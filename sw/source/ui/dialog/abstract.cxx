@@ -23,7 +23,7 @@
 #include "dialog.hrc"
 #include "abstract.hxx"
 
-SwInsertAbstractDlg::SwInsertAbstractDlg(Window* pParent)
+SwInsertAbstractDlg::SwInsertAbstractDlg(vcl::Window* pParent)
     : SfxModalDialog(pParent, "AbstractDialog",
         "modules/swriter/ui/abstractdialog.ui")
 {

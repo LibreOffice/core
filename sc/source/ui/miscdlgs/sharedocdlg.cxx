@@ -69,7 +69,7 @@ public:
 
 // class ScShareDocumentDlg
 
-ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
+ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewData )
     : ModalDialog(pParent, "ShareDocumentDialog", "modules/scalc/ui/sharedocumentdlg.ui")
     , mpViewData(pViewData)
     , mpDocShell(NULL)

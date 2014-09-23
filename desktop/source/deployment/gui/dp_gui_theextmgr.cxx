@@ -49,7 +49,7 @@ namespace dp_gui {
 //                             TheExtensionManager
 
 
-TheExtensionManager::TheExtensionManager( Window *pParent,
+TheExtensionManager::TheExtensionManager( vcl::Window *pParent,
                                           const uno::Reference< uno::XComponentContext > &xContext ) :
     m_xContext( xContext ),
     m_pParent( pParent ),
@@ -488,7 +488,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
         return s_ExtMgr;
     }
 
-    Window* pParent = DIALOG_NO_PARENT;
+    vcl::Window* pParent = DIALOG_NO_PARENT;
     if (xParent.is())
         pParent = VCLUnoHelper::GetWindow(xParent);
 

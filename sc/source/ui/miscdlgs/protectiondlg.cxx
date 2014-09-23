@@ -31,7 +31,7 @@ static const ScTableProtection::Option aOptions[] = {
 };
 static const sal_uInt16 nOptionCount = sizeof(aOptions) / sizeof (aOptions[0]);
 
-ScTableProtectionDlg::ScTableProtectionDlg(Window* pParent)
+ScTableProtectionDlg::ScTableProtectionDlg(vcl::Window* pParent)
     : ModalDialog( pParent, "ProtectSheetDialog", "modules/scalc/ui/protectsheetdlg.ui" )
 {
     get(m_pPasswords, "passwords");

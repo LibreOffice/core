@@ -44,7 +44,7 @@ enum
     ROW_IS_REMOVABLE
 };
 
-TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
+TemplateRemoteView::TemplateRemoteView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : TemplateAbstractView(pParent,nWinStyle,bDisableTransientChildren)
 {
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
@@ -54,7 +54,7 @@ TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTemplateRemoteView(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateRemoteView(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new TemplateRemoteView(pParent, WB_VSCROLL, false);
 }

@@ -883,7 +883,7 @@ namespace
 #if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
     guint get_xid_for_dbus()
     {
-        const Window *pTopWindow = Application::IsHeadlessModeEnabled() ? NULL : Application::GetActiveTopWindow();
+        const vcl::Window *pTopWindow = Application::IsHeadlessModeEnabled() ? NULL : Application::GetActiveTopWindow();
         const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : NULL;
         return pEnvData ? pEnvData->aWindow : 0;
     }

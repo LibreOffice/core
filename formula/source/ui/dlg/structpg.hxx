@@ -48,7 +48,7 @@ protected:
 
 public:
 
-                    StructListBox(Window* pParent, WinBits nBits );
+                    StructListBox(vcl::Window* pParent, WinBits nBits );
 
     /** Inserts an entry with static image (no difference between collapsed/expanded). */
     SvTreeListEntry*    InsertStaticEntry(
@@ -89,7 +89,7 @@ protected:
 
 public:
 
-                    StructPage( Window* pParent);
+                    StructPage( vcl::Window* pParent);
 
     void            ClearStruct();
     virtual SvTreeListEntry*    InsertEntry(const OUString& rText, SvTreeListEntry* pParent,

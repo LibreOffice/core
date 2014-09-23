@@ -36,7 +36,7 @@ namespace dbmm
     {
     public:
         MacroMigrationDialog(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument >& _rxDocument
         );

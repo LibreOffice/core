@@ -36,7 +36,7 @@
 #include <rtl/strbuf.hxx>
 #include "svtools/treelistentry.hxx"
 
-SvxSearchFormatDialog::SvxSearchFormatDialog(Window* pParent, const SfxItemSet& rSet)
+SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabDialog(pParent, "SearchFormatDialog", "cui/ui/searchformatdialog.ui", &rSet)
     , m_pFontList(NULL)
     , m_nNamePageId(0)
@@ -110,7 +110,7 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
     }
 }
 
-SvxSearchAttributeDialog::SvxSearchAttributeDialog(Window* pParent,
+SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
     SearchAttrItemList& rLst, const sal_uInt16* pWhRanges)
     : ModalDialog(pParent, "SearchAttrDialog", "cui/ui/searchattrdialog.ui")
     , rList(rLst)
@@ -222,7 +222,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
 
 SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
 (
-    Window* pParent,
+    vcl::Window* pParent,
     bool bRelax,
     sal_uInt16 nOther,
     sal_uInt16 nShorter,

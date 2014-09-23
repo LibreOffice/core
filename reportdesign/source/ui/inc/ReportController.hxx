@@ -351,7 +351,7 @@ namespace rptui
         bool                                isFormatCommandEnabled(sal_uInt16 _nCommand
                                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat>& _xControlFormat) const;
 
-        virtual bool                        Construct(Window* pParent) SAL_OVERRIDE;
+        virtual bool                        Construct(vcl::Window* pParent) SAL_OVERRIDE;
         // XEventListener
         virtual void SAL_CALL               disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

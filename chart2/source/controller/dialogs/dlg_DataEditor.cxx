@@ -39,7 +39,7 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-DataEditor::DataEditor(Window* pParent,
+DataEditor::DataEditor(vcl::Window* pParent,
     const Reference< chart2::XChartDocument > & xChartDoc,
     const Reference< uno::XComponentContext > & xContext)
     : ModalDialog(pParent, "ChartDataDialog",
@@ -48,7 +48,7 @@ DataEditor::DataEditor(Window* pParent,
     , m_xChartDoc(xChartDoc)
     , m_xContext(xContext)
 {
-    m_xBrwData.reset(new DataBrowser(get<Window>("datawindow"), WB_BORDER | WB_TABSTOP, true /* bLiveUpdate */));
+    m_xBrwData.reset(new DataBrowser(get<vcl::Window>("datawindow"), WB_BORDER | WB_TABSTOP, true /* bLiveUpdate */));
     m_xBrwData->set_hexpand(true);
     m_xBrwData->set_vexpand(true);
     m_xBrwData->set_expand(true);
@@ -201,13 +201,13 @@ bool DataEditor::ApplyChangesToModel()
 // travels/no longer travels over this window.  _rMemFunc may be
 // TaskPaneList::AddWindow or TaskPaneList::RemoveWindow
 void DataEditor::notifySystemWindow(
-    Window* pWindow, Window* pToRegister,
-    ::comphelper::mem_fun1_t< TaskPaneList, Window* > rMemFunc )
+    vcl::Window* pWindow, vcl::Window* pToRegister,
+    ::comphelper::mem_fun1_t< TaskPaneList, vcl::Window* > rMemFunc )
 {
     OSL_ENSURE( pWindow, "Window must not be null!" );
     if( !pWindow )
         return;
-    Window* pParent = pWindow->GetParent();
+    vcl::Window* pParent = pWindow->GetParent();
     while( pParent && ! pParent->IsSystemWindow() )
     {
         pParent = pParent->GetParent();

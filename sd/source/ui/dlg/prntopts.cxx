@@ -28,7 +28,7 @@
 /**
  *  dialog to adjust print options
  */
-SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
+SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
     SfxTabPage          ( pParent, "prntopts" , "modules/simpress/ui/prntopts.ui" , &rInAttrs ),
         rOutAttrs               ( rInAttrs )
 {
@@ -182,7 +182,7 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
     ClickBookletHdl( NULL );
 }
 
-SfxTabPage* SdPrintOptions::Create( Window* pWindow,
+SfxTabPage* SdPrintOptions::Create( vcl::Window* pWindow,
                 const SfxItemSet* rOutAttrs )
 {
     return( new SdPrintOptions( pWindow, *rOutAttrs ) );

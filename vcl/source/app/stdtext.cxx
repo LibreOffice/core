@@ -34,7 +34,7 @@ OUString GetStandardText( sal_uInt16 nStdText )
     return OUString();
 }
 
-void ShowServiceNotAvailableError(Window* pParent,
+void ShowServiceNotAvailableError(vcl::Window* pParent,
     const OUString& rServiceName, bool bError)
 {
     OUString aText  = GetStandardText(STANDARD_TEXT_SERVICE_NOT_AVAILABLE).

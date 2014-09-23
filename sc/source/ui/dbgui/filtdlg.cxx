@@ -49,7 +49,7 @@
 ScFilterDlg::EntryList::EntryList() :
     mnHeaderPos(INVALID_HEADER_POS) {}
 
-ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
     const SfxItemSet& rArgSet)
     : ScAnyRefDlg ( pB, pCW, pParent, "StandardFilterDialog",
         "modules/scalc/ui/standardfilterdialog.ui" )

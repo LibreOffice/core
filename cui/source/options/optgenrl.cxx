@@ -209,7 +209,7 @@ public:
 
 
 
-SvxGeneralTabPage::SvxGeneralTabPage(Window* pParent, const SfxItemSet& rCoreSet)
+SvxGeneralTabPage::SvxGeneralTabPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
     : SfxTabPage(pParent, "OptUserPage", "cui/ui/optuserpage.ui", &rCoreSet)
 {
@@ -296,7 +296,7 @@ void SvxGeneralTabPage::SetLinks ()
 
 
 
-SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SvxGeneralTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return ( new SvxGeneralTabPage( pParent, *rAttrSet ) );
 }

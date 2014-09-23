@@ -87,7 +87,7 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
 }
 
 
-BackingWindow::BackingWindow( Window* i_pParent ) :
+BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),
     mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
     mbInitControls( false ),
@@ -193,10 +193,10 @@ BackingWindow::~BackingWindow()
     // deregister drag&drop helper
     if (mxDropTargetListener.is())
     {
-        for (std::vector<Window*>::iterator aI = maDndWindows.begin(),
+        for (std::vector<vcl::Window*>::iterator aI = maDndWindows.begin(),
             aEnd = maDndWindows.end(); aI != aEnd; ++aI)
         {
-            Window *pDndWin = *aI;
+            vcl::Window *pDndWin = *aI;
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
                     pDndWin->GetDropTarget();
             if (xDropTarget.is())
@@ -453,10 +453,10 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
     // establish drag&drop mode
     mxDropTargetListener.set(new OpenFileDropTargetListener(mxContext, mxFrame));
 
-    for (std::vector<Window*>::iterator aI = maDndWindows.begin(),
+    for (std::vector<vcl::Window*>::iterator aI = maDndWindows.begin(),
         aEnd = maDndWindows.end(); aI != aEnd; ++aI)
     {
-        Window *pDndWin = *aI;
+        vcl::Window *pDndWin = *aI;
         css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
             pDndWin->GetDropTarget();
         if (xDropTarget.is())

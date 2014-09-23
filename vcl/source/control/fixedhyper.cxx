@@ -19,7 +19,7 @@
 
 #include <vcl/fixedhyper.hxx>
 
-FixedHyperlink::FixedHyperlink(Window* pParent, WinBits nWinStyle)
+FixedHyperlink::FixedHyperlink(vcl::Window* pParent, WinBits nWinStyle)
     : FixedText(pParent, nWinStyle)
     , m_nTextLen(0)
 {

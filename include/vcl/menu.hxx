@@ -44,7 +44,7 @@ class Image;
 class PopupMenu;
 class KeyEvent;
 class MenuFloatingWindow;
-class Window;
+namespace vcl { class Window; }
 class SalMenu;
 class IMenuBarWindow;
 struct SystemMenuData;
@@ -122,7 +122,7 @@ private:
     MenuItemList*       pItemList;          // Liste mit den MenuItems
     MenuLogo*           pLogo;
     Menu*               pStartedFrom;
-    Window*             pWindow;
+    vcl::Window*             pWindow;
 
     Link                aActivateHdl;       // Active-Handler
     Link                aDeactivateHdl;     // Deactivate-Handler
@@ -158,14 +158,14 @@ protected:
     SAL_DLLPRIVATE Menu*            ImplGetStartMenu();
     SAL_DLLPRIVATE Menu*            ImplFindSelectMenu();
     SAL_DLLPRIVATE Menu*            ImplFindMenu( sal_uInt16 nId );
-    SAL_DLLPRIVATE Size             ImplCalcSize( const Window* pWin );
+    SAL_DLLPRIVATE Size             ImplCalcSize( const vcl::Window* pWin );
     SAL_DLLPRIVATE bool             ImplIsVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE bool             ImplIsSelectable( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetVisibleItemCount() const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetFirstVisible() const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetPrevVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetNextVisible( sal_uInt16 nPos ) const;
-    SAL_DLLPRIVATE void             ImplPaint( Window* pWin, sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = 0, bool bHighlighted = false, bool bLayout = false, bool bRollover = false ) const;
+    SAL_DLLPRIVATE void             ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = 0, bool bHighlighted = false, bool bLayout = false, bool bRollover = false ) const;
     SAL_DLLPRIVATE void             ImplSelect();
     SAL_DLLPRIVATE void             ImplCallHighlight( sal_uInt16 nHighlightItem );
     SAL_DLLPRIVATE void             ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos );
@@ -178,11 +178,11 @@ protected:
 
     // returns native check and option menu symbol height in rCheckHeight and rRadioHeight
     // return value is maximum width and height of checkboxes and radiobuttons
-    SAL_DLLPRIVATE Size             ImplGetNativeCheckAndRadioSize( const Window*, long& rCheckHeight, long& rRadioHeight ) const;
+    SAL_DLLPRIVATE Size             ImplGetNativeCheckAndRadioSize( const vcl::Window*, long& rCheckHeight, long& rRadioHeight ) const;
 
     // returns native submenu arrow size and spacing from right border
     // return value is whether it's supported natively
-    SAL_DLLPRIVATE bool         ImplGetNativeSubmenuArrowSize( Window* pWin, Size& rArrowSize, long& rArrowSpacing ) const;
+    SAL_DLLPRIVATE bool         ImplGetNativeSubmenuArrowSize( vcl::Window* pWin, Size& rArrowSize, long& rArrowSpacing ) const;
 
     SAL_DLLPRIVATE void                ImplAddDel( ImplMenuDelData &rDel );
     SAL_DLLPRIVATE void                ImplRemoveDel( ImplMenuDelData &rDel );
@@ -200,7 +200,7 @@ public:
     SAL_DLLPRIVATE void             ImplKillLayoutData() const;
     SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const { return pStartedFrom; }
 
-    SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
+    SAL_DLLPRIVATE vcl::Window*  ImplGetWindow() const { return pWindow; }
     void ImplSelectWithStart( Menu* pStartMenu = NULL );
 
 protected:
@@ -365,7 +365,7 @@ public:
     // gets the activation key of the specified item
     KeyEvent GetActivationKey( sal_uInt16 nItemId ) const;
 
-    Window*             GetWindow() const { return pWindow; }
+    vcl::Window*             GetWindow() const { return pWindow; }
 
     void                SetAccessibleName( sal_uInt16 nItemId, const OUString& rStr );
     OUString            GetAccessibleName( sal_uInt16 nItemId ) const;
@@ -408,9 +408,9 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     friend class MenuFloatingWindow;
     friend class SystemWindow;
 
-    SAL_DLLPRIVATE static Window* ImplCreate(Window* pParent, Window* pWindow, MenuBar* pMenu, const css::uno::Reference<css::frame::XFrame> &rFrame);
-    SAL_DLLPRIVATE static void      ImplDestroy( MenuBar* pMenu, bool bDelete );
-    SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu = true );
+    SAL_DLLPRIVATE static vcl::Window* ImplCreate(vcl::Window* pParent, vcl::Window* pWindow, MenuBar* pMenu, const css::uno::Reference<css::frame::XFrame> &rFrame);
+    SAL_DLLPRIVATE static void         ImplDestroy( MenuBar* pMenu, bool bDelete );
+    SAL_DLLPRIVATE bool                ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu = true );
 
 protected:
 
@@ -507,7 +507,7 @@ private:
     SAL_DLLPRIVATE MenuFloatingWindow*   ImplGetFloatingWindow() const { return (MenuFloatingWindow*)Menu::ImplGetWindow(); }
 
 protected:
-    SAL_DLLPRIVATE sal_uInt16                ImplExecute( Window* pWindow, const Rectangle& rRect, sal_uLong nPopupFlags, Menu* pStaredFrom, bool bPreSelectFirst );
+    SAL_DLLPRIVATE sal_uInt16                ImplExecute( vcl::Window* pWindow, const Rectangle& rRect, sal_uLong nPopupFlags, Menu* pStaredFrom, bool bPreSelectFirst );
     SAL_DLLPRIVATE long                  ImplCalcHeight( sal_uInt16 nEntries ) const;
     SAL_DLLPRIVATE sal_uInt16                ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry = 0, sal_uInt16* pLastVisible = NULL ) const;
 
@@ -525,8 +525,8 @@ public:
     void                SetText( const OUString& rTitle )  { aTitleText = rTitle; }
     const OUString&     GetText() const                     { return aTitleText; }
 
-    sal_uInt16              Execute( Window* pWindow, const Point& rPopupPos );
-    sal_uInt16              Execute( Window* pWindow, const Rectangle& rRect, sal_uInt16 nFlags = 0 );
+    sal_uInt16              Execute( vcl::Window* pWindow, const Point& rPopupPos );
+    sal_uInt16              Execute( vcl::Window* pWindow, const Rectangle& rRect, sal_uInt16 nFlags = 0 );
 
     // Fuer das TestTool
     void                EndExecute( sal_uInt16 nSelect = 0 );

@@ -62,7 +62,7 @@ static ::osl::Mutex& ImplGetOwnStaticMutex()
 
 LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
-    Window* pWindow = (Window*) ::GetWindowLong( hWnd, 0 );
+    vcl::Window* pWindow = (vcl::Window*) ::GetWindowLong( hWnd, 0 );
     bool    bProcessed = true;
 
     if( pWindow )

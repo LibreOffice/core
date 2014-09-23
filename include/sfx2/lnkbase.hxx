@@ -144,7 +144,7 @@ public:
     void            Disconnect();
 
     // Link impl: DECL_LINK( MyEndDialogHdl, SvBaseLink* ); <= param is this
-    virtual void    Edit( Window*, const Link& rEndEditHdl );
+    virtual void    Edit( vcl::Window*, const Link& rEndEditHdl );
 
     // should the link appear in the dialog? (to the left in the link in the...)
     bool            IsVisible() const           { return bVisible; }

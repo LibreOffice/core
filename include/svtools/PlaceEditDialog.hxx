@@ -48,8 +48,8 @@ private :
 
 public :
 
-     PlaceEditDialog( Window* pParent);
-     PlaceEditDialog(Window* pParent, const boost::shared_ptr<Place> &pPlace );
+     PlaceEditDialog( vcl::Window* pParent);
+     PlaceEditDialog(vcl::Window* pParent, const boost::shared_ptr<Place> &pPlace );
      virtual ~PlaceEditDialog();
 
      // Returns a place instance with given information

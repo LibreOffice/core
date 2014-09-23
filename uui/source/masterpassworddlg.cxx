@@ -36,7 +36,7 @@ IMPL_LINK_NOARG(MasterPasswordDialog, OKHdl_Impl)
 
 MasterPasswordDialog::MasterPasswordDialog
 (
-    Window*                                     pParent,
+    vcl::Window*                                     pParent,
     ::com::sun::star::task::PasswordRequestMode aDialogMode,
     ResMgr*                                     pResMgr
 )

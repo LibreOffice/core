@@ -40,7 +40,7 @@ namespace dbaui
         OUString     m_sModule;
 
     public:
-        OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName );
+        OpenDocumentButton( vcl::Window* _pParent, const sal_Char* _pAsciiModuleName );
 
     protected:
         void    impl_init( const sal_Char* _pAsciiModuleName );
@@ -57,7 +57,7 @@ namespace dbaui
         MapIndexToStringPair    m_aURLs;
 
     public:
-        OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName );
+        OpenDocumentListBox( vcl::Window* _pParent, const sal_Char* _pAsciiModuleName );
 
         OUString  GetSelectedDocumentURL() const;
         OUString  GetSelectedDocumentFilter() const;

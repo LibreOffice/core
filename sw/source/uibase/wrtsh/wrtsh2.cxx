@@ -198,7 +198,7 @@ class FieldDeletionModify : public SwModify
 // Start input dialog for a specific field
 
 bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
-                                   Window* pParentWin, OString* pWindowState )
+                                   vcl::Window* pParentWin, OString* pWindowState )
 {
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

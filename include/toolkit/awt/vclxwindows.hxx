@@ -674,7 +674,7 @@ public:
 
     // ::com::sun::star::awt::XLayoutConstrains
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    static ::com::sun::star::awt::Size SAL_CALL implGetMinimumSize( Window* p ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::awt::Size SAL_CALL implGetMinimumSize( vcl::Window* p ) throw(::com::sun::star::uno::RuntimeException);
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }

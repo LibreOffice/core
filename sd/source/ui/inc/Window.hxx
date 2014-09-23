@@ -40,11 +40,11 @@ class ViewShell;
     be an integer percent value.
 */
 class Window
-    : public ::Window,
+    : public ::vcl::Window,
       public ::DropTargetHelper
 {
 public:
-    Window (::Window* pParent);
+    Window (vcl::Window* pParent);
     virtual ~Window (void);
 
     void    SetViewShell (ViewShell* pViewSh);

@@ -45,7 +45,7 @@
 
 using namespace dbaui;
 // class OTableFieldDescWin
-OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
+OTableFieldDescWin::OTableFieldDescWin( vcl::Window* pParent)
     : TabPage(pParent, WB_3DLOOK)
     , m_eChildFocus(NONE)
 {
@@ -72,15 +72,15 @@ OTableFieldDescWin::~OTableFieldDescWin()
     m_pHeader->Hide();
 
     {
-        boost::scoped_ptr<Window> aTemp(m_pGenPage);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pGenPage);
         m_pGenPage = NULL;
     }
     {
-        boost::scoped_ptr<Window> aTemp(m_pHeader);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pHeader);
         m_pHeader = NULL;
     }
     {
-        boost::scoped_ptr<Window> aTemp(m_pHelpBar);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pHelpBar);
         m_pHelpBar = NULL;
     }
 }

@@ -122,7 +122,7 @@ namespace
 }
 
 
-void displayException(const Any& _rExcept, Window* _pParent)
+void displayException(const Any& _rExcept, vcl::Window* _pParent)
 {
     // check whether we need to display it
     if ( !lcl_shouldDisplayError( _rExcept ) )
@@ -131,7 +131,7 @@ void displayException(const Any& _rExcept, Window* _pParent)
     try
     {
         // the parent window
-        Window* pParentWindow = _pParent ? _pParent : Application::GetDefDialogParent();
+        vcl::Window* pParentWindow = _pParent ? _pParent : Application::GetDefDialogParent();
         Reference< XWindow > xParentWindow = VCLUnoHelper::GetInterface(pParentWindow);
 
         Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create(::comphelper::getProcessComponentContext(), "", xParentWindow, _rExcept);
@@ -144,25 +144,25 @@ void displayException(const Any& _rExcept, Window* _pParent)
 }
 
 
-void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, Window* _pParent)
+void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, vcl::Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
 
-void displayException(const ::com::sun::star::sdbc::SQLWarning& _rExcept, Window* _pParent)
+void displayException(const ::com::sun::star::sdbc::SQLWarning& _rExcept, vcl::Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
 
-void displayException(const ::com::sun::star::sdb::SQLContext& _rExcept, Window* _pParent)
+void displayException(const ::com::sun::star::sdb::SQLContext& _rExcept, vcl::Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
 
-void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, Window* _pParent)
+void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, vcl::Window* _pParent)
 {
     displayException(_rEvent.Reason, _pParent);
 }

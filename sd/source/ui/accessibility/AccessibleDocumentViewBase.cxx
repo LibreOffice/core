@@ -132,7 +132,7 @@ void AccessibleDocumentViewBase::Init (void)
 
     // Register at VCL Window to be informed of activated and deactivated
     // OLE objects.
-    Window* pWindow = maShapeTreeInfo.GetWindow();
+    vcl::Window* pWindow = maShapeTreeInfo.GetWindow();
     if (pWindow != NULL)
     {
         maWindowLink = LINK(
@@ -143,7 +143,7 @@ void AccessibleDocumentViewBase::Init (void)
         sal_uInt16 nCount = pWindow->GetChildCount();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
-            Window* pChildWindow = pWindow->GetChild (i);
+            vcl::Window* pChildWindow = pWindow->GetChild (i);
             if (pChildWindow &&
                 (AccessibleRole::EMBEDDED_OBJECT
                     ==pChildWindow->GetAccessibleRole()))
@@ -171,8 +171,8 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             {
                 // Window is dying.  Unregister from VCL Window.
                 // This is also attempted in the disposing() method.
-                Window* pWindow = maShapeTreeInfo.GetWindow();
-                Window* pDyingWindow = static_cast<Window*>(
+                vcl::Window* pWindow = maShapeTreeInfo.GetWindow();
+                vcl::Window* pDyingWindow = static_cast<vcl::Window*>(
                     pWindowEvent->GetWindow());
                 if (pWindow==pDyingWindow && pWindow!=NULL && maWindowLink.IsSet())
                 {
@@ -185,7 +185,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             case VCLEVENT_WINDOW_SHOW:
             {
                 // A new window has been created.  Is it an OLE object?
-                Window* pChildWindow = static_cast<Window*>(
+                vcl::Window* pChildWindow = static_cast<vcl::Window*>(
                     pWindowEvent->GetData());
                 if (pChildWindow!=NULL
                     && (pChildWindow->GetAccessibleRole()
@@ -200,7 +200,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             {
                 // A window has been destroyed.  Has that been an OLE
                 // object?
-                Window* pChildWindow = static_cast<Window*>(
+                vcl::Window* pChildWindow = static_cast<vcl::Window*>(
                     pWindowEvent->GetData());
                 if (pChildWindow!=NULL
                     && (pChildWindow->GetAccessibleRole()
@@ -479,7 +479,7 @@ OUString SAL_CALL
 void AccessibleDocumentViewBase::impl_dispose()
 {
     // Unregister from VCL Window.
-    Window* pWindow = maShapeTreeInfo.GetWindow();
+    vcl::Window* pWindow = maShapeTreeInfo.GetWindow();
     if (maWindowLink.IsSet())
     {
         if (pWindow)

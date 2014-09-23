@@ -37,10 +37,10 @@ FloatingWindowAccessible::~FloatingWindowAccessible()
 
 void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelationSetHelper& rRelationSet)
 {
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        Window* pParentWindow = pWindow->GetParent();
+        vcl::Window* pParentWindow = pWindow->GetParent();
         if( pParentWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);

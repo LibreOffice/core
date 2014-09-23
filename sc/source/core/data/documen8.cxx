@@ -779,7 +779,7 @@ bool ScDocument::IsInLinkUpdate() const
     return bInLinkUpdate || IsInDdeLinkUpdate();
 }
 
-void ScDocument::UpdateExternalRefLinks(Window* pWin)
+void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
 {
     if (!pExternalRefMgr.get())
         return;

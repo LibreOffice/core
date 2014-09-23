@@ -41,7 +41,7 @@ static const sal_uInt16 pRanges[] =
 |*
 \************************************************************************/
 
-SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
+SvxTextTabDialog::SvxTextTabDialog( vcl::Window* pParent,
                                 const SfxItemSet* pAttr,
                                 const SdrView* pSdrView ) :
         SfxTabDialog        ( pParent
@@ -76,7 +76,7 @@ void SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 |*
 \************************************************************************/
 
-SvxTextAnimationPage::SvxTextAnimationPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
+SvxTextAnimationPage::SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs ) :
                 SfxTabPage      ( pWindow
                                   ,"TextAnimation"
                                   ,"cui/ui/textanimtabpage.ui"
@@ -450,7 +450,7 @@ const sal_uInt16* SvxTextAnimationPage::GetRanges()
 |*
 \************************************************************************/
 
-SfxTabPage* SvxTextAnimationPage::Create( Window* pWindow,
+SfxTabPage* SvxTextAnimationPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SvxTextAnimationPage( pWindow, *rAttrs ) );

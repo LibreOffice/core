@@ -64,7 +64,7 @@ ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
 {
 }
 
-ScCsvControl::ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBits nBits ) :
+ScCsvControl::ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits ) :
     Control( pParent, nBits ),
     mrData( rData ),
     mpAccessible( NULL ),

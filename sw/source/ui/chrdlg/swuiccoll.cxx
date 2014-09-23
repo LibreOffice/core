@@ -50,7 +50,7 @@ static long nTabs[] =
         0, 100
     };
 
-SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
+SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "ConditionPage",
         "modules/swriter/ui/conditionpage.ui", &rSet)
     ,
@@ -137,7 +137,7 @@ int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet *rSet)
+SfxTabPage* SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return new SwCondCollPage(pParent, *rSet);
 }

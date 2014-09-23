@@ -37,7 +37,7 @@
 
 #define GALLERY_BRWBOX_TITLE    1
 
-GalleryPreview::GalleryPreview(Window* pParent, WinBits nStyle, GalleryTheme* pTheme)
+GalleryPreview::GalleryPreview(vcl::Window* pParent, WinBits nStyle, GalleryTheme* pTheme)
     : Window(pParent, nStyle)
     , DropTargetHelper(this)
     , DragSourceHelper(this)
@@ -47,7 +47,7 @@ GalleryPreview::GalleryPreview(Window* pParent, WinBits nStyle, GalleryTheme* pT
     InitSettings();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGalleryPreview(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGalleryPreview(vcl::Window *pParent,
     VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;

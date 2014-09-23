@@ -53,7 +53,7 @@ class FmFormObj;
 class FmFormModel;
 class FmFormView;
 class FmFormShell;
-class Window;
+namespace vcl { class Window; }
 class OutputDevice;
 class SdrUnoObj;
 struct ImplSVEvent;
@@ -93,7 +93,7 @@ class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >                            m_xControlContainer;
     css::uno::Reference<css::uno::XComponentContext>                                                        m_xContext;
     FmXFormView*                m_pViewImpl;
-    Window*                     m_pWindow;
+    vcl::Window*                     m_pWindow;
 
 protected:
     virtual ~FormViewPageWindowAdapter();
@@ -127,7 +127,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
     void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm );
     void dispose();
-    Window* getWindow() const {return m_pWindow;}
+    vcl::Window* getWindow() const {return m_pWindow;}
 };
 
 typedef ::rtl::Reference< FormViewPageWindowAdapter >   PFormViewPageWindowAdapter;

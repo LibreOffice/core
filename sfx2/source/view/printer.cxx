@@ -202,7 +202,7 @@ void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 
 
 
-SfxPrintOptionsDialog::SfxPrintOptionsDialog(Window *pParent,
+SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
                                               SfxViewShell *pViewShell,
                                               const SfxItemSet *pSet)
 

@@ -34,7 +34,7 @@ Assistent::Assistent(int nNoOfPages)
         mpPageStatus[i] = true;
 }
 
-bool Assistent::InsertControl(int nDestPage,Window* pUsedControl)
+bool Assistent::InsertControl(int nDestPage, ::vcl::Window* pUsedControl)
 {
     DBG_ASSERT( (nDestPage > 0) && (nDestPage <= mnPages), "Page not aviable!");
 
@@ -86,8 +86,8 @@ bool Assistent::GotoPage(const int nPageToGo)
     {
         int nIndex=mnCurrentPage-1;
 
-        std::vector<Window*>::iterator iter = maPages[nIndex].begin();
-        std::vector<Window*>::iterator iterEnd = maPages[nIndex].end();
+        std::vector<vcl::Window*>::iterator iter = maPages[nIndex].begin();
+        std::vector<vcl::Window*>::iterator iterEnd = maPages[nIndex].end();
 
         for(; iter != iterEnd; ++iter)
         {

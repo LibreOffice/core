@@ -139,7 +139,7 @@ void CellAppearancePropertyPanel::EndCellBorderStylePopupMode(void)
 }
 
 CellAppearancePropertyPanel::CellAppearancePropertyPanel(
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame),
@@ -339,7 +339,7 @@ IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
 }
 
 CellAppearancePropertyPanel* CellAppearancePropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {

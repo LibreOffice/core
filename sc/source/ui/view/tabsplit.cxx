@@ -23,7 +23,7 @@
 
 #include <vcl/settings.hxx>
 
-ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pData ) :
+ScTabSplitter::ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle, ScViewData* pData ) :
     Splitter( pParent, nWinStyle ),
     pViewData(pData)
 {
@@ -61,7 +61,7 @@ void ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScTabSplitter::Splitting( Point& rSplitPos )
 {
-    Window* pParent = GetParent();
+    vcl::Window* pParent = GetParent();
     Point aScreenPos = pParent->OutputToNormalizedScreenPixel( rSplitPos );
     pViewData->GetView()->SnapSplitPos( aScreenPos );
     Point aNew = pParent->NormalizedScreenToOutputPixel( aScreenPos );

@@ -34,7 +34,7 @@ protected:
     virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-    SvSimpleTableContainer( Window* pParent, WinBits nBits = WB_BORDER );
+    SvSimpleTableContainer( vcl::Window* pParent, WinBits nBits = WB_BORDER );
 
     void SetTable(SvSimpleTable* pTable);
 

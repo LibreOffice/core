@@ -31,15 +31,13 @@
 #include <set>
 
 class SfxRequest;
-class Window;
-
 struct AcceptDropEvent;
 class DropTargetHelper;
 struct ExecuteDropEvent;
 struct ImplSVEvent;
 class Point;
 class SdPage;
-class Window;
+namespace vcl { class Window; }
 
 namespace sd {
 class Window;
@@ -72,14 +70,14 @@ public:
 
     void HandleSlotCall (SfxRequest& rRequest);
 
-    void DoCut (::Window* pWindow = 0);
-    void DoCopy (::Window* pWindow = 0);
-    void DoPaste (::Window* pWindow = 0);
-    void DoDelete (::Window* pWindow = 0);
+    void DoCut (::vcl::Window* pWindow = 0);
+    void DoCopy (::vcl::Window* pWindow = 0);
+    void DoPaste (::vcl::Window* pWindow = 0);
+    void DoDelete (::vcl::Window* pWindow = 0);
 
     void StartDrag (
         const Point& rDragPt,
-        ::Window* pWindow );
+        ::vcl::Window* pWindow );
 
     void DragFinished (
         sal_Int8 nDropAction);
@@ -141,7 +139,7 @@ private:
     ImplSVEvent * mnDragFinishedUserEventId;
 
     void CreateSlideTransferable (
-        ::Window* pWindow,
+        ::vcl::Window* pWindow,
         bool bDrag);
 
     /** Determine the position of where to insert the pages in the current
@@ -153,7 +151,7 @@ private:
             The index in the range [0,n] (both inclusive) with n the number
             of pages is returned.
     */
-    sal_Int32 GetInsertionPosition (::Window* pWindow);
+    sal_Int32 GetInsertionPosition (::vcl::Window* pWindow);
 
     /** Paste the pages of the transferable of the sd module at the given
         position.

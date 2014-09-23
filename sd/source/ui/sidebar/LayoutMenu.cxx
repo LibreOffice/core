@@ -121,7 +121,7 @@ static const snewfoil_value_info standard[] =
 };
 
 LayoutMenu::LayoutMenu (
-    ::Window* pParent,
+    vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : ValueSet (pParent, WB_ITEMBORDER),

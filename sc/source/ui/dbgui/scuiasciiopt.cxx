@@ -228,7 +228,7 @@ static void save_Separators(
     aItem.PutProperties(aNames, aValues);
 }
 
-ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent, const OUString& aDatName,
+ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall ) :
         ModalDialog (pParent, "TextImportCsvDialog",
             "modules/scalc/ui/textimportcsv.ui"),

@@ -25,7 +25,7 @@ namespace {
 
 class RestartDialog: public ModalDialog {
 public:
-    RestartDialog(Window * parent, svtools::RestartReason reason):
+    RestartDialog(vcl::Window * parent, svtools::RestartReason reason):
         ModalDialog(parent, "RestartDialog", "svt/ui/restartdialog.ui")
     {
         get(btnYes_, "yes");
@@ -52,7 +52,7 @@ private:
     DECL_LINK(hdlYes, void *);
     DECL_LINK(hdlNo, void *);
 
-    Window * reason_;
+    vcl::Window * reason_;
     PushButton * btnYes_;
     PushButton * btnNo_;
 };
@@ -71,7 +71,7 @@ IMPL_LINK_NOARG(RestartDialog, hdlNo) {
 
 void svtools::executeRestartDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    Window * parent, RestartReason reason)
+    vcl::Window * parent, RestartReason reason)
 {
     if (RestartDialog(parent, reason).Execute()) {
         css::task::OfficeRestartManager::get(context)->requestRestart(

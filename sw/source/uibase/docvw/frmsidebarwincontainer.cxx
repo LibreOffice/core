@@ -181,7 +181,7 @@ SwSidebarWin* SwFrmSidebarWinContainer::get( const SwFrm& rFrm,
 }
 
 void SwFrmSidebarWinContainer::getAll( const SwFrm& rFrm,
-                                       std::vector< Window* >* pSidebarWins )
+                                       std::vector< vcl::Window* >* pSidebarWins )
 {
     pSidebarWins->clear();
 

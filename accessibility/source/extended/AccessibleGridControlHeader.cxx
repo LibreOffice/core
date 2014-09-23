@@ -217,7 +217,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
 
 Rectangle AccessibleGridControlHeader::implGetBoundingBox()
 {
-    Window* pParent = m_aTable.GetAccessibleParentWindow();
+    vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
     Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
     Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
     if(isColumnBar())

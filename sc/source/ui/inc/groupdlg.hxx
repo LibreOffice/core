@@ -27,7 +27,7 @@
 class ScGroupDlg : public ModalDialog
 {
 public:
-    ScGroupDlg(Window* pParent, bool bUnGroup = false, bool bRows = true);
+    ScGroupDlg(vcl::Window* pParent, bool bUnGroup = false, bool bRows = true);
     virtual ~ScGroupDlg();
 
     bool GetColsChecked() const;

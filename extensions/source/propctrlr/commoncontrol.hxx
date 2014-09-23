@@ -47,7 +47,7 @@ namespace pcr
         ControlHelper*  m_pHelper;
 
     public:
-        ControlWindow( Window* _pParent, WinBits _nStyle )
+        ControlWindow( vcl::Window* _pParent, WinBits _nStyle )
             :WindowType( _pParent, _nStyle )
             ,m_pHelper( NULL )
         {
@@ -86,7 +86,7 @@ namespace pcr
     class ControlHelper
     {
     private:
-        Window*                         m_pControlWindow;
+        vcl::Window*                         m_pControlWindow;
         sal_Int16                       m_nControlType;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >
                                         m_xContext;
@@ -116,7 +116,7 @@ namespace pcr
                 would just call our <member>setModified</member>.
         */
         ControlHelper(
-            Window* _pControlWindow,
+            vcl::Window* _pControlWindow,
             sal_Int16 _nControlType,
             ::com::sun::star::inspection::XPropertyControl& _rAntiImpl,
             IModifyListener* _pModifyListener );
@@ -126,8 +126,8 @@ namespace pcr
         /** sets our "modified" flag to <TRUE/>
         */
         inline void setModified() { m_bModified = true; }
-        inline       Window* getVclControlWindow()       { return m_pControlWindow; }
-        inline const Window* getVclControlWindow() const { return m_pControlWindow; }
+        inline       vcl::Window* getVclControlWindow()       { return m_pControlWindow; }
+        inline const vcl::Window* getVclControlWindow() const { return m_pControlWindow; }
 
     public:
         // XPropertyControl
@@ -153,9 +153,9 @@ namespace pcr
         void    autoSizeWindow();
 
         /// may be used by derived classes, they forward the event to the PropCtrListener
-        DECL_LINK( ModifiedHdl, Window* );
-        DECL_LINK( GetFocusHdl, Window* );
-        DECL_LINK( LoseFocusHdl, Window* );
+        DECL_LINK( ModifiedHdl, vcl::Window* );
+        DECL_LINK( GetFocusHdl, vcl::Window* );
+        DECL_LINK( LoseFocusHdl, vcl::Window* );
 
     private:
         /** fail-safe wrapper around calling our context's activateNextControl
@@ -191,7 +191,7 @@ namespace pcr
         ControlHelper   m_aImplControl;
 
     protected:
-        inline CommonBehaviourControl( sal_Int16 _nControlType, Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers = true );
+        inline CommonBehaviourControl( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers = true );
 
         // XPropertyControl - delegated to ->m_aImplControl
         virtual ::sal_Int16 SAL_CALL getControlType() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
@@ -244,7 +244,7 @@ namespace pcr
 
 
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
-    inline CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::CommonBehaviourControl ( sal_Int16 _nControlType, Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers )
+    inline CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::CommonBehaviourControl ( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers )
         :ComponentBaseClass( m_aMutex )
         ,m_aImplControl( new WindowType( _pParentWindow, _nWindowStyle ), _nControlType, *this, this )
     {

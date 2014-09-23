@@ -38,7 +38,7 @@ namespace svt
     //= DrawerDeckLayouter
 
 
-    DrawerDeckLayouter::DrawerDeckLayouter( ::Window& i_rParentWindow, IToolPanelDeck& i_rPanels )
+    DrawerDeckLayouter::DrawerDeckLayouter( vcl::Window& i_rParentWindow, IToolPanelDeck& i_rPanels )
         :m_rParentWindow( i_rParentWindow )
         ,m_rPanelDeck( i_rPanels )
         ,m_aDrawers()
@@ -211,7 +211,7 @@ namespace svt
     }
 
 
-    size_t DrawerDeckLayouter::impl_getPanelPositionFromWindow( const Window* i_pDrawerWindow ) const
+    size_t DrawerDeckLayouter::impl_getPanelPositionFromWindow( const vcl::Window* i_pDrawerWindow ) const
     {
         for (   ::std::vector< PToolPanelDrawer >::const_iterator drawerPos = m_aDrawers.begin();
                 drawerPos != m_aDrawers.end();

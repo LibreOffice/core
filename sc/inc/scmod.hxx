@@ -111,7 +111,7 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     bool                mbIsInSharedDocLoading:1;
     bool                mbIsInSharedDocSaving:1;
 
-    std::map<sal_uInt16, std::list<Window*> > m_mapRefWindow;
+    std::map<sal_uInt16, std::list<vcl::Window*> > m_mapRefWindow;
     std::stack<ScAnyRefModalDlg*> maAnyRefDlgStack;
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
@@ -246,16 +246,16 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     // virtual methods for the options dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetInSharedDocLoading( bool bNew )  { mbIsInSharedDocLoading = bNew; }
     bool                IsInSharedDocLoading() const        { return mbIsInSharedDocLoading; }
     void                SetInSharedDocSaving( bool bNew )   { mbIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return mbIsInSharedDocSaving; }
 
-    SC_DLLPUBLIC bool   RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
-    SC_DLLPUBLIC bool   UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
-    SC_DLLPUBLIC Window * Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor );
+    SC_DLLPUBLIC bool   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
+    SC_DLLPUBLIC bool   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
+    SC_DLLPUBLIC vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
 
     ScAnyRefModalDlg* GetCurrentAnyRefDlg();
     void PushNewAnyRefDlg( ScAnyRefModalDlg* pDlg );

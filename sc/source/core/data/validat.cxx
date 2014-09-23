@@ -180,7 +180,7 @@ bool ScValidationData::GetErrMsg( OUString& rTitle, OUString& rMsg,
 }
 
 bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
-                                ScFormulaCell* pCell, Window* pParent ) const
+                                ScFormulaCell* pCell, vcl::Window* pParent ) const
 {
     ScDocument* pDocument = GetDocument();
     SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
@@ -261,7 +261,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     // true -> abort
 
 bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
-                                ScFormulaCell* pCell, Window* pParent ) const
+                                ScFormulaCell* pCell, vcl::Window* pParent ) const
 {
     if ( SfxApplication::IsXScriptURL( aErrorTitle ) )
     {
@@ -372,7 +372,7 @@ void ScValidationData::DoCalcError( ScFormulaCell* pCell ) const
 
     // true -> abort
 
-bool ScValidationData::DoError( Window* pParent, const OUString& rInput,
+bool ScValidationData::DoError( vcl::Window* pParent, const OUString& rInput,
                                 const ScAddress& rPos ) const
 {
     if ( eErrorStyle == SC_VALERR_MACRO )

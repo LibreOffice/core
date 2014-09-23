@@ -69,7 +69,7 @@ void ScDocShell::ErrorMessage( sal_uInt16 nGlobStrId )
 {
     //! StopMarking an der (aktiven) View?
 
-    Window* pParent = GetActiveDialogParent();
+    vcl::Window* pParent = GetActiveDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
     bool bFocus = pParent && pParent->HasFocus();
 

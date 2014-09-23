@@ -36,7 +36,7 @@
 class VirtualDevice;
 class OutputDevice;
 class Region;
-class Window;
+namespace vcl { class Window; }
 class SdrHdlList;
 class SdrMarkView;
 class SdrObject;

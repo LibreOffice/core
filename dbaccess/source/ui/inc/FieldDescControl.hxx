@@ -66,8 +66,8 @@ namespace dbaui
     {
     private:
         OTableDesignHelpBar*    pHelp;
-        Window*                 pLastFocusWindow;
-        Window*                 m_pActFocusWindow;
+        vcl::Window*                 pLastFocusWindow;
+        vcl::Window*                 m_pActFocusWindow;
 
         FixedText*              pDefaultText;
         FixedText*              pRequiredText;
@@ -170,10 +170,10 @@ namespace dbaui
 
         const OPropColumnEditCtrl*              getColumnCtrl() const { return m_pColumnName; }
 
-        void    implFocusLost(Window* _pWhich);
+        void    implFocusLost(vcl::Window* _pWhich);
 
     public:
-        OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar);
+        OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
         virtual ~OFieldDescControl();
 
         void                DisplayData(OFieldDescription* pFieldDescr );

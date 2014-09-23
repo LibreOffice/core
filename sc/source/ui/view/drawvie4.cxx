@@ -88,7 +88,7 @@ void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rO
     }
 }
 
-bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
+bool ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
 {
     bool bReturn = false;
 
@@ -520,7 +520,7 @@ void ScDrawView::SetMarkedOriginalSize()
             }
             if (pViewData)
             {
-                Window* pActWin = pViewData->GetActiveWin();
+                vcl::Window* pActWin = pViewData->GetActiveWin();
                 if (pActWin)
                 {
                     aOriginalSize = pActWin->LogicToLogic(

@@ -171,7 +171,7 @@ namespace pcr
     //= ControlCharacterDialog
 
 
-    ControlCharacterDialog::ControlCharacterDialog(Window* _pParent, const SfxItemSet& _rCoreSet)
+    ControlCharacterDialog::ControlCharacterDialog(vcl::Window* _pParent, const SfxItemSet& _rCoreSet)
         : SfxTabDialog(_pParent, "ControlFontDialog",
             "modules/spropctrlr/ui/controlfontdialog.ui", &_rCoreSet)
         , m_nCharsId(0)

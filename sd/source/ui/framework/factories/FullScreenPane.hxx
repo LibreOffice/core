@@ -51,7 +51,7 @@ public:
     FullScreenPane (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const ::Window* pViewShellWindow);
+        const vcl::Window* pViewShellWindow);
     virtual ~FullScreenPane (void) throw();
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;

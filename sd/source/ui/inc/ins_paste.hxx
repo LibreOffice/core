@@ -35,7 +35,7 @@ private:
     RadioButton* m_pRbAfter;
 
 public:
-    SdInsertPasteDlg( Window* pWindow );
+    SdInsertPasteDlg( vcl::Window* pWindow );
     bool IsInsertBefore() const;
 };
 

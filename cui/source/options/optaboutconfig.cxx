@@ -56,7 +56,7 @@ struct Prop_Impl
     {}
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCuiCustomMultilineEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCuiCustomMultilineEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new CuiCustomMultilineEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
 }
@@ -124,7 +124,7 @@ Size CuiCustomMultilineEdit::GetOptimalSize() const
     return LogicToPixel(Size(150, GetTextHeight()), MAP_APPFONT);
 }
 
-CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSet& rItemSet*/ ) :
+CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxItemSet& rItemSet*/ ) :
     ModelessDialog( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui"),
     m_pPrefCtrl( get<SvSimpleTableContainer>("preferences") ),
     m_pResetBtn( get<PushButton>("reset") ),
@@ -456,7 +456,7 @@ std::vector< OUString > CuiAboutConfigTabPage::commaStringToSequence( const OUSt
     return tempVector;
 }
 
-CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( Window* pWindow,
+CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( vcl::Window* pWindow,
                                                       const OUString& rValue,
                                                       int limit ) :
     ModalDialog( pWindow, "AboutConfigValueDialog", "cui/ui/aboutconfigvaluedialog.ui" ),

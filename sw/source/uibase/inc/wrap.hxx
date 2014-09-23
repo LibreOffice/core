@@ -25,7 +25,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class SfxItemSet;
 class SwWrtShell;
 
@@ -34,7 +34,7 @@ class SwWrapDlg : public SfxSingleTabDialog
     SwWrtShell*         pWrtShell;
 
 public:
-    SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
+    SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
 
     SwWrtShell*  GetWrtShell()   { return pWrtShell; }
 };
@@ -79,7 +79,7 @@ class SwWrapTabPage: public SfxTabPage
     bool bDrawMode;
     bool bContourImage;
 
-    SwWrapTabPage(Window *pParent, const SfxItemSet &rSet);
+    SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwWrapTabPage();
 
     void            ApplyImageList();
@@ -97,7 +97,7 @@ class SwWrapTabPage: public SfxTabPage
 
 public:
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
     virtual bool    FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void    Reset(const SfxItemSet *rSet) SAL_OVERRIDE;

@@ -79,7 +79,7 @@ namespace dbaui
         void            EnableLines();
 
     public:
-        DlgOrderCrit(   Window * pParent,
+        DlgOrderCrit(   vcl::Window * pParent,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols);

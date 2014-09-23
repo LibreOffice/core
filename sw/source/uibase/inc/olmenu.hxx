@@ -81,7 +81,7 @@ public:
             const ::com::sun::star::uno::Sequence< OUString > &rSuggestions,
             const OUString & rParaText );
 
-    sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );
+    sal_uInt16  Execute( const Rectangle& rPopupPos, vcl::Window* pWin );
     void Execute( sal_uInt16 nId );
 
 };

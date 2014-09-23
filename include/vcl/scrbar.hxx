@@ -70,7 +70,7 @@ private:
 
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
     using Window::ImplInit;
-    SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplUpdateRects( bool bUpdate = true );
     SAL_DLLPRIVATE long         ImplCalcThumbPos( long nPixPos );
@@ -89,7 +89,7 @@ private:
     DECL_DLLPRIVATE_LINK(       ImplAutoTimerHdl, void* );
 
 public:
-    explicit        ScrollBar( Window* pParent, WinBits nStyle = WB_VERT );
+    explicit        ScrollBar( vcl::Window* pParent, WinBits nStyle = WB_VERT );
     virtual         ~ScrollBar();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -145,15 +145,15 @@ public:
 // - ScrollBarBox -
 
 
-class VCL_DLLPUBLIC ScrollBarBox : public Window
+class VCL_DLLPUBLIC ScrollBarBox : public vcl::Window
 {
 private:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
 
 public:
-    explicit        ScrollBarBox( Window* pParent, WinBits nStyle = 0 );
+    explicit        ScrollBarBox( vcl::Window* pParent, WinBits nStyle = 0 );
 
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

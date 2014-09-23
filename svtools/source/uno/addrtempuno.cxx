@@ -71,7 +71,7 @@ namespace {
 
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(Window* _pParent) SAL_OVERRIDE;
+        virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
 
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
 
@@ -212,7 +212,7 @@ namespace {
     }
 
 
-    Dialog* OAddressBookSourceDialogUno::createDialog(Window* _pParent)
+    Dialog* OAddressBookSourceDialogUno::createDialog(vcl::Window* _pParent)
     {
         if ( m_xDataSource.is() && !m_sTable.isEmpty() )
             return new AddressBookSourceDialog(_pParent, m_aContext, m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );

@@ -44,7 +44,7 @@ namespace svt
         ::std::auto_ptr< PanelTabBar >  pTabBar;
         AccessibleFactoryAccess         aAccessibleFactory;
 
-        TabDeckLayouter_Data( Window& i_rParent, IToolPanelDeck& i_rPanels,
+        TabDeckLayouter_Data( vcl::Window& i_rParent, IToolPanelDeck& i_rPanels,
                 const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
             :eAlignment( i_eAlignment )
             ,rPanels( i_rPanels )
@@ -80,7 +80,7 @@ namespace svt
     //= TabDeckLayouter
 
 
-    TabDeckLayouter::TabDeckLayouter( Window& i_rParent, IToolPanelDeck& i_rPanels,
+    TabDeckLayouter::TabDeckLayouter( vcl::Window& i_rParent, IToolPanelDeck& i_rPanels,
             const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :m_pData( new TabDeckLayouter_Data( i_rParent, i_rPanels, i_eAlignment, i_eItemContent ) )
     {

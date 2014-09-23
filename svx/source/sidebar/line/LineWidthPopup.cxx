@@ -28,7 +28,7 @@
 namespace svx { namespace sidebar {
 
 LineWidthPopup::LineWidthPopup (
-    Window* pParent,
+    vcl::Window* pParent,
     const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator)
     : Popup(
         pParent,

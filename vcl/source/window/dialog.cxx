@@ -70,7 +70,7 @@ static OString ImplGetDialogText( Dialog* pDialog )
     return aErrorStr.makeStringAndClear();
 }
 
-static bool ImplIsMnemonicCtrl( Window* pWindow )
+static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
 {
     if( ! pWindow->GetSettings().GetStyleSettings().GetAutoMnemonic() )
         return false;
@@ -90,7 +90,7 @@ static bool ImplIsMnemonicCtrl( Window* pWindow )
         //until we can be sure we can remove it
         if ( pWindow->GetStyle() & (WB_INFO | WB_NOLABEL) )
             return false;
-        Window* pNextWindow = pWindow->GetWindow( WINDOW_NEXT );
+        vcl::Window* pNextWindow = pWindow->GetWindow( WINDOW_NEXT );
         if ( !pNextWindow )
             return false;
         pNextWindow = pNextWindow->GetWindow( WINDOW_CLIENT );
@@ -119,9 +119,9 @@ void ImplHideSplash()
 
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
-Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
+vcl::Window * nextLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChild)
 {
-    Window *pLastChild = pChild;
+    vcl::Window *pLastChild = pChild;
 
     if (isContainerWindow(*pChild))
         pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
@@ -130,7 +130,7 @@ Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
 
     while (!pChild)
     {
-        Window *pParent = pLastChild->GetParent();
+        vcl::Window *pParent = pLastChild->GetParent();
         if (!pParent)
             return NULL;
         if (pParent == pTopLevel)
@@ -145,9 +145,9 @@ Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
     return pChild;
 }
 
-Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
+vcl::Window * prevLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChild)
 {
-    Window *pLastChild = pChild;
+    vcl::Window *pLastChild = pChild;
 
     if (isContainerWindow(*pChild))
         pChild = pChild->GetWindow(WINDOW_LASTCHILD);
@@ -156,7 +156,7 @@ Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
 
     while (!pChild)
     {
-        Window *pParent = pLastChild->GetParent();
+        vcl::Window *pParent = pLastChild->GetParent();
         if (!pParent)
             return NULL;
         if (pParent == pTopLevel)
@@ -173,19 +173,19 @@ Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
 
 //Get first window of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
-Window * firstLogicalChildOfParent(Window *pTopLevel)
+vcl::Window * firstLogicalChildOfParent(vcl::Window *pTopLevel)
 {
-    Window *pChild = pTopLevel->GetWindow(WINDOW_FIRSTCHILD);
+    vcl::Window *pChild = pTopLevel->GetWindow(WINDOW_FIRSTCHILD);
     if (pChild && isContainerWindow(*pChild))
         pChild = nextLogicalChildOfParent(pTopLevel, pChild);
     return pChild;
 }
 
-void ImplWindowAutoMnemonic( Window* pWindow )
+void ImplWindowAutoMnemonic( vcl::Window* pWindow )
 {
     MnemonicGenerator   aMnemonicGenerator;
-    Window*                 pGetChild;
-    Window*                 pChild;
+    vcl::Window*                 pGetChild;
+    vcl::Window*                 pChild;
 
     // register the assigned mnemonics
     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
@@ -199,7 +199,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
     // take the Controls of the dialog into account for TabPages
     if ( pWindow->GetType() == WINDOW_TABPAGE )
     {
-        Window* pParent = pWindow->GetParent();
+        vcl::Window* pParent = pWindow->GetParent();
         if ( pParent->GetType() == WINDOW_TABCONTROL )
             pParent = pParent->GetParent();
 
@@ -237,8 +237,8 @@ static VclButtonBox* getActionArea(Dialog *pDialog)
     VclButtonBox *pButtonBox = NULL;
     if (pDialog->isLayoutEnabled())
     {
-        Window *pBox = pDialog->GetWindow(WINDOW_FIRSTCHILD);
-        Window *pChild = pBox->GetWindow(WINDOW_LASTCHILD);
+        vcl::Window *pBox = pDialog->GetWindow(WINDOW_FIRSTCHILD);
+        vcl::Window *pChild = pBox->GetWindow(WINDOW_LASTCHILD);
         while (pChild)
         {
             pButtonBox = dynamic_cast<VclButtonBox*>(pChild);
@@ -250,7 +250,7 @@ static VclButtonBox* getActionArea(Dialog *pDialog)
     return pButtonBox;
 }
 
-static Window* getActionAreaButtonList(Dialog *pDialog)
+static vcl::Window* getActionAreaButtonList(Dialog *pDialog)
 {
     VclButtonBox* pButtonBox = getActionArea(pDialog);
     if (pButtonBox)
@@ -260,7 +260,7 @@ static Window* getActionAreaButtonList(Dialog *pDialog)
 
 static PushButton* ImplGetDefaultButton( Dialog* pDialog )
 {
-    Window* pChild = getActionAreaButtonList(pDialog);
+    vcl::Window* pChild = getActionAreaButtonList(pDialog);
     while ( pChild )
     {
         if ( pChild->ImplIsPushButton() )
@@ -278,7 +278,7 @@ static PushButton* ImplGetDefaultButton( Dialog* pDialog )
 
 static PushButton* ImplGetOKButton( Dialog* pDialog )
 {
-    Window* pChild = getActionAreaButtonList(pDialog);
+    vcl::Window* pChild = getActionAreaButtonList(pDialog);
     while ( pChild )
     {
         if ( pChild->GetType() == WINDOW_OKBUTTON )
@@ -292,7 +292,7 @@ static PushButton* ImplGetOKButton( Dialog* pDialog )
 
 static PushButton* ImplGetCancelButton( Dialog* pDialog )
 {
-    Window* pChild = getActionAreaButtonList(pDialog);
+    vcl::Window* pChild = getActionAreaButtonList(pDialog);
 
     while ( pChild )
     {
@@ -315,7 +315,7 @@ static void ImplMouseAutoPos( Dialog* pDialog )
     }
     else if ( nMouseOptions & MOUSE_OPTION_AUTODEFBTNPOS )
     {
-        Window* pWindow = ImplGetDefaultButton( pDialog );
+        vcl::Window* pWindow = ImplGetDefaultButton( pDialog );
         if ( !pWindow )
             pWindow = ImplGetOKButton( pDialog );
         if ( !pWindow )
@@ -350,7 +350,7 @@ void Dialog::ImplInitDialogData()
     mpDialogImpl            = new DialogImpl;
 }
 
-void Dialog::ImplInit( Window* pParent, WinBits nStyle )
+void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     sal_uInt16 nSysWinMode = Application::GetSystemWindowMode();
 
@@ -479,27 +479,27 @@ OUString VclBuilderContainer::getUIRootDir()
 //do the init. Find the real parent stashed in mpDialogParent.
 void Dialog::doDeferredInit(WinBits nBits)
 {
-    Window *pParent = mpDialogParent;
+    vcl::Window *pParent = mpDialogParent;
     mpDialogParent = NULL;
     ImplInit(pParent, nBits);
     mbIsDefferedInit = false;
 }
 
-Dialog::Dialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+Dialog::Dialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : SystemWindow(WINDOW_DIALOG)
 {
     ImplInitDialogData();
     loadUI(pParent, rID, rUIXMLDescription);
 }
 
-Dialog::Dialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType)
+Dialog::Dialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType)
     : SystemWindow(nType)
 {
     ImplInitDialogData();
     loadUI(pParent, rID, rUIXMLDescription);
 }
 
-Dialog::Dialog(Window* pParent, WinBits nStyle)
+Dialog::Dialog(vcl::Window* pParent, WinBits nStyle)
     : SystemWindow(WINDOW_DIALOG)
 {
     ImplInitDialogData();
@@ -734,7 +734,7 @@ bool Dialog::ImplStartExecuteModal()
     }
 
 #ifdef DBG_UTIL
-    Window* pParent = GetParent();
+    vcl::Window* pParent = GetParent();
     if ( pParent )
     {
         pParent = pParent->ImplGetFirstOverlapWindow();
@@ -800,7 +800,7 @@ short Dialog::Execute()
 
 #ifdef DBG_UTIL
     ImplDelData aParentDelData;
-    Window* pDialogParent = mpDialogParent;
+    vcl::Window* pDialogParent = mpDialogParent;
     if( pDialogParent )
         pDialogParent->ImplAddDel( &aParentDelData );
 #endif
@@ -917,8 +917,8 @@ void Dialog::EndDialog( long nResult )
         // the same frame parent (or NULL)
         if( mpPrevExecuteDlg )
         {
-            Window* pFrameParent = ImplGetFrameWindow()->ImplGetParent();
-            Window* pPrevFrameParent = mpPrevExecuteDlg->ImplGetFrameWindow()->ImplGetParent();
+            vcl::Window* pFrameParent = ImplGetFrameWindow()->ImplGetParent();
+            vcl::Window* pPrevFrameParent = mpPrevExecuteDlg->ImplGetFrameWindow()->ImplGetParent();
             if( ( !pFrameParent && !pPrevFrameParent ) ||
                 ( pFrameParent && pPrevFrameParent && pFrameParent->ImplGetFrame() == pPrevFrameParent->ImplGetFrame() )
                 )
@@ -956,7 +956,7 @@ long Dialog::GetResult() const
     return mpDialogImpl->mnResult;
 }
 
-void Dialog::EndAllDialogs( Window* pParent )
+void Dialog::EndAllDialogs( vcl::Window* pParent )
 {
    ImplSVData*  pSVData = ImplGetSVData();
    Dialog*      pTempModDialog;
@@ -991,7 +991,7 @@ void Dialog::SetModalInputMode( bool bModal )
             mpPrevExecuteDlg->EnableInput( false, true, true, this );
 
         // determine next overlap dialog parent
-        Window* pParent = GetParent();
+        vcl::Window* pParent = GetParent();
         if ( pParent )
         {
             // #103716# dialogs should always be modal to the whole frame window
@@ -1042,7 +1042,7 @@ void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
 {
     if ( bSubModalDialogs )
     {
-        Window* pOverlap = ImplGetFirstOverlapWindow();
+        vcl::Window* pOverlap = ImplGetFirstOverlapWindow();
         pOverlap = pOverlap->mpWindowImpl->mpFirstOverlap;
         while ( pOverlap )
         {
@@ -1057,7 +1057,7 @@ void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
 
 void Dialog::GrabFocusToFirstControl()
 {
-    Window* pFocusControl;
+    vcl::Window* pFocusControl;
 
     // find focus control, even if the dialog has focus
     if ( HasFocus() )
@@ -1087,7 +1087,7 @@ void Dialog::GrabFocusToFirstControl()
 
 void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder, sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
-    ImplBorderWindow aImplWin( (Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
+    ImplBorderWindow aImplWin( (vcl::Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
     aImplWin.GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
 }
 
@@ -1152,18 +1152,18 @@ VclBuilderContainer::~VclBuilderContainer()
     delete m_pUIBuilder;
 }
 
-ModelessDialog::ModelessDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+ModelessDialog::ModelessDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG)
 {
 }
 
-ModalDialog::ModalDialog( Window* pParent, WinBits nStyle ) :
+ModalDialog::ModalDialog( vcl::Window* pParent, WinBits nStyle ) :
     Dialog( WINDOW_MODALDIALOG )
 {
     ImplInit( pParent, nStyle );
 }
 
-ModalDialog::ModalDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
+ModalDialog::ModalDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
     Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODALDIALOG)
 {
 }

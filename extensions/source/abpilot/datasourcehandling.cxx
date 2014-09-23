@@ -502,7 +502,7 @@ namespace abp
     }
 
 
-    bool ODataSource::connect( Window* _pMessageParent )
+    bool ODataSource::connect( vcl::Window* _pMessageParent )
     {
         if ( isConnected( ) )
             // nothing to do

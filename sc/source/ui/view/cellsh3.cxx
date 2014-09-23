@@ -779,7 +779,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_AUTOFORMAT:
             {
-                Window* pDlgParent = pTabViewShell->GetDialogParent();
+                vcl::Window* pDlgParent = pTabViewShell->GetDialogParent();
                 SCCOL nStartCol;
                 SCROW nStartRow;
                 SCTAB nStartTab;

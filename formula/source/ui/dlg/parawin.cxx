@@ -35,7 +35,7 @@ namespace formula
 {
 
 
-ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg):
+ParaWin::ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg):
     TabPage         (pParent, "ParameterPage", "formula/ui/parameter.ui"),
     pFuncDesc       ( NULL ),
     pMyParent       (_pDlg),
@@ -81,7 +81,7 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg):
     get(m_pSlider, "scrollbar");
 
     //lock down initial preferences
-    Window *pGrid = get<Window>("paramgrid");
+    vcl::Window *pGrid = get<vcl::Window>("paramgrid");
     pGrid->set_height_request(pGrid->get_preferred_size().Height());
     Size aSize(get_preferred_size());
     set_width_request(aSize.Width());

@@ -397,7 +397,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
     return 0;
 }
 
-SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard) :
+SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* _pWizard) :
     SfxModalDialog(pParent, "MailBodyDialog", "modules/swriter/ui/mmmailbody.ui")
 {
     m_pWizard = _pWizard;

@@ -29,7 +29,7 @@
 namespace chart
 {
 
-SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow, const SfxItemSet& rInAttrs)
+SchLegendPosTabPage::SchLegendPosTabPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     : SfxTabPage( pWindow
                  ,"tp_LegendPosition"
                  ,"modules/schart/ui/tp_LegendPosition.ui"
@@ -41,7 +41,7 @@ SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow, const SfxItemSet& rInA
     m_pLbTextDirection->SetDropDownLineCount(3);
 }
 
-SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow, const SfxItemSet* rOutAttrs)
+SfxTabPage* SchLegendPosTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rOutAttrs)
 {
     return new SchLegendPosTabPage(pWindow, *rOutAttrs);
 }

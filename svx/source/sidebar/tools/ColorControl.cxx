@@ -82,7 +82,7 @@ namespace {
 
 
 ColorControl::ColorControl (
-    Window* pParent,
+    vcl::Window* pParent,
     SfxBindings* /* pBindings */,
     const ResId& rControlResId,
     const ResId& rValueSetResId,

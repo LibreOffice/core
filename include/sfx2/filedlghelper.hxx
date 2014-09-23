@@ -55,7 +55,7 @@ namespace com
 }
 
 class SfxItemSet;
-class Window;
+namespace vcl { class Window; }
 
 // the SFXWB constants are for the nFlags parameter of the constructor
 #define SFXWB_INSERT            0x04000000L     // turn Open into Insert dialog
@@ -103,7 +103,7 @@ private:
 public:
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
-                                              Window* _pPreferredParent = NULL );
+                                              vcl::Window* _pPreferredParent = NULL );
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
@@ -126,7 +126,7 @@ public:
                                               const OUString& aExtName,
                                               const OUString& rStandardDir,
                                               const ::com::sun::star::uno::Sequence< OUString >& rBlackList,
-                                              Window* _pPreferredParent = NULL );
+                                              vcl::Window* _pPreferredParent = NULL );
 
 
     virtual                 ~FileDialogHelper();

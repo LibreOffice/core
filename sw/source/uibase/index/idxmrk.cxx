@@ -54,7 +54,7 @@
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwInsertIdxMarkWrapper, FN_INSERT_IDX_ENTRY_DLG)
 
-SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
+SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo ) :
@@ -84,7 +84,7 @@ void    SwInsertIdxMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwInsertAuthMarkWrapper, FN_INSERT_AUTH_ENTRY_DLG)
 
-SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   Window *pParentWindow,
+SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo ) :

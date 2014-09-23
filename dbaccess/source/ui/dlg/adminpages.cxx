@@ -56,7 +56,7 @@ namespace dbaui
     {
     }
 
-    OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
+    OGenericAdministrationPage::OGenericAdministrationPage(vcl::Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rUIXMLDescription, &_rAttrSet)
         ,m_abEnableRoadmap(false)
         ,m_pAdminDialog(NULL)
@@ -258,7 +258,7 @@ namespace dbaui
         Point aReference = _rReference.GetPosPixel();
         aReference.Y() += _rReference.GetSizePixel().Height();
 
-        const Window* pConverter = _rControl.GetParent();
+        const vcl::Window* pConverter = _rControl.GetParent();
         Size aOffset = pConverter->LogicToPixel( Size( _nIndentAppFont, ( _eRelation == RelatedControls ? 3 : 6 ) ), MAP_APPFONT );
 
         Point aControlPos( aReference.X() + aOffset.Width(), aReference.Y() + aOffset.Height() );

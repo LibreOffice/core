@@ -165,7 +165,7 @@ public:
     friend class                ImpPDFTabLinksPage;
     friend class                ImpPDFTabSigningPage;
 
-    ImpPDFTabDialog( Window* pParent,
+    ImpPDFTabDialog( vcl::Window* pParent,
                      Sequence< PropertyValue >& rFilterData,
                      const Reference< XComponent >& rDoc
                      );
@@ -238,11 +238,11 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 public:
     DECL_LINK( ToggleExportPDFAHdl, void* );
 
-    ImpPDFTabGeneralPage( Window* pParent,
+    ImpPDFTabGeneralPage( vcl::Window* pParent,
                           const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabGeneralPage();
-    static SfxTabPage*          Create( Window* pParent,
+    static SfxTabPage*          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet);
 
     void    GetFilterConfigItem(ImpPDFTabDialog* paParent);
@@ -277,11 +277,11 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
     DECL_LINK( ToggleRbMagnHdl, void* );
 
 public:
-    ImpPDFTabOpnFtrPage( Window* pParent,
+    ImpPDFTabOpnFtrPage( vcl::Window* pParent,
                          const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabOpnFtrPage();
-    static SfxTabPage*          Create( Window* pParent,
+    static SfxTabPage*          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -310,11 +310,11 @@ class ImpPDFTabViewerPage : public SfxTabPage
 
     DECL_LINK( ToggleRbBookmarksHdl, void* );
 public:
-    ImpPDFTabViewerPage( Window* pParent,
+    ImpPDFTabViewerPage( vcl::Window* pParent,
                          const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabViewerPage();
-    static SfxTabPage*          Create( Window* pParent,
+    static SfxTabPage*          Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -365,11 +365,11 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     void enablePermissionControls();
 
 public:
-    ImpPDFTabSecurityPage( Window* pParent,
+    ImpPDFTabSecurityPage( vcl::Window* pParent,
                            const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabSecurityPage();
-    static SfxTabPage*      Create( Window* pParent,
+    static SfxTabPage*      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -396,11 +396,11 @@ class ImpPDFTabLinksPage : public SfxTabPage
     DECL_LINK( ClickRbOpnLnksBrowserHdl, void* );
 
 public:
-    ImpPDFTabLinksPage( Window* pParent,
+    ImpPDFTabLinksPage( vcl::Window* pParent,
                            const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabLinksPage();
-    static SfxTabPage*      Create( Window* pParent,
+    static SfxTabPage*      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
@@ -425,11 +425,11 @@ class ImpPDFTabSigningPage : public SfxTabPage
     DECL_LINK( ClickmaPbSignCertClear, void* );
 
 public:
-    ImpPDFTabSigningPage( Window* pParent,
+    ImpPDFTabSigningPage( vcl::Window* pParent,
                           const SfxItemSet& rSet );
 
     virtual ~ImpPDFTabSigningPage();
-    static SfxTabPage*      Create( Window* pParent,
+    static SfxTabPage*      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);

@@ -27,13 +27,13 @@
 
 #define MAX_PAGES 10
 
-class Window;
+namespace vcl { class Window; }
 
 class SD_DLLPUBLIC Assistent
 {
     /** contains for every page the controls, which have to be
         connected? correctly */
-    std::vector<Window*> maPages[MAX_PAGES];
+    std::vector<vcl::Window*> maPages[MAX_PAGES];
 
     /// number of pages
     int mnPages;
@@ -51,7 +51,7 @@ public:
     void DisablePage( int nPage );
 
     /// adds a control to the specified page
-    bool InsertControl(int nDestPage,Window* pUsedControl);
+    bool InsertControl(int nDestPage, vcl::Window* pUsedControl);
 
     bool NextPage();
 

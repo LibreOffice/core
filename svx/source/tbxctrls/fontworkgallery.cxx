@@ -70,7 +70,7 @@ namespace svx
 const int nColCount = 4;
 const int nLineCount = 4;
 
-FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent, sal_uInt16 /*nSID*/ ) :
+FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pParent, sal_uInt16 /*nSID*/ ) :
         ModalDialog(pParent, "FontworkGalleryDialog", "svx/ui/fontworkgallerydialog.ui" ),
         mnThemeId           ( 0xffff ),
         mpSdrView           ( pSdrView ),
@@ -298,7 +298,7 @@ void FontWorkShapeTypeControl::Select(sal_uInt16 /*nSelectModifier*/)
 class FontworkAlignmentWindow : public ToolbarMenu
 {
 public:
-    FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow );
+    FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
 
     virtual void statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException ) SAL_OVERRIDE;
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -319,7 +319,7 @@ private:
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
 
-FontworkAlignmentWindow::FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow )
+FontworkAlignmentWindow::FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow )
 : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_FONTWORK_ALIGNMENT ))
 , mrController( rController )
 , maImgAlgin1( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16    ) )
@@ -419,7 +419,7 @@ class FontworkAlignmentControl : public svt::PopupWindowController
 public:
     FontworkAlignmentControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual ::Window* createPopupWindow( ::Window* pParent ) SAL_OVERRIDE;
+    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -438,7 +438,7 @@ FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentC
 
 
 
-::Window* FontworkAlignmentControl::createPopupWindow( ::Window* pParent )
+vcl::Window* FontworkAlignmentControl::createPopupWindow( vcl::Window* pParent )
 {
     return new FontworkAlignmentWindow( *this, m_xFrame, pParent );
 }
@@ -485,7 +485,7 @@ Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames
 class FontworkCharacterSpacingWindow : public ToolbarMenu
 {
 public:
-    FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow );
+    FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
 
     virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 private:
@@ -503,7 +503,7 @@ private:
 
 
 
-FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow )
+FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow )
 : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_FONTWORK_CHARSPACING ))
 , mrController( rController )
 , msFontworkCharacterSpacing( ".uno:FontworkCharacterSpacing" )
@@ -650,7 +650,7 @@ class FontworkCharacterSpacingControl : public svt::PopupWindowController
 public:
     FontworkCharacterSpacingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual ::Window* createPopupWindow( ::Window* pParent ) SAL_OVERRIDE;
+    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -667,7 +667,7 @@ FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Referenc
 
 
 
-::Window* FontworkCharacterSpacingControl::createPopupWindow( ::Window* pParent )
+vcl::Window* FontworkCharacterSpacingControl::createPopupWindow( vcl::Window* pParent )
 {
     return new FontworkCharacterSpacingWindow( *this, m_xFrame, pParent );
 }
@@ -711,7 +711,7 @@ Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl::getSupportedServi
     return FontworkCharacterSpacingControl_getSupportedServiceNames();
 }
 
-FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( Window* pParent, sal_Int32 nScale )
+FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( vcl::Window* pParent, sal_Int32 nScale )
 :   ModalDialog( pParent, "FontworkSpacingDialog" , "svx/ui/fontworkspacingdialog.ui" )
 {
     get(m_pMtrScale, "entry");

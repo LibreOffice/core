@@ -30,7 +30,7 @@ class StarBASIC;
 class SfxUInt16Item;
 class SfxBindings;
 class SfxDispatcher;
-class Window;
+namespace vcl { class Window; }
 
 namespace basctl
 {
@@ -68,7 +68,7 @@ namespace basctl
         Will show an error message when renaming fails because the new name is already used.
     */
     bool            RenameModule(
-        Window* pErrorParent, const ScriptDocument& rDocument,
+        vcl::Window* pErrorParent, const ScriptDocument& rDocument,
         const OUString& rLibName, const OUString& rOldName, const OUString& rNewName );
 
     // new methods for macros
@@ -91,7 +91,7 @@ namespace basctl
         Will show an error message when renaming fails because the new name is already used.
     */
     bool            RenameDialog(
-        Window* pErrorParent, const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rOldName, const OUString& rNewName )
+        vcl::Window* pErrorParent, const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rOldName, const OUString& rNewName )
         throw (css::container::ElementExistException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
     bool            RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );

@@ -43,7 +43,7 @@ namespace svxform
     }
 
 
-    void OLocalExchange::copyToClipboard( Window* _pWindow, const GrantAccess& )
+    void OLocalExchange::copyToClipboard( vcl::Window* _pWindow, const GrantAccess& )
     {
         if ( m_bClipboardOwner )
         {   // simulate a lostOwnership to notify parties interested in
@@ -85,7 +85,7 @@ namespace svxform
     }
 
 
-    void OLocalExchange::startDrag( Window* _pWindow, sal_Int8 _nDragSourceActions, const GrantAccess& )
+    void OLocalExchange::startDrag( vcl::Window* _pWindow, sal_Int8 _nDragSourceActions, const GrantAccess& )
     {
         m_bDragging = true;
         StartDrag( _pWindow, _nDragSourceActions );
@@ -360,7 +360,7 @@ namespace svxform
         return new OControlExchange;
     }
 
-    OLocalExchangeHelper::OLocalExchangeHelper(Window* _pDragSource)
+    OLocalExchangeHelper::OLocalExchangeHelper(vcl::Window* _pDragSource)
         :m_pDragSource(_pDragSource)
         ,m_pTransferable(NULL)
     {

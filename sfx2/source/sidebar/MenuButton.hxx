@@ -28,7 +28,7 @@ class MenuButton
     : public CheckBox
 {
 public:
-    MenuButton (Window* pParentWindow);
+    MenuButton (vcl::Window* pParentWindow);
     virtual ~MenuButton (void);
 
     virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;

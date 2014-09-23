@@ -36,7 +36,7 @@ using namespace css::uno;
 namespace sc { namespace sidebar {
 
 AlignmentPropertyPanel::AlignmentPropertyPanel(
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : PanelLayout(pParent, "AlignmentPropertyPanel", "modules/scalc/ui/sidebaralignment.ui", rxFrame),
@@ -186,7 +186,7 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
 }
 
 AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {

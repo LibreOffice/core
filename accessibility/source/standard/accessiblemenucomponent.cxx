@@ -111,7 +111,7 @@ awt::Rectangle OAccessibleMenuComponent::implGetBounds() throw (RuntimeException
 
     if ( m_pMenu )
     {
-        Window* pWindow = m_pMenu->GetWindow();
+        vcl::Window* pWindow = m_pMenu->GetWindow();
         if ( pWindow )
         {
             // get bounding rectangle of the window in screen coordinates
@@ -183,10 +183,10 @@ Reference< XAccessible > OAccessibleMenuComponent::getAccessibleParent(  ) throw
 
     if ( m_pMenu )
     {
-        Window* pWindow = m_pMenu->GetWindow();
+        vcl::Window* pWindow = m_pMenu->GetWindow();
         if ( pWindow )
         {
-            Window* pParent = pWindow->GetAccessibleParentWindow();
+            vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
             if ( pParent )
                 xParent = pParent->GetAccessible();
         }
@@ -213,7 +213,7 @@ OUString OAccessibleMenuComponent::getAccessibleDescription( ) throw (RuntimeExc
     OUString sDescription;
     if ( m_pMenu )
     {
-        Window* pWindow = m_pMenu->GetWindow();
+        vcl::Window* pWindow = m_pMenu->GetWindow();
         if ( pWindow )
             sDescription = pWindow->GetAccessibleDescription();
     }
@@ -271,7 +271,7 @@ awt::Point OAccessibleMenuComponent::getLocationOnScreen(  ) throw (RuntimeExcep
 
     if ( m_pMenu )
     {
-        Window* pWindow = m_pMenu->GetWindow();
+        vcl::Window* pWindow = m_pMenu->GetWindow();
         if ( pWindow )
         {
             Rectangle aRect = pWindow->GetWindowExtentsRelative( NULL );
@@ -290,7 +290,7 @@ void OAccessibleMenuComponent::grabFocus(  ) throw (RuntimeException, std::excep
 
     if ( m_pMenu )
     {
-        Window* pWindow = m_pMenu->GetWindow();
+        vcl::Window* pWindow = m_pMenu->GetWindow();
         if ( pWindow )
             pWindow->GrabFocus();
     }
@@ -329,7 +329,7 @@ Reference< awt::XFont > OAccessibleMenuComponent::getFont(  ) throw (RuntimeExce
 
     if ( m_pMenu )
     {
-        Window* pWindow = m_pMenu->GetWindow();
+        vcl::Window* pWindow = m_pMenu->GetWindow();
         if ( pWindow )
         {
             Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), UNO_QUERY );

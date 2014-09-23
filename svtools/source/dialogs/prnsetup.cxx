@@ -216,7 +216,7 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 
 
 
-PrinterSetupDialog::PrinterSetupDialog(Window* pParent)
+PrinterSetupDialog::PrinterSetupDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "PrinterSetupDialog",
         "svt/ui/printersetupdialog.ui")
 {

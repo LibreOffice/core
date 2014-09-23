@@ -29,7 +29,7 @@ sal_uInt16 ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
 
-ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
+ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
                                           InsertDeleteFlags nCheckDefaults,
                                           const OUString* pStrTitle )
 

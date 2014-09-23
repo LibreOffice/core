@@ -73,7 +73,7 @@ namespace SwLangHelper
         OUString aKeyboardLang;
         LanguageType nLang = LANGUAGE_DONTKNOW;
 
-        Window* pWin = rEditView.GetWindow();
+        vcl::Window* pWin = rEditView.GetWindow();
         if(pWin)
             nLang = pWin->GetInputLanguage();
         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)

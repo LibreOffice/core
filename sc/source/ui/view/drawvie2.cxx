@@ -28,12 +28,12 @@ void ScDrawView::UpdateBrowser()
     //  VC's und den Browser dazu gibts nicht mehr...
 }
 
-void ScDrawView::VCAddWin( Window* /* pWin */ )
+void ScDrawView::VCAddWin( vcl::Window* /* pWin */ )
 {
     //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
 
-void ScDrawView::VCRemoveWin( Window* /* pWin */ )
+void ScDrawView::VCRemoveWin( vcl::Window* /* pWin */ )
 {
     //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }

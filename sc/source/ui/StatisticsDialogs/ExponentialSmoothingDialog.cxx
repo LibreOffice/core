@@ -28,7 +28,7 @@
 
 ScExponentialSmoothingDialog::ScExponentialSmoothingDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    Window* pParent, ScViewData* pViewData ) :
+                    vcl::Window* pParent, ScViewData* pViewData ) :
     ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "ExponentialSmoothingDialog", "modules/scalc/ui/exponentialsmoothingdialog.ui" )

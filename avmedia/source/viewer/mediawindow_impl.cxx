@@ -49,7 +49,7 @@ namespace avmedia { namespace priv {
 // - MediaWindowControl -
 
 
-MediaWindowControl::MediaWindowControl( Window* pParent ) :
+MediaWindowControl::MediaWindowControl( vcl::Window* pParent ) :
     MediaControl( pParent, MEDIACONTROLSTYLE_MULTILINE )
 {
 }
@@ -81,13 +81,13 @@ void  MediaWindowControl::execute( const MediaItem& rItem )
 // - MediaChildWindow -
 
 
-MediaChildWindow::MediaChildWindow( Window* pParent ) :
+MediaChildWindow::MediaChildWindow( vcl::Window* pParent ) :
     SystemChildWindow( pParent, WB_CLIPCHILDREN )
 {
 }
 
 #if HAVE_FEATURE_GLTF
-MediaChildWindow::MediaChildWindow( Window* pParent, SystemWindowData* pData ) :
+MediaChildWindow::MediaChildWindow( vcl::Window* pParent, SystemWindowData* pData ) :
     SystemChildWindow( pParent, WB_CLIPCHILDREN, pData )
 {
 }
@@ -161,7 +161,7 @@ void MediaChildWindow::Command( const CommandEvent& rCEvt )
 // - MediaWindowImpl -
 
 
-MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bool bInternalMediaControl ) :
+MediaWindowImpl::MediaWindowImpl( vcl::Window* pParent, MediaWindow* pMediaWindow, bool bInternalMediaControl ) :
     Control( pParent ),
     DropTargetHelper( this ),
     DragSourceHelper( this ),

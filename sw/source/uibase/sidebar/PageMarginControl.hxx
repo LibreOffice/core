@@ -51,7 +51,7 @@ class PageMarginControl
 {
 public:
     PageMarginControl(
-        Window* pParent,
+        vcl::Window* pParent,
         PagePropertyPanel& rPanel,
         const SvxLongLRSpaceItem& aPageLRMargin,
         const SvxLongULSpaceItem& aPageULMargin,

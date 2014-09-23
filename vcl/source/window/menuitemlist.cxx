@@ -198,7 +198,7 @@ MenuItemData* MenuItemList::SearchItem(
                 {
                     KeyCode mnKeyCode;
                     sal_Unicode mnUnicode = pData->aText[n+1];
-                    Window* pDefWindow = ImplGetDefaultWindow();
+                    vcl::Window* pDefWindow = ImplGetDefaultWindow();
                     if(  (  pDefWindow
                          && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode,
                              Application::GetSettings().GetUILanguageTag().getLanguageType(), mnKeyCode )
@@ -259,7 +259,7 @@ size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
                 KeyCode mnKeyCode;
                 // if MapUnicodeToKeyCode fails or is unsupported we try the pure ascii mapping of the keycodes
                 // so we have working shortcuts when ascii mnemonics are used
-                Window* pDefWindow = ImplGetDefaultWindow();
+                vcl::Window* pDefWindow = ImplGetDefaultWindow();
                 if(  (  pDefWindow
                      && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText[n+1],
                          Application::GetSettings().GetUILanguageTag().getLanguageType(), mnKeyCode )

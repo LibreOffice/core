@@ -99,7 +99,7 @@ public:
     void                SetDragWasInternal();
     SC_DLLPUBLIC void   SetUseInApi( bool bSet );
 
-    static SC_DLLPUBLIC ScTransferObj* GetOwnClipboard( Window* pUIWin );
+    static SC_DLLPUBLIC ScTransferObj* GetOwnClipboard( vcl::Window* pUIWin );
 
     static SfxObjectShell*  SetDrawClipDoc( bool bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

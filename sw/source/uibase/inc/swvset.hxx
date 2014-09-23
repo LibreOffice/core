@@ -23,7 +23,7 @@
 class SwRulerValueSet : public SvxBmpNumValueSet
 {
 public:
-    SwRulerValueSet(Window* pParent, WinBits nWinStyle);
+    SwRulerValueSet(vcl::Window* pParent, WinBits nWinStyle);
     virtual ~SwRulerValueSet();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 };

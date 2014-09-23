@@ -53,7 +53,7 @@ public:
     bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false) SAL_OVERRIDE;
     virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const SAL_OVERRIDE;
 
-    virtual void MakeVisible(const Rectangle& rRect, ::Window& rWin) SAL_OVERRIDE;
+    virtual void MakeVisible(const Rectangle& rRect, ::vcl::Window& rWin) SAL_OVERRIDE;
     virtual void HideSdrPage() SAL_OVERRIDE; // SdrPageView* pPV);
 
     void    PresPaint(const Region& rRegion);

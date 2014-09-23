@@ -116,7 +116,7 @@ namespace {
 static long lUserW = 5669; // 10 cm
 static long lUserH = 5669; // 10 cm
 
-SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet)
+SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvFormatPage",
         "modules/swriter/ui/envformatpage.ui", &rSet)
 {
@@ -438,7 +438,7 @@ void SwEnvFmtPage::SetMinMax()
     m_pSizeHeightField->Reformat();
 }
 
-SfxTabPage* SwEnvFmtPage::Create(Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwEnvFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwEnvFmtPage(pParent, *rSet);
 }

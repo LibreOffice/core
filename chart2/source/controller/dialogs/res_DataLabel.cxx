@@ -84,7 +84,7 @@ void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, sal_uInt16 nWhichId,
 
 }//end anonymous namespace
 
-DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, Window* pParent, const SfxItemSet& rInAttrs )
+DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, vcl::Window* pParent, const SfxItemSet& rInAttrs )
     :
     m_pNumberFormatter(0),
     m_bNumberFormatMixedState(true),

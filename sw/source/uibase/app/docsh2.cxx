@@ -130,7 +130,7 @@ using namespace ::sfx2;
 
 // create DocInfo (virtual)
 SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
-                                Window *pParent, const SfxItemSet &rSet)
+                                vcl::Window *pParent, const SfxItemSet &rSet)
 {
     SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
     //only with statistics, when this document is being shown, not
@@ -812,7 +812,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
                                     pStrm->GetData(), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
-                            GetView()? (Window*)&GetView()->GetEditWin() : 0 );
+                            GetView()? (vcl::Window*)&GetView()->GetEditWin() : 0 );
                         delete pStrm;
                     }
                 }
@@ -1480,7 +1480,7 @@ SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjR
     SwWrtShell* pShell = GetWrtShell();
     if ( pShell )
     {
-        pResult = pShell->GetView().FindIPClient( xObjRef.GetObject(), (Window*)&pShell->GetView().GetEditWin() );
+        pResult = pShell->GetView().FindIPClient( xObjRef.GetObject(), (vcl::Window*)&pShell->GetView().GetEditWin() );
         if ( !pResult )
             pResult = new SwOleClient( &pShell->GetView(), &pShell->GetView().GetEditWin(), xObjRef );
     }

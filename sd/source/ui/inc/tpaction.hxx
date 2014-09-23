@@ -44,7 +44,7 @@ class SdActionDlg : public SfxSingleTabDialog
 private:
     const SfxItemSet&   rOutAttrs;
 public:
-    SdActionDlg(Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView);
+    SdActionDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView);
 };
 
 /**
@@ -95,10 +95,10 @@ private:
     sal_uInt16                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 
 public:
-            SdTPAction( Window* pParent, const SfxItemSet& rInAttrs );
+            SdTPAction( vcl::Window* pParent, const SfxItemSet& rInAttrs );
             virtual ~SdTPAction();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet& );
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;

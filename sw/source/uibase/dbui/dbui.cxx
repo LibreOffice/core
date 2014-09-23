@@ -22,7 +22,7 @@
 #include "dbui.hrc"
 #include "dbui.hxx"
 
-PrintMonitor::PrintMonitor(Window *pParent, PrintMonitorType eType )
+PrintMonitor::PrintMonitor(vcl::Window *pParent, PrintMonitorType eType )
     : CancelableModelessDialog(pParent, "PrintMonitorDialog",
         "modules/swriter/ui/printmonitordialog.ui")
 {
@@ -42,7 +42,7 @@ PrintMonitor::PrintMonitor(Window *pParent, PrintMonitorType eType )
     m_pPrinting->Show();
 }
 
-CancelableModelessDialog::CancelableModelessDialog( Window *pParent,
+CancelableModelessDialog::CancelableModelessDialog( vcl::Window *pParent,
         const OString& rID, const OUString& rUIXMLDescription )
     : ModelessDialog( pParent , rID, rUIXMLDescription )
 {

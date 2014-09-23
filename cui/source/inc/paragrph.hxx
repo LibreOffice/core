@@ -48,7 +48,7 @@ class SvxStdParagraphTabPage: public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    SvxStdParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
+    SvxStdParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     // indention
     SvxRelativeField*       m_pLeftIndent;
@@ -99,7 +99,7 @@ protected:
 public:
     DECL_LINK(ELRLoseFocusHdl, void *);
 
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -153,14 +153,14 @@ class SvxParaAlignTabPage : public SfxTabPage
 
     void                    UpdateExample_Impl( bool bAll = false );
 
-                            SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet );
+                            SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual                 ~SvxParaAlignTabPage();
 
 protected:
     virtual int             DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -191,7 +191,7 @@ class SvxExtParagraphTabPage: public SfxTabPage
 public:
     virtual             ~SvxExtParagraphTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
@@ -204,7 +204,7 @@ protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
-                        SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
+                        SvxExtParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     // hyphenation
     TriStateBox*        m_pHyphenBox;
@@ -263,7 +263,7 @@ class SvxAsianTabPage : public SfxTabPage
     CheckBox*     m_pHangingPunctCB;
     CheckBox*     m_pScriptSpaceCB;
 
-    SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet );
+    SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     DECL_LINK( ClickHdl_Impl, CheckBox* );
 
@@ -271,7 +271,7 @@ public:
     virtual ~SvxAsianTabPage();
 
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 

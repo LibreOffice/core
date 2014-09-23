@@ -31,7 +31,7 @@ class ViewElementListProvider;
 class ShapeFontDialog : public SfxTabDialog
 {
 public:
-    ShapeFontDialog(Window* pParent, const SfxItemSet* pAttr,
+    ShapeFontDialog(vcl::Window* pParent, const SfxItemSet* pAttr,
         const ViewElementListProvider* pViewElementListProvider);
 private:
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;

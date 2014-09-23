@@ -103,7 +103,7 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
     /// Make DocInfo known to the Doc.
     SAL_DLLPRIVATE virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
-                                    Window *pParent, const SfxItemSet &) SAL_OVERRIDE;
+                                    vcl::Window *pParent, const SfxItemSet &) SAL_OVERRIDE;
     /// OLE-stuff
     SAL_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16) SAL_OVERRIDE;
 

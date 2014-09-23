@@ -28,7 +28,7 @@
 class SvxBorderBackgroundDlg: public SfxTabDialog
 {
 public:
-    SvxBorderBackgroundDlg(Window *pParent,
+    SvxBorderBackgroundDlg(vcl::Window *pParent,
         const SfxItemSet& rCoreSet,
         bool bEnableSelector = false,
         bool bEnableDrawingLayerFillStyles = false);

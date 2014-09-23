@@ -71,7 +71,7 @@ namespace svt
     //= ToolPanelDrawer
 
 
-    ToolPanelDrawer::ToolPanelDrawer( Window& i_rParent, const OUString& i_rTitle )
+    ToolPanelDrawer::ToolPanelDrawer( vcl::Window& i_rParent, const OUString& i_rTitle )
         :Window( &i_rParent, WB_TABSTOP )
         ,m_pPaintDevice( new VirtualDevice( *this ) )
         ,m_aVisualization( *this )

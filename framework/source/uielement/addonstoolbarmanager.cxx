@@ -348,7 +348,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     Reference< XWindow > xWindow = xTbxController->createItemWindow( xToolbarWindow );
                     if ( xWindow.is() )
                     {
-                        Window* pItemWin = VCLUnoHelper::GetWindow( xWindow );
+                        vcl::Window* pItemWin = VCLUnoHelper::GetWindow( xWindow );
                         if ( pItemWin )
                         {
                             WindowType nType = pItemWin->GetType();
@@ -477,7 +477,7 @@ IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEve
     for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
     {
         const sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
-        Window* pWindow = m_pToolBar->GetItemWindow( nId );
+        vcl::Window* pWindow = m_pToolBar->GetItemWindow( nId );
         if ( pWindow )
         {
             const DataChangedEvent& rDCEvt( *pDataChangedEvent );

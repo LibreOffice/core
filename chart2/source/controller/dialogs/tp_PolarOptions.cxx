@@ -28,7 +28,7 @@
 namespace chart
 {
 
-PolarOptionsTabPage::PolarOptionsTabPage( Window* pWindow,const SfxItemSet& rInAttrs ) :
+PolarOptionsTabPage::PolarOptionsTabPage( vcl::Window* pWindow,const SfxItemSet& rInAttrs ) :
     SfxTabPage( pWindow
     ,"tp_PolarOptions"
     ,"modules/schart/ui/tp_PolarOptions.ui"
@@ -48,7 +48,7 @@ PolarOptionsTabPage::~PolarOptionsTabPage()
 {
 }
 
-SfxTabPage* PolarOptionsTabPage::Create( Window* pWindow,const SfxItemSet* rOutAttrs )
+SfxTabPage* PolarOptionsTabPage::Create( vcl::Window* pWindow,const SfxItemSet* rOutAttrs )
 {
     return new PolarOptionsTabPage( pWindow, *rOutAttrs );
 }

@@ -33,7 +33,7 @@ namespace pcr
     // class OBrowserPage
 
 
-    OBrowserPage::OBrowserPage(Window* pParent,WinBits nWinStyle)
+    OBrowserPage::OBrowserPage(vcl::Window* pParent,WinBits nWinStyle)
             :TabPage(pParent,nWinStyle)
             ,m_aListBox(this)
     {

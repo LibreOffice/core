@@ -53,7 +53,7 @@ class ScFormulaDlg : public formula::FormulaDlg,
     static ScAddress    aCursorPos;
 public:
                     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                        Window* pParent, ScViewData* pViewData ,formula::IFunctionManager* _pFunctionMgr);
+                        vcl::Window* pParent, ScViewData* pViewData ,formula::IFunctionManager* _pFunctionMgr);
                     virtual ~ScFormulaDlg();
 
     // IFormulaEditorHelper

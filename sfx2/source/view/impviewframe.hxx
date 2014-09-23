@@ -35,9 +35,9 @@ struct SfxViewFrame_Impl
     OUString            aActualURL;
     SfxFrame&           rFrame;
     svtools::AsynchronLink* pReloader;
-    Window*             pWindow;
+    vcl::Window*             pWindow;
     SfxViewFrame*       pActiveChild;
-    Window*             pFocusWin;
+    vcl::Window*             pFocusWin;
     sal_uInt16          nDocViewNo;
     sal_uInt16          nCurViewId;
     bool            bResizeInToOut:1;
@@ -79,12 +79,12 @@ struct SfxViewFrame_Impl
     }
 };
 
-class SfxFrameViewWindow_Impl : public Window
+class SfxFrameViewWindow_Impl : public vcl::Window
 {
     SfxViewFrame*   pFrame;
 
 public:
-                        SfxFrameViewWindow_Impl( SfxViewFrame* p, Window& rParent, WinBits nBits=0 ) :
+                        SfxFrameViewWindow_Impl( SfxViewFrame* p, vcl::Window& rParent, WinBits nBits=0 ) :
                             Window( &rParent, nBits | WB_CLIPCHILDREN ),
                             pFrame( p )
                         {

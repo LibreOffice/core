@@ -113,7 +113,7 @@ void SwInsertBookmarkDlg::Apply()
 
 }
 
-SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRequest& rRequest ) :
+SwInsertBookmarkDlg::SwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rS, SfxRequest& rRequest ) :
     SvxStandardDialog(pParent, "InsertBookmarkDialog", "modules/swriter/ui/insertbookmark.ui"),
     rSh( rS ),
     rReq( rRequest )
@@ -149,7 +149,7 @@ SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
 }
 
-BookmarkCombo::BookmarkCombo(Window* pWin, WinBits nStyle)
+BookmarkCombo::BookmarkCombo(vcl::Window* pWin, WinBits nStyle)
     : SwComboBox(pWin, nStyle)
 {
 }
@@ -229,7 +229,7 @@ bool BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBookmarkCombo(Window* pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBookmarkCombo(vcl::Window* pParent, VclBuilder::stringmap &)
 {
     return new BookmarkCombo(pParent, 0);
 }

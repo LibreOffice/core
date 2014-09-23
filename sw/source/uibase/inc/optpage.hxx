@@ -67,11 +67,11 @@ class SwContentOptPage : public SfxTabPage
     DECL_LINK(VertRulerHdl, CheckBox*);
     DECL_LINK(AnyRulerHdl, CheckBox*);
 public:
-                        SwContentOptPage( Window* pParent,
+                        SwContentOptPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
                         virtual ~SwContentOptPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -115,11 +115,11 @@ class SwAddPrinterTabPage : public SfxTabPage
                 DECL_LINK(AutoClickHdl, void *);
                 DECL_LINK(SelectHdl, void *);
 
-                SwAddPrinterTabPage( Window* pParent,
+                SwAddPrinterTabPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
 public:
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -186,12 +186,12 @@ class SwStdFontTabPage : public SfxTabPage
     DECL_LINK( ModifyHeightHdl, FontSizeBox * );
     DECL_LINK( LoseFocusHdl, ComboBox * );
 
-            SwStdFontTabPage( Window* pParent,
+            SwStdFontTabPage( vcl::Window* pParent,
                                        const SfxItemSet& rSet );
             virtual ~SwStdFontTabPage();
 
 public:
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -227,13 +227,13 @@ class SwTableOptionsTabPage : public SfxTabPage
 
     DECL_LINK(CheckBoxHdl, void *);
 
-                SwTableOptionsTabPage( Window* pParent,
+                SwTableOptionsTabPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
                 virtual ~SwTableOptionsTabPage();
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -273,12 +273,12 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
 
     SwWrtShell *    m_pWrtShell;
 
-    SwShdwCrsrOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+    SwShdwCrsrOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwShdwCrsrOptionsTabPage();
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -288,7 +288,7 @@ public:
 };
 
 // mark preview
-class SwMarkPreview : public Window
+class SwMarkPreview : public vcl::Window
 {
     Size            m_aInitialSize;
 
@@ -317,7 +317,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
-                    SwMarkPreview(Window* pParent, WinBits nWinBits);
+                    SwMarkPreview(vcl::Window* pParent, WinBits nWinBits);
     virtual         ~SwMarkPreview();
 
     inline void     SetColor(const Color& rCol) { m_aMarkCol = rCol; }
@@ -347,7 +347,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     OUString             sAuthor;
     OUString             sNone;
 
-    SwRedlineOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+    SwRedlineOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwRedlineOptionsTabPage();
 
     DECL_LINK( AttribHdl, ListBox *pLB );
@@ -358,7 +358,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -371,10 +371,10 @@ public:
 class SwTestTabPage : public SfxTabPage
 {
 public:
-                        SwTestTabPage( Window* pParent,
+                        SwTestTabPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -410,7 +410,7 @@ class SwCompareOptionsTabPage : public SfxTabPage
     CheckBox*     m_pIgnoreCB;
     NumericField* m_pLenNF;
 
-    SwCompareOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+    SwCompareOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwCompareOptionsTabPage();
 
     DECL_LINK(ComparisonHdl, void *);
@@ -418,7 +418,7 @@ class SwCompareOptionsTabPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

@@ -50,7 +50,7 @@ private:
 
 public:
 
-    GraphicPreviewWindow(Window* pParent, WinBits nStyle);
+    GraphicPreviewWindow(vcl::Window* pParent, WinBits nStyle);
     void init(const Graphic* pOrigGraphic, const Link& rLink)
     {
         mpOrigGraphic = pOrigGraphic;
@@ -84,7 +84,7 @@ protected:
 
 public:
 
-    GraphicFilterDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const Graphic& rGraphic);
+    GraphicFilterDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const Graphic& rGraphic);
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
@@ -101,7 +101,7 @@ private:
 
 public:
 
-    GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius);
+    GraphicFilterSmooth( vcl::Window* pParent, const Graphic& rGraphic, double nRadius);
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     double          GetRadius() const { return mpMtrRadius->GetValue() / 10.0; }
@@ -120,7 +120,7 @@ private:
 
 public:
 
-    GraphicFilterMosaic(Window* pParent, const Graphic& rGraphic,
+    GraphicFilterMosaic(vcl::Window* pParent, const Graphic& rGraphic,
         sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges);
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
@@ -141,7 +141,7 @@ private:
 
 public:
 
-    GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
+    GraphicFilterSolarize( vcl::Window* pParent, const Graphic& rGraphic,
                                            sal_uInt8 nGreyThreshold, bool bInvert );
 
     virtual Graphic     GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
@@ -158,7 +158,7 @@ class GraphicFilterSepia : public GraphicFilterDialog
 private:
     MetricField*    mpMtrSepia;
 public:
-    GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
+    GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
                         sal_uInt16 nSepiaPercent );
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     sal_uInt16 GetSepiaPercent() const
@@ -176,7 +176,7 @@ class GraphicFilterPoster : public GraphicFilterDialog
 private:
     NumericField*   mpNumPoster;
 public:
-    GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
+    GraphicFilterPoster( vcl::Window* pParent, const Graphic& rGraphic,
                          sal_uInt16 nPosterColorCount );
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
@@ -194,7 +194,7 @@ private:
     virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 public:
-    EmbossControl(Window* pParent)
+    EmbossControl(vcl::Window* pParent)
         : SvxRectCtl(pParent) {}
 
     void            SetModifyHdl( const Link& rHdl ) { maModifyHdl = rHdl; }
@@ -205,7 +205,7 @@ class GraphicFilterEmboss : public GraphicFilterDialog
 private:
     EmbossControl*  mpCtlLight;
 public:
-    GraphicFilterEmboss( Window* pParent, const Graphic& rGraphic,
+    GraphicFilterEmboss( vcl::Window* pParent, const Graphic& rGraphic,
                          RECT_POINT eLightSource );
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;

@@ -77,7 +77,7 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
 
-    Dialog* ComposerDialog::createDialog(Window* _pParent)
+    Dialog* ComposerDialog::createDialog(vcl::Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection;
@@ -140,7 +140,7 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new RowsetFilterDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-    Dialog* RowsetFilterDialog::createComposerDialog( Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
+    Dialog* RowsetFilterDialog::createComposerDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
         return new DlgFilterCrit( _pParent, m_aContext, _rxConnection, m_xComposer, _rxColumns );
     }
@@ -188,7 +188,7 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new RowsetOrderDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-    Dialog* RowsetOrderDialog::createComposerDialog( Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
+    Dialog* RowsetOrderDialog::createComposerDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
         return new DlgOrderCrit( _pParent, _rxConnection, m_xComposer, _rxColumns );
     }

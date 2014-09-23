@@ -25,7 +25,7 @@
 #include <vcl/msgbox.hxx>
 #include "alienwarn.hxx"
 
-SfxAlienWarningDialog::SfxAlienWarningDialog(Window* pParent, const OUString& _rFormatName)
+SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName)
     : MessageDialog(pParent, "AlienWarnDialog", "sfx/ui/alienwarndialog.ui")
 {
     get(m_pWarningOnBox, "ask");

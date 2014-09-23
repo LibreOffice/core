@@ -28,7 +28,7 @@ class CellLineStylePopup : public svx::sidebar::Popup
 {
 public :
     CellLineStylePopup(
-        Window* pParent,
+        vcl::Window* pParent,
         const ::boost::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator);
     virtual ~CellLineStylePopup(void);
 

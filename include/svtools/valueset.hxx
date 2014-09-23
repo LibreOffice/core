@@ -284,8 +284,8 @@ protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
 public:
-                    ValueSet( Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren = false );
-                    ValueSet( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
+                    ValueSet( vcl::Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren = false );
+                    ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
                     virtual ~ValueSet();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

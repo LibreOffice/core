@@ -62,7 +62,7 @@ namespace avmedia
 // - MediaControl -
 
 
-MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
+MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle ) :
     Control( pParent ),
     maImageList( SvtMiscOptions().AreCurrentSymbolsLarge() ? AVMEDIA_RESID( AVMEDIA_IMGLST_L ) : AVMEDIA_RESID( AVMEDIA_IMGLST ) ),
     maItem( 0, AVMEDIA_SETMASK_ALL ),

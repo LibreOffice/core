@@ -30,7 +30,7 @@
 
 using namespace ::dbaui;
 // OWizColumnSelect
-OWizNameMatching::OWizNameMatching( Window* pParent)
+OWizNameMatching::OWizNameMatching( vcl::Window* pParent)
         :OWizardPage( pParent, "NameMatching", "dbaccess/ui/namematchingpage.ui" )
         , m_aImgUp(ModuleRes(IMG_UP))
         , m_aImgDown(ModuleRes(IMG_DOWN))
@@ -344,7 +344,7 @@ void OColumnString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDa
     rDev.DrawText( rPos, GetText() );
 }
 
-OColumnTreeBox::OColumnTreeBox( Window* pParent, WinBits nBits )
+OColumnTreeBox::OColumnTreeBox( vcl::Window* pParent, WinBits nBits )
     : OMarkableTreeListBox(pParent, nBits)
     , m_bReadOnly(false)
 {
@@ -354,7 +354,7 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, WinBits nBits )
     SetSelectionMode( SINGLE_SELECTION );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOColumnTreeBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOColumnTreeBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new OColumnTreeBox(pParent);
 }

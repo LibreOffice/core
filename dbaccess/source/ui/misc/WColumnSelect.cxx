@@ -43,7 +43,7 @@ namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOper
 
 OUString OWizColumnSelect::GetTitle() const { return ModuleRes(STR_WIZ_COLUMN_SELECT_TITEL); }
 
-OWizardPage::OWizardPage(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+OWizardPage::OWizardPage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : TabPage(pParent, rID, rUIXMLDescription)
      ,m_pParent(static_cast<OCopyTableWizard*>(pParent))
      ,m_bFirstTime(true)
@@ -51,7 +51,7 @@ OWizardPage::OWizardPage(Window* pParent, const OString& rID, const OUString& rU
 }
 
 // OWizColumnSelect
-OWizColumnSelect::OWizColumnSelect( Window* pParent)
+OWizColumnSelect::OWizColumnSelect( vcl::Window* pParent)
     :OWizardPage( pParent, "ApplyColPage", "dbaccess/ui/applycolpage.ui")
 {
     get(m_pOrgColumnNames, "from");

@@ -62,7 +62,7 @@ using namespace ::com::sun::star;
 
 #include <svl/eitem.hxx>
 
-SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
+SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage",
         "modules/swriter/ui/optgeneralpage.ui", &rSet)
     , m_pWrtShell(NULL)
@@ -125,7 +125,7 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
     m_pShowStandardizedPageCount->SetClickHdl(aLink);
 }
 
-SfxTabPage* SwLoadOptPage::Create( Window* pParent,
+SfxTabPage* SwLoadOptPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
     return new SwLoadOptPage(pParent, *rAttrSet );
@@ -350,7 +350,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
     return 0;
 }
 
-SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet)
+SwCaptionOptDlg::SwCaptionOptDlg(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet, "CaptionDialog",
         "modules/swriter/ui/captiondialog.ui")
 {
@@ -358,13 +358,13 @@ SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet)
     SetTabPage(SwCaptionOptPage::Create(get_content_area(), &rSet));
 }
 
-SwCaptionPreview::SwCaptionPreview( Window* pParent, WinBits nStyle )
+SwCaptionPreview::SwCaptionPreview( vcl::Window* pParent, WinBits nStyle )
     : Window( pParent, nStyle )
 {
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwCaptionPreview(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwCaptionPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -409,7 +409,7 @@ void SwCaptionPreview::Paint( const Rectangle& rRect )
     DrawText( Point( 4, 6 ), maText );
 }
 
-SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
+SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptCaptionPage", "modules/swriter/ui/optcaptionpage.ui", &rSet)
     , m_sSWTable(SW_RESSTR(STR_CAPTION_TABLE))
     , m_sSWFrame(SW_RESSTR(STR_CAPTION_FRAME))
@@ -522,7 +522,7 @@ SwCaptionOptPage::~SwCaptionOptPage()
     delete pMgr;
 }
 
-SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
+SfxTabPage* SwCaptionOptPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
     return new SwCaptionOptPage(pParent, *rAttrSet );
@@ -888,7 +888,7 @@ void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
         SwComboBox::KeyInput(rEvt);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCaptionComboBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCaptionComboBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
     bool bDropdown = VclBuilder::extractDropdown(rMap);

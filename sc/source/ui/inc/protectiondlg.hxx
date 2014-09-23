@@ -27,13 +27,13 @@
 #include <vcl/layout.hxx>
 #include <svx/checklbx.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class ScTableProtection;
 
 class ScTableProtectionDlg : public ModalDialog
 {
 public:
-    explicit ScTableProtectionDlg(Window* pParent);
+    explicit ScTableProtectionDlg(vcl::Window* pParent);
     virtual ~ScTableProtectionDlg();
 
     virtual short Execute() SAL_OVERRIDE;

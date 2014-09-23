@@ -42,7 +42,7 @@ using namespace com::sun::star::linguistic2;
 
 
 
-TextConvWrapper::TextConvWrapper( Window* pWindow,
+TextConvWrapper::TextConvWrapper( vcl::Window* pWindow,
         const Reference< XComponentContext >& rxContext,
         const Locale& rSourceLocale,
         const Locale& rTargetLocale,

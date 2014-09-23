@@ -35,7 +35,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
 // OColumnControlWindow
-OColumnControlWindow::OColumnControlWindow(Window* pParent
+OColumnControlWindow::OColumnControlWindow(vcl::Window* pParent
                                            ,const Reference<XComponentContext>& _rxContext)
             : OFieldDescControl(pParent,NULL)
             , m_xContext(_rxContext)

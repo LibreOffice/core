@@ -30,6 +30,7 @@ class ImplRegionBand;
 class RegionBand;
 class Polygon;
 class PolyPolygon;
+namespace vcl { class Window; }
 
 typedef boost::shared_ptr< RegionBand > RegionBandPtr;
 typedef boost::shared_ptr< PolyPolygon > PolyPolygonPtr;
@@ -40,7 +41,7 @@ class VCL_DLLPUBLIC Region
 {
 private:
     friend class OutputDevice;
-    friend class Window;
+    friend class vcl::Window;
     friend class Bitmap;
 
     // possible contents

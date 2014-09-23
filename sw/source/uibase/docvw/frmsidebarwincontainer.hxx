@@ -24,7 +24,7 @@
 
 class SwFrm;
 class SwFmtFld;
-class Window;
+namespace vcl { class Window; }
 
 namespace sw { namespace sidebarwindows {
 
@@ -50,7 +50,7 @@ class SwFrmSidebarWinContainer
                            const sal_Int32 nIndex );
 
         void getAll( const SwFrm& rFrm,
-                     std::vector< Window* >* pSidebarWins );
+                     std::vector< vcl::Window* >* pSidebarWins );
 
     private:
         FrmSidebarWinContainer* mpFrmSidebarWinContainer;

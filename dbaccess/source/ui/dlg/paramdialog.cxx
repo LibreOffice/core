@@ -51,7 +51,7 @@ namespace dbaui
 
 
     OParameterDialog::OParameterDialog(
-            Window* pParent, const Reference< XIndexAccess > & rParamContainer,
+            vcl::Window* pParent, const Reference< XIndexAccess > & rParamContainer,
             const Reference< XConnection > & _rxConnection, const Reference< XComponentContext >& rxContext)
         :ModalDialog( pParent, "Parameters", "dbaccess/ui/parametersdialog.ui")
         ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)
@@ -341,7 +341,7 @@ namespace dbaui
             m_pOKBtn->SetStyle(m_pOKBtn->GetStyle() | WB_DEFBUTTON);
 
             // set to focus to one of the buttons temporary (with this their "default"-state is really updated)
-            Window* pOldFocus = Application::GetFocusWindow();
+            vcl::Window* pOldFocus = Application::GetFocusWindow();
 
             // if the old focus window is the value edit do some preparations ...
             Selection aSel;

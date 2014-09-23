@@ -449,7 +449,7 @@ namespace slideshow
 
                     rVCLDeviceParams[ 1 ] >>= aVal;
 
-                    Window* pWindow = reinterpret_cast< Window* >( aVal );
+                    vcl::Window* pWindow = reinterpret_cast< vcl::Window* >( aVal );
 
                     if( pWindow )
                     {
@@ -472,7 +472,7 @@ namespace slideshow
 #else
                             if( avmedia::IsModel(rMimeType) )
                             {
-                                mpEventHandlerParent.reset(new Window(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL));
+                                mpEventHandlerParent.reset(new vcl::Window(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL));
                                 mpEventHandlerParent->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                                 mpEventHandlerParent->EnablePaint(false);

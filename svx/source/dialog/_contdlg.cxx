@@ -63,7 +63,7 @@ void SvxContourDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/, 
     }
 }
 
-SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* _pParent, sal_uInt16 nId,
+SvxContourDlgChildWindow::SvxContourDlgChildWindow( vcl::Window* _pParent, sal_uInt16 nId,
                                                     SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
             SfxChildWindow( _pParent, nId )
 {
@@ -79,7 +79,7 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* _pParent, sal_uInt16
 }
 
 SvxContourDlg::SvxContourDlg(SfxBindings* _pBindings, SfxChildWindow* pCW,
-                             Window* _pParent)
+                             vcl::Window* _pParent)
     : SfxFloatingWindow(_pBindings, pCW, _pParent , "FloatingContour",
         "svx/ui/floatingcontour.ui")
     , pSuperClass(NULL)
@@ -199,7 +199,7 @@ void SvxContourDlg::Update( const Graphic& rGraphic, bool bGraphicLinked,
 }
 
 SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *pCW,
-                                       Window* _pParent) :
+                                       vcl::Window* _pParent) :
         SvxContourDlg       ( _pBindings, pCW, _pParent ),
         pUpdateEditingObject( NULL ),
         pCheckObj           ( NULL ),
@@ -211,7 +211,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 {
     get(m_pTbx1, "toolbar");
     get(m_pMtfTolerance, "spinbutton");
-    m_pContourWnd = new ContourWindow(get<Window>("container"), WB_BORDER);
+    m_pContourWnd = new ContourWindow(get<vcl::Window>("container"), WB_BORDER);
     m_pContourWnd->set_hexpand(true);
     m_pContourWnd->set_vexpand(true);
     m_pContourWnd->Show();

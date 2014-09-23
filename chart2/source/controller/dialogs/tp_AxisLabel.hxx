@@ -69,12 +69,12 @@ private:
     DECL_LINK ( ToggleShowLabel, void* );
 
 public:
-    SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rInAttrs );
+    SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SchAxisLabelTabPage();
 
     void    Construct();
 
-    static SfxTabPage* Create( Window* pParent, const SfxItemSet* rInAttrs );
+    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* rInAttrs ) SAL_OVERRIDE;
 

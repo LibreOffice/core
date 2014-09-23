@@ -57,7 +57,7 @@ namespace framework
 class SpinfieldControl : public SpinField
 {
     public:
-        SpinfieldControl( Window* pParent, WinBits nStyle, ISpinfieldListener* pSpinFieldListener );
+        SpinfieldControl( vcl::Window* pParent, WinBits nStyle, ISpinfieldListener* pSpinFieldListener );
         virtual ~SpinfieldControl();
 
         virtual void Up() SAL_OVERRIDE;
@@ -76,7 +76,7 @@ class SpinfieldControl : public SpinField
         ISpinfieldListener* m_pSpinFieldListener;
 };
 
-SpinfieldControl::SpinfieldControl( Window* pParent, WinBits nStyle, ISpinfieldListener* pSpinFieldListener ) :
+SpinfieldControl::SpinfieldControl( vcl::Window* pParent, WinBits nStyle, ISpinfieldListener* pSpinFieldListener ) :
     SpinField( pParent, nStyle )
     , m_pSpinFieldListener( pSpinFieldListener )
 {

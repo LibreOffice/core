@@ -57,7 +57,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     boost::scoped_ptr<SvxColumnItem>      mpColumnItem;     // columns
     boost::scoped_ptr<SvxObjectItem>      mpObjectItem;     // object
 
-    Window*         pEditWin;
+    vcl::Window*         pEditWin;
 
     boost::scoped_ptr<SvxRuler_Impl> mpRulerImpl;
 
@@ -251,7 +251,7 @@ public:
 #define     SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL 0x0040
 #define     SVXRULER_SUPPORT_REDUCED_METRIC             0x0080 //shorten the context menu to select metric
 
-    SvxRuler(Window* pParent, Window *pEditWin, sal_uInt16 nRulerFlags,
+    SvxRuler(vcl::Window* pParent, vcl::Window *pEditWin, sal_uInt16 nRulerFlags,
              SfxBindings &rBindings, WinBits nWinStyle = WB_STDRULER);
     virtual ~SvxRuler();
 

@@ -47,7 +47,7 @@
 
 // class SvxJSearchOptionsDialog -----------------------------------------
 
-SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(Window *pParent,
+SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(vcl::Window *pParent,
     const SfxItemSet& rOptionsSet, sal_Int32 nInitialFlags)
     : SfxSingleTabDialog(pParent, rOptionsSet)
     , nInitialTlFlags( nInitialFlags )

@@ -265,7 +265,7 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
     {
         VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
         OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
-        Window* pChildWin = static_cast< Window* >( pVclEvent->GetData() );
+        vcl::Window* pChildWin = static_cast< vcl::Window* >( pVclEvent->GetData() );
 
         switch ( pVclEvent->GetId() )
         {
@@ -289,7 +289,7 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
 
 int SwView::_CreateScrollbar( bool bHori )
 {
-    Window *pMDI = &GetViewFrame()->GetWindow();
+    vcl::Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &m_pHScrollbar : &m_pVScrollbar;
 
     assert(!*ppScrollbar); //check beforehand!

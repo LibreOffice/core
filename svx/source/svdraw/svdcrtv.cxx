@@ -319,7 +319,7 @@ void SdrCreateView::HideConnectMarker()
     ImpClearConnectMarker();
 }
 
-bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
+bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
 {
     if(CheckEdgeMode() && pWin)
     {
@@ -701,7 +701,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
             SdrTextObj* pText=PTR_CAST(SdrTextObj,pObjMerk);
             if (pText!=NULL && pText->IsTextFrame())
             {
-                SdrBeginTextEdit(pText, pPVMerk, (Window*)0L, true, (SdrOutliner*)0L, (OutlinerView*)0L);
+                SdrBeginTextEdit(pText, pPVMerk, (vcl::Window*)0L, true, (SdrOutliner*)0L, (OutlinerView*)0L);
             }
         }
     }

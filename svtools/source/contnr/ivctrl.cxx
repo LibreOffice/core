@@ -70,7 +70,7 @@ SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtr
 |
 \*****************************************************************************/
 
-SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle ) :
+SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) :
 
      // WB_CLIPCHILDREN on, as ScrollBars lie on the window!
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
@@ -493,7 +493,7 @@ void SvtIconChoiceCtrl::CallImplEventListeners(sal_uLong nEvent, void* pData)
 }
 ::com::sun::star::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
 {
-    Window* pParent = GetAccessibleParentWindow();
+    vcl::Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvTreeListBox::CreateAccessible - accessible parent not found" );
 
     ::com::sun::star::uno::Reference< XAccessible > xAccessible;

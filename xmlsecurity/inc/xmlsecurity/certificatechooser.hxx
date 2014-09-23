@@ -63,7 +63,7 @@ private:
     void ImplInitialize();
 
 public:
-    CertificateChooser( Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
+    CertificateChooser( vcl::Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
     virtual ~CertificateChooser();
 
     short Execute() SAL_OVERRIDE;

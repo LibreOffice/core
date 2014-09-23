@@ -28,13 +28,13 @@
 #include <algorithm>
 
 // can't have static linkage because SUNPRO 5.2 complains
-Point ImplTaskPaneListGetPos( const Window *w )
+Point ImplTaskPaneListGetPos( const vcl::Window *w )
 {
     Point pos;
     if( w->ImplIsDockingWindow() )
     {
         pos = ((DockingWindow*)w)->GetPosPixel();
-        Window *pF = ((DockingWindow*)w)->GetFloatingWindow();
+        vcl::Window *pF = ((DockingWindow*)w)->GetFloatingWindow();
         if( pF )
             pos = pF->OutputToAbsoluteScreenPixel( pF->ScreenToOutputPixel( pos ) );
         else
@@ -47,9 +47,9 @@ Point ImplTaskPaneListGetPos( const Window *w )
 }
 
 // compares window pos left-to-right
-struct LTRSort : public ::std::binary_function< const Window*, const Window*, bool >
+struct LTRSort : public ::std::binary_function< const vcl::Window*, const vcl::Window*, bool >
 {
-    bool operator()( const Window* w1, const Window* w2 ) const
+    bool operator()( const vcl::Window* w1, const vcl::Window* w2 ) const
     {
         Point pos1(ImplTaskPaneListGetPos( w1 ));
         Point pos2(ImplTaskPaneListGetPos( w2 ));
@@ -60,9 +60,9 @@ struct LTRSort : public ::std::binary_function< const Window*, const Window*, bo
             return ( pos1.X() < pos2.X() );
     }
 };
-struct LTRSortBackward : public ::std::binary_function< const Window*, const Window*, bool >
+struct LTRSortBackward : public ::std::binary_function< const vcl::Window*, const vcl::Window*, bool >
 {
-    bool operator()( const Window* w2, const Window* w1 ) const
+    bool operator()( const vcl::Window* w2, const vcl::Window* w1 ) const
     {
         Point pos1(ImplTaskPaneListGetPos( w1 ));
         Point pos2(ImplTaskPaneListGetPos( w2 ));
@@ -74,7 +74,7 @@ struct LTRSortBackward : public ::std::binary_function< const Window*, const Win
     }
 };
 
-static void ImplTaskPaneListGrabFocus( Window *pWindow, bool bForward )
+static void ImplTaskPaneListGrabFocus( vcl::Window *pWindow, bool bForward )
 {
     // put focus in child of floating windows which is typically a toolbar
     // that can deal with the focus
@@ -91,12 +91,12 @@ TaskPaneList::~TaskPaneList()
 {
 }
 
-void TaskPaneList::AddWindow( Window *pWindow )
+void TaskPaneList::AddWindow( vcl::Window *pWindow )
 {
     if( pWindow )
     {
-        ::std::vector< Window* >::iterator insertionPos = mTaskPanes.end();
-        for ( ::std::vector< Window* >::iterator p = mTaskPanes.begin();
+        ::std::vector< vcl::Window* >::iterator insertionPos = mTaskPanes.end();
+        for ( ::std::vector< vcl::Window* >::iterator p = mTaskPanes.begin();
               p != mTaskPanes.end();
               ++p
             )
@@ -129,9 +129,9 @@ void TaskPaneList::AddWindow( Window *pWindow )
     }
 }
 
-void TaskPaneList::RemoveWindow( Window *pWindow )
+void TaskPaneList::RemoveWindow( vcl::Window *pWindow )
 {
-    ::std::vector< Window* >::iterator p;
+    ::std::vector< vcl::Window* >::iterator p;
     p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
     if( p != mTaskPanes.end() )
     {
@@ -140,9 +140,9 @@ void TaskPaneList::RemoveWindow( Window *pWindow )
     }
 }
 
-bool TaskPaneList::IsInList( Window *pWindow )
+bool TaskPaneList::IsInList( vcl::Window *pWindow )
 {
-    ::std::vector< Window* >::iterator p;
+    ::std::vector< vcl::Window* >::iterator p;
     p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
     if( p != mTaskPanes.end() )
         return true;
@@ -171,10 +171,10 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
 
         // is the focus in the list ?
-        ::std::vector< Window* >::iterator p = mTaskPanes.begin();
+        ::std::vector< vcl::Window* >::iterator p = mTaskPanes.begin();
         while( p != mTaskPanes.end() )
         {
-            Window *pWin = *p;
+            vcl::Window *pWin = *p;
             if( pWin->HasChildPathFocus( true ) )
             {
                 bFocusInList = true;
@@ -187,7 +187,7 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 }
 
                 // activate next task pane
-                Window *pNextWin = NULL;
+                vcl::Window *pNextWin = NULL;
 
                 if( bSplitterOnly )
                     pNextWin = FindNextSplitter( *p, true );
@@ -220,7 +220,7 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         // the focus is not in the list: activate first float if F6 was pressed
         if( !bFocusInList )
         {
-            Window *pWin;
+            vcl::Window *pWin;
             if( bSplitterOnly )
                 pWin = FindNextSplitter( NULL, true );
             else
@@ -237,14 +237,14 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 }
 
 // returns next splitter
-Window* TaskPaneList::FindNextSplitter( Window *pWindow, bool bForward )
+vcl::Window* TaskPaneList::FindNextSplitter( vcl::Window *pWindow, bool bForward )
 {
     if( bForward )
         ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
     else
         ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
 
-    ::std::vector< Window* >::iterator p = mTaskPanes.begin();
+    ::std::vector< vcl::Window* >::iterator p = mTaskPanes.begin();
     while( p != mTaskPanes.end() )
     {
         if( !pWindow || *p == pWindow )
@@ -274,14 +274,14 @@ Window* TaskPaneList::FindNextSplitter( Window *pWindow, bool bForward )
 }
 
 // returns first valid item (regardless of type) if pWindow==0, otherwise returns next valid float
-Window* TaskPaneList::FindNextFloat( Window *pWindow, bool bForward )
+vcl::Window* TaskPaneList::FindNextFloat( vcl::Window *pWindow, bool bForward )
 {
     if( bForward )
         ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
     else
         ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
 
-    ::std::vector< Window* >::iterator p = mTaskPanes.begin();
+    ::std::vector< vcl::Window* >::iterator p = mTaskPanes.begin();
     while( p != mTaskPanes.end() )
     {
         if( !pWindow || *p == pWindow )

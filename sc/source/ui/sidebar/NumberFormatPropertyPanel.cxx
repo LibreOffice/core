@@ -46,7 +46,7 @@ const char UNO_INSERTFIXEDTEXT[]      = ".uno:InsertFixedText";
 namespace sc { namespace sidebar {
 
 NumberFormatPropertyPanel::NumberFormatPropertyPanel(
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
   : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui", rxFrame),
@@ -167,7 +167,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
 }
 
 NumberFormatPropertyPanel* NumberFormatPropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {

@@ -207,7 +207,7 @@ void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpt
     if ( pTabViewShell )
     {
         ScViewData* pView = pTabViewShell->GetViewData();
-        Window* pWin = ( pView != NULL ) ? pView->GetActiveWin() : NULL;
+        vcl::Window* pWin = ( pView != NULL ) ? pView->GetActiveWin() : NULL;
         if ( pView && pWin )
         {
             if ( bAsLink && bOtherDoc )

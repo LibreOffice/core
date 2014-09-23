@@ -76,7 +76,7 @@ class FmSearchDialog : public ModalDialog
     OUString        m_sSearch;
     OUString        m_sCancel;
 
-    Window*         m_pPreSearchFocus;
+    vcl::Window*         m_pPreSearchFocus;
 
     Link    m_lnkFoundHandler;          ///< Handler for "found"
     Link    m_lnkCanceledNotFoundHdl;   ///< Handler for Positioning the Cursors
@@ -107,7 +107,7 @@ public:
         (of course needed : the string number i in strUsedFields of a context must correspond with the interface number i in the
         arrFields of the context)
     */
-    FmSearchDialog(Window* pParent, const OUString& strInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
+    FmSearchDialog(vcl::Window* pParent, const OUString& strInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
         const Link& lnkContextSupplier);
 
     virtual ~FmSearchDialog();

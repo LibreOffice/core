@@ -61,7 +61,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::accessibility;
 
 // class ORelationTableView
-ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pView )
+ORelationTableView::ORelationTableView( vcl::Window* pParent, ORelationDesignView* pView )
     :OJoinTableView( pParent, pView )
     , ::comphelper::OContainerListener(m_aMutex)
     ,m_pExistingConnection(NULL)

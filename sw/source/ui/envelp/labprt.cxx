@@ -28,7 +28,7 @@
 #include <cmdid.h>
 #include <boost/scoped_ptr.hpp>
 
-SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet)
+SwLabPrtPage::SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelOptionsPage",
         "modules/swriter/ui/labeloptionspage.ui", &rSet)
     , pPrinter(0)
@@ -93,7 +93,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
     return 0;
 }
 
-SfxTabPage* SwLabPrtPage::Create(Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwLabPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwLabPrtPage( pParent, *rSet );
 }

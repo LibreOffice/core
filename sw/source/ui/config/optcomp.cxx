@@ -91,7 +91,7 @@ struct SwCompatibilityOptPage_Impl
     SwCompatibilityItemList     m_aList;
 };
 
-SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet& rSet)
+SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptCompatPage",
         "modules/swriter/ui/optcompatpage.ui", &rSet)
     , m_pWrtShell(NULL)
@@ -400,7 +400,7 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_bExpandWordSpace );
 }
 
-SfxTabPage* SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SwCompatibilityOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SwCompatibilityOptPage( pParent, *rAttrSet );
 }

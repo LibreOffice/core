@@ -47,7 +47,7 @@ static sal_uInt16 nFldDlgFmtSel = 0;
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet )
+SwFldRefPage::SwFldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
     : SwFldPage(pParent, "FldRefPage",
         "modules/swriter/ui/fldrefpage.ui", rCoreSet)
     , maOutlineNodes()
@@ -937,7 +937,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-SfxTabPage* SwFldRefPage::Create(   Window* pParent,
+SfxTabPage* SwFldRefPage::Create(   vcl::Window* pParent,
                         const SfxItemSet* rAttrSet )
 {
     return ( new SwFldRefPage( pParent, *rAttrSet ) );

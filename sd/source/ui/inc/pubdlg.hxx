@@ -195,7 +195,7 @@ private:
 
 public:
 
-    SdPublishingDlg(Window* pWindow, DocumentType eDocType);
+    SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType);
     virtual ~SdPublishingDlg();
 
     void GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams );

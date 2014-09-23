@@ -63,7 +63,7 @@ static const sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45
 ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     svt::ToolboxController& rController,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParentWindow
+    vcl::Window* pParentWindow
 )
 :   ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION )) ,
     mrController( rController ) ,
@@ -238,7 +238,7 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 
 
 
-::Window* ExtrusionDirectionControl::createPopupWindow( ::Window* pParent )
+vcl::Window* ExtrusionDirectionControl::createPopupWindow( vcl::Window* pParent )
 {
     return new ExtrusionDirectionWindow( *this, m_xFrame, pParent );
 }
@@ -284,7 +284,7 @@ Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceName
     return ExtrusionDirectionControl_getSupportedServiceNames();
 }
 
-ExtrusionDepthDialog::ExtrusionDepthDialog( Window* pParent, double fDepth, FieldUnit eDefaultUnit )
+ExtrusionDepthDialog::ExtrusionDepthDialog( vcl::Window* pParent, double fDepth, FieldUnit eDefaultUnit )
     : ModalDialog( pParent, "ExtrustionDepthDialog", "svx/ui/extrustiondepthdialog.ui" )
 {
     get(m_pMtrDepth, "depth");
@@ -303,7 +303,7 @@ double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 ExtrusionDepthWindow::ExtrusionDepthWindow(
     svt::ToolboxController& rController,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParentWindow
+    vcl::Window* pParentWindow
 )   : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH ))
     , mrController( rController )
     , maImgDepth0( SVX_RES( IMG_DEPTH_0 ) )
@@ -488,7 +488,7 @@ ExtrusionDepthController::ExtrusionDepthController(
 
 
 
-::Window* ExtrusionDepthController::createPopupWindow( ::Window* pParent )
+vcl::Window* ExtrusionDepthController::createPopupWindow( vcl::Window* pParent )
 {
     return new ExtrusionDepthWindow( *this, m_xFrame, pParent );
 }
@@ -533,7 +533,7 @@ Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames
     return ExtrusionDepthController_getSupportedServiceNames();
 }
 
-ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
+ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window* pParentWindow )
 : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ))
 , mrController( rController )
 , maImgBright( SVX_RES( IMG_LIGHTING_BRIGHT ) )
@@ -745,7 +745,7 @@ ExtrusionLightingControl::ExtrusionLightingControl(
 
 
 
-::Window* ExtrusionLightingControl::createPopupWindow( ::Window* pParent )
+vcl::Window* ExtrusionLightingControl::createPopupWindow( vcl::Window* pParent )
 {
     return new ExtrusionLightingWindow( *this, m_xFrame, pParent );
 }
@@ -794,7 +794,7 @@ Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     svt::ToolboxController& rController,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParentWindow
+    vcl::Window* pParentWindow
 )   : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_SURFACE ) )
     , mrController( rController )
     , maImgSurface1( SVX_RES( IMG_WIRE_FRAME ) )
@@ -888,7 +888,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 
 
 
-::Window* ExtrusionSurfaceControl::createPopupWindow( ::Window* pParent )
+vcl::Window* ExtrusionSurfaceControl::createPopupWindow( vcl::Window* pParent )
 {
     return new ExtrusionSurfaceWindow( *this, m_xFrame, pParent );
 }

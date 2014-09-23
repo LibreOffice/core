@@ -33,7 +33,7 @@
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 
-class Window;
+namespace vcl { class Window; }
 namespace dbaui
 {
 
@@ -49,13 +49,13 @@ namespace dbaui
                     m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
                     m_xDocumentUI;
-        Window*     m_pDialogParent;
+        vcl::Window*     m_pDialogParent;
         OUString    m_sCurrentlyEditing;
         OUString    m_sDataSourceName;
 
     public:
         OLinkedDocumentsAccess(
-            Window* _pDialogParent,
+            vcl::Window* _pDialogParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rDocumentUI,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,

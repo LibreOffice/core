@@ -73,10 +73,10 @@ private:
     sal_uInt16              GetSelectedDirection();
 
 public:
-    SvxTextAnimationPage( Window* pWindow, const SfxItemSet& rInAttrs );
+    SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxTextAnimationPage();
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet* );
+    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -101,7 +101,7 @@ private:
 
 public:
 
-            SvxTextTabDialog( Window* pParent, const SfxItemSet* pAttr,
+            SvxTextTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                                 const SdrView* pView );
             virtual ~SvxTextTabDialog() {};
 };

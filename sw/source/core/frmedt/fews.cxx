@@ -607,13 +607,13 @@ sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
     return nRet;
 }
 
-SwFEShell::SwFEShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
+SwFEShell::SwFEShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOptions )
     : SwEditShell( rDoc, pWindow, pOptions ),
     pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( false )
 {
 }
 
-SwFEShell::SwFEShell( SwEditShell& rShell, Window *pWindow )
+SwFEShell::SwFEShell( SwEditShell& rShell, vcl::Window *pWindow )
     : SwEditShell( rShell, pWindow ),
     pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( false )
 {

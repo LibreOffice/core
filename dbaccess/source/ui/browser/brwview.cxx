@@ -65,7 +65,7 @@ namespace
 
 // UnoDataBrowserView
 
-UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
+UnoDataBrowserView::UnoDataBrowserView( vcl::Window* pParent,
                                         IController& _rController,
                                         const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     :ODataView(pParent,_rController,_rxContext)
@@ -161,7 +161,7 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
     {
         if (m_pTreeView)
         {
-            boost::scoped_ptr<Window> aTemp(m_pTreeView);
+            boost::scoped_ptr<vcl::Window> aTemp(m_pTreeView);
             m_pTreeView = NULL;
         }
         m_pTreeView = _pTreeView;

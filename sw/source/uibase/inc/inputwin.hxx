@@ -33,7 +33,7 @@ class SfxDispatcher;
 class InputEdit : public Edit
 {
 public:
-                    InputEdit(Window* pParent, WinBits nStyle) :
+                    InputEdit(vcl::Window* pParent, WinBits nStyle) :
                         Edit(pParent , nStyle){}
 
     void            UpdateRange(const OUString& aSel,
@@ -80,7 +80,7 @@ protected:
     void            CancelFormula();
 
 public:
-                    SwInputWindow( Window* pParent, SfxBindings* pBindings );
+                    SwInputWindow( vcl::Window* pParent, SfxBindings* pBindings );
     virtual         ~SwInputWindow();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -101,7 +101,7 @@ class SwInputChild : public SfxChildWindow
 {
     SfxDispatcher*  pDispatch;
 public:
-    SwInputChild( Window* ,
+    SwInputChild( vcl::Window* ,
                         sal_uInt16 nId,
                         SfxBindings*,
                         SfxChildWinInfo*  );

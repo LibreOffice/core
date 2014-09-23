@@ -475,7 +475,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                         if(xElement.is())
                         {
                             uno::Reference< awt::XWindow > xWin( xElement->getRealInterface(), uno::UNO_QUERY_THROW );
-                            Window* pWin = VCLUnoHelper::GetWindow( xWin );
+                            vcl::Window* pWin = VCLUnoHelper::GetWindow( xWin );
                             ToolBox* pTextToolbox = dynamic_cast< ToolBox* >( pWin );
                             if( pTextToolbox )
                             {
@@ -486,7 +486,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                     const OUString& rCommand = pTextToolbox->GetItemCommand( nItemId );
                                     if (rCommand == ".uno:StyleApply")
                                     {
-                                        Window* pItemWin = pTextToolbox->GetItemWindow( nItemId );
+                                        vcl::Window* pItemWin = pTextToolbox->GetItemWindow( nItemId );
                                         if( pItemWin )
                                             pItemWin->GrabFocus();
                                         break;
@@ -930,7 +930,7 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 SfxInPlaceClient* SfxViewShell::FindIPClient
 (
     const uno::Reference < embed::XEmbeddedObject >& xObj,
-    Window*             pObjParentWin
+    vcl::Window*             pObjParentWin
 )   const
 {
     SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
@@ -1185,7 +1185,7 @@ const SvBorder& SfxViewShell::GetBorderPixel() const
 
 void SfxViewShell::SetWindow
 (
-    Window*     pViewPort   // For example Null pointer in the Destructor.
+    vcl::Window*     pViewPort   // For example Null pointer in the Destructor.
 )
 
 /*  [Description]

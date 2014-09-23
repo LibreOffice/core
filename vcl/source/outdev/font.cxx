@@ -517,7 +517,7 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
     // also update child windows if needed
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
-        Window* pChild = ((Window*)this)->mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = ((vcl::Window*)this)->mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->ImplClearFontData( true );
@@ -553,7 +553,7 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
     // also update child windows if needed
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
-        Window* pChild = ((Window*)this)->mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = ((vcl::Window*)this)->mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->ImplRefreshFontData( true );
@@ -579,7 +579,7 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
     if ( bNewFontLists )
     {
         pSVData->maGDIData.mpScreenFontList->Clear();
-        Window * pFrame = pSVData->maWinData.mpFirstFrame;
+        vcl::Window * pFrame = pSVData->maWinData.mpFirstFrame;
         if ( pFrame )
         {
             if ( pFrame->AcquireGraphics() )
@@ -600,12 +600,12 @@ void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHd
     ImplSVData* const pSVData = ImplGetSVData();
 
     // update all windows
-    Window* pFrame = pSVData->maWinData.mpFirstFrame;
+    vcl::Window* pFrame = pSVData->maWinData.mpFirstFrame;
     while ( pFrame )
     {
         ( pFrame->*pHdl )( bNewFontLists );
 
-        Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
+        vcl::Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
         while ( pSysWin )
         {
             ( pSysWin->*pHdl )( bNewFontLists );

@@ -195,7 +195,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
 }
 
-FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
@@ -346,11 +346,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                     xObj->setVisualAreaSize( nAspect, aSz );
 
                     //  re-convert aSize to 1/100th mm to avoid rounding errors in comparison below
-                    aSize = Window::LogicToLogic( aTmp,
+                    aSize = vcl::Window::LogicToLogic( aTmp,
                                     MapMode( aMapUnit ), aMap100 );
                 }
                 else
-                    aSize = Window::LogicToLogic( aSize,
+                    aSize = vcl::Window::LogicToLogic( aSize,
                                     MapMode( aMapUnit ), aMap100 );
             }
 
@@ -426,7 +426,7 @@ void FuInsertOLE::Deactivate()
     FuPoor::Deactivate();
 }
 
-FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
@@ -533,7 +533,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     }
     if (bSizeCh)
     {
-        aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
+        aSize = vcl::Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
         aSz.Width = aSize.Width();
         aSz.Height = aSize.Height();
         xObj->setVisualAreaSize( nAspect, aSz );
@@ -776,7 +776,7 @@ void FuInsertChart::Deactivate()
     FuPoor::Deactivate();
 }
 
-FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq, const OUString& rURL):
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {

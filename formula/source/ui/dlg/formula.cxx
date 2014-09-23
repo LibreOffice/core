@@ -391,13 +391,13 @@ void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
     sal_uInt16 nSwitch=rNEvt.GetType();
     if(nSwitch==EVENT_GETFOCUS && !bIsShutDown)
     {
-        Window* pWin=rNEvt.GetWindow();
+        vcl::Window* pWin=rNEvt.GetWindow();
         if(pWin!=NULL)
         {
             aActivWinId = pWin->GetUniqueId();
             if(aActivWinId.isEmpty())
             {
-                Window* pParent=pWin->GetParent();
+                vcl::Window* pParent=pWin->GetParent();
                 while(pParent!=NULL)
                 {
                     aActivWinId=pParent->GetUniqueId();
@@ -1643,7 +1643,7 @@ void FormulaDlg_Impl::SetEdSelection()
     } // if( pEd )
 }
 
-FormulaModalDialog::FormulaModalDialog( Window* pParent
+FormulaModalDialog::FormulaModalDialog( vcl::Window* pParent
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult
                                             , bool _bSupportMatrix
@@ -1692,7 +1692,7 @@ void FormulaModalDialog::RefInputDoneAfter( bool bForced )
     m_pImpl->RefInputDoneAfter( bForced );
 }
 
-void FormulaModalDialog::SetFocusWin(Window *pWin,const OString& nUniqueId)
+void FormulaModalDialog::SetFocusWin(vcl::Window *pWin,const OString& nUniqueId)
 {
     if(pWin->GetUniqueId()==nUniqueId)
     {
@@ -1704,7 +1704,7 @@ void FormulaModalDialog::SetFocusWin(Window *pWin,const OString& nUniqueId)
 
         for(sal_uInt16 i=0;i<nCount;i++)
         {
-            Window* pChild=pWin->GetChild(i);
+            vcl::Window* pChild=pWin->GetChild(i);
             SetFocusWin(pChild,nUniqueId);
         }
     }
@@ -1726,7 +1726,7 @@ void FormulaModalDialog::StoreFormEditData(FormEditData* pData)
 //      Initialisation / General functions  for Dialog
 
 FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                             Window* pParent
+                             vcl::Window* pParent
                             , bool _bSupportFunctionResult
                             , bool _bSupportResult
                             , bool _bSupportMatrix
@@ -1795,7 +1795,7 @@ void FormulaDlg::RefInputDoneAfter( bool bForced )
     m_pImpl->RefInputDoneAfter( bForced );
 }
 
-void FormulaDlg::SetFocusWin(Window *pWin,const OString& nUniqueId)
+void FormulaDlg::SetFocusWin(vcl::Window *pWin,const OString& nUniqueId)
 {
     if(pWin->GetUniqueId()==nUniqueId)
     {
@@ -1807,7 +1807,7 @@ void FormulaDlg::SetFocusWin(Window *pWin,const OString& nUniqueId)
 
         for(sal_uInt16 i=0;i<nCount;i++)
         {
-            Window* pChild=pWin->GetChild(i);
+            vcl::Window* pChild=pWin->GetChild(i);
             SetFocusWin(pChild,nUniqueId);
         }
     }

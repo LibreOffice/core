@@ -103,7 +103,7 @@ class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
     DECL_LINK(ContainsHdl_Impl, CheckBox*);
     DECL_LINK(OKHdl, void *);
 public:
-    SwMailBodyDialog(Window* pParent, SwMailMergeWizard* pWizard);
+    SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* pWizard);
     virtual ~SwMailBodyDialog();
 
     void            SetBody(const OUString& rBody ) {m_pBodyMLE->SetText(rBody);}

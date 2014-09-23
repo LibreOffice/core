@@ -67,11 +67,11 @@ class SwEndNoteOptionPage : public SfxTabPage
     DECL_LINK(NumCountHdl, void *);
 
 public:
-    SwEndNoteOptionPage( Window *pParent, bool bEndNote,
+    SwEndNoteOptionPage( vcl::Window *pParent, bool bEndNote,
                          const SfxItemSet &rSet );
     virtual ~SwEndNoteOptionPage();
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
@@ -80,11 +80,11 @@ public:
 
 class SwFootNoteOptionPage : public SwEndNoteOptionPage
 {
-    SwFootNoteOptionPage( Window *pParent, const SfxItemSet &rSet );
+    SwFootNoteOptionPage( vcl::Window *pParent, const SfxItemSet &rSet );
     virtual ~SwFootNoteOptionPage();
 
 public:
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
 };
 
 #endif

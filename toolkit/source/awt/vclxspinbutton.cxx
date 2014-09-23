@@ -37,7 +37,7 @@ namespace toolkit
 
     namespace
     {
-        void lcl_modifyStyle( Window* _pWindow, WinBits _nStyleBits, bool _bShouldBePresent )
+        void lcl_modifyStyle( vcl::Window* _pWindow, WinBits _nStyleBits, bool _bShouldBePresent )
         {
             WinBits nStyle = _pWindow->GetStyle();
             if ( _bShouldBePresent )
@@ -98,7 +98,7 @@ namespace toolkit
         typedef long (SpinButton::*GetSpinButtonValue) (void) const;
 
 
-        void lcl_setSpinButtonValue(Window* _pWindow, SetSpinButtonValue _pSetter, sal_Int32 _nValue )
+        void lcl_setSpinButtonValue(vcl::Window* _pWindow, SetSpinButtonValue _pSetter, sal_Int32 _nValue )
         {
             SolarMutexGuard aGuard;
             SpinButton* pSpinButton = static_cast< SpinButton* >( _pWindow );
@@ -107,7 +107,7 @@ namespace toolkit
         }
 
 
-        sal_Int32 lcl_getSpinButtonValue(const Window* _pWindow, GetSpinButtonValue _pGetter )
+        sal_Int32 lcl_getSpinButtonValue(const vcl::Window* _pWindow, GetSpinButtonValue _pGetter )
         {
             SolarMutexGuard aGuard;
 

@@ -37,7 +37,7 @@ enum SvxPrevLineSpace
 
 // class SvxParaPrevWindow -----------------------------------------------
 
-class SVX_DLLPUBLIC SvxParaPrevWindow : public Window
+class SVX_DLLPUBLIC SvxParaPrevWindow : public vcl::Window
 {
     using Window::Draw;
 private:
@@ -68,7 +68,7 @@ protected:
     void DrawParagraph( bool bAll );
 
 public:
-    SvxParaPrevWindow( Window* pParent, WinBits nBits);
+    SvxParaPrevWindow( vcl::Window* pParent, WinBits nBits);
 
     void        SetFirstLineOfst( short nNew )  { nFirstLineOfst = nNew; }
     void        SetLeftMargin( long nNew )      { nLeftMargin = nNew; }

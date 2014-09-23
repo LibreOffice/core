@@ -338,7 +338,7 @@ namespace accessibility
 
     Rectangle AccessibleGridControlTableCell::implGetBoundingBox()
     {
-        Window* pParent = m_aTable.GetAccessibleParentWindow();
+        vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
         DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
         Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( pParent );
         sal_Int32 nIndex = getAccessibleIndexInParent();

@@ -24,7 +24,7 @@
 
 //  A simple container for docked toolbars
 //  - its main purpose is theming support
-class VCL_DLLPUBLIC DockingAreaWindow : public Window
+class VCL_DLLPUBLIC DockingAreaWindow : public vcl::Window
 {
     class ImplData;
 
@@ -36,7 +36,7 @@ private:
     SAL_DLLPRIVATE  DockingAreaWindow & operator= (const DockingAreaWindow &);
 
 public:
-    explicit        DockingAreaWindow( Window* pParent );
+    explicit        DockingAreaWindow( vcl::Window* pParent );
     virtual         ~DockingAreaWindow();
 
     void            SetAlign( WindowAlign eNewAlign );

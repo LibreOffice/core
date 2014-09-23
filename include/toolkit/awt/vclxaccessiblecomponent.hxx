@@ -34,7 +34,7 @@
 
 #include <tools/link.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class VCLXWindow;
 class VclSimpleEvent;
 class VclWindowEvent;
@@ -83,7 +83,7 @@ public:
     virtual ~VCLXAccessibleComponent();
 
     VCLXWindow*    GetVCLXWindow() const { return mpVCLXindow; }
-    Window*        GetWindow() const;
+    vcl::Window*        GetWindow() const;
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 

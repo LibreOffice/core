@@ -63,7 +63,7 @@ protected:
     virtual void        MouseButtonDown ( const MouseEvent& ) SAL_OVERRIDE;
 
 public:
-                        SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
+                        SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
                             SfxWorkWindow *pW, bool bWithButtons,
                             WinBits nBits = WB_BORDER | WB_SIZEABLE | WB_3DLOOK );
 

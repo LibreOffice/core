@@ -53,7 +53,7 @@ private:
     void create( PresObjKind eKind );
 
 public:
-    MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
+    MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
 
     virtual short Execute() SAL_OVERRIDE;
 };

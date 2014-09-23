@@ -33,7 +33,7 @@ class ParaNumberingPopup
 {
 public :
     ParaNumberingPopup (
-        Window* pParent,
+        vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
     virtual ~ParaNumberingPopup (void);
 

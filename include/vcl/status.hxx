@@ -32,7 +32,7 @@ typedef ::std::vector< ImplStatusItem* > ImplStatusItemList;
 // - Progress-Ausgabe -
 
 
-void VCL_DLLPUBLIC DrawProgress( Window* pWindow, const Point& rPos,
+void VCL_DLLPUBLIC DrawProgress( vcl::Window* pWindow, const Point& rPos,
                                  long nOffset, long nPrgsWidth, long nPrgsHeight,
                                  sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
                                  const Rectangle& rFramePosSize
@@ -69,7 +69,7 @@ typedef sal_uInt16 StatusBarItemBits;
 // - StatusBar -
 
 
-class VCL_DLLPUBLIC StatusBar : public Window
+class VCL_DLLPUBLIC StatusBar : public vcl::Window
 {
     class   ImplData;
 private:
@@ -96,7 +96,7 @@ private:
     Link                maDoubleClickHdl;
 
     using Window::ImplInit;
-    SAL_DLLPRIVATE void      ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void      ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void      ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void      ImplFormat();
     SAL_DLLPRIVATE bool      ImplIsItemUpdate();
@@ -110,7 +110,7 @@ private:
     SAL_DLLPRIVATE sal_uInt16    ImplGetFirstVisiblePos() const;
 
 public:
-                        StatusBar( Window* pParent,
+                        StatusBar( vcl::Window* pParent,
                                    WinBits nWinStyle = WB_BORDER | WB_RIGHT );
                         virtual ~StatusBar();
 

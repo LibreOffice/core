@@ -1101,7 +1101,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
 
 
 
-void BrowseBox::PaintData( Window& rWin, const Rectangle& rRect )
+void BrowseBox::PaintData( vcl::Window& rWin, const Rectangle& rRect )
 {
     if ( !bBootstrapped && IsReallyVisible() )
         BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
@@ -2028,7 +2028,7 @@ void BrowseBox::SetCursorColor(const Color& _rCol)
 
 Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
 {
-    Window* pParent = NULL;
+    vcl::Window* pParent = NULL;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
@@ -2052,7 +2052,7 @@ Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
 
 Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
 {
-    Window* pParent = NULL;
+    vcl::Window* pParent = NULL;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
@@ -2068,7 +2068,7 @@ Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
 
 Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
 {
-    Window* pParent = NULL;
+    vcl::Window* pParent = NULL;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 

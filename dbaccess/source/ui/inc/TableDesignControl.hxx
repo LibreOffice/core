@@ -46,7 +46,7 @@ namespace dbaui
         bool    m_bClipboardFilled;
 
     public:
-        OTableRowView(Window* pParent);
+        OTableRowView(vcl::Window* pParent);
         virtual ~OTableRowView();
 
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;

@@ -37,7 +37,7 @@
 
 SvxAreaTabDialog::SvxAreaTabDialog
 (
-    Window* pParent,
+    vcl::Window* pParent,
     const SfxItemSet* pAttr,
     SdrModel* pModel,
     bool bShadow

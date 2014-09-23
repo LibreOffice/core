@@ -129,7 +129,7 @@ bool DocumentLinkManager::hasDdeLinks() const
     return false;
 }
 
-bool DocumentLinkManager::updateDdeLinks( Window* pWin )
+bool DocumentLinkManager::updateDdeLinks( vcl::Window* pWin )
 {
     if (!mpImpl->mpLinkManager)
         return false;

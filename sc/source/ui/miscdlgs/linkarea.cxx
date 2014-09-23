@@ -37,7 +37,7 @@
 #include "docsh.hxx"
 #include "tablink.hxx"
 
-ScLinkedAreaDlg::ScLinkedAreaDlg(Window* pParent)
+ScLinkedAreaDlg::ScLinkedAreaDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "ExternalDataDialog", "modules/scalc/ui/externaldata.ui")
     , pSourceShell(NULL)
     , pDocInserter(NULL)
@@ -69,7 +69,7 @@ short ScLinkedAreaDlg::Execute()
 {
     // set parent for file dialog or filter options
 
-    Window* pOldDefParent = Application::GetDefDialogParent();
+    vcl::Window* pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
     short nRet = ModalDialog::Execute();

@@ -33,7 +33,7 @@
 #define PREVIEW_WIDTH       113
 #define PREVIEW_HEIGHT      160
 
-class ScanPreview : public Window
+class ScanPreview : public vcl::Window
 {
 private:
     enum DragDirection { TopLeft, Top, TopRight, Right, BottomRight, Bottom,
@@ -51,7 +51,7 @@ private:
 
     void DrawRectangles(Point& rUL, Point& rBR);
 public:
-    ScanPreview(Window* pParent, WinBits nStyle)
+    ScanPreview(vcl::Window* pParent, WinBits nStyle)
         : Window(pParent, nStyle)
         , maMaxBottomRight(PREVIEW_WIDTH,  PREVIEW_HEIGHT)
         , mpParentDialog(NULL)
@@ -145,7 +145,7 @@ public:
     }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScanPreview(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScanPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -155,7 +155,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScanPreview(Window *pParent
     return pWindow;
 }
 
-SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
+SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
         ModalDialog(pParent, "SaneDialog", "modules/scanner/ui/sanedialog.ui"),
         mrSane( rSane ),
         mbScanEnabled( bScanEnabled ),

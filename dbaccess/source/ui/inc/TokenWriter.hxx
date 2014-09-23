@@ -196,7 +196,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xTargetRowUpdate;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xTargetResultSetMetaData;
-        Window*                     m_pParent;
+        vcl::Window*                     m_pParent;
         bool                        m_bAlreadyAsked;
 
         bool insertNewRow();
@@ -205,7 +205,7 @@ namespace dbaui
 
     public:
         // export data
-        ORowSetImportExport(Window* _pParent,
+        ORowSetImportExport(vcl::Window* _pParent,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >& _xResultSetUpdate,
                             const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,

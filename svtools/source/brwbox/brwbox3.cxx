@@ -87,7 +87,7 @@ namespace svt
 
 Reference< XAccessible > BrowseBox::CreateAccessible()
 {
-    Window* pParent = GetAccessibleParentWindow();
+    vcl::Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "BrowseBox::CreateAccessible - parent not found" );
 
     if( pParent && !m_pImpl->m_pAccessible)
@@ -542,7 +542,7 @@ bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, 
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
 
-Rectangle BrowseBox::GetWindowExtentsRelative( Window *pRelativeWindow ) const
+Rectangle BrowseBox::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }
@@ -557,12 +557,12 @@ Reference< XAccessible > BrowseBox::GetAccessible( bool bCreate )
     return Control::GetAccessible( bCreate );
 }
 
-Window* BrowseBox::GetAccessibleParentWindow() const
+vcl::Window* BrowseBox::GetAccessibleParentWindow() const
 {
     return Control::GetAccessibleParentWindow();
 }
 
-Window* BrowseBox::GetWindowInstance()
+vcl::Window* BrowseBox::GetWindowInstance()
 {
     return this;
 }

@@ -47,7 +47,7 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 {
  public:
 
-    SvxIMapDlgChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
+    SvxIMapDlgChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW_WITHID( SvxIMapDlgChildWindow );
 
@@ -134,7 +134,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
 public:
 
                         SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
-                                    Window* pParent );
+                                    vcl::Window* pParent );
                         virtual ~SvxIMapDlg();
 
     void                SetExecState( bool bEnable );

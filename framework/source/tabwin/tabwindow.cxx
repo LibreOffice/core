@@ -140,7 +140,7 @@ void TabWindow::implts_LayoutWindows() const
 
 TabControl* TabWindow::impl_GetTabControl( const css::uno::Reference< css::awt::XWindow >& rTabControlWindow ) const
 {
-    Window* pWindow = VCLUnoHelper::GetWindow( rTabControlWindow );
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow( rTabControlWindow );
     if ( pWindow )
         return (TabControl *)pWindow;
     else
@@ -151,7 +151,7 @@ void TabWindow::impl_SetTitle( const OUString& rTitle )
 {
     if ( m_xTopWindow.is() )
     {
-        Window* pWindow = VCLUnoHelper::GetWindow(
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow(
                             css::uno::Reference< css::awt::XWindow >(
                                 m_xTopWindow, css::uno::UNO_QUERY ));
         if ( pWindow )
@@ -387,7 +387,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
                     xWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
 
                     SolarMutexGuard aGuard;
-                    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if( pWindow )
                         pWindow->Show( true );
 
@@ -509,7 +509,7 @@ throw( css::uno::RuntimeException, std::exception )
 
     if ( m_xContainerWindow.is() )
     {
-        Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
         if ( pWindow )
             pWindow->Show();
     }
@@ -521,7 +521,7 @@ throw( css::uno::RuntimeException, std::exception )
     SolarMutexGuard g;
     if ( m_xContainerWindow.is() )
     {
-        Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
         if ( pWindow )
             pWindow->Hide();
     }

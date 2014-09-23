@@ -23,7 +23,7 @@
 class ScAutoFormatDlg : public ModalDialog
 {
 public:
-    ScAutoFormatDlg(Window* pParent,
+    ScAutoFormatDlg(vcl::Window* pParent,
                     ScAutoFormat* pAutoFormat,
                     const ScAutoFormatData* pSelFormatData,
                     ScViewData *pViewData);

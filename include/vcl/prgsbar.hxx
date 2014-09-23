@@ -55,7 +55,7 @@
 // - ProgressBar -
 
 
-class VCL_DLLPUBLIC ProgressBar : public Window
+class VCL_DLLPUBLIC ProgressBar : public vcl::Window
 {
 private:
     Point               maPos;
@@ -71,7 +71,7 @@ private:
     SAL_DLLPRIVATE void             ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc );
 
 public:
-                        ProgressBar( Window* pParent, WinBits nWinBits = WB_STDPROGRESSBAR );
+                        ProgressBar( vcl::Window* pParent, WinBits nWinBits = WB_STDPROGRESSBAR );
                         virtual ~ProgressBar();
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;

@@ -33,10 +33,10 @@ namespace chart
 class DataLabelsTabPage : public SfxTabPage
 {
 public:
-    DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs);
+    DataLabelsTabPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs);
     virtual ~DataLabelsTabPage();
 
-    static SfxTabPage* Create(Window* pWindow, const SfxItemSet* rInAttrs);
+    static SfxTabPage* Create(vcl::Window* pWindow, const SfxItemSet* rInAttrs);
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 

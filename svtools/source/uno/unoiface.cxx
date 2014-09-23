@@ -42,7 +42,7 @@
 
 namespace
 {
-    static void lcl_setWinBits( Window* _pWindow, WinBits _nBits, bool _bSet )
+    static void lcl_setWinBits( vcl::Window* _pWindow, WinBits _nBits, bool _bSet )
     {
         WinBits nStyle = _pWindow->GetStyle();
         if ( _bSet )
@@ -59,9 +59,9 @@ namespace
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, WinBits nWinBits )
+SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits )
 {
-    Window* pWindow = NULL;
+    vcl::Window* pWindow = NULL;
     OUString aServiceName( pDescriptor->WindowServiceName );
     if ( aServiceName.equalsIgnoreAsciiCase( "MultiLineEdit" ) )
     {
@@ -589,7 +589,7 @@ void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const 
     }
 }
 
-void VCLXFileControl::SetWindow( Window* pWindow )
+void VCLXFileControl::SetWindow( vcl::Window* pWindow )
 {
     FileControl* pPrevFileControl = dynamic_cast<FileControl*>( GetWindow() );
     if ( pPrevFileControl )
@@ -616,7 +616,7 @@ void VCLXFileControl::setText( const OUString& aText ) throw(::com::sun::star::u
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->SetText( aText );
@@ -644,7 +644,7 @@ OUString VCLXFileControl::getText() throw(::com::sun::star::uno::RuntimeExceptio
     SolarMutexGuard aGuard;
 
     OUString aText;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;
@@ -823,7 +823,7 @@ SVTXFormattedField::~SVTXFormattedField()
 }
 
 
-void SVTXFormattedField::SetWindow( Window* _pWindow )
+void SVTXFormattedField::SetWindow( vcl::Window* _pWindow )
 {
     VCLXSpinField::SetWindow(_pWindow);
     if (GetFormattedField())
@@ -2138,7 +2138,7 @@ void VCLXProgressBar::setForegroundColor( sal_Int32 nColor ) throw(::com::sun::s
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         Color aColor( nColor );
@@ -2150,7 +2150,7 @@ void VCLXProgressBar::setBackgroundColor( sal_Int32 nColor ) throw(::com::sun::s
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         Color aColor( nColor );
@@ -2226,7 +2226,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const ::com::su
             break;
             case BASEPROPERTY_FILLCOLOR:
             {
-                Window* pWindow = GetWindow();
+                vcl::Window* pWindow = GetWindow();
                 if ( pWindow )
                 {
                     bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;

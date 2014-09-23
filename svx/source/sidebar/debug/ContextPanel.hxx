@@ -30,11 +30,11 @@ namespace svx { namespace sidebar {
 /** Display the current context.
 */
 class ContextPanel
-    : public Window,
+    : public vcl::Window,
       public sfx2::sidebar::IContextChangeReceiver
 {
 public:
-    ContextPanel (::Window* pParent);
+    ContextPanel (vcl::Window* pParent);
     virtual ~ContextPanel (void);
 
     // From IContextChangeReceiverInterface

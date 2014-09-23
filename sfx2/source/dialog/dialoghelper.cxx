@@ -18,23 +18,23 @@
 //right, get both of their non-preview areas to request the same size
 //so that the preview appears in the same place in each one so
 //flipping between tabs isn't distracting as it jumps around
-void setPreviewsToSamePlace(Window *pParent, VclBuilderContainer *pPage)
+void setPreviewsToSamePlace(vcl::Window *pParent, VclBuilderContainer *pPage)
 {
-    Window *pOurGrid = pPage->get<Window>("maingrid");
+    vcl::Window *pOurGrid = pPage->get<vcl::Window>("maingrid");
     if (!pOurGrid)
         return;
 
-    std::vector<Window*> aGrids;
+    std::vector<vcl::Window*> aGrids;
     aGrids.push_back(pOurGrid);
 
-    for (Window* pChild = pParent->GetWindow(WINDOW_FIRSTCHILD); pChild;
+    for (vcl::Window* pChild = pParent->GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         VclBuilderContainer *pPeer = dynamic_cast<VclBuilderContainer*>(pChild);
         if (!pPeer || pPeer == pPage || !pPeer->hasBuilder())
             continue;
 
-        Window *pOtherGrid = pPeer->get<Window>("maingrid");
+        vcl::Window *pOtherGrid = pPeer->get<vcl::Window>("maingrid");
         if (!pOtherGrid)
             continue;
 
@@ -44,36 +44,36 @@ void setPreviewsToSamePlace(Window *pParent, VclBuilderContainer *pPage)
     if (aGrids.size() > 1)
     {
         boost::shared_ptr< VclSizeGroup > xGroup(new VclSizeGroup);
-        for (std::vector<Window*>::iterator aI = aGrids.begin(); aI != aGrids.end(); ++aI)
+        for (std::vector<vcl::Window*>::iterator aI = aGrids.begin(); aI != aGrids.end(); ++aI)
         {
-            Window *pWindow = *aI;
+            vcl::Window *pWindow = *aI;
             pWindow->remove_from_all_size_groups();
             pWindow->add_to_size_group(xGroup);
         }
     }
 }
 
-Size getParagraphPreviewOptimalSize(const Window *pReference)
+Size getParagraphPreviewOptimalSize(const vcl::Window *pReference)
 {
     return pReference->LogicToPixel(Size(68 , 112), MAP_APPFONT);
 }
 
-Size getDrawPreviewOptimalSize(const Window *pReference)
+Size getDrawPreviewOptimalSize(const vcl::Window *pReference)
 {
     return pReference->LogicToPixel(Size(88, 42), MAP_APPFONT);
 }
 
-Size getDrawListBoxOptimalSize(const Window *pReference)
+Size getDrawListBoxOptimalSize(const vcl::Window *pReference)
 {
     return pReference->LogicToPixel(Size(88, 110), MAP_APPFONT);
 }
 
-Size SFX2_DLLPUBLIC getPreviewStripSize(const Window *pReference)
+Size SFX2_DLLPUBLIC getPreviewStripSize(const vcl::Window *pReference)
 {
     return pReference->LogicToPixel(Size(70 , 40), MapMode(MAP_APPFONT));
 }
 
-Size SFX2_DLLPUBLIC getPreviewOptionsSize(const Window *pReference)
+Size SFX2_DLLPUBLIC getPreviewOptionsSize(const vcl::Window *pReference)
 {
     return pReference->LogicToPixel(Size(70 , 27), MapMode(MAP_APPFONT));
 }

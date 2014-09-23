@@ -146,7 +146,7 @@ void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
     mpEdValue->SetDate( aDate );
 }
 
-ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo ) :
+ScDPNumGroupDlg::ScDPNumGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo ) :
     ModalDialog     ( pParent, "PivotTableGroupByNumber", "modules/scalc/ui/groupbynumber.ui" ),
     mpRbAutoStart   ( get<RadioButton>("auto_start") ),
     mpRbManStart    ( get<RadioButton>("manual_start") ),
@@ -194,7 +194,7 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
     return aInfo;
 }
 
-ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
+ScDPDateGroupDlg::ScDPDateGroupDlg( vcl::Window* pParent,
         const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate ) :
     ModalDialog( pParent, "PivotTableGroupByDate", "modules/scalc/ui/groupbydate.ui" ),
     mpRbAutoStart   ( get<RadioButton>("auto_start") ),

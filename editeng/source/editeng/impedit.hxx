@@ -79,7 +79,7 @@ class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvtCTLOptions;
-class Window;
+namespace vcl { class Window; }
 class SvxNumberFormat;
 
 
@@ -215,7 +215,7 @@ private:
     vcl::Cursor*        pCursor;
     Color*              pBackgroundColor;
     EditEngine*         pEditEngine;
-    Window*             pOutWin;
+    vcl::Window*             pOutWin;
     Pointer*            pPointer;
     DragAndDropInfo*    pDragAndDropInfo;
 
@@ -263,7 +263,7 @@ protected:
     void ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly );
 
 public:
-                    ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow );
+                    ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindow );
                     virtual ~ImpEditView();
 
     EditView*       GetEditViewPtr() { return pEditView; }
@@ -284,7 +284,7 @@ public:
 
     bool            IsVertical() const;
 
-    bool            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
+    bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin = NULL );
 
     bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -310,7 +310,7 @@ public:
     void            DrawSelection() { DrawSelection( aEditSelection ); }
     void            DrawSelection( EditSelection, Region* pRegion = NULL, OutputDevice* pTargetDevice = NULL );
 
-    Window*         GetWindow() const           { return pOutWin; }
+    vcl::Window*         GetWindow() const           { return pOutWin; }
 
     EESelectionMode GetSelectionMode() const    { return eSelectionMode; }
     void            SetSelectionMode( EESelectionMode eMode );
@@ -760,7 +760,7 @@ public:
     EditPaM         DeleteSelected( EditSelection aEditSelection);
     EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, bool bIsUserInput = false );
     EditPaM         InsertText(const EditSelection& aCurEditSelection, const OUString& rStr);
-    EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, Window* pFrameWin = NULL );
+    EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, vcl::Window* pFrameWin = NULL );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, sal_uInt8 nMode, sal_uInt8 nDelMode = DELMODE_SIMPLE );
     EditPaM         InsertParaBreak( EditSelection aEditSelection );
     EditPaM         InsertLineBreak(const EditSelection& aEditSelection);

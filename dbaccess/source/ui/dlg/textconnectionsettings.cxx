@@ -29,7 +29,7 @@
 namespace dbaui
 {
     // TextConnectionSettingsDialog
-    TextConnectionSettingsDialog::TextConnectionSettingsDialog( Window* _pParent, SfxItemSet& _rItems )
+    TextConnectionSettingsDialog::TextConnectionSettingsDialog( vcl::Window* _pParent, SfxItemSet& _rItems )
         :ModalDialog( _pParent, "TextConnectionSettingsDialog", "dbaccess/ui/textconnectionsettings.ui" )
         ,m_rItems( _rItems )
     {

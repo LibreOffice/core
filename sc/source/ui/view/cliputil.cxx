@@ -24,7 +24,7 @@
 
 void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog )
 {
-    Window* pWin = pViewData->GetActiveWin();
+    vcl::Window* pWin = pViewData->GetActiveWin();
     ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
     ScDocument* pThisDoc = pViewData->GetDocument();
     ScDPObject* pDPObj = pThisDoc->GetDPAtCursor( pViewData->GetCurX(),

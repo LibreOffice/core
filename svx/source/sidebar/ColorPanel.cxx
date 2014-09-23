@@ -25,7 +25,7 @@
 
 namespace svx { namespace sidebar {
 
-ColorPanel::ColorPanel (::Window* pParent)
+ColorPanel::ColorPanel (vcl::Window* pParent)
     : ValueSet(pParent),
       mnPreferredColumnCount(2)
 {
@@ -53,7 +53,7 @@ ColorPanel::~ColorPanel (void)
 
 void ColorPanel::Resize (void)
 {
-    ::Window::Resize();
+    vcl::Window::Resize();
     Size aWindowSize = GetOutputSizePixel();
     SetPosSizePixel(Point(0,0), aWindowSize);
     if (IsVisible() && aWindowSize.Width() > 0)

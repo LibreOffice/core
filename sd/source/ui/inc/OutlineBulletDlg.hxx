@@ -34,7 +34,7 @@ class OutlineBulletDlg
 {
 public:
     OutlineBulletDlg (
-        ::Window* pParent,
+        vcl::Window* pParent,
         const SfxItemSet* pAttr,
         ::sd::View* pView );
     virtual ~OutlineBulletDlg ();

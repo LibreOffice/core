@@ -106,7 +106,7 @@ IMPL_LINK_NOARG(SwFootNotePage, LineColorSelected_Impl)
     return 0;
 }
 
-SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet)
+SwFootNotePage::SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "FootnoteAreaPage",
         "modules/swriter/ui/footnoteareapage.ui", &rSet)
     , lMaxHeight(0)
@@ -137,7 +137,7 @@ SwFootNotePage::~SwFootNotePage()
 {
 }
 
-SfxTabPage* SwFootNotePage::Create(Window *pParent, const SfxItemSet *rSet)
+SfxTabPage* SwFootNotePage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return new SwFootNotePage(pParent, *rSet);
 }

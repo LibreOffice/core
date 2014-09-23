@@ -31,7 +31,7 @@ using namespace css::uno;
 namespace sfx2 { namespace sidebar {
 
 
-MenuButton::MenuButton (Window* pParentWindow)
+MenuButton::MenuButton (vcl::Window* pParentWindow)
     : CheckBox(pParentWindow),
       mbIsLeftButtonDown(false),
       mePaintType(PT_Theme)

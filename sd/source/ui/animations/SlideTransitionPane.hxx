@@ -52,7 +52,7 @@ class SlideTransitionPane : public PanelLayout
 {
 public:
     explicit SlideTransitionPane(
-        ::Window * pParent,
+        Window * pParent,
         ViewShellBase & rBase,
         const Size& rMinSize,
         SdDrawDocument* pDoc,

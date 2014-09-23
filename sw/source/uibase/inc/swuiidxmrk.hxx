@@ -155,7 +155,7 @@ class SwIndexMarkFloatDlg : public SfxModelessDialog
     public:
         SwIndexMarkFloatDlg(       SfxBindings* pBindings,
                                    SfxChildWindow* pChild,
-                                   Window *pParent,
+                                   vcl::Window *pParent,
                                    SfxChildWinInfo* pInfo,
                                    bool bNew=true);
     void    ReInitDlg(SwWrtShell& rWrtShell);
@@ -165,7 +165,7 @@ class SwIndexMarkModalDlg : public SvxStandardDialog
 {
     SwIndexMarkPane m_aContent;
 public:
-    SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark);
+    SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark);
 
     virtual void        Apply() SAL_OVERRIDE;
     void    ReInitDlg(SwWrtShell& rWrtShell);
@@ -231,7 +231,7 @@ class SwAuthMarkFloatDlg : public SfxModelessDialog
     public:
         SwAuthMarkFloatDlg(        SfxBindings* pBindings,
                                    SfxChildWindow* pChild,
-                                   Window *pParent,
+                                   vcl::Window *pParent,
                                    SfxChildWinInfo* pInfo,
                                    bool bNew=true);
     void    ReInitDlg(SwWrtShell& rWrtShell);
@@ -241,7 +241,7 @@ class SwAuthMarkModalDlg : public SvxStandardDialog
 {
     SwAuthorMarkPane m_aContent;
 public:
-    SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh);
+    SwAuthMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh);
 
     virtual void        Apply() SAL_OVERRIDE;
     void    ReInitDlg(SwWrtShell& rWrtShell);

@@ -38,7 +38,7 @@ class ScTypedStrData;
 class ScPivotFilterDlg : public ModalDialog
 {
 public:
-    ScPivotFilterDlg(Window* pParent, const SfxItemSet& rArgSet, SCTAB nSourceTab);
+    ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgSet, SCTAB nSourceTab);
     virtual ~ScPivotFilterDlg();
 
     const ScQueryItem&  GetOutputItem();

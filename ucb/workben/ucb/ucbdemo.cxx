@@ -86,7 +86,7 @@ using namespace com::sun::star;
 class MyOutWindow : public ListBox
 {
 public:
-    MyOutWindow( Window *pParent, WinBits nWinStyle )
+    MyOutWindow( vcl::Window *pParent, WinBits nWinStyle )
     : ListBox ( pParent, nWinStyle | WB_AUTOHSCROLL ) {}
     ~MyOutWindow() {}
 
@@ -1668,7 +1668,7 @@ private:
     bool m_bSort;
 
 public:
-    MyWin( Window *pParent, WinBits nWinStyle,
+    MyWin( vcl::Window *pParent, WinBits nWinStyle,
            uno::Reference< lang::XMultiServiceFactory >& rxFactory,
            OUString const & rConfigurationKey1,
            OUString const & rConfigurationKey2 );
@@ -1682,7 +1682,7 @@ public:
 };
 
 
-MyWin::MyWin( Window *pParent, WinBits nWinStyle,
+MyWin::MyWin( vcl::Window *pParent, WinBits nWinStyle,
               uno::Reference< lang::XMultiServiceFactory >& rxFactory,
               OUString const & rConfigurationKey1,
               OUString const & rConfigurationKey2 )

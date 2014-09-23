@@ -52,7 +52,7 @@ public:
     static ::boost::shared_ptr<SlideSorterViewShell> Create(
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
-        ::Window* pParentWindow,
+        ::vcl::Window* pParentWindow,
         FrameView* pFrameView,
         const bool bIsCenterPane);
 
@@ -121,7 +121,7 @@ public:
 
     virtual void StartDrag (
         const Point& rDragPt,
-        ::Window* pWindow );
+        ::vcl::Window* pWindow );
     virtual void DragFinished (
         sal_Int8 nDropAction);
     virtual sal_Int8 AcceptDrop (
@@ -182,7 +182,7 @@ public:
     /** Try to relocate all toplevel window elements to the given parent
         window.
     */
-    virtual bool RelocateToParentWindow (::Window* pParentWindow) SAL_OVERRIDE;
+    virtual bool RelocateToParentWindow (::vcl::Window* pParentWindow) SAL_OVERRIDE;
 
 protected:
 
@@ -200,7 +200,7 @@ private:
     SlideSorterViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         FrameView* pFrameView);
     void Initialize (void);
 

@@ -56,7 +56,7 @@ const sal_Int64 DIGITS      = 4;
 
 ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    Window* pParent, ScViewData* pViewData ) :
+                    vcl::Window* pParent, ScViewData* pViewData ) :
     ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent,
                       "RandomNumberGeneratorDialog", "modules/scalc/ui/randomnumbergenerator.ui" ),
     mpViewData       ( pViewData ),

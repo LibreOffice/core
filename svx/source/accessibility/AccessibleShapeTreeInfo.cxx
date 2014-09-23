@@ -141,7 +141,7 @@ void AccessibleShapeTreeInfo::SetController (
 
 
 
-void AccessibleShapeTreeInfo::SetWindow (Window* pWindow)
+void AccessibleShapeTreeInfo::SetWindow (vcl::Window* pWindow)
 {
     mpWindow = pWindow;
 }

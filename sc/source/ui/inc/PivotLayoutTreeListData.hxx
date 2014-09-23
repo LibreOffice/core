@@ -20,7 +20,7 @@ private:
     boost::ptr_vector<ScItemValue> maDataItemValues;
 
 public:
-    ScPivotLayoutTreeListData(Window* pParent, WinBits nBits);
+    ScPivotLayoutTreeListData(vcl::Window* pParent, WinBits nBits);
     virtual ~ScPivotLayoutTreeListData();
     virtual bool DoubleClickHdl() SAL_OVERRIDE;
 

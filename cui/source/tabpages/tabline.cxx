@@ -35,7 +35,7 @@
 
 SvxLineTabDialog::SvxLineTabDialog
 (
-    Window* pParent,
+    vcl::Window* pParent,
     const SfxItemSet* pAttr,
     SdrModel* pModel,
     const SdrObject* pSdrObj,

@@ -62,7 +62,7 @@ using namespace com::sun::star::container;
 #define ADDITIONAL_PAGE_MYSQL_NATIVE   12
 
 // ODbTypeWizDialog
-ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
+ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
                                ,SfxItemSet* _pItems
                                ,const Reference< XComponentContext >& _rxORB
                                ,const ::com::sun::star::uno::Any& _aDataSourceName

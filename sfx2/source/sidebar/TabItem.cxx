@@ -32,7 +32,7 @@ using namespace css::uno;
 namespace sfx2 { namespace sidebar {
 
 
-TabItem::TabItem (Window* pParentWindow)
+TabItem::TabItem (vcl::Window* pParentWindow)
     : ImageRadioButton(pParentWindow),
       mbIsLeftButtonDown(false),
       mePaintType(PT_Theme)

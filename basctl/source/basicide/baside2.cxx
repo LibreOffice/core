@@ -654,7 +654,7 @@ bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
 
     // #i47002#
-    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( !pWindow )
         return false;
 
@@ -1443,7 +1443,7 @@ void ModulWindow::UpdateModule ()
 
 
 
-ModulWindowLayout::ModulWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
+ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(0),
     aWatchWindow(this),

@@ -72,7 +72,7 @@ static bool is_gnome_desktop( Display* pDisplay )
         if( nUTFAtom && nNetWMNameAtom )
         {
             // another, more expensive check: search for a gnome-panel
-            XLIB_Window aRoot, aParent, *pChildren = NULL;
+            ::Window aRoot, aParent, *pChildren = NULL;
             unsigned int nChildren = 0;
             XQueryTree( pDisplay, DefaultRootWindow( pDisplay ),
                         &aRoot, &aParent, &pChildren, &nChildren );

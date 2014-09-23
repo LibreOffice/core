@@ -130,7 +130,7 @@ namespace pcr
     }
 
 
-    Dialog* OTabOrderDialog::createDialog( Window* _pParent )
+    Dialog* OTabOrderDialog::createDialog( vcl::Window* _pParent )
     {
         return new TabOrderDialog( _pParent, m_xTabbingModel, m_xControlContext, m_aContext );
     }

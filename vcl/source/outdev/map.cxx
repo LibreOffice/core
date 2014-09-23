@@ -228,11 +228,11 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             if ( !pSVData->maGDIData.mnAppFontX )
             {
                 if( pSVData->maWinData.mpFirstFrame )
-                    Window::ImplInitAppFontData( pSVData->maWinData.mpFirstFrame );
+                    vcl::Window::ImplInitAppFontData( pSVData->maWinData.mpFirstFrame );
                 else
                 {
                     WorkWindow* pWin = new WorkWindow( NULL, 0 );
-                    Window::ImplInitAppFontData( pWin );
+                    vcl::Window::ImplInitAppFontData( pWin );
                     delete pWin;
                 }
             }
@@ -682,8 +682,8 @@ void OutputDevice::SetMapMode()
         mbInitFont  = true;
         if ( GetOutDevType() == OUTDEV_WINDOW )
         {
-            if ( ((Window*)this)->mpWindowImpl->mpCursor )
-                ((Window*)this)->mpWindowImpl->mpCursor->ImplNew();
+            if ( ((vcl::Window*)this)->mpWindowImpl->mpCursor )
+                ((vcl::Window*)this)->mpWindowImpl->mpCursor->ImplNew();
         }
 
         // #106426# Adapt logical offset when changing mapmode
@@ -786,8 +786,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     mbInitFont  = true;
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
-        if ( ((Window*)this)->mpWindowImpl->mpCursor )
-            ((Window*)this)->mpWindowImpl->mpCursor->ImplNew();
+        if ( ((vcl::Window*)this)->mpWindowImpl->mpCursor )
+            ((vcl::Window*)this)->mpWindowImpl->mpCursor->ImplNew();
     }
 
     // #106426# Adapt logical offset when changing mapmode
@@ -2092,6 +2092,8 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
 }
 
 
+namespace vcl {
+
 long Window::ImplLogicUnitToPixelX( long nX, MapUnit eUnit )
 {
     if ( eUnit != MAP_PIXEL )
@@ -2142,6 +2144,7 @@ long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
     return nY;
 }
 
+} /* namespace vcl */
 
 DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
 {

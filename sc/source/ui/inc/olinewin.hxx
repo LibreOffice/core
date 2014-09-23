@@ -29,7 +29,7 @@ enum ScOutlineMode { SC_OUTLINE_HOR, SC_OUTLINE_VER };
 
 /** The window left of or above the spreadsheet containing the outline groups
     and controls to expand/collapse them. */
-class ScOutlineWindow : public Window
+class ScOutlineWindow : public vcl::Window
 {
 private:
     ScViewData&                 mrViewData;         /// View data containing the document.
@@ -57,7 +57,7 @@ private:
 
 public:
                                 ScOutlineWindow(
-                                    Window* pParent,
+                                    vcl::Window* pParent,
                                     ScOutlineMode eMode,
                                     ScViewData* pViewData,
                                     ScSplitPos eWhich );

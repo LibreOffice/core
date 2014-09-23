@@ -525,7 +525,7 @@ void GtkSalGraphics::copyBits( const SalTwoRect& rPosAry,
                                SalGraphics* pSrcGraphics )
 {
     GtkSalFrame* pFrame = GetGtkFrame();
-    XLIB_Window aWin = None;
+    ::Window aWin = None;
     if( pFrame && m_pWindow )
     {
         /* #i64117# some themes set the background pixmap VERY frequently */

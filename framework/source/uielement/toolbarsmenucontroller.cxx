@@ -304,7 +304,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
 
                     SolarMutexGuard aGuard;
                     Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
-                    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow )
                         aToolBarInfo.aToolBarUIName = pWindow->GetText();
 

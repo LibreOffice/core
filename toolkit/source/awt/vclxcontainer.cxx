@@ -84,7 +84,7 @@ void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Ref
 
     // Request container interface from all children
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > aSeq;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         sal_uInt16 nChildren = pWindow->GetChildCount();
@@ -94,7 +94,7 @@ void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Ref
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > * pChildRefs = aSeq.getArray();
             for ( sal_uInt16 n = 0; n < nChildren; n++ )
             {
-                Window* pChild = pWindow->GetChild( n );
+                vcl::Window* pChild = pWindow->GetChild( n );
                 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xWP = pChild->GetComponentInterface( true );
                 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xW( xWP, ::com::sun::star::uno::UNO_QUERY );
                 pChildRefs[n] = xW;
@@ -110,7 +110,7 @@ void VCLXContainer::enableDialogControl( sal_Bool bEnable ) throw(::com::sun::st
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nStyle = pWindow->GetStyle();
@@ -131,11 +131,11 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > * pComps = Components.getConstArray();
     const ::com::sun::star::uno::Any* pTabs = Tabs.getConstArray();
 
-    Window* pPrevWin = NULL;
+    vcl::Window* pPrevWin = NULL;
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
         // ::com::sun::star::style::TabStop
-        Window* pWin = VCLUnoHelper::GetWindow( pComps[n] );
+        vcl::Window* pWin = VCLUnoHelper::GetWindow( pComps[n] );
         // May be NULL if a ::com::sun::star::uno::Sequence is originated from TabController and is missing a peer!
         if ( pWin )
         {
@@ -174,14 +174,14 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
     sal_uInt32 nCount = Components.getLength();
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > * pComps = Components.getConstArray();
 
-    Window* pPrevWin = NULL;
-    Window* pPrevRadio = NULL;
+    vcl::Window* pPrevWin = NULL;
+    vcl::Window* pPrevRadio = NULL;
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        Window* pWin = VCLUnoHelper::GetWindow( pComps[n] );
+        vcl::Window* pWin = VCLUnoHelper::GetWindow( pComps[n] );
         if ( pWin )
         {
-            Window* pSortBehind = pPrevWin;
+            vcl::Window* pSortBehind = pPrevWin;
             // #57096# Sort all radios consecutively
             bool bNewPrevWin = true;
             if ( pWin->GetType() == WINDOW_RADIOBUTTON )
@@ -209,7 +209,7 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
             // Add WB_GROUP after the last group
             if ( n == ( nCount - 1 ) )
             {
-                Window* pBehindLast = pWin->GetWindow( WINDOW_NEXT );
+                vcl::Window* pBehindLast = pWin->GetWindow( WINDOW_NEXT );
                 if ( pBehindLast )
                 {
                     WinBits nLastStyle = pBehindLast->GetStyle();
@@ -242,7 +242,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
             sal_Int32 nVal =0;
             Value >>= nVal;
             Size aSize( nVal, nVal );
-            Window* pWindow = GetWindow();
+            vcl::Window* pWindow = GetWindow();
             MapMode aMode( MAP_APPFONT );
             toolkit::ScrollableInterface* pScrollable = dynamic_cast< toolkit::ScrollableInterface* >( pWindow );
             if ( pWindow && pScrollable )

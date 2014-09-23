@@ -79,7 +79,7 @@ void SAL_CALL DragSourceHelper::DragGestureListener::dragGestureRecognized( cons
 // - DragSourceHelper -
 
 
-DragSourceHelper::DragSourceHelper( Window* pWindow ) :
+DragSourceHelper::DragSourceHelper( vcl::Window* pWindow ) :
     mxDragGestureRecognizer( pWindow->GetDragGestureRecognizer() )
 {
     if( mxDragGestureRecognizer.is() )
@@ -253,7 +253,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dropActionChanged( const Dro
 // - DropTargetHelper -
 
 
-DropTargetHelper::DropTargetHelper( Window* pWindow ) :
+DropTargetHelper::DropTargetHelper( vcl::Window* pWindow ) :
     mxDropTarget( pWindow->GetDropTarget() ),
     mpFormats( new DataFlavorExVector )
 {
@@ -596,7 +596,7 @@ bool TransferDataContainer::HasAnyData() const
 
 
 void TransferDataContainer::StartDrag(
-        Window* pWindow, sal_Int8 nDragSourceActions,
+        vcl::Window* pWindow, sal_Int8 nDragSourceActions,
         const Link& rLnk, sal_Int32 nDragPointer, sal_Int32 nDragImage )
 {
     pImpl->aFinshedLnk = rLnk;

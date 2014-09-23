@@ -272,7 +272,7 @@ class WidgetPainter
     */
         bool drawStyledWidget( QWidget *pWidget,
                 ControlState nState, const ImplControlValue& aValue,
-                Display *dpy, XLIB_Window drawable, SalX11Screen nXScreen,
+                Display *dpy, ::Window drawable, SalX11Screen nXScreen,
                 int nDepth, GC gc,
                 ControlPart nPart = PART_ENTIRE_CONTROL );
 
@@ -465,7 +465,7 @@ WidgetPainter::~WidgetPainter( void )
 
 bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     ControlState nState, const ImplControlValue& aValue,
-    Display *dpy, XLIB_Window drawable, SalX11Screen nXScreen,
+    Display *dpy, ::Window drawable, SalX11Screen nXScreen,
     int nDepth, GC gc, ControlPart nPart )
 {
     if ( !pWidget )
@@ -1383,7 +1383,7 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     bool bReturn = false;
 
     Display *dpy = GetXDisplay();
-    XLIB_Window drawable = GetDrawable();
+    ::Window drawable = GetDrawable();
     GC gc = SelectPen(); //SelectFont(); // GC with current clipping region set
 
     if ( (nType == CTRL_PUSHBUTTON) && (nPart == PART_ENTIRE_CONTROL) )

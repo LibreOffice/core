@@ -24,7 +24,7 @@
 #include <vcl/tabdlg.hxx>
 #include <vcl/button.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class ResMgr;
 
 class filter_info_impl;
@@ -34,7 +34,7 @@ class XMLFilterTabPageXSLT;
 class XMLFilterTabDialog: public TabDialog
 {
 public:
-    XMLFilterTabDialog(Window *pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
+    XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
     virtual ~XMLFilterTabDialog();
 
     bool onOk();

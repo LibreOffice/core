@@ -50,7 +50,7 @@ class DlgEdView;
 class DialogWindowLayout;
 class ObjectCatalog;
 
-bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName );
+bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName );
 
 class DialogWindow: public BaseWindow
 {
@@ -127,7 +127,7 @@ public:
 class DialogWindowLayout : public Layout
 {
 public:
-    DialogWindowLayout (Window* pParent, ObjectCatalog&);
+    DialogWindowLayout (vcl::Window* pParent, ObjectCatalog&);
     virtual ~DialogWindowLayout();
 public:
     void ShowPropertyBrowser ();

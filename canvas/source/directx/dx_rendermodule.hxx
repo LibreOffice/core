@@ -26,7 +26,7 @@
 #include <boost/shared_ptr.hpp>
 #include "dx_winstuff.hxx"
 
-class Window;
+namespace vcl { class Window; }
 namespace basegfx
 {
     class B2IRange;
@@ -75,7 +75,7 @@ namespace dxcanvas
     /** Factory method, to create an IRenderModule instance for the
         given VCL window instance
      */
-    IDXRenderModuleSharedPtr createRenderModule( const ::Window& rParent );
+    IDXRenderModuleSharedPtr createRenderModule( const vcl::Window& rParent );
 }
 
 #endif

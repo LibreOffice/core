@@ -48,7 +48,7 @@ class GL3DResourceGroup;
 class ChartTypeTabPage : public ResourceChangeListener, public svt::OWizardPage, public ChartTypeTemplateProvider
 {
 public:
-    ChartTypeTabPage( Window* pParent
+    ChartTypeTabPage( vcl::Window* pParent
                 , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartDocument >& xChartModel
                 , const ::com::sun::star::uno::Reference<

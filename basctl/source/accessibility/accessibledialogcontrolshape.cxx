@@ -178,9 +178,9 @@ void AccessibleDialogControlShape::SetBounds( const awt::Rectangle& aBounds )
 
 
 
-Window* AccessibleDialogControlShape::GetWindow() const
+vcl::Window* AccessibleDialogControlShape::GetWindow() const
 {
-    Window* pWindow = NULL;
+    vcl::Window* pWindow = NULL;
     if ( m_pDlgEdObj )
     {
         Reference< awt::XControl > xControl( m_pDlgEdObj->GetControl(), UNO_QUERY );
@@ -495,7 +495,7 @@ sal_Int32 AccessibleDialogControlShape::getForeground(  ) throw (RuntimeExceptio
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsControlForeground() )
@@ -521,7 +521,7 @@ sal_Int32 AccessibleDialogControlShape::getBackground(  ) throw (RuntimeExceptio
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsControlBackground() )
@@ -542,7 +542,7 @@ Reference< awt::XFont > AccessibleDialogControlShape::getFont(  ) throw (Runtime
     OExternalLockGuard aGuard( this );
 
     Reference< awt::XFont > xFont;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), UNO_QUERY );
@@ -578,7 +578,7 @@ OUString AccessibleDialogControlShape::getToolTipText(  ) throw (RuntimeExceptio
     OExternalLockGuard aGuard( this );
 
     OUString sText;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         sText = pWindow->GetQuickHelpText();
 

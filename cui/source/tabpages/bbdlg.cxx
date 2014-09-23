@@ -24,7 +24,7 @@
 #include "svx/svxids.hrc"
 #include "cuitabarea.hxx"
 
-SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(Window *pParent,
+SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(vcl::Window *pParent,
     const SfxItemSet& rCoreSet,
     bool bEnableSelector,
     bool bEnableDrawingLayerFillStyles)

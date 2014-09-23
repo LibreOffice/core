@@ -53,7 +53,7 @@ class DataStreamDlg : public ModalDialog
     ScRange GetStartRange();
 
 public:
-    DataStreamDlg(ScDocShell *pDocShell, Window* pParent);
+    DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent);
 
     void Init( const DataStream& rStrm );
 

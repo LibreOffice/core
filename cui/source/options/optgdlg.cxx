@@ -183,7 +183,7 @@ namespace
 
 
 
-OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
+OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", &rSet)
 {
     get(m_pToolTipsCB, "tooltips");
@@ -236,7 +236,7 @@ OfaMiscTabPage::~OfaMiscTabPage()
 
 
 
-SfxTabPage* OfaMiscTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* OfaMiscTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new OfaMiscTabPage( pParent, *rAttrSet );
 }
@@ -535,7 +535,7 @@ void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
 
 // class OfaViewTabPage --------------------------------------------------
 
-OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
+OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", &rSet)
     , nSizeLB_InitialSelection(0)
     , nStyleLB_InitialSelection(0)
@@ -647,7 +647,7 @@ IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
     return 0;
 }
 
-SfxTabPage* OfaViewTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* OfaViewTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new OfaViewTabPage(pParent, *rAttrSet);
 }
@@ -839,7 +839,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if(bRepaintWindows)
     {
-        Window* pAppWindow = Application::GetFirstTopLevelWindow();
+        vcl::Window* pAppWindow = Application::GetFirstTopLevelWindow();
 
         while(pAppWindow)
         {
@@ -997,7 +997,7 @@ static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocal
     return aBuf.makeStringAndClear();
 }
 
-OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
+OfaLanguagesTabPage::OfaLanguagesTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
       SfxTabPage( pParent,"OptLanguagesPage","cui/ui/optlanguagespage.ui", &rSet ),
      pLangConfig(new LanguageConfig_Impl)
 {
@@ -1149,7 +1149,7 @@ OfaLanguagesTabPage::~OfaLanguagesTabPage()
     delete pLangConfig;
 }
 
-SfxTabPage* OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* OfaLanguagesTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new OfaLanguagesTabPage(pParent, *rAttrSet);
 }

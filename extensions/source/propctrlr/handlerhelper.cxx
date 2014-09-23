@@ -275,9 +275,9 @@ namespace pcr
     }
 
 
-    Window* PropertyHandlerHelper::getDialogParentWindow( const Reference<XComponentContext>& _rContext )
+    vcl::Window* PropertyHandlerHelper::getDialogParentWindow( const Reference<XComponentContext>& _rContext )
     {
-        Window* pInspectorWindow = NULL;
+        vcl::Window* pInspectorWindow = NULL;
         try
         {
             Reference< XWindow > xInspectorWindow( _rContext->getValueByName( "DialogParentWindow" ), UNO_QUERY_THROW );

@@ -17,7 +17,7 @@
 
 namespace sc {
 
-DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
+DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent)
     : ModalDialog(pParent, "DataStreamDialog", "modules/scalc/ui/datastreams.ui")
     , mpDocShell(pDocShell)
 {

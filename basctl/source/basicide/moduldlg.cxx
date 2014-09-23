@@ -52,12 +52,12 @@ using namespace ::com::sun::star::resource;
 
 
 
-ExtTreeListBox::ExtTreeListBox(Window* pParent, WinBits nStyle)
+ExtTreeListBox::ExtTreeListBox(vcl::Window* pParent, WinBits nStyle)
     : TreeListBox(pParent, nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeExtTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -462,7 +462,7 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
 }
 
 // OrganizeDialog
-OrganizeDialog::OrganizeDialog(Window* pParent, sal_Int16 tabId,
+OrganizeDialog::OrganizeDialog(vcl::Window* pParent, sal_Int16 tabId,
     EntryDescriptor& rDesc )
     : TabDialog( pParent, "OrganizeDialog",
         "modules/BasicIDE/ui/organizedialog.ui" )
@@ -499,7 +499,7 @@ OrganizeDialog::~OrganizeDialog()
 
 short OrganizeDialog::Execute()
 {
-    Window* pPrevDlgParent = Application::GetDefDialogParent();
+    vcl::Window* pPrevDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
     short nRet = TabDialog::Execute();
     Application::SetDefDialogParent( pPrevDlgParent );
@@ -550,7 +550,7 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 
 
-ObjectPage::ObjectPage(Window *pParent, const OString &rName, sal_uInt16 nMode)
+ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nMode)
     : TabPage(pParent, rName, OUString("modules/BasicIDE/ui/") +
         OStringToOUString(rName, RTL_TEXTENCODING_UTF8).toAsciiLowerCase() +
         OUString(".ui"))
@@ -791,7 +791,7 @@ void ObjectPage::NewModule()
     if ( GetSelection( aDocument, aLibName ) )
     {
         OUString aModName;
-        createModImpl( static_cast<Window*>( this ), aDocument,
+        createModImpl( static_cast<vcl::Window*>( this ), aDocument,
                     *m_pBasicBox, aLibName, aModName, true );
     }
 }
@@ -912,7 +912,7 @@ void ObjectPage::EndTabDialog( sal_uInt16 nRet )
         pTabDlg->EndDialog( nRet );
 }
 
-LibDialog::LibDialog( Window* pParent )
+LibDialog::LibDialog( vcl::Window* pParent )
     : ModalDialog(pParent, "ImportLibDialog", "modules/BasicIDE/ui/importlibdialog.ui")
 {
     get(m_pStorageFrame, "storageframe");
@@ -931,7 +931,7 @@ void LibDialog::SetStorageName( const OUString& rName )
 }
 
 // Helper function
-SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
+SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
     TreeListBox& rBasicBox, const OUString& rLibName, const OUString& _aModName, bool bMain )
 {
     OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );

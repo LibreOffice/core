@@ -59,7 +59,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlGlueEscDir, SfxUInt16Item )
 /**
  * Constructor for glue point escape direction Listbox
  */
-GlueEscDirLB::GlueEscDirLB( Window* pParent, const Reference< XFrame >& rFrame ) :
+GlueEscDirLB::GlueEscDirLB( vcl::Window* pParent, const Reference< XFrame >& rFrame ) :
         ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),
         m_xFrame( rFrame )
 {
@@ -160,7 +160,7 @@ void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
     SfxToolBoxControl::StateChanged( nSId, eState, pState );
 }
 
-Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
+vcl::Window* SdTbxCtlGlueEscDir::CreateItemWindow( vcl::Window *pParent )
 {
     if( GetSlotId() == SID_GLUE_ESCDIR )
     {

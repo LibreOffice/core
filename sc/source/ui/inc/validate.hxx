@@ -83,9 +83,9 @@ class ScValidationDlg;
 class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
 {
 public:
-    explicit                    ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet );
+    explicit                    ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet );
 
-    static SfxTabPage*          Create( Window* pParent, const SfxItemSet* rArgSet );
+    static SfxTabPage*          Create( vcl::Window* pParent, const SfxItemSet* rArgSet );
     static const sal_uInt16*              GetRanges();
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -125,7 +125,7 @@ private:
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
     DECL_LINK(EditSetFocusHdl, void *);
-    DECL_LINK( KillFocusHdl, Window *);
+    DECL_LINK( KillFocusHdl, vcl::Window *);
     void    OnClick( Button *pBtn );
     formula::RefEdit*           m_pRefEdit;
 public:
@@ -134,7 +134,7 @@ public:
         ScTPValidationValue* m_pPage;
         virtual void Click() SAL_OVERRIDE;
     public:
-        ScRefButtonEx(Window* pParent, WinBits nStyle)
+        ScRefButtonEx(vcl::Window* pParent, WinBits nStyle)
             : ::formula::RefButton(pParent, nStyle)
             , m_pPage(NULL)
         {
@@ -183,13 +183,13 @@ class ScValidationDlg
     bool    LeaveRefStatus();
 
 public:
-    explicit ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = NULL );
+    explicit ScValidationDlg( vcl::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = NULL );
     virtual                     ~ScValidationDlg()
     {
         if( m_bOwnRefHdlr )
             RemoveRefDlg( false );
     }
-    static ScValidationDlg * Find1AliveObject( Window *pAncestor )
+    static ScValidationDlg * Find1AliveObject( vcl::Window *pAncestor )
     {
         return static_cast<ScValidationDlg *>( SC_MOD()->Find1RefWindow( SLOTID, pAncestor ) );
     }
@@ -226,7 +226,7 @@ public:
     }
 
     bool IsRefInputting(){  return m_bRefInputting; }
-    Window*             get_refinput_shrink_parent() { return m_pHBox; }
+    vcl::Window*             get_refinput_shrink_parent() { return m_pHBox; }
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE
     {
@@ -285,10 +285,10 @@ private:
     // DECL_LINK( SelectHdl, ListBox * );
 
 public:
-            ScTPValidationHelp( Window* pParent, const SfxItemSet& rArgSet );
+            ScTPValidationHelp( vcl::Window* pParent, const SfxItemSet& rArgSet );
             virtual ~ScTPValidationHelp();
 
-    static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet* rArgSet );
+    static  SfxTabPage* Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
@@ -310,10 +310,10 @@ private:
     DECL_LINK(ClickSearchHdl, void *);
 
 public:
-            ScTPValidationError( Window* pParent, const SfxItemSet& rArgSet );
+            ScTPValidationError( vcl::Window* pParent, const SfxItemSet& rArgSet );
             virtual ~ScTPValidationError();
 
-    static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet* rArgSet );
+    static  SfxTabPage* Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };

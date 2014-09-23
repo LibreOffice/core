@@ -33,7 +33,7 @@
 
 namespace sc { namespace sidebar {
 
-CellLineStyleControl::CellLineStyleControl(Window* pParent, CellAppearancePropertyPanel& rPanel)
+CellLineStyleControl::CellLineStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
 :   svx::sidebar::PopupControl(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_LINESTYLE)),
     mrCellAppearancePropertyPanel(rPanel),
     maPushButtonMoreOptions(this, ScResId(PB_OPTIONS)),

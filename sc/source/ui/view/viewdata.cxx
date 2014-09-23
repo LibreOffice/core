@@ -905,7 +905,7 @@ void ScViewData::ResetOldCursor()
 }
 
 Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
-                                    Window* pWin, const ScPatternAttr* pPattern,
+                                    vcl::Window* pWin, const ScPatternAttr* pPattern,
                                     bool bForceToTop )
 {
     return ScEditUtil( pDoc, nPosX, nPosY, nTabNo, GetScrPos(nPosX,nPosY,eWhich,true),
@@ -915,7 +915,7 @@ Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
 
 void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                 ScEditEngineDefaulter* pNewEngine,
-                                Window* pWin, SCCOL nNewX, SCROW nNewY )
+                                vcl::Window* pWin, SCCOL nNewX, SCROW nNewY )
 {
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
     ScHSplitPos eHWhich = WhichH(eWhich);
@@ -1139,7 +1139,7 @@ void ScViewData::EditGrowX()
 
     ScEditEngineDefaulter* pEngine =
         (ScEditEngineDefaulter*) pCurView->GetEditEngine();
-    Window* pWin = pCurView->GetWindow();
+    vcl::Window* pWin = pCurView->GetWindow();
 
     SCCOL nLeft = GetPosX(eHWhich);
     SCCOL nRight = nLeft + VisibleCellsX(eHWhich);
@@ -1326,7 +1326,7 @@ void ScViewData::EditGrowY( bool bInitial )
     }
 
     EditEngine* pEngine = pCurView->GetEditEngine();
-    Window* pWin = pCurView->GetWindow();
+    vcl::Window* pWin = pCurView->GetWindow();
 
     SCROW nBottom = GetPosY(eVWhich) + VisibleCellsY(eVWhich);
 
@@ -2096,7 +2096,7 @@ const ScMarkData& ScViewData::GetMarkData() const
     return *mpMarkData;
 }
 
-Window* ScViewData::GetDialogParent()
+vcl::Window* ScViewData::GetDialogParent()
 {
     OSL_ENSURE( pViewShell, "GetDialogParent() ohne ViewShell" );
     return pViewShell->GetDialogParent();

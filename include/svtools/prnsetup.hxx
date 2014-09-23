@@ -59,7 +59,7 @@ private:
                     DECL_DLLPRIVATE_LINK( ImplStatusHdl, void* );
 
 public:
-                    PrinterSetupDialog( Window* pWindow );
+                    PrinterSetupDialog( vcl::Window* pWindow );
                     virtual ~PrinterSetupDialog();
 
     void            SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }

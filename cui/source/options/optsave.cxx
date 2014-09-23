@@ -80,7 +80,7 @@ SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 
 // class SvxSaveTabPage --------------------------------------------------
 
-SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
+SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, "OptSavePage", "cui/ui/optsavepage.ui", &rCoreSet ),
     pImpl               ( new SvxSaveTabPage_Impl )
 {
@@ -204,7 +204,7 @@ SfxSaveTabPage::~SfxSaveTabPage()
 
 
 
-SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
+SfxTabPage* SfxSaveTabPage::Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet )
 {
     return ( new SfxSaveTabPage( pParent, *rAttrSet ) );

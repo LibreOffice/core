@@ -41,7 +41,7 @@ namespace pcr
     // class OPropertyEditor
 
 
-    OPropertyEditor::OPropertyEditor( Window* pParent, WinBits nWinStyle)
+    OPropertyEditor::OPropertyEditor( vcl::Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle)
             ,m_aTabControl( this )
             ,m_pListener(NULL)

@@ -103,7 +103,7 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
 
 
 
-HeaderBar::HeaderBar( Window* pParent, WinBits nWinStyle ) :
+HeaderBar::HeaderBar( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle & WB_3DLOOK )
 {
     ImplInit( nWinStyle );
@@ -303,7 +303,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                               const Rectangle* pRect,
                               sal_uLong )
 {
-    Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? (Window*) pDev : NULL;
+    vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? (vcl::Window*) pDev : NULL;
     ImplControlValue aControlValue(0);
     Rectangle aCtrlRegion;
     ControlState nState(0);

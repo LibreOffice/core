@@ -47,11 +47,11 @@ struct ScSortParam;
 class ScTabPageSortFields : public SfxTabPage
 {
 public:
-    ScTabPageSortFields( Window*             pParent,
+    ScTabPageSortFields( vcl::Window*             pParent,
             const SfxItemSet&   rArgSet );
     virtual ~ScTabPageSortFields();
 
-    static  SfxTabPage* Create      ( Window*               pParent,
+    static  SfxTabPage* Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -106,13 +106,13 @@ class CollatorWrapper;
 class ScTabPageSortOptions : public SfxTabPage
 {
 public:
-    ScTabPageSortOptions( Window*            pParent,
+    ScTabPageSortOptions( vcl::Window*            pParent,
             const SfxItemSet&  rArgSet );
     virtual ~ScTabPageSortOptions();
 
 #undef SfxTabPage
 #define SfxTabPage ::SfxTabPage
-    static  SfxTabPage* Create      ( Window*               pParent,
+    static  SfxTabPage* Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;

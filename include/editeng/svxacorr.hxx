@@ -40,7 +40,7 @@ class CharClass;
 class SfxPoolItem;
 class SvxAutoCorrect;
 class SfxObjectShell;
-class Window;
+namespace vcl { class Window; }
 
 struct CompareSvStringsISortDtor
 {
@@ -291,7 +291,7 @@ public:
     // to the actual SwTxtNode/EditNode string because it inserts the character
     // in rDoc and expects that to side-effect rTxt
     sal_uLong DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                           sal_Int32 nPos, sal_Unicode cInsChar, bool bInsert, Window* pFrameWin = NULL );
+                           sal_Int32 nPos, sal_Unicode cInsChar, bool bInsert, vcl::Window* pFrameWin = NULL );
 
     // Return for the autotext expansion the previous word,
     // AutoCorrect - corresponding algorithm

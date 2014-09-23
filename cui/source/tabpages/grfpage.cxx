@@ -48,7 +48,7 @@ static inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
     description: crop graphic
  --------------------------------------------------------------------*/
 
-SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
+SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage(pParent, "CropPage", "cui/ui/croppage.ui", &rSet)
     , pLastCropField(0)
     , nOldWidth(0)
@@ -129,7 +129,7 @@ SvxGrfCropPage::~SvxGrfCropPage()
     aTimer.Stop();
 }
 
-SfxTabPage* SvxGrfCropPage::Create(Window *pParent, const SfxItemSet *rSet)
+SfxTabPage* SvxGrfCropPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return new SvxGrfCropPage( pParent, *rSet );
 }
@@ -749,7 +749,7 @@ Size SvxGrfCropPage::GetGrfOrigSize( const Graphic& rGrf ) const
 
 /*****************************************************************/
 
-SvxCropExample::SvxCropExample( Window* pPar, WinBits nStyle )
+SvxCropExample::SvxCropExample( vcl::Window* pPar, WinBits nStyle )
     : Window( pPar, nStyle)
     , aFrameSize( OutputDevice::LogicToLogic(
                             Size( CM_1_TO_TWIP / 2, CM_1_TO_TWIP / 2 ),
@@ -765,7 +765,7 @@ Size SvxCropExample::GetOptimalSize() const
     return LogicToPixel(Size(78, 78), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxCropExample(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxCropExample(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

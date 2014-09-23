@@ -106,7 +106,7 @@ void ScCondFormatManagerWindow::setColSizes()
     SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
 }
 
-ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos):
+ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos):
     ModalDialog(pParent, "CondFormatManager", "modules/scalc/ui/condformatmanager.ui"),
     mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : NULL),
     mpDoc(pDoc),

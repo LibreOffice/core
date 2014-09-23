@@ -37,7 +37,7 @@ private:
     boost::scoped_ptr < LegendPositionResources >    m_xLegendPositionResources;
 
 public:
-    SchLegendDlg( Window* pParent, const ::com::sun::star::uno::Reference<
+    SchLegendDlg( vcl::Window* pParent, const ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XComponentContext>& xCC );
 
     void init( const ::com::sun::star::uno::Reference<

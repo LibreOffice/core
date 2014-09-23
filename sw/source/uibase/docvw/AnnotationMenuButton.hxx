@@ -37,7 +37,7 @@ class AnnotationMenuButton : public MenuButton
         // overloaded <MenuButton> methods
         virtual void Select() SAL_OVERRIDE;
 
-        // overloaded <Window> methods
+        // overloaded <vcl::Window> methods
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
         virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;

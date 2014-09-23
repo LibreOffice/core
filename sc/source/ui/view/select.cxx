@@ -67,7 +67,7 @@ sal_uLong ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Poi
                                              bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll )
 {
     sal_uLong nUpdateInterval = SELENG_AUTOREPEAT_INTERVAL_MAX;
-    Window* pWin = pEngine->GetWindow();
+    vcl::Window* pWin = pEngine->GetWindow();
     Rectangle aScrRect = pWin->GetDesktopRectPixel();
     Point aRootPos = pWin->OutputToAbsoluteScreenPixel(Point(0,0));
     if (bRightScroll)
@@ -202,7 +202,7 @@ void ScViewFunctionSet::BeginDrag()
 
                 pTransferObj->SetDragSource( pDocSh, rMark );
 
-                Window* pWindow = pViewData->GetActiveWin();
+                vcl::Window* pWindow = pViewData->GetActiveWin();
                 if ( pWindow->IsTracking() )
                     pWindow->EndTracking( ENDTRACK_CANCEL );    // abort selecting
 
@@ -732,7 +732,7 @@ void ScViewFunctionSet::DeselectAll()
     bAnchor = false;
 }
 
-ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
+ScViewSelectionEngine::ScViewSelectionEngine( vcl::Window* pWindow, ScTabView* pView,
                                                 ScSplitPos eSplitPos ) :
         SelectionEngine( pWindow, &pView->GetFunctionSet() ),
         eWhich( eSplitPos )
@@ -916,7 +916,7 @@ void ScHeaderFunctionSet::DeselectAll()
     bAnchor = false;
 }
 
-ScHeaderSelectionEngine::ScHeaderSelectionEngine( Window* pWindow, ScHeaderFunctionSet* pFuncSet ) :
+ScHeaderSelectionEngine::ScHeaderSelectionEngine( vcl::Window* pWindow, ScHeaderFunctionSet* pFuncSet ) :
         SelectionEngine( pWindow, pFuncSet )
 {
     SetSelectionMode( MULTIPLE_SELECTION );

@@ -235,7 +235,7 @@ public:
 
     void            SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart );
 
-    virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( Window *pParent,
+    virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( vcl::Window *pParent,
                                                               const SfxItemSet &rSet ) SAL_OVERRIDE;
 
     void    GetDocStat( ScDocStat& rDocStat );
@@ -269,13 +269,13 @@ public:
 
     ScChangeAction* GetChangeAction( const ScAddress& rPos );
     void            SetChangeComment( ScChangeAction* pAction, const OUString& rComment );
-    void            ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent, bool bPrevNext = true );
+    void            ExecuteChangeCommentDialog( ScChangeAction* pAction, vcl::Window* pParent, bool bPrevNext = true );
                     /// Protect/unprotect ChangeTrack and return <TRUE/> if
                     /// protection was successfully changed.
                     /// If bJustQueryIfProtected==sal_True protection is not
                     /// changed and <TRUE/> is returned if not protected or
                     /// password was entered correctly.
-    bool            ExecuteChangeProtectionDialog( Window* _pParent, bool bJustQueryIfProtected = false );
+    bool            ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJustQueryIfProtected = false );
 
     void            SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages );
     bool            AdjustPrintZoom( const ScRange& rRange );
@@ -287,7 +287,7 @@ public:
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const OUString& rStyle );
 
-    Window*         GetActiveDialogParent();
+    vcl::Window*         GetActiveDialogParent();
     void            ErrorMessage( sal_uInt16 nGlobStrId );
     bool            IsEditable() const;
 

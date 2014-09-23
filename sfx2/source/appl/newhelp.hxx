@@ -57,7 +57,7 @@ private:
     void            ClearChildren( SvTreeListEntry* pParent );
 
 public:
-    ContentListBox_Impl(Window* pParent, WinBits nStyle);
+    ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle);
     virtual ~ContentListBox_Impl();
 
 
@@ -78,7 +78,7 @@ protected:
     SfxHelpIndexWindow_Impl*    m_pIdxWin;
 
 public:
-    HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
+    HelpTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
         const OString& rID, const OUString& rUIXMLDescription);
 
     virtual Control*    GetLastFocusControl() = 0;
@@ -92,7 +92,7 @@ private:
     ContentListBox_Impl* m_pContentBox;
 
 public:
-    ContentTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin);
+    ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin);
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
@@ -107,7 +107,7 @@ public:
 class IndexBox_Impl : public ComboBox
 {
 public:
-    IndexBox_Impl(Window* pParent, WinBits nStyle);
+    IndexBox_Impl(vcl::Window* pParent, WinBits nStyle);
 
     virtual void        UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
     virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -137,7 +137,7 @@ private:
     DECL_LINK(          TimeoutHdl, Timer* );
 
 public:
-    IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
+    IndexTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     virtual ~IndexTabPage_Impl();
 
     virtual void        ActivatePage() SAL_OVERRIDE;
@@ -167,7 +167,7 @@ private:
     Link                aSearchLink;
 
 public:
-    SearchBox_Impl(Window* pParent, WinBits nStyle)
+    SearchBox_Impl(vcl::Window* pParent, WinBits nStyle)
         : ComboBox(pParent, nStyle)
     {
         SetDropDownLineCount(5);
@@ -182,7 +182,7 @@ public:
 class SearchResultsBox_Impl : public ListBox
 {
 public:
-    SearchResultsBox_Impl(Window* pParent, WinBits nStyle)
+    SearchResultsBox_Impl(vcl::Window* pParent, WinBits nStyle)
         : ListBox(pParent, nStyle)
     {
     }
@@ -213,7 +213,7 @@ private:
     DECL_LINK(ModifyHdl, void *);
 
 public:
-    SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
+    SearchTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     virtual ~SearchTabPage_Impl();
 
     virtual void        ActivatePage() SAL_OVERRIDE;
@@ -238,7 +238,7 @@ private:
     void                DoAction( sal_uInt16 nAction );
 
 public:
-    BookmarksBox_Impl(Window* pParent, WinBits nStyle);
+    BookmarksBox_Impl(vcl::Window* pParent, WinBits nStyle);
     virtual ~BookmarksBox_Impl();
 
     virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -253,7 +253,7 @@ private:
     DECL_LINK(OpenHdl, void *);
 
 public:
-    BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
+    BookmarksTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
@@ -268,7 +268,7 @@ public:
 
 class SfxHelpWindow_Impl;
 
-class SfxHelpIndexWindow_Impl : public Window, public VclBuilderContainer
+class SfxHelpIndexWindow_Impl : public vcl::Window, public VclBuilderContainer
 {
 private:
     ListBox*            m_pActiveLB;
@@ -389,7 +389,7 @@ bool SfxHelpIndexWindow_Impl::WasCursorLeftOrRight()
 class TextWin_Impl : public DockingWindow
 {
 public:
-                            TextWin_Impl( Window* pParent );
+                            TextWin_Impl( vcl::Window* pParent );
     virtual                 ~TextWin_Impl();
 
     virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -400,7 +400,7 @@ public:
 class SvtMiscOptions;
 class SfxHelpWindow_Impl;
 
-class SfxHelpTextWindow_Impl : public Window
+class SfxHelpTextWindow_Impl : public vcl::Window
 {
 private:
     ToolBox                 aToolBox;
@@ -415,7 +415,7 @@ private:
     OUString                sCurrentFactory;
 
     SfxHelpWindow_Impl*     pHelpWin;
-    Window*                 pTextWin;
+    vcl::Window*                 pTextWin;
     sfx2::SearchDialog*     pSrchDlg;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                             xFrame;
@@ -516,7 +516,7 @@ friend class SfxHelpIndexWindow_Impl;
 
 public:
     SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,
-                        Window* pParent, WinBits nBits );
+                        vcl::Window* pParent, WinBits nBits );
     virtual ~SfxHelpWindow_Impl();
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -557,7 +557,7 @@ class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
 private:
     Edit* m_pTitleED;
 public:
-    SfxAddHelpBookmarkDialog_Impl( Window* pParent, bool bRename = true );
+    SfxAddHelpBookmarkDialog_Impl( vcl::Window* pParent, bool bRename = true );
 
     void SetTitle( const OUString& rTitle );
     OUString GetTitle() const { return m_pTitleED->GetText(); }

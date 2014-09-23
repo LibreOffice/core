@@ -16,7 +16,7 @@
 #include "defaultsoptions.hxx"
 #include "document.hxx"
 
-ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreSet) :
+ScTpDefaultsOptions::ScTpDefaultsOptions(vcl::Window *pParent, const SfxItemSet &rCoreSet) :
     SfxTabPage(pParent, "OptDefaultPage", "modules/scalc/ui/optdefaultpage.ui", &rCoreSet)
 
 {
@@ -32,7 +32,7 @@ ScTpDefaultsOptions::~ScTpDefaultsOptions()
 {
 }
 
-SfxTabPage* ScTpDefaultsOptions::Create(Window *pParent, const SfxItemSet *rCoreAttrs)
+SfxTabPage* ScTpDefaultsOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)
 {
     return new ScTpDefaultsOptions(pParent, *rCoreAttrs);
 }

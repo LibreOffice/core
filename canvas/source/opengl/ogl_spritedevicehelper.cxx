@@ -93,7 +93,7 @@ namespace oglcanvas
     SpriteDeviceHelper::~SpriteDeviceHelper()
     {}
 
-    void SpriteDeviceHelper::init( Window&               rWindow,
+    void SpriteDeviceHelper::init( vcl::Window&               rWindow,
                                    SpriteCanvas&         rSpriteCanvas,
                                    const awt::Rectangle& rViewArea )
     {

@@ -33,7 +33,7 @@ class SvFileObject : public sfx2::SvLinkSource
     OUString            sReferer;
     Link                aEndEditLink;
     SfxMediumRef        xMed;
-    Window*             pOldParent;
+    vcl::Window*             pOldParent;
 
     sal_uInt8 nType;
 
@@ -67,7 +67,7 @@ public:
                             bool bSynchron = false ) SAL_OVERRIDE;
 
     virtual bool Connect( sfx2::SvBaseLink* ) SAL_OVERRIDE;
-    virtual void Edit( Window *, sfx2::SvBaseLink *, const Link& rEndEditHdl ) SAL_OVERRIDE;
+    virtual void Edit( vcl::Window *, sfx2::SvBaseLink *, const Link& rEndEditHdl ) SAL_OVERRIDE;
 
     // Ask whether you can access data directly or whether it has to be triggered
     virtual bool IsPending() const SAL_OVERRIDE;

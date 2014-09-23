@@ -24,7 +24,7 @@ class SfxCheckinDialog : public ModalDialog
         DECL_DLLPRIVATE_LINK(OKHdl, void *);
 
     public:
-        SfxCheckinDialog( Window* pParent );
+        SfxCheckinDialog( vcl::Window* pParent );
 
         OUString GetComment( );
         bool IsMajor( );

@@ -64,7 +64,7 @@ protected:
     virtual void Resize() SAL_OVERRIDE;
 
 public:
-    AboutDialog(Window* pParent);
+    AboutDialog(vcl::Window* pParent);
 
     DECL_LINK( HandleClick, PushButton* );
 };

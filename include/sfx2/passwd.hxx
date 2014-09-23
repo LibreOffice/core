@@ -74,7 +74,7 @@ private:
     void            SetPasswdText();
 
 public:
-    SfxPasswordDialog(Window* pParent, const OUString* pGroupText = NULL);
+    SfxPasswordDialog(vcl::Window* pParent, const OUString* pGroupText = NULL);
 
     OUString GetUser() const
     {

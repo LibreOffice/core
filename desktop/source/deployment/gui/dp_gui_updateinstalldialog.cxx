@@ -70,7 +70,7 @@
 
 #include <vector>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace cssu = ::com::sun::star::uno;
 
@@ -200,7 +200,7 @@ void UpdateInstallDialog::Thread::execute()
 }
 
 UpdateInstallDialog::UpdateInstallDialog(
-    Window * parent,
+    vcl::Window * parent,
     std::vector<dp_gui::UpdateData> & aVecUpdateData,
     cssu::Reference< cssu::XComponentContext > const & xCtx):
     ModalDialog(

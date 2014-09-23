@@ -44,7 +44,7 @@ private:
     SVX_DLLPRIVATE void SetStyles();
     SVX_DLLPRIVATE void AdaptSize();
 public:
-    SvxXConnectionPreview( Window* pParent, WinBits nStyle);
+    SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxXConnectionPreview();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;

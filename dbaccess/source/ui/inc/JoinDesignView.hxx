@@ -38,7 +38,7 @@ namespace dbaui
         OJoinController&        m_rController;
 
     public:
-        OJoinDesignView(Window* pParent,
+        OJoinDesignView(vcl::Window* pParent,
                         OJoinController& _rController,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OJoinDesignView();

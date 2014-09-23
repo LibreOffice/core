@@ -46,7 +46,7 @@ class FilterDialog : public ModalDialog
 {
     // public interface
     public:
-             FilterDialog (       Window*            pParentWindow  );
+             FilterDialog (       vcl::Window*            pParentWindow  );
         void SetURL       ( const OUString&          sURL           );
         void ChangeFilters( const FilterNameList*    pFilterNames   );
         bool AskForFilter (       FilterNameListPtr& pSelectedItem  );

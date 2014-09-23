@@ -33,7 +33,7 @@
 class SfxInPlaceClient_Impl;
 class SfxViewShell;
 class SfxObjectShell;
-class Window;
+namespace vcl { class Window; }
 class Fraction;
 
 
@@ -44,7 +44,7 @@ friend class SfxInPlaceClient_Impl;
 
     SfxInPlaceClient_Impl*  m_pImp;
     SfxViewShell*           m_pViewSh;
-    Window*                 m_pEditWin;
+    vcl::Window*                 m_pEditWin;
 
     // called after the requested new object area was negotiated
     SAL_DLLPRIVATE virtual void ObjectAreaChanged();
@@ -59,11 +59,11 @@ friend class SfxInPlaceClient_Impl;
     SAL_DLLPRIVATE virtual void MakeVisible();
 
 public:
-                        SfxInPlaceClient( SfxViewShell* pViewShell, Window* pDraw, sal_Int64 nAspect = com::sun::star::embed::Aspects::MSOLE_CONTENT );
+                        SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window* pDraw, sal_Int64 nAspect = com::sun::star::embed::Aspects::MSOLE_CONTENT );
     virtual             ~SfxInPlaceClient();
 
     SfxViewShell*       GetViewShell() const { return m_pViewSh; }
-    Window*             GetEditWin() const { return m_pEditWin; }
+    vcl::Window*             GetEditWin() const { return m_pEditWin; }
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject() const;
     void                SetObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rObject );
     void                SetObjectState( sal_Int32 );

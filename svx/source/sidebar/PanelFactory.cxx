@@ -112,7 +112,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         aArguments.getOrDefault("ApplicationName", OUString()),
         aArguments.getOrDefault("ContextName", OUString()));
 
-    ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( ! xParentWindow.is() || pParentWindow==NULL)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow",
@@ -126,7 +126,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
             "PanelFactory::createUIElement called without SfxBindings",
             NULL);
 
-    Window* pControl = NULL;
+    vcl::Window* pControl = NULL;
     ui::LayoutSize aLayoutSize (-1,-1,-1);
 
 #define DoesResourceEndWith(s) rsResourceURL.endsWithAsciiL(s,strlen(s))

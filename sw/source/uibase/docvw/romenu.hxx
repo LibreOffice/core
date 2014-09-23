@@ -53,8 +53,8 @@ public:
     SwReadOnlyPopup( const Point &rDPos, SwView &rV );
     virtual ~SwReadOnlyPopup();
 
-    void Execute( Window* pWin, const Point &rPPos );
-    void Execute( Window* pWin, sal_uInt16 nId );
+    void Execute( vcl::Window* pWin, const Point &rPPos );
+    void Execute( vcl::Window* pWin, sal_uInt16 nId );
 };
 
 void GetPreferredExtension( OUString &rExt, const Graphic &rGrf );

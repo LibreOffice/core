@@ -59,7 +59,7 @@ void SwAccessiblePage::GetStates(
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
-        Window *pWin = GetWindow();
+        vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
             rStateSet.AddState( AccessibleStateType::FOCUSED );
     }
@@ -86,7 +86,7 @@ void SwAccessiblePage::_InvalidateCursorPos()
 
     if( bOldSelected != bNewSelected )
     {
-        Window *pWin = GetWindow();
+        vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
     }
@@ -94,7 +94,7 @@ void SwAccessiblePage::_InvalidateCursorPos()
 
 void SwAccessiblePage::_InvalidateFocus()
 {
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
     if( pWin )
     {
         bool bSelected;

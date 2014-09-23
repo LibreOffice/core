@@ -304,7 +304,7 @@ OUString SectRepr::GetSubRegion() const
 }
 
 // dialog edit regions
-SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
+SwEditRegionDlg::SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh )
     : SfxModalDialog(pParent, "EditSectionDialog",
         "modules/swriter/ui/editsectiondialog.ui")
     , m_bSubRegionsFilled(false)
@@ -1390,7 +1390,7 @@ static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
 }
 
 SwInsertSectionTabDialog::SwInsertSectionTabDialog(
-            Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
+            vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
     : SfxTabDialog(pParent, "InsertSectionDialog",
         "modules/swriter/ui/insertsectiondialog.ui", &rSet)
     , rWrtSh(rSh)
@@ -1490,7 +1490,7 @@ short   SwInsertSectionTabDialog::Ok()
 }
 
 SwInsertSectionTabPage::SwInsertSectionTabPage(
-                            Window *pParent, const SfxItemSet &rAttrSet)
+                            vcl::Window *pParent, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, "SectionPage",
         "modules/swriter/ui/sectionpage.ui", &rAttrSet)
     , m_pWrtSh(0)
@@ -1636,7 +1636,7 @@ void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 {
 }
 
-SfxTabPage* SwInsertSectionTabPage::Create( Window* pParent,
+SfxTabPage* SwInsertSectionTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SwInsertSectionTabPage(pParent, *rAttrSet);
@@ -1794,7 +1794,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
     return 0;
 }
 
-SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( Window *pParent,
+SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( vcl::Window *pParent,
                                                 const SfxItemSet &rAttrSet)
     : SfxTabPage( pParent, "FootnotesEndnotesTabPage", "modules/swriter/ui/footnotesendnotestabpage.ui", &rAttrSet )
 
@@ -1976,7 +1976,7 @@ void SwSectionFtnEndTabPage::Reset( const SfxItemSet* rSet )
                                     RES_END_AT_TXTEND, false ));
 }
 
-SfxTabPage* SwSectionFtnEndTabPage::Create( Window* pParent,
+SfxTabPage* SwSectionFtnEndTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SwSectionFtnEndTabPage(pParent, *rAttrSet);
@@ -2039,7 +2039,7 @@ IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
 }
 
 SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
-    Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
+    vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
     : SfxTabDialog(pParent, "FormatSectionDialog",
         "modules/swriter/ui/formatsectiondialog.ui", &rSet)
     , rWrtSh(rSh)
@@ -2084,7 +2084,7 @@ void SwSectionPropertyTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage 
         ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
 }
 
-SwSectionIndentTabPage::SwSectionIndentTabPage(Window *pParent, const SfxItemSet &rAttrSet)
+SwSectionIndentTabPage::SwSectionIndentTabPage(vcl::Window *pParent, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, "IndentPage", "modules/swriter/ui/indentpage.ui", &rAttrSet)
 {
     get(m_pBeforeMF, "before");
@@ -2138,7 +2138,7 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     IndentModifyHdl(0);
 }
 
-SfxTabPage*  SwSectionIndentTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet)
+SfxTabPage*  SwSectionIndentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
     return new SwSectionIndentTabPage(pParent, *rAttrSet);
 }

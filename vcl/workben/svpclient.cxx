@@ -84,7 +84,7 @@ class MyWin : public WorkWindow
     ImageControl    m_aImage;
     PushButton      m_aQuitButton;
 public:
-                 MyWin( Window* pParent, WinBits nWinStyle );
+                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -113,7 +113,7 @@ void Main()
     Application::Execute();
 }
 
-MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
+MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
     m_aListButton( this, 0 ),
     m_aSvpBitmaps( this, WB_BORDER ),

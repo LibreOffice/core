@@ -57,7 +57,7 @@ namespace sw { namespace sidebarwindows {
 }}
 class SwSidebarItem;
 class SwFrm;
-class Window;
+namespace vcl { class Window; }
 struct ImplSVEvent;
 
 #define SORT_POS    1
@@ -282,10 +282,10 @@ class SwPostItMgr: public SfxListener
             void DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
                                               sw::sidebarwindows::SwSidebarWin& rSidebarWin );
             bool HasFrmConnectedSidebarWins( const SwFrm& rFrm );
-            Window* GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
+            vcl::Window* GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
                                                 const sal_Int32 nIndex );
             void GetAllSidebarWinForFrm( const SwFrm& rFrm,
-                                         std::vector< Window* >* pChildren );
+                                         std::vector< vcl::Window* >* pChildren );
 
             void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
 };

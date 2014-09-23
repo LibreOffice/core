@@ -75,7 +75,7 @@ public:
 class SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 {
  public:
-    SvxFontWorkChildWindow(Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+    SvxFontWorkChildWindow(vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
     SFX_DECL_CHILDWINDOW_WITHID(SvxFontWorkChildWindow);
 };
 
@@ -158,7 +158,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
  public:
     SvxFontWorkDialog(  SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
-                        Window* pParent,
+                        vcl::Window* pParent,
                         const ResId& rResId );
     virtual ~SvxFontWorkDialog();
 

@@ -37,7 +37,7 @@
 void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
 {
     // does only work for WorkWindows
-    Window *pWindow = GetWindow();
+    vcl::Window *pWindow = GetWindow();
     if ( pWindow->GetType() != WINDOW_WORKWINDOW )
     {
         com::sun::star::uno::RuntimeException aException;

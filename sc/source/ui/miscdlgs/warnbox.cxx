@@ -24,7 +24,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 
-ScCbWarningBox::ScCbWarningBox( Window* pParent, const OUString& rMsgStr, bool bDefYes ) :
+ScCbWarningBox::ScCbWarningBox( vcl::Window* pParent, const OUString& rMsgStr, bool bDefYes ) :
     WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
 {
     // By default, the check box is ON, and the user needs to un-check it to
@@ -54,7 +54,7 @@ void ScCbWarningBox::DisableDialog()
 {
 }
 
-ScReplaceWarnBox::ScReplaceWarnBox( Window* pParent ) :
+ScReplaceWarnBox::ScReplaceWarnBox( vcl::Window* pParent ) :
     ScCbWarningBox( pParent, OUString( ScResId( STR_REPLCELLSWARN ) ), true )
 {
     SetHelpId( HID_SC_REPLCELLSWARN );

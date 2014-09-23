@@ -82,7 +82,7 @@ class SfxViewVersionDialog_Impl : public SfxModalDialog
     DECL_LINK(ButtonHdl, Button*);
 
 public:
-    SfxViewVersionDialog_Impl(Window *pParent, SfxVersionInfo& rInfo, bool bEdit);
+    SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVersionInfo& rInfo, bool bEdit);
 };
 
 class SfxCmisVersionsDialog : public SfxModalDialog

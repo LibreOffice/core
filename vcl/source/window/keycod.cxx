@@ -101,7 +101,7 @@ vcl::KeyCode::KeyCode( const ResId& rResId )
     }
 }
 
-OUString vcl::KeyCode::GetName( Window* pWindow ) const
+OUString vcl::KeyCode::GetName( vcl::Window* pWindow ) const
 {
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();

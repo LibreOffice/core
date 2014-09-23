@@ -37,7 +37,7 @@ class SwWrtShell;
 class SwDropCapsDlg : public SfxSingleTabDialog
 {
 public:
-    SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet );
+    SwDropCapsDlg(vcl::Window *pParent, const SfxItemSet &rSet );
 };
 
 class SwDropCapsPict;
@@ -66,7 +66,7 @@ friend class SwDropCapsPict;
 
     SwWrtShell &rSh;
 
-     SwDropCapsPage(Window *pParent, const SfxItemSet &rSet);
+     SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwDropCapsPage();
 
     virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
@@ -82,7 +82,7 @@ friend class SwDropCapsPict;
 
 public:
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 
     virtual bool FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;

@@ -39,7 +39,7 @@ namespace sfx2 {
 // SearchDialog
 
 
-SearchDialog::SearchDialog(Window* pWindow, const OUString& rConfigName)
+SearchDialog::SearchDialog(vcl::Window* pWindow, const OUString& rConfigName)
     : ModelessDialog(pWindow, "SearchDialog", "sfx/ui/searchdialog.ui")
     , m_sConfigName(rConfigName)
     , m_bIsConstructed(false)

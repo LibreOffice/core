@@ -195,7 +195,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
     if ( pTabViewShell )
     {
         ScViewData& rView = pTabViewShell->GetViewData();
-        Window* pWin = rView.GetActiveWin();
+        vcl::Window* pWin = rView.GetActiveWin();
         if (pWin)
         {
             ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );

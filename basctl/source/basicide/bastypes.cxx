@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 TYPEINIT0( BaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
-BaseWindow::BaseWindow( Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName )
+BaseWindow::BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
     ,m_aDocument( rDocument )
     ,m_aLibName( aLibName )
@@ -266,7 +266,7 @@ WinBits const DockingWindow::StyleBits =
     WB_BORDER | WB_3DLOOK | WB_CLIPCHILDREN |
     WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_DOCKABLE;
 
-DockingWindow::DockingWindow (Window* pParent) :
+DockingWindow::DockingWindow (vcl::Window* pParent) :
     ::DockingWindow(pParent, StyleBits),
     pLayout(0),
     nShowCount(0)
@@ -418,7 +418,7 @@ void DockingWindow::DockThis ()
 
 
 
-ExtendedEdit::ExtendedEdit( Window* pParent, IDEResId nRes ) :
+ExtendedEdit::ExtendedEdit( vcl::Window* pParent, IDEResId nRes ) :
     Edit( pParent, nRes )
 {
     aAcc.SetSelectHdl( LINK( this, ExtendedEdit, EditAccHdl ) );
@@ -454,7 +454,7 @@ IMPL_LINK_INLINE_END( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 
 
 
-TabBar::TabBar( Window* pParent ) :
+TabBar::TabBar( vcl::Window* pParent ) :
     ::TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
 {
     EnableEditMode(true);
@@ -782,7 +782,7 @@ LibInfos::Item::Item (
 LibInfos::Item::~Item ()
 { }
 
-bool QueryDel( const OUString& rName, const ResId& rId, Window* pParent )
+bool QueryDel( const OUString& rName, const ResId& rId, vcl::Window* pParent )
 {
     OUString aQuery(rId.toString());
     OUStringBuffer aNameBuf( rName );
@@ -793,27 +793,27 @@ bool QueryDel( const OUString& rName, const ResId& rId, Window* pParent )
     return ( aQueryBox.Execute() == RET_YES );
 }
 
-bool QueryDelMacro( const OUString& rName, Window* pParent )
+bool QueryDelMacro( const OUString& rName, vcl::Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
 }
 
-bool QueryReplaceMacro( const OUString& rName, Window* pParent )
+bool QueryReplaceMacro( const OUString& rName, vcl::Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYREPLACEMACRO ), pParent );
 }
 
-bool QueryDelDialog( const OUString& rName, Window* pParent )
+bool QueryDelDialog( const OUString& rName, vcl::Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELDIALOG ), pParent );
 }
 
-bool QueryDelLib( const OUString& rName, bool bRef, Window* pParent )
+bool QueryDelLib( const OUString& rName, bool bRef, vcl::Window* pParent )
 {
     return QueryDel( rName, IDEResId( bRef ? RID_STR_QUERYDELLIBREF : RID_STR_QUERYDELLIB ), pParent );
 }
 
-bool QueryDelModule( const OUString& rName, Window* pParent )
+bool QueryDelModule( const OUString& rName, vcl::Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }

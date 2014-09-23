@@ -48,7 +48,7 @@ class DataChangedEvent;
 class Accelerator;
 class Help;
 class OutputDevice;
-class Window;
+namespace vcl { class Window; }
 class WorkWindow;
 class MenuBar;
 class UnoWrapperBase;
@@ -313,7 +313,7 @@ public:
         class TheWindow : public WorkWindow
         {
             public:
-                TheWindow(Window *parent, WinBits windowStyle) :
+                TheWindow(vcl::Window *parent, WinBits windowStyle) :
                         WorkWindow(parent, windowStyle) {}
 
                 virtual void Paint(const Rectangle &);
@@ -811,7 +811,7 @@ public:
 
      @see ImplCallEventListeners(VclSimpleEvent* pEvent)
     */
-    static void                 ImplCallEventListeners( sal_uLong nEvent, Window* pWin, void* pData );
+    static void                 ImplCallEventListeners( sal_uLong nEvent, vcl::Window* pWin, void* pData );
 
     /** Send event to all VCL application event listeners
 
@@ -829,7 +829,7 @@ public:
 
      @see PostKeyEvent
     */
-    static bool                 HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static bool                 HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent );
 
     /** Send keypress event
 
@@ -839,7 +839,7 @@ public:
 
      @see HandleKey
     */
-    static ImplSVEvent *        PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static ImplSVEvent *        PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent );
 
     /** Send mouse event
 
@@ -847,7 +847,7 @@ public:
      @param     pWin            Pointer to window to which the event is sent
      @param     pKeyEvent       Mouse event to send
     */
-    static ImplSVEvent *        PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
+    static ImplSVEvent *        PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent );
 
     /** Send zoom event
 
@@ -858,7 +858,7 @@ public:
      @param     pWin            Pointer to window to which the event is sent
      @param     pZoomEvent      Zoom event to send
     */
-    static ImplSVEvent *        PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent );
+    static ImplSVEvent *        PostZoomEvent( sal_uLong nEvent, vcl::Window *pWin, ZoomEvent* pZoomEvent );
 
     /* Send scroll event
 
@@ -869,7 +869,7 @@ public:
      @param      pWin            Pointer to window to which the event is sent
      @param      pScrollEvent    Scroll event to send
     */
-    static ImplSVEvent *         PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent );
+    static ImplSVEvent *         PostScrollEvent( sal_uLong nEvent, vcl::Window *pWin, ScrollEvent* pScrollEvent );
 
     /** Remove mouse and keypress events from a window... any also zoom and scroll events
      if the platform supports it.
@@ -878,7 +878,7 @@ public:
 
      @see HandleKey, PostKeyEvent, PostMouseEvent, PostZoomEvent, PostScrollEvent
     */
-    static void                 RemoveMouseAndKeyEvents( Window *pWin );
+    static void                 RemoveMouseAndKeyEvents( vcl::Window *pWin );
 
     /** Post a user event to the default window.
 
@@ -962,7 +962,7 @@ public:
 
      @see GetAppWindow, GetDefaultDevice
     */
-    static Window*              GetFocusWindow();
+    static vcl::Window*              GetFocusWindow();
 
     /** Get the default "device" (in this case the default window).
 
@@ -980,7 +980,7 @@ public:
      @see GetNextTopLevelWindow, GetTopWindowCount, GetTopWindow,
           GetActiveTopWindow
     */
-    static Window*              GetFirstTopLevelWindow();
+    static vcl::Window*              GetFirstTopLevelWindow();
 
     /** Get the next top level window.
 
@@ -989,7 +989,7 @@ public:
 
      @returns Pointer to next top window.
     */
-    static Window*              GetNextTopLevelWindow( Window* pWindow );
+    static vcl::Window*              GetNextTopLevelWindow( vcl::Window* pWindow );
 
     /** Return the number of top-level windows being used by the application
 
@@ -1013,7 +1013,7 @@ public:
      @see GetFirstTopLevelWindow, GetNextTopLevelWindow, GetTopWindowCount,
           GetActiveTopWindow
     */
-    static Window*              GetTopWindow( long nIndex );
+    static vcl::Window*              GetTopWindow( long nIndex );
 
     /** Get the "active" top window.
 
@@ -1025,7 +1025,7 @@ public:
      @see GetFirstTopLevelWindow, GetNextTopLevelWindow, GetTopWindowCount,
           GetTopWindow
     */
-    static Window*              GetActiveTopWindow();
+    static vcl::Window*              GetActiveTopWindow();
 
     ///@}
 
@@ -1265,7 +1265,7 @@ public:
 
      @see GetDefDialogParent
     */
-    static void                 SetDefDialogParent( Window* pWindow );
+    static void                 SetDefDialogParent( vcl::Window* pWindow );
 
     /** Get the default parent window for dialog boxes.
 
@@ -1278,7 +1278,7 @@ public:
 
      @returns Pointer to the default window.
     */
-    static Window*              GetDefDialogParent();
+    static vcl::Window*              GetDefDialogParent();
 
 
     /** Gets the dialog cancel mode for headless environments.

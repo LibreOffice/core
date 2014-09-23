@@ -62,7 +62,7 @@ namespace svt { namespace uno
 
 
     //= WizardShell
-    WizardShell::WizardShell( Window* i_pParent, const Reference< XWizardController >& i_rController,
+    WizardShell::WizardShell( vcl::Window* i_pParent, const Reference< XWizardController >& i_rController,
             const Sequence< Sequence< sal_Int16 > >& i_rPaths )
         :WizardShell_Base( i_pParent, WB_MOVEABLE | WB_CLOSEABLE )
         ,m_xController( i_rController )

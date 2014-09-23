@@ -65,7 +65,7 @@ public:
 
     ValueSetWithTextControl(
         const tControlType eControlType,
-        Window* pParent,
+        vcl::Window* pParent,
         const ResId& rResId);
 
     virtual ~ValueSetWithTextControl(void);
@@ -129,7 +129,7 @@ class SVX_DLLPUBLIC SvxNumValueSet2 : public ValueSet
 
 
     public:
-        SvxNumValueSet2( Window* pParent, const ResId& rResId);
+        SvxNumValueSet2( vcl::Window* pParent, const ResId& rResId);
         virtual ~SvxNumValueSet2();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
@@ -146,7 +146,7 @@ class SVX_DLLPUBLIC SvxNumValueSet2 : public ValueSet
 class SVX_DLLPUBLIC SvxNumValueSet3 : public ValueSet
 {
     public:
-        SvxNumValueSet3( Window* pParent, const ResId& rResId);
+        SvxNumValueSet3( vcl::Window* pParent, const ResId& rResId);
         virtual ~SvxNumValueSet3();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;

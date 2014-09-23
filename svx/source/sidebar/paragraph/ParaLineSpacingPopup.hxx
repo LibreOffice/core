@@ -34,7 +34,7 @@ class ParaLineSpacingPopup
 {
 public :
     ParaLineSpacingPopup (
-        Window* pParent,
+        vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
     virtual ~ParaLineSpacingPopup (void);
 

@@ -41,7 +41,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 // class OTableBorderWindow
-OTableBorderWindow::OTableBorderWindow(Window* pParent) : Window(pParent,WB_BORDER)
+OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB_BORDER)
     ,m_aHorzSplitter( this )
 {
 
@@ -68,11 +68,11 @@ OTableBorderWindow::~OTableBorderWindow()
     m_pFieldDescWin->Hide();
 
     {
-        boost::scoped_ptr<Window> aTemp(m_pEditorCtrl);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pEditorCtrl);
         m_pEditorCtrl = NULL;
     }
     {
-        boost::scoped_ptr<Window> aTemp(m_pFieldDescWin);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pFieldDescWin);
         m_pFieldDescWin = NULL;
     }
 
@@ -167,7 +167,7 @@ void OTableBorderWindow::GetFocus()
 }
 
 // class OTableDesignView
-OTableDesignView::OTableDesignView( Window* pParent,
+OTableDesignView::OTableDesignView( vcl::Window* pParent,
                                     const Reference< XComponentContext >& _rxOrb,
                                     OTableController& _rController
                                    ) :
@@ -193,7 +193,7 @@ OTableDesignView::~OTableDesignView()
     m_pWin->Hide();
 
     {
-        boost::scoped_ptr<Window> aTemp(m_pWin);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
         m_pWin = NULL;
     }
 }

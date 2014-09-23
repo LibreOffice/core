@@ -61,7 +61,7 @@ SFX_IMPL_MODELESSDIALOG_WITHID( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 static sal_uInt16 nSortMode = 0xffff;
 static bool       bSortDir = true;
 
-SwRedlineAcceptChild::SwRedlineAcceptChild( Window* _pParent,
+SwRedlineAcceptChild::SwRedlineAcceptChild( vcl::Window* _pParent,
                                             sal_uInt16 nId,
                                             SfxBindings* pBindings,
                                             SfxChildWinInfo* pInfo ) :
@@ -84,7 +84,7 @@ bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
 }
 
 SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
-    SfxBindings* _pBindings, SwChildWinWrapper* pChild, Window *_pParent)
+    SfxBindings* _pBindings, SwChildWinWrapper* pChild, vcl::Window *_pParent)
     : SfxModelessDialog(_pBindings, pChild, _pParent,
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
     , pChildWin       (pChild)

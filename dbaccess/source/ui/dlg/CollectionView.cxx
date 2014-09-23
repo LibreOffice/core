@@ -55,7 +55,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::sdbc;
 using namespace comphelper;
-OCollectionView::OCollectionView( Window * pParent
+OCollectionView::OCollectionView( vcl::Window * pParent
                                  ,const Reference< XContent>& _xContent
                                  ,const OUString& _sDefaultName
                                  ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)

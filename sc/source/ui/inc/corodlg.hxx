@@ -26,7 +26,7 @@
 class ScColRowLabelDlg : public ModalDialog
 {
 public:
-    ScColRowLabelDlg(Window* pParent,
+    ScColRowLabelDlg(vcl::Window* pParent,
                      bool bCol = false,
                      bool bRow = false)
         : ModalDialog(pParent, "ChangeSourceDialog",

@@ -61,7 +61,7 @@ class MyEdit_Impl : public Edit
 {
     SvInplaceEdit2* pOwner;
 public:
-                 MyEdit_Impl( Window* pParent, SvInplaceEdit2* pOwner );
+                 MyEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* pOwner );
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void LoseFocus() SAL_OVERRIDE;
 };
@@ -70,12 +70,12 @@ class MyMultiEdit_Impl : public MultiLineEdit
 {
     SvInplaceEdit2* pOwner;
 public:
-                 MyMultiEdit_Impl( Window* pParent, SvInplaceEdit2* pOwner );
+                 MyMultiEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* pOwner );
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void LoseFocus() SAL_OVERRIDE;
 };
 
-MyEdit_Impl::MyEdit_Impl( Window* pParent, SvInplaceEdit2* _pOwner ) :
+MyEdit_Impl::MyEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* _pOwner ) :
 
     Edit( pParent, WB_LEFT ),
 
@@ -95,7 +95,7 @@ void MyEdit_Impl::LoseFocus()
     pOwner->LoseFocus();
 }
 
-MyMultiEdit_Impl::MyMultiEdit_Impl( Window* pParent, SvInplaceEdit2* _pOwner )
+MyMultiEdit_Impl::MyMultiEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* _pOwner )
     : MultiLineEdit( pParent,
     WB_CENTER
     ), pOwner(_pOwner)
@@ -116,7 +116,7 @@ void MyMultiEdit_Impl::LoseFocus()
 
 SvInplaceEdit2::SvInplaceEdit2
 (
-    Window* pParent, const Point& rPos,
+    vcl::Window* pParent, const Point& rPos,
     const Size& rSize,
     const OUString& rData,
     const Link& rNotifyEditEnd,
@@ -374,7 +374,7 @@ struct SvTreeListBoxImpl
 };
 
 
-SvTreeListBox::SvTreeListBox(Window* pParent, WinBits nWinStyle) :
+SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     Control(pParent, nWinStyle | WB_CLIPCHILDREN),
     DropTargetHelper(this),
     DragSourceHelper(this),
@@ -403,7 +403,7 @@ SvTreeListBox::SvTreeListBox(Window* pParent, WinBits nWinStyle) :
     SetSublistOpenWithLeftRight();
 }
 
-SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
+SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     Control(pParent, rResId),
     DropTargetHelper(this),
     DragSourceHelper(this),
@@ -431,7 +431,7 @@ SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
     SetSublistOpenWithLeftRight();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -3826,7 +3826,7 @@ void SvTreeListBox::EnableList( bool _bEnable )
 
 ::com::sun::star::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
 {
-    Window* pParent = GetAccessibleParentWindow();
+    vcl::Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvTreeListBox::CreateAccessible - accessible parent not found" );
 
     ::com::sun::star::uno::Reference< XAccessible > xAccessible;

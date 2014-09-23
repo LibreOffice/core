@@ -288,7 +288,7 @@ void LinkManager::UpdateAllLinks(
     bool bAskUpdate,
     bool /*bCallErrHdl*/,
     bool bUpdateGrfLinks,
-    Window* pParentWin )
+    vcl::Window* pParentWin )
 {
     // First make a copy of the array in order to update links
     // links in ... no contact between them!

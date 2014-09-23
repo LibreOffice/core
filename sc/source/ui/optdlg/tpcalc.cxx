@@ -35,7 +35,7 @@
 
 #include <math.h>
 
-ScTpCalcOptions::ScTpCalcOptions(Window* pParent, const SfxItemSet& rCoreAttrs)
+ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "OptCalculatePage",
         "modules/scalc/ui/optcalculatepage.ui", &rCoreAttrs)
     , pOldOptions(new ScDocOptions(
@@ -79,7 +79,7 @@ void ScTpCalcOptions::Init()
     m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
 }
 
-SfxTabPage* ScTpCalcOptions::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* ScTpCalcOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return ( new ScTpCalcOptions( pParent, *rAttrSet ) );
 }

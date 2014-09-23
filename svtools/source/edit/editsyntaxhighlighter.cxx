@@ -25,13 +25,13 @@
 #include <vcl/txtattr.hxx>
 
 
-MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle,
+MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( vcl::Window* pParent, WinBits nWinStyle,
     HighlighterLanguage aLanguage): MultiLineEdit(pParent,nWinStyle), mbDoBracketHilight(true), aHighlighter(aLanguage)
 {
     EnableUpdateData(300);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeMultiLineEditSyntaxHighlight(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeMultiLineEditSyntaxHighlight(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new MultiLineEditSyntaxHighlight(pParent);
 }

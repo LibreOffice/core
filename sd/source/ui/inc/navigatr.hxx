@@ -79,7 +79,7 @@ private:
 };
 
 class SdNavigatorWin
-    : public Window
+    : public vcl::Window
 {
 public:
     typedef ::boost::function<void(void)> UpdateRequestFunctor;
@@ -92,7 +92,7 @@ public:
             rely on others to trigger updates.
     */
     SdNavigatorWin(
-        ::Window* pParent,
+        vcl::Window* pParent,
         ::sd::NavigatorChildWindow* pChildWinContext,
         const SdResId& rSdResId,
         SfxBindings* pBindings,

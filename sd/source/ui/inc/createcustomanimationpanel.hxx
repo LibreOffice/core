@@ -24,7 +24,7 @@
 
 namespace sd {
 
-::Window * createCustomAnimationPanel (::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame);
+::vcl::Window * createCustomAnimationPanel (vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
 }
 

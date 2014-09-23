@@ -43,7 +43,7 @@ static const sal_Int32 gaRightIconPadding (5);
 
 PanelTitleBar::PanelTitleBar (
     const ::rtl::OUString& rsTitle,
-    Window* pParentWindow,
+    vcl::Window* pParentWindow,
     Panel* pPanel)
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
       mbIsLeftButtonDown(false),

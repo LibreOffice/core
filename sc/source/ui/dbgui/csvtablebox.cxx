@@ -23,7 +23,7 @@
 #include <vcl/settings.hxx>
 #include "editutil.hxx"
 
-ScCsvTableBox::ScCsvTableBox( Window* pParent, WinBits nBits ) :
+ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :
     ScCsvControl( pParent, maData, nBits ),
     maRuler( *this ),
     maGrid( *this ),
@@ -54,7 +54,7 @@ ScCsvTableBox::ScCsvTableBox( Window* pParent, WinBits nBits ) :
     InitControls();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScCsvTableBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCsvTableBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ScCsvTableBox(pParent, WB_BORDER);
 }

@@ -35,7 +35,7 @@
 #include <boost/function.hpp>
 
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sfx2 { namespace sidebar {
 
@@ -61,7 +61,7 @@ public:
     static css::uno::Reference<css::ui::XUIElement> Create (
         const ::rtl::OUString& rsResourceURL,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        Window* pControl,
+        vcl::Window* pControl,
         const css::ui::LayoutSize& rLayoutSize);
 
     // XContextChangeEventListener
@@ -103,7 +103,7 @@ protected:
     SidebarPanelBase (
         const ::rtl::OUString& rsResourceURL,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        Window* pWindow,
+        vcl::Window* pWindow,
         const css::ui::LayoutSize& rLayoutSize);
     virtual ~SidebarPanelBase (void);
 
@@ -111,7 +111,7 @@ protected:
         throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    Window* mpControl;
+    vcl::Window* mpControl;
     const ::rtl::OUString msResourceURL;
     const css::ui::LayoutSize maLayoutSize;
 };

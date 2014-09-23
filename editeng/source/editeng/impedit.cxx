@@ -67,7 +67,7 @@ static inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, shor
 
 //  class ImpEditView
 
-ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow ) :
+ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindow ) :
     aOutArea( Point(), pEng->GetPaperSize() )
 {
     pEditView           = pView;
@@ -333,7 +333,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
         }
         else
         {
-            Window* pWindow = dynamic_cast< Window* >(_pTarget);
+            vcl::Window* pWindow = dynamic_cast< vcl::Window* >(_pTarget);
 
             if(pWindow)
             {
@@ -985,7 +985,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
     return Pair( nRealDiffX, nRealDiffY );
 }
 
-bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin )
+bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin )
 {
     bool bDone = false;
 
@@ -1964,7 +1964,7 @@ void ImpEditView::dragOver(const ::com::sun::star::datatransfer::dnd::DropTarget
 
 void ImpEditView::AddDragAndDropListeners()
 {
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( !bActiveDragAndDropListener && pWindow && pWindow->GetDragGestureRecognizer().is() )
     {
         vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );

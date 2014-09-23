@@ -73,7 +73,7 @@ public:
 
     bool                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( bool bVal )    { bUserSel = bVal; }
-    virtual Window*             GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window*             GetPreferredKeyInputWindow() SAL_OVERRIDE;
 };
 
 SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx)
@@ -109,7 +109,7 @@ void SvxPopupWindowListBox::PopupModeEnd()
 
     if( SfxViewShell::Current() )
     {
-        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        vcl::Window* pShellWnd = SfxViewShell::Current()->GetWindow();
         if (pShellWnd)
             pShellWnd->GrabFocus();
     }
@@ -123,7 +123,7 @@ void SvxPopupWindowListBox::StateChanged(
     SfxPopupWindow::StateChanged( nSID, eState, pState );
 }
 
-Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
+vcl::Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
 {
     // allows forwarding key events in the correct window
     // without setting the focus

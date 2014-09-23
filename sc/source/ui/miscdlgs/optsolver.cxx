@@ -46,7 +46,7 @@
 
 using namespace com::sun::star;
 
-ScSolverProgressDialog::ScSolverProgressDialog(Window* pParent)
+ScSolverProgressDialog::ScSolverProgressDialog(vcl::Window* pParent)
     : ModelessDialog(pParent, "SolverProgressDialog",
         "modules/scalc/ui/solverprogressdialog.ui")
 {
@@ -65,14 +65,14 @@ void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
     m_pFtTime->SetText( aNew );
 }
 
-ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( Window* pParent, const OUString& rErrorText )
+ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( vcl::Window* pParent, const OUString& rErrorText )
     : ModalDialog(pParent, "NoSolutionDialog", "modules/scalc/ui/nosolutiondialog.ui")
 {
     get(m_pFtErrorText, "error");
     m_pFtErrorText->SetText(rErrorText);
 }
 
-ScSolverSuccessDialog::ScSolverSuccessDialog( Window* pParent, const OUString& rSolution )
+ScSolverSuccessDialog::ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution )
     : ModalDialog(pParent, "SolverSuccessDialog", "modules/scalc/ui/solversuccessdialog.ui")
 {
     get(m_pFtResult, "result");
@@ -93,12 +93,12 @@ IMPL_LINK( ScSolverSuccessDialog, ClickHdl, PushButton*, pBtn )
     return 0;
 }
 
-ScCursorRefEdit::ScCursorRefEdit( Window* pParent, Window *pLabel )
+ScCursorRefEdit::ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel )
     : formula::RefEdit( pParent, pLabel )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScCursorRefEdit(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCursorRefEdit(vcl::Window *pParent,
     VclBuilder::stringmap &)
 {
     return new ScCursorRefEdit(pParent, NULL);
@@ -145,7 +145,7 @@ ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bM
 
 //  class ScOptSolverDlg
 
-ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                           ScDocShell* pDocSh, ScAddress aCursorPos )
 
     : ScAnyRefDlg(pB, pCW, pParent, "SolverDialog", "modules/scalc/ui/solverdlg.ui")

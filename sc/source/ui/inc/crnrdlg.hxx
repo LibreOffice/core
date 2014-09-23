@@ -33,7 +33,7 @@ class ScDocument;
 class ScColRowNameRangesDlg : public ScAnyRefDlg
 {
 public:
-                    ScColRowNameRangesDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScColRowNameRangesDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScViewData*    ptrViewData );
                     virtual ~ScColRowNameRangesDlg();
 

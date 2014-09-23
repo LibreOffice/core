@@ -40,10 +40,10 @@ class BibWindowContainer : public BibWindow     //Window
         virtual void            Resize() SAL_OVERRIDE;
 
     public:
-        BibWindowContainer( Window* pParent, BibShortCutHandler* pChild, WinBits nStyle = WB_3DLOOK);
+        BibWindowContainer( vcl::Window* pParent, BibShortCutHandler* pChild, WinBits nStyle = WB_3DLOOK);
         virtual ~BibWindowContainer();
 
-        inline Window*          GetChild();
+        inline vcl::Window*          GetChild();
 
         virtual void            GetFocus() SAL_OVERRIDE;
 
@@ -52,7 +52,7 @@ class BibWindowContainer : public BibWindow     //Window
         using Window::GetChild;
 };
 
-inline Window* BibWindowContainer::GetChild()
+inline vcl::Window* BibWindowContainer::GetChild()
 {
     return pChild? pChild->GetWindow() : NULL;
 }
@@ -83,7 +83,7 @@ class BibBookContainer: public BibSplitWindow
 
     public:
 
-        BibBookContainer(Window* pParent, WinBits nStyle = WB_3DLOOK );
+        BibBookContainer(vcl::Window* pParent, WinBits nStyle = WB_3DLOOK );
         virtual ~BibBookContainer();
 
         inline BibWindow*       GetTopWin() {return pTopWin;}

@@ -33,7 +33,7 @@ class ScViewData;
 class ScPrintAreasDlg : public ScAnyRefDlg
 {
 public:
-                    ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent );
+                    ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent );
                     virtual ~ScPrintAreasDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;

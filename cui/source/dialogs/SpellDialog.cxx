@@ -175,7 +175,7 @@ sal_uInt16 SpellUndoAction_Impl::GetId()const
 // class SvxSpellCheckDialog ---------------------------------------------
 
 SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
-    Window * pParent, SfxBindings* _pBindings)
+    vcl::Window * pParent, SfxBindings* _pBindings)
     : SfxModelessDialog (_pBindings, pChildWindow,
         pParent, "SpellingDialog", "cui/ui/spellingdialog.ui")
     , aDialogUndoLink(LINK (this, SpellDialog, DialogUndoHdl))
@@ -1009,7 +1009,7 @@ void SpellDialog::InvalidateDialog()
     if( bFocusLocked )
         return;
     m_pIgnorePB->SetText(m_sResumeST);
-    Window* aDisableArr[] =
+    vcl::Window* aDisableArr[] =
     {
         m_pNotInDictFT,
         m_pSentenceED,
@@ -1179,7 +1179,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
 }
 
 
-SentenceEditWindow_Impl::SentenceEditWindow_Impl(Window * pParent, WinBits nBits)
+SentenceEditWindow_Impl::SentenceEditWindow_Impl(vcl::Window * pParent, WinBits nBits)
     : VclMultiLineEdit(pParent, nBits)
     , m_nErrorStart(0)
     , m_nErrorEnd(0)
@@ -1188,7 +1188,7 @@ SentenceEditWindow_Impl::SentenceEditWindow_Impl(Window * pParent, WinBits nBits
     DisableSelectionOnFocus();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSentenceEditWindow(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSentenceEditWindow(vcl::Window *pParent,
     VclBuilder::stringmap &)
 {
     return new SentenceEditWindow_Impl(pParent, WB_BORDER|WB_VSCROLL|WB_IGNORETAB);

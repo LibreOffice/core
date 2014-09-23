@@ -89,7 +89,7 @@ private:
     BigInt          mnLast;
 
 public:
-                    LongCurrencyField( Window* pParent, WinBits nWinStyle );
+                    LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle );
                     virtual ~LongCurrencyField();
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -116,7 +116,7 @@ public:
 class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormatter
 {
 public:
-                    LongCurrencyBox( Window* pParent, WinBits nWinStyle );
+                    LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
                     virtual ~LongCurrencyBox();
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

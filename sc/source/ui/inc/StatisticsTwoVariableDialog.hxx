@@ -29,7 +29,7 @@ public:
 
     ScStatisticsTwoVariableDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        Window* pParent, ScViewData* pViewData,
+        vcl::Window* pParent, ScViewData* pViewData,
         const OString& rID, const OUString& rUIXMLDescription );
 
     virtual ~ScStatisticsTwoVariableDialog();

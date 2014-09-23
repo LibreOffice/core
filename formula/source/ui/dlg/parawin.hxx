@@ -123,7 +123,7 @@ protected:
         void            UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i );
 
 public:
-                        ParaWin(Window* pParent,IControlReferenceHandler* _pDlg);
+                        ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg);
                         virtual ~ParaWin();
 
         void            SetFunctionDesc(const IFunctionDescription* pFDesc);

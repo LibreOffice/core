@@ -48,7 +48,7 @@ private:
     DECL_LINK(MoreButtonClickHdl_Impl, void*);
 
 public:
-    ParaNumberingControl( Window* pParent,
+    ParaNumberingControl( vcl::Window* pParent,
                           svx::sidebar::ParaPropertyPanel& rPanel);
     virtual ~ParaNumberingControl();
     void UpdateValueSet();

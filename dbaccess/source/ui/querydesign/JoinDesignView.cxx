@@ -51,7 +51,7 @@ namespace dbaui
 {
 
 // OJoinDesignView
-OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController& _rController,const Reference< XComponentContext >& _rxContext)
+OJoinDesignView::OJoinDesignView(vcl::Window* _pParent, OJoinController& _rController,const Reference< XComponentContext >& _rxContext)
     :ODataView( _pParent, _rController, _rxContext )
     ,m_pTableView(NULL)
     ,m_rController( _rController )
@@ -61,9 +61,9 @@ OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController& _rController
 
 OJoinDesignView::~OJoinDesignView()
 {
-    boost::scoped_ptr<Window> aT3(m_pScrollWindow);
+    boost::scoped_ptr<vcl::Window> aT3(m_pScrollWindow);
     m_pScrollWindow = NULL;
-    boost::scoped_ptr<Window> aT2(m_pTableView);
+    boost::scoped_ptr<vcl::Window> aT2(m_pTableView);
     m_pTableView = NULL;
 }
 

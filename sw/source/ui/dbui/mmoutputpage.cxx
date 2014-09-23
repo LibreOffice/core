@@ -120,7 +120,7 @@ class SwSaveWarningBox_Impl : public SwMessageAndEditDialog
 {
     DECL_LINK( ModifyHdl, Edit*);
 public:
-    SwSaveWarningBox_Impl(Window* pParent, const OUString& rFileName);
+    SwSaveWarningBox_Impl(vcl::Window* pParent, const OUString& rFileName);
 
     OUString        GetFileName() const
     {
@@ -133,7 +133,7 @@ class SwSendQueryBox_Impl : public SwMessageAndEditDialog
     bool            bIsEmptyAllowed;
     DECL_LINK( ModifyHdl, Edit*);
 public:
-    SwSendQueryBox_Impl(Window* pParent, const OString& rID,
+    SwSendQueryBox_Impl(vcl::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription);
 
     void SetValue(const OUString& rSet)
@@ -154,7 +154,7 @@ public:
     }
 };
 
-SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(Window* pParent, const OUString& rFileName)
+SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(vcl::Window* pParent, const OUString& rFileName)
     : SwMessageAndEditDialog(pParent, "AlreadyExistsDialog",
         "modules/swriter/ui/alreadyexistsdialog.ui")
 {
@@ -174,7 +174,7 @@ IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-SwSendQueryBox_Impl::SwSendQueryBox_Impl(Window* pParent, const OString& rID,
+SwSendQueryBox_Impl::SwSendQueryBox_Impl(vcl::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription)
     : SwMessageAndEditDialog(pParent, rID, rUIXMLDescription)
     , bIsEmptyAllowed(true)
@@ -196,7 +196,7 @@ class SwCopyToDialog : public SfxModalDialog
     Edit* m_pBCCED;
 
 public:
-    SwCopyToDialog(Window* pParent)
+    SwCopyToDialog(vcl::Window* pParent)
         : SfxModalDialog(pParent, "CCDialog",
             "modules/swriter/ui/ccdialog.ui")
     {
@@ -348,7 +348,7 @@ bool SwMailMergeOutputPage::canAdvance() const
 
 IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
 {
-    Window* aControls[] =
+    vcl::Window* aControls[] =
     {
         m_pSaveStartDocPB,
         m_pSaveAsOneRB, m_pSaveIndividualRB,
@@ -364,7 +364,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
         0
     };
     SetUpdateMode(true);
-    Window** pControl = aControls;
+    vcl::Window** pControl = aControls;
     do
     {
         (*pControl)->Show(false);
@@ -420,7 +420,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
     }
     else
     {
-        Window* aMailControls[] =
+        vcl::Window* aMailControls[] =
         {
             m_pFromRB, m_pFromNF, m_pToFT, m_pToNF,
             m_pMailToFT, m_pMailToLB, m_pCopyToPB,
@@ -429,7 +429,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             m_pAttachmentGroup,
             m_pSendAllRB, m_pSendDocumentsPB, 0
         };
-        Window** pMailControl = aMailControls;
+        vcl::Window** pMailControl = aMailControls;
         do
         {
             (*pMailControl)->Show(true);

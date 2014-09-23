@@ -39,7 +39,7 @@ typedef sal_uInt16 FileControlMode_Internal;
 #define FILECTRL_ORIGINALBUTTONTEXT     ((sal_uInt16)0x0002)
 
 
-class SVT_DLLPUBLIC FileControl : public Window
+class SVT_DLLPUBLIC FileControl : public vcl::Window
 {
 private:
     Edit            maEdit;
@@ -64,7 +64,7 @@ protected:
     DECL_DLLPRIVATE_LINK( ButtonHdl, void* );
 
 public:
-                    FileControl( Window* pParent, WinBits nStyle, FileControlMode = 0 );
+                    FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode = 0 );
                     virtual ~FileControl();
 
     Edit&           GetEdit() { return maEdit; }

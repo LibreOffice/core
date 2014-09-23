@@ -129,7 +129,7 @@ sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute() throw(uno::RuntimeExc
 
         if( !m_pDialog )
         {
-            Window* pParent = NULL;
+            vcl::Window* pParent = NULL;
             if( m_xParentWindow.is() )
             {
                 VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParentWindow);

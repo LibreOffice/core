@@ -30,12 +30,12 @@ namespace dbaui
     protected:
         virtual SvParser*   createReader(sal_Int32 _nRows) SAL_OVERRIDE;
     public:
-        OWizHTMLExtend(Window* pParent, SvStream& _rStream)
+        OWizHTMLExtend(vcl::Window* pParent, SvStream& _rStream)
             : OWizTypeSelect( pParent, &_rStream )
         {
         }
 
-        static OWizTypeSelect* Create( Window* _pParent, SvStream& _rInput ) { return new OWizHTMLExtend( _pParent, _rInput ); }
+        static OWizTypeSelect* Create( vcl::Window* _pParent, SvStream& _rInput ) { return new OWizHTMLExtend( _pParent, _rInput ); }
 
         virtual ~OWizHTMLExtend(){}
     };
@@ -45,12 +45,12 @@ namespace dbaui
     protected:
         virtual SvParser* createReader(sal_Int32 _nRows) SAL_OVERRIDE;
     public:
-        OWizRTFExtend(Window* pParent,SvStream& _rStream)
+        OWizRTFExtend(vcl::Window* pParent,SvStream& _rStream)
             : OWizTypeSelect( pParent, &_rStream )
         {
         }
 
-        static OWizTypeSelect* Create( Window* _pParent, SvStream& _rInput ) { return new OWizRTFExtend( _pParent, _rInput ); }
+        static OWizTypeSelect* Create( vcl::Window* _pParent, SvStream& _rInput ) { return new OWizRTFExtend( _pParent, _rInput ); }
 
         virtual ~OWizRTFExtend(){}
     };
@@ -61,7 +61,7 @@ namespace dbaui
     protected:
         virtual SvParser* createReader(sal_Int32 _nRows) SAL_OVERRIDE;
     public:
-        OWizNormalExtend(Window* pParent);
+        OWizNormalExtend(vcl::Window* pParent);
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WEXTENDPAGES_HXX

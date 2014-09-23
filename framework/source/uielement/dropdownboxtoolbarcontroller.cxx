@@ -52,7 +52,7 @@ namespace framework
 class ListBoxControl : public ListBox
 {
     public:
-        ListBoxControl( Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener );
+        ListBoxControl( vcl::Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener );
         virtual ~ListBoxControl();
 
         virtual void Select() SAL_OVERRIDE;
@@ -65,7 +65,7 @@ class ListBoxControl : public ListBox
         IListBoxListener* m_pListBoxListener;
 };
 
-ListBoxControl::ListBoxControl( Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener ) :
+ListBoxControl::ListBoxControl( vcl::Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener ) :
     ListBox( pParent, nStyle )
     , m_pListBoxListener( pListBoxListener )
 {
@@ -172,7 +172,7 @@ void DropdownToolbarController::Select()
 {
     if ( m_pListBoxControl->GetEntryCount() > 0 )
     {
-        Window::PointerState aState = m_pListBoxControl->GetPointerState();
+        vcl::Window::PointerState aState = m_pListBoxControl->GetPointerState();
 
         sal_uInt16 nKeyModifier = sal_uInt16( aState.mnState & KEY_MODTYPE );
         execute( nKeyModifier );

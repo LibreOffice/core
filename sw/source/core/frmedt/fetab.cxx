@@ -1564,7 +1564,7 @@ static const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
 const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) const
 {
     const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();
-    Window* pOutWin = GetWin();
+    vcl::Window* pOutWin = GetWin();
     SwTwips nFuzzy = COLFUZZY;
     if( pOutWin )
     {

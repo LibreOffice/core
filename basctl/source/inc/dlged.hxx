@@ -37,7 +37,7 @@ class Printer;
 class KeyEvent;
 class MouseEvent;
 class Timer;
-class Window;
+namespace vcl { class Window; }
 
 namespace basctl
 {
@@ -118,7 +118,7 @@ private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
     boost::scoped_ptr<DlgEdFactory> pObjFac; // never nullptr
-    Window&             rWindow; // DialogWindow
+    vcl::Window&             rWindow; // DialogWindow
     boost::scoped_ptr<DlgEdFunc> pFunc;
     DialogWindowLayout& rLayout;
     Mode                eMode;
@@ -137,13 +137,13 @@ private:
 
 public:
     DlgEditor (
-        Window&, DialogWindowLayout&,
+        vcl::Window&, DialogWindowLayout&,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel,
         com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> xDialogModel
     );
     virtual ~DlgEditor();
 
-    Window& GetWindow() const { return rWindow; }
+    vcl::Window& GetWindow() const { return rWindow; }
 
     /** returns the control container associated with our window
         @see GetWindow

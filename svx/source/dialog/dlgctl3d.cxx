@@ -41,7 +41,7 @@
 
 using namespace com::sun::star;
 
-Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, const ResId& rResId)
+Svx3DPreviewControl::Svx3DPreviewControl(vcl::Window* pParent, const ResId& rResId)
 :   Control(pParent, rResId),
     mpModel(0),
     mpFmPage(0),
@@ -57,7 +57,7 @@ Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, const ResId& rResId)
     SetBackground();
 }
 
-Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, WinBits nStyle)
+Svx3DPreviewControl::Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle)
 :   Control(pParent, nStyle),
     mpModel(0),
     mpFmPage(0),
@@ -253,7 +253,7 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 #define NO_LIGHT_SELECTED           (0xffffffff)
 #define MAX_NUMBER_LIGHTS              (8)
 
-Svx3DLightControl::Svx3DLightControl(Window* pParent, WinBits nStyle)
+Svx3DLightControl::Svx3DLightControl(vcl::Window* pParent, WinBits nStyle)
 :   Svx3DPreviewControl(pParent, nStyle),
     maUserInteractiveChangeCallback(),
     maUserSelectionChangeCallback(),
@@ -954,7 +954,7 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
 
 
 
-SvxLightCtl3D::SvxLightCtl3D( Window* pParent, const ResId& rResId)
+SvxLightCtl3D::SvxLightCtl3D( vcl::Window* pParent, const ResId& rResId)
 :   Control(pParent, rResId),
     maLightControl(this, 0),
     maHorScroller(this, WB_HORZ | WB_DRAG),
@@ -965,7 +965,7 @@ SvxLightCtl3D::SvxLightCtl3D( Window* pParent, const ResId& rResId)
     Init();
 }
 
-SvxLightCtl3D::SvxLightCtl3D( Window* pParent)
+SvxLightCtl3D::SvxLightCtl3D( vcl::Window* pParent)
 :   Control(pParent, WB_BORDER | WB_TABSTOP),
     maLightControl(this, 0),
     maHorScroller(this, WB_HORZ | WB_DRAG),
@@ -981,7 +981,7 @@ Size SvxLightCtl3D::GetOptimalSize() const
     return LogicToPixel(Size(80, 100), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLightCtl3D(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLightCtl3D(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxLightCtl3D(pParent);
 }

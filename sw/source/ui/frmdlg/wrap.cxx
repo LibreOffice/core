@@ -50,7 +50,7 @@ static const sal_uInt16 aWrapPageRg[] = {
     0
 };
 
-SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode)
+SwWrapDlg::SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode)
     : SfxSingleTabDialog(pParent, rSet, "WrapDialog", "modules/swriter/ui/wrapdialog.ui")
     , pWrtShell(pSh)
 
@@ -62,7 +62,7 @@ SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bD
     SetTabPage(pNewPage);
 }
 
-SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet)
+SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "WrapPage" , "modules/swriter/ui/wrappage.ui", &rSet)
     , nOldLeftMargin(0)
     , nOldRightMargin(0)
@@ -134,7 +134,7 @@ SwWrapTabPage::~SwWrapTabPage()
 {
 }
 
-SfxTabPage* SwWrapTabPage::Create(Window *pParent, const SfxItemSet *rSet)
+SfxTabPage* SwWrapTabPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return new SwWrapTabPage(pParent, *rSet);
 }

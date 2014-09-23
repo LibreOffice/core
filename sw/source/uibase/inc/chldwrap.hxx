@@ -33,7 +33,7 @@ class SwChildWinWrapper : public SfxChildWindow
 
     // Implementation in fldtdlg.cxx
 protected:
-    SwChildWinWrapper(Window *pParentWindow, sal_uInt16 nId);
+    SwChildWinWrapper(vcl::Window *pParentWindow, sal_uInt16 nId);
 
 public:
     virtual bool    ReInitDlg(SwDocShell *pDocSh);

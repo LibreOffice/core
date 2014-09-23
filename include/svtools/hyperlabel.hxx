@@ -52,7 +52,7 @@ namespace svt
         void                implInit();
 
     public:
-        HyperLabel( Window* _pParent, WinBits _nWinStyle = 0 );
+        HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
         virtual ~HyperLabel( );
 
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

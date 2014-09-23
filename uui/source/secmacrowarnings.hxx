@@ -66,7 +66,7 @@ private:
     void                InitControls();
 
 public:
-    MacroWarning( Window* pParent, bool _bShowSignatures, ResMgr& rResMgr );
+    MacroWarning( vcl::Window* pParent, bool _bShowSignatures, ResMgr& rResMgr );
     virtual ~MacroWarning();
 
     void    SetDocumentURL( const OUString& rDocURL );

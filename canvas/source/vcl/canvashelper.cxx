@@ -1436,14 +1436,14 @@ namespace vclcanvas
         {
             // TODO(Q3): Evil downcast. And what's more, Window::Flush is
             // not even const. Wah.
-            static_cast<Window&>(mpOutDev->getOutDev()).Flush();
+            static_cast<vcl::Window&>(mpOutDev->getOutDev()).Flush();
         }
 
         if( mp2ndOutDev && mp2ndOutDev->getOutDev().GetOutDevType() == OUTDEV_WINDOW )
         {
             // TODO(Q3): Evil downcast. And what's more, Window::Flush is
             // not even const. Wah.
-            static_cast<Window&>(mp2ndOutDev->getOutDev()).Flush();
+            static_cast<vcl::Window&>(mp2ndOutDev->getOutDev()).Flush();
         }
     }
 

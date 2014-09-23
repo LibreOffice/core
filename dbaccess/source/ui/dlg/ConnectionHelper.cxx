@@ -87,7 +87,7 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    OConnectionHelper::OConnectionHelper( Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs)
+    OConnectionHelper::OConnectionHelper( vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs)
         : OGenericAdministrationPage(pParent, _rId, _rUIXMLDescription, _rCoreAttrs)
         , m_bUserGrabFocus(false)
         , m_pCollection(NULL)

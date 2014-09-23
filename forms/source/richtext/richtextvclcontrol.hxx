@@ -45,7 +45,7 @@ namespace frm
     public:
         RichTextControl(
             RichTextEngine* _pEngine,
-            Window* _pParent,
+            vcl::Window* _pParent,
             WinBits _nStyle,
             ITextAttributeListener* _pTextAttribListener,
             ITextSelectionListener* _pSelectionListener
@@ -116,7 +116,7 @@ namespace frm
 
     private:
         EditEngine&  getEngine() const;
-        Window&      getViewport() const;
+        vcl::Window&      getViewport() const;
     };
 
 

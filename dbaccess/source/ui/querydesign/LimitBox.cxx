@@ -32,7 +32,7 @@ namespace dbaui
 {
 
 
-LimitBox::LimitBox( Window* pParent, WinBits nStyle )
+LimitBox::LimitBox( vcl::Window* pParent, WinBits nStyle )
     : NumericBox( pParent, nStyle )
 {
     SetShowTrailingZeros( false );
@@ -112,7 +112,7 @@ void LimitBox::LoadDefaultLimits()
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLimitBox( Window *pParent, VclBuilder::stringmap & )
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLimitBox( vcl::Window *pParent, VclBuilder::stringmap & )
 {
     LimitBox* pBox = new LimitBox( pParent, WB_DROPDOWN | WB_VSCROLL );
     return pBox;

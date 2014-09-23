@@ -62,7 +62,7 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
         Edit::KeyInput(rEvt);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeReturnActionEdit(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeReturnActionEdit(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
     return new ReturnActionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);

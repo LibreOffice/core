@@ -66,7 +66,7 @@ public:
     ToolPanelViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         FrameView* pFrameView);
     virtual ~ToolPanelViewShell (void);
 
@@ -107,10 +107,10 @@ public:
 
     /** Relocate all toplevel controls to the given parent window.
     */
-    virtual bool RelocateToParentWindow (::Window* pParentWindow) SAL_OVERRIDE;
+    virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) SAL_OVERRIDE;
 
     /// returns <TRUE/> if and only if the given window is the panel anchor window of our ToolPanelDeck
-    bool    IsPanelAnchorWindow( const ::Window& i_rWindow ) const;
+    bool    IsPanelAnchorWindow( const vcl::Window& i_rWindow ) const;
 
     /** creates an XUIElement for the given standard panel
     */

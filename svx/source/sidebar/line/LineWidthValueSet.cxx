@@ -25,7 +25,7 @@ namespace svx { namespace sidebar {
 
 
 LineWidthValueSet::LineWidthValueSet (
-    Window* pParent, const ResId& rResId)
+    vcl::Window* pParent, const ResId& rResId)
     : ValueSet( pParent, rResId ),
       pVDev(NULL),
       nSelItem(0),

@@ -72,7 +72,7 @@ public:
         Note that GetWindow() may return different Window pointers when
         Hide() is called in between.
     */
-    virtual ::Window* GetWindow (void) SAL_OVERRIDE;
+    virtual vcl::Window* GetWindow (void) SAL_OVERRIDE;
 
     /** The local getWindow() first calls GetWindow() to provide a valid
         window pointer before forwarding the call to the base class.

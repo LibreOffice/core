@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sd { namespace tools {
 
@@ -64,7 +64,7 @@ public:
             IdleStates values or-ed together that describe what the system
             is currently doing so that the caller can decide what to do.
     */
-    static sal_Int32 GetIdleState (const ::Window* pWindow = NULL);
+    static sal_Int32 GetIdleState (const vcl::Window* pWindow = NULL);
 
 private:
     /** Check whether there are input events pending.
@@ -75,7 +75,7 @@ private:
     */
     static sal_Int32 CheckSlideShowRunning (void);
 
-    static sal_Int32 CheckWindowPainting (const ::Window& rWindow);
+    static sal_Int32 CheckWindowPainting (const vcl::Window& rWindow);
 };
 
 } } // end of namespace ::sd::tools

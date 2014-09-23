@@ -204,7 +204,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 // - SearchProgress -
 
 
-SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL )
+SearchProgress::SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL )
     : ModalDialog(pParent, "GallerySearchProgress", "cui/ui/gallerysearchprogress.ui")
     , parent_(pParent)
     , startUrl_(rStartURL)
@@ -335,7 +335,7 @@ void TakeThread::execute()
 }
 
 // - TakeProgress -
-TakeProgress::TakeProgress(Window* pWindow)
+TakeProgress::TakeProgress(vcl::Window* pWindow)
     : ModalDialog(pWindow, "GalleryApplyProgress",
         "cui/ui/galleryapplyprogress.ui")
     , window_(pWindow)
@@ -433,7 +433,7 @@ void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 
 
 // - ActualizeProgress -
-ActualizeProgress::ActualizeProgress(Window* pWindow, GalleryTheme* pThm)
+ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
     : ModalDialog(pWindow, "GalleryUpdateProgress",
         "cui/ui/galleryupdateprogress.ui")
     , pTimer(NULL)
@@ -508,7 +508,7 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
     return 0;
 }
 
-TitleDialog::TitleDialog(Window* pParent, const OUString& rOldTitle)
+TitleDialog::TitleDialog(vcl::Window* pParent, const OUString& rOldTitle)
     : ModalDialog(pParent, "GalleryTitleDialog", "cui/ui/gallerytitledialog.ui")
 {
     get(m_pEdit, "entry");
@@ -520,7 +520,7 @@ TitleDialog::TitleDialog(Window* pParent, const OUString& rOldTitle)
 // - GalleryIdDialog -
 
 
-GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm )
+GalleryIdDialog::GalleryIdDialog( vcl::Window* pParent, GalleryTheme* _pThm )
     : ModalDialog(pParent, "GalleryThemeIDDialog", "cui/ui/gallerythemeiddialog.ui")
     , pThm(_pThm )
 {
@@ -575,7 +575,7 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 // - GalleryThemeProperties -
 
 
-GalleryThemeProperties::GalleryThemeProperties(Window* pParent,
+GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
     ExchangeData* _pData, SfxItemSet* pItemSet)
     : SfxTabDialog( pParent, "GalleryThemeDialog",
         "cui/ui/gallerythemedialog.ui", pItemSet)
@@ -608,7 +608,7 @@ void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 }
 
 // - TPGalleryThemeGeneral -
-TPGalleryThemeGeneral::TPGalleryThemeGeneral(Window* pParent, const SfxItemSet& rSet)
+TPGalleryThemeGeneral::TPGalleryThemeGeneral(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "GalleryGeneralPage",
         "cui/ui/gallerygeneralpage.ui", &rSet)
     , pData(NULL)
@@ -687,13 +687,13 @@ bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
 
 
 
-SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* TPGalleryThemeGeneral::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new TPGalleryThemeGeneral( pParent, *rSet );
 }
 
 // - TPGalleryThemeProperties -
-TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet )
+TPGalleryThemeProperties::TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet )
     : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", &rSet)
     , pData(NULL)
     , nCurFilterPos(0)
@@ -771,7 +771,7 @@ TPGalleryThemeProperties::~TPGalleryThemeProperties()
 
 
 
-SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* TPGalleryThemeProperties::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new TPGalleryThemeProperties( pParent, *rSet );
 }

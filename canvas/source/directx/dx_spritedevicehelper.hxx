@@ -42,7 +42,7 @@ namespace dxcanvas
     public:
         SpriteDeviceHelper();
 
-        void init( Window&                                  rWindow,
+        void init( vcl::Window&                                  rWindow,
                    SpriteCanvas&                            rSpriteCanvas,
                    const ::com::sun::star::awt::Rectangle&  rRect,
                    bool                                     bFullscreen );

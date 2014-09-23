@@ -660,7 +660,7 @@ void OutlinerMasterViewFilter::End()
 }
 
 bool View::SdrBeginTextEdit(
-    SdrObject* pObj, SdrPageView* pPV, ::Window* pWin,
+    SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     bool bIsNewObj,
     SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
     bool bDontDeleteOutliner, bool bOnlyOneView, bool bGrabFocus )
@@ -1319,7 +1319,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     const bool bSwitchOff )
 {
     SdrModel* pSdrModel = GetModel();
-    Window* pWindow = dynamic_cast< Window* >(GetFirstOutputDevice());
+    vcl::Window* pWindow = dynamic_cast< vcl::Window* >(GetFirstOutputDevice());
     if (!pSdrModel || !pWindow)
         return;
 

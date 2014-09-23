@@ -23,7 +23,7 @@
 
 namespace sc { namespace sidebar {
 
-CellLineStyleValueSet::CellLineStyleValueSet( Window* pParent, const ResId& rResId)
+CellLineStyleValueSet::CellLineStyleValueSet( vcl::Window* pParent, const ResId& rResId)
 :   ValueSet( pParent, rResId ),
     pVDev(NULL),
     nSelItem(0)

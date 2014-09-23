@@ -7537,7 +7537,7 @@ bool SwFrm::GetBackgroundBrush(
 }
 
 void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pO,
-                      Window *pW, sal_uInt16 nZoom )
+                      vcl::Window *pW, sal_uInt16 nZoom )
 {
     pSh->mpOut = pO;
     pSh->mpWin = pW;
@@ -7600,7 +7600,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         const Region aRepaintRegion(aOut.SVRect());
         pSh->DLPrePaint2(aRepaintRegion);
 
-        Window *pWin = pSh->GetWin();
+        vcl::Window *pWin = pSh->GetWin();
         sal_uInt16 nZoom = pSh->GetViewOptions()->GetZoom();
         ::SetOutDevAndWin( pSh, &aDev, 0, 100 );
         bFlyMetafile = true;

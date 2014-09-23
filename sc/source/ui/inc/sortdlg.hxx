@@ -29,7 +29,7 @@
 class ScSortDlg : public SfxTabDialog
 {
 public:
-    ScSortDlg(Window* pParent, const SfxItemSet* pArgSet);
+    ScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet);
 
     void SetHeaders( bool bHeaders )  { bIsHeaders = bHeaders; }
     void SetByRows ( bool bByRows  )  { bIsByRows = bByRows; }
@@ -44,7 +44,7 @@ private:
 class ScSortWarningDlg : public ModalDialog
 {
 public:
-    ScSortWarningDlg( Window* pParent, const OUString& rExtendText,const OUString& rCurrentText );
+    ScSortWarningDlg( vcl::Window* pParent, const OUString& rExtendText,const OUString& rCurrentText );
     DECL_LINK( BtnHdl, PushButton* );
 private:
     FixedText*       aFtText;

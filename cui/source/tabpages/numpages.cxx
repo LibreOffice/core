@@ -173,7 +173,7 @@ static vcl::Font& lcl_GetDefaultBulletFont()
     return aDefBulletFont;
 }
 
-SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
+SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PickNumberingPage", "cui/ui/picknumberingpage.ui", &rSet)
     , pActNum(0)
@@ -223,7 +223,7 @@ SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
     delete pSaveNum;
 }
 
-SfxTabPage*  SvxSingleNumPickTabPage::Create( Window* pParent,
+SfxTabPage*  SvxSingleNumPickTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SvxSingleNumPickTabPage(pParent, *rAttrSet);
@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl)
 }
 
 
-SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
+SvxBulletPickTabPage::SvxBulletPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PickBulletPage", "cui/ui/pickbulletpage.ui", &rSet)
     , pActNum(0)
@@ -384,7 +384,7 @@ SvxBulletPickTabPage::~SvxBulletPickTabPage()
     delete pSaveNum;
 }
 
-SfxTabPage*  SvxBulletPickTabPage::Create( Window* pParent,
+SfxTabPage*  SvxBulletPickTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SvxBulletPickTabPage(pParent, *rAttrSet);
@@ -524,7 +524,7 @@ void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
 }
 
 
-SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
+SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PickOutlinePage", "cui/ui/pickoutlinepage.ui", &rSet)
     , pActNum(0)
@@ -581,7 +581,7 @@ SvxNumPickTabPage::~SvxNumPickTabPage()
     delete pSaveNum;
 }
 
-SfxTabPage*  SvxNumPickTabPage::Create( Window* pParent,
+SfxTabPage*  SvxNumPickTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SvxNumPickTabPage(pParent, *rAttrSet);
@@ -772,7 +772,7 @@ void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetCharFmtNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
 }
 
-SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
+SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PickGraphicPage", "cui/ui/pickgraphicpage.ui", &rSet)
     , pActNum(0)
@@ -822,7 +822,7 @@ SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
     delete pSaveNum;
 }
 
-SfxTabPage*  SvxBitmapPickTabPage::Create( Window* pParent,
+SfxTabPage*  SvxBitmapPickTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SvxBitmapPickTabPage(pParent, *rAttrSet);
@@ -1021,7 +1021,7 @@ void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotR
 }
 
 // tabpage numbering options
-SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
+SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "NumberingOptionsPage", "cui/ui/numberingoptionspage.ui", &rSet)
     , pActNum(0)
@@ -1141,7 +1141,7 @@ void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
     m_pHeightMF->SetUnit( eMetric );
 }
 
-SfxTabPage* SvxNumOptionsTabPage::Create( Window* pParent,
+SfxTabPage* SvxNumOptionsTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SvxNumOptionsTabPage(pParent, *rAttrSet);
@@ -2265,7 +2265,7 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     return nRet;
 }
 
-SvxNumberingPreview::SvxNumberingPreview(Window* pParent, WinBits nWinBits)
+SvxNumberingPreview::SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits)
     : Window(pParent, nWinBits)
     , pActNum(0)
     , nPageWidth(0)
@@ -2276,7 +2276,7 @@ SvxNumberingPreview::SvxNumberingPreview(Window* pParent, WinBits nWinBits)
     SetBorderStyle(WINDOW_BORDER_MONO);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNumberingPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNumberingPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxNumberingPreview(pParent, WB_BORDER);
 }
@@ -2580,7 +2580,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
 //dialog to this one, except with a different preview window impl.
 //TODO, determine if SwNumPositionTabPage and SvxNumPositionTabPage can be
 //merged
-SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
+SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "NumberingPositionPage", "cui/ui/numberingpositionpage.ui", &rSet)
     , pActNum(0)
@@ -3093,7 +3093,7 @@ void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_pIndentAtMF->Show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-SfxTabPage* SvxNumPositionTabPage::Create( Window* pParent,
+SfxTabPage* SvxNumPositionTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SvxNumPositionTabPage(pParent, *rAttrSet);

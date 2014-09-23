@@ -50,7 +50,7 @@ class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog, public formul
 {
     friend class FormulaDlg_Impl;
 public:
-                    FormulaModalDialog( Window* pParent
+                    FormulaModalDialog( vcl::Window* pParent
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult
                                             , bool _bSupportMatrix
@@ -69,7 +69,7 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( bool bForced = false );
-    void            SetFocusWin(Window *pWin,const OString& nUniqueId);
+    void            SetFocusWin(vcl::Window *pWin,const OString& nUniqueId);
 
     void            SetMeText(const OUString& _sText);
     void            Update();
@@ -91,7 +91,7 @@ class FORMULA_DLLPUBLIC FormulaDlg:
 public:
                     FormulaDlg( SfxBindings* pB
                                     , SfxChildWindow* pCW
-                                    , Window* pParent
+                                    , vcl::Window* pParent
                                     , bool _bSupportFunctionResult
                                     , bool _bSupportResult
                                     , bool _bSupportMatrix
@@ -113,7 +113,7 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( bool bForced = false );
-    void            SetFocusWin(Window *pWin,const OString& nUniqueId);
+    void            SetFocusWin(vcl::Window *pWin,const OString& nUniqueId);
     void            HighlightFunctionParas(const OUString& aFormula);
 
     void            SetMeText(const OUString& _sText);

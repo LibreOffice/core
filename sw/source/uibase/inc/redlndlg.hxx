@@ -136,7 +136,7 @@ class SwModelessRedlineAcceptDlg : public SfxModelessDialog
     SwChildWinWrapper*      pChildWin;
 
 public:
-    SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, Window *pParent);
+    SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, vcl::Window *pParent);
     virtual ~SwModelessRedlineAcceptDlg();
 
     virtual void    Activate() SAL_OVERRIDE;
@@ -147,7 +147,7 @@ public:
 class SwRedlineAcceptChild : public SwChildWinWrapper
 {
 public:
-    SwRedlineAcceptChild(   Window* ,
+    SwRedlineAcceptChild(   vcl::Window* ,
                             sal_uInt16 nId,
                             SfxBindings*,
                             SfxChildWinInfo*  );

@@ -176,8 +176,8 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         && SupportInputMethodStyle( pInputMethod->GetSupportedStyles() ) )
     {
         const SystemEnvData* pEnv = pFrame->GetSystemData();
-        XLIB_Window  aClientWindow = pEnv->aShellWindow;
-        XLIB_Window  aFocusWindow  = pEnv->aWindow;
+        ::Window  aClientWindow = pEnv->aShellWindow;
+        ::Window  aFocusWindow  = pEnv->aWindow;
 
         // for status callbacks and commit string callbacks
 #define PREEDIT_BUFSZ 16
@@ -420,7 +420,7 @@ SalI18N_InputContext::HandleDestroyIM()
 //  called once on each frame, it relys on a valid maContext
 
 void
-SalI18N_InputContext::ExtendEventMask( XLIB_Window aFocusWindow )
+SalI18N_InputContext::ExtendEventMask( ::Window aFocusWindow )
 {
     unsigned long nIMEventMask;
     XWindowAttributes aWindowAttributes;
@@ -587,8 +587,8 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
         maClientData.pFrame = pFocusFrame;
 
         const SystemEnvData* pEnv   = pFocusFrame->GetSystemData();
-        XLIB_Window  aClientWindow  = pEnv->aShellWindow;
-        XLIB_Window  aFocusWindow   = pEnv->aWindow;
+        ::Window  aClientWindow  = pEnv->aShellWindow;
+        ::Window  aFocusWindow   = pEnv->aWindow;
 
         XSetICValues( maContext,
                       XNFocusWindow,       aFocusWindow,

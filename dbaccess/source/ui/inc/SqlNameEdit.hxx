@@ -56,12 +56,12 @@ namespace dbaui
                         ,public OSQLNameChecker
     {
     public:
-        OSQLNameEdit(Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
+        OSQLNameEdit(vcl::Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
             : Edit(_pParent,nStyle)
             ,OSQLNameChecker(_rAllowedChars)
         {
         }
-        OSQLNameEdit(Window* _pParent,const ResId& _rRes,const OUString& _rAllowedChars = OUString())
+        OSQLNameEdit(vcl::Window* _pParent,const ResId& _rRes,const OUString& _rAllowedChars = OUString())
             : Edit(_pParent,_rRes)
             ,OSQLNameChecker(_rAllowedChars)
         {
@@ -77,12 +77,12 @@ namespace dbaui
                             ,public OSQLNameChecker
     {
     public:
-        OSQLNameComboBox(Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
+        OSQLNameComboBox(vcl::Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
             : ComboBox(_pParent,nStyle)
             , OSQLNameChecker(_rAllowedChars)
         {
         }
-        OSQLNameComboBox(Window* _pParent,const ResId& _rRes,const OUString& _rAllowedChars = OUString())
+        OSQLNameComboBox(vcl::Window* _pParent,const ResId& _rRes,const OUString& _rAllowedChars = OUString())
             : ComboBox(_pParent,_rRes)
             , OSQLNameChecker(_rAllowedChars)
         {

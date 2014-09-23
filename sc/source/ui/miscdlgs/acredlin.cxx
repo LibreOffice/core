@@ -79,7 +79,7 @@ ScRedlinData::~ScRedlinData()
 
 //  class ScAcceptChgDlg
 
-ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
     ScViewData* ptrViewData)
     : SfxModelessDialog(pB, pCW, pParent,
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui"),
@@ -874,7 +874,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
         pWnd->SetCloseHdl(LINK( this, ScAcceptChgDlg,RefInfoHandle));
         pWnd->SetRefString(pTPFilter->GetRange());
         ScSimpleRefDlgWrapper::SetAutoReOpen(false);
-        Window* pWin=pWnd->GetWindow();
+        vcl::Window* pWin=pWnd->GetWindow();
         pWin->SetPosSizePixel(GetPosPixel(),GetSizePixel());
         Hide();
         pWin->SetText(GetText());
@@ -900,7 +900,7 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, OUString*, pResult)
 
         if(pWnd!=NULL)
         {
-            Window* pWin=pWnd->GetWindow();
+            vcl::Window* pWin=pWnd->GetWindow();
             Size aWinSize=pWin->GetSizePixel();
             aWinSize.Width()=GetSizePixel().Width();
             SetPosSizePixel(pWin->GetPosPixel(),aWinSize);

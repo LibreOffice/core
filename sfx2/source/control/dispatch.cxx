@@ -1915,7 +1915,7 @@ bool SfxDispatcher::_FillState(const SfxSlotServer& rSvr, SfxItemSet& rState,
     return false;
 }
 
-SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, const Point *pPos )
+SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId, vcl::Window *pWin, const Point *pPos )
 {
     SfxDispatcher &rDisp = *SfxGetpApp()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
@@ -1927,7 +1927,7 @@ SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, co
         nShLevel = rDisp.pImp->aStack.size();
     }
 
-    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
+    vcl::Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
     for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
     {
         const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
@@ -1939,7 +1939,7 @@ SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, co
     return 0;
 }
 
-void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Point *pPos )
+void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, vcl::Window *pWin, const Point *pPos )
 {
     SfxDispatcher &rDisp = *SfxGetpApp()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
@@ -1951,7 +1951,7 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
         nShLevel = rDisp.pImp->aStack.size();
     }
 
-    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
+    vcl::Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
     for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
     {
         const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
@@ -1963,9 +1963,9 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
     }
 }
 
-void SfxDispatcher::ExecutePopup( const ResId &rId, Window *pWin, const Point *pPos )
+void SfxDispatcher::ExecutePopup( const ResId &rId, vcl::Window *pWin, const Point *pPos )
 {
-    Window *pWindow = pWin ? pWin : pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
+    vcl::Window *pWindow = pWin ? pWin : pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
     SfxPopupMenuManager::ExecutePopup( rId, GetFrame(), pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
 }
 

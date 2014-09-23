@@ -199,7 +199,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     bool                m_bHScrollbarEnabled;
     bool                m_bVScrollbarEnabled;
 
-    Window              *m_pScrollFill;   // dummy window for filling the lower right edge
+    ::vcl::Window       *m_pScrollFill;   // dummy window for filling the lower right edge
                                         // when both scrollbars are active
 
     SvxRuler            *m_pHRuler,
@@ -333,7 +333,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // methods for printing
     SAL_DLLPRIVATE virtual SfxPrinter*       GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual bool              HasPrintOptionsPage() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( Window* pParent,
+    SAL_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( vcl::Window* pParent,
                                                     const SfxItemSet& rSet) SAL_OVERRIDE;
     // for readonly switching
     SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
@@ -510,11 +510,11 @@ public:
     int             CreateTab();
     int             KillTab();
 
-    bool            StatVRuler() const { return ((Window*)m_pVRuler)->IsVisible(); }
+    bool            StatVRuler() const { return ((vcl::Window*)m_pVRuler)->IsVisible(); }
     void            ChangeVRulerMetric(FieldUnit eUnit);
     void            GetVRulerMetric(FieldUnit& rToFill) const;
 
-    bool            StatTab() const { return ((Window*)m_pHRuler)->IsVisible(); }
+    bool            StatTab() const { return ((vcl::Window*)m_pHRuler)->IsVisible(); }
     SvxRuler&       GetHRuler()    { return *m_pHRuler; }
     SvxRuler&       GetVRuler()    { return *m_pVRuler; }
     void            InvalidateRulerPos();
@@ -564,7 +564,7 @@ public:
     bool            HasDrwObj(SdrObject *pSdrObj) const;
     bool            HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const;
     bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,
-                                    Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
+                                    vcl::Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
 
     void            StateTabWin(SfxItemSet&);
 
@@ -676,7 +676,7 @@ inline const SwDocShell *SwView::GetDocShell() const
     return ((SwView*)this)->GetDocShell();
 }
 
-SfxTabPage* CreatePrintOptionsPage( Window *pParent,
+SfxTabPage* CreatePrintOptionsPage( vcl::Window *pParent,
                                     const SfxItemSet &rOptions,
                                     bool bPreview);
 

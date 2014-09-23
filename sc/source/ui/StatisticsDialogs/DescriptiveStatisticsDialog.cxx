@@ -61,7 +61,7 @@ static const OUString strWildcardNumber("%NUMBER%");
 
 ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    Window* pParent, ScViewData* pViewData ) :
+                    vcl::Window* pParent, ScViewData* pViewData ) :
     ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "DescriptiveStatisticsDialog", "modules/scalc/ui/descriptivestatisticsdialog.ui" )

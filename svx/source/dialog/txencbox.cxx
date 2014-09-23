@@ -33,13 +33,13 @@
 #include <rtl/strbuf.hxx>
 #include <osl/nlsupport.h>
 
-SvxTextEncodingBox::SvxTextEncodingBox( Window* pParent, WinBits nBits )
+SvxTextEncodingBox::SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits )
     : ListBox( pParent, nBits )
 {
     m_pEncTable = new SvxTextEncodingTable;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxTextEncodingBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxTextEncodingBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     bool bDropdown = VclBuilder::extractDropdown(rMap);

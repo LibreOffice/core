@@ -190,7 +190,7 @@ Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController (vo
 OutlineViewShell::OutlineViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
-    ::Window* pParentWindow,
+    ::vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)
     : ViewShell(pFrame, pParentWindow, rViewShellBase),
       pOlView(NULL),
@@ -541,7 +541,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 {
                     OutlineViewPageChangesGuard aGuard2(pOlView);
 
-                    vcl::KeyCode aKCode(KEY_DELETE);
+                    ::vcl::KeyCode aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode );
                     pOutlView->PostKeyEvent(aKEvt);
 
@@ -1445,7 +1445,7 @@ bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     Invalidate(SID_STYLE_FAMILY5);
 
     // check and distinguish cursor movements- or input-keys
-    vcl::KeyCode aKeyGroup( rKEvt.GetKeyCode().GetGroup() );
+    ::vcl::KeyCode aKeyGroup( rKEvt.GetKeyCode().GetGroup() );
     if( (aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS) ||
         (GetActualPage() != pLastPage) )
     {

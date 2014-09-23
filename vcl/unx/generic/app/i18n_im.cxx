@@ -378,7 +378,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 // give IM the opportunity to look at the event, and possibly hide it
 
 bool
-SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window    )
+SalI18N_InputMethod::FilterEvent( XEvent *pEvent, ::Window window    )
 {
     if (!mbUseable)
         return False;

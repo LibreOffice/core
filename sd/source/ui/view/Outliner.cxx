@@ -104,7 +104,7 @@ public:
     void ProvideOutlinerView (
         Outliner& rOutliner,
         const ::boost::shared_ptr<ViewShell>& rpViewShell,
-        ::Window* pWindow);
+        vcl::Window* pWindow);
 
     /** This method is called when the OutlinerView is no longer used.
     */
@@ -1582,7 +1582,7 @@ sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
     // while the message box is being shown.  We also have to take into
     // account that we are called during a spell check and the search dialog
     // is not available.
-    ::Window* pSearchDialog = NULL;
+    vcl::Window* pSearchDialog = NULL;
     SfxChildWindow* pChildWindow = NULL;
     switch (meMode)
     {
@@ -1643,7 +1643,7 @@ Outliner::Implementation::~Implementation (void)
 void Outliner::Implementation::ProvideOutlinerView (
     Outliner& rOutliner,
     const ::boost::shared_ptr<ViewShell>& rpViewShell,
-    ::Window* pWindow)
+    vcl::Window* pWindow)
 {
     if (rpViewShell.get() != NULL)
     {

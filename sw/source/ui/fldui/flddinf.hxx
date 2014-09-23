@@ -59,11 +59,11 @@ protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
-                        SwFldDokInfPage(Window* pWindow, const SfxItemSet& rSet);
+                        SwFldDokInfPage(vcl::Window* pWindow, const SfxItemSet& rSet);
 
                         virtual ~SwFldDokInfPage();
 
-    static SfxTabPage*  Create(Window* pParent, const SfxItemSet* rAttrSet);
+    static SfxTabPage*  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

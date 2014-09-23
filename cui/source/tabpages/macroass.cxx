@@ -135,7 +135,7 @@ void _SfxMacroTabPage::EnableButtons()
         mpImpl->pAssignPB->Enable( false );
 }
 
-_SfxMacroTabPage::_SfxMacroTabPage(Window* pParent, const SfxItemSet& rAttrSet)
+_SfxMacroTabPage::_SfxMacroTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "EventAssignPage", "cui/ui/eventassignpage.ui", &rAttrSet)
 {
     mpImpl = new _SfxMacroTabPage_Impl;
@@ -433,7 +433,7 @@ void _SfxMacroTabPage::FillEvents()
     }
 }
 
-SfxMacroTabPage::SfxMacroTabPage(Window* pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
+SfxMacroTabPage::SfxMacroTabPage(vcl::Window* pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
     : _SfxMacroTabPage( pParent, rSet )
 {
     mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
@@ -456,18 +456,18 @@ SfxMacroTabPage::SfxMacroTabPage(Window* pParent, const Reference< XFrame >& rxD
 
 namespace
 {
-    SfxMacroTabPage* CreateSfxMacroTabPage( Window* pParent, const SfxItemSet& rAttrSet )
+    SfxMacroTabPage* CreateSfxMacroTabPage( vcl::Window* pParent, const SfxItemSet& rAttrSet )
     {
         return new SfxMacroTabPage( pParent, NULL, rAttrSet );
     }
 }
 
-SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SfxMacroTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return CreateSfxMacroTabPage(pParent, *rAttrSet);
 }
 
-SfxMacroAssignDlg::SfxMacroAssignDlg(Window* pParent,
+SfxMacroAssignDlg::SfxMacroAssignDlg(vcl::Window* pParent,
     const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet, "EventAssignDialog",
         "cui/ui/eventassigndialog.ui")

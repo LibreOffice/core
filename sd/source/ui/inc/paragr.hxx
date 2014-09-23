@@ -33,7 +33,7 @@ private:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 public:
-                    SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr );
+                    SdParagraphDlg( vcl::Window* pParent, const SfxItemSet* pAttr );
                     virtual ~SdParagraphDlg() {};
 };
 

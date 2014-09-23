@@ -38,7 +38,7 @@ IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
     return 0;
 }
 
-SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
+SvxCTLOptionsPage::SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, "OptCTLPage", "cui/ui/optctlpage.ui", &rSet  )
 
@@ -61,7 +61,7 @@ SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
 }
 
-SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SvxCTLOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxCTLOptionsPage( pParent, *rAttrSet );
 }

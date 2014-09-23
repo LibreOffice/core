@@ -37,7 +37,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
+ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData ) :
     TabBar( pParent,
             WinBits(WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG ) ),
             DropTargetHelper( this ),
@@ -488,7 +488,7 @@ void ScTabControl::DoDrag( const Region& /* rRegion */ )
 
     pTransferObj->SetDragSource( pDocSh, aTabMark );
 
-    Window* pWindow = pViewData->GetActiveWin();
+    vcl::Window* pWindow = pViewData->GetActiveWin();
     SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }

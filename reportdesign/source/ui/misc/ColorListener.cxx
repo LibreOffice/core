@@ -26,7 +26,7 @@
 namespace rptui
 {
 
-OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
+OColorListener::OColorListener(vcl::Window* _pParent ,const OUString& _sColorEntry)
 : Window(_pParent)
 ,m_sColorEntry(_sColorEntry)
 ,m_nColor(COL_LIGHTBLUE)

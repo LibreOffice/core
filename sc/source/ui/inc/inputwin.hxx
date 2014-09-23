@@ -40,10 +40,10 @@ class ScRangeList;
 class ScTabViewShell;
 class Accelerator;
 
-class ScTextWndBase : public Window
+class ScTextWndBase : public vcl::Window
 {
 public:
-    ScTextWndBase( Window* pParent,  WinBits nStyle );
+    ScTextWndBase( vcl::Window* pParent,  WinBits nStyle );
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
     virtual void            SetTextString( const OUString& rString ) = 0;
@@ -60,7 +60,7 @@ public:
 class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit window
 {
 public:
-                    ScTextWnd( Window* pParent, ScTabViewShell* pViewSh );
+                    ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh );
     virtual         ~ScTextWnd();
 
     virtual void            SetTextString( const OUString& rString ) SAL_OVERRIDE;
@@ -137,7 +137,7 @@ private:
     bool            bFormulaMode;
 
 public:
-                    ScPosWnd( Window* pParent );
+                    ScPosWnd( vcl::Window* pParent );
     virtual         ~ScPosWnd();
 
     void            SetPos( const OUString& rPosStr );        // Displayed Text
@@ -199,7 +199,7 @@ class ScInputBarGroup : public ScTextWndBase
 {
 
 public:
-                    ScInputBarGroup( Window* Parent, ScTabViewShell* pViewSh );
+                    ScInputBarGroup( vcl::Window* Parent, ScTabViewShell* pViewSh );
     virtual         ~ScInputBarGroup();
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
@@ -236,7 +236,7 @@ private:
 class ScInputWindow : public ToolBox                        // Parent toolbox
 {
 public:
-                    ScInputWindow( Window* pParent, SfxBindings* pBind );
+                    ScInputWindow( vcl::Window* pParent, SfxBindings* pBind );
     virtual         ~ScInputWindow();
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -301,7 +301,7 @@ private:
 class ScInputWindowWrapper : public SfxChildWindow
 {
 public:
-            ScInputWindowWrapper( Window*           pParent,
+            ScInputWindowWrapper( vcl::Window*           pParent,
                                   sal_uInt16            nId,
                                   SfxBindings*      pBindings,
                                   SfxChildWinInfo*  pInfo );

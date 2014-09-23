@@ -126,7 +126,7 @@ namespace dbmm
     };
 
     // MacroMigrationDialog
-    MacroMigrationDialog::MacroMigrationDialog(Window* _pParent, const Reference<XComponentContext>& _rContext,
+    MacroMigrationDialog::MacroMigrationDialog(vcl::Window* _pParent, const Reference<XComponentContext>& _rContext,
         const Reference< XOfficeDatabaseDocument >& _rxDocument)
         : MacroMigrationDialog_Base(_pParent)
         , m_pData( new MacroMigrationDialog_Data( _rContext, _rxDocument ) )

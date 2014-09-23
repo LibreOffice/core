@@ -1410,7 +1410,7 @@ void ScTabView::ErrorMessage( sal_uInt16 nGlobStrId )
 
     StopMarking();      // falls per Focus aus MouseButtonDown aufgerufen
 
-    Window* pParent = aViewData.GetDialogParent();
+    vcl::Window* pParent = aViewData.GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
     bool bFocus = pParent && pParent->HasFocus();
 

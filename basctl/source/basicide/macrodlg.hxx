@@ -87,7 +87,7 @@ private:
     void                RestoreMacroDescription();
 
 public:
-                        MacroChooser( Window* pParent, bool bCreateEntries = true );
+                        MacroChooser( vcl::Window* pParent, bool bCreateEntries = true );
                         virtual ~MacroChooser();
 
     SbMethod*           GetMacro();

@@ -33,7 +33,7 @@ class ImpEditEngine;
 class ImpEditView;
 class SvxSearchItem;
 class SvxFieldItem;
-class Window;
+namespace vcl { class Window; }
 class Pointer;
 class KeyEvent;
 class MouseEvent;
@@ -85,14 +85,14 @@ private:
     EDITENG_DLLPRIVATE EditView&        operator=( const EditView& );
 
 public:
-                    EditView( EditEngine* pEng, Window* pWindow );
+                    EditView( EditEngine* pEng, vcl::Window* pWindow );
     virtual         ~EditView();
 
     void            SetEditEngine( EditEngine* pEditEngine );
     EditEngine*     GetEditEngine() const;
 
-    void            SetWindow( Window* pWin );
-    Window*         GetWindow() const;
+    void            SetWindow( vcl::Window* pWin );
+    vcl::Window*         GetWindow() const;
 
     void            Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = 0 );
     void            Invalidate();
@@ -136,7 +136,7 @@ public:
 
     void            InsertText( const OUString& rNew, bool bSelect = false );
 
-    bool            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
+    bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin = NULL );
 
     bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -187,7 +187,7 @@ public:
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;
 
-    void            CompleteAutoCorrect( Window* pFrameWin = NULL );
+    void            CompleteAutoCorrect( vcl::Window* pFrameWin = NULL );
 
     EESpellState    StartSpeller( bool bMultipleDoc = false );
     EESpellState    StartThesaurus();

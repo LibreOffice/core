@@ -81,19 +81,21 @@ using namespace ::com::sun::star::datatransfer::dnd;
 
 using ::com::sun::star::awt::XTopWindow;
 
+namespace vcl {
+
 Window::Window( WindowType nType )
 {
     ImplInitWindowData( nType );
 }
 
-Window::Window( Window* pParent, WinBits nStyle )
+Window::Window( vcl::Window* pParent, WinBits nStyle )
 {
 
     ImplInitWindowData( WINDOW_WINDOW );
     ImplInit( pParent, nStyle, NULL );
 }
 
-Window::Window( Window* pParent, const ResId& rResId )
+Window::Window( vcl::Window* pParent, const ResId& rResId )
     : mpWindowImpl(NULL)
 {
     rResId.SetRT( RSC_WINDOW );
@@ -109,10 +111,10 @@ Window::Window( Window* pParent, const ResId& rResId )
 #if OSL_DEBUG_LEVEL > 0
 namespace
 {
-    OString lcl_createWindowInfo(const Window& i_rWindow)
+    OString lcl_createWindowInfo(const vcl::Window& i_rWindow)
     {
         // skip border windows, they don't carry information which helps diagnosing the problem
-        const Window* pWindow( &i_rWindow );
+        const vcl::Window* pWindow( &i_rWindow );
         while ( pWindow && ( pWindow->GetType() == WINDOW_BORDERWINDOW ) )
             pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
         if ( !pWindow )
@@ -131,7 +133,7 @@ namespace
 
 Window::~Window()
 {
-    vcl::LazyDeletor<Window>::Undelete( this );
+    vcl::LazyDeletor<vcl::Window>::Undelete( this );
 
     DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
 
@@ -163,8 +165,8 @@ Window::~Window()
     // remove ownerdraw decorated windows from list in the top-most frame window
     if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
     {
-        ::std::vector< Window* >& rList = ImplGetOwnerDrawList();
-        ::std::vector< Window* >::iterator p;
+        ::std::vector< vcl::Window* >& rList = ImplGetOwnerDrawList();
+        ::std::vector< vcl::Window* >::iterator p;
         p = ::std::find( rList.begin(), rList.end(), this );
         if( p != rList.end() )
             rList.erase( p );
@@ -246,7 +248,7 @@ Window::~Window()
     {
         OStringBuffer aErrorStr;
         bool        bError = false;
-        Window*     pTempWin;
+        vcl::Window*     pTempWin;
         if (mpWindowImpl->mpFrameData != 0)
         {
             pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
@@ -325,7 +327,7 @@ Window::~Window()
             Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
 
-        Window* pMyParent = GetParent();
+        vcl::Window* pMyParent = GetParent();
         SystemWindow* pMySysWin = NULL;
 
         while ( pMyParent )
@@ -349,7 +351,7 @@ Window::~Window()
 
     if( mpWindowImpl->mbIsInTaskPaneList )
     {
-        Window* pMyParent = GetParent();
+        vcl::Window* pMyParent = GetParent();
         SystemWindow* pMySysWin = NULL;
 
         while ( pMyParent )
@@ -418,7 +420,7 @@ Window::~Window()
     }
 
     // if we get focus pass focus to another window
-    Window* pOverlapWindow = ImplGetFirstOverlapWindow();
+    vcl::Window* pOverlapWindow = ImplGetFirstOverlapWindow();
     if ( pSVData->maWinData.mpFocusWin == this
         || bHasFocussedChild )  // #122232#, see above, try some cleanup
     {
@@ -430,8 +432,8 @@ Window::~Window()
         }
         else
         {
-            Window* pParent = GetParent();
-            Window* pBorderWindow = mpWindowImpl->mpBorderWindow;
+            vcl::Window* pParent = GetParent();
+            vcl::Window* pBorderWindow = mpWindowImpl->mpBorderWindow;
         // when windows overlap, give focus to the parent
         // of the next FrameWindow
             if ( pBorderWindow )
@@ -512,7 +514,7 @@ Window::~Window()
         {
             ImplWinData* pParentWinData = mpWindowImpl->mpRealParent->ImplGetWinData();
 
-            ::std::list< Window* >::iterator myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
+            ::std::list< vcl::Window* >::iterator myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
                 pParentWinData->maTopWindowChildren.end(), this );
             DBG_ASSERT( myPos != pParentWinData->maTopWindowChildren.end(), "Window::~Window: inconsistency in top window chain!" );
             if ( myPos != pParentWinData->maTopWindowChildren.end() )
@@ -552,7 +554,7 @@ Window::~Window()
             pSVData->maWinData.mpFirstFrame = mpWindowImpl->mpFrameData->mpNextFrame;
         else
         {
-            Window* pSysWin = pSVData->maWinData.mpFirstFrame;
+            vcl::Window* pSysWin = pSVData->maWinData.mpFirstFrame;
             while ( pSysWin->mpWindowImpl->mpFrameData->mpNextFrame != this )
                 pSysWin = pSysWin->mpWindowImpl->mpFrameData->mpNextFrame;
             pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
@@ -565,6 +567,8 @@ Window::~Window()
     // should be the last statements
     delete mpWindowImpl; mpWindowImpl = NULL;
 }
+
+} /* namespace vcl */
 
 WindowImpl::WindowImpl( WindowType nType )
 {
@@ -726,6 +730,8 @@ WindowImpl::~WindowImpl()
     delete mpControlFont;
 }
 
+namespace vcl {
+
 bool Window::AcquireGraphics() const
 {
     DBG_TESTSOLARMUTEX();
@@ -749,7 +755,7 @@ bool Window::AcquireGraphics() const
         OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
         while ( pReleaseOutDev )
         {
-            if ( ((Window*)pReleaseOutDev)->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame )
+            if ( ((vcl::Window*)pReleaseOutDev)->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame )
                 break;
             pReleaseOutDev = pReleaseOutDev->mpPrevGraphics;
         }
@@ -777,11 +783,11 @@ bool Window::AcquireGraphics() const
     if ( mpGraphics )
     {
         mpNextGraphics = pSVData->maGDIData.mpFirstWinGraphics;
-        pSVData->maGDIData.mpFirstWinGraphics = const_cast<Window*>(this);
+        pSVData->maGDIData.mpFirstWinGraphics = const_cast<vcl::Window*>(this);
         if ( mpNextGraphics )
-            mpNextGraphics->mpPrevGraphics = const_cast<Window*>(this);
+            mpNextGraphics->mpPrevGraphics = const_cast<vcl::Window*>(this);
         if ( !pSVData->maGDIData.mpLastWinGraphics )
-            pSVData->maGDIData.mpLastWinGraphics = const_cast<Window*>(this);
+            pSVData->maGDIData.mpLastWinGraphics = const_cast<vcl::Window*>(this);
     }
 
     if ( mpGraphics )
@@ -806,7 +812,7 @@ void Window::ReleaseGraphics( bool bRelease )
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    Window* pWindow = (Window*)this;
+    vcl::Window* pWindow = (vcl::Window*)this;
 
     if ( bRelease )
         pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );
@@ -844,12 +850,12 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
     return nResult;
 }
 
-void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
+void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     DBG_ASSERT( mpWindowImpl->mbFrame || pParent, "Window::Window(): pParent == NULL" );
 
     ImplSVData* pSVData = ImplGetSVData();
-    Window*     pRealParent = pParent;
+    vcl::Window*     pRealParent = pParent;
 
     // inherit 3D look
     if ( !mpWindowImpl->mbOverlapWin && pParent && (pParent->GetStyle() & WB_3DLOOK) )
@@ -870,7 +876,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             nStyle |= WB_BORDER;
         }
         ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_NEEDSFOCUS), nBorderTypeStyle );
-        ((Window*)pBorderWin)->mpWindowImpl->mpClientWindow = this;
+        ((vcl::Window*)pBorderWin)->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;
         pParent = mpWindowImpl->mpBorderWindow;
@@ -1128,7 +1134,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDCREATED, this );
 }
 
-void Window::ImplInitAppFontData( Window* pWindow )
+void Window::ImplInitAppFontData( vcl::Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
     long nTextHeight = pWindow->GetTextHeight();
@@ -1192,7 +1198,7 @@ ImplWinData* Window::ImplGetWinData() const
     {
         static const char* pNoNWF = getenv( "SAL_NO_NWF" );
 
-        ((Window*)this)->mpWindowImpl->mpWinData = new ImplWinData;
+        ((vcl::Window*)this)->mpWindowImpl->mpWinData = new ImplWinData;
         mpWindowImpl->mpWinData->mpExtOldText     = NULL;
         mpWindowImpl->mpWinData->mpExtOldAttrAry  = NULL;
         mpWindowImpl->mpWinData->mpCursorRect     = NULL;
@@ -1278,20 +1284,6 @@ bool Window::ImplCheckUIFont( const vcl::Font& rFont )
     return bUIFontOk;
 }
 
-bool ImplDoTiledRendering()
-{
-#if !HAVE_FEATURE_DESKTOP
-    // We do tiled rendering only for iOS at the moment, actually, but
-    // let's see what happens if we assume it for Android, too.
-    return true;
-#else
-    // We need some way to know globally if this process will use
-    // tiled rendering or not. Or should this be a per-window setting?
-    // Or what?
-    return false;
-#endif
-}
-
 SalGraphics* Window::ImplGetFrameGraphics() const
 {
     if ( mpWindowImpl->mpFrameWindow->mpGraphics )
@@ -1330,7 +1322,7 @@ void Window::ImplSetReallyVisible()
         // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_SHOW. Normally, we should
         // introduce another event which explicitly triggers the Accessibility implementations.
 
-    Window* pWindow = mpWindowImpl->mpFirstOverlap;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
     {
         if ( pWindow->mpWindowImpl->mbVisible )
@@ -1464,13 +1456,13 @@ bool Window::ImplUpdatePos()
     }
     else
     {
-        Window* pParent = ImplGetParent();
+        vcl::Window* pParent = ImplGetParent();
 
         mnOutOffX  = mpWindowImpl->mnX + pParent->mnOutOffX;
         mnOutOffY  = mpWindowImpl->mnY + pParent->mnOutOffY;
     }
 
-    Window* pChild = mpWindowImpl->mpFirstChild;
+    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         if ( pChild->ImplUpdatePos() )
@@ -1489,7 +1481,7 @@ void Window::ImplUpdateSysObjPos()
     if ( mpWindowImpl->mpSysObj )
         mpWindowImpl->mpSysObj->SetPosSize( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
 
-    Window* pChild = mpWindowImpl->mpFirstChild;
+    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         pChild->ImplUpdateSysObjPos();
@@ -1804,7 +1796,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 void Window::ImplNewInputContext()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Window*     pFocusWin = pSVData->maWinData.mpFocusWin;
+    vcl::Window*     pFocusWin = pSVData->maWinData.mpFocusWin;
     if ( !pFocusWin )
         return;
 
@@ -1855,7 +1847,7 @@ void Window::doLazyDelete()
         Show( false );
         SetParent( ImplGetDefaultWindow() );
     }
-    vcl::LazyDeletor<Window>::Delete( this );
+    vcl::LazyDeletor<vcl::Window>::Delete( this );
 }
 
 sal_uInt16 Window::GetIndicatorState() const
@@ -2011,7 +2003,7 @@ bool Window::IsLocked( bool bChildren ) const
 
     if ( bChildren || mpWindowImpl->mbChildNotify )
     {
-        Window* pChild = mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             if ( pChild->IsLocked( true ) )
@@ -2039,7 +2031,7 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
 
     if ( mpWindowImpl->mnExtendedStyle != nExtendedStyle )
     {
-        Window* pWindow = ImplGetBorderWindow();
+        vcl::Window* pWindow = ImplGetBorderWindow();
         if( ! pWindow )
             pWindow = this;
         if( pWindow->mpWindowImpl->mbFrame )
@@ -2071,7 +2063,7 @@ void Window::SetBorderStyle( sal_uInt16 nBorderStyle )
             // this is a little awkward: some controls (e.g. svtools ProgressBar)
             // cannot avoid getting constructed with WB_BORDER but want to disable
             // borders in case of NWF drawing. So they need a method to remove their border window
-            Window* pBorderWin = mpWindowImpl->mpBorderWindow;
+            vcl::Window* pBorderWin = mpWindowImpl->mpBorderWindow;
             // remove us as border window's client
             pBorderWin->mpWindowImpl->mpClientWindow = NULL;
             mpWindowImpl->mpBorderWindow = NULL;
@@ -2128,9 +2120,9 @@ long Window::CalcTitleWidth() const
         // border of external dialogs
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         vcl::Font aFont = GetFont();
-        ((Window*)this)->SetPointFont( rStyleSettings.GetTitleFont() );
+        ((vcl::Window*)this)->SetPointFont( rStyleSettings.GetTitleFont() );
         long nTitleWidth = GetTextWidth( GetText() );
-        ((Window*)this)->SetFont( aFont );
+        ((vcl::Window*)this)->SetFont( aFont );
         nTitleWidth += rStyleSettings.GetTitleHeight() * 3;
         nTitleWidth += rStyleSettings.GetBorderSize() * 2;
         nTitleWidth += 10;
@@ -2208,11 +2200,11 @@ void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLe
     }
 }
 
-void Window::CollectChildren(::std::vector<Window *>& rAllChildren )
+void Window::CollectChildren(::std::vector<vcl::Window *>& rAllChildren )
 {
     rAllChildren.push_back( this );
 
-    Window* pChild = mpWindowImpl->mpFirstChild;
+    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         pChild->CollectChildren( rAllChildren );
@@ -2357,7 +2349,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
         StateChanged( STATE_CHANGE_VISIBLE );
 
-        Window* pTestParent;
+        vcl::Window* pTestParent;
         if ( ImplIsOverlapWindow() )
             pTestParent = mpWindowImpl->mpOverlapWindow;
         else
@@ -2547,7 +2539,7 @@ void Window::Enable( bool bEnable, bool bChild )
 
     if ( bChild || mpWindowImpl->mbChildNotify )
     {
-        Window* pChild = mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->Enable( bEnable, bChild );
@@ -2563,7 +2555,7 @@ void Window::SetCallHandlersOnInputDisabled( bool bCall )
 {
     mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall ? true : false;
 
-    Window* pChild = mpWindowImpl->mpFirstChild;
+    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         pChild->SetCallHandlersOnInputDisabled( bCall );
@@ -2620,7 +2612,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
 
     if ( bChild || mpWindowImpl->mbChildNotify )
     {
-        Window* pChild = mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->EnableInput( bEnable, bChild );
@@ -2640,7 +2632,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
 }
 
 void Window::EnableInput( bool bEnable, bool bChild, bool bSysWin,
-                          const Window* pExcludeWindow )
+                          const vcl::Window* pExcludeWindow )
 {
 
     EnableInput( bEnable, bChild );
@@ -2650,7 +2642,7 @@ void Window::EnableInput( bool bEnable, bool bChild, bool bSysWin,
         // shouldn't be the case, than this must be changed in dialog.cxx
         if( pExcludeWindow )
             pExcludeWindow = pExcludeWindow->ImplGetFirstOverlapWindow();
-        Window* pSysWin = mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mpFirstOverlap;
+        vcl::Window* pSysWin = mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mpFirstOverlap;
         while ( pSysWin )
         {
             // Is Window in the path from this window
@@ -2665,7 +2657,7 @@ void Window::EnableInput( bool bEnable, bool bChild, bool bSysWin,
         }
 
         // enable/disable floating system windows as well
-        Window* pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;
+        vcl::Window* pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;
         while ( pFrameWin )
         {
             if( pFrameWin->ImplIsFloatingWindow() )
@@ -2685,8 +2677,8 @@ void Window::EnableInput( bool bEnable, bool bChild, bool bSysWin,
         // the same for ownerdraw floating windows
         if( mpWindowImpl->mbFrame )
         {
-            ::std::vector< Window* >& rList = mpWindowImpl->mpFrameData->maOwnerDrawList;
-            ::std::vector< Window* >::iterator p = rList.begin();
+            ::std::vector< vcl::Window* >& rList = mpWindowImpl->mpFrameData->maOwnerDrawList;
+            ::std::vector< vcl::Window* >::iterator p = rList.begin();
             while( p != rList.end() )
             {
                 // Is Window in the path from this window
@@ -2723,7 +2715,7 @@ void Window::AlwaysEnableInput( bool bAlways, bool bChild )
 
     if ( bChild || mpWindowImpl->mbChildNotify )
     {
-        Window* pChild = mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->AlwaysEnableInput( bAlways, bChild );
@@ -2752,7 +2744,7 @@ void Window::AlwaysDisableInput( bool bAlways, bool bChild )
 
     if ( bChild || mpWindowImpl->mbChildNotify )
     {
-        Window* pChild = mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->AlwaysDisableInput( bAlways, bChild );
@@ -2804,7 +2796,7 @@ void Window::setPosSizePixel( long nX, long nY,
         mpWindowImpl->mbDefSize = false;
 
     // The top BorderWindow is the window which is to be positioned
-    Window* pWindow = this;
+    vcl::Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
@@ -2821,7 +2813,7 @@ void Window::setPosSizePixel( long nX, long nY,
             nHeight = pWindow->mnOutHeight;
 
         sal_uInt16 nSysFlags=0;
-        Window *pParent = GetParent();
+        vcl::Window *pParent = GetParent();
 
         if( nFlags & WINDOW_POSSIZE_WIDTH )
             nSysFlags |= SAL_FRAME_POSSIZE_WIDTH;
@@ -2970,14 +2962,14 @@ long Window::ImplGetUnmirroredOutOffX()
 Point Window::OutputToNormalizedScreenPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    long offx = ((Window*) this)->ImplGetUnmirroredOutOffX();
+    long offx = ((vcl::Window*) this)->ImplGetUnmirroredOutOffX();
     return Point( rPos.X()+offx, rPos.Y()+mnOutOffY );
 }
 
 Point Window::NormalizedScreenToOutputPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    long offx = ((Window*) this)->ImplGetUnmirroredOutOffX();
+    long offx = ((vcl::Window*) this)->ImplGetUnmirroredOutOffX();
     return Point( rPos.X()-offx, rPos.Y()-mnOutOffY );
 }
 
@@ -3018,24 +3010,24 @@ Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle &rR
     return Rectangle( p1, p2 );
 }
 
-Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow ) const
+Rectangle Window::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
 {
     // with decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow, false );
 }
 
-Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow ) const
+Rectangle Window::GetClientWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
 {
     // without decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow, true );
 }
 
-Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, bool bClientOnly ) const
+Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const
 {
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     // make sure we use the extent of our border window,
     // otherwise we miss a few pixels
-    const Window *pWin = (!bClientOnly && mpWindowImpl->mpBorderWindow) ? mpWindowImpl->mpBorderWindow : this;
+    const vcl::Window *pWin = (!bClientOnly && mpWindowImpl->mpBorderWindow) ? mpWindowImpl->mpBorderWindow : this;
 
     Point aPos( pWin->OutputToScreenPixel( Point(0,0) ) );
     aPos.X() += g.nX;
@@ -3052,7 +3044,7 @@ Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, bool bC
     if( pRelativeWindow )
     {
         // #106399# express coordinates relative to borderwindow
-        Window *pRelWin = (!bClientOnly && pRelativeWindow->mpWindowImpl->mpBorderWindow) ? pRelativeWindow->mpWindowImpl->mpBorderWindow : pRelativeWindow;
+        vcl::Window *pRelWin = (!bClientOnly && pRelativeWindow->mpWindowImpl->mpBorderWindow) ? pRelativeWindow->mpWindowImpl->mpBorderWindow : pRelativeWindow;
         aPos = pRelWin->AbsoluteScreenToOutputPixel( aPos );
     }
     return Rectangle( aPos, aSize );
@@ -3121,7 +3113,7 @@ void Window::SetFakeFocus( bool bFocus )
 bool Window::HasChildPathFocus( bool bSystemWindow ) const
 {
 
-    Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
+    vcl::Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
     if ( pFocusWin )
         return ImplIsWindowOrChild( pFocusWin, bSystemWindow );
     return false;
@@ -3161,7 +3153,7 @@ void Window::SetText( const OUString& rStr )
     // name change.
     if ( IsReallyVisible() )
     {
-        Window* pWindow = GetAccessibleRelationLabelFor();
+        vcl::Window* pWindow = GetAccessibleRelationLabelFor();
         if ( pWindow && pWindow != this )
             pWindow->ImplCallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
     }
@@ -3220,7 +3212,7 @@ const OUString& Window::GetHelpText() const
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
+                ((vcl::Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
                 mpWindowImpl->mbHelpTextDynamic = false;
             }
         }
@@ -3270,7 +3262,7 @@ void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > xIFace )
         pWrapper->SetWindowInterface( this, xIFace );
 }
 
-void Window::ImplCallDeactivateListeners( Window *pNew )
+void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
 {
     // no deactivation if the newly activated window is my child
     if ( !pNew || !ImplIsChild( pNew ) )
@@ -3287,7 +3279,7 @@ void Window::ImplCallDeactivateListeners( Window *pNew )
     }
 }
 
-void Window::ImplCallActivateListeners( Window *pOld )
+void Window::ImplCallActivateListeners( vcl::Window *pOld )
 {
     // no activation if the old active window is my child
     if ( !pOld || !ImplIsChild( pOld ) )
@@ -3557,7 +3549,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
 
 // controls should return the window that gets the
 // focus by default, so keyevents can be sent to that window directly
-Window* Window::GetPreferredKeyInputWindow()
+vcl::Window* Window::GetPreferredKeyInputWindow()
 {
     return this;
 }
@@ -3565,7 +3557,7 @@ Window* Window::GetPreferredKeyInputWindow()
 bool Window::IsScrollable() const
 {
     // check for scrollbars
-    Window *pChild = mpWindowImpl->mpFirstChild;
+    vcl::Window *pChild = mpWindowImpl->mpFirstChild;
     while( pChild )
     {
         if( pChild->GetType() == WINDOW_SCROLLBAR )
@@ -3597,8 +3589,8 @@ bool Window::IsInModalNonRefMode() const
 
 void Window::ImplIncModalCount()
 {
-    Window* pFrameWindow = mpWindowImpl->mpFrameWindow;
-    Window* pParent = pFrameWindow;
+    vcl::Window* pFrameWindow = mpWindowImpl->mpFrameWindow;
+    vcl::Window* pParent = pFrameWindow;
     while( pFrameWindow )
     {
         pFrameWindow->mpWindowImpl->mpFrameData->mnModalMode++;
@@ -3611,8 +3603,8 @@ void Window::ImplIncModalCount()
 }
 void Window::ImplDecModalCount()
 {
-    Window* pFrameWindow = mpWindowImpl->mpFrameWindow;
-    Window* pParent = pFrameWindow;
+    vcl::Window* pFrameWindow = mpWindowImpl->mpFrameWindow;
+    vcl::Window* pParent = pFrameWindow;
     while( pFrameWindow )
     {
         pFrameWindow->mpWindowImpl->mpFrameData->mnModalMode--;
@@ -3640,13 +3632,13 @@ void Window::ImplNotifyIconifiedState( bool bIconified )
 bool Window::HasActiveChildFrame()
 {
     bool bRet = false;
-    Window *pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;
+    vcl::Window *pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;
     while( pFrameWin )
     {
         if( pFrameWin != mpWindowImpl->mpFrameWindow )
         {
             bool bDecorated = false;
-            Window *pChildFrame = pFrameWin->ImplGetWindow();
+            vcl::Window *pChildFrame = pFrameWin->ImplGetWindow();
             // #i15285# unfortunately WB_MOVEABLE is the same as WB_TABSTOP which can
             // be removed for ToolBoxes to influence the keyboard accessibility
             // thus WB_MOVEABLE is no indicator for decoration anymore
@@ -3695,7 +3687,7 @@ void Window::EnableNativeWidget( bool bEnable )
     }
 
     // push down, useful for compound controls
-    Window *pChild = mpWindowImpl->mpFirstChild;
+    vcl::Window *pChild = mpWindowImpl->mpFirstChild;
     while( pChild )
     {
         pChild->EnableNativeWidget( bEnable );
@@ -3752,7 +3744,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
 
     aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop ? true : false );
     aArg[ 4 ] = makeAny( Reference< css::awt::XWindow >(
-                             const_cast<Window*>(this)->GetComponentInterface(),
+                             const_cast<vcl::Window*>(this)->GetComponentInterface(),
                              UNO_QUERY ));
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
@@ -3890,5 +3882,22 @@ Any Window::GetSystemDataAny() const
     }
     return aRet;
 }
+
+} /* namespace vcl */
+
+bool ImplDoTiledRendering()
+{
+#if !HAVE_FEATURE_DESKTOP
+    // We do tiled rendering only for iOS at the moment, actually, but
+    // let's see what happens if we assume it for Android, too.
+    return true;
+#else
+    // We need some way to know globally if this process will use
+    // tiled rendering or not. Or should this be a per-window setting?
+    // Or what?
+    return false;
+#endif
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

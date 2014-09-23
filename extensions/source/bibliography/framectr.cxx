@@ -183,7 +183,7 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
     ,pDatMan( pDataManager )
     ,pBibMod(NULL)
 {
-    Window* pParent = VCLUnoHelper::GetWindow( xWindow );
+    vcl::Window* pParent = VCLUnoHelper::GetWindow( xWindow );
     pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
     bDisposing=false;
     bHierarchical=true;
@@ -398,15 +398,15 @@ bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XForm
     return bResult;
 }
 
-static Window* lcl_GetFocusChild( Window* pParent )
+static vcl::Window* lcl_GetFocusChild( vcl::Window* pParent )
 {
     sal_uInt16 nChildren = pParent->GetChildCount();
     for( sal_uInt16 nChild = 0; nChild < nChildren; ++nChild)
     {
-        Window* pChild = pParent->GetChild( nChild );
+        vcl::Window* pChild = pParent->GetChild( nChild );
         if(pChild->HasFocus())
             return pChild;
-        Window* pSubChild = lcl_GetFocusChild( pChild );
+        vcl::Window* pSubChild = lcl_GetFocusChild( pChild );
         if(pSubChild)
             return pSubChild;
     }
@@ -421,7 +421,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
     if ( !bDisposing )
     {
         ::SolarMutexGuard aGuard;
-        Window* pParent = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pParent = VCLUnoHelper::GetWindow( xWindow );
         WaitObject aWaitObject( pParent );
 
         OUString aCommand( _rURL.Path);
@@ -613,7 +613,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Cut")
         {
-            Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+            vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
             if(pChild)
             {
                 KeyEvent aEvent( 0, KEYFUNC_CUT );
@@ -622,7 +622,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Copy")
         {
-            Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+            vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
             if(pChild)
             {
                 KeyEvent aEvent( 0, KEYFUNC_COPY );
@@ -631,7 +631,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Paste")
         {
-            Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+            vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
             if(pChild)
             {
                 KeyEvent aEvent( 0, KEYFUNC_PASTE );
@@ -708,14 +708,14 @@ void BibFrameController_Impl::addStatusListener(
     }
     else if(aURL.Path == "Cut")
     {
-        Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
         Edit* pEdit = dynamic_cast<Edit*>( pChild );
         if( pEdit )
             aEvent.IsEnabled  = !pEdit->IsReadOnly() && pEdit->GetSelection().Len();
     }
     if(aURL.Path == "Copy")
     {
-        Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
         Edit* pEdit = dynamic_cast<Edit*>( pChild );
         if( pEdit )
             aEvent.IsEnabled  = pEdit->GetSelection().Len() > 0;
@@ -723,7 +723,7 @@ void BibFrameController_Impl::addStatusListener(
     else if(aURL.Path == "Paste" )
     {
         aEvent.IsEnabled  = sal_False;
-        Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
         if(pChild)
         {
             uno::Reference< datatransfer::clipboard::XClipboard > xClip = pChild->GetClipboard();

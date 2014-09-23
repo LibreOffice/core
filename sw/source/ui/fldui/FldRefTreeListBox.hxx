@@ -27,7 +27,7 @@ protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
 public:
-    SwFldRefTreeListBox(Window* pParent, WinBits nStyle);
+    SwFldRefTreeListBox(vcl::Window* pParent, WinBits nStyle);
 };
 #endif
 

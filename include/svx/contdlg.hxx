@@ -37,7 +37,7 @@ class SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
 {
  public:
 
-    SvxContourDlgChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
+    SvxContourDlgChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW_WITHID( SvxContourDlgChildWindow );
 };
@@ -74,7 +74,7 @@ protected:
 public:
 
                         SvxContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
-                                      Window* pParent);
+                                      vcl::Window* pParent);
                         virtual ~SvxContourDlg();
 
     const Graphic&      GetGraphic() const;

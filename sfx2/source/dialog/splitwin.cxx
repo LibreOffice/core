@@ -205,7 +205,7 @@ void SfxEmptySplitWin_Impl::MouseMove( const MouseEvent& rMEvt )
 
 
 
-SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
+SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
         SfxWorkWindow *pW, bool bWithButtons, WinBits nBits )
 
 /*  [Description]
@@ -1086,7 +1086,7 @@ bool SfxSplitWindow::CursorIsOverRect( bool bForceAdding ) const
         aRect = aRect.GetUnion( aVisRect );
     }
 
-    if ( aRect.IsInside( OutputToScreenPixel( ((Window*)this)->GetPointerPosPixel() ) ) )
+    if ( aRect.IsInside( OutputToScreenPixel( ((vcl::Window*)this)->GetPointerPosPixel() ) ) )
         return true;
     return false;
 }

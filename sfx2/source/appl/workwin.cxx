@@ -541,7 +541,7 @@ void SfxWorkWindow::Sort_Impl()
 
 // constructor for workwin of a Frame
 
-SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm, SfxFrame* pMaster )
+SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMaster )
     : SfxWorkWindow(
         pWin,
         pFrm->GetCurrentViewFrame()->GetBindings(),
@@ -579,7 +579,7 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm, SfxFra
 
 // Constructor of the base class
 
-SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pParentWorkwin ) :
+SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxBindings& rB, SfxWorkWindow* pParentWorkwin ) :
     pParent( pParentWorkwin ),
     pBindings(&rB),
     pWorkWin (pWin),
@@ -964,7 +964,7 @@ bool SfxWorkWindow::PrepareClose_Impl()
 
 
 
-SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( Window& rWindow,
+SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
                     SfxChildAlignment eAlign, bool bCanGetFocus )
 {
     DBG_ASSERT( aChildren.size() < 255, "too many children" );
@@ -987,7 +987,7 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( Window& rWindow,
 
 
 
-void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
+void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
 {
 
     SfxChild_Impl *pChild = 0;
@@ -1013,7 +1013,7 @@ void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
 
 
 
-SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const Window& rWindow ) const
+SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window& rWindow ) const
 {
 
     SfxChild_Impl *pChild = 0;
@@ -1671,7 +1671,7 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId )
         SfxChildWindow *pCW = aChildWins[n]->pWin;
         if (pCW && pCW->GetAlignment() == SFX_ALIGN_NOALIGNMENT && pCW->GetType() != nId)
         {
-            Window *pWin = pCW->GetWindow();
+            vcl::Window *pWin = pCW->GetWindow();
             SfxChild_Impl *pChild = FindChild_Impl(*pWin);
             if (bHide)
             {
@@ -1698,7 +1698,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 {
     SfxDockingWindow* pDockWin=0;
     sal_uInt16 nPos = USHRT_MAX;
-    Window *pWin=0;
+    vcl::Window *pWin=0;
     SfxChildWin_Impl *pCW = 0;
 
     if ( eChild == SFX_CHILDWIN_OBJECTBAR )
@@ -2586,8 +2586,8 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
         // size is just being calculated before it is displayed.
         SfxSplitWindow* pSplitWin = pSplit[n];
         bool bDummyWindow = !pSplitWin->IsFadeIn();
-        Window *pDummy = pSplitWin->GetSplitWindow();
-        Window *pWin = bDummyWindow ? pDummy : pSplitWin;
+        vcl::Window *pDummy = pSplitWin->GetSplitWindow();
+        vcl::Window *pWin = bDummyWindow ? pDummy : pSplitWin;
         if ( (pSplitWin->IsPinned() && !bDummyWindow) || (!pWin->IsVisible() && pActSplitWin != pSplitWin) )
             continue;
 
@@ -2731,7 +2731,7 @@ Rectangle SfxWorkWindow::GetFreeArea( bool bAutoHide ) const
         return aClientArea;
 }
 
-void SfxWorkWindow::SetActiveChild_Impl( Window *pChild )
+void SfxWorkWindow::SetActiveChild_Impl( vcl::Window *pChild )
 {
     pActiveChild = pChild;
 }

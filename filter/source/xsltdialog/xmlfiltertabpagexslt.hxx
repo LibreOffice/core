@@ -26,14 +26,14 @@
 #include <vcl/combobox.hxx>
 #include <svtools/inettbc.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class ResMgr;
 class filter_info_impl;
 
 class XMLFilterTabPageXSLT : public TabPage
 {
 public:
-    XMLFilterTabPageXSLT( Window* pParent);
+    XMLFilterTabPageXSLT( vcl::Window* pParent);
     virtual ~XMLFilterTabPageXSLT();
 
     bool FillInfo( filter_info_impl* pInfo );

@@ -30,7 +30,7 @@
 #include <vcl/vclevent.hxx>
 #include <set>
 
-class Window;
+namespace vcl { class Window; }
 class ToolBox;
 class DocumentFocusListener;
 
@@ -53,16 +53,16 @@ public:
 protected:
 
     // received a WINDOW_GETFOCUS event for this window
-    void window_got_focus(Window *pWindow);
+    void window_got_focus(vcl::Window *pWindow);
 
     // received a TOOLBOX_HIGHLIGHT event for this window
-    void toolbox_highlight_on(Window *pWindow);
+    void toolbox_highlight_on(vcl::Window *pWindow);
 
     // received a TOOLBOX_HIGHLIGHTOFF event for this window
-    void toolbox_highlight_off(Window *pWindow);
+    void toolbox_highlight_off(vcl::Window *pWindow);
 
     // received a TABPAGE_ACTIVATE event for this window
-    void tabpage_activated(Window *pWindow);
+    void tabpage_activated(vcl::Window *pWindow);
 
     // received a MENU_HIGHLIGHT event for this window
     void menu_highlighted(const ::VclMenuEvent *pEvent);
@@ -71,7 +71,7 @@ protected:
     void notify_toolbox_item_focus(ToolBox *pToolBox);
 
     // toolbox item opened a floating window (e.g. color chooser)
-    void toolbox_open_floater(Window *pWindow);
+    void toolbox_open_floater(vcl::Window *pWindow);
 
     // callback function for Application::addEventListener
     static long WindowEventHandler(AquaA11yFocusTracker *pFocusTracker, ::VclSimpleEvent const *pEvent);
@@ -84,7 +84,7 @@ private:
     rtl::Reference< KeyboardFocusListener > m_aFocusListener;
 
     // the list of Windows that need deeper (focus) investigation
-    std::set< Window *> m_aDocumentWindowList;
+    std::set< vcl::Window *> m_aDocumentWindowList;
 
     // the link object needed for Application::addEventListener
     Link m_aWindowEventLink;

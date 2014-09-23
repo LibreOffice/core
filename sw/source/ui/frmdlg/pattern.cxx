@@ -23,7 +23,7 @@
 #include "pattern.hxx"
 #include "frmui.hrc"
 
-SwBackgroundDlg::SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet)
+SwBackgroundDlg::SwBackgroundDlg(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet)
 
 {

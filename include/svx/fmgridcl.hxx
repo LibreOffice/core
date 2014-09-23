@@ -106,7 +106,7 @@ class SVX_DLLPUBLIC FmGridControl : public DbGridControl
 public:
     FmGridControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
-        Window* pParent,
+        vcl::Window* pParent,
         FmXGridPeer* _pPeer,
         WinBits nBits);
 

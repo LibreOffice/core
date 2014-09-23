@@ -109,7 +109,7 @@ namespace dbaui
         sal_uInt16          nTitleId;
     };
 
-    class OTasksWindow : public Window
+    class OTasksWindow : public vcl::Window
     {
         OCreationList                       m_aCreation;
         FixedText                           m_aDescription;
@@ -122,7 +122,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView);
+        OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView);
         virtual ~OTasksWindow();
 
         // window overloads
@@ -352,7 +352,7 @@ namespace dbaui
 
         SvTreeListEntry* getEntry( const Point& _aPoint ) const;
 
-        Window* getTreeWindow() const;
+        vcl::Window* getTreeWindow() const;
     private:
         void                impl_createPage(
                                 ElementType _eType,

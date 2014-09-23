@@ -69,7 +69,7 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
     bool               IsDropDownBox() const { return mpFloatWin ? true : false; }
@@ -80,8 +80,8 @@ protected:
     virtual void        FillLayoutData() const SAL_OVERRIDE;
 
 public:
-    explicit            ListBox( Window* pParent, WinBits nStyle = WB_BORDER );
-    explicit            ListBox( Window* pParent, const ResId& );
+    explicit            ListBox( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
+    explicit            ListBox( vcl::Window* pParent, const ResId& );
     virtual             ~ListBox();
 
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
@@ -95,7 +95,7 @@ public:
     virtual void        DoubleClick();
     virtual void        GetFocus() SAL_OVERRIDE;
     virtual void        LoseFocus() SAL_OVERRIDE;
-    virtual Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
 
     virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;
 
@@ -255,7 +255,7 @@ private:
     bool            IsValueChangedFromSaved() const;
 
 public:
-    explicit        MultiListBox( Window* pParent, WinBits nStyle = 0 );
+    explicit        MultiListBox( vcl::Window* pParent, WinBits nStyle = 0 );
 
 };
 

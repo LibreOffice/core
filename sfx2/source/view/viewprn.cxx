@@ -453,7 +453,7 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
         return 0;
 
     // Create Dialog
-    boost::scoped_ptr<SfxPrintOptionsDialog> pDlg(new SfxPrintOptionsDialog( static_cast<Window*>(_pSetupParent),
+    boost::scoped_ptr<SfxPrintOptionsDialog> pDlg(new SfxPrintOptionsDialog( static_cast<vcl::Window*>(_pSetupParent),
                                                              _pViewSh, _pOptions ));
     if ( _bHelpDisabled )
         pDlg->DisableHelp();
@@ -885,7 +885,7 @@ sal_uInt16 SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, sal_uInt16 /*n
 
 SfxTabPage* SfxViewShell::CreatePrintOptionsPage
 (
-    Window*             /*pParent*/,
+    vcl::Window*             /*pParent*/,
     const SfxItemSet&   /*rOptions*/
 )
 {

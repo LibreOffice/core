@@ -25,7 +25,7 @@
 
 class ScDocShell;
 class ScDocument;
-class Window;
+namespace vcl { class Window; }
 
 namespace sc {
 

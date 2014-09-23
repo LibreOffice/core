@@ -33,7 +33,7 @@ protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
     virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
-    MacroEventListBox( Window* pParent, WinBits nStyle );
+    MacroEventListBox( vcl::Window* pParent, WinBits nStyle );
 
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;

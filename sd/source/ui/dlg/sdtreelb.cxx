@@ -97,7 +97,7 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeSdPageObjsTLB(::Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSdPageObjsTLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -191,7 +191,7 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
     return mnListBoxDropFormatId;
 }
 
-SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
+SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, const SdResId& rSdResId )
 :   SvTreeListBox       ( pParentWin, rSdResId )
 ,   bisInSdNavigatorWin  ( false )
 ,   mpParent            ( pParentWin )
@@ -222,7 +222,7 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
             SV_DRAGDROP_APP_MOVE  | SV_DRAGDROP_APP_COPY  | SV_DRAGDROP_APP_DROP );
 }
 
-SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, WinBits nStyle )
+SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 :   SvTreeListBox       ( pParentWin, nStyle )
 ,   bisInSdNavigatorWin ( false )
 ,   mpParent            ( pParentWin )
@@ -601,11 +601,11 @@ void SdPageObjsTLB::AddShapeList (
     bool  bMarked=false;
     if(bisInSdNavigatorWin)
     {
-        Window* pWindow=NULL;
+        vcl::Window* pWindow=NULL;
         SdNavigatorWin* pSdNavigatorWin=NULL;
         sd::DrawDocShell* pSdDrawDocShell = NULL;
         if(pEntry)
-            pWindow=(Window*)GetParent(pEntry);
+            pWindow=(vcl::Window*)GetParent(pEntry);
         if(pWindow)
             pSdNavigatorWin = (SdNavigatorWin*)pWindow;
         if( pSdNavigatorWin )
@@ -644,11 +644,11 @@ void SdPageObjsTLB::AddShapeList (
 
                 if(bisInSdNavigatorWin)
                 {
-                    Window* pWindow=NULL;
+                    vcl::Window* pWindow=NULL;
                     SdNavigatorWin* pSdNavigatorWin=NULL;
                     sd::DrawDocShell* pSdDrawDocShell = NULL;
                     if(pNewEntry)
-                        pWindow=(Window*)GetParent(pNewEntry);
+                        pWindow=(vcl::Window*)GetParent(pNewEntry);
                     if(pWindow)
                         pSdNavigatorWin = (SdNavigatorWin*)pWindow;
                     if( pSdNavigatorWin )
@@ -678,11 +678,11 @@ void SdPageObjsTLB::AddShapeList (
 
                 if(bisInSdNavigatorWin)
                 {
-                    Window* pWindow=NULL;
+                    vcl::Window* pWindow=NULL;
                     SdNavigatorWin* pSdNavigatorWin=NULL;
                     sd::DrawDocShell* pSdDrawDocShell = NULL;
                     if(pNewEntry)
-                        pWindow=(Window*)GetParent(pNewEntry);
+                        pWindow=(vcl::Window*)GetParent(pNewEntry);
                     if(pWindow)
                         pSdNavigatorWin = (SdNavigatorWin*)pWindow;
                     if( pSdNavigatorWin )
@@ -727,11 +727,11 @@ void SdPageObjsTLB::AddShapeList (
 
                 if(bisInSdNavigatorWin)
                 {
-                    Window* pWindow=NULL;
+                    vcl::Window* pWindow=NULL;
                     SdNavigatorWin* pSdNavigatorWin=NULL;
                     sd::DrawDocShell* pSdDrawDocShell = NULL;
                     if(pNewEntry)
-                        pWindow=(Window*)GetParent(pNewEntry);
+                        pWindow=(vcl::Window*)GetParent(pNewEntry);
                     if(pWindow)
                         pSdNavigatorWin = (SdNavigatorWin*)pWindow;
                     if( pSdNavigatorWin )

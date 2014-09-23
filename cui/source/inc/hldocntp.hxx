@@ -50,10 +50,10 @@ protected:
                              SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
 
 public:
-    SvxHyperlinkNewDocTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
+    SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkNewDocTp ();
 
-    static  IconChoicePage* Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
+    static  IconChoicePage* Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
     virtual bool        AskApply () SAL_OVERRIDE;
     virtual void        DoApply () SAL_OVERRIDE;

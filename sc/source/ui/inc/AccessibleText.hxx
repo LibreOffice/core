@@ -117,7 +117,7 @@ class ScAccessibleEditObjectTextData : public ScAccessibleTextData
 {
 public:
     // Add a para to indicate whether the object is cloned
-    ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, bool isClone = false);
+    ScAccessibleEditObjectTextData(EditView* pEditView, vcl::Window* pWin, bool isClone = false);
     virtual             ~ScAccessibleEditObjectTextData();
 
     virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
@@ -139,14 +139,14 @@ protected:
     EditView*                  mpEditView;
     EditEngine*                mpEditEngine;
     SvxEditEngineForwarder*    mpForwarder;
-    Window*                    mpWindow;
+    vcl::Window*                    mpWindow;
     bool                       mbIsCloned;
 };
 
 class ScAccessibleEditLineTextData : public ScAccessibleEditObjectTextData
 {
 public:
-                        ScAccessibleEditLineTextData(EditView* pEditView, Window* pWin);
+                        ScAccessibleEditLineTextData(EditView* pEditView, vcl::Window* pWin);
     virtual             ~ScAccessibleEditLineTextData();
 
     virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
@@ -285,7 +285,7 @@ private:
     typedef ::std::auto_ptr< SvxTextForwarder > TextForwarderPtr;
     typedef ::std::auto_ptr< ScCsvViewForwarder > ViewForwarderPtr;
 
-    Window*                     mpWindow;
+    vcl::Window*                     mpWindow;
     EditEngine*                 mpEditEngine;
     TextForwarderPtr            mpTextForwarder;
     ViewForwarderPtr            mpViewForwarder;
@@ -295,7 +295,7 @@ private:
 
 public:
     explicit                    ScAccessibleCsvTextData(
-                                    Window* pWindow,
+                                    vcl::Window* pWindow,
                                     EditEngine* pEditEngine,
                                     const OUString& rCellText,
                                     const Rectangle& rBoundBox,

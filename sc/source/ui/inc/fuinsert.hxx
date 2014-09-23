@@ -26,7 +26,7 @@
 class FuInsertGraphic : public FuPoor
 {
  public:
-    FuInsertGraphic( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuInsertGraphic( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertGraphic();
 
@@ -37,7 +37,7 @@ class FuInsertGraphic : public FuPoor
 class FuInsertOLE : public FuPoor
 {
  public:
-    FuInsertOLE( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuInsertOLE( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
 
     virtual void Activate() SAL_OVERRIDE;
@@ -47,7 +47,7 @@ class FuInsertOLE : public FuPoor
 class FuInsertChart : public FuPoor
 {
  public:
-    FuInsertChart( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuInsertChart( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
 
     virtual void Activate() SAL_OVERRIDE;
@@ -57,7 +57,7 @@ class FuInsertChart : public FuPoor
 class FuInsertChartFromFile : public FuPoor
 {
  public:
-    FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq, const OUString& rURL);
 
     virtual void Activate() SAL_OVERRIDE;
@@ -67,7 +67,7 @@ class FuInsertChartFromFile : public FuPoor
 class FuInsertMedia : public FuPoor
 {
  public:
-    FuInsertMedia( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuInsertMedia( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertMedia();
 

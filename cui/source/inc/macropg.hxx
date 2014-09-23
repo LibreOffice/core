@@ -72,7 +72,7 @@ protected:
     bool bReadOnly, bDocModified, bAppEvents, bInitialized;
     EventDisplayNames aDisplayNames;
 
-    _SvxMacroTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemSet );
+    _SvxMacroTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemSet );
 
     void                        EnableButtons();
     ::com::sun::star::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
@@ -97,7 +97,7 @@ class SvxMacroTabPage : public _SvxMacroTabPage
 {
 public:
     SvxMacroTabPage(
-        Window* pParent,
+        vcl::Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
         const SfxItemSet& rSet,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace,
@@ -112,7 +112,7 @@ typedef const sal_uInt16* (*GetTabPageRanges)(); // gives international Which-va
 class SvxMacroAssignSingleTabDialog : public SfxSingleTabDialog
 {
 public:
-    SvxMacroAssignSingleTabDialog(Window* pParent, const SfxItemSet& rOptionsSet);
+    SvxMacroAssignSingleTabDialog(vcl::Window* pParent, const SfxItemSet& rOptionsSet);
 
 private:
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
@@ -123,7 +123,7 @@ class SvxMacroAssignDlg : public SvxMacroAssignSingleTabDialog
 {
 public:
     SvxMacroAssignDlg(
-        Window* pParent,
+        vcl::Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
         const SfxItemSet& rSet,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& xNameReplace,

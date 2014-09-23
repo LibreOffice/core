@@ -46,7 +46,7 @@ SwBoxEntry::SwBoxEntry(const SwBoxEntry& rOld) :
 {
 }
 
-SwComboBox::SwComboBox(Window* pParent, WinBits nStyle)
+SwComboBox::SwComboBox(vcl::Window* pParent, WinBits nStyle)
     : ComboBox(pParent, nStyle)
 {
     Init();

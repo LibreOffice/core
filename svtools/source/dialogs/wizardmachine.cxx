@@ -40,7 +40,7 @@ namespace svt
         }
     };
 
-    OWizardPage::OWizardPage(Window *pParent, const OString& rID,
+    OWizardPage::OWizardPage(vcl::Window *pParent, const OString& rID,
         const OUString& rUIXMLDescription)
         : TabPage(pParent, rID, rUIXMLDescription)
         , m_pImpl(new WizardPageImplData)
@@ -100,7 +100,7 @@ namespace svt
         }
     };
 
-    OWizardMachine::OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
+    OWizardMachine::OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
         :WizardDialog( _pParent, i_nStyle )
         ,m_pFinish(NULL)
         ,m_pCancel(NULL)
@@ -112,7 +112,7 @@ namespace svt
         implConstruct( _nButtonFlags );
     }
 
-    OWizardMachine::OWizardMachine(Window* _pParent, sal_uInt32 _nButtonFlags )
+    OWizardMachine::OWizardMachine(vcl::Window* _pParent, sal_uInt32 _nButtonFlags )
         :WizardDialog( _pParent, "WizardDialog", "svt/ui/wizarddialog.ui" )
         ,m_pFinish(NULL)
         ,m_pCancel(NULL)
@@ -301,9 +301,9 @@ namespace svt
     }
 
 
-    void OWizardMachine::implResetDefault(Window* _pWindow)
+    void OWizardMachine::implResetDefault(vcl::Window* _pWindow)
     {
-        Window* pChildLoop = _pWindow->GetWindow(WINDOW_FIRSTCHILD);
+        vcl::Window* pChildLoop = _pWindow->GetWindow(WINDOW_FIRSTCHILD);
         while (pChildLoop)
         {
             // does the window participate in the tabbing order?

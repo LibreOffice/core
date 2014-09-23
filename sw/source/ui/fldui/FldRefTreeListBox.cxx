@@ -23,12 +23,12 @@
 #include <vcl/builder.hxx>
 #include <vcl/help.hxx>
 
-SwFldRefTreeListBox::SwFldRefTreeListBox(Window* pParent, WinBits nStyle)
+SwFldRefTreeListBox::SwFldRefTreeListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwFldRefTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwFldRefTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

@@ -54,7 +54,7 @@ const sal_Int32 nDialogExtraDataLen = 11;      // 12345678901
 
 }
 
-SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
+SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
     : SfxModalDialog(pParent, "AsciiFilterDialog", "modules/swriter/ui/asciifilterdialog.ui")
     , m_bSaveLineStatus(true)

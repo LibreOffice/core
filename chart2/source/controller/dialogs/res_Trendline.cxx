@@ -39,7 +39,7 @@ void lcl_setValue( FormattedField& rFmtField, double fValue )
     rFmtField.SetDefaultValue( fValue );
 }
 
-TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInAttrs ) :
+TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet& rInAttrs ) :
         m_eTrendLineType( CHREGRESS_LINEAR ),
         m_bTrendLineUnique( true ),
         m_pNumFormatter( NULL ),

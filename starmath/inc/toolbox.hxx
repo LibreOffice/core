@@ -81,7 +81,7 @@ class SmToolBoxWrapper : public SfxChildWindow
     SFX_DECL_CHILDWINDOW_WITHID(SmToolBoxWrapper);
 
 protected:
-    SmToolBoxWrapper(Window *pParentWindow,
+    SmToolBoxWrapper(vcl::Window *pParentWindow,
                      sal_uInt16, SfxBindings*, SfxChildWinInfo*);
 };
 

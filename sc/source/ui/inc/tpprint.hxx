@@ -29,11 +29,11 @@ class ScTpPrintOptions : public SfxTabPage
     CheckBox*       m_pSelectedSheetsCB;
     CheckBox*       m_pForceBreaksCB;
 
-            ScTpPrintOptions( Window* pParent, const SfxItemSet& rCoreSet );
+            ScTpPrintOptions( vcl::Window* pParent, const SfxItemSet& rCoreSet );
             virtual ~ScTpPrintOptions();
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rCoreSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
     virtual bool        FillItemSet( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     using SfxTabPage::DeactivatePage;

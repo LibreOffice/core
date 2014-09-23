@@ -396,7 +396,7 @@ void SvLBoxButton::Clone( SvLBoxItem* pSource )
     pData = ((SvLBoxButton*)pSource)->pData;
 }
 
-void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Window* i_pParent )
+void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, vcl::Window* i_pParent )
 {
     if ( i_pParent->IsNativeControlSupported( i_eType, PART_ENTIRE_CONTROL) )
     {

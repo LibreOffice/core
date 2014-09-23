@@ -46,7 +46,7 @@
 
 using namespace ::com::sun::star;
 
-void ImplInitFieldSettings( Window* pWin, bool bFont, bool bForeground, bool bBackground )
+void ImplInitFieldSettings( vcl::Window* pWin, bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
 
@@ -87,7 +87,7 @@ void ImplInitDropDownButton( PushButton* pButton )
         pButton->SetBackground();
 }
 
-ImplEntryList::ImplEntryList( Window* pWindow )
+ImplEntryList::ImplEntryList( vcl::Window* pWindow )
 {
     mpWindow = pWindow;
     mnLastSelected = LISTBOX_ENTRY_NOTFOUND;
@@ -488,7 +488,7 @@ sal_Int32 ImplEntryList::FindFirstSelectable( sal_Int32 nPos, bool bForward /* =
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
+ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) :
     Control( pParent, 0 ),
     maQuickSelectionEngine( *this )
 {
@@ -2128,7 +2128,7 @@ sal_uInt16 ImplListBoxWindow::ImplGetTextStyle() const
     return nTextStyle;
 }
 
-ImplListBox::ImplListBox( Window* pParent, WinBits nWinStyle ) :
+ImplListBox::ImplListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
     maLBWindow( this, nWinStyle&(~WB_BORDER) )
 {
@@ -2228,7 +2228,7 @@ void ImplListBox::GetFocus()
     maLBWindow.GrabFocus();
 }
 
-Window* ImplListBox::GetPreferredKeyInputWindow()
+vcl::Window* ImplListBox::GetPreferredKeyInputWindow()
 {
     return &maLBWindow;
 }
@@ -2583,7 +2583,7 @@ void ImplListBox::SetEdgeBlending(bool bNew)
     }
 }
 
-ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
+ImplWin::ImplWin( vcl::Window* pParent, WinBits nWinStyle ) :
     Control ( pParent, nWinStyle )
 {
     if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
@@ -2654,7 +2654,7 @@ void ImplWin::ImplDraw( bool bLayout )
             // Repaint the (focused) area similarly to
             // ImplSmallBorderWindowView::DrawWindow() in
             // vcl/source/window/brdwin.cxx
-            Window *pWin = GetParent();
+            vcl::Window *pWin = GetParent();
 
             ImplControlValue aControlValue;
             if ( !pWin->IsEnabled() )
@@ -2673,7 +2673,7 @@ void ImplWin::ImplDraw( bool bLayout )
             bool bMouseOver = false;
             if( GetParent() )
             {
-                Window *pChild = GetParent()->GetWindow( WINDOW_FIRSTCHILD );
+                vcl::Window *pChild = GetParent()->GetWindow( WINDOW_FIRSTCHILD );
                 while( pChild && !(bMouseOver = pChild->IsMouseOver()) )
                     pChild = pChild->GetWindow( WINDOW_NEXT );
             }
@@ -2840,7 +2840,7 @@ void ImplWin::GetFocus()
         IsNativeWidgetEnabled() &&
         IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
     {
-        Window* pWin = GetParent()->GetWindow( WINDOW_BORDER );
+        vcl::Window* pWin = GetParent()->GetWindow( WINDOW_BORDER );
         if( ! pWin )
             pWin = GetParent();
         pWin->Invalidate();
@@ -2857,7 +2857,7 @@ void ImplWin::LoseFocus()
         IsNativeWidgetEnabled() &&
         IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
     {
-        Window* pWin = GetParent()->GetWindow( WINDOW_BORDER );
+        vcl::Window* pWin = GetParent()->GetWindow( WINDOW_BORDER );
         if( ! pWin )
             pWin = GetParent();
         pWin->Invalidate();
@@ -2867,7 +2867,7 @@ void ImplWin::LoseFocus()
     Control::LoseFocus();
 }
 
-ImplBtn::ImplBtn( Window* pParent, WinBits nWinStyle ) :
+ImplBtn::ImplBtn( vcl::Window* pParent, WinBits nWinStyle ) :
     PushButton(  pParent, nWinStyle ),
     mbDown  ( false )
 {
@@ -2889,7 +2889,7 @@ void ImplBtn::MouseButtonDown( const MouseEvent& )
     }
 }
 
-ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
+ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( vcl::Window* pParent ) :
     FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )    // no drop shadow for list boxes
 {
     mpImplLB = NULL;
@@ -2900,7 +2900,7 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
 
     EnableSaveBackground();
 
-    Window * pBorderWindow = ImplGetBorderWindow();
+    vcl::Window * pBorderWindow = ImplGetBorderWindow();
     if( pBorderWindow )
     {
         SetAccessibleRole(accessibility::AccessibleRole::PANEL);
@@ -2953,8 +2953,8 @@ void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, 
         // The number also cannot be calculated by List/Combobox, as for
         // this the presence of the vertical Scrollbar has to be known.
         mpImplLB->SetSizePixel( GetOutputSizePixel() );
-        ((Window*)mpImplLB)->Resize();
-        ((Window&)mpImplLB->GetMainWindow()).Resize();
+        ((vcl::Window*)mpImplLB)->Resize();
+        ((vcl::Window&)mpImplLB->GetMainWindow()).Resize();
     }
 }
 
@@ -3067,7 +3067,7 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
         // check if the control's parent is un-mirrored which is the case for form controls in a mirrored UI
         // where the document is unmirrored
         // because StartPopupMode() expects a rectangle in mirrored coordinates we have to re-mirror
-        Window *pGrandparent = GetParent()->GetParent();
+        vcl::Window *pGrandparent = GetParent()->GetParent();
         const OutputDevice *pGrandparentOutDev = pGrandparent->GetOutDev();
 
         if( pGrandparent->ImplIsAntiparallel() )

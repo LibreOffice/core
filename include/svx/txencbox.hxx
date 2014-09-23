@@ -33,7 +33,7 @@ private:
     SVX_DLLPRIVATE sal_Int32                EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
 
 public:
-    SvxTextEncodingBox( Window* pParent, WinBits nBits );
+    SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits );
     virtual ~SvxTextEncodingBox();
 
     /** Fill with all known encodings but exclude those matching one or more

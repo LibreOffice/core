@@ -34,7 +34,7 @@ private:
     DECL_LINK( DblClkHdl, void * );
 
 public:
-    ScShowTabDlg( Window* pParent );
+    ScShowTabDlg( vcl::Window* pParent );
 
     /** Sets dialog title, fixed text for listbox and help IDs. */
     void    SetDescription(

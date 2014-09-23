@@ -122,7 +122,7 @@ protected:
     virtual void        InitEntry(SvTreeListEntry*,const OUString&,const Image&,const Image&, SvLBoxButtonKind) SAL_OVERRIDE;
 
 public:
-            ScContentTree( Window* pParent, const ResId& rResId );
+            ScContentTree( vcl::Window* pParent, const ResId& rResId );
             virtual ~ScContentTree();
 
     OUString getAltLongDescText(SvTreeListEntry* pEntry, bool isAltText) const;

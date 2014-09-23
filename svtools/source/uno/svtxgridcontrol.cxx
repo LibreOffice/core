@@ -89,7 +89,7 @@ SVTXGridControl::~SVTXGridControl()
 }
 
 
-void SVTXGridControl::SetWindow( Window* pWindow )
+void SVTXGridControl::SetWindow( vcl::Window* pWindow )
 {
     SVTXGridControl_Base::SetWindow( pWindow );
     impl_checkTableModelInit();
@@ -858,7 +858,7 @@ void SVTXGridControl::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno:
     SolarMutexGuard aGuard;
 
     m_pTableModel->setEnabled( bEnable );
-    Window * pWindow = GetWindow();
+    vcl::Window * pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->Enable( bEnable, true );

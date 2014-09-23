@@ -43,7 +43,7 @@ class SalInfoPrinter;
 struct SalPrinterQueueInfo;
 class SalPrinter;
 class VirtualDevice;
-class Window;
+namespace vcl { class Window; }
 
 namespace vcl {
     class PrinterController;
@@ -232,7 +232,7 @@ private:
 
     SAL_DLLPRIVATE void         ImplInitData();
     SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
-    SAL_DLLPRIVATE void         ImplInitDisplay( const Window* pWindow );
+    SAL_DLLPRIVATE void         ImplInitDisplay( const vcl::Window* pWindow );
     SAL_DLLPRIVATE static SalPrinterQueueInfo* ImplGetQueueInfo( const OUString& rPrinterName,
                                                   const OUString* pDriver );
     SAL_DLLPRIVATE void         ImplUpdatePageData();
@@ -318,7 +318,7 @@ public:
     bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
 
-    bool                        Setup( Window* pWindow = NULL );
+    bool                        Setup( vcl::Window* pWindow = NULL );
     bool                        SetPrinterProps( const Printer* pPrinter );
 
     // SetPrinterOptions is used internally only now
@@ -557,7 +557,7 @@ public:
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
     SAL_DLLPRIVATE void resetPaperToLastConfigured();
     VCL_PLUGIN_PUBLIC void setJobState( com::sun::star::view::PrintableState );
-    SAL_DLLPRIVATE bool setupPrinter( Window* i_pDlgParent );
+    SAL_DLLPRIVATE bool setupPrinter( vcl::Window* i_pDlgParent );
 
     SAL_DLLPRIVATE int getPageCountProtected() const;
     SAL_DLLPRIVATE css::uno::Sequence< css::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;

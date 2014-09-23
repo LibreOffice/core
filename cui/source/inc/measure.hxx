@@ -64,16 +64,16 @@ private:
 
 public:
 
-    SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs );
+    SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxMeasurePage();
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet* );
+    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
-    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void        PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
@@ -86,7 +86,7 @@ public:
 class SvxMeasureDialog : public SfxSingleTabDialog
 {
 public:
-    SvxMeasureDialog(Window* pParent, const SfxItemSet& rAttr,
+    SvxMeasureDialog(vcl::Window* pParent, const SfxItemSet& rAttr,
         const SdrView* pView);
 };
 

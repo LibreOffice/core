@@ -87,7 +87,7 @@
 
 bool SwViewShell::mbLstAct = false;
 ShellResource *SwViewShell::mpShellRes = 0;
-Window *SwViewShell::mpCareWindow = 0;
+vcl::Window *SwViewShell::mpCareWindow = 0;
 BitmapEx* SwViewShell::mpErrorBmp = NULL;
 BitmapEx* SwViewShell::mpReplaceBmp = NULL;
 
@@ -124,7 +124,7 @@ lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
     // windows has been painted, so need to paint the child windows now.
     if (rShell.GetWin())
     {
-        Window& rWindow = *(rShell.GetWin());
+        vcl::Window& rWindow = *(rShell.GetWin());
         const Rectangle aRectanglePixel(rWindow.LogicToPixel(rRect.SVRect()));
         PaintTransparentChildren(rWindow, aRectanglePixel);
     }
@@ -560,7 +560,7 @@ void SwViewShell::MakeVisible( const SwRect &rRect )
     }
 }
 
-Window* SwViewShell::CareChildWin(SwViewShell& rVSh)
+vcl::Window* SwViewShell::CareChildWin(SwViewShell& rVSh)
 {
     if(rVSh.mpSfxViewShell)
     {
@@ -568,7 +568,7 @@ Window* SwViewShell::CareChildWin(SwViewShell& rVSh)
         const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
         SfxViewFrame* pVFrame = rVSh.mpSfxViewShell->GetViewFrame();
         const SfxChildWindow* pChWin = pVFrame->GetChildWindow( nId );
-        Window *pWin = pChWin ? pChWin->GetWindow() : NULL;
+        vcl::Window *pWin = pChWin ? pChWin->GetWindow() : NULL;
         if ( pWin && pWin->IsVisible() )
             return pWin;
 #endif
@@ -1241,7 +1241,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                 // clear mpWin during DLPrePaint2 to get paint preparation for mpOut, but set it again
                 // immediately afterwards. There are many decisions in SW which imply that Printing
                 // is used when mpWin == 0 (wrong but widely used).
-                Window* pOldWin = mpWin;
+                vcl::Window* pOldWin = mpWin;
                 mpWin = 0;
                 DLPrePaint2(Region(aRect.SVRect()));
                 mpWin = pOldWin;
@@ -2088,7 +2088,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     if (*mpOpt == rOpt)
         return;
 
-    Window *pMyWin = GetWin();
+    vcl::Window *pMyWin = GetWin();
     if( !pMyWin )
     {
         OSL_ENSURE( pMyWin, "SwViewShell::ApplyViewOptions: no window" );
@@ -2211,7 +2211,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         bool bOnlineSpl = rOpt.IsOnlineSpell();
         while( pSh != this )
         {   pSh->mpOpt->SetOnlineSpell( bOnlineSpl );
-            Window *pTmpWin = pSh->GetWin();
+            vcl::Window *pTmpWin = pSh->GetWin();
             if( pTmpWin )
                 pTmpWin->Invalidate();
             pSh = (SwViewShell*)pSh->GetNext();
@@ -2421,7 +2421,7 @@ ShellResource* SwViewShell::GetShellRes()
     return mpShellRes;
 }
 
-void SwViewShell::SetCareWin( Window* pNew )
+void SwViewShell::SetCareWin( vcl::Window* pNew )
 {
     mpCareWindow = pNew;
 }

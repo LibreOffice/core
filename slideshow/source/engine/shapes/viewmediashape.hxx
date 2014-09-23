@@ -30,7 +30,7 @@
 #include "viewlayer.hxx"
 
 class SystemChildWindow;
-class Window;
+namespace vcl { class Window; }
 
 namespace com { namespace sun { namespace star { namespace drawing {
     class XShape;
@@ -148,7 +148,7 @@ namespace slideshow
                                                      const OUString& rMimeType );
             ViewLayerSharedPtr                    mpViewLayer;
             ::std::auto_ptr< SystemChildWindow >  mpMediaWindow;
-            boost::scoped_ptr< Window >           mpEventHandlerParent;
+            boost::scoped_ptr< ::vcl::Window >    mpEventHandlerParent;
             mutable ::com::sun::star::awt::Point  maWindowOffset;
             mutable ::basegfx::B2DRectangle       maBounds;
 

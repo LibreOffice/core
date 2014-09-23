@@ -33,7 +33,7 @@ private:
     NumericField*       mpNumRows;
 
 public:
-    SvxNewTableDialog( Window* pWindow );
+    SvxNewTableDialog( vcl::Window* pWindow );
 
     virtual short Execute(void) SAL_OVERRIDE;
     virtual void Apply(void);

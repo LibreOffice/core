@@ -502,7 +502,7 @@ void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
     }
 }
 
-Window* SvxFillToolBoxControl::CreateItemWindow(Window *pParent)
+vcl::Window* SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent)
 {
     if(GetSlotId() == SID_ATTR_FILL_STYLE)
     {
@@ -533,7 +533,7 @@ Window* SvxFillToolBoxControl::CreateItemWindow(Window *pParent)
     return NULL;
 }
 
-FillControl::FillControl(Window* pParent,WinBits nStyle)
+FillControl::FillControl(vcl::Window* pParent,WinBits nStyle)
 :   Window(pParent,nStyle | WB_DIALOGCONTROL),
     mpLbFillType(new SvxFillTypeBox(this)),
     mpLbFillAttr(new SvxFillAttrBox(this)),

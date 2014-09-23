@@ -220,7 +220,7 @@ sal_uInt32 CheckPasswd_Impl
 
                 if ( bIsEncrypted )
                 {
-                    Window* pWin = pDoc ? pDoc->GetDialogParent( pFile ) : NULL;
+                    vcl::Window* pWin = pDoc ? pDoc->GetDialogParent( pFile ) : NULL;
                     if ( pWin )
                         pWin->Show();
 
@@ -461,7 +461,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     if ( !pTemplNameItem && !pTemplFileNameItem )
     {
         bool bNewWin = false;
-        Window* pTopWin = GetTopWindow();
+        vcl::Window* pTopWin = GetTopWindow();
 
         SfxTemplateManagerDlg aTemplDlg;
         int nRet = aTemplDlg.Execute();
@@ -830,7 +830,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INET_PROT_VND_SUN_STAR_HELP )
             {
                 SolarMutexGuard aGuard;
-                Window *pWindow = SfxGetpApp()->GetTopWindow();
+                vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
 
                 MessageDialog aSecurityWarningBox(pWindow,
                                                   SfxResId(STR_SECURITY_WARNING_NO_HYPERLINKS),

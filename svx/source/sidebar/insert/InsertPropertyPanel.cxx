@@ -46,7 +46,7 @@ namespace svx { namespace sidebar {
 
 
 InsertPropertyPanel::InsertPropertyPanel (
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
     :   PanelLayout(pParent, "InsertPropertyPanel", "svx/ui/sidebarinsert.ui", rxFrame),
         mxFrame(rxFrame)
@@ -66,7 +66,7 @@ InsertPropertyPanel::InsertPropertyPanel (
     // general ;-)
     // In other words, we should find the underlying problem, and remove the
     // WindowEventListener for good.
-    Window* pTopWindow = pParent;
+    vcl::Window* pTopWindow = pParent;
     while (pTopWindow->GetParent() != NULL)
         pTopWindow = pTopWindow->GetParent();
     pTopWindow->AddChildEventListener(LINK(this, InsertPropertyPanel, WindowEventListener));
@@ -78,7 +78,7 @@ InsertPropertyPanel::InsertPropertyPanel (
 InsertPropertyPanel::~InsertPropertyPanel (void)
 {
     // Remove window child listener.
-    Window* pTopWindow = this;
+    vcl::Window* pTopWindow = this;
     while (pTopWindow->GetParent() != NULL)
         pTopWindow = pTopWindow->GetParent();
     pTopWindow->RemoveChildEventListener(LINK(this, InsertPropertyPanel, WindowEventListener));
@@ -100,7 +100,7 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
         return 1;
 
     VclWindowEvent* pWindowEvent = dynamic_cast<VclWindowEvent*>(pEvent);
-    Window* pWindow = pWindowEvent ? pWindowEvent->GetWindow() : NULL;
+    vcl::Window* pWindow = pWindowEvent ? pWindowEvent->GetWindow() : NULL;
     ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
     if (pToolBox == NULL)
         return 1;

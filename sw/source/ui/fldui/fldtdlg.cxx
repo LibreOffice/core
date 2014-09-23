@@ -47,7 +47,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 // carrier of the dialog
-SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
+SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent)
     : SfxTabDialog(pParent, "FieldDialog", "modules/swriter/ui/fielddialog.ui")
     , m_pChildWin(pCW)
     , m_pBindings(pB)

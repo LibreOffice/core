@@ -45,7 +45,7 @@
 
 #define SLIDER_VIEW_STYLE           (WB_3DLOOK | WB_HORZ | WB_VERT)
 
-void Slider::ImplInit( Window* pParent, WinBits nStyle )
+void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     mnThumbPixOffset    = 0;
     mnThumbPixRange     = 0;
@@ -73,7 +73,7 @@ void Slider::ImplInit( Window* pParent, WinBits nStyle )
     SetSizePixel( CalcWindowSizePixel() );
 }
 
-Slider::Slider( Window* pParent, WinBits nStyle ) :
+Slider::Slider( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_SLIDER )
 {
     ImplInit( pParent, nStyle );
@@ -81,7 +81,7 @@ Slider::Slider( Window* pParent, WinBits nStyle ) :
 
 void Slider::ImplInitSettings()
 {
-    Window* pParent = GetParent();
+    vcl::Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
         EnableChildTransparentMode( true );

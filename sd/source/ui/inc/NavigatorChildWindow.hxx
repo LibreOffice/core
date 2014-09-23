@@ -22,7 +22,7 @@
 
 #include <sfx2/childwin.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class SfxBindings;
 
 namespace sd {
@@ -35,7 +35,7 @@ class NavigatorChildWindow
 {
 public:
     NavigatorChildWindow (
-        ::Window*,
+        vcl::Window*,
         sal_uInt16,
         SfxBindings*,
         SfxChildWinInfo*);

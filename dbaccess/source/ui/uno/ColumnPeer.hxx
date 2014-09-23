@@ -33,7 +33,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xColumn;
     public:
 
-        OColumnPeer(Window* _pParent
+        OColumnPeer(vcl::Window* _pParent
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
         void setColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);

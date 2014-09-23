@@ -31,7 +31,7 @@
 #include "authratr.hxx"
 
 class SwRect;
-class Window;
+namespace vcl { class Window; }
 class OutputDevice;
 class SwViewShell;
 class SwDocShell;
@@ -182,7 +182,7 @@ public:
             SwViewOption(const SwViewOption&);
             ~SwViewOption();
 
-    void   Init( Window *pWin );        // Initializing of static data.
+    void   Init( vcl::Window *pWin );        // Initializing of static data.
 
     sal_uInt16 GetPixelTwips() const { return nPixelTwips; }
 

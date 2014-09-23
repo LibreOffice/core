@@ -38,7 +38,7 @@ class SwTableTabDlg : public SfxTabDialog
 
     virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
 public:
-     SwTableTabDlg( Window* pParent, SfxItemPool& Pool,
+     SwTableTabDlg( vcl::Window* pParent, SfxItemPool& Pool,
                     const SfxItemSet* pItemSet, SwWrtShell* pSh );
 };
 

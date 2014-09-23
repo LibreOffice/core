@@ -21,7 +21,7 @@ private:
     SCCOL maDataItem;
 
 public:
-    ScPivotLayoutTreeListLabel(Window* pParent, WinBits nBits);
+    ScPivotLayoutTreeListLabel(vcl::Window* pParent, WinBits nBits);
     virtual ~ScPivotLayoutTreeListLabel();
     void FillLabelFields(ScDPLabelDataVector& rLabelVector);
     ScItemValue* GetItem(SCCOL nColumn);

@@ -31,7 +31,7 @@
 class OutlinerView;
 class SdrOutliner;
 class SdrView;
-class Window;
+namespace vcl { class Window; }
 
 namespace accessibility
 {
@@ -52,7 +52,7 @@ namespace accessibility
             SdrOutliner& rOutliner,
             SdrView& rView,
             OutlinerView& rOutlView,
-            const ::Window& rViewWindow );
+            const vcl::Window& rViewWindow );
         virtual ~AccessibleOutlineEditSource();
 
         /// This method is disabled and always returns NULL
@@ -81,7 +81,7 @@ namespace accessibility
         DECL_LINK( NotifyHdl, EENotify* );
 
         SdrView&                        mrView;
-        const ::Window& mrWindow;
+        const vcl::Window& mrWindow;
         SdrOutliner*                    mpOutliner;
         OutlinerView* mpOutlinerView;
 

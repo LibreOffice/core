@@ -46,7 +46,7 @@ namespace dbaui
     using namespace ::com::sun::star::sdbcx;
 
     // OUserAdminDlg
-    OUserAdminDlg::OUserAdminDlg(Window* _pParent
+    OUserAdminDlg::OUserAdminDlg(vcl::Window* _pParent
                                             , SfxItemSet* _pItems
                                             ,const Reference< XComponentContext >& _rxORB
                                             ,const ::com::sun::star::uno::Any& _aDataSourceName
@@ -119,7 +119,7 @@ namespace dbaui
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( m_pImpl->getORB() );
         static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
-        Window *pWin = GetViewWindow();
+        vcl::Window *pWin = GetViewWindow();
         if(pWin)
             pWin->Invalidate();
 

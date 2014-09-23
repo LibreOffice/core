@@ -34,7 +34,7 @@ namespace sfx2 { namespace sidebar {
 SidebarDockingWindow::SidebarDockingWindow(
     SfxBindings* pSfxBindings,
     SidebarChildWindow& rChildWindow,
-    Window* pParentWindow,
+    vcl::Window* pParentWindow,
     WinBits nBits)
     : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits),
       mpSidebarController()

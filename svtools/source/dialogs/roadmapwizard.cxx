@@ -118,14 +118,14 @@ namespace svt
     }
 
     //= RoadmapWizard
-    RoadmapWizard::RoadmapWizard( Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
+    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
         :OWizardMachine( _pParent, i_nStyle, _nButtonFlags )
         ,m_pImpl( new RoadmapWizardImpl )
     {
         impl_construct();
     }
 
-    RoadmapWizard::RoadmapWizard( Window* _pParent, sal_uInt32 _nButtonFlags )
+    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent, sal_uInt32 _nButtonFlags )
         :OWizardMachine( _pParent, _nButtonFlags )
         ,m_pImpl( new RoadmapWizardImpl )
     {

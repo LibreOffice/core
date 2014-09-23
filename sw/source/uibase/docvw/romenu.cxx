@@ -228,7 +228,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     RemoveDisabledEntries( true, true );
 }
 
-void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
+void SwReadOnlyPopup::Execute( vcl::Window* pWin, const Point &rPixPos )
 {
     sal_uInt16 nId     = PopupMenu::Execute(
     pWin,
@@ -237,7 +237,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
 }
 
 // execute the resulting ID only - necessary to support XContextMenuInterception
-void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
+void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     SfxDispatcher &rDis = *rView.GetViewFrame()->GetDispatcher();

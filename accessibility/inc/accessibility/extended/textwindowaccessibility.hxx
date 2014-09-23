@@ -92,14 +92,14 @@ public:
     inline ~WindowListenerGuard() { endListening(); }
 
     // Not thread safe:
-    void startListening(::Window & rNotifier);
+    void startListening(vcl::Window & rNotifier);
 
     // Not thread safe:
     void endListening();
 
 private:
     ::Link m_aListener;
-    ::Window * m_pNotifier;
+    vcl::Window * m_pNotifier;
 };
 
 class ParagraphInfo

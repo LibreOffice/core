@@ -46,13 +46,13 @@ class SvxBackgroundTabPage : public SvxTabPage
 {
     using TabPage::DeactivatePage;
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        FillUserData() SAL_OVERRIDE;
-    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void        PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     /// Shift-ListBox activation
     void                ShowSelector();
@@ -67,7 +67,7 @@ protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
-    SvxBackgroundTabPage( Window* pParent, const SfxItemSet& rCoreSet );
+    SvxBackgroundTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
     virtual ~SvxBackgroundTabPage();
 
     VclContainer*           m_pAsGrid;

@@ -34,7 +34,7 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFldDokPage::SwFldDokPage(Window* pParent, const SfxItemSet& rCoreSet )
+SwFldDokPage::SwFldDokPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
     : SwFldPage(pParent, "FldDocumentPage",
         "modules/swriter/ui/flddocumentpage.ui", rCoreSet)
     , nOldSel(0)
@@ -632,7 +632,7 @@ bool SwFldDokPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-SfxTabPage* SwFldDokPage::Create(   Window* pParent,
+SfxTabPage* SwFldDokPage::Create(   vcl::Window* pParent,
                         const SfxItemSet* rAttrSet )
 {
     return ( new SwFldDokPage( pParent, *rAttrSet ) );

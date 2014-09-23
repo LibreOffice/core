@@ -243,7 +243,7 @@ public:
 
     virtual         ~ScTabViewShell();
 
-    SC_DLLPUBLIC Window* GetDialogParent();
+    SC_DLLPUBLIC vcl::Window* GetDialogParent();
 
     bool            IsRefInputMode() const;
     void            ExecuteInputDirect();
@@ -348,7 +348,7 @@ public:
                                           sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false ) SAL_OVERRIDE;
 
     virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
-    virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
+    virtual SfxTabPage*     CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
     void            ConnectObject( SdrOle2Obj* pObj );
     bool            ActivateObject( SdrOle2Obj* pObj, long nVerb );
@@ -358,7 +358,7 @@ public:
     SC_DLLPUBLIC static ScTabViewShell* GetActiveViewShell();
     SfxModelessDialog*  CreateRefDialog( SfxBindings* pB, SfxChildWindow* pCW,
                                         SfxChildWinInfo* pInfo,
-                                        Window* pParent, sal_uInt16 nSlotId );
+                                        vcl::Window* pParent, sal_uInt16 nSlotId );
 
     void            UpdateOleZoom();
     inline SbxObject* GetScSbxObject() const

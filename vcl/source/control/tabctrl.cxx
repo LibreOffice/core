@@ -82,7 +82,7 @@ struct ImplTabCtrlData
 // for the Tab positions
 #define TAB_PAGERECT        0xFFFF
 
-void TabControl::ImplInit( Window* pParent, WinBits nStyle )
+void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     mbLayoutDirty = true;
 
@@ -144,7 +144,7 @@ void TabControl::ImplInitSettings( bool bFont,
 
     if ( bBackground )
     {
-        Window* pParent = GetParent();
+        vcl::Window* pParent = GetParent();
         if ( !IsControlBackground() &&
             (pParent->IsChildTransparentModeEnabled()
             || IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL)
@@ -183,7 +183,7 @@ void TabControl::ImplFreeLayoutData()
     }
 }
 
-TabControl::TabControl( Window* pParent, WinBits nStyle ) :
+TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_TABCONTROL )
 {
     ImplInit( pParent, nStyle );
@@ -575,7 +575,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
     ImplTabItem*    pItem = ImplGetItem( nId );
     TabPage*        pOldPage = (pOldItem) ? pOldItem->mpTabPage : NULL;
     TabPage*        pPage = (pItem) ? pItem->mpTabPage : NULL;
-    Window*         pCtrlParent = GetParent();
+    vcl::Window*         pCtrlParent = GetParent();
 
     if ( IsReallyVisible() && IsUpdateMode() )
     {
@@ -646,7 +646,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
         if ( pOldPage && pOldPage->HasChildPathFocus() )
         {
             sal_uInt16  n = 0;
-            Window* pFirstChild = pPage->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
+            vcl::Window* pFirstChild = pPage->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
             if ( pFirstChild )
                 pFirstChild->ImplControlFocus( GETFOCUS_INIT );
             else

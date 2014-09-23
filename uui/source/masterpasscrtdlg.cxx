@@ -50,7 +50,7 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
     return 1;
 }
 
-MasterPasswordCreateDialog::MasterPasswordCreateDialog(Window* pParent, ResMgr* pResMgr)
+MasterPasswordCreateDialog::MasterPasswordCreateDialog(vcl::Window* pParent, ResMgr* pResMgr)
     : ModalDialog(pParent, "SetMasterPasswordDialog", "uui/ui/setmasterpassworddlg.ui")
     , pResourceMgr(pResMgr)
     , nMinLen(1)

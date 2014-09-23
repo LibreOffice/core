@@ -50,7 +50,7 @@ ClientView::~ClientView()
  * to be overloaded and properly handled.
  */
 
-void ClientView::InvalidateOneWin(::Window& rWin)
+void ClientView::InvalidateOneWin(vcl::Window& rWin)
 {
     Region aRegion;
     CompleteRedraw(&rWin, aRegion);
@@ -61,7 +61,7 @@ void ClientView::InvalidateOneWin(::Window& rWin)
  * to be overloaded and properly handled.
  */
 
-void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
+void ClientView::InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect)
 {
     CompleteRedraw(&rWin, Region(rRect));
 }

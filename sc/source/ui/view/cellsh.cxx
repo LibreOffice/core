@@ -373,7 +373,7 @@ static bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDat
 
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 {
-    Window* pWin = GetViewData()->GetActiveWin();
+    vcl::Window* pWin = GetViewData()->GetActiveWin();
     bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
@@ -467,7 +467,7 @@ bool checkDestRanges(ScViewData& rViewData)
     // Multiple destination ranges.
 
     ScDocument* pDoc = rViewData.GetDocument();
-    Window* pWin = rViewData.GetActiveWin();
+    vcl::Window* pWin = rViewData.GetActiveWin();
     if (!pWin)
         return false;
 
@@ -505,7 +505,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         // create listener
         pImpl->m_pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScCellShell, ClipboardChanged ) );
         pImpl->m_pClipEvtLstnr->acquire();
-        Window* pWin = GetViewData()->GetActiveWin();
+        vcl::Window* pWin = GetViewData()->GetActiveWin();
         pImpl->m_pClipEvtLstnr->AddRemoveListener( pWin, true );
 
         // get initial state
@@ -1047,7 +1047,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         if ( pViewFrame && pViewFrame->HasChildWindow( nWhich ) )
                         {
                             SfxChildWindow* pChild = pViewFrame->GetChildWindow( nWhich );
-                            Window* pWin = ( pChild ? pChild->GetWindow() : NULL );
+                            vcl::Window* pWin = ( pChild ? pChild->GetWindow() : NULL );
                             if ( pWin && pWin->IsVisible() )
                             {
                                 bVisible = true;

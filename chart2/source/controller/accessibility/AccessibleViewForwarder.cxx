@@ -27,7 +27,7 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-AccessibleViewForwarder::AccessibleViewForwarder( AccessibleChartView* pAccChartView, Window* pWindow )
+AccessibleViewForwarder::AccessibleViewForwarder( AccessibleChartView* pAccChartView, vcl::Window* pWindow )
     :m_pAccChartView( pAccChartView )
     ,m_pWindow( pWindow )
     ,m_aMapMode( MAP_100TH_MM )

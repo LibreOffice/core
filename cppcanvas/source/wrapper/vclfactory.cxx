@@ -71,7 +71,7 @@ namespace cppcanvas
             new internal::ImplBitmapCanvas( xCanvas ) );
     }
 
-    SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const ::Window& rVCLWindow ) const
+    SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const vcl::Window& rVCLWindow ) const
     {
         return SpriteCanvasSharedPtr(
             new internal::ImplSpriteCanvas(

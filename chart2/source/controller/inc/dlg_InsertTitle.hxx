@@ -32,7 +32,7 @@ private:
     boost::scoped_ptr< TitleResources >  m_xTitleResources;
 
 public:
-    SchTitleDlg( Window* pParent, const TitleDialogData& rInput );
+    SchTitleDlg( vcl::Window* pParent, const TitleDialogData& rInput );
 
     void getResult( TitleDialogData& rOutput );
 };

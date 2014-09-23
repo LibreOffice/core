@@ -69,7 +69,7 @@ class MyWin : public WorkWindow
 {
     Bitmap      m_aBitmap;
 public:
-                 MyWin( Window* pParent, WinBits nWinStyle );
+                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -89,7 +89,7 @@ void Main()
     Application::Execute();
 }
 
-MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
+MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
     m_aBitmap( Size( 256, 256 ), 32 )
 {

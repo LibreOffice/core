@@ -68,8 +68,8 @@ namespace svt
         OUString             getLabel( sal_Int16 _nId ) const;
         void                        enableControl( sal_Int16 _nId, bool _bEnable );
 
-        static void             setHelpURL( Window* _pControl, const OUString& _rURL, bool _bFileView );
-        static OUString  getHelpURL( Window* _pControl, bool _bFileView );
+        static void             setHelpURL( vcl::Window* _pControl, const OUString& _rURL, bool _bFileView );
+        static OUString  getHelpURL( vcl::Window* _pControl, bool _bFileView );
 
     private:
         /** implements the various methods for setting properties on controls

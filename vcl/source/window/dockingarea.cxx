@@ -59,7 +59,7 @@ static void ImplInitBackground( DockingAreaWindow* pThis )
         SystemWindow *pSysWin = pThis->GetSystemWindow();
         if ( pSysWin && pSysWin->GetMenuBar() )
         {
-            Window *pMenubarWin = pSysWin->GetMenuBar()->GetWindow();
+            vcl::Window *pMenubarWin = pSysWin->GetMenuBar()->GetWindow();
             if ( pMenubarWin )
                 nMenubarHeight = pMenubarWin->GetOutputHeightPixel();
         }
@@ -77,7 +77,7 @@ static void ImplInitBackground( DockingAreaWindow* pThis )
         pThis->SetBackground( Wallpaper( pThis->GetSettings().GetStyleSettings().GetFaceColor() ) );
 }
 
-DockingAreaWindow::DockingAreaWindow( Window* pParent ) :
+DockingAreaWindow::DockingAreaWindow( vcl::Window* pParent ) :
     Window( WINDOW_DOCKINGAREA )
 {
     ImplInit( pParent, WB_CLIPCHILDREN|WB_3DLOOK, NULL );
@@ -114,7 +114,7 @@ static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
         SystemWindow *pSysWin = pThis->GetSystemWindow();
         if( pSysWin && pSysWin->GetMenuBar() )
         {
-            Window *pMenubarWin = pSysWin->GetMenuBar()->GetWindow();
+            vcl::Window *pMenubarWin = pSysWin->GetMenuBar()->GetWindow();
             if( pMenubarWin )
                 pMenubarWin->Invalidate();
         }
@@ -181,7 +181,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
                 sal_uInt16 nChildren = GetChildCount();
                 for( sal_uInt16 n = 0; n < nChildren; n++ )
                 {
-                    Window* pChild = GetChild( n );
+                    vcl::Window* pChild = GetChild( n );
                     if ( pChild->IsVisible() )
                     {
                         Point aPos = pChild->GetPosPixel();
@@ -207,7 +207,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
             sal_uInt16 nChildren = GetChildCount();
             for( sal_uInt16 n = 0; n < nChildren; n++ )
             {
-                Window* pChild = GetChild( n );
+                vcl::Window* pChild = GetChild( n );
                 Point aPos = pChild->GetPosPixel();
                 Size aSize = pChild->GetSizePixel();
                 if( IsHorizontal() )

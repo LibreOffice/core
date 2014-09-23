@@ -781,7 +781,7 @@ bool FrameSelectorImpl::SelectedBordersEqual() const
     return bEqual;
 }
 
-FrameSelector::FrameSelector(Window* pParent)
+FrameSelector::FrameSelector(vcl::Window* pParent)
     : Control(pParent, WB_BORDER|WB_TABSTOP)
 {
     // not in c'tor init list (avoid warning about usage of *this)
@@ -789,7 +789,7 @@ FrameSelector::FrameSelector(Window* pParent)
     EnableRTL( false ); // #107808# don't mirror the mouse handling
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFrameSelector(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFrameSelector(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new FrameSelector(pParent);
 }

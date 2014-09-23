@@ -51,7 +51,7 @@ Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
 }
 
 ParaNumberingControl::ParaNumberingControl(
-    Window* pParent,
+    vcl::Window* pParent,
     svx::sidebar::ParaPropertyPanel& rPanel )
     : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_NUMBERING) )
     , maNumberVS( this,SVX_RES(VS_NUMBERING) )

@@ -31,7 +31,7 @@ class SvxFmAbsRecWin : public NumericField
     SfxToolBoxControl*  m_pController;
         // for invalidating our content whe losing the focus
 public:
-    SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pController );
+    SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController );
     virtual ~SvxFmAbsRecWin();
 
     virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
@@ -72,7 +72,7 @@ public:
     SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlAbsRec();
 
-    virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
+    virtual vcl::Window* CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -87,7 +87,7 @@ public:
     SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecText();
 
-    virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
+    virtual vcl::Window* CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 };
 
 
@@ -99,7 +99,7 @@ public:
     SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecFromText();
 
-    virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
+    virtual vcl::Window* CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 };
 
 
@@ -113,7 +113,7 @@ public:
     SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecTotal();
 
-    virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
+    virtual vcl::Window* CreateItemWindow( vcl::Window* pParent ) SAL_OVERRIDE;
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
 };

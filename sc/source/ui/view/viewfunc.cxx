@@ -88,7 +88,7 @@ static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDo
     }
 }
 
-ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
+ScViewFunc::ScViewFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScTabView( pParent, rDocSh, pViewShell ),
     bFormatValid( false )
 {

@@ -32,7 +32,7 @@
 
 //  class ScTabOpDlg
 
-ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                         ScDocument*         pDocument,
                         const ScRefAddress& rCursorPos )
 

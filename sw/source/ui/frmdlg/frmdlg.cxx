@@ -45,7 +45,7 @@
 
 // the dialog's carrier
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
-                    Window*             pParent,
+                    vcl::Window*             pParent,
                     const SfxItemSet&   rCoreSet,
                     bool                bNewFrm,
                     const OString&      sResType,

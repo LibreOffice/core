@@ -21,7 +21,7 @@ class TemplateRemoteView : public TemplateAbstractView
 {
 public:
 
-    TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren);
+    TemplateRemoteView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren);
 
     virtual ~TemplateRemoteView ();
 

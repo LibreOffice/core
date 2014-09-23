@@ -35,7 +35,7 @@ namespace dbaui
     class OBeamer : public DockingWindow
     {
     public:
-        OBeamer(Window* _pParent) : DockingWindow(_pParent,0){}
+        OBeamer(vcl::Window* _pParent) : DockingWindow(_pParent,0){}
     };
 
     // OQueryContainerWindow
@@ -48,7 +48,7 @@ namespace dbaui
 
         DECL_LINK( SplitHdl, void* );
     public:
-        OQueryContainerWindow(Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        OQueryContainerWindow(vcl::Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
         virtual ~OQueryContainerWindow();
 
         virtual void Construct() SAL_OVERRIDE;

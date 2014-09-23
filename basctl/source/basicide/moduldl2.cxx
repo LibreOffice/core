@@ -150,7 +150,7 @@ void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDa
 } // namespace
 
 //  basctl::CheckBox
-CheckBox::CheckBox(Window* pParent, WinBits nStyle)
+CheckBox::CheckBox(vcl::Window* pParent, WinBits nStyle)
     : SvTabListBox(pParent, nStyle)
     , eMode(ObjectMode::Module)
     , m_aDocument(ScriptDocument::getApplicationScriptDocument())
@@ -161,7 +161,7 @@ CheckBox::CheckBox(Window* pParent, WinBits nStyle)
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCheckBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCheckBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
     return 0;
 }
 
-NewObjectDialog::NewObjectDialog(Window * pParent, ObjectMode::Mode eMode,
+NewObjectDialog::NewObjectDialog(vcl::Window * pParent, ObjectMode::Mode eMode,
     bool bCheckName)
     : ModalDialog(pParent, "NewLibDialog", "modules/BasicIDE/ui/newlibdialog.ui")
 {
@@ -396,7 +396,7 @@ NewObjectDialog::NewObjectDialog(Window * pParent, ObjectMode::Mode eMode,
 }
 
 // GotoLineDialog
-GotoLineDialog::GotoLineDialog(Window * pParent )
+GotoLineDialog::GotoLineDialog(vcl::Window * pParent )
     : ModalDialog(pParent, "GotoLineDialog",
         "modules/BasicIDE/ui/gotolinedialog.ui")
 {
@@ -428,7 +428,7 @@ IMPL_LINK_NOARG(ExportDialog, OkButtonHandler)
     return 0;
 }
 
-ExportDialog::ExportDialog(Window * pParent)
+ExportDialog::ExportDialog(vcl::Window * pParent)
     : ModalDialog(pParent, "ExportDialog",
         "modules/BasicIDE/ui/exportdialog.ui")
     , mbExportAsPackage(false)
@@ -441,7 +441,7 @@ ExportDialog::ExportDialog(Window * pParent)
 }
 
 // LibPage
-LibPage::LibPage(Window * pParent)
+LibPage::LibPage(vcl::Window * pParent)
     : TabPage(pParent, "LibPage",
         "modules/BasicIDE/ui/libpage.ui")
     , m_aCurDocument(ScriptDocument::getApplicationScriptDocument())
@@ -689,7 +689,7 @@ IMPL_LINK_INLINE_END( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 
 void LibPage::NewLib()
 {
-    createLibImpl( static_cast<Window*>( this ), m_aCurDocument, m_pLibBox, NULL);
+    createLibImpl( static_cast<vcl::Window*>( this ), m_aCurDocument, m_pLibBox, NULL);
 }
 
 void LibPage::InsertLib()
@@ -1428,7 +1428,7 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
 }
 
 // Helper function
-void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
+void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     CheckBox* pLibBox, TreeListBox* pBasicBox )
 {
     OSL_ENSURE( rDocument.isAlive(), "createLibImpl: invalid document!" );

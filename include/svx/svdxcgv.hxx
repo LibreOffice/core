@@ -114,7 +114,7 @@ public:
 
     bool            Yank( sal_uIntPtr nFormat = SDR_ANYFORMAT );
 
-    bool            Paste( Window* pWin = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT );
+    bool            Paste( vcl::Window* pWin = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT );
     bool            PasteClipboard( OutputDevice* pOut = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT, sal_uInt32 nOptions = 0 );
 };
 

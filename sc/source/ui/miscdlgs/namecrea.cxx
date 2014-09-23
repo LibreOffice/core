@@ -22,7 +22,7 @@
 #include "namecrea.hxx"
 #include "scresid.hxx"
 
-ScNameCreateDlg::ScNameCreateDlg( Window * pParent, sal_uInt16 nFlags )
+ScNameCreateDlg::ScNameCreateDlg( vcl::Window * pParent, sal_uInt16 nFlags )
     : ModalDialog(pParent, "CreateNamesDialog", "modules/scalc/ui/createnamesdialog.ui")
 {
     get(m_pTopBox, "top");

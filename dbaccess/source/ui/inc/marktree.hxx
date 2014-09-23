@@ -38,7 +38,7 @@ class OMarkableTreeListBox : public DBTreeListBox
     Link                m_aCheckButtonHandler;
 
 public:
-    OMarkableTreeListBox( Window* pParent, WinBits nWinStyle=0 );
+    OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0 );
     virtual ~OMarkableTreeListBox();
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

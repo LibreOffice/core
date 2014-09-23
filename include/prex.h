@@ -32,7 +32,6 @@
 /* Types from <X11/X.h> that clash, but we do use. */
 #define Region      XLIB_Region
 #define Time        XLIB_Time
-#define Window      XLIB_Window
 
 #if defined __cplusplus
 extern "C" {

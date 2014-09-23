@@ -28,7 +28,7 @@
 
 class TextEngine;
 class OutputDevice;
-class Window;
+namespace vcl { class Window; }
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
@@ -100,11 +100,11 @@ protected:
             using       DragAndDropClient::dragOver;
 
 public:
-                        TextView( TextEngine* pEng, Window* pWindow );
+                        TextView( TextEngine* pEng, vcl::Window* pWindow );
     virtual            ~TextView();
 
     TextEngine*         GetTextEngine() const;
-    Window*             GetWindow() const;
+    vcl::Window*             GetWindow() const;
 
     void                Invalidate();
     void                Scroll( long nHorzScroll, long nVertScroll );

@@ -45,7 +45,7 @@ static const sal_uInt16 pShadowRanges[] =
     0
 };
 
-SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
+SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
 
     SvxTabPage          ( pParent,
                           "ShadowTabPage",
@@ -456,7 +456,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 
-SfxTabPage* SvxShadowTabPage::Create( Window* pWindow,
+SfxTabPage* SvxShadowTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SvxShadowTabPage( pWindow, *rAttrs ) );
@@ -533,7 +533,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 
 
 
-void SvxShadowTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
+void SvxShadowTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRcPt )
 {
     eRP = eRcPt;
 

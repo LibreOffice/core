@@ -31,10 +31,10 @@ class SdrObject;
 class ScNoteMarker
 {
 private:
-    Window*     pWindow;
-    Window*     pRightWin;
-    Window*     pBottomWin;
-    Window*     pDiagWin;
+    vcl::Window*     pWindow;
+    vcl::Window*     pRightWin;
+    vcl::Window*     pBottomWin;
+    vcl::Window*     pDiagWin;
     ScDocument* pDoc;
     ScAddress   aDocPos;
     OUString    aUserText;
@@ -52,7 +52,7 @@ private:
     DECL_LINK( TimeHdl, void* );
 
 public:
-                ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
+                ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                                 ScDocument* pD, ScAddress aPos, const OUString& rUser,
                                 const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard );
                 ~ScNoteMarker();

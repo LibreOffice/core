@@ -58,7 +58,7 @@ namespace abp
     //= OAddessBookSourcePilot
 
 
-    OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XComponentContext >& _rxORB)
+    OAddessBookSourcePilot::OAddessBookSourcePilot(vcl::Window* _pParent, const Reference< XComponentContext >& _rxORB)
         :OAddessBookSourcePilot_Base( _pParent,
             static_cast<sal_uInt32>(WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS) )
         ,m_xORB(_rxORB)

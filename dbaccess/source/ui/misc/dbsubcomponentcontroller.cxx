@@ -451,7 +451,7 @@ namespace dbaui
     {
         OUString aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
         Reference< XWindow > xWindow = getTopMostContainerWindow();
-        Window* pWin = NULL;
+        vcl::Window* pWin = NULL;
         if ( xWindow.is() )
             pWin = VCLUnoHelper::GetWindow(xWindow);
         if ( !pWin )

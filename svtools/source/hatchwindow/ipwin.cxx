@@ -138,7 +138,7 @@ void SvResizeHelper::Draw( OutputDevice * pDev )
 |*
 |*    Description
 *************************************************************************/
-void SvResizeHelper::InvalidateBorder( Window * pWin )
+void SvResizeHelper::InvalidateBorder( vcl::Window * pWin )
 {
     Rectangle   aMoveRects[ 4 ];
     FillMoveRectsPixel( aMoveRects );
@@ -151,7 +151,7 @@ void SvResizeHelper::InvalidateBorder( Window * pWin )
 |*
 |*    Description
 *************************************************************************/
-bool SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
+bool SvResizeHelper::SelectBegin( vcl::Window * pWin, const Point & rPos )
 {
     if( -1 == nGrab )
     {
@@ -171,7 +171,7 @@ bool SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
 |*
 |*    Description
 *************************************************************************/
-short SvResizeHelper::SelectMove( Window * pWin, const Point & rPos )
+short SvResizeHelper::SelectMove( vcl::Window * pWin, const Point & rPos )
 {
     if( -1 == nGrab )
     {
@@ -421,7 +421,7 @@ void SvResizeHelper::ValidateRect( Rectangle & rValidate ) const
 |*
 |*    Description
 *************************************************************************/
-bool SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
+bool SvResizeHelper::SelectRelease( vcl::Window * pWin, const Point & rPos,
                                     Rectangle & rOutPosSize )
 {
     if( -1 != nGrab )
@@ -441,7 +441,7 @@ bool SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
 |*
 |*    Description
 *************************************************************************/
-void SvResizeHelper::Release( Window * pWin )
+void SvResizeHelper::Release( vcl::Window * pWin )
 {
     if( nGrab != -1 )
     {
@@ -458,7 +458,7 @@ void SvResizeHelper::Release( Window * pWin )
 *************************************************************************/
 SvResizeWindow::SvResizeWindow
 (
-    Window * pParent,
+    vcl::Window * pParent,
     VCLXHatchWindow* pWrapper
 )
     : Window( pParent, WB_CLIPCHILDREN )

@@ -52,7 +52,7 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
     using SvTreeListBox::Select;
 
 public:
-    SwDBTreeList(Window* pParent, WinBits nStyle);
+    SwDBTreeList(vcl::Window* pParent, WinBits nStyle);
     virtual ~SwDBTreeList();
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 

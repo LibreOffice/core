@@ -50,7 +50,7 @@ namespace svt
     class SVT_DLLPUBLIC PanelTabBar : public Control
     {
     public:
-        PanelTabBar( Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
+        PanelTabBar( vcl::Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
         virtual ~PanelTabBar();
 
         // attribute access

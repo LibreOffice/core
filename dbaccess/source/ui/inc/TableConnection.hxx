@@ -36,7 +36,7 @@ namespace dbaui
     class OJoinTableView;
     class OConnectionLine;
 
-    class OTableConnection : public Window
+    class OTableConnection : public vcl::Window
     {
         ::std::vector<OConnectionLine*> m_vConnLine;
         TTableConnectionData::value_type

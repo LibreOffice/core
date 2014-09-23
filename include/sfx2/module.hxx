@@ -46,7 +46,7 @@ struct SfxMenuCtrlFactory;
 struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
 class SfxTabPage;
-class Window;
+namespace vcl { class Window; }
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XFrame;
@@ -86,7 +86,7 @@ public:
     void                        RegisterMenuControl(SfxMenuCtrlFactory*);
 
     virtual SfxTabPage*         CreateTabPage( sal_uInt16 nId,
-                                               Window* pParent,
+                                               vcl::Window* pParent,
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) SAL_OVERRIDE;
 

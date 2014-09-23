@@ -26,7 +26,7 @@
 class XWindowPeer;
 class XToolkit;
 class EventList;
-class Window;
+namespace vcl { class Window; }
 class OutputDevice;
 class MouseEvent;
 class CommandEvent;
@@ -67,10 +67,10 @@ public:
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) = 0;
 
     // Window
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, bool bCreate ) = 0;
-    virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace ) = 0;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) = 0;
+    virtual void                SetWindowInterface( vcl::Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace ) = 0;
 
-    virtual void                WindowDestroyed( Window* pWindow ) = 0;
+    virtual void                WindowDestroyed( vcl::Window* pWindow ) = 0;
 
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >

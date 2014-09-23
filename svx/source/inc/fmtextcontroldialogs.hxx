@@ -37,7 +37,7 @@ namespace svx
         sal_uInt16 m_nCharPositionPageId;
 
     public:
-        TextControlCharAttribDialog( Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList );
+        TextControlCharAttribDialog( vcl::Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList );
 
     protected:
         virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage ) SAL_OVERRIDE;
@@ -46,7 +46,7 @@ namespace svx
     class TextControlParaAttribDialog : public SfxTabDialog
     {
     public:
-        TextControlParaAttribDialog(Window* _pParent, const SfxItemSet& _rCoreSet);
+        TextControlParaAttribDialog(vcl::Window* _pParent, const SfxItemSet& _rCoreSet);
     };
 
 } // namespace svx

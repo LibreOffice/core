@@ -42,7 +42,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 
 // OWizTypeSelectControl
-OWizTypeSelectControl::OWizTypeSelectControl(Window* pParent, Window* pParentTabPage, OTableDesignHelpBar* pHelpBar)
+OWizTypeSelectControl::OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar)
     : OFieldDescControl(pParent, pHelpBar)
 {
 
@@ -211,7 +211,7 @@ OUString OWizTypeSelectControl::getAutoIncrementValue() const
 }
 
 #define IMG_PRIMARY_KEY 1
-OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
+OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
                :OWizardPage( pParent, "TypeSelect", "dbaccess/ui/typeselectpage.ui")
                ,m_pTypeControl(new OWizTypeSelectControl(get<VclVBox>("control_container"), this) )
                ,m_pParserStream( _pStream )
@@ -373,7 +373,7 @@ void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr, sal_uInt
     SetEntryData(_nPos,_pFieldDescr);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOWizTypeSelectList(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOWizTypeSelectList(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new OWizTypeSelectList(pParent);
 }

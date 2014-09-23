@@ -22,7 +22,7 @@
 
 #include <vcl/button.hxx>
 
-LockFailedQueryBox::LockFailedQueryBox( Window* pParent, ResMgr* pResMgr ) :
+LockFailedQueryBox::LockFailedQueryBox( vcl::Window* pParent, ResMgr* pResMgr ) :
     MessBox(pParent, 0,
             ResId(STR_LOCKFAILED_TITLE, *pResMgr).toString(),
             OUString() )

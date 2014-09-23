@@ -55,7 +55,7 @@ class SwRect;
 class MapMode;
 class SwAccPreviewData;
 struct PreviewPage;
-class Window;
+namespace vcl { class Window; }
 
 // real states for events
 #define ACC_STATE_EDITABLE 0x01
@@ -193,12 +193,12 @@ public:
     // Dispose frame and its children if bRecursive is set
     void Dispose( const SwFrm* pFrm,
                   const SdrObject* pObj,
-                  Window* pWindow,
+                  vcl::Window* pWindow,
                   bool bRecursive = false );
 
     void InvalidatePosOrSize( const SwFrm* pFrm,
                               const SdrObject* pObj,
-                              Window* pWindow,
+                              vcl::Window* pWindow,
                               const SwRect& rOldFrm );
 
     void InvalidateContent( const SwFrm *pFrm );
@@ -245,7 +245,7 @@ public:
     void InvalidateTextSelectionOfAllParas();
 
     sal_Int32 GetChildIndex( const SwFrm& rParentFrm,
-                             Window& rChild ) const;
+                             vcl::Window& rChild ) const;
 
     // update preview data (and fire events if necessary)
     void UpdatePreview( const std::vector<PreviewPage*>& _rPreviewPages,

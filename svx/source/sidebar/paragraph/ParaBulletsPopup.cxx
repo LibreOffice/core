@@ -24,7 +24,7 @@
 namespace svx { namespace sidebar {
 
 ParaBulletsPopup::ParaBulletsPopup (
-    Window* pParent,
+    vcl::Window* pParent,
     const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator)
     : Popup(
         pParent,

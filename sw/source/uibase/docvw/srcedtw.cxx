@@ -232,7 +232,7 @@ private:
     SwSrcEditWindow & editor_;
 };
 
-SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
+SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView ) :
     Window( pParent, WB_BORDER|WB_CLIPCHILDREN ),
 
     pTextEngine(0),

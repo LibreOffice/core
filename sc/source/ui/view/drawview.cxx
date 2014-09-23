@@ -509,7 +509,7 @@ void ScDrawView::MarkListHasChanged()
 
         if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
         {
-            ((Window&)rOutDev).Update();
+            ((vcl::Window&)rOutDev).Update();
         }
     }
 
@@ -537,7 +537,7 @@ void ScDrawView::MarkListHasChanged()
 bool ScDrawView::SdrBeginTextEdit(
     SdrObject* pObj,
     SdrPageView* pPV,
-    ::Window* pWinL,
+    vcl::Window* pWinL,
     bool bIsNewObj,
     SdrOutliner* pGivenOutliner,
     OutlinerView* pGivenOutlinerView,
@@ -817,7 +817,7 @@ void ScDrawView::LockCalcLayer( SdrLayerID nLayer, bool bLock )
         SetLayerLocked( pLockLayer->GetName(), bLock );
 }
 
-void ScDrawView::MakeVisible( const Rectangle& rRect, Window& rWin )
+void ScDrawView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )
 {
     //! rWin richtig auswerten
     //! ggf Zoom aendern

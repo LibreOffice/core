@@ -41,7 +41,7 @@ IMPL_LINK_NOARG_INLINE_START(SwTableWidthDlg, LoseFocusHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwTableWidthDlg, LoseFocusHdl)
 
-SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc )
+SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
     : SvxStandardDialog( pParent, "ColumnWidthDialog", "modules/swriter/ui/columnwidth.ui" )
     , rFnc(rTableFnc)
 {

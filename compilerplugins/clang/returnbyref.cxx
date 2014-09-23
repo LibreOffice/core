@@ -59,7 +59,7 @@ bool ReturnByRef::VisitCXXMethodDecl(const CXXMethodDecl * functionDecl) {
         return true;
     }
     // Ignore stuff like:
-    //   operator Window *(){ return &m_rWindow; }
+    //   operator vcl::Window *(){ return &m_rWindow; }
     if (dyn_cast< CXXConversionDecl >( functionDecl ) != nullptr) {
         return true;
     }

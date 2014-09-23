@@ -28,7 +28,7 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
 
 
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, WinBits nWinStyle )
+OMarkableTreeListBox::OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinStyle )
     : DBTreeListBox(pParent, nWinStyle)
 {
 

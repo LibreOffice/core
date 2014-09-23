@@ -43,7 +43,7 @@ class RangeChooserTabPage : public svt::OWizardPage, public RangeSelectionListen
 {
 public:
 
-    RangeChooserTabPage( Window* pParent
+    RangeChooserTabPage( vcl::Window* pParent
                 , DialogModel & rDialogModel
                 , ChartTypeTemplateProvider* pTemplateProvider
                 , Dialog * pParentDialog

@@ -142,7 +142,7 @@ IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl)
     return 1;
 }
 
-LoginDialog::LoginDialog(Window* pParent, sal_uInt16 nFlags,
+LoginDialog::LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,
     const OUString& rServer, const OUString& rRealm)
     : ModalDialog(pParent, "LoginDialog", "uui/ui/logindialog.ui")
 {

@@ -66,14 +66,14 @@ public:
 
     virtual void    DoConnect(SdrOle2Obj* pOleObj) SAL_OVERRIDE;
 
-    virtual void    MakeVisible( const Rectangle& rRect, Window& rWin ) SAL_OVERRIDE;
+    virtual void    MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) SAL_OVERRIDE;
 
     virtual void    DeleteMarked() SAL_OVERRIDE;
 
     virtual bool    SdrBeginTextEdit(
                       SdrObject* pObj,
                       SdrPageView* pPV = 0L,
-                      ::Window* pWin = 0L,
+                      vcl::Window* pWin = 0L,
                       bool bIsNewObj = false,
                       SdrOutliner* pGivenOutliner = 0L,
                       OutlinerView* pGivenOutlinerView = 0L,
@@ -90,7 +90,7 @@ public:
     void            InvalidateAttribs();
     void            InvalidateDrawTextAttrs();
 
-    bool            BeginDrag( Window* pWindow, const Point& rStartPos );
+    bool            BeginDrag( vcl::Window* pWindow, const Point& rStartPos );
     void            DoCut();
     void            DoCopy();
 
@@ -105,8 +105,8 @@ public:
     void            SetCellAnchored();
     ScAnchorType    GetAnchorType() const;
 
-    void            VCAddWin( Window* pWin );
-    void            VCRemoveWin( Window* pWin );
+    void            VCAddWin( vcl::Window* pWin );
+    void            VCRemoveWin( vcl::Window* pWin );
 
     void            UpdateIMap( SdrObject* pObj );
 

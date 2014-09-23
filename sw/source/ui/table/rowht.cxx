@@ -49,7 +49,7 @@ void SwTableHeightDlg::Apply()
     rSh.SetRowHeight( aSz );
 }
 
-SwTableHeightDlg::SwTableHeightDlg(Window *pParent, SwWrtShell &rS)
+SwTableHeightDlg::SwTableHeightDlg(vcl::Window *pParent, SwWrtShell &rS)
     : SvxStandardDialog(pParent, "RowHeightDialog", "modules/swriter/ui/rowheight.ui")
     , rSh( rS )
 {

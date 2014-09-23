@@ -70,7 +70,7 @@ public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
         after the dialog has been destroyed
     */
-    ODbTypeWizDialog(Window* pParent
+    ODbTypeWizDialog(vcl::Window* pParent
         ,SfxItemSet* _pItems
         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         ,const ::com::sun::star::uno::Any& _aDataSourceName

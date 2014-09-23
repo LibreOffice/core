@@ -1789,7 +1789,7 @@ void OReportController::doOpenHelpAgent()
     }
 }
 
-bool OReportController::Construct(Window* pParent)
+bool OReportController::Construct(vcl::Window* pParent)
 {
     ODesignView* pMyOwnView = new ODesignView( pParent, m_xContext, *this );
     StartListening( *pMyOwnView );

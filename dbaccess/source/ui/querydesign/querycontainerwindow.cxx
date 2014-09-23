@@ -42,7 +42,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
 
     // OQueryContainerWindow
-    OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
+    OQueryContainerWindow::OQueryContainerWindow(vcl::Window* pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
         :ODataView( pParent, _rController, _rxContext )
         ,m_pViewSwitch(NULL)
         ,m_pBeamer(NULL)
@@ -71,7 +71,7 @@ namespace dbaui
                 xCloseable->close(sal_False); // false - holds the owner ship of this frame
         }
 
-        boost::scoped_ptr<Window> aTemp(m_pSplitter);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pSplitter);
         m_pSplitter = NULL;
 
     }

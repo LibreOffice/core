@@ -161,7 +161,7 @@ bool DigitalSignaturesDialog::isXML(const OUString& rURI )
 }
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
-    Window* pParent,
+    vcl::Window* pParent,
     uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
     bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature)
     : ModalDialog(pParent, "DigitalSignaturesDialog", "xmlsec/ui/digitalsignaturesdialog.ui")

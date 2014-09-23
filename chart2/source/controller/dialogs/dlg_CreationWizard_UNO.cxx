@@ -173,7 +173,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
     SolarMutexGuard aSolarGuard;
     if( !m_pDialog )
     {
-        Window* pParent = NULL;
+        vcl::Window* pParent = NULL;
         if( !m_xParentWindow.is() && m_xChartModel.is() )
         {
             uno::Reference< frame::XController > xController(

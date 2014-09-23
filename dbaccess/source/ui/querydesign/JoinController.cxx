@@ -96,7 +96,7 @@ public:
     virtual bool    allowQueries() const SAL_OVERRIDE;
     virtual bool    allowAddition() const SAL_OVERRIDE;
     virtual void    addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName ) SAL_OVERRIDE;
-    virtual void    onWindowClosing( const Window* _pWindow ) SAL_OVERRIDE;
+    virtual void    onWindowClosing( const vcl::Window* _pWindow ) SAL_OVERRIDE;
 
 private:
     OJoinTableView* getTableView() const;
@@ -127,13 +127,13 @@ void AddTableDialogContext::addTableWindow( const OUString& _rQualifiedTableName
     getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, true );
 }
 
-void AddTableDialogContext::onWindowClosing( const Window* _pWindow )
+void AddTableDialogContext::onWindowClosing( const vcl::Window* _pWindow )
 {
     if ( !m_rController.getView() )
         return;
 
     ::dbaui::notifySystemWindow(
-        m_rController.getView(), const_cast< Window* >( _pWindow ), ::comphelper::mem_fun( &TaskPaneList::RemoveWindow ) );
+        m_rController.getView(), const_cast< vcl::Window* >( _pWindow ), ::comphelper::mem_fun( &TaskPaneList::RemoveWindow ) );
 
     m_rController.InvalidateFeature( ID_BROWSER_ADDTABLE );
     m_rController.getView()->GrabFocus();
@@ -171,7 +171,7 @@ OJoinDesignView* OJoinController::getJoinView()
 void OJoinController::disposing()
 {
     {
-        boost::scoped_ptr< Window > pEnsureDelete( m_pAddTableDialog );
+        boost::scoped_ptr< vcl::Window > pEnsureDelete( m_pAddTableDialog );
         m_pAddTableDialog   = NULL;
     }
 

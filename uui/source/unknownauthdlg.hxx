@@ -43,7 +43,7 @@ private:
     DECL_LINK(ViewCertHdl_Impl, void *);
 
 public:
-    UnknownAuthDialog(Window* pParent,
+    UnknownAuthDialog(vcl::Window* pParent,
         const css::uno::Reference< css::security::XCertificate >& rXCert,
         const css::uno::Reference< css::uno::XComponentContext >& xContext);
 

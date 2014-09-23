@@ -79,7 +79,7 @@ namespace svx {namespace sidebar {
 #define NEGA_MAXVALUE          -10000000
 
 ParaPropertyPanel* ParaPropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
@@ -1090,7 +1090,7 @@ PopupControl* ParaPropertyPanel::CreateBGColorPopupControl (PopupContainer* pPar
 }
 
 
-ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
+ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)

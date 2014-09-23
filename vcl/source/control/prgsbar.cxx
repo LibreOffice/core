@@ -33,7 +33,7 @@ void ProgressBar::ImplInit()
     ImplInitSettings( true, true, true );
 }
 
-static WinBits clearProgressBarBorder( Window* pParent, WinBits nOrgStyle )
+static WinBits clearProgressBarBorder( vcl::Window* pParent, WinBits nOrgStyle )
 {
     WinBits nOutStyle = nOrgStyle;
     if( pParent && (nOrgStyle & WB_BORDER) != 0 )
@@ -49,7 +49,7 @@ Size ProgressBar::GetOptimalSize() const
     return Size(150, 20);
 }
 
-ProgressBar::ProgressBar( Window* pParent, WinBits nWinStyle ) :
+ProgressBar::ProgressBar( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, clearProgressBarBorder( pParent, nWinStyle ) )
 {
     SetOutputSizePixel( GetOptimalSize() );

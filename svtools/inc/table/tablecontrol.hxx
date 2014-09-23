@@ -65,7 +65,7 @@ namespace svt { namespace table
 
 
     public:
-        TableControl( Window* _pParent, WinBits _nStyle );
+        TableControl( vcl::Window* _pParent, WinBits _nStyle );
         virtual ~TableControl();
 
         /// sets a new table model
@@ -141,7 +141,7 @@ namespace svt { namespace table
             if the row, which should be removed, is selected, it will be erased from the vector
         */
         SelectionEngine*    getSelEngine();
-        Window&             getDataWindow();
+        vcl::Window&             getDataWindow();
 
         // Window overridables
         virtual void        GetFocus() SAL_OVERRIDE;
@@ -166,11 +166,11 @@ namespace svt { namespace table
 
 
         // IAccessibleTable
-        virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const SAL_OVERRIDE;
+        virtual Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const SAL_OVERRIDE;
         virtual void GrabFocus() SAL_OVERRIDE;
         virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) SAL_OVERRIDE;
-        virtual Window* GetAccessibleParentWindow() const SAL_OVERRIDE;
-        virtual Window* GetWindowInstance() SAL_OVERRIDE;
+        virtual vcl::Window* GetAccessibleParentWindow() const SAL_OVERRIDE;
+        virtual vcl::Window* GetWindowInstance() SAL_OVERRIDE;
         virtual sal_Int32 GetAccessibleControlCount() const SAL_OVERRIDE;
         virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) SAL_OVERRIDE;
         virtual long GetRowCount() const SAL_OVERRIDE;

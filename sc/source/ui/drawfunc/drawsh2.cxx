@@ -282,7 +282,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
 void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 {
     Point       aMousePos   = pViewData->GetMousePosPixel();
-    Window*     pWindow     = pViewData->GetActiveWin();
+    vcl::Window*     pWindow     = pViewData->GetActiveWin();
     ScDrawView* pDrView     = pViewData->GetScDrawView();
     Point       aPos        = pWindow->PixelToLogic(aMousePos);
     bool        bHasMarked  = pDrView->AreObjectsMarked();

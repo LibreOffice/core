@@ -103,7 +103,7 @@ private:
     // helper
     bool SetAdjustedNumericalValue( const char* pOption, double fValue, int nElement = 0 );
 public:
-    SaneDlg( Window*, Sane&, bool );
+    SaneDlg( vcl::Window*, Sane&, bool );
     virtual ~SaneDlg();
 
     virtual short Execute() SAL_OVERRIDE;

@@ -462,7 +462,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     return 0L;
 }
 
-SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(Window *pParent, SfxVersionInfo& rInfo, bool bEdit)
+SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVersionInfo& rInfo, bool bEdit)
     : SfxModalDialog(pParent, "VersionCommentDialog", "sfx/ui/versioncommentdialog.ui")
     , m_rInfo(rInfo)
 {

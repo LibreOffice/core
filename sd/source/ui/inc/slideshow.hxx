@@ -48,7 +48,7 @@ class SdDrawDocument;
 class KeyEvent;
 class Size;
 class Rectangle;
-class Window;
+namespace vcl { class Window; }
 class SfxRequest;
 class WorkWindow;
 struct ImplSVEvent;
@@ -94,7 +94,7 @@ public:
     static bool StartPreview( ViewShellBase& rBase,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
-        ::Window* pParent = 0 );
+        ::vcl::Window* pParent = 0 );
 
     static void Stop( ViewShellBase& rBase );
 
@@ -110,7 +110,7 @@ public:
     bool startPreview(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
-        ::Window* pParent = 0 );
+        ::vcl::Window* pParent = 0 );
 
     // uno api
 
@@ -194,7 +194,7 @@ private:
 
     void ThrowIfDisposed() const throw (css::uno::RuntimeException);
 
-    void CreateController( ViewShell* pViewSh, ::sd::View* pView, ::Window* pParentWindow );
+    void CreateController( ViewShell* pViewSh, ::sd::View* pView, ::vcl::Window* pParentWindow );
     WorkWindow *GetWorkWindow();
 
     // default: disabled copy/assignment

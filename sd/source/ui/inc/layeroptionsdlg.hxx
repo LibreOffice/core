@@ -46,7 +46,7 @@ private:
 
 public:
 
-    SdInsertLayerDlg( Window* pWindow, const SfxItemSet& rInAttrs,
+    SdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         bool bDeletable, const OUString& rStr );
     void                GetAttr( SfxItemSet& rOutAttrs );
 };

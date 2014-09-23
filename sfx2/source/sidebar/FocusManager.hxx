@@ -73,8 +73,8 @@ private:
     ::std::vector<Button*> maButtons;
     const ::boost::function<void(const Panel&)> maShowPanelFunctor;
     bool mbObservingContentControlFocus;
-    Window* mpFirstFocusedContentControl;
-    Window* mpLastFocusedWindow;
+    vcl::Window* mpFirstFocusedContentControl;
+    vcl::Window* mpLastFocusedWindow;
 
     enum PanelComponent
     {
@@ -105,12 +105,12 @@ private:
     /** Let the focus manager listen for window events for the given
         window.
     */
-    void RegisterWindow (Window& rWindow);
-    void UnregisterWindow (Window& rWindow);
+    void RegisterWindow (vcl::Window& rWindow);
+    void UnregisterWindow (vcl::Window& rWindow);
 
     /** Remove the window from the panel or the button container.
     */
-    void RemoveWindow (Window& rWindow);
+    void RemoveWindow (vcl::Window& rWindow);
 
     void FocusDeckTitle (void);
     bool IsDeckTitleVisible (void) const;
@@ -141,9 +141,9 @@ private:
 
     void HandleKeyEvent (
         const vcl::KeyCode& rKeyCode,
-        const Window& rWindow);
+        const vcl::Window& rWindow);
 
-    FocusLocation GetFocusLocation (const Window& rWindow) const;
+    FocusLocation GetFocusLocation (const vcl::Window& rWindow) const;
 
 };
 

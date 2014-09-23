@@ -237,10 +237,10 @@ namespace
     private:
         DECL_LINK(ShowHdl, void *);
     public:
-        LicenseDialog(Window *pParent=NULL);
+        LicenseDialog(vcl::Window *pParent=NULL);
     };
 
-    LicenseDialog::LicenseDialog(Window *pParent)
+    LicenseDialog::LicenseDialog(vcl::Window *pParent)
         : ModalDialog(pParent, "LicenseDialog", "sfx/ui/licensedialog.ui")
     {
         get<PushButton>("show")->SetClickHdl(LINK(this, LicenseDialog, ShowHdl));
@@ -885,7 +885,7 @@ ResMgr* SfxApplication::GetOffResManager_Impl()
 namespace
 {
 #ifndef DISABLE_SCRIPTING
-    Window* lcl_getDialogParent( const Reference< XFrame >& _rxFrame, Window* _pFallback )
+    vcl::Window* lcl_getDialogParent( const Reference< XFrame >& _rxFrame, vcl::Window* _pFallback )
     {
         if ( !_rxFrame.is() )
             return _pFallback;
@@ -893,7 +893,7 @@ namespace
         try
         {
             Reference< awt::XWindow > xContainerWindow( _rxFrame->getContainerWindow(), UNO_SET_THROW );
-            Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+            vcl::Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             OSL_ENSURE( pWindow, "lcl_getDialogParent: cool, somebody implemented a VCL-less toolkit!" );
 
             if ( pWindow )
@@ -1208,7 +1208,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             OUString aLang( aLanguage );
             OSL_TRACE("SfxApplication::OfaExec_Impl: about to create dialog for: %s", OUStringToOString( aLang , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
-            // not sure about the Window*
+            // not sure about the vcl::Window*
             VclAbstractDialog* pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage );
             if( pDlg )
             {

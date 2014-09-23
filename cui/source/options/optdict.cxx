@@ -95,7 +95,7 @@ static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rTex
 
 // class SvxNewDictionaryDialog -------------------------------------------
 
-SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
+SvxNewDictionaryDialog::SvxNewDictionaryDialog( vcl::Window* pParent,
         Reference< XSpellChecker1 >  &xSpl ) :
 
     ModalDialog( pParent, "OptNewDictionaryDialog" , "cui/ui/optnewdictionarydialog.ui" ),
@@ -208,7 +208,7 @@ IMPL_LINK_NOARG_INLINE_END(SvxNewDictionaryDialog, ModifyHdl_Impl)
 
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxDictEdit(Window *pParent, VclBuilder::stringmap&)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxDictEdit(vcl::Window *pParent, VclBuilder::stringmap&)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK;
     SvxDictEdit *pEdit = new SvxDictEdit(pParent, nWinStyle);
@@ -216,7 +216,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxDictEdit(Window *pParent
 };
 
 SvxEditDictionaryDialog::SvxEditDictionaryDialog(
-            Window* pParent,
+            vcl::Window* pParent,
             const OUString& rName,
             Reference< XSpellChecker1 >  &xSpl ) :
 

@@ -124,7 +124,7 @@ public:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
         GetTemporaryControlForWindow(
-            const Window& _rWindow,
+            const vcl::Window& _rWindow,
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer
         ) const;
 

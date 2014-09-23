@@ -121,7 +121,7 @@ public:
 
 protected:
 
-    Window*                 mpParent;
+    vcl::Window*                 mpParent;
     const SdDrawDocument*   mpDoc;
     SdDrawDocument*         mpBookmarkDoc;
     SfxMedium*              mpMedium;
@@ -184,8 +184,8 @@ protected:
 
 public:
 
-    SdPageObjsTLB( Window* pParent, const SdResId& rSdResId );
-    SdPageObjsTLB( Window* pParent, WinBits nStyle );
+    SdPageObjsTLB( vcl::Window* pParent, const SdResId& rSdResId );
+    SdPageObjsTLB( vcl::Window* pParent, WinBits nStyle );
                             virtual ~SdPageObjsTLB();
 
    // helper function for   GetEntryAltText and GetEntryLongDescription

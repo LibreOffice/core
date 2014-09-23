@@ -31,7 +31,7 @@ class GlueEscDirLB : public ListBox
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 public:
-                GlueEscDirLB( Window* pParent,
+                GlueEscDirLB( vcl::Window* pParent,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                  virtual ~GlueEscDirLB();
 
@@ -51,7 +51,7 @@ private:
 public:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 
             SFX_DECL_TOOLBOX_CONTROL();
 

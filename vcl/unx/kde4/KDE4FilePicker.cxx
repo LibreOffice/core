@@ -243,7 +243,7 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     }
 
     //get the window id of the main OO window to set it for the dialog as a parent
-    Window *pParentWin = Application::GetDefDialogParent();
+    vcl::Window *pParentWin = Application::GetDefDialogParent();
     if ( pParentWin )
     {
         const SystemEnvData* pSysData = ((SystemWindow *)pParentWin)->GetSystemData();

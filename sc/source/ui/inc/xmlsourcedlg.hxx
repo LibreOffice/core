@@ -56,7 +56,7 @@ class ScXMLSourceDlg : public ScAnyRefDlg
 
 public:
     ScXMLSourceDlg(
-        SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc);
+        SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent, ScDocument* pDoc);
 
     virtual bool IsRefInputMode() const SAL_OVERRIDE;
     virtual void SetReference(const ScRange& rRange, ScDocument* pDoc) SAL_OVERRIDE;

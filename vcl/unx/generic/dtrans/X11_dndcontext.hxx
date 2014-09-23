@@ -38,12 +38,12 @@ namespace x11 {
     ::com::sun::star::datatransfer::dnd::XDropTargetDropContext
     >
     {
-        XLIB_Window                 m_aDropWindow;
+        ::Window                    m_aDropWindow;
         XLIB_Time                   m_nTimestamp;
         SelectionManager&           m_rManager;
         com::sun::star::uno::Reference< XInterface >     m_xManagerRef;
     public:
-        DropTargetDropContext( XLIB_Window, XLIB_Time, SelectionManager& );
+        DropTargetDropContext( ::Window, XLIB_Time, SelectionManager& );
         virtual ~DropTargetDropContext();
 
         // XDropTargetDropContext
@@ -57,12 +57,12 @@ namespace x11 {
     ::com::sun::star::datatransfer::dnd::XDropTargetDragContext
     >
     {
-        XLIB_Window                 m_aDropWindow;
+        ::Window                    m_aDropWindow;
         XLIB_Time                   m_nTimestamp;
         SelectionManager&           m_rManager;
         com::sun::star::uno::Reference< XInterface >     m_xManagerRef;
     public:
-        DropTargetDragContext( XLIB_Window, XLIB_Time, SelectionManager& );
+        DropTargetDragContext( ::Window, XLIB_Time, SelectionManager& );
         virtual ~DropTargetDragContext();
 
         // XDropTargetDragContext
@@ -75,12 +75,12 @@ namespace x11 {
     ::com::sun::star::datatransfer::dnd::XDragSourceContext
     >
     {
-        XLIB_Window                 m_aDropWindow;
+        ::Window                    m_aDropWindow;
         XLIB_Time                   m_nTimestamp;
         SelectionManager&           m_rManager;
         com::sun::star::uno::Reference< XInterface >     m_xManagerRef;
     public:
-        DragSourceContext( XLIB_Window, XLIB_Time, SelectionManager& );
+        DragSourceContext( ::Window, XLIB_Time, SelectionManager& );
         virtual ~DragSourceContext();
 
         // XDragSourceContext

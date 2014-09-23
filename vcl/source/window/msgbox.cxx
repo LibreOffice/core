@@ -136,7 +136,7 @@ void MessBox::ImplInitButtons()
     }
 }
 
-MessBox::MessBox( Window* pParent, WinBits nStyle,
+MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
                   const OUString& rTitle, const OUString& rMessage ) :
     ButtonDialog( WINDOW_MESSBOX ),
     maMessText( rMessage )
@@ -386,13 +386,13 @@ void InfoBox::ImplInitInfoBoxData()
     SetImage( InfoBox::GetStandardImage() );
 }
 
-InfoBox::InfoBox( Window* pParent, const OUString& rMessage ) :
+InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
     MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
 {
     ImplInitInfoBoxData();
 }
 
-InfoBox::InfoBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
+InfoBox::InfoBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
     ImplInitInfoBoxData();
@@ -413,7 +413,7 @@ void WarningBox::ImplInitWarningBoxData()
     SetImage( WarningBox::GetStandardImage() );
 }
 
-WarningBox::WarningBox( Window* pParent, WinBits nStyle,
+WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
                         const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
@@ -442,7 +442,7 @@ void ErrorBox::ImplInitErrorBoxData()
     SetImage( ErrorBox::GetStandardImage() );
 }
 
-ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
+ErrorBox::ErrorBox( vcl::Window* pParent, WinBits nStyle,
                     const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
@@ -473,7 +473,7 @@ void QueryBox::ImplInitQueryBoxData()
     SetImage( QueryBox::GetStandardImage() );
 }
 
-QueryBox::QueryBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
+QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
     ImplInitQueryBoxData();

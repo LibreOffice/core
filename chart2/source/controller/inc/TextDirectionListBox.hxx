@@ -22,7 +22,7 @@
 
 #include <svx/frmdirlbox.hxx>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace chart
 {
@@ -30,8 +30,8 @@ namespace chart
 class TextDirectionListBox : public svx::FrameDirectionListBox
 {
 public:
-    explicit            TextDirectionListBox( Window* pParent,
-                            Window* pWindow1 = 0, Window* pWindow2 = 0 );
+    explicit            TextDirectionListBox( vcl::Window* pParent,
+                            vcl::Window* pWindow1 = 0, vcl::Window* pWindow2 = 0 );
     virtual             ~TextDirectionListBox();
 };
 

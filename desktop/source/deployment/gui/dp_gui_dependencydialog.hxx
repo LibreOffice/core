@@ -29,14 +29,14 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace dp_gui {
 
 class DependencyDialog: public ModalDialog {
 public:
     DependencyDialog(
-        Window * parent, std::vector< OUString > const & dependencies);
+        vcl::Window * parent, std::vector< OUString > const & dependencies);
 
     virtual ~DependencyDialog();
 

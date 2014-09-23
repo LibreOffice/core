@@ -929,10 +929,10 @@ public:
     sal_uInt16 GetScalingOfSelectedText() const;
 
     /// Ctor/Dtor.
-    SwEditShell( SwDoc&, Window*, const SwViewOption *pOpt = 0 );
+    SwEditShell( SwDoc&, vcl::Window*, const SwViewOption *pOpt = 0 );
 
     /// Copy-Constructor in disguise.
-    SwEditShell( SwEditShell&, Window* );
+    SwEditShell( SwEditShell&, vcl::Window* );
     virtual ~SwEditShell();
 
 private:

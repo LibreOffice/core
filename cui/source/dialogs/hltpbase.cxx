@@ -35,13 +35,13 @@ using namespace ::ucbhelper;
 
 //# ComboBox-Control for URL's with History and Autocompletion           #
 
-SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart )
+SvxHyperURLBox::SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart )
 : SvtURLBox         ( pParent, eSmart ),
   DropTargetHelper  ( this )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxHyperURLBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxHyperURLBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxHyperURLBox(pParent, INET_PROT_HTTP);
 }
@@ -85,7 +85,7 @@ bool SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
 
 //# Hyperlink-Dialog: Tabpages-Baseclass                                 #
 
-SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
+SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,
                                                    IconChoiceDialog* pDlg,
                                                    const OString& rID,
                                                    const OUString& rUIXMLDescription,
@@ -178,7 +178,7 @@ bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, bool bDisConnectDlg
 // Show Extra-Window
 void SvxHyperlinkTabPageBase::ShowMarkWnd ()
 {
-    ( ( Window* ) mpMarkWnd )->Show();
+    ( ( vcl::Window* ) mpMarkWnd )->Show();
 
     // Size of dialog-window in screen pixels
     Rectangle aDlgRect( mpDialog->GetWindowExtentsRelative( NULL ) );

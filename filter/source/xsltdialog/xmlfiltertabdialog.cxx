@@ -35,7 +35,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
-XMLFilterTabDialog::XMLFilterTabDialog(Window *pParent, ResMgr& rResMgr,
+XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr,
     const Reference< XComponentContext >& rxContext, const filter_info_impl* pInfo)
     : TabDialog(pParent, "XSLTFilterDialog","filter/ui/xsltfilterdialog.ui")
     , mxContext(rxContext)
@@ -89,7 +89,7 @@ bool XMLFilterTabDialog::onOk()
 
     sal_uInt16 nErrorPage = 0;
     sal_uInt16 nErrorId = 0;
-    Window* pFocusWindow = NULL;
+    vcl::Window* pFocusWindow = NULL;
     OUString aReplace1;
     OUString aReplace2;
 

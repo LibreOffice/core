@@ -46,7 +46,7 @@ private:
 protected:
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 public:
-    SvxPathControl(Window* pParent);
+    SvxPathControl(vcl::Window* pParent);
     HeaderBar* getHeaderBar() { return m_pHeaderBar; }
     XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
     virtual ~SvxPathControl();
@@ -85,7 +85,7 @@ public:
 class XMLFilterSettingsDialog : public ModelessDialog
 {
 public:
-    XMLFilterSettingsDialog(Window* pParent,
+    XMLFilterSettingsDialog(vcl::Window* pParent,
         const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext);
 
     DECL_LINK(ClickHdl_Impl, PushButton * );

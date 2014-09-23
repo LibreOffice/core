@@ -95,7 +95,7 @@ public:
     virtual ~ViewShellObjectBarFactory (void);
     virtual SfxShell* CreateShell (
         ::sd::ShellId nId,
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         ::sd::FrameView* pFrameView) SAL_OVERRIDE;
     virtual void ReleaseShell (SfxShell* pShell) SAL_OVERRIDE;
 private:
@@ -133,7 +133,7 @@ SfxViewFrame* ViewShell::GetViewFrame (void) const
 /// declare SFX-Slotmap and standard interface
 TYPEINIT1(ViewShell, SfxShell);
 
-ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, ViewShellBase& rViewShellBase, bool bAllowCenter)
+ViewShell::ViewShell( SfxViewFrame*, vcl::Window* pParentWindow, ViewShellBase& rViewShellBase, bool bAllowCenter)
 :   SfxShell(&rViewShellBase)
 ,   mbCenterAllowed(bAllowCenter)
 ,   mpParentWindow(pParentWindow)
@@ -237,7 +237,7 @@ void ViewShell::construct(void)
 void ViewShell::doShow(void)
 {
     mpContentWindow->Show();
-    static_cast< ::Window*>(mpContentWindow.get())->Resize();
+    static_cast< vcl::Window*>(mpContentWindow.get())->Resize();
     OSL_TRACE("content window has size %d %d",
         mpContentWindow->GetSizePixel().Width(),
         mpContentWindow->GetSizePixel().Height());
@@ -1400,7 +1400,7 @@ void ViewShell::ShowUIControls (bool bVisible)
         mpContentWindow->Show( bVisible );
 }
 
-bool ViewShell::RelocateToParentWindow (::Window* pParentWindow)
+bool ViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
 {
     mpParentWindow = pParentWindow;
 
@@ -1472,7 +1472,7 @@ ViewShellObjectBarFactory::~ViewShellObjectBarFactory (void)
 
 SfxShell* ViewShellObjectBarFactory::CreateShell (
     ::sd::ShellId nId,
-    ::Window*,
+    vcl::Window*,
     ::sd::FrameView* )
 {
     SfxShell* pShell = NULL;

@@ -48,7 +48,7 @@ namespace dbaui
         bool    m_bSuspendSelectHdl;
 
     public:
-        DbaIndexList(Window* _pParent, WinBits nWinBits);
+        DbaIndexList(vcl::Window* _pParent, WinBits nWinBits);
 
         void SetSelectHdl(const Link& _rHdl) { m_aSelectHdl = _rHdl; }
         Link GetSelectHdl() const { return m_aSelectHdl; }
@@ -103,7 +103,7 @@ namespace dbaui
                                 m_xContext;
     public:
         DbaIndexDialog(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Sequence< OUString >& _rFieldNames,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,

@@ -34,7 +34,7 @@ sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
 |*
 |************************************************************************/
 
-SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
+SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
                                                  IconChoiceDialog* pDlg,
                                                  const SfxItemSet& rItemSet)
 :   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkInternetPage", "cui/ui/hyperlinkinternetpage.ui",
@@ -187,7 +187,7 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkInternetTp::Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+IconChoicePage* SvxHyperlinkInternetTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
     return( new SvxHyperlinkInternetTp( pWindow, pDlg, rItemSet ) );
 }

@@ -46,7 +46,7 @@ class SvxLineBox : public LineLB
     void            ReleaseFocus_Impl();
 
 public:
-    SvxLineBox( Window* pParent,
+    SvxLineBox( vcl::Window* pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                 WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     virtual ~SvxLineBox();
@@ -84,7 +84,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
-    SvxMetricField( Window* pParent,
+    SvxMetricField( vcl::Window* pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                     WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
     virtual ~SvxMetricField();
@@ -99,7 +99,7 @@ public:
 class SvxFillTypeBox : public FillTypeLB
 {
 public:
-    SvxFillTypeBox( Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
+    SvxFillTypeBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     virtual ~SvxFillTypeBox();
 
     void            Selected() { bSelect = true; }
@@ -122,7 +122,7 @@ private:
 class SvxFillAttrBox : public FillAttrLB
 {
 public:
-    SvxFillAttrBox( Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
+    SvxFillAttrBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     virtual ~SvxFillAttrBox();
 
     bool            IsRelease() { return bRelease;}

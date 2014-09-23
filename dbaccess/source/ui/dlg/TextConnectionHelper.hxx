@@ -47,7 +47,7 @@ namespace dbaui
         Link        m_aModifiedHandler;     /// to be called if something on the page has been modified
 
     public:
-        OTextConnectionHelper( Window* pParent, const short _nAvailableSections );
+        OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections );
         virtual ~OTextConnectionHelper();
 
     private:

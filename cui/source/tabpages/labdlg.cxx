@@ -70,7 +70,7 @@ static const sal_uInt16 pCaptionRanges[] =
     0
 };
 
-SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "CalloutPage", "cui/ui/calloutpage.ui", &rInAttrs)
     , nCaptionType(0)
     , nGap(0)
@@ -336,7 +336,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 
 
 
-SfxTabPage* SvxCaptionTabPage::Create( Window* pWindow,
+SfxTabPage* SvxCaptionTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rOutAttrs )
 {
     return( new SvxCaptionTabPage( pWindow, *rOutAttrs ) );
@@ -514,7 +514,7 @@ void SvxCaptionTabPage::FillValueSet()
 
 
 
-SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView,
+SvxCaptionTabDialog::SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pSdrView,
     sal_uInt16 nAnchorTypes)
     : SfxTabDialog( pParent, "CalloutDialog", "cui/ui/calloutdialog.ui")
     , pView(pSdrView)

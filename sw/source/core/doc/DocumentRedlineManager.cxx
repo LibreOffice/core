@@ -2649,7 +2649,7 @@ void DocumentRedlineManager::checkRedlining(RedlineMode_t& _rReadlineMode)
 {
     const SwRedlineTbl& rRedlineTbl = GetRedlineTbl();
     SwEditShell* pEditShell = m_rSwdoc.GetEditShell();
-    Window* pParent = pEditShell ? pEditShell->GetWin() : NULL;
+    vcl::Window* pParent = pEditShell ? pEditShell->GetWin() : NULL;
     if ( pParent && !mbReadlineChecked && rRedlineTbl.size() > MAX_REDLINE_COUNT
         && !((_rReadlineMode & nsRedlineMode_t::REDLINE_SHOW_DELETE) == nsRedlineMode_t::REDLINE_SHOW_DELETE) )
     {

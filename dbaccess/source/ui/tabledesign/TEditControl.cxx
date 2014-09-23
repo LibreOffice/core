@@ -138,7 +138,7 @@ void OTableEditorCtrl::UpdateAll()
     Invalidate();
 }
 
-OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
+OTableEditorCtrl::OTableEditorCtrl(vcl::Window* pWindow)
     :OTableRowView(pWindow)
     ,pNameCell(NULL)
     ,pTypeCell(NULL)

@@ -945,7 +945,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
 
             if( pOutputDevice->GetOutDevType() == OUTDEV_WINDOW )
             {
-                const Region aPaintRgn( ( (Window*) pOutputDevice )->GetPaintRegion() );
+                const Region aPaintRgn( ( (vcl::Window*) pOutputDevice )->GetPaintRegion() );
                 if( !aPaintRgn.IsNull() )
                     aOutRect.Intersection( pOutputDevice->LogicToPixel( aPaintRgn.GetBoundRect() ) );
             }

@@ -161,14 +161,14 @@ Edit::Edit( WindowType nType ) :
     ImplInitEditData();
 }
 
-Edit::Edit( Window* pParent, WinBits nStyle ) :
+Edit::Edit( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_EDIT )
 {
     ImplInitEditData();
     ImplInit( pParent, nStyle );
 }
 
-Edit::Edit( Window* pParent, const ResId& rResId ) :
+Edit::Edit( vcl::Window* pParent, const ResId& rResId ) :
     Control( WINDOW_EDIT )
 {
     rResId.SetRT( RSC_EDIT );
@@ -308,7 +308,7 @@ bool Edit::ImplUseNativeBorder( WinBits nStyle )
                                  && ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
     if( ! bRet && mbIsSubEdit )
     {
-        Window* pWindow = GetParent();
+        vcl::Window* pWindow = GetParent();
         nStyle = pWindow->GetStyle();
         bRet = pWindow->IsNativeControlSupported(ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE)
                && ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
@@ -316,7 +316,7 @@ bool Edit::ImplUseNativeBorder( WinBits nStyle )
     return bRet;
 }
 
-void Edit::ImplInit( Window* pParent, WinBits nStyle )
+void Edit::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     if ( !(nStyle & (WB_CENTER | WB_RIGHT)) )
@@ -786,7 +786,7 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenc
     return mxISC;
 }
 
-void Edit::ShowTruncationWarning( Window* pParent )
+void Edit::ShowTruncationWarning( vcl::Window* pParent )
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
@@ -944,7 +944,7 @@ void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
 int Edit::ImplGetNativeControlType() const
 {
     int nCtrl = 0;
-    const Window *pControl = mbIsSubEdit ? GetParent() : this;
+    const vcl::Window *pControl = mbIsSubEdit ? GetParent() : this;
 
     switch( pControl->GetType() )
     {
@@ -1016,11 +1016,11 @@ void Edit::ImplPaintBorder( long nXStart, long nXEnd )
     if( ImplUseNativeBorder( GetStyle() ) || IsPaintTransparent() )
     {
         // draw the inner part by painting the whole control using its border window
-        Window *pBorder = GetWindow( WINDOW_BORDER );
+        vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
         if( pBorder == this )
         {
             // we have no border, use parent
-            Window *pControl = mbIsSubEdit ? GetParent() : this;
+            vcl::Window *pControl = mbIsSubEdit ? GetParent() : this;
             pBorder = pControl->GetWindow( WINDOW_BORDER );
             if( pBorder == this )
                 pBorder = GetParent();
@@ -1856,10 +1856,10 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_u
     }
 }
 
-void Edit::ImplInvalidateOutermostBorder( Window* pWin )
+void Edit::ImplInvalidateOutermostBorder( vcl::Window* pWin )
 {
     // allow control to show focused state
-    Window *pInvalWin = pWin, *pBorder = pWin;
+    vcl::Window *pInvalWin = pWin, *pBorder = pWin;
     while( ( pBorder = pInvalWin->GetWindow( WINDOW_BORDER ) ) != pInvalWin && pBorder &&
            pInvalWin->ImplGetFrame() == pBorder->ImplGetFrame() )
     {
@@ -1922,7 +1922,7 @@ void Edit::GetFocus()
     Control::GetFocus();
 }
 
-Window* Edit::GetPreferredKeyInputWindow()
+vcl::Window* Edit::GetPreferredKeyInputWindow()
 {
     if ( mpSubEdit )
         return mpSubEdit->GetPreferredKeyInputWindow();
@@ -2768,7 +2768,7 @@ Size Edit::CalcMinimumSize() const
 
 Size Edit::GetMinimumEditSize()
 {
-    Window* pDefWin = ImplGetDefaultWindow();
+    vcl::Window* pDefWin = ImplGetDefaultWindow();
     Edit aEdit( pDefWin, WB_BORDER );
     Size aSize( aEdit.CalcMinimumSize() );
     return aSize;
@@ -2792,7 +2792,7 @@ Size Edit::CalcSize(sal_Int32 nChars) const
 
 sal_Int32 Edit::GetMaxVisChars() const
 {
-    const Window* pW = mpSubEdit ? mpSubEdit : this;
+    const vcl::Window* pW = mpSubEdit ? mpSubEdit : this;
     sal_Int32 nOutWidth = pW->GetOutputSizePixel().Width();
     sal_Int32 nCharWidth = GetTextWidth( OUString('x') );
     return nCharWidth ? nOutWidth/nCharWidth : 0;

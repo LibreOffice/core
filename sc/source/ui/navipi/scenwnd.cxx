@@ -194,7 +194,7 @@ void ScScenarioListBox::DeleteScenario( bool bQueryBox )
 
 // class ScScenarioWindow ------------------------------------------------
 
-ScScenarioWindow::ScScenarioWindow( Window* pParent, const OUString& aQH_List,
+ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_List,
                                     const OUString& aQH_Comment)
     :   Window      ( pParent, WB_TABSTOP | WB_DIALOGCONTROL ),
         aLbScenario ( *this ),

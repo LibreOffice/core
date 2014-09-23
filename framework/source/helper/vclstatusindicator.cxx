@@ -46,7 +46,7 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
 {
     SolarMutexGuard aSolarGuard;
 
-    Window* pParentWindow = VCLUnoHelper::GetWindow(m_xParentWindow);
+    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(m_xParentWindow);
     if (!m_pStatusBar)
         m_pStatusBar = new StatusBar(pParentWindow, WB_3DLOOK|WB_BORDER);
 
@@ -127,8 +127,8 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
         m_pStatusBar->SetProgressValue(nPercent);
 }
 
-void VCLStatusIndicator::impl_recalcLayout(Window* pStatusBar   ,
-                                           Window* pParentWindow)
+void VCLStatusIndicator::impl_recalcLayout(vcl::Window* pStatusBar   ,
+                                           vcl::Window* pParentWindow)
 {
     if (
         (!pStatusBar   ) ||

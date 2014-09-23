@@ -41,7 +41,7 @@ namespace svt
         (We could also inject the A11Y component on the A11Y level only, but this would mean additional code. With
         this approach here, VCL/toolkit will take care of creating and maintaining the A11Y component for us.)
     */
-    class DrawerVisualization : public Window
+    class DrawerVisualization : public vcl::Window
     {
     public:
         DrawerVisualization( ToolPanelDrawer& i_rParent );
@@ -59,10 +59,10 @@ namespace svt
     //= ToolPanelDrawer
 
 
-    class ToolPanelDrawer : public Window
+    class ToolPanelDrawer : public vcl::Window
     {
     public:
-        ToolPanelDrawer( Window& i_rParent, const OUString& i_rTitle );
+        ToolPanelDrawer( vcl::Window& i_rParent, const OUString& i_rTitle );
         virtual ~ToolPanelDrawer();
 
         long    GetPreferredHeightPixel() const;

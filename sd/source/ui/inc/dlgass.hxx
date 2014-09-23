@@ -41,7 +41,7 @@ private:
     AssistentDlgImpl* mpImpl;
 
 public:
-    AssistentDlg(Window* pParent, bool bAutoPilot);
+    AssistentDlg(vcl::Window* pParent, bool bAutoPilot);
     virtual ~AssistentDlg();
 
     DECL_LINK( FinishHdl, void * );

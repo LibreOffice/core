@@ -114,7 +114,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     Reference<ui::XSidebar> xSidebar (aArguments.getOrDefault("Sidebar", Reference<ui::XSidebar>()));
 
     // Throw exceptions when the arguments are not as expected.
-    ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( ! xParentWindow.is() || pParentWindow==NULL)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow");
@@ -140,7 +140,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
     // Create a framework view.
-    ::Window* pControl = NULL;
+    vcl::Window* pControl = NULL;
     css::ui::LayoutSize aLayoutSize (-1,-1,-1);
 
 #define EndsWith(s,t) s.endsWithAsciiL(t,strlen(t))

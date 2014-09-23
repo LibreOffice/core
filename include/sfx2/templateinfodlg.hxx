@@ -25,7 +25,7 @@ class SfxTemplateInfoDlg : public ModalDialog
 {
 public:
 
-    SfxTemplateInfoDlg (Window *pParent = NULL);
+    SfxTemplateInfoDlg (vcl::Window *pParent = NULL);
 
     virtual ~SfxTemplateInfoDlg ();
 
@@ -40,7 +40,7 @@ private:
     PushButton*   mpBtnClose;
     VclBox*      mpBox;
 
-    Window *mpPreviewView;  // gets released when xWindows get destroyed (dont delete in constructor)
+    vcl::Window *mpPreviewView;  // gets released when xWindows get destroyed (dont delete in constructor)
     svtools::ODocumentInfoPreview *mpInfoView;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 > m_xFrame;

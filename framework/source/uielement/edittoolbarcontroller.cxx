@@ -51,7 +51,7 @@ namespace framework
 class EditControl : public Edit
 {
     public:
-        EditControl( Window* pParent, WinBits nStyle, IEditListener* pEditListener );
+        EditControl( vcl::Window* pParent, WinBits nStyle, IEditListener* pEditListener );
         virtual ~EditControl();
 
         virtual void Modify() SAL_OVERRIDE;
@@ -64,7 +64,7 @@ class EditControl : public Edit
         IEditListener* m_pEditListener;
 };
 
-EditControl::EditControl( Window* pParent, WinBits nStyle, IEditListener* pEditListener ) :
+EditControl::EditControl( vcl::Window* pParent, WinBits nStyle, IEditListener* pEditListener ) :
     Edit( pParent, nStyle )
     , m_pEditListener( pEditListener )
 {

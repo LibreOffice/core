@@ -184,7 +184,7 @@ static void aDspFunc(const OUString &rErr, const OUString &rAction)
     OSL_FAIL(aErr.getStr());
 }
 
-ErrorContext::ErrorContext(Window *pWinP)
+ErrorContext::ErrorContext(vcl::Window *pWinP)
 {
     EDcrData *pData=EDcrData::GetData();
     ErrorContext *&pHdl=pData->pFirstCtx;
@@ -272,7 +272,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     ErrorContext *pCtx=ErrorContext::GetContext();
     if(pCtx)
         pCtx->GetString(pInfo->GetErrorCode(), aAction);
-    Window *pParent=0;
+    vcl::Window *pParent=0;
     // Remove parent from context
     for(;pCtx;pCtx=pCtx->pNext)
         if(pCtx->GetParent())

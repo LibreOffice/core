@@ -108,19 +108,19 @@ BitmapEx VCLUnoHelper::GetBitmap( const ::com::sun::star::uno::Reference< ::com:
     return xBmp;
 }
 
-Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow )
+vcl::Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : NULL;
 }
 
-Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow )
+vcl::Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : NULL;
 }
 
-Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindow )
+vcl::Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : NULL;
@@ -142,7 +142,7 @@ Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::com::s
     return aRegion;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> VCLUnoHelper::GetInterface( Window* pWindow )
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> VCLUnoHelper::GetInterface( vcl::Window* pWindow )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWin;
     if ( pWindow )
@@ -187,7 +187,7 @@ Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequence< sal_
     return aPoly;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer> VCLUnoHelper::CreateControlContainer( Window* pWindow )
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer> VCLUnoHelper::CreateControlContainer( vcl::Window* pWindow )
 {
     UnoControlContainer* pContainer = new UnoControlContainer( pWindow->GetComponentInterface( true ) );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > x = pContainer;

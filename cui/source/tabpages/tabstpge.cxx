@@ -36,7 +36,7 @@
 
 // class TabWin_Impl -----------------------------------------------------
 
-class TabWin_Impl : public Window
+class TabWin_Impl : public vcl::Window
 {
     SvxTabulatorTabPage* mpPage;
 private:
@@ -44,7 +44,7 @@ private:
 
 public:
 
-    TabWin_Impl(Window* pParent, WinBits nBits)
+    TabWin_Impl(vcl::Window* pParent, WinBits nBits)
         : Window(pParent, nBits)
         , mpPage(0)
         , nTabStyle(0)
@@ -57,7 +57,7 @@ public:
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTabWin_Impl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTabWin_Impl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new TabWin_Impl(pParent, 0);
 }
@@ -96,7 +96,7 @@ void TabWin_Impl::Paint( const Rectangle& )
 
 // class SvxTabulatorTabPage ---------------------------------------------
 
-SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAttr ):
+SvxTabulatorTabPage::SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet& rAttr ):
 
     SfxTabPage( pParent, "ParagraphTabsPage","cui/ui/paratabspage.ui", &rAttr ),
 
@@ -259,7 +259,7 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-SfxTabPage* SvxTabulatorTabPage::Create( Window* pParent,
+SfxTabPage* SvxTabulatorTabPage::Create( vcl::Window* pParent,
                                          const SfxItemSet* rSet)
 {
     return ( new SvxTabulatorTabPage( pParent, *rSet ) );

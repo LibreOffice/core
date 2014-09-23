@@ -38,7 +38,7 @@ SFX_IMPL_CHILDWINDOW_WITHID(SpellDialogChildWindow, SID_SPELL_DIALOG)
 namespace sd {
 
 SpellDialogChildWindow::SpellDialogChildWindow (
-    ::Window* _pParent,
+    vcl::Window* _pParent,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)

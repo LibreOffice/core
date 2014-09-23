@@ -607,7 +607,7 @@ IMPL_LINK_NOARG(SfxInPlaceClient_Impl, TimerHdl)
 // SfxInPlaceClient
 
 
-SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, Window *pDraw, sal_Int64 nAspect ) :
+SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw, sal_Int64 nAspect ) :
     m_pImp( new SfxInPlaceClient_Impl ),
     m_pViewSh( pViewShell ),
     m_pEditWin( pDraw )
@@ -1041,7 +1041,7 @@ void SfxInPlaceClient::DeactivateObject()
                 uno::Reference< frame::XController > xController = xModel->getCurrentController();
                 if ( xController.is() )
                 {
-                    Window* pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
+                    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
                     bHasFocus = pWindow->HasChildPathFocus( true );
                 }
             }

@@ -89,7 +89,7 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
         pPrtPage = (SwLabPrtPage*)&rPage;
 }
 
-SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
+SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
                                 SwDBManager* pDBManager_, bool bLabel)
     : SfxTabDialog(pParent, "LabelDialog",
         "modules/swriter/ui/labeldialog.ui", &rSet)
@@ -225,7 +225,7 @@ Printer *SwLabDlg::GetPrt()
         return (NULL);
 }
 
-SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet)
+SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "CardMediumPage",
         "modules/swriter/ui/cardmediumpage.ui", &rSet)
     , pDBManager(NULL)
@@ -458,7 +458,7 @@ void SwLabPage::InitDatabaseBox()
     }
 }
 
-SfxTabPage* SwLabPage::Create(Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwLabPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwLabPage(pParent, *rSet);
 }
@@ -561,7 +561,7 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
     }
 }
 
-SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet)
+SwVisitingCardPage::SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "CardFormatPage",
         "modules/swriter/ui/cardformatpage.ui", &rSet)
     , pExampleFrame(0)
@@ -594,7 +594,7 @@ SwVisitingCardPage::~SwVisitingCardPage()
     delete pExampleFrame;
 }
 
-SfxTabPage* SwVisitingCardPage::Create(Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwVisitingCardPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwVisitingCardPage(pParent, *rSet);
 }
@@ -702,7 +702,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
     }
 }
 
-SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet)
+SwPrivateDataPage::SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PrivateUserPage",
         "modules/swriter/ui/privateuserpage.ui", &rSet)
 {
@@ -728,7 +728,7 @@ SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 }
 
-SfxTabPage* SwPrivateDataPage::Create(Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwPrivateDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwPrivateDataPage(pParent, *rSet);
 }
@@ -795,7 +795,7 @@ void SwPrivateDataPage::Reset(const SfxItemSet* rSet)
     m_pMailED->SetText(aItem.aPrivMail);
 }
 
-SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet)
+SwBusinessDataPage::SwBusinessDataPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "BusinessDataPage",
         "modules/swriter/ui/businessdatapage.ui", &rSet)
 {
@@ -816,7 +816,7 @@ SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 }
 
-SfxTabPage* SwBusinessDataPage::Create(Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwBusinessDataPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwBusinessDataPage(pParent, *rSet);
 }

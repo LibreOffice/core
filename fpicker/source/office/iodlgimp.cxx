@@ -91,7 +91,7 @@ SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 
 
 
-SvtFileDialogURLSelector::SvtFileDialogURLSelector( Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId )
+SvtFileDialogURLSelector::SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId )
     :MenuButton ( _pParent, nBits )
     ,m_pDlg     ( _pDlg )
     ,m_pMenu    ( new PopupMenu )
@@ -123,7 +123,7 @@ void SvtFileDialogURLSelector::Activate()
 
 
 
-SvtUpButton_Impl::SvtUpButton_Impl( Window *pParent, SvtFileDialog* pDlg, WinBits nBits )
+SvtUpButton_Impl::SvtUpButton_Impl( vcl::Window *pParent, SvtFileDialog* pDlg, WinBits nBits )
     :SvtFileDialogURLSelector( pParent, pDlg, nBits, IMG_FILEDLG_BTN_UP )
 {
 }

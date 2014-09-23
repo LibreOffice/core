@@ -41,7 +41,7 @@ namespace pcr
         virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
 
     public:
-        OBrowserPage(Window* pParent, WinBits nWinStyle = 0);
+        OBrowserPage(vcl::Window* pParent, WinBits nWinStyle = 0);
         virtual ~OBrowserPage();
 
         sal_Int32 getMinimumWidth();

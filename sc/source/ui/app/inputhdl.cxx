@@ -1688,7 +1688,7 @@ void ScInputHandler::UpdateActiveView()
     // GetActiveWin (the currently active pane) fails for ref input across the
     // panes of a split view.
 
-    Window* pShellWin = pActiveViewSh ?
+    vcl::Window* pShellWin = pActiveViewSh ?
                 pActiveViewSh->GetWindowByPos( pActiveViewSh->GetViewData().GetEditActivePart() ) :
                 NULL;
 
@@ -1699,7 +1699,7 @@ void ScInputHandler::UpdateActiveView()
         for (sal_uInt16 i=1; i<nCount; i++)
         {
             EditView* pThis = pEngine->GetView(i);
-            Window* pWin = pThis->GetWindow();
+            vcl::Window* pWin = pThis->GetWindow();
             if ( pWin==pShellWin )
                 pTableView = pThis;
         }
@@ -2412,7 +2412,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             lcl_SelectionToEnd(pTableView);
         }
 
-        Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
+        vcl::Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
 
         if (pTopView)
             pTopView->CompleteAutoCorrect(); // CompleteAutoCorrect for both Views
@@ -2439,7 +2439,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                     pActiveViewSh->StopMarking();   // (the InfoBox consumes the MouseButtonUp)
 
                 //FIXME: We still run into problems if the input is triggered by activating another View
-                Window* pParent = Application::GetDefDialogParent();
+                vcl::Window* pParent = Application::GetDefDialogParent();
                 if ( pData->DoError( pParent, aString, aCursorPos ) )
                     bForget = true;                 // Do not take over input
             }
@@ -3163,7 +3163,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 {
                     if (pTableView)
                     {
-                        Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
+                        vcl::Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
                         if ( pTableView->PostKeyEvent( rKEvt, pFrameWin ) )
                             bUsed = true;
                     }

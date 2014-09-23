@@ -48,7 +48,7 @@ public:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     virtual void MarkListHasChanged() SAL_OVERRIDE;
-    virtual void MakeVisible( const Rectangle& rRect, Window& rWin ) SAL_OVERRIDE;
+    virtual void MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) SAL_OVERRIDE;
 
     inline OReportSection*  getReportSection() const { return m_pSectionWindow; }
 

@@ -38,7 +38,7 @@ static const OUString strWildcardVariable2Range("%VAR2_RANGE%");
 
 ScFTestDialog::ScFTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    Window* pParent, ScViewData* pViewData ) :
+                    vcl::Window* pParent, ScViewData* pViewData ) :
     ScStatisticsTwoVariableDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "TTestDialog", "modules/scalc/ui/ttestdialog.ui" )

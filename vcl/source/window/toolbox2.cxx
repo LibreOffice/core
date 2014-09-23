@@ -636,7 +636,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
         pItem->maMinimalItemSize = rRequestedSize;
 }
 
-void ToolBox::InsertWindow( sal_uInt16 nItemId, Window* pWindow,
+void ToolBox::InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
                             ToolBoxItemBits nBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "ToolBox::InsertWindow(): ItemId == 0" );
@@ -1301,7 +1301,7 @@ const OUString& ToolBox::GetItemText( sal_uInt16 nItemId ) const
     return pItem->maText;
 }
 
-void ToolBox::SetItemWindow( sal_uInt16 nItemId, Window* pNewWindow )
+void ToolBox::SetItemWindow( sal_uInt16 nItemId, vcl::Window* pNewWindow )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1316,7 +1316,7 @@ void ToolBox::SetItemWindow( sal_uInt16 nItemId, Window* pNewWindow )
     }
 }
 
-Window* ToolBox::GetItemWindow( sal_uInt16 nItemId ) const
+vcl::Window* ToolBox::GetItemWindow( sal_uInt16 nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1910,7 +1910,7 @@ void ToolBox::ImplExecuteCustomMenu()
         ImplDelData aBorderDel;
         bool bBorderDel = false;
 
-        Window *pWin = this;
+        vcl::Window *pWin = this;
         Rectangle aMenuRect = mpData->maMenubuttonItem.maRect;
         if( IsFloatingMode() )
         {

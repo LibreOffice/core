@@ -30,7 +30,7 @@ private:
     DECL_DLLPRIVATE_LINK( ImplHandlePanelLayoutTimerHdl, void* );
 
 public:
-    PanelLayout(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+    PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
             const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame);
     virtual ~PanelLayout();
 

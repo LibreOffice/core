@@ -27,19 +27,19 @@
 
 class VCL_DLLPUBLIC TaskPaneList
 {
-    ::std::vector<Window *> mTaskPanes;
-    Window *FindNextFloat( Window *pWindow, bool bForward = true );
-    Window *FindNextSplitter( Window *pWindow, bool bForward = true );
+    ::std::vector<vcl::Window *> mTaskPanes;
+    vcl::Window *FindNextFloat( vcl::Window *pWindow, bool bForward = true );
+    vcl::Window *FindNextSplitter( vcl::Window *pWindow, bool bForward = true );
 
 public:
-    bool IsInList( Window *pWindow );
+    bool IsInList( vcl::Window *pWindow );
 
 public:
     TaskPaneList();
     ~TaskPaneList();
 
-    void AddWindow( Window *pWindow );
-    void RemoveWindow( Window *pWindow );
+    void AddWindow( vcl::Window *pWindow );
+    void RemoveWindow( vcl::Window *pWindow );
     bool HandleKeyEvent( KeyEvent aKeyEvent );
 };
 

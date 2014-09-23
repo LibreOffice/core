@@ -36,7 +36,7 @@ namespace sw { namespace sidebar {
     {
     public:
         static WrapPropertyPanel* Create(
-            Window* pParent,
+            vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
 
@@ -49,7 +49,7 @@ namespace sw { namespace sidebar {
 
     private:
         WrapPropertyPanel(
-            Window* pParent,
+            vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
             SfxBindings* pBindings );
 

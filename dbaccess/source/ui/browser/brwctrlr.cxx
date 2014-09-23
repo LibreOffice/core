@@ -722,7 +722,7 @@ void SbaXDataBrowserController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:FormSlots/insertRecord",    ID_BROWSER_INSERT_ROW,  CommandGroup::INSERT );
 }
 
-bool SbaXDataBrowserController::Construct(Window* pParent)
+bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
 {
     // create/initialize the form and the grid model
     m_xRowSet = CreateForm();

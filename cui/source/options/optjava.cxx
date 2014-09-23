@@ -131,7 +131,7 @@ public:
 
 // class SvxJavaOptionsPage ----------------------------------------------
 
-SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet )
+SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", &rSet)
     , m_pParamDlg(NULL)
     , m_pPathDlg(NULL)
@@ -195,7 +195,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 #if HAVE_FEATURE_JAVA
     jfw_lock();
 #else
-    get<Window>("javaframe")->Disable();
+    get<vcl::Window>("javaframe")->Disable();
 #endif
 }
 
@@ -635,7 +635,7 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 
 
 
-SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SvxJavaOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return ( new SvxJavaOptionsPage( pParent, *rAttrSet ) );
 }
@@ -786,7 +786,7 @@ void SvxJavaOptionsPage::FillUserData()
 
 // class SvxJavaParameterDlg ---------------------------------------------
 
-SvxJavaParameterDlg::SvxJavaParameterDlg( Window* pParent ) :
+SvxJavaParameterDlg::SvxJavaParameterDlg( vcl::Window* pParent ) :
 
     ModalDialog( pParent, "JavaStartParameters",
                  "cui/ui/javastartparametersdialog.ui" )
@@ -919,7 +919,7 @@ void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
 
 // class SvxJavaClassPathDlg ---------------------------------------------
 
-SvxJavaClassPathDlg::SvxJavaClassPathDlg(Window* pParent)
+SvxJavaClassPathDlg::SvxJavaClassPathDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "JavaClassPath", "cui/ui/javaclasspathdialog.ui")
 {
     get( m_pPathList, "paths");

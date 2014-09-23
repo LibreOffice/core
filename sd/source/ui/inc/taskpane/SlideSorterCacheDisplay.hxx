@@ -36,7 +36,7 @@
 #include <map>
 #include <vector>
 
-class Window;
+namespace vcl { class Window; }
 
 #include "svx/svdpage.hxx"
 #include "drawdoc.hxx"
@@ -54,7 +54,7 @@ public:
     SlideSorterCacheDisplay (const SdDrawDocument* pDocument);
     virtual ~SlideSorterCacheDisplay (void);
 
-    void SetParentWindow (::Window* pParentWindow);
+    void SetParentWindow (vcl::Window* pParentWindow);
 
     virtual void Paint (const Rectangle& rBoundingBox);
     virtual void Resize (void);
@@ -76,7 +76,7 @@ public:
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeigh);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
-    virtual ::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow (void);
     virtual bool IsResizable (void);
     virtual bool IsExpandable (void) const;
     virtual bool IsExpanded (void) const;
@@ -86,7 +86,7 @@ private:
     static void AddInstance (const SdDrawDocument* pDocument, SlideSorterCacheDisplay* pControl);
     static void RemoveInstance (SlideSorterCacheDisplay* pControl);
 
-    ::Window* mpWindow;
+    vcl::Window* mpWindow;
     sal_Int32 mnPageCount;
     sal_Int32 mnColumnCount;
     sal_Int32 mnRowCount;

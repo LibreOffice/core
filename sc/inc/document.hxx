@@ -107,7 +107,7 @@ namespace sfx2 {
     class LinkManager;
     }
 class SvxSearchItem;
-class Window;
+namespace vcl { class Window; }
 class XColorList;
 
 struct ScAttrEntry;
@@ -713,7 +713,7 @@ public:
     ScFormulaParserPool& GetFormulaParserPool() const;
 
     bool            HasAreaLinks() const;
-    void            UpdateExternalRefLinks(Window* pWin);
+    void            UpdateExternalRefLinks(vcl::Window* pWin);
     void            UpdateAreaLinks();
 
                     // originating DDE links
@@ -779,7 +779,7 @@ public:
     void            SetChartRangeList( const OUString& rChartName,
                         const ScRangeListRef& rNewRangeListRef );
 
-    void            StartAnimations( SCTAB nTab, Window* pWin );
+    void            StartAnimations( SCTAB nTab, vcl::Window* pWin );
 
     bool            HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const;
     bool            HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect ) const;

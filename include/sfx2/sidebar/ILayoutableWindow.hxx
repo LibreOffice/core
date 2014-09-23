@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <com/sun/star/ui/LayoutSize.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sfx2 { namespace sidebar {
 

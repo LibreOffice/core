@@ -171,7 +171,7 @@ public:
     void    SetReadOnly(bool bRead){m_bReadOnly = bRead;}
     void    SetObject(sal_Int16 nPos) {m_bObject = m_bReadOnly = true; m_nFieldPos = nPos;}
 
-    void    ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat );
+    void    ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat );
 
     // Properties, die auf den ::com::sun::star::frame::Controller durchschlagen koennen
     sal_Int16   SetAlignment(sal_Int16 _nAlign);
@@ -217,8 +217,8 @@ private:
 
 protected:
     DbGridColumn&               m_rColumn;
-    Window*                     m_pPainter;
-    Window*                     m_pWindow;
+    vcl::Window*                     m_pPainter;
+    vcl::Window*                     m_pWindow;
 
 protected:
     // attribute access
@@ -270,7 +270,7 @@ public:
     virtual ~DbCellControl();
 
 
-    Window& GetWindow() const
+    vcl::Window& GetWindow() const
     {
         ENSURE_OR_THROW( m_pWindow, "no window" );
         return *m_pWindow;
@@ -284,7 +284,7 @@ public:
     void SetTextLineColor(const Color& _rColor);
 
     // Initialisieren bevor ein Control angezeigt wird
-    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    virtual void Init( vcl::Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual ::svt::CellControllerRef CreateController() const = 0;
 
     // Schreiben des Wertes in das Model
@@ -301,7 +301,7 @@ public:
     virtual void PaintFieldToCell( OutputDevice& rDev, const Rectangle& rRect, const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect );
 
-    void  ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat );
+    void  ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat );
 
     double GetValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
 
@@ -402,7 +402,7 @@ public:
     ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit; }
     bool                    IsSimpleEdit() const { return m_bIsSimpleEdit; }
 
-    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
+    virtual void Init( vcl::Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
     virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) SAL_OVERRIDE;
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) SAL_OVERRIDE;
     virtual ::svt::CellControllerRef CreateController() const SAL_OVERRIDE;
@@ -432,7 +432,7 @@ public:
     virtual ~DbFormattedField();
 
 
-    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
+    virtual void Init( vcl::Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
     virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) SAL_OVERRIDE;
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) SAL_OVERRIDE;
     virtual ::svt::CellControllerRef CreateController() const SAL_OVERRIDE;
@@ -453,7 +453,7 @@ public:
     TYPEINFO_OVERRIDE();
     DbCheckBox(DbGridColumn& _rColumn);
 
-    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
+    virtual void Init( vcl::Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) SAL_OVERRIDE;
     virtual ::svt::CellControllerRef CreateController() const SAL_OVERRIDE;
     virtual void PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
@@ -476,7 +476,7 @@ public:
     TYPEINFO_OVERRIDE();
     DbComboBox(DbGridColumn& _rColumn);
 
-    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
+    virtual void Init( vcl::Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
     virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) SAL_OVERRIDE;
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) SAL_OVERRIDE;
     virtual ::svt::CellControllerRef CreateController() const SAL_OVERRIDE;
@@ -504,7 +504,7 @@ public:
     TYPEINFO_OVERRIDE();
     DbListBox(DbGridColumn& _rColumn);
 
-    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
+    virtual void Init( vcl::Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
     virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) SAL_OVERRIDE;
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) SAL_OVERRIDE;
     virtual ::svt::CellControllerRef CreateController() const SAL_OVERRIDE;
@@ -528,7 +528,7 @@ class DbPatternField : public DbCellControl
 public:
     TYPEINFO_OVERRIDE();
     DbPatternField( DbGridColumn& _rColumn, const css::uno::Reference<css::uno::XComponentContext>& _rContext );
-    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
+    virtual void Init( vcl::Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
     virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) SAL_OVERRIDE;
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) SAL_OVERRIDE;
     virtual ::svt::CellControllerRef CreateController() const SAL_OVERRIDE;
@@ -564,12 +564,12 @@ protected:
     DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign = com::sun::star::awt::TextAlign::RIGHT );
 
 public:
-    virtual void                        Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxCursor ) SAL_OVERRIDE;
+    virtual void                        Init( vcl::Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxCursor ) SAL_OVERRIDE;
     virtual ::svt::CellControllerRef    CreateController() const SAL_OVERRIDE;
 
 protected:
     virtual SpinField*  createField(
-                            Window* _pParent,
+                            vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                         ) = 0;
@@ -591,7 +591,7 @@ protected:
 
     // DbSpinField
     virtual SpinField*  createField(
-                            Window* _pParent,
+                            vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                         ) SAL_OVERRIDE;
@@ -616,7 +616,7 @@ protected:
 
     // DbSpinField
     virtual SpinField*  createField(
-                            Window* _pParent,
+                            vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                         ) SAL_OVERRIDE;
@@ -645,7 +645,7 @@ protected:
 
     // DbSpinField
     virtual SpinField*  createField(
-                            Window* _pParent,
+                            vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                         ) SAL_OVERRIDE;
@@ -670,7 +670,7 @@ protected:
 
     // DbSpinField
     virtual SpinField*  createField(
-                            Window* _pParent,
+                            vcl::Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                         ) SAL_OVERRIDE;
@@ -697,7 +697,7 @@ public:
     DbFilterField(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);
     virtual ~DbFilterField();
 
-    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
+    virtual void Init( vcl::Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor ) SAL_OVERRIDE;
     virtual ::svt::CellControllerRef CreateController() const SAL_OVERRIDE;
     virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void Update() SAL_OVERRIDE;
@@ -718,7 +718,7 @@ protected:
 
 protected:
     void SetList(const ::com::sun::star::uno::Any& rItems, bool bComboBox);
-    void CreateControl(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xModel);
+    void CreateControl(vcl::Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xModel);
     DECL_LINK( OnClick, void* );
 };
 
@@ -809,7 +809,7 @@ public:
     virtual void SAL_CALL removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     bool Commit() {return m_pCellControl->Commit();}
-    void ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat )
+    void ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat )
         { m_pCellControl->ImplInitWindow( rParent, _eInitWhat ); }
 
     bool isAlignedController() const { return m_pCellControl->isAlignedController(); }
@@ -817,8 +817,8 @@ public:
         { m_pCellControl->AlignControl(nAlignment);}
 
 protected:
-    virtual Window* getEventWindow() const;
-    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual vcl::Window* getEventWindow() const;
+    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData );
 
     // default implementations call our focus listeners, don't forget to call them if you override this
     virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent );
@@ -934,7 +934,7 @@ public:
     virtual void SAL_CALL removeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
+    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
 
     virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent ) SAL_OVERRIDE;
     virtual void onFocusLost( const ::com::sun::star::awt::FocusEvent& _rEvent ) SAL_OVERRIDE;
@@ -985,8 +985,8 @@ public:
     virtual void SAL_CALL setActionCommand( const OUString& Command ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual Window* getEventWindow() const SAL_OVERRIDE;
-    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
+    virtual vcl::Window* getEventWindow() const SAL_OVERRIDE;
+    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
 };
 
 
@@ -1038,7 +1038,7 @@ public:
     virtual void SAL_CALL SAL_CALL makeVisible(sal_Int16 nEntry) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
+    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
 
     DECL_LINK( OnDoubleClick, void* );
 };
@@ -1083,7 +1083,7 @@ public:
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 _Lines ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
+    virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
 };
 
 

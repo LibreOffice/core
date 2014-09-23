@@ -27,7 +27,7 @@
 
 namespace rptui
 {
-    class OColorListener : public Window, public SfxListener
+    class OColorListener : public vcl::Window, public SfxListener
     {
         OColorListener(const OColorListener&);
         void operator =(const OColorListener&);
@@ -46,7 +46,7 @@ namespace rptui
     protected:
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     public:
-        OColorListener(Window* _pParent,const OUString& _sColorEntry);
+        OColorListener(vcl::Window* _pParent,const OUString& _sColorEntry);
         virtual ~OColorListener();
 
         using Window::Notify;

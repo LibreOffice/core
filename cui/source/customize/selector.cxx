@@ -73,7 +73,7 @@ using namespace ::com::sun::star::container;
  * The implementations of SvxConfigFunctionListBox and
  * SvxConfigGroupListBox are copied from sfx2/source/dialog/cfg.cxx
  */
-SvxConfigFunctionListBox::SvxConfigFunctionListBox(Window* pParent, WinBits nStyle)
+SvxConfigFunctionListBox::SvxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT | WB_TABSTOP)
     , pCurEntry(0)
     , m_pDraggingEntry(0)
@@ -86,7 +86,7 @@ SvxConfigFunctionListBox::SvxConfigFunctionListBox(Window* pParent, WinBits nSty
         LINK( this, SvxConfigFunctionListBox, TimerHdl ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxConfigFunctionListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigFunctionListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -193,7 +193,7 @@ SvxConfigFunctionListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
     return DND_ACTION_NONE;
 }
 
-SvxConfigGroupListBox::SvxConfigGroupListBox(Window* pParent, WinBits nStyle)
+SvxConfigGroupListBox::SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle |
             WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_TABSTOP)
     , m_bShowSlots(false)
@@ -214,7 +214,7 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(Window* pParent, WinBits nStyle)
     );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxConfigGroupListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigGroupListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -858,7 +858,7 @@ void SvxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
  */
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
-    Window* pParent, bool bShowSlots, const Reference< frame::XFrame >& xFrame)
+    vcl::Window* pParent, bool bShowSlots, const Reference< frame::XFrame >& xFrame)
     : ModelessDialog(pParent, "MacroSelectorDialog", "cui/ui/macroselectordialog.ui")
     , m_bShowSlots(bShowSlots)
 {

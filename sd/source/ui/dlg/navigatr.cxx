@@ -62,12 +62,12 @@ static const sal_uInt16 nShowAllShapesFilter=2;
  * SdNavigatorWin - FloatingWindow
  */
 SdNavigatorWin::SdNavigatorWin(
-    ::Window* pParent,
+    vcl::Window* pParent,
     ::sd::NavigatorChildWindow* pChWinCtxt,
     const SdResId& rSdResId,
     SfxBindings* pInBindings,
     const UpdateRequestFunctor& rUpdateRequest)
-    : ::Window( pParent, rSdResId )
+    : vcl::Window( pParent, rSdResId )
     , maToolbox ( this, SdResId( 1 ) )
     , maTlbObjects( this, SdResId( TLB_OBJECTS ) )
     , maLbDocs ( this, SdResId( LB_DOCS ) )
@@ -407,7 +407,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
 
                 if ( pCurSh )
                 {
-                    Window* pShellWnd = pCurSh->GetWindow();
+                    vcl::Window* pShellWnd = pCurSh->GetWindow();
                     if ( pShellWnd )
                         pShellWnd->GrabFocus();
                 }

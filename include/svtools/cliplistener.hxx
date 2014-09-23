@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 
 class SVT_DLLPUBLIC TransferableClipboardListener : public ::cppu::WeakImplHelper1<
@@ -38,7 +38,7 @@ public:
             TransferableClipboardListener( const Link& rCallback );
             virtual ~TransferableClipboardListener();
 
-    void    AddRemoveListener( Window* pWin, bool bAdd );
+    void    AddRemoveListener( vcl::Window* pWin, bool bAdd );
     void    ClearCallbackLink();
 
             // XEventListener

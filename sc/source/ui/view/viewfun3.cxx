@@ -439,7 +439,7 @@ void ScViewFunc::PasteDraw()
     ScViewData& rViewData = GetViewData();
     SCCOL nPosX = rViewData.GetCurX();
     SCROW nPosY = rViewData.GetCurY();
-    Window* pWin = GetActiveWin();
+    vcl::Window* pWin = GetActiveWin();
     Point aPos = pWin->PixelToLogic( rViewData.GetScrPos( nPosX, nPosY,
                                      rViewData.GetActivePart() ) );
     ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
@@ -455,7 +455,7 @@ void ScViewFunc::PasteFromSystem()
 {
     UpdateInputLine();
 
-    Window* pWin = GetActiveWin();
+    vcl::Window* pWin = GetActiveWin();
     ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
     ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
 
@@ -582,7 +582,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
         ScViewData& rViewData = GetViewData();
         SCCOL nPosX = rViewData.GetCurX();
         SCROW nPosY = rViewData.GetCurY();
-        Window* pWin = GetActiveWin();
+        vcl::Window* pWin = GetActiveWin();
         Point aPos = pWin->PixelToLogic( rViewData.GetScrPos( nPosX, nPosY, rViewData.GetActivePart() ) );
         PasteDraw(
             aPos, pDrawClip->GetModel(), false,
@@ -662,7 +662,7 @@ bool ScViewFunc::PasteFromSystem( sal_uLong nFormatId, bool bApi )
     UpdateInputLine();
 
     bool bRet = true;
-    Window* pWin = GetActiveWin();
+    vcl::Window* pWin = GetActiveWin();
     ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
     if ( nFormatId == 0 && pOwnClip )
     {
@@ -768,7 +768,7 @@ static bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL 
 
 namespace {
 
-bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument* pDoc, const ScMarkData& rMark, Window* pParentWnd)
+bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument* pDoc, const ScMarkData& rMark, vcl::Window* pParentWnd)
 {
     bool bIsEmpty = true;
     ScMarkData::const_iterator itrTab = rMark.begin(), itrTabEnd = rMark.end();

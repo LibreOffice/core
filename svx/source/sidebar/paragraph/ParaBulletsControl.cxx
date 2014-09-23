@@ -34,7 +34,7 @@
 namespace svx { namespace sidebar {
 
 ParaBulletsControl::ParaBulletsControl(
-    Window* pParent,
+    vcl::Window* pParent,
     svx::sidebar::ParaPropertyPanel& rPanel )
     : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_BULLETS) )
     , maBulletsVS( this,SVX_RES(VS_VALUES) )

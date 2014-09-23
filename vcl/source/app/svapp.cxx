@@ -156,28 +156,28 @@ struct ImplEventHook
 struct ImplPostEventData
 {
     sal_uLong           mnEvent;
-    const Window*   mpWin;
+    const vcl::Window*   mpWin;
     ImplSVEvent *   mnEventId;
     KeyEvent        maKeyEvent;
     MouseEvent      maMouseEvent;
     ZoomEvent       maZoomEvent;
     ScrollEvent     maScrollEvent;
 
-       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const KeyEvent& rKeyEvent ) :
+       ImplPostEventData( sal_uLong nEvent, const vcl::Window* pWin, const KeyEvent& rKeyEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maKeyEvent( rKeyEvent ) {}
-       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const MouseEvent& rMouseEvent ) :
+       ImplPostEventData( sal_uLong nEvent, const vcl::Window* pWin, const MouseEvent& rMouseEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maMouseEvent( rMouseEvent ) {}
 #if !HAVE_FEATURE_DESKTOP
-       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const ZoomEvent& rZoomEvent ) :
+       ImplPostEventData( sal_uLong nEvent, const vcl::Window* pWin, const ZoomEvent& rZoomEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maZoomEvent( rZoomEvent ) {}
-       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const ScrollEvent& rScrollEvent ) :
+       ImplPostEventData( sal_uLong nEvent, const vcl::Window* pWin, const ScrollEvent& rScrollEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maScrollEvent( rScrollEvent ) {}
 #endif
 
     ~ImplPostEventData() {}
 };
 
-typedef ::std::pair< Window*, ImplPostEventData* > ImplPostEventPair;
+typedef ::std::pair< vcl::Window*, ImplPostEventData* > ImplPostEventPair;
 
 static ::std::list< ImplPostEventPair > aPostedEventList;
 
@@ -478,7 +478,7 @@ void Application::OverrideSystemSettings( AllSettings& /*rSettings*/ )
 
 void Application::MergeSystemSettings( AllSettings& rSettings )
 {
-    Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
+    vcl::Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
     if( ! pWindow )
         pWindow = ImplGetDefaultWindow();
     if( pWindow )
@@ -497,7 +497,7 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
 
 bool Application::ValidateSystemFont()
 {
-    Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
+    vcl::Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
     if( ! pWindow )
         pWindow = ImplGetDefaultWindow();
 
@@ -542,7 +542,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             ImplCallEventListeners( VCLEVENT_APPLICATION_DATACHANGED, NULL, &aDCEvt);
 
             // Update all windows
-            Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
+            vcl::Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
             // Reset data that needs to be re-calculated
             long nOldDPIX = 0;
             long nOldDPIY = 0;
@@ -550,21 +550,21 @@ void Application::SetSettings( const AllSettings& rSettings )
             {
                 nOldDPIX = pFirstFrame->mnDPIX;
                 nOldDPIY = pFirstFrame->mnDPIY;
-                Window::ImplInitAppFontData(pFirstFrame);
+                vcl::Window::ImplInitAppFontData(pFirstFrame);
             }
-            Window* pFrame = pFirstFrame;
+            vcl::Window* pFrame = pFirstFrame;
             while ( pFrame )
             {
                 // restore AppFont cache data
                 pFrame->mpWindowImpl->mpFrameData->meMapUnit = MAP_PIXEL;
 
                 // call UpdateSettings from ClientWindow in order to prevent updating data twice
-                Window* pClientWin = pFrame;
+                vcl::Window* pClientWin = pFrame;
                 while ( pClientWin->ImplGetClientWindow() )
                     pClientWin = pClientWin->ImplGetClientWindow();
                 pClientWin->UpdateSettings( rSettings, true );
 
-                Window* pTempWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
+                vcl::Window* pTempWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
                 while ( pTempWin )
                 {
                     // call UpdateSettings from ClientWindow in order to prevent updating data twice
@@ -636,12 +636,12 @@ void Application::InitSettings()
 void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Window*     pFrame = pSVData->maWinData.mpFirstFrame;
+    vcl::Window*     pFrame = pSVData->maWinData.mpFirstFrame;
     while ( pFrame )
     {
         pFrame->NotifyAllChildren( rDCEvt );
 
-        Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
+        vcl::Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
         while ( pSysWin )
         {
             pSysWin->NotifyAllChildren( rDCEvt );
@@ -652,7 +652,7 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
     }
 }
 
-void Application::ImplCallEventListeners( sal_uLong nEvent, Window *pWin, void* pData )
+void Application::ImplCallEventListeners( sal_uLong nEvent, vcl::Window *pWin, void* pData )
 {
     ImplSVData* pSVData = ImplGetSVData();
     VclWindowEvent aEvent( pWin, nEvent, pData );
@@ -699,7 +699,7 @@ void Application::RemoveKeyListener( const Link& rKeyListener )
         pSVData->maAppData.mpKeyListeners->removeListener( rKeyListener );
 }
 
-bool Application::HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
+bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
 {
     // let listeners process the key event
     VclWindowEvent aEvent( pWin, nEvent, (void *) pKeyEvent );
@@ -713,7 +713,7 @@ bool Application::HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent
     return bProcessed;
 }
 
-ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
+ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = 0;
@@ -738,7 +738,7 @@ ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEven
     return nEventId;
 }
 
-ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent )
+ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent )
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = 0;
@@ -773,7 +773,7 @@ ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, Mouse
 
 #if !HAVE_FEATURE_DESKTOP
 
-ImplSVEvent * Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent )
+ImplSVEvent * Application::PostZoomEvent( sal_uLong nEvent, vcl::Window *pWin, ZoomEvent* pZoomEvent )
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = 0;
@@ -805,7 +805,7 @@ ImplSVEvent * Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEv
     return nEventId;
 }
 
-ImplSVEvent * Application::PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent )
+ImplSVEvent * Application::PostScrollEvent( sal_uLong nEvent, vcl::Window *pWin, ScrollEvent* pScrollEvent )
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = 0;
@@ -903,7 +903,7 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
     return 0;
 }
 
-void Application::RemoveMouseAndKeyEvents( Window* pWin )
+void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
 {
     const SolarMutexGuard aGuard;
 
@@ -932,7 +932,7 @@ ImplSVEvent * Application::PostUserEvent( const Link& rLink, void* pCaller )
     pSVEvent->mpLink    = new Link( rLink );
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = true;
-    Window* pDefWindow = ImplGetDefaultWindow();
+    vcl::Window* pDefWindow = ImplGetDefaultWindow();
     if ( pDefWindow == 0 || !pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
     {
         delete pSVEvent->mpLink;
@@ -1013,7 +1013,7 @@ WorkWindow* Application::GetAppWindow()
     return ImplGetSVData()->maWinData.mpAppWin;
 }
 
-Window* Application::GetFocusWindow()
+vcl::Window* Application::GetFocusWindow()
 {
     return ImplGetSVData()->maWinData.mpFocusWin;
 }
@@ -1023,13 +1023,13 @@ OutputDevice* Application::GetDefaultDevice()
     return ImplGetDefaultWindow();
 }
 
-Window* Application::GetFirstTopLevelWindow()
+vcl::Window* Application::GetFirstTopLevelWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->maWinData.mpFirstFrame;
 }
 
-Window* Application::GetNextTopLevelWindow( Window* pWindow )
+vcl::Window* Application::GetNextTopLevelWindow( vcl::Window* pWindow )
 {
     return pWindow->mpWindowImpl->mpFrameData->mpNextFrame;
 }
@@ -1038,7 +1038,7 @@ long    Application::GetTopWindowCount()
 {
     long nRet = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame : NULL;
+    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame : NULL;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1048,11 +1048,11 @@ long    Application::GetTopWindowCount()
     return nRet;
 }
 
-Window* Application::GetTopWindow( long nIndex )
+vcl::Window* Application::GetTopWindow( long nIndex )
 {
     long nIdx = 0;
     ImplSVData* pSVData = ImplGetSVData();
-    Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame : NULL;
+    vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame : NULL;
     while( pWin )
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
@@ -1067,9 +1067,9 @@ Window* Application::GetTopWindow( long nIndex )
     return NULL;
 }
 
-Window* Application::GetActiveTopWindow()
+vcl::Window* Application::GetActiveTopWindow()
 {
-    Window *pWin = ImplGetSVData()->maWinData.mpFocusWin;
+    vcl::Window *pWin = ImplGetSVData()->maWinData.mpFocusWin;
     while( pWin )
     {
         if( pWin->IsTopWindow() )
@@ -1285,12 +1285,12 @@ void Application::SetDialogScaleX( short nScale )
         pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*nScale)/100;
 }
 
-void Application::SetDefDialogParent( Window* pWindow )
+void Application::SetDefDialogParent( vcl::Window* pWindow )
 {
     ImplGetSVData()->maWinData.mpDefDialogParent = pWindow;
 }
 
-Window* Application::GetDefDialogParent()
+vcl::Window* Application::GetDefDialogParent()
 {
     ImplSVData* pSVData = ImplGetSVData();
     // #103442# find some useful dialog parent if there
@@ -1305,7 +1305,7 @@ Window* Application::GetDefDialogParent()
         // as DefDialogParent
 
         // current focus frame
-        Window *pWin = NULL;
+        vcl::Window *pWin = NULL;
         if( (pWin = pSVData->maWinData.mpFocusWin) != NULL )
         {
             while( pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent )
@@ -1670,10 +1670,10 @@ void Application::setDeInitHook(Link const & hook) {
 }
 
 // helper method to allow inline constructor even for pWindow!=NULL case
-void ImplDelData::AttachToWindow( const Window* pWindow )
+void ImplDelData::AttachToWindow( const vcl::Window* pWindow )
 {
     if( pWindow )
-        const_cast<Window*>(pWindow)->ImplAddDel( this );
+        const_cast<vcl::Window*>(pWindow)->ImplAddDel( this );
 }
 
 // define dtor for ImplDelData
@@ -1684,7 +1684,7 @@ ImplDelData::~ImplDelData()
     if( !mbDel && mpWindow )
     {
         // the window still exists but we were not removed
-        const_cast<Window*>(mpWindow)->ImplRemoveDel( this );
+        const_cast<vcl::Window*>(mpWindow)->ImplRemoveDel( this );
         mpWindow = NULL;
     }
 }

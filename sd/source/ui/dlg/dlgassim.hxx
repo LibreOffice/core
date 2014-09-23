@@ -35,7 +35,7 @@ private:
     void InsertTitle( SvTreeListEntry* pEntry, const OUString& rTitle );
 
 public:
-    SdPageListControl( Window* pParent, const WinBits nStyle );
+    SdPageListControl( vcl::Window* pParent, const WinBits nStyle );
     virtual ~SdPageListControl();
 
     void Fill( SdDrawDocument* pDoc );

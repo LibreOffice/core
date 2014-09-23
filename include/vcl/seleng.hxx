@@ -24,7 +24,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class CommandEvent;
 
 // Timerticks
@@ -77,7 +77,7 @@ class VCL_DLLPUBLIC SelectionEngine
 {
 private:
     FunctionSet*        pFunctionSet;
-    Window*             pWin;
+    vcl::Window*             pWin;
     Rectangle           aArea;
     Timer               aWTimer; // generate fake mouse moves
     MouseEvent          aLastMove;
@@ -91,7 +91,7 @@ private:
                                 // determines to deselect or not when Ctrl-key is pressed on CursorPosChanging
 public:
 
-                        SelectionEngine( Window* pWindow,
+                        SelectionEngine( vcl::Window* pWindow,
                                          FunctionSet* pFunctions = NULL,
                                          sal_uLong nAutoRepeatInterval = SELENG_AUTOREPEAT_INTERVAL );
                         ~SelectionEngine();
@@ -129,8 +129,8 @@ public:
                             { return aLastMove.GetPosPixel(); }
     const MouseEvent&   GetMouseEvent() const { return aLastMove; }
 
-    void                SetWindow( Window*);
-    Window*             GetWindow() const { return pWin; }
+    void                SetWindow( vcl::Window*);
+    vcl::Window*             GetWindow() const { return pWin; }
 
     void                LockModifiers( sal_uInt16 nModifiers )
                             { nLockedMods = nModifiers; }

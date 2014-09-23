@@ -81,12 +81,12 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    SfxTabPage* OConnectionTabPage::Create( Window* pParent,    const SfxItemSet* _rAttrSet )
+    SfxTabPage* OConnectionTabPage::Create( vcl::Window* pParent,    const SfxItemSet* _rAttrSet )
     {
         return ( new OConnectionTabPage( pParent, *_rAttrSet ) );
     }
     // OConnectionTabPage
-    OConnectionTabPage::OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs)
+    OConnectionTabPage::OConnectionTabPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionHelper(pParent, "ConnectionPage", "dbaccess/ui/connectionpage.ui", _rCoreAttrs)
     {
         get(m_pFL2, "userlabel");

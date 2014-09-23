@@ -39,7 +39,7 @@ private:
     virtual void    MakeVisible() SAL_OVERRIDE;
 
 public:
-                    ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );
+                    ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );
     virtual         ~ScClient();
 
     SdrGrafObj*     GetGrafEdit() const             { return pGrafEdit; }

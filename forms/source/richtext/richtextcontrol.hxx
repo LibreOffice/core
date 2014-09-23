@@ -97,7 +97,7 @@ namespace frm
         */
         static ORichTextPeer* Create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >&         _rxModel,
-            Window* _pParentWindow,
+            vcl::Window* _pParentWindow,
             WinBits _nStyle
         );
 

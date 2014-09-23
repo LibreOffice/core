@@ -31,7 +31,7 @@ class SW_DLLPUBLIC ConditionEdit : public Edit, public DropTargetHelper
     SAL_DLLPRIVATE virtual sal_Int8  ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
 public:
-    ConditionEdit(Window* pParent, WinBits nStyle);
+    ConditionEdit(vcl::Window* pParent, WinBits nStyle);
 
     void ShowBrackets(bool bShow)
     {

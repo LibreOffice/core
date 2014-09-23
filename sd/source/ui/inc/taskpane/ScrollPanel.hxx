@@ -51,7 +51,7 @@ public:
     /** Create a new scroll panel which itself is the root of a TreeNode hierarchy
         parent.  This will usually be a child window.
     */
-    ScrollPanel (::Window& i_rParentWindow);
+    ScrollPanel (vcl::Window& i_rParentWindow);
     virtual ~ScrollPanel (void);
 
     /** Add a control to the sub panel.  An title bar is added above the
@@ -86,7 +86,7 @@ public:
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
     virtual bool IsResizable (void);
-    virtual ::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow (void);
     virtual sal_Int32 GetMinimumWidth (void);
 
     virtual void ExpandControl (
@@ -98,7 +98,7 @@ public:
     ScrollBar& GetVerticalScrollBar (void);
     ScrollBar& GetHorizontalScrollBar (void);
 
-    // ::Window
+    // vcl::Window
     virtual long Notify( NotifyEvent& rNEvt );
 
     virtual ::com::sun::star::uno::Reference<
@@ -117,14 +117,14 @@ public:
     */
     void MakeRectangleVisible (
         Rectangle& aRectangle,
-        ::Window* pWindow);
+        vcl::Window* pWindow);
 
 private:
     ::Control maScrollWindow;
     ScrollBar maVerticalScrollBar;
     ScrollBar maHorizontalScrollBar;
-    ::Window maScrollBarFiller;
-    ::Window maScrollWindowFiller;
+    vcl::Window maScrollBarFiller;
+    vcl::Window maScrollWindowFiller;
     Point maScrollOffset;
     bool mbIsRearrangePending;
     bool mbIsLayoutPending;

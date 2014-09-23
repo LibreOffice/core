@@ -173,7 +173,7 @@ class ColorConfigWindow_Impl
     , public VclBuilderContainer
 {
 public:
-    ColorConfigWindow_Impl(Window* pParent);
+    ColorConfigWindow_Impl(vcl::Window* pParent);
     virtual ~ColorConfigWindow_Impl();
 
 public:
@@ -196,7 +196,7 @@ private:
         FixedText *m_pText;
     public:
         Chapter(FixedText *pText, bool bShow);
-        Chapter(Window *pGrid, unsigned nYPos, const OUString& sDisplayName);
+        Chapter(vcl::Window *pGrid, unsigned nYPos, const OUString& sDisplayName);
         ~Chapter();
     public:
         void SetBackground(const Wallpaper& W) { m_pText->SetBackground(W); }
@@ -210,7 +210,7 @@ private:
     {
     public:
         Entry(ColorConfigWindow_Impl& rParent, unsigned iEntry, long nCheckBoxLabelOffset, bool bShow);
-        Entry(Window* pGrid, unsigned nYPos, const ExtendedColorConfigValue& aColorEntry,
+        Entry(vcl::Window* pGrid, unsigned nYPos, const ExtendedColorConfigValue& aColorEntry,
             long nCheckBoxLabelOffset);
         ~Entry();
     public:
@@ -238,7 +238,7 @@ private:
         // color list box
         ColorListBox* m_pColorList;
         // color preview box
-        Window* m_pPreview;
+        vcl::Window* m_pPreview;
         // default color
         Color m_aDefaultColor;
     private:
@@ -290,7 +290,7 @@ ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText, bool bShow)
 }
 
 // ctor for extended groups
-ColorConfigWindow_Impl::Chapter::Chapter(Window *pGrid,
+ColorConfigWindow_Impl::Chapter::Chapter(vcl::Window *pGrid,
     unsigned nYPos, const OUString& rDisplayName)
     : m_bOwnsWidget(true)
 {
@@ -343,7 +343,7 @@ ColorConfigWindow_Impl::Entry::Entry(ColorConfigWindow_Impl& rParent, unsigned i
 }
 
 // ctor for extended entries
-ColorConfigWindow_Impl::Entry::Entry( Window *pGrid, unsigned nYPos,
+ColorConfigWindow_Impl::Entry::Entry( vcl::Window *pGrid, unsigned nYPos,
     ExtendedColorConfigValue const& rColorEntry, long nCheckBoxLabelOffset)
     : m_bOwnsWidgets(true)
     , m_aDefaultColor(rColorEntry.getDefaultColor())
@@ -360,7 +360,7 @@ ColorConfigWindow_Impl::Entry::Entry( Window *pGrid, unsigned nYPos,
     m_pColorList->set_grid_left_attach(1);
     m_pColorList->set_grid_top_attach(nYPos);
 
-    m_pPreview = new Window(pGrid, WB_BORDER);
+    m_pPreview = new vcl::Window(pGrid, WB_BORDER);
     m_pPreview->set_grid_left_attach(2);
     m_pPreview->set_grid_top_attach(nYPos);
     m_pPreview->set_margin_right(6);
@@ -500,7 +500,7 @@ void ColorConfigWindow_Impl::Entry::SetColor (Color aColor)
 // ColorConfigWindow_Impl
 
 
-ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent)
+ColorConfigWindow_Impl::ColorConfigWindow_Impl(vcl::Window* pParent)
     : VclContainer(pParent)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "cui/ui/colorconfigwin.ui");
@@ -646,9 +646,9 @@ void ColorConfigWindow_Impl::AdjustHeaderBar()
 {
     // horizontal positions
     unsigned const nX0 = 0;
-    unsigned const nX1 = get<Window>("doccolor")->GetPosPixel().X();
-    unsigned const nX2 = get<Window>("doccolor_lb")->GetPosPixel().X();
-    unsigned const nX3 = get<Window>("doccolor_wn")->GetPosPixel().X();
+    unsigned const nX1 = get<vcl::Window>("doccolor")->GetPosPixel().X();
+    unsigned const nX2 = get<vcl::Window>("doccolor_lb")->GetPosPixel().X();
+    unsigned const nX3 = get<vcl::Window>("doccolor_wn")->GetPosPixel().X();
     unsigned const nX4 = m_pHeaderHB->GetSizePixel().Width();
     m_pHeaderHB->SetItemSize(1, nX1 - nX0);
     m_pHeaderHB->SetItemSize(2, nX2 - nX1);
@@ -840,7 +840,7 @@ class ColorConfigCtrl_Impl : public VclVBox
     virtual void Command (CommandEvent const& rCEvt) SAL_OVERRIDE;
     virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
 public:
-    ColorConfigCtrl_Impl(Window* pParent);
+    ColorConfigCtrl_Impl(vcl::Window* pParent);
     virtual ~ColorConfigCtrl_Impl();
 
     void InitHeaderBar(const OUString &rOn, const OUString &rUIElems,
@@ -859,7 +859,7 @@ public:
     }
 };
 
-ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(Window* pParent)
+ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
     : VclVBox(pParent)
     , pColorConfig(0)
     , pExtColorConfig(0)
@@ -916,7 +916,7 @@ ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
     delete m_pHeaderHB;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorConfigCtrl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorConfigCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ColorConfigCtrl_Impl(pParent);
 }
@@ -1030,7 +1030,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
 
 
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(
-    Window* pParent, const SfxItemSet& rCoreSet)
+    vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "OptAppearancePage", "cui/ui/optappearancepage.ui", &rCoreSet)
     , bFillItemSetCalled(false)
     , pColorConfig(0)
@@ -1043,10 +1043,10 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     get(m_pColorConfigCT, "colorconfig");
 
     m_pColorConfigCT->InitHeaderBar(
-        get<Window>("on")->GetText(),
-        get<Window>("uielements")->GetText(),
-        get<Window>("colorsetting")->GetText(),
-        get<Window>("preview")->GetText());
+        get<vcl::Window>("on")->GetText(),
+        get<vcl::Window>("uielements")->GetText(),
+        get<vcl::Window>("colorsetting")->GetText(),
+        get<vcl::Window>("preview")->GetText());
 
     m_pColorSchemeLB->SetSelectHdl(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
     Link aLk = LINK(this, SvxColorOptionsTabPage, SaveDeleteHdl_Impl );
@@ -1075,7 +1075,7 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
     delete pExtColorConfig;
 }
 
-SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SvxColorOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return ( new SvxColorOptionsTabPage( pParent, *rAttrSet ) );
 }

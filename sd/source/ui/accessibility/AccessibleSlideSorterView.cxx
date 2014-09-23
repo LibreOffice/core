@@ -68,7 +68,7 @@ public:
     Implementation (
         AccessibleSlideSorterView& rAccessibleSlideSorter,
         ::sd::slidesorter::SlideSorter& rSlideSorter,
-        ::Window* pWindow);
+        vcl::Window* pWindow);
     virtual ~Implementation (void);
 
     void RequestUpdateChildren (void);
@@ -96,7 +96,7 @@ private:
     sal_Int32 mnFirstVisibleChild;
     sal_Int32 mnLastVisibleChild;
     bool mbListeningToDocument;
-    ::Window* mpWindow;
+    vcl::Window* mpWindow;
     sal_Int32 mnFocusedIndex;
     bool mbModelChangeLocked;
     ImplSVEvent * mnUpdateChildrenUserEventId;
@@ -110,7 +110,7 @@ private:
 AccessibleSlideSorterView::AccessibleSlideSorterView(
     ::sd::slidesorter::SlideSorter& rSlideSorter,
     const Reference<XAccessible>& rxParent,
-    ::Window* pContentWindow)
+    vcl::Window* pContentWindow)
     : AccessibleSlideSorterViewBase(MutexOwner::maMutex),
       mrSlideSorter(rSlideSorter),
       mxParent(rxParent),
@@ -223,7 +223,7 @@ Reference<XAccessible > SAL_CALL AccessibleSlideSorterView::getAccessibleParent 
 
     if (mpContentWindow != NULL)
     {
-        ::Window* pParent = mpContentWindow->GetAccessibleParentWindow();
+        vcl::Window* pParent = mpContentWindow->GetAccessibleParentWindow();
         if (pParent != NULL)
             xParent = pParent->GetAccessible();
     }
@@ -667,7 +667,7 @@ bool AccessibleSlideSorterView::IsDisposed (void)
 AccessibleSlideSorterView::Implementation::Implementation (
     AccessibleSlideSorterView& rAccessibleSlideSorter,
     ::sd::slidesorter::SlideSorter& rSlideSorter,
-    ::Window* pWindow)
+    vcl::Window* pWindow)
     : mrAccessibleSlideSorter(rAccessibleSlideSorter),
       mrSlideSorter(rSlideSorter),
       maPageObjects(),

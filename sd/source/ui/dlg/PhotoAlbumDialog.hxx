@@ -44,7 +44,7 @@ namespace sd
 class SdPhotoAlbumDialog : public ModalDialog
 {
 public:
-    SdPhotoAlbumDialog(Window* pWindow, SdDrawDocument* pActDoc);
+    SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pActDoc);
     virtual ~SdPhotoAlbumDialog();
 
     virtual short Execute() SAL_OVERRIDE;

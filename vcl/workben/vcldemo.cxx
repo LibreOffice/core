@@ -63,7 +63,7 @@ SAL_IMPLEMENT_MAIN()
 class MyWin : public WorkWindow
 {
 public:
-                 MyWin( Window* pParent, WinBits nWinStyle );
+                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -83,7 +83,7 @@ void Main()
     Application::Execute();
 }
 
-MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
+MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
 {
 }

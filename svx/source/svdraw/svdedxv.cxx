@@ -259,7 +259,7 @@ void SdrObjEditView::ModelHasChanged()
                 {
                     OutlinerView* pOLV=pTextEditOutliner->GetView(nOV);
                     { // invalidate old OutlinerView area
-                        Window* pWin=pOLV->GetWindow();
+                        vcl::Window* pWin=pOLV->GetWindow();
                         Rectangle aTmpRect(aOldArea);
                         sal_uInt16 nPixSiz=pOLV->GetInvalidateMore()+1;
                         Size aMore(pWin->PixelToLogic(Size(nPixSiz,nPixSiz)));
@@ -375,7 +375,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
 
 void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
 {
-    Window* pWin = rOutlView.GetWindow();
+    vcl::Window* pWin = rOutlView.GetWindow();
 
     if(pWin)
     {
@@ -422,7 +422,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
     }
 }
 
-OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, bool /*bNoPaint*/, OutlinerView* pGivenView) const
+OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoPaint*/, OutlinerView* pGivenView) const
 {
     // background
     Color aBackground(GetTextEditBackgroundColor(*this));
@@ -519,7 +519,7 @@ SdrUndoManager* SdrObjEditView::getSdrUndoManagerForEnhancedTextEdit() const
 }
 
 bool SdrObjEditView::SdrBeginTextEdit(
-    SdrObject* pObj, SdrPageView* pPV, Window* pWin,
+    SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     bool bIsNewObj, SdrOutliner* pGivenOutliner,
     OutlinerView* pGivenOutlinerView,
     bool bDontDeleteOutliner, bool bOnlyOneView,
@@ -557,7 +557,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             if(OUTDEV_WINDOW == pPaintWindow->GetOutputDevice().GetOutDevType())
             {
-                pWin = (Window*)(&pPaintWindow->GetOutputDevice());
+                pWin = (vcl::Window*)(&pPaintWindow->GetOutputDevice());
             }
         }
 
@@ -703,7 +703,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
                     if(&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                     {
-                        OutlinerView* pOutlView = ImpMakeOutlinerView((Window*)(&rOutDev), !bEmpty, 0L);
+                        OutlinerView* pOutlView = ImpMakeOutlinerView((vcl::Window*)(&rOutDev), !bEmpty, 0L);
                         pTextEditOutliner->InsertView(pOutlView, (sal_uInt16)i);
                     }
                 }
@@ -806,7 +806,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 {
     SdrEndTextEditKind eRet=SDRENDTEXTEDIT_UNCHANGED;
     SdrTextObj* pTEObj = dynamic_cast< SdrTextObj* >( mxTextEditObj.get() );
-    Window*       pTEWin         =pTextEditWin;
+    vcl::Window*       pTEWin         =pTextEditWin;
     SdrOutliner*  pTEOutliner    =pTextEditOutliner;
     OutlinerView* pTEOutlinerView=pTextEditOutlinerView;
     vcl::Cursor*  pTECursorMerker=pTextEditCursorMerker;
@@ -993,7 +993,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             i--;
             OutlinerView* pOLV=pTEOutliner->GetView(i);
             sal_uInt16 nMorePix=pOLV->GetInvalidateMore() + 10;
-            Window* pWin=pOLV->GetWindow();
+            vcl::Window* pWin=pOLV->GetWindow();
             Rectangle aRect(pOLV->GetOutputArea());
             pTEOutliner->RemoveView(i);
             if (!bTextEditDontDelete || i!=0)
@@ -1080,7 +1080,7 @@ SdrPageView* SdrObjEditView::GetTextEditPageView() const
 
 
 
-OutlinerView* SdrObjEditView::ImpFindOutlinerView(Window* pWin) const
+OutlinerView* SdrObjEditView::ImpFindOutlinerView(vcl::Window* pWin) const
 {
     if (pWin==NULL) return NULL;
     if (pTextEditOutliner==NULL) return NULL;
@@ -1093,7 +1093,7 @@ OutlinerView* SdrObjEditView::ImpFindOutlinerView(Window* pWin) const
     return pNewView;
 }
 
-void SdrObjEditView::SetTextEditWin(Window* pWin)
+void SdrObjEditView::SetTextEditWin(vcl::Window* pWin)
 {
     if(mxTextEditObj.is() && pWin!=NULL && pWin!=pTextEditWin)
     {
@@ -1157,7 +1157,7 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
         OutlinerView* pOLV=pTextEditOutliner->GetView(0);
         if( pOLV )
         {
-            Window* pWin=pOLV->GetWindow();
+            vcl::Window* pWin=pOLV->GetWindow();
             if (pText!=NULL && pText->IsTextFrame() && pOLV!=NULL && pWin!=NULL) {
                 sal_uInt16 nPixSiz=pOLV->GetInvalidateMore();
                 Rectangle aEditArea(aMinTextEditArea);
@@ -1178,7 +1178,7 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
 
 
 
-bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
     if(pTextEditOutlinerView)
     {
@@ -1201,7 +1201,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
     return SdrGlueEditView::KeyInput(rKEvt,pWin);
 }
 
-bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
+bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
 {
     if (pTextEditOutlinerView!=NULL) {
         bool bPostIt=pTextEditOutliner->IsInSelectionMode();
@@ -1236,7 +1236,7 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
     return SdrGlueEditView::MouseButtonDown(rMEvt,pWin);
 }
 
-bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
+bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
 {
     if (pTextEditOutlinerView!=NULL) {
         bool bPostIt=pTextEditOutliner->IsInSelectionMode();
@@ -1267,7 +1267,7 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
     return SdrGlueEditView::MouseButtonUp(rMEvt,pWin);
 }
 
-bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
+bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
 {
     if (pTextEditOutlinerView!=NULL) {
         bool bSelMode=pTextEditOutliner->IsInSelectionMode();
@@ -1305,7 +1305,7 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
     return SdrGlueEditView::MouseMove(rMEvt,pWin);
 }
 
-bool SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
+bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
 {
     // as long as OutlinerView returns a sal_Bool, it only gets COMMAND_STARTDRAG
     if (pTextEditOutlinerView!=NULL)
@@ -1667,7 +1667,7 @@ void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin)
 
     if(mxTextEditObj.is() && !bTextEditOnlyOneView && pNewWin->GetOutDevType()==OUTDEV_WINDOW)
     {
-        OutlinerView* pOutlView=ImpMakeOutlinerView((Window*)pNewWin,false,NULL);
+        OutlinerView* pOutlView=ImpMakeOutlinerView((vcl::Window*)pNewWin,false,NULL);
         pTextEditOutliner->InsertView(pOutlView);
     }
 }
@@ -1681,7 +1681,7 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
         for (sal_uIntPtr i=pTextEditOutliner->GetViewCount(); i>0;) {
             i--;
             OutlinerView* pOLV=pTextEditOutliner->GetView(i);
-            if (pOLV && pOLV->GetWindow()==(Window*)pOldWin) {
+            if (pOLV && pOLV->GetWindow()==(vcl::Window*)pOldWin) {
                 delete pTextEditOutliner->RemoveView(i);
             }
         }
@@ -1697,7 +1697,7 @@ bool SdrObjEditView::IsTextEditInSelectionMode() const
 // MacroMode
 
 
-bool SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, Window* pWin)
+bool SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin)
 {
     BrkMacroObj();
     if (pObj!=NULL && pPV!=NULL && pWin!=NULL && pObj->HasMacro()) {

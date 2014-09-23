@@ -73,7 +73,7 @@ private:
     DECL_LINK(SelectHdl, void *);
 
 public:
-    ManageLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr );
+    ManageLanguageDialog( vcl::Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr );
     virtual ~ManageLanguageDialog();
 };
 
@@ -92,7 +92,7 @@ private:
     void                FillLanguageBox();
 
 public:
-    SetDefaultLanguageDialog(Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr);
+    SetDefaultLanguageDialog(vcl::Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >   GetLocales() const;
 };

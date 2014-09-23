@@ -23,22 +23,22 @@
 namespace sdr
 {
 
-bool SelectionController::onKeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
+bool SelectionController::onKeyInput(const KeyEvent& /*rKEvt*/, vcl::Window* /*pWin*/)
 {
     return false;
 }
 
-bool SelectionController::onMouseButtonDown(const MouseEvent& /*rMEvt*/, Window* /*pWin*/)
+bool SelectionController::onMouseButtonDown(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/)
 {
     return false;
 }
 
-bool SelectionController::onMouseButtonUp(const MouseEvent& /*rMEvt*/, Window* /*pWin*/)
+bool SelectionController::onMouseButtonUp(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/)
 {
     return false;
 }
 
-bool SelectionController::onMouseMove(const MouseEvent& /*rMEvt*/, Window* /*pWin*/)
+bool SelectionController::onMouseMove(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/)
 {
     return false;
 }

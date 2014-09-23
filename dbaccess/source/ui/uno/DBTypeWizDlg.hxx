@@ -55,7 +55,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 protected:
 // OGenericUnoDialog overridables
-    virtual Dialog* createDialog(Window* _pParent) SAL_OVERRIDE;
+    virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
 };
 
 }   // namespace dbaui

@@ -2004,10 +2004,10 @@ bool SwPostItMgr::HasFrmConnectedSidebarWins( const SwFrm& rFrm )
     return bRet;
 }
 
-Window* SwPostItMgr::GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
+vcl::Window* SwPostItMgr::GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
                                                  const sal_Int32 nIndex )
 {
-    Window* pSidebarWin( 0 );
+    vcl::Window* pSidebarWin( 0 );
 
     if ( mpFrmSidebarWinContainer != 0 )
     {
@@ -2018,7 +2018,7 @@ Window* SwPostItMgr::GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
 }
 
 void SwPostItMgr::GetAllSidebarWinForFrm( const SwFrm& rFrm,
-                                          std::vector< Window* >* pChildren )
+                                          std::vector< vcl::Window* >* pChildren )
 {
     if ( mpFrmSidebarWinContainer != 0 )
     {

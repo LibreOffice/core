@@ -21,7 +21,7 @@
 
 #include <sfx2/basedlgs.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class SfxItemSet;
 
 namespace chart
@@ -30,7 +30,7 @@ namespace chart
 class NumberFormatDialog : public SfxSingleTabDialog
 {
 public:
-     NumberFormatDialog(Window* pParent, SfxItemSet& rSet);
+     NumberFormatDialog(vcl::Window* pParent, SfxItemSet& rSet);
     virtual ~NumberFormatDialog();
 
     static SfxItemSet CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool );

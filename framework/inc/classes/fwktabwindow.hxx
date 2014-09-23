@@ -44,7 +44,7 @@ namespace framework
 class FwkTabControl : public TabControl
 {
 public:
-    FwkTabControl(Window* pParent);
+    FwkTabControl(vcl::Window* pParent);
 
     void BroadcastEvent( sal_uLong nEvent );
 };
@@ -63,7 +63,7 @@ private:
 
 public:
     FwkTabPage(
-        Window* pParent,
+        vcl::Window* pParent,
         const OUString& rPageURL,
     const css::uno::Reference< css::awt::XContainerWindowEventHandler >& rEventHdl,
         const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider );
@@ -93,7 +93,7 @@ struct TabEntry
 
 typedef std::vector< TabEntry* > TabEntryList;
 
-class FwkTabWindow : public Window
+class FwkTabWindow : public vcl::Window
 {
 private:
     FwkTabControl   m_aTabCtrl;
@@ -109,7 +109,7 @@ private:
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, void *);
 
 public:
-    FwkTabWindow( Window* pParent );
+    FwkTabWindow( vcl::Window* pParent );
     virtual ~FwkTabWindow();
 
     void            AddEventListener( const Link& rEventListener );

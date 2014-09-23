@@ -39,7 +39,7 @@ class SFX2_DLLPUBLIC SidebarToolBox
     : public ToolBox
 {
 public:
-    SidebarToolBox(Window* pParentWindow);
+    SidebarToolBox(vcl::Window* pParentWindow);
     virtual ~SidebarToolBox (void);
 
     using ToolBox::InsertItem;

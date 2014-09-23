@@ -303,7 +303,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
                 if (pViewSh && bValid && !aChartName.isEmpty() )
                 {
-                    Window* pParent = pViewSh->GetDialogParent();
+                    vcl::Window* pParent = pViewSh->GetDialogParent();
 
                     SCCOL nCol1 = aSingleRange.aStart.Col();
                     SCROW nRow1 = aSingleRange.aStart.Row();
@@ -562,7 +562,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 // xmlsec05/06:
                 // getting real parent window when called from Security-Options TP
-                Window* pParent = NULL;
+                vcl::Window* pParent = NULL;
                 const SfxPoolItem* pParentItem;
                 if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
                     pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
@@ -621,7 +621,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case SID_CHG_PROTECT :
             {
-                Window* pParent = NULL;
+                vcl::Window* pParent = NULL;
                 const SfxPoolItem* pParentItem;
                 if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
                     pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
@@ -1116,7 +1116,7 @@ void UpdateAcceptChangesDialog()
     }
 }
 
-bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, bool bJustQueryIfProtected )
+bool ScDocShell::ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJustQueryIfProtected )
 {
     bool bDone = false;
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();

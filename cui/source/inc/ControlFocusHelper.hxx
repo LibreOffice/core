@@ -29,7 +29,7 @@ private:
     Control*        m_pFocusCtrl;
 
 public:
-    SvxControlFocusHelper( Window* pParent, const ResId& rId ) :
+    SvxControlFocusHelper( vcl::Window* pParent, const ResId& rId ) :
         Control( pParent, rId ), m_pFocusCtrl( NULL ) {}
 
     void            SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }

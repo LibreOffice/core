@@ -87,7 +87,7 @@ namespace pcr
     // OFormatSampleControl
 
 
-    OFormatSampleControl::OFormatSampleControl( Window* pParent, WinBits nWinStyle )
+    OFormatSampleControl::OFormatSampleControl( vcl::Window* pParent, WinBits nWinStyle )
         :OFormatSampleControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
     }
@@ -169,7 +169,7 @@ namespace pcr
     // class OFormattedNumericControl
 
 
-    OFormattedNumericControl::OFormattedNumericControl( Window* pParent, WinBits nWinStyle )
+    OFormattedNumericControl::OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle )
         :OFormattedNumericControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
         getTypedControlWindow()->TreatAsNumber(true);
@@ -261,7 +261,7 @@ namespace pcr
     //= OFileUrlControl
 
 
-    OFileUrlControl::OFileUrlControl( Window* pParent, WinBits nWinStyle )
+    OFileUrlControl::OFileUrlControl( vcl::Window* pParent, WinBits nWinStyle )
         :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, nWinStyle | WB_DROPDOWN )
     {
         getTypedControlWindow()->SetDropDownLineCount( 10 );
@@ -307,7 +307,7 @@ namespace pcr
     //= OTimeDurationControl
 
 
-    OTimeDurationControl::OTimeDurationControl( ::Window* pParent, WinBits nWinStyle )
+    OTimeDurationControl::OTimeDurationControl( vcl::Window* pParent, WinBits nWinStyle )
         :ONumericControl( pParent, nWinStyle )
     {
         getTypedControlWindow()->SetUnit( FUNIT_CUSTOM );

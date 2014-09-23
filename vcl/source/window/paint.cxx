@@ -43,7 +43,7 @@
 class PaintHelper
 {
 private:
-    Window* m_pWindow;
+    vcl::Window* m_pWindow;
     Region* m_pChildRegion;
     Rectangle m_aSelectionRect;
     Rectangle m_aPaintRect;
@@ -52,7 +52,7 @@ private:
     bool m_bPop;
     bool m_bRestoreCursor;
 public:
-    PaintHelper(Window *pWindow, sal_uInt16 nPaintFlags);
+    PaintHelper(vcl::Window *pWindow, sal_uInt16 nPaintFlags);
     void SetPop()
     {
         m_bPop = true;
@@ -85,7 +85,7 @@ public:
     ~PaintHelper();
 };
 
-PaintHelper::PaintHelper(Window *pWindow, sal_uInt16 nPaintFlags)
+PaintHelper::PaintHelper(vcl::Window *pWindow, sal_uInt16 nPaintFlags)
     : m_pWindow(pWindow)
     , m_pChildRegion(NULL)
     , m_nPaintFlags(nPaintFlags)
@@ -124,6 +124,8 @@ void PaintHelper::DoPaint(const Region* pRegion)
         m_pWindow->Paint(m_aPaintRect);
     }
 }
+
+namespace vcl {
 
 void Window::PushPaintHelper(PaintHelper *pHelper)
 {
@@ -184,6 +186,8 @@ void Window::PopPaintHelper(PaintHelper *pHelper)
         mpWindowImpl->mpCursor->ImplResume(pHelper->GetRestoreCursor());
 }
 
+} /* namespace vcl */
+
 PaintHelper::~PaintHelper()
 {
     WindowImpl* pWindowImpl = m_pWindow->ImplGetWindowImpl();
@@ -195,7 +199,7 @@ PaintHelper::~PaintHelper()
     if ( m_nPaintFlags & (IMPL_PAINT_PAINTALLCHILDREN | IMPL_PAINT_PAINTCHILDREN) )
     {
         // Paint from the bottom child window and frontward.
-        Window* pTempWindow = pWindowImpl->mpLastChild;
+        vcl::Window* pTempWindow = pWindowImpl->mpLastChild;
         while ( pTempWindow )
         {
             if ( pTempWindow->mpWindowImpl->mbVisible )
@@ -216,6 +220,8 @@ PaintHelper::~PaintHelper()
 
     delete m_pChildRegion;
 }
+
+namespace vcl {
 
 void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 {
@@ -258,7 +264,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 void Window::ImplCallOverlapPaint()
 {
     // emit overlapping windows first
-    Window* pTempWindow = mpWindowImpl->mpFirstOverlap;
+    vcl::Window* pTempWindow = mpWindowImpl->mpFirstOverlap;
     while ( pTempWindow )
     {
         if ( pTempWindow->mpWindowImpl->mbReallyVisible )
@@ -323,7 +329,7 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags
     // set PAINTCHILDREN for all parent windows till the first OverlapWindow
     if ( !ImplIsOverlapWindow() )
     {
-        Window* pTempWindow = this;
+        vcl::Window* pTempWindow = this;
         sal_uInt16 nTranspPaint = IsPaintTransparent() ? IMPL_PAINT_PAINT : 0;
         do
         {
@@ -354,7 +360,7 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags
     if( ((IsPaintTransparent() && !(nFlags & INVALIDATE_NOTRANSPARENT)) || (nFlags & INVALIDATE_TRANSPARENT) )
             && ImplGetParent() )
     {
-        Window *pParent = ImplGetParent();
+        vcl::Window *pParent = ImplGetParent();
         while( pParent && pParent->IsPaintTransparent() )
             pParent = pParent->ImplGetParent();
         if( pParent )
@@ -384,7 +390,7 @@ void Window::ImplInvalidateOverlapFrameRegion( const Region& rRegion )
         ImplInvalidateFrameRegion( &aRegion, INVALIDATE_CHILDREN );
 
     // now we invalidate the overlapping windows
-    Window* pTempWindow = mpWindowImpl->mpFirstOverlap;
+    vcl::Window* pTempWindow = mpWindowImpl->mpFirstOverlap;
     while ( pTempWindow )
     {
         if ( pTempWindow->IsVisible() )
@@ -416,10 +422,10 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
     bool bInvalidateAll = !pRegion;
 
     // take Transparent-Invalidate into account
-    Window* pOpaqueWindow = this;
+    vcl::Window* pOpaqueWindow = this;
     if ( (mpWindowImpl->mbPaintTransparent && !(nFlags & INVALIDATE_NOTRANSPARENT)) || (nFlags & INVALIDATE_TRANSPARENT) )
     {
-        Window* pTempWindow = pOpaqueWindow->ImplGetParent();
+        vcl::Window* pTempWindow = pOpaqueWindow->ImplGetParent();
         while ( pTempWindow )
         {
             if ( !pTempWindow->IsPaintTransparent() )
@@ -505,7 +511,7 @@ void Window::ImplMoveInvalidateRegion( const Rectangle& rRect,
 
     if ( bChildren && (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDREN) )
     {
-        Window* pWindow = mpWindowImpl->mpFirstChild;
+        vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
         {
             pWindow->ImplMoveInvalidateRegion( rRect, nHorzScroll, nVertScroll, true );
@@ -524,7 +530,7 @@ void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
     if ( !ImplIsOverlapWindow() )
     {
         Region  aPaintAllRegion;
-        Window* pPaintAllWindow = this;
+        vcl::Window* pPaintAllWindow = this;
         do
         {
             pPaintAllWindow = pPaintAllWindow->ImplGetParent();
@@ -566,7 +572,7 @@ void Window::ImplValidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
                 Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
                 aChildRegion = aRect;
             }
-            Window* pChild = mpWindowImpl->mpFirstChild;
+            vcl::Window* pChild = mpWindowImpl->mpFirstChild;
             while ( pChild )
             {
                 pChild->Invalidate( aChildRegion, INVALIDATE_CHILDREN | INVALIDATE_NOTRANSPARENT );
@@ -584,7 +590,7 @@ void Window::ImplValidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
 
     if ( nFlags & VALIDATE_CHILDREN )
     {
-        Window* pChild = mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->ImplValidateFrameRegion( pRegion, nFlags );
@@ -649,7 +655,7 @@ void Window::ImplUpdateAll( bool bOverlapWindows )
 
     // an update changes the OverlapWindow, such that for later paints
     // not too much has to be drawn, if ALLCHILDREN etc. is set
-    Window* pWindow = ImplGetFirstOverlapWindow();
+    vcl::Window* pWindow = ImplGetFirstOverlapWindow();
     if ( bOverlapWindows )
         pWindow->ImplCallOverlapPaint();
     else
@@ -905,7 +911,7 @@ bool Window::HasPaintEvent() const
 
     if ( !ImplIsOverlapWindow() )
     {
-        const Window* pTempWindow = this;
+        const vcl::Window* pTempWindow = this;
         do
         {
             pTempWindow = pTempWindow->ImplGetParent();
@@ -941,8 +947,8 @@ void Window::Update()
     }
 
     // First we should skip all windows which are Paint-Transparent
-    Window* pUpdateWindow = this;
-    Window* pWindow = pUpdateWindow;
+    vcl::Window* pUpdateWindow = this;
+    vcl::Window* pWindow = pUpdateWindow;
     while ( !pWindow->ImplIsOverlapWindow() )
     {
         if ( !pWindow->mpWindowImpl->mbPaintTransparent )
@@ -972,7 +978,7 @@ void Window::Update()
 
         // trigger an update also for system windows on top of us,
         // otherwise holes would remain
-         Window* pUpdateOverlapWindow = ImplGetFirstOverlapWindow()->mpWindowImpl->mpFirstOverlap;
+         vcl::Window* pUpdateOverlapWindow = ImplGetFirstOverlapWindow()->mpWindowImpl->mpFirstOverlap;
          while ( pUpdateOverlapWindow )
          {
              pUpdateOverlapWindow->Update();
@@ -1086,7 +1092,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     // get rid of virtual device now so they don't pile up during recursive calls
     delete pMaskedDevice, pMaskedDevice = NULL;
 
-    for( Window* pChild = mpWindowImpl->mpFirstChild; pChild; pChild = pChild->mpWindowImpl->mpNext )
+    for( vcl::Window* pChild = mpWindowImpl->mpFirstChild; pChild; pChild = pChild->mpWindowImpl->mpNext )
     {
         if( pChild->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pChild->IsVisible() )
         {
@@ -1119,10 +1125,10 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
     DBG_ASSERT( ! pDev->HasMirroredGraphics(), "PaintToDevice to mirroring graphics" );
     DBG_ASSERT( ! pDev->IsRTLEnabled(), "PaintToDevice to mirroring device" );
 
-    Window* pRealParent = NULL;
+    vcl::Window* pRealParent = NULL;
     if( ! mpWindowImpl->mbVisible )
     {
-        Window* pTempParent = ImplGetDefaultWindow();
+        vcl::Window* pTempParent = ImplGetDefaultWindow();
         if( pTempParent )
             pTempParent->EnableChildTransparentMode();
         pRealParent = GetParent();
@@ -1341,7 +1347,7 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     if ( bScrollChildren )
     {
-        Window* pWindow = mpWindowImpl->mpFirstChild;
+        vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
         {
             Point aPos = pWindow->GetPosPixel();
@@ -1358,6 +1364,8 @@ void Window::ImplScroll( const Rectangle& rRect,
     if ( mpWindowImpl->mpCursor )
         mpWindowImpl->mpCursor->ImplResume();
 }
+
+} /* namespace vcl */
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

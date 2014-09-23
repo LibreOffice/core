@@ -33,7 +33,7 @@ class ScDocument;
 class ScFillSeriesDlg : public ModalDialog
 {
 public:
-            ScFillSeriesDlg( Window*        pParent,
+            ScFillSeriesDlg( vcl::Window*        pParent,
                              ScDocument&    rDocument,
                              FillDir        eFillDir,
                              FillCmd        eFillCmd,

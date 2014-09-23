@@ -47,9 +47,9 @@ namespace bib
 
     using namespace ::com::sun::star::uno;
 
-    void HandleTaskPaneList( Window* pWindow, bool bAddToList )
+    void HandleTaskPaneList( vcl::Window* pWindow, bool bAddToList )
     {
-        Window*             pParent = pWindow->GetParent();
+        vcl::Window*             pParent = pWindow->GetParent();
 
         DBG_ASSERT( pParent, "-GetTaskPaneList(): everybody here should have a parent!" );
 
@@ -69,7 +69,7 @@ namespace bib
 
 
     class BibGridwin
-                :public Window //DockingWindow
+                :public vcl::Window //DockingWindow
     {
     private:
             Reference< awt::XWindow >           m_xGridWin;
@@ -85,7 +85,7 @@ namespace bib
 
     public:
 
-            BibGridwin(Window* pParent, WinBits nStyle = WB_3DLOOK );
+            BibGridwin(vcl::Window* pParent, WinBits nStyle = WB_3DLOOK );
             virtual ~BibGridwin();
 
             void createGridWin(const Reference< awt::XControlModel > & xDbForm);
@@ -98,7 +98,7 @@ namespace bib
             virtual void GetFocus() SAL_OVERRIDE;
     };
 
-    BibGridwin::BibGridwin( Window* _pParent, WinBits _nStyle ) : Window( _pParent, _nStyle )
+    BibGridwin::BibGridwin( vcl::Window* _pParent, WinBits _nStyle ) : Window( _pParent, _nStyle )
     {
         m_xControlContainer = VCLUnoHelper::CreateControlContainer(this);
 
@@ -180,7 +180,7 @@ namespace bib
             m_xGridWin->setFocus();
     }
 
-    BibBeamer::BibBeamer( Window* _pParent, BibDataManager* _pDM, WinBits _nStyle )
+    BibBeamer::BibBeamer( vcl::Window* _pParent, BibDataManager* _pDM, WinBits _nStyle )
         :BibSplitWindow( _pParent, _nStyle | WB_NOSPLITDRAW )
         ,pDatMan( _pDM )
         ,pToolBar( NULL )

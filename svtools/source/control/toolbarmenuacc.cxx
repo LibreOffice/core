@@ -182,7 +182,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleParent() throw (R
 
     Reference< XAccessible > xRet;
 
-    Window* pParent = mpParent->mrMenu.GetParent();
+    vcl::Window* pParent = mpParent->mrMenu.GetParent();
     if( pParent )
         xRet = pParent->GetAccessible();
 
@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getAccessibleIndexInParent() throw (RuntimeEx
     const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
-    Window* pParent = mpParent->mrMenu.GetParent();
+    vcl::Window* pParent = mpParent->mrMenu.GetParent();
     if( pParent )
     {
         for( sal_uInt16 i = 0, nCount = pParent->GetChildCount(); i < nCount ; i++ )
@@ -238,7 +238,7 @@ OUString SAL_CALL ToolbarMenuAcc::getAccessibleName() throw (RuntimeException, s
 
     if( aRet.isEmpty() )
     {
-        Window* pLabel = mpParent->mrMenu.GetAccessibleRelationLabeledBy();
+        vcl::Window* pLabel = mpParent->mrMenu.GetAccessibleRelationLabeledBy();
         if( pLabel && pLabel != &mpParent->mrMenu )
             aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
     }

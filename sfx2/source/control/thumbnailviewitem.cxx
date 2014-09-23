@@ -52,7 +52,7 @@ class ResizableMultiLineEdit : public VclMultiLineEdit
         bool mbIsInGrabFocus;
 
     public:
-        ResizableMultiLineEdit (Window* pParent, ThumbnailViewItem* pItem);
+        ResizableMultiLineEdit (vcl::Window* pParent, ThumbnailViewItem* pItem);
         virtual ~ResizableMultiLineEdit ();
 
         void SetInGrabFocus(bool bInGrabFocus) { mbIsInGrabFocus = bInGrabFocus; }
@@ -61,7 +61,7 @@ class ResizableMultiLineEdit : public VclMultiLineEdit
         virtual void Modify() SAL_OVERRIDE;
 };
 
-ResizableMultiLineEdit::ResizableMultiLineEdit (Window* pParent, ThumbnailViewItem* pItem) :
+ResizableMultiLineEdit::ResizableMultiLineEdit (vcl::Window* pParent, ThumbnailViewItem* pItem) :
     VclMultiLineEdit (pParent, WB_CENTER | WB_BORDER),
     mpItem(pItem),
     mbIsInGrabFocus(false)

@@ -169,7 +169,7 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSource
     return xRet;
 }
 
-SwDBTreeList::SwDBTreeList(Window *pParent, WinBits nStyle)
+SwDBTreeList::SwDBTreeList(vcl::Window *pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
     , aImageList(SW_RES(ILIST_DB_DLG))
     , bInitialized(false)
@@ -180,7 +180,7 @@ SwDBTreeList::SwDBTreeList(Window *pParent, WinBits nStyle)
         InitTreeList();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwDBTreeList(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwDBTreeList(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

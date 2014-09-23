@@ -70,7 +70,7 @@ public:
         detailed field of an <type scope="com::sun::star::sdb">SQLContext</type>).
     */
     OSQLMessageBox(
-        Window* _pParent,
+        vcl::Window* _pParent,
         const dbtools::SQLExceptionInfo& _rException,
         WinBits _nStyle = WB_OK | WB_DEF_OK,
         const OUString& _rHelpURL = OUString()
@@ -82,7 +82,7 @@ public:
         @param  rMessage    the detailed message to display
         @param  _eType      determines the image to use. AUTO is disallowed in this constructor version
     */
-    OSQLMessageBox(Window* pParent,
+    OSQLMessageBox(vcl::Window* pParent,
                 const OUString& rTitle,
                 const OUString& rMessage,
                 WinBits nStyle = WB_OK | WB_DEF_OK,
@@ -107,7 +107,7 @@ private:
 class OSQLWarningBox : public OSQLMessageBox
 {
 public:
-    OSQLWarningBox( Window* _pParent,
+    OSQLWarningBox( vcl::Window* _pParent,
                     const OUString& _rMessage,
                     WinBits _nStyle = WB_OK | WB_DEF_OK,
                     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
@@ -117,7 +117,7 @@ public:
 class OSQLErrorBox : public OSQLMessageBox
 {
 public:
-    OSQLErrorBox( Window* _pParent,
+    OSQLErrorBox( vcl::Window* _pParent,
                   const OUString& _rMessage,
                   WinBits _nStyle = WB_OK | WB_DEF_OK,
                   const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );

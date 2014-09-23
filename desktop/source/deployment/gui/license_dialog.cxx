@@ -55,7 +55,7 @@ class LicenseView : public MultiLineEdit, public SfxListener
     Link            maScrolledHdl;
 
 public:
-    LicenseView( Window* pParent, WinBits nStyle );
+    LicenseView( vcl::Window* pParent, WinBits nStyle );
     virtual ~LicenseView();
 
     void ScrollDown( ScrollType eScroll );
@@ -94,7 +94,7 @@ struct LicenseDialogImpl : public ModalDialog
     bool m_bLicenseRead;
 
     LicenseDialogImpl(
-        Window * pParent,
+        vcl::Window * pParent,
         css::uno::Reference< css::uno::XComponentContext > const & xContext,
         const OUString & sExtensionName,
         const OUString & sLicenseText);
@@ -103,7 +103,7 @@ struct LicenseDialogImpl : public ModalDialog
 
 };
 
-LicenseView::LicenseView( Window* pParent, WinBits nStyle )
+LicenseView::LicenseView( vcl::Window* pParent, WinBits nStyle )
     : MultiLineEdit( pParent, nStyle )
 {
     SetLeftMargin( 5 );
@@ -111,7 +111,7 @@ LicenseView::LicenseView( Window* pParent, WinBits nStyle )
     StartListening( *GetTextEngine() );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLicenseView(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLicenseView(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -182,7 +182,7 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 
 LicenseDialogImpl::LicenseDialogImpl(
-    Window * pParent,
+    vcl::Window * pParent,
     cssu::Reference< cssu::XComponentContext > const & xContext,
     const OUString & sExtensionName,
     const OUString & sLicenseText)

@@ -42,7 +42,7 @@
 
 #include <unomid.h>
 
-SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent)
+SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(vcl::Window *pParent)
     : SfxModalDialog(pParent,
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
 {

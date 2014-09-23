@@ -20,7 +20,7 @@
 
 #define HDL(hdl)            LINK( this, ScDataFormDlg, hdl )
 
-ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
+ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShellOri)
     : ModalDialog(pParent, "DataFormDialog", "modules/scalc/ui/dataform.ui")
     , pTabViewShell(pTabViewShellOri)
     , bNoSelection(false)

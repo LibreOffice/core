@@ -73,7 +73,7 @@ protected:
     virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
-    ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+    ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                     ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
                     const ScAddress& aCursorPos, const bool bUndo);
 

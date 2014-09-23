@@ -38,7 +38,7 @@ class NumberFormatPropertyPanel
 public:
 public:
     static NumberFormatPropertyPanel* Create(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
@@ -80,7 +80,7 @@ private:
 
     // constructor/destuctor
     NumberFormatPropertyPanel(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~NumberFormatPropertyPanel();

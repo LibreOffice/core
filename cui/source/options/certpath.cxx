@@ -25,7 +25,7 @@
 
 using namespace ::com::sun::star;
 
-CertPathDialog::CertPathDialog(Window* pParent)
+CertPathDialog::CertPathDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "CertDialog", "cui/ui/certdialog.ui")
 {
     get(m_pOKBtn, "ok");

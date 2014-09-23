@@ -36,7 +36,7 @@ class SVX_DLLPUBLIC PopupControl
 {
 public :
     PopupControl (
-        Window* pParent,
+        vcl::Window* pParent,
         const ResId& rResId);
     virtual ~PopupControl (void);
 

@@ -37,7 +37,7 @@
 namespace basctl
 {
 
-ObjectCatalog::ObjectCatalog (Window* pParent) :
+ObjectCatalog::ObjectCatalog (vcl::Window* pParent) :
     DockingWindow(pParent),
     aTitle(this),
     aTree(this, IDEResId(RID_TLB_MACROS))

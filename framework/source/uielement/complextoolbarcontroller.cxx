@@ -266,7 +266,7 @@ void ComplexToolbarController::addNotifyInfo(
     }
 }
 
-sal_Int32 ComplexToolbarController::getFontSizePixel( const Window* pWindow )
+sal_Int32 ComplexToolbarController::getFontSizePixel( const vcl::Window* pWindow )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     const vcl::Font&     rFont     = rSettings.GetAppFont();

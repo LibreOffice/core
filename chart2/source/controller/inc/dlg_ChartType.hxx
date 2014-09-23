@@ -32,7 +32,7 @@ class ChartTypeTabPage;
 class ChartTypeDialog : public ModalDialog
 {
 public:
-    ChartTypeDialog( Window* pWindow
+    ChartTypeDialog( vcl::Window* pWindow
         , const ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XModel >& xChartModel
         , const ::com::sun::star::uno::Reference<

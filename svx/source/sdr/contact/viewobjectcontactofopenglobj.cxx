@@ -34,16 +34,16 @@ ViewObjectContactOfOpenGLObj::~ViewObjectContactOfOpenGLObj()
 {
 }
 
-Window* ViewObjectContactOfOpenGLObj::getWindow() const
+vcl::Window* ViewObjectContactOfOpenGLObj::getWindow() const
 {
-    Window* pRetval = 0;
+    vcl::Window* pRetval = 0;
 
     boost::optional<const OutputDevice&> oPageOutputDev = getPageViewOutputDevice();
     if( oPageOutputDev )
     {
         if(OUTDEV_WINDOW == oPageOutputDev->GetOutDevType())
         {
-            pRetval = static_cast< Window* >(&const_cast<OutputDevice&>(oPageOutputDev.get()));
+            pRetval = static_cast< vcl::Window* >(&const_cast<OutputDevice&>(oPageOutputDev.get()));
         }
     }
 

@@ -34,7 +34,7 @@
 #include "globstr.hrc"
 #include "instbdlg.hxx"
 
-ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
+ScInsertTableDlg::ScInsertTableDlg( vcl::Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
     : ModalDialog(pParent, "InsertSheetDialog", "modules/scalc/ui/insertsheet.ui")
     , rViewData(rData)
     , rDoc(*rData.GetDocument())
@@ -120,7 +120,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 short ScInsertTableDlg::Execute()
 {
     // set Parent of DocumentInserter and Doc-Manager
-    Window* pOldDefParent = Application::GetDefDialogParent();
+    vcl::Window* pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
     if ( m_pBtnFromFile->IsChecked() )

@@ -56,18 +56,18 @@ namespace pcr
         Point                   m_aLinePos;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
                                 m_xControl;
-        Window*                 m_pControlWindow;
+        vcl::Window*                 m_pControlWindow;
         PushButton*             m_pBrowseButton;
         PushButton*             m_pAdditionalBrowseButton;
         IButtonClickListener*   m_pClickListener;
-        Window*                 m_pTheParent;
+        vcl::Window*                 m_pTheParent;
         sal_uInt16              m_nNameWidth;
         sal_uInt16              m_nEnableFlags;
         bool                    m_bIndentTitle;
         bool                    m_bReadOnly;
 
     public:
-                            OBrowserLine( const OUString& _rEntryName, Window* pParent);
+                            OBrowserLine( const OUString& _rEntryName, vcl::Window* pParent);
                             ~OBrowserLine();
 
         void setControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
@@ -75,7 +75,7 @@ namespace pcr
         {
             return m_xControl;
         }
-        inline Window* getControlWindow() const
+        inline vcl::Window* getControlWindow() const
         {
             return m_pControlWindow;
         }
@@ -95,8 +95,8 @@ namespace pcr
         void                Hide();
         bool            IsVisible();
 
-        Window*             GetRefWindow();
-        void                SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags );
+        vcl::Window*             GetRefWindow();
+        void                SetTabOrder(vcl::Window* pRefWindow, sal_uInt16 nFlags );
 
         bool            GrabFocus();
         void                ShowBrowseButton( const OUString& _rImageURL, bool _bPrimary );

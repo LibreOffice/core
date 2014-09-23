@@ -28,7 +28,7 @@
 class ScCalcOptionsDialog : public ModalDialog
 {
 public:
-    ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rConfig);
+    ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig);
     virtual ~ScCalcOptionsDialog();
 
     DECL_LINK( SettingsSelHdl, Control* );

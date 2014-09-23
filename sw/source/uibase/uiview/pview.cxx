@@ -172,7 +172,7 @@ void  SwPreviewZoomDlg::Apply()
 }
 
 // all for SwPagePreviewWin
-SwPagePreviewWin::SwPagePreviewWin( Window *pParent, SwPagePreview& rPView )
+SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView )
     : Window(pParent, WinBits(WB_CLIPCHILDREN))
     , mpViewShell(0)
     , mrView(rPView)
@@ -1237,7 +1237,7 @@ SwDocShell* SwPagePreview::GetDocShell()
 
 int SwPagePreview::_CreateScrollbar( bool bHori )
 {
-    Window *pMDI = &GetViewFrame()->GetWindow();
+    vcl::Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
 
     assert(!*ppScrollbar); //check beforehand!
@@ -1695,7 +1695,7 @@ bool SwPagePreview::HasPrintOptionsPage() const
     return true;
 }
 
-SfxTabPage*  SwPagePreview::CreatePrintOptionsPage( Window *pParent,
+SfxTabPage*  SwPagePreview::CreatePrintOptionsPage( vcl::Window *pParent,
                                                 const SfxItemSet &rOptions )
 {
     return ::CreatePrintOptionsPage( pParent, rOptions, !bNormalPrint );

@@ -27,7 +27,7 @@
 #include <boost/scoped_ptr.hpp>
 
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
-        Window* pParent, const SwCSVData& rOldData)
+        vcl::Window* pParent, const SwCSVData& rOldData)
     : SfxModalDialog(pParent, "CustomizeAddrListDialog",
         "modules/swriter/ui/customizeaddrlistdialog.ui")
     , m_pNewData( new SwCSVData(rOldData))
@@ -173,7 +173,7 @@ void SwCustomizeAddressListDialog::UpdateButtons()
 
 
 SwAddRenameEntryDialog::SwAddRenameEntryDialog(
-        Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+        vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
         const std::vector< OUString >& rCSVHeader)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
     , m_rCSVHeader(rCSVHeader)

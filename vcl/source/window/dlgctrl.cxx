@@ -37,27 +37,27 @@
 
 using namespace ::com::sun::star;
 
-static bool ImplHasIndirectTabParent( Window* pWindow )
+static bool ImplHasIndirectTabParent( vcl::Window* pWindow )
 {
     // The window has inderect tab parent if it is included in tab hierarchy
     // of the indirect parent window
 
-    Window* pNonLayoutParent = getNonLayoutParent(pWindow);
+    vcl::Window* pNonLayoutParent = getNonLayoutParent(pWindow);
     return ( pNonLayoutParent
           && ( pNonLayoutParent->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) );
 }
 
-static Window* ImplGetTopParentOfTabHierarchy( Window* pParent )
+static vcl::Window* ImplGetTopParentOfTabHierarchy( vcl::Window* pParent )
 {
     // The method allows to find the most close parent containing all the
     // window from the current tab-hierarchy
     // The direct parent should be provided as a parameter here
 
-    Window* pResult = pParent;
+    vcl::Window* pResult = pParent;
 
     if ( pResult )
     {
-        Window* pNonLayoutParent = getNonLayoutParent(pResult);
+        vcl::Window* pNonLayoutParent = getNonLayoutParent(pResult);
         while ( pNonLayoutParent && ( pResult->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) )
         {
             pResult = pNonLayoutParent;
@@ -68,13 +68,13 @@ static Window* ImplGetTopParentOfTabHierarchy( Window* pParent )
     return pResult;
 }
 
-static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex )
+static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex )
 {
-    Window*     pTabPage = NULL;
-    Window*     pFoundWindow = NULL;
+    vcl::Window*     pTabPage = NULL;
+    vcl::Window*     pFoundWindow = NULL;
 
-    Window*     pWindow = firstLogicalChildOfParent(pParent);
-    Window*     pNextWindow = pWindow;
+    vcl::Window*     pWindow = firstLogicalChildOfParent(pParent);
+    vcl::Window*     pNextWindow = pWindow;
     while ( pWindow )
     {
         pWindow = pWindow->ImplGetWindow();
@@ -102,7 +102,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
                     TabPage* pTempTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
                     if ( pTempTabPage )
                     {
-                        Window* pTempWindow = pTabControl->GetWindow( WINDOW_FIRSTCHILD );
+                        vcl::Window* pTempWindow = pTabControl->GetWindow( WINDOW_FIRSTCHILD );
                         while ( pTempWindow )
                         {
                             if ( pTempWindow->ImplGetWindow() == pTempTabPage )
@@ -137,12 +137,12 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
     return pFoundWindow;
 }
 
-Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable )
+vcl::Window* ImplGetChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable )
 {
     pParent = ImplGetTopParentOfTabHierarchy( pParent );
 
     nIndex = 0;
-    Window* pWindow = ImplGetSubChildWindow( pParent, n, nIndex );
+    vcl::Window* pWindow = ImplGetSubChildWindow( pParent, n, nIndex );
     if ( bTestEnable )
     {
         sal_uInt16 n2 = nIndex;
@@ -169,9 +169,9 @@ Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, b
     return pWindow;
 }
 
-static Window* ImplGetNextWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable )
+static vcl::Window* ImplGetNextWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable )
 {
-    Window* pWindow = ImplGetChildWindow( pParent, n+1, nIndex, bTestEnable );
+    vcl::Window* pWindow = ImplGetChildWindow( pParent, n+1, nIndex, bTestEnable );
     if ( n == nIndex )
     {
         n = 0;
@@ -180,14 +180,16 @@ static Window* ImplGetNextWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIn
     return pWindow;
 }
 
-Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
+namespace vcl {
+
+vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
                                   sal_uInt16 nFormStart, sal_uInt16 nFormEnd,
                                   sal_uInt16* pIndex )
 {
     DBG_ASSERT( (nIndex >= nFormStart) && (nIndex <= nFormEnd),
                 "Window::ImplGetDlgWindow() - nIndex not in Form" );
 
-    Window* pWindow = NULL;
+    vcl::Window* pWindow = NULL;
     sal_uInt16  i;
     sal_uInt16  nTemp;
     sal_uInt16  nStartIndex;
@@ -264,7 +266,7 @@ Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
             {
                 if ( pWindow->GetType() == WINDOW_TABCONTROL )
                 {
-                    Window* pNextWindow = ImplGetDlgWindow( i, DLGWINDOW_NEXT );
+                    vcl::Window* pNextWindow = ImplGetDlgWindow( i, DLGWINDOW_NEXT );
                     if ( pNextWindow )
                     {
                         if ( pWindow->IsChild( pNextWindow ) )
@@ -284,12 +286,14 @@ Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
     return pWindow;
 }
 
-Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIndex,
+} /* namespace vcl */
+
+vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, sal_uInt16& rIndex,
                                sal_uInt16& rFormStart, sal_uInt16& rFormEnd )
 {
-    Window* pSWindow;
-    Window* pSecondWindow = NULL;
-    Window* pTempWindow = NULL;
+    vcl::Window* pSWindow;
+    vcl::Window* pSecondWindow = NULL;
+    vcl::Window* pTempWindow = NULL;
     sal_uInt16  i;
     sal_uInt16  nSecond_i = 0;
     sal_uInt16  nFormStart = 0;
@@ -297,7 +301,7 @@ Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIn
     sal_uInt16  nFormEnd;
 
     // find focus window in the child list
-    Window* pFirstChildWindow = pSWindow = ImplGetChildWindow( pParent, 0, i, false );
+    vcl::Window* pFirstChildWindow = pSWindow = ImplGetChildWindow( pParent, 0, i, false );
 
     if( pWindow == NULL )
         pWindow = pSWindow;
@@ -378,7 +382,7 @@ Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIn
     return pSWindow;
 }
 
-Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
+vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
                              sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable )
 {
     DBG_ASSERT( (rIndex >= nFormStart) && (rIndex <= nFormEnd),
@@ -387,7 +391,7 @@ Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cC
     sal_Unicode cCompareChar;
     sal_uInt16  nStart = rIndex;
     sal_uInt16  i = rIndex;
-    Window* pWindow;
+    vcl::Window* pWindow;
 
     // MT: Where can we keep the CharClass?!
     static uno::Reference< i18n::XCharacterClassification > xCharClass;
@@ -414,7 +418,7 @@ Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cC
                 if (pWindow->GetType() == WINDOW_FIXEDTEXT)
                 {
                     FixedText *pFixedText = static_cast<FixedText*>(pWindow);
-                    Window *pMnemonicWidget = pFixedText->get_mnemonic_widget();
+                    vcl::Window *pMnemonicWidget = pFixedText->get_mnemonic_widget();
                     SAL_WARN_IF(isContainerWindow(pFixedText->GetParent()) && !pMnemonicWidget,
                         "vcl.a11y", "label missing mnemonic_widget?");
                     if (pMnemonicWidget)
@@ -445,7 +449,7 @@ Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cC
             // get form start and end
             ::ImplFindDlgCtrlWindow( pWindow, NULL,
                                      nChildIndex, nChildFormStart, nChildFormEnd );
-            Window* pAccelWin = ImplFindAccelWindow( pWindow, nChildIndex, cCharCode,
+            vcl::Window* pAccelWin = ImplFindAccelWindow( pWindow, nChildIndex, cCharCode,
                                                      nChildFormStart, nChildFormEnd,
                                                      bCheckEnable );
             if( pAccelWin )
@@ -467,6 +471,8 @@ Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cC
 
     return NULL;
 }
+
+namespace vcl {
 
 void Window::ImplControlFocus( sal_uInt16 nFlags )
 {
@@ -509,9 +515,11 @@ void Window::ImplControlFocus( sal_uInt16 nFlags )
     }
 }
 
+} /* namespace vcl */
+
 namespace
 {
-    bool isSuitableDestination(Window *pWindow)
+    bool isSuitableDestination(vcl::Window *pWindow)
     {
         return (pWindow && isVisibleInLayout(pWindow) &&
                 isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() &&
@@ -531,7 +539,7 @@ namespace
 
         for (; aI != rGroup.end(); ++aI)
         {
-            Window *pWindow = *aI;
+            vcl::Window *pWindow = *aI;
 
             if (isSuitableDestination(pWindow))
             {
@@ -542,7 +550,7 @@ namespace
 
         for (aI = rGroup.begin(); aI != aStart; ++aI)
         {
-            Window *pWindow = *aI;
+            vcl::Window *pWindow = *aI;
 
             if (isSuitableDestination(pWindow))
             {
@@ -572,13 +580,15 @@ namespace
     }
 }
 
+namespace vcl {
+
 bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 {
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     sal_uInt16  nKeyCode = aKeyCode.GetCode();
-    Window* pSWindow;
-    Window* pTempWindow;
-    Window* pButtonWindow;
+    vcl::Window* pSWindow;
+    vcl::Window* pTempWindow;
+    vcl::Window* pButtonWindow;
     sal_uInt16  i;
     sal_uInt16  iButton;
     sal_uInt16  iButtonStart;
@@ -589,7 +599,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     sal_uInt16  nDlgCtrlFlags;
 
     // we cannot take over control without Focus-window
-    Window* pFocusWindow = Application::GetFocusWindow();
+    vcl::Window* pFocusWindow = Application::GetFocusWindow();
     if ( !pFocusWindow || !ImplIsWindowOrChild( pFocusWindow ) )
         return false;
 
@@ -730,11 +740,11 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 if ( aKeyCode.IsMod1() )
                 {
                     // search group
-                    Window* pFormularFirstWindow = NULL;
-                    Window* pLastFormularFirstWindow = NULL;
+                    vcl::Window* pFormularFirstWindow = NULL;
+                    vcl::Window* pLastFormularFirstWindow = NULL;
                     pTempWindow = ImplGetChildWindow( this, 0, iTemp, false );
-                    Window* pPrevFirstFormularFirstWindow = NULL;
-                    Window* pFirstFormularFirstWindow = pTempWindow;
+                    vcl::Window* pPrevFirstFormularFirstWindow = NULL;
+                    vcl::Window* pFirstFormularFirstWindow = pTempWindow;
                     while ( pTempWindow )
                     {
                         if ( pTempWindow->ImplGetWindow()->IsDialogControlStart() )
@@ -804,7 +814,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                             nType = DLGWINDOW_NEXT;
                             nGetFocusFlags |= GETFOCUS_FORWARD;
                         }
-                        Window* pWindow = ImplGetDlgWindow( i, nType, nFormStart, nFormEnd, &nNewIndex );
+                        vcl::Window* pWindow = ImplGetDlgWindow( i, nType, nFormStart, nFormEnd, &nNewIndex );
                         // if this is the same window, simulate a Get/LoseFocus,
                         // in case AROUND is being processed
                         if ( pWindow == pSWindow )
@@ -848,7 +858,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 WinBits nStyle = pSWindow->GetStyle();
                 if ( !(nStyle & WB_GROUP) )
                 {
-                    Window* pWindow = prevLogicalChildOfParent(this, pSWindow);
+                    vcl::Window* pWindow = prevLogicalChildOfParent(this, pSWindow);
                     while ( pWindow )
                     {
                         pWindow = pWindow->ImplGetWindow();
@@ -876,7 +886,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 return nextInGroup(static_cast<RadioButton*>(pSWindow), false);
             else
             {
-                Window* pWindow = nextLogicalChildOfParent(this, pSWindow);
+                vcl::Window* pWindow = nextLogicalChildOfParent(this, pSWindow);
                 while ( pWindow )
                 {
                     pWindow = pWindow->ImplGetWindow();
@@ -943,7 +953,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 // checks if this window has dialog control
 bool Window::ImplHasDlgCtrl()
 {
-    Window* pDlgCtrlParent;
+    vcl::Window* pDlgCtrlParent;
 
     // lookup window for dialog control
     pDlgCtrlParent = ImplGetParent();
@@ -960,9 +970,9 @@ bool Window::ImplHasDlgCtrl()
 
 void Window::ImplDlgCtrlNextWindow()
 {
-    Window* pDlgCtrlParent;
-    Window* pDlgCtrl;
-    Window* pSWindow;
+    vcl::Window* pDlgCtrlParent;
+    vcl::Window* pDlgCtrl;
+    vcl::Window* pSWindow;
     sal_uInt16  nIndex;
     sal_uInt16  nFormStart;
     sal_uInt16  nFormEnd;
@@ -984,17 +994,17 @@ if ( !pDlgCtrlParent || (GetStyle() & WB_NODIALOGCONTROL) || ((pDlgCtrlParent->G
     if ( !pSWindow )
         return;
 
-    Window* pWindow = pDlgCtrlParent->ImplGetDlgWindow( nIndex, DLGWINDOW_NEXT, nFormStart, nFormEnd );
+    vcl::Window* pWindow = pDlgCtrlParent->ImplGetDlgWindow( nIndex, DLGWINDOW_NEXT, nFormStart, nFormEnd );
     if ( pWindow && (pWindow != pSWindow) )
         pWindow->ImplControlFocus();
 }
 
-static void ImplDlgCtrlUpdateDefButton( Window* pParent, Window* pFocusWindow,
+static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, vcl::Window* pFocusWindow,
                                         bool bGetFocus )
 {
     PushButton* pOldDefButton   = NULL;
     PushButton* pNewDefButton   = NULL;
-    Window*     pSWindow;
+    vcl::Window*     pSWindow;
     sal_uInt16      i;
     sal_uInt16      nFormStart;
     sal_uInt16      nFormEnd;
@@ -1029,7 +1039,7 @@ static void ImplDlgCtrlUpdateDefButton( Window* pParent, Window* pFocusWindow,
     if ( !bGetFocus )
     {
         sal_uInt16 nDummy;
-        Window* pNewFocusWindow = Application::GetFocusWindow();
+        vcl::Window* pNewFocusWindow = Application::GetFocusWindow();
         if ( !pNewFocusWindow || !pParent->ImplIsWindowOrChild( pNewFocusWindow ) )
             pNewDefButton = NULL;
         else if ( !::ImplFindDlgCtrlWindow( pParent, pNewFocusWindow, i, nDummy, nDummy ) ||
@@ -1046,7 +1056,7 @@ static void ImplDlgCtrlUpdateDefButton( Window* pParent, Window* pFocusWindow,
     }
 }
 
-void Window::ImplDlgCtrlFocusChanged( Window* pWindow, bool bGetFocus )
+void Window::ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus )
 {
     if ( mpWindowImpl->mpDlgCtrlDownWindow && !bGetFocus )
     {
@@ -1057,7 +1067,7 @@ void Window::ImplDlgCtrlFocusChanged( Window* pWindow, bool bGetFocus )
     ImplDlgCtrlUpdateDefButton( this, pWindow, bGetFocus );
 }
 
-Window* Window::ImplFindDlgCtrlWindow( Window* pWindow )
+vcl::Window* Window::ImplFindDlgCtrlWindow( vcl::Window* pWindow )
 {
     sal_uInt16  nIndex;
     sal_uInt16  nFormStart;
@@ -1067,29 +1077,14 @@ Window* Window::ImplFindDlgCtrlWindow( Window* pWindow )
     return ::ImplFindDlgCtrlWindow( this, pWindow, nIndex, nFormStart, nFormEnd );
 }
 
-Window* Window::GetParentLabelFor( const Window* ) const
+vcl::Window* Window::GetParentLabelFor( const vcl::Window* ) const
 {
     return NULL;
 }
 
-Window* Window::GetParentLabeledBy( const Window* ) const
+vcl::Window* Window::GetParentLabeledBy( const vcl::Window* ) const
 {
     return NULL;
-}
-
-sal_Unicode getAccel( const OUString& rStr )
-{
-    sal_Unicode nChar = 0;
-    sal_Int32 nPos = 0;
-    do
-    {
-        nPos = rStr.indexOf( '~', nPos );
-        if( nPos != -1 && nPos < rStr.getLength() )
-            nChar = rStr[ ++nPos ];
-        else
-            nChar = 0;
-    } while( nChar == '~' );
-    return nChar;
 }
 
 KeyEvent Window::GetActivationKey() const
@@ -1099,7 +1094,7 @@ KeyEvent Window::GetActivationKey() const
     sal_Unicode nAccel = getAccel( GetText() );
     if( ! nAccel )
     {
-        Window* pWindow = GetAccessibleRelationLabeledBy();
+        vcl::Window* pWindow = GetAccessibleRelationLabeledBy();
         if( pWindow )
             nAccel = getAccel( pWindow->GetText() );
     }
@@ -1122,4 +1117,21 @@ KeyEvent Window::GetActivationKey() const
     return aKeyEvent;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+} /* namespace vcl */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */sal_Unicode getAccel( const OUString& rStr )
+{
+    sal_Unicode nChar = 0;
+    sal_Int32 nPos = 0;
+    do
+    {
+        nPos = rStr.indexOf( '~', nPos );
+        if( nPos != -1 && nPos < rStr.getLength() )
+            nChar = rStr[ ++nPos ];
+        else
+            nChar = 0;
+    } while( nChar == '~' );
+    return nChar;
+}
+
+

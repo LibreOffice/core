@@ -42,7 +42,7 @@ namespace sc { namespace sidebar {
 #define FRM_VALID_OUTER     0x0f
 #define FRM_VALID_ALL       0xff
 
-CellBorderStyleControl::CellBorderStyleControl(Window* pParent, CellAppearancePropertyPanel& rPanel)
+CellBorderStyleControl::CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
 :   svx::sidebar::PopupControl(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE)),
     mrCellAppearancePropertyPanel(rPanel),
     maTBBorder1(this, ScResId(TB_BORDER1)),

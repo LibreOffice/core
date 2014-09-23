@@ -33,10 +33,10 @@ class ColorPanel
     : public ValueSet
 {
 public:
-    ColorPanel (::Window* pParent);
+    ColorPanel (vcl::Window* pParent);
     virtual ~ColorPanel (void);
 
-    // From ::Window
+    // From vcl::Window
     virtual void Resize (void);
     virtual void DataChanged (const DataChangedEvent& rEvent);
 

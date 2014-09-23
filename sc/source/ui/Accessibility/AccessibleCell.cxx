@@ -154,7 +154,7 @@ Rectangle ScAccessibleCell::GetBoundingBoxOnScreen(void) const
     Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
         {
             Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);
@@ -177,7 +177,7 @@ Rectangle ScAccessibleCell::GetBoundingBox() const
         aCellRect.SetSize(Size(nSizeX, nSizeY));
         aCellRect.SetPos(mpViewShell->GetViewData().GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, true));
 
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
         {
             Rectangle aRect(pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow()));

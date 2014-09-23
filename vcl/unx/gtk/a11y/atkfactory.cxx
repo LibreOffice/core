@@ -111,10 +111,10 @@ wrapper_factory_create_accessible( GObject *obj )
     GtkSalFrame* pFrame = GtkSalFrame::getFromWindow( GTK_WINDOW( parent_widget ) );
     g_return_val_if_fail( pFrame != NULL, NULL );
 
-    Window* pFrameWindow = pFrame->GetWindow();
+    vcl::Window* pFrameWindow = pFrame->GetWindow();
     if( pFrameWindow )
     {
-        Window* pWindow = pFrameWindow;
+        vcl::Window* pWindow = pFrameWindow;
 
         // skip accessible objects already exposed by the frame objects
         if( WINDOW_BORDERWINDOW == pWindow->GetType() )

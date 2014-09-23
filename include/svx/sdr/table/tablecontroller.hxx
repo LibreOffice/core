@@ -46,10 +46,10 @@ public:
     SVX_DLLPRIVATE virtual ~SvxTableController();
 
     // from sdr::SelectionController
-    SVX_DLLPRIVATE virtual bool onKeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool onMouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual bool onMouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
 
     SVX_DLLPRIVATE virtual bool DeleteMarked() SAL_OVERRIDE;
 
@@ -134,12 +134,12 @@ private:
 
     SVX_DLLPRIVATE void MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow );
 
-    SVX_DLLPRIVATE void EditCell( const CellPos& rPos, ::Window* pWindow, const ::com::sun::star::awt::MouseEvent* pMouseEvent = 0, sal_uInt16 nAction = 0 );
+    SVX_DLLPRIVATE void EditCell( const CellPos& rPos, vcl::Window* pWindow, const ::com::sun::star::awt::MouseEvent* pMouseEvent = 0, sal_uInt16 nAction = 0 );
     SVX_DLLPRIVATE bool StopTextEdit();
 
-    SVX_DLLPRIVATE sal_uInt16 getKeyboardAction( const KeyEvent& rKEvt, Window* pWindow );
-    SVX_DLLPRIVATE bool executeAction( sal_uInt16 nAction, bool bSelect, Window* pWindow );
-    SVX_DLLPRIVATE void gotoCell( const CellPos& rCell, bool bSelect, Window* pWindow, sal_uInt16 nAction = 0 );
+    SVX_DLLPRIVATE sal_uInt16 getKeyboardAction( const KeyEvent& rKEvt, vcl::Window* pWindow );
+    SVX_DLLPRIVATE bool executeAction( sal_uInt16 nAction, bool bSelect, vcl::Window* pWindow );
+    SVX_DLLPRIVATE void gotoCell( const CellPos& rCell, bool bSelect, vcl::Window* pWindow, sal_uInt16 nAction = 0 );
 
     SVX_DLLPRIVATE void StartSelection( const CellPos& rPos );
     SVX_DLLPRIVATE void UpdateSelection( const CellPos& rPos );

@@ -51,7 +51,7 @@ void lcl_setValue( FormattedField& rFmtField, double fValue )
 
 }
 
-ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
+ScaleTabPage::ScaleTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow
                , "tp_Scale"
                , "modules/schart/ui/tp_Scale.ui"
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl)
     return 0;
 }
 
-SfxTabPage* ScaleTabPage::Create(Window* pWindow,const SfxItemSet* rOutAttrs)
+SfxTabPage* ScaleTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
 {
     return new ScaleTabPage(pWindow, *rOutAttrs);
 }

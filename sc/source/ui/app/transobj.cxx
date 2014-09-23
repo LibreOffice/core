@@ -197,7 +197,7 @@ ScTransferObj::~ScTransferObj()
 
 }
 
-ScTransferObj* ScTransferObj::GetOwnClipboard( Window* pUIWin )
+ScTransferObj* ScTransferObj::GetOwnClipboard( vcl::Window* pUIWin )
 {
     ScTransferObj* pObj = SC_MOD()->GetClipData().pCellClipboard;
     if ( pObj && pUIWin )

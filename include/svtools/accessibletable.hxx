@@ -86,11 +86,11 @@ public:
             AccessibleTableControlObjType eObjType ) const= 0;
 
     // Window
-    virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
+    virtual Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const = 0;
     virtual void GrabFocus()= 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true )= 0;
-    virtual Window* GetAccessibleParentWindow() const= 0;
-    virtual Window* GetWindowInstance()= 0;
+    virtual vcl::Window* GetAccessibleParentWindow() const= 0;
+    virtual vcl::Window* GetWindowInstance()= 0;
     virtual sal_Int32 GetAccessibleControlCount() const = 0;
     virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )= 0;
     virtual long GetRowCount() const= 0;

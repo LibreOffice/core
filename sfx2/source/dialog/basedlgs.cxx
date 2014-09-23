@@ -153,7 +153,7 @@ void SfxModalDialog::init()
     GetDialogData_Impl();
 }
 
-SfxModalDialog::SfxModalDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription )
+SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription )
 :   ModalDialog(pParent, rID, rUIXMLDescription),
     nUniqId(0), //todo: remove this member when the ResId using ctor is removed
     pInputSet(0),
@@ -303,7 +303,7 @@ IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl)
 }
 
 SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
-    SfxChildWindow *pCW, Window *pParent, const OString& rID,
+    SfxChildWindow *pCW, vcl::Window *pParent, const OString& rID,
     const OUString& rUIXMLDescription)
     : ModelessDialog(pParent, rID, rUIXMLDescription)
 {
@@ -447,7 +447,7 @@ bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
 
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
-                        Window* pParent, WinBits nWinBits) :
+                        vcl::Window* pParent, WinBits nWinBits) :
     FloatingWindow (pParent, nWinBits),
     pBindings(pBindinx),
     pImp( new SfxFloatingWindow_Impl )
@@ -464,7 +464,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
-                        Window* pParent,
+                        vcl::Window* pParent,
                         const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame) :
     FloatingWindow(pParent, rID, rUIXMLDescription, rFrame),
     pBindings(pBindinx),
@@ -674,7 +674,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
 
 
 
-SfxSingleTabDialog::SfxSingleTabDialog(Window *pParent, const SfxItemSet& rSet,
+SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& rSet,
     const OString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
     , fnGetRanges(NULL)
@@ -687,7 +687,7 @@ SfxSingleTabDialog::SfxSingleTabDialog(Window *pParent, const SfxItemSet& rSet,
     SetInputSet( &rSet );
 }
 
-SfxSingleTabDialog::SfxSingleTabDialog(Window* pParent, const SfxItemSet* pInSet,
+SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window* pParent, const SfxItemSet* pInSet,
     const OString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
     , fnGetRanges(NULL)

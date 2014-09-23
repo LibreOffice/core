@@ -175,7 +175,7 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
 
 
 
-SvxCharBasePage::SvxCharBasePage(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset)
+SvxCharBasePage::SvxCharBasePage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset)
     : SfxTabPage( pParent, rID, rUIXMLDescription, &rItemset )
     , m_pPreviewWin(NULL)
     , m_bPreviewBackgroundToCharacter( false )
@@ -262,7 +262,7 @@ struct SvxCharNamePage_Impl
 
 // class SvxCharNamePage -------------------------------------------------
 
-SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
+SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet )
     : SvxCharBasePage(pParent, "CharNamePage", "cui/ui/charnamepage.ui", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
 {
@@ -1180,7 +1180,7 @@ int SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-SfxTabPage* SvxCharNamePage::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* SvxCharNamePage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxCharNamePage( pParent, *rSet );
 }
@@ -1313,7 +1313,7 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 }
 // class SvxCharEffectsPage ----------------------------------------------
 
-SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSet )
+SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& rInSet )
     : SvxCharBasePage(pParent, "EffectsPage", "cui/ui/effectspage.ui", rInSet)
     , m_aTransparentColorName(CUI_RES(RID_SVXSTR_CHARNAME_TRANSPARENT))
 {
@@ -1727,7 +1727,7 @@ int SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-SfxTabPage* SvxCharEffectsPage::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* SvxCharEffectsPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxCharEffectsPage( pParent, *rSet );
 }
@@ -2564,7 +2564,7 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 
 // class SvxCharPositionPage ---------------------------------------------
 
-SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rInSet )
+SvxCharPositionPage::SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet& rInSet )
     : SvxCharBasePage(pParent, "PositionPage", "cui/ui/positionpage.ui", rInSet)
     , m_nSuperEsc((short)DFLT_ESC_SUPER)
     , m_nSubEsc((short)DFLT_ESC_SUB)
@@ -2901,7 +2901,7 @@ int SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-SfxTabPage* SvxCharPositionPage::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* SvxCharPositionPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxCharPositionPage( pParent, *rSet );
 }
@@ -3328,7 +3328,7 @@ void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 }
 // class SvxCharTwoLinesPage ------------------------------------------------
 
-SvxCharTwoLinesPage::SvxCharTwoLinesPage(Window* pParent, const SfxItemSet& rInSet)
+SvxCharTwoLinesPage::SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet& rInSet)
     : SvxCharBasePage(pParent, "TwoLinesPage", "cui/ui/twolinespage.ui", rInSet)
     , m_nStartBracketPosition( 0 )
     , m_nEndBracketPosition( 0 )
@@ -3473,7 +3473,7 @@ int SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-SfxTabPage* SvxCharTwoLinesPage::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* SvxCharTwoLinesPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxCharTwoLinesPage( pParent, *rSet );
 }

@@ -24,7 +24,7 @@
 class OpenLockedQueryBox : public MessBox
 {
 public:
-    OpenLockedQueryBox( Window* pParent, ResMgr* pResMgr, const OUString& aMessage );
+    OpenLockedQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage );
     virtual ~OpenLockedQueryBox();
 };
 

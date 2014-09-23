@@ -30,6 +30,8 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 
+namespace vcl {
+
 void Window::DataChanged( const DataChangedEvent& )
 {
 }
@@ -39,7 +41,7 @@ void Window::NotifyAllChildren( DataChangedEvent& rDCEvt )
 
     DataChanged( rDCEvt );
 
-    Window* pChild = mpWindowImpl->mpFirstChild;
+    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         pChild->NotifyAllChildren( rDCEvt );
@@ -129,7 +131,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
                     !pWrapper->IsDocking() && bHit )
                 {
                     Point   aPos = pMEvt->GetPosPixel();
-                    Window* pWindow = rNEvt.GetWindow();
+                    vcl::Window* pWindow = rNEvt.GetWindow();
                     if ( pWindow != this )
                     {
                         aPos = pWindow->OutputToScreenPixel( aPos );
@@ -179,7 +181,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
                  !(GetStyle() & WB_TABSTOP) && !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) )
             {
                 sal_uInt16 n = 0;
-                Window* pFirstChild = ImplGetDlgWindow( n, DLGWINDOW_FIRST );
+                vcl::Window* pFirstChild = ImplGetDlgWindow( n, DLGWINDOW_FIRST );
                 if ( pFirstChild )
                     pFirstChild->ImplControlFocus();
             }
@@ -225,7 +227,7 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
 
     ImplRemoveDel( &aDelData );
 
-    Window* pWindow = this;
+    vcl::Window* pWindow = this;
     while ( pWindow )
     {
         pWindow->ImplAddDel( &aDelData );
@@ -301,14 +303,14 @@ void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
 }
 
 
-MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, Window* pSource, Window* pDest )
+MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, vcl::Window* pSource, vcl::Window* pDest )
 {
     Point aPos = pSource->OutputToScreenPixel( rE.GetPosPixel() );
     aPos = pDest->ScreenToOutputPixel( aPos );
     return MouseEvent( aPos, rE.GetClicks(), rE.GetMode(), rE.GetButtons(), rE.GetModifier() );
 }
 
-CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, Window* pSource, Window* pDest )
+CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, vcl::Window* pSource, vcl::Window* pDest )
 {
     if ( !rCEvt.IsMouseEvent() )
         return rCEvt;
@@ -405,7 +407,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
     ImplRemoveDel( &aDelData );
 
     // #106721# check if we're part of a compound control and notify
-    Window *pParent = ImplGetParent();
+    vcl::Window *pParent = ImplGetParent();
     while( pParent )
     {
         if( pParent->IsCompoundControl() )
@@ -424,7 +426,7 @@ void Window::ImplCallInitShow()
     StateChanged( STATE_CHANGE_INITSHOW );
     mpWindowImpl->mbInInitShow    = false;
 
-    Window* pWindow = mpWindowImpl->mpFirstOverlap;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
     {
         if ( pWindow->mpWindowImpl->mbVisible )
@@ -464,7 +466,7 @@ void Window::ImplCallMove()
     {
         // update frame position
         SalFrame *pParentFrame = NULL;
-        Window *pParent = ImplGetParent();
+        vcl::Window *pParent = ImplGetParent();
         while( pParent )
         {
             if( pParent->mpWindowImpl->mpFrame != mpWindowImpl->mpFrame )
@@ -485,7 +487,7 @@ void Window::ImplCallMove()
         // the client window and and all its subclients have the same position as the borderframe
         // this is important for floating toolbars where the borderwindow is a floating window
         // which has another borderwindow (ie the system floating window)
-        Window *pClientWin = mpWindowImpl->mpClientWindow;
+        vcl::Window *pClientWin = mpWindowImpl->mpClientWindow;
         while( pClientWin )
         {
             pClientWin->mpWindowImpl->maPos = mpWindowImpl->maPos;
@@ -498,12 +500,12 @@ void Window::ImplCallMove()
     ImplCallEventListeners( VCLEVENT_WINDOW_MOVE );
 }
 
-void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
-                                          Window* pOldOverlapWindow )
+void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
+                                          vcl::Window* pOldOverlapWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Window*     pNewRealWindow;
-    Window*     pOldRealWindow;
+    vcl::Window*     pNewRealWindow;
+    vcl::Window*     pOldRealWindow;
     bool bCallActivate = true;
     bool bCallDeactivate = true;
 
@@ -528,7 +530,7 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
                 bCallActivate = false;
             else
             {
-                Window* pLastRealWindow = pSVData->maWinData.mpLastDeacWin->ImplGetWindow();
+                vcl::Window* pLastRealWindow = pSVData->maWinData.mpLastDeacWin->ImplGetWindow();
                 pSVData->maWinData.mpLastDeacWin->mpWindowImpl->mbActive = false;
                 pSVData->maWinData.mpLastDeacWin->Deactivate();
                 if ( pLastRealWindow != pSVData->maWinData.mpLastDeacWin )
@@ -574,5 +576,8 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
         }
     }
 }
+
+} /* namespace vcl */
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

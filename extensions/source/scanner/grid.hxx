@@ -48,7 +48,7 @@ class GridDialog : public ModalDialog
 
 public:
     GridDialog(double* pXValues, double* pYValues, int nValues,
-                Window* pParent, bool bCutValues = true);
+                vcl::Window* pParent, bool bCutValues = true);
 
     void setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY);
     double* getNewYValues();

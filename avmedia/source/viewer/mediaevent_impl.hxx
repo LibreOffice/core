@@ -41,7 +41,7 @@ namespace avmedia
         {
         public:
 
-                    MediaEventListenersImpl( Window& rNotifyWindow );
+                    MediaEventListenersImpl( vcl::Window& rNotifyWindow );
                     virtual ~MediaEventListenersImpl();
 
         void        cleanUp();
@@ -69,7 +69,7 @@ namespace avmedia
 
         private:
 
-            Window*                 mpNotifyWindow;
+            vcl::Window*                 mpNotifyWindow;
             mutable ::osl::Mutex    maMutex;
         };
     }

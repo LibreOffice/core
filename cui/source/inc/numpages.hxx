@@ -38,7 +38,7 @@ class SvxBmpNumValueSet;
 class SvxNumValueSet;
 class SvxBrushItem;
 
-class SvxNumberingPreview : public Window
+class SvxNumberingPreview : public vcl::Window
 {
     const SvxNumRule*   pActNum;
     vcl::Font           aStdFont;
@@ -51,7 +51,7 @@ class SvxNumberingPreview : public Window
         virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     public:
-        SvxNumberingPreview(Window* pParent, WinBits nWinBits = WB_BORDER);
+        SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits = WB_BORDER);
 
         void    SetNumRule(const SvxNumRule* pNum)
                     {pActNum = pNum; Invalidate();};
@@ -106,11 +106,11 @@ class SvxSingleNumPickTabPage : public SfxTabPage
         DECL_LINK(DoubleClickHdl_Impl, void *);
 
     public:
-        SvxSingleNumPickTabPage(Window* pParent,
+        SvxSingleNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
         virtual ~SvxSingleNumPickTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
@@ -142,11 +142,11 @@ class SvxBulletPickTabPage : public SfxTabPage
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
     public:
-        SvxBulletPickTabPage(Window* pParent,
+        SvxBulletPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
         virtual ~SvxBulletPickTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
@@ -185,11 +185,11 @@ class SvxNumPickTabPage : public SfxTabPage
         DECL_LINK(DoubleClickHdl_Impl, void *);
 
     public:
-        SvxNumPickTabPage(Window* pParent,
+        SvxNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
         virtual ~SvxNumPickTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
@@ -230,11 +230,11 @@ class SvxBitmapPickTabPage : public SfxTabPage
         DECL_LINK(LinkBmpHdl_Impl, void *);
 
     public:
-        SvxBitmapPickTabPage(Window* pParent,
+        SvxBitmapPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
         virtual ~SvxBitmapPickTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
@@ -342,11 +342,11 @@ class SvxNumOptionsTabPage : public SfxTabPage
         DECL_STATIC_LINK( SvxNumOptionsTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
 
     public:
-        SvxNumOptionsTabPage(Window* pParent,
+        SvxNumOptionsTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
         virtual ~SvxNumOptionsTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
@@ -445,7 +445,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK( IndentAtHdl_Impl, MetricField* );
 
 public:
-        SvxNumPositionTabPage(Window* pParent,
+        SvxNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
         virtual ~SvxNumPositionTabPage();
 
@@ -454,7 +454,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SetMetric(FieldUnit eSet);

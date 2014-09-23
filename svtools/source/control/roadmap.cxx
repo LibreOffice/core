@@ -45,7 +45,7 @@ namespace svt
     class IDLabel :  public FixedText
     {
     public:
-        IDLabel( Window* _pParent, WinBits _nWinStyle = 0 );
+        IDLabel( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
         virtual ~IDLabel( );
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     };
@@ -79,7 +79,7 @@ namespace svt
         bool                    IsEnabled() const;
         void                    GrabFocus();
 
-        bool                    Contains( const Window* _pWindow ) const;
+        bool                    Contains( const vcl::Window* _pWindow ) const;
 
         HyperLabel*             GetDescriptionHyperLabel() const { return mpDescription; }
 
@@ -162,7 +162,7 @@ namespace svt
     //= Roadmap
 
 
-    ORoadmap::ORoadmap( Window* _pParent, WinBits _nWinStyle )
+    ORoadmap::ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle )
         :Control( _pParent, _nWinStyle )
         ,m_pImpl( new RoadmapImpl( *this ) )
 
@@ -598,7 +598,7 @@ namespace svt
     }
 
 
-    RoadmapItem* ORoadmap::GetByPointer(Window* pWindow)
+    RoadmapItem* ORoadmap::GetByPointer(vcl::Window* pWindow)
     {
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
         for (   HL_Vector::const_iterator i = rItems.begin();
@@ -618,7 +618,7 @@ namespace svt
         // capture KeyEvents for taskpane cycling
         if ( _rNEvt.GetType() == EVENT_KEYINPUT )
         {
-            Window* pWindow = _rNEvt.GetWindow();
+            vcl::Window* pWindow = _rNEvt.GetWindow();
             RoadmapItem* pItem = GetByPointer( pWindow );
             if ( pItem != NULL )
             {
@@ -693,7 +693,7 @@ namespace svt
     }
 
 
-    bool RoadmapItem::Contains( const Window* _pWindow ) const
+    bool RoadmapItem::Contains( const vcl::Window* _pWindow ) const
     {
         return ( mpID == _pWindow ) || ( mpDescription == _pWindow );
     }
@@ -851,7 +851,7 @@ namespace svt
     }
 
 
-    IDLabel::IDLabel( Window* _pParent, WinBits _nWinStyle )
+    IDLabel::IDLabel( vcl::Window* _pParent, WinBits _nWinStyle )
         :FixedText( _pParent, _nWinStyle )
     {
 

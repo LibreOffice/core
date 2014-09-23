@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace linguistic2
     class XHyphenator;
 } } } }
 
-class Window;
+namespace vcl { class Window; }
 class ResId;
 class Link;
 class SvxSpellWrapper;
@@ -42,7 +42,7 @@ class AbstractThesaurusDialog : public VclAbstractDialog
 public:
     virtual OUString    GetWord() = 0;
     virtual sal_uInt16  GetLanguage() const = 0;
-    virtual Window*     GetWindow() = 0;
+    virtual vcl::Window*     GetWindow() = 0;
 };
 
 class AbstractHyphenWordDialog : public VclAbstractDialog
@@ -50,7 +50,7 @@ class AbstractHyphenWordDialog : public VclAbstractDialog
 public:
     virtual void    SelLeft() = 0;
     virtual void    SelRight() = 0;
-    virtual Window* GetWindow() = 0;
+    virtual vcl::Window* GetWindow() = 0;
 };
 
 class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
@@ -87,14 +87,14 @@ class EDITENG_DLLPUBLIC EditAbstractDialogFactory : virtual public VclAbstractDi
 public:
                                         virtual ~EditAbstractDialogFactory();   // needed for export of vtable
     static EditAbstractDialogFactory*   Create();
-    virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
+    virtual AbstractThesaurusDialog*        CreateThesaurusDialog( vcl::Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
                                                 const OUString &rWord, sal_Int16 nLanguage ) = 0;
 
-    virtual AbstractHyphenWordDialog*       CreateHyphenWordDialog( Window*,
+    virtual AbstractHyphenWordDialog*       CreateHyphenWordDialog( vcl::Window*,
                                                 const OUString &rWord, LanguageType nLang,
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper ) = 0;
-    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,
+    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( vcl::Window* _pParent,
                                             editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection ) = 0;
 };
 

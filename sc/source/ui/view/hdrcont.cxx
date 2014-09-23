@@ -44,7 +44,7 @@
 #define SC_HDRPAINT_TEXT        6
 #define SC_HDRPAINT_COUNT       7
 
-ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
+ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelectionEngine,
                                   SCCOLROW nNewSize, bool bNewVertical ) :
             Window      ( pParent ),
             pSelEngine  ( pSelectionEngine ),

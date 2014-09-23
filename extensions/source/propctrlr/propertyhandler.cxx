@@ -307,7 +307,7 @@ namespace pcr
         ) );
     }
 
-    Window* PropertyHandler::impl_getDefaultDialogParent_nothrow() const
+    vcl::Window* PropertyHandler::impl_getDefaultDialogParent_nothrow() const
     {
         return PropertyHandlerHelper::getDialogParentWindow( m_xContext );
     }

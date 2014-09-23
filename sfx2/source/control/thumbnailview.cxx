@@ -56,7 +56,7 @@ enum
     SCROLL_OFFSET = 4
 };
 
-ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
+ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : Control( pParent, nWinStyle )
 {
     ImplInit();

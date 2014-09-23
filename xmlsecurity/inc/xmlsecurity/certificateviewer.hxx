@@ -56,7 +56,7 @@ private:
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     css::uno::Reference< css::security::XCertificate > mxCert;
 public:
-    CertificateViewer( Window* pParent, const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const css::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey );
+    CertificateViewer( vcl::Window* pParent, const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const css::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey );
     virtual             ~CertificateViewer();
 };
 
@@ -66,7 +66,7 @@ class CertificateViewerTP : public TabPage
 protected:
     CertificateViewer*  mpDlg;
 public:
-    CertificateViewerTP( Window* _pParent, const OString& rID,
+    CertificateViewerTP( vcl::Window* _pParent, const OString& rID,
         const OUString& rUIXMLDescription, CertificateViewer* _pDlg );
     void SetTabDlg( CertificateViewer* _pTabDlg )
     {
@@ -86,7 +86,7 @@ private:
     FixedImage*         m_pKeyImg;
     FixedText*          m_pHintCorrespPrivKeyFI;
 public:
-                        CertificateViewerGeneralTP( Window* pParent, CertificateViewer* _pDlg );
+                        CertificateViewerGeneralTP( vcl::Window* pParent, CertificateViewer* _pDlg );
 
     virtual void        ActivatePage() SAL_OVERRIDE;
 };
@@ -106,7 +106,7 @@ private:
     void                InsertElement( const OUString& _rField, const OUString& _rValue,
                                        const OUString& _rDetails, bool _bFixedWidthFont = false );
 public:
-                        CertificateViewerDetailsTP( Window* pParent, CertificateViewer* _pDlg );
+                        CertificateViewerDetailsTP( vcl::Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerDetailsTP();
 
     virtual void        ActivatePage() SAL_OVERRIDE;
@@ -135,7 +135,7 @@ private:
                                     bool bValid);
 
 public:
-                        CertificateViewerCertPathTP( Window* pParent, CertificateViewer* _pDlg );
+                        CertificateViewerCertPathTP( vcl::Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerCertPathTP();
 
     virtual void        ActivatePage() SAL_OVERRIDE;

@@ -45,7 +45,7 @@ namespace offapp
         Link                                    m_aRowChangeHandler;
 
     public:
-        DriverListControl(Window* _pParent);
+        DriverListControl(vcl::Window* _pParent);
 
         virtual void Init() SAL_OVERRIDE;
                 void Update(const DriverPoolingSettings& _rSettings);
@@ -87,7 +87,7 @@ namespace offapp
     };
 
 
-    DriverListControl::DriverListControl(Window* _pParent)
+    DriverListControl::DriverListControl(vcl::Window* _pParent)
         :EditBrowseBox(_pParent, EBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_HIDECURSOR | BROWSER_AUTOSIZE_LASTCOL | WB_BORDER)
         ,m_aSeekRow(m_aSettings.end())
         ,m_sYes(CUI_RES(RID_SVXSTR_YES))
@@ -98,7 +98,7 @@ namespace offapp
         SetUniqueId(UID_OFA_CONNPOOL_DRIVERLIST_BACK);
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDriverListControl(Window *pParent, VclBuilder::stringmap &)
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDriverListControl(vcl::Window *pParent, VclBuilder::stringmap &)
     {
         return new DriverListControl(pParent);
     }
@@ -300,7 +300,7 @@ namespace offapp
     //= ConnectionPoolOptionsPage
 
 
-    ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet)
+    ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet)
         : SfxTabPage(_pParent, "ConnPoolPage", "cui/ui/connpooloptions.ui", &_rAttrSet)
     {
         get(m_pEnablePooling, "connectionpooling");
@@ -326,7 +326,7 @@ namespace offapp
     }
 
 
-    SfxTabPage* ConnectionPoolOptionsPage::Create(Window* _pParent, const SfxItemSet* _rAttrSet)
+    SfxTabPage* ConnectionPoolOptionsPage::Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet)
     {
         return new ConnectionPoolOptionsPage(_pParent, *_rAttrSet);
     }

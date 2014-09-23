@@ -66,7 +66,7 @@ protected:
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) SAL_OVERRIDE;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) SAL_OVERRIDE;
 public:
-    _SdrItemBrowserControl(Window* pParent, WinBits nBits=WB_3DLOOK|WB_BORDER|WB_TABSTOP);
+    _SdrItemBrowserControl(vcl::Window* pParent, WinBits nBits=WB_3DLOOK|WB_BORDER|WB_TABSTOP);
     virtual ~_SdrItemBrowserControl();
     void Clear();
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
@@ -100,7 +100,7 @@ public:
 class _SdrItemBrowserWindow: public FloatingWindow {
     _SdrItemBrowserControl aBrowse;
 public:
-    _SdrItemBrowserWindow(Window* pParent, WinBits nBits=WB_STDSIZEABLEDOCKWIN);
+    _SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits=WB_STDSIZEABLEDOCKWIN);
     virtual ~_SdrItemBrowserWindow();
     virtual void Resize() SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
@@ -118,7 +118,7 @@ class SdrItemBrowser: public _SdrItemBrowserWindow {
     SdrView* pView;
     bool bDirty;
 private:
-    static Window* ImpGetViewWin(SdrView& rView);
+    static vcl::Window* ImpGetViewWin(SdrView& rView);
     DECL_LINK(IdleHdl, void *);
     DECL_LINK(ChangedHdl,_SdrItemBrowserControl*);
     DECL_LINK(SetDirtyHdl, void *);

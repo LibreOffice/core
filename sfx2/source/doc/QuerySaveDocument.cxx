@@ -21,7 +21,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 
-short ExecuteQuerySaveDocument(Window* _pParent, const OUString& _rTitle)
+short ExecuteQuerySaveDocument(vcl::Window* _pParent, const OUString& _rTitle)
 {
     if (Application::IsHeadlessModeEnabled())
     {

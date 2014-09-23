@@ -51,7 +51,7 @@ protected:
                     mbInDropDown:1;
 
     using Window::ImplInit;
-    SAL_DLLPRIVATE void   ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
 
 private:
     DECL_DLLPRIVATE_LINK( ImplTimeout, Timer* );
@@ -70,8 +70,8 @@ protected:
     Rectangle *     ImplFindPartRect( const Point& rPt );
 
 public:
-    explicit        SpinField( Window* pParent, WinBits nWinStyle = 0 );
-    explicit        SpinField( Window* pParent, const ResId& );
+    explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle = 0 );
+    explicit        SpinField( vcl::Window* pParent, const ResId& );
     virtual         ~SpinField();
 
     virtual bool    ShowDropDown( bool bShow );

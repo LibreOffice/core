@@ -562,7 +562,7 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
     mpTheme->SetDragPos( 0 );
     if ( nDropAction )
     {
-        Window *pFocusWindow = Application::GetFocusWindow();
+        vcl::Window *pFocusWindow = Application::GetFocusWindow();
         if ( pFocusWindow )
             pFocusWindow->GrabFocusToDocument();
     }
@@ -576,12 +576,12 @@ void GalleryTransferable::ObjectReleased()
     delete mpURL, mpURL = NULL;
 }
 
-void GalleryTransferable::CopyToClipboard( Window* pWindow )
+void GalleryTransferable::CopyToClipboard( vcl::Window* pWindow )
 {
     TransferableHelper::CopyToClipboard( pWindow );
 }
 
-void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
+void GalleryTransferable::StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
                                      sal_Int32 nDragPointer, sal_Int32 nDragImage )
 {
     INetURLObject aURL;

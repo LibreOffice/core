@@ -34,11 +34,11 @@
 #define TB_MENUBUTTON_SIZE      12
 #define TB_MENUBUTTON_OFFSET    2
 
-class Window;
+namespace vcl { class Window; }
 
 struct ImplToolItem
 {
-    Window*             mpWindow;
+    vcl::Window*        mpWindow;
     void*               mpUserData;
     Image               maImage;
     Image               maHighImage;

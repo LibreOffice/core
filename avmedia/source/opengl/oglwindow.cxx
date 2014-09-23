@@ -15,7 +15,7 @@ using namespace libgltf;
 
 namespace avmedia { namespace ogl {
 
-OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, Window& rEventHandlerParent )
+OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, vcl::Window& rEventHandlerParent )
     : m_rHandle( rHandle )
     , m_rContext( rContext )
     , m_rEventHandler( rEventHandlerParent )

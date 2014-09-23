@@ -102,7 +102,7 @@ namespace dbaui
     }
 
     // OLinkedDocumentsAccess
-    OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
+    OLinkedDocumentsAccess::OLinkedDocumentsAccess( vcl::Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
         const Reference< XComponentContext >& _rxContext, const Reference< XNameAccess >& _rxContainer,
         const Reference< XConnection>& _xConnection, const OUString& _sDataSourceName )
         :m_xContext(_rxContext)

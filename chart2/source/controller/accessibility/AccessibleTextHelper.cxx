@@ -78,7 +78,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
     if( m_pTextHelper )
         delete m_pTextHelper;
 
-    Window* pWindow( VCLUnoHelper::GetWindow( xWindow ));
+    vcl::Window* pWindow( VCLUnoHelper::GetWindow( xWindow ));
     if( pWindow )
     {
         SdrView * pView = m_pDrawViewWrapper;

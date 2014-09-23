@@ -28,7 +28,7 @@ class ScDelimiterTable;
 class ScImportOptionsDlg : public ModalDialog
 {
 public:
-    ScImportOptionsDlg( Window*                 pParent,
+    ScImportOptionsDlg( vcl::Window*                 pParent,
                         bool                    bAscii = true,
                         const ScImportOptions*  pOptions = NULL,
                         const OUString*         pStrTitle = NULL,

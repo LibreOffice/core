@@ -78,7 +78,7 @@ public:
     void    ExecFormatPaintbrush(SfxRequest& rReq);
     void    StateFormatPaintbrush(SfxItemSet& rSet);
 
-    void    ExecuteMacroAssign( SdrObject* pObj, Window* pWin );
+    void    ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin );
     void    ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage = 0xffff );
     void    ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage = 0xffff );
     void    ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 nTabPage = 0xffff );

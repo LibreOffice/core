@@ -50,7 +50,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-                    FormulaListBox( Window* pParent, WinBits nBits );
+                    FormulaListBox( vcl::Window* pParent, WinBits nBits );
 
 };
 
@@ -85,7 +85,7 @@ protected:
 
 public:
 
-                    FuncPage( Window* pParent,const IFunctionManager* _pFunctionManager);
+                    FuncPage( vcl::Window* pParent,const IFunctionManager* _pFunctionManager);
 
     void            SetCategory(sal_Int32  nCat);
     void            SetFunction(sal_Int32  nFunc);

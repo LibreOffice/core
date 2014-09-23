@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <boost/scoped_array.hpp>
 
-class GridWindow : public Window
+class GridWindow : public vcl::Window
 {
     // helper class for handles
     struct impHandle
@@ -49,13 +49,13 @@ class GridWindow : public Window
             return (maPos.X() < rComp.maPos.X());
         }
 
-        void draw(Window& rWin, const BitmapEx& rBitmapEx)
+        void draw(vcl::Window& rWin, const BitmapEx& rBitmapEx)
         {
             const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
             rWin.DrawBitmapEx(maPos - aOffset, rBitmapEx);
         }
 
-        bool isHit(Window& rWin, const Point& rPos)
+        bool isHit(vcl::Window& rWin, const Point& rPos)
         {
             const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
             const Rectangle aTarget(maPos - aOffset, maPos + aOffset);
@@ -117,7 +117,7 @@ class GridWindow : public Window
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
     void drawLine( double x1, double y1, double x2, double y2 );
 public:
-    GridWindow(Window* pParent);
+    GridWindow(vcl::Window* pParent);
     void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
     virtual ~GridWindow();
 
@@ -130,7 +130,7 @@ public:
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
-GridWindow::GridWindow(Window* pParent)
+GridWindow::GridWindow(vcl::Window* pParent)
     : Window(pParent, 0)
     , m_aGridArea(50, 15, 100, 100)
     , m_fMinX(0.0)
@@ -198,7 +198,7 @@ Size GridWindow::GetOptimalSize() const
     return LogicToPixel(Size(240, 200), MAP_APPFONT);
 }
 
-GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, Window* pParent, bool bCutValues )
+GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, vcl::Window* pParent, bool bCutValues )
     : ModalDialog(pParent, "GridDialog", "modules/scanner/ui/griddialog.ui")
 {
     get(m_pOKButton, "ok");
@@ -694,7 +694,7 @@ double* GridDialog::getNewYValues()
     return m_pGridWindow->getNewYValues();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGridWindow(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGridWindow(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new GridWindow(pParent);
 }

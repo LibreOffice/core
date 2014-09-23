@@ -439,8 +439,8 @@ public:
     // Wenn die View kein Invalidate() an den Fenstern durchfuehren soll, muss
     // man diese beiden folgenden Methoden ueberladen und entsprechend anders
     // reagieren.
-    virtual void InvalidateOneWin(Window& rWin);
-    virtual void InvalidateOneWin(Window& rWin, const Rectangle& rRect);
+    virtual void InvalidateOneWin(vcl::Window& rWin);
+    virtual void InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect);
 
     void SetActiveLayer(const OUString& rName) { aAktLayer=rName; }
     const OUString&  GetActiveLayer() const { return aAktLayer; }
@@ -477,15 +477,15 @@ public:
     // Default=FALSE. Flag ist nicht persistent.
     bool IsSwapAsynchron() const { return bSwapAsynchron; }
     void SetSwapAsynchron(bool bJa=true) { bSwapAsynchron=bJa; }
-    virtual bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
+    virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
 
-    virtual bool MouseButtonDown(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return false; }
-    virtual bool MouseButtonUp(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return false; }
-    virtual bool MouseMove(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return false; }
-    virtual bool Command(const CommandEvent& /*rCEvt*/, Window* /*pWin*/) { return false; }
+    virtual bool MouseButtonDown(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
+    virtual bool MouseButtonUp(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
+    virtual bool MouseMove(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
+    virtual bool Command(const CommandEvent& /*rCEvt*/, vcl::Window* /*pWin*/) { return false; }
     bool Cut(sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }
     bool Yank(sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }
-    bool Paste(Window* /*pWin*/=NULL, sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }
+    bool Paste(vcl::Window* /*pWin*/=NULL, sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }
 
     /* new interface src537 */
     bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;
@@ -494,7 +494,7 @@ public:
     SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(bool& rOk) const;
     bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
-    virtual void MakeVisible(const Rectangle& rRect, Window& rWin);
+    virtual void MakeVisible(const Rectangle& rRect, vcl::Window& rWin);
 
     // Fuer PlugIn. Wird vom Paint des OLE-Obj gerufen.
     virtual void DoConnect(SdrOle2Obj* pOleObj);
@@ -519,8 +519,8 @@ public:
     // bei bShow=sal_False wird der Browser destruiert
 #ifdef DBG_UTIL
     void ShowItemBrowser(bool bShow=true);
-    bool IsItemBrowserVisible() const { return pItemBrowser!=NULL && ((Window*)pItemBrowser)->IsVisible(); }
-    Window* GetItemBrowser() const { return (Window*)pItemBrowser; }
+    bool IsItemBrowserVisible() const { return pItemBrowser!=NULL && ((vcl::Window*)pItemBrowser)->IsVisible(); }
+    vcl::Window* GetItemBrowser() const { return (vcl::Window*)pItemBrowser; }
 #endif
 
     // Muss von App beim Scrollen usw. gerufen werden, damit ein u.U.

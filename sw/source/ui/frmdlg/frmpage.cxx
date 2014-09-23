@@ -596,7 +596,7 @@ namespace
     }
 }
 
-SwFrmPage::SwFrmPage(Window *pParent, const SfxItemSet &rSet)
+SwFrmPage::SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "FrmTypePage",
         "modules/swriter/ui/frmtypepage.ui", &rSet)
     ,
@@ -821,7 +821,7 @@ SwFrmPage::~SwFrmPage()
 {
 }
 
-SfxTabPage* SwFrmPage::Create(Window *pParent, const SfxItemSet *rSet)
+SfxTabPage* SwFrmPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return new SwFrmPage( pParent, *rSet );
 }
@@ -2348,7 +2348,7 @@ void SwFrmPage::EnableVerticalPositioning( bool bEnable )
     m_pVertRelationLB->Enable( bEnable );
 }
 
-SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet)
+SwGrfExtPage::SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "PicturePage",
         "modules/swriter/ui/picturepage.ui", &rSet)
     , pGrfDlg(0)
@@ -2376,7 +2376,7 @@ SwGrfExtPage::~SwGrfExtPage()
     delete pGrfDlg;
 }
 
-SfxTabPage* SwGrfExtPage::Create( Window *pParent, const SfxItemSet *rSet )
+SfxTabPage* SwGrfExtPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
 {
     return new SwGrfExtPage( pParent, *rSet );
 }
@@ -2599,7 +2599,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl)
 }
 
 // example window
-BmpWindow::BmpWindow(Window* pPar, WinBits nStyle)
+BmpWindow::BmpWindow(vcl::Window* pPar, WinBits nStyle)
     : Window(pPar, nStyle)
     , bHorz(false)
     , bVert(false)
@@ -2619,7 +2619,7 @@ Size BmpWindow::GetOptimalSize() const
     return LogicToPixel(Size(127 , 66), MapMode(MAP_APPFONT));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBmpWindow(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBmpWindow(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new BmpWindow(pParent, 0);
 }
@@ -2698,7 +2698,7 @@ void BmpWindow::SetBitmapEx(const BitmapEx& rBmp)
 }
 
 // set URL and ImageMap at frames
-SwFrmURLPage::SwFrmURLPage( Window *pParent, const SfxItemSet &rSet ) :
+SwFrmURLPage::SwFrmURLPage( vcl::Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent, "FrmURLPage" , "modules/swriter/ui/frmurlpage.ui", &rSet)
 {
     get(pURLED,"url");
@@ -2794,7 +2794,7 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet *rSet)
     return bModified;
 }
 
-SfxTabPage* SwFrmURLPage::Create(Window *pParent, const SfxItemSet *rSet)
+SfxTabPage* SwFrmURLPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return new SwFrmURLPage( pParent, *rSet );
 }
@@ -2822,7 +2822,7 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
     return 0;
 }
 
-SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet)
+SwFrmAddPage::SwFrmAddPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "FrmAddPage" , "modules/swriter/ui/frmaddpage.ui", &rSet)
     , pWrtSh(0)
     , bHtmlMode(false)
@@ -2859,7 +2859,7 @@ SwFrmAddPage::~SwFrmAddPage()
 {
 }
 
-SfxTabPage* SwFrmAddPage::Create(Window *pParent, const SfxItemSet *rSet)
+SfxTabPage* SwFrmAddPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return new SwFrmAddPage(pParent, *rSet);
 }

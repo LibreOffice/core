@@ -197,7 +197,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
 {
     OSL_ASSERT( m_xContext.is() );
 
-    Window* pWindow = m_pToolBar;
+    vcl::Window* pWindow = m_pToolBar;
     while ( pWindow && !pWindow->IsSystemWindow() )
         pWindow = pWindow->GetParent();
 
@@ -253,7 +253,7 @@ void ToolBarManager::Destroy()
     SolarMutexGuard g;
     if ( m_bAddedToTaskPaneList )
     {
-        Window* pWindow = m_pToolBar;
+        vcl::Window* pWindow = m_pToolBar;
         while ( pWindow && !pWindow->IsSystemWindow() )
             pWindow = pWindow->GetParent();
 
@@ -1042,7 +1042,7 @@ void ToolBarManager::CreateControllers()
                 Reference< XWindow > xWindow = xTbxController->createItemWindow( xToolbarWindow );
                 if ( xWindow.is() )
                 {
-                    Window* pItemWin = VCLUnoHelper::GetWindow( xWindow );
+                    vcl::Window* pItemWin = VCLUnoHelper::GetWindow( xWindow );
                     if ( pItemWin )
                     {
                         WindowType nType = pItemWin->GetType();
@@ -1680,12 +1680,12 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
 
     if ( m_pToolBar->IsCustomize() )
     {
-        sal_uInt16      nPos( 0 );
+        sal_uInt16    nPos( 0 );
         ::PopupMenu*  pItemMenu( aPopupMenu.GetPopupMenu( 1 ));
 
         bool    bIsFloating( false );
 
-        DockingManager* pDockMgr = Window::GetDockingManager();
+        DockingManager* pDockMgr = vcl::Window::GetDockingManager();
         if ( pDockMgr )
             bIsFloating = pDockMgr->IsFloating( m_pToolBar );
 
@@ -2059,7 +2059,7 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
     for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
     {
         const sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
-        Window* pWindow = m_pToolBar->GetItemWindow( nId );
+        vcl::Window* pWindow = m_pToolBar->GetItemWindow( nId );
         if ( pWindow )
         {
             const DataChangedEvent& rDCEvt( *pDataChangedEvent );
@@ -2115,7 +2115,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
             // Use docking window close to close the toolbar. The toolbar layout manager is
             // listener and will react correctly according to the context sensitive
             // flag of our toolbar.
-            Window* pWin = VCLUnoHelper::GetWindow( pExecuteInfo->xWindow );
+            vcl::Window* pWin = VCLUnoHelper::GetWindow( pExecuteInfo->xWindow );
             DockingWindow* pDockWin = dynamic_cast< DockingWindow* >( pWin );
             if ( pDockWin )
                 pDockWin->Close();

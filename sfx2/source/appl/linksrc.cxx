@@ -423,7 +423,7 @@ bool SvLinkSource::GetData( ::com::sun::star::uno::Any &, const OUString &, bool
     return false;
 }
 
-void SvLinkSource::Edit( Window *, SvBaseLink *, const Link& )
+void SvLinkSource::Edit( vcl::Window *, SvBaseLink *, const Link& )
 {
 }
 

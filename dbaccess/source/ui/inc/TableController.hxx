@@ -113,7 +113,7 @@ namespace dbaui
 
         inline TOTypeInfoSP                 getTypeInfoFallBack() const { return m_pTypeInfo; }
 
-        virtual bool                        Construct(Window* pParent) SAL_OVERRIDE;
+        virtual bool                        Construct(vcl::Window* pParent) SAL_OVERRIDE;
         // XEventListener
         virtual void SAL_CALL               disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

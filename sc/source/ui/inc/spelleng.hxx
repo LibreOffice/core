@@ -121,7 +121,7 @@ protected:
 
 private:
     /** Returns the spelling dialog if it is open. */
-    Window*             GetDialogParent();
+    vcl::Window*             GetDialogParent();
 };
 
 /** Edit engine for text conversion. */

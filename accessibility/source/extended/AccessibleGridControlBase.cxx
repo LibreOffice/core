@@ -419,7 +419,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::su
     ensureIsAlive();
 
     sal_Int32 nColor = 0;
-    Window* pInst = m_aTable.GetWindowInstance();
+    vcl::Window* pInst = m_aTable.GetWindowInstance();
     if ( pInst )
     {
         if ( pInst->IsControlForeground() )
@@ -443,7 +443,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (::com::su
 
     ensureIsAlive();
     sal_Int32 nColor = 0;
-    Window* pInst = m_aTable.GetWindowInstance();
+    vcl::Window* pInst = m_aTable.GetWindowInstance();
     if ( pInst )
     {
         if ( pInst->IsControlBackground() )

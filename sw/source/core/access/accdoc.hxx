@@ -36,7 +36,7 @@ class SwAccessibleDocumentBase : public SwAccessibleContext
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> mxParent;
 
-    Window* mpChildWin; // protected by solar mutext
+    vcl::Window* mpChildWin; // protected by solar mutext
 
     using SwAccessibleFrame::SetVisArea;
 
@@ -48,8 +48,8 @@ public:
 
     void SetVisArea();
 
-    virtual void AddChild( Window *pWin, bool bFireEvent = true );
-    virtual void RemoveChild( Window *pWin );
+    virtual void AddChild( vcl::Window *pWin, bool bFireEvent = true );
+    virtual void RemoveChild( vcl::Window *pWin );
 
     // XAccessibleContext
 

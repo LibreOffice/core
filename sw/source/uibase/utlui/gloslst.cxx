@@ -58,11 +58,11 @@ class SwGlossDecideDlg : public ModalDialog
     DECL_LINK(SelectHdl, void*);
 
     public:
-        SwGlossDecideDlg(Window* pParent);
+        SwGlossDecideDlg(vcl::Window* pParent);
     ListBox&    GetListBox() {return *m_pListLB;}
 };
 
-SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent)
+SwGlossDecideDlg::SwGlossDecideDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "SelectAutoTextDialog",
         "modules/swriter/ui/selectautotextdialog.ui")
 {

@@ -36,7 +36,7 @@ public:
     SidebarDockingWindow(
         SfxBindings* pBindings,
         SidebarChildWindow& rChildWindow,
-        Window* pParent,
+        vcl::Window* pParent,
         WinBits nBits);
     virtual ~SidebarDockingWindow (void);
 

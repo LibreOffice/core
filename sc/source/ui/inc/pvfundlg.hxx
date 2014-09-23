@@ -47,7 +47,7 @@ class ScDPObject;
 class ScDPFunctionListBox : public ListBox
 {
 public:
-    ScDPFunctionListBox(Window* pParent, WinBits nStyle);
+    ScDPFunctionListBox(vcl::Window* pParent, WinBits nStyle);
 
     void                SetSelection( sal_uInt16 nFuncMask );
     sal_uInt16          GetSelection() const;
@@ -60,7 +60,7 @@ class ScDPFunctionDlg : public ModalDialog
 {
     typedef ::boost::unordered_map< OUString, OUString, OUStringHash > NameMapType;
 public:
-    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
+    explicit            ScDPFunctionDlg( vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
     sal_uInt16              GetFuncMask() const;
@@ -100,7 +100,7 @@ private:
 class ScDPSubtotalDlg : public ModalDialog
 {
 public:
-    explicit            ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
+    explicit            ScDPSubtotalDlg( vcl::Window* pParent, ScDPObject& rDPObj,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
 
@@ -135,7 +135,7 @@ private:
 class ScDPSubtotalOptDlg : public ModalDialog
 {
 public:
-    explicit            ScDPSubtotalOptDlg( Window* pParent, ScDPObject& rDPObj,
+    explicit            ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj,
                             const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
                             bool bEnableLayout );
 
@@ -187,7 +187,7 @@ private:
 class ScDPShowDetailDlg : public ModalDialog
 {
 public:
-    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
+    explicit            ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
 
     virtual short       Execute() SAL_OVERRIDE;
 

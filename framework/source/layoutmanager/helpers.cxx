@@ -79,7 +79,7 @@ bool isHorizontalDockingArea( const sal_Int32 nDockArea )
   return isHorizontalDockingArea(static_cast< ui::DockingArea >( nDockArea ));
 }
 
-OUString retrieveToolbarNameFromHelpURL( Window* pWindow )
+OUString retrieveToolbarNameFromHelpURL( vcl::Window* pWindow )
 {
     OUString aToolbarName;
 
@@ -99,7 +99,7 @@ OUString retrieveToolbarNameFromHelpURL( Window* pWindow )
     return aToolbarName;
 }
 
-ToolBox* getToolboxPtr( Window* pWindow )
+ToolBox* getToolboxPtr( vcl::Window* pWindow )
 {
     ToolBox* pToolbox(NULL);
     if ( pWindow->GetType() == WINDOW_TOOLBOX )
@@ -107,7 +107,7 @@ ToolBox* getToolboxPtr( Window* pWindow )
     return pToolbox;
 }
 
-Window* getWindowFromXUIElement( const uno::Reference< ui::XUIElement >& xUIElement )
+vcl::Window* getWindowFromXUIElement( const uno::Reference< ui::XUIElement >& xUIElement )
 {
     SolarMutexGuard aGuard;
     uno::Reference< awt::XWindow > xWindow;
@@ -118,7 +118,7 @@ Window* getWindowFromXUIElement( const uno::Reference< ui::XUIElement >& xUIElem
 
 SystemWindow* getTopSystemWindow( const uno::Reference< awt::XWindow >& xWindow )
 {
-    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     while ( pWindow && !pWindow->IsSystemWindow() )
         pWindow = pWindow->GetParent();
 
@@ -150,7 +150,7 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
         _xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
         _rPosSize = _xWindow->getPosSize();
 
-        Window* pWindow = VCLUnoHelper::GetWindow( _xWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( _xWindow );
         if ( pWindow->GetType() == WINDOW_TOOLBOX )
         {
             ::Size aSize = ((ToolBox*)pWindow)->CalcWindowSizePixel( 1 );
@@ -291,7 +291,7 @@ bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFrame )
         // #i76867# top and system window is required.
         SolarMutexGuard aGuard;
         uno::Reference< awt::XWindow > xWindow( xWindowCheck, uno::UNO_QUERY );
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         return ( pWindow && pWindow->IsSystemWindow() );
     }
 

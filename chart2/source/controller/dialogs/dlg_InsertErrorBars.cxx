@@ -39,7 +39,7 @@ namespace chart
 {
 
 InsertErrorBarsDialog::InsertErrorBarsDialog(
-    Window* pParent, const SfxItemSet& rMyAttrs,
+    vcl::Window* pParent, const SfxItemSet& rMyAttrs,
     const uno::Reference< chart2::XChartDocument > & xChartDocument,
     ErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ ) :
         ModalDialog( pParent

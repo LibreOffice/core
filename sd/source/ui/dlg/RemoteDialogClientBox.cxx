@@ -61,7 +61,7 @@ ClientRemovedListener::~ClientRemovedListener()
 
 // ClientBox
 
-ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
+ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     Control( pParent, nStyle ),
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
@@ -108,7 +108,7 @@ ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
     Show();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeClientBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeClientBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

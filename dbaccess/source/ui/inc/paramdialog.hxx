@@ -79,7 +79,7 @@ namespace dbaui
                     m_aFinalValues;     /// the final values as entered by the user
 
     public:
-        OParameterDialog(Window* _pParent,
+        OParameterDialog(vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & _rParamContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);

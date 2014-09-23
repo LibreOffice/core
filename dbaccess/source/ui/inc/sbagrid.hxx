@@ -88,7 +88,7 @@ namespace dbaui
         virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > & rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > & rParentPeer) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
-        virtual FmXGridPeer*    imp_CreatePeer(Window* pParent) SAL_OVERRIDE;
+        virtual FmXGridPeer*    imp_CreatePeer(vcl::Window* pParent) SAL_OVERRIDE;
     };
 
     // SbaXGridPeer
@@ -127,7 +127,7 @@ namespace dbaui
         virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
-        virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle) SAL_OVERRIDE;
+        virtual FmGridControl*  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) SAL_OVERRIDE;
 #ifdef _MSC_VER
         typedef ::com::sun::star::frame::XStatusListener xstlist_type;
         typedef ::com::sun::star::uno::Reference< xstlist_type > xlistener_type;

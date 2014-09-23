@@ -13,7 +13,7 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sdr {
 namespace contact {
@@ -25,7 +25,7 @@ public:
     virtual ~ViewObjectContactOfOpenGLObj();
 
 private:
-    Window* getWindow() const;
+    vcl::Window* getWindow() const;
 };
 
 } // namespace sdr

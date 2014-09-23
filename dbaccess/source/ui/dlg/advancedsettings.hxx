@@ -74,7 +74,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
-        SpecialSettingsPage(Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
+        SpecialSettingsPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
 
     protected:
         virtual ~SpecialSettingsPage();
@@ -110,7 +110,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 
-        GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        GeneratedValuesPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
 
         // nControlFlags is a combination of the CBTP_xxx-constants

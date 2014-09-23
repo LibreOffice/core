@@ -92,7 +92,7 @@ public:
 class NextButton
 {
 public:
-    NextButton (::Window* pParent);
+    NextButton (vcl::Window* pParent);
 
     void ForceFocusEventBroadcast (void);
     void SetClickHdl (const Link& rLink);
@@ -108,7 +108,7 @@ private:
 class AssistentDlgImpl : public SfxListener
 {
 public:
-    AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, bool bAutoPilot  );
+    AssistentDlgImpl( vcl::Window* pWindow, const Link& rFinishLink, bool bAutoPilot  );
     virtual ~AssistentDlgImpl();
 
     /// Local mutex used to serialize concurrent method calls.
@@ -159,7 +159,7 @@ public:
     */
     bool mbPreviewUpdating;
 
-    ::Window* mpWindow;
+    vcl::Window* mpWindow;
 
     void SavePassword( SfxObjectShellLock xDoc, const OUString& rPath );
     void RestorePassword( SfxItemSet* pSet, const OUString& rPath );
@@ -318,7 +318,7 @@ public:
 
 };
 
-AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, bool bAutoPilot ) :
+AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link& rFinishLink, bool bAutoPilot ) :
     mpTemplateRegion(NULL),
     mpLayoutRegion(NULL),
     mbUserDataDirty(false),
@@ -1449,7 +1449,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
     {
         CloseDocShell();
 
-        ::Window *pParent = Application::GetDefDialogParent();
+        vcl::Window *pParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( mpWindow );
 
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
@@ -1495,7 +1495,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
         SfxObjectShellLock xLayoutDocShell;
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
 
-        ::Window *pParent = Application::GetDefDialogParent();
+        vcl::Window *pParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( mpWindow );
 
         if(IsOwnFormat(aLayoutFile))
@@ -1721,7 +1721,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
     return aIcon;
 }
 
-AssistentDlg::AssistentDlg(Window* pParent, bool bAutoPilot) :
+AssistentDlg::AssistentDlg(vcl::Window* pParent, bool bAutoPilot) :
     ModalDialog(pParent, "Assistent", "modules/simpress/ui/assistentdialog.ui")
 {
     Link aFinishLink = LINK(this,AssistentDlg, FinishHdl);
@@ -1826,7 +1826,7 @@ uno::Sequence< beans::NamedValue > AssistentDlg::GetPassword()
 
 //===== NextButton ============================================================
 
-NextButton::NextButton (::Window* pParent) :
+NextButton::NextButton (vcl::Window* pParent) :
       mbIsFirstButtonActive(true)
 {
     AssistentDlg* assDlg = static_cast<AssistentDlg*>(pParent);

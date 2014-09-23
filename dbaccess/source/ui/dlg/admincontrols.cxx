@@ -56,14 +56,14 @@ namespace dbaui
         }
 
         // IWindowOperator
-        virtual void operateOn( const VclWindowEvent& _rTrigger, Window& _rOperateOn ) const SAL_OVERRIDE;
+        virtual void operateOn( const VclWindowEvent& _rTrigger, vcl::Window& _rOperateOn ) const SAL_OVERRIDE;
 
     private:
         const OUString    m_sDisabledText;
               OUString    m_sUserText;
     };
 
-    void TextResetOperator::operateOn( const VclWindowEvent& _rTrigger, Window& _rOperateOn ) const
+    void TextResetOperator::operateOn( const VclWindowEvent& _rTrigger, vcl::Window& _rOperateOn ) const
     {
         OSL_ENSURE( _rTrigger.GetWindow() == &_rOperateOn, "TextResetOperator::operateOn: you're misusing this implementation!" );
 
@@ -116,7 +116,7 @@ namespace dbaui
                                 ,public ::svt::DialogController
     {
     public:
-        TextResetOperatorController( Window& _rObservee, const OUString& _rDisabledText )
+        TextResetOperatorController( vcl::Window& _rObservee, const OUString& _rDisabledText )
             :TextResetOperatorController_Base( _rDisabledText )
             ,::svt::DialogController( _rObservee, getEventFilter(), getOperator() )
         {
@@ -125,7 +125,7 @@ namespace dbaui
     };
 
     // MySQLNativeSettings
-    MySQLNativeSettings::MySQLNativeSettings( Window& _rParent, const Link& _rControlModificationLink )
+    MySQLNativeSettings::MySQLNativeSettings( vcl::Window& _rParent, const Link& _rControlModificationLink )
         :TabPage( &_rParent, "MysqlNativeSettings", "dbaccess/ui/mysqlnativesettings.ui" )
     {
         get(m_pDatabaseNameLabel, "dbnamelabel");

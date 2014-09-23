@@ -36,7 +36,7 @@ public:
     FrameWindowPane (
         const ::com::sun::star::uno::Reference<
             com::sun::star::drawing::framework::XResourceId>& rxPaneId,
-        ::Window* pWindow);
+        vcl::Window* pWindow);
     virtual ~FrameWindowPane (void) throw();
 
     /** A frame window typically can (and should) exists on its own without

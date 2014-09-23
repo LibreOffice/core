@@ -374,7 +374,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     impl_showProgress();
 
     SolarMutexGuard aSolarGuard;
-    Window* pWindow = VCLUnoHelper::GetWindow(xParentWindow);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( pWindow )
     {
         bool bForceFrontAndFocus(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext));

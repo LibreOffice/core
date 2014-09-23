@@ -134,7 +134,7 @@ namespace frm
         }
 
 
-        static void adjustTwoStateWinBit( Window* _pWindow, const Any& _rValue, WinBits _nFlag, bool _bInvert = false )
+        static void adjustTwoStateWinBit( vcl::Window* _pWindow, const Any& _rValue, WinBits _nFlag, bool _bInvert = false )
         {
             WinBits nBits = _pWindow->GetStyle();
             implAdjustTwoStateFlag( _rValue, nBits, _nFlag, _bInvert );
@@ -197,7 +197,7 @@ namespace frm
             mbCreatingPeer = true;
 
             // determine the VLC window for the parent
-            Window* pParentWin = NULL;
+            vcl::Window* pParentWin = NULL;
             if ( _rParentPeer.is() )
             {
                 VCLXWindow* pParentXWin = VCLXWindow::GetImplementation( _rParentPeer );
@@ -300,7 +300,7 @@ namespace frm
     // ORichTextPeer
 
 
-    ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, Window* _pParentWindow, WinBits _nStyle )
+    ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, vcl::Window* _pParentWindow, WinBits _nStyle )
     {
         DBG_TESTSOLARMUTEX();
 

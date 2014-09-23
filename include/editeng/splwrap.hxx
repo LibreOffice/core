@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XHyphenator;
 }}}}
 
-class Window;
+namespace vcl { class Window; }
 class SdrObject;
 // misc functions ---------------------------------------------------------------
 
@@ -48,7 +48,7 @@ private:
     friend class SvxHyphenWordDialog;
     friend struct SvxHyphenWordDialog_Impl;
 
-    Window*     pWin;
+    vcl::Window*     pWin;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
     ::com::sun::star::uno::Reference<
@@ -72,12 +72,12 @@ private:
     bool    FindSpellError();   // Check for errors (over areas)
 
 public:
-    SvxSpellWrapper( Window* pWn,
+    SvxSpellWrapper( vcl::Window* pWn,
                      ::com::sun::star::uno::Reference<
                          ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpellChecker,
                      const bool bStart = false, const bool bIsAllRight = false,
                      const bool bOther = false, const bool bRevAllow = true );
-    SvxSpellWrapper( Window* pWn,
+    SvxSpellWrapper( vcl::Window* pWn,
                      ::com::sun::star::uno::Reference<
                          ::com::sun::star::linguistic2::XHyphenator >  &xHyphenator,
                      const bool bStart = false, const bool bOther = false );
@@ -109,7 +109,7 @@ public:
         ::com::sun::star::linguistic2::XHyphenator >
                     GetXHyphenator()    { return xHyph; }
     inline bool     IsAllRight()        { return bAllRight; }
-    inline Window*  GetWin() { return pWin; }
+    inline vcl::Window*  GetWin() { return pWin; }
     inline void     EnableAutoCorrect() { bAuto = true; }
 
 protected:

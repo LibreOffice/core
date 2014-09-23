@@ -45,7 +45,7 @@
 
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {
-    Window *pMDI = &GetViewFrame()->GetWindow();
+    vcl::Window *pMDI = &GetViewFrame()->GetWindow();
 
     switch ( rReq.GetSlot() )
     {

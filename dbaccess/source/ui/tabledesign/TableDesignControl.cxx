@@ -34,7 +34,7 @@ using namespace ::com::sun::star::util;
 // Defines
 #define HANDLE_ID 0
 
-OTableRowView::OTableRowView(Window* pParent)
+OTableRowView::OTableRowView(vcl::Window* pParent)
     :EditBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),EBBF_NONE,
                     BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
                     BROWSER_KEEPSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL)

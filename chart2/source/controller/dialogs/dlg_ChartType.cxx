@@ -33,7 +33,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-ChartTypeDialog::ChartTypeDialog( Window* pParent
+ChartTypeDialog::ChartTypeDialog( vcl::Window* pParent
                 , const uno::Reference< frame::XModel >& xChartModel
                 , const uno::Reference< uno::XComponentContext >& xContext )
     : ModalDialog( pParent, "ChartTypeDialog",

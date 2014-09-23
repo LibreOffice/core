@@ -193,7 +193,7 @@ namespace sdr
             // but always the exact redraw area
             if(OUTDEV_WINDOW == rSource.GetOutDevType())
             {
-                Window& rWindow = (Window&)rSource;
+                vcl::Window& rWindow = (vcl::Window&)rSource;
                 Region aPaintRegionPixel = rWindow.LogicToPixel(rWindow.GetPaintRegion());
                 aRegion.Intersect(aPaintRegionPixel);
 
@@ -274,7 +274,7 @@ namespace sdr
                 // #i80730# switch off VCL cursor during overlay refresh
                 if(bTargetIsWindow)
                 {
-                    Window& rWindow = static_cast< Window& >(rmOutputDevice);
+                    vcl::Window& rWindow = static_cast< vcl::Window& >(rmOutputDevice);
                     vcl::Cursor* pCursor = rWindow.GetCursor();
 
                     if(pCursor && pCursor->IsVisible())
@@ -391,7 +391,7 @@ namespace sdr
                 // To get the update, the windows in question are updated manulally here.
                 if(bTargetIsWindow)
                 {
-                    Window& rWindow = static_cast< Window& >(rmOutputDevice);
+                    vcl::Window& rWindow = static_cast< vcl::Window& >(rmOutputDevice);
 
                     const Rectangle aRegionRectanglePixel(
                         maBufferRememberedRangePixel.getMinX(),
@@ -404,7 +404,7 @@ namespace sdr
                 // #i80730# restore visibility of VCL cursor
                 if(bCursorWasEnabled)
                 {
-                    Window& rWindow = static_cast< Window& >(rmOutputDevice);
+                    vcl::Window& rWindow = static_cast< vcl::Window& >(rmOutputDevice);
                     vcl::Cursor* pCursor = rWindow.GetCursor();
 
                     if(pCursor)

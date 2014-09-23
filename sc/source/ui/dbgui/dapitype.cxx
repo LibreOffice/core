@@ -25,7 +25,7 @@
 
 using namespace com::sun::star;
 
-ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(Window* pParent, bool bEnableExternal)
+ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(vcl::Window* pParent, bool bEnableExternal)
     : ModalDialog( pParent, "SelectSourceDialog", "modules/scalc/ui/selectsource.ui" )
 {
     get(m_pBtnSelection, "selection");
@@ -93,7 +93,7 @@ IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, RadioButton*, pBtn )
     return 0;
 }
 
-ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
+ScDataPilotServiceDlg::ScDataPilotServiceDlg( vcl::Window* pParent,
                                 const uno::Sequence<OUString>& rServices ) :
     ModalDialog     ( pParent, "DapiserviceDialog", "modules/scalc/ui/dapiservicedialog.ui" )
 {

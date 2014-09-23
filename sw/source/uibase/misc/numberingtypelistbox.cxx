@@ -35,7 +35,7 @@ struct SwNumberingTypeListBox_Impl
     uno::Reference<text::XNumberingTypeInfo> xInfo;
 };
 
-SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, WinBits nStyle ) :
+SwNumberingTypeListBox::SwNumberingTypeListBox( vcl::Window* pWin, WinBits nStyle ) :
     ListBox(pWin, nStyle),
     pImpl(new SwNumberingTypeListBox_Impl)
 {
@@ -54,7 +54,7 @@ bool SwNumberingTypeListBox::set_property(const OString &rKey, const OString &rV
     return true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwNumberingTypeListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwNumberingTypeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     SwNumberingTypeListBox *pListBox = new SwNumberingTypeListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
     pListBox->EnableAutoSize(true);

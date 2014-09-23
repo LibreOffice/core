@@ -403,7 +403,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // initialize the component and its parent window
     css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
     WorkWindow* pParent = (WorkWindow*)VCLUnoHelper::GetWindow(xParentWindow);
-    Window*     pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+    vcl::Window*     pWindow = VCLUnoHelper::GetWindow(m_xWindow);
 
     // disable full screen mode of the frame!
     if (pParent && pParent->IsFullScreenMode())
@@ -438,7 +438,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if( pParent && pBack )
     {
         long nMenuHeight = 0;
-        Window* pMenu = pParent->GetWindow(WINDOW_NEXT);
+        vcl::Window* pMenu = pParent->GetWindow(WINDOW_NEXT);
         if( pMenu )
             nMenuHeight = pMenu->GetSizePixel().Height();
 
@@ -717,8 +717,8 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     }
 
     // create the component window
-    Window* pParent   = VCLUnoHelper::GetWindow(xParentWindow);
-    Window* pWindow   = new BackingWindow(pParent);
+    vcl::Window* pParent   = VCLUnoHelper::GetWindow(xParentWindow);
+    vcl::Window* pWindow   = new BackingWindow(pParent);
             m_xWindow = VCLUnoHelper::GetInterface(pWindow);
 
     if (!m_xWindow.is())
@@ -791,7 +791,7 @@ void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const css::uno:
     // vnd.org.libreoffice.recentdocs:ClearRecentFileList  - clear recent files
     if ( aURL.Path == "ClearRecentFileList" )
     {
-        Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
         BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
         if( pBack )
         {

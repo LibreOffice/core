@@ -37,7 +37,7 @@ static const sal_Int32 gnInitialVerticalSplitPosition (150);
 
 GalleryControl::GalleryControl (
     SfxBindings* /*pBindings*/,
-    Window* pParentWindow)
+    vcl::Window* pParentWindow)
     : Window(pParentWindow, GAL_RES(RID_SVXDLG_GALLERYBROWSER)),
       mpGallery (Gallery::GetGalleryInstance()),
       mpSplitter(new GallerySplitter(
@@ -171,7 +171,7 @@ void GalleryControl::Resize (void)
     maLastSize = aNewSize;
 }
 
-bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt, Window* )
+bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt, vcl::Window* )
 {
     const sal_uInt16    nCode = rKEvt.GetKeyCode().GetCode();
     bool            bRet = ( !rKEvt.GetKeyCode().IsMod1() &&

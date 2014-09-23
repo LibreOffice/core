@@ -50,7 +50,7 @@ namespace
     const sal_Int32 nPageCount = 4;
 }
 
-CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XModel >& xChartModel
+CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< frame::XModel >& xChartModel
                                , const uno::Reference< uno::XComponentContext >& xContext
                                , sal_Int32 nOnePageOnlyIndex )
                 : svt::RoadmapWizard( pParent,

@@ -35,7 +35,7 @@
 
 #include <boost/utility.hpp>
 
-class Window;
+namespace vcl { class Window; }
 class SfxFilter;
 class SfxObjectFactory;
 class SfxMedium;
@@ -60,17 +60,17 @@ public:
 
 class SfxFrameWindow
 {
-    Window*     pWindow;
+    vcl::Window*     pWindow;
 public:
-                SfxFrameWindow( Window *pWin )
+                SfxFrameWindow( vcl::Window *pWin )
                  : pWindow( pWin )
                 {}
 
     virtual     ~SfxFrameWindow()
                 { delete pWindow; }
-    Window*     GetWindow() const
+    vcl::Window*     GetWindow() const
                 { return pWindow; }
-    void        SetWindow( Window *pWin )
+    void        SetWindow( vcl::Window *pWin )
                 { pWindow = pWin; }
 };
 

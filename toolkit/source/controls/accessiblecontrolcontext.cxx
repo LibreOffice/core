@@ -225,14 +225,14 @@ namespace toolkit
     }
 
 
-    Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
+    vcl::Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
     {
         Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
         Reference< awt::XWindow > xWindow;
         if ( xControl.is() )
             xWindow.set(xControl->getPeer(), css::uno::UNO_QUERY);
 
-        Window* pWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : NULL;
+        vcl::Window* pWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : NULL;
 
         if ( _pxUNOWindow )
             *_pxUNOWindow = xWindow;
@@ -259,7 +259,7 @@ namespace toolkit
 
         // our control
         Reference< awt::XWindow > xWindow;
-        Window* pVCLWindow = implGetWindow( &xWindow );
+        vcl::Window* pVCLWindow = implGetWindow( &xWindow );
 
         awt::Rectangle aBounds( 0, 0, 0, 0 );
         if ( xWindow.is() )
@@ -267,7 +267,7 @@ namespace toolkit
             // ugly, but .... though the XWindow has a getPosSize, it is impossible to determine the
             // parent which this position/size is relative to. This means we must tunnel UNO and ask the
             // implementation
-            Window* pVCLParent = pVCLWindow ? pVCLWindow->GetParent() : NULL;
+            vcl::Window* pVCLParent = pVCLWindow ? pVCLWindow->GetParent() : NULL;
 
             // the relative location of the window
             ::Point aWindowRelativePos( 0, 0);
@@ -326,7 +326,7 @@ namespace toolkit
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
-        Window* pWindow = implGetWindow( );
+        vcl::Window* pWindow = implGetWindow( );
         sal_Int32 nColor = 0;
         if ( pWindow )
         {
@@ -352,7 +352,7 @@ namespace toolkit
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
-        Window* pWindow = implGetWindow( );
+        vcl::Window* pWindow = implGetWindow( );
         sal_Int32 nColor = 0;
         if ( pWindow )
         {

@@ -25,7 +25,7 @@
 
 namespace sd {
 class OutlineViewShell;
-class Window;
+namespace vcl { class Window; }
 }
 
 namespace accessibility {

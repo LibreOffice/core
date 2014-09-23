@@ -24,7 +24,7 @@
 class SwAddrDlg : public SfxSingleTabDialog
 {
 public:
-    SwAddrDlg(Window* pParent, const SfxItemSet& rSet);
+    SwAddrDlg(vcl::Window* pParent, const SfxItemSet& rSet);
 };
 
 #endif

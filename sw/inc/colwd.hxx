@@ -37,7 +37,7 @@ protected:
     DECL_LINK(LoseFocusHdl, void * = 0);
 
 public:
-    SwTableWidthDlg(Window *pParent, SwTableFUNC &rFnc );
+    SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc );
 };
 
 #endif

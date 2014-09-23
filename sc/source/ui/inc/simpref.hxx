@@ -67,7 +67,7 @@ protected:
     virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
-                    ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScViewData*    ptrViewData );
                     virtual ~ScSimpleRefDlg();
 

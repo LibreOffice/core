@@ -35,7 +35,7 @@ class MorphDlg
 {
 public:
     MorphDlg (
-        ::Window* pParent,
+        vcl::Window* pParent,
         const SdrObject* pObj1,
         const SdrObject* pObj2);
     virtual ~MorphDlg (void);

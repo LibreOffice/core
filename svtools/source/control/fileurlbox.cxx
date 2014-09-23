@@ -30,7 +30,7 @@ namespace svt
     //= FileURLBox
 
 
-    FileURLBox::FileURLBox( Window* _pParent, WinBits _nStyle )
+    FileURLBox::FileURLBox( vcl::Window* _pParent, WinBits _nStyle )
         :SvtURLBox( _pParent, _nStyle, INET_PROT_FILE )
     {
         DisableHistory();

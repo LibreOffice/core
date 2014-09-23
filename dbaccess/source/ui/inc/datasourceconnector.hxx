@@ -30,7 +30,7 @@ namespace dbtools
     class SQLExceptionInfo;
 }
 
-class Window;
+namespace vcl { class Window; }
 namespace dbaui
 {
 
@@ -38,7 +38,7 @@ namespace dbaui
     class ODatasourceConnector
     {
     protected:
-        Window*         m_pErrorMessageParent;
+        vcl::Window*         m_pErrorMessageParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xContext;
         OUString m_sContextInformation;
@@ -46,11 +46,11 @@ namespace dbaui
     public:
         ODatasourceConnector(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            Window* _pMessageParent
+            vcl::Window* _pMessageParent
         );
         ODatasourceConnector(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            Window* _pMessageParent,
+            vcl::Window* _pMessageParent,
             const OUString& _rContextInformation
         );
 

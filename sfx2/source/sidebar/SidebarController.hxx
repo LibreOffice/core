@@ -184,7 +184,7 @@ private:
         to indicate that when the current mouse drag operation ends, the
         sidebar will only show the tab bar.
     */
-    ::boost::scoped_ptr<Window> mpCloseIndicator;
+    ::boost::scoped_ptr<vcl::Window> mpCloseIndicator;
 
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
     /** Make maRequestedContext the current context.
@@ -198,7 +198,7 @@ private:
         const Context& rContext);
     SharedPanel CreatePanel (
         const ::rtl::OUString& rsPanelId,
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         const bool bIsInitiallyExpanded,
         const Context& rContext);
     void SwitchToDeck (

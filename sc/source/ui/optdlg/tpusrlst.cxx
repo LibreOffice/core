@@ -44,7 +44,7 @@ static const sal_Unicode cDelimiter = ',';
 
 // Benutzerdefinierte Listen:
 
-ScTpUserLists::ScTpUserLists( Window*               pParent,
+ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
                               const SfxItemSet&     rCoreAttrs )
 
     :   SfxTabPage      ( pParent,
@@ -135,7 +135,7 @@ void ScTpUserLists::Init()
 
 }
 
-SfxTabPage* ScTpUserLists::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* ScTpUserLists::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return ( new ScTpUserLists( pParent, *rAttrSet ) );
 }

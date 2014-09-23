@@ -49,7 +49,7 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
 }
 
 
-NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
+NameClashDialog::NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
                                   OUString const & rTargetFolderURL,
                                   OUString const & rClashingName,
                                   OUString const & rProposedNewName,

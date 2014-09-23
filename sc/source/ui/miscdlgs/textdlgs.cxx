@@ -31,7 +31,7 @@
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
 
-ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
+ScCharDlg::ScCharDlg( vcl::Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell )
     : SfxTabDialog(pParent, "CharDialog",
         "modules/scalc/ui/chardialog.ui", pAttr)
@@ -62,7 +62,7 @@ void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-ScParagraphDlg::ScParagraphDlg(Window* pParent, const SfxItemSet* pAttr)
+ScParagraphDlg::ScParagraphDlg(vcl::Window* pParent, const SfxItemSet* pAttr)
     : SfxTabDialog(pParent, "ParagraphDialog",
         "modules/scalc/ui/paradialog.ui", pAttr)
     , m_nTabPageId(0)

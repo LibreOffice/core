@@ -29,7 +29,7 @@
 namespace sw { namespace sidebar {
 
 PageOrientationControl::PageOrientationControl(
-    Window* pParent,
+    vcl::Window* pParent,
     PagePropertyPanel& rPanel,
     const bool bLandscape )
     : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_ORIENTATION) )

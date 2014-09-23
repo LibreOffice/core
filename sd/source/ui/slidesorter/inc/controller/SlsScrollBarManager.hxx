@@ -30,10 +30,10 @@
 
 class ScrollBar;
 class ScrollBarBox;
-class Window;
+namespace vcl { class Window; }
 
 namespace sd {
-class Window;
+namespace vcl { class Window; }
 }
 
 namespace sd { namespace slidesorter {

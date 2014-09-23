@@ -51,7 +51,7 @@ public:
     SfxWorkWindow*            pWorkWin;
     SvBorder                  aBorder;
     // formerly SfxTopFrame
-    Window*                   pExternalContainerWindow;
+    vcl::Window*                   pExternalContainerWindow;
     bool                      bHidden;
     bool                      bLockResize;
     bool                      bMenuBarOn;

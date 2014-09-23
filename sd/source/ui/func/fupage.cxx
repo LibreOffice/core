@@ -73,7 +73,7 @@ using namespace com::sun::star;
 
 namespace sd {
 
-class Window;
+namespace vcl { class Window; }
 
 // 50 cm 28350
 // adapted from writer
@@ -164,7 +164,7 @@ void FuPage::Deactivate()
 {
 }
 
-const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
+const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
 {
     if (!mpDrawViewShell)
         return NULL;

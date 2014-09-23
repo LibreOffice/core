@@ -45,7 +45,7 @@ public:
         virtual void execute() = 0;
     };
 
-    explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
+    explicit ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
 
     virtual void PopupModeEnd() SAL_OVERRIDE;
@@ -194,7 +194,7 @@ class ScCheckListBox : public SvTreeListBox
 
     public:
 
-    ScCheckListBox( Window* pParent, WinBits nWinStyle = 0 );
+    ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
     virtual ~ScCheckListBox() { delete mpCheckButton; }
     void Init();
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
@@ -234,13 +234,13 @@ public:
         Config();
     };
 
-    explicit ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc);
+    explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc);
     virtual ~ScCheckListMenuWindow();
 
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
-    virtual Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void setMemberSize(size_t n);
@@ -334,7 +334,7 @@ private:
     OKButton        maBtnOk;
     CancelButton    maBtnCancel;
 
-    ::std::vector<Window*>          maTabStopCtrls;
+    ::std::vector<vcl::Window*>          maTabStopCtrls;
     size_t                          mnCurTabStop;
 
     ::std::vector<Member>           maMembers;

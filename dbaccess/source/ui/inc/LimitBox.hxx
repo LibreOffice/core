@@ -23,7 +23,7 @@ namespace dbaui
 class LimitBox: public NumericBox
 {
     public:
-        LimitBox( Window* pParent, WinBits nStyle );
+        LimitBox( vcl::Window* pParent, WinBits nStyle );
         virtual ~LimitBox();
 
         virtual OUString    CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;

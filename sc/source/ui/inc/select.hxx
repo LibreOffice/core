@@ -32,7 +32,7 @@ class ScViewSelectionEngine : public SelectionEngine
 private:
     ScSplitPos      eWhich;
 public:
-                    ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
+                    ScViewSelectionEngine( vcl::Window* pWindow, ScTabView* pView,
                                                     ScSplitPos eSplitPos );
 
     ScSplitPos      GetWhich() const            { return eWhich; }
@@ -103,7 +103,7 @@ public:
 class ScHeaderSelectionEngine : public SelectionEngine
 {
 public:
-                    ScHeaderSelectionEngine( Window* pWindow, ScHeaderFunctionSet* pFuncSet );
+                    ScHeaderSelectionEngine( vcl::Window* pWindow, ScHeaderFunctionSet* pFuncSet );
 };
 
 #endif

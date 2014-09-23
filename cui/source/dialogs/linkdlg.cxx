@@ -85,7 +85,7 @@ static long nTabs[] =
     };
 
 
-SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, bool bHtml )
+SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool bHtml )
     : ModalDialog( pParent, "BaseLinksDialog", "cui/ui/baselinksdialog.ui"),
     aStrAutolink( CUI_RES( STR_AUTOLINK ) ),
     aStrManuallink( CUI_RES( STR_MANUALLINK ) ),

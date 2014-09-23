@@ -40,7 +40,7 @@ class SwMultiTOXMarkDlg : public SvxStandardDialog
 
     void                Apply() SAL_OVERRIDE;
 public:
-    SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr &rTOXMgr );
+    SwMultiTOXMarkDlg( vcl::Window* pParent, SwTOXMgr &rTOXMgr );
     virtual ~SwMultiTOXMarkDlg();
 };
 

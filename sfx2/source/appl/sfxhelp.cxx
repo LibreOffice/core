@@ -79,12 +79,12 @@ using namespace ::com::sun::star::system;
 class NoHelpErrorBox : public MessageDialog
 {
 public:
-    NoHelpErrorBox( Window* _pParent );
+    NoHelpErrorBox( vcl::Window* _pParent );
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 };
 
-NoHelpErrorBox::NoHelpErrorBox( Window* _pParent )
+NoHelpErrorBox::NoHelpErrorBox( vcl::Window* _pParent )
     : MessageDialog(_pParent, SfxResId(RID_STR_HLPFILENOTEXIST))
 {
     // Error message: "No help available"
@@ -403,7 +403,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
     // create all internal windows and sub frames ...
     Reference< ::com::sun::star::awt::XWindow > xParentWindow = xHelpTask->getContainerWindow();
-    Window*                                     pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
+    vcl::Window*                                     pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
     SfxHelpWindow_Impl*                         pHelpWindow   = new SfxHelpWindow_Impl( xHelpTask, pParentWindow, WB_DOCKBORDER );
     Reference< ::com::sun::star::awt::XWindow > xHelpWindow   = VCLUnoHelper::GetInterface( pHelpWindow );
 
@@ -441,7 +441,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
     return pHelpWindow;
 }
 
-OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindow )
+OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* pWindow )
 {
     OUString sModuleName = GetHelpModuleName_Impl();
     OUString sHelpText = SfxHelp_Impl::GetHelpText( aCommandURL, sModuleName );
@@ -451,7 +451,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindo
     if (pWindow && sHelpText.isEmpty())
     {
         // no help text found -> try with parent help id.
-        Window* pParent = pWindow->GetParent();
+        vcl::Window* pParent = pWindow->GetParent();
         while ( pParent )
         {
             aNewHelpId = pParent->GetHelpId();
@@ -498,7 +498,7 @@ bool SfxHelp::SearchKeyword( const OUString& rKeyword )
     return Start_Impl( OUString(), NULL, rKeyword );
 }
 
-bool SfxHelp::Start( const OUString& rURL, const Window* pWindow )
+bool SfxHelp::Start( const OUString& rURL, const vcl::Window* pWindow )
 {
     return Start_Impl( rURL, pWindow, OUString() );
 }
@@ -527,7 +527,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
     return false;
 }
 
-bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const OUString& rKeyword)
+bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword)
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
     AppendConfigToken(aHelpRootURL, true);
@@ -563,7 +563,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const OUSt
             if ( impl_hasHelpInstalled() && pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
             {
                 // no help found -> try with parent help id.
-                Window* pParent = pWindow->GetParent();
+                vcl::Window* pParent = pWindow->GetParent();
                 bool bTriedTabPage = false;
                 while ( pParent )
                 {
@@ -590,7 +590,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const OUSt
                             Dialog *pDialog = ((Dialog*)pParent);
                             TabControl *pCtrl = pDialog->hasBuilder() ? pDialog->get<TabControl>("tabcontrol") : NULL;
                             TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : NULL;
-                            Window *pTabChild = pTabPage ? pTabPage->GetWindow(WINDOW_FIRSTCHILD) : NULL;
+                            vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(WINDOW_FIRSTCHILD) : NULL;
                             if (pTabChild)
                                 pParent = pTabChild;
                         }
@@ -606,7 +606,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const OUSt
         if ( impl_showOnlineHelp( aHelpURL ) )
             return true;
 
-        NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
+        NoHelpErrorBox aErrBox( const_cast< vcl::Window* >( pWindow ) );
         aErrBox.Execute();
         return false;
     }

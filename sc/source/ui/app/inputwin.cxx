@@ -104,7 +104,7 @@ enum ScNameInputType
     SC_MANAGE_NAMES
 };
 
-ScTextWndBase::ScTextWndBase( Window* pParent,  WinBits nStyle )
+ScTextWndBase::ScTextWndBase( vcl::Window* pParent,  WinBits nStyle )
     : Window ( pParent, nStyle )
 {
     if ( IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
@@ -118,7 +118,7 @@ ScTextWndBase::ScTextWndBase( Window* pParent,  WinBits nStyle )
 
 SFX_IMPL_CHILDWINDOW_WITHID(ScInputWindowWrapper,FID_INPUTLINE_STATUS)
 
-ScInputWindowWrapper::ScInputWindowWrapper( Window*          pParentP,
+ScInputWindowWrapper::ScInputWindowWrapper( vcl::Window*          pParentP,
                                             sal_uInt16           nId,
                                             SfxBindings*     pBindings,
                                             SfxChildWinInfo* /* pInfo */ )
@@ -154,7 +154,7 @@ static bool lcl_isExperimentalMode()
 
 //  class ScInputWindow
 
-static ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent, SfxBindings* pBind )
+static ScTextWndBase* lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBindings* pBind )
 {
     ScTabViewShell* pViewSh = NULL;
     SfxDispatcher* pDisp = pBind->GetDispatcher();
@@ -170,7 +170,7 @@ static ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent, SfxBindings* pBind
     return new ScInputBarGroup( pParent, pViewSh );
 }
 
-ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
+ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         // With WB_CLIPCHILDREN otherwise we get flickering
         ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN) ),
         aWndPos         ( this ),
@@ -895,7 +895,7 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
     ToolBox::MouseButtonUp( rMEvt );
 }
 
-ScInputBarGroup::ScInputBarGroup(Window* pParent, ScTabViewShell* pViewSh)
+ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
         aMultiTextWnd        ( this, pViewSh ),
         aButton              ( this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE ),
@@ -949,7 +949,7 @@ void ScInputBarGroup::SetTextString( const OUString& rString )
 
 void ScInputBarGroup::Resize()
 {
-    Window *w=GetParent();
+    vcl::Window *w=GetParent();
     ScInputWindow *pParent;
     pParent=dynamic_cast<ScInputWindow*>(w);
 
@@ -1054,7 +1054,7 @@ void ScInputBarGroup::DecrementVerticalSize()
 
 IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
 {
-    Window *w=GetParent();
+    vcl::Window *w=GetParent();
     ScInputWindow *pParent;
     pParent=dynamic_cast<ScInputWindow*>(w);
 
@@ -1081,7 +1081,7 @@ IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
 
 void ScInputBarGroup::TriggerToolboxLayout()
 {
-    Window *w=GetParent();
+    vcl::Window *w=GetParent();
     ScInputWindow &rParent = dynamic_cast<ScInputWindow&>(*w);
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
@@ -1436,7 +1436,7 @@ void ScMultiTextWnd::SetTextString( const OUString& rNewString )
     DoScroll();
 }
 
-ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
+ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE | WB_BORDER) ),
         DragSourceHelper( this ),
         pEditEngine  ( NULL ),
@@ -2049,7 +2049,7 @@ void ScTextWnd::TextGrabFocus()
 
 // Position window
 
-ScPosWnd::ScPosWnd( Window* pParent ) :
+ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
     ComboBox    ( pParent, WinBits(WB_HIDE | WB_DROPDOWN) ),
     pAccel      ( NULL ),
     nTipVisible ( 0 ),
@@ -2321,7 +2321,7 @@ void ScPosWnd::Modify()
         {
             // show the help tip at the text cursor position
 
-            Window* pWin = GetSubEdit();
+            vcl::Window* pWin = GetSubEdit();
             if (!pWin)
                 pWin = this;
             Point aPos;
@@ -2519,7 +2519,7 @@ void ScPosWnd::ReleaseFocus_Impl()
     // Set focus to active View
     if ( pCurSh )
     {
-        Window* pShellWnd = pCurSh->GetWindow();
+        vcl::Window* pShellWnd = pCurSh->GetWindow();
 
         if ( pShellWnd )
             pShellWnd->GrabFocus();

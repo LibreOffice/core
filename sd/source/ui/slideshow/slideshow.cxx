@@ -185,7 +185,7 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase& rBase )
 bool SlideShow::StartPreview( ViewShellBase& rBase,
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
     const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
-    ::Window* pParent /* = 0 */ )
+    vcl::Window* pParent /* = 0 */ )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
     if( xSlideShow.is() )
@@ -213,7 +213,7 @@ bool SlideShow::IsRunning( ViewShell& rViewShell )
     return xSlideShow.is() && xSlideShow->isRunning() && (xSlideShow->mxController->getViewShell() == &rViewShell);
 }
 
-void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, ::Window* pParentWindow )
+void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, vcl::Window* pParentWindow )
 {
     DBG_ASSERT( !mxController.is(), "sd::SlideShow::CreateController(), clean up old controller first!" );
 
@@ -900,7 +900,7 @@ void SAL_CALL SlideShow::disposing (void)
     mpDoc = 0;
 }
 
-bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode, ::Window* pParent )
+bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode, vcl::Window* pParent )
 {
     Sequence< PropertyValue > aArguments(4);
 
@@ -1108,7 +1108,7 @@ void SlideShow::StartInPlacePresentation()
         }
         else
         {
-            ::Window* pParentWindow = mxCurrentSettings->mpParentWindow;
+            vcl::Window* pParentWindow = mxCurrentSettings->mpParentWindow;
             if( pParentWindow == 0 )
                 pParentWindow = mpCurrentViewShellBase->GetViewWindow();
 

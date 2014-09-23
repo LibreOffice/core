@@ -952,7 +952,7 @@ void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark
 }
 
 SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* _pBindings,
-    SfxChildWindow* pChild, Window *pParent,
+    SfxChildWindow* pChild, vcl::Window *pParent,
     SfxChildWinInfo* pInfo, bool bNew)
     : SfxModelessDialog(_pBindings, pChild, pParent, "IndexEntryDialog", "modules/swriter/ui/indexentry.ui")
     , m_aContent(*this, bNew, *::GetActiveWrtShell())
@@ -972,7 +972,7 @@ void SwIndexMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
     m_aContent.ReInitDlg( rWrtShell );
 }
 
-SwIndexMarkModalDlg::SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark)
+SwIndexMarkModalDlg::SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark)
     : SvxStandardDialog(pParent, "IndexEntryDialog", "modules/swriter/ui/indexentry.ui")
     , m_aContent(*this, false, rSh)
 {
@@ -1005,7 +1005,7 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
     DECL_LINK(EnableHdl, ListBox* pBox);
 
 public:
-    SwCreateAuthEntryDlg_Impl(Window* pParent,
+    SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
                             const OUString pFields[],
                             SwWrtShell& rSh,
                             bool bNewEntry,
@@ -1416,7 +1416,7 @@ void SwAuthorMarkPane::Activate()
     m_pActionBT->Enable(!pSh->HasReadonlySel());
 }
 
-SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
+SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         const OUString pFields[],
         SwWrtShell& rSh,
         bool bNewEntry,
@@ -1604,7 +1604,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox*, pBox)
 
 SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
                                    SfxChildWindow* pChild,
-                                   Window *pParent,
+                                   vcl::Window *pParent,
                                    SfxChildWinInfo* pInfo,
                                    bool bNew)
     : SfxModelessDialog(_pBindings, pChild, pParent,
@@ -1628,7 +1628,7 @@ void SwAuthMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
     m_aContent.ReInitDlg( rWrtShell );
 }
 
-SwAuthMarkModalDlg::SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh)
+SwAuthMarkModalDlg::SwAuthMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh)
     : SvxStandardDialog(pParent, "BibliographyEntryDialog",
         "modules/swriter/ui/bibliographyentry.ui")
     , m_aContent(*this, false)

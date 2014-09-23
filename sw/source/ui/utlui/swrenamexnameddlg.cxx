@@ -51,7 +51,7 @@
 
 using namespace ::com::sun::star;
 
-SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
+SwRenameXNamedDlg::SwRenameXNamedDlg( vcl::Window* pWin,
             uno::Reference< container::XNamed > & xN,
             uno::Reference< container::XNameAccess > & xNA )
     : ModalDialog(pWin, "RenameObjectDialog",

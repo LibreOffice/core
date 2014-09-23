@@ -48,7 +48,7 @@ namespace svx
         CheckBox* m_pBlockUntrustedRefererLinksCB;
 
     public:
-        SecurityOptionsDialog( Window* pParent, SvtSecurityOptions* pOptions );
+        SecurityOptionsDialog( vcl::Window* pParent, SvtSecurityOptions* pOptions );
         virtual ~SecurityOptionsDialog();
 
         bool IsSaveOrSendDocsChecked() const { return m_pSaveOrSendDocsCB->IsChecked(); }

@@ -74,9 +74,9 @@ using namespace ::svt::table;
 
 namespace {
 
-inline bool hasFloatingChild(Window *pWindow)
+inline bool hasFloatingChild(vcl::Window *pWindow)
 {
-    Window * pChild = pWindow->GetAccessibleChildWindow(0);
+    vcl::Window * pChild = pWindow->GetAccessibleChildWindow(0);
     if( pChild && WINDOW_FLOATINGWINDOW == pChild->GetType() )
         return true;
 
@@ -304,7 +304,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 {
     Reference< XAccessibleContext > xContext;
 
-    Window* pWindow = _pXWindow->GetWindow();
+    vcl::Window* pWindow = _pXWindow->GetWindow();
     if ( pWindow )
     {
         WindowType nType = pWindow->GetType();
@@ -348,7 +348,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
             // The logic here has to match that of Window::GetAccessibleParentWindow in
             // vcl/source/window/window.cxx to avoid PopupMenuFloatingWindow
             // becoming a11y parents of themselves
-            Window* pChild = pWindow->GetAccessibleChildWindow(0);
+            vcl::Window* pChild = pWindow->GetAccessibleChildWindow(0);
             if (PopupMenuFloatingWindow::isPopupMenu(pChild))
             {
                 // Get the accessible context from the child window.

@@ -112,7 +112,7 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 
 //          ScContentTree
 
-ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
+ScContentTree::ScContentTree( vcl::Window* pParent, const ResId& rResId ) :
     SvTreeListBox   ( pParent, rResId ),
     aEntryImages    ( ScResId( RID_IMAGELIST_NAVCONT ) ),
     nRootType       ( SC_CONTENT_ROOT ),
@@ -483,7 +483,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                     case SC_CONTENT_GRAPHIC:
                     case SC_CONTENT_DRAWING:
                     {
-                        Window* pWindow=(Window*)GetParent(pEntry);
+                        vcl::Window* pWindow=(vcl::Window*)GetParent(pEntry);
                         ScNavigatorDlg* pScNavigatorDlg = (ScNavigatorDlg*)pWindow;
                         ScTabViewShell* pScTabViewShell = NULL;
                         ScDrawView* pScDrawView = NULL;
@@ -965,12 +965,12 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                                     SvTreeListEntry* pChild=InsertEntry( aName, pParent );
                                     if(pChild)
                                         pChild->SetMarked(false);
-                                    Window* pWindow=NULL;
+                                    vcl::Window* pWindow=NULL;
                                     ScTabViewShell* pScTabViewShell=NULL;
                                     ScDrawView* pScDrawView=NULL;
                                     ScNavigatorDlg* pScNavigatorDlg=NULL;
                                     if(pChild)
-                                         pWindow=(Window*)GetParent(pChild);
+                                         pWindow=(vcl::Window*)GetParent(pChild);
                                     if(pWindow)
                                             pScNavigatorDlg = (ScNavigatorDlg*)pWindow;
                                     if (pScNavigatorDlg!=NULL)
@@ -1219,7 +1219,7 @@ static bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const OUString& rN
     return bFound;
 }
 
-static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, sal_uInt16 nType, Window* pWin )
+static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, sal_uInt16 nType, vcl::Window* pWin )
 {
     ScDocument& rSrcDoc = pSrcShell->GetDocument();
     ScDrawLayer* pModel = rSrcDoc.GetDrawLayer();
@@ -1257,7 +1257,7 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, sal_
     }
 }
 
-static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, sal_uInt16 nFlags, Window* pWin )
+static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, sal_uInt16 nFlags, vcl::Window* pWin )
 {
     ScMarkData aMark;
     aMark.SelectTable( rRange.aStart.Tab(), true );

@@ -92,7 +92,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Window*     pFocusWindow = Application::GetFocusWindow();
+    vcl::Window*     pFocusWindow = Application::GetFocusWindow();
     bool    bRet;
 
     if( pFocusWindow )

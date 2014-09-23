@@ -194,11 +194,11 @@ public:
     void SetMasterPagePaintCaching(bool bOn);
     bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }
 
-    bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual bool Command(const CommandEvent& rCEvt, Window* pWin) SAL_OVERRIDE;
+    bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    virtual bool Command(const CommandEvent& rCEvt, vcl::Window* pWin) SAL_OVERRIDE;
 
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 
@@ -270,17 +270,17 @@ public:
 // ~~~~~~~~~~~~~~~~~~~~
 //   Einfache Events:
 //   ~~~~~~~~~~~~~~~~
-//     sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
-//     sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-//     sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-//     sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
-//     sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
+//     sal_Bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
+//     sal_Bool MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin);
+//     sal_Bool MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin);
+//     sal_Bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin);
+//     sal_Bool Command(const CommandEvent& rCEvt, vcl::Window* pWin);
 //
 //   Exchange (Clipboard derzeit noch ohne SdrPrivateData):
 //   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //     sal_Bool Cut(sal_uIntPtr nFormat=SDR_ANYFORMAT);
 //     sal_Bool Yank(sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//     sal_Bool Paste(Window* pWin=NULL, sal_uIntPtr nFormat=SDR_ANYFORMAT);
+//     sal_Bool Paste(vcl::Window* pWin=NULL, sal_uIntPtr nFormat=SDR_ANYFORMAT);
 //
 //   SfxItems:
 //   ~~~~~~~~~

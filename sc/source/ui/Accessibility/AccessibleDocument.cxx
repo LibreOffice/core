@@ -1414,14 +1414,14 @@ ScAccessibleDocument::ScAccessibleDocument(
     if (pViewShell)
     {
         pViewShell->AddAccessibilityObject(*this);
-        Window *pWin = pViewShell->GetWindowByPos(eSplitPos);
+        vcl::Window *pWin = pViewShell->GetWindowByPos(eSplitPos);
         if( pWin )
         {
             pWin->AddChildEventListener( LINK( this, ScAccessibleDocument, WindowChildEventListener ));
             sal_uInt16 nCount =   pWin->GetChildCount();
             for( sal_uInt16 i=0; i < nCount; ++i )
             {
-                Window *pChildWin = pWin->GetChild( i );
+                vcl::Window *pChildWin = pWin->GetChild( i );
                 if( pChildWin &&
                     AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                     AddChild( pChildWin->GetAccessible(), false );
@@ -1461,7 +1461,7 @@ void SAL_CALL ScAccessibleDocument::disposing()
     FreeAccessibleSpreadsheet();
     if (mpViewShell)
     {
-        Window *pWin = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window *pWin = mpViewShell->GetWindowByPos(meSplitPos);
         if( pWin )
             pWin->RemoveChildEventListener( LINK( this, ScAccessibleDocument, WindowChildEventListener ));
 
@@ -1493,7 +1493,7 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
         {
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
             {
-                Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
+                vcl::Window* pChildWin = static_cast < vcl::Window * >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     AddChild( pChildWin->GetAccessible(), true );
@@ -1502,7 +1502,7 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
             break;
         case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
             {
-                Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
+                vcl::Window* pChildWin = static_cast < vcl::Window * >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     RemoveChild( pChildWin->GetAccessible(), true );
@@ -2228,7 +2228,7 @@ Rectangle ScAccessibleDocument::GetBoundingBoxOnScreen() const
     Rectangle aRect;
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
             aRect = pWindow->GetWindowExtentsRelative(NULL);
     }
@@ -2241,7 +2241,7 @@ Rectangle ScAccessibleDocument::GetBoundingBox() const
     Rectangle aRect;
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
             aRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
     }

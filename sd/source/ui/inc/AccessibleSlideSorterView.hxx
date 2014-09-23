@@ -34,7 +34,7 @@
 
 #include <memory>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -65,7 +65,7 @@ public:
     AccessibleSlideSorterView(
         ::sd::slidesorter::SlideSorter& rSlideSorter,
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> & rxParent,
-        ::Window* pParentWindow);
+        vcl::Window* pParentWindow);
 
     void Init();
 
@@ -297,7 +297,7 @@ private:
 
     sal_uInt32 mnClientId;
 
-    ::Window* mpContentWindow;
+    vcl::Window* mpContentWindow;
 
     /** Check whether or not the object has been disposed (or is in the
         state of being disposed).  If that is the case then

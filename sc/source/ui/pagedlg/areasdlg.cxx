@@ -86,7 +86,7 @@ static void printAddressFlags(sal_uInt16 nFlag)
 
 //  class ScPrintAreasDlg
 
-ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent )
+ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent )
     : ScAnyRefDlg(pB, pCW, pParent, "PrintAreasDialog", "modules/scalc/ui/printareasdialog.ui")
     , bDlgLostFocus(false)
     , pDoc(NULL)

@@ -83,7 +83,7 @@ enum FrameBorderState
 class SVX_DLLPUBLIC FrameSelector : public Control
 {
 public:
-    FrameSelector(Window* pParent);
+    FrameSelector(vcl::Window* pParent);
     virtual             ~FrameSelector();
 
     /** Initializes the control, enables/disables frame borders according to flags. */

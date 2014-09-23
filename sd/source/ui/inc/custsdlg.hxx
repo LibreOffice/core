@@ -55,7 +55,7 @@ private:
     DECL_LINK( StartShowHdl, void* );
 
 public:
-                SdCustomShowDlg( Window* pWindow, SdDrawDocument& rDrawDoc );
+                SdCustomShowDlg( vcl::Window* pWindow, SdDrawDocument& rDrawDoc );
                 virtual ~SdCustomShowDlg();
 
     bool        IsModified() const { return( bModified ); }
@@ -87,7 +87,7 @@ private:
 
 public:
 
-                    SdDefineCustomShowDlg( Window* pWindow,
+                    SdDefineCustomShowDlg( vcl::Window* pWindow,
                             SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS );
                     virtual ~SdDefineCustomShowDlg();
 

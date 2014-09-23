@@ -1276,14 +1276,14 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             pViewFrame->GetDispatcher()->Flush();
         }
 
-        Window* pEditWin = m_pData->m_pViewShell->GetWindow();
+        vcl::Window* pEditWin = m_pData->m_pViewShell->GetWindow();
         if ( pEditWin && m_pData->m_pViewShell->IsShowView_Impl() )
             pEditWin->Show();
 
         if ( SfxViewFrame::Current() == pViewFrame )
             pViewFrame->GetDispatcher()->Update_Impl( true );
 
-        Window* pFrameWin = &pViewFrame->GetWindow();
+        vcl::Window* pFrameWin = &pViewFrame->GetWindow();
         if ( pFrameWin != &pViewFrame->GetFrame().GetWindow() )
             pFrameWin->Show();
 

@@ -141,7 +141,7 @@ namespace pcr
     }
 
 
-    Dialog* OControlFontDialog::createDialog(Window* _pParent)
+    Dialog* OControlFontDialog::createDialog(vcl::Window* _pParent)
     {
         ControlCharacterDialog::createItemSet(m_pFontItems, m_pItemPool, m_pItemPoolDefaults);
 

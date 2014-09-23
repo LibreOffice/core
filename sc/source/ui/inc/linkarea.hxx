@@ -62,7 +62,7 @@ private:
                                         const OUString& rOptions );
 
 public:
-            ScLinkedAreaDlg( Window* pParent );
+            ScLinkedAreaDlg( vcl::Window* pParent );
             virtual ~ScLinkedAreaDlg();
 
     void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,

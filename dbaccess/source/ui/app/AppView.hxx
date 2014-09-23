@@ -42,7 +42,7 @@ namespace dbaui
     class OApplicationDetailView;
     class OApplicationSwapWindow;
     class OTitleWindow;
-    class OAppBorderWindow : public Window
+    class OAppBorderWindow : public vcl::Window
     {
         OTitleWindow*                       m_pPanel;
         OApplicationDetailView*             m_pDetailView;
@@ -97,7 +97,7 @@ namespace dbaui
         // Window
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     public:
-        OApplicationView(   Window* pParent
+        OApplicationView(   vcl::Window* pParent
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
                             ,IApplicationController&            _rAppController
                             ,PreviewMode _ePreviewMode

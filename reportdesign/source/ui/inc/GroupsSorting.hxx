@@ -143,7 +143,7 @@ protected:
     // OPropertyChangeListener
     virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 public:
-    OGroupsSortingDialog( Window* pParent
+    OGroupsSortingDialog( vcl::Window* pParent
                         ,bool _bReadOnly
                         ,::rptui::OReportController* _pController);
     virtual ~OGroupsSortingDialog();

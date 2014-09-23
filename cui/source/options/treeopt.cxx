@@ -286,8 +286,8 @@ void MailMergeCfg_Impl::Notify( const com::sun::star::uno::Sequence< OUString >&
 {
 }
 
-//typedef SfxTabPage* (*FNCreateTabPage)( Window *pParent, const SfxItemSet &rAttrSet );
-SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
+//typedef SfxTabPage* (*FNCreateTabPage)( vcl::Window *pParent, const SfxItemSet &rAttrSet );
+SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
 {
     CreateTabPage fnCreate = 0;
     switch(nId)
@@ -510,7 +510,7 @@ void OfaTreeOptionsDialog::InitWidgets()
 // Ctor() with Frame -----------------------------------------------------
 using namespace ::com::sun::star;
 OfaTreeOptionsDialog::OfaTreeOptionsDialog(
-    Window* pParent,
+    vcl::Window* pParent,
     const Reference< XFrame >& _xFrame,
     bool bActivateLastSelection ) :
 
@@ -529,7 +529,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(
 }
 
 // Ctor() with ExtensionId -----------------------------------------------
-OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const OUString& rExtensionId ) :
+OfaTreeOptionsDialog::OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId ) :
 
     SfxModalDialog( pParent, "OptionsDialog", "cui/ui/optionsdialog.ui" ),
     INI_LIST()
@@ -1131,7 +1131,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     pNewPage = pPageInfo->m_pPage;
 
     // restore lost focus, if necessary
-    Window* pFocusWin = Application::GetFocusWindow();
+    vcl::Window* pFocusWin = Application::GetFocusWindow();
     // if the focused window is not the options treebox and the old page has the focus
     if ( pFocusWin && pFocusWin != pBox && pOldPage && pOldPage->HasChildPathFocus() )
         // then set the focus to the new page or if we are on a group set the focus to the options treebox
@@ -1142,7 +1142,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     OString sHelpId(HID_OFADLG_TREELISTBOX);
     if (::isLayoutEnabled(pNewPage))
     {
-        Window *pFirstChild = pNewPage->GetWindow(WINDOW_FIRSTCHILD);
+        vcl::Window *pFirstChild = pNewPage->GetWindow(WINDOW_FIRSTCHILD);
         assert(pFirstChild);
         sHelpId = pFirstChild->GetHelpId();
     }
@@ -2151,7 +2151,7 @@ short OfaTreeOptionsDialog::Execute()
 
 // class ExtensionsTabPage -----------------------------------------------
 ExtensionsTabPage::ExtensionsTabPage(
-    Window* pParent, WinBits nStyle, const OUString& rPageURL,
+    vcl::Window* pParent, WinBits nStyle, const OUString& rPageURL,
     const OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider ) :
 
     TabPage( pParent, nStyle ),
@@ -2214,7 +2214,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
                 Reference< awt::XWindowPeer > xWinPeer( xPageControl->getPeer() );
                 if ( xWinPeer.is() )
                 {
-                    Window* pWindow = VCLUnoHelper::GetWindow( xWinPeer );
+                    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWinPeer );
                     if ( pWindow )
                         pWindow->SetStyle( pWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
                 }

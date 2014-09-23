@@ -43,7 +43,7 @@ namespace svx
     //= ODocumentLinkDialog
 
 
-    ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, bool _bCreateNew )
+    ODocumentLinkDialog::ODocumentLinkDialog( vcl::Window* _pParent, bool _bCreateNew )
         : ModalDialog(_pParent, "DatabaseLinkDialog",
             "cui/ui/databaselinkdialog.ui")
         ,m_bCreatingNew(_bCreateNew)

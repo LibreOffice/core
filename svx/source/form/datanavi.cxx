@@ -124,7 +124,7 @@ namespace svxform
             m_xPropSet( _rxSet ) {}
     };
 
-    DataTreeListBox::DataTreeListBox(Window* pParent, WinBits nBits)
+    DataTreeListBox::DataTreeListBox(vcl::Window* pParent, WinBits nBits)
         : SvTreeListBox(pParent, nBits)
         , m_pXFormsPage(NULL)
         , m_eGroup(DGTUnknown)
@@ -291,12 +291,12 @@ namespace svxform
 
     // class XFormsPage
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDataTreeListBox(Window *pParent, VclBuilder::stringmap &)
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDataTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
     {
         return new DataTreeListBox((XFormsPage*)pParent, WB_BORDER);
     }
 
-    XFormsPage::XFormsPage( Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup ) :
+    XFormsPage::XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup ) :
 
         TabPage( pParent, "XFormsPage", "svx/ui/xformspage.ui" ),
         m_pNaviWin      ( _pNaviWin ),
@@ -1343,7 +1343,7 @@ namespace svxform
         }
     }
 
-    DataNavigatorWindow::DataNavigatorWindow(Window* pParent, SfxBindings* pBindings)
+    DataNavigatorWindow::DataNavigatorWindow(vcl::Window* pParent, SfxBindings* pBindings)
         : Window(pParent)
         , m_pInstPage(NULL)
         , m_pSubmissionPage(NULL)
@@ -2045,7 +2045,7 @@ namespace svxform
 
     void DataNavigatorWindow::Resize()
     {
-        Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+        vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
         if (!pChild)
             return;
         VclContainer::setLayoutAllocation(*pChild, Point(0,0), GetSizePixel());
@@ -2053,7 +2053,7 @@ namespace svxform
 
     Size DataNavigatorWindow::GetOptimalSize() const
     {
-        const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+        const vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
         if (!pChild)
             return Window::GetOptimalSize();
         return VclContainer::getLayoutRequisition(*pChild);
@@ -2128,7 +2128,7 @@ namespace svxform
         }
     }
 
-    DataNavigator::DataNavigator( SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent ) :
+    DataNavigator::DataNavigator( SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent ) :
 
         SfxDockingWindow( _pBindings, _pMgr, _pParent,
                           WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) ),
@@ -2234,7 +2234,7 @@ namespace svxform
 
 
     DataNavigatorManager::DataNavigatorManager(
-        Window* _pParent, sal_uInt16 _nId, SfxBindings* _pBindings, SfxChildWinInfo* _pInfo ) :
+        vcl::Window* _pParent, sal_uInt16 _nId, SfxBindings* _pBindings, SfxChildWinInfo* _pInfo ) :
 
         SfxChildWindow( _pParent, _nId )
 
@@ -2245,7 +2245,7 @@ namespace svxform
         ( (SfxDockingWindow*)pWindow )->Initialize( _pInfo );
     }
 
-    AddDataItemDialog::AddDataItemDialog(Window* pParent, ItemNode* _pNode,
+    AddDataItemDialog::AddDataItemDialog(vcl::Window* pParent, ItemNode* _pNode,
         const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper)
         : ModalDialog(pParent, "AddDataItemDialog" , "svx/ui/adddataitemdialog.ui")
         , m_xUIHelper(_rUIHelper)
@@ -2722,7 +2722,7 @@ namespace svxform
         m_pItemFrame->set_label(sText);
     }
 
-    AddConditionDialog::AddConditionDialog(Window* pParent,
+    AddConditionDialog::AddConditionDialog(vcl::Window* pParent,
         const OUString& _rPropertyName,
         const Reference< XPropertySet >& _rPropSet)
         : ModalDialog(pParent, "AddConditionDialog", "svx/ui/addconditiondialog.ui")
@@ -3017,7 +3017,7 @@ namespace svxform
         }
     }
 
-    ManageNamespaceDialog::ManageNamespaceDialog(Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit)
+    ManageNamespaceDialog::ManageNamespaceDialog(vcl::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit)
         : ModalDialog(pParent, "AddNamespaceDialog", "svx/ui/addnamespacedialog.ui")
         , m_pConditionDlg ( _pCondDlg )
     {
@@ -3057,7 +3057,7 @@ namespace svxform
     }
 
     AddSubmissionDialog::AddSubmissionDialog(
-        Window* pParent, ItemNode* _pNode,
+        vcl::Window* pParent, ItemNode* _pNode,
         const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper)
         : ModalDialog(pParent, "AddSubmissionDialog",
             "svx/ui/addsubmissiondialog.ui")
@@ -3274,7 +3274,7 @@ namespace svxform
         m_pRefBtn->Enable( m_xTempBinding.is() );
     }
 
-    AddModelDialog::AddModelDialog(Window* pParent, bool bIsEdit)
+    AddModelDialog::AddModelDialog(vcl::Window* pParent, bool bIsEdit)
         : ModalDialog(pParent, "AddModelDialog", "svx/ui/addmodeldialog.ui")
     {
         get(m_pNameED, "name");
@@ -3284,7 +3284,7 @@ namespace svxform
             SetText(get<FixedText>("alttitle")->GetText());
     }
 
-    AddInstanceDialog::AddInstanceDialog(Window* pParent, bool _bEdit)
+    AddInstanceDialog::AddInstanceDialog(vcl::Window* pParent, bool _bEdit)
         : ModalDialog(pParent, "AddInstanceDialog" , "svx/ui/addinstancedialog.ui")
     {
         get(m_pNameED, "name");
@@ -3322,7 +3322,7 @@ namespace svxform
         return 0;
     }
 
-    LinkedInstanceWarningBox::LinkedInstanceWarningBox( Window* pParent )
+    LinkedInstanceWarningBox::LinkedInstanceWarningBox( vcl::Window* pParent )
         : MessageDialog(pParent, "FormLinkWarnDialog", "svx/ui/formlinkwarndialog.ui")
     {
     }

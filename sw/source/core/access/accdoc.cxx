@@ -99,7 +99,7 @@ void SwAccessibleDocumentBase::SetVisArea()
     }
 }
 
-void SwAccessibleDocumentBase::AddChild( Window *pWin, bool bFireEvent )
+void SwAccessibleDocumentBase::AddChild( vcl::Window *pWin, bool bFireEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -118,7 +118,7 @@ void SwAccessibleDocumentBase::AddChild( Window *pWin, bool bFireEvent )
     }
 }
 
-void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
+void SwAccessibleDocumentBase::RemoveChild( vcl::Window *pWin )
 {
     SolarMutexGuard aGuard;
 
@@ -243,7 +243,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
     {
         SolarMutexGuard aGuard;
 
-        Window *pWin = GetWindow();
+        vcl::Window *pWin = GetWindow();
 
         CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
@@ -264,7 +264,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 {
     SolarMutexGuard aGuard;
 
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
@@ -279,7 +279,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 {
     SolarMutexGuard aGuard;
 
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
@@ -294,7 +294,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 {
     SolarMutexGuard aGuard;
 
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
@@ -310,7 +310,7 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
 {
     SolarMutexGuard aGuard;
 
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
@@ -331,7 +331,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
     {
         CHECK_FOR_DEFUNC( XAccessibleComponent )
 
-        Window *pWin = GetWindow();
+        vcl::Window *pWin = GetWindow();
         CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
         Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
@@ -359,14 +359,14 @@ SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
     maSelectionHelper( *this )
 {
     SetName( GetResource( STR_ACCESS_DOC_NAME ) );
-    Window *pWin = pInitMap->GetShell()->GetWin();
+    vcl::Window *pWin = pInitMap->GetShell()->GetWin();
     if( pWin )
     {
         pWin->AddChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
         sal_uInt16 nCount =   pWin->GetChildCount();
         for( sal_uInt16 i=0; i < nCount; i++ )
         {
-            Window* pChildWin = pWin->GetChild( i );
+            vcl::Window* pChildWin = pWin->GetChild( i );
             if( pChildWin &&
                 AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 AddChild( pChildWin, false );
@@ -376,7 +376,7 @@ SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
 
 SwAccessibleDocument::~SwAccessibleDocument()
 {
-    Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
+    vcl::Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
     if( pWin )
         pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
 }
@@ -385,7 +385,7 @@ void SwAccessibleDocument::Dispose( bool bRecursive )
 {
     OSL_ENSURE( GetFrm() && GetMap(), "already disposed" );
 
-    Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
+    vcl::Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
     if( pWin )
         pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
     SwAccessibleContext::Dispose( bRecursive );
@@ -402,7 +402,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
         {
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
             {
-                Window* pChildWin = static_cast< Window* >( pVclEvent->GetData() );
+                vcl::Window* pChildWin = static_cast< vcl::Window* >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     AddChild( pChildWin );
@@ -411,7 +411,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
             break;
         case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
             {
-                Window* pChildWin = static_cast< Window* >( pVclEvent->GetData() );
+                vcl::Window* pChildWin = static_cast< vcl::Window* >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     RemoveChild( pChildWin );
@@ -420,7 +420,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
             break;
         case VCLEVENT_OBJECT_DYING:  // send destroy on hide for direct accessible children
             {
-                Window* pChildWin = pVclEvent->GetWindow();
+                vcl::Window* pChildWin = pVclEvent->GetWindow();
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     RemoveChild( pChildWin );

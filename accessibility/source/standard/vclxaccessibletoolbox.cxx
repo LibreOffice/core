@@ -425,7 +425,7 @@ void VCLXAccessibleToolBox::UpdateAllItems_Impl()
     }
 }
 
-void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( Window* pWindow, bool bOpen )
+void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( vcl::Window* pWindow, bool bOpen )
 {
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if( pWindow && pToolBox )
@@ -458,7 +458,7 @@ void VCLXAccessibleToolBox::UpdateItemEnabled_Impl( sal_Int32 _nPos )
 
 void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent, bool _bShow )
 {
-    Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
+    vcl::Window* pChildWindow = (vcl::Window *) rVclWindowEvent.GetData();
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pChildWindow
         && pToolBox
@@ -605,7 +605,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
         case VCLEVENT_DROPDOWN_OPEN:
         case VCLEVENT_DROPDOWN_CLOSE:
         {
-            UpdateCustomPopupItemp_Impl( static_cast< Window* >( rVclWindowEvent.GetData() ), rVclWindowEvent.GetId() == VCLEVENT_DROPDOWN_OPEN );
+            UpdateCustomPopupItemp_Impl( static_cast< vcl::Window* >( rVclWindowEvent.GetData() ), rVclWindowEvent.GetId() == VCLEVENT_DROPDOWN_OPEN );
             break;
         }
 
@@ -723,7 +723,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
         {
             sal_uInt16 nItemId = pToolBox->GetItemId( (sal_uInt16)i );
             sal_uInt16 nHighlightItemId = pToolBox->GetHighlightItemId();
-            Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
+            vcl::Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
             // not found -> create a new child
             VCLXAccessibleToolBoxItem* pChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
             Reference< XAccessible> xParent = pChild;
@@ -772,7 +772,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( c
 Reference< XAccessible > VCLXAccessibleToolBox::GetItemWindowAccessible( const VclWindowEvent& rVclWindowEvent )
 {
     Reference< XAccessible > xReturn;
-    Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
+    vcl::Window* pChildWindow = (vcl::Window *) rVclWindowEvent.GetData();
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pChildWindow && pToolBox )
     {
@@ -780,7 +780,7 @@ Reference< XAccessible > VCLXAccessibleToolBox::GetItemWindowAccessible( const V
         for (sal_uInt16 i = 0 ; i < nCount && !xReturn.is() ; ++i)
         {
             sal_uInt16 nItemId = pToolBox->GetItemId( i );
-            Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
+            vcl::Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
             if ( pItemWindow == pChildWindow )
                 xReturn = getAccessibleChild(i);
         }

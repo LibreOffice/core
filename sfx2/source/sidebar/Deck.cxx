@@ -42,7 +42,7 @@ namespace sfx2 { namespace sidebar {
 
 Deck::Deck (
     const DeckDescriptor& rDeckDescriptor,
-    Window* pParentWindow,
+    vcl::Window* pParentWindow,
     const ::boost::function<void(void)>& rCloserAction)
     : Window(pParentWindow, 0),
       msId(rDeckDescriptor.msId),
@@ -52,9 +52,9 @@ Deck::Deck (
       mnMinimalWidth(0),
       maPanels(),
       mpTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, this, rCloserAction)),
-      mpScrollClipWindow(new Window(this)),
+      mpScrollClipWindow(new vcl::Window(this)),
       mpScrollContainer(new ScrollContainerWindow(mpScrollClipWindow.get())),
-      mpFiller(new Window(this)),
+      mpFiller(new vcl::Window(this)),
       mpVerticalScrollBar(new ScrollBar(this))
 {
     SetBackground(Wallpaper());
@@ -254,7 +254,7 @@ void Deck::RequestLayout (void)
         *mpVerticalScrollBar);
 }
 
-::Window* Deck::GetPanelParentWindow (void)
+vcl::Window* Deck::GetPanelParentWindow (void)
 {
     return mpScrollContainer.get();
 }
@@ -291,7 +291,7 @@ void Deck::ShowPanel (const Panel& rPanel)
 
 
 
-const OUString GetWindowClassification (const Window* pWindow)
+const OUString GetWindowClassification (const vcl::Window* pWindow)
 {
     const OUString& rsName (pWindow->GetText());
     if (!rsName.isEmpty())
@@ -305,7 +305,7 @@ const OUString GetWindowClassification (const Window* pWindow)
 }
 
 
-void Deck::PrintWindowSubTree (Window* pRoot, int nIndentation)
+void Deck::PrintWindowSubTree (vcl::Window* pRoot, int nIndentation)
 {
     static const char* sIndentation = "                                                                  ";
     const Point aLocation (pRoot->GetPosPixel());
@@ -345,7 +345,7 @@ IMPL_LINK(Deck, HandleVerticalScrollBarChange,void*, EMPTYARG)
 
 //----- Deck::ScrollContainerWindow -------------------------------------------
 
-Deck::ScrollContainerWindow::ScrollContainerWindow (Window* pParentWindow)
+Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
     : Window(pParentWindow),
       maSeparators()
 {

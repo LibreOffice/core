@@ -37,7 +37,7 @@
 
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
-ScTabBgColorDlg::ScTabBgColorDlg(Window* pParent, const OUString& rTitle,
+ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,
     const OUString& rTabBgColorNoColorText, const Color& rDefaultColor,
     const OString& sHelpId)
     : ModalDialog(pParent, "TabColorDialog", "modules/scalc/ui/tabcolordialog.ui")
@@ -130,13 +130,13 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl)
     return 0;
 }
 
-ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(Window* pParent, WinBits nStyle)
+ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(vcl::Window* pParent, WinBits nStyle)
     : SvxColorValueSet(pParent, nStyle)
     , m_pTabBgColorDlg(NULL)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScTabBgColorValueSet(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScTabBgColorValueSet(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 

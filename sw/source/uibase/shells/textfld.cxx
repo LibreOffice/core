@@ -115,7 +115,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
 
-    Window *pMDI = &GetView().GetViewFrame()->GetWindow();
+    vcl::Window *pMDI = &GetView().GetViewFrame()->GetWindow();
     bool bMore = false;
     bool bIsText = true;
     sal_uInt16 nInsertType = 0;

@@ -237,7 +237,7 @@ class MappingDialog_Impl : public ModalDialog
     DECL_LINK(ListBoxSelectHdl, ListBox*);
 
 public:
-    MappingDialog_Impl(Window* pParent, BibDataManager* pDatMan);
+    MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pDatMan);
     virtual ~MappingDialog_Impl();
 
     void    SetModified() {bModified = true;}
@@ -255,7 +255,7 @@ static sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
     return USHRT_MAX;
 }
 
-MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan)
+MappingDialog_Impl::MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pMan)
     : ModalDialog(pParent, "MappingDialog", "modules/sbibliography/ui/mappingdialog.ui")
     , pDatMan(pMan)
     , sNone(BIB_RESSTR(RID_BIB_STR_NONE))
@@ -432,13 +432,13 @@ class DBChangeDialog_Impl : public ModalDialog
 
     DECL_LINK(DoubleClickHdl, SvTabListBox*);
 public:
-    DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan );
+    DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* pMan );
     virtual ~DBChangeDialog_Impl();
 
     OUString     GetCurrentURL()const;
 };
 
-DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
+DBChangeDialog_Impl::DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* pMan )
     : ModalDialog(pParent, "ChooseDataSourceDialog",
         "modules/sbibliography/ui/choosedatasourcedialog.ui")
     ,
@@ -1432,7 +1432,7 @@ void BibDataManager::RemoveMeAsUidListener()
     }
 }
 
-void BibDataManager::CreateMappingDialog(Window* pParent)
+void BibDataManager::CreateMappingDialog(vcl::Window* pParent)
 {
     boost::scoped_ptr<MappingDialog_Impl> pDlg(new MappingDialog_Impl(pParent, this));
     if(RET_OK == pDlg->Execute() && pBibView)
@@ -1441,7 +1441,7 @@ void BibDataManager::CreateMappingDialog(Window* pParent)
     }
 }
 
-OUString BibDataManager::CreateDBChangeDialog(Window* pParent)
+OUString BibDataManager::CreateDBChangeDialog(vcl::Window* pParent)
 {
     OUString uRet;
     boost::scoped_ptr<DBChangeDialog_Impl> pDlg(new DBChangeDialog_Impl(pParent, this ));

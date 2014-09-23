@@ -52,7 +52,7 @@ namespace dbaui
         virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     public:
-        ORelationTableView( Window* pParent, ORelationDesignView* pView );
+        ORelationTableView( vcl::Window* pParent, ORelationDesignView* pView );
         virtual ~ORelationTableView();
 
         virtual void RemoveTabWin( OTableWindow* pTabWin ) SAL_OVERRIDE;

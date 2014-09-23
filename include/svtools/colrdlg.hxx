@@ -24,7 +24,7 @@
 
 #include <tools/color.hxx>
 
-class Window;
+namespace vcl { class Window; }
 
 
 // - ColorDialog -
@@ -39,7 +39,7 @@ namespace svtools
 class SVT_DLLPUBLIC SvColorDialog
 {
 public:
-    SvColorDialog( ::Window* pParent );
+    SvColorDialog( vcl::Window* pParent );
     virtual ~SvColorDialog();
 
     void            SetColor( const Color& rColor );
@@ -50,7 +50,7 @@ public:
     virtual short   Execute();
 
 private:
-    Window*    mpParent;
+    vcl::Window*    mpParent;
     Color    maColor;
     sal_Int16 meMode;
 };

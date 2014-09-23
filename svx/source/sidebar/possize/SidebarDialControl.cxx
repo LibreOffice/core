@@ -24,13 +24,13 @@
 
 namespace svx { namespace sidebar {
 
-SidebarDialControl::SidebarDialControl (Window* pParent, WinBits nBits)
+SidebarDialControl::SidebarDialControl (vcl::Window* pParent, WinBits nBits)
     : svx::DialControl(pParent, nBits)
 {
     Init(GetOutputSizePixel());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSidebarDialControl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSidebarDialControl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SidebarDialControl(pParent, WB_TABSTOP);
 }

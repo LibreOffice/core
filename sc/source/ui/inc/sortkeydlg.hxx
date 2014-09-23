@@ -31,7 +31,7 @@ struct ScSortKeyItem : public VclBuilderContainer
     RadioButton*    m_pBtnUp;
     RadioButton*    m_pBtnDown;
 
-    ScSortKeyItem(Window* pParent);
+    ScSortKeyItem(vcl::Window* pParent);
 
     void DisableField();
     void EnableField();

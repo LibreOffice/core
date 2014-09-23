@@ -321,7 +321,7 @@ Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 
 // Uses an out-parameter instead of return value, due to the object reference
 
-void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pWindow )
+void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, vcl::Window* pWindow )
 {
     Point aPos = pWindow->GetPosPixel();
     Size aSz = pWindow->GetSizePixel();
@@ -365,7 +365,7 @@ void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
     return mpImpl->getAccessibleFactory().getFactory();
 }
 
-void VCLXWindow::SetWindow( Window* pWindow )
+void VCLXWindow::SetWindow( vcl::Window* pWindow )
 {
     if ( GetWindow() )
     {
@@ -394,7 +394,7 @@ void VCLXWindow::resumeVclEventListening( )
     --mpImpl->mnListenerLockLevel;
 }
 
-void VCLXWindow::notifyWindowRemoved( Window& _rWindow )
+void VCLXWindow::notifyWindowRemoved( vcl::Window& _rWindow )
 {
     if ( mpImpl->getContainerListeners().getLength() )
     {
@@ -607,11 +607,11 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
                     aEvent.Temporary = sal_False;
 
-                    Window* pNext = Application::GetFocusWindow();
+                    vcl::Window* pNext = Application::GetFocusWindow();
                     if ( pNext )
                     {
                         // Don't care about internals if this control is compound
-                        Window* pNextC = pNext;
+                        vcl::Window* pNextC = pNext;
                         while ( pNextC && !pNextC->IsCompoundControl() )
                             pNextC = pNextC->GetParent();
                         if ( pNextC )
@@ -891,7 +891,7 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 {
     Size aSz = rOutSz;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         sal_Int32 nLeft, nTop, nRight, nBottom;
@@ -968,8 +968,8 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
 
     if ( GetWindow() )
     {
-        if( Window::GetDockingManager()->IsDockable( GetWindow() ) )
-            Window::GetDockingManager()->SetPosSizePixel( GetWindow() , X, Y, Width, Height, Flags );
+        if( vcl::Window::GetDockingManager()->IsDockable( GetWindow() ) )
+            vcl::Window::GetDockingManager()->SetPosSizePixel( GetWindow() , X, Y, Width, Height, Flags );
         else
             GetWindow()->setPosSizePixel( X, Y, Width, Height, Flags );
     }
@@ -982,8 +982,8 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
     ::com::sun::star::awt::Rectangle aBounds;
     if ( GetWindow() )
     {
-        if( Window::GetDockingManager()->IsDockable( GetWindow() ) )
-            aBounds = AWTRectangle( Window::GetDockingManager()->GetPosSizePixel( GetWindow() ) );
+        if( vcl::Window::GetDockingManager()->IsDockable( GetWindow() ) )
+            aBounds = AWTRectangle( vcl::Window::GetDockingManager()->GetPosSizePixel( GetWindow() ) );
         else
             aBounds = AWTRectangle( Rectangle( GetWindow()->GetPosPixel(), GetWindow()->GetSizePixel() ) );
     }
@@ -995,7 +995,7 @@ void VCLXWindow::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::Ru
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         mpImpl->setDirectVisible( bVisible );
@@ -1007,7 +1007,7 @@ void VCLXWindow::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->Enable( bEnable, false ); // #95824# without children!
@@ -1173,10 +1173,10 @@ sal_Bool VCLXWindow::isChild( const ::com::sun::star::uno::Reference< ::com::sun
     SolarMutexGuard aGuard;
 
     bool bIsChild = false;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        Window* pPeerWindow = VCLUnoHelper::GetWindow( rxPeer );
+        vcl::Window* pPeerWindow = VCLUnoHelper::GetWindow( rxPeer );
         bIsChild = pPeerWindow && pWindow->IsChild( pPeerWindow );
     }
 
@@ -1255,7 +1255,7 @@ void VCLXWindow::getStyles( sal_Int16 nType, ::com::sun::star::awt::FontDescript
 
 namespace toolkit
 {
-    static void setColorSettings( Window* _pWindow, const ::com::sun::star::uno::Any& _rValue,
+    static void setColorSettings( vcl::Window* _pWindow, const ::com::sun::star::uno::Any& _rValue,
         void (StyleSettings::*pSetter)( const Color& ), const Color& (StyleSettings::*pGetter)( ) const )
     {
         sal_Int32 nColor = 0;
@@ -1342,7 +1342,7 @@ void VCLXWindow::GetPropertyIds( std::list< sal_uInt16 >& _out_rIds )
 
 namespace
 {
-    void    lcl_updateWritingMode( Window& _rWindow, const sal_Int16 _nWritingMode, const sal_Int16 _nContextWritingMode )
+    void    lcl_updateWritingMode( vcl::Window& _rWindow, const sal_Int16 _nWritingMode, const sal_Int16 _nContextWritingMode )
     {
         bool bEnableRTL = false;
         switch ( _nWritingMode )
@@ -1360,7 +1360,7 @@ namespace
                 case WritingMode2::RL_TB:   bEnableRTL = true; break;
                 case WritingMode2::CONTEXT:
                 {
-                    const Window* pParent = _rWindow.GetParent();
+                    const vcl::Window* pParent = _rWindow.GetParent();
                     OSL_ENSURE( pParent, "lcl_updateWritingMode: cannot determine context's writing mode!" );
                     if ( pParent )
                         bEnableRTL = pParent->IsRTLEnabled();
@@ -1383,7 +1383,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( !pWindow )
         return;
 
@@ -2229,7 +2229,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( !pWindow )
         return;
 
@@ -2396,7 +2396,7 @@ void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (::com::sun::s
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->EnableDocking( bEnable );
 }
@@ -2405,9 +2405,9 @@ sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (::com::sun::star::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if( pWindow )
-        return Window::GetDockingManager()->IsFloating( pWindow );
+        return vcl::Window::GetDockingManager()->IsFloating( pWindow );
     else
         return sal_False;
 }
@@ -2416,18 +2416,18 @@ void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (::com::su
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if( pWindow )
-        Window::GetDockingManager()->SetFloatingMode( pWindow, bFloating );
+        vcl::Window::GetDockingManager()->SetFloatingMode( pWindow, bFloating );
 }
 
 sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if( pWindow )
-        return Window::GetDockingManager()->IsLocked( pWindow );
+        return vcl::Window::GetDockingManager()->IsLocked( pWindow );
     else
         return sal_False;
 }
@@ -2436,18 +2436,18 @@ void SAL_CALL VCLXWindow::lock(  ) throw (::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
-    if( pWindow && !Window::GetDockingManager()->IsFloating( pWindow ) )
-        Window::GetDockingManager()->Lock( pWindow );
+    vcl::Window* pWindow = GetWindow();
+    if( pWindow && !vcl::Window::GetDockingManager()->IsFloating( pWindow ) )
+        vcl::Window::GetDockingManager()->Lock( pWindow );
 }
 
 void SAL_CALL VCLXWindow::unlock(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
-    if( pWindow && !Window::GetDockingManager()->IsFloating( pWindow ) )
-        Window::GetDockingManager()->Unlock( pWindow );
+    vcl::Window* pWindow = GetWindow();
+    if( pWindow && !vcl::Window::GetDockingManager()->IsFloating( pWindow ) )
+        vcl::Window::GetDockingManager()->Unlock( pWindow );
 }
 void SAL_CALL VCLXWindow::startPopupMode( const ::com::sun::star::awt::Rectangle& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -2469,7 +2469,7 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::Ru
 void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Window *pWindow;
+    vcl::Window *pWindow;
     if( (pWindow = GetWindow()) != NULL )
     {
         DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow);
@@ -2483,7 +2483,7 @@ void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSiz
 ::com::sun::star::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Window *pWindow;
+    vcl::Window *pWindow;
     if( (pWindow = GetWindow()) != NULL )
     {
         DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow);

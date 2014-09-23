@@ -59,7 +59,7 @@ class OTableGrantControl : public ::svt::EditBrowseBox
     ImplSVEvent *               m_nDeactivateEvent;
 
 public:
-    OTableGrantControl( Window* pParent, WinBits nBits);
+    OTableGrantControl( vcl::Window* pParent, WinBits nBits);
     virtual ~OTableGrantControl();
     void UpdateTables();
     void setUserName(const OUString& _sUserName);

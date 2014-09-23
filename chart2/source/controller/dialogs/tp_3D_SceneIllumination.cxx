@@ -36,14 +36,14 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-LightButton::LightButton( Window* pParent)
+LightButton::LightButton( vcl::Window* pParent)
             : ImageButton( pParent)
             , m_bLightOn(false)
 {
     SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLightButton(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLightButton(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new LightButton(pParent);
 }
@@ -225,7 +225,7 @@ namespace
     }
 }
 
-ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWindow
+ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window* pWindow
                 , const uno::Reference< beans::XPropertySet > & xSceneProperties
                 , const uno::Reference< frame::XModel >& xChartModel
                 , const XColorListRef & pColorTable )

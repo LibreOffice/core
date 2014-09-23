@@ -735,22 +735,22 @@ ConvertToolbarEntry(
     return aPropSeq;
 }
 
-SfxTabPage *CreateSvxMenuConfigPage( Window *pParent, const SfxItemSet* rSet )
+SfxTabPage *CreateSvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
     return new SvxMenuConfigPage( pParent, *rSet );
 }
 
-SfxTabPage *CreateKeyboardConfigPage( Window *pParent, const SfxItemSet* rSet )
+SfxTabPage *CreateKeyboardConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
        return new SfxAcceleratorConfigPage( pParent, *rSet );
 }
 
-SfxTabPage *CreateSvxToolbarConfigPage( Window *pParent, const SfxItemSet* rSet )
+SfxTabPage *CreateSvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
     return new SvxToolbarConfigPage( pParent, *rSet );
 }
 
-SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet* rSet )
+SfxTabPage *CreateSvxEventConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
     return new SvxEventConfigPage( pParent, *rSet, SvxEventConfigPage::EarlyInit() );
 }
@@ -780,7 +780,7 @@ bool showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFra
  * key bindings.
  *
  *****************************************************************************/
-SvxConfigDialog::SvxConfigDialog(Window * pParent, const SfxItemSet* pInSet)
+SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet)
     : SfxTabDialog(pParent, "CustomizeDialog",
         "cui/ui/customizedialog.ui", pInSet)
     , m_nMenusPageId(0)
@@ -1378,7 +1378,7 @@ public:
  * listbox
  *
  *****************************************************************************/
-SvxMenuEntriesListBox::SvxMenuEntriesListBox(Window* pParent, SvxConfigPage* pPg)
+SvxMenuEntriesListBox::SvxMenuEntriesListBox(vcl::Window* pParent, SvxConfigPage* pPg)
     : SvTreeListBox(pParent, WB_TABSTOP|WB_CLIPCHILDREN|WB_HIDESELECTION|WB_BORDER)
     , pPage(pPg)
     , m_bIsInternalDrag( false )
@@ -1517,7 +1517,7 @@ void SvxMenuEntriesListBox::KeyInput( const KeyEvent& rKeyEvent )
  * both tabpages to add, delete, move and rename items etc.
  *
  *****************************************************************************/
-SvxConfigPage::SvxConfigPage(Window *pParent, const SfxItemSet& rSet)
+SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "MenuAssignPage", "cui/ui/menuassignpage.ui", &rSet)
     , bInitialised(false)
     , pCurrentSaveInData(0)
@@ -2172,7 +2172,7 @@ bool SvxConfigPage::MoveEntryData(
     return false;
 }
 
-SvxMenuConfigPage::SvxMenuConfigPage(Window *pParent, const SfxItemSet& rSet)
+SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     : SvxConfigPage(pParent, rSet)
 {
     m_pContentsListBox = new SvxMenuEntriesListBox(m_pEntries, this);
@@ -2576,7 +2576,7 @@ SaveInData* SvxMenuConfigPage::CreateSaveInData(
 }
 
 SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
-    Window* pParent, SvxEntries* entries,
+    vcl::Window* pParent, SvxEntries* entries,
     SvxConfigEntry* selection, bool bCreateMenu )
     : ModalDialog(pParent, "MoveMenuDialog", "cui/ui/movemenu.ui")
     , bModified(false)
@@ -2835,7 +2835,7 @@ bool SvxConfigEntry::IsRenamable()
     return true;
 }
 
-SvxToolbarConfigPage::SvxToolbarConfigPage(Window *pParent, const SfxItemSet& rSet)
+SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     : SvxConfigPage(pParent, rSet)
 {
     SetHelpId( HID_SVX_CONFIG_TOOLBAR );
@@ -3476,7 +3476,7 @@ void ToolbarSaveInData::SetSystemStyle(
     // this code is a temporary hack as the UI is not updating after
     // changing the toolbar style via the API
     uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    Window *window = NULL;
+    vcl::Window *window = NULL;
 
     uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
     if ( xPropSet.is() )
@@ -4515,7 +4515,7 @@ SvTreeListEntry* SvxToolbarConfigPage::AddFunction(
     return pNewLBEntry;
 }
 
-SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(Window* pParent, SvxToolbarConfigPage* pPg)
+SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg)
     : SvxMenuEntriesListBox(pParent, pPg)
     , pPage(pPg)
 {
@@ -4697,7 +4697,7 @@ TriState SvxToolbarEntriesListBox::NotifyCopying(
     return TRISTATE_FALSE;
 }
 
-SvxNewToolbarDialog::SvxNewToolbarDialog(Window* pWindow, const OUString& rName)
+SvxNewToolbarDialog::SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& rName)
     : ModalDialog(pWindow, "NewToolbarDialog", "cui/ui/newtoolbardialog.ui")
 {
     get(m_pEdtName, "edit");
@@ -4724,7 +4724,7 @@ IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
 * The SvxIconSelectorDialog class
 *
 *******************************************************************************/
-SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
+SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     const uno::Reference< css::ui::XImageManager >& rXImageManager,
     const uno::Reference< css::ui::XImageManager >& rXParentImageManager )
     :
@@ -5302,7 +5302,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 *
 *******************************************************************************/
 SvxIconReplacementDialog :: SvxIconReplacementDialog(
-    Window *pWindow, const OUString& aMessage, bool /*bYestoAll*/ )
+    vcl::Window *pWindow, const OUString& aMessage, bool /*bYestoAll*/ )
     :
 MessBox( pWindow, WB_DEF_YES, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 
@@ -5317,7 +5317,7 @@ MessBox( pWindow, WB_DEF_YES, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_R
 }
 
 SvxIconReplacementDialog :: SvxIconReplacementDialog(
-    Window *pWindow, const OUString& aMessage )
+    vcl::Window *pWindow, const OUString& aMessage )
     :
 MessBox( pWindow, WB_YES_NO_CANCEL, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 {
@@ -5350,7 +5350,7 @@ sal_uInt16 SvxIconReplacementDialog :: ShowDialog()
 *
 *******************************************************************************/
 SvxIconChangeDialog::SvxIconChangeDialog(
-    Window *pWindow, const OUString& aMessage)
+    vcl::Window *pWindow, const OUString& aMessage)
     :ModalDialog(pWindow, "IconChange", "cui/ui/iconchangedialog.ui")
 {
     get(pFImageInfo, "infoImage");

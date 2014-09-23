@@ -74,7 +74,7 @@ namespace rptui
         typedef ::std::vector< ConditionPtr >       Conditions;
 
         OModuleClient   m_aModuleClient;
-        Window*         m_pConditionPlayground;
+        vcl::Window*         m_pConditionPlayground;
         Conditions      m_aConditions;
         VclScrolledWindow* m_pScrollWindow;
         ScrollBar*      m_pCondScroll;
@@ -90,7 +90,7 @@ namespace rptui
 
     public:
         ConditionalFormattingDialog(
-            Window* pParent,
+            vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel>& _xHoldAlive,
             ::rptui::OReportController& _rController
         );

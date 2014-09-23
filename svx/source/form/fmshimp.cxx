@@ -2886,7 +2886,7 @@ Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlMod
         {
             // fallabck (some controls might not have been created, yet, since they were never visible so far)
             Reference< XControl > xContainerControl( xControlContainer, UNO_QUERY_THROW );
-            const Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerControl->getPeer() );
+            const vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerControl->getPeer() );
             ENSURE_OR_THROW( pContainerWindow, "unexpected control container implementation" );
 
             const SdrView* pSdrView = m_pShell ? m_pShell->GetFormView() : NULL;

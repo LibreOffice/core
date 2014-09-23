@@ -31,7 +31,7 @@ struct SvxAccessibilityOptionsTabPage_Impl
             : m_aConfig(){}
 };
 
-SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(Window* pParent,
+SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(vcl::Window* pParent,
     const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptAccessibilityPage",
         "cui/ui/optaccessibilitypage.ui", &rSet)
@@ -61,7 +61,7 @@ SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
     delete m_pImpl;
 }
 
-SfxTabPage* SvxAccessibilityOptionsTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SvxAccessibilityOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxAccessibilityOptionsTabPage(pParent, *rAttrSet);
 }

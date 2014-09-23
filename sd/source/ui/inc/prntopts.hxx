@@ -61,10 +61,10 @@ private:
 
     using OutputDevice::SetDrawMode;
 public:
-            SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs);
+            SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs);
             virtual ~SdPrintOptions();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;

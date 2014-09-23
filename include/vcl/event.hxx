@@ -28,7 +28,7 @@
 
 class AllSettings;
 class OutputDevice;
-class Window;
+namespace vcl { class Window; }
 struct IDataObject;
 
 namespace com { namespace sun { namespace star { namespace awt {
@@ -393,7 +393,7 @@ inline TrackingEvent::TrackingEvent( const MouseEvent& rMEvt,
 class VCL_DLLPUBLIC NotifyEvent
 {
 private:
-    Window*                 mpWindow;
+    vcl::Window*                 mpWindow;
     void*                   mpData;
     sal_uInt16                  mnType;
     long                    mnRetValue;
@@ -401,12 +401,12 @@ private:
 public:
                             NotifyEvent();
                             NotifyEvent( sal_uInt16 nType,
-                                         Window* pWindow,
+                                         vcl::Window* pWindow,
                                          const void* pEvent = NULL,
                                          long nRet = 0 );
 
     sal_uInt16                  GetType() const { return mnType; }
-    Window*                 GetWindow() const { return mpWindow; }
+    vcl::Window*                 GetWindow() const { return mpWindow; }
     void*                   GetData() const { return mpData; }
 
     void                    SetReturnValue( long nRet ) { mnRetValue = nRet; }
@@ -425,7 +425,7 @@ inline NotifyEvent::NotifyEvent()
     mnRetValue  = 0;
 }
 
-inline NotifyEvent::NotifyEvent( sal_uInt16 nType, Window* pWindow,
+inline NotifyEvent::NotifyEvent( sal_uInt16 nType, vcl::Window* pWindow,
                                  const void* pEvent, long nRet )
 {
     mpWindow    = pWindow;

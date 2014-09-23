@@ -228,7 +228,7 @@ namespace dbp
         OControlWizardPage_Base::initializePage();
     }
 
-    OControlWizard::OControlWizard( Window* _pParent,
+    OControlWizard::OControlWizard( vcl::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OWizardMachine(_pParent, WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH)
         ,m_xContext(_rxContext)
@@ -455,7 +455,7 @@ namespace dbp
         return initContext();
     }
 
-    Reference< XInteractionHandler > OControlWizard::getInteractionHandler(Window* _pWindow) const
+    Reference< XInteractionHandler > OControlWizard::getInteractionHandler(vcl::Window* _pWindow) const
     {
         Reference< XInteractionHandler > xHandler;
         try

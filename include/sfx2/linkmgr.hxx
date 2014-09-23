@@ -129,7 +129,7 @@ public:
     void        UpdateAllLinks( bool bAskUpdate = true,
                                 bool bCallErrHdl = true,
                                 bool bUpdateGrfLinks = false,
-                                Window* pParentWin = 0 );
+                                vcl::Window* pParentWin = 0 );
 
     // Call for list of links (eg for link-dialog)
     const       SvBaseLinks& GetLinks() const { return aLinkTbl; }

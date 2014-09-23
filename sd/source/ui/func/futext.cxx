@@ -1187,11 +1187,11 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
 
             if (Help::IsBalloonHelpEnabled())
             {
-                bReturn = Help::ShowBalloon( (Window*)mpWindow, rHEvt.GetMousePosPixel(), aScreenRect, aHelpText);
+                bReturn = Help::ShowBalloon( (vcl::Window*)mpWindow, rHEvt.GetMousePosPixel(), aScreenRect, aHelpText);
             }
             else if (Help::IsQuickHelpEnabled())
             {
-                bReturn = Help::ShowQuickHelp( (Window*)mpWindow, aScreenRect, aHelpText);
+                bReturn = Help::ShowQuickHelp( (vcl::Window*)mpWindow, aScreenRect, aHelpText);
             }
         }
     }

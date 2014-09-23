@@ -26,7 +26,7 @@
 
 #include <vector>
 
-class Window;
+namespace vcl { class Window; }
 class OutputDevice;
 class SdDrawDocument;
 
@@ -62,7 +62,7 @@ public:
             This device is added to the device list if it is not <null/> and
             when it is not already a member of that list.
     */
-    void RegisterWindow (::Window* pWindow);
+    void RegisterWindow (vcl::Window* pWindow);
 
     /** Remove the given device from the list of devices which will be updated
         when one of the monitored values changes.
@@ -70,7 +70,7 @@ public:
             This device is removed from the device list when it is a member
             of that list.
     */
-    void UnregisterWindow (::Window* pWindow);
+    void UnregisterWindow (vcl::Window* pWindow);
 
     /** Set the view shell whose output devices shall be kept up to date.
         It is used to clear the master page cache so that a redraw affects
@@ -122,7 +122,7 @@ private:
     /** Type and data member for a list of devices that have to be kept
         up-to-date.
     */
-    typedef ::std::vector< ::Window*> tWindowList;
+    typedef ::std::vector< vcl::Window*> tWindowList;
     tWindowList maWindowList;
 
     /** The central method of this class.  Update the given output device.

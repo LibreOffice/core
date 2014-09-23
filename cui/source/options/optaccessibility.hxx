@@ -40,12 +40,12 @@ class SvxAccessibilityOptionsTabPage : public SfxTabPage
 
     SvxAccessibilityOptionsTabPage_Impl* m_pImpl;
 
-    SvxAccessibilityOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+    SvxAccessibilityOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 public:
 
     virtual ~SvxAccessibilityOptionsTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };

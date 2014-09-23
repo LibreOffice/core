@@ -344,7 +344,7 @@ void SAL_CALL ChartController::attachFrame(
 
     //create view @todo is this the correct place here??
 
-    Window* pParent = NULL;
+    vcl::Window* pParent = NULL;
     //get the window parent from the frame to use as parent for our new window
     if(xFrame.is())
     {
@@ -1427,7 +1427,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
             SolarMutexGuard aGuard;
             if( m_pChartWindow )
             {
-                Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());
+                vcl::Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());
                 if( pParentWin )
                     xParent.set( pParentWin->GetAccessible());
             }

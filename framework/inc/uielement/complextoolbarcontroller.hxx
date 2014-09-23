@@ -30,7 +30,7 @@
 #include <tools/link.hxx>
 
 class ToolBox;
-class Window;
+namespace vcl { class Window; }
 
 namespace framework
 {
@@ -74,7 +74,7 @@ class ComplexToolbarController : public svt::ToolboxController
         DECL_STATIC_LINK( ComplexToolbarController, Notify_Impl, NotifyInfo* );
 
     protected:
-        static sal_Int32 getFontSizePixel( const Window* pWindow );
+        static sal_Int32 getFontSizePixel( const vcl::Window* pWindow );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommand( const OUString& aCommand ) const;
         void addNotifyInfo( const OUString&                                                        aEventName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,

@@ -30,7 +30,7 @@ protected:
     sal_uInt16 nIdentifier;
 
 public:
-    FuConstUnoControl(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                        SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstUnoControl();

@@ -38,7 +38,7 @@ using ::rtl::OUString;
 namespace sfx2 { namespace sidebar {
 
 
-SidebarToolBox::SidebarToolBox (Window* pParentWindow)
+SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     : ToolBox(pParentWindow, 0),
       maItemSeparator(Theme::GetImage(Theme::Image_ToolBoxItemSeparator)),
       maControllers(),
@@ -53,7 +53,7 @@ SidebarToolBox::SidebarToolBox (Window* pParentWindow)
 #endif
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSidebarToolBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSidebarToolBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SidebarToolBox(pParent);
 }

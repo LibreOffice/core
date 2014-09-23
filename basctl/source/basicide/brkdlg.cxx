@@ -63,7 +63,7 @@ bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
 
 } // namespace
 
-BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList )
+BreakPointDialog::BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkPntList )
     : ModalDialog(pParent, "ManageBreakpointsDialog",
         "modules/BasicIDE/ui/managebreakpoints.ui")
     , m_rOriginalBreakPointList(rBrkPntList)

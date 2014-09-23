@@ -74,7 +74,7 @@ RegistrationItemSetHolder::~RegistrationItemSetHolder()
 
 // class DatabaseRegistrationDialog  ------------------------------------------------
 
-DatabaseRegistrationDialog::DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rInAttrs )
+DatabaseRegistrationDialog::DatabaseRegistrationDialog( vcl::Window* pParent, const SfxItemSet& rInAttrs )
     : RegistrationItemSetHolder(rInAttrs)
     , SfxSingleTabDialog(pParent, getRegistrationItems())
 {
@@ -101,7 +101,7 @@ short DatabaseRegistrationDialog::Execute()
 
 // class DbRegistrationOptionsPage --------------------------------------------------
 
-DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
+DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, "DbRegisterPage", "cui/ui/dbregisterpage.ui", &rSet ),
 
@@ -174,7 +174,7 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 
 
 
-SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
+SfxTabPage* DbRegistrationOptionsPage::Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet )
 {
     return ( new DbRegistrationOptionsPage( pParent, *rAttrSet ) );

@@ -46,7 +46,7 @@ class SwEnvPrtPage : public SfxTabPage
 
     Printer* pPrt;
 
-    SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet);
+    SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
     DECL_LINK(ClickHdl, void *);
     DECL_LINK(AlignHdl, void *);
@@ -59,7 +59,7 @@ class SwEnvPrtPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rSet);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;

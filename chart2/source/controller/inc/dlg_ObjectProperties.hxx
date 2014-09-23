@@ -126,7 +126,7 @@ private:
     DECL_LINK( OKPressed, void * );
 
 public:
-    SchAttribTabDlg(Window* pParent, const SfxItemSet* pAttr,
+    SchAttribTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr,
                     const ObjectPropertiesDialogParameter* pDialogParameter,
                     const ViewElementListProvider* pViewElementListProvider,
                     const ::com::sun::star::uno::Reference<

@@ -27,7 +27,7 @@
 class ScTabPageProtection : public SfxTabPage
 {
 public:
-    static  SfxTabPage* Create          ( Window*               pParent,
+    static  SfxTabPage* Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rAttrSet );
     static  const sal_uInt16*     GetRanges       ();
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
@@ -38,7 +38,7 @@ protected:
     virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 private:
-                ScTabPageProtection( Window*            pParent,
+                ScTabPageProtection( vcl::Window*            pParent,
                                      const SfxItemSet&  rCoreAttrs );
 private:
     TriStateBox*    m_pBtnHideCell;

@@ -123,7 +123,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
 
             // Get the parent window.
             mxParentWindow = Reference<awt::XWindow>(rArguments[2], UNO_QUERY_THROW);
-            ::Window* pParentWindow = VCLUnoHelper::GetWindow(mxParentWindow);
+            vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(mxParentWindow);
 
             mxParentWindow->addWindowListener(this);
 

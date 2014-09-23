@@ -46,7 +46,7 @@ private:
     std::vector<OUString> maSelectedNames;
     boost::ptr_map<OUString, ScRangeName> maRangeMap;
 public:
-    ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool bInsList=true );
+    ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true );
 
     virtual ~ScNamePasteDlg();
 

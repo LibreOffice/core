@@ -555,7 +555,7 @@ uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const SdrView& _rView, 
 
 
 uno::Reference< awt::XControl > SdrUnoObj::GetTemporaryControlForWindow(
-    const Window& _rWindow, uno::Reference< awt::XControlContainer >& _inout_ControlContainer ) const
+    const vcl::Window& _rWindow, uno::Reference< awt::XControlContainer >& _inout_ControlContainer ) const
 {
     uno::Reference< awt::XControl > xControl;
 

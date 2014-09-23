@@ -39,12 +39,12 @@ class PanelTitleBar;
 
 
 class Panel
-    : public Window
+    : public vcl::Window
 {
 public:
     Panel (
         const PanelDescriptor& rPanelDescriptor,
-        Window* pParentWindow,
+        vcl::Window* pParentWindow,
         const bool bIsInitiallyExpanded,
         const ::boost::function<void(void)>& rDeckLayoutTrigger,
         const ::boost::function<Context(void)>& rContextAccess);

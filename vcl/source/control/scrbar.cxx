@@ -74,7 +74,7 @@ struct ImplScrollBarData
     Rectangle       maTrackRect; // TODO: move to ScrollBar class when binary incompatibility of ScrollBar class is no longer problematic
 };
 
-void ScrollBar::ImplInit( Window* pParent, WinBits nStyle )
+void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     mpData              = NULL;
     mnThumbPixRange     = 0;
@@ -117,7 +117,7 @@ void ScrollBar::ImplInitStyle( WinBits nStyle )
         mbFullDrag = (GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_SCROLL) != 0;
 }
 
-ScrollBar::ScrollBar( Window* pParent, WinBits nStyle ) :
+ScrollBar::ScrollBar( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_SCROLLBAR )
 {
     ImplInit( pParent, nStyle );
@@ -622,9 +622,9 @@ void ScrollBar::ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev )
     if ( mbCalcSize )
         ImplCalc( false );
 
-    Window *pWin = NULL;
+    vcl::Window *pWin = NULL;
     if( pOutDev->GetOutDevType() == OUTDEV_WINDOW )
-        pWin = (Window*) pOutDev;
+        pWin = (vcl::Window*) pOutDev;
 
     // Draw the entire control if the native theme engine needs it
     if ( nDrawFlags && pWin && pWin->IsNativeControlSupported(CTRL_SCROLLBAR, PART_DRAW_BACKGROUND_HORZ) )
@@ -1428,7 +1428,7 @@ Size ScrollBar::getCurrentCalcSize() const
     return aCtrlRegion.GetSize();
 }
 
-void ScrollBarBox::ImplInit( Window* pParent, WinBits nStyle )
+void ScrollBarBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     Window::ImplInit( pParent, nStyle, NULL );
 
@@ -1438,7 +1438,7 @@ void ScrollBarBox::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings();
 }
 
-ScrollBarBox::ScrollBarBox( Window* pParent, WinBits nStyle ) :
+ScrollBarBox::ScrollBarBox( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SCROLLBARBOX )
 {
     ImplInit( pParent, nStyle );

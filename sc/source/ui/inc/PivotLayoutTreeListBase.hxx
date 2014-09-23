@@ -40,7 +40,7 @@ protected:
 public:
     void Setup(ScPivotLayoutDialog* pParent);
 
-    ScPivotLayoutTreeListBase(Window* pParent, WinBits nBits, SvPivotTreeListType eType = UNDEFINED);
+    ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType = UNDEFINED);
     virtual ~ScPivotLayoutTreeListBase();
 
     virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvent) SAL_OVERRIDE;

@@ -34,7 +34,7 @@
 #define SC_NOTEMARK_TIME    800
 #define SC_NOTEMARK_SHORT   70
 
-ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
+ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                             ScDocument* pD, ScAddress aPos, const OUString& rUser,
                             const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard ) :
     pWindow( pWin ),
@@ -112,7 +112,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
     return 0;
 }
 
-static void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMap )
+static void lcl_DrawWin( SdrObject* pObject, vcl::Window* pWindow, const MapMode& rMap )
 {
     MapMode aOld = pWindow->GetMapMode();
     pWindow->SetMapMode( rMap );

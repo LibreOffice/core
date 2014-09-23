@@ -121,7 +121,7 @@ class SwScrollNaviToolBox : public ToolBox
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     public:
-        SwScrollNaviToolBox(Window* pParent, WinBits nWinStyle ) :
+        SwScrollNaviToolBox(vcl::Window* pParent, WinBits nWinStyle ) :
             ToolBox(pParent, nWinStyle ) {}
 };
 
@@ -142,7 +142,7 @@ protected:
         virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
-        SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window *pParent );
+        SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window *pParent );
         virtual ~SwScrollNaviPopup();
 
     static OUString         GetQuickHelpText(bool bNext);
@@ -157,7 +157,7 @@ class SwHlpImageButton : public ImageButton
 {
     bool        bUp;
     public:
-        SwHlpImageButton(Window* pParent, const ResId& rResId, bool bUpBtn) :
+        SwHlpImageButton(vcl::Window* pParent, const ResId& rResId, bool bUpBtn) :
             ImageButton(pParent, rResId), bUp(bUpBtn){}
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
@@ -176,7 +176,7 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    virtual Window*         CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*         CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 #endif
 

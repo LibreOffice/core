@@ -37,7 +37,7 @@
 #include <dialmgr.hxx>
 #include <boost/scoped_ptr.hpp>
 
-SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
+SvPasteObjectDialog::SvPasteObjectDialog( vcl::Window* pParent )
     : ModalDialog(pParent, "PasteSpecialDialog", "cui/ui/pastespecial.ui")
 {
     get(m_pFtObjectSource, "source");

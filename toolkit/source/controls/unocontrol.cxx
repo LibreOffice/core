@@ -181,10 +181,10 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( bool bAcceptExist
         Reference< XControl > xMe;
         OWeakAggObject::queryInterface( ::getCppuType( &xMe ) ) >>= xMe;
 
-        Window* pParentWindow( NULL );
+        vcl::Window* pParentWindow( NULL );
         {
             SolarMutexGuard aGuard;
-            pParentWindow = dynamic_cast< Window* >( Application::GetDefaultDevice() );
+            pParentWindow = dynamic_cast< vcl::Window* >( Application::GetDefaultDevice() );
             ENSURE_OR_THROW( pParentWindow != NULL, "could obtain a default parent window!" );
         }
         try
@@ -640,7 +640,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // Since the implementations for the listeners changed a lot towards 1.1, this
         // would not be the case anymore, if we would not do this listener-lock below
         // #i14703#
-        Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
+        vcl::Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
         VCLXWindow* pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : NULL;
         VclListenerLock aNoVclEventMultiplexing( pPeer );
 

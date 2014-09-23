@@ -56,7 +56,7 @@ SdrView* ScTabViewShell::GetDrawView() const
 
 void ScTabViewShell::WindowChanged()
 {
-    Window* pWin = GetActiveWin();
+    vcl::Window* pWin = GetActiveWin();
 
     ScDrawView* pDrView = GetScDrawView();
     if (pDrView)
@@ -81,7 +81,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     ScTabView* pTabView = GetViewData().GetView();
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
 
-    Window*     pWin    = pTabView->GetActiveWin();
+    vcl::Window*     pWin    = pTabView->GetActiveWin();
     ScDrawView* pView   = pTabView->GetScDrawView();
     SdrModel*   pDoc    = pView->GetModel();
 

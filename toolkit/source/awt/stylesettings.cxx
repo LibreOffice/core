@@ -111,7 +111,7 @@ namespace toolkit
     WindowStyleSettings::WindowStyleSettings(::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
         :m_pData( new WindowStyleSettings_Data(i_rListenerMutex, i_rOwningWindow ) )
     {
-        Window* pWindow = i_rOwningWindow.GetWindow();
+        vcl::Window* pWindow = i_rOwningWindow.GetWindow();
         if ( !pWindow )
             throw RuntimeException();
         pWindow->AddEventListener( LINK( m_pData.get(), WindowStyleSettings_Data, OnWindowEvent ) );
@@ -127,7 +127,7 @@ namespace toolkit
     {
         StyleMethodGuard aGuard( *m_pData );
 
-        Window* pWindow = m_pData->pOwningWindow->GetWindow();
+        vcl::Window* pWindow = m_pData->pOwningWindow->GetWindow();
         OSL_ENSURE( pWindow, "WindowStyleSettings::dispose: window has been reset before we could revoke the listener!" );
         if ( pWindow )
             pWindow->RemoveEventListener( LINK( m_pData.get(), WindowStyleSettings_Data, OnWindowEvent ) );
@@ -143,7 +143,7 @@ namespace toolkit
     {
         sal_Int32 lcl_getStyleColor( WindowStyleSettings_Data& i_rData, Color const & (StyleSettings::*i_pGetter)() const )
         {
-            const Window* pWindow = i_rData.pOwningWindow->GetWindow();
+            const vcl::Window* pWindow = i_rData.pOwningWindow->GetWindow();
             const AllSettings aAllSettings = pWindow->GetSettings();
             const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
             return (aStyleSettings.*i_pGetter)().GetColor();
@@ -151,7 +151,7 @@ namespace toolkit
 
         void lcl_setStyleColor( WindowStyleSettings_Data& i_rData, void (StyleSettings::*i_pSetter)( Color const & ), const sal_Int32 i_nColor )
         {
-            Window* pWindow = i_rData.pOwningWindow->GetWindow();
+            vcl::Window* pWindow = i_rData.pOwningWindow->GetWindow();
             AllSettings aAllSettings = pWindow->GetSettings();
             StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
             (aStyleSettings.*i_pSetter)( Color( i_nColor ) );
@@ -161,7 +161,7 @@ namespace toolkit
 
         FontDescriptor lcl_getStyleFont( WindowStyleSettings_Data& i_rData, vcl::Font const & (StyleSettings::*i_pGetter)() const )
         {
-            const Window* pWindow = i_rData.pOwningWindow->GetWindow();
+            const vcl::Window* pWindow = i_rData.pOwningWindow->GetWindow();
             const AllSettings aAllSettings = pWindow->GetSettings();
             const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
             return VCLUnoHelper::CreateFontDescriptor( (aStyleSettings.*i_pGetter)() );
@@ -170,7 +170,7 @@ namespace toolkit
         void lcl_setStyleFont( WindowStyleSettings_Data& i_rData, void (StyleSettings::*i_pSetter)( vcl::Font const &),
             vcl::Font const & (StyleSettings::*i_pGetter)() const, const FontDescriptor& i_rFont )
         {
-            Window* pWindow = i_rData.pOwningWindow->GetWindow();
+            vcl::Window* pWindow = i_rData.pOwningWindow->GetWindow();
             AllSettings aAllSettings = pWindow->GetSettings();
             StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
             const vcl::Font aNewFont = VCLUnoHelper::CreateFont( i_rFont, (aStyleSettings.*i_pGetter)() );
@@ -394,7 +394,7 @@ namespace toolkit
     ::sal_Int32 SAL_CALL WindowStyleSettings::getFaceGradientColor() throw (RuntimeException, std::exception)
     {
         StyleMethodGuard aGuard( *m_pData );
-        const Window* pWindow = m_pData->pOwningWindow->GetWindow();
+        const vcl::Window* pWindow = m_pData->pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
         return aStyleSettings.GetFaceGradientColor().GetColor();
@@ -698,7 +698,7 @@ namespace toolkit
     ::sal_Int32 SAL_CALL WindowStyleSettings::getSeparatorColor() throw (RuntimeException, std::exception)
     {
         StyleMethodGuard aGuard( *m_pData );
-        const Window* pWindow = m_pData->pOwningWindow->GetWindow();
+        const vcl::Window* pWindow = m_pData->pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
         return aStyleSettings.GetSeparatorColor().GetColor();
@@ -764,7 +764,7 @@ namespace toolkit
     sal_Bool SAL_CALL WindowStyleSettings::getHighContrastMode() throw (RuntimeException, std::exception)
     {
         StyleMethodGuard aGuard( *m_pData );
-        const Window* pWindow = m_pData->pOwningWindow->GetWindow();
+        const vcl::Window* pWindow = m_pData->pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
         return aStyleSettings.GetHighContrastMode();
@@ -774,7 +774,7 @@ namespace toolkit
     void SAL_CALL WindowStyleSettings::setHighContrastMode( sal_Bool _highcontrastmode ) throw (RuntimeException, std::exception)
     {
         StyleMethodGuard aGuard( *m_pData );
-        Window* pWindow = m_pData->pOwningWindow->GetWindow();
+        vcl::Window* pWindow = m_pData->pOwningWindow->GetWindow();
         AllSettings aAllSettings = pWindow->GetSettings();
         StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
         aStyleSettings.SetHighContrastMode( _highcontrastmode );

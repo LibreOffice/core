@@ -43,7 +43,7 @@
 
 // class SvxCharacterMap =================================================
 
-SvxCharacterMap::SvxCharacterMap( Window* pParent, bool bOne_, const SfxItemSet* pSet )
+SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxItemSet* pSet )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
     , bOne( bOne_ )
     , pSubsetMap( NULL )
@@ -166,13 +166,13 @@ short SvxCharacterMap::Execute()
 
 // class SvxShowText =====================================================
 
-SvxShowText::SvxShowText(Window* pParent, bool bCenter)
+SvxShowText::SvxShowText(vcl::Window* pParent, bool bCenter)
     : Control(pParent)
     , mnY(0)
     , mbCenter(bCenter)
 {}
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowText(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxShowText(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxShowText(pParent);
 }

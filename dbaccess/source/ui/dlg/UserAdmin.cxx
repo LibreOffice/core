@@ -61,13 +61,13 @@ class OPasswordDialog : public ModalDialog
     DECL_LINK( ModifiedHdl, Edit * );
 
 public:
-    OPasswordDialog( Window* pParent,const OUString& _sUserName);
+    OPasswordDialog( vcl::Window* pParent,const OUString& _sUserName);
 
     OUString        GetOldPassword() const { return m_pEDOldPassword->GetText(); }
     OUString        GetNewPassword() const { return m_pEDPassword->GetText(); }
 };
 
-OPasswordDialog::OPasswordDialog(Window* _pParent,const OUString& _sUserName)
+OPasswordDialog::OPasswordDialog(vcl::Window* _pParent,const OUString& _sUserName)
     : ModalDialog(_pParent, "PasswordDialog", "dbaccess/ui/password.ui")
 {
     get(m_pUser, "userframe");
@@ -108,7 +108,7 @@ IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
 }
 
 // OUserAdmin
-OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
+OUserAdmin::OUserAdmin(vcl::Window* pParent,const SfxItemSet& _rAttrSet)
     : OGenericAdministrationPage( pParent, "UserAdminPage", "dbaccess/ui/useradminpage.ui", _rAttrSet)
     , m_pUSER(0)
     , m_pNEWUSER(0)
@@ -181,7 +181,7 @@ void OUserAdmin::FillUserNames()
 
 }
 
-SfxTabPage* OUserAdmin::Create( Window* pParent, const SfxItemSet* _rAttrSet )
+SfxTabPage* OUserAdmin::Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
 {
     return ( new OUserAdmin( pParent, *_rAttrSet ) );
 }

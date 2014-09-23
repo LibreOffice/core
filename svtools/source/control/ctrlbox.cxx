@@ -90,21 +90,21 @@ void ColorListBox::ImplDestroyColorEntries()
     pColorList->clear();
 }
 
-ColorListBox::ColorListBox( Window* pParent, WinBits nWinStyle ) :
+ColorListBox::ColorListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle )
 {
     ImplInit();
     SetEdgeBlending(true);
 }
 
-ColorListBox::ColorListBox( Window* pParent, const ResId& rResId ) :
+ColorListBox::ColorListBox( vcl::Window* pParent, const ResId& rResId ) :
     ListBox( pParent, rResId )
 {
     ImplInit();
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -715,7 +715,7 @@ void LineListBox::ImplInit()
     UpdatePaintLineColor();
 }
 
-LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
+LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle ),
     m_nWidth( 5 ),
     m_sNone( ),
@@ -725,7 +725,7 @@ LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
     ImplInit();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLineListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -953,7 +953,7 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
         UpdateEntries( m_nWidth );
 }
 
-FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
+FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     mpFontList = NULL;
@@ -961,7 +961,7 @@ FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
     InitFontMRUEntriesFile();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontNameBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontNameBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -1315,7 +1315,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-FontStyleBox::FontStyleBox(Window* pParent, WinBits nBits)
+FontStyleBox::FontStyleBox(vcl::Window* pParent, WinBits nBits)
     : ComboBox(pParent, nBits)
 {
     //Use the standard texts to get an optimal size and stick to that size.
@@ -1339,7 +1339,7 @@ Size FontStyleBox::GetOptimalSize() const
     return ComboBox::GetOptimalSize();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontStyleBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontStyleBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -1533,13 +1533,13 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
     }
 }
 
-FontSizeBox::FontSizeBox( Window* pParent, WinBits nWinSize ) :
+FontSizeBox::FontSizeBox( vcl::Window* pParent, WinBits nWinSize ) :
     MetricBox( pParent, nWinSize )
 {
     ImplInit();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontSizeBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontSizeBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;

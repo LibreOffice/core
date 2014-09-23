@@ -31,7 +31,7 @@ private:
     DECL_DLLPRIVATE_LINK( HandleConnectButton, void * );
     DECL_LINK( CloseHdl, void * );
 public:
-    RemoteDialog( Window* pWindow );
+    RemoteDialog( vcl::Window* pWindow );
 };
 
 }

@@ -129,7 +129,7 @@ namespace frm
             mbCreatingPeer = true;
 
             // determine the VLC window for the parent
-            Window* pParentWin = NULL;
+            vcl::Window* pParentWin = NULL;
             if ( _rParentPeer.is() )
             {
                 VCLXWindow* pParentXWin = VCLXWindow::GetImplementation( _rParentPeer );
@@ -230,7 +230,7 @@ namespace frm
 
 
     ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XComponentContext >& _rxORB,
-        Window* _pParentWindow, const Reference< XControlModel >& _rxModel )
+        vcl::Window* _pParentWindow, const Reference< XControlModel >& _rxModel )
     {
         DBG_TESTSOLARMUTEX();
 

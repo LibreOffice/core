@@ -101,7 +101,7 @@ public:
     virtual Size            GetFirstPageSize() SAL_OVERRIDE;
     virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, bool bTemplate = false ) const SAL_OVERRIDE;
     virtual void            SetModified( bool = true ) SAL_OVERRIDE;
-    virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( ::Window *pParent,
+    virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( ::vcl::Window *pParent,
                                                               const SfxItemSet &rSet ) SAL_OVERRIDE;
 
     using SotObject::GetInterface;
@@ -154,7 +154,7 @@ public:
                 a default name of a not-yet-existing slide (e.g. 'Slide 17'),
                 sal_True is returned, but rName is set to an empty string.
      */
-    bool                    CheckPageName(::Window* pWin, OUString& rName );
+    bool                    CheckPageName(vcl::Window* pWin, OUString& rName );
 
     void                    SetSlotFilter(bool bEnable = false, sal_uInt16 nCount = 0, const sal_uInt16* pSIDs = NULL) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;

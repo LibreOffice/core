@@ -74,7 +74,7 @@ class SwIdxFormDlg : public SvxStandardDialog
     bool            bLastLinkIsEnd;
 
 public:
-    SwIdxFormDlg( Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
+    SwIdxFormDlg( vcl::Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
     virtual ~SwIdxFormDlg();
 
     const SwForm&   GetTOXForm();

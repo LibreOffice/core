@@ -37,7 +37,7 @@ class ThreeD_SceneIllumination_TabPage;
 class View3DDialog : public TabDialog
 {
 public:
-    View3DDialog( Window* pWindow,
+    View3DDialog( vcl::Window* pWindow,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
                   const XColorListRef &pColorTable );
     virtual ~View3DDialog();

@@ -709,7 +709,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         pViewShell->GetViewFrame()->GetBindings().InvalidateAll( true );
 }
 
-SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage* pRet = NULL;
     SfxAllItemSet aSet(*(rSet.GetPool()));

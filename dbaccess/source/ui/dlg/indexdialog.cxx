@@ -87,7 +87,7 @@ namespace dbaui
     }
 
     // DbaIndexList
-    DbaIndexList::DbaIndexList(Window* _pParent, WinBits nWinBits)
+    DbaIndexList::DbaIndexList(vcl::Window* _pParent, WinBits nWinBits)
         :SvTreeListBox(_pParent, nWinBits)
         ,m_bSuspendSelectHdl(false)
     {
@@ -158,13 +158,13 @@ namespace dbaui
         return bReturn;
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDbaIndexList(Window *pParent, VclBuilder::stringmap &)
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDbaIndexList(vcl::Window *pParent, VclBuilder::stringmap &)
     {
         return new DbaIndexList (pParent, WB_BORDER);
     }
 
     // DbaIndexDialog
-    DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< OUString >& _rFieldNames,
+    DbaIndexDialog::DbaIndexDialog( vcl::Window* _pParent, const Sequence< OUString >& _rFieldNames,
                                     const Reference< XNameAccess >& _rxIndexes,
                                     const Reference< XConnection >& _rxConnection,
                                     const Reference< XComponentContext >& _rxContext,sal_Int32 _nMaxColumnsInIndex)

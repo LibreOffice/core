@@ -57,13 +57,13 @@ namespace dbaui
     using ::svt::OFileNotation;
 
     // ODatasourceConnector
-    ODatasourceConnector::ODatasourceConnector(const Reference< XComponentContext >& _rxContext, Window* _pMessageParent)
+    ODatasourceConnector::ODatasourceConnector(const Reference< XComponentContext >& _rxContext, vcl::Window* _pMessageParent)
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xContext(_rxContext)
     {
     }
 
-    ODatasourceConnector::ODatasourceConnector( const Reference< XComponentContext >& _rxContext, Window* _pMessageParent,
+    ODatasourceConnector::ODatasourceConnector( const Reference< XComponentContext >& _rxContext, vcl::Window* _pMessageParent,
         const OUString& _rContextInformation )
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xContext(_rxContext)

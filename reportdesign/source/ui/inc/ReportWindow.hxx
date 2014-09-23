@@ -40,7 +40,7 @@ namespace rptui
     class OSectionView;
     class DlgEdFactory;
 
-    class OReportWindow :    public Window
+    class OReportWindow :    public vcl::Window
                             , public IMarkedSection
                             , public ::cppu::BaseMutex
                             , public ::comphelper::OPropertyChangeListener

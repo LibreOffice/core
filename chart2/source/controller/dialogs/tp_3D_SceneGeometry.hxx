@@ -35,7 +35,7 @@ namespace chart
 class ThreeD_SceneGeometry_TabPage : public TabPage
 {
 public:
-    ThreeD_SceneGeometry_TabPage( Window* pWindow,
+    ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow,
                                   const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::beans::XPropertySet > & xSceneProperties,
                                   ControllerLockHelper & rControllerLockHelper );

@@ -28,7 +28,7 @@
 
 class KeyEvent;
 class MouseEvent;
-class Window;
+namespace vcl { class Window; }
 class SfxItemSet;
 class SfxRequest;
 class SfxStyleSheet;
@@ -41,10 +41,10 @@ namespace sdr
 class SVX_DLLPUBLIC SelectionController: public cppu::OWeakObject
 {
 public:
-    virtual bool onKeyInput(const KeyEvent& rKEvt, Window* pWin);
-    virtual bool onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-    virtual bool onMouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-    virtual bool onMouseMove(const MouseEvent& rMEvt, Window* pWin);
+    virtual bool onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
+    virtual bool onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin);
+    virtual bool onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin);
+    virtual bool onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWin);
 
     virtual void onSelectionHasChanged();
 

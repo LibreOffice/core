@@ -65,7 +65,7 @@ public:
                          sal_uInt16 nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,
-                         Window* pParentWindow);
+                         vcl::Window* pParentWindow);
     virtual ~SvxColorWindow_Impl();
     void                StartSelection();
 

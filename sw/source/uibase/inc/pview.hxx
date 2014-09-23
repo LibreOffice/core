@@ -42,7 +42,7 @@ class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
 
 // Delete member <mnVirtPage> and its accessor
-class SwPagePreviewWin : public Window
+class SwPagePreviewWin : public vcl::Window
 {
     SwViewShell*          mpViewShell;
     sal_uInt16              mnSttPage;
@@ -59,7 +59,7 @@ class SwPagePreviewWin : public Window
     using Window::Scroll;
 
 public:
-    SwPagePreviewWin( Window* pParent, SwPagePreview& rView );
+    SwPagePreviewWin( vcl::Window* pParent, SwPagePreview& rView );
     virtual ~SwPagePreviewWin();
 
     // calls SwViewShell::Paint
@@ -170,9 +170,9 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     ImageButton             *pPageUpBtn,
                             *pPageDownBtn;
     // dummy window for filling the lower right edge when both scrollbars are active
-    Window                  *pScrollFill;
+    ::vcl::Window           *pScrollFill;
 
-    sal_uInt16                  mnPageCount;
+    sal_uInt16              mnPageCount;
     bool                    bNormalPrint;
 
     // New members to reset design mode at draw view for form shell on switching
@@ -192,7 +192,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
+    SAL_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( vcl::Window *pParent,
                                                 const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
     SAL_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, bool bInner );
@@ -225,7 +225,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    inline Window&          GetFrameWindow() const { return GetViewFrame()->GetWindow(); }
+    inline vcl::Window&          GetFrameWindow() const { return GetViewFrame()->GetWindow(); }
     inline SwViewShell*     GetViewShell() const { return pViewWin->GetViewShell(); }
     inline const Rectangle& GetVisArea() const { return aVisArea; }
     inline void             GrabFocusViewWin() { pViewWin->GrabFocus(); }

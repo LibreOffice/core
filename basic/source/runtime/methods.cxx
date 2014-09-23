@@ -4601,7 +4601,7 @@ RTLFUNC(MsgBox)
 
     SolarMutexGuard aSolarGuard;
 
-    Window* pParent = Application::GetDefDialogParent();
+    vcl::Window* pParent = Application::GetDefDialogParent();
     switch( nType )
     {
     case 16:

@@ -175,7 +175,7 @@ class SwFrmPage: public SfxTabPage
 
     void            EnableGraficMode( void );   // hides auto check boxes and re-org controls for "Real Size" button
 
-    SwFrmPage(Window *pParent, const SfxItemSet &rSet);
+    SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwFrmPage();
 
     SwWrtShell *getFrmDlgParentShell();
@@ -185,7 +185,7 @@ class SwFrmPage: public SfxTabPage
 
 public:
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
@@ -224,7 +224,7 @@ class SwGrfExtPage: public SfxTabPage
     DECL_LINK(BrowseHdl, void *);
 
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
-    SwGrfExtPage(Window *pParent, const SfxItemSet &rSet);
+    SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwGrfExtPage();
 
     using SfxTabPage::ActivatePage;
@@ -232,7 +232,7 @@ class SwGrfExtPage: public SfxTabPage
 
 public:
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
@@ -253,7 +253,7 @@ class SwFrmURLPage : public SfxTabPage
 
     DECL_LINK(InsertFileHdl, void *);
 
-    SwFrmURLPage(Window *pParent, const SfxItemSet &rSet);
+    SwFrmURLPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwFrmURLPage();
 
     using SfxTabPage::ActivatePage;
@@ -261,7 +261,7 @@ class SwFrmURLPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
@@ -303,12 +303,12 @@ class SwFrmAddPage : public SfxTabPage
     DECL_LINK(EditModifyHdl, void *);
     DECL_LINK(ChainModifyHdl, ListBox*);
 
-    SwFrmAddPage(Window *pParent, const SfxItemSet &rSet);
+    SwFrmAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwFrmAddPage();
 
 public:
 
-    static SfxTabPage*  Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage*  Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16*      GetRanges();
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;

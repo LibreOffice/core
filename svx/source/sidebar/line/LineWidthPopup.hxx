@@ -33,7 +33,7 @@ class LineWidthPopup
 {
 public :
     LineWidthPopup (
-        Window* pParent,
+        vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
     virtual ~LineWidthPopup (void);
 

@@ -314,7 +314,7 @@ bool QueryListFacade::isLeafSelected() const
     return pEntry && !m_rQueryList.GetModel()->HasChildren( pEntry );
 }
 
-OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
+OAddTableDlg::OAddTableDlg( vcl::Window* pParent, IAddTableDialogContext& _rContext )
    : ModelessDialog(pParent, "TablesJoinDialog", "dbaccess/ui/tablesjoindialog.ui")
    , m_rContext(_rContext)
 {

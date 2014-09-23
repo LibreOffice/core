@@ -139,7 +139,7 @@ public:
         the content window.
         It does not include the ViewTabBar.
     */
-    ::boost::scoped_ptr< ::Window> mpViewWindow;
+    ::boost::scoped_ptr< vcl::Window> mpViewWindow;
     ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
     ::boost::shared_ptr<ViewShellManager> mpViewShellManager;
     ::boost::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
@@ -199,10 +199,10 @@ namespace {
     window of the main view shell.  With the key press it forwards the focus
     so that it is not called very often.
 */
-class FocusForwardingWindow : public ::Window
+class FocusForwardingWindow : public vcl::Window
 {
 public:
-    FocusForwardingWindow (::Window& rParentWindow, ViewShellBase& rBase);
+    FocusForwardingWindow (vcl::Window& rParentWindow, ViewShellBase& rBase);
     virtual ~FocusForwardingWindow (void);
     virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;
     virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
@@ -955,7 +955,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
     mpImpl->mpViewTabBar = rViewTabBar;
 }
 
-::Window* ViewShellBase::GetViewWindow (void)
+::vcl::Window* ViewShellBase::GetViewWindow (void)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
@@ -1375,9 +1375,9 @@ void CurrentPageSetter::operator() (bool)
 namespace sd { namespace {
 
 FocusForwardingWindow::FocusForwardingWindow (
-    ::Window& rParentWindow,
+    vcl::Window& rParentWindow,
     ViewShellBase& rBase)
-    : ::Window(&rParentWindow, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
+    : vcl::Window(&rParentWindow, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
         mrBase(rBase)
 {
     OSL_TRACE("created FocusForwardingWindow at %x", this);
@@ -1393,7 +1393,7 @@ void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
     ::boost::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
     if (pViewShell.get() != NULL)
     {
-        ::Window* pWindow = pViewShell->GetActiveWindow();
+        vcl::Window* pWindow = pViewShell->GetActiveWindow();
         if (pWindow != NULL)
         {
             // Forward the focus so that the window is called directly the
@@ -1410,7 +1410,7 @@ void FocusForwardingWindow::Command (const CommandEvent& rEvent)
     ::boost::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
     if (pViewShell.get() != NULL)
     {
-        ::Window* pWindow = pViewShell->GetActiveWindow();
+        vcl::Window* pWindow = pViewShell->GetActiveWindow();
         if (pWindow != NULL)
         {
             pWindow->Command(rEvent);

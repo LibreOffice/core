@@ -54,7 +54,7 @@
 
 // ScAutoFmtPreview
 
-ScAutoFmtPreview::ScAutoFmtPreview(Window* pParent)
+ScAutoFmtPreview::ScAutoFmtPreview(vcl::Window* pParent)
     : Window(pParent)
     , pCurData(NULL)
     , aVD(*this)
@@ -73,7 +73,7 @@ ScAutoFmtPreview::ScAutoFmtPreview(Window* pParent)
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScAutoFmtPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScAutoFmtPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ScAutoFmtPreview(pParent);
 }

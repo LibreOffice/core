@@ -30,7 +30,7 @@ class TextCharacterSpacingPopup
 {
 public :
     TextCharacterSpacingPopup (
-        Window* pParent,
+        vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
     virtual ~TextCharacterSpacingPopup (void);
 

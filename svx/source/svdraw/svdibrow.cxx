@@ -165,7 +165,7 @@ class ImpItemEdit: public Edit
     _SdrItemBrowserControl*     pBrowse;
 
 public:
-    ImpItemEdit(Window* pParent, _SdrItemBrowserControl* pBrowse_, WinBits nBits=0)
+    ImpItemEdit(vcl::Window* pParent, _SdrItemBrowserControl* pBrowse_, WinBits nBits=0)
     :   Edit(pParent, nBits),
         pBrowse(pBrowse_)
     {}
@@ -208,7 +208,7 @@ void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 
 #define MYBROWSEMODE (BROWSER_THUMBDRAGGING|BROWSER_KEEPHIGHLIGHT|BROWSER_NO_HSCROLL|BROWSER_HIDECURSOR)
 
-_SdrItemBrowserControl::_SdrItemBrowserControl(Window* pParent, WinBits nBits):
+_SdrItemBrowserControl::_SdrItemBrowserControl(vcl::Window* pParent, WinBits nBits):
     BrowseBox(pParent,nBits,MYBROWSEMODE),
     aList()
 {
@@ -506,7 +506,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
         pEditControl->Show();
         pEditControl->GrabFocus();
         pEditControl->SetSelection(Selection(SELECTION_MIN,SELECTION_MAX));
-        Window* pParent=GetParent();
+        vcl::Window* pParent=GetParent();
         aWNamMerk=pParent->GetText();
         OUString aNeuNam(aWNamMerk);
         aNeuNam += " ";
@@ -534,7 +534,7 @@ bool _SdrItemBrowserControl::EndChangeEntry()
         pEditControl=NULL;
         delete pAktChangeEntry;
         pAktChangeEntry=NULL;
-        Window* pParent=GetParent();
+        vcl::Window* pParent=GetParent();
         pParent->SetText(aWNamMerk);
         SetMode(MYBROWSEMODE);
         bRet = true;
@@ -549,7 +549,7 @@ void _SdrItemBrowserControl::BrkChangeEntry()
         pEditControl=NULL;
         delete pAktChangeEntry;
         pAktChangeEntry=NULL;
-        Window* pParent=GetParent();
+        vcl::Window* pParent=GetParent();
         pParent->SetText(aWNamMerk);
         SetMode(MYBROWSEMODE);
     }
@@ -1044,7 +1044,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
 
 // - _SdrItemBrowserWindow -
 
-_SdrItemBrowserWindow::_SdrItemBrowserWindow(Window* pParent, WinBits nBits):
+_SdrItemBrowserWindow::_SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits):
     FloatingWindow(pParent,nBits),
     aBrowse(this)
 {
@@ -1080,7 +1080,7 @@ SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     SetDirty();
 }
 
-Window* SdrItemBrowser::ImpGetViewWin(SdrView& rView)
+vcl::Window* SdrItemBrowser::ImpGetViewWin(SdrView& rView)
 {
     const sal_uInt32 nWinCount(rView.PaintWindowCount());
 
@@ -1090,7 +1090,7 @@ Window* SdrItemBrowser::ImpGetViewWin(SdrView& rView)
 
         if(OUTDEV_WINDOW == pCandidate->GetOutputDevice().GetOutDevType())
         {
-            return (Window*)(&pCandidate->GetOutputDevice());
+            return (vcl::Window*)(&pCandidate->GetOutputDevice());
         }
     }
 
@@ -1099,7 +1099,7 @@ Window* SdrItemBrowser::ImpGetViewWin(SdrView& rView)
 
 void SdrItemBrowser::ForceParent()
 {
-    Window* pWin=ImpGetViewWin(*pView);
+    vcl::Window* pWin=ImpGetViewWin(*pView);
     if (pWin!=NULL) SetParent(pWin);
 }
 

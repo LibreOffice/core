@@ -33,7 +33,7 @@ protected:
     virtual void Apply() SAL_OVERRIDE;
 
 public:
-    SwMergeTblDlg( Window *pParent, bool& rWithPrev );
+    SwMergeTblDlg( vcl::Window *pParent, bool& rWithPrev );
 };
 
 #endif

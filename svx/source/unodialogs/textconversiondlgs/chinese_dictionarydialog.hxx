@@ -63,8 +63,8 @@ public:
     DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits);
 
     void init(const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary,
-        Window *pED_Term, Window *pED_Mapping, ListBox *pLB_Property,
-        Window *pFT_Term, Window *pFT_Mapping, Window *pFT_Property);
+        vcl::Window *pED_Term, vcl::Window *pED_Mapping, ListBox *pLB_Property,
+        vcl::Window *pFT_Term, vcl::Window *pFT_Mapping, vcl::Window *pFT_Property);
 
     void deleteAll();
     void refillFromDictionary( sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
@@ -99,8 +99,8 @@ public:
     css::uno::Reference<css::linguistic2::XConversionDictionary>  m_xDictionary;
 
 private:
-    Window*     m_pED_Term;
-    Window*     m_pED_Mapping;
+    vcl::Window*     m_pED_Term;
+    vcl::Window*     m_pED_Mapping;
     ListBox*    m_pLB_Property;
 
     std::vector< DictionaryEntry* > m_aToBeDeleted;
@@ -111,7 +111,7 @@ private:
 class ChineseDictionaryDialog : public ModalDialog
 {
 public:
-    ChineseDictionaryDialog( Window* pParent );
+    ChineseDictionaryDialog( vcl::Window* pParent );
     virtual ~ChineseDictionaryDialog();
 
     //this method should be called once before calling execute

@@ -127,7 +127,7 @@ protected:
     DECL_LINK(Rename, void *);
 
 public:
-    SwNewGlosNameDlg( Window* pParent,
+    SwNewGlosNameDlg( vcl::Window* pParent,
                       const OUString& rOldName,
                       const OUString& rOldShort );
 
@@ -135,7 +135,7 @@ public:
     OUString GetNewShort() const { return m_pNewShort->GetText(); }
 };
 
-SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
+SwNewGlosNameDlg::SwNewGlosNameDlg(vcl::Window* pParent,
                             const OUString& rOldName,
                             const OUString& rOldShort )
     : ModalDialog(pParent, "RenameAutoTextDialog",
@@ -808,7 +808,7 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
 }
 
 // TreeListBox for groups and blocks
-SwGlTreeListBox::SwGlTreeListBox(Window* pParent, WinBits nBits)
+SwGlTreeListBox::SwGlTreeListBox(vcl::Window* pParent, WinBits nBits)
     : SvTreeListBox(pParent, nBits)
     , sReadonly(SW_RESSTR(SW_STR_READONLY)),
     pDragEntry(0)
@@ -821,7 +821,7 @@ Size SwGlTreeListBox::GetOptimalSize() const
     return LogicToPixel(Size(212, 84), MapMode(MAP_APPFONT));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwGlTreeListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwGlTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwGlTreeListBox(pParent, WB_BORDER | WB_TABSTOP);
 }

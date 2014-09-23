@@ -30,7 +30,7 @@
 namespace svx { namespace sidebar {
 
 TextCharacterSpacingControl::TextCharacterSpacingControl (
-    Window* pParent,
+    vcl::Window* pParent,
     svx::sidebar::TextPropertyPanel& rPanel,
     SfxBindings* pBindings)
 :   PopupControl( pParent,SVX_RES(RID_POPUPPANEL_TEXTPAGE_SPACING))

@@ -28,6 +28,8 @@
 #define IMPL_MAXSAVEBACKSIZE    (640*480)
 #define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
 
+namespace vcl {
+
 void Window::InitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
@@ -118,12 +120,12 @@ Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
     if ( nFlags & WINDOW_GETCLIPREGION_NOCHILDREN )
     {
         if ( mpWindowImpl->mbInitWinClipRegion )
-            ((Window*)this)->ImplInitWinClipRegion();
+            ((vcl::Window*)this)->ImplInitWinClipRegion();
         aWinClipRegion = mpWindowImpl->maWinClipRegion;
     }
     else
     {
-        Region* pWinChildClipRegion = ((Window*)this)->ImplGetWinChildClipRegion();
+        Region* pWinChildClipRegion = ((vcl::Window*)this)->ImplGetWinChildClipRegion();
         aWinClipRegion = *pWinChildClipRegion;
         // --- RTL --- remirror clip region before passing it to somebody
         if( ImplIsAntiparallel() )
@@ -194,10 +196,10 @@ void Window::ImplClipBoundaries( Region& rRegion, bool bThis, bool bOverlaps )
         if ( bOverlaps && !rRegion.IsEmpty() )
         {
             // Clip Overlap Siblings
-            Window* pStartOverlapWindow = this;
+            vcl::Window* pStartOverlapWindow = this;
             while ( !pStartOverlapWindow->mpWindowImpl->mbFrame )
             {
-                Window* pOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
+                vcl::Window* pOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
                 while ( pOverlapWindow && (pOverlapWindow != pStartOverlapWindow) )
                 {
                     pOverlapWindow->ImplExcludeOverlapWindows2( rRegion );
@@ -217,7 +219,7 @@ void Window::ImplClipBoundaries( Region& rRegion, bool bThis, bool bOverlaps )
 bool Window::ImplClipChildren( Region& rRegion )
 {
     bool    bOtherClip = false;
-    Window* pWindow = mpWindowImpl->mpFirstChild;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
     {
         if ( pWindow->mpWindowImpl->mbReallyVisible )
@@ -239,7 +241,7 @@ bool Window::ImplClipChildren( Region& rRegion )
 
 void Window::ImplClipAllChildren( Region& rRegion )
 {
-    Window* pWindow = mpWindowImpl->mpFirstChild;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
     {
         if ( pWindow->mpWindowImpl->mbReallyVisible )
@@ -250,7 +252,7 @@ void Window::ImplClipAllChildren( Region& rRegion )
 
 void Window::ImplClipSiblings( Region& rRegion )
 {
-    Window* pWindow = ImplGetParent()->mpWindowImpl->mpFirstChild;
+    vcl::Window* pWindow = ImplGetParent()->mpWindowImpl->mpFirstChild;
     while ( pWindow )
     {
         if ( pWindow == this )
@@ -395,7 +397,7 @@ void Window::ImplUpdateSysObjChildrenClip()
     if ( mpWindowImpl->mpSysObj && mpWindowImpl->mbInitWinClipRegion )
         ImplSysObjClip( NULL );
 
-    Window* pWindow = mpWindowImpl->mpFirstChild;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
     {
         pWindow->ImplUpdateSysObjChildrenClip();
@@ -407,7 +409,7 @@ void Window::ImplUpdateSysObjOverlapsClip()
 {
     ImplUpdateSysObjChildrenClip();
 
-    Window* pWindow = mpWindowImpl->mpFirstOverlap;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
     {
         pWindow->ImplUpdateSysObjOverlapsClip();
@@ -424,7 +426,7 @@ void Window::ImplUpdateSysObjClip()
         // siblings should recalculate their clip region
         if ( mpWindowImpl->mbClipSiblings )
         {
-            Window* pWindow = mpWindowImpl->mpNext;
+            vcl::Window* pWindow = mpWindowImpl->mpNext;
             while ( pWindow )
             {
                 pWindow->ImplUpdateSysObjChildrenClip();
@@ -448,7 +450,7 @@ bool Window::ImplSetClipFlagChildren( bool bSysObjOnlySmaller )
         mbInitClipRegion = true;
         mpWindowImpl->mbInitWinClipRegion = true;
 
-        Window* pWindow = mpWindowImpl->mpFirstChild;
+        vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
         {
             if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
@@ -470,7 +472,7 @@ bool Window::ImplSetClipFlagChildren( bool bSysObjOnlySmaller )
     mbInitClipRegion = true;
     mpWindowImpl->mbInitWinClipRegion = true;
 
-    Window* pWindow = mpWindowImpl->mpFirstChild;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
     {
         if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
@@ -485,7 +487,7 @@ bool Window::ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller )
 {
     bool bUpdate = ImplSetClipFlagChildren( bSysObjOnlySmaller );
 
-    Window* pWindow = mpWindowImpl->mpFirstOverlap;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
     {
         if ( !pWindow->ImplSetClipFlagOverlapWindows( bSysObjOnlySmaller ) )
@@ -502,7 +504,7 @@ bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
     {
         bool bUpdate = ImplSetClipFlagChildren( bSysObjOnlySmaller );
 
-        Window* pParent = ImplGetParent();
+        vcl::Window* pParent = ImplGetParent();
         if ( pParent &&
              ((pParent->GetStyle() & WB_CLIPCHILDREN) || (mpWindowImpl->mnParentClipMode & PARENTCLIPMODE_CLIP)) )
         {
@@ -513,7 +515,7 @@ bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
         // siblings should recalculate their clip region
         if ( mpWindowImpl->mbClipSiblings )
         {
-            Window* pWindow = mpWindowImpl->mpNext;
+            vcl::Window* pWindow = mpWindowImpl->mpNext;
             while ( pWindow )
             {
                 if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
@@ -564,7 +566,7 @@ void Window::ImplExcludeWindowRegion( Region& rRegion )
 
 void Window::ImplExcludeOverlapWindows( Region& rRegion )
 {
-    Window* pWindow = mpWindowImpl->mpFirstOverlap;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
     {
         if ( pWindow->mpWindowImpl->mbReallyVisible )
@@ -587,7 +589,7 @@ void Window::ImplExcludeOverlapWindows2( Region& rRegion )
 
 void Window::ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Region& rRegion )
 {
-    Window* pWindow = mpWindowImpl->mpFirstOverlap;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
     {
         if ( pWindow->mpWindowImpl->mbReallyVisible )
@@ -617,14 +619,14 @@ void Window::ImplIntersectAndUnionOverlapWindows2( const Region& rInterRegion, R
 void Window::ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& rRegion )
 {
     // Clip Overlap Siblings
-    Window* pStartOverlapWindow;
+    vcl::Window* pStartOverlapWindow;
     if ( !ImplIsOverlapWindow() )
         pStartOverlapWindow = mpWindowImpl->mpOverlapWindow;
     else
         pStartOverlapWindow = this;
     while ( !pStartOverlapWindow->mpWindowImpl->mbFrame )
     {
-        Window* pOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
+        vcl::Window* pOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
         while ( pOverlapWindow && (pOverlapWindow != pStartOverlapWindow) )
         {
             pOverlapWindow->ImplIntersectAndUnionOverlapWindows2( rInterRegion, rRegion );
@@ -647,7 +649,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
     if ( mpWindowImpl->mbWinRegion )
         rRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
     Region  aTempRegion;
-    Window* pWindow;
+    vcl::Window* pWindow;
 
     ImplCalcOverlapRegionOverlaps( aRegion, rRegion );
 
@@ -710,12 +712,12 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
     }
 }
 
-bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
+bool Window::ImplIsWindowInFront( const vcl::Window* pTestWindow ) const
 {
     // check for overlapping window
     pTestWindow = pTestWindow->ImplGetFirstOverlapWindow();
-    const Window* pTempWindow = pTestWindow;
-    const Window* pThisWindow = ImplGetFirstOverlapWindow();
+    const vcl::Window* pTempWindow = pTestWindow;
+    const vcl::Window* pThisWindow = ImplGetFirstOverlapWindow();
     if ( pTempWindow == pThisWindow )
         return false;
     do
@@ -926,7 +928,7 @@ void Window::ImplDeleteOverlapBackground()
             mpWindowImpl->mpFrameData->mpFirstBackWin = mpWindowImpl->mpOverlapData->mpNextBackWin;
         else
         {
-            Window* pTemp = mpWindowImpl->mpFrameData->mpFirstBackWin;
+            vcl::Window* pTemp = mpWindowImpl->mpFrameData->mpFirstBackWin;
             while ( pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin != this )
                 pTemp = pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin;
             pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin = mpWindowImpl->mpOverlapData->mpNextBackWin;
@@ -937,12 +939,12 @@ void Window::ImplDeleteOverlapBackground()
 
 void Window::ImplInvalidateAllOverlapBackgrounds()
 {
-    Window* pWindow = mpWindowImpl->mpFrameData->mpFirstBackWin;
+    vcl::Window* pWindow = mpWindowImpl->mpFrameData->mpFirstBackWin;
     while ( pWindow )
     {
         // remember next window here already, as this window could
         // be removed within the next if clause from the list
-        Window* pNext = pWindow->mpWindowImpl->mpOverlapData->mpNextBackWin;
+        vcl::Window* pNext = pWindow->mpWindowImpl->mpOverlapData->mpNextBackWin;
 
         if ( ImplIsWindowInFront( pWindow ) )
         {
@@ -966,5 +968,6 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
     }
 }
 
+} /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

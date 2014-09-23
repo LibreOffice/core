@@ -975,12 +975,12 @@ void ChildrenManagerImpl::UpdateSelection (void)
         }
     }
 
-    Window *pParentWindow = maShapeTreeInfo.GetWindow();
+    vcl::Window *pParentWindow = maShapeTreeInfo.GetWindow();
     bool bShapeActive= false;
     // For table cell, the table's parent must be checked to make sure it has focus.
     if (pParentWindow)
     {
-        Window *pPWindow = pParentWindow->GetParent();
+        vcl::Window *pPWindow = pParentWindow->GetParent();
         if (pParentWindow->HasFocus() || (pPWindow && pPWindow->HasFocus()))
             bShapeActive =true;
     }

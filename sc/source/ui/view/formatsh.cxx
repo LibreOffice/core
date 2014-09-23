@@ -842,7 +842,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 //  If GetDefDialogParent is a dialog, it must be used
                 //  (style catalog)
 
-                Window* pParent = Application::GetDefDialogParent();
+                vcl::Window* pParent = Application::GetDefDialogParent();
                 if ( !pParent || !pParent->IsDialog() )
                 {
                     //  GetDefDialogParent currently doesn't return the window

@@ -275,7 +275,7 @@ void FmXGridSourcePropListener::_propertyChanged(const PropertyChangeEvent& evt)
         m_pParent->DataSourcePropertyChanged(evt);
 }
 
-DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(Window* pParent, WinBits nStyle)
+DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(vcl::Window* pParent, WinBits nStyle)
                    :NumericField(pParent, nStyle)
 {
     SetMin(1);
@@ -326,7 +326,7 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
     m_bPositioning = false;
 }
 
-DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
+DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent, WinBits nStyle)
           :Control(pParent, nStyle)
           ,m_aRecordText(this, WB_VCENTER)
           ,m_aAbsolute(this, WB_CENTER | WB_VCENTER)
@@ -598,7 +598,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
 {
     bool bAvailable = GetState(nWhich);
     DbGridControl* pParent = (DbGridControl*)GetParent();
-    Window* pWnd = NULL;
+    vcl::Window* pWnd = NULL;
     switch (nWhich)
     {
         case NavigationBar::RECORD_FIRST:
@@ -709,7 +709,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    Window* pWindows[] = {  &m_aRecordText,
+    vcl::Window* pWindows[] = {  &m_aRecordText,
                             &m_aAbsolute,
                             &m_aRecordOf,
                             &m_aRecordCount,
@@ -859,7 +859,7 @@ void DbGridRow::SetState(CursorWrapper* pCur, bool bPaintCursor)
 
 DbGridControl::DbGridControl(
                 Reference< XComponentContext > _rxContext,
-                Window* pParent,
+                vcl::Window* pParent,
                 WinBits nBits)
             :DbGridControl_Base(pParent, EBBF_NONE, nBits, DEFAULT_BROWSE_MODE )
             ,m_xContext(_rxContext)

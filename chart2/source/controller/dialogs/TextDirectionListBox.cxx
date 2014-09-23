@@ -27,7 +27,7 @@
 namespace chart
 {
 
-TextDirectionListBox::TextDirectionListBox( Window* pParent, Window* pWindow1, Window* pWindow2 ) :
+TextDirectionListBox::TextDirectionListBox( vcl::Window* pParent, vcl::Window* pWindow1, vcl::Window* pWindow2 ) :
     svx::FrameDirectionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_DROPDOWN)
 {
     InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_LTR ), FRMDIR_HORI_LEFT_TOP );
@@ -42,7 +42,7 @@ TextDirectionListBox::TextDirectionListBox( Window* pParent, Window* pWindow1, W
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTextDirectionListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTextDirectionListBox(vcl::Window *pParent, VclBuilder::stringmap &)
      {
          return new TextDirectionListBox(pParent);
      }

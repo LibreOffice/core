@@ -59,7 +59,7 @@ namespace dbaui
         }
     };
 
-    ODataView::ODataView(   Window* pParent,
+    ODataView::ODataView(   vcl::Window* pParent,
                             IController& _rController,
                             const Reference< XComponentContext >& _rxContext,
                             WinBits nStyle)

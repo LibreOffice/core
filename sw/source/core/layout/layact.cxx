@@ -2110,7 +2110,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
     if ( !m_bIndicator )
     {
         m_bIndicator = true;
-        Window *pWin = pImp->GetShell()->GetWin();
+        vcl::Window *pWin = pImp->GetShell()->GetWin();
         if ( pWin )
         {
             Rectangle aRect( 0, 0, 5, 5 );

@@ -38,7 +38,7 @@ namespace svt { namespace table
     /** the window containing the content area (including headers) of
         a table control
     */
-    class TableDataWindow : public Window
+    class TableDataWindow : public vcl::Window
     {
         friend class TableFunctionSet;
     private:

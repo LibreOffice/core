@@ -111,7 +111,7 @@ void DBSaveData::Restore()
 
 //  class ScDbNameDlg
 
-ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
     ScViewData* ptrViewData)
     : ScAnyRefDlg(pB, pCW, pParent,
         "DefineDatabaseRangeDialog",
@@ -140,9 +140,9 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     get(m_pBtnCancel, "cancel");
     get(m_pBtnAdd, "add");
     aStrAdd = m_pBtnAdd->GetText();
-    aStrModify = get<Window>("modify")->GetText();
+    aStrModify = get<vcl::Window>("modify")->GetText();
     get(m_pBtnRemove, "delete");
-    aStrInvalid = get<Window>("invalid")->GetText();
+    aStrInvalid = get<vcl::Window>("invalid")->GetText();
 
     m_pFTSource->SetStyle(m_pFTSource->GetStyle() | WB_NOLABEL);
     m_pFTOperations->SetStyle(m_pFTOperations->GetStyle() | WB_NOLABEL);

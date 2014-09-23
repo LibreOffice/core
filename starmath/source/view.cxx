@@ -706,7 +706,7 @@ void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const 
 /**************************************************************************/
 
 SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWindow,
-                               Window *pParent) :
+                               vcl::Window *pParent) :
     SfxDockingWindow(pBindings_, pChildWindow, pParent, SmResId(RID_CMDBOXWINDOW)),
     aEdit       (*this),
     aController (aEdit, SID_TEXT, *pBindings_),
@@ -887,7 +887,7 @@ void SmCmdBoxWindow::GetFocus()
 
 SFX_IMPL_DOCKINGWINDOW_WITHID(SmCmdBoxWrapper, SID_CMDBOXWINDOW);
 
-SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, sal_uInt16 nId,
+SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
                                  SfxBindings *pBindings,
                                  SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
@@ -1360,7 +1360,7 @@ bool SmViewShell::HasPrintOptionsPage() const
     return true;
 }
 
-SfxTabPage* SmViewShell::CreatePrintOptionsPage(Window *pParent,
+SfxTabPage* SmViewShell::CreatePrintOptionsPage(vcl::Window *pParent,
                                                 const SfxItemSet &rOptions)
 {
     return SmPrintOptionsTabPage::Create(pParent, rOptions);

@@ -40,7 +40,7 @@ public:
     ImplData();
     ~ImplData();
 
-    Window*         mpParent;
+    vcl::Window*         mpParent;
     Size            maMaxOutSize;
 };
 
@@ -68,7 +68,7 @@ private:
     DECL_LINK(DockingHdl, void *);
     DECL_LINK(DockTimerHdl, void *);
 public:
-    ImplDockFloatWin( Window* pParent, WinBits nWinBits,
+    ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
     virtual ~ImplDockFloatWin();
 
@@ -82,7 +82,7 @@ public:
     virtual bool    Close() SAL_OVERRIDE;
 };
 
-ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
+ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                                     DockingWindow* pDockingWin ) :
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
@@ -326,7 +326,7 @@ void DockingWindow::ImplInitDockingWindowData()
     mbHideBtn      = false;
 }
 
-void DockingWindow::ImplInit( Window* pParent, WinBits nStyle )
+void DockingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
@@ -406,14 +406,14 @@ DockingWindow::DockingWindow( WindowType nType ) :
     ImplInitDockingWindowData();
 }
 
-DockingWindow::DockingWindow( Window* pParent, WinBits nStyle ) :
+DockingWindow::DockingWindow( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_DOCKINGWINDOW )
 {
     ImplInitDockingWindowData();
     ImplInit( pParent, nStyle );
 }
 
-DockingWindow::DockingWindow( Window* pParent, const ResId& rResId ) :
+DockingWindow::DockingWindow( vcl::Window* pParent, const ResId& rResId ) :
     Window( WINDOW_DOCKINGWINDOW )
 {
     ImplInitDockingWindowData();
@@ -579,7 +579,7 @@ bool DockingWindow::Notify( NotifyEvent& rNEvt )
                     if( ! IsFloatingMode() || ! mpFloatWin->mpWindowImpl->mbFrame )
                     {
                         Point   aPos = pMEvt->GetPosPixel();
-                        Window* pWindow = rNEvt.GetWindow();
+                        vcl::Window* pWindow = rNEvt.GetWindow();
                         if ( pWindow != this )
                         {
                             aPos = pWindow->OutputToScreenPixel( aPos );
@@ -739,7 +739,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
 
                 maDockPos = Window::GetPosPixel();
 
-                Window* pRealParent = mpWindowImpl->mpRealParent;
+                vcl::Window* pRealParent = mpWindowImpl->mpRealParent;
                 mpOldBorderWin = mpWindowImpl->mpBorderWindow;
 
                 ImplDockFloatWin* pWin =
@@ -800,7 +800,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
                 mpImplData->maMaxOutSize = mpFloatWin->GetMaxOutputSizePixel();
 
-                Window* pRealParent = mpWindowImpl->mpRealParent;
+                vcl::Window* pRealParent = mpWindowImpl->mpRealParent;
                 mpWindowImpl->mpBorderWindow = NULL;
                 if ( mpOldBorderWin )
                 {

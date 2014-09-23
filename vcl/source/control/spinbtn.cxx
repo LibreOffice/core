@@ -23,7 +23,7 @@
 #include <vcl/spin.hxx>
 #include <vcl/settings.hxx>
 
-void SpinButton::ImplInit( Window* pParent, WinBits nStyle )
+void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     mbUpperIn     = false;
     mbLowerIn     = false;
@@ -48,7 +48,7 @@ void SpinButton::ImplInit( Window* pParent, WinBits nStyle )
     Control::ImplInit( pParent, nStyle, NULL );
 }
 
-SpinButton::SpinButton( Window* pParent, WinBits nStyle )
+SpinButton::SpinButton( vcl::Window* pParent, WinBits nStyle )
     :Control( WINDOW_SPINBUTTON )
     ,mbUpperIsFocused( false )
 {

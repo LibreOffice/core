@@ -93,7 +93,7 @@ namespace
 }
 
 // class OFieldDescControl
-OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar )
+OFieldDescControl::OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar )
     :TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
     ,pHelp( pHelpBar )
     ,pLastFocusWindow(NULL)
@@ -163,11 +163,11 @@ OFieldDescControl::~OFieldDescControl()
 {
 
     {
-        boost::scoped_ptr<Window> aTemp(m_pVertScroll);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pVertScroll);
         m_pVertScroll    = NULL;
     }
     {
-        boost::scoped_ptr<Window> aTemp(m_pHorzScroll);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pHorzScroll);
         m_pHorzScroll    = NULL;
     }
     if ( m_bAdded )
@@ -226,7 +226,7 @@ IMPL_LINK(OFieldDescControl, OnScroll, ScrollBar*, /*pBar*/)
 
 namespace
 {
-    void getMaxXPosition(Window* _pWindow,long& _rnMaxXPosition)
+    void getMaxXPosition(vcl::Window* _pWindow,long& _rnMaxXPosition)
     {
         if (_pWindow)
         {
@@ -1556,7 +1556,7 @@ void OFieldDescControl::GetFocus()
     }
 }
 
-void OFieldDescControl::implFocusLost(Window* _pWhich)
+void OFieldDescControl::implFocusLost(vcl::Window* _pWhich)
 {
     OSL_ENSURE(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
 

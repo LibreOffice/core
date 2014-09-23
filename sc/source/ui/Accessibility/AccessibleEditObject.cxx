@@ -54,7 +54,7 @@ using namespace ::com::sun::star::accessibility;
 
 ScAccessibleEditObject::ScAccessibleEditObject(
         const uno::Reference<XAccessible>& rxParent,
-        EditView* pEditView, Window* pWin, const OUString& rName,
+        EditView* pEditView, vcl::Window* pWin, const OUString& rName,
         const OUString& rDescription, EditObjectType eObjectType)
     :
     ScAccessibleContextBase(rxParent, AccessibleRole::TEXT_FRAME),
@@ -513,19 +513,19 @@ uno::Reference< XAccessibleRelationSet > ScAccessibleEditObject::getAccessibleRe
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Window* pWindow = mpWindow;
+    vcl::Window* pWindow = mpWindow;
     utl::AccessibleRelationSetHelper* rRelationSet = new utl::AccessibleRelationSetHelper;
     uno::Reference< XAccessibleRelationSet > rSet = rRelationSet;
     if ( pWindow )
     {
-        Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
+        vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
             aSequence[0] = pLabeledBy->GetAccessible();
             rRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::LABELED_BY, aSequence ) );
         }
-        Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+        vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if ( pMemberOf && pMemberOf != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);

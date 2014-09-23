@@ -23,7 +23,7 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
+ScMetricInputDlg::ScMetricInputDlg( vcl::Window*         pParent,
                                     const OString&  sDialogName,
                                     long            nCurrent,
                                     long            nDefault,

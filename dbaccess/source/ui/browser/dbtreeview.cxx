@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 // class DBTreeView
-DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
+DBTreeView::DBTreeView( vcl::Window* pParent, WinBits nBits)
                     :   Window( pParent, nBits )
                     , m_pTreeListBox(NULL)
 {
@@ -53,7 +53,7 @@ DBTreeView::~DBTreeView()
             m_pTreeListBox->GetModel()->RemoveView(m_pTreeListBox);
             m_pTreeListBox->DisconnectFromModel();
         }
-        boost::scoped_ptr<Window> aTemp(m_pTreeListBox);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pTreeListBox);
         m_pTreeListBox = NULL;
     }
 }

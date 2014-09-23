@@ -29,7 +29,7 @@ namespace sd {
 
 class View;
 class ViewShell;
-class Window;
+namespace vcl { class Window; }
 
 class FuPresentationLayout
     : public FuPoor

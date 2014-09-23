@@ -43,7 +43,7 @@
 
 namespace svtools {
 
-ODocumentInfoPreview::ODocumentInfoPreview(Window * pParent, WinBits nBits):
+ODocumentInfoPreview::ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits):
     Window(pParent, WB_DIALOGCONTROL), m_pEditWin(this, nBits),
     m_pInfoTable(new SvtDocInfoTable_Impl),
     m_aLanguageTag(SvtPathOptions().GetLanguageTag()) // detect application language
@@ -55,7 +55,7 @@ ODocumentInfoPreview::ODocumentInfoPreview(Window * pParent, WinBits nBits):
 
 ODocumentInfoPreview::~ODocumentInfoPreview() {}
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeODocumentInfoPreview(Window *pParent, VclBuilder::stringmap&)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeODocumentInfoPreview(vcl::Window *pParent, VclBuilder::stringmap&)
 {
     return new ODocumentInfoPreview(pParent, WB_BORDER | WB_READONLY);
 }

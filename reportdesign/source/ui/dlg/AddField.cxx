@@ -144,7 +144,7 @@ void OAddFieldWindowListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_r
 // class OAddFieldWindow
 
 
-OAddFieldWindow::OAddFieldWindow(Window* pParent
+OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent
                                  ,const uno::Reference< beans::XPropertySet >& _xRowSet
                                  )
             :FloatingWindow(pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE))

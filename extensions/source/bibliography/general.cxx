@@ -166,7 +166,7 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::
 {
 }
 
-BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
+BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent, "GeneralPage", "modules/sbibliography/ui/generalpage.ui"),
     sErrorPrefix(BIB_RESSTR(ST_ERROR_PREFIX)),
     pDatMan(pMan)
@@ -246,7 +246,7 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
 
     xCtrlContnr = VCLUnoHelper::CreateControlContainer(pGrid);
 
-    std::vector<Window*> aChildren;
+    std::vector<vcl::Window*> aChildren;
 
     AddControlWithError(lcl_GetColumnName(pMapping, IDENTIFIER_POS), *pIdentifierFT,
         sTableErrorString,
@@ -400,7 +400,7 @@ void BibGeneralPage::CommitActiveControl()
 }
 
 void BibGeneralPage::AddControlWithError( const OUString& rColumnName, FixedText &rLabel,
-    OUString& rErrorString, const OString& sHelpId, sal_uInt16 nIndexInFTArray, std::vector<Window*> &rChildren)
+    OUString& rErrorString, const OString& sHelpId, sal_uInt16 nIndexInFTArray, std::vector<vcl::Window*> &rChildren)
 {
     const OUString aColumnUIName(rLabel.GetText());
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
@@ -426,7 +426,7 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, FixedText
 uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
         const OUString& rName,
         FixedText& rLabel, const OString& sHelpId, sal_Int16& rIndex,
-        std::vector<Window*>& rChildren)
+        std::vector<vcl::Window*>& rChildren)
 {
     uno::Reference< awt::XControlModel >  xCtrModel;
     try
@@ -514,7 +514,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     xCtrWin->setVisible( sal_True );
                     xControl->setDesignMode( sal_True );
 
-                    Window* pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
+                    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
                     pWindow->set_grid_top_attach(rLabel.get_grid_top_attach());
                     pWindow->set_grid_left_attach(rLabel.get_grid_left_attach()+1);
                     pWindow->set_valign(VCL_ALIGN_CENTER);
@@ -674,7 +674,7 @@ bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
                 uno::Reference< awt::XControl >  xControl( aControls[ nCtrlIndex ], UNO_QUERY );
                 DBG_ASSERT( xControl.is(), "-BibGeneralPage::HandleShortCutKey(): a control which is not a control!" );
 
-                Window*         pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
+                vcl::Window*         pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
 
                 if( pWindow )
                 {

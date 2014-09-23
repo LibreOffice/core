@@ -57,7 +57,7 @@ class MasterPagesSelector
 {
 public:
     MasterPagesSelector (
-        ::Window* pParent,
+        vcl::Window* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
@@ -83,7 +83,7 @@ public:
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
     virtual bool IsResizable (void);
-    virtual ::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow (void);
     virtual sal_Int32 GetMinimumWidth (void);
 
     /** Update the selection of previews according to whatever

@@ -28,7 +28,7 @@
 #include <svx/svxdllapi.h>
 
 class SdrView;
-class Window;
+namespace vcl { class Window; }
 
 namespace accessibility {
 
@@ -140,13 +140,13 @@ public:
     /** Set the window that is used to construct SvxTextEditSources which in
         turn is used to create accessible edit engines.
     */
-    void SetWindow (Window* pWindow);
+    void SetWindow (vcl::Window* pWindow);
 
     /** Return the current Window.
         @return
             The returned value may be NULL.
     */
-    Window* GetWindow (void) const { return mpWindow;}
+    vcl::Window* GetWindow (void) const { return mpWindow;}
 
     /** The view forwarder allows the transformation between internal
         and pixel coordinates and can be asked for the visible area.
@@ -188,7 +188,7 @@ private:
     /** This window is necessary to construct an SvxTextEditSource which in
         turn is used to create an accessible edit engine.
     */
-    Window* mpWindow;
+    vcl::Window* mpWindow;
 
     /** The view forwarder allows the transformation between internal
         and pixel coordinates and can be asked for the visible area.

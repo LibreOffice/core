@@ -30,10 +30,10 @@
 class SwDocStatPage: public SfxTabPage
 {
 public:
-    SwDocStatPage(Window *pParent, const SfxItemSet &rSet);
+    SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwDocStatPage();
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
 protected:
     virtual bool    FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;

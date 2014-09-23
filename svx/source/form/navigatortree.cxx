@@ -112,7 +112,7 @@ namespace svxform
         }
     }
 
-    NavigatorTree::NavigatorTree( Window* pParent )
+    NavigatorTree::NavigatorTree( vcl::Window* pParent )
         :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL ) // #100258# OJ WB_HSCROLL added
         ,m_aControlExchange(this)
         ,m_pNavModel( NULL )
@@ -2102,7 +2102,7 @@ namespace svxform
                 OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
                 if ( ( OUTDEV_WINDOW == rOutDev.GetOutDevType() ) && !aMarkRect.IsEmpty() )
                 {
-                    pFormView->MakeVisible( aMarkRect, (Window&)rOutDev );
+                    pFormView->MakeVisible( aMarkRect, (vcl::Window&)rOutDev );
                 }
             } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
         }
@@ -2175,7 +2175,7 @@ namespace svxform
                 OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
                 if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
                 {
-                    pFormView->MakeVisible( aMarkRect, (Window&)rOutDev );
+                    pFormView->MakeVisible( aMarkRect, (vcl::Window&)rOutDev );
                 }
             } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
         }

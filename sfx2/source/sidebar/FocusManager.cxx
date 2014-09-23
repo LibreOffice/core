@@ -174,7 +174,7 @@ void FocusManager::SetButtons (const ::std::vector<Button*>& rButtons)
 
 
 
-void FocusManager::RegisterWindow (Window& rWindow)
+void FocusManager::RegisterWindow (vcl::Window& rWindow)
 {
     rWindow.AddEventListener(LINK(this, FocusManager, WindowEventListener));
 }
@@ -182,7 +182,7 @@ void FocusManager::RegisterWindow (Window& rWindow)
 
 
 
-void FocusManager::UnregisterWindow (Window& rWindow)
+void FocusManager::UnregisterWindow (vcl::Window& rWindow)
 {
     rWindow.RemoveEventListener(LINK(this, FocusManager, WindowEventListener));
 }
@@ -190,7 +190,7 @@ void FocusManager::UnregisterWindow (Window& rWindow)
 
 
 
-FocusManager::FocusLocation FocusManager::GetFocusLocation (const Window& rWindow) const
+FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& rWindow) const
 {
     // Check the deck title.
     if (mpDeckTitleBar != NULL)
@@ -309,7 +309,7 @@ void FocusManager::FocusPanel (
 
 void FocusManager::FocusPanelContent (const sal_Int32 nPanelIndex)
 {
-    Window* pWindow = VCLUnoHelper::GetWindow(maPanels[nPanelIndex]->GetElementWindow());
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(maPanels[nPanelIndex]->GetElementWindow());
     if (pWindow != NULL)
     {
         mbObservingContentControlFocus = true;
@@ -342,7 +342,7 @@ void FocusManager::ClickButton (const sal_Int32 nButtonIndex)
 
 
 
-void FocusManager::RemoveWindow (Window& rWindow)
+void FocusManager::RemoveWindow (vcl::Window& rWindow)
 {
     ::std::vector<Panel*>::iterator iPanel (::std::find(maPanels.begin(), maPanels.end(), &rWindow));
     if (iPanel != maPanels.end())
@@ -435,7 +435,7 @@ bool FocusManager::MoveFocusInsideDeckTitle (
 
 void FocusManager::HandleKeyEvent (
     const vcl::KeyCode& rKeyCode,
-    const Window& rWindow)
+    const vcl::Window& rWindow)
 {
     const FocusLocation aLocation (GetFocusLocation(rWindow));
     mpLastFocusedWindow = NULL;
@@ -594,7 +594,7 @@ IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
         return 0;
 
     VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
-    Window* pSource = pWindowEvent->GetWindow();
+    vcl::Window* pSource = pWindowEvent->GetWindow();
     if (pSource == NULL)
         return 0;
 
@@ -635,7 +635,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
         return 0;
 
     VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
-    Window* pSource = pWindowEvent->GetWindow();
+    vcl::Window* pSource = pWindowEvent->GetWindow();
     if (pSource == NULL)
         return 0;
 
@@ -647,7 +647,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
 
             // Go up the window hierarchy to find out whether the
             // parent of the event source is known to us.
-            Window* pWindow = pSource;
+            vcl::Window* pWindow = pSource;
             FocusLocation aLocation (PC_None, -1);
             while (true)
             {

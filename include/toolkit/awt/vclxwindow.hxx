@@ -46,7 +46,7 @@
 #include <list>
 #include <boost/function.hpp>
 
-class Window;
+namespace vcl { class Window; }
 class VclSimpleEvent;
 class VclWindowEvent;
 struct SystemParentData;
@@ -128,13 +128,13 @@ public:
     VCLXWindow( bool bWithDefaultProps = false );
     virtual ~VCLXWindow();
 
-    virtual void    SetWindow( Window* pWindow );
-    Window*         GetWindow() const                                   { return (Window*)GetOutputDevice(); }
+    virtual void    SetWindow( vcl::Window* pWindow );
+    vcl::Window*    GetWindow() const                                   { return (vcl::Window*)GetOutputDevice(); }
 
     void    suspendVclEventListening( );
     void    resumeVclEventListening( );
 
-    void    notifyWindowRemoved( Window& _rWindow );
+    void    notifyWindowRemoved( vcl::Window& _rWindow );
 
     // ::com::sun::star::lang::XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();

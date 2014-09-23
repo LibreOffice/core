@@ -47,7 +47,7 @@ namespace bib
 
 
 
-    BibView::BibView( Window* _pParent, BibDataManager* _pManager, WinBits _nStyle )
+    BibView::BibView( vcl::Window* _pParent, BibDataManager* _pManager, WinBits _nStyle )
         :BibWindow( _pParent, _nStyle )
         ,m_pDatMan( _pManager )
         ,m_xDatMan( _pManager )

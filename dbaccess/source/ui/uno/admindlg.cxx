@@ -92,7 +92,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-Dialog* ODataSourcePropertyDialog::createDialog(Window* _pParent)
+Dialog* ODataSourcePropertyDialog::createDialog(vcl::Window* _pParent)
 {
 
     ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_aContext);

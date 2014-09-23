@@ -44,7 +44,7 @@ class DataSourceDialog :
 {
 public:
     explicit DataSourceDialog(
-        Window * pParent,
+        vcl::Window * pParent,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDocument,
         const ::com::sun::star::uno::Reference<

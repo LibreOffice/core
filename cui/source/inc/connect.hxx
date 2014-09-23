@@ -60,10 +60,10 @@ private:
 
 public:
 
-    SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttrs );
+    SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxConnectionPage();
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet* );
+    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -79,7 +79,7 @@ public:
 class SvxConnectionDialog : public SfxSingleTabDialog
 {
 public:
-    SvxConnectionDialog( Window* pParent, const SfxItemSet& rAttr,
+    SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet& rAttr,
                        const SdrView* pView );
     virtual ~SvxConnectionDialog();
 };

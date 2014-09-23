@@ -55,16 +55,16 @@ namespace svt
             <p>Beware: In opposite to the old DragServer::CopyString, this method does not <em>add</em> the string
             to the clipboard, instead the old clipboard content is <em>replaced</em>!</p>
         */
-        SVT_DLLPUBLIC static void           CopyString( const OUString& _rContent, Window* _pWindow = NULL );
+        SVT_DLLPUBLIC static void           CopyString( const OUString& _rContent, vcl::Window* _pWindow = NULL );
 
         /** extracts a string from the system clipboard given
             @return <TRUE/> if the extraction was successful, i.e. if the clipboard contained a string content
         */
-        SVT_DLLPUBLIC static bool           PasteString( OUString& _rContent, Window* _pWindow = NULL );
+        SVT_DLLPUBLIC static bool           PasteString( OUString& _rContent, vcl::Window* _pWindow = NULL );
 
         /** starts dragging a simple string
         */
-        SVT_DLLPUBLIC static void           StartStringDrag( const OUString& _rContent, Window* _pWindow, sal_Int8 _nDragSourceActions );
+        SVT_DLLPUBLIC static void           StartStringDrag( const OUString& _rContent, vcl::Window* _pWindow, sal_Int8 _nDragSourceActions );
     };
 
 

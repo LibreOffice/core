@@ -224,7 +224,7 @@ public:
         view and other UI elements, like scroll bars and rulers.  Ownership
         of that window remains with the called ViewShellBase object.
     */
-    ::Window* GetViewWindow (void);
+    vcl::Window* GetViewWindow (void);
 
     /** returns the ui descriptive name for the given uno slot. The result is taken from the configuration
         and not cached, so do not use it excessive (f.e. in status updates) */

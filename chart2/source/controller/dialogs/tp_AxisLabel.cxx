@@ -31,7 +31,7 @@
 namespace chart
 {
 
-SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
+SchAxisLabelTabPage::SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage( pParent, "AxisLabelTabPage","modules/schart/ui/tp_axisLabel.ui", &rInAttrs ),
 
         m_bShowStaggeringControls( true ),
@@ -79,7 +79,7 @@ void SchAxisLabelTabPage::Construct()
 {
 }
 
-SfxTabPage* SchAxisLabelTabPage::Create( Window* pParent, const SfxItemSet* rAttrs )
+SfxTabPage* SchAxisLabelTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
 {
     return new SchAxisLabelTabPage( pParent, *rAttrs );
 }

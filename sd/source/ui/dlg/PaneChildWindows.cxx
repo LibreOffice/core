@@ -50,7 +50,7 @@ SFX_IMPL_DOCKINGWINDOW_WITHID(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
 //===== PaneChildWindow =======================================================
 
 PaneChildWindow::PaneChildWindow (
-    ::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
@@ -90,7 +90,7 @@ PaneChildWindow::~PaneChildWindow (void)
 //===== LeftPaneImpressChildWindow ============================================
 
 LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
-    ::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
@@ -108,7 +108,7 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
 //===== LeftPaneDrawChildWindow ===============================================
 
 LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
-    ::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)

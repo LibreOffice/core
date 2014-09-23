@@ -53,7 +53,7 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
     return cSelectedChar;
 }
 
-SvxShowCharSet::SvxShowCharSet(Window* pParent)
+SvxShowCharSet::SvxShowCharSet(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
     , m_pAccessible(NULL)
     , aVscrollSB( this, WB_VERT)
@@ -82,7 +82,7 @@ void SvxShowCharSet::Resize()
     SetFont(GetFont()); //force recalculation of correct fontsize
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowCharSet(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxShowCharSet(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxShowCharSet(pParent);
 }

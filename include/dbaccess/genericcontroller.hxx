@@ -65,7 +65,7 @@ namespace dbtools
     class SQLExceptionInfo;
 }
 
-class Window;
+namespace vcl { class Window; }
 namespace dbaui
 {
     class ODataView;
@@ -424,7 +424,7 @@ namespace dbaui
         */
         virtual void InvalidateAll();
         // late construction
-        virtual bool Construct(Window* pParent);
+        virtual bool Construct(vcl::Window* pParent);
 
         /** get the layout manager
             @param  _xFrame

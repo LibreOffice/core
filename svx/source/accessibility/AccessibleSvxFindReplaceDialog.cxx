@@ -39,11 +39,11 @@ VCLXAccessibleSvxFindReplaceDialog::~VCLXAccessibleSvxFindReplaceDialog()
 void VCLXAccessibleSvxFindReplaceDialog::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {
     VCLXAccessibleComponent::FillAccessibleRelationSet( rRelationSet );
-    Window* pDlg = GetWindow();
+    vcl::Window* pDlg = GetWindow();
     if ( pDlg )
     {
         SvxSearchDialog* pSrchDlg = static_cast<SvxSearchDialog*>( pDlg );
-        Window* pDocWin = pSrchDlg->GetDocWin();
+        vcl::Window* pDocWin = pSrchDlg->GetDocWin();
         if ( !pDocWin )
         {
             return;

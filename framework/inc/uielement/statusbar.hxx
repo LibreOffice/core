@@ -31,7 +31,7 @@ class FrameworkStatusBar : public StatusBar
 {
     public:
 
-        FrameworkStatusBar( Window*           pParent,
+        FrameworkStatusBar( vcl::Window*           pParent,
                             WinBits           nWinBits );
         virtual ~FrameworkStatusBar();
 

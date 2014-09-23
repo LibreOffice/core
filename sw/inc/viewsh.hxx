@@ -59,7 +59,7 @@ class SwViewOption;
 class SwViewImp;
 class SwPrintData;
 class SwPagePreviewPrtData;
-class Window;
+namespace vcl { class Window; }
 class OutputDevice;
 class SwLayIdle;
 struct ShellResource;
@@ -98,7 +98,7 @@ class SW_DLLPUBLIC SwViewShell : public Ring
 {
     friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
     friend void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pOut,
-                                 Window *pWin, sal_uInt16 nZoom );
+                                 vcl::Window *pWin, sal_uInt16 nZoom );
 
     friend class SwViewImp;
     friend class SwLayIdle;
@@ -125,7 +125,7 @@ class SW_DLLPUBLIC SwViewShell : public Ring
     SwViewImp    *mpImp;             // Core-internals of SwViewShell.
                                     // The pointer is never 0.
 
-    Window       *mpWin;              ///< = 0 during printing or pdf export
+    ::vcl::Window *mpWin;             ///< = 0 during printing or pdf export
     OutputDevice *mpOut;              ///< Window, Printer, VirtDev, ...
     OutputDevice* mpTmpRef;           // Temporariy reference device. Is used
                                      // during (printer depending) prospect
@@ -184,7 +184,7 @@ class SW_DLLPUBLIC SwViewShell : public Ring
 
 protected:
     static ShellResource*   mpShellRes;      ///< Resources for the Shell.
-    static Window*          mpCareWindow;    ///< Avoid this window.
+    static vcl::Window*          mpCareWindow;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
     SwDoc                   *mpDoc;          ///< The document; never 0.
@@ -344,10 +344,10 @@ public:
     // 2. GetWin:      Available if we not printing
     // 3. GetOut:      Printer, Window or Virtual device
     OutputDevice& GetRefDev() const;
-    inline Window* GetWin()    const { return mpWin; }
+    inline vcl::Window* GetWin()    const { return mpWin; }
     inline OutputDevice* GetOut()     const { return mpOut; }
 
-    void SetWin(Window* win) { mpWin = win; }
+    void SetWin(vcl::Window* win) { mpWin = win; }
     static inline bool IsLstEndAction() { return SwViewShell::mbLstAct; }
 
     // Change of all page descriptors.
@@ -433,10 +433,10 @@ public:
     static void           SetShellRes( ShellResource* pRes ) { mpShellRes = pRes; }
     static ShellResource* GetShellRes();
 
-    static void           SetCareWin( Window* pNew );
-    static Window*        GetCareWin(SwViewShell& rVSh)
+    static void           SetCareWin( vcl::Window* pNew );
+    static vcl::Window*        GetCareWin(SwViewShell& rVSh)
                           { return mpCareWindow ? mpCareWindow : CareChildWin(rVSh); }
-    static Window*        CareChildWin(SwViewShell& rVSh);
+    static vcl::Window*        CareChildWin(SwViewShell& rVSh);
 
     inline SfxViewShell   *GetSfxViewShell() { return mpSfxViewShell; }
     inline void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
@@ -547,9 +547,9 @@ public:
 
     SwAccessibleMap* GetAccessibleMap();
 
-    SwViewShell( SwViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
+    SwViewShell( SwViewShell&, vcl::Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );
-    SwViewShell( SwDoc& rDoc, Window *pWin,
+    SwViewShell( SwDoc& rDoc, vcl::Window *pWin,
                const SwViewOption *pOpt = 0, OutputDevice *pOut = 0,
                long nFlags = 0 );
     virtual ~SwViewShell();

@@ -64,12 +64,12 @@ class ScTpContentOptions : public SfxTabPage
     DECL_LINK( SelLbObjHdl, ListBox* );
     DECL_LINK( CBHdl, CheckBox* );
 
-            ScTpContentOptions( Window*         pParent,
+            ScTpContentOptions( vcl::Window*         pParent,
                              const SfxItemSet&  rArgSet );
             virtual ~ScTpContentOptions();
 
 public:
-    static  SfxTabPage* Create          ( Window*               pParent,
+    static  SfxTabPage* Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
@@ -112,12 +112,12 @@ class ScTpLayoutOptions : public SfxTabPage
 
     DECL_LINK(  UpdateHdl, CheckBox* );
 
-            ScTpLayoutOptions( Window*          pParent,
+            ScTpLayoutOptions( vcl::Window*          pParent,
                              const SfxItemSet&  rArgSet );
             virtual ~ScTpLayoutOptions();
 
 public:
-    static  SfxTabPage* Create          ( Window*               pParent,
+    static  SfxTabPage* Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;

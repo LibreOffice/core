@@ -28,7 +28,7 @@ class SwModalRedlineAcceptDlg : public SfxModalDialog
     SwRedlineAcceptDlg*     pImplDlg;
 
 public:
-    SwModalRedlineAcceptDlg(Window *pParent);
+    SwModalRedlineAcceptDlg(vcl::Window *pParent);
     virtual ~SwModalRedlineAcceptDlg();
 
     void            AcceptAll( bool bAccept );

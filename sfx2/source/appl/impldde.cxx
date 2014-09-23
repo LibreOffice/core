@@ -64,11 +64,11 @@ class SvDDELinkEditDialog : public ModalDialog
 
     DECL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit* );
 public:
-    SvDDELinkEditDialog( Window* pParent, SvBaseLink* );
+    SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* );
     OUString GetCmd() const;
 };
 
-SvDDELinkEditDialog::SvDDELinkEditDialog( Window* pParent, SvBaseLink* pLink )
+SvDDELinkEditDialog::SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* pLink )
     : ModalDialog( pParent, "LinkEditDialog", "sfx/ui/linkeditdialog.ui" )
 {
     get(m_pOKButton, "ok");
@@ -253,7 +253,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     return true;
 }
 
-void SvDDEObject::Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl )
+void SvDDEObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl )
 {
     SvDDELinkEditDialog aDlg( pParent, pBaseLink );
     if ( RET_OK == aDlg.Execute() && rEndEditHdl.IsSet() )

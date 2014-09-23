@@ -499,7 +499,7 @@ namespace svxform
         virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
     public:
-        NavigatorTree(Window* pParent );
+        NavigatorTree(vcl::Window* pParent );
         virtual ~NavigatorTree();
 
         void Clear();
@@ -568,7 +568,7 @@ namespace svxform
 
     public:
         NavigatorFrame( SfxBindings *pBindings, SfxChildWindow *pMgr,
-                       Window* pParent );
+                       vcl::Window* pParent );
         virtual ~NavigatorFrame();
 
         void UpdateContent( FmFormShell* pFormShell );
@@ -580,7 +580,7 @@ namespace svxform
     class SVX_DLLPUBLIC NavigatorFrameManager : public SfxChildWindow
     {
     public:
-        SVX_DLLPRIVATE NavigatorFrameManager( Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,
+        SVX_DLLPRIVATE NavigatorFrameManager( vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,
                           SfxChildWinInfo *pInfo );
         SFX_DECL_CHILDWINDOW( NavigatorFrameManager );
     };

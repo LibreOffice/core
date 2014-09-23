@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 
 //  Corner-Button
 
-ScCornerButton::ScCornerButton( Window* pParent, ScViewData* pData, bool bAdditional ) :
+ScCornerButton::ScCornerButton( vcl::Window* pParent, ScViewData* pData, bool bAdditional ) :
     Window( pParent, WinBits( 0 ) ),
     pViewData( pData ),
     bAdd( bAdditional )
@@ -184,7 +184,7 @@ static bool lcl_HasRowOutline( const ScViewData& rViewData )
     return false;
 }
 
-ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
+ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     pFrameWin( pParent ),
     aViewData( &rDocSh, pViewShell ),
     pSelEngine( NULL ),
@@ -271,7 +271,7 @@ IMPL_LINK_NOARG(ScTabView, TimerHdl)
 
 // --- Resize ---------------------------------------------------------------------
 
-static void lcl_SetPosSize( Window& rWindow, const Point& rPos, const Size& rSize,
+static void lcl_SetPosSize( vcl::Window& rWindow, const Point& rPos, const Size& rSize,
                         long nTotalWidth, bool bLayoutRTL )
 {
     Point aNewPos = rPos;
@@ -870,7 +870,7 @@ void ScTabView::ActiveGrabFocus()
         pGridWin[ePos]->GrabFocus();
 }
 
-ScSplitPos ScTabView::FindWindow( Window* pWindow ) const
+ScSplitPos ScTabView::FindWindow( vcl::Window* pWindow ) const
 {
     ScSplitPos eVal = SC_SPLIT_BOTTOMLEFT;      // Default
     for (sal_uInt16 i=0; i<4; i++)
@@ -1378,7 +1378,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
     }
 }
 
-inline void ShowHide( Window* pWin, bool bShow )
+inline void ShowHide( vcl::Window* pWin, bool bShow )
 {
     OSL_ENSURE(pWin || !bShow, "Fenster ist nicht da");
     if (pWin)
@@ -1884,7 +1884,7 @@ Point ScTabView::GetMousePosPixel()
     return aPos;
 }
 
-static bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, Window* pWin )
+static bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, vcl::Window* pWin )
 {
     if (pWin)
     {
@@ -1919,7 +1919,7 @@ void ScTabView::SnapSplitPos( Point& rScreenPosPixel )
     if ( aViewData.GetVSplitMode() != SC_SPLIT_NONE )
         ePos = SC_SPLIT_TOPLEFT;
 
-    Window* pWin = pGridWin[ePos];
+    vcl::Window* pWin = pGridWin[ePos];
     if (!pWin)
     {
         OSL_FAIL("Window NULL");
@@ -1950,7 +1950,7 @@ void ScTabView::FreezeSplitters( bool bFreeze )
     ScSplitPos ePos = SC_SPLIT_BOTTOMLEFT;
     if ( eOldV != SC_SPLIT_NONE )
         ePos = SC_SPLIT_TOPLEFT;
-    Window* pWin = pGridWin[ePos];
+    vcl::Window* pWin = pGridWin[ePos];
 
     bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
 
@@ -2072,7 +2072,7 @@ void ScTabView::SplitAtCursor()
     ScSplitPos ePos = SC_SPLIT_BOTTOMLEFT;
     if ( aViewData.GetVSplitMode() != SC_SPLIT_NONE )
         ePos = SC_SPLIT_TOPLEFT;
-    Window* pWin = pGridWin[ePos];
+    vcl::Window* pWin = pGridWin[ePos];
     Point aWinStart = pWin->GetPosPixel();
 
     SCCOL nPosX = aViewData.GetCurX();
@@ -2136,7 +2136,7 @@ void ScTabView::SetNewVisArea()
                 pGridWin[i]->SetMapMode(aDrawMode[i]);
         }
 
-    Window* pActive = pGridWin[aViewData.GetActivePart()];
+    vcl::Window* pActive = pGridWin[aViewData.GetActivePart()];
     if (pActive)
         aViewData.GetViewShell()->VisAreaChanged(
             pActive->PixelToLogic(Rectangle(Point(),pActive->GetOutputSizePixel())) );

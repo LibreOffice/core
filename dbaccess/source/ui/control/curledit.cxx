@@ -25,7 +25,7 @@
 namespace dbaui
 {
 
-OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, WinBits _nBits,bool _bShowPrefix)
+OConnectionURLEdit::OConnectionURLEdit(vcl::Window* _pParent, WinBits _nBits,bool _bShowPrefix)
     :Edit(_pParent, _nBits)
     ,m_pTypeCollection(NULL)
     ,m_pForcedPrefix(NULL)
@@ -33,7 +33,7 @@ OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, WinBits _nBits,bool _bS
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeConnectionURLEdit(Window *pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeConnectionURLEdit(vcl::Window *pParent)
 {
     return new OConnectionURLEdit(pParent, WB_BORDER, false);
 }

@@ -42,7 +42,7 @@
 
 
 class ResMgr;
-class Window;
+namespace vcl { class Window; }
 
 class ImpSVGDialog : public ModalDialog
 {
@@ -64,7 +64,7 @@ private:
 
 public:
 
-    ImpSVGDialog( Window* pParent, /*ResMgr& rResMgr,*/
+    ImpSVGDialog( vcl::Window* pParent, /*ResMgr& rResMgr,*/
                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
     virtual ~ImpSVGDialog();
 

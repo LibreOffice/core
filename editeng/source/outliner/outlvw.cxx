@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 
 
 
-OutlinerView::OutlinerView( Outliner* pOut, Window* pWin )
+OutlinerView::OutlinerView( Outliner* pOut, vcl::Window* pWin )
 {
 
     pOwner                      = pOut;
@@ -73,7 +73,7 @@ void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
     pEditView->Paint( rRect, pTargetDevice );
 }
 
-bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
+bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
 {
     // For the first Paint/KeyInput/Drop an emty Outliner is turned into
     // an Outliner with exactly one paragraph.
@@ -1234,12 +1234,12 @@ void OutlinerView::HideCursor()
     pEditView->HideCursor();
 }
 
-void OutlinerView::SetWindow( Window* pWin )
+void OutlinerView::SetWindow( vcl::Window* pWin )
 {
     pEditView->SetWindow( pWin );
 }
 
-Window* OutlinerView::GetWindow() const
+vcl::Window* OutlinerView::GetWindow() const
 {
     return pEditView->GetWindow();
 }

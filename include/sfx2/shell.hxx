@@ -29,7 +29,7 @@
 #include <tools/rtti.hxx>
 
 class ResMgr;
-class Window;
+namespace vcl { class Window; }
 class ToolBox;
 class SfxItemPool;
 class SfxPoolItem;

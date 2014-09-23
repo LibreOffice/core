@@ -88,7 +88,7 @@ namespace dxcanvas
 
         uno::Reference< awt::XWindow > xParentWindow;
         maArguments[4] >>= xParentWindow;
-        Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+        vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
         if( !pParentWindow )
             throw lang::NoSupportException( "Parent window not VCL window, or canvas out-of-process!" );
 

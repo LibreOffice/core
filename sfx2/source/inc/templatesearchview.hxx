@@ -16,7 +16,7 @@ class TemplateSearchView : public ThumbnailView
 {
 public:
 
-    TemplateSearchView ( Window* pParent, WinBits nWinStyle = WB_TABSTOP | WB_VSCROLL);
+    TemplateSearchView ( vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP | WB_VSCROLL);
 
     virtual ~TemplateSearchView();
 

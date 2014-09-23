@@ -27,7 +27,7 @@
 #include <vcl/settings.hxx>
 #include <boost/scoped_ptr.hpp>
 
-SvxXMeasurePreview::SvxXMeasurePreview( Window* pParent, WinBits nStyle)
+SvxXMeasurePreview::SvxXMeasurePreview( vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)
 {
     SetMapMode( MAP_100TH_MM );
@@ -62,7 +62,7 @@ void SvxXMeasurePreview::Resize()
     pMeasureObj->SetPoint(aPt2, 1);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXMeasurePreview(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXMeasurePreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

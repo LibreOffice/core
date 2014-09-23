@@ -1411,7 +1411,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=sa
         VEC_SHAPE vecxShapeRemove;
         int nCountSelectedShape=0;
 
-        Window *pWin = GetShell()->GetWin();
+        vcl::Window *pWin = GetShell()->GetWin();
         bool bFocused = pWin && pWin->HasFocus();
         SwAccessibleObjShape_Impl *pShape = pShapes;
         int nShapeCount = nShapes;
@@ -1575,7 +1575,7 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
 
     if( pShapes )
     {
-        Window *pWin = GetShell()->GetWin();
+        vcl::Window *pWin = GetShell()->GetWin();
         bool bFocused = pWin && pWin->HasFocus();
         SwAccessibleObjShape_Impl  *pShape = pShapes;
         while( nShapes )
@@ -2201,7 +2201,7 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
 
 void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                                const SdrObject *pObj,
-                               Window* pWindow,
+                               vcl::Window* pWindow,
                                bool bRecursive )
 {
     SwAccessibleChild aFrmOrObj( pFrm, pObj, pWindow );
@@ -2328,7 +2328,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
 
 void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                                            const SdrObject *pObj,
-                                           Window* pWindow,
+                                           vcl::Window* pWindow,
                                            const SwRect& rOldBox )
 {
     SwAccessibleChild aFrmOrObj( pFrm, pObj, pWindow );
@@ -2928,7 +2928,7 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
 }
 
 sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrm& rParentFrm,
-                                          Window& rChild ) const
+                                          vcl::Window& rChild ) const
 {
     sal_Int32 nIndex( -1 );
 
@@ -3089,7 +3089,7 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
     Point aPoint = rPoint;
 
     aPoint = OutputDevice::LogicToLogic( aPoint, aSrc, aDest );
-    Window *pWin = GetShell()->GetWin();
+    vcl::Window *pWin = GetShell()->GetWin();
     if( pWin )
     {
         MapMode aMapMode;
@@ -3119,7 +3119,7 @@ Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
 Point SwAccessibleMap::PixelToLogic( const Point& rPoint ) const
 {
     Point aPoint;
-    Window *pWin = GetShell()->GetWin();
+    vcl::Window *pWin = GetShell()->GetWin();
     if( pWin )
     {
         aPoint = pWin->ScreenToOutputPixel( rPoint );

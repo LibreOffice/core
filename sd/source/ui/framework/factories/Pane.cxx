@@ -34,7 +34,7 @@ namespace sd { namespace framework {
 
 Pane::Pane (
     const Reference<XResourceId>& rxPaneId,
-    ::Window* pWindow)
+    vcl::Window* pWindow)
     throw ()
     : PaneInterfaceBase(MutexOwner::maMutex),
       mxPaneId(rxPaneId),
@@ -53,7 +53,7 @@ void Pane::disposing (void)
     mpWindow = NULL;
 }
 
-::Window* Pane::GetWindow (void)
+::vcl::Window* Pane::GetWindow (void)
 {
     if (mxWindow.is())
         return mpWindow;
@@ -90,7 +90,7 @@ sal_Bool SAL_CALL Pane::isVisible (void)
 {
     ThrowIfDisposed();
 
-    const ::Window* pWindow = GetWindow();
+    const vcl::Window* pWindow = GetWindow();
     if (pWindow != NULL)
         return pWindow->IsVisible();
     else
@@ -102,7 +102,7 @@ void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
 {
     ThrowIfDisposed();
 
-    ::Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if (pWindow != NULL)
         pWindow->Show(bIsVisible);
 }
@@ -111,7 +111,7 @@ Reference<css::accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    ::Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if (pWindow != NULL)
         return pWindow->GetAccessible(false);
     else
@@ -123,7 +123,7 @@ void SAL_CALL Pane::setAccessible (
     throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    ::Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if (pWindow != NULL)
         pWindow->SetAccessible(rxAccessible);
 }

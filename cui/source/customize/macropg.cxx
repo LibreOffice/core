@@ -129,7 +129,7 @@ bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-MacroEventListBox::MacroEventListBox( Window* pParent, WinBits nStyle )
+MacroEventListBox::MacroEventListBox( vcl::Window* pParent, WinBits nStyle )
     : Control( pParent, nStyle )
     , maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
     , maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP )
@@ -140,7 +140,7 @@ MacroEventListBox::MacroEventListBox( Window* pParent, WinBits nStyle )
     maListBox.EnableCellFocus();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeMacroEventListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeMacroEventListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -212,7 +212,7 @@ void _SvxMacroTabPage::EnableButtons()
     }
 }
 
-_SvxMacroTabPage::_SvxMacroTabPage(Window* pParent, const OString& rID,
+_SvxMacroTabPage::_SvxMacroTabPage(vcl::Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription, const SfxItemSet& rAttrSet)
     : SfxTabPage( pParent, rID, rUIXMLDescription, &rAttrSet ),
     m_xAppEvents(0),
@@ -801,7 +801,7 @@ Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eve
     return ::std::make_pair( type, url );
 }
 
-SvxMacroTabPage::SvxMacroTabPage(Window* pParent,
+SvxMacroTabPage::SvxMacroTabPage(vcl::Window* pParent,
     const Reference< frame::XFrame >& _rxDocumentFrame,
     const SfxItemSet& rSet,
     Reference< container::XNameReplace > xNameReplace,
@@ -835,7 +835,7 @@ SvxMacroTabPage::SvxMacroTabPage(Window* pParent,
         rListBox.Select(pE);
 }
 
-SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet,
+SvxMacroAssignDlg::SvxMacroAssignDlg( vcl::Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet,
     const Reference< container::XNameReplace >& xNameReplace, sal_uInt16 nSelectedIndex )
         : SvxMacroAssignSingleTabDialog(pParent, rSet)
 {
@@ -857,7 +857,7 @@ IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
     return 0;
 }
 
-AssignComponentDialog::AssignComponentDialog( Window * pParent, const OUString& rURL )
+AssignComponentDialog::AssignComponentDialog( vcl::Window * pParent, const OUString& rURL )
     : ModalDialog( pParent, "AssignComponent", "cui/ui/assigncomponentdialog.ui" )
     , maURL( rURL )
 {
@@ -890,7 +890,7 @@ IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
 
 
 
-SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(Window *pParent,
+SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(vcl::Window *pParent,
     const SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet, "MacroAssignDialog", "cui/ui/macroassigndialog.ui")
 {

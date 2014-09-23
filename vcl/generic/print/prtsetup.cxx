@@ -71,7 +71,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
  * RTSDialog
  */
 
-RTSDialog::RTSDialog(const PrinterInfo& rJobData, const OUString& rPrinter, Window* pParent)
+RTSDialog::RTSDialog(const PrinterInfo& rJobData, const OUString& rPrinter, vcl::Window* pParent)
     : TabDialog(pParent, "PrinterPropertiesDialog", "vcl/ui/printerpropertiesdialog.ui")
     , m_aJobData(rJobData)
     , m_aPrinter(rPrinter)

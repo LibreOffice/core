@@ -266,10 +266,10 @@ namespace vclcanvas
         const Size  aOutDevSize( rBackOutDev.GetOutputSizePixel() );
         const Point aEmptyPoint(0,0);
 
-        Window* pTargetWindow = NULL;
+        vcl::Window* pTargetWindow = NULL;
         if( rOutDev.GetOutDevType() == OUTDEV_WINDOW )
         {
-            pTargetWindow = &static_cast<Window&>(rOutDev); // TODO(Q3): Evil downcast.
+            pTargetWindow = &static_cast<vcl::Window&>(rOutDev); // TODO(Q3): Evil downcast.
 
             // we're double-buffered, thus no need for paint area-limiting
             // clips. besides that, will interfere with animations (as for

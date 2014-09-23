@@ -28,7 +28,7 @@ class ScCbWarningBox : public WarningBox
 public:
     /** @param rMsgStr  Resource ID for the message text.
         @param bDefYes  true = "Yes" focused, false = "No" focused. */
-                                ScCbWarningBox( Window* pParent, const OUString& rMsgStr, bool bDefYes = true );
+                                ScCbWarningBox( vcl::Window* pParent, const OUString& rMsgStr, bool bDefYes = true );
 
     /** Opens dialog if IsDialogEnabled() returns true.
         @descr  If after executing the dialog the checkbox "Do not show again" is set,
@@ -45,7 +45,7 @@ public:
 class ScReplaceWarnBox : public ScCbWarningBox
 {
 public:
-                                ScReplaceWarnBox( Window* pParent );
+                                ScReplaceWarnBox( vcl::Window* pParent );
 
     /** Reads the configuration key "ReplaceCellsWarning". */
     virtual bool                IsDialogEnabled() SAL_OVERRIDE;

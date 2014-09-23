@@ -21,7 +21,7 @@
 #include "dialmgr.hxx"
 #include "newtabledlg.hxx"
 
-SvxNewTableDialog::SvxNewTableDialog( Window* pParent )
+SvxNewTableDialog::SvxNewTableDialog( vcl::Window* pParent )
 : ModalDialog( pParent, "NewTableDialog", "cui/ui/newtabledialog.ui" )
 {
     get(mpNumRows, "rows");

@@ -76,7 +76,7 @@ awt::Rectangle AccessibleChartView::GetWindowPosSize() const
 
     awt::Rectangle aBBox( xWindow->getPosSize() );
 
-    Window* pWindow( VCLUnoHelper::GetWindow( GetInfo().m_xWindow ));
+    vcl::Window* pWindow( VCLUnoHelper::GetWindow( GetInfo().m_xWindow ));
     if( pWindow )
     {
         SolarMutexGuard aSolarGuard;
@@ -324,7 +324,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
             aAccInfo.m_pParent = 0;
             aAccInfo.m_spObjectHierarchy = m_spObjectHierarchy;
             aAccInfo.m_pSdrView = m_pSdrView;
-            Window* pWindow = VCLUnoHelper::GetWindow( m_xWindow );
+            vcl::Window* pWindow = VCLUnoHelper::GetWindow( m_xWindow );
             if ( m_pViewForwarder )
             {
                 delete m_pViewForwarder;

@@ -30,7 +30,7 @@ private:
     CheckBox* m_pWarningOnBox;
 
 public:
-    SvxLinkWarningDialog(Window* pParent, const OUString& _rFileName);
+    SvxLinkWarningDialog(vcl::Window* pParent, const OUString& _rFileName);
     virtual ~SvxLinkWarningDialog();
 };
 

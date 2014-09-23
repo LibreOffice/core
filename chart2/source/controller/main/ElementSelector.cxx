@@ -50,7 +50,7 @@ namespace
 static const OUString lcl_aServiceName( "com.sun.star.comp.chart.ElementSelectorToolbarController" );
 }
 
-SelectorListBox::SelectorListBox( Window* pParent, WinBits nStyle )
+SelectorListBox::SelectorListBox( vcl::Window* pParent, WinBits nStyle )
     : ListBox( pParent, nStyle )
     , m_bReleaseFocus( true )
 {
@@ -301,7 +301,7 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
     uno::Reference< awt::XWindow > xItemWindow;
     if( !m_apSelectorListBox.get() )
     {
-        Window* pParent = VCLUnoHelper::GetWindow( xParent );
+        vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
         if( pParent )
         {
             m_apSelectorListBox.reset( new SelectorListBox( pParent, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER ) );

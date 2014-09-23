@@ -38,7 +38,7 @@ class AreaTransparencyGradientControl : public PopupControl
 {
 public:
     AreaTransparencyGradientControl (
-        Window* pParent,
+        vcl::Window* pParent,
         AreaPropertyPanel& rPanel);
     virtual ~AreaTransparencyGradientControl (void);
 

@@ -94,17 +94,17 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     sal_Bool bEnableParentClip)
     throw (css::uno::RuntimeException, std::exception)
 {
-    ::Window* pParentWindow = VCLUnoHelper::GetWindow(rxParentWindow);
+    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(rxParentWindow);
 
     // Create a new window.
-    ::Window* pWindow = NULL;
+    vcl::Window* pWindow = NULL;
     if (bCreateSystemChildWindow)
     {
         pWindow = new WorkWindow(pParentWindow, WB_SYSTEMCHILDWINDOW);
     }
     else
     {
-        pWindow = new ::Window(pParentWindow);
+        pWindow = new vcl::Window(pParentWindow);
     }
     Reference<awt::XWindow> xWindow (pWindow->GetComponentInterface(), UNO_QUERY);
 
@@ -170,7 +170,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
 
     // No shared window is given or an explicit canvas service name is
     // specified.  Create a new canvas.
-    ::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
     if (pWindow != NULL)
     {
         Sequence<Any> aArg (5);
@@ -200,7 +200,7 @@ void SAL_CALL PresenterHelper::toTop (
     const Reference<awt::XWindow>& rxWindow)
     throw (css::uno::RuntimeException, std::exception)
 {
-    ::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
     if (pWindow != NULL)
     {
         pWindow->ToTop();
@@ -443,7 +443,7 @@ void SAL_CALL PresenterHelper::captureMouse (
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     // Capture the mouse (if not already done.)
-    ::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
     if (pWindow != NULL && ! pWindow->IsMouseCaptured())
     {
         pWindow->CaptureMouse();
@@ -456,7 +456,7 @@ void SAL_CALL PresenterHelper::releaseMouse (const Reference<awt::XWindow>& rxWi
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     // Release the mouse (if not already done.)
-    ::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(rxWindow);
     if (pWindow != NULL && pWindow->IsMouseCaptured())
     {
         pWindow->ReleaseMouse();
@@ -468,8 +468,8 @@ awt::Rectangle PresenterHelper::getWindowExtentsRelative (
     const Reference<awt::XWindow>& rxParentWindow)
     throw (RuntimeException, std::exception)
 {
-    ::Window* pChildWindow = VCLUnoHelper::GetWindow(rxChildWindow);
-    ::Window* pParentWindow = VCLUnoHelper::GetWindow(rxParentWindow);
+    vcl::Window* pChildWindow = VCLUnoHelper::GetWindow(rxChildWindow);
+    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(rxParentWindow);
     if (pChildWindow!=NULL && pParentWindow!=NULL)
     {
         Rectangle aBox (pChildWindow->GetWindowExtentsRelative(pParentWindow));

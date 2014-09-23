@@ -40,7 +40,7 @@
 #include <tools/link.hxx>
 
 class Dialog;
-class Window;
+namespace vcl { class Window; }
 class VclWindowEvent;
 
 
@@ -124,7 +124,7 @@ namespace svt
             but the application-wide solar mutex is (to guard the not thread-safe ctor of the dialog).
             @param      pParent     the parent window for the new dialog
         */
-        virtual Dialog* createDialog(Window* _pParent) = 0;
+        virtual Dialog* createDialog(vcl::Window* _pParent) = 0;
 
         /// called to destroy the dialog used. the default implementation just deletes m_pDialog and resets it to NULL
         virtual void destroyDialog();

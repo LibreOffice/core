@@ -30,7 +30,7 @@
 
 namespace {
 
-void ImplGetSpinbuttonValue( Window *pWin, const Rectangle& rUpperRect,
+void ImplGetSpinbuttonValue( vcl::Window *pWin, const Rectangle& rUpperRect,
                             const Rectangle& rLowerRect,
                             bool bUpperIn, bool bLowerIn,
                             bool bUpperEnabled, bool bLowerEnabled, bool bHorz,
@@ -71,7 +71,7 @@ void ImplGetSpinbuttonValue( Window *pWin, const Rectangle& rUpperRect,
     rValue.mnLowerPart = bHorz ? PART_BUTTON_RIGHT : PART_BUTTON_DOWN;
 }
 
-bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonValue )
+bool ImplDrawNativeSpinfield( vcl::Window *pWin, const SpinbuttonValue& rSpinbuttonValue )
 {
     bool bNativeOK = false;
 
@@ -89,7 +89,7 @@ bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonVa
         else
         {
             // paint the spinbox as a whole, use borderwindow to have proper clipping
-            Window *pBorder = pWin->GetWindow( WINDOW_BORDER );
+            vcl::Window *pBorder = pWin->GetWindow( WINDOW_BORDER );
 
             // to not overwrite everything, set the button region as clipregion to the border window
             Rectangle aClipRect( rSpinbuttonValue.maLowerRect );
@@ -122,7 +122,7 @@ bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonVa
     return bNativeOK;
 }
 
-bool ImplDrawNativeSpinbuttons( Window *pWin, const SpinbuttonValue& rSpinbuttonValue )
+bool ImplDrawNativeSpinbuttons( vcl::Window *pWin, const SpinbuttonValue& rSpinbuttonValue )
 {
     bool bNativeOK = false;
 
@@ -189,7 +189,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
 
     if( pOutDev->GetOutDevType() == OUTDEV_WINDOW )
     {
-        Window *pWin = (Window*) pOutDev;
+        vcl::Window *pWin = (vcl::Window*) pOutDev;
 
         // are we drawing standalone spin buttons or members of a spinfield ?
         ControlType aControl = CTRL_SPINBUTTONS;
@@ -297,7 +297,7 @@ void SpinField::ImplInitSpinFieldData()
     mbInDropDown    = false;
 }
 
-void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
+void SpinField::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
 {
     Edit::ImplInit( pParent, nWinStyle );
 
@@ -337,14 +337,14 @@ SpinField::SpinField( WindowType nTyp ) :
     ImplInitSpinFieldData();
 }
 
-SpinField::SpinField( Window* pParent, WinBits nWinStyle ) :
+SpinField::SpinField( vcl::Window* pParent, WinBits nWinStyle ) :
     Edit( WINDOW_SPINFIELD )
 {
     ImplInitSpinFieldData();
     ImplInit( pParent, nWinStyle );
 }
 
-SpinField::SpinField( Window* pParent, const ResId& rResId ) :
+SpinField::SpinField( vcl::Window* pParent, const ResId& rResId ) :
     Edit( WINDOW_SPINFIELD )
 {
     ImplInitSpinFieldData();
@@ -663,8 +663,8 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
             ! (GetStyle() & WB_DROPDOWN) &&
             IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) )
         {
-            Window *pWin = (Window*) pDev;
-            Window *pBorder = pWin->GetWindow( WINDOW_BORDER );
+            vcl::Window *pWin = (vcl::Window*) pDev;
+            vcl::Window *pBorder = pWin->GetWindow( WINDOW_BORDER );
 
             // get the system's spin button size
             ImplControlValue aControlValue;
@@ -726,7 +726,7 @@ void SpinField::Resize()
             Rectangle aContent, aBound;
 
             // use the full extent of the control
-            Window *pBorder = GetWindow( WINDOW_BORDER );
+            vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
             Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
             // adjust position and size of the edit field

@@ -351,7 +351,7 @@ private:
     OKButton*       m_pBtnOK;
 
 public:
-    SdDesignNameDlg(Window* pWindow, const OUString& aName );
+    SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName );
 
     OUString GetDesignName();
     DECL_LINK(ModifyHdl, void *);
@@ -359,7 +359,7 @@ public:
 
 // SdPublishingDlg Methods
 
-SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
+SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
 :   ModalDialog(pWindow, "PublishingDialog", "modules/simpress/ui/publishingdialog.ui")
 ,   mpButtonSet( new ButtonSet() )
 ,   aAssistentFunc(NOOFPAGES)
@@ -1532,7 +1532,7 @@ bool SdPublishingDlg::Save()
 }
 
 // SdDesignNameDlg Methods
-SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const OUString& aName)
+SdDesignNameDlg::SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName)
     : ModalDialog(pWindow, "NameDesignDialog", "modules/sdraw/ui/namedesign.ui")
 {
     get(m_pEdit, "entry");

@@ -38,7 +38,7 @@
 /**
  * dialog to edit field commands
  */
-SdModifyFieldDlg::SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) :
+SdModifyFieldDlg::SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) :
     ModalDialog ( pWindow, "EditFieldsDialog", "modules/simpress/ui/dlgfield.ui" ),
     maInputSet  ( rSet ),
     pField      ( pInField )

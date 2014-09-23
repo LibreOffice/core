@@ -37,7 +37,7 @@
 |*
 \************************************************************************/
 
-FuConstRectangle::FuConstRectangle(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuConstRectangle::FuConstRectangle(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {

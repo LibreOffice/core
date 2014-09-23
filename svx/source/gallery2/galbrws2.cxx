@@ -130,7 +130,7 @@ public:
                        GalleryBrowser2* pBrowser );
     virtual ~GalleryThemePopup();
 
-    void ExecutePopup( Window *pParent, const ::Point &aPos );
+    void ExecutePopup( vcl::Window *pParent, const ::Point &aPos );
 
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent &rEvent) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL disposing( const css::lang::EventObject &rSource) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -231,7 +231,7 @@ void GalleryThemePopup::Execute(
     }
 }
 
-void GalleryThemePopup::ExecutePopup( Window *pWindow, const ::Point &aPos )
+void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos )
 {
     css::uno::Reference< css::frame::XStatusListener > xThis( this );
 
@@ -414,7 +414,7 @@ void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-GalleryBrowser2::GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery* pGallery ) :
+GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, const ResId& rResId, Gallery* pGallery ) :
     Control             ( pParent, rResId ),
     mpGallery           ( pGallery ),
     mpCurTheme          ( NULL ),
@@ -610,7 +610,7 @@ sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper&, const ExecuteDropEvent
     return nRet;
 }
 
-void GalleryBrowser2::StartDrag( Window*, const Point* pDragPoint )
+void GalleryBrowser2::StartDrag( vcl::Window*, const Point* pDragPoint )
 {
     if( mpCurTheme )
     {
@@ -622,13 +622,13 @@ void GalleryBrowser2::StartDrag( Window*, const Point* pDragPoint )
     }
 }
 
-void GalleryBrowser2::TogglePreview( Window*, const Point* )
+void GalleryBrowser2::TogglePreview( vcl::Window*, const Point* )
 {
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
     GetViewWindow()->GrabFocus();
 }
 
-void GalleryBrowser2::ShowContextMenu( Window*, const Point* pContextPoint )
+void GalleryBrowser2::ShowContextMenu( vcl::Window*, const Point* pContextPoint )
 {
     Point aSelPos;
     const sal_uIntPtr nItemId = ImplGetSelectedItemId( pContextPoint, aSelPos );
@@ -652,7 +652,7 @@ void GalleryBrowser2::ShowContextMenu( Window*, const Point* pContextPoint )
     }
 }
 
-bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
+bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 {
     Point       aSelPos;
     const sal_uIntPtr   nItemId = ImplGetSelectedItemId( NULL, aSelPos );
@@ -855,9 +855,9 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
     }
 }
 
-Window* GalleryBrowser2::GetViewWindow() const
+vcl::Window* GalleryBrowser2::GetViewWindow() const
 {
-    Window* pRet;
+    vcl::Window* pRet;
 
     switch( GetMode() )
     {
@@ -1199,13 +1199,13 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
 
             case( MN_COPYCLIPBOARD ):
             {
-                Window* pWindow;
+                vcl::Window* pWindow;
 
                 switch( GetMode() )
                 {
-                    case( GALLERYBROWSERMODE_ICON ): pWindow = (Window*) mpIconView; break;
-                    case( GALLERYBROWSERMODE_LIST ): pWindow = (Window*) mpListView; break;
-                    case( GALLERYBROWSERMODE_PREVIEW ): pWindow = (Window*) mpPreview; break;
+                    case( GALLERYBROWSERMODE_ICON ): pWindow = (vcl::Window*) mpIconView; break;
+                    case( GALLERYBROWSERMODE_LIST ): pWindow = (vcl::Window*) mpListView; break;
+                    case( GALLERYBROWSERMODE_PREVIEW ): pWindow = (vcl::Window*) mpPreview; break;
 
                     default:
                         pWindow = NULL;

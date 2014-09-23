@@ -50,10 +50,10 @@ void DeckLayouter::LayoutDeck (
     const Rectangle aContentArea,
     sal_Int32& rMinimalWidth,
     SharedPanelContainer& rPanels,
-    Window& rDeckTitleBar,
-    Window& rScrollClipWindow,
-    Window& rScrollContainer,
-    Window& rFiller,
+    vcl::Window& rDeckTitleBar,
+    vcl::Window& rScrollClipWindow,
+    vcl::Window& rScrollContainer,
+    vcl::Window& rFiller,
     ScrollBar& rVerticalScrollBar)
 {
     if (aContentArea.GetWidth()<=0 || aContentArea.GetHeight()<=0)
@@ -89,8 +89,8 @@ Rectangle DeckLayouter::LayoutPanels (
     const Rectangle aContentArea,
     sal_Int32& rMinimalWidth,
     ::std::vector<LayoutItem>& rLayoutItems,
-    Window& rScrollClipWindow,
-    Window& rScrollContainer,
+    vcl::Window& rScrollClipWindow,
+    vcl::Window& rScrollContainer,
     ScrollBar& rVerticalScrollBar,
     const bool bShowVerticalScrollBar)
 {
@@ -197,7 +197,7 @@ sal_Int32 DeckLayouter::PlacePanels (
     ::std::vector<LayoutItem>& rLayoutItems,
     const sal_Int32 nWidth,
     const LayoutMode eMode,
-    Window& rScrollContainer)
+    vcl::Window& rScrollContainer)
 {
     ::std::vector<sal_Int32> aSeparators;
     const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
@@ -429,7 +429,7 @@ void DeckLayouter::DistributeHeights (
 
 
 Rectangle DeckLayouter::PlaceDeckTitle (
-    Window& rDeckTitleBar,
+    vcl::Window& rDeckTitleBar,
     const Rectangle& rAvailableSpace)
 {
     if (static_cast<DockingWindow*>(rDeckTitleBar.GetParent()->GetParent())->IsFloatingMode())
@@ -504,7 +504,7 @@ void DeckLayouter::SetupVerticalScrollBar(
 
 
 void DeckLayouter::UpdateFiller (
-    Window& rFiller,
+    vcl::Window& rFiller,
     const Rectangle& rBox)
 {
     if (rBox.GetHeight() > 0)

@@ -242,7 +242,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             ScTabView* pTabView = GetViewData().GetView();
                             if( pTabView )
                             {
-                                Window* pWin = pTabView->GetActiveWin();
+                                vcl::Window* pWin = pTabView->GetActiveWin();
                                 if( pWin )
                                 {
                                     pSearchDlg->SetDocWin( pWin );
@@ -312,7 +312,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             ScTabView* pTabView = GetViewData().GetView();
                             if( pTabView )
                             {
-                                Window* pWin = pTabView->GetActiveWin();
+                                vcl::Window* pWin = pTabView->GetActiveWin();
                                 if( pWin )
                                 {
                                     pSearchDlg->SetDocWin( pWin );

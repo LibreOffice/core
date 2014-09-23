@@ -71,7 +71,7 @@ using namespace ::com::sun::star;
 
 // Tools->Options->Writer->View
 // Tools->Options->Writer/Web->View
-SwContentOptPage::SwContentOptPage( Window* pParent,
+SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
                                       const SfxItemSet& rCoreSet ) :
     SfxTabPage(pParent, "ViewOptionsPage",
                "modules/swriter/ui/viewoptionspage.ui", &rCoreSet)
@@ -158,7 +158,7 @@ SwContentOptPage::~SwContentOptPage()
 {
 }
 
-SfxTabPage* SwContentOptPage::Create( Window* pParent,
+SfxTabPage* SwContentOptPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SwContentOptPage(pParent, *rAttrSet);
@@ -284,7 +284,7 @@ IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
 }
 
 // TabPage Printer additional settings
-SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
+SwAddPrinterTabPage::SwAddPrinterTabPage(vcl::Window* pParent,
     const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "PrintOptionsPage",
         "modules/swriter/ui/printoptionspage.ui", &rCoreSet)
@@ -361,7 +361,7 @@ void SwAddPrinterTabPage::SetPreview(bool bPrev)
     m_pPagesFrame->Enable(!bPreview);
 }
 
-SfxTabPage* SwAddPrinterTabPage::Create( Window* pParent,
+SfxTabPage* SwAddPrinterTabPage::Create( vcl::Window* pParent,
                                        const SfxItemSet* rAttrSet )
 {
     return ( new SwAddPrinterTabPage( pParent, *rAttrSet ) );
@@ -506,7 +506,7 @@ void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
 }
 
 // Tabpage Standardfonts
-SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
+SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
                                        const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptFontTabPage" , "modules/swriter/ui/optfonttabpage.ui" , &rSet),
     pPrt(0),
@@ -587,7 +587,7 @@ SwStdFontTabPage::~SwStdFontTabPage()
     }
 }
 
-SfxTabPage* SwStdFontTabPage::Create( Window* pParent,
+SfxTabPage* SwStdFontTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
     return new SwStdFontTabPage(pParent, *rAttrSet);
@@ -1061,7 +1061,7 @@ void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
         SetFontMode(sal::static_int_cast< sal_uInt8, sal_uInt16>( pFlagItem->GetValue()));
 }
 
-SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
+SwTableOptionsTabPage::SwTableOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, "OptTablePage", "modules/swriter/ui/opttablepage.ui", &rSet),
     pWrtShell(0),
     bHTMLMode(false)
@@ -1091,7 +1091,7 @@ SwTableOptionsTabPage::~SwTableOptionsTabPage()
 {
 }
 
-SfxTabPage* SwTableOptionsTabPage::Create( Window* pParent,
+SfxTabPage* SwTableOptionsTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
     return new SwTableOptionsTabPage(pParent, *rAttrSet );
@@ -1259,7 +1259,7 @@ void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
         SetWrtShell(pWrtSh->GetValue());
 }
 
-SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
+SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
                                                     const SfxItemSet& rSet )
    : SfxTabPage(pParent, "OptFormatAidsPage",
                 "modules/swriter/ui/optformataidspage.ui", &rSet),
@@ -1325,7 +1325,7 @@ SwShdwCrsrOptionsTabPage::~SwShdwCrsrOptionsTabPage()
 {
 }
 
-SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* SwShdwCrsrOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SwShdwCrsrOptionsTabPage( pParent, *rSet );
 }
@@ -1477,7 +1477,7 @@ static sal_uInt16 aDeletedAttrMap[] = { 0, 1, 2, 5, 6, 7, 8, 9, 10 };
 static sal_uInt16 aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 
 // Preview of selection
-SwMarkPreview::SwMarkPreview( Window *pParent, WinBits nWinBits ) :
+SwMarkPreview::SwMarkPreview( vcl::Window *pParent, WinBits nWinBits ) :
 
     Window(pParent, nWinBits),
     m_aTransCol( COL_TRANSPARENT ),
@@ -1490,7 +1490,7 @@ SwMarkPreview::SwMarkPreview( Window *pParent, WinBits nWinBits ) :
     SetMapMode(MAP_PIXEL);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwMarkPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwMarkPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwMarkPreview(pParent, 0);
 }
@@ -1653,7 +1653,7 @@ namespace
     }
 }
 
-SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
+SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptRedLinePage",
         "modules/swriter/ui/optredlinepage.ui" , &rSet)
@@ -1687,7 +1687,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     pChangedPreviewWN->set_width_request(aPreviewSize.Width());
     pMarkPreviewWN->set_width_request(aPreviewSize.Width());
 
-    sAuthor = get<Window>("byauthor")->GetText();
+    sAuthor = get<vcl::Window>("byauthor")->GetText();
 
     for (sal_Int32 i = 0; i < pInsertLB->GetEntryCount(); ++i)
     {
@@ -1728,7 +1728,7 @@ SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
 {
 }
 
-SfxTabPage* SwRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwRedlineOptionsTabPage( pParent, *rSet );
 }
@@ -2205,7 +2205,7 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
     rExampleWin.Invalidate();
 }
 
-SwCompareOptionsTabPage::SwCompareOptionsTabPage(  Window* pParent, const SfxItemSet& rSet )
+SwCompareOptionsTabPage::SwCompareOptionsTabPage(  vcl::Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage( pParent,"OptComparison","modules/swriter/ui/optcomparison.ui", &rSet )
 {
     get(m_pAutoRB,"auto");
@@ -2228,7 +2228,7 @@ SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
 {
 }
 
-SfxTabPage* SwCompareOptionsTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SwCompareOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SwCompareOptionsTabPage( pParent, *rAttrSet );
 }
@@ -2333,7 +2333,7 @@ IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl)
 
 #ifdef DBG_UTIL
 
-SwTestTabPage::SwTestTabPage(Window* pParent, const SfxItemSet& rCoreSet)
+SwTestTabPage::SwTestTabPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage( pParent, "OptTestPage", "modules/swriter/ui/opttestpage.ui", &rCoreSet)
     , bAttrModified( false )
 {
@@ -2352,7 +2352,7 @@ SwTestTabPage::SwTestTabPage(Window* pParent, const SfxItemSet& rCoreSet)
 
 }
 
-SfxTabPage* SwTestTabPage::Create( Window* pParent,
+SfxTabPage* SwTestTabPage::Create( vcl::Window* pParent,
                                        const SfxItemSet* rAttrSet )
 {
     return new SwTestTabPage(pParent, *rAttrSet);

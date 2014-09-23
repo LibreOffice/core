@@ -72,7 +72,7 @@ class SwAddressControl_Impl : public Control
     using Window::SetData;
 
 public:
-    SwAddressControl_Impl(Window* pParent , WinBits nBits );
+    SwAddressControl_Impl(vcl::Window* pParent , WinBits nBits );
     virtual ~SwAddressControl_Impl();
 
     void        SetData(SwCSVData& rDBData);
@@ -83,10 +83,10 @@ public:
     virtual void Resize() SAL_OVERRIDE;
 };
 
-SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, WinBits nBits ) :
+SwAddressControl_Impl::SwAddressControl_Impl(vcl::Window* pParent, WinBits nBits ) :
     Control(pParent, nBits),
     m_pScrollBar(new ScrollBar(this)),
-    m_pWindow(new Window(this, WB_DIALOGCONTROL)),
+    m_pWindow(new vcl::Window(this, WB_DIALOGCONTROL)),
     m_pData(0),
     m_nLineHeight(0),
     m_nCurrentDataSet(0),
@@ -106,7 +106,7 @@ SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, WinBits nBits ) :
     m_pScrollBar->EnableDrag();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwAddressControlImpl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAddressControlImpl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwAddressControl_Impl(pParent, WB_BORDER | WB_DIALOGCONTROL);
 }
@@ -390,7 +390,7 @@ void SwAddressControl_Impl::Resize()
 }
 
 SwCreateAddressListDialog::SwCreateAddressListDialog(
-        Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig) :
+        vcl::Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, "CreateAddressList", "modules/swriter/ui/createaddresslist.ui"),
     m_sAddressListFilterName( SW_RES(    ST_FILTERNAME)),
     m_sURL(rURL),

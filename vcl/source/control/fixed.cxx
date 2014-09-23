@@ -80,7 +80,7 @@ static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
     return aPos;
 }
 
-void FixedText::ImplInit( Window* pParent, WinBits nStyle )
+void FixedText::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
@@ -111,7 +111,7 @@ void FixedText::ImplInitSettings( bool bFont,
 
     if ( bBackground )
     {
-        Window* pParent = GetParent();
+        vcl::Window* pParent = GetParent();
         if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
         {
             EnableChildTransparentMode( true );
@@ -133,7 +133,7 @@ void FixedText::ImplInitSettings( bool bFont,
     }
 }
 
-FixedText::FixedText( Window* pParent, WinBits nStyle )
+FixedText::FixedText( vcl::Window* pParent, WinBits nStyle )
     : Control(WINDOW_FIXEDTEXT)
     , m_nMaxWidthChars(-1)
     , m_nMinWidthChars(-1)
@@ -142,7 +142,7 @@ FixedText::FixedText( Window* pParent, WinBits nStyle )
     ImplInit( pParent, nStyle );
 }
 
-FixedText::FixedText( Window* pParent, const ResId& rResId )
+FixedText::FixedText( vcl::Window* pParent, const ResId& rResId )
     : Control(WINDOW_FIXEDTEXT)
     , m_nMaxWidthChars(-1)
     , m_nMinWidthChars(-1)
@@ -435,21 +435,21 @@ bool FixedText::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-Window* FixedText::getAccessibleRelationLabelFor() const
+vcl::Window* FixedText::getAccessibleRelationLabelFor() const
 {
-    Window *pWindow = Control::getAccessibleRelationLabelFor();
+    vcl::Window *pWindow = Control::getAccessibleRelationLabelFor();
     if (pWindow)
         return pWindow;
     return get_mnemonic_widget();
 }
 
-void FixedText::set_mnemonic_widget(Window *pWindow)
+void FixedText::set_mnemonic_widget(vcl::Window *pWindow)
 {
     if (pWindow == m_pMnemonicWindow)
         return;
     if (m_pMnemonicWindow)
     {
-        Window *pTempReEntryGuard = m_pMnemonicWindow;
+        vcl::Window *pTempReEntryGuard = m_pMnemonicWindow;
         m_pMnemonicWindow = NULL;
         pTempReEntryGuard->remove_mnemonic_label(this);
     }
@@ -463,7 +463,7 @@ FixedText::~FixedText()
     set_mnemonic_widget(NULL);
 }
 
-SelectableFixedText::SelectableFixedText(Window* pParent, WinBits nStyle)
+SelectableFixedText::SelectableFixedText(vcl::Window* pParent, WinBits nStyle)
     : Edit(pParent, nStyle)
 {
     // no border
@@ -483,7 +483,7 @@ void SelectableFixedText::LoseFocus()
     Invalidate();
 }
 
-void FixedLine::ImplInit( Window* pParent, WinBits nStyle )
+void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
@@ -514,7 +514,7 @@ void FixedLine::ImplInitSettings( bool bFont,
 
     if ( bBackground )
     {
-        Window* pParent = GetParent();
+        vcl::Window* pParent = GetParent();
         if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
         {
             EnableChildTransparentMode( true );
@@ -609,14 +609,14 @@ void FixedLine::ImplDraw( bool bLayout )
     }
 }
 
-FixedLine::FixedLine( Window* pParent, WinBits nStyle ) :
+FixedLine::FixedLine( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_FIXEDLINE )
 {
     ImplInit( pParent, nStyle );
     SetSizePixel( Size( 2, 2 ) );
 }
 
-FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
+FixedLine::FixedLine( vcl::Window* pParent, const ResId& rResId ) :
     Control( WINDOW_FIXEDLINE )
 {
     rResId.SetRT( RSC_FIXEDLINE );
@@ -705,7 +705,7 @@ Size FixedLine::GetOptimalSize() const
     return CalcWindowSize( FixedText::CalcMinimumTextSize ( this, 0x7fffffff ) );
 }
 
-void FixedBitmap::ImplInit( Window* pParent, WinBits nStyle )
+void FixedBitmap::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
@@ -721,7 +721,7 @@ WinBits FixedBitmap::ImplInitStyle( WinBits nStyle )
 
 void FixedBitmap::ImplInitSettings()
 {
-    Window* pParent = GetParent();
+    vcl::Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
         EnableChildTransparentMode( true );
@@ -742,7 +742,7 @@ void FixedBitmap::ImplInitSettings()
     }
 }
 
-FixedBitmap::FixedBitmap( Window* pParent, WinBits nStyle ) :
+FixedBitmap::FixedBitmap( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_FIXEDBITMAP )
 {
     ImplInit( pParent, nStyle );
@@ -846,7 +846,7 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
     queue_resize();
 }
 
-void FixedImage::ImplInit( Window* pParent, WinBits nStyle )
+void FixedImage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     mbInUserDraw = false;
@@ -863,7 +863,7 @@ WinBits FixedImage::ImplInitStyle( WinBits nStyle )
 
 void FixedImage::ImplInitSettings()
 {
-    Window* pParent = GetParent();
+    vcl::Window* pParent = GetParent();
     if ( pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
         EnableChildTransparentMode( true );
@@ -897,13 +897,13 @@ void FixedImage::ImplLoadRes( const ResId& rResId )
     }
 }
 
-FixedImage::FixedImage( Window* pParent, WinBits nStyle ) :
+FixedImage::FixedImage( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_FIXEDIMAGE )
 {
     ImplInit( pParent, nStyle );
 }
 
-FixedImage::FixedImage( Window* pParent, const ResId& rResId ) :
+FixedImage::FixedImage( vcl::Window* pParent, const ResId& rResId ) :
     Control( WINDOW_FIXEDIMAGE )
 {
     rResId.SetRT( RSC_FIXEDIMAGE );

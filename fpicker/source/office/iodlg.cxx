@@ -302,7 +302,7 @@ namespace
 
 SvtFileDialog::SvtFileDialog
 (
-    Window* _pParent,
+    vcl::Window* _pParent,
     WinBits nBits,
     WinBits nExtraBits
 ) :
@@ -329,7 +329,7 @@ SvtFileDialog::SvtFileDialog
 
 
 
-SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
+SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
     :ModalDialog( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
     ,_pCbReadOnly( NULL )
     ,_pCbLinkBox( NULL)
@@ -348,14 +348,14 @@ SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
     Init_Impl( nBits );
 }
 
-class CustomContainer : public Window
+class CustomContainer : public vcl::Window
 {
     SvtExpFileDlg_Impl* _pImp;
     SvtFileView* _pFileView;
     Splitter* _pSplitter;
 
 public:
-    CustomContainer(Window *pParent)
+    CustomContainer(vcl::Window *pParent)
         : Window(pParent)
         , _pImp(NULL)
         , _pFileView(NULL)
@@ -476,7 +476,7 @@ void SvtFileDialog::Init_Impl
     _pImp->_pLbFilter->setMaxWidthChars(40);
 
     m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
-    Window *pUpContainer = get<Window>("up");
+    vcl::Window *pUpContainer = get<vcl::Window>("up");
     _pImp->_pBtnUp = new SvtUpButton_Impl(pUpContainer, this, 0);
     _pImp->_pBtnUp->SetHelpId( HID_FILEOPEN_LEVELUP );
     _pImp->_pBtnUp->set_vexpand(true);
@@ -519,7 +519,7 @@ void SvtFileDialog::Init_Impl
     if ( ( nStyle & SFXWB_MULTISELECTION ) == SFXWB_MULTISELECTION )
         _pImp->_bMultiSelection = true;
 
-    _pContainer = new CustomContainer(get<Window>("container"));
+    _pContainer = new CustomContainer(get<vcl::Window>("container"));
     Size aSize(LogicToPixel(Size(270, 85), MAP_APPFONT));
     _pContainer->set_height_request(aSize.Height());
     _pContainer->set_width_request(aSize.Width());
@@ -1628,10 +1628,10 @@ long SvtFileDialog::OK()
 class SvtDefModalDialogParent_Impl
 {
 private:
-    Window* _pOld;
+    vcl::Window* _pOld;
 
 public:
-    SvtDefModalDialogParent_Impl( Window *pNew ) :
+    SvtDefModalDialogParent_Impl( vcl::Window *pNew ) :
         _pOld( Application::GetDefDialogParent() )
         { Application::SetDefDialogParent( pNew ); }
 
@@ -2832,7 +2832,7 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl )
     return 0;
 }
 
-QueryFolderNameDialog::QueryFolderNameDialog(Window* _pParent,
+QueryFolderNameDialog::QueryFolderNameDialog(vcl::Window* _pParent,
     const OUString& rTitle, const OUString& rDefaultText, OUString* pGroupName)
     : ModalDialog(_pParent, "FolderNameDialog", "fps/ui/foldernamedialog.ui")
 {

@@ -31,7 +31,7 @@ namespace toolkit
 // in the same bitmap :-( WB_VSCROLL & WB_HSCROLL apparently are only for
 // child classes ( whole thing is a mess if you ask me )
 template< class T>
-ScrollableWrapper<T>::ScrollableWrapper( Window* pParent, WinBits nStyle ) : T( pParent, nStyle & ~( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) ), maHScrollBar( this, WB_HSCROLL | WB_DRAG), maVScrollBar( this, WB_VSCROLL | WB_DRAG ), mbHasHoriBar( false ), mbHasVertBar( false ), maScrollVis( None )
+ScrollableWrapper<T>::ScrollableWrapper( vcl::Window* pParent, WinBits nStyle ) : T( pParent, nStyle & ~( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) ), maHScrollBar( this, WB_HSCROLL | WB_DRAG), maVScrollBar( this, WB_VSCROLL | WB_DRAG ), mbHasHoriBar( false ), mbHasVertBar( false ), maScrollVis( None )
 {
     Link aLink( LINK( this, ScrollableWrapper, ScrollBarHdl ) );
     maVScrollBar.SetScrollHdl( aLink );
@@ -90,7 +90,7 @@ void ScrollableWrapper<T>::lcl_Scroll( long nX, long nY )
     // Manually scroll all children ( except the scrollbars )
     for ( int index = 0; index < T::GetChildCount(); ++index )
     {
-        Window* pChild = T::GetChild( index );
+        vcl::Window* pChild = T::GetChild( index );
         if ( pChild && pChild != &maVScrollBar && pChild != &maHScrollBar )
         {
             Point aPos = pChild->GetPosPixel();

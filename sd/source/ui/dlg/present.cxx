@@ -35,7 +35,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
+SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
                                   const SfxItemSet& rInAttrs,
                                   const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList ) :
                 ModalDialog     ( pWindow, "PresentationDialog", "modules/simpress/ui/presentationdialog.ui" ),

@@ -153,7 +153,7 @@ Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceName
 
 
 
-typedef bool ( *PFunc_getSpecialCharsForEdit)( Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rOutString );
+typedef bool ( *PFunc_getSpecialCharsForEdit)( vcl::Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rOutString );
 
 
 // Lazy binding of the GetSpecialCharsForEdit function as it resides in
@@ -166,11 +166,11 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 #else
 
-extern "C" bool GetSpecialCharsForEdit( Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rOutString );
+extern "C" bool GetSpecialCharsForEdit( vcl::Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rOutString );
 
 #endif
 
-OUString GetSpecialCharsForEdit(Window* pParent, const vcl::Font& rFont)
+OUString GetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
 {
     static bool bDetermineFunction = false;
     static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = 0;

@@ -78,7 +78,7 @@ struct BasicStatus
 class DockingWindow : public ::DockingWindow
 {
 public:
-    DockingWindow (Window* pParent);
+    DockingWindow (vcl::Window* pParent);
     DockingWindow (Layout* pParent);
 public:
     void ResizeIfDocking (Point const&, Size const&);
@@ -126,7 +126,7 @@ protected:
     virtual void    EndRenaming() SAL_OVERRIDE;
 
 public:
-    TabBar (Window* pParent);
+    TabBar (vcl::Window* pParent);
 
     void            Sort();
 };
@@ -145,7 +145,7 @@ class EntryDescriptor;
 
 // BaseWindow -- the base of both ModulWindow and DialogWindow.
 
-class BaseWindow : public Window
+class BaseWindow : public vcl::Window
 {
 private:
     ScrollBar*      pShellHScrollBar;
@@ -166,7 +166,7 @@ protected:
 
 public:
                     TYPEINFO();
-    BaseWindow( Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName );
+    BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName );
     virtual         ~BaseWindow();
 
     void            Init();
@@ -295,11 +295,11 @@ void            CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines
 OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName );
 sal_uLong           CalcLineCount( SvStream& rStream );
 
-bool QueryReplaceMacro( const OUString& rName, Window* pParent = 0 );
-bool QueryDelMacro( const OUString& rName, Window* pParent = 0 );
-bool QueryDelDialog( const OUString& rName, Window* pParent = 0 );
-bool QueryDelModule( const OUString& rName, Window* pParent = 0 );
-bool QueryDelLib( const OUString& rName, bool bRef = false, Window* pParent = 0 );
+bool QueryReplaceMacro( const OUString& rName, vcl::Window* pParent = 0 );
+bool QueryDelMacro( const OUString& rName, vcl::Window* pParent = 0 );
+bool QueryDelDialog( const OUString& rName, vcl::Window* pParent = 0 );
+bool QueryDelModule( const OUString& rName, vcl::Window* pParent = 0 );
+bool QueryDelLib( const OUString& rName, bool bRef = false, vcl::Window* pParent = 0 );
 bool QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat = false, bool bNewTitle = false );
 
 class ModuleInfoHelper

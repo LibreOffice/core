@@ -101,7 +101,7 @@ static void lcl_setModified( SfxObjectShell*  pShell )
 void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 {
     sal_uInt16              nSlot       = rReq.GetSlot();
-    Window*             pWin        = pViewData->GetActiveWin();
+    vcl::Window*             pWin        = pViewData->GetActiveWin();
     ScDrawView*         pView       = pViewData->GetScDrawView();
     SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
 
@@ -314,7 +314,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
     }
 }
 
-void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
+void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
 {
     SvxMacroItem aItem ( SfxGetpApp()->GetPool().GetWhich( SID_ATTR_MACROITEM ) );
     ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );

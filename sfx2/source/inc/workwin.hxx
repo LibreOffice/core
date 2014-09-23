@@ -90,7 +90,7 @@ struct SfxStatBar_Impl
 
 struct SfxChild_Impl
 {
-    Window*                         pWin;
+    vcl::Window*                         pWin;
     Size                            aSize;
     SfxChildAlignment               eAlign;
     sal_uInt16                          nVisible;
@@ -98,7 +98,7 @@ struct SfxChild_Impl
     bool                            bCanGetFocus;
     bool                            bSetFocus;
 
-    SfxChild_Impl( Window& rChild, const Size& rSize,
+    SfxChild_Impl( vcl::Window& rChild, const Size& rSize,
                    SfxChildAlignment eAlignment, bool bIsVisible ):
         pWin(&rChild), aSize(rSize), eAlign(eAlignment), bResize(false),
         bCanGetFocus( false ), bSetFocus( false )
@@ -221,9 +221,9 @@ protected:
     SfxChildList_Impl       aChildren;
     SfxChildWindows_Impl    aChildWins;
     SfxBindings*            pBindings;
-    Window*                 pWorkWin;
+    vcl::Window*                 pWorkWin;
     SfxShell*               pConfigShell;
-    Window*                 pActiveChild;
+    vcl::Window*                 pActiveChild;
     sal_uInt16                  nUpdateMode;
     sal_uInt16                  nChildren;
     sal_uInt16                  nOrigMode;
@@ -244,7 +244,7 @@ protected:
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,bool);
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);
     void                    Sort_Impl();
-    SfxChild_Impl*          FindChild_Impl( const Window& rWindow ) const;
+    SfxChild_Impl*          FindChild_Impl( const vcl::Window& rWindow ) const;
     virtual bool            RequestTopToolSpacePixel_Impl( SvBorder aBorder );
     virtual Rectangle       GetTopRect_Impl();
     SvBorder                Arrange_Impl();
@@ -252,11 +252,11 @@ protected:
     static bool         IsPluginMode( SfxObjectShell* pObjShell );
 
 public:
-                            SfxWorkWindow( Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = NULL);
+                            SfxWorkWindow( vcl::Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = NULL);
     virtual                 ~SfxWorkWindow();
     SfxBindings&            GetBindings()
                             { return *pBindings; }
-    Window*                 GetWindow() const
+    vcl::Window*                 GetWindow() const
                             { return pWorkWin; }
     Rectangle               GetFreeArea( bool bAutoHide ) const;
     void                    SetDockingAllowed(bool bSet)
@@ -272,8 +272,8 @@ public:
 
     // Methods for all Child windows
     void                    DataChanged_Impl( const DataChangedEvent& rDCEvt );
-    void                    ReleaseChild_Impl( Window& rWindow );
-    SfxChild_Impl*          RegisterChild_Impl( Window& rWindow, SfxChildAlignment eAlign, bool bCanGetFocus=false );
+    void                    ReleaseChild_Impl( vcl::Window& rWindow );
+    SfxChild_Impl*          RegisterChild_Impl( vcl::Window& rWindow, SfxChildAlignment eAlign, bool bCanGetFocus=false );
     void                    ShowChildren_Impl();
     void                    HideChildren_Impl();
     bool                    PrepareClose_Impl();
@@ -316,7 +316,7 @@ public:
 
     bool                    IsVisible_Impl( sal_uInt16 nMode ) const;
     bool                    IsFloating( sal_uInt16 nId );
-    void                    SetActiveChild_Impl( Window *pChild );
+    void                    SetActiveChild_Impl( vcl::Window *pChild );
     virtual bool            ActivateNextChild_Impl( bool bForward = true );
     bool                    AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const;
 
@@ -333,7 +333,7 @@ class SfxFrameWorkWin_Impl : public SfxWorkWindow
     SfxFrame*           pMasterFrame;
     SfxFrame*           pFrame;
 public:
-                        SfxFrameWorkWin_Impl( Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
+                        SfxFrameWorkWin_Impl( vcl::Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
     virtual void        ArrangeChildren_Impl( bool bForce = true ) SAL_OVERRIDE;
     virtual void        UpdateObjectBars_Impl() SAL_OVERRIDE;
     virtual Rectangle   GetTopRect_Impl() SAL_OVERRIDE;

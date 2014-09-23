@@ -37,7 +37,7 @@ namespace avmedia
 // - MediaPlayer -
 
 
-MediaPlayer::MediaPlayer( Window* _pParent, sal_uInt16 nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
+MediaPlayer::MediaPlayer( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
     pWindow = new MediaFloater( _pBindings, this, _pParent );
@@ -59,7 +59,7 @@ SFX_IMPL_DOCKINGWINDOW_WITHID( MediaPlayer, SID_AVMEDIA_PLAYER )
 // - MediaFloater -
 
 
-MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, Window* pParent ) :
+MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::Window* pParent ) :
     SfxDockingWindow( _pBindings, pCW, pParent, WB_CLOSEABLE | WB_MOVEABLE | WB_SIZEABLE | WB_DOCKABLE ),
     mpMediaWindow( new MediaWindow( this, true ) )
 {
@@ -106,7 +106,7 @@ void MediaFloater::ToggleFloatingMode()
     mpMediaWindow->setPosSize( Rectangle( Point(), GetOutputSizePixel() ) );
     mpMediaWindow->executeMediaItem( aRestoreItem );
 
-    Window* pWindow = mpMediaWindow->getWindow();
+    vcl::Window* pWindow = mpMediaWindow->getWindow();
 
     if( pWindow )
         pWindow->SetHelpId( HID_AVMEDIA_PLAYERWINDOW );

@@ -60,13 +60,13 @@ namespace dbaui
 {
 using namespace ::com::sun::star;
 
-    OGenericAdministrationPage* OTextConnectionPageSetup::CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage* OTextConnectionPageSetup::CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OTextConnectionPageSetup( pParent, _rAttrSet ) );
     }
 
     // OTextConnectionPageSetup
-    OTextConnectionPageSetup::OTextConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OTextConnectionPageSetup::OTextConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OConnectionTabPageSetup(pParent, "DBWizTextPage", "dbaccess/ui/dbwiztextpage.ui", _rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
     {
 
@@ -124,13 +124,13 @@ using namespace ::com::sun::star;
         return m_pTextConnectionHelper->prepareLeave();
     }
 
-    OGenericAdministrationPage* OLDAPConnectionPageSetup::CreateLDAPTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage* OLDAPConnectionPageSetup::CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OLDAPConnectionPageSetup( pParent, _rAttrSet ) );
     }
 
     // OLDAPPageSetup
-    OLDAPConnectionPageSetup::OLDAPConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OLDAPConnectionPageSetup::OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage(pParent, "LDAPConnectionPage", "dbaccess/ui/ldapconnectionpage.ui",_rCoreAttrs)
     {
         get(m_pFTHelpText, "helpLabel");
@@ -217,13 +217,13 @@ using namespace ::com::sun::star;
         return 0L;
     }
 
-    OMySQLIntroPageSetup* OMySQLIntroPageSetup::CreateMySQLIntroTabPage( Window* _pParent, const SfxItemSet& _rAttrSet )
+    OMySQLIntroPageSetup* OMySQLIntroPageSetup::CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OMySQLIntroPageSetup( _pParent, _rAttrSet) );
     }
 
 
-    OMySQLIntroPageSetup::OMySQLIntroPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OMySQLIntroPageSetup::OMySQLIntroPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
             :OGenericAdministrationPage(pParent, "DBWizMysqlIntroPage", "dbaccess/ui/dbwizmysqlintropage.ui", _rCoreAttrs)
     {
         get(m_pODBCDatabase, "odbc");
@@ -290,7 +290,7 @@ using namespace ::com::sun::star;
     }
 
     // MySQLNativeSetupPage
-    MySQLNativeSetupPage::MySQLNativeSetupPage( Window* _pParent, const SfxItemSet& _rCoreAttrs )
+    MySQLNativeSetupPage::MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage( _pParent, "DBWizMysqlNativePage", "dbaccess/ui/dbwizmysqlnativepage.ui", _rCoreAttrs )
         ,m_aMySQLSettings       ( *get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink() )
     {
@@ -300,7 +300,7 @@ using namespace ::com::sun::star;
         SetRoadmapStateValue(false);
     }
 
-    OGenericAdministrationPage* MySQLNativeSetupPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage* MySQLNativeSetupPage::Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return new MySQLNativeSetupPage( pParent, _rAttrSet );
     }
@@ -343,7 +343,7 @@ using namespace ::com::sun::star;
     }
 
     // OMySQLJDBCConnectionPageSetup
-    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, sal_uInt16 _nDefaultPortResId, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderTextResId, sal_uInt16 _nDriverClassId)
+    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, sal_uInt16 _nDefaultPortResId, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderTextResId, sal_uInt16 _nDriverClassId)
         :OGenericAdministrationPage(pParent, "SpecialJDBCConnectionPage", "dbaccess/ui/specialjdbcconnectionpage.ui", _rCoreAttrs)
         ,m_nPortId(_nPortId)
     {
@@ -387,7 +387,7 @@ using namespace ::com::sun::star;
         SetRoadmapStateValue(false);
     }
 
-    OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
                                                          _rAttrSet,
@@ -398,7 +398,7 @@ using namespace ::com::sun::star;
                                                          STR_MYSQL_DRIVERCLASSTEXT) );
     }
 
-    OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
                                                           _rAttrSet,
@@ -512,13 +512,13 @@ using namespace ::com::sun::star;
         return 0L;
     }
 
-    OGenericAdministrationPage* OJDBCConnectionPageSetup::CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage* OJDBCConnectionPageSetup::CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OJDBCConnectionPageSetup( pParent, _rAttrSet));
     }
 
     // OMySQLJDBCConnectionPageSetup
-    OJDBCConnectionPageSetup::OJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs)
+    OJDBCConnectionPageSetup::OJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionTabPageSetup(pParent, "JDBCConnectionPage", "dbaccess/ui/jdbcconnectionpage.ui", _rCoreAttrs,
                                 STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
     {
@@ -621,13 +621,13 @@ using namespace ::com::sun::star;
         return 0L;
     }
 
-    OGenericAdministrationPage* OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage* OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OSpreadSheetConnectionPageSetup( pParent, _rAttrSet ) );
     }
 
 
-    OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OConnectionTabPageSetup(pParent, "DBWizSpreadsheetPage", "dbaccess/ui/dbwizspreadsheetpage.ui", _rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
     {
         get(m_pPasswordrequired, "passwordrequired");
@@ -662,13 +662,13 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    OGenericAdministrationPage* OAuthentificationPageSetup::CreateAuthentificationTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage* OAuthentificationPageSetup::CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OAuthentificationPageSetup( pParent, _rAttrSet) );
     }
 
 
-    OAuthentificationPageSetup::OAuthentificationPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OAuthentificationPageSetup::OAuthentificationPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage(pParent, "AuthentificationPage", "dbaccess/ui/authentificationpage.ui", _rCoreAttrs )
     {
         get(m_pFTHelpText, "helptext");
@@ -729,13 +729,13 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
-    OGenericAdministrationPage* OFinalDBPageSetup::CreateFinalDBTabPageSetup( Window* pParent, const SfxItemSet& _rAttrSet)
+    OGenericAdministrationPage* OFinalDBPageSetup::CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet)
     {
         return ( new OFinalDBPageSetup( pParent, _rAttrSet) );
     }
 
 
-    OFinalDBPageSetup::OFinalDBPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs)
+    OFinalDBPageSetup::OFinalDBPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs)
         : OGenericAdministrationPage(pParent, "PageFinal",
             "dbaccess/ui/finalpagewizard.ui", _rCoreAttrs)
     {

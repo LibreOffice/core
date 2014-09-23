@@ -522,7 +522,7 @@ FwkTabWindow* TabWindowService::mem_TabWin ()
 
     if ( ! m_xTabWin.is ())
     {
-        Window* pFakeParent = dynamic_cast< Window* >(Application::GetDefaultDevice ());
+        vcl::Window* pFakeParent = dynamic_cast< vcl::Window* >(Application::GetDefaultDevice ());
 
         m_pTabWin = new FwkTabWindow (pFakeParent);
         m_xTabWin = VCLUnoHelper::GetInterface (m_pTabWin);

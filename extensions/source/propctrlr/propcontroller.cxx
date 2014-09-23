@@ -373,7 +373,7 @@ namespace pcr
         // announcement is responsible for calling setComponent, too.
         Reference< XWindow > xContainerWindow = m_xFrame->getContainerWindow();
         VCLXWindow* pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
-        Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
+        vcl::Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
         if (!pParentWin)
             throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
 
@@ -696,7 +696,7 @@ namespace pcr
     }
 
 
-    bool OPropertyBrowserController::Construct(Window* _pParentWin)
+    bool OPropertyBrowserController::Construct(vcl::Window* _pParentWin)
     {
         DBG_ASSERT(!haveView(), "OPropertyBrowserController::Construct: already have a view!");
         DBG_ASSERT(_pParentWin, "OPropertyBrowserController::Construct: invalid parent window!");

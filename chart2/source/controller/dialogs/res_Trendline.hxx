@@ -34,7 +34,7 @@ namespace chart
 class TrendlineResources
 {
 public:
-    TrendlineResources( Window* pParent, const SfxItemSet& rInAttrs );
+    TrendlineResources( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~TrendlineResources();
 
     void Reset(const SfxItemSet& rInAttrs);

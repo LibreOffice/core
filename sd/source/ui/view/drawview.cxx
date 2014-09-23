@@ -515,7 +515,7 @@ bool DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
  * Make passed region visible (scrolling if necessary)
  */
 
-void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
+void DrawView::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
 {
     if (!rRect.IsEmpty() && mpDrawViewShell)
     {

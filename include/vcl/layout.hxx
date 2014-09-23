@@ -20,20 +20,20 @@
 #include <boost/multi_array.hpp>
 #include <set>
 
-class VCL_DLLPUBLIC VclContainer : public Window
+class VCL_DLLPUBLIC VclContainer : public vcl::Window
 {
 public:
-    VclContainer(Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN);
+    VclContainer(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN);
 
     //These take into account the external margins of the rWindow widget
     //while GetOptimalSize/get_preferred_size and SetPosSizePixel are
     //oblivious to them
-    static Size getLayoutRequisition(const Window &rWindow);
-    static void setLayoutPosSize(Window &rWindow, const Point &rPos, const Size &rSize);
+    static Size getLayoutRequisition(const vcl::Window &rWindow);
+    static void setLayoutPosSize(vcl::Window &rWindow, const Point &rPos, const Size &rSize);
 
     //applies the allocation pos and size onto rWindow via setLayoutPosSize taking into account
     //the rWindows alignment desires within that allocation
-    static void setLayoutAllocation(Window &rWindow, const Point &rPos, const Size &rSize);
+    static void setLayoutAllocation(vcl::Window &rWindow, const Point &rPos, const Size &rSize);
 
     void markLayoutDirty()
     {
@@ -66,7 +66,7 @@ protected:
     bool m_bVerticalContainer;
     int m_nSpacing;
 public:
-    VclBox(Window *pParent, bool bHomogeneous, int nSpacing)
+    VclBox(vcl::Window *pParent, bool bHomogeneous, int nSpacing)
         : VclContainer(pParent)
         , m_bHomogeneous(bHomogeneous)
         , m_bVerticalContainer(false)
@@ -107,13 +107,13 @@ protected:
     virtual long getSecondaryCoordinate(const Point &rPos) const = 0;
     virtual void setSecondaryCoordinate(Point &rPos, long) const = 0;
 
-    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const = 0;
+    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const = 0;
 };
 
 class VCL_DLLPUBLIC VclVBox : public VclBox
 {
 public:
-    VclVBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
+    VclVBox(vcl::Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
         : VclBox(pParent, bHomogeneous, nSpacing)
     {
         m_bVerticalContainer = true;
@@ -151,7 +151,7 @@ protected:
     {
         rPos.setX(nPos);
     }
-    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const SAL_OVERRIDE
+    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
     {
         return rWindow.get_expand() || rWindow.get_vexpand();
     }
@@ -160,7 +160,7 @@ protected:
 class VCL_DLLPUBLIC VclHBox : public VclBox
 {
 public:
-    VclHBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
+    VclHBox(vcl::Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
         : VclBox(pParent, bHomogeneous, nSpacing)
     {
         m_bVerticalContainer = false;
@@ -198,7 +198,7 @@ protected:
     {
         rPos.setY(nPos);
     }
-    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const SAL_OVERRIDE
+    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
     {
         return rWindow.get_expand() || rWindow.get_hexpand();
     }
@@ -217,7 +217,7 @@ enum VclButtonBoxStyle
 class VCL_DLLPUBLIC VclButtonBox : public VclBox
 {
 public:
-    VclButtonBox(Window *pParent, int nSpacing)
+    VclButtonBox(vcl::Window *pParent, int nSpacing)
         : VclBox(pParent, false, nSpacing)
         , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
     {
@@ -252,7 +252,7 @@ private:
 class VCL_DLLPUBLIC VclVButtonBox : public VclButtonBox
 {
 public:
-    VclVButtonBox(Window *pParent, int nSpacing = 0)
+    VclVButtonBox(vcl::Window *pParent, int nSpacing = 0)
         : VclButtonBox(pParent, nSpacing)
     {
         m_bVerticalContainer = true;
@@ -290,7 +290,7 @@ protected:
     {
         rPos.setX(nPos);
     }
-    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const SAL_OVERRIDE
+    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
     {
         return rWindow.get_expand() || rWindow.get_vexpand();
     }
@@ -299,7 +299,7 @@ protected:
 class VCL_DLLPUBLIC VclHButtonBox : public VclButtonBox
 {
 public:
-    VclHButtonBox(Window *pParent, int nSpacing = 0)
+    VclHButtonBox(vcl::Window *pParent, int nSpacing = 0)
         : VclButtonBox(pParent, nSpacing)
     {
         m_bVerticalContainer = false;
@@ -337,7 +337,7 @@ protected:
     {
         rPos.setY(nPos);
     }
-    virtual bool getPrimaryDimensionChildExpand(const Window &rWindow) const SAL_OVERRIDE
+    virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
     {
         return rWindow.get_expand() || rWindow.get_hexpand();
     }
@@ -353,7 +353,7 @@ private:
 
     struct GridEntry
     {
-        Window *pChild;
+        vcl::Window *pChild;
         sal_Int32 nSpanWidth;
         sal_Int32 nSpanHeight;
         GridEntry()
@@ -395,7 +395,7 @@ private:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 public:
-    VclGrid(Window *pParent)
+    VclGrid(vcl::Window *pParent)
         : VclContainer(pParent)
         , m_bRowHomogeneous(false), m_bColumnHomogeneous(false)
         , m_nRowSpacing(0), m_nColumnSpacing(0)
@@ -436,18 +436,18 @@ public:
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
-VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
+VCL_DLLPUBLIC void setGridAttach(vcl::Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
     sal_Int32 nWidth = 1, sal_Int32 nHeight = 1);
 
 class VCL_DLLPUBLIC VclBin : public VclContainer
 {
 public:
-    VclBin(Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN)
+    VclBin(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN)
         : VclContainer(pParent, nStyle)
     {
     }
-    virtual Window *get_child();
-    virtual const Window *get_child() const;
+    virtual vcl::Window *get_child();
+    virtual const vcl::Window *get_child() const;
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 };
@@ -455,22 +455,22 @@ public:
 class VCL_DLLPUBLIC VclFrame : public VclBin
 {
 private:
-    Window *m_pLabel;
+    vcl::Window *m_pLabel;
 private:
     friend class VclBuilder;
-    void designate_label(Window *pWindow);
+    void designate_label(vcl::Window *pWindow);
 public:
-    VclFrame(Window *pParent)
+    VclFrame(vcl::Window *pParent)
         : VclBin(pParent)
         , m_pLabel(NULL)
     {
     }
     void set_label(const OUString &rLabel);
     OUString get_label() const;
-    virtual Window *get_child() SAL_OVERRIDE;
-    virtual const Window *get_child() const SAL_OVERRIDE;
-    Window *get_label_widget();
-    const Window *get_label_widget() const;
+    virtual vcl::Window *get_child() SAL_OVERRIDE;
+    virtual const vcl::Window *get_child() const SAL_OVERRIDE;
+    vcl::Window *get_label_widget();
+    const vcl::Window *get_label_widget() const;
 protected:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
@@ -480,7 +480,7 @@ protected:
 class VCL_DLLPUBLIC VclAlignment : public VclBin
 {
 public:
-    VclAlignment(Window *pParent)
+    VclAlignment(vcl::Window *pParent)
         : VclBin(pParent)
         , m_nBottomPadding(0)
         , m_nLeftPadding(0)
@@ -510,7 +510,7 @@ private:
 class VCL_DLLPUBLIC VclExpander : public VclBin
 {
 public:
-    VclExpander(Window *pParent)
+    VclExpander(vcl::Window *pParent)
         : VclBin(pParent)
         , m_bResizeTopLevel(true)
         , m_aDisclosureButton(this)
@@ -518,8 +518,8 @@ public:
         m_aDisclosureButton.SetToggleHdl(LINK(this, VclExpander, ClickHdl));
         m_aDisclosureButton.Show();
     }
-    virtual Window *get_child() SAL_OVERRIDE;
-    virtual const Window *get_child() const SAL_OVERRIDE;
+    virtual vcl::Window *get_child() SAL_OVERRIDE;
+    virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     bool get_expanded() const
     {
@@ -553,9 +553,9 @@ private:
 class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 {
 public:
-    VclScrolledWindow(Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
-    virtual Window *get_child() SAL_OVERRIDE;
-    virtual const Window *get_child() const SAL_OVERRIDE;
+    VclScrolledWindow(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
+    virtual vcl::Window *get_child() SAL_OVERRIDE;
+    virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     ScrollBar& getVertScrollBar() { return m_aVScroll; }
     ScrollBar& getHorzScrollBar() { return m_aHScroll; }
@@ -579,7 +579,7 @@ private:
 class VCL_DLLPUBLIC VclViewport : public VclBin
 {
 public:
-    VclViewport(Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN)
+    VclViewport(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN)
         : VclBin(pParent, nStyle)
     {
     }
@@ -598,10 +598,10 @@ private:
     //Any Commands an EventBoxHelper receives are forwarded to its parent
     //The VclEventBox ensures that m_aEventBoxHelper is the
     //first child and is transparent, but covers the rest of the children
-    class EventBoxHelper : public Window
+    class EventBoxHelper : public vcl::Window
     {
     public:
-        EventBoxHelper(Window* pParent)
+        EventBoxHelper(vcl::Window* pParent)
             : Window(pParent, 0)
         {
             SetSizePixel(pParent->GetSizePixel());
@@ -617,14 +617,14 @@ private:
 
     EventBoxHelper m_aEventBoxHelper;
 public:
-    VclEventBox(Window* pParent)
+    VclEventBox(vcl::Window* pParent)
         : VclBin(pParent)
         , m_aEventBoxHelper(this)
     {
         m_aEventBoxHelper.Show();
     }
-    virtual Window *get_child() SAL_OVERRIDE;
-    virtual const Window *get_child() const SAL_OVERRIDE;
+    virtual vcl::Window *get_child() SAL_OVERRIDE;
+    virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 
@@ -642,7 +642,7 @@ enum VclSizeGroupMode
 class VCL_DLLPUBLIC VclSizeGroup
 {
 private:
-    std::set<Window*> m_aWindows;
+    std::set<vcl::Window*> m_aWindows;
     bool m_bIgnoreHidden;
     VclSizeGroupMode m_eMode;
 
@@ -653,19 +653,19 @@ public:
         , m_eMode(VCL_SIZE_GROUP_HORIZONTAL)
     {
     }
-    void insert(Window *pWindow)
+    void insert(vcl::Window *pWindow)
     {
         m_aWindows.insert(pWindow);
     }
-    void erase(Window *pWindow)
+    void erase(vcl::Window *pWindow)
     {
         m_aWindows.erase(pWindow);
     }
-    const std::set<Window*>& get_widgets() const
+    const std::set<vcl::Window*>& get_widgets() const
     {
         return m_aWindows;
     }
-    std::set<Window*>& get_widgets()
+    std::set<vcl::Window*>& get_widgets()
     {
         return m_aWindows;
     }
@@ -712,24 +712,24 @@ private:
     VclMultiLineEdit* m_pPrimaryMessage;
     VclMultiLineEdit* m_pSecondaryMessage;
     std::vector<PushButton*> m_aOwnedButtons;
-    std::map<const Window*, short> m_aResponses;
+    std::map<const vcl::Window*, short> m_aResponses;
     OUString m_sPrimaryString;
     OUString m_sSecondaryString;
     DECL_DLLPRIVATE_LINK(ButtonHdl, Button *);
     void setButtonHandlers(VclButtonBox *pButtonBox);
-    short get_response(const Window *pWindow) const;
+    short get_response(const vcl::Window *pWindow) const;
     void create_owned_areas();
 
     friend class VclBuilder;
-    MessageDialog(Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
+    MessageDialog(vcl::Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
 public:
 
-    MessageDialog(Window* pParent,
+    MessageDialog(vcl::Window* pParent,
         const OUString &rMessage,
         VclMessageType eMessageType = VCL_MESSAGE_ERROR,
         VclButtonsType eButtonsType = VCL_BUTTONS_OK,
         WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
-    MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
     ///Emitted when an action widget is clicked
@@ -740,7 +740,7 @@ public:
     void set_secondary_text(const OUString &rSecondaryString);
     virtual ~MessageDialog();
 
-    static void SetMessagesWidths(Window *pParent, VclMultiLineEdit *pPrimaryMessage,
+    static void SetMessagesWidths(vcl::Window *pParent, VclMultiLineEdit *pPrimaryMessage,
         VclMultiLineEdit *pSecondaryMessage);
 };
 
@@ -751,57 +751,57 @@ VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
 //i.e. acts like pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC Window* firstLogicalChildOfParent(Window *pTopLevel);
+VCL_DLLPUBLIC vcl::Window* firstLogicalChildOfParent(vcl::Window *pTopLevel);
 
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(WINDOW_NEXT);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC Window* nextLogicalChildOfParent(Window *pTopLevel, Window *pChild);
+VCL_DLLPUBLIC vcl::Window* nextLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChild);
 
 //Get previous window before pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(WINDOW_PREV);
 //in a flat hierarchy where dialogs only have one layer
 //of children
-VCL_DLLPUBLIC Window* prevLogicalChildOfParent(Window *pTopLevel, Window *pChild);
+VCL_DLLPUBLIC vcl::Window* prevLogicalChildOfParent(vcl::Window *pTopLevel, vcl::Window *pChild);
 
 //Returns true is the Window has a single child which is a container
-VCL_DLLPUBLIC bool isLayoutEnabled(const Window *pWindow);
+VCL_DLLPUBLIC bool isLayoutEnabled(const vcl::Window *pWindow);
 
-inline bool isContainerWindow(const Window &rWindow)
+inline bool isContainerWindow(const vcl::Window &rWindow)
 {
     WindowType eType = rWindow.GetType();
     return (eType == WINDOW_CONTAINER || eType == WINDOW_SCROLLWINDOW);
 }
 
-inline bool isContainerWindow(const Window *pWindow)
+inline bool isContainerWindow(const vcl::Window *pWindow)
 {
     return pWindow && isContainerWindow(*pWindow);
 }
 
 //Returns true if the containing dialog is doing its initial
 //layout and isn't visible yet
-VCL_DLLPUBLIC bool isInitialLayout(const Window *pWindow);
+VCL_DLLPUBLIC bool isInitialLayout(const vcl::Window *pWindow);
 
 // retro-fitting utilities
 
 //Get a Size which is large enough to contain all children with
 //an equal amount of space at top left and bottom right
-Size getLegacyBestSizeForChildren(const Window &rWindow);
+Size getLegacyBestSizeForChildren(const vcl::Window &rWindow);
 
 //Get first parent which is not a layout widget
-VCL_DLLPUBLIC Window* getNonLayoutParent(Window *pParent);
+VCL_DLLPUBLIC vcl::Window* getNonLayoutParent(vcl::Window *pParent);
 
 //Get first real parent which is not a layout widget
-Window* getNonLayoutRealParent(Window *pParent);
+vcl::Window* getNonLayoutRealParent(vcl::Window *pParent);
 
 //return true if this window and its stack of containers are all shown
-bool isVisibleInLayout(const Window *pWindow);
+bool isVisibleInLayout(const vcl::Window *pWindow);
 
 //return true if this window and its stack of containers are all enabled
-bool isEnabledInLayout(const Window *pWindow);
+bool isEnabledInLayout(const vcl::Window *pWindow);
 
 #endif
 

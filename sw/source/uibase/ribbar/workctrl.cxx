@@ -450,12 +450,12 @@ static const char* aNavigationHelpIds[ NAVI_ENTRIES ] =
     HID_NID_NEXT
 };
 
-SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& rFrame, Window *pParent)
+SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window *pParent)
     : SfxPopupWindow(nId, pParent, "FloatingNavigation",
         "modules/swriter/ui/floatingnavigation.ui", rFrame),
     aIList(SW_RES(IL_VALUES))
 {
-    m_pToolBox = new SwScrollNaviToolBox(get<Window>("box"), 0);
+    m_pToolBox = new SwScrollNaviToolBox(get<vcl::Window>("box"), 0);
     get(m_pInfoField, "label");
 
     sal_uInt16 i;
@@ -600,7 +600,7 @@ class SwZoomBox_Impl : public ComboBox
 
 public:
     SwZoomBox_Impl(
-        Window* pParent,
+        vcl::Window* pParent,
         sal_uInt16 nSlot,
         const Reference< XDispatchProvider >& rDispatchProvider );
     virtual ~SwZoomBox_Impl();
@@ -614,7 +614,7 @@ protected:
 };
 
 SwZoomBox_Impl::SwZoomBox_Impl(
-    Window* pParent,
+    vcl::Window* pParent,
     sal_uInt16 nSlot,
     const Reference< XDispatchProvider >& rDispatchProvider ):
     ComboBox( pParent, SW_RES(RID_PVIEW_ZOOM_LB)),
@@ -694,7 +694,7 @@ bool SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
     }
     else if ( EVENT_LOSEFOCUS == rNEvt.GetType() )
     {
-        Window* pFocusWin = Application::GetFocusWindow();
+        vcl::Window* pFocusWin = Application::GetFocusWindow();
         if ( !HasFocus() && GetSubEdit() != pFocusWin )
             SetText( GetSavedValue() );
     }
@@ -713,7 +713,7 @@ void SwZoomBox_Impl::ReleaseFocus()
 
     if ( pCurSh )
     {
-        Window* pShellWnd = pCurSh->GetWindow();
+        vcl::Window* pShellWnd = pCurSh->GetWindow();
 
         if ( pShellWnd )
             pShellWnd->GrabFocus();
@@ -750,7 +750,7 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     }
 }
 
-Window* SwPreviewZoomControl::CreateItemWindow( Window *pParent )
+vcl::Window* SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent )
 {
     SwZoomBox_Impl* pRet = new SwZoomBox_Impl( pParent, GetSlotId(), Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
     return pRet;

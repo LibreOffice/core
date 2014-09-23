@@ -25,7 +25,7 @@
 // caution: needs C-Linkage since dynamically loaded via symbol name
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rResult)
+SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(vcl::Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rResult)
 {
     bool bRet = false;
     boost::scoped_ptr<SvxCharacterMap> aDlg(new SvxCharacterMap( i_pParent ));

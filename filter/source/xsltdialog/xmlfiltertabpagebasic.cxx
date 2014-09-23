@@ -23,7 +23,7 @@
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltersettingsdialog.hxx"
 
-XMLFilterTabPageBasic::XMLFilterTabPageBasic(Window* pParent)
+XMLFilterTabPageBasic::XMLFilterTabPageBasic(vcl::Window* pParent)
     : TabPage(pParent, "XmlFilterTabPageGeneral", "filter/ui/xmlfiltertabpagegeneral.ui")
 {
     get(m_pEDFilterName,   "filtername");

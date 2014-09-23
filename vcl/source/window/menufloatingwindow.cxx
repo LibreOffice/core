@@ -25,7 +25,7 @@
 #include <vcl/settings.hxx>
 #include <window.h>
 
-MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nStyle ) :
+MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBits nStyle ) :
     FloatingWindow( pParent, nStyle )
 {
     mpWindowImpl->mbMenuFloatingWindow= true;
@@ -1141,7 +1141,7 @@ void MenuFloatingWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     sal_uInt16 nId = nHighlightedItem;
     Menu* pM = pMenu;
-    Window* pW = this;
+    vcl::Window* pW = this;
 
     // #102618# Get item rect before destroying the window in EndExecute() call
     Rectangle aHighlightRect( ImplGetItemRect( nHighlightedItem ) );

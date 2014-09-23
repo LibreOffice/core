@@ -38,7 +38,7 @@ class SVX_DLLPUBLIC ColorPopup
 {
 public :
     ColorPopup (
-        Window* pParent,
+        vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
     virtual ~ColorPopup (void);
 

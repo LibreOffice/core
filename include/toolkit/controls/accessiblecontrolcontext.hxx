@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace toolkit
 {
@@ -117,7 +117,7 @@ namespace toolkit
         // stops listening at the control model
         void stopModelListening( );
 
-        Window* implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
+        vcl::Window* implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
     };
 
 

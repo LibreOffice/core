@@ -31,7 +31,7 @@ class SfxItemSet;
 class SW_DLLPUBLIC SwPageExample : public SvxPageWindow
 {
 public:
-    SwPageExample(Window* pPar)
+    SwPageExample(vcl::Window* pPar)
         : SvxPageWindow(pPar)
     {
         SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));
@@ -51,7 +51,7 @@ protected:
                            const bool bSecond,
                            const bool bEnabled ) SAL_OVERRIDE;
 public:
-    SwPageGridExample(Window* pPar) :
+    SwPageGridExample(vcl::Window* pPar) :
                                 SwPageExample(pPar),
                                 pGridItem(0),
                                 m_bVertical(false){}
@@ -72,7 +72,7 @@ protected:
                            const bool bEnabled ) SAL_OVERRIDE;
 
 public:
-    SwColExample(Window* pPar)
+    SwColExample(vcl::Window* pPar)
         : SwPageExample(pPar)
         , pColMgr(0)
     {
@@ -85,7 +85,7 @@ public:
     }
 };
 
-class SW_DLLPUBLIC SwColumnOnlyExample : public Window
+class SW_DLLPUBLIC SwColumnOnlyExample : public vcl::Window
 {
 private:
     Size        m_aWinSize;
@@ -97,7 +97,7 @@ protected:
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 public:
-    SwColumnOnlyExample(Window*);
+    SwColumnOnlyExample(vcl::Window*);
 
     void        SetColumns(const SwFmtCol& rCol);
 

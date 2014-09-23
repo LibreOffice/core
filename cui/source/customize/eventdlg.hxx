@@ -47,7 +47,7 @@ public:
 
                     /// this is only to let callers know that there is a LateInit which *must* be called
                     struct EarlyInit { };
-                    SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet, EarlyInit );
+                    SvxEventConfigPage( vcl::Window *pParent, const SfxItemSet& rSet, EarlyInit );
                     virtual ~SvxEventConfigPage();
 
     void            LateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );

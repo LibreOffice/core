@@ -106,7 +106,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getQueryColumn( const OUString& _rFieldName ) const;
 
     public:
-        DlgFilterCrit(  Window * pParent,
+        DlgFilterCrit(  vcl::Window * pParent,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,

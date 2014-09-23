@@ -142,7 +142,7 @@ bool ImplTabButton::PreNotify( NotifyEvent& rNEvt )
 // - ImplTabSizer -
 
 
-class ImplTabSizer : public Window
+class ImplTabSizer : public vcl::Window
 {
 public:
                     ImplTabSizer( TabBar* pParent, WinBits nWinStyle = 0 );
@@ -434,7 +434,7 @@ void TabBar::ImplInit( WinBits nWinStyle )
 
 
 
-TabBar::TabBar( Window* pParent, WinBits nWinStyle ) :
+TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, (nWinStyle & WB_3DLOOK) | WB_CLIPCHILDREN )
 {
     ImplInit( nWinStyle );

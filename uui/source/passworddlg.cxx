@@ -24,7 +24,7 @@
 
 using namespace ::com::sun::star;
 
-PasswordDialog::PasswordDialog(Window* _pParent,
+PasswordDialog::PasswordDialog(vcl::Window* _pParent,
     task::PasswordRequestMode nDlgMode, ResMgr * pResMgr,
     const OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
     : ModalDialog(_pParent, "PasswordDialog", "uui/ui/password.ui")

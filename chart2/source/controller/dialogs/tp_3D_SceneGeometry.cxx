@@ -54,7 +54,7 @@ void lcl_SetMetricFieldLimits( MetricField& rField, sal_Int64 nLimit )
 }
 
 }
-ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
+ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow
                 , const uno::Reference< beans::XPropertySet > & xSceneProperties
                 , ControllerLockHelper & rControllerLockHelper )
                 : TabPage ( pWindow

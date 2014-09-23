@@ -37,7 +37,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-ScTpContentOptions::ScTpContentOptions( Window*         pParent,
+ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
                              const SfxItemSet&  rArgSet ) :
     SfxTabPage(pParent, "TpViewPage", "modules/scalc/ui/tpviewpage.ui", &rArgSet),
     pLocalOptions(0)
@@ -98,7 +98,7 @@ ScTpContentOptions::~ScTpContentOptions()
     delete pLocalOptions;
 }
 
-SfxTabPage* ScTpContentOptions::Create( Window*     pParent,
+SfxTabPage* ScTpContentOptions::Create( vcl::Window*     pParent,
                               const SfxItemSet*     rCoreSet )
 {
     return new ScTpContentOptions(pParent, *rCoreSet);
@@ -346,7 +346,7 @@ IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
     return 0;
 }
 
-ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
+ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
                                         const SfxItemSet&   rArgSet ) :
     SfxTabPage( pParent, "ScGeneralPage",
                 "modules/scalc/ui/scgeneralpage.ui", &rArgSet),
@@ -408,7 +408,7 @@ ScTpLayoutOptions::~ScTpLayoutOptions()
 {
 }
 
-SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
+SfxTabPage* ScTpLayoutOptions::Create( vcl::Window*          pParent,
                                     const SfxItemSet*   rCoreSet )
 {
     ScTpLayoutOptions* pNew = new ScTpLayoutOptions(pParent, *rCoreSet);

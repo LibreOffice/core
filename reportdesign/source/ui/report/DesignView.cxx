@@ -57,11 +57,11 @@ using namespace container;
 #define REPORT_ID           2
 #define TASKPANE_ID         3
 
-class OTaskWindow : public Window
+class OTaskWindow : public vcl::Window
 {
     PropBrw* m_pPropWin;
 public:
-    OTaskWindow(Window* _pParent) : Window(_pParent),m_pPropWin(NULL){}
+    OTaskWindow(vcl::Window* _pParent) : Window(_pParent),m_pPropWin(NULL){}
 
     inline void setPropertyBrowser(PropBrw* _pPropWin)
     {
@@ -80,7 +80,7 @@ public:
 // class ODesignView
 
 
-ODesignView::ODesignView(   Window* pParent,
+ODesignView::ODesignView(   vcl::Window* pParent,
                             const Reference< XComponentContext >& _rxOrb,
                             OReportController& _rController) :
     ODataView( pParent, _rController, _rxOrb, WB_DIALOGCONTROL )
@@ -133,7 +133,7 @@ ODesignView::~ODesignView()
     {
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp2(m_pPropWin);
+        ::std::auto_ptr<vcl::Window> aTemp2(m_pPropWin);
         SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pPropWin = NULL;
     }
@@ -143,7 +143,7 @@ ODesignView::~ODesignView()
         aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp2(m_pAddField);
+        ::std::auto_ptr<vcl::Window> aTemp2(m_pAddField);
         SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pAddField = NULL;
     }
@@ -153,13 +153,13 @@ ODesignView::~ODesignView()
         aDlgOpt.SetWindowState(OStringToOUString(m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp2(m_pReportExplorer);
+        ::std::auto_ptr<vcl::Window> aTemp2(m_pReportExplorer);
         SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pReportExplorer = NULL;
     }
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp2(m_pTaskPane);
+        ::std::auto_ptr<vcl::Window> aTemp2(m_pTaskPane);
         SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pTaskPane = NULL;
     }

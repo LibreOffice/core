@@ -147,7 +147,7 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    Window*                                         pParent = mpParent->GetParent();
+    vcl::Window*                                         pParent = mpParent->GetParent();
     uno::Reference< css::accessibility::XAccessible >    xRet;
 
     if ( pParent )
@@ -159,12 +159,12 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
 ::com::sun::star::awt::Rectangle SvxShowCharSetVirtualAcc::implGetBounds(  ) throw (RuntimeException)
 {
     ::com::sun::star::awt::Rectangle aBounds ( 0, 0, 0, 0 );
-    Window* pWindow = mpParent;
+    vcl::Window* pWindow = mpParent;
     if ( pWindow )
     {
         Rectangle aRect = pWindow->GetWindowExtentsRelative( NULL );
         aBounds = AWTRectangle( aRect );
-        Window* pParent = pWindow->GetAccessibleParentWindow();
+        vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
             Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );

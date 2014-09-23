@@ -42,7 +42,7 @@
             Get(ATTR_PAGE_SHARED)).GetValue()
 
 ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle,
                           const OString& rID, const OUString& rUIXMLDescription )
@@ -58,7 +58,7 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditHeaderDlg::ScHFEditHeaderDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
@@ -69,7 +69,7 @@ ScHFEditHeaderDlg::ScHFEditHeaderDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditFooterDlg::ScHFEditFooterDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
@@ -80,7 +80,7 @@ ScHFEditFooterDlg::ScHFEditFooterDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditLeftHeaderDlg::ScHFEditLeftHeaderDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
@@ -90,7 +90,7 @@ ScHFEditLeftHeaderDlg::ScHFEditLeftHeaderDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditRightHeaderDlg::ScHFEditRightHeaderDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
@@ -100,7 +100,7 @@ ScHFEditRightHeaderDlg::ScHFEditRightHeaderDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditLeftFooterDlg::ScHFEditLeftFooterDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
@@ -110,7 +110,7 @@ ScHFEditLeftFooterDlg::ScHFEditLeftFooterDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditRightFooterDlg::ScHFEditRightFooterDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
@@ -120,7 +120,7 @@ ScHFEditRightFooterDlg::ScHFEditRightFooterDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditSharedHeaderDlg::ScHFEditSharedHeaderDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
@@ -132,7 +132,7 @@ ScHFEditSharedHeaderDlg::ScHFEditSharedHeaderDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditSharedFooterDlg::ScHFEditSharedFooterDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
@@ -144,7 +144,7 @@ ScHFEditSharedFooterDlg::ScHFEditSharedFooterDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditAllDlg::ScHFEditAllDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
@@ -157,7 +157,7 @@ ScHFEditAllDlg::ScHFEditAllDlg( SfxViewFrame*     pFrameP,
 }
 
 ScHFEditActiveDlg::ScHFEditActiveDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle)
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,

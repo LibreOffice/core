@@ -165,7 +165,7 @@ public:
     int  CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr );
 
     // remove the DDE-Link format promise
-    void RemoveDDELinkFormat( const Window& rWin );
+    void RemoveDDELinkFormat( const vcl::Window& rWin );
 
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
@@ -189,7 +189,7 @@ public:
                                 SvxClipboardFmtItem & rToFill );
 
     // Interfaces for Drag & Drop
-    void StartDrag( Window* pWin, const Point& rPos );
+    void StartDrag( vcl::Window* pWin, const Point& rPos );
 
     SwWrtShell* GetShell()              { return pWrtShell; }
     void SetCleanUp( bool bFlag )       { bCleanUp = bFlag; }

@@ -61,7 +61,7 @@ using namespace ::com::sun::star::text;
 namespace sd { namespace sidebar {
 
 MasterPagesSelector::MasterPagesSelector (
-    ::Window* pParent,
+    ::vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
@@ -500,7 +500,7 @@ bool MasterPagesSelector::IsResizable (void)
     return false;
 }
 
-::Window* MasterPagesSelector::GetWindow (void)
+::vcl::Window* MasterPagesSelector::GetWindow (void)
 {
     return this;
 }

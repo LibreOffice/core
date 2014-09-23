@@ -38,7 +38,7 @@ public:
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 /** base class for list boxes which need to update their content according to the list
@@ -48,7 +48,7 @@ class DocListenerBox    :public ListBox
                         ,public DocumentEventListener
 {
 protected:
-    DocListenerBox( Window* pParent );
+    DocListenerBox( vcl::Window* pParent );
     virtual ~DocListenerBox();
 
 protected:
@@ -94,7 +94,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-                    LibBox( Window* pParent,
+                    LibBox( vcl::Window* pParent,
                                  const com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                     virtual ~LibBox();
 
@@ -111,7 +111,7 @@ public:
                         virtual ~LanguageBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 class LanguageBox : public DocListenerBox
@@ -134,7 +134,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-    LanguageBox( Window* pParent );
+    LanguageBox( vcl::Window* pParent );
     virtual ~LanguageBox();
 
     using           Window::Update;

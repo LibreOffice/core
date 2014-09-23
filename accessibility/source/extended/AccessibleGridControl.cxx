@@ -236,7 +236,7 @@ OUString SAL_CALL AccessibleGridControl::getImplementationName()
 
 Rectangle AccessibleGridControl::implGetBoundingBox()
 {
-    Window* pParent = m_aTable.GetAccessibleParentWindow();
+    vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
     OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
     return m_aTable.GetWindowExtentsRelative( pParent );
 }

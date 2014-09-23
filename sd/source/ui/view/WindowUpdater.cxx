@@ -44,7 +44,7 @@ WindowUpdater::~WindowUpdater (void) throw ()
     maCTLOptions.RemoveListener(this);
 }
 
-void WindowUpdater::RegisterWindow (::Window* pWindow)
+void WindowUpdater::RegisterWindow (vcl::Window* pWindow)
 {
     if (pWindow != NULL)
     {
@@ -60,7 +60,7 @@ void WindowUpdater::RegisterWindow (::Window* pWindow)
     }
 }
 
-void WindowUpdater::UnregisterWindow (::Window* pWindow)
+void WindowUpdater::UnregisterWindow (vcl::Window* pWindow)
 {
     tWindowList::iterator aWindowIterator (
         ::std::find (

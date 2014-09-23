@@ -499,7 +499,7 @@ namespace
 }
 
 // OCopyTableWizard
-OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
+OCopyTableWizard::OCopyTableWizard( vcl::Window * pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
         const ICopyTableSourceObject& _rSourceObject, const Reference< XConnection >& _xSourceConnection,
         const Reference< XConnection >& _xConnection, const Reference< XComponentContext >& _rxContext,
         const Reference< XInteractionHandler>&   _xInteractionHandler)
@@ -591,7 +591,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultN
     ActivatePage();
 }
 
-OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
+OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
         const ODatabaseExport::TColumns& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
         const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
         TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XComponentContext >& _rxContext )

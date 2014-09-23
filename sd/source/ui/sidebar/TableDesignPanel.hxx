@@ -28,7 +28,7 @@ class TableDesignPanel
 {
 public:
     TableDesignPanel (
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
     virtual ~TableDesignPanel (void);
 
@@ -36,8 +36,8 @@ public:
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
 protected:
-    virtual ::Window* CreateWrappedControl (
-        ::Window* pParentWindow,
+    virtual vcl::Window* CreateWrappedControl (
+        vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase) SAL_OVERRIDE;
 };
 

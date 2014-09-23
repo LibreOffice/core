@@ -93,13 +93,13 @@ private:
 public:
                         SfxPopupMenuManager( PopupMenu*, SfxBindings& );
                         ~SfxPopupMenuManager();
-    static void         ExecutePopup( const ResId&, SfxViewFrame* pViewFrame, const Point& rPoint, Window* pWindow );
+    static void         ExecutePopup( const ResId&, SfxViewFrame* pViewFrame, const Point& rPoint, vcl::Window* pWindow );
     // @deprecated!!
     // Don't use this method any longer. The whole class will be removed in the future.
     // Changing code which relies on Popup would need much more effort.
-    static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
+    static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, vcl::Window* pWindow );
 
-    sal_uInt16              Execute( const Point& rPos, Window *pWindow );
+    sal_uInt16              Execute( const Point& rPos, vcl::Window *pWindow );
 
     void                RemoveDisabledEntries();
     Menu*                   GetSVMenu();

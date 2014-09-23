@@ -94,8 +94,8 @@ using namespace vcl_sal;
                                 | PropertyChangeMask \
                                 | ColormapChangeMask
 
-static XLIB_Window  hPresentationWindow = None, hPresFocusWindow = None;
-static ::std::list< XLIB_Window > aPresentationReparentList;
+static ::Window  hPresentationWindow = None, hPresFocusWindow = None;
+static ::std::list< ::Window > aPresentationReparentList;
 static int          nVisibleFloats      = 0;
 
 static void doReparentPresentationDialogues( SalDisplay* pDisplay )
@@ -104,7 +104,7 @@ static void doReparentPresentationDialogues( SalDisplay* pDisplay )
     while( aPresentationReparentList.begin() != aPresentationReparentList.end() )
     {
         int x, y;
-        XLIB_Window aRoot, aChild;
+        ::Window aRoot, aChild;
         unsigned int w, h, bw, d;
         XGetGeometry( pDisplay->GetDisplay(),
                       aPresentationReparentList.front(),
@@ -353,8 +353,8 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     Attributes.event_mask               = CLIENT_EVENTS;
 
     const SalVisual& rVis = GetDisplay()->GetVisual( m_nXScreen );
-    XLIB_Window aFrameParent = pParentData ? pParentData->aWindow : GetDisplay()->GetRootWindow( m_nXScreen );
-    XLIB_Window aClientLeader = None;
+    ::Window aFrameParent = pParentData ? pParentData->aWindow : GetDisplay()->GetRootWindow( m_nXScreen );
+    ::Window aClientLeader = None;
 
     if( bUseGeometry )
     {
@@ -403,14 +403,14 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
 
         int x_ret, y_ret;
         unsigned int bw, d;
-        XLIB_Window aRoot, aParent;
+        ::Window aRoot, aParent;
 
         XGetGeometry( GetXDisplay(), pParentData->aWindow,
                       &aRoot, &x_ret, &y_ret, &w, &h, &bw, &d );
         mhForeignParent = pParentData->aWindow;
 
         mhShellWindow = aParent = mhForeignParent;
-        XLIB_Window* pChildren;
+        ::Window* pChildren;
         unsigned int nChildren;
         bool bBreak = false;
         do
@@ -500,7 +500,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
                 else if( GetDisplay()->IsXinerama() )
                 {
                     // place frame on same screen as mouse pointer
-                    XLIB_Window aRoot, aChild;
+                    ::Window aRoot, aChild;
                     int root_x = 0, root_y = 0, lx, ly;
                     unsigned int mask;
                     XQueryPointer( GetXDisplay(),
@@ -1378,7 +1378,7 @@ void X11SalFrame::ToTop( sal_uInt16 nFlags )
         XMapWindow( GetXDisplay(), GetWindow() );
     }
 
-    XLIB_Window aToTopWindow = IsSysChildWindow() ? GetWindow() : GetShellWindow();
+    ::Window aToTopWindow = IsSysChildWindow() ? GetWindow() : GetShellWindow();
     if( ! (nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY) )
     {
         XRaiseWindow( GetXDisplay(), aToTopWindow );
@@ -1442,7 +1442,7 @@ void X11SalFrame::Center( )
         // get xinerama screen we are on
         // if there is a parent, use its center for screen determination
         // else use the pointer
-        XLIB_Window aRoot, aChild;
+        ::Window aRoot, aChild;
         int root_x, root_y, x, y;
         unsigned int mask;
         if( mpParent )
@@ -1486,7 +1486,7 @@ void X11SalFrame::Center( )
 
         if( pFrame->nStyle_ & SAL_FRAME_STYLE_PLUG )
         {
-            XLIB_Window aRoot;
+            ::Window aRoot;
             unsigned int bw, depth;
             XGetGeometry( GetXDisplay(),
                           pFrame->GetShellWindow(),
@@ -1897,7 +1897,7 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
         if( Application::GetSettings().GetLayoutRTL() )
             values.x = mpParent->maGeometry.nWidth-values.width-1-values.x;
 
-         XLIB_Window aChild;
+         ::Window aChild;
          // coordinates are relative to parent, so translate to root coordinates
          XTranslateCoordinates( GetDisplay()->GetDisplay(),
                                 mpParent->GetWindow(),
@@ -2203,7 +2203,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
    ------------------------------------------------------------------- */
 
 static Bool
-IsRunningXAutoLock( Display *p_display, XLIB_Window a_window )
+IsRunningXAutoLock( Display *p_display, ::Window a_window )
 {
     const char *p_atomname = "XAUTOLOCK_SEMAPHORE_PID";
     Atom        a_pidatom;
@@ -2247,7 +2247,7 @@ MessageToXAutoLock( Display *p_display, int n_message )
 {
     const char *p_atomname = "XAUTOLOCK_MESSAGE" ;
     Atom        a_messageatom;
-    XLIB_Window a_rootwindow;
+    ::Window    a_rootwindow;
 
     a_rootwindow = RootWindowOfScreen( ScreenOfDisplay(p_display, 0) );
     if ( ! IsRunningXAutoLock(p_display, a_rootwindow) )
@@ -2555,7 +2555,7 @@ SalFrame* X11SalFrame::GetParent() const
     return mpParent;
 }
 
-void X11SalFrame::createNewWindow( XLIB_Window aNewParent, SalX11Screen nXScreen )
+void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
 {
     bool bWasVisible = bMapped_;
     if( bWasVisible )
@@ -2682,7 +2682,7 @@ static sal_uInt16 sal_GetCode( int state )
 SalFrame::SalPointerState X11SalFrame::GetPointerState()
 {
     SalPointerState aState;
-    XLIB_Window aRoot, aChild;
+    ::Window aRoot, aChild;
     int rx, ry, wx, wy;
     unsigned int nMask = 0;
     XQueryPointer( GetXDisplay(),
@@ -2847,7 +2847,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                  *  is unknown (the above case implicitly assumes
                  *  that floats are on top which should be true)
                  */
-                XLIB_Window aRoot, aChild;
+                ::Window aRoot, aChild;
                 int root_x, root_y, win_x, win_y;
                 unsigned int mask_return;
                 if( XQueryPointer( GetXDisplay(),
@@ -3482,7 +3482,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
     return 1;
 }
 
-void X11SalFrame::RestackChildren( XLIB_Window* pTopLevelWindows, int nTopLevelWindows )
+void X11SalFrame::RestackChildren( ::Window* pTopLevelWindows, int nTopLevelWindows )
 {
     if( maChildren.begin() != maChildren.end() )
     {
@@ -3528,7 +3528,7 @@ void X11SalFrame::RestackChildren()
     if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected()
         && maChildren.begin() != maChildren.end() )
     {
-        XLIB_Window aRoot, aParent, *pChildren = NULL;
+        ::Window aRoot, aParent, *pChildren = NULL;
         unsigned int nChildren;
         if( XQueryTree( GetXDisplay(),
                         GetDisplay()->GetRootWindow( m_nXScreen ),
@@ -3596,7 +3596,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
                        pEvent->width,
                        pEvent->height );
 
-    XLIB_Window hDummy;
+    ::Window hDummy;
     XTranslateCoordinates( GetXDisplay(),
                            GetWindow(),
                            pDisplay_->GetRootWindow( pDisplay_->GetDefaultXScreen() ),
@@ -3664,8 +3664,8 @@ IMPL_LINK_NOARG(X11SalFrame, HandleAlwaysOnTopRaise)
 long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
 {
     Display        *pDisplay   = pEvent->display;
-    XLIB_Window     hWM_Parent;
-    XLIB_Window     hRoot, *Children, hDummy;
+    ::Window        hWM_Parent;
+    ::Window        hRoot, *Children, hDummy;
     unsigned int    nChildren;
     bool            bNone = pDisplay_->GetProperties()
                             & PROPERTY_SUPPORT_WM_Parent_Pixmap_None;
@@ -3755,7 +3755,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         )
     {
         int x = 0, y = 0;
-        XLIB_Window aChild;
+        ::Window aChild;
         XTranslateCoordinates( GetXDisplay(),
                                GetStackingWindow(),
                                GetDisplay()->GetRootWindow( m_nXScreen ),
@@ -4207,7 +4207,7 @@ void X11SalFrame::ResetClipRegion()
     XWindowAttributes win_attrib;
     XRectangle        win_size;
 
-    XLIB_Window aShapeWindow = mhShellWindow;
+    ::Window aShapeWindow = mhShellWindow;
 
     XGetWindowAttributes ( GetDisplay()->GetDisplay(),
                            aShapeWindow,
@@ -4257,7 +4257,7 @@ void X11SalFrame::EndSetClipRegion()
     const int   ordering    = YSorted;
     const int   op = ShapeSet;
 
-    XLIB_Window aShapeWindow = mhShellWindow;
+    ::Window aShapeWindow = mhShellWindow;
     XShapeCombineRectangles ( GetDisplay()->GetDisplay(),
                               aShapeWindow,
                               dest_kind,

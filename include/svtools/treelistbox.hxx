@@ -344,8 +344,8 @@ protected:
 
 public:
 
-    SvTreeListBox( Window* pParent, WinBits nWinStyle=0 );
-    SvTreeListBox( Window* pParent, const ResId& rResId );
+    SvTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0 );
+    SvTreeListBox( vcl::Window* pParent, const ResId& rResId );
     virtual ~SvTreeListBox();
 
     SvTreeList* GetModel() const { return pModel; }
@@ -807,7 +807,7 @@ class SvInplaceEdit2
     DECL_LINK( EscapeHdl_Impl, void * );
 
 public:
-                SvInplaceEdit2( Window* pParent, const Point& rPos, const Size& rSize,
+                SvInplaceEdit2( vcl::Window* pParent, const Point& rPos, const Size& rSize,
                    const OUString& rData, const Link& rNotifyEditEnd,
                    const Selection&, bool bMultiLine = false );
                ~SvInplaceEdit2();

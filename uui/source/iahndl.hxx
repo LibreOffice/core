@@ -61,7 +61,7 @@ namespace com { namespace sun { namespace star {
 
 #include <boost/unordered_map.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 struct InteractionHandlerData
 {
@@ -143,7 +143,7 @@ private:
     static long
     getstringfromrequest(void* pHandleData, void* pInteractionHandler);
 
-    Window *
+    vcl::Window *
     getParentProperty();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>

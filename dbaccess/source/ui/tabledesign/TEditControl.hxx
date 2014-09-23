@@ -122,7 +122,7 @@ namespace dbaui
         DECL_LINK(ControlPreNotifyHdl, NotifyEvent*);
 
     public:
-        OTableEditorCtrl(Window* pParentWin);
+        OTableEditorCtrl(vcl::Window* pParentWin);
         virtual ~OTableEditorCtrl();
         virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) SAL_OVERRIDE;
         virtual void UpdateAll();

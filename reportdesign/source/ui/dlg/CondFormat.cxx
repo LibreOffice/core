@@ -66,10 +66,10 @@ namespace rptui
 
     class UpdateLocker
     {
-        Window& m_rWindow;
+        vcl::Window& m_rWindow;
 
     public:
-        UpdateLocker( Window& _rWindow )
+        UpdateLocker( vcl::Window& _rWindow )
             :m_rWindow( _rWindow )
         {
             _rWindow.SetUpdateMode( false );
@@ -103,7 +103,7 @@ namespace rptui
 
     // class ConditionalFormattingDialog
     ConditionalFormattingDialog::ConditionalFormattingDialog(
-            Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController )
+            vcl::Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController )
         :ModalDialog( _pParent, "CondFormat", "modules/dbreport/ui/condformatdialog.ui" )
         ,m_rController( _rController )
         ,m_xFormatConditions( _rxFormatConditions )
@@ -496,11 +496,11 @@ namespace rptui
             if ( m_bDeletingCondition )
                 break;
 
-            const Window* pGetFocusWindow( _rNEvt.GetWindow() );
+            const vcl::Window* pGetFocusWindow( _rNEvt.GetWindow() );
 
             // determine whether the new focus window is part of an (currently invisible) condition
-            const Window* pConditionCandidate = pGetFocusWindow->GetParent();
-            const Window* pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
+            const vcl::Window* pConditionCandidate = pGetFocusWindow->GetParent();
+            const vcl::Window* pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
             while   (   ( pPlaygroundCandidate )
                     &&  ( pPlaygroundCandidate != this )
                     &&  ( pPlaygroundCandidate != m_pConditionPlayground )

@@ -81,7 +81,7 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void     ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void     ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void     ImplCalcEditHeight();
@@ -92,8 +92,8 @@ protected:
 
     virtual void  FillLayoutData() const SAL_OVERRIDE;
 public:
-    explicit        ComboBox( Window* pParent, WinBits nStyle = 0 );
-    explicit        ComboBox( Window* pParent, const ResId& );
+    explicit        ComboBox( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        ComboBox( vcl::Window* pParent, const ResId& );
     virtual         ~ComboBox();
 
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;

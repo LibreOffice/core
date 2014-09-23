@@ -35,7 +35,7 @@
 #include <tools/link.hxx>
 
 class SvtFileDialog;
-class Window;
+namespace vcl { class Window; }
 struct ImplSVEvent;
 
 namespace svt
@@ -92,7 +92,7 @@ namespace svt
         // overridables
 
         // will be called with locked SolarMutex
-        virtual SvtFileDialog*  implCreateDialog( Window* _pParent ) = 0;
+        virtual SvtFileDialog*  implCreateDialog( vcl::Window* _pParent ) = 0;
         virtual sal_Int16       implExecutePicker( ) = 0;
             // do NOT override XExecutableDialog::execute! We need to do some stuff there ourself ...
 

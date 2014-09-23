@@ -44,7 +44,7 @@
 class KeyEvent;
 class MouseEvent;
 class Timer;
-class Window;
+namespace vcl { class Window; }
 
 namespace rptui
 {
@@ -63,7 +63,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        m_xReportComponent;
         OReportController&                  m_rReportController;
         OScrollWindowHelper                 m_aScrollWindow;
-        Window*                             m_pTaskPane;
+        vcl::Window*                             m_pTaskPane;
         PropBrw*                            m_pPropWin;
         OAddFieldWindow*                    m_pAddField;
         OSectionView*                       m_pCurrentView;
@@ -95,7 +95,7 @@ namespace rptui
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     public:
-        ODesignView(Window* pParent,
+        ODesignView(vcl::Window* pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
                     OReportController& _rController);
         virtual ~ODesignView();

@@ -49,7 +49,7 @@ IMPL_LINK( AccessibleTabBarBase, WindowEventListener, VclSimpleEvent*, pEvent )
     OSL_ENSURE( pWinEvent, "AccessibleTabBarBase::WindowEventListener - unknown window event" );
     if( pWinEvent )
     {
-        Window* pEventWindow = pWinEvent->GetWindow();
+        vcl::Window* pEventWindow = pWinEvent->GetWindow();
         OSL_ENSURE( pEventWindow, "AccessibleTabBarBase::WindowEventListener: no window!" );
 
         if( ( pWinEvent->GetId() == VCLEVENT_TABBAR_PAGEREMOVED ) &&

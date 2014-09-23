@@ -51,7 +51,7 @@ namespace dbaui
     using namespace ::com::sun::star::container;
 
     // OGeneralPage
-    OGeneralPage::OGeneralPage( Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems )
+    OGeneralPage::OGeneralPage( vcl::Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems )
         :OGenericAdministrationPage( pParent, "PageGeneral", _rUIXMLDescription, _rItems )
         ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN )
         ,m_pSpecialMessage              ( NULL )
@@ -439,7 +439,7 @@ namespace dbaui
     }
 
     // OGeneralPageDialog
-    OGeneralPageDialog::OGeneralPageDialog( Window* pParent, const SfxItemSet& _rItems )
+    OGeneralPageDialog::OGeneralPageDialog( vcl::Window* pParent, const SfxItemSet& _rItems )
         :OGeneralPage( pParent, "dbaccess/ui/generalpagedialog.ui", _rItems )
     {
     }
@@ -482,7 +482,7 @@ namespace dbaui
     }
 
     // OGeneralPageWizard
-    OGeneralPageWizard::OGeneralPageWizard( Window* pParent, const SfxItemSet& _rItems )
+    OGeneralPageWizard::OGeneralPageWizard( vcl::Window* pParent, const SfxItemSet& _rItems )
         :OGeneralPage( pParent, "dbaccess/ui/generalpagewizard.ui", _rItems )
         ,m_pRB_CreateDatabase           ( NULL )
         ,m_pRB_OpenExistingDatabase     ( NULL )

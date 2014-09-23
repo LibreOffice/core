@@ -38,7 +38,7 @@ enum ScSolverErr
 class ScSolverDlg : public ScAnyRefDlg
 {
 public:
-                    ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScDocument* pDocument,
                                  ScAddress aCursorPos );
                     virtual ~ScSolverDlg();

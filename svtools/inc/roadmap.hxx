@@ -56,7 +56,7 @@ namespace svt
         void            implInit();
 
     public:
-        ORoadmap( Window* _pParent, WinBits _nWinStyle = 0 );
+        ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
         virtual ~ORoadmap( );
 
         void            SetRoadmapBitmap( const BitmapEx& maBitmap, bool _bInvalidate = true );
@@ -109,7 +109,7 @@ namespace svt
         void                        DeselectOldRoadmapItems();
         ItemId                      GetNextAvailableItemId( ItemIndex _NewIndex );
         ItemId                      GetPreviousAvailableItemId( ItemIndex _NewIndex );
-        RoadmapItem*                GetByPointer(Window* pWindow);
+        RoadmapItem*                GetByPointer(vcl::Window* pWindow);
         RoadmapItem*                InsertHyperLabel( ItemIndex _Index, const OUString& _aStr, ItemId _RMID, bool _bEnabled = true  );
         void                        UpdatefollowingHyperLabels( ItemIndex _Index );
     };

@@ -58,7 +58,7 @@ namespace pcr
         typedef ControlWindow< LISTBOX_WINDOW >  ListBoxType;
 
     public:
-        ListLikeControlWithModifyHandler( Window* _pParent, WinBits _nStyle )
+        ListLikeControlWithModifyHandler( vcl::Window* _pParent, WinBits _nStyle )
             :ListBoxType( _pParent, _nStyle )
         {
         }
@@ -100,7 +100,7 @@ namespace pcr
     class OTimeControl : public OTimeControl_Base
     {
     public:
-        OTimeControl( Window* pParent, WinBits nWinStyle );
+        OTimeControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -115,7 +115,7 @@ namespace pcr
     class ODateControl : public ODateControl_Base
     {
     public:
-        ODateControl( Window* pParent, WinBits nWinStyle );
+        ODateControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -133,7 +133,7 @@ namespace pcr
         bool m_bIsPassword : 1;
 
     public:
-        OEditControl( Window* _pParent, bool _bPassWord, WinBits nWinStyle );
+        OEditControl( vcl::Window* _pParent, bool _bPassWord, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -151,7 +151,7 @@ namespace pcr
     class ODateTimeControl : public ODateTimeControl_Base
     {
     public:
-        ODateTimeControl( Window* pParent,WinBits nWinStyle );
+        ODateTimeControl( vcl::Window* pParent,WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -169,7 +169,7 @@ namespace pcr
         Link    m_aClickHandler;
 
     public:
-        HyperlinkInput( Window* _pParent, WinBits _nWinStyle );
+        HyperlinkInput( vcl::Window* _pParent, WinBits _nWinStyle );
 
         /** sets the handler which will (asynchronously, with locked SolarMutex) be called
             when the hyperlink has been clicked by the user
@@ -198,7 +198,7 @@ namespace pcr
         ::cppu::OInterfaceContainerHelper   m_aActionListeners;
 
     public:
-        OHyperlinkControl( Window* _pParent, WinBits _nWinStyle );
+        OHyperlinkControl( vcl::Window* _pParent, WinBits _nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -225,7 +225,7 @@ namespace pcr
         typedef ControlWindow< MetricField > BaseClass;
 
     public:
-        CustomConvertibleNumericField( Window* _pParent, WinBits _nStyle )
+        CustomConvertibleNumericField( vcl::Window* _pParent, WinBits _nStyle )
             :BaseClass( _pParent, _nStyle )
         {
         }
@@ -244,7 +244,7 @@ namespace pcr
         sal_Int16   m_nFieldToUNOValueFactor;
 
     public:
-        ONumericControl( Window* pParent, WinBits nWinStyle );
+        ONumericControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -289,7 +289,7 @@ namespace pcr
         ::std::set< OUString >   m_aNonColorEntries;
 
     public:
-        OColorControl( Window* pParent, WinBits nWinStyle );
+        OColorControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -315,7 +315,7 @@ namespace pcr
     class OListboxControl : public OListboxControl_Base
     {
     public:
-        OListboxControl( Window* pParent, WinBits nWinStyle );
+        OListboxControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -339,7 +339,7 @@ namespace pcr
     class OComboboxControl : public OComboboxControl_Base
     {
     public:
-        OComboboxControl( Window* pParent, WinBits nWinStyle );
+        OComboboxControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -381,7 +381,7 @@ namespace pcr
         bool                                m_bDropdown : 1;
 
     public:
-        DropDownEditControl( Window* _pParent, WinBits _nStyle );
+        DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle );
         virtual ~DropDownEditControl();
 
         void setOperationMode( MultiLineOperationMode _eMode ) { m_nOperationMode = _eMode; }
@@ -419,7 +419,7 @@ namespace pcr
     class OMultilineEditControl : public OMultilineEditControl_Base
     {
     public:
-        OMultilineEditControl( Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle  );
+        OMultilineEditControl( vcl::Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle  );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

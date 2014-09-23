@@ -35,7 +35,7 @@ struct FadeEffectLBImpl;
 class SD_DLLPUBLIC FadeEffectLB : public ListBox
 {
 public:
-    FadeEffectLB(Window* pParent, WinBits nStyle);
+    FadeEffectLB(vcl::Window* pParent, WinBits nStyle);
     virtual ~FadeEffectLB();
     virtual void                Fill();
 

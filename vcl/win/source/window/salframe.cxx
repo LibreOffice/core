@@ -199,7 +199,7 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if( pFrame )
     {
-        Window *pWin = pFrame->GetWindow();
+        vcl::Window *pWin = pFrame->GetWindow();
         while( pWin )
         {
             WorkWindow *pWorkWin = (pWin->GetType() == WINDOW_WORKWINDOW) ? (WorkWindow *) pWin : NULL;
@@ -1113,7 +1113,7 @@ HWND ImplGetParentHwnd( HWND hWnd )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if( !pFrame || !pFrame->GetWindow())
         return ::GetParent( hWnd );
-    Window *pRealParent = pFrame->GetWindow()->ImplGetWindowImpl()->mpRealParent;
+    vcl::Window *pRealParent = pFrame->GetWindow()->ImplGetWindowImpl()->mpRealParent;
     if( pRealParent )
         return static_cast<WinSalFrame*>(pRealParent->ImplGetWindowImpl()->mpFrame)->mhWnd;
     else
@@ -1172,7 +1172,7 @@ static void ImplSalShow( HWND hWnd, bool bVisible, bool bNoActivate )
 
         if( aDogTag.isDeleted() )
             return;
-        Window *pClientWin = pFrame->GetWindow()->ImplGetClientWindow();
+        vcl::Window *pClientWin = pFrame->GetWindow()->ImplGetClientWindow();
         if ( pFrame->mbFloatWin || ( pClientWin && (pClientWin->GetStyle() & WB_SYSTEMFLOATWIN) ) )
             pFrame->mnShowState = SW_SHOWNOACTIVATE;
         else
@@ -1235,7 +1235,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
     if ( !bVisible )
     {
-        Window *pClientWin = GetWindow()->ImplGetClientWindow();
+        vcl::Window *pClientWin = GetWindow()->ImplGetClientWindow();
         if ( mbFloatWin || ( pClientWin && (pClientWin->GetStyle() & WB_SYSTEMFLOATWIN) ) )
                 mnShowState = SW_SHOWNOACTIVATE;
         else
@@ -3043,7 +3043,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         // #103168# post again if async focus has not arrived yet
         // hopefully we will not receive the corresponding button up before this
         // button down arrives again
-        Window *pWin = pFrame->GetWindow();
+        vcl::Window *pWin = pFrame->GetWindow();
         if( pWin && pWin->ImplGetWindowImpl()->mpFrameData->mnFocusId )
         {
             ImplPostMessage( hWnd, nMsg, wParam, lParam );
@@ -5218,7 +5218,7 @@ static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
     }
 
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
-    Window *pWindow = pFrame ? pFrame->GetWindow() : NULL;
+    vcl::Window *pWindow = pFrame ? pFrame->GetWindow() : NULL;
 
     if( pWindow )
     {
@@ -5695,7 +5695,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             // #95133# a system dialog is opened/closed, using our app window as parent
             {
                 WinSalFrame* pFrame = GetWindowPtr( hWnd );
-                Window *pWin = NULL;
+                vcl::Window *pWin = NULL;
                 if( pFrame )
                     pWin = pFrame->GetWindow();
 

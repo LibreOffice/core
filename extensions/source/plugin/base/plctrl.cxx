@@ -166,7 +166,7 @@ void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XTo
     _xParentWindow = Reference< ::com::sun::star::awt::XWindow > ( xParentPeer, UNO_QUERY );
     DBG_ASSERT( _xParentWindow.is(), "### no parent peer window!" );
 
-    Window* pImpl = VCLUnoHelper::GetWindow( xParentPeer );
+    vcl::Window* pImpl = VCLUnoHelper::GetWindow( xParentPeer );
     if (pImpl)
     {
         _pSysChild = new SystemChildWindow( pImpl, WB_CLIPCHILDREN );

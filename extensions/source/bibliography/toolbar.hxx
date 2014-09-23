@@ -148,7 +148,7 @@ class BibToolBar:   public ToolBox
 
     public:
 
-        BibToolBar(Window* pParent, Link aLink, WinBits nStyle = WB_3DLOOK );
+        BibToolBar(vcl::Window* pParent, Link aLink, WinBits nStyle = WB_3DLOOK );
         virtual ~BibToolBar();
 
         void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);

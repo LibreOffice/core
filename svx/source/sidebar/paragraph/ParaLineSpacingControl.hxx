@@ -39,7 +39,7 @@ namespace svx { namespace sidebar {
 class ParaLineSpacingControl:public svx::sidebar::PopupControl
 {
 public:
-    ParaLineSpacingControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel);
+    ParaLineSpacingControl(vcl::Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel);
     virtual ~ParaLineSpacingControl();
     void Rearrange(SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem,const ::sfx2::sidebar::EnumContext currentContext);
     //virtual void Paint(const Rectangle& rect);

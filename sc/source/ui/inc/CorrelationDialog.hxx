@@ -18,7 +18,7 @@ class ScCorrelationDialog : public ScMatrixComparisonGenerator
 public:
     ScCorrelationDialog(
         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-        Window* pParent, ScViewData* pViewData);
+        vcl::Window* pParent, ScViewData* pViewData);
 
     virtual bool Close() SAL_OVERRIDE;
 

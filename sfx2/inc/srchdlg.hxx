@@ -58,7 +58,7 @@ private:
     DECL_LINK(FindHdl, void *);
 
 public:
-    SearchDialog( Window* pWindow, const OUString& rConfigName );
+    SearchDialog( vcl::Window* pWindow, const OUString& rConfigName );
     virtual ~SearchDialog();
 
     void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }

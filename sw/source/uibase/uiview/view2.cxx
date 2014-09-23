@@ -581,7 +581,7 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     OSL_ENSURE( !((const SfxBoolItem*)pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
                     // xmlsec05:    new password dialog
-                    Window* pParent;
+                    vcl::Window* pParent;
                     const SfxPoolItem* pParentItem;
                     if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
                         pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
@@ -619,7 +619,7 @@ void SwView::Execute(SfxRequest &rReq)
 
             // xmlsec05:    new password dialog
             //              message box for wrong password
-            Window* pParent;
+            vcl::Window* pParent;
             const SfxPoolItem* pParentItem;
             if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
                 pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
@@ -2277,7 +2277,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
 
             if (!bCompare && !nFound)
             {
-                Window* pWin = &GetEditWin();
+                vcl::Window* pWin = &GetEditWin();
                 MessageDialog(pWin, SW_RES(STR_NO_MERGE_ENTRY), VCL_MESSAGE_INFO).Execute();
             }
             if( nRet==2 && xDocSh.Is() )
@@ -2432,7 +2432,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
     {
         // call documents and template dialog
         SfxApplication* pSfxApp = SfxGetpApp();
-        Window* pTopWin = pSfxApp->GetTopWindow();
+        vcl::Window* pTopWin = pSfxApp->GetTopWindow();
 
         SfxTemplateManagerDlg aDocTemplDlg;
         int nRet = aDocTemplDlg.Execute();

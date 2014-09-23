@@ -59,7 +59,7 @@ namespace
             SwPageBreakWin* m_pWin;
 
         public:
-            SwBreakDashedLine( Window* pParent, Color& ( *pColorFn )(), SwPageBreakWin* pWin ) :
+            SwBreakDashedLine( vcl::Window* pParent, Color& ( *pColorFn )(), SwPageBreakWin* pWin ) :
                 SwDashedLine( pParent, pColorFn ),
                 m_pWin( pWin ) {};
 

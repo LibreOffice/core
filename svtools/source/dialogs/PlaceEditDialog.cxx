@@ -16,7 +16,7 @@
 
 using namespace boost;
 
-PlaceEditDialog::PlaceEditDialog( Window* pParent ) :
+PlaceEditDialog::PlaceEditDialog( vcl::Window* pParent ) :
     ModalDialog( pParent, "PlaceEditDialog", "svt/ui/placeedit.ui" ),
     m_pCurrentDetails( )
 {
@@ -42,7 +42,7 @@ PlaceEditDialog::PlaceEditDialog( Window* pParent ) :
     InitDetails( );
 }
 
-PlaceEditDialog::PlaceEditDialog( Window* pParent, const boost::shared_ptr<Place>& pPlace ) :
+PlaceEditDialog::PlaceEditDialog( vcl::Window* pParent, const boost::shared_ptr<Place>& pPlace ) :
     ModalDialog( pParent, "PlaceEditDialog", "svt/ui/placeedit.ui" ),
     m_pCurrentDetails( )
 {

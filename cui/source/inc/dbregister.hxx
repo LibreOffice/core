@@ -89,10 +89,10 @@ namespace svx
 #endif
 
     public:
-        DbRegistrationOptionsPage( Window* pParent, const SfxItemSet& rSet );
+        DbRegistrationOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
         virtual ~DbRegistrationOptionsPage();
 
-        static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+        static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
         static const sal_uInt16*      GetRanges();
 
         virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -128,7 +128,7 @@ namespace svx
                                         ,public SfxSingleTabDialog
     {
     public:
-        DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rAttr );
+        DatabaseRegistrationDialog( vcl::Window* pParent, const SfxItemSet& rAttr );
         virtual ~DatabaseRegistrationDialog();
 
         virtual short   Execute() SAL_OVERRIDE;

@@ -27,7 +27,7 @@
 #include "border.hxx"
 #include <svx/dialogs.hrc>
 
-SvxFormatCellsDialog::SvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel )
+SvxFormatCellsDialog::SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel )
     : SfxTabDialog(pParent, "FormatCellsDialog", "cui/ui/formatcellsdialog.ui", pAttr)
     , mrOutAttrs(*pAttr)
     , mpColorTab(pModel->GetColorList())

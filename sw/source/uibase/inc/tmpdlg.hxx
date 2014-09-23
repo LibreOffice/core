@@ -71,7 +71,7 @@ class SwTemplateDlg: public SfxStyleDialog
 public:
     /// @param sPage
     /// Identifies name of page to open at by default
-    SwTemplateDlg(  Window*             pParent,
+    SwTemplateDlg(  vcl::Window*             pParent,
                     SfxStyleSheetBase&  rBase,
                     sal_uInt16          nRegion,
                     const OString&      sPage = OString(),

@@ -60,7 +60,7 @@ void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
 
 }
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos):
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos):
     ModalDialog( pWindow, "DataBarOptions", "modules/scalc/ui/databaroptions.ui" ),
     mpNumberFormatter( pDoc->GetFormatTable() ),
     mpDoc(pDoc),

@@ -49,7 +49,7 @@ class SvxBulletItem;
 class SvxFont;
 class SvxSearchItem;
 class SvxFieldItem;
-class Window;
+namespace vcl { class Window; }
 class KeyEvent;
 class MouseEvent;
 class Pointer;
@@ -203,7 +203,7 @@ private:
     EDITENG_DLLPRIVATE sal_Int32    ImpCalcSelectedPages( bool bIncludeFirstSelected );
 
 public:
-                OutlinerView( Outliner* pOut, Window* pWindow );
+                OutlinerView( Outliner* pOut, vcl::Window* pWindow );
     virtual     ~OutlinerView();
 
     EditView&   GetEditView() const { return *pEditView; }
@@ -211,7 +211,7 @@ public:
     void        Scroll( long nHorzScroll, long nVertScroll );
 
     void        Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = 0 );
-    bool        PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin = NULL );
+    bool        PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin = NULL );
     bool        MouseButtonDown( const MouseEvent& );
     bool        MouseButtonUp( const MouseEvent& );
     bool        MouseMove( const MouseEvent& );
@@ -221,8 +221,8 @@ public:
 
     Outliner*   GetOutliner() const { return pOwner; }
 
-    void        SetWindow( Window* pWindow );
-    Window*     GetWindow() const;
+    void        SetWindow( vcl::Window* pWindow );
+    vcl::Window*     GetWindow() const;
 
     void        SetReadOnly( bool bReadOnly );
     bool        IsReadOnly() const;

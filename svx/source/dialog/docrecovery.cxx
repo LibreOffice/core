@@ -527,7 +527,7 @@ css::util::URL RecoveryCore::impl_getParsedURL(const OUString& sURL)
     return aURL;
 }
 
-PluginProgressWindow::PluginProgressWindow(      Window*                                       pParent  ,
+PluginProgressWindow::PluginProgressWindow(      vcl::Window*                                       pParent  ,
                                            const css::uno::Reference< css::lang::XComponent >& xProgress)
     : Window     (pParent  )
     , m_xProgress(xProgress)
@@ -545,7 +545,7 @@ PluginProgressWindow::~PluginProgressWindow()
 }
 
 
-PluginProgress::PluginProgress(      Window*                                             pParent,
+PluginProgress::PluginProgress(      vcl::Window*                                             pParent,
                                const css::uno::Reference< css::uno::XComponentContext >& xContext  )
 {
     m_pPlugProgressWindow = new PluginProgressWindow(pParent, static_cast< css::lang::XComponent* >(this));
@@ -623,7 +623,7 @@ void SAL_CALL PluginProgress::reset()
 }
 
 
-SaveDialog::SaveDialog(Window* pParent, RecoveryCore* pCore)
+SaveDialog::SaveDialog(vcl::Window* pParent, RecoveryCore* pCore)
     : Dialog(pParent, "DocRecoverySaveDialog",
         "svx/ui/docrecoverysavedialog.ui")
     , m_pCore(pCore)
@@ -677,7 +677,7 @@ IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
     return 0;
 }
 
-SaveProgressDialog::SaveProgressDialog(Window* pParent, RecoveryCore* pCore)
+SaveProgressDialog::SaveProgressDialog(vcl::Window* pParent, RecoveryCore* pCore)
     : ModalDialog(pParent, "DocRecoveryProgressDialog",
         "svx/ui/docrecoveryprogressdialog.ui")
     , m_pCore(pCore)
@@ -828,7 +828,7 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
 }
 
 
-short impl_askUserForWizardCancel(Window* pParent, sal_Int16 nRes)
+short impl_askUserForWizardCancel(vcl::Window* pParent, sal_Int16 nRes)
 {
     MessageDialog aQuery(pParent, SVX_RES(nRes), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
     if (aQuery.Execute() == RET_YES)
@@ -837,7 +837,7 @@ short impl_askUserForWizardCancel(Window* pParent, sal_Int16 nRes)
         return DLG_RET_CANCEL;
 }
 
-RecoveryDialog::RecoveryDialog(Window* pParent, RecoveryCore* pCore)
+RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     : Dialog(pParent, "DocRecoveryRecoverDialog",
         "svx/ui/docrecoveryrecoverdialog.ui")
     , m_aTitleRecoveryInProgress(SVX_RESSTR(RID_SVXSTR_RECOVERY_INPROGRESS))
@@ -1205,7 +1205,7 @@ OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
     return sStatus;
 }
 
-BrokenRecoveryDialog::BrokenRecoveryDialog(Window*       pParent        ,
+BrokenRecoveryDialog::BrokenRecoveryDialog(vcl::Window*       pParent        ,
                                            RecoveryCore* pCore          ,
                                            bool      bBeforeRecovery)
     : ModalDialog   ( pParent, "DocRecoveryBrokenDialog", "svx/ui/docrecoverybrokendialog.ui" )

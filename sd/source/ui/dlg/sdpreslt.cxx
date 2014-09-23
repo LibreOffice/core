@@ -32,7 +32,7 @@
 #include <boost/scoped_ptr.hpp>
 
 SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
-    ::Window* pWindow, const SfxItemSet& rInAttrs)
+    vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     : ModalDialog(pWindow, "SlideDesignDialog",
         "modules/simpress/ui/slidedesigndialog.ui")
     , mpDocSh(pDocShell)

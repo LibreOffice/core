@@ -482,9 +482,9 @@ namespace svx
         }
 
 
-        static Window* lcl_getWindow( const Reference< XControl >& _rxControl )
+        static vcl::Window* lcl_getWindow( const Reference< XControl >& _rxControl )
         {
-            Window* pWindow = NULL;
+            vcl::Window* pWindow = NULL;
             try
             {
                 Reference< XWindowPeer > xControlPeer;
@@ -967,7 +967,7 @@ namespace svx
 
                 case SID_PASTE:
                 {
-                    Window* pActiveControlVCLWindow = lcl_getWindow( m_xActiveControl );
+                    vcl::Window* pActiveControlVCLWindow = lcl_getWindow( m_xActiveControl );
                     if ( pActiveControlVCLWindow )
                     {
                         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pActiveControlVCLWindow) );

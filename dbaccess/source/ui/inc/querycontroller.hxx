@@ -165,7 +165,7 @@ namespace dbaui
         ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
         ::connectivity::OSQLParseTreeIterator&  getParseIterator()  { return *m_pSqlIterator; }
 
-        virtual bool Construct(Window* pParent) SAL_OVERRIDE;
+        virtual bool Construct(vcl::Window* pParent) SAL_OVERRIDE;
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )

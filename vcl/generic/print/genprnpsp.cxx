@@ -99,13 +99,13 @@ namespace
 
     public:
         // parent window, Query text, initial value
-        QueryString(Window*, OUString &, OUString &);
+        QueryString(vcl::Window*, OUString &, OUString &);
     };
 
     /*
      *  QueryString
      */
-    QueryString::QueryString(Window* pParent, OUString& rQuery, OUString& rRet)
+    QueryString::QueryString(vcl::Window* pParent, OUString& rQuery, OUString& rRet)
         : ModalDialog(pParent, "QueryDialog",
             "vcl/ui/querydialog.ui" )
         , m_rReturnValue( rRet )

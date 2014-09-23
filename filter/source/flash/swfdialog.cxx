@@ -146,7 +146,7 @@ Sequence< OUString > SAL_CALL SWFDialog::getSupportedServiceNames()
 
 
 
-Dialog* SWFDialog::createDialog( Window* pParent )
+Dialog* SWFDialog::createDialog( vcl::Window* pParent )
 {
     Dialog* pRet = NULL;
 

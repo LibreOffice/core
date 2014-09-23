@@ -37,7 +37,7 @@ using namespace com::sun::star;
 
 namespace sd {
 
-Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, ::Window* pWindow) :
+Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, vcl::Window* pWindow) :
     SfxInPlaceClient(pViewShell->GetViewShell(), pWindow, pObj->GetAspect() ),
     mpViewShell(pViewShell),
     pSdrOle2Obj(pObj),

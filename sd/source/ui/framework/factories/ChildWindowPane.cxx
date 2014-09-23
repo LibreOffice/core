@@ -38,7 +38,7 @@ ChildWindowPane::ChildWindowPane (
     sal_uInt16 nChildWindowId,
     ViewShellBase& rViewShellBase,
     ::std::auto_ptr<SfxShell> pShell)
-    : ChildWindowPaneInterfaceBase(rxPaneId,(::Window*)NULL),
+    : ChildWindowPaneInterfaceBase(rxPaneId,(vcl::Window*)NULL),
       mnChildWindowId(nChildWindowId),
       mrViewShellBase(rViewShellBase),
       mpShell(pShell),
@@ -118,7 +118,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
     Pane::disposing();
 }
 
-::Window* ChildWindowPane::GetWindow (void)
+::vcl::Window* ChildWindowPane::GetWindow (void)
 {
     do
     {

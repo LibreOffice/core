@@ -22,7 +22,7 @@
 
 namespace sd { namespace sidebar {
 
-PreviewValueSet::PreviewValueSet (::Window* pParent)
+PreviewValueSet::PreviewValueSet (vcl::Window* pParent)
     : ValueSet (pParent, WB_TABSTOP),
       maPreviewSize(10,10),
       mnBorderWidth(3),

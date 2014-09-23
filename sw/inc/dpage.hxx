@@ -43,7 +43,7 @@ public:
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV,
                                     const Rectangle *pRect) const SAL_OVERRIDE;
 
-    bool RequestHelp( Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
+    bool RequestHelp( vcl::Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
 };

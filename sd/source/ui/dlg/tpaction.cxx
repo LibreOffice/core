@@ -76,7 +76,7 @@ using namespace com::sun::star::lang;
  * Constructor of the Tab dialog: appends the pages to the dialog
  */
 SdActionDlg::SdActionDlg (
-    ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
+    vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
     : SfxSingleTabDialog(pParent, *pAttr, "InteractionDialog",
         "modules/simpress/ui/interactiondialog.ui")
     , rOutAttrs(*pAttr)
@@ -95,7 +95,7 @@ SdActionDlg::SdActionDlg (
 /**
  *  Action-TabPage
  */
-SdTPAction::SdTPAction(Window* pWindow, const SfxItemSet& rInAttrs)
+SdTPAction::SdTPAction(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow, "InteractionPage",
         "modules/simpress/ui/interactionpage.ui", &rInAttrs)
     , rOutAttrs(rInAttrs)
@@ -358,7 +358,7 @@ int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
     return( LEAVE_PAGE );
 }
 
-SfxTabPage* SdTPAction::Create( Window* pWindow,
+SfxTabPage* SdTPAction::Create( vcl::Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTPAction( pWindow, rAttrs ) );
@@ -410,7 +410,7 @@ void SdTPAction::OpenFileDialog()
         }
         else if (bMacro)
         {
-            Window* pOldWin = Application::GetDefDialogParent();
+            vcl::Window* pOldWin = Application::GetDefDialogParent();
             Application::SetDefDialogParent( this );
 
             // choose macro dialog

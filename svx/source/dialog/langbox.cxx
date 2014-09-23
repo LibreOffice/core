@@ -107,7 +107,7 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLanguageBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     bool bDropdown = VclBuilder::extractDropdown(rMap);
@@ -120,7 +120,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pPar
     return pLanguageBox;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageComboBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLanguageComboBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     bool bDropdown = VclBuilder::extractDropdown(rMap);
@@ -492,7 +492,7 @@ sal_Int32 SvxLanguageBoxBase::GetSavedValueLBB() const
 }
 
 
-SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nBits, bool bCheck )
+SvxLanguageBox::SvxLanguageBox( vcl::Window* pParent, WinBits nBits, bool bCheck )
     : ListBox( pParent, nBits )
     , SvxLanguageBoxBase( bCheck )
 {
@@ -507,7 +507,7 @@ SvxLanguageBox::~SvxLanguageBox()
 }
 
 
-SvxLanguageComboBox::SvxLanguageComboBox( Window* pParent, WinBits nBits, bool bCheck )
+SvxLanguageComboBox::SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits, bool bCheck )
     : ComboBox( pParent, nBits )
     , SvxLanguageBoxBase( bCheck )
     , mnSavedValuePos( COMBOBOX_ENTRY_NOTFOUND )

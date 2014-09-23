@@ -59,7 +59,7 @@ public:
     bool IsPreeditMode()    { return maClientData.eState == ePreeditStatusActive; }
     XIC  GetContext()       { return maContext; }
 
-    void ExtendEventMask(  XLIB_Window aFocusWindow );
+    void ExtendEventMask(  ::Window aFocusWindow );
     void SetICFocus( SalFrame* pFocusFrame );
     void UnsetICFocus( SalFrame* pFrame );
     void HandleDestroyIM();

@@ -33,7 +33,7 @@ private:
 
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) SAL_OVERRIDE;
 public:
-    ScCharDlg(Window* pParent, const SfxItemSet* pAttr,
+    ScCharDlg(vcl::Window* pParent, const SfxItemSet* pAttr,
         const SfxObjectShell* pDocShell);
 };
 
@@ -45,7 +45,7 @@ private:
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) SAL_OVERRIDE;
 
 public:
-    ScParagraphDlg(Window* pParent, const SfxItemSet* pAttr);
+    ScParagraphDlg(vcl::Window* pParent, const SfxItemSet* pAttr);
 };
 
 #endif

@@ -40,7 +40,7 @@ public:
 class VCLXSvxFindReplaceDialog : public VCLXDialog
 {
 public:
-    VCLXSvxFindReplaceDialog(Window* pSplDlg)
+    VCLXSvxFindReplaceDialog(vcl::Window* pSplDlg)
     {
         SetWindow(pSplDlg);
     }

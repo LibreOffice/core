@@ -59,7 +59,7 @@ private:
 
 public:
 
-            SvxTransformTabDialog( Window* pParent, const SfxItemSet* pAttr,
+            SvxTransformTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                             const SdrView* pView,
                             sal_uInt16 nAnchorTypes = 0);
             virtual ~SvxTransformTabDialog();
@@ -145,9 +145,9 @@ private:
     void        SetMaxSize( Rectangle aRect );
 
 public:
-    SvxPositionSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxPositionSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
-    static SfxTabPage* Create( Window*, const SfxItemSet* );
+    static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -156,7 +156,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
@@ -200,9 +200,9 @@ private:
     FieldUnit           eDlgUnit;
 
 public:
-         SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+         SvxAngleTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
-    static SfxTabPage* Create( Window*, const SfxItemSet* );
+    static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -211,7 +211,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
@@ -244,9 +244,9 @@ private:
     FieldUnit           eDlgUnit;
 
 public:
-         SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+         SvxSlantTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
-    static SfxTabPage* Create( Window*, const SfxItemSet* );
+    static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -255,7 +255,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }

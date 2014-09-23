@@ -29,7 +29,7 @@
 // - PDFDialog -
 
 
-class Window;
+namespace vcl { class Window; }
 
 typedef ::svt::OGenericUnoDialog             PDFDialog_DialogBase;
 typedef ::cppu::ImplInheritanceHelper2  <
@@ -51,7 +51,7 @@ protected:
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Dialog* createDialog( Window* pParent ) SAL_OVERRIDE;
+    virtual Dialog* createDialog( vcl::Window* pParent ) SAL_OVERRIDE;
     virtual void executedDialog( sal_Int16 nExecutionResult ) SAL_OVERRIDE;
     virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;

@@ -391,7 +391,7 @@ bool Shell::PrepareClose( bool bUI )
     {
         if( bUI )
         {
-            Window *pParent = &GetViewFrame()->GetWindow();
+            vcl::Window *pParent = &GetViewFrame()->GetWindow();
             InfoBox( pParent, IDE_RESSTR(RID_STR_CANNOTCLOSE)).Execute();
         }
         return false;

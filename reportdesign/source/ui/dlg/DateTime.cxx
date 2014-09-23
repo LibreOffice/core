@@ -47,7 +47,7 @@ using namespace ::comphelper;
 
 // class ODateTimeDialog
 
-ODateTimeDialog::ODateTimeDialog( Window* _pParent
+ODateTimeDialog::ODateTimeDialog( vcl::Window* _pParent
                                            ,const uno::Reference< report::XSection >& _xHoldAlive
                                            ,OReportController* _pController)
     : ModalDialog( _pParent, "DateTimeDialog" , "modules/dbreport/ui/datetimedialog.ui" )

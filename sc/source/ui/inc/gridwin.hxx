@@ -83,7 +83,7 @@ struct SpellCallbackInfo;
 // predefines
 namespace sdr { namespace overlay { class OverlayObjectList; }}
 
-class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHelper
+class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSourceHelper
 {
     // ScFilterListBox is always used for selection list
     friend class ScFilterListBox;
@@ -305,7 +305,7 @@ protected:
 public:
     enum AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty, SortAscending, SortDescending };
 
-    ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
+    ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
     virtual ~ScGridWindow();
 
     // #i70788# flush and get overlay

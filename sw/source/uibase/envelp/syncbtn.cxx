@@ -31,7 +31,7 @@
 
 SFX_IMPL_FLOATINGWINDOW( SwSyncChildWin, FN_SYNC_LABELS )
 
-SwSyncChildWin::SwSyncChildWin( Window* _pParent,
+SwSyncChildWin::SwSyncChildWin( vcl::Window* _pParent,
                                 sal_uInt16 nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo ) :
@@ -60,7 +60,7 @@ SwSyncChildWin::SwSyncChildWin( Window* _pParent,
 
 SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
                             SfxChildWindow* pChild,
-                            Window *pParent)
+                            vcl::Window *pParent)
     : SfxFloatingWindow(_pBindings, pChild, pParent, "FloatingSync", "modules/swriter/ui/floatingsync.ui")
 {
     get(m_pSyncBtn, "sync");

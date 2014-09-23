@@ -27,7 +27,7 @@
 #include "ViewShell.hxx"
 
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
-    ::Window* pWindow, const SdDrawDocument* pInDoc,
+    vcl::Window* pWindow, const SdDrawDocument* pInDoc,
     SfxMedium* pSfxMedium, const OUString& rFileName )
     : ModalDialog(pWindow, "InsertSlidesDialog",
         "modules/sdraw/ui/insertslidesdialog.ui")

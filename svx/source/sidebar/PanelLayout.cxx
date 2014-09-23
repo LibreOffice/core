@@ -14,7 +14,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
 
-PanelLayout::PanelLayout(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame)
+PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame)
     : Control(pParent)
     , m_bInClose(false)
 {
@@ -56,7 +56,7 @@ void PanelLayout::queue_resize(StateChangedType /*eReason*/)
 
 IMPL_LINK( PanelLayout, ImplHandlePanelLayoutTimerHdl, void*, EMPTYARG )
 {
-    Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
     assert(pChild);
     VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
     return 0;
@@ -68,7 +68,7 @@ void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, s
     bool bCanHandleSmallerHeight = false;
 
     bool bIsLayoutEnabled = isLayoutEnabled(this);
-    Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
 
     if (bIsLayoutEnabled && pChild->GetType() == WINDOW_SCROLLWINDOW)
     {

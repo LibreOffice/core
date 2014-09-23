@@ -455,7 +455,7 @@ void ImplNewLongCurrencyFieldValue( LongCurrencyField* pField, BigInt nNewValue 
     pField->Modify();
 }
 
-LongCurrencyField::LongCurrencyField( Window* pParent, WinBits nWinStyle ) :
+LongCurrencyField::LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
     SetField( this );
@@ -537,7 +537,7 @@ void LongCurrencyField::Last()
     SpinField::Last();
 }
 
-LongCurrencyBox::LongCurrencyBox( Window* pParent, WinBits nWinStyle ) :
+LongCurrencyBox::LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );

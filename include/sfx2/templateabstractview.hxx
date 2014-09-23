@@ -80,8 +80,8 @@ class SFX2_DLLPUBLIC TemplateAbstractView : public ThumbnailView
 {
 public:
 
-    TemplateAbstractView(Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren);
-    TemplateAbstractView(Window* pParent);
+    TemplateAbstractView(vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren);
+    TemplateAbstractView(vcl::Window* pParent);
 
     virtual ~TemplateAbstractView ();
 

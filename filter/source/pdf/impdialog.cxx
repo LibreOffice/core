@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 // please note: the default used here are the same as per specification,
 // they should be the same in  PDFFilter::implExport and  in PDFExport::PDFExport
 
-ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFilterData,
+ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >& rFilterData,
     const Reference< XComponent >& rxDoc)
     : SfxTabDialog(pParent, "PdfOptionsDialog","filter/ui/pdfoptionsdialog.ui"),
     maConfigItem( "Office.Common/Filter/PDF/Export/", &rFilterData ),
@@ -510,7 +510,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 }
 
 
-ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(Window* pParent, const SfxItemSet& rCoreSet)
+ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "PdfGeneralPage","filter/ui/pdfgeneralpage.ui", &rCoreSet)
     , mbTaggedPDFUserSelection(false)
     , mbExportFormFieldsUserSelection(false)
@@ -704,7 +704,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
 }
 
 
-SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
+SfxTabPage*  ImpPDFTabGeneralPage::Create( vcl::Window* pParent,
                                            const SfxItemSet* rAttrSet)
 {
     return ( new  ImpPDFTabGeneralPage( pParent, *rAttrSet ) );
@@ -822,7 +822,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
 }
 
 // the option features tab page
-ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(Window* pParent, const SfxItemSet& rCoreSet)
+ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "PdfViewPage","filter/ui/pdfviewpage.ui", &rCoreSet)
     , mbUseCTLFont(false)
 {
@@ -855,7 +855,7 @@ ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage()
 }
 
 
-SfxTabPage*  ImpPDFTabOpnFtrPage::Create( Window* pParent,
+SfxTabPage*  ImpPDFTabOpnFtrPage::Create( vcl::Window* pParent,
                                           const SfxItemSet* rAttrSet)
 {
     return ( new  ImpPDFTabOpnFtrPage( pParent, *rAttrSet ) );
@@ -984,7 +984,7 @@ IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
 
 // The Viewer preferences tab page
 
-ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
+ImpPDFTabViewerPage::ImpPDFTabViewerPage( vcl::Window* pParent,
                                           const SfxItemSet& rCoreSet )
     : SfxTabPage(pParent, "PdfUserInterfacePage","filter/ui/pdfuserinterfacepage.ui", &rCoreSet)
     , mbIsPresentation(false)
@@ -1015,7 +1015,7 @@ IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
     return 0;
 }
 
-SfxTabPage*  ImpPDFTabViewerPage::Create( Window* pParent,
+SfxTabPage*  ImpPDFTabViewerPage::Create( vcl::Window* pParent,
                                           const SfxItemSet* rAttrSet)
 {
     return ( new  ImpPDFTabViewerPage( pParent, *rAttrSet ) );
@@ -1064,7 +1064,7 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
 }
 
 // The Security preferences tab page
-ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(Window* i_pParent, const SfxItemSet& i_rCoreSet)
+ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(vcl::Window* i_pParent, const SfxItemSet& i_rCoreSet)
     : SfxTabPage(i_pParent, "PdfSecurityPage","filter/ui/pdfsecuritypage.ui", &i_rCoreSet)
     , msUserPwdTitle( PDFFilterResId( STR_PDF_EXPORT_UDPWD ) )
     , mbHaveOwnerPassword( false )
@@ -1072,7 +1072,7 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(Window* i_pParent, const SfxItemSet
     , msOwnerPwdTitle( PDFFilterResId( STR_PDF_EXPORT_ODPWD ) )
 {
     get(mpPbSetPwd, "setpassword");
-    msStrSetPwd = get<Window>("setpasswordstitle")->GetText();
+    msStrSetPwd = get<vcl::Window>("setpasswordstitle")->GetText();
 
     get(mpUserPwdSet, "userpwdset");
     get(mpUserPwdUnset, "userpwdunset");
@@ -1107,7 +1107,7 @@ ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
 }
 
 
-SfxTabPage*  ImpPDFTabSecurityPage::Create( Window* pParent,
+SfxTabPage*  ImpPDFTabSecurityPage::Create( vcl::Window* pParent,
                                           const SfxItemSet* rAttrSet)
 {
     return ( new  ImpPDFTabSecurityPage( pParent, *rAttrSet ) );
@@ -1306,7 +1306,7 @@ void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( bool bEnableSecurity )
 
 // The link preferences tab page (relative and other stuff)
 
-ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
+ImpPDFTabLinksPage::ImpPDFTabLinksPage( vcl::Window* pParent,
                                               const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, "PdfLinksPage","filter/ui/pdflinkspage.ui",&rCoreSet ),
 
@@ -1328,7 +1328,7 @@ ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
 }
 
 
-SfxTabPage*  ImpPDFTabLinksPage::Create( Window* pParent,
+SfxTabPage*  ImpPDFTabLinksPage::Create( vcl::Window* pParent,
                                           const SfxItemSet* rAttrSet)
 {
     return ( new  ImpPDFTabLinksPage( pParent, *rAttrSet ) );
@@ -1527,7 +1527,7 @@ IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
 
 // The digital signatures tab page
 
-ImpPDFTabSigningPage::ImpPDFTabSigningPage(Window* pParent, const SfxItemSet& rCoreSet)
+ImpPDFTabSigningPage::ImpPDFTabSigningPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "PdfSignPage","filter/ui/pdfsignpage.ui", &rCoreSet)
     , maSignCertificate()
 {
@@ -1585,7 +1585,7 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear )
 }
 
 
-SfxTabPage*  ImpPDFTabSigningPage::Create( Window* pParent,
+SfxTabPage*  ImpPDFTabSigningPage::Create( vcl::Window* pParent,
                                           const SfxItemSet* rAttrSet)
 {
     return ( new  ImpPDFTabSigningPage( pParent, *rAttrSet ) );

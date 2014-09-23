@@ -413,7 +413,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     }
 
     Point aPos( rPos );
-    Window* pWin = GetActiveWin();
+    vcl::Window* pWin = GetActiveWin();
     MapMode aSourceMap = rGraphic.GetPrefMapMode();
     MapMode aDestMap( MAP_100TH_MM );
 

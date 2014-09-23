@@ -115,7 +115,7 @@ bool  SvxGridItem::GetPresentation
 }
 
 // TabPage Screen Settings
-SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
+SvxGridTabPage::SvxGridTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, "OptGridPage" , "svx/ui/optgridpage.ui", &rCoreSet ),
     bAttrModified( false )
@@ -173,7 +173,7 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
 
 
-SfxTabPage* SvxGridTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxGridTabPage::Create( vcl::Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new SvxGridTabPage( pParent, rAttrSet ) );
 }

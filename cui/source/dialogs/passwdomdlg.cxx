@@ -142,7 +142,7 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
 }
 
 PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
-    Window * pParent, sal_uInt16 nMinPasswdLen,
+    vcl::Window * pParent, sal_uInt16 nMinPasswdLen,
     sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify)
     : SfxModalDialog( pParent, "PasswordDialog", "cui/ui/password.ui" )
 {

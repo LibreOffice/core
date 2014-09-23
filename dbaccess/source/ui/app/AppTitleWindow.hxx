@@ -23,18 +23,18 @@
 
 namespace dbaui
 {
-    class OTitleWindow : public Window
+    class OTitleWindow : public vcl::Window
     {
         FixedText   m_aSpace1;
         FixedText   m_aSpace2;
         FixedText   m_aTitle;
-        Window*     m_pChild;
+        vcl::Window*     m_pChild;
         bool        m_bShift;
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift = true);
+        OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift = true);
         virtual ~OTitleWindow();
 
         // window overloads
@@ -45,14 +45,14 @@ namespace dbaui
             @param  _pChild
                 The child window.
         */
-        void setChildWindow(Window* _pChild);
+        void setChildWindow(vcl::Window* _pChild);
 
         /** gets the child window.
 
             @return
                 The child winodw.
         */
-        inline Window* getChildWindow() const { return m_pChild; }
+        inline vcl::Window* getChildWindow() const { return m_pChild; }
 
         /** sets the title text out of the resource
             @param  _nTitleId

@@ -30,7 +30,7 @@
 
 #include <vector>
 
-class Window;
+namespace vcl { class Window; }
 namespace com { namespace sun { namespace star {
     namespace inspection {
         struct LineDescriptor;
@@ -174,13 +174,13 @@ namespace pcr
         /** gets the window of the ObjectInspector in which an property handler lives
 
             The method looks up a value called "DialogParentWindow" in the given UNO copmonent context,
-            queries it for XWindow, and returns the respective Window*. If either of those steps fails,
+            queries it for XWindow, and returns the respective vcl::Window*. If either of those steps fails,
             this is asserted in a non-product version, and silently ignore otherwise.
 
             @param  _rContext
                 the component context which was used to create the component calling this method
         */
-        static Window* getDialogParentWindow( const css::uno::Reference< css::uno::XComponentContext > & _rContext );
+        static vcl::Window* getDialogParentWindow( const css::uno::Reference< css::uno::XComponentContext > & _rContext );
 
 
         /** determines whether given PropertyAttributes require a to-be-created

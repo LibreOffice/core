@@ -84,7 +84,7 @@ public:
     static OUString getResourceString( sal_uInt16 id );
     static bool     IsSharedPkgMgr( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &);
     static bool     continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
-                                               Window *pParent,
+                                               vcl::Window *pParent,
                                                const sal_uInt16 nResID,
                                                bool &bHadWarning );
 
@@ -138,7 +138,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_DLLPRIVATE_LINK( startProgress, void * );
 
 public:
-                    ExtMgrDialog( Window * pParent, TheExtensionManager *pManager );
+                    ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager );
     virtual        ~ExtMgrDialog();
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -209,7 +209,7 @@ class UpdateRequiredDialog : public ModalDialog,
     void            disableAllEntries();
 
 public:
-                    UpdateRequiredDialog( Window * pParent, TheExtensionManager *pManager );
+                    UpdateRequiredDialog( vcl::Window * pParent, TheExtensionManager *pManager );
     virtual        ~UpdateRequiredDialog();
 
     virtual short   Execute() SAL_OVERRIDE;
@@ -241,7 +241,7 @@ class ShowLicenseDialog : public ModalDialog
 {
     VclMultiLineEdit* m_pLicenseText;
 public:
-    ShowLicenseDialog(Window * pParent, const css::uno::Reference< css::deployment::XPackage > &xPackage);
+    ShowLicenseDialog(vcl::Window * pParent, const css::uno::Reference< css::deployment::XPackage > &xPackage);
 };
 
 

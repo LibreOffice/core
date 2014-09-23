@@ -47,7 +47,7 @@ class SwLabPage : public SfxTabPage
 
     bool        m_bLabel;
 
-    SwLabPage(Window* pParent, const SfxItemSet& rSet);
+    SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
     DECL_LINK(AddrHdl, void *);
     DECL_LINK( DatabaseHdl, ListBox *pListBox );
@@ -64,7 +64,7 @@ class SwLabPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rSet);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
@@ -86,7 +86,7 @@ class SwVisitingCardPage : public SfxTabPage
 {
     SvTreeListBox*  m_pAutoTextLB;
     ListBox*        m_pAutoTextGroupLB;
-    Window*         m_pExampleWIN;
+    vcl::Window*         m_pExampleWIN;
 
     OUString        sTempURL;
 
@@ -108,7 +108,7 @@ class SwVisitingCardPage : public SfxTabPage
                                     const OUString* pNames,
                                     const OUString* pValues );
 
-    SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet);
+    SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwVisitingCardPage();
 
     using TabPage::ActivatePage;
@@ -116,7 +116,7 @@ class SwVisitingCardPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rSet);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
@@ -147,14 +147,14 @@ class SwPrivateDataPage : public SfxTabPage
     Edit* m_pHomePageED;
     Edit* m_pMailED;
 
-    SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet);
+    SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
 public:
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rSet);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
@@ -183,14 +183,14 @@ class SwBusinessDataPage : public SfxTabPage
     Edit* m_pHomePageED;
     Edit* m_pMailED;
 
-    SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet);
+    SwBusinessDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
 public:
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rSet);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;

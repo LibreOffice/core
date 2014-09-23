@@ -82,10 +82,10 @@ private:
     std::auto_ptr<AnnotationWindow>                 mpAnnotationWindow;
     Color                                           maColor;
     int                                             mnIndex;
-    const vcl::Font&                                mrFont;
+    const ::vcl::Font&                              mrFont;
     Size                                            maSize;
     ImplSVEvent *                                   mnClosePopupEvent;
-    ::Window*                                       mpListenWindow;
+    vcl::Window*                                       mpListenWindow;
     Point                                           maMouseDownPos;
 };
 

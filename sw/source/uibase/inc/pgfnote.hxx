@@ -32,14 +32,14 @@
 class SwFootNotePage: public SfxTabPage
 {
 public:
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 
 private:
-    SwFootNotePage(Window *pParent, const SfxItemSet &rSet);
+    SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwFootNotePage();
 
     RadioButton*    m_pMaxHeightPageBtn;

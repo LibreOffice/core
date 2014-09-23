@@ -57,7 +57,7 @@ namespace sd {
 /**
  *  SdDisplay - Control
  */
-SdDisplay::SdDisplay( Window* pWin, SdResId Id ) :
+SdDisplay::SdDisplay( vcl::Window* pWin, SdResId Id ) :
         Control( pWin, Id ),
         aScale( 1, 1 )
 {
@@ -123,7 +123,7 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
  *  AnimationWindow - FloatingWindow
  */
 AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
-                SfxChildWindow *pCW, Window* pParent, const SdResId& rSdResId ) :
+                SfxChildWindow *pCW, vcl::Window* pParent, const SdResId& rSdResId ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent, rSdResId ),
         aCtlDisplay         ( this, SdResId( CTL_DISPLAY ) ),
         aBtnFirst           ( this, SdResId( BTN_FIRST ) ),
@@ -972,7 +972,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
 void AnimationWindow::CreateAnimObj (::sd::View& rView )
 {
-    ::Window* pOutWin = static_cast< ::Window*>(rView.GetFirstOutputDevice()); // GetWin( 0 );
+    vcl::Window* pOutWin = static_cast< vcl::Window*>(rView.GetFirstOutputDevice()); // GetWin( 0 );
     DBG_ASSERT( pOutWin, "Window does not exist!" );
 
     // find window center

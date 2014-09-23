@@ -47,7 +47,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
 // ODbAdminDialog
-ODbAdminDialog::ODbAdminDialog(Window* _pParent
+ODbAdminDialog::ODbAdminDialog(vcl::Window* _pParent
                                , SfxItemSet* _pItems
                                , const Reference< XComponentContext >& _rxContext)
     : SfxTabDialog(_pParent, "AdminDialog",
@@ -85,7 +85,7 @@ void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );
     static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
-    Window *pWin = GetViewWindow();
+    vcl::Window *pWin = GetViewWindow();
     if(pWin)
         pWin->Invalidate();
 

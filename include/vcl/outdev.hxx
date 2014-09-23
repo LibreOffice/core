@@ -94,7 +94,7 @@ class SalLayout;
 class ImplLayoutArgs;
 class ImplFontAttributes;
 class VirtualDevice;
-class Window;
+namespace vcl { class Window; }
 struct SalTwoRect;
 
 // Layout options
@@ -258,10 +258,10 @@ class VCL_DLLPUBLIC OutputDevice: private boost::noncopyable
     friend class Printer;
     friend class System;
     friend class VirtualDevice;
-    friend class Window;
+    friend class vcl::Window;
     friend class WorkWindow;
     friend class vcl::PDFWriterImpl;
-    friend void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
+    friend void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
 private:
     mutable SalGraphics*            mpGraphics;         ///< Graphics context to draw on

@@ -57,7 +57,7 @@ SFX_IMPL_DOCKINGWINDOW_WITHID( ScFunctionChildWindow, FID_FUNCTION_BOX )
 #*
 #************************************************************************/
 
-ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
+ScFunctionChildWindow::ScFunctionChildWindow( vcl::Window* pParentP,
                                     sal_uInt16 nId,
                                     SfxBindings* pBindings,
                                     SfxChildWinInfo* pInfo ) :
@@ -87,7 +87,7 @@ ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
 #************************************************************************/
 
 ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
-                SfxChildWindow *pCW, Window* pParent, const ResId& rResId ) :
+                SfxChildWindow *pCW, vcl::Window* pParent, const ResId& rResId ) :
 
     SfxDockingWindow( pBindingsP, pCW, pParent, rResId ),
     aPrivatSplit    ( this, ResId( FT_SPLIT, *rResId.GetResMgr()  ),SC_SPLIT_VERT),
@@ -915,7 +915,7 @@ void ScFunctionDockWin::DoEnter()
     }
     if ( pCurSh )
     {
-        Window* pShellWnd = pCurSh->GetWindow();
+        vcl::Window* pShellWnd = pCurSh->GetWindow();
 
         if ( pShellWnd )
             pShellWnd->GrabFocus();

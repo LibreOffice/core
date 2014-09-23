@@ -79,9 +79,9 @@ uno::Reference< XAccessible > SwAccessibleContext::GetWeakParent() const
     return xParent;
 }
 
-Window *SwAccessibleContext::GetWindow()
+vcl::Window *SwAccessibleContext::GetWindow()
 {
-    Window *pWin = 0;
+    vcl::Window *pWin = 0;
 
     if( GetMap() )
     {
@@ -321,7 +321,7 @@ void SwAccessibleContext::ScrolledIn()
 
         if( HasCursor() )
         {
-            Window *pWin = GetWindow();
+            vcl::Window *pWin = GetWindow();
             if( pWin && pWin->HasFocus() )
             {
                 FireStateChangedEvent( AccessibleStateType::FOCUSED, true );
@@ -793,7 +793,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
 
     uno::Reference< XAccessible > xAcc;
 
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
@@ -849,7 +849,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(bool bRelative)
 
     const SwFrm *pParent = GetParent();
     OSL_ENSURE( pParent, "no Parent found" );
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin && pParent )
 
@@ -906,7 +906,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
 
     Point aPixPos(aRect.X, aRect.Y);
 
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
     aPixPos = pWin->OutputToAbsoluteScreenPixel(aPixPos);
@@ -1037,7 +1037,7 @@ void SwAccessibleContext::ScrolledInShape( const SdrObject* ,
 
     if( pAccImpl->GetState( AccessibleStateType::FOCUSED ) )
     {
-        Window *pWin = GetWindow();
+        vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
         {
             AccessibleEventObject aStateChangedEvent;
@@ -1261,7 +1261,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             }
             else if ( rChildFrmOrObj.GetWindow() )
             {
-                OSL_FAIL( "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - not expected to handle dispose of child of type <Window>." );
+                OSL_FAIL( "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - not expected to handle dispose of child of type <vcl::Window>." );
             }
         }
     }
@@ -1468,9 +1468,9 @@ bool SwAccessibleContext::HasAdditionalAccessibleChildren()
 }
 
 /** #i88070# - get additional accessible child by index */
-Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 nIndex )
+vcl::Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 nIndex )
 {
-    Window* pAdditionalAccessibleChild( 0 );
+    vcl::Window* pAdditionalAccessibleChild( 0 );
 
     if ( GetFrm()->IsTxtFrm() )
     {
@@ -1486,7 +1486,7 @@ Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 nInde
 }
 
 /** #i88070# - get all additional accessible children */
-void SwAccessibleContext::GetAdditionalAccessibleChildren( std::vector< Window* >* pChildren )
+void SwAccessibleContext::GetAdditionalAccessibleChildren( std::vector< vcl::Window* >* pChildren )
 {
     if ( GetFrm()->IsTxtFrm() )
     {

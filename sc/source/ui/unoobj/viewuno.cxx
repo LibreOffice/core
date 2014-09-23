@@ -300,7 +300,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
 
 namespace
 {
-    bool lcl_prepareFormShellCall( ScTabViewShell* _pViewShell, sal_uInt16 _nPane, FmFormShell*& _rpFormShell, Window*& _rpWindow, SdrView*& _rpSdrView )
+    bool lcl_prepareFormShellCall( ScTabViewShell* _pViewShell, sal_uInt16 _nPane, FmFormShell*& _rpFormShell, vcl::Window*& _rpWindow, SdrView*& _rpSdrView )
     {
         if ( !_pViewShell )
             return false;
@@ -323,7 +323,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
 
     uno::Reference< form::runtime::XFormController > xController;
 
-    Window* pWindow( NULL );
+    vcl::Window* pWindow( NULL );
     SdrView* pSdrView( NULL );
     FmFormShell* pFormShell( NULL );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
@@ -349,7 +349,7 @@ void SAL_CALL ScViewPaneBase::setFormDesignMode( sal_Bool _DesignMode ) throw (u
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow( NULL );
+    vcl::Window* pWindow( NULL );
     SdrView* pSdrView( NULL );
     FmFormShell* pFormShell( NULL );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
@@ -366,7 +366,7 @@ uno::Reference<awt::XControl> SAL_CALL ScViewPaneBase::getControl(
 
     uno::Reference<awt::XControl> xRet;
 
-    Window* pWindow( NULL );
+    vcl::Window* pWindow( NULL );
     SdrView* pSdrView( NULL );
     FmFormShell* pFormShell( NULL );
     if ( lcl_prepareFormShellCall( pViewShell, nPane, pFormShell, pWindow, pSdrView ) )
@@ -1137,7 +1137,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
 
             if (pDrawPage && pDrawView && pDrawView->GetSdrPageView())
             {
-                Window* pActiveWin = rData.GetActiveWin();
+                vcl::Window* pActiveWin = rData.GetActiveWin();
                 Point aPos = pActiveWin->PixelToLogic(rPoint);
 
                 sal_uInt16 nHitLog = (sal_uInt16) pActiveWin->PixelToLogic(
@@ -1692,7 +1692,7 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
         pViewSh->RemoveSplit();
 
         Point aWinStart;
-        Window* pWin = pViewSh->GetWindowByPos( SC_SPLIT_BOTTOMLEFT );
+        vcl::Window* pWin = pViewSh->GetWindowByPos( SC_SPLIT_BOTTOMLEFT );
         if (pWin)
             aWinStart = pWin->GetPosPixel();
 
@@ -1973,7 +1973,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
         else if ( aString.equalsAscii( SC_UNO_VISAREASCREEN ) )
         {
             ScViewData& rViewData = pViewSh->GetViewData();
-            Window* pActiveWin = rViewData.GetActiveWin();
+            vcl::Window* pActiveWin = rViewData.GetActiveWin();
             if ( pActiveWin )
             {
                 Rectangle aRect = pActiveWin->GetWindowExtentsRelative( NULL );

@@ -69,7 +69,7 @@ namespace svt
                         m_pImpl;
 
     public:
-        AddressBookSourceDialog( Window* _pParent,
+        AddressBookSourceDialog( vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
 
         /** if you use this ctor, the dialog
@@ -91,7 +91,7 @@ namespace svt
                 the table name to display. It must refer to a valid table, relative to a connection
                 obtained from <arg>_rxTransientDS</arg>
         */
-        AddressBookSourceDialog( Window* _pParent,
+        AddressBookSourceDialog( vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _rxTransientDS,
             const OUString& _rDataSourceName,

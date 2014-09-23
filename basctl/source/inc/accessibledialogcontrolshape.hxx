@@ -25,7 +25,7 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class VCLExternalSolarLock;
 
 namespace utl {
@@ -74,7 +74,7 @@ protected:
     ::com::sun::star::awt::Rectangle GetBounds();
     void                    SetBounds( const ::com::sun::star::awt::Rectangle& aBounds );
 
-    Window*                 GetWindow() const;
+    vcl::Window*                 GetWindow() const;
 
     OUString                GetModelStringProperty( const sal_Char* pPropertyName );
 

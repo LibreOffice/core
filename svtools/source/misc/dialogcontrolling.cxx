@@ -49,12 +49,12 @@ namespace svt
 
     struct DialogController_Data
     {
-        Window&                     rInstigator;
-        ::std::vector< Window* >    aConcernedWindows;
+        vcl::Window&                     rInstigator;
+        ::std::vector< vcl::Window* >    aConcernedWindows;
         PWindowEventFilter          pEventFilter;
         PWindowOperator             pOperator;
 
-        DialogController_Data( Window& _rInstigator, const PWindowEventFilter _pEventFilter, const PWindowOperator _pOperator )
+        DialogController_Data( vcl::Window& _rInstigator, const PWindowEventFilter _pEventFilter, const PWindowOperator _pOperator )
             :rInstigator( _rInstigator )
             ,pEventFilter( _pEventFilter )
             ,pOperator( _pOperator )
@@ -66,7 +66,7 @@ namespace svt
     //= DialogController
 
 
-    DialogController::DialogController( Window& _rInstigator, const PWindowEventFilter& _pEventFilter,
+    DialogController::DialogController( vcl::Window& _rInstigator, const PWindowEventFilter& _pEventFilter,
             const PWindowOperator& _pOperator )
         :m_pImpl( new DialogController_Data( _rInstigator, _pEventFilter, _pOperator ) )
     {
@@ -92,7 +92,7 @@ namespace svt
     }
 
 
-    void DialogController::addDependentWindow( Window& _rWindow )
+    void DialogController::addDependentWindow( vcl::Window& _rWindow )
     {
         m_pImpl->aConcernedWindows.push_back( &_rWindow );
 
@@ -111,7 +111,7 @@ namespace svt
 
     void DialogController::impl_updateAll( const VclWindowEvent& _rTriggerEvent )
     {
-        for ( ::std::vector< Window* >::iterator loop = m_pImpl->aConcernedWindows.begin();
+        for ( ::std::vector< vcl::Window* >::iterator loop = m_pImpl->aConcernedWindows.begin();
                 loop != m_pImpl->aConcernedWindows.end();
                 ++loop
             )
@@ -119,7 +119,7 @@ namespace svt
     }
 
 
-    void DialogController::impl_update( const VclWindowEvent& _rTriggerEvent, Window& _rWindow )
+    void DialogController::impl_update( const VclWindowEvent& _rTriggerEvent, vcl::Window& _rWindow )
     {
         m_pImpl->pOperator->operateOn( _rTriggerEvent, _rWindow );
     }
@@ -173,7 +173,7 @@ namespace svt
     }
 
 
-    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow )
+    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, vcl::Window& _rDependentWindow )
     {
         PDialogController pController( new RadioDependentEnabler( _rRadio ) );
         pController->addDependentWindow( _rDependentWindow );
@@ -181,7 +181,7 @@ namespace svt
     }
 
 
-    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2 )
+    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2 )
     {
         PDialogController pController( new RadioDependentEnabler( _rRadio ) );
         pController->addDependentWindow( _rDependentWindow1 );
@@ -190,7 +190,7 @@ namespace svt
     }
 
 
-    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3 )
+    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2, vcl::Window& _rDependentWindow3 )
     {
         PDialogController pController( new RadioDependentEnabler( _rRadio ) );
         pController->addDependentWindow( _rDependentWindow1 );
@@ -200,7 +200,7 @@ namespace svt
     }
 
 
-    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4, Window& _rDependentWindow5 )
+    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2, vcl::Window& _rDependentWindow3, vcl::Window& _rDependentWindow4, vcl::Window& _rDependentWindow5 )
     {
         PDialogController pController( new RadioDependentEnabler( _rRadio ) );
         pController->addDependentWindow( _rDependentWindow1 );
@@ -212,7 +212,7 @@ namespace svt
     }
 
 
-    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow )
+    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow )
     {
         PDialogController pController( new RadioDependentEnabler( _rBox ) );
         pController->addDependentWindow( _rDependentWindow );
@@ -220,7 +220,7 @@ namespace svt
     }
 
 
-    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow1, Window& _rDependentWindow2 )
+    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2 )
     {
         PDialogController pController( new RadioDependentEnabler( _rBox ) );
         pController->addDependentWindow( _rDependentWindow1 );
@@ -229,7 +229,7 @@ namespace svt
     }
 
 
-    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4 )
+    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2, vcl::Window& _rDependentWindow3, vcl::Window& _rDependentWindow4 )
     {
         PDialogController pController( new RadioDependentEnabler( _rBox ) );
         pController->addDependentWindow( _rDependentWindow1 );

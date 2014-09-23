@@ -44,7 +44,7 @@ class SvxJSearchOptionsDialog : public SfxSingleTabDialog
     SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & );
 
 public:
-    SvxJSearchOptionsDialog(Window *pParent,
+    SvxJSearchOptionsDialog(vcl::Window *pParent,
         const SfxItemSet& rOptionsSet, sal_Int32 nInitialFlags);
 
     // Window

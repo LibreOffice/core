@@ -47,7 +47,7 @@ class SwCustomizeAddressListDialog : public SfxModalDialog
 
     void UpdateButtons();
 public:
-    SwCustomizeAddressListDialog(Window* pParent, const SwCSVData& rOldData);
+    SwCustomizeAddressListDialog(vcl::Window* pParent, const SwCSVData& rOldData);
     virtual ~SwCustomizeAddressListDialog();
 
     SwCSVData*    GetNewData() { return m_pNewData;}
@@ -61,7 +61,7 @@ class SwAddRenameEntryDialog : public SfxModalDialog
 
     DECL_LINK(ModifyHdl_Impl, Edit*);
 protected:
-    SwAddRenameEntryDialog(Window* pParent, const OString& rID,
+    SwAddRenameEntryDialog(vcl::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription, const std::vector< OUString >& rCSVHeader);
 public:
     void                SetFieldName(const OUString& rName) {m_pFieldNameED->SetText(rName);}
@@ -72,7 +72,7 @@ public:
 class SwAddEntryDialog : public SwAddRenameEntryDialog
 {
 public:
-    SwAddEntryDialog(Window* pParent, const std::vector< OUString >& rCSVHeader)
+    SwAddEntryDialog(vcl::Window* pParent, const std::vector< OUString >& rCSVHeader)
         : SwAddRenameEntryDialog(pParent, "AddEntryDialog",
             "modules/swriter/ui/addentrydialog.ui", rCSVHeader)
     {
@@ -82,7 +82,7 @@ public:
 class SwRenameEntryDialog : public SwAddRenameEntryDialog
 {
 public:
-    SwRenameEntryDialog(Window* pParent, const std::vector< OUString >& rCSVHeader)
+    SwRenameEntryDialog(vcl::Window* pParent, const std::vector< OUString >& rCSVHeader)
         : SwAddRenameEntryDialog(pParent, "RenameEntryDialog",
             "modules/swriter/ui/renameentrydialog.ui", rCSVHeader)
     {

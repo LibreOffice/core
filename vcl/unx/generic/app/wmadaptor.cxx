@@ -539,7 +539,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     // check for GnomeWM
     if( m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ WIN_PROTOCOLS ] )
     {
-        XLIB_Window         aWMChild    = None;
+        ::Window         aWMChild    = None;
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
@@ -556,10 +556,10 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             && nItems != 0
             )
         {
-            aWMChild = *(XLIB_Window*)pProperty;
+            aWMChild = *(::Window*)pProperty;
             XFree( pProperty );
             pProperty = NULL;
-            XLIB_Window aCheckWindow = None;
+            ::Window aCheckWindow = None;
             GetGenericData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
@@ -580,7 +580,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 {
                     GetGenericData()->ErrorTrapPush();
 
-                    aCheckWindow =  *(XLIB_Window*)pProperty;
+                    aCheckWindow =  *(::Window*)pProperty;
                     XFree( pProperty );
                     pProperty = NULL;
                     if( aCheckWindow == aWMChild )
@@ -744,7 +744,7 @@ bool WMAdaptor::getNetWmName()
 
     if( m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ NET_WM_NAME ] )
     {
-        XLIB_Window         aWMChild = None;
+        ::Window         aWMChild = None;
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
@@ -761,10 +761,10 @@ bool WMAdaptor::getNetWmName()
             && nItems != 0
             )
         {
-            aWMChild = *(XLIB_Window*)pProperty;
+            aWMChild = *(::Window*)pProperty;
             XFree( pProperty );
             pProperty = NULL;
-            XLIB_Window aCheckWindow = None;
+            ::Window aCheckWindow = None;
             GetGenericData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
@@ -784,7 +784,7 @@ bool WMAdaptor::getNetWmName()
                     if ( ! GetGenericData()->ErrorTrapPop( false ) )
                     {
                         GetGenericData()->ErrorTrapPush();
-                        aCheckWindow =  *(XLIB_Window*)pProperty;
+                        aCheckWindow =  *(::Window*)pProperty;
                         XFree( pProperty );
                         pProperty = NULL;
                         if( aCheckWindow == aWMChild )
@@ -1050,7 +1050,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
     int nBytes = aProp.nitems ? aProp.nitems : aTitle.getLength();
     const SystemEnvData* pEnv = pFrame->GetSystemData();
     XChangeProperty( m_pDisplay,
-                     (XLIB_Window)pEnv->aShellWindow,
+                     (::Window)pEnv->aShellWindow,
                      XA_WM_NAME,
                      nType,
                      nFormat,
@@ -1058,7 +1058,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
                      pData,
                      nBytes );
     XChangeProperty( m_pDisplay,
-                     (XLIB_Window)pEnv->aShellWindow,
+                     (::Window)pEnv->aShellWindow,
                      XA_WM_ICON_NAME,
                      nType,
                      nFormat,
@@ -1066,7 +1066,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
                      pData,
                      nBytes );
     XChangeProperty( m_pDisplay,
-                     (XLIB_Window)pEnv->aShellWindow,
+                     (::Window)pEnv->aShellWindow,
                      m_aWMAtoms[ WM_LOCALE_NAME ],
                      XA_STRING,
                      8,
@@ -1092,7 +1092,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) con
     const SystemEnvData* pEnv = pFrame->GetSystemData();
     if( m_aWMAtoms[ NET_WM_NAME ] )
         XChangeProperty( m_pDisplay,
-                         (XLIB_Window)pEnv->aShellWindow,
+                         (::Window)pEnv->aShellWindow,
                          m_aWMAtoms[ NET_WM_NAME ],
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
@@ -1101,7 +1101,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) con
                          aTitle.getLength() );
     if( m_aWMAtoms[ NET_WM_ICON_NAME ] )
         XChangeProperty( m_pDisplay,
-                         (XLIB_Window)pEnv->aShellWindow,
+                         (::Window)pEnv->aShellWindow,
                          m_aWMAtoms[ NET_WM_ICON_NAME ],
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
@@ -1801,7 +1801,7 @@ void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferen
         && ! pFrame->IsFloatGrabWindow()
         )
     {
-        XLIB_Window aTransient = pFrame->pDisplay_->GetRootWindow( pFrame->GetScreenNumber() );
+        ::Window aTransient = pFrame->pDisplay_->GetRootWindow( pFrame->GetScreenNumber() );
         pFrame->mbTransientForRoot = true;
         if( pReferenceFrame )
         {
@@ -2102,7 +2102,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
         {
             if( m_pSalDisplay->IsXinerama() )
             {
-                XLIB_Window aRoot, aChild;
+                ::Window aRoot, aChild;
                 int root_x = 0, root_y = 0, lx, ly;
                 unsigned int mask;
                 XQueryPointer( m_pDisplay,
@@ -2180,7 +2180,7 @@ int WMAdaptor::getCurrentWorkArea() const
 /*
  *  WMAdaptor::getWindowWorkArea
  */
-int WMAdaptor::getWindowWorkArea( XLIB_Window aWindow ) const
+int WMAdaptor::getWindowWorkArea( ::Window aWindow ) const
 {
     int nCurrent = -1;
     if( m_aWMAtoms[ NET_WM_DESKTOP ] )

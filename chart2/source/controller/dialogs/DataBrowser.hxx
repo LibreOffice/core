@@ -67,7 +67,7 @@ protected:
     void SetDirty();
 
 public:
-    DataBrowser( Window* pParent, WinBits nStyle, bool bLiveUpdate );
+    DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate );
     virtual ~DataBrowser();
 
     /** GetCellText returns the text at the given position

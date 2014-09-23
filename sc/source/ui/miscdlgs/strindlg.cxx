@@ -22,7 +22,7 @@
 #include "strindlg.hxx"
 #include "scresid.hxx"
 
-ScStringInputDlg::ScStringInputDlg( Window*         pParent,
+ScStringInputDlg::ScStringInputDlg( vcl::Window*         pParent,
                                     const OUString&   rTitle,
                                     const OUString&   rEditTitle,
                                     const OUString&   rDefault,

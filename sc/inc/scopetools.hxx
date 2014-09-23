@@ -13,7 +13,7 @@
 #include "scdllapi.h"
 
 class ScDocument;
-class Window;
+namespace vcl { class Window; }
 
 namespace sc {
 
@@ -58,9 +58,9 @@ public:
 
 class WaitPointerSwitch
 {
-    Window* mpFrameWin;
+    vcl::Window* mpFrameWin;
 public:
-    WaitPointerSwitch(Window* pWin);
+    WaitPointerSwitch(vcl::Window* pWin);
     ~WaitPointerSwitch();
 };
 

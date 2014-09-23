@@ -88,7 +88,7 @@ static const sal_uInt16 pRanges[] =
 
 namespace svx {
 
-    bool ShowBorderBackgroundDlg( Window* pParent, SfxItemSet* pBBSet,
+    bool ShowBorderBackgroundDlg( vcl::Window* pParent, SfxItemSet* pBBSet,
             bool bEnableBackgroundSelector )
     {
         bool bRes = false;
@@ -125,7 +125,7 @@ const sal_uInt16* SvxHeaderPage::GetRanges()
 
 
 
-SfxTabPage* SvxHeaderPage::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* SvxHeaderPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxHeaderPage( pParent, *rSet );
 }
@@ -139,14 +139,14 @@ const sal_uInt16* SvxFooterPage::GetRanges()
 
 
 
-SfxTabPage* SvxFooterPage::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* SvxFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxFooterPage( pParent, *rSet );
 }
 
 
 
-SvxHeaderPage::SvxHeaderPage( Window* pParent, const SfxItemSet& rAttr ) :
+SvxHeaderPage::SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
 
     SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_HEADERSET )
 
@@ -155,7 +155,7 @@ SvxHeaderPage::SvxHeaderPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 
 
-SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
+SvxFooterPage::SvxFooterPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
 
     SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_FOOTERSET )
 
@@ -163,7 +163,7 @@ SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
 }
 
 
-SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId ) :
+SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId ) :
     SfxTabPage(pParent, "HFFormatPage", "svx/ui/headfootformatpage.ui", &rSet),
     nId(nSetId),
     pBBSet(NULL),
@@ -1133,7 +1133,7 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
     return 0;
 }
 
-static void lcl_Move(Window& rWin, sal_Int32 nDiff)
+static void lcl_Move(vcl::Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());
     aPos.Y() -= nDiff;
@@ -1144,7 +1144,7 @@ void SvxHFPage::EnableDynamicSpacing()
 {
     m_pDynSpacingCB->Show();
     //move all following controls
-    Window* aMoveWindows[] =
+    vcl::Window* aMoveWindows[] =
     {
         m_pHeightFT,
         m_pHeightEdit,

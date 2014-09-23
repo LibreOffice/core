@@ -41,7 +41,7 @@ class FmShowColsDialog : public ModalDialog
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xColumns;
 
 public:
-    FmShowColsDialog(Window* pParent);
+    FmShowColsDialog(vcl::Window* pParent);
 
     void SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols);
 

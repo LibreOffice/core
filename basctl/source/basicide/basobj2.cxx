@@ -77,7 +77,7 @@ void Organize( sal_Int16 tabId )
         if (BaseWindow* pCurWin = pShell->GetCurWindow())
             aDesc = pCurWin->CreateEntryDescriptor();
 
-    Window* pParent = Application::GetDefDialogParent();
+    vcl::Window* pParent = Application::GetDefDialogParent();
     OrganizeDialog(pParent, tabId, aDesc).Execute();
 }
 
@@ -145,7 +145,7 @@ Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryCon
 }
 
 bool RenameModule (
-    Window* pErrorParent,
+    vcl::Window* pErrorParent,
     const ScriptDocument& rDocument,
     const OUString& rLibName,
     const OUString& rOldName,

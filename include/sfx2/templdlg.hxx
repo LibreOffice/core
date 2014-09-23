@@ -45,7 +45,7 @@ friend class SfxTemplateDialog_Impl;
     virtual void                StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
 public:
-    SfxTemplateDialog( SfxBindings*, SfxChildWindow*, Window* );
+    SfxTemplateDialog( SfxBindings*, SfxChildWindow*, vcl::Window* );
     virtual ~SfxTemplateDialog();
 
     virtual void                Update();
@@ -62,7 +62,7 @@ class SFX2_DLLPUBLIC SfxTemplateDialogWrapper : public SfxChildWindow
 {
 public:
                 SfxTemplateDialogWrapper
-                    (Window*,sal_uInt16,SfxBindings*,SfxChildWinInfo*);
+                    (vcl::Window*,sal_uInt16,SfxBindings*,SfxChildWinInfo*);
                 SFX_DECL_CHILDWINDOW_WITHID(SfxTemplateDialogWrapper);
 };
 
@@ -71,7 +71,7 @@ public:
 class SFX2_DLLPUBLIC SfxTemplatePanelControl : public DockingWindow
 {
 public:
-    SfxTemplatePanelControl (SfxBindings* pBindings, Window* pParentWindow);
+    SfxTemplatePanelControl (SfxBindings* pBindings, vcl::Window* pParentWindow);
     virtual ~SfxTemplatePanelControl();
 
     virtual void                Update();

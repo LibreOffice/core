@@ -99,7 +99,7 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 // ScImportOptionsDlg
 
 ScImportOptionsDlg::ScImportOptionsDlg(
-        Window*                 pParent,
+        vcl::Window*                 pParent,
         bool                    bAscii,
         const ScImportOptions*  pOptions,
         const OUString*         pStrTitle,

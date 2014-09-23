@@ -50,7 +50,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
        pArgs->GetItemState(nSlot, false, &pItem );
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
-    Window *pMDI = &pVFrame->GetWindow();
+    vcl::Window *pMDI = &pVFrame->GetWindow();
 
     switch( nSlot )
     {

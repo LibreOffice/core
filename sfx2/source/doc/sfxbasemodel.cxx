@@ -348,7 +348,7 @@ class SfxOwnFramesLocker
 {
     Sequence< Reference< frame::XFrame > > m_aLockedFrames;
 
-    Window* GetVCLWindow( const Reference< frame::XFrame >& xFrame );
+    vcl::Window* GetVCLWindow( const Reference< frame::XFrame >& xFrame );
 public:
     SfxOwnFramesLocker( SfxObjectShell* ObjechShell );
     ~SfxOwnFramesLocker();
@@ -370,7 +370,7 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell* pObjectShell )
         {
             // get vcl window related to the frame and lock it if it is still not locked
             Reference< frame::XFrame > xFrame = rSfxFrame.GetFrameInterface();
-            Window* pWindow = GetVCLWindow( xFrame );
+            vcl::Window* pWindow = GetVCLWindow( xFrame );
             if ( !pWindow )
                 throw RuntimeException();
 
@@ -403,9 +403,9 @@ SfxOwnFramesLocker::~SfxOwnFramesLocker()
     UnlockFrames();
 }
 
-Window* SfxOwnFramesLocker::GetVCLWindow( const Reference< frame::XFrame >& xFrame )
+vcl::Window* SfxOwnFramesLocker::GetVCLWindow( const Reference< frame::XFrame >& xFrame )
 {
-    Window* pWindow = NULL;
+    vcl::Window* pWindow = NULL;
 
     if ( xFrame.is() )
     {
@@ -426,7 +426,7 @@ void SfxOwnFramesLocker::UnlockFrames()
             if ( m_aLockedFrames[nInd].is() )
             {
                 // get vcl window related to the frame and unlock it
-                Window* pWindow = GetVCLWindow( m_aLockedFrames[nInd] );
+                vcl::Window* pWindow = GetVCLWindow( m_aLockedFrames[nInd] );
                 if ( !pWindow )
                     throw RuntimeException();
 
@@ -3651,7 +3651,7 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
     SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false );
     if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !pViewFrm->GetFrame().IsInPlace() )
     {
-        Window* pWindow = VCLUnoHelper::GetWindow( pViewFrm->GetFrame().GetFrameInterface()->getContainerWindow() );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( pViewFrm->GetFrame().GetFrameInterface()->getContainerWindow() );
         Size aWinSize = pWindow->GetSizePixel();
         awt::Size aCurrent = getVisualAreaSize( nAspect );
         Size aDiff( aSize.Width-aCurrent.Width, aSize.Height-aCurrent.Height );

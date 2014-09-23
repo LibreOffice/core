@@ -62,12 +62,12 @@ using ::com::sun::star::frame::XComponentLoader;
 
 
 
-class SfxFrameWindow_Impl : public Window
+class SfxFrameWindow_Impl : public vcl::Window
 {
 public:
     SfxFrame*           pFrame;
 
-    SfxFrameWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow );
+    SfxFrameWindow_Impl( SfxFrame* pF, vcl::Window& i_rContainerWindow );
     virtual ~SfxFrameWindow_Impl( );
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -79,7 +79,7 @@ public:
     void                DoResize();
 };
 
-SfxFrameWindow_Impl::SfxFrameWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow )
+SfxFrameWindow_Impl::SfxFrameWindow_Impl( SfxFrame* pF, vcl::Window& i_rContainerWindow )
         : Window( &i_rContainerWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
         , pFrame( pF )
 {
@@ -150,7 +150,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     }
     else if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
     {
-        Window* pWindow = rNEvt.GetWindow();
+        vcl::Window* pWindow = rNEvt.GetWindow();
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
         SfxViewShell* pShell = pView ? pView->GetViewShell() : NULL;
         if ( pShell )
@@ -161,7 +161,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
     if ( nType == EVENT_MOUSEBUTTONDOWN )
     {
-        Window* pWindow = rNEvt.GetWindow();
+        vcl::Window* pWindow = rNEvt.GetWindow();
         const MouseEvent* pMEvent = rNEvt.GetMouseEvent();
         Point aPos = pWindow->OutputToScreenPixel( pMEvent->GetPosPixel() );
         SfxWorkWindow *pWorkWin = pFrame->GetWorkWindow_Impl();
@@ -225,7 +225,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     return xFrame;
 }
 
-SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nViewId, bool bHidden )
+SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, vcl::Window& rWindow, sal_uInt16 nViewId, bool bHidden )
 {
     SfxFrame* pFrame = NULL;
     try
@@ -287,7 +287,7 @@ SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
 {
     // create a new TopFrame to an external XFrame object ( wrap controller )
     ENSURE_OR_THROW( i_rFrame.is(), "NULL frame not allowed" );
-    Window* pWindow = VCLUnoHelper::GetWindow( i_rFrame->getContainerWindow() );
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow( i_rFrame->getContainerWindow() );
     ENSURE_OR_THROW( pWindow, "frame without container window not allowed" );
 
     SfxFrame* pFrame = new SfxFrame( *pWindow, false );
@@ -295,7 +295,7 @@ SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
     return pFrame;
 }
 
-SfxFrame::SfxFrame( Window& i_rContainerWindow, bool i_bHidden )
+SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow, bool i_bHidden )
     :SvCompatWeakBase<SfxFrame>( this )
     ,pParentFrame( NULL )
     ,pChildArr( NULL )

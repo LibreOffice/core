@@ -40,10 +40,10 @@ class ScDocument;
 
 enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
-class SC_DLLPUBLIC ScAutoFmtPreview : public Window
+class SC_DLLPUBLIC ScAutoFmtPreview : public vcl::Window
 {
 public:
-    ScAutoFmtPreview(Window* pParent);
+    ScAutoFmtPreview(vcl::Window* pParent);
     void DetectRTL(ScViewData *pViewData);
     virtual ~ScAutoFmtPreview();
 

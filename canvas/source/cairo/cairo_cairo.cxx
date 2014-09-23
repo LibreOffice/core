@@ -30,7 +30,7 @@ namespace cairo
  *  Surface classes), see platform specific cairo_<platform>_cairo.cxx                  *
  ****************************************************************************************/
 
-    const SystemEnvData* GetSysData(const Window *pOutputWindow)
+    const SystemEnvData* GetSysData(const vcl::Window *pOutputWindow)
     {
         const SystemEnvData* pSysData = NULL;
         // check whether we're a SysChild: have to fetch system data

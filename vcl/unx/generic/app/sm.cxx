@@ -263,7 +263,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, SaveYourselfHdl, void*, pStat
         const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
-            Window *pWindow = (*it)->GetWindow();
+            vcl::Window *pWindow = (*it)->GetWindow();
             if (pWindow && pWindow->IsVisible())
             {
                 *pSmRestartHint = SmRestartIfRunning;

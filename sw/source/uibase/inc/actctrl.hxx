@@ -31,7 +31,7 @@ protected:
     virtual void Action();
     virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
-    NumEditAction( Window* pParent, const ResId& rResId ) :
+    NumEditAction( vcl::Window* pParent, const ResId& rResId ) :
                                 NumericField(pParent, rResId) {}
 
     void        SetActionHdl( const Link& rLink )   { aActionLink = rLink;}
@@ -43,7 +43,7 @@ class SW_DLLPUBLIC ReturnActionEdit : public Edit
 {
     Link    aReturnActionLink;
 public:
-    ReturnActionEdit(Window* pParent, WinBits nStyle)
+    ReturnActionEdit(vcl::Window* pParent, WinBits nStyle)
         : Edit(pParent, nStyle)
     {
     }

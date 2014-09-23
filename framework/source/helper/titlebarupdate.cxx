@@ -179,7 +179,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     // VCL SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
 
-    Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
+    vcl::Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
         ( pWindow->GetType() == WINDOW_WORKWINDOW )
@@ -296,7 +296,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     // VCL SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
 
-    Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
+    vcl::Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
         ( pWindow->GetType() == WINDOW_WORKWINDOW )
@@ -330,7 +330,7 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
     // VCL SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
 
-    Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
+    vcl::Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
         ( pWindow->GetType() == WINDOW_WORKWINDOW )

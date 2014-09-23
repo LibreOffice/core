@@ -36,7 +36,7 @@ namespace chart
 class LightButton : public ImageButton
 {
 public:
-    LightButton( Window* pParent);
+    LightButton( vcl::Window* pParent);
     virtual ~LightButton();
 
     void switchLightOn(bool bOn);
@@ -52,7 +52,7 @@ class ThreeD_SceneIllumination_TabPage : public TabPage
 {
 public:
     ThreeD_SceneIllumination_TabPage(
-        Window* pWindow,
+        vcl::Window* pWindow,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xSceneProperties,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel,

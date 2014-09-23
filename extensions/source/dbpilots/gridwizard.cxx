@@ -52,7 +52,7 @@ namespace dbp
     //= OGridWizard
 
 
-    OGridWizard::OGridWizard( Window* _pParent,
+    OGridWizard::OGridWizard( vcl::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, _rxObjectModel, _rxContext)
         ,m_bHadDataSelection(true)

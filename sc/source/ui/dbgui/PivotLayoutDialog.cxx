@@ -65,7 +65,7 @@ ScRange lclGetRangeForNamedRange(OUString const & aName, ScDocument* pDocument)
 }
 
 ScPivotLayoutDialog::ScPivotLayoutDialog(
-                            SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, Window* pParent,
+                            SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent,
                             ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable) :
     ScAnyRefDlg           (pSfxBindings, pChildWindow, pParent, "PivotTableLayout", "modules/scalc/ui/pivottablelayoutdialog.ui"),
     maPivotTableObject    (*pPivotTableObject),

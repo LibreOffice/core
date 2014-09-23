@@ -25,7 +25,7 @@
 namespace chart
 {
 
-SchTitleDlg::SchTitleDlg(Window* pWindow, const TitleDialogData& rInput )
+SchTitleDlg::SchTitleDlg(vcl::Window* pWindow, const TitleDialogData& rInput )
     : ModalDialog(pWindow, "InsertTitleDialog", "modules/schart/ui/inserttitledlg.ui")
     , m_xTitleResources(new TitleResources(*this, true))
 {

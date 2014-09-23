@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ShapeFontDialog::ShapeFontDialog( Window* pParent, const SfxItemSet* pAttr,
+ShapeFontDialog::ShapeFontDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
     const ViewElementListProvider* pViewElementListProvider )
     : SfxTabDialog(pParent, "CharDialog",
         "modules/schart/ui/chardialog.ui", pAttr)

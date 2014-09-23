@@ -213,8 +213,8 @@ public:
     using SwEditShell::Insert;
 
     TYPEINFO_OVERRIDE();
-    SwFEShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
-    SwFEShell( SwEditShell& rShell, Window *pWin );
+    SwFEShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = 0 );
+    SwFEShell( SwEditShell& rShell, vcl::Window *pWin );
     virtual ~SwFEShell();
 
     /// Copy and Paste methods for internal clipboard.

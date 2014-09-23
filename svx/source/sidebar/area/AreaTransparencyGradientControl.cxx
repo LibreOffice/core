@@ -53,7 +53,7 @@ namespace svx { namespace sidebar {
 
 
 AreaTransparencyGradientControl::AreaTransparencyGradientControl (
-    Window* pParent,
+    vcl::Window* pParent,
     AreaPropertyPanel& rPanel)
     : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_AREAPAGE_TRGR)),
       maFtTrgrCenterX(this, SVX_RES(FT_TRGR_CENTER_X)),

@@ -26,7 +26,7 @@
 namespace svx { namespace sidebar {
 
 Popup::Popup (
-    Window* pParent,
+    vcl::Window* pParent,
     const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator,
     const ::rtl::OUString& rsAccessibleName)
     : mpControl(),

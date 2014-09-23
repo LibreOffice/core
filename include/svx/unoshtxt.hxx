@@ -37,7 +37,7 @@ class SvxTextForwarder;
 class SdrObject;
 class SdrModel;
 class SdrView;
-class Window;
+namespace vcl { class Window; }
 class SvxTextEditSourceImpl;
 class SdrText;
 
@@ -51,7 +51,7 @@ public:
 
         The window is necessary, since our views can display on multiple windows
      */
-    SvxTextEditSource( SdrObject& rObj, SdrText* pText, SdrView& rView, const Window& rViewWindow );
+    SvxTextEditSource( SdrObject& rObj, SdrText* pText, SdrView& rView, const vcl::Window& rViewWindow );
 
     virtual ~SvxTextEditSource();
 

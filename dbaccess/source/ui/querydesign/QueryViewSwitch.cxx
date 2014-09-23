@@ -43,11 +43,11 @@ OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryContro
 OQueryViewSwitch::~OQueryViewSwitch()
 {
     {
-        boost::scoped_ptr<Window> aTemp(m_pTextView);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pTextView);
         m_pTextView = NULL;
     }
     {
-        boost::scoped_ptr<Window> aTemp(m_pDesignView);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pDesignView);
         m_pDesignView = NULL;
     }
 }
@@ -167,7 +167,7 @@ void OQueryViewSwitch::paste()
 
 OQueryContainerWindow* OQueryViewSwitch::getContainer() const
 {
-    Window* pDesignParent = getDesignView() ? getDesignView()->GetParent() : NULL;
+    vcl::Window* pDesignParent = getDesignView() ? getDesignView()->GetParent() : NULL;
     return static_cast< OQueryContainerWindow* >( pDesignParent );
 }
 

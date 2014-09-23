@@ -152,24 +152,24 @@ private:
     void stopModelListening();
 
     /** Returns the controller for the passed VCL window. */
-    uno::Reference< frame::XController > getControllerForWindow( Window* pWindow ) const;
+    uno::Reference< frame::XController > getControllerForWindow( vcl::Window* pWindow ) const;
 
     /** Calls the Workbook_Window[Activate|Deactivate] event handler. */
-    void processWindowActivateEvent( Window* pWindow, bool bActivate );
+    void processWindowActivateEvent( vcl::Window* pWindow, bool bActivate );
     /** Posts a Workbook_WindowResize user event. */
-    void postWindowResizeEvent( Window* pWindow );
+    void postWindowResizeEvent( vcl::Window* pWindow );
     /** Callback link for Application::PostUserEvent(). */
-    DECL_LINK( processWindowResizeEvent, Window* );
+    DECL_LINK( processWindowResizeEvent, vcl::Window* );
 
 private:
-    typedef ::std::map< Window*, uno::Reference< frame::XController > > WindowControllerMap;
+    typedef ::std::map< vcl::Window*, uno::Reference< frame::XController > > WindowControllerMap;
 
     ::osl::Mutex        maMutex;
     ScVbaEventsHelper&  mrVbaEvents;
     uno::Reference< frame::XModel > mxModel;
     ScDocShell*         mpDocShell;
     WindowControllerMap maControllers;          /// Maps VCL top windows to their controllers.
-    Window*             mpActiveWindow;         /// Currently activated window, to prevent multiple (de)activation.
+    vcl::Window*             mpActiveWindow;         /// Currently activated window, to prevent multiple (de)activation.
     bool                mbWindowResized;        /// True = window resize system event processed.
     bool                mbBorderChanged;        /// True = borders changed system event processed.
     bool                mbDisposed;
@@ -218,7 +218,7 @@ void ScVbaEventListener::startControllerListening( const uno::Reference< frame::
     if( xControllerBorder.is() )
         try { xControllerBorder->addBorderResizeListener( this ); } catch( uno::Exception& ) {}
 
-    if( Window* pWindow = VCLUnoHelper::GetWindow( xWindow ) )
+    if( vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow ) )
         maControllers[ pWindow ] = rxController;
 }
 
@@ -238,7 +238,7 @@ void ScVbaEventListener::stopControllerListening( const uno::Reference< frame::X
     if( xControllerBorder.is() )
         try { xControllerBorder->removeBorderResizeListener( this ); } catch( uno::Exception& ) {}
 
-    if( Window* pWindow = VCLUnoHelper::GetWindow( xWindow ) )
+    if( vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow ) )
     {
         maControllers.erase( pWindow );
         if( pWindow == mpActiveWindow )
@@ -273,7 +273,7 @@ void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEve
     if( !mbDisposed )
     {
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         OSL_TRACE( "ScVbaEventListener::windowActivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow );
         // do not fire activation event multiple time for the same window
         if( pWindow && (pWindow != mpActiveWindow) )
@@ -295,7 +295,7 @@ void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rE
     if( !mbDisposed )
     {
         uno::Reference< awt::XWindow > xWindow( rEvent.Source, uno::UNO_QUERY );
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         OSL_TRACE( "ScVbaEventListener::windowDeactivated - pWindow = 0x%p, mpActiveWindow = 0x%p", pWindow, mpActiveWindow );
         // do not fire the deactivation event, if the window is not active (prevent multiple deactivation)
         if( pWindow && (pWindow == mpActiveWindow) )
@@ -444,13 +444,13 @@ void ScVbaEventListener::stopModelListening()
     }
 }
 
-uno::Reference< frame::XController > ScVbaEventListener::getControllerForWindow( Window* pWindow ) const
+uno::Reference< frame::XController > ScVbaEventListener::getControllerForWindow( vcl::Window* pWindow ) const
 {
     WindowControllerMap::const_iterator aIt = maControllers.find( pWindow );
     return (aIt == maControllers.end()) ? uno::Reference< frame::XController >() : aIt->second;
 }
 
-void ScVbaEventListener::processWindowActivateEvent( Window* pWindow, bool bActivate )
+void ScVbaEventListener::processWindowActivateEvent( vcl::Window* pWindow, bool bActivate )
 {
     uno::Reference< frame::XController > xController = getControllerForWindow( pWindow );
     if( xController.is() )
@@ -461,7 +461,7 @@ void ScVbaEventListener::processWindowActivateEvent( Window* pWindow, bool bActi
     }
 }
 
-void ScVbaEventListener::postWindowResizeEvent( Window* pWindow )
+void ScVbaEventListener::postWindowResizeEvent( vcl::Window* pWindow )
 {
     // check that the passed window is still alive (it must be registered in maControllers)
     if( pWindow && (maControllers.count( pWindow ) > 0) )
@@ -472,7 +472,7 @@ void ScVbaEventListener::postWindowResizeEvent( Window* pWindow )
     }
 }
 
-IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, Window*, EMPTYARG pWindow )
+IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, vcl::Window*, EMPTYARG pWindow )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -487,7 +487,7 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, Window*, EMPTYARG pWind
     if( !mbDisposed && pWindow && (maControllers.count( pWindow ) > 0) )
     {
         // do not fire event unless all mouse buttons have been released
-        Window::PointerState aPointerState = pWindow->GetPointerState();
+        vcl::Window::PointerState aPointerState = pWindow->GetPointerState();
         if( (aPointerState.mnState & (MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)) == 0 )
         {
             uno::Reference< frame::XController > xController = getControllerForWindow( pWindow );

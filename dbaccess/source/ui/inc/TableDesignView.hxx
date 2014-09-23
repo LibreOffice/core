@@ -30,7 +30,7 @@ namespace dbaui
     class OTableController;
     class OTableFieldDescWin;
     class OTableEditorCtrl;
-    class OTableBorderWindow : public Window
+    class OTableBorderWindow : public vcl::Window
     {
         Splitter                            m_aHorzSplitter;
         OTableFieldDescWin*                 m_pFieldDescWin;
@@ -42,7 +42,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OTableBorderWindow(Window* pParent);
+        OTableBorderWindow(vcl::Window* pParent);
         virtual ~OTableBorderWindow();
         // window overloads
         virtual void Resize() SAL_OVERRIDE;
@@ -73,7 +73,7 @@ namespace dbaui
         virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
 
     public:
-        OTableDesignView(   Window* pParent,
+        OTableDesignView(   vcl::Window* pParent,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
                             OTableController& _rController);
         virtual ~OTableDesignView();

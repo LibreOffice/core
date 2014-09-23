@@ -24,7 +24,7 @@ class ScSamplingDialog : public ScAnyRefDlg
 public:
     ScSamplingDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        Window* pParent, ScViewData* pViewData );
+        vcl::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScSamplingDialog();
 

@@ -71,7 +71,7 @@ namespace pcr
         void                        GetFocus() SAL_OVERRIDE;
 
     public:
-                                    OPropertyEditor (Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
+                                    OPropertyEditor (vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
 
                                     virtual ~OPropertyEditor();
 

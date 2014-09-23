@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using ::com::sun::star::beans::XPropertySet;
 
-SvxFmAbsRecWin::SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pController )
+SvxFmAbsRecWin::SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController )
     :NumericField( _pParent, WB_BORDER )
     ,m_pController(_pController)
 {
@@ -275,7 +275,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
 }
 
 
-Window* SvxFmTbxCtlAbsRec::CreateItemWindow( Window* pParent )
+vcl::Window* SvxFmTbxCtlAbsRec::CreateItemWindow( vcl::Window* pParent )
 {
     SvxFmAbsRecWin* pWin = new SvxFmAbsRecWin( pParent, this );
     pWin->SetUniqueId( UID_ABSOLUTE_RECORD_WINDOW );
@@ -295,7 +295,7 @@ SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
 }
 
 
-Window* SvxFmTbxCtlRecText::CreateItemWindow( Window* pParent )
+vcl::Window* SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
 {
     OUString aText(SVX_RESSTR(RID_STR_REC_TEXT));
     FixedText* pFixedText = new FixedText( pParent );
@@ -321,7 +321,7 @@ SvxFmTbxCtlRecFromText::~SvxFmTbxCtlRecFromText()
 }
 
 
-Window* SvxFmTbxCtlRecFromText::CreateItemWindow( Window* pParent )
+vcl::Window* SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window* pParent )
 {
     OUString aText(SVX_RESSTR(RID_STR_REC_FROM_TEXT));
     FixedText* pFixedText = new FixedText( pParent, WB_CENTER );
@@ -348,7 +348,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 }
 
 
-Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
+vcl::Window* SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
 {
     pFixedText = new FixedText( pParent );
     OUString aSample("123456");

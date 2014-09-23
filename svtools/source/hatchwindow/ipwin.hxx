@@ -58,20 +58,20 @@ public:
     void        FillHandleRectsPixel( Rectangle aRects[ 8 ] ) const;
     void        FillMoveRectsPixel( Rectangle aRects[ 4 ] ) const;
     void        Draw( OutputDevice * );
-    void        InvalidateBorder( Window * );
-    bool        SelectBegin( Window *, const Point & rPos );
-    short       SelectMove( Window * pWin, const Point & rPos );
+    void        InvalidateBorder( vcl::Window * );
+    bool        SelectBegin( vcl::Window *, const Point & rPos );
+    short       SelectMove( vcl::Window * pWin, const Point & rPos );
     Point       GetTrackPosPixel( const Rectangle & rRect ) const;
     Rectangle   GetTrackRectPixel( const Point & rTrackPos ) const;
     void        ValidateRect( Rectangle & rValidate ) const;
-    bool        SelectRelease( Window *, const Point & rPos, Rectangle & rOutPosSize );
-    void        Release( Window * pWin );
+    bool        SelectRelease( vcl::Window *, const Point & rPos, Rectangle & rOutPosSize );
+    void        Release( vcl::Window * pWin );
 };
 
 /********************** SvResizeWindow ***********************************
 *************************************************************************/
 class VCLXHatchWindow;
-class SvResizeWindow : public Window
+class SvResizeWindow : public vcl::Window
 {
     Pointer         m_aOldPointer;
     short           m_nMoveGrab;  // last pointer type
@@ -80,7 +80,7 @@ class SvResizeWindow : public Window
 
     VCLXHatchWindow* m_pWrapper;
 public:
-    SvResizeWindow( Window* pParent, VCLXHatchWindow* pWrapper );
+    SvResizeWindow( vcl::Window* pParent, VCLXHatchWindow* pWrapper );
 
     void    SetHatchBorderPixel( const Size & rSize );
 

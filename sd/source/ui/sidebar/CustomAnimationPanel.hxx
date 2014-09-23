@@ -29,7 +29,7 @@ class CustomAnimationPanel
 {
 public:
     CustomAnimationPanel (
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~CustomAnimationPanel (void);
@@ -38,8 +38,8 @@ public:
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
 protected:
-    virtual ::Window* CreateWrappedControl (
-        ::Window* pParentWindow,
+    virtual vcl::Window* CreateWrappedControl (
+        vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase) SAL_OVERRIDE;
 
 private:

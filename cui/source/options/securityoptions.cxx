@@ -42,7 +42,7 @@ namespace svx
 {
 
 
-SecurityOptionsDialog::SecurityOptionsDialog(Window* pParent, SvtSecurityOptions* pOptions)
+SecurityOptionsDialog::SecurityOptionsDialog(vcl::Window* pParent, SvtSecurityOptions* pOptions)
     : ModalDialog(pParent, "SecurityOptionsDialog", "cui/ui/securityoptionsdialog.ui")
 {
     DBG_ASSERT( pOptions, "SecurityOptionsDialog::SecurityOptionsDialog(): invalid SvtSecurityOptions" );

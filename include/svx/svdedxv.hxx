@@ -66,12 +66,12 @@ protected:
     SdrPageView*                pTextEditPV;
     SdrOutliner*                pTextEditOutliner;     // Na eben der Outliner fuers TextEdit
     OutlinerView*               pTextEditOutlinerView; // die aktuelle View des Outliners
-    Window*                     pTextEditWin;          // passendes Win zu pTextEditOutlinerView
+    vcl::Window*                     pTextEditWin;          // passendes Win zu pTextEditOutlinerView
     vcl::Cursor*                pTextEditCursorMerker; // Zum Restaurieren des Cursors am jeweiligen Win
     ImpSdrEditPara*             pEditPara; // Da hau' ich erstmal alles rein um kompatibel zu bleiben...
     SdrObject*                  pMacroObj;
     SdrPageView*                pMacroPV;
-    Window*                     pMacroWin;
+    vcl::Window*                     pMacroWin;
 
     Rectangle                   aTextEditArea;
     Rectangle                   aMinTextEditArea;
@@ -102,11 +102,11 @@ protected:
     // provide their document UndoManager and derive it from SdrUndoManager.
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
 
-    OutlinerView* ImpFindOutlinerView(Window* pWin) const;
+    OutlinerView* ImpFindOutlinerView(vcl::Window* pWin) const;
 
     // Eine neue OutlinerView auf dem Heap anlegen und alle erforderlichen Parameter setzen.
     // pTextEditObj, pTextEditPV und pTextEditOutliner muessen initiallisiert sein.
-    OutlinerView* ImpMakeOutlinerView(Window* pWin, bool bNoPaint, OutlinerView* pGivenView) const;
+    OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, OutlinerView* pGivenView) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
@@ -172,7 +172,7 @@ public:
     // dieser Instanz und ausserdem auch den StatusEventHdl.
     // Ebenso kann eine spezifische OutlinerView vorgegeben werden.
 
-    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, bool bIsNewObj = false,
+    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, vcl::Window* pWin = 0L, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true);
     // bDontDeleteReally ist ein Spezialparameter fuer den Writer.
@@ -203,8 +203,8 @@ public:
     virtual SdrPageView* GetTextEditPageView() const SAL_OVERRIDE;
 
     // Das aktuelle Win des Outliners
-    Window* GetTextEditWin() const { return pTextEditWin; }
-    void SetTextEditWin(Window* pWin);
+    vcl::Window* GetTextEditWin() const { return pTextEditWin; }
+    void SetTextEditWin(vcl::Window* pWin);
 
     // An den hier abgeholten Outliner kann man schliesslich
     // Events versenden, Attribute setzen, Cut/Copy/Paste rufen,
@@ -214,11 +214,11 @@ public:
     const OutlinerView* GetTextEditOutlinerView() const { return pTextEditOutlinerView; }
     OutlinerView* GetTextEditOutlinerView() { return pTextEditOutlinerView; }
 
-    virtual bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual bool Command(const CommandEvent& rCEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
+    virtual bool Command(const CommandEvent& rCEvt, vcl::Window* pWin) SAL_OVERRIDE;
 
     // #97766# make virtual to change implementation e.g. for SdOutlineView
     virtual sal_uInt16 GetScriptType() const;
@@ -245,8 +245,8 @@ public:
     // Draw-Objekte mit Macrofunktionalitaet hat (SdrObject::HasMacro()==sal_True).
     void SetMacroMode(bool bOn) { bMacroMode=bOn; }
     bool IsMacroMode() const { return bMacroMode; }
-    bool BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, Window* pWin);
-    bool BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, Window* pWin) { return BegMacroObj(rPnt,-2,pObj,pPV,pWin); }
+    bool BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin);
+    bool BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin) { return BegMacroObj(rPnt,-2,pObj,pPV,pWin); }
     void MovMacroObj(const Point& rPnt);
     void BrkMacroObj();
     bool EndMacroObj();

@@ -30,7 +30,7 @@ namespace pcr
     //= class OPropertyBrowserView
 
 
-    OPropertyBrowserView::OPropertyBrowserView(Window* _pParent, WinBits nBits)
+    OPropertyBrowserView::OPropertyBrowserView(vcl::Window* _pParent, WinBits nBits)
                   :Window(_pParent, nBits | WB_3DLOOK)
                   ,m_nActivePage(0)
     {
@@ -58,7 +58,7 @@ namespace pcr
             sal_uInt16 nTmpPage = m_pPropBox->GetCurPage();
             if (nTmpPage)
                 m_nActivePage = nTmpPage;
-            boost::scoped_ptr<Window> aTemp(m_pPropBox);
+            boost::scoped_ptr<vcl::Window> aTemp(m_pPropBox);
             m_pPropBox = NULL;
         }
 

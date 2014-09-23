@@ -63,7 +63,7 @@ namespace dbaui
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(Window* _pParent) SAL_OVERRIDE;
+        virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
     };
 
     OAdvancedSettingsDialog::OAdvancedSettingsDialog(const Reference< XComponentContext >& _rxORB)
@@ -119,7 +119,7 @@ namespace dbaui
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
-    Dialog* OAdvancedSettingsDialog::createDialog(Window* _pParent)
+    Dialog* OAdvancedSettingsDialog::createDialog(vcl::Window* _pParent)
     {
         AdvancedSettingsDialog* pDlg = new AdvancedSettingsDialog(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
         return pDlg;

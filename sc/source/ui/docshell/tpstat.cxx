@@ -27,12 +27,12 @@
 
 // Dokumentinfo-Tabpage:
 
-SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet* rSet )
+SfxTabPage* ScDocStatPage::Create( vcl::Window *pParent, const SfxItemSet* rSet )
 {
     return new ScDocStatPage( pParent, *rSet );
 }
 
-ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
+ScDocStatPage::ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet )
     :   SfxTabPage( pParent, "StatisticsInfoPage", "modules/scalc/ui/statisticsinfopage.ui", &rSet )
 {
     get(m_pFtTables,"nosheets");

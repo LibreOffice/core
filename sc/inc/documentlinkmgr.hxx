@@ -15,7 +15,7 @@
 
 class ScDocument;
 class SfxObjectShell;
-class Window;
+namespace vcl { class Window; }
 
 namespace sfx2 {
 
@@ -54,7 +54,7 @@ public:
 
     bool hasDdeLinks() const;
 
-    bool updateDdeLinks( Window* pWin );
+    bool updateDdeLinks( vcl::Window* pWin );
 
     bool updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
 

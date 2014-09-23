@@ -78,7 +78,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         MapMode aTempMap( mpOut->GetMapMode() );
         aTempMap.SetOrigin( Point() );
         mpBackground->SetMapMode( aTempMap );
-        ( (Window*) mpOut )->SaveBackground( maDispPt, maDispSz, Point(), *mpBackground );
+        ( (vcl::Window*) mpOut )->SaveBackground( maDispPt, maDispSz, Point(), *mpBackground );
         mpBackground->SetMapMode( MapMode() );
     }
     else
@@ -282,7 +282,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
             delete pDev;
 
             if( mpOut->GetOutDevType() == OUTDEV_WINDOW )
-                ( (Window*) mpOut )->Sync();
+                ( (vcl::Window*) mpOut )->Sync();
         }
     }
 }
@@ -296,7 +296,7 @@ void ImplAnimView::ImplRepaint()
         MapMode aTempMap( mpOut->GetMapMode() );
         aTempMap.SetOrigin( Point() );
         mpBackground->SetMapMode( aTempMap );
-        ( (Window*) mpOut )->SaveBackground( maDispPt, maDispSz, Point(), *mpBackground );
+        ( (vcl::Window*) mpOut )->SaveBackground( maDispPt, maDispSz, Point(), *mpBackground );
         mpBackground->SetMapMode( MapMode() );
     }
     else

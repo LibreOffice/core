@@ -26,7 +26,7 @@
 
 namespace svx { namespace sidebar {
 
-EmptyPanel::EmptyPanel (::Window* pParent)
+EmptyPanel::EmptyPanel (vcl::Window* pParent)
     : Control(pParent, SVX_RES(RID_SIDEBAR_EMPTY_PANEL)),
       maMessageControl(this, SVX_RES(FT_MESSAGE))
 {

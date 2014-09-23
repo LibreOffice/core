@@ -40,7 +40,7 @@ void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
 
 
 
-ScrollableWindow::ScrollableWindow( Window* pParent, WinBits nBits,
+ScrollableWindow::ScrollableWindow( vcl::Window* pParent, WinBits nBits,
                                     ScrollableWindowFlags nFlags ) :
     Window( pParent, WinBits(nBits|WB_CLIPCHILDREN) ),
     aVScroll( this, WinBits(WB_VSCROLL | WB_DRAG) ),

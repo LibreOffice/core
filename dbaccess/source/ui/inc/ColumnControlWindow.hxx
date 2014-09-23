@@ -53,7 +53,7 @@ namespace dbaui
         virtual void                CellModified(long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
 
     public:
-        OColumnControlWindow(Window* pParent
+        OColumnControlWindow(vcl::Window* pParent
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
         virtual ~OColumnControlWindow();
 

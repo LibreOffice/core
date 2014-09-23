@@ -105,17 +105,17 @@ public:
     virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class IFrameWindow_Impl : public Window
+class IFrameWindow_Impl : public vcl::Window
 {
     uno::Reference < frame::XFrame2 > mxFrame;
 
 public:
-    IFrameWindow_Impl( Window *pParent,
+    IFrameWindow_Impl( vcl::Window *pParent,
                        bool bHasBorder,
                        WinBits nWinBits = 0 );
 };
 
-IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, bool bHasBorder, WinBits nWinBits )
+IFrameWindow_Impl::IFrameWindow_Impl( vcl::Window *pParent, bool bHasBorder, WinBits nWinBits )
     : Window( pParent, nWinBits | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_DOCKBORDER )
 {
     if ( !bHasBorder )
@@ -173,7 +173,7 @@ throw( uno::RuntimeException, std::exception )
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
         DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
-        Window* pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        vcl::Window* pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         IFrameWindow_Impl* pWin = new IFrameWindow_Impl( pParent, maFrmDescr.IsFrameBorderOn() );
         pWin->SetSizePixel( pParent->GetOutputSizePixel() );
         pWin->SetBackground();

@@ -36,7 +36,7 @@ static bool     bOutputForPrinter = true;
 
 #define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
 
-SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet )
+SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptPrintPage", "sfx/ui/optprintpage.ui", &rSet)
 {
     get(m_pPrinterOutputRB, "printer");
@@ -89,26 +89,26 @@ SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
 {
 }
 
-SfxTabPage* SfxCommonPrintOptionsTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SfxCommonPrintOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return( new SfxCommonPrintOptionsTabPage( pParent, *rAttrSet ) );
 }
 
-Window* SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const Window* pWindow ) const
+vcl::Window* SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const vcl::Window* pWindow ) const
 {
-    if ( pWindow == (Window *)m_pReduceGradientsStepCountNF )
+    if ( pWindow == (vcl::Window *)m_pReduceGradientsStepCountNF )
         return m_pReduceGradientsStripesRB;
-    else if ( pWindow == (Window *)m_pReduceBitmapsResolutionLB )
+    else if ( pWindow == (vcl::Window *)m_pReduceBitmapsResolutionLB )
         return m_pReduceBitmapsResolutionRB;
     else
         return SfxTabPage::GetParentLabeledBy( pWindow );
 }
 
-Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const Window* pWindow ) const
+vcl::Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const vcl::Window* pWindow ) const
 {
-    if ( pWindow == (Window *)m_pReduceGradientsStripesRB )
+    if ( pWindow == (vcl::Window *)m_pReduceGradientsStripesRB )
         return m_pReduceGradientsStepCountNF;
-    else if ( pWindow == (Window *)m_pReduceBitmapsResolutionRB )
+    else if ( pWindow == (vcl::Window *)m_pReduceBitmapsResolutionRB )
         return m_pReduceBitmapsResolutionLB;
     else
         return SfxTabPage::GetParentLabelFor( pWindow );

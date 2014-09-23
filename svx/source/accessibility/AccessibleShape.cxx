@@ -147,7 +147,7 @@ void AccessibleShape::Init (void)
     if (xText.is())
     {
         SdrView* pView = maShapeTreeInfo.GetSdrView ();
-        const Window* pWindow = maShapeTreeInfo.GetWindow ();
+        const vcl::Window* pWindow = maShapeTreeInfo.GetWindow ();
         if (pView != NULL && pWindow != NULL && mxShape.is())
         {
             // #107948# Determine whether shape text is empty

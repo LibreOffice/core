@@ -51,7 +51,7 @@ protected:
 
     bool                m_bPreviewBackgroundToCharacter;
 
-    SvxCharBasePage(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset);
+    SvxCharBasePage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset);
 
     virtual             ~SvxCharBasePage();
 
@@ -113,7 +113,7 @@ private:
 
     SvxCharNamePage_Impl*   m_pImpl;
 
-                        SvxCharNamePage( Window* pParent, const SfxItemSet& rSet );
+                        SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     void                Initialize();
     const FontList*     GetFontList() const;
@@ -152,7 +152,7 @@ public:
 public:
                         virtual ~SvxCharNamePage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -210,7 +210,7 @@ private:
 
     OUString            m_aTransparentColorName;
 
-                        SvxCharEffectsPage( Window* pParent, const SfxItemSet& rSet );
+                        SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& rSet );
                         virtual ~SvxCharEffectsPage();
 
     void                Initialize();
@@ -231,7 +231,7 @@ public:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -284,7 +284,7 @@ private:
     sal_uInt8                m_nSuperProp;
     sal_uInt8                m_nSubProp;
 
-                        SvxCharPositionPage( Window* pParent, const SfxItemSet& rSet );
+                        SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet& rSet );
                         virtual ~SvxCharPositionPage();
 
     void                Initialize();
@@ -310,7 +310,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -334,7 +334,7 @@ private:
     sal_uInt16              m_nStartBracketPosition;
     sal_uInt16              m_nEndBracketPosition;
 
-    SvxCharTwoLinesPage(Window* pParent, const SfxItemSet& rSet);
+    SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SvxCharTwoLinesPage();
 
     void                UpdatePreview_Impl();
@@ -353,7 +353,7 @@ public:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

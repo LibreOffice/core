@@ -510,7 +510,7 @@ void AssignmentPersistentData::Commit()
 
 
 
-    AddressBookSourceDialog::AddressBookSourceDialog(Window* _pParent,
+    AddressBookSourceDialog::AddressBookSourceDialog(vcl::Window* _pParent,
             const Reference< XComponentContext >& _rxORB )
         : ModalDialog(_pParent, "AddressTemplateDialog", "svt/ui/addresstemplatedialog.ui")
         , m_sNoFieldSelection(SVT_RESSTR(STR_NO_FIELD_SELECTION))
@@ -521,7 +521,7 @@ void AssignmentPersistentData::Commit()
     }
 
 
-    AddressBookSourceDialog::AddressBookSourceDialog( Window* _pParent, const Reference< XComponentContext >& _rxORB,
+    AddressBookSourceDialog::AddressBookSourceDialog( vcl::Window* _pParent, const Reference< XComponentContext >& _rxORB,
         const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
         const OUString& _rTable, const Sequence< AliasProgrammaticPair >& _rMapping )
         : ModalDialog(_pParent, "AddressTemplateDialog", "svt/ui/addresstemplatedialog.ui")

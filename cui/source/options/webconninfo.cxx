@@ -102,7 +102,7 @@ void PasswordTable::setColWidths()
 // class WebConnectionInfoDialog -----------------------------------------
 
 
-WebConnectionInfoDialog::WebConnectionInfoDialog(Window* pParent)
+WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "StoredWebConnectionDialog", "cui/ui/storedwebconnectiondialog.ui")
     , m_nPos( -1 )
 {

@@ -44,7 +44,7 @@ namespace vcl
     class PrintDialog : public ModalDialog
     {
     public:
-        class PrintPreviewWindow : public Window
+        class PrintPreviewWindow : public vcl::Window
         {
             static const sal_Int32 PREVIEW_BITMAP_WIDTH;
 
@@ -62,7 +62,7 @@ namespace vcl
             void preparePreviewBitmap();
 
         public:
-            PrintPreviewWindow( Window* pParent );
+            PrintPreviewWindow( vcl::Window* pParent );
             virtual ~PrintPreviewWindow();
 
             virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -78,14 +78,14 @@ namespace vcl
                             );
         };
 
-        class ShowNupOrderWindow : public Window
+        class ShowNupOrderWindow : public vcl::Window
         {
             int mnOrderMode;
             int mnRows;
             int mnColumns;
             void ImplInitSettings();
         public:
-            ShowNupOrderWindow( Window* pParent );
+            ShowNupOrderWindow( vcl::Window* pParent );
             virtual ~ShowNupOrderWindow();
 
             virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -207,10 +207,10 @@ namespace vcl
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
-        std::map< Window*, OUString >      maControlToPropertyMap;
-        std::map< OUString, std::vector< Window* > >
+        std::map< vcl::Window*, OUString >      maControlToPropertyMap;
+        std::map< OUString, std::vector< vcl::Window* > >
                                                 maPropertyToWindowMap;
-        std::map< Window*, sal_Int32 >          maControlToNumValMap;
+        std::map< vcl::Window*, sal_Int32 >          maControlToNumValMap;
         std::set< OUString >               maReverseDependencySet;
 
         Size                                    maNupPortraitSize;
@@ -236,12 +236,12 @@ namespace vcl
         void updatePrinterText();
         void checkControlDependencies();
         void checkOptionalControlDependencies();
-        void makeEnabled( Window* );
+        void makeEnabled( vcl::Window* );
         void updateWindowFromProperty( const OUString& );
         void setupOptionalUI();
         void readFromSettings();
         void storeToSettings();
-        com::sun::star::beans::PropertyValue* getValueForWindow( Window* ) const;
+        com::sun::star::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
 
         virtual void Resize() SAL_OVERRIDE;
         virtual void Command( const CommandEvent& ) SAL_OVERRIDE;
@@ -258,7 +258,7 @@ namespace vcl
         DECL_LINK( UIOption_ModifyHdl, Edit* );
 
     public:
-        PrintDialog( Window*, const boost::shared_ptr< PrinterController >& );
+        PrintDialog( vcl::Window*, const boost::shared_ptr< PrinterController >& );
         virtual ~PrintDialog();
 
         bool isPrintToFile();
@@ -283,7 +283,7 @@ namespace vcl
         DECL_LINK( ClickHdl, Button* );
 
     public:
-        PrintProgressDialog(Window* i_pParent, int i_nMax);
+        PrintProgressDialog(vcl::Window* i_pParent, int i_nMax);
 
         bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent, int i_nMax = -1 );

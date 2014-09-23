@@ -35,7 +35,7 @@ class ThreeD_SceneAppearance_TabPage : public TabPage
 {
 public:
     ThreeD_SceneAppearance_TabPage(
-        Window* pWindow,
+        vcl::Window* pWindow,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
         ControllerLockHelper & rControllerLockHelper );
     virtual ~ThreeD_SceneAppearance_TabPage();

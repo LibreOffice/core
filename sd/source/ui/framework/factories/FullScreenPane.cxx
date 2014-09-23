@@ -40,12 +40,12 @@ namespace sd { namespace framework {
 FullScreenPane::FullScreenPane (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<XResourceId>& rxPaneId,
-    const ::Window* pViewShellWindow)
+    const vcl::Window* pViewShellWindow)
     : FrameWindowPane(rxPaneId,NULL),
       mxComponentContext(rxComponentContext),
       mpWorkWindow(NULL)
 {
-    ::Window* pParent = NULL;
+    vcl::Window* pParent = NULL;
     mpWorkWindow.reset(new WorkWindow(
         pParent,
         0));  // For debugging (non-fullscreen) use WB_BORDER | WB_MOVEABLE | WB_SIZEABLE));
@@ -86,7 +86,7 @@ FullScreenPane::FullScreenPane (
     // For some reason the VCL canvas can not paint into a WorkWindow.
     // Therefore a child window is created that covers the WorkWindow
     // completely.
-    mpWindow = new ::Window(mpWorkWindow.get());
+    mpWindow = new vcl::Window(mpWorkWindow.get());
     mpWindow->SetPosSizePixel(Point(0,0), mpWorkWindow->GetSizePixel());
     mpWindow->SetBackground(Wallpaper());
     mxWindow = VCLUnoHelper::GetInterface(mpWindow);
@@ -165,7 +165,7 @@ void SAL_CALL FullScreenPane::setAccessible (
         Reference<lang::XInitialization> xInitializable (rxAccessible, UNO_QUERY);
         if (xInitializable.is())
         {
-            ::Window* pParentWindow = mpWindow->GetParent();
+            vcl::Window* pParentWindow = mpWindow->GetParent();
             Reference<css::accessibility::XAccessible> xAccessibleParent;
             if (pParentWindow != NULL)
                 xAccessibleParent = pParentWindow->GetAccessible();
@@ -198,7 +198,7 @@ IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
 Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
     throw (RuntimeException)
 {
-    ::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
     if (pWindow != NULL)
     {
         Sequence<Any> aArg (5);

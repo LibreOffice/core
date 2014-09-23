@@ -29,7 +29,7 @@
 
 class EditView;
 class EditStatus;
-class Window;
+namespace vcl { class Window; }
 class SvxScriptSetItem;
 
 namespace frm
@@ -67,7 +67,7 @@ namespace frm
         struct GrantAccess { friend class RichTextControl; private: GrantAccess() { } };
         inline EditView*        getView( const GrantAccess& ) const     { return m_pView; }
         inline RichTextEngine*  getEngine( const GrantAccess& ) const   { return m_pEngine; }
-        inline Window*          getViewport( const GrantAccess& ) const { return m_pViewport; }
+        inline vcl::Window*          getViewport( const GrantAccess& ) const { return m_pViewport; }
 
     public:
         RichTextControlImpl( Control* _pAntiImpl, RichTextEngine* _pEngine,

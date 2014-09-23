@@ -84,7 +84,7 @@ Reference< chart2::XChartTypeTemplate > DocumentChartTypeTemplateProvider::getCu
 class DataSourceTabControl : public TabControl
 {
 public:
-    DataSourceTabControl(Window* pParent);
+    DataSourceTabControl(vcl::Window* pParent);
 
     virtual bool DeactivatePage() SAL_OVERRIDE;
 
@@ -95,7 +95,7 @@ private:
     bool m_bTogglingEnabled;
 };
 
-DataSourceTabControl::DataSourceTabControl(Window* pParent)
+DataSourceTabControl::DataSourceTabControl(vcl::Window* pParent)
     : TabControl(pParent)
     , m_bTogglingEnabled(true)
 {
@@ -124,7 +124,7 @@ enum DataSourceDialogPages
     TP_DATA_SOURCE = 2
 };
 
-DataSourceDialog::DataSourceDialog(Window * pParent,
+DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
     const Reference< XChartDocument > & xChartDocument,
     const Reference< uno::XComponentContext > & xContext)
     : TabDialog(pParent, "DataRangeDialog",

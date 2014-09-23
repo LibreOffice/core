@@ -152,7 +152,7 @@ namespace drawinglayer
 
                                         if(pVCLXWindow)
                                         {
-                                            Window* pWindow = pVCLXWindow->GetWindow();
+                                            vcl::Window* pWindow = pVCLXWindow->GetWindow();
 
                                             if(pWindow)
                                             {

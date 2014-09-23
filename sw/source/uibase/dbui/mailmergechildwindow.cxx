@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 SFX_IMPL_FLOATINGWINDOW( SwMailMergeChildWindow, FN_MAILMERGE_CHILDWINDOW )
 
-SwMailMergeChildWindow::SwMailMergeChildWindow( Window* _pParent,
+SwMailMergeChildWindow::SwMailMergeChildWindow( vcl::Window* _pParent,
                                 sal_uInt16 nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo ) :
@@ -64,7 +64,7 @@ SwMailMergeChildWindow::SwMailMergeChildWindow( Window* _pParent,
 }
 
 SwMailMergeChildWin::SwMailMergeChildWin(SfxBindings* _pBindings,
-    SfxChildWindow* pChild, Window *pParent)
+    SfxChildWindow* pChild, vcl::Window *pParent)
     : SfxFloatingWindow(_pBindings, pChild, pParent, "FloatingMMChild",
                         "modules/swriter/ui/floatingmmchild.ui")
 {

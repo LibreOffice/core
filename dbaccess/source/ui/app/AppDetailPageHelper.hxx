@@ -47,7 +47,7 @@ namespace dbaui
     class OAppBorderWindow;
     class DBTreeListBox;
 
-    class OPreviewWindow : public Window
+    class OPreviewWindow : public vcl::Window
     {
         GraphicObject       m_aGraphicObj;
         Rectangle           m_aPreviewRect;
@@ -66,7 +66,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OPreviewWindow(Window* _pParent);
+        OPreviewWindow(vcl::Window* _pParent);
 
         // window overloads
         virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
@@ -75,7 +75,7 @@ namespace dbaui
     };
     // A helper class for the controls in the detail page.
     // Combines general functionality.
-    class OAppDetailPageHelper : public Window
+    class OAppDetailPageHelper : public vcl::Window
     {
         DBTreeListBox*      m_pLists[ELEMENT_COUNT];
         OAppBorderWindow&   m_rBorderWin;
@@ -85,7 +85,7 @@ namespace dbaui
         OPreviewWindow      m_aPreview;
         ::svtools::ODocumentInfoPreview
                             m_aDocumentInfo;
-        Window*             m_pTablePreview;
+        vcl::Window*             m_pTablePreview;
         ::std::auto_ptr<PopupMenu> m_aMenu;
         PreviewMode         m_ePreviewMode;
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
@@ -129,7 +129,7 @@ namespace dbaui
             @param  _pWindow
                 The control which should be visible.
         */
-        void setDetailPage(Window* _pWindow);
+        void setDetailPage(vcl::Window* _pWindow);
 
         /** sets all HandleCallbacks
             @param  _pTreeView
@@ -167,7 +167,7 @@ namespace dbaui
         void ImplInitSettings();
 
     public:
-        OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
+        OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
         virtual ~OAppDetailPageHelper();
 
         // window overloads

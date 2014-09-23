@@ -104,10 +104,10 @@ private:
     void                    AddFolder( const OUString& _rFolder );
 
 public:
-    SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet );
+    SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxJavaOptionsPage();
 
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -138,7 +138,7 @@ private:
 
 
 public:
-    SvxJavaParameterDlg( Window* pParent );
+    SvxJavaParameterDlg( vcl::Window* pParent );
     virtual ~SvxJavaParameterDlg();
 
     virtual short           Execute() SAL_OVERRIDE;
@@ -170,7 +170,7 @@ private:
                                     m_pPathList->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
 
 public:
-    SvxJavaClassPathDlg( Window* pParent );
+    SvxJavaClassPathDlg( vcl::Window* pParent );
     virtual ~SvxJavaClassPathDlg();
 
     inline const OUString&  GetOldPath() const { return m_sOldPath; }

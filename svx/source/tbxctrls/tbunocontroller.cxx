@@ -86,7 +86,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
 class SvxFontSizeBox_Impl : public FontSizeBox
 {
 public:
-                        SvxFontSizeBox_Impl( Window* pParent,
+                        SvxFontSizeBox_Impl( vcl::Window* pParent,
                                              const uno::Reference< frame::XDispatchProvider >& rDispatchProvider,
                                              const uno::Reference< frame::XFrame >& _xFrame,
                                              FontHeightToolBoxControl& rCtrl );
@@ -114,7 +114,7 @@ private:
 };
 
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
-    Window*                                           _pParent,
+    vcl::Window*                                           _pParent,
     const uno::Reference< frame::XDispatchProvider >& _rDispatchProvider,
     const uno::Reference< frame::XFrame >&            _xFrame,
     FontHeightToolBoxControl&                         _rCtrl ) :
@@ -249,7 +249,7 @@ bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
     }
     else if( EVENT_LOSEFOCUS == rNEvt.GetType() )
     {
-        Window* pFocusWin = Application::GetFocusWindow();
+        vcl::Window* pFocusWin = Application::GetFocusWindow();
         if(!HasFocus() && GetSubEdit() != pFocusWin)
             SetText(GetSavedValue());
     }
@@ -405,7 +405,7 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
     uno::Reference< awt::XWindow > xItemWindow;
     uno::Reference< awt::XWindow > xParent( Parent );
 
-    Window* pParent = VCLUnoHelper::GetWindow( xParent );
+    vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
         SolarMutexGuard aSolarMutexGuard;

@@ -40,7 +40,7 @@ using ::std::vector;
 |
 \**********************************************************************/
 
-IconChoicePage::IconChoicePage( Window *pParent, const OString& rID,
+IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
                                 const OUString& rUIXMLDescription,
                                 const SfxItemSet &rAttrSet )
 :   TabPage                   ( pParent, rID, rUIXMLDescription ),
@@ -106,7 +106,7 @@ bool IconChoicePage::QueryClose()
 
 void IconChoicePage::ImplInitSettings()
 {
-    Window* pParent = GetParent();
+    vcl::Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
         EnableChildTransparentMode( true );
@@ -166,14 +166,14 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 |
 \**********************************************************************/
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtIconChoiceCtrl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtIconChoiceCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvtIconChoiceCtrl(pParent, WB_3DLOOK | WB_ICON | WB_BORDER |
                             WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
                             WB_NODRAGSELECTION | WB_TABSTOP);
 }
 
-IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
+IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OString& rID,
                                      const OUString& rUIXMLDescription,
                                      const SfxItemSet *pItemSet )
 :   ModalDialog         ( pParent, rID, rUIXMLDescription ),

@@ -100,7 +100,7 @@ class OColorPopup : public FloatingWindow
     Condition* m_pCondition;
     sal_uInt16      m_nSlotId;
 public:
-    OColorPopup(Window* _pParent,Condition* _pCondition);
+    OColorPopup(vcl::Window* _pParent,Condition* _pCondition);
     ValueSet        m_aColorSet;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
@@ -110,7 +110,7 @@ public:
     void SetSlotId(sal_uInt16 _nSlotId);
 };
 
-OColorPopup::OColorPopup(Window* _pParent,Condition* _pCondition)
+OColorPopup::OColorPopup(vcl::Window* _pParent,Condition* _pCondition)
 :FloatingWindow(_pParent, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK|WB_DIALOGCONTROL ))
 ,m_pCondition(_pCondition)
 ,m_nSlotId(0)
@@ -202,7 +202,7 @@ IMPL_LINK_NOARG(OColorPopup, SelectHdl)
 // = Condition
 
 
-Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController )
+Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController )
     :VclHBox(_pParent)
     ,m_rController( _rController )
     ,m_rAction( _rAction )

@@ -331,7 +331,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException,
 
     if( NULL == mpDialog )
     {
-        Window* pParent = DIALOG_NO_PARENT;
+        vcl::Window* pParent = DIALOG_NO_PARENT;
         if (mxParent.is())
             pParent = VCLUnoHelper::GetWindow(mxParent);
 

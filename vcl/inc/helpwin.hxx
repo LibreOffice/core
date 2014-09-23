@@ -50,7 +50,7 @@ protected:
     void                ImplShow();
 
 public:
-                        HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle );
+                        HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle );
                         virtual ~HelpTextWindow();
 
     const OUString&     GetHelpText() const { return maHelpText; }
@@ -70,11 +70,11 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
 
-void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
+void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
         const OUString& rHelpText, const OUString& rStatusText,
         const Point& rScreenPos, const Rectangle* pHelpArea = NULL );
 void ImplDestroyHelpWindow( bool bUpdateHideTime );
-void ImplSetHelpWindowPos( Window* pHelpWindow, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
+void ImplSetHelpWindowPos( vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
                             const Point& rPos, const Rectangle* pHelpArea );
 
 #endif // INCLUDED_VCL_INC_HELPWIN_HXX

@@ -84,7 +84,7 @@ Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
     {
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-        Rectangle aBBox(static_cast<Window&>(rOutDev).GetWindowExtentsRelative(0L));
+        Rectangle aBBox(static_cast<::vcl::Window&>(rOutDev).GetWindowExtentsRelative(0L));
         return rOutDev.LogicToPixel (rPoint) + aBBox.TopLeft();
     }
     else
@@ -114,7 +114,7 @@ Point AccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
     {
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-        Rectangle aBBox (static_cast<Window&>(rOutDev).GetWindowExtentsRelative(0L));
+        Rectangle aBBox (static_cast<::vcl::Window&>(rOutDev).GetWindowExtentsRelative(0L));
         return rOutDev.PixelToLogic (rPoint - aBBox.TopLeft());
     }
     else

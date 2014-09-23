@@ -44,10 +44,10 @@ using namespace com::sun::star;
 
 #define FRAME_OFFSET 4
 
-class AutoFmtPreview : public Window
+class AutoFmtPreview : public vcl::Window
 {
 public:
-    AutoFmtPreview(Window* pParent);
+    AutoFmtPreview(vcl::Window* pParent);
     virtual ~AutoFmtPreview();
 
     void NotifyChange( const SwTableAutoFmt& rNewData );
@@ -100,7 +100,7 @@ private:
 class SwStringInputDlg : public ModalDialog
 {
 public:
-            SwStringInputDlg(     Window* pParent,
+            SwStringInputDlg(     vcl::Window* pParent,
                             const OUString& rTitle,
                             const OUString& rEditTitle,
                             const OUString& rDefault );
@@ -112,7 +112,7 @@ private:
     Edit*           m_pEdInput;   // Edit obtains the focus.
 };
 
-SwStringInputDlg::SwStringInputDlg(Window* pParent, const OUString& rTitle,
+SwStringInputDlg::SwStringInputDlg(vcl::Window* pParent, const OUString& rTitle,
     const OUString& rEditTitle, const OUString& rDefault)
     : ModalDialog(pParent, "StringInputDialog", "modules/swriter/ui/stringinput.ui")
 {
@@ -134,7 +134,7 @@ SwStringInputDlg::~SwStringInputDlg()
 
 // AutoFormat-Dialogue:
 
-SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
+SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
                     bool bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
     : SfxModalDialog(pParent, "AutoFormatTableDialog", "modules/swriter/ui/autoformattable.ui")
     , aStrTitle(SW_RES(STR_ADD_AUTOFORMAT_TITLE))
@@ -486,7 +486,7 @@ IMPL_LINK_NOARG_INLINE_START(SwAutoFormatDlg, OkHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 
-AutoFmtPreview::AutoFmtPreview(Window* pParent) :
+AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent) :
         Window          ( pParent ),
         aCurData        ( OUString() ),
         aVD             ( *this ),
@@ -508,7 +508,7 @@ AutoFmtPreview::AutoFmtPreview(Window* pParent) :
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeAutoFmtPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeAutoFmtPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new AutoFmtPreview(pParent);
 }

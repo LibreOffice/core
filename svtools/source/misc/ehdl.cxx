@@ -32,7 +32,7 @@
 
 
 static sal_uInt16 aWndFunc(
-    Window *pWin,            // Parent of the dialog
+    vcl::Window *pWin,            // Parent of the dialog
     sal_uInt16 nFlags,
     const OUString &rErr,      // error text
     const OUString &rAction)   // action text
@@ -370,7 +370,7 @@ bool SfxErrorHandler::GetErrorString(
 
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, Window *pWindow, sal_uInt16 nResIdP, ResMgr *pMgrP)
+    sal_uInt16 nCtxIdP, vcl::Window *pWindow, sal_uInt16 nResIdP, ResMgr *pMgrP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP)
 {
     if( nResId==USHRT_MAX )
@@ -380,7 +380,7 @@ SfxErrorContext::SfxErrorContext(
 
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, const OUString &aArg1P, Window *pWindow,
+    sal_uInt16 nCtxIdP, const OUString &aArg1P, vcl::Window *pWindow,
     sal_uInt16 nResIdP, ResMgr *pMgrP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP),
     aArg1(aArg1P)

@@ -48,7 +48,7 @@ inline GdkWindow * widget_get_window(GtkWidget *widget)
 #endif
 }
 
-inline XLIB_Window widget_get_xid(GtkWidget *widget)
+inline ::Window widget_get_xid(GtkWidget *widget)
 {
 #if GTK_CHECK_VERSION(3,0,0)
     return GDK_WINDOW_XID(gtk_widget_get_window(widget));

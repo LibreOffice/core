@@ -44,7 +44,7 @@ class ScPreviewShell: public SfxViewShell
     ScPreview*      pPreview;               // Output window
     ScrollBar*      pHorScroll;
     ScrollBar*      pVerScroll;
-    Window*         pCorner;
+    vcl::Window*         pCorner;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSourceData;  // ViewData
     sal_uInt8           nSourceDesignMode;      // form design mode from TabView
@@ -54,7 +54,7 @@ class ScPreviewShell: public SfxViewShell
     SfxBroadcaster* pAccessibilityBroadcaster;
     bool            GetPageSize( Size& aPageSize );
 private:
-    void            Construct( Window* pParent );
+    void            Construct( vcl::Window* pParent );
     DECL_LINK(ScrollHandler, ScrollBar* );
     DECL_LINK(CloseHdl, SystemWindow*);
     void            DoScroll( sal_uInt16 nMode );
@@ -111,7 +111,7 @@ public:
     virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
     virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
-    virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
+    virtual SfxTabPage*     CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
     void    AddAccessibilityObject( SfxListener& rObject );
     void    RemoveAccessibilityObject( SfxListener& rObject );

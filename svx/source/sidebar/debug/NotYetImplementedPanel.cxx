@@ -21,7 +21,7 @@
 
 namespace svx { namespace sidebar {
 
-NotYetImplementedPanel::NotYetImplementedPanel (::Window* pParent)
+NotYetImplementedPanel::NotYetImplementedPanel (vcl::Window* pParent)
     : Window(pParent, 0),
       maMessageControl(this, 0)
 {

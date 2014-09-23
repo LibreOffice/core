@@ -624,7 +624,7 @@ namespace svt { namespace table
         }
 
 
-        void lcl_setButtonRepeat( Window& _rWindow, sal_uLong _nDelay )
+        void lcl_setButtonRepeat( vcl::Window& _rWindow, sal_uLong _nDelay )
         {
             AllSettings aSettings = _rWindow.GetSettings();
             MouseSettings aMouseSettings = aSettings.GetMouseSettings();
@@ -636,7 +636,7 @@ namespace svt { namespace table
         }
 
 
-        bool lcl_updateScrollbar( Window& _rParent, ScrollBar*& _rpBar,
+        bool lcl_updateScrollbar( vcl::Window& _rParent, ScrollBar*& _rpBar,
             bool const i_needBar, long _nVisibleUnits,
             long _nPosition, long _nLineSize, long _nRange,
             bool _bHorizontal, const Link& _rScrollHandler )
@@ -2439,7 +2439,7 @@ namespace svt { namespace table
     }
 
 
-    Reference< XAccessible > TableControl_Impl::getAccessible( Window& i_parentWindow )
+    Reference< XAccessible > TableControl_Impl::getAccessible( vcl::Window& i_parentWindow )
     {
         DBG_TESTSOLARMUTEX();
         if ( m_pAccessibleTable == NULL )

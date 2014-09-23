@@ -27,7 +27,7 @@
 namespace dbaui
 {
     class OAppBorderWindow;
-    class OApplicationSwapWindow :  public Window,
+    class OApplicationSwapWindow :  public vcl::Window,
                                     public IClipboardTest
     {
         OApplicationIconControl             m_aIconControl;
@@ -41,7 +41,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OApplicationSwapWindow( Window* _pParent, OAppBorderWindow& _rBorderWindow );
+        OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow );
         virtual ~OApplicationSwapWindow();
         // window overloads
         virtual void Resize() SAL_OVERRIDE;

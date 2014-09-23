@@ -38,7 +38,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <boost/scoped_ptr.hpp>
 
-SwFootNoteOptionDlg::SwFootNoteOptionDlg(Window *pParent, SwWrtShell &rS)
+SwFootNoteOptionDlg::SwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rS)
     : SfxTabDialog(pParent, "FootEndnoteDialog", "modules/swriter/ui/footendnotedialog.ui")
     , rSh( rS )
 {
@@ -69,7 +69,7 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
     return 0;
 }
 
-SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, bool bEN,
+SwEndNoteOptionPage::SwEndNoteOptionPage(vcl::Window *pParent, bool bEN,
     const SfxItemSet &rSet)
     : SfxTabPage(pParent,
         bEN ? OString("EndnotePage") : OString("FootnotePage"),
@@ -223,7 +223,7 @@ SwEndNoteOptionPage::~SwEndNoteOptionPage()
 {
 }
 
-SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet *rSet )
+SfxTabPage *SwEndNoteOptionPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
 {
     return new SwEndNoteOptionPage( pParent, true, *rSet );
 }
@@ -390,7 +390,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     return true;
 }
 
-SwFootNoteOptionPage::SwFootNoteOptionPage( Window *pParent, const SfxItemSet &rSet ) :
+SwFootNoteOptionPage::SwFootNoteOptionPage( vcl::Window *pParent, const SfxItemSet &rSet ) :
     SwEndNoteOptionPage( pParent, false, rSet )
 {
 }
@@ -399,7 +399,7 @@ SwFootNoteOptionPage::~SwFootNoteOptionPage()
 {
 }
 
-SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet *rSet )
+SfxTabPage *SwFootNoteOptionPage::Create(vcl::Window *pParent, const SfxItemSet *rSet )
 {
     return new SwFootNoteOptionPage( pParent, *rSet );
 }

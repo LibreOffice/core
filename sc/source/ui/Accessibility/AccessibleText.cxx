@@ -82,7 +82,7 @@ Rectangle ScViewForwarder::GetVisArea() const
     Rectangle aVisArea;
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
         {
             aVisArea.SetSize(pWindow->GetSizePixel());
@@ -109,7 +109,7 @@ Point ScViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMod
 {
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
             return pWindow->LogicToPixel( rPoint, rMapMode );
     }
@@ -124,7 +124,7 @@ Point ScViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMod
 {
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
             return pWindow->PixelToLogic( rPoint, rMapMode );
     }
@@ -142,11 +142,11 @@ void ScViewForwarder::SetInvalid()
 
 class ScEditObjectViewForwarder : public SvxViewForwarder
 {
-    Window*             mpWindow;
+    vcl::Window*             mpWindow;
     // #i49561# EditView needed for access to its visible area.
     const EditView* mpEditView;
 public:
-                        ScEditObjectViewForwarder( Window* pWindow,
+                        ScEditObjectViewForwarder( vcl::Window* pWindow,
                                                    const EditView* _pEditView);
     virtual             ~ScEditObjectViewForwarder();
 
@@ -158,7 +158,7 @@ public:
     void                SetInvalid();
 };
 
-ScEditObjectViewForwarder::ScEditObjectViewForwarder( Window* pWindow,
+ScEditObjectViewForwarder::ScEditObjectViewForwarder( vcl::Window* pWindow,
                                                       const EditView* _pEditView )
     :
     mpWindow(pWindow),
@@ -290,7 +290,7 @@ Point ScPreviewViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& 
 {
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
             MapMode aMapMode(pWindow->GetMapMode().GetMapUnit());
@@ -309,7 +309,7 @@ Point ScPreviewViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& 
 {
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
             MapMode aMapMode(pWindow->GetMapMode());
@@ -338,7 +338,7 @@ Rectangle ScPreviewViewForwarder::GetVisRect() const
     if ( mpViewShell )
     {
         Size aOutputSize;
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if ( pWindow )
             aOutputSize = pWindow->GetOutputSizePixel();
         Point aPoint;
@@ -353,7 +353,7 @@ Rectangle ScPreviewViewForwarder::CorrectVisArea(const Rectangle& rVisArea) cons
     Rectangle aVisArea(rVisArea);
     Point aPos = aVisArea.TopLeft(); // get first the position to remember negative positions after clipping
 
-    Window* pWin = mpViewShell->GetWindow();
+    vcl::Window* pWin = mpViewShell->GetWindow();
     if (pWin)
         aVisArea = pWin->GetWindowExtentsRelative(pWin).GetIntersection(aVisArea);
 
@@ -545,9 +545,9 @@ Rectangle ScPreviewNoteViewForwarder::GetVisArea() const
 class ScEditViewForwarder : public SvxEditViewForwarder
 {
     EditView*           mpEditView;
-    Window*             mpWindow;
+    vcl::Window*             mpWindow;
 public:
-                        ScEditViewForwarder(EditView* pEditView, Window* pWin);
+                        ScEditViewForwarder(EditView* pEditView, vcl::Window* pWin);
     virtual             ~ScEditViewForwarder();
 
     virtual bool        IsValid() const SAL_OVERRIDE;
@@ -565,7 +565,7 @@ public:
     void                SetInvalid();
 };
 
-ScEditViewForwarder::ScEditViewForwarder(EditView* pEditView, Window* pWin)
+ScEditViewForwarder::ScEditViewForwarder(EditView* pEditView, vcl::Window* pWin)
     : mpEditView(pEditView),
     mpWindow(pWin)
 {
@@ -815,7 +815,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         aSize.setWidth( nWidth );
         aSize.setHeight( aSize.getHeight() - nTopM - nBottomM );
 
-        Window* pWin = mpViewShell->GetWindowByPos( meSplitPos );
+        vcl::Window* pWin = mpViewShell->GetWindowByPos( meSplitPos );
         if ( pWin )
         {
             aSize = pWin->PixelToLogic( aSize, pEditEngine->GetRefMapMode() );
@@ -962,7 +962,7 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
     return pDocSh;
 }
 
-ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, bool isClone)
+ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, vcl::Window* pWin, bool isClone)
     :
     mpViewForwarder(NULL),
     mpEditViewForwarder(NULL),
@@ -1073,7 +1073,7 @@ IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify*, aNotify)
     return 0;
 }
 
-ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, Window* pWin)
+ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, vcl::Window* pWin)
     :
     ScAccessibleEditObjectTextData(pEditView, pWin),
     mbEditEngineCreated(false)
@@ -1284,7 +1284,7 @@ SvxTextForwarder* ScAccessiblePreviewCellTextData::GetTextForwarder()
     if (!bEditEngineBefore && pEditEngine)
     {
         Size aSize(mpViewShell->GetLocationData().GetCellOutputRect(aCellPos).GetSize());
-        Window* pWin = mpViewShell->GetWindow();
+        vcl::Window* pWin = mpViewShell->GetWindow();
         if (pWin)
             aSize = pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
         pEditEngine->SetPaperSize(aSize);
@@ -1384,7 +1384,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         if ( mpViewShell  )
         {
             Size aOutputSize;
-            Window* pWindow = mpViewShell->GetWindow();
+            vcl::Window* pWindow = mpViewShell->GetWindow();
             if ( pWindow )
                 aOutputSize = pWindow->GetOutputSizePixel();
             Point aPoint;
@@ -1515,7 +1515,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
         Rectangle aVisRect;
         mpViewShell->GetLocationData().GetHeaderPosition(aVisRect);
         Size aSize(aVisRect.GetSize());
-        Window* pWin = mpViewShell->GetWindow();
+        vcl::Window* pWin = mpViewShell->GetWindow();
         if (pWin)
             aSize = pWin->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
         mpEditEngine->SetPaperSize(aSize);
@@ -1618,7 +1618,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         if ( mpViewShell  )
         {
             Size aOutputSize;
-            Window* pWindow = mpViewShell->GetWindow();
+            vcl::Window* pWindow = mpViewShell->GetWindow();
             if ( pWindow )
                 aOutputSize = pWindow->GetOutputSizePixel();
             Point aPoint;
@@ -1650,10 +1650,10 @@ SvxViewForwarder* ScAccessibleNoteTextData::GetViewForwarder()
 class ScCsvViewForwarder : public SvxViewForwarder
 {
     Rectangle                   maBoundBox;
-    Window*                     mpWindow;
+    vcl::Window*                     mpWindow;
 
 public:
-    explicit                    ScCsvViewForwarder( Window* pWindow, const Rectangle& rBoundBox );
+    explicit                    ScCsvViewForwarder( vcl::Window* pWindow, const Rectangle& rBoundBox );
 
     virtual bool                IsValid() const SAL_OVERRIDE;
     virtual Rectangle           GetVisArea() const SAL_OVERRIDE;
@@ -1663,7 +1663,7 @@ public:
     void                        SetInvalid();
 };
 
-ScCsvViewForwarder::ScCsvViewForwarder( Window* pWindow, const Rectangle& rBoundBox ) :
+ScCsvViewForwarder::ScCsvViewForwarder( vcl::Window* pWindow, const Rectangle& rBoundBox ) :
     maBoundBox( rBoundBox ),
     mpWindow( pWindow )
 {
@@ -1697,7 +1697,7 @@ void ScCsvViewForwarder::SetInvalid()
 }
 
 ScAccessibleCsvTextData::ScAccessibleCsvTextData(
-        Window* pWindow, EditEngine* pEditEngine,
+        vcl::Window* pWindow, EditEngine* pEditEngine,
         const OUString& rCellText, const Rectangle& rBoundBox, const Size& rCellSize ) :
     mpWindow( pWindow ),
     mpEditEngine( pEditEngine ),

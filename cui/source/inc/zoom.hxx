@@ -55,7 +55,7 @@ private:
     DECL_LINK( OKHdl, Button* );
 
 public:
-    SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet );
+    SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet );
     virtual ~SvxZoomDialog();
 
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }

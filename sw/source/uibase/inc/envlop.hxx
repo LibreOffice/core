@@ -40,13 +40,13 @@ class SwEnvFmtPage;
 class SwWrtShell;
 class Printer;
 
-class SwEnvPreview : public Window
+class SwEnvPreview : public vcl::Window
 {
     void Paint(const Rectangle&) SAL_OVERRIDE;
 
 public:
 
-    SwEnvPreview(Window * pParent, WinBits nStyle);
+    SwEnvPreview(vcl::Window * pParent, WinBits nStyle);
 
 protected:
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -71,7 +71,7 @@ friend class SwEnvPreview;
     virtual short   Ok() SAL_OVERRIDE;
 
 public:
-     SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
+     SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
     virtual ~SwEnvDlg();
 };
 
@@ -89,7 +89,7 @@ class SwEnvPage : public SfxTabPage
     SwWrtShell*   pSh;
     OUString      sActDBName;
 
-     SwEnvPage(Window* pParent, const SfxItemSet& rSet);
+     SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwEnvPage();
 
     DECL_LINK( DatabaseHdl, ListBox * );
@@ -105,7 +105,7 @@ class SwEnvPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rSet);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;

@@ -39,7 +39,7 @@ namespace sd {
  */
 
 BreakDlg::BreakDlg(
-    ::Window* pWindow,
+    vcl::Window* pWindow,
     DrawView* _pDrView,
     DrawDocShell* pShell,
     sal_uLong nSumActionCount,

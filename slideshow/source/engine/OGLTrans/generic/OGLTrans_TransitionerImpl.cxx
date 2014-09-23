@@ -371,7 +371,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     mpContext = boost::make_shared<OpenGLContext>();
     mpContext->requestLegacyContext();
 
-    if( !mpContext->init( reinterpret_cast< Window* >( aVal ) ) )
+    if( !mpContext->init( reinterpret_cast< vcl::Window* >( aVal ) ) )
         return false;
     SAL_INFO("slideshow", "created the context");
 

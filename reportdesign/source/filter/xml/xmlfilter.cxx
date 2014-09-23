@@ -406,7 +406,7 @@ uno::Sequence< OUString > ORptFilter::getSupportedServiceNames_Static(  ) throw(
 sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException, std::exception)
 {
-    Window*     pFocusWindow = Application::GetFocusWindow();
+    vcl::Window*     pFocusWindow = Application::GetFocusWindow();
     bool    bRet = false;
 
     if( pFocusWindow )

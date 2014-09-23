@@ -42,7 +42,7 @@ class PageSizeControl
 {
 public:
     PageSizeControl(
-        Window* pParent,
+        vcl::Window* pParent,
         PagePropertyPanel& rPanel,
         const Paper ePaper,
         const bool bLandscape,

@@ -71,7 +71,7 @@ namespace pcr
     //= TabOrderDialog
 
 
-    TabOrderDialog::TabOrderDialog( Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
+    TabOrderDialog::TabOrderDialog( vcl::Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
                     const Reference< XControlContainer >& _rxControlCont, const Reference< XComponentContext >& _rxORB )
         :ModalDialog( _pParent, "TabOrderDialog", "modules/spropctrlr/ui/taborder.ui")
         ,m_xModel( _rxTabModel )
@@ -289,7 +289,7 @@ namespace pcr
     //= TabOrderListBox
 
 
-    TabOrderListBox::TabOrderListBox( Window* pParent, WinBits nBits  )
+    TabOrderListBox::TabOrderListBox( vcl::Window* pParent, WinBits nBits  )
         :SvTreeListBox( pParent, nBits  )
     {
         SetDragDropMode(0xFFFF/*SV_DRAGDROP_CTRL_MOVE*/);
@@ -298,7 +298,7 @@ namespace pcr
         SetSelectionMode( MULTIPLE_SELECTION );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTabOrderListBox(Window *pParent,
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTabOrderListBox(vcl::Window *pParent,
          VclBuilder::stringmap &rMap)
     {
          WinBits nWinStyle = WB_TABSTOP;

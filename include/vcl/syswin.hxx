@@ -130,7 +130,7 @@ public:
 
 // - SystemWindow -
 class VCL_DLLPUBLIC SystemWindow
-    : public Window
+    : public vcl::Window
     , public VclBuilderContainer
 {
     friend class WorkWindow;
@@ -155,22 +155,22 @@ private:
     Timer           maLayoutTimer;
 protected:
     bool            mbIsDefferedInit;
-    Window*         mpDialogParent;
+    vcl::Window*         mpDialogParent;
 public:
     using Window::ImplIsInTaskPaneList;
-    SAL_DLLPRIVATE bool ImplIsInTaskPaneList( Window* pWin );
+    SAL_DLLPRIVATE bool ImplIsInTaskPaneList( vcl::Window* pWin );
     SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDefferedInit; }
 
 private:
     SAL_DLLPRIVATE void Init();
-    SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin );
+    SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window* i_pConfigureWin );
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, VclContainer &rBox);
     DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, void* );
 
 protected:
     // Single argument ctors shall be explicit.
     explicit SystemWindow(WindowType nType);
-    void loadUI(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+    void loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
 
     void     SetWindowStateData( const WindowStateData& rData );
 

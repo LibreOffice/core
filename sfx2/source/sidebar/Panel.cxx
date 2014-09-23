@@ -47,7 +47,7 @@ namespace sfx2 { namespace sidebar {
 
 Panel::Panel (
     const PanelDescriptor& rPanelDescriptor,
-    Window* pParentWindow,
+    vcl::Window* pParentWindow,
     const bool bIsInitiallyExpanded,
     const ::boost::function<void(void)>& rDeckLayoutTrigger,
     const ::boost::function<Context(void)>& rContextAccess)

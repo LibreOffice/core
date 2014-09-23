@@ -78,7 +78,7 @@ struct SwSearchOptions
     SwSearchOptions( SwWrtShell* pSh, bool bBackward );
 };
 
-static Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
+static vcl::Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
 {
     return pSrchDlg && pSrchDlg->IsVisible() ? pSrchDlg : 0;
 }
@@ -198,7 +198,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     if ( pDlgWrp )
                     {
                         m_pSrchDlg = (SvxSearchDialog*)(pDlgWrp->GetWindow());
-                        m_pSrchDlg->SetDocWin( (Window*)m_pEditWin);
+                        m_pSrchDlg->SetDocWin( (vcl::Window*)m_pEditWin);
                         m_pSrchDlg->SetSrchFlag();
                     }
                 }
@@ -225,7 +225,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     if ( pDlgWrp )
                     {
                         m_pSrchDlg = (SvxSearchDialog*)(pDlgWrp->GetWindow());
-                        m_pSrchDlg->SetDocWin( (Window*)m_pEditWin);
+                        m_pSrchDlg->SetDocWin( (vcl::Window*)m_pEditWin);
                         m_pSrchDlg->SetSrchFlag();
                     }
                 }
@@ -286,7 +286,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     if ( pDlgWrp )
                     {
                         m_pSrchDlg = (SvxSearchDialog*)(pDlgWrp->GetWindow());
-                        m_pSrchDlg->SetDocWin( (Window*)m_pEditWin);
+                        m_pSrchDlg->SetDocWin( (vcl::Window*)m_pEditWin);
                         m_pSrchDlg->SetSrchFlag();
                     }
                 }
@@ -344,7 +344,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     {
                         OUString aText( SW_RES( STR_NB_REPLACED ) );
                         aText = aText.replaceFirst("XX", OUString::number( nFound ));
-                        Window* pParentWindow = GetParentWindow( m_pSrchDlg );
+                        vcl::Window* pParentWindow = GetParentWindow( m_pSrchDlg );
                         InfoBox( pParentWindow, aText ).Execute();
                     }
                 }
@@ -355,7 +355,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 if ( pDlgWrp )
                 {
                     m_pSrchDlg = (SvxSearchDialog*)(pDlgWrp->GetWindow());
-                    m_pSrchDlg->SetDocWin( (Window*)m_pEditWin);
+                    m_pSrchDlg->SetDocWin( (vcl::Window*)m_pEditWin);
                     m_pSrchDlg->SetSrchFlag();
                 }
 #endif

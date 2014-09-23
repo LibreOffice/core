@@ -28,7 +28,7 @@ using namespace com::sun::star::beans;
 // - ImpPDFDialog -
 
 
-ImpSWFDialog::ImpSWFDialog( Window* pParent, Sequence< PropertyValue >& rFilterData ) :
+ImpSWFDialog::ImpSWFDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFilterData ) :
     ModalDialog( pParent, "ImpSWFDialog", "filter/ui/impswfdialog.ui" ),
 
     maConfigItem( "Office.Common/Filter/Flash/Export/", &rFilterData )

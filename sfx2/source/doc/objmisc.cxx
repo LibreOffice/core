@@ -1752,9 +1752,9 @@ bool SfxObjectShell::AdjustMacroMode( const OUString& /*rScriptType*/, bool bSup
     return pImp->aMacroMode.adjustMacroMode( xInteraction );
 }
 
-Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
+vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
 {
-    Window* pWindow = 0;
+    vcl::Window* pWindow = 0;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
     SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoFrameItem, SID_FILLFRAME, false );
     if ( pUnoItem )

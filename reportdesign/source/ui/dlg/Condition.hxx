@@ -105,7 +105,7 @@ namespace rptui
         DECL_LINK( OnConditionAction,   Button* );
 
     public:
-        Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController );
+        Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController );
         virtual ~Condition();
 
         /** will be called when the id of the image list needs to change.

@@ -253,7 +253,7 @@ namespace accessibility
 
                 if ( i < nCount )
                 {
-                    Window* pChild = m_pTabBar->GetAccessibleChildWindow( (sal_uInt16)i );
+                    vcl::Window* pChild = m_pTabBar->GetAccessibleChildWindow( (sal_uInt16)i );
                     if ( pChild )
                         xChild = pChild->GetAccessible();
                 }
@@ -279,7 +279,7 @@ namespace accessibility
         Reference< XAccessible > xParent;
         if ( m_pTabBar )
         {
-            Window* pParent = m_pTabBar->GetAccessibleParentWindow();
+            vcl::Window* pParent = m_pTabBar->GetAccessibleParentWindow();
             if ( pParent )
                 xParent = pParent->GetAccessible();
         }
@@ -296,13 +296,13 @@ namespace accessibility
         sal_Int32 nIndexInParent = -1;
         if ( m_pTabBar )
         {
-            Window* pParent = m_pTabBar->GetAccessibleParentWindow();
+            vcl::Window* pParent = m_pTabBar->GetAccessibleParentWindow();
             if ( pParent )
             {
                 for ( sal_uInt16 i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
                 {
-                    Window* pChild = pParent->GetAccessibleChildWindow( i );
-                    if ( pChild == static_cast< Window* >( m_pTabBar ) )
+                    vcl::Window* pChild = pParent->GetAccessibleChildWindow( i );
+                    if ( pChild == static_cast< vcl::Window* >( m_pTabBar ) )
                     {
                         nIndexInParent = i;
                         break;

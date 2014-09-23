@@ -28,7 +28,7 @@ class FuConstPolygon : public FuConstruct
     Point aLastPos;
 
  public:
-    FuConstPolygon(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuConstPolygon(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstPolygon();

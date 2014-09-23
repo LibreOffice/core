@@ -47,7 +47,7 @@ class SwSelectDBTableDialog : public SfxModalDialog
 
     DECL_LINK(PreviewHdl, PushButton*);
 public:
-    SwSelectDBTableDialog(Window* pParent,
+    SwSelectDBTableDialog(vcl::Window* pParent,
         const css::uno::Reference<css::sdbc::XConnection>& xConnection);
     virtual ~SwSelectDBTableDialog();
 

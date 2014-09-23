@@ -79,7 +79,7 @@ using ::com::sun::star::awt::XWindow;
 SFX_IMPL_FLOATINGWINDOW(FmPropBrwMgr, SID_FM_SHOW_PROPERTIES)
 
 
-FmPropBrwMgr::FmPropBrwMgr( Window* _pParent, sal_uInt16 _nId,
+FmPropBrwMgr::FmPropBrwMgr( vcl::Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
@@ -184,7 +184,7 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 }
 
 FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
-            SfxChildWindow* _pMgr, Window* _pParent, const SfxChildWinInfo* _pInfo )
+            SfxChildWindow* _pMgr, vcl::Window* _pParent, const SfxChildWinInfo* _pInfo )
     :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE) )
     ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *_pBindings)
     ,m_bInitialStateChange(true)
@@ -207,7 +207,7 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
         // responsibility for this window (as soon as we initialize a frame with a window, the frame
         // is responsible for its life time, but |this| is controlled by the belonging SfxChildWindow)
         // #i34249#
-        Window* pContainerWindow = new Window( this );
+        vcl::Window* pContainerWindow = new vcl::Window( this );
         pContainerWindow->Show();
         m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
 

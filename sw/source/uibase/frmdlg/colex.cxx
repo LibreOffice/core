@@ -314,12 +314,12 @@ void SwColExample::DrawPage( const Point& rOrg,
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwColExample(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwColExample(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwColExample(pParent);
 }
 
-SwColumnOnlyExample::SwColumnOnlyExample(Window* pParent)
+SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
     : Window(pParent)
     , m_aFrmSize(1,1)
 {
@@ -343,7 +343,7 @@ SwColumnOnlyExample::SwColumnOnlyExample(Window* pParent)
     SetMapMode( aMapMode );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwColumnOnlyExample(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwColumnOnlyExample(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwColumnOnlyExample(pParent);
 }
@@ -607,7 +607,7 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     SwPageExample::UpdateExample(rSet);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwPageGridExample(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwPageGridExample(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwPageGridExample(pParent);
 }

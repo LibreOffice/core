@@ -25,7 +25,7 @@ using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-inline sal_Int32 implMap( Window& /*rWnd*/, sal_Int32 nVal )
+inline sal_Int32 implMap( vcl::Window& /*rWnd*/, sal_Int32 nVal )
 {
     //return( rWnd.LogicToLogic( Size( nVal, nVal ) ).Height(), MAP_APPFONT, MAP_APPFONT );
     return( nVal << 1 );
@@ -35,7 +35,7 @@ inline sal_Int32 implMap( Window& /*rWnd*/, sal_Int32 nVal )
 // - ImpSVGDialog -
 
 
-ImpSVGDialog::ImpSVGDialog( Window* pParent, Sequence< PropertyValue >& rFilterData ) :
+ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFilterData ) :
     ModalDialog( pParent ),
     maFI( this ),
     maCBTinyProfile( this ),

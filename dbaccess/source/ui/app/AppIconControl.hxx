@@ -32,7 +32,7 @@ namespace dbaui
         IControlActionListener*     m_pActionListener;
 
     public:
-        OApplicationIconControl(Window* _pParent);
+        OApplicationIconControl(vcl::Window* _pParent);
         virtual ~OApplicationIconControl();
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }

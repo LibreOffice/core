@@ -23,7 +23,7 @@
 #include <sfx2/childwin.hxx>
 #include <sal/types.h>
 
-class Window;
+namespace vcl { class Window; }
 class SfxBindings;
 
 namespace sd {
@@ -33,7 +33,7 @@ class AnimationChildWindow
 {
 public:
     AnimationChildWindow(
-        ::Window*,
+        vcl::Window*,
         sal_uInt16,
         SfxBindings*,
         SfxChildWinInfo*);

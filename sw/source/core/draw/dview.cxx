@@ -797,7 +797,7 @@ void SwDrawView::ModelHasChanged()
     }
 }
 
-void SwDrawView::MakeVisible( const Rectangle &rRect, Window & )
+void SwDrawView::MakeVisible( const Rectangle &rRect, vcl::Window & )
 {
     OSL_ENSURE( rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
     rImp.GetShell()->MakeVisible( SwRect( rRect ) );

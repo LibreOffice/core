@@ -32,7 +32,7 @@
 
 namespace formula
 {
-StructListBox::StructListBox(Window* pParent, WinBits nBits ):
+StructListBox::StructListBox(vcl::Window* pParent, WinBits nBits ):
     SvTreeListBox(pParent, nBits)
 {
     bActiveFlag=false;
@@ -77,12 +77,12 @@ void StructListBox::LoseFocus()
     SvTreeListBox::LoseFocus();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeStructListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeStructListBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new StructListBox(pParent, WB_BORDER);
 }
 
-StructPage::StructPage(Window* pParent):
+StructPage::StructPage(vcl::Window* pParent):
     TabPage(pParent, "StructPage", "formula/ui/structpage.ui"),
     maImgEnd        ( ModuleRes( BMP_STR_END ) ),
     maImgError      ( ModuleRes( BMP_STR_ERROR ) ),

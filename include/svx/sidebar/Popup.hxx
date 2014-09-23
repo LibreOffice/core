@@ -26,7 +26,7 @@
 #include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 
-class Window;
+namespace vcl { class Window; }
 class ToolBox;
 
 namespace svx { namespace sidebar {
@@ -51,7 +51,7 @@ public :
             PopupControl).
     */
     Popup (
-        Window* pParent,
+        vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator,
         const ::rtl::OUString& rsAccessibleName);
     virtual ~Popup (void);
@@ -90,7 +90,7 @@ protected:
     virtual void CreateContainerAndControl (void);
 
 private:
-    Window* mpParent;
+    vcl::Window* mpParent;
     ::boost::function<PopupControl*(PopupContainer*)> maControlCreator;
     ::boost::function<void(void)> maPopupModeEndCallback;
     const ::rtl::OUString msAccessibleName;

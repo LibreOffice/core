@@ -37,7 +37,7 @@ private:
     ListBox*     m_pLbNamedRange;
 
 public:
-    ScDataPilotSourceTypeDlg(Window* pParent, bool bEnableExternal);
+    ScDataPilotSourceTypeDlg(vcl::Window* pParent, bool bEnableExternal);
     virtual ~ScDataPilotSourceTypeDlg();
 
     bool IsDatabase() const;
@@ -60,7 +60,7 @@ private:
     Edit            *m_pEdPasswd;
 
 public:
-            ScDataPilotServiceDlg( Window* pParent,
+            ScDataPilotServiceDlg( vcl::Window* pParent,
                     const com::sun::star::uno::Sequence<OUString>& rServices );
             virtual ~ScDataPilotServiceDlg();
 

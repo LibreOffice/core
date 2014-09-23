@@ -42,7 +42,7 @@ class LookUpComboBox : public ComboBox
     LookUpComboBox& operator = ( const LookUpComboBox & );
 
 public:
-    LookUpComboBox(Window *pParent);
+    LookUpComboBox(vcl::Window *pParent);
     virtual ~LookUpComboBox();
 
     DECL_LINK( ModifyTimer_Hdl, Timer * );
@@ -83,7 +83,7 @@ class ThesaurusAlternativesCtrl
     ThesaurusAlternativesCtrl & operator = ( const ThesaurusAlternativesCtrl & );
 
 public:
-    ThesaurusAlternativesCtrl(Window* pParent);
+    ThesaurusAlternativesCtrl(vcl::Window* pParent);
 
     void init(SvxThesaurusDialog *pDialog);
     virtual ~ThesaurusAlternativesCtrl();
@@ -108,7 +108,7 @@ class ReplaceEdit : public Edit
     ReplaceEdit & operator = ( const ReplaceEdit & );
 
 public:
-    ReplaceEdit(Window *pParent);
+    ReplaceEdit(vcl::Window *pParent);
     virtual ~ReplaceEdit();
 
     void init(Button *pBtn)  { m_pBtn = pBtn; }
@@ -159,7 +159,7 @@ public:
     virtual void     Apply() SAL_OVERRIDE;
 
 public:
-    SvxThesaurusDialog( Window* pParent,
+    SvxThesaurusDialog( vcl::Window* pParent,
                         css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
                         const OUString &rWord, LanguageType nLanguage );
     virtual ~SvxThesaurusDialog();

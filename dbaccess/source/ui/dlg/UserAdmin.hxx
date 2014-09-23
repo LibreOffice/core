@@ -60,9 +60,9 @@ protected:
 
     void        FillUserNames();
 
-    OUserAdmin( Window* pParent, const SfxItemSet& _rCoreAttrs);
+    OUserAdmin( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    static  SfxTabPage* Create( Window* pParent, const SfxItemSet* _rAttrSet );
+    static  SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
 
     virtual ~OUserAdmin();
     OUString GetUser();

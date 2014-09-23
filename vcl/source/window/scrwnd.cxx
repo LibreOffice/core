@@ -36,7 +36,7 @@
 #define MIN_TIME        20
 #define DEF_TIMEOUT     50
 
-ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
+ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
             FloatingWindow  ( pParent, 0 ),
             mnRepaintTime   ( 1UL ),
             mnTimeout       ( DEF_TIMEOUT ),
@@ -341,7 +341,7 @@ IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
 {
     if ( mnActDeltaX || mnActDeltaY )
     {
-        Window*             pWindow = GetParent();
+        vcl::Window*             pWindow = GetParent();
         const Point         aMousePos( pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() ) );
         Point               aCmdMousePos( pWindow->ImplFrameToOutput( aMousePos ) );
         CommandScrollData   aScrollData( mnActDeltaX, mnActDeltaY );

@@ -30,7 +30,7 @@
 class ScNewScenarioDlg : public ModalDialog
 {
 public:
-    ScNewScenarioDlg(Window* pParent, const OUString& rName, bool bEdit = false, bool bSheetProtected = false);
+    ScNewScenarioDlg(vcl::Window* pParent, const OUString& rName, bool bEdit = false, bool bSheetProtected = false);
 
     void SetScenarioData( const OUString& rName, const OUString& rComment,
                           const Color& rColor, sal_uInt16 nFlags );

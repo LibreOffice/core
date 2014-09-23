@@ -31,7 +31,7 @@
 |*
 \************************************************************************/
 
-SvxNameDialog::SvxNameDialog( Window* pWindow, const OUString& rName, const OUString& rDesc ) :
+SvxNameDialog::SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const OUString& rDesc ) :
     ModalDialog     ( pWindow, "NameDialog", "cui/ui/namedialog.ui" )
 {
     get(pBtnOK, "ok");
@@ -58,7 +58,7 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
 // plus uniqueness-callback-linkHandler
 
 SvxObjectNameDialog::SvxObjectNameDialog(
-    Window* pWindow,
+    vcl::Window* pWindow,
     const OUString& rName) :
     ModalDialog     ( pWindow, "ObjectNameDialog", "cui/ui/objectnamedialog.ui" )
 {
@@ -88,7 +88,7 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
 // Dialog for editing Object Title and Description
 
 SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
-    Window* pWindow,
+    vcl::Window* pWindow,
     const OUString& rTitle,
     const OUString& rDescription) :
     ModalDialog     ( pWindow, "ObjectTitleDescDialog", "cui/ui/objecttitledescdialog.ui" )
@@ -113,7 +113,7 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 |*
 \************************************************************************/
 
-SvxMessDialog::SvxMessDialog( Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg )
+SvxMessDialog::SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg )
     : ModalDialog(pWindow, "MessBox", "cui/ui/messbox.ui")
     , pImage(NULL)
 {

@@ -369,7 +369,7 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
     bool bUndo (rDoc.IsUndoEnabled());
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
-    Window* pWaitWin = rDocShell.GetActiveDialogParent();
+    vcl::Window* pWaitWin = rDocShell.GetActiveDialogParent();
     if (pWaitWin)
         pWaitWin->EnterWait();
     if (bUndo)

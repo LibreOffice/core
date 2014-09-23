@@ -26,7 +26,7 @@
 class ScDoubleField : public Edit
 {
 public:
-    explicit            ScDoubleField( Window* pParent, WinBits nStyle );
+    explicit            ScDoubleField( vcl::Window* pParent, WinBits nStyle );
 
     bool                GetValue( double& rfValue ) const;
     void                SetValue( double fValue,

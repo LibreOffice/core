@@ -79,7 +79,7 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     }
 }
 
-Window* ScZoomSliderControl::CreateItemWindow( Window *pParent )
+vcl::Window* ScZoomSliderControl::CreateItemWindow( vcl::Window *pParent )
 {
     // #i98000# Don't try to get a value via SfxViewFrame::Current here.
     // The view's value is always notified via StateChanged later.
@@ -216,7 +216,7 @@ long ScZoomSliderWnd::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
     return nRect;
 }
 
-ScZoomSliderWnd::ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
+ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , sal_uInt16 nCurrentZoom ):
                 Window( pParent ),
                 mpImpl( new ScZoomSliderWnd_Impl( nCurrentZoom ) ),

@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 
 // class LookUpComboBox --------------------------------------------------
 
-LookUpComboBox::LookUpComboBox(Window *pParent)
+LookUpComboBox::LookUpComboBox(vcl::Window *pParent)
     : ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP)
     , m_pDialog(NULL)
 {
@@ -67,7 +67,7 @@ LookUpComboBox::LookUpComboBox(Window *pParent)
     EnableAutocomplete( false );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLookUpComboBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLookUpComboBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new LookUpComboBox(pParent);
 }
@@ -95,13 +95,13 @@ IMPL_LINK( LookUpComboBox, ModifyTimer_Hdl, Timer *, EMPTYARG /*pTimer*/ )
 
 // class ReplaceEdit --------------------------------------------------
 
-ReplaceEdit::ReplaceEdit(Window *pParent)
+ReplaceEdit::ReplaceEdit(vcl::Window *pParent)
     : Edit(pParent, WB_BORDER | WB_TABSTOP)
     , m_pBtn(NULL)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeReplaceEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeReplaceEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ReplaceEdit(pParent);
 }
@@ -159,7 +159,7 @@ void AlternativesString::Paint(
     rDev.SetFont( aOldFont );
 }
 
-ThesaurusAlternativesCtrl::ThesaurusAlternativesCtrl(Window* pParent)
+ThesaurusAlternativesCtrl::ThesaurusAlternativesCtrl(vcl::Window* pParent)
     : SvxCheckListBox(pParent)
     , m_pDialog(NULL)
 {
@@ -167,7 +167,7 @@ ThesaurusAlternativesCtrl::ThesaurusAlternativesCtrl(Window* pParent)
     SetHighlightRange();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeThesaurusAlternativesCtrl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeThesaurusAlternativesCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ThesaurusAlternativesCtrl(pParent);
 }
@@ -437,7 +437,7 @@ IMPL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox *, pB
 // class SvxThesaurusDialog ----------------------------------------------
 
 SvxThesaurusDialog::SvxThesaurusDialog(
-    Window* pParent,
+    vcl::Window* pParent,
     uno::Reference< linguistic2::XThesaurus >  xThes,
     const OUString &rWord,
     LanguageType nLanguage)

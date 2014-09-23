@@ -45,11 +45,11 @@ using namespace ::com::sun::star;
 
 namespace {
 
-class PluginWindow_Impl : public Window
+class PluginWindow_Impl : public vcl::Window
 {
 public:
     uno::Reference < awt::XWindow > xWindow;
-    PluginWindow_Impl( Window* pParent )
+    PluginWindow_Impl( vcl::Window* pParent )
      : Window( pParent, WB_CLIPCHILDREN )
      {}
 
@@ -151,7 +151,7 @@ throw( uno::RuntimeException, std::exception )
 
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
-        Window* pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        vcl::Window* pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         PluginWindow_Impl* pWin = new PluginWindow_Impl( pParent );
         pWin->SetSizePixel( pParent->GetOutputSizePixel() );
         pWin->SetBackground();

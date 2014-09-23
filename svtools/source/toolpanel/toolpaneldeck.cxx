@@ -87,7 +87,7 @@ namespace svt
         PDeckLayouter       GetLayouter() const { return m_pLayouter; }
         void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
 
-        Window&             GetPanelWindowAnchor()       { return m_aPanelAnchor; }
+        vcl::Window&             GetPanelWindowAnchor()       { return m_aPanelAnchor; }
 
         bool                IsDead() const { return m_bInDtor; }
 
@@ -130,7 +130,7 @@ namespace svt
 
     private:
         ToolPanelDeck&      m_rDeck;
-        Window              m_aPanelAnchor;
+        vcl::Window         m_aPanelAnchor;
         ToolPanelCollection m_aPanels;
         PToolPanel          m_pDummyPanel;
         PanelDeckListeners  m_aListeners;
@@ -341,7 +341,7 @@ namespace svt
     //= ToolPanelDeck
 
 
-    ToolPanelDeck::ToolPanelDeck( Window& i_rParent, const WinBits i_nStyle )
+    ToolPanelDeck::ToolPanelDeck( vcl::Window& i_rParent, const WinBits i_nStyle )
         :Control( &i_rParent, i_nStyle )
         ,m_pImpl( new ToolPanelDeck_Impl( *this ) )
     {
@@ -425,13 +425,13 @@ namespace svt
     }
 
 
-    Window& ToolPanelDeck::GetPanelWindowAnchor()
+    vcl::Window& ToolPanelDeck::GetPanelWindowAnchor()
     {
         return m_pImpl->GetPanelWindowAnchor();
     }
 
 
-    const Window& ToolPanelDeck::GetPanelWindowAnchor() const
+    const vcl::Window& ToolPanelDeck::GetPanelWindowAnchor() const
     {
         return m_pImpl->GetPanelWindowAnchor();
     }

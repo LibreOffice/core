@@ -319,7 +319,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 const SwView* pView = pDocShell ? pDocShell->GetView() : NULL;
                 const FmFormShell* pFormShell = pView ? pView->GetFormShell() : NULL;
                 SdrView* pDrawView = pView ? pView->GetDrawView() : NULL;
-                Window* pWindow = pView ? pView->GetWrtShell().GetWin() : NULL;
+                vcl::Window* pWindow = pView ? pView->GetWrtShell().GetWin() : NULL;
 
                 OSL_ENSURE( pFormShell && pDrawView && pWindow, "SwXTextView::ExecMoveMisc: no chance!" );
                 if ( !pFormShell || !pDrawView || !pWindow )

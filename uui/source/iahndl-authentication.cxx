@@ -58,7 +58,7 @@ namespace {
 
 void
 executeLoginDialog(
-    Window * pParent,
+    vcl::Window * pParent,
     LoginErrorInfo & rInfo,
     OUString const & rRealm)
 {
@@ -182,7 +182,7 @@ void getRememberModes(
 
 void
 handleAuthenticationRequest_(
-    Window * pParent,
+    vcl::Window * pParent,
     uno::Reference< task::XInteractionHandler2 > const & xIH,
     uno::Reference< uno::XComponentContext > const & xContext,
     ucb::AuthenticationRequest const & rRequest,
@@ -403,7 +403,7 @@ handleAuthenticationRequest_(
 
 void
 executeMasterPasswordDialog(
-    Window * pParent,
+    vcl::Window * pParent,
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode)
 {
@@ -458,7 +458,7 @@ executeMasterPasswordDialog(
 
 void
 handleMasterPasswordRequest_(
-    Window * pParent,
+    vcl::Window * pParent,
     task::PasswordRequestMode nMode,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
@@ -498,7 +498,7 @@ handleMasterPasswordRequest_(
 
 void
 executePasswordDialog(
-    Window * pParent,
+    vcl::Window * pParent,
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode,
     const OUString& aDocName,
@@ -558,7 +558,7 @@ executePasswordDialog(
 
 void
 handlePasswordRequest_(
-    Window * pParent,
+    vcl::Window * pParent,
     task::PasswordRequestMode nMode,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
@@ -666,7 +666,7 @@ UUIInteractionHelper::handlePasswordRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
     // parameters to be filled for the call to handlePasswordRequest_
-    Window * pParent = getParentProperty();
+    vcl::Window * pParent = getParentProperty();
     task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations = rRequest->getContinuations();
     OUString aDocumentName;

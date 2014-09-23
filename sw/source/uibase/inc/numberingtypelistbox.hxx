@@ -35,7 +35,7 @@ class SW_DLLPUBLIC SwNumberingTypeListBox : public ListBox
     SwNumberingTypeListBox_Impl* pImpl;
 
 public:
-    SwNumberingTypeListBox( Window* pWin, WinBits nStyle = WB_BORDER );
+    SwNumberingTypeListBox( vcl::Window* pWin, WinBits nStyle = WB_BORDER );
     virtual ~SwNumberingTypeListBox();
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;

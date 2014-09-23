@@ -38,7 +38,7 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet )
+SwFldVarPage::SwFldVarPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
     : SwFldPage(pParent, "FldVarPage",
         "modules/swriter/ui/fldvarpage.ui", rCoreSet)
     , nOldFormat(0)
@@ -1225,7 +1225,7 @@ bool SwFldVarPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-SfxTabPage* SwFldVarPage::Create(   Window* pParent,
+SfxTabPage* SwFldVarPage::Create(   vcl::Window* pParent,
                         const SfxItemSet* rAttrSet )
 {
     return ( new SwFldVarPage( pParent, *rAttrSet ) );
@@ -1236,13 +1236,13 @@ sal_uInt16 SwFldVarPage::GetGroup()
     return GRP_VAR;
 }
 
-SelectionListBox::SelectionListBox(Window* pParent, WinBits nStyle)
+SelectionListBox::SelectionListBox(vcl::Window* pParent, WinBits nStyle)
     : ListBox(pParent, nStyle)
     , bCallAddSelection(false)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSelectionListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSelectionListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
 

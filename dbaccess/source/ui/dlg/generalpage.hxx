@@ -33,7 +33,7 @@ namespace dbaui
     class OGeneralPage : public OGenericAdministrationPage
     {
     protected:
-        OGeneralPage( Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems );
+        OGeneralPage( vcl::Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems );
         virtual ~OGeneralPage();
 
         OUString            m_eCurrentSelection;    /// currently selected type
@@ -102,7 +102,7 @@ namespace dbaui
     class OGeneralPageDialog : public OGeneralPage
     {
     public:
-        OGeneralPageDialog( Window* pParent, const SfxItemSet& _rItems );
+        OGeneralPageDialog( vcl::Window* pParent, const SfxItemSet& _rItems );
 
     protected:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
@@ -115,7 +115,7 @@ namespace dbaui
     class OGeneralPageWizard : public OGeneralPage
     {
     public:
-        OGeneralPageWizard( Window* pParent, const SfxItemSet& _rItems );
+        OGeneralPageWizard( vcl::Window* pParent, const SfxItemSet& _rItems );
 
     public:
         enum CreationMode

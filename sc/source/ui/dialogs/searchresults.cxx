@@ -22,7 +22,7 @@
 
 namespace sc {
 
-SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, Window* pParent, sal_uInt16 /* nId */ ) :
+SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent, sal_uInt16 /* nId */ ) :
     ModelessDialog(pParent, "SearchResultsDialog", "modules/scalc/ui/searchresults.ui"),
     mpBindings(_pBindings), mpDoc(NULL)
 {
@@ -115,7 +115,7 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl )
 }
 
 SearchResultsDlgWrapper::SearchResultsDlgWrapper(
-    Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* /*pInfo*/ ) :
+    vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* /*pInfo*/ ) :
     SfxChildWindow(_pParent, nId)
 {
     pWindow = new SearchResultsDlg(pBindings, _pParent, nId);

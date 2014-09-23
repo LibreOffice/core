@@ -37,7 +37,7 @@ namespace svt
         OUString      m_sPreservedText;
 
     public:
-        FileURLBox( Window* _pParent, WinBits _nStyle );
+        FileURLBox( vcl::Window* _pParent, WinBits _nStyle );
 
     protected:
         virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

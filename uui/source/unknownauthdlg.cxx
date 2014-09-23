@@ -58,7 +58,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
 
 
 
-UnknownAuthDialog::UnknownAuthDialog(Window* pParent,
+UnknownAuthDialog::UnknownAuthDialog(vcl::Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,
     const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : MessageDialog(pParent, "UnknownAuthDialog",

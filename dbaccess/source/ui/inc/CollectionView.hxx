@@ -54,7 +54,7 @@ namespace dbaui
         /// sets the fixedtext to the right content
         void initCurrentPath();
     public:
-        OCollectionView( Window * pParent
+        OCollectionView( vcl::Window * pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
                         ,const OUString& _sDefaultName
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);

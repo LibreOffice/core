@@ -29,7 +29,7 @@
 
 using namespace ::dbaui;
 // class OApplicationIconControl
-OApplicationIconControl::OApplicationIconControl(Window* _pParent)
+OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
     : SvtIconChoiceCtrl(_pParent,WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
                                 WB_TABSTOP | WB_CLIPCHILDREN | WB_NOVSCROLL | WB_SMART_ARRANGE | WB_NOHSCROLL | WB_CENTER)
     ,DropTargetHelper(this)

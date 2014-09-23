@@ -75,7 +75,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-    SentenceEditWindow_Impl(Window* pParent, WinBits nBits);
+    SentenceEditWindow_Impl(vcl::Window* pParent, WinBits nBits);
     virtual ~SentenceEditWindow_Impl();
 
     void            SetModifyHdl(const Link& rLink) SAL_OVERRIDE { m_aModifyLink = rLink;}
@@ -217,7 +217,7 @@ protected:
 public:
     SpellDialog(
         svx::SpellDialogChildWindow* pChildWindow,
-        Window * pParent,
+        vcl::Window * pParent,
         SfxBindings* pBindings);
     virtual ~SpellDialog();
 

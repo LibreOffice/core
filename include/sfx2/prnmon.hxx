@@ -41,7 +41,7 @@ private:
     SfxTabPage*             pPage;
 
 public:
-                            SfxPrintOptionsDialog( Window *pParent,
+                            SfxPrintOptionsDialog( vcl::Window *pParent,
                                                    SfxViewShell *pViewShell,
                                                    const SfxItemSet *rOptions );
     virtual                 ~SfxPrintOptionsDialog();

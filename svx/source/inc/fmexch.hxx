@@ -67,8 +67,8 @@ namespace svxform
         bool        isDragging() const { return m_bDragging; }
         bool        isClipboardOwner() const { return m_bClipboardOwner; }
 
-        void        startDrag( Window* pWindow, sal_Int8 nDragSourceActions, const GrantAccess& );
-        void        copyToClipboard( Window* _pWindow, const GrantAccess& );
+        void        startDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, const GrantAccess& );
+        void        copyToClipboard( vcl::Window* _pWindow, const GrantAccess& );
 
         void        setClipboardListener( const Link& _rListener ) { m_aClipboardListener = _rListener; }
 
@@ -85,7 +85,7 @@ namespace svxform
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
 
     private:
-        void StartDrag( Window* pWindow, sal_Int8 nDragSourceActions, sal_Int32 nDragPointer = DND_POINTER_NONE, sal_Int32 nDragImage = DND_IMAGE_NONE )
+        void StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, sal_Int32 nDragPointer = DND_POINTER_NONE, sal_Int32 nDragImage = DND_IMAGE_NONE )
         {   // don't allow this base class method to be called from outside
             TransferableHelper::StartDrag(pWindow, nDragSourceActions, nDragPointer, nDragImage);
         }
@@ -98,11 +98,11 @@ namespace svxform
     class SVX_DLLPUBLIC OLocalExchangeHelper
     {
     protected:
-        Window*             m_pDragSource;
+        vcl::Window*             m_pDragSource;
         OLocalExchange*     m_pTransferable;
 
     public:
-        OLocalExchangeHelper( Window* _pDragSource );
+        OLocalExchangeHelper( vcl::Window* _pDragSource );
         virtual ~OLocalExchangeHelper();
 
         void        prepareDrag( );
@@ -226,7 +226,7 @@ namespace svxform
     class OControlExchangeHelper : public OLocalExchangeHelper
     {
     public:
-        OControlExchangeHelper(Window* _pDragSource) : OLocalExchangeHelper(_pDragSource) { }
+        OControlExchangeHelper(vcl::Window* _pDragSource) : OLocalExchangeHelper(_pDragSource) { }
 
         OControlExchange* operator->() const { return static_cast< OControlExchange* >( m_pTransferable ); }
         OControlExchange& operator*() const { return *static_cast< OControlExchange* >( m_pTransferable ); }

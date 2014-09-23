@@ -28,7 +28,7 @@
 class ScColOrRowDlg : public ModalDialog
 {
 public:
-    ScColOrRowDlg(Window* pParent, const OUString& rStrTitle,
+    ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
         const OUString& rStrLabel, bool bColDefault = true);
 private:
     VclFrame*       m_pFrame;

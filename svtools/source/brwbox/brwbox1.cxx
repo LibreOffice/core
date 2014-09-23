@@ -113,7 +113,7 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
 
 
 
-BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode )
+BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
@@ -124,7 +124,7 @@ BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode )
 
 
 
-BrowseBox::BrowseBox( Window* pParent, const ResId& rId, BrowserMode nMode )
+BrowseBox::BrowseBox( vcl::Window* pParent, const ResId& rId, BrowserMode nMode )
     :Control( pParent, rId )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )

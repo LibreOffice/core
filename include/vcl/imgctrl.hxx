@@ -35,7 +35,7 @@ private:
     ::sal_Int16     mnScaleMode;
 
 public:
-                    ImageControl( Window* pParent, WinBits nStyle = 0 );
+                    ImageControl( vcl::Window* pParent, WinBits nStyle = 0 );
 
     // set/get the scale mode. This is one of the css.awt.ImageScaleMode constants
     void            SetScaleMode( const ::sal_Int16 _nMode );

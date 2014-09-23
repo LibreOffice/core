@@ -38,7 +38,7 @@ const sal_uLong nEntryDataDelim = 2;
 // note: some of the initialisation is done in Init
 ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
                                 SfxChildWindow* pCW,
-                                Window* pParent,
+                                vcl::Window* pParent,
                                 ScViewData* ptrViewData )
 
     :   ScAnyRefDlg ( pB, pCW, pParent, "NameRangesDialog" , "modules/scalc/ui/namerangesdialog.ui" ),

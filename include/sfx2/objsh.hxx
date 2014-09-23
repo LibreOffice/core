@@ -344,7 +344,7 @@ public:
     void                        SignScriptingContent();
 
     virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
-                                        Window *pParent, const SfxItemSet& );
+                                        vcl::Window *pParent, const SfxItemSet& );
 
     ErrCode                     CallBasic( const OUString& rMacro, const OUString& rBasicName,
                                     SbxArray* pArgs = 0, SbxValue* pRet = 0 );
@@ -407,7 +407,7 @@ public:
     virtual bool                PrepareClose(bool bUI = true);
     virtual bool                IsInformationLost();
     virtual sal_uInt16          GetHiddenInformationState( sal_uInt16 nStates );
-    sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, Window* pParent );
+    sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, vcl::Window* pParent );
     virtual bool                HasSecurityOptOpenReadOnly() const;
     bool                        IsSecurityOptOpenReadOnly() const;
     void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly = true );
@@ -510,7 +510,7 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< OUString > GetEventNames();
 
-    Window*                     GetDialogParent( SfxMedium* pMedium=0 );
+    vcl::Window*                     GetDialogParent( SfxMedium* pMedium=0 );
     static SfxObjectShell*      CreateObject( const OUString& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >

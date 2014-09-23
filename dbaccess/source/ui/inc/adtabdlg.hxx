@@ -50,7 +50,7 @@ namespace dbaui
         virtual bool    allowQueries() const = 0;
         virtual bool    allowAddition() const = 0;
         virtual void    addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName ) = 0;
-        virtual void    onWindowClosing( const Window* _pWindow ) = 0;
+        virtual void    onWindowClosing( const vcl::Window* _pWindow ) = 0;
 
     protected:
         ~IAddTableDialogContext() {}
@@ -78,7 +78,7 @@ namespace dbaui
 
     public:
         OAddTableDlg(
-            Window* _pParent,
+            vcl::Window* _pParent,
             IAddTableDialogContext& _rContext );
         virtual ~OAddTableDlg();
 

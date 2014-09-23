@@ -61,11 +61,11 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
 
     SalDisplay     *pDisplay_;
     SalX11Screen    m_nXScreen;
-    XLIB_Window     mhWindow;
-    XLIB_Window     mhShellWindow;
-    XLIB_Window     mhForeignParent;
+    ::Window        mhWindow;
+    ::Window        mhShellWindow;
+    ::Window        mhForeignParent;
     // window to fall back to when no longer in fullscreen mode
-    XLIB_Window     mhStackingWindow;
+    ::Window        mhStackingWindow;
     // window to listen for CirculateNotify events
 
     Pixmap          mhBackgroundPixmap;
@@ -138,7 +138,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     void            Maximize();
     void            Restore();
 
-    void            RestackChildren( XLIB_Window* pTopLevelWindows, int nTopLevelWindows );
+    void            RestackChildren( ::Window* pTopLevelWindows, int nTopLevelWindows );
     void            RestackChildren();
 
     long            HandleKeyEvent      ( XKeyEvent         *pEvent );
@@ -154,7 +154,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
 
     DECL_LINK( HandleAlwaysOnTopRaise, void* );
 
-    void            createNewWindow( XLIB_Window aParent, SalX11Screen nXScreen = SalX11Screen( -1 ) );
+    void            createNewWindow( ::Window aParent, SalX11Screen nXScreen = SalX11Screen( -1 ) );
     void            updateScreenNumber();
 
     void            setXEmbedInfo();
@@ -177,15 +177,15 @@ public:
     {
         return pDisplay_->GetDisplay();
     }
-    XLIB_Window GetDrawable() const
+    ::Window GetDrawable() const
     {
         return GetWindow();
     }
     SalX11Screen            GetScreenNumber() const { return m_nXScreen; }
-    XLIB_Window             GetWindow() const { return mhWindow; }
-    XLIB_Window             GetShellWindow() const { return mhShellWindow; }
-    XLIB_Window             GetForeignParent() const { return mhForeignParent; }
-    XLIB_Window             GetStackingWindow() const { return mhStackingWindow; }
+    ::Window                GetWindow() const { return mhWindow; }
+    ::Window                GetShellWindow() const { return mhShellWindow; }
+    ::Window                GetForeignParent() const { return mhForeignParent; }
+    ::Window                GetStackingWindow() const { return mhStackingWindow; }
     long                    ShutDown() const { return CallCallback( SALEVENT_SHUTDOWN, 0 ); }
     long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
               sal_uIntPtr           GetStyle() const { return nStyle_; }

@@ -58,7 +58,7 @@ protected:
     ScrollBar*      GetVScrollBar() const;
 
 public:
-    VclMultiLineEdit( Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
+    VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
     virtual ~VclMultiLineEdit();
 
     void            SelectionChanged();

@@ -70,7 +70,7 @@ CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponent
     uno::Reference<awt::XWindow> xWindow = xTarget->getContainerWindow();
     if (xWindow.is())
     {
-        Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
         if (pWindow->IsSystemWindow())
             m_pSysWindow = dynamic_cast<SystemWindow*>(pWindow);
     }
@@ -584,7 +584,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
             //     Because sometimes VCL create "implicit border windows" as parents even we created
             //     a simple XWindow using the toolkit only .-(
             SolarMutexGuard aSolarLock;
-            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+            vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
             if (
                 (pWindow                  ) &&
                 (pWindow->IsSystemWindow())

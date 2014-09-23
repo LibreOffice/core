@@ -661,7 +661,7 @@ void SfxAccCfgLBoxString_Impl::Paint(
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSfxAccCfgTabListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxAccCfgTabListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -729,7 +729,7 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
 }
 
 
-SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxItemSet& aSet )
+SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const SfxItemSet& aSet )
     : SfxTabPage(pParent, "AccelConfigPage", "cui/ui/accelconfigpage.ui", &aSet)
     , m_pMacroInfoItem()
     , m_pStringItem()

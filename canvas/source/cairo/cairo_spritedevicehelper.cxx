@@ -51,7 +51,7 @@ namespace cairocanvas
         mbFullScreen( false )
     {}
 
-    void SpriteDeviceHelper::init( Window&                   rOutputWindow,
+    void SpriteDeviceHelper::init( vcl::Window&                   rOutputWindow,
                                    SpriteCanvas&             rSpriteCanvas,
                                    const ::basegfx::B2ISize& rSize,
                                    bool                      bFullscreen )

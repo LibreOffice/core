@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-class Window;
+namespace vcl { class Window; }
 
 
 
@@ -157,7 +157,7 @@ namespace abp
                 at all.
             @see isConnected
         */
-        bool    connect( Window* _pMessageParent );
+        bool    connect( vcl::Window* _pMessageParent );
 
         /// returns <TRUE/> if the object has a valid connection, obtained from it's data source
         bool    isConnected( ) const;

@@ -152,7 +152,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, Execute
 }
 
 
-Window* SfxURLToolBoxControl_Impl::CreateItemWindow( Window* pParent )
+vcl::Window* SfxURLToolBoxControl_Impl::CreateItemWindow( vcl::Window* pParent )
 {
     SvtURLBox* pURLBox = new SvtURLBox( pParent );
     pURLBox->SetOpenHdl( LINK( this, SfxURLToolBoxControl_Impl, OpenHdl ) );
@@ -181,7 +181,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
     Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
     if ( xFrame.is() )
     {
-        Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
         if ( pWin )
         {
             pWin->GrabFocus();

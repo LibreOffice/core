@@ -26,7 +26,7 @@
 
 class ScDrawView;
 class ScTabViewShell;
-class Window;
+namespace vcl { class Window; }
 class SdrModel;
 class Dialog;
 
@@ -44,7 +44,7 @@ class FuPoor
 protected:
     ScDrawView*     pView;
     ScTabViewShell* pViewShell;
-    Window*         pWindow;
+    vcl::Window*         pWindow;
     SdrModel*       pDrDoc;
 
     SfxRequest      aSfxRequest;
@@ -66,7 +66,7 @@ private:
     sal_uInt16      mnCode;
 
 public:
-    FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuPoor(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuPoor();
 
@@ -74,7 +74,7 @@ public:
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
-    virtual void Paint(const Rectangle&, Window*) {}
+    virtual void Paint(const Rectangle&, vcl::Window*) {}
 
     virtual void DoCut();
     virtual void DoCopy();
@@ -95,7 +95,7 @@ public:
     virtual void Activate();
     virtual void Deactivate();
 
-    void SetWindow(Window* pWin) { pWindow = pWin; }
+    void SetWindow(vcl::Window* pWin) { pWindow = pWin; }
 
     sal_uInt16 GetSlotID() const { return( aSfxRequest.GetSlot() ); }
 

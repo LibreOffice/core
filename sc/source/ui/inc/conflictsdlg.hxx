@@ -157,7 +157,7 @@ private:
     DECL_LINK( KeepAllOthersHandle, void* );
 
 public:
-                        ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList );
+                        ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList );
                         virtual ~ScConflictsDlg();
 
     void                UpdateView();

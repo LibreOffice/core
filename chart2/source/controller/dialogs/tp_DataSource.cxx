@@ -181,7 +181,7 @@ namespace chart
 {
 
 DataSourceTabPage::DataSourceTabPage(
-    Window * pParent,
+    vcl::Window * pParent,
     DialogModel & rDialogModel,
     ChartTypeTemplateProvider* pTemplateProvider,
     Dialog * pParentDialog,

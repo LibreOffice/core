@@ -337,7 +337,7 @@ namespace accessibility
 
     namespace
     {
-        bool lcl_covers( const ::Window& i_rWindow, const ::Point& i_rPoint )
+        bool lcl_covers( const vcl::Window& i_rWindow, const ::Point& i_rPoint )
         {
             const Rectangle aWindowBounds( i_rWindow.GetWindowExtentsRelative( i_rWindow.GetParent() ) );
             return aWindowBounds.IsInside( i_rPoint );

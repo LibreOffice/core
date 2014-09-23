@@ -25,7 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <cuires.hrc>
 
-SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( Window* pParent, const SfxItemSet& rSet )
+SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet )
 : SfxTabPage(pParent, "OptBasicIDEPage", "cui/ui/optbasicidepage.ui", &rSet)
 {
     SvtMiscOptions aMiscOpt;
@@ -136,7 +136,7 @@ void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     pUseExtendedTypesChk->SaveValue();
 }
 
-SfxTabPage* SvxBasicIDEOptionsPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SvxBasicIDEOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return ( new SvxBasicIDEOptionsPage( pParent, *rAttrSet ) );
 }

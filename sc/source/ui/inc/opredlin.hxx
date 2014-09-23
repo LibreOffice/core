@@ -45,10 +45,10 @@ class ScRedlineOptionsTabPage : public SfxTabPage
 
 public:
 
-    ScRedlineOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+    ScRedlineOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~ScRedlineOptionsTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

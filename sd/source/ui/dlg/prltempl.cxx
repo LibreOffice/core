@@ -49,7 +49,7 @@
  * Constructor of Tab dialog: appends pages to the dialog
  */
 SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
-                                Window* pParent,
+                                vcl::Window* pParent,
                                 SdResId DlgId,
                                 SfxStyleSheetBase& rStyleBase,
                                 PresentationObjects _ePO,

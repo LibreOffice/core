@@ -22,7 +22,7 @@ template <sal_Int16 WindowID>
 class ChildWindowWrapper : public SfxChildWindow
 {
 public:
-    ChildWindowWrapper( Window* pParentP, sal_uInt16 nId,
+    ChildWindowWrapper( vcl::Window* pParentP, sal_uInt16 nId,
                   SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
         SfxChildWindow(pParentP, nId)
     {
@@ -41,7 +41,7 @@ public:
     }
 
     static SfxChildWindow* CreateImpl(
-                Window *pParent, sal_uInt16 nId,
+                vcl::Window *pParent, sal_uInt16 nId,
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo )
     {
         SfxChildWindow* pWindow = new ChildWindowWrapper(pParent, nId, pBindings, pInfo);

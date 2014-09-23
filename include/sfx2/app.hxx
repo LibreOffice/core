@@ -81,7 +81,7 @@ class SfxWorkWindow;
 class SfxFilterMatcher;
 class SfxModule;
 class SfxModule;
-class Window;
+namespace vcl { class Window; }
 struct SfxChildWinFactory;
 struct SfxMenuCtrlFactory;
 struct SfxStbCtrlFactory;
@@ -176,7 +176,7 @@ public:
     */
     sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, bool bCopy=true, SfxItemSet* pArgs = 0 );
     SfxTemplateDialog*          GetTemplateDialog();
-    Window*                     GetTopWindow() const;
+    vcl::Window*                     GetTopWindow() const;
 
     // members
     SfxFilterMatcher&           GetFilterMatcher();

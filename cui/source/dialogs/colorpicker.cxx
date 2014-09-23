@@ -133,7 +133,7 @@ static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& f
 class HexColorControl : public Edit
 {
 public:
-    HexColorControl( Window* pParent, const WinBits& nStyle );
+    HexColorControl( vcl::Window* pParent, const WinBits& nStyle );
 
     virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void Paste() SAL_OVERRIDE;
@@ -145,13 +145,13 @@ private:
     bool ImplProcessKeyInput( const KeyEvent& rKEv );
 };
 
-HexColorControl::HexColorControl( Window* pParent, const WinBits& nStyle )
+HexColorControl::HexColorControl( vcl::Window* pParent, const WinBits& nStyle )
 : Edit( pParent, nStyle )
 {
     SetMaxTextLen( 6 );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeHexColorControl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeHexColorControl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new HexColorControl(pParent, WB_BORDER);
 }
@@ -261,7 +261,7 @@ bool HexColorControl::ImplProcessKeyInput( const KeyEvent& rKEv )
 class ColorPreviewControl : public Control
 {
 public:
-    ColorPreviewControl( Window* pParent, const WinBits& nStyle );
+    ColorPreviewControl( vcl::Window* pParent, const WinBits& nStyle );
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
@@ -270,14 +270,14 @@ private:
     Color maColor;
 };
 
-ColorPreviewControl::ColorPreviewControl( Window* pParent, const WinBits& nStyle )
+ColorPreviewControl::ColorPreviewControl( vcl::Window* pParent, const WinBits& nStyle )
 : Control( pParent, nStyle )
 {
     SetFillColor( maColor );
     SetLineColor( maColor );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorPreviewControl(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorPreviewControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = 0;
 
@@ -310,7 +310,7 @@ const ColorMode DefaultMode = HUE;
 class ColorFieldControl : public Control
 {
 public:
-    ColorFieldControl( Window* pParent, const WinBits& nStyle );
+    ColorFieldControl( vcl::Window* pParent, const WinBits& nStyle );
     virtual ~ColorFieldControl();
 
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -350,7 +350,7 @@ private:
     std::vector< sal_uInt16 > maPercent_Vert;
 };
 
-ColorFieldControl::ColorFieldControl( Window* pParent, const WinBits& nStyle )
+ColorFieldControl::ColorFieldControl( vcl::Window* pParent, const WinBits& nStyle )
 : Control( pParent, nStyle )
 , meMode( DefaultMode )
 , mdX( -1.0 )
@@ -365,7 +365,7 @@ ColorFieldControl::~ColorFieldControl()
     delete mpBitmap;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorFieldControl(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorFieldControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = 0;
 
@@ -702,7 +702,7 @@ void ColorFieldControl::UpdatePosition()
 class ColorSliderControl : public Control
 {
 public:
-    ColorSliderControl( Window* pParent, const WinBits& nStyle );
+    ColorSliderControl( vcl::Window* pParent, const WinBits& nStyle );
     virtual ~ColorSliderControl();
 
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -734,7 +734,7 @@ private:
     double mdValue;
 };
 
-ColorSliderControl::ColorSliderControl( Window* pParent, const WinBits& nStyle )
+ColorSliderControl::ColorSliderControl( vcl::Window* pParent, const WinBits& nStyle )
 : Control( pParent, nStyle )
 , meMode( DefaultMode )
 , mpBitmap( 0 )
@@ -749,7 +749,7 @@ ColorSliderControl::~ColorSliderControl()
     delete mpBitmap;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorSliderControl(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorSliderControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = 0;
 
@@ -958,7 +958,7 @@ const sal_uInt16 UPDATE_ALL = 0xff;
 class ColorPickerDialog : public ModalDialog
 {
 public:
-    ColorPickerDialog( Window* pParent, sal_Int32 nColor, sal_Int16 nMode );
+    ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sal_Int16 nMode );
 
     void update_color( sal_uInt16 n = UPDATE_ALL );
 
@@ -1010,7 +1010,7 @@ private:
     MetricField*    mpMFKey;
 };
 
-ColorPickerDialog::ColorPickerDialog( Window* pParent, sal_Int32 nColor, sal_Int16 nMode )
+ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sal_Int16 nMode )
 : ModalDialog( pParent, "ColorPicker", "cui/ui/colorpickerdialog.ui" )
 , maPreviousColor( nColor )
 , mnDialogMode( nMode )

@@ -175,7 +175,7 @@ SdrView::~SdrView()
     maAccessibilityOptions.RemoveListener(this);
 }
 
-bool SdrView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+bool SdrView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
     SetActualWin(pWin);
     bool bRet = SdrCreateView::KeyInput(rKEvt,pWin);
@@ -218,7 +218,7 @@ bool SdrView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
     return bRet;
 }
 
-bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
+bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
 {
     SetActualWin(pWin);
     if (rMEvt.IsLeft()) aDragStat.SetMouseDown(true);
@@ -231,7 +231,7 @@ bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
     return bRet;
 }
 
-bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
+bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
 {
     SetActualWin(pWin);
     if (rMEvt.IsLeft()) aDragStat.SetMouseDown(false);
@@ -245,7 +245,7 @@ bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
     return bRet;
 }
 
-bool SdrView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
+bool SdrView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
 {
     SetActualWin(pWin);
     aDragStat.SetMouseDown(rMEvt.IsLeft());
@@ -259,7 +259,7 @@ bool SdrView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
     return bRet;
 }
 
-bool SdrView::Command(const CommandEvent& rCEvt, Window* pWin)
+bool SdrView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
 {
     SetActualWin(pWin);
     bool bRet = SdrCreateView::Command(rCEvt,pWin);
@@ -488,7 +488,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 // we currently don't account for ticker text
                 if(pActualOutDev && pActualOutDev->GetOutDevType() == OUTDEV_WINDOW)
                 {
-                    OutlinerView aOLV(pOutliner, (Window*)pActualOutDev);
+                    OutlinerView aOLV(pOutliner, (vcl::Window*)pActualOutDev);
                     const EditView& aEV=aOLV.GetEditView();
                     const SvxFieldItem* pItem=aEV.GetField(aTemporaryTextRelativePosition);
                     if (pItem!=NULL) {
@@ -822,7 +822,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                     if (eHit==SDRHIT_TEXTEDIT)
                     {
                         bool bRet2(pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType() &&
-                            SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, (Window*)pActualOutDev, false, (SdrOutliner*)0L));
+                            SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, (vcl::Window*)pActualOutDev, false, (SdrOutliner*)0L));
 
                         if(bRet2)
                         {
@@ -905,7 +905,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 bRet=BegCreateCaptionObj(aLogicPos,Size(5*nHgt,2*nHgt));
             } else bRet=BegCreateObj(aLogicPos);
         } break;
-        case SDREVENT_BEGMACROOBJ: bRet=BegMacroObj(aLogicPos,nHitTolLog,rVEvt.pObj,rVEvt.pPV,(Window*)pActualOutDev); break;
+        case SDREVENT_BEGMACROOBJ: bRet=BegMacroObj(aLogicPos,nHitTolLog,rVEvt.pObj,rVEvt.pPV,(vcl::Window*)pActualOutDev); break;
         case SDREVENT_BEGTEXTEDIT: {
             if (!IsObjMarked(rVEvt.pObj)) {
                 UnmarkAllObj();
@@ -913,7 +913,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             }
 
             bRet = pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType()&&
-                 SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, (Window*)pActualOutDev, false, (SdrOutliner*)0L);
+                 SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, (vcl::Window*)pActualOutDev, false, (SdrOutliner*)0L);
 
             if(bRet)
             {
@@ -926,7 +926,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         default: break;
     } // switch
     if (bRet && pActualOutDev!=NULL && pActualOutDev->GetOutDevType()==OUTDEV_WINDOW) {
-        Window* pWin=(Window*)pActualOutDev;
+        vcl::Window* pWin=(vcl::Window*)pActualOutDev;
         // left mouse button pressed?
         bool bLeftDown=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseDown;
         // left mouse button released?

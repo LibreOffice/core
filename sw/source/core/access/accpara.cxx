@@ -378,7 +378,7 @@ void SwAccessibleParagraph::GetStates(
         pTxtNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() &&
         nOldCaretPos != -1)
     {
-        Window *pWin = GetWindow();
+        vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
             rStateSet.AddState( AccessibleStateType::FOCUSED );
         ::rtl::Reference < SwAccessibleContext > xThis( this );
@@ -486,7 +486,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
         GetMap()->SetCursorContext( xThis );
     }
 
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
     if( nOld != nNew )
     {
         // The cursor's node position is simulated by the focus!
@@ -519,7 +519,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
 
 void SwAccessibleParagraph::_InvalidateFocus()
 {
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
     if( pWin )
     {
         sal_Int32 nPos;
@@ -1026,7 +1026,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     }
 
     // ->#i13955#
-    Window * pWindow = GetWindow();
+    vcl::Window * pWindow = GetWindow();
 
     if (pWindow != NULL)
         pWindow->GrabFocus();
@@ -1413,7 +1413,7 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessiblePa
     if( tabs.hasElements() )
     {
         // translate core coordinates into accessibility coordinates
-        Window *pWin = GetWindow();
+        vcl::Window *pWin = GetWindow();
         CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
 
         SwRect aTmpRect(0, 0, tabs[0].Position, 0);
@@ -2451,7 +2451,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     GetFrm()->GetCharRect( aCoreRect, aPosition, &aMoveState );
 
     // translate core coordinates into accessibility coordinates
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
 
     Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect.SVRect() ));
@@ -2489,7 +2489,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     SwPosition aPos( *pNode, aIndex );
 
     // construct Point (translate into layout coordinates)
-    Window *pWin = GetWindow();
+    vcl::Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
     Point aPoint( rPoint.X, rPoint.Y );
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrm() ) ); // twip rel to doc root
@@ -3669,7 +3669,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
 
                 const SwRect& aCursorCoreRect = pCrsrShell->GetCharRect();
                 // translate core coordinates into accessibility coordinates
-                Window *pWin = GetWindow();
+                vcl::Window *pWin = GetWindow();
                 CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
 
                 Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect.SVRect() ));

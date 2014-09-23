@@ -44,12 +44,12 @@ class SvRTLInputBox : public ModalDialog
     DECL_LINK( CancelHdl, Button * );
 
 public:
-    SvRTLInputBox( Window* pParent, const OUString& rPrompt, const OUString& rTitle,
+    SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt, const OUString& rTitle,
         const OUString& rDefault, long nXTwips = -1, long nYTwips = -1 );
     OUString GetText() const SAL_OVERRIDE { return aText; }
 };
 
-SvRTLInputBox::SvRTLInputBox( Window* pParent, const OUString& rPrompt,
+SvRTLInputBox::SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt,
         const OUString& rTitle, const OUString& rDefault,
         long nXTwips, long nYTwips ) :
     ModalDialog( pParent,WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),

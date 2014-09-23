@@ -156,7 +156,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
 
 SvxFontWorkChildWindow::SvxFontWorkChildWindow
 (
-    Window* _pParent,
+    vcl::Window* _pParent,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo
@@ -178,7 +178,7 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
 
 SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
                                       SfxChildWindow *pCW,
-                                      Window* _pParent,
+                                      vcl::Window* _pParent,
                                       const ResId& rResId ) :
     SfxDockingWindow( pBindinx, pCW, _pParent, rResId ),
 

@@ -26,12 +26,12 @@
 class SfxObjectShell;
 class GDIMetaFile;
 
-class SfxPreviewBase_Impl : public Window
+class SfxPreviewBase_Impl : public vcl::Window
 {
 protected:
     ::boost::shared_ptr<GDIMetaFile> pMetaFile;
 public:
-    SfxPreviewBase_Impl(Window* pParent, WinBits nStyle);
+    SfxPreviewBase_Impl(vcl::Window* pParent, WinBits nStyle);
     void            SetObjectShell( SfxObjectShell* pObj );
     virtual void    Resize() SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
@@ -42,12 +42,12 @@ class SfxPreviewWin_Impl: public SfxPreviewBase_Impl
 protected:
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 public:
-    SfxPreviewWin_Impl(Window* pParent, WinBits nStyle)
+    SfxPreviewWin_Impl(vcl::Window* pParent, WinBits nStyle)
         : SfxPreviewBase_Impl(pParent, nStyle)
     {
     }
     static void     ImpPaint(
-        const Rectangle& rRect, GDIMetaFile* pFile, Window* pWindow );
+        const Rectangle& rRect, GDIMetaFile* pFile, vcl::Window* pWindow );
 };
 
 #endif

@@ -27,13 +27,13 @@ const char* ImplDbgCheckWindow( const void* pObj )
 {
     DBG_TESTSOLARMUTEX();
 
-    const Window* pWindow = (Window*)pObj;
+    const vcl::Window* pWindow = (vcl::Window*)pObj;
 
     if ( (pWindow->GetType() < WINDOW_FIRST) || (pWindow->GetType() > WINDOW_LAST) )
         return "Window data overwrite";
 
     // check window-chain
-    Window* pChild = pWindow->mpWindowImpl->mpFirstChild;
+    vcl::Window* pChild = pWindow->mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
         if ( pChild->mpWindowImpl->mpParent != pWindow )

@@ -51,7 +51,7 @@ class SwMailMergeDlg : public SvxStandardDialog
 {
     friend class SwXSelChgLstnr_Impl;
 
-    Window*         m_pBeamerWin;
+    vcl::Window*         m_pBeamerWin;
 
     RadioButton*     m_pAllRB;
     RadioButton*     m_pMarkedRB;
@@ -115,7 +115,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     bool            ExecQryShell();
 
 public:
-     SwMailMergeDlg(Window* pParent, SwWrtShell& rSh,
+     SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rSh,
          const OUString& rSourceName,
         const OUString& rTblName,
         sal_Int32 nCommandType,
@@ -140,7 +140,7 @@ class SwMailMergeCreateFromDlg : public ModalDialog
 {
     RadioButton* m_pThisDocRB;
 public:
-    SwMailMergeCreateFromDlg(Window* pParent);
+    SwMailMergeCreateFromDlg(vcl::Window* pParent);
     bool IsThisDocument() const
     {
         return m_pThisDocRB->IsChecked();
@@ -151,7 +151,7 @@ class SwMailMergeFieldConnectionsDlg : public ModalDialog
 {
     RadioButton* m_pUseExistingRB;
 public:
-    SwMailMergeFieldConnectionsDlg(Window* pParent);
+    SwMailMergeFieldConnectionsDlg(vcl::Window* pParent);
     bool IsUseExistingConnections() const
     {
         return m_pUseExistingRB->IsChecked();

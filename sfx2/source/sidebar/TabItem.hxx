@@ -23,7 +23,7 @@
 
 #include "DeckDescriptor.hxx"
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sfx2 { namespace sidebar {
 
@@ -33,7 +33,7 @@ class TabItem
     : public ImageRadioButton
 {
 public:
-    TabItem (Window* pParentWindow);
+    TabItem (vcl::Window* pParentWindow);
     virtual ~TabItem (void);
 
     virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;

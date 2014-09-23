@@ -40,7 +40,7 @@ namespace sd {
 
 #define TOKEN ';'
 
-CopyDlg::CopyDlg(::Window* pWindow, const SfxItemSet& rInAttrs,
+CopyDlg::CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
     const XColorListRef &pColList, ::sd::View* pInView)
     : SfxModalDialog(pWindow, "DuplicateDialog", "modules/sdraw/ui/copydlg.ui")
     , mrOutAttrs(rInAttrs)

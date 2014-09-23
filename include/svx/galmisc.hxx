@@ -181,8 +181,8 @@ protected:
     virtual void                    DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
     virtual void                    ObjectReleased() SAL_OVERRIDE;
 
-    void                            CopyToClipboard( Window* pWindow );
-    void                            StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
+    void                            CopyToClipboard( vcl::Window* pWindow );
+    void                            StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
                                                sal_Int32 nDragPointer = DND_POINTER_NONE,
                                                sal_Int32 nDragImage = DND_IMAGE_NONE );
 };

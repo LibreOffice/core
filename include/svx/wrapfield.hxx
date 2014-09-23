@@ -32,7 +32,7 @@ namespace svx {
 class SVX_DLLPUBLIC WrapField : public NumericField
 {
 public:
-    explicit            WrapField( Window* pParent, WinBits nBits );
+    explicit            WrapField( vcl::Window* pParent, WinBits nBits );
 
 protected:
     /** Up event with wrap-around functionality. */

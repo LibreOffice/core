@@ -51,7 +51,7 @@ namespace vclcanvas
         // vcl/source/window/window.cxx is broken, that disposes the
         // canvas during window deletion, we're riding a dead horse
         // here
-        Window& mrOutputWindow;
+        vcl::Window& mrOutputWindow;
     };
 }
 

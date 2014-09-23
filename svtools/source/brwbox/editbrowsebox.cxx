@@ -47,7 +47,7 @@ namespace svt
     namespace
     {
 
-        sal_uInt16 getRealGetFocusFlags( Window* _pWindow )
+        sal_uInt16 getRealGetFocusFlags( vcl::Window* _pWindow )
         {
             sal_uInt16 nFlags = 0;
             while ( _pWindow && !nFlags )
@@ -133,7 +133,7 @@ namespace svt
     }
 
 
-    EditBrowseBox::EditBrowseBox(Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags, BrowserMode _nMode )
+    EditBrowseBox::EditBrowseBox(vcl::Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags, BrowserMode _nMode )
                   :BrowseBox( pParent, rId, _nMode )
                   ,nStartEvent(0)
                   ,nEndEvent(0)
@@ -154,7 +154,7 @@ namespace svt
     }
 
 
-    EditBrowseBox::EditBrowseBox( Window* pParent, sal_Int32 nBrowserFlags, WinBits nBits, BrowserMode _nMode )
+    EditBrowseBox::EditBrowseBox( vcl::Window* pParent, sal_Int32 nBrowserFlags, WinBits nBits, BrowserMode _nMode )
                   :BrowseBox( pParent, nBits, _nMode )
                   ,nStartEvent(0)
                   ,nEndEvent(0)
@@ -554,7 +554,7 @@ namespace svt
             // the position of the event relative to the controller's window
             Point aPos = _rEvt.GetPosPixel() - _rEvt.GetRect().TopLeft();
             // the (child) window which should really get the event
-            Window* pRealHandler = aController->GetWindow().FindWindow(aPos);
+            vcl::Window* pRealHandler = aController->GetWindow().FindWindow(aPos);
             if (pRealHandler)
                 // the coords relative to this real handler
                 aPos -= pRealHandler->GetPosPixel();
@@ -570,7 +570,7 @@ namespace svt
             if (_bUp)
                 pRealHandler->MouseButtonUp(aEvent);
 
-            Window *pWin = &aController->GetWindow();
+            vcl::Window *pWin = &aController->GetWindow();
             if (!pWin->IsTracking())
             {
                 for (pWin = pWin->GetWindow(WINDOW_FIRSTCHILD);
@@ -916,7 +916,7 @@ namespace svt
 
         if (nNewRow != nEditRow)
         {
-            Window& rWindow = GetDataWindow();
+            vcl::Window& rWindow = GetDataWindow();
             if ((nEditRow >= 0) && (GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
             {
                 Rectangle aRect = GetFieldRectPixel(nEditRow, 0, false );

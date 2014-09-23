@@ -34,7 +34,7 @@
 
 // Subtotals group tabpage:
 
-ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent,
+ScTpSubTotalGroup::ScTpSubTotalGroup( vcl::Window* pParent,
                                       const SfxItemSet& rArgSet )
         :   SfxTabPage      ( pParent,
                               "SubTotalGrpPage", "modules/scalc/ui/subtotalgrppage.ui",
@@ -378,27 +378,27 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 
 // Derived Group TabPages:
 
-SfxTabPage* ScTpSubTotalGroup1::Create( Window*         pParent,
+SfxTabPage* ScTpSubTotalGroup1::Create( vcl::Window*         pParent,
                                                  const SfxItemSet*  rArgSet )
     { return ( new ScTpSubTotalGroup1( pParent, *rArgSet ) ); }
 
-SfxTabPage* ScTpSubTotalGroup2::Create( Window*          pParent,
+SfxTabPage* ScTpSubTotalGroup2::Create( vcl::Window*          pParent,
                                        const SfxItemSet*    rArgSet )
     { return ( new ScTpSubTotalGroup2( pParent, *rArgSet ) ); }
 
-SfxTabPage* ScTpSubTotalGroup3::Create( Window*          pParent,
+SfxTabPage* ScTpSubTotalGroup3::Create( vcl::Window*          pParent,
                                        const SfxItemSet*    rArgSet )
     { return ( new ScTpSubTotalGroup3( pParent, *rArgSet ) ); }
 
-ScTpSubTotalGroup1::ScTpSubTotalGroup1( Window* pParent, const SfxItemSet& rArgSet ) :
+ScTpSubTotalGroup1::ScTpSubTotalGroup1( vcl::Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
-ScTpSubTotalGroup2::ScTpSubTotalGroup2( Window* pParent, const SfxItemSet& rArgSet ) :
+ScTpSubTotalGroup2::ScTpSubTotalGroup2( vcl::Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
-ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgSet ) :
+ScTpSubTotalGroup3::ScTpSubTotalGroup3( vcl::Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
@@ -416,7 +416,7 @@ bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(3);
 
 // Optionen-Tabpage:
 
-ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
+ScTpSubTotalOptions::ScTpSubTotalOptions( vcl::Window*               pParent,
                                           const SfxItemSet&     rArgSet )
 
         :   SfxTabPage      ( pParent,
@@ -462,7 +462,7 @@ void ScTpSubTotalOptions::Init()
     FillUserSortListBox();
 }
 
-SfxTabPage* ScTpSubTotalOptions::Create( Window*                 pParent,
+SfxTabPage* ScTpSubTotalOptions::Create( vcl::Window*                 pParent,
                                           const SfxItemSet*     rArgSet )
 {
     return ( new ScTpSubTotalOptions( pParent, *rArgSet ) );

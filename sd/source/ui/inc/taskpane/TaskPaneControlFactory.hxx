@@ -47,10 +47,10 @@ public:
 
         Derived classes should overload InternalCreateControl.
     */
-    ::std::auto_ptr<TreeNode> CreateControl( ::Window& i_rParent );
+    ::std::auto_ptr<TreeNode> CreateControl( vcl::Window& i_rParent );
 
 protected:
-    virtual TreeNode* InternalCreateControl( ::Window& i_rParent ) = 0;
+    virtual TreeNode* InternalCreateControl( vcl::Window& i_rParent ) = 0;
 };
 
 /** A simple helper class that realizes a ControlFactory that is able to create root controls, providing
@@ -66,7 +66,7 @@ public:
     {}
 
 protected:
-    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
+    virtual TreeNode* InternalCreateControl( vcl::Window& i_rParent )
     {
         return new ControlType( i_rParent, mrArgument );
     }

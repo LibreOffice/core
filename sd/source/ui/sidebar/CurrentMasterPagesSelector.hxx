@@ -36,7 +36,7 @@ class CurrentMasterPagesSelector
 {
 public:
     static MasterPagesSelector* Create (
-        ::Window* pParent,
+        vcl::Window* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
@@ -62,7 +62,7 @@ private:
     css::uno::Reference<css::lang::XComponent> mxListener;
 
     CurrentMasterPagesSelector (
-        ::Window* pParent,
+        vcl::Window* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,

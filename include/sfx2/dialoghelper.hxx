@@ -16,7 +16,7 @@
 
 class DateTime;
 class LocaleDataWrapper;
-class Window;
+namespace vcl { class Window; }
 class VclBuilderContainer;
 
 //when two tab pages both have the same basic layout with a preview on the
@@ -26,17 +26,17 @@ class VclBuilderContainer;
 
 //there has to be a "maingrid" container which contains all the widgets
 //except for the preview widget
-void SFX2_DLLPUBLIC setPreviewsToSamePlace(Window *pParent, VclBuilderContainer *pPage);
+void SFX2_DLLPUBLIC setPreviewsToSamePlace(vcl::Window *pParent, VclBuilderContainer *pPage);
 
-Size SFX2_DLLPUBLIC getParagraphPreviewOptimalSize(const Window *pReference);
+Size SFX2_DLLPUBLIC getParagraphPreviewOptimalSize(const vcl::Window *pReference);
 
-Size SFX2_DLLPUBLIC getDrawPreviewOptimalSize(const Window *pReference);
+Size SFX2_DLLPUBLIC getDrawPreviewOptimalSize(const vcl::Window *pReference);
 
-Size SFX2_DLLPUBLIC getDrawListBoxOptimalSize(const Window *pReference);
+Size SFX2_DLLPUBLIC getDrawListBoxOptimalSize(const vcl::Window *pReference);
 
-Size SFX2_DLLPUBLIC getPreviewStripSize(const Window *pReference);
+Size SFX2_DLLPUBLIC getPreviewStripSize(const vcl::Window *pReference);
 
-Size SFX2_DLLPUBLIC getPreviewOptionsSize(const Window *pReference);
+Size SFX2_DLLPUBLIC getPreviewOptionsSize(const vcl::Window *pReference);
 
 OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper);
 

@@ -57,7 +57,7 @@ class AreaPropertyPanel
 {
 public:
     static AreaPropertyPanel* Create(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
@@ -167,7 +167,7 @@ private:
 
     // constructor/destuctor
     AreaPropertyPanel(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~AreaPropertyPanel(void);

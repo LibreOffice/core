@@ -43,7 +43,7 @@ public:
     bool        CreateMethod( Display *pDisplay );
     XIMStyles  *GetSupportedStyles()    { return mpStyles;  }
     bool        SetLocale( const char* pLocale = "" );
-    bool        FilterEvent( XEvent *pEvent, XLIB_Window window );
+    bool        FilterEvent( XEvent *pEvent, ::Window window );
 
     SalI18N_InputMethod();
     ~SalI18N_InputMethod();

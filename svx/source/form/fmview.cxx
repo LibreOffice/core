@@ -276,8 +276,8 @@ void FmFormView::ChangeDesignMode(bool bDesign)
         {
             if ( GetActualOutDev() && GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW )
             {
-                const Window* pWindow = static_cast< const Window* >( GetActualOutDev() );
-                const_cast< Window* >( pWindow )->GrabFocus();
+                const vcl::Window* pWindow = static_cast< const vcl::Window* >( GetActualOutDev() );
+                const_cast< vcl::Window* >( pWindow )->GrabFocus();
             }
 
             // redraw UNO objects
@@ -480,7 +480,7 @@ void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFor
 }
 
 
-bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
     bool bDone = false;
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
@@ -541,7 +541,7 @@ bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 }
 
 
-bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
+bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, vcl::Window* _pWin )
 {
     bool bReturn = E3dView::MouseButtonDown( _rMEvt, _pWin );
 

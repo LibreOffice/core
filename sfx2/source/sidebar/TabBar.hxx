@@ -45,7 +45,7 @@ class TabItem;
 /** The tab bar is the container for the individual tabs.
 */
 class TabBar
-    : public Window
+    : public vcl::Window
 {
 public:
     /** DeckMenuData has entries for display name, deck id, and a flag:
@@ -65,7 +65,7 @@ public:
             const Rectangle&,
             const ::std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
     TabBar (
-        Window* pParentWindow,
+        vcl::Window* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const ::boost::function<void(const ::rtl::OUString&rsDeckId)>& rDeckActivationFunctor,
         const PopupMenuProvider& rPopupMenuProvider);

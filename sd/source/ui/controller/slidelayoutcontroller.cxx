@@ -66,7 +66,7 @@ namespace sd
 class LayoutToolbarMenu : public svtools::ToolbarMenu
 {
 public:
-    LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, ::Window* pParent, const bool bInsertPage );
+    LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, vcl::Window* pParent, const bool bInsertPage );
     virtual ~LayoutToolbarMenu();
 
 protected:
@@ -151,7 +151,7 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pIn
     pValue->SetSizePixel( pValue->CalcWindowSizePixel( aLayoutItemSize ) );
 }
 
-LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, ::Window* pParent, const bool bInsertPage )
+LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, vcl::Window* pParent, const bool bInsertPage )
 : svtools::ToolbarMenu(xFrame, pParent, WB_CLIPCHILDREN )
 , mrController( rController )
 , mxFrame(xFrame)
@@ -355,7 +355,7 @@ void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::
     }
 }
 
-::Window* SlideLayoutController::createPopupWindow( ::Window* pParent )
+::vcl::Window* SlideLayoutController::createPopupWindow( ::vcl::Window* pParent )
 {
     return new sd::LayoutToolbarMenu( *this, m_xFrame, pParent, mbInsertPage );
 }

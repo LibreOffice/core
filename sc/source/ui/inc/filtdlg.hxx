@@ -53,7 +53,7 @@ class ScFilterDlg : public ScAnyRefDlg
     };
     typedef boost::ptr_map<SCCOL,EntryList> EntryListsMap;
 public:
-                    ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  const SfxItemSet&  rArgSet );
                     virtual ~ScFilterDlg();
 
@@ -160,7 +160,7 @@ private:
 class ScSpecialFilterDlg : public ScAnyRefDlg
 {
 public:
-                    ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                         const SfxItemSet&   rArgSet );
                     virtual ~ScSpecialFilterDlg();
 

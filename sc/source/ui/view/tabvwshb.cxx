@@ -72,7 +72,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     //  wird aus dem Paint gerufen
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
-    Window* pWin = GetActiveWin();
+    vcl::Window* pWin = GetActiveWin();
 
     //  wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
 
@@ -106,7 +106,7 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     RemoveHintWindow();
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
-    Window* pWin = GetActiveWin();
+    vcl::Window* pWin = GetActiveWin();
     ErrCode nErr = ERRCODE_NONE;
     bool bErrorShown = false;
 
@@ -274,7 +274,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
     ScTabView*   pTabView  = GetViewData().GetView();
-    Window*      pWin      = pTabView->GetActiveWin();
+    vcl::Window*      pWin      = pTabView->GetActiveWin();
     ScDrawView*  pView     = pTabView->GetScDrawView();
     ScDocShell*  pDocSh    = GetViewData().GetDocShell();
     ScDocument&  rDoc      = pDocSh->GetDocument();

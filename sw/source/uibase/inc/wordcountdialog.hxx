@@ -54,7 +54,7 @@ class SwWordCountFloatDlg : public SfxModelessDialog
 public:
     SwWordCountFloatDlg(     SfxBindings* pBindings,
                              SfxChildWindow* pChild,
-                             Window *pParent,
+                             vcl::Window *pParent,
                              SfxChildWinInfo* pInfo);
     virtual ~SwWordCountFloatDlg();
     void    UpdateCounts();
@@ -66,7 +66,7 @@ class SwWordCountWrapper : public SfxChildWindow
 {
     AbstractSwWordCountFloatDlg*   pAbstDlg;
 protected:
-    SwWordCountWrapper(    Window *pParentWindow,
+    SwWordCountWrapper(    vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo );

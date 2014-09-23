@@ -21,7 +21,7 @@
 #include <svtools/svmedit2.hxx>
 #include <vcl/xtextedt.hxx>
 
-ExtMultiLineEdit::ExtMultiLineEdit( Window* pParent, WinBits nWinStyle ) :
+ExtMultiLineEdit::ExtMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle ) :
 
     MultiLineEdit( pParent, nWinStyle )
 

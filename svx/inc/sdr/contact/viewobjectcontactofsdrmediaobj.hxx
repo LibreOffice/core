@@ -25,7 +25,7 @@
 #include <tools/gen.hxx>
 
 namespace avmedia { class MediaItem; }
-class Window;
+namespace vcl { class Window; }
 
 namespace sdr
 {
@@ -44,7 +44,7 @@ namespace sdr
 
         public:
 
-            Window* getWindow() const;
+            vcl::Window* getWindow() const;
 
             Size    getPreferredSize() const;
 

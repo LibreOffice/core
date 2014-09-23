@@ -243,7 +243,7 @@ OUString ORelationController::getPrivateTitle( ) const
     return ::dbaui::getStrippedDatabaseName(getDataSource(),sName);
 }
 
-bool ORelationController::Construct(Window* pParent)
+bool ORelationController::Construct(vcl::Window* pParent)
 {
     setView( * new ORelationDesignView( pParent, *this, getORB() ) );
     OJoinController::Construct(pParent);

@@ -1636,7 +1636,7 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
     awt::DeviceInfo aDeviceInfo;
 
     DlgEditor& rEditor = GetDlgEditor();
-    Window& rWindow = rEditor.GetWindow();
+    vcl::Window& rWindow = rEditor.GetWindow();
 
     // obtain an XControl
     ::utl::SharedUNOComponent< awt::XControl > xDialogControl; // ensures auto-disposal, if needed

@@ -301,13 +301,13 @@ class OExceptionChainDialog : public ModalDialog
     ExceptionDisplayChain   m_aExceptions;
 
 public:
-    OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions );
+    OExceptionChainDialog( vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions );
 
 protected:
     DECL_LINK(OnExceptionSelected, void*);
 };
 
-OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const ExceptionDisplayChain& _rExceptions)
+OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions)
     : ModalDialog(pParent, "SQLExceptionDialog", "dbaccess/ui/sqlexception.ui")
     , m_aExceptions(_rExceptions)
 {
@@ -413,7 +413,7 @@ struct SQLMessageBox_Impl
 
 namespace
 {
-    void lcl_positionInAppFont( const Window& _rParent, Window& _rChild, long _nX, long _nY, long _Width, long _Height )
+    void lcl_positionInAppFont( const vcl::Window& _rParent, vcl::Window& _rChild, long _nX, long _nY, long _Width, long _Height )
     {
         Point aPos = _rParent.LogicToPixel( Point( _nX, _nY ), MAP_APPFONT );
         Size aSize = _rParent.LogicToPixel( Size( _Width, _Height ), MAP_APPFONT );
@@ -664,7 +664,7 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
     impl_addDetailsButton();
 }
 
-OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, const OUString& _rHelpURL )
+OSQLMessageBox::OSQLMessageBox(vcl::Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, const OUString& _rHelpURL )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( this )
     ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
@@ -675,7 +675,7 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rExcep
     Construct( _nStyle, AUTO );
 }
 
-OSQLMessageBox::OSQLMessageBox( Window* _pParent, const OUString& _rTitle, const OUString& _rMessage, WinBits _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
+OSQLMessageBox::OSQLMessageBox( vcl::Window* _pParent, const OUString& _rTitle, const OUString& _rMessage, WinBits _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( this )
     ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
@@ -704,14 +704,14 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
 }
 
 // OSQLWarningBox
-OSQLWarningBox::OSQLWarningBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
+OSQLWarningBox::OSQLWarningBox( vcl::Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_WARNING ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
 {
 }
 
 // OSQLErrorBox
-OSQLErrorBox::OSQLErrorBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
+OSQLErrorBox::OSQLErrorBox( vcl::Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_ERROR ), _rMessage, _nStyle, OSQLMessageBox::Error, _pAdditionalErrorInfo )
 {

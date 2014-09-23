@@ -62,7 +62,7 @@ namespace dbaui
         */
         virtual void            resizeControls(const Size& _rDiff);
 
-        OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
+        OTableSubscriptionPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
         virtual ~OTableSubscriptionPage();
 
     protected:

@@ -298,7 +298,7 @@ namespace dbaui
     public:
         // used for copy tables or queries
         OCopyTableWizard(
-            Window * pParent,
+            vcl::Window * pParent,
             const OUString& _rDefaultName,
             sal_Int16 _nOperation,
             const ICopyTableSourceObject&                                                           _rSourceObject,
@@ -310,7 +310,7 @@ namespace dbaui
 
         // used for importing rtf/html sources
         OCopyTableWizard(
-            Window* pParent,
+            vcl::Window* pParent,
             const OUString& _rDefaultName,
             sal_Int16 _nOperation,
             const ODatabaseExport::TColumns& _rDestColumns,

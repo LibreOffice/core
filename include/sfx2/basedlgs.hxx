@@ -44,7 +44,7 @@ class FixedLine;
 //and SfxDockingWindow, where it is changed into a UniqueId and cleared
 //This reverses the clear of the HelpId
 
-inline void reverseUniqueHelpIdHack(Window &rWindow)
+inline void reverseUniqueHelpIdHack(vcl::Window &rWindow)
 {
     if (rWindow.GetHelpId().isEmpty())
         rWindow.SetHelpId(rWindow.GetUniqueId());
@@ -68,7 +68,7 @@ private:
     SAL_DLLPRIVATE void init();
 
 protected:
-    SfxModalDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
+    SfxModalDialog(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
 
     OUString&           GetExtraData()      { return aExtraData; }
     sal_uInt32          GetUniqId() const   { return nUniqId; }
@@ -100,7 +100,7 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
 
 protected:
     SfxModelessDialog( SfxBindings*, SfxChildWindow*,
-        Window*, const OString& rID, const OUString& rUIXMLDescription );
+        vcl::Window*, const OString& rID, const OUString& rUIXMLDescription );
     virtual ~SfxModelessDialog();
     virtual bool            Close() SAL_OVERRIDE;
     virtual void            Resize() SAL_OVERRIDE;
@@ -132,11 +132,11 @@ class SFX2_DLLPUBLIC SfxFloatingWindow: public FloatingWindow
 protected:
                             SfxFloatingWindow( SfxBindings *pBindings,
                                               SfxChildWindow *pCW,
-                                              Window* pParent,
+                                              vcl::Window* pParent,
                                               WinBits nWinBits=WB_STDMODELESS);
                             SfxFloatingWindow( SfxBindings *pBindings,
                                               SfxChildWindow *pCW,
-                                              Window* pParent,
+                                              vcl::Window* pParent,
                                               const OString& rID, const OUString& rUIXMLDescription,
                                               const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
                             virtual ~SfxFloatingWindow();
@@ -178,11 +178,11 @@ typedef const sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which
 class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxModalDialog
 {
 public:
-    SfxSingleTabDialog(Window *pParent, const SfxItemSet& rOptionsSet,
+    SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& rOptionsSet,
         const OString& rID = OString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 
-    SfxSingleTabDialog(Window *pParent, const SfxItemSet* pInSet = 0,
+    SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet* pInSet = 0,
         const OString& rID = OString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 

@@ -36,7 +36,7 @@ struct ScSubTotalParam;
 class ScTpSubTotalGroup : public SfxTabPage
 {
 protected:
-            ScTpSubTotalGroup( Window* pParent,
+            ScTpSubTotalGroup( vcl::Window* pParent,
                                const SfxItemSet& rArgSet );
 
 public:
@@ -76,13 +76,13 @@ private:
 class ScTpSubTotalGroup1 : public ScTpSubTotalGroup
 {
 protected:
-            ScTpSubTotalGroup1( Window*              pParent,
+            ScTpSubTotalGroup1( vcl::Window*              pParent,
                                 const SfxItemSet&    rArgSet );
 
 public:
     virtual ~ScTpSubTotalGroup1();
 
-    static  SfxTabPage* Create      ( Window*               pParent,
+    static  SfxTabPage* Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -91,13 +91,13 @@ public:
 class ScTpSubTotalGroup2 : public ScTpSubTotalGroup
 {
 protected:
-            ScTpSubTotalGroup2( Window*              pParent,
+            ScTpSubTotalGroup2( vcl::Window*              pParent,
                                 const SfxItemSet&    rArgSet );
 
 public:
     virtual ~ScTpSubTotalGroup2();
 
-    static  SfxTabPage* Create      ( Window*               pParent,
+    static  SfxTabPage* Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -106,13 +106,13 @@ public:
 class ScTpSubTotalGroup3 : public ScTpSubTotalGroup
 {
 protected:
-            ScTpSubTotalGroup3( Window*              pParent,
+            ScTpSubTotalGroup3( vcl::Window*              pParent,
                                 const SfxItemSet&    rArgSet );
 
 public:
     virtual ~ScTpSubTotalGroup3();
 
-    static  SfxTabPage* Create      ( Window*               pParent,
+    static  SfxTabPage* Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -121,13 +121,13 @@ public:
 class ScTpSubTotalOptions : public SfxTabPage
 {
 protected:
-            ScTpSubTotalOptions( Window*             pParent,
+            ScTpSubTotalOptions( vcl::Window*             pParent,
                                   const SfxItemSet&  rArgSet );
 
 public:
     virtual ~ScTpSubTotalOptions();
 
-    static SfxTabPage*  Create      ( Window*               pParent,
+    static SfxTabPage*  Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;

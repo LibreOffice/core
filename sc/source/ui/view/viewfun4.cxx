@@ -95,11 +95,11 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         boost::scoped_ptr<ScTabEditEngine> pEngine(new ScTabEditEngine( *pPattern, rDoc.GetEnginePool() ));
         pEngine->EnableUndo( false );
 
-        Window* pActWin = GetActiveWin();
+        vcl::Window* pActWin = GetActiveWin();
         if (pActWin)
         {
             pEngine->SetPaperSize(Size(100000,100000));
-            Window aWin( pActWin );
+            vcl::Window aWin( pActWin );
             EditView aEditView( pEngine.get(), &aWin );
             aEditView.SetOutputArea(Rectangle(0,0,100000,100000));
 

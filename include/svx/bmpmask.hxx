@@ -59,7 +59,7 @@ public:
 class SVX_DLLPUBLIC SvxBmpMaskChildWindow : public SfxChildWindow
 {
  public:
-                            SvxBmpMaskChildWindow( Window*,
+                            SvxBmpMaskChildWindow( vcl::Window*,
                                                    sal_uInt16, SfxBindings*,
                                                    SfxChildWinInfo* );
 
@@ -146,7 +146,7 @@ public:
 
                         SvxBmpMask( SfxBindings *pBindinx,
                                     SfxChildWindow *pCW,
-                                    Window* pParent,
+                                    vcl::Window* pParent,
                                     const ResId& rResId );
                         virtual ~SvxBmpMask();
 

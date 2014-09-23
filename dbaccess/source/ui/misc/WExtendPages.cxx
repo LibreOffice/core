@@ -48,7 +48,7 @@ SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
                             m_pParent->shouldCreatePrimaryKey());
 }
 
-OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent )
+OWizNormalExtend::OWizNormalExtend(vcl::Window* pParent) : OWizTypeSelect( pParent )
 {
     EnableAuto(false);
 }

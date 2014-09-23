@@ -31,7 +31,7 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-void TabPage::ImplInit( Window* pParent, WinBits nStyle )
+void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
@@ -48,7 +48,7 @@ void TabPage::ImplInit( Window* pParent, WinBits nStyle )
 
 void TabPage::ImplInitSettings()
 {
-    Window* pParent = GetParent();
+    vcl::Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
         EnableChildTransparentMode( true );
@@ -69,13 +69,13 @@ void TabPage::ImplInitSettings()
     }
 }
 
-TabPage::TabPage( Window* pParent, WinBits nStyle ) :
+TabPage::TabPage( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_TABPAGE )
 {
     ImplInit( pParent, nStyle );
 }
 
-TabPage::TabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
+TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Window(WINDOW_TABPAGE)
 {
     ImplInit(pParent, 0);

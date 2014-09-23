@@ -1205,7 +1205,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 sal_uLong
 SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nInsPos, sal_Unicode cChar,
-                                    bool bInsert, Window* pFrameWin )
+                                    bool bInsert, vcl::Window* pFrameWin )
 {
     sal_uLong nRet = 0;
     bool bIsNextRun = bRunNext;

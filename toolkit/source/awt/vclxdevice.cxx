@@ -128,8 +128,8 @@ IMPL_XTYPEPROVIDER_END
         OutDevType eDevType = mpOutputDevice->GetOutDevType();
         if ( eDevType == OUTDEV_WINDOW )
         {
-            aDevSz = ((Window*)mpOutputDevice)->GetSizePixel();
-            ((Window*)mpOutputDevice)->GetBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
+            aDevSz = ((vcl::Window*)mpOutputDevice)->GetSizePixel();
+            ((vcl::Window*)mpOutputDevice)->GetBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
         }
         else if ( eDevType == OUTDEV_PRINTER )
         {

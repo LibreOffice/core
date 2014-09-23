@@ -54,7 +54,7 @@ using namespace ::com::sun::star::lang;
  *     nDefFmt:     Select this format and possibly insert it
  */
 
-NumFormatListBox::NumFormatListBox(Window* pWin, WinBits nStyle) :
+NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
     ListBox             ( pWin, nStyle ),
     nCurrFormatType     (-1),
     nStdEntry           (0),
@@ -68,7 +68,7 @@ NumFormatListBox::NumFormatListBox(Window* pWin, WinBits nStyle) :
     Init(NUMBERFORMAT_NUMBER, true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumFormatListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeNumFormatListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
 

@@ -36,7 +36,7 @@
 /*                                                                   */
 /*********************************************************************/
 
-SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
+SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
                                 const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptFontsPage", "cui/ui/optfontspage.ui", &rSet)
     , pConfig(new SvtFontSubstConfig)
@@ -143,7 +143,7 @@ SvxFontSubstTabPage::~SvxFontSubstTabPage()
     delete m_pCheckLB;
 }
 
-SfxTabPage*  SvxFontSubstTabPage::Create( Window* pParent,
+SfxTabPage*  SvxFontSubstTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SvxFontSubstTabPage(pParent, *rAttrSet);
@@ -238,7 +238,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     m_pFontHeightLB->SaveValue();
 }
 
-IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
+IMPL_LINK(SvxFontSubstTabPage, SelectHdl, vcl::Window*, pWin)
 {
     if (pWin == m_pApply || pWin == m_pDelete)
     {

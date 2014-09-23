@@ -65,7 +65,7 @@ namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
 // OTableTreeListBox
-OTableTreeListBox::OTableTreeListBox(Window* pParent, WinBits nWinStyle)
+OTableTreeListBox::OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle)
     :OMarkableTreeListBox(pParent, nWinStyle)
     ,m_xImageProvider( new ImageProvider )
     ,m_bVirtualRoot(false)
@@ -74,7 +74,7 @@ OTableTreeListBox::OTableTreeListBox(Window* pParent, WinBits nWinStyle)
     implSetDefaultImages();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOTableTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOTableTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

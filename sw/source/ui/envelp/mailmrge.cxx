@@ -127,7 +127,7 @@ void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeExcepti
     OSL_FAIL("disposing");
 }
 
-SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
+SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
         const OUString& rSourceName,
         const OUString& rTblName,
         sal_Int32 nCommandType,
@@ -627,14 +627,14 @@ uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
     return xResSetClone;
 }
 
-SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(Window* pParent)
+SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "MailMergeDialog",
         "modules/swriter/ui/mailmergedialog.ui")
 {
     get(m_pThisDocRB, "document");
 }
 
-SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent)
+SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "MergeConnectDialog",
         "modules/swriter/ui/mergeconnectdialog.ui")
 {

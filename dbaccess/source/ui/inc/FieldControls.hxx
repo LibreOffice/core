@@ -34,7 +34,7 @@ namespace dbaui
         short                m_nPos;
         OUString             m_strHelpText;
     public:
-        OPropColumnEditCtrl(Window* pParent, OUString& _rAllowedChars, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropColumnEditCtrl(vcl::Window* pParent, OUString& _rAllowedChars, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         virtual bool IsModified() const SAL_OVERRIDE { return IsValueChangedFromSaved(); }
 
@@ -52,7 +52,7 @@ namespace dbaui
         OUString             m_strHelpText;
 
     public:
-        OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropEditCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         virtual bool IsModified() const SAL_OVERRIDE { return IsValueChangedFromSaved(); }
 
@@ -68,7 +68,7 @@ namespace dbaui
         OUString  m_strHelpText;
 
     public:
-        OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropNumericEditCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         virtual bool IsModified() const SAL_OVERRIDE { return IsValueChangedFromSaved(); }
 
@@ -85,7 +85,7 @@ namespace dbaui
         OUString  m_strHelpText;
 
     public:
-        OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropListBoxCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         bool IsModified() const { return IsValueChangedFromSaved(); }
 

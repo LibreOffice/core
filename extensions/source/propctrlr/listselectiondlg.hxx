@@ -39,7 +39,7 @@ namespace pcr
 
     public:
         ListSelectionDialog(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxListBox,
             const OUString& _rPropertyName,
             const OUString& _rPropertyUIName

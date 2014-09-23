@@ -231,7 +231,7 @@ namespace cairo
 
         if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
         {
-            const Window &rWindow = (const Window &) rRefDevice;
+            const vcl::Window &rWindow = (const vcl::Window &) rRefDevice;
             const SystemEnvData* pSysData = GetSysData(&rWindow);
             if (pSysData && pSysData->hWnd)
                 surf = SurfaceSharedPtr(new Win32Surface(GetDC((HWND) pSysData->hWnd), x, y));

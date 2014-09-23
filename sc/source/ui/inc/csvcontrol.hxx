@@ -239,7 +239,7 @@ private:
 
 public:
     explicit                    ScCsvControl( ScCsvControl& rParent );
-    explicit                    ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBits nBits );
+    explicit                    ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits );
     virtual                     ~ScCsvControl();
 
     // event handling ---------------------------------------------------------

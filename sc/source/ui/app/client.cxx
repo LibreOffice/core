@@ -39,7 +39,7 @@
 
 using namespace com::sun::star;
 
-ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj ) :
+ScClient::ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj ) :
     SfxInPlaceClient( pViewShell, pDraw, pObj->GetAspect() ),
     pModel( pSdrModel ),
     pGrafEdit( 0 )
@@ -229,7 +229,7 @@ void ScClient::ViewChanged()
         ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
         if ( pViewSh )
         {
-            Window* pWin = pViewSh->GetActiveWin();
+            vcl::Window* pWin = pViewSh->GetActiveWin();
             if ( pWin->LogicToPixel( aVisSize ) != pWin->LogicToPixel( aLogicRect.GetSize() ) )
             {
                 aLogicRect.SetSize( aVisSize );

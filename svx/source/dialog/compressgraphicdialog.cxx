@@ -39,7 +39,7 @@ using namespace com::sun::star::beans;
 
 #include <stdio.h>
 
-CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings ) :
+CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings ) :
     ModalDialog       ( pParent, "CompressGraphicDialog", "svx/ui/compressgraphicdialog.ui" ),
     m_pGraphicObj     ( pGraphicObj ),
     m_aGraphic        ( pGraphicObj->GetGraphicObject().GetGraphic() ),
@@ -53,7 +53,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, SdrGrafObj* pGr
     Initialize();
 }
 
-CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings ) :
+CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings ) :
     ModalDialog       ( pParent, "CompressGraphicDialog", "svx/ui/compressgraphicdialog.ui" ),
     m_pGraphicObj     ( NULL ),
     m_aGraphic        ( rGraphic ),

@@ -45,7 +45,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-SdTpOptionsSnap::SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  ) :
+SdTpOptionsSnap::SdTpOptionsSnap( vcl::Window* pParent, const SfxItemSet& rInAttrs  ) :
         SvxGridTabPage(pParent, rInAttrs)
 {
     pSnapFrames->Show();
@@ -99,7 +99,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
     pCbxRotate->GetClickHdl().Call(0);
 }
 
-SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
+SfxTabPage* SdTpOptionsSnap::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SdTpOptionsSnap( pWindow, *rAttrs ) );
@@ -111,7 +111,7 @@ SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
 |*
 \************************************************************************/
 
-SdTpOptionsContents::SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  ) :
+SdTpOptionsContents::SdTpOptionsContents( vcl::Window* pParent, const SfxItemSet& rInAttrs  ) :
     SfxTabPage ( pParent, "SdViewPage", "modules/simpress/ui/sdviewpage.ui", &rInAttrs )
 {
     get( m_pCbxRuler, "ruler");
@@ -165,7 +165,7 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
     m_pCbxHandlesBezier->SaveValue();
 }
 
-SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
+SfxTabPage* SdTpOptionsContents::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SdTpOptionsContents( pWindow, *rAttrs ) );
@@ -179,7 +179,7 @@ SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
 #define TABLE_COUNT 12
 #define TOKEN ':'
 
-SdTpOptionsMisc::SdTpOptionsMisc(Window* pParent, const SfxItemSet& rInAttrs)
+SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "OptSavePage", "modules/simpress/ui/optimpressgeneralpage.ui", &rInAttrs)
     , nWidth(0)
     , nHeight(0)
@@ -488,7 +488,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     UpdateCompatibilityControls ();
 }
 
-SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
+SfxTabPage* SdTpOptionsMisc::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SdTpOptionsMisc( pWindow, *rAttrs ) );

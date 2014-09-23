@@ -22,7 +22,7 @@
 
 #include "DrawViewShell.hxx"
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sd {
 
@@ -59,7 +59,7 @@ public:
     GraphicViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         FrameView* pFrameView = NULL);
 
     virtual ~GraphicViewShell (void);

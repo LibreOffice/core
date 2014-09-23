@@ -43,7 +43,7 @@ bool BibShortCutHandler::HandleShortCutKey( const KeyEvent& )
 }
 
 
-BibWindow::BibWindow( Window* pParent, WinBits nStyle ) : Window( pParent, nStyle ), BibShortCutHandler( this )
+BibWindow::BibWindow( vcl::Window* pParent, WinBits nStyle ) : Window( pParent, nStyle ), BibShortCutHandler( this )
 {
 }
 
@@ -52,7 +52,7 @@ BibWindow::~BibWindow()
 }
 
 
-BibSplitWindow::BibSplitWindow( Window* pParent, WinBits nStyle ) : SplitWindow( pParent, nStyle ), BibShortCutHandler( this )
+BibSplitWindow::BibSplitWindow( vcl::Window* pParent, WinBits nStyle ) : SplitWindow( pParent, nStyle ), BibShortCutHandler( this )
 {
 }
 
@@ -60,7 +60,7 @@ BibSplitWindow::~BibSplitWindow()
 {
 }
 
-BibTabPage::BibTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
+BibTabPage::BibTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
                         TabPage( pParent, rID, rUIXMLDescription ), BibShortCutHandler( this )
 {
 }
@@ -80,13 +80,13 @@ using namespace ::rtl;
 #define WIN_MIN_HEIGHT 10
 #define WIN_STEP_SIZE 5
 
-BibWindowContainer::BibWindowContainer( Window* pParent, BibShortCutHandler* pChildWin, WinBits nStyle ) :
+BibWindowContainer::BibWindowContainer( vcl::Window* pParent, BibShortCutHandler* pChildWin, WinBits nStyle ) :
         BibWindow( pParent, nStyle ),
         pChild( pChildWin )
 {
     if(pChild!=NULL)
     {
-        Window* pChildWindow = GetChild();
+        vcl::Window* pChildWindow = GetChild();
         pChildWindow->SetParent(this);
         pChildWindow->Show();
         pChildWindow->SetPosPixel(Point(0,0));
@@ -97,7 +97,7 @@ BibWindowContainer::~BibWindowContainer()
 {
     if( pChild )
     {
-        Window* pDel = GetChild();
+        vcl::Window* pDel = GetChild();
         pChild = NULL;          // prevents GetFocus for child while deleting!
         delete pDel;
     }
@@ -121,7 +121,7 @@ bool BibWindowContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
 }
 
 
-BibBookContainer::BibBookContainer(Window* pParent, WinBits nStyle):
+BibBookContainer::BibBookContainer(vcl::Window* pParent, WinBits nStyle):
     BibSplitWindow(pParent,nStyle),
     pTopWin(NULL),
     pBottomWin(NULL)
@@ -140,14 +140,14 @@ BibBookContainer::~BibBookContainer()
 
     if( pTopWin )
     {
-        Window* pDel = pTopWin;
+        vcl::Window* pDel = pTopWin;
         pTopWin = NULL;         // prevents GetFocus for child while deleting!
         delete pDel;
     }
 
     if( pBottomWin )
     {
-        Window* pDel = pBottomWin;
+        vcl::Window* pDel = pBottomWin;
         pBottomWin = NULL;      // prevents GetFocus for child while deleting!
         delete pDel;
     }

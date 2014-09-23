@@ -456,7 +456,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
                          const Reference< XNumberFormatter >& xFormatter)
 {
     bool bEnabled = ( rDev.GetOutDevType() != OUTDEV_WINDOW )
-                ||  ( static_cast< Window& >( rDev ).IsEnabled() );
+                ||  ( static_cast< vcl::Window& >( rDev ).IsEnabled() );
 
     FmXDataCell* pDataCell = PTR_CAST(FmXDataCell, m_pCell);
     if (pDataCell)
@@ -517,7 +517,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
 }
 
 
-void DbGridColumn::ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat )
+void DbGridColumn::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat )
 {
     if ( m_pCell )
         m_pCell->ImplInitWindow( rParent, _eInitWhat );
@@ -722,9 +722,9 @@ bool DbCellControl::Commit()
 }
 
 
-void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat )
+void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat )
 {
-    Window* pWindows[] = { m_pPainter, m_pWindow };
+    vcl::Window* pWindows[] = { m_pPainter, m_pWindow };
 
     if ( ( _eInitWhat & InitWritingMode ) != 0 )
     {
@@ -861,7 +861,7 @@ void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel
 }
 
 
-void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor )
+void DbCellControl::Init( vcl::Window& rParent, const Reference< XRowSet >& _rxCursor )
 {
     ImplInitWindow( rParent, InitAll );
 
@@ -937,7 +937,7 @@ void DbCellControl::SetTextLineColor(const Color& _rColor)
 
 namespace
 {
-    static void lcl_implAlign( Window* _pWindow, WinBits _nAlignmentBit )
+    static void lcl_implAlign( vcl::Window* _pWindow, WinBits _nAlignmentBit )
     {
         WinBits nStyle = _pWindow->GetStyle();
         nStyle &= ~(WB_LEFT | WB_RIGHT | WB_CENTER);
@@ -1083,7 +1083,7 @@ DbTextField::~DbTextField( )
 }
 
 
-void DbTextField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
+void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
     sal_Int16 nAlignment = m_rColumn.SetAlignmentFromModel(-1);
 
@@ -1243,7 +1243,7 @@ DbFormattedField::~DbFormattedField()
 }
 
 
-void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
+void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
     sal_Int16 nAlignment = m_rColumn.SetAlignmentFromModel(-1);
 
@@ -1614,7 +1614,7 @@ DbCheckBox::DbCheckBox( DbGridColumn& _rColumn )
 
 namespace
 {
-    void setCheckBoxStyle( Window* _pWindow, bool bMono )
+    void setCheckBoxStyle( vcl::Window* _pWindow, bool bMono )
     {
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -1628,7 +1628,7 @@ namespace
 }
 
 
-void DbCheckBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
+void DbCheckBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
 {
     setTransparent( true );
 
@@ -1762,7 +1762,7 @@ void DbPatternField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 }
 
 
-void DbPatternField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
+void DbPatternField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
     m_rColumn.SetAlignmentFromModel(-1);
 
@@ -1849,7 +1849,7 @@ DbSpinField::DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign )
 }
 
 
-void DbSpinField::Init( Window& _rParent, const Reference< XRowSet >& _rxCursor )
+void DbSpinField::Init( vcl::Window& _rParent, const Reference< XRowSet >& _rxCursor )
 {
     m_rColumn.SetAlignmentFromModel( m_nStandardAlign );
 
@@ -1943,7 +1943,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 }
 
 
-SpinField* DbNumericField::createField( Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/  )
+SpinField* DbNumericField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/  )
 {
     return new DoubleNumericField( _pParent, _nFieldStyle );
 }
@@ -2071,7 +2071,7 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
 }
 
 
-SpinField* DbCurrencyField::createField( Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/  )
+SpinField* DbCurrencyField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/  )
 {
     return new LongCurrencyField( _pParent, _nFieldStyle );
 }
@@ -2177,7 +2177,7 @@ DbDateField::DbDateField( DbGridColumn& _rColumn )
 }
 
 
-SpinField* DbDateField::createField( Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& _rxModel  )
+SpinField* DbDateField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& _rxModel  )
 {
     // check if there is a DropDown property set to TRUE
     bool bDropDown =    !hasProperty( FM_PROP_DROPDOWN, _rxModel )
@@ -2305,7 +2305,7 @@ DbTimeField::DbTimeField( DbGridColumn& _rColumn )
 }
 
 
-SpinField* DbTimeField::createField( Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/ )
+SpinField* DbTimeField::createField( vcl::Window* _pParent, WinBits _nFieldStyle, const Reference< XPropertySet >& /*_rxModel*/ )
 {
     return new TimeField( _pParent, _nFieldStyle );
 }
@@ -2458,7 +2458,7 @@ void DbComboBox::implAdjustGenericFieldSetting( const Reference< XPropertySet >&
 }
 
 
-void DbComboBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
+void DbComboBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
 {
     m_rColumn.SetAlignmentFromModel(::com::sun::star::awt::TextAlign::LEFT);
 
@@ -2583,7 +2583,7 @@ void DbListBox::SetList(const Any& rItems)
 }
 
 
-void DbListBox::Init( Window& rParent, const Reference< XRowSet >& xCursor)
+void DbListBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
     m_rColumn.SetAlignment(::com::sun::star::awt::TextAlign::LEFT);
 
@@ -2751,7 +2751,7 @@ void DbFilterField::SetList(const Any& rItems, bool bComboBox)
 }
 
 
-void DbFilterField::CreateControl(Window* pParent, const Reference< ::com::sun::star::beans::XPropertySet >& xModel)
+void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::sun::star::beans::XPropertySet >& xModel)
 {
     switch (m_nControlClass)
     {
@@ -2808,7 +2808,7 @@ void DbFilterField::CreateControl(Window* pParent, const Reference< ::com::sun::
 }
 
 
-void DbFilterField::Init( Window& rParent, const Reference< XRowSet >& xCursor )
+void DbFilterField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
 {
     Reference< ::com::sun::star::beans::XPropertySet >  xModel(m_rColumn.getModel());
     m_rColumn.SetAlignment(::com::sun::star::awt::TextAlign::LEFT);
@@ -3168,13 +3168,13 @@ FmXGridCell::FmXGridCell( DbGridColumn* pColumn, DbCellControl* _pControl )
 
 void FmXGridCell::init()
 {
-    Window* pEventWindow( getEventWindow() );
+    vcl::Window* pEventWindow( getEventWindow() );
     if ( pEventWindow )
         pEventWindow->AddEventListener( LINK( this, FmXGridCell, OnWindowEvent ) );
 }
 
 
-Window* FmXGridCell::getEventWindow() const
+vcl::Window* FmXGridCell::getEventWindow() const
 {
     if ( m_pCellControl )
         return &m_pCellControl->GetWindow();
@@ -3425,7 +3425,7 @@ void FmXGridCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 
-void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
@@ -3550,7 +3550,7 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
     }
 
     sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_VCENTER;
-    if ( ( rDev.GetOutDevType() == OUTDEV_WINDOW ) && !static_cast< Window& >( rDev ).IsEnabled() )
+    if ( ( rDev.GetOutDevType() == OUTDEV_WINDOW ) && !static_cast< vcl::Window& >( rDev ).IsEnabled() )
         nStyle |= TEXT_DRAW_DISABLE;
 
     switch (m_pColumn->GetAlignment())
@@ -3825,7 +3825,7 @@ void FmXEditCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 
-void FmXEditCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXEditCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
@@ -3972,13 +3972,13 @@ void SAL_CALL FmXCheckBoxCell::setActionCommand( const OUString& _Command ) thro
 }
 
 
-Window* FmXCheckBoxCell::getEventWindow() const
+vcl::Window* FmXCheckBoxCell::getEventWindow() const
 {
     return m_pBox;
 }
 
 
-void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
@@ -4309,7 +4309,7 @@ void SAL_CALL FmXListBoxCell::makeVisible(sal_Int16 nEntry) throw( RuntimeExcept
 }
 
 
-void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
     if  (   ( &_rWindow == m_pBox )
         &&  ( _nEventId == VCLEVENT_LISTBOX_SELECT )
@@ -4512,7 +4512,7 @@ void SAL_CALL FmXComboBoxCell::setDropDownLineCount(sal_Int16 nLines) throw( Run
 }
 
 
-void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
 {
 
     switch ( _nEventId )

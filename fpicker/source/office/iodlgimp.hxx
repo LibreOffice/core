@@ -90,7 +90,7 @@ protected:
     virtual void    FillURLMenu( PopupMenu* _pMenu ) = 0;
 
 protected:
-    SvtFileDialogURLSelector( Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId );
+    SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId );
     virtual ~SvtFileDialogURLSelector();
 
     virtual void        Activate() SAL_OVERRIDE;
@@ -102,7 +102,7 @@ private:
     std::vector<OUString> _aURLs;
 
 public:
-    SvtUpButton_Impl( Window* pParent, SvtFileDialog* pDlg, WinBits nBits );
+    SvtUpButton_Impl( vcl::Window* pParent, SvtFileDialog* pDlg, WinBits nBits );
     virtual ~SvtUpButton_Impl();
 
 protected:

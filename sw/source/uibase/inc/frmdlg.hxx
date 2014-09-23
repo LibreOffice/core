@@ -50,7 +50,7 @@ class SwFrmDlg : public SfxTabDialog
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 public:
-    SwFrmDlg(   SfxViewFrame *pFrame, Window *pParent,
+    SwFrmDlg(   SfxViewFrame *pFrame, vcl::Window *pParent,
                 const SfxItemSet& rCoreSet,
                 bool bNewFrm  = false,
                 const OString& sResType = OString("FrameDialog"),

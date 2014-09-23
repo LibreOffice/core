@@ -75,7 +75,7 @@ class VCL_DLLPUBLIC FloatingWindow : public SystemWindow
     class   ImplData;
 private:
     FloatingWindow* mpNextFloat;
-    Window*         mpFirstPopupModeWin;
+    vcl::Window*         mpFirstPopupModeWin;
     ImplData*       mpImplData;
     Rectangle       maFloatRect;
     ImplSVEvent *   mnPostId;
@@ -101,16 +101,16 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
 
 public:
-    SAL_DLLPRIVATE FloatingWindow*  ImplFloatHitTest( Window* pReference, const Point& rPos, HitTest& rHitTest );
+    SAL_DLLPRIVATE FloatingWindow*  ImplFloatHitTest( vcl::Window* pReference, const Point& rPos, HitTest& rHitTest );
     SAL_DLLPRIVATE FloatingWindow*  ImplFindLastLevelFloat();
-    SAL_DLLPRIVATE bool             ImplIsFloatPopupModeWindow( const Window* pWindow );
+    SAL_DLLPRIVATE bool             ImplIsFloatPopupModeWindow( const vcl::Window* pWindow );
     SAL_DLLPRIVATE void             ImplSetMouseDown() { mbMouseDown = true; }
     SAL_DLLPRIVATE bool             ImplIsMouseDown() const  { return mbMouseDown; }
-    SAL_DLLPRIVATE static Point     ImplCalcPos( Window* pWindow,
+    SAL_DLLPRIVATE static Point     ImplCalcPos( vcl::Window* pWindow,
                                                  const Rectangle& rRect, sal_uLong nFlags,
                                                  sal_uInt16& rArrangeIndex );
     SAL_DLLPRIVATE void             ImplEndPopupMode( sal_uInt16 nFlags = 0, sal_uLong nFocusId = 0 );
@@ -119,8 +119,8 @@ public:
     virtual        void             doDeferredInit(WinBits nBits) SAL_OVERRIDE;
 
 public:
-    explicit        FloatingWindow(Window* pParent, WinBits nStyle = WB_STDFLOATWIN);
-    explicit        FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+    explicit        FloatingWindow(vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN);
+    explicit        FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
                                    const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual         ~FloatingWindow();
 
@@ -136,7 +136,7 @@ public:
     void            StartPopupMode( const Rectangle& rRect, sal_uLong nFlags = 0 );
     void            StartPopupMode( ToolBox* pBox, sal_uLong nFlags = 0  );
     void            EndPopupMode( sal_uInt16 nFlags = 0 );
-    void            AddPopupModeWindow( Window* pWindow );
+    void            AddPopupModeWindow( vcl::Window* pWindow );
     sal_uLong           GetPopupModeFlags() const { return mnPopupModeFlags; }
     void            SetPopupModeFlags( sal_uLong nFlags ) { mnPopupModeFlags = nFlags; }
     bool            IsInPopupMode() const { return mbPopupMode; }
@@ -149,7 +149,7 @@ public:
 
     bool            GrabsFocus() const { return mbGrabFocus; }
 
-    static Point    CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex );
+    static Point    CalcFloatingPosition( vcl::Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex );
 };
 
 #endif // INCLUDED_VCL_FLOATWIN_HXX

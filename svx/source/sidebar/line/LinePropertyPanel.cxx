@@ -154,7 +154,7 @@ namespace {
 namespace svx { namespace sidebar {
 
 LinePropertyPanel::LinePropertyPanel(
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui", rxFrame),
@@ -300,7 +300,7 @@ void LinePropertyPanel::SetupIcons(void)
 
 
 LinePropertyPanel* LinePropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {

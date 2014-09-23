@@ -65,7 +65,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
 {
     OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    Window*             pWindow = &GetView().GetViewFrame()->GetWindow();
+    vcl::Window*             pWindow = &GetView().GetViewFrame()->GetWindow();
     bool                bAPI = false, bRet = false;
 
     if( pReqArgs )

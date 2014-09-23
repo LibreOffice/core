@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
         const SdrPaintWindow& rPaintWindow( GetOriginalPaintWindow() ? *GetOriginalPaintWindow() : GetPaintWindow() );
         if ( rPaintWindow.OutputToWindow() && !rView.IsPrintPreview() )
         {
-            Window& rWindow = dynamic_cast< Window& >( rPaintWindow.GetOutputDevice() );
+            vcl::Window& rWindow = dynamic_cast< vcl::Window& >( rPaintWindow.GetOutputDevice() );
             const_cast< SdrPageWindow* >( this )->mxControlContainer = VCLUnoHelper::CreateControlContainer( &rWindow );
 
             // #100394# xC->setVisible triggers window->Show() and this has
@@ -375,7 +375,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
     if(GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
     {
         const SvtOptionsDrawinglayer aDrawinglayerOpt;
-        Window& rWindow(static_cast< Window& >(GetPaintWindow().GetOutputDevice()));
+        vcl::Window& rWindow(static_cast< vcl::Window& >(GetPaintWindow().GetOutputDevice()));
         basegfx::B2DRange aDiscreteRange(rRange);
         aDiscreteRange.transform(rWindow.GetViewTransformation());
 

@@ -39,7 +39,7 @@ private:
     DECL_LINK(ModifyHdl, void *);
 
 public:
-    SvxNameDialog( Window* pWindow, const OUString& rName, const OUString& rDesc );
+    SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const OUString& rDesc );
 
     void    GetName( OUString& rName ){rName = pEdtName->GetText();}
 
@@ -87,7 +87,7 @@ private:
 
 public:
     // constructor
-    SvxObjectNameDialog(Window* pWindow, const OUString& rName);
+    SvxObjectNameDialog(vcl::Window* pWindow, const OUString& rName);
 
     // data access
     void GetName(OUString& rName) {rName = pEdtName->GetText(); }
@@ -117,7 +117,7 @@ private:
 
 public:
     // constructor
-    SvxObjectTitleDescDialog(Window* pWindow, const OUString& rTitle, const OUString& rDesc);
+    SvxObjectTitleDescDialog(vcl::Window* pWindow, const OUString& rTitle, const OUString& rDesc);
 
     // data access
     void GetTitle(OUString& rTitle) {rTitle = pEdtTitle->GetText(); }
@@ -138,7 +138,7 @@ private:
     DECL_LINK(Button2Hdl, void *);
 
 public:
-    SvxMessDialog( Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = NULL );
+    SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = NULL );
     virtual ~SvxMessDialog();
 
     void    SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt );

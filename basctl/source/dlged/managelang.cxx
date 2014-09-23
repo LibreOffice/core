@@ -55,7 +55,7 @@ bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
     return bRet;
 }
 
-ManageLanguageDialog::ManageLanguageDialog(Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr)
+ManageLanguageDialog::ManageLanguageDialog(vcl::Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr)
     : ModalDialog(pParent, "ManageLanguagesDialog", "modules/BasicIDE/ui/managelanguages.ui")
     , m_xLocalizationMgr(xLMgr)
     , m_sDefLangStr(IDE_RESSTR(RID_STR_DEF_LANG))
@@ -217,7 +217,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
 
 // class SetDefaultLanguageDialog -----------------------------------------------
 
-SetDefaultLanguageDialog::SetDefaultLanguageDialog(Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr)
+SetDefaultLanguageDialog::SetDefaultLanguageDialog(vcl::Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr)
     : ModalDialog(pParent, "DefaultLanguageDialog", "modules/BasicIDE/ui/defaultlanguage.ui")
     , m_pCheckLangLB(NULL)
     , m_xLocalizationMgr(xLMgr)

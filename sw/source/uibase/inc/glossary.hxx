@@ -75,7 +75,7 @@ class SwGlTreeListBox : public SvTreeListBox
                                     SvTreeListEntry*  pEntry,
                                     bool              bIsMove);
 public:
-    SwGlTreeListBox(Window* pParent, WinBits nBits);
+    SwGlTreeListBox(vcl::Window* pParent, WinBits nBits);
 
     virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -96,7 +96,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     SwGlTreeListBox* m_pCategoryBox;
     CheckBox*       m_pFileRelCB;
     CheckBox*       m_pNetRelCB;
-    Window*         m_pExampleWIN;
+    vcl::Window*         m_pExampleWIN;
     PushButton*     m_pInsertBtn;
     MenuButton*     m_pEditBtn;
     PushButton*     m_pBibBtn;

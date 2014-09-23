@@ -26,7 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-void MenuWindow::ImplInitMenuWindow(Window* pWin, bool bFont, bool bMenuBar)
+void MenuWindow::ImplInitMenuWindow(vcl::Window* pWin, bool bFont, bool bMenuBar)
 {
     const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
 
@@ -76,7 +76,7 @@ void MenuWindow::ImplInitMenuWindow(Window* pWin, bool bFont, bool bMenuBar)
     pWin->SetLineColor();
 }
 
-static sal_uLong ImplChangeTipTimeout( sal_uLong nTimeout, Window *pWindow )
+static sal_uLong ImplChangeTipTimeout( sal_uLong nTimeout, vcl::Window *pWindow )
 {
     AllSettings aAllSettings( pWindow->GetSettings() );
     HelpSettings aHelpSettings( aAllSettings.GetHelpSettings() );
@@ -87,7 +87,7 @@ static sal_uLong ImplChangeTipTimeout( sal_uLong nTimeout, Window *pWindow )
     return nRet;
 }
 
-bool MenuWindow::ImplHandleHelpEvent(Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
+bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
         const HelpEvent& rHEvt, const Rectangle &rHighlightRect)
 {
     if( ! pMenu )

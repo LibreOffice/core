@@ -48,7 +48,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 class Rectangle;
 class Ruler;
-class Window;
+namespace vcl { class Window; }
 
 
 typedef ::cppu::WeakAggComponentImplHelper5<

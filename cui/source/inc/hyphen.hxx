@@ -34,7 +34,7 @@ class SvxSpellWrapper;
 class HyphenEdit : public Edit
 {
 public:
-    HyphenEdit(Window* pParent);
+    HyphenEdit(vcl::Window* pParent);
 
 protected:
     virtual void KeyInput(const KeyEvent &rKEvt) SAL_OVERRIDE;
@@ -82,7 +82,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
 
 public:
     SvxHyphenWordDialog( const OUString &rWord, LanguageType nLang,
-                         Window* pParent,
+                         vcl::Window* pParent,
                          css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                          SvxSpellWrapper* pWrapper );
     virtual ~SvxHyphenWordDialog();

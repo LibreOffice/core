@@ -71,7 +71,7 @@ class Image;
 class PopupMenu;
 class Application;
 class OutputDevice;
-class Window;
+namespace vcl { class Window; }
 class SystemWindow;
 class WorkWindow;
 class Dialog;
@@ -177,20 +177,20 @@ struct ImplSVGDIData
 
 struct ImplSVWinData
 {
-    Window*                 mpFirstFrame;       // First FrameWindow
-    Window*                 mpDefDialogParent;  // Default Dialog Parent
+    vcl::Window*                 mpFirstFrame;       // First FrameWindow
+    vcl::Window*                 mpDefDialogParent;  // Default Dialog Parent
     WorkWindow*             mpAppWin;           // Application-Window
-    Window*                 mpFocusWin;         // window, that has the focus
-    Window*                 mpActiveApplicationFrame; // the last active application frame, can be used as DefModalDialogParent if no focuswin set
-    Window*                 mpCaptureWin;       // window, that has the mouse capture
-    Window*                 mpLastDeacWin;      // Window, that need a deactivate (FloatingWindow-Handling)
+    vcl::Window*                 mpFocusWin;         // window, that has the focus
+    vcl::Window*                 mpActiveApplicationFrame; // the last active application frame, can be used as DefModalDialogParent if no focuswin set
+    vcl::Window*                 mpCaptureWin;       // window, that has the mouse capture
+    vcl::Window*                 mpLastDeacWin;      // Window, that need a deactivate (FloatingWindow-Handling)
     FloatingWindow*         mpFirstFloat;       // First FloatingWindow in PopupMode
     Dialog*                 mpLastExecuteDlg;   // First Dialog that is in Execute
-    Window*                 mpExtTextInputWin;  // Window, which is in ExtTextInput
-    Window*                 mpTrackWin;         // window, that is in tracking mode
+    vcl::Window*                 mpExtTextInputWin;  // Window, which is in ExtTextInput
+    vcl::Window*                 mpTrackWin;         // window, that is in tracking mode
     AutoTimer*              mpTrackTimer;       // tracking timer
     ImageList*              mpMsgBoxImgList;    // ImageList for MessageBox
-    Window*                 mpAutoScrollWin;    // window, that is in AutoScrollMode mode
+    vcl::Window*                 mpAutoScrollWin;    // window, that is in AutoScrollMode mode
     sal_uInt16              mnTrackFlags;       // tracking flags
     sal_uInt16              mnAutoScrollFlags;  // auto scroll flags
     bool                mbNoDeactivate;     // true: do not execute Deactivate
@@ -323,7 +323,7 @@ struct ImplSVData
     ImplSVHelpData          maHelpData;         // indepen data for Help classes
     ImplSVNWFData           maNWFData;
     UnoWrapperBase*         mpUnoWrapper;
-    Window*                 mpIntroWindow;      // the splash screen
+    vcl::Window*                 mpIntroWindow;      // the splash screen
     DockingManager*         mpDockingManager;
     BlendFrameCache*        mpBlendFrameCache;
     bool                mbIsTestTool;
@@ -342,15 +342,14 @@ struct ImplSVData
 void        ImplInitSVData();
 void        ImplDeInitSVData();
 void        ImplDestroySVData();
-Window*     ImplGetDefaultWindow();
+vcl::Window*     ImplGetDefaultWindow();
 VCL_PLUGIN_PUBLIC ResMgr*     ImplGetResMgr();
 VCL_PLUGIN_PUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
 DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
-void        ImplWindowAutoMnemonic( Window* pWindow );
+void        ImplWindowAutoMnemonic( vcl::Window* pWindow );
 
 void        ImplUpdateSystemProcessWindow();
-Window*     ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 
 bool        ImplCallHotKey( const vcl::KeyCode& rKeyCode );
 void        ImplFreeHotKeyData();
@@ -374,10 +373,10 @@ FieldUnitStringList* ImplGetCleanedFieldUnits();
 struct ImplDelData
 {
     ImplDelData*    mpNext;
-    const Window*   mpWindow;
+    const vcl::Window*   mpWindow;
     bool            mbDel;
 
-                    ImplDelData( const Window* pWindow = NULL )
+                    ImplDelData( const vcl::Window* pWindow = NULL )
                     : mpNext( NULL ), mpWindow( NULL ), mbDel( false )
                     { if( pWindow ) AttachToWindow( pWindow ); }
 
@@ -390,19 +389,19 @@ struct ImplDelData
     }
 
 private:
-    void            AttachToWindow( const Window* );
+    void            AttachToWindow( const vcl::Window* );
 };
 
 struct ImplFocusDelData : public ImplDelData
 {
-    Window*         mpFocusWin;
+    vcl::Window*         mpFocusWin;
 };
 
 struct ImplSVEvent
 {
     void*               mpData;
     Link*               mpLink;
-    Window*             mpWindow;
+    vcl::Window*             mpWindow;
     ImplDelData         maDelData;
     bool                mbCall;
 };

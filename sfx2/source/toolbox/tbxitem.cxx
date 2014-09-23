@@ -107,7 +107,7 @@ using namespace ::com::sun::star::ui;
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
 SFX_IMPL_TOOLBOX_CONTROL(SfxRecentFilesToolBoxControl, SfxStringItem);
 
-static Window* GetTopMostParentSystemWindow( Window* pWindow )
+static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
 {
     OSL_ASSERT( pWindow );
     if ( pWindow )
@@ -204,7 +204,7 @@ IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent 
          (( pEvent->GetId() == VCLEVENT_WINDOW_MOVE ) ||
           ( pEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE )))
     {
-        Window* pWindow( ((VclWindowEvent*)pEvent)->GetWindow() );
+        vcl::Window* pWindow( ((VclWindowEvent*)pEvent)->GetWindow() );
         if (( pWindow == mpFloatingWindow ) &&
             ( mpPopupWindow != 0 ))
         {
@@ -274,7 +274,7 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
 
     // Remove and destroy our item window at our toolbox
     SolarMutexGuard aGuard;
-    Window* pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
+    vcl::Window* pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
     pImpl->pBox->SetItemWindow( pImpl->nTbxId, 0 );
     delete pWindow;
 
@@ -625,7 +625,7 @@ void SAL_CALL SfxToolBoxControl::doubleClick() throw (::com::sun::star::uno::Run
 Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Window* pWindow = CreatePopupWindow();
+    vcl::Window* pWindow = CreatePopupWindow();
     if ( pWindow )
         return VCLUnoHelper::GetInterface( pWindow );
     else
@@ -720,7 +720,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
                 OUString aPersistentString( "Persistent" );
                 try
                 {
-                    Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
+                    vcl::Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
                     if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                     {
                         Any a;
@@ -823,14 +823,14 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBar
                 }
                 pImpl->mxUIElement = xUIElement;
 
-                Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
+                vcl::Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
                 ToolBox* pToolBar( 0 );
                 if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                     pToolBar = (ToolBox *)pTbxWindow;
 
                 if ( pToolBar )
                 {
-                    Window*  pParentTbxWindow( pImpl->pBox );
+                    vcl::Window*  pParentTbxWindow( pImpl->pBox );
                     pToolBar->SetParent( pParentTbxWindow );
                     ::Size aSize = getPersistentFloatingSize( xFrame, rSubToolBarResName );
                     if ( aSize.Width() == 0 || aSize.Height() == 0 )
@@ -841,7 +841,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBar
                     pToolBar->SetSizePixel( aSize );
 
                     // open subtoolbox in popup mode
-                    Window::GetDockingManager()->StartPopupMode( pImpl->pBox, pToolBar );
+                    vcl::Window::GetDockingManager()->StartPopupMode( pImpl->pBox, pToolBar );
                 }
             }
         }
@@ -992,7 +992,7 @@ SfxPopupWindow* SfxToolBoxControl::CreatePopupWindowCascading()
 
 
 
-Window* SfxToolBoxControl::CreateItemWindow( Window * )
+vcl::Window* SfxToolBoxControl::CreateItemWindow( vcl::Window * )
 {
     return 0;
 }
@@ -1148,7 +1148,7 @@ SfxPopupWindow::SfxPopupWindow(
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
 {
-    Window* pWindow = GetTopMostParentSystemWindow( this );
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
@@ -1162,7 +1162,7 @@ SfxPopupWindow::SfxPopupWindow(sal_uInt16 nId, const OString& rID, const OUStrin
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
 {
-    Window* pWindow = GetTopMostParentSystemWindow( this );
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
@@ -1170,7 +1170,7 @@ SfxPopupWindow::SfxPopupWindow(sal_uInt16 nId, const OString& rID, const OUStrin
 SfxPopupWindow::SfxPopupWindow(
     sal_uInt16 nId,
     const Reference< XFrame >& rFrame,
-    Window* pParentWindow,
+    vcl::Window* pParentWindow,
     WinBits nBits ) :
     FloatingWindow( pParentWindow, nBits )
     , m_bFloating( false )
@@ -1179,14 +1179,14 @@ SfxPopupWindow::SfxPopupWindow(
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
 {
-    Window* pWindow = GetTopMostParentSystemWindow( this );
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
 SfxPopupWindow::SfxPopupWindow(
     sal_uInt16 nId,
-    Window* pParentWindow,
+    vcl::Window* pParentWindow,
     const OString& rID, const OUString& rUIXMLDescription,
     const Reference< XFrame >& rFrame ) :
     FloatingWindow( pParentWindow, rID, rUIXMLDescription, rFrame)
@@ -1196,7 +1196,7 @@ SfxPopupWindow::SfxPopupWindow(
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
 {
-    Window* pWindow = GetTopMostParentSystemWindow( this );
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
@@ -1209,7 +1209,7 @@ SfxPopupWindow::~SfxPopupWindow()
         m_xStatusListener.clear();
     }
 
-    Window* pWindow = GetTopMostParentSystemWindow( this );
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( this );
 }
@@ -1309,7 +1309,7 @@ void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
         ::Point       aPos = rMEvt.GetPosPixel();
         ::Point       aScrPos = OutputToScreenPixel( aPos );
         sal_uInt16 i = 0;
-        Window* pWindow = GetChild( i );
+        vcl::Window* pWindow = GetChild( i );
         while ( pWindow )
         {
             ::MouseEvent aMEvt( pWindow->ScreenToOutputPixel( aScrPos ),

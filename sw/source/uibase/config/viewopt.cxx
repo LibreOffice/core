@@ -295,7 +295,7 @@ SwViewOption::~SwViewOption()
 {
 }
 
-void SwViewOption::Init( Window *pWin )
+void SwViewOption::Init( vcl::Window *pWin )
 {
     if( !nPixelTwips && pWin )
     {

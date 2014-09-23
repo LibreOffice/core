@@ -39,7 +39,7 @@ protected:
     virtual void Apply() SAL_OVERRIDE;
 
 public:
-    SvxSplitTableDlg(Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
+    SvxSplitTableDlg(vcl::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
     virtual ~SvxSplitTableDlg();
 
     DECL_LINK( ClickHdl, Button * );

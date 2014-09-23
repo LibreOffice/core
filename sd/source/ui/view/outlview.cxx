@@ -86,7 +86,7 @@ struct SdParaAndPos
 
 TYPEINIT1( OutlineView, ::sd::View );
 
-OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewShell& rOutlineViewShell)
+OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineViewShell& rOutlineViewShell)
 : ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewShell)
 , mrOutlineViewShell(rOutlineViewShell)
 , mrOutliner(*mrDoc.GetOutliner(true))
@@ -279,7 +279,7 @@ void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
 {
     bool bRemoved = false;
     sal_uInt16 nView = 0;
-    ::Window* pWindow;
+    vcl::Window* pWindow;
 
     while (nView < MAX_OUTLINERVIEWS && !bRemoved)
     {
@@ -305,7 +305,7 @@ void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
 /**
  * Return a pointer to the OutlinerView corresponding to the window
  */
-OutlinerView* OutlineView::GetViewByWindow (::Window* pWin) const
+OutlinerView* OutlineView::GetViewByWindow (vcl::Window* pWin) const
 {
     OutlinerView* pOlView = NULL;
     for (sal_uInt16 nView = 0; nView < MAX_OUTLINERVIEWS; nView++)
@@ -1444,7 +1444,7 @@ void OutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
             {
                 mpOutlinerView[nView]->SetBackgroundColor( aDocColor );
 
-                ::Window* pWindow = mpOutlinerView[nView]->GetWindow();
+                vcl::Window* pWindow = mpOutlinerView[nView]->GetWindow();
 
                 if( pWindow )
                     pWindow->SetBackground( Wallpaper( aDocColor ) );

@@ -27,7 +27,7 @@
 
 #include <vcl/msgbox.hxx>
 
-ScRetypePassDlg::ScRetypePassDlg(Window* pParent) :
+ScRetypePassDlg::ScRetypePassDlg(vcl::Window* pParent) :
     ModalDialog(pParent, "RetypePass", "modules/scalc/ui/retypepassdialog.ui"),
 
     maTextNotProtected(ScResId(STR_NOT_PROTECTED)),
@@ -43,7 +43,7 @@ ScRetypePassDlg::ScRetypePassDlg(Window* pParent) :
     get(mpBtnOk ,"ok");
     get(mpTextDocStatus, "docStatusLabel");
     get(mpBtnRetypeDoc, "retypeDocButton");
-    Window *pScrolledWindow = get<Window>("scrolledwindow");
+    vcl::Window *pScrolledWindow = get<vcl::Window>("scrolledwindow");
     Size aSize(LogicToPixel(Size(190, 90), MAP_APPFONT));
     pScrolledWindow->set_width_request(aSize.Width());
     pScrolledWindow->set_height_request(aSize.Height());
@@ -61,11 +61,11 @@ void ScRetypePassDlg::DeleteSheets()
 {
     for(std::vector<VclHBox*>::iterator it = maSheets.begin(); it != maSheets.end(); ++it)
     {
-        Window *pWindow = (*it);
-        Window *pChild = pWindow->GetWindow(WINDOW_FIRSTCHILD);
+        vcl::Window *pWindow = (*it);
+        vcl::Window *pChild = pWindow->GetWindow(WINDOW_FIRSTCHILD);
         while (pChild)
         {
-            Window *pOldChild = pChild;
+            vcl::Window *pOldChild = pChild;
             pChild = pChild->GetWindow(WINDOW_NEXT);
             delete pOldChild;
         }
@@ -305,7 +305,7 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
     return 0;
 }
 
-ScRetypePassInputDlg::ScRetypePassInputDlg(Window* pParent, ScPassHashProtectable* pProtected)
+ScRetypePassInputDlg::ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProtectable* pProtected)
     : ModalDialog(pParent, "RetypePasswordDialog",
         "modules/scalc/ui/retypepassworddialog.ui")
     , mpProtected(pProtected)

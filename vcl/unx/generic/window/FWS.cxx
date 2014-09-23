@@ -102,7 +102,7 @@ WMSupportsFWS (Display *display, int screen)
         return False;
     }
 
-    fwsCommWindow = *(Window *) propData;
+    fwsCommWindow = *(::Window *) propData;
     #if OSL_DEBUG_LEVEL > 1
     fprintf (stderr, "Using fwsCommWindow = 0x%lx.\n", fwsCommWindow);
     #endif

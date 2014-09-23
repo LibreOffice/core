@@ -17,7 +17,7 @@
 using namespace ::sd;
 using namespace ::std;
 
-RemoteDialog::RemoteDialog( Window *pWindow )
+RemoteDialog::RemoteDialog( vcl::Window *pWindow )
     : ModalDialog(pWindow, "RemoteDialog",
         "modules/simpress/ui/remotedialog.ui")
 {

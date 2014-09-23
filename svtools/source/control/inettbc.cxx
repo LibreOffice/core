@@ -832,7 +832,7 @@ void SvtURLBox::TryAutoComplete()
 }
 
 
-SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart, bool bSetDefaultHelpID )
+SvtURLBox::SvtURLBox( vcl::Window* pParent, INetProtocol eSmart, bool bSetDefaultHelpID )
     :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOSIZE | WB_AUTOHSCROLL ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( false ),
@@ -851,7 +851,7 @@ SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart, bool bSetDefaultHelp
 }
 
 
-SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart,
+SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart,
     bool bSetDefaultHelpID )
     :   ComboBox( pParent, _nStyle ),
         eSmartProtocol( eSmart ),
@@ -865,7 +865,7 @@ SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart,
     Init(bSetDefaultHelpID);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtURLBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtURLBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                        WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
@@ -875,7 +875,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtURLBox(Window *pParent, 
 }
 
 
-SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart,
+SvtURLBox::SvtURLBox( vcl::Window* pParent, const ResId& _rResId, INetProtocol eSmart,
     bool bSetDefaultHelpID )
     :   ComboBox( pParent , _rResId ),
         eSmartProtocol( eSmart ),

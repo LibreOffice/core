@@ -29,21 +29,21 @@ class Size;
 class SvxRuler;
 class SwScrollbar;
 class SwViewShell;
-class Window;
+namespace vcl { class Window; }
 
 // The following functions are available in viewprt.cxx
 void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, bool bWeb );
-SfxTabPage* CreatePrintOptionsPage( Window*, const SfxItemSet& );
+SfxTabPage* CreatePrintOptionsPage( vcl::Window*, const SfxItemSet& );
 void SetAppPrintOptions( SwViewShell* pSh, bool bWeb );
 
 // The following functions are available in viewport.cxx
-void ViewResizePixel( const Window &rRef,
+void ViewResizePixel( const vcl::Window &rRef,
                     const Point &rOfst,
                     const Size &rSize,
                     const Size &rEditSz,
                     SwScrollbar& rVScrollbar,
                     SwScrollbar& rHScrollbar,
-                    Window& rScrollBarBox,
+                    vcl::Window& rScrollBarBox,
                     SvxRuler* pVRuler = 0,
                     SvxRuler* pHRuler = 0,
                     bool bVRulerRight = false );

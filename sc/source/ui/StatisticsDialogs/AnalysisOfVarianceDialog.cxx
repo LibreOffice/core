@@ -96,7 +96,7 @@ void lclMakeSubRangesList(ScRangeList& rRangeList, ScRange& rInputRange, ScStati
 
 ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    Window* pParent, ScViewData* pViewData ) :
+                    vcl::Window* pParent, ScViewData* pViewData ) :
     ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "AnalysisOfVarianceDialog", "modules/scalc/ui/analysisofvariancedialog.ui" ),

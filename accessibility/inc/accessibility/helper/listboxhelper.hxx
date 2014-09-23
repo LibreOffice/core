@@ -76,7 +76,7 @@ public:
         return aRect;
     }
 
-    virtual Rectangle       GetWindowExtentsRelative( Window* pRelativeWindow ) SAL_OVERRIDE
+    virtual Rectangle       GetWindowExtentsRelative( vcl::Window* pRelativeWindow ) SAL_OVERRIDE
     {
         return m_aComboListBox.GetWindowExtentsRelative( pRelativeWindow );
     }

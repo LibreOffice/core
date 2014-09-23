@@ -28,7 +28,7 @@ namespace dbaui
     class DBTreeListBox;
     // - DBTreeView -
 
-    class DBTreeView : public Window
+    class DBTreeView : public vcl::Window
     {
     private:
         DBTreeListBox*  m_pTreeListBox;
@@ -37,7 +37,7 @@ namespace dbaui
         virtual void Resize() SAL_OVERRIDE;
     public:
 
-        DBTreeView( Window* pParent,
+        DBTreeView( vcl::Window* pParent,
                 WinBits nBits );
         virtual ~DBTreeView();
 

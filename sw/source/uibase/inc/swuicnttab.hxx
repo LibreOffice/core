@@ -61,7 +61,7 @@ struct SwIndexSections_Impl;
 
 class SwMultiTOXTabDialog : public SfxTabDialog
 {
-    Window*                 m_pExampleContainerWIN;
+    vcl::Window*                 m_pExampleContainerWIN;
     CheckBox*               m_pShowExampleCB;
     SwTOXMgr*               pMgr;
     SwWrtShell&             rSh;
@@ -97,7 +97,7 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     DECL_LINK(ShowPreviewHdl, void*);
 
 public:
-    SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
+    SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet& rSet,
                         SwWrtShell &rShell,
                         SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
                         bool bGlobal = false);
@@ -219,7 +219,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet);
+    SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXSelectTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -228,7 +228,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
@@ -247,7 +247,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     typedef std::vector<Control*>::const_reverse_iterator ctrl_const_reverse_iterator;
 
     Button* m_pLeftScrollWin;
-    Window* m_pCtrlParentWin;
+    vcl::Window* m_pCtrlParentWin;
     Button* m_pRightScrollWin;
     std::vector<Control*>   aControlList;
     SwForm*         pForm;
@@ -281,7 +281,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     void        MoveControls(long nOffset);
 
 public:
-    SwTokenWindow(Window* pParent);
+    SwTokenWindow(vcl::Window* pParent);
     virtual ~SwTokenWindow();
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
@@ -329,7 +329,7 @@ class SwIdxTreeListBox : public SvTreeListBox
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 public:
-    SwIdxTreeListBox(Window* pPar, WinBits nStyle);
+    SwIdxTreeListBox(vcl::Window* pPar, WinBits nStyle);
     void SetTabPage(SwTOXEntryTabPage* pPar) { pParent = pPar; }
 };
 
@@ -432,7 +432,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet);
+    SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXEntryTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -440,7 +440,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
@@ -478,7 +478,7 @@ class SwTOXStylesTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet);
+    SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXStylesTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -487,7 +487,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
 };

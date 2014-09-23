@@ -49,7 +49,7 @@
 class ToolBox;
 
 class BackingWindow
-    : public Window
+    : public vcl::Window
     , public VclBuilderContainer
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
@@ -88,7 +88,7 @@ class BackingWindow
     TemplateLocalView*              mpLocalView;
     TemplateAbstractView*           mpCurrentView;
 
-    std::vector<Window*>            maDndWindows;
+    std::vector<vcl::Window*>            maDndWindows;
 
     Rectangle                       maStartCentButtons;
 
@@ -120,7 +120,7 @@ class BackingWindow
     void initControls();
 
 public:
-    BackingWindow( Window* pParent );
+    BackingWindow( vcl::Window* pParent );
     virtual ~BackingWindow();
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;

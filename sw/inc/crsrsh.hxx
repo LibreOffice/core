@@ -305,9 +305,9 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    SwCrsrShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
+    SwCrsrShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = 0 );
     // disguised copy constructor
-    SwCrsrShell( SwCrsrShell& rShell, Window *pWin );
+    SwCrsrShell( SwCrsrShell& rShell, vcl::Window *pWin );
     virtual ~SwCrsrShell();
 
     // create new cursor and append the old one

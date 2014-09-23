@@ -330,7 +330,7 @@ void SidebarController::NotifyResize (void)
         return;
     }
 
-    Window* pParentWindow = mpTabBar->GetParent();
+    vcl::Window* pParentWindow = mpTabBar->GetParent();
     sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
 
     const sal_Int32 nWidth (pParentWindow->GetSizePixel().Width());
@@ -720,7 +720,7 @@ void SidebarController::SwitchToDeck (
 
 SharedPanel SidebarController::CreatePanel (
     const OUString& rsPanelId,
-    ::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     const bool bIsInitiallyExpanded,
     const Context& rContext)
 {
@@ -1096,7 +1096,7 @@ sal_Int32 SidebarController::SetChildWindowWidth (const sal_Int32 nNewWidth)
     pSplitWindow->GetWindowPos(mpParentWindow, nColumn, nRow);
     const long nColumnWidth (pSplitWindow->GetLineSize(nColumn));
 
-    Window* pWindow = mpParentWindow;
+    vcl::Window* pWindow = mpParentWindow;
     const Size aWindowSize (pWindow->GetSizePixel());
 
     pSplitWindow->MoveWindow(

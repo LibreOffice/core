@@ -34,6 +34,7 @@ static OString ImplAutoHelpID( ResMgr* pResMgr )
     return aRet;
 }
 
+namespace vcl {
 
 WinBits Window::ImplInitRes( const ResId& rResId )
 {
@@ -155,4 +156,6 @@ void Window::ImplLoadRes( const ResId& rResId )
         SetBorderStyle( nBorderStyle );
     }
 }
+
+} /* namespace vcl */
 

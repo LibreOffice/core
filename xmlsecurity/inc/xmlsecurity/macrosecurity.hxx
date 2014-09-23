@@ -63,7 +63,7 @@ private:
 
     DECL_LINK(          OkBtnHdl, void* );
 public:
-    MacroSecurity(Window* pParent,
+    MacroSecurity(vcl::Window* pParent,
         const css::uno::Reference< css::uno::XComponentContext>& rxCtx,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
     virtual ~MacroSecurity();
@@ -79,7 +79,7 @@ class MacroSecurityTP : public TabPage
 protected:
     MacroSecurity*      mpDlg;
 public:
-    MacroSecurityTP(Window* _pParent, const OString& rID,
+    MacroSecurityTP(vcl::Window* _pParent, const OString& rID,
         const OUString& rUIXMLDescription, MacroSecurity* _pDlg);
 
     void SetTabDlg(MacroSecurity* pTabDlg)
@@ -104,7 +104,7 @@ protected:
     DECL_LINK(RadioButtonHdl, void *);
 
 public:
-                        MacroSecurityLevelTP( Window* pParent, MacroSecurity* _pDlg );
+                        MacroSecurityLevelTP( vcl::Window* pParent, MacroSecurity* _pDlg );
 
     virtual void        ClosePage( void ) SAL_OVERRIDE;
 };
@@ -138,7 +138,7 @@ private:
     void                ImplCheckButtons();
 
 public:
-    MacroSecurityTrustedSourcesTP(Window* pParent, MacroSecurity* _pDlg);
+    MacroSecurityTrustedSourcesTP(vcl::Window* pParent, MacroSecurity* _pDlg);
     virtual ~MacroSecurityTrustedSourcesTP();
 
     virtual void        ActivatePage() SAL_OVERRIDE;

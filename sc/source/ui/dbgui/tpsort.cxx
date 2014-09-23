@@ -67,7 +67,7 @@ using namespace com::sun::star;
 
 // Sort Criteria Tab page
 
-ScTabPageSortFields::ScTabPageSortFields(Window* pParent,
+ScTabPageSortFields::ScTabPageSortFields(vcl::Window* pParent,
                                           const SfxItemSet& rArgSet)
     : SfxTabPage(pParent, "SortCriteriaPage",
         "modules/scalc/ui/sortcriteriapage.ui", &rArgSet)
@@ -135,7 +135,7 @@ void ScTabPageSortFields::Init()
     }
 }
 
-SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
+SfxTabPage* ScTabPageSortFields::Create( vcl::Window*    pParent,
                                          const SfxItemSet*  rArgSet )
 {
     return ( new ScTabPageSortFields( pParent, *rArgSet ) );
@@ -477,7 +477,7 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 
 // Sort option Tab Page:
 
-ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
+ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
                                             const SfxItemSet&   rArgSet )
     : SfxTabPage(pParent, "SortOptionsPage",
         "modules/scalc/ui/sortoptionspage.ui", &rArgSet)
@@ -608,7 +608,7 @@ void ScTabPageSortOptions::Init()
 }
 
 SfxTabPage* ScTabPageSortOptions::Create(
-                                            Window*             pParent,
+                                            vcl::Window*             pParent,
                                             const SfxItemSet*   rArgSet )
 {
     return ( new ScTabPageSortOptions( pParent, *rArgSet ) );

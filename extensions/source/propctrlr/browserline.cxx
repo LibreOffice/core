@@ -53,7 +53,7 @@ namespace pcr
 
     //= OBrowserLine
 
-    OBrowserLine::OBrowserLine( const OUString& _rEntryName, Window* pParent )
+    OBrowserLine::OBrowserLine( const OUString& _rEntryName, vcl::Window* pParent )
             :m_sEntryName( _rEntryName )
             ,m_aFtTitle(pParent)
             ,m_pControlWindow( NULL )
@@ -121,13 +121,13 @@ namespace pcr
     }
 
 
-    Window* OBrowserLine::GetRefWindow()
+    vcl::Window* OBrowserLine::GetRefWindow()
     {
-        Window* pRefWindow=&m_aFtTitle;
+        vcl::Window* pRefWindow=&m_aFtTitle;
 
         if(m_pBrowseButton)
         {
-            pRefWindow=(Window*)m_pBrowseButton;
+            pRefWindow=(vcl::Window*)m_pBrowseButton;
         }
         else if ( m_pControlWindow )
         {
@@ -137,11 +137,11 @@ namespace pcr
     }
 
 
-    void OBrowserLine::SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags )
+    void OBrowserLine::SetTabOrder(vcl::Window* pRefWindow, sal_uInt16 nFlags )
     {
         m_aFtTitle.SetZOrder(pRefWindow,nFlags);
         if ( m_pControlWindow )
-            m_pControlWindow->SetZOrder( (Window*)&m_aFtTitle, WINDOW_ZORDER_BEHIND );
+            m_pControlWindow->SetZOrder( (vcl::Window*)&m_aFtTitle, WINDOW_ZORDER_BEHIND );
 
         if ( m_pBrowseButton && m_pControlWindow )
             m_pBrowseButton->SetZOrder( m_pControlWindow, WINDOW_ZORDER_BEHIND );
@@ -325,13 +325,13 @@ namespace pcr
             }
         }
 
-        void implEnable( Window* _pWindow, sal_uInt16 _nEnabledBits, sal_uInt16 _nMatchBits  )
+        void implEnable( vcl::Window* _pWindow, sal_uInt16 _nEnabledBits, sal_uInt16 _nMatchBits  )
         {
             if ( _pWindow )
                 _pWindow->Enable( ( _nEnabledBits & _nMatchBits ) == _nMatchBits );
         }
 
-        void implEnable( Window* _pWindow, bool _bEnable )
+        void implEnable( vcl::Window* _pWindow, bool _bEnable )
         {
             if ( _pWindow )
                 _pWindow->Enable( _bEnable );

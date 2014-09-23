@@ -55,7 +55,7 @@ class ScSolverOptionsDialog : public ModalDialog
     void    EditOption();
 
 public:
-    ScSolverOptionsDialog( Window* pParent,
+    ScSolverOptionsDialog( vcl::Window* pParent,
                            const com::sun::star::uno::Sequence<OUString>& rImplNames,
                            const com::sun::star::uno::Sequence<OUString>& rDescriptions,
                            const OUString& rEngine,
@@ -73,7 +73,7 @@ class ScSolverIntegerDialog : public ModalDialog
     NumericField* m_pNfValue;
 
 public:
-    ScSolverIntegerDialog( Window * pParent );
+    ScSolverIntegerDialog( vcl::Window * pParent );
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( sal_Int32 nValue );
@@ -86,7 +86,7 @@ class ScSolverValueDialog : public ModalDialog
     Edit*       m_pEdValue;
 
 public:
-    ScSolverValueDialog( Window * pParent );
+    ScSolverValueDialog( vcl::Window * pParent );
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( double fValue );

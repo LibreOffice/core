@@ -176,7 +176,7 @@ namespace
 }
 #endif
 
-VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID, const uno::Reference<frame::XFrame>& rFrame)
+VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID, const uno::Reference<frame::XFrame>& rFrame)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pStringReplace(ResMgr::GetReadStringHook())
@@ -217,7 +217,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
         aEnd = m_pParserState->m_aMnemonicWidgetMaps.end(); aI != aEnd; ++aI)
     {
         FixedText *pOne = get<FixedText>(aI->m_sID);
-        Window *pOther = get<Window>(aI->m_sValue);
+        vcl::Window *pOther = get<vcl::Window>(aI->m_sValue);
         SAL_WARN_IF(!pOne || !pOther, "vcl", "missing either source " << aI->m_sID << " or target " << aI->m_sValue << " member of Mnemonic Widget Mapping");
         if (pOne && pOther)
             pOne->set_mnemonic_widget(pOther);
@@ -227,14 +227,14 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
     for (AtkMap::iterator aI = m_pParserState->m_aAtkInfo.begin(),
          aEnd = m_pParserState->m_aAtkInfo.end(); aI != aEnd; ++aI)
     {
-        Window *pSource = aI->first;
+        vcl::Window *pSource = aI->first;
         const stringmap &rMap = aI->second;
 
         for (stringmap::const_iterator aP = rMap.begin(),
             aEndP = rMap.end(); aP != aEndP; ++aP)
         {
             const OString &rTarget = aP->second;
-            Window *pTarget = get<Window>(rTarget);
+            vcl::Window *pTarget = get<vcl::Window>(rTarget);
             SAL_WARN_IF(!pTarget, "vcl", "missing member of a11y relation: "
                 << rTarget.getStr());
             if (!pTarget)
@@ -290,7 +290,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
     for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aNumericFormatterAdjustmentMaps.begin(),
          aEnd = m_pParserState->m_aNumericFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
-        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<Window>(aI->m_sID));
+        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<vcl::Window>(aI->m_sID));
         const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
@@ -300,7 +300,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
     for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aTimeFormatterAdjustmentMaps.begin(),
          aEnd = m_pParserState->m_aTimeFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
-        TimeField *pTarget = dynamic_cast<TimeField*>(get<Window>(aI->m_sID));
+        TimeField *pTarget = dynamic_cast<TimeField*>(get<vcl::Window>(aI->m_sID));
         const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
@@ -310,7 +310,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
     for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aDateFormatterAdjustmentMaps.begin(),
          aEnd = m_pParserState->m_aDateFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
-        DateField *pTarget = dynamic_cast<DateField*>(get<Window>(aI->m_sID));
+        DateField *pTarget = dynamic_cast<DateField*>(get<vcl::Window>(aI->m_sID));
         const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
@@ -345,7 +345,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
         for (std::vector<OString>::iterator aW = aI->m_aWidgets.begin(),
             aEndW = aI->m_aWidgets.end(); aW != aEndW; ++aW)
         {
-            Window* pWindow = get<Window>(aW->getStr());
+            vcl::Window* pWindow = get<vcl::Window>(aW->getStr());
             pWindow->add_to_size_group(xGroup);
         }
     }
@@ -450,7 +450,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
 
     //Remove ScrollWindow parent widgets whose children in vcl implement scrolling
     //internally.
-    for (std::map<Window*, Window*>::iterator aI = m_pParserState->m_aRedundantParentWidgets.begin(),
+    for (std::map<vcl::Window*, vcl::Window*>::iterator aI = m_pParserState->m_aRedundantParentWidgets.begin(),
         aEnd = m_pParserState->m_aRedundantParentWidgets.end(); aI != aEnd; ++aI)
     {
         delete_by_window(aI->first);
@@ -462,8 +462,8 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
     {
         VclExpander *pOne = *aI;
 
-        Window *pChild = pOne->get_child();
-        Window* pLabel = pOne->GetWindow(WINDOW_LASTCHILD);
+        vcl::Window *pChild = pOne->get_child();
+        vcl::Window* pLabel = pOne->GetWindow(WINDOW_LASTCHILD);
         if (pLabel && pLabel != pChild && pLabel->GetType() == WINDOW_FIXEDTEXT)
         {
             FixedText *pLabelWidget = static_cast<FixedText*>(pLabel);
@@ -835,7 +835,7 @@ namespace
         pButton->SetModeImage(aImage);
     }
 
-    Button* extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
+    Button* extractStockAndBuildPushButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER;
 
@@ -868,7 +868,7 @@ namespace
         return pWindow;
     }
 
-    Button * extractStockAndBuildMenuButton(Window *pParent, VclBuilder::stringmap &rMap)
+    Button * extractStockAndBuildMenuButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
@@ -1165,7 +1165,7 @@ void VclBuilder::extractMnemonicWidget(const OString &rLabelID, stringmap &rMap)
     }
 }
 
-Window* VclBuilder::prepareWidgetOwnScrolling(Window *pParent, WinBits &rWinStyle)
+vcl::Window* VclBuilder::prepareWidgetOwnScrolling(vcl::Window *pParent, WinBits &rWinStyle)
 {
     //For Widgets that manage their own scrolling, if one appears as a child of
     //a scrolling window shoehorn that scrolling settings to this widget and
@@ -1181,7 +1181,7 @@ Window* VclBuilder::prepareWidgetOwnScrolling(Window *pParent, WinBits &rWinStyl
     return pParent;
 }
 
-void VclBuilder::cleanupWidgetOwnScrolling(Window *pScrollParent, Window *pWindow, stringmap &rMap)
+void VclBuilder::cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Window *pWindow, stringmap &rMap)
 {
     //remove the redundant scrolling parent
     sal_Int32 nWidthReq = pScrollParent->get_width_request();
@@ -1196,7 +1196,7 @@ void VclBuilder::cleanupWidgetOwnScrolling(Window *pScrollParent, Window *pWindo
 extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
-Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OString &id,
+vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
     stringmap &rMap, const std::vector<OString> &rItems)
 {
     bool bIsPlaceHolder = name.isEmpty();
@@ -1242,7 +1242,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
 
     extractButtonImage(id, rMap, name == "GtkRadioButton");
 
-    Window *pWindow = NULL;
+    vcl::Window *pWindow = NULL;
     if (name == "GtkDialog")
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
@@ -1492,7 +1492,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;
         //ListBox manages its own scrolling,
-        Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
+        vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         pWindow = new ListBox(pRealParent, nWinStyle);
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, pWindow, rMap);
@@ -1570,7 +1570,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkDrawingArea")
     {
         OString sBorder = extractCustomProperty(rMap);
-        pWindow = new Window(pParent, sBorder.isEmpty() ? 0 : WB_BORDER);
+        pWindow = new vcl::Window(pParent, sBorder.isEmpty() ? 0 : WB_BORDER);
     }
     else if (name == "GtkTextView")
     {
@@ -1581,7 +1581,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;
         //VclMultiLineEdit manages its own scrolling,
-        Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
+        vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         pWindow = new VclMultiLineEdit(pRealParent, nWinStyle);
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, pWindow, rMap);
@@ -1702,7 +1702,7 @@ namespace
 {
     //return true for window types which exist in vcl but are not themselves
     //represented in the .ui format, i.e. only their children exist.
-    bool isConsideredGtkPseudo(Window *pWindow)
+    bool isConsideredGtkPseudo(vcl::Window *pWindow)
     {
         return pWindow->GetType() == WINDOW_TABPAGE;
     }
@@ -1720,7 +1720,7 @@ void VclBuilder::setDeferredProperties()
     set_properties(m_pParent, aDeferredProperties);
 }
 
-void VclBuilder::set_properties(Window *pWindow, const stringmap &rProps)
+void VclBuilder::set_properties(vcl::Window *pWindow, const stringmap &rProps)
 {
     for (stringmap::const_iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
     {
@@ -1730,12 +1730,12 @@ void VclBuilder::set_properties(Window *pWindow, const stringmap &rProps)
     }
 }
 
-Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
+vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClass,
     const OString &rID, stringmap &rProps, stringmap &rPango,
     stringmap &rAtk,
     std::vector<OString> &rItems)
 {
-    Window *pCurrentChild = NULL;
+    vcl::Window *pCurrentChild = NULL;
 
     if (m_pParent && !isConsideredGtkPseudo(m_pParent) && !m_sID.isEmpty() && rID.equals(m_sID))
     {
@@ -1797,7 +1797,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
     return pCurrentChild;
 }
 
-void VclBuilder::reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition)
+void VclBuilder::reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition)
 {
     if (rWindow.mpWindowImpl->mpParent != rWindow.mpWindowImpl->mpRealParent)
     {
@@ -1811,7 +1811,7 @@ void VclBuilder::reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition)
     rWindow.reorderWithinParent(nNewPosition);
 }
 
-void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
+void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
     OString sID;
 
@@ -1878,7 +1878,7 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
 
 //so that tabbing between controls goes in a visually sensible sequence
 //we sort these into a best-tab-order sequence
-bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, const Window *pB) const
+bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const vcl::Window *pA, const vcl::Window *pB) const
 {
     //sort child order within parent list by grid position
     sal_Int32 nTopA = pA->get_grid_top_attach();
@@ -1934,7 +1934,7 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
         const VclFrame *pFrameParent = dynamic_cast<const VclFrame*>(pA->GetParent());
         if (pFrameParent)
         {
-            const Window *pLabel = pFrameParent->get_label_widget();
+            const vcl::Window *pLabel = pFrameParent->get_label_widget();
             int nFramePosA = (pA == pLabel) ? 0 : 1;
             int nFramePosB = (pB == pLabel) ? 0 : 1;
             return nFramePosA < nFramePosB;
@@ -1943,9 +1943,9 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
     return false;
 }
 
-void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
+void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
-    Window *pCurrentChild = NULL;
+    vcl::Window *pCurrentChild = NULL;
 
     xmlreader::Span name;
     int nsId;
@@ -2017,7 +2017,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                         }
                         else if (sInternalChild.startsWith("action_area") || sInternalChild.startsWith("messagedialog-action_area"))
                         {
-                            Window *pContentArea = pCurrentChild->GetParent();
+                            vcl::Window *pContentArea = pCurrentChild->GetParent();
                             assert(pContentArea && pContentArea->GetType() == WINDOW_CONTAINER);
                             if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pContentArea ? pContentArea->GetParent() : NULL))
                             {
@@ -2027,8 +2027,8 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
                         //To-Do make reorder a virtual in Window, move this foo
                         //there and see above
-                        std::vector<Window*> aChilds;
-                        for (Window* pChild = pCurrentChild->GetWindow(WINDOW_FIRSTCHILD); pChild;
+                        std::vector<vcl::Window*> aChilds;
+                        for (vcl::Window* pChild = pCurrentChild->GetWindow(WINDOW_FIRSTCHILD); pChild;
                             pChild = pChild->GetWindow(WINDOW_NEXT))
                         {
                             aChilds.push_back(pChild);
@@ -2062,7 +2062,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
     }
 }
 
-void VclBuilder::reorderWithinParent(std::vector<Window*>& rChilds, bool bIsButtonBox)
+void VclBuilder::reorderWithinParent(std::vector<vcl::Window*>& rChilds, bool bIsButtonBox)
 {
     for (size_t i = 0; i < rChilds.size(); ++i)
     {
@@ -2336,7 +2336,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
-void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rID, Window *pWindow)
+void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rID, vcl::Window *pWindow)
 {
     assert(pWindow);
 
@@ -2736,7 +2736,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
     rProps.clear();
 }
 
-Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
+vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
     OString sClass;
     OString sID;
@@ -2794,7 +2794,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     if (!sCustomProperty.isEmpty())
         aProperties[OString("customproperty")] = sCustomProperty;
 
-    Window *pCurrentChild = NULL;
+    vcl::Window *pCurrentChild = NULL;
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -2859,7 +2859,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     return pCurrentChild;
 }
 
-void VclBuilder::handlePacking(Window *pCurrent, Window *pParent, xmlreader::XmlReader &reader)
+void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
     xmlreader::Span name;
     int nsId;
@@ -2891,8 +2891,8 @@ void VclBuilder::handlePacking(Window *pCurrent, Window *pParent, xmlreader::Xml
     }
 }
 
-void VclBuilder::applyPackingProperty(Window *pCurrent,
-    Window *pParent,
+void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
+    vcl::Window *pParent,
     xmlreader::XmlReader &reader)
 {
     if (!pCurrent)
@@ -2909,7 +2909,7 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
 
     if (pCurrent->GetType() == WINDOW_SCROLLWINDOW)
     {
-        std::map<Window*, Window*>::iterator aFind = m_pParserState->m_aRedundantParentWidgets.find(pCurrent);
+        std::map<vcl::Window*, vcl::Window*>::iterator aFind = m_pParserState->m_aRedundantParentWidgets.find(pCurrent);
         if (aFind != m_pParserState->m_aRedundantParentWidgets.end())
         {
             pCurrent = aFind->second;
@@ -3105,12 +3105,12 @@ void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMa
     }
 }
 
-Window *VclBuilder::get_widget_root()
+vcl::Window *VclBuilder::get_widget_root()
 {
     return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow;
 }
 
-Window *VclBuilder::get_by_name(const OString& sID)
+vcl::Window *VclBuilder::get_by_name(const OString& sID)
 {
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -3134,7 +3134,7 @@ PopupMenu *VclBuilder::get_menu(const OString& sID)
     return NULL;
 }
 
-short VclBuilder::get_response(const Window *pWindow) const
+short VclBuilder::get_response(const vcl::Window *pWindow) const
 {
     for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -3180,13 +3180,13 @@ void VclBuilder::delete_by_name(const OString& sID)
     }
 }
 
-void VclBuilder::delete_by_window(const Window *pWindow)
+void VclBuilder::delete_by_window(const vcl::Window *pWindow)
 {
     drop_ownership(pWindow);
     delete pWindow;
 }
 
-void VclBuilder::drop_ownership(const Window *pWindow)
+void VclBuilder::drop_ownership(const vcl::Window *pWindow)
 {
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -3199,7 +3199,7 @@ void VclBuilder::drop_ownership(const Window *pWindow)
     }
 }
 
-OString VclBuilder::get_by_window(const Window *pWindow) const
+OString VclBuilder::get_by_window(const vcl::Window *pWindow) const
 {
     for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -3211,13 +3211,13 @@ OString VclBuilder::get_by_window(const Window *pWindow) const
     return OString();
 }
 
-VclBuilder::PackingData VclBuilder::get_window_packing_data(const Window *pWindow) const
+VclBuilder::PackingData VclBuilder::get_window_packing_data(const vcl::Window *pWindow) const
 {
     //We've stored the return of new Control, some of these get
     //border windows placed around them which are what you get
     //from GetChild, so scoot up a level if necessary to get the
     //window whose position value we have
-    const Window *pPropHolder = pWindow->mpWindowImpl->mpClientWindow ?
+    const vcl::Window *pPropHolder = pWindow->mpWindowImpl->mpClientWindow ?
         pWindow->mpWindowImpl->mpClientWindow : pWindow;
 
     for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
@@ -3230,7 +3230,7 @@ VclBuilder::PackingData VclBuilder::get_window_packing_data(const Window *pWindo
     return PackingData();
 }
 
-void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nPosition)
+void VclBuilder::set_window_packing_position(const vcl::Window *pWindow, sal_Int32 nPosition)
 {
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)

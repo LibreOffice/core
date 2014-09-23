@@ -39,7 +39,7 @@
 #include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
 
-ScStyleDlg::ScStyleDlg( Window*             pParent,
+ScStyleDlg::ScStyleDlg( vcl::Window*             pParent,
                         SfxStyleSheetBase&  rStyleBase,
                         sal_uInt16              nRscId )
 

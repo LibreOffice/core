@@ -126,7 +126,7 @@ void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
 
 
 
-SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
+SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     : SfxModalDialog(pParent, "ZoomDialog", "cui/ui/zoomdialog.ui")
     , rSet(rCoreSet)
     , pOutSet(NULL)

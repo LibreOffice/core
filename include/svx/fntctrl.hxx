@@ -34,7 +34,7 @@ class FontPrevWin_Impl;
 
 // class SvxFontPrevWindow -----------------------------------------------
 
-class SVX_DLLPUBLIC SvxFontPrevWindow : public Window
+class SVX_DLLPUBLIC SvxFontPrevWindow : public vcl::Window
 {
     using OutputDevice::SetFont;
 private:
@@ -46,8 +46,8 @@ private:
     SVX_DLLPRIVATE void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
 
 public:
-                        SvxFontPrevWindow( Window* pParent, const ResId& rId );
-                        SvxFontPrevWindow(Window* pParent, WinBits nStyle);
+                        SvxFontPrevWindow( vcl::Window* pParent, const ResId& rId );
+                        SvxFontPrevWindow(vcl::Window* pParent, WinBits nStyle);
     virtual             ~SvxFontPrevWindow();
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
