@@ -4235,20 +4235,15 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
             nLineEnd = pPap->nEndPos;// nLineEnd zeigt *hinter* das <CR>
             pPap->nEndPos--;        // Absatzende um 1 Zeichen verkuerzen
 
-            // gibt es bereits ein CharAttr-Ende das auf das jetzige
-            // Absatzende zeigt ?  ... dann auch um 1 Zeichen verkuerzen
-            if (pChp->nEndPos == nLineEnd)
-                pChp->nEndPos--;
-
             // gibt es bereits ein Sep-Ende, das auf das jetzige Absatzende
             // zeigt ?  ... dann auch um 1 Zeichen verkuerzen
             if( pSep->nEndPos == nLineEnd )
                 pSep->nEndPos--;
         }
     }
-    else if ( (&rDesc == pChp) || (&rDesc == pSep) )
+    else if (&rDesc == pSep)
     {
-        // Char Adjust oder Sep Adjust Wenn Ende Char-Attr == Absatzende ...
+        // Sep Adjust Wenn Ende Char-Attr == Absatzende ...
         if( (rDesc.nEndPos == nLineEnd) && (rDesc.nEndPos > rDesc.nStartPos) )
             rDesc.nEndPos--;            // ... dann um 1 Zeichen verkuerzen
     }
