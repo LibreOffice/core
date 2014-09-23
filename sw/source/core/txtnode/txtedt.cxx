@@ -723,6 +723,8 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
         OUStringBuffer aBuf(aPreDashReplacementText);
         for (sal_Int32 i = nStartPos; i < nEndPos; ++i)
         {
+            if (i < 0)
+                continue;
             sal_Unicode cChar = aBuf[i];
             if (sDashes.indexOf(cChar) != -1)
             {
@@ -798,9 +800,9 @@ bool SwScanner::NextWord()
     while ( true )
     {
         // skip non-letter characters:
-        while ( nBegin < aText.getLength() )
+        while (nBegin < aText.getLength())
         {
-            if ( !u_isspace( aText[nBegin] ) )
+            if (nBegin >= 0 && !u_isspace(aText[nBegin]))
             {
                 if ( !pLanguage )
                 {
