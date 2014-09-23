@@ -706,7 +706,8 @@ IMAGE_SETEVENT:
             free( aStream );
         }
     }
-    else if (aGraphicURL.GetProtocol() == INET_PROT_FILE)
+    // sBaseURL is empty if the source is clipboard
+    else if (sBaseURL.isEmpty())
     {
         if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
             sGrfNm = "";

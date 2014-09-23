@@ -29,9 +29,16 @@ DECLARE_HTMLIMPORT_TEST(testPictureImport, "picture.html")
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);
-    // The document contains one embeded picture and one stored as a link.
-    const sfx2::LinkManager& rLinkManager = pTxtDoc->GetDocShell()->GetDoc()->GetEditShell()->GetLinkManager();
-    CPPUNIT_ASSERT_EQUAL(size_t(1), rLinkManager.GetLinks().size());
+    // The document contains two pictures stored as a link.
+    sfx2::LinkManager& rLinkManager = pTxtDoc->GetDocShell()->GetDoc()->GetEditShell()->GetLinkManager();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rLinkManager.GetLinks().size());
+    rLinkManager.Remove(0,2);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rLinkManager.GetLinks().size());
+
+    // TODO: Get the data into clipboard in html format and paste
+
+    // But when pasting we don't want images to be linked.
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rLinkManager.GetLinks().size());
 }
 
 DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
