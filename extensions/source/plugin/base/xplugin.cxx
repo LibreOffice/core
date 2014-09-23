@@ -536,7 +536,7 @@ void XPlugin_Impl::loadPlugin()
             if( !socketpair( AF_UNIX, SOCK_STREAM, 0, sv ) )
                 pComm = new UnxPluginComm( m_aDescription.Mimetype,
                                            m_aDescription.PluginName,
-                                           (XLIB_Window)pEnvData->aWindow,
+                                           (Window)pEnvData->aWindow,
                                            sv[0],
                                            sv[1]
                                            );

@@ -764,7 +764,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 {
                     if( ! pInst->pWidget )
                     {
-                        pInst->pWidget = CreateNewShell( &(pInst->pShell), (XLIB_Window)pWindow->window );
+                        pInst->pWidget = CreateNewShell( &(pInst->pShell), (Window)pWindow->window );
                     }
 
                     // fill in NPWindow and NPCallbackStruct

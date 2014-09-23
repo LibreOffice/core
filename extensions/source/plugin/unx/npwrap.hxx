@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-void* CreateNewShell( void** pShellReturn, XLIB_Window aParentWindow );
+void* CreateNewShell( void** pShellReturn, Window aParentWindow );
 
 void LoadAdditionalLibs(const char*);
 

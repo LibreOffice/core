@@ -52,7 +52,7 @@
 UnxPluginComm::UnxPluginComm(
                              const OUString& /*mimetype*/,
                              const OUString& library,
-                             XLIB_Window aParent,
+                             Window aParent,
                              int nDescriptor1,
                              int nDescriptor2
                              ) :

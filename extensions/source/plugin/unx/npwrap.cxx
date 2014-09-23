@@ -119,7 +119,7 @@ IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
 
 }
 
-Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParentWindow )
+Widget createSubWidget( char* /*pPluginText*/, Widget shell, Window aParentWindow )
 {
     Widget newWidget = XtVaCreateManagedWidget(
 #if defined USE_MOTIF
@@ -152,7 +152,7 @@ Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParent
     return newWidget;
 }
 
-void* CreateNewShell( void** pShellReturn, XLIB_Window aParentWindow )
+void* CreateNewShell( void** pShellReturn, Window aParentWindow )
 {
     String n, c;
     XtGetApplicationNameAndClass(pXtAppDisplay, &n, &c);
