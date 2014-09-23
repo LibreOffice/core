@@ -175,7 +175,7 @@ sal_Int32 SwBreakIt::getGraphemeCount(const OUString& rText,
 {
     sal_Int32 nGraphemeCount = 0;
 
-    sal_Int32 nCurPos = std::max(0, nStart);
+    sal_Int32 nCurPos = std::max(static_cast<sal_Int32>(0), nStart);
     while (nCurPos < nEnd)
     {
         // fdo#49208 cheat and assume that nothing can combine with a space
