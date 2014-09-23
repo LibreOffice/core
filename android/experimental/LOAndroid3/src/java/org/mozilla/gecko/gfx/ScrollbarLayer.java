@@ -14,7 +14,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.opengl.GLES20;
 
-import org.libreoffice.DirectBufferAllocator;
+import org.libreoffice.kit.DirectBufferAllocator;
 import org.mozilla.gecko.util.FloatUtils;
 
 import java.nio.ByteBuffer;

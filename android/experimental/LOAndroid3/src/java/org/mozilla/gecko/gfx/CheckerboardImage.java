@@ -7,7 +7,7 @@ package org.mozilla.gecko.gfx;
 
 import android.graphics.Color;
 
-import org.libreoffice.DirectBufferAllocator;
+import org.libreoffice.kit.DirectBufferAllocator;
 
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;

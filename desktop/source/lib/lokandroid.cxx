@@ -80,6 +80,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Office_document
 }
 
 /* Document */
+
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_destroy
     (JNIEnv* pEnv, jobject aObject)
 {
@@ -164,7 +165,8 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDoc
     return nWidth;
 }
 
-extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Office_saveAs(JNIEnv* pEnv, jobject aObject, jstring sUrl, jstring sFormat, jstring sOptions)
+extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Office_saveAs
+    (JNIEnv* pEnv, jobject aObject, jstring sUrl, jstring sFormat, jstring sOptions)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
@@ -179,6 +181,30 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Office_saveAs(JN
     pEnv->ReleaseStringUTFChars(sOptions, pOptions);
 
     return result;
+}
+
+/* DirectBufferAllocator */
+
+extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_DirectBufferAllocator_allocateDirectBufferNative
+    (JNIEnv* pEnv, jclass /*aClass*/, jlong nSize)
+{
+    jobject aBuffer = NULL;
+    void* pMemory = malloc(nSize);
+    if (pMemory != NULL)
+    {
+        aBuffer = pEnv->NewDirectByteBuffer(pMemory, nSize);
+        if (!aBuffer)
+        {
+            free(pMemory);
+        }
+    }
+    return aBuffer;
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_DirectBufferAllocator_freeDirectBufferNative
+    (JNIEnv* pEnv, jclass, jobject aBuffer)
+{
+    free(pEnv->GetDirectBufferAddress(aBuffer));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

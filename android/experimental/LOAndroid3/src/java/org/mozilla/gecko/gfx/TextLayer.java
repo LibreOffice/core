@@ -11,7 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
-import org.libreoffice.DirectBufferAllocator;
+import org.libreoffice.kit.DirectBufferAllocator;
 
 import java.nio.ByteBuffer;
 

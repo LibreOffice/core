@@ -52,7 +52,7 @@ import android.opengl.GLSurfaceView;
 import android.os.SystemClock;
 import android.util.Log;
 
-import org.libreoffice.DirectBufferAllocator;
+import org.libreoffice.kit.DirectBufferAllocator;
 import org.mozilla.gecko.gfx.Layer.RenderContext;
 
 import java.nio.ByteBuffer;

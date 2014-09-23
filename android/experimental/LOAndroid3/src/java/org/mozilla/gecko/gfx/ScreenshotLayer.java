@@ -12,7 +12,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.opengl.GLES20;
 
-import org.libreoffice.DirectBufferAllocator;
+import org.libreoffice.kit.DirectBufferAllocator;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
