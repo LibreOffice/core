@@ -83,6 +83,7 @@ public class LOKitThread extends Thread {
             Rect tileRect = new Rect(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
             if (!Rect.intersects(rect, tileRect)) {
                 Log.i(LOGTAG, "tilerender delete " + tileRect);
+                tile.destroy();
                 removeTiles.add(tile);
             }
         }
