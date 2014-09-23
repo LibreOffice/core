@@ -46,12 +46,16 @@ DockingAreaWindow::ImplData::~ImplData()
 
 static void ImplInitBackground( DockingAreaWindow* pThis )
 {
-    const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
-    if ( !rPersonaBitmap.IsEmpty() && pThis->GetAlign() == WINDOWALIGN_TOP )
+    const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
+    const BitmapEx& rPersonaBitmap = pThis->GetAlign() == WINDOWALIGN_TOP ? rSetting.GetPersonaHeader() :rSetting.GetPersonaFooter();
+    if ( !rPersonaBitmap.IsEmpty() &&( pThis->GetAlign() == WINDOWALIGN_TOP|| pThis->GetAlign()==WINDOWALIGN_BOTTOM ) )
     {
         Wallpaper aWallpaper( rPersonaBitmap );
-        aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
-        aWallpaper.SetColor( Application::GetSettings().GetStyleSettings().GetWorkspaceColor() );
+        if(pThis->GetAlign()==WINDOWALIGN_TOP )
+            aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
+        else
+            aWallpaper.SetStyle( WALLPAPER_BOTTOMRIGHT );
+        aWallpaper.SetColor( rSetting.GetWorkspaceColor() );
 
         // we need to shift the bitmap vertically so that it spans over the
         // menubar conveniently
@@ -155,6 +159,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
         ToolbarValue        aControlValue;
+        const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
 
         if( GetAlign() == WINDOWALIGN_TOP && ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG )
         {
@@ -162,9 +167,11 @@ void DockingAreaWindow::Paint( const Rectangle& )
             // useful for special gradient effects that should cover both windows
             aControlValue.mbIsTopDockingArea = true;
         }
-        ControlState        nState = CTRL_STATE_ENABLED;
 
-        if ( GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
+        ControlState        nState = CTRL_STATE_ENABLED;
+        const bool isFooter = GetAlign() == WINDOWALIGN_BOTTOM && !rSetting.GetPersonaFooter().IsEmpty();
+
+        if (( GetAlign() == WINDOWALIGN_TOP && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter  )
             Erase();
         else if ( !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
         {
