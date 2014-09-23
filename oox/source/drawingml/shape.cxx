@@ -678,7 +678,11 @@ Reference< XShape > Shape::createAndInsert(
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc( length+1);
                     aGrabBag[length].Name = "mso-orig-shape-type";
-                    aGrabBag[length].Value = uno::makeAny(mpCustomShapePropertiesPtr->getShapePresetTypeName());
+                    const uno::Sequence< sal_Int8 > aNameSeq =
+                        mpCustomShapePropertiesPtr->getShapePresetTypeName();
+                    OUString sShapePresetTypeName(reinterpret_cast< const char* >(
+                        aNameSeq.getConstArray()), aNameSeq.getLength(), RTL_TEXTENCODING_UTF8);
+                    aGrabBag[length].Value = uno::makeAny(sShapePresetTypeName);
                     propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
                 }
                 //If the text box has links then save the link information so that

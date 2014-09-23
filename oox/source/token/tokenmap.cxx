@@ -73,18 +73,6 @@ TokenMap::~TokenMap()
 {
 }
 
-OUString TokenMap::getUnicodeTokenName( sal_Int32 nToken ) const
-{
-    Sequence< sal_Int8 > rUtf8Name = getUtf8TokenName(nToken);
-    if (rUtf8Name.getLength() == 0)
-        return OUString();
-
-    return OUString(reinterpret_cast< const char * >(
-                    rUtf8Name.getConstArray() ),
-                    rUtf8Name.getLength(),
-                    RTL_TEXTENCODING_UTF8);
-}
-
 sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
 {
     OString aUtf8Name = OUStringToOString( rUnicodeName, RTL_TEXTENCODING_UTF8 );

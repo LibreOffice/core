@@ -55,17 +55,18 @@ AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFas
     }
 }
 
-static OUString tokenToString( int token )
+static OString tokenToString( int token )
 {
-    OUString tokenname = StaticTokenMap::get().getUnicodeTokenName( token & TOKEN_MASK );
+    const uno::Sequence< sal_Int8 > aTokenNameSeq = StaticTokenMap::get().getUtf8TokenName( token & TOKEN_MASK );
+    OString tokenname( reinterpret_cast< const char* >( aTokenNameSeq.getConstArray() ), aTokenNameSeq.getLength() );
     if( tokenname.isEmpty())
         tokenname = "???";
     int nmsp = ( token & NMSP_MASK & ~( TAG_OPENING | TAG_CLOSING ));
 #if 0 // this is awfully long
-    OUString namespacename = StaticNamespaceMap::get().count( nmsp ) != 0
-        ? StaticNamespaceMap::get()[ nmsp ] : OUString( "???" );
+    OString namespacename = StaticNamespaceMap::get().count( nmsp ) != 0
+        ? StaticNamespaceMap::get()[ nmsp ] : OString( "???" );
 #else
-    OUString namespacename;
+    OString namespacename;
     // only few are needed actually
     switch( nmsp )
     {

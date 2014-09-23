@@ -56,9 +56,9 @@ CustomShapeProperties::~CustomShapeProperties()
 {
 }
 
-OUString CustomShapeProperties::getShapePresetTypeName() const
+uno::Sequence< sal_Int8 > CustomShapeProperties::getShapePresetTypeName() const
 {
-    return StaticTokenMap::get().getUnicodeTokenName( mnShapePresetType );
+    return StaticTokenMap::get().getUtf8TokenName( mnShapePresetType );
 }
 
 sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide )
@@ -136,7 +136,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         }
         else if (maPresetDataMap.find(mnShapePresetType) != maPresetDataMap.end())
         {
-            OSL_TRACE("found property map for preset: %s (%d)", USS(getShapePresetTypeName()), mnShapePresetType);
+            OSL_TRACE("found property map for preset: %d", mnShapePresetType);
 
             aPropertyMap = maPresetDataMap[mnShapePresetType];
 #ifdef DEBUG

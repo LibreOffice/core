@@ -35,9 +35,6 @@ public:
     explicit            TokenMap();
                         ~TokenMap();
 
-    /** Returns the Unicode name of the passed token identifier. */
-    OUString     getUnicodeTokenName( sal_Int32 nToken ) const;
-
     /** Returns the token identifier for the passed Unicode token name. */
     sal_Int32           getTokenFromUnicode( const OUString& rUnicodeName ) const;
 

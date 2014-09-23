@@ -116,7 +116,7 @@ public:
                         const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > & xShape, const ::com::sun::star::awt::Size &aSize );
 
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }
-    OUString getShapePresetTypeName() const;
+    css::uno::Sequence< sal_Int8 > getShapePresetTypeName() const;
     void setShapePresetType( sal_Int32 nShapePresetType ){ mnShapePresetType = nShapePresetType; };
     bool                                getShapeTypeOverride(){ return mbShapeTypeOverride; };
     void                                setShapeTypeOverride( bool bShapeTypeOverride ) { mbShapeTypeOverride = bShapeTypeOverride; };
