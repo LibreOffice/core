@@ -159,7 +159,7 @@ using namespace ::com::sun::star;
 
         if ( m_pETHostServer->IsValueChangedFromSaved() )
         {
-            DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet->GetItem(DSID_TYPECOLLECTION));
+            const DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet->GetItem(DSID_TYPECOLLECTION));
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
             if (pCollectionItem)
                 pCollection = pCollectionItem->getCollection();
@@ -249,7 +249,7 @@ using namespace ::com::sun::star;
     void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, bool /*_bSaveValue*/)
     {
         // show the "Connect directly" option only if the driver is installed
-        DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
+        const DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
         bool bHasMySQLNative = ( pCollectionItem != NULL ) && pCollectionItem->getCollection()->hasDriver( "sdbc:mysqlc:" );
         if ( bHasMySQLNative )
             m_pNATIVEDatabase->Show();

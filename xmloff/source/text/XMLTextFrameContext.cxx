@@ -1435,7 +1435,7 @@ void XMLTextFrameContext::EndElement()
 
     SvXMLImportContext const*const pContext =
         (pMultiContext) ? &pMultiContext : &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(PTR_CAST( XMLTextFrameContext_Impl, pContext ));
     assert(!pMultiContext || pImpl);
     if( pImpl )
     {

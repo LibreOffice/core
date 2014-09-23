@@ -155,7 +155,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
             if( 0 != (pDesc = (SwFmtPageDesc*)rPool.GetItem2( RES_PAGEDESC, n ) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
-                SwCntntNode* pNd = PTR_CAST( SwCntntNode, pDesc->GetDefinedIn() );
+                const SwCntntNode* pNd = PTR_CAST( SwCntntNode, pDesc->GetDefinedIn() );
                 if( pNd )
                 {
                     if ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*pNd) )

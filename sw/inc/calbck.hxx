@@ -101,6 +101,7 @@ public:
    void SwClientNotifyCall( const SwModify& rModify, const SfxHint& rHint ) { SwClientNotify( rModify, rHint ); }
 
     const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
+    SwModify* GetRegisteredIn() { return pRegisteredIn; }
     bool IsLast() const { return !pLeft && !pRight; }
 
     // needed for class SwClientIter

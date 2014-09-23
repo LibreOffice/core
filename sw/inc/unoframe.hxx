@@ -141,7 +141,11 @@ public:
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     void attach( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xTextRange ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    SwFrmFmt*       GetFrmFmt() const
+    const SwFrmFmt* GetFrmFmt() const
+    {
+        return PTR_CAST ( SwFrmFmt, GetRegisteredIn() );
+    }
+    SwFrmFmt* GetFrmFmt()
     {
         return PTR_CAST ( SwFrmFmt, GetRegisteredIn() );
     }

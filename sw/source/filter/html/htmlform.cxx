@@ -687,7 +687,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 
     const SdrView* pDrawView = pVSh ? pVSh->GetDrawView() : 0;
 
-    SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
+    const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
     uno::Reference< awt::XControl > xControl;
     if ( pDrawView && pVSh->GetWin() && pFormObj )
         xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin() );

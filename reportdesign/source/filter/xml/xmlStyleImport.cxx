@@ -107,8 +107,8 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
                 {
                     OReportStylesContext* pMyStyles = PTR_CAST(OReportStylesContext,GetOwnImport().GetAutoStyles());
                     if ( pMyStyles )
-                        pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
-                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true));
+                        pStyle = const_cast<SvXMLNumFormatContext*>(PTR_CAST(SvXMLNumFormatContext,pMyStyles->
+                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true)));
                     else {
                         OSL_FAIL("not possible to get style");
                     }

@@ -154,7 +154,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     if (nCloneErrCnt==0) {
         for (size_t no=0; no<nAnz; ++no) {
             const SdrObject* pSrcOb=rSrcList.GetObj(no);
-            SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pSrcOb);
+            const SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pSrcOb);
             if (pSrcEdge!=NULL) {
                 SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(true);
                 SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(false);
