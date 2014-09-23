@@ -23,6 +23,11 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/text/MailMergeType.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
@@ -34,6 +39,8 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <dbmgr.hxx>
+#include <unoprnms.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -135,6 +142,29 @@ using namespace css;
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
+#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, BaseClass) \
+    class TestName : public BaseClass { \
+    protected: \
+        virtual OUString getTestName() SAL_OVERRIDE { return OUString::createFromAscii(#TestName); } \
+    public: \
+        CPPUNIT_TEST_SUITE(TestName); \
+        CPPUNIT_TEST(MailMerge); \
+        CPPUNIT_TEST_SUITE_END(); \
+    \
+        void MailMerge() { \
+            executeMailMergeTest(filename, datasource, tablename); \
+        } \
+        void verify() SAL_OVERRIDE; \
+    }; \
+    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
+    void TestName::verify()
+
+/**
+ * Maps database URIs to the registered database names for quick lookups
+ */
+typedef std::map<OUString, OUString> DBuriMap;
+DBuriMap aDBuriMap;
+
 /// Base class for filter tests loading or roundtriping a document, then asserting the document model.
 class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
@@ -142,7 +172,11 @@ private:
     OUString maFilterOptions;
 
 protected:
-    uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxMMComponent;
+    uno::Reference< com::sun::star::task::XJob > mxJob;
+    uno::Sequence< beans::NamedValue > mSeqMailMergeArgs;
+
     xmlBufferPtr mpXmlBuffer;
     const char* mpTestDocumentPath;
     const char* mpFilter;
@@ -156,7 +190,9 @@ protected:
 
     sal_uInt32 mnStartTime;
     utl::TempFile maTempFile;
+    utl::TempFile maTempDir;
     bool mbExported; ///< Does maTempFile already contain something useful?
+    sal_Int16 nCurOutputType;
 
 protected:
     virtual OUString getTestName() { return OUString(); }
@@ -176,7 +212,9 @@ public:
         , mpTestDocumentPath(pTestDocumentPath)
         , mpFilter(pFilter)
         , mnStartTime(0)
+        , maTempDir(NULL, true)
         , mbExported(false)
+        , nCurOutputType(0)
     {
         maTempFile.EnableKillingFile();
     }
@@ -195,6 +233,16 @@ public:
     {
         if (mxComponent.is())
             mxComponent->dispose();
+        if (mxMMComponent.is())
+        {
+            if (nCurOutputType == text::MailMergeType::SHELL)
+            {
+                SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+                pTxtDoc->GetDocShell()->DoClose();
+            }
+            else
+                mxMMComponent->dispose();
+        }
 
         test::BootstrapFixture::tearDown();
     }
@@ -259,6 +307,32 @@ protected:
     }
 
     /**
+     * Helper func used by each unit test to test the 'mail merge' code.
+     *
+     * Registers the data source, loads the original file as reference,
+     * initializes the mail merge job and its default argument sequence.
+     *
+     * The 'verify' method actually has to execute the mail merge by
+     * calling executeMailMerge() after modifying the job arguments.
+     */
+    void executeMailMergeTest(const char* filename, const char* datasource, const char* tablename = 0)
+    {
+        header();
+        preTest(filename);
+        load(mpTestDocumentPath, filename);
+
+        const OUString aPrefix( "LOMM_" );
+        const OUString aWorkDir = maTempDir.GetURL();
+        const OUString aURI( getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
+        OUString aDBName = registerDBsource( aURI, aPrefix, aWorkDir );
+        initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir );
+
+        postTest(filename);
+        verify();
+        finish();
+    }
+
+    /**
      * Function overloaded by unit test. See DECLARE_SW_*_TEST macros
      */
     virtual void verify()
@@ -288,7 +362,7 @@ protected:
     }
 
     /**
-     * Override this function if not calcing layout is needed
+     * Override this function if calcing layout is not needed
      */
     virtual bool mustCalcLayoutOf(const char* /*filename*/)
     {
@@ -687,6 +761,89 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("extended-properties"), BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a14"), BAD_CAST("http://schemas.microsoft.com/office/drawing/2010/main"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("o"), BAD_CAST("urn:schemas-microsoft-com:office:office"));
+    }
+
+    virtual OUString registerDBsource( const OUString &aURI, const OUString &aPrefix, const OUString &aWorkDir )
+    {
+        OUString aDBName;
+        DBuriMap::const_iterator pos = aDBuriMap.find( aURI );
+        if (pos == aDBuriMap.end())
+        {
+            aDBName = SwDBManager::LoadAndRegisterDataSource( aURI, &aPrefix, &aWorkDir );
+            aDBuriMap.insert( std::pair< OUString, OUString >( aURI, aDBName ) );
+            std::cout << "New datasource name: '" << aDBName << "'" << std::endl;
+        }
+        else
+        {
+            aDBName = pos->second;
+            std::cout << "Old datasource name: '" << aDBName << "'" << std::endl;
+        }
+        CPPUNIT_ASSERT(!aDBName.isEmpty());
+        return aDBName;
+    }
+
+    virtual void initMailMergeJobAndArgs( const char* filename, const char* tablename, const OUString &aDBName,
+                                          const OUString &aPrefix, const OUString &aWorkDir )
+    {
+        uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( "com.sun.star.text.MailMerge" ), uno::UNO_QUERY_THROW );
+        mxJob.set( xJob );
+
+        int seq_id = 5;
+        if (tablename) seq_id += 2;
+        mSeqMailMergeArgs.realloc( seq_id );
+
+        seq_id = 0;
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_OUTPUT_TYPE ), uno::Any( text::MailMergeType::SHELL ) );
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DOCUMENT_URL ), uno::Any(
+                                        ( OUString(getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) );
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DATA_SOURCE_NAME ), uno::Any( aDBName ) );
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_OUTPUT_URL ), uno::Any( aWorkDir ) );
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_FILE_NAME_PREFIX ), uno::Any( aPrefix ));
+        if (tablename)
+        {
+            mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND_TYPE ), uno::Any( sdb::CommandType::TABLE ) );
+            mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND ), uno::Any( OUString::createFromAscii(tablename) ) );
+        }
+    }
+
+    virtual void executeMailMerge()
+    {
+        uno::Any res = mxJob->execute( mSeqMailMergeArgs );
+
+        OUString aCurOutputURL;
+        OUString aCurFileNamePrefix;
+        const beans::NamedValue *pArguments = mSeqMailMergeArgs.getConstArray();
+        bool bOk = true;
+        sal_Int32 nArgs = mSeqMailMergeArgs.getLength();
+
+        for (sal_Int32 i = 0; i < nArgs; ++i) {
+            const OUString &rName  = pArguments[i].Name;
+            const uno::Any &rValue = pArguments[i].Value;
+
+            // all error checking was already done by the MM job execution
+            if (rName == UNO_NAME_OUTPUT_URL)
+                bOk &= rValue >>= aCurOutputURL;
+            else if (rName == UNO_NAME_FILE_NAME_PREFIX)
+                bOk &= rValue >>= aCurFileNamePrefix;
+            else if (rName == UNO_NAME_OUTPUT_TYPE)
+                bOk &= rValue >>= nCurOutputType;
+        }
+
+        CPPUNIT_ASSERT(bOk);
+
+        if (nCurOutputType == text::MailMergeType::SHELL)
+        {
+            CPPUNIT_ASSERT(res >>= mxMMComponent);
+            CPPUNIT_ASSERT(mxMMComponent.is());
+        }
+        else
+        {
+            CPPUNIT_ASSERT(res == true);
+            mxMMComponent = loadFromDesktop( aCurOutputURL + "/" + aCurFileNamePrefix + "0.odt",
+                                             "com.sun.star.text.TextDocument");
+            CPPUNIT_ASSERT(mxMMComponent.is());
+            calcLayout();
+        }
     }
 };
 
