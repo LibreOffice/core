@@ -2257,6 +2257,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_INSERT_FLD_PAGE_TITLE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_INSERT_FLD_PAGES // ole : no, status : play rec
     [
         ExecMethod = FuTemporary ;

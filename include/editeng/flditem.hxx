@@ -25,6 +25,7 @@
 #include <svl/poolitem.hxx>
 #include <tools/pstm.hxx>
 #include <editeng/editengdllapi.h>
+#include <../sd/inc/sdpage.hxx> // for Page Title field
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -184,6 +185,18 @@ class EDITENG_DLLPUBLIC SvxPageField : public SvxFieldData
 public:
     SV_DECL_PERSIST1( SvxPageField, SvxFieldData, com::sun::star::text::textfield::Type::PAGE )
     SvxPageField();
+
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
+
+    virtual MetaAction* createBeginComment() const SAL_OVERRIDE;
+};
+
+class EDITENG_DLLPUBLIC SvxPageTitleField : public SvxFieldData
+{
+public:
+    SV_DECL_PERSIST1( SvxPageTitleField, SvxFieldData, com::sun::star::text::textfield::Type::PAGE_TITLE )
+    SvxPageTitleField();
 
     virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;

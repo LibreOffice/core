@@ -117,6 +117,8 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                 return new SvxPageField();
             case text::textfield::Type::PAGES:
                 return new SvxPagesField();
+            case text::textfield::Type::PAGE_TITLE:
+                return new SvxPageTitleField();
             case text::textfield::Type::DOCINFO_TITLE:
                 return new SvxFileField();
             case text::textfield::Type::TABLE:
@@ -607,7 +609,40 @@ MetaAction* SvxURLField::createBeginComment() const
                                   2*aURL.getLength() );
 }
 
+//
+// SvxPageTitleField methods
+//
 
+SV_IMPL_PERSIST1( SvxPageTitleField, SvxFieldData );
+
+SvxPageTitleField::SvxPageTitleField() {}
+
+SvxFieldData* SvxPageTitleField::Clone() const
+{
+    return new SvxPageTitleField();
+}
+
+bool SvxPageTitleField::operator==( const SvxFieldData& rCmp ) const
+{
+    return ( rCmp.Type() == TYPE(SvxPageTitleField) );
+}
+
+void SvxPageTitleField::Load( SvPersistStream & /*rStm*/ )
+{
+}
+
+void SvxPageTitleField::Save( SvPersistStream & /*rStm*/ )
+{
+}
+
+MetaAction* SvxPageTitleField::createBeginComment() const
+{
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN;PageTitleField" );
+}
+
+//
+// SvxPagesField
+//
 // The fields that were removed from Calc:
 
 
@@ -1152,6 +1187,7 @@ SvClassManager& SvxFieldItem::GetClassManager()
         pClassMgr->Register(SvxURLField::StaticClassId(),     SvxURLField::CreateInstance);
         pClassMgr->Register(SvxDateField::StaticClassId(),    SvxDateField::CreateInstance);
         pClassMgr->Register(SvxPageField::StaticClassId(),    SvxPageField::CreateInstance);
+        pClassMgr->Register(SvxPageTitleField::StaticClassId(), SvxPageTitleField::CreateInstance);
         pClassMgr->Register(SvxTimeField::StaticClassId(),    SvxTimeField::CreateInstance);
         pClassMgr->Register(SvxExtTimeField::StaticClassId(), SvxExtTimeField::CreateInstance);
         pClassMgr->Register(SvxExtFileField::StaticClassId(), SvxExtFileField::CreateInstance);
