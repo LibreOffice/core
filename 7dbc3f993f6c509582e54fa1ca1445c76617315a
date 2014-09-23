@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_2e814790",
+        "filename": "javaunohelper/JunitTest_juh_ComponentBase.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-23T11:28:56Z",
+      "side": 1,
+      "message": "This file is not really needed. You can incorporate the changes in JunitTest_juh_ComponentContext.mk and rename it. See other comment.",
+      "revId": "7dbc3f993f6c509582e54fa1ca1445c76617315a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_4e7493ce",
+        "filename": "javaunohelper/Module_javaunohelper.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-23T11:28:56Z",
+      "side": 1,
+      "message": "It looks like we could use the same makefile and just add second junit invocation in it, instead to duplicate it: Rename existing JunitTest_juh_ComponentContext.mk to: JunitTest_juh.mk and include both unit tests (and sourced needed for bot in it).",
+      "revId": "7dbc3f993f6c509582e54fa1ca1445c76617315a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
