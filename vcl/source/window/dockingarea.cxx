@@ -46,12 +46,16 @@ DockingAreaWindow::ImplData::~ImplData()
 
 static void ImplInitBackground( DockingAreaWindow* pThis )
 {
-    const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
-    if ( !rPersonaBitmap.IsEmpty() && pThis->GetAlign() == WINDOWALIGN_TOP )
+    const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
+    const BitmapEx& rPersonaBitmap = pThis->GetAlign() == WINDOWALIGN_TOP ? rSetting.GetPersonaHeader() :rSetting.GetPersonaFooter();
+    if ( !rPersonaBitmap.IsEmpty() &&( pThis->GetAlign() == WINDOWALIGN_TOP|| pThis->GetAlign()==WINDOWALIGN_BOTTOM ) )
     {
         Wallpaper aWallpaper( rPersonaBitmap );
-        aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
-        aWallpaper.SetColor( Application::GetSettings().GetStyleSettings().GetWorkspaceColor() );
+        if(pThis->GetAlign()==WINDOWALIGN_TOP )
+            aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
+        else
+            aWallpaper.SetStyle( WALLPAPER_BOTTOMRIGHT );
+        aWallpaper.SetColor( rSetting.GetWorkspaceColor() );
 
         // we need to shift the bitmap vertically so that it spans over the
         // menubar conveniently

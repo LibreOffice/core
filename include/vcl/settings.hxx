@@ -522,6 +522,8 @@ public:
 
     const BitmapEx                  GetPersonaHeader() const;
 
+    const BitmapEx                  GetPersonaFooter() const;
+
     const boost::optional<Color>&   GetPersonaMenuBarTextColor() const;
 
     // global switch to allow EdgeBlenging; currently possible for ValueSet and ListBox

@@ -1468,9 +1468,10 @@ void ToolBox::ImplInitSettings( bool bFont,
         else
         {
             if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) ||
-                ( GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() ) )
+                ( GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )|| ( GetAlign() == WINDOWALIGN_BOTTOM && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()) )
             {
                 SetBackground();
+                SetTextColor(rStyleSettings.GetMenuBarTextColor());
                 SetPaintTransparent( true );
                 SetParentClipMode( PARENTCLIPMODE_NOCLIP );
                 mpData->maDisplayBackground = Wallpaper( rStyleSettings.GetFaceColor() );
