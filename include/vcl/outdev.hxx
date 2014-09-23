@@ -46,7 +46,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
 #ifdef check
 #  //some problem with MacOSX and a check define
 #  undef check
@@ -99,7 +99,7 @@ class VirtualDevice;
 class Window;
 struct SalTwoRect;
 
-typedef boost::shared_ptr< FontCharMap > PtrFontCharMap;
+typedef boost::intrusive_ptr< FontCharMap > PtrFontCharMap;
 
 // Layout options
 #define SAL_LAYOUT_BIDI_RTL                 (1<<0)

@@ -39,6 +39,7 @@ FontCharMap::FontCharMap( const CmapResult& rCR )
 ,   mpGlyphIds( rCR.mpGlyphIds )
 ,   mnRangeCount( rCR.mnRangeCount )
 ,   mnCharCount( 0 )
+,   mnRefCount( 0 )
 {
     const sal_UCS4* pRangePtr = mpRangeCodes;
     for( int i = mnRangeCount; --i >= 0; pRangePtr += 2 )
@@ -55,6 +56,7 @@ FontCharMap::FontCharMap()
 ,   mpGlyphIds( FontCharMap::GetDefaultMap()->mpGlyphIds )
 ,   mnRangeCount( FontCharMap::GetDefaultMap()->mnRangeCount )
 ,   mnCharCount( 0 )
+,   mnRefCount( 0 )
 {}
 
 static PtrFontCharMap pDefaultFontCharMap = NULL;

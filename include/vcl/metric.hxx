@@ -24,12 +24,12 @@
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 class ImplFontMetric;
 class FontCharMap;
 
-typedef boost::shared_ptr< FontCharMap > PtrFontCharMap;
+typedef boost::intrusive_ptr< FontCharMap > PtrFontCharMap;
 typedef sal_uInt32 sal_UCS4;
 
 namespace vcl {
@@ -139,6 +139,8 @@ public:
 
 private:
     friend class OutputDevice;
+    friend void intrusive_ptr_release(FontCharMap*);
+    friend void intrusive_ptr_add_ref(FontCharMap*);
 
     int                     findRangeIndex( sal_uInt32 ) const;
     void                    destroy();
@@ -152,7 +154,19 @@ private:
     const sal_uInt16*       mpGlyphIds;       // individual glyphid mappings
     int                     mnRangeCount;
     int                     mnCharCount;      // covered codepoints
+    sal_uLong               mnRefCount;       // for intrusive_ptr
 };
+
+inline void intrusive_ptr_add_ref(FontCharMap *pFontCharMap)
+{
+    ++pFontCharMap->mnRefCount;
+}
+
+inline void intrusive_ptr_release(FontCharMap* pFontCharMap)
+{
+    if (--pFontCharMap->mnRefCount == 0)
+        delete pFontCharMap;
+}
 
 class VCL_DLLPUBLIC TextRectInfo
 {
