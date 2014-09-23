@@ -14,7 +14,14 @@
 htmlDocPtr HtmlTestTools::parseHtml(utl::TempFile& aTempFile)
 {
     SvFileStream aFileStream(aTempFile.GetURL(), STREAM_READ);
-    return parseHtmlStream(&aFileStream);
+    htmlDocPtr doc = parseHtmlStream(&aFileStream);
+    xmlFree(doc->name);
+    doc->name = reinterpret_cast<char *>(
+        xmlStrdup(
+            reinterpret_cast<xmlChar const *>(
+                OUStringToOString(
+                    aTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
+    return doc;
 }
 
 htmlDocPtr HtmlTestTools::parseHtmlStream(SvStream* pStream)
