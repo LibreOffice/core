@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_b1c91aaf",
+        "filename": "javaunohelper/test/com/sun/star/lib/uno/helper/ComponentBase_Test.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-23T15:02:00Z",
+      "side": 1,
+      "message": "The initialization shouldn\u0027t happen in constructor anymore. JUnit way is to use setUp()/tearDown() methods. Because you are using JUnit 4 the way to go is to use @Before annotated method instead. Remove constructor and use:\n\n  @Before\n  public void setUp() {\n    conetnt on current ComponentBase_Test()\n    [...]\n  }",
+      "revId": "a053b97331b42229582d0c5a6bd59ec37ff15c9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
