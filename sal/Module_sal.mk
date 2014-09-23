@@ -35,6 +35,8 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 $(eval $(call gb_Module_add_check_targets,sal,\
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,CppunitTest_Module_DLL) \
 	CppunitTest_sal_bytesequence \
+	$(if $(filter $(OS),WNT),\
+		CppunitTest_sal_comtools) \
 	CppunitTest_sal_osl_condition \
 	$(if $(filter $(OS),WNT),, \
 		CppunitTest_sal_osl_file) \
