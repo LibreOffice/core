@@ -212,7 +212,7 @@ public class GeckoLayerClient {
             mLayerController.getView().postDelayed(new AdjustRunnable(), MIN_VIEWPORT_CHANGE_DELAY - timeDelta);
             mPendingViewportAdjust = true;
         } else {
-            adjustViewport();
+            adjustViewport(null);
         }
     }
 
@@ -220,15 +220,21 @@ public class GeckoLayerClient {
         mViewportSizeChanged = true;
     }
 
-    private void adjustViewport() {
-        ViewportMetrics viewportMetrics =
-            new ViewportMetrics(mLayerController.getViewportMetrics());
+    void adjustViewport(DisplayPortMetrics displayPort) {
+        ImmutableViewportMetrics metrics = mLayerController.getViewportMetrics();
 
-        viewportMetrics.setViewport(viewportMetrics.getClampedViewport());
+        ViewportMetrics clampedMetrics = new ViewportMetrics(metrics);
+        clampedMetrics.setViewport(clampedMetrics.getClampedViewport());
 
-        mDisplayPort = DisplayPortCalculator.calculate(mLayerController.getViewportMetrics());
+        if (displayPort == null) {
+            displayPort = DisplayPortCalculator.calculate(metrics,
+                    mLayerController.getPanZoomController().getVelocityVector());
+        }
 
-        LOKitShell.sendEvent(LOEvent.viewport(viewportMetrics));
+        mDisplayPort = displayPort;
+        mGeckoViewport = clampedMetrics;
+
+        LOKitShell.sendEvent(LOEvent.viewport(clampedMetrics));
         if (mViewportSizeChanged) {
             mViewportSizeChanged = false;
             LOKitShell.viewSizeChanged();
@@ -240,7 +246,7 @@ public class GeckoLayerClient {
     public void geometryChanged() {
         sendResizeEventIfNecessary(false);
         if (mLayerController.getRedrawHint())
-            adjustViewport();
+            adjustViewport(null);
     }
 
     public ViewportMetrics getGeckoViewportMetrics() {
@@ -267,7 +273,7 @@ public class GeckoLayerClient {
     private class AdjustRunnable implements Runnable {
         public void run() {
             mPendingViewportAdjust = false;
-            adjustViewport();
+            adjustViewport(null);
         }
     }
 }

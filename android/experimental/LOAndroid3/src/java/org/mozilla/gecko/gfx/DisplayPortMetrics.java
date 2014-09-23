@@ -35,11 +35,11 @@ public final class DisplayPortMetrics {
     public String toJSON() {
         StringBuffer sb = new StringBuffer(256);
         sb.append("{ \"left\": ").append(mPosition.left)
-                .append(", \"top\": ").append(mPosition.top)
-                .append(", \"right\": ").append(mPosition.right)
-                .append(", \"bottom\": ").append(mPosition.bottom)
-                .append(", \"resolution\": ").append(mResolution)
-                .append('}');
+          .append(", \"top\": ").append(mPosition.top)
+          .append(", \"right\": ").append(mPosition.right)
+          .append(", \"bottom\": ").append(mPosition.bottom)
+          .append(", \"resolution\": ").append(mResolution)
+          .append('}');
         return sb.toString();
     }
 
