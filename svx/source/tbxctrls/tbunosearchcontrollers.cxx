@@ -179,8 +179,14 @@ void FindTextFieldControl::SetTextToSelected_Impl()
 
     if ( !aString.isEmpty() )
     {
+        // If something is selected in the document, prepopulate with this
         SetText( aString );
         GetModifyHdl().Call(this); // FIXME why SetText doesn't trigger this?
+    }
+    else if (GetEntryCount() > 0)
+    {
+        // Else, prepopulate with last search word (fdo#84256)
+        SetText(GetEntry(0));
     }
 }
 
@@ -222,7 +228,7 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             if ( bMod1 && nCode == KEY_F )
                 SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
-            // Execute the search when Enter, Ctrl-G or F3 pressed
+            // Execute the search when Return, Ctrl-G or F3 pressed
             if ( KEY_RETURN == nCode || (bMod1 && (KEY_G == nCode)) || (KEY_F3 == nCode) )
             {
                 Remember_Impl(GetText());
