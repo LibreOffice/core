@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_0e032b11",
+        "filename": "vcl/source/window/dockingarea.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-23T13:42:46Z",
+      "side": 1,
+      "message": "This line is a bit long.\nWe don\u0027t have standards for this, but please don\u0027t exceed 120 chars in a line.",
+      "revId": "f296ab7b41b6470584154802728339218a3b3088",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_2e06e720",
+        "filename": "vcl/source/window/dockingarea.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-23T13:42:46Z",
+      "side": 1,
+      "message": "warning: suggest parentheses around ‘\u0026\u0026’ within ‘||’ [-Wparentheses]",
+      "revId": "f296ab7b41b6470584154802728339218a3b3088",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
