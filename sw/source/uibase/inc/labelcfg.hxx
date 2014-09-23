@@ -21,12 +21,10 @@
 
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
+#include "labrec.hxx"
 
 #include <map>
 #include <vector>
-
-class SwLabRecs;
-class SwLabRec;
 
 struct SwLabelMeasure
 {

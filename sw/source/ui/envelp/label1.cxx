@@ -139,8 +139,8 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 
     for (size_t nRecPos = 0; nRecPos < pRecs->size(); ++nRecPos)
     {
-        if (pRec->aMake == (*pRecs)[nRecPos]->aMake &&
-            pRec->aType == (*pRecs)[nRecPos]->aType)
+        if (pRec->aMake == (*pRecs)[nRecPos].aMake &&
+            pRec->aType == (*pRecs)[nRecPos].aType)
         {
             bDouble = true;
             break;
@@ -203,7 +203,7 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
     const size_t nCount = Recs().size();
     for (size_t i = 0; i < nCount; ++i)
     {
-        pRec = Recs()[i];
+        pRec = &Recs()[i];
         if (pRec->aType != sCustom &&
             rRecName == pRec->aType && bCont == pRec->bCont)
         {
@@ -212,7 +212,7 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
         }
     }
     if (!bFound)    // User defined
-        pRec = Recs()[0];
+        pRec = &Recs()[0];
 
     return(pRec);
 }
@@ -362,14 +362,14 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
     //insert the entries into the sorted list box
     for ( size_t i = 0; i < nCount; ++i )
     {
-        const OUString aType ( GetParentSwLabDlg()->Recs()[i]->aType );
+        const OUString aType ( GetParentSwLabDlg()->Recs()[i].aType );
         bool bInsert = false;
-        if ( GetParentSwLabDlg()->Recs()[i]->aType == sCustom )
+        if ( GetParentSwLabDlg()->Recs()[i].aType == sCustom )
         {
             bInsert = true;
             m_pTypeBox->InsertEntry(aType );
         }
-        else if ( GetParentSwLabDlg()->Recs()[i]->bCont == bCont )
+        else if ( GetParentSwLabDlg()->Recs()[i].bCont == bCont )
         {
             if ( m_pHiddenSortTypeBox->GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
             {

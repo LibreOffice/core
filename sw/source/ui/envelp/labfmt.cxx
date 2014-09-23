@@ -489,7 +489,7 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
     {
         rItem.aMake = rItem.aType = SW_RESSTR(STR_CUSTOM);
 
-        SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
+        SwLabRec& rRec = GetParentSwLabDlg()->Recs()[0];
         rItem.lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
         rItem.lVDist  = rRec.lVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
         rItem.lWidth  = rRec.lWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));

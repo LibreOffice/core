@@ -24,8 +24,6 @@
 #include <labelcfg.hxx>
 #include <vector>
 
-class SwLabRec;
-class SwLabRecs;
 class SwLabItem;
 class SwLabPrtPage;
 class SwDBManager;

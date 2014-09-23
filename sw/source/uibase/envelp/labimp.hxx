@@ -72,42 +72,9 @@
 #include <svtools/treelistbox.hxx>
 #include <label.hxx>
 #include <labimg.hxx>
-#include <vector>
 
 #define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
 #define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
-
-class SwLabRec
-{
-public:
-    SwLabRec(): lHDist(0), lVDist(0), lWidth(0), lHeight(0), lLeft(0), lUpper(0), lPWidth(0), lPHeight(0), nCols(0), nRows(0), bCont(false) {}
-
-    void SetFromItem( const SwLabItem& rItem );
-    void FillItem( SwLabItem& rItem ) const;
-
-    OUString        aMake;
-    OUString        aType;
-    long            lHDist;
-    long            lVDist;
-    long            lWidth;
-    long            lHeight;
-    long            lLeft;
-    long            lUpper;
-    long            lPWidth;
-    long            lPHeight;
-    sal_Int32       nCols;
-    sal_Int32       nRows;
-    bool        bCont;
-};
-
-class SwLabRecs : public std::vector<SwLabRec*> {
-public:
-    ~SwLabRecs()
-    {
-        for(const_iterator it = begin(); it != end(); ++it)
-            delete *it;
-    }
-};
 
 #endif
 
