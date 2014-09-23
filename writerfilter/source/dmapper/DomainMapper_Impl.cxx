@@ -4455,6 +4455,22 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
     uno::Reference<text::XTextContent> xTextContent
         (m_pGraphicImport->GetGraphicObject());
 
+    // In case the SDT starts with the text portion of the graphic, then set the SDT properties here.
+    bool bHasGrabBag = false;
+    uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
+    if (xPropertySet.is())
+    {
+        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+        bHasGrabBag = xPropertySetInfo->hasPropertyByName("FrameInteropGrabBag");
+        // In case we're outside a paragraph, then the SDT properties are stored in the paragraph grab-bag, not the frame one.
+        if (!m_pSdtHelper->isInteropGrabBagEmpty() && bHasGrabBag && !m_pSdtHelper->isOutsideAParagraph())
+        {
+            comphelper::SequenceAsHashMap aFrameGrabBag(xPropertySet->getPropertyValue("FrameInteropGrabBag"));
+            aFrameGrabBag["SdtPr"] = uno::makeAny(m_pSdtHelper->getInteropGrabBagAndClear());
+            xPropertySet->setPropertyValue("FrameInteropGrabBag", uno::makeAny(aFrameGrabBag.getAsConstPropertyValueList()));
+        }
+    }
+
     /* Set "SdtEndBefore" property on Drawing.
      * It is required in a case when Drawing appears immediately after first run i.e.
      * there is no text/space/tab in between two runs.
@@ -4462,20 +4478,16 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
      */
     if(IsSdtEndBefore())
     {
-        uno::Reference< beans::XPropertySet > xGraphicObjectProperties(xTextContent,
-                    uno::UNO_QUERY_THROW);
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-        if(xGraphicObjectProperties.is())
+        if(xPropertySet.is())
         {
-            xPropSetInfo = xGraphicObjectProperties->getPropertySetInfo();
-            if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+            if (bHasGrabBag)
             {
                 uno::Sequence<beans::PropertyValue> aFrameGrabBag(1);
                 beans::PropertyValue aRet;
                 aRet.Name = "SdtEndBefore";
                 aRet.Value <<= uno::makeAny(true);
                 aFrameGrabBag[0] = aRet;
-                xGraphicObjectProperties->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aFrameGrabBag));
+                xPropertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aFrameGrabBag));
             }
         }
     }

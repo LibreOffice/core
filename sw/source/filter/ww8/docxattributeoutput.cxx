@@ -4132,6 +4132,15 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         nImageType = XML_embed;
     }
 
+    // In case there are any grab-bag items on the graphic frame, emit them now.
+    // These are always character grab-bags, as graphics are at-char or as-char in Word.
+    const SfxPoolItem* pItem = 0;
+    if (pFrmFmt->GetAttrSet().HasItem(RES_FRMATR_GRABBAG, &pItem))
+    {
+        const SfxGrabBagItem* pGrabBag = static_cast<const SfxGrabBagItem*>(pItem);
+        CharGrabBag(*pGrabBag);
+    }
+
     m_rExport.SdrExporter().startDMLAnchorInline(pFrmFmt, rSize);
 
     // picture description (used for pic:cNvPr later too)

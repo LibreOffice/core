@@ -251,6 +251,18 @@ DECLARE_OOXMLEXPORT_TEST(testSdtIgnoredFooter, "sdt-ignored-footer.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSdtRunPicture, "sdt-run-picture.docx")
+{
+    // SDT around run was exported as SDT around paragraph
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // This was 1: there was an SDT around w:p.
+        assertXPath(pXmlDoc, "//w:body/w:sdt", 0);
+        // This was 0: there were no SDT around w:r.
+        assertXPath(pXmlDoc, "//w:body/w:p/w:sdt", 1);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
