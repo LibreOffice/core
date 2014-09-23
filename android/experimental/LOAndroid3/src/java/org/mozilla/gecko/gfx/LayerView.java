@@ -38,7 +38,6 @@
 
 package org.mozilla.gecko.gfx;
 
-//import org.mozilla.gecko.GeckoInputConnection;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -202,6 +201,7 @@ public class LayerView extends FlexibleGLSurfaceView {
     }
 
     public void changeCheckerboardBitmap(Bitmap bitmap) {
+        mRenderer.resetCheckerboard();
         mRenderer.setCheckerboardBitmap(bitmap);
     }
 

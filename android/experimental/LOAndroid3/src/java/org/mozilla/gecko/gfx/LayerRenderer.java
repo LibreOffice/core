@@ -91,6 +91,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     private final FloatBuffer mCoordBuffer;
     private RenderContext mLastPageContext;
     private int mMaxTextureSize;
+    private int mBackgroundColor;
 
     private CopyOnWriteArrayList<Layer> mExtraLayers = new CopyOnWriteArrayList<Layer>();
 
@@ -548,7 +549,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             if (rootLayer != null) mUpdated &= rootLayer.update(mPageContext);  // called on compositor thread
             mUpdated &= mBackgroundLayer.update(mScreenContext);    // called on compositor thread
             mUpdated &= mShadowLayer.update(mPageContext);  // called on compositor thread
-            updateCheckerboardImage();
             mUpdated &= mCheckerboardLayer.update(mPageContext);   // called on compositor thread
             if (mFrameRateLayer != null) mUpdated &= mFrameRateLayer.update(mScreenContext); // called on compositor thread
             mUpdated &= mVertScrollLayer.update(mPageContext);  // called on compositor thread
@@ -556,12 +556,64 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
             for (Layer layer : mExtraLayers)
                 mUpdated &= layer.update(mPageContext); // called on compositor thread
+        }
 
-            GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
+        /** Retrieves the bounds for the layer, rounded in such a way that it
+         * can be used as a mask for something that will render underneath it.
+         * This will round the bounds inwards, but stretch the mask towards any
+         * near page edge, where near is considered to be 'within 2 pixels'.
+         * Returns null if the given layer is null.
+         */
+        private Rect getMaskForLayer(Layer layer) {
+            if (layer == null) {
+                return null;
+            }
+
+            RectF bounds = RectUtils.contract(layer.getBounds(mPageContext), 1.0f, 1.0f);
+            Rect mask = RectUtils.roundIn(bounds);
+
+            // If the mask is within two pixels of any page edge, stretch it over
+            // that edge. This is to avoid drawing thin slivers when masking
+            // layers.
+            if (mask.top <= 2) {
+                mask.top = -1;
+            }
+            if (mask.left <= 2) {
+                mask.left = -1;
+            }
+
+            // Because we're drawing relative to the page-rect, we only need to
+            // take into account its width and height (and not its origin)
+            int pageRight = mPageRect.width();
+            int pageBottom = mPageRect.height();
+
+            if (mask.right >= pageRight - 2) {
+                mask.right = pageRight + 1;
+            }
+            if (mask.bottom >= pageBottom - 2) {
+                mask.bottom = pageBottom + 1;
+            }
+
+            return mask;
         }
 
         /** This function is invoked via JNI; be careful when modifying signature. */
         public void drawBackground() {
+            GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
+
+            /* Update background color. */
+            mBackgroundColor = mView.getController().getCheckerboardColor();
+
+            /* Clear to the page background colour. The bits set here need to
+             * match up with those used in gfx/layers/opengl/LayerManagerOGL.cpp.
+             */
+            GLES20.glClearColor(((mBackgroundColor>>16)&0xFF) / 255.0f,
+                                ((mBackgroundColor>>8)&0xFF) / 255.0f,
+                                (mBackgroundColor&0xFF) / 255.0f,
+                                0.0f);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT |
+                           GLES20.GL_DEPTH_BUFFER_BIT);
+
             /* Draw the background. */
             mBackgroundLayer.setMask(mPageRect);
             mBackgroundLayer.draw(mScreenContext);
@@ -572,21 +624,20 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             if (!untransformedPageRect.contains(mView.getController().getViewport()))
                 mShadowLayer.draw(mPageContext);
 
-            /* Find the area the root layer will render into, to mask the scissor rect */
-            Rect rootMask = null;
-            Layer rootLayer = mView.getController().getRoot();
-            if (rootLayer != null) {
-                RectF rootBounds = rootLayer.getBounds(mPageContext);
-                rootBounds.offset(-mPageContext.viewport.left, -mPageContext.viewport.top);
-                rootMask = new Rect();
-                rootBounds.roundOut(rootMask);
-            }
+            /* Draw the 'checkerboard'. We use gfx.show_checkerboard_pattern to
+             * determine whether to draw the screenshot layer.
+             */
+            if (mView.getController().checkerboardShouldShowChecks()) {
+                /* Find the area the root layer will render into, to mask the checkerboard layer */
+                Rect rootMask = getMaskForLayer(mView.getController().getRoot());
+                mCheckerboardLayer.setMask(rootMask);
 
-            /* Draw the checkerboard. */
-            setScissorRect();
-            mCheckerboardLayer.setMask(rootMask);
-            mCheckerboardLayer.draw(mPageContext);
-            GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
+                /* Scissor around the page-rect, in case the page has shrunk
+                 * since the screenshot layer was last updated.
+                 */
+                setScissorRect(); // Calls glEnable(GL_SCISSOR_TEST))
+                mCheckerboardLayer.draw(mPageContext);
+            }
         }
 
         // Draws the layer the client added to us.
@@ -603,15 +654,15 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         public void drawForeground() {
             /* Draw any extra layers that were added (likely plugins) */
             if (mExtraLayers.size() > 0) {
-                // This is a hack. SurfaceTextureLayer draws with its own program, so disable ours here
-                // and re-enable when done. If we end up adding other types of Layer here we'll need
-                // to do something different.
-                deactivateDefaultProgram();
+                for (Layer layer : mExtraLayers) {
+                    if (!layer.usesDefaultProgram())
+                        deactivateDefaultProgram();
 
-                for (Layer layer : mExtraLayers)
                     layer.draw(mPageContext);
 
-                activateDefaultProgram();
+                    if (!layer.usesDefaultProgram())
+                        activateDefaultProgram();
+                }
             }
 
             /* Draw the vertical scrollbar. */
@@ -629,11 +680,21 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
                 // Find out how much of the viewport area is valid
                 Rect viewport = RectUtils.round(mPageContext.viewport);
                 Region validRegion = rootLayer.getValidRegion(mPageContext);
+
+                /* restrict the viewport to page bounds so we don't
+                 * count overscroll as checkerboard */
+                if (!viewport.intersect(0, 0, mPageRect.width(), mPageRect.height())) {
+                    /* if the rectangles don't intersect
+                       intersect() doesn't change viewport
+                       so we set it to empty by hand */
+                    viewport.setEmpty();
+                }
                 validRegion.op(viewport, Region.Op.INTERSECT);
 
                 float checkerboard = 0.0f;
-                if (!(validRegion.isRect() && validRegion.getBounds().equals(viewport))) {
-                    int screenArea = viewport.width() * viewport.height();
+
+                int screenArea = viewport.width() * viewport.height();
+                if (screenArea > 0 && !(validRegion.isRect() && validRegion.getBounds().equals(viewport))) {
                     validRegion.op(viewport, Region.Op.REVERSE_DIFFERENCE);
 
                     // XXX The assumption here is that a Region never has overlapping
