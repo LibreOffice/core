@@ -439,6 +439,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Slide Master</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:HandoutMasterPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -597,6 +600,9 @@
       <node oor:name=".uno:PageSetup" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Page...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:PasteSpecial" oor:op="replace">
@@ -893,6 +899,9 @@
       <node oor:name=".uno:DeletePage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">D~elete Slide</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DeleteLayer" oor:op="replace">

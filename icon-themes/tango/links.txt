@@ -129,6 +129,8 @@ sw/imglst/sc20558.png cmd/sc_ok.png
 avmedia/res/avl02048.png cmd/lc_open.png
 avmedia/res/av02048.png cmd/sc_open.png
 svx/res/id02.png cmd/sc_open.png
+cmd/lc_pagesetup.png cmd/lc_setdocumentproperties.png
+cmd/sc_pagesetup.png cmd/sc_setdocumentproperties.png
 
 # Duplicates
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
