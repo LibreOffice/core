@@ -9,7 +9,7 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck
 
-.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch findunusedcode get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch findunusedcode get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS) patch unpatch
 
 MAKECMDGOALS?=all
 build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
@@ -388,5 +388,23 @@ $(foreach ide,\
 $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
 endif # MAKE_RESTARTS
+
+patch:
+	test -d uncommitted-patches || exit 0
+	for F in uncommitted-patches/*.patch; do \
+		patch --dry-run -p1 <$$F || exit 1; \
+	done
+	mkdir -p uncommitted-patches.applied
+	for F in uncommitted-patches/*.patch; do \
+		patch -p1 <$$F || exit 1; \
+		cp $$F uncommitted-patches.applied; \
+	done
+
+unpatch:
+	test -d uncommitted-patches.applied || exit 0
+	for F in uncommitted-patches.applied/*.patch; do \
+		patch -R -p1 <$$F || exit 1; \
+		rm $$F; \
+	done
 
 # vim: set noet sw=4 ts=4:
