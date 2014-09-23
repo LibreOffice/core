@@ -1222,7 +1222,7 @@ bool SfxViewFrame::SetBorderPixelImpl
 
             Size aOldSize = GetWindow().GetOutputSizePixel();
             GetWindow().SetOutputSizePixel( aSize );
-            Window* pParent = &GetWindow();
+            vcl::Window* pParent = &GetWindow();
             while ( pParent->GetParent() )
                 pParent = pParent->GetParent();
             Size aOuterSize = pParent->GetOutputSizePixel();
@@ -1709,7 +1709,7 @@ void SfxViewFrame::Enable( bool bEnable )
         }
         else
         {
-            Window *pWindow = &GetFrame().GetTopFrame().GetWindow();
+            vcl::Window *pWindow = &GetFrame().GetTopFrame().GetWindow();
             if ( !bEnable )
                 pImp->bWindowWasEnabled = pWindow->IsInputEnabled();
             if ( !bEnable || pImp->bWindowWasEnabled )
@@ -1817,7 +1817,7 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
                         xSupp->setActiveFrame( uno::Reference < frame::XFrame >() );
 
                     css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
-                    Window* pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+                    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
                     if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
                     {
                         SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
@@ -2485,7 +2485,7 @@ SfxViewFrame* SfxViewFrame::GetTopViewFrame() const
     return GetFrame().GetTopFrame().GetCurrentViewFrame();
 }
 
-Window& SfxViewFrame::GetWindow() const
+vcl::Window& SfxViewFrame::GetWindow() const
 {
     return pImp->pWindow ? *pImp->pWindow : GetFrame().GetWindow();
 }

@@ -297,7 +297,7 @@ namespace svt { namespace table
 
         // A11Y
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                        getAccessible( Window& i_parentWindow );
+                        getAccessible( vcl::Window& i_parentWindow );
         void            disposeAccessible();
 
         inline bool     isAccessibleAlive() const { return impl_isAccessibleAlive(); }

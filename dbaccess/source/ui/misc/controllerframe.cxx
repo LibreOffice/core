@@ -262,7 +262,7 @@ namespace dbaui
             const Reference< XWindow > xContainerWindow( m_pData->m_xFrame->getContainerWindow(), UNO_SET_THROW );
             if ( _bRegister )
             {
-                const Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+                const vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                 ENSURE_OR_THROW( pContainerWindow, "no Window implementation for the frame's container window!" );
 
                 m_pData->m_bIsTopLevelDocumentWindow = ( pContainerWindow->GetExtendedStyle() & WB_EXT_DOCUMENT ) != 0;

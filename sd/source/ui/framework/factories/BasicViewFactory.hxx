@@ -41,7 +41,7 @@ class ViewShellBase;
 class FrameView;
 }
 class SfxViewFrame;
-class Window;
+namespace vcl { class Window; }
 
 namespace {
 
@@ -104,7 +104,7 @@ private:
     FrameView* mpFrameView;
 
     class ViewCache;
-    ::boost::shared_ptr<Window> mpWindow;
+    ::boost::shared_ptr<vcl::Window> mpWindow;
     ::boost::shared_ptr<ViewCache> mpViewCache;
 
     css::uno::Reference<css::drawing::framework::XPane> mxLocalPane;
@@ -112,7 +112,7 @@ private:
     ::boost::shared_ptr<ViewDescriptor> CreateView (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         SfxViewFrame& rFrame,
-        ::Window& rWindow,
+        vcl::Window& rWindow,
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane,
         FrameView* pFrameView,
         const bool bIsCenterView);
@@ -120,7 +120,7 @@ private:
     ::boost::shared_ptr<ViewShell> CreateViewShell (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         SfxViewFrame& rFrame,
-        ::Window& rWindow,
+        vcl::Window& rWindow,
         FrameView* pFrameView,
         const bool bIsCenterView);
 

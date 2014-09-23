@@ -75,7 +75,7 @@ public:
     void                    Init( const OUString& language );
     void  RequestSubEntries(  SvTreeListEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
                               ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
-                    SFTreeListBox(Window* pParent);
+                    SFTreeListBox(vcl::Window* pParent);
                     virtual ~SFTreeListBox();
 
     void            ExpandAllTrees();
@@ -100,7 +100,7 @@ class CuiInputDialog : public ModalDialog
 private:
     Edit* m_pEdit;
 public:
-    CuiInputDialog(Window * pParent, sal_uInt16 nMode);
+    CuiInputDialog(vcl::Window * pParent, sal_uInt16 nMode);
 
     OUString GetObjectName() const { return m_pEdit->GetText(); }
     void SetObjectName(const OUString& rName)
@@ -177,7 +177,7 @@ protected:
 public:
                     // prob need another arg in the ctor
                     // to specify the language or provider
-                    SvxScriptOrgDialog( Window* pParent, const OUString& language );
+                    SvxScriptOrgDialog( vcl::Window* pParent, const OUString& language );
                     virtual ~SvxScriptOrgDialog();
 
     virtual short   Execute() SAL_OVERRIDE;
@@ -195,7 +195,7 @@ private:
 public:
 
     SvxScriptErrorDialog(
-        Window* parent, ::com::sun::star::uno::Any aException );
+        vcl::Window* parent, ::com::sun::star::uno::Any aException );
 
     virtual ~SvxScriptErrorDialog();
 

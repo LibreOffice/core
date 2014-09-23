@@ -74,7 +74,7 @@ namespace x11 {
         ::osl::Mutex                m_aMutex;
         bool                        m_bActive;
         sal_Int8                    m_nDefaultActions;
-        XLIB_Window                 m_aTargetWindow;
+        ::Window                    m_aTargetWindow;
         class SelectionManager*     m_pSelectionManager;
         css::uno::Reference< css::datatransfer::dnd::XDragSource >
                                     m_xSelectionManager;
@@ -165,7 +165,7 @@ namespace x11 {
         {
             css::uno::Sequence< sal_Int8 >  m_aData;
             int                             m_nBufferPos;
-            XLIB_Window                         m_aRequestor;
+            ::Window                        m_aRequestor;
             Atom                            m_aProperty;
             Atom                            m_aTarget;
             int                             m_nFormat;
@@ -199,7 +199,7 @@ namespace x11 {
             Atom                        m_aUTF8Type;
             bool                        m_bHaveCompound;
             bool                        m_bOwner;
-            XLIB_Window                 m_aLastOwner;
+            ::Window                    m_aLastOwner;
             PixmapHolder*               m_pPixmap;
             // m_nOrigXLIB_Timestamp contains the XLIB_Timestamp at which the seclection
             // was acquired; needed for XLIB_TimeSTAMP target
@@ -224,7 +224,7 @@ namespace x11 {
         struct DropTargetEntry
         {
             DropTarget*     m_pTarget;
-            XLIB_Window     m_aRootWindow;
+            ::Window        m_aRootWindow;
 
             DropTargetEntry() : m_pTarget( NULL ), m_aRootWindow( None ) {}
             DropTargetEntry( DropTarget* pTarget ) :
@@ -248,7 +248,7 @@ namespace x11 {
         int                         m_EndThreadPipe[2];
         oslThread                   m_aDragExecuteThread;
         ::osl::Condition            m_aDragRunning;
-        XLIB_Window                 m_aWindow;
+        ::Window                    m_aWindow;
         css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
         css::uno::Reference< css::awt::XDisplayConnection >
                                     m_xDisplayConnection;
@@ -261,13 +261,13 @@ namespace x11 {
 
         // contains the XdndEnterEvent of a drop action running
         // with one of our targets. The data.l[0] member
-        // (conatining the drag source XLIB_Window) is set
+        // (conatining the drag source ::Window) is set
         // to None while that is not the case
         XClientMessageEvent         m_aDropEnterEvent;
         // set to false on XdndEnter
         // set to true on first XdndPosition or XdndLeave
         bool                        m_bDropEnterSent;
-        XLIB_Window                 m_aCurrentDropWindow;
+        ::Window                    m_aCurrentDropWindow;
         // XLIB_Time code of XdndDrop
         XLIB_Time                   m_nDropTime;
         sal_Int8                    m_nLastDropAction;
@@ -285,10 +285,10 @@ namespace x11 {
         // drag only
 
         // None if no Dnd action is running with us as source
-        XLIB_Window                 m_aDropWindow;
-        // either m_aDropXLIB_Window or its XdndProxy
-        XLIB_Window                 m_aDropProxy;
-        XLIB_Window                 m_aDragSourceWindow;
+        ::Window                    m_aDropWindow;
+        // either m_aDropWindow or its XdndProxy
+        ::Window                    m_aDropProxy;
+        ::Window                    m_aDragSourceWindow;
         // XTransferable for Xdnd when we are drag source
         css::uno::Reference< css::datatransfer::XTransferable >
                                     m_xDragSourceTransferable;
@@ -322,7 +322,7 @@ namespace x11 {
         // drag and drop
 
         int                         m_nCurrentProtocolVersion;
-        ::boost::unordered_map< XLIB_Window, DropTargetEntry >
+        ::boost::unordered_map< ::Window, DropTargetEntry >
                                     m_aDropTargets;
 
         // some special atoms that are needed often
@@ -361,7 +361,7 @@ namespace x11 {
         ::boost::unordered_map< Atom, Selection* >
                                     m_aSelections;
         // IncrementalTransfers in progress
-        boost::unordered_map< XLIB_Window, boost::unordered_map< Atom, IncrementalTransfer > >
+        boost::unordered_map< ::Window, boost::unordered_map< Atom, IncrementalTransfer > >
                                     m_aIncrementals;
 
         // do not use X11 multithreading capabilities
@@ -388,10 +388,10 @@ namespace x11 {
         void sendDragStatus( Atom nDropAction );
         void sendDropPosition( bool bForce, XLIB_Time eventXLIB_Time );
         bool updateDragAction( int modifierState );
-        int getXdndVersion( XLIB_Window aXLIB_Window, XLIB_Window& rProxy );
+        int getXdndVersion( ::Window aXLIB_Window, ::Window& rProxy );
         Cursor createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY );
-        // coordinates on root XLIB_Window
-        void updateDragWindow( int nX, int nY, XLIB_Window aRoot );
+        // coordinates on root ::Window
+        void updateDragWindow( int nX, int nY, ::Window aRoot );
 
         bool getPasteData( Atom selection, Atom type, css::uno::Sequence< sal_Int8 >& rData );
         // returns true if conversion was successful
@@ -400,7 +400,7 @@ namespace x11 {
                           Atom nSelection,
                           int & rFormat,
                           css::uno::Sequence< sal_Int8 >& rData );
-        bool sendData( SelectionAdaptor* pAdaptor, XLIB_Window requestor, Atom target, Atom property, Atom selection );
+        bool sendData( SelectionAdaptor* pAdaptor, ::Window requestor, Atom target, Atom property, Atom selection );
 
         // thread dispatch loop
         public:
@@ -426,7 +426,7 @@ namespace x11 {
         static SelectionManager& get( const OUString& rDisplayName = OUString() );
 
         Display * getDisplay() { return m_pDisplay; };
-        XLIB_Window getWindow() { return m_aWindow; };
+        ::Window getWindow() { return m_aWindow; };
 
         void registerHandler( Atom selection, SelectionAdaptor& rAdaptor );
         void deregisterHandler( Atom selection );
@@ -450,18 +450,18 @@ namespace x11 {
         bool getPasteData( Atom selection, const OUString& rType, css::uno::Sequence< sal_Int8 >& rData );
 
         // for XDropTarget to register/deregister itself
-        void registerDropTarget( XLIB_Window aXLIB_Window, DropTarget* pTarget );
-        void deregisterDropTarget( XLIB_Window aXLIB_Window );
+        void registerDropTarget( ::Window aXLIB_Window, DropTarget* pTarget );
+        void deregisterDropTarget( ::Window aXLIB_Window );
 
         // for XDropTarget{Drag|Drop}Context
-        void accept( sal_Int8 dragOperation, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
-        void reject( XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
-        void dropComplete( bool success, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void accept( sal_Int8 dragOperation, ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void reject( ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void dropComplete( bool success, ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
 
         // for XDragSourceContext
         sal_Int32 getCurrentCursor() { return m_aCurrentCursor;}
-        void setCursor( sal_Int32 cursor, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
-        void setImage( sal_Int32 image, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void setCursor( sal_Int32 cursor, ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void setImage( sal_Int32 image, ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
         void transferablesFlavorsChanged();
 
         void shutdown() throw();

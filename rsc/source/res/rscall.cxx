@@ -40,7 +40,7 @@ void InitRscCompiler()
     pStdPar1         = new OString('(');
     pStdPar2         = new OString('(');
 
-    pWinParType      = new OString("( Window * pParent, const ResId & rResId, sal_Bool");
+    pWinParType      = new OString("( vcl::Window * pParent, const ResId & rResId, sal_Bool");
     pWinPar1         = new OString("( pParent,");
     pWinPar2         = new OString("( this,");
     nRefDeep         = 10;

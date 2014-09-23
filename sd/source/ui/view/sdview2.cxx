@@ -94,7 +94,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {}
 };
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateClipboardDataObject( View*, ::Window& )
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateClipboardDataObject( View*, vcl::Window& )
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object ist destroyed automatically
@@ -157,7 +157,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, ::Window& rWindow, const Point& rDragPos )
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, vcl::Window& rWindow, const Point& rDragPos )
 {
     SdTransferable* pTransferable = new SdTransferable( &mrDoc, pWorkView, false );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
@@ -206,7 +206,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, ::Window& rWindow )
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, vcl::Window& rWindow )
 {
     SdTransferable*                 pTransferable = new SdTransferable( &mrDoc, pWorkView, true );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
@@ -245,7 +245,7 @@ void View::UpdateSelectionClipboard( bool bForceDeselect )
     }
 }
 
-void View::DoCut(::Window* )
+void View::DoCut(vcl::Window* )
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -262,7 +262,7 @@ void View::DoCut(::Window* )
     }
 }
 
-void View::DoCopy (::Window* pWindow)
+void View::DoCopy (vcl::Window* pWindow)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -275,7 +275,7 @@ void View::DoCopy (::Window* pWindow)
     }
 }
 
-void View::DoPaste (::Window* pWindow)
+void View::DoPaste (vcl::Window* pWindow)
 {
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewSh->GetActiveWindow() ) );
     if( !aDataHelper.GetTransferable().is() )
@@ -354,7 +354,7 @@ void View::DoPaste (::Window* pWindow)
     }
 }
 
-void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
+void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
 {
     if( AreObjectsMarked() && IsAction() && mpViewSh && pWindow && !mpDragSrcMarkList )
     {

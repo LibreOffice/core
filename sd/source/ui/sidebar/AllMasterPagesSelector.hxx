@@ -38,7 +38,7 @@ class AllMasterPagesSelector
 {
 public:
     static MasterPagesSelector* Create (
-        ::Window* pParent,
+        vcl::Window* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
@@ -59,7 +59,7 @@ private:
     ::std::auto_ptr<SortedMasterPageDescriptorList> mpSortedMasterPages;
 
     AllMasterPagesSelector (
-        ::Window* pParent,
+        vcl::Window* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,

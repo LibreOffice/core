@@ -50,8 +50,8 @@ namespace sd {
 #define MIN_ZOOM           5        ///< minimal zoom factor
 #define MAX_ZOOM           3000     ///< maximal zoom factor
 
-Window::Window(::Window* pParent)
-    : ::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
+Window::Window(vcl::Window* pParent)
+    : vcl::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
       DropTargetHelper( this ),
       mpShareWin(NULL),
       maWinPos(0, 0),           // precautionary; but the values should be set
@@ -74,7 +74,7 @@ Window::Window(::Window* pParent)
     aMap.SetMapUnit(MAP_100TH_MM);
     SetMapMode(aMap);
 
-    // whit it, the ::WindowColor is used in the slide mode
+    // whit it, the vcl::WindowColor is used in the slide mode
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetWindowColor() ) );
 
     // adjust contrast mode initially
@@ -192,7 +192,7 @@ long Window::GetZoom (void) const
 
 void Window::Resize()
 {
-    ::Window::Resize();
+    vcl::Window::Resize();
     CalcMinZoom();
 
     if( mpViewShell && mpViewShell->GetViewFrame() )
@@ -221,7 +221,7 @@ void Window::KeyInput(const KeyEvent& rKEvt)
         }
         else
         {
-            ::Window::KeyInput(rKEvt);
+            vcl::Window::KeyInput(rKEvt);
         }
     }
 }
@@ -260,7 +260,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
         nResult = mpViewShell->Notify(rNEvt, this);
     }
     if( !nResult )
-        nResult = ::Window::Notify( rNEvt );
+        nResult = vcl::Window::Notify( rNEvt );
 
     return nResult;
 }
@@ -270,10 +270,10 @@ void Window::RequestHelp(const HelpEvent& rEvt)
     if ( mpViewShell )
     {
         if( !mpViewShell->RequestHelp( rEvt, this) )
-            ::Window::RequestHelp( rEvt );
+            vcl::Window::RequestHelp( rEvt );
     }
     else
-        ::Window::RequestHelp( rEvt );
+        vcl::Window::RequestHelp( rEvt );
 }
 
 /**
@@ -699,7 +699,7 @@ double Window::GetScrlPageHeight()
 void Window::LoseFocus()
 {
     mnTicks = 0;
-    ::Window::LoseFocus ();
+    vcl::Window::LoseFocus ();
 }
 
 /**
@@ -708,12 +708,12 @@ void Window::LoseFocus()
 void Window::GrabFocus()
 {
     mnTicks      = 0;
-    ::Window::GrabFocus ();
+    vcl::Window::GrabFocus ();
 }
 
 void Window::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    ::Window::DataChanged( rDCEvt );
+    vcl::Window::DataChanged( rDCEvt );
 
     /* Omit PRINTER by all documents which are not using a printer.
        Omit FONTS and FONTSUBSTITUTION if no text output is available or if the
@@ -930,7 +930,7 @@ void Window::DropScroll(const Point& rMousePos)
     // If current viewshell is PresentationViewShell, just return empty because the correct ShowWin will be created later.
     if (mpViewShell && mpViewShell->ISA(PresentationViewShell))
     {
-        return ::Window::CreateAccessible ();
+        return vcl::Window::CreateAccessible ();
     }
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(false);
     if (xAcc.get())
@@ -946,7 +946,7 @@ void Window::DropScroll(const Point& rMousePos)
     else
     {
         OSL_TRACE ("::sd::Window::CreateAccessible: no view shell");
-        return ::Window::CreateAccessible ();
+        return vcl::Window::CreateAccessible ();
     }
 }
 

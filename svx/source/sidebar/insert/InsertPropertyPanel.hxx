@@ -39,7 +39,7 @@ class InsertPropertyPanel
 {
 public:
     InsertPropertyPanel (
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~InsertPropertyPanel (void);
 

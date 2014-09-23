@@ -31,7 +31,7 @@
 /**
  * Constructor of tab dialog: append pages to dialog
  */
-SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
+SdCharDlg::SdCharDlg( vcl::Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell ) :
         SfxTabDialog        ( pParent
                              ,"DrawCharDialog"

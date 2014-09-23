@@ -47,7 +47,7 @@
 using namespace nsSwDocInfoSubType;
 using namespace com::sun::star;
 
-SwFldDokInfPage::SwFldDokInfPage(Window* pParent, const SfxItemSet& rCoreSet)
+SwFldDokInfPage::SwFldDokInfPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     :  SwFldPage(pParent, "FldDocInfoPage",
         "modules/swriter/ui/flddocinfopage.ui", rCoreSet)
     , pSelEntry(0)
@@ -450,7 +450,7 @@ bool SwFldDokInfPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-SfxTabPage* SwFldDokInfPage::Create(    Window* pParent,
+SfxTabPage* SwFldDokInfPage::Create(    vcl::Window* pParent,
                         const SfxItemSet* rAttrSet )
 {
     return ( new SwFldDokInfPage( pParent, *rAttrSet ) );

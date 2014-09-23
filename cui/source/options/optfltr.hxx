@@ -36,14 +36,14 @@ class OfaMSFilterTabPage : public SfxTabPage
     CheckBox*       aPBasicCodeCB;
     CheckBox*       aPBasicStgCB;
 
-    OfaMSFilterTabPage( Window* pParent, const SfxItemSet& rSet );
+    OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();
 
     DECL_LINK(LoadWordBasicCheckHdl_Impl, void *);
     DECL_LINK(LoadExcelBasicCheckHdl_Impl, void *);
 public:
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -83,7 +83,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
            sChgToFromSmartArt;
     SvLBoxButtonData*   pCheckButtonData;
 
-    OfaMSFilterTabPage2( Window* pParent, const SfxItemSet& rSet );
+    OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage2();
 
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType );
@@ -93,7 +93,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

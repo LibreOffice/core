@@ -410,7 +410,7 @@ void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
 {
 }
 
-CustomAnimationList::CustomAnimationList( ::Window* pParent )
+CustomAnimationList::CustomAnimationList( vcl::Window* pParent )
     : SvTreeListBox( pParent, WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT )
     , mbIgnorePaint(false)
     , mpController(0)
@@ -424,7 +424,7 @@ CustomAnimationList::CustomAnimationList( ::Window* pParent )
     SetNodeDefaultImages();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCustomAnimationList( ::Window *pParent )
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCustomAnimationList( vcl::Window *pParent )
 {
     return new CustomAnimationList( pParent );
 }

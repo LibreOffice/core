@@ -72,7 +72,7 @@ int UIPreviewApp::Main()
 
         {
             VclBuilder aBuilder(pDialog, OUString(), uifiles[0]);
-            Window *pRoot = aBuilder.get_widget_root();
+            vcl::Window *pRoot = aBuilder.get_widget_root();
             Dialog *pRealDialog = dynamic_cast<Dialog*>(pRoot);
 
             if (!pRealDialog)

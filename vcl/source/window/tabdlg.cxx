@@ -39,9 +39,9 @@ void TabDialog::ImplPosControls()
     Size        aCtrlSize( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
     long        nDownCtrl = 0;
     long        nOffY = 0;
-    Window*     pTabControl = NULL;
+    vcl::Window*     pTabControl = NULL;
 
-    Window* pChild = GetWindow( WINDOW_FIRSTCHILD );
+    vcl::Window* pChild = GetWindow( WINDOW_FIRSTCHILD );
     while ( pChild )
     {
         if ( pChild->IsVisible() && (pChild != mpViewWindow) )
@@ -155,7 +155,7 @@ void TabDialog::ImplPosControls()
         if ( nCtrlBarWidth <= (aTabSize.Width()+nBtnEx) )
             nX = (aTabSize.Width()+nBtnEx) - nCtrlBarWidth + IMPL_DIALOG_OFFSET;
 
-        Window* pChild2 = GetWindow( WINDOW_FIRSTCHILD );
+        vcl::Window* pChild2 = GetWindow( WINDOW_FIRSTCHILD );
         while ( pChild2 )
         {
             if ( pChild2->IsVisible() && (pChild2 != mpViewWindow) )
@@ -206,14 +206,14 @@ void TabDialog::ImplPosControls()
     mbPosControls = false;
 }
 
-TabDialog::TabDialog( Window* pParent, WinBits nStyle ) :
+TabDialog::TabDialog( vcl::Window* pParent, WinBits nStyle ) :
     Dialog( WINDOW_TABDIALOG )
 {
     ImplInitTabDialogData();
     ImplInit( pParent, nStyle );
 }
 
-TabDialog::TabDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
+TabDialog::TabDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
     Dialog(pParent, rID, rUIXMLDescription, WINDOW_TABDIALOG)
 {
     ImplInitTabDialogData();

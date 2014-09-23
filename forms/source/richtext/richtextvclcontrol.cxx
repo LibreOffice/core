@@ -41,7 +41,7 @@
 namespace frm
 {
 
-    RichTextControl::RichTextControl( RichTextEngine* _pEngine, Window* _pParent, WinBits _nStyle,
+    RichTextControl::RichTextControl( RichTextEngine* _pEngine, vcl::Window* _pParent, WinBits _nStyle,
         ITextAttributeListener* _pTextAttribListener, ITextSelectionListener* _pSelectionListener )
         :Control( _pParent, implInitStyle( _nStyle ) )
         ,m_pImpl( NULL )
@@ -314,7 +314,7 @@ namespace frm
     }
 
 
-    Window& RichTextControl::getViewport() const
+    vcl::Window& RichTextControl::getViewport() const
     {
         return *m_pImpl->getViewport( RichTextControlImpl::GrantAccess() );
     }

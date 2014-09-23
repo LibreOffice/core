@@ -42,7 +42,7 @@
 |*
 \************************************************************************/
 
-FuConstruct::FuConstruct(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuConstruct::FuConstruct(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq) :
     FuDraw(pViewSh, pWin, pViewP, pDoc, rReq)
 {

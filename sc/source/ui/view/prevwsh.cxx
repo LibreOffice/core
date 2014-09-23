@@ -100,11 +100,11 @@ SFX_IMPL_NAMED_VIEWFACTORY( ScPreviewShell, "PrintPreview" )
     SFX_VIEW_REGISTRATION(ScDocShell);
 }
 
-void ScPreviewShell::Construct( Window* pParent )
+void ScPreviewShell::Construct( vcl::Window* pParent )
 {
     // Find the top-most window, and set the close window handler to intercept
     // the window close event.
-    Window* pWin = pParent;
+    vcl::Window* pWin = pParent;
     while (!pWin->IsSystemWindow())
     {
         if (pWin->GetParent())
@@ -536,7 +536,7 @@ bool ScPreviewShell::HasPrintOptionsPage() const
     return true;
 }
 
-SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
+SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");

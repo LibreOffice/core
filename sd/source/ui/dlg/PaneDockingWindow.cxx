@@ -38,7 +38,7 @@ using ::sfx2::TitledDockingWindow;
 namespace sd {
 
 PaneDockingWindow::PaneDockingWindow(
-        SfxBindings *_pBindings, SfxChildWindow *pChildWindow, ::Window* pParent,
+        SfxBindings *_pBindings, SfxChildWindow *pChildWindow, vcl::Window* pParent,
         const ResId& rResId, const OUString& rsTitle )
         :TitledDockingWindow( _pBindings, pChildWindow, pParent, rResId )
 {
@@ -95,7 +95,7 @@ void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
     SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
     if (pSplitWindow != NULL)
     {
-        const sal_uInt16 nId (pSplitWindow->GetItemId(static_cast< ::Window*>(this)));
+        const sal_uInt16 nId (pSplitWindow->GetItemId(static_cast< vcl::Window*>(this)));
         const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
         // Because the PaneDockingWindow paints its own decoration, we have
         // to compensate the valid size range for that.

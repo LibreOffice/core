@@ -28,7 +28,7 @@
 #include "navmgr.hxx"
 #include <boost/optional.hpp>
 
-class Window;
+namespace vcl { class Window; }
 class SbxArray;
 class SwDoc;
 class SwViewOption;
@@ -389,7 +389,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    MoveCrsr( bool bWithSelect = false );
 
     // update input fields
-    bool    StartInputFldDlg(SwField*, bool bNextButton, Window* pParentWin = 0, OString* pWindowState = 0);
+    bool    StartInputFldDlg(SwField*, bool bNextButton, vcl::Window* pParentWin = 0, OString* pWindowState = 0);
     // update DropDown fields
     bool    StartDropDownFldDlg(SwField*, bool bNextButton, OString* pWindowState = 0);
 
@@ -446,8 +446,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     DECL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData* );
 
     // ctor, the first one is a kind of a controlled copy ctor for more views of a document
-    SwWrtShell( SwWrtShell&, Window *pWin, SwView &rShell);
-    SwWrtShell( SwDoc& rDoc, Window *pWin, SwView &rShell,
+    SwWrtShell( SwWrtShell&, vcl::Window *pWin, SwView &rShell);
+    SwWrtShell( SwDoc& rDoc, vcl::Window *pWin, SwView &rShell,
                 const SwViewOption *pViewOpt = 0);
     virtual ~SwWrtShell();
 

@@ -57,13 +57,13 @@ class SwParagraphNumTabPage : public SfxTabPage
     DECL_LINK(LineCountHdl_Impl, void *);
 
 protected:
-        SwParagraphNumTabPage(Window* pParent, const SfxItemSet& rSet );
+        SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
     void aCountParaFL();
 
 public:
         virtual ~SwParagraphNumTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 

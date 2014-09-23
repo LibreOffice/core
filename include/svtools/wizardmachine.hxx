@@ -98,7 +98,7 @@ namespace svt
                 if the OWizardPage is used in an OWizardMachine, this parameter
                 must be the OWizardMachine (which is derived from Window)
          */
-        OWizardPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
+        OWizardPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
         virtual ~OWizardPage();
 
         // IWizardPageController overridables
@@ -165,15 +165,15 @@ namespace svt
                         m_pImpl;
             // hold members in this structure to allow keeping compatible when members are added
 
-        SVT_DLLPRIVATE void addButtons(Window* _pParent, sal_uInt32 _nButtonFlags);
+        SVT_DLLPRIVATE void addButtons(vcl::Window* _pParent, sal_uInt32 _nButtonFlags);
 
     public:
         /** ctor
 
             For the button flags, use any combination of the WZB_* flags.
         */
-        OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags );
-        OWizardMachine(Window* _pParent, sal_uInt32 _nButtonFlags );
+        OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags );
+        OWizardMachine(vcl::Window* _pParent, sal_uInt32 _nButtonFlags );
         virtual ~OWizardMachine();
 
         /// enable (or disable) buttons
@@ -349,7 +349,7 @@ namespace svt
         DECL_DLLPRIVATE_LINK(OnPrevPage, void*);
         DECL_DLLPRIVATE_LINK(OnFinish, void*);
 
-        SVT_DLLPRIVATE void     implResetDefault(Window* _pWindow);
+        SVT_DLLPRIVATE void     implResetDefault(vcl::Window* _pWindow);
         SVT_DLLPRIVATE void     implUpdateTitle();
         SVT_DLLPRIVATE void     implConstruct( const sal_uInt32 _nButtonFlags );
     };

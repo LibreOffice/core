@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
-SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet)
+SwFldFuncPage::SwFldFuncPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SwFldPage(pParent, "FldFuncPage",
         "modules/swriter/ui/fldfuncpage.ui", rCoreSet)
     , nOldFormat(0)
@@ -499,7 +499,7 @@ void SwFldFuncPage::UpdateSubType()
 // call MacroBrowser, fill Listbox with Macros
 IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
 {
-    Window* pDefModalDlgParent = Application::GetDefDialogParent();
+    vcl::Window* pDefModalDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( pBtn );
     const OUString sMacro(TurnMacroString(m_pNameED->GetText()).replaceAll(".", ";"));
     if (GetFldMgr().ChooseMacro(sMacro))
@@ -597,7 +597,7 @@ OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
     return rMacro;
 }
 
-SfxTabPage* SwFldFuncPage::Create(  Window* pParent,
+SfxTabPage* SwFldFuncPage::Create(  vcl::Window* pParent,
                         const SfxItemSet* rAttrSet )
 {
     return ( new SwFldFuncPage( pParent, *rAttrSet ) );

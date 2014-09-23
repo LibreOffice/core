@@ -51,17 +51,17 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makePrintPreviewWindow(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makePrintPreviewWindow(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new PrintDialog::PrintPreviewWindow(pParent);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeShowNupOrderWindow(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeShowNupOrderWindow(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new PrintDialog::ShowNupOrderWindow(pParent);
 }
 
-PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent )
+PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     : Window( i_pParent, 0 )
     , maOrigSize( 10, 10 )
     , maPageVDev( *this )
@@ -294,7 +294,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     maPageVDev.SetDrawMode( nOldDrawMode );
 }
 
-PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( Window* i_pParent )
+PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( vcl::Window* i_pParent )
     : Window( i_pParent, WB_NOBORDER )
     , mnOrderMode( 0 )
     , mnRows( 1 )
@@ -568,7 +568,7 @@ void PrintDialog::OutputOptPage::storeToSettings()
                                                 OUString("false") );
 }
 
-PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterController>& i_rController )
+PrintDialog::PrintDialog( vcl::Window* i_pParent, const boost::shared_ptr<PrinterController>& i_rController )
     : ModalDialog(i_pParent, "PrintDialog", "vcl/ui/printdialog.ui")
     , mpCustomOptionsUIBuilder(NULL)
     , maPController( i_rController )
@@ -795,13 +795,13 @@ bool PrintDialog::isSingleJobs()
     return maOptionsPage.mpCollateSingleJobsBox->IsChecked();
 }
 
-void setHelpId( Window* i_pWindow, const Sequence< OUString >& i_rHelpIds, sal_Int32 i_nIndex )
+void setHelpId( vcl::Window* i_pWindow, const Sequence< OUString >& i_rHelpIds, sal_Int32 i_nIndex )
 {
     if( i_nIndex >= 0 && i_nIndex < i_rHelpIds.getLength() )
         i_pWindow->SetHelpId( OUStringToOString( i_rHelpIds.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8 ) );
 }
 
-static void setHelpText( Window* i_pWindow, const Sequence< OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
+static void setHelpText( vcl::Window* i_pWindow, const Sequence< OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
 {
     // without a help text set and the correct smartID,
     // help texts will be retrieved from the online help system
@@ -819,11 +819,11 @@ void PrintDialog::setupOptionalUI()
             OUString sOptionsUIFile;
             rOptions[i].Value >>= sOptionsUIFile;
 
-            Window *pCustom = get<Window>("customcontents");
+            vcl::Window *pCustom = get<vcl::Window>("customcontents");
 
             delete mpCustomOptionsUIBuilder;
             mpCustomOptionsUIBuilder = new VclBuilder(pCustom, getUIRootDir(), sOptionsUIFile);
-            Window *pWindow = mpCustomOptionsUIBuilder->get_widget_root();
+            vcl::Window *pWindow = mpCustomOptionsUIBuilder->get_widget_root();
             pWindow->Show();
             continue;
         }
@@ -963,9 +963,9 @@ void PrintDialog::setupOptionalUI()
         }
         else if (aCtrlType == "Subgroup" && !aID.isEmpty())
         {
-            Window *pFrame = get<Window>(aID);
+            vcl::Window *pFrame = get<vcl::Window>(aID);
             if (!pFrame && mpCustomOptionsUIBuilder)
-                pFrame = mpCustomOptionsUIBuilder->get<Window>(aID);
+                pFrame = mpCustomOptionsUIBuilder->get<vcl::Window>(aID);
 
             if (!pFrame)
                 continue;
@@ -1174,7 +1174,7 @@ void PrintDialog::setupOptionalUI()
     // update enable states
     checkOptionalControlDependencies();
 
-    Window *pPageRange = get<Window>("pagerange");
+    vcl::Window *pPageRange = get<vcl::Window>("pagerange");
 
     // print range not shown (currently math only) -> hide spacer line and reverse order
     if (!pPageRange || !pPageRange->IsVisible())
@@ -1217,7 +1217,7 @@ void PrintDialog::checkControlDependencies()
 
 void PrintDialog::checkOptionalControlDependencies()
 {
-    for( std::map< Window*, OUString >::iterator it = maControlToPropertyMap.begin();
+    for( std::map< vcl::Window*, OUString >::iterator it = maControlToPropertyMap.begin();
          it != maControlToPropertyMap.end(); ++it )
     {
         bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
@@ -1241,7 +1241,7 @@ void PrintDialog::checkOptionalControlDependencies()
 
         if( bShouldbeEnabled && dynamic_cast<RadioButton*>(it->first) )
         {
-            std::map< Window*, sal_Int32 >::const_iterator r_it = maControlToNumValMap.find( it->first );
+            std::map< vcl::Window*, sal_Int32 >::const_iterator r_it = maControlToNumValMap.find( it->first );
             if( r_it != maControlToNumValMap.end() )
             {
                 bShouldbeEnabled = maPController->isUIChoiceEnabled( it->second, r_it->second );
@@ -1655,10 +1655,10 @@ IMPL_LINK_NOARG(PrintDialog, UIOptionsChanged)
     return 0;
 }
 
-PropertyValue* PrintDialog::getValueForWindow( Window* i_pWindow ) const
+PropertyValue* PrintDialog::getValueForWindow( vcl::Window* i_pWindow ) const
 {
     PropertyValue* pVal = NULL;
-    std::map< Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
+    std::map< vcl::Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {
         pVal = maPController->getValue( it->second );
@@ -1674,10 +1674,10 @@ PropertyValue* PrintDialog::getValueForWindow( Window* i_pWindow ) const
 void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
 {
     beans::PropertyValue* pValue = maPController->getValue( i_rProperty );
-    std::map< OUString, std::vector< Window* > >::const_iterator it = maPropertyToWindowMap.find( i_rProperty );
+    std::map< OUString, std::vector< vcl::Window* > >::const_iterator it = maPropertyToWindowMap.find( i_rProperty );
     if( pValue && it != maPropertyToWindowMap.end() )
     {
-        const std::vector< Window* >& rWindows( it->second );
+        const std::vector< vcl::Window* >& rWindows( it->second );
         if( ! rWindows.empty() )
         {
             bool bVal = false;
@@ -1723,9 +1723,9 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
     }
 }
 
-void PrintDialog::makeEnabled( Window* i_pWindow )
+void PrintDialog::makeEnabled( vcl::Window* i_pWindow )
 {
-    std::map< Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
+    std::map< vcl::Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {
         OUString aDependency( maPController->makeEnabled( it->second ) );
@@ -1760,7 +1760,7 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
     if( i_pBtn->IsChecked() )
     {
         PropertyValue* pVal = getValueForWindow( i_pBtn );
-        std::map< Window*, sal_Int32 >::const_iterator it = maControlToNumValMap.find( i_pBtn );
+        std::map< vcl::Window*, sal_Int32 >::const_iterator it = maControlToNumValMap.find( i_pBtn );
         if( pVal && it != maControlToNumValMap.end() )
         {
             makeEnabled( i_pBtn );
@@ -1869,7 +1869,7 @@ void PrintDialog::previewBackward()
 
 // PrintProgressDialog
 
-PrintProgressDialog::PrintProgressDialog(Window* i_pParent, int i_nMax)
+PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
     : ModelessDialog(i_pParent, "PrintProgressDialog",
         "vcl/ui/printprogressdialog.ui")
     , mbCanceled(false)

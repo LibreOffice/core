@@ -19,7 +19,7 @@
 
 #include "ins_paste.hxx"
 
-SdInsertPasteDlg::SdInsertPasteDlg(Window* pWindow)
+SdInsertPasteDlg::SdInsertPasteDlg(vcl::Window* pWindow)
     : ModalDialog( pWindow, "InsertSlidesDialog",
         "modules/simpress/ui/insertslides.ui")
 {

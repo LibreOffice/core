@@ -31,45 +31,45 @@
 class BibShortCutHandler
 {
 private:
-    Window*                 pBaseClass;     // in cases, where BibShortCutHandler also has to be a window
+    vcl::Window*                 pBaseClass;     // in cases, where BibShortCutHandler also has to be a window
 
 protected:
-    inline                  BibShortCutHandler( Window* pBaseClass );
+    inline                  BibShortCutHandler( vcl::Window* pBaseClass );
 
 public:
     virtual                 ~BibShortCutHandler();
     virtual bool            HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
 
-    inline Window*          GetWindow( void );
+    inline vcl::Window*          GetWindow( void );
 };
 
-inline BibShortCutHandler::BibShortCutHandler( Window* _pBaseClass ) : pBaseClass( _pBaseClass )
+inline BibShortCutHandler::BibShortCutHandler( vcl::Window* _pBaseClass ) : pBaseClass( _pBaseClass )
 {
 }
 
-inline Window* BibShortCutHandler::GetWindow( void )
+inline vcl::Window* BibShortCutHandler::GetWindow( void )
 {
     return pBaseClass;
 }
 
-class BibWindow : public Window, public BibShortCutHandler
+class BibWindow : public vcl::Window, public BibShortCutHandler
 {
 public:
-                            BibWindow( Window* pParent,WinBits nStyle = WB_3DLOOK);
+                            BibWindow( vcl::Window* pParent,WinBits nStyle = WB_3DLOOK);
     virtual                 ~BibWindow();
 };
 
 class BibSplitWindow : public SplitWindow, public BibShortCutHandler
 {
 public:
-                            BibSplitWindow( Window* pParent,WinBits nStyle = WB_3DLOOK);
+                            BibSplitWindow( vcl::Window* pParent,WinBits nStyle = WB_3DLOOK);
     virtual                 ~BibSplitWindow();
 };
 
 class BibTabPage : public TabPage, public BibShortCutHandler
 {
 public:
-    BibTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    BibTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
     virtual ~BibTabPage();
 };
 

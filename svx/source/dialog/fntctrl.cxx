@@ -478,19 +478,19 @@ void SvxFontPrevWindow::Init()
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
-SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
+SvxFontPrevWindow::SvxFontPrevWindow( vcl::Window* pParent, const ResId& rId ) :
     Window( pParent, rId )
 {
     Init();
 }
 
-SvxFontPrevWindow::SvxFontPrevWindow(Window* pParent, WinBits nStyle)
+SvxFontPrevWindow::SvxFontPrevWindow(vcl::Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
 {
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontPrevWindow(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFontPrevWindow(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

@@ -55,7 +55,7 @@ class MediaControl : public Control
 {
 public:
 
-                        MediaControl( Window* pParent, MediaControlStyle eControlStyle );
+                        MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle );
     virtual             ~MediaControl();
 
     const Size&         getMinSizePixel() const;

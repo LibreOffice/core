@@ -149,7 +149,7 @@ static void lcl_LeaveDrawText(SwWrtShell& rSh)
 }
 
 SwSpellDialogChildWindow::SwSpellDialogChildWindow (
-            Window* _pParent,
+            vcl::Window* _pParent,
             sal_uInt16 nId,
             SfxBindings* pBindings,
             SfxChildWinInfo* pInfo)
@@ -420,7 +420,7 @@ The code below would only be part of the solution.
                 LockFocusNotification( true );
                 OUString sInfo(SW_RES(STR_SPELLING_COMPLETED));
                 // #i84610#
-                Window* pTemp = GetWindow();    // temporary needed for g++ 3.3.5
+                vcl::Window* pTemp = GetWindow();    // temporary needed for g++ 3.3.5
                 MessageDialog(pTemp, sInfo, VCL_MESSAGE_INFO).Execute();
                 LockFocusNotification( false );
                 // take care that the now valid selection is stored

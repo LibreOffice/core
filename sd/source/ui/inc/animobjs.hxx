@@ -64,7 +64,7 @@ private:
     Fraction    aScale;
 
 public:
-    SdDisplay( ::Window* pWin, SdResId Id );
+    SdDisplay( vcl::Window* pWin, SdResId Id );
     virtual ~SdDisplay();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -82,7 +82,7 @@ class AnimationWindow : public SfxDockingWindow
 
 public:
     AnimationWindow( SfxBindings* pBindings, SfxChildWindow *pCW,
-        ::Window* pParent, const SdResId& rSdResId );
+        vcl::Window* pParent, const SdResId& rSdResId );
     virtual ~AnimationWindow();
 
     void    AddObj( ::sd::View& rView );
@@ -122,7 +122,7 @@ private:
 
     HelpButton      aBtnHelp;
 
-    ::Window*       pWin;
+    vcl::Window*       pWin;
     ::std::vector< ::std::pair<BitmapEx*, Time*> > m_FrameList;
     static const size_t EMPTY_FRAMELIST = ULONG_MAX;
     size_t          m_nCurrentFrame;

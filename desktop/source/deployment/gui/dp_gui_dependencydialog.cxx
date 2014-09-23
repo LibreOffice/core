@@ -31,12 +31,12 @@
 #include "dp_gui_dependencydialog.hxx"
 #include "dp_gui_shared.hxx"
 
-class Window;
+namespace vcl { class Window; }
 
 using dp_gui::DependencyDialog;
 
 DependencyDialog::DependencyDialog(
-    Window * parent, std::vector< OUString > const & dependencies):
+    vcl::Window * parent, std::vector< OUString > const & dependencies):
     ModalDialog(parent, "Dependencies", "desktop/ui/dependenciesdialog.ui")
 {
     get(m_list, "depListTreeview");

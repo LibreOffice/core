@@ -47,7 +47,7 @@ namespace dbp
     //= OGroupBoxWizard
 
 
-    OGroupBoxWizard::OGroupBoxWizard( Window* _pParent,
+    OGroupBoxWizard::OGroupBoxWizard( vcl::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, _rxObjectModel, _rxContext)
         ,m_bVisitedDefault(false)

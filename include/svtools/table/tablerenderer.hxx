@@ -210,14 +210,14 @@ namespace svt { namespace table
             The cell cursor is used to indicate the active/current cell
             of a table control.
         */
-        virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect) = 0;
+        virtual void    ShowCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) = 0;
 
         /** hides the cell cursor previously drawn into the given rectangle
 
             The cell cursor is used to indicate the active/current cell
             of a table control.
         */
-        virtual void    HideCellCursor( Window& _rView, const Rectangle& _rCursorRect) = 0;
+        virtual void    HideCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) = 0;
 
         /** checks whether a given cell content fits into a given target area on a given device.
 

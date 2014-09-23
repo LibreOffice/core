@@ -122,7 +122,7 @@ private:
 public:
 
                             GalleryBrowser1(
-                                Window* pParent,
+                                vcl::Window* pParent,
                                 const ResId& rResId,
                                 Gallery* pGallery,
                                 const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
@@ -134,7 +134,7 @@ public:
     OUString                GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : OUString(); }
 
     void                    ShowContextMenu();
-    bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
+    bool                    KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow );
 };
 
 #endif // INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX

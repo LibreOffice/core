@@ -90,7 +90,7 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const OUString& rFileName, const OUString& rFilterName, bool bAsLink, bool bApi,
-                        ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView )
+                        ScTabViewShell* pViewSh, vcl::Window* pWindow, SdrView* pView )
 {
     ScDrawView* pDrawView = pViewSh->GetScDrawView();
 
@@ -175,7 +175,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 }
 
 static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
-                      ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView,
+                      ScTabViewShell* pViewSh, vcl::Window* pWindow, SdrView* pView,
                       const Size& rPrefSize, bool const bLink )
 {
     SdrPageView*    pPV  = pView->GetSdrPageView();
@@ -226,7 +226,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 \************************************************************************/
 
 FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
-                                  Window*           pWin,
+                                  vcl::Window*           pWin,
                                   ScDrawView*       pViewP,
                                   SdrModel*         pDoc,
                                   SfxRequest&       rReq )
@@ -331,7 +331,7 @@ void FuInsertGraphic::Deactivate()
 \************************************************************************/
 
 FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
-                              Window*           pWin,
+                              vcl::Window*           pWin,
                               ScDrawView*       pViewP,
                               SdrModel*         pDoc,
                               SfxRequest&       rReq ) :

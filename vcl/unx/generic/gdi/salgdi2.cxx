@@ -240,7 +240,7 @@ void X11SalGraphics::YieldGraphicsExpose()
     // get frame if necessary
     SalFrame* pFrame    = m_pFrame;
     Display* pDisplay   = GetXDisplay();
-    XLIB_Window aWindow = GetDrawable();
+    ::Window aWindow = GetDrawable();
     if( ! pFrame )
     {
         const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();

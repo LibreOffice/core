@@ -27,7 +27,7 @@ namespace dbaui
 #define DEF_ROW_HEIGHT  45
 #define DEF_COL_WIDTH   227
 
-DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard )
+DlgSize::DlgSize( vcl::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard )
     : ModalDialog(pParent, bRow ? OString("RowHeightDialog") : OString("ColWidthDialog"),
         bRow ? OUString("dbaccess/ui/rowheightdialog.ui") : OUString("dbaccess/ui/colwidthdialog.ui"))
     , m_nPrevValue(nVal)

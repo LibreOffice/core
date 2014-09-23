@@ -80,7 +80,7 @@ protected:
     virtual void GetFocus() SAL_OVERRIDE;
 
 public:
-    SvtFileView( Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection );
+    SvtFileView( vcl::Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection );
     virtual ~SvtFileView();
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -214,7 +214,7 @@ private:
     PushButton* m_pAllButton;
 public:
 
-    QueryDeleteDlg_Impl(Window* pParent, const OUString& rName);
+    QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& rName);
 
     void EnableAllButton() { m_pAllButton->Enable(true); }
 };

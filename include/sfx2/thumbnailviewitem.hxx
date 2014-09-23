@@ -36,7 +36,7 @@ const int THUMBNAILVIEW_ITEM_CORNER = 5;
 
 class CheckBox;
 namespace vcl { class Font; }
-class Window;
+namespace vcl { class Window; }
 class ThumbnailView;
 
 namespace basegfx {

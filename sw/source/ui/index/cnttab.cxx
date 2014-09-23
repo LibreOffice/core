@@ -173,7 +173,7 @@ protected:
     std::vector<long>               GetOptimalColWidths() const;
 
 public:
-    SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilder);
+    SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder);
     void                            ReadEntries(SvStream& rInStr);
     void                            WriteEntries(SvStream& rOutStr);
 
@@ -197,7 +197,7 @@ class SwAutoMarkDlg_Impl : public ModalDialog
 
     DECL_LINK(OkHdl, void *);
 public:
-    SwAutoMarkDlg_Impl(Window* pParent, const OUString& rAutoMarkURL,
+    SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
                         const OUString& rAutoMarkType, bool bCreate);
     virtual ~SwAutoMarkDlg_Impl();
 
@@ -211,7 +211,7 @@ sal_uInt16 CurTOXType::GetFlatIndex() const
 
 #define EDIT_MINWIDTH 15
 
-SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
+SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell &rShell,
                     SwTOXBase* pCurTOX,
                     sal_uInt16 nToxType, bool bGlobal)
@@ -631,11 +631,11 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
     DECL_LINK(HeaderDragHdl, void *);
 
 public:
-    SwAddStylesDlg_Impl(Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
+    SwAddStylesDlg_Impl(vcl::Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
     virtual ~SwAddStylesDlg_Impl();
 };
 
-SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
+SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
             SwWrtShell& rWrtSh, OUString rStringArr[])
     : SfxModalDialog(pParent, "AssignStylesDialog",
         "modules/swriter/ui/assignstylesdialog.ui")
@@ -766,7 +766,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
     return 0;
 }
 
-SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet)
+SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "TocIndexPage",
         "modules/swriter/ui/tocindexpage.ui", &rAttrSet)
     , aFromNames(SW_RES(RES_SRCTYPES))
@@ -787,7 +787,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     get(m_pCreateFrame, "createframe");
     get(m_pFromHeadingsCB, "fromheadings");
     get(m_pAddStylesCB, "addstylescb");
-    sAddStyleUser = get<Window>("stylescb")->GetText();
+    sAddStyleUser = get<vcl::Window>("stylescb")->GetText();
     get(m_pAddStylesPB, "styles");
     get(m_pFromTablesCB, "fromtables");
     get(m_pFromFramesCB, "fromframes");
@@ -1247,7 +1247,7 @@ int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXSelectTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet)
+SfxTabPage* SwTOXSelectTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
     return new SwTOXSelectTabPage(pParent, *rAttrSet);
 }
@@ -1462,7 +1462,7 @@ class SwTOXEdit : public Edit
     bool     bNextControl;
     SwTokenWindow* m_pParent;
 public:
-    SwTOXEdit( Window* pParent, SwTokenWindow* pTokenWin,
+    SwTOXEdit( vcl::Window* pParent, SwTokenWindow* pTokenWin,
                 const SwFormToken& aToken)
         : Edit( pParent, WB_BORDER|WB_TABSTOP|WB_CENTER),
         aFormToken(aToken),
@@ -1547,7 +1547,7 @@ class SwTOXButton : public PushButton
     bool        bNextControl;
     SwTokenWindow* m_pParent;
 public:
-    SwTOXButton( Window* pParent, SwTokenWindow* pTokenWin,
+    SwTOXButton( vcl::Window* pParent, SwTokenWindow* pTokenWin,
                 const SwFormToken& rToken)
         : PushButton(pParent, WB_BORDER|WB_TABSTOP),
         aFormToken(rToken),
@@ -1669,13 +1669,13 @@ void SwTOXButton::RequestHelp( const HelpEvent& rHEvt )
         Button::RequestHelp(rHEvt);
 }
 
-SwIdxTreeListBox::SwIdxTreeListBox(Window* pPar, WinBits nStyle)
+SwIdxTreeListBox::SwIdxTreeListBox(vcl::Window* pPar, WinBits nStyle)
     : SvTreeListBox(pPar, nStyle)
     , pParent(NULL)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwIdxTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwIdxTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1722,7 +1722,7 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         SvTreeListBox::RequestHelp(rHEvt);
 }
 
-SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet)
+SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "TocEntriesPage",
         "modules/swriter/ui/tocentriespage.ui", &rAttrSet)
     , sDelimStr(SW_RESSTR(STR_DELIM))
@@ -2077,7 +2077,7 @@ int SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXEntryTabPage::Create( Window* pParent,     const SfxItemSet* rAttrSet)
+SfxTabPage* SwTOXEntryTabPage::Create( vcl::Window* pParent,     const SfxItemSet* rAttrSet)
 {
     return new SwTOXEntryTabPage(pParent, *rAttrSet);
 }
@@ -2088,7 +2088,7 @@ IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pCharStyleLB->GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_CHAR);
-        Window* pDefDlgParent = Application::GetDefDialogParent();
+        vcl::Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell().
         GetView().GetViewFrame()->GetDispatcher()->Execute(
@@ -2564,7 +2564,7 @@ OUString SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
     return sRet;
 }
 
-SwTokenWindow::SwTokenWindow(Window* pParent)
+SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
     : VclHBox(pParent)
     , pForm(0)
     , nLevel(0)
@@ -2603,7 +2603,7 @@ SwTokenWindow::SwTokenWindow(Window* pParent)
     m_pRightScrollWin->SetClickHdl(aLink);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwTokenWindow(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwTokenWindow(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwTokenWindow(pParent);
 }
@@ -3482,7 +3482,7 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
     return nIndex;
 }
 
-SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet )
+SwTOXStylesTabPage::SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet )
     : SfxTabPage(pParent, "TocStylesPage",
         "modules/swriter/ui/tocstylespage.ui", &rAttrSet)
     , m_pCurrentForm(0)
@@ -3592,7 +3592,7 @@ int SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXStylesTabPage::Create( Window* pParent,
+SfxTabPage* SwTOXStylesTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SwTOXStylesTabPage(pParent, *rAttrSet);
@@ -3604,7 +3604,7 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pParaLayLB->GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA);
-        Window* pDefDlgParent = Application::GetDefDialogParent();
+        vcl::Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
         rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(
@@ -3697,7 +3697,7 @@ void SwTOXStylesTabPage::Modify()
 #define ITEM_CASE           6
 #define ITEM_WORDONLY       7
 
-SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilder)
+SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder)
     : SwEntryBrowseBox_Base( pParent, EBBF_NONE, WB_TABSTOP | WB_BORDER,
                            BROWSER_KEEPSELECTION |
                            BROWSER_COLUMNSELECTION |
@@ -3712,15 +3712,15 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilde
     , nCurrentRow(0)
     , bModified(false)
 {
-    sSearch = pBuilder->get<Window>("searchterm")->GetText();
-    sAlternative = pBuilder->get<Window>("alternative")->GetText();
-    sPrimKey = pBuilder->get<Window>("key1")->GetText();
-    sSecKey = pBuilder->get<Window>("key2")->GetText();
-    sComment = pBuilder->get<Window>("comment")->GetText();
-    sCaseSensitive = pBuilder->get<Window>("casesensitive")->GetText();
-    sWordOnly = pBuilder->get<Window>("wordonly")->GetText();
-    sYes = pBuilder->get<Window>("yes")->GetText();
-    sNo = pBuilder->get<Window>("no")->GetText();
+    sSearch = pBuilder->get<vcl::Window>("searchterm")->GetText();
+    sAlternative = pBuilder->get<vcl::Window>("alternative")->GetText();
+    sPrimKey = pBuilder->get<vcl::Window>("key1")->GetText();
+    sSecKey = pBuilder->get<vcl::Window>("key2")->GetText();
+    sComment = pBuilder->get<vcl::Window>("comment")->GetText();
+    sCaseSensitive = pBuilder->get<vcl::Window>("casesensitive")->GetText();
+    sWordOnly = pBuilder->get<vcl::Window>("wordonly")->GetText();
+    sYes = pBuilder->get<vcl::Window>("yes")->GetText();
+    sNo = pBuilder->get<vcl::Window>("no")->GetText();
 
     aCellCheckBox.GetBox().EnableTriState(false);
     xController = new ::svt::EditCellController(&aCellEdit);
@@ -4012,7 +4012,7 @@ bool SwEntryBrowseBox::IsModified()const
     return pController->IsModified();
 }
 
-SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const OUString& rAutoMarkURL,
+SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
         const OUString& rAutoMarkType, bool bCreate)
     : ModalDialog(pParent, "CreateAutomarkDialog",
         "modules/swriter/ui/createautomarkdialog.ui")

@@ -60,8 +60,8 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     sIntervalName += ")";
     m_pDivIntervalNF->SetAccessibleName(sIntervalName);
 
-    Window *pNumIntervalFT = get<Window>("interval");
-    Window *pNumRowsFT = get<Window>("intervallines");
+    vcl::Window *pNumIntervalFT = get<vcl::Window>("interval");
+    vcl::Window *pNumRowsFT = get<vcl::Window>("intervallines");
     sIntervalName = pNumIntervalFT->GetAccessibleName();
     sIntervalName += "(";
     sIntervalName += pNumRowsFT->GetAccessibleName();

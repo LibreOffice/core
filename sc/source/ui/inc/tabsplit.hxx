@@ -37,7 +37,7 @@ protected:
     virtual void    Splitting( Point& rSplitPos ) SAL_OVERRIDE;
 
 public:
-                    ScTabSplitter( Window* pParent, WinBits nWinStyle,
+                    ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle,
                                     ScViewData* pData );
                     virtual ~ScTabSplitter();
 

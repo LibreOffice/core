@@ -28,7 +28,7 @@ struct BitmapSystemData;
 struct SystemGraphicsData;
 class  VirtualDevice;
 class  OutputDevice;
-class  Window;
+namespace vcl { class Window; }
 class  Size;
 
 #include <cairo.h>
@@ -43,7 +43,7 @@ namespace cairo {
     typedef boost::shared_ptr<cairo_surface_t> CairoSurfaceSharedPtr;
     typedef boost::shared_ptr<Cairo>           CairoSharedPtr;
 
-    const SystemEnvData* GetSysData(const Window *pOutputWindow);
+    const SystemEnvData* GetSysData(const vcl::Window *pOutputWindow);
 
     /** Cairo surface interface
 

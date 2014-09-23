@@ -30,7 +30,7 @@
 |*
 \************************************************************************/
 
-SvxDistributeDialog::SvxDistributeDialog(Window* pParent,
+SvxDistributeDialog::SvxDistributeDialog(vcl::Window* pParent,
     const SfxItemSet& rInAttrs, SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
     : SfxSingleTabDialog(pParent, rInAttrs, "DistributionDialog",
@@ -47,7 +47,7 @@ SvxDistributeDialog::SvxDistributeDialog(Window* pParent,
 |*
 \************************************************************************/
 
-SvxDistributePage::SvxDistributePage(Window* pWindow,
+SvxDistributePage::SvxDistributePage(vcl::Window* pWindow,
     const SfxItemSet& rInAttrs, SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
     : SvxTabPage(pWindow, "DistributionPage", "cui/ui/distributionpage.ui",
@@ -74,13 +74,13 @@ SvxDistributePage::SvxDistributePage(Window* pWindow,
 |*
 \************************************************************************/
 
-SfxTabPage* SvxDistributePage::Create(Window* pWindow, const SfxItemSet& rAttrs,
+SfxTabPage* SvxDistributePage::Create(vcl::Window* pWindow, const SfxItemSet& rAttrs,
     SvxDistributeHorizontal eHor, SvxDistributeVertical eVer)
 {
     return new SvxDistributePage(pWindow, rAttrs, eHor, eVer);
 }
 
-void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)
+void SvxDistributePage::PointChanged(vcl::Window* /*pWindow*/, RECT_POINT /*eRP*/)
 {
 }
 

@@ -37,7 +37,7 @@ namespace sfx2 { namespace sidebar {
 Reference<ui::XUIElement> SidebarPanelBase::Create (
     const ::rtl::OUString& rsResourceURL,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    Window* pWindow,
+    vcl::Window* pWindow,
     const css::ui::LayoutSize& rLayoutSize)
 {
     Reference<ui::XUIElement> xUIElement (
@@ -55,7 +55,7 @@ Reference<ui::XUIElement> SidebarPanelBase::Create (
 SidebarPanelBase::SidebarPanelBase (
     const ::rtl::OUString& rsResourceURL,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    Window* pWindow,
+    vcl::Window* pWindow,
     const css::ui::LayoutSize& rLayoutSize)
     : SidebarPanelBaseInterfaceBase(m_aMutex),
       mxFrame(rxFrame),

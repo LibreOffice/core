@@ -50,7 +50,7 @@ public:
     PaneDockingWindow (
         SfxBindings *pBindings,
         SfxChildWindow *pChildWindow,
-        ::Window* pParent,
+        vcl::Window* pParent,
         const ResId& rResId,
         const OUString& rsTitle);
 

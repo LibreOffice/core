@@ -245,7 +245,7 @@ void SearchAttrItemList::Remove(size_t nPos, size_t nLen)
     SrchAttrItemList::erase( begin() + nPos, begin() + nPos + nLen );
 }
 
-SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind )
+SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind )
     : SfxModelessDialog(&rBind, pChildWin, pParent, "FindReplaceDialog",
         "svx/ui/findreplacedialog.ui")
     , mpDocWin(NULL)
@@ -2213,7 +2213,7 @@ SFX_IMPL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper, SID_SEARCH_DLG);
 
 
 
-SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* _pParent, sal_uInt16 nId,
+SvxSearchDialogWrapper::SvxSearchDialogWrapper( vcl::Window* _pParent, sal_uInt16 nId,
                                                 SfxBindings* pBindings,
                                                 SfxChildWinInfo* pInfo )
     : SfxChildWindow( _pParent, nId )
@@ -2245,7 +2245,7 @@ SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
 }
 
 
-static Window* lcl_GetSearchLabelWindow()
+static vcl::Window* lcl_GetSearchLabelWindow()
 {
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
             SfxViewFrame::Current()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
@@ -2274,7 +2274,7 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
     else if (rSL == SL_NotFound)
         sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_NOT_FOUND);
 
-    if (Window *pSearchLabel = lcl_GetSearchLabelWindow())
+    if (vcl::Window *pSearchLabel = lcl_GetSearchLabelWindow())
     {
         if (sStr.isEmpty())
             pSearchLabel->Hide();

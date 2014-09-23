@@ -57,7 +57,7 @@ IMPL_LINK_INLINE_START( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 }
 IMPL_LINK_INLINE_END( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 
-SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool )
+SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rInPool )
     : ModalDialog(pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui")
     , aQueryOverwriteBox(this, SfxResId(STR_QUERY_OVERWRITE),
                          VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)

@@ -33,7 +33,7 @@ static bool EnableNativeWidget( const OutputDevice& i_rDevice )
 
     case OUTDEV_WINDOW:
         {
-            const Window* pWindow = dynamic_cast< const Window* >( &i_rDevice );
+            const vcl::Window* pWindow = dynamic_cast< const vcl::Window* >( &i_rDevice );
             if (pWindow)
             {
                 return pWindow->IsNativeWidgetEnabled();

@@ -25,7 +25,7 @@
 
 class SwFrmFmt;
 class SwWrtShell;
-class Window;
+namespace vcl { class Window; }
 class SwFlyFrmFmt;
 
 namespace com { namespace sun { namespace star {
@@ -55,7 +55,7 @@ public:
            ~SwTableFUNC();
 
     void    InitTabCols();
-    void    ColWidthDlg(Window *pParent );
+    void    ColWidthDlg(vcl::Window *pParent );
     SwTwips GetColWidth(sal_uInt16 nNum) const;
     SwTwips GetMaxColWidth(sal_uInt16 nNum) const;
     void    SetColWidth(sal_uInt16 nNum, SwTwips nWidth );

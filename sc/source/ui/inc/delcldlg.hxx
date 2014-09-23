@@ -35,7 +35,7 @@ private:
     RadioButton* m_pBtnDelCols;
 
 public:
-    ScDeleteCellDlg(Window* pParent, bool bDisallowCellMove = false);
+    ScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove = false);
 
     DelCellCmd GetDelCellCmd() const;
 };

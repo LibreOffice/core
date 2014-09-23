@@ -26,7 +26,7 @@
 class FuConstruct : public FuDraw
 {
  public:
-    FuConstruct(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuConstruct(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstruct();

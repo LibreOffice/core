@@ -43,7 +43,7 @@ class SwEnvFmtPage : public SfxTabPage
 
     std::vector<sal_uInt16>  aIDs;
 
-    SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet);
+    SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( EditHdl, MenuButton * );
@@ -60,7 +60,7 @@ class SwEnvFmtPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rSet);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;

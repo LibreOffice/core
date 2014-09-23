@@ -597,13 +597,13 @@ void PushButton::ImplInitPushButtonData()
 
 namespace
 {
-    Window* getPreviousSibling(Window *pParent)
+    vcl::Window* getPreviousSibling(vcl::Window *pParent)
     {
         return pParent ? pParent->GetWindow(WINDOW_LASTCHILD) : NULL;
     }
 }
 
-void PushButton::ImplInit( Window* pParent, WinBits nStyle )
+void PushButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
     Button::ImplInit( pParent, nStyle, NULL );
@@ -614,7 +614,7 @@ void PushButton::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( true, true, true );
 }
 
-WinBits PushButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
+WinBits PushButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle )
 {
     if ( !(nStyle & WB_NOTABSTOP) )
         nStyle |= WB_TABSTOP;
@@ -675,7 +675,7 @@ void PushButton::ImplInitSettings( bool bFont,
     }
 }
 
-void PushButton::ImplDrawPushButtonFrame( Window* pDev,
+void PushButton::ImplDrawPushButtonFrame( vcl::Window* pDev,
                                           Rectangle& rRect, sal_uInt16 nStyle )
 {
     if ( !(pDev->GetStyle() & (WB_RECTSTYLE | WB_SMALLSTYLE)) )
@@ -701,7 +701,7 @@ void PushButton::ImplDrawPushButtonFrame( Window* pDev,
         rRect = aDecoView.DrawButton( rRect, nStyle );
 }
 
-bool PushButton::ImplHitTestPushButton( Window* pDev,
+bool PushButton::ImplHitTestPushButton( vcl::Window* pDev,
                                         const Point& rPos )
 {
     Point       aTempPoint;
@@ -1139,14 +1139,14 @@ PushButton::PushButton( WindowType nType ) :
     ImplInitPushButtonData();
 }
 
-PushButton::PushButton( Window* pParent, WinBits nStyle ) :
+PushButton::PushButton( vcl::Window* pParent, WinBits nStyle ) :
     Button( WINDOW_PUSHBUTTON )
 {
     ImplInitPushButtonData();
     ImplInit( pParent, nStyle );
 }
 
-PushButton::PushButton( Window* pParent, const ResId& rResId ) :
+PushButton::PushButton( vcl::Window* pParent, const ResId& rResId ) :
     Button( WINDOW_PUSHBUTTON )
 {
     rResId.SetRT( RSC_PUSHBUTTON );
@@ -1480,7 +1480,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
             if( bDropDown && GetParent()->IsNativeControlSupported( aCtrlType, PART_ENTIRE_CONTROL) &&
                    !GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN) )
             {
-                Window *pBorder = GetParent()->GetWindow( WINDOW_BORDER );
+                vcl::Window *pBorder = GetParent()->GetWindow( WINDOW_BORDER );
                 if(aCtrlType == CTRL_COMBOBOX)
                 {
                     // only paint the button part to avoid flickering of the combobox text
@@ -1634,14 +1634,14 @@ bool PushButton::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-void OKButton::ImplInit( Window* pParent, WinBits nStyle )
+void OKButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     PushButton::ImplInit( pParent, nStyle );
 
     SetText( Button::GetStandardText( BUTTON_OK ) );
 }
 
-OKButton::OKButton( Window* pParent, WinBits nStyle ) :
+OKButton::OKButton( vcl::Window* pParent, WinBits nStyle ) :
     PushButton( WINDOW_OKBUTTON )
 {
     ImplInit( pParent, nStyle );
@@ -1652,7 +1652,7 @@ void OKButton::Click()
     // close parent if no link set
     if ( !GetClickHdl() )
     {
-        Window* pParent = getNonLayoutParent(this);
+        vcl::Window* pParent = getNonLayoutParent(this);
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )
@@ -1679,14 +1679,14 @@ void OKButton::Click()
     }
 }
 
-void CancelButton::ImplInit( Window* pParent, WinBits nStyle )
+void CancelButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     PushButton::ImplInit( pParent, nStyle );
 
     SetText( Button::GetStandardText( BUTTON_CANCEL ) );
 }
 
-CancelButton::CancelButton( Window* pParent, WinBits nStyle ) :
+CancelButton::CancelButton( vcl::Window* pParent, WinBits nStyle ) :
     PushButton( WINDOW_CANCELBUTTON )
 {
     ImplInit( pParent, nStyle );
@@ -1697,7 +1697,7 @@ void CancelButton::Click()
     // close parent if link not set
     if ( !GetClickHdl() )
     {
-        Window* pParent = getNonLayoutParent(this);
+        vcl::Window* pParent = getNonLayoutParent(this);
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )
@@ -1724,26 +1724,26 @@ void CancelButton::Click()
     }
 }
 
-CloseButton::CloseButton( Window* pParent, WinBits nStyle )
+CloseButton::CloseButton( vcl::Window* pParent, WinBits nStyle )
     : CancelButton(pParent, nStyle)
 {
     SetText( Button::GetStandardText( BUTTON_CLOSE ) );
 }
 
-void HelpButton::ImplInit( Window* pParent, WinBits nStyle )
+void HelpButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     PushButton::ImplInit( pParent, nStyle | WB_NOPOINTERFOCUS );
 
     SetText( Button::GetStandardText( BUTTON_HELP ) );
 }
 
-HelpButton::HelpButton( Window* pParent, WinBits nStyle ) :
+HelpButton::HelpButton( vcl::Window* pParent, WinBits nStyle ) :
     PushButton( WINDOW_HELPBUTTON )
 {
     ImplInit( pParent, nStyle );
 }
 
-HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
+HelpButton::HelpButton( vcl::Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_HELPBUTTON )
 {
     rResId.SetRT( RSC_HELPBUTTON );
@@ -1760,7 +1760,7 @@ void HelpButton::Click()
     // trigger help if no link set
     if ( !GetClickHdl() )
     {
-        Window* pFocusWin = Application::GetFocusWindow();
+        vcl::Window* pFocusWin = Application::GetFocusWindow();
         if ( !pFocusWin )
             pFocusWin = this;
 
@@ -1778,7 +1778,7 @@ void RadioButton::ImplInitRadioButtonData()
     mbStateChanged  = false;
 }
 
-void RadioButton::ImplInit( Window* pParent, WinBits nStyle )
+void RadioButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
     Button::ImplInit( pParent, nStyle, NULL );
@@ -1786,7 +1786,7 @@ void RadioButton::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( true, true, true );
 }
 
-WinBits RadioButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
+WinBits RadioButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle )
 {
     if ( !(nStyle & WB_NOGROUP) &&
          (!pPrevWindow || (pPrevWindow->GetType() != WINDOW_RADIOBUTTON)) )
@@ -1818,7 +1818,7 @@ void RadioButton::ImplInitSettings( bool bFont,
 
     if ( bBackground )
     {
-        Window* pParent = GetParent();
+        vcl::Window* pParent = GetParent();
         if ( !IsControlBackground() &&
             (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) ) )
         {
@@ -2197,10 +2197,10 @@ std::vector< RadioButton* > RadioButton::GetRadioButtonGroup(bool bIncludeThis) 
     SAL_WARN("vcl.control", "No new-style group set on radiobutton <" << GetHelpId() << "> using old-style digging around");
 
     // go back to first in group;
-    Window* pFirst = const_cast<RadioButton*>(this);
+    vcl::Window* pFirst = const_cast<RadioButton*>(this);
     while( ( pFirst->GetStyle() & WB_GROUP ) == 0 )
     {
-        Window* pWindow = pFirst->GetWindow( WINDOW_PREV );
+        vcl::Window* pWindow = pFirst->GetWindow( WINDOW_PREV );
         if( pWindow )
             pFirst = pWindow;
         else
@@ -2272,14 +2272,14 @@ void RadioButton::ImplCallClick( bool bGrabFocus, sal_uInt16 nFocusFlags )
     mbStateChanged = false;
 }
 
-RadioButton::RadioButton( Window* pParent, WinBits nStyle ) :
+RadioButton::RadioButton( vcl::Window* pParent, WinBits nStyle ) :
     Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
 {
     ImplInitRadioButtonData();
     ImplInit( pParent, nStyle );
 }
 
-RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
+RadioButton::RadioButton( vcl::Window* pParent, const ResId& rResId ) :
     Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
 {
     rResId.SetRT( RSC_RADIOBUTTON );
@@ -2896,7 +2896,7 @@ void CheckBox::ImplInitCheckBoxData()
     mbTriState      = false;
 }
 
-void CheckBox::ImplInit( Window* pParent, WinBits nStyle )
+void CheckBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
     Button::ImplInit( pParent, nStyle, NULL );
@@ -2904,7 +2904,7 @@ void CheckBox::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( true, true, true );
 }
 
-WinBits CheckBox::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
+WinBits CheckBox::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle )
 {
     if ( !(nStyle & WB_NOTABSTOP) )
         nStyle |= WB_TABSTOP;
@@ -2931,7 +2931,7 @@ void CheckBox::ImplInitSettings( bool bFont,
 
     if ( bBackground )
     {
-        Window* pParent = GetParent();
+        vcl::Window* pParent = GetParent();
         if ( !IsControlBackground() &&
             (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) ) )
         {
@@ -3173,14 +3173,14 @@ void CheckBox::ImplCheck()
     Click();
 }
 
-CheckBox::CheckBox( Window* pParent, WinBits nStyle ) :
+CheckBox::CheckBox( vcl::Window* pParent, WinBits nStyle ) :
     Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
 {
     ImplInitCheckBoxData();
     ImplInit( pParent, nStyle );
 }
 
-CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
+CheckBox::CheckBox( vcl::Window* pParent, const ResId& rResId ) :
     Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
 {
     rResId.SetRT( RSC_CHECKBOX );
@@ -3726,13 +3726,13 @@ Size CheckBox::GetOptimalSize() const
     return CalcMinimumSize();
 }
 
-ImageButton::ImageButton( Window* pParent, WinBits nStyle ) :
+ImageButton::ImageButton( vcl::Window* pParent, WinBits nStyle ) :
     PushButton( pParent, nStyle )
 {
     ImplInitStyle();
 }
 
-ImageButton::ImageButton( Window* pParent, const ResId& rResId ) :
+ImageButton::ImageButton( vcl::Window* pParent, const ResId& rResId ) :
     PushButton( pParent, rResId.SetRT( RSC_IMAGEBUTTON ) )
 {
     sal_uLong nObjMask = ReadLongRes();
@@ -3769,7 +3769,7 @@ void ImageButton::ImplInitStyle()
     SetStyle( nStyle );
 }
 
-ImageRadioButton::ImageRadioButton( Window* pParent, WinBits nStyle ) :
+ImageRadioButton::ImageRadioButton( vcl::Window* pParent, WinBits nStyle ) :
     RadioButton( pParent, nStyle )
 {
 }
@@ -3778,7 +3778,7 @@ ImageRadioButton::~ImageRadioButton()
 {
 }
 
-TriStateBox::TriStateBox( Window* pParent, WinBits nStyle ) :
+TriStateBox::TriStateBox( vcl::Window* pParent, WinBits nStyle ) :
     CheckBox( pParent, nStyle )
 {
     EnableTriState( true );
@@ -3788,7 +3788,7 @@ TriStateBox::~TriStateBox()
 {
 }
 
-DisclosureButton::DisclosureButton( Window* pParent, WinBits nStyle ) :
+DisclosureButton::DisclosureButton( vcl::Window* pParent, WinBits nStyle ) :
     CheckBox( pParent, nStyle )
 {
 }

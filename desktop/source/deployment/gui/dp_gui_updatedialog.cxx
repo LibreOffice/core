@@ -116,7 +116,7 @@
 
 class KeyEvent;
 class MouseEvent;
-class Window;
+namespace vcl { class Window; }
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
@@ -487,7 +487,7 @@ bool UpdateDialog::Thread::update(
 // UpdateDialog ----------------------------------------------------------
 UpdateDialog::UpdateDialog(
     uno::Reference< uno::XComponentContext > const & context,
-    Window * parent,
+    vcl::Window * parent,
                            const std::vector<uno::Reference< deployment::XPackage > > &vExtensionList,
     std::vector< dp_gui::UpdateData > * updateData):
     ModalDialog(parent, "UpdateDialog", "desktop/ui/updatedialog.ui"),
@@ -589,7 +589,7 @@ short UpdateDialog::Execute() {
     return ModalDialog::Execute();
 }
 
-UpdateDialog::CheckListBox::CheckListBox( Window* pParent, UpdateDialog & dialog):
+UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & dialog):
     SvxCheckListBox( pParent, WinBits(WB_BORDER) ),
     m_ignoreUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE ) ),
     m_ignoreAllUpdates( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE_ALL ) ),

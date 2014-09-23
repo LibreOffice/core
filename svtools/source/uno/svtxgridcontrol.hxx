@@ -106,7 +106,7 @@ public:
 
 protected:
     // VCLXWindow
-    virtual void    SetWindow( Window* pWindow ) SAL_OVERRIDE;
+    virtual void    SetWindow( vcl::Window* pWindow ) SAL_OVERRIDE;
 
 private:
     void    impl_updateColumnsFromModel_nothrow();

@@ -191,7 +191,7 @@ protected:
     virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const SAL_OVERRIDE;
 
 public:
-    ViewTabListBox_Impl( Window* pParentWin, SvtFileView_Impl* pParent, sal_Int16 nFlags );
+    ViewTabListBox_Impl( vcl::Window* pParentWin, SvtFileView_Impl* pParent, sal_Int16 nFlags );
    virtual ~ViewTabListBox_Impl();
 
     virtual void    Resize() SAL_OVERRIDE;
@@ -563,7 +563,7 @@ OUString CreateExactSizeText( sal_Int64 nSize )
 // class ViewTabListBox_Impl ---------------------------------------------
 
 
-ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
+ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
                                           SvtFileView_Impl* pParent,
                                           sal_Int16 nFlags ) :
 
@@ -1062,7 +1062,7 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 }
 
 // class SvtFileView -----------------------------------------------------
-SvtFileView::SvtFileView( Window* pParent, WinBits nBits,
+SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
                           bool bOnlyFolder, bool bMultiSelection ) :
 
     Control( pParent, nBits )
@@ -1095,7 +1095,7 @@ SvtFileView::~SvtFileView()
     delete pTemp;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtFileView(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtFileView(vcl::Window *pParent,
 VclBuilder::stringmap &rMap)
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
@@ -2312,7 +2312,7 @@ void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
 
 namespace svtools {
 
-QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(Window* pParent, const OUString& rName)
+QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& rName)
     : MessageDialog(pParent, "QueryDeleteDialog", "svt/ui/querydeletedialog.ui")
 {
     get(m_pAllButton, "all");

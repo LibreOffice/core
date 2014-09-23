@@ -374,7 +374,7 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     }
 }
 
-SvxTPView::SvxTPView(Window * pParent)
+SvxTPView::SvxTPView(vcl::Window * pParent)
     : TabPage(pParent, "RedlineViewPage", "svx/ui/redlineviewpage.ui")
     , bEnableAccept(true)
     , bEnableAcceptAll(true)
@@ -524,7 +524,7 @@ IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
     return 0;
 }
 
-SvxTPFilter::SvxTPFilter( Window * pParent)
+SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     : TabPage(pParent, "RedlineFilterPage", "svx/ui/redlinefilterpage.ui")
     , pRedlinTable(NULL)
     , bModified(false)
@@ -1056,7 +1056,7 @@ IMPL_LINK( SvxTPFilter, RefHandle, PushButton*, pRef )
     return 0;
 }
 
-SvxAcceptChgCtr::SvxAcceptChgCtr(Window* pParent)
+SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent)
     : TabControl(pParent, WB_TABSTOP | WB_DIALOGCONTROL)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "svx/ui/redlinecontrol.ui", "RedlineControl");

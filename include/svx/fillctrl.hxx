@@ -67,12 +67,12 @@ public:
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
     void Update(const SfxPoolItem* pState);
-    virtual Window* CreateItemWindow(Window* pParent) SAL_OVERRIDE;
+    virtual vcl::Window* CreateItemWindow(vcl::Window* pParent) SAL_OVERRIDE;
 };
 
 
 
-class FillControl : public Window
+class FillControl : public vcl::Window
 {
 private:
     friend class SvxFillToolBoxControl;
@@ -99,7 +99,7 @@ private:
     void updateLastFillAttrControlSelectEntryPos();
 
 public:
-    FillControl(Window* pParent, WinBits nStyle = 0);
+    FillControl(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~FillControl();
 
     virtual void Resize() SAL_OVERRIDE;

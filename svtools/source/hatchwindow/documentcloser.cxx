@@ -119,7 +119,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
                 xWinPeer->setProperty( OUString( "PluginParent" ),
                                         uno::makeAny( (sal_Int64) 0 ) );
 
-                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                     Dialog::EndAllDialogs( pWindow );
             }

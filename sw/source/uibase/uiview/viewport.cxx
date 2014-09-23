@@ -411,7 +411,7 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
     Rectangle aOldVisArea( m_aVisArea );
     long nDiffY = 0;
 
-    Window* pCareWn = SwViewShell::GetCareWin(GetWrtShell());
+    vcl::Window* pCareWn = SwViewShell::GetCareWin(GetWrtShell());
     if ( pCareWn )
     {
         Rectangle aDlgRect( GetEditWin().PixelToLogic(
@@ -832,13 +832,13 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, bool /*bInner*/ )
     SetBorderPixel( rToFill );
 }
 
-void ViewResizePixel( const Window &rRef,
+void ViewResizePixel( const vcl::Window &rRef,
                     const Point &rOfst,
                     const Size &rSize,
                     const Size &rEditSz,
                     SwScrollbar& rVScrollbar,
                     SwScrollbar& rHScrollbar,
-                    Window& rScrollBarBox,
+                    vcl::Window& rScrollBarBox,
                     SvxRuler* pVRuler,
                     SvxRuler* pHRuler,
                     bool bVRulerRight )

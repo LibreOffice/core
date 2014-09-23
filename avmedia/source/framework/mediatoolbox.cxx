@@ -39,7 +39,7 @@ class MediaToolBoxControl_Impl : public MediaControl
 {
 public:
 
-                            MediaToolBoxControl_Impl( Window& rParent, MediaToolBoxControl& rControl );
+                            MediaToolBoxControl_Impl( vcl::Window& rParent, MediaToolBoxControl& rControl );
                             virtual ~MediaToolBoxControl_Impl();
 
     void                    update() SAL_OVERRIDE;
@@ -52,7 +52,7 @@ private:
 
 
 
-MediaToolBoxControl_Impl::MediaToolBoxControl_Impl( Window& rParent, MediaToolBoxControl& rControl ) :
+MediaToolBoxControl_Impl::MediaToolBoxControl_Impl( vcl::Window& rParent, MediaToolBoxControl& rControl ) :
     MediaControl( &rParent, MEDIACONTROLSTYLE_SINGLELINE ),
     mpToolBoxControl( &rControl )
 {
@@ -129,7 +129,7 @@ void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eSta
 
 
 
-Window* MediaToolBoxControl::CreateItemWindow( Window *pParent )
+vcl::Window* MediaToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return( pParent ? new MediaToolBoxControl_Impl( *pParent, *this ) : NULL );
 }

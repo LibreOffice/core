@@ -69,7 +69,7 @@ class SwNumNamesDlg : public ModalDialog
     DECL_LINK(DoubleClickHdl, void *);
 
 public:
-    SwNumNamesDlg(Window *pParent);
+    SwNumNamesDlg(vcl::Window *pParent);
     void SetUserNames(const OUString *pList[]);
     OUString GetName() const { return m_pFormEdit->GetText(); }
     sal_Int32 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
@@ -121,7 +121,7 @@ IMPL_LINK_NOARG_INLINE_START(SwNumNamesDlg, DoubleClickHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwNumNamesDlg, DoubleClickHdl)
 
-SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
+SwNumNamesDlg::SwNumNamesDlg(vcl::Window *pParent)
     : ModalDialog(pParent, "NumberingNameDialog",
         "modules/swriter/ui/numberingnamedialog.ui")
 {
@@ -145,7 +145,7 @@ static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
 }
 
 sal_uInt16 SwOutlineTabDialog::nNumLevel = 1;
-SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent, const SfxItemSet* pSwItemSet,
+SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* pSwItemSet,
     SwWrtShell &rSh)
     : SfxTabDialog(pParent, "OutlineNumberingDialog",
         "modules/swriter/ui/outlinenumbering.ui", pSwItemSet)
@@ -401,7 +401,7 @@ short SwOutlineTabDialog::Ok()
     return RET_OK;
 }
 
-SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent,
+SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(vcl::Window* pParent,
     const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OutlineNumberingPage",
         "modules/swriter/ui/outlinenumberingpage.ui", &rSet)
@@ -826,7 +826,7 @@ void SwOutlineSettingsTabPage::Reset( const SfxItemSet* rSet )
     ActivatePage(*rSet);
 }
 
-SfxTabPage* SwOutlineSettingsTabPage::Create( Window* pParent,
+SfxTabPage* SwOutlineSettingsTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SwOutlineSettingsTabPage(pParent, *rAttrSet);
@@ -882,7 +882,7 @@ static long lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, long nXS
     return nRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumberingPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeNumberingPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new NumberingPreview(pParent);
 }

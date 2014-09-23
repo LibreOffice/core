@@ -200,7 +200,7 @@ namespace sfx2
     //= TaskPaneDockingWindow
 
 
-    TaskPaneDockingWindow::TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper, Window* i_pParent, WinBits i_nBits )
+    TaskPaneDockingWindow::TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper, vcl::Window* i_pParent, WinBits i_nBits )
         :TitledDockingWindow( i_pBindings, &i_rWrapper, i_pParent, i_nBits )
         ,m_aTaskPane( GetContentWindow(), lcl_getFrame( i_pBindings ) )
         ,m_aPaneController( m_aTaskPane, *this )
@@ -235,7 +235,7 @@ namespace sfx2
     SFX_IMPL_DOCKINGWINDOW( TaskPaneWrapper, SID_TASKPANE );
 
 
-    TaskPaneWrapper::TaskPaneWrapper( Window* i_pParent, sal_uInt16 i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
+    TaskPaneWrapper::TaskPaneWrapper( vcl::Window* i_pParent, sal_uInt16 i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
         :SfxChildWindow( i_pParent, i_nId )
     {
         pWindow = new TaskPaneDockingWindow( i_pBindings, *this, i_pParent,
@@ -302,7 +302,7 @@ namespace sfx2
         virtual OUString GetDisplayName() const SAL_OVERRIDE;
         virtual Image GetImage() const SAL_OVERRIDE;
         virtual OString GetHelpID() const SAL_OVERRIDE;
-        virtual void Activate( Window& i_rParentWindow ) SAL_OVERRIDE;
+        virtual void Activate( vcl::Window& i_rParentWindow ) SAL_OVERRIDE;
         virtual void Deactivate() SAL_OVERRIDE;
         virtual void SetSizePixel( const Size& i_rPanelWindowSize ) SAL_OVERRIDE;
         virtual void GrabFocus() SAL_OVERRIDE;
@@ -317,7 +317,7 @@ namespace sfx2
         virtual ~CustomToolPanel();
 
     private:
-        bool    impl_ensureToolPanelWindow( Window& i_rPanelParentWindow );
+        bool    impl_ensureToolPanelWindow( vcl::Window& i_rPanelParentWindow );
         void    impl_updatePanelConfig( const bool i_bVisible ) const;
 
     private:
@@ -350,7 +350,7 @@ namespace sfx2
     }
 
 
-    bool CustomToolPanel::impl_ensureToolPanelWindow( Window& i_rPanelParentWindow )
+    bool CustomToolPanel::impl_ensureToolPanelWindow( vcl::Window& i_rPanelParentWindow )
     {
         if ( m_bAttemptedCreation )
             return m_aCustomPanel.is();
@@ -414,7 +414,7 @@ namespace sfx2
     }
 
 
-    void CustomToolPanel::Activate( Window& i_rParentWindow )
+    void CustomToolPanel::Activate( vcl::Window& i_rParentWindow )
     {
         ENSURE_OR_RETURN_VOID( impl_ensureToolPanelWindow( i_rParentWindow ), "no panel to activate!" );
 
@@ -722,7 +722,7 @@ namespace sfx2
     //= ModuleTaskPane
 
 
-    ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame )
+    ModuleTaskPane::ModuleTaskPane( vcl::Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame )
         :Window( &i_rParentWindow, WB_DIALOGCONTROL )
         ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame, NULL ) )
     {

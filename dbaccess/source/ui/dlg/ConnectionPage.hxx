@@ -55,7 +55,7 @@ namespace dbaui
         DECL_LINK(OnEditModified,Edit*);
 
     public:
-        static  SfxTabPage* Create( Window* pParent, const SfxItemSet* _rAttrSet );
+        static  SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
@@ -68,7 +68,7 @@ namespace dbaui
             affect the type may be changed (compared to the previous URL).</p>
         */
     private:
-        OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
+        OConnectionTabPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
             // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~OConnectionTabPage();
 

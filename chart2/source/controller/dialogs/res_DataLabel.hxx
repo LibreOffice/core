@@ -37,7 +37,7 @@ namespace chart
 class DataLabelResources
 {
 public:
-    DataLabelResources( VclBuilderContainer* pWindow, Window* pParent, const SfxItemSet& rInAttrs );
+    DataLabelResources( VclBuilderContainer* pWindow, vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~DataLabelResources();
 
     bool FillItemSet(SfxItemSet* rOutAttrs) const;
@@ -83,7 +83,7 @@ private:
     bool                m_bSourceFormatForValue;
     bool                m_bSourceFormatForPercent;
 
-    Window*             m_pWindow;
+    vcl::Window*             m_pWindow;
     SfxItemPool*        m_pPool;
 
     DECL_LINK(NumberFormatDialogHdl, PushButton * );

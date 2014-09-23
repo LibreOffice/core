@@ -80,7 +80,7 @@ static const sal_uInt16 pValueRanges[] =
     0
 };
 
-ScValidationDlg::ScValidationDlg(Window* pParent, const SfxItemSet* pArgSet,
+ScValidationDlg::ScValidationDlg(vcl::Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh, SfxBindings *pB /*= NULL*/)
     : ScValidationDlgBase(pParent ? pParent : SfxGetpApp()->GetTopWindow(),
         "ValidationDialog", "modules/scalc/ui/validationdialog.ui", pArgSet, pB)
@@ -124,7 +124,7 @@ void ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, formula:
 {
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
-        Window *pNewParent = pValidationDlg->get_refinput_shrink_parent();
+        vcl::Window *pNewParent = pValidationDlg->get_refinput_shrink_parent();
         if( pEdit == m_pRefEdit && m_pRefEdit->GetParent() != pNewParent )
         {
             m_pRefEdit->SetParent(pNewParent);
@@ -290,7 +290,7 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
 
 } // namespace
 
-ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet )
+ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet )
     : SfxTabPage( pParent, "ValidationCriteriaPage",
         "modules/scalc/ui/validationcriteriapage.ui", &rArgSet)
     , maStrMin(ScResId(SCSTR_VALID_MINIMUM))
@@ -356,7 +356,7 @@ void ScTPValidationValue::Init()
     CheckHdl( NULL );
 }
 
-SfxTabPage* ScTPValidationValue::Create( Window* pParent, const SfxItemSet* rArgSet )
+SfxTabPage* ScTPValidationValue::Create( vcl::Window* pParent, const SfxItemSet* rArgSet )
 {
     return( new ScTPValidationValue( pParent, *rArgSet ) );
 }
@@ -467,7 +467,7 @@ void ScTPValidationValue::SetSecondFormula( const OUString& rFmlaStr )
 
 ScValidationDlg * ScTPValidationValue::GetValidationDlg()
 {
-    if( Window *pParent = GetParent() )
+    if( vcl::Window *pParent = GetParent() )
         do{
             if ( dynamic_cast<ScValidationDlg*>( pParent ) )
                 return static_cast< ScValidationDlg * >( pParent );
@@ -487,7 +487,7 @@ void ScTPValidationValue::SetupRefDlg()
             pValidationDlg->SetRefInputStartPreHdl( (ScRefHandlerHelper::PINPUTSTARTDLTYPE)( &ScTPValidationValue::RefInputStartPreHdl ) );
             pValidationDlg->SetRefInputDonePostHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::RefInputDonePostHdl ) );
 
-            Window *pLabel = NULL;
+            vcl::Window *pLabel = NULL;
 
             if ( m_pEdMax->IsVisible() )
             {
@@ -544,7 +544,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl)
     return 0;
 }
 
-IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
+IMPL_LINK( ScTPValidationValue, KillFocusHdl, vcl::Window *, pWnd )
 {
     if( pWnd == m_pRefEdit || pWnd == m_pBtnRef )
         if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
@@ -627,7 +627,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl)
 
 // Input Help Page
 
-ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
+ScTPValidationHelp::ScTPValidationHelp( vcl::Window*         pParent,
                                           const SfxItemSet& rArgSet )
 
     :   SfxTabPage      ( pParent,
@@ -651,7 +651,7 @@ void ScTPValidationHelp::Init()
     pTsbHelp->EnableTriState( false );
 }
 
-SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
+SfxTabPage* ScTPValidationHelp::Create( vcl::Window* pParent,
                                          const SfxItemSet*  rArgSet )
 {
     return ( new ScTPValidationHelp( pParent, *rArgSet ) );
@@ -688,7 +688,7 @@ bool ScTPValidationHelp::FillItemSet( SfxItemSet* rArgSet )
 
 // Error Alert Page
 
-ScTPValidationError::ScTPValidationError( Window*           pParent,
+ScTPValidationError::ScTPValidationError( vcl::Window*           pParent,
                                           const SfxItemSet& rArgSet )
 
     :   SfxTabPage      ( pParent,
@@ -721,7 +721,7 @@ void ScTPValidationError::Init()
     SelectActionHdl( NULL );
 }
 
-SfxTabPage* ScTPValidationError::Create( Window*    pParent,
+SfxTabPage* ScTPValidationError::Create( vcl::Window*    pParent,
                                          const SfxItemSet*  rArgSet )
 {
     return ( new ScTPValidationError( pParent, *rArgSet ) );
@@ -778,7 +778,7 @@ IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
 
 IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
 {
-    Window* pOld = Application::GetDefDialogParent();
+    vcl::Window* pOld = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
     // Use static SfxApplication method to bring up selector dialog for
@@ -872,7 +872,7 @@ bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
     return true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScRefButtonEx(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScRefButtonEx(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ScTPValidationValue::ScRefButtonEx(pParent, 0);
 }
@@ -893,7 +893,7 @@ void ScTPValidationValue::OnClick( Button *pBtn )
 
 bool ScValidationDlg::IsChildFocus()
 {
-    if ( const Window *pWin = Application::GetFocusWindow() )
+    if ( const vcl::Window *pWin = Application::GetFocusWindow() )
         while( NULL != ( pWin = pWin->GetParent() ) )
             if( pWin == this )
                 return true;

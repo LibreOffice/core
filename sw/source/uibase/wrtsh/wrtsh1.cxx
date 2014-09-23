@@ -1593,7 +1593,7 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
 
 // Some kind of controlled copy ctor
 
-SwWrtShell::SwWrtShell( SwWrtShell& rSh, Window *_pWin, SwView &rShell )
+SwWrtShell::SwWrtShell( SwWrtShell& rSh, vcl::Window *_pWin, SwView &rShell )
     : SwFEShell( rSh, _pWin ),
      COMMON_INI_LIST
 {
@@ -1610,7 +1610,7 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, Window *_pWin, SwView &rShell )
     }
 }
 
-SwWrtShell::SwWrtShell( SwDoc& rDoc, Window *_pWin, SwView &rShell,
+SwWrtShell::SwWrtShell( SwDoc& rDoc, vcl::Window *_pWin, SwView &rShell,
                         const SwViewOption *pViewOpt )
     : SwFEShell( rDoc, _pWin, pViewOpt),
       COMMON_INI_LIST
@@ -1752,7 +1752,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                 //Actions have to be closed while the dialog is showing
                 EndAllAction();
 
-                Window* pParent = &GetView().GetViewFrame()->GetWindow();
+                vcl::Window* pParent = &GetView().GetViewFrame()->GetWindow();
                 short nResult;
                 if (bHeader)
                     nResult = DeleteHeaderDialog(pParent).Execute();

@@ -146,7 +146,7 @@ void fillRepeatComboBox( ListBox* pBox )
     pBox->SetEntryData( pBox->InsertEntry( aEndOfSlide ), (void*)((sal_Int32)-2) );
 }
 
-CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase,
+CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
                                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                           const Size& rMinSize )
 :   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame ),
@@ -2256,9 +2256,9 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     }
 }
 
-::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
+::vcl::Window * createCustomAnimationPanel( ::vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
 {
-    ::Window* pWindow = 0;
+    ::vcl::Window* pWindow = 0;
 
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )

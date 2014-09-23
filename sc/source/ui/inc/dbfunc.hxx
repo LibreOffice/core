@@ -42,7 +42,7 @@ private:
     void GetSelectedMemberList(ScDPUniqueStringSet& rEntries, long& rDimension);
 
 public:
-                    ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
+                    ScDBFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
     virtual         ~ScDBFunc();
 
                     // only UISort repeat the partial results if necessary

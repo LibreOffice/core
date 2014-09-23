@@ -83,8 +83,8 @@ namespace svt { namespace table
                             bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle ) SAL_OVERRIDE;
-        virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect) SAL_OVERRIDE;
-        virtual void    HideCellCursor( Window& _rView, const Rectangle& _rCursorRect) SAL_OVERRIDE;
+        virtual void    ShowCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) SAL_OVERRIDE;
+        virtual void    HideCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) SAL_OVERRIDE;
         virtual bool    FitsIntoCell(
                             ::com::sun::star::uno::Any const & i_cellContent,
                             ColPos const i_colPos, RowPos const i_rowPos,

@@ -67,19 +67,19 @@ class SmPrintOptionsTabPage : public SfxTabPage
     virtual void    Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage* Create(Window *pWindow, const SfxItemSet &rSet);
+    static SfxTabPage* Create(vcl::Window *pWindow, const SfxItemSet &rSet);
 
-    SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &rOptions);
+    SmPrintOptionsTabPage(vcl::Window *pParent, const SfxItemSet &rOptions);
 };
 
 /**************************************************************************/
 
-class SmShowFont : public Window
+class SmShowFont : public vcl::Window
 {
     virtual void Paint(const Rectangle&) SAL_OVERRIDE;
 
 public:
-    SmShowFont(Window *pParent, WinBits nStyle)
+    SmShowFont(vcl::Window *pParent, WinBits nStyle)
         : Window(pParent, nStyle)
     {
     }
@@ -106,7 +106,7 @@ class SmFontDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
-    SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
+    SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
 
     const vcl::Font& GetFont() const { return Face; }
     void        SetFont(const vcl::Font &rFont);
@@ -127,7 +127,7 @@ class SmFontSizeDialog : public ModalDialog
     DECL_LINK(DefaultButtonClickHdl, Button *);
 
 public:
-    SmFontSizeDialog(Window *pParent);
+    SmFontSizeDialog(vcl::Window *pParent);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -154,7 +154,7 @@ class SmFontTypeDialog : public ModalDialog
     DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
-    SmFontTypeDialog(Window *pParent, OutputDevice *pFntListDevice);
+    SmFontTypeDialog(vcl::Window *pParent, OutputDevice *pFntListDevice);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -221,7 +221,7 @@ class SmDistanceDialog : public ModalDialog
     void    SetCategory(sal_uInt16 Category);
 
 public:
-    SmDistanceDialog(Window *pParent);
+    SmDistanceDialog(vcl::Window *pParent);
     virtual ~SmDistanceDialog();
 
     void ReadFrom(const SmFormat &rFormat);
@@ -245,7 +245,7 @@ class SmAlignDialog : public ModalDialog
     DECL_LINK(DefaultButtonClickHdl, Button *);
 
 public:
-    SmAlignDialog(Window *pParent);
+    SmAlignDialog(vcl::Window *pParent);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
@@ -275,7 +275,7 @@ class SmShowSymbolSetWindow : public Control
 
     DECL_LINK( ScrollHdl, ScrollBar* );
 public:
-    SmShowSymbolSetWindow(Window *pParent, WinBits nStyle);
+    SmShowSymbolSetWindow(vcl::Window *pParent, WinBits nStyle);
     void setScrollbar(ScrollBar *pVScrollBar);
     void calccols();
     void    SelectSymbol(sal_uInt16 nSymbol);
@@ -292,7 +292,7 @@ class SmShowSymbolSet : public VclHBox
     Size        aOutputSize;
 
 public:
-    SmShowSymbolSet(Window *pParent);
+    SmShowSymbolSet(vcl::Window *pParent);
 
     void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet) { aSymbolWindow.SetSymbolSet(rSymbolSet); }
 
@@ -316,7 +316,7 @@ class SmShowSymbol : public Control
     void setFontSize(vcl::Font &rFont) const;
 
 public:
-    SmShowSymbol(Window *pParent, WinBits nStyle)
+    SmShowSymbol(vcl::Window *pParent, WinBits nStyle)
         : Control(pParent, nStyle)
     {
     }
@@ -360,7 +360,7 @@ class SmSymbolDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
-    SmSymbolDialog(Window * pParent, OutputDevice *pFntListDevice,
+    SmSymbolDialog(vcl::Window * pParent, OutputDevice *pFntListDevice,
             SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell);
 
     bool    SelectSymbolSet(const OUString &rSymbolSetName);
@@ -376,7 +376,7 @@ class SmShowChar : public Control
     virtual void    Resize() SAL_OVERRIDE;
 
 public:
-    SmShowChar(Window *pParent, WinBits nStyle)
+    SmShowChar(vcl::Window *pParent, WinBits nStyle)
     : Control(pParent, nStyle)
     {
     }
@@ -453,7 +453,7 @@ class SmSymDefineDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
-    SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
+    SmSymDefineDialog(vcl::Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
     virtual ~SmSymDefineDialog();
 
     using OutputDevice::SetFont;

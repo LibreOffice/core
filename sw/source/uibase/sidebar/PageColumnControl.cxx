@@ -32,7 +32,7 @@
 namespace sw { namespace sidebar {
 
 PageColumnControl::PageColumnControl(
-    Window* pParent,
+    vcl::Window* pParent,
     PagePropertyPanel& rPanel,
     const sal_uInt16 nColumnType,
     const bool bLandscape )

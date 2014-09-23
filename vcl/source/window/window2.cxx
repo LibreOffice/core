@@ -47,6 +47,8 @@
 
 using namespace com::sun::star;
 
+namespace vcl {
+
 void Window::ShowFocus( const Rectangle& rRect )
 {
     if( mpWindowImpl->mbInShowFocus )
@@ -934,7 +936,7 @@ void Window::EnableDocking( bool bEnable )
 }
 
 // retrieves the list of owner draw decorated windows for this window hiearchy
-::std::vector<Window *>& Window::ImplGetOwnerDrawList()
+::std::vector<vcl::Window *>& Window::ImplGetOwnerDrawList()
 {
     return ImplGetTopmostFrameWindow()->mpWindowImpl->mpFrameData->maOwnerDrawList;
 }
@@ -961,7 +963,7 @@ const OString& Window::GetUniqueId() const
 
 // --------- old inline methods ---------------
 
-Window* Window::ImplGetWindow()
+vcl::Window* Window::ImplGetWindow()
 {
     if ( mpWindowImpl->mpClientWindow )
         return mpWindowImpl->mpClientWindow;
@@ -979,22 +981,22 @@ SalFrame* Window::ImplGetFrame() const
     return mpWindowImpl->mpFrame;
 }
 
-Window* Window::ImplGetParent() const
+vcl::Window* Window::ImplGetParent() const
 {
     return mpWindowImpl->mpParent;
 }
 
-Window* Window::ImplGetClientWindow() const
+vcl::Window* Window::ImplGetClientWindow() const
 {
     return mpWindowImpl->mpClientWindow;
 }
 
-Window* Window::ImplGetBorderWindow() const
+vcl::Window* Window::ImplGetBorderWindow() const
 {
     return mpWindowImpl->mpBorderWindow;
 }
 
-Window* Window::ImplGetFirstOverlapWindow()
+vcl::Window* Window::ImplGetFirstOverlapWindow()
 {
     if ( mpWindowImpl->mbOverlapWin )
         return this;
@@ -1002,7 +1004,7 @@ Window* Window::ImplGetFirstOverlapWindow()
         return mpWindowImpl->mpOverlapWindow;
 }
 
-const Window* Window::ImplGetFirstOverlapWindow() const
+const vcl::Window* Window::ImplGetFirstOverlapWindow() const
 {
     if ( mpWindowImpl->mbOverlapWin )
         return this;
@@ -1010,7 +1012,7 @@ const Window* Window::ImplGetFirstOverlapWindow() const
         return mpWindowImpl->mpOverlapWindow;
 }
 
-Window* Window::ImplGetFrameWindow() const
+vcl::Window* Window::ImplGetFrameWindow() const
 {
     return mpWindowImpl->mpFrameWindow;
 }
@@ -1097,7 +1099,7 @@ WindowType Window::GetType() const
 
 Dialog* Window::GetParentDialog() const
 {
-    const Window *pWindow = this;
+    const vcl::Window *pWindow = this;
 
     while( pWindow )
     {
@@ -1210,7 +1212,7 @@ bool Window::IsInPaint() const
     return mpWindowImpl->mbInPaint;
 }
 
-Window* Window::GetParent() const
+vcl::Window* Window::GetParent() const
 {
     return mpWindowImpl->mpRealParent;
 }
@@ -1401,11 +1403,11 @@ void Window::SetOutputSizePixel( const Size& rNewSize )
 //as dirty for the size remains unchanged, but layout changed circumstances
 namespace
 {
-    bool queue_ungrouped_resize(Window *pOrigWindow)
+    bool queue_ungrouped_resize(vcl::Window *pOrigWindow)
     {
         bool bSomeoneCares = false;
 
-        Window *pWindow = pOrigWindow->GetParent();
+        vcl::Window *pWindow = pOrigWindow->GetParent();
         if (pWindow)
         {
             if (isContainerWindow(*pWindow))
@@ -1435,11 +1437,11 @@ void Window::queue_resize(StateChangedType eReason)
     }
     if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VCL_SIZE_GROUP_NONE)
     {
-        std::set<Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
-        for (std::set<Window*>::iterator aI = rWindows.begin(),
+        std::set<vcl::Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
+        for (std::set<vcl::Window*>::iterator aI = rWindows.begin(),
             aEnd = rWindows.end(); aI != aEnd; ++aI)
         {
-            Window *pOther = *aI;
+            vcl::Window *pOther = *aI;
             if (pOther == this)
                 continue;
             queue_ungrouped_resize(pOther);
@@ -1450,7 +1452,7 @@ void Window::queue_resize(StateChangedType eReason)
     {
         //fdo#57090 force a resync of the borders of the borderwindow onto this
         //window in case they have changed
-        Window* pBorderWindow = ImplGetBorderWindow();
+        vcl::Window* pBorderWindow = ImplGetBorderWindow();
         if (pBorderWindow)
             pBorderWindow->Resize();
     }
@@ -1727,11 +1729,11 @@ Size Window::get_preferred_size() const
         if (eMode != VCL_SIZE_GROUP_NONE)
         {
             const bool bIgnoreInHidden = pWindowImpl->m_xSizeGroup->get_ignore_hidden();
-            const std::set<Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
-            for (std::set<Window*>::const_iterator aI = rWindows.begin(),
+            const std::set<vcl::Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
+            for (std::set<vcl::Window*>::const_iterator aI = rWindows.begin(),
                 aEnd = rWindows.end(); aI != aEnd; ++aI)
             {
-                const Window *pOther = *aI;
+                const vcl::Window *pOther = *aI;
                 if (pOther == this)
                     continue;
                 if (bIgnoreInHidden && !pOther->IsVisible())
@@ -2034,5 +2036,8 @@ std::vector<FixedText*> Window::list_mnemonic_labels() const
 {
     return mpWindowImpl->m_aMnemonicLabels;
 }
+
+} /* namespace vcl */
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,7 +45,7 @@ namespace dbmm
     class MacroMigrationPage : public MacroMigrationPage_Base
     {
     public:
-        MacroMigrationPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
+        MacroMigrationPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
 
     protected:
         const MacroMigrationDialog& getDialog() const;
@@ -56,7 +56,7 @@ namespace dbmm
     class PreparationPage : public MacroMigrationPage
     {
     public:
-        PreparationPage(Window *pParent);
+        PreparationPage(vcl::Window *pParent);
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
@@ -100,7 +100,7 @@ namespace dbmm
     class ProgressPage : public MacroMigrationPage, public IMigrationProgress
     {
     public:
-        ProgressPage(Window *pParent);
+        ProgressPage(vcl::Window *pParent);
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
@@ -131,7 +131,7 @@ namespace dbmm
     class ResultPage : public MacroMigrationPage
     {
     public:
-        ResultPage(Window *pParent);
+        ResultPage(vcl::Window *pParent);
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 

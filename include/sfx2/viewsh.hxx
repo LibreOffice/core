@@ -40,7 +40,7 @@
 class SfxBaseController;
 class Size;
 class Fraction;
-class Window;
+namespace vcl { class Window; }
 class KeyEvent;
 class WorkWindow;
 class SvBorder;
@@ -137,7 +137,7 @@ friend class SfxPrinterController;
     SfxInPlaceClientList*       pIPClientList;
     SfxViewFrame*               pFrame;
     SfxShell*                   pSubShell;
-    Window*                     pWindow;
+    vcl::Window*                     pWindow;
     bool                        bNoNewWindow;
 
 protected:
@@ -176,7 +176,7 @@ public:
 
     SfxInPlaceClient*           GetIPClient() const;
     SfxInPlaceClient*           GetUIActiveClient() const;
-    SfxInPlaceClient*           FindIPClient( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  xObj, Window *pObjParentWin ) const;
+    SfxInPlaceClient*           FindIPClient( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  xObj, vcl::Window *pObjParentWin ) const;
 
     virtual ErrCode             DoVerb(long nVerb);
 
@@ -218,8 +218,8 @@ public:
     bool                        Escape();
 
     // Viewing Interface
-    Window*                     GetWindow() const { return pWindow; }
-    void                        SetWindow( Window *pViewPort );
+    vcl::Window*                     GetWindow() const { return pWindow; }
+    void                        SetWindow( vcl::Window *pViewPort );
     virtual void                AdjustPosSizePixel( const Point &rOfs, const Size &rSize );
     const SvBorder&             GetBorderPixel() const;
     void                        SetBorderPixel( const SvBorder &rBorder );
@@ -230,7 +230,7 @@ public:
     virtual SfxPrinter*         GetPrinter( bool bCreate = false );
     virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual bool                HasPrintOptionsPage() const;
-    virtual SfxTabPage*         CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
+    virtual SfxTabPage*         CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions );
     virtual JobSetup            GetJobSetup() const;
     Printer*                    GetActivePrinter() const;
 

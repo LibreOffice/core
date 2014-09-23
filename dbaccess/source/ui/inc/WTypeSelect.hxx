@@ -37,7 +37,7 @@ namespace dbaui
     class OWizTypeSelectControl : public OFieldDescControl
     {
     protected:
-        Window*             m_pParentTabPage;
+        vcl::Window*             m_pParentTabPage;
         virtual void        ActivateAggregate( EControlType eType ) SAL_OVERRIDE;
         virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
 
@@ -51,7 +51,7 @@ namespace dbaui
         virtual OUString            getAutoIncrementValue() const SAL_OVERRIDE;
 
     public:
-        OWizTypeSelectControl(Window* pParent, Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=NULL);
+        OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=NULL);
         virtual ~OWizTypeSelectControl();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
@@ -69,15 +69,15 @@ namespace dbaui
                                                 bool _bSet = false);
     protected:
         virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        Window*                 m_pParentTabPage;
+        vcl::Window*                 m_pParentTabPage;
     public:
-        OWizTypeSelectList( Window* pParent, WinBits nStyle = WB_BORDER )
+        OWizTypeSelectList( vcl::Window* pParent, WinBits nStyle = WB_BORDER )
             : MultiListBox(pParent,nStyle)
             , m_bPKey(false)
             , m_pParentTabPage(NULL)
             {}
         void                    SetPKey(bool bPKey) { m_bPKey = bPKey; }
-        void                    SetParentTabPage(Window* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
+        void                    SetParentTabPage(vcl::Window* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
     };
 
     // Wizard Page: OWizTypeSelect
@@ -116,14 +116,14 @@ namespace dbaui
         virtual bool            LeavePage() SAL_OVERRIDE;
         virtual OUString        GetTitle() const SAL_OVERRIDE;
 
-        OWizTypeSelect(Window* pParent, SvStream* _pStream = NULL );
+        OWizTypeSelect(vcl::Window* pParent, SvStream* _pStream = NULL );
         virtual ~OWizTypeSelect();
 
         inline void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
         inline void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 
-    typedef OWizTypeSelect* (*TypeSelectionPageFactory)( Window*, SvStream& );
+    typedef OWizTypeSelect* (*TypeSelectionPageFactory)( vcl::Window*, SvStream& );
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WTYPESELECT_HXX
 

@@ -78,7 +78,7 @@ class SwAutoFormatDlg : public SfxModalDialog
     DECL_LINK( SelFmtHdl, void * );
 
 public:
-    SwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
+    SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                         bool bSetAutoFmt = true,
                         const SwTableAutoFmt* pSelFmt = 0 );
     virtual ~SwAutoFormatDlg();

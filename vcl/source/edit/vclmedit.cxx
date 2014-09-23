@@ -33,7 +33,7 @@
 #include <vcl/settings.hxx>
 #include <boost/scoped_ptr.hpp>
 
-class TextWindow : public Window
+class TextWindow : public vcl::Window
 {
 private:
     ExtTextEngine*  mpExtTextEngine;
@@ -47,7 +47,7 @@ private:
     bool            mbTextSelectable;
 
 public:
-                    TextWindow( Window* pParent );
+                    TextWindow( vcl::Window* pParent );
                     virtual ~TextWindow();
 
     ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
@@ -703,7 +703,7 @@ bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
     return bDone;
 }
 
-TextWindow::TextWindow( Window* pParent ) : Window( pParent )
+TextWindow::TextWindow( vcl::Window* pParent ) : Window( pParent )
 {
     mbInMBDown = false;
     mbFocusSelectionHide = false;
@@ -926,7 +926,7 @@ void TextWindow::LoseFocus()
         mpExtTextView->SetPaintSelection( false );
 }
 
-VclMultiLineEdit::VclMultiLineEdit( Window* pParent, WinBits nWinStyle )
+VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
     : Edit( pParent, nWinStyle )
 {
     SetType( WINDOW_MULTILINEEDIT );
@@ -1189,7 +1189,7 @@ Size VclMultiLineEdit::CalcMinimumSize() const
     Size aSz = pImpVclMEdit->CalcMinimumSize();
 
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
+    ((vcl::Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.Width() += nLeft+nRight;
     aSz.Height() += nTop+nBottom;
 
@@ -1200,7 +1200,7 @@ Size VclMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
 {
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
+    ((vcl::Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
 
     // center vertically for whole lines
 
@@ -1221,7 +1221,7 @@ Size VclMultiLineEdit::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) c
     Size aSz = pImpVclMEdit->CalcBlockSize( nColumns, nLines );
 
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
+    ((vcl::Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.Width() += nLeft+nRight;
     aSz.Height() += nTop+nBottom;
     return aSz;

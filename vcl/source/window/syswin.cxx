@@ -96,7 +96,7 @@ SystemWindow::SystemWindow(WindowType nType)
     Init();
 }
 
-void SystemWindow::loadUI(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
     const css::uno::Reference<css::frame::XFrame> &rFrame)
 {
     mbIsDefferedInit = true;
@@ -119,7 +119,7 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
         MenuBar* pMBar = mpMenuBar;
         if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
         {
-            Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
+            vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
             if( pWin && pWin->IsSystemWindow() )
                 pMBar = ((SystemWindow*)pWin)->GetMenuBar();
         }
@@ -148,7 +148,7 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
             TaskPaneList *pTList = mpImplData->mpTaskPaneList;
             if( !pTList && ( GetType() == WINDOW_FLOATINGWINDOW ) )
             {
-                Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
+                vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
                 if( pWin && pWin->IsSystemWindow() )
                     pTList = ((SystemWindow*)pWin)->mpImplData->mpTaskPaneList;
             }
@@ -156,7 +156,7 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
             {
                 // search topmost system window which is the one to handle dialog/toolbar cycling
                 SystemWindow *pSysWin = this;
-                Window *pWin = this;
+                vcl::Window *pWin = this;
                 while( pWin )
                 {
                     pWin = pWin->GetParent();
@@ -182,7 +182,7 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
         MenuBar* pMBar = mpMenuBar;
         if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
         {
-            Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
+            vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
             if ( pWin && pWin->IsSystemWindow() )
                 pMBar = ((SystemWindow*)pWin)->GetMenuBar();
         }
@@ -205,7 +205,7 @@ bool SystemWindow::Close()
         return false;
 
     // Is Window not closeable, ignore close
-    Window*     pBorderWin = ImplGetBorderWindow();
+    vcl::Window*     pBorderWin = ImplGetBorderWindow();
     WinBits     nStyle;
     if ( pBorderWin )
         nStyle = pBorderWin->GetStyle();
@@ -241,7 +241,7 @@ void SystemWindow::SetRepresentedURL( const OUString& i_rURL )
     mpImplData->maRepresentedURL = i_rURL;
     if ( !mbSysChild && bChanged )
     {
-        const Window* pWindow = this;
+        const vcl::Window* pWindow = this;
         while ( pWindow->mpWindowImpl->mpBorderWindow )
             pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
@@ -259,7 +259,7 @@ void SystemWindow::SetIcon( sal_uInt16 nIcon )
 
     if ( !mbSysChild )
     {
-        const Window* pWindow = this;
+        const vcl::Window* pWindow = this;
         while ( pWindow->mpWindowImpl->mpBorderWindow )
             pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
@@ -273,7 +273,7 @@ void SystemWindow::EnableSaveBackground( bool bSave )
     if( ImplGetSVData()->maWinData.mbNoSaveBackground )
         bSave = false;
 
-    Window* pWindow = this;
+    vcl::Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
     if ( pWindow->mpWindowImpl->mbOverlapWin && !pWindow->mpWindowImpl->mbFrame )
@@ -286,7 +286,7 @@ void SystemWindow::EnableSaveBackground( bool bSave )
 
 bool SystemWindow::IsSaveBackgroundEnabled() const
 {
-    const Window* pWindow = this;
+    const vcl::Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
     if ( pWindow->mpWindowImpl->mpOverlapData )
@@ -567,7 +567,7 @@ static OString ImplWindowStateToStr(const WindowStateData& rData)
     return rStrBuf.makeStringAndClear();
 }
 
-void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin )
+void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window* i_pConfigureWin )
 {
     Rectangle aScreenRect;
     if( !Application::IsUnifiedDisplay() )
@@ -609,7 +609,7 @@ void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, lo
         bMove = true;
         io_rY = aScreenRect.Bottom() - i_nHeight;
     }
-    Window* pParent = i_pConfigureWin->GetParent();
+    vcl::Window* pParent = i_pConfigureWin->GetParent();
     if( bMove && pParent )
     {
         // calculate absolute screen pos here, since that is what is contained in WindowState
@@ -631,7 +631,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
     if ( mbSysChild )
         return;
 
-    Window* pWindow = this;
+    vcl::Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
@@ -675,7 +675,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             {
                 Rectangle aDesktop = GetDesktopRectPixel();
                 ImplSVData *pSVData = ImplGetSVData();
-                Window *pWin = pSVData->maWinData.mpFirstFrame;
+                vcl::Window *pWin = pSVData->maWinData.mpFirstFrame;
                 bool bWrapped = false;
                 while( pWin )
                 {
@@ -784,7 +784,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
     if ( mbSysChild )
         return;
 
-    const Window* pWindow = this;
+    const vcl::Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
@@ -884,8 +884,8 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar, const css::uno::Reference<css::
     if ( mpMenuBar != pMenuBar )
     {
         MenuBar* pOldMenuBar = mpMenuBar;
-        Window*  pOldWindow = NULL;
-        Window*  pNewWindow=NULL;
+        vcl::Window*  pOldWindow = NULL;
+        vcl::Window*  pNewWindow=NULL;
         mpMenuBar = pMenuBar;
 
         if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
@@ -956,7 +956,7 @@ void SystemWindow::SetMenuBarMode( sal_uInt16 nMode )
     }
 }
 
-bool SystemWindow::ImplIsInTaskPaneList( Window* pWin )
+bool SystemWindow::ImplIsInTaskPaneList( vcl::Window* pWin )
 {
     if( mpImplData && mpImplData->mpTaskPaneList )
         return mpImplData->mpTaskPaneList->IsInList( pWin );

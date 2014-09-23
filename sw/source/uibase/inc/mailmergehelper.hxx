@@ -51,14 +51,14 @@ namespace SwMailMergeHelper
                             com::sun::star::uno::Reference< com::sun::star::mail::XMailService >&  xInMailService,
                             const OUString& rInMailServerPassword,
                             const OUString& rOutMailServerPassword,
-                            Window* pDialogParentWindow = 0 );
+                            vcl::Window* pDialogParentWindow = 0 );
 }
 
 struct SwAddressPreview_Impl;
 
 // Preview window used to show the possible selection of address blocks
 // and also the resulting address filled with database data
-class SW_DLLPUBLIC SwAddressPreview : public Window
+class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
 {
     ScrollBar               aVScrollBar;
     SwAddressPreview_Impl*  pImpl;
@@ -76,7 +76,7 @@ class SW_DLLPUBLIC SwAddressPreview : public Window
     DECL_LINK(ScrollHdl, void*);
 
 public:
-    SwAddressPreview(Window* pParent, WinBits nStyle=WB_BORDER);
+    SwAddressPreview(vcl::Window* pParent, WinBits nStyle=WB_BORDER);
 
     void positionScrollBar();
 
@@ -140,10 +140,10 @@ class SW_DLLPUBLIC SwAuthenticator :
 {
     OUString m_aUserName;
     OUString m_aPassword;
-    Window*         m_pParentWindow;
+    vcl::Window*         m_pParentWindow;
 public:
     SwAuthenticator() : m_pParentWindow(0) {}
-    SwAuthenticator(const OUString& username, const OUString& password, Window* pParent) :
+    SwAuthenticator(const OUString& username, const OUString& password, vcl::Window* pParent) :
         m_aUserName(username),
         m_aPassword(password),
         m_pParentWindow( pParent )

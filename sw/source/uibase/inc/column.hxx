@@ -64,7 +64,7 @@ class SwColumnDlg : public SfxModalDialog
     DECL_LINK(OkHdl, void *);
 
 public:
-    SwColumnDlg(Window* pParent, SwWrtShell& rSh);
+    SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh);
     virtual ~SwColumnDlg();
 
     SwWrtShell&     GetWrtShell()   { return rWrtShell; }
@@ -73,11 +73,11 @@ public:
 class ColumnValueSet : public ValueSet
 {
 public:
-    ColumnValueSet(Window* pParent, const ResId& rResId)
+    ColumnValueSet(vcl::Window* pParent, const ResId& rResId)
         : ValueSet(pParent, rResId)
     {
     }
-    ColumnValueSet(Window* pParent)
+    ColumnValueSet(vcl::Window* pParent)
         : ValueSet(pParent, WB_TABSTOP | WB_ITEMBORDER | WB_DOUBLEBORDER)
     {
     }
@@ -163,7 +163,7 @@ class SwColumnPage : public SfxTabPage
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
-    SwColumnPage(Window *pParent, const SfxItemSet &rSet);
+    SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet);
 
     void connectPercentField(PercentField &rWrap, const OString &rName);
 
@@ -172,7 +172,7 @@ class SwColumnPage : public SfxTabPage
 public:
     virtual ~SwColumnPage();
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 
     virtual bool    FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;

@@ -33,7 +33,7 @@ class SVX_DLLPUBLIC PopupContainer
     : public FloatingWindow
 {
 public:
-    PopupContainer (Window* pParent);
+    PopupContainer (vcl::Window* pParent);
     virtual ~PopupContainer (void);
 
     virtual bool Notify (NotifyEvent& rNEvt) SAL_OVERRIDE;

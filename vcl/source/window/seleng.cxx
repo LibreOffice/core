@@ -32,7 +32,7 @@ inline bool SelectionEngine::ShouldDeselect( bool bModifierKey1 ) const
 
 // TODO: throw out FunctionSet::SelectAtPoint
 
-SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet,
+SelectionEngine::SelectionEngine( vcl::Window* pWindow, FunctionSet* pFuncSet,
                                   sal_uLong nAutoRepeatInterval ) :
     pWin( pWindow ),
     nUpdateInterval( nAutoRepeatInterval )
@@ -308,7 +308,7 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
     return true;
 }
 
-void SelectionEngine::SetWindow( Window* pNewWin )
+void SelectionEngine::SetWindow( vcl::Window* pNewWin )
 {
     if( pNewWin != pWin )
     {

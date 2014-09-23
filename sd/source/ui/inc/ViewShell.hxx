@@ -115,7 +115,7 @@ public:
 
     ViewShell (
         SfxViewFrame *pFrame,
-        ::Window* pParentWindow,
+        ::vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase,
         bool bAllowCenter = true);
     virtual ~ViewShell (void);
@@ -145,7 +145,7 @@ public:
     /** Return the window that is the parent of all controls of this view
         shell.  This may or may not be the window of the frame.
     */
-    inline ::Window* GetParentWindow (void) const { return mpParentWindow; }
+    inline ::vcl::Window* GetParentWindow (void) const { return mpParentWindow; }
 
     inline ::sd::View* GetView (void) const { return mpView; }
     inline SdrView* GetDrawView (void) const;
@@ -421,7 +421,7 @@ public:
         all views, so the return value tells the caller if the relocation
         was successful.
     */
-    virtual bool RelocateToParentWindow (::Window* pParentWindow);
+    virtual bool RelocateToParentWindow (::vcl::Window* pParentWindow);
 
     /** Depending on the given request create a new page or duplicate an
         existing one.  A new page is created behind the given slide.
@@ -568,7 +568,7 @@ protected:
     void doShow();
 
 private:
-    ::Window* mpParentWindow;
+    ::vcl::Window* mpParentWindow;
     /** This window updater is used to keep all relevant windows up to date
         with reference to the digit langugage used to display digits in text
         shapes.

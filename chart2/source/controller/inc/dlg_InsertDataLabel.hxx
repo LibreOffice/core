@@ -43,7 +43,7 @@ private:
     void Reset();
 
 public:
-    DataLabelsDialog(Window* pParent, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter);
+    DataLabelsDialog(vcl::Window* pParent, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter);
     virtual ~DataLabelsDialog();
 
     void FillItemSet(SfxItemSet& rOutAttrs);

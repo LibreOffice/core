@@ -34,7 +34,7 @@
 
 #include "globstr.hrc"
 
-ScCondFormatList::ScCondFormatList(Window* pParent, WinBits nStyle)
+ScCondFormatList::ScCondFormatList(vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle | WB_DIALOGCONTROL)
     , mbHasScrollBar(false)
     , mpScrollBar(new ScrollBar(this, WB_VERT ))
@@ -127,7 +127,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
     RecalcAll();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScCondFormatList(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCondFormatList(vcl::Window *pParent,
     VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = 0;
@@ -395,7 +395,7 @@ IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
 
 //ScCondFormatDlg
 
-ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc,
+ScCondFormatDlg::ScCondFormatDlg(vcl::Window* pParent, ScDocument* pDoc,
     const ScConditionalFormat* pFormat, const ScRangeList& rRange,
     const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType)
     : ScAnyRefModalDlg(pParent, "ConditionalFormatDialog",

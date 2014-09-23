@@ -34,7 +34,7 @@ class StyleSettings;
 // - Control -
 
 
-class VCL_DLLPUBLIC Control : public Window
+class VCL_DLLPUBLIC Control : public vcl::Window
 {
 protected:
     ::vcl::ImplControlData* mpControlData;
@@ -125,8 +125,8 @@ public:
     SAL_DLLPRIVATE void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect );
 
 public:
-    explicit        Control( Window* pParent, WinBits nWinStyle = 0 );
-    explicit        Control( Window* pParent, const ResId& );
+    explicit        Control( vcl::Window* pParent, WinBits nWinStyle = 0 );
+    explicit        Control( vcl::Window* pParent, const ResId& );
     virtual         ~Control();
 
     virtual void    EnableRTL ( bool bEnable = true ) SAL_OVERRIDE;

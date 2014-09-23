@@ -137,10 +137,10 @@ using org::libreoffice::touch::ByteBufferWrapper;
 
 namespace {
 
-extern "C" typedef Window* (SAL_CALL *FN_SvtCreateWindow)(
+extern "C" typedef vcl::Window* (SAL_CALL *FN_SvtCreateWindow)(
         VCLXWindow** ppNewComp,
         const css::awt::WindowDescriptor* pDescriptor,
-        Window* pParent,
+        vcl::Window* pParent,
         WinBits nWinBits );
 
 class VCLXToolkit_Impl
@@ -186,7 +186,7 @@ protected:
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    Window* ImplCreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor& rDescriptor, Window* pParent, WinBits nWinBits );
+    vcl::Window* ImplCreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent, WinBits nWinBits );
     css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor, WinBits nWinBits );
 
 public:
@@ -765,14 +765,14 @@ void SAL_CALL VCLXToolkit::disposing()
     return xRef;
 }
 
-Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
+vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const ::com::sun::star::awt::WindowDescriptor& rDescriptor,
-    Window* pParent, WinBits nWinBits )
+    vcl::Window* pParent, WinBits nWinBits )
 {
     OUString aServiceName( rDescriptor.WindowServiceName );
     aServiceName = aServiceName.toAsciiLowerCase();
 
-    Window* pNewWindow = NULL;
+    vcl::Window* pNewWindow = NULL;
     sal_uInt16 nType = ImplGetComponentType( aServiceName );
     bool bFrameControl = false;
     if ( aServiceName == "frame" )
@@ -1142,7 +1142,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     if (nType == WINDOW_DOCKINGWINDOW )
                         pNewWindow = new DockingWindow( pParent, nWinBits );
                     else
-                        pNewWindow = new Window( pParent, nWinBits );
+                        pNewWindow = new vcl::Window( pParent, nWinBits );
                     *ppNewComp = new VCLXContainer;
                 }
                 else
@@ -1150,7 +1150,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     if (nType == WINDOW_DOCKINGWINDOW )
                         pNewWindow = new DockingWindow( pParent, nWinBits );
                     else
-                        pNewWindow = new Window( pParent, nWinBits );
+                        pNewWindow = new vcl::Window( pParent, nWinBits );
                     *ppNewComp = new VCLXWindow;
                 }
             break;
@@ -1182,7 +1182,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 #else
 
-extern "C" Window* SAL_CALL CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, WinBits nWinBits );
+extern "C" vcl::Window* SAL_CALL CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits );
 
 #endif
 
@@ -1196,7 +1196,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xRef;
 
-    Window* pParent = NULL;
+    vcl::Window* pParent = NULL;
     if ( rDescriptor.Parent.is() )
     {
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );
@@ -1213,7 +1213,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     VCLXWindow* pNewComp = NULL;
 
-    Window* pNewWindow = NULL;
+    vcl::Window* pNewWindow = NULL;
     // Try to create the window with SvTools
     // (do this _before_ creating it on our own: The old mechanism (extended toolkit in SvTools) did it this way,
     // and we need to stay compatible)
@@ -1311,7 +1311,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 // ::com::sun::star::awt::XSystemChildFactory
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createSystemChild( const ::com::sun::star::uno::Any& Parent, const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Window* pChildWindow = NULL;
+    vcl::Window* pChildWindow = NULL;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
     {
         // use sal_Int64 here to accommodate all int types
@@ -1446,7 +1446,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     css::uno::Reference< css::awt::XWindow > xWindow( xMsgBox, css::uno::UNO_QUERY );
     if ( xMsgBox.is() && xWindow.is() )
     {
-        Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
         {
             SolarMutexGuard aGuard;
@@ -1460,7 +1460,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL VCLXToolkit::getDragGestureRecognizer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Window * pWindow = VCLUnoHelper::GetWindow( window );
+    vcl::Window * pWindow = VCLUnoHelper::GetWindow( window );
 
     if( pWindow )
         return pWindow->GetDragGestureRecognizer();
@@ -1472,7 +1472,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 {
     SolarMutexGuard g;
 
-    Window * pWindow = VCLUnoHelper::GetWindow( window );
+    vcl::Window * pWindow = VCLUnoHelper::GetWindow( window );
 
     if( pWindow )
         return pWindow->GetDragSource();
@@ -1484,7 +1484,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 {
     SolarMutexGuard g;
 
-    Window * pWindow = VCLUnoHelper::GetWindow( window );
+    vcl::Window * pWindow = VCLUnoHelper::GetWindow( window );
 
     if( pWindow )
         return pWindow->GetDropTarget();
@@ -1546,7 +1546,7 @@ css::uno::Reference< css::awt::XTopWindow > SAL_CALL
 VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
     throw (css::uno::RuntimeException, std::exception)
 {
-    ::Window * p = ::Application::GetTopWindow(static_cast< long >(nIndex));
+    vcl::Window * p = ::Application::GetTopWindow(static_cast< long >(nIndex));
         // XXX  numeric overflow
     return css::uno::Reference< css::awt::XTopWindow >(
         p == 0 ? 0 : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
@@ -1557,7 +1557,7 @@ VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
 css::uno::Reference< css::awt::XTopWindow > SAL_CALL
 VCLXToolkit::getActiveTopWindow() throw (css::uno::RuntimeException, std::exception)
 {
-    ::Window * p = ::Application::GetActiveTopWindow();
+    vcl::Window * p = ::Application::GetActiveTopWindow();
     return css::uno::Reference< css::awt::XTopWindow >(
         p == 0 ? 0 : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
         css::uno::UNO_QUERY);
@@ -1748,7 +1748,7 @@ void VCLXToolkit::callTopWindowListeners(
     void (SAL_CALL css::awt::XTopWindowListener::* pFn)(
         css::lang::EventObject const &))
 {
-    ::Window * pWindow
+    vcl::Window * pWindow
           = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
     if (pWindow->IsTopWindow())
     {
@@ -1786,7 +1786,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
 
     if (aHandlers.hasElements())
     {
-        ::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
+        vcl::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
 
         // See implementation in vclxwindow.cxx for mapping between VCL and UNO AWT event
         ::KeyEvent * pKeyEvent = static_cast< ::KeyEvent * >(
@@ -1829,7 +1829,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
 void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                                      bool bGained)
 {
-    ::Window * pWindow
+    vcl::Window * pWindow
           = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
     if (pWindow->IsTopWindow())
     {
@@ -1841,8 +1841,8 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
             // window that gets the focus next (see implementation in
             // vclxwindow.cxx for mapping between VCL and UNO AWT event):
             css::uno::Reference< css::uno::XInterface > xNext;
-            ::Window * pFocus = ::Application::GetFocusWindow();
-            for (::Window * p = pFocus; p != 0; p = p->GetParent())
+            vcl::Window * pFocus = ::Application::GetFocusWindow();
+            for (vcl::Window * p = pFocus; p != 0; p = p->GetParent())
                 if (!p->IsCompoundControl())
                 {
                     pFocus = p;

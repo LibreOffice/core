@@ -38,7 +38,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 
-RecentDocsView::RecentDocsView( Window* pParent )
+RecentDocsView::RecentDocsView( vcl::Window* pParent )
     : ThumbnailView(pParent)
     , mnFileTypes(TYPE_NONE)
     , mnTextHeight(30)
@@ -57,7 +57,7 @@ RecentDocsView::RecentDocsView( Window* pParent )
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRecentDocsView(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRecentDocsView(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new RecentDocsView(pParent);
 }

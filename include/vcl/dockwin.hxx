@@ -72,19 +72,19 @@ struct EndPopupModeData
 
 class ImplDockingWindowWrapper
 {
-    friend class Window;
+    friend class ::vcl::Window;
     friend class DockingManager;
     friend class DockingWindow;
 
 private:
 
     // the original 'Docking'window
-    Window *mpDockingWindow;
+    vcl::Window *mpDockingWindow;
 
     // the original DockingWindow members
     FloatingWindow* mpFloatWin;
-    Window*         mpOldBorderWin;
-    Window*         mpParent;
+    vcl::Window*         mpOldBorderWin;
+    vcl::Window*         mpParent;
     Point           maFloatPos;
     Point           maDockPos;
     Point           maMouseOff;
@@ -122,10 +122,10 @@ private:
     bool            ImplStartDockingEnabled()               { return mbStartDockingEnabled; }
 
 public:
-    ImplDockingWindowWrapper( const Window *pWindow );
+    ImplDockingWindowWrapper( const vcl::Window *pWindow );
     virtual ~ImplDockingWindowWrapper();
 
-    Window*         GetWindow()     { return mpDockingWindow; }
+    vcl::Window*         GetWindow()     { return mpDockingWindow; }
     bool            ImplStartDocking( const Point& rPos );
 
     // those methods actually call the corresponding handlers
@@ -191,43 +191,43 @@ public:
     DockingManager();
     ~DockingManager();
 
-    void AddWindow( const Window *pWin );
-    void RemoveWindow( const Window *pWin );
+    void AddWindow( const vcl::Window *pWin );
+    void RemoveWindow( const vcl::Window *pWin );
 
-    ImplDockingWindowWrapper*  GetDockingWindowWrapper( const Window *pWin );
-    bool IsDockable( const Window *pWin );
+    ImplDockingWindowWrapper*  GetDockingWindowWrapper( const vcl::Window *pWin );
+    bool IsDockable( const vcl::Window *pWin );
 
-    bool IsFloating( const Window *pWin );
-    void SetFloatingMode( const Window *pWin, bool bFloating );
+    bool IsFloating( const vcl::Window *pWin );
+    void SetFloatingMode( const vcl::Window *pWin, bool bFloating );
 
-    void Lock( const Window *pWin );
-    void Unlock( const Window *pWin );
-    bool IsLocked( const Window *pWin );
+    void Lock( const vcl::Window *pWin );
+    void Unlock( const vcl::Window *pWin );
+    bool IsLocked( const vcl::Window *pWin );
 
-    void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin );
-    void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin, sal_uLong nPopupModeFlags );
+    void    StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWin );
+    void    StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWin, sal_uLong nPopupModeFlags );
 
-    bool    IsInPopupMode( const Window *pWin );
-    void    EndPopupMode( const Window *pWin );
+    bool    IsInPopupMode( const vcl::Window *pWin );
+    void    EndPopupMode( const vcl::Window *pWin );
 
     // required because those methods are not virtual in Window (!!!) and must
     // be availbale from the toolkit
-    void        SetPosSizePixel( Window *pWin, long nX, long nY,
+    void        SetPosSizePixel( vcl::Window *pWin, long nX, long nY,
                                 long nWidth, long nHeight,
                                 sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
-    Rectangle   GetPosSizePixel( const Window *pWin );
+    Rectangle   GetPosSizePixel( const vcl::Window *pWin );
 };
 
 
 // - DockingWindow -
 
 
-class VCL_DLLPUBLIC DockingWindow : public Window
+class VCL_DLLPUBLIC DockingWindow : public vcl::Window
 {
     class   ImplData;
 private:
     FloatingWindow* mpFloatWin;
-    Window*         mpOldBorderWin;
+    vcl::Window*         mpOldBorderWin;
     ImplData*       mpImplData;
     Point           maFloatPos;
     Point           maDockPos;
@@ -266,7 +266,7 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
@@ -277,8 +277,8 @@ protected:
                     DockingWindow( WindowType nType );
 
 public:
-                    DockingWindow( Window* pParent, WinBits nStyle = WB_STDDOCKWIN );
-                    DockingWindow( Window* pParent, const ResId& rResId );
+                    DockingWindow( vcl::Window* pParent, WinBits nStyle = WB_STDDOCKWIN );
+                    DockingWindow( vcl::Window* pParent, const ResId& rResId );
                     virtual ~DockingWindow();
 
     virtual void    StartDocking();

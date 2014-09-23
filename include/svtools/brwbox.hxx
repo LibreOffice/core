@@ -128,7 +128,7 @@ typedef sal_uLong BrowserMode;
 
 class BrowseEvent
 {
-    Window*             pWin;
+    vcl::Window*             pWin;
     long                nRow;
     Rectangle           aRect;
     sal_uInt16              nCol;
@@ -136,12 +136,12 @@ class BrowseEvent
 
 public:
                         BrowseEvent();
-                        BrowseEvent( Window* pWindow,
+                        BrowseEvent( vcl::Window* pWindow,
                                      long nAbsRow,
                                      sal_uInt16 nColumn, sal_uInt16 nColumnId,
                                      const Rectangle& rRect );
 
-    Window*             GetWindow() const { return pWin; }
+    vcl::Window*             GetWindow() const { return pWin; }
     long                GetRow() const { return nRow; }
     sal_uInt16              GetColumn() const { return nCol; }
     sal_uInt16              GetColumnId() const { return nColId; }
@@ -157,7 +157,7 @@ class BrowserMouseEvent: public MouseEvent, public BrowseEvent
 public:
     BrowserMouseEvent();
     BrowserMouseEvent( BrowserDataWin* pWin, const MouseEvent& rEvt );
-    BrowserMouseEvent( Window* pWin, const MouseEvent& rEvt,
+    BrowserMouseEvent( vcl::Window* pWin, const MouseEvent& rEvt,
                        long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                        const Rectangle& rRect );
 };
@@ -217,7 +217,7 @@ public:
     static const sal_uInt16 HandleColumnId = 0;
 
 private:
-    Window*         pDataWin;       // window to display data rows
+    vcl::Window*         pDataWin;       // window to display data rows
     ScrollBar*      pVScroll;       // vertical scrollbar
     ScrollBar       aHScroll;       // horizontal scrollbar
 
@@ -339,7 +339,7 @@ protected:
     virtual bool    SeekRow( long nRow ) = 0;
     virtual void    DrawCursor();
     virtual void    PaintRow( OutputDevice &rDev, const Rectangle &rRect );
-    virtual void    PaintData( Window& rWin, const Rectangle& rRect );
+    virtual void    PaintData( vcl::Window& rWin, const Rectangle& rRect );
     virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const = 0;
     // Advice for the subclass: the visible scope of rows has changed.
@@ -397,9 +397,9 @@ protected:
     virtual void    ImplEndTracking();
 
 public:
-                    BrowseBox( Window* pParent, WinBits nBits = 0,
+                    BrowseBox( vcl::Window* pParent, WinBits nBits = 0,
                                BrowserMode nMode = 0 );
-                    BrowseBox( Window* pParent, const ResId& rId,
+                    BrowseBox( vcl::Window* pParent, const ResId& rId,
                                BrowserMode nMode = 0 );
                     virtual ~BrowseBox();
 
@@ -520,7 +520,7 @@ public:
     bool            IsResizing() const { return bResizing; }
 
     // access to positions of fields, column and rows
-    Window&         GetDataWindow() const { return *pDataWin; }
+    vcl::Window&         GetDataWindow() const { return *pDataWin; }
     Rectangle       GetRowRectPixel( long nRow,
                                      bool bRelToBrowser = true ) const;
     Rectangle       GetFieldRectPixel( long nRow, sal_uInt16 nColId,
@@ -788,11 +788,11 @@ public:
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const SAL_OVERRIDE;
     virtual OUString                GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const SAL_OVERRIDE;
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) SAL_OVERRIDE;
-    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const SAL_OVERRIDE;
+    virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const SAL_OVERRIDE;
     virtual void                    GrabFocus() SAL_OVERRIDE;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) SAL_OVERRIDE;
-    virtual Window*                 GetAccessibleParentWindow() const SAL_OVERRIDE;
-    virtual Window*                 GetWindowInstance() SAL_OVERRIDE;
+    virtual vcl::Window*                 GetAccessibleParentWindow() const SAL_OVERRIDE;
+    virtual vcl::Window*                 GetWindowInstance() SAL_OVERRIDE;
 
 private:
     // the following declares some Window/OutputDevice methods private. This happened in the course

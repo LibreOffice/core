@@ -21,7 +21,7 @@
 
 namespace svx { namespace sidebar {
 
-ContextPanel::ContextPanel (::Window* pParent)
+ContextPanel::ContextPanel (vcl::Window* pParent)
     : Window(pParent, 0),
       maApplicationName(this, 0),
       maContextName(this, 0)

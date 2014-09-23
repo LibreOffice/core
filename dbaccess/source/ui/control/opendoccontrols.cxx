@@ -156,13 +156,13 @@ namespace dbaui
 
     // OpenButton
 
-    OpenDocumentButton::OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName )
+    OpenDocumentButton::OpenDocumentButton( vcl::Window* _pParent, const sal_Char* _pAsciiModuleName )
         :PushButton( _pParent )
     {
         impl_init( _pAsciiModuleName );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOpenDocumentButton( Window *pParent, VclBuilder::stringmap & )
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOpenDocumentButton( vcl::Window *pParent, VclBuilder::stringmap & )
     {
         return new OpenDocumentButton( pParent, "com.sun.star.sdb.OfficeDatabaseDocument" );
     }
@@ -186,13 +186,13 @@ namespace dbaui
 
     // OpenDocumentListBox
 
-    OpenDocumentListBox::OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName )
+    OpenDocumentListBox::OpenDocumentListBox( vcl::Window* _pParent, const sal_Char* _pAsciiModuleName )
         :ListBox( _pParent, WB_BORDER | WB_DROPDOWN )
     {
         impl_init( _pAsciiModuleName );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOpenDocumentListBox( Window *pParent, VclBuilder::stringmap & )
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOpenDocumentListBox( vcl::Window *pParent, VclBuilder::stringmap & )
     {
         return new OpenDocumentListBox( pParent, "com.sun.star.sdb.OfficeDatabaseDocument" );
     }

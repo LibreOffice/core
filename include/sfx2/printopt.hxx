@@ -93,15 +93,15 @@ protected:
 
 public:
 
-                        SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+                        SfxCommonPrintOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
                         virtual ~SfxCommonPrintOptionsTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual Window*     GetParentLabeledBy( const Window* pLabel ) const SAL_OVERRIDE;
-    virtual Window*     GetParentLabelFor( const Window* pLabel ) const SAL_OVERRIDE;
+    virtual vcl::Window*     GetParentLabeledBy( const vcl::Window* pLabel ) const SAL_OVERRIDE;
+    virtual vcl::Window*     GetParentLabelFor( const vcl::Window* pLabel ) const SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 };
 
 #endif // INCLUDED_SFX2_PRINTOPT_HXX

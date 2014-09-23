@@ -61,7 +61,7 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
     updateViewSettings();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSdDocPreviewWin(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSdDocPreviewWin(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
 
@@ -72,7 +72,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSdDocPreviewWin(Window *pPa
     return new SdDocPreviewWin(pParent, nWinStyle);
 }
 
-SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const WinBits nStyle )
+SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
 : Control(pParent, nStyle), pMetaFile( 0 ), bInEffect(false), mpObj(NULL), mnShowPage(0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );

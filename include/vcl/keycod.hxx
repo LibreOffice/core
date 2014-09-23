@@ -26,7 +26,7 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/vclenum.hxx>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace vcl
 {
@@ -56,27 +56,27 @@ public:
                     { return (nCode & KEY_MODTYPE); }
     sal_uInt16      GetAllModifier() const
                     { return (nCode & KEY_ALLMODTYPE); }
-    bool        IsShift() const
+    bool            IsShift() const
                     { return ((nCode & KEY_SHIFT) != 0); }
-    bool        IsMod1() const
+    bool            IsMod1() const
                     { return ((nCode & KEY_MOD1) != 0); }
-    bool        IsMod2() const
+    bool            IsMod2() const
                     { return ((nCode & KEY_MOD2) != 0); }
-    bool        IsMod3() const
+    bool            IsMod3() const
                     { return ((nCode & KEY_MOD3) != 0); }
     sal_uInt16      GetGroup() const
                     { return (nCode & KEYGROUP_TYPE); }
 
-    OUString        GetName( Window* pWindow = NULL ) const;
+    OUString        GetName( vcl::Window* pWindow = NULL ) const;
 
-    bool        IsFunction() const
+    bool            IsFunction() const
                     { return (eFunc != KEYFUNC_DONTKNOW); }
 
-    KeyFuncType GetFunction() const;
+    KeyFuncType     GetFunction() const;
 
-    KeyCode&    operator = ( const KeyCode& rKeyCode );
-    bool        operator ==( const KeyCode& rKeyCode ) const;
-    bool        operator !=( const KeyCode& rKeyCode ) const;
+    KeyCode&        operator = ( const KeyCode& rKeyCode );
+    bool            operator ==( const KeyCode& rKeyCode ) const;
+    bool            operator !=( const KeyCode& rKeyCode ) const;
 };
 
 } // namespace vcl

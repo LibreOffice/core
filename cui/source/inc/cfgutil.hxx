@@ -111,7 +111,7 @@ class SfxConfigFunctionListBox : public SvTreeListBox
     virtual void  MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 public:
-    SfxConfigFunctionListBox(Window*, WinBits nStyle);
+    SfxConfigFunctionListBox(vcl::Window*, WinBits nStyle);
     virtual ~SfxConfigFunctionListBox();
 
     void          ClearAll();
@@ -163,7 +163,7 @@ protected:
     virtual bool        Expand( SvTreeListEntry* pParent ) SAL_OVERRIDE;
 
 public:
-    SfxConfigGroupListBox(Window* pParent, WinBits nStyle);
+    SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SfxConfigGroupListBox();
     void                ClearAll();
 

@@ -52,12 +52,12 @@ class SvxAsianLayoutPage : public SfxTabPage
     DECL_LINK(ChangeStandardHdl, CheckBox*);
     DECL_LINK(ModifyHdl, Edit*);
 
-    SvxAsianLayoutPage( Window* pParent, const SfxItemSet& rSet );
+    SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& rSet );
 public:
 
     virtual ~SvxAsianLayoutPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     static const sal_uInt16*  GetRanges();
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

@@ -1932,7 +1932,7 @@ ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )
 }
 
 IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
-                                          const Point& rWinPoint, const Window& rCmpWnd )
+                                          const Point& rWinPoint, const vcl::Window& rCmpWnd )
 {
     const MapMode       aMap100( MAP_100TH_MM );
     MapMode             aWndMode = rCmpWnd.GetMapMode();

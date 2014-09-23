@@ -49,7 +49,7 @@ private:
     DECL_LINK(CheckHdl_Impl, svx::SvxRadioButtonListBox*);
 
 public:
-    SvxMultiPathDialog(Window* pParent);
+    SvxMultiPathDialog(vcl::Window* pParent);
     virtual ~SvxMultiPathDialog();
 
     OUString        GetPath() const;
@@ -68,7 +68,7 @@ private:
     DECL_LINK(SelectHdl_Impl, void *);
 
 public:
-    SvxPathSelectDialog(Window* pParent);
+    SvxPathSelectDialog(vcl::Window* pParent);
     virtual ~SvxPathSelectDialog();
 
     OUString        GetPath() const;

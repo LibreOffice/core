@@ -59,8 +59,8 @@ class VCLPLUG_GEN_PUBLIC X11SalObject : public SalObject
 public:
     SystemEnvData maSystemChildData;
     SalFrame*       mpParent;
-    XLIB_Window     maPrimary;
-    XLIB_Window     maSecondary;
+    ::Window        maPrimary;
+    ::Window        maSecondary;
     Colormap        maColormap;
     SalClipRegion   maClipRegion;
     bool            mbVisible;

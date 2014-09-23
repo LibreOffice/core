@@ -25,7 +25,7 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 
-ScTextImportOptionsDlg::ScTextImportOptionsDlg(Window* pParent)
+ScTextImportOptionsDlg::ScTextImportOptionsDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "TextImportOptionsDialog", "modules/scalc/ui/textimportoptions.ui")
 {
     get(m_pBtnOk, "ok");

@@ -24,7 +24,7 @@
 class FileChangedQueryBox : public MessBox
 {
 public:
-    FileChangedQueryBox( Window* pParent, ResMgr* pResMgr );
+    FileChangedQueryBox( vcl::Window* pParent, ResMgr* pResMgr );
     virtual ~FileChangedQueryBox();
 };
 

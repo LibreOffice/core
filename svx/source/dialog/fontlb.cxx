@@ -83,7 +83,7 @@ void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEnt
 
 
 
-SvxFontListBox::SvxFontListBox(Window* pParent, WinBits nStyle)
+SvxFontListBox::SvxFontListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTabListBox(pParent, nStyle)
     , maStdFont(GetFont())
     , mpEntryColor(NULL)
@@ -93,7 +93,7 @@ SvxFontListBox::SvxFontListBox(Window* pParent, WinBits nStyle)
     maEntryFont = maStdFont;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFontListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

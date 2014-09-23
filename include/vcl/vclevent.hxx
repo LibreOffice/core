@@ -30,7 +30,7 @@
 #include <list>
 #include <vector>
 
-class Window;
+namespace vcl { class Window; }
 class Menu;
 
 namespace com { namespace sun { namespace star {
@@ -42,15 +42,15 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_OBJECT_DYING                  1
 
 // VclWindowEvent:
-#define VCLEVENT_WINDOW_CHILDCREATED         500    // pData = Window*
-#define VCLEVENT_WINDOW_CHILDDESTROYED       501    // pData = Window*
+#define VCLEVENT_WINDOW_CHILDCREATED         500    // pData = vcl::Window*
+#define VCLEVENT_WINDOW_CHILDDESTROYED       501    // pData = vcl::Window*
 #define VCLEVENT_WINDOW_PAINT               1000    // pData = Rectangle*
 #define VCLEVENT_WINDOW_MOVE                1001
 #define VCLEVENT_WINDOW_RESIZE              1002
 #define VCLEVENT_WINDOW_SHOW                1003
 #define VCLEVENT_WINDOW_HIDE                1004
 #define VCLEVENT_WINDOW_ACTIVATE            1005
-#define VCLEVENT_WINDOW_DEACTIVATE          1006    // pData = Window* = pPrevActiveWindow
+#define VCLEVENT_WINDOW_DEACTIVATE          1006    // pData = vcl::Window* = pPrevActiveWindow
 #define VCLEVENT_WINDOW_CLOSE               1007
 #define VCLEVENT_WINDOW_GETFOCUS            1008
 #define VCLEVENT_WINDOW_LOSEFOCUS           1009
@@ -217,15 +217,15 @@ public:
 class VCL_DLLPUBLIC VclWindowEvent : public VclSimpleEvent
 {
 private:
-    Window* pWindow;
+    vcl::Window* pWindow;
     void*   pData;
 
 public:
-    VclWindowEvent( Window* pWin, sal_uLong n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
+    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
     virtual ~VclWindowEvent() {}
     TYPEINFO_OVERRIDE();
 
-    Window* GetWindow() const { return pWindow; }
+    vcl::Window* GetWindow() const { return pWindow; }
     void*   GetData() const { return pData; }
 };
 

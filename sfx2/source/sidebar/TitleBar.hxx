@@ -28,12 +28,12 @@
 namespace sfx2 { namespace sidebar {
 
 class TitleBar
-    : public Window
+    : public vcl::Window
 {
 public:
     TitleBar (
         const ::rtl::OUString& rsTitle,
-        Window* pParentWindow,
+        vcl::Window* pParentWindow,
         const sidebar::Paint& rInitialBackgroundPaint);
     virtual ~TitleBar (void);
 

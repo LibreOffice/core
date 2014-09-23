@@ -32,7 +32,7 @@
  * dialog to adjust grid (scarcely ESO!)
  */
 SdSnapLineDlg::SdSnapLineDlg(
-    ::Window* pWindow,
+    vcl::Window* pWindow,
     const SfxItemSet& rInAttrs,
     ::sd::View* pView)
     : ModalDialog(pWindow, "SnapObjectDialog", "modules/sdraw/ui/dlgsnap.ui")

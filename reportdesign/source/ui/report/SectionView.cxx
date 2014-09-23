@@ -71,7 +71,7 @@ void OSectionView::MarkListHasChanged()
 
 
 
-void OSectionView::MakeVisible( const Rectangle& rRect, Window& rWin )
+void OSectionView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )
 {
     // visible area
     MapMode aMap( rWin.GetMapMode() );

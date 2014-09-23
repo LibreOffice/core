@@ -45,7 +45,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-ORelationDesignView::ORelationDesignView(Window* _pParent, ORelationController& _rController,const Reference< XComponentContext >& _rxContext)
+ORelationDesignView::ORelationDesignView(vcl::Window* _pParent, ORelationController& _rController,const Reference< XComponentContext >& _rxContext)
     :OJoinDesignView( _pParent, _rController, _rxContext )
 {
 }

@@ -49,7 +49,7 @@ void SfxPreviewBase_Impl::SetObjectShell( SfxObjectShell* pObj )
 }
 
 SfxPreviewBase_Impl::SfxPreviewBase_Impl(
-    Window* pParent, WinBits nStyle)
+    vcl::Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
     , pMetaFile()
 {
@@ -66,7 +66,7 @@ Size SfxPreviewBase_Impl::GetOptimalSize() const
 }
 
 void SfxPreviewWin_Impl::ImpPaint(
-    const Rectangle&, GDIMetaFile* pFile, Window* pWindow )
+    const Rectangle&, GDIMetaFile* pFile, vcl::Window* pWindow )
 {
     pWindow->SetLineColor();
     Color aLightGrayCol( COL_LIGHTGRAY );
@@ -115,7 +115,7 @@ void SfxPreviewWin_Impl::Paint( const Rectangle& rRect )
     ImpPaint( rRect, pMetaFile.get(), this );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSfxPreviewWin(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxPreviewWin(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SfxPreviewWin_Impl(pParent, 0);
 }
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
 
         if ( !xDocShell.Is() )
         {
-            Window *pParent = Application::GetDefDialogParent();
+            vcl::Window *pParent = Application::GetDefDialogParent();
             Application::SetDefDialogParent( pAntiImpl );
             SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,pAntiImpl);
             SfxApplication *pSfxApp = SfxGetpApp();
@@ -444,7 +444,7 @@ SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
     rExtra = m_pMoreBt->get_expanded() ? OUString("Y") : OUString("N");
 }
 
-SfxNewFileDialog::SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags)
+SfxNewFileDialog::SfxNewFileDialog(vcl::Window *pParent, sal_uInt16 nFlags)
     : SfxModalDialog(pParent, "LoadTemplateDialog",
         "sfx/ui/loadtemplatedialog.ui")
 {

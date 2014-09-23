@@ -22,7 +22,7 @@
 #include <editeng/hangulhanja.hxx>
 
 class SwView;
-class Window;
+namespace vcl { class Window; }
 class SwWrtShell;
 struct SwConversionArgs;
 class SwPaM;
@@ -30,7 +30,7 @@ class SwPaM;
 class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
 {
     SwView *    m_pView;
-    Window*     m_pWin;
+    vcl::Window*     m_pWin;
     SwWrtShell &m_rWrtShell;
 
     SwConversionArgs *m_pConvArgs;    /**< object for arguments (and results) needed

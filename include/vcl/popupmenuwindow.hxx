@@ -28,7 +28,7 @@ private:
     struct ImplData;
     ImplData* mpImplData;
 public:
-    PopupMenuFloatingWindow( Window* pParent, WinBits nStyle = (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER) );
+    PopupMenuFloatingWindow( vcl::Window* pParent, WinBits nStyle = (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER) );
     virtual ~PopupMenuFloatingWindow();
 
     sal_uInt16      GetMenuStackLevel() const;
@@ -36,7 +36,7 @@ public:
     bool            IsPopupMenu() const;
 
     //determine if a given window is an activated PopupMenuFloatingWindow
-    static bool isPopupMenu(const Window *pWindow);
+    static bool isPopupMenu(const vcl::Window *pWindow);
 };
 
 #endif

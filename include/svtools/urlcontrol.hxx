@@ -37,7 +37,7 @@ namespace svt
         OUString      m_sPreservedText;
 
     public:
-        OFileURLControl(Window* _pParent, WinBits nStyle);
+        OFileURLControl(vcl::Window* _pParent, WinBits nStyle);
 
     protected:
         virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

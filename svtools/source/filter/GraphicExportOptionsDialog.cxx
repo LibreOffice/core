@@ -23,7 +23,7 @@ using namespace css::beans;
 using namespace css::lang;
 using namespace css::uno;
 
-GraphicExportOptionsDialog::GraphicExportOptionsDialog(Window* pWindow, const Reference<XComponent>& rxSourceDocument) :
+GraphicExportOptionsDialog::GraphicExportOptionsDialog(vcl::Window* pWindow, const Reference<XComponent>& rxSourceDocument) :
     ModalDialog(pWindow, "GraphicExporter", "svt/ui/GraphicExportOptionsDialog.ui"),
     mResolution(96.0),
     mRenderer(rxSourceDocument)

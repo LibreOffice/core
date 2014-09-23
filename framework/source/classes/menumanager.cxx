@@ -626,7 +626,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XCompone
             if ( xFrame == xCurrentFrame )
                 nActiveItemId = nItemId;
 
-            Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+            vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
             if ( pWin && pWin->IsVisible() )
             {
                 aNewWindowListVector.push_back( pWin->GetText() );
@@ -846,7 +846,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 
                     if ( xFrame.is() && nTaskId == nCurItemId )
                     {
-                        Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                        vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                         pWin->GrabFocus();
                         pWin->ToTop( TOTOP_RESTOREWHENMIN );
                         break;

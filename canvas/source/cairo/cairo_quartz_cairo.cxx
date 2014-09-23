@@ -301,7 +301,7 @@ namespace cairo
 
         if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
         {
-            const Window &rWindow = (const Window &) rRefDevice;
+            const vcl::Window &rWindow = (const vcl::Window &) rRefDevice;
             const SystemEnvData* pSysData = GetSysData(&rWindow);
             if (pSysData)
                 surf = SurfaceSharedPtr(new QuartzSurface(pSysData->pView, x, y, width, height));

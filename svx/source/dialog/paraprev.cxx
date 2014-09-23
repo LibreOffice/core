@@ -22,7 +22,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/settings.hxx>
 
-SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent,  WinBits nBits) :
+SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
 
     Window( pParent, nBits),
 
@@ -45,7 +45,7 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent,  WinBits nBits) :
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxParaPrevWindow(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxParaPrevWindow(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxParaPrevWindow(pParent, WB_BORDER);
 }

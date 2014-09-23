@@ -61,7 +61,7 @@ private:
     bool                        mbFixedMode;        /// false = Separators, true = Fixed width.
 
 public:
-    explicit                    ScCsvTableBox( Window* pParent, WinBits nBits );
+    explicit                    ScCsvTableBox( vcl::Window* pParent, WinBits nBits );
 
     /** Finishes initialization. Must be called after constructing a new object. */
     void Init();

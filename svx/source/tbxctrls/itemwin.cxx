@@ -53,7 +53,7 @@ using namespace ::com::sun::star::beans;
 
 #define LOGICAL_EDIT_HEIGHT         12
 
-SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
+SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
@@ -220,7 +220,7 @@ void SvxLineBox::ReleaseFocus_Impl()
 
     if( SfxViewShell::Current() )
     {
-        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        vcl::Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
         if ( pShellWnd )
             pShellWnd->GrabFocus();
@@ -255,7 +255,7 @@ void SvxLineBox::FillControl()
 }
 
 SvxMetricField::SvxMetricField(
-    Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits )
+    vcl::Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits )
     : MetricField(pParent, nBits)
     , aCurTxt()
     , ePoolUnit(SFX_MAPUNIT_CM)
@@ -321,7 +321,7 @@ void SvxMetricField::ReleaseFocus_Impl()
 {
     if( SfxViewShell::Current() )
     {
-        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        vcl::Window* pShellWnd = SfxViewShell::Current()->GetWindow();
         if ( pShellWnd )
             pShellWnd->GrabFocus();
     }
@@ -415,7 +415,7 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     MetricField::DataChanged( rDCEvt );
 }
 
-SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
+SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent, WinBits nBits ) :
     FillTypeLB( pParent, nBits | WB_TABSTOP ),
     nCurPos ( 0 ),
     bSelect ( false ),
@@ -427,7 +427,7 @@ SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     Show();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFillTypeBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFillTypeBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxFillTypeBox(pParent);
 }
@@ -496,14 +496,14 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
 {
     if( SfxViewShell::Current() )
     {
-        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        vcl::Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
         if ( pShellWnd )
             pShellWnd->GrabFocus();
     }
 }
 
-SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
+SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent, WinBits nBits ) :
     FillAttrLB( pParent, nBits | WB_TABSTOP ),
     nCurPos( 0 ),
     bRelease( true )
@@ -514,7 +514,7 @@ SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
     Show();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFillAttrBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFillAttrBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxFillAttrBox(pParent);
 }
@@ -581,7 +581,7 @@ void SvxFillAttrBox::ReleaseFocus_Impl()
 {
     if( SfxViewShell::Current() )
     {
-        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        vcl::Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
         if ( pShellWnd )
             pShellWnd->GrabFocus();

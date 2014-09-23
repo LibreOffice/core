@@ -30,13 +30,13 @@ class SwSyncBtnDlg : public SfxFloatingWindow
     DECL_LINK( BtnHdl, void* );
 
 public:
-    SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, Window *pParent);
+    SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, vcl::Window *pParent);
 };
 
 class SwSyncChildWin : public SfxChildWindow
 {
 public:
-    SwSyncChildWin( Window* ,
+    SwSyncChildWin( vcl::Window* ,
                     sal_uInt16 nId,
                     SfxBindings*,
                     SfxChildWinInfo*  );

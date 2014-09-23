@@ -27,7 +27,7 @@ class SfxStyleSheetBase;
 class ScStyleDlg : public SfxStyleDialog
 {
 public:
-    ScStyleDlg( Window*             pParent,
+    ScStyleDlg( vcl::Window*             pParent,
                 SfxStyleSheetBase&  rStyleBase,
                 sal_uInt16          nRscId );
 

@@ -107,7 +107,7 @@ public:
 
     static PropertySubControl*
                         create( sal_Int32 nType,
-                                ::Window* pParent,
+                                vcl::Window* pParent,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const OUString& rPresetId,
                                 const Link& rModifyHdl );
@@ -121,7 +121,7 @@ protected:
 class PropertyControl : public ListBox
 {
 public:
-    PropertyControl( Window* pParent );
+    PropertyControl( vcl::Window* pParent );
     virtual ~PropertyControl();
 
     void setSubControl( PropertySubControl* pSubControl );
@@ -141,7 +141,7 @@ class STLPropertySet;
 class CustomAnimationDialog : public TabDialog
 {
 public:
-    CustomAnimationDialog(Window* pParent, STLPropertySet* pSet, const OString& Page = OString());
+    CustomAnimationDialog(vcl::Window* pParent, STLPropertySet* pSet, const OString& Page = OString());
     virtual ~CustomAnimationDialog();
 
     STLPropertySet* getDefaultSet() { return mpSet; }

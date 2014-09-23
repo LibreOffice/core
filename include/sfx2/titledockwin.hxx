@@ -39,11 +39,11 @@ namespace sfx2
     public:
         TitledDockingWindow(
             SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow,
-            Window* i_pParent, WinBits i_nStyle = 0
+            vcl::Window* i_pParent, WinBits i_nStyle = 0
         );
 
         TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow,
-            Window* i_pParent, const ResId& i_rResId
+            vcl::Window* i_pParent, const ResId& i_rResId
         );
 
         virtual ~TitledDockingWindow();
@@ -81,8 +81,8 @@ namespace sfx2
         /** returns the content window, which is to be used as parent window for any content to be displayed
             in the docking window.
         */
-        ::Window&       GetContentWindow()          { return m_aContentWindow; }
-        const ::Window& GetContentWindow() const    { return m_aContentWindow; }
+        vcl::Window&       GetContentWindow()          { return m_aContentWindow; }
+        const vcl::Window& GetContentWindow() const    { return m_aContentWindow; }
 
         ToolBox&        GetToolBox()        { return m_aToolbox; }
         const ToolBox&  GetToolBox() const  { return m_aToolbox; }

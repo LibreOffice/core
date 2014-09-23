@@ -56,7 +56,7 @@ namespace {
 
 void
 handleLockedDocumentRequest_(
-    Window * pParent,
+    vcl::Window * pParent,
     const OUString& aDocumentURL,
     const OUString& aInfo,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
@@ -145,7 +145,7 @@ handleLockedDocumentRequest_(
 
 void
 handleChangedByOthersRequest_(
-    Window * pParent,
+    vcl::Window * pParent,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations )
 {
@@ -180,7 +180,7 @@ handleChangedByOthersRequest_(
 
 void
 handleLockFileIgnoreRequest_(
-    Window * pParent,
+    vcl::Window * pParent,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations )
 {

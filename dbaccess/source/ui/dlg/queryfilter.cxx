@@ -62,7 +62,7 @@ void Replace_SQL_PlaceHolder(OUString& aString)
 }
 
 
-DlgFilterCrit::DlgFilterCrit(Window * pParent,
+DlgFilterCrit::DlgFilterCrit(vcl::Window * pParent,
                              const Reference< XComponentContext >& rxContext,
                              const Reference< XConnection>& _rxConnection,
                              const Reference< XSingleSelectQueryComposer >& _rxComposer,

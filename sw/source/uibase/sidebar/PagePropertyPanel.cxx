@@ -84,7 +84,7 @@ namespace {
 namespace sw { namespace sidebar {
 
 PagePropertyPanel* PagePropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -102,7 +102,7 @@ PagePropertyPanel* PagePropertyPanel::Create (
 }
 
 PagePropertyPanel::PagePropertyPanel(
-            Window* pParent,
+            vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings)
     : PanelLayout(pParent, "PagePropertyPanel", "modules/swriter/ui/sidebarpage.ui", rxFrame)

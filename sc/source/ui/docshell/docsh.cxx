@@ -1604,10 +1604,10 @@ bool ScDocShell::Save()
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
     if (pFrame1)
     {
-        Window* pWindow = &pFrame1->GetWindow();
+        vcl::Window* pWindow = &pFrame1->GetWindow();
         if ( pWindow )
         {
-            Window* pSysWin = pWindow->GetSystemWindow();
+            vcl::Window* pSysWin = pWindow->GetSystemWindow();
             if ( pSysWin )
             {
                 pSysWin->SetAccessibleName(OUString());
@@ -2508,7 +2508,7 @@ bool ScDocShell::PrepareClose( bool bUI )
             ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
             if(pViewSh!=NULL)
             {
-                Window *pWin=pViewSh->GetWindow();
+                vcl::Window *pWin=pViewSh->GetWindow();
                 if(pWin!=NULL) pWin->GrabFocus();
             }
         }
@@ -2887,7 +2887,7 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
 }
 
 SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
-                                         Window *pParent, const SfxItemSet &rSet )
+                                         vcl::Window *pParent, const SfxItemSet &rSet )
 {
     SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
     ScDocShell*            pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
@@ -2908,7 +2908,7 @@ SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
     return pDlg;
 }
 
-Window* ScDocShell::GetActiveDialogParent()
+vcl::Window* ScDocShell::GetActiveDialogParent()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )

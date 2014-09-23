@@ -54,10 +54,10 @@ class MyFixedText : public FixedText
 protected:
     void        RequestHelp( const HelpEvent& rHEvt );
 public:
-                MyFixedText(Window* pParent) : FixedText(pParent) {}
+                MyFixedText(vcl::Window* pParent) : FixedText(pParent) {}
 };
 
-class MyWindow : public Window
+class MyWindow : public vcl::Window
 {
 private:
     NumericField    aCountField;
@@ -74,7 +74,7 @@ private:
     PushButton      aViewButton;
 
 public:
-            MyWindow( Window *pParent );
+            MyWindow( vcl::Window *pParent );
 
         DECL_LINK(CountHdl, PushButton*);
         DECL_LINK(TextHdl, PushButton*);
@@ -157,7 +157,7 @@ void ScTestListener::selectionChanged(const EventObject& aEvent)
     pFixedText->SetText(aStr);
 }
 
-extern "C" Window* SAL_CALL CreateWindow( Window *pParent, const String& rParam )
+extern "C" vcl::Window* SAL_CALL CreateWindow( vcl::Window *pParent, const String& rParam )
 {
     MyWindow *pWin = new MyWindow( pParent );
     return pWin;
@@ -175,7 +175,7 @@ void MyFixedText::RequestHelp( const HelpEvent& rHEvt )
         FixedText::RequestHelp( rHEvt );
 }
 
-MyWindow::MyWindow( Window *pParent ) :
+MyWindow::MyWindow( vcl::Window *pParent ) :
     Window( pParent ),
     aCountField( this, WinBits(WB_SPIN | WB_REPEAT | WB_BORDER) ),
     aCountButton( this ),

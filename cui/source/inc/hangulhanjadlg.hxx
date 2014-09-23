@@ -41,7 +41,7 @@ namespace svx
     class SuggestionSet : public ValueSet
     {
     public:
-        SuggestionSet( Window* pParent );
+        SuggestionSet( vcl::Window* pParent );
         virtual ~SuggestionSet();
 
         virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
@@ -51,7 +51,7 @@ namespace svx
     class SuggestionDisplay : public Control
     {
     public:
-        SuggestionDisplay( Window* pParent, WinBits nBits );
+        SuggestionDisplay( vcl::Window* pParent, WinBits nBits );
         virtual ~SuggestionDisplay();
 
         void DisplayListBox( bool bDisplayListBox );
@@ -134,7 +134,7 @@ namespace svx
 
     public:
         HangulHanjaConversionDialog(
-                Window* _pParent,
+                vcl::Window* _pParent,
                 editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
         virtual ~HangulHanjaConversionDialog( );
 
@@ -220,7 +220,7 @@ namespace svx
 
         void                Init( void );       ///< reads settings from core and init controls
     public:
-                            HangulHanjaOptionsDialog( Window* _pParent );
+                            HangulHanjaOptionsDialog( vcl::Window* _pParent );
         virtual             ~HangulHanjaOptionsDialog();
 
         void                AddDict( const OUString& _rName, bool _bChecked );
@@ -238,7 +238,7 @@ namespace svx
         DECL_LINK( OKHdl, void* );
         DECL_LINK( ModifyHdl, void* );
     public:
-        HangulHanjaNewDictDialog( Window* _pParent );
+        HangulHanjaNewDictDialog( vcl::Window* _pParent );
 
         bool GetName( OUString& _rRetName ) const;
     };
@@ -256,7 +256,7 @@ namespace svx
         bool                ShouldScroll( bool _bUp ) const;
         void                DoJump( bool _bUp );
     public:
-                            SuggestionEdit( Window* pParent, WinBits nBits );
+                            SuggestionEdit( vcl::Window* pParent, WinBits nBits );
         virtual             ~SuggestionEdit();
         virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         void init( ScrollBar* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext);
@@ -310,7 +310,7 @@ namespace svx
         bool            DeleteEntryFromDictionary( const OUString& rEntry, const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary >& xDict );
 
     public:
-                        HangulHanjaEditDictDialog( Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );
+                        HangulHanjaEditDictDialog( vcl::Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );
                         virtual ~HangulHanjaEditDictDialog();
 
         void            UpdateScrollbar( void );

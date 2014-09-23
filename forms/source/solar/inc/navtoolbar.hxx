@@ -36,7 +36,7 @@ namespace frm
 
     class ImplNavToolBar;
 
-    class NavigationToolBar : public Window
+    class NavigationToolBar : public vcl::Window
     {
     public:
         enum ImageSize
@@ -61,11 +61,11 @@ namespace frm
                                         m_pDescriptionProvider;
         ImageSize                       m_eImageSize;
         ImplNavToolBar*                 m_pToolbar;
-        ::std::vector< Window* >        m_aChildWins;
+        ::std::vector< vcl::Window* >        m_aChildWins;
 
     public:
         NavigationToolBar(
-            Window* _pParent,
+            vcl::Window* _pParent,
             WinBits _nStyle,
             const ::boost::shared_ptr< const ICommandImageProvider >& _pImageProvider,
             const ::boost::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
@@ -137,18 +137,18 @@ namespace frm
         void updateFeatureStates( );
 
         // iterating through item windows
-        typedef void (NavigationToolBar::*ItemWindowHandler) (sal_uInt16, Window*, const void*) const;
+        typedef void (NavigationToolBar::*ItemWindowHandler) (sal_uInt16, vcl::Window*, const void*) const;
         void    forEachItemWindow( ItemWindowHandler _handler, const void* _pParam );
 
-        void setItemBackground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const;
-        void setTextLineColor( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const;
+        void setItemBackground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor ) const;
+        void setTextLineColor( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor ) const;
 #if 0
-        void setItemWindowZoom( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void setItemWindowZoom( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
 #endif
-        void setItemControlFont( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
-        void setItemControlForeground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
-        void adjustItemWindowWidth( sal_uInt16 _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const;
-        void enableItemRTL( sal_uInt16 /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const;
+        void setItemControlFont( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void setItemControlForeground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void adjustItemWindowWidth( sal_uInt16 _nItemId, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled ) const;
     };
 
     class RecordPositionInput : public NumericField
@@ -157,7 +157,7 @@ namespace frm
         const IFeatureDispatcher*   m_pDispatcher;
 
     public:
-        RecordPositionInput( Window* _pParent );
+        RecordPositionInput( vcl::Window* _pParent );
         virtual ~RecordPositionInput();
 
         /** sets the dispatcher which is to be used for the features

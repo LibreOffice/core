@@ -40,7 +40,7 @@ enum ScTabOpErr
 class ScTabOpDlg : public ScAnyRefDlg
 {
 public:
-                    ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                 ScDocument*     pDocument,
                                 const ScRefAddress& rCursorPos );
                     virtual ~ScTabOpDlg();

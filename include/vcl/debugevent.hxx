@@ -21,7 +21,7 @@ class VCL_DLLPUBLIC DebugEventInjector : Timer {
   sal_uInt32 mnEventsLeft;
   DebugEventInjector( sal_uInt32 nMaxEvents );
 
-  Window *ChooseWindow();
+  vcl::Window *ChooseWindow();
   void InjectTextEvent();
   void InjectMenuEvent();
   void InjectMouseEvent();

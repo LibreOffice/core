@@ -77,10 +77,10 @@ protected:
     virtual void SetMarkWndShouldOpen (bool bOpen) SAL_OVERRIDE {mbMarkWndOpen=bOpen;}
 
 public:
-    SvxHyperlinkInternetTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
+    SvxHyperlinkInternetTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkInternetTp ();
 
-    static  IconChoicePage* Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
+    static  IconChoicePage* Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
     virtual void        SetMarkStr ( const OUString& aStrMark ) SAL_OVERRIDE;
 

@@ -38,9 +38,9 @@
 using namespace ::com::sun::star;
 
 
-static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window* pLabel, sal_Unicode nAccel )
+static vcl::Window* ImplGetLabelFor( vcl::Window* pFrameWindow, WindowType nMyType, vcl::Window* pLabel, sal_Unicode nAccel )
 {
-    Window* pWindow = NULL;
+    vcl::Window* pWindow = NULL;
 
     if( nMyType == WINDOW_FIXEDTEXT     ||
         nMyType == WINDOW_FIXEDLINE     ||
@@ -73,7 +73,7 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
             while( nIndex < nFormEnd )
             {
                 nIndex++;
-                Window* pSWindow = ::ImplGetChildWindow( pFrameWindow,
+                vcl::Window* pSWindow = ::ImplGetChildWindow( pFrameWindow,
                                                  nIndex,
                                                  nIndex,
                                                  false );
@@ -98,6 +98,8 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
 
     return pWindow;
 }
+
+namespace vcl {
 
 Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
 {
@@ -263,5 +265,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
     }
     return pWindow;
 }
+
+} /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

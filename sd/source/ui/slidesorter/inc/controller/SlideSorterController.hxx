@@ -122,7 +122,7 @@ public:
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.
     */
-    void Paint (const Rectangle& rRect, ::Window* pWin);
+    void Paint (const Rectangle& rRect, vcl::Window* pWin);
 
     void FuTemporary (SfxRequest& rRequest);
     void FuPermanent (SfxRequest& rRequest);

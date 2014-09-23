@@ -39,7 +39,7 @@
 namespace sw { namespace sidebar {
 
 PageMarginControl::PageMarginControl(
-    Window* pParent,
+    vcl::Window* pParent,
     PagePropertyPanel& rPanel,
     const SvxLongLRSpaceItem& aPageLRMargin,
     const SvxLongULSpaceItem& aPageULMargin,

@@ -37,10 +37,10 @@
 class SdParagraphNumTabPage : public SfxTabPage
 {
 public:
-    SdParagraphNumTabPage(Window* pParent, const SfxItemSet& rSet );
+    SdParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SdParagraphNumTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -55,7 +55,7 @@ private:
     DECL_LINK( ImplNewStartHdl, void* );
 };
 
-SdParagraphNumTabPage::SdParagraphNumTabPage(Window* pParent, const SfxItemSet& rAttr )
+SdParagraphNumTabPage::SdParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rAttr )
                       : SfxTabPage(pParent,
                                    "DrawParaNumbering",
                                    "modules/sdraw/ui/paranumberingtab.ui",
@@ -74,7 +74,7 @@ SdParagraphNumTabPage::~SdParagraphNumTabPage()
 {
 }
 
-SfxTabPage* SdParagraphNumTabPage::Create(Window *pParent, const SfxItemSet * rAttrSet)
+SfxTabPage* SdParagraphNumTabPage::Create(vcl::Window *pParent, const SfxItemSet * rAttrSet)
 {
     return new SdParagraphNumTabPage( pParent, *rAttrSet );
 }
@@ -153,7 +153,7 @@ IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl)
     return 0;
 }
 
-SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
+SdParagraphDlg::SdParagraphDlg( vcl::Window* pParent, const SfxItemSet* pAttr )
                : SfxTabDialog( pParent,
                                "DrawParagraphPropertiesDialog",
                                "modules/sdraw/ui/drawparadialog.ui",

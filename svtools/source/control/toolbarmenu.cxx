@@ -41,7 +41,7 @@ namespace svtools {
 
 
 
-static Window* GetTopMostParentSystemWindow( Window* pWindow )
+static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
 {
     OSL_ASSERT( pWindow );
     if ( pWindow )
@@ -437,7 +437,7 @@ IMPL_LINK( ToolbarMenu, HighlightHdl, Control *, pControl )
 
 
 
-ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, Window* pParentWindow, WinBits nBits )
+ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, WinBits nBits )
 : DockingWindow(pParentWindow, nBits)
 {
     implInit(rFrame);
@@ -445,7 +445,7 @@ ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, Window* pParentWind
 
 
 
-ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, Window* pParentWindow, const ResId& rResId )
+ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, const ResId& rResId )
 : DockingWindow(pParentWindow, rResId)
 {
     implInit(rFrame);
@@ -462,7 +462,7 @@ void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 
     initWindow();
 
-    Window* pWindow = GetTopMostParentSystemWindow( this );
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
@@ -471,7 +471,7 @@ void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 
 ToolbarMenu::~ToolbarMenu()
 {
-    Window* pWindow = GetTopMostParentSystemWindow( this );
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( this );
 
@@ -584,7 +584,7 @@ void ToolbarMenu::initWindow()
 
 
 
-static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
+static long ImplGetNativeCheckAndRadioSize( vcl::Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
 {
     rMaxWidth = rCheckHeight = rRadioHeight = 0;
 
@@ -1283,7 +1283,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 }
 
 
-static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRect, bool i_bHighlight )
+static void ImplPaintCheckBackground( vcl::Window* i_pWindow, const Rectangle& i_rRect, bool i_bHighlight )
 {
     bool bNativeOk = false;
     if( i_pWindow->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )

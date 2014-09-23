@@ -353,10 +353,10 @@ const Graphic* SwTransferable::FindOLEReplacementGraphic() const
     return NULL;
 }
 
-void SwTransferable::RemoveDDELinkFormat( const Window& rWin )
+void SwTransferable::RemoveDDELinkFormat( const vcl::Window& rWin )
 {
     RemoveFormat( SOT_FORMATSTR_ID_LINK );
-    CopyToClipboard( (Window*)&rWin );
+    CopyToClipboard( (vcl::Window*)&rWin );
 }
 
 namespace
@@ -3143,7 +3143,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     }
 }
 
-void SwTransferable::StartDrag( Window* pWin, const Point& rPos )
+void SwTransferable::StartDrag( vcl::Window* pWin, const Point& rPos )
 {
     if(!pWrtShell)
         return;

@@ -26,9 +26,9 @@
 class VCL_DLLPUBLIC WaitObject
 {
 private:
-    Window*     mpWindow;
+    vcl::Window*     mpWindow;
 public:
-                WaitObject( Window* pWindow )
+                WaitObject( vcl::Window* pWindow )
                 {
                     mpWindow = pWindow;
                     if ( mpWindow )

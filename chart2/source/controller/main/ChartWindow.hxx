@@ -32,10 +32,10 @@ class ChartController;
 thus the controller can perform appropriate actions
 */
 
-class ChartWindow : public Window
+class ChartWindow : public vcl::Window
 {
 public:
-    ChartWindow( ChartController* pController, Window* pParent, WinBits nStyle );
+    ChartWindow( ChartController* pController, vcl::Window* pParent, WinBits nStyle );
     virtual ~ChartWindow();
 
     void clear();

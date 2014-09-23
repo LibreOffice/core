@@ -195,9 +195,9 @@ Point XIMStatusWindow::updatePosition()
         SalExtTextInputPosEvent aPosEvent;
         m_pLastParent->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
         int x, y;
-        XLIB_Window aChild;
+        ::Window aChild;
         XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
-                               (XLIB_Window)pParentEnvData->aShellWindow,
+                               (::Window)pParentEnvData->aShellWindow,
                                GetGenericData()->GetSalDisplay()->GetRootWindow( GetGenericData()->GetSalDisplay()->GetDefaultXScreen() ),
                                0, 0,
                                &x, &y,
@@ -269,7 +269,7 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
     if( m_bDelayedShow )
     {
         XRaiseWindow( (Display*)pData->pDisplay,
-                      (XLIB_Window)pData->aShellWindow );
+                      (::Window)pData->aShellWindow );
     }
     return 0;
 }
@@ -351,7 +351,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
         if( nDistance < 20 )
             nDistance = 20;
         XMoveWindow( (Display*)pEnvData->pDisplay,
-                     (XLIB_Window)pEnvData->aShellWindow,
+                     (::Window)pEnvData->aShellWindow,
                      rGeom.nX,
                      rGeom.nY + rGeom.nHeight + nDistance
                      );
@@ -441,7 +441,7 @@ void IIIMPStatusWindow::GetFocus()
             const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
             GetGenericData()->ErrorTrapPush();
             XSetInputFocus( (Display*)pParentEnvData->pDisplay,
-                            (XLIB_Window)pParentEnvData->aShellWindow,
+                            (::Window)pParentEnvData->aShellWindow,
                             RevertToNone,
                             CurrentTime
                             );
@@ -471,7 +471,7 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
                 const SystemEnvData* pEnv = pParent->GetSystemData();
                 GetGenericData()->ErrorTrapPush();
                 XSetInputFocus( (Display*)pEnv->pDisplay,
-                                (XLIB_Window)pEnv->aShellWindow,
+                                (::Window)pEnv->aShellWindow,
                                 RevertToNone,
                                 CurrentTime
                                 );

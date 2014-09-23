@@ -51,7 +51,7 @@
 
 // AutoFormat-Dialog:
 
-ScAutoFormatDlg::ScAutoFormatDlg(Window* pParent,
+ScAutoFormatDlg::ScAutoFormatDlg(vcl::Window* pParent,
     ScAutoFormat* pAutoFormat,
     const ScAutoFormatData* pSelFormatData,
     ScViewData *pViewData)

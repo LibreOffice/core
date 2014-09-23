@@ -26,17 +26,17 @@
 
 #include <tools/errinf.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class ResMgr;
 
 class SVT_DLLPUBLIC SfxErrorContext : private ErrorContext
 {
 public:
     SfxErrorContext(
-            sal_uInt16 nCtxIdP, Window *pWin=0,
+            sal_uInt16 nCtxIdP, vcl::Window *pWin=0,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
     SfxErrorContext(
-            sal_uInt16 nCtxIdP, const OUString &aArg1, Window *pWin=0,
+            sal_uInt16 nCtxIdP, const OUString &aArg1, vcl::Window *pWin=0,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
     bool GetString(sal_uLong nErrId, OUString &rStr) SAL_OVERRIDE;
 

@@ -14,7 +14,7 @@
 
 class SwViewShell;
 class View;
-class Window;
+namespace vcl { class Window; }
 class SwEditWin;
 
 /**
@@ -28,7 +28,7 @@ class SwCommentRuler
 public:
     SwCommentRuler (
         SwViewShell* pViewSh,
-        Window* pParent,
+        vcl::Window* pParent,
         SwEditWin* pWin,
         sal_uInt16 nRulerFlags,
         SfxBindings& rBindings,

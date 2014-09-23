@@ -33,7 +33,7 @@ class TextUnderlineControl:public svx::sidebar::PopupControl
 {
 public:
     TextUnderlineControl (
-        Window* pParent,
+        vcl::Window* pParent,
         svx::sidebar::TextPropertyPanel& rPanel,
         SfxBindings* pBindings);
     void Rearrange(FontUnderline eLine);

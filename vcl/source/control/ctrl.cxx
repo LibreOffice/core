@@ -45,14 +45,14 @@ Control::Control( WindowType nType ) :
     ImplInitControlData();
 }
 
-Control::Control( Window* pParent, WinBits nStyle ) :
+Control::Control( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_CONTROL )
 {
     ImplInitControlData();
     ImplInit( pParent, nStyle, NULL );
 }
 
-Control::Control( Window* pParent, const ResId& rResId ) :
+Control::Control( vcl::Window* pParent, const ResId& rResId ) :
     Window( WINDOW_CONTROL )
 {
     ImplInitControlData();
@@ -258,7 +258,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
     {
         if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
         {
-            Window* pFocusWin = Application::GetFocusWindow();
+            vcl::Window* pFocusWin = Application::GetFocusWindow();
             if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
             {
                 mbHasControlFocus = false;

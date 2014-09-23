@@ -38,7 +38,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
 
 // export data
-ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
+ORowSetImportExport::ORowSetImportExport(   vcl::Window* _pParent,
                                             const Reference< XResultSetUpdate >& _xResultSetUpdate,
                                             const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                             const Reference< XComponentContext >& _rM,

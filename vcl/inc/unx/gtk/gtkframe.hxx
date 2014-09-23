@@ -48,7 +48,7 @@ class GtkSalGraphics;
 class GtkSalDisplay;
 
 #if GTK_CHECK_VERSION(3,0,0)
-typedef XLIB_Window GdkNativeWindow;
+typedef ::Window GdkNativeWindow;
 #define GDK_WINDOW_XWINDOW(o) GDK_WINDOW_XID(o)
 #define gdk_set_sm_client_id(i) gdk_x11_set_sm_client_id(i)
 #define gdk_window_foreign_new_for_display(a,b) gdk_x11_window_foreign_new_for_display(a,b)
@@ -295,7 +295,7 @@ class GtkSalFrame : public SalFrame
     Size calcDefaultSize();
 
     void setMinMaxSize();
-    void createNewWindow( XLIB_Window aParent, bool bXEmbed, SalX11Screen nXScreen );
+    void createNewWindow( ::Window aParent, bool bXEmbed, SalX11Screen nXScreen );
     void askForXEmbedFocus( sal_Int32 nTimecode );
 
     void AllocateFrame();

@@ -42,7 +42,7 @@ namespace svt
         virtual OUString GetDisplayName() const SAL_OVERRIDE;
         virtual Image GetImage() const SAL_OVERRIDE;
         virtual OString GetHelpID() const SAL_OVERRIDE;
-        virtual void Activate( Window& i_rParentWindow ) SAL_OVERRIDE;
+        virtual void Activate( vcl::Window& i_rParentWindow ) SAL_OVERRIDE;
         virtual void Deactivate() SAL_OVERRIDE;
         virtual void SetSizePixel( const Size& i_rPanelWindowSize ) SAL_OVERRIDE;
         virtual void GrabFocus() SAL_OVERRIDE;

@@ -26,13 +26,13 @@
 namespace svt
 {
     //= OFileURLControl
-    OFileURLControl::OFileURLControl(Window* _pParent, WinBits nStyle)
+    OFileURLControl::OFileURLControl(vcl::Window* _pParent, WinBits nStyle)
         : SvtURLBox(_pParent, nStyle, INET_PROT_FILE)
     {
         DisableHistory();
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOFileURLControl(Window *pParent, VclBuilder::stringmap &)
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOFileURLControl(vcl::Window *pParent, VclBuilder::stringmap &)
     {
         WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                            WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;

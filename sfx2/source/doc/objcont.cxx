@@ -289,7 +289,7 @@ void SfxObjectShell::UpdateTime_Impl(
 
 SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
 (
-    Window*             pParent,
+    vcl::Window*             pParent,
     const SfxItemSet&   rSet
 )
 {

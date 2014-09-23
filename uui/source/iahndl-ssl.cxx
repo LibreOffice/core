@@ -137,7 +137,7 @@ getLocalizedDatTimeStr(
 
 bool
 executeUnknownAuthDialog(
-    Window * pParent,
+    vcl::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert)
 {
@@ -177,7 +177,7 @@ executeUnknownAuthDialog(
 
 bool
 executeSSLWarnDialog(
-    Window * pParent,
+    vcl::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert,
     sal_Int32 const & failure,
@@ -246,7 +246,7 @@ executeSSLWarnDialog(
 
 void
 handleCertificateValidationRequest_(
-    Window * pParent,
+    vcl::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     ucb::CertificateValidationRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &

@@ -119,7 +119,7 @@ protected:
     virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
-                    ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                ScViewData*      ptrViewData,
                                const ScAddress& aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap = NULL );
     virtual         ~ScNameDlg();

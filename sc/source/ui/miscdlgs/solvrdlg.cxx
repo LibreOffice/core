@@ -33,13 +33,13 @@
 
 namespace
 {
-    void lclErrorDialog( Window* pParent, const OUString& aString )
+    void lclErrorDialog( vcl::Window* pParent, const OUString& aString )
     {
         MessageDialog(pParent, aString).Execute();
     }
 }
 
-ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                           ScDocument* pDocument,
                           ScAddress aCursorPos )
 

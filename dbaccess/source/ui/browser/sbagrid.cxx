@@ -145,7 +145,7 @@ SbaXGridControl::~SbaXGridControl()
 {
 }
 
-FmXGridPeer* SbaXGridControl::imp_CreatePeer(Window* pParent)
+FmXGridPeer* SbaXGridControl::imp_CreatePeer(vcl::Window* pParent)
 {
     FmXGridPeer* pReturn = new SbaXGridPeer(m_xContext);
 
@@ -549,7 +549,7 @@ SbaXGridPeer* SbaXGridPeer::getImplementation(const Reference< XInterface >& _rx
     return NULL;
 }
 
-FmGridControl* SbaXGridPeer::imp_CreateControl(Window* pParent, WinBits nStyle)
+FmGridControl* SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
 {
     return new SbaGridControl( m_xContext, pParent, this, nStyle);
 }
@@ -706,7 +706,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
 
 // SbaGridControl
 SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
-                               Window* pParent, FmXGridPeer* _pPeer, WinBits nBits)
+                               vcl::Window* pParent, FmXGridPeer* _pPeer, WinBits nBits)
     :FmGridControl(_rM,pParent, _pPeer, nBits)
     ,m_pMasterListener(NULL)
     ,m_nAsyncDropEvent(0)

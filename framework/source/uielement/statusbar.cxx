@@ -25,7 +25,7 @@ namespace framework
 {
 
 FrameworkStatusBar::FrameworkStatusBar(
-    Window*           pParent,
+    vcl::Window*           pParent,
     WinBits           nWinBits ) :
     StatusBar( pParent, nWinBits ),
     m_pMgr( NULL )

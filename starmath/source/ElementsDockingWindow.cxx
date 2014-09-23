@@ -212,7 +212,7 @@ const sal_uInt16 SmElementsControl::aOthers[][2] =
     {RID_DOTSUP, RID_DOTSUP_HELP}, {RID_DOTSDOWN, RID_DOTSDOWN_HELP}
 };
 
-SmElementsControl::SmElementsControl(Window *pParent, const ResId& rResId)
+SmElementsControl::SmElementsControl(vcl::Window *pParent, const ResId& rResId)
     : Control(pParent, rResId)
     , mpDocShell(new SmDocShell(SFXOBJECTSHELL_STD_NORMAL))
     , maCurrentSetId(0)
@@ -615,7 +615,7 @@ const sal_uInt16 SmElementsDockingWindow::aCategories[] = {
     RID_CATEGORY_EXAMPLES
 };
 
-SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, SfxChildWindow* pChildWindow, Window* pParent) :
+SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent) :
     SfxDockingWindow(pInputBindings, pChildWindow, pParent, SmResId(RID_ELEMENTSDOCKINGWINDOW)),
     maElementsControl   (this, SmResId(1)),
     maElementListBox    (this, SmResId(1))
@@ -722,7 +722,7 @@ void SmElementsDockingWindow::Resize()
 SFX_IMPL_DOCKINGWINDOW_WITHID(SmElementsDockingWindowWrapper, SID_ELEMENTSDOCKINGWINDOW);
 
 SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
-                            Window *pParentWindow, sal_uInt16 nId,
+                            vcl::Window *pParentWindow, sal_uInt16 nId,
                             SfxBindings *pBindings, SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
 {

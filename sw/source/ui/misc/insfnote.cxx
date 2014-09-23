@@ -163,7 +163,7 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
     return 0;
 }
 
-SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, bool bEd)
+SwInsFootNoteDlg::SwInsFootNoteDlg(vcl::Window *pParent, SwWrtShell &rShell, bool bEd)
     : SvxStandardDialog(pParent, "InsertFootnoteDialog", "modules/swriter/ui/insertfootnote.ui")
     , rSh(rShell)
     , eCharSet(RTL_TEXTENCODING_DONTKNOW)

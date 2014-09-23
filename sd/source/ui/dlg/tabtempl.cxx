@@ -45,7 +45,7 @@
 /**
  * Constructor of the Tab dialog: appends pages to the dialog
  */
-SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
+SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
                                 const SfxObjectShell* pDocShell,
                                 SfxStyleSheetBase& rStyleBase,
                                 SdrModel* pModel,

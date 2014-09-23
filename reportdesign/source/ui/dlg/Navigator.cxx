@@ -180,7 +180,7 @@ protected:
     void _elementReplaced( const container::ContainerEvent& _rEvent );
 
 public:
-    NavigatorTree(Window* pParent,OReportController& _rController );
+    NavigatorTree(vcl::Window* pParent,OReportController& _rController );
     virtual ~NavigatorTree();
 
     DECL_LINK(OnEntrySelDesel, NavigatorTree*);
@@ -212,7 +212,7 @@ private:
     using SvTreeListBox::ExecuteDrop;
 };
 
-NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
+NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rController )
         :SvTreeListBox( pParent, WB_TABSTOP| WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
         ,comphelper::OSelectionChangeListener(m_aMutex)
         ,OPropertyChangeListener(m_aMutex)
@@ -886,7 +886,7 @@ public:
 ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pParent)
     :m_xReport(_rController.getReportDefinition())
     ,m_rController(_rController)
-    ,m_pNavigatorTree(new NavigatorTree(_pParent->get<Window>("box"),_rController))
+    ,m_pNavigatorTree(new NavigatorTree(_pParent->get<vcl::Window>("box"),_rController))
 {
     reportdesign::OReportVisitor aVisitor(m_pNavigatorTree.get());
     aVisitor.start(m_xReport);
@@ -896,7 +896,7 @@ ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pPar
 }
 
 // class ONavigator
-ONavigator::ONavigator(Window* _pParent ,OReportController& _rController)
+ONavigator::ONavigator(vcl::Window* _pParent ,OReportController& _rController)
     : FloatingWindow( _pParent, "FloatingNavigator", "modules/dbreport/ui/floatingnavigator.ui")
 {
     m_pImpl.reset(new ONavigatorImpl(_rController,this));

@@ -83,7 +83,7 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
 
 // CTOR / DTOR -----------------------------------------------------------
 
-SfxPasswordDialog::SfxPasswordDialog(Window* pParent, const OUString* pGroupText)
+SfxPasswordDialog::SfxPasswordDialog(vcl::Window* pParent, const OUString* pGroupText)
     : ModalDialog(pParent, "PasswordDialog", "sfx/ui/password.ui")
     , maMinLenPwdStr(SFX2_RESSTR(STR_PASSWD_MIN_LEN))
     , maMinLenPwdStr1(SFX2_RESSTR(STR_PASSWD_MIN_LEN1))

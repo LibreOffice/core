@@ -48,7 +48,7 @@ class ImageMap;
 class INetBookmark;
 class INetImage;
 class FileList;
-class Window;
+namespace vcl { class Window; }
 class Link;
 
 // Drag&Drop defines
@@ -251,13 +251,13 @@ public:
 
     void                PrepareOLE( const TransferableObjectDescriptor& rObjDesc );
 
-    void                CopyToClipboard( Window *pWindow ) const;
-    void                CopyToSelection( Window *pWindow ) const;
-    void                StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
+    void                CopyToClipboard( vcl::Window *pWindow ) const;
+    void                CopyToSelection( vcl::Window *pWindow ) const;
+    void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
                                    sal_Int32 nDragPointer = DND_POINTER_NONE,
                                    sal_Int32 nDragImage = DND_IMAGE_NONE );
 
-    static void         ClearSelection( Window *pWindow );
+    static void         ClearSelection( vcl::Window *pWindow );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetSystemClipboard();
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
@@ -367,8 +367,8 @@ public:
 
 public:
 
-    static TransferableDataHelper   CreateFromSystemClipboard( Window * pWindow );
-    static TransferableDataHelper   CreateFromSelection( Window * pWindow );
+    static TransferableDataHelper   CreateFromSystemClipboard( vcl::Window * pWindow );
+    static TransferableDataHelper   CreateFromSelection( vcl::Window * pWindow );
     static bool                     IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
                                              const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
                                              bool bCompareParameters = false );
@@ -416,7 +416,7 @@ public:
                         // to be overridden by the application
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-                        DragSourceHelper( Window* pWindow );
+                        DragSourceHelper( vcl::Window* pWindow );
     virtual             ~DragSourceHelper();
 };
 
@@ -475,7 +475,7 @@ public:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-                        DropTargetHelper( Window* pWindow );
+                        DropTargetHelper( vcl::Window* pWindow );
                         DropTargetHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >& rxDropTarget );
 
     virtual             ~DropTargetHelper();
@@ -519,7 +519,7 @@ public:
     bool                HasAnyData() const;
 
     using TransferableHelper::StartDrag;
-    void                StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
+    void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
                                    const Link& rCallbck,
                                    sal_Int32 nDragPointer = DND_POINTER_NONE,
                                    sal_Int32 nDragImage = DND_IMAGE_NONE );

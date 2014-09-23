@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 
-SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
+SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
 {
     get( m_pSearchButton, "search_personas" );
@@ -258,7 +258,7 @@ void SelectPersonaDialog::ClearSearchResults()
     }
 }
 
-SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
+SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", &rSet )
 {
     // persona
@@ -295,7 +295,7 @@ SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
 {
 }
 
-SfxTabPage* SvxPersonalizationTabPage::Create( Window *pParent, const SfxItemSet *rSet )
+SfxTabPage* SvxPersonalizationTabPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
 {
     return new SvxPersonalizationTabPage( pParent, *rSet );
 }

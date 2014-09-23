@@ -388,7 +388,7 @@ OUString impl_getFilter( const OUString& _rURL )
     return sFilter;
 }
 
-void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& rEndEditHdl )
+void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Link& rEndEditHdl )
 {
     aEndEditLink = rEndEditHdl;
     OUString sFile, sRange, sTmpFilter;

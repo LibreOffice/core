@@ -74,7 +74,7 @@ class SwCreateAddressListDialog : public SfxModalDialog
 
 public:
     SwCreateAddressListDialog(
-            Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig);
+            vcl::Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig);
     virtual ~SwCreateAddressListDialog();
 
     const OUString&         GetURL() const {    return m_sURL;    }

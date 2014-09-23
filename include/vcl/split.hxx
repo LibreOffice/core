@@ -25,10 +25,10 @@
 
 #define SPLITTER_DEFAULTSTEPSIZE 0xFFFF
 
-class VCL_DLLPUBLIC Splitter : public Window
+class VCL_DLLPUBLIC Splitter : public vcl::Window
 {
 private:
-    Window*             mpRefWin;
+    vcl::Window*             mpRefWin;
     long                mnSplitPos;
     long                mnLastSplitPos;
     long                mnStartSplitPos;
@@ -59,11 +59,11 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void      ImplInit( Window* pParent, WinBits nWinStyle );
+    SAL_DLLPRIVATE void      ImplInit( vcl::Window* pParent, WinBits nWinStyle );
 
 public:
-    explicit            Splitter( Window* pParent, WinBits nStyle = WB_VSCROLL );
-    explicit            Splitter( Window* pParent, const ResId& );
+    explicit            Splitter( vcl::Window* pParent, WinBits nStyle = WB_VSCROLL );
+    explicit            Splitter( vcl::Window* pParent, const ResId& );
     virtual             ~Splitter();
 
     virtual void        StartSplit();
@@ -86,9 +86,9 @@ public:
     void                StartDrag();
 
     void                SetDragRectPixel( const Rectangle& rDragRect,
-                                          Window* pRefWin = NULL );
+                                          vcl::Window* pRefWin = NULL );
     const Rectangle&    GetDragRectPixel() const { return maDragRect; }
-    Window*             GetDragWindow() const { return mpRefWin; }
+    vcl::Window*             GetDragWindow() const { return mpRefWin; }
 
     virtual void        SetSplitPosPixel( long nPos );
     long                GetSplitPosPixel() const { return mnSplitPos; }

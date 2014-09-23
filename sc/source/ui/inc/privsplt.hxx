@@ -51,7 +51,7 @@ class ScPrivatSplit : public Control
 
     public:
 
-        ScPrivatSplit( Window* pWindow, const ResId& rResId,
+        ScPrivatSplit( vcl::Window* pWindow, const ResId& rResId,
                         SC_SPLIT_DIRECTION eScSplit);
 
         virtual short   GetDeltaX();

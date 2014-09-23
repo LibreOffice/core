@@ -230,7 +230,7 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
         // SOLAR SAFE -> ------------------------
         SolarMutexGuard aSolarGuard;
 
-        Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
         // check for system window is necessary to guarantee correct pointer cast!
         if (
             (pWindow                  ) &&
@@ -261,7 +261,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     // SOLAR SAFE -> ------------------------
     SolarMutexGuard aSolarGuard;
 
-    Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (!pWindow)
         return;
 

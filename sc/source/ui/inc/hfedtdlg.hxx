@@ -29,7 +29,7 @@ class ScHFEditDlg : public SfxTabDialog
 {
     SvxNumType eNumType;
 protected:
-    ScHFEditDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle,
         const OString& rID, const OUString& rUIXMLDescription );
 public:
@@ -39,70 +39,70 @@ public:
 class ScHFEditHeaderDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditHeaderDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditHeaderDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditFooterDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditFooterDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditFooterDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditLeftHeaderDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditLeftHeaderDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditLeftHeaderDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditRightHeaderDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditRightHeaderDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditRightHeaderDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditLeftFooterDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditLeftFooterDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditLeftFooterDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditRightFooterDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditRightFooterDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditRightFooterDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditSharedHeaderDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditSharedHeaderDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditSharedHeaderDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditSharedFooterDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditSharedFooterDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditSharedFooterDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditAllDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditAllDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditAllDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 
 class ScHFEditActiveDlg : public ScHFEditDlg
 {
 public:
-    ScHFEditActiveDlg(SfxViewFrame* pFrame, Window* pParent,
+    ScHFEditActiveDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle);
 };
 

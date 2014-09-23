@@ -85,7 +85,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             if ( !pWindow->ImplGetFrameData()->mnFocusId )
             {
                 pWindow->ImplGetFrameData()->mbStartFocusState = true;
-                pWindow->ImplGetFrameData()->mnFocusId = Application::PostUserEvent( LINK( pWindow->ImplGetFrameWindow(), Window, ImplAsyncFocusHdl ) );
+                pWindow->ImplGetFrameData()->mnFocusId = Application::PostUserEvent( LINK( pWindow->ImplGetFrameWindow(), vcl::Window, ImplAsyncFocusHdl ) );
             }
             break;
 
@@ -107,7 +107,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
     return nRet;
 }
 
-void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow )
+void SystemChildWindow::ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow )
 {
     mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData, bShow );
 
@@ -122,13 +122,13 @@ void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, Syste
     }
 }
 
-SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
+SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
     ImplInitSysChild( pParent, nStyle, NULL );
 }
 
-SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow ) :
+SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
     ImplInitSysChild( pParent, nStyle, pData, bShow );

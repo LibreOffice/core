@@ -46,7 +46,7 @@ class BreakDlg
 {
 public:
     BreakDlg (
-        ::Window* pWindow,
+        vcl::Window* pWindow,
         DrawView* pDrView,
         DrawDocShell* pShell,
         sal_uLong nSumActionCount,

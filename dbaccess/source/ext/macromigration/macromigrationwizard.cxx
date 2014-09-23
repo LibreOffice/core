@@ -88,7 +88,7 @@ namespace dbmm
         virtual ~MacroMigrationDialogService();
 
     protected:
-        virtual Dialog* createDialog( Window* _pParent ) SAL_OVERRIDE;
+        virtual Dialog* createDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
         virtual void destroyDialog() SAL_OVERRIDE;
 
     private:
@@ -121,7 +121,7 @@ namespace dbmm
         return *(new MacroMigrationDialogService( _rxContext ) );
     }
 
-    Dialog* MacroMigrationDialogService::createDialog( Window* _pParent )
+    Dialog* MacroMigrationDialogService::createDialog( vcl::Window* _pParent )
     {
         return new MacroMigrationDialog( _pParent, m_aContext, m_xDocument );
     }

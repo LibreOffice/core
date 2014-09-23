@@ -94,7 +94,7 @@ namespace
 
 
 static bool lcl_GetPassword(
-    Window *pParent,
+    vcl::Window *pParent,
     bool bProtect,
     /*out*/OUString &rPassword )
 {
@@ -421,13 +421,13 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
 }
 
 
-SfxTabPage* SfxSecurityPage::Create( Window * pParent, const SfxItemSet * rItemSet )
+SfxTabPage* SfxSecurityPage::Create( vcl::Window * pParent, const SfxItemSet * rItemSet )
 {
     return new SfxSecurityPage( pParent, *rItemSet );
 }
 
 
-SfxSecurityPage::SfxSecurityPage( Window* pParent, const SfxItemSet& rItemSet )
+SfxSecurityPage::SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "SecurityInfoPage", "sfx/ui/securityinfopage.ui", &rItemSet)
 {
     m_pImpl.reset(new SfxSecurityPage_Impl( *this, rItemSet ));

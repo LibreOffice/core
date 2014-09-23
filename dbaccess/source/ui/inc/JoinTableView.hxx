@@ -48,18 +48,18 @@ namespace dbaui
     // this class conatins only the scrollbars to avoid that
     // the tablewindows clip the scrollbars
     class OJoinTableView;
-    class OScrollWindowHelper : public Window
+    class OScrollWindowHelper : public vcl::Window
     {
         ScrollBar           m_aHScrollBar;
         ScrollBar           m_aVScrollBar;
-        Window*             m_pCornerWindow;
+        vcl::Window*             m_pCornerWindow;
         OJoinTableView*     m_pTableView;
 
     protected:
         virtual void Resize() SAL_OVERRIDE;
 
     public:
-        OScrollWindowHelper( Window* pParent);
+        OScrollWindowHelper( vcl::Window* pParent);
         virtual ~OScrollWindowHelper();
 
         void setTableView(OJoinTableView* _pTableView);
@@ -72,7 +72,7 @@ namespace dbaui
     };
 
 
-    class OJoinTableView : public Window,
+    class OJoinTableView : public vcl::Window,
                            public IDragTransferableListener,
                            public DropTargetHelper
     {
@@ -109,7 +109,7 @@ namespace dbaui
         OJoinDesignViewAccess*      m_pAccessible;
 
     public:
-        OJoinTableView( Window* pParent, OJoinDesignView* pView );
+        OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView );
         virtual ~OJoinTableView();
 
         // window override

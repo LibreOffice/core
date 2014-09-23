@@ -92,7 +92,7 @@ private:
 class ScDPNumGroupDlg : public ModalDialog
 {
 public:
-    explicit            ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo );
+    explicit            ScDPNumGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo );
 
     ScDPNumGroupInfo    GetGroupInfo() const;
 
@@ -112,7 +112,7 @@ private:
 class ScDPDateGroupDlg : public ModalDialog
 {
 public:
-    explicit            ScDPDateGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo,
+    explicit            ScDPDateGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo,
                             sal_Int32 nDatePart, const Date& rNullDate );
 
     ScDPNumGroupInfo    GetGroupInfo() const;

@@ -35,7 +35,7 @@ private:
     RadioButton* m_pBtnInsCol;
 
 public:
-            ScInsertCellDlg( Window* pParent,bool bDisallowCellMove = false );
+            ScInsertCellDlg( vcl::Window* pParent,bool bDisallowCellMove = false );
             virtual ~ScInsertCellDlg();
 
     InsCellCmd GetInsCellCmd() const;

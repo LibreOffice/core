@@ -101,7 +101,7 @@ namespace impl
 class SeriesHeaderEdit : public Edit
 {
 public:
-    SeriesHeaderEdit( Window * pParent );
+    SeriesHeaderEdit( vcl::Window * pParent );
     virtual ~SeriesHeaderEdit();
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
@@ -114,7 +114,7 @@ private:
     bool m_bShowWarningBox;
 };
 
-SeriesHeaderEdit::SeriesHeaderEdit( Window * pParent ) :
+SeriesHeaderEdit::SeriesHeaderEdit( vcl::Window * pParent ) :
         Edit( pParent ),
         m_nStartColumn( 0 ),
         m_bShowWarningBox( false )
@@ -147,7 +147,7 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
 class SeriesHeader
 {
 public:
-    explicit SeriesHeader(Window * pParent, Window *pColorParent);
+    explicit SeriesHeader(vcl::Window * pParent, vcl::Window *pColorParent);
 
     void SetColor( const Color & rCol );
     void SetPos( const Point & rPos );
@@ -200,7 +200,7 @@ private:
     bool      m_bSeriesNameChangePending;
 };
 
-SeriesHeader::SeriesHeader( Window * pParent, Window *pColorParent ) :
+SeriesHeader::SeriesHeader( vcl::Window * pParent, vcl::Window *pColorParent ) :
         m_spSymbol( new FixedImage( pParent, WB_NOBORDER )),
         m_spSeriesName( new SeriesHeaderEdit( pParent )),
         m_spColorBar( new FixedText( pColorParent, WB_NOBORDER )),
@@ -455,7 +455,7 @@ sal_Int32 lcl_getColumnInDataOrHeader(
 
 } // anonymous namespace
 
-DataBrowser::DataBrowser( Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
+DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
     ::svt::EditBrowseBox( pParent, nStyle, EBBF_SMART_TAB_TRAVEL | EBBF_HANDLE_COLUMN_TEXT, BROWSER_STANDARD_FLAGS ),
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
@@ -580,8 +580,8 @@ void DataBrowser::RenewTable()
     GoToColumnId( ::std::min( nOldColId, static_cast< sal_uInt16 >( ColCount() - 1 )));
 
     Dialog* pDialog = GetParentDialog();
-    Window* pWin = pDialog->get<VclContainer>("columns");
-    Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
+    vcl::Window* pWin = pDialog->get<VclContainer>("columns");
+    vcl::Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
 
     // fill series headers
     clearHeaders();
@@ -1216,8 +1216,8 @@ void DataBrowser::EndScroll()
 void DataBrowser::RenewSeriesHeaders()
 {
     Dialog* pDialog = GetParentDialog();
-    Window* pWin = pDialog->get<VclContainer>("columns");
-    Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
+    vcl::Window* pWin = pDialog->get<VclContainer>("columns");
+    vcl::Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
 
     clearHeaders();
     DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
@@ -1260,8 +1260,8 @@ void DataBrowser::ImplAdjustHeaderControls()
     nCurrentPos +=  this->GetColumnWidth( 0 );
 
     Dialog* pDialog = GetParentDialog();
-    Window* pWin = pDialog->get<VclContainer>("columns");
-    Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
+    vcl::Window* pWin = pDialog->get<VclContainer>("columns");
+    vcl::Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
     pWin->set_margin_left(nCurrentPos);
     pColorWin->set_margin_left(nCurrentPos);
 

@@ -40,13 +40,13 @@ public:
     PopupWindowControllerImpl();
     ~PopupWindowControllerImpl();
 
-    void SetPopupWindow( ::Window* pPopupWindow, ToolBox* pToolBox );
+    void SetPopupWindow( vcl::Window* pPopupWindow, ToolBox* pToolBox );
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
-    DECL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, Window* );
+    DECL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, vcl::Window* );
 
 private:
-    ::Window* mpPopupWindow;
+    vcl::Window* mpPopupWindow;
     ToolBox* mpToolBox;
 };
 
@@ -62,7 +62,7 @@ PopupWindowControllerImpl::~PopupWindowControllerImpl()
         SetPopupWindow(0,0);
 }
 
-void PopupWindowControllerImpl::SetPopupWindow( ::Window* pPopupWindow, ToolBox* pToolBox )
+void PopupWindowControllerImpl::SetPopupWindow( vcl::Window* pPopupWindow, ToolBox* pToolBox )
 {
     if( mpPopupWindow )
     {
@@ -122,7 +122,7 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
 
 
 
-IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, Window*, pWindow )
+IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, vcl::Window*, pWindow )
 {
     (void)*pThis;
     delete pWindow;
@@ -218,13 +218,13 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
     ToolBox* pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
     if( pToolBox )
     {
-        ::Window* pItemWindow = pToolBox->GetItemWindow( pToolBox->GetDownItemId() );
-        ::Window* pWin = createPopupWindow( pItemWindow ? pItemWindow : pToolBox );
+        vcl::Window* pItemWindow = pToolBox->GetItemWindow( pToolBox->GetDownItemId() );
+        vcl::Window* pWin = createPopupWindow( pItemWindow ? pItemWindow : pToolBox );
         if( pWin )
         {
                pWin->EnableDocking(true);
             mpImpl->SetPopupWindow(pWin,pToolBox);
-            ::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin,
+            vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin,
                                                            FLOATWIN_POPUPMODE_GRABFOCUS |
                                                            FLOATWIN_POPUPMODE_NOFOCUSCLOSE |
                                                            FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |

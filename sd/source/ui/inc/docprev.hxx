@@ -63,7 +63,7 @@ protected:
     void updateViewSettings();
 
 public:
-                    SdDocPreviewWin( Window* pParent, const WinBits nStyle );
+                    SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle );
                     virtual ~SdDocPreviewWin();
     void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
     virtual void    Resize() SAL_OVERRIDE;

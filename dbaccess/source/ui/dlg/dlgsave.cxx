@@ -176,7 +176,7 @@ namespace
     }
 }
 
-OSaveAsDlg::OSaveAsDlg( Window * pParent,
+OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
                         const sal_Int32& _rType,
                         const Reference< XComponentContext >& _rxContext,
                         const Reference< XConnection>& _xConnection,
@@ -269,7 +269,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
     implInit();
 }
 
-OSaveAsDlg::OSaveAsDlg( Window * pParent,
+OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
                         const Reference< XComponentContext >& _rxContext,
                         const OUString& rDefault,
                         const OUString& _sLabel,

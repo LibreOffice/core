@@ -379,8 +379,8 @@ void DictionaryList::Resize()
 }
 
 void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& xDictionary,
-    Window *pED_Term, Window *pED_Mapping, ListBox *pLB_Property,
-    Window *pFT_Term, Window *pFT_Mapping, Window *pFT_Property)
+    vcl::Window *pED_Term, vcl::Window *pED_Mapping, ListBox *pLB_Property,
+    vcl::Window *pFT_Term, vcl::Window *pFT_Mapping, vcl::Window *pFT_Property)
 {
     SetStyle( WB_VSCROLL | WB_TABSTOP );
     SetSelectionMode( SINGLE_SELECTION );
@@ -428,7 +428,7 @@ void ChineseDictionaryDialog::initDictionaryControl(DictionaryList *pList,
         m_pFT_Term, m_pFT_Mapping, m_pFT_Property);
 }
 
-ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
+ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
     : ModalDialog(pParent, "ChineseDictionaryDialog",
          "svx/ui/chinesedictionary.ui")
     , m_nTextConversionOptions(i18n::TextConversionOption::NONE)

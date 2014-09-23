@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sd {
 
@@ -49,7 +49,7 @@ public:
         */
     virtual ShellType* CreateShell (
         ShellId nId,
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         FrameView* pFrameView = NULL) = 0;
 
     /** Tell the factory that a shell is no longer in use.  It may destroy

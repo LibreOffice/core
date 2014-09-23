@@ -97,7 +97,7 @@ namespace toolkit
 {
     /** sets the "face color" for button like controls (scroll bar, spin button)
     */
-    void setButtonLikeFaceColor( Window* _pWindow, const ::com::sun::star::uno::Any& _rColorValue )
+    void setButtonLikeFaceColor( vcl::Window* _pWindow, const ::com::sun::star::uno::Any& _rColorValue )
     {
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -151,13 +151,13 @@ namespace toolkit
         _pWindow->SetSettings( aSettings, true );
     }
 
-    Any getButtonLikeFaceColor( const Window* _pWindow )
+    Any getButtonLikeFaceColor( const vcl::Window* _pWindow )
     {
         sal_Int32 nBackgroundColor = _pWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
         return makeAny( nBackgroundColor );
     }
 
-    static void adjustBooleanWindowStyle( const Any& _rValue, Window* _pWindow, WinBits _nBits, bool _bInverseSemantics )
+    static void adjustBooleanWindowStyle( const Any& _rValue, vcl::Window* _pWindow, WinBits _nBits, bool _bInverseSemantics )
     {
         WinBits nStyle = _pWindow->GetStyle();
         bool bValue( false );
@@ -169,7 +169,7 @@ namespace toolkit
         _pWindow->SetStyle( nStyle );
     }
 
-    static void setVisualEffect( const Any& _rValue, Window* _pWindow )
+    static void setVisualEffect( const Any& _rValue, vcl::Window* _pWindow )
     {
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -189,7 +189,7 @@ namespace toolkit
         _pWindow->SetSettings( aSettings );
     }
 
-    static Any getVisualEffect( Window* _pWindow )
+    static Any getVisualEffect( vcl::Window* _pWindow )
     {
         Any aEffect;
 
@@ -423,7 +423,7 @@ void VCLXButton::setLabel( const OUString& rLabel ) throw(::com::sun::star::uno:
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( rLabel );
 }
@@ -850,7 +850,7 @@ void VCLXCheckBox::setLabel( const OUString& rLabel ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( rLabel );
 }
@@ -1216,7 +1216,7 @@ void VCLXRadioButton::setLabel( const OUString& rLabel ) throw(::com::sun::star:
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( rLabel );
 }
@@ -1413,7 +1413,7 @@ void VCLXSpinField::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::star::uno
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nStyle = pWindow->GetStyle();
@@ -2210,7 +2210,7 @@ void VCLXMessageBox::setCaptionText( const OUString& rText ) throw(::com::sun::s
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( rText );
 }
@@ -2220,7 +2220,7 @@ OUString VCLXMessageBox::getCaptionText() throw(::com::sun::star::uno::RuntimeEx
     SolarMutexGuard aGuard;
 
     OUString aText;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;
@@ -2307,7 +2307,7 @@ void SAL_CALL VCLXDialog::setHelpId( const OUString& rId ) throw (RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetHelpId( OUStringToOString( rId, RTL_TEXTENCODING_UTF8 ) );
 }
@@ -2316,7 +2316,7 @@ void VCLXDialog::setTitle( const OUString& Title ) throw(::com::sun::star::uno::
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( Title );
 }
@@ -2326,7 +2326,7 @@ OUString VCLXDialog::getTitle() throw(::com::sun::star::uno::RuntimeException, s
     SolarMutexGuard aGuard;
 
     OUString aTitle;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         aTitle = pWindow->GetText();
     return aTitle;
@@ -2340,13 +2340,13 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException, s
     if ( GetWindow() )
     {
         Dialog* pDlg = (Dialog*) GetWindow();
-        Window* pParent = pDlg->GetWindow( WINDOW_PARENTOVERLAP );
-        Window* pOldParent = NULL;
-        Window* pSetParent = NULL;
+        vcl::Window* pParent = pDlg->GetWindow( WINDOW_PARENTOVERLAP );
+        vcl::Window* pOldParent = NULL;
+        vcl::Window* pSetParent = NULL;
         if ( pParent && !pParent->IsReallyVisible() )
         {
             pOldParent = pDlg->GetParent();
-            Window* pFrame = pDlg->GetWindow( WINDOW_FRAME );
+            vcl::Window* pFrame = pDlg->GetWindow( WINDOW_FRAME );
             if( pFrame != pDlg )
             {
                 pDlg->SetParent( pFrame );
@@ -2372,7 +2372,7 @@ void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException, std
 void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
 
     if ( pWindow )
     {
@@ -2506,7 +2506,7 @@ void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
 throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
 
     if ( pWindow )
     {
@@ -2780,7 +2780,7 @@ void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
 throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
 
     if ( pWindow )
     {
@@ -2966,7 +2966,7 @@ OUString VCLXFixedHyperlink::getText() throw(::com::sun::star::uno::RuntimeExcep
     SolarMutexGuard aGuard;
 
     OUString aText;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;
@@ -2996,7 +2996,7 @@ void VCLXFixedHyperlink::setAlignment( short nAlign ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nNewBits = 0;
@@ -3018,7 +3018,7 @@ short VCLXFixedHyperlink::getAlignment() throw(::com::sun::star::uno::RuntimeExc
     SolarMutexGuard aGuard;
 
     short nAlign = 0;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nStyle = pWindow->GetStyle();
@@ -3218,7 +3218,7 @@ void VCLXFixedText::setText( const OUString& Text ) throw(::com::sun::star::uno:
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( Text );
 }
@@ -3228,7 +3228,7 @@ OUString VCLXFixedText::getText() throw(::com::sun::star::uno::RuntimeException,
     SolarMutexGuard aGuard;
 
     OUString aText;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;
@@ -3238,7 +3238,7 @@ void VCLXFixedText::setAlignment( short nAlign ) throw(::com::sun::star::uno::Ru
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nNewBits = 0;
@@ -3260,7 +3260,7 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
     SolarMutexGuard aGuard;
 
     short nAlign = 0;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nStyle = pWindow->GetStyle();
@@ -3499,7 +3499,7 @@ void VCLXScrollBar::setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::R
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nStyle = pWindow->GetStyle();
@@ -3519,7 +3519,7 @@ sal_Int32 VCLXScrollBar::getOrientation() throw(::com::sun::star::uno::RuntimeEx
     SolarMutexGuard aGuard;
 
     sal_Int32 n = 0;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         WinBits nStyle = pWindow->GetStyle();
@@ -3765,7 +3765,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-::com::sun::star::awt::Size SAL_CALL VCLXScrollBar::implGetMinimumSize( Window* p ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Size SAL_CALL VCLXScrollBar::implGetMinimumSize( vcl::Window* p ) throw(::com::sun::star::uno::RuntimeException)
 {
     long n = p->GetSettings().GetStyleSettings().GetScrollBarSize();
     return ::com::sun::star::awt::Size( n, n );
@@ -3906,7 +3906,7 @@ OUString VCLXEdit::getText() throw(::com::sun::star::uno::RuntimeException, std:
     SolarMutexGuard aGuard;
 
     OUString aText;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;
@@ -4809,7 +4809,7 @@ VCLXDateField::~VCLXDateField()
 //change the window type here to match the role
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXDateField::CreateAccessibleContext()
 {
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->SetType( WINDOW_DATEFIELD );
@@ -5157,7 +5157,7 @@ VCLXTimeField::~VCLXTimeField()
 //change the window type here to match the role
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXTimeField::CreateAccessibleContext()
 {
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->SetType( WINDOW_TIMEFIELD );
@@ -6601,7 +6601,7 @@ void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
 throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
 
     if ( pWindow )
     {

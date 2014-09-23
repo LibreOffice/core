@@ -37,7 +37,7 @@ static void (* window_real_initialize) (AtkObject *obj, gpointer data) = NULL;
 static void (* window_real_finalize) (GObject *obj) = NULL;
 
 static void
-init_from_window( AtkObject *accessible, Window *pWindow )
+init_from_window( AtkObject *accessible, vcl::Window *pWindow )
 {
     static AtkRole aDefaultRole = ATK_ROLE_INVALID;
 
@@ -75,7 +75,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
             sal_uInt16 type = WINDOW_WINDOW;
             bool parentIsMenuFloatingWindow = false;
 
-            Window *pParent = pWindow->GetParent();
+            vcl::Window *pParent = pWindow->GetParent();
             if( pParent ) {
                 type = pParent->GetType();
                 parentIsMenuFloatingWindow = pParent->IsMenuFloatingWindow();
@@ -91,7 +91,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
 
         default:
         {
-            Window *pChild = pWindow->GetWindow(WINDOW_FIRSTCHILD);
+            vcl::Window *pChild = pWindow->GetWindow(WINDOW_FIRSTCHILD);
             if( pChild )
             {
                 if( WINDOW_HELPTEXTWINDOW == pChild->GetType() )
@@ -159,9 +159,9 @@ static gboolean ooo_tooltip_unmap( GtkWidget* pToolTip, gpointer )
 /*****************************************************************************/
 
 static bool
-isChildPopupMenu(Window* pWindow)
+isChildPopupMenu(vcl::Window* pWindow)
 {
-    Window* pChild = pWindow->GetAccessibleChildWindow(0);
+    vcl::Window* pChild = pWindow->GetAccessibleChildWindow(0);
     if (!pChild)
         return false;
 
@@ -183,7 +183,7 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
     GtkSalFrame *pFrame = GtkSalFrame::getFromWindow( GTK_WINDOW( data ) );
     if( pFrame )
     {
-        Window *pWindow = pFrame->GetWindow();
+        vcl::Window *pWindow = pFrame->GetWindow();
         if( pWindow )
         {
             init_from_window( obj, pWindow );

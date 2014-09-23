@@ -94,7 +94,7 @@ class ScEditEngineDefaulter;
 class EditView;
 class EditStatus;
 class Outliner;
-class Window;
+namespace vcl { class Window; }
 class SfxObjectShell;
 class SfxBindings;
 class SfxDispatcher;
@@ -240,7 +240,7 @@ public:
     ScMarkData&     GetMarkData();
     const ScMarkData& GetMarkData() const;
 
-    Window*         GetDialogParent();          // forwarded from tabvwsh
+    vcl::Window*         GetDialogParent();          // forwarded from tabvwsh
     ScGridWindow*   GetActiveWin();             // from View
     ScDrawView*     GetScDrawView();            // from View
     bool            IsMinimized();              // from View
@@ -404,7 +404,7 @@ public:
     void            ResetEditView();
     void            SetEditEngine( ScSplitPos eWhich,
                                     ScEditEngineDefaulter* pNewEngine,
-                                    Window* pWin, SCCOL nNewX, SCROW nNewY );
+                                    vcl::Window* pWin, SCCOL nNewX, SCROW nNewY );
     void            GetEditView( ScSplitPos eWhich, EditView*& rViewPtr, SCCOL& rCol, SCROW& rRow );
     bool            HasEditView( ScSplitPos eWhich ) const
                                         { return pEditView[eWhich] && bEditActive[eWhich]; }
@@ -422,7 +422,7 @@ public:
     SCCOL           GetEditEndCol() const           { return nEditEndCol; }
     SCROW           GetEditEndRow() const           { return nEditEndRow; }
 
-    Rectangle       GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY, Window* pWin,
+    Rectangle       GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY, vcl::Window* pWin,
                                     const ScPatternAttr* pPattern, bool bForceToTop );
 
     void            SetTabNo( SCTAB nNewTab );

@@ -45,7 +45,7 @@ namespace com
 class SfxPartChildWnd_Impl : public SfxChildWindow
 {
 public:
-    SfxPartChildWnd_Impl( Window* pParent, sal_uInt16 nId,
+    SfxPartChildWnd_Impl( vcl::Window* pParent, sal_uInt16 nId,
                                    SfxBindings* pBindings,
                                    SfxChildWinInfo* pInfo );
 
@@ -66,7 +66,7 @@ protected:
 public:
                             SfxPartDockWnd_Impl( SfxBindings* pBindings,
                                   SfxChildWindow* pChildWin,
-                                  Window* pParent,
+                                  vcl::Window* pParent,
                                   WinBits nBits );
 
                             virtual ~SfxPartDockWnd_Impl();

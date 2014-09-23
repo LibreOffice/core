@@ -38,7 +38,7 @@ inline SvxFrameDirection lclVoidToEnum( void* pDirection )
 
 } // namespace
 
-FrameDirectionListBox::FrameDirectionListBox( Window* pParent, WinBits nBits )
+FrameDirectionListBox::FrameDirectionListBox( vcl::Window* pParent, WinBits nBits )
     : ListBox(pParent, nBits)
     , meSaveValue(FRMDIR_HORI_LEFT_TOP)
 {
@@ -48,7 +48,7 @@ FrameDirectionListBox::~FrameDirectionListBox()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFrameDirectionListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFrameDirectionListBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     FrameDirectionListBox* pListBox = new FrameDirectionListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
     pListBox->EnableAutoSize(true);

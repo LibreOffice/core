@@ -54,7 +54,7 @@ using namespace com::sun::star::util;
 
 using ::rtl::Uri;
 
-XMLFilterSettingsDialog::XMLFilterSettingsDialog(Window* pParent,
+XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext)
     : ModelessDialog(pParent, "XMLFilterSettingsDialog", "filter/ui/xmlfiltersettings.ui")
     , mxContext( rxContext )
@@ -1336,7 +1336,7 @@ OUString getApplicationUIName( const OUString& rServiceName )
     }
 }
 
-SvxPathControl::SvxPathControl(Window* pParent)
+SvxPathControl::SvxPathControl(vcl::Window* pParent)
     : VclVBox(pParent)
     , bHasBeenShown(false)
 {
@@ -1376,7 +1376,7 @@ SvxPathControl::~SvxPathControl()
     delete m_pHeaderBar;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPathControl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPathControl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxPathControl(pParent);
 }

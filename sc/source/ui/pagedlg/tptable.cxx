@@ -79,7 +79,7 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
 #define SC_TPTABLE_SCALE_TO         1
 #define SC_TPTABLE_SCALE_TO_PAGES   2
 
-ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
+ScTablePage::ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
         SfxTabPage( pParent, "SheetPrintPage","modules/scalc/ui/sheetprintpage.ui", &rCoreAttrs )
 {
@@ -132,7 +132,7 @@ const sal_uInt16* ScTablePage::GetRanges()
     return pPageTableRanges;
 }
 
-SfxTabPage* ScTablePage::Create( Window* pParent, const SfxItemSet* rCoreSet )
+SfxTabPage* ScTablePage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
 {
     return ( new ScTablePage( pParent, *rCoreSet ) );
 }

@@ -499,7 +499,7 @@ static Pointer lcl_msoPointerToLOPointer( long msoPointerStyle )
 ScVbaControl::getMousePointer() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     PointerStyle eType = POINTER_ARROW; // default ?
-    Window* pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
     if ( pWindow )
     {
         eType = pWindow->GetPointer().GetStyle();
@@ -510,7 +510,7 @@ ScVbaControl::getMousePointer() throw (::com::sun::star::uno::RuntimeException, 
 void SAL_CALL
 ScVbaControl::setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Window* pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
     if ( pWindow )
     {
         Pointer aPointer( POINTER_ARROW );

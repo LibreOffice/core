@@ -63,9 +63,9 @@ private:
     DECL_LINK(StandardizedPageCountCheckHdl, void *);
 
 public:
-    SwLoadOptPage(Window* pParent, const SfxItemSet& rSet);
+    SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -75,7 +75,7 @@ public:
 class SwCaptionOptDlg : public SfxSingleTabDialog
 {
 public:
-    SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet);
+    SwCaptionOptDlg(vcl::Window* pParent, const SfxItemSet& rSet);
 };
 
 class CaptionComboBox : public SwComboBox
@@ -84,18 +84,18 @@ protected:
     virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
 
 public:
-    CaptionComboBox(Window* pParent, WinBits nStyle)
+    CaptionComboBox(vcl::Window* pParent, WinBits nStyle)
         : SwComboBox(pParent, nStyle)
     {}
 };
 
-class SwCaptionPreview : public Window
+class SwCaptionPreview : public vcl::Window
 {
 private:
     OUString maText;
     Point    maDrawPos;
 public:
-    SwCaptionPreview( Window* pParent, WinBits nStyle );
+    SwCaptionPreview( vcl::Window* pParent, WinBits nStyle );
     void Init();
     void SetPreviewText( const OUString& rText );
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -162,11 +162,11 @@ private:
     void                DrawSample();
 
 public:
-                        SwCaptionOptPage( Window* pParent,
+                        SwCaptionOptPage( vcl::Window* pParent,
                                          const SfxItemSet& rSet );
                         virtual ~SwCaptionOptPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

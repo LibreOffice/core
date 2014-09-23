@@ -27,7 +27,7 @@ namespace pcr
     //= InspectorHelpWindow
 
 
-    InspectorHelpWindow::InspectorHelpWindow( Window* _pParent )
+    InspectorHelpWindow::InspectorHelpWindow( vcl::Window* _pParent )
         :Window( _pParent, WB_DIALOGCONTROL )
         ,m_aSeparator( this )
         ,m_aHelpText( this, WB_LEFT | WB_READONLY | WB_AUTOVSCROLL )

@@ -22,7 +22,7 @@
 
 #include <vcl/window.hxx>
 
-class ScHintWindow : public Window
+class ScHintWindow : public vcl::Window
 {
 private:
     OUString  aTitle;
@@ -36,7 +36,7 @@ protected:
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 public:
-            ScHintWindow( Window* pParent, const OUString& rTit, const OUString& rMsg );
+            ScHintWindow( vcl::Window* pParent, const OUString& rTit, const OUString& rMsg );
             virtual ~ScHintWindow();
 };
 

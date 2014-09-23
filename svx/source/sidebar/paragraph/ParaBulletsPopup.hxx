@@ -33,7 +33,7 @@ class ParaBulletsPopup
 {
 public :
     ParaBulletsPopup (
-        Window* pParent,
+        vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
     virtual ~ParaBulletsPopup (void);
 

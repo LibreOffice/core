@@ -66,9 +66,9 @@ private:
     ScTypedCaseStrSet::const_iterator miAutoPosColumn;
     ScTypedCaseStrSet::const_iterator miAutoPosFormula;
 
-    Window*                 pTipVisibleParent;
+    vcl::Window*                 pTipVisibleParent;
     sal_uLong               nTipVisible;
-    Window*                 pTipVisibleSecParent;
+    vcl::Window*                 pTipVisibleSecParent;
     sal_uLong               nTipVisibleSec;
     OUString                aManualTip;
     OUString                aAutoSearch;

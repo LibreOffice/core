@@ -68,7 +68,7 @@ static void lcl_GetFieldData( ScHeaderFieldData& rData )
 
 // class ScEditWindow
 
-ScEditWindow::ScEditWindow( Window* pParent, WinBits nBits, ScEditWindowLocation eLoc )
+ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLocation eLoc )
     :   Control( pParent, nBits ),
     eLocation(eLoc),
     pAcc(NULL)
@@ -129,7 +129,7 @@ ScEditWindow::~ScEditWindow()
     delete pEdView;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScEditWindow(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScEditWindow(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ScEditWindow (pParent, WB_BORDER|WB_TABSTOP, Left);
 }
@@ -327,7 +327,7 @@ void ScEditWindow::LoseFocus()
     return pAcc;
 }
 
-ScExtIButton::ScExtIButton(Window* pParent, WinBits nBits )
+ScExtIButton::ScExtIButton(vcl::Window* pParent, WinBits nBits )
     : ImageButton(pParent,nBits), pPopupMenu(NULL)
 {
     nSelected=0;
@@ -335,7 +335,7 @@ ScExtIButton::ScExtIButton(Window* pParent, WinBits nBits )
     SetDropDown(PUSHBUTTON_DROPDOWN_TOOLBOX);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScExtIButton(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScExtIButton(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ScExtIButton (pParent, 0);// WB_BORDER|WB_TABSTOP);
 }

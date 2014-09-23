@@ -83,7 +83,7 @@ inline bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
     return bRet;
 }
 
-SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh)
+SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     : SfxModalDialog(pParent, "ColumnDialog", "modules/swriter/ui/columndialog.ui")
     , rWrtShell(rSh)
     , pPageSet(0)
@@ -162,7 +162,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh)
 
     // create TabPage
     pTabPage = (SwColumnPage*) SwColumnPage::Create(get_content_area(), pColPgSet);
-    pTabPage->get<Window>("applytoft")->Show();
+    pTabPage->get<vcl::Window>("applytoft")->Show();
     pTabPage->get(m_pApplyToLB, "applytolb");
     m_pApplyToLB->Show();
 
@@ -393,7 +393,7 @@ void SwColumnPage::ResetColWidth()
 }
 
 // Now as TabPage
-SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
+SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "ColumnPage", "modules/swriter/ui/columnpage.ui", &rSet)
     , pColMgr(0)
     , nFirstVis(0)
@@ -622,7 +622,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 }
 
 // create TabPage
-SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet *rSet)
+SfxTabPage* SwColumnPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return new SwColumnPage(pParent, *rSet);
 }
@@ -1364,7 +1364,7 @@ void ColumnValueSet::DataChanged( const DataChangedEvent& rDCEvt )
     ValueSet::DataChanged( rDCEvt );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColumnValueSet(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColumnValueSet(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ColumnValueSet(pParent);
 }

@@ -23,12 +23,12 @@
 
 using namespace ::com::sun::star;
 
-SfxTabPage* SfxDocumentFontsPage::Create( Window* parent, const SfxItemSet* set )
+SfxTabPage* SfxDocumentFontsPage::Create( vcl::Window* parent, const SfxItemSet* set )
 {
     return new SfxDocumentFontsPage( parent, *set );
 }
 
-SfxDocumentFontsPage::SfxDocumentFontsPage( Window* parent, const SfxItemSet& set )
+SfxDocumentFontsPage::SfxDocumentFontsPage( vcl::Window* parent, const SfxItemSet& set )
     : SfxTabPage( parent, "DocumentFontsPage", "sfx/ui/documentfontspage.ui", &set )
 {
     get( embedFontsCheckbox, "embedFonts" );

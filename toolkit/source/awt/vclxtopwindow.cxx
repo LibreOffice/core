@@ -80,7 +80,7 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException, std::exc
 
     // TODO, check the process id
     ::com::sun::star::uno::Any aRet;
-    Window* pWindow = GetWindowImpl();
+    vcl::Window* pWindow = GetWindowImpl();
     if ( pWindow )
     {
         const SystemEnvData* pSysData = ((SystemWindow *)pWindow)->GetSystemData();
@@ -134,7 +134,7 @@ void VCLXTopWindow_Base::toFront(  ) throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    Window* pWindow = GetWindowImpl();
+    vcl::Window* pWindow = GetWindowImpl();
     if ( pWindow )
         ((WorkWindow*)pWindow)->ToTop( TOTOP_RESTOREWHENMIN );
 }
@@ -254,7 +254,7 @@ VCLXTopWindow::~VCLXTopWindow()
 {
 }
 
-Window* VCLXTopWindow::GetWindowImpl()
+vcl::Window* VCLXTopWindow::GetWindowImpl()
 {
     return VCLXContainer::GetWindow();
 }

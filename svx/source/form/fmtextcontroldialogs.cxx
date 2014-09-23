@@ -33,7 +33,7 @@
 namespace svx
 {
 
-    TextControlCharAttribDialog::TextControlCharAttribDialog( Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList )
+    TextControlCharAttribDialog::TextControlCharAttribDialog( vcl::Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList )
         : SfxTabDialog( pParent, "TextControlCharacterPropertiesDialog",
             "svx/ui/textcontrolchardialog.ui", &_rCoreSet )
         , m_aFontList(_rFontList)
@@ -67,7 +67,7 @@ namespace svx
         }
     }
 
-    TextControlParaAttribDialog::TextControlParaAttribDialog(Window* _pParent,
+    TextControlParaAttribDialog::TextControlParaAttribDialog(vcl::Window* _pParent,
         const SfxItemSet& _rCoreSet)
         : SfxTabDialog( _pParent, "TextControlParagraphPropertiesDialog",
             "svx/ui/textcontrolparadialog.ui", &_rCoreSet )

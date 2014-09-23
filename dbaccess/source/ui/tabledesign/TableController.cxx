@@ -538,7 +538,7 @@ void OTableController::impl_initialize()
     }
 }
 
-bool OTableController::Construct(Window* pParent)
+bool OTableController::Construct(vcl::Window* pParent)
 {
     setView( * new OTableDesignView( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);

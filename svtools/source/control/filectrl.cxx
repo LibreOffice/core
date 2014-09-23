@@ -34,7 +34,7 @@ using namespace ::com::sun::star::ui;
 
 
 
-FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlags ) :
+FileControl::FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode nFlags ) :
     Window( pParent, nStyle|WB_DIALOGCONTROL ),
     maEdit( this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP ),
     maButton( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ),

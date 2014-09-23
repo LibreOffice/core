@@ -29,7 +29,7 @@ class SwInsertIdxMarkWrapper : public SfxChildWindow
 {
     AbstractMarkFloatDlg*   pAbstDlg;
 protected:
-    SwInsertIdxMarkWrapper( Window *pParentWindow,
+    SwInsertIdxMarkWrapper( vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo );
@@ -44,7 +44,7 @@ class SwInsertAuthMarkWrapper : public SfxChildWindow
 {
     AbstractMarkFloatDlg*   pAbstDlg;
 protected:
-    SwInsertAuthMarkWrapper(    Window *pParentWindow,
+    SwInsertAuthMarkWrapper(    vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo );

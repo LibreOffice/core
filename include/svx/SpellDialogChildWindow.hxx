@@ -49,7 +49,7 @@ class SVX_DLLPUBLIC SpellDialogChildWindow
     AbstractSpellDialog* m_pAbstractSpellDialog;
 public:
     SpellDialogChildWindow (
-        Window*pParent,
+        vcl::Window*pParent,
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);

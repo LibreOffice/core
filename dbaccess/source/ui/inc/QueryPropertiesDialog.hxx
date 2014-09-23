@@ -28,7 +28,7 @@ class QueryPropertiesDialog : public ModalDialog
 public:
 
     QueryPropertiesDialog(
-        Window* pParent, const bool bDistinct, const sal_Int64 nLimit );
+        vcl::Window* pParent, const bool bDistinct, const sal_Int64 nLimit );
     virtual ~QueryPropertiesDialog();
 
     bool getDistinct() const;

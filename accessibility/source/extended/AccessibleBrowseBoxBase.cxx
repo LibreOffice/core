@@ -502,7 +502,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun:
     ensureIsAlive();
 
     sal_Int32 nColor = 0;
-    Window* pInst = mpBrowseBox->GetWindowInstance();
+    vcl::Window* pInst = mpBrowseBox->GetWindowInstance();
     if ( pInst )
     {
         if ( pInst->IsControlForeground() )
@@ -527,7 +527,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun:
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     sal_Int32 nColor = 0;
-    Window* pInst = mpBrowseBox->GetWindowInstance();
+    vcl::Window* pInst = mpBrowseBox->GetWindowInstance();
     if ( pInst )
     {
         if ( pInst->IsControlBackground() )

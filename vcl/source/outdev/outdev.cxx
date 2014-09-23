@@ -726,7 +726,7 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect
         }
         else
         {
-            if ( ((Window*)this)->mpWindowImpl->mpFrameWindow == ((Window*)pSrcDev)->mpWindowImpl->mpFrameWindow )
+            if ( ((vcl::Window*)this)->mpWindowImpl->mpFrameWindow == ((vcl::Window*)pSrcDev)->mpWindowImpl->mpFrameWindow )
                 pGraphics2 = NULL;
             else
             {

@@ -38,7 +38,7 @@
 
 #include "opredlin.hxx"
 
-ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
+ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( vcl::Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent,"OptChangesPage", "modules/scalc/ui/optchangespage.ui", &rSet),
     aAuthorStr      (ScResId(SCSTR_AUTHOR))
@@ -59,7 +59,7 @@ ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
 }
 
-SfxTabPage* ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* ScRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new ScRedlineOptionsTabPage( pParent, *rSet );
 }

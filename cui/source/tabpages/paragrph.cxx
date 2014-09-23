@@ -194,7 +194,7 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl)
     return 0;
 }
 
-SfxTabPage* SvxStdParagraphTabPage::Create( Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SvxStdParagraphTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SvxStdParagraphTabPage( pParent, *rSet );
 }
@@ -618,7 +618,7 @@ int SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,  const SfxItemSet& rAttr ) :
+SvxStdParagraphTabPage::SvxStdParagraphTabPage( vcl::Window* pParent,  const SfxItemSet& rAttr ) :
     SfxTabPage( pParent, "ParaIndentSpacing","cui/ui/paraindentspacing.ui", &rAttr ),
 
     nAbst           ( MAX_DURCH ),
@@ -964,7 +964,7 @@ void    SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 #define LASTLINECOUNT_OLD       3
 #define LASTLINECOUNT_NEW       4
 
-SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet )
+SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
 
     : SfxTabPage(pParent, "ParaAlignPage", "cui/ui/paragalignpage.ui",&rSet)
 {
@@ -1046,7 +1046,7 @@ int SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SvxParaAlignTabPage::Create( Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* SvxParaAlignTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxParaAlignTabPage(pParent, *rSet);
 }
@@ -1324,7 +1324,7 @@ void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)
             EnableJustifyExt();
 }
 
-SfxTabPage* SvxExtParagraphTabPage::Create( Window* pParent,
+SfxTabPage* SvxExtParagraphTabPage::Create( vcl::Window* pParent,
                                             const SfxItemSet* rSet )
 {
     return new SvxExtParagraphTabPage( pParent, *rSet );
@@ -1829,7 +1829,7 @@ void SvxExtParagraphTabPage::DisablePageBreak()
     m_pPagenumEdit->Enable(false);
 }
 
-SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rAttr ) :
+SvxExtParagraphTabPage::SvxExtParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
     SfxTabPage( pParent, "TextFlowPage","cui/ui/textflowpage.ui", &rAttr ),
 
     bPageBreak  ( true ),
@@ -2119,7 +2119,7 @@ void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
                     DisablePageBreak();
 }
 
-SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
+SvxAsianTabPage::SvxAsianTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, "AsianTypography","cui/ui/asiantypography.ui", &rSet)
 
 {
@@ -2138,7 +2138,7 @@ SvxAsianTabPage::~SvxAsianTabPage()
 {
 }
 
-SfxTabPage* SvxAsianTabPage::Create(    Window* pParent, const SfxItemSet* rSet )
+SfxTabPage* SvxAsianTabPage::Create(    vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxAsianTabPage(pParent, *rSet);
 }

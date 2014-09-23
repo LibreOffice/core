@@ -325,7 +325,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     /* Maybe a QueryBox is opened ("update links?"), therefore the dialog
        becomes the current DefModalDialogParent */
-    ::Window* pDefParent = Application::GetDefDialogParent();
+    vcl::Window* pDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent(pDlg->GetWindow());
 
     sal_uInt16 nRet = pDlg->Execute();

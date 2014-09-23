@@ -19,7 +19,7 @@
 #include <vcl/settings.hxx>
 #include <boost/scoped_ptr.hpp>
 
-SwDashedLine::SwDashedLine( Window* pParent, Color& ( *pColorFn )() ) :
+SwDashedLine::SwDashedLine( vcl::Window* pParent, Color& ( *pColorFn )() ) :
     FixedLine( pParent, WB_DIALOGCONTROL | WB_HORZ ),
     m_pColorFn( pColorFn )
 {

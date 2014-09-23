@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
         class XPropertySet;
     }
 } } }
-class Window;
+namespace vcl { class Window; }
 
 
 namespace abp
@@ -61,7 +61,7 @@ namespace abp
         */
         bool invokeDialog(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
-            class Window* _pParent,
+            class vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDataSource,
             AddressSettings& _rSettings
         );

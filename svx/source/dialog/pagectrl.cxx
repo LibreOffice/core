@@ -34,7 +34,7 @@
 #define CELL_WIDTH      1600L
 #define CELL_HEIGHT      800L
 
-SvxPageWindow::SvxPageWindow(Window* pParent)
+SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
 : Window(pParent),
     aWinSize(),
     aSize(),
@@ -93,7 +93,7 @@ SvxPageWindow::~SvxPageWindow()
     delete pFtBorder;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPageWindow(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPageWindow(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxPageWindow(pParent);
 }

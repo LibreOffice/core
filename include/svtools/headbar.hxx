@@ -233,7 +233,7 @@ typedef sal_uInt16 HeaderBarItemBits;
 
 class VCLXHeaderBar;
 
-class SVT_DLLPUBLIC HeaderBar : public Window
+class SVT_DLLPUBLIC HeaderBar : public vcl::Window
 {
 private:
     ImplHeadItemList*   mpItemList;
@@ -291,7 +291,7 @@ private:
     SVT_DLLPRIVATE void             ImplEndDrag( bool bCancel );
 
 public:
-    HeaderBar( Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
+    HeaderBar( vcl::Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
     virtual ~HeaderBar();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

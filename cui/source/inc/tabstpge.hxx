@@ -50,7 +50,7 @@ class SvxTabulatorTabPage : public SfxTabPage
 public:
     virtual ~SvxTabulatorTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -62,7 +62,7 @@ protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
-    SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rSet );
+    SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     // tabulators and positions
     MetricBox*      m_pTabBox;

@@ -45,7 +45,7 @@ namespace {
 class FindTextFieldControl : public ComboBox
 {
 public:
-    FindTextFieldControl( Window* pParent, WinBits nStyle,
+    FindTextFieldControl( vcl::Window* pParent, WinBits nStyle,
         css::uno::Reference< css::frame::XFrame >& xFrame,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~FindTextFieldControl();

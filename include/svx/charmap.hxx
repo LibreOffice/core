@@ -42,7 +42,7 @@ namespace svx
 class SVX_DLLPUBLIC SvxShowCharSet : public Control
 {
 public:
-                    SvxShowCharSet( Window* pParent );
+                    SvxShowCharSet( vcl::Window* pParent );
                     virtual ~SvxShowCharSet();
 
     void            SetFont( const vcl::Font& rFont );

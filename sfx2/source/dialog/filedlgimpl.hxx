@@ -54,7 +54,7 @@ namespace sfx2
         SfxFilterMatcher*           mpMatcher;
         GraphicFilter*              mpGraphicFilter;
         FileDialogHelper*           mpAntiImpl;
-        Window*                     mpPreferredParentWindow;
+        vcl::Window*                     mpPreferredParentWindow;
 
         ::comphelper::SequenceAsVector< OUString > mlLastURLs;
 
@@ -180,7 +180,7 @@ namespace sfx2
                                     const short nDialogType,
                                     sal_Int64 nFlags,
                                     sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
-                                    Window* _pPreferredParentWindow = NULL,
+                                    vcl::Window* _pPreferredParentWindow = NULL,
                                     const OUString& sStandardDir = OUString(),
                                     const ::com::sun::star::uno::Sequence< OUString >&   rBlackList = ::com::sun::star::uno::Sequence< OUString >()
                                 );

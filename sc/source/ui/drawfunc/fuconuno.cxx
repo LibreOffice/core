@@ -28,7 +28,7 @@
 |*
 \************************************************************************/
 
-FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
     , nInventor(0)

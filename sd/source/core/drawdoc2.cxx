@@ -968,7 +968,7 @@ SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
 
 IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
                                               const Point& rWinPoint,
-                                              const ::Window& /* rCmpWnd */ )
+                                              const ::vcl::Window& /* rCmpWnd */ )
 {
     SdIMapInfo* pIMapInfo = GetIMapInfo( pObj );
     IMapObject* pIMapObj = NULL;

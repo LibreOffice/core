@@ -84,7 +84,7 @@ private:
     OUString            GetDisplayName( sal_Int32 nDisplay,
                                         DisplayType eType );
 public:
-                        SdStartPresentationDlg( Window* pWindow,
+                        SdStartPresentationDlg( vcl::Window* pWindow,
                                 const SfxItemSet& rInAttrs,
                                 const std::vector<OUString> &rPageNames,
                                 SdCustomShowList* pCSList );

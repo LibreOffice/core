@@ -139,7 +139,7 @@ namespace
 }
 
     // ODbDataSourceAdministrationHelper
-ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Reference< XComponentContext >& _xORB,Window* _pParent,IItemSetHelper* _pItemSetHelper)
+ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Reference< XComponentContext >& _xORB, vcl::Window* _pParent,IItemSetHelper* _pItemSetHelper)
         : m_xContext(_xORB)
         , m_pParent(_pParent)
         , m_pItemSetHelper(_pItemSetHelper)

@@ -24,7 +24,7 @@
 #include "dochdl.hrc"
 #include <vcl/layout.hxx>
 
-SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const OUString &rShortName)
+SwSelGlossaryDlg::SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName)
     : ModalDialog(pParent, "InsertAutoTextDialog",
         "modules/swriter/ui/insertautotextdialog.ui")
 {

@@ -22,12 +22,12 @@
 
 namespace svx {
 
-WrapField::WrapField( Window* pParent, WinBits nBits ) :
+WrapField::WrapField( vcl::Window* pParent, WinBits nBits ) :
     NumericField( pParent, nBits )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeWrapField(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeWrapField(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new WrapField(pParent, WB_SPIN|WB_REPEAT|WB_BORDER|WB_TABSTOP);
 }

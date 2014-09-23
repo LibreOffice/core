@@ -27,7 +27,7 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-class Window;
+namespace vcl { class Window; }
 
 
 namespace pcr
@@ -71,7 +71,7 @@ namespace pcr
         void    create( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxUI );
 
     private:
-        Window* impl_getVclControlWindow_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
+        vcl::Window* impl_getVclControlWindow_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
         OUString impl_getHelpText_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
     };
 

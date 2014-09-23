@@ -78,7 +78,7 @@ namespace dbaui
         virtual bool            LeavePage() SAL_OVERRIDE;
         virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
-        OWizColumnSelect(Window* pParent);
+        OWizColumnSelect(vcl::Window* pParent);
         virtual ~OWizColumnSelect();
     };
 }

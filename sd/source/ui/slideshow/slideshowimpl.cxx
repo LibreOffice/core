@@ -487,7 +487,7 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
     }
 }
 
-SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, ::Window* pParentWindow )
+SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow )
 : SlideshowImplBase( m_aMutex )
 , mxModel(pDoc->getUnoModel(),UNO_QUERY_THROW)
 , mpView(pView)
@@ -756,7 +756,7 @@ void SAL_CALL SlideshowImpl::disposing()
 bool SlideshowImpl::startPreview(
         const Reference< XDrawPage >& xDrawPage,
         const Reference< XAnimationNode >& xAnimationNode,
-        ::Window* pParent )
+        vcl::Window* pParent )
 {
     bool bRet = false;
 

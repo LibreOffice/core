@@ -32,7 +32,7 @@
 namespace chart
 {
 
-SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs)
+SchOptionTabPage::SchOptionTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow,
                "TP_OPTIONS",
                "modules/schart/ui/tp_SeriesToAxis.ui",
@@ -76,7 +76,7 @@ IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
     return 0;
 }
 
-SfxTabPage* SchOptionTabPage::Create(Window* pWindow,const SfxItemSet* rOutAttrs)
+SfxTabPage* SchOptionTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
 {
     return new SchOptionTabPage(pWindow, *rOutAttrs);
 }

@@ -141,7 +141,7 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() th
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
+Dialog* OSQLMessageDialog::createDialog(vcl::Window* _pParent)
 {
     if ( m_aException.hasValue() )
         return new OSQLMessageBox( _pParent, SQLExceptionInfo( m_aException ), WB_OK | WB_DEF_OK, m_sHelpURL );

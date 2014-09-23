@@ -86,7 +86,7 @@ namespace chart
 #define POS_3DSCHEME_CUSTOM 2
 
 ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
-      Window* pWindow
+      vcl::Window* pWindow
     , const uno::Reference< frame::XModel > & xChartModel
     , ControllerLockHelper & rControllerLockHelper )
                 : TabPage ( pWindow

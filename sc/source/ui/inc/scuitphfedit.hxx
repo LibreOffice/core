@@ -52,7 +52,7 @@ public:
     void            ClearTextAreas();
 
 protected:
-                ScHFEditPage( Window*           pParent,
+                ScHFEditPage( vcl::Window*           pParent,
                               const SfxItemSet& rCoreSet,
                               sal_uInt16        nWhich,
                               bool              bHeader );
@@ -104,37 +104,37 @@ private:
 class ScRightHeaderEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rCoreSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
 
 private:
-    ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
+    ScRightHeaderEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 class ScLeftHeaderEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rCoreSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
 
 private:
-    ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
+    ScLeftHeaderEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 class ScRightFooterEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rCoreSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
 
 private:
-    ScRightFooterEditPage( Window* pParent, const SfxItemSet& rSet );
+    ScRightFooterEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 class ScLeftFooterEditPage : public ScHFEditPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rCoreSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
 
 private:
-    ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rSet );
+    ScLeftFooterEditPage( vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 #endif

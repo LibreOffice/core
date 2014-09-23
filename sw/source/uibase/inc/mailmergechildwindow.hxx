@@ -29,7 +29,7 @@ class SwMailMergeChildWin : public SfxFloatingWindow
     DECL_LINK( BackHdl, void* );
 
 public:
-    SwMailMergeChildWin(SfxBindings*, SfxChildWindow*, Window *pParent);
+    SwMailMergeChildWin(SfxBindings*, SfxChildWindow*, vcl::Window *pParent);
 
     virtual void FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
 };
@@ -37,7 +37,7 @@ public:
 class SwMailMergeChildWindow : public SfxChildWindow
 {
 public:
-    SwMailMergeChildWindow( Window* ,
+    SwMailMergeChildWindow( vcl::Window* ,
                     sal_uInt16 nId,
                     SfxBindings*,
                     SfxChildWinInfo*  );

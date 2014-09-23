@@ -35,10 +35,10 @@
 class SdTpOptionsSnap : public SvxGridTabPage
 {
 public:
-            SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  );
+            SdTpOptionsSnap( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
             virtual ~SdTpOptionsSnap();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -56,10 +56,10 @@ private:
     CheckBox*    m_pCbxMoveOutline;
 
 public:
-            SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  );
+            SdTpOptionsContents( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
             virtual ~SdTpOptionsContents();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 };
@@ -129,10 +129,10 @@ protected:
     virtual int DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
 public:
-            SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  );
+            SdTpOptionsMisc( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
             virtual ~SdTpOptionsMisc();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 

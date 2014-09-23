@@ -30,7 +30,7 @@ class CuiCustomMultilineEdit : public Edit
 {
 public:
     bool bNumericOnly;
-    CuiCustomMultilineEdit( Window* pParent, WinBits nStyle )
+    CuiCustomMultilineEdit( vcl::Window* pParent, WinBits nStyle )
         : Edit( pParent, nStyle )
         , bNumericOnly(false)
     {}
@@ -56,7 +56,7 @@ private:
     DECL_LINK( ResetBtnHdl_Impl, void * );
 
 public:
-   CuiAboutConfigTabPage(Window* pParent);
+   CuiAboutConfigTabPage(vcl::Window* pParent);
    void     InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue);
    void     Reset();
    void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess);
@@ -70,7 +70,7 @@ private:
     CuiCustomMultilineEdit* m_pEDValue;
 
 public:
-    CuiAboutConfigValueDialog( Window* pWindow, const OUString& rValue , int limit = 0);
+    CuiAboutConfigValueDialog( vcl::Window* pWindow, const OUString& rValue , int limit = 0);
 
     OUString getValue()
     {

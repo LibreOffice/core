@@ -31,7 +31,7 @@ namespace svx {
 
 struct OrientationHelper_Impl
 {
-    typedef std::pair< Window*, TriState >  WindowPair;
+    typedef std::pair< vcl::Window*, TriState >  WindowPair;
     typedef std::vector< WindowPair >       WindowVec;
 
     DialControl&        mrCtrlDial;
@@ -42,10 +42,10 @@ struct OrientationHelper_Impl
 
     explicit            OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox& rCbStacked );
 
-    void                AddDependentWindow( Window& rWindow, TriState eDisableIfStacked );
+    void                AddDependentWindow( vcl::Window& rWindow, TriState eDisableIfStacked );
 
     void                EnableDependentWindows();
-    void                EnableWindow( Window& rWindow, TriState eDisableIfStacked );
+    void                EnableWindow( vcl::Window& rWindow, TriState eDisableIfStacked );
 
     void                ShowDependentWindows();
 
@@ -65,7 +65,7 @@ OrientationHelper_Impl::OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox
     mrCbStacked.SetClickHdl( LINK( this, OrientationHelper_Impl, ClickHdl ) );
 }
 
-void OrientationHelper_Impl::AddDependentWindow( Window& rWindow, TriState eDisableIfStacked )
+void OrientationHelper_Impl::AddDependentWindow( vcl::Window& rWindow, TriState eDisableIfStacked )
 {
     maWinVec.push_back( std::make_pair( &rWindow, eDisableIfStacked ) );
     EnableWindow( rWindow, eDisableIfStacked );
@@ -77,7 +77,7 @@ void OrientationHelper_Impl::EnableDependentWindows()
         EnableWindow( *aIt->first, aIt->second );
 }
 
-void OrientationHelper_Impl::EnableWindow( Window& rWindow, TriState eDisableIfStacked )
+void OrientationHelper_Impl::EnableWindow( vcl::Window& rWindow, TriState eDisableIfStacked )
 {
     bool bDisableOnStacked = false;
     switch( eDisableIfStacked )
@@ -117,7 +117,7 @@ OrientationHelper::~OrientationHelper()
 {
 }
 
-void OrientationHelper::AddDependentWindow( Window& rWindow, TriState eDisableIfStacked )
+void OrientationHelper::AddDependentWindow( vcl::Window& rWindow, TriState eDisableIfStacked )
 {
     mpImpl->AddDependentWindow( rWindow, eDisableIfStacked );
 }

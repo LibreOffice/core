@@ -205,7 +205,7 @@ protected:
 
     // OCommonPicker overridables
 
-    virtual SvtFileDialog*  implCreateDialog( Window* _pParent ) SAL_OVERRIDE;
+    virtual SvtFileDialog*  implCreateDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
     virtual sal_Int16       implExecutePicker( ) SAL_OVERRIDE;
     virtual bool            implHandleInitializationArgument(
                                 const OUString& _rName,

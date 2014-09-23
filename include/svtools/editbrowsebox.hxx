@@ -189,7 +189,7 @@ namespace svt
     class SVT_DLLPUBLIC MultiLineTextCell : public MultiLineEdit
     {
     public:
-        MultiLineTextCell( Window* _pParent, WinBits _nStyle )
+        MultiLineTextCell( vcl::Window* _pParent, WinBits _nStyle )
             :MultiLineEdit( _pParent, _nStyle )
         {
         }
@@ -277,7 +277,7 @@ namespace svt
         Link        m_aClickLink,m_aModifyLink;
 
     public:
-        CheckBoxControl(Window* pParent, WinBits nWinStyle = 0);
+        CheckBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
         virtual ~CheckBoxControl();
 
         virtual void GetFocus() SAL_OVERRIDE;
@@ -327,7 +327,7 @@ namespace svt
         friend class ComboBoxCellController;
 
     public:
-        ComboBoxControl(Window* pParent, WinBits nWinStyle = 0);
+        ComboBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
 
     protected:
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -360,7 +360,7 @@ namespace svt
         friend class ListBoxCellController;
 
     public:
-        ListBoxControl(Window* pParent, WinBits nWinStyle = 0);
+        ListBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
 
     protected:
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -472,7 +472,7 @@ namespace svt
                                  aOldController;
 
         ImplSVEvent * nStartEvent, * nEndEvent, * nCellModifiedEvent;     // event ids
-        Window* m_pFocusWhileRequest;
+        vcl::Window* m_pFocusWhileRequest;
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
             // and the asynchornous event the focus has changed, we won't grab it for ourself.
 
@@ -588,8 +588,8 @@ namespace svt
             // secure starting of StartEditHdl
 
     public:
-        EditBrowseBox(Window* pParent, sal_Int32 nBrowserFlags = EBBF_NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = 0 );
-        EditBrowseBox(Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags = EBBF_NONE, BrowserMode nMode = 0 );
+        EditBrowseBox(vcl::Window* pParent, sal_Int32 nBrowserFlags = EBBF_NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = 0 );
+        EditBrowseBox(vcl::Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags = EBBF_NONE, BrowserMode nMode = 0 );
         virtual ~EditBrowseBox();
 
         bool IsEditing() const {return aController.Is();}

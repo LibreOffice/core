@@ -197,7 +197,7 @@ FontworkBar::~FontworkBar()
     SetRepeatTarget(NULL);
 }
 
-static Window* ImpGetViewWin(SdrView* pView)
+static vcl::Window* ImpGetViewWin(SdrView* pView)
 {
     if( pView )
     {
@@ -208,7 +208,7 @@ static Window* ImpGetViewWin(SdrView* pView)
 
             if(OUTDEV_WINDOW == pOut->GetOutDevType())
             {
-                return (Window*)pOut;
+                return (vcl::Window*)pOut;
             }
         }
     }

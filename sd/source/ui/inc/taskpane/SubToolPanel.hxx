@@ -26,7 +26,7 @@
 #include <vcl/scrbar.hxx>
 #include <vector>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sd { namespace toolpanel {
 
@@ -54,7 +54,7 @@ public:
     /** Create a new sub tool panel with the given window as its
         parent.  This will usually be a child window.
     */
-    SubToolPanel (Window& i_rParentWindow);
+    SubToolPanel (vcl::Window& i_rParentWindow);
     virtual ~SubToolPanel (void);
 
     virtual void Paint (const Rectangle& rRect);
@@ -69,7 +69,7 @@ public:
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
     virtual bool IsResizable (void);
-    virtual ::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow (void);
     virtual sal_Int32 GetMinimumWidth (void);
 
     virtual void ExpandControl (
@@ -83,7 +83,7 @@ public:
 
     using Window::GetWindow;
 private:
-    ::Window maWindowFiller;
+    vcl::Window maWindowFiller;
     bool mbIsRearrangePending;
     bool mbIsLayoutPending;
     sal_uInt32 mnChildrenWidth;

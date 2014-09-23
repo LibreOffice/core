@@ -41,7 +41,7 @@ class SwPaM;
 class SbModule;
 class SvxMacroItem;
 class SvNumberFormatter;
-class Window;
+namespace vcl { class Window; }
 
 // the groups of fields
 enum SwFldGroups
@@ -75,7 +75,7 @@ struct SwInsertFld_Data
     ::com::sun::star::uno::Any aDBDataSource;
     ::com::sun::star::uno::Any aDBConnection;
     ::com::sun::star::uno::Any aDBColumn;
-    Window* pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
+    vcl::Window* pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
 
     SwInsertFld_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
                     sal_uLong nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :

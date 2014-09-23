@@ -40,7 +40,7 @@ namespace svx { namespace sidebar {
 
 
 GraphicPropertyPanel::GraphicPropertyPanel(
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "GraphicPropertyPanel", "svx/ui/sidebargraphic.ui", rxFrame),
@@ -222,7 +222,7 @@ void GraphicPropertyPanel::SetupIcons(void)
 
 
 GraphicPropertyPanel* GraphicPropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {

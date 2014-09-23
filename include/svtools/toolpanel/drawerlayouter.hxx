@@ -45,7 +45,7 @@ namespace svt
     {
     public:
         DrawerDeckLayouter(
-            ::Window& i_rParentWindow,
+            vcl::Window& i_rParentWindow,
             IToolPanelDeck& i_rPanels
         );
         virtual ~DrawerDeckLayouter();
@@ -71,13 +71,13 @@ namespace svt
     private:
         // triggers a re-arrance of the panel deck elements
         void    impl_triggerRearrange() const;
-        size_t  impl_getPanelPositionFromWindow( const Window* i_pDrawerWindow ) const;
+        size_t  impl_getPanelPositionFromWindow( const vcl::Window* i_pDrawerWindow ) const;
         void    impl_removeDrawer( const size_t i_nPosition );
 
         DECL_LINK( OnWindowEvent, VclSimpleEvent* );
 
 private:
-        Window&                             m_rParentWindow;
+        vcl::Window&                             m_rParentWindow;
         IToolPanelDeck&                     m_rPanelDeck;
         ::std::vector< PToolPanelDrawer >   m_aDrawers;
         ::boost::optional< size_t >         m_aLastKnownActivePanel;

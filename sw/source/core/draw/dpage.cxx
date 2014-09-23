@@ -119,7 +119,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
     return pGridLst;
 }
 
-bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
+bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                            const HelpEvent& rEvt )
 {
     bool bContinue = true;

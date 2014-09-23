@@ -28,7 +28,7 @@
 #define CUIFM_PROP_HIDDEN "Hidden"
 #define CUIFM_PROP_LABEL  "Label"
 
-FmShowColsDialog::FmShowColsDialog(Window* pParent)
+FmShowColsDialog::FmShowColsDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "ShowColDialog", "cui/ui/showcoldialog.ui")
 {
     get(m_pOK, "ok");

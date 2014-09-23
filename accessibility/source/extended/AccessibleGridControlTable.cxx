@@ -344,7 +344,7 @@ OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
 
 Rectangle AccessibleGridControlTable::implGetBoundingBox()
 {
-    Window* pParent = m_aTable.GetAccessibleParentWindow();
+    vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
     Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ));
     Rectangle aTableRect( m_aTable.calcTableRect() );

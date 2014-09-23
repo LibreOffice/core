@@ -113,7 +113,7 @@ private:
     bool canAddRemove();
 
 public:
-    DigitalSignaturesDialog( Window* pParent, css::uno::Reference<
+    DigitalSignaturesDialog( vcl::Window* pParent, css::uno::Reference<
         css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
     virtual ~DigitalSignaturesDialog();

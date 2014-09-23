@@ -36,7 +36,7 @@
 
 
 class ResMgr;
-class Window;
+namespace vcl { class Window; }
 
 class ImpSWFDialog : public ModalDialog
 {
@@ -55,7 +55,7 @@ private:
     DECL_LINK( OnToggleCheckbox, CheckBox* );
 
 public:
-    ImpSWFDialog( Window* pParent,
+    ImpSWFDialog( vcl::Window* pParent,
                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
     virtual ~ImpSWFDialog();
 

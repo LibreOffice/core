@@ -19,7 +19,7 @@ class PushButton;
 class InputDialog : public ModalDialog
 {
 public:
-    InputDialog (const OUString &labelText, Window *pParent = NULL);
+    InputDialog (const OUString &labelText, vcl::Window *pParent = NULL);
     OUString getEntryText () const;
 
 private:

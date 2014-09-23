@@ -28,7 +28,7 @@
 namespace sd { namespace sidebar {
 
 NavigatorWrapper::NavigatorWrapper (
-    ::Window* pParent,
+    vcl::Window* pParent,
     sd::ViewShellBase& rViewShellBase,
     SfxBindings* pBindings)
     : Control(pParent, 0),

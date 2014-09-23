@@ -26,7 +26,7 @@
 class FuConstRectangle : public FuConstruct
 {
  public:
-    FuConstRectangle(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuConstRectangle(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstRectangle();

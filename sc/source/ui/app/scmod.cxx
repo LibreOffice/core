@@ -260,7 +260,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
             }
             else if ( pViewShell->ISA(ScPreviewShell) )
             {
-                Window* pWin = pViewShell->GetWindow();
+                vcl::Window* pWin = pViewShell->GetWindow();
                 if (pWin)
                     pWin->Invalidate();
             }
@@ -2093,7 +2093,7 @@ void ScModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 }
 
-SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage* pRet = NULL;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -2215,9 +2215,9 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
     return 0;
 }
 
-bool ScModule::RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
+bool ScModule::RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
 {
-    std::list<Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
+    std::list<vcl::Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
 
     if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
     {
@@ -2228,16 +2228,16 @@ bool ScModule::RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
     return false;
 }
 
-bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
+bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
 {
-    std::map<sal_uInt16, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+    std::map<sal_uInt16, std::list<vcl::Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
         return false;
 
-    std::list<Window*> & rlRefWindow = iSlot->second;
+    std::list<vcl::Window*> & rlRefWindow = iSlot->second;
 
-    std::list<Window*>::iterator i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
+    std::list<vcl::Window*>::iterator i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
 
     if( i == rlRefWindow.end() )
         return false;
@@ -2250,21 +2250,21 @@ bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
     return true;
 }
 
-Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor )
+vcl::Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor )
 {
     if (!pWndAncestor)
         return NULL;
 
-    std::map<sal_uInt16, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+    std::map<sal_uInt16, std::list<vcl::Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
         return NULL;
 
-    std::list<Window*> & rlRefWindow = iSlot->second;
+    std::list<vcl::Window*> & rlRefWindow = iSlot->second;
 
-    while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
+    while( vcl::Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
 
-    for( std::list<Window*>::iterator i = rlRefWindow.begin(); i!=rlRefWindow.end(); ++i )
+    for( std::list<vcl::Window*>::iterator i = rlRefWindow.begin(); i!=rlRefWindow.end(); ++i )
         if ( pWndAncestor->IsWindowOrChild( *i, (*i)->IsSystemWindow() ) )
             return *i;
 

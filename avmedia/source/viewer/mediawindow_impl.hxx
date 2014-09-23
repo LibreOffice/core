@@ -48,7 +48,7 @@ namespace avmedia
         {
         public:
 
-                    MediaWindowControl( Window* pParent );
+                    MediaWindowControl( vcl::Window* pParent );
                     virtual ~MediaWindowControl();
 
         protected:
@@ -65,8 +65,8 @@ namespace avmedia
         {
         public:
 
-                            MediaChildWindow( Window* pParent );
-                            MediaChildWindow( Window* pParent, SystemWindowData* pData );
+                            MediaChildWindow( vcl::Window* pParent );
+                            MediaChildWindow( vcl::Window* pParent, SystemWindowData* pData );
                             virtual ~MediaChildWindow();
 
         protected:
@@ -92,7 +92,7 @@ namespace avmedia
         {
         public:
 
-                            MediaWindowImpl( Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl );
+                            MediaWindowImpl( vcl::Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl );
             virtual         ~MediaWindowImpl();
 
             static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = 0 );

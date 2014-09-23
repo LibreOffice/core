@@ -26,15 +26,15 @@ namespace sfx2
 {
     // source in newhelp.cxx
 
-    void HandleTaskPaneList( Window* pWindow, bool bAddToList );
+    void HandleTaskPaneList( vcl::Window* pWindow, bool bAddToList );
         // pWindow: just a system window or something which is child of a system window
 
-    inline void AddToTaskPaneList( Window* pWindowToBeHandled )
+    inline void AddToTaskPaneList( vcl::Window* pWindowToBeHandled )
     {
         HandleTaskPaneList( pWindowToBeHandled, true );
     }
 
-    inline void RemoveFromTaskPaneList( Window* pWindowToBeHandled )
+    inline void RemoveFromTaskPaneList( vcl::Window* pWindowToBeHandled )
     {
         HandleTaskPaneList( pWindowToBeHandled, false );
     }

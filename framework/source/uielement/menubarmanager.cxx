@@ -1026,7 +1026,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
                     xList->getByIndex(i) >>= xFrame;
                     if ( xFrame.is() && nTaskId == nCurItemId )
                     {
-                        Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                        vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                         pWin->GrabFocus();
                         pWin->ToTop( TOTOP_RESTOREWHENMIN );
                         break;

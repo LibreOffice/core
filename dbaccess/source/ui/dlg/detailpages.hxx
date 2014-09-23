@@ -73,7 +73,7 @@ namespace dbaui
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 
         // nControlFlags is a combination of the CBTP_xxx-constants
-        OCommonBehaviourTabPage(Window* pParent, const OString& rId, const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags);
+        OCommonBehaviourTabPage(vcl::Window* pParent, const OString& rId, const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags);
     protected:
 
         virtual ~OCommonBehaviourTabPage();
@@ -94,7 +94,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
-        ODbaseDetailsPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
+        ODbaseDetailsPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
     private:
         CheckBox*           m_pShowDeleted;
         FixedText*          m_pFT_Message;
@@ -120,7 +120,7 @@ namespace dbaui
         virtual ~OAdoDetailsPage();
     public:
 
-        OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OAdoDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     };
 
     // OOdbcDetailsPage
@@ -129,7 +129,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
-        OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OOdbcDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
     private:
@@ -142,7 +142,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
-        OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OUserDriverDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
@@ -159,14 +159,14 @@ namespace dbaui
     class OMySQLODBCDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        OMySQLODBCDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OMySQLODBCDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     };
 
     // OGeneralSpecialJDBCDetailsPage
     class OGeneralSpecialJDBCDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        OGeneralSpecialJDBCDetailsPage(   Window* pParent
+        OGeneralSpecialJDBCDetailsPage(   vcl::Window* pParent
                                         , const SfxItemSet& _rCoreAttrs
                                         , sal_uInt16 _nPortId
                                         , bool bShowSocket = true
@@ -198,7 +198,7 @@ namespace dbaui
     class MySQLNativePage : public OCommonBehaviourTabPage
     {
     public:
-        MySQLNativePage(    Window* pParent,
+        MySQLNativePage(    vcl::Window* pParent,
                             const SfxItemSet& _rCoreAttrs );
 
     private:
@@ -223,7 +223,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
-        OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OLDAPDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
     private:
@@ -244,7 +244,7 @@ namespace dbaui
         virtual ~OMozillaDetailsPage();
     public:
 
-        OMozillaDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OMozillaDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     };
 
     // OTextDetailsPage
@@ -253,7 +253,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
-        OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OTextDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;
 
     private:

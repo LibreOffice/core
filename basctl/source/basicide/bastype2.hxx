@@ -206,8 +206,8 @@ protected:
     virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
 
 public:
-    TreeListBox(Window* pParent, const ResId& rRes);
-    TreeListBox(Window* pParent, WinBits nStyle);
+    TreeListBox(vcl::Window* pParent, const ResId& rRes);
+    TreeListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~TreeListBox();
 
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );

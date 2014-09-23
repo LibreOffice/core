@@ -46,7 +46,7 @@ private:
     DECL_LINK(TB3SelectHdl, ToolBox *);
 
 public:
-    CellBorderStyleControl(Window* pParent, CellAppearancePropertyPanel& rPanel);
+    CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);
     virtual ~CellBorderStyleControl(void);
 };
 

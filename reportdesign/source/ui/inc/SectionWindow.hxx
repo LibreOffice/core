@@ -43,7 +43,7 @@ namespace comphelper
 namespace rptui
 {
     class OViewsWindow;
-    class OSectionWindow :      public Window
+    class OSectionWindow :      public vcl::Window
                             ,   public ::cppu::BaseMutex
                             ,   public ::comphelper::OPropertyChangeListener
     {

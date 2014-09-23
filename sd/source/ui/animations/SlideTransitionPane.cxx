@@ -410,7 +410,7 @@ namespace sd
 
 // SlideTransitionPane
 SlideTransitionPane::SlideTransitionPane(
-    ::Window * pParent,
+    Window * pParent,
     ViewShellBase & rBase,
     const Size& rMinSize,
     SdDrawDocument* pDoc,
@@ -1069,9 +1069,9 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
     return 0;
 }
 
-::Window * createSlideTransitionPanel( ::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
+::vcl::Window * createSlideTransitionPanel( ::vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
 {
-    ::Window* pWindow = 0;
+    ::vcl::Window* pWindow = 0;
 
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )

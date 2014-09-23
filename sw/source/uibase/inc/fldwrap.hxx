@@ -26,7 +26,7 @@ class SwFldDlgWrapper : public SwChildWinWrapper
 {
 public:
     AbstractSwFldDlg * pDlgInterface;
-    SwFldDlgWrapper( Window* pParent, sal_uInt16 nId,
+    SwFldDlgWrapper( vcl::Window* pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW_WITHID(SwFldDlgWrapper);
@@ -40,7 +40,7 @@ class SwFldDataOnlyDlgWrapper : public SwChildWinWrapper
 {
 public:
     AbstractSwFldDlg * pDlgInterface;
-    SwFldDataOnlyDlgWrapper( Window* pParent, sal_uInt16 nId,
+    SwFldDataOnlyDlgWrapper( vcl::Window* pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SwFldDataOnlyDlgWrapper);

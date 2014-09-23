@@ -172,7 +172,7 @@ class AbstractThesaurusDialog_Impl : public AbstractThesaurusDialog
     DECL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl,SvxThesaurusDialog)
     virtual OUString    GetWord() SAL_OVERRIDE;
     virtual sal_uInt16  GetLanguage() const SAL_OVERRIDE;
-    virtual Window*     GetWindow() SAL_OVERRIDE;
+    virtual vcl::Window*     GetWindow() SAL_OVERRIDE;
 };
 
 class AbstractHyphenWordDialog_Impl: public AbstractHyphenWordDialog
@@ -180,7 +180,7 @@ class AbstractHyphenWordDialog_Impl: public AbstractHyphenWordDialog
     DECL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl,SvxHyphenWordDialog)
     virtual void    SelLeft() SAL_OVERRIDE;
     virtual void    SelRight() SAL_OVERRIDE;
-    virtual Window* GetWindow() SAL_OVERRIDE;
+    virtual vcl::Window* GetWindow() SAL_OVERRIDE;
 };
 
 class FmShowColsDialog;
@@ -208,7 +208,7 @@ class AbstractSpellDialog_Impl : public AbstractSpellDialog
     virtual void        SetLanguage( sal_uInt16 nLang ) SAL_OVERRIDE;
     virtual bool        Close() SAL_OVERRIDE;
     virtual void        Invalidate() SAL_OVERRIDE;
-    virtual Window*     GetWindow() SAL_OVERRIDE;
+    virtual vcl::Window*     GetWindow() SAL_OVERRIDE;
     virtual SfxBindings& GetBindings() SAL_OVERRIDE;
 };
 
@@ -413,7 +413,7 @@ class SvxHpLinkDlg;
 class AbstractSvxHpLinkDlg_Impl :public AbstractSvxHpLinkDlg
 {
     DECL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl,SvxHpLinkDlg)
-    virtual Window*     GetWindow() SAL_OVERRIDE;
+    virtual vcl::Window*     GetWindow() SAL_OVERRIDE;
     virtual bool        QueryClose() SAL_OVERRIDE;
 };
 
@@ -487,7 +487,7 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
     virtual void                HideAuthor() SAL_OVERRIDE ;
     virtual void                SetReadonlyPostIt(bool bDisable) SAL_OVERRIDE ;
     virtual bool                IsOkEnabled() const SAL_OVERRIDE;
-    virtual Window *            GetWindow() SAL_OVERRIDE;
+    virtual vcl::Window *            GetWindow() SAL_OVERRIDE;
 private:
     Link aNextHdl;
     Link aPrevHdl;
@@ -509,167 +509,167 @@ class AbstractPasswordToOpenModifyDialog_Impl : public AbstractPasswordToOpenMod
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
 public:
-    virtual VclAbstractDialog*          CreateVclDialog( Window* pParent, sal_uInt32 nResId ) SAL_OVERRIDE;
-    virtual VclAbstractDialog*          CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) SAL_OVERRIDE;
+    virtual VclAbstractDialog*          CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId ) SAL_OVERRIDE;
+    virtual VclAbstractDialog*          CreateSfxDialog( vcl::Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) SAL_OVERRIDE;
     virtual SfxAbstractDialog*          CreateSfxDialog( sal_uInt32 nResId,
-                                            Window* pParent,
+                                            vcl::Window* pParent,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xViewFrame,
                                             const SfxItemSet* pAttrSet=0 );
-    virtual SfxAbstractDialog*          CreateSfxDialog( Window* pParent,
+    virtual SfxAbstractDialog*          CreateSfxDialog( vcl::Window* pParent,
                                             const SfxItemSet& rAttr,
                                             const SdrView* pView,
                                             sal_uInt32 nResId ) SAL_OVERRIDE;
-    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent,
+    virtual SfxAbstractDialog*              CreateSfxDialog( vcl::Window* pParent,
                                                              const SfxItemSet& rAttr,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
                                                                         sal_uInt32 nResId
                                                                         ) SAL_OVERRIDE;
-    virtual VclAbstractDialog*          CreateFrameDialog( Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, sal_uInt32 nResId, const OUString& rParameter ) SAL_OVERRIDE;
+    virtual VclAbstractDialog*          CreateFrameDialog( vcl::Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, sal_uInt32 nResId, const OUString& rParameter ) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
-                                            Window* pParent,
+                                            vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SfxViewFrame* pViewFrame,
                                             bool bEditFmt=false,
                                             const OUString *pUserButtonText=0 ) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
-                                            Window* pParent,
+                                            vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xViewFrame,
                                             bool bEditFmt=false,
                                             const OUString *pUserButtonText=0 ) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog*       CreateTextTabDialog( Window* pParent,
+    virtual SfxAbstractTabDialog*       CreateTextTabDialog( vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView,
                                             SdrModel* pModel=0 ) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog*       CreateTabItemDialog(Window* pParent,
+    virtual SfxAbstractTabDialog*       CreateTabItemDialog(vcl::Window* pParent,
                                             const SfxItemSet& rSet) SAL_OVERRIDE;
-    virtual AbstractSvxCaptionDialog*   CreateCaptionDialog( Window* pParent,
+    virtual AbstractSvxCaptionDialog*   CreateCaptionDialog( vcl::Window* pParent,
                                             const SdrView* pView,
                                             sal_uInt16 nAnchorTypes = 0 ) SAL_OVERRIDE;
-    virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(Window* pParent,
+    virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(vcl::Window* pParent,
                                             const SfxItemSet& rAttr,
                                             SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
                                             SvxDistributeVertical eVer = SvxDistributeVerticalNone) SAL_OVERRIDE;
-    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, const OUString& rCommmand,
+    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
             const SvObjectServerList* pList = 0 ) SAL_OVERRIDE;
-    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, const OUString& rCommmand,
+    virtual VclAbstractDialog*          CreateEditObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj ) SAL_OVERRIDE;
-   virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent ) SAL_OVERRIDE;
-   virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p=0  ) SAL_OVERRIDE;
+   virtual  SfxAbstractPasteDialog*         CreatePasteDialog( vcl::Window* pParent ) SAL_OVERRIDE;
+   virtual  SfxAbstractLinksDialog*         CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p=0  ) SAL_OVERRIDE;
 
-   virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,
+   virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( vcl::Window* _pParent,
                                             editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection ) SAL_OVERRIDE;
-   virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
+   virtual AbstractThesaurusDialog*        CreateThesaurusDialog( vcl::Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
                                                 const OUString &rWord, sal_Int16 nLanguage ) SAL_OVERRIDE;
 
-   virtual AbstractHyphenWordDialog*       CreateHyphenWordDialog( Window*,
+   virtual AbstractHyphenWordDialog*       CreateHyphenWordDialog( vcl::Window*,
                                                 const OUString &rWord, LanguageType nLang,
                                                 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper ) SAL_OVERRIDE;
 
-   virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( Window* pParent ) SAL_OVERRIDE;
-   virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( Window* pParent,
+   virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( vcl::Window* pParent ) SAL_OVERRIDE;
+   virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( vcl::Window* pParent,
                                             const SfxItemSet& rCoreSet) SAL_OVERRIDE;
    //UUUU add for SvxBorderBackgroundDlg
    virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg(
-       Window* pParent,
+       vcl::Window* pParent,
        const SfxItemSet& rCoreSet,
        bool bEnableSelector = false,
        bool bEnableDrawingLayerFillStyles = false) SAL_OVERRIDE;
 
-   virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( Window* pParent,
+   virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pView,
                                                                 sal_uInt16 nAnchorTypes = 0) SAL_OVERRIDE ;
-    virtual SfxAbstractTabDialog* CreateSchTransformTabDialog( Window* pParent,
+    virtual SfxAbstractTabDialog* CreateSchTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,
                                                                 sal_uInt32 nResId,
                                                                 bool bSizeTabPage = false
                                                                  ) SAL_OVERRIDE;
     virtual AbstractSpellDialog *  CreateSvxSpellDialog(
-                            Window* pParent,
+                            vcl::Window* pParent,
                             SfxBindings* pBindings,
                             svx::SpellDialogChildWindow* pSpellChildWindow ) SAL_OVERRIDE;
 
-    virtual VclAbstractRefreshableDialog * CreateActualizeProgressDialog( Window* pParent, GalleryTheme* pThm ) SAL_OVERRIDE;
-    virtual AbstractSearchProgress * CreateSearchProgressDialog( Window* pParent,
+    virtual VclAbstractRefreshableDialog * CreateActualizeProgressDialog( vcl::Window* pParent, GalleryTheme* pThm ) SAL_OVERRIDE;
+    virtual AbstractSearchProgress * CreateSearchProgressDialog( vcl::Window* pParent,
                                             const INetURLObject& rStartURL) SAL_OVERRIDE;
-    virtual AbstractTakeProgress * CreateTakeProgressDialog( Window* pParent ) SAL_OVERRIDE;
-    virtual AbstractTitleDialog * CreateTitleDialog( Window* pParent,
+    virtual AbstractTakeProgress * CreateTakeProgressDialog( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual AbstractTitleDialog * CreateTitleDialog( vcl::Window* pParent,
                                              const OUString& rOldText) SAL_OVERRIDE;
-    virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( Window* pParent,
+    virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( vcl::Window* pParent,
                                             GalleryTheme* pThm) SAL_OVERRIDE;
-    virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog( Window* pParent,
+    virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog( vcl::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet) SAL_OVERRIDE;
-    virtual AbstractURLDlg * CreateURLDialog( Window* pParent,
+    virtual AbstractURLDlg * CreateURLDialog( vcl::Window* pParent,
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList ) SAL_OVERRIDE;
     virtual AbstractSvxHlinkDlgMarkWnd* CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId ) SAL_OVERRIDE;
 
-    virtual VclAbstractDialog*      CreateSvxSearchAttributeDialog( Window* pParent,
+    virtual VclAbstractDialog*      CreateSvxSearchAttributeDialog( vcl::Window* pParent,
                                             SearchAttrItemList& rLst,
                                             const sal_uInt16* pWhRanges) SAL_OVERRIDE;
-    virtual AbstractSvxSearchSimilarityDialog * CreateSvxSearchSimilarityDialog( Window* pParent,
+    virtual AbstractSvxSearchSimilarityDialog * CreateSvxSearchSimilarityDialog( vcl::Window* pParent,
                                                             bool bRelax,
                                                             sal_uInt16 nOther,
                                                             sal_uInt16 nShorter,
                                                             sal_uInt16 nLonger) SAL_OVERRIDE;
-    virtual AbstractSvxJSearchOptionsDialog * CreateSvxJSearchOptionsDialog( Window* pParent,
+    virtual AbstractSvxJSearchOptionsDialog * CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
                                                             sal_Int32 nInitialFlags) SAL_OVERRIDE;
-    virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( Window* pParent ) SAL_OVERRIDE;
-    virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( Window* pParent,
+    virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( vcl::Window* pParent ) SAL_OVERRIDE;
+    virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl ) SAL_OVERRIDE;
-    virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( Window* pParent,
+    virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId) SAL_OVERRIDE;
-    virtual AbstractSvxNameDialog *     CreateSvxNameDialog( Window* pParent,
+    virtual AbstractSvxNameDialog *     CreateSvxNameDialog( vcl::Window* pParent,
                                             const OUString& rName, const OUString& rDesc ) SAL_OVERRIDE;
     // #i68101#
-    virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(Window* pParent, const OUString& rName ) SAL_OVERRIDE;
-    virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(Window* pParent, const OUString& rTitle, const OUString& rDescription) SAL_OVERRIDE;
+    virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(vcl::Window* pParent, const OUString& rName ) SAL_OVERRIDE;
+    virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(vcl::Window* pParent, const OUString& rTitle, const OUString& rDescription) SAL_OVERRIDE;
 
-    virtual AbstractSvxMessDialog *         CreateSvxMessDialog( Window* pParent, sal_uInt32 nResId,
+    virtual AbstractSvxMessDialog *         CreateSvxMessDialog( vcl::Window* pParent, sal_uInt32 nResId,
                                                 const OUString& rText, const OUString& rDesc,
                                                 Image* pImg = NULL ) SAL_OVERRIDE;
-    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(Window* pParent) SAL_OVERRIDE;
-    virtual AbstractSvxMultiPathDialog *    CreateSvxPathSelectDialog(Window* pParent) SAL_OVERRIDE;
-    virtual AbstractSvxHpLinkDlg *          CreateSvxHpLinkDlg (Window* pParent,
+    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual AbstractSvxMultiPathDialog *    CreateSvxPathSelectDialog(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual AbstractSvxHpLinkDlg *          CreateSvxHpLinkDlg (vcl::Window* pParent,
                                                 SfxBindings* pBindings,
                                                 sal_uInt32 nResId) SAL_OVERRIDE;
-    virtual AbstractFmSearchDialog*         CreateFmSearchDialog(Window* pParent,
+    virtual AbstractFmSearchDialog*         CreateFmSearchDialog(vcl::Window* pParent,
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier) SAL_OVERRIDE;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(Window* pParent,
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,
                                                 const Graphic& rGraphic, RECT_POINT eLightSource) SAL_OVERRIDE;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(Window* pParent,
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(vcl::Window* pParent,
                                                 const Graphic& rGraphic, sal_uInt16 nCount) SAL_OVERRIDE;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSepia (Window* pParent,
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSepia (vcl::Window* pParent,
                                                 const Graphic& rGraphic, sal_uInt16 nCount) SAL_OVERRIDE;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (Window* pParent,
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (vcl::Window* pParent,
                                                 const Graphic& rGraphic, double nRadius) SAL_OVERRIDE;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (Window* pParent,
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (vcl::Window* pParent,
                                                 const Graphic& rGraphic, sal_uInt8 nGreyThreshold,
                                                 bool bInvert) SAL_OVERRIDE;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (Window* pParent,
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (vcl::Window* pParent,
                                                 const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
                                                 bool bEnhanceEdges) SAL_OVERRIDE;
-    virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( Window* pParent,
+    virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( vcl::Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
                                                             bool bShadow ) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog*           CreateSvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr,
+    virtual SfxAbstractTabDialog*           CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj = NULL,
                                                                  bool bHasObj = true ) SAL_OVERRIDE;
-    virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( Window* pParent,
+    virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
                                                                         bool bPrevNext = false ) SAL_OVERRIDE;
 
@@ -679,38 +679,38 @@ public:
 
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual DialogGetRanges             GetDialogGetRangesFunc() SAL_OVERRIDE;
-    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const OUString& rLanguage ) SAL_OVERRIDE;
+    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( vcl::Window* pParent, const OUString& rLanguage ) SAL_OVERRIDE;
 
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
-            Window* pParent,
+            vcl::Window* pParent,
             bool bShowSlots,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
         ) SAL_OVERRIDE;
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
-            Window* pParent, ::com::sun::star::uno::Any aException) SAL_OVERRIDE;
+            vcl::Window* pParent, ::com::sun::star::uno::Any aException) SAL_OVERRIDE;
 
     virtual VclAbstractDialog*  CreateSvxMacroAssignDlg(
-                Window* _pParent,
+                vcl::Window* _pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
                 const bool _bUnoDialogMode,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& _rxEvents,
                 const sal_uInt16 _nInitiallySelectedEvent
             ) SAL_OVERRIDE;
 
-    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = NULL ) SAL_OVERRIDE;
+    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = NULL ) SAL_OVERRIDE;
 
-    virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal ) SAL_OVERRIDE;
+    virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal ) SAL_OVERRIDE;
 
-    virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( Window* pParent ) SAL_OVERRIDE ;
+    virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( vcl::Window* pParent ) SAL_OVERRIDE ;
 
     virtual VclAbstractDialog*          CreateOptionsDialog(
-        Window* pParent, const OUString& rExtensionId, const OUString& rApplicationContext ) SAL_OVERRIDE;
+        vcl::Window* pParent, const OUString& rExtensionId, const OUString& rApplicationContext ) SAL_OVERRIDE;
 
-    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, const OString& sHelpId ) SAL_OVERRIDE;
+    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId ) SAL_OVERRIDE;
 
-    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) SAL_OVERRIDE;
+    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) SAL_OVERRIDE;
 };
 
 #endif

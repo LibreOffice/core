@@ -319,7 +319,7 @@ void SchAttribTabDlg::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorSte
     m_fAxisMinorStepWidthForErrorBarDecimals = fMinorStepWidth;
 }
 
-SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
+SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
                                  const SfxItemSet* pAttr,
                                  const ObjectPropertiesDialogParameter* pDialogParameter,
                                  const ViewElementListProvider* pViewElementListProvider,

@@ -25,7 +25,7 @@
 class SwAccessibleMap;
 class SwFrm;
 class SdrObject;
-class Window;
+namespace vcl { class Window; }
 class SwRect;
 
 namespace sw { namespace access {
@@ -36,17 +36,17 @@ class SwAccessibleChild
         SwAccessibleChild();
         explicit SwAccessibleChild( const SdrObject* pDrawObj );
         explicit SwAccessibleChild( const SwFrm* pFrm );
-        explicit SwAccessibleChild( Window* pWindow );
+        explicit SwAccessibleChild( vcl::Window* pWindow );
         SwAccessibleChild( const SwFrm* pFrm,
                            const SdrObject* pDrawObj,
-                           Window* pWindow );
+                           vcl::Window* pWindow );
 
         SwAccessibleChild( const SwAccessibleChild& r );
         SwAccessibleChild& operator=( const SwAccessibleChild& r );
 
         SwAccessibleChild& operator=( const SdrObject* pDrawObj );
         SwAccessibleChild& operator=( const SwFrm* pFrm );
-        SwAccessibleChild& operator=( Window* pWindow );
+        SwAccessibleChild& operator=( vcl::Window* pWindow );
 
         bool operator==( const SwAccessibleChild& r ) const;
 
@@ -54,7 +54,7 @@ class SwAccessibleChild
 
         const SwFrm* GetSwFrm() const { return mpFrm; }
         const SdrObject* GetDrawObject() const { return mpDrawObj; }
-        Window* GetWindow() const { return mpWindow; }
+        vcl::Window* GetWindow() const { return mpWindow; }
 
         const SwFrm* GetParent( const bool bInPagePreview ) const;
 
@@ -72,11 +72,11 @@ class SwAccessibleChild
     private:
         const SwFrm* mpFrm;
         const SdrObject* mpDrawObj;
-        Window* mpWindow;
+        vcl::Window* mpWindow;
 
         void Init( const SdrObject* pDrawObj );
         void Init( const SwFrm* pFrm );
-        void Init( Window* pWindow );
+        void Init( vcl::Window* pWindow );
 };
 
 } } // eof of namespace sw::access

@@ -24,7 +24,7 @@
 class LockFailedQueryBox : public MessBox
 {
 public:
-    LockFailedQueryBox( Window* pParent, ResMgr* pResMgr );
+    LockFailedQueryBox( vcl::Window* pParent, ResMgr* pResMgr );
     virtual ~LockFailedQueryBox();
 };
 

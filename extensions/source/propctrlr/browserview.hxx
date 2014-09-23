@@ -35,7 +35,7 @@ namespace pcr
 
     //=
 
-    class OPropertyBrowserView : public Window
+    class OPropertyBrowserView : public vcl::Window
     {
         OPropertyEditor*        m_pPropBox;
         sal_uInt16              m_nActivePage;
@@ -47,7 +47,7 @@ namespace pcr
         virtual bool Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
 
     public:
-        OPropertyBrowserView( Window* pParent, WinBits nBits = 0);
+        OPropertyBrowserView( vcl::Window* pParent, WinBits nBits = 0);
 
         virtual ~OPropertyBrowserView();
 

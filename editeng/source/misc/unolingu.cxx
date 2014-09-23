@@ -823,7 +823,7 @@ SvxDicListChgClamp::~SvxDicListChgClamp()
     }
 }
 
-short SvxDicError( Window *pParent, sal_Int16 nError )
+short SvxDicError( vcl::Window *pParent, sal_Int16 nError )
 {
     short nRes = 0;
     if (DIC_ERR_NONE != nError)

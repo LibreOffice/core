@@ -101,7 +101,7 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const
     rDev.SetFont( aOldFont );
 }
 
-ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
+ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
                         const uno::Sequence<OUString>& rImplNames,
                         const uno::Sequence<OUString>& rDescriptions,
                         const OUString& rEngine,
@@ -380,7 +380,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
     return 0;
 }
 
-ScSolverIntegerDialog::ScSolverIntegerDialog(Window * pParent)
+ScSolverIntegerDialog::ScSolverIntegerDialog(vcl::Window * pParent)
     : ModalDialog( pParent, "IntegerDialog",
         "modules/scalc/ui/integerdialog.ui" )
 {
@@ -408,7 +408,7 @@ sal_Int32 ScSolverIntegerDialog::GetValue() const
     return (sal_Int32) nValue;
 }
 
-ScSolverValueDialog::ScSolverValueDialog( Window * pParent )
+ScSolverValueDialog::ScSolverValueDialog( vcl::Window * pParent )
     : ModalDialog( pParent, "DoubleDialog",
         "modules/scalc/ui/doubledialog.ui" )
 {

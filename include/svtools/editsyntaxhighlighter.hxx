@@ -39,7 +39,7 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     public:
-        MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER , HighlighterLanguage aLanguage = HIGHLIGHT_SQL);
+        MultiLineEditSyntaxHighlight( vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER , HighlighterLanguage aLanguage = HIGHLIGHT_SQL);
         virtual ~MultiLineEditSyntaxHighlight();
 
         virtual void UpdateData() SAL_OVERRIDE;

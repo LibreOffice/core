@@ -43,7 +43,7 @@ using namespace com::sun::star;
 #define DP_TYPELIST_QUERY   1
 #define DP_TYPELIST_SQLNAT  3
 
-ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
+ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( vcl::Window* pParent ) :
     ModalDialog(pParent, "SelectDataSourceDialog",
         "modules/scalc/ui/selectdatasource.ui")
 {

@@ -24,7 +24,7 @@
 namespace frm
 {
 
-    RichTextViewPort::RichTextViewPort( Window* _pParent )
+    RichTextViewPort::RichTextViewPort( vcl::Window* _pParent )
         :Control ( _pParent )
         ,m_pView(NULL)
         ,m_bHideInactiveSelection( true )

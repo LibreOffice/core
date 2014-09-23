@@ -49,7 +49,7 @@ class SwCharDlg: public SfxTabDialog
     sal_uInt16 m_nCharBrdId;
 
 public:
-    SwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
+    SwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
               sal_uInt8 nDialogMode, const OUString* pFmtStr = 0);
 
     virtual ~SwCharDlg();
@@ -78,11 +78,11 @@ class SwCharURLPage : public SfxTabPage
     DECL_LINK(EventHdl, void *);
 
 public:
-                        SwCharURLPage( Window* pParent,
+                        SwCharURLPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
 
                         virtual ~SwCharURLPage();
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

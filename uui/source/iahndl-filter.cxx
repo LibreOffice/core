@@ -46,7 +46,7 @@ namespace {
 
 void
 executeFilterDialog(
-    Window                    * pParent ,
+    vcl::Window          * pParent ,
     OUString       const & rURL    ,
     uui::FilterNameList const & rFilters,
     OUString             & rFilter )
@@ -75,7 +75,7 @@ executeFilterDialog(
 
 void
 handleNoSuchFilterRequest_(
-    Window * pParent,
+    vcl::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     document::NoSuchFilterRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &

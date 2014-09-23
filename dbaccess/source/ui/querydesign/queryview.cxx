@@ -24,7 +24,7 @@
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-OQueryView::OQueryView(Window* _pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
+OQueryView::OQueryView(vcl::Window* _pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
     :OJoinDesignView( _pParent, _rController, _rxContext )
 {
 

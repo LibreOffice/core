@@ -665,7 +665,7 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
           && GetMediaDescr().find( aVersionCommentString ) == GetMediaDescr().end() )
         {
             // notify the user that SaveAs is going to be done
-            Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
+            vcl::Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
             MessageDialog aMessageBox(pWin, SfxResId(STR_NEW_FILENAME_SAVE),
                                       VCL_MESSAGE_QUESTION, VCL_BUTTONS_OK_CANCEL);
             if ( aMessageBox.Execute() == RET_OK )
@@ -1855,15 +1855,15 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
     if ( !SvtSaveOptions().IsWarnAlienFormat() )
         return true;
 
-    Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
+    vcl::Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
     SfxAlienWarningDialog aDlg( pWin, aOldUIName );
 
     return aDlg.Execute() == RET_OK;
 }
 
-Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
+vcl::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
 {
-    Window* pWin = 0;
+    vcl::Window* pWin = 0;
     try {
         if ( xModel.is() )
         {

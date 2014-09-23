@@ -22,7 +22,7 @@
 #include <table.hrc>
 #include <tblenum.hxx>
 
-SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh )
+SwSplitTblDlg::SwSplitTblDlg( vcl::Window *pParent, SwWrtShell &rSh )
     : SvxStandardDialog( pParent, "SplitTableDialog", "modules/swriter/ui/splittable.ui" )
     , rShell(rSh)
     , m_nSplit(HEADLINE_CNTNTCOPY)

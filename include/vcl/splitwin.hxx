@@ -88,7 +88,7 @@ private:
     Link                maFadeOutHdl;
 
     using Window::ImplInit;
-    SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
     SAL_DLLPRIVATE void ImplCalcLayout();
     SAL_DLLPRIVATE void ImplUpdate();
@@ -125,7 +125,7 @@ private:
     SAL_DLLPRIVATE      SplitWindow (const SplitWindow &);
     SAL_DLLPRIVATE      SplitWindow & operator= (const SplitWindow &);
 public:
-                        SplitWindow( Window* pParent, WinBits nStyle = 0 );
+                        SplitWindow( vcl::Window* pParent, WinBits nStyle = 0 );
                         virtual ~SplitWindow();
 
     virtual void        StartSplit();
@@ -146,7 +146,7 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    void                InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
+    void                InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
                                     sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nSetId = 0,
                                     SplitWindowItemBits nBits = 0 );
     void                InsertItem( sal_uInt16 nId, long nSize,
@@ -173,7 +173,7 @@ public:
     */
     long                GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const;
     sal_uInt16              GetSet( sal_uInt16 nId ) const;
-    sal_uInt16              GetItemId( Window* pWindow ) const;
+    sal_uInt16              GetItemId( vcl::Window* pWindow ) const;
     sal_uInt16              GetItemId( const Point& rPos ) const;
     sal_uInt16              GetItemPos( sal_uInt16 nId, sal_uInt16 nSetId = 0 ) const;
     sal_uInt16              GetItemId( sal_uInt16 nPos, sal_uInt16 nSetId = 0 ) const;

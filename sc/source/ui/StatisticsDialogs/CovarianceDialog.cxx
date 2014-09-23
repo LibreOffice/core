@@ -22,7 +22,7 @@ namespace
 
 ScCovarianceDialog::ScCovarianceDialog(
                         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                        Window* pParent, ScViewData* pViewData ) :
+                        vcl::Window* pParent, ScViewData* pViewData ) :
     ScMatrixComparisonGenerator(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "CovarianceDialog", "modules/scalc/ui/covariancedialog.ui" )

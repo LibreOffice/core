@@ -36,7 +36,7 @@ private:
     DECL_LINK( NameHdl, void * );
 
 public:
-    QueryFolderNameDialog(Window* _pParent, const OUString& rTitle,
+    QueryFolderNameDialog(vcl::Window* _pParent, const OUString& rTitle,
         const OUString& rDefaultText, OUString* pGroupName = NULL);
     OUString GetName() const { return m_pNameEdit->GetText(); }
 };

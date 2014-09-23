@@ -175,7 +175,7 @@ ExtensionRemovedListener::~ExtensionRemovedListener()
 
 
 // ExtensionBox_Impl
-ExtensionBox_Impl::ExtensionBox_Impl(Window* pParent) :
+ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
     IExtensionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_CHILDDLGCTRL ),
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
@@ -837,7 +837,7 @@ Size ExtensionBox_Impl::GetOptimalSize() const
     return LogicToPixel(Size(250, 150), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeExtensionBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtensionBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ExtensionBox_Impl(pParent);
 }

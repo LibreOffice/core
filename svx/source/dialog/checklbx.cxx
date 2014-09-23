@@ -26,7 +26,7 @@
 
 #include <vcl/builder.hxx>
 
-SvxCheckListBox::SvxCheckListBox( Window* pParent, WinBits nWinStyle ) :
+SvxCheckListBox::SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
     SvTreeListBox( pParent, nWinStyle )
 
@@ -34,7 +34,7 @@ SvxCheckListBox::SvxCheckListBox( Window* pParent, WinBits nWinStyle ) :
     Init_Impl();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxCheckListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxCheckListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

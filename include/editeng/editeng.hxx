@@ -83,7 +83,7 @@ class Rectangle;
 class SvStream;
 class Link;
 class OutputDevice;
-class Window;
+namespace vcl { class Window; }
 class SfxPoolItem;
 class SvxNumBulletItem;
 class SvxBulletItem;
@@ -142,7 +142,7 @@ private:
 
     EDITENG_DLLPRIVATE                 EditEngine( const EditEngine& );
     EDITENG_DLLPRIVATE EditEngine&     operator=( const EditEngine& );
-    EDITENG_DLLPRIVATE bool            PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, Window* pFrameWin = NULL );
+    EDITENG_DLLPRIVATE bool            PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, vcl::Window* pFrameWin = NULL );
 
     EDITENG_DLLPRIVATE void CursorMoved(ContentNode* pPrevNode);
     EDITENG_DLLPRIVATE void CheckIdleFormatter();

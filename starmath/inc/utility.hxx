@@ -157,7 +157,7 @@ protected:
     DECL_LINK(SelectHdl, ListBox *);
 
 public:
-    SmFontPickListBox(Window* pParent, WinBits nBits);
+    SmFontPickListBox(vcl::Window* pParent, WinBits nBits);
 
     SmFontPickListBox& operator = (const SmFontPickList& rList);
 

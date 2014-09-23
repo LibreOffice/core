@@ -29,7 +29,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class SwAccessibleMap;
 class SwCrsrShell;
 class SdrObject;
@@ -107,7 +107,7 @@ protected:
 
     bool IsDisposing() const { return bDisposing; }
 
-    Window *GetWindow();
+    vcl::Window *GetWindow();
     SwAccessibleMap *GetMap() { return pMap; }
     const SwAccessibleMap *GetMap() const { return pMap; }
 
@@ -359,10 +359,10 @@ public:
     bool HasAdditionalAccessibleChildren();
 
     // #i88070# - get additional child by index
-    Window* GetAdditionalAccessibleChild( const sal_Int32 nIndex );
+    vcl::Window* GetAdditionalAccessibleChild( const sal_Int32 nIndex );
 
     // #i88070# - get all additional accessible children
-    void GetAdditionalAccessibleChildren( std::vector< Window* >* pChildren );
+    void GetAdditionalAccessibleChildren( std::vector< vcl::Window* >* pChildren );
 
     const OUString& GetName() const { return sName; }
 

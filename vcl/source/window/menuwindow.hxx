@@ -30,7 +30,7 @@ class Link;
 class Menu;
 class MenuBar;
 class Rectangle;
-class Window;
+namespace vcl { class Window; }
 
 /** Common ancestor for MenuFloatingWindow and MenuBarWindow.
 
@@ -54,10 +54,10 @@ public:
     virtual ~MenuWindow() {}
 
     /// Sets up some visual properties of the underlying window.
-    void ImplInitMenuWindow(Window* pWin, bool bFont, bool bMenuBar);
+    void ImplInitMenuWindow(vcl::Window* pWin, bool bFont, bool bMenuBar);
 
     /// Show the appropriate help tooltip.
-    bool ImplHandleHelpEvent(Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
+    bool ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
             const HelpEvent& rHEvt, const Rectangle &rHighlightRect);
 };
 

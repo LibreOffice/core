@@ -28,7 +28,7 @@
 class ScMetricInputDlg : public ModalDialog
 {
 public:
-    ScMetricInputDlg( Window*        pParent,
+    ScMetricInputDlg( vcl::Window*        pParent,
                       const OString& sDialogName,
                       long           nCurrent,
                       long           nDefault,

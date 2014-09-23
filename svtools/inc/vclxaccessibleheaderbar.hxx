@@ -67,7 +67,7 @@ private:
 class VCLXHeaderBar :  public VCLXWindow
 {
 public:
-    VCLXHeaderBar(Window* pHeaderBar);
+    VCLXHeaderBar(vcl::Window* pHeaderBar);
     virtual ~VCLXHeaderBar();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() SAL_OVERRIDE;

@@ -79,7 +79,7 @@ protected:
     Rectangle       ImplGetItemRect( sal_uInt16 nPos );
 
 public:
-                    MenuFloatingWindow( Menu* pMenu, Window* pParent, WinBits nStyle );
+                    MenuFloatingWindow( Menu* pMenu, vcl::Window* pParent, WinBits nStyle );
                     virtual ~MenuFloatingWindow();
 
             void    doShutdown();

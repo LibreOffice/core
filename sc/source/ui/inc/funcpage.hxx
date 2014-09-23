@@ -45,7 +45,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt );
 
 public:
-                    ScListBox( Window* pParent, const ResId& rResId );
+                    ScListBox( vcl::Window* pParent, const ResId& rResId );
 };
 
 class ScFuncPage : public TabPage
@@ -72,7 +72,7 @@ protected:
 
 public:
 
-                    ScFuncPage( Window* pParent);
+                    ScFuncPage( vcl::Window* pParent);
 
     void            SetCategory(sal_uInt16 nCat);
     void            SetFunction(sal_uInt16 nFunc);

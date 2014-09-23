@@ -45,7 +45,7 @@ namespace avmedia {
 // - MediaWindow -
 
 
-MediaWindow::MediaWindow( Window* parent, bool bInternalMediaControl ) :
+MediaWindow::MediaWindow( vcl::Window* parent, bool bInternalMediaControl ) :
     mpImpl( new priv::MediaWindowImpl( parent, this, bInternalMediaControl ) )
 {
     mpImpl->Show();
@@ -190,7 +190,7 @@ void MediaWindow::hide()
 
 
 
-Window* MediaWindow::getWindow() const
+vcl::Window* MediaWindow::getWindow() const
 {
     return mpImpl.get();
 }
@@ -236,7 +236,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 
 
 
-bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
+bool MediaWindow::executeMediaURLDialog(vcl::Window* /* pParent */,
         OUString& rURL, bool *const o_pbLink)
 {
     ::sfx2::FileDialogHelper        aDlg( (o_pbLink)
@@ -325,7 +325,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
 
 
 
-void MediaWindow::executeFormatErrorBox( Window* pParent )
+void MediaWindow::executeFormatErrorBox( vcl::Window* pParent )
 {
     MessageDialog aErrBox( pParent, AVMEDIA_RESID( AVMEDIA_STR_ERR_URL ) );
 

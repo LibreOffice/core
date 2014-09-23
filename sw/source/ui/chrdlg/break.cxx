@@ -124,7 +124,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
     return 0;
 }
 
-SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
+SwBreakDlg::SwBreakDlg( vcl::Window *pParent, SwWrtShell &rS )
     : SvxStandardDialog(pParent, "BreakDialog", "modules/swriter/ui/insertbreak.ui")
     , rSh(rS)
     , nKind(0)

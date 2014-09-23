@@ -37,7 +37,7 @@
 #include "queryentry.hxx"
 #include "markdata.hxx"
 
-ScDBFunc::ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
+ScDBFunc::ScDBFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScViewFunc( pParent, rDocSh, pViewShell )
 {
 }

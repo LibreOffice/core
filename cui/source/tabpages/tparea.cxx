@@ -224,7 +224,7 @@ void SvxTransparenceTabPage::SetControlState_Impl(XGradientStyle eXGS)
     }
 }
 
-SvxTransparenceTabPage::SvxTransparenceTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
 :   SvxTabPage          ( pParent,
                           "TransparencyTabPage",
                           "cui/ui/transparencytabpage.ui",
@@ -289,7 +289,7 @@ void SvxTransparenceTabPage::Construct()
 {
 }
 
-SfxTabPage* SvxTransparenceTabPage::Create(Window* pWindow, const SfxItemSet* rAttrs)
+SfxTabPage* SvxTransparenceTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rAttrs)
 {
     return(new SvxTransparenceTabPage(pWindow, *rAttrs));
 }
@@ -486,7 +486,7 @@ int SvxTransparenceTabPage::DeactivatePage(SfxItemSet* _pSet)
     return(LEAVE_PAGE);
 }
 
-void SvxTransparenceTabPage::PointChanged(Window* , RECT_POINT eRcPt)
+void SvxTransparenceTabPage::PointChanged(vcl::Window* , RECT_POINT eRcPt)
 {
     eRP = eRcPt;
 }
@@ -579,7 +579,7 @@ void SvxTransparenceTabPage::PageCreated(const SfxAllItemSet& aSet)
 |*
 \************************************************************************/
 
-SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
+SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
 
     SvxTabPage( pParent,
                 "AreaTabPage",
@@ -1756,7 +1756,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 
-SfxTabPage* SvxAreaTabPage::Create( Window* pWindow,
+SfxTabPage* SvxAreaTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SvxAreaTabPage( pWindow, *rAttrs ) );
@@ -2365,7 +2365,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickScaleHdl_Impl)
 
 
 
-void SvxAreaTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
+void SvxAreaTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRcPt )
 {
     eRP = eRcPt;
 

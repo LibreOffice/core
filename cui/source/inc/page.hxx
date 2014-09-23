@@ -178,7 +178,7 @@ private:
     void                CheckMarginEdits( bool _bClear );
     bool                IsMarginOutOfRange();
 
-    SvxPageDescPage( Window* pParent, const SfxItemSet& rSet );
+    SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     //UUUU
     void EnableDrawingLayerFillStyles(bool bNew) { mbEnableDrawingLayerFillStyles = bNew; }
@@ -188,7 +188,7 @@ protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rOutSet ) SAL_OVERRIDE;

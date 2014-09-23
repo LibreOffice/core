@@ -21,7 +21,7 @@
 #include <svx/svxdlg.hxx>
 #include <sfx2/sfx.hrc>
 
-SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet)
+SwAddrDlg::SwAddrDlg(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

@@ -89,7 +89,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 }
 
 
-SvTabListBox::SvTabListBox( Window* pParent, WinBits nBits )
+SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
 {
     pTabList = 0;
@@ -98,7 +98,7 @@ SvTabListBox::SvTabListBox( Window* pParent, WinBits nBits )
     SetHighlightRange();    // select full width
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvTabListBox(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvTabListBox(vcl::Window *pParent,
     VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
@@ -506,7 +506,7 @@ namespace svt
 
 // class SvHeaderTabListBox ----------------------------------------------
 
-SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
+SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
     SvTabListBox( pParent, nWinStyle ),
 
@@ -641,7 +641,7 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl)
 
 IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl)
 {
-    Window* pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
+    vcl::Window* pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvHeaderTabListBox..CreateAccessibleHdl_Impl - accessible parent not found" );
     if ( pParent )
     {
@@ -839,7 +839,7 @@ Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _bOnScree
     Rectangle aRect;
     if ( _bIsColumnBar )
     {
-        Window* pParent = NULL;
+        vcl::Window* pParent = NULL;
         if ( !_bOnScreen )
             pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
 
@@ -850,7 +850,7 @@ Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _bOnScree
 
 Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
 {
-    Window* pParent = NULL;
+    vcl::Window* pParent = NULL;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
@@ -872,7 +872,7 @@ Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 
         aTopLeft.X() = aItemRect.Left();
         Size aSize = aItemRect.GetSize();
         aRect = Rectangle( aTopLeft, aSize );
-        Window* pParent = NULL;
+        vcl::Window* pParent = NULL;
         if ( !_bOnScreen )
             pParent = GetAccessibleParentWindow();
         aTopLeft = aRect.TopLeft();
@@ -1153,7 +1153,7 @@ bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUStrin
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
 
-Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( Window *pRelativeWindow ) const
+Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }
@@ -1168,19 +1168,19 @@ Reference< XAccessible > SvHeaderTabListBox::GetAccessible( bool bCreate )
     return Control::GetAccessible( bCreate );
 }
 
-Window* SvHeaderTabListBox::GetAccessibleParentWindow() const
+vcl::Window* SvHeaderTabListBox::GetAccessibleParentWindow() const
 {
     return Control::GetAccessibleParentWindow();
 }
 
-Window* SvHeaderTabListBox::GetWindowInstance()
+vcl::Window* SvHeaderTabListBox::GetWindowInstance()
 {
     return this;
 }
 
 Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
 {
-    Window* pParent = GetAccessibleParentWindow();
+    vcl::Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvHeaderTabListBox::::CreateAccessible - accessible parent not found" );
 
     Reference< XAccessible > xAccessible;

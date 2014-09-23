@@ -132,7 +132,7 @@ private:
     DECL_LINK(  StartVerifySignatureHdl, void* );
 
 public:
-                MyWin( Window* pParent, WinBits nWinStyle );
+                MyWin( vcl::Window* pParent, WinBits nWinStyle );
 
 };
 
@@ -144,7 +144,7 @@ void Main()
     Application::Execute();
 }
 
-MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
+MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
     maTokenLine( this ),
     maTest1Line( this ),

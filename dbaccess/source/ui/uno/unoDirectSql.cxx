@@ -78,7 +78,7 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
 
-    Dialog* ODirectSQLDialog::createDialog(Window* _pParent)
+    Dialog* ODirectSQLDialog::createDialog(vcl::Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection = m_xActiveConnection;

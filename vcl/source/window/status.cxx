@@ -111,7 +111,7 @@ bool StatusBar::ImplIsItemUpdate()
         return false;
 }
 
-void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
+void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     mpImplData = new ImplData;
 
@@ -142,7 +142,7 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
     SetOutputSizePixel( CalcWindowSizePixel() );
 }
 
-StatusBar::StatusBar( Window* pParent, WinBits nStyle ) :
+StatusBar::StatusBar( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_STATUSBAR )
 {
     ImplInit( pParent, nStyle );
@@ -458,7 +458,7 @@ void StatusBar::ImplDrawItem( bool bOffScreen, sal_uInt16 nPos, bool bDrawText, 
         ImplCallEventListeners( VCLEVENT_STATUSBAR_DRAWITEM, (void*) sal_IntPtr(pItem->mnId) );
 }
 
-void DrawProgress( Window* pWindow, const Point& rPos,
+void DrawProgress( vcl::Window* pWindow, const Point& rPos,
                    long nOffset, long nPrgsWidth, long nPrgsHeight,
                    sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
                    const Rectangle& rFramePosSize
@@ -475,7 +475,7 @@ void DrawProgress( Window* pWindow, const Point& rPos,
         Rectangle aControlRegion( aDrawRect );
         if( bNeedErase )
         {
-            Window* pEraseWindow = pWindow;
+            vcl::Window* pEraseWindow = pWindow;
             while( pEraseWindow->IsPaintTransparent()                         &&
                    ! pEraseWindow->ImplGetWindowImpl()->mbFrame )
             {

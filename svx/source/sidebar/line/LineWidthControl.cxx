@@ -36,7 +36,7 @@
 namespace svx { namespace sidebar {
 
 LineWidthControl::LineWidthControl (
-    Window* pParent,
+    vcl::Window* pParent,
     LinePropertyPanel& rPanel)
     : svx::sidebar::PopupControl(pParent,SVX_RES(RID_POPUPPANEL_LINEPAGE_WIDTH)),
       mrLinePropertyPanel(rPanel),

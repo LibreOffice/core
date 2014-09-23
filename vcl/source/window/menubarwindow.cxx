@@ -34,7 +34,7 @@
 // document closing button
 #define IID_DOCUMENTCLOSE 1
 
-DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
+DecoToolBox::DecoToolBox( vcl::Window* pParent, WinBits nStyle ) :
     ToolBox( pParent, nStyle )
 {
     ImplInit();
@@ -115,7 +115,7 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
     }
 }
 
-MenuBarWindow::MenuBarWindow( Window* pParent ) :
+MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     Window( pParent, 0 ),
     aCloseBtn(this),
     aFloatBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ),
@@ -519,18 +519,18 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         GrabFocus();
 }
 
-static int ImplGetTopDockingAreaHeight( Window *pWindow )
+static int ImplGetTopDockingAreaHeight( vcl::Window *pWindow )
 {
     // find docking area that is top aligned and return its height
     // note: dockingareas are direct children of the SystemWindow
     if( pWindow->ImplGetFrameWindow() )
     {
-        Window *pWin = pWindow->ImplGetFrameWindow()->GetWindow( WINDOW_FIRSTCHILD ); //mpWindowImpl->mpFirstChild;
+        vcl::Window *pWin = pWindow->ImplGetFrameWindow()->GetWindow( WINDOW_FIRSTCHILD ); //mpWindowImpl->mpFirstChild;
         while( pWin )
         {
             if( pWin->IsSystemWindow() )
             {
-                Window *pChildWin = pWin->GetWindow( WINDOW_FIRSTCHILD ); //mpWindowImpl->mpFirstChild;
+                vcl::Window *pChildWin = pWin->GetWindow( WINDOW_FIRSTCHILD ); //mpWindowImpl->mpFirstChild;
                 while( pChildWin )
                 {
                     DockingAreaWindow *pDockingArea = NULL;
@@ -554,7 +554,7 @@ static int ImplGetTopDockingAreaHeight( Window *pWindow )
     return 0;
 }
 
-static void ImplAddNWFSeparator( Window *pThis, const MenubarValue& rMenubarValue )
+static void ImplAddNWFSeparator( vcl::Window *pThis, const MenubarValue& rMenubarValue )
 {
     // add a separator if
     // - we have an adjacent docking area

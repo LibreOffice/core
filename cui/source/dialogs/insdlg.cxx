@@ -91,7 +91,7 @@ uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( 
     return uno::Reference< io::XInputStream >();
 }
 
-InsertObjectDialog_Impl::InsertObjectDialog_Impl(Window * pParent, const OString& rID,
+InsertObjectDialog_Impl::InsertObjectDialog_Impl(vcl::Window * pParent, const OString& rID,
     const OUString& rUIXMLDescription,
     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage)
     : ModalDialog(pParent, rID, rUIXMLDescription)
@@ -167,7 +167,7 @@ void SvInsertOleDlg::SelectDefault()
 
 SvInsertOleDlg::SvInsertOleDlg
 (
-    Window* pParent,
+    vcl::Window* pParent,
     const Reference < embed::XStorage >& xStorage,
     const SvObjectServerList* pServers
 )
@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
 
 
 
-SvInsertPlugInDialog::SvInsertPlugInDialog(Window* pParent,
+SvInsertPlugInDialog::SvInsertPlugInDialog(vcl::Window* pParent,
     const uno::Reference < embed::XStorage >& xStorage)
     : InsertObjectDialog_Impl(pParent, "InsertPluginDialog", "cui/ui/insertplugin.ui", xStorage)
     , m_pURL(0)
@@ -472,7 +472,7 @@ short SvInsertPlugInDialog::Execute()
     return nRet;
 }
 
-SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent,
+SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( vcl::Window *pParent,
                             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
     : InsertObjectDialog_Impl( pParent, "InsertFloatingFrameDialog", "cui/ui/insertfloatingframe.ui",
                               xStorage )
@@ -480,7 +480,7 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent,
     Init();
 }
 
-SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent,
+SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( vcl::Window *pParent,
                             const uno::Reference < embed::XEmbeddedObject >& xObj )
     : InsertObjectDialog_Impl( pParent, "InsertFloatingFrameDialog", "cui/ui/insertfloatingframe.ui",
                               uno::Reference < embed::XStorage >() )
@@ -718,7 +718,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
 
 IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
 {
-    Window* pOldParent = Application::GetDefDialogParent();
+    vcl::Window* pOldParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( pThis );
 
     // create the file dialog

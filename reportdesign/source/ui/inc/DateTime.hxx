@@ -77,7 +77,7 @@ class ODateTimeDialog : public ModalDialog
     // fill methods
     void InsertEntry(sal_Int16 _nNumberFormatId);
 public:
-    ODateTimeDialog( Window* pParent
+    ODateTimeDialog( vcl::Window* pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xHoldAlive
                         ,::rptui::OReportController* _pController);
     virtual ~ODateTimeDialog();

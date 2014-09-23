@@ -46,11 +46,11 @@ namespace dbaui
         DECL_LINK(OnEditModified,Edit*);
 
     public:
-        static  OGenericAdministrationPage* CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateMSAccessTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateADOTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateODBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        static  OGenericAdministrationPage* CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateDbaseTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateMSAccessTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateADOTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateODBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateUserDefinedTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 
@@ -68,7 +68,7 @@ namespace dbaui
         OUString getConnectionURL( ) const;
 
     protected:
-        OConnectionTabPageSetup(Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
+        OConnectionTabPageSetup(vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
         virtual bool checkTestConnection() SAL_OVERRIDE;
             // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~OConnectionTabPageSetup();

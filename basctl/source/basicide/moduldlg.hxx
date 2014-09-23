@@ -56,7 +56,7 @@ private:
 
     DECL_LINK(OkButtonHandler, void *);
 public:
-    NewObjectDialog (Window* pParent, ObjectMode::Mode, bool bCheckName = false);
+    NewObjectDialog (vcl::Window* pParent, ObjectMode::Mode, bool bCheckName = false);
     OUString GetObjectName() const { return m_pEdit->GetText(); }
     void SetObjectName( const OUString& rName )
     {
@@ -71,7 +71,7 @@ class GotoLineDialog : public ModalDialog
     OKButton*       m_pOKButton;
     DECL_LINK(OkButtonHandler, void *);
 public:
-    GotoLineDialog(Window * pParent);
+    GotoLineDialog(vcl::Window * pParent);
     sal_Int32 GetLineNumber() const;
 };
 
@@ -86,7 +86,7 @@ private:
     DECL_LINK(OkButtonHandler, void *);
 
 public:
-    ExportDialog( Window * pParent );
+    ExportDialog( vcl::Window * pParent );
 
     bool isExportAsPackage () const { return mbExportAsPackage; }
 };
@@ -109,7 +109,7 @@ protected:
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, bool bMove );
 
 public:
-    ExtTreeListBox(Window* pParent, WinBits nStyle);
+    ExtTreeListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~ExtTreeListBox();
 };
 
@@ -122,7 +122,7 @@ private:
     void                Init();
 
 public:
-    CheckBox(Window* pParent, WinBits nStyle);
+    CheckBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~CheckBox();
 
     SvTreeListEntry*    DoInsertEntry( const OUString& rStr, sal_uLong nPos = LISTBOX_APPEND );
@@ -150,7 +150,7 @@ private:
     ::CheckBox*     m_pReplaceBox;
 
 public:
-    LibDialog( Window* pParent );
+    LibDialog( vcl::Window* pParent );
 
     void            SetStorageName( const OUString& rName );
 
@@ -169,7 +169,7 @@ private:
     EntryDescriptor    m_aCurEntry;
 
 public:
-    OrganizeDialog( Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
+    OrganizeDialog( vcl::Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
     virtual ~OrganizeDialog();
 
     virtual short   Execute() SAL_OVERRIDE;
@@ -201,7 +201,7 @@ protected:
     virtual void        DeactivatePage() SAL_OVERRIDE;
 
 public:
-    ObjectPage(Window* pParent, const OString& rName, sal_uInt16 nMode);
+    ObjectPage(vcl::Window* pParent, const OString& rName, sal_uInt16 nMode);
 
     void                SetCurrentEntry( EntryDescriptor& rDesc );
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
@@ -247,16 +247,16 @@ protected:
     TabDialog*          pTabDlg;
 
 public:
-                        LibPage( Window* pParent );
+                        LibPage( vcl::Window* pParent );
     virtual             ~LibPage();
 
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };
 
 // Helper functions
-SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
+SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
     TreeListBox& rBasicBox, const OUString& rLibName, const OUString& aModName, bool bMain = false );
-void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
+void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     CheckBox* pLibBox, TreeListBox* pBasicBox );
 
 } // namespace basctl

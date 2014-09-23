@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ErrorBarsTabPage::ErrorBarsTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
+ErrorBarsTabPage::ErrorBarsTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage( pParent
         ,"tp_ErrorBars"
         ,"modules/schart/ui/tp_ErrorBars.ui"
@@ -42,7 +42,7 @@ ErrorBarsTabPage::ErrorBarsTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 }
 
 SfxTabPage* ErrorBarsTabPage::Create(
-    Window* pParent, const SfxItemSet* rOutAttrs )
+    vcl::Window* pParent, const SfxItemSet* rOutAttrs )
 {
     return new ErrorBarsTabPage( pParent, *rOutAttrs );
 }

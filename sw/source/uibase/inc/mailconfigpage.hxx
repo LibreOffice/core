@@ -55,10 +55,10 @@ class SwMailConfigPage : public SfxTabPage
     DECL_LINK(TestHdl, void *);
 
 public:
-    SwMailConfigPage( Window* pParent, const SfxItemSet& rSet );
+    SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwMailConfigPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -69,7 +69,7 @@ public:
 class SwMailConfigDlg : public SfxSingleTabDialog
 {
 public:
-    SwMailConfigDlg(Window* pParent, SfxItemSet& rSet);
+    SwMailConfigDlg(vcl::Window* pParent, SfxItemSet& rSet);
 };
 
 #endif

@@ -432,7 +432,7 @@ sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< ::com::sun::star::aw
 }
 
 
-FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
+FmXGridPeer* FmXGridControl::imp_CreatePeer(vcl::Window* pParent)
 {
     FmXGridPeer* pReturn = new FmXGridPeer(m_xContext);
 
@@ -477,7 +477,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
         // mbCreatingPeer is virtually the same as m_nPeerCreationLevel, but it's the base class' method
         // to prevent recursion.
 
-        Window* pParentWin = NULL;
+        vcl::Window* pParentWin = NULL;
         if (rParentPeer.is())
         {
             VCLXWindow* pParent = VCLXWindow::GetImplementation(rParentPeer);
@@ -1078,13 +1078,13 @@ FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
 }
 
 
-FmGridControl* FmXGridPeer::imp_CreateControl(Window* pParent, WinBits nStyle)
+FmGridControl* FmXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
 {
     return new FmGridControl(m_xContext, pParent, this, nStyle);
 }
 
 
-void FmXGridPeer::Create(Window* pParent, WinBits nStyle)
+void FmXGridPeer::Create(vcl::Window* pParent, WinBits nStyle)
 {
     FmGridControl* pWin = imp_CreateControl(pParent, nStyle);
     DBG_ASSERT(pWin != NULL, "FmXGridPeer::Create : imp_CreateControl didn't return a control !");
@@ -1711,7 +1711,7 @@ void FmXGridPeer::setDesignMode(sal_Bool bOn) throw( RuntimeException, std::exce
 {
     if (bOn != isDesignMode())
     {
-        Window* pWin = GetWindow();
+        vcl::Window* pWin = GetWindow();
         if (pWin)
             ((FmGridControl*) pWin)->SetDesignMode(bOn);
     }
@@ -1725,7 +1725,7 @@ void FmXGridPeer::setDesignMode(sal_Bool bOn) throw( RuntimeException, std::exce
 
 sal_Bool FmXGridPeer::isDesignMode() throw( RuntimeException, std::exception )
 {
-    Window* pWin = GetWindow();
+    vcl::Window* pWin = GetWindow();
     if (pWin)
         return ((FmGridControl*) pWin)->IsDesignMode();
     else
@@ -2027,7 +2027,7 @@ Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
     Reference< XAccessibleContext > xContext;
 
     // use the AccessibleContext provided by the VCL window
-    Window* pGrid = GetWindow();
+    vcl::Window* pGrid = GetWindow();
     if ( pGrid )
     {
         Reference< XAccessible > xAcc( pGrid->GetAccessible( true ) );
@@ -2057,7 +2057,7 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
     if (GetWindow())
     {
         FmGridControl* pGrid = (FmGridControl*) GetWindow();
-        Window* pDataWindow  = &pGrid->GetDataWindow();
+        vcl::Window* pDataWindow  = &pGrid->GetDataWindow();
 
         if ( _rPropertyName == FM_PROP_NAME )
         {

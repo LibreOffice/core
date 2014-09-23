@@ -251,10 +251,10 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
     if (pFrame1)
     {
-        Window* pWindow = &pFrame1->GetWindow();
+        vcl::Window* pWindow = &pFrame1->GetWindow();
         if ( pWindow )
         {
-            Window* pSysWin = pWindow->GetSystemWindow();
+            vcl::Window* pSysWin = pWindow->GetSystemWindow();
             if ( pSysWin )
             {
                 pSysWin->SetAccessibleName(OUString());

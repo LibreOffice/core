@@ -33,7 +33,7 @@ protected:
 
     DECL_LINK(DoubleClickHdl, ListBox*);
 public:
-    SwSelGlossaryDlg(Window * pParent, const OUString &rShortName);
+    SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName);
     void InsertGlos(const OUString &rRegion, const OUString &rGlosName)
     {
         const OUString aTmp = rRegion + ":" + rGlosName;

@@ -131,7 +131,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
 class FocusWindowWaitCursor
 {
-    Window*         m_pFocusWindow;
+    vcl::Window*         m_pFocusWindow;
     public:
     FocusWindowWaitCursor() :
         m_pFocusWindow( Application::GetFocusWindow() )

@@ -46,7 +46,7 @@ protected:
     SAL_DLLPRIVATE void ImplPosControls();
 
 public:
-                        MessBox( Window* pParent, WinBits nStyle,
+                        MessBox( vcl::Window* pParent, WinBits nStyle,
                                  const OUString& rTitle, const OUString& rMessage );
                         virtual ~MessBox();
 
@@ -72,8 +72,8 @@ private:
     SAL_DLLPRIVATE void ImplInitInfoBoxData();
 
 public:
-                        InfoBox( Window* pParent, const OUString& rMessage );
-                        InfoBox( Window* pParent, WinBits nStyle,
+                        InfoBox( vcl::Window* pParent, const OUString& rMessage );
+                        InfoBox( vcl::Window* pParent, WinBits nStyle,
                                 const OUString& rMessage );
 
     static Image        GetStandardImage();
@@ -85,7 +85,7 @@ private:
     SAL_DLLPRIVATE void ImplInitWarningBoxData();
 
 public:
-                        WarningBox( Window* pParent, WinBits nStyle,
+                        WarningBox( vcl::Window* pParent, WinBits nStyle,
                                     const OUString& rMessage );
 
     void                SetDefaultCheckBoxText();
@@ -99,7 +99,7 @@ private:
     SAL_DLLPRIVATE void ImplInitErrorBoxData();
 
 public:
-                        ErrorBox( Window* pParent, WinBits nStyle,
+                        ErrorBox( vcl::Window* pParent, WinBits nStyle,
                                   const OUString& rMessage );
 
     static Image        GetStandardImage();
@@ -111,7 +111,7 @@ private:
     SAL_DLLPRIVATE void ImplInitQueryBoxData();
 
 public:
-                        QueryBox( Window* pParent, WinBits nStyle,
+                        QueryBox( vcl::Window* pParent, WinBits nStyle,
                                   const OUString& rMessage );
 
     void                SetDefaultCheckBoxText();

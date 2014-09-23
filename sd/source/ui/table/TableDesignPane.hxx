@@ -56,7 +56,7 @@ class TableValueSet : public ValueSet
 private:
     bool m_bModal;
 public:
-    TableValueSet(Window *pParent, WinBits nStyle);
+    TableValueSet(vcl::Window *pParent, WinBits nStyle);
     virtual void Resize() SAL_OVERRIDE;
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void updateSettings();
@@ -111,7 +111,7 @@ class TableDesignPane : public PanelLayout
 private:
     TableDesignWidget aImpl;
 public:
-    TableDesignPane( ::Window* pParent, ViewShellBase& rBase )
+    TableDesignPane( vcl::Window* pParent, ViewShellBase& rBase )
         : PanelLayout(pParent, "TableDesignPanel",
         "modules/simpress/ui/tabledesignpanel.ui", com::sun::star::uno::Reference<css::frame::XFrame>())
         , aImpl(this, rBase, false)
@@ -124,7 +124,7 @@ class TableDesignDialog : public ModalDialog
 private:
     TableDesignWidget aImpl;
 public:
-    TableDesignDialog( ::Window* pParent, ViewShellBase& rBase )
+    TableDesignDialog( vcl::Window* pParent, ViewShellBase& rBase )
         : ModalDialog(pParent, "TableDesignDialog",
         "modules/sdraw/ui/tabledesigndialog.ui")
         , aImpl(this, rBase, true)
@@ -133,7 +133,7 @@ public:
     virtual short Execute() SAL_OVERRIDE;
 };
 
-void showTableDesignDialog( ::Window*, ViewShellBase& );
+void showTableDesignDialog( vcl::Window*, ViewShellBase& );
 
 }
 

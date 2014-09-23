@@ -38,7 +38,7 @@ namespace basctl
 class ObjectCatalog : public DockingWindow
 {
 public:
-    ObjectCatalog (Window* pParent);
+    ObjectCatalog (vcl::Window* pParent);
     virtual ~ObjectCatalog ();
 public:
     void UpdateEntries () { aTree.UpdateEntries(); }

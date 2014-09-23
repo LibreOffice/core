@@ -42,7 +42,7 @@ const sal_uInt16 aExportToPosArr[] =
 };
 
 
-OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
+OfaHtmlTabPage::OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet) :
 SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", &rSet )
 {
     get(aSize1NF,"size1");
@@ -88,7 +88,7 @@ OfaHtmlTabPage::~OfaHtmlTabPage()
 {
 }
 
-SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
+SfxTabPage* OfaHtmlTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
     return new OfaHtmlTabPage(pParent, *rAttrSet);

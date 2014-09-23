@@ -27,7 +27,7 @@
 class SvxBoxItem;
 
 // class SvxPageWindow ---------------------------------------------------
-class SVX_DLLPUBLIC SvxPageWindow : public Window
+class SVX_DLLPUBLIC SvxPageWindow : public vcl::Window
 {
     using Window::GetBorder;
 
@@ -87,7 +87,7 @@ protected:
         const Rectangle& rDefineRange);
 
 public:
-    SvxPageWindow( Window* pParent );
+    SvxPageWindow( vcl::Window* pParent );
     virtual ~SvxPageWindow();
 
     //UUUU

@@ -32,7 +32,7 @@ class FixedLine;
 namespace dbaui
 {
     class IController;
-    class DBACCESS_DLLPUBLIC ODataView :    public Window
+    class DBACCESS_DLLPUBLIC ODataView :    public vcl::Window
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;  // the service factory to work with
 
@@ -42,7 +42,7 @@ namespace dbaui
         ::std::auto_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
     public:
-        ODataView(  Window* pParent,
+        ODataView(  vcl::Window* pParent,
                     IController& _rController,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& ,
                     WinBits nStyle = 0 );

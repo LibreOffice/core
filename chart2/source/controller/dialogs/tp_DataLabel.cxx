@@ -25,7 +25,7 @@
 namespace chart
 {
 
-DataLabelsTabPage::DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs)
+DataLabelsTabPage::DataLabelsTabPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
         : SfxTabPage(pWindow
         , "tp_DataLabel"
         , "modules/schart/ui/tp_DataLabel.ui"
@@ -38,7 +38,7 @@ DataLabelsTabPage::~DataLabelsTabPage()
 {
 }
 
-SfxTabPage* DataLabelsTabPage::Create(Window* pWindow, const SfxItemSet* rOutAttrs)
+SfxTabPage* DataLabelsTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rOutAttrs)
 {
     return new DataLabelsTabPage(pWindow, *rOutAttrs);
 }

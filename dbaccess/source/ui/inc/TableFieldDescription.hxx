@@ -33,7 +33,7 @@ namespace comphelper
     class NamedValueCollection;
 }
 
-class Window;
+namespace vcl { class Window; }
 
 namespace dbaui
 {
@@ -49,7 +49,7 @@ namespace dbaui
         OUString             m_aFieldAlias;  ///< column alias
         OUString             m_aFunctionName;///< contains the function name (only if m_eFunctionType != FKT_NONE)
 
-        Window*                     m_pTabWindow;
+        vcl::Window*                     m_pTabWindow;
 
         sal_Int32                   m_eDataType;
         sal_Int32                   m_eFunctionType;
@@ -79,7 +79,7 @@ namespace dbaui
 
         void SetVisible( bool bVis=true ) { m_bVisible = bVis; }
         void SetGroupBy( bool bGb=false ) { m_bGroupBy = bGb; }
-        void SetTabWindow( Window* pWin ){ m_pTabWindow = pWin; }
+        void SetTabWindow( vcl::Window* pWin ){ m_pTabWindow = pWin; }
         void SetField( const OUString& rF ) { m_aFieldName = rF; }
         void SetFieldAlias( const OUString& rF ) { m_aFieldAlias = rF; }
         void SetTable( const OUString& rT ) { m_aTableName = rT; }
@@ -105,7 +105,7 @@ namespace dbaui
         OUString GetCriteria( sal_uInt16 nIdx ) const;
         sal_Int32 GetColWidth() const { return m_nColWidth; }
         sal_Int32 GetFieldIndex() const { return m_nIndex; }
-        Window* GetTabWindow() const { return m_pTabWindow;}
+        vcl::Window* GetTabWindow() const { return m_pTabWindow;}
         sal_Int32 GetFunctionType() const { return m_eFunctionType; }
         sal_uInt16 GetColumnId() const { return m_nColumnId;}
 

@@ -60,7 +60,7 @@ static const sal_uInt16 pRanges[] =
 |*
 \************************************************************************/
 
-SvxMeasureDialog::SvxMeasureDialog( Window* pParent, const SfxItemSet& rInAttrs,
+SvxMeasureDialog::SvxMeasureDialog( vcl::Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView )
     : SfxSingleTabDialog(pParent, rInAttrs)
 {
@@ -79,7 +79,7 @@ SvxMeasureDialog::SvxMeasureDialog( Window* pParent, const SfxItemSet& rInAttrs,
 |*
 \************************************************************************/
 
-SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
+SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs ) :
                 SvxTabPage      ( pWindow
                                  ,"DimensionLinesTabPage"
                                  ,"cui/ui/dimensionlinestabpage.ui"
@@ -593,7 +593,7 @@ void SvxMeasurePage::Construct()
 |*
 \************************************************************************/
 
-SfxTabPage* SvxMeasurePage::Create( Window* pWindow,
+SfxTabPage* SvxMeasurePage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SvxMeasurePage( pWindow, *rAttrs ) );
@@ -604,7 +604,7 @@ const sal_uInt16* SvxMeasurePage::GetRanges()
     return( pRanges );
 }
 
-void SvxMeasurePage::PointChanged( Window* pWindow, RECT_POINT /*eRP*/ )
+void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RECT_POINT /*eRP*/ )
 {
     ChangeAttrHdl_Impl( pWindow );
 }

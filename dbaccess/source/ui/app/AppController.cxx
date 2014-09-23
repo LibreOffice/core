@@ -312,7 +312,7 @@ OApplicationController::~OApplicationController()
         dispose();
     }
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< Window> aTemp( getView() );
+    ::std::auto_ptr< vcl::Window> aTemp( getView() );
     SAL_WNODEPRECATED_DECLARATIONS_POP
     clearView();
 
@@ -429,7 +429,7 @@ void SAL_CALL OApplicationController::disposing()
     OApplicationController_CBASE::disposing(); // here the m_refCount must be equal 5
 }
 
-bool OApplicationController::Construct(Window* _pParent)
+bool OApplicationController::Construct(vcl::Window* _pParent)
 {
     setView( * new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode ) );
     getView()->SetUniqueId(UID_APP_VIEW);
@@ -452,7 +452,7 @@ bool OApplicationController::Construct(Window* _pParent)
     if ( !bSuccess )
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< Window> aTemp( getView() );
+        ::std::auto_ptr< vcl::Window> aTemp( getView() );
         SAL_WNODEPRECATED_DECLARATIONS_POP
         clearView();
         return false;

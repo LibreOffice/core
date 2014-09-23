@@ -62,7 +62,7 @@ namespace svx
     void FillPasswordList();
 
     public:
-        WebConnectionInfoDialog( Window* pParent );
+        WebConnectionInfoDialog( vcl::Window* pParent );
         virtual ~WebConnectionInfoDialog();
     };
 

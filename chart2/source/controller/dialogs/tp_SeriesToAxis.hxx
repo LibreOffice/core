@@ -30,10 +30,10 @@ namespace chart
 class SchOptionTabPage : public SfxTabPage
 {
 public:
-    SchOptionTabPage(Window* pParent, const SfxItemSet& rInAttrs);
+    SchOptionTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
     virtual ~SchOptionTabPage();
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rInAttrs);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet* rInAttrs) SAL_OVERRIDE;
 

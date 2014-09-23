@@ -63,7 +63,7 @@ using namespace com::sun::star;
 |*
 \************************************************************************/
 
-FuSelection::FuSelection(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuSelection::FuSelection(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq ) :
     FuDraw(pViewSh, pWin, pViewP, pDoc, rReq),
     bVCAction(false)

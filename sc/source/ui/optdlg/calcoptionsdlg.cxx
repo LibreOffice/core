@@ -121,7 +121,7 @@ ScCalcConfig::StringConversion toStringConversion(sal_Int32 nPos)
 
 }
 
-ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rConfig)
+ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig)
     : ModalDialog(pParent, "FormulaCalculationOptions",
         "modules/scalc/ui/formulacalculationoptions.ui")
     , maCalcA1(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString())
@@ -150,23 +150,23 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
 
     mpBtnAutomaticSelectionTrue->SetToggleHdl(LINK(this, ScCalcOptionsDialog, BtnAutomaticSelectHdl));
 
-    maCaptionStringRefSyntax = get<Window>("ref_syntax_caption")->GetText();
-    maDescStringRefSyntax = get<Window>("ref_syntax_desc")->GetText();
-    maUseFormulaSyntax = get<Window>("use_formula_syntax")->GetText();
+    maCaptionStringRefSyntax = get<vcl::Window>("ref_syntax_caption")->GetText();
+    maDescStringRefSyntax = get<vcl::Window>("ref_syntax_desc")->GetText();
+    maUseFormulaSyntax = get<vcl::Window>("use_formula_syntax")->GetText();
 
-    maCaptionStringConversion = get<Window>("string_conversion_caption")->GetText();
-    maDescStringConversion = get<Window>("string_conversion_desc")->GetText();
-    maStringConversionAsError = get<Window>("string_conversion_as_error")->GetText();
-    maStringConversionAsZero = get<Window>("string_conversion_as_zero")->GetText();
-    maStringConversionUnambiguous = get<Window>("string_conversion_unambiguous")->GetText();
-    maStringConversionLocaleDependent = get<Window>("string_conversion_locale_dependent")->GetText();
+    maCaptionStringConversion = get<vcl::Window>("string_conversion_caption")->GetText();
+    maDescStringConversion = get<vcl::Window>("string_conversion_desc")->GetText();
+    maStringConversionAsError = get<vcl::Window>("string_conversion_as_error")->GetText();
+    maStringConversionAsZero = get<vcl::Window>("string_conversion_as_zero")->GetText();
+    maStringConversionUnambiguous = get<vcl::Window>("string_conversion_unambiguous")->GetText();
+    maStringConversionLocaleDependent = get<vcl::Window>("string_conversion_locale_dependent")->GetText();
 
-    maCaptionEmptyStringAsZero = get<Window>("empty_str_as_zero_caption")->GetText();
-    maDescEmptyStringAsZero = get<Window>("empty_str_as_zero_desc")->GetText();
+    maCaptionEmptyStringAsZero = get<vcl::Window>("empty_str_as_zero_caption")->GetText();
+    maDescEmptyStringAsZero = get<vcl::Window>("empty_str_as_zero_desc")->GetText();
 
-    maCaptionOpenCLEnabled = get<Window>("opencl_enabled")->GetText();
-    maDescOpenCLEnabled = get<Window>("opencl_enabled_desc")->GetText();
-    maSoftware = get<Window>("software")->GetText();
+    maCaptionOpenCLEnabled = get<vcl::Window>("opencl_enabled")->GetText();
+    maDescOpenCLEnabled = get<vcl::Window>("opencl_enabled_desc")->GetText();
+    maSoftware = get<vcl::Window>("software")->GetText();
 
     mpLbSettings->set_height_request(8 * mpLbSettings->GetTextHeight());
     mpLbSettings->SetStyle(mpLbSettings->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);

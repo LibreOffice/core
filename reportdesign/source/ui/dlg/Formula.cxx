@@ -42,7 +42,7 @@ namespace rptui
 //      Initialisierung / gemeinsame Funktionen  fuer Dialog
 
 
-FormulaDialog::FormulaDialog(Window* pParent
+FormulaDialog::FormulaDialog(vcl::Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
                              , const ::boost::shared_ptr< IFunctionManager >&  _pFunctionMgr
                              , const OUString& _sFormula
@@ -91,7 +91,7 @@ FormulaDialog::~FormulaDialog()
         SvtViewOptions aDlgOpt( E_WINDOW, OUString( HID_RPT_FIELD_SEL_WIN ) );
         aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
 
-        boost::scoped_ptr<Window> aTemp2(m_pAddField);
+        boost::scoped_ptr<vcl::Window> aTemp2(m_pAddField);
         m_pAddField = NULL;
     }
 

@@ -40,7 +40,7 @@ class SelectionListBox : public ListBox
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-    SelectionListBox(Window* pParent, WinBits nStyle);
+    SelectionListBox(vcl::Window* pParent, WinBits nStyle);
 
     //  detect selection via Ctrl or Alt and evaluate with SelectHdl
     bool            IsCallAddSelection() const {return bCallAddSelection;}
@@ -90,11 +90,11 @@ protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
-                        SwFldVarPage(Window* pParent, const SfxItemSet& rSet);
+                        SwFldVarPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
                         virtual ~SwFldVarPage();
 
-    static SfxTabPage*  Create(Window* pParent, const SfxItemSet* rAttrSet);
+    static SfxTabPage*  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

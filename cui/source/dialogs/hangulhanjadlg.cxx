@@ -212,7 +212,7 @@ namespace svx
     {
 
     public:
-        RubyRadioButton( Window* _pParent, WinBits nBits );
+        RubyRadioButton( vcl::Window* _pParent, WinBits nBits );
         void init( const OUString& rPrimaryText, const OUString& rSecondaryText, const PseudoRubyText::RubyPosition& rPosition );
         virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
@@ -223,7 +223,7 @@ namespace svx
         PseudoRubyText m_aRubyText;
     };
 
-    RubyRadioButton::RubyRadioButton( Window* _pParent, WinBits nBits )
+    RubyRadioButton::RubyRadioButton( vcl::Window* _pParent, WinBits nBits )
         :RadioButton( _pParent, nBits )
     {
     }
@@ -322,7 +322,7 @@ namespace svx
         return minimumSize;
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRubyRadioButton( Window *pParent, VclBuilder::stringmap & )
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRubyRadioButton( vcl::Window *pParent, VclBuilder::stringmap & )
     {
         return new RubyRadioButton( pParent, WB_LEFT|WB_VCENTER );
     }
@@ -330,7 +330,7 @@ namespace svx
 
     //= SuggestionSet
 
-    SuggestionSet::SuggestionSet( Window* pParent )
+    SuggestionSet::SuggestionSet( vcl::Window* pParent )
                     : ValueSet( pParent, pParent->GetStyle() | WB_BORDER )
 
     {
@@ -363,7 +363,7 @@ namespace svx
     //= SuggestionDisplay
 
 
-    SuggestionDisplay::SuggestionDisplay( Window* pParent, WinBits nBits )
+    SuggestionDisplay::SuggestionDisplay( vcl::Window* pParent, WinBits nBits )
         : Control( pParent, nBits )
         , m_bDisplayListBox( true )
         , m_aValueSet( this )
@@ -522,7 +522,7 @@ namespace svx
         m_aListBox.SetHelpId( HID_HANGULDLG_SUGGESTIONS_LIST );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSuggestionDisplay( Window *pParent, VclBuilder::stringmap & )
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSuggestionDisplay( vcl::Window *pParent, VclBuilder::stringmap & )
     {
         return new SuggestionDisplay( pParent, WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
     }
@@ -530,7 +530,7 @@ namespace svx
 
     //= HangulHanjaConversionDialog
 
-    HangulHanjaConversionDialog::HangulHanjaConversionDialog( Window* _pParent, HHC::ConversionDirection _ePrimaryDirection )
+    HangulHanjaConversionDialog::HangulHanjaConversionDialog( vcl::Window* _pParent, HHC::ConversionDirection _ePrimaryDirection )
         :ModalDialog( _pParent, "HangulHanjaConversionDialog", "cui/ui/hangulhanjaconversiondialog.ui" )
         ,m_pIgnoreNonPrimary( NULL )
         ,m_bDocumentMode( true )
@@ -744,7 +744,7 @@ namespace svx
 
     namespace
     {
-        void lcl_modifyWindowStyle( Window* _pWin, WinBits _nSet, WinBits _nReset )
+        void lcl_modifyWindowStyle( vcl::Window* _pWin, WinBits _nSet, WinBits _nReset )
         {
             DBG_ASSERT( 0 == ( _nSet & _nReset ), "lcl_modifyWindowStyle: set _and_ reset the same bit?" );
             if ( _pWin )
@@ -767,8 +767,8 @@ namespace svx
         // switch the def button depending if we're working for document text
         if ( bOldDocumentMode != m_bDocumentMode )
         {
-            Window* pOldDefButton = NULL;
-            Window* pNewDefButton = NULL;
+            vcl::Window* pOldDefButton = NULL;
+            vcl::Window* pNewDefButton = NULL;
             if ( m_bDocumentMode )
             {
                 pOldDefButton = m_pFind;
@@ -1077,7 +1077,7 @@ namespace svx
         return 0L;
     }
 
-    HangulHanjaOptionsDialog::HangulHanjaOptionsDialog(Window* _pParent)
+    HangulHanjaOptionsDialog::HangulHanjaOptionsDialog(vcl::Window* _pParent)
         : ModalDialog( _pParent, "HangulHanjaOptDialog",
             "cui/ui/hangulhanjaoptdialog.ui" )
         , m_pCheckButtonData(NULL)
@@ -1172,7 +1172,7 @@ namespace svx
         return 0;
     }
 
-    HangulHanjaNewDictDialog::HangulHanjaNewDictDialog(Window* pParent)
+    HangulHanjaNewDictDialog::HangulHanjaNewDictDialog(vcl::Window* pParent)
         : ModalDialog(pParent, "HangulHanjaAddDialog", "cui/ui/hangulhanjaadddialog.ui")
         , m_bEntered(false)
     {
@@ -1350,7 +1350,7 @@ namespace svx
         ( static_cast< HangulHanjaEditDictDialog* >( GetParentDialog() ) )->UpdateScrollbar();
     }
 
-    SuggestionEdit::SuggestionEdit( Window* pParent, WinBits nBits )
+    SuggestionEdit::SuggestionEdit( vcl::Window* pParent, WinBits nBits )
         : Edit(pParent, nBits)
         , m_pPrev(NULL)
         , m_pNext(NULL)
@@ -1418,7 +1418,7 @@ namespace svx
         m_pNext = pNext;
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSuggestionEdit( Window *pParent, VclBuilder::stringmap & )
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSuggestionEdit( vcl::Window *pParent, VclBuilder::stringmap & )
     {
         return new SuggestionEdit( pParent, WB_LEFT|WB_VCENTER|WB_BORDER );
     }
@@ -1703,7 +1703,7 @@ namespace svx
         UpdateButtonStates();
     }
 
-    HangulHanjaEditDictDialog::HangulHanjaEditDictDialog( Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict )
+    HangulHanjaEditDictDialog::HangulHanjaEditDictDialog( vcl::Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict )
         :ModalDialog            ( _pParent, "HangulHanjaEditDictDialog", "cui/ui/hangulhanjaeditdictdialog.ui" )
         ,m_aEditHintText        ( CUI_RESSTR(RID_SVXSTR_EDITHINT) )
         ,m_rDictList            ( _rDictList )

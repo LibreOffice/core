@@ -27,7 +27,7 @@
 
 #include <com/sun/star/awt/XWindow.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 
 
@@ -47,7 +47,7 @@ public:
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
     virtual bool operator == ( const SfxPoolItem& rAttr ) const SAL_OVERRIDE;
 
-    Window *        GetWindowPtr() const    { return VCLUnoHelper::GetWindow( m_xWin ); }
+    vcl::Window *        GetWindowPtr() const    { return VCLUnoHelper::GetWindow( m_xWin ); }
     com::sun::star::uno::Reference< com::sun::star::awt::XWindow >  GetXWindow() const  { return m_xWin; }
 };
 

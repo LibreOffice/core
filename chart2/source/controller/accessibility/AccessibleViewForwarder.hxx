@@ -22,7 +22,7 @@
 #include <vcl/mapmod.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace chart
 {
@@ -32,7 +32,7 @@ class AccessibleChartView;
 class AccessibleViewForwarder : public ::accessibility::IAccessibleViewForwarder
 {
 public:
-    AccessibleViewForwarder( AccessibleChartView* pAccChartView, Window* pWindow );
+    AccessibleViewForwarder( AccessibleChartView* pAccChartView, vcl::Window* pWindow );
     virtual ~AccessibleViewForwarder();
 
     // ________ IAccessibleViewforwarder ________
@@ -48,7 +48,7 @@ private:
     AccessibleViewForwarder& operator=( AccessibleViewForwarder& );
 
     AccessibleChartView* m_pAccChartView;
-    Window* m_pWindow;
+    vcl::Window* m_pWindow;
     MapMode m_aMapMode;
 };
 

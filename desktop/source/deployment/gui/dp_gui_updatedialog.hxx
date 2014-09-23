@@ -45,7 +45,7 @@ class Image;
 class KeyEvent;
 class MouseEvent;
 class ResId;
-class Window;
+namespace vcl { class Window; }
 
 namespace com { namespace sun { namespace star {
     namespace deployment { class XExtensionManager;
@@ -79,7 +79,7 @@ public:
     */
     UpdateDialog(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context,
-        Window * parent,
+        vcl::Window * parent,
         const std::vector< com::sun::star::uno::Reference<
         com::sun::star::deployment::XPackage > > & vExtensionList,
         std::vector< dp_gui::UpdateData > * updateData);
@@ -109,7 +109,7 @@ private:
     class CheckListBox: public SvxCheckListBox {
     public:
         CheckListBox(
-            Window* pParent, UpdateDialog & dialog);
+            vcl::Window* pParent, UpdateDialog & dialog);
 
         virtual ~CheckListBox();
 

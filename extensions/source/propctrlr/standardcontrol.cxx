@@ -68,7 +68,7 @@ namespace pcr
     //= OTimeControl
 
 
-    OTimeControl::OTimeControl( Window* pParent, WinBits nWinStyle )
+    OTimeControl::OTimeControl( vcl::Window* pParent, WinBits nWinStyle )
         :OTimeControl_Base( PropertyControlType::TimeField, pParent, nWinStyle )
     {
         getTypedControlWindow()->SetStrictFormat( true );
@@ -113,7 +113,7 @@ namespace pcr
     //= ODateControl
 
 
-    ODateControl::ODateControl( Window* pParent, WinBits nWinStyle )
+    ODateControl::ODateControl( vcl::Window* pParent, WinBits nWinStyle )
         :ODateControl_Base( PropertyControlType::DateField, pParent, nWinStyle | WB_DROPDOWN )
     {
         WindowType* pControlWindow = getTypedControlWindow();
@@ -167,7 +167,7 @@ namespace pcr
     //= OEditControl
 
 
-    OEditControl::OEditControl(Window* _pParent, bool _bPW, WinBits _nWinStyle)
+    OEditControl::OEditControl(vcl::Window* _pParent, bool _bPW, WinBits _nWinStyle)
         :OEditControl_Base( _bPW ? PropertyControlType::CharacterField : PropertyControlType::TextField, _pParent, _nWinStyle )
     {
         m_bIsPassword = _bPW;
@@ -253,7 +253,7 @@ namespace pcr
     // class ODateTimeControl
 
 
-    ODateTimeControl::ODateTimeControl( Window* _pParent, WinBits _nWinStyle)
+    ODateTimeControl::ODateTimeControl( vcl::Window* _pParent, WinBits _nWinStyle)
         :ODateTimeControl_Base( PropertyControlType::DateTimeField, _pParent, _nWinStyle )
     {
         getTypedControlWindow()->EnableEmptyField( true );
@@ -326,7 +326,7 @@ namespace pcr
     //= HyperlinkInput
 
 
-    HyperlinkInput::HyperlinkInput( Window* _pParent, WinBits _nWinStyle )
+    HyperlinkInput::HyperlinkInput( vcl::Window* _pParent, WinBits _nWinStyle )
         :Edit( _pParent, _nWinStyle )
     {
         ::svtools::ColorConfig aColorConfig;
@@ -411,7 +411,7 @@ namespace pcr
     //= OHyperlinkControl
 
 
-    OHyperlinkControl::OHyperlinkControl( Window* _pParent, WinBits _nWinStyle )
+    OHyperlinkControl::OHyperlinkControl( vcl::Window* _pParent, WinBits _nWinStyle )
         :OHyperlinkControl_Base( PropertyControlType::HyperlinkField, _pParent, _nWinStyle )
         ,m_aActionListeners( m_aMutex )
     {
@@ -477,7 +477,7 @@ namespace pcr
     //= ONumericControl
 
 
-    ONumericControl::ONumericControl( Window* _pParent, WinBits _nWinStyle )
+    ONumericControl::ONumericControl( vcl::Window* _pParent, WinBits _nWinStyle )
         :ONumericControl_Base( PropertyControlType::NumericField, _pParent, _nWinStyle )
         ,m_eValueUnit( FUNIT_NONE )
         ,m_nFieldToUNOValueFactor( 1 )
@@ -664,7 +664,7 @@ namespace pcr
     }
 
 
-    OColorControl::OColorControl(Window* pParent, WinBits nWinStyle)
+    OColorControl::OColorControl(vcl::Window* pParent, WinBits nWinStyle)
         :OColorControl_Base( PropertyControlType::ColorListBox, pParent, nWinStyle )
     {
         // initialize the color listbox
@@ -798,7 +798,7 @@ namespace pcr
     //= OListboxControl
 
 
-    OListboxControl::OListboxControl( Window* pParent, WinBits nWinStyle)
+    OListboxControl::OListboxControl( vcl::Window* pParent, WinBits nWinStyle)
         :OListboxControl_Base( PropertyControlType::ListBox, pParent, nWinStyle )
     {
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
@@ -890,7 +890,7 @@ namespace pcr
     //= OComboboxControl
 
 
-    OComboboxControl::OComboboxControl( Window* pParent, WinBits nWinStyle)
+    OComboboxControl::OComboboxControl( vcl::Window* pParent, WinBits nWinStyle)
         :OComboboxControl_Base( PropertyControlType::ComboBox, pParent, nWinStyle )
     {
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
@@ -967,7 +967,7 @@ namespace pcr
         virtual void    Resize() SAL_OVERRIDE;
 
     public:
-                        OMultilineFloatingEdit(Window* _pParen);
+                        OMultilineFloatingEdit(vcl::Window* _pParen);
         MultiLineEdit&  getEdit() { return m_aImplEdit; }
 
     protected:
@@ -975,7 +975,7 @@ namespace pcr
     };
 
 
-    OMultilineFloatingEdit::OMultilineFloatingEdit(Window* _pParent)
+    OMultilineFloatingEdit::OMultilineFloatingEdit(vcl::Window* _pParent)
         :FloatingWindow(_pParent, WB_BORDER)
         ,m_aImplEdit(this, WB_VSCROLL|WB_IGNORETAB|WB_NOBORDER)
     {
@@ -1022,7 +1022,7 @@ namespace pcr
     //= DropDownEditControl_Base
 
 
-    DropDownEditControl::DropDownEditControl( Window* _pParent, WinBits _nStyle )
+    DropDownEditControl::DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle )
         :DropDownEditControl_Base( _pParent, _nStyle )
         ,m_pFloatingEdit( NULL )
         ,m_pImplEdit( NULL )
@@ -1064,16 +1064,16 @@ namespace pcr
     DropDownEditControl::~DropDownEditControl()
     {
         {
-            boost::scoped_ptr<Window> aTemp(m_pFloatingEdit);
+            boost::scoped_ptr<vcl::Window> aTemp(m_pFloatingEdit);
             m_pFloatingEdit = NULL;
         }
         {
-            boost::scoped_ptr<Window> aTemp(m_pImplEdit);
+            boost::scoped_ptr<vcl::Window> aTemp(m_pImplEdit);
             SetSubEdit( NULL );
             m_pImplEdit = NULL;
         }
         {
-            boost::scoped_ptr<Window> aTemp(m_pDropdownButton);
+            boost::scoped_ptr<vcl::Window> aTemp(m_pDropdownButton);
             m_pDropdownButton = NULL;
         }
     }
@@ -1142,7 +1142,7 @@ namespace pcr
                 ShowDropDown( true );
                 m_pFloatingEdit->getEdit().GrabFocus();
                 m_pFloatingEdit->getEdit().SetSelection( aSel );
-                Window* pFocusWin = Application::GetFocusWindow();
+                vcl::Window* pFocusWin = Application::GetFocusWindow();
                 pFocusWin->KeyInput( *rNEvt.GetKeyEvent() );
             }
         }
@@ -1355,7 +1355,7 @@ namespace pcr
     //= OMultilineEditControl
 
 
-    OMultilineEditControl::OMultilineEditControl( Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle )
+    OMultilineEditControl::OMultilineEditControl( vcl::Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle )
         :OMultilineEditControl_Base( _eMode == eMultiLineText ? PropertyControlType::MultiLineTextField : PropertyControlType::StringListField
                                    , pParent
                                    , ( nWinStyle | WB_DIALOGCONTROL ) & ( ~WB_READONLY | ~WB_DROPDOWN )

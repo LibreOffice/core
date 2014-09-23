@@ -36,7 +36,7 @@ class LineWidthControl
     : public svx::sidebar::PopupControl
 {
 public:
-    LineWidthControl (Window* pParent, LinePropertyPanel& rPanel);
+    LineWidthControl (vcl::Window* pParent, LinePropertyPanel& rPanel);
     virtual ~LineWidthControl (void);
 
     virtual void GetFocus() SAL_OVERRIDE;

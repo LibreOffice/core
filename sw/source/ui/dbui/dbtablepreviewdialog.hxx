@@ -32,11 +32,11 @@ namespace com{ namespace sun{ namespace star{
 class SwDBTablePreviewDialog : public SfxModalDialog
 {
     FixedText*      m_pDescriptionFI;
-    Window*         m_pBeamerWIN;
+    vcl::Window*         m_pBeamerWIN;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >         m_xFrame;
 public:
-    SwDBTablePreviewDialog(Window* pParent,
+    SwDBTablePreviewDialog(vcl::Window* pParent,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rValues  );
     virtual ~SwDBTablePreviewDialog();
 

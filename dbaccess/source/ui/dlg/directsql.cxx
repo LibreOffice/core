@@ -35,7 +35,7 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
 
     // DirectSQLDialog
-    DirectSQLDialog::DirectSQLDialog( Window* _pParent, const Reference< XConnection >& _rxConn )
+    DirectSQLDialog::DirectSQLDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConn )
         :ModalDialog(_pParent, "DirectSQLDialog" , "dbaccess/ui/directsqldialog.ui")
         ,m_nHistoryLimit(20)
         ,m_nStatusCount(1)

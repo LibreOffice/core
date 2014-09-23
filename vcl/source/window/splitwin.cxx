@@ -53,8 +53,8 @@ struct ImplSplitItem
     long                mnOldWidth;
     long                mnOldHeight;
     ImplSplitSet*       mpSet;
-    Window*             mpWindow;
-    Window*             mpOrgParent;
+    vcl::Window*             mpWindow;
+    vcl::Window*             mpOrgParent;
     sal_uInt16              mnId;
     SplitWindowItemBits mnBits;
     bool                mbFixed;
@@ -308,7 +308,7 @@ static ImplSplitSet* ImplFindItem( ImplSplitSet* pSet, sal_uInt16 nId, sal_uInt1
     return NULL;
 }
 
-static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, Window* pWindow )
+static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, vcl::Window* pWindow )
 {
     sal_uInt16          i;
     sal_uInt16          nItems = pSet->mnItems;
@@ -1242,7 +1242,7 @@ void SplitWindow::ImplDrawSplitTracking( SplitWindow* pThis, const Point& rPos )
     pThis->ShowTracking( aRect, SHOWTRACK_SPLIT );
 }
 
-void SplitWindow::ImplInit( Window* pParent, WinBits nStyle )
+void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     ImplSplitSet* pNewSet   = new ImplSplitSet;
     pNewSet->mpItems        = NULL;
@@ -1340,7 +1340,7 @@ void SplitWindow::ImplInitSettings()
     }
 }
 
-SplitWindow::SplitWindow( Window* pParent, WinBits nStyle ) :
+SplitWindow::SplitWindow( vcl::Window* pParent, WinBits nStyle ) :
     DockingWindow( WINDOW_SPLITWINDOW )
 {
     ImplInit( pParent, nStyle );
@@ -2631,7 +2631,7 @@ void SplitWindow::DataChanged( const DataChangedEvent& rDCEvt )
         DockingWindow::DataChanged( rDCEvt );
 }
 
-void SplitWindow::InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
+void SplitWindow::InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
                               sal_uInt16 nPos, sal_uInt16 nSetId,
                               SplitWindowItemBits nBits )
 {
@@ -2726,8 +2726,8 @@ void SplitWindow::RemoveItem( sal_uInt16 nId, bool bHide )
         return;
 
     ImplSplitItem*   pItem   = &(pSet->mpItems[nPos]);
-    Window*         pWindow = pItem->mpWindow;
-    Window*         pOrgParent = pItem->mpOrgParent;
+    vcl::Window*         pWindow = pItem->mpWindow;
+    vcl::Window*         pOrgParent = pItem->mpOrgParent;
 
     // delete set if required
     if ( !pWindow )
@@ -3130,7 +3130,7 @@ bool SplitWindow::IsItemValid( sal_uInt16 nId ) const
         return false;
 }
 
-sal_uInt16 SplitWindow::GetItemId( Window* pWindow ) const
+sal_uInt16 SplitWindow::GetItemId( vcl::Window* pWindow ) const
 {
     return ImplFindItem( mpBaseSet, pWindow );
 }

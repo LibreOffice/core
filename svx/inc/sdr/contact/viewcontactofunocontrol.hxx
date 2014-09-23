@@ -27,7 +27,7 @@
 #include <memory>
 
 class OutputDevice;
-class Window;
+namespace vcl { class Window; }
 class SdrUnoObj;
 namespace com { namespace sun { namespace star {
     namespace awt {
@@ -67,7 +67,7 @@ namespace sdr { namespace contact {
             @seealso SdrUnoObj::GetTemporaryControlForWindow
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
-            getTemporaryControlForWindow( const Window& _rWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer ) const;
+            getTemporaryControlForWindow( const vcl::Window& _rWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer ) const;
 
     protected:
         virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact ) SAL_OVERRIDE;

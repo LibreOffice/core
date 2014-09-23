@@ -80,7 +80,7 @@ namespace dbaui
         DECL_LINK( ScrollDownHdl, SvTreeListBox* );
 
     public:
-        DBTreeListBox( Window* pParent
+        DBTreeListBox( vcl::Window* pParent
             ,WinBits nWinStyle=0
             ,bool _bHandleEnterKey = false);
         virtual ~DBTreeListBox();

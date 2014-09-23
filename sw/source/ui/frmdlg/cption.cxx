@@ -64,7 +64,7 @@ class SwSequenceOptionDialog : public SvxStandardDialog
     OUString        aFldTypeName;
 
 public:
-    SwSequenceOptionDialog( Window *pParent, SwView &rV,
+    SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,
                             const OUString& rSeqFldType );
     virtual ~SwSequenceOptionDialog();
     virtual void Apply() SAL_OVERRIDE;
@@ -91,7 +91,7 @@ OUString TextFilterAutoConvert::filter(const OUString &rText)
     return rText;
 }
 
-SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
+SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),
     m_sNone( SW_RESSTR(SW_STR_NONE) ),
     rView( rV ),
@@ -413,7 +413,7 @@ SwCaptionDialog::~SwCaptionDialog()
     delete pMgr;
 }
 
-SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
+SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,
                                             const OUString& rSeqFldType )
     : SvxStandardDialog( pParent, "CaptionOptionsDialog", "modules/swriter/ui/captionoptions.ui" ),
     rView( rV ),

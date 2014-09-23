@@ -77,7 +77,7 @@ class ScImportAsciiDlg : public ModalDialog
 
 public:
                                 ScImportAsciiDlg(
-                                    Window* pParent, const OUString& aDatName,
+                                    vcl::Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall );
                                 virtual ~ScImportAsciiDlg();
 

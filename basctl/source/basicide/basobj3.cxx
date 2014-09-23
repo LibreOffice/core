@@ -155,7 +155,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
 }
 
 bool RenameDialog (
-    Window* pErrorParent,
+    vcl::Window* pErrorParent,
     ScriptDocument const& rDocument,
     OUString const& rLibName,
     OUString const& rOldName,
@@ -348,7 +348,7 @@ void BasicStopped(
             *pnWaitCount = nWait;
     }
 
-    Window* pDefParent = Application::GetDefDialogParent();
+    vcl::Window* pDefParent = Application::GetDefDialogParent();
     if ( pDefParent && !pDefParent->IsEnabled() )
     {
         pDefParent->Enable(true);

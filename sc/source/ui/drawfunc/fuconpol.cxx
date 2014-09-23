@@ -33,7 +33,7 @@
 |*
 \************************************************************************/
 
-FuConstPolygon::FuConstPolygon(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuConstPolygon::FuConstPolygon(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {

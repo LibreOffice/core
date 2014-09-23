@@ -30,7 +30,7 @@ namespace pcr
 
     //= InspectorHelpWindow
 
-    class InspectorHelpWindow : public Window
+    class InspectorHelpWindow : public vcl::Window
     {
     private:
         FixedLine       m_aSeparator;
@@ -40,7 +40,7 @@ namespace pcr
         sal_Int32       m_nMaxLines;
 
     public:
-        InspectorHelpWindow( Window* _pParent );
+        InspectorHelpWindow( vcl::Window* _pParent );
 
         virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
 

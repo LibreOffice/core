@@ -42,7 +42,7 @@
 
 //  class ScSpecialFilterDialog
 
-ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                         const SfxItemSet&   rArgSet )
 
     :   ScAnyRefDlg ( pB, pCW, pParent, "AdvancedFilterDialog", "modules/scalc/ui/advancedfilterdialog.ui" ),

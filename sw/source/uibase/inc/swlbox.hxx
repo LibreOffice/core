@@ -25,7 +25,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class SwBoxEntry;
-class Window;
+namespace vcl { class Window; }
 
 typedef boost::ptr_vector<SwBoxEntry> SwEntryLst;
 
@@ -60,7 +60,7 @@ class SW_DLLPUBLIC SwComboBox : public ComboBox
 
 public:
 
-    SwComboBox(Window* pParent, WinBits nStyle);
+    SwComboBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SwComboBox();
 
     void                    InsertSwEntry(const SwBoxEntry&);

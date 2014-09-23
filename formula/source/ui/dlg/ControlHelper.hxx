@@ -44,7 +44,7 @@ protected:
 
 
 public:
-                    EditBox( Window* pParent, WinBits nBits );
+                    EditBox( vcl::Window* pParent, WinBits nBits );
 
                     virtual ~EditBox();
 
@@ -62,7 +62,7 @@ public:
 class ArgEdit : public RefEdit
 {
 public:
-            ArgEdit( Window* pParent, WinBits nBits );
+            ArgEdit( vcl::Window* pParent, WinBits nBits );
 
     void    Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
                   ScrollBar& rArgSlider, sal_uInt16 nArgCount );

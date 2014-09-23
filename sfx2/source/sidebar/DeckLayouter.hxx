@@ -28,7 +28,7 @@
 #include <vector>
 
 class ScrollBar;
-class Window;
+namespace vcl { class Window; }
 
 namespace sfx2 { namespace sidebar {
 
@@ -45,10 +45,10 @@ public:
         const Rectangle aContentArea,
         sal_Int32& rMinimalWidth,
         SharedPanelContainer& rPanels,
-        Window& pDeckTitleBar,
-        Window& pScrollClipWindow,
-        Window& pScrollContainer,
-        Window& pFiller,
+        vcl::Window& pDeckTitleBar,
+        vcl::Window& pScrollClipWindow,
+        vcl::Window& pScrollContainer,
+        vcl::Window& pFiller,
         ScrollBar& pVerticalScrollBar);
 
 private:
@@ -80,8 +80,8 @@ private:
         const Rectangle aContentArea,
         sal_Int32& rMinimalWidth,
         ::std::vector<LayoutItem>& rLayoutItems,
-        Window& rScrollClipWindow,
-        Window& rScrollContainer,
+        vcl::Window& rScrollClipWindow,
+        vcl::Window& rScrollContainer,
         ScrollBar& pVerticalScrollBar,
         const bool bShowVerticalScrollBar);
     static void GetRequestedSizes (
@@ -98,9 +98,9 @@ private:
         ::std::vector<LayoutItem>& rLayoutItems,
         const sal_Int32 nWidth,
         const LayoutMode eMode,
-        Window& rScrollContainer);
+        vcl::Window& rScrollContainer);
     static Rectangle PlaceDeckTitle (
-        Window& rTittleBar,
+        vcl::Window& rTittleBar,
         const Rectangle& rAvailableSpace);
     static Rectangle PlaceVerticalScrollBar (
         ScrollBar& rVerticalScrollBar,
@@ -111,7 +111,7 @@ private:
         const sal_Int32 nContentHeight,
         const sal_Int32 nVisibleHeight);
     static void UpdateFiller (
-        Window& rFiller,
+        vcl::Window& rFiller,
         const Rectangle& rBox);
 };
 

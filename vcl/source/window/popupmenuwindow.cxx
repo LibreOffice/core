@@ -38,7 +38,7 @@ PopupMenuFloatingWindow::ImplData::~ImplData()
 {
 }
 
-PopupMenuFloatingWindow::PopupMenuFloatingWindow( Window* pParent, WinBits nStyle ) :
+PopupMenuFloatingWindow::PopupMenuFloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
     FloatingWindow(pParent, nStyle),
     mpImplData(new ImplData)
 {
@@ -64,7 +64,7 @@ bool PopupMenuFloatingWindow::IsPopupMenu() const
     return mpImplData->mnMenuStackLevel != ::std::numeric_limits<sal_uInt16>::max();
 }
 
-bool PopupMenuFloatingWindow::isPopupMenu(const Window *pWindow)
+bool PopupMenuFloatingWindow::isPopupMenu(const vcl::Window *pWindow)
 {
     const PopupMenuFloatingWindow* pChild = dynamic_cast<const PopupMenuFloatingWindow*>(pWindow);
     return pChild && pChild->IsPopupMenu();

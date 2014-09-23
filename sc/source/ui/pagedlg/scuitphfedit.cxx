@@ -55,7 +55,7 @@ static ScEditWindow* pActiveEdWnd = NULL;
 
 // class ScHFEditPage
 
-ScHFEditPage::ScHFEditPage( Window*             pParent,
+ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
                             const SfxItemSet&   rCoreAttrs,
                             sal_uInt16          nWhichId,
                             bool                bHeader  )
@@ -114,8 +114,8 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     //swap left/right areas and their lables in RTL mode
     if( Application::GetSettings().GetLayoutRTL() )
     {
-        Window *pLeft = get<Window>("labelFT_LEFT");
-        Window *pRight = get<Window>("labelFT_RIGHT");
+        vcl::Window *pLeft = get<vcl::Window>("labelFT_LEFT");
+        vcl::Window *pRight = get<vcl::Window>("labelFT_RIGHT");
         sal_Int32 nOldLeftAttach = pLeft->get_grid_left_attach();
         sal_Int32 nOldRightAttach = pRight->get_grid_left_attach();
         pLeft->set_grid_left_attach(nOldRightAttach);
@@ -827,50 +827,50 @@ IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
 
 // class ScRightHeaderEditPage
 
-ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
+ScRightHeaderEditPage::ScRightHeaderEditPage( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
                     rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERRIGHT ),
                     true )
     {}
 
-SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
+SfxTabPage* ScRightHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
     { return ( new ScRightHeaderEditPage( pParent, *rCoreSet ) ); };
 
 // class ScLeftHeaderEditPage
 
-ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
+ScLeftHeaderEditPage::ScLeftHeaderEditPage( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
                     rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERLEFT ),
                     true )
     {}
 
-SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
+SfxTabPage* ScLeftHeaderEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
     { return ( new ScLeftHeaderEditPage( pParent, *rCoreSet ) ); };
 
 // class ScRightFooterEditPage
 
-ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
+ScRightFooterEditPage::ScRightFooterEditPage( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
                     rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERRIGHT ),
                     false )
     {}
 
-SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
+SfxTabPage* ScRightFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
     { return ( new ScRightFooterEditPage( pParent, *rCoreSet ) ); };
 
 // class ScLeftFooterEditPage
 
-ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
+ScLeftFooterEditPage::ScLeftFooterEditPage( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
                     rCoreSet,
                     rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERLEFT ),
                     false )
     {}
 
-SfxTabPage* ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
+SfxTabPage* ScLeftFooterEditPage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )
     { return ( new ScLeftFooterEditPage( pParent, *rCoreSet ) ); };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

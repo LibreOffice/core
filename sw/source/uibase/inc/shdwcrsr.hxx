@@ -23,11 +23,11 @@
 #include <tools/color.hxx>
 #include <limits.h>
 
-class Window;
+namespace vcl { class Window; }
 
 class SwShadowCursor
 {
-    Window* pWin;
+    vcl::Window* pWin;
     Color aCol;
     Point aOldPt;
     long nOldHeight;
@@ -37,7 +37,7 @@ class SwShadowCursor
     void DrawCrsr( const Point& rPt, long nHeight, sal_uInt16 nMode );
 
 public:
-    SwShadowCursor( Window& rWin, const Color& rCol )
+    SwShadowCursor( vcl::Window& rWin, const Color& rCol )
         : pWin( &rWin ), aCol( rCol ), nOldHeight(0), nOldMode( USHRT_MAX ) {}
     ~SwShadowCursor();
 

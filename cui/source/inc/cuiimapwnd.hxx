@@ -41,7 +41,7 @@ class URLDlg : public ModalDialog
 
 public:
 
-                        URLDlg( Window* pWindow,
+                        URLDlg( vcl::Window* pWindow,
                                 const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription,
                                 const OUString& rTarget, const OUString& rName,
                                 TargetList& rTargetList );

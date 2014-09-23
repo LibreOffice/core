@@ -44,7 +44,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 
-SwParaDlg::SwParaDlg(Window *pParent,
+SwParaDlg::SwParaDlg(vcl::Window *pParent,
                     SwView& rVw,
                     const SfxItemSet& rCoreSet,
                     sal_uInt8 nDialogMode,

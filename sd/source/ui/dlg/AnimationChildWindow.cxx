@@ -34,7 +34,7 @@ SFX_IMPL_DOCKINGWINDOW_WITHID(AnimationChildWindow, SID_ANIMATION_OBJECTS)
  * Derivative from SfxChildWindow as "container" for animator
  */
 AnimationChildWindow::AnimationChildWindow(
-    ::Window* _pParent,
+    vcl::Window* _pParent,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo )

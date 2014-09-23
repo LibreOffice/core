@@ -289,7 +289,7 @@ namespace
         if (xUIElement.is())
         {
             Reference< XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
-            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+            vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
             if( pWindow || pWindow->HasChildPathFocus() )
             {
                 pWindow->GrabFocusToDocument();
@@ -762,7 +762,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign );
                 if ( pNode )
                 {
-                    Window* pView = getView();
+                    vcl::Window* pView = getView();
                     ModalDialog* pWindow = new ModalDialog( pView, WB_STDMODAL | WB_SIZEMOVE | WB_CENTER );
                     pWindow->SetSizePixel( ::Size( pView->GetSizePixel().Width() / 2, pView->GetSizePixel().Height() / 2 ) );
                     SvTreeListBox* pTreeBox = new SvTreeListBox( pWindow, WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_VSCROLL );
@@ -1113,7 +1113,7 @@ void OQueryController::setQueryComposer()
     }
 }
 
-bool OQueryController::Construct(Window* pParent)
+bool OQueryController::Construct(vcl::Window* pParent)
 {
     // TODO: we have to check if we should create the text view or the design view
 

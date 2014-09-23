@@ -41,7 +41,7 @@
 
 using namespace ::com::sun::star;
 
-SwFldPage::SwFldPage(Window *pParent, const OString& rID,
+SwFldPage::SwFldPage(vcl::Window *pParent, const OString& rID,
     const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
     , m_pCurFld(0)

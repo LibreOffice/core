@@ -26,13 +26,13 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-SvSimpleTableContainer::SvSimpleTableContainer(Window* pParent, WinBits nBits)
+SvSimpleTableContainer::SvSimpleTableContainer(vcl::Window* pParent, WinBits nBits)
     : Control(pParent, nBits)
     , m_pTable(NULL)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvSimpleTableContainer(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvSimpleTableContainer(vcl::Window *pParent,
     VclBuilder::stringmap &)
 {
     return new SvSimpleTableContainer(pParent, WB_TABSTOP | WB_DIALOGCONTROL | WB_BORDER);

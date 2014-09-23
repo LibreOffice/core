@@ -35,7 +35,7 @@ class PanelTitleBar
 public:
     PanelTitleBar (
         const ::rtl::OUString& rsTitle,
-        Window* pParentWindow,
+        vcl::Window* pParentWindow,
         Panel* pPanel );
     virtual ~PanelTitleBar (void);
 

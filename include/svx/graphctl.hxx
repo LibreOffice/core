@@ -80,7 +80,7 @@ protected:
 
 public:
 
-   GraphCtrl( Window* pParent, WinBits nStyle );
+   GraphCtrl( vcl::Window* pParent, WinBits nStyle );
    virtual ~GraphCtrl();
 
     void                SetWinStyle( WinBits nWinBits );

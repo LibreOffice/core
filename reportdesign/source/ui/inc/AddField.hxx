@@ -76,7 +76,7 @@ class  OAddFieldWindow  :public FloatingWindow
     OAddFieldWindow(const OAddFieldWindow&);
     void operator =(const OAddFieldWindow&);
 public:
-    OAddFieldWindow(Window* pParent
+    OAddFieldWindow(vcl::Window* pParent
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xRowSet);
 
     virtual ~OAddFieldWindow();

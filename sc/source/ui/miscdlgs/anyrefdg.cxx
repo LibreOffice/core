@@ -95,10 +95,10 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
                 if(pViewSh!=NULL)
                 {
-                    Window *pWin=pViewSh->GetWindow();
+                    vcl::Window *pWin=pViewSh->GetWindow();
                     if(pWin)
                     {
-                        Window *pParent=pWin->GetParent();
+                        vcl::Window *pParent=pWin->GetParent();
                         if(pParent)
                         {
                             pParent->EnableInput(bEnable,true);
@@ -345,7 +345,7 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
     return long(true);
 }
 
-typedef std::vector<Window*> winvec;
+typedef std::vector<vcl::Window*> winvec;
 
 void ScFormulaReferenceHelper::RefInputDone( bool bForced )
 {
@@ -397,7 +397,7 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
         // All others: Show();
         for (winvec::iterator aI = m_aHiddenWidgets.begin(); aI != m_aHiddenWidgets.end(); ++aI)
         {
-            Window *pWindow = *aI;
+            vcl::Window *pWindow = *aI;
             pWindow->Show();
         }
         m_aHiddenWidgets.clear();
@@ -407,7 +407,7 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             pRefEdit->set_width_request(mnOldEditWidthReq);
             Dialog* pResizeDialog = pRefEdit->GetParentDialog();
             pResizeDialog->set_border_width(m_nOldBorderWidth);
-            if (Window *pActionArea = pResizeDialog->get_action_area())
+            if (vcl::Window *pActionArea = pResizeDialog->get_action_area())
                 pActionArea->Show();
             pResizeDialog->setOptimalLayoutSize();
         }
@@ -417,14 +417,14 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
     }
 }
 
-typedef std::set<Window*> winset;
+typedef std::set<vcl::Window*> winset;
 
 namespace
 {
-    void hideUnless(Window *pTop, const winset& rVisibleWidgets,
+    void hideUnless(vcl::Window *pTop, const winset& rVisibleWidgets,
         winvec &rWasVisibleWidgets)
     {
-        for (Window* pChild = pTop->GetWindow(WINDOW_FIRSTCHILD); pChild;
+        for (vcl::Window* pChild = pTop->GetWindow(WINDOW_FIRSTCHILD); pChild;
             pChild = pChild->GetWindow(WINDOW_NEXT))
         {
             if (!pChild->IsVisible())
@@ -476,7 +476,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
 
         // Save and adjust window title
         sOldDialogText = m_pWindow->GetText();
-        if (Window *pLabel = pRefEdit->GetLabelWidgetForShrinkMode())
+        if (vcl::Window *pLabel = pRefEdit->GetLabelWidgetForShrinkMode())
         {
             OUString sLabel = pLabel->GetText();
             if (!sLabel.isEmpty())
@@ -492,11 +492,11 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
 
         if (!mbOldDlgLayoutEnabled)
         {
-            for (Window* pChild = m_pWindow->GetWindow(WINDOW_FIRSTCHILD); pChild;
+            for (vcl::Window* pChild = m_pWindow->GetWindow(WINDOW_FIRSTCHILD); pChild;
                 pChild = pChild->GetWindow(WINDOW_NEXT))
             {
-                Window *pWin = pChild->GetWindow(WINDOW_CLIENT);
-                if (pWin == (Window*)pRefEdit || pWin == (Window*)pRefBtn)
+                vcl::Window *pWin = pChild->GetWindow(WINDOW_CLIENT);
+                if (pWin == (vcl::Window*)pRefEdit || pWin == (vcl::Window*)pRefBtn)
                     continue; // do nothing
                 else if (pWin->IsVisible())
                 {
@@ -512,8 +512,8 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             //and all its direct parents.
             winset m_aVisibleWidgets;
             pResizeDialog = pRefEdit->GetParentDialog();
-            Window *pContentArea = pResizeDialog->get_content_area();
-            for (Window *pCandidate = pRefEdit;
+            vcl::Window *pContentArea = pResizeDialog->get_content_area();
+            for (vcl::Window *pCandidate = pRefEdit;
                 pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
                 pCandidate = pCandidate->GetWindow(WINDOW_REALPARENT))
             {
@@ -521,7 +521,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             }
             //same again with pRefBtn, except stop if there's a
             //shared parent in the existing widgets
-            for (Window *pCandidate = pRefBtn;
+            for (vcl::Window *pCandidate = pRefBtn;
                 pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
                 pCandidate = pCandidate->GetWindow(WINDOW_REALPARENT))
             {
@@ -581,7 +581,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             pRefEdit->set_width_request(aOldEditSize.Width());
             m_nOldBorderWidth = pResizeDialog->get_border_width();
             pResizeDialog->set_border_width(0);
-            if (Window *pActionArea = pResizeDialog->get_action_area())
+            if (vcl::Window *pActionArea = pResizeDialog->get_action_area())
                 pActionArea->Hide();
             pResizeDialog->setOptimalLayoutSize();
         }
@@ -693,10 +693,10 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
                 if(pViewSh!=NULL)
                 {
-                    Window *pWin=pViewSh->GetWindow();
+                    vcl::Window *pWin=pViewSh->GetWindow();
                     if(pWin)
                     {
-                        Window *pParent=pWin->GetParent();
+                        vcl::Window *pParent=pWin->GetParent();
                         if(pParent)
                         {
                             pParent->EnableInput(bFlag,false);
@@ -729,10 +729,10 @@ static void lcl_InvalidateWindows()
                 ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
                 if(pViewSh!=NULL)
                 {
-                    Window *pWin=pViewSh->GetWindow();
+                    vcl::Window *pWin=pViewSh->GetWindow();
                     if(pWin)
                     {
-                        Window *pParent=pWin->GetParent();
+                        vcl::Window *pParent=pWin->GetParent();
                         if(pParent)
                             pParent->Invalidate();
                     }
@@ -759,7 +759,7 @@ static void lcl_HideAllReferences()
 //The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
 //  class ScRefHandler
 
-ScRefHandler::ScRefHandler( Window &rWindow, SfxBindings* pB, bool bBindRef ):
+ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef ):
         m_rWindow( rWindow ),
         m_bInRefMode( false ),
         m_aHelper(this,pB),
@@ -835,7 +835,7 @@ bool ScRefHandler::LeaveRefMode()
 
     lcl_HideAllReferences();
 
-    if( Dialog *pDlg = dynamic_cast<Dialog*>( static_cast<Window*>(*this) ) )
+    if( Dialog *pDlg = dynamic_cast<Dialog*>( static_cast<vcl::Window*>(*this) ) )
         pDlg->SetModalInputMode(false);
     SetDispatcherLock( false );         //! here and in DoClose ?
 
@@ -1001,7 +1001,7 @@ void ScRefHandler::RefInputDone( bool bForced )
     m_aHelper.RefInputDone( bForced );
 }
 
-ScRefHdlModalImpl::ScRefHdlModalImpl(Window* pParent, const OString& rID,
+ScRefHdlModalImpl::ScRefHdlModalImpl(vcl::Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription)
     : ModalDialog( pParent, rID, rUIXMLDescription)
     , ScRefHandler(dynamic_cast<Window&>(*this), NULL, true)
@@ -1020,7 +1020,7 @@ void ScRefHdlModalImpl::StateChanged( StateChangedType nStateChange )
     ScRefHandler::stateChanged( nStateChange, true );
 }
 
-ScAnyRefModalDlg::ScAnyRefModalDlg(Window* pParent, const OString& rID,
+ScAnyRefModalDlg::ScAnyRefModalDlg(vcl::Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription)
     : ScRefHdlModalImpl(pParent, rID, rUIXMLDescription)
 {

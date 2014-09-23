@@ -56,7 +56,7 @@
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
-SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
+SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
     : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
     aPos(       this,       SW_RES(ED_POS)),
     aEdit(      this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION),
@@ -609,7 +609,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
 
 }
 
-SwInputChild::SwInputChild(Window* _pParent,
+SwInputChild::SwInputChild(vcl::Window* _pParent,
                                 sal_uInt16 nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* ) :

@@ -35,9 +35,9 @@ class SFX2_DLLPUBLIC SfxHelp : public Help
     SfxHelp_Impl*   pImp;
 
 private:
-    SAL_DLLPRIVATE bool Start_Impl( const OUString& rURL, const Window* pWindow, const OUString& rKeyword );
+    SAL_DLLPRIVATE bool Start_Impl( const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword );
     SAL_DLLPRIVATE virtual bool SearchKeyword( const OUString& rKeyWord ) SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual bool Start( const OUString& rURL, const Window* pWindow ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool Start( const OUString& rURL, const vcl::Window* pWindow ) SAL_OVERRIDE;
     SAL_DLLPRIVATE OUString GetHelpModuleName_Impl();
     SAL_DLLPRIVATE OUString CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName );
 
@@ -48,7 +48,7 @@ public:
     inline void             SetTicket( const OUString& rTicket )  { aTicket = rTicket; }
     inline void             SetUser( const OUString& rUser )      { aUser = rUser; }
 
-    virtual OUString        GetHelpText( const OUString&, const Window* pWindow ) SAL_OVERRIDE;
+    virtual OUString        GetHelpText( const OUString&, const vcl::Window* pWindow ) SAL_OVERRIDE;
 
     static OUString         CreateHelpURL( const OUString& aCommandURL, const OUString& rModuleName );
     static OUString         GetDefaultHelpModule();

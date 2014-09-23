@@ -40,7 +40,7 @@ class ScCursorRefEdit : public formula::RefEdit
     Link    maCursorDownLink;
 
 public:
-            ScCursorRefEdit( Window* pParent, Window *pLabel );
+            ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel );
     void    SetCursorLinks( const Link& rUp, const Link& rDown );
 
 protected:
@@ -93,7 +93,7 @@ public:
 class ScOptSolverDlg : public ScAnyRefDlg
 {
 public:
-                    ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScDocShell* pDocSh, ScAddress aCursorPos );
                     virtual ~ScOptSolverDlg();
 
@@ -205,7 +205,7 @@ class ScSolverProgressDialog : public ModelessDialog
     FixedText* m_pFtTime;
 
 public:
-    ScSolverProgressDialog( Window* pParent );
+    ScSolverProgressDialog( vcl::Window* pParent );
 
     void    HideTimeLimit();
     void    SetTimeLimit( sal_Int32 nSeconds );
@@ -216,7 +216,7 @@ class ScSolverNoSolutionDialog : public ModalDialog
     FixedText* m_pFtErrorText;
 
 public:
-    ScSolverNoSolutionDialog(Window* pParent, const OUString& rErrorText);
+    ScSolverNoSolutionDialog(vcl::Window* pParent, const OUString& rErrorText);
 };
 
 class ScSolverSuccessDialog : public ModalDialog
@@ -228,7 +228,7 @@ class ScSolverSuccessDialog : public ModalDialog
     DECL_LINK(ClickHdl, PushButton*);
 
 public:
-    ScSolverSuccessDialog( Window* pParent, const OUString& rSolution );
+    ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution );
 };
 
 #endif

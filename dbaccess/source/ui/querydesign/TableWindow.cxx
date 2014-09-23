@@ -66,7 +66,7 @@ namespace DatabaseObject = css::sdb::application::DatabaseObject;
 #define TABWIN_HEIGHT_MIN   80
 
 // class OTableWindow
-OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData )
+OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData )
           : ::comphelper::OContainerListener(m_aMutex)
           ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
           ,m_aTypeImage( this )
@@ -103,7 +103,7 @@ OTableWindow::~OTableWindow()
     if (m_pListBox)
     {
         OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
-        boost::scoped_ptr<Window> aTemp(m_pListBox);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pListBox);
         m_pListBox = NULL;
     }
     if ( m_pContainerListener.is() )

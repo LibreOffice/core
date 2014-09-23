@@ -25,7 +25,7 @@
 
 namespace dbaui
 {
-    CharSetListBox::CharSetListBox( Window* _pParent, WinBits _nBits = WB_DROPDOWN )
+    CharSetListBox::CharSetListBox( vcl::Window* _pParent, WinBits _nBits = WB_DROPDOWN )
         : ListBox( _pParent, _nBits )
     {
         SetDropDownLineCount( 20 );
@@ -38,7 +38,7 @@ namespace dbaui
         }
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCharSetListBox(Window *pParent)
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCharSetListBox(vcl::Window *pParent)
     {
         return new CharSetListBox(pParent);
     }

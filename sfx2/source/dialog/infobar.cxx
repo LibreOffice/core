@@ -28,7 +28,7 @@ namespace
     class SfxCloseButton : public PushButton
     {
         public:
-            SfxCloseButton( Window* pParent ) : PushButton( pParent, 0 )
+            SfxCloseButton( vcl::Window* pParent ) : PushButton( pParent, 0 )
             {
             }
 
@@ -95,7 +95,7 @@ namespace
     }
 }
 
-SfxInfoBarWindow::SfxInfoBarWindow( Window* pParent, const OUString& sId,
+SfxInfoBarWindow::SfxInfoBarWindow( vcl::Window* pParent, const OUString& sId,
        const OUString& sMessage, vector< PushButton* > aButtons ) :
     Window( pParent, 0 ),
     m_sId( sId ),
@@ -317,7 +317,7 @@ void SfxInfoBarContainerWindow::Resize( )
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SfxInfoBarContainerChild, SID_INFOBARCONTAINER, SFX_OBJECTBAR_OBJECT );
 
-SfxInfoBarContainerChild::SfxInfoBarContainerChild( Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* ) :
+SfxInfoBarContainerChild::SfxInfoBarContainerChild( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* ) :
     SfxChildWindow( _pParent, nId ),
     m_pBindings( pBindings )
 {

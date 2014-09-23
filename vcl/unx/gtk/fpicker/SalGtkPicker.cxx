@@ -111,7 +111,7 @@ RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit 
 {
     GtkWindow *pParent = NULL;
 
-    ::Window * pWindow = ::Application::GetActiveTopWindow();
+    vcl::Window * pWindow = ::Application::GetActiveTopWindow();
     if( pWindow )
     {
         GtkSalFrame *pFrame = dynamic_cast<GtkSalFrame *>( pWindow->ImplGetFrame() );

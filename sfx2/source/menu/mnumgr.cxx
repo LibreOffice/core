@@ -252,7 +252,7 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
 
 
 
-sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
+sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, vcl::Window* pWindow )
 {
     sal_uInt16 nVal = ( (PopupMenu*) GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
     delete pStaticThesSubMenu;  pStaticThesSubMenu = NULL;
@@ -279,7 +279,7 @@ SfxPopupMenuManager::SfxPopupMenuManager( PopupMenu* pMenuArg, SfxBindings& rBin
 {
 }
 
-SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow )
+SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, vcl::Window* pWindow )
 {
     PopupMenu *pSVMenu = new PopupMenu( rResId );
     sal_uInt16 n, nCount = pSVMenu->GetItemCount();
@@ -331,7 +331,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
 }
 
 
-void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFrame, const Point& rPoint, Window* pWindow )
+void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFrame, const Point& rPoint, vcl::Window* pWindow )
 {
     PopupMenu *pSVMenu = new PopupMenu( rResId );
     sal_uInt16 n, nCount = pSVMenu->GetItemCount();

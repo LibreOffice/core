@@ -58,7 +58,7 @@ private:
     DECL_LINK( ClickHdl, Button * );
 
 public:
-    SdSnapLineDlg(Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);
+    SdSnapLineDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);
 
     void GetAttr(SfxItemSet& rOutAttrs);
 

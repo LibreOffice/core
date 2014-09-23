@@ -47,7 +47,7 @@ namespace abp
     public:
         /// ctor
         OAddessBookSourcePilot(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
         /// dtor
         virtual ~OAddessBookSourcePilot();

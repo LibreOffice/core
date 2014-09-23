@@ -2465,7 +2465,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 }
 
 EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
-                                    bool bOverwrite, Window* pFrameWin )
+                                    bool bOverwrite, vcl::Window* pFrameWin )
 {
     EditSelection aSel( rCurSel );
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();

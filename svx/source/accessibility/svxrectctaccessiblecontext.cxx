@@ -357,18 +357,18 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAcc
     //return Reference< XAccessibleRelationSet >();
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     uno::Reference< css::accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
-    Window* pWindow = mpRepr;
+    vcl::Window* pWindow = mpRepr;
     if ( pWindow )
     {
-        // Window *pLabeledBy = pWindow->GetAccRelationLabeledBy();
-        Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
+        // vcl::Window *pLabeledBy = pWindow->GetAccRelationLabeledBy();
+        vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
             aSequence[0] = pLabeledBy->GetAccessible();
             pRelationSetHelper->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
         }
-        Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+        vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if ( pMemberOf && pMemberOf != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -764,7 +764,7 @@ void SvxRectCtlAccessibleContext::ThrowExceptionIfNotAlive( void ) throw( lang::
 
 SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     const Reference<XAccessible>&   rxParent,
-    const Window&                       rParentWindow,
+    const vcl::Window&                       rParentWindow,
     const OUString&              rName,
     const OUString&              rDescription,
     const Rectangle&                    rBoundingBox,

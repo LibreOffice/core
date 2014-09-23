@@ -62,7 +62,7 @@ protected:
     virtual void    Mirror() SAL_OVERRIDE;
 
 public:
-                    ScTabControl( Window* pParent, ScViewData* pData );
+                    ScTabControl( vcl::Window* pParent, ScViewData* pData );
                     virtual ~ScTabControl();
 
     using TabBar::StartDrag;

@@ -25,7 +25,7 @@
 
 static sal_uInt8 nInsItemChecked=0;
 
-ScInsertCellDlg::ScInsertCellDlg( Window* pParent,bool bDisallowCellMove) :
+ScInsertCellDlg::ScInsertCellDlg( vcl::Window* pParent,bool bDisallowCellMove) :
     ModalDialog     ( pParent, "InsertCellsDialog", "modules/scalc/ui/insertcells.ui")
 {
     get(m_pBtnCellsDown, "down");

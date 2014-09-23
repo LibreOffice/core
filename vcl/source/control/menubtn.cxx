@@ -37,7 +37,7 @@ void MenuButton::ImplInitMenuButtonData()
     mnMenuMode      = 0;
 }
 
-void MenuButton::ImplInit( Window* pParent, WinBits nStyle )
+void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     if ( !(nStyle & WB_NOTABSTOP) )
         nStyle |= WB_TABSTOP;
@@ -73,7 +73,7 @@ OString MenuButton::GetCurItemIdent() const
         mpMenu->GetItemIdent(mnCurItemId) : OString();
 }
 
-MenuButton::MenuButton( Window* pParent, WinBits nWinBits )
+MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
     : PushButton( WINDOW_MENUBUTTON )
 {
     ImplInitMenuButtonData();

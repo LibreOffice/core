@@ -39,7 +39,7 @@ protected:
     virtual void Apply() SAL_OVERRIDE;
 
 public:
-    SwSplitTblDlg( Window *pParent, SwWrtShell &rSh );
+    SwSplitTblDlg( vcl::Window *pParent, SwWrtShell &rSh );
 
     sal_uInt16 GetSplitMode() const { return m_nSplit; }
 };

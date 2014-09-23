@@ -55,8 +55,8 @@ protected:
     void Construct();
 
 public:
-    Svx3DPreviewControl(Window* pParent, const ResId& rResId);
-    Svx3DPreviewControl(Window* pParent, WinBits nStyle = 0);
+    Svx3DPreviewControl(vcl::Window* pParent, const ResId& rResId);
+    Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~Svx3DPreviewControl();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -111,7 +111,7 @@ class SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
     void TrySelection(Point aPosPixel);
 
 public:
-    Svx3DLightControl(Window* pParent, WinBits nStyle = 0);
+    Svx3DLightControl(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~Svx3DLightControl();
 
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
@@ -165,8 +165,8 @@ private:
     Link                    maUserSelectionChangeCallback;
 
 public:
-    SvxLightCtl3D( Window* pParent, const ResId& rResId);
-    SvxLightCtl3D( Window* pParent);
+    SvxLightCtl3D( vcl::Window* pParent, const ResId& rResId);
+    SvxLightCtl3D( vcl::Window* pParent);
     virtual ~SvxLightCtl3D();
 
     // react to size changes

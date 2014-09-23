@@ -136,7 +136,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     DECL_DLLPRIVATE_LINK( HandleRemoveBtn, void * );
 
 public:
-                    ExtBoxWithBtns_Impl(Window* pParent);
+                    ExtBoxWithBtns_Impl(vcl::Window* pParent);
                    virtual ~ExtBoxWithBtns_Impl();
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);
@@ -150,7 +150,7 @@ public:
     void            enableButtons( bool bEnable );
 };
 
-ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(Window* pParent)
+ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(vcl::Window* pParent)
     : ExtensionBox_Impl(pParent)
     , m_bInterfaceLocked(false)
     , m_pOptionsBtn(NULL)
@@ -195,7 +195,7 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeExtBoxWithBtns(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtBoxWithBtns(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ExtBoxWithBtns_Impl(pParent);
 }
@@ -581,7 +581,7 @@ bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > 
 
 
 bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackage > &xPackage,
-                                              Window *pParent,
+                                              vcl::Window *pParent,
                                               const sal_uInt16 nResID,
                                               bool &bHadWarning )
 {
@@ -662,7 +662,7 @@ void DialogHelper::PostUserEvent( const Link& rLink, void* pCaller )
 }
 
 //                             ExtMgrDialog
-ExtMgrDialog::ExtMgrDialog(Window *pParent, TheExtensionManager *pManager)
+ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager)
     : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/extensionmanager.ui")
     , DialogHelper(pManager->getContext(), (Dialog*) this)
     , m_sAddPackages(getResourceString(RID_STR_ADD_PACKAGES))
@@ -1153,7 +1153,7 @@ bool ExtMgrDialog::Close()
 }
 
 //UpdateRequiredDialog
-UpdateRequiredDialog::UpdateRequiredDialog(Window *pParent, TheExtensionManager *pManager)
+UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionManager *pManager)
     : ModalDialog(pParent, "UpdateRequiredDialog", "desktop/ui/updaterequireddialog.ui")
     , DialogHelper(pManager->getContext(), (Dialog*) this)
     , m_sAddPackages(getResourceString(RID_STR_ADD_PACKAGES))
@@ -1560,7 +1560,7 @@ void UpdateRequiredDialog::disableAllEntries()
 
 //                             ShowLicenseDialog
 
-ShowLicenseDialog::ShowLicenseDialog( Window * pParent,
+ShowLicenseDialog::ShowLicenseDialog( vcl::Window * pParent,
                                       const uno::Reference< deployment::XPackage > &xPackage )
     : ModalDialog(pParent, "ShowLicenseDialog", "desktop/ui/showlicensedialog.ui")
 {

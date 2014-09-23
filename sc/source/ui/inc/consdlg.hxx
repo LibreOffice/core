@@ -36,7 +36,7 @@ class ScAreaData;
 class ScConsolidateDlg : public ScAnyRefDlg
 {
 public:
-                    ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                       const SfxItemSet& rArgSet );
                     virtual ~ScConsolidateDlg();
 

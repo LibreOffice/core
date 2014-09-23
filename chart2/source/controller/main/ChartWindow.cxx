@@ -45,7 +45,7 @@ namespace
 namespace chart
 {
 
-ChartWindow::ChartWindow( ChartController* pController, Window* pParent, WinBits nStyle )
+ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, WinBits nStyle )
         : Window(pParent, nStyle)
         , m_pWindowController( pController )
         , m_bInPaint(false)
@@ -215,7 +215,7 @@ uno::Reference< css::accessibility::XAccessible > ChartWindow::CreateAccessible(
 
 void ChartWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    ::Window::DataChanged( rDCEvt );
+    vcl::Window::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
@@ -249,7 +249,7 @@ void ChartWindow::RequestHelp( const HelpEvent& rHEvt )
     }
 
     if( !bHelpHandled )
-        ::Window::RequestHelp( rHEvt );
+        vcl::Window::RequestHelp( rHEvt );
 }
 
 void ChartWindow::adjustHighContrastMode()
@@ -264,7 +264,7 @@ void ChartWindow::adjustHighContrastMode()
 
 void ChartWindow::ForceInvalidate()
 {
-    ::Window::Invalidate();
+    vcl::Window::Invalidate();
     if(m_pOpenGLWindow)
     {
         m_pOpenGLWindow->Invalidate();
@@ -274,7 +274,7 @@ void ChartWindow::Invalidate( sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
-    ::Window::Invalidate( nFlags );
+    vcl::Window::Invalidate( nFlags );
     if(m_pOpenGLWindow)
     {
         m_pOpenGLWindow->Invalidate( nFlags );
@@ -284,7 +284,7 @@ void ChartWindow::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
-    ::Window::Invalidate( rRect, nFlags );
+    vcl::Window::Invalidate( rRect, nFlags );
     if(m_pOpenGLWindow)
     {
         m_pOpenGLWindow->Invalidate( rRect, nFlags );
@@ -294,7 +294,7 @@ void ChartWindow::Invalidate( const Region& rRegion, sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
-    ::Window::Invalidate( rRegion, nFlags );
+    vcl::Window::Invalidate( rRegion, nFlags );
     if(m_pOpenGLWindow)
     {
         m_pOpenGLWindow->Invalidate( rRegion, nFlags );

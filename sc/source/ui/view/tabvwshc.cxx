@@ -113,7 +113,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
 
 SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                         SfxBindings* pB, SfxChildWindow* pCW, SfxChildWinInfo* pInfo,
-                        Window* pParent, sal_uInt16 nSlotId )
+                        vcl::Window* pParent, sal_uInt16 nSlotId )
 {
     //  Dialog nur aufmachen, wenn ueber ScModule::SetRefDialog gerufen, damit
     //  z.B. nach einem Absturz offene Ref-Dialoge nicht wiederkommen (#42341#).

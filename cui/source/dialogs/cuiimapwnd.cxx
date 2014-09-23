@@ -48,7 +48,7 @@
 |*
 \************************************************************************/
 
-URLDlg::URLDlg( Window* pWindow, const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription, const OUString& rTarget, const OUString& rName, TargetList& rTargetList )
+URLDlg::URLDlg( vcl::Window* pWindow, const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription, const OUString& rTarget, const OUString& rName, TargetList& rTargetList )
 : ModalDialog(pWindow, "IMapDialog", "cui/ui/cuiimapdlg.ui")
 {
     get(m_pEdtURL, "urlentry");

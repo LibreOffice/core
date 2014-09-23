@@ -54,7 +54,7 @@ protected:
 
 
 public:
-            BreakPointDialog( Window* pParent, BreakPointList& rBrkList );
+            BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkList );
 
     void    SetCurrentBreakPoint( BreakPoint* pBrk );
 };

@@ -117,7 +117,7 @@ public:
         SfxDispatcher*          GetDispatcher() { return pDispatcher; }
     SfxBindings&            GetBindings() { return *pBindings; }
     const SfxBindings&      GetBindings() const  { return *pBindings; }
-    Window&                 GetWindow() const;
+    vcl::Window&                 GetWindow() const;
     virtual void            SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     SfxProgress*            GetProgress() const;

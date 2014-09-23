@@ -55,7 +55,7 @@ private:
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
     SAL_DLLPRIVATE void ImplUpdateRects( bool bUpdate = true );
     SAL_DLLPRIVATE long ImplCalcThumbPos( long nPixPos );
@@ -71,7 +71,7 @@ private:
     SAL_DLLPRIVATE long ImplDoSlideAction( ScrollType eScrollType );
 
 public:
-                    Slider( Window* pParent, WinBits nStyle = WB_HORZ );
+                    Slider( vcl::Window* pParent, WinBits nStyle = WB_HORZ );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;

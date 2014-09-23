@@ -44,7 +44,7 @@ using namespace css::uno;
 namespace sfx2 { namespace sidebar {
 
 TabBar::TabBar (
-    Window* pParentWindow,
+    vcl::Window* pParentWindow,
     const Reference<frame::XFrame>& rxFrame,
     const ::boost::function<void(const ::rtl::OUString&)>& rDeckActivationFunctor,
     const PopupMenuProvider& rPopupMenuProvider)

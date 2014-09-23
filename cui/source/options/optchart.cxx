@@ -39,7 +39,7 @@ namespace
     }
 }
 
-SvxDefaultColorOptPage::SvxDefaultColorOptPage(Window* pParent, const SfxItemSet& rInAttrs)
+SvxDefaultColorOptPage::SvxDefaultColorOptPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "OptChartColorsPage","cui/ui/optchartcolorspage.ui", &rInAttrs)
 {
     get(m_pPBRemove, "delete");
@@ -103,7 +103,7 @@ void SvxDefaultColorOptPage::Construct()
 }
 
 
-SfxTabPage* SvxDefaultColorOptPage::Create( Window* pParent, const SfxItemSet* rAttrs )
+SfxTabPage* SvxDefaultColorOptPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
 {
     return new SvxDefaultColorOptPage( pParent, *rAttrs );
 }

@@ -951,7 +951,7 @@ void EditEngine::SetInSelectionMode(bool b)
     pImpEditEngine->bInSelection = b;
 }
 
-bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, Window* pFrameWin )
+bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, vcl::Window* pFrameWin )
 {
     DBG_ASSERT( pEditView, "no View - no cookie !" );
 

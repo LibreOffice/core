@@ -33,7 +33,7 @@ struct FadeEffectLBImpl
     std::vector< TransitionPresetPtr > maPresets;
 };
 
-FadeEffectLB::FadeEffectLB(Window* pParent, WinBits nStyle)
+FadeEffectLB::FadeEffectLB(vcl::Window* pParent, WinBits nStyle)
     : ListBox(pParent, nStyle)
     , mpImpl(new FadeEffectLBImpl)
 {
@@ -67,7 +67,7 @@ void FadeEffectLB::Fill()
     SelectEntryPos(0);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFadeEffectLB(Window* pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFadeEffectLB(vcl::Window* pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 

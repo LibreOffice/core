@@ -39,11 +39,11 @@ class RandRWrapper
     Bool(*m_pXRRQueryExtension)(Display*,int*,int*);
     XRRScreenConfiguration*(*m_pXRRGetScreenInfo)(Display*,Drawable);
     void(*m_pXRRFreeScreenConfigInfo)(XRRScreenConfiguration*);
-    void(*m_pXRRSelectInput)(Display*,XLIB_Window,int);
+    void(*m_pXRRSelectInput)(Display*,::Window,int);
     int(*m_pXRRUpdateConfiguration)(XEvent*);
     XRRScreenSize*(*m_pXRRConfigSizes)(XRRScreenConfiguration*,int*);
     SizeID(*m_pXRRConfigCurrentConfiguration)(XRRScreenConfiguration*,Rotation*);
-    int(*m_pXRRRootToScreen)(Display*, XLIB_Window);
+    int(*m_pXRRRootToScreen)(Display*, ::Window);
 
     bool m_bValid;
 
@@ -71,7 +71,7 @@ public:
         if( m_bValid )
             m_pXRRFreeScreenConfigInfo( i_pConfig );
     }
-    void XRRSelectInput( Display* i_pDisp, XLIB_Window i_window, int i_nMask )
+    void XRRSelectInput( Display* i_pDisp, ::Window i_window, int i_nMask )
     {
         if( m_bValid )
             m_pXRRSelectInput( i_pDisp, i_window, i_nMask );
@@ -88,7 +88,7 @@ public:
     {
         return m_bValid ? m_pXRRConfigCurrentConfiguration( i_pConfig, o_pRot ) : 0;
     }
-    int XRRRootToScreen( Display *dpy, XLIB_Window root )
+    int XRRRootToScreen( Display *dpy, ::Window root )
     {
         return m_bValid ? m_pXRRRootToScreen( dpy, root ) : -1;
     }
@@ -99,11 +99,11 @@ void RandRWrapper::initFromModule()
     m_pXRRQueryExtension = (Bool(*)(Display*,int*,int*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRQueryExtension" );
     m_pXRRGetScreenInfo = (XRRScreenConfiguration*(*)(Display*,Drawable))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRGetScreenInfo" );
     m_pXRRFreeScreenConfigInfo = (void(*)(XRRScreenConfiguration*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRFreeScreenConfigInfo" );
-    m_pXRRSelectInput = (void(*)(Display*,XLIB_Window,int))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRSelectInput" );
+    m_pXRRSelectInput = (void(*)(Display*,::Window,int))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRSelectInput" );
     m_pXRRUpdateConfiguration = (int(*)(XEvent*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRUpdateConfiguration" );
     m_pXRRConfigSizes = (XRRScreenSize*(*)(XRRScreenConfiguration*,int*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRConfigSizes" );
     m_pXRRConfigCurrentConfiguration = (SizeID(*)(XRRScreenConfiguration*,Rotation*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRConfigCurrentConfiguration" );
-    m_pXRRRootToScreen = (int(*)(Display*,XLIB_Window))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRRootToScreen" );
+    m_pXRRRootToScreen = (int(*)(Display*,::Window))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRRootToScreen" );
 
     m_bValid = m_pXRRQueryExtension             &&
                m_pXRRGetScreenInfo              &&
@@ -197,7 +197,7 @@ public:
         if( m_bValid )
             ::XRRFreeScreenConfigInfo( i_pConfig );
     }
-    void XRRSelectInput( Display* i_pDisp, XLIB_Window i_window, int i_nMask )
+    void XRRSelectInput( Display* i_pDisp, ::Window i_window, int i_nMask )
     {
         if( m_bValid )
             ::XRRSelectInput( i_pDisp, i_window, i_nMask );
@@ -214,7 +214,7 @@ public:
     {
         return m_bValid ? ::XRRConfigCurrentConfiguration( i_pConfig, o_pRot ) : 0;
     }
-    int XRRRootToScreen( Display *dpy, XLIB_Window root )
+    int XRRRootToScreen( Display *dpy, ::Window root )
     {
         return m_bValid ? ::XRRRootToScreen( dpy, root ) : -1;
     }
@@ -255,7 +255,7 @@ void RandRWrapper::releaseWrapper()
 #include <cstdio>
 #endif
 
-void SalDisplay::InitRandR( XLIB_Window aRoot ) const
+void SalDisplay::InitRandR( ::Window aRoot ) const
 {
     #ifdef USE_RANDR
     if( m_bUseRandRWrapper )

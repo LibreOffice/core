@@ -829,7 +829,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         }
         else
         {
-            Window *pTmpWindow = &GetViewFrame()->GetWindow();
+            vcl::Window *pTmpWindow = &GetViewFrame()->GetWindow();
             MessageDialog(pTmpWindow, SW_RES(STR_ERR_SRCSTREAM), VCL_MESSAGE_INFO).Execute();
         }
     }

@@ -15,14 +15,14 @@
 class OpenGLWindowImpl
 {
 public:
-    OpenGLWindowImpl(Window* pWindow);
+    OpenGLWindowImpl(vcl::Window* pWindow);
     OpenGLContext& getContext() { return maContext;}
 private:
     OpenGLContext maContext;
     boost::scoped_ptr<SystemChildWindow> mpChildWindow;
 };
 
-OpenGLWindowImpl::OpenGLWindowImpl(Window* pWindow)
+OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow)
 {
     SystemWindowData aData = OpenGLContext::generateWinData(pWindow, false);
     mpChildWindow.reset(new SystemChildWindow(pWindow, 0, &aData));
@@ -32,7 +32,7 @@ OpenGLWindowImpl::OpenGLWindowImpl(Window* pWindow)
 }
 
 
-OpenGLWindow::OpenGLWindow(Window* pParent):
+OpenGLWindow::OpenGLWindow(vcl::Window* pParent):
     Window(pParent, 0),
     mpImpl(new OpenGLWindowImpl(this)),
     mpRenderer(NULL)

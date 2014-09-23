@@ -37,7 +37,7 @@ private:
     virtual const SfxItemSet*   GetRefreshedSet();
 
 public:
-    SdPresCellTemplateDlg( SdrModel* pModel, Window* pParent, SfxStyleSheetBase& rStyleBase );
+    SdPresCellTemplateDlg( SdrModel* pModel, vcl::Window* pParent, SfxStyleSheetBase& rStyleBase );
     ~SdPresCellTemplateDlg();
 
     const SfxItemSet* GetOutputItemSet() const;

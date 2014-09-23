@@ -607,7 +607,7 @@ struct RulerUnitData
 
 class ImplRulerData;
 
-class SVT_DLLPUBLIC Ruler : public Window
+class SVT_DLLPUBLIC Ruler : public vcl::Window
 {
 private:
     VirtualDevice   maVirDev;
@@ -712,7 +712,7 @@ protected:
     RulerUnitData   GetCurrentRulerUnit() const;
 
 public:
-            Ruler( Window* pParent, WinBits nWinStyle = WB_STDRULER );
+            Ruler( vcl::Window* pParent, WinBits nWinStyle = WB_STDRULER );
     virtual ~Ruler();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

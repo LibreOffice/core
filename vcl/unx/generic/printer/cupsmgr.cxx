@@ -844,13 +844,13 @@ namespace
         Edit*      m_pPassEdit;
 
     public:
-        RTSPWDialog(const OString& rServer, const OString& rUserName, Window* pParent);
+        RTSPWDialog(const OString& rServer, const OString& rUserName, vcl::Window* pParent);
 
         OString getUserName() const;
         OString getPassword() const;
     };
 
-    RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, Window* pParent )
+    RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, vcl::Window* pParent )
         : ModalDialog(pParent, "CUPSPasswordDialog",
             "vcl/ui/cupspassworddialog.ui")
     {

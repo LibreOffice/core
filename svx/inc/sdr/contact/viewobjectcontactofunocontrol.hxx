@@ -27,7 +27,7 @@
 #include <svx/svxdllapi.h>
 
 class OutputDevice;
-class Window;
+namespace vcl { class Window; }
 class SdrUnoObj;
 namespace com { namespace sun { namespace star {
     namespace awt {
@@ -63,7 +63,7 @@ namespace sdr { namespace contact {
         */
         static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
             getTemporaryControlForWindow(
-                const Window& _rWindow,
+                const vcl::Window& _rWindow,
                 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer,
                 const SdrUnoObj& _rUnoObject
             );

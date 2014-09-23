@@ -57,7 +57,7 @@ namespace svt
     //= OStringTransfer
 
 
-    void OStringTransfer::CopyString( const OUString& _rContent, Window* _pWindow )
+    void OStringTransfer::CopyString( const OUString& _rContent, vcl::Window* _pWindow )
     {
         OStringTransferable* pTransferable = new OStringTransferable( _rContent );
         Reference< XTransferable > xTransfer = pTransferable;
@@ -65,7 +65,7 @@ namespace svt
     }
 
 
-    bool OStringTransfer::PasteString( OUString& _rContent, Window* _pWindow )
+    bool OStringTransfer::PasteString( OUString& _rContent, vcl::Window* _pWindow )
     {
         TransferableDataHelper aClipboardData = TransferableDataHelper::CreateFromSystemClipboard( _pWindow );
 
@@ -89,7 +89,7 @@ namespace svt
     }
 
 
-    void OStringTransfer::StartStringDrag( const OUString& _rContent, Window* _pWindow, sal_Int8 _nDragSourceActions )
+    void OStringTransfer::StartStringDrag( const OUString& _rContent, vcl::Window* _pWindow, sal_Int8 _nDragSourceActions )
     {
         OStringTransferable* pTransferable = new OStringTransferable( _rContent );
         Reference< XTransferable > xTransfer = pTransferable;

@@ -82,7 +82,7 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
             sal_Int32 nOldCaretPosition = m_nCaretPosition;
             m_nCaretPosition = getCaretPosition();
 
-            Window* pWindow = GetWindow();
+            vcl::Window* pWindow = GetWindow();
             if (pWindow && pWindow->HasChildPathFocus())
             {
                 if (m_nCaretPosition != nOldCaretPosition)
@@ -97,7 +97,7 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
         break;
         case VCLEVENT_EDIT_SELECTIONCHANGED:
         {
-            Window* pWindow = GetWindow();
+            vcl::Window* pWindow = GetWindow();
             if (pWindow && pWindow->HasChildPathFocus())
             {
                 NotifyAccessibleEvent( AccessibleEventId::TEXT_SELECTION_CHANGED, Any(), Any() );
@@ -256,7 +256,7 @@ sal_Bool VCLXAccessibleEdit::doAccessibleAction ( sal_Int32 nIndex ) throw (Inde
         throw IndexOutOfBoundsException();
 
     bool bDoAction = false;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         pWindow->GrabFocus();

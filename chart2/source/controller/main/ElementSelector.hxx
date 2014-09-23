@@ -47,7 +47,7 @@ struct ListBoxEntryData
 class SelectorListBox : public ListBox
 {
     public:
-        SelectorListBox( Window* pParent, WinBits nStyle );
+        SelectorListBox( vcl::Window* pParent, WinBits nStyle );
         virtual ~SelectorListBox();
 
         virtual void Select() SAL_OVERRIDE;

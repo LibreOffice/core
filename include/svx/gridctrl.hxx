@@ -142,7 +142,7 @@ public:
         class AbsolutePos : public NumericField
         {
         public:
-            AbsolutePos(Window* pParent, WinBits nStyle = 0);
+            AbsolutePos(vcl::Window* pParent, WinBits nStyle = 0);
 
             virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
             virtual void LoseFocus() SAL_OVERRIDE;
@@ -182,7 +182,7 @@ public:
             RECORD_NEW
         };
 
-        NavigationBar(Window* pParent, WinBits nStyle = 0);
+        NavigationBar(vcl::Window* pParent, WinBits nStyle = 0);
 
         // Status methods for Controls
         void InvalidateAll(sal_Int32 nCurrentPos = -1, bool bAll = false);
@@ -366,7 +366,7 @@ protected:
 public:
     DbGridControl(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >,
-        Window* pParent,
+        vcl::Window* pParent,
         WinBits nBits = WB_BORDER);
 
     virtual ~DbGridControl();

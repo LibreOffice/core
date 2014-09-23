@@ -42,7 +42,7 @@ using namespace ::com::sun::star::beans;
 
 #define ROUND(x) static_cast<long>((x) + .5)
 
-SwLabPreview::SwLabPreview(Window* pParent)
+SwLabPreview::SwLabPreview(vcl::Window* pParent)
     : Window(pParent, 0)
     , aGrayColor(COL_LIGHTGRAY)
     , aHDistStr(SW_RESSTR(STR_HDIST))
@@ -84,7 +84,7 @@ Size SwLabPreview::GetOptimalSize() const
     return LogicToPixel(Size(146 , 161), MapMode(MAP_APPFONT));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwLabPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwLabPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwLabPreview(pParent);
 }
@@ -286,7 +286,7 @@ void SwLabPreview::UpdateItem(const SwLabItem& rItem)
     Invalidate();
 }
 
-SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet)
+SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelFormatPage",
         "modules/swriter/ui/labelformatpage.ui", &rSet)
     , bModified(false)
@@ -464,7 +464,7 @@ void SwLabFmtPage::ChangeMinMax()
     m_pPHeightField->Reformat();
 }
 
-SfxTabPage* SwLabFmtPage::Create(Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwLabFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwLabFmtPage(pParent, *rSet);
 }

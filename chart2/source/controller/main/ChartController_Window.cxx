@@ -545,7 +545,7 @@ IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl)
         SolarMutexGuard aGuard;
         if( m_pChartWindow )
         {
-            Window::PointerState aPointerState( m_pChartWindow->GetPointerState() );
+            vcl::Window::PointerState aPointerState( m_pChartWindow->GetPointerState() );
             MouseEvent aMouseEvent(
                             aPointerState.maPos,
                             1/*nClicks*/,

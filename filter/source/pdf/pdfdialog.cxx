@@ -108,7 +108,7 @@ Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
 
 
 
-Dialog* PDFDialog::createDialog( Window* pParent )
+Dialog* PDFDialog::createDialog( vcl::Window* pParent )
 {
     Dialog* pRet = NULL;
 

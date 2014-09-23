@@ -23,7 +23,7 @@
 
 
 SvxRelativeField::SvxRelativeField(
-        Window *const pParent, WinBits const nBits, FieldUnit const eUnit)
+        vcl::Window *const pParent, WinBits const nBits, FieldUnit const eUnit)
     : MetricField( pParent, nBits)
     , nRelMin(0)
     , nRelMax(0)
@@ -39,8 +39,8 @@ SvxRelativeField::SvxRelativeField(
     SetMax( 9999 );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL
-makeSvxRelativeField(Window *const pParent, VclBuilder::stringmap & rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL
+makeSvxRelativeField(vcl::Window *const pParent, VclBuilder::stringmap & rMap)
 {
     OString const custom(VclBuilder::extractCustomProperty(rMap));
     FieldUnit const eUnit(VclBuilder::detectUnit(custom));

@@ -180,7 +180,7 @@ void SAL_CALL VCLXTabPageContainer::elementInserted( const ::com::sun::star::con
         Reference< awt::tab::XTabPageModel > xP( xControl->getModel(), UNO_QUERY );
         sal_Int16 nPageID = xP->getTabPageID();
 
-        Window* pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
         TabPage* pPage = (TabPage*)pWindow;
         pTabCtrl->InsertPage(nPageID,pPage->GetText());
 

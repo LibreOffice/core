@@ -41,7 +41,7 @@ VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindo
     m_nPageId = 0;
     if ( m_pTabPage )
     {
-        Window* pParent = m_pTabPage->GetAccessibleParentWindow();
+        vcl::Window* pParent = m_pTabPage->GetAccessibleParentWindow();
         if ( pParent && pParent->GetType() == WINDOW_TABCONTROL )
         {
             m_pTabControl = static_cast< TabControl* >( pParent );

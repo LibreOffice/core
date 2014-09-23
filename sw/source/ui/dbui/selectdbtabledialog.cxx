@@ -90,7 +90,7 @@ void SwAddressTable::setColSizes()
     SvSimpleTable::SetTabs(&nTabs_Impl[0], MAP_PIXEL);
 }
 
-SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
+SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
         const uno::Reference< sdbc::XConnection>& rConnection)
     : SfxModalDialog(pParent, "SelectTableDialog", "modules/swriter/ui/selecttabledialog.ui")
     , m_sName(SW_RES(ST_NAME))

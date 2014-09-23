@@ -15,7 +15,7 @@
 #include <vcl/settings.hxx>
 #include "window.h"
 
-VclContainer::VclContainer(Window *pParent, WinBits nStyle)
+VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WINDOW_CONTAINER)
     , m_bLayoutDirty(true)
 {
@@ -35,7 +35,7 @@ Size VclContainer::GetOptimalSize() const
     return calculateRequisition();
 }
 
-void VclContainer::setLayoutPosSize(Window &rWindow, const Point &rPos, const Size &rSize)
+void VclContainer::setLayoutPosSize(vcl::Window &rWindow, const Point &rPos, const Size &rSize)
 {
     sal_Int32 nBorderWidth = rWindow.get_border_width();
     sal_Int32 nLeft = rWindow.get_margin_left() + nBorderWidth;
@@ -47,7 +47,7 @@ void VclContainer::setLayoutPosSize(Window &rWindow, const Point &rPos, const Si
     rWindow.SetPosSizePixel(aPos, aSize);
 }
 
-void VclContainer::setLayoutAllocation(Window &rChild, const Point &rAllocPos, const Size &rChildAlloc)
+void VclContainer::setLayoutAllocation(vcl::Window &rChild, const Point &rAllocPos, const Size &rChildAlloc)
 {
     VclAlign eHalign = rChild.get_halign();
     VclAlign eValign = rChild.get_valign();
@@ -108,7 +108,7 @@ void VclContainer::setLayoutAllocation(Window &rChild, const Point &rAllocPos, c
     setLayoutPosSize(rChild, aChildPos, aChildSize);
 }
 
-Size VclContainer::getLayoutRequisition(const Window &rWindow)
+Size VclContainer::getLayoutRequisition(const vcl::Window &rWindow)
 {
     sal_Int32 nBorderWidth = rWindow.get_border_width();
     sal_Int32 nLeft = rWindow.get_margin_left() + nBorderWidth;
@@ -182,7 +182,7 @@ Size VclBox::calculateRequisition() const
     sal_uInt16 nVisibleChildren = 0;
 
     Size aSize;
-    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    for (vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
             continue;
@@ -202,7 +202,7 @@ Size VclBox::calculateRequisition() const
 void VclBox::setAllocation(const Size &rAllocation)
 {
     sal_uInt16 nVisibleChildren = 0, nExpandChildren = 0;
-    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    for (vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
             continue;
@@ -230,8 +230,8 @@ void VclBox::setAllocation(const Size &rAllocation)
     }
 
     //Split into those we pack from the start onwards, and those we pack from the end backwards
-    std::vector<Window*> aWindows[2];
-    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    std::vector<vcl::Window*> aWindows[2];
+    for (vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
             continue;
@@ -254,9 +254,9 @@ void VclBox::setAllocation(const Size &rAllocation)
             setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension);
         }
 
-        for (std::vector<Window*>::iterator aI = aWindows[ePackType].begin(), aEnd = aWindows[ePackType].end(); aI != aEnd; ++aI)
+        for (std::vector<vcl::Window*>::iterator aI = aWindows[ePackType].begin(), aEnd = aWindows[ePackType].end(); aI != aEnd; ++aI)
         {
-            Window *pChild = *aI;
+            vcl::Window *pChild = *aI;
 
             long nPadding = pChild->get_padding();
 
@@ -427,7 +427,7 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
     std::vector<long> aSubGroupSizes;
     std::vector<bool> aSubGroupNonHomogeneous;
 
-    for (const Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    for (const vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
             continue;
@@ -621,7 +621,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
     std::vector<long>::const_iterator aPrimaryI = aReq.m_aMainGroupDimensions.begin();
     std::vector<long>::const_iterator aSecondaryI = aReq.m_aSubGroupDimensions.begin();
     bool bIgnoreSecondaryPacking = (m_eLayoutStyle == VCL_BUTTONBOX_SPREAD || m_eLayoutStyle == VCL_BUTTONBOX_CENTER);
-    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    for (vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
             continue;
@@ -690,7 +690,7 @@ static int getButtonPriority(const OString &rType)
 }
 
 class sortButtons
-    : public std::binary_function<const Window*, const Window*, bool>
+    : public std::binary_function<const vcl::Window*, const vcl::Window*, bool>
 {
     bool m_bVerticalContainer;
 public:
@@ -698,10 +698,10 @@ public:
         : m_bVerticalContainer(bVerticalContainer)
     {
     }
-    bool operator()(const Window *pA, const Window *pB) const;
+    bool operator()(const vcl::Window *pA, const vcl::Window *pB) const;
 };
 
-bool sortButtons::operator()(const Window *pA, const Window *pB) const
+bool sortButtons::operator()(const vcl::Window *pA, const vcl::Window *pB) const
 {
     //sort into two groups of pack start and pack end
     VclPackType ePackA = pA->get_pack_type();
@@ -735,8 +735,8 @@ bool sortButtons::operator()(const Window *pA, const Window *pB) const
 
 void VclButtonBox::sort_native_button_order()
 {
-    std::vector<Window*> aChilds;
-    for (Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
+    std::vector<vcl::Window*> aChilds;
+    for (vcl::Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         aChilds.push_back(pChild);
@@ -752,7 +752,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
 {
     ext_array_type A;
 
-    for (Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
+    for (vcl::Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         sal_Int32 nLeftAttach = pChild->get_grid_left_attach();
@@ -802,7 +802,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
             const GridEntry &rEntry = A[x][y];
-            const Window *pChild = rEntry.pChild;
+            const vcl::Window *pChild = rEntry.pChild;
             if (pChild && pChild->IsVisible())
             {
                 aNonEmptyCols[x] = true;
@@ -929,7 +929,7 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
             const GridEntry &rEntry = A[x][y];
-            const Window *pChild = rEntry.pChild;
+            const vcl::Window *pChild = rEntry.pChild;
             if (!pChild || !pChild->IsVisible())
                 continue;
 
@@ -960,7 +960,7 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
             const GridEntry &rEntry = A[x][y];
-            const Window *pChild = rEntry.pChild;
+            const vcl::Window *pChild = rEntry.pChild;
             if (!pChild || !pChild->IsVisible())
                 continue;
 
@@ -1205,7 +1205,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
             GridEntry &rEntry = A[x][y];
-            Window *pChild = rEntry.pChild;
+            vcl::Window *pChild = rEntry.pChild;
             if (pChild)
             {
                 Size aChildAlloc(0, 0);
@@ -1251,7 +1251,7 @@ bool VclGrid::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nWidth, sal_Int32 nHeight)
+void setGridAttach(vcl::Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nWidth, sal_Int32 nHeight)
 {
     rWidget.set_grid_left_attach(nLeft);
     rWidget.set_grid_top_attach(nTop);
@@ -1259,21 +1259,21 @@ void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 n
     rWidget.set_grid_height(nHeight);
 }
 
-const Window *VclBin::get_child() const
+const vcl::Window *VclBin::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
     return pWindowImpl->mpFirstChild;
 }
 
-Window *VclBin::get_child()
+vcl::Window *VclBin::get_child()
 {
-    return const_cast<Window*>(const_cast<const VclBin*>(this)->get_child());
+    return const_cast<vcl::Window*>(const_cast<const VclBin*>(this)->get_child());
 }
 
 Size VclBin::calculateRequisition() const
 {
-    const Window *pChild = get_child();
+    const vcl::Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
         return getLayoutRequisition(*pChild);
     return Size(0, 0);
@@ -1281,7 +1281,7 @@ Size VclBin::calculateRequisition() const
 
 void VclBin::setAllocation(const Size &rAllocation)
 {
-    Window *pChild = get_child();
+    vcl::Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
         setLayoutAllocation(*pChild, Point(0, 0), rAllocation);
 }
@@ -1292,8 +1292,8 @@ Size VclFrame::calculateRequisition() const
 {
     Size aRet(0, 0);
 
-    const Window *pChild = get_child();
-    const Window *pLabel = get_label_widget();
+    const vcl::Window *pChild = get_child();
+    const vcl::Window *pLabel = get_label_widget();
 
     if (pChild && pChild->IsVisible())
         aRet = getLayoutRequisition(*pChild);
@@ -1323,8 +1323,8 @@ void VclFrame::setAllocation(const Size &rAllocation)
         rAllocation.Height() - rFrameStyle.top - rFrameStyle.bottom);
     Point aChildPos(rFrameStyle.left, rFrameStyle.top);
 
-    Window *pChild = get_child();
-    Window *pLabel = get_label_widget();
+    vcl::Window *pChild = get_child();
+    vcl::Window *pLabel = get_label_widget();
 
     if (pLabel && pLabel->IsVisible())
     {
@@ -1340,13 +1340,13 @@ void VclFrame::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
-void VclFrame::designate_label(Window *pWindow)
+void VclFrame::designate_label(vcl::Window *pWindow)
 {
     assert(pWindow->GetParent() == this);
     m_pLabel = pWindow;
 }
 
-const Window *VclFrame::get_label_widget() const
+const vcl::Window *VclFrame::get_label_widget() const
 {
     assert(GetChildCount() == 2);
     if (m_pLabel)
@@ -1358,12 +1358,12 @@ const Window *VclFrame::get_label_widget() const
     return pWindowImpl->mpFirstChild;
 }
 
-Window *VclFrame::get_label_widget()
+vcl::Window *VclFrame::get_label_widget()
 {
-    return const_cast<Window*>(const_cast<const VclFrame*>(this)->get_label_widget());
+    return const_cast<vcl::Window*>(const_cast<const VclFrame*>(this)->get_label_widget());
 }
 
-const Window *VclFrame::get_child() const
+const vcl::Window *VclFrame::get_child() const
 {
     assert(GetChildCount() == 2);
     //The child widget is the normally the last (of two) children
@@ -1375,28 +1375,28 @@ const Window *VclFrame::get_child() const
     return pWindowImpl->mpLastChild;
 }
 
-Window *VclFrame::get_child()
+vcl::Window *VclFrame::get_child()
 {
-    return const_cast<Window*>(const_cast<const VclFrame*>(this)->get_child());
+    return const_cast<vcl::Window*>(const_cast<const VclFrame*>(this)->get_child());
 }
 
 void VclFrame::set_label(const OUString &rLabel)
 {
-    Window *pLabel = get_label_widget();
+    vcl::Window *pLabel = get_label_widget();
     assert(pLabel);
     pLabel->SetText(rLabel);
 }
 
 OUString VclFrame::get_label() const
 {
-    const Window *pLabel = get_label_widget();
+    const vcl::Window *pLabel = get_label_widget();
     assert(pLabel);
     return pLabel->GetText();
 }
 
 OUString VclFrame::getDefaultAccessibleName() const
 {
-    const Window *pLabel = get_label_widget();
+    const vcl::Window *pLabel = get_label_widget();
     if (pLabel)
         return pLabel->GetAccessibleName();
     return VclBin::getDefaultAccessibleName();
@@ -1407,7 +1407,7 @@ Size VclAlignment::calculateRequisition() const
     Size aRet(m_nLeftPadding + m_nRightPadding,
         m_nTopPadding + m_nBottomPadding);
 
-    const Window *pChild = get_child();
+    const vcl::Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
     {
         Size aChildSize = getLayoutRequisition(*pChild);
@@ -1420,7 +1420,7 @@ Size VclAlignment::calculateRequisition() const
 
 void VclAlignment::setAllocation(const Size &rAllocation)
 {
-    Window *pChild = get_child();
+    vcl::Window *pChild = get_child();
     if (!pChild || !pChild->IsVisible())
         return;
 
@@ -1456,7 +1456,7 @@ bool VclAlignment::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-const Window *VclExpander::get_child() const
+const vcl::Window *VclExpander::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
@@ -1465,9 +1465,9 @@ const Window *VclExpander::get_child() const
     return pWindowImpl->mpFirstChild->GetWindow(WINDOW_NEXT);
 }
 
-Window *VclExpander::get_child()
+vcl::Window *VclExpander::get_child()
 {
-    return const_cast<Window*>(const_cast<const VclExpander*>(this)->get_child());
+    return const_cast<vcl::Window*>(const_cast<const VclExpander*>(this)->get_child());
 }
 
 Size VclExpander::calculateRequisition() const
@@ -1476,8 +1476,8 @@ Size VclExpander::calculateRequisition() const
 
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    const Window *pChild = get_child();
-    const Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    const vcl::Window *pChild = get_child();
+    const vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
     if (pChild && pChild->IsVisible() && m_aDisclosureButton.IsChecked())
         aRet = getLayoutRequisition(*pChild);
@@ -1513,8 +1513,8 @@ void VclExpander::setAllocation(const Size &rAllocation)
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
     //The label widget is the last (of two) children
-    Window *pChild = get_child();
-    Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    vcl::Window *pChild = get_child();
+    vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
     Size aButtonSize = getLayoutRequisition(m_aDisclosureButton);
     Size aLabelSize;
@@ -1575,7 +1575,7 @@ void VclExpander::StateChanged(StateChangedType nType)
 
     if (nType == STATE_CHANGE_INITSHOW)
     {
-        Window *pChild = get_child();
+        vcl::Window *pChild = get_child();
         if (pChild)
             pChild->Show(m_aDisclosureButton.IsChecked());
     }
@@ -1583,7 +1583,7 @@ void VclExpander::StateChanged(StateChangedType nType)
 
 IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
 {
-    Window *pChild = get_child();
+    vcl::Window *pChild = get_child();
     if (pChild)
     {
         pChild->Show(pBtn->IsChecked());
@@ -1596,7 +1596,7 @@ IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
     return 0;
 }
 
-VclScrolledWindow::VclScrolledWindow(Window *pParent, WinBits nStyle)
+VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)
     : VclBin(pParent, nStyle)
     , m_bUserManagedScrolling(false)
     , m_aVScroll(this, WB_HIDE | WB_VERT)
@@ -1612,7 +1612,7 @@ VclScrolledWindow::VclScrolledWindow(Window *pParent, WinBits nStyle)
 
 IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)
 {
-    Window *pChild = get_child();
+    vcl::Window *pChild = get_child();
     if (!pChild)
         return 1;
 
@@ -1640,23 +1640,23 @@ IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)
     return 1;
 }
 
-const Window *VclScrolledWindow::get_child() const
+const vcl::Window *VclScrolledWindow::get_child() const
 {
     assert(GetChildCount() == 4);
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
     return pWindowImpl->mpLastChild;
 }
 
-Window *VclScrolledWindow::get_child()
+vcl::Window *VclScrolledWindow::get_child()
 {
-    return const_cast<Window*>(const_cast<const VclScrolledWindow*>(this)->get_child());
+    return const_cast<vcl::Window*>(const_cast<const VclScrolledWindow*>(this)->get_child());
 }
 
 Size VclScrolledWindow::calculateRequisition() const
 {
     Size aRet(0, 0);
 
-    const Window *pChild = get_child();
+    const vcl::Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
         aRet = getLayoutRequisition(*pChild);
 
@@ -1671,7 +1671,7 @@ Size VclScrolledWindow::calculateRequisition() const
 
 void VclScrolledWindow::InitScrollBars(const Size &rRequest)
 {
-    const Window *pChild = get_child();
+    const vcl::Window *pChild = get_child();
     if (!pChild || !pChild->IsVisible())
         return;
 
@@ -1697,7 +1697,7 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     Size aChildAllocation(rAllocation);
     Size aChildReq;
 
-    Window *pChild = get_child();
+    vcl::Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
         aChildReq = getLayoutRequisition(*pChild);
 
@@ -1810,7 +1810,7 @@ bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
 
 void VclViewport::setAllocation(const Size &rAllocation)
 {
-    Window *pChild = get_child();
+    vcl::Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
     {
         Size aReq(getLayoutRequisition(*pChild));
@@ -1820,7 +1820,7 @@ void VclViewport::setAllocation(const Size &rAllocation)
     }
 }
 
-const Window *VclEventBox::get_child() const
+const vcl::Window *VclEventBox::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
@@ -1829,15 +1829,15 @@ const Window *VclEventBox::get_child() const
     return pWindowImpl->mpFirstChild->GetWindow(WINDOW_NEXT);
 }
 
-Window *VclEventBox::get_child()
+vcl::Window *VclEventBox::get_child()
 {
-    return const_cast<Window*>(const_cast<const VclEventBox*>(this)->get_child());
+    return const_cast<vcl::Window*>(const_cast<const VclEventBox*>(this)->get_child());
 }
 
 void VclEventBox::setAllocation(const Size& rAllocation)
 {
     Point aChildPos(0, 0);
-    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    for (vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
             continue;
@@ -1849,7 +1849,7 @@ Size VclEventBox::calculateRequisition() const
 {
     Size aRet(0, 0);
 
-    for (const Window* pChild = get_child(); pChild;
+    for (const vcl::Window* pChild = get_child(); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
@@ -1872,7 +1872,7 @@ void VclSizeGroup::trigger_queue_resize()
     //sufficient to trigger one widget to trigger all of them
     if (!m_aWindows.empty())
     {
-        Window *pWindow = *m_aWindows.begin();
+        vcl::Window *pWindow = *m_aWindows.begin();
         pWindow->queue_resize();
     }
 }
@@ -1936,7 +1936,7 @@ void MessageDialog::create_owned_areas()
     m_pOwnedActionArea->Show();
 }
 
-MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
+MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
     : Dialog(pParent, nStyle)
     , m_eButtonsType(VCL_BUTTONS_NONE)
     , m_eMessageType(VCL_MESSAGE_INFO)
@@ -1948,7 +1948,7 @@ MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
     SetType(WINDOW_MESSBOX);
 }
 
-MessageDialog::MessageDialog(Window* pParent,
+MessageDialog::MessageDialog(vcl::Window* pParent,
     const OUString &rMessage,
     VclMessageType eMessageType,
     VclButtonsType eButtonsType,
@@ -1966,7 +1966,7 @@ MessageDialog::MessageDialog(Window* pParent,
     create_owned_areas();
 }
 
-MessageDialog::MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MESSBOX)
     , m_eButtonsType(VCL_BUTTONS_NONE)
     , m_eMessageType(VCL_MESSAGE_INFO)
@@ -2002,9 +2002,9 @@ IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton)
     return 0;
 }
 
-short MessageDialog::get_response(const Window *pWindow) const
+short MessageDialog::get_response(const vcl::Window *pWindow) const
 {
-    std::map<const Window*, short>::const_iterator aFind = m_aResponses.find(pWindow);
+    std::map<const vcl::Window*, short>::const_iterator aFind = m_aResponses.find(pWindow);
     if (aFind != m_aResponses.end())
         return aFind->second;
     if (!m_pUIBuilder)
@@ -2015,7 +2015,7 @@ short MessageDialog::get_response(const Window *pWindow) const
 void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
 {
     assert(pButtonBox);
-    for (Window* pChild = pButtonBox->GetWindow(WINDOW_FIRSTCHILD); pChild;
+    for (vcl::Window* pChild = pButtonBox->GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         switch (pChild->GetType())
@@ -2051,7 +2051,7 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
     }
 }
 
-void MessageDialog::SetMessagesWidths(Window *pParent,
+void MessageDialog::SetMessagesWidths(vcl::Window *pParent,
     VclMultiLineEdit *pPrimaryMessage, VclMultiLineEdit *pSecondaryMessage)
 {
     if (pSecondaryMessage)
@@ -2273,11 +2273,11 @@ void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
     }
 }
 
-Size getLegacyBestSizeForChildren(const Window &rWindow)
+Size getLegacyBestSizeForChildren(const vcl::Window &rWindow)
 {
     Rectangle aBounds;
 
-    for (const Window* pChild = rWindow.GetWindow(WINDOW_FIRSTCHILD); pChild;
+    for (const vcl::Window* pChild = rWindow.GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
@@ -2298,7 +2298,7 @@ Size getLegacyBestSizeForChildren(const Window &rWindow)
     return aRet;
 }
 
-Window* getNonLayoutParent(Window *pWindow)
+vcl::Window* getNonLayoutParent(vcl::Window *pWindow)
 {
     while (pWindow)
     {
@@ -2309,7 +2309,7 @@ Window* getNonLayoutParent(Window *pWindow)
     return pWindow;
 }
 
-Window* getNonLayoutRealParent(Window *pWindow)
+vcl::Window* getNonLayoutRealParent(vcl::Window *pWindow)
 {
     while (pWindow)
     {
@@ -2320,7 +2320,7 @@ Window* getNonLayoutRealParent(Window *pWindow)
     return pWindow;
 }
 
-bool isVisibleInLayout(const Window *pWindow)
+bool isVisibleInLayout(const vcl::Window *pWindow)
 {
     bool bVisible = true;
     while (bVisible)
@@ -2333,7 +2333,7 @@ bool isVisibleInLayout(const Window *pWindow)
     return bVisible;
 }
 
-bool isEnabledInLayout(const Window *pWindow)
+bool isEnabledInLayout(const vcl::Window *pWindow)
 {
     bool bEnabled = true;
     while (bEnabled)
@@ -2346,14 +2346,14 @@ bool isEnabledInLayout(const Window *pWindow)
     return bEnabled;
 }
 
-bool isLayoutEnabled(const Window *pWindow)
+bool isLayoutEnabled(const vcl::Window *pWindow)
 {
     //Child is a container => we're layout enabled
-    const Window *pChild = pWindow ? pWindow->GetWindow(WINDOW_FIRSTCHILD) : NULL;
+    const vcl::Window *pChild = pWindow ? pWindow->GetWindow(WINDOW_FIRSTCHILD) : NULL;
     return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(WINDOW_NEXT);
 }
 
-bool isInitialLayout(const Window *pWindow)
+bool isInitialLayout(const vcl::Window *pWindow)
 {
     Dialog *pParentDialog = pWindow ? pWindow->GetParentDialog() : NULL;
     return pParentDialog && pParentDialog->isCalculatingInitialLayoutSize();

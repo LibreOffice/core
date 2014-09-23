@@ -61,7 +61,7 @@ SwAccessibleChild::SwAccessibleChild( const SwFrm* pFrm )
     Init( pFrm );
 }
 
-SwAccessibleChild::SwAccessibleChild( Window* pWindow )
+SwAccessibleChild::SwAccessibleChild( vcl::Window* pWindow )
     : mpFrm( 0 )
     , mpDrawObj( 0 )
     , mpWindow( 0 )
@@ -71,7 +71,7 @@ SwAccessibleChild::SwAccessibleChild( Window* pWindow )
 
 SwAccessibleChild::SwAccessibleChild( const SwFrm* pFrm,
                                       const SdrObject* pDrawObj,
-                                      Window* pWindow )
+                                      vcl::Window* pWindow )
     : mpFrm( 0 )
     , mpDrawObj( 0 )
     , mpWindow( 0 )
@@ -113,7 +113,7 @@ void SwAccessibleChild::Init( const SwFrm* pFrm )
     mpWindow = 0;
 }
 
-void SwAccessibleChild::Init( Window* pWindow )
+void SwAccessibleChild::Init( vcl::Window* pWindow )
 {
     mpWindow = pWindow;
     mpFrm = 0;
@@ -196,7 +196,7 @@ SwAccessibleChild& SwAccessibleChild::operator=( const SwFrm* pFrm )
     return *this;
 }
 
-SwAccessibleChild& SwAccessibleChild::operator=( Window* pWindow )
+SwAccessibleChild& SwAccessibleChild::operator=( vcl::Window* pWindow )
 {
     Init( pWindow );
     return *this;

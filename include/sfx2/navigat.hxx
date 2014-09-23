@@ -27,7 +27,7 @@ class SfxNavigatorWrapper : public SfxChildWindow
 {
 
 public:
-                        SfxNavigatorWrapper( Window* pParent ,
+                        SfxNavigatorWrapper( vcl::Window* pParent ,
                                                 sal_uInt16 nId ,
                                                 SfxBindings* pBindings ,
                                                 SfxChildWinInfo* pInfo );
@@ -42,7 +42,7 @@ class SFX2_DLLPUBLIC SfxNavigator : public SfxDockingWindow
 public:
                         SfxNavigator( SfxBindings* pBindings ,
                             SfxChildWindow* pChildWin ,
-                            Window* pParent ,
+                            vcl::Window* pParent ,
                             WinBits nBits );
 
     virtual void        Resize() SAL_OVERRIDE;

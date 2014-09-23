@@ -31,7 +31,7 @@ namespace accessibility
         SdrOutliner&    rOutliner,
         SdrView&        rView,
         OutlinerView& rOutlView,
-        const ::Window& rViewWindow )
+        const vcl::Window& rViewWindow )
         : mrView( rView ),
           mrWindow( rViewWindow ),
           mpOutliner( &rOutliner ),

@@ -44,7 +44,7 @@ static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, const
     }
 }
 
-ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
+ComboBox::ComboBox( vcl::Window* pParent, WinBits nStyle ) :
     Edit( WINDOW_COMBOBOX )
 {
     ImplInitComboBoxData();
@@ -52,7 +52,7 @@ ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
     SetWidthInChars(-1);
 }
 
-ComboBox::ComboBox( Window* pParent, const ResId& rResId ) :
+ComboBox::ComboBox( vcl::Window* pParent, const ResId& rResId ) :
     Edit( WINDOW_COMBOBOX )
 {
     ImplInitComboBoxData();
@@ -118,7 +118,7 @@ void ComboBox::ImplCalcEditHeight()
     }
 }
 
-void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
+void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     ImplInitStyle( nStyle );
 
@@ -172,7 +172,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
     EnableAutocomplete( true );
     mpSubEdit->Show();
 
-    Window* pLBParent = this;
+    vcl::Window* pLBParent = this;
     if ( mpFloatWin )
         pLBParent = mpFloatWin;
     mpImplLB = new ImplListBox( pLBParent, nListStyle|WB_SIMPLEMODE|WB_AUTOHSCROLL );
@@ -981,7 +981,7 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
 {
     long nButtonDownWidth = 0;
 
-    Window *pBorder = GetWindow( WINDOW_BORDER );
+    vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
     ImplControlValue aControlValue;
     Point aPoint;
     Rectangle aContent, aBound;
@@ -1041,7 +1041,7 @@ Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
 {
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
+    ((vcl::Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.Height() -= nTop+nBottom;
     if ( !IsDropDownBox() )
     {
@@ -1357,7 +1357,7 @@ void ComboBox::SetNoSelection()
 Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     Rectangle aRect = mpImplLB->GetMainWindow().GetBoundingRectangle( nItem );
-    Rectangle aOffset = mpImplLB->GetMainWindow().GetWindowExtentsRelative( (Window*)this );
+    Rectangle aOffset = mpImplLB->GetMainWindow().GetWindowExtentsRelative( (vcl::Window*)this );
     aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
     return aRect;
 }
@@ -1414,7 +1414,7 @@ ComboBox::ComboBoxBounds ComboBox::calcComboBoxDropDownComponentBounds(const Siz
     long    nTop = 0;
     long    nBottom = rOutSz.Height();
 
-    Window *pBorder = GetWindow( WINDOW_BORDER );
+    vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
     ImplControlValue aControlValue;
     Point aPoint;
     Rectangle aContent, aBound;

@@ -30,7 +30,7 @@
 class ScInsertContentsDlg : public ModalDialog
 {
 public:
-            ScInsertContentsDlg( Window*          pParent,
+            ScInsertContentsDlg( vcl::Window*          pParent,
                                  InsertDeleteFlags nCheckDefaults = IDF_NONE,
                                  const OUString*  pStrTitle = NULL );
             virtual ~ScInsertContentsDlg();

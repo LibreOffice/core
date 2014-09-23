@@ -63,7 +63,7 @@ void TabControl::TabControlTransferable::DragFinished( sal_Int8 nDropAction )
     mrParent.DragFinished( nDropAction );
 }
 
-TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
+TabControl::TabControl(DrawViewShell* pViewSh, vcl::Window* pParent) :
     TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_SIZEABLE | WB_DRAG) ),
     DragSourceHelper( this ),
     DropTargetHelper( this ),

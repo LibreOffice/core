@@ -53,7 +53,7 @@ private:
     DECL_LINK(DockTimerHdl, void *);
     DECL_LINK(EndDockTimerHdl, void *);
 public:
-    ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
+    ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
     virtual ~ImplDockFloatWin2();
 
@@ -70,7 +70,7 @@ public:
                                      sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
 };
 
-ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
+ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                                     ImplDockingWindowWrapper* pDockingWin ) :
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
@@ -155,7 +155,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
     // called during move of a floating window
     mnLastUserEvent = 0;
 
-    Window *pDockingArea = mpDockWin->GetWindow()->GetParent();
+    vcl::Window *pDockingArea = mpDockWin->GetWindow()->GetParent();
     PointerState aState = pDockingArea->GetPointerState();
 
     bool bRealMove = true;
@@ -165,7 +165,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
         // we allow docking only when the window was moved
         // by dragging its caption
         // and ignore move request due to resizing
-        Window *pBorder = GetWindow( WINDOW_BORDER );
+        vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
         if( pBorder != this )
         {
             Point aPt;
@@ -313,7 +313,7 @@ DockingManager::~DockingManager()
     mDockingWindows.clear();
 }
 
-ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const Window *pWindow )
+ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const vcl::Window *pWindow )
 {
     ::std::vector< ImplDockingWindowWrapper* >::iterator p;
     p = mDockingWindows.begin();
@@ -327,7 +327,7 @@ ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const Window 
     return NULL;
 }
 
-bool DockingManager::IsDockable( const Window *pWindow )
+bool DockingManager::IsDockable( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
 
@@ -338,7 +338,7 @@ bool DockingManager::IsDockable( const Window *pWindow )
     return (pWrapper != NULL);
 }
 
-bool DockingManager::IsFloating( const Window *pWindow )
+bool DockingManager::IsFloating( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
@@ -347,7 +347,7 @@ bool DockingManager::IsFloating( const Window *pWindow )
         return false;
 }
 
-bool DockingManager::IsLocked( const Window *pWindow )
+bool DockingManager::IsLocked( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper && pWrapper->IsLocked() )
@@ -356,35 +356,35 @@ bool DockingManager::IsLocked( const Window *pWindow )
         return false;
 }
 
-void DockingManager::Lock( const Window *pWindow )
+void DockingManager::Lock( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
         pWrapper->Lock();
 }
 
-void DockingManager::Unlock( const Window *pWindow )
+void DockingManager::Unlock( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
         pWrapper->Unlock();
 }
 
-void DockingManager::SetFloatingMode( const Window *pWindow, bool bFloating )
+void DockingManager::SetFloatingMode( const vcl::Window *pWindow, bool bFloating )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
         pWrapper->SetFloatingMode( bFloating );
 }
 
-void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const Window *pWindow, sal_uLong nFlags )
+void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWindow, sal_uLong nFlags )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
         pWrapper->StartPopupMode( pParentToolBox, nFlags );
 }
 
-void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const Window *pWindow )
+void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWindow )
 {
     StartPopupMode( pParentToolBox, pWindow, FLOATWIN_POPUPMODE_ALLOWTEAROFF         |
                     FLOATWIN_POPUPMODE_NOFOCUSCLOSE         |
@@ -392,7 +392,7 @@ void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const Window *pWin
                     FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
 }
 
-bool DockingManager::IsInPopupMode( const Window *pWindow )
+bool DockingManager::IsInPopupMode( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper && pWrapper->IsInPopupMode() )
@@ -401,14 +401,14 @@ bool DockingManager::IsInPopupMode( const Window *pWindow )
         return false;
 }
 
-void DockingManager::EndPopupMode( const Window *pWin )
+void DockingManager::EndPopupMode( const vcl::Window *pWin )
 {
     ImplDockingWindowWrapper *pWrapper = GetDockingWindowWrapper( pWin );
     if( pWrapper && pWrapper->GetFloatingWindow() && pWrapper->GetFloatingWindow()->IsInPopupMode() )
         pWrapper->GetFloatingWindow()->EndPopupMode();
 }
 
-void DockingManager::AddWindow( const Window *pWindow )
+void DockingManager::AddWindow( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
@@ -419,7 +419,7 @@ void DockingManager::AddWindow( const Window *pWindow )
     mDockingWindows.push_back( pWrapper );
 }
 
-void DockingManager::RemoveWindow( const Window *pWindow )
+void DockingManager::RemoveWindow( const vcl::Window *pWindow )
 {
     ::std::vector< ImplDockingWindowWrapper* >::iterator p;
     p = mDockingWindows.begin();
@@ -436,7 +436,7 @@ void DockingManager::RemoveWindow( const Window *pWindow )
     }
 }
 
-void DockingManager::SetPosSizePixel( Window *pWindow, long nX, long nY,
+void DockingManager::SetPosSizePixel( vcl::Window *pWindow, long nX, long nY,
                                     long nWidth, long nHeight,
                                     sal_uInt16 nFlags )
 {
@@ -445,7 +445,7 @@ void DockingManager::SetPosSizePixel( Window *pWindow, long nX, long nY,
         pWrapper->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
-Rectangle DockingManager::GetPosSizePixel( const Window *pWindow )
+Rectangle DockingManager::GetPosSizePixel( const vcl::Window *pWindow )
 {
     Rectangle aRect;
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
@@ -487,7 +487,7 @@ private:
     void                        ImplSetBorder();
 
 public:
-    ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
+    ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
     virtual ~ImplPopupFloatWin();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
@@ -497,7 +497,7 @@ public:
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;
-    virtual Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
 
     Rectangle           GetDragRect() const;
     Point               GetToolboxPosition() const;
@@ -508,7 +508,7 @@ public:
     bool                hasGrip() const { return mbHasGrip; }
 };
 
-ImplPopupFloatWin::ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip ) :
+ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip ) :
     FloatingWindow( pParent, WB_NOBORDER | WB_SYSTEMWINDOW | WB_NOSHADOW)
 {
     mpWindowImpl->mbToolbarFloatingWindow = true;   // indicate window type, required for accessibility
@@ -539,7 +539,7 @@ ImplPopupFloatWin::~ImplPopupFloatWin()
     return ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >();
 }
 
-Window* ImplPopupFloatWin::GetPreferredKeyInputWindow()
+vcl::Window* ImplPopupFloatWin::GetPreferredKeyInputWindow()
 {
     if( mpWindowImpl->mpClientWindow )
         return mpWindowImpl->mpClientWindow;
@@ -794,8 +794,8 @@ void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-ImplDockingWindowWrapper::ImplDockingWindowWrapper( const Window *pWindow )
-    : mpDockingWindow(const_cast<Window*>(pWindow))
+ImplDockingWindowWrapper::ImplDockingWindowWrapper( const vcl::Window *pWindow )
+    : mpDockingWindow(const_cast<vcl::Window*>(pWindow))
     , mpFloatWin(NULL)
     , mpOldBorderWin(NULL)
     , mpParent(pWindow->GetParent())
@@ -880,8 +880,8 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
         mnTrackHeight   += mnDockTop+mnDockBottom;
     }
 
-    Window *pDockingArea = GetWindow()->GetParent();
-    Window::PointerState aState = pDockingArea->GetPointerState();
+    vcl::Window *pDockingArea = GetWindow()->GetParent();
+    vcl::Window::PointerState aState = pDockingArea->GetPointerState();
 
     // mouse pos in screen pixels
     Point aMousePos = pDockingArea->OutputToScreenPixel( aState.maPos );
@@ -1129,7 +1129,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLon
     GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
 
     // prepare reparenting
-    Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
+    vcl::Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
     mpOldBorderWin = GetWindow()->GetWindow( WINDOW_BORDER );
     if( mpOldBorderWin == GetWindow() )
         mpOldBorderWin = NULL;  // no border window found
@@ -1190,7 +1190,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     EndPopupModeData aData( pPopupFloatWin->GetTearOffPosition(), mpFloatWin->IsPopupModeTearOff() );
 
     // before deleting change parent back, so we can delete the floating window alone
-    Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
+    vcl::Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
     GetWindow()->mpWindowImpl->mpBorderWindow = NULL;
     if ( mpOldBorderWin )
     {
@@ -1239,7 +1239,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
 
                 maDockPos = GetWindow()->GetPosPixel();
 
-                Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
+                vcl::Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT );
                 mpOldBorderWin = GetWindow()->GetWindow( WINDOW_BORDER );
                 if( mpOldBorderWin == mpDockingWindow )
                     mpOldBorderWin = NULL;  // no border window found
@@ -1305,7 +1305,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
                 maMaxOutSize    = mpFloatWin->GetMaxOutputSizePixel();
 
-                Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT ); //mpWindowImpl->mpRealParent;
+                vcl::Window* pRealParent = GetWindow()->GetWindow( WINDOW_PARENT ); //mpWindowImpl->mpRealParent;
                 GetWindow()->mpWindowImpl->mpBorderWindow = NULL;
                 if ( mpOldBorderWin )
                 {

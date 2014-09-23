@@ -903,7 +903,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     return 0;
 }
 
-void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation > xAnnotation, ::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )
+void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation > xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )
 {
     SfxDispatcher* pDispatcher( getDispatcher( mrBase ) );
     if( !pDispatcher )

@@ -41,7 +41,7 @@ namespace {
 
 sal_uInt16
 executeErrorDialog(
-    Window * pParent,
+    vcl::Window * pParent,
     task::InteractionClassification eClassification,
     OUString const & rContext,
     OUString const & rMessage,

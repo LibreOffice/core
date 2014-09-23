@@ -17,7 +17,7 @@
 namespace basctl
 {
 
-LineNumberWindow::LineNumberWindow (Window* pParent, ModulWindow* pModulWindow) :
+LineNumberWindow::LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     Window(pParent, WB_BORDER),
     m_pModulWindow(pModulWindow),
     m_nCurYOffset(0)

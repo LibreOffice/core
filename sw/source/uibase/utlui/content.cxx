@@ -784,7 +784,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
 // TreeListBox for content indicator
 
-SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
+SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId) :
         SvTreeListBox( pParent, rResId ),
 
         sSpace(OUString("                    ")),
@@ -2730,7 +2730,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                                     pActiveShell->GetView().GetEditWin();
                                 vcl::KeyCode tempKeycode( KEY_ESCAPE );
                                 KeyEvent rKEvt( 0 , tempKeycode );
-                                ((Window*)&pEditWindow)->KeyInput( rKEvt );
+                                ((vcl::Window*)&pEditWindow)->KeyInput( rKEvt );
                                 //rView.GetEditWin().GrabFocus();
                             }
                         }

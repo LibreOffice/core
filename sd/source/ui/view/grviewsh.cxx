@@ -32,7 +32,7 @@ namespace sd {
 GraphicViewShell::GraphicViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
-    ::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     FrameView* pFrameView)
     : DrawViewShell (
         pFrame,

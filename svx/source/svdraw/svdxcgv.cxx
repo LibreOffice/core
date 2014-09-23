@@ -797,7 +797,7 @@ bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
 
 
 
-bool SdrExchangeView::Paste(Window* /*pWin*/, sal_uIntPtr /*nFormat*/)
+bool SdrExchangeView::Paste(vcl::Window* /*pWin*/, sal_uIntPtr /*nFormat*/)
 {
     OSL_FAIL( "SdrExchangeView::Paste: Not supported any more." );
     return false;

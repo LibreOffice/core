@@ -37,6 +37,8 @@
 
 #include <window.h>
 
+namespace vcl {
+
 void Window::SetSettings( const AllSettings& rSettings )
 {
     SetSettings( rSettings, false );
@@ -68,7 +70,7 @@ void Window::SetSettings( const AllSettings& rSettings, bool bChild )
 
     if ( bChild || mpWindowImpl->mbChildNotify )
     {
-        Window* pChild = mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->SetSettings( rSettings, bChild );
@@ -136,7 +138,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
 
     if ( bChild || mpWindowImpl->mbChildNotify )
     {
-        Window* pChild = mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->UpdateSettings( rSettings, bChild );
@@ -384,5 +386,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
     if ( bCallHdl )
         GetpApp()->OverrideSystemSettings( rSettings );
 }
+
+} /*namespace vcl*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

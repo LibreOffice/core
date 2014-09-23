@@ -47,7 +47,7 @@ private:
     DECL_LINK( ToggleHandle, void* );
 
 public:
-                        ScShareDocumentDlg( Window* pParent, ScViewData* pViewData );
+                        ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewData );
                         virtual ~ScShareDocumentDlg();
 
     bool                IsShareDocumentChecked() const;

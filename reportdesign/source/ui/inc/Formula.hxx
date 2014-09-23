@@ -60,7 +60,7 @@ class FormulaDialog : public formula::FormulaModalDialog,
 
     DECL_LINK( OnClickHdl, OAddFieldWindow*);
 public:
-    FormulaDialog( Window* pParent
+    FormulaDialog( vcl::Window* pParent
         , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xServiceFactory
         , const ::boost::shared_ptr< formula::IFunctionManager >& _pFunctionMgr
         , const OUString& _sFormula

@@ -56,7 +56,7 @@ Rectangle& FloatingWindow::ImplGetItemEdgeClipRect()
     return mpImplData->maItemEdgeClipRect;
 }
 
-void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
+void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     mpImplData = new ImplData;
 
@@ -146,13 +146,13 @@ void FloatingWindow::ImplInitSettings()
     SetBackground( aColor );
 }
 
-FloatingWindow::FloatingWindow( Window* pParent, WinBits nStyle ) :
+FloatingWindow::FloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_FLOATINGWINDOW )
 {
     ImplInit( pParent, nStyle );
 }
 
-FloatingWindow::FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
+FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : SystemWindow(WINDOW_FLOATINGWINDOW)
 {
     loadUI(pParent, rID, rUIXMLDescription, rFrame);
@@ -161,7 +161,7 @@ FloatingWindow::FloatingWindow(Window* pParent, const OString& rID, const OUStri
 //Find the real parent stashed in mpDialogParent.
 void FloatingWindow::doDeferredInit(WinBits nBits)
 {
-    Window *pParent = mpDialogParent;
+    vcl::Window *pParent = mpDialogParent;
     mpDialogParent = NULL;
     ImplInit(pParent, nBits);
     mbIsDefferedInit = false;
@@ -183,12 +183,12 @@ FloatingWindow::~FloatingWindow()
     delete mpImplData;
 }
 
-Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex )
+Point FloatingWindow::CalcFloatingPosition( vcl::Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex )
 {
     return ImplCalcPos( pWindow, rRect, nFlags, rArrangeIndex );
 }
 
-Point FloatingWindow::ImplCalcPos( Window* pWindow,
+Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                                    const Rectangle& rRect, sal_uLong nFlags,
                                    sal_uInt16& rArrangeIndex )
 {
@@ -199,7 +199,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     FloatingWindow *pFloatingWindow = dynamic_cast<FloatingWindow*>( pWindow );
 
     // convert....
-    Window* pW = pWindow;
+    vcl::Window* pW = pWindow;
     if ( pW->mpWindowImpl->mpRealParent )
         pW = pW->mpWindowImpl->mpRealParent;
 
@@ -399,7 +399,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     return pW->OutputToScreenPixel( aPos );
 }
 
-FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Point& rPos, HitTest& rHitTest )
+FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const Point& rPos, HitTest& rHitTest )
 {
     FloatingWindow* pWin = this;
 
@@ -427,7 +427,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
         // compute the floating window's size in absolute screen coordinates
 
         // use the border window to have the exact position
-        Window *pBorderWin = pWin->GetWindow( WINDOW_BORDER );
+        vcl::Window *pBorderWin = pWin->GetWindow( WINDOW_BORDER );
 
         Point aPt;  // the top-left corner in output coordinates ie (0,0)
         Rectangle devRect( pBorderWin->ImplOutputToUnmirroredAbsoluteScreenPixel( Rectangle( aPt, pBorderWin->GetSizePixel()) ) ) ;
@@ -472,7 +472,7 @@ FloatingWindow* FloatingWindow::ImplFindLastLevelFloat()
     return pLastFoundWin;
 }
 
-bool FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
+bool FloatingWindow::ImplIsFloatPopupModeWindow( const vcl::Window* pWindow )
 {
     FloatingWindow* pWin = this;
 
@@ -621,7 +621,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
     // !!! rRect is expected to be in screen coordinates of the parent frame window !!!
     maFloatRect             = rRect;
 
-    Window *pReference =  GetParent();
+    vcl::Window *pReference =  GetParent();
     const OutputDevice *pParentWinOutDev = pReference->GetOutDev();
 
     // compare coordinates in absolute screen coordinates
@@ -787,7 +787,7 @@ void FloatingWindow::EndPopupMode( sal_uInt16 nFlags )
     ImplEndPopupMode( nFlags );
 }
 
-void FloatingWindow::AddPopupModeWindow( Window* pWindow )
+void FloatingWindow::AddPopupModeWindow( vcl::Window* pWindow )
 {
     // !!! up-to-now only 1 window and not yet a list
     mpFirstPopupModeWin = pWindow;

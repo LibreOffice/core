@@ -546,7 +546,7 @@ namespace dbaui
         virtual void        disconnect();
 
         // late construction
-        virtual bool        Construct(Window* pParent) SAL_OVERRIDE;
+        virtual bool        Construct(vcl::Window* pParent) SAL_OVERRIDE;
         virtual void        describeSupportedFeatures() SAL_OVERRIDE;
 
     protected:

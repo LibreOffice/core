@@ -47,6 +47,8 @@
 
 using namespace ::com::sun::star::uno;
 
+namespace vcl {
+
 sal_uInt16 Window::ImplHitTest( const Point& rFramePos )
 {
     Point aFramePos( rFramePos );
@@ -98,7 +100,7 @@ PointerStyle Window::ImplGetMousePointer() const
     else
         ePointerStyle = POINTER_ARROW;
 
-    const Window* pWindow = this;
+    const vcl::Window* pWindow = this;
     do
     {
         // when the pointer is not visible stop the search, as
@@ -164,7 +166,7 @@ void Window::ImplGenerateMouseMove()
 IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl)
 {
     mpWindowImpl->mpFrameData->mnMouseMoveId = 0;
-    Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;
+    vcl::Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;
     if( ! pCaptureWin ||
         (pCaptureWin->mpWindowImpl && pCaptureWin->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame)
     )
@@ -252,7 +254,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
     ImplSVData* pSVData = ImplGetSVData();
 
     bool bAsyncFocusWaiting = false;
-    Window *pFrame = pSVData->maWinData.mpFirstFrame;
+    vcl::Window *pFrame = pSVData->maWinData.mpFirstFrame;
     while( pFrame  )
     {
         if( pFrame != mpWindowImpl->mpFrameWindow && pFrame->mpWindowImpl->mpFrameData->mnFocusId )
@@ -268,7 +270,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
     bool bMustNotGrabFocus = false;
     // #100242#, check parent hierarchy if some floater prohibits grab focus
 
-    Window *pParent = this;
+    vcl::Window *pParent = this;
     while( pParent )
     {
         // #102158#, ignore grabfocus only if the floating parent grabs keyboard focus by itself (GrabsFocus())
@@ -289,7 +291,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
             pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
 
         // mark this windows as the last FocusWindow
-        Window* pOverlapWindow = ImplGetFirstOverlapWindow();
+        vcl::Window* pOverlapWindow = ImplGetFirstOverlapWindow();
         pOverlapWindow->mpWindowImpl->mpLastFocusWindow = this;
         mpWindowImpl->mpFrameData->mpFocusWin = this;
 
@@ -309,7 +311,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
             }
         }
 
-        Window* pOldFocusWindow = pSVData->maWinData.mpFocusWin;
+        vcl::Window* pOldFocusWindow = pSVData->maWinData.mpFocusWin;
         ImplDelData aOldFocusDel( pOldFocusWindow );
 
         pSVData->maWinData.mpFocusWin = this;
@@ -326,15 +328,15 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         if ( pOldFocusWindow )
         {
             // remember Focus
-            Window* pOldOverlapWindow = pOldFocusWindow->ImplGetFirstOverlapWindow();
-            Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
+            vcl::Window* pOldOverlapWindow = pOldFocusWindow->ImplGetFirstOverlapWindow();
+            vcl::Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
             if ( pOldOverlapWindow != pNewOverlapWindow )
                 ImplCallFocusChangeActivate( pNewOverlapWindow, pOldOverlapWindow );
         }
         else
         {
-            Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
-            Window* pNewRealWindow = pNewOverlapWindow->ImplGetWindow();
+            vcl::Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
+            vcl::Window* pNewRealWindow = pNewOverlapWindow->ImplGetWindow();
             pNewOverlapWindow->mpWindowImpl->mbActive = true;
             pNewOverlapWindow->Activate();
             if ( pNewRealWindow != pNewOverlapWindow )
@@ -398,7 +400,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
 
 void Window::ImplGrabFocusToDocument( sal_uInt16 nFlags )
 {
-    Window *pWin = this;
+    vcl::Window *pWin = this;
     while( pWin )
     {
         if( !pWin->GetParent() )
@@ -772,5 +774,7 @@ Reference< css::datatransfer::dnd::XDragGestureRecognizer > Window::GetDragGestu
 {
     return Reference< css::datatransfer::dnd::XDragGestureRecognizer > ( GetDropTarget(), UNO_QUERY );
 }
+
+} /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

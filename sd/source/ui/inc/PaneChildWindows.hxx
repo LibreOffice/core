@@ -30,7 +30,7 @@ class PaneChildWindow
 {
 public:
     PaneChildWindow (
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo,
@@ -44,7 +44,7 @@ class LeftPaneImpressChildWindow
     : public PaneChildWindow
 {
 public:
-    LeftPaneImpressChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+    LeftPaneImpressChildWindow (vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
 
     SFX_DECL_CHILDWINDOW_WITHID(LeftPaneImpressChildWindow);
 };
@@ -53,7 +53,7 @@ class LeftPaneDrawChildWindow
     : public PaneChildWindow
 {
 public:
-    LeftPaneDrawChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+    LeftPaneDrawChildWindow (vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
 
     SFX_DECL_CHILDWINDOW_WITHID(LeftPaneDrawChildWindow);
 };

@@ -60,7 +60,7 @@
 #include <vector>
 #include <memory>
 
-class Window;
+namespace vcl { class Window; }
 
 
 namespace pcr
@@ -310,7 +310,7 @@ namespace pcr
         */
         bool impl_findObjectProperty_nothrow( const OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty = NULL );
 
-        bool Construct(Window* _pParentWin);
+        bool Construct(vcl::Window* _pParentWin);
 
         /** retrieves the property handler for a given property name
             @param  _rPropertyName

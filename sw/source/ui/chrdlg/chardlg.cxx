@@ -58,7 +58,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
-SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
+SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     sal_uInt8 nDialogMode, const OUString* pStr)
     : SfxTabDialog(0, pParent, "CharacterPropertiesDialog",
         "modules/swriter/ui/characterproperties.ui", &rCoreSet, pStr != 0)
@@ -133,7 +133,7 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
+SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "CharURLPage", "modules/swriter/ui/charurlpage.ui", &rCoreSet)
     , pINetItem(0)
     , bModified(false)
@@ -278,7 +278,7 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     return bModified;
 }
 
-SfxTabPage* SwCharURLPage::Create(  Window* pParent,
+SfxTabPage* SwCharURLPage::Create(  vcl::Window* pParent,
                         const SfxItemSet* rAttrSet )
 {
     return ( new SwCharURLPage( pParent, *rAttrSet ) );

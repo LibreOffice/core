@@ -48,7 +48,7 @@ sal_uInt16 CertificateChooser::GetSelectedEntryPos( void ) const
     return (sal_uInt16) nSel;
 }
 
-CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::XComponentContext>& _rxCtx, uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
+CertificateChooser::CertificateChooser( vcl::Window* _pParent, uno::Reference< uno::XComponentContext>& _rxCtx, uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
     : ModalDialog(_pParent, "SelectCertificateDialog", "xmlsec/ui/selectcertificatedialog.ui")
     , maCertsToIgnore( _rCertsToIgnore )
 {
@@ -99,8 +99,8 @@ short CertificateChooser::Execute()
     // Problem: This Dialog should be visible right now, and the parent should not be accessible.
     // Show, Update, DIsableInput...
 
-    Window* pMe = this;
-    Window* pParent = GetParent();
+    vcl::Window* pMe = this;
+    vcl::Window* pParent = GetParent();
     if ( pParent )
         pParent->EnableInput( false );
     pMe->Show();

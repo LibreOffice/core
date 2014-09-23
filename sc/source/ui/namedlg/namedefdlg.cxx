@@ -32,7 +32,7 @@
     | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
-ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
         ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
         const ScAddress& aCursorPos, const bool bUndo )
     : ScAnyRefDlg( pB, pCW, pParent, "DefineNameDialog", "modules/scalc/ui/definename.ui" )

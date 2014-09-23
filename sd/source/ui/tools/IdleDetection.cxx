@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 namespace sd { namespace tools {
 
-sal_Int32 IdleDetection::GetIdleState (const ::Window* pWindow)
+sal_Int32 IdleDetection::GetIdleState (const vcl::Window* pWindow)
 {
     sal_Int32 nResult (CheckInputPending() | CheckSlideShowRunning());
     if (pWindow != NULL)
@@ -93,7 +93,7 @@ sal_Int32 IdleDetection::CheckSlideShowRunning (void)
     return eResult;
 }
 
-sal_Int32 IdleDetection::CheckWindowPainting (const ::Window& rWindow)
+sal_Int32 IdleDetection::CheckWindowPainting (const vcl::Window& rWindow)
 {
     if (rWindow.IsInPaint())
         return IDET_WINDOW_PAINTING;

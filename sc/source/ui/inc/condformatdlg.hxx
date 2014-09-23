@@ -70,7 +70,7 @@ private:
     void DoScroll(long nDiff);
 
 public:
-    ScCondFormatList(Window* pParent, WinBits nStyle);
+    ScCondFormatList(vcl::Window* pParent, WinBits nStyle);
 
     void init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScConditionalFormat* pFormat,
         const ScRangeList& rRanges, const ScAddress& rPos,
@@ -114,7 +114,7 @@ protected:
     virtual void RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
-    SC_DLLPUBLIC ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+    SC_DLLPUBLIC ScCondFormatDlg(vcl::Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
             const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
     virtual ~ScCondFormatDlg();
 

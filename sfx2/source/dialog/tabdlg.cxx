@@ -163,7 +163,7 @@ void SfxTabPage::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::st
     return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
 }
 
-SfxTabPage::SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet)
+SfxTabPage::SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet)
     : TabPage(pParent, rID, rUIXMLDescription)
     , pSet                ( rAttrSet )
     , bHasExchangeSupport ( false )
@@ -311,7 +311,7 @@ SfxTabDialog* SfxTabPage::GetTabDialog() const
 SfxTabDialog::SfxTabDialog
 (
     SfxViewFrame* pViewFrame,     // Frame, to which the Dialog belongs
-    Window* pParent,              // Parent Window
+    vcl::Window* pParent,              // Parent Window
     const OString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
     const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
@@ -340,7 +340,7 @@ SfxTabDialog::SfxTabDialog
 */
 
 (
-    Window* pParent,              // Parent Window
+    vcl::Window* pParent,              // Parent Window
     const OString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
     const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand

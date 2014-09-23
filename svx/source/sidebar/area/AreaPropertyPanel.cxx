@@ -60,7 +60,7 @@ const sal_Int32 AreaPropertyPanel::DEFAULT_BORDER = 0;
 
 
 AreaPropertyPanel::AreaPropertyPanel(
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame),
@@ -578,7 +578,7 @@ void AreaPropertyPanel::SetupIcons(void)
 
 
 AreaPropertyPanel* AreaPropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {

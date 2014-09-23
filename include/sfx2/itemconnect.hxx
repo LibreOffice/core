@@ -286,7 +286,7 @@ class SFX2_DLLPUBLIC DummyItemConnection:
     public ItemConnectionBase, public DummyWindowWrapper
 {
 public:
-    explicit            DummyItemConnection( sal_uInt16 nSlot, Window& rWindow,
+    explicit            DummyItemConnection( sal_uInt16 nSlot, vcl::Window& rWindow,
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 
 protected:

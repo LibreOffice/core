@@ -32,7 +32,7 @@
 #include "dlgassim.hxx"
 
 SdPageListControl::SdPageListControl(
-    ::Window* pParent,
+    vcl::Window* pParent,
     const WinBits nStyle )
     : SvTreeListBox(pParent, nStyle)
 {
@@ -49,7 +49,7 @@ SdPageListControl::SdPageListControl(
     SetCheckButtonHdl( LINK(this,SdPageListControl,CheckButtonClickHdl) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeSdPageListControl(::Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSdPageListControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

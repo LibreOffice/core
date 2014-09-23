@@ -26,7 +26,7 @@
 class FuConstArc : public FuConstruct
 {
  public:
-    FuConstArc( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuConstArc( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstArc();

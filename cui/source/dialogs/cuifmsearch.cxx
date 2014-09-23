@@ -74,7 +74,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
     m_pbClose->SetHelpText(OUString());
 }
 
-FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
+FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
     const Link& lnkContextSupplier)
     :ModalDialog(pParent, "RecordSearchDialog", "cui/ui/fmsearchdialog.ui")
     ,m_sCancel                  ( Button::GetStandardText( BUTTON_CANCEL ) )
@@ -559,7 +559,7 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
     if ( !bEnable )
     {
         // if one of my children has the focus, remember it
-        Window* pFocusWindow = Application::GetFocusWindow( );
+        vcl::Window* pFocusWindow = Application::GetFocusWindow( );
         if ( pFocusWindow && IsChild( pFocusWindow ) )
             m_pPreSearchFocus = pFocusWindow;
         else

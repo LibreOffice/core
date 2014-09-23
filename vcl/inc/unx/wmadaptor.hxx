@@ -198,7 +198,7 @@ public:
     /*
      * gets the workarea the specified window is on (or -1)
      */
-    int getWindowWorkArea( XLIB_Window aWindow ) const;
+    int getWindowWorkArea( ::Window aWindow ) const;
     /*
      *  gets the specified workarea
      */

@@ -26,7 +26,7 @@
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
 
-ConditionEdit::ConditionEdit(Window* pParent, WinBits nStyle)
+ConditionEdit::ConditionEdit(vcl::Window* pParent, WinBits nStyle)
     : Edit(pParent, nStyle)
     , DropTargetHelper(this)
     , bBrackets(true)
@@ -34,7 +34,7 @@ ConditionEdit::ConditionEdit(Window* pParent, WinBits nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeConditionEdit(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeConditionEdit(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
     return new ConditionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);

@@ -93,7 +93,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
         SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
-        ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+        vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
         if ( ! xParentWindow.is() || pParentWindow==NULL)
             throw RuntimeException(
                 "PanelFactory::createUIElement called without ParentWindow",
@@ -137,7 +137,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         }
         else if (DoesResourceEndWith("/NavigatorPanel"))
         {
-            Window* pPanel = new ScNavigatorDlg(pBindings, NULL, pParentWindow, false);
+            vcl::Window* pPanel = new ScNavigatorDlg(pBindings, NULL, pParentWindow, false);
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
                 rsResourceURL,
                 xFrame,
@@ -146,7 +146,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         }
         else if (DoesResourceEndWith("/FunctionsPanel"))
         {
-            Window* pPanel = new ScFunctionDockWin(pBindings, NULL, pParentWindow, ScResId(FID_FUNCTION_BOX));
+            vcl::Window* pPanel = new ScFunctionDockWin(pBindings, NULL, pParentWindow, ScResId(FID_FUNCTION_BOX));
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
                 rsResourceURL,
                 xFrame,

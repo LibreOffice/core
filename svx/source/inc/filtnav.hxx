@@ -228,7 +228,7 @@ inline bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rFormats 
 class OFilterExchangeHelper : public OLocalExchangeHelper
 {
 public:
-    OFilterExchangeHelper(Window* _pDragSource) : OLocalExchangeHelper(_pDragSource) { }
+    OFilterExchangeHelper(vcl::Window* _pDragSource) : OLocalExchangeHelper(_pDragSource) { }
 
     OFilterItemExchange* operator->() const { return static_cast<OFilterItemExchange*>(m_pTransferable); }
 
@@ -252,7 +252,7 @@ class FmFilterNavigator : public SvTreeListBox, public SfxListener
     DROP_ACTION         m_aDropActionType;
 
 public:
-    FmFilterNavigator( Window* pParent );
+    FmFilterNavigator( vcl::Window* pParent );
     virtual ~FmFilterNavigator();
 
     void UpdateContent(
@@ -325,7 +325,7 @@ protected:
 
 public:
     FmFilterNavigatorWin( SfxBindings *pBindings, SfxChildWindow *pMgr,
-                   Window* pParent );
+                   vcl::Window* pParent );
     virtual ~FmFilterNavigatorWin();
 
     void UpdateContent( FmFormShell* pFormShell );
@@ -341,7 +341,7 @@ public:
 class FmFilterNavigatorWinMgr : public SfxChildWindow
 {
 public:
-    FmFilterNavigatorWinMgr( Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,
+    FmFilterNavigatorWinMgr( vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,
                       SfxChildWinInfo *pInfo );
     SFX_DECL_CHILDWINDOW( FmFilterNavigatorWinMgr );
 };

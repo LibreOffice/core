@@ -1258,7 +1258,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( nFormat )
                 {
-                    Window* pWin = GetViewData()->GetActiveWin();
+                    vcl::Window* pWin = GetViewData()->GetActiveWin();
                     bool bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != NULL );
                     bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
                     bool bOle = ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE );
@@ -1287,7 +1287,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool bAsLink    = false;
                 InsCellCmd eMoveMode = INS_NONE;
 
-                Window* pWin = GetViewData()->GetActiveWin();
+                vcl::Window* pWin = GetViewData()->GetActiveWin();
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 bool bOtherDoc = !pDoc->IsClipboardSource();
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
@@ -1475,7 +1475,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_PASTE_ONLY_TEXT:
         case SID_PASTE_ONLY_FORMULA:
         {
-            Window* pWin = GetViewData()->GetActiveWin();
+            vcl::Window* pWin = GetViewData()->GetActiveWin();
             if ( ScTransferObj::GetOwnClipboard( pWin ) )  // own cell data
             {
                 rReq.SetSlot( FID_INS_CELL_CONTENTS );
@@ -1499,7 +1499,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             // differentiate between own cell data and draw objects/external data
             // this makes FID_INS_CELL_CONTENTS superfluous
             {
-                Window* pWin = GetViewData()->GetActiveWin();
+                vcl::Window* pWin = GetViewData()->GetActiveWin();
 
                 //  Clipboard-ID given as parameter? Basic "PasteSpecial(Format)"
                 const SfxPoolItem* pItem=NULL;

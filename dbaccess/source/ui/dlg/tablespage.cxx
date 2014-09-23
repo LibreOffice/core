@@ -69,7 +69,7 @@ namespace dbaui
     using namespace ::comphelper;
 
     // OTableSubscriptionPage
-    OTableSubscriptionPage::OTableSubscriptionPage(Window* pParent, const SfxItemSet& _rCoreAttrs,
+    OTableSubscriptionPage::OTableSubscriptionPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs,
         OTableSubscriptionDialog* _pTablesDlg)
         : OGenericAdministrationPage(pParent, "TablesFilterPage",
             "dbaccess/ui/tablesfilterpage.ui", _rCoreAttrs)

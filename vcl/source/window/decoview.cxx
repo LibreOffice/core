@@ -618,7 +618,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     const StyleSettings& rStyleSettings, sal_uInt16 nStyle )
 {
-    Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? (Window*) pDev : NULL;
+    vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? (vcl::Window*) pDev : NULL;
 
     const bool bMenuStyle = nStyle & FRAME_DRAW_MENU;
 
@@ -1041,7 +1041,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
 {
     Point aStart( rStart ), aStop( rStop );
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
-    Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? (Window*) mpOutDev: NULL;
+    vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? (vcl::Window*) mpOutDev: NULL;
     if(pWin)
     {
         ControlPart nPart = ( bVertical ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ );

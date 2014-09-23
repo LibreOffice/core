@@ -95,7 +95,7 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleParent(  )
     throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
+    vcl::Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
     assert(pTabPage && WINDOW_TABPAGE == pTabPage->GetType());
     return pTabPage->GetAccessible( true );
 }
@@ -105,7 +105,7 @@ sal_Int32 SvxPixelCtlAccessible::getAccessibleIndexInParent(  )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     sal_uInt16 nIdx = 0;
-    Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
+    vcl::Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
     assert(pTabPage && WINDOW_TABPAGE == pTabPage->GetType());
     sal_uInt16 nChildren = pTabPage->GetChildCount();
     for(nIdx = 0; nIdx < nChildren; nIdx++)
@@ -140,7 +140,7 @@ uno::Reference< XAccessibleRelationSet > SvxPixelCtlAccessible::getAccessibleRel
     ::osl::MutexGuard   aGuard( m_aMutex );
     utl::AccessibleRelationSetHelper* rRelationSet = new utl::AccessibleRelationSetHelper;
     uno::Reference< css::accessibility::XAccessibleRelationSet > rSet = rRelationSet;
-    Window *pLabeledBy = mrPixelCtl.GetAccessibleRelationLabeledBy();
+    vcl::Window *pLabeledBy = mrPixelCtl.GetAccessibleRelationLabeledBy();
     if ( pLabeledBy && pLabeledBy != &mrPixelCtl )
     {
         uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -148,7 +148,7 @@ uno::Reference< XAccessibleRelationSet > SvxPixelCtlAccessible::getAccessibleRel
         rRelationSet->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
     }
 
-    Window* pMemberOf = mrPixelCtl.GetAccessibleRelationMemberOf();
+    vcl::Window* pMemberOf = mrPixelCtl.GetAccessibleRelationMemberOf();
     if ( pMemberOf && pMemberOf != &mrPixelCtl )
     {
         uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);

@@ -32,9 +32,9 @@ static double getRandom()
     return (double)rand() / RAND_MAX;
 }
 
-Window *DebugEventInjector::ChooseWindow()
+vcl::Window *DebugEventInjector::ChooseWindow()
 {
-    Window *pWindow, *pParent;
+    vcl::Window *pWindow, *pParent;
 
     if (getRandom() < 0.80 &&
         (pWindow = Application::GetFocusWindow()))
@@ -46,11 +46,11 @@ Window *DebugEventInjector::ChooseWindow()
         // select a top window at random
         long nIdx = Application::GetTopWindowCount() * getRandom();
         if (!(pParent = Application::GetTopWindow( nIdx )))
-            pParent = static_cast<Window *>(Application::GetAppWindow());
+            pParent = static_cast<vcl::Window *>(Application::GetAppWindow());
     }
     assert (pParent != NULL);
 
-    std::vector< Window *> aChildren;
+    std::vector< vcl::Window *> aChildren;
     pParent->CollectChildren( aChildren );
 
     return aChildren[ aChildren.size() * getRandom() ];
@@ -77,7 +77,7 @@ static void CollectMenuItemIds( Menu *pMenu, MenuItemIds &rIds )
 
 void DebugEventInjector::InjectMenuEvent()
 {
-    Window *pFocus = Application::GetFocusWindow();
+    vcl::Window *pFocus = Application::GetFocusWindow();
     if (!pFocus)
         return;
 
@@ -133,7 +133,7 @@ static void InitKeyEvent( SalKeyEvent &rKeyEvent )
 void DebugEventInjector::InjectTextEvent()
 {
     SalKeyEvent aKeyEvent;
-    Window *pWindow = ChooseWindow();
+    vcl::Window *pWindow = ChooseWindow();
 
     InitKeyEvent( aKeyEvent );
 
@@ -198,7 +198,7 @@ void DebugEventInjector::InjectEvent()
 
 void DebugEventInjector::InjectKeyNavEdit()
 {
-    Window *pWindow = ChooseWindow();
+    vcl::Window *pWindow = ChooseWindow();
 
     struct {
         double     mnProb;

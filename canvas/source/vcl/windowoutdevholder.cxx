@@ -29,9 +29,9 @@ namespace vclcanvas
 {
     namespace
     {
-        Window& windowFromXWin( const uno::Reference<awt::XWindow>& xWin )
+        vcl::Window& windowFromXWin( const uno::Reference<awt::XWindow>& xWin )
         {
-            Window* pWindow = VCLUnoHelper::GetWindow(xWin);
+            vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWin);
             if( !pWindow )
                 throw lang::NoSupportException(
                     "Parent window not VCL window, or canvas out-of-process!",

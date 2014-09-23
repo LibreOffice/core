@@ -68,7 +68,7 @@ class ColorWindow : public Control
 
 
 public:
-                ColorWindow( Window* pParent, const ResId& rId ) :
+                ColorWindow( vcl::Window* pParent, const ResId& rId ) :
                     Control( pParent, rId ),
                     aColor( COL_WHITE ) {};
 
@@ -366,7 +366,7 @@ void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*
 
 
 
-SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( Window* pParent_, sal_uInt16 nId,
+SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( vcl::Window* pParent_, sal_uInt16 nId,
                                               SfxBindings* pBindings,
                                               SfxChildWinInfo* pInfo ) :
         SfxChildWindow( pParent_, nId )
@@ -384,7 +384,7 @@ SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( Window* pParent_, sal_uInt16 nId,
 
 SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
-                        Window* pParent,
+                        vcl::Window* pParent,
                         const ResId& rResId ) :
         SfxDockingWindow    ( pBindinx, pCW, pParent, rResId ),
         aTbxPipette         ( this, BMP_RESID( TBX_PIPETTE ) ),

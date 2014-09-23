@@ -53,7 +53,7 @@ static const sal_uInt16 pRanges[] =
 |* dialog (page) for copying objects
 |*
 \************************************************************************/
-SvxTextAttrPage::SvxTextAttrPage(Window* pWindow, const SfxItemSet& rInAttrs)
+SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     : SvxTabPage(pWindow,"TextAttributesPage","cui/ui/textattrtabpage.ui", rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(NULL)
@@ -520,7 +520,7 @@ void SvxTextAttrPage::Construct()
 |*
 \************************************************************************/
 
-SfxTabPage* SvxTextAttrPage::Create( Window* pWindow,
+SfxTabPage* SvxTextAttrPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SvxTextAttrPage( pWindow, *rAttrs ) );
@@ -533,7 +533,7 @@ const sal_uInt16* SvxTextAttrPage::GetRanges()
 
 /** Check whether we have to uncheck the "Full width" check box.
 */
-void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
+void SvxTextAttrPage::PointChanged( vcl::Window*, RECT_POINT eRP )
 {
     if (m_pTsbFullWidth->GetState() == TRISTATE_TRUE)
     {

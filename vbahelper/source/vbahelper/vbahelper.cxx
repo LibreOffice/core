@@ -686,7 +686,7 @@ sal_Int32 getPointerStyle( const uno::Reference< frame::XModel >& xModel )
         const uno::Reference< frame::XFrame >      xFrame     ( xController->getFrame(),        uno::UNO_SET_THROW );
         const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),   uno::UNO_SET_THROW );
         // why the heck isn't there an XWindowPeer::getPointer, but a setPointer only?
-        const Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        const vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
             nPointerStyle = pWindow->GetSystemWindow()->GetPointer().GetStyle();
     }
@@ -731,7 +731,7 @@ void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Point
         const uno::Reference< frame::XFrame >      xFrame     ( (*controller)->getFrame(),       uno::UNO_SET_THROW   );
         const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),    uno::UNO_SET_THROW   );
 
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         SAL_WARN_IF( !pWindow, "vbahelper", "ScVbaApplication::setCursor: no window!" );
         if ( !pWindow )
             continue;
@@ -923,7 +923,7 @@ double UserFormGeometryHelper::implGetSize( bool bHeight, bool bOuter ) const
         'InnerHeight'), but the window API returns the inner size. */
     if( mbDialog && bOuter )
     {
-        if( const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow ) )
+        if( const vcl::Window* pWindow = VCLUnoHelper::GetWindow( mxWindow ) )
         {
             Rectangle aOuterRect = pWindow->GetWindowExtentsRelative( NULL );
             aSizePixel = awt::Size( aOuterRect.getWidth(), aOuterRect.getHeight() );
@@ -947,7 +947,7 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
         pixel height to get the same result. */
     if ( mbDialog && bOuter )
     {
-        if( const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow ) )
+        if( const vcl::Window* pWindow = VCLUnoHelper::GetWindow( mxWindow ) )
         {
             Rectangle aOuterRect = pWindow->GetWindowExtentsRelative( NULL );
             if( !aOuterRect.IsEmpty() )

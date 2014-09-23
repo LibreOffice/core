@@ -10,7 +10,7 @@
 #include <sfx2/checkin.hxx>
 #include <vcl/msgbox.hxx>
 
-SfxCheckinDialog::SfxCheckinDialog( Window* pParent ) :
+SfxCheckinDialog::SfxCheckinDialog( vcl::Window* pParent ) :
     ModalDialog( pParent, "CheckinDialog", "sfx/ui/checkin.ui" )
 {
     get( m_pCommentED, "VersionComment" );

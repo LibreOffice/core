@@ -85,7 +85,7 @@ class FmFieldWin :public SfxFloatingWindow
 
 public:
     FmFieldWin(SfxBindings *pBindings,
-               SfxChildWindow *pMgr, Window* pParent);
+               SfxChildWindow *pMgr, vcl::Window* pParent);
 
     virtual ~FmFieldWin();
     virtual void Resize() SAL_OVERRIDE;
@@ -123,7 +123,7 @@ protected:
 class FmFieldWinMgr : public SfxChildWindow
 {
 public:
-    FmFieldWinMgr(Window *pParent, sal_uInt16 nId,
+    FmFieldWinMgr(vcl::Window *pParent, sal_uInt16 nId,
         SfxBindings *pBindings, SfxChildWinInfo *pInfo);
     SFX_DECL_CHILDWINDOW(FmFieldWinMgr);
 };

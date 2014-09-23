@@ -283,7 +283,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     pAccContext = NULL;
 }
 
-Ruler::Ruler( Window* pParent, WinBits nWinStyle ) :
+Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle & WB_3DLOOK ),
     maVirDev( *this ),
     maMapMode( MAP_100TH_MM ),
@@ -2802,7 +2802,7 @@ void Ruler::DrawTicks()
 
 uno::Reference< XAccessible > Ruler::CreateAccessible()
 {
-    Window* pParent = GetAccessibleParentWindow();
+    vcl::Window* pParent = GetAccessibleParentWindow();
     OSL_ENSURE( pParent, "-SvxRuler::CreateAccessible(): No Parent!" );
     uno::Reference< XAccessible >   xAccParent  = pParent->GetAccessible();
     if( xAccParent.is() )

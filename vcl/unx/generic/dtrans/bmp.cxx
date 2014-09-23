@@ -306,7 +306,7 @@ sal_uInt8* x11::X11_getBmpFromPixmap(
                                 )
 {
     // get geometry of drawable
-    XLIB_Window aRoot;
+    ::Window aRoot;
     int x,y;
     unsigned int w, h, bw, d;
     XGetGeometry( pDisplay, aDrawable, &aRoot, &x, &y, &w, &h, &bw, &d );

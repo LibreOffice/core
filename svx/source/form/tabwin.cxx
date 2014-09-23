@@ -175,7 +175,7 @@ FmFieldWinData::~FmFieldWinData()
 {
 }
 
-FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent)
+FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent)
             :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE))
             ,SfxControllerItem(SID_FM_FIELDS_CONTROL, *_pBindings)
             ,::comphelper::OPropertyChangeListener(m_aMutex)
@@ -411,7 +411,7 @@ void FmFieldWin::FillInfo( SfxChildWinInfo& rInfo ) const
 SFX_IMPL_FLOATINGWINDOW(FmFieldWinMgr, SID_FM_ADD_FIELD)
 
 
-FmFieldWinMgr::FmFieldWinMgr(Window* _pParent, sal_uInt16 _nId,
+FmFieldWinMgr::FmFieldWinMgr(vcl::Window* _pParent, sal_uInt16 _nId,
                SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {

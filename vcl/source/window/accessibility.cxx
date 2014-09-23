@@ -123,6 +123,8 @@ ImplAccessibleInfos::~ImplAccessibleInfos()
     delete pAccessibleDescription;
 }
 
+namespace vcl {
+
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Window::GetAccessible( bool bCreate )
 {
     // do not optimize hierarchy for the top level border win (ie, when there is no parent)
@@ -130,7 +132,7 @@ ImplAccessibleInfos::~ImplAccessibleInfos()
     if ( GetParent() && ( GetType() == WINDOW_BORDERWINDOW ) && ( GetChildCount() == 1 ) )
     //if( !ImplIsAccessibleCandidate() )
     {
-        Window* pChild = GetAccessibleChildWindow( 0 );
+        vcl::Window* pChild = GetAccessibleChildWindow( 0 );
         if ( pChild )
             return pChild->GetAccessible();
     }
@@ -180,7 +182,7 @@ bool Window::ImplIsAccessibleNativeFrame() const
 sal_uInt16 Window::ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirstWindowType ) const
 {
     sal_uInt16  nChildren = 0;
-    Window* pChild = GetWindow( nFirstWindowType );
+    vcl::Window* pChild = GetWindow( nFirstWindowType );
     while ( pChild )
     {
         if( pChild->ImplIsAccessibleCandidate() )
@@ -192,16 +194,16 @@ sal_uInt16 Window::ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirst
     return nChildren;
 }
 
-Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, bool bTopLevel ) const
+vcl::Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, bool bTopLevel ) const
 {
 
     if( bTopLevel )
         rChildCount = 0;
 
-    Window* pChild = GetWindow( nFirstWindowType );
+    vcl::Window* pChild = GetWindow( nFirstWindowType );
     while ( pChild )
     {
-        Window *pTmpChild = pChild;
+        vcl::Window *pTmpChild = pChild;
 
         if( !pChild->ImplIsAccessibleCandidate() )
             pTmpChild = pChild->ImplGetAccessibleCandidateChild( nChild, rChildCount, WINDOW_FIRSTCHILD, false );
@@ -215,16 +217,16 @@ Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& 
     return NULL;
 }
 
-Window* Window::GetAccessibleParentWindow() const
+vcl::Window* Window::GetAccessibleParentWindow() const
 {
     if ( ImplIsAccessibleNativeFrame() )
         return NULL;
 
-    Window* pParent = mpWindowImpl->mpParent;
+    vcl::Window* pParent = mpWindowImpl->mpParent;
     if( GetType() == WINDOW_MENUBARWINDOW )
     {
         // report the menubar as a child of THE workwindow
-        Window *pWorkWin = GetParent()->mpWindowImpl->mpFirstChild;
+        vcl::Window *pWorkWin = GetParent()->mpWindowImpl->mpFirstChild;
         while( pWorkWin && (pWorkWin == this) )
             pWorkWin = pWorkWin->mpWindowImpl->mpNext;
         pParent = pWorkWin;
@@ -251,7 +253,7 @@ Window* Window::GetAccessibleParentWindow() const
 sal_uInt16 Window::GetAccessibleChildWindowCount()
 {
     sal_uInt16 nChildren = 0;
-    Window* pChild = mpWindowImpl->mpFirstChild;
+    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while( pChild )
     {
         if( pChild->IsVisible() )
@@ -265,7 +267,7 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
     /*
     if( ImplIsOverlapWindow() )
     {
-        Window* pOverlap = GetWindow( WINDOW_FIRSTOVERLAP );
+        vcl::Window* pOverlap = GetWindow( WINDOW_FIRSTOVERLAP );
         while ( pOverlap )
         {
             if( pOverlap->IsVisible() )
@@ -295,7 +297,7 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
     return nChildren;
 }
 
-Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
+vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
 {
     // report the menubarwindow as a the first child of THE workwindow
     if( GetType() == WINDOW_WORKWINDOW && ((WorkWindow *) this)->GetMenuBar() )
@@ -312,7 +314,7 @@ Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
 
     // transform n to child number including invisible children
     sal_uInt16 nChildren = n;
-    Window* pChild = mpWindowImpl->mpFirstChild;
+    vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while( pChild )
     {
         if( pChild->IsVisible() )
@@ -335,7 +337,7 @@ Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
         /*
         if( ImplIsOverlapWindow() )
         {
-            Window* pOverlap = GetWindow( WINDOW_FIRSTOVERLAP );
+            vcl::Window* pOverlap = GetWindow( WINDOW_FIRSTOVERLAP );
             while ( !pChild && pOverlap )
             {
                 if ( !nChildren && pOverlap->IsVisible() )
@@ -486,7 +488,7 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
                 nRole = accessibility::AccessibleRole::FRAME;
             else if( IsScrollable() )
                 nRole = accessibility::AccessibleRole::SCROLL_PANE;
-            else if( ((Window*)this)->ImplGetWindow()->IsMenuFloatingWindow() )
+            else if( ((vcl::Window*)this)->ImplGetWindow()->IsMenuFloatingWindow() )
                 nRole = accessibility::AccessibleRole::WINDOW;      // #106002#, contextmenus are windows (i.e. toplevel)
             else
                 // #104051# WINDOW seems to be a bad default role, use LAYEREDPANE instead
@@ -555,7 +557,7 @@ OUString Window::getDefaultAccessibleName() const
         case WINDOW_TREELISTBOX:
         case WINDOW_METRICBOX:
         {
-            Window *pLabel = GetAccessibleRelationLabeledBy();
+            vcl::Window *pLabel = GetAccessibleRelationLabeledBy();
             if ( pLabel && pLabel != this )
                 aAccessibleName = pLabel->GetText();
             if (aAccessibleName.isEmpty())
@@ -613,7 +615,7 @@ OUString Window::GetAccessibleDescription() const
     {
         // Special code for help text windows. ZT asks the border window for the
         // description so we have to forward this request to our inner window.
-        const Window* pWin = ((Window *)this)->ImplGetWindow();
+        const vcl::Window* pWin = ((vcl::Window *)this)->ImplGetWindow();
         if ( pWin->GetType() == WINDOW_HELPTEXTWINDOW )
             aAccessibleDescription = pWin->GetHelpText();
         else
@@ -623,28 +625,28 @@ OUString Window::GetAccessibleDescription() const
     return aAccessibleDescription;
 }
 
-void Window::SetAccessibleRelationLabeledBy( Window* pLabeledBy )
+void Window::SetAccessibleRelationLabeledBy( vcl::Window* pLabeledBy )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
     mpWindowImpl->mpAccessibleInfos->pLabeledByWindow = pLabeledBy;
 }
 
-void Window::SetAccessibleRelationLabelFor( Window* pLabelFor )
+void Window::SetAccessibleRelationLabelFor( vcl::Window* pLabelFor )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
     mpWindowImpl->mpAccessibleInfos->pLabelForWindow = pLabelFor;
 }
 
-void Window::SetAccessibleRelationMemberOf( Window* pMemberOfWin )
+void Window::SetAccessibleRelationMemberOf( vcl::Window* pMemberOfWin )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
     mpWindowImpl->mpAccessibleInfos->pMemberOfWindow = pMemberOfWin;
 }
 
-Window* Window::GetAccessibleRelationMemberOf() const
+vcl::Window* Window::GetAccessibleRelationMemberOf() const
 {
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pMemberOfWindow)
         return mpWindowImpl->mpAccessibleInfos->pMemberOfWindow;
@@ -655,7 +657,7 @@ Window* Window::GetAccessibleRelationMemberOf() const
     return NULL;
 }
 
-Window* Window::getAccessibleRelationLabelFor() const
+vcl::Window* Window::getAccessibleRelationLabelFor() const
 {
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabelForWindow)
         return mpWindowImpl->mpAccessibleInfos->pLabelForWindow;
@@ -663,9 +665,9 @@ Window* Window::getAccessibleRelationLabelFor() const
     return NULL;
 }
 
-Window* Window::GetAccessibleRelationLabelFor() const
+vcl::Window* Window::GetAccessibleRelationLabelFor() const
 {
-    Window* pWindow = getAccessibleRelationLabelFor();
+    vcl::Window* pWindow = getAccessibleRelationLabelFor();
 
     if (pWindow)
         return pWindow;
@@ -676,7 +678,7 @@ Window* Window::GetAccessibleRelationLabelFor() const
     return NULL;
 }
 
-Window* Window::GetAccessibleRelationLabeledBy() const
+vcl::Window* Window::GetAccessibleRelationLabeledBy() const
 {
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabeledByWindow)
         return mpWindowImpl->mpAccessibleInfos->pLabeledByWindow;
@@ -688,7 +690,7 @@ Window* Window::GetAccessibleRelationLabeledBy() const
         for (std::vector<FixedText*>::iterator
             aI = aMnemonicLabels.begin(), aEnd = aMnemonicLabels.end(); aI != aEnd; ++aI)
         {
-            Window *pCandidate = *aI;
+            vcl::Window *pCandidate = *aI;
             if (pCandidate->IsVisible())
                 return pCandidate;
         }
@@ -707,7 +709,7 @@ bool Window::IsAccessibilityEventsSuppressed( bool bTraverseParentPath )
         return mpWindowImpl->mbSuppressAccessibilityEvents;
     else
     {
-        Window *pParent = this;
+        vcl::Window *pParent = this;
         while ( pParent && pParent->mpWindowImpl)
         {
             if( pParent->mpWindowImpl->mbSuppressAccessibilityEvents )
@@ -723,5 +725,7 @@ void Window::SetAccessibilityEventsSuppressed(bool bSuppressed)
 {
     mpWindowImpl->mbSuppressAccessibilityEvents = bSuppressed;
 }
+
+} /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

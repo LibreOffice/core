@@ -52,26 +52,26 @@ public:
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) SAL_OVERRIDE;
 
     // Window
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, bool bCreate ) SAL_OVERRIDE;
-    virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) SAL_OVERRIDE;
+    virtual void                SetWindowInterface( vcl::Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace ) SAL_OVERRIDE;
 
-    void                WindowDestroyed( Window* pWindow ) SAL_OVERRIDE;
-    void                WindowEvent_Move( Window* pWindow );
-    void                WindowEvent_Resize( Window* pWindow );
-    void                WindowEvent_Show( Window* pWindow, bool bShow );
-    void                WindowEvent_Close( Window* pWindow );
-    void                WindowEvent_Minimize( Window* pWindow );
-    void                WindowEvent_Normalize( Window* pWindow );
-    void                WindowEvent_Activate( Window* pWindow, bool bActivated );
-    void                WindowEvent_MouseButtonUp( Window* pWindow, const MouseEvent& rEvt );
-    void                WindowEvent_MouseButtonDown( Window* pWindow, const MouseEvent& rEvt );
-    void                WindowEvent_MouseMove( Window* pWindow, const MouseEvent& rEvt );
-    void                WindowEvent_Command( Window* pWindow, const CommandEvent& rCEvt );
-    void                WindowEvent_KeyInput( Window* pWindow, const KeyEvent& rEvt );
-    void                WindowEvent_KeyUp( Window* pWindow, const KeyEvent& rEvt );
-    void                WindowEvent_GetFocus( Window* pWindow );
-    void                WindowEvent_LoseFocus( Window* pWindow );
-    void                WindowEvent_Paint( Window* pWindow, const Rectangle& rRect );
+    void                WindowDestroyed( vcl::Window* pWindow ) SAL_OVERRIDE;
+    void                WindowEvent_Move( vcl::Window* pWindow );
+    void                WindowEvent_Resize( vcl::Window* pWindow );
+    void                WindowEvent_Show( vcl::Window* pWindow, bool bShow );
+    void                WindowEvent_Close( vcl::Window* pWindow );
+    void                WindowEvent_Minimize( vcl::Window* pWindow );
+    void                WindowEvent_Normalize( vcl::Window* pWindow );
+    void                WindowEvent_Activate( vcl::Window* pWindow, bool bActivated );
+    void                WindowEvent_MouseButtonUp( vcl::Window* pWindow, const MouseEvent& rEvt );
+    void                WindowEvent_MouseButtonDown( vcl::Window* pWindow, const MouseEvent& rEvt );
+    void                WindowEvent_MouseMove( vcl::Window* pWindow, const MouseEvent& rEvt );
+    void                WindowEvent_Command( vcl::Window* pWindow, const CommandEvent& rCEvt );
+    void                WindowEvent_KeyInput( vcl::Window* pWindow, const KeyEvent& rEvt );
+    void                WindowEvent_KeyUp( vcl::Window* pWindow, const KeyEvent& rEvt );
+    void                WindowEvent_GetFocus( vcl::Window* pWindow );
+    void                WindowEvent_LoseFocus( vcl::Window* pWindow );
+    void                WindowEvent_Paint( vcl::Window* pWindow, const Rectangle& rRect );
 
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >

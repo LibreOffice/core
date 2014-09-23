@@ -81,12 +81,12 @@ namespace dbaui
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOSQLNameEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOSQLNameEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new dbaui::OSQLNameEdit(pParent);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOSQLNameComboBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOSQLNameComboBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new dbaui::OSQLNameComboBox(pParent);
 }

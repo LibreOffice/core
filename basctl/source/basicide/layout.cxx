@@ -35,7 +35,7 @@ static long const nSplitThickness = 3;
 
 // ctor for derived classes
 // pParent: the parent window (Shell)
-Layout::Layout (Window* pParent) :
+Layout::Layout (vcl::Window* pParent) :
     Window(pParent, WB_CLIPCHILDREN),
     pChild(0),
     bFirstSize(true),

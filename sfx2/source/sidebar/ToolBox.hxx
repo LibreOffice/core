@@ -28,7 +28,7 @@ class ToolBox
     : public ::ToolBox
 {
 public:
-    MenuButton (Window* pParentWindow);
+    MenuButton (vcl::Window* pParentWindow);
     virtual ~MenuButton (void);
 
     virtual void Paint (const Rectangle& rUpdateArea);

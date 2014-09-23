@@ -28,7 +28,7 @@ class SW_DLLPUBLIC CancelableModelessDialog : public ModelessDialog
 {
 protected:
     CancelButton* m_pCancelButton;
-    CancelableModelessDialog( Window *pParent, const OString& rID,
+    CancelableModelessDialog( vcl::Window *pParent, const OString& rID,
                               const OUString& rUIXMLDescription );
 
 public:
@@ -50,7 +50,7 @@ public:
     FixedText* m_pPrinter;
     FixedText* m_pPrintInfo;
 
-    PrintMonitor( Window *pParent, PrintMonitorType eType );
+    PrintMonitor( vcl::Window *pParent, PrintMonitorType eType );
 };
 
 #endif

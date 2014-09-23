@@ -33,7 +33,7 @@ namespace formula
 {
 
 // class ArgEdit
-ArgEdit::ArgEdit( Window* pParent, WinBits nBits )
+ArgEdit::ArgEdit( vcl::Window* pParent, WinBits nBits )
     :   RefEdit( pParent, NULL, nBits ),
         pEdPrev ( NULL ),
         pEdNext ( NULL ),
@@ -42,7 +42,7 @@ ArgEdit::ArgEdit( Window* pParent, WinBits nBits )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeArgEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeArgEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ArgEdit(pParent, WB_BORDER);
 }
@@ -333,7 +333,7 @@ IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
 
 // class EditBox
 
-EditBox::EditBox( Window* pParent, WinBits nBits )
+EditBox::EditBox( vcl::Window* pParent, WinBits nBits )
         :Control(pParent,nBits),
         bMouseFlag(false)
 {
@@ -354,7 +354,7 @@ EditBox::EditBox( Window* pParent, WinBits nBits )
     SetHelpId( "" );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeEditBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeEditBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new EditBox(pParent, WB_BORDER);
 }
@@ -457,7 +457,7 @@ void EditBox::UpdateOldSel()
 
 #define SC_ENABLE_TIME 100
 
-RefEdit::RefEdit( Window* _pParent, Window* pShrinkModeLabel, WinBits nStyle )
+RefEdit::RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle )
     : Edit( _pParent, nStyle )
     , pAnyRefDlg( NULL )
     , pLabelWidget(pShrinkModeLabel)
@@ -466,8 +466,8 @@ RefEdit::RefEdit( Window* _pParent, Window* pShrinkModeLabel, WinBits nStyle )
     aTimer.SetTimeout( SC_ENABLE_TIME );
 }
 
-RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent,
-    Window* pShrinkModeLabel, const ResId& rResId )
+RefEdit::RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent,
+    vcl::Window* pShrinkModeLabel, const ResId& rResId )
     : Edit( _pParent, rResId )
     , pAnyRefDlg( pParent )
     , pLabelWidget(pShrinkModeLabel)
@@ -476,7 +476,7 @@ RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent,
     aTimer.SetTimeout( SC_ENABLE_TIME );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRefEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new RefEdit(pParent, NULL, WB_BORDER);
 }
@@ -517,7 +517,7 @@ void RefEdit::StartUpdateData()
     aTimer.Start();
 }
 
-void RefEdit::SetReferences( IControlReferenceHandler* pDlg, Window* pLabel )
+void RefEdit::SetReferences( IControlReferenceHandler* pDlg, vcl::Window* pLabel )
 {
     pAnyRefDlg = pDlg;
     pLabelWidget = pLabel;
@@ -571,7 +571,7 @@ IMPL_LINK_NOARG(RefEdit, UpdateHdl)
 }
 
 //class RefButton
-RefButton::RefButton( Window* _pParent, WinBits nStyle ) :
+RefButton::RefButton( vcl::Window* _pParent, WinBits nStyle ) :
     ImageButton( _pParent, nStyle ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
     aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
@@ -583,7 +583,7 @@ RefButton::RefButton( Window* _pParent, WinBits nStyle ) :
     SetStartImage();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRefButton(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefButton(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new RefButton(pParent, 0);
 }

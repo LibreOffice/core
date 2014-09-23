@@ -18,7 +18,7 @@
 
 using namespace std;
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScPivotLayoutTreeListData(Window *pParent, VclBuilder::stringmap& )
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScPivotLayoutTreeListData(vcl::Window *pParent, VclBuilder::stringmap& )
 {
     return new ScPivotLayoutTreeListData(pParent, WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
 }
@@ -64,7 +64,7 @@ OUString lclCreateDataItemName(const sal_uInt16 nFunctionMask, const OUString& r
 
 } // anonymous namespace
 
-ScPivotLayoutTreeListData::ScPivotLayoutTreeListData(Window* pParent, WinBits nBits) :
+ScPivotLayoutTreeListData::ScPivotLayoutTreeListData(vcl::Window* pParent, WinBits nBits) :
     ScPivotLayoutTreeListBase(pParent, nBits, DATA_LIST)
 {}
 

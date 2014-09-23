@@ -301,7 +301,7 @@ bool AnnotationTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& /*rHdl*/
 
     if( rMEvt.IsLeft() && !rMEvt.IsRight() )
     {
-        Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
+        vcl::Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
         if( pWindow )
         {
             maMouseDownPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
@@ -371,7 +371,7 @@ bool AnnotationTag::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        ::Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
+        vcl::Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
         if( pWindow )
         {
             Rectangle aContextRect(rCEvt.GetMousePosPixel(),Size(1,1));
@@ -512,7 +512,7 @@ void AnnotationTag::select()
 
     mrManager.onTagSelected( *this );
 
-    Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
+    vcl::Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
     if( pWindow )
     {
         RealPoint2D aPosition( mxAnnotation->getPosition() );
@@ -585,7 +585,7 @@ void AnnotationTag::OpenPopup( bool bEdit )
 
     if( !mpAnnotationWindow.get() )
     {
-           ::Window* pWindow = dynamic_cast< ::Window* >( getView().GetFirstOutputDevice() );
+           vcl::Window* pWindow = dynamic_cast< vcl::Window* >( getView().GetFirstOutputDevice() );
            if( pWindow )
            {
             RealPoint2D aPosition( mxAnnotation->getPosition() );
@@ -631,7 +631,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
 {
     if( pEvent != NULL )
     {
-        ::Window* pWindow = pEvent->GetWindow();
+        vcl::Window* pWindow = pEvent->GetWindow();
 
         if( pWindow )
         {

@@ -34,7 +34,7 @@ class ExtrusionDepthDialog : public ModalDialog
     MetricField* m_pMtrDepth;
 
 public:
-    ExtrusionDepthDialog( Window* pParent, double fDepth, FieldUnit eDefaultUnit );
+    ExtrusionDepthDialog( vcl::Window* pParent, double fDepth, FieldUnit eDefaultUnit );
 
     double getDepth() const;
 };

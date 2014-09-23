@@ -502,7 +502,7 @@ static sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
     return nLBRelations;
 }
 
-SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "SwPosSizePage", "cui/ui/swpossizepage.ui", &rInAttrs)
     , m_pVMap(0)
     , m_pHMap(0)
@@ -693,7 +693,7 @@ SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
 {
 }
 
-SfxTabPage* SvxSwPosSizeTabPage::Create( Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SvxSwPosSizeTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SvxSwPosSizeTabPage(pParent, *rSet);
 }

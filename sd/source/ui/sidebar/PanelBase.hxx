@@ -42,7 +42,7 @@ class PanelBase
 {
 public:
     PanelBase (
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
     virtual ~PanelBase (void);
 
@@ -63,9 +63,9 @@ public:
             ::com::sun::star::accessibility::XAccessible>& rxParent);
 
 protected:
-    ::boost::scoped_ptr< ::Window> mpWrappedControl;
-    virtual ::Window* CreateWrappedControl (
-        ::Window* pParentWindow,
+    ::boost::scoped_ptr< vcl::Window> mpWrappedControl;
+    virtual vcl::Window* CreateWrappedControl (
+        vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase) = 0;
 
 private:

@@ -42,7 +42,7 @@ namespace sfx2 { class FileDialogHelper; }
 class ScInsertTableDlg : public ModalDialog
 {
 public:
-            ScInsertTableDlg( Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile );
+            ScInsertTableDlg( vcl::Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile );
             virtual ~ScInsertTableDlg();
 
     virtual short   Execute() SAL_OVERRIDE;      // overloaded to set parent dialog

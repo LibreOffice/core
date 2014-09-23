@@ -38,7 +38,7 @@ class CopyDlg
     : public SfxModalDialog
 {
 public:
-    CopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs,
+    CopyDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         const XColorListRef &pColList, ::sd::View* pView );
     virtual ~CopyDlg();
 

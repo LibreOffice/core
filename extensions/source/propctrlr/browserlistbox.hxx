@@ -122,7 +122,7 @@ namespace pcr
         void    Resize() SAL_OVERRIDE;
 
     public:
-                                    OBrowserListBox( Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL );
+                                    OBrowserListBox( vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL );
 
                                     virtual ~OBrowserListBox();
 

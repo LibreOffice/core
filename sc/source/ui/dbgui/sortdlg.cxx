@@ -24,7 +24,7 @@
 #include "sortdlg.hxx"
 #include "scresid.hxx"
 
-ScSortDlg::ScSortDlg(Window* pParent, const SfxItemSet* pArgSet)
+ScSortDlg::ScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialog(pParent, "SortDialog", "modules/scalc/ui/sortdialog.ui", pArgSet)
     , bIsHeaders(false)
     , bIsByRows(false)
@@ -33,7 +33,7 @@ ScSortDlg::ScSortDlg(Window* pParent, const SfxItemSet* pArgSet)
     AddTabPage("options", ScTabPageSortOptions::Create, 0);
 }
 
-ScSortWarningDlg::ScSortWarningDlg(Window* pParent,
+ScSortWarningDlg::ScSortWarningDlg(vcl::Window* pParent,
     const OUString& rExtendText, const OUString& rCurrentText)
     : ModalDialog(pParent, "SortWarning", "modules/scalc/ui/sortwarning.ui")
 {

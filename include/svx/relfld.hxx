@@ -40,7 +40,7 @@ protected:
     void            Modify() SAL_OVERRIDE;
 
 public:
-    SvxRelativeField(Window* pParent, WinBits nBits, FieldUnit eUnit);
+    SvxRelativeField(vcl::Window* pParent, WinBits nBits, FieldUnit eUnit);
 
     void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
                                         sal_uInt16 nStep = 5 );

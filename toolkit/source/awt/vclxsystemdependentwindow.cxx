@@ -68,7 +68,7 @@ IMPL_XTYPEPROVIDER_END
 
     // TODO, check the process id
     ::com::sun::star::uno::Any aRet;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         const SystemEnvData* pSysData = ((SystemChildWindow *)pWindow)->GetSystemData();

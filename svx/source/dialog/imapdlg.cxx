@@ -93,7 +93,7 @@ void SvxIMapDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
     }
 }
 
-SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( Window* _pParent, sal_uInt16 nId,
+SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( vcl::Window* _pParent, sal_uInt16 nId,
                                               SfxBindings* pBindings,
                                               SfxChildWinInfo* pInfo ) :
             SfxChildWindow( _pParent, nId )
@@ -117,12 +117,12 @@ void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageM
         SVXIMAPDLG()->UpdateLink( rGraphic, pImageMap, pTargetList, pEditingObj );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeStatusBar(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeStatusBar(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new StatusBar(pParent);
 }
 
-SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, Window* _pParent)
+SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window* _pParent)
     : SfxModelessDialog(_pBindings, pCW, _pParent, "ImapDialog", "svx/ui/imapdialog.ui")
     , pCheckObj(NULL)
     , aIMapItem(SID_IMAP_EXEC, *this, *_pBindings)

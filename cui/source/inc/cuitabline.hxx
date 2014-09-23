@@ -61,7 +61,7 @@ protected:
     void                SavePalettes();
 
 public:
-    SvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr,
+    SvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                       SdrModel* pModel, const SdrObject* pObj = NULL,
                       bool bHasObj = true );
     virtual ~SvxLineTabDialog();
@@ -202,12 +202,12 @@ public:
 
     void ShowSymbolControls(bool bOn);
 
-    SvxLineTabPage( Window* pParent, const SfxItemSet& rInAttrs );
+    SvxLineTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxLineTabPage();
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static  const sal_uInt16*    GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -216,7 +216,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     virtual void FillUserData() SAL_OVERRIDE;
 
@@ -301,11 +301,11 @@ private:
     void CheckChanges_Impl();
 
 public:
-    SvxLineDefTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxLineDefTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -370,12 +370,12 @@ private:
     void CheckChanges_Impl();
 
 public:
-    SvxLineEndDefTabPage( Window* pParent, const SfxItemSet& rInAttrs );
+    SvxLineEndDefTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxLineEndDefTabPage();
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 

@@ -48,7 +48,7 @@ namespace sd {
  * Constructor of tab dialog: append pages to the dialog
  */
 OutlineBulletDlg::OutlineBulletDlg(
-    ::Window* pParent,
+    vcl::Window* pParent,
     const SfxItemSet* pAttr,
     ::sd::View* pView )
     : SfxTabDialog( pParent, "BulletsAndNumberingDialog",

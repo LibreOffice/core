@@ -35,7 +35,7 @@
 //!         Parent-Window fuer Dialoge
 //!         Problem: OLE Server!
 
-Window* ScTabViewShell::GetDialogParent()
+vcl::Window* ScTabViewShell::GetDialogParent()
 {
     //  if a ref-input dialog is open, use it as parent
     //  (necessary when a slot is executed from the dialog's OK handler)
@@ -47,7 +47,7 @@ Window* ScTabViewShell::GetDialogParent()
             SfxChildWindow* pChild = pViewFrm->GetChildWindow(nCurRefDlgId);
             if (pChild)
             {
-                Window* pWin = pChild->GetWindow();
+                vcl::Window* pWin = pChild->GetWindow();
                 if (pWin && pWin->IsVisible())
                     return pWin;
             }

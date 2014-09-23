@@ -362,7 +362,7 @@ void DeInitVCL()
     long nBadTopWindows = nTopWindowCount;
     for( long i = 0; i < nTopWindowCount; i++ )
     {
-        Window* pWin = Application::GetTopWindow( i );
+        vcl::Window* pWin = Application::GetTopWindow( i );
         // default window will be destroyed further down
         // but may still be useful during deinit up to that point
         if( pWin == pSVData->mpDefaultWin )

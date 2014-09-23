@@ -108,7 +108,7 @@ class SmElementsControl : public Control
     void build();
 
 public:
-    SmElementsControl(Window *pParent, const ResId& rResId);
+    SmElementsControl(vcl::Window *pParent, const ResId& rResId);
     virtual ~SmElementsControl();
 
     void setElementSetId(sal_uInt16 aSetId);
@@ -138,7 +138,7 @@ public:
 
     SmElementsDockingWindow( SfxBindings* pBindings,
                              SfxChildWindow* pChildWindow,
-                             Window* pParent );
+                             vcl::Window* pParent );
     virtual ~SmElementsDockingWindow();
 
     virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode) SAL_OVERRIDE;
@@ -150,7 +150,7 @@ class SmElementsDockingWindowWrapper : public SfxChildWindow
     SFX_DECL_CHILDWINDOW_WITHID(SmElementsDockingWindowWrapper);
 
 protected:
-    SmElementsDockingWindowWrapper( Window* pParentWindow,
+    SmElementsDockingWindowWrapper( vcl::Window* pParentWindow,
                                     sal_uInt16 nId,
                                     SfxBindings* pBindings,
                                     SfxChildWinInfo* pInfo );

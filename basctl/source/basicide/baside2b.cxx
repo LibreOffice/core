@@ -229,7 +229,7 @@ private:
     sal_uLong nCurState;
 };
 
-EditorWindow::EditorWindow (Window* pParent, ModulWindow* pModulWindow) :
+EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     Window(pParent, WB_BORDER),
     pEditView(0),
     pEditEngine(0),
@@ -1355,7 +1355,7 @@ void EditorWindow::ForceSyntaxTimeout()
 
 
 
-BreakPointWindow::BreakPointWindow (Window* pParent, ModulWindow* pModulWindow)
+BreakPointWindow::BreakPointWindow (vcl::Window* pParent, ModulWindow* pModulWindow)
     : Window(pParent, WB_BORDER)
     , rModulWindow(*pModulWindow)
     , nCurYOffset(0) // memorize nCurYOffset and not take it from EditEngine
@@ -2119,7 +2119,7 @@ EditorWindow::GetComponentInterface(bool bCreate)
 
 
 
-WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
+WatchTreeListBox::WatchTreeListBox( vcl::Window* pParent, WinBits nWinBits )
     : SvHeaderTabListBox( pParent, nWinBits )
 {}
 

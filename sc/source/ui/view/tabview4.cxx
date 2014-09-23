@@ -67,7 +67,7 @@ void ScTabView::ShowRefTip()
             aHelp = aHelp.replaceFirst("%2", OUString::number(nCols) );
 
             ScSplitPos eWhich = aViewData.GetActivePart();
-            Window* pWin = pGridWin[eWhich];
+            vcl::Window* pWin = pGridWin[eWhich];
             if ( pWin )
             {
                 Point aStart = aViewData.GetScrPos( nStartX, nStartY, eWhich );
@@ -245,7 +245,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
     //  Tip-Hilfe fuer Auto-Fill
     if ( aViewData.GetRefType() == SC_REFTYPE_FILL && Help::IsQuickHelpEnabled() )
     {
-        Window* pWin = GetActiveWin();
+        vcl::Window* pWin = GetActiveWin();
         if ( pWin )
         {
             OUString aHelpStr;

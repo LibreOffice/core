@@ -30,7 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
-FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuPoor::FuPoor(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     pView(pViewP),
     pViewShell(pViewSh),

@@ -60,7 +60,7 @@ static bool bLastRelative = false;
 //dialog to this one, except with a different preview window impl.
 //TODO, determine if SwNumPositionTabPage and SvxNumPositionTabPage can be
 //merged
-SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
+SwNumPositionTabPage::SwNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OutlinePositionPage",
         "modules/swriter/ui/outlinepositionpage.ui", &rSet)
@@ -512,7 +512,7 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_pIndentAtMF->Show( bLabelAlignmentPosAndSpaceModeActive );
 }
 
-SfxTabPage* SwNumPositionTabPage::Create( Window* pParent,
+SfxTabPage* SwNumPositionTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SwNumPositionTabPage(pParent, *rAttrSet);
@@ -913,7 +913,7 @@ void SwNumPositionTabPage::SetModified(bool bRepaint)
 }
 #endif
 
-SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
+SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet, SwWrtShell & rSh)
     : SfxTabDialog(pParent, "BulletsAndNumberingDialog",
         "modules/swriter/ui/bulletsandnumbering.ui",

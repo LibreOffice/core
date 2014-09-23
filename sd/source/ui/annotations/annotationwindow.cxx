@@ -265,7 +265,7 @@ Selection AnnotationTextWindow::GetSurroundingTextSelection() const
 
 /************** AnnotationWindow***********************************++*/
 
-AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, Window* pParent )
+AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent )
 : FloatingWindow(pParent, WB_SYSTEMWINDOW|WB_BORDER|WB_NEEDSFOCUS)
 , mrManager( rManager )
 , mpDocShell( pDocShell )
@@ -724,7 +724,7 @@ void AnnotationWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         // context menu
         Rectangle aRect(LogicToPixel(maRectMetaButton.BottomLeft()),LogicToPixel(maRectMetaButton.BottomLeft()));
-        mrManager.ExecuteAnnotationContextMenu( mxAnnotation, (::Window*)this, aRect, true );
+        mrManager.ExecuteAnnotationContextMenu( mxAnnotation, (vcl::Window*)this, aRect, true );
     }
 }
 

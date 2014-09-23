@@ -26,7 +26,7 @@
 
 class Point;
 class Rectangle;
-class Window;
+namespace vcl { class Window; }
 
 
 // - Help-Types -
@@ -59,9 +59,9 @@ public:
                         Help();
     virtual             ~Help();
 
-    virtual bool    Start( const OUString& rHelpId, const Window* pWindow );
+    virtual bool    Start( const OUString& rHelpId, const vcl::Window* pWindow );
     virtual bool    SearchKeyword( const OUString& rKeyWord );
-    virtual OUString    GetHelpText( const OUString& aHelpURL, const Window* pWindow );
+    virtual OUString    GetHelpText( const OUString& aHelpURL, const vcl::Window* pWindow );
 
     static void         EnableContextHelp();
     static void         DisableContextHelp();
@@ -76,10 +76,10 @@ public:
     static void         EnableBalloonHelp();
     static void         DisableBalloonHelp();
     static bool     IsBalloonHelpEnabled();
-    static bool     ShowBalloon( Window* pParent,
+    static bool     ShowBalloon( vcl::Window* pParent,
                                      const Point& rScreenPos,
                                      const OUString& rHelpText );
-    static bool     ShowBalloon( Window* pParent,
+    static bool     ShowBalloon( vcl::Window* pParent,
                                      const Point& rScreenPos,
                                      const Rectangle&,
                                      const OUString& rHelpText );
@@ -87,12 +87,12 @@ public:
     static void         EnableQuickHelp();
     static void         DisableQuickHelp();
     static bool     IsQuickHelpEnabled();
-    static bool     ShowQuickHelp( Window* pParent,
+    static bool     ShowQuickHelp( vcl::Window* pParent,
                                        const Rectangle& rScreenRect,
                                        const OUString& rHelpText,
                                        const OUString& rLongHelpText,
                                        sal_uInt16 nStyle = 0 );
-    static bool     ShowQuickHelp( Window* pParent,
+    static bool     ShowQuickHelp( vcl::Window* pParent,
                                        const Rectangle& rScreenRect,
                                        const OUString& rHelpText,
                                        sal_uInt16 nStyle = 0 )
@@ -100,11 +100,11 @@ public:
 
     static void         HideBalloonAndQuickHelp();
 
-    static sal_uLong    ShowTip( Window* pParent,
+    static sal_uLong    ShowTip( vcl::Window* pParent,
                                  const Rectangle& rScreenRect,
                                  const OUString& rText, sal_uInt16 nStyle = 0 );
     static void         UpdateTip( sal_uLong nId,
-                                   Window* pParent,
+                                   vcl::Window* pParent,
                                    const Rectangle& rScreenRect,
                                    const OUString& rText );
     static void         HideTip( sal_uLong nId );

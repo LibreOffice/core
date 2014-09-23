@@ -88,7 +88,7 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
 
             VCLXWindow* pvclwindow =
                 dynamic_cast<VCLXWindow*>(m_xAccessible.get());
-            Window* window = pvclwindow->GetWindow();
+            vcl::Window* window = pvclwindow->GetWindow();
             const SystemEnvData* systemdata=window->GetSystemData();
 
             //add this child

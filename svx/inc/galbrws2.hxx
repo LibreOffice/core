@@ -152,7 +152,7 @@ public:
 
 public:
 
-                        GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery* pGallery );
+                        GalleryBrowser2( vcl::Window* pParent, const ResId& rResId, Gallery* pGallery );
                         virtual ~GalleryBrowser2();
 
     void                SelectTheme( const OUString& rThemeName );
@@ -160,7 +160,7 @@ public:
     GalleryBrowserMode  GetMode() const { return meMode; }
     void                SetMode( GalleryBrowserMode eMode );
 
-    Window*             GetViewWindow() const;
+    vcl::Window*             GetViewWindow() const;
 
     void                Travel( GalleryBrowserTravel eTravel );
 
@@ -170,10 +170,10 @@ public:
 
     sal_Int8            AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );
     sal_Int8            ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
-    void                StartDrag( Window* pWindow, const Point* pDragPoint = NULL );
-    void                TogglePreview( Window* pWindow, const Point* pPreviewPoint = NULL );
-    void                ShowContextMenu( Window* pWindow, const Point* pContextPoint = NULL );
-    bool                KeyInput( const KeyEvent& rEvt, Window* pWindow );
+    void                StartDrag( vcl::Window* pWindow, const Point* pDragPoint = NULL );
+    void                TogglePreview( vcl::Window* pWindow, const Point* pPreviewPoint = NULL );
+    void                ShowContextMenu( vcl::Window* pWindow, const Point* pContextPoint = NULL );
+    bool                KeyInput( const KeyEvent& rEvt, vcl::Window* pWindow );
 
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > GetFrame() const;
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > GetUNOContext() const { return m_xContext; }

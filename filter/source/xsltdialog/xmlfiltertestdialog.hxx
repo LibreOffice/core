@@ -34,7 +34,7 @@ class filter_info_impl;
 class XMLFilterTestDialog : public ModalDialog
 {
 public:
-    XMLFilterTestDialog(Window* pParent,
+    XMLFilterTestDialog(vcl::Window* pParent,
         const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterTestDialog();
 

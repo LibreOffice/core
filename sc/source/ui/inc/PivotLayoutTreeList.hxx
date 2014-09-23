@@ -16,7 +16,7 @@
 class ScPivotLayoutTreeList : public ScPivotLayoutTreeListBase
 {
 public:
-    ScPivotLayoutTreeList(Window* pParent, WinBits nBits);
+    ScPivotLayoutTreeList(vcl::Window* pParent, WinBits nBits);
     virtual ~ScPivotLayoutTreeList();
     virtual bool DoubleClickHdl() SAL_OVERRIDE;
 

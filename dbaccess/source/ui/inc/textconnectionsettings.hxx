@@ -37,7 +37,7 @@ namespace dbaui
     class TextConnectionSettingsDialog : public ModalDialog
     {
     public:
-        TextConnectionSettingsDialog( Window* _pParent, SfxItemSet& _rItems );
+        TextConnectionSettingsDialog( vcl::Window* _pParent, SfxItemSet& _rItems );
         virtual ~TextConnectionSettingsDialog();
 
         /** initializes a set of PropertyStorage instaces, which are bound to

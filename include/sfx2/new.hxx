@@ -56,7 +56,7 @@ private:
 
 public:
 
-    SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags = 0);
+    SfxNewFileDialog(vcl::Window *pParent, sal_uInt16 nFlags = 0);
     virtual ~SfxNewFileDialog();
 
     // Returns false, when '- No -' is set as Template

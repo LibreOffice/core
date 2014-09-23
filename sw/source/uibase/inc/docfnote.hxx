@@ -36,7 +36,7 @@ class SwFootNoteOptionDlg :public SfxTabDialog
     DECL_LINK( OkHdl, Button * );
 
 public:
-    SwFootNoteOptionDlg(Window *pParent, SwWrtShell &rSh );
+    SwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh );
 };
 
 #endif

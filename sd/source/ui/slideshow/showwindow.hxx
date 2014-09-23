@@ -49,7 +49,7 @@ class ShowWindow
 {
 
 public:
-    ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, ::Window* pParent );
+    ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, vcl::Window* pParent );
     virtual ~ShowWindow (void);
 
     bool         SetEndMode();

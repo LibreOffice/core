@@ -24,7 +24,7 @@
 #include <vcl/msgbox.hxx>
 class SwLabFmtPage;
 
-class SwLabPreview : public Window
+class SwLabPreview : public vcl::Window
 {
     Color aGrayColor;
 
@@ -61,7 +61,7 @@ class SwLabPreview : public Window
 
 public:
 
-    SwLabPreview(Window* pParent);
+    SwLabPreview(vcl::Window* pParent);
 
     void UpdateItem(const SwLabItem& rItem);
 };
@@ -88,7 +88,7 @@ class SwLabFmtPage : public SfxTabPage
 
     SwLabItem    aItem;
 
-     SwLabFmtPage(Window* pParent, const SfxItemSet& rSet);
+     SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwLabFmtPage();
 
     DECL_LINK(ModifyHdl, void *);
@@ -103,7 +103,7 @@ class SwLabFmtPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rSet);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;

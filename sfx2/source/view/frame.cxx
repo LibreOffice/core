@@ -858,7 +858,7 @@ void SfxFrame::GrabFocusOnComponent_Impl()
         return;
     }
 
-    Window* pFocusWindow = &GetWindow();
+    vcl::Window* pFocusWindow = &GetWindow();
     if ( GetCurrentViewFrame() && GetCurrentViewFrame()->GetViewShell() && GetCurrentViewFrame()->GetViewShell()->GetWindow() )
         pFocusWindow = GetCurrentViewFrame()->GetViewShell()->GetWindow();
 

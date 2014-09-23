@@ -26,11 +26,11 @@
 struct SystemEnvData;
 struct SystemWindowData;
 
-class VCL_DLLPUBLIC SystemChildWindow : public Window
+class VCL_DLLPUBLIC SystemChildWindow : public vcl::Window
 {
 private:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void     ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow = false );
+    SAL_DLLPRIVATE void     ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow = false );
     SAL_DLLPRIVATE void     ImplTestJavaException( void* pEnv );
 
     // Copy assignment is forbidden and not implemented.
@@ -38,9 +38,9 @@ private:
     SAL_DLLPRIVATE          SystemChildWindow & operator= (const SystemChildWindow &);
 
 public:
-    explicit                SystemChildWindow( Window* pParent, WinBits nStyle = 0 );
+    explicit                SystemChildWindow( vcl::Window* pParent, WinBits nStyle = 0 );
                             // create a SystemChildWindow using the given SystemWindowData
-    explicit                SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow = true );
+    explicit                SystemChildWindow( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow = true );
     virtual                 ~SystemChildWindow();
 
     const SystemEnvData*    GetSystemData() const;

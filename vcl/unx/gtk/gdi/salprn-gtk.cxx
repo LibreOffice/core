@@ -412,7 +412,7 @@ GtkPrintDialog::impl_initDialog()
     //To-Do, like fpicker, set UI language
     m_pDialog = m_pWrapper->print_unix_dialog_new(NULL, NULL);
 
-    Window* const pTopWindow(Application::GetActiveTopWindow());
+    vcl::Window* const pTopWindow(Application::GetActiveTopWindow());
     if (pTopWindow)
     {
         GtkSalFrame* const pFrame(dynamic_cast<GtkSalFrame*>(pTopWindow->ImplGetFrame()));

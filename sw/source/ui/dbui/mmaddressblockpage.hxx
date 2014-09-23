@@ -104,7 +104,7 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
     using Window::SetSettings;
 
 public:
-    SwSelectAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig);
+    SwSelectAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig);
     virtual ~SwSelectAddressBlockDialog();
 
     void    SetAddressBlocks(const com::sun::star::uno::Sequence< OUString>& rBlocks,
@@ -121,7 +121,7 @@ class DDListBox : public SvTreeListBox
 {
     SwCustomizeAddressBlockDialog*   m_pParentDialog;
 public:
-    DDListBox(Window* pParent, const WinBits nStyle);
+    DDListBox(vcl::Window* pParent, const WinBits nStyle);
 
     void SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
 
@@ -145,7 +145,7 @@ class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
 protected:
     bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
-    AddressMultiLineEdit(Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER);
+    AddressMultiLineEdit(vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER);
     virtual ~AddressMultiLineEdit();
 
     void            SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
@@ -226,7 +226,7 @@ private:
     void            UpdateImageButtons_Impl();
 
 public:
-    SwCustomizeAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
+    SwCustomizeAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
     virtual ~SwCustomizeAddressBlockDialog();
 
     void            SetAddress(const OUString& rAddress);
@@ -255,7 +255,7 @@ class SwAssignFieldsDialog : public SfxModalDialog
     DECL_LINK(AssignmentModifyHdl_Impl, void*);
 
 public:
-    SwAssignFieldsDialog(Window* pParent,
+    SwAssignFieldsDialog(vcl::Window* pParent,
                 SwMailMergeConfigItem& rConfigItem,
                 const OUString& rPreview,
                 bool bIsAddressBlock);

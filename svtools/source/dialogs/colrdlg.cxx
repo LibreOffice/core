@@ -39,7 +39,7 @@ using namespace ::com::sun::star::ui::dialogs;
 // - ColorDialog -
 
 
-SvColorDialog::SvColorDialog( Window* pWindow )
+SvColorDialog::SvColorDialog( vcl::Window* pWindow )
 : mpParent( pWindow )
 , meMode( svtools::ColorPickerMode_SELECT )
 {

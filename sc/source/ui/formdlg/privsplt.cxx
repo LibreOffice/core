@@ -34,7 +34,7 @@
 #*
 #************************************************************************/
 
-ScPrivatSplit::ScPrivatSplit(Window* pParent, const ResId& rResId,
+ScPrivatSplit::ScPrivatSplit(vcl::Window* pParent, const ResId& rResId,
                              SC_SPLIT_DIRECTION eSplit)
     : Control(pParent, rResId)
     , nDeltaX(0)

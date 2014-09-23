@@ -28,7 +28,7 @@
 class SVT_DLLPUBLIC FixedInfo : public FixedText
 {
 public:
-    FixedInfo( Window* pParent, const ResId& rResId );
+    FixedInfo( vcl::Window* pParent, const ResId& rResId );
 };
 
 #endif // INCLUDED_SVTOOLS_STDCTRL_HXX

@@ -48,7 +48,7 @@ struct BaseLink_Impl
 {
     Link                m_aEndEditLink;
     LinkManager*      m_pLinkMgr;
-    Window*             m_pParentWin;
+    vcl::Window*             m_pParentWin;
     FileDialogHelper*   m_pFileDlg;
     bool                m_bIsConnect;
 
@@ -435,7 +435,7 @@ SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const ::com:
     return SUCCESS;
 }
 
-void SvBaseLink::Edit( Window* pParent, const Link& rEndEditHdl )
+void SvBaseLink::Edit( vcl::Window* pParent, const Link& rEndEditHdl )
 {
     pImpl->m_pParentWin = pParent;
     pImpl->m_aEndEditLink = rEndEditHdl;

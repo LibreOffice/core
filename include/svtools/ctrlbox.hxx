@@ -155,9 +155,9 @@ class SVT_DLLPUBLIC ColorListBox : public ListBox
     SVT_DLLPRIVATE void         ImplDestroyColorEntries();
 
 public:
-                    ColorListBox( Window* pParent,
+                    ColorListBox( vcl::Window* pParent,
                                   WinBits nWinStyle = WB_BORDER );
-                    ColorListBox( Window* pParent, const ResId& rResId );
+                    ColorListBox( vcl::Window* pParent, const ResId& rResId );
     virtual         ~ColorListBox();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
@@ -302,7 +302,7 @@ public:
     typedef Color (*ColorFunc)(Color);
     typedef Color (*ColorDistFunc)(Color, Color);
 
-                    LineListBox( Window* pParent, WinBits nWinStyle = WB_BORDER );
+                    LineListBox( vcl::Window* pParent, WinBits nWinStyle = WB_BORDER );
     virtual         ~LineListBox();
 
     /** Set the width in Twips */
@@ -404,7 +404,7 @@ protected:
     void            LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep = ';' );
     void            SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep = ';' ) const;
 public:
-                    FontNameBox( Window* pParent,
+                    FontNameBox( vcl::Window* pParent,
                                  WinBits nWinStyle = WB_SORT );
     virtual         ~FontNameBox();
 
@@ -432,7 +432,7 @@ class SVT_DLLPUBLIC FontStyleBox : public ComboBox
 private:
     using ComboBox::SetText;
 public:
-    FontStyleBox( Window* pParent, WinBits nBits );
+    FontStyleBox( vcl::Window* pParent, WinBits nBits );
     virtual         ~FontStyleBox();
 
     virtual void    Select() SAL_OVERRIDE;
@@ -477,7 +477,7 @@ protected:
     virtual OUString CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
 
 public:
-                    FontSizeBox( Window* pParent, WinBits nWinStyle = 0 );
+                    FontSizeBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
     virtual         ~FontSizeBox();
 
     void            Reformat() SAL_OVERRIDE;

@@ -24,7 +24,7 @@
 #include <vcl/button.hxx>
 #include <sfx2/tabdlg.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class SfxItemSet;
 
 
@@ -59,12 +59,12 @@ private:
     sal_Int32               GetTransliterationFlags_Impl();
 
 protected:
-                        SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet );
+                        SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
 public:
                         virtual ~SvxJSearchOptionsPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

@@ -47,11 +47,11 @@ class SVT_DLLPUBLIC ToolbarMenu : public DockingWindow
     friend struct ToolbarMenu_Impl;
 public:
                     ToolbarMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                 Window* pParentWindow,
+                                 vcl::Window* pParentWindow,
                                  WinBits nBits );
 
                     ToolbarMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                 Window* pParentWindow,
+                                 vcl::Window* pParentWindow,
                                  const ResId& rResId );
 
                     virtual ~ToolbarMenu();

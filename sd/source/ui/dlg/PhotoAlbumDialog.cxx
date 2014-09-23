@@ -37,7 +37,7 @@ namespace sd
 
 OUString SdPhotoAlbumDialog::sDirUrl;
 
-SdPhotoAlbumDialog::SdPhotoAlbumDialog(Window* pWindow, SdDrawDocument* pActDoc)
+SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pActDoc)
 : ModalDialog(pWindow, "PhotoAlbumCreatorDialog", "modules/simpress/ui/photoalbum.ui"),
   pDoc(pActDoc)
 {

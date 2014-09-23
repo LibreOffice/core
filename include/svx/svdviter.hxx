@@ -34,7 +34,7 @@ Using this class, you can find out:
   - All PageViews in which a model is displayed
   - All PageViews in which a certain page is visible (also as MasterPage)
   - All PageViews in which a certain object is visible (also as MasterPage)
-- Window* First/NextWindow()
+- vcl::Window* First/NextWindow()
   - All Windows in which a model is displayed
   - All Windows in which a certain page is visible (also as MasterPage)
   - All Windows in which a certain object is visible (also as MasterPage)
@@ -53,7 +53,7 @@ Not considered are:
 */
 
 class OutputDevice;
-class Window;
+namespace vcl { class Window; }
 class SdrView;
 class SdrPageView;
 class SdrModel;

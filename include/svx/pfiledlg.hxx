@@ -36,7 +36,7 @@ private:
 public:
     // with nKind = SID_INSERT_SOUND    or
     //      nKind = SID_INSERT_VIDEO
-    SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind );
+    SvxPluginFileDlg (vcl::Window *pParent, sal_uInt16 nKind );
     ~SvxPluginFileDlg ();
 
     ErrCode                  Execute();

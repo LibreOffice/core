@@ -20,6 +20,8 @@
 #include <vcl/window.hxx>
 #include <vcl/outdev.hxx>
 
+namespace vcl {
+
 void Window::EnableRTL ( bool bEnable )
 {
     StateChanged( STATE_CHANGE_MIRRORING );
@@ -31,5 +33,7 @@ bool Window::HasMirroredGraphics() const
     const OutputDevice* pOutDev = GetOutDev();
     return pOutDev->OutputDevice::HasMirroredGraphics();
 }
+
+} /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

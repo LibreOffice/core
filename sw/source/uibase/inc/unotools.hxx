@@ -39,7 +39,7 @@ class SwFrmCtrlWindow : public VclEventBox
 {
     SwOneExampleFrame* pExampleFrame;
 public:
-    SwFrmCtrlWindow(Window* pParent, SwOneExampleFrame* pFrame);
+    SwFrmCtrlWindow(vcl::Window* pParent, SwOneExampleFrame* pFrame);
 
     virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwOneExampleFrame
     SAL_DLLPRIVATE void  DisposeControl();
 
 public:
-    SwOneExampleFrame(Window& rWin,
+    SwOneExampleFrame(vcl::Window& rWin,
                     sal_uInt32 nStyleFlags = EX_SHOW_ONLINE_LAYOUT,
                     const Link* pInitalizedLink = 0,
                     const OUString* pURL = 0);
@@ -113,7 +113,7 @@ public:
 
     void CreatePopup(const Point& rPt);
 
-    static void     CreateErrorMessage(Window* pParent);
+    static void     CreateErrorMessage(vcl::Window* pParent);
 };
 
 #endif

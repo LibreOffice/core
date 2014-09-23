@@ -40,7 +40,7 @@
 class GalleryTheme;
 class GalleryBrowser2;
 
-class SVX_DLLPUBLIC GalleryPreview : public Window, public DropTargetHelper, public DragSourceHelper
+class SVX_DLLPUBLIC GalleryPreview : public vcl::Window, public DropTargetHelper, public DragSourceHelper
 {
 private:
 
@@ -71,7 +71,7 @@ private:
 
 public:
 
-    GalleryPreview(Window* pParent,
+    GalleryPreview(vcl::Window* pParent,
         WinBits nStyle = WB_TABSTOP | WB_BORDER,
         GalleryTheme* pTheme = NULL);
 

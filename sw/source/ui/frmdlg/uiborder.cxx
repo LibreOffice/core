@@ -29,7 +29,7 @@
 #include "uiborder.hxx"
 #include "frmui.hrc"
 
-SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
+SwBorderDlg::SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
     SfxSingleTabDialog(pParent, rSet)
 
 {

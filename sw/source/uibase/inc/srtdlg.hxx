@@ -83,7 +83,7 @@ class SwSortDlg : public SvxStandardDialog
     DECL_LINK(DelimCharHdl, void *);
 
 public:
-    SwSortDlg(Window * pParent, SwWrtShell &rSh);
+    SwSortDlg(vcl::Window * pParent, SwWrtShell &rSh);
     virtual ~SwSortDlg();
 };
 

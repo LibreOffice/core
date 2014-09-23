@@ -318,7 +318,7 @@ namespace cairo
         return SurfaceSharedPtr(new X11Surface(rSurface));
     }
 
-    static X11SysData getSysData( const Window& rWindow )
+    static X11SysData getSysData( const vcl::Window& rWindow )
     {
         const SystemEnvData* pSysData = GetSysData(&rWindow);
 
@@ -337,7 +337,7 @@ namespace cairo
                                     int x, int y, int width, int height )
     {
         if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-            return SurfaceSharedPtr(new X11Surface(getSysData((const Window&)rRefDevice),
+            return SurfaceSharedPtr(new X11Surface(getSysData((const vcl::Window&)rRefDevice),
                                                    x,y,width,height));
         else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
             return SurfaceSharedPtr(new X11Surface(getSysData((const VirtualDevice&)rRefDevice),
@@ -355,7 +355,7 @@ namespace cairo
         if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
         {
             if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-                return SurfaceSharedPtr(new X11Surface(getSysData((const Window&)rRefDevice), rData ));
+                return SurfaceSharedPtr(new X11Surface(getSysData((const vcl::Window&)rRefDevice), rData ));
             else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
                 return SurfaceSharedPtr(new X11Surface(getSysData((const VirtualDevice&)rRefDevice), rData ));
         }

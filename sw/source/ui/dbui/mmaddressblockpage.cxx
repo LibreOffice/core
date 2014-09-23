@@ -297,7 +297,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
 }
 
 SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
-                Window* pParent, SwMailMergeConfigItem& rConfig)
+                vcl::Window* pParent, SwMailMergeConfigItem& rConfig)
     : SfxModalDialog(pParent, "SelectBlockDialog",
         "modules/swriter/ui/selectblockdialog.ui")
     , m_rConfig(rConfig)
@@ -452,7 +452,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, IncludeHdl_Impl, RadioButton*, pButton)
 #define USER_DATA_NONE              -4
 
 SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
-        Window* pParent, SwMailMergeConfigItem& rConfig, DialogType eType)
+        vcl::Window* pParent, SwMailMergeConfigItem& rConfig, DialogType eType)
     : SfxModalDialog(pParent, "AddressBlockDialog",
         "modules/swriter/ui/addressblockdialog.ui")
     , m_aTextFilter("<>")
@@ -771,7 +771,7 @@ class SwAssignFieldsControl : public Control
 
     void                MakeVisible( sal_Int32 nIndex );
 public:
-    SwAssignFieldsControl(Window* pParent, WinBits nBits);
+    SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits);
     virtual ~SwAssignFieldsControl();
 
     void        Init(SwMailMergeConfigItem& rConfigItem);
@@ -784,12 +784,12 @@ public:
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwAssignFieldsControl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAssignFieldsControl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwAssignFieldsControl(pParent, WB_BORDER);
 }
 
-SwAssignFieldsControl::SwAssignFieldsControl(Window* pParent, WinBits nBits) :
+SwAssignFieldsControl::SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits) :
     Control(pParent, nBits | WB_DIALOGCONTROL | WB_TABSTOP | WB_DIALOGCONTROL),
     m_aVScroll(this),
     m_aHeaderHB(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
@@ -1104,7 +1104,7 @@ IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, ListBox*, pBox)
 }
 
 SwAssignFieldsDialog::SwAssignFieldsDialog(
-        Window* pParent, SwMailMergeConfigItem& rConfigItem,
+        vcl::Window* pParent, SwMailMergeConfigItem& rConfigItem,
         const OUString& rPreview,
         bool bIsAddressBlock) :
     SfxModalDialog(pParent, "AssignFieldsDialog", "modules/swriter/ui/assignfieldsdialog.ui"),
@@ -1187,7 +1187,7 @@ IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl)
     return 0;
 }
 
-DDListBox::DDListBox(Window* pParent, WinBits nStyle)
+DDListBox::DDListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
     , m_pParentDialog(NULL)
 {
@@ -1202,7 +1202,7 @@ DDListBox::DDListBox(Window* pParent, WinBits nStyle)
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDDListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDDListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1237,7 +1237,7 @@ void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
     }
 }
 
-AddressMultiLineEdit::AddressMultiLineEdit(Window* pParent, WinBits nBits)
+AddressMultiLineEdit::AddressMultiLineEdit(vcl::Window* pParent, WinBits nBits)
     : VclMultiLineEdit(pParent, nBits)
     , m_pParentDialog(NULL)
 {
@@ -1251,7 +1251,7 @@ Size AddressMultiLineEdit::GetOptimalSize() const
     return LogicToPixel(Size(160, 60), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeAddressMultiLineEdit(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeAddressMultiLineEdit(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

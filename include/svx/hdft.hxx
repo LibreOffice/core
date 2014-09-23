@@ -31,7 +31,7 @@
 
 namespace svx
 {
-    SVX_DLLPUBLIC bool ShowBorderBackgroundDlg( Window* pParent, SfxItemSet* pBBSet,
+    SVX_DLLPUBLIC bool ShowBorderBackgroundDlg( vcl::Window* pParent, SfxItemSet* pBBSet,
             bool bEnableBackgroundSelector );
 }
 
@@ -65,7 +65,7 @@ protected:
     virtual void    ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int     DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
-    SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId );
+    SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId );
 
     FixedText*       m_pPageLbl;
     CheckBox*        m_pTurnOnBox;
@@ -110,11 +110,11 @@ private:
 class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
 private:
-    SvxHeaderPage( Window* pParent, const SfxItemSet& rSet );
+    SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 // class SvxFooterPage ---------------------------------------------------
@@ -122,17 +122,17 @@ private:
 class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
 private:
-    SVX_DLLPRIVATE SvxFooterPage(   Window* pParent, const SfxItemSet& rSet );
+    SVX_DLLPRIVATE SvxFooterPage(   vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 class SVX_DLLPUBLIC DeleteHeaderDialog : public MessageDialog
 {
 public:
-    DeleteHeaderDialog(Window *pParent)
+    DeleteHeaderDialog(vcl::Window *pParent)
         : MessageDialog(pParent, "DeleteHeaderDialog",
             "svx/ui/deleteheaderdialog.ui")
     {
@@ -142,7 +142,7 @@ public:
 class SVX_DLLPUBLIC DeleteFooterDialog : public MessageDialog
 {
 public:
-    DeleteFooterDialog(Window *pParent)
+    DeleteFooterDialog(vcl::Window *pParent)
         : MessageDialog(pParent, "DeleteFooterDialog",
             "svx/ui/deletefooterdialog.ui")
     {

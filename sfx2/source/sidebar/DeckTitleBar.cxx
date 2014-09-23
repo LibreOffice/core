@@ -37,7 +37,7 @@ static const sal_Int32 gaRightGripPadding (3);
 
 DeckTitleBar::DeckTitleBar (
     const ::rtl::OUString& rsTitle,
-    Window* pParentWindow,
+    vcl::Window* pParentWindow,
     const ::boost::function<void(void)>& rCloserAction)
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
       mnCloserItemIndex(1),

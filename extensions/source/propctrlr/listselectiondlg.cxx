@@ -29,7 +29,7 @@ namespace pcr
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
-    ListSelectionDialog::ListSelectionDialog(Window* _pParent, const Reference< XPropertySet >& _rxListBox,
+    ListSelectionDialog::ListSelectionDialog(vcl::Window* _pParent, const Reference< XPropertySet >& _rxListBox,
             const OUString& _rPropertyName, const OUString& _rPropertyUIName)
         : ModalDialog( _pParent, "ListSelectDialog", "modules/spropctrlr/ui/listselectdialog.ui" )
         ,m_xListBox     ( _rxListBox     )

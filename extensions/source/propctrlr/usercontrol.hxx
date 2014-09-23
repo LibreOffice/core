@@ -41,7 +41,7 @@ namespace pcr
         typedef ControlWindow< FormattedField > BaseClass;
 
     public:
-        NumberFormatSampleField( Window* _pParent, WinBits _nStyle )
+        NumberFormatSampleField( vcl::Window* _pParent, WinBits _nStyle )
             :BaseClass( _pParent, _nStyle )
         {
         }
@@ -59,7 +59,7 @@ namespace pcr
     class OFormatSampleControl : public OFormatSampleControl_Base
     {
     public:
-        OFormatSampleControl( Window* pParent, WinBits nWinStyle );
+        OFormatSampleControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -102,7 +102,7 @@ namespace pcr
         sal_Int32   m_nLastDecimalDigits;
 
     public:
-        OFormattedNumericControl( Window* pParent, WinBits nWinStyle = WB_TABSTOP);
+        OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP);
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -128,7 +128,7 @@ namespace pcr
     class OFileUrlControl : public OFileUrlControl_Base
     {
     public:
-        OFileUrlControl( Window* pParent, WinBits nWinStyle );
+        OFileUrlControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -145,7 +145,7 @@ namespace pcr
     class OTimeDurationControl : public ONumericControl
     {
     public:
-        OTimeDurationControl( ::Window* pParent, WinBits nWinStyle );
+        OTimeDurationControl( vcl::Window* pParent, WinBits nWinStyle );
         virtual ~OTimeDurationControl();
 
         // XPropertyControl

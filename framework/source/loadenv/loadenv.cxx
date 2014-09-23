@@ -1463,7 +1463,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (xModified->isModified())
         return css::uno::Reference< css::frame::XFrame >();
 
-    Window* pWindow = VCLUnoHelper::GetWindow(xTask->getContainerWindow());
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xTask->getContainerWindow());
     if (pWindow && pWindow->IsInModalMode())
         return css::uno::Reference< css::frame::XFrame >();
 
@@ -1537,7 +1537,7 @@ void LoadEnv::impl_reactForLoadingState()
         if (bMinimized)
         {
             SolarMutexGuard aSolarGuard;
-            Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+            vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
             // check for system window is necessary to guarantee correct pointer cast!
             if (pWindow && pWindow->IsSystemWindow())
                 ((WorkWindow*)pWindow)->Minimize();
@@ -1645,7 +1645,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     // <- SAFE ----------------------------------
 
     SolarMutexGuard aSolarGuard;
-    Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( pWindow )
     {
         bool const preview( m_lMediaDescriptor.getUnpackedValueOrDefault(
@@ -1691,7 +1691,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     // SOLAR SAFE ->
     SolarMutexClearableGuard aSolarGuard1;
 
-    Window*  pWindow       = VCLUnoHelper::GetWindow(xWindow);
+    vcl::Window*  pWindow       = VCLUnoHelper::GetWindow(xWindow);
     if (!pWindow)
         return;
 
@@ -1755,7 +1755,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
             // But if we get a valid pointer we can be sure, that it's the system window pointer
             // we already checked and used before. Because nobody recycle the same uno reference for
             // a new internal c++ implementation ... hopefully .-))
-            Window* pWindowCheck  = VCLUnoHelper::GetWindow(xWindow);
+            vcl::Window* pWindowCheck  = VCLUnoHelper::GetWindow(xWindow);
             if (! pWindowCheck)
                 return;
 

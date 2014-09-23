@@ -291,7 +291,7 @@ namespace accessibility
 
         const ::Point aRequestedPoint( VCLUnoHelper::ConvertToVCLPoint( i_rPoint ) );
         // check the panel window itself
-        const ::Window& rActivePanelAnchor( m_pImpl->m_pPanelDeck->GetPanelWindowAnchor() );
+        const vcl::Window& rActivePanelAnchor( m_pImpl->m_pPanelDeck->GetPanelWindowAnchor() );
         const Rectangle aPanelAnchorArea( rActivePanelAnchor.GetPosPixel(), rActivePanelAnchor.GetOutputSizePixel() );
         if ( aPanelAnchorArea.IsInside( aRequestedPoint ) )
             // note that this assumes that the Window which actually implements the concrete panel covers

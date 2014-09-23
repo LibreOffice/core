@@ -174,7 +174,7 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
     return pItem1->mnId > pItem2->mnId;
 }
 
-SfxTemplateManagerDlg::SfxTemplateManagerDlg(Window *parent)
+SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     : ModelessDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
       maSelTemplates(cmpSelectionItems),
       maSelFolders(cmpSelectionItems),

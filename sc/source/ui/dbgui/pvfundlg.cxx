@@ -151,13 +151,13 @@ static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
 
 } // namespace
 
-ScDPFunctionListBox::ScDPFunctionListBox(Window* pParent, WinBits nStyle)
+ScDPFunctionListBox::ScDPFunctionListBox(vcl::Window* pParent, WinBits nStyle)
     : ListBox(pParent, nStyle)
 {
     FillFunctionNames();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDPFunctionListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScDPFunctionListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -193,7 +193,7 @@ void ScDPFunctionListBox::FillFunctionNames()
 }
 
 ScDPFunctionDlg::ScDPFunctionDlg(
-        Window* pParent, const ScDPLabelDataVector& rLabelVec,
+        vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
         const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData)
     : ModalDialog(pParent, "DataFieldDialog",
         "modules/scalc/ui/datafielddialog.ui")
@@ -406,7 +406,7 @@ IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl)
     return 0;
 }
 
-ScDPSubtotalDlg::ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
+ScDPSubtotalDlg::ScDPSubtotalDlg( vcl::Window* pParent, ScDPObject& rDPObj,
         const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
         const ScDPNameVec& rDataFields, bool bEnableLayout )
     : ModalDialog(pParent, "PivotFieldDialog",
@@ -507,7 +507,7 @@ IMPL_LINK( ScDPSubtotalDlg, ClickHdl, PushButton*, pBtn )
     return 0;
 }
 
-ScDPSubtotalOptDlg::ScDPSubtotalOptDlg( Window* pParent, ScDPObject& rDPObj,
+ScDPSubtotalOptDlg::ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj,
         const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
         bool bEnableLayout )
     : ModalDialog(pParent, "DataFieldOptionsDialog",
@@ -757,7 +757,7 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )
     return 0;
 }
 
-ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient ) :
+ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient ) :
     ModalDialog     ( pParent, "ShowDetail", "modules/scalc/ui/showdetaildialog.ui" ),
     mrDPObj(rDPObj)
 {

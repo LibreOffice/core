@@ -23,7 +23,7 @@
 
 #define SCROLL_LINE_SIZE 250
 
-SwScrollbar::SwScrollbar( Window *pWin, bool bHoriz ) :
+SwScrollbar::SwScrollbar( vcl::Window *pWin, bool bHoriz ) :
     ScrollBar( pWin,
     WinBits( WB_3DLOOK | WB_HIDE | ( bHoriz ? WB_HSCROLL : WB_VSCROLL)  ) ),
     bHori( bHoriz ),

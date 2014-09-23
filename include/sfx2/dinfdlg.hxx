@@ -217,13 +217,13 @@ private:
     void                ImplCheckPasswordState();
 
 protected:
-    SfxDocumentPage( Window* pParent, const SfxItemSet& );
+    SfxDocumentPage( vcl::Window* pParent, const SfxItemSet& );
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
 
     void                EnableUseUserData();
 };
@@ -240,13 +240,13 @@ private:
     SfxDocumentInfoItem*    m_pInfoItem;
 
 protected:
-    SfxDocumentDescPage( Window* pParent, const SfxItemSet& );
+    SfxDocumentDescPage( vcl::Window* pParent, const SfxItemSet& );
 
     virtual bool            FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet* );
+    static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 // class SfxDocumentInfoDialog -------------------------------------------
@@ -259,7 +259,7 @@ protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage& rPage ) SAL_OVERRIDE;
 
 public:
-    SfxDocumentInfoDialog( Window* pParent, const SfxItemSet& );
+    SfxDocumentInfoDialog( vcl::Window* pParent, const SfxItemSet& );
     void AddFontTabPage();
 };
 
@@ -274,7 +274,7 @@ private:
 
 public:
     inline CustomPropertiesEdit(
-        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+        vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
             Edit( pParent, rResId ), m_pLine( pLine ) {}
 
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
@@ -287,7 +287,7 @@ private:
 
 public:
     inline CustomPropertiesTypeBox(
-        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+        vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
             ListBox( pParent, rResId ), m_pLine( pLine ) {}
 
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
@@ -302,7 +302,7 @@ public:
     ::boost::optional<sal_Int16> m_TZ;
 
     inline CustomPropertiesDateField(
-        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+        vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
             DateField( pParent, rResId ), m_pLine( pLine ) {}
 
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
@@ -316,7 +316,7 @@ public:
     bool m_isUTC;
 
     inline CustomPropertiesTimeField(
-        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+        vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
             TimeField( pParent, rResId ), m_pLine( pLine ), m_isUTC(false) {}
 
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
@@ -328,7 +328,7 @@ class CustomPropertiesDurationField : public Edit
 protected:
     virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
 public:
-    CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
+    CustomPropertiesDurationField( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
     virtual ~CustomPropertiesDurationField();
 
     void SetDuration( const com::sun::star::util::Duration& rDuration );
@@ -340,7 +340,7 @@ class CustomPropertiesEditButton : public PushButton
     CustomPropertyLine*             m_pLine;
 
 public:
-    CustomPropertiesEditButton( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
+    CustomPropertiesEditButton( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
     virtual ~CustomPropertiesEditButton();
 
     DECL_LINK(ClickHdl, void *);
@@ -353,7 +353,7 @@ private:
 
 public:
     inline CustomPropertiesRemoveButton(
-        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+        vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
             ImageButton( pParent, rResId ), m_pLine( pLine ) {}
 
     inline CustomPropertyLine*      GetLine() const { return m_pLine; }
@@ -366,7 +366,7 @@ private:
     RadioButton                     m_aNoButton;
 
 public:
-    CustomPropertiesYesNoButton( Window* pParent, const ResId& rResId );
+    CustomPropertiesYesNoButton( vcl::Window* pParent, const ResId& rResId );
 
     virtual void    Resize() SAL_OVERRIDE;
 
@@ -394,14 +394,14 @@ struct CustomPropertyLine
     bool                            m_bIsRemoved;
     bool                            m_bTypeLostFocus;
 
-    CustomPropertyLine( Window* pParent );
+    CustomPropertyLine( vcl::Window* pParent );
 
     void    SetRemoved();
 };
 
 // class CustomPropertiesWindow ------------------------------------------
 
-class CustomPropertiesWindow : public Window
+class CustomPropertiesWindow : public vcl::Window
 {
 private:
     FixedText*                          m_pHeaderAccName;
@@ -441,7 +441,7 @@ private:
     void        ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox );
 
 public:
-    CustomPropertiesWindow(Window* pParent,
+    CustomPropertiesWindow(vcl::Window* pParent,
         FixedText *pHeaderAccName,
         FixedText *pHeaderAccType,
         FixedText *pHeaderAccValue);
@@ -479,7 +479,7 @@ private:
     DECL_LINK( RemovedHdl, void* );
 
 public:
-    CustomPropertiesControl(Window* pParent);
+    CustomPropertiesControl(vcl::Window* pParent);
     virtual ~CustomPropertiesControl();
 
     void            AddLine( const OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
@@ -505,21 +505,21 @@ private:
     using TabPage::DeactivatePage;
 
 protected:
-    SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& );
+    SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 struct CmisValue : public VclBuilderContainer
 {
     Edit*   m_aValueEdit;
 
-    CmisValue( Window* pParent, const OUString& aStr );
+    CmisValue( vcl::Window* pParent, const OUString& aStr );
 };
 
 struct CmisDateTime : public VclBuilderContainer
@@ -527,7 +527,7 @@ struct CmisDateTime : public VclBuilderContainer
     DateField*  m_aDateField;
     TimeField*  m_aTimeField;
 
-    CmisDateTime( Window* pParent, const ::com::sun::star::util::DateTime& aDateTime );
+    CmisDateTime( vcl::Window* pParent, const ::com::sun::star::util::DateTime& aDateTime );
 };
 
 struct CmisYesNo : public VclBuilderContainer
@@ -535,7 +535,7 @@ struct CmisYesNo : public VclBuilderContainer
     RadioButton* m_aYesButton;
     RadioButton* m_aNoButton;
 
-    CmisYesNo( Window* pParent, bool bValue);
+    CmisYesNo( vcl::Window* pParent, bool bValue);
 };
 
 // struct CmisPropertyLine ---------------------------------------------
@@ -556,7 +556,7 @@ struct CmisPropertyLine : public VclBuilderContainer
     std::vector< CmisYesNo* >     m_aYesNos;
     sal_Int32                     m_nNumValue;
     long getItemHeight() const;
-    CmisPropertyLine( Window* pParent );
+    CmisPropertyLine( vcl::Window* pParent );
     virtual ~CmisPropertyLine();
 };
 
@@ -627,14 +627,14 @@ private:
     DECL_LINK(UpdateHdl, void *);
 
 protected:
-    SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& );
+    SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
 #endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX

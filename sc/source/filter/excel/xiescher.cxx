@@ -1710,7 +1710,7 @@ SdrObject* XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const R
             inserted into the draw page. */
         sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
         MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xEmbObj->getMapUnit( nAspect ) );
-        Size aSize( Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( aUnit ) ) );
+        Size aSize( vcl::Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( aUnit ) ) );
         ::com::sun::star::awt::Size aAwtSize( aSize.Width(), aSize.Height() );
         xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
 

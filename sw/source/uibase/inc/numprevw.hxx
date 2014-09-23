@@ -25,7 +25,7 @@
 class SwNumRule;
 namespace rtl { class OUString; }
 
-class NumberingPreview : public Window
+class NumberingPreview : public vcl::Window
 {
     const SwNumRule*    pActNum;
     vcl::Font           aStdFont;
@@ -38,14 +38,14 @@ class NumberingPreview : public Window
         virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     public:
-        NumberingPreview(Window* pParent, const ResId& rResId)
+        NumberingPreview(vcl::Window* pParent, const ResId& rResId)
         : Window(pParent, rResId),
             pActNum(0),nPageWidth(0), pOutlineNames(0),
             bPosition(false), nActLevel(USHRT_MAX)
         {
         }
 
-        NumberingPreview(Window* pParent)
+        NumberingPreview(vcl::Window* pParent)
             : Window(pParent)
             , pActNum(0),nPageWidth(0), pOutlineNames(0),
             bPosition(false), nActLevel(USHRT_MAX)

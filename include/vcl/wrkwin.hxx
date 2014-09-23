@@ -50,7 +50,7 @@ private:
                     mbFullScreenMode:1;
 
     SAL_DLLPRIVATE void ImplInitWorkWindowData();
-    SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken );
+    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken );
 
 private:
     SAL_DLLPRIVATE              WorkWindow( const WorkWindow& rWin );
@@ -58,12 +58,12 @@ private:
 
 protected:
     explicit        WorkWindow( WindowType nType );
-    SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = NULL );
+    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = NULL );
     SAL_DLLPRIVATE void ImplSetFrameState( sal_uLong aFrameState );
 
 public:
-    explicit        WorkWindow( Window* pParent, WinBits nStyle = WB_STDWORK );
-    explicit        WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
+    explicit        WorkWindow( vcl::Window* pParent, WinBits nStyle = WB_STDWORK );
+    explicit        WorkWindow( vcl::Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
     explicit        WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
     virtual         ~WorkWindow();
 

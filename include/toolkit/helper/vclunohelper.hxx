@@ -60,7 +60,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 #include <tools/fldunit.hxx>
 #include <tools/poly.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class OutputDevice;
 class MouseEvent;
 class KeyEvent;
@@ -79,10 +79,10 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>    CreateBitmap( const BitmapEx& rBitmap );
 
     // Window
-    static Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow );
-    static Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow2 );
-    static Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindowPeer );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>    GetInterface( Window* pWindow );
+    static vcl::Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow );
+    static vcl::Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow2 );
+    static vcl::Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindowPeer );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>    GetInterface( vcl::Window* pWindow );
 
     // OutputDevice
     static OutputDevice*                            GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>& rxDevice );
@@ -112,7 +112,7 @@ public:
     // Rectangle
     static bool                                 IsZero( ::com::sun::star::awt::Rectangle rRect );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>  CreateControlContainer( Window* pWindow );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>  CreateControlContainer( vcl::Window* pWindow );
 
     // MapUnits
     static MapUnit                                  UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit );

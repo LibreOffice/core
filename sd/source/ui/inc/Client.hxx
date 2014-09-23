@@ -42,7 +42,7 @@ class Client : public SfxInPlaceClient
     virtual void    MakeVisible() SAL_OVERRIDE;
 
 public:
-    Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, ::Window* pWindow);
+    Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, vcl::Window* pWindow);
     virtual ~Client (void);
 
     SdrOle2Obj*     GetSdrOle2Obj() const { return pSdrOle2Obj; }

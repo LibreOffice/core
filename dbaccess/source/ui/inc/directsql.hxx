@@ -66,7 +66,7 @@ namespace dbaui
 
     public:
         DirectSQLDialog(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
         virtual ~DirectSQLDialog();
 

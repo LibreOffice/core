@@ -443,7 +443,7 @@ SdrObject* SwXTextView::GetControl(
     SwView* pView2 = GetView();
     FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
     SdrView* pDrawView = pView2 ? pView2->GetDrawView() : NULL;
-    Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
+    vcl::Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
 
     OSL_ENSURE( pFormShell && pDrawView && pWindow, "SwXTextView::GetControl: how could I?" );
 
@@ -469,7 +469,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     SwView* pView2 = GetView();
     FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
     SdrView* pDrawView = pView2 ? pView2->GetDrawView() : NULL;
-    Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
+    vcl::Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
     OSL_ENSURE( pFormShell && pDrawView && pWindow, "SwXTextView::getFormController: how could I?" );
 
     uno::Reference< form::runtime::XFormController > xController;

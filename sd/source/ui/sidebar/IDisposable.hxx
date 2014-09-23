@@ -22,7 +22,7 @@
 #include <tools/gen.hxx>
 #include <sal/types.h>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sd { namespace sidebar {
 

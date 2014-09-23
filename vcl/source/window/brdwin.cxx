@@ -77,6 +77,8 @@ static void ImplGetPinImage( sal_uInt16 nStyle, bool bPinIn, Image& rImage )
     rImage = pSVData->maCtrlData.mpPinImgList->GetImage( nId );
 }
 
+namespace vcl {
+
 void Window::ImplCalcSymbolRect( Rectangle& rRect )
 {
     // Add border, not shown in the non-default representation,
@@ -95,13 +97,15 @@ void Window::ImplCalcSymbolRect( Rectangle& rRect )
     rRect.Bottom()  -= nExtraHeight;
 }
 
+} /* namespace vcl */
+
 static void ImplDrawBrdWinSymbol( OutputDevice* pDev,
                                   const Rectangle& rRect, SymbolType eSymbol )
 {
     // we leave 5% room between the symbol and the button border
     DecorationView  aDecoView( pDev );
     Rectangle       aTempRect = rRect;
-    Window::ImplCalcSymbolRect( aTempRect );
+    vcl::Window::ImplCalcSymbolRect( aTempRect );
     aDecoView.DrawSymbol( aTempRect, eSymbol,
                           pDev->GetSettings().GetStyleSettings().GetButtonTextColor(), 0 );
 }
@@ -114,7 +118,7 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
     nState &= ~BUTTON_DRAW_HIGHLIGHT;
 
     Rectangle aTempRect;
-    Window *pWin = dynamic_cast< Window* >(pDev);
+    vcl::Window *pWin = dynamic_cast< vcl::Window* >(pDev);
     if( pWin )
     {
         if( bMouseOver )
@@ -461,7 +465,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                 {
                     // dispatch to correct window type (why is Close() not virtual ??? )
                     // TODO: make Close() virtual
-                    Window *pWin = pBorderWindow->ImplGetClientWindow()->ImplGetWindow();
+                    vcl::Window *pWin = pBorderWindow->ImplGetClientWindow()->ImplGetWindow();
                     SystemWindow  *pSysWin  = dynamic_cast<SystemWindow* >(pWin);
                     DockingWindow *pDockWin = dynamic_cast<DockingWindow*>(pWin);
                     if ( pSysWin )
@@ -1007,9 +1011,9 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     mnHeight    = nHeight;
     mbNWFBorder = false;
 
-    Window *pWin = NULL, *pCtrl = NULL;
+    vcl::Window *pWin = NULL, *pCtrl = NULL;
     if (mpOutDev->GetOutDevType() == OUTDEV_WINDOW)
-        pWin = (Window*) mpOutDev;
+        pWin = (vcl::Window*) mpOutDev;
 
     if (pWin)
         pCtrl = mpBorderWindow->GetWindow(WINDOW_CLIENT);
@@ -1096,7 +1100,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                         mpBorderWindow->SetBackground();
                         pCtrl->SetPaintTransparent( true );
 
-                        Window* pCompoundParent = NULL;
+                        vcl::Window* pCompoundParent = NULL;
                         if( pWin->GetParent() && pWin->GetParent()->IsCompoundControl() )
                             pCompoundParent = pWin->GetParent();
 
@@ -1182,9 +1186,9 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
     bool bNativeOK = false;
     // for native widget drawing we must find out what
     // control this border belongs to
-    Window *pWin = NULL, *pCtrl = NULL;
+    vcl::Window *pWin = NULL, *pCtrl = NULL;
     if( mpOutDev->GetOutDevType() == OUTDEV_WINDOW )
-        pWin = (Window*) mpOutDev;
+        pWin = (vcl::Window*) mpOutDev;
 
     ControlType aCtrlType = 0;
     ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
@@ -1272,7 +1276,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
         }
 
         bool bMouseOver = false;
-        Window *pCtrlChild = pCtrl->GetWindow( WINDOW_FIRSTCHILD );
+        vcl::Window *pCtrlChild = pCtrl->GetWindow( WINDOW_FIRSTCHILD );
         while( pCtrlChild && !(bMouseOver = pCtrlChild->IsMouseOver()) )
             pCtrlChild = pCtrlChild->GetWindow( WINDOW_NEXT );
 
@@ -1740,14 +1744,14 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
     }
 }
 
-void ImplBorderWindow::ImplInit( Window* pParent,
+void ImplBorderWindow::ImplInit( vcl::Window* pParent,
                                  WinBits nStyle, sal_uInt16 nTypeStyle,
                                  const ::com::sun::star::uno::Any& )
 {
     ImplInit( pParent, nStyle, nTypeStyle, NULL );
 }
 
-void ImplBorderWindow::ImplInit( Window* pParent,
+void ImplBorderWindow::ImplInit( vcl::Window* pParent,
                                  WinBits nStyle, sal_uInt16 nTypeStyle,
                                  SystemParentData* pSystemParentData
                                  )
@@ -1825,7 +1829,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     InitView();
 }
 
-ImplBorderWindow::ImplBorderWindow( Window* pParent,
+ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent,
                                     SystemParentData* pSystemParentData,
                                     WinBits nStyle, sal_uInt16 nTypeStyle
                                     ) : Window( WINDOW_BORDERWINDOW )
@@ -1833,7 +1837,7 @@ ImplBorderWindow::ImplBorderWindow( Window* pParent,
     ImplInit( pParent, nStyle, nTypeStyle, pSystemParentData );
 }
 
-ImplBorderWindow::ImplBorderWindow( Window* pParent, WinBits nStyle ,
+ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent, WinBits nStyle ,
                                     sal_uInt16 nTypeStyle ) :
     Window( WINDOW_BORDERWINDOW )
 {
@@ -1915,7 +1919,7 @@ void ImplBorderWindow::Resize()
 
     if ( !mbRollUp )
     {
-        Window* pClientWindow = ImplGetClientWindow();
+        vcl::Window* pClientWindow = ImplGetClientWindow();
 
         if ( mpMenuBarWindow )
         {
@@ -2035,7 +2039,7 @@ void ImplBorderWindow::UpdateView( bool bNewView, const Size& rNewOutSize )
         mpBorderView->Init( this, aSize.Width(), aSize.Height() );
     }
 
-    Window* pClientWindow = ImplGetClientWindow();
+    vcl::Window* pClientWindow = ImplGetClientWindow();
     if ( pClientWindow )
     {
         GetBorder( pClientWindow->mpWindowImpl->mnLeftBorder, pClientWindow->mpWindowImpl->mnTopBorder,
@@ -2159,7 +2163,7 @@ void ImplBorderWindow::UpdateMenuHeight()
     Resize();
 }
 
-void ImplBorderWindow::SetMenuBarWindow( Window* pWindow )
+void ImplBorderWindow::SetMenuBarWindow( vcl::Window* pWindow )
 {
     mpMenuBarWindow = pWindow;
     UpdateMenuHeight();
@@ -2193,7 +2197,7 @@ Rectangle ImplBorderWindow::GetMenuRect() const
 
 Size ImplBorderWindow::GetOptimalSize() const
 {
-    const Window* pClientWindow = ImplGetClientWindow();
+    const vcl::Window* pClientWindow = ImplGetClientWindow();
     if (pClientWindow)
         return pClientWindow->GetOptimalSize();
     return Size(mnMinWidth, mnMinHeight);

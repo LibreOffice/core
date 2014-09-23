@@ -29,7 +29,7 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 
-ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
+ScMoveTableDlg::ScMoveTableDlg(vcl::Window* pParent, const OUString& rDefault)
 
     :   ModalDialog ( pParent, "MoveCopySheetDialog", "modules/scalc/ui/movecopysheet.ui" ),
         maDefaultName( rDefault ),

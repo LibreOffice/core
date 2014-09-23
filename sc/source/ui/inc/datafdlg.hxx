@@ -55,7 +55,7 @@ private:
     boost::ptr_vector<boost::nullable<Edit> > maEdits;
 
 public:
-    ScDataFormDlg( Window* pParent, ScTabViewShell* pTabViewShell);
+    ScDataFormDlg( vcl::Window* pParent, ScTabViewShell* pTabViewShell);
     virtual ~ScDataFormDlg();
 
     void FillCtrls(SCROW nCurrentRow);

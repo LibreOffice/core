@@ -38,7 +38,7 @@
 
 //  class ScHighlightChgDlg
 
-ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                       ScViewData*       ptrViewData)
     : ScAnyRefDlg(pB, pCW, pParent, "ShowChangesDialog",
         "modules/scalc/ui/showchangesdialog.ui")
@@ -51,7 +51,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     get(m_pCbAccept, "showaccepted");
     get(m_pCbReject, "showrejected");
     get(m_pEdAssign, "range");
-    m_pEdAssign->SetReferences(this, m_pFilterCtr->get<Window>("range"));
+    m_pEdAssign->SetReferences(this, m_pFilterCtr->get<vcl::Window>("range"));
     m_pEdAssign->SetSizePixel(m_pEdAssign->get_preferred_size());
     get(m_pRbAssign, "rangeref");
     m_pRbAssign->SetReferences(this, m_pEdAssign);

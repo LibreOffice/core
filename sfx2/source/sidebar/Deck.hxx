@@ -40,12 +40,12 @@ class DeckTitleBar;
     It displays the deck title.
 */
 class Deck
-    : public Window
+    : public vcl::Window
 {
 public:
     Deck (
         const DeckDescriptor& rDeckDescriptor,
-        Window* pParentWindow,
+        vcl::Window* pParentWindow,
         const ::boost::function<void(void)>& rCloserAction);
     virtual ~Deck (void);
 
@@ -57,7 +57,7 @@ public:
     void SetPanels (const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels (void) const { return maPanels;}
     void RequestLayout (void);
-    ::Window* GetPanelParentWindow (void);
+    vcl::Window* GetPanelParentWindow (void);
 
     /** Try to make the panel completely visible.
         When the whole panel does not fit then make its top visible
@@ -70,14 +70,14 @@ public:
     virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
     void PrintWindowTree();
-    static void PrintWindowSubTree (Window* pRoot, int nIndentation);
+    static void PrintWindowSubTree (vcl::Window* pRoot, int nIndentation);
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
 
-    class ScrollContainerWindow : public Window
+    class ScrollContainerWindow : public vcl::Window
     {
     public:
-        ScrollContainerWindow (Window* pParentWindow);
+        ScrollContainerWindow (vcl::Window* pParentWindow);
         virtual ~ScrollContainerWindow (void);
         virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
         void SetSeparators (const ::std::vector<sal_Int32>& rSeparators);
@@ -94,9 +94,9 @@ private:
     sal_Int32 mnMinimalWidth;
     SharedPanelContainer maPanels;
     ::boost::scoped_ptr<DeckTitleBar> mpTitleBar;
-    ::boost::scoped_ptr<Window> mpScrollClipWindow;
+    ::boost::scoped_ptr<vcl::Window> mpScrollClipWindow;
     ::boost::scoped_ptr<ScrollContainerWindow> mpScrollContainer;
-    ::boost::scoped_ptr<Window> mpFiller;
+    ::boost::scoped_ptr<vcl::Window> mpFiller;
     ::boost::scoped_ptr<ScrollBar> mpVerticalScrollBar;
 
     DECL_LINK(HandleVerticalScrollBarChange,void*);

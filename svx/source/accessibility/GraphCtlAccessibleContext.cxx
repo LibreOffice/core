@@ -797,11 +797,11 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox( void ) throw( RuntimeEx
 
     Rectangle aBounds ( 0, 0, 0, 0 );
 
-    Window* pWindow = mpControl;
+    vcl::Window* pWindow = mpControl;
     if (pWindow != NULL)
     {
         aBounds = pWindow->GetWindowExtentsRelative (NULL);
-        Window* pParent = pWindow->GetAccessibleParentWindow();
+        vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if (pParent != NULL)
         {
             Rectangle aParentRect = pParent->GetWindowExtentsRelative (NULL);

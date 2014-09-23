@@ -15,7 +15,7 @@
 #include "scresid.hxx"
 #include "appoptio.hxx"
 
-ScTpCompatOptions::ScTpCompatOptions(Window *pParent, const SfxItemSet &rCoreAttrs) :
+ScTpCompatOptions::ScTpCompatOptions(vcl::Window *pParent, const SfxItemSet &rCoreAttrs) :
     SfxTabPage(pParent, "OptCompatibilityPage","modules/scalc/ui/optcompatibilitypage.ui", &rCoreAttrs)
 {
     get(m_pLbKeyBindings,"keybindings");
@@ -25,7 +25,7 @@ ScTpCompatOptions::~ScTpCompatOptions()
 {
 }
 
-SfxTabPage* ScTpCompatOptions::Create(Window *pParent, const SfxItemSet *rCoreAttrs)
+SfxTabPage* ScTpCompatOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)
 {
     return new ScTpCompatOptions(pParent, *rCoreAttrs);
 }

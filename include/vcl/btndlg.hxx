@@ -61,7 +61,7 @@ protected:
     SAL_DLLPRIVATE long ImplGetButtonSize();
 
 public:
-                        ButtonDialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
+                        ButtonDialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
                         virtual ~ButtonDialog();
 
     virtual void        Resize() SAL_OVERRIDE;

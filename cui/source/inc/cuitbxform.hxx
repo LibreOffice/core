@@ -32,7 +32,7 @@ public:
     NumericField* m_pRecordNo;
 
 public:
-    FmInputRecordNoDialog(Window * pParent);
+    FmInputRecordNoDialog(vcl::Window * pParent);
 
     void SetValue(long dNew) { m_pRecordNo->SetValue(dNew); }
     long GetValue() const { return static_cast<long>(m_pRecordNo->GetValue()); }

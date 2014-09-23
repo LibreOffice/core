@@ -783,7 +783,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     mpGraphics->GetDevFontList( mpFontCollection );
 }
 
-void Printer::ImplInitDisplay( const Window* pWindow )
+void Printer::ImplInitDisplay( const vcl::Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -1121,7 +1121,7 @@ bool Printer::SetJobSetup( const JobSetup& rSetup )
     return false;
 }
 
-bool Printer::Setup( Window* pWindow )
+bool Printer::Setup( vcl::Window* pWindow )
 {
     if ( IsDisplayPrinter() )
         return false;

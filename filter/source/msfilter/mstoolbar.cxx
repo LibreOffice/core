@@ -61,7 +61,7 @@ void CustomToolBarImportHelper::applyIcons()
         uno::Reference< ui::XImageManager > xImageManager( getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
         sal_uInt16 nColor = ui::ImageType::COLOR_NORMAL;
 
-        Window* topwin = Application::GetActiveTopWindow();
+        vcl::Window* topwin = Application::GetActiveTopWindow();
     if ( topwin != NULL && topwin->GetDisplayBackground().GetColor().IsDark() )
             nColor = css::ui::ImageType::COLOR_HIGHCONTRAST;
 

@@ -597,7 +597,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
 
     if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
     {
-        Window* pWindow = (Window*)pOut;
+        vcl::Window* pWindow = (vcl::Window*)pOut;
 
         if(pWindow->IsInPaint())
         {
@@ -836,7 +836,7 @@ Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const Region& 
     // would be set.
     if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType() && !bDisableIntersect)
     {
-        Window* pWindow = (Window*)pOut;
+        vcl::Window* pWindow = (vcl::Window*)pOut;
 
         if(pWindow->IsInPaint())
         {
@@ -874,7 +874,7 @@ void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
 
 
 
-bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
+bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, vcl::Window* /*pWin*/)
 {
     return false;
 }
@@ -899,7 +899,7 @@ void SdrPaintView::GlueInvalidate() const
                     const SdrObject* pObj=pOL->GetObj(nObjNum);
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     if (pGPL!=NULL && pGPL->GetCount()!=0) {
-                        pGPL->Invalidate((Window&)rOutDev, pObj);
+                        pGPL->Invalidate((vcl::Window&)rOutDev, pObj);
                     }
                 }
             }
@@ -917,7 +917,7 @@ void SdrPaintView::InvalidateAllWin()
 
         if(pPaintWindow->OutputToWindow())
         {
-            InvalidateOneWin((Window&)pPaintWindow->GetOutputDevice());
+            InvalidateOneWin((vcl::Window&)pPaintWindow->GetOutputDevice());
         }
     }
 }
@@ -951,19 +951,19 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix)
 
             if (aRect.IsOver(aOutRect))
             {
-                InvalidateOneWin((Window&)rOutDev, aRect);
+                InvalidateOneWin((vcl::Window&)rOutDev, aRect);
             }
         }
     }
 }
 
-void SdrPaintView::InvalidateOneWin(Window& rWin)
+void SdrPaintView::InvalidateOneWin(vcl::Window& rWin)
 {
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(INVALIDATE_NOERASE);
 }
 
-void SdrPaintView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
+void SdrPaintView::InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect)
 {
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(rRect, INVALIDATE_NOERASE);
@@ -1134,7 +1134,7 @@ void SdrPaintView::ShowItemBrowser(bool bShow)
 }
 #endif
 
-void SdrPaintView::MakeVisible(const Rectangle& rRect, Window& rWin)
+void SdrPaintView::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
 {
     MapMode aMap(rWin.GetMapMode());
     Size aActualSize(rWin.GetOutputSize());

@@ -43,7 +43,7 @@ namespace cairocanvas
     public:
         SpriteDeviceHelper();
 
-        void init( Window&                   rOutputWindow,
+        void init( vcl::Window&                   rOutputWindow,
                    SpriteCanvas&             rSpriteCanvas,
                    const ::basegfx::B2ISize& rSize,
                    bool                      bFullscreen );

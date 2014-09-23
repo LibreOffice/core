@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
+SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     SvxStandardDialog(pParent, "InsertScriptDialog", "modules/swriter/ui/insertscript.ui"),
 
     bNew(true),

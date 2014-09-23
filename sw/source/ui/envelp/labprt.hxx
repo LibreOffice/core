@@ -44,7 +44,7 @@ class SwLabPrtPage : public SfxTabPage
     FixedText*    m_pPrinterInfo;
     PushButton*   m_pPrtSetup;
 
-     SwLabPrtPage(Window* pParent, const SfxItemSet& rSet);
+     SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwLabPrtPage();
 
     DECL_LINK( CountHdl, Button * );
@@ -56,7 +56,7 @@ class SwLabPrtPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet* rSet);
+    static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;

@@ -25,7 +25,7 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-ScSelEntryDlg::ScSelEntryDlg(Window*  pParent, const std::vector<OUString> &rEntryList)
+ScSelEntryDlg::ScSelEntryDlg(vcl::Window*  pParent, const std::vector<OUString> &rEntryList)
     : ModalDialog(pParent, "SelectRangeDialog", "modules/scalc/ui/selectrange.ui")
 {
     get(m_pLb, "treeview");

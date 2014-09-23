@@ -42,7 +42,7 @@ InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
 
 // SchAxisDlg
 
-SchAxisDlg::SchAxisDlg(Window* pWindow,
+SchAxisDlg::SchAxisDlg(vcl::Window* pWindow,
     const InsertAxisOrGridDialogData& rInput, bool bAxisDlg)
     : ModalDialog(pWindow,
           bAxisDlg ?
@@ -95,7 +95,7 @@ void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
     rOutput.aExistenceList[5]=m_pCbSecondaryZ->IsChecked();
 }
 
-SchGridDlg::SchGridDlg( Window* pParent, const InsertAxisOrGridDialogData& rInput )
+SchGridDlg::SchGridDlg( vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput )
                 : SchAxisDlg( pParent, rInput, false )//rInAttrs, b3D, bNet, bSecondaryX, bSecondaryY, false )
 {
 }

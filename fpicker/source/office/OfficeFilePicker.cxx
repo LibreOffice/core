@@ -463,7 +463,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 }
 
 
-SvtFileDialog* SvtFilePicker::implCreateDialog( Window* _pParent )
+SvtFileDialog* SvtFilePicker::implCreateDialog( vcl::Window* _pParent )
 {
     WinBits nExtraBits;
     WinBits nBits = getWinBits( nExtraBits );

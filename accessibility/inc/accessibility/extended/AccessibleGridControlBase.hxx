@@ -43,7 +43,7 @@
 
 
 
-class Window;
+namespace vcl { class Window; }
 
 namespace utl {
     class AccessibleStateSetHelper;

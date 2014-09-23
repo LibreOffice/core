@@ -55,7 +55,7 @@ void DlgEdView::MarkListHasChanged()
     rDlgEditor.UpdatePropertyBrowserDelayed();
 }
 
-void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
+void DlgEdView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )
 {
     // visible area
     MapMode aMap( rWin.GetMapMode() );

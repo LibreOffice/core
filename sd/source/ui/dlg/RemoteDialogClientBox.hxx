@@ -135,7 +135,7 @@ class ClientBox:
     void checkIndex(sal_Int32 pos) const;
 
 public:
-                    ClientBox( Window* pParent, WinBits nStyle );
+                    ClientBox( vcl::Window* pParent, WinBits nStyle );
                    virtual ~ClientBox();
 
     void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

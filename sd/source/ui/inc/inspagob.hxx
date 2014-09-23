@@ -41,7 +41,7 @@ private:
     DECL_LINK( SelectObjectHdl, void * );
 
 public:
-                SdInsertPagesObjsDlg( Window* pParent,
+                SdInsertPagesObjsDlg( vcl::Window* pParent,
                                 const SdDrawDocument* pDoc,
                                 SfxMedium* pSfxMedium,
                                 const OUString& rFileName );

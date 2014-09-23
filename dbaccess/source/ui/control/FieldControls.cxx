@@ -26,7 +26,7 @@ namespace dbaui {
 
 namespace {
 
-void lcl_setSpecialReadOnly( bool _bReadOnly, Window* _pWin )
+void lcl_setSpecialReadOnly( bool _bReadOnly, vcl::Window* _pWin )
 {
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
     const Color& rNewColor = _bReadOnly ? aSystemStyle.GetDialogColor() : aSystemStyle.GetFieldColor();
@@ -36,7 +36,7 @@ void lcl_setSpecialReadOnly( bool _bReadOnly, Window* _pWin )
 
 }
 
-OPropColumnEditCtrl::OPropColumnEditCtrl(Window* pParent,
+OPropColumnEditCtrl::OPropColumnEditCtrl(vcl::Window* pParent,
                                                 rtl::OUString& _rAllowedChars,
                                                 sal_uInt16 nHelpId,
                                                 short nPosition,
@@ -56,7 +56,7 @@ OPropColumnEditCtrl::SetSpecialReadOnly(bool _bReadOnly)
 
 
 
-OPropEditCtrl::OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
+OPropEditCtrl::OPropEditCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
     :Edit(pParent, nWinStyle)
     ,m_nPos(nPosition)
 {
@@ -78,14 +78,14 @@ OPropNumericEditCtrl::SetSpecialReadOnly(bool _bReadOnly)
 }
 
 
-OPropNumericEditCtrl::OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
+OPropNumericEditCtrl::OPropNumericEditCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
     :NumericField(pParent, nWinStyle)
     ,m_nPos(nPosition)
 {
     m_strHelpText = ModuleRes(nHelpId);
 }
 
-OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
+OPropListBoxCtrl::OPropListBoxCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
     :ListBox(pParent, nWinStyle)
     ,m_nPos(nPosition)
 {

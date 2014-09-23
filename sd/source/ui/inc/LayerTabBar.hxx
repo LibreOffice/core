@@ -37,7 +37,7 @@ class LayerTabBar
 public:
     LayerTabBar (
         DrawViewShell* pDrViewSh,
-        ::Window* pParent);
+        vcl::Window* pParent);
     virtual ~LayerTabBar (void);
 
     /** Inform all listeners of this control that the current layer has been

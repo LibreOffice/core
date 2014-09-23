@@ -54,7 +54,7 @@ using namespace ::com::sun::star::view;
 
 #define SPACEBETWEENENTRIES     4
 // class DBTreeListBox
-DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,bool _bHandleEnterKey)
+DBTreeListBox::DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle ,bool _bHandleEnterKey)
     :SvTreeListBox(pParent,nWinStyle)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)

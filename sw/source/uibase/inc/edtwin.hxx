@@ -52,7 +52,7 @@ class   SdrDropMarkerOverlay;
     To translate the pixel positions from the buffer OutputDevice to the real
     pixel positions, use the PixelToLogic methods of this class.
   */
-class SwEditWin: public Window,
+class SwEditWin: public vcl::Window,
                 public DropTargetHelper, public DragSourceHelper
 {
 friend void     ScrollMDI(SwViewShell* pVwSh, const SwRect&,
@@ -288,7 +288,7 @@ public:
 
     SwFrameControlsManager& GetFrameControlsManager() { return m_aFrameControlsManager; }
 
-    SwEditWin(Window *pParent, SwView &);
+    SwEditWin(vcl::Window *pParent, SwView &);
     virtual ~SwEditWin();
     virtual void SwitchView();
 };

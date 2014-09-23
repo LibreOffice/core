@@ -152,12 +152,12 @@ public:
     SfxViewFrame*       GetFrame() const;
     SfxModule*      GetModule() const;
     // caller has to clean up the Manager on his own
-    static SfxPopupMenuManager* Popup( sal_uInt16 nConfigId,Window *pWin, const Point *pPos );
+    static SfxPopupMenuManager* Popup( sal_uInt16 nConfigId, vcl::Window *pWin, const Point *pPos );
 
     void                ExecutePopup( const ResId &rId,
-                              Window *pWin = 0, const Point *pPosPixel = 0 );
+                              vcl::Window *pWin = 0, const Point *pPosPixel = 0 );
     static void         ExecutePopup( sal_uInt16 nConfigId = 0,
-                              Window *pWin = 0, const Point *pPosPixel = 0 );
+                              vcl::Window *pWin = 0, const Point *pPosPixel = 0 );
 
     bool                IsAppDispatcher() const;
     bool                IsFlushed() const;

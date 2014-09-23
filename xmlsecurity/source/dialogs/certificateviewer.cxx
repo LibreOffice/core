@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 CertificateViewer::CertificateViewer(
-        Window* _pParent,
+        vcl::Window* _pParent,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
         const css::uno::Reference< css::security::XCertificate >& _rXCert, bool bCheckForPrivateKey )
     : TabDialog(_pParent, "ViewCertDialog", "xmlsec/ui/viewcertdialog.ui" )
@@ -66,14 +66,14 @@ CertificateViewer::~CertificateViewer()
     delete mpTabCtrl->GetTabPage(mnPathId);
 }
 
-CertificateViewerTP::CertificateViewerTP( Window* _pParent, const OString& rID,
+CertificateViewerTP::CertificateViewerTP( vcl::Window* _pParent, const OString& rID,
     const OUString& rUIXMLDescription, CertificateViewer* _pDlg )
     : TabPage(_pParent, rID, rUIXMLDescription)
     , mpDlg(_pDlg)
 {
 }
 
-CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, CertificateViewer* _pDlg )
+CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, "CertGeneral", "xmlsec/ui/certgeneral.ui", _pDlg )
 {
     get( m_pCertImg, "certimage" );
@@ -174,7 +174,7 @@ void CertificateViewerDetailsTP::InsertElement( const OUString& _rField, const O
     pEntry->SetUserData( ( void* ) new Details_UserDatat( _rDetails, _bFixedWidthFont ) );
 }
 
-CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, CertificateViewer* _pDlg )
+CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, "CertDetails", "xmlsec/ui/certdetails.ui", _pDlg  )
     ,m_aFixedWidthFont( OutputDevice::GetDefaultFont( DEFAULTFONT_UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )
 {
@@ -299,7 +299,7 @@ struct CertPath_UserData
 };
 
 
-CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, CertificateViewer* _pDlg )
+CertificateViewerCertPathTP::CertificateViewerCertPathTP( vcl::Window* _pParent, CertificateViewer* _pDlg )
     : CertificateViewerTP(_pParent, "CertPage", "xmlsec/ui/certpage.ui", _pDlg)
     , mpParent(_pDlg)
     , mbFirstActivateDone(false)

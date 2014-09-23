@@ -33,7 +33,7 @@
 
 #include <set>
 
-ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScAddress& rPos):
+ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
     maFtCondNr( this, ScResId( FT_COND_NR ) ),
@@ -90,7 +90,7 @@ void ScCondFrmtEntry::SetHeight()
     long nMaxHeight = 0;
     for(sal_uInt16 i = 0; i < nChildren; i++)
     {
-        Window *pChild  = GetChild(i);
+        vcl::Window *pChild  = GetChild(i);
         if(!pChild || !pChild->IsVisible())
             continue;
         Point aPos = pChild->GetPosPixel();
@@ -164,7 +164,7 @@ void FillStyleListBox( ScDocument* pDoc, ListBox& rLbStyle )
 
 }
 
-ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
+ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
         const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbCondType( this, ScResId( LB_CELLIS_TYPE ) ),
@@ -548,7 +548,7 @@ IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
 
 // formula
 
-ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormat ):
+ScFormulaFrmtEntry::ScFormulaFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
@@ -716,7 +716,7 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
 
 }
 
-ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
+ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
     maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ),
@@ -867,7 +867,7 @@ IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox*, pBox )
     return 0;
 }
 
-ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
+ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
     maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ),
@@ -1103,7 +1103,7 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
 
 }
 
-ScDataBarFrmtEntry::ScDataBarFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat ):
+ScDataBarFrmtEntry::ScDataBarFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
     maLbDataBarMinType( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ),
@@ -1229,7 +1229,7 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
     return 0;
 }
 
-ScDateFrmtEntry::ScDateFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat ):
+ScDateFrmtEntry::ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, ScAddress() ),
     maLbDateEntry( this, ScResId( LB_DATE_TYPE ) ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
@@ -1330,7 +1330,7 @@ class ScIconSetFrmtDataEntry : public Control
         ListBox maLbEntryType;
 
     public:
-        ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, ScDocument* pDoc,
+        ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc,
                 sal_Int32 i, const ScColorScaleEntry* pEntry = NULL );
 
         ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
@@ -1338,7 +1338,7 @@ class ScIconSetFrmtDataEntry : public Control
         void SetFirstEntry();
 };
 
-ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry ):
+ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry ):
     Control( pParent, ScResId( RID_ICON_SET_ENTRY ) ),
     maImgIcon( this, ScResId( IMG_ICON ) ),
     maFtEntry( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ),
@@ -1420,7 +1420,7 @@ void ScIconSetFrmtDataEntry::SetFirstEntry()
     maLbEntryType.SelectEntryPos(1);
 }
 
-ScIconSetFrmtEntry::ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat ):
+ScIconSetFrmtEntry::ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat ):
         ScCondFrmtEntry( pParent, pDoc, rPos ),
         maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
         maLbIconSetType( this, ScResId( LB_ICONSET_TYPE ) )

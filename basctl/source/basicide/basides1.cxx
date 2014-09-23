@@ -139,7 +139,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         {
                             SfxViewFrame* pViewFrame = GetViewFrame();
                             SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : NULL;
-                            Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
+                            vcl::Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
                             QueryBox aQuery(pParent, WB_YES_NO|WB_DEF_YES, IDE_RESSTR(RID_STR_SEARCHFROMSTART));
                             if ( aQuery.Execute() == RET_YES )
                             {
@@ -665,7 +665,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                                     TextSelection aSel( TextPaM( nLine, nCol1 ), TextPaM( nLine, nCol2 ) );
                                     pTextView->SetSelection( aSel );
                                     pTextView->ShowCursor();
-                                    Window* pWindow_ = pTextView->GetWindow();
+                                    vcl::Window* pWindow_ = pTextView->GetWindow();
                                     if ( pWindow_ )
                                         pWindow_->GrabFocus();
                                 }
@@ -1002,8 +1002,8 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
             pCurWin->Init();
             if (!GetExtraData()->ShellInCriticalSection())
             {
-                Window* pFrameWindow = &GetViewFrame()->GetWindow();
-                Window* pFocusWindow = Application::GetFocusWindow();
+                vcl::Window* pFrameWindow = &GetViewFrame()->GetWindow();
+                vcl::Window* pFocusWindow = Application::GetFocusWindow();
                 while ( pFocusWindow && ( pFocusWindow != pFrameWindow ) )
                     pFocusWindow = pFocusWindow->GetParent();
                 if ( pFocusWindow ) // Focus in BasicIDE

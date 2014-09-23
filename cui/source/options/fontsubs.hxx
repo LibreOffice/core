@@ -84,18 +84,18 @@ class SvxFontSubstTabPage : public SfxTabPage
 
     SvLBoxButtonData*   pCheckButtonData;
 
-    DECL_LINK(SelectHdl, Window *pWin = 0);
+    DECL_LINK(SelectHdl, vcl::Window *pWin = 0);
     DECL_LINK(NonPropFontsHdl, CheckBox* pBox);
 
     SvTreeListEntry*    CreateEntry(OUString& rFont1, OUString& rFont2);
     void            CheckEnable();
 
 
-    SvxFontSubstTabPage( Window* pParent, const SfxItemSet& rSet );
+    SvxFontSubstTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxFontSubstTabPage();
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet);
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };

@@ -41,7 +41,7 @@ class vector;
 
 
 
-class SvxNumberPreview : public Window
+class SvxNumberPreview : public vcl::Window
 {
 private:
     OUString        aPrevStr;
@@ -56,7 +56,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
-    SvxNumberPreview(Window* pParent, WinBits nStyle = WB_BORDER);
+    SvxNumberPreview(vcl::Window* pParent, WinBits nStyle = WB_BORDER);
 
     void            NotifyChange( const OUString& rPrevStr, const Color* pColor = NULL );
 };
@@ -70,7 +70,7 @@ class SvxNumberFormatTabPage : public SfxTabPage
 public:
     virtual ~SvxNumberFormatTabPage();
 
-    static SfxTabPage*      Create( Window* pParent,
+    static SfxTabPage*      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
     static const sal_uInt16*      GetRanges();
 
@@ -87,7 +87,7 @@ public:
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 private:
-    SvxNumberFormatTabPage( Window* pParent,
+    SvxNumberFormatTabPage( vcl::Window* pParent,
                             const SfxItemSet& rCoreAttrs );
     FixedText*              m_pFtCategory;
     ListBox*                m_pLbCategory;
@@ -128,7 +128,7 @@ private:
 
     OUString sAutomaticEntry;
 
-    Window*                 pLastActivWindow;
+    vcl::Window*                 pLastActivWindow;
 
     void    Init_Impl();
     void    FillCurrencyBox();

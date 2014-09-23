@@ -37,7 +37,7 @@
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwFldDlgWrapper, FN_INSERT_FIELD)
 
-SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, sal_uInt16 nId) :
+SwChildWinWrapper::SwChildWinWrapper(vcl::Window *pParentWindow, sal_uInt16 nId) :
         SfxChildWindow(pParentWindow, nId),
         m_pDocSh(0)
 {
@@ -76,7 +76,7 @@ SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
     return aInfo;
 }
 
-SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, sal_uInt16 nId,
+SwFldDlgWrapper::SwFldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo*  )
     : SwChildWinWrapper( _pParent, nId )
@@ -120,7 +120,7 @@ SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
     return aInfo;
 }
 
-SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, sal_uInt16 nId,
+SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo* pInfo )
     : SwChildWinWrapper( _pParent, nId )

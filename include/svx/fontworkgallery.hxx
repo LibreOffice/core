@@ -36,7 +36,7 @@
 
 class FmFormModel;
 class SdrView;
-class Window;
+namespace vcl { class Window; }
 class SdrTextObj;
 class SdrObject;
 class SdrModel;
@@ -67,7 +67,7 @@ class FontworkCharacterSpacingDialog : public ModalDialog
     MetricField* m_pMtrScale;
 
 public:
-    FontworkCharacterSpacingDialog( Window* pParent, sal_Int32 nScale );
+    FontworkCharacterSpacingDialog( vcl::Window* pParent, sal_Int32 nScale );
 
     sal_Int32 getScale() const;
 };
@@ -97,7 +97,7 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
     std::vector< BitmapEx> maFavoritesHorizontal;
 
 public:
-    FontWorkGalleryDialog( SdrView* pView, Window* pParent, sal_uInt16 nSID );
+    FontWorkGalleryDialog( SdrView* pView, vcl::Window* pParent, sal_uInt16 nSID );
     virtual ~FontWorkGalleryDialog();
 
     // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog

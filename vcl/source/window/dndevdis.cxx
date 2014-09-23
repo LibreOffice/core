@@ -34,7 +34,7 @@ using namespace ::com::sun::star::datatransfer::dnd;
 
 // DNDEventDispatcher::DNDEventDispatcher
 
-DNDEventDispatcher::DNDEventDispatcher( Window * pTopWindow ):
+DNDEventDispatcher::DNDEventDispatcher( vcl::Window * pTopWindow ):
     m_pTopWindow( pTopWindow ),
     m_pCurrentWindow( NULL )
 {
@@ -46,7 +46,7 @@ DNDEventDispatcher::~DNDEventDispatcher()
 {
 }
 
-Window* DNDEventDispatcher::findTopLevelWindow(Point location)
+vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -54,7 +54,7 @@ Window* DNDEventDispatcher::findTopLevelWindow(Point location)
     // because those coordinates come from outside, they must be mirrored if RTL layout is active
     if( Application::GetSettings().GetLayoutRTL() )
         m_pTopWindow->ImplMirrorFramePos( location );
-    Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
+    vcl::Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
 
     if( NULL == pChildWindow )
         pChildWindow = m_pTopWindow;
@@ -80,7 +80,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 
     Point location( dtde.LocationX, dtde.LocationY );
 
-    Window* pChildWindow = findTopLevelWindow(location);
+    vcl::Window* pChildWindow = findTopLevelWindow(location);
 
     // handle the case that drop is in an other vcl window than the last dragOver
     if( pChildWindow != m_pCurrentWindow )
@@ -117,7 +117,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
     osl::MutexGuard aImplGuard( m_aMutex );
     Point location( dtdee.LocationX, dtdee.LocationY );
 
-    Window * pChildWindow = findTopLevelWindow(location);
+    vcl::Window * pChildWindow = findTopLevelWindow(location);
 
     // assume pointer write operation to be atomic
     m_pCurrentWindow = pChildWindow;
@@ -159,7 +159,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
 
-    Window * pChildWindow = findTopLevelWindow(location);
+    vcl::Window * pChildWindow = findTopLevelWindow(location);
 
     if( pChildWindow != m_pCurrentWindow )
     {
@@ -198,7 +198,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
     Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
 
-    Window* pChildWindow = findTopLevelWindow(location);
+    vcl::Window* pChildWindow = findTopLevelWindow(location);
 
     if( pChildWindow != m_pCurrentWindow )
     {
@@ -236,7 +236,7 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
 
     Point origin( dge.DragOriginX, dge.DragOriginY );
 
-    Window* pChildWindow = findTopLevelWindow(origin);
+    vcl::Window* pChildWindow = findTopLevelWindow(origin);
 
     fireDragGestureEvent( pChildWindow, dge.DragSource, dge.Event, origin, dge.DragAction );
 }
@@ -262,7 +262,7 @@ void SAL_CALL DNDEventDispatcher::rejectDrag() throw(RuntimeException, std::exce
 
 // DNDEventDispatcher::fireDragEnterEvent
 
-sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
+sal_Int32 DNDEventDispatcher::fireDragEnterEvent( vcl::Window *pWindow,
     const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
     const Point& rLocation, const sal_Int8 nSourceActions, const Sequence< DataFlavor >& aFlavorList
 )
@@ -296,7 +296,7 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
 
 // DNDEventDispatcher::fireDragOverEvent
 
-sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
+sal_Int32 DNDEventDispatcher::fireDragOverEvent( vcl::Window *pWindow,
     const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
     const Point& rLocation, const sal_Int8 nSourceActions
 )
@@ -327,7 +327,7 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
 
 // DNDEventDispatcher::fireDragExitEvent
 
-sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(RuntimeException)
+sal_Int32 DNDEventDispatcher::fireDragExitEvent( vcl::Window *pWindow ) throw(RuntimeException)
 {
     sal_Int32 n = 0;
 
@@ -352,7 +352,7 @@ sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(Runtime
 
 // DNDEventDispatcher::fireDropActionChangedEvent
 
-sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
+sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( vcl::Window *pWindow,
     const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
     const Point& rLocation, const sal_Int8 nSourceActions
 )
@@ -383,7 +383,7 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
 
 // DNDEventDispatcher::fireDropEvent
 
-sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
+sal_Int32 DNDEventDispatcher::fireDropEvent( vcl::Window *pWindow,
     const Reference< XDropTargetDropContext >& xContext, const sal_Int8 nDropAction, const Point& rLocation,
     const sal_Int8 nSourceActions, const Reference< XTransferable >& xTransferable
 )
@@ -426,7 +426,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
 
 // DNDEventDispatcher::fireDragGestureRecognized
 
-sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
+sal_Int32 DNDEventDispatcher::fireDragGestureEvent( vcl::Window *pWindow,
     const Reference< XDragSource >& xSource, const Any event,
     const Point& rOrigin, const sal_Int8 nDragAction
 )

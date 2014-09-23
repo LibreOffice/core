@@ -39,7 +39,7 @@ private:
     DECL_LINK( SelectHdl, void* );
 
 public:
-    ScDataPilotDatabaseDlg(Window* pParent);
+    ScDataPilotDatabaseDlg(vcl::Window* pParent);
 
     void    GetValues( ScImportSourceDesc& rDesc );
 };

@@ -69,7 +69,7 @@ private:
     virtual const SfxItemSet*   GetRefreshedSet() SAL_OVERRIDE;
 
 public:
-    SdTabTemplateDlg(Window* pParent,
+    SdTabTemplateDlg(vcl::Window* pParent,
             const SfxObjectShell* pDocShell,
             SfxStyleSheetBase& rStyleBase,
             SdrModel* pModel,

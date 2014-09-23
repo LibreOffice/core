@@ -89,7 +89,7 @@ private:
 
     bool mbIsMainViewChangePending;
 
-    ::Window* mpMainViewShellWindow;
+    vcl::Window* mpMainViewShellWindow;
 
     /** Register at window of center pane and at the form shell that
         represents the form tool bar.  The former informs this manager about

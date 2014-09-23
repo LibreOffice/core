@@ -34,7 +34,7 @@ class EmptyPanel
     : public Control
 {
 public:
-    EmptyPanel (::Window* pParent);
+    EmptyPanel (vcl::Window* pParent);
     virtual ~EmptyPanel (void);
 
     virtual void Resize (void) SAL_OVERRIDE;

@@ -41,7 +41,7 @@ typedef sal_uInt16 ScrollableWindowFlags;
 // - ScrollableWindow -
 
 
-class SVT_DLLPUBLIC ScrollableWindow: public Window
+class SVT_DLLPUBLIC ScrollableWindow: public vcl::Window
 {
 private:
     Point           aPixOffset;         // offset to virtual window (pixel)
@@ -62,7 +62,7 @@ private:
     DECL_DLLPRIVATE_LINK( EndScrollHdl, ScrollBar * );
 
 public:
-                    ScrollableWindow( Window* pParent, WinBits nBits = 0,
+                    ScrollableWindow( vcl::Window* pParent, WinBits nBits = 0,
                                       ScrollableWindowFlags = SCRWIN_DEFAULT );
 
     virtual void    Resize() SAL_OVERRIDE;

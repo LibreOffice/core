@@ -157,7 +157,7 @@ IMPL_LINK_INLINE_START( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, EMP
 IMPL_LINK_INLINE_END( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, pButton )
 
 
-SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &rOptions)
+SmPrintOptionsTabPage::SmPrintOptionsTabPage(vcl::Window *pParent, const SfxItemSet &rOptions)
     : SfxTabPage(pParent, "SmathSettings", "modules/smath/ui/smathsettings.ui", &rOptions)
 {
     get( m_pTitle,               "title");
@@ -220,7 +220,7 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 }
 
 
-SfxTabPage* SmPrintOptionsTabPage::Create(Window* pWindow, const SfxItemSet& rSet)
+SfxTabPage* SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const SfxItemSet& rSet)
 {
     return (new SmPrintOptionsTabPage(pWindow, rSet));
 }
@@ -239,7 +239,7 @@ void SmShowFont::Paint(const Rectangle& rRect )
                    (GetOutputSize().Height() - TextSize.Height()) / 2), Text);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmShowFont(Window* pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowFont(vcl::Window* pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
 
@@ -318,7 +318,7 @@ void SmFontDialog::SetFont(const vcl::Font &rFont)
     m_pShowFont->SetFont(Face);
 }
 
-SmFontDialog::SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes)
+SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes)
     : ModalDialog(pParent, "FontDialog", "modules/smath/ui/fontdialog.ui")
 {
     get(m_pFontBox, "font");
@@ -368,7 +368,7 @@ SmFontDialog::SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, bool 
 
 namespace
 {
-    void getColors(Window &rRef, ColorData &rBgCol, ColorData &rTxtCol)
+    void getColors(vcl::Window &rRef, ColorData &rBgCol, ColorData &rTxtCol)
     {
         const StyleSettings &rS = rRef.GetSettings().GetStyleSettings();
         if (rS.GetHighContrastMode())
@@ -408,7 +408,7 @@ void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
 class SaveDefaultsQuery : public MessageDialog
 {
 public:
-    SaveDefaultsQuery(Window *pParent)
+    SaveDefaultsQuery(vcl::Window *pParent)
         : MessageDialog(pParent, "SaveDefaultsDialog",
             "modules/smath/ui/savedefaultsdialog.ui")
     {
@@ -427,7 +427,7 @@ IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton
     return 0;
 }
 
-SmFontSizeDialog::SmFontSizeDialog(Window * pParent)
+SmFontSizeDialog::SmFontSizeDialog(vcl::Window * pParent)
     : ModalDialog(pParent, "FontSizeDialog", "modules/smath/ui/fontsizedialog.ui")
 {
     get(m_pTextSize, "spinB_text");
@@ -520,7 +520,7 @@ IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTY
 }
 IMPL_LINK_INLINE_END( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButton )
 
-SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevice)
+SmFontTypeDialog::SmFontTypeDialog(vcl::Window * pParent, OutputDevice *pFntListDevice)
     : ModalDialog(pParent, "FontsDialog", "modules/smath/ui/fonttypedialog.ui"),
     pFontListDev    (pFntListDevice)
 {
@@ -758,7 +758,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     };
 
     // array to help iterate over the controls
-    Window * const  aWin[4][2] =
+    vcl::Window * const  aWin[4][2] =
     {
         { m_pFixedText1, m_pMetricField1 },
         { m_pFixedText2, m_pMetricField2 },
@@ -852,7 +852,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
 }
 
 
-SmDistanceDialog::SmDistanceDialog(Window *pParent)
+SmDistanceDialog::SmDistanceDialog(vcl::Window *pParent)
     : ModalDialog(pParent, "SpacingDialog",
         "modules/smath/ui/spacingdialog.ui")
 {
@@ -985,7 +985,7 @@ IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
     return 0;
 }
 
-SmAlignDialog::SmAlignDialog(Window * pParent)
+SmAlignDialog::SmAlignDialog(vcl::Window * pParent)
     : ModalDialog(pParent, "AlignmentDialog",
         "modules/smath/ui/alignmentdialog.ui")
 {
@@ -1035,7 +1035,7 @@ void SmAlignDialog::WriteTo(SmFormat &rFormat) const
 }
 
 
-SmShowSymbolSetWindow::SmShowSymbolSetWindow(Window *pParent, WinBits nStyle)
+SmShowSymbolSetWindow::SmShowSymbolSetWindow(vcl::Window *pParent, WinBits nStyle)
     : Control(pParent, nStyle)
     , m_pVScrollBar(0)
     , nLen(0)
@@ -1180,7 +1180,7 @@ void SmShowSymbolSetWindow::setScrollbar(ScrollBar *pVScrollBar)
     m_pVScrollBar->SetScrollHdl(LINK(this, SmShowSymbolSetWindow, ScrollHdl));
 }
 
-SmShowSymbolSet::SmShowSymbolSet(Window *pParent)
+SmShowSymbolSet::SmShowSymbolSet(vcl::Window *pParent)
     : VclHBox(pParent, false, 6)
     , aSymbolWindow(this, WB_TABSTOP)
     , aVScrollBar(this, WinBits(WB_VSCROLL))
@@ -1192,7 +1192,7 @@ SmShowSymbolSet::SmShowSymbolSet(Window *pParent)
     aSymbolWindow.Show();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmShowSymbolSet(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowSymbolSet(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SmShowSymbolSet(pParent);
 }
@@ -1219,7 +1219,7 @@ void SmShowSymbolSetWindow::calccols()
 
 Size SmShowSymbolSetWindow::GetOptimalSize() const
 {
-    Window *pParent = GetParent();
+    vcl::Window *pParent = GetParent();
     return Size(pParent->approximate_char_width() * 24, pParent->GetTextHeight() * 8);
 }
 
@@ -1281,7 +1281,7 @@ IMPL_LINK( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, EMPTYARG /*pScrollBar*/
     return 0;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmShowSymbol(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowSymbol(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
 
@@ -1447,7 +1447,7 @@ IMPL_LINK_NOARG( SmSymbolDialog, GetClickHdl )
 }
 
 
-SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
+SmSymbolDialog::SmSymbolDialog(vcl::Window *pParent, OutputDevice *pFntListDevice,
         SmSymbolManager &rMgr, SmViewShell &rViewShell)
     : ModalDialog(pParent, "CatalogDialog",
         "modules/smath/ui/catalogdialog.ui")
@@ -1562,7 +1562,7 @@ const SmSym * SmSymbolDialog::GetSymbol() const
 
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmShowChar(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowChar(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
 
@@ -1970,7 +1970,7 @@ void SmSymDefineDialog::UpdateButtons()
     pDeleteBtn->Enable(bDelete);
 }
 
-SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
+SmSymDefineDialog::SmSymDefineDialog(vcl::Window * pParent,
         OutputDevice *pFntListDevice, SmSymbolManager &rMgr) :
     ModalDialog         (pParent, "EditSymbols", "modules/smath/ui/symdefinedialog.ui"),
     rSymbolMgr          (rMgr),

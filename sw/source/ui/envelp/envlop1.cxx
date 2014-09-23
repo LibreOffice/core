@@ -47,7 +47,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-SwEnvPreview::SwEnvPreview(Window* pParent, WinBits nStyle)
+SwEnvPreview::SwEnvPreview(vcl::Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
 {
     SetMapMode(MapMode(MAP_PIXEL));
@@ -58,7 +58,7 @@ Size SwEnvPreview::GetOptimalSize() const
     return LogicToPixel(Size(84 , 63), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwEnvPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwEnvPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwEnvPreview(pParent, 0);
 }
@@ -131,7 +131,7 @@ void SwEnvPreview::Paint(const Rectangle &)
     DrawRect(Rectangle(Point(nStmpX, nStmpY), Size(nStmpW, nStmpH)));
 }
 
-SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
+SwEnvDlg::SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert)
     : SfxTabDialog(pParent, "EnvDialog",
         "modules/swriter/ui/envdialog.ui", &rSet)
@@ -187,7 +187,7 @@ short SwEnvDlg::Ok()
     return nRet;
 }
 
-SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet)
+SwEnvPage::SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvAddressPage",
         "modules/swriter/ui/envaddresspage.ui", &rSet)
 {
@@ -304,7 +304,7 @@ void SwEnvPage::InitDatabaseBox()
     }
 }
 
-SfxTabPage* SwEnvPage::Create(Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwEnvPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwEnvPage(pParent, *rSet);
 }

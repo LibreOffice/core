@@ -206,7 +206,7 @@ const sal_uInt16 ACTION_START_SELECTION = 14;
 const sal_uInt16 ACTION_HANDLED_BY_VIEW = 15;
 const sal_uInt16 ACTION_TAB = 18;
 
-bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, Window* pWindow )
+bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow )
 {
     if( !checkTableObject() )
         return false;
@@ -245,7 +245,7 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, Window* pWindow )
 // ::com::sun::star::awt::XMouseClickHandler:
 
 
-bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, Window* pWindow )
+bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWindow )
 {
     if( !pWindow || !checkTableObject() )
         return false;
@@ -298,7 +298,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin
 
 
 
-bool SvxTableController::onMouseButtonUp(const MouseEvent& rMEvt, Window* /*pWin*/)
+bool SvxTableController::onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* /*pWin*/)
 {
     if( !checkTableObject() )
         return false;
@@ -313,7 +313,7 @@ bool SvxTableController::onMouseButtonUp(const MouseEvent& rMEvt, Window* /*pWin
 
 
 
-bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, Window* pWindow )
+bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWindow )
 {
     if( !checkTableObject() )
         return false;
@@ -1372,7 +1372,7 @@ bool SvxTableController::checkTableObject()
 
 
 
-sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window* /*pWindow*/ )
+sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Window* /*pWindow*/ )
 {
     const bool bMod1 = rKEvt.GetKeyCode().IsMod1(); // ctrl
     const bool bMod2 = rKEvt.GetKeyCode().IsMod2(); // Alt
@@ -1559,7 +1559,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window*
     return nAction;
 }
 
-bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, Window* pWindow )
+bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::Window* pWindow )
 {
     ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
@@ -1671,7 +1671,7 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, Window
 
 
 
-void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, Window* pWindow, sal_uInt16 nAction )
+void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, vcl::Window* pWindow, sal_uInt16 nAction )
 {
     if( mxTableObj.is() && static_cast<SdrTableObj*>(mxTableObj.get())->IsTextEditActive() )
         mpView->SdrEndTextEdit(true);
@@ -1789,7 +1789,7 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
 
 
 
-void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const awt::MouseEvent* pMouseEvent /*= 0*/, sal_uInt16 nAction /*= ACTION_NONE */ )
+void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, const awt::MouseEvent* pMouseEvent /*= 0*/, sal_uInt16 nAction /*= ACTION_NONE */ )
 {
     SdrPageView* pPV = mpView->GetSdrPageView();
 

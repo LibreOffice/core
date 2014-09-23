@@ -53,7 +53,7 @@ Help::~Help()
 {
 }
 
-bool Help::Start( const OUString&, const Window* )
+bool Help::Start( const OUString&, const vcl::Window* )
 {
     return false;
 }
@@ -63,7 +63,7 @@ bool Help::SearchKeyword( const OUString& )
     return false;
 }
 
-OUString Help::GetHelpText( const OUString&, const Window* )
+OUString Help::GetHelpText( const OUString&, const vcl::Window* )
 {
     return OUString();
 }
@@ -146,7 +146,7 @@ bool Help::IsBalloonHelpEnabled()
     return ImplGetSVData()->maHelpData.mbBalloonHelp;
 }
 
-bool Help::ShowBalloon( Window* pParent,
+bool Help::ShowBalloon( vcl::Window* pParent,
                         const Point& rScreenPos,
                         const OUString& rHelpText )
 {
@@ -156,7 +156,7 @@ bool Help::ShowBalloon( Window* pParent,
     return true;
 }
 
-bool Help::ShowBalloon( Window* pParent,
+bool Help::ShowBalloon( vcl::Window* pParent,
                         const Point& rScreenPos, const Rectangle& rRect,
                         const OUString& rHelpText )
 {
@@ -181,7 +181,7 @@ bool Help::IsQuickHelpEnabled()
     return ImplGetSVData()->maHelpData.mbQuickHelp;
 }
 
-bool Help::ShowQuickHelp( Window* pParent,
+bool Help::ShowQuickHelp( vcl::Window* pParent,
                           const Rectangle& rScreenRect,
                           const OUString& rHelpText,
                           const OUString& rLongHelpText,
@@ -200,7 +200,7 @@ void Help::HideBalloonAndQuickHelp()
     ImplDestroyHelpWindow( bIsVisible );
 }
 
-sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
+sal_uIntPtr Help::ShowTip( vcl::Window* pParent, const Rectangle& rScreenRect,
                      const OUString& rText, sal_uInt16 nStyle )
 {
     sal_uInt16 nHelpWinStyle = ( ( nStyle & QUICKHELP_TIP_STYLE_BALLOON ) != 0 ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
@@ -213,7 +213,7 @@ sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
     return nId;
 }
 
-void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreenRect, const OUString& rText )
+void Help::UpdateTip( sal_uIntPtr nId, vcl::Window* pParent, const Rectangle& rScreenRect, const OUString& rText )
 {
     HelpTextWindow* pHelpWin = reinterpret_cast< HelpTextWindow* >( nId );
     ENSURE_OR_RETURN_VOID( pHelpWin != NULL, "Help::UpdateTip: invalid ID!" );
@@ -230,7 +230,7 @@ void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreen
 void Help::HideTip( sal_uLong nId )
 {
     HelpTextWindow* pHelpWin = (HelpTextWindow*)nId;
-    Window* pFrameWindow = pHelpWin->ImplGetFrameWindow();
+    vcl::Window* pFrameWindow = pHelpWin->ImplGetFrameWindow();
     pHelpWin->Hide();
     // trigger update, so that a Paint is instantly triggered since we do not save the background
     pFrameWindow->ImplUpdateAll();
@@ -238,7 +238,7 @@ void Help::HideTip( sal_uLong nId )
     ImplGetSVData()->maHelpData.mnLastHelpHideTime = Time::GetSystemTicks();
 }
 
-HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle ) :
+HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle ) :
     FloatingWindow( pParent, WB_SYSTEMWINDOW|WB_TOOLTIPWIN ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
     maHelpText( rText )
 {
@@ -464,7 +464,7 @@ OUString HelpTextWindow::GetText() const
     return FloatingWindow::CreateAccessible();
 }
 
-void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
+void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
                          const OUString& rHelpText, const OUString& rStatusText,
                          const Point& rScreenPos, const Rectangle* pHelpArea )
 {
@@ -501,7 +501,7 @@ void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 n
             bool const bTextChanged = rHelpText != pHelpWin->GetHelpText();
             if ( bTextChanged || ( ( nStyle & QUICKHELP_FORCE_REPOSITION ) != 0 ) )
             {
-                Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
+                vcl::Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
                 Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
                 if( pHelpWin->IsVisible() )
                     pWindow->Invalidate( aInvRect );
@@ -547,7 +547,7 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
     HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
     if ( pHelpWin )
     {
-        Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
+        vcl::Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
         // find out screen area covered by system help window
         Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
         if( pHelpWin->IsVisible() )
@@ -561,7 +561,7 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
     }
 }
 
-void ImplSetHelpWindowPos( Window* pHelpWin, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
+void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
                            const Point& rPos, const Rectangle* pHelpArea )
 {
     Point       aPos = rPos;
@@ -665,7 +665,7 @@ void ImplSetHelpWindowPos( Window* pHelpWin, sal_uInt16 nHelpWinStyle, sal_uInt1
         }
     }
 
-    Window* pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
+    vcl::Window* pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
     aPos = pWindow->AbsoluteScreenToOutputPixel( aPos );
     pHelpWin->SetPosPixel( aPos );
 }

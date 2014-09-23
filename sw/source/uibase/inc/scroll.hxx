@@ -50,7 +50,7 @@ public:
     void    SetAuto(bool bSet);
     bool    IsAuto() { return bAuto;}
 
-    SwScrollbar(Window *pParent, bool bHori = true );
+    SwScrollbar(vcl::Window *pParent, bool bHori = true );
     virtual ~SwScrollbar();
 };
 

@@ -29,7 +29,7 @@
 namespace svx { namespace sidebar {
 
 TextUnderlineControl::TextUnderlineControl (
-    Window* pParent,
+    vcl::Window* pParent,
     svx::sidebar::TextPropertyPanel& rPanel,
     SfxBindings* pBindings)
 :   svx::sidebar::PopupControl( pParent,SVX_RES(RID_POPUPPANEL_TEXTPAGE_UNDERLINE))

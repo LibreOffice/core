@@ -55,7 +55,7 @@ namespace dbaui
     };
 
     // SpecialSettingsPage
-    SpecialSettingsPage::SpecialSettingsPage( Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta )
+    SpecialSettingsPage::SpecialSettingsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta )
         : OGenericAdministrationPage(pParent, "SpecialSettingsPage",
             "dbaccess/ui/specialsettingspage.ui", _rCoreAttrs)
         , m_pIsSQL92Check( NULL )
@@ -295,7 +295,7 @@ namespace dbaui
     }
 
     // GeneratedValuesPage
-    GeneratedValuesPage::GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    GeneratedValuesPage::GeneratedValuesPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         : OGenericAdministrationPage(pParent, "GeneratedValuesPage",
             "dbaccess/ui/generatedvaluespage.ui", _rCoreAttrs)
     {
@@ -368,7 +368,7 @@ namespace dbaui
     }
 
     // AdvancedSettingsDialog
-    AdvancedSettingsDialog::AdvancedSettingsDialog( Window* _pParent, SfxItemSet* _pItems,
+    AdvancedSettingsDialog::AdvancedSettingsDialog( vcl::Window* _pParent, SfxItemSet* _pItems,
         const Reference< XComponentContext >& _rxContext, const Any& _aDataSourceName )
         : SfxTabDialog(_pParent, "AdvancedSettingsDialog",
             "dbaccess/ui/advancedsettingsdialog.ui", _pItems)
@@ -435,7 +435,7 @@ namespace dbaui
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );
         static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
-        Window *pWin = GetViewWindow();
+        vcl::Window *pWin = GetViewWindow();
         if(pWin)
             pWin->Invalidate();
 

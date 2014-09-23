@@ -222,7 +222,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         UIElement        implts_findToolbar( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xToolbar );
         UIElement&       impl_findToolbar( const OUString& aName );
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > implts_getXWindow( const OUString& aName );
-        Window*          implts_getWindow( const OUString& aName );
+        vcl::Window*          implts_getWindow( const OUString& aName );
         bool             implts_insertToolbar( const UIElement& rUIElement );
         void             implts_setToolbar( const UIElement& rUIElement );
         ::Size           implts_getTopBottomDockingAreaSizes();

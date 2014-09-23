@@ -59,7 +59,7 @@ bool DrawViewShell::GotoBookmark(const OUString& rBookmark)
 |*
 \************************************************************************/
 
-void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
+void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
 {
     // In older versions, if in X or Y the size of the object was
     // smaller than the visible area, the user-defined zoom was

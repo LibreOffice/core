@@ -30,7 +30,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 
 namespace {
@@ -74,7 +74,7 @@ public:
     Pane (
         const ::com::sun::star::uno::Reference<
             com::sun::star::drawing::framework::XResourceId>& rxPaneId,
-        ::Window* pWindow)
+        vcl::Window* pWindow)
         throw ();
     virtual ~Pane (void);
 
@@ -85,7 +85,7 @@ public:
     /** This method is typically used together with the XUnoTunnel to obtain
         a Window pointer from an XPane object.
     */
-    virtual ::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow (void);
 
     //----- XPane -------------------------------------------------------------
 
@@ -135,7 +135,7 @@ public:
 
 protected:
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxPaneId;
-    ::Window* mpWindow;
+    vcl::Window* mpWindow;
     ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxWindow;
     ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas> mxCanvas;
 

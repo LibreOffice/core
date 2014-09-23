@@ -22,7 +22,7 @@
 
 namespace svx { namespace sidebar {
 
-PopupContainer::PopupContainer (Window* pParent)
+PopupContainer::PopupContainer (vcl::Window* pParent)
     : FloatingWindow(pParent, WB_SYSTEMWINDOW | WB_3DLOOK) //  | WB_POPUP_FOCUSWIN)
 {
 }

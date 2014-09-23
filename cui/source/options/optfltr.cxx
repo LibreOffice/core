@@ -38,7 +38,7 @@ enum MSFltrPg2_CheckBoxEntries {
 
 
 
-OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
+OfaMSFilterTabPage::OfaMSFilterTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, "OptFltrPage", "cui/ui/optfltrpage.ui", &rSet )
 {
     get( aWBasicCodeCB      , "wo_basic"    );
@@ -70,7 +70,7 @@ IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl)
     return 0;
 }
 
-SfxTabPage* OfaMSFilterTabPage::Create( Window* pParent,
+SfxTabPage* OfaMSFilterTabPage::Create( vcl::Window* pParent,
                                         const SfxItemSet* rAttrSet )
 {
     return new OfaMSFilterTabPage( pParent, *rAttrSet );
@@ -128,7 +128,7 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet* )
     aPBasicStgCB->SaveValue();
 }
 
-OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent, const SfxItemSet& rSet ) :
+OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptFilterPage", "cui/ui/optfltrembedpage.ui", &rSet ),
     sHeader1(CUI_RES(RID_SVXSTR_HEADER1)),
     sHeader2(CUI_RES(RID_SVXSTR_HEADER2)),
@@ -163,7 +163,7 @@ OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
     delete m_pCheckLB;
 }
 
-SfxTabPage* OfaMSFilterTabPage2::Create( Window* pParent,
+SfxTabPage* OfaMSFilterTabPage2::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {
     return new OfaMSFilterTabPage2( pParent, *rAttrSet );

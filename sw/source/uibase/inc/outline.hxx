@@ -67,7 +67,7 @@ class SwOutlineTabDialog : public SfxTabDialog
         virtual short   Ok() SAL_OVERRIDE;
 
     public:
-        SwOutlineTabDialog(Window* pParent,
+        SwOutlineTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
         virtual ~SwOutlineTabDialog();
@@ -119,7 +119,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet);
+    SwOutlineSettingsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwOutlineSettingsTabPage();
 
     void SetWrtShell(SwWrtShell* pShell);
@@ -129,7 +129,7 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 };
 

@@ -38,7 +38,7 @@ class AllSettings;
 class SalGraphics;
 class SalBitmap;
 class SalMenu;
-class Window;
+namespace vcl { class Window; }
 
 struct SalFrameState;
 struct SalInputContext;
@@ -99,7 +99,7 @@ struct SystemParentData;
 class VCL_PLUGIN_PUBLIC SalFrame : public vcl::DeletionNotifier
 {
     // the VCL window corresponding to this frame
-    Window*                 m_pWindow;
+    vcl::Window*                 m_pWindow;
     SALFRAMEPROC            m_pProc;
 
 public:
@@ -229,11 +229,11 @@ public:
 
     // Callbacks (indepent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
-    void                    SetCallback( Window* pWindow, SALFRAMEPROC pProc )
+    void                    SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc )
         { m_pWindow = pWindow; m_pProc = pProc; }
 
     // returns the instance set
-    Window*                 GetWindow() const { return m_pWindow; }
+    vcl::Window*                 GetWindow() const { return m_pWindow; }
 
     // Call the callback set; this sometimes necessary for implementation classes
     // that should not know more than necessary about the SalFrame implementation

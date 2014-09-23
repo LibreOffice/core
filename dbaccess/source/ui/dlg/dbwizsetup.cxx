@@ -100,7 +100,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 
 // ODbTypeWizDialogSetup
-ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
+ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
                                ,SfxItemSet* _pItems
                                ,const Reference< XComponentContext >& _rxORB
                                ,const ::com::sun::star::uno::Any& _aDataSourceName

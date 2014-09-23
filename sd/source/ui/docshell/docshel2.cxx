@@ -144,7 +144,7 @@ Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
 
     if (aVisArea.IsEmpty() && mpViewShell)
     {
-        Window* pWin = mpViewShell->GetActiveWindow();
+        vcl::Window* pWin = mpViewShell->GetActiveWindow();
 
         if (pWin)
         {
@@ -282,7 +282,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
  * name.
  * @return sal_False if the user cancels the action.
  */
-bool DrawDocShell::CheckPageName (::Window* pWin, OUString& rName )
+bool DrawDocShell::CheckPageName (vcl::Window* pWin, OUString& rName )
 {
     const OUString aStrForDlg( rName );
     bool bIsNameValid = IsNewPageNameValid( rName, true );

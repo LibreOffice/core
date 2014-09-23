@@ -29,7 +29,7 @@
 #include <memory>
 #include <boost/function.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sd { namespace toolpanel {
 
@@ -39,7 +39,7 @@ class ControlContainer;
     control are child windows.
 */
 class TitledControl
-    : public ::Window,
+    : public vcl::Window,
       public TreeNode
 {
 public:
@@ -74,7 +74,7 @@ public:
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
     virtual bool IsResizable (void);
-    virtual ::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow (void);
 
     virtual void Resize (void);
     virtual void GetFocus (void);

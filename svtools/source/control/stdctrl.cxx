@@ -19,7 +19,7 @@
 
 #include <svtools/stdctrl.hxx>
 
-FixedInfo::FixedInfo( Window* pParent, const ResId& rResId ) :
+FixedInfo::FixedInfo( vcl::Window* pParent, const ResId& rResId ) :
     FixedText( pParent, rResId )
 {
     SetStyle( GetStyle() | WB_INFO );

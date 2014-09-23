@@ -91,7 +91,7 @@ struct PresentationSettingsEx : public PresentationSettings
 {
     bool mbRehearseTimings;
     bool mbPreview;
-    ::Window* mpParentWindow;
+    vcl::Window* mpParentWindow;
     css::uno::Reference< css::drawing::XDrawPage > mxStartPage;
     css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
 
@@ -164,7 +164,7 @@ friend class SlideShow;
 friend class SlideShowView;
 
 public:
-    explicit SlideshowImpl( const css::uno::Reference< css::presentation::XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, ::Window* pParentWindow);
+    explicit SlideshowImpl( const css::uno::Reference< css::presentation::XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow);
 
     // css::presentation::XSlideShowController:
     virtual sal_Bool SAL_CALL getAlwaysOnTop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -250,7 +250,7 @@ private:
     bool startPreview(
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
-        ::Window* pParent );
+        vcl::Window* pParent );
 
     ShowWindow* getShowWindow() const { return mpShowWindow; }
 
@@ -337,7 +337,7 @@ private:
     SdDrawDocument* mpDoc;
 
     SfxItemSet*     mpNewAttr;
-    ::Window*       mpParentWindow;
+    vcl::Window*       mpParentWindow;
     ShowWindow*     mpShowWindow;
     PushButton*     mpTimeButton;
 

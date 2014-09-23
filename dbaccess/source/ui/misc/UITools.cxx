@@ -208,7 +208,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
 }
 
 Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
-    Window* _pErrorMessageParent, Reference< XComponentContext > _rxContext, ::dbtools::SQLExceptionInfo* _pErrorInfo )
+    vcl::Window* _pErrorMessageParent, Reference< XComponentContext > _rxContext, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create(_rxContext);
 
@@ -280,7 +280,7 @@ Reference< XInterface > getDataSourceOrModel(const Reference< XInterface >& _xOb
     return xRet;
 }
 
-void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< XComponentContext >& _rxContext)
+void showError(const SQLExceptionInfo& _rInfo, vcl::Window* _pParent,const Reference< XComponentContext >& _rxContext)
 {
     OSL_ENSURE(_pParent,"showError: Parent window must be NOT NULL!");
     ::dbtools::showError(_rInfo,VCLUnoHelper::GetInterface(_pParent), _rxContext);
@@ -753,7 +753,7 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
 void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
                             const Reference<XPropertySet>& xField,
                             SvNumberFormatter* _pFormatter,
-                            Window* _pParent)
+                            vcl::Window* _pParent)
 {
     if (xAffectedCol.is() && xField.is())
     {
@@ -786,7 +786,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
     }
 }
 
-bool callColumnFormatDialog(Window* _pParent,
+bool callColumnFormatDialog(vcl::Window* _pParent,
                                 SvNumberFormatter* _pFormatter,
                                 sal_Int32 _nDataType,
                                 sal_Int32& _nFormatKey,
@@ -908,7 +908,7 @@ const SfxFilter* getStandardDatabaseFilter()
 bool appendToFilter(const Reference<XConnection>& _xConnection,
                         const OUString& _sName,
                         const Reference< XComponentContext >& _rxContext,
-                        Window* _pParent)
+                        vcl::Window* _pParent)
 {
     bool bRet = false;
     Reference< XChild> xChild(_xConnection,UNO_QUERY);
@@ -956,7 +956,7 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
     return bRet;
 }
 
-void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,Window*> _rMemFunc)
+void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*> _rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
     SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : NULL;
@@ -1281,7 +1281,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     return pTypeInfo;
 }
 
-sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,bool _bAll,const OUString& _sName)
+sal_Int32 askForUserAction(vcl::Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,bool _bAll,const OUString& _sName)
 {
     SolarMutexGuard aGuard;
     OUString aMsg = ModuleRes(_nText);
@@ -1385,7 +1385,7 @@ Reference<XPropertySet> createView( const OUString& _rName, const Reference< XCo
     return createView( _rName, _rxConnection, sCommand );
 }
 
-bool insertHierachyElement( Window* _pParent, const Reference< XComponentContext >& _rxContext,
+bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentContext >& _rxContext,
                            const Reference<XHierarchicalNameContainer>& _xNames,
                            const OUString& _sParentFolder,
                            bool _bForm,

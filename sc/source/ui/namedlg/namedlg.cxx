@@ -47,7 +47,7 @@
 
 //logic
 
-ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
         ScViewData*       ptrViewData,
         const ScAddress&  aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap  )
     : ScAnyRefDlg(pB, pCW, pParent, "ManageNamesDialog", "modules/scalc/ui/managenamesdialog.ui")

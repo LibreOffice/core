@@ -354,13 +354,13 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
     return 0L;
 }
 
-void lcl_scroll(Window& _rWindow,const Point& _aDelta)
+void lcl_scroll(vcl::Window& _rWindow,const Point& _aDelta)
 {
     _rWindow.Scroll(-_aDelta.X(),-_aDelta.Y());
     _rWindow.Invalidate(INVALIDATE_TRANSPARENT);
 }
 
-void lcl_setOrigin(Window& _rWindow,long _nX, long _nY)
+void lcl_setOrigin(vcl::Window& _rWindow,long _nX, long _nY)
 {
     MapMode aMap = _rWindow.GetMapMode();
     aMap.SetOrigin( Point(- _nX, - _nY));

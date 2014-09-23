@@ -39,7 +39,7 @@ class DecoToolBox : public ToolBox
 
     using Window::ImplInit;
 public:
-            DecoToolBox( Window* pParent, WinBits nStyle = 0 );
+            DecoToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
     void    ImplInit();
 
     void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -54,7 +54,7 @@ public:
 
 /** Class that implements the actual window of the menu bar.
 */
-class MenuBarWindow : public Window, public IMenuBarWindow
+class MenuBarWindow : public vcl::Window, public IMenuBarWindow
 {
     friend class MenuBar;
     friend class Menu;
@@ -106,7 +106,7 @@ private:
     void            GetFocus() SAL_OVERRIDE;
 
 public:
-                    MenuBarWindow( Window* pParent );
+                    MenuBarWindow( vcl::Window* pParent );
                     virtual ~MenuBarWindow();
 
     virtual void    ShowButtons(bool bClose, bool bFloat, bool bHide) SAL_OVERRIDE;

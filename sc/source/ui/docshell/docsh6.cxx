@@ -136,7 +136,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart 
     SvInPlaceEnvironment* pEnv = GetIPEnv();
     if (pEnv)
     {
-        Window* pWin = pEnv->GetEditWin();
+        vcl::Window* pWin = pEnv->GetEditWin();
         pEnv->MakeScale( aArea.GetSize(), MAP_100TH_MM,
                             pWin->LogicToPixel( aArea.GetSize() ) );
     } */
@@ -530,7 +530,7 @@ void ScDocShell::CheckConfigOptions()
         ScTabViewShell* pViewShell = GetBestViewShell();
         if (pViewShell)
         {
-            Window* pParent = pViewShell->GetFrameWin();
+            vcl::Window* pParent = pViewShell->GetFrameWin();
             InfoBox aBox(pParent, ScGlobal::GetRscString(STR_OPTIONS_WARN_SEPARATORS));
             aBox.Execute();
         }

@@ -90,13 +90,13 @@ OAppBorderWindow::~OAppBorderWindow()
     if ( m_pPanel )
     {
         m_pPanel->Hide();
-        boost::scoped_ptr<Window> aTemp(m_pPanel);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pPanel);
         m_pPanel = NULL;
     }
     if ( m_pDetailView )
     {
         m_pDetailView->Hide();
-        boost::scoped_ptr<Window> aTemp(m_pDetailView);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pDetailView);
         m_pDetailView = NULL;
     }
 
@@ -177,7 +177,7 @@ OApplicationSwapWindow* OAppBorderWindow::getPanel() const
 
 
 // class OApplicationView
-OApplicationView::OApplicationView( Window* pParent
+OApplicationView::OApplicationView( vcl::Window* pParent
                                     ,const Reference< XComponentContext >& _rxOrb
                                     ,IApplicationController& _rAppController
                                     ,PreviewMode _ePreviewMode
@@ -208,7 +208,7 @@ OApplicationView::~OApplicationView()
     {
         stopComponentListening(m_xObject);
         m_pWin->Hide();
-        boost::scoped_ptr<Window> aTemp(m_pWin);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
         m_pWin = NULL;
     }
 }

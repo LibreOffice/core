@@ -39,7 +39,7 @@ namespace dbaui
         virtual void Resize() SAL_OVERRIDE;
 
     public:
-        OTableDesignHelpBar( Window* pParent );
+        OTableDesignHelpBar( vcl::Window* pParent );
         virtual ~OTableDesignHelpBar();
 
         void SetHelpText( const OUString& rText );

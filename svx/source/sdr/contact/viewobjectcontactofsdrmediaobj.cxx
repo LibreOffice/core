@@ -39,7 +39,7 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
     mpMediaWindow( NULL )
 {
 #if HAVE_FEATURE_AVMEDIA
-    Window* pWindow = getWindow();
+    vcl::Window* pWindow = getWindow();
 
     if( pWindow )
     {
@@ -60,16 +60,16 @@ ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
 
 
 
-Window* ViewObjectContactOfSdrMediaObj::getWindow() const
+vcl::Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 {
-    Window* pRetval = 0;
+    vcl::Window* pRetval = 0;
 
     boost::optional<const OutputDevice&> oPageOutputDev = getPageViewOutputDevice();
     if( oPageOutputDev )
     {
         if(OUTDEV_WINDOW == oPageOutputDev->GetOutDevType())
         {
-            pRetval = static_cast< Window* >(&const_cast<OutputDevice&>(oPageOutputDev.get()));
+            pRetval = static_cast< vcl::Window* >(&const_cast<OutputDevice&>(oPageOutputDev.get()));
         }
     }
 

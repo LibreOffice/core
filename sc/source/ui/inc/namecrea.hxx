@@ -33,7 +33,7 @@ protected:
     CheckBox* m_pBottomBox;
     CheckBox* m_pRightBox;
 public:
-    ScNameCreateDlg( Window * pParent, sal_uInt16 nFlags );
+    ScNameCreateDlg( vcl::Window * pParent, sal_uInt16 nFlags );
 
     sal_uInt16          GetFlags() const;
 };

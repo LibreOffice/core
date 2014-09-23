@@ -42,7 +42,7 @@ class DialogModel;
 class CreationWizard : public svt::RoadmapWizard, public TabPageNotifiable
 {
 public:
-    CreationWizard( Window* pParent,
+    CreationWizard( vcl::Window* pParent,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XModel >& xChartModel
         , const ::com::sun::star::uno::Reference<

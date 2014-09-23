@@ -83,7 +83,7 @@ private:
     FixedText*          m_pFtSearchDir;
     FixedText*          m_pFtSearchType;
     CancelButton*       m_pBtnCancel;
-    Window * parent_;
+    vcl::Window * parent_;
     INetURLObject startUrl_;
     rtl::Reference< SearchThread > maSearchThread;
 
@@ -91,7 +91,7 @@ private:
     void                Terminate();
 
 public:
-                        SearchProgress( Window* pParent, const INetURLObject& rStartURL );
+                        SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL );
                         virtual ~SearchProgress() {};
 
                         DECL_LINK( CleanUpHdl, void* );
@@ -127,7 +127,7 @@ class TakeProgress : public ModalDialog
 private:
     FixedText*          m_pFtTakeFile;
     CancelButton*       m_pBtnCancel;
-    Window * window_;
+    vcl::Window * window_;
     rtl::Reference< TakeThread > maTakeThread;
     TokenList_impl      maTakenList;
 
@@ -136,7 +136,7 @@ private:
 
 public:
 
-    TakeProgress( Window* pWindow );
+    TakeProgress( vcl::Window* pWindow );
 
     DECL_LINK( CleanUpHdl, void* );
 
@@ -159,7 +159,7 @@ private:
                         DECL_LINK( ActualizeHdl, INetURLObject* pURL );
 
 public:
-                        ActualizeProgress( Window* pWindow, GalleryTheme* pThm );
+                        ActualizeProgress( vcl::Window* pWindow, GalleryTheme* pThm );
                         virtual ~ActualizeProgress() {};
 
     virtual short       Execute() SAL_OVERRIDE;
@@ -170,7 +170,7 @@ class TitleDialog : public ModalDialog
 private:
     Edit* m_pEdit;
 public:
-    TitleDialog(Window* pParent, const OUString& rOldText);
+    TitleDialog(vcl::Window* pParent, const OUString& rOldText);
     OUString GetTitle() const { return m_pEdit->GetText(); }
 };
 
@@ -184,7 +184,7 @@ private:
     DECL_LINK( ClickOkHdl, void* );
     DECL_LINK( ClickResNameHdl, void* );
 public:
-    GalleryIdDialog( Window* pParent, GalleryTheme* pThm );
+    GalleryIdDialog( vcl::Window* pParent, GalleryTheme* pThm );
     sal_uLong GetId() const { return m_pLbResName->GetSelectEntryPos(); }
 };
 
@@ -198,7 +198,7 @@ class GalleryThemeProperties : public SfxTabDialog
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) SAL_OVERRIDE;
 
 public:
-    GalleryThemeProperties(Window* pParent, ExchangeData* pData, SfxItemSet* pItemSet);
+    GalleryThemeProperties(vcl::Window* pParent, ExchangeData* pData, SfxItemSet* pItemSet);
 };
 
 class TPGalleryThemeGeneral : public SfxTabPage
@@ -219,13 +219,13 @@ private:
 
 public:
 
-                        TPGalleryThemeGeneral( Window* pParent, const SfxItemSet& rSet );
+                        TPGalleryThemeGeneral( vcl::Window* pParent, const SfxItemSet& rSet );
                         virtual ~TPGalleryThemeGeneral() {}
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 };
 
 typedef ::std::vector< FilterEntry* > FilterEntryList_impl;
@@ -284,7 +284,7 @@ class TPGalleryThemeProperties : public SfxTabPage
                         DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
 
 public:
-                        TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet );
+                        TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet );
                         virtual ~TPGalleryThemeProperties();
 
     void                SetXChgData( ExchangeData* pData );
@@ -292,7 +292,7 @@ public:
 
     void                StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult );
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX

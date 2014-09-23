@@ -48,7 +48,7 @@ namespace svt
     {
     }
 
-    HyperLabel::HyperLabel( Window* _pParent, WinBits _nWinStyle )
+    HyperLabel::HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle )
         :FixedText( _pParent, _nWinStyle )
         ,m_pImpl( new HyperLabelImpl )
     {

@@ -47,11 +47,11 @@ class ScFormulaReferenceHelper
     ::std::auto_ptr<ScCompiler>         pRefComp;
     formula::RefEdit*    pRefEdit;               // active input field
     formula::RefButton*  pRefBtn;                // associated button
-    Window*             m_pWindow;
+    vcl::Window*             m_pWindow;
     SfxBindings*        m_pBindings;
     ::std::auto_ptr<Accelerator>
                         pAccel;                 // for Enter/Escape
-    ::std::vector<Window*> m_aHiddenWidgets;    // vector of hidden Controls
+    ::std::vector<vcl::Window*> m_aHiddenWidgets;    // vector of hidden Controls
     sal_Int32           m_nOldBorderWidth;      // border width for expanded dialog
     SCTAB               nRefTab;                // used for ShowReference
 
@@ -61,7 +61,7 @@ class ScFormulaReferenceHelper
     Size                aOldEditSize;           // Original size of the input field
     long                mnOldEditWidthReq;
     Point               aOldButtonPos;          // Original position of the button
-    Window*             mpOldEditParent;        // Original parent of the edit field and the button
+    vcl::Window*             mpOldEditParent;        // Original parent of the edit field and the button
     bool                mbOldDlgLayoutEnabled;  // Original layout state of parent dialog
     bool                mbOldEditParentLayoutEnabled;  // Original layout state of edit widget parent
 
@@ -87,7 +87,7 @@ public:
     void                RefInputDone( bool bForced = false );
     void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 
-    inline void         SetWindow(Window* _pWindow) { m_pWindow = _pWindow; }
+    inline void         SetWindow(vcl::Window* _pWindow) { m_pWindow = _pWindow; }
     bool                DoClose( sal_uInt16 nId );
     void                SetDispatcherLock( bool bLock );
     void                EnableSpreadsheets( bool bFlag = true, bool bChildren = true );
@@ -96,7 +96,7 @@ public:
     static              void enableInput(bool _bInput);
 
 protected:
-    Window      *       GetWindow(){ return m_pWindow; }
+    vcl::Window*        GetWindow(){ return m_pWindow; }
 
 public:
     bool                CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
@@ -106,12 +106,12 @@ public:
 class SC_DLLPUBLIC ScRefHandler :
                     public IAnyRefDialog
 {
-    Window &    m_rWindow;
+    vcl::Window &    m_rWindow;
     bool        m_bInRefMode;
 
 public:
-    operator Window *(){ return &m_rWindow; }
-    Window  * operator ->() { return static_cast<Window *>(*this); }
+    operator vcl::Window *(){ return &m_rWindow; }
+    vcl::Window* operator ->() { return static_cast<vcl::Window *>(*this); }
     friend class        formula::RefButton;
     friend class        formula::RefEdit;
 
@@ -120,7 +120,7 @@ private:
                         m_aHelper;
     SfxBindings*        pMyBindings;
 
-    Window*             pActiveWin;
+    vcl::Window*        pActiveWin;
     Timer               aTimer;
     OUString            aDocName;               // document on which the dialog was opened
 
@@ -142,7 +142,7 @@ protected:
     void stateChanged(const StateChangedType nStateChange, const bool bBindRef);
 
 public:
-                        ScRefHandler( Window &rWindow, SfxBindings* pB, bool bBindRef );
+                        ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef );
     virtual             ~ScRefHandler();
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE = 0;
@@ -177,7 +177,7 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 protected:
-    ScRefHdlModalImpl(Window* pParent, const OString& rID,
+    ScRefHdlModalImpl(vcl::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription);
 
 private:
@@ -264,7 +264,7 @@ void ScRefHdlrImplBase<TWindow, bBindRef>::StateChanged( StateChangedType nState
 class ScAnyRefModalDlg : public ScRefHdlModalImpl
 {
 public:
-    ScAnyRefModalDlg(Window* pParent, const OString& rID,
+    ScAnyRefModalDlg(vcl::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription);
 };
 

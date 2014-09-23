@@ -43,7 +43,7 @@ private:
     DECL_DLLPRIVATE_LINK( ModifyHdl, ComboBox * );
 
 public:
-    SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& );
+    SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& );
     virtual ~SfxNewStyleDlg();
 
     OUString                GetName() const { return comphelper::string::stripStart(m_pColBox->GetText(), ' '); }

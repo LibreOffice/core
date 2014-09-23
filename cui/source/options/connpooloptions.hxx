@@ -48,10 +48,10 @@ namespace offapp
         NumericField*           m_pTimeout;
 
     protected:
-        ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet);
+        ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet);
 
     public:
-        static SfxTabPage*  Create(Window* _pParent, const SfxItemSet* _rAttrSet);
+        static SfxTabPage*  Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet);
 
     protected:
         virtual bool        Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;

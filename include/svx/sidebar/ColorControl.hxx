@@ -26,7 +26,7 @@
 #include <boost/function.hpp>
 #include <svx/SvxColorValueSet.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class SfxBindings;
 class RedId;
 class FloatingWindow;
@@ -58,7 +58,7 @@ public:
             When zero is given then no such field is created.
     */
     ColorControl (
-        Window* pParent,
+        vcl::Window* pParent,
         SfxBindings* pBindings,
         const ResId& rControlResId,
         const ResId& rValueSetResId,

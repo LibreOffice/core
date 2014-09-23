@@ -55,10 +55,10 @@ protected:
                                      SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
 
 public:
-    SvxHyperlinkMailTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
+    SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkMailTp ();
 
-    static  IconChoicePage* Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
+    static  IconChoicePage* Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
     virtual void        SetInitFocus() SAL_OVERRIDE;
 };

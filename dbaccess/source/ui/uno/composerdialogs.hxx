@@ -63,14 +63,14 @@ namespace dbaui
     protected:
         // own overridables
         virtual Dialog* createComposerDialog(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns
         ) = 0;
 
     private:
         // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(Window* _pParent) SAL_OVERRIDE;
+        virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
     };
 
     // RowsetFilterDialog
@@ -86,7 +86,7 @@ namespace dbaui
     protected:
         // own overridables
         virtual Dialog* createComposerDialog(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns
         ) SAL_OVERRIDE;
@@ -111,7 +111,7 @@ namespace dbaui
     protected:
         // own overridables
         virtual Dialog* createComposerDialog(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns
         ) SAL_OVERRIDE;

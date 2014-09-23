@@ -164,7 +164,7 @@ sal_Int32 AccFrameSelector::getAccessibleIndexInParent(  )
     sal_Int32 nIdx = 0;
     if( meBorder == FRAMEBORDER_NONE )
     {
-        Window* pTabPage = mpFrameSel->GetParent();
+        vcl::Window* pTabPage = mpFrameSel->GetParent();
         sal_Int32 nChildren = pTabPage->GetChildCount();
         for( nIdx = 0; nIdx < nChildren; ++nIdx )
             if( pTabPage->GetChild( static_cast< sal_uInt16 >( nIdx ) ) == mpFrameSel )
@@ -217,7 +217,7 @@ Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet( 
     if(meBorder == FRAMEBORDER_NONE)
     {
         //add the label relation
-        Window *pLabeledBy = mpFrameSel->GetAccessibleRelationLabeledBy();
+        vcl::Window *pLabeledBy = mpFrameSel->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != mpFrameSel )
         {
             AccessibleRelation aLabelRelation;
@@ -226,7 +226,7 @@ Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet( 
             aLabelRelation.TargetSet.getArray()[0]  = pLabeledBy->GetAccessible();
             pHelper->AddRelation(aLabelRelation);
         }
-        Window* pMemberOf = mpFrameSel->GetAccessibleRelationMemberOf();
+        vcl::Window* pMemberOf = mpFrameSel->GetAccessibleRelationMemberOf();
         if ( pMemberOf && pMemberOf != mpFrameSel )
         {
             AccessibleRelation aMemberOfRelation;
@@ -479,7 +479,7 @@ Any AccFrameSelector::getAccessibleKeyBinding(  ) throw (RuntimeException)
     Reference< XAccessibleRelationSet > xRet = new utl::AccessibleRelationSetHelper;
     if(meBorder == FRAMEBORDER_NONE)
     {
-        Window* pPrev = mpFrameSel->GetWindow( WINDOW_PREV );
+        vcl::Window* pPrev = mpFrameSel->GetWindow( WINDOW_PREV );
         if(pPrev && WINDOW_FIXEDTEXT == pPrev->GetType())
         {
             OUString sText = pPrev->GetText();
@@ -635,7 +635,7 @@ IMPL_LINK( AccFrameSelector, WindowEventListener, VclSimpleEvent*, pEvent )
     DBG_ASSERT( pWinEvent, "AccFrameSelector::WindowEventListener - unknown window event" );
     if ( pWinEvent )
     {
-        Window* pWindow = pWinEvent->GetWindow();
+        vcl::Window* pWindow = pWinEvent->GetWindow();
         DBG_ASSERT( pWindow, "AccFrameSelector::WindowEventListener: no window!" );
         if ( !pWindow->IsAccessibilityEventsSuppressed() || ( pWinEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
         {

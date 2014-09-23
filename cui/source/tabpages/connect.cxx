@@ -50,7 +50,7 @@ static const sal_uInt16 pRanges[] =
 |*
 \************************************************************************/
 
-SvxConnectionDialog::SvxConnectionDialog( Window* pParent, const SfxItemSet& rInAttrs,
+SvxConnectionDialog::SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView )
     : SfxSingleTabDialog(pParent, rInAttrs)
 {
@@ -79,7 +79,7 @@ SvxConnectionDialog::~SvxConnectionDialog()
 |*
 \************************************************************************/
 
-SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttrs )
+SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs )
     : SfxTabPage(pWindow ,"ConnectorTabPage" ,"cui/ui/connectortabpage.ui"
         ,&rInAttrs)
     , rOutAttrs(rInAttrs)
@@ -388,7 +388,7 @@ void SvxConnectionPage::Construct()
 |*
 \************************************************************************/
 
-SfxTabPage* SvxConnectionPage::Create( Window* pWindow,
+SfxTabPage* SvxConnectionPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SvxConnectionPage( pWindow, *rAttrs ) );

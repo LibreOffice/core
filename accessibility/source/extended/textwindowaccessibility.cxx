@@ -46,7 +46,7 @@ void SfxListenerGuard::endListening()
     }
 }
 
-void WindowListenerGuard::startListening(::Window & rNotifier)
+void WindowListenerGuard::startListening(vcl::Window & rNotifier)
 {
     OSL_ENSURE(m_pNotifier == 0, "called more than once");
     m_pNotifier = &rNotifier;
@@ -267,7 +267,7 @@ css::awt::Size SAL_CALL Paragraph::getSize()
 void SAL_CALL Paragraph::grabFocus() throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
-    Window* pWindow = m_xDocument->GetWindow();
+    vcl::Window* pWindow = m_xDocument->GetWindow();
     if ( pWindow )
     {
         pWindow->GrabFocus();

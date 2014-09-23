@@ -28,7 +28,7 @@
 using namespace ::dbaui;
 
 // class OSplitterView
-OSplitterView::OSplitterView(Window* _pParent,bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
+OSplitterView::OSplitterView(vcl::Window* _pParent,bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
     ,m_pSplitter( NULL )
     ,m_pLeft(NULL)
     ,m_pRight(NULL)
@@ -183,7 +183,7 @@ void OSplitterView::Resize()
 
 }
 
-void OSplitterView::set(Window* _pRight,Window* _pLeft)
+void OSplitterView::set(vcl::Window* _pRight,Window* _pLeft)
 {
     m_pLeft = _pLeft;
     m_pRight = _pRight;

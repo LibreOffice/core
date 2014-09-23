@@ -86,7 +86,7 @@ private:
     SdrObject*                      mpObject;
     SdrText*                        mpText;
     SdrView*                        mpView;
-    const Window*                   mpWindow;
+    const vcl::Window*                   mpWindow;
     SdrModel*                       mpModel;
     SdrOutliner*                    mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
@@ -121,7 +121,7 @@ private:
 
 public:
     SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText );
-    SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const Window& rWindow );
+    SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const vcl::Window& rWindow );
     virtual ~SvxTextEditSourceImpl();
 
     void SAL_CALL acquire();
@@ -194,7 +194,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
 
 
 
-SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const Window& rWindow )
+SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const vcl::Window& rWindow )
   : maRefCount      ( 0 ),
     mpObject        ( &rObject ),
     mpText          ( pText ),
@@ -1036,7 +1036,7 @@ SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, SdrText* pText )
 }
 
 
-SvxTextEditSource::SvxTextEditSource( SdrObject& rObj, SdrText* pText, SdrView& rView, const Window& rWindow )
+SvxTextEditSource::SvxTextEditSource( SdrObject& rObj, SdrText* pText, SdrView& rView, const vcl::Window& rWindow )
 {
     mpImpl = new SvxTextEditSourceImpl( rObj, pText, rView, rWindow );
     mpImpl->acquire();

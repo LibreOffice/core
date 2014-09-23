@@ -82,7 +82,7 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
     if(bCalc)
     {
         ToolBox& rTbx = GetToolBox();
-        Window* pParent = rTbx.GetParent();
+        vcl::Window* pParent = rTbx.GetParent();
         WindowType nWinType = pParent->GetType();
         if(WINDOW_FLOATINGWINDOW == nWinType)
         {

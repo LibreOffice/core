@@ -61,7 +61,7 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-RangeChooserTabPage::RangeChooserTabPage( Window* pParent
+RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
         , DialogModel & rDialogModel
         , ChartTypeTemplateProvider* pTemplateProvider
         , Dialog * pParentDialog

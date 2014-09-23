@@ -76,7 +76,7 @@ static const sal_uInt16 pLineRanges[] =
 
 SvxLineTabPage::SvxLineTabPage
 (
-    Window* pParent,
+    vcl::Window* pParent,
     const SfxItemSet& rInAttrs
 ) :
     SvxTabPage ( pParent
@@ -1483,7 +1483,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 
-SfxTabPage* SvxLineTabPage::Create( Window* pWindow,
+SfxTabPage* SvxLineTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return( new SvxLineTabPage( pWindow, *rAttrs ) );
@@ -1673,7 +1673,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
 
 
 
-void SvxLineTabPage::PointChanged( Window*, RECT_POINT eRcPt )
+void SvxLineTabPage::PointChanged( vcl::Window*, RECT_POINT eRcPt )
 {
     eRP = eRcPt;
 }

@@ -26,7 +26,7 @@
 #include "rangenam.hxx"
 #include "viewdata.hxx"
 
-ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
+ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool )
     : ModalDialog( pParent, "InsertNameDialog", "modules/scalc/ui/insertname.ui" )
 {
     get(m_pBtnPasteAll, "pasteall");

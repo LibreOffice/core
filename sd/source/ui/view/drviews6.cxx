@@ -290,7 +290,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
                 if( pNewObj->IsLinkedGraphic() )
                 {
-                    MessageDialog aQueryBox( (Window*) GetActiveWindow(),"QueryUnlinkImageDialog","modules/sdraw/ui/queryunlinkimagedialog.ui");
+                    MessageDialog aQueryBox( (vcl::Window*) GetActiveWindow(),"QueryUnlinkImageDialog","modules/sdraw/ui/queryunlinkimagedialog.ui");
 
                     if (RET_YES == aQueryBox.Execute())
                         pNewObj->ReleaseGraphicLink();

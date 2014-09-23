@@ -26,7 +26,7 @@ namespace dbaui
     class ORelationTableWindow : public OTableWindow
     {
     public:
-        ORelationTableWindow( Window* pParent,const TTableWindowData::value_type& pTabWinData)
+        ORelationTableWindow( vcl::Window* pParent,const TTableWindowData::value_type& pTabWinData)
             : OTableWindow(pParent, pTabWinData) {}
 
         /** returns the name which should be used when displaying join or relations

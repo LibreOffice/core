@@ -17,7 +17,7 @@
 #include <vcl/lstbox.hxx>
 #include <numberingtypelistbox.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class SwWrtShell;
 class SwPageDesc;
 
@@ -61,7 +61,7 @@ private:
     DECL_LINK(DownHdl, void *);
     DECL_LINK(StartPageHdl, void *);
 public:
-    SwTitlePageDlg( Window *pParent );
+    SwTitlePageDlg( vcl::Window *pParent );
     virtual ~SwTitlePageDlg();
 };
 

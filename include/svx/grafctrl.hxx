@@ -68,7 +68,7 @@ public:
     virtual ~SvxGrafToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -160,7 +160,7 @@ public:
                         virtual ~SvxGrafModeToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 

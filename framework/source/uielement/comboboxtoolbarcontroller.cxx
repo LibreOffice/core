@@ -53,7 +53,7 @@ namespace framework
 class ComboBoxControl : public ComboBox
 {
     public:
-        ComboBoxControl( Window* pParent, WinBits nStyle, IComboBoxListener* pComboBoxListener );
+        ComboBoxControl( vcl::Window* pParent, WinBits nStyle, IComboBoxListener* pComboBoxListener );
         virtual ~ComboBoxControl();
 
         virtual void Select() SAL_OVERRIDE;
@@ -68,7 +68,7 @@ class ComboBoxControl : public ComboBox
         IComboBoxListener* m_pComboBoxListener;
 };
 
-ComboBoxControl::ComboBoxControl( Window* pParent, WinBits nStyle, IComboBoxListener* pComboBoxListener ) :
+ComboBoxControl::ComboBoxControl( vcl::Window* pParent, WinBits nStyle, IComboBoxListener* pComboBoxListener ) :
     ComboBox( pParent, nStyle )
     , m_pComboBoxListener( pComboBoxListener )
 {
@@ -188,7 +188,7 @@ void ComboboxToolbarController::Select()
 {
     if ( m_pComboBox->GetEntryCount() > 0 )
     {
-        Window::PointerState aState = m_pComboBox->GetPointerState();
+        vcl::Window::PointerState aState = m_pComboBox->GetPointerState();
 
         sal_uInt16 nKeyModifier = sal_uInt16( aState.mnState & KEY_MODTYPE );
         execute( nKeyModifier );

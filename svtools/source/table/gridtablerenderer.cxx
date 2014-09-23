@@ -558,13 +558,13 @@ namespace svt { namespace table
     }
 
 
-    void GridTableRenderer::ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect)
+    void GridTableRenderer::ShowCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect)
     {
         _rView.ShowFocus( _rCursorRect );
     }
 
 
-    void GridTableRenderer::HideCellCursor( Window& _rView, const Rectangle& _rCursorRect)
+    void GridTableRenderer::HideCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect)
     {
         (void)_rCursorRect;
         _rView.HideFocus();

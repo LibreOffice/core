@@ -49,7 +49,7 @@ class ODbDataSourceAdministrationHelper;
         SfxItemSet*             m_pOutSet;
     public:
 
-        OTableSubscriptionDialog(Window* pParent
+        OTableSubscriptionDialog(vcl::Window* pParent
             ,SfxItemSet* _pItems
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
             ,const ::com::sun::star::uno::Any& _aDataSourceName

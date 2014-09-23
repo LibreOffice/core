@@ -81,8 +81,8 @@ private:
     sal_uLong GetSelectedInterpolationType();
 
 public:
-    CompressGraphicsDialog( Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings );
-    CompressGraphicsDialog( Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings );
+    CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings );
+    CompressGraphicsDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings );
 
     virtual ~CompressGraphicsDialog();
 

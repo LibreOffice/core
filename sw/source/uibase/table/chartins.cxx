@@ -61,7 +61,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart )
+Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart )
 {
     // positioning code according to spepc; similar to Calc fuins2.cxx
     Point aRet;
@@ -132,7 +132,7 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
     return aRet;
 }
 
-void SwInsertChart(Window* pParent, SfxBindings* pBindings )
+void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
 {
     (void) pParent;
     (void) pBindings;

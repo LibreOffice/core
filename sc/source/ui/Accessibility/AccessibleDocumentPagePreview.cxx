@@ -542,7 +542,7 @@ Rectangle ScIAccessibleViewForwarder::GetVisibleArea() const
 {
     SolarMutexGuard aGuard;
     Rectangle aVisRect;
-    Window* pWin = mpViewShell->GetWindow();
+    vcl::Window* pWin = mpViewShell->GetWindow();
     if (pWin)
     {
         aVisRect.SetSize(pWin->GetOutputSizePixel());
@@ -558,7 +558,7 @@ Point ScIAccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 {
     SolarMutexGuard aGuard;
     Point aPoint;
-    Window* pWin = mpViewShell->GetWindow();
+    vcl::Window* pWin = mpViewShell->GetWindow();
     if (pWin && mpAccDoc)
     {
         Rectangle aRect(mpAccDoc->GetBoundingBoxOnScreen());
@@ -572,7 +572,7 @@ Size ScIAccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 {
     SolarMutexGuard aGuard;
     Size aSize;
-    Window* pWin = mpViewShell->GetWindow();
+    vcl::Window* pWin = mpViewShell->GetWindow();
     if (pWin)
         aSize = pWin->LogicToPixel(rSize, maMapMode);
     return aSize;
@@ -582,7 +582,7 @@ Point ScIAccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
 {
     SolarMutexGuard aGuard;
     Point aPoint;
-    Window* pWin = mpViewShell->GetWindow();
+    vcl::Window* pWin = mpViewShell->GetWindow();
     if (pWin && mpAccDoc)
     {
         Rectangle aRect(mpAccDoc->GetBoundingBoxOnScreen());
@@ -595,7 +595,7 @@ Size ScIAccessibleViewForwarder::PixelToLogic (const Size& rSize) const
 {
     SolarMutexGuard aGuard;
     Size aSize;
-    Window* pWin = mpViewShell->GetWindow();
+    vcl::Window* pWin = mpViewShell->GetWindow();
     if (pWin)
         aSize = pWin->PixelToLogic(rSize, maMapMode);
     return aSize;
@@ -1085,7 +1085,7 @@ void ScShapeChildren::FillShapes(const Rectangle& aPixelPaintRect, const MapMode
 {
     OSL_ENSURE(nRangeId < maShapeRanges.size(), "this is not a valid range for draw objects");
     SdrPage* pPage = GetDrawPage();
-    Window* pWin = mpViewShell->GetWindow();
+    vcl::Window* pWin = mpViewShell->GetWindow();
     if (pPage && pWin)
     {
         bool bForeAdded(false);
@@ -1183,7 +1183,7 @@ struct ScPagePreviewCountData
     long nForeShapes;
     long nControls;
 
-    ScPagePreviewCountData( const ScPreviewLocationData& rData, Window* pSizeWindow,
+    ScPagePreviewCountData( const ScPreviewLocationData& rData, vcl::Window* pSizeWindow,
         ScNotesChildren* pNotesChildren, ScShapeChildren* pShapeChildren );
 
     long GetTotal() const
@@ -1193,7 +1193,7 @@ struct ScPagePreviewCountData
 };
 
 ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rData,
-                                Window* pSizeWindow, ScNotesChildren* pNotesChildren,
+                                vcl::Window* pSizeWindow, ScNotesChildren* pNotesChildren,
                                 ScShapeChildren* pShapeChildren) :
     nBackShapes( 0 ),
     nHeaders( 0 ),
@@ -1321,7 +1321,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
             }
 
             Size aOutputSize;
-            Window* pSizeWindow = mpViewShell->GetWindow();
+            vcl::Window* pSizeWindow = mpViewShell->GetWindow();
             if ( pSizeWindow )
                 aOutputSize = pSizeWindow->GetOutputSizePixel();
             Point aPoint;
@@ -1359,7 +1359,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
         else if (pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             Size aOutputSize;
-            Window* pSizeWindow = mpViewShell->GetWindow();
+            vcl::Window* pSizeWindow = mpViewShell->GetWindow();
             if ( pSizeWindow )
                 aOutputSize = pSizeWindow->GetOutputSizePixel();
             Point aPoint;
@@ -1627,7 +1627,7 @@ Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const throw 
     Rectangle aRect;
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
             aRect = pWindow->GetWindowExtentsRelative(NULL);
     }
@@ -1639,7 +1639,7 @@ Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() const throw (uno::Ru
     Rectangle aRect;
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
             aRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
     }

@@ -45,7 +45,7 @@ struct Impl_IMEInfos;
 #define EDIT_NOLIMIT                SAL_MAX_INT32
 #define EDIT_UPDATEDATA_TIMEOUT     350
 
-typedef OUString (*FncGetSpecialChars)( Window* pWin, const vcl::Font& rFont );
+typedef OUString (*FncGetSpecialChars)( vcl::Window* pWin, const vcl::Font& rFont );
 
 class VCL_DLLPUBLIC TextFilter
 {
@@ -131,14 +131,14 @@ private:
 protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    SAL_DLLPRIVATE void        ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void        ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits     ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void        ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, bool bPaint = true );
     SAL_DLLPRIVATE int         ImplGetNativeControlType() const;
     SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
-    static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( Window* pWin );
+    static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( vcl::Window* pWin );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
@@ -161,8 +161,8 @@ public:
     // public because needed in button.cxx
     SAL_DLLPRIVATE bool        ImplUseNativeBorder( WinBits nStyle );
 
-                        Edit( Window* pParent, WinBits nStyle = WB_BORDER );
-                        Edit( Window* pParent, const ResId& rResId );
+                        Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
+                        Edit( vcl::Window* pParent, const ResId& rResId );
                         virtual ~Edit();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -177,7 +177,7 @@ public:
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
 
     virtual void        Modify();
     virtual void        UpdateData();
@@ -250,7 +250,7 @@ public:
     sal_Int32           GetCharPos( const Point& rWindowPos ) const;
 
     // shows a warning box saying "text too long, truncated"
-    static void         ShowTruncationWarning( Window* pParent );
+    static void         ShowTruncationWarning( vcl::Window* pParent );
 
     static void                 SetGetSpecialCharsFunction( FncGetSpecialChars fn );
     static FncGetSpecialChars   GetGetSpecialCharsFunction();

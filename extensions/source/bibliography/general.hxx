@@ -119,17 +119,17 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
                                 AddXControl( const OUString& rName, FixedText& rLabel, const OString& sHelpId,
-                                            sal_Int16& rIndex, std::vector<Window*>& rChildren );
+                                            sal_Int16& rIndex, std::vector<vcl::Window*>& rChildren );
 
     void                        AddControlWithError( const OUString& rColumnName, FixedText& rLabel,
                                             OUString& rErrorString,
-                                            const OString& sHelpId, sal_uInt16 nIndexInFTArray, std::vector<Window*>& rChildren );
+                                            const OString& sHelpId, sal_uInt16 nIndexInFTArray, std::vector<vcl::Window*>& rChildren );
 
 protected:
     void                        InitFixedTexts( void );     // create mnemonics and set text an all fixed texts
 
 public:
-                                BibGeneralPage(Window* pParent, BibDataManager* pDatMan);
+                                BibGeneralPage(vcl::Window* pParent, BibDataManager* pDatMan);
     virtual                     ~BibGeneralPage();
 
     inline const OUString&      GetErrorString() const;

@@ -34,7 +34,7 @@
 
 class LinguMgrExitLstnr;
 
-class Window;
+namespace vcl { class Window; }
 
 
 
@@ -183,7 +183,7 @@ EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
 // misc functions
 
 
-EDITENG_DLLPUBLIC short SvxDicError( Window *pParent, sal_Int16 nError );
+EDITENG_DLLPUBLIC short SvxDicError( vcl::Window *pParent, sal_Int16 nError );
 
 
 #endif

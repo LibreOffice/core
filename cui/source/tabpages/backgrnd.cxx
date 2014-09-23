@@ -176,10 +176,10 @@ sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
     preview window for brush or bitmap
 */
 
-class BackgroundPreviewImpl : public Window
+class BackgroundPreviewImpl : public vcl::Window
 {
 public:
-    BackgroundPreviewImpl(Window* pParent);
+    BackgroundPreviewImpl(vcl::Window* pParent);
     void setBmp(bool bBmp);
     virtual ~BackgroundPreviewImpl();
 
@@ -203,7 +203,7 @@ private:
     sal_uInt8            nTransparency;
 };
 
-BackgroundPreviewImpl::BackgroundPreviewImpl(Window* pParent)
+BackgroundPreviewImpl::BackgroundPreviewImpl(vcl::Window* pParent)
     : Window(pParent, WB_BORDER)
     , bIsBmp(false)
     , pBitmap(NULL)
@@ -214,7 +214,7 @@ BackgroundPreviewImpl::BackgroundPreviewImpl(Window* pParent)
     Paint(aDrawRect);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBackgroundPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBackgroundPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new BackgroundPreviewImpl(pParent);
 }
@@ -350,7 +350,7 @@ void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 
 #define HDL(hdl) LINK(this,SvxBackgroundTabPage,hdl)
 
-SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rCoreSet)
+SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     : SvxTabPage(pParent, "BackgroundPage", "cui/ui/backgroundpage.ui", rCoreSet)
     , nHtmlMode(0)
     , bAllowShowSelector(true)
@@ -456,7 +456,7 @@ const sal_uInt16* SvxBackgroundTabPage::GetRanges()
 
 
 
-SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
+SfxTabPage* SvxBackgroundTabPage::Create( vcl::Window* pParent,
                                           const SfxItemSet* rAttrSet )
 
 /*  [Description]
@@ -1068,7 +1068,7 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
+void SvxBackgroundTabPage::PointChanged( vcl::Window* , RECT_POINT  )
 {
     // has to be implemented so that position control can work
 }
@@ -1423,7 +1423,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
         return 0;
     bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
-    OUString aStrBrowse(get<Window>("findgraphicsft")->GetText());
+    OUString aStrBrowse(get<vcl::Window>("findgraphicsft")->GetText());
     pImportDlg = new SvxOpenGraphicDialog( aStrBrowse );
     if ( bHtml || bLinkOnly )
         pImportDlg->EnableLink(false);

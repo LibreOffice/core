@@ -54,10 +54,10 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
 
 public:
-    explicit        MenuButton( Window* pParent, WinBits nStyle = 0 );
+    explicit        MenuButton( vcl::Window* pParent, WinBits nStyle = 0 );
     virtual         ~MenuButton();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

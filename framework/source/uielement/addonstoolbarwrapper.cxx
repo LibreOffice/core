@@ -109,7 +109,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
             AddonsToolBarManager* pToolBarManager = 0;
             {
                 SolarMutexGuard aSolarMutexGuard;
-                Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                vcl::Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
                     sal_uLong nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
@@ -151,7 +151,7 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw 
         AddonsToolBarManager* pToolBarManager = static_cast< AddonsToolBarManager *>( m_xToolBarManager.get() );
         if ( pToolBarManager )
         {
-            Window* pWindow = (Window *)pToolBarManager->GetToolBar();
+            vcl::Window* pWindow = (vcl::Window *)pToolBarManager->GetToolBar();
             return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
         }
     }

@@ -238,7 +238,7 @@ protected:
 
 public:
             Svx3DWin( SfxBindings* pBindings, SfxChildWindow *pCW,
-                        Window* pParent );
+                        vcl::Window* pParent );
             virtual ~Svx3DWin();
 
     void    InitColorLB( const SdrModel* pDoc );

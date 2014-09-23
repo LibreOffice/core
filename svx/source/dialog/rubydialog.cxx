@@ -60,7 +60,7 @@ static const sal_Char cDisplayName[] = "DisplayName";
 static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
 static const sal_Char cRubies[] = "Rubies";
 
-SvxRubyChildWindow::SvxRubyChildWindow( Window* _pParent, sal_uInt16 nId,
+SvxRubyChildWindow::SvxRubyChildWindow( vcl::Window* _pParent, sal_uInt16 nId,
     SfxBindings* pBindings, SfxChildWinInfo* pInfo) :
     SfxChildWindow(_pParent, nId)
 {
@@ -191,7 +191,7 @@ void  SvxRubyData_Impl::AssertOneEntry()
 }
 
 SvxRubyDialog::SvxRubyDialog(SfxBindings *pBind, SfxChildWindow *pCW,
-                                    Window* _pParent)
+                                    vcl::Window* _pParent)
     : SfxModelessDialog(pBind, pCW, _pParent, "AsianPhoneticGuideDialog",
         "svx/ui/asianphoneticguidedialog.ui")
     , nLastPos(0)
@@ -752,7 +752,7 @@ void SvxRubyDialog::EnableControls(bool bEnable)
     m_pApplyPB->Enable(bEnable);
 }
 
-RubyPreview::RubyPreview(Window *pParent)
+RubyPreview::RubyPreview(vcl::Window *pParent)
     : Window(pParent, WB_BORDER)
     , m_pParentDlg(NULL)
 {
@@ -760,7 +760,7 @@ RubyPreview::RubyPreview(Window *pParent)
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRubyPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRubyPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new RubyPreview(pParent);
 }
@@ -913,7 +913,7 @@ bool RubyEdit::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRubyEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRubyEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new RubyEdit(pParent);
 }

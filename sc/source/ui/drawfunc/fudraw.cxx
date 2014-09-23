@@ -47,7 +47,7 @@
 |*
 \************************************************************************/
 
-FuDraw::FuDraw(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuDraw::FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     FuPoor      (pViewSh, pWin, pViewP, pDoc, rReq),
     aNewPointer ( POINTER_ARROW ),
@@ -704,7 +704,7 @@ void FuDraw::Deactivate()
 |*
 \************************************************************************/
 
-static bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, Window* pWindow )
+static bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, vcl::Window* pWindow )
 {
     SdrViewEvent aVEvt;
     MouseEvent aMEvt( rPosPixel, 1, 0, MOUSE_LEFT );

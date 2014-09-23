@@ -68,7 +68,7 @@ class TabBarControl : public ::TabControl
 {
 public:
     TabBarControl (
-        ::Window* pParentWindow,
+        vcl::Window* pParentWindow,
         const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
     virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
     virtual void ActivatePage (void) SAL_OVERRIDE;
@@ -174,11 +174,11 @@ void ViewTabBar::disposing (void)
     mxController = NULL;
 }
 
-::Window* ViewTabBar::GetAnchorWindow(
+vcl::Window* ViewTabBar::GetAnchorWindow(
     const Reference<XResourceId>& rxViewTabBarId,
     const Reference<frame::XController>& rxController)
 {
-    ::Window* pWindow = NULL;
+    vcl::Window* pWindow = NULL;
     ViewShellBase* pBase = NULL;
 
     // Tunnel through the controller and use the ViewShellBase to obtain the
@@ -559,7 +559,7 @@ void ViewTabBar::UpdateTabBarButtons (void)
 //===== TabBarControl =========================================================
 
 TabBarControl::TabBarControl (
-    ::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     const ::rtl::Reference<ViewTabBar>& rpViewTabBar)
     : ::TabControl(pParentWindow),
       mpViewTabBar(rpViewTabBar)

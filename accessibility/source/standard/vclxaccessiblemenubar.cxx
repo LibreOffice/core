@@ -160,15 +160,15 @@ sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  ) throw (RuntimeEx
 
     if ( m_pMenu )
     {
-        Window* pWindow = m_pMenu->GetWindow();
+        vcl::Window* pWindow = m_pMenu->GetWindow();
         if ( pWindow )
         {
-            Window* pParent = pWindow->GetAccessibleParentWindow();
+            vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
             if ( pParent )
             {
                 for ( sal_uInt16 n = pParent->GetAccessibleChildWindowCount(); n; )
                 {
-                    Window* pChild = pParent->GetAccessibleChildWindow( --n );
+                    vcl::Window* pChild = pParent->GetAccessibleChildWindow( --n );
                     if ( pChild == pWindow )
                     {
                         nIndexInParent = n;

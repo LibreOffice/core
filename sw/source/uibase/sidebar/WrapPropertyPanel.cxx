@@ -43,7 +43,7 @@ const char UNO_WRAPIDEAL[] = ".uno:WrapIdeal";
 namespace sw { namespace sidebar {
 
 WrapPropertyPanel* WrapPropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
@@ -61,7 +61,7 @@ WrapPropertyPanel* WrapPropertyPanel::Create (
 }
 
 WrapPropertyPanel::WrapPropertyPanel(
-    Window* pParent,
+    vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings )
     : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame)

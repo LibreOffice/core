@@ -853,7 +853,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     sal_Int16 nDialogType,
     sal_Int64 nFlags,
     sal_Int16 nDialog,
-    Window* _pPreferredParentWindow,
+    vcl::Window* _pPreferredParentWindow,
     const OUString& sStandardDir,
     const ::com::sun::star::uno::Sequence< OUString >& rBlackList
     )
@@ -2246,7 +2246,7 @@ FileDialogHelper::FileDialogHelper(
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     sal_Int64 nFlags,
-    Window* _pPreferredParent )
+    vcl::Window* _pPreferredParent )
     : m_nError(0)
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent );
@@ -2260,7 +2260,7 @@ FileDialogHelper::FileDialogHelper(
     const OUString& aExtName,
     const OUString& rStandardDir,
     const ::com::sun::star::uno::Sequence< OUString >& rBlackList,
-    Window* _pPreferredParent )
+    vcl::Window* _pPreferredParent )
     : m_nError(0)
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent,rStandardDir, rBlackList );

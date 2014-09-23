@@ -43,7 +43,7 @@ void WorkWindow::ImplInitWorkWindowData()
     mbFullScreenMode        = false;
 }
 
-void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
+void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     sal_uInt16 nFrameStyle = BORDERWINDOW_STYLE_FRAME;
     if ( nStyle & WB_APP )
@@ -67,14 +67,14 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pS
     SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
 }
 
-void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
+void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
 {
     if( aSystemWorkWindowToken.hasValue() )
     {
         ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
         aSystemWorkWindowToken >>= aSeq;
         SystemParentData* pData = (SystemParentData*)aSeq.getArray();
-        DBG_ASSERT( aSeq.getLength() == sizeof( SystemParentData ) && pData->nSize == sizeof( SystemParentData ), "WorkWindow::WorkWindow( Window*, const Any&, WinBits ) called with invalid Any" );
+        DBG_ASSERT( aSeq.getLength() == sizeof( SystemParentData ) && pData->nSize == sizeof( SystemParentData ), "WorkWindow::WorkWindow( vcl::Window*, const Any&, WinBits ) called with invalid Any" );
         // init with style 0 as does WorkWindow::WorkWindow( SystemParentData* );
         ImplInit( pParent, 0, pData );
     }
@@ -88,14 +88,14 @@ WorkWindow::WorkWindow( WindowType nType ) :
     ImplInitWorkWindowData();
 }
 
-WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
+WorkWindow::WorkWindow( vcl::Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
     ImplInitWorkWindowData();
     ImplInit( pParent, nStyle, NULL );
 }
 
-WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
+WorkWindow::WorkWindow( vcl::Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
     ImplInitWorkWindowData();

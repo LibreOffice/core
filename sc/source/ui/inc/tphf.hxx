@@ -36,7 +36,7 @@ public:
     void            SetStyleDlg ( const ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }
 
 protected:
-                    ScHFPage( Window* pParent,
+                    ScHFPage( vcl::Window* pParent,
                               const SfxItemSet& rSet,
                               sal_uInt16 nSetId );
 
@@ -60,21 +60,21 @@ private:
 class ScHeaderPage : public ScHFPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
 private:
-    ScHeaderPage( Window* pParent, const SfxItemSet& rSet );
+    ScHeaderPage( vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 class ScFooterPage : public ScHFPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
 private:
-    ScFooterPage( Window* pParent, const SfxItemSet& rSet );
+    ScFooterPage( vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPHF_HXX

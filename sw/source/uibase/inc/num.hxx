@@ -115,7 +115,7 @@ class SwNumPositionTabPage : public SfxTabPage
 
 public:
 
-    SwNumPositionTabPage(Window* pParent,
+    SwNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
     virtual ~SwNumPositionTabPage();
 
@@ -124,7 +124,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
@@ -156,7 +156,7 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
         virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) SAL_OVERRIDE;
         DECL_LINK(RemoveNumberingHdl, void *);
     public:
-        SwSvxNumBulletTabDialog(Window* pParent,
+        SwSvxNumBulletTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
         virtual ~SwSvxNumBulletTabDialog();

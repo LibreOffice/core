@@ -903,11 +903,11 @@ std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
 class NameClashQueryBox : public MessBox
 {
 public:
-    NameClashQueryBox( Window* pParent,
+    NameClashQueryBox( vcl::Window* pParent,
         const OUString& rTitle, const OUString& rMessage );
 };
 
-NameClashQueryBox::NameClashQueryBox( Window* pParent,
+NameClashQueryBox::NameClashQueryBox( vcl::Window* pParent,
     const OUString& rTitle, const OUString& rMessage )
         : MessBox( pParent, 0, rTitle, rMessage )
 {
@@ -928,11 +928,11 @@ NameClashQueryBox::NameClashQueryBox( Window* pParent,
 class LanguageMismatchQueryBox : public MessBox
 {
 public:
-    LanguageMismatchQueryBox( Window* pParent,
+    LanguageMismatchQueryBox( vcl::Window* pParent,
         const OUString& rTitle, const OUString& rMessage );
 };
 
-LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
+LanguageMismatchQueryBox::LanguageMismatchQueryBox( vcl::Window* pParent,
     const OUString& rTitle, const OUString& rMessage )
         : MessBox( pParent, 0, rTitle, rMessage )
 {
@@ -950,7 +950,7 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
 }
 
 
-bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName )
+bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName )
 {
     bool bDone = false;
 
@@ -1406,7 +1406,7 @@ ItemType DialogWindow::GetType () const
 
 
 
-DialogWindowLayout::DialogWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
+DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(0),
     rObjectCatalog(rObjectCatalog_),

@@ -52,7 +52,7 @@ namespace svx { namespace sidebar {
 
 
 PosSizePropertyPanel::PosSizePropertyPanel(
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
@@ -228,7 +228,7 @@ void PosSizePropertyPanel::SetupIcons(void)
 
 
 PosSizePropertyPanel* PosSizePropertyPanel::Create (
-    Window* pParent,
+    vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)

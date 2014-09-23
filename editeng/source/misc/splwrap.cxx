@@ -143,7 +143,7 @@ SvxSpellWrapper::~SvxSpellWrapper()
  *
  --------------------------------------------------------------------*/
 
-SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
+SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
     Reference< XSpellChecker1 >  &xSpellChecker,
     const bool bStart, const bool bIsAllRight,
     const bool bOther, const bool bRevAllow ) :
@@ -168,7 +168,7 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
 
 
 
-SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
+SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
         Reference< XHyphenator >  &xHyphenator,
         const bool bStart, const bool bOther ) :
     pWin        ( pWn ),
@@ -372,7 +372,7 @@ void SvxSpellWrapper::SpellDocument( )
         Reference< XSpellAlternatives >     xAlt( GetLast(), UNO_QUERY );
         Reference< XHyphenatedWord >        xHyphWord( GetLast(), UNO_QUERY );
 
-        Window *pOld = pWin;
+        vcl::Window *pOld = pWin;
         bDialog = true;
         if (xHyphWord.is())
         {

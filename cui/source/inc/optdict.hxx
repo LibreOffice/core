@@ -63,7 +63,7 @@ private:
     DECL_LINK(ModifyHdl_Impl, void *);
 
 public:
-    SvxNewDictionaryDialog( Window* pParent,
+    SvxNewDictionaryDialog( vcl::Window* pParent,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl );
 
@@ -80,9 +80,9 @@ class SvxDictEdit : public Edit
     bool    bSpaces;
 
     public:
-                    SvxDictEdit(Window* pParent, const ResId& rResId) :
+                    SvxDictEdit(vcl::Window* pParent, const ResId& rResId) :
                         Edit(pParent, rResId), bSpaces(false){}
-                    SvxDictEdit(Window* pParent, WinBits aWB) :
+                    SvxDictEdit(vcl::Window* pParent, WinBits aWB) :
                         Edit(pParent, aWB), bSpaces(false){}
 
     void            SetActionHdl( const Link& rLink )
@@ -148,7 +148,7 @@ protected:
 //    virtual void    Paint( const Rectangle& rRect );
 
 public:
-    SvxEditDictionaryDialog( Window* pParent,
+    SvxEditDictionaryDialog( vcl::Window* pParent,
             const OUString& rName,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1> &xSpl );

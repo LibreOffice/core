@@ -36,7 +36,7 @@ namespace svx {
 class DialControlBmp : public VirtualDevice
 {
 public:
-    explicit            DialControlBmp( Window& rParent );
+    explicit            DialControlBmp( vcl::Window& rParent );
 
     void                InitBitmap(const vcl::Font& rFont);
     void                SetSize(const Size& rSize);
@@ -58,7 +58,7 @@ private:
 
     void                Init();
 
-    Window&             mrParent;
+    vcl::Window&             mrParent;
     long                mnCenterX;
     long                mnCenterY;
 };
@@ -80,7 +80,7 @@ private:
 class SVX_DLLPUBLIC DialControl : public Control
 {
 public:
-    explicit            DialControl( Window* pParent, WinBits nBits );
+    explicit            DialControl( vcl::Window* pParent, WinBits nBits );
 
     virtual             ~DialControl();
 
@@ -143,7 +143,7 @@ protected:
         long                mnCenterY;
         bool                mbNoRot;
 
-        explicit            DialControl_Impl( Window& rParent );
+        explicit            DialControl_Impl( vcl::Window& rParent );
         void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
         void                SetSize( const Size& rWinSize );
     };

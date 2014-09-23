@@ -151,7 +151,7 @@ LanguageType EditView::CheckLanguage(
 
 // class EditView
 
-EditView::EditView( EditEngine* pEng, Window* pWindow )
+EditView::EditView( EditEngine* pEng, vcl::Window* pWindow )
 {
     pImpEditView = new ImpEditView( this, pEng, pWindow );
 }
@@ -276,13 +276,13 @@ void EditView::SetEditEngine( EditEngine* pEditEng )
     pImpEditView->SetEditSelection( aStartSel );
 }
 
-void EditView::SetWindow( Window* pWin )
+void EditView::SetWindow( vcl::Window* pWin )
 {
     pImpEditView->pOutWin = pWin;
     pImpEditView->pEditEngine->pImpEditEngine->GetSelEngine().Reset();
 }
 
-Window* EditView::GetWindow() const
+vcl::Window* EditView::GetWindow() const
 {
     return pImpEditView->pOutWin;
 }
@@ -355,7 +355,7 @@ void EditView::InsertText( const OUString& rStr, bool bSelect )
     pEE->FormatAndUpdate( this );
 }
 
-bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin )
+bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin )
 {
     return pImpEditView->PostKeyEvent( rKeyEvent, pFrameWin );
 }
@@ -673,7 +673,7 @@ void EditView::TransliterateText( sal_Int32 nTransliterationMode )
     }
 }
 
-void EditView::CompleteAutoCorrect( Window* pFrameWin )
+void EditView::CompleteAutoCorrect( vcl::Window* pFrameWin )
 {
     if ( !pImpEditView->HasSelection() && pImpEditView->pEditEngine->pImpEditEngine->GetStatus().DoAutoCorrect() )
     {

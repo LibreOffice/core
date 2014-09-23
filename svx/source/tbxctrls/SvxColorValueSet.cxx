@@ -23,13 +23,13 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-SvxColorValueSet::SvxColorValueSet(Window* _pParent, WinBits nWinStyle)
+SvxColorValueSet::SvxColorValueSet(vcl::Window* _pParent, WinBits nWinStyle)
 :   ValueSet(_pParent, nWinStyle)
 {
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxColorValueSet(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxColorValueSet(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -40,7 +40,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxColorValueSet(Window *pP
     return new SvxColorValueSet(pParent, nWinBits);
 }
 
-SvxColorValueSet::SvxColorValueSet(Window* _pParent, const ResId& rResId)
+SvxColorValueSet::SvxColorValueSet(vcl::Window* _pParent, const ResId& rResId)
 :   ValueSet(_pParent, rResId)
 {
     SetEdgeBlending(true);
@@ -136,7 +136,7 @@ Size SvxColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
 
 void SvxColorValueSet::Resize()
 {
-    Window *pParent = GetParent();
+    vcl::Window *pParent = GetParent();
     //don't do this for the drop down color palettes
     if (pParent && pParent->GetType() != WINDOW_FLOATINGWINDOW)
         layoutToGivenHeight(GetOutputSizePixel().Height(), GetItemCount());

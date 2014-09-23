@@ -209,10 +209,10 @@ class SwSendWarningBox_Impl : public MessageDialog
 {
     VclMultiLineEdit  *m_pDetailED;
 public:
-    SwSendWarningBox_Impl(Window* pParent, const OUString& rDetails);
+    SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails);
 };
 
-SwSendWarningBox_Impl::SwSendWarningBox_Impl(Window* pParent, const OUString& rDetails)
+SwSendWarningBox_Impl::SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails)
     : MessageDialog(pParent, "WarnEmailDialog", "modules/swriter/ui/warnemaildialog.ui")
 {
     get(m_pDetailED, "errors");
@@ -225,7 +225,7 @@ SwSendWarningBox_Impl::SwSendWarningBox_Impl(Window* pParent, const OUString& rD
 #define ITEMID_TASK     1
 #define ITEMID_STATUS   2
 
-SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConfigItem) :
+SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& rConfigItem) :
     ModelessDialog /*SfxModalDialog*/(pParent, "SendMailsDialog", "modules/swriter/ui/mmsendmails.ui"),
     m_pTransferStatus(get<FixedText>("transferstatus")),
     m_pPaused(get<FixedText>("paused")),

@@ -204,7 +204,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     }
 
-    Window *pParent = pOldSh ? pOldSh->GetWin() : 0;
+    vcl::Window *pParent = pOldSh ? pOldSh->GetWin() : 0;
     boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
     short nMode = ENV_INSERT;
 

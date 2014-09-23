@@ -12,12 +12,12 @@
 
 #include <vcl/builder.hxx>
 
-TemplateSearchView::TemplateSearchView (Window *pParent, WinBits nWinStyle)
+TemplateSearchView::TemplateSearchView (vcl::Window *pParent, WinBits nWinStyle)
     : ThumbnailView(pParent,nWinStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTemplateSearchView(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateSearchView(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new TemplateSearchView(pParent);
 }

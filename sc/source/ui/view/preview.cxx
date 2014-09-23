@@ -83,7 +83,7 @@ static long lcl_GetDisplayStart( SCTAB nTab, ScDocument* pDoc, std::vector<long>
     return nDisplayStart;
 }
 
-ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh ) :
+ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh ) :
     Window( pParent ),
     nPageNo( 0 ),
     nZoom( 100 ),

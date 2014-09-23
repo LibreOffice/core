@@ -78,7 +78,7 @@ public:
 };
 
 MasterPagesSelector* AllMasterPagesSelector::Create (
-    ::Window* pParent,
+    vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
@@ -102,7 +102,7 @@ MasterPagesSelector* AllMasterPagesSelector::Create (
 }
 
 AllMasterPagesSelector::AllMasterPagesSelector (
-    ::Window* pParent,
+    vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer,

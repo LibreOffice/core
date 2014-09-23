@@ -17,7 +17,7 @@ namespace basctl
 
 class ModulWindow;
 
-class LineNumberWindow : public Window
+class LineNumberWindow : public vcl::Window
 {
 private:
     ModulWindow* m_pModulWindow;
@@ -30,7 +30,7 @@ protected:
     virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
 
 public:
-    LineNumberWindow (Window* pParent, ModulWindow* pModulWin);
+    LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWin);
     virtual ~LineNumberWindow();
 
     void DoScroll( long nHorzScroll, long nVertScroll );

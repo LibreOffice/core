@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 |*
 |************************************************************************/
 
-SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet)
+SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet)
 :   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkMailPage", "cui/ui/hyperlinkmailpage.ui",
                               rItemSet )
 {
@@ -169,7 +169,7 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkMailTp::Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+IconChoicePage* SvxHyperlinkMailTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
     return( new SvxHyperlinkMailTp( pWindow, pDlg, rItemSet ) );
 }

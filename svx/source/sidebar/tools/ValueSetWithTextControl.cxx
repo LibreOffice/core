@@ -70,7 +70,7 @@ static vcl::Font& lcl_GetDefaultBulletFont()
 
 ValueSetWithTextControl::ValueSetWithTextControl(
     const tControlType eControlType,
-    Window* pParent,
+    vcl::Window* pParent,
     const ResId& rResId)
     : ValueSet( pParent, rResId )
     , meControlType( eControlType )
@@ -270,7 +270,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->Pop();
 }
 
-SvxNumValueSet2::SvxNumValueSet2( Window* pParent, const ResId& rResId) :
+SvxNumValueSet2::SvxNumValueSet2( vcl::Window* pParent, const ResId& rResId) :
     ValueSet( pParent, rResId ),
     aLineColor  ( COL_LIGHTGRAY ),
     pVDev       ( NULL )
@@ -424,7 +424,7 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
 
 
 
-SvxNumValueSet3::SvxNumValueSet3( Window* pParent, const ResId& rResId) :
+SvxNumValueSet3::SvxNumValueSet3( vcl::Window* pParent, const ResId& rResId) :
     ValueSet( pParent, rResId )
 {
     SetColCount( 3 );

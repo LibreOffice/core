@@ -40,14 +40,14 @@ namespace com{namespace sun{namespace star{
 
 
 class SvxRubyDialog;
-class RubyPreview : public Window
+class RubyPreview : public vcl::Window
 {
 protected:
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     SvxRubyDialog* m_pParentDlg;
 
 public:
-    RubyPreview(Window *pParent);
+    RubyPreview(vcl::Window *pParent);
     void setRubyDialog(SvxRubyDialog* pParentDlg)
     {
         m_pParentDlg = pParentDlg;
@@ -59,7 +59,7 @@ class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
 {
  public:
 
-    SvxRubyChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
+    SvxRubyChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW( SvxRubyChildWindow );
 
@@ -72,11 +72,11 @@ class RubyEdit  : public Edit
     virtual void        GetFocus() SAL_OVERRIDE;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
-    RubyEdit(Window* pParent, const ResId& rResId)
+    RubyEdit(vcl::Window* pParent, const ResId& rResId)
         : Edit(pParent, rResId)
     {
     }
-    RubyEdit(Window* pParent)
+    RubyEdit(vcl::Window* pParent)
         : Edit(pParent, WB_BORDER)
     {
     }
@@ -161,7 +161,7 @@ protected:
 public:
 
                         SvxRubyDialog(SfxBindings *pBindings, SfxChildWindow *pCW,
-                                    Window* pParent);
+                                    vcl::Window* pParent);
     virtual             ~SvxRubyDialog();
 
     virtual void        Activate() SAL_OVERRIDE;

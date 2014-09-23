@@ -91,7 +91,7 @@ class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
 {
     SvxSearchDialog *dialog;
 public:
-    SvxSearchDialogWrapper( Window*pParent, sal_uInt16 nId,
+    SvxSearchDialogWrapper( vcl::Window*pParent, sal_uInt16 nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     virtual ~SvxSearchDialogWrapper ();
@@ -118,7 +118,7 @@ friend class SvxSearchDialogWrapper;
 friend class SvxJSearchOptionsDialog;
 
 public:
-    SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
+    SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     virtual ~SvxSearchDialog();
 
     virtual bool    Close() SAL_OVERRIDE;
@@ -138,8 +138,8 @@ public:
 
     sal_Int32       GetTransliterationFlags() const;
 
-    void SetDocWin( Window* pDocWin ) { mpDocWin = pDocWin; }
-    Window* GetDocWin() { return mpDocWin; }
+    void SetDocWin( vcl::Window* pDocWin ) { mpDocWin = pDocWin; }
+    vcl::Window* GetDocWin() { return mpDocWin; }
     void SetSrchFlag( bool bSuccess = false ) { mbSuccess = bSuccess; }
     bool GetSrchFlag() { return mbSuccess; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
@@ -150,7 +150,7 @@ public:
     void SetSearchLabel(const OUString& rStr) { m_pSearchLabel->SetText(rStr); }
 
 private:
-    Window*         mpDocWin;
+    vcl::Window*         mpDocWin;
     bool            mbSuccess;
 
     VclFrame*       m_pSearchFrame;

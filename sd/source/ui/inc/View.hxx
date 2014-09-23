@@ -99,12 +99,12 @@ public:
     virtual void            MarkListHasChanged() SAL_OVERRIDE;
     virtual void            ModelHasChanged() SAL_OVERRIDE;
     virtual void            SelectAll();
-    virtual void            DoCut(::Window* pWindow=NULL);
-    virtual void            DoCopy(::Window* pWindow=NULL);
-    virtual void            DoPaste(::Window* pWindow=NULL);
+    virtual void            DoCut(vcl::Window* pWindow=NULL);
+    virtual void            DoCopy(vcl::Window* pWindow=NULL);
+    virtual void            DoPaste(vcl::Window* pWindow=NULL);
     virtual void            DoConnect(SdrOle2Obj* pOleObj) SAL_OVERRIDE;
     virtual bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false);
-    virtual void            StartDrag( const Point& rStartPos, ::Window* pWindow );
+    virtual void            StartDrag( const Point& rStartPos, vcl::Window* pWindow );
     virtual void            DragFinished( sal_Int8 nDropAction );
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
@@ -121,14 +121,14 @@ public:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::datatransfer::XTransferable>
-        CreateClipboardDataObject (::sd::View*, ::Window& rWindow);
+        CreateClipboardDataObject (::sd::View*, vcl::Window& rWindow);
     ::com::sun::star::uno::Reference<
         ::com::sun::star::datatransfer::XTransferable>
-        CreateDragDataObject (::sd::View*, ::Window& rWindow,
+        CreateDragDataObject (::sd::View*, vcl::Window& rWindow,
             const Point& rDragPos);
     ::com::sun::star::uno::Reference<
         ::com::sun::star::datatransfer::XTransferable>
-        CreateSelectionDataObject (::sd::View*, ::Window& rWindow);
+        CreateSelectionDataObject (::sd::View*, vcl::Window& rWindow);
 
     void                    UpdateSelectionClipboard( bool bForceDeselect );
 
@@ -136,7 +136,7 @@ public:
     inline SdDrawDocument& GetDoc(void) const;
     inline ViewShell* GetViewShell(void) const { return mpViewSh; }
 
-    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, bool bIsNewObj = false,
+    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::vcl::Window* pWin = 0L, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true) SAL_OVERRIDE;
 

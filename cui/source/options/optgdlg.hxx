@@ -65,10 +65,10 @@ protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
-    OfaMiscTabPage( Window* pParent, const SfxItemSet& rSet );
+    OfaMiscTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMiscTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -120,10 +120,10 @@ private:
     DECL_LINK( OnSelectionToggled, void* );
 
 public:
-    OfaViewTabPage( Window* pParent, const SfxItemSet& rSet );
+    OfaViewTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaViewTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -164,10 +164,10 @@ class OfaLanguagesTabPage : public SfxTabPage
     DECL_LINK(  DatePatternsHdl, Edit* ) ;
 
 public:
-    OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet );
+    OfaLanguagesTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaLanguagesTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

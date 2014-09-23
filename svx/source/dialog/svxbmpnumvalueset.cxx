@@ -389,7 +389,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetLineColor(aOldColor);
 }
 
-SvxNumValueSet::SvxNumValueSet(Window* pParent, WinBits nWinBits)
+SvxNumValueSet::SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits)
     : ValueSet(pParent, nWinBits)
     , nPageType(0)
     , bHTMLMode(false)
@@ -397,7 +397,7 @@ SvxNumValueSet::SvxNumValueSet(Window* pParent, WinBits nWinBits)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNumValueSet(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNumValueSet(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxNumValueSet(pParent, WB_TABSTOP);
 }
@@ -463,13 +463,13 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     }
 }
 
-SvxBmpNumValueSet::SvxBmpNumValueSet(Window* pParent, WinBits nWinBits)
+SvxBmpNumValueSet::SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits)
     : SvxNumValueSet(pParent, nWinBits)
 {
     init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxBmpNumValueSet(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxBmpNumValueSet(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxBmpNumValueSet(pParent, WB_TABSTOP);
 }

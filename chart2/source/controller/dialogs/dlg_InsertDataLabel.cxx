@@ -23,7 +23,7 @@
 namespace chart
 {
 
-DataLabelsDialog::DataLabelsDialog(Window* pWindow, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter) :
+DataLabelsDialog::DataLabelsDialog(vcl::Window* pWindow, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter) :
     ModalDialog(pWindow
                 ,"dlg_DataLabels"
                 ,"modules/schart/ui/dlg_DataLabel.ui"),

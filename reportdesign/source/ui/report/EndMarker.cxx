@@ -32,7 +32,7 @@
 namespace rptui
 {
 
-OEndMarker::OEndMarker(Window* _pParent ,const OUString& _sColorEntry)
+OEndMarker::OEndMarker(vcl::Window* _pParent ,const OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
 {
     SetUniqueId(HID_RPT_ENDMARKER);

@@ -339,7 +339,7 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView)
+OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView)
     : Window(_pParent,WB_DIALOGCONTROL )
     ,m_aCreation(*this)
     ,m_aDescription(this)
@@ -886,7 +886,7 @@ bool OApplicationDetailView::isSortUp() const
     return m_pControlHelper->isSortUp();
 }
 
-Window* OApplicationDetailView::getTreeWindow() const
+vcl::Window* OApplicationDetailView::getTreeWindow() const
 {
     return m_pControlHelper->getCurrentView();
 }

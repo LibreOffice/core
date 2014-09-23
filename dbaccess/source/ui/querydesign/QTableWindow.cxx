@@ -49,7 +49,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace dbaui;
 // class OQueryTableWindow
-OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias)
+OQueryTableWindow::OQueryTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias)
     :OTableWindow( pParent, pTabWinData )
     ,m_nAliasNum(0)
 {

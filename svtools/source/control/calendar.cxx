@@ -238,7 +238,7 @@ void Calendar::ImplInitSettings()
 
 
 
-Calendar::Calendar( Window* pParent, WinBits nWinStyle ) :
+Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK | WB_RANGESELECT | WB_MULTISELECT) ),
     maCalendarWrapper( Application::GetAppLocaleDataWrapper().getComponentContext() ),
     maOldFormatFirstDate( 0, 0, 1900 ),
@@ -2192,7 +2192,7 @@ private:
     FixedLine*      mpFixedLine;
 
 public:
-                    ImplCFieldFloatWin( Window* pParent );
+                    ImplCFieldFloatWin( vcl::Window* pParent );
                     virtual ~ImplCFieldFloatWin();
 
     void            SetCalendar( Calendar* pCalendar )
@@ -2207,7 +2207,7 @@ public:
 
 
 
-ImplCFieldFloatWin::ImplCFieldFloatWin( Window* pParent ) :
+ImplCFieldFloatWin::ImplCFieldFloatWin( vcl::Window* pParent ) :
     FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW  )
 {
     mpCalendar  = NULL;
@@ -2369,7 +2369,7 @@ bool ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
     return FloatingWindow::Notify( rNEvt );
 }
 
-CalendarField::CalendarField(Window* pParent, WinBits nWinStyle)
+CalendarField::CalendarField(vcl::Window* pParent, WinBits nWinStyle)
     : DateField(pParent, nWinStyle)
     , mpFloatWin(NULL)
     , mpCalendar(NULL)
@@ -2513,7 +2513,7 @@ bool CalendarField::ShowDropDown( bool bShow )
 
 
 
-Calendar* CalendarField::CreateCalendar( Window* pParent )
+Calendar* CalendarField::CreateCalendar( vcl::Window* pParent )
 {
     return new Calendar( pParent, mnCalendarStyle | WB_TABSTOP );
 }

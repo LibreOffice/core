@@ -32,13 +32,13 @@ using namespace ::com::sun::star::frame;
 
 static void lcl_updateThumbnails (TemplateContainerItem *pItem);
 
-TemplateLocalView::TemplateLocalView ( Window* pParent)
+TemplateLocalView::TemplateLocalView ( vcl::Window* pParent)
     : TemplateAbstractView(pParent),
       mpDocTemplates(new SfxDocumentTemplates)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTemplateLocalView(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateLocalView(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new TemplateLocalView(pParent);
 }

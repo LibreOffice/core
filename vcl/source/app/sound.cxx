@@ -24,7 +24,7 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 
-void Sound::Beep( Window* pWindow )
+void Sound::Beep( vcl::Window* pWindow )
 {
     // #i91990#
     if ( Application::IsHeadlessModeEnabled() )

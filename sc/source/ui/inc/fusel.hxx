@@ -28,7 +28,7 @@ class SdrPageView;
 class FuSelection : public FuDraw
 {
 public:
-    FuSelection(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuSelection(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq );
 
     virtual ~FuSelection();

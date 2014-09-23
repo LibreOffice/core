@@ -32,7 +32,7 @@ class DeckTitleBar
 public:
     DeckTitleBar (
         const ::rtl::OUString& rsTitle,
-        Window* pParentWindow,
+        vcl::Window* pParentWindow,
         const ::boost::function<void(void)>& rCloserAction);
     virtual ~DeckTitleBar (void);
 

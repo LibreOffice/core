@@ -41,7 +41,7 @@
 
 #define RENAME_TOKEN_DELIM      (sal_Unicode)1
 
-SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
+SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
     std::vector<OUString> const& rPathArr, SwGlossaryHdl *pHdl)
     : SvxStandardDialog(pParent, "EditCategoriesDialog",
         "modules/swriter/ui/editcategories.ui")
@@ -395,7 +395,7 @@ void FEdit::KeyInput( const KeyEvent& rKEvent )
         Edit::KeyInput( rKEvent );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new FEdit(pParent);
 }
@@ -429,7 +429,7 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwGlossaryGroupTLB(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwGlossaryGroupTLB(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwGlossaryGroupTLB(pParent);
 }

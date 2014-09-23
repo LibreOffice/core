@@ -57,7 +57,7 @@ IdleSwitch::~IdleSwitch()
     mrDoc.EnableIdle(mbOldValue);
 }
 
-WaitPointerSwitch::WaitPointerSwitch(Window* pWin) :
+WaitPointerSwitch::WaitPointerSwitch(vcl::Window* pWin) :
     mpFrameWin(pWin)
 {
     if (mpFrameWin)

@@ -90,7 +90,7 @@ SAL_IMPLEMENT_MAIN()
 class MyWin : public WorkWindow
 {
 public:
-                MyWin( Window* pParent, WinBits nWinStyle );
+                MyWin( vcl::Window* pParent, WinBits nWinStyle );
 
     void        MouseMove( const MouseEvent& rMEvt );
     void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -120,7 +120,7 @@ void Main()
 
 
 
-MyWin::MyWin( Window* pParent, WinBits nWinStyle )
+MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle )
     :WorkWindow( pParent, nWinStyle )
     ,aOKBtn(this)
 {

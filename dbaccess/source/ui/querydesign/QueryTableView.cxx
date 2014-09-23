@@ -222,7 +222,7 @@ namespace
 }
 
 // class OQueryTableView
-OQueryTableView::OQueryTableView( Window* pParent,OQueryDesignView* pView)
+OQueryTableView::OQueryTableView( vcl::Window* pParent,OQueryDesignView* pView)
     : OJoinTableView( pParent,pView)
 {
     SetHelpId(HID_CTL_QRYDGNTAB);

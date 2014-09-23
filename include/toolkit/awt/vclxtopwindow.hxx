@@ -46,7 +46,7 @@ protected:
 
     bool isSystemDependentWindowPeer() const { return m_bWHWND; }
 
-    virtual Window* GetWindowImpl() = 0;
+    virtual vcl::Window* GetWindowImpl() = 0;
     virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl() = 0;
 
     VCLXTopWindow_Base( const bool _bSupportSystemWindowPeer );
@@ -86,7 +86,7 @@ class TOOLKIT_DLLPUBLIC VCLXTopWindow: public VCLXTopWindow_Base,
                      public VCLXContainer
 {
 protected:
-    virtual Window* GetWindowImpl() SAL_OVERRIDE;
+    virtual vcl::Window* GetWindowImpl() SAL_OVERRIDE;
     virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl() SAL_OVERRIDE;
 
 public:

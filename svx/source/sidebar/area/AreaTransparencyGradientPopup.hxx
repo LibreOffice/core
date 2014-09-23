@@ -34,7 +34,7 @@ class AreaTransparencyGradientPopup
 {
 public :
     AreaTransparencyGradientPopup (
-        Window* pParent,
+        vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
     virtual ~AreaTransparencyGradientPopup (void);
 

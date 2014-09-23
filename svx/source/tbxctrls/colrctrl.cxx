@@ -89,7 +89,7 @@ bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, sal_
     return( rxOStm->GetError() == ERRCODE_NONE );
 }
 
-SvxColorValueSet_docking::SvxColorValueSet_docking( Window* _pParent, const ResId& rResId ) :
+SvxColorValueSet_docking::SvxColorValueSet_docking( vcl::Window* _pParent, const ResId& rResId ) :
     SvxColorValueSet( _pParent, rResId ),
     DragSourceHelper( this ),
     mbLeftButton(true)
@@ -182,7 +182,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
 (
     SfxBindings* _pBindings,
     SfxChildWindow* pCW,
-    Window* _pParent,
+    vcl::Window* _pParent,
     const ResId& rResId
 ) :
 

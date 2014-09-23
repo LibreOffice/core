@@ -41,7 +41,7 @@ class IconChoiceDialog;
 class IconChoicePage;
 
 // Create-Function
-typedef IconChoicePage* (*CreatePage)(Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet &rAttrSet);
+typedef IconChoicePage* (*CreatePage)(vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet &rAttrSet);
 typedef const sal_uInt16*         (*GetPageRanges)(); // gives international Which-value
 
 /// Data-structure for pages in dialog
@@ -84,7 +84,7 @@ private :
     void                ImplInitSettings();
 
 protected :
-    IconChoicePage( Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet );
+    IconChoicePage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet );
 
     sal_uInt16              GetSlot( sal_uInt16 nWhich ) const  { return pSet->GetPool()->GetSlotId( nWhich ); }
     sal_uInt16              GetWhich( sal_uInt16 nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
@@ -182,7 +182,7 @@ protected :
 public :
 
     // the IconChoiceCtrl's could also be set in the Ctor
-    IconChoiceDialog ( Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+    IconChoiceDialog ( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
                        const SfxItemSet * pItemSet = 0 );
     virtual ~IconChoiceDialog ();
 

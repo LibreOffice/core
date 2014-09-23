@@ -15,7 +15,7 @@
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwWordCountWrapper, FN_WORDCOUNT_DIALOG)
 
-SwWordCountWrapper::SwWordCountWrapper(   Window *pParentWindow,
+SwWordCountWrapper::SwWordCountWrapper(   vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo ) :

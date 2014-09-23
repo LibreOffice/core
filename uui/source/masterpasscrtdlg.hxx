@@ -41,7 +41,7 @@ private:
     DECL_LINK(EditHdl_Impl, void *);
 
 public:
-    MasterPasswordCreateDialog( Window* pParent, ResMgr * pResMgr );
+    MasterPasswordCreateDialog( vcl::Window* pParent, ResMgr * pResMgr );
 
     OUString GetMasterPassword() const { return m_pEDMasterPasswordCrt->GetText(); }
 

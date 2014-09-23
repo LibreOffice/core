@@ -66,7 +66,7 @@ Bitmap& SvxRectCtl::GetRectBitmap( void )
     return *pBitmap;
 }
 
-SvxRectCtl::SvxRectCtl(Window* pParent, RECT_POINT eRpt,
+SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
     sal_uInt16 nBorder, sal_uInt16 nCircle, CTL_STYLE eStyle)
     : Control(pParent, WB_BORDER | WB_TABSTOP)
     , pAccContext(NULL)
@@ -96,7 +96,7 @@ Size SvxRectCtl::GetOptimalSize() const
     return LogicToPixel(Size(78, 39), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxRectCtl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxRectCtl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxRectCtl(pParent);
 }
@@ -263,7 +263,7 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
             SetActualRP( eRP );
 
-            Window *pTabPage = getNonLayoutParent(this);
+            vcl::Window *pTabPage = getNonLayoutParent(this);
             if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
                 ( (SvxTabPage*)pTabPage)->PointChanged( this, eRP );
         }
@@ -348,7 +348,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
         {
             SetActualRP( eNewRP );
 
-            Window *pTabPage = getNonLayoutParent(this);
+            vcl::Window *pTabPage = getNonLayoutParent(this);
             if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
                 ((SvxTabPage*) pTabPage)->PointChanged(this, eRP);
 
@@ -669,7 +669,7 @@ void SvxRectCtl::SetState( CTL_STATE nState )
     eRP = GetRPFromPoint( _aPtNew );
     Invalidate();
 
-    Window *pTabPage = getNonLayoutParent(this);
+    vcl::Window *pTabPage = getNonLayoutParent(this);
     if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
         ((SvxTabPage*)pTabPage)->PointChanged(this, eRP);
 }
@@ -707,7 +707,7 @@ Rectangle SvxRectCtl::CalculateFocusRectangle( RECT_POINT eRectPoint ) const
 
 Reference< XAccessible > SvxRectCtl::CreateAccessible()
 {
-    Window*                     pParent = GetAccessibleParentWindow();
+    vcl::Window*                     pParent = GetAccessibleParentWindow();
 
     DBG_ASSERT( pParent, "-SvxRectCtl::CreateAccessible(): No Parent!" );
 
@@ -796,7 +796,7 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
     aFocusPosition.setY(nY);
     Invalidate(Rectangle(Point(0,0),aRectSize));
 
-    Window *pTabPage = getNonLayoutParent(this);
+    vcl::Window *pTabPage = getNonLayoutParent(this);
     if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
         ( (SvxTabPage*)pTabPage)->PointChanged( this, RP_MM ); // RectPoint ist dummy
 
@@ -804,7 +804,7 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
 
 }
 
-SvxPixelCtl::SvxPixelCtl(Window* pParent, sal_uInt16 nNumber)
+SvxPixelCtl::SvxPixelCtl(vcl::Window* pParent, sal_uInt16 nNumber)
     : Control(pParent, WB_BORDER)
     , nLines(nNumber)
     , bPaintable(true)
@@ -832,7 +832,7 @@ Size SvxPixelCtl::GetOptimalSize() const
     return LogicToPixel(Size(72, 72), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPixelCtl(Window *pParent, VclBuilder::stringmap&)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPixelCtl(vcl::Window *pParent, VclBuilder::stringmap&)
 {
     return new SvxPixelCtl(pParent, 8);
 }
@@ -1108,7 +1108,7 @@ void SvxPixelCtl::Reset()
 
 // Constructor: BitmapCtl for SvxPixelCtl
 
-SvxBitmapCtl::SvxBitmapCtl( Window* /*pParent*/, const Size& rSize )
+SvxBitmapCtl::SvxBitmapCtl( vcl::Window* /*pParent*/, const Size& rSize )
     : aSize(rSize)
     , nLines(0)
     , pBmpArray(NULL)
@@ -1128,7 +1128,7 @@ BitmapEx SvxBitmapCtl::GetBitmapEx()
     return BitmapEx(aRetval);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorLB(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
@@ -1195,14 +1195,14 @@ void FillAttrLB::Fill( const XColorListRef &pColorTab )
 
 // Fills the listbox (provisional) with strings
 
-HatchingLB::HatchingLB( Window* pParent, WinBits nWinStyle)
+HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
 : ListBox( pParent, nWinStyle ),
   mpList ( NULL )
 {
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeHatchingLB(Window *pParent, VclBuilder::stringmap& rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeHatchingLB(vcl::Window *pParent, VclBuilder::stringmap& rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1290,14 +1290,14 @@ void FillAttrLB::Fill( const XHatchListRef &pList )
 
 // Fills the listbox (provisional) with strings
 
-GradientLB::GradientLB( Window* pParent, WinBits aWB)
+GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
 : ListBox( pParent, aWB ),
   mpList(NULL)
 {
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGradientLB(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGradientLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1407,7 +1407,7 @@ void FillAttrLB::Fill( const XGradientListRef &pList )
 
 // BitmapLB Constructor
 
-BitmapLB::BitmapLB( Window* pParent, WinBits aWB)
+BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
 :   ListBox( pParent, aWB ),
     maBitmapEx(),
     mpList(NULL)
@@ -1415,7 +1415,7 @@ BitmapLB::BitmapLB( Window* pParent, WinBits aWB)
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBitmapLB(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBitmapLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1538,7 +1538,7 @@ void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_Int32 n
     }
 }
 
-FillAttrLB::FillAttrLB(Window* pParent, WinBits aWB)
+FillAttrLB::FillAttrLB(vcl::Window* pParent, WinBits aWB)
 :   ColorListBox(pParent, aWB)
 {
 }
@@ -1578,14 +1578,14 @@ void FillTypeLB::Fill()
     SetUpdateMode( true );
 }
 
-LineLB::LineLB(Window* pParent, WinBits aWB)
+LineLB::LineLB(vcl::Window* pParent, WinBits aWB)
 :   ListBox(pParent, aWB),
     mbAddStandardFields(true)
 {
     // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLineLB(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
@@ -1682,13 +1682,13 @@ void LineLB::Modify( const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& rBi
 
 // Fills the listbox (provisional) with strings
 
-LineEndLB::LineEndLB( Window* pParent, WinBits aWB )
+LineEndLB::LineEndLB( vcl::Window* pParent, WinBits aWB )
     : ListBox( pParent, aWB )
 {
     // No EdgeBlending for LineEnds SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLineEndLB(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineEndLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
@@ -1824,7 +1824,7 @@ void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
     Invalidate();
 }
 
-SvxPreviewBase::SvxPreviewBase(Window* pParent)
+SvxPreviewBase::SvxPreviewBase(vcl::Window* pParent)
     : Control(pParent, WB_BORDER)
     , mpModel(new SdrModel())
     , mpBufferDevice(new VirtualDevice(*this))
@@ -1963,7 +1963,7 @@ void SvxXLinePreview::Resize()
     mpLineObjC->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonC));
 }
 
-SvxXLinePreview::SvxXLinePreview(Window* pParent)
+SvxXLinePreview::SvxXLinePreview(vcl::Window* pParent)
     : SvxPreviewBase(pParent)
     , mpLineObjA(NULL)
     , mpLineObjB(NULL)
@@ -1983,7 +1983,7 @@ SvxXLinePreview::SvxXLinePreview(Window* pParent)
     mpLineObjC->SetModel(&getModel());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXLinePreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXLinePreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxXLinePreview(pParent);
 }
@@ -2068,7 +2068,7 @@ void SvxXLinePreview::Paint( const Rectangle& )
     LocalPostPaint();
 }
 
-SvxXRectPreview::SvxXRectPreview(Window* pParent)
+SvxXRectPreview::SvxXRectPreview(vcl::Window* pParent)
     : SvxPreviewBase(pParent)
     , mpRectangleObject(0)
 {
@@ -2094,7 +2094,7 @@ void SvxXRectPreview::Resize()
     SvxPreviewBase::Resize();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXRectPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXRectPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxXRectPreview(pParent);
 }
@@ -2126,7 +2126,7 @@ void SvxXRectPreview::Paint( const Rectangle& )
     LocalPostPaint();
 }
 
-SvxXShadowPreview::SvxXShadowPreview( Window* pParent )
+SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
     : SvxPreviewBase(pParent)
     , mpRectangleObject(0)
     , mpRectangleShadow(0)
@@ -2149,7 +2149,7 @@ SvxXShadowPreview::SvxXShadowPreview( Window* pParent )
     mpRectangleShadow->SetModel(&getModel());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXShadowPreview (Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXShadowPreview (vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxXShadowPreview(pParent);
 }

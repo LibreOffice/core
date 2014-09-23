@@ -84,7 +84,7 @@ public:
 class UnoTreeListBoxImpl : public SvTreeListBox
 {
 public:
-    UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent, WinBits nWinStyle );
+    UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pParent, WinBits nWinStyle );
     virtual ~UnoTreeListBoxImpl();
 
     sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
@@ -204,7 +204,7 @@ UnoTreeListEntry* TreeControlPeer::getEntry( const Reference< XTreeNode >& xNode
 
 
 
-Window* TreeControlPeer::createVclControl( Window* pParent, sal_Int64 nWinStyle )
+vcl::Window* TreeControlPeer::createVclControl( vcl::Window* pParent, sal_Int64 nWinStyle )
 {
     mpTreeImpl = new UnoTreeListBoxImpl( this, pParent, nWinStyle );
     return mpTreeImpl;
@@ -222,7 +222,7 @@ void TreeControlPeer::disposeControl()
 
 
 
-void TreeControlPeer::SetWindow( Window* pWindow )
+void TreeControlPeer::SetWindow( vcl::Window* pWindow )
 {
     VCLXWindow::SetWindow( pWindow );
 }
@@ -1475,7 +1475,7 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
 // class UnoTreeListBoxImpl
 
 
-UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent, WinBits nWinStyle )
+UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pParent, WinBits nWinStyle )
 : SvTreeListBox( pParent, nWinStyle )
 , mxPeer( pPeer )
 {

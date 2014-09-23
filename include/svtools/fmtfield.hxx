@@ -94,7 +94,7 @@ protected:
     bool                m_bUseInputStringForFormatting;
 
 public:
-    FormattedField(Window* pParent, WinBits nStyle = 0, SvNumberFormatter* pInitialFormatter = NULL, sal_Int32 nFormatKey = 0);
+    FormattedField(vcl::Window* pParent, WinBits nStyle = 0, SvNumberFormatter* pInitialFormatter = NULL, sal_Int32 nFormatKey = 0);
     virtual ~FormattedField();
 
     // Min-/Max-Verwaltung
@@ -266,7 +266,7 @@ protected:
     validation::NumberValidator*    m_pNumberValidator;
 
 public:
-    DoubleNumericField(Window* pParent, WinBits nStyle = 0)
+    DoubleNumericField(vcl::Window* pParent, WinBits nStyle = 0)
         :FormattedField(pParent, nStyle)
         ,m_pNumberValidator( NULL )
     {
@@ -294,7 +294,7 @@ class DoubleCurrencyField : public FormattedField
     bool       m_bChangingFormat;
 
 public:
-    DoubleCurrencyField(Window* pParent, WinBits nStyle = 0);
+    DoubleCurrencyField(vcl::Window* pParent, WinBits nStyle = 0);
 
     OUString    getCurrencySymbol() const { return m_sCurrencySymbol; }
     void        setCurrencySymbol(const OUString& rSymbol);

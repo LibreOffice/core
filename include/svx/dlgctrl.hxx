@@ -42,11 +42,11 @@ class SvxTabPage : public SfxTabPage
 {
 
 public:
-    SvxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
+    SvxTabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
         : SfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
     {
     }
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) = 0;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) = 0;
 };
 
 /*************************************************************************
@@ -95,7 +95,7 @@ protected:
 
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
-    SvxRectCtl( Window* pParent, RECT_POINT eRpt = RP_MM,
+    SvxRectCtl( vcl::Window* pParent, RECT_POINT eRpt = RP_MM,
                 sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT );
     void SetControlSettings(RECT_POINT eRpt = RP_MM, sal_uInt16 nBorder = 200,
         sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT);
@@ -142,7 +142,7 @@ protected:
     const sal_uInt16*   pBmpArray;
 
 public:
-            SvxBitmapCtl( Window* pParent, const Size& rSize );
+            SvxBitmapCtl( vcl::Window* pParent, const Size& rSize );
             ~SvxBitmapCtl();
 
     BitmapEx GetBitmapEx();
@@ -176,7 +176,7 @@ protected:
     void    ChangePixel( sal_uInt16 nPixel );
 
 public:
-    SvxPixelCtl( Window* pParent, sal_uInt16 nNumber = 8 );
+    SvxPixelCtl( vcl::Window* pParent, sal_uInt16 nNumber = 8 );
 
     virtual ~SvxPixelCtl();
 
@@ -225,8 +225,8 @@ class SVX_DLLPUBLIC ColorLB : public ColorListBox
 {
 
 public:
-         ColorLB( Window* pParent, ResId Id ) : ColorListBox( pParent, Id ) {}
-         ColorLB( Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
+         ColorLB( vcl::Window* pParent, ResId Id ) : ColorListBox( pParent, Id ) {}
+         ColorLB( vcl::Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
 
     virtual void Fill( const XColorListRef &pTab );
 
@@ -240,7 +240,7 @@ class SVX_DLLPUBLIC HatchingLB : public ListBox
 {
     XHatchListRef mpList;
 public:
-    explicit HatchingLB(Window* pParent, WinBits aWB);
+    explicit HatchingLB(vcl::Window* pParent, WinBits aWB);
 
     virtual void Fill( const XHatchListRef &pList );
 
@@ -254,7 +254,7 @@ class SVX_DLLPUBLIC GradientLB : public ListBox
 {
     XGradientListRef mpList;
 public:
-    explicit GradientLB(Window* pParent, WinBits aWB);
+    explicit GradientLB(vcl::Window* pParent, WinBits aWB);
 
     virtual void Fill( const XGradientListRef &pList );
 
@@ -269,7 +269,7 @@ public:
 class SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
-    explicit BitmapLB(Window* pParent, WinBits aWB);
+    explicit BitmapLB(vcl::Window* pParent, WinBits aWB);
 
     virtual void Fill(const XBitmapListRef &pList);
 
@@ -291,7 +291,7 @@ private:
     BitmapEx        maBitmapEx;
 
 public:
-    FillAttrLB( Window* pParent, WinBits aWB );
+    FillAttrLB( vcl::Window* pParent, WinBits aWB );
 
     virtual void Fill( const XColorListRef    &pList );
     virtual void Fill( const XHatchListRef    &pList );
@@ -305,8 +305,8 @@ class FillTypeLB : public ListBox
 {
 
 public:
-         FillTypeLB( Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
-         FillTypeLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
+         FillTypeLB( vcl::Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
+         FillTypeLB( vcl::Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
 
     virtual void Fill();
 };
@@ -321,7 +321,7 @@ private:
     bool        mbAddStandardFields : 1;
 
 public:
-    LineLB(Window* pParent, WinBits aWB);
+    LineLB(vcl::Window* pParent, WinBits aWB);
     virtual ~LineLB();
 
     virtual void Fill(const XDashListRef &pList);
@@ -340,7 +340,7 @@ class SVX_DLLPUBLIC LineEndLB : public ListBox
 {
 
 public:
-    LineEndLB( Window* pParent, WinBits aWB );
+    LineEndLB( vcl::Window* pParent, WinBits aWB );
     virtual ~LineEndLB (void);
 
     virtual void Fill( const XLineEndListRef &pList, bool bStart = true );
@@ -371,7 +371,7 @@ protected:
     void LocalPostPaint();
 
 public:
-    SvxPreviewBase(Window* pParent);
+    SvxPreviewBase(vcl::Window* pParent);
     virtual ~SvxPreviewBase();
 
     // change support
@@ -401,7 +401,7 @@ private:
     Size                                            maSymbolSize;
 
 public:
-    SvxXLinePreview( Window* pParent );
+    SvxXLinePreview( vcl::Window* pParent );
     virtual ~SvxXLinePreview();
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
@@ -427,7 +427,7 @@ private:
     SdrObject*                                      mpRectangleObject;
 
 public:
-    SvxXRectPreview(Window* pParent);
+    SvxXRectPreview(vcl::Window* pParent);
     virtual ~SvxXRectPreview();
 
     void SetAttributes(const SfxItemSet& rItemSet);
@@ -451,7 +451,7 @@ private:
     SdrObject* mpRectangleShadow;
 
 public:
-    SvxXShadowPreview(Window *pParent);
+    SvxXShadowPreview(vcl::Window *pParent);
 
     virtual ~SvxXShadowPreview();
 

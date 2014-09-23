@@ -18,7 +18,7 @@
 
 using namespace std;
 
-ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(Window* pParent, WinBits nBits, SvPivotTreeListType eType)
+ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType)
     : SvTreeListBox(pParent, nBits)
     , meType(eType)
     , mpParent(NULL)

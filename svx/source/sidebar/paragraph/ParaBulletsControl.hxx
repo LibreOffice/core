@@ -46,7 +46,7 @@ private:
     DECL_LINK(MoreButtonClickHdl_Impl, void*);
 
 public:
-    ParaBulletsControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel);
+    ParaBulletsControl(vcl::Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel);
     virtual ~ParaBulletsControl();
     void UpdateValueSet();
 };

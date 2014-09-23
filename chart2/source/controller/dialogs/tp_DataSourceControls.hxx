@@ -45,7 +45,7 @@ public:
 class SeriesListBox : public ::SvTreeListBox
 {
 public:
-    explicit SeriesListBox(Window* pParent, WinBits nStyle);
+    explicit SeriesListBox(vcl::Window* pParent, WinBits nStyle);
 
     virtual SvTreeListEntry* CreateEntry() const SAL_OVERRIDE;
 };

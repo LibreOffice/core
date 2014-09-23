@@ -30,7 +30,7 @@
 #include <boost/noncopyable.hpp>
 
 class Rectangle;
-class Window;
+namespace vcl { class Window; }
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
 } } } }
@@ -66,7 +66,7 @@ namespace svt
                 method will always get the same parent window. The complete area of this window is
                 available, and should be used, for the panel window.
         */
-        virtual void Activate( Window& i_rParentWindow ) = 0;
+        virtual void Activate( vcl::Window& i_rParentWindow ) = 0;
 
         /** deactivates the panel
 

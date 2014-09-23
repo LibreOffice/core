@@ -57,7 +57,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 class Rectangle;
 class SvxRectCtl;
 class SvxRectCtlChildAccessibleContext;
-class Window;
+namespace vcl { class Window; }
 
 
 typedef ::cppu::WeakAggComponentImplHelper6<
@@ -324,7 +324,7 @@ class SvxRectCtlChildAccessibleContext : public SvxRectCtlChildAccessibleContext
 public:
     SvxRectCtlChildAccessibleContext(
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent,
-        const Window& rParentWindow,
+        const vcl::Window& rParentWindow,
         const OUString& rName, const OUString& rDescription,
         const Rectangle& rBoundingBox,
         long nIndexInParent );
@@ -504,7 +504,7 @@ private:
     Rectangle*                          mpBoundingBox;
 
     /// window of parent
-    const Window&                       mrParentWindow;
+    const vcl::Window&                       mrParentWindow;
 
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          mnClientId;

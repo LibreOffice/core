@@ -46,7 +46,7 @@ namespace pcr
     class TabOrderListBox : public SvTreeListBox
     {
     public:
-        TabOrderListBox( Window* pParent, WinBits nBits  );
+        TabOrderListBox( vcl::Window* pParent, WinBits nBits  );
         virtual ~TabOrderListBox();
 
         void            MoveSelection( long nRelPos );
@@ -95,7 +95,7 @@ namespace pcr
 
     public:
         TabOrderDialog(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& _rxTabModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxControlCont,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB

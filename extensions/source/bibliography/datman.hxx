@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-class Window;
+namespace vcl { class Window; }
 
 
 namespace bib
@@ -167,8 +167,8 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadControlModel(const OUString& rName,
                                                         bool bForceListBox = false);
 
-        void                        CreateMappingDialog(Window* pParent);
-        OUString                    CreateDBChangeDialog(Window* pParent);
+        void                        CreateMappingDialog(vcl::Window* pParent);
+        OUString                    CreateDBChangeDialog(vcl::Window* pParent);
 
         void                        DispatchDBChangeDialog();
         bool                        HasActiveConnection() const;

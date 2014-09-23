@@ -309,7 +309,7 @@ public:
     virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual FmXGridPeer*    imp_CreatePeer(Window* pParent);
+    virtual FmXGridPeer*    imp_CreatePeer(vcl::Window* pParent);
         // ImplCreatePeer would be better, but doesn't work because it's not exported
 
 };
@@ -376,7 +376,7 @@ public:
     virtual ~FmXGridPeer();
 
     // spaeter Constructor, immer nach dem realen Constructor zu rufen !
-    void Create(Window* pParent, WinBits nStyle);
+    void Create(vcl::Window* pParent, WinBits nStyle);
 
 // UNO connection
     DECLARE_UNO3_DEFAULTS(FmXGridPeer, VCLXWindow)
@@ -515,7 +515,7 @@ public:
     virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle);
+    virtual FmGridControl*  imp_CreateControl(vcl::Window* pParent, WinBits nStyle);
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::util::URL>&       getSupportedURLs();
     static ::com::sun::star::uno::Sequence<sal_uInt16>& getSupportedGridSlots();

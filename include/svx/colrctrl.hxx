@@ -58,8 +58,8 @@ protected:
                     DECL_STATIC_LINK(SvxColorValueSet_docking, ExecDragHdl, void*);
 
 public:
-                    SvxColorValueSet_docking( Window* pParent, WinBits nWinStyle = WB_ITEMBORDER );
-                    SvxColorValueSet_docking( Window* pParent, const ResId& rResId );
+                    SvxColorValueSet_docking( vcl::Window* pParent, WinBits nWinStyle = WB_ITEMBORDER );
+                    SvxColorValueSet_docking( vcl::Window* pParent, const ResId& rResId );
 
     bool IsLeftButton() const { return mbLeftButton; }
 };
@@ -102,7 +102,7 @@ protected:
 public:
                     SvxColorDockingWindow( SfxBindings* pBindings,
                                            SfxChildWindow *pCW,
-                                           Window* pParent,
+                                           vcl::Window* pParent,
                                            const ResId& rResId );
                     virtual ~SvxColorDockingWindow();
 

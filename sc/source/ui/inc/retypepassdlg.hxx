@@ -33,7 +33,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-class Window;
+namespace vcl { class Window; }
 class ScDocProtection;
 class ScTableProtection;
 class ScDocument;
@@ -44,7 +44,7 @@ public:
     typedef ::boost::shared_ptr<ScDocProtection>    DocProtectionPtr;
     typedef ::boost::shared_ptr<ScTableProtection>  TabProtectionPtr;
 
-    explicit ScRetypePassDlg(Window* pParent);
+    explicit ScRetypePassDlg(vcl::Window* pParent);
     virtual ~ScRetypePassDlg();
 
     virtual short Execute() SAL_OVERRIDE;
@@ -102,7 +102,7 @@ private:
 class ScRetypePassInputDlg : public ModalDialog
 {
 public:
-    explicit ScRetypePassInputDlg(Window* pParent, ScPassHashProtectable* pProtected);
+    explicit ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProtectable* pProtected);
     virtual ~ScRetypePassInputDlg();
 
     virtual short Execute() SAL_OVERRIDE;

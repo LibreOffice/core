@@ -33,7 +33,7 @@ protected:
     SdrTextObj*     pTextObj;
 
 public:
-    FuText(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+    FuText(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuText();

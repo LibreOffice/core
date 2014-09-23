@@ -73,11 +73,11 @@ protected:
 public:
                         SfxDockingWindow( SfxBindings *pBindings,
                                           SfxChildWindow *pCW,
-                                          Window* pParent,
+                                          vcl::Window* pParent,
                                           WinBits nWinBits=0);
                         SfxDockingWindow( SfxBindings *pBindings,
                                           SfxChildWindow *pCW,
-                                          Window* pParent,
+                                          vcl::Window* pParent,
                                           const ResId& rResId);
                         virtual ~SfxDockingWindow();
 
@@ -116,7 +116,7 @@ public:
 class SfxDockingWrapper : public SfxChildWindow
 {
     public:
-        SfxDockingWrapper( Window* pParent ,
+        SfxDockingWrapper( vcl::Window* pParent ,
                            sal_uInt16 nId ,
                            SfxBindings* pBindings ,
                            SfxChildWinInfo* pInfo );

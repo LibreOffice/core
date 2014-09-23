@@ -96,7 +96,7 @@
 // don't make more than 15 entries visible at once
 #define MAX_STYLES_ENTRIES          static_cast< sal_uInt16 >( 15 )
 
-static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
+static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
 
 // namespaces
 using namespace ::editeng;
@@ -116,7 +116,7 @@ class SvxStyleBox_Impl : public ComboBox
 {
     using Window::IsVisible;
 public:
-    SvxStyleBox_Impl( Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
+    SvxStyleBox_Impl( vcl::Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
                         const Reference< XFrame >& _xFrame,const OUString& rClearFormatKey, const OUString& rMoreKey, bool bInSpecialMode );
     virtual ~SvxStyleBox_Impl();
 
@@ -189,7 +189,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
-    SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame
+    SvxFontNameBox_Impl( vcl::Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame
         , WinBits nStyle = WB_SORT
         );
     virtual ~SvxFontNameBox_Impl();
@@ -216,7 +216,7 @@ class SvxFrmValueSet_Impl : public ValueSet
     sal_uInt16          nModifier;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 public:
-    SvxFrmValueSet_Impl(Window* pParent,  WinBits nWinStyle)
+    SvxFrmValueSet_Impl(vcl::Window* pParent,  WinBits nWinStyle)
         : ValueSet(pParent, nWinStyle), nModifier(0) {}
     sal_uInt16          GetModifier() const {return nModifier;}
 
@@ -242,11 +242,11 @@ private:
 protected:
     virtual void    Resize() SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
-    virtual Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
 
 public:
-    SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
+    SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
     virtual ~SvxFrameWindow_Impl();
     void            StartSelection();
 
@@ -267,11 +267,11 @@ private:
 protected:
     virtual void    Resize() SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
-    virtual Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:
-    SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
+    SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
 
     virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 };
@@ -293,7 +293,7 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
         SvxStyleToolBoxControl& rControl;
 };
 
-SvxStyleBox_Impl::SvxStyleBox_Impl(Window* pParent,
+SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
                                    const OUString& rCommand,
                                    SfxStyleFamily eFamily,
                                    const Reference< XDispatchProvider >& rDispatchProvider,
@@ -727,7 +727,7 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
     return bChanged;
 }
 
-SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame, WinBits nStyle ) :
+SvxFontNameBox_Impl::SvxFontNameBox_Impl( vcl::Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame, WinBits nStyle ) :
 
     FontNameBox        ( pParent, nStyle | WinBits( WB_DROPDOWN | WB_AUTOHSCROLL ) ),
     pFontList          ( NULL ),
@@ -850,7 +850,7 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
     }
     else if ( EVENT_LOSEFOCUS == rNEvt.GetType() )
     {
-        Window* pFocusWin = Application::GetFocusWindow();
+        vcl::Window* pFocusWin = Application::GetFocusWindow();
         if ( !HasFocus() && GetSubEdit() != pFocusWin )
             SetText( GetSavedValue() );
         // send EndPreview
@@ -1003,7 +1003,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           sal_uInt16                 nSlotId,
                                           const Reference< XFrame >& rFrame,
                                           const OUString&            rWndTitle,
-                                          Window*                    pParentWindow ):
+                                          vcl::Window*                    pParentWindow ):
 
     SfxPopupWindow( nSlotId, pParentWindow,
                     "palette_popup_window", "svx/ui/colorwindow.ui",
@@ -1225,7 +1225,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     }
 }
 
-SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
+SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
     aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     bParagraphMode(false)
@@ -1286,7 +1286,7 @@ SfxPopupWindow* SvxFrameWindow_Impl::Clone() const
     return new SvxFrameWindow_Impl( GetId(), GetFrame(), GetParent() );
 }
 
-Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
+vcl::Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
 {
     return &aFrameSet;
 }
@@ -1495,7 +1495,7 @@ static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
     return SvxBorderLine::threeDMediumColor( aMain );
 }
 
-SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
+SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
 
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION | WB_AUTOSIZE ) ),
     m_aLineStyleLb( this )
@@ -1596,7 +1596,7 @@ bool SvxLineWindow_Impl::Close()
     return SfxPopupWindow::Close();
 }
 
-Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
+vcl::Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
 {
     return &m_aLineStyleLb;
 }
@@ -2122,7 +2122,7 @@ void SvxStyleToolBoxControl::StateChanged(
         Update();
 }
 
-Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
+vcl::Window* SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     SvxStyleBox_Impl* pBox = new SvxStyleBox_Impl( pParent,
                                                    OUString( ".uno:StyleApply" ),
@@ -2182,7 +2182,7 @@ void SvxFontNameToolBoxControl::StateChanged(
     rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
 }
 
-Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
+vcl::Window* SvxFontNameToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     SvxFontNameBox_Impl* pBox = new SvxFontNameBox_Impl( pParent,
                                                          Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
@@ -2493,7 +2493,7 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
 
 
 
-static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
+static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
 {
     Size aSize = rValueSet.CalcWindowSizePixel( aItemSize );
     aSize.Width()  += 4;

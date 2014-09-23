@@ -54,7 +54,7 @@
 using namespace ::com::sun::star;
 
 
-SvxEventConfigPage::SvxEventConfigPage(Window *pParent, const SfxItemSet& rSet,
+SvxEventConfigPage::SvxEventConfigPage(vcl::Window *pParent, const SfxItemSet& rSet,
     SvxEventConfigPage::EarlyInit)
     : _SvxMacroTabPage(pParent, "EventsConfigPage",
         "cui/ui/eventsconfigpage.ui", rSet)

@@ -142,7 +142,7 @@ bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
 }
 
 
-SfxChildWindow::SfxChildWindow(Window *pParentWindow, sal_uInt16 nId)
+SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     : pParent(pParentWindow)
     , nType(nId)
     , eChildAlignment(SFX_ALIGN_NOALIGNMENT)
@@ -191,7 +191,7 @@ SfxChildWindow::~SfxChildWindow()
 
 
 SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
-        Window *pParent, SfxBindings* pBindings, SfxChildWinInfo& rInfo)
+        vcl::Window *pParent, SfxBindings* pBindings, SfxChildWinInfo& rInfo)
 {
     SfxChildWindow *pChild=0;
     SfxChildWinFactory* pFact=0;
@@ -510,7 +510,7 @@ SfxChildWindowContext::~SfxChildWindowContext()
 
 FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
 {
-    Window *pParent = pWindow->GetParent();
+    vcl::Window *pParent = pWindow->GetParent();
     if (pParent->GetType() == WINDOW_DOCKINGWINDOW || pParent->GetType() == WINDOW_TOOLBOX)
     {
         return ((DockingWindow*)pParent)->GetFloatingWindow();
@@ -673,7 +673,7 @@ void SfxChildWindow::Show( sal_uInt16 nFlags )
     }
 }
 
-Window* SfxChildWindow::GetContextWindow( SfxModule *pModule ) const
+vcl::Window* SfxChildWindow::GetContextWindow( SfxModule *pModule ) const
 {
     return pModule == pImp->pContextModule && pContext ? pContext->GetWindow(): 0;
 }

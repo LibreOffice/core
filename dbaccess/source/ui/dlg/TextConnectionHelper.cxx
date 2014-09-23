@@ -56,7 +56,7 @@
 namespace dbaui
 {
 
-    OTextConnectionHelper::OTextConnectionHelper( Window* pParent, const short _nAvailableSections )
+    OTextConnectionHelper::OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections )
         :TabPage(pParent, "TextPage", "dbaccess/ui/textpage.ui")
         ,m_aFieldSeparatorList      (ModuleRes(STR_AUTOFIELDSEPARATORLIST))
         ,m_aTextSeparatorList       (ModuleRes(STR_AUTOTEXTSEPARATORLIST))
@@ -114,7 +114,7 @@ namespace dbaui
         struct SectionDescriptor
         {
             short   nFlag;
-            Window* pFirstControl;
+            vcl::Window* pFirstControl;
         } aSections[] = {
             { TC_EXTENSION,     m_pExtensionHeader },
             { TC_SEPARATORS,    m_pFormatHeader },
@@ -131,14 +131,14 @@ namespace dbaui
                 continue;
             }
 
-            Window* pThisSection = aSections[section].pFirstControl;
-            Window* pNextSection = aSections[section+1].pFirstControl;
+            vcl::Window* pThisSection = aSections[section].pFirstControl;
+            vcl::Window* pNextSection = aSections[section+1].pFirstControl;
 
             // hide all elements from this section
-            Window* pControl = pThisSection;
+            vcl::Window* pControl = pThisSection;
             while ( ( pControl != pNextSection ) && pControl )
             {
-                Window* pRealWindow = pControl->GetWindow( WINDOW_CLIENT );
+                vcl::Window* pRealWindow = pControl->GetWindow( WINDOW_CLIENT );
             #if OSL_DEBUG_LEVEL > 0
                 OUString sWindowText( pRealWindow->GetText() );
                 (void)sWindowText;

@@ -74,7 +74,7 @@ private:
     void Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted = false );
 
 public:
-    PresLayoutPreview( ::Window* pParent );
+    PresLayoutPreview( vcl::Window* pParent );
     virtual ~PresLayoutPreview();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -153,7 +153,7 @@ private:
     void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet, SdPage* pPage );
 
 public:
-    HeaderFooterTabPage( ::Window* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
+    HeaderFooterTabPage( vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
     virtual ~HeaderFooterTabPage();
 
     void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle );
@@ -165,7 +165,7 @@ public:
 
 using namespace ::sd;
 
-HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage ) :
+HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage ) :
         TabDialog ( pParent, "HeaderFooterDialog", "modules/simpress/ui/headerfooterdialog.ui" ),
         mpDoc( pDoc ),
         mpCurrentPage( pCurrentPage ),
@@ -389,7 +389,7 @@ void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const H
     pPage->setHeaderFooterSettings( rNewSettings );
 }
 
-HeaderFooterTabPage::HeaderFooterTabPage( ::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
+HeaderFooterTabPage::HeaderFooterTabPage( vcl::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
         TabPage( pWindow, "HeaderFooterTab", "modules/simpress/ui/headerfootertab.ui" ),
         mpDoc(pDoc),
         mbHandoutMode( bHandoutMode )
@@ -671,13 +671,13 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     }
 }
 
-PresLayoutPreview::PresLayoutPreview( ::Window* pParent )
+PresLayoutPreview::PresLayoutPreview( vcl::Window* pParent )
     : Control(pParent)
     , mpMaster(NULL)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makePresLayoutPreview( ::Window *pParent, VclBuilder::stringmap & )
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makePresLayoutPreview( vcl::Window *pParent, VclBuilder::stringmap & )
 {
     return new PresLayoutPreview( pParent );
 }

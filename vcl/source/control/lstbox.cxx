@@ -49,13 +49,13 @@ ListBox::ListBox(WindowType nType)
     ImplInitListBoxData();
 }
 
-ListBox::ListBox( Window* pParent, WinBits nStyle ) : Control( WINDOW_LISTBOX )
+ListBox::ListBox( vcl::Window* pParent, WinBits nStyle ) : Control( WINDOW_LISTBOX )
 {
     ImplInitListBoxData();
     ImplInit( pParent, nStyle );
 }
 
-ListBox::ListBox( Window* pParent, const ResId& rResId ) :
+ListBox::ListBox( vcl::Window* pParent, const ResId& rResId ) :
     Control( WINDOW_LISTBOX )
 {
     rResId.SetRT( RSC_LISTBOX );
@@ -96,7 +96,7 @@ void ListBox::ImplInitListBoxData()
     mbEdgeBlending  = false;
 }
 
-void ListBox::ImplInit( Window* pParent, WinBits nStyle )
+void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     if ( !(nStyle & WB_NOBORDER) && ( nStyle & WB_DROPDOWN ) )
@@ -149,7 +149,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         mpBtn->GetDropTarget()->addDropTargetListener(xDrop);
     }
 
-    Window* pLBParent = this;
+    vcl::Window* pLBParent = this;
     if ( mpFloatWin )
         pLBParent = mpFloatWin;
     mpImplLB = new ImplListBox( pLBParent, nStyle&(~WB_BORDER) );
@@ -503,7 +503,7 @@ void ListBox::GetFocus()
     Control::GetFocus();
 }
 
-Window* ListBox::GetPreferredKeyInputWindow()
+vcl::Window* ListBox::GetPreferredKeyInputWindow()
 {
     if ( mpImplLB )
     {
@@ -625,7 +625,7 @@ void ListBox::Resize()
         long nBottom = aOutSz.Height();
 
         // Note: in case of no border, pBorder will actually be this
-        Window *pBorder = GetWindow( WINDOW_BORDER );
+        vcl::Window *pBorder = GetWindow( WINDOW_BORDER );
         ImplControlValue aControlValue;
         Point aPoint;
         Rectangle aContent, aBound;
@@ -1158,7 +1158,7 @@ bool ListBox::IsInDropDown() const
 Rectangle ListBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     Rectangle aRect = mpImplLB->GetMainWindow().GetBoundingRectangle( nItem );
-    Rectangle aOffset = mpImplLB->GetMainWindow().GetWindowExtentsRelative( (Window*)this );
+    Rectangle aOffset = mpImplLB->GetMainWindow().GetWindowExtentsRelative( (vcl::Window*)this );
     aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
     return aRect;
 }
@@ -1283,7 +1283,7 @@ Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
 {
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
+    ((vcl::Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.Height() -= nTop+nBottom;
     if ( !IsDropDownBox() )
     {
@@ -1486,7 +1486,7 @@ void ListBox::SetEdgeBlending(bool bNew)
     }
 }
 
-MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
+MultiListBox::MultiListBox( vcl::Window* pParent, WinBits nStyle ) :
     ListBox( WINDOW_MULTILISTBOX )
 {
     ImplInit( pParent, nStyle );

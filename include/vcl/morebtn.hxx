@@ -46,10 +46,10 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
 public:
-    explicit            MoreButton( Window* pParent, WinBits nStyle = 0 );
+    explicit            MoreButton( vcl::Window* pParent, WinBits nStyle = 0 );
     virtual             ~MoreButton();
 
     void                Click() SAL_OVERRIDE;

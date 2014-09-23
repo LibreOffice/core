@@ -34,7 +34,7 @@ SFX_IMPL_DOCKINGWINDOW_WITHID(SidebarChildWindow, SID_SIDEBAR);
 
 
 SidebarChildWindow::SidebarChildWindow (
-    Window* pParentWindow,
+    vcl::Window* pParentWindow,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
@@ -61,7 +61,7 @@ SidebarChildWindow::SidebarChildWindow (
 
 
 
-sal_Int32 SidebarChildWindow::GetDefaultWidth (Window* pWindow)
+sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window* pWindow)
 {
     if (pWindow != NULL)
     {

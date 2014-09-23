@@ -65,7 +65,7 @@ namespace svt
     class EditBrowseBox;
 }
 
-class Window;
+namespace vcl { class Window; }
 class ToolBox;
 namespace vcl { class Font; }
 class SvNumberFormatter;
@@ -107,7 +107,7 @@ namespace dbaui
         @param  _rxContext              need to create the dialog
     */
     void showError( const ::dbtools::SQLExceptionInfo& _rInfo,
-                    Window* _pParent,
+                    vcl::Window* _pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
     /** fills a map and a vector with localized type names
@@ -163,7 +163,7 @@ namespace dbaui
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >
         getDataSourceByName(
                 const OUString& _rDataSourceName,
-                Window* _pErrorMessageParent,
+                vcl::Window* _pErrorMessageParent,
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > _rxContext,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo
             );
@@ -187,11 +187,11 @@ namespace dbaui
     void callColumnFormatDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xAffectedCol,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xField,
                                 SvNumberFormatter* _pFormatter,
-                                Window* _pParent);
+                                vcl::Window* _pParent);
 
     /** second variant of the function before
     */
-    bool callColumnFormatDialog(Window* _pParent,
+    bool callColumnFormatDialog(vcl::Window* _pParent,
                                     SvNumberFormatter* _pFormatter,
                                     sal_Int32 _nDataType,
                                     sal_Int32& _nFormatKey,
@@ -207,7 +207,7 @@ namespace dbaui
     bool appendToFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const OUString& _sName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                            Window* _pParent);
+                            vcl::Window* _pParent);
 
     /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
         @param  _pWindow
@@ -220,9 +220,9 @@ namespace dbaui
             ::comphelper::mem_fun(&TaskPaneList::AddWindow)
             ::comphelper::mem_fun(&TaskPaneList::RemoveWindow)
     */
-    void notifySystemWindow(Window* _pWindow,
-                            Window* _pToRegister,
-                            ::comphelper::mem_fun1_t<TaskPaneList,Window*> _rMemFunc);
+    void notifySystemWindow(vcl::Window* _pWindow,
+                            vcl::Window* _pToRegister,
+                            ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*> _rMemFunc);
 
     /** adjustToolBoxSize checks if the size of the ToolBox is still valid. If not it will be resized.
         @param  _pToolBox
@@ -327,7 +327,7 @@ namespace dbaui
         @return
             RET_YES, RET_NO, RET_ALL
     */
-    sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,bool _bAll,const OUString& _sName);
+    sal_Int32 askForUserAction(vcl::Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,bool _bAll,const OUString& _sName);
 
     /** creates a new view from a query or table
         @param  _sName
@@ -389,7 +389,7 @@ namespace dbaui
             <TRUE/> if the insert opertions was successful, otherwise <FALSE/>.
     */
     bool insertHierachyElement(
-                Window* _pParent,
+                vcl::Window* _pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameContainer>& _xNames,
                 const OUString& _sParentFolder,

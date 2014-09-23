@@ -276,7 +276,7 @@ void SwViewImp::UpdateAccessible()
 {
     // We require a layout and an XModel to be accessible.
     IDocumentLayoutAccess* pIDLA = GetShell()->getIDocumentLayoutAccess();
-    Window *pWin = GetShell()->GetWin();
+    vcl::Window *pWin = GetShell()->GetWin();
     OSL_ENSURE( GetShell()->GetLayout(), "no layout, no access" );
     OSL_ENSURE( pWin, "no window, no access" );
 

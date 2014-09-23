@@ -56,7 +56,7 @@ namespace dbaui
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
 
-    OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, const OString& rId,
+    OCommonBehaviourTabPage::OCommonBehaviourTabPage(vcl::Window* pParent, const OString& rId,
         const OUString& rUIXMLDescription, const SfxItemSet& _rCoreAttrs,
         sal_uInt32 nControlFlags)
 
@@ -187,7 +187,7 @@ namespace dbaui
     }
 
     // ODbaseDetailsPage
-    ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    ODbaseDetailsPage::ODbaseDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, "DbasePage", "dbaccess/ui/dbasepage.ui", _rCoreAttrs, CBTP_USE_CHARSET)
     {
         get(m_pShowDeleted, "showDelRowsCheckbutton");
@@ -204,7 +204,7 @@ namespace dbaui
 
     }
 
-    SfxTabPage* ODriversSettings::CreateDbase( Window* pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateDbase( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new ODbaseDetailsPage( pParent, *_rAttrSet ) );
     }
@@ -260,7 +260,7 @@ namespace dbaui
     }
 
     // OAdoDetailsPage
-    OAdoDetailsPage::OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OAdoDetailsPage::OAdoDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, "AutoCharset", "dbaccess/ui/autocharsetpage.ui", _rCoreAttrs, CBTP_USE_CHARSET )
     {
 
@@ -270,20 +270,20 @@ namespace dbaui
     {
 
     }
-    SfxTabPage* ODriversSettings::CreateAdo( Window* pParent,   const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateAdo( vcl::Window* pParent,   const SfxItemSet* _rAttrSet )
     {
         return ( new OAdoDetailsPage( pParent, *_rAttrSet ) );
     }
 
     // OOdbcDetailsPage
-    OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OOdbcDetailsPage::OOdbcDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, "ODBC", "dbaccess/ui/odbcpage.ui", _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_OPTIONS)
     {
         get(m_pUseCatalog, "useCatalogCheckbutton");
         m_pUseCatalog->SetToggleHdl(getControlModifiedLink());
     }
 
-    SfxTabPage* ODriversSettings::CreateODBC( Window* pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateODBC( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new OOdbcDetailsPage( pParent, *_rAttrSet ) );
     }
@@ -308,7 +308,7 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OOdbcDetailsPage
-    OUserDriverDetailsPage::OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OUserDriverDetailsPage::OUserDriverDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         : OCommonBehaviourTabPage(pParent, "UserDetailsPage", "dbaccess/ui/userdetailspage.ui", _rCoreAttrs,
             CBTP_USE_CHARSET | CBTP_USE_OPTIONS)
     {
@@ -321,7 +321,7 @@ namespace dbaui
         m_pUseCatalog->SetToggleHdl(getControlModifiedLink());
     }
 
-    SfxTabPage* ODriversSettings::CreateUser( Window* pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateUser( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new OUserDriverDetailsPage( pParent, *_rAttrSet ) );
     }
@@ -373,18 +373,18 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // OMySQLODBCDetailsPage
-    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, "AutoCharset", "dbaccess/ui/autocharsetpage.ui", _rCoreAttrs, CBTP_USE_CHARSET )
     {
     }
 
-    SfxTabPage* ODriversSettings::CreateMySQLODBC( Window* pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateMySQLODBC( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new OMySQLODBCDetailsPage( pParent, *_rAttrSet ) );
     }
 
     // OMySQLJDBCDetailsPage
-    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, bool bShowSocket )
+    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, bool bShowSocket )
         :OCommonBehaviourTabPage(pParent, "GeneralSpecialJDBCDetails", "dbaccess/ui/generalspecialjdbcdetailspage.ui", _rCoreAttrs, CBTP_USE_CHARSET)
         ,m_nPortId(_nPortId)
         ,m_bUseClass(true)
@@ -514,7 +514,7 @@ namespace dbaui
     }
 
     // MySQLNativePage
-    MySQLNativePage::MySQLNativePage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    MySQLNativePage::MySQLNativePage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, "MysqlNativePage", "dbaccess/ui/mysqlnativepage.ui", _rCoreAttrs, CBTP_USE_CHARSET )
         ,m_aMySQLSettings       ( *get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink() )
     {
@@ -584,22 +584,22 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    SfxTabPage* ODriversSettings::CreateMySQLJDBC( Window* pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateMySQLJDBC( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCDetailsPage( pParent, *_rAttrSet,DSID_MYSQL_PORTNUMBER ) );
     }
-    SfxTabPage* ODriversSettings::CreateMySQLNATIVE( Window* pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateMySQLNATIVE( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new MySQLNativePage( pParent, *_rAttrSet ) );
     }
 
-    SfxTabPage* ODriversSettings::CreateOracleJDBC( Window* pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateOracleJDBC( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCDetailsPage( pParent, *_rAttrSet,DSID_ORACLE_PORTNUMBER, false) );
     }
 
     // OLDAPDetailsPage
-    OLDAPDetailsPage::OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OLDAPDetailsPage::OLDAPDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, "LDAP", "dbaccess/ui/ldappage.ui", _rCoreAttrs, 0)
     {
         get(m_pETBaseDN, "baseDNEntry");
@@ -619,7 +619,7 @@ namespace dbaui
         m_pCBUseSSL->SetClickHdl(LINK(this, OLDAPDetailsPage,OnCheckBoxClick));
     }
 
-    SfxTabPage* ODriversSettings::CreateLDAP( Window* pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateLDAP( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new OLDAPDetailsPage( pParent, *_rAttrSet ) );
     }
@@ -676,7 +676,7 @@ namespace dbaui
     }
 
     // OTextDetailsPage
-    OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    OTextDetailsPage::OTextDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, "EmptyPage", "dbaccess/ui/emptypage.ui", _rCoreAttrs, 0)
     {
 
@@ -689,7 +689,7 @@ namespace dbaui
 
     }
 
-    SfxTabPage* ODriversSettings::CreateText( Window* pParent,  const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateText( vcl::Window* pParent,  const SfxItemSet* _rAttrSet )
     {
         return ( new OTextDetailsPage( pParent, *_rAttrSet ) );
     }
@@ -727,12 +727,12 @@ namespace dbaui
         return m_pTextConnectionHelper->prepareLeave();
     }
 
-    SfxTabPage* ODriversSettings::CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateGeneratedValuesPage( vcl::Window* _pParent, const SfxItemSet* _rAttrSet )
     {
         return new GeneratedValuesPage( _pParent, *_rAttrSet );
     }
 
-    SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet* _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( vcl::Window* _pParent, const SfxItemSet* _rAttrSet )
     {
         OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( *_rAttrSet );
         DataSourceMetaData aMetaData( eType );

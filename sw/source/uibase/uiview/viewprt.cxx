@@ -147,7 +147,7 @@ bool SwView::HasPrintOptionsPage() const
 
 // TabPage for application-specific print options
 
-SfxTabPage* SwView::CreatePrintOptionsPage(Window* pParent,
+SfxTabPage* SwView::CreatePrintOptionsPage(vcl::Window* pParent,
                                                     const SfxItemSet& rSet)
 {
     return ::CreatePrintOptionsPage( pParent, rSet, false );
@@ -245,7 +245,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
 
 // Create page printer/additions for SwView and SwPagePreview
 
-SfxTabPage* CreatePrintOptionsPage( Window *pParent,
+SfxTabPage* CreatePrintOptionsPage( vcl::Window *pParent,
                                 const SfxItemSet &rOptions, bool bPreview )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

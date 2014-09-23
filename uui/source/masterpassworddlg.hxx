@@ -36,7 +36,7 @@ class MasterPasswordDialog : public ModalDialog
     DECL_LINK(OKHdl_Impl, void *);
 
 public:
-    MasterPasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
+    MasterPasswordDialog( vcl::Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
 
     OUString        GetMasterPassword() const { return m_pEDMasterPassword->GetText(); }
 

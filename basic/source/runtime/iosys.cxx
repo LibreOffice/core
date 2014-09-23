@@ -70,14 +70,14 @@ class SbiInputDialog : public ModalDialog {
     OKButton aOk;
     CancelButton aCancel;
     OUString aText;
-    DECL_LINK( Ok, Window * );
-    DECL_LINK( Cancel, Window * );
+    DECL_LINK( Ok, vcl::Window * );
+    DECL_LINK( Cancel, vcl::Window * );
 public:
-    SbiInputDialog( Window*, const OUString& );
+    SbiInputDialog( vcl::Window*, const OUString& );
     const OUString& GetInput() { return aText; }
 };
 
-SbiInputDialog::SbiInputDialog( Window* pParent, const OUString& rPrompt )
+SbiInputDialog::SbiInputDialog( vcl::Window* pParent, const OUString& rPrompt )
             :ModalDialog( pParent, WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
              aInput( this, WB_3DLOOK | WB_LEFT | WB_BORDER ),
              aOk( this ), aCancel( this )
@@ -105,7 +105,7 @@ SbiInputDialog::SbiInputDialog( Window* pParent, const OUString& rPrompt )
     aCancel.Show();
 }
 
-IMPL_LINK_INLINE_START( SbiInputDialog, Ok, Window *, pWindow )
+IMPL_LINK_INLINE_START( SbiInputDialog, Ok, vcl::Window *, pWindow )
 {
     (void)pWindow;
 
@@ -113,16 +113,16 @@ IMPL_LINK_INLINE_START( SbiInputDialog, Ok, Window *, pWindow )
     EndDialog( 1 );
     return 0;
 }
-IMPL_LINK_INLINE_END( SbiInputDialog, Ok, Window *, pWindow )
+IMPL_LINK_INLINE_END( SbiInputDialog, Ok, vcl::Window *, pWindow )
 
-IMPL_LINK_INLINE_START( SbiInputDialog, Cancel, Window *, pWindow )
+IMPL_LINK_INLINE_START( SbiInputDialog, Cancel, vcl::Window *, pWindow )
 {
     (void)pWindow;
 
     EndDialog( 0 );
     return 0;
 }
-IMPL_LINK_INLINE_END( SbiInputDialog, Cancel, Window *, pWindow )
+IMPL_LINK_INLINE_END( SbiInputDialog, Cancel, vcl::Window *, pWindow )
 
 
 SbiStream::SbiStream()
@@ -851,7 +851,7 @@ void SbiIoSystem::Shutdown()
     if( !aOut.isEmpty() )
     {
 #if defined __GNUC__
-        Window* pParent = Application::GetDefDialogParent();
+        vcl::Window* pParent = Application::GetDefDialogParent();
         MessBox( pParent, WinBits( WB_OK ), OUString(), aOut ).Execute();
 #else
         MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOut ).Execute();

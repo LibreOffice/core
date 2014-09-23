@@ -56,7 +56,7 @@ namespace pcr
         bool        m_bHaveAssignableControl;
 
     public:
-        OSelectLabelDialog(Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xControlModel);
+        OSelectLabelDialog(vcl::Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xControlModel);
         virtual ~OSelectLabelDialog();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  GetSelected() const { return m_pNoAssignment->IsChecked() ? ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > () : m_xSelectedControl; }

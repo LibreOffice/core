@@ -137,7 +137,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
 
             aGuard.reset();
             {
-                Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+                vcl::Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                 while ( pWindow && !pWindow->IsSystemWindow() )
                     pWindow = pWindow->GetParent();
 
@@ -215,7 +215,7 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
     if ( xFrame.is() )
     {
         uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
-        Window* pWindow = NULL;
+        vcl::Window* pWindow = NULL;
 
         SolarMutexGuard aSolarGuard;
         {

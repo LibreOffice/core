@@ -3525,10 +3525,10 @@ sal_Bool SAL_CALL FormController::supportsMode(const OUString& Mode) throw( Runt
 }
 
 
-Window* FormController::getDialogParentWindow()
+vcl::Window* FormController::getDialogParentWindow()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    Window* pParentWindow = NULL;
+    vcl::Window* pParentWindow = NULL;
     try
     {
         Reference< XControl > xContainerControl( getContainer(), UNO_QUERY_THROW );
@@ -3613,7 +3613,7 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
 
 namespace
 {
-    void displayErrorSetFocus( const OUString& _rMessage, const Reference< XControl >& _rxFocusControl, Window* _pDialogParent )
+    void displayErrorSetFocus( const OUString& _rMessage, const Reference< XControl >& _rxFocusControl, vcl::Window* _pDialogParent )
     {
         SQLContext aError;
         aError.Message = SVX_RESSTR(RID_STR_WRITEERROR);

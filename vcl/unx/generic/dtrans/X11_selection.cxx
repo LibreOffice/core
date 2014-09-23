@@ -876,7 +876,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     if( it == m_aSelections.end() )
         return false;
 
-    XLIB_Window aSelectionOwner = XGetSelectionOwner( m_pDisplay, selection );
+    ::Window aSelectionOwner = XGetSelectionOwner( m_pDisplay, selection );
     if( aSelectionOwner == None )
         return false;
     if( aSelectionOwner == m_aWindow )
@@ -1423,7 +1423,7 @@ static sal_Size GetTrueFormatSize(int nFormat)
 }
 
 bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
-                                 XLIB_Window requestor,
+                                 ::Window requestor,
                                  Atom target,
                                  Atom property,
                                  Atom selection )
@@ -1510,7 +1510,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
         {
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "using INCR protocol\n" );
-            boost::unordered_map< XLIB_Window, boost::unordered_map< Atom, IncrementalTransfer > >::const_iterator win_it = m_aIncrementals.find( requestor );
+            boost::unordered_map< ::Window, boost::unordered_map< Atom, IncrementalTransfer > >::const_iterator win_it = m_aIncrementals.find( requestor );
             if( win_it != m_aIncrementals.end() )
             {
                 boost::unordered_map< Atom, IncrementalTransfer >::const_iterator inc_it = win_it->second.find( property );
@@ -1904,7 +1904,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
     // feed incrementals
     if( rNotify.state == PropertyDelete )
     {
-        boost::unordered_map< XLIB_Window, boost::unordered_map< Atom, IncrementalTransfer > >::iterator it;
+        boost::unordered_map< ::Window, boost::unordered_map< Atom, IncrementalTransfer > >::iterator it;
         it = m_aIncrementals.find( rNotify.window );
         if( it != m_aIncrementals.end() )
         {
@@ -2082,12 +2082,12 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
     osl::ResettableMutexGuard aGuard(m_aMutex);
 
     // handle drop related events
-    XLIB_Window aSource = rMessage.data.l[0];
-    XLIB_Window aTarget = rMessage.window;
+    ::Window aSource = rMessage.data.l[0];
+    ::Window aTarget = rMessage.window;
 
     bool bHandled = false;
 
-    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::iterator it =
+    ::boost::unordered_map< ::Window, DropTargetEntry >::iterator it =
           m_aDropTargets.find( aTarget );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2101,7 +2101,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             fprintf( stderr, "but no target found\n" );
         else if( ! it->second.m_pTarget->m_bActive )
             fprintf( stderr, "but target is inactive\n" );
-        else if( m_aDropEnterEvent.data.l[0] != None && (XLIB_Window)m_aDropEnterEvent.data.l[0] != aSource )
+        else if( m_aDropEnterEvent.data.l[0] != None && (::Window)m_aDropEnterEvent.data.l[0] != aSource )
             fprintf( stderr, "but source 0x%lx is unknown (expected 0x%lx or 0)\n", aSource, m_aDropEnterEvent.data.l[0] );
         else
             fprintf( stderr, "processing.\n" );
@@ -2122,7 +2122,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 
     if( it != m_aDropTargets.end() &&
         it->second.m_pTarget->m_bActive &&
-       ( m_aDropEnterEvent.data.l[0] == None || XLIB_Window(m_aDropEnterEvent.data.l[0]) == aSource )
+       ( m_aDropEnterEvent.data.l[0] == None || ::Window(m_aDropEnterEvent.data.l[0]) == aSource )
         )
     {
         if( rMessage.message_type == m_nXdndEnter )
@@ -2138,7 +2138,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
         }
         else if(
                 rMessage.message_type == m_nXdndPosition &&
-                aSource == XLIB_Window(m_aDropEnterEvent.data.l[0])
+                aSource == ::Window(m_aDropEnterEvent.data.l[0])
                 )
         {
             bHandled = true;
@@ -2146,7 +2146,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             if( ! m_bDropEnterSent )
                 m_nDropTimestamp = m_nDropTime;
 
-            XLIB_Window aChild;
+            ::Window aChild;
             XTranslateCoordinates( m_pDisplay,
                                    it->second.m_aRootWindow,
                                    it->first,
@@ -2194,7 +2194,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
         }
         else if(
                 rMessage.message_type == m_nXdndLeave  &&
-                aSource == XLIB_Window(m_aDropEnterEvent.data.l[0])
+                aSource == ::Window(m_aDropEnterEvent.data.l[0])
                 )
         {
             bHandled = true;
@@ -2212,7 +2212,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
         }
         else if(
                 rMessage.message_type == m_nXdndDrop &&
-                aSource == XLIB_Window(m_aDropEnterEvent.data.l[0])
+                aSource == ::Window(m_aDropEnterEvent.data.l[0])
                 )
         {
             bHandled = true;
@@ -2259,7 +2259,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
  *  methods for XDropTargetDropContext
  */
 
-void SelectionManager::dropComplete( bool bSuccess, XLIB_Window aDropWindow, XLIB_Time )
+void SelectionManager::dropComplete( bool bSuccess, ::Window aDropWindow, XLIB_Time )
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
@@ -2455,14 +2455,14 @@ void SelectionManager::sendDropPosition( bool bForce, XLIB_Time eventTime )
     if( m_bDropSent )
         return;
 
-    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it =
+    ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( m_aDropWindow );
     if( it != m_aDropTargets.end() )
     {
         if( it->second.m_pTarget->m_bActive )
         {
             int x, y;
-            XLIB_Window aChild;
+            ::Window aChild;
             XTranslateCoordinates( m_pDisplay, it->second.m_aRootWindow, m_aDropWindow, m_nLastDragX, m_nLastDragY, &x, &y, &aChild );
             DropTargetDragEvent dtde;
             dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
@@ -2516,7 +2516,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
     bool bHandled = false;
 
     // for shortcut
-    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it =
+    ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( m_aDropWindow );
 #if OSL_DEBUG_LEVEL > 1
     switch( rMessage.type )
@@ -2622,7 +2622,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
         bool bForce = false;
         int root_x  = rMessage.type == MotionNotify ? rMessage.xmotion.x_root : rMessage.xcrossing.x_root;
         int root_y  = rMessage.type == MotionNotify ? rMessage.xmotion.y_root : rMessage.xcrossing.y_root;
-        XLIB_Window root = rMessage.type == MotionNotify ? rMessage.xmotion.root : rMessage.xcrossing.root;
+        ::Window root = rMessage.type == MotionNotify ? rMessage.xmotion.root : rMessage.xcrossing.root;
         m_nDragTimestamp = rMessage.type == MotionNotify ? rMessage.xmotion.time : rMessage.xcrossing.time;
 
         aGuard.clear();
@@ -2718,7 +2718,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                 {
                     bHandled = true;
                     int x, y;
-                    XLIB_Window aChild;
+                    ::Window aChild;
                     XTranslateCoordinates( m_pDisplay, rMessage.xbutton.root, m_aDropWindow, rMessage.xbutton.x_root, rMessage.xbutton.y_root, &x, &y, &aChild );
                     DropTargetDropEvent dtde;
                     dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
@@ -2768,7 +2768,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                 {
                     bHandled = true;
 
-                    XLIB_Window aDummy;
+                    ::Window aDummy;
                     XEvent aEvent;
                     aEvent.type = ButtonPress;
                     aEvent.xbutton.display      = m_pDisplay;
@@ -2825,7 +2825,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
     return bHandled;
 }
 
-void SelectionManager::accept( sal_Int8 dragOperation, XLIB_Window aDropWindow, XLIB_Time )
+void SelectionManager::accept( sal_Int8 dragOperation, ::Window aDropWindow, XLIB_Time )
 {
     if( aDropWindow == m_aCurrentDropWindow )
     {
@@ -2845,7 +2845,7 @@ void SelectionManager::accept( sal_Int8 dragOperation, XLIB_Window aDropWindow, 
     }
 }
 
-void SelectionManager::reject( XLIB_Window aDropWindow, XLIB_Time )
+void SelectionManager::reject( ::Window aDropWindow, XLIB_Time )
 {
     if( aDropWindow == m_aCurrentDropWindow )
     {
@@ -2889,7 +2889,7 @@ sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction ) throw(std::e
     return aCursor;
 }
 
-int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
+int SelectionManager::getXdndVersion( ::Window aWindow, ::Window& rProxy )
 {
     Atom* pProperties = NULL;
     int nProperties = 0;
@@ -2917,7 +2917,7 @@ int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
             if( pBytes )
             {
                 if( nType == XA_WINDOW )
-                    rProxy = *(XLIB_Window*)pBytes;
+                    rProxy = *(::Window*)pBytes;
                 XFree( pBytes );
                 pBytes = NULL;
                 if( rProxy != None )
@@ -2927,7 +2927,7 @@ int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
                                         &nType, &nFormat, &nItems, &nBytes, &pBytes );
                     if( pBytes )
                     {
-                        if( nType == XA_WINDOW && *(XLIB_Window*)pBytes != rProxy )
+                        if( nType == XA_WINDOW && *(::Window*)pBytes != rProxy )
                             rProxy = None;
                         XFree( pBytes );
                         pBytes = NULL;
@@ -2942,7 +2942,7 @@ int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
     if ( pProperties )
         XFree (pProperties);
 
-    XLIB_Window aAwareWindow = rProxy != None ? rProxy : aWindow;
+    ::Window aAwareWindow = rProxy != None ? rProxy : aWindow;
 
     XGetWindowProperty( m_pDisplay, aAwareWindow, m_nXdndAware, 0, 1, False, XA_ATOM,
                         &nType, &nFormat, &nItems, &nBytes, &pBytes );
@@ -2958,7 +2958,7 @@ int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
     return nVersion;
 }
 
-void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
+void SelectionManager::updateDragWindow( int nX, int nY, ::Window aRoot )
 {
     osl::ResettableMutexGuard aGuard( m_aMutex );
 
@@ -2967,9 +2967,9 @@ void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
     m_nLastDragX = nX;
     m_nLastDragY = nY;
 
-    XLIB_Window aParent = aRoot;
-    XLIB_Window aChild;
-    XLIB_Window aNewProxy = None, aNewCurrentWindow = None;
+    ::Window aParent = aRoot;
+    ::Window aChild;
+    ::Window aNewProxy = None, aNewCurrentWindow = None;
     int nNewProtocolVersion = -1;
     int nWinX, nWinY;
 
@@ -3009,7 +3009,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
     dsde.DropAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
     dsde.UserAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
 
-    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it;
+    ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it;
     if( aNewCurrentWindow != m_aDropWindow )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -3158,11 +3158,11 @@ void SelectionManager::startDrag(
         // the pointer is located in. since said window should be one
         // of our DropTargets at the time of executeDrag we can use
         // them for a start
-        XLIB_Window aRoot, aParent, aChild;
+        ::Window aRoot, aParent, aChild;
         int root_x(0), root_y(0), win_x(0), win_y(0);
         unsigned int mask(0);
 
-        ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it;
+        ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it;
         it = m_aDropTargets.begin();
         while( it != m_aDropTargets.end() )
         {
@@ -3457,7 +3457,7 @@ void SelectionManager::dragDoDispatch()
  */
 
 
-void SelectionManager::setCursor( sal_Int32 cursor, XLIB_Window aDropWindow, XLIB_Time )
+void SelectionManager::setCursor( sal_Int32 cursor, ::Window aDropWindow, XLIB_Time )
 {
     osl::MutexGuard aGuard( m_aMutex );
     if( aDropWindow == m_aDropWindow && Cursor(cursor) != m_aCurrentCursor )
@@ -3471,7 +3471,7 @@ void SelectionManager::setCursor( sal_Int32 cursor, XLIB_Window aDropWindow, XLI
     }
 }
 
-void SelectionManager::setImage( sal_Int32, XLIB_Window, XLIB_Time )
+void SelectionManager::setImage( sal_Int32, ::Window, XLIB_Time )
 {
 }
 
@@ -3687,7 +3687,7 @@ void SelectionManager::run( void* pThis )
             {
                 if( it->first != This->m_nXdndSelection && ! it->second->m_bOwner )
                 {
-                    XLIB_Window aOwner = XGetSelectionOwner( This->m_pDisplay, it->first );
+                    ::Window aOwner = XGetSelectionOwner( This->m_pDisplay, it->first );
                     if( aOwner != it->second->m_aLastOwner )
                     {
                         it->second->m_aLastOwner = aOwner;
@@ -3868,12 +3868,12 @@ extern "C"
     typedef int(*xerror_hdl_t)(Display*,XErrorEvent*);
 }
 
-void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTarget )
+void SelectionManager::registerDropTarget( ::Window aWindow, DropTarget* pTarget )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
     // sanity check
-    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it =
+    ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( aWindow );
     if( it != m_aDropTargets.end() )
         OSL_FAIL( "attempt to register window as drop target twice" );
@@ -3910,7 +3910,7 @@ void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTar
         OSL_FAIL( "attempt to register None as drop target" );
 }
 
-void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
+void SelectionManager::deregisterDropTarget( ::Window aWindow )
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
@@ -3918,7 +3918,7 @@ void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
     if( aWindow == m_aDragSourceWindow && m_aDragRunning.check() )
     {
         // abort drag
-        boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it =
+        boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
             m_aDropTargets.find( m_aDropWindow );
         if( it != m_aDropTargets.end() )
         {

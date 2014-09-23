@@ -41,7 +41,7 @@ private:
 
 public:
 
-            SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
+            SdCharDlg( vcl::Window* pParent, const SfxItemSet* pAttr,
                         const SfxObjectShell* pDocShell );
             virtual ~SdCharDlg() {};
 };

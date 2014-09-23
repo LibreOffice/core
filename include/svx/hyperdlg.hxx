@@ -37,7 +37,7 @@ private:
     AbstractSvxHpLinkDlg*   mpDlg;
 
 public:
-    SvxHlinkDlgWrapper( Window*pParent, sal_uInt16 nId,
+    SvxHlinkDlgWrapper( vcl::Window*pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper);

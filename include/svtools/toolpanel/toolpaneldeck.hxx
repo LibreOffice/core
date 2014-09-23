@@ -136,7 +136,7 @@ namespace svt
                                         ,public IToolPanelDeck
     {
     public:
-        ToolPanelDeck( Window& i_rParent, const WinBits i_nStyle = WB_DIALOGCONTROL );
+        ToolPanelDeck( vcl::Window& i_rParent, const WinBits i_nStyle = WB_DIALOGCONTROL );
         virtual ~ToolPanelDeck();
 
         // attributes
@@ -148,8 +148,8 @@ namespace svt
             This is a single dedicated window, which is passed to the IToolPanel::ActivatePanel method
             whenever a panel is activated, to act as parent window for the panel's VCL-Window.
         */
-        ::Window&           GetPanelWindowAnchor();
-        const ::Window&     GetPanelWindowAnchor() const;
+        vcl::Window&           GetPanelWindowAnchor();
+        const vcl::Window&     GetPanelWindowAnchor() const;
 
         // IToolPanelDeck
         virtual size_t      GetPanelCount() const SAL_OVERRIDE;

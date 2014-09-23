@@ -104,7 +104,7 @@ static bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 }
 
 // init list
-SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
+SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     : SvxStandardDialog(pParent, "SortDialog", "modules/swriter/ui/sortdialog.ui")
     , aColTxt(SW_RES(STR_COL))
     , aRowTxt(SW_RES(STR_ROW))

@@ -22,12 +22,12 @@
 
 #ifdef DBG_UTIL
 
-class Window;
+namespace vcl { class Window; }
 
 void DbgGUIInitSolarMutexCheck();
 void DbgGUIDeInitSolarMutexCheck();
 void DbgGUIStart();
-void DbgDialogTest( Window* pWindow );
+void DbgDialogTest( vcl::Window* pWindow );
 
 #define DBGGUI_INIT_SOLARMUTEXCHECK() DbgGUIInitSolarMutexCheck()
 #define DBGGUI_DEINIT_SOLARMUTEXCHECK() DbgGUIDeInitSolarMutexCheck()

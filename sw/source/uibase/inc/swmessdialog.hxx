@@ -26,7 +26,7 @@ protected:
     VclMultiLineEdit* m_pSecondaryMessage;
     Edit*             m_pEdit;
 public:
-    SwMessageAndEditDialog(Window* pParent, const OString& rID,
+    SwMessageAndEditDialog(vcl::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription);
 };
 

@@ -64,7 +64,7 @@ namespace chart2 { namespace data {
 
 //      Help - Window
 
-class ScCornerButton : public Window
+class ScCornerButton : public vcl::Window
 {
 private:
     ScViewData*     pViewData;
@@ -75,7 +75,7 @@ protected:
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 public:
-                    ScCornerButton( Window* pParent, ScViewData* pData, bool bAdditional );
+                    ScCornerButton( vcl::Window* pParent, ScViewData* pData, bool bAdditional );
                     virtual ~ScCornerButton();
 
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
@@ -87,7 +87,7 @@ class ScTabView : boost::noncopyable
 private:
     enum BlockMode { None = 0, Normal = 1, Own = 2 };
 
-    Window*             pFrameWin;              // First !!!
+    vcl::Window*             pFrameWin;              // First !!!
     ScViewData          aViewData;              // must be at the front !
 
     ScViewSelectionEngine*  pSelEngine;
@@ -227,7 +227,7 @@ protected:
     void            UpdateIMap( SdrObject* pObj );
 
 public:
-                    ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
+                    ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
                     ~ScTabView();
 
     void            MakeDrawLayer();
@@ -319,9 +319,9 @@ public:
     void            FakeButtonUp( ScSplitPos eWhich );
 
     ScGridWindow*   GetActiveWin();
-    Window*         GetWindowByPos( ScSplitPos ePos ) { return pGridWin[ePos]; }
+    vcl::Window*         GetWindowByPos( ScSplitPos ePos ) { return pGridWin[ePos]; }
 
-    ScSplitPos      FindWindow( Window* pWindow ) const;
+    ScSplitPos      FindWindow( vcl::Window* pWindow ) const;
 
     void            SetActivePointer( const Pointer& rPointer );
 
@@ -508,7 +508,7 @@ public:
 
     void            EnableRefInput(bool bFlag = true);
 
-    Window*         GetFrameWin() const { return pFrameWin; }
+    vcl::Window*         GetFrameWin() const { return pFrameWin; }
 
     bool            HasPaintBrush() const           { return pBrushDocument || pDrawBrushSet; }
     ScDocument*     GetBrushDocument() const        { return pBrushDocument; }

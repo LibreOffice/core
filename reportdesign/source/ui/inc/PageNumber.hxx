@@ -53,7 +53,7 @@ class OPageNumberDialog :   public ModalDialog
     OPageNumberDialog(const OPageNumberDialog&);
     void operator =(const OPageNumberDialog&);
 public:
-    OPageNumberDialog( Window* pParent
+    OPageNumberDialog( vcl::Window* pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xHoldAlive
                         ,::rptui::OReportController* _pController);
     virtual ~OPageNumberDialog();

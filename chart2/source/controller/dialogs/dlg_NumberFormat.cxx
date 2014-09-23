@@ -30,7 +30,7 @@ namespace chart
 {
 using namespace ::com::sun::star;
 
-NumberFormatDialog::NumberFormatDialog(Window* pParent, SfxItemSet& rSet)
+NumberFormatDialog::NumberFormatDialog(vcl::Window* pParent, SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet, "FormatNumberDialog",
         "cui/ui/formatnumberdialog.ui")
 {

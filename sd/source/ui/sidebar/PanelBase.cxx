@@ -22,7 +22,7 @@
 namespace sd { namespace sidebar {
 
 PanelBase::PanelBase (
-    ::Window* pParentWindow,
+    vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
     : Control(pParentWindow),
       mpWrappedControl(NULL),

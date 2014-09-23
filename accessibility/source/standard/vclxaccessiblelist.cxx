@@ -660,7 +660,7 @@ bool SAL_CALL VCLXAccessibleList::contains( const awt::Point& rPoint ) throw (Ru
 
     bool bInside = false;
 
-    Window* pListBox = GetWindow();
+    vcl::Window* pListBox = GetWindow();
     if ( pListBox )
     {
         Rectangle aRect( Point(0,0), pListBox->GetSizePixel() );

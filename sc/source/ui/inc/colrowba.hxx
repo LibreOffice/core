@@ -33,7 +33,7 @@ class ScColBar : public ScHeaderControl
     ScHeaderFunctionSet*     pFuncSet;
 
 public:
-                ScColBar( Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
+                ScColBar( vcl::Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
                 virtual ~ScColBar();
 
@@ -65,7 +65,7 @@ class ScRowBar : public ScHeaderControl
     ScHeaderFunctionSet*     pFuncSet;
 
 public:
-                ScRowBar( Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
+                ScRowBar( vcl::Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
                 virtual ~ScRowBar();
 

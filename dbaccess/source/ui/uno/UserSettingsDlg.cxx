@@ -92,7 +92,7 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo() 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-Dialog* OUserSettingsDialog::createDialog(Window* _pParent)
+Dialog* OUserSettingsDialog::createDialog(vcl::Window* _pParent)
 {
     OUserAdminDlg* pDlg = new OUserAdminDlg(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection, m_xActiveConnection);
     return pDlg;

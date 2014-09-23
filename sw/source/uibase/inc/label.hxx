@@ -55,7 +55,7 @@ class SwLabDlg : public SfxTabDialog
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 public:
 
-     SwLabDlg( Window* pParent, const SfxItemSet& rSet,
+     SwLabDlg( vcl::Window* pParent, const SfxItemSet& rSet,
                  SwDBManager* pDBManager, bool bLabel);
     virtual ~SwLabDlg();
 

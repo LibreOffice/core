@@ -170,7 +170,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     }
 
     // Get Window pointer for XWindow of the pane.
-    ::Window* pWindow = NULL;
+    vcl::Window* pWindow = NULL;
     if (xPane.is())
         pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
 
@@ -299,7 +299,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
 ::boost::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
     const Reference<XResourceId>& rxViewId,
     SfxViewFrame& rFrame,
-    ::Window& rWindow,
+    vcl::Window& rWindow,
     const Reference<XPane>& rxPane,
     FrameView* pFrameView,
     const bool bIsCenterPane)
@@ -344,7 +344,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
 ::boost::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     const Reference<XResourceId>& rxViewId,
     SfxViewFrame& rFrame,
-    ::Window& rWindow,
+    vcl::Window& rWindow,
     FrameView* pFrameView,
     const bool bIsCenterPane)
 {

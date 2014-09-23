@@ -123,7 +123,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
     if (pWindow)
     {
         // The whole background is painted by the view and controls.
-        ::Window* pParentWindow = pWindow->GetParent();
+        ::vcl::Window* pParentWindow = pWindow->GetParent();
         OSL_ASSERT(pParentWindow!=NULL);
         pParentWindow->SetBackground (Wallpaper());
 
@@ -267,7 +267,7 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
 
 void SlideSorterController::Paint (
     const Rectangle& rBBox,
-    ::Window* pWindow)
+    ::vcl::Window* pWindow)
 {
     if (mnPaintEntranceCount == 0)
     {
@@ -542,7 +542,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
 {
     if (pEvent != NULL)
     {
-        ::Window* pWindow = pEvent->GetWindow();
+        ::vcl::Window* pWindow = pEvent->GetWindow();
         SharedSdWindow pActiveWindow (mrSlideSorter.GetContentWindow());
         switch (pEvent->GetId())
         {

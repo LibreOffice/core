@@ -28,7 +28,7 @@
 class ScTablePage : public SfxTabPage
 {
 public:
-    static  SfxTabPage* Create          ( Window*           pParent,
+    static  SfxTabPage* Create          ( vcl::Window*           pParent,
                                           const SfxItemSet* rCoreSet );
     static  const sal_uInt16* GetRanges       ();
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
@@ -38,7 +38,7 @@ public:
     virtual void        DataChanged     ( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
-                    ScTablePage( Window* pParent, const SfxItemSet& rCoreSet );
+                    ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
     virtual         ~ScTablePage();
 
     void            ShowImage();

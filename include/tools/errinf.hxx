@@ -30,7 +30,7 @@
 
 class EDcr_Impl;
 class ErrHdl_Impl;
-class Window;
+namespace vcl { class Window; }
 
 class ErrorInfo
 {
@@ -121,20 +121,20 @@ class TOOLS_DLLPUBLIC ErrorContext
 
 private:
     ErrorContext*           pNext;
-    Window*                 pWin;
+    vcl::Window*                 pWin;
 
 public:
-                            ErrorContext(Window *pWin=0);
+                            ErrorContext(vcl::Window *pWin=0);
     virtual                 ~ErrorContext();
 
     virtual bool            GetString( sal_uIntPtr nErrId, OUString& rCtxStr ) = 0;
-    Window*                 GetParent() { return pWin; }
+    vcl::Window*                 GetParent() { return pWin; }
 
     static ErrorContext*    GetContext();
 };
 
 typedef sal_uInt16 WindowDisplayErrorFunc(
-    Window *, sal_uInt16 nMask, const OUString &rErr, const OUString &rAction);
+    vcl::Window *, sal_uInt16 nMask, const OUString &rErr, const OUString &rAction);
 
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);

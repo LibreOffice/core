@@ -28,7 +28,7 @@
 
 SFX_IMPL_DOCKINGWINDOW( SfxNavigatorWrapper , SID_NAVIGATOR );
 
-SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
+SfxNavigatorWrapper::SfxNavigatorWrapper( vcl::Window* pParentWnd ,
                                                 sal_uInt16 nId ,
                                                 SfxBindings* pBindings ,
                                                 SfxChildWinInfo* pInfo )
@@ -47,7 +47,7 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
 
 SfxNavigator::SfxNavigator( SfxBindings* pBind ,
                             SfxChildWindow* pChildWin ,
-                            Window* pParent ,
+                            vcl::Window* pParent ,
                             WinBits nBits )
                         : SfxDockingWindow( pBind ,
                                             pChildWin ,

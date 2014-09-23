@@ -40,7 +40,7 @@ protected:
     DECL_LINK(ImplLoseFocusHdl, void *);
 
 public:
-                    ExtendedEdit( Window* pParent, IDEResId nRes );
+                    ExtendedEdit( vcl::Window* pParent, IDEResId nRes );
 
     void            SetAccHdl( const Link& rLink )          { aAccHdl = rLink; }
     void            SetLoseFocusHdl( const Link& rLink )    { aLoseFocusHdl = rLink; }

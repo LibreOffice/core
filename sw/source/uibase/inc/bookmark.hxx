@@ -37,7 +37,7 @@ class BookmarkCombo : public SwComboBox
 
     virtual bool    PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 public:
-    BookmarkCombo(Window* pWin, WinBits nStyle);
+    BookmarkCombo(vcl::Window* pWin, WinBits nStyle);
 
     sal_Int32           GetSelectEntryCount() const;
     sal_Int32           GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const;
@@ -61,7 +61,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
     virtual void Apply() SAL_OVERRIDE;
 
 public:
-    SwInsertBookmarkDlg(Window *pParent, SwWrtShell &rSh, SfxRequest& rReq);
+    SwInsertBookmarkDlg(vcl::Window *pParent, SwWrtShell &rSh, SfxRequest& rReq);
     virtual ~SwInsertBookmarkDlg();
 };
 

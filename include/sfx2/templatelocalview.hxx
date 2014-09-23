@@ -29,7 +29,7 @@ class SFX2_DLLPUBLIC TemplateLocalView : public TemplateAbstractView
 
 public:
 
-    TemplateLocalView ( Window* pParent );
+    TemplateLocalView ( vcl::Window* pParent );
 
     virtual ~TemplateLocalView ();
 

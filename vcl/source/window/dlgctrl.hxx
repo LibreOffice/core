@@ -22,12 +22,12 @@
 
 #include <window.h>
 
-Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable );
+vcl::Window* ImplGetChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable );
 
-Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIndex,
+vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, sal_uInt16& rIndex,
                                sal_uInt16& rFormStart, sal_uInt16& rFormEnd );
 
-Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
+vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
                              sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable = true );
 
 sal_Unicode getAccel( const OUString& rStr );

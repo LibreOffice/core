@@ -312,7 +312,7 @@ IMPL_LINK_NOARG( GL3DResourceGroup, SettingChangedHdl )
 class SplinePropertiesDialog : public ModalDialog
 {
 public:
-    SplinePropertiesDialog( Window* pParent );
+    SplinePropertiesDialog( vcl::Window* pParent );
     virtual ~SplinePropertiesDialog();
 
     void fillControls( const ChartTypeParameter& rParameter );
@@ -334,7 +334,7 @@ private:
 const sal_uInt16 CUBIC_SPLINE_POS = 0;
 const sal_uInt16 B_SPLINE_POS = 1;
 
-SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
+SplinePropertiesDialog::SplinePropertiesDialog( vcl::Window* pParent )
         : ModalDialog( pParent, "SmoothLinesDialog", "modules/schart/ui/smoothlinesdlg.ui")
 {
     get(m_pLB_Spline_Type, "SplineTypeComboBox");
@@ -399,7 +399,7 @@ IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl)
 class SteppedPropertiesDialog : public ModalDialog
 {
 public:
-    SteppedPropertiesDialog( Window* pParent );
+    SteppedPropertiesDialog( vcl::Window* pParent );
     virtual ~SteppedPropertiesDialog();
 
     void fillControls( const ChartTypeParameter& rParameter );
@@ -416,7 +416,7 @@ private:
     RadioButton* m_pRB_CenterY;
 };
 
-SteppedPropertiesDialog::SteppedPropertiesDialog( Window* pParent )
+SteppedPropertiesDialog::SteppedPropertiesDialog( vcl::Window* pParent )
     : ModalDialog( pParent, "SteppedLinesDialog", "modules/schart/ui/steppedlinesdlg.ui")
 {
     get(m_pRB_Start, "step_start_rb");
@@ -675,7 +675,7 @@ IMPL_LINK_NOARG(GeometryResourceGroup, GeometryChangeHdl)
     return 0;
 }
 
-ChartTypeTabPage::ChartTypeTabPage(Window* pParent
+ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         , const uno::Reference< XChartDocument >& xChartModel
         , const uno::Reference< uno::XComponentContext >& xContext
         , bool bDoLiveUpdate, bool bShowDescription)

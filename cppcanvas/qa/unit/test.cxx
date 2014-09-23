@@ -43,7 +43,7 @@ public:
 void CanvasTest::testComposite()
 {
 #ifdef LINUX
-    boost::scoped_ptr<Window> pWin(new WorkWindow( (Window *)NULL ));
+    boost::scoped_ptr<vcl::Window> pWin(new WorkWindow( (vcl::Window *)NULL ));
 
     uno::Reference<rendering::XCanvas> xCanvas = pWin->GetCanvas ();
     if( !xCanvas.is() )

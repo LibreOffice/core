@@ -64,7 +64,7 @@ private:
     sal_uInt16 m_nEventsPageId;
 
 public:
-    SvxConfigDialog( Window*, const SfxItemSet* );
+    SvxConfigDialog( vcl::Window*, const SfxItemSet* );
 
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
@@ -321,7 +321,7 @@ protected:
     bool                m_bIsInternalDrag;
 
 public:
-    SvxMenuEntriesListBox(Window*, SvxConfigPage*);
+    SvxMenuEntriesListBox(vcl::Window*, SvxConfigPage*);
     virtual ~SvxMenuEntriesListBox();
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
@@ -390,7 +390,7 @@ protected:
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
 
-    SvxConfigPage( Window*, const SfxItemSet& );
+    SvxConfigPage( vcl::Window*, const SfxItemSet& );
 
     DECL_LINK( MoveHdl, Button * );
 
@@ -481,7 +481,7 @@ private:
     void            DeleteSelectedTopLevel() SAL_OVERRIDE;
 
 public:
-    SvxMenuConfigPage( Window *pParent, const SfxItemSet& rItemSet );
+    SvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
     virtual ~SvxMenuConfigPage();
 
     SaveInData* CreateSaveInData(
@@ -513,7 +513,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
 
 public:
     SvxMainMenuOrganizerDialog (
-        Window*, SvxEntries*,
+        vcl::Window*, SvxEntries*,
         SvxConfigEntry*, bool bCreateMenu = false );
 
     virtual ~SvxMainMenuOrganizerDialog ();
@@ -542,7 +542,7 @@ protected:
 
 public:
 
-    SvxToolbarEntriesListBox(Window* pParent, SvxToolbarConfigPage* pPg);
+    SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg);
     virtual ~SvxToolbarEntriesListBox();
 
     void            SetChangedListener( const Link& aChangedListener )
@@ -582,7 +582,7 @@ private:
     void            DeleteSelectedTopLevel() SAL_OVERRIDE;
 
 public:
-    SvxToolbarConfigPage( Window *pParent, const SfxItemSet& rItemSet );
+    SvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
     virtual ~SvxToolbarConfigPage();
 
     SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = NULL,
@@ -670,7 +670,7 @@ private:
     DECL_LINK(ModifyHdl, Edit*);
 
 public:
-    SvxNewToolbarDialog(Window* pWindow, const OUString& rName);
+    SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& rName);
 
     ListBox*        m_pSaveInListBox;
 
@@ -733,7 +733,7 @@ private:
 public:
 
     SvxIconSelectorDialog(
-        Window *pWindow,
+        vcl::Window *pWindow,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::ui::XImageManager >& rXImageManager,
         const ::com::sun::star::uno::Reference<
@@ -754,12 +754,12 @@ class SvxIconReplacementDialog : public MessBox
 {
 public:
     SvxIconReplacementDialog(
-        Window *pWindow,
+        vcl::Window *pWindow,
         const OUString& aMessage,
         bool aYestoAll);
 
     SvxIconReplacementDialog(
-        Window *pWindow,
+        vcl::Window *pWindow,
         const OUString& aMessage );
 
     OUString ReplaceIconName( const OUString& );
@@ -772,7 +772,7 @@ private:
     FixedImage*         pFImageInfo;
     VclMultiLineEdit*   pLineEditDescription;
 public:
-    SvxIconChangeDialog(Window *pWindow, const OUString& aMessage);
+    SvxIconChangeDialog(vcl::Window *pWindow, const OUString& aMessage);
 };
 #endif // INCLUDED_CUI_SOURCE_INC_CFG_HXX
 

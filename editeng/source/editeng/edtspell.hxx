@@ -57,7 +57,7 @@ protected:
     virtual void            AutoCorrect( const OUString& rOldWord, const OUString& rNewWord ) SAL_OVERRIDE;
 
 public:
-    EditSpellWrapper( Window* pWin,
+    EditSpellWrapper( vcl::Window* pWin,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1 > &xChecker,
             bool bIsStart,

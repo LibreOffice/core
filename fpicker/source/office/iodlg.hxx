@@ -89,7 +89,7 @@ private:
     CheckBox*                   _pCbPreviewBox;
     CheckBox*                   _pCbSelection;
     PushButton*                 _pPbPlay;
-    Window*                     _pPrevWin;
+    vcl::Window*                     _pPrevWin;
     FixedBitmap*                _pPrevBmp;
     CustomContainer*            _pContainer;
     SvtFileView*                _pFileView;
@@ -193,8 +193,8 @@ protected:
     short                       PrepareExecute();
 
 public:
-                                SvtFileDialog( Window* _pParent, WinBits nBits, WinBits nExtraBits );
-                                SvtFileDialog( Window* _pParent, WinBits nBits );
+                                SvtFileDialog( vcl::Window* _pParent, WinBits nBits, WinBits nExtraBits );
+                                SvtFileDialog( vcl::Window* _pParent, WinBits nBits );
                                 virtual ~SvtFileDialog();
 
     virtual long                OK();

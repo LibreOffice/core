@@ -27,7 +27,7 @@
 namespace dbaui
 {
 
-OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift)
+OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift)
 : Window(_pParent,_nBits | WB_DIALOGCONTROL)
 , m_aSpace1(this)
 , m_aSpace2(this)
@@ -40,7 +40,7 @@ OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,
     SetBorderStyle(WINDOW_BORDER_MONO);
     ImplInitSettings( true, true, true );
 
-    Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle };
+    vcl::Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle };
     for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         pWindows[i]->Show();
 }
@@ -50,13 +50,13 @@ OTitleWindow::~OTitleWindow()
     if ( m_pChild )
     {
         m_pChild->Hide();
-        boost::scoped_ptr<Window> aTemp(m_pChild);
+        boost::scoped_ptr<vcl::Window> aTemp(m_pChild);
         m_pChild = NULL;
     }
 
 }
 
-void OTitleWindow::setChildWindow(Window* _pChild)
+void OTitleWindow::setChildWindow(vcl::Window* _pChild)
 {
     m_pChild = _pChild;
 }
@@ -151,7 +151,7 @@ void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
 
-    Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
+    vcl::Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
     for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
     {
         vcl::Font aFont = pWindows[i]->GetFont();

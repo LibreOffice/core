@@ -31,7 +31,7 @@
 namespace chart
 {
 
-SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
+SchAlignmentTabPage::SchAlignmentTabPage(vcl::Window* pWindow,
                                          const SfxItemSet& rInAttrs, bool bWithRotation) :
     SfxTabPage(pWindow, "TitleRotationTabPage","modules/schart/ui/titlerotationtabpage.ui", &rInAttrs)
 {
@@ -60,13 +60,13 @@ SchAlignmentTabPage::~SchAlignmentTabPage()
     delete m_pOrientHlp;
 }
 
-SfxTabPage* SchAlignmentTabPage::Create(Window* pParent,
+SfxTabPage* SchAlignmentTabPage::Create(vcl::Window* pParent,
                                         const SfxItemSet* rInAttrs)
 {
     return new SchAlignmentTabPage(pParent, *rInAttrs);
 }
 
-SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
+SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(vcl::Window* pParent,
                                         const SfxItemSet* rInAttrs)
 {
     return new SchAlignmentTabPage(pParent, *rInAttrs, false);

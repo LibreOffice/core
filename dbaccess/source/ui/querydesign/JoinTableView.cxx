@@ -64,7 +64,7 @@ using namespace ::com::sun::star::lang;
 #define TABWIN_WIDTH_STD    120
 #define TABWIN_HEIGHT_STD   120
 
-OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
+OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParent)
     ,m_aHScrollBar( this, WB_HSCROLL|WB_REPEAT|WB_DRAG )
     ,m_aVScrollBar( this, WB_VSCROLL|WB_REPEAT|WB_DRAG )
     ,m_pCornerWindow(new ScrollBarBox(this, WB_3DLOOK))
@@ -89,7 +89,7 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 
 OScrollWindowHelper::~OScrollWindowHelper()
 {
-    boost::scoped_ptr<Window> aTemp(m_pCornerWindow);
+    boost::scoped_ptr<vcl::Window> aTemp(m_pCornerWindow);
     m_pCornerWindow = NULL;
     m_pTableView = NULL;
 }
@@ -152,7 +152,7 @@ void OScrollWindowHelper::Resize()
 
 // class OJoinTableView
 
-OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView )
+OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
     :Window( pParent,WB_BORDER )
     ,DropTargetHelper(this)
     ,m_aDragOffset( Point(0,0) )
@@ -1391,10 +1391,10 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
             if (m_aTableMap.empty())
                 // no tab wins -> no conns -> no focus change
                 break;
-            Window* pSource = rNEvt.GetWindow();
+            vcl::Window* pSource = rNEvt.GetWindow();
             if (pSource)
             {
-                Window* pSearchFor = NULL;
+                vcl::Window* pSearchFor = NULL;
                 if (pSource->GetParent() == this)
                     // it may be one of the tab wins
                     pSearchFor = pSource;
@@ -1517,7 +1517,7 @@ void OJoinTableView::clearLayoutInformation()
     {
         if ( aIter->second )
             aIter->second->clearListBox();
-        boost::scoped_ptr<Window> aTemp(aIter->second);
+        boost::scoped_ptr<vcl::Window> aTemp(aIter->second);
         aIter->second = NULL;
     }
 

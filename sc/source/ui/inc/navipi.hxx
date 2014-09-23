@@ -91,10 +91,10 @@ private:
 
 // class ScScenarioWindow ------------------------------------------------
 
-class ScScenarioWindow : public Window
+class ScScenarioWindow : public vcl::Window
 {
 public:
-            ScScenarioWindow( Window* pParent, const OUString& aQH_List, const OUString& aQH_Comment);
+            ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_List, const OUString& aQH_Comment);
             virtual ~ScScenarioWindow();
 
     void    NotifyState( const SfxPoolItem* pState );
@@ -205,7 +205,7 @@ private:
 
 //  class ScNavigatorDlg
 
-class ScNavigatorDlg : public Window, public SfxListener
+class ScNavigatorDlg : public vcl::Window, public SfxListener
 {
 friend class ScNavigatorControllerItem;
 friend class ScNavigatorDialogWrapper;
@@ -305,7 +305,7 @@ protected:
     virtual void    Resizing( Size& rSize );
 
 public:
-                ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent,
+                ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl::Window* pParent,
                     const bool bUseStyleSettingsBackground);
                 virtual ~ScNavigatorDlg();
 
@@ -322,7 +322,7 @@ public:
 class ScNavigatorDialogWrapper: public SfxChildWindowContext
 {
 public:
-            ScNavigatorDialogWrapper( Window*           pParent,
+            ScNavigatorDialogWrapper( vcl::Window*           pParent,
                                       sal_uInt16            nId,
                                       SfxBindings*      pBindings,
                                       SfxChildWinInfo*  pInfo );

@@ -48,7 +48,7 @@ using namespace com::sun::star;
 
 SvxHatchTabPage::SvxHatchTabPage
 (
-    Window* pParent,
+    vcl::Window* pParent,
     const SfxItemSet& rInAttrs
 ) :
 
@@ -339,7 +339,7 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 
 
 
-SfxTabPage* SvxHatchTabPage::Create( Window* pWindow,
+SfxTabPage* SvxHatchTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rSet )
 {
     return new SvxHatchTabPage( pWindow, *rSet );
@@ -799,7 +799,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
 
 
 
-void SvxHatchTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
+void SvxHatchTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRcPt )
 {
     if( pWindow == m_pCtlAngle )
     {

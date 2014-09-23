@@ -108,7 +108,7 @@ namespace dbp
 
     public:
         OControlWizard(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObjectModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
@@ -130,7 +130,7 @@ namespace dbp
         /** returns the com.sun.star.task.InteractionHandler
             @param  _pWindow    The window will be used when an error message has to be shown.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler(Window* _pWindow) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler(vcl::Window* _pWindow) const;
 
     protected:
         // initialize the derivees settings (which have to be derived from OControlWizardSettings)

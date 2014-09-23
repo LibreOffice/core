@@ -63,7 +63,7 @@ protected:
     SvTreeListEntry*            GetChildOnPos( SvTreeListEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const;
 
 public:
-    SvTabListBox( Window* pParent, WinBits = WB_BORDER );
+    SvTabListBox( vcl::Window* pParent, WinBits = WB_BORDER );
     virtual ~SvTabListBox();
     void            SetTabs( long* pTabs, MapUnit = MAP_APPFONT );
     sal_uInt16          TabCount() const { return (sal_uInt16)nTabCount; }
@@ -137,7 +137,7 @@ private:
     void            RecalculateAccessibleChildren();
 
 public:
-    SvHeaderTabListBox( Window* pParent, WinBits nBits );
+    SvHeaderTabListBox( vcl::Window* pParent, WinBits nBits );
     virtual ~SvHeaderTabListBox();
 
     virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
@@ -223,7 +223,7 @@ public:
 
     virtual OUString                GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const SAL_OVERRIDE;
     virtual OUString                GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const SAL_OVERRIDE;
-    virtual Window*                 GetWindowInstance() SAL_OVERRIDE;
+    virtual vcl::Window*                 GetWindowInstance() SAL_OVERRIDE;
 
     using SvTreeListBox::FillAccessibleStateSet;
     virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const SAL_OVERRIDE;
@@ -234,10 +234,10 @@ public:
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) SAL_OVERRIDE;
 
     // Window
-    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const SAL_OVERRIDE;
+    virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const SAL_OVERRIDE;
     virtual void                    GrabFocus() SAL_OVERRIDE;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) SAL_OVERRIDE;
-    virtual Window*                 GetAccessibleParentWindow() const SAL_OVERRIDE;
+    virtual vcl::Window*                 GetAccessibleParentWindow() const SAL_OVERRIDE;
 
     /** Creates and returns the accessible object of the whole BrowseBox. */
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;

@@ -127,7 +127,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
    smarttag library.
 
 */
-sal_uInt16 SwSmartTagPopup::Execute( const Rectangle& rWordPos, Window* pWin )
+sal_uInt16 SwSmartTagPopup::Execute( const Rectangle& rWordPos, vcl::Window* pWin )
 {
     sal_uInt16 nId = PopupMenu::Execute(pWin, pWin->LogicToPixel(rWordPos));
 

@@ -46,7 +46,7 @@ private:
     DECL_LINK( DelAllHdl, void * );
 
 public:
-            ScDeleteContentsDlg( Window* pParent,
+            ScDeleteContentsDlg( vcl::Window* pParent,
                                  InsertDeleteFlags nCheckDefaults = IDF_NONE );
             virtual ~ScDeleteContentsDlg();
     void    DisableObjects();

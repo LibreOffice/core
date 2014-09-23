@@ -1944,7 +1944,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
     if ( !IsFormatted() )
         FormatDoc();
 
-    Window* pOutWin = dynamic_cast<Window*>(pOutDev);
+    vcl::Window* pOutWin = dynamic_cast<vcl::Window*>(pOutDev);
     bool bTransparent = (pOutWin && pOutWin->IsPaintTransparent());
 
     long nY = rStartPos.Y();

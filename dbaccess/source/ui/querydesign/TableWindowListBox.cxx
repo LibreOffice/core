@@ -343,7 +343,7 @@ void OTableWindowListBox::GetFocus()
 IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 {
     // tell my parent
-    Window* pParent = Window::GetParent();
+    vcl::Window* pParent = Window::GetParent();
     OSL_ENSURE(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
 
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());

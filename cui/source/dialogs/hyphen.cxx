@@ -36,12 +36,12 @@
 
 using namespace css;
 
-HyphenEdit::HyphenEdit(Window* pParent)
+HyphenEdit::HyphenEdit(vcl::Window* pParent)
     : Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK|WB_TABSTOP)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeHyphenEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeHyphenEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new HyphenEdit(pParent);
 }
@@ -454,7 +454,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, GetFocusHdl_Impl)
 
 SvxHyphenWordDialog::SvxHyphenWordDialog(
     const OUString &rWord, LanguageType nLang,
-    Window* pParent,
+    vcl::Window* pParent,
     uno::Reference< linguistic2::XHyphenator >  &xHyphen,
     SvxSpellWrapper* pWrapper)
     : SfxModalDialog(pParent, "HyphenateDialog", "cui/ui/hyphenate.ui")

@@ -95,7 +95,7 @@ class SwEditRegionDlg : public SfxModalDialog
     SectReprArr             aSectReprArr;
     const SwSection*        pCurrSect;
     sfx2::DocumentInserter* m_pDocInserter;
-    Window*                 m_pOldDefDlgParent;
+    vcl::Window*                 m_pOldDefDlgParent;
 
     bool            bDontCheckPasswd :1;
     bool            bWeb            :1;
@@ -129,7 +129,7 @@ class SwEditRegionDlg : public SfxModalDialog
     bool CheckPasswd(CheckBox* pBox = 0);
 
 public:
-    SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh );
+    SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh );
     virtual ~SwEditRegionDlg();
 
     void    SelectSection(const OUString& rSectionName);
@@ -168,7 +168,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     ::com::sun::star::uno::Sequence <sal_Int8 > m_aNewPasswd;
     SwWrtShell*             m_pWrtSh;
     sfx2::DocumentInserter* m_pDocInserter;
-    Window*                 m_pOldDefDlgParent;
+    vcl::Window*                 m_pOldDefDlgParent;
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
     // #114856# edit in readonly sections
@@ -182,7 +182,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
 
 public:
-    SwInsertSectionTabPage(Window *pParent, const SfxItemSet &rAttrSet);
+    SwInsertSectionTabPage(vcl::Window *pParent, const SfxItemSet &rAttrSet);
     virtual ~SwInsertSectionTabPage();
 
     void    SetWrtShell(SwWrtShell& rSh);
@@ -190,7 +190,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 };
 
@@ -226,13 +226,13 @@ class SwSectionFtnEndTabPage : public SfxTabPage
     void ResetState( bool bFtn, const SwFmtFtnEndAtTxtEnd& );
 
 public:
-    SwSectionFtnEndTabPage( Window *pParent, const SfxItemSet &rAttrSet );
+    SwSectionFtnEndTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionFtnEndTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 };
 
@@ -244,13 +244,13 @@ class SwSectionIndentTabPage : public SfxTabPage
 
     DECL_LINK(IndentModifyHdl, void *);
 public:
-    SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet );
+    SwSectionIndentTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionIndentTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     void    SetWrtShell(SwWrtShell& rSh);
@@ -271,7 +271,7 @@ protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
     virtual short   Ok() SAL_OVERRIDE;
 public:
-    SwInsertSectionTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
+    SwInsertSectionTabDialog(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwInsertSectionTabDialog();
 
     void        SetSectionData(SwSectionData const& rSect);
@@ -290,7 +290,7 @@ class SwSectionPropertyTabDialog : public SfxTabDialog
 protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 public:
-    SwSectionPropertyTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
+    SwSectionPropertyTabDialog(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwSectionPropertyTabDialog();
 };
 

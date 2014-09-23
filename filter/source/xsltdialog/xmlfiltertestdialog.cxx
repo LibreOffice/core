@@ -133,7 +133,7 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
     return false;
 }
 
-XMLFilterTestDialog::XMLFilterTestDialog(Window* pParent,
+XMLFilterTestDialog::XMLFilterTestDialog(vcl::Window* pParent,
     const Reference<XComponentContext>& rxContext)
     : ModalDialog(pParent, "TestXMLFilterDialog", "filter/ui/testxmlfilter.ui")
     , mxContext(rxContext)

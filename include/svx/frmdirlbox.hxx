@@ -39,7 +39,7 @@ namespace svx {
 class SVX_DLLPUBLIC FrameDirectionListBox : public ListBox
 {
 public:
-    explicit            FrameDirectionListBox( Window* pParent, WinBits nBits );
+    explicit            FrameDirectionListBox( vcl::Window* pParent, WinBits nBits );
     virtual             ~FrameDirectionListBox();
 
     /** Inserts a string with corresponding direction enum into the listbox. */

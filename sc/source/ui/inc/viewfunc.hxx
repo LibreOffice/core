@@ -68,7 +68,7 @@ private:
     bool        bFormatValid;
 
 public:
-                    ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
+                    ScViewFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
                     ~ScViewFunc();
 
     const ScPatternAttr*    GetSelectionPattern ();

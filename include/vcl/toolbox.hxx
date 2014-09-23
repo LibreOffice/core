@@ -202,7 +202,7 @@ private:
     public:
     using Window::ImplInit;
     private:
-    SAL_DLLPRIVATE void            ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void            ImplLoadRes( const ResId& rResId );
@@ -285,8 +285,8 @@ protected:
     void                SetCurItemId(sal_uInt16 nSet) { mnCurItemId = nSet; }
 
 public:
-                        ToolBox( Window* pParent, WinBits nStyle = 0 );
-                        ToolBox( Window* pParent, const ResId& rResId );
+                        ToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
+                        ToolBox( vcl::Window* pParent, const ResId& rResId );
                         virtual ~ToolBox();
 
     virtual void        Click();
@@ -341,7 +341,7 @@ public:
     void                InsertItem( sal_uInt16 nItemId, const OUString& rText,
                                     ToolBoxItemBits nBits = 0,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
-    void                InsertWindow( sal_uInt16 nItemId, Window* pWindow,
+    void                InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
                                       ToolBoxItemBits nBits = 0,
                                       sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertSpace( sal_uInt16 nPos = TOOLBOX_APPEND );
@@ -412,8 +412,8 @@ public:
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
     const OUString&     GetItemText( sal_uInt16 nItemId ) const;
-    void                SetItemWindow( sal_uInt16 nItemId, Window* pNewWindow );
-    Window*             GetItemWindow( sal_uInt16 nItemId ) const;
+    void                SetItemWindow( sal_uInt16 nItemId, vcl::Window* pNewWindow );
+    vcl::Window*             GetItemWindow( sal_uInt16 nItemId ) const;
     sal_uInt16              GetHighlightItemId() const { return mnHighItemId; }
 
     void                StartSelection();

@@ -109,7 +109,7 @@ void SwWordCountFloatDlg::showStandardizedPages(bool bShowStandardizedPages)
 
 SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWindow* pChild,
-                                         Window *pParent,
+                                         vcl::Window *pParent,
                                          SfxChildWinInfo* pInfo)
     : SfxModelessDialog(_pBindings, pChild, pParent, "WordCountDialog", "modules/swriter/ui/wordcount.ui")
 {

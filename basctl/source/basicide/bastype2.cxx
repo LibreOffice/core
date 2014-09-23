@@ -183,14 +183,14 @@ bool EntryDescriptor::operator == (EntryDescriptor const& rDesc) const
 
 
 
-TreeListBox::TreeListBox (Window* pParent, ResId const& rRes)
+TreeListBox::TreeListBox (vcl::Window* pParent, ResId const& rRes)
     : SvTreeListBox( pParent, IDEResId( sal::static_int_cast<sal_uInt16>( rRes.GetId() ) ) )
     , m_aNotifier( *this )
 {
     Init();
 }
 
-TreeListBox::TreeListBox (Window* pParent, WinBits nStyle)
+TreeListBox::TreeListBox (vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
     , m_aNotifier( *this )
 {
@@ -204,7 +204,7 @@ void TreeListBox::Init()
     nMode = 0xFF;   // everything
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

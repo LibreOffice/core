@@ -54,7 +54,7 @@ class SvPasteObjectDialog : public ModalDialog
     DECL_LINK( DoubleClickHdl, ListBox * );
 
 public:
-                SvPasteObjectDialog( Window* pParent );
+                SvPasteObjectDialog( vcl::Window* pParent );
                 virtual ~SvPasteObjectDialog();
 
     void        Insert( SotFormatStringId nFormat, const OUString & rFormatName );

@@ -70,7 +70,7 @@ namespace pcr
         Link        m_aLinkChangeHandler;
 
     public:
-        FieldLinkRow( Window* _pParent );
+        FieldLinkRow( vcl::Window* _pParent );
 
         inline void         SetLinkChangeHandler( const Link& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
 
@@ -92,7 +92,7 @@ namespace pcr
     };
 
 
-    FieldLinkRow::FieldLinkRow( Window* _pParent )
+    FieldLinkRow::FieldLinkRow( vcl::Window* _pParent )
         :TabPage( _pParent, "FieldLinkRow", "modules/spropctrlr/ui/fieldlinkrow.ui" )
     {
         get(m_pDetailColumn, "detailCombobox");
@@ -140,7 +140,7 @@ namespace pcr
         return 0L;
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFieldLinkRow(Window *pParent, VclBuilder::stringmap &)
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFieldLinkRow(vcl::Window *pParent, VclBuilder::stringmap &)
     {
         return new FieldLinkRow(pParent);
     }
@@ -149,7 +149,7 @@ namespace pcr
     //= FormLinkDialog
 
 
-    FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XPropertySet >& _rxDetailForm,
+    FormLinkDialog::FormLinkDialog( vcl::Window* _pParent, const Reference< XPropertySet >& _rxDetailForm,
             const Reference< XPropertySet >& _rxMasterForm, const Reference< XComponentContext >& _rxContext,
             const OUString& _sExplanation,
             const OUString& _sDetailLabel,

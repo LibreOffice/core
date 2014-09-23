@@ -22,7 +22,7 @@
 
 #include <vcl/dllapi.h>
 
-class Window;
+namespace vcl { class Window; }
 
 
 // - Sound -
@@ -31,7 +31,7 @@ class Window;
 class VCL_DLLPUBLIC Sound
 {
 public:
-    static void         Beep( Window* pWindow = NULL );
+    static void         Beep( vcl::Window* pWindow = NULL );
 };
 
 #endif // INCLUDED_VCL_SOUND_HXX

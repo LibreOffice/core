@@ -780,7 +780,7 @@ void ScEditShell::GetClipState( SfxItemSet& rSet )
         // create listener
         pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScEditShell, ClipboardChanged ) );
         pClipEvtLstnr->acquire();
-        Window* pWin = pViewData->GetActiveWin();
+        vcl::Window* pWin = pViewData->GetActiveWin();
         pClipEvtLstnr->AddRemoveListener( pWin, true );
 
         // get initial state

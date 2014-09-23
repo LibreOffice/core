@@ -32,11 +32,11 @@
 //sibling after that is going to fail hard
 class CandidateMgr
 {
-    std::vector<Window*> m_aCandidates;
-    std::set<Window*> m_aDeletedCandidates;
+    std::vector<vcl::Window*> m_aCandidates;
+    std::set<vcl::Window*> m_aDeletedCandidates;
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
 public:
-    void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect);
+    void PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect);
     ~CandidateMgr();
 };
 
@@ -45,7 +45,7 @@ IMPL_LINK(CandidateMgr, WindowEventListener, VclSimpleEvent*, pEvent)
     VclWindowEvent* pWinEvent = dynamic_cast< VclWindowEvent* >( pEvent );
     if (pWinEvent)
     {
-        Window* pWindow = pWinEvent->GetWindow();
+        vcl::Window* pWindow = pWinEvent->GetWindow();
         if (pWinEvent->GetId() == VCLEVENT_OBJECT_DYING)
         {
             m_aDeletedCandidates.insert(pWindow);
@@ -57,17 +57,17 @@ IMPL_LINK(CandidateMgr, WindowEventListener, VclSimpleEvent*, pEvent)
 
 CandidateMgr::~CandidateMgr()
 {
-    for (std::vector<Window*>::iterator aI = m_aCandidates.begin();
+    for (std::vector<vcl::Window*>::iterator aI = m_aCandidates.begin();
          aI != m_aCandidates.end(); ++aI)
     {
-        Window* pCandidate = *aI;
+        vcl::Window* pCandidate = *aI;
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
             continue;
         pCandidate->RemoveEventListener(LINK(this, CandidateMgr, WindowEventListener));
     }
 }
 
-void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
+void PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect)
 {
     if (!rWindow.IsChildTransparentModeEnabled())
         return;
@@ -76,9 +76,9 @@ void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
     aManager.PaintTransparentChildren(rWindow, rPixelRect);
 }
 
-void CandidateMgr::PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
+void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect)
 {
-    Window * pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
+    vcl::Window * pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
     while (pCandidate)
     {
         if (pCandidate->IsPaintTransparent())
@@ -96,7 +96,7 @@ void CandidateMgr::PaintTransparentChildren(Window & rWindow, Rectangle const& r
         pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
     }
 
-    for (std::vector<Window*>::iterator aI = m_aCandidates.begin();
+    for (std::vector<vcl::Window*>::iterator aI = m_aCandidates.begin();
          aI != m_aCandidates.end(); ++aI)
     {
         pCandidate = *aI;
@@ -247,7 +247,7 @@ void SdrPaintWindow::impCreateOverlayManager()
             // Request a repaint so that the buffered overlay manager fills
             // its buffer properly.  This is a workaround for missing buffer
             // updates.
-            Window* pWindow = dynamic_cast<Window*>(&GetOutputDevice());
+            vcl::Window* pWindow = dynamic_cast<vcl::Window*>(&GetOutputDevice());
             if (pWindow != NULL)
                 pWindow->Invalidate();
 

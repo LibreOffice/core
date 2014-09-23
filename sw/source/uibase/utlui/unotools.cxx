@@ -62,7 +62,7 @@ const sal_Char cFactory[] = "private:factory/swriter";
 
 bool SwOneExampleFrame::bShowServiceNotAvailableMessage = true;
 
-SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
+SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link* pInitializedLink,
                                         const OUString* pURL ) :
@@ -90,7 +90,7 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
     aTopWindow.Show();
 }
 
-void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
+void SwOneExampleFrame::CreateErrorMessage(vcl::Window* pParent)
 {
     if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
     {
@@ -517,7 +517,7 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
     return 0;
 };
 
-SwFrmCtrlWindow::SwFrmCtrlWindow(Window* pParent, SwOneExampleFrame* pFrame)
+SwFrmCtrlWindow::SwFrmCtrlWindow(vcl::Window* pParent, SwOneExampleFrame* pFrame)
     : VclEventBox(pParent)
     , pExampleFrame(pFrame)
 {

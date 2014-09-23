@@ -84,7 +84,7 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
     else
         ChartTypeUnoDlg_BASE::implInitialize(_rValue);
 }
-Dialog* ChartTypeUnoDlg::createDialog(Window* _pParent)
+Dialog* ChartTypeUnoDlg::createDialog(vcl::Window* _pParent)
 {
     return new ChartTypeDialog( _pParent, m_xChartModel, m_aContext );
 }

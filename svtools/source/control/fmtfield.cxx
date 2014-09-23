@@ -297,7 +297,7 @@ FormattedField::StaticFormatter::~StaticFormatter()
 }
 
 
-FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatter* pInitialFormatter, sal_Int32 nFormatKey)
+FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle, SvNumberFormatter* pInitialFormatter, sal_Int32 nFormatKey)
     :SpinField(pParent, nStyle)
     ,m_aLastSelection(0,0)
     ,m_dMinValue(0)
@@ -328,7 +328,7 @@ FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatte
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFormattedField(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFormattedField(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     WinBits nWinBits = WB_BORDER | WB_SPIN;
     return new FormattedField(pParent, nWinBits);
@@ -1067,7 +1067,7 @@ void DoubleNumericField::ResetConformanceTester()
     m_pNumberValidator = new validation::NumberValidator( cSeparatorThousand, cSeparatorDecimal );
 }
 
-DoubleCurrencyField::DoubleCurrencyField(Window* pParent, WinBits nStyle)
+DoubleCurrencyField::DoubleCurrencyField(vcl::Window* pParent, WinBits nStyle)
     :FormattedField(pParent, nStyle)
     ,m_bChangingFormat(false)
 {

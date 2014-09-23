@@ -46,7 +46,7 @@ namespace svt { namespace table
     //= TableControl
 
 
-    TableControl::TableControl( Window* _pParent, WinBits _nStyle )
+    TableControl::TableControl( vcl::Window* _pParent, WinBits _nStyle )
         :Control( _pParent, _nStyle )
         ,m_pImpl( new TableControl_Impl( *this ) )
     {
@@ -266,7 +266,7 @@ namespace svt { namespace table
     }
 
 
-    Window& TableControl::getDataWindow()
+    vcl::Window& TableControl::getDataWindow()
     {
         return m_pImpl->getDataWindow();
     }
@@ -274,7 +274,7 @@ namespace svt { namespace table
 
     Reference< XAccessible > TableControl::CreateAccessible()
     {
-        Window* pParent = GetAccessibleParentWindow();
+        vcl::Window* pParent = GetAccessibleParentWindow();
         ENSURE_OR_RETURN( pParent, "TableControl::CreateAccessible - parent not found", NULL );
 
         return m_pImpl->getAccessible( *pParent );
@@ -500,7 +500,7 @@ namespace svt { namespace table
     }
 
 
-    Rectangle TableControl::GetWindowExtentsRelative( Window *pRelativeWindow ) const
+    Rectangle TableControl::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
     {
         return Control::GetWindowExtentsRelative( pRelativeWindow );
     }
@@ -518,13 +518,13 @@ namespace svt { namespace table
     }
 
 
-    Window* TableControl::GetAccessibleParentWindow() const
+    vcl::Window* TableControl::GetAccessibleParentWindow() const
     {
         return Control::GetAccessibleParentWindow();
     }
 
 
-    Window* TableControl::GetWindowInstance()
+    vcl::Window* TableControl::GetWindowInstance()
     {
         return this;
     }

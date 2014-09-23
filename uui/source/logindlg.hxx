@@ -67,7 +67,7 @@ class LoginDialog : public ModalDialog
     DECL_LINK(UseSysCredsHdl_Impl, void *);
 
 public:
-    LoginDialog(Window* pParent, sal_uInt16 nFlags,
+    LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,
         const OUString& rServer, const OUString &rRealm);
 
     OUString        GetPath() const                             { return m_pPathED->GetText(); }

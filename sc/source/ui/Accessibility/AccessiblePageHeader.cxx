@@ -350,7 +350,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const throw (uno::Run
     Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
             Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);
@@ -374,7 +374,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBox() const throw (uno::RuntimeExce
 
         // the Rectangle could contain negative coordinates so it should be cliped
         Rectangle aClipRect(Point(0, 0), aRect.GetSize());
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
             aClipRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
         aRect = aClipRect.GetIntersection(aRect);

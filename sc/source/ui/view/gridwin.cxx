@@ -215,7 +215,7 @@ protected:
     void            SelectHdl();
 
 public:
-                ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
+                ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
                 virtual ~ScFilterListBox();
 
@@ -234,7 +234,7 @@ public:
 };
 
 //  ListBox in einem FloatingWindow (pParent)
-ScFilterListBox::ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
+ScFilterListBox::ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
                                   SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode ) :
     ListBox( pParent, WB_AUTOHSCROLL ),
     pGridWin( pGrid ),
@@ -329,13 +329,13 @@ void ScFilterListBox::SelectHdl()
 class ScFilterFloatingWindow : public FloatingWindow
 {
 public:
-    ScFilterFloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
+    ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
     virtual ~ScFilterFloatingWindow();
     // required for System FloatingWindows that will not process KeyInput by themselves
-    virtual Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
 };
 
-ScFilterFloatingWindow::ScFilterFloatingWindow( Window* pParent, WinBits nStyle ) :
+ScFilterFloatingWindow::ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
     FloatingWindow( pParent, nStyle|WB_SYSTEMWINDOW ) // make it a system floater
     {}
 
@@ -344,7 +344,7 @@ ScFilterFloatingWindow::~ScFilterFloatingWindow()
     EndPopupMode();
 }
 
-Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
+vcl::Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
 {
     // redirect keyinput in the child window
     return GetWindow(WINDOW_FIRSTCHILD) ? GetWindow(WINDOW_FIRSTCHILD)->GetPreferredKeyInputWindow() : NULL;    // will be the FilterBox
@@ -422,7 +422,7 @@ static bool lcl_GetHyperlinkCell(
 }
 
 //  WB_DIALOGCONTROL noetig fuer UNO-Controls
-ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos )
+ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos eWhichPos )
 :           Window( pParent, WB_CLIPCHILDREN | WB_DIALOGCONTROL ),
             DropTargetHelper( this ),
             DragSourceHelper( this ),
@@ -2656,7 +2656,7 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
     sal_uInt16 nType = rNEvt.GetType();
     if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
     {
-        Window* pWindow = rNEvt.GetWindow();
+        vcl::Window* pWindow = rNEvt.GetWindow();
         if (pWindow == this && pViewData)
         {
             SfxViewFrame* pViewFrame = pViewData->GetViewShell()->GetViewFrame();
@@ -2799,7 +2799,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
             pViewData->GetView()->GetSelEngine()->Command( aDragEvent );
 }
 
-static void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, Window* pWin )
+static void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, vcl::Window* pWin )
 {
     SCCOL nCol = pViewData->GetCurX();
     SCROW nRow = pViewData->GetCurY();

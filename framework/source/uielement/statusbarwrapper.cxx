@@ -105,7 +105,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
             StatusBarManager* pStatusBarManager( 0 );
             {
                 SolarMutexGuard aSolarMutexGuard;
-                Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                vcl::Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
                     sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
@@ -169,7 +169,7 @@ Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( Ru
         StatusBarManager* pStatusBarManager = static_cast< StatusBarManager *>( m_xStatusBarManager.get() );
         if ( pStatusBarManager )
         {
-            Window* pWindow = (Window *)pStatusBarManager->GetStatusBar();
+            vcl::Window* pWindow = (vcl::Window *)pStatusBarManager->GetStatusBar();
             if ( pWindow )
                 return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
         }

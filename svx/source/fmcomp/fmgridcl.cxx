@@ -1000,7 +1000,7 @@ void FmGridHeader::Command(const CommandEvent& rEvt)
 
 FmGridControl::FmGridControl(
                 const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                Window* pParent,
+                vcl::Window* pParent,
                 FmXGridPeer* _pPeer,
                 WinBits nBits)
         :DbGridControl(_rxContext, pParent, nBits)

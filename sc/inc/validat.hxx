@@ -73,10 +73,10 @@ private:
     OUString aErrorMessage;
 
     bool DoMacro( const ScAddress& rPos, const OUString& rInput,
-                                ScFormulaCell* pCell, Window* pParent ) const;
+                                ScFormulaCell* pCell, vcl::Window* pParent ) const;
 
     bool DoScript( const ScAddress& rPos, const OUString& rInput,
-                                ScFormulaCell* pCell, Window* pParent ) const;
+                                ScFormulaCell* pCell, vcl::Window* pParent ) const;
 
     using ScConditionEntry::operator==;
 
@@ -133,7 +133,7 @@ public:
     bool IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
                     // TRUE -> break
-    bool DoError( Window* pParent, const OUString& rInput, const ScAddress& rPos ) const;
+    bool DoError( vcl::Window* pParent, const OUString& rInput, const ScAddress& rPos ) const;
     void DoCalcError( ScFormulaCell* pCell ) const;
 
     bool IsEmpty() const;

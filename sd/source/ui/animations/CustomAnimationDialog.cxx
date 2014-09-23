@@ -98,7 +98,7 @@ namespace sd {
 class PresetPropertyBox  : public PropertySubControl
 {
 public:
-    PresetPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const OUString& aPresetId, const Link& rModifyHdl );
+    PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link& rModifyHdl );
     virtual ~PresetPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
@@ -110,7 +110,7 @@ private:
     ListBox* mpControl;
 };
 
-PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const OUString& aPresetId, const Link& rModifyHdl )
+PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
     mpControl = new ListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
@@ -175,7 +175,7 @@ Control* PresetPropertyBox::getControl()
 class ColorPropertyBox  : public PropertySubControl
 {
 public:
-    ColorPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
+    ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl );
     virtual ~ColorPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
@@ -186,7 +186,7 @@ private:
     ColorListBox* mpControl;
 };
 
-ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
+ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
     mpControl = new ColorListBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
@@ -247,7 +247,7 @@ Control* ColorPropertyBox::getControl()
 class FontPropertyBox : public PropertySubControl
 {
 public:
-    FontPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
+    FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl );
     virtual ~FontPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
@@ -259,7 +259,7 @@ private:
     FontNameBox* mpControl;
 };
 
-FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
+FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
     mpControl = new FontNameBox( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
@@ -320,7 +320,7 @@ Control* FontPropertyBox::getControl()
 class DropdownMenuBox : public Edit
 {
 public:
-    DropdownMenuBox( Window* pParent, Edit* pSubControl, PopupMenu* pMenu );
+    DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu );
     virtual ~DropdownMenuBox();
 
     void Resize() SAL_OVERRIDE;
@@ -334,7 +334,7 @@ private:
     PopupMenu* mpMenu;
 };
 
-DropdownMenuBox::DropdownMenuBox( Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
+DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
 :   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
     mpSubControl(pSubControl),mpDropdownButton(0),mpMenu(pMenu)
 {
@@ -394,7 +394,7 @@ bool DropdownMenuBox::PreNotify( NotifyEvent& rNEvt )
 class CharHeightPropertyBox : public PropertySubControl
 {
 public:
-    CharHeightPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
+    CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl );
     virtual ~CharHeightPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
@@ -410,7 +410,7 @@ private:
     MetricField* mpMetric;
 };
 
-CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
+CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
     mpMetric = new MetricField( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER);
@@ -471,7 +471,7 @@ Control* CharHeightPropertyBox::getControl()
 class TransparencyPropertyBox : public PropertySubControl
 {
 public:
-    TransparencyPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
+    TransparencyPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl );
     virtual ~TransparencyPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
@@ -491,7 +491,7 @@ private:
     Link maModifyHdl;
 };
 
-TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
+TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
@@ -575,7 +575,7 @@ Control* TransparencyPropertyBox::getControl()
 class RotationPropertyBox : public PropertySubControl
 {
 public:
-    RotationPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
+    RotationPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl );
     virtual ~RotationPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
@@ -595,7 +595,7 @@ private:
     Link maModifyHdl;
 };
 
-RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
+RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
@@ -700,7 +700,7 @@ Control* RotationPropertyBox::getControl()
 class ScalePropertyBox : public PropertySubControl
 {
 public:
-    ScalePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
+    ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl );
     virtual ~ScalePropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
@@ -721,7 +721,7 @@ private:
     int mnDirection;
 };
 
-ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
+ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
@@ -863,7 +863,7 @@ Control* ScalePropertyBox::getControl()
 class FontStylePropertyBox : public PropertySubControl
 {
 public:
-    FontStylePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
+    FontStylePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl );
     virtual ~FontStylePropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
@@ -886,7 +886,7 @@ private:
     sal_Int16 mnFontUnderline;
 };
 
-FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl )
+FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
@@ -984,7 +984,7 @@ Control* FontStylePropertyBox::getControl()
 class CustomAnimationEffectTabPage : public TabPage
 {
 public:
-    CustomAnimationEffectTabPage( Window* pParent, const STLPropertySet* pSet );
+    CustomAnimationEffectTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
     virtual ~CustomAnimationEffectTabPage();
 
     void update( STLPropertySet* pSet );
@@ -1025,7 +1025,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
 };
 
-CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, const STLPropertySet* pSet )
+CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent, const STLPropertySet* pSet )
 : TabPage( pParent, "EffectTab", "modules/simpress/ui/customanimationeffecttab.ui" ), mbHasText( false ), mpSet(pSet )
 {
     get(mpSettings, "settings" );
@@ -1556,7 +1556,7 @@ void CustomAnimationEffectTabPage::onSoundPreview()
 class CustomAnimationDurationTabPage : public TabPage
 {
 public:
-    CustomAnimationDurationTabPage( Window* pParent, const STLPropertySet* pSet );
+    CustomAnimationDurationTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
     virtual ~CustomAnimationDurationTabPage();
 
     void update( STLPropertySet* pSet );
@@ -1580,7 +1580,7 @@ private:
     ListBox* mpLBTrigger;
 };
 
-CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, const STLPropertySet* pSet)
+CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pParent, const STLPropertySet* pSet)
 : TabPage( pParent, "TimingTab", "modules/simpress/ui/customanimationtimingtab.ui" ), mpSet( pSet )
 {
     get(mpFTStart,"start_label" );
@@ -1921,7 +1921,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 class CustomAnimationTextAnimTabPage : public TabPage
 {
 public:
-    CustomAnimationTextAnimTabPage( Window* pParent, const STLPropertySet* pSet );
+    CustomAnimationTextAnimTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
 
     void update( STLPropertySet* pSet );
 
@@ -1941,7 +1941,7 @@ private:
     bool mbHasVisibleShapes;
 };
 
-CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, const STLPropertySet* pSet)
+CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(vcl::Window* pParent, const STLPropertySet* pSet)
 :   TabPage( pParent, "TextAnimationTab", "modules/simpress/ui/customanimationtexttab.ui" ),
     mpSet( pSet ),
     mbHasVisibleShapes(true)
@@ -2100,7 +2100,7 @@ IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl)
     return 0;
 }
 
-CustomAnimationDialog::CustomAnimationDialog(Window* pParent, STLPropertySet* pSet, const OString& sPage)
+CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySet* pSet, const OString& sPage)
 : TabDialog( pParent, "CustomAnimationProperties", "modules/simpress/ui/customanimationproperties.ui")
 , mpSet( pSet )
 , mpResultSet( 0 )
@@ -2208,12 +2208,12 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     return pSet;
 }
 
-PropertyControl::PropertyControl( Window* pParent )
+PropertyControl::PropertyControl( vcl::Window* pParent )
 : ListBox( pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN ), mpSubControl(0)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makePropertyControl( Window *pParent )
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makePropertyControl( vcl::Window *pParent )
 {
     return new PropertyControl( pParent );
 }
@@ -2258,7 +2258,7 @@ PropertySubControl::~PropertySubControl()
 {
 }
 
-PropertySubControl* PropertySubControl::create( sal_Int32 nType, Window* pParent, const Any& rValue, const OUString& rPresetId, const Link& rModifyHdl )
+PropertySubControl* PropertySubControl::create( sal_Int32 nType, vcl::Window* pParent, const Any& rValue, const OUString& rPresetId, const Link& rModifyHdl )
 {
     PropertySubControl* pSubControl = NULL;
     switch( nType )

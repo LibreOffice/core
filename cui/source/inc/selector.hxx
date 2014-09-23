@@ -100,7 +100,7 @@ friend class SvxConfigGroupListBox;
     virtual void                    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 public:
-    SvxConfigFunctionListBox(Window* pParent, WinBits nStyle);
+    SvxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxConfigFunctionListBox();
     void                            ClearAll();
     OUString                        GetHelpText( SvTreeListEntry *pEntry );
@@ -160,7 +160,7 @@ protected:
     virtual bool    Expand( SvTreeListEntry* pParent ) SAL_OVERRIDE;
 
 public:
-    SvxConfigGroupListBox(Window* pParent, WinBits nStyle);
+    SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxConfigGroupListBox();
 
     void    Init(bool bShowSlots, const ::com::sun::star::uno::Reference
@@ -198,7 +198,7 @@ class SvxScriptSelectorDialog : public ModelessDialog
 public:
 
     SvxScriptSelectorDialog (
-        Window* pParent = NULL,
+        vcl::Window* pParent = NULL,
         bool bShowSlots = false,
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::frame::XFrame >& xFrame = 0

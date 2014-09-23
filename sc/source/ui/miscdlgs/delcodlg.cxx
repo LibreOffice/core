@@ -28,7 +28,7 @@ InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_S
                                                  IDF_NOTE     | IDF_FORMULA |
                                                  IDF_VALUE);
 
-ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
+ScDeleteContentsDlg::ScDeleteContentsDlg( vcl::Window* pParent,
                                           InsertDeleteFlags nCheckDefaults ) :
     ModalDialog     ( pParent, "DeleteContentsDialog", "modules/scalc/ui/deletecontents.ui" ),
 

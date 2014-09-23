@@ -14,7 +14,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 
-InputDialog::InputDialog(const OUString &rLabelText, Window *pParent)
+InputDialog::InputDialog(const OUString &rLabelText, vcl::Window *pParent)
     : ModalDialog(pParent, "InputDialog", "sfx/ui/inputdialog.ui")
 {
     get(m_pEntry, "entry");

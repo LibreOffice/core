@@ -39,7 +39,7 @@ namespace sd { namespace toolpanel {
     control. 2) Keyboard focus is indicated by a dotted rectangle.
 */
 class TitleBar
-    : public ::Window,
+    : public vcl::Window,
       public TreeNode
 {
 public:
@@ -51,7 +51,7 @@ public:
         will be formatted according to the given type.
     */
     TitleBar (
-        ::Window* pParent,
+        vcl::Window* pParent,
         const OUString& rsTitle,
         TitleBarType eType,
         bool bIsExpandable);
@@ -61,7 +61,7 @@ public:
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
     virtual bool IsResizable (void);
-    virtual ::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow (void);
     virtual sal_Int32 GetMinimumWidth (void);
 
     virtual void Paint (const Rectangle& rBoundingBox);

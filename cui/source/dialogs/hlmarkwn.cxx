@@ -66,14 +66,14 @@ struct TargetData
 //#                                                                      #
 //# Tree-Window                                                          #
 //#                                                                      #
-SvxHlmarkTreeLBox::SvxHlmarkTreeLBox(Window* pParent, WinBits nStyle)
+SvxHlmarkTreeLBox::SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
     , mpParentWnd(NULL)
 {
     SetNodeDefaultImages();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxHlmarkTreeLBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxHlmarkTreeLBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

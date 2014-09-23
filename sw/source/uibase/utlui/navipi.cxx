@@ -429,7 +429,7 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
         SwHelpToolBox::MouseButtonDown(rEvt);
 }
 
-void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, Window *pParent)
+void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, vcl::Window *pParent)
 {
     Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame().GetFrameInterface();
     SwScrollNaviPopup* pPopup = new
@@ -602,7 +602,7 @@ void SwNavigationPI::_ZoomIn()
 
 void SwNavigationPI::Resize()
 {
-    Window* pParent = GetParent();
+    vcl::Window* pParent = GetParent();
     if( !_IsZoomedIn() )
     {
         Size aNewSize (pParent->GetOutputSizePixel());
@@ -653,7 +653,7 @@ void SwNavigationPI::Resize()
 
 SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                                 SfxChildWindowContext* pCw,
-                                Window* pParent) :
+                                vcl::Window* pParent) :
 
     Window( pParent, SW_RES(DLG_NAVIGATION_PI)),
     SfxControllerItem( SID_DOCFULLNAME, *_pBindings ),
@@ -1318,7 +1318,7 @@ SwView*  SwNavigationPI::GetCreateView() const
     return pCreateView;
 }
 
-SwNavigationChild::SwNavigationChild( Window* pParent,
+SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
                         sal_uInt16 nId,
                         SfxBindings* _pBindings,
                         SfxChildWinInfo* )

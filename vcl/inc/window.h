@@ -41,7 +41,7 @@ struct ImplDelData;
 struct ImplAccessibleInfos;
 
 class FixedText;
-class Window;
+namespace vcl { class Window; }
 class VclSizeGroup;
 class VirtualDevice;
 class PhysicalFontCollection;
@@ -91,7 +91,7 @@ namespace vcl {
     struct ControlLayoutData;
 }
 
-bool ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
+bool ImplWindowFrameProc( vcl::Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
 
 #define WINDOW_HITTEST_INSIDE           ((sal_uInt16)0x0001)
 #define WINDOW_HITTEST_TRANSPARENT      ((sal_uInt16)0x0002)
@@ -111,7 +111,7 @@ struct ImplWinData
     sal_uInt16          mnIsTopWindow;
     bool                mbMouseOver;            //< tracks mouse over for native widget paint effect
     bool                mbEnableNativeWidget;   //< toggle native widget rendering
-    ::std::list< Window* >
+    ::std::list< vcl::Window* >
                         maTopWindowChildren;
 };
 
@@ -119,7 +119,7 @@ struct ImplOverlapData
 {
     VirtualDevice*      mpSaveBackDev;          //< saved background bitmap
     Region*             mpSaveBackRgn;          //< saved region, which must be invalidated
-    Window*             mpNextBackWin;          //< next window with saved background
+    vcl::Window*        mpNextBackWin;          //< next window with saved background
     sal_uIntPtr         mnSaveBackSize;         //< bitmap size of saved background
     bool                mbSaveBack;             //< true: save background
     sal_uInt8           mnTopLevel;             //< Level for Overlap-Window
@@ -130,13 +130,13 @@ struct ImplFrameData
     Timer               maPaintTimer;           //< paint timer
     Timer               maResizeTimer;          //< resize timer
     InputContext        maOldInputContext;      //< last set Input Context
-    Window*             mpNextFrame;            //< next frame window
-    Window*             mpFirstOverlap;         //< first overlap window
-    Window*             mpFocusWin;             //< focus window (is also set, when frame doesn't have the focous)
-    Window*             mpMouseMoveWin;         //< last window, where MouseMove() called
-    Window*             mpMouseDownWin;         //< last window, where MouseButtonDown() called
-    Window*             mpFirstBackWin;         //< first overlap-window with saved background
-    ::std::vector<Window *> maOwnerDrawList;    //< List of system windows with owner draw decoration
+    vcl::Window*        mpNextFrame;            //< next frame window
+    vcl::Window*        mpFirstOverlap;         //< first overlap vcl::Window
+    vcl::Window*        mpFocusWin;             //< focus window (is also set, when frame doesn't have the focous)
+    vcl::Window*        mpMouseMoveWin;         //< last window, where MouseMove() called
+    vcl::Window*        mpMouseDownWin;         //< last window, where MouseButtonDown() called
+    vcl::Window*        mpFirstBackWin;         //< first overlap-window with saved background
+    ::std::vector<vcl::Window *> maOwnerDrawList;    //< List of system windows with owner draw decoration
     PhysicalFontCollection* mpFontCollection;   //< Font-List for this frame
     ImplFontCache*      mpFontCache;            //< Font-Cache for this frame
     sal_Int32           mnDPIX;                 //< Original Screen Resolution
@@ -185,9 +185,9 @@ struct ImplAccessibleInfos
     sal_uInt16          nAccessibleRole;
     OUString*           pAccessibleName;
     OUString*           pAccessibleDescription;
-    Window*             pLabeledByWindow;
-    Window*             pLabelForWindow;
-    Window*             pMemberOfWindow;
+    vcl::Window*        pLabeledByWindow;
+    vcl::Window*        pLabelForWindow;
+    vcl::Window*        pMemberOfWindow;
 
     ImplAccessibleInfos();
     ~ImplAccessibleInfos();
@@ -206,21 +206,21 @@ public:
     ImplFrameData*      mpFrameData;
     SalFrame*           mpFrame;
     SalObject*          mpSysObj;
-    Window*             mpFrameWindow;
-    Window*             mpOverlapWindow;
-    Window*             mpBorderWindow;
-    Window*             mpClientWindow;
-    Window*             mpParent;
-    Window*             mpRealParent;
-    Window*             mpFirstChild;
-    Window*             mpLastChild;
-    Window*             mpFirstOverlap;
-    Window*             mpLastOverlap;
-    Window*             mpPrev;
-    Window*             mpNext;
-    Window*             mpNextOverlap;
-    Window*             mpLastFocusWindow;
-    Window*             mpDlgCtrlDownWindow;
+    vcl::Window*        mpFrameWindow;
+    vcl::Window*        mpOverlapWindow;
+    vcl::Window*        mpBorderWindow;
+    vcl::Window*        mpClientWindow;
+    vcl::Window*        mpParent;
+    vcl::Window*        mpRealParent;
+    vcl::Window*        mpFirstChild;
+    vcl::Window*        mpLastChild;
+    vcl::Window*        mpFirstOverlap;
+    vcl::Window*        mpLastOverlap;
+    vcl::Window*        mpPrev;
+    vcl::Window*        mpNext;
+    vcl::Window*        mpNextOverlap;
+    vcl::Window*        mpLastFocusWindow;
+    vcl::Window*        mpDlgCtrlDownWindow;
     VclEventListeners   maEventListeners;
     VclEventListeners   maChildEventListeners;
 
@@ -375,10 +375,10 @@ public:
 
 // helper methods
 
-bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeave,
+bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeave,
                            long nX, long nY, sal_uIntPtr nMsgTime,
                            sal_uInt16 nCode, sal_uInt16 nMode );
-void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
+void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
 #endif // INCLUDED_VCL_INC_WINDOW_H
 

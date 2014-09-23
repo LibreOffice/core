@@ -87,7 +87,7 @@ public:
     DrawViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
-        ::Window* pParentWindow,
+        ::vcl::Window* pParentWindow,
         PageKind ePageKind = PK_STANDARD,
         FrameView* pFrameView = NULL);
 
@@ -261,7 +261,7 @@ public:
     //false.
     void            FreshNavigatrEntry();
     void            FreshNavigatrTree();
-    void            MakeVisible(const Rectangle& rRect, ::Window& rWin);
+    void            MakeVisible(const Rectangle& rRect, ::vcl::Window& rWin);
 
     virtual void    ReadFrameViewData(FrameView* pView) SAL_OVERRIDE;
     virtual void    WriteFrameViewData() SAL_OVERRIDE;
@@ -373,7 +373,7 @@ public:
     /** Relocation to a new parent window is not supported for DrawViewShell
         objects so this method always returns <FALSE/>.
     */
-    virtual bool RelocateToParentWindow (::Window* pParentWindow) SAL_OVERRIDE;
+    virtual bool RelocateToParentWindow (::vcl::Window* pParentWindow) SAL_OVERRIDE;
 
     OUString GetSidebarContextName (void) const;
 

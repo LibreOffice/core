@@ -419,7 +419,7 @@ void SfxApplication::ReleaseIndex(sal_uInt16 i)
 
 
 
-Window* SfxApplication::GetTopWindow() const
+vcl::Window* SfxApplication::GetTopWindow() const
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( SfxViewFrame::Current() );
     return pWork ? pWork->GetWindow() : NULL;

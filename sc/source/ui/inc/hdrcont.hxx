@@ -29,7 +29,7 @@
 // Size of the sliders
 #define HDR_SLIDERSIZE      2
 
-class ScHeaderControl : public Window
+class ScHeaderControl : public vcl::Window
 {
 private:
     SelectionEngine*    pSelEngine;
@@ -101,7 +101,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
 public:
-            ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
+            ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelectionEngine,
                                 SCCOLROW nNewSize, bool bNewVertical );
             virtual ~ScHeaderControl();
 

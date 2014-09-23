@@ -51,7 +51,7 @@ private:
     DECL_LINK(EditModifyHdl, void *);
 
 public:
-                    SvxPasswordDialog( Window* pParent, bool bAllowEmptyPasswords = false, bool bDisableOldPassword = false );
+                    SvxPasswordDialog( vcl::Window* pParent, bool bAllowEmptyPasswords = false, bool bDisableOldPassword = false );
                     virtual ~SvxPasswordDialog();
 
     OUString        GetOldPassword() const { return m_pOldPasswdED->GetText(); }

@@ -45,7 +45,7 @@ struct MyStruct
     SfxWorkWindow*      pWorkWin;
 };
 
-SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, sal_uInt16 nId,
+SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
                                                 SfxBindings* pBindings,
                                                 SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId ),
@@ -60,7 +60,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, sal_uInt16 nId,
     pWindow = mpDlg->GetWindow();
     ((MyStruct*)pImp)->bVisible = false;
 
-    Window* pTopWindow = 0;
+    vcl::Window* pTopWindow = 0;
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&
             (0 != (pTopWindow = SfxGetpApp()->GetTopWindow())))
     {

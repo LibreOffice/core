@@ -41,7 +41,7 @@ namespace svt
 
     //= ComboBoxControl
 
-    ComboBoxControl::ComboBoxControl(Window* pParent, WinBits nWinStyle)
+    ComboBoxControl::ComboBoxControl(vcl::Window* pParent, WinBits nWinStyle)
                    :ComboBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
     {
         EnableAutoSize(false);
@@ -149,7 +149,7 @@ namespace svt
     //= ListBoxControl
 
 
-    ListBoxControl::ListBoxControl(Window* pParent, WinBits nWinStyle)
+    ListBoxControl::ListBoxControl(vcl::Window* pParent, WinBits nWinStyle)
                   :ListBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
     {
         EnableAutoSize(false);
@@ -246,7 +246,7 @@ namespace svt
     //= CheckBoxControl
 
 
-    CheckBoxControl::CheckBoxControl(Window* pParent, WinBits nWinStyle)
+    CheckBoxControl::CheckBoxControl(vcl::Window* pParent, WinBits nWinStyle)
                    :Control(pParent, nWinStyle)
     {
         const Wallpaper& rParentBackground = pParent->GetBackground();

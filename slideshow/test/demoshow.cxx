@@ -305,10 +305,10 @@ public:
     virtual sal_uInt16  Exception( sal_uInt16 nError );
 };
 
-class ChildWindow : public Window
+class ChildWindow : public vcl::Window
 {
 public:
-    ChildWindow( Window* pParent );
+    ChildWindow( vcl::Window* pParent );
     virtual ~ChildWindow();
     virtual void Paint( const Rectangle& rRect );
     virtual void Resize();
@@ -322,7 +322,7 @@ private:
     uno::Reference< presentation::XSlideShow > mxShow;
 };
 
-ChildWindow::ChildWindow( Window* pParent ) :
+ChildWindow::ChildWindow( vcl::Window* pParent ) :
     Window(pParent, WB_CLIPCHILDREN | WB_BORDER| WB_3DLOOK ),
     mpView(),
     mxShow()
@@ -402,7 +402,7 @@ private:
 };
 
 DemoWindow::DemoWindow() :
-    Dialog((Window*)NULL),
+    Dialog((vcl::Window*)NULL),
     maLeftChild( this ),
     maRightTopChild( this ),
     maRightBottomChild( this ),

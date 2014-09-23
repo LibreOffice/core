@@ -137,7 +137,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         }
     }
 
-    Window* pWaitWin = rDocShell.GetActiveDialogParent();
+    vcl::Window* pWaitWin = rDocShell.GetActiveDialogParent();
     if (pWaitWin)
         pWaitWin->EnterWait();
     ScDocShellModificator aModificator( rDocShell );

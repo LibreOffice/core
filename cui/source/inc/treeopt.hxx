@@ -196,10 +196,10 @@ protected:
     virtual short   Execute() SAL_OVERRIDE;
 
 public:
-    OfaTreeOptionsDialog( Window* pParent,
+    OfaTreeOptionsDialog( vcl::Window* pParent,
         const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame,
         bool bActivateLastSelection = true );
-    OfaTreeOptionsDialog( Window* pParent, const OUString& rExtensionId );
+    OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId );
     virtual ~OfaTreeOptionsDialog();
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );
@@ -272,7 +272,7 @@ private:
 
 public:
     ExtensionsTabPage(
-        Window* pParent, WinBits nStyle,
+        vcl::Window* pParent, WinBits nStyle,
         const OUString& rPageURL, const OUString& rEvtHdl,
         const com::sun::star::uno::Reference<
             com::sun::star::awt::XContainerWindowProvider >& rProvider );

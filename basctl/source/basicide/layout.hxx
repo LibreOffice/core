@@ -41,7 +41,7 @@ class BaseWindow;
 // Layout -- the common base of ModulLayout and DialogLayout.
 // Handles the splitting lines and the dockable windows.
 
-class Layout: public Window
+class Layout: public vcl::Window
 {
 public:
     void DockaWindow (DockingWindow*);
@@ -54,7 +54,7 @@ public:
     virtual void UpdateDebug (bool bBasicStopped ) = 0;
 
 protected:
-    Layout (Window* pParent);
+    Layout (vcl::Window* pParent);
     virtual ~Layout ();
 
     void AddToLeft   (DockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }

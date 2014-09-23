@@ -38,7 +38,7 @@ const long DIAL_OUTER_WIDTH = 8;
 
 
 
-DialControlBmp::DialControlBmp( Window& rParent ) :
+DialControlBmp::DialControlBmp( vcl::Window& rParent ) :
     VirtualDevice( rParent, 0, 0 ),
     mbEnabled( true ),
     mrParent( rParent ),
@@ -223,7 +223,7 @@ void DialControlBmp::DrawBackground()
 
 
 
-DialControl::DialControl_Impl::DialControl_Impl ( Window& rParent ) :
+DialControl::DialControl_Impl::DialControl_Impl ( vcl::Window& rParent ) :
     mpBmpEnabled(new DialControlBmp(rParent)),
     mpBmpDisabled(new DialControlBmp(rParent)),
     mpBmpBuffered(new DialControlBmp(rParent)),
@@ -264,7 +264,7 @@ void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
 
 
 
-DialControl::DialControl( Window* pParent, WinBits nBits ) :
+DialControl::DialControl( vcl::Window* pParent, WinBits nBits ) :
     Control( pParent, nBits ),
      mpImpl( new DialControl_Impl( *this ) )
 {
@@ -275,7 +275,7 @@ DialControl::~DialControl()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDialControl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDialControl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new DialControl(pParent, WB_TABSTOP);
 }

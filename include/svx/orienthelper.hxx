@@ -68,7 +68,7 @@ public:
         TRISTATE_TRUE:    Window always disabled, if stacked text is turned on.
         TRISTATE_FALSE:  Window always disabled, if stacked text is turned off.
         TRISTATE_INDET: Window will be enabled/disabled independent from stacked text. */
-    void                AddDependentWindow( Window& rWindow, TriState eDisableIfStacked = TRISTATE_INDET );
+    void                AddDependentWindow( vcl::Window& rWindow, TriState eDisableIfStacked = TRISTATE_INDET );
 
     /** Enables or disables the dial control and all dependent windows. */
     void                Enable( bool bEnable = true );

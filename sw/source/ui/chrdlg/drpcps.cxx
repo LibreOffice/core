@@ -101,7 +101,7 @@ class SwDropCapsPict : public Control
 
 public:
 
-    SwDropCapsPict(Window *pParent, WinBits nBits)
+    SwDropCapsPict(vcl::Window *pParent, WinBits nBits)
         : Control(pParent, nBits)
         , mpPage(NULL)
         , mnLines(0)
@@ -130,7 +130,7 @@ public:
     void        DrawPrev( const Point& rPt );
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwDropCapsPict(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwDropCapsPict(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SwDropCapsPict(pParent, WB_BORDER);
 }
@@ -506,7 +506,7 @@ void SwDropCapsPict::_InitPrinter()
     }
 }
 
-SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet )
+SwDropCapsDlg::SwDropCapsDlg(vcl::Window *pParent, const SfxItemSet &rSet )
     : SfxSingleTabDialog(pParent, rSet)
 {
     SwDropCapsPage* pNewPage = (SwDropCapsPage*) SwDropCapsPage::Create(get_content_area(), &rSet);
@@ -514,7 +514,7 @@ SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet )
     SetTabPage(pNewPage);
 }
 
-SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)
+SwDropCapsPage::SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "DropCapPage","modules/swriter/ui/dropcapspage.ui", &rSet)
     , bModified(false)
     , bFormat(true)
@@ -575,7 +575,7 @@ int  SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
     return LEAVE_PAGE;
 }
 
-SfxTabPage*  SwDropCapsPage::Create(Window *pParent,
+SfxTabPage*  SwDropCapsPage::Create(vcl::Window *pParent,
     const SfxItemSet *rSet)
 {
     return new SwDropCapsPage(pParent, *rSet);

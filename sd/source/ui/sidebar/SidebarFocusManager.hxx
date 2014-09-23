@@ -26,7 +26,7 @@
 #include <memory>
 
 class VclSimpleEvent;
-class Window;
+namespace vcl { class Window; }
 
 namespace sd { namespace toolpanel {
 
@@ -54,8 +54,8 @@ public:
             window to the target window.
     */
     void RegisterLink (
-        ::Window* pSource,
-        ::Window* pTarget,
+        vcl::Window* pSource,
+        vcl::Window* pTarget,
         const vcl::KeyCode& rKey);
 
     /** Register a link that will move the focus from the source window to
@@ -66,7 +66,7 @@ public:
         @param pTarget
             The window to which the focus will be transferred.
     */
-    void RegisterUpLink (::Window* pSource, ::Window* pTarget);
+    void RegisterUpLink (vcl::Window* pSource, vcl::Window* pTarget);
 
     /** Register a link that will move the focus from the source window to
         the target window when the source window is focused and KEY_RETURN
@@ -76,15 +76,15 @@ public:
         @param pTarget
             The window to which the focus will be transferred.
     */
-    void RegisterDownLink (::Window* pSource, ::Window* pTarget);
+    void RegisterDownLink (vcl::Window* pSource, vcl::Window* pTarget);
 
     /** Remove all links from the source window to the target window.  When
         there are links from the target window to the source window then
         these are not touced.
     */
     void RemoveLinks (
-        ::Window* pSource,
-        ::Window* pTarget);
+        vcl::Window* pSource,
+        vcl::Window* pTarget);
 
     /** Let the focus manager transfer the focus from the specified source
         window to a target window that is determined according the the
@@ -92,7 +92,7 @@ public:
         When there is no rule for this combination of source window and key
         code then the focus stays where it is.
     */
-    bool TransferFocus (::Window* pSource, const vcl::KeyCode& rCode);
+    bool TransferFocus (vcl::Window* pSource, const vcl::KeyCode& rCode);
 
 private:
     friend struct FocusManagerCreator;
@@ -110,12 +110,12 @@ private:
 
     /** Remove all links from or to the given window.
     */
-    void RemoveLinks (::Window* pWindow);
+    void RemoveLinks (vcl::Window* pWindow);
 
     /** Unregister as event listener from the given window when there are no
         links from this window anymore.
     */
-    void RemoveUnusedEventListener (::Window* pWindow);
+    void RemoveUnusedEventListener (vcl::Window* pWindow);
 
     /** Listen for key events and on KEY_RETURN go down and on
         KEY_ESCAPE go up.

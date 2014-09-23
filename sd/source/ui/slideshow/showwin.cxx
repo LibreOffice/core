@@ -41,7 +41,7 @@ namespace sd {
 static const sal_uLong HIDE_MOUSE_TIMEOUT = 10000;
 static const sal_uLong SHOW_MOUSE_TIMEOUT = 1000;
 
-ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::Window* pParent )
+ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vcl::Window* pParent )
 : ::sd::Window( pParent )
 , mnPauseTimeout( SLIDE_NO_TIMEOUT )
 , mnRestartPageIndex( PAGE_NO_END )
@@ -642,7 +642,7 @@ void ShowWindow::AddWindowToPaintView()
     else
     {
         OSL_TRACE ("::sd::Window::CreateAccessible: no view shell");
-        return ::Window::CreateAccessible ();
+        return vcl::Window::CreateAccessible ();
     }
 }
 } // end of namespace sd

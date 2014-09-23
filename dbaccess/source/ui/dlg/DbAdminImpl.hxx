@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <svl/poolitem.hxx>
 
-class Window;
+namespace vcl { class Window; }
 namespace dbaui
 {
     namespace DataSourceInfoConverter
@@ -68,12 +68,12 @@ namespace dbaui
 
         MapInt2String           m_aDirectPropTranslator;    /// translating property id's into names (direct properties of a data source)
         MapInt2String           m_aIndirectPropTranslator;  /// translating property id's into names (indirect properties of a data source)
-        Window*                 m_pParent;
+        vcl::Window*                 m_pParent;
         IItemSetHelper*         m_pItemSetHelper;
     public:
 
         ODbDataSourceAdministrationHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
-                                        ,Window* _pParent
+                                        ,vcl::Window* _pParent
                                         ,IItemSetHelper* _pItemSetHelper);
 
         /** translate the current dialog SfxItems into driver relevant PropertyValues

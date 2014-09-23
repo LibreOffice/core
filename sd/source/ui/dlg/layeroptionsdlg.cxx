@@ -25,7 +25,7 @@
 #include "sdresid.hxx"
 #include "layeroptionsdlg.hxx"
 
-SdInsertLayerDlg::SdInsertLayerDlg( Window* pWindow, const SfxItemSet& rInAttrs,
+SdInsertLayerDlg::SdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
     bool bDeletable, const OUString& rStr )
     : ModalDialog(pWindow, "InsertLayerDialog", "modules/sdraw/ui/insertlayer.ui")
     , mrOutAttrs(rInAttrs)

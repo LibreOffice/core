@@ -27,7 +27,7 @@
 class ScSubTotalDlg : public SfxTabDialog
 {
 public:
-    ScSubTotalDlg(Window* pParent, const SfxItemSet* pArgSet);
+    ScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet);
 private:
     PushButton* m_pBtnRemove;
     DECL_LINK( RemoveHdl, PushButton * );

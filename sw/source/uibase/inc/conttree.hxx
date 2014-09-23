@@ -139,7 +139,7 @@ protected:
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
 public:
-    SwContentTree(Window* pParent, const ResId& rResId);
+    SwContentTree(vcl::Window* pParent, const ResId& rResId);
     virtual ~SwContentTree();
     OUString        GetEntryAltText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     OUString        GetEntryLongDescription( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
@@ -230,7 +230,7 @@ private:
     SvTreeListEntry*            pDDSource;      // source for Drag'n Drop
     SwGlblDocContents*      pSwGlblDocContents; // array with sorted content
 
-    Window*                 pDefParentWin;
+    vcl::Window*                 pDefParentWin;
     SwGlblDocContent*       pDocContent;
     sfx2::DocumentInserter* pDocInserter;
 
@@ -306,7 +306,7 @@ protected:
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
 public:
-    SwGlobalTree(Window* pParent, const ResId& rResId);
+    SwGlobalTree(vcl::Window* pParent, const ResId& rResId);
     virtual ~SwGlobalTree();
 
     void                TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox);

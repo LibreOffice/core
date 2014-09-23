@@ -59,7 +59,7 @@ namespace bib
         virtual void        _reloaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
 
     public:
-                            BibView( Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
+                            BibView( vcl::Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
                             virtual ~BibView();
 
         void                UpdatePages();

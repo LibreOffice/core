@@ -32,7 +32,7 @@ namespace chart
 class InsertErrorBarsDialog : public ModalDialog
 {
 public:
-    InsertErrorBarsDialog( Window* pParent, const SfxItemSet& rMyAttrs,
+    InsertErrorBarsDialog( vcl::Window* pParent, const SfxItemSet& rMyAttrs,
                            const ::com::sun::star::uno::Reference<
                                ::com::sun::star::chart2::XChartDocument > & xChartDocument,
                            ErrorBarResources::tErrorBarType eType );

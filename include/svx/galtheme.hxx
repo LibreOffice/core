@@ -216,8 +216,8 @@ public:
 
     SAL_DLLPRIVATE bool         InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos );
 
-    SAL_DLLPRIVATE void         CopyToClipboard( Window* pWindow, sal_uIntPtr nPos );
-    SAL_DLLPRIVATE void         StartDrag( Window* pWindow, sal_uIntPtr nPos );
+    SAL_DLLPRIVATE void         CopyToClipboard( vcl::Window* pWindow, sal_uIntPtr nPos );
+    SAL_DLLPRIVATE void         StartDrag( vcl::Window* pWindow, sal_uIntPtr nPos );
 
 public:
 

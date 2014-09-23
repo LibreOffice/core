@@ -92,7 +92,7 @@ Reference<XPropertySetInfo>  SAL_CALL OTableFilterDialog::getPropertySetInfo() t
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-Dialog* OTableFilterDialog::createDialog(Window* _pParent)
+Dialog* OTableFilterDialog::createDialog(vcl::Window* _pParent)
 {
     OTableSubscriptionDialog* pDlg = new OTableSubscriptionDialog(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
     return pDlg;

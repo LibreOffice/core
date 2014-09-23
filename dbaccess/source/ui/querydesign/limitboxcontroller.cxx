@@ -32,7 +32,7 @@ namespace dbaui
 class LimitBoxImpl: public LimitBox
 {
     public:
-        LimitBoxImpl( Window* pParent, LimitBoxController* pCtrl );
+        LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl );
         virtual ~LimitBoxImpl();
 
         virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -41,7 +41,7 @@ class LimitBoxImpl: public LimitBox
         LimitBoxController* m_pControl;
 };
 
-LimitBoxImpl::LimitBoxImpl( Window* pParent, LimitBoxController* pCtrl )
+LimitBoxImpl::LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl )
     : LimitBox( pParent, WinBits( WB_DROPDOWN | WB_VSCROLL) )
     , m_pControl( pCtrl )
 {
@@ -199,7 +199,7 @@ uno::Reference< awt::XWindow > SAL_CALL LimitBoxController::createItemWindow(
     uno::Reference< awt::XWindow > xItemWindow;
     uno::Reference< awt::XWindow > xParent( Parent );
 
-    Window* pParent = VCLUnoHelper::GetWindow( xParent );
+    vcl::Window* pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
         SolarMutexGuard aSolarMutexGuard;

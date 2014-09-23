@@ -142,13 +142,13 @@ public:
                                            const OString& rID, const OUString& rUIXMLDescription,
                                            const css::uno::Reference<css::frame::XFrame> &rFrame =
                                                css::uno::Reference<css::frame::XFrame>());
-                            SfxPopupWindow(sal_uInt16 nId, Window *pParent,
+                            SfxPopupWindow(sal_uInt16 nId, vcl::Window *pParent,
                                            const OString& rID, const OUString& rUIXMLDescription,
                                            const css::uno::Reference<css::frame::XFrame> &rFrame =
                                                css::uno::Reference<css::frame::XFrame>());
                             SfxPopupWindow( sal_uInt16 nId,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                            Window* pParentWindow,
+                                            vcl::Window* pParentWindow,
                                             WinBits nBits );
                             virtual ~SfxPopupWindow();
 
@@ -202,7 +202,7 @@ protected:
     virtual SfxPopupWindowType GetPopupWindowType() const;
     virtual SfxPopupWindow*    CreatePopupWindow();
     virtual SfxPopupWindow*    CreatePopupWindowCascading();
-    virtual Window*            CreateItemWindow( Window *pParent );
+    virtual vcl::Window*            CreateItemWindow( vcl::Window *pParent );
 
     // Must be called by subclass to set a new popup window instance
     void                       SetPopupWindow( SfxPopupWindow* pWindow );
@@ -294,7 +294,7 @@ class SfxDragButton_Impl : public FixedImage
 {
 public:
 
-                    SfxDragButton_Impl( Window *pParent );
+                    SfxDragButton_Impl( vcl::Window *pParent );
     virtual void    Command ( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -305,7 +305,7 @@ class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxDragToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
-    virtual Window*         CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*         CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
     virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
 };
 

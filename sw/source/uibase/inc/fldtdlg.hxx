@@ -47,7 +47,7 @@ class SwFldDlg: public SfxTabDialog
                                        bool bOnlyActivate = false );
 
 public:
-    SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent);
+    SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent);
     virtual ~SwFldDlg();
 
     DECL_LINK(OKHdl, void *);

@@ -52,7 +52,7 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 
 OQueryTextView::~OQueryTextView()
 {
-    boost::scoped_ptr<Window> aTemp(m_pEdit);
+    boost::scoped_ptr<vcl::Window> aTemp(m_pEdit);
     m_pEdit = NULL;
 }
 

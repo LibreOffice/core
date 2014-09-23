@@ -222,7 +222,7 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
 
 // class ExtTextView
 
-ExtTextView::ExtTextView( ExtTextEngine* pEng, Window* pWindow )
+ExtTextView::ExtTextView( ExtTextEngine* pEng, vcl::Window* pWindow )
     : TextView( pEng, pWindow )
 {
 }

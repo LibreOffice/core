@@ -24,7 +24,7 @@
 #include "splitcelldlg.hxx"
 #include "cuires.hrc"
 
-SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical,
+SvxSplitTableDlg::SvxSplitTableDlg( vcl::Window *pParent, bool bIsTableVertical,
     long nMaxVertical, long nMaxHorizontal )
     : SvxStandardDialog(pParent, "SplitCellsDialog", "cui/ui/splitcellsdialog.ui")
     , mnMaxVertical(nMaxVertical)

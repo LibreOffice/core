@@ -53,7 +53,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xNameAccessNodes;
 
-    Window                  *m_pParent;
+    vcl::Window             *m_pParent;
     ExtMgrDialog            *m_pExtMgrDialog;
     UpdateRequiredDialog    *m_pUpdReqDialog;
     ExtensionCmdQueue       *m_pExecuteCmdQueue;
@@ -63,7 +63,7 @@ private:
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;
 
-         TheExtensionManager( Window * pParent,
+         TheExtensionManager( vcl::Window * pParent,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &xContext );
         virtual ~TheExtensionManager();
 

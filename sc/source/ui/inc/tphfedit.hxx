@@ -53,7 +53,7 @@ enum ScEditWindowLocation
 class SC_DLLPUBLIC ScEditWindow : public Control
 {
 public:
-            ScEditWindow( Window* pParent,  WinBits nBits , ScEditWindowLocation eLoc );
+            ScEditWindow( vcl::Window* pParent,  WinBits nBits , ScEditWindowLocation eLoc );
             virtual ~ScEditWindow();
 
     using Control::SetFont;
@@ -118,7 +118,7 @@ protected:
 
 public:
 
-    ScExtIButton(Window* pParent, WinBits nBits );
+    ScExtIButton(vcl::Window* pParent, WinBits nBits );
 
     void            SetPopupMenu(PopupMenu* pPopUp);
 

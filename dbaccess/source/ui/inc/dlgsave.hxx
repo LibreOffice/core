@@ -52,14 +52,14 @@ namespace dbaui
         OSaveAsDlgImpl* m_pImpl;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
     public:
-        OSaveAsDlg( Window * pParent,const sal_Int32& _rType,
+        OSaveAsDlg( vcl::Window * pParent,const sal_Int32& _rType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                     const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
 
-        OSaveAsDlg( Window* _pParent,
+        OSaveAsDlg( vcl::Window* _pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const OUString& _rDefault,
                     const OUString& _sLabel,

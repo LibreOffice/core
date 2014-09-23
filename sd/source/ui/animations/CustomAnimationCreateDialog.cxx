@@ -66,7 +66,7 @@ const int MISCEFFECTS = 4;
 class CategoryListBox : public ListBox
 {
 public:
-    CategoryListBox( Window* pParent );
+    CategoryListBox( vcl::Window* pParent );
     virtual ~CategoryListBox();
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -83,14 +83,14 @@ private:
     Link            maDoubleClickHdl;
 };
 
-CategoryListBox::CategoryListBox( Window* pParent )
+CategoryListBox::CategoryListBox( vcl::Window* pParent )
 : ListBox( pParent, WB_TABSTOP | WB_BORDER )
 {
     EnableUserDraw( true );
     SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCategoryListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCategoryListBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new CategoryListBox( pParent );
 }
@@ -163,7 +163,7 @@ void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
 class CustomAnimationCreateTabPage : public TabPage
 {
 public:
-    CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText, bool bIsMotionPath = false );
+    CustomAnimationCreateTabPage( vcl::Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText, bool bIsMotionPath = false );
     virtual ~CustomAnimationCreateTabPage();
 
     PathKind getCreatePathKind() const;
@@ -224,7 +224,7 @@ bool ImplStlEffectCategorySortHelper::operator()( const CustomAnimationPresetPtr
     return mxCollator->compareString(p1->getLabel(), p2->getLabel()) == -1;
 }
 
-CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText, bool bIsMotionPath )
+CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( vcl::Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText, bool bIsMotionPath )
 : TabPage( pParent, "CustomAnimationCreateTab", "modules/simpress/ui/customanimationcreatetab.ui" )
 , mpParent( pDialogParent )
 , mnId( nTabId )
@@ -479,7 +479,7 @@ bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
     return false;
 }
 
-CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration  )
+CustomAnimationCreateDialog::CustomAnimationCreateDialog( vcl::Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration  )
 :   TabDialog( pParent, "CustomAnimationCreate", "modules/simpress/ui/customanimationcreatedialog.ui" )
 ,   mpPane( pPane )
 ,   mrTargets( rTargets )
@@ -612,10 +612,10 @@ void CustomAnimationCreateDialog::preview( const CustomAnimationPresetPtr& pPres
 
 namespace
 {
-Window * lcl_GetTopmostParent( Window * pWindow )
+vcl::Window * lcl_GetTopmostParent( vcl::Window * pWindow )
 {
-    Window * pResult = 0;
-    Window * pCurrent = pWindow ? pWindow->GetParent() : 0;
+    vcl::Window * pResult = 0;
+    vcl::Window * pCurrent = pWindow ? pWindow->GetParent() : 0;
     while( pCurrent )
     {
         pResult = pCurrent;
@@ -636,7 +636,7 @@ void CustomAnimationCreateDialog::setPosition()
     else
     {
         // default position: aligned with right edge of parent
-        Window * pParent = lcl_GetTopmostParent( this );
+        vcl::Window * pParent = lcl_GetTopmostParent( this );
         if( pParent )
         {
             Point aPos( GetPosPixel());

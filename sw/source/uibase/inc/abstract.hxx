@@ -31,7 +31,7 @@ class SwInsertAbstractDlg : public SfxModalDialog
 protected:
 
 public:
-    SwInsertAbstractDlg( Window* pParent );
+    SwInsertAbstractDlg( vcl::Window* pParent );
 
     sal_uInt8   GetLevel() const;
     sal_uInt8   GetPara() const;

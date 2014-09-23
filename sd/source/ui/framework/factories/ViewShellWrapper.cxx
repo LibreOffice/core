@@ -207,7 +207,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
 
         if (mpViewShell.get() != NULL)
         {
-            ::Window* pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
+            ::vcl::Window* pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
             if (pWindow != NULL && mpViewShell->RelocateToParentWindow(pWindow))
             {
                 bResult = true;

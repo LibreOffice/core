@@ -215,7 +215,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
     {
         case FN_EDIT_REGION:
         {
-            Window* pParentWin = &GetView().GetViewFrame()->GetWindow();
+            vcl::Window* pParentWin = &GetView().GetViewFrame()->GetWindow();
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");

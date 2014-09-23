@@ -98,13 +98,13 @@ protected:
 
 public:
 
-                    ImplGrafMetricField( Window* pParent, const OUString& aCmd, const Reference< XFrame >& rFrame );
+                    ImplGrafMetricField( vcl::Window* pParent, const OUString& aCmd, const Reference< XFrame >& rFrame );
                     virtual ~ImplGrafMetricField();
 
     void            Update( const SfxPoolItem* pItem );
 };
 
-ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame ) :
+ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame ) :
     MetricField( pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_3DLOOK ),
     maCommand( rCmd ),
     mxFrame( rFrame )
@@ -251,7 +251,7 @@ protected:
 
 public:
 
-                            ImplGrafControl( Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame );
+                            ImplGrafControl( vcl::Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame );
                             virtual ~ImplGrafControl();
 
     void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
@@ -259,7 +259,7 @@ public:
 };
 
 ImplGrafControl::ImplGrafControl(
-    Window* pParent,
+    vcl::Window* pParent,
     const OUString& rCmd,
     const Reference< XFrame >& rFrame
 )   : Control( pParent, WB_TABSTOP )
@@ -321,13 +321,13 @@ private:
 
 public:
 
-                    ImplGrafModeControl( Window* pParent, const Reference< XFrame >& rFrame );
+                    ImplGrafModeControl( vcl::Window* pParent, const Reference< XFrame >& rFrame );
                     virtual ~ImplGrafModeControl();
 
     void            Update( const SfxPoolItem* pItem );
 };
 
-ImplGrafModeControl::ImplGrafModeControl( Window* pParent, const Reference< XFrame >& rFrame ) :
+ImplGrafModeControl::ImplGrafModeControl( vcl::Window* pParent, const Reference< XFrame >& rFrame ) :
     ListBox( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL ),
     mnCurPos( 0 ),
     mxFrame( rFrame )
@@ -410,7 +410,7 @@ void ImplGrafModeControl::ImplReleaseFocus()
 {
     if( SfxViewShell::Current() )
     {
-        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        vcl::Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
         if( pShellWnd )
             pShellWnd->GrabFocus();
@@ -489,7 +489,7 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
     }
 }
 
-Window* SvxGrafToolBoxControl::CreateItemWindow( Window *pParent )
+vcl::Window* SvxGrafToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return( new ImplGrafControl( pParent, m_aCommandURL, m_xFrame ) );
 }
@@ -576,7 +576,7 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
     }
 }
 
-Window* SvxGrafModeToolBoxControl::CreateItemWindow( Window *pParent )
+vcl::Window* SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return( new ImplGrafModeControl( pParent, m_xFrame ) );
 }

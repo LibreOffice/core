@@ -24,7 +24,7 @@
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/report/XReportDefinition.hpp>
 
-class Window;
+namespace vcl { class Window; }
 namespace dbaui
 {
     class DBSubComponentController;

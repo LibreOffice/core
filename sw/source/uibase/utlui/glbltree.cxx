@@ -144,7 +144,7 @@ void SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint&
         bValid = false;
 }
 
-SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
+SwGlobalTree::SwGlobalTree(vcl::Window* pParent, const ResId& rResId) :
 
     SvTreeListBox(pParent, rResId),
 

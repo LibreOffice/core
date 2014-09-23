@@ -69,7 +69,7 @@ namespace abp
 
 
 
-        bool invokeDialog( const Reference< XComponentContext >& _rxORB, class Window* _pParent,
+        bool invokeDialog( const Reference< XComponentContext >& _rxORB, class vcl::Window* _pParent,
             const Reference< XPropertySet >& _rxDataSource, AddressSettings& _rSettings )
         {
             _rSettings.aFieldMapping.clear();

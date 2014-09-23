@@ -72,7 +72,7 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
 
     virtual void                FillLayoutData() const SAL_OVERRIDE;
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
@@ -80,7 +80,7 @@ protected:
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
 
 public:
-                        TabControl( Window* pParent,
+                        TabControl( vcl::Window* pParent,
                                     WinBits nStyle = WB_STDTABCONTROL );
                         virtual ~TabControl();
 

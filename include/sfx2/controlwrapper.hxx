@@ -221,10 +221,10 @@ private:
     hide a control, if an item is unknown.
  */
 class SFX2_DLLPUBLIC DummyWindowWrapper:
-    public SingleControlWrapper< Window, void* >
+    public SingleControlWrapper< vcl::Window, void* >
 {
 public:
-    explicit            DummyWindowWrapper( Window& rWindow );
+    explicit            DummyWindowWrapper( vcl::Window& rWindow );
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
     virtual void        SetControlDontKnow( bool ) SAL_OVERRIDE;

@@ -29,7 +29,7 @@ class ScDocShell;
 class ScPreviewShell;
 class FmFormView;
 
-class ScPreview : public Window
+class ScPreview : public vcl::Window
 {
 private:
     ScMarkData::MarkedTabsType maSelectedTabs;
@@ -116,7 +116,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
 public:
-            ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh );
+            ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh );
             virtual ~ScPreview();
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

@@ -33,7 +33,7 @@
 namespace sd { namespace sidebar {
 
 MasterPagesSelector* RecentMasterPagesSelector::Create (
-    ::Window* pParent,
+    vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
@@ -57,7 +57,7 @@ MasterPagesSelector* RecentMasterPagesSelector::Create (
 }
 
 RecentMasterPagesSelector::RecentMasterPagesSelector (
-    ::Window* pParent,
+    vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer,

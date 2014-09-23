@@ -40,7 +40,7 @@ protected:
     virtual void    Modify() SAL_OVERRIDE;
 
 public:
-                    SdPagesField( Window* pParent,
+                    SdPagesField( vcl::Window* pParent,
                                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                   WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
                     virtual ~SdPagesField();
@@ -55,7 +55,7 @@ class SdTbxCtlDiaPages : public SfxToolBoxControl
 public:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 
     SFX_DECL_TOOLBOX_CONTROL();
 

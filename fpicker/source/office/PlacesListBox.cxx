@@ -53,7 +53,7 @@ void PlacesListBox_Impl::MouseButtonUp( const MouseEvent& rMEvt )
     mpParent->updateView( );
 }
 
-PlacesListBox::PlacesListBox( Window* pParent, SvtFileDialog* pFileDlg, const OUString& rTitle, WinBits nBits ) :
+PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, const OUString& rTitle, WinBits nBits ) :
     Control( pParent, nBits ),
     maPlaces( ),
     mpDlg( pFileDlg ),

@@ -18,7 +18,7 @@ class ScFTestDialog : public ScStatisticsTwoVariableDialog
 public:
     ScFTestDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        Window* pParent, ScViewData* pViewData );
+        vcl::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScFTestDialog();
 

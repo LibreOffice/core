@@ -73,10 +73,10 @@ friend class SfxStyleDialog;
     void    UpdateName_Impl(ListBox *, const OUString &rNew);
     void    SetDescriptionText_Impl();
 
-    SfxManageStyleSheetPage(Window *pParent, const SfxItemSet &rAttrSet );
+    SfxManageStyleSheetPage(vcl::Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SfxManageStyleSheetPage();
 
-    static SfxTabPage*  Create(Window *pParent, const SfxItemSet *rAttrSet );
+    static SfxTabPage*  Create(vcl::Window *pParent, const SfxItemSet *rAttrSet );
 
 protected:
     virtual bool        FillItemSet(SfxItemSet *) SAL_OVERRIDE;

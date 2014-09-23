@@ -47,7 +47,7 @@ class SwCondCollPage : public SfxTabPage
 
     bool                bNewTemplate;
 
-    SwCondCollPage(Window *pParent, const SfxItemSet &rSet);
+    SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwCondCollPage();
 
     virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
@@ -61,7 +61,7 @@ class SwCondCollPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
+    static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 
     virtual bool FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;

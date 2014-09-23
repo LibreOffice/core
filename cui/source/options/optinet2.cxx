@@ -96,7 +96,7 @@ using namespace ::sfx2;
 
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNoSpaceEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNoSpaceEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxNoSpaceEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
 }
@@ -152,7 +152,7 @@ bool SvxNoSpaceEdit::set_property(const OString &rKey, const OString &rValue)
 /*                                                                  */
 /********************************************************************/
 
-SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet)
+SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptProxyPage","cui/ui/optproxypage.ui", &rSet)
     , aProxyModePN("ooInetProxyType")
     , aHttpProxyPN("ooInetHTTPProxyName")
@@ -214,7 +214,7 @@ SvxProxyTabPage::~SvxProxyTabPage()
 {
 }
 
-SfxTabPage* SvxProxyTabPage::Create(Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SvxProxyTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxProxyTabPage(pParent, *rAttrSet);
 }
@@ -574,7 +574,7 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 /*                                                                  */
 /********************************************************************/
 
-SvxSecurityTabPage::SvxSecurityTabPage(Window* pParent, const SfxItemSet& rSet)
+SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptSecurityPage", "cui/ui/optsecuritypage.ui", &rSet)
     , mpSecOptions(new SvtSecurityOptions)
     , mpSecOptDlg(NULL)
@@ -853,7 +853,7 @@ void SvxSecurityTabPage::InitControls()
     }
 }
 
-SfxTabPage* SvxSecurityTabPage::Create(Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SvxSecurityTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxSecurityTabPage(pParent, *rAttrSet);
 }
@@ -1018,7 +1018,7 @@ struct SvxEMailTabPage_Impl
     MailerProgramCfg_Impl aMailConfig;
 };
 
-SvxEMailTabPage::SvxEMailTabPage(Window* pParent, const SfxItemSet& rSet)
+SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, "OptEmailPage", "cui/ui/optemailpage.ui", &rSet)
     , pImpl(new SvxEMailTabPage_Impl)
 {
@@ -1039,7 +1039,7 @@ SvxEMailTabPage::~SvxEMailTabPage()
 
 /* -------------------------------------------------------------------------*/
 
-SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage*  SvxEMailTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxEMailTabPage(pParent, *rAttrSet);
 }

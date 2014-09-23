@@ -28,7 +28,7 @@ class LineWidthValueSet
     : public ValueSet
 {
 public:
-    LineWidthValueSet (Window* pParent, const ResId& rResId);
+    LineWidthValueSet (vcl::Window* pParent, const ResId& rResId);
     virtual ~LineWidthValueSet (void);
 
     void SetUnit(OUString* str);

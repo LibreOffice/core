@@ -39,7 +39,7 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
                                       // starts from the cursor position
 
     EditView *      m_pEditView;
-    Window *        m_pWin;
+    vcl::Window *        m_pWin;
 
     bool            m_bStartChk;
     bool            m_bStartDone;
@@ -94,7 +94,7 @@ protected:
 
 
 public:
-    TextConvWrapper( Window* pWindow,
+    TextConvWrapper( vcl::Window* pWindow,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::lang::Locale& rSourceLocale,
             const ::com::sun::star::lang::Locale& rTargetLocale,

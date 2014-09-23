@@ -31,7 +31,7 @@
 
 // class ScFillSeriesDlg
 
-ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
+ScFillSeriesDlg::ScFillSeriesDlg( vcl::Window*       pParent,
                                   ScDocument&   rDocument,
                                   FillDir       eFillDir,
                                   FillCmd       eFillCmd,

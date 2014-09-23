@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-class Window;
+namespace vcl { class Window; }
 class ModelData_Impl;
 
 class SfxStoringHelper
@@ -82,7 +82,7 @@ public:
                                     const OUString& aDefUIName,
                                     bool bCanProceedFurther );
 
-    static Window* GetModelWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    static vcl::Window* GetModelWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 
 };
 

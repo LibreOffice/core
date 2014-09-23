@@ -28,12 +28,12 @@
 class FilterConfigItem;
 class SvStream;
 class Graphic;
-class Window;
+namespace vcl { class Window; }
 
 struct FltCallDialogParameter
 {
 
-    Window*     pWindow;
+    vcl::Window*     pWindow;
     ResMgr*     pResMgr;
     FieldUnit   eFieldUnit;
     OUString    aFilterExt;
@@ -41,7 +41,7 @@ struct FltCallDialogParameter
     // In and Out PropertySequence for all filter dialogs
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
 
-    FltCallDialogParameter( Window* pW, ResMgr* pRsMgr, FieldUnit eFiUni ) :
+    FltCallDialogParameter( vcl::Window* pW, ResMgr* pRsMgr, FieldUnit eFiUni ) :
         pWindow         ( pW ),
         pResMgr         ( pRsMgr ),
         eFieldUnit      ( eFiUni ) {};

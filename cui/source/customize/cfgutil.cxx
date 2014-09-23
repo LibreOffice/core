@@ -249,7 +249,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     return lStyles;
 }
 
-SfxConfigFunctionListBox::SfxConfigFunctionListBox(Window* pParent, WinBits nStyle)
+SfxConfigFunctionListBox::SfxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox( pParent, nStyle )
     , pCurEntry( 0 )
     , pStylesInfo( 0 )
@@ -263,7 +263,7 @@ SfxConfigFunctionListBox::SfxConfigFunctionListBox(Window* pParent, WinBits nSty
         LINK( this, SfxConfigFunctionListBox, TimerHdl ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSfxConfigFunctionListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxConfigFunctionListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -410,7 +410,7 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     FreeResource();
 }
 
-SfxConfigGroupListBox::SfxConfigGroupListBox(Window* pParent, WinBits nStyle)
+SfxConfigGroupListBox::SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
     , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), pStylesInfo(0)
 {
@@ -418,7 +418,7 @@ SfxConfigGroupListBox::SfxConfigGroupListBox(Window* pParent, WinBits nStyle)
     SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSfxConfigGroupListBox(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxConfigGroupListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 

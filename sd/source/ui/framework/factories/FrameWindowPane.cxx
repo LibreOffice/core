@@ -27,7 +27,7 @@ namespace sd { namespace framework {
 
 FrameWindowPane::FrameWindowPane (
     const Reference<XResourceId>& rxPaneId,
-    ::Window* pWindow)
+    vcl::Window* pWindow)
     : Pane(rxPaneId,pWindow)
 {
 }

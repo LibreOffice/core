@@ -174,7 +174,7 @@ bool DlgEditor::RemarkDialog()
 
 
 DlgEditor::DlgEditor (
-    Window& rWindow_, DialogWindowLayout& rLayout_,
+    vcl::Window& rWindow_, DialogWindowLayout& rLayout_,
     com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel,
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> xDialogModel
 )

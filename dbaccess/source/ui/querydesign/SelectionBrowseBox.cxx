@@ -97,7 +97,7 @@ namespace
     }
 }
 
-OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
+OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
                    :EditBrowseBox( pParent,EBBF_NOROWPICTURE, WB_3DLOOK, BROWSER_COLUMNSELECTION | BROWSER_KEEPSELECTION |  BROWSER_HIDESELECT |
                                   BROWSER_HIDECURSOR | BROWSER_HLINESFULL | BROWSER_VLINESFULL )
                    ,m_nSeekRow(0)

@@ -109,7 +109,7 @@ void ImplDestroySVData()
     pImplSVData = NULL;
 }
 
-Window* ImplGetDefaultWindow()
+vcl::Window* ImplGetDefaultWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpAppWin )
@@ -272,15 +272,15 @@ bool ImplInitAccessBridge()
     return true;
 }
 
-Window* ImplFindWindow( const SalFrame* pFrame, ::Point& rSalFramePos )
+vcl::Window* ImplFindWindow( const SalFrame* pFrame, ::Point& rSalFramePos )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Window*     pFrameWindow = pSVData->maWinData.mpFirstFrame;
+    vcl::Window*     pFrameWindow = pSVData->maWinData.mpFirstFrame;
     while ( pFrameWindow )
     {
         if ( pFrameWindow->ImplGetFrame() == pFrame )
         {
-            Window* pWindow = pFrameWindow->ImplFindWindow( rSalFramePos );
+            vcl::Window* pWindow = pFrameWindow->ImplFindWindow( rSalFramePos );
             if ( !pWindow )
                 pWindow = pFrameWindow->ImplGetWindow();
             rSalFramePos = pWindow->ImplFrameToOutput( rSalFramePos );

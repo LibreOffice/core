@@ -22,7 +22,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class SfxViewFrame;
 class SfxItemSet;
 
@@ -30,7 +30,7 @@ class ScAttrDlg : public SfxTabDialog
 {
 public:
                 ScAttrDlg( SfxViewFrame*     pFrame,
-                           Window*           pParent,
+                           vcl::Window*           pParent,
                            const SfxItemSet* pCellAttrs );
                 virtual ~ScAttrDlg();
 

@@ -78,7 +78,7 @@ public:
     void DeleteAnnotationsByAuthor( const OUString& sAuthor );
     void DeleteAllAnnotations();
 
-    void ExecuteAnnotationContextMenu( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, ::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu = false );
+    void ExecuteAnnotationContextMenu( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu = false );
 
     Color GetColorDark(sal_uInt16 aAuthorIndex);
     Color GetColorLight(sal_uInt16 aAuthorIndex);

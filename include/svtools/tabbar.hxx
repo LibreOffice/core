@@ -327,7 +327,7 @@ enum TabBarAllowRenamingReturnCode {
 struct TabBar_Impl;
 struct ImplTabBarItem;
 
-class SVT_DLLPUBLIC TabBar : public Window
+class SVT_DLLPUBLIC TabBar : public vcl::Window
 {
     friend class    ImplTabButton;
     friend class    ImplTabSizer;
@@ -404,7 +404,7 @@ public:
     static const sal_uInt16 PAGE_NOT_FOUND;
     static const sal_uInt16 INSERT_TAB_POS;
 
-                    TabBar( Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
+                    TabBar( vcl::Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
     virtual         ~TabBar();
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

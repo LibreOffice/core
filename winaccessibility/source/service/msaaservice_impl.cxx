@@ -147,7 +147,7 @@ Sequence< OUString > MSAAServiceImpl::getSupportedServiceNames() throw (RuntimeE
 }
 
 static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xAccMgr,
-                                             Window *pWindow, bool bShow)
+                                             vcl::Window *pWindow, bool bShow)
 {
     if ( pWindow )
     {
@@ -156,7 +156,7 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
         SAL_INFO( "iacc2", "Decide whether to register existing window with IAccessible2" );
 
         // Test for combo box - drop down floating windows first
-        Window * pParentWindow = pWindow->GetParent();
+        vcl::Window * pParentWindow = pWindow->GetParent();
 
         if ( pParentWindow )
         {
@@ -221,7 +221,7 @@ static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xA
 
     for ( sal_uInt16 i = 0; i < nTopWindowCount; i++ )
     {
-        Window* pTopWindow = Application::GetTopWindow( i );
+        vcl::Window* pTopWindow = Application::GetTopWindow( i );
         css::uno::Reference< css::accessibility::XAccessible > xAccessible = pTopWindow->GetAccessible();
         if ( xAccessible.is() )
         {

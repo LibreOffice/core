@@ -27,7 +27,7 @@
 
 // class SwFrmPagePreview -------------------------------------------------------
 
-class SVX_DLLPUBLIC SvxSwFrameExample : public Window
+class SVX_DLLPUBLIC SvxSwFrameExample : public vcl::Window
 {
     Color       m_aTransColor;      // transparency
     Color       m_aBgCol;           // background
@@ -73,7 +73,7 @@ protected:
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:
 
-    SvxSwFrameExample(Window* pParent, WinBits nStyle);
+    SvxSwFrameExample(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxSwFrameExample();
 
     inline void SetWrap(sal_uInt16 nW)          { nWrap     = nW; }

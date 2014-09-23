@@ -2517,7 +2517,7 @@ OQueryDesignView::~OQueryDesignView()
 {
     if ( m_pTableView )
         ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    boost::scoped_ptr<Window> aTemp(m_pSelectionBox);
+    boost::scoped_ptr<vcl::Window> aTemp(m_pSelectionBox);
     m_pSelectionBox = NULL;
 
 }
@@ -2776,7 +2776,7 @@ bool OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
         case EVENT_GETFOCUS:
 #if OSL_DEBUG_LEVEL > 0
             {
-                Window* pFocus = Application::GetFocusWindow();
+                vcl::Window* pFocus = Application::GetFocusWindow();
                 (void)pFocus;
             }
 #endif

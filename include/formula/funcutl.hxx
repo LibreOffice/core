@@ -34,7 +34,7 @@ class FORMULA_DLLPUBLIC RefEdit : public Edit
 private:
     Timer                     aTimer;
     IControlReferenceHandler* pAnyRefDlg; // parent dialog
-    Window*                   pLabelWidget;
+    vcl::Window*                   pLabelWidget;
 
     DECL_LINK( UpdateHdl, void* );
 
@@ -44,8 +44,8 @@ protected:
     virtual void LoseFocus() SAL_OVERRIDE;
 
 public:
-    RefEdit( Window* _pParent,IControlReferenceHandler* pParent, Window* pShrinkModeLabel, const ResId& rResId );
-    RefEdit( Window* _pParent, Window* pShrinkModeLabel, WinBits nStyle = WB_BORDER );
+    RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent, vcl::Window* pShrinkModeLabel, const ResId& rResId );
+    RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle = WB_BORDER );
 
     virtual ~RefEdit();
 
@@ -64,14 +64,14 @@ public:
 
     void         StartUpdateData();
 
-    void         SetReferences( IControlReferenceHandler* pDlg, Window *pLabelWidget );
+    void         SetReferences( IControlReferenceHandler* pDlg, vcl::Window *pLabelWidget );
 
     IControlReferenceHandler* GetRefDialog()
     {
         return pAnyRefDlg;
     }
 
-    Window*      GetLabelWidgetForShrinkMode()
+    vcl::Window*      GetLabelWidgetForShrinkMode()
     {
         return pLabelWidget;
     }
@@ -95,7 +95,7 @@ protected:
     virtual void LoseFocus() SAL_OVERRIDE;
 
 public:
-    RefButton(Window* _pParent, WinBits nStyle = 0);
+    RefButton(vcl::Window* _pParent, WinBits nStyle = 0);
     void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
     void SetStartImage();
     void SetEndImage();

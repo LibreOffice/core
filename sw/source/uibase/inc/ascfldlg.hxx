@@ -50,7 +50,7 @@ class SwAsciiFilterDlg : public SfxModalDialog
 public:
     // CTOR:    for import - pStream is the inputstream
     //          for export - pStream must be 0
-    SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
+    SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
                         SvStream* pStream );
     virtual ~SwAsciiFilterDlg();
 

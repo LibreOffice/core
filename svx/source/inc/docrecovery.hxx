@@ -299,12 +299,12 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 };
 
 
-class PluginProgressWindow : public Window
+class PluginProgressWindow : public vcl::Window
 {
     private:
         css::uno::Reference< css::lang::XComponent > m_xProgress;
     public:
-        PluginProgressWindow(      Window*                                       pParent  ,
+        PluginProgressWindow(      vcl::Window*                                       pParent  ,
                              const css::uno::Reference< css::lang::XComponent >& xProgress);
         virtual ~PluginProgressWindow();
 };
@@ -325,7 +325,7 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
     // native interface
     public:
         /** @short  TODO */
-        PluginProgress(      Window*                                             pParent,
+        PluginProgress(      vcl::Window*                                             pParent,
                        const css::uno::Reference< css::uno::XComponentContext >& xContext  );
 
 
@@ -392,7 +392,7 @@ class SaveDialog : public Dialog
                     and the current list of open documents,
                     which should be shown inside this dialog.
          */
-        SaveDialog(Window* pParent, RecoveryCore* pCore);
+        SaveDialog(vcl::Window* pParent, RecoveryCore* pCore);
 
         DECL_LINK(OKButtonHdl, void*);
 };
@@ -403,7 +403,7 @@ class SaveProgressDialog : public ModalDialog
     // member
     private:
         OUString      m_aProgrBaseTxt;
-        Window*       m_pProgrParent;
+        vcl::Window*       m_pProgrParent;
 
         // @short   TODO
         RecoveryCore* m_pCore;
@@ -425,7 +425,7 @@ class SaveProgressDialog : public ModalDialog
             @param  pCore
                     used to start emegrency save.
          */
-        SaveProgressDialog(Window*       pParent,
+        SaveProgressDialog(vcl::Window*       pParent,
                            RecoveryCore* pCore  );
 
         /** @short  start the emergency save operation. */
@@ -500,7 +500,7 @@ class RecoveryDialog : public Dialog
     private:
         FixedText*      m_pTitleFT;
         FixedText*      m_pDescrFT;
-        Window*         m_pProgrParent;
+        vcl::Window*         m_pProgrParent;
         RecovDocList*   m_pFileListLB;
         PushButton*     m_pNextBtn;
         CancelButton*   m_pCancelBtn;
@@ -528,7 +528,7 @@ class RecoveryDialog : public Dialog
     // member
     public:
         /** @short TODO */
-        RecoveryDialog(Window*       pParent,
+        RecoveryDialog(vcl::Window*       pParent,
                        RecoveryCore* pCore  );
 
         virtual ~RecoveryDialog();
@@ -575,7 +575,7 @@ class BrokenRecoveryDialog : public ModalDialog
 
 
         /** @short TODO */
-        BrokenRecoveryDialog(Window*       pParent        ,
+        BrokenRecoveryDialog(vcl::Window*       pParent        ,
                              RecoveryCore* pCore          ,
                              bool      bBeforeRecovery);
 

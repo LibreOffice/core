@@ -91,7 +91,7 @@ namespace frm
         */
         static ONavigationBarPeer* Create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
-            Window* _pParentWindow,
+            vcl::Window* _pParentWindow,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel
         );
 

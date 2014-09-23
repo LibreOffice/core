@@ -32,12 +32,12 @@
 #include <SwRewriter.hxx>
 
 // masqueraded copy constructor
-SwEditShell::SwEditShell( SwEditShell& rEdSH, Window *pWindow )
+SwEditShell::SwEditShell( SwEditShell& rEdSH, vcl::Window *pWindow )
     : SwCrsrShell( rEdSH, pWindow )
 {
 }
 
-SwEditShell::SwEditShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
+SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOptions )
     : SwCrsrShell( rDoc, pWindow, pOptions )
 {
     GetDoc()->GetIDocumentUndoRedo().DoUndo(true);

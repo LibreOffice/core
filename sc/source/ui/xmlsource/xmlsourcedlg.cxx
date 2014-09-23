@@ -67,7 +67,7 @@ OUString getXPath(
 }
 
 ScXMLSourceDlg::ScXMLSourceDlg(
-    SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc)
+    SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent, ScDocument* pDoc)
     : ScAnyRefDlg(pB, pCW, pParent, "XMLSourceDialog",
         "modules/scalc/ui/xmlsourcedialog.ui")
     , mpCurRefEntry(NULL)

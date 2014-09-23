@@ -52,7 +52,7 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
     }
 }
 
-ScColBar::ScColBar( Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
+ScColBar::ScColBar( vcl::Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
                     ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
             ScHeaderControl( pParent, pEng, MAXCOL+1, false ),
             pViewData( pData ),
@@ -211,7 +211,7 @@ bool ScColBar::IsLayoutRTL() const        // overloaded only for columns
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
 
-ScRowBar::ScRowBar( Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
+ScRowBar::ScRowBar( vcl::Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
                     ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
             ScHeaderControl( pParent, pEng, MAXROW+1, true ),
             pViewData( pData ),

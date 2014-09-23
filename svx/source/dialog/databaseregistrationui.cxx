@@ -29,7 +29,7 @@
 
 namespace svx
 {
-    sal_uInt16 administrateDatabaseRegistration( Window* _parentWindow )
+    sal_uInt16 administrateDatabaseRegistration( vcl::Window* _parentWindow )
     {
         sal_uInt16 nResult = RET_CANCEL;
 

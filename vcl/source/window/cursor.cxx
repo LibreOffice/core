@@ -38,12 +38,12 @@ struct ImplCursorData
     unsigned char   mnDirection;        // indicates writing direction
     sal_uInt16          mnStyle;            // Cursor-Style
     bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
-    Window*         mpWindow;           // Zugeordnetes Windows
+    vcl::Window*         mpWindow;           // Zugeordnetes Windows
 };
 
 static void ImplCursorInvert( ImplCursorData* pData )
 {
-    Window* pWindow  = pData->mpWindow;
+    vcl::Window* pWindow  = pData->mpWindow;
     bool    bMapMode = pWindow->IsMapModeEnabled();
     pWindow->EnableMapMode( false );
     sal_uInt16 nInvertStyle;
@@ -119,7 +119,7 @@ void vcl::Cursor::ImplDraw()
 {
     if ( mpData && mpData->mpWindow && !mpData->mbCurVisible )
     {
-        Window* pWindow         = mpData->mpWindow;
+        vcl::Window* pWindow         = mpData->mpWindow;
         mpData->maPixPos        = pWindow->LogicToPixel( maPos );
         mpData->maPixSize       = pWindow->LogicToPixel( maSize );
         mpData->mnPixSlant      = pWindow->LogicToPixel( Size( mnSlant, 0 ) ).Width();
@@ -152,7 +152,7 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
 {
     if ( mbVisible )
     {
-        Window* pWindow;
+        vcl::Window* pWindow;
         if ( mpWindow )
             pWindow = mpWindow;
         else
@@ -317,7 +317,7 @@ void vcl::Cursor::Hide()
     }
 }
 
-void vcl::Cursor::SetWindow( Window* pWindow )
+void vcl::Cursor::SetWindow( vcl::Window* pWindow )
 {
     if ( mpWindow != pWindow )
     {

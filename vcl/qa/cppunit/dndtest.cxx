@@ -49,7 +49,7 @@ using namespace ::com::sun::star::datatransfer::dnd;
 class MyWin : public WorkWindow
 {
 public:
-                MyWin( Window* pParent, WinBits nWinStyle );
+                MyWin( vcl::Window* pParent, WinBits nWinStyle );
 
     void        MouseMove( const MouseEvent& rMEvt );
     void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -62,11 +62,11 @@ public:
 
 class MyDragAndDropListener: public ::cppu::WeakImplHelper3 < XDropTargetListener, XDragGestureListener, XDragSourceListener >
 {
-    Window * m_pWindow;
+    vcl::Window * m_pWindow;
 
 public:
 
-    MyDragAndDropListener( Window * pWindow ) : m_pWindow( pWindow ) {};
+    MyDragAndDropListener( vcl::Window * pWindow ) : m_pWindow( pWindow ) {};
 
     virtual void SAL_CALL dragGestureRecognized( const DragGestureEvent& dge ) throw(RuntimeException);
     virtual void SAL_CALL drop( const DropTargetDropEvent& dtde ) throw(RuntimeException);
@@ -87,7 +87,7 @@ class MyInfoBox : public InfoBox
 
 public:
 
-    MyInfoBox( Window* pParent );
+    MyInfoBox( vcl::Window* pParent );
 };
 
 class MyListBox : public ListBox
@@ -95,7 +95,7 @@ class MyListBox : public ListBox
 
 public:
 
-    MyListBox( Window* pParent );
+    MyListBox( vcl::Window* pParent );
 };
 
 class StringTransferable : public ::cppu::WeakImplHelper1< XTransferable >
@@ -152,7 +152,7 @@ void VclDnDTest::testDnD()
     aListBox.Show();
 }
 
-MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
+MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
 {
     Reference< XDropTargetListener > xListener = new MyDragAndDropListener( this );
@@ -258,7 +258,7 @@ void SAL_CALL MyDragAndDropListener::disposing( const EventObject& ) throw(Runti
 {
 }
 
-MyInfoBox::MyInfoBox( Window* pParent ) : InfoBox( pParent,
+MyInfoBox::MyInfoBox( vcl::Window* pParent ) : InfoBox( pParent,
     OUString("dragging over this box should result in another window id in the drag log.") )
 {
     Reference< XDropTargetListener > xListener = new MyDragAndDropListener( this );
@@ -275,7 +275,7 @@ MyInfoBox::MyInfoBox( Window* pParent ) : InfoBox( pParent,
         xRecognizer->addDragGestureListener( Reference< XDragGestureListener > ( xListener, UNO_QUERY ) );
 };
 
-MyListBox::MyListBox( Window* pParent ) : ListBox( pParent )
+MyListBox::MyListBox( vcl::Window* pParent ) : ListBox( pParent )
 {
     Reference< XDropTargetListener > xListener = new MyDragAndDropListener( this );
 

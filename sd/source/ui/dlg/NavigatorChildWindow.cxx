@@ -46,7 +46,7 @@ void RequestNavigatorUpdate (SfxBindings* pBindings)
 }
 
 NavigatorChildWindow::NavigatorChildWindow (
-    ::Window* pParent,
+    vcl::Window* pParent,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* )

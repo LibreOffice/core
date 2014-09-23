@@ -63,7 +63,7 @@ namespace com
 
 class SvBorder;
 class SfxWorkWindow;
-class Window;
+namespace vcl { class Window; }
 class SfxFrame;
 class SfxFrame_Impl;
 class SfxObjectShell;
@@ -105,7 +105,7 @@ private:
     SfxFrame*           pParentFrame;
     SfxFrameArr_Impl*   pChildArr;
     SfxFrame_Impl*      pImp;
-    Window*             pWindow;
+    vcl::Window*             pWindow;
 
 protected:
     bool                Close();
@@ -114,7 +114,7 @@ protected:
     SAL_DLLPRIVATE void RemoveChildFrame_Impl( SfxFrame* );
 
                         SfxFrame( );    // not implemented
-    SAL_DLLPRIVATE      SfxFrame( Window& i_rContainerWindow, bool bHidden );
+    SAL_DLLPRIVATE      SfxFrame( vcl::Window& i_rContainerWindow, bool bHidden );
 
 public:
                         TYPEINFO();
@@ -122,9 +122,9 @@ public:
     static SfxFrame*    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
     static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                         CreateBlankFrame();
-    static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nViewId, bool bHidden );
+    static SfxFrame*    Create( SfxObjectShell& rDoc, vcl::Window& rWindow, sal_uInt16 nViewId, bool bHidden );
 
-    Window&             GetWindow() const { return *pWindow;}
+    vcl::Window&             GetWindow() const { return *pWindow;}
     void                CancelTransfers( bool bCancelLoadEnv = true );
     bool                DoClose();
     sal_uInt16          GetChildFrameCount() const;

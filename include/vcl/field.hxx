@@ -483,7 +483,7 @@ public:
 class VCL_DLLPUBLIC PatternField : public SpinField, public PatternFormatter
 {
 public:
-    explicit                PatternField( Window* pParent, WinBits nWinStyle );
+    explicit                PatternField( vcl::Window* pParent, WinBits nWinStyle );
     virtual                 ~PatternField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -502,8 +502,8 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-    explicit                NumericField( Window* pParent, WinBits nWinStyle );
-    explicit                NumericField( Window* pParent, const ResId& );
+    explicit                NumericField( vcl::Window* pParent, WinBits nWinStyle );
+    explicit                NumericField( vcl::Window* pParent, const ResId& );
     virtual                 ~NumericField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -532,8 +532,8 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-    explicit                MetricField( Window* pParent, WinBits nWinStyle );
-    explicit                MetricField( Window* pParent, const ResId& );
+    explicit                MetricField( vcl::Window* pParent, WinBits nWinStyle );
+    explicit                MetricField( vcl::Window* pParent, const ResId& );
     virtual                 ~MetricField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -600,7 +600,7 @@ public:
 class VCL_DLLPUBLIC CurrencyField : public SpinField, public CurrencyFormatter
 {
 public:
-    CurrencyField( Window* pParent, WinBits nWinStyle );
+    CurrencyField( vcl::Window* pParent, WinBits nWinStyle );
     virtual ~CurrencyField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -631,8 +631,8 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-    explicit                DateField( Window* pParent, WinBits nWinStyle );
-    explicit                DateField( Window* pParent, const ResId& );
+    explicit                DateField( vcl::Window* pParent, WinBits nWinStyle );
+    explicit                DateField( vcl::Window* pParent, const ResId& );
     virtual                 ~DateField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -667,8 +667,8 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-    explicit                TimeField( Window* pParent, WinBits nWinStyle );
-    explicit                TimeField( Window* pParent, const ResId& );
+    explicit                TimeField( vcl::Window* pParent, WinBits nWinStyle );
+    explicit                TimeField( vcl::Window* pParent, const ResId& );
     virtual                 ~TimeField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -698,7 +698,7 @@ public:
 class VCL_DLLPUBLIC PatternBox : public ComboBox, public PatternFormatter
 {
 public:
-                            PatternBox( Window* pParent, WinBits nWinStyle );
+                            PatternBox( vcl::Window* pParent, WinBits nWinStyle );
                             virtual ~PatternBox();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -717,7 +717,7 @@ public:
 class VCL_DLLPUBLIC NumericBox : public ComboBox, public NumericFormatter
 {
 public:
-    explicit                NumericBox( Window* pParent, WinBits nWinStyle );
+    explicit                NumericBox( vcl::Window* pParent, WinBits nWinStyle );
     virtual                 ~NumericBox();
 
     virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
@@ -741,7 +741,7 @@ public:
 class VCL_DLLPUBLIC MetricBox : public ComboBox, public MetricFormatter
 {
 public:
-    explicit                MetricBox( Window* pParent, WinBits nWinStyle );
+    explicit                MetricBox( vcl::Window* pParent, WinBits nWinStyle );
     virtual                 ~MetricBox();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -774,7 +774,7 @@ public:
 class VCL_DLLPUBLIC CurrencyBox : public ComboBox, public CurrencyFormatter
 {
 public:
-    explicit                CurrencyBox( Window* pParent, WinBits nWinStyle );
+    explicit                CurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
     virtual                 ~CurrencyBox();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -795,7 +795,7 @@ public:
 class VCL_DLLPUBLIC DateBox : public ComboBox, public DateFormatter
 {
 public:
-    explicit                DateBox( Window* pParent, WinBits nWinStyle );
+    explicit                DateBox( vcl::Window* pParent, WinBits nWinStyle );
     virtual                 ~DateBox();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -815,7 +815,7 @@ public:
 class VCL_DLLPUBLIC TimeBox : public ComboBox, public TimeFormatter
 {
 public:
-    explicit                TimeBox( Window* pParent, WinBits nWinStyle );
+    explicit                TimeBox( vcl::Window* pParent, WinBits nWinStyle );
     virtual                 ~TimeBox();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

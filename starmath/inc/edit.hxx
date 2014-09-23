@@ -45,7 +45,7 @@ class CommandEvent;
 
 /**************************************************************************/
 
-class SmEditWindow : public Window, public DropTargetHelper
+class SmEditWindow : public vcl::Window, public DropTargetHelper
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >  xAccessible;

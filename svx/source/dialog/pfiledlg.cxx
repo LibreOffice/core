@@ -49,7 +49,7 @@ OUString SvxPluginFileDlg::GetPath() const
     return maFileDlg.GetPath();
 }
 
-SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
+SvxPluginFileDlg::SvxPluginFileDlg (vcl::Window *, sal_uInt16 nKind )
     : maFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, SFXWB_INSERT)
 {
     // set title of the dialogwindow

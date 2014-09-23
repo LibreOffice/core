@@ -54,7 +54,7 @@ private:
     SwFldMgr*               pMgr;
     SwWrtShell*             pSh;
     sfx2::FileDialogHelper* pFileDlg;
-    Window*                 pOldDefDlgParent;
+    vcl::Window*                 pOldDefDlgParent;
 
     DECL_LINK(OKHdl, void *);
     DECL_LINK(PrevHdl, void *);
@@ -69,7 +69,7 @@ private:
     void            SetFld();
 
 public:
-    SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
+    SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh);
     virtual ~SwJavaEditDialog();
 
     OUString GetScriptText() const { return aText; }

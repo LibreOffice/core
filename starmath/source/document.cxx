@@ -431,7 +431,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     sal_uLong nOldDrawMode = DRAWMODE_DEFAULT;
     bool bRestoreDrawMode = false;
     if (OUTDEV_WINDOW == rDev.GetOutDevType() &&
-        ((Window &) rDev).GetSettings().GetStyleSettings().GetHighContrastMode())
+        ((vcl::Window &) rDev).GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         nOldDrawMode = rDev.GetDrawMode();
         rDev.SetDrawMode( DRAWMODE_DEFAULT );

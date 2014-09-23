@@ -44,7 +44,7 @@ protected:
     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& m_xStorage;
     comphelper::EmbeddedObjectContainer aCnt;
 
-    InsertObjectDialog_Impl(Window * pParent, const OString& rID,
+    InsertObjectDialog_Impl(vcl::Window * pParent, const OString& rID,
         const OUString& rUIXMLDescription,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
 public:
@@ -83,7 +83,7 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
         { return m_pRbNewObject->IsChecked(); }
 
 public:
-    SvInsertOleDlg( Window* pParent,
+    SvInsertOleDlg( vcl::Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
         const SvObjectServerList* pServers = NULL );
     virtual short Execute() SAL_OVERRIDE;
@@ -106,7 +106,7 @@ private:
     OUString GetPlugInOptions() const { return m_pEdPluginsOptions->GetText(); }
 
 public:
-    SvInsertPlugInDialog(Window* pParent,
+    SvInsertPlugInDialog(vcl::Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
     virtual ~SvInsertPlugInDialog();
     virtual short Execute() SAL_OVERRIDE;
@@ -139,9 +139,9 @@ private:
     void Init();
 
 public:
-    SfxInsertFloatingFrameDialog(Window *pParent,
+    SfxInsertFloatingFrameDialog(vcl::Window *pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
-    SfxInsertFloatingFrameDialog( Window* pParent,
+    SfxInsertFloatingFrameDialog( vcl::Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
     virtual short Execute() SAL_OVERRIDE;
 };

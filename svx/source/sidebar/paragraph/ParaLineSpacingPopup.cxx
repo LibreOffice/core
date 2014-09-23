@@ -24,7 +24,7 @@
 namespace svx { namespace sidebar {
 
 ParaLineSpacingPopup::ParaLineSpacingPopup (
-    Window* pParent,
+    vcl::Window* pParent,
     const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator)
     : Popup(
         pParent,

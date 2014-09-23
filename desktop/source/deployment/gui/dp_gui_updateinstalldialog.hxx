@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 }}}}
 
-class Window;
+namespace vcl { class Window; }
 
 namespace dp_gui {
 
@@ -56,7 +56,7 @@ public:
        @param parent
        the parent window, may be null
     */
-    UpdateInstallDialog(Window * parent, std::vector<UpdateData> & aVecUpdateData,
+    UpdateInstallDialog(vcl::Window * parent, std::vector<UpdateData> & aVecUpdateData,
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xCtx);
 
     virtual ~UpdateInstallDialog();

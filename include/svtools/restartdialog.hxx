@@ -15,7 +15,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <svtools/svtdllapi.h>
 
-class Window;
+namespace vcl { class Window; }
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
@@ -38,7 +38,7 @@ enum RestartReason {
 SVT_DLLPUBLIC void executeRestartDialog(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         const & context,
-    Window * parent, RestartReason reason);
+    vcl::Window * parent, RestartReason reason);
 
 }
 

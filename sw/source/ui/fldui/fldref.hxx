@@ -74,11 +74,11 @@ protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
-                        SwFldRefPage(Window* pParent, const SfxItemSet& rSet);
+                        SwFldRefPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
                         virtual ~SwFldRefPage();
 
-    static SfxTabPage*  Create(Window* pParent, const SfxItemSet* rAttrSet);
+    static SfxTabPage*  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

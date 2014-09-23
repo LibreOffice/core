@@ -38,7 +38,7 @@ namespace rptui
     class OSectionView;
     class OSectionWindow;
 
-    class OReportSection :   public Window
+    class OReportSection :   public vcl::Window
                         ,   public ::cppu::BaseMutex
                         ,   public ::comphelper::OPropertyChangeListener
                         ,   public DropTargetHelper

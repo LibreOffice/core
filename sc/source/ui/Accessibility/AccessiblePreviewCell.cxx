@@ -211,7 +211,7 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const throw (uno::Ru
     if (mpViewShell)
     {
         mpViewShell->GetLocationData().GetCellPosition( maCellAddress, aCellRect );
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
             Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);

@@ -126,7 +126,7 @@ namespace svxform
         using SvTreeListBox::ExecuteDrop;
 
     public:
-        DataTreeListBox( Window* pParent, WinBits nBits );
+        DataTreeListBox( vcl::Window* pParent, WinBits nBits );
         virtual ~DataTreeListBox();
 
         virtual PopupMenu*      CreateContextMenu( void ) SAL_OVERRIDE;
@@ -286,7 +286,7 @@ namespace svxform
         virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     public:
-        XFormsPage( Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
+        XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
         virtual ~XFormsPage();
 
         virtual void                Resize() SAL_OVERRIDE;
@@ -321,7 +321,7 @@ namespace svxform
     typedef std::vector< XFormsPage* >          PageList;
     typedef ::rtl::Reference < DataListener >   DataListener_ref;
 
-    class DataNavigatorWindow : public Window, public VclBuilderContainer
+    class DataNavigatorWindow : public vcl::Window, public VclBuilderContainer
     {
     private:
         ListBox*                    m_pModelsBox;
@@ -369,7 +369,7 @@ namespace svxform
         virtual Size                GetOptimalSize() const SAL_OVERRIDE;
 
     public:
-        DataNavigatorWindow( Window* pParent, SfxBindings* pBindings );
+        DataNavigatorWindow( vcl::Window* pParent, SfxBindings* pBindings );
         virtual ~DataNavigatorWindow();
 
         void                        SetDocModified();
@@ -397,7 +397,7 @@ namespace svxform
         virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment ) SAL_OVERRIDE;
 
     public:
-        DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, Window* pParent );
+        DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, vcl::Window* pParent );
         virtual ~DataNavigator();
 
         using Window::Update;
@@ -412,7 +412,7 @@ namespace svxform
     class SVX_DLLPUBLIC DataNavigatorManager : public SfxChildWindow
     {
     public:
-        SVX_DLLPRIVATE DataNavigatorManager( Window* pParent, sal_uInt16 nId,
+        SVX_DLLPRIVATE DataNavigatorManager( vcl::Window* pParent, sal_uInt16 nId,
                               SfxBindings* pBindings, SfxChildWinInfo* pInfo );
         SFX_DECL_CHILDWINDOW( DataNavigatorManager );
     };
@@ -468,7 +468,7 @@ namespace svxform
 
     public:
         AddDataItemDialog(
-            Window* pParent, ItemNode* _pNode, const XFormsUIHelper1_ref& _rUIHelper );
+            vcl::Window* pParent, ItemNode* _pNode, const XFormsUIHelper1_ref& _rUIHelper );
         virtual ~AddDataItemDialog();
 
         void                InitText( DataItemType _eType );
@@ -495,7 +495,7 @@ namespace svxform
         DECL_LINK(OKHdl, void *);
 
     public:
-        AddConditionDialog(Window* pParent,
+        AddConditionDialog(vcl::Window* pParent,
             const OUString& _rPropertyName, const XPropertySet_ref& _rBinding);
 
         XFormsUIHelper1_ref GetUIHelper() const { return m_xUIHelper; }
@@ -548,7 +548,7 @@ namespace svxform
         DECL_LINK(OKHdl, void *);
 
     public:
-        ManageNamespaceDialog(Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit);
+        ManageNamespaceDialog(vcl::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit);
 
         void SetNamespace(const OUString& _rPrefix, const OUString& _rURL)
         {
@@ -590,7 +590,7 @@ namespace svxform
         void                FillAllBoxes();
 
     public:
-        AddSubmissionDialog( Window* pParent, ItemNode* _pNode,
+        AddSubmissionDialog( vcl::Window* pParent, ItemNode* _pNode,
             const XFormsUIHelper1_ref& _rUIHelper );
         virtual ~AddSubmissionDialog();
 
@@ -605,7 +605,7 @@ namespace svxform
         CheckBox* m_pModifyCB;
 
     public:
-        AddModelDialog( Window* pParent, bool _bEdit );
+        AddModelDialog( vcl::Window* pParent, bool _bEdit );
 
         OUString         GetName() const { return m_pNameED->GetText(); }
         void             SetName( const OUString& _rName ) { m_pNameED->SetText( _rName );}
@@ -629,7 +629,7 @@ namespace svxform
         DECL_LINK(FilePickerHdl, void *);
 
     public:
-        AddInstanceDialog( Window* pParent, bool _bEdit );
+        AddInstanceDialog( vcl::Window* pParent, bool _bEdit );
 
         void SetRenameMode()
         {
@@ -650,7 +650,7 @@ namespace svxform
     class LinkedInstanceWarningBox : public MessageDialog
     {
     public:
-        LinkedInstanceWarningBox( Window* pParent );
+        LinkedInstanceWarningBox( vcl::Window* pParent );
     };
 
 

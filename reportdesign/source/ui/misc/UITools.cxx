@@ -648,7 +648,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE }
     };
-    Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
+    vcl::Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<FontList> pFontList(new FontList( pParent ));
     XColorListRef pColorList( XColorList::CreateStdColorList() );
@@ -752,7 +752,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
 
     ::boost::shared_ptr<rptui::OReportModel> pModel  = ::reportdesign::OReportDefinition::getSdrModel(_xShape->getSection()->getReportDefinition());
 
-    Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
+    vcl::Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
 
     bool bSuccess = false;
     try
@@ -843,7 +843,7 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
 }
 
 
-void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,Window*> _rMemFunc)
+void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*> _rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
     SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : NULL;
@@ -1001,7 +1001,7 @@ void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,boo
         rSectionView.InsertObjectAtView(_pControl,*rSectionView.GetSdrPageView(),SDRINSERT_ADDMARK);
 }
 
-void setZoomFactor(const Fraction& _aZoom,Window& _rWindow)
+void setZoomFactor(const Fraction& _aZoom, vcl::Window& _rWindow)
 {
     MapMode aMapMode( _rWindow.GetMapMode() );
     aMapMode.SetScaleX(_aZoom);
@@ -1027,7 +1027,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
     {
         xFactory = _xContext->getServiceManager();
         xServiceFactory.set(xFactory,uno::UNO_QUERY);
-        Window* pParent = VCLUnoHelper::GetWindow( _xInspectorWindow );
+        vcl::Window* pParent = VCLUnoHelper::GetWindow( _xInspectorWindow );
 
         uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext("org.libreoffice.report.pentaho.SOFunctionManager",_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )

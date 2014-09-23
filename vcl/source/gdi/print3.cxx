@@ -789,7 +789,7 @@ void PrinterController::resetPrinterOptions( bool i_bFileOutput )
     mpImplData->mpPrinter->SetPrinterOptions( aOpt );
 }
 
-bool PrinterController::setupPrinter( Window* i_pParent )
+bool PrinterController::setupPrinter( vcl::Window* i_pParent )
 {
     bool bRet = false;
     if( mpImplData->mpPrinter.get() )

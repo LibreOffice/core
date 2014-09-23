@@ -3245,7 +3245,7 @@ sal_uLong EasyFile::close()
 }
 
 // This class helps reporting errors during file i/o
-HtmlErrorContext::HtmlErrorContext(Window *_pWin)
+HtmlErrorContext::HtmlErrorContext(vcl::Window *_pWin)
 : ErrorContext(_pWin)
 {
     mnResId = 0;

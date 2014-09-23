@@ -1830,7 +1830,7 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
     if( !pEnv || !*pEnv )
     {
         int ret = XGrabPointer( GetDisplay(),
-                                (XLIB_Window)pEnvData->aWindow,
+                                (::Window)pEnvData->aWindow,
                                 False,
                                 PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
                                 GrabModeAsync,
@@ -1889,7 +1889,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
 {
     if( pEvent->type == XLIB_KeyPress || pEvent->type == KeyRelease )
     {
-        XLIB_Window aWindow = pEvent->xkey.window;
+        ::Window aWindow = pEvent->xkey.window;
 
         std::list< SalFrame* >::const_iterator it;
         for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
@@ -1969,7 +1969,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
     for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
     {
         X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
-        XLIB_Window aDispatchWindow = pEvent->xany.window;
+        ::Window aDispatchWindow = pEvent->xany.window;
         if( pFrame->GetWindow() == aDispatchWindow
             || pFrame->GetShellWindow() == aDispatchWindow
             || pFrame->GetForeignParent() == aDispatchWindow

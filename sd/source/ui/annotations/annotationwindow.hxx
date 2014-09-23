@@ -100,7 +100,7 @@ class AnnotationWindow : public FloatingWindow
         DECL_LINK(ScrollHdl, ScrollBar*);
 
     public:
-        AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, ::Window* pParent );
+        AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent );
         virtual ~AnnotationWindow();
 
         void StartEdit();

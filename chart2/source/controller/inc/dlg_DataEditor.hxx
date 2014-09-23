@@ -42,7 +42,7 @@ class DataBrowser;
 class DataEditor : public ModalDialog
 {
 public:
-    DataEditor( Window* pParent,
+    DataEditor( vcl::Window* pParent,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XChartDocument > & xChartDoc,
                 const ::com::sun::star::uno::Reference<
@@ -102,9 +102,9 @@ private:
 
         @note this code is taken from dbaccess/source/ui/inc/UITools.hxx
     */
-    void notifySystemWindow( Window* pWindow,
-                             Window* pToRegister,
-                             ::comphelper::mem_fun1_t< TaskPaneList, Window* > rMemFunc );
+    void notifySystemWindow( vcl::Window* pWindow,
+                             vcl::Window* pToRegister,
+                             ::comphelper::mem_fun1_t< TaskPaneList, vcl::Window* > rMemFunc );
 };
 
 } // namespace chart

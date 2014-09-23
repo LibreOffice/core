@@ -114,7 +114,7 @@ bool GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 // - GalleryBrowser1 -
 
 GalleryBrowser1::GalleryBrowser1(
-    Window* pParent,
+    vcl::Window* pParent,
     const ResId& rResId,
     Gallery* pGallery,
     const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
@@ -516,7 +516,7 @@ void GalleryBrowser1::ShowContextMenu()
     Application::PostUserEvent( LINK( this, GalleryBrowser1, ShowContextMenuHdl ), this );
 }
 
-bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
+bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 {
     bool bRet = false;
     if (maKeyInputHandler)

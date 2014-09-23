@@ -396,7 +396,7 @@ void DocumentFocusListener::detachRecursive(
  * page tabs in gtk are widgets, so we need to simulate focus events for those
  */
 
-static void handle_tabpage_activated(Window *pWindow)
+static void handle_tabpage_activated(vcl::Window *pWindow)
 {
     uno::Reference< accessibility::XAccessible > xAccessible =
         pWindow->GetAccessible();
@@ -436,7 +436,7 @@ static void notify_toolbox_item_focus(ToolBox *pToolBox)
         atk_wrapper_focus_tracker_notify_when_idle( xContext->getAccessibleChild( nPos ) );
 }
 
-static void handle_toolbox_highlight(Window *pWindow)
+static void handle_toolbox_highlight(vcl::Window *pWindow)
 {
     ToolBox *pToolBox = static_cast <ToolBox *> (pWindow);
 
@@ -451,7 +451,7 @@ static void handle_toolbox_highlight(Window *pWindow)
     notify_toolbox_item_focus(pToolBox);
 }
 
-static void handle_toolbox_highlightoff(Window *pWindow)
+static void handle_toolbox_highlightoff(vcl::Window *pWindow)
 {
     ToolBox *pToolBox = static_cast <ToolBox *> (pWindow);
     ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pToolBox->GetParent() );
@@ -482,7 +482,7 @@ static void create_wrapper_for_child(
 
 static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
 {
-    Window* pWindow = pEvent->GetWindow();
+    vcl::Window* pWindow = pEvent->GetWindow();
     sal_Int32 index = (sal_Int32)(sal_IntPtr) pEvent->GetData();
 
     if( pWindow && pWindow->IsReallyVisible() )
@@ -497,14 +497,14 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
 
 /*****************************************************************************/
 
-static std::set< Window * > g_aWindowList;
+static std::set< vcl::Window * > g_aWindowList;
 
 static void handle_get_focus(::VclWindowEvent const * pEvent)
 {
     static rtl::Reference< DocumentFocusListener > aDocumentFocusListener =
         new DocumentFocusListener();
 
-    Window *pWindow = pEvent->GetWindow();
+    vcl::Window *pWindow = pEvent->GetWindow();
 
     // The menu bar is handled through VCLEVENT_MENU_HIGHLIGHTED
     if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )

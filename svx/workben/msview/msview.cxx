@@ -509,7 +509,7 @@ public:
 class AtomContainerTreeListBox : public SvTreeListBox
 {
 public:
-    AtomContainerTreeListBox( Window* pParent );
+    AtomContainerTreeListBox( vcl::Window* pParent );
     ~AtomContainerTreeListBox();
 
     void SetRootAtom( const Atom* pAtom );
@@ -544,7 +544,7 @@ private:
 
 typedef std::pair< AtomContainerTreeListBox*, SvTreeListEntry* > AtomContainerEntryPair;
 
-AtomContainerTreeListBox::AtomContainerTreeListBox( Window* pParent )
+AtomContainerTreeListBox::AtomContainerTreeListBox( vcl::Window* pParent )
 : SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_HASBUTTONSATROOT|WB_3DLOOK|WB_BORDER ),
     mpRootAtom( 0 ), mbRecursiveGuard( false )
 {

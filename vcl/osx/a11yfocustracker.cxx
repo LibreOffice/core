@@ -35,7 +35,7 @@
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-static inline Window *
+static inline vcl::Window *
 getWindow(const ::VclSimpleEvent *pEvent)
 {
     return static_cast< const ::VclWindowEvent *> (pEvent)->GetWindow();
@@ -124,11 +124,11 @@ void AquaA11yFocusTracker::notify_toolbox_item_focus(ToolBox *pToolBox)
     }
 }
 
-void AquaA11yFocusTracker::toolbox_open_floater(Window *pWindow)
+void AquaA11yFocusTracker::toolbox_open_floater(vcl::Window *pWindow)
 {
     bool bToolboxFound = false;
     bool bFloatingWindowFound = false;
-    Window * pFloatingWindow = NULL;
+    vcl::Window * pFloatingWindow = NULL;
     while ( pWindow != NULL ) {
         if ( pWindow->GetType() == WINDOW_TOOLBOX ) {
             bToolboxFound = true;
@@ -157,7 +157,7 @@ void AquaA11yFocusTracker::toolbox_open_floater(Window *pWindow)
     }
 }
 
-void AquaA11yFocusTracker::toolbox_highlight_on(Window *pWindow)
+void AquaA11yFocusTracker::toolbox_highlight_on(vcl::Window *pWindow)
 {
     // Make sure either the toolbox or its parent toolbox has the focus
     if ( ! pWindow->HasFocus() )
@@ -170,7 +170,7 @@ void AquaA11yFocusTracker::toolbox_highlight_on(Window *pWindow)
     notify_toolbox_item_focus(static_cast <ToolBox *> (pWindow));
 }
 
-void AquaA11yFocusTracker::toolbox_highlight_off(Window *pWindow)
+void AquaA11yFocusTracker::toolbox_highlight_off(vcl::Window *pWindow)
 {
     ToolBox* pToolBoxParent = dynamic_cast< ToolBox * >( pWindow->GetParent() );
 
@@ -179,7 +179,7 @@ void AquaA11yFocusTracker::toolbox_highlight_off(Window *pWindow)
         notify_toolbox_item_focus( pToolBoxParent );
 }
 
-void AquaA11yFocusTracker::tabpage_activated(Window *pWindow)
+void AquaA11yFocusTracker::tabpage_activated(vcl::Window *pWindow)
 {
     Reference< XAccessible > xAccessible( pWindow->GetAccessible() );
 
@@ -205,7 +205,7 @@ void AquaA11yFocusTracker::menu_highlighted(const VclMenuEvent *pEvent)
     }
 }
 
-void AquaA11yFocusTracker::window_got_focus(Window *pWindow)
+void AquaA11yFocusTracker::window_got_focus(vcl::Window *pWindow)
 {
     // The menu bar is handled through VCLEVENT_MENU_HIGHLIGHTED
     if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )

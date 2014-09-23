@@ -44,7 +44,7 @@ public:
     virtual ~DlgEdView();
 
     virtual void MarkListHasChanged() SAL_OVERRIDE;
-    virtual void MakeVisible( const Rectangle& rRect, Window& rWin ) SAL_OVERRIDE;
+    virtual void MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) SAL_OVERRIDE;
 
 protected:
     // overloaded to handle HitTest for some objects special

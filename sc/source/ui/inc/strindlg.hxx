@@ -27,7 +27,7 @@
 class ScStringInputDlg : public ModalDialog
 {
 public:
-    ScStringInputDlg(Window* pParent,
+    ScStringInputDlg(vcl::Window* pParent,
         const OUString& rTitle,
         const OUString& rEditTitle,
         const OUString& rDefault,

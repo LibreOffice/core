@@ -615,7 +615,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rItemSet )
+SfxDocumentDescPage::SfxDocumentDescPage( vcl::Window * pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "DescriptionInfoPage", "sfx/ui/descriptioninfopage.ui", &rItemSet)
     , m_pInfoItem   ( NULL )
 
@@ -628,7 +628,7 @@ SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rI
     m_pCommentEd->set_height_request(m_pCommentEd->GetTextHeight() * 16);
 }
 
-SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet *rItemSet)
+SfxTabPage *SfxDocumentDescPage::Create(vcl::Window *pParent, const SfxItemSet *rItemSet)
 {
      return new SfxDocumentDescPage(pParent, *rItemSet);
 }
@@ -746,7 +746,7 @@ namespace
     }
 }
 
-SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
+SfxDocumentPage::SfxDocumentPage(vcl::Window* pParent, const SfxItemSet& rItemSet)
     : SfxTabPage(pParent, "DocumentInfoPage", "sfx/ui/documentinfopage.ui", &rItemSet)
     , bEnableUseUserData( false )
     , bHandleDelete( false )
@@ -909,7 +909,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
 
 
 
-SfxTabPage* SfxDocumentPage::Create( Window* pParent, const SfxItemSet* rItemSet )
+SfxTabPage* SfxDocumentPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
 {
      return new SfxDocumentPage( pParent, *rItemSet );
 }
@@ -1156,7 +1156,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 }
 
 
-SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
+SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
                                               const SfxItemSet& rItemSet )
     : SfxTabDialog(0, pParent, "DocumentPropertiesDialog",
         "sfx/ui/documentpropertiesdialog.ui", &rItemSet)
@@ -1224,7 +1224,7 @@ void SfxDocumentInfoDialog::AddFontTabPage()
 
 // class CustomPropertiesYesNoButton -------------------------------------
 
-CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( Window* pParent, const ResId& rResId ) :
+CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( vcl::Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId ),
     m_aYesButton( this, ResId( RB_PROPERTY_YES, *rResId.GetResMgr() ) ),
     m_aNoButton ( this, ResId( RB_PROPERTY_NO, *rResId.GetResMgr() ) )
@@ -1251,12 +1251,12 @@ class DurationDialog_Impl : public ModalDialog
 
 public:
 
-    DurationDialog_Impl( Window* pParent, const util::Duration& rDuration );
+    DurationDialog_Impl( vcl::Window* pParent, const util::Duration& rDuration );
 
     util::Duration  GetDuration() const;
 };
 
-DurationDialog_Impl::DurationDialog_Impl(Window* pParent,
+DurationDialog_Impl::DurationDialog_Impl(vcl::Window* pParent,
     const util::Duration& rDuration)
     : ModalDialog(pParent, "EditDurationDialog",
         "sfx/ui/editdurationdialog.ui")
@@ -1294,7 +1294,7 @@ util::Duration  DurationDialog_Impl::GetDuration() const
     return aRet;
 }
 
-CustomPropertiesDurationField::CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+CustomPropertiesDurationField::CustomPropertiesDurationField( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
         Edit( pParent, rResId ), m_pLine( pLine )
 
 {
@@ -1333,7 +1333,7 @@ void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration
     SetText( sText );
 }
 
-CustomPropertiesEditButton::CustomPropertiesEditButton( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+CustomPropertiesEditButton::CustomPropertiesEditButton( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
         PushButton( pParent, rResId ), m_pLine( pLine )
 {
     SetClickHdl( LINK( this, CustomPropertiesEditButton, ClickHdl ));
@@ -1366,7 +1366,7 @@ void CustomPropertiesYesNoButton::Resize()
 }
 
 // struct CustomPropertyLine ---------------------------------------------
-CustomPropertyLine::CustomPropertyLine( Window* pParent ) :
+CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aNameBox      ( pParent, SfxResId( SFX_CB_PROPERTY_NAME ) ),
     m_aTypeBox      ( pParent, SfxResId( SFX_LB_PROPERTY_TYPE ), this ),
     m_aValueEdit    ( pParent, SfxResId( SFX_ED_PROPERTY_VALUE ), this ),
@@ -1403,7 +1403,7 @@ void CustomPropertyLine::SetRemoved()
     m_aRemoveButton.Hide();
 }
 
-CustomPropertiesWindow::CustomPropertiesWindow(Window* pParent,
+CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     FixedText *pHeaderAccName,
     FixedText *pHeaderAccType,
     FixedText *pHeaderAccValue) :
@@ -1504,11 +1504,11 @@ IMPL_LINK( CustomPropertiesWindow, RemoveHdl, CustomPropertiesRemoveButton*, pBu
             if ( pLine->m_bIsRemoved )
                 continue;
 
-            Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit,
+            vcl::Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit,
                                     &pLine->m_aDateField, &pLine->m_aTimeField,
                                     &pLine->m_aDurationField, &pLine->m_aEditButton,
                                     &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
-            Window** pCurrent = pWindows;
+            vcl::Window** pCurrent = pWindows;
             while ( *pCurrent )
             {
                 Point aPos = (*pCurrent)->GetPosPixel();
@@ -1600,7 +1600,7 @@ void CustomPropertiesWindow::ValidateLine( CustomPropertyLine* pLine, bool bIsFr
     {
         if ( bIsFromTypeBox ) // LoseFocus of TypeBox
             pLine->m_bTypeLostFocus = true;
-        Window* pParent = GetParent()->GetParent();
+        vcl::Window* pParent = GetParent()->GetParent();
         if (MessageDialog(pParent, SfxResId(STR_SFX_QUERY_WRONG_TYPE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_OK_CANCEL).Execute() == RET_OK)
             pLine->m_aTypeBox.SelectEntryPos( m_aTypeBox.GetEntryPos( (void*)CUSTOM_TYPE_TEXT ) );
         else
@@ -1626,8 +1626,8 @@ bool CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
     pHeaderBar->SetItemSize( HI_VALUE, nItemWidth );
     pHeaderBar->SetItemSize( HI_ACTION, nButtonWidth );
 
-    Window* pWindows[] = { &m_aNameBox, &m_aTypeBox, &m_aValueEdit, &m_aRemoveButton, NULL };
-    Window** pCurrent = pWindows;
+    vcl::Window* pWindows[] = { &m_aNameBox, &m_aTypeBox, &m_aValueEdit, &m_aRemoveButton, NULL };
+    vcl::Window** pCurrent = pWindows;
     sal_uInt16 nPos = 0;
     while ( *pCurrent )
     {
@@ -1688,7 +1688,7 @@ sal_uInt16 CustomPropertiesWindow::GetVisibleLineCount() const
 
 void CustomPropertiesWindow::updateLineWidth()
 {
-    Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
+    vcl::Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
                             &m_aDateField, &m_aTimeField,
                             &m_aDurationField, &m_aEditButton,
                             &m_aYesNoButton, &m_aRemoveButton, NULL };
@@ -1699,14 +1699,14 @@ void CustomPropertiesWindow::updateLineWidth()
     {
         CustomPropertyLine* pNewLine = *aI;
 
-        Window* pNewWindows[] =
+        vcl::Window* pNewWindows[] =
             {   &pNewLine->m_aNameBox, &pNewLine->m_aTypeBox, &pNewLine->m_aValueEdit,
                 &pNewLine->m_aDateField, &pNewLine->m_aTimeField,
                 &pNewLine->m_aDurationField, &pNewLine->m_aEditButton,
                 &pNewLine->m_aYesNoButton, &pNewLine->m_aRemoveButton, NULL };
 
-        Window** pCurrent = pWindows;
-        Window** pNewCurrent = pNewWindows;
+        vcl::Window** pCurrent = pWindows;
+        vcl::Window** pNewCurrent = pNewWindows;
         while ( *pCurrent )
         {
             Size aSize = (*pCurrent)->GetSizePixel();
@@ -1742,17 +1742,17 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
 
     sal_Int32 nPos = GetVisibleLineCount() * GetLineHeight();
     m_aCustomPropertiesLines.push_back( pNewLine );
-    Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
+    vcl::Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
                             &m_aDateField, &m_aTimeField,
                             &m_aDurationField, &m_aEditButton,
                             &m_aYesNoButton, &m_aRemoveButton, NULL };
-    Window* pNewWindows[] =
+    vcl::Window* pNewWindows[] =
         {   &pNewLine->m_aNameBox, &pNewLine->m_aTypeBox, &pNewLine->m_aValueEdit,
             &pNewLine->m_aDateField, &pNewLine->m_aTimeField,
             &pNewLine->m_aDurationField, &pNewLine->m_aEditButton,
             &pNewLine->m_aYesNoButton, &pNewLine->m_aRemoveButton, NULL };
-    Window** pCurrent = pWindows;
-    Window** pNewCurrent = pNewWindows;
+    vcl::Window** pCurrent = pWindows;
+    vcl::Window** pNewCurrent = pNewWindows;
     while ( *pCurrent )
     {
         Size aSize = (*pCurrent)->GetSizePixel();
@@ -1890,9 +1890,9 @@ void CustomPropertiesWindow::DoScroll( sal_Int32 nNewPos )
         if ( pLine->m_bIsRemoved )
             continue;
 
-        Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit, &pLine->m_aDateField, &pLine->m_aTimeField,
+        vcl::Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit, &pLine->m_aDateField, &pLine->m_aTimeField,
                                 &pLine->m_aDurationField, &pLine->m_aEditButton, &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
-        Window** pCurrent = pWindows;
+        vcl::Window** pCurrent = pWindows;
         while ( *pCurrent )
         {
             Point aPos = (*pCurrent)->GetPosPixel();
@@ -1984,7 +1984,7 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
     return aPropertiesSeq;
 }
 
-CustomPropertiesControl::CustomPropertiesControl(Window* pParent)
+CustomPropertiesControl::CustomPropertiesControl(vcl::Window* pParent)
     : VclVBox(pParent)
     , m_pHeaderBar(NULL)
     , m_pBody(NULL)
@@ -2063,7 +2063,7 @@ void CustomPropertiesControl::setAllocation(const Size &rAllocation)
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCustomPropertiesControl(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCustomPropertiesControl(vcl::Window *pParent,
     VclBuilder::stringmap &)
 {
     return new CustomPropertiesControl(pParent);
@@ -2105,7 +2105,7 @@ void CustomPropertiesControl::AddLine( const OUString& sName, Any& rAny, bool bI
 }
 
 // class SfxCustomPropertiesPage -----------------------------------------
-SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& rItemSet )
+SfxCustomPropertiesPage::SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "CustomInfoPage", "sfx/ui/custominfopage.ui", &rItemSet)
 {
     get(m_pPropertiesCtrl, "properties");
@@ -2190,12 +2190,12 @@ int SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return nRet;
 }
 
-SfxTabPage* SfxCustomPropertiesPage::Create( Window* pParent, const SfxItemSet* rItemSet )
+SfxTabPage* SfxCustomPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
 {
     return new SfxCustomPropertiesPage( pParent, *rItemSet );
 }
 
-CmisValue::CmisValue( Window* pParent, const OUString& aStr )
+CmisValue::CmisValue( vcl::Window* pParent, const OUString& aStr )
 {
     m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
     get( m_aValueEdit, "value");
@@ -2203,7 +2203,7 @@ CmisValue::CmisValue( Window* pParent, const OUString& aStr )
     m_aValueEdit->SetText( aStr );
 }
 
-CmisDateTime::CmisDateTime( Window* pParent, const util::DateTime& aDateTime )
+CmisDateTime::CmisDateTime( vcl::Window* pParent, const util::DateTime& aDateTime )
 {
     m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
     get( m_aDateField, "date");
@@ -2215,7 +2215,7 @@ CmisDateTime::CmisDateTime( Window* pParent, const util::DateTime& aDateTime )
                            aDateTime.Seconds, aDateTime.NanoSeconds ) );
 }
 
-CmisYesNo::CmisYesNo( Window* pParent, bool bValue )
+CmisYesNo::CmisYesNo( vcl::Window* pParent, bool bValue )
 {
     m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
     get( m_aYesButton, "yes");
@@ -2229,7 +2229,7 @@ CmisYesNo::CmisYesNo( Window* pParent, bool bValue )
 }
 
 // struct CmisPropertyLine ---------------------------------------------
-CmisPropertyLine::CmisPropertyLine(Window* pParent)
+CmisPropertyLine::CmisPropertyLine(vcl::Window* pParent)
     : m_sType(CMIS_TYPE_STRING)
     , m_bUpdatable(false)
     , m_bRequired(false)
@@ -2587,7 +2587,7 @@ void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
 }
 
 // class SfxCmisPropertiesPage -----------------------------------------
-SfxCmisPropertiesPage::SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& rItemSet )
+SfxCmisPropertiesPage::SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "CmisInfoPage", "sfx/ui/cmisinfopage.ui", &rItemSet)
     , m_pPropertiesCtrl( this )
 {
@@ -2687,7 +2687,7 @@ int SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SfxCmisPropertiesPage::Create( Window* pParent, const SfxItemSet* rItemSet )
+SfxTabPage* SfxCmisPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )
 {
     return new SfxCmisPropertiesPage( pParent, *rItemSet );
 }

@@ -30,7 +30,7 @@
 class ScMoveTableDlg : public ModalDialog
 {
 public:
-    ScMoveTableDlg(Window* pParent, const OUString& rDefault);
+    ScMoveTableDlg(vcl::Window* pParent, const OUString& rDefault);
     virtual ~ScMoveTableDlg();
 
     sal_uInt16  GetSelectedDocument     () const { return nDocument; }

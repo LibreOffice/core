@@ -209,8 +209,8 @@ public:
     {
         bool                m_bInit;
 
-        XLIB_Window         m_aRoot;
-        XLIB_Window         m_aRefWindow;
+        ::Window            m_aRoot;
+        ::Window            m_aRefWindow;
         Size                m_aSize;
         SalVisual           m_aVisual;
         SalColormap         m_aColormap;
@@ -280,7 +280,7 @@ protected:
 
     virtual bool    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
-    void            InitRandR( XLIB_Window aRoot ) const;
+    void            InitRandR( ::Window aRoot ) const;
     void            DeInitRandR();
     int             processRandREvent( XEvent* );
 
@@ -332,7 +332,7 @@ public:
         return m_aScreens[nXScreen.getXScreen()];
     }
 
-    XLIB_Window     GetDrawable( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aRefWindow; }
+    ::Window         GetDrawable( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aRefWindow; }
     Display        *GetDisplay() const { return pDisp_; }
     SalX11Screen    GetDefaultXScreen() const { return m_nXDefaultScreen; }
     const Size&     GetScreenSize( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aSize; }
@@ -367,7 +367,7 @@ public:
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
     bool            IsXinerama() const { return m_bXinerama; }
     const std::vector< Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
-    XLIB_Window     GetRootWindow( SalX11Screen nXScreen ) const
+    ::Window        GetRootWindow( SalX11Screen nXScreen ) const
             { return getDataForScreen( nXScreen ).m_aRoot; }
     const std::vector< ScreenData >& GetScreenData() { return m_aScreens; }
     unsigned int GetXScreenCount() const { return m_aScreens.size(); }

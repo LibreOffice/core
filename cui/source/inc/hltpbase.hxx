@@ -59,7 +59,7 @@ protected:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-    SvxHyperURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_FILE );
+    SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart = INET_PROT_FILE );
 
 };
 
@@ -79,7 +79,7 @@ private:
                         mxDocumentFrame;
 
 protected:
-    Window*             mpDialog;
+    vcl::Window*             mpDialog;
 
     bool                mbStdControlsInit;
 
@@ -111,7 +111,7 @@ protected:
 
 public:
     SvxHyperlinkTabPageBase (
-        Window *pParent,
+        vcl::Window *pParent,
         IconChoiceDialog* pDlg,
         const OString& rID,
         const OUString& rUIXMLDescription,
@@ -134,7 +134,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
-    bool IsMarkWndVisible ()      { return ((Window*)mpMarkWnd)->IsVisible(); }
+    bool IsMarkWndVisible ()      { return ((vcl::Window*)mpMarkWnd)->IsVisible(); }
     Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
     bool MoveToExtraWnd ( Point aNewPos, bool bDisConnectDlg = false );
 
@@ -147,8 +147,8 @@ protected:
     virtual void SetMarkWndShouldOpen(bool bOpen);
 
     void ShowMarkWnd ();
-    void HideMarkWnd ()           { ( ( Window* ) mpMarkWnd )->Hide(); }
-    void InvalidateMarkWnd ()     { ( ( Window* ) mpMarkWnd )->Invalidate(); }
+    void HideMarkWnd ()           { ( ( vcl::Window* ) mpMarkWnd )->Hide(); }
+    void InvalidateMarkWnd ()     { ( ( vcl::Window* ) mpMarkWnd )->Invalidate(); }
 
     SfxDispatcher* GetDispatcher() const;
 

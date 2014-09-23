@@ -34,7 +34,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent) :
+XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( vcl::Window* pParent) :
     TabPage( pParent, "XmlFilterTabPageTransformation", "filter/ui/xmlfiltertabpagetransformation.ui" ),
 
     sHTTPSchema( "http://" ),

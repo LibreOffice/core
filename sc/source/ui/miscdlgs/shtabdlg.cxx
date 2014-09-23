@@ -25,7 +25,7 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-ScShowTabDlg::ScShowTabDlg(Window* pParent)
+ScShowTabDlg::ScShowTabDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "ShowSheetDialog", "modules/scalc/ui/showsheetdialog.ui")
 {
     get(m_pFrame, "frame");

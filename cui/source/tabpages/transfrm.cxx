@@ -102,7 +102,7 @@ static void lcl_ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
 |*
 \************************************************************************/
 
-SvxTransformTabDialog::SvxTransformTabDialog( Window* pParent, const SfxItemSet* pAttr,
+SvxTransformTabDialog::SvxTransformTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                                 const SdrView* pSdrView, sal_uInt16 nAnchorTypes )
     : SfxTabDialog( pParent
                   ,"PositionAndSizeDialog"
@@ -197,7 +197,7 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link& rLink)
 |*      angle and the rotation angle of the graphic objects
 |*
 \************************************************************************/
-SvxAngleTabPage::SvxAngleTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+SvxAngleTabPage::SvxAngleTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage( pParent,"Rotation","cui/ui/rotationtabpage.ui", rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(NULL)
@@ -330,7 +330,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
 
 
 
-SfxTabPage* SvxAngleTabPage::Create( Window* pWindow, const SfxItemSet* rSet)
+SfxTabPage* SvxAngleTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet)
 {
     return(new SvxAngleTabPage(pWindow, *rSet));
 }
@@ -362,7 +362,7 @@ int SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-void SvxAngleTabPage::PointChanged(Window* pWindow, RECT_POINT eRP)
+void SvxAngleTabPage::PointChanged(vcl::Window* pWindow, RECT_POINT eRP)
 {
     if(pWindow == m_pCtlRect)
     {
@@ -431,7 +431,7 @@ void SvxAngleTabPage::PointChanged(Window* pWindow, RECT_POINT eRP)
 |*      dialog for changing slant and corner radius
 |*
 \************************************************************************/
-SvxSlantTabPage::SvxSlantTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+SvxSlantTabPage::SvxSlantTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage( pParent,"SlantAndCornerRadius","cui/ui/slantcornertabpage.ui",
         rInAttrs)
     , rOutAttrs(rInAttrs)
@@ -564,7 +564,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
 
 
-SfxTabPage* SvxSlantTabPage::Create( Window* pWindow, const SfxItemSet* rOutAttrs )
+SfxTabPage* SvxSlantTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
     return( new SvxSlantTabPage( pWindow, *rOutAttrs ) );
 }
@@ -603,7 +603,7 @@ int SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-void SvxSlantTabPage::PointChanged( Window* , RECT_POINT  )
+void SvxSlantTabPage::PointChanged( vcl::Window* , RECT_POINT  )
 {
 }
 
@@ -612,7 +612,7 @@ void SvxSlantTabPage::PointChanged( Window* , RECT_POINT  )
 |*      Dialog for changing position and size of graphic objects
 |*
 \************************************************************************/
-SvxPositionSizeTabPage::SvxPositionSizeTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SvxTabPage(pParent,"PositionAndSize","cui/ui/possizetabpage.ui", rInAttrs)
     , mrOutAttrs(rInAttrs)
     , mpView(NULL)
@@ -1003,7 +1003,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 
 
 
-SfxTabPage* SvxPositionSizeTabPage::Create( Window* pWindow, const SfxItemSet* rOutAttrs )
+SfxTabPage* SvxPositionSizeTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
     return( new SvxPositionSizeTabPage( pWindow, *rOutAttrs ) );
 }
@@ -1349,7 +1349,7 @@ void SvxPositionSizeTabPage::GetTopLeftPosition(double& rfX, double& rfY, const 
 
 
 
-void SvxPositionSizeTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
+void SvxPositionSizeTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRP )
 {
     if( pWindow == m_pCtlPos )
     {

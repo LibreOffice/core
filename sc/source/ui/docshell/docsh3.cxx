@@ -620,7 +620,7 @@ void ScDocShell::SetChangeComment( ScChangeAction* pAction, const OUString& rCom
     }
 }
 
-void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent, bool bPrevNext)
+void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, vcl::Window* pParent, bool bPrevNext)
 {
     if (!pAction) return;           // ohne Aktion ist nichts..
 

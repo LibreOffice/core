@@ -86,7 +86,7 @@ namespace svt
         virtual void        renderBackground() const = 0;
         virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const = 0;
         virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const = 0;
-        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const = 0;
+        virtual void        postRenderItem( vcl::Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const = 0;
 
         // TODO: postRenderItem takes the "real" window, i.e. effectively the tab bar. This is because
         // DrawSelectionBackground needs to be applied after everything else is painted, and is available at the Window
@@ -115,7 +115,7 @@ namespace svt
         virtual void        renderBackground() const SAL_OVERRIDE;
         virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
         virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
-        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
+        virtual void        postRenderItem( vcl::Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
 
     protected:
         OutputDevice&   getTargetDevice() const { return m_rTargetDevice; }
@@ -149,7 +149,7 @@ namespace svt
     }
 
 
-    void VCLItemRenderer::postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
+    void VCLItemRenderer::postRenderItem( vcl::Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
     {
         const bool bActive = ( ( i_nItemFlags & ITEM_STATE_ACTIVE ) != 0 );
         const bool bHovered = ( ( i_nItemFlags & ITEM_STATE_HOVERED ) != 0 );
@@ -190,7 +190,7 @@ namespace svt
         virtual void        renderBackground() const SAL_OVERRIDE;
         virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
         virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
-        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
+        virtual void        postRenderItem( vcl::Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
 
     protected:
         OutputDevice&   getTargetDevice() const { return m_rTargetDevice; }
@@ -243,7 +243,7 @@ namespace svt
     }
 
 
-    void NWFToolboxItemRenderer::postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
+    void NWFToolboxItemRenderer::postRenderItem( vcl::Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
     {
         (void)i_rActualWindow;
         (void)i_rItemRect;
@@ -268,7 +268,7 @@ namespace svt
         virtual void        renderBackground() const SAL_OVERRIDE;
         virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
         virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
-        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
+        virtual void        postRenderItem( vcl::Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
 
     protected:
         OutputDevice&   getTargetDevice() const { return m_rTargetDevice; }
@@ -330,7 +330,7 @@ namespace svt
     }
 
 
-    void NWFTabItemRenderer::postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
+    void NWFTabItemRenderer::postRenderItem( vcl::Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
     {
         (void)i_rActualWindow;
         (void)i_rItemRect;
@@ -989,7 +989,7 @@ namespace svt
     //= PanelTabBar
 
 
-    PanelTabBar::PanelTabBar( Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
+    PanelTabBar::PanelTabBar( vcl::Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :Control( &i_rParentWindow, 0 )
         ,m_pImpl( new PanelTabBar_Impl( *this, i_rPanelDeck, i_eAlignment, i_eItemContent ) )
     {

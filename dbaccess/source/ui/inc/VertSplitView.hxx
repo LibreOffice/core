@@ -25,11 +25,11 @@ class Splitter;
 
 namespace dbaui
 {
-    class OSplitterView : public Window
+    class OSplitterView : public vcl::Window
     {
         Splitter*                           m_pSplitter;
-        Window*                             m_pLeft;
-        Window*                             m_pRight;
+        vcl::Window*                             m_pLeft;
+        vcl::Window*                             m_pRight;
         bool                            m_bVertical;
 
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
@@ -37,13 +37,13 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OSplitterView(Window* _pParent,bool _bVertical = true);
+        OSplitterView(vcl::Window* _pParent,bool _bVertical = true);
         virtual ~OSplitterView();
         // window overloads
         virtual void GetFocus() SAL_OVERRIDE;
 
         void setSplitter(Splitter* _pSplitter);
-        void set(Window* _pRight,Window* _pLeft = NULL);
+        void set(vcl::Window* _pRight,Window* _pLeft = NULL);
         virtual void Resize() SAL_OVERRIDE;
     };
 }

@@ -63,7 +63,7 @@
 
 using namespace ::com::sun::star;
 
-SwFormatTablePage::SwFormatTablePage(Window* pParent, const SfxItemSet& rSet)
+SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", &rSet)
     , m_aTextFilter(" .<>")
     , pTblData(0)
@@ -370,7 +370,7 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
     bModified = true;
 }
 
-SfxTabPage*  SwFormatTablePage::Create( Window* pParent,
+SfxTabPage*  SwFormatTablePage::Create( vcl::Window* pParent,
                                    const SfxItemSet* rAttrSet)
 {
     return new SwFormatTablePage( pParent, *rAttrSet );
@@ -709,7 +709,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 //Description: Page column configuration
-SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
+SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableColumnPage",
         "modules/swriter/ui/tablecolumnpage.ui", &rSet)
     , pTblData(0)
@@ -754,7 +754,7 @@ SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
 {
 }
 
-SfxTabPage*   SwTableColumnPage::Create( Window* pParent,
+SfxTabPage*   SwTableColumnPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SwTableColumnPage( pParent, *rAttrSet );
@@ -1201,7 +1201,7 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 
 }
 
-SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool&,
+SwTableTabDlg::SwTableTabDlg(vcl::Window* pParent, SfxItemPool&,
     const SfxItemSet* pItemSet, SwWrtShell* pSh)
     : SfxTabDialog(0, pParent, "TablePropertiesDialog",
         "modules/swriter/ui/tableproperties.ui", pItemSet)
@@ -1243,7 +1243,7 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
 }
 
-SwTextFlowPage::SwTextFlowPage(Window* pParent, const SfxItemSet& rSet)
+SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableTextFlowPage",
         "modules/swriter/ui/tabletextflowpage.ui", &rSet)
     , pShell(0)
@@ -1315,7 +1315,7 @@ SwTextFlowPage::SwTextFlowPage(Window* pParent, const SfxItemSet& rSet)
 {
 }
 
-SfxTabPage*   SwTextFlowPage::Create( Window* pParent,
+SfxTabPage*   SwTextFlowPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet)
 {
     return new SwTextFlowPage(pParent, *rAttrSet);

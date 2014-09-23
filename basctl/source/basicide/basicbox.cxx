@@ -78,7 +78,7 @@ void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPool
 
 
 
-Window* LibBoxControl::CreateItemWindow( Window *pParent )
+vcl::Window* LibBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return new LibBox( pParent, m_xFrame );
 }
@@ -87,7 +87,7 @@ Window* LibBoxControl::CreateItemWindow( Window *pParent )
 //= DocListenerBox
 
 
-DocListenerBox::DocListenerBox( Window* pParent )
+DocListenerBox::DocListenerBox( vcl::Window* pParent )
     :ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) )
     ,m_aNotifier( *this )
 {
@@ -146,7 +146,7 @@ void DocListenerBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/
 
 //= basctl::LibBox
 
-LibBox::LibBox( Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
+LibBox::LibBox( vcl::Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
     DocListenerBox( pParent ),
     m_xFrame( rFrame )
 {
@@ -190,7 +190,7 @@ void LibBox::ReleaseFocus()
 
     if ( pCurSh )
     {
-        Window* pShellWin = pCurSh->GetWindow();
+        vcl::Window* pShellWin = pCurSh->GetWindow();
         if ( !pShellWin )
             pShellWin = Application::GetDefDialogParent();
 
@@ -367,14 +367,14 @@ void LanguageBoxControl::StateChanged( sal_uInt16 nID, SfxItemState eState, cons
     }
 }
 
-Window* LanguageBoxControl::CreateItemWindow( Window *pParent )
+vcl::Window* LanguageBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return new LanguageBox( pParent );
 }
 
 // class basctl::LanguageBox -----------------------------------------------
 
-LanguageBox::LanguageBox( Window* pParent ) :
+LanguageBox::LanguageBox( vcl::Window* pParent ) :
 
     DocListenerBox( pParent ),
 

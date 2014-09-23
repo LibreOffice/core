@@ -124,7 +124,7 @@ static OUString GetLabelFromCommandURL( const OUString& rCommandURL, const uno::
 
 SFX_IMPL_FLOATINGWINDOW( SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDOW );
 
-SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( Window* pParentWnd ,
+SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( vcl::Window* pParentWnd ,
                                                 sal_uInt16 nId ,
                                                 SfxBindings* pBind ,
                                                 SfxChildWinInfo* pInfo )
@@ -163,7 +163,7 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
 SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
     SfxBindings* pBind ,
     SfxChildWindow* pChildWin ,
-    Window* pParent )
+    vcl::Window* pParent )
     : SfxFloatingWindow( pBind,
                          pChildWin,
                          pParent,
@@ -230,7 +230,7 @@ void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
         SfxViewFrame *pFrame = GetBindings().GetDispatcher_Impl()->GetFrame();
-        Window* pEditWin = pFrame->GetViewShell()->GetWindow();
+        vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
 
         Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
         aPoint = GetParent()->ScreenToOutputPixel( aPoint );

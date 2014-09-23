@@ -69,7 +69,7 @@ public:
             the view shell of the task pane.
     */
     LayoutMenu (
-        ::Window* pParent,
+        vcl::Window* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~LayoutMenu (void);
@@ -84,7 +84,7 @@ public:
     // From ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
-    // From ::Window
+    // From vcl::Window
     virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
     virtual void Resize (void) SAL_OVERRIDE;
 

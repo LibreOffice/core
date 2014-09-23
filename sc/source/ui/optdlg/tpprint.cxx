@@ -27,7 +27,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 
-ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
+ScTpPrintOptions::ScTpPrintOptions( vcl::Window*           pParent,
                                     const SfxItemSet& rCoreAttrs )
     :   SfxTabPage      ( pParent,
                           "optCalcPrintPage",
@@ -43,7 +43,7 @@ ScTpPrintOptions::~ScTpPrintOptions()
 {
 }
 
-SfxTabPage* ScTpPrintOptions::Create( Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* ScTpPrintOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new ScTpPrintOptions( pParent, *rAttrSet );
 }

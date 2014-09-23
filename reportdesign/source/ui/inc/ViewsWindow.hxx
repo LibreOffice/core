@@ -75,24 +75,24 @@ namespace rptui
 
     class OWindowPositionCorrector
     {
-        ::std::vector< ::std::pair<Window*,Point> > m_aChildren;
+        ::std::vector< ::std::pair<vcl::Window*,Point> > m_aChildren;
         long m_nDeltaX;
         long m_nDeltaY;
     public:
-        OWindowPositionCorrector(Window* _pWindow,long _nDeltaX, long _nDeltaY) :m_nDeltaX(_nDeltaX), m_nDeltaY(_nDeltaY)
+        OWindowPositionCorrector(vcl::Window* _pWindow,long _nDeltaX, long _nDeltaY) :m_nDeltaX(_nDeltaX), m_nDeltaY(_nDeltaY)
         {
             sal_uInt16 nCount = _pWindow->GetChildCount();
             m_aChildren.reserve(nCount);
             while( nCount )
             {
-                Window* pChild = _pWindow->GetChild(--nCount);
-                m_aChildren.push_back(::std::pair<Window*,Point>(pChild,pChild->GetPosPixel()));
+                vcl::Window* pChild = _pWindow->GetChild(--nCount);
+                m_aChildren.push_back(::std::pair<vcl::Window*,Point>(pChild,pChild->GetPosPixel()));
             }
         }
         ~OWindowPositionCorrector()
         {
-            ::std::vector< ::std::pair<Window*,Point> >::iterator aIter = m_aChildren.begin();
-            ::std::vector< ::std::pair<Window*,Point> >::iterator aEnd = m_aChildren.end();
+            ::std::vector< ::std::pair<vcl::Window*,Point> >::iterator aIter = m_aChildren.begin();
+            ::std::vector< ::std::pair<vcl::Window*,Point> >::iterator aEnd = m_aChildren.end();
             for (; aIter != aEnd; ++aIter)
             {
                 const Point aPos = aIter->first->GetPosPixel();
@@ -102,7 +102,7 @@ namespace rptui
         }
     };
 
-    class OViewsWindow :    public Window
+    class OViewsWindow :    public vcl::Window
                         ,   public utl::ConfigurationListener
                         ,   public IMarkedSection
     {

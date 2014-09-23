@@ -175,9 +175,9 @@ namespace sfx2
 {
 
 
-    void HandleTaskPaneList( Window* pWindow, bool bAddToList )
+    void HandleTaskPaneList( vcl::Window* pWindow, bool bAddToList )
     {
-        Window* pParent = pWindow->GetParent();
+        vcl::Window* pParent = pWindow->GetParent();
         DBG_ASSERT( pParent, "HandleTaskPaneList(): every window here should have a parent" );
 
         SystemWindow* pSysWin = pParent->GetSystemWindow();
@@ -271,7 +271,7 @@ struct ContentEntry_Impl
 
 // ContentListBox_Impl ---------------------------------------------------
 
-ContentListBox_Impl::ContentListBox_Impl(Window* pParent, WinBits nStyle)
+ContentListBox_Impl::ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
     , aOpenBookImage(SfxResId(IMG_HELP_CONTENT_BOOK_OPEN))
     , aClosedBookImage(SfxResId(IMG_HELP_CONTENT_BOOK_CLOSED))
@@ -291,7 +291,7 @@ ContentListBox_Impl::ContentListBox_Impl(Window* pParent, WinBits nStyle)
     InitRoot();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeContentListBox(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeContentListBox(vcl::Window *pParent,
     VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
@@ -419,7 +419,7 @@ OUString ContentListBox_Impl::GetSelectEntry() const
 }
 
 // class HelpTabPage_Impl ------------------------------------------------
-HelpTabPage_Impl::HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
+HelpTabPage_Impl::HelpTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
     const OString& rID, const OUString& rUIXMLDescription)
     : TabPage( pParent, rID, rUIXMLDescription)
     , m_pIdxWin( _pIdxWin )
@@ -427,7 +427,7 @@ HelpTabPage_Impl::HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pI
 }
 
 // class ContentTabPage_Impl ---------------------------------------------
-ContentTabPage_Impl::ContentTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
+ContentTabPage_Impl::ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpContentPage",
         "sfx/ui/helpcontentpage.ui")
 {
@@ -450,14 +450,14 @@ Control* ContentTabPage_Impl::GetLastFocusControl()
 
 // class IndexBox_Impl ---------------------------------------------------
 
-IndexBox_Impl::IndexBox_Impl(Window* pParent, WinBits nStyle)
+IndexBox_Impl::IndexBox_Impl(vcl::Window* pParent, WinBits nStyle)
     : ComboBox(pParent, nStyle)
 {
     EnableAutocomplete(true);
     EnableUserDraw(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeIndexBox(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeIndexBox(vcl::Window *pParent,
     VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
@@ -525,7 +525,7 @@ void IndexBox_Impl::SelectExecutableEntry()
 
 // class IndexTabPage_Impl -----------------------------------------------
 
-IndexTabPage_Impl::IndexTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
+IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpIndexPage",
         "sfx/ui/helpindexpage.ui")
     , bIsActivated(false)
@@ -836,7 +836,7 @@ void IndexTabPage_Impl::OpenKeyword()
 
 // class SearchBox_Impl --------------------------------------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSearchBox(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSearchBox(vcl::Window *pParent,
     VclBuilder::stringmap &)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_DROPDOWN;
@@ -869,7 +869,7 @@ void SearchBox_Impl::Select()
 
 // class SearchResultsBox_Impl -------------------------------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSearchResultsBox(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSearchResultsBox(vcl::Window *pParent,
     VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
@@ -896,7 +896,7 @@ bool SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
 
 // class SearchTabPage_Impl ----------------------------------------------
 
-SearchTabPage_Impl::SearchTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
+SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpSearchPage",
         "sfx/ui/helpsearchpage.ui")
     , xBreakIterator(vcl::unohelper::CreateBreakIterator())
@@ -1119,12 +1119,12 @@ void GetBookmarkEntry_Impl
     }
 }
 
-BookmarksBox_Impl::BookmarksBox_Impl(Window* pParent, WinBits nStyle)
+BookmarksBox_Impl::BookmarksBox_Impl(vcl::Window* pParent, WinBits nStyle)
     : ListBox(pParent, nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBookmarksBox(Window *pParent,
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBookmarksBox(vcl::Window *pParent,
     VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
@@ -1241,7 +1241,7 @@ bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
 
 // class BookmarksTabPage_Impl -------------------------------------------
 
-BookmarksTabPage_Impl::BookmarksTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
+BookmarksTabPage_Impl::BookmarksTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpBookmarkPage",
         "sfx/ui/helpbookmarkpage.ui")
 {
@@ -1573,7 +1573,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
 
 void SfxHelpIndexWindow_Impl::Resize()
 {
-    Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
     if (!pChild)
         return;
     VclContainer::setLayoutAllocation(*pChild, Point(0,0), GetSizePixel());
@@ -1581,7 +1581,7 @@ void SfxHelpIndexWindow_Impl::Resize()
 
 Size SfxHelpIndexWindow_Impl::GetOptimalSize() const
 {
-    const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    const vcl::Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
     if (!pChild)
         return Window::GetOptimalSize();
     return VclContainer::getLayoutRequisition(*pChild);
@@ -1798,7 +1798,7 @@ void SfxHelpIndexWindow_Impl::SelectExecutableEntry()
 
 // class TextWin_Impl ----------------------------------------------------
 
-TextWin_Impl::TextWin_Impl( Window* p ) : DockingWindow( p, 0 )
+TextWin_Impl::TextWin_Impl( vcl::Window* p ) : DockingWindow( p, 0 )
 {
 }
 
@@ -2320,7 +2320,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     if ( EVENT_COMMAND == nType && rNEvt.GetCommandEvent() )
     {
         const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
-        Window* pCmdWin = rNEvt.GetWindow();
+        vcl::Window* pCmdWin = rNEvt.GetWindow();
 
         if ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != &aToolBox )
         {
@@ -2660,7 +2660,7 @@ void SfxHelpWindow_Impl::MakeLayout()
 {
     if ( nHeight > 0 && xWindow.is() )
     {
-        Window* pScreenWin = VCLUnoHelper::GetWindow(xWindow);
+        vcl::Window* pScreenWin = VCLUnoHelper::GetWindow(xWindow);
 
         /* #i55528#
             Hide() / Show() will produce strange effects.
@@ -2787,7 +2787,7 @@ void SfxHelpWindow_Impl::SaveConfig()
     aUserData += ";";
     aUserData += OUString::number( nH );
 
-    Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
+    vcl::Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
     aWinPos = pScreenWin->GetWindowExtentsRelative( NULL ).TopLeft();
     aUserData += ";";
     aUserData += OUString::number( aWinPos.X() );
@@ -2948,7 +2948,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
 
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,
-    Window* pParent, WinBits ) :
+    vcl::Window* pParent, WinBits ) :
 
     SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
 
@@ -2991,7 +2991,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 {
     SaveConfig();
-    Window* pDel = pIndexWin;
+    vcl::Window* pDel = pIndexWin;
     pIndexWin = NULL;
     delete pDel;
 
@@ -3195,7 +3195,7 @@ bool SfxHelpWindow_Impl::HasHistorySuccessor() const
 
 // class SfxAddHelpBookmarkDialog_Impl -----------------------------------
 
-SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(Window* pParent, bool bRename)
+SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(vcl::Window* pParent, bool bRename)
     : ModalDialog( pParent, "BookmarkDialog", "sfx/ui/bookmarkdialog.ui")
 {
     get(m_pTitleED, "entry");

@@ -37,7 +37,7 @@ namespace dbaui
         virtual void Resize() SAL_OVERRIDE;
 
     public:
-        OFieldDescGenWin( Window* pParent, OTableDesignHelpBar* pHelpBar );
+        OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar );
         virtual ~OFieldDescGenWin();
 
         virtual void GetFocus() SAL_OVERRIDE;

@@ -88,7 +88,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
-    ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( ! xParentWindow.is() || pParentWindow==NULL)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow",
@@ -123,7 +123,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (DoesResourceEndWith("/NavigatorPanel"))
     {
-        Window* pPanel = new SwNavigationPI(pBindings, NULL, pParentWindow);
+        vcl::Window* pPanel = new SwNavigationPI(pBindings, NULL, pParentWindow);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,

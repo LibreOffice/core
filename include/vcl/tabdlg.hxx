@@ -30,7 +30,7 @@ class VCL_DLLPUBLIC TabDialog : public Dialog
 {
 private:
     FixedLine*          mpFixedLine;
-    Window*             mpViewWindow;
+    vcl::Window*             mpViewWindow;
     WindowAlign         meViewAlign;
     bool                mbPosControls;
 
@@ -38,15 +38,15 @@ private:
     SAL_DLLPRIVATE void ImplPosControls();
 
 public:
-                        TabDialog( Window* pParent,
+                        TabDialog( vcl::Window* pParent,
                                    WinBits nStyle = WB_STDTABDIALOG );
-                        TabDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+                        TabDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
                         virtual ~TabDialog();
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-    void                SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
-    Window*             GetViewWindow() const { return mpViewWindow; }
+    void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
+    vcl::Window*             GetViewWindow() const { return mpViewWindow; }
     void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
     WindowAlign         GetViewAlign() const { return meViewAlign; }
 };

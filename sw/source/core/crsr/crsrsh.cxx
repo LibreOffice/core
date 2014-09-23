@@ -2586,7 +2586,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     Copy cursor position and add it to the ring.
     All views of a document are in the ring of the shell.
 */
-SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
+SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, vcl::Window *pInitWin )
     : SwViewShell( rShell, pInitWin )
     , SwModify( 0 )
     , m_pCrsrStk( 0 )
@@ -2627,7 +2627,7 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
 }
 
 /// default constructor
-SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
+SwCrsrShell::SwCrsrShell( SwDoc& rDoc, vcl::Window *pInitWin,
                             const SwViewOption *pInitOpt )
     : SwViewShell( rDoc, pInitWin, pInitOpt )
     , SwModify( 0 )

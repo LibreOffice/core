@@ -61,7 +61,7 @@ enum AboutDialogButton
     WEBSITE_BUTTON
 };
 
-AboutDialog::AboutDialog(Window* pParent)
+AboutDialog::AboutDialog(vcl::Window* pParent)
     : SfxModalDialog(pParent, "AboutDialog", "cui/ui/aboutdialog.ui")
 {
     get(m_pLogoReplacement, "logoreplacement");

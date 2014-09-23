@@ -1007,7 +1007,7 @@ void TransferableHelper::PrepareOLE( const TransferableObjectDescriptor& rObjDes
 
 
 
-void TransferableHelper::CopyToClipboard( Window *pWindow ) const
+void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
     Reference< XClipboard > xClipboard;
@@ -1040,7 +1040,7 @@ void TransferableHelper::CopyToClipboard( Window *pWindow ) const
 
 
 
-void TransferableHelper::CopyToSelection( Window *pWindow ) const
+void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
     Reference< XClipboard > xSelection;
@@ -1070,7 +1070,7 @@ void TransferableHelper::CopyToSelection( Window *pWindow ) const
 
 
 
-void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
+void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceActions,
                                     sal_Int32 nDnDPointer, sal_Int32 nDnDImage )
 
 {
@@ -1119,7 +1119,7 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
 
 
 
-void TransferableHelper::ClearSelection( Window *pWindow )
+void TransferableHelper::ClearSelection( vcl::Window *pWindow )
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
     Reference< XClipboard > xSelection( pWindow->GetPrimarySelection() );
@@ -1132,7 +1132,7 @@ void TransferableHelper::ClearSelection( Window *pWindow )
 
 Reference< XClipboard> TransferableHelper::GetSystemClipboard()
 {
-    Window *pFocusWindow = Application::GetFocusWindow();
+    vcl::Window *pFocusWindow = Application::GetFocusWindow();
 
     if( pFocusWindow )
         return pFocusWindow->GetClipboard();
@@ -2238,7 +2238,7 @@ void TransferableDataHelper::StopClipboardListening( )
 
 
 
-TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window * pWindow )
+TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( vcl::Window * pWindow )
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
@@ -2272,7 +2272,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
 
 
 
-TransferableDataHelper TransferableDataHelper::CreateFromSelection( Window* pWindow )
+TransferableDataHelper TransferableDataHelper::CreateFromSelection( vcl::Window* pWindow )
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
 

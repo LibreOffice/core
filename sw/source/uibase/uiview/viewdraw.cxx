@@ -165,7 +165,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
     else if ( nSlotId == SID_FONTWORK_GALLERY_FLOATER )
     {
-        Window*  pWin = &( m_pWrtShell->GetView().GetViewFrame()->GetWindow() );
+        vcl::Window*  pWin = &( m_pWrtShell->GetView().GetViewFrame()->GetWindow() );
 
         if ( pWin )
             pWin->EnterWait();
@@ -506,7 +506,7 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
 
 // Enable DrawTextEditMode
 
-bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
+bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
         bool bIsNewObj, bool bSetSelectionToStart)
 {
     SwWrtShell *pSh = &GetWrtShell();

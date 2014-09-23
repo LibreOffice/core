@@ -25,7 +25,7 @@ namespace chart
 
 using namespace ::com::sun::star;
 
-SchLegendDlg::SchLegendDlg(Window* pWindow, const uno::Reference< uno::XComponentContext>& xCC )
+SchLegendDlg::SchLegendDlg(vcl::Window* pWindow, const uno::Reference< uno::XComponentContext>& xCC )
     : ModalDialog(pWindow
     ,"dlg_InsertLegend"
     ,"modules/schart/ui/dlg_InsertLegend.ui")

@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ShapeParagraphDialog::ShapeParagraphDialog(Window* pParent,
+ShapeParagraphDialog::ShapeParagraphDialog(vcl::Window* pParent,
     const SfxItemSet* pAttr)
     : SfxTabDialog(pParent, "ParagraphDialog",
         "modules/schart/ui/paradialog.ui", pAttr)

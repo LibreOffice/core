@@ -45,7 +45,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 
     if( rDev.GetOutDevType() == OUTDEV_WINDOW )
     {
-        Window *pWin = (Window*) &rDev;
+        vcl::Window *pWin = (vcl::Window*) &rDev;
         if( bPressed )
             pWin->DrawSelectionBackground( aRect, 0, true, false, false );
     }
@@ -242,7 +242,7 @@ void BrowserDataWin::LeaveUpdateLock()
 }
 
 
-void InitSettings_Impl( Window *pWin,
+void InitSettings_Impl( vcl::Window *pWin,
                         bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings =
@@ -619,7 +619,7 @@ void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 
 
 
-BrowseEvent::BrowseEvent( Window* pWindow,
+BrowseEvent::BrowseEvent( vcl::Window* pWindow,
                           long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const Rectangle& rRect ):
     pWin(pWindow),
@@ -640,7 +640,7 @@ BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
 
 
 
-BrowserMouseEvent::BrowserMouseEvent( Window *pWindow, const MouseEvent& rEvt,
+BrowserMouseEvent::BrowserMouseEvent( vcl::Window *pWindow, const MouseEvent& rEvt,
                           long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const Rectangle& rRect ):
     MouseEvent(rEvt),

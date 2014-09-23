@@ -36,7 +36,7 @@ namespace dbaui
         virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
 
     public:
-        OColumnTreeBox( Window* pParent, WinBits nBits = WB_BORDER );
+        OColumnTreeBox( vcl::Window* pParent, WinBits nBits = WB_BORDER );
 
         void FillListBox( const ODatabaseExport::TColumnVector& _rList);
         void SetReadOnly(bool _bRo=true) { m_bReadOnly = _bRo; }
@@ -77,7 +77,7 @@ namespace dbaui
         virtual bool            LeavePage() SAL_OVERRIDE;
         virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
-        OWizNameMatching(Window* pParent);
+        OWizNameMatching(vcl::Window* pParent);
         virtual ~OWizNameMatching();
 
     };

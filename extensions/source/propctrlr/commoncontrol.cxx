@@ -40,7 +40,7 @@ namespace pcr
     //= ControlHelper
 
 
-    ControlHelper::ControlHelper( Window* _pControlWindow, sal_Int16 _nControlType, XPropertyControl& _rAntiImpl, IModifyListener* _pModifyListener )
+    ControlHelper::ControlHelper( vcl::Window* _pControlWindow, sal_Int16 _nControlType, XPropertyControl& _rAntiImpl, IModifyListener* _pModifyListener )
         :m_pControlWindow( _pControlWindow )
         ,m_nControlType( _nControlType )
         ,m_rAntiImpl( _rAntiImpl )
@@ -144,7 +144,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( ControlHelper, ModifiedHdl, Window*, /*_pWin*/ )
+    IMPL_LINK( ControlHelper, ModifiedHdl, vcl::Window*, /*_pWin*/ )
     {
         if ( m_pModifyListener )
             m_pModifyListener->modified();
@@ -152,7 +152,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( ControlHelper, GetFocusHdl, Window*, /*_pWin*/ )
+    IMPL_LINK( ControlHelper, GetFocusHdl, vcl::Window*, /*_pWin*/ )
     {
         try
         {
@@ -167,7 +167,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( ControlHelper, LoseFocusHdl, Window*, /*_pWin*/ )
+    IMPL_LINK( ControlHelper, LoseFocusHdl, vcl::Window*, /*_pWin*/ )
     {
         // TODO/UNOize: should this be outside the default control's implementations? If somebody
         // has an own control implementation, which does *not* do this - would this be allowed?

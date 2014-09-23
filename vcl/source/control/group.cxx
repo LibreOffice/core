@@ -30,7 +30,7 @@
 
 #define GROUP_VIEW_STYLE        (WB_3DLOOK | WB_NOLABEL)
 
-void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
+void GroupBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
@@ -62,7 +62,7 @@ void GroupBox::ImplInitSettings( bool bFont,
 
     if ( bBackground )
     {
-        Window* pParent = GetParent();
+        vcl::Window* pParent = GetParent();
         if ( (pParent->IsChildTransparentModeEnabled() ||
               !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
              !IsControlBackground() )
@@ -86,7 +86,7 @@ void GroupBox::ImplInitSettings( bool bFont,
     }
 }
 
-GroupBox::GroupBox( Window* pParent, WinBits nStyle ) :
+GroupBox::GroupBox( vcl::Window* pParent, WinBits nStyle ) :
     Control( WINDOW_GROUPBOX )
 {
     ImplInit( pParent, nStyle );

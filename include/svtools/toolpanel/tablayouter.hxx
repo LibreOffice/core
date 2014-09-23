@@ -30,7 +30,7 @@
 
 #include <boost/noncopyable.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 
 namespace svt
@@ -59,7 +59,7 @@ namespace svt
                 specifies the content to show on the tab items
         */
         TabDeckLayouter(
-            Window& i_rParent,
+            vcl::Window& i_rParent,
             IToolPanelDeck& i_rPanels,
             const TabAlignment i_eAlignment,
             const TabItemContent i_eItemContent

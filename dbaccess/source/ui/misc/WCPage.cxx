@@ -50,7 +50,7 @@ using namespace ::com::sun::star::sdbcx;
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
 // Klasse OCopyTable
-OCopyTable::OCopyTable(Window * pParent)
+OCopyTable::OCopyTable(vcl::Window * pParent)
     : OWizardPage(pParent, "CopyTablePage", "dbaccess/ui/copytablepage.ui")
     , m_nOldOperation(0)
     , m_pPage2(NULL)

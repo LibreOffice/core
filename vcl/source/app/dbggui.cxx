@@ -213,7 +213,7 @@ private:
     bool            mbHelpText;
 
 public:
-                    DbgInfoDialog( Window* pParent, bool bHelpText = false );
+                    DbgInfoDialog( vcl::Window* pParent, bool bHelpText = false );
 
     void            SetInfoText( const OUString& rStr );
 };
@@ -378,7 +378,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
     }
 }
 
-DbgInfoDialog::DbgInfoDialog( Window* pParent, bool bHelpText ) :
+DbgInfoDialog::DbgInfoDialog( vcl::Window* pParent, bool bHelpText ) :
     ModalDialog( pParent, WB_STDMODAL ),
     maListBox( this, WB_BORDER | WB_AUTOHSCROLL ),
     maOKButton( this, WB_DEFBUTTON )
@@ -449,12 +449,12 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
     maListBox.SetUpdateMode( true );
 }
 
-void DbgDialogTest( Window* pWindow )
+void DbgDialogTest( vcl::Window* pWindow )
 {
     bool        aAccelBuf[65536] = {false};
     sal_uInt16      nChildCount = pWindow->GetChildCount();
-    Window*     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
-    Window*     pChild;
+    vcl::Window*     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+    vcl::Window*     pChild;
     Point       aTabPos;
 
     if ( !pGetChild )
@@ -613,7 +613,7 @@ void DbgDialogTest( Window* pWindow )
 
                 if ( (i+1 < nChildCount) && !aText.isEmpty() )
                 {
-                    Window* pTempChild = pGetChild->GetWindow( WINDOW_NEXT )->ImplGetWindow();
+                    vcl::Window* pTempChild = pGetChild->GetWindow( WINDOW_NEXT )->ImplGetWindow();
                     if ( (pTempChild->GetType() == WINDOW_EDIT) ||
                          (pTempChild->GetType() == WINDOW_MULTILINEEDIT) ||
                          (pTempChild->GetType() == WINDOW_SPINFIELD) ||

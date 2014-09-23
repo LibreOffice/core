@@ -56,7 +56,7 @@ namespace accessibility
          */
         AccessibleProxyEditSource_Impl( SdrObject&      rObj,
                                         SdrView&        rView,
-                                        const Window&   rViewWindow );
+                                        const vcl::Window&   rViewWindow );
         virtual ~AccessibleProxyEditSource_Impl();
 
         // from the SvxEditSource interface
@@ -175,7 +175,7 @@ namespace accessibility
 
     AccessibleProxyEditSource_Impl::AccessibleProxyEditSource_Impl( SdrObject&      rObj,
                                                                     SdrView&        rView,
-                                                                    const Window&   rViewWindow ) :
+                                                                    const vcl::Window&   rViewWindow ) :
         maEditSource( rObj, 0, rView, rViewWindow )
     {
     }
@@ -221,7 +221,7 @@ namespace accessibility
 
     AccessibleEmptyEditSource::AccessibleEmptyEditSource( SdrObject&    rObj,
                                                           SdrView&      rView,
-                                                          const Window& rViewWindow ) :
+                                                          const vcl::Window& rViewWindow ) :
         mpEditSource( new AccessibleEmptyEditSource_Impl() ),
         mrObj(rObj),
         mrView(rView),

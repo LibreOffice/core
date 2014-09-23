@@ -53,7 +53,7 @@ namespace dbaui
     protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) SAL_OVERRIDE;
     public:
-        OUserAdminDlg( Window* _pParent
+        OUserAdminDlg( vcl::Window* _pParent
                             ,SfxItemSet* _pItems
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
                             ,const ::com::sun::star::uno::Any& _aDataSourceName

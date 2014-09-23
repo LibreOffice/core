@@ -41,7 +41,7 @@ namespace pcr
         ::std::set< OUString > m_aProhibitedNames;
 
     public:
-        NewDataTypeDialog(Window* _pParent, const OUString& _rNameBase,
+        NewDataTypeDialog(vcl::Window* _pParent, const OUString& _rNameBase,
             const ::std::vector< OUString >& _rProhibitedNames );
 
         OUString GetName() const { return m_pName->GetText(); }

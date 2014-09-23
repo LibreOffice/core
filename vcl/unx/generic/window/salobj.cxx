@@ -62,7 +62,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     SalDisplay* pSalDisp        = GetGenericData()->GetSalDisplay();
     const SystemEnvData* pEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
-    XLIB_Window aObjectParent   = (XLIB_Window)pEnv->aWindow;
+    ::Window aObjectParent      = (::Window)pEnv->aWindow;
 
     // find out on which screen that window is
     XWindowAttributes aParentAttr;
@@ -271,7 +271,7 @@ X11SalObject::ResetClipRegion()
     XWindowAttributes win_attrib;
     XRectangle        win_size;
 
-    XLIB_Window aShapeWindow = maPrimary;
+    ::Window aShapeWindow = maPrimary;
 
     XGetWindowAttributes ( (Display*)maSystemChildData.pDisplay,
                            aShapeWindow,
@@ -329,7 +329,7 @@ X11SalObject::EndSetClipRegion()
             op = ShapeUnion;
     }
 
-    XLIB_Window aShapeWindow = maPrimary;
+    ::Window aShapeWindow = maPrimary;
 
     XShapeCombineRectangles ( (Display*)maSystemChildData.pDisplay,
                               aShapeWindow,
@@ -439,7 +439,7 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
                 SalMouseEvent aEvt;
                 const SystemEnvData* pParentData = pObject->mpParent->GetSystemData();
                 int dest_x, dest_y;
-                XLIB_Window aChild = None;
+                ::Window aChild = None;
                 XTranslateCoordinates( pEvent->xbutton.display,
                                        pEvent->xbutton.root,
                                        pParentData->aWindow,

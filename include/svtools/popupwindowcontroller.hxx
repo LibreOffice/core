@@ -27,7 +27,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <boost/scoped_ptr.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace svt
 {
@@ -41,7 +41,7 @@ public:
                            const OUString& aCommandURL );
     virtual ~PopupWindowController();
 
-    virtual ::Window* createPopupWindow( ::Window* pParent ) = 0;
+    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) = 0;
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

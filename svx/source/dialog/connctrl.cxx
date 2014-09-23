@@ -36,7 +36,7 @@
 #include <vcl/settings.hxx>
 #include <boost/scoped_ptr.hpp>
 
-SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, WinBits nStyle)
+SvxXConnectionPreview::SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)
     , pEdgeObj(NULL)
     , pObjList(NULL)
@@ -46,7 +46,7 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, WinBits nStyle)
     SetStyles();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXConnectionPreview(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXConnectionPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

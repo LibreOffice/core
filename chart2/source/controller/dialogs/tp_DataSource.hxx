@@ -53,7 +53,7 @@ class DataSourceTabPage :
 {
 public:
     explicit DataSourceTabPage(
-        Window * pParent,
+        vcl::Window * pParent,
         DialogModel & rDialogModel,
         ChartTypeTemplateProvider* pTemplateProvider,
         Dialog * pParentDialog,

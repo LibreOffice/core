@@ -39,7 +39,7 @@ class SdPresLayoutDlg
 public:
     SdPresLayoutDlg(
         ::sd::DrawDocShell* pDocShell,
-        ::Window* pWindow,
+        vcl::Window* pWindow,
         const SfxItemSet& rInAttrs);
 
     virtual ~SdPresLayoutDlg (void);

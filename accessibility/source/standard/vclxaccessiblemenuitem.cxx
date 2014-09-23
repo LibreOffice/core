@@ -395,7 +395,7 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
 
     if ( m_pParent )
     {
-        Window* pWindow = m_pParent->GetWindow();
+        vcl::Window* pWindow = m_pParent->GetWindow();
         if ( pWindow )
         {
             Reference< datatransfer::clipboard::XClipboard > xClipboard = pWindow->GetClipboard();

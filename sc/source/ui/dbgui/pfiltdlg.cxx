@@ -39,7 +39,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 
-ScPivotFilterDlg::ScPivotFilterDlg(Window* pParent, const SfxItemSet& rArgSet,
+ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgSet,
     SCTAB nSourceTab )
     :   ModalDialog(pParent, "PivotFilterDialog",
             "modules/scalc/ui/pivotfilterdialog.ui" )

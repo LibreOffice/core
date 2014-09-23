@@ -49,7 +49,7 @@ private:
     void Init();
 
 public:
-    ScDataBarSettingsDlg(Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos);
+    ScDataBarSettingsDlg(vcl::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos);
 
     ScDataBarFormatData* GetData();
 };

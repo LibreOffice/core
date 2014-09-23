@@ -52,7 +52,7 @@ class OfaAutoCorrDlg : public SfxTabDialog
     DECL_LINK(SelectLanguageHdl, ListBox*);
 public:
 
-    OfaAutoCorrDlg(Window* pParent, const SfxItemSet *pSet);
+    OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet *pSet);
 
     void EnableLanguage(bool bEnable);
 };
@@ -108,9 +108,9 @@ private:
     OUString m_sAccidentalCaps;
 
 public:
-    OfaAutocorrOptionsPage(Window* pParent, const SfxItemSet& rSet);
+    OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -165,12 +165,12 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
         SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
 
-        OfaSwAutoFmtOptionsPage( Window* pParent,
+        OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
                             const SfxItemSet& rSet );
         virtual ~OfaSwAutoFmtOptionsPage();
 
     public:
-        static SfxTabPage*  Create( Window* pParent,
+        static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
         virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
         virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -185,9 +185,9 @@ class AutoCorrEdit : public Edit
     bool    bSpaces;
 
     public:
-                    AutoCorrEdit(Window* pParent, const ResId& rResId) :
+                    AutoCorrEdit(vcl::Window* pParent, const ResId& rResId) :
                         Edit(pParent, rResId), bSpaces(false){}
-                    AutoCorrEdit(Window* pParent) :
+                    AutoCorrEdit(vcl::Window* pParent) :
                         Edit(pParent), bSpaces(false){}
 
     void            SetActionHdl( const Link& rLink )
@@ -260,10 +260,10 @@ private:
 
         void setTabs();
 public:
-                        OfaAutocorrReplacePage( Window* pParent, const SfxItemSet& rSet );
+                        OfaAutocorrReplacePage( vcl::Window* pParent, const SfxItemSet& rSet );
                         virtual ~OfaAutocorrReplacePage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet);
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -318,10 +318,10 @@ private:
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 public:
-                        OfaAutocorrExceptPage( Window* pParent, const SfxItemSet& rSet );
+                        OfaAutocorrExceptPage( vcl::Window* pParent, const SfxItemSet& rSet );
                         virtual ~OfaAutocorrExceptPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -383,11 +383,11 @@ private:
 
     SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
-                        OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet );
+                        OfaQuoteTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 public:
                         virtual ~OfaQuoteTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -404,7 +404,7 @@ public:
     {
         OfaAutoCompleteTabPage* m_pPage;
     public:
-        AutoCompleteMultiListBox(Window *pParent, WinBits nBits)
+        AutoCompleteMultiListBox(vcl::Window *pParent, WinBits nBits)
             : MultiListBox(pParent, nBits)
             , m_pPage(NULL)
         {
@@ -432,12 +432,12 @@ private:
 
     DECL_LINK( CheckHdl, CheckBox* );
 
-                        OfaAutoCompleteTabPage( Window* pParent,
+                        OfaAutoCompleteTabPage( vcl::Window* pParent,
                                                 const SfxItemSet& rSet );
 public:
                         virtual ~OfaAutoCompleteTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -466,7 +466,7 @@ private:
     PushButton*             m_pPropertiesPB;
 
     /// construction via Create()
-    OfaSmartTagOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+    OfaSmartTagOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
     /** Inserts items into m_aSmartTagTypesLB
 
@@ -504,7 +504,7 @@ public:
 
     virtual ~OfaSmartTagOptionsTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet);
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

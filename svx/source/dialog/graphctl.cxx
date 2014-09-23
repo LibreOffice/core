@@ -53,7 +53,7 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
     }
 }
 
-GraphCtrl::GraphCtrl( Window* pParent, WinBits nStyle ) :
+GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             Control         ( pParent, nStyle ),
             aMap100         ( MAP_100TH_MM ),
             nWinStyle       ( 0 ),
@@ -73,7 +73,7 @@ GraphCtrl::GraphCtrl( Window* pParent, WinBits nStyle ) :
     EnableRTL( false );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGraphCtrl(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGraphCtrl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -748,7 +748,7 @@ IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
 {
     if( mpAccContext == NULL )
     {
-        Window* pParent = GetParent();
+        vcl::Window* pParent = GetParent();
 
         DBG_ASSERT( pParent, "-GraphCtrl::CreateAccessible(): No Parent!" );
 

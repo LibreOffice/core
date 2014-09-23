@@ -48,7 +48,7 @@
 struct TableLink_Impl
 {
     ScDocShell* m_pDocSh;
-    Window*     m_pOldParent;
+    vcl::Window*     m_pOldParent;
     Link        m_aEndEditLink;
 
     TableLink_Impl() : m_pDocSh( NULL ), m_pOldParent( NULL ) {}
@@ -106,7 +106,7 @@ ScTableLink::~ScTableLink()
     delete pImpl;
 }
 
-void ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
+void ScTableLink::Edit( vcl::Window* pParent, const Link& rEndEditHdl )
 {
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
     //  ein Optionen-Dialog kommt...

@@ -300,7 +300,7 @@ struct SvxColorTabPageShadow
 
 
 
-SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", &rInAttrs)
     , meType( XCOLOR_LIST )
     , mpXPool( (XOutdevItemPool*) rInAttrs.GetPool() )
@@ -619,7 +619,7 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 
 
 
-SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
+SfxTabPage* SvxColorTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rOutAttrs )
 {
     return( new SvxColorTabPage( pWindow, *rOutAttrs ) );
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 {
-    Window *pWindow = this;
+    vcl::Window *pWindow = this;
     while( pWindow )
     {
         pWindow = pWindow->GetParent();

@@ -78,7 +78,7 @@ namespace dbaui
         */
         sal_uInt16 getColumnIdent( sal_uInt16 _nColId ) const;
     public:
-        ORelationControl(Window *pParent);
+        ORelationControl(vcl::Window *pParent);
         void SetController(OTableListBoxControl* pController)
         {
             m_pBoxControl = pController;
@@ -127,7 +127,7 @@ namespace dbaui
     };
 
     // class ORelationControl
-    ORelationControl::ORelationControl(Window *pParent)
+    ORelationControl::ORelationControl(vcl::Window *pParent)
         : EditBrowseBox(pParent,
             EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE,
             WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
@@ -138,7 +138,7 @@ namespace dbaui
     {
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeORelationControl(Window *pParent, VclBuilder::stringmap &)
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeORelationControl(vcl::Window *pParent, VclBuilder::stringmap &)
     {
         return new ORelationControl(pParent);
     }

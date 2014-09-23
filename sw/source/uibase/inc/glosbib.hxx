@@ -37,12 +37,12 @@ class SwGlossaryHdl;
 class FEdit : public Edit
 {
 public:
-    FEdit(Window* pParent, const ResId& rResId)
+    FEdit(vcl::Window* pParent, const ResId& rResId)
         : Edit(pParent, rResId)
     {
     }
 
-    FEdit(Window* pParent)
+    FEdit(vcl::Window* pParent)
         : Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
     {
     }
@@ -60,7 +60,7 @@ struct GlosBibUserData
 class SwGlossaryGroupTLB : public SvTabListBox
 {
 public:
-    SwGlossaryGroupTLB(Window* pParent)
+    SwGlossaryGroupTLB(vcl::Window* pParent)
         : SvTabListBox(pParent, WB_BORDER|WB_HSCROLL|WB_CLIPCHILDREN|WB_SORT)
     {
     }
@@ -98,7 +98,7 @@ protected:
     DECL_LINK(RenameHdl, void *);
 
 public:
-    SwGlossaryGroupDlg(Window * pParent,
+    SwGlossaryGroupDlg(vcl::Window * pParent,
                         std::vector<OUString> const& rPathArr,
                         SwGlossaryHdl *pGlosHdl);
     virtual ~SwGlossaryGroupDlg();

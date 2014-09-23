@@ -75,7 +75,7 @@ protected:
     void                SavePalettes();
 
 public:
-    SvxAreaTabDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
+    SvxAreaTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
     virtual ~SvxAreaTabDialog();
 
     void                SetNewColorList( XColorListRef pColTab )
@@ -159,17 +159,17 @@ class SvxTransparenceTabPage : public SvxTabPage
     void InvalidatePreview (bool bEnable = true );
 
 public:
-    SvxTransparenceTabPage(Window* pParent, const SfxItemSet& rInAttrs);
+    SvxTransparenceTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
     void Construct();
 
-    static SfxTabPage* Create(Window*, const SfxItemSet*);
+    static SfxTabPage* Create(vcl::Window*, const SfxItemSet*);
     static const sal_uInt16* GetRanges();
 
     virtual bool FillItemSet(SfxItemSet*) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet*) SAL_OVERRIDE;
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet) SAL_OVERRIDE;
-    virtual void PointChanged(Window* pWindow, RECT_POINT eRP) SAL_OVERRIDE;
+    virtual void PointChanged(vcl::Window* pWindow, RECT_POINT eRP) SAL_OVERRIDE;
 
     void SetPageType(sal_uInt16 nInType) { nPageType = nInType; }
     void SetDlgType(sal_uInt16 nInType) { nDlgType = nInType; }
@@ -288,18 +288,18 @@ private:
     void ClickBitmapHdl_Impl();
 
 public:
-    SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs );
+    SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetGradientList( XGradientListRef pGrdLst)
@@ -354,17 +354,17 @@ private:
     DECL_LINK( ModifyShadowHdl_Impl, void * );
 
 public:
-    SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
     void    Construct();
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
@@ -433,11 +433,11 @@ private:
     void SetControlState_Impl( XGradientStyle eXGS );
 
 public:
-    SvxGradientTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxGradientTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -509,18 +509,18 @@ private:
     long CheckChanges_Impl();
 
 public:
-    SvxHatchTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxHatchTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetHatchingList( XHatchListRef pHtchLst)
@@ -594,19 +594,19 @@ private:
     long CheckChanges_Impl();
 
 public:
-    SvxBitmapTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxBitmapTabPage();
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetBitmapList( XBitmapListRef pBmpLst) { pBitmapList = pBmpLst; }
@@ -627,7 +627,7 @@ public:
             Return a label control that provides a name for the specified
             control.
     */
-    virtual Window* GetParentLabeledBy( const Window* pLabeled ) const SAL_OVERRIDE;
+    virtual vcl::Window* GetParentLabeledBy( const vcl::Window* pLabeled ) const SAL_OVERRIDE;
 };
 
 /************************************************************************/
@@ -729,12 +729,12 @@ private:
 
     void UpdateModified();
 public:
-    SvxColorTabPage( Window* pParent, const SfxItemSet& rInAttrs );
+    SvxColorTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxColorTabPage();
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet* );
+    static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 

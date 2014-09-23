@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 #include <sal/types.h>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace sd { namespace toolpanel {
 
@@ -80,7 +80,7 @@ public:
             Returns the window which is layouted or NULL to indicate
             that the object is in an invalid state.
     */
-    virtual ::Window* GetWindow (void) = 0;
+    virtual vcl::Window* GetWindow (void) = 0;
 
     /** Return the minimal width of the window.
     */

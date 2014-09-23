@@ -146,7 +146,7 @@ struct ImpTextView
 {
     TextEngine*         mpTextEngine;
 
-    Window*             mpWindow;
+    vcl::Window*             mpWindow;
     TextSelection       maSelection;
     Point               maStartDocPos;
 //    TextPaM             maMBDownPaM;
@@ -176,7 +176,7 @@ struct ImpTextView
     bool                mbCursorAtEndOfLine;
 };
 
-TextView::TextView( TextEngine* pEng, Window* pWindow ) :
+TextView::TextView( TextEngine* pEng, vcl::Window* pWindow ) :
     mpImpl(new ImpTextView)
 {
     pWindow->EnableRTL( false );
@@ -2309,7 +2309,7 @@ void TextSelFunctionSet::DestroyAnchor()
 }
 TextEngine*         TextView::GetTextEngine() const
 { return mpImpl->mpTextEngine; }
-Window*             TextView::GetWindow() const
+vcl::Window*             TextView::GetWindow() const
 { return mpImpl->mpWindow; }
 void                TextView::EnableCursor( bool bEnable )
 { mpImpl->mbCursorEnabled = bEnable; }

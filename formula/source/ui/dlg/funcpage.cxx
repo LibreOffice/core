@@ -31,7 +31,7 @@
 namespace formula
 {
 
-FormulaListBox::FormulaListBox( Window* pParent, WinBits nBits ):
+FormulaListBox::FormulaListBox( vcl::Window* pParent, WinBits nBits ):
     ListBox(pParent, nBits)
 {}
 
@@ -57,7 +57,7 @@ bool FormulaListBox::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFormulaListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFormulaListBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new FormulaListBox(pParent, WB_BORDER | WB_SORT);
 }
@@ -71,7 +71,7 @@ inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
     return nLbPos;
 }
 
-FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
+FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManager):
     TabPage(pParent, "FunctionPage", "formula/ui/functionpage.ui"),
     m_pFunctionManager(_pFunctionManager)
 {

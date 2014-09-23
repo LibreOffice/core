@@ -133,7 +133,7 @@ OUString VCLXAccessibleToolBoxItem::GetText( bool _bAsName )
             sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
             if (sRet.isEmpty())
             {
-                Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
+                vcl::Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
                 if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
                      pItemWindow->GetAccessible()->getAccessibleContext().is() )
                 {

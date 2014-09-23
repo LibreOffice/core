@@ -25,7 +25,7 @@
 namespace dbaui
 {
     class OSqlEdit;
-    class OQueryTextView : public Window
+    class OQueryTextView : public vcl::Window
     {
         friend class OQueryViewSwitch;
         OSqlEdit*   m_pEdit;

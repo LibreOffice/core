@@ -40,7 +40,7 @@ class SwParaDlg: public SfxTabDialog
     void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
 
 public:
-    SwParaDlg(  Window *pParent,
+    SwParaDlg(  vcl::Window *pParent,
                 SwView& rVw,
                 const SfxItemSet&,
                 sal_uInt8 nDialogMode,

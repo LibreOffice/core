@@ -61,7 +61,7 @@ class LinePropertyPanel
 {
 public:
     static LinePropertyPanel* Create(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
@@ -162,7 +162,7 @@ private:
 
     // constructor/destuctor
     LinePropertyPanel(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~LinePropertyPanel(void);

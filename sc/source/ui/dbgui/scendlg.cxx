@@ -36,7 +36,7 @@
 #include "scresid.hxx"
 #include "scendlg.hxx"
 
-ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const OUString& rName, bool bEdit, bool bSheetProtected)
+ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName, bool bEdit, bool bSheetProtected)
 
     : ModalDialog(pParent, "ScenarioDialog",
         "modules/scalc/ui/scenariodialog.ui")

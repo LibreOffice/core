@@ -75,7 +75,7 @@ class CodeCompleteWindow;
 OUString getTextEngineText (ExtTextEngine&);
 void setTextEngineText (ExtTextEngine&, OUString const&);
 
-class EditorWindow : public Window, public SfxListener
+class EditorWindow : public vcl::Window, public SfxListener
 {
 friend class CodeCompleteListBox;
 private:
@@ -144,7 +144,7 @@ protected:
     bool            ImpCanModify();
 
 public:
-                    EditorWindow (Window* pParent, ModulWindow*);
+                    EditorWindow (vcl::Window* pParent, ModulWindow*);
                     virtual ~EditorWindow();
 
     ExtTextEngine*  GetEditEngine() const   { return pEditEngine.get(); }
@@ -169,7 +169,7 @@ public:
 };
 
 
-class BreakPointWindow : public Window
+class BreakPointWindow : public vcl::Window
 {
 private:
     ModulWindow&    rModulWindow;
@@ -192,7 +192,7 @@ protected:
     bool            SyncYOffset();
 
 public:
-                    BreakPointWindow (Window* pParent, ModulWindow*);
+                    BreakPointWindow (vcl::Window* pParent, ModulWindow*);
                     virtual ~BreakPointWindow();
 
     void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
@@ -216,7 +216,7 @@ protected:
     SbxBase*        ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rbArrayElement );
 
 public:
-    WatchTreeListBox( Window* pParent, WinBits nWinBits );
+    WatchTreeListBox( vcl::Window* pParent, WinBits nWinBits );
     virtual ~WatchTreeListBox();
 
     void            RequestingChildren( SvTreeListEntry * pParent ) SAL_OVERRIDE;
@@ -277,7 +277,7 @@ public:
 };
 
 
-class ComplexEditorWindow : public Window
+class ComplexEditorWindow : public vcl::Window
 {
 private:
     BreakPointWindow    aBrkWindow;
@@ -426,7 +426,7 @@ public:
 class ModulWindowLayout: public Layout
 {
 public:
-    ModulWindowLayout (Window* pParent, ObjectCatalog&);
+    ModulWindowLayout (vcl::Window* pParent, ObjectCatalog&);
 public:
     // Layout:
     virtual void Activating (BaseWindow&) SAL_OVERRIDE;
@@ -507,7 +507,7 @@ protected:
     virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
 };
 
-class CodeCompleteWindow: public Window
+class CodeCompleteWindow: public vcl::Window
 {
 friend class CodeCompleteListBox;
 private:

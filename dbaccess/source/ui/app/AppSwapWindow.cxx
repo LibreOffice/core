@@ -36,7 +36,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 // class OApplicationSwapWindow
-OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWindow& _rBorderWindow )
+OApplicationSwapWindow::OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow )
     :Window(_pParent,WB_DIALOGCONTROL )
     ,m_aIconControl(this)
     ,m_eLastType(E_NONE)

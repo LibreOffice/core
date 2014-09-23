@@ -672,7 +672,7 @@ gboolean ensure_dbus_setup( gpointer data )
         GActionGroup* pActionGroup = ( ( GActionGroup* ) g_lo_action_group_new( reinterpret_cast< gpointer >( pSalFrame ) ) );
 
         // Generate menu paths.
-        XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
+        ::Window windowId = GDK_WINDOW_XID( gdkWindow );
         gchar* aDBusWindowPath = g_strdup_printf( "/org/libreoffice/window/%lu", windowId );
         gchar* aDBusMenubarPath = g_strdup_printf( "/org/libreoffice/window/%lu/menus/menubar", windowId );
 
@@ -1153,7 +1153,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
     else if( ! bBeforeRealize )
     {
         Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
-        XLIB_Window aWindow = widget_get_xid(GTK_WIDGET(pWindow));
+        ::Window aWindow = widget_get_xid(GTK_WIDGET(pWindow));
         XWMHints* pHints = XGetWMHints( pDisplay, aWindow );
         if( ! pHints )
         {
@@ -1375,8 +1375,8 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
 GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow aWindow )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
-    XLIB_Window aRoot, aParent;
-    XLIB_Window* pChildren;
+    ::Window aRoot, aParent;
+    ::Window* pChildren;
     unsigned int nChildren;
     bool bBreak = false;
     do
@@ -1442,7 +1442,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
 #if !GTK_CHECK_VERSION(3,0,0)
     int x_ret, y_ret;
     unsigned int w, h, bw, d;
-    XLIB_Window aRoot;
+    ::Window aRoot;
     XGetGeometry( getDisplay()->GetDisplay(), pSysData->aWindow,
                   &aRoot, &x_ret, &y_ret, &w, &h, &bw, &d );
     maGeometry.nWidth   = w;
@@ -1453,7 +1453,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     {
         XReparentWindow( getDisplay()->GetDisplay(),
                          widget_get_xid(m_pWindow),
-                         (XLIB_Window)pSysData->aWindow,
+                         (::Window)pSysData->aWindow,
                          0, 0 );
     }
 #else
@@ -2927,7 +2927,7 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
 
 #if !GTK_CHECK_VERSION(3,0,0)
 
-void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, SalX11Screen nXScreen )
+void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Screen nXScreen )
 {
     bool bWasVisible = m_pWindow && IS_WIDGET_MAPPED(m_pWindow);
     if( bWasVisible )
@@ -3121,7 +3121,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
             bContinueDispatch = false;
             // update position
             int x = 0, y = 0;
-            XLIB_Window aChild;
+            ::Window aChild;
             XTranslateCoordinates( getDisplay()->GetDisplay(),
                                    widget_get_xid(m_pWindow),
                                    getDisplay()->GetRootWindow( getDisplay()->GetDefaultXScreen() ),
@@ -3884,7 +3884,7 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     GdkWindow* pWin = widget_get_window(GTK_WIDGET(pThis->getWindow()));
     if( pWin )
     {
-        XLIB_Window aWin = GDK_WINDOW_XWINDOW(pWin);
+        ::Window aWin = GDK_WINDOW_XWINDOW(pWin);
         if( aWin != None )
             XSetWindowBackgroundPixmap( pThis->getDisplay()->GetDisplay(),
                                         aWin,
@@ -4437,7 +4437,7 @@ uno::Reference<accessibility::XAccessibleEditableText>
     return uno::Reference< accessibility::XAccessibleEditableText >();
 }
 
-static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(Window *pFocusWin)
+static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::Window *pFocusWin)
 {
     uno::Reference<accessibility::XAccessibleEditableText> xText;
     try
@@ -4455,7 +4455,7 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(Windo
 
 gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer /*im_handler*/ )
 {
-    Window *pFocusWin = Application::GetFocusWindow();
+    vcl::Window *pFocusWin = Application::GetFocusWindow();
     if (!pFocusWin)
         return true;
 
@@ -4477,7 +4477,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
 gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint offset, gint nchars,
     gpointer /*im_handler*/ )
 {
-    Window *pFocusWin = Application::GetFocusWindow();
+    vcl::Window *pFocusWin = Application::GetFocusWindow();
     if (!pFocusWin)
         return true;
 

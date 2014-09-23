@@ -344,7 +344,7 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 
     WaitObject* pWait = NULL;
     if( mpViewShell )
-        pWait = new WaitObject( (Window*) mpViewShell->GetActiveWindow() );
+        pWait = new WaitObject( (vcl::Window*) mpViewShell->GetActiveWindow() );
 
     mpDoc->NewOrLoadCompleted( NEW_DOC );
     mpDoc->CreateFirstPages();
@@ -516,10 +516,10 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
     if (pFrame1)
     {
-        ::Window* pWindow = &pFrame1->GetWindow();
+        vcl::Window* pWindow = &pFrame1->GetWindow();
         if ( pWindow )
         {
-            ::Window* pSysWin = pWindow->GetSystemWindow();
+            vcl::Window* pSysWin = pWindow->GetSystemWindow();
             if ( pSysWin )
             {
                 pSysWin->SetAccessibleName(OUString());
@@ -1168,7 +1168,7 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
     ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
 
-SfxDocumentInfoDialog* DrawDocShell::CreateDocumentInfoDialog( ::Window *pParent, const SfxItemSet &rSet )
+SfxDocumentInfoDialog* DrawDocShell::CreateDocumentInfoDialog( vcl::Window *pParent, const SfxItemSet &rSet )
 {
     SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
     DrawDocShell*          pDocSh = PTR_CAST(DrawDocShell,SfxObjectShell::Current());

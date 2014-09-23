@@ -22,7 +22,7 @@
 
 
 GallerySplitter::GallerySplitter(
-    Window* pParent,
+    vcl::Window* pParent,
     const ResId& rResId,
     const ::boost::function<void(void)>& rDataChangeFunctor)
     : Splitter( pParent, rResId ),

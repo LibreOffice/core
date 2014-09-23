@@ -72,7 +72,7 @@ class AbstractSwWordCountFloatDlg_Impl : public AbstractSwWordCountFloatDlg
     DECL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl,SwWordCountFloatDlg)
     virtual void                UpdateCounts() SAL_OVERRIDE;
     virtual void                SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat) SAL_OVERRIDE;
-    virtual Window *            GetWindow() SAL_OVERRIDE; //this method is added for return a Window type pointer
+    virtual vcl::Window *            GetWindow() SAL_OVERRIDE; //this method is added for return a Window type pointer
 };
 
 class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
@@ -210,7 +210,7 @@ class AbstractSwFldDlg_Impl : public AbstractSwFldDlg
     virtual void                Initialize(SfxChildWinInfo *pInfo) SAL_OVERRIDE;
     virtual void                ReInitDlg() SAL_OVERRIDE;
     virtual void                ActivateDatabasePage() SAL_OVERRIDE;
-    virtual Window *            GetWindow() SAL_OVERRIDE; //this method is added for return a Window type pointer
+    virtual vcl::Window *            GetWindow() SAL_OVERRIDE; //this method is added for return a Window type pointer
 };
 
 class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
@@ -336,7 +336,7 @@ class AbstractIndexMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
     DECL_ABSTDLG_BASE(AbstractIndexMarkFloatDlg_Impl,SwIndexMarkFloatDlg)
     virtual void    ReInitDlg(SwWrtShell& rWrtShell) SAL_OVERRIDE;
-    virtual Window *            GetWindow() SAL_OVERRIDE; //this method is added for return a Window type pointer
+    virtual vcl::Window *            GetWindow() SAL_OVERRIDE; //this method is added for return a Window type pointer
 };
 
 class SwAuthMarkFloatDlg;
@@ -344,7 +344,7 @@ class AbstractAuthMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
     DECL_ABSTDLG_BASE(AbstractAuthMarkFloatDlg_Impl,SwAuthMarkFloatDlg)
     virtual void    ReInitDlg(SwWrtShell& rWrtShell) SAL_OVERRIDE;
-    virtual Window *            GetWindow() SAL_OVERRIDE; //this method is added for return a Window type pointer
+    virtual vcl::Window *            GetWindow() SAL_OVERRIDE; //this method is added for return a Window type pointer
 };
 
 class SwMailMergeWizard;
@@ -375,38 +375,38 @@ class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 public:
     virtual ~SwAbstractDialogFactory_Impl() {}
 
-    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent,
+    virtual SfxAbstractDialog*              CreateSfxDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
                                                                         sal_uInt32 nResId
                                                                         ) SAL_OVERRIDE;
     virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(SfxBindings* pBindings,
-        SfxChildWindow* pChild, Window *pParent, SfxChildWinInfo* pInfo) SAL_OVERRIDE;
-    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg(Window* pParent) SAL_OVERRIDE;
-    virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
+        SfxChildWindow* pChild, vcl::Window *pParent, SfxChildWinInfo* pInfo) SAL_OVERRIDE;
+    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( vcl::Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream ) SAL_OVERRIDE;
-    virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId ) SAL_OVERRIDE;
-    virtual AbstractSwBreakDlg * CreateSwBreakDlg(Window *pParent, SwWrtShell &rSh) SAL_OVERRIDE;
+    virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId ) SAL_OVERRIDE;
+    virtual AbstractSwBreakDlg * CreateSwBreakDlg(vcl::Window *pParent, SwWrtShell &rSh) SAL_OVERRIDE;
     virtual VclAbstractDialog   * CreateSwChangeDBDlg(SwView& rVw) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog *  CreateSwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
+    virtual SfxAbstractTabDialog *  CreateSwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         sal_uInt8 nDialogMode, const OUString* pFmtStr = 0) SAL_OVERRIDE;
     virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg(SwView& rView, bool bToTable) SAL_OVERRIDE;
-    virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,int nResId) SAL_OVERRIDE;
+    virtual VclAbstractDialog * CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV,int nResId) SAL_OVERRIDE;
 
     virtual AbstractSwInsertDBColAutoPilot* CreateSwInsertDBColAutoPilot(SwView& rView,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
         com::sun::star::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg(Window *pParent, SwWrtShell &rSh) SAL_OVERRIDE;
+    virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh) SAL_OVERRIDE;
 
-    virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog (Window *pParent, SwWrtShell &rSh,
+    virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog (vcl::Window *pParent, SwWrtShell &rSh,
         SwField* pField, bool bNextButton = false) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) SAL_OVERRIDE;
-    virtual AbstractSwLabDlg* CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet,
+    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) SAL_OVERRIDE;
+    virtual AbstractSwLabDlg* CreateSwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) SAL_OVERRIDE;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog* CreateSwParaDlg ( Window *pParent,
+    virtual SfxAbstractTabDialog* CreateSwParaDlg ( vcl::Window *pParent,
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
                                                     sal_uInt8 nDialogMode,
@@ -414,36 +414,36 @@ public:
                                                     bool bDraw = false,
                                                     const OString& sDefPage = OString() ) SAL_OVERRIDE;
 
-    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(Window * pParent, const OUString &rShortName) SAL_OVERRIDE;
-    virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ) SAL_OVERRIDE;
-    virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ) SAL_OVERRIDE;
+    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName) SAL_OVERRIDE;
+    virtual VclAbstractDialog * CreateVclAbstractDialog ( vcl::Window * pParent, SwWrtShell &rSh, int nResId ) SAL_OVERRIDE;
+    virtual AbstractSplitTableDialog * CreateSplitTblDialog ( vcl::Window * pParent, SwWrtShell &rSh ) SAL_OVERRIDE;
 
-    virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
+    virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                                                             bool bSetAutoFmt = true,
                                                             const SwTableAutoFmt* pSelFmt = 0 ) SAL_OVERRIDE;
-    virtual SfxAbstractDialog * CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, sal_uInt16 nType, int nResId ) SAL_OVERRIDE;
+    virtual SfxAbstractDialog * CreateSwBorderDlg (vcl::Window* pParent, SfxItemSet& rSet, sal_uInt16 nType, int nResId ) SAL_OVERRIDE;
 
-    virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) SAL_OVERRIDE;
-    virtual VclAbstractDialog * CreateSwTableWidthDlg(Window *pParent, SwTableFUNC &rFnc) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog* CreateSwTableTabDlg(Window* pParent, SfxItemPool& Pool,
+    virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) SAL_OVERRIDE;
+    virtual VclAbstractDialog * CreateSwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc) SAL_OVERRIDE;
+    virtual SfxAbstractTabDialog* CreateSwTableTabDlg(vcl::Window* pParent, SfxItemPool& Pool,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) SAL_OVERRIDE;
-    virtual AbstractSwFldDlg * CreateSwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent) SAL_OVERRIDE;
+    virtual AbstractSwFldDlg * CreateSwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent) SAL_OVERRIDE;
     virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ) SAL_OVERRIDE;
-    virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg(Window* pParent,
+    virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg(vcl::Window* pParent,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess) SAL_OVERRIDE;
-    virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(Window *pParent) SAL_OVERRIDE;
+    virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(vcl::Window *pParent) SAL_OVERRIDE;
 
-    virtual VclAbstractDialog*          CreateTblMergeDialog(Window* pParent, bool& rWithPrev) SAL_OVERRIDE;
+    virtual VclAbstractDialog*          CreateTblMergeDialog(vcl::Window* pParent, bool& rWithPrev) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*       CreateFrmTabDialog( const OString &rDialogType,
-                                                SfxViewFrame *pFrame, Window *pParent,
+                                                SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool bNewFrm  = true,
                                                 bool bFmt     = false,
                                                 const OString& sDefPage = OString(),
                                                 const OUString*   pFmtStr  = 0) SAL_OVERRIDE;
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
-                                                Window*             pParent,
+                                                vcl::Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,
                                                 const OString&      sPage = OString(),
@@ -452,51 +452,51 @@ public:
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) SAL_OVERRIDE;
-    virtual AbstractFldInputDlg*        CreateFldInputDlg(Window *pParent,
+    virtual AbstractFldInputDlg*        CreateFldInputDlg(vcl::Window *pParent,
         SwWrtShell &rSh, SwField* pField, bool bNextButton = false) SAL_OVERRIDE;
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg(
-        Window * pParent, SwWrtShell &rSh, bool bEd = false) SAL_OVERRIDE;
-    virtual VclAbstractDialog *         CreateTitlePageDlg ( Window * pParent ) SAL_OVERRIDE;
+        vcl::Window * pParent, SwWrtShell &rSh, bool bEd = false) SAL_OVERRIDE;
+    virtual VclAbstractDialog *         CreateTitlePageDlg ( vcl::Window * pParent ) SAL_OVERRIDE;
     virtual VclAbstractDialog *         CreateVclSwViewDialog(SwView& rView) SAL_OVERRIDE;
     virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView) SAL_OVERRIDE;
-    virtual AbstractJavaEditDialog*     CreateJavaEditDialog(Window* pParent,
+    virtual AbstractJavaEditDialog*     CreateJavaEditDialog(vcl::Window* pParent,
         SwWrtShell* pWrtSh) SAL_OVERRIDE;
     virtual AbstractMailMergeDlg*       CreateMailMergeDlg( int nResId,
-                                                Window* pParent, SwWrtShell& rSh,
+                                                vcl::Window* pParent, SwWrtShell& rSh,
                                                 const OUString& rSourceName,
                                                 const OUString& rTblName,
                                                 sal_Int32 nCommandType,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
                                                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0 ) SAL_OVERRIDE;
-    virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg(Window* pParent) SAL_OVERRIDE;
-    virtual AbstractMailMergeFieldConnectionsDlg* CreateMailMergeFieldConnectionsDlg(Window* pParent) SAL_OVERRIDE;
-    virtual VclAbstractDialog*          CreateMultiTOXMarkDlg(Window* pParent, SwTOXMgr &rTOXMgr) SAL_OVERRIDE;
+    virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual AbstractMailMergeFieldConnectionsDlg* CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent) SAL_OVERRIDE;
+    virtual VclAbstractDialog*          CreateMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr &rTOXMgr) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*       CreateSwTabDialog( int nResId,
-                                                Window* pParent,
+                                                vcl::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) SAL_OVERRIDE;
     virtual AbstractMultiTOXTabDialog*      CreateMultiTOXTabDialog(
-                                                Window* pParent, const SfxItemSet& rSet,
+                                                vcl::Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
                                                 bool bGlobal = false) SAL_OVERRIDE;
-    virtual AbstractEditRegionDlg*      CreateEditRegionDlg(Window* pParent, SwWrtShell& rWrtSh) SAL_OVERRIDE;
+    virtual AbstractEditRegionDlg*      CreateEditRegionDlg(vcl::Window* pParent, SwWrtShell& rWrtSh) SAL_OVERRIDE;
     virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog(
-        Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) SAL_OVERRIDE;
+        vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) SAL_OVERRIDE;
     virtual AbstractMarkFloatDlg*       CreateIndexMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
-                                                       Window *pParent,
+                                                       vcl::Window *pParent,
                                                        SfxChildWinInfo* pInfo,
                                                        bool bNew=true) SAL_OVERRIDE;
     virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg(
                                                        SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
-                                                       Window *pParent,
+                                                       vcl::Window *pParent,
                                                        SfxChildWinInfo* pInfo,
                                                        bool bNew=true) SAL_OVERRIDE;
     virtual VclAbstractDialog *         CreateIndexMarkModalDlg(
-                                                Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) SAL_OVERRIDE;
+                                                vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) SAL_OVERRIDE;
 
     virtual AbstractMailMergeWizard*    CreateMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem) SAL_OVERRIDE;
 

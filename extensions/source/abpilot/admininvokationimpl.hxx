@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-class Window;
+namespace vcl { class Window; }
 
 namespace abp
 {
@@ -36,13 +36,13 @@ namespace abp
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xDataSource;
-        Window*         m_pMessageParent;
+        vcl::Window*         m_pMessageParent;
 
     public:
         OAdminDialogInvokation(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _xDataSource,
-            Window* _pMessageParent
+            vcl::Window* _pMessageParent
         );
 
         bool invokeAdministration( bool _bFixedType );

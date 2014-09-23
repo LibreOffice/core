@@ -33,7 +33,7 @@ using namespace com::sun::star;
 
 #define TRANSCOL Color( COL_WHITE )
 
-ContourWindow::ContourWindow( Window* pParent, WinBits nBits ) :
+ContourWindow::ContourWindow( vcl::Window* pParent, WinBits nBits ) :
             GraphCtrl       ( pParent, nBits ),
             aWorkRect       ( 0, 0, 0, 0 ),
             bPipetteMode    ( false ),

@@ -548,9 +548,9 @@ void ToolBox::ImplErase( ToolBox* pThis, const Rectangle &rRect, bool bHighlight
     // to have the same highlight color (transparency in DrawSelectionBackground())
     // items with open popups will also painted using a constant color
     if( !pThis->mpData->mbNativeButtons &&
-        (bHighlight || ! (((Window*) pThis)->GetStyle() & WB_3DLOOK ) ) )
+        (bHighlight || ! (((vcl::Window*) pThis)->GetStyle() & WB_3DLOOK ) ) )
     {
-        if( (((Window*) pThis)->GetStyle() & WB_3DLOOK ) )
+        if( (((vcl::Window*) pThis)->GetStyle() & WB_3DLOOK ) )
         {
             pThis->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
             pThis->SetLineColor();
@@ -1349,7 +1349,7 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
     return (long) true;
 }
 
-void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
+void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
 
     // initialize variables
@@ -1547,16 +1547,16 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
     }
 }
 
-ToolBox::ToolBox( Window* pParent, WinBits nStyle ) :
+ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
     DockingWindow( WINDOW_TOOLBOX )
 {
     ImplInit( pParent, nStyle );
 }
 
-ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
+ToolBox::ToolBox( vcl::Window* pParent, const ResId& rResId ) :
     DockingWindow( WINDOW_TOOLBOX )
 {
-    SAL_INFO( "vcl.window", "vcl: ToolBox::ToolBox( Window* pParent, const ResId& rResId )" );
+    SAL_INFO( "vcl.window", "vcl: ToolBox::ToolBox( vcl::Window* pParent, const ResId& rResId )" );
 
     rResId.SetRT( RSC_TOOLBOX );
     WinBits nStyle = ImplInitRes( rResId );
@@ -3547,7 +3547,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     // eg, in a edit control
     // and do not highlight when focus is in a different toolbox
     bool bDrawHotSpot = true;
-    Window *pWin = Application::GetFocusWindow();
+    vcl::Window *pWin = Application::GetFocusWindow();
     if( pWin && pWin->ImplGetWindowImpl()->mbToolBox && pWin != this )
         bDrawHotSpot = false;
 
@@ -4084,7 +4084,7 @@ void ToolBox::Resize()
     {
         if (mpData->m_aItems[i].mbExpand)
         {
-            Window *pWindow = mpData->m_aItems[i].mpWindow;
+            vcl::Window *pWindow = mpData->m_aItems[i].mpWindow;
             SAL_WARN_IF(!pWindow, "vcl.layout", "only tabitems with window supported at the moment");
             if (!pWindow)
                 continue;
@@ -4124,7 +4124,7 @@ void ToolBox::Resize()
                     for (size_t i = 0; i < aExpandables.size(); ++i)
                     {
                         size_t nIndex = aExpandables[i];
-                        Window *pWindow = mpData->m_aItems[nIndex].mpWindow;
+                        vcl::Window *pWindow = mpData->m_aItems[nIndex].mpWindow;
                         Size aWinSize(pWindow->GetSizePixel());
                         Size aPrefSize(pWindow->get_preferred_size());
                         aWinSize.Width() = aPrefSize.Width() + nDiff;
@@ -4275,7 +4275,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
             {
                 // internal TAB cycling only if parent is not a dialog or if we are the only child
                 // otherwise the dialog control will take over
-                Window *pParent = ImplGetParent();
+                vcl::Window *pParent = ImplGetParent();
                 bool bOldSchoolContainer =
                     ((pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL &&
                     pParent->GetChildCount() != 1);
@@ -4713,12 +4713,12 @@ Size ToolBox::GetOptimalSize() const
 {
     // If we have any expandable entries, then force them to their
     // optimal sizes, then reset them afterwards
-    std::map<Window*, Size> aExpandables;
+    std::map<vcl::Window*, Size> aExpandables;
     for (size_t i = 0; i < mpData->m_aItems.size(); ++i)
     {
         if (mpData->m_aItems[i].mbExpand)
         {
-            Window *pWindow = mpData->m_aItems[i].mpWindow;
+            vcl::Window *pWindow = mpData->m_aItems[i].mpWindow;
             SAL_WARN_IF(!pWindow, "vcl.layout", "only tabitems with window supported at the moment");
             if (!pWindow)
                 continue;
@@ -4732,9 +4732,9 @@ Size ToolBox::GetOptimalSize() const
 
     Size aSize(ImplCalcSize( this, mnLines ));
 
-    for (std::map<Window*, Size>::iterator aI = aExpandables.begin(); aI != aExpandables.end(); ++aI)
+    for (std::map<vcl::Window*, Size>::iterator aI = aExpandables.begin(); aI != aExpandables.end(); ++aI)
     {
-        Window *pWindow = aI->first;
+        vcl::Window *pWindow = aI->first;
         Size aWinSize = aI->second;
         pWindow->SetSizePixel(aWinSize);
     }
@@ -4958,7 +4958,7 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
     return bRet;
 }
 
-bool ImplCloseLastPopup( Window *pParent )
+bool ImplCloseLastPopup( vcl::Window *pParent )
 {
     // close last popup toolbox (see also:
     // ImplHandleMouseFloatMode(...) in winproc.cxx )
@@ -5029,7 +5029,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     mnKeyModifier = aKeyCode.GetModifier();
     sal_uInt16 nCode = aKeyCode.GetCode();
 
-    Window *pParent = ImplGetParent();
+    vcl::Window *pParent = ImplGetParent();
     bool bOldSchoolContainer = ((pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL);
     bool bParentIsContainer = bOldSchoolContainer || isContainerWindow(pParent);
 
@@ -5128,7 +5128,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             else
             {
                 // send focus to document pane
-                Window *pWin = this;
+                vcl::Window *pWin = this;
                 while( pWin )
                 {
                     if( !pWin->GetParent() )
@@ -5166,7 +5166,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             // #i13931# forward alphanum keyinput into embedded control
             if( (aKeyGroup == KEYGROUP_NUM || aKeyGroup == KEYGROUP_ALPHA ) && pItem && pItem->mpWindow && pItem->mbEnabled )
             {
-                Window *pFocusWindow = Application::GetFocusWindow();
+                vcl::Window *pFocusWindow = Application::GetFocusWindow();
                 ImplHideFocus();
                 mbChangingHighlight = true;  // avoid focus change due to loss of focus
                 pItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
@@ -5193,7 +5193,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     if (HasFocus() && mpData->mbKeyInputDisabled && bParentIsContainer)
     {
         sal_uInt16 n = 0;
-        Window *pFocusControl = pParent->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
+        vcl::Window *pFocusControl = pParent->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
         if ( pFocusControl && pFocusControl != this )
             pFocusControl->ImplControlFocus( GETFOCUS_INIT );
     }
@@ -5532,7 +5532,7 @@ void ToolBox::ImplShowFocus()
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow )
         {
-            Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
+            vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
             pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = true;
             pWin->Invalidate( 0 );
         }
@@ -5546,7 +5546,7 @@ void ToolBox::ImplHideFocus()
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow )
         {
-            Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
+            vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
             pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = false;
             pWin->Invalidate( 0 );
         }

@@ -107,7 +107,7 @@ private:
     bool GetDestination(ScRange& aDestinationRange, bool& bToNewSheet);
 
 public:
-    ScPivotLayoutDialog(SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, Window* pParent,
+    ScPivotLayoutDialog(SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent,
                              ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bCreateNewPivotTable);
     virtual ~ScPivotLayoutDialog();
 

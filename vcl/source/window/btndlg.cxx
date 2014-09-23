@@ -50,7 +50,7 @@ ButtonDialog::ButtonDialog( WindowType nType ) :
     ImplInitButtonDialogData();
 }
 
-ButtonDialog::ButtonDialog( Window* pParent, WinBits nStyle ) :
+ButtonDialog::ButtonDialog( vcl::Window* pParent, WinBits nStyle ) :
     Dialog( WINDOW_BUTTONDIALOG )
 {
     ImplInitButtonDialogData();

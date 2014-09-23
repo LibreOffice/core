@@ -37,15 +37,15 @@ class FmFormModel;
 namespace svx { namespace sidebar {
 
 
-class SVX_DLLPUBLIC GalleryControl : public Window
+class SVX_DLLPUBLIC GalleryControl : public vcl::Window
 {
 public:
     GalleryControl (
         SfxBindings* pBindings,
-        Window* pParentWindow);
+        vcl::Window* pParentWindow);
     virtual ~GalleryControl (void);
 
-    bool GalleryKeyInput( const KeyEvent& rKEvt, Window* pWindow);
+    bool GalleryKeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow);
 
 private:
     Gallery* mpGallery;

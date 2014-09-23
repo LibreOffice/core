@@ -26,7 +26,7 @@
 using namespace dbaui;
 #define STANDARD_MARGIN                 6
 // class OTableDesignHelpBar
-OTableDesignHelpBar::OTableDesignHelpBar( Window* pParent ) :
+OTableDesignHelpBar::OTableDesignHelpBar( vcl::Window* pParent ) :
      TabPage( pParent, WB_3DLOOK )
 {
     m_pTextWin = new MultiLineEdit( this, WB_VSCROLL | WB_LEFT | WB_BORDER | WB_NOTABSTOP | WB_READONLY);
@@ -38,7 +38,7 @@ OTableDesignHelpBar::OTableDesignHelpBar( Window* pParent ) :
 
 OTableDesignHelpBar::~OTableDesignHelpBar()
 {
-    boost::scoped_ptr<Window> aTemp(m_pTextWin);
+    boost::scoped_ptr<vcl::Window> aTemp(m_pTextWin);
     m_pTextWin = NULL;
 }
 

@@ -76,7 +76,7 @@ static const sal_uInt16 pRanges[] =
 #*
 #************************************************************************/
 
-SvxNumberPreview::SvxNumberPreview(Window* pParent, WinBits nStyle)
+SvxNumberPreview::SvxNumberPreview(vcl::Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
     , mnPos(-1)
     , mnChar(0x0)
@@ -89,7 +89,7 @@ SvxNumberPreview::SvxNumberPreview(Window* pParent, WinBits nStyle)
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNumberPreview(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNumberPreview(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxNumberPreview(pParent);
 }
@@ -235,7 +235,7 @@ void SvxNumberPreview::DataChanged( const DataChangedEvent& rDCEvt )
 
 #define HDL(hdl) LINK( this, SvxNumberFormatTabPage, hdl )
 
-SvxNumberFormatTabPage::SvxNumberFormatTabPage(Window* pParent,
+SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "NumberingFormatPage",
         "cui/ui/numberingformatpage.ui", &rCoreAttrs)
@@ -375,7 +375,7 @@ const sal_uInt16* SvxNumberFormatTabPage::GetRanges()
 #*
 #************************************************************************/
 
-SfxTabPage* SvxNumberFormatTabPage::Create( Window* pParent,
+SfxTabPage* SvxNumberFormatTabPage::Create( vcl::Window* pParent,
                                             const SfxItemSet* rAttrSet )
 {
     return ( new SvxNumberFormatTabPage( pParent, *rAttrSet ) );
@@ -1664,7 +1664,7 @@ bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==EVENT_LOSEFOCUS)
     {
-        if ( rNEvt.GetWindow() == dynamic_cast< Window* >( m_pEdComment ) && !m_pEdComment->IsVisible() )
+        if ( rNEvt.GetWindow() == dynamic_cast< vcl::Window* >( m_pEdComment ) && !m_pEdComment->IsVisible() )
         {
             pLastActivWindow = NULL;
         }

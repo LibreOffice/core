@@ -190,7 +190,7 @@ public:
     static ScIMapInfo* GetIMapInfo( SdrObject* pObj );
 
     static IMapObject* GetHitIMapObject( SdrObject* pObject,
-                            const Point& rWinPoint, const Window& rCmpWnd );
+                            const Point& rWinPoint, const vcl::Window& rCmpWnd );
 
     static ScMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate = false );
 

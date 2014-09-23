@@ -343,7 +343,7 @@ class OptionsBreakSet : public ModalDialog
     NumericField*   m_pBreakNF;
 
 public:
-    OptionsBreakSet(Window* pParent, sal_uInt16 nRID)
+    OptionsBreakSet(vcl::Window* pParent, sal_uInt16 nRID)
         : ModalDialog(pParent, "BreakNumberOption",
             "cui/ui/breaknumberoption.ui")
         , m_pBreakNF(NULL)
@@ -1031,7 +1031,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
 
 // class SvxLinguTabPage -------------------------------------------------
 
-SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
+SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, "OptLinguPage", "cui/ui/optlingupage.ui", &rSet),
 
     sCapitalWords   (CUI_RES(RID_SVXSTR_CAPITAL_WORDS)),
@@ -1147,7 +1147,7 @@ const sal_uInt16* SvxLinguTabPage::GetRanges()
 
 
 
-SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
+SfxTabPage* SvxLinguTabPage::Create( vcl::Window* pParent,
                                      const SfxItemSet* rAttrSet )
 {
     return ( new SvxLinguTabPage( pParent, *rAttrSet ) );
@@ -1837,7 +1837,7 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
     }
 }
 
-SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData)
+SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rData)
     : ModalDialog( pParent, "EditModulesDialog",
         "cui/ui/editmodulesdialog.ui")
     , sSpell(CUI_RES(RID_SVXSTR_SPELL))

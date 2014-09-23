@@ -25,7 +25,7 @@
 
 namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
-ImageControl::ImageControl( Window* pParent, WinBits nStyle )
+ImageControl::ImageControl( vcl::Window* pParent, WinBits nStyle )
     :FixedImage( pParent, nStyle )
     ,mnScaleMode( ImageScaleMode::ANISOTROPIC )
 {
@@ -137,7 +137,7 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
 
     if( HasFocus() )
     {
-        Window *pWin = GetWindow( WINDOW_BORDER );
+        vcl::Window *pWin = GetWindow( WINDOW_BORDER );
 
         bool bFlat = (GetBorderStyle() == 2);
         Rectangle aRect( Point(0,0), pWin->GetOutputSizePixel() );

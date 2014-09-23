@@ -30,7 +30,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 
-FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
+FmInputRecordNoDialog::FmInputRecordNoDialog(vcl::Window * pParent)
     : ModalDialog( pParent, "RecordNumberDialog", "cui/ui/recordnumberdialog.ui")
 {
     get(m_pRecordNo, "entry-nospin");

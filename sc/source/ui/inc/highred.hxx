@@ -78,7 +78,7 @@ protected:
     virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
-                    ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                ScViewData*      ptrViewData);
 
                     virtual ~ScHighlightChgDlg();

@@ -70,7 +70,7 @@ void ScNavigatorDlg::ReleaseFocus()
 
     if ( pCurSh )
     {
-        Window* pShellWnd = pCurSh->GetWindow();
+        vcl::Window* pShellWnd = pCurSh->GetWindow();
         if ( pShellWnd )
             pShellWnd->GrabFocus();
     }
@@ -480,7 +480,7 @@ ScNavigatorSettings::ScNavigatorSettings() :
 SFX_IMPL_CHILDWINDOWCONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR )
 
 ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
-                                    Window*          pParent,
+                                    vcl::Window*          pParent,
                                     sal_uInt16           nId,
                                     SfxBindings*     pBind,
                                     SfxChildWinInfo* /* pInfo */ ) :
@@ -552,7 +552,7 @@ void ScNavigatorDialogWrapper::Resizing( Size& rSize )
 #define REGISTER_SLOT(i,id) \
     ppBoundItems[i]=new ScNavigatorControllerItem(id,*this,rBindings);
 
-ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent,
+ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl::Window* pParent,
     const bool bUseStyleSettingsBackground) :
         Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
         rBindings   ( *pB ),                                // is used in CommandToolBox ctor

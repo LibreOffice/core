@@ -136,7 +136,7 @@ SfxTemplateDialog::SfxTemplateDialog
 (
     SfxBindings *pBind,
     SfxChildWindow *pCW,
-    Window *pParent
+    vcl::Window *pParent
 )
 
 /*  [Description]
@@ -349,7 +349,7 @@ PopupMenu* SfxActionListBox::CreateContextMenu( void )
 
 
 
-SfxTemplateDialogWrapper::SfxTemplateDialogWrapper(Window *pParentWnd,
+SfxTemplateDialogWrapper::SfxTemplateDialogWrapper(vcl::Window *pParentWnd,
         sal_uInt16 nId,  SfxBindings *p, SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWnd, nId)
 {
@@ -364,7 +364,7 @@ SfxTemplateDialogWrapper::SfxTemplateDialogWrapper(Window *pParentWnd,
 //===== SfxTemplatePanelControl ===============================================
 SfxTemplatePanelControl::SfxTemplatePanelControl (
     SfxBindings* pBindings,
-    Window* pParentWindow)
+    vcl::Window* pParentWindow)
     : DockingWindow(pParentWindow, SfxResId(DLG_STYLE_DESIGNER) ),
       pImpl(new SfxTemplateDialog_Impl(pBindings, this)),
       mpBindings(pBindings)
@@ -455,7 +455,7 @@ void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
         SfxViewFrame *pFrame = mpBindings->GetDispatcher_Impl()->GetFrame();
-        Window* pEditWin = pFrame->GetViewShell()->GetWindow();
+        vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
 
         Size aSize = pEditWin->GetSizePixel();
         Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
@@ -750,7 +750,7 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox *pBox,
 
 // Constructor
 
-SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window* pW, bool ) :
+SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window* pW, bool ) :
     mbIgnoreSelect( false ),
     pBindings               ( pB ),
     pWindow                 ( pW ),
@@ -1984,7 +1984,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
     OUString aEmpty;
     if ( nActFamily != 0xffff && (pTreeBox || aFmtLb.GetSelectionCount() <= 1))
     {
-        Window* pTmp;
+        vcl::Window* pTmp;
         pTmp = Application::GetDefDialogParent();
         if ( ISA(SfxTemplateDialog_Impl) )
             Application::SetDefDialogParent( pWindow->GetParent() );
@@ -2024,7 +2024,7 @@ void SfxCommonTemplateDialog_Impl::EditHdl(void *)
         sal_uInt16 nFilter = nActFilter;
         OUString aTemplName(GetSelectedEntry());
         GetSelectedStyle(); // -Wall required??
-        Window* pTmp;
+        vcl::Window* pTmp;
         //DefModalDialogParent set for modality of the following dialogs
         pTmp = Application::GetDefDialogParent();
         if ( ISA(SfxTemplateDialog_Impl) )
@@ -2193,7 +2193,7 @@ void    SfxCommonTemplateDialog_Impl::ResetFocus()
     {
         SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
         SfxViewShell *pVu = pViewFrame->GetViewShell();
-        Window *pAppWin = pVu ? pVu->GetWindow(): 0;
+        vcl::Window *pAppWin = pVu ? pVu->GetWindow(): 0;
         if(pAppWin)
             pAppWin->GrabFocus();
     }
@@ -2293,7 +2293,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
 
 
 
-void SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl( const Point& rPos, Window* pWin )
+void SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl( const Point& rPos, vcl::Window* pWin )
 {
     // Bug# 94152: This part should never be called, because before this happens, the TreeListBox should captured this!
     OSL_FAIL( "+SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl(): How could this happen? Please infirm developer ASAP!" );
@@ -2811,7 +2811,7 @@ void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
         SfxViewFrame *pFrame = GetBindings().GetDispatcher_Impl()->GetFrame();
-        Window* pEditWin = pFrame->GetViewShell()->GetWindow();
+        vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
 
         Size aSize = pEditWin->GetSizePixel();
         Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
@@ -2825,7 +2825,7 @@ void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
     SfxDockingWindow::StateChanged( nStateChange );
 }
 
-DropToolBox_Impl::DropToolBox_Impl(Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog) :
+DropToolBox_Impl::DropToolBox_Impl(vcl::Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog) :
     ToolBox(pParent),
     DropTargetHelper(this),
     rParent(*pTemplateDialog)

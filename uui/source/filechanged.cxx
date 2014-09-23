@@ -20,7 +20,7 @@
 #include "ids.hrc"
 #include "filechanged.hxx"
 
-FileChangedQueryBox::FileChangedQueryBox( Window* pParent, ResMgr* pResMgr ) :
+FileChangedQueryBox::FileChangedQueryBox( vcl::Window* pParent, ResMgr* pResMgr ) :
     MessBox(pParent, 0,
             ResId(STR_FILECHANGED_TITLE, *pResMgr).toString(),
             OUString() )

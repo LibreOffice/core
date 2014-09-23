@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )
 
 // SdPagesField
-SdPagesField::SdPagesField( Window* pParent,
+SdPagesField::SdPagesField( vcl::Window* pParent,
                             const uno::Reference< frame::XFrame >& rFrame,
                             WinBits nBits ) :
     SvxMetricField  ( pParent, rFrame, nBits ),
@@ -132,7 +132,7 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
     }
 }
 
-Window* SdTbxCtlDiaPages::CreateItemWindow( Window* pParent )
+vcl::Window* SdTbxCtlDiaPages::CreateItemWindow( vcl::Window* pParent )
 {
     return new SdPagesField( pParent, m_xFrame );
 }

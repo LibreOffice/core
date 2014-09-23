@@ -94,7 +94,7 @@ void ValueSet::ImplInit()
     ImplInitSettings( true, true, true );
 }
 
-ValueSet::ValueSet( Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren ) :
+ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren ) :
     Control( pParent, nWinStyle ),
     maVirDev( *this ),
     maColor( COL_TRANSPARENT )
@@ -103,7 +103,7 @@ ValueSet::ValueSet( Window* pParent, WinBits nWinStyle, bool bDisableTransientCh
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeValueSet(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeValueSet(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -114,7 +114,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeValueSet(Window *pParent, V
     return new ValueSet(pParent, nWinBits);
 }
 
-ValueSet::ValueSet( Window* pParent, const ResId& rResId, bool bDisableTransientChildren ) :
+ValueSet::ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTransientChildren ) :
     Control( pParent, rResId ),
     maVirDev( *this ),
     maColor( COL_TRANSPARENT )

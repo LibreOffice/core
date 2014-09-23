@@ -61,11 +61,11 @@ public:
 
     /** Return the Window pointer of a tree node.
     */
-    virtual ::Window* GetWindow (void);
+    virtual vcl::Window* GetWindow (void);
 
     /** Return a const pointer to the window of a tree node.
     */
-    virtual const ::Window* GetConstWindow (void) const;
+    virtual const vcl::Window* GetConstWindow (void) const;
 
     /** Return the joined minimum width of all children, i.e. the largest of
         the minimum widths.

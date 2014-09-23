@@ -313,7 +313,7 @@ ContextMenuHelper::executePopupMenu(
             uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow() );
             if ( xWindow.is() )
             {
-                Window* pParent = VCLUnoHelper::GetWindow( xWindow );
+                vcl::Window* pParent = VCLUnoHelper::GetWindow( xWindow );
                 sal_uInt16 nResult = pMenu->Execute( pParent, rPos );
 
                 if ( nResult > 0 )

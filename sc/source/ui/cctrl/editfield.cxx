@@ -41,12 +41,12 @@ sal_Unicode lclGetGroupSep()
 
 } // namespace
 
-ScDoubleField::ScDoubleField( Window* pParent, WinBits nStyle ) :
+ScDoubleField::ScDoubleField( vcl::Window* pParent, WinBits nStyle ) :
     Edit( pParent, nStyle )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDoubleField(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScDoubleField(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
     return new ScDoubleField(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);

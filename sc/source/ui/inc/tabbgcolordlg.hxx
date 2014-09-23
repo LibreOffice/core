@@ -28,7 +28,7 @@
 class ScTabBgColorDlg : public ModalDialog
 {
 public:
-    ScTabBgColorDlg( Window* pParent,
+    ScTabBgColorDlg( vcl::Window* pParent,
                      const OUString& rTitle,
                      const OUString& rTabBgColorNoColorText,
                      const Color& rDefaultColor,
@@ -39,7 +39,7 @@ public:
     class ScTabBgColorValueSet : public SvxColorValueSet
     {
     public:
-        ScTabBgColorValueSet(Window* pParent, WinBits nStyle);
+        ScTabBgColorValueSet(vcl::Window* pParent, WinBits nStyle);
         void SetDialog(ScTabBgColorDlg* pTabBgColorDlg)
         {
             m_pTabBgColorDlg = pTabBgColorDlg;

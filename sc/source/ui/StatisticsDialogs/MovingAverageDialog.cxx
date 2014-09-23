@@ -28,7 +28,7 @@
 
 ScMovingAverageDialog::ScMovingAverageDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    Window* pParent, ScViewData* pViewData ) :
+                    vcl::Window* pParent, ScViewData* pViewData ) :
     ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "MovingAverageDialog", "modules/scalc/ui/movingaveragedialog.ui" )

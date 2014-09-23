@@ -100,8 +100,8 @@ struct GLWindow
 #elif defined( ANDROID )
 #elif defined( UNX )
     Display*           dpy;
-    int                     screen;
-    XLIB_Window             win;
+    int                screen;
+    Window             win;
 #if defined( GLX_EXT_texture_from_pixmap )
     GLXFBConfig        fbc;
 #endif
@@ -155,7 +155,7 @@ public:
 
     void requestLegacyContext();
 
-    bool init(Window* pParent = 0);
+    bool init(vcl::Window* pParent = 0);
     bool init(SystemChildWindow* pChildWindow);
 
     void makeCurrent();
@@ -180,7 +180,7 @@ public:
 
     bool supportMultiSampling() const;
 
-    static SystemWindowData generateWinData(Window* pParent, bool bRequestLegacyContext);
+    static SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
 
 private:
     SAL_DLLPRIVATE bool initWindow();
@@ -191,8 +191,8 @@ private:
 #endif
 
     GLWindow m_aGLWin;
-    boost::scoped_ptr<Window> m_pWindow;
-    Window* mpWindow; //points to m_pWindow or the parent window, don't delete it
+    boost::scoped_ptr<vcl::Window> m_pWindow;
+    vcl::Window* mpWindow; //points to m_pWindow or the parent window, don't delete it
     SystemChildWindow* m_pChildWindow;
     boost::scoped_ptr<SystemChildWindow> m_pChildWindowGC;
     bool mbInitialized;

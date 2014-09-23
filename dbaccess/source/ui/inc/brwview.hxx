@@ -49,7 +49,7 @@ namespace dbaui
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
         mutable SbaGridControl* m_pVclControl;  // our grid's VCL representation
-        Window*                 m_pStatus;
+        vcl::Window*                 m_pStatus;
 
         DECL_LINK( SplitHdl, void* );
     // attribute access
@@ -58,7 +58,7 @@ namespace dbaui
         SbaGridControl*         getVclControl() const;
 
     public:
-        UnoDataBrowserView( Window* pParent,
+        UnoDataBrowserView( vcl::Window* pParent,
                             IController& _rController,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~UnoDataBrowserView();

@@ -38,11 +38,11 @@ class VCL_DLLPUBLIC FixedText : public Control
 private:
     sal_Int32 m_nMaxWidthChars;
     sal_Int32 m_nMinWidthChars;
-    Window *m_pMnemonicWindow;
+    vcl::Window *m_pMnemonicWindow;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
@@ -56,11 +56,11 @@ protected:
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
 
-    virtual Window* getAccessibleRelationLabelFor() const SAL_OVERRIDE;
+    virtual vcl::Window* getAccessibleRelationLabelFor() const SAL_OVERRIDE;
 
 public:
-    explicit        FixedText( Window* pParent, WinBits nStyle = 0 );
-    explicit        FixedText( Window* pParent, const ResId& rResId );
+    explicit        FixedText( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        FixedText( vcl::Window* pParent, const ResId& rResId );
     virtual         ~FixedText();
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -78,14 +78,14 @@ public:
     Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    void set_mnemonic_widget(Window *pWindow);
-    Window* get_mnemonic_widget() const { return m_pMnemonicWindow; }
+    void set_mnemonic_widget(vcl::Window *pWindow);
+    vcl::Window* get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
 
 class VCL_DLLPUBLIC SelectableFixedText : public Edit
 {
 public:
-    explicit SelectableFixedText( Window* pParent, WinBits nStyle = 0 );
+    explicit SelectableFixedText( vcl::Window* pParent, WinBits nStyle = 0 );
 
     virtual void    LoseFocus() SAL_OVERRIDE;
 };
@@ -99,7 +99,7 @@ class VCL_DLLPUBLIC FixedLine : public Control
 private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void    ImplDraw( bool bLayout = false );
@@ -112,8 +112,8 @@ protected:
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
 
 public:
-    explicit        FixedLine( Window* pParent, WinBits nStyle = WB_HORZ );
-    explicit        FixedLine( Window* pParent, const ResId& );
+    explicit        FixedLine( vcl::Window* pParent, WinBits nStyle = WB_HORZ );
+    explicit        FixedLine( vcl::Window* pParent, const ResId& );
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
@@ -132,14 +132,14 @@ private:
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize );
 
 public:
-    explicit        FixedBitmap( Window* pParent, WinBits nStyle = 0 );
+    explicit        FixedBitmap( vcl::Window* pParent, WinBits nStyle = 0 );
     virtual         ~FixedBitmap();
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -166,7 +166,7 @@ private:
 private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
 
@@ -176,8 +176,8 @@ protected:
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
 public:
-    explicit        FixedImage( Window* pParent, WinBits nStyle = 0 );
-    explicit        FixedImage( Window* pParent, const ResId& );
+    explicit        FixedImage( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        FixedImage( vcl::Window* pParent, const ResId& );
     virtual         ~FixedImage();
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;

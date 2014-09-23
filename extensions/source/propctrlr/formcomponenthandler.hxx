@@ -454,7 +454,7 @@ namespace pcr
         ::std::auto_ptr< WaitObject >       m_aWaitObject;
 
     public:
-        WaitCursor( Window* _pWindow )
+        WaitCursor( vcl::Window* _pWindow )
         {
             if ( _pWindow )
                 m_aWaitObject.reset( new WaitObject( _pWindow ) );

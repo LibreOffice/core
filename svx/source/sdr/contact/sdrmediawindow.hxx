@@ -34,7 +34,7 @@ class SdrMediaWindow : public ::avmedia::MediaWindow
 {
 public:
 
-                            SdrMediaWindow( Window* pParent, ViewObjectContactOfSdrMediaObj& rViewObjContact );
+                            SdrMediaWindow( vcl::Window* pParent, ViewObjectContactOfSdrMediaObj& rViewObjContact );
                             virtual ~SdrMediaWindow();
 
         virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

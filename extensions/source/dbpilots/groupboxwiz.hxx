@@ -53,7 +53,7 @@ namespace dbp
 
     public:
         OGroupBoxWizard(
-            Window* _pParent,
+            vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObjectModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );

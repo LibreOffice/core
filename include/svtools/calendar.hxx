@@ -257,7 +257,7 @@ protected:
     DECL_STATIC_LINK( Calendar, ScrollHdl, Timer *);
 
 public:
-                    Calendar( Window* pParent, WinBits nWinStyle = 0 );
+                    Calendar( vcl::Window* pParent, WinBits nWinStyle = 0 );
                     virtual ~Calendar();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -415,13 +415,13 @@ private:
                         DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, void* );
 
 public:
-                        CalendarField( Window* pParent, WinBits nWinStyle );
+                        CalendarField( vcl::Window* pParent, WinBits nWinStyle );
                         virtual ~CalendarField();
 
     virtual void        Select();
 
     virtual bool        ShowDropDown( bool bShow ) SAL_OVERRIDE;
-    virtual Calendar*   CreateCalendar( Window* pParent );
+    virtual Calendar*   CreateCalendar( vcl::Window* pParent );
     Calendar*           GetCalendar();
 
     void                SetDefaultDate( const Date& rDate ) { maDefaultDate = rDate; }

@@ -40,7 +40,7 @@ class AlignmentPropertyPanel
 {
 public:
     static AlignmentPropertyPanel* Create(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
@@ -92,7 +92,7 @@ private:
 
     // constructor/destuctor
     AlignmentPropertyPanel(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~AlignmentPropertyPanel();

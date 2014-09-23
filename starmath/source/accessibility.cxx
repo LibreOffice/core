@@ -62,7 +62,7 @@ using namespace com::sun::star::accessibility;
 
 
 
-static awt::Rectangle lcl_GetBounds( Window *pWin )
+static awt::Rectangle lcl_GetBounds( vcl::Window *pWin )
 {
     // !! see VCLXAccessibleComponent::implGetBounds()
 
@@ -77,7 +77,7 @@ static awt::Rectangle lcl_GetBounds( Window *pWin )
         aBounds.Y       = aRect.Top();
         aBounds.Width   = aRect.GetWidth();
         aBounds.Height  = aRect.GetHeight();
-        Window* pParent = pWin->GetAccessibleParentWindow();
+        vcl::Window* pParent = pWin->GetAccessibleParentWindow();
         if (pParent)
         {
             Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );
@@ -89,7 +89,7 @@ static awt::Rectangle lcl_GetBounds( Window *pWin )
     return aBounds;
 }
 
-static awt::Point lcl_GetLocationOnScreen( Window *pWin )
+static awt::Point lcl_GetLocationOnScreen( vcl::Window *pWin )
 {
     // !! see VCLXAccessibleComponent::getLocationOnScreen()
 
@@ -314,7 +314,7 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
     if (!pWin)
         throw RuntimeException();
 
-    Window *pAccParent = pWin->GetAccessibleParentWindow();
+    vcl::Window *pAccParent = pWin->GetAccessibleParentWindow();
     OSL_ENSURE( pAccParent, "accessible parent missing" );
     return pAccParent ? pAccParent->GetAccessible() : Reference< XAccessible >();
 }
@@ -324,7 +324,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
     sal_Int32 nIdx = -1;
-    Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
+    vcl::Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
     if (pAccParent)
     {
         sal_uInt16 nCnt = pAccParent->GetAccessibleChildWindowCount();
@@ -1822,7 +1822,7 @@ uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleParent(  )
     if (!pWin)
         throw RuntimeException();
 
-    Window *pAccParent = pWin->GetAccessibleParentWindow();
+    vcl::Window *pAccParent = pWin->GetAccessibleParentWindow();
     OSL_ENSURE( pAccParent, "accessible parent missing" );
     return pAccParent ? pAccParent->GetAccessible() : Reference< XAccessible >();
 }
@@ -1832,7 +1832,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleIndexInParent(  )
 {
     SolarMutexGuard aGuard;
     sal_Int32 nIdx = -1;
-    Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
+    vcl::Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
     if (pAccParent)
     {
         sal_uInt16 nCnt = pAccParent->GetAccessibleChildWindowCount();

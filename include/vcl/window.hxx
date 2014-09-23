@@ -317,11 +317,33 @@ const char* ImplDbgCheckWindow( const void* pObj );
 
 bool ImplDoTiledRendering();
 
+namespace vcl { class Window; }
+vcl::Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
+
+namespace vcl { class Cursor; }
 class Dialog;
 class WindowImpl;
 class PaintHelper;
 class VclBuilder;
 class VclSizeGroup;
+class OutputDevice;
+class Application;
+class SystemWindow;
+class WorkWindow;
+class Dialog;
+class MessBox;
+class DockingWindow;
+class FloatingWindow;
+class GroupBox;
+class PushButton;
+class RadioButton;
+class SystemChildWindow;
+class ImplBorderWindow;
+class VclBuilder;
+class ImplDockingWindowWrapper;
+class ImplPopupFloatWin;
+class MenuFloatingWindow;
+namespace svt { class PopupWindowControllerImpl; }
 
 struct WindowResHeader
 {
@@ -330,30 +352,32 @@ struct WindowResHeader
     sal_uLong nRSStyle;
 };
 
+namespace vcl {
+
 class VCL_DLLPUBLIC Window : public OutputDevice, public Resource
 {
     friend class vcl::Cursor;
-    friend class OutputDevice;
-    friend class Application;
-    friend class SystemWindow;
-    friend class WorkWindow;
-    friend class Dialog;
-    friend class MessBox;
-    friend class DockingWindow;
-    friend class FloatingWindow;
-    friend class GroupBox;
-    friend class PushButton;
-    friend class RadioButton;
-    friend class SystemChildWindow;
-    friend class ImplBorderWindow;
-    friend class VclBuilder;
-    friend class PaintHelper;
+    friend class ::OutputDevice;
+    friend class ::Application;
+    friend class ::SystemWindow;
+    friend class ::WorkWindow;
+    friend class ::Dialog;
+    friend class ::MessBox;
+    friend class ::DockingWindow;
+    friend class ::FloatingWindow;
+    friend class ::GroupBox;
+    friend class ::PushButton;
+    friend class ::RadioButton;
+    friend class ::SystemChildWindow;
+    friend class ::ImplBorderWindow;
+    friend class ::VclBuilder;
+    friend class ::PaintHelper;
 
     // TODO: improve missing functionality
     // only required because of SetFloatingMode()
-    friend class ImplDockingWindowWrapper;
-    friend class ImplPopupFloatWin;
-    friend class MenuFloatingWindow;
+    friend class ::ImplDockingWindowWrapper;
+    friend class ::ImplPopupFloatWin;
+    friend class ::MenuFloatingWindow;
 
     friend class svt::PopupWindowControllerImpl;
 
@@ -374,9 +398,9 @@ private:
     OutputDevice* mpOutputDevice;
 
 #ifdef DBG_UTIL
-    friend const char* ImplDbgCheckWindow( const void* pObj );
+    friend const char* ::ImplDbgCheckWindow( const void* pObj );
 #endif
-    friend Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
+    friend vcl::Window* ::ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 
 public:
 
@@ -388,26 +412,26 @@ public:
     DECL_DLLPRIVATE_LINK(      ImplHideOwnerDrawWindowsHdl, void* );
 
 
-    SAL_DLLPRIVATE static void          ImplInitAppFontData( Window* pWindow );
+    SAL_DLLPRIVATE static void          ImplInitAppFontData( vcl::Window* pWindow );
 
-    SAL_DLLPRIVATE Window*              ImplGetFrameWindow() const;
+    SAL_DLLPRIVATE vcl::Window*         ImplGetFrameWindow() const;
     SalFrame*                           ImplGetFrame() const;
     SAL_DLLPRIVATE ImplFrameData*       ImplGetFrameData();
 
-    SAL_DLLPRIVATE Window*              ImplGetWindow();
+    SAL_DLLPRIVATE vcl::Window*         ImplGetWindow();
     SAL_DLLPRIVATE ImplWinData*         ImplGetWinData() const;
-    SAL_DLLPRIVATE Window*              ImplGetClientWindow() const;
-    SAL_DLLPRIVATE Window*              ImplGetDlgWindow( sal_uInt16 n, sal_uInt16 nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );
-    SAL_DLLPRIVATE Window*              ImplGetParent() const;
-    SAL_DLLPRIVATE Window*              ImplFindWindow( const Point& rFramePos );
+    SAL_DLLPRIVATE vcl::Window*         ImplGetClientWindow() const;
+    SAL_DLLPRIVATE vcl::Window*         ImplGetDlgWindow( sal_uInt16 n, sal_uInt16 nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );
+    SAL_DLLPRIVATE vcl::Window*         ImplGetParent() const;
+    SAL_DLLPRIVATE vcl::Window*         ImplFindWindow( const Point& rFramePos );
 
     SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void                 ImplInvalidateOverlapFrameRegion( const Region& rRegion );
 
     SAL_DLLPRIVATE bool                 ImplSetClipFlag( bool bSysObjOnlySmaller = false );
 
-    SAL_DLLPRIVATE bool                 ImplIsWindowOrChild( const Window* pWindow, bool bSystemWindow = false ) const;
-    SAL_DLLPRIVATE bool                 ImplIsChild( const Window* pWindow, bool bSystemWindow = false ) const;
+    SAL_DLLPRIVATE bool                 ImplIsWindowOrChild( const vcl::Window* pWindow, bool bSystemWindow = false ) const;
+    SAL_DLLPRIVATE bool                 ImplIsChild( const vcl::Window* pWindow, bool bSystemWindow = false ) const;
     SAL_DLLPRIVATE bool                 ImplIsFloatingWindow() const;
     SAL_DLLPRIVATE bool                 ImplIsPushButton() const;
     SAL_DLLPRIVATE bool                 ImplIsSplitter() const;
@@ -454,7 +478,7 @@ public:
 
 protected:
 
-    SAL_DLLPRIVATE void                 ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
+    SAL_DLLPRIVATE void                 ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
 
     SAL_DLLPRIVATE Point                ImplOutputToFrame( const Point& rPos );
 
@@ -464,7 +488,7 @@ protected:
     SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
     SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
 
-    SAL_DLLPRIVATE Window*              ImplGetBorderWindow() const;
+    SAL_DLLPRIVATE vcl::Window*              ImplGetBorderWindow() const;
 
     SAL_DLLPRIVATE void                 ImplInvalidate( const Region* rRegion, sal_uInt16 nFlags );
 
@@ -491,18 +515,18 @@ private:
 
     SAL_DLLPRIVATE void                 ImplInitWindowData( WindowType nType );
 
-    SAL_DLLPRIVATE void                 ImplSetFrameParent( const Window* pParent );
+    SAL_DLLPRIVATE void                 ImplSetFrameParent( const vcl::Window* pParent );
 
-    SAL_DLLPRIVATE void                 ImplInsertWindow( Window* pParent );
+    SAL_DLLPRIVATE void                 ImplInsertWindow( vcl::Window* pParent );
     SAL_DLLPRIVATE void                 ImplRemoveWindow( bool bRemoveFrameData );
 
     SAL_DLLPRIVATE SalGraphics*         ImplGetFrameGraphics() const;
 
-    SAL_DLLPRIVATE void                 ImplCallFocusChangeActivate( Window* pNewOverlapWindow, Window* pOldOverlapWindow );
-    SAL_DLLPRIVATE Window*              ImplGetFirstOverlapWindow();
-    SAL_DLLPRIVATE const Window*        ImplGetFirstOverlapWindow() const;
+    SAL_DLLPRIVATE void                 ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow, vcl::Window* pOldOverlapWindow );
+    SAL_DLLPRIVATE vcl::Window*              ImplGetFirstOverlapWindow();
+    SAL_DLLPRIVATE const vcl::Window*        ImplGetFirstOverlapWindow() const;
 
-    SAL_DLLPRIVATE bool                 ImplIsRealParentPath( const Window* pWindow ) const;
+    SAL_DLLPRIVATE bool                 ImplIsRealParentPath( const vcl::Window* pWindow ) const;
 
     SAL_DLLPRIVATE bool                 ImplTestMousePointerSet();
 
@@ -546,7 +570,7 @@ private:
     SAL_DLLPRIVATE void                 ImplCallOverlapPaint();
     SAL_DLLPRIVATE void                 ImplPostPaint();
 
-    SAL_DLLPRIVATE void                 ImplUpdateWindowPtr( Window* pWindow );
+    SAL_DLLPRIVATE void                 ImplUpdateWindowPtr( vcl::Window* pWindow );
     SAL_DLLPRIVATE void                 ImplUpdateWindowPtr();
     SAL_DLLPRIVATE void                 ImplUpdateOverlapWindowPtr( bool bNewFrame );
 
@@ -584,18 +608,18 @@ private:
     SAL_DLLPRIVATE bool                 ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput );
     SAL_DLLPRIVATE bool                 ImplHasDlgCtrl();
     SAL_DLLPRIVATE void                 ImplDlgCtrlNextWindow();
-    SAL_DLLPRIVATE void                 ImplDlgCtrlFocusChanged( Window* pWindow, bool bGetFocus );
-    SAL_DLLPRIVATE Window*              ImplFindDlgCtrlWindow( Window* pWindow );
+    SAL_DLLPRIVATE void                 ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus );
+    SAL_DLLPRIVATE vcl::Window*              ImplFindDlgCtrlWindow( vcl::Window* pWindow );
 
     SAL_DLLPRIVATE long                 ImplLogicUnitToPixelX( long nX, MapUnit eUnit );
     SAL_DLLPRIVATE long                 ImplLogicUnitToPixelY( long nY, MapUnit eUnit );
 
-    SAL_DLLPRIVATE bool                 ImplIsWindowInFront( const Window* pTestWindow ) const;
+    SAL_DLLPRIVATE bool                 ImplIsWindowInFront( const vcl::Window* pTestWindow ) const;
 
     SAL_DLLPRIVATE static void          ImplNewInputContext();
 
-    SAL_DLLPRIVATE void                 ImplCallActivateListeners(Window*);
-    SAL_DLLPRIVATE void                 ImplCallDeactivateListeners(Window*);
+    SAL_DLLPRIVATE void                 ImplCallActivateListeners(vcl::Window*);
+    SAL_DLLPRIVATE void                 ImplCallDeactivateListeners(vcl::Window*);
 
     SAL_DLLPRIVATE void                 ImplHandleScroll( ScrollBar* pHScrl, long nX, ScrollBar* pVScrl, long nY );
 
@@ -603,11 +627,11 @@ private:
     SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();
 
     // retrieves the list of owner draw decorated windows for this window hiearchy
-    SAL_DLLPRIVATE ::std::vector<Window *>& ImplGetOwnerDrawList();
+    SAL_DLLPRIVATE ::std::vector<vcl::Window *>& ImplGetOwnerDrawList();
 
-    SAL_DLLPRIVATE Window*              ImplGetTopmostFrameWindow();
+    SAL_DLLPRIVATE vcl::Window*              ImplGetTopmostFrameWindow();
 
-    SAL_DLLPRIVATE Rectangle            ImplGetWindowExtentsRelative( Window *pRelativeWindow, bool bClientOnly ) const;
+    SAL_DLLPRIVATE Rectangle            ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const;
 
     SAL_DLLPRIVATE bool                 ImplStopDnd();
     SAL_DLLPRIVATE void                 ImplStartDnd();
@@ -649,9 +673,9 @@ public:
 
 public:
     // Single argument ctors shall be explicit.
-    explicit                            Window( Window* pParent, WinBits nStyle = 0 );
+    explicit                            Window( vcl::Window* pParent, WinBits nStyle = 0 );
 
-                                        Window( Window* pParent, const ResId& rResId );
+                                        Window( vcl::Window* pParent, const ResId& rResId );
     virtual                             ~Window();
 
     OutputDevice const*                 GetOutDev() const { return mpOutputDevice; };
@@ -683,7 +707,7 @@ public:
     virtual void                        DataChanged( const DataChangedEvent& rDCEvt );
     virtual bool                        PreNotify( NotifyEvent& rNEvt );
     virtual bool                        Notify( NotifyEvent& rNEvt );
-    virtual Window*                     GetPreferredKeyInputWindow();
+    virtual vcl::Window*                     GetPreferredKeyInputWindow();
 
     /*virtual*/ void                    AddEventListener( const Link& rEventListener );
     /*virtual*/ void                    RemoveEventListener( const Link& rEventListener );
@@ -798,8 +822,8 @@ public:
     // paint additional parts of your window if necessary
     void                                ExpandPaintClipRegion( const Region& rRegion );
 
-    void                                SetParent( Window* pNewParent );
-    Window*                             GetParent() const;
+    void                                SetParent( vcl::Window* pNewParent );
+    vcl::Window*                             GetParent() const;
     // return the dialog we are contained in or NULL if un-contained
     Dialog*                             GetParentDialog() const;
 
@@ -816,7 +840,7 @@ public:
 
     void                                EnableInput( bool bEnable = true, bool bChild = true );
     void                                EnableInput( bool bEnable, bool bChild, bool bSysWin,
-                                                     const Window* pExcludeWindow = NULL );
+                                                     const vcl::Window* pExcludeWindow = NULL );
     bool                                IsInputEnabled() const;
 
     /** Override <code>EnableInput</code>. This can be necessary due to other people
@@ -891,7 +915,7 @@ public:
     sal_uInt16                          GetActivateMode() const;
 
     void                                ToTop( sal_uInt16 nFlags = 0 );
-    void                                SetZOrder( Window* pRefWindow, sal_uInt16 nFlags );
+    void                                SetZOrder( vcl::Window* pRefWindow, sal_uInt16 nFlags );
     void                                EnableAlwaysOnTop( bool bEnable = true );
     bool                                IsAlwaysOnTopEnabled() const;
 
@@ -918,9 +942,9 @@ public:
     Point                               AbsoluteScreenToOutputPixel( const Point& rPos ) const;
     Rectangle                           GetDesktopRectPixel() const;
     //  window extents including border and decoratrion
-    Rectangle                           GetWindowExtentsRelative( Window *pRelativeWindow ) const;
+    Rectangle                           GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
     // window extents of the client window, coordinates to be used in SetPosPixel
-    Rectangle                           GetClientWindowExtentsRelative( Window *pRelativeWindow ) const;
+    Rectangle                           GetClientWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
 
     virtual bool                        IsScrollable() const;
     virtual void                        Scroll( long nHorzScroll, long nVertScroll,
@@ -1013,19 +1037,19 @@ public:
     void                                SetUniqueId( const OString& );
     const OString&                      GetUniqueId() const;
 
-    Window*                             FindWindow( const Point& rPos ) const;
+    vcl::Window*                             FindWindow( const Point& rPos ) const;
 
     sal_uInt16                          GetChildCount() const;
-    Window*                             GetChild( sal_uInt16 nChild ) const;
-    Window*                             GetWindow( sal_uInt16 nType ) const;
-    bool                                IsChild( const Window* pWindow, bool bSystemWindow = false ) const;
-    bool                                IsWindowOrChild( const Window* pWindow, bool bSystemWindow = false  ) const;
+    vcl::Window*                             GetChild( sal_uInt16 nChild ) const;
+    vcl::Window*                             GetWindow( sal_uInt16 nType ) const;
+    bool                                IsChild( const vcl::Window* pWindow, bool bSystemWindow = false ) const;
+    bool                                IsWindowOrChild( const vcl::Window* pWindow, bool bSystemWindow = false  ) const;
 
     void                                SetData( void* pNewData );
     void*                               GetData() const;
 
     /// Add all children to @rAllChildren recursively.
-    SAL_DLLPRIVATE void                 CollectChildren(::std::vector<Window *>& rAllChildren );
+    SAL_DLLPRIVATE void                 CollectChildren(::std::vector<vcl::Window *>& rAllChildren );
 
     void                                ShowFocus( const Rectangle& rRect );
     void                                HideFocus();
@@ -1083,9 +1107,9 @@ public:
 
     void                                SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > );
 
-    Window*                             GetAccessibleParentWindow() const;
+    vcl::Window*                             GetAccessibleParentWindow() const;
     sal_uInt16                          GetAccessibleChildWindowCount();
-    Window*                             GetAccessibleChildWindow( sal_uInt16 n );
+    vcl::Window*                             GetAccessibleChildWindow( sal_uInt16 n );
 
     void                                SetAccessibleRole( sal_uInt16 nRole );
     sal_uInt16                          GetAccessibleRole() const;
@@ -1096,14 +1120,14 @@ public:
     void                                SetAccessibleDescription( const OUString& rDescr );
     OUString                            GetAccessibleDescription() const;
 
-    void                                SetAccessibleRelationLabeledBy( Window* pLabeledBy );
-    Window*                             GetAccessibleRelationLabeledBy() const;
+    void                                SetAccessibleRelationLabeledBy( vcl::Window* pLabeledBy );
+    vcl::Window*                             GetAccessibleRelationLabeledBy() const;
 
-    void                                SetAccessibleRelationLabelFor( Window* pLabelFor );
-    Window*                             GetAccessibleRelationLabelFor() const;
+    void                                SetAccessibleRelationLabelFor( vcl::Window* pLabelFor );
+    vcl::Window*                             GetAccessibleRelationLabelFor() const;
 
-    void                                SetAccessibleRelationMemberOf( Window* pMemberOf );
-    Window*                             GetAccessibleRelationMemberOf() const;
+    void                                SetAccessibleRelationMemberOf( vcl::Window* pMemberOf );
+    vcl::Window*                             GetAccessibleRelationMemberOf() const;
 
 
     // to avoid sending accessibility events in cases like closing dialogs
@@ -1112,19 +1136,19 @@ public:
     void                                SetAccessibilityEventsSuppressed(bool bSuppressed);
 
     // Deprecated - can use SetAccessibleRelationLabelFor/By nowadys
-    virtual Window*                     GetParentLabelFor( const Window* pLabel ) const;
-    virtual Window*                     GetParentLabeledBy( const Window* pLabeled ) const;
+    virtual vcl::Window*                     GetParentLabelFor( const vcl::Window* pLabel ) const;
+    virtual vcl::Window*                     GetParentLabeledBy( const vcl::Window* pLabeled ) const;
     KeyEvent                            GetActivationKey() const;
 
 protected:
 
     // These eventually are supposed to go when everything is converted to .ui
-    SAL_DLLPRIVATE Window*              getLegacyNonLayoutAccessibleRelationMemberOf() const;
-    SAL_DLLPRIVATE Window*              getLegacyNonLayoutAccessibleRelationLabeledBy() const;
-    SAL_DLLPRIVATE Window*              getLegacyNonLayoutAccessibleRelationLabelFor() const;
+    SAL_DLLPRIVATE vcl::Window*              getLegacyNonLayoutAccessibleRelationMemberOf() const;
+    SAL_DLLPRIVATE vcl::Window*              getLegacyNonLayoutAccessibleRelationLabeledBy() const;
+    SAL_DLLPRIVATE vcl::Window*              getLegacyNonLayoutAccessibleRelationLabelFor() const;
 
     // Let Label override the code part of GetAccessibleRelationLabelFor
-    virtual Window*                     getAccessibleRelationLabelFor() const;
+    virtual vcl::Window*                     getAccessibleRelationLabelFor() const;
     virtual sal_uInt16                  getDefaultAccessibleRole() const;
     virtual OUString                    getDefaultAccessibleName() const;
 
@@ -1146,7 +1170,7 @@ private:
     SAL_DLLPRIVATE bool                 ImplIsAccessibleCandidate() const;
     SAL_DLLPRIVATE bool                 ImplIsAccessibleNativeFrame() const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirstWindowType ) const;
-    SAL_DLLPRIVATE Window*              ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, bool bTopLevel = true ) const;
+    SAL_DLLPRIVATE vcl::Window*              ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, bool bTopLevel = true ) const;
     SAL_DLLPRIVATE bool                 ImplRegisterAccessibleNativeFrame();
     SAL_DLLPRIVATE void                 ImplRevokeAccessibleNativeFrame();
     ///@}
@@ -1410,6 +1434,7 @@ public:
     virtual Selection GetSurroundingTextSelection() const;
 };
 
+}
 
 #endif // INCLUDED_VCL_WINDOW_HXX
 

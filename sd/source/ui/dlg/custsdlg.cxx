@@ -31,7 +31,7 @@
 #include "svtools/treelistentry.hxx"
 
 // SdCustomShowDlg
-SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
+SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
                             SdDrawDocument& rDrawDoc ) :
     ModalDialog     ( pWindow, "CustomSlideShows", "modules/simpress/ui/customslideshows.ui" ),
     rDoc            ( rDrawDoc ),
@@ -261,7 +261,7 @@ bool SdCustomShowDlg::IsCustomShow() const
 }
 
 // SdDefineCustomShowDlg
-SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
+SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
                         SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS ) :
     ModalDialog     ( pWindow, "DefineCustomSlideShow", "modules/simpress/ui/definecustomslideshow.ui" ),
     rDoc            ( rDrawDoc ),

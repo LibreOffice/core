@@ -60,7 +60,7 @@ namespace sfx2
     {
     public:
         TaskPaneWrapper(
-            Window* i_pParent,
+            vcl::Window* i_pParent,
             sal_uInt16 i_nId,
             SfxBindings* i_pBindings,
             SfxChildWinInfo* i_pInfo
@@ -102,7 +102,7 @@ namespace sfx2
     /** SFX-less version of a module dependent task pane, filled with tool panels as specified in the respective
         module's configuration
     */
-    class SFX2_DLLPUBLIC ModuleTaskPane : public Window
+    class SFX2_DLLPUBLIC ModuleTaskPane : public vcl::Window
     {
     public:
         /** creates a new instance
@@ -114,7 +114,7 @@ namespace sfx2
                 responsible for, thus controlling which tool panels are actually available.
         */
         ModuleTaskPane(
-            Window& i_rParentWindow,
+            vcl::Window& i_rParentWindow,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame
         );
         virtual ~ModuleTaskPane();
@@ -186,7 +186,7 @@ namespace sfx2
     {
     public:
         TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper,
-            Window* i_pParent, WinBits i_nBits );
+            vcl::Window* i_pParent, WinBits i_nBits );
 
         // ITaskPaneToolPanelAccess
         virtual void    ActivateToolPanel( const OUString& i_rPanelURL ) SAL_OVERRIDE;

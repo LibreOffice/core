@@ -33,7 +33,7 @@
 class FmPropBrwMgr : public SfxChildWindow
 {
 public:
-    FmPropBrwMgr(Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo *pInfo);
+    FmPropBrwMgr(vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo *pInfo);
     SFX_DECL_CHILDWINDOW(FmPropBrwMgr);
 };
 
@@ -79,7 +79,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB,
         SfxBindings* pBindings,
         SfxChildWindow* pMgr,
-        Window* pParent,
+        vcl::Window* pParent,
         const SfxChildWinInfo* _pInfo
     );
     virtual ~FmPropBrw();

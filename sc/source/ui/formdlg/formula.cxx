@@ -64,7 +64,7 @@ ScAddress ScFormulaDlg::aCursorPos;
 //      Initialisierung / gemeinsame Funktionen  fuer Dialog
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                                    Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
+                                    vcl::Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
     : formula::FormulaDlg( pB, pCW, pParent, true,true,true, _pFunctionMgr,this)
     , m_aHelper(this,pB)
 {

@@ -29,7 +29,7 @@
 class SvxSearchFormatDialog : public SfxTabDialog
 {
 public:
-    SvxSearchFormatDialog( Window* pParent, const SfxItemSet& rSet );
+    SvxSearchFormatDialog( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxSearchFormatDialog();
 
 protected:
@@ -48,7 +48,7 @@ private:
 class SvxSearchAttributeDialog : public ModalDialog
 {
 public:
-    SvxSearchAttributeDialog( Window* pParent, SearchAttrItemList& rLst,
+    SvxSearchAttributeDialog( vcl::Window* pParent, SearchAttrItemList& rLst,
                               const sal_uInt16* pWhRanges );
 
 private:
@@ -71,7 +71,7 @@ private:
     CheckBox*            m_pRelaxBox;
 
 public:
-    SvxSearchSimilarityDialog(  Window* pParent,
+    SvxSearchSimilarityDialog(  vcl::Window* pParent,
                                 bool bRelax,
                                 sal_uInt16 nOther,
                                 sal_uInt16 nShorter,

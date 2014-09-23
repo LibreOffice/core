@@ -176,7 +176,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, DelHdl_Impl)
     return 0;
 }
 
-SvxMultiPathDialog::SvxMultiPathDialog(Window* pParent)
+SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "MultiPathDialog", "cui/ui/multipathdialog.ui")
 {
     get(m_pAddBtn, "add");
@@ -205,7 +205,7 @@ SvxMultiPathDialog::SvxMultiPathDialog(Window* pParent)
     m_pRadioLB->ShowTable();
 }
 
-SvxPathSelectDialog::SvxPathSelectDialog(Window* pParent)
+SvxPathSelectDialog::SvxPathSelectDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "SelectPathDialog", "cui/ui/selectpathdialog.ui")
 {
     get(m_pAddBtn, "add");

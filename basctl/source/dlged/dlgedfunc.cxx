@@ -30,7 +30,7 @@ namespace basctl
 IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
 {
     (void)pTimer;
-    Window& rWindow = rParent.GetWindow();
+    vcl::Window& rWindow = rParent.GetWindow();
     Point aPos = rWindow.ScreenToOutputPixel( rWindow.GetPointerPosPixel() );
     aPos = rWindow.PixelToLogic( aPos );
     ForceScroll( aPos );
@@ -42,7 +42,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 {
     aScrollTimer.Stop();
 
-    Window& rWindow  = rParent.GetWindow();
+    vcl::Window& rWindow  = rParent.GetWindow();
 
     static Point aDefPoint;
     Rectangle aOutRect( aDefPoint, rWindow.GetOutputSizePixel() );
@@ -111,7 +111,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
     bool bReturn = false;
 
     SdrView& rView = rParent.GetView();
-    Window& rWindow = rParent.GetWindow();
+    vcl::Window& rWindow = rParent.GetWindow();
 
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
@@ -350,7 +350,7 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         return true;
 
     SdrView& rView  = rParent.GetView();
-    Window& rWindow = rParent.GetWindow();
+    vcl::Window& rWindow = rParent.GetWindow();
     rView.SetActualWin(&rWindow);
 
     Point aPos = rWindow.PixelToLogic( rMEvt.GetPosPixel() );
@@ -388,7 +388,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     DlgEdFunc::MouseButtonUp( rMEvt );
 
     SdrView& rView  = rParent.GetView();
-    Window& rWindow = rParent.GetWindow();
+    vcl::Window& rWindow = rParent.GetWindow();
     rView.SetActualWin(&rWindow);
 
     rWindow.ReleaseMouse();
@@ -418,7 +418,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView& rView  = rParent.GetView();
-    Window& rWindow = rParent.GetWindow();
+    vcl::Window& rWindow = rParent.GetWindow();
     rView.SetActualWin(&rWindow);
 
     Point aPos = rWindow.PixelToLogic(rMEvt.GetPosPixel());
@@ -449,7 +449,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // get view from parent
     SdrView& rView  = rParent.GetView();
-    Window& rWindow = rParent.GetWindow();
+    vcl::Window& rWindow = rParent.GetWindow();
     rView.SetActualWin(&rWindow);
 
     sal_uInt16 nDrgLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
@@ -513,7 +513,7 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 
     // get view from parent
     SdrView& rView  = rParent.GetView();
-    Window& rWindow = rParent.GetWindow();
+    vcl::Window& rWindow = rParent.GetWindow();
     rView.SetActualWin(&rWindow);
 
     Point aPnt = rWindow.PixelToLogic(rMEvt.GetPosPixel());
@@ -544,7 +544,7 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView& rView  = rParent.GetView();
-    Window& rWindow = rParent.GetWindow();
+    vcl::Window& rWindow = rParent.GetWindow();
     rView.SetActualWin(&rWindow);
 
     Point aPnt = rWindow.PixelToLogic(rMEvt.GetPosPixel());

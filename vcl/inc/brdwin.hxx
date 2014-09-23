@@ -74,16 +74,16 @@ class ImplBorderWindowView;
 #define BORDERWINDOW_TITLE_POPUP            ((sal_uInt16)0x0008)
 #define BORDERWINDOW_TITLE_NONE             ((sal_uInt16)0x0010)
 
-class ImplBorderWindow : public Window
+class ImplBorderWindow : public vcl::Window
 {
-    friend class Window;
+    friend class vcl::Window;
     friend class ImplBorderWindowView;
     friend class ImplSmallBorderWindowView;
     friend class ImplStdBorderWindowView;
 
 private:
     ImplBorderWindowView*   mpBorderView;
-    Window*                 mpMenuBarWindow;
+    vcl::Window*                 mpMenuBarWindow;
     long                    mnMinWidth;
     long                    mnMinHeight;
     long                    mnMaxWidth;
@@ -104,10 +104,10 @@ private:
     bool                    mbDisplayActive;
 
     using Window::ImplInit;
-    void                    ImplInit( Window* pParent,
+    void                    ImplInit( vcl::Window* pParent,
                                       WinBits nStyle, sal_uInt16 nTypeStyle,
                                       SystemParentData* pParentData );
-    void                    ImplInit( Window* pParent,
+    void                    ImplInit( vcl::Window* pParent,
                                       WinBits nStyle, sal_uInt16 nTypeStyle,
                                       const ::com::sun::star::uno::Any& );
 
@@ -116,11 +116,11 @@ private:
                             ImplBorderWindow& operator= (const ImplBorderWindow &);
 
 public:
-                            ImplBorderWindow( Window* pParent,
+                            ImplBorderWindow( vcl::Window* pParent,
                                               SystemParentData* pParentData,
                                               WinBits nStyle = 0,
                                               sal_uInt16 nTypeStyle = 0 );
-                            ImplBorderWindow( Window* pParent, WinBits nStyle = 0,
+                            ImplBorderWindow( vcl::Window* pParent, WinBits nStyle = 0,
                                               sal_uInt16 nTypeStyle = 0 );
                             virtual ~ImplBorderWindow();
 
@@ -155,7 +155,7 @@ public:
     void                    SetMenuButton( bool bMenuButton );
 
     void                    UpdateMenuHeight();
-    void                    SetMenuBarWindow( Window* pWindow );
+    void                    SetMenuBarWindow( vcl::Window* pWindow );
     void                    SetMenuBarMode( bool bHide );
 
     void                    SetMinOutputSize( long nWidth, long nHeight )

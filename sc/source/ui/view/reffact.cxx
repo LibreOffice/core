@@ -55,7 +55,7 @@ SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 {
     SfxChildWinInfo anInfo = SfxChildWindow::GetInfo();
 
-    if( Window *pWnd = GetWindow() )
+    if( vcl::Window *pWnd = GetWindow() )
     {
         anInfo.aSize  = pWnd->GetSizePixel();
 
@@ -73,7 +73,7 @@ namespace
 }
 
 #define IMPL_CHILD_CTOR(Class,sid) \
-    Class::Class( Window*               pParentP,                   \
+    Class::Class( vcl::Window*               pParentP,                   \
                     sal_uInt16              nId,                        \
                     SfxBindings*        p,                          \
                     SfxChildWinInfo*    pInfo )                     \
@@ -132,7 +132,7 @@ static long         nScSimpleRefX;
 static long         nScSimpleRefY;
 static bool         bAutoReOpen = true;
 
-ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
+ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,
                                 sal_uInt16              nId,
                                 SfxBindings*        p,
                                 SfxChildWinInfo*    pInfo )
@@ -228,7 +228,7 @@ void ScSimpleRefDlgWrapper::StartRefInput()
 
 // ScAcceptChgDlgWrapper //FIXME: should be moved into ViewShell
 
-ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
+ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   vcl::Window* pParentP,
                                             sal_uInt16 nId,
                                             SfxBindings* pBindings,
                                             SfxChildWinInfo* pInfo ) :
@@ -278,7 +278,7 @@ namespace
     }
 }
 
-ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,
+ScValidityRefChildWin::ScValidityRefChildWin( vcl::Window*               pParentP,
                                              sal_uInt16             nId,
                                              SfxBindings*       p,
                                              SfxChildWinInfo*   /*pInfo*/ )

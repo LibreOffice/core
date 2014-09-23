@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-class Window;
+namespace vcl { class Window; }
 
 namespace pcr
 {
@@ -138,7 +138,7 @@ namespace pcr
 
         /** retrieves a window which can be used as parent for dialogs
         */
-        Window* impl_getDefaultDialogParent_nothrow() const;
+        vcl::Window* impl_getDefaultDialogParent_nothrow() const;
 
         /** retrieves the property id for a given property name
             @throw com::sun::star::beans::UnknownPropertyException

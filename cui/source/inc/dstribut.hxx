@@ -41,15 +41,15 @@ class SvxDistributePage : public SvxTabPage
     RadioButton*                m_pBtnVerBottom;
 
 public:
-    SvxDistributePage(Window* pWindow, const SfxItemSet& rInAttrs,
+    SvxDistributePage(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
         SvxDistributeVertical eVer = SvxDistributeVerticalNone);
 
-    static SfxTabPage* Create(Window*, const SfxItemSet&,
+    static SfxTabPage* Create(vcl::Window*, const SfxItemSet&,
         SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
     virtual bool FillItemSet(SfxItemSet*) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet*) SAL_OVERRIDE;
-    virtual void PointChanged(Window* pWindow, RECT_POINT eRP) SAL_OVERRIDE;
+    virtual void PointChanged(vcl::Window* pWindow, RECT_POINT eRP) SAL_OVERRIDE;
 
     SvxDistributeHorizontal GetDistributeHor() const { return m_eDistributeHor; }
     SvxDistributeVertical GetDistributeVer() const { return m_eDistributeVer; }
@@ -60,7 +60,7 @@ class SvxDistributeDialog : public SfxSingleTabDialog
     SvxDistributePage* mpPage;
 
 public:
-    SvxDistributeDialog(Window* pParent, const SfxItemSet& rAttr,
+    SvxDistributeDialog(vcl::Window* pParent, const SfxItemSet& rAttr,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
         SvxDistributeVertical eVer = SvxDistributeVerticalNone);
 

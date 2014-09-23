@@ -36,7 +36,7 @@
 class ScFunctionChildWindow : public SfxChildWindow
 {
  public:
-    ScFunctionChildWindow( Window*, sal_uInt16, SfxBindings*,
+    ScFunctionChildWindow( vcl::Window*, sal_uInt16, SfxBindings*,
                             SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW_WITHID(ScFunctionChildWindow);
@@ -101,7 +101,7 @@ protected:
 public:
                     ScFunctionDockWin(  SfxBindings* pBindings,
                                         SfxChildWindow *pCW,
-                                        Window* pParent,
+                                        vcl::Window* pParent,
                                         const ResId& rResId );
 
                     virtual ~ScFunctionDockWin();

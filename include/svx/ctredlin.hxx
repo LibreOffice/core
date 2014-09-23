@@ -202,7 +202,7 @@ protected:
     void            EnableDateLine2(bool bFlag);
 
 public:
-                    SvxTPFilter( Window * pParent);
+                    SvxTPFilter( vcl::Window * pParent);
 
     virtual void    DeactivatePage() SAL_OVERRIDE;
     void            SetRedlinTable(SvxRedlinTable*);
@@ -314,7 +314,7 @@ private:
     DECL_LINK( PbClickHdl, PushButton* );
 
 public:
-    SvxTPView(Window * pParent);
+    SvxTPView(vcl::Window * pParent);
     virtual ~SvxTPView();
 
     void            InsertWriterHeader();
@@ -373,7 +373,7 @@ private:
     sal_uInt16      m_nFilterPageId;
 
 public:
-                    SvxAcceptChgCtr(Window* pParent);
+                    SvxAcceptChgCtr(vcl::Window* pParent);
 
                     virtual ~SvxAcceptChgCtr();
 

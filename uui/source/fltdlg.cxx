@@ -45,7 +45,7 @@ namespace uui
     @param      "pParentWindow"  , parent window for dialog
     @threadsafe no
 *//*-*************************************************************************************************************/
-FilterDialog::FilterDialog( Window* pParentWindow )
+FilterDialog::FilterDialog( vcl::Window* pParentWindow )
     :   ModalDialog  (pParentWindow, "FilterSelectDialog", "uui/ui/filterselect.ui" )
     ,   m_pFilterNames(NULL)
 {

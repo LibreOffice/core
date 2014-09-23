@@ -50,7 +50,7 @@
 namespace svx { namespace sidebar {
 
 
-ParaLineSpacingControl::ParaLineSpacingControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel)
+ParaLineSpacingControl::ParaLineSpacingControl(vcl::Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel)
     : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_LINESPACING))
     , mbUseLineSPCustom             (false)
     , mbLineSPDisable               (false)

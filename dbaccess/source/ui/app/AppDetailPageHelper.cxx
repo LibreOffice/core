@@ -125,17 +125,17 @@ namespace
         return (nIndex != -1 ? lcl_findEntry_impl(rTree,_rName.copy(sErase.getLength() + 1),_pFirst) : NULL);
     }
     // class OPreviewWindow
-    class OTablePreviewWindow : public Window
+    class OTablePreviewWindow : public vcl::Window
     {
         DECL_LINK(OnDisableInput, void*);
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OTablePreviewWindow( Window* pParent, WinBits nStyle = 0 );
+        OTablePreviewWindow( vcl::Window* pParent, WinBits nStyle = 0 );
         virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     };
-    OTablePreviewWindow::OTablePreviewWindow(Window* pParent, WinBits nStyle) : Window( pParent, nStyle)
+    OTablePreviewWindow::OTablePreviewWindow(vcl::Window* pParent, WinBits nStyle) : Window( pParent, nStyle)
     {
         ImplInitSettings( true, true, true );
     }
@@ -186,7 +186,7 @@ namespace
 }
 
 // class OAppDetailPageHelper
-OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
+OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_rBorderWin(_rBorderWin)
     ,m_aFL(this,WB_VERT)
     ,m_aTBPreview(this,WB_TABSTOP )
@@ -675,10 +675,10 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
     }
 }
 
-void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
+void OAppDetailPageHelper::setDetailPage(vcl::Window* _pWindow)
 {
     OSL_ENSURE(_pWindow,"OAppDetailPageHelper::setDetailPage: Window is NULL!");
-    Window* pCurrent = getCurrentView();
+    vcl::Window* pCurrent = getCurrentView();
     if ( pCurrent )
         pCurrent->Hide();
 
@@ -965,7 +965,7 @@ void OAppDetailPageHelper::Resize()
     long nOutputWidth  = aOutputSize.Width();
     long nOutputHeight = aOutputSize.Height();
 
-    Window* pWindow = getCurrentView();
+    vcl::Window* pWindow = getCurrentView();
     if ( pWindow )
     {
         Size aFLSize = LogicToPixel( Size( 2, 6 ), MAP_APPFONT );
@@ -1273,7 +1273,7 @@ void OAppDetailPageHelper::ImplInitSettings()
     m_pTablePreview->SetBackground( rStyleSettings.GetFieldColor() );
 }
 
-OPreviewWindow::OPreviewWindow(Window* _pParent)
+OPreviewWindow::OPreviewWindow(vcl::Window* _pParent)
 : Window(_pParent)
 {
     ImplInitSettings( true, true, true );

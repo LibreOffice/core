@@ -25,7 +25,7 @@
 #include <vcl/lstbox.hxx>
 #include <numberingtypelistbox.hxx>
 
-class Window;
+namespace vcl { class Window; }
 class SwView;
 class SwWrtShell;
 
@@ -34,9 +34,9 @@ class SwLineNumberingDlg : public SfxModalDialog
 private:
     SwWrtShell* pSh;
     VclContainer* m_pBodyContent;
-    Window* m_pDivIntervalFT;
+    vcl::Window* m_pDivIntervalFT;
     NumericField* m_pDivIntervalNF;
-    Window* m_pDivRowsFT;
+    vcl::Window* m_pDivRowsFT;
     NumericField* m_pNumIntervalNF;
     ListBox* m_pCharStyleLB;
     SwNumberingTypeListBox* m_pFormatLB;

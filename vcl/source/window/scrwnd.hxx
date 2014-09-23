@@ -69,7 +69,7 @@ protected:
 
 public:
 
-                        ImplWheelWindow( Window* pParent );
+                        ImplWheelWindow( vcl::Window* pParent );
                         virtual ~ImplWheelWindow();
 
     void                ImplStop();

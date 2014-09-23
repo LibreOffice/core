@@ -196,8 +196,8 @@ class SmCmdBoxWrapper : public SfxChildWindow
     SFX_DECL_CHILDWINDOW_WITHID(SmCmdBoxWrapper);
 
 protected:
-    SmCmdBoxWrapper(Window          *pParentWindow,
-                    sal_uInt16           nId,
+    SmCmdBoxWrapper(::vcl::Window   *pParentWindow,
+                    sal_uInt16       nId,
                     SfxBindings     *pBindings,
                     SfxChildWinInfo *pInfo);
 
@@ -264,7 +264,7 @@ protected:
     void InsertFrom(SfxMedium &rMedium);
 
     virtual bool HasPrintOptionsPage() const SAL_OVERRIDE;
-    virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
+    virtual SfxTabPage *CreatePrintOptionsPage(::vcl::Window    *pParent,
                                                const SfxItemSet &rOptions) SAL_OVERRIDE;
     virtual void Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
     virtual void Activate(bool IsMDIActivate) SAL_OVERRIDE;

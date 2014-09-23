@@ -22,12 +22,12 @@
 #include <vcl/decoview.hxx>
 #include <vcl/builder.hxx>
 
-SdHtmlAttrPreview::SdHtmlAttrPreview( Window* pParent, WinBits nStyle )
+SdHtmlAttrPreview::SdHtmlAttrPreview( vcl::Window* pParent, WinBits nStyle )
 :Control( pParent, nStyle )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSdHtmlAttrPreview(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSdHtmlAttrPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = 0;
 

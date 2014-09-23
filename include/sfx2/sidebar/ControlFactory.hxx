@@ -39,9 +39,9 @@ class SFX2_DLLPUBLIC ControlFactory
 public:
     /** Create the menu button for the task bar.
     */
-    static CheckBox* CreateMenuButton (Window* pParentWindow);
+    static CheckBox* CreateMenuButton (vcl::Window* pParentWindow);
 
-    static ImageRadioButton* CreateTabItem (Window* pParentWindow);
+    static ImageRadioButton* CreateTabItem (vcl::Window* pParentWindow);
 };
 
 

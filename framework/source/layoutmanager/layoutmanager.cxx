@@ -691,7 +691,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
 ::Size LayoutManager::implts_getContainerWindowOutputSize()
 {
     ::Size  aContainerWinSize;
-    Window* pContainerWindow( 0 );
+    vcl::Window* pContainerWindow( 0 );
 
     // Retrieve output size from container Window
     SolarMutexGuard aGuard;
@@ -884,10 +884,10 @@ void LayoutManager::implts_createProgressBar()
         Reference< awt::XWindow > xStatusBarWindow = pWrapper->getStatusBar();
 
         SolarMutexGuard aGuard;
-        Window* pStatusBarWnd = VCLUnoHelper::GetWindow( xStatusBarWindow );
+        vcl::Window* pStatusBarWnd = VCLUnoHelper::GetWindow( xStatusBarWindow );
         if ( !pStatusBarWnd )
         {
-            Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+            vcl::Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             if ( pWindow )
             {
                 StatusBar* pStatusBar = new StatusBar( pWindow, WinBits( WB_LEFT | WB_3DLOOK ) );
@@ -970,11 +970,11 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
     if ( xWindow.is() )
     {
         SolarMutexGuard aGuard;
-        Window* pParentWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pParentWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pParentWindow && ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR ))
         {
-            Window* pOldParentWindow = pWindow->GetParent();
+            vcl::Window* pOldParentWindow = pWindow->GetParent();
             if ( pParentWindow != pOldParentWindow )
                 pWindow->SetParent( pParentWindow );
             ((StatusBar *)pWindow)->SetPosSizePixel( rPos, rSize );
@@ -1012,7 +1012,7 @@ bool LayoutManager::implts_showProgressBar()
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     SolarMutexGuard aGuard;
-    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( pWindow )
     {
         if ( !pWindow->IsVisible() )
@@ -1052,7 +1052,7 @@ bool LayoutManager::implts_hideProgressBar()
     implts_readStatusBarState( STATUS_BAR_ALIAS );
     bHideStatusBar = !m_aStatusBarElement.m_bVisible;
 
-    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( pWindow && pWindow->IsVisible() && ( bHideStatusBar || bInternalStatusBar ))
     {
         implts_setOffset( 0 );
@@ -1077,7 +1077,7 @@ bool LayoutManager::implts_showStatusBar( bool bStoreState )
         Reference< awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
 
         SolarMutexGuard aGuard;
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && !pWindow->IsVisible() )
         {
             implts_setOffset( pWindow->GetSizePixel().Height() );
@@ -1103,7 +1103,7 @@ bool LayoutManager::implts_hideStatusBar( bool bStoreState )
         Reference< awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
 
         SolarMutexGuard aGuard;
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->IsVisible() )
         {
             implts_setOffset( 0 );
@@ -1272,7 +1272,7 @@ throw ( RuntimeException, std::exception )
         if ( pToolbarManager )
             pToolbarManager->resetDockingArea();
 
-        Window* pContainerWindow = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pContainerWindow )
             pContainerWindow->RemoveChildEventListener( LINK( this, LayoutManager, WindowEventListener ) );
     }
@@ -1294,7 +1294,7 @@ throw ( RuntimeException, std::exception )
         // and we get no notification anymore
         {
             SolarMutexGuard aGuard;
-            Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+            vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
             if( pContainerWindow )
                 m_bParentWindowVisible = pContainerWindow->IsVisible();
         }
@@ -1310,7 +1310,7 @@ throw ( RuntimeException, std::exception )
         SolarMutexGuard aGuard;
 
         // Add layout manager as listener to get notifications about toolbar button activties
-        Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+        vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
         if ( pContainerWindow )
             pContainerWindow->AddChildEventListener( LINK( this, LayoutManager, WindowEventListener ) );
 
@@ -1365,8 +1365,8 @@ void LayoutManager::implts_reparentChildWindows()
     if ( xStatusBarWindow.is() )
     {
         SolarMutexGuard aGuard;
-        Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-        Window* pWindow          = VCLUnoHelper::GetWindow( xStatusBarWindow );
+        vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        vcl::Window* pWindow          = VCLUnoHelper::GetWindow( xStatusBarWindow );
         if ( pWindow && pContainerWindow )
             pWindow->SetParent( pContainerWindow );
     }
@@ -1392,7 +1392,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
 
     if ( pEvent && pEvent->ISA( VclWindowEvent ))
     {
-        Window* pWindow = static_cast< VclWindowEvent* >(pEvent)->GetWindow();
+        vcl::Window* pWindow = static_cast< VclWindowEvent* >(pEvent)->GetWindow();
         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
         {
             SolarMutexClearableGuard aReadLock;
@@ -1644,7 +1644,7 @@ throw (uno::RuntimeException, std::exception)
                 // we need VCL here to pass special flags to Show()
                 SolarMutexGuard aGuard;
                 Reference< awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
-                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                 {
                     pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
@@ -2102,7 +2102,7 @@ throw (RuntimeException, std::exception)
             Reference< awt::XWindow > xWindow( m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
             if ( xWindow.is() )
             {
-                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow && pWindow->IsVisible() )
                     return sal_True;
                 else

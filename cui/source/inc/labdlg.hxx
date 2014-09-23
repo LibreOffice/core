@@ -73,9 +73,9 @@ private:
     const SdrView*      pView;
 
 public:
-    SvxCaptionTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxCaptionTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet* );
+    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -104,7 +104,7 @@ private:
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 public:
-    SvxCaptionTabDialog(Window* pParent, const SdrView* pView,
+    SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pView,
                             sal_uInt16 nAnchorTypes = 0);
 
     /// link for the Writer to validate positions

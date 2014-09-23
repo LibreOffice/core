@@ -107,7 +107,7 @@ void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventOb
         mpParent->ScannerEvent( rEventObject );
 }
 
-DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
+DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
     : ViewShell (pFrame, pParentWindow, rViewShellBase)
     , maTabControl(this, pParentWindow)
     , mbIsLayerModeActive(false)
@@ -415,7 +415,7 @@ css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubCo
     return xSubController;
 }
 
-bool DrawViewShell::RelocateToParentWindow (::Window* pParentWindow)
+bool DrawViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
 {
     // DrawViewShells can not be relocated to a new parent window at the
     // moment, so return <FALSE/> except when the given parent window is the

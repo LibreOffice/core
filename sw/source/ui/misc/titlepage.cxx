@@ -150,7 +150,7 @@ sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
     return nPage;
 }
 
-SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
+SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     SfxModalDialog( pParent, "DLG_TITLEPAGE", "modules/swriter/ui/titlepage.ui"),
     mpPageFmtDesc(0)
 {

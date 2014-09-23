@@ -101,7 +101,7 @@ namespace frm
         const IFeatureDispatcher*   m_pDispatcher;
 
     public:
-        ImplNavToolBar( Window* _pParent )
+        ImplNavToolBar( vcl::Window* _pParent )
             :ToolBox( _pParent, WB_3DLOOK )
             ,m_pDispatcher( NULL )
         {
@@ -132,7 +132,7 @@ namespace frm
         }
     }
 
-    NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle, const PCommandImageProvider& _pImageProvider,
+    NavigationToolBar::NavigationToolBar( vcl::Window* _pParent, WinBits _nStyle, const PCommandImageProvider& _pImageProvider,
             const PCommandDescriptionProvider& _pDescriptionProvider )
         :Window( _pParent, _nStyle )
         ,m_pDispatcher( NULL )
@@ -147,7 +147,7 @@ namespace frm
 
     NavigationToolBar::~NavigationToolBar( )
     {
-        for (   ::std::vector< Window* >::iterator loopChildWins = m_aChildWins.begin();
+        for (   ::std::vector< vcl::Window* >::iterator loopChildWins = m_aChildWins.begin();
                 loopChildWins != m_aChildWins.end();
                 ++loopChildWins
             )
@@ -224,7 +224,7 @@ namespace frm
         DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
 
-        Window* pItemWindow = m_pToolbar->GetItemWindow( (sal_uInt16)_nFeatureId );
+        vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( (sal_uInt16)_nFeatureId );
         if ( pItemWindow )
             pItemWindow->SetText( _rText );
         else
@@ -296,7 +296,7 @@ namespace frm
 
                 if ( pSupportedFeatures->bItemWindow )
                 {
-                    Window* pItemWindow = NULL;
+                    vcl::Window* pItemWindow = NULL;
                     if ( FormFeature::MoveAbsolute == pSupportedFeatures->nId )
                     {
                         pItemWindow = new RecordPositionInput( m_pToolbar );
@@ -558,14 +558,14 @@ namespace frm
         for ( sal_uInt16 item = 0; item < m_pToolbar->GetItemCount(); ++item )
         {
             sal_uInt16 nItemId = m_pToolbar->GetItemId( item );
-            Window* pItemWindow = m_pToolbar->GetItemWindow( nItemId );
+            vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( nItemId );
             if ( pItemWindow )
                 (this->*_handler)( nItemId, pItemWindow, _pParam );
         }
     }
 
 
-    void NavigationToolBar::setItemBackground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
+    void NavigationToolBar::setItemBackground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor ) const
     {
         if ( _pColor )
             _pItemWindow->SetControlBackground( *static_cast< const Color* >( _pColor ) );
@@ -574,7 +574,7 @@ namespace frm
     }
 
 
-    void NavigationToolBar::setTextLineColor( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
+    void NavigationToolBar::setTextLineColor( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* _pColor ) const
     {
         if ( _pColor )
             _pItemWindow->SetTextLineColor( *static_cast< const Color* >( _pColor ) );
@@ -583,14 +583,14 @@ namespace frm
     }
 #if 0
 
-    void NavigationToolBar::setItemWindowZoom( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
+    void NavigationToolBar::setItemWindowZoom( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         _pItemWindow->SetZoom( GetZoom() );
         _pItemWindow->SetZoomedPointFont( IsControlFont() ? GetControlFont() : GetPointFont() );
     }
 #endif
 
-    void NavigationToolBar::setItemControlFont( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
+    void NavigationToolBar::setItemControlFont( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         if ( IsControlFont() )
             _pItemWindow->SetControlFont( GetControlFont() );
@@ -599,7 +599,7 @@ namespace frm
     }
 
 
-    void NavigationToolBar::setItemControlForeground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
+    void NavigationToolBar::setItemControlForeground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         if ( IsControlForeground() )
             _pItemWindow->SetControlForeground( GetControlForeground() );
@@ -609,7 +609,7 @@ namespace frm
     }
 
 
-    void NavigationToolBar::adjustItemWindowWidth( sal_uInt16 _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const
+    void NavigationToolBar::adjustItemWindowWidth( sal_uInt16 _nItemId, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         OUString sItemText;
         switch ( _nItemId )
@@ -639,12 +639,12 @@ namespace frm
     }
 
 
-    void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const
+    void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled ) const
     {
         _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
     }
 
-    RecordPositionInput::RecordPositionInput( Window* _pParent )
+    RecordPositionInput::RecordPositionInput( vcl::Window* _pParent )
         :NumericField( _pParent, WB_BORDER | WB_VCENTER )
         ,m_pDispatcher( NULL )
     {

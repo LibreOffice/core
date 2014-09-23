@@ -52,7 +52,7 @@ protected:
     bool            ImpIndentBlock( bool bRight );
 
 public:
-                        ExtTextView( ExtTextEngine* pEng, Window* pWindow );
+                        ExtTextView( ExtTextEngine* pEng, vcl::Window* pWindow );
                         virtual ~ExtTextView();
 
     bool            MatchGroup();

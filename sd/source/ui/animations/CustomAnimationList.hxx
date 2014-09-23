@@ -46,7 +46,7 @@ class CustomAnimationList : public SvTreeListBox, public ISequenceListener
     friend struct stl_append_effect_func;
 
 public:
-    CustomAnimationList( ::Window* pParent );
+    CustomAnimationList( vcl::Window* pParent );
     virtual ~CustomAnimationList();
 
     // methods

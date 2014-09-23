@@ -151,9 +151,9 @@ namespace pcr
     }
 
 
-    Window* DefaultHelpProvider::impl_getVclControlWindow_nothrow( const Reference< XPropertyControl >& _rxControl )
+    vcl::Window* DefaultHelpProvider::impl_getVclControlWindow_nothrow( const Reference< XPropertyControl >& _rxControl )
     {
-        Window* pControlWindow = NULL;
+        vcl::Window* pControlWindow = NULL;
         OSL_PRECOND( _rxControl.is(), "DefaultHelpProvider::impl_getVclControlWindow_nothrow: illegal control!" );
         if ( !_rxControl.is() )
             return pControlWindow;
@@ -179,7 +179,7 @@ namespace pcr
         if ( !_rxControl.is() )
             return sHelpText;
 
-        Window* pControlWindow( impl_getVclControlWindow_nothrow( _rxControl ) );
+        vcl::Window* pControlWindow( impl_getVclControlWindow_nothrow( _rxControl ) );
         OSL_ENSURE( pControlWindow, "DefaultHelpProvider::impl_getHelpText_nothrow: could not determine the VCL window!" );
         if ( !pControlWindow )
             return sHelpText;

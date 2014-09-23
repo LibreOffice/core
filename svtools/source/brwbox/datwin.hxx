@@ -104,7 +104,7 @@ class BrowserDataWin
 {
 public:
     BrowserHeader*  pHeaderBar;     // only for BROWSER_HEADERBAR_NEW
-    Window*         pEventWin;      // Window of forwarded events
+    vcl::Window*         pEventWin;      // Window of forwarded events
     ScrollBarBox*   pCornerWin;     // Window in the corner btw the ScrollBars
     bool            bInDtor;
     AutoTimer       aMouseTimer;    // recalls MouseMove on dragging out
@@ -199,14 +199,14 @@ class BrowserScrollBar: public ScrollBar
     BrowserDataWin* _pDataWin;
 
 public:
-                    BrowserScrollBar( Window* pParent, WinBits nStyle,
+                    BrowserScrollBar( vcl::Window* pParent, WinBits nStyle,
                                       BrowserDataWin *pDataWin )
                     :   ScrollBar( pParent, nStyle ),
                         _nTip( 0 ),
                         _nLastPos( ULONG_MAX ),
                         _pDataWin( pDataWin )
                     {}
-                    //ScrollBar( Window* pParent, const ResId& rResId );
+                    //ScrollBar( vcl::Window* pParent, const ResId& rResId );
 
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
     virtual void    EndScroll() SAL_OVERRIDE;
@@ -214,7 +214,7 @@ public:
 
 
 
-void InitSettings_Impl( Window *pWin,
+void InitSettings_Impl( vcl::Window *pWin,
          bool bFont = true, bool bForeground = true, bool bBackground = true );
 
 

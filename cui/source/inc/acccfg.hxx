@@ -62,7 +62,7 @@ protected:
                                           const Image&, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
 
 public:
-    SfxAccCfgTabListBox_Impl(Window *pParent, WinBits nStyle)
+    SfxAccCfgTabListBox_Impl(vcl::Window *pParent, WinBits nStyle)
         : SvTabListBox(pParent, nStyle)
         , m_pAccelConfigPage(NULL)
     {
@@ -170,7 +170,7 @@ private:
     void                        CreateCustomItems( SvTreeListEntry* pEntry, const OUString& aCol1, const OUString& aCol2 );
 
 public:
-                                SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );
+                                SfxAcceleratorConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
     virtual                     ~SfxAcceleratorConfigPage();
 
     virtual bool                FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

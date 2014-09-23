@@ -28,7 +28,7 @@
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
 
-GraphicPreviewWindow::GraphicPreviewWindow(Window* pParent,
+GraphicPreviewWindow::GraphicPreviewWindow(vcl::Window* pParent,
     const WinBits nStyle)
     : Control(pParent, nStyle)
     , mpOrigGraphic(NULL)
@@ -37,7 +37,7 @@ GraphicPreviewWindow::GraphicPreviewWindow(Window* pParent,
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGraphicPreviewWindow(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGraphicPreviewWindow(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 
@@ -136,7 +136,7 @@ void GraphicPreviewWindow::Resize()
     ScaleImageToFit();
 }
 
-GraphicFilterDialog::GraphicFilterDialog(Window* pParent,
+GraphicFilterDialog::GraphicFilterDialog(vcl::Window* pParent,
     const OString& rID, const OUString& rUIXMLDescription,
     const Graphic& rGraphic)
     : ModalDialog(pParent, rID, rUIXMLDescription)
@@ -181,7 +181,7 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
 // - FilterMosaic -
 
 
-GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
+GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges )
     : GraphicFilterDialog(pParent, "MosaicDialog",
         "cui/ui/mosaicdialog.ui", rGraphic)
@@ -246,7 +246,7 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 // - GraphicFilterSmooth -
 
 
-GraphicFilterSmooth::GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius)
+GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& rGraphic, double nRadius)
     : GraphicFilterDialog(pParent, "SmoothDialog",
         "cui/ui/smoothdialog.ui", rGraphic)
 {
@@ -290,7 +290,7 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
 // - GraphicFilterSolarize -
 
 
-GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
+GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphic& rGraphic,
                                               sal_uInt8 cGreyThreshold, bool bInvert )
     : GraphicFilterDialog(pParent, "SolarizeDialog",
         "cui/ui/solarizedialog.ui", rGraphic)
@@ -345,7 +345,7 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
 // - GraphicFilterSepia -
 
 
-GraphicFilterSepia::GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
+GraphicFilterSepia::GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
                                         sal_uInt16 nSepiaPercent )
     : GraphicFilterDialog(pParent, "AgingDialog",
         "cui/ui/agingdialog.ui", rGraphic)
@@ -386,7 +386,7 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
 // - GraphicFilterPoster -
 
 
-GraphicFilterPoster::GraphicFilterPoster(Window* pParent, const Graphic& rGraphic,
+GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nPosterCount)
     : GraphicFilterDialog(pParent, "PosterDialog",
         "cui/ui/posterdialog.ui", rGraphic)
@@ -444,14 +444,14 @@ Size EmbossControl::GetOptimalSize() const
     return LogicToPixel(Size(77, 60), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeEmbossControl(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeEmbossControl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new EmbossControl(pParent);
 }
 
 
 
-GraphicFilterEmboss::GraphicFilterEmboss(Window* pParent,
+GraphicFilterEmboss::GraphicFilterEmboss(vcl::Window* pParent,
     const Graphic& rGraphic, RECT_POINT eLightSource)
     : GraphicFilterDialog (pParent, "EmbossDialog",
         "cui/ui/embossdialog.ui", rGraphic)

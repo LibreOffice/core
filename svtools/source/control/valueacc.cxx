@@ -216,7 +216,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    Window*                                         pParent = mpParent->GetParent();
+    vcl::Window*                                         pParent = mpParent->GetParent();
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if( pParent )
@@ -232,7 +232,7 @@ sal_Int32 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    Window*                 pParent = mpParent->GetParent();
+    vcl::Window*                 pParent = mpParent->GetParent();
     sal_Int32               nRet = 0;
 
     if( pParent )
@@ -292,7 +292,7 @@ OUString SAL_CALL ValueSetAcc::getAccessibleName()
 
         if ( aRet.isEmpty() )
         {
-            Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
+            vcl::Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
             if ( pLabel && pLabel != mpParent )
                 aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
 
@@ -312,13 +312,13 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
     ThrowIfDisposed();
     SolarMutexGuard g;
     uno::Reference< accessibility::XAccessibleRelationSet > xRelSet;
-    Window* pWindow = (Window*)mpParent;
+    vcl::Window* pWindow = (vcl::Window*)mpParent;
     if ( pWindow )
     {
         utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;
         xRelSet = pRelationSet;
 
-        Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
+        vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -326,7 +326,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
             pRelationSet->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
         }
 
-        Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+        vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if ( pMemberOf && pMemberOf != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);

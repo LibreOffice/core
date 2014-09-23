@@ -137,7 +137,7 @@ void OAccessibleMenuItemComponent::Click()
     // click the menu item
     if ( m_pParent )
     {
-        Window* pWindow = m_pParent->GetWindow();
+        vcl::Window* pWindow = m_pParent->GetWindow();
         if ( pWindow )
         {
             // #102438# Menu items are not selectable
@@ -264,7 +264,7 @@ awt::Rectangle OAccessibleMenuItemComponent::implGetBounds() throw (RuntimeExcep
         aBounds = AWTRectangle( m_pParent->GetBoundingRectangle( m_nItemPos ) );
 
         // get position of containing window in screen coordinates
-        Window* pWindow = m_pParent->GetWindow();
+        vcl::Window* pWindow = m_pParent->GetWindow();
         if ( pWindow )
         {
             Rectangle aRect = pWindow->GetWindowExtentsRelative( NULL );

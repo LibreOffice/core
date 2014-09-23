@@ -42,7 +42,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
     {
         SfxViewFrame*   pViewFrame = SfxViewFrame::Current();
         SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : NULL;
-        Window*         pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : NULL;
+        vcl::Window*         pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : NULL;
         Graphic         aGraphic;
 
         switch( rReq.GetSlot() )

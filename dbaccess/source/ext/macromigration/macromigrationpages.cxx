@@ -45,7 +45,7 @@ namespace dbmm
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::frame::XModel;
 
-    MacroMigrationPage::MacroMigrationPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
+    MacroMigrationPage::MacroMigrationPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
         : MacroMigrationPage_Base(pParent, rID, rUIXMLDescription)
     {
     }
@@ -61,7 +61,7 @@ namespace dbmm
     }
 
     // PreparationPage
-    PreparationPage::PreparationPage(Window *pParent)
+    PreparationPage::PreparationPage(vcl::Window *pParent)
         : MacroMigrationPage(pParent, "PreparePage" ,"dbaccess/ui/preparepage.ui")
     {
         get(m_pCloseDocError, "closedocerror");
@@ -162,7 +162,7 @@ namespace dbmm
     }
 
     // ProgressPage
-    ProgressPage::ProgressPage(Window* pParent)
+    ProgressPage::ProgressPage(vcl::Window* pParent)
         : MacroMigrationPage(pParent, "MigratePage" ,"dbaccess/ui/migratepage.ui")
     {
         get(m_pObjectCount, "count");
@@ -246,7 +246,7 @@ namespace dbmm
     }
 
     // ResultPage
-    ResultPage::ResultPage(Window* pParent)
+    ResultPage::ResultPage(vcl::Window* pParent)
         : MacroMigrationPage(pParent, "SummaryPage" ,"dbaccess/ui/summarypage.ui")
     {
         get(m_pChanges, "textview");

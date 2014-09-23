@@ -23,7 +23,7 @@
 #include "scresid.hxx"
 #include "subtdlg.hxx"
 
-ScSubTotalDlg::ScSubTotalDlg(Window* pParent, const SfxItemSet* pArgSet)
+ScSubTotalDlg::ScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialog(pParent, "SubTotalDialog",
         "modules/scalc/ui/subtotaldialog.ui", pArgSet)
 {

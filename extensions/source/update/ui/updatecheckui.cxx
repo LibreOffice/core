@@ -104,7 +104,7 @@ private:
     void            RecalcTextRects();
 
 public:
-                    BubbleWindow( Window* pParent, const OUString& rTitle,
+                    BubbleWindow( vcl::Window* pParent, const OUString& rTitle,
                                   const OUString& rText, const Image& rImage );
                    virtual ~BubbleWindow();
 
@@ -259,7 +259,7 @@ UpdateCheckUI::supportsService( OUString const & serviceName ) throw (uno::Runti
 Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
 {
     sal_uInt32 nResID;
-    Window *pMBarWin = pMBar->GetWindow();
+    vcl::Window *pMBarWin = pMBar->GetWindow();
     sal_uInt32 nMBarHeight = 20;
 
     if ( pMBarWin )
@@ -641,11 +641,11 @@ IMPL_LINK_NOARG(UpdateCheckUI, UserEventHdl)
 {
     SolarMutexGuard aGuard;
 
-    Window *pTopWin = Application::GetFirstTopLevelWindow();
-    Window *pActiveWin = Application::GetActiveTopWindow();
+    vcl::Window *pTopWin = Application::GetFirstTopLevelWindow();
+    vcl::Window *pActiveWin = Application::GetActiveTopWindow();
     SystemWindow *pActiveSysWin = NULL;
 
-    Window *pBubbleWin = NULL;
+    vcl::Window *pBubbleWin = NULL;
     if ( mpBubbleWin )
         pBubbleWin = mpBubbleWin;
 
@@ -686,7 +686,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     else if ( VCLEVENT_WINDOW_MENUBARADDED == nEventID )
     {
         SolarMutexGuard aGuard;
-        Window *pWindow = pEvent->GetWindow();
+        vcl::Window *pWindow = pEvent->GetWindow();
         if ( pWindow )
         {
             SystemWindow *pSysWin = pWindow->GetSystemWindow();
@@ -731,7 +731,7 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
         case VCLEVENT_WINDOW_GETFOCUS: {
             SolarMutexGuard aGuard;
 
-            Window *pWindow = static_cast< VclWindowEvent * >(pEvent)->GetWindow();
+            vcl::Window *pWindow = static_cast< VclWindowEvent * >(pEvent)->GetWindow();
             if ( pWindow && pWindow->IsTopWindow() )
             {
                 SystemWindow *pSysWin = pWindow->GetSystemWindow();
@@ -758,7 +758,7 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
 #define TEXT_MAX_HEIGHT       200
 
 
-BubbleWindow::BubbleWindow( Window* pParent, const OUString& rTitle,
+BubbleWindow::BubbleWindow( vcl::Window* pParent, const OUString& rTitle,
                             const OUString& rText, const Image& rImage )
     : FloatingWindow( pParent, WB_SYSTEMWINDOW
                                | WB_OWNERDRAWDECORATION

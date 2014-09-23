@@ -32,7 +32,7 @@ class ScDocOptions;
 class ScTpCalcOptions : public SfxTabPage
 {
 public:
-    static  SfxTabPage* Create          ( Window*               pParent,
+    static  SfxTabPage* Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
@@ -40,7 +40,7 @@ public:
     virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 private:
-                ScTpCalcOptions( Window*            pParent,
+                ScTpCalcOptions( vcl::Window*            pParent,
                                  const SfxItemSet&  rCoreSet );
                 virtual ~ScTpCalcOptions();
 

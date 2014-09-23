@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SVDGLUE_HXX
 #define INCLUDED_SVX_SVDGLUE_HXX
 
-class Window;
+namespace vcl { class Window; }
 class OutputDevice;
 class SvStream;
 class SdrObject;
@@ -92,7 +92,7 @@ public:
     sal_uInt16       GetVertAlign() const                       { return nAlign&0xFF00; }
     void         SetVertAlign(sal_uInt16 nAlg)                  { nAlign=(nAlign&0x00FF)|(nAlg&0xFF00); }
     bool         IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
-    void         Invalidate(Window& rWin, const SdrObject* pObj) const;
+    void         Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     Point        GetAbsolutePos(const SdrObject& rObj) const;
     void         SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
     long         GetAlignAngle() const;
@@ -130,7 +130,7 @@ public:
     const SdrGluePoint& operator[](sal_uInt16 nPos) const                       { return *GetObject(nPos); }
     sal_uInt16          FindGluePoint(sal_uInt16 nId) const;
     sal_uInt16          HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, bool bBack = false, bool bNext = false, sal_uInt16 nId0=0) const;
-    void                Invalidate(Window& rWin, const SdrObject* pObj) const;
+    void                Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
     void                SetReallyAbsolute(bool bOn, const SdrObject& rObj);
     void                Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj);

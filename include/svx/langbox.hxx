@@ -114,7 +114,7 @@ protected:
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox, public SvxLanguageBoxBase
 {
 public:
-    SvxLanguageBox( Window* pParent, WinBits nBits, bool bCheck = false );
+    SvxLanguageBox( vcl::Window* pParent, WinBits nBits, bool bCheck = false );
     virtual ~SvxLanguageBox();
 
 private:
@@ -141,7 +141,7 @@ private:
 class SVX_DLLPUBLIC SvxLanguageComboBox : public ComboBox, public SvxLanguageBoxBase
 {
 public:
-    SvxLanguageComboBox( Window* pParent, WinBits nBits, bool bCheck = false );
+    SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits, bool bCheck = false );
     virtual ~SvxLanguageComboBox();
 
     enum EditedAndValid

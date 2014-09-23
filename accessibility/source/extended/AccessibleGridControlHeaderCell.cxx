@@ -134,7 +134,7 @@ OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
 
 Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
 {
-    Window* pParent = m_aTable.GetAccessibleParentWindow();
+    vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
     Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
     sal_Int32 nIndex = getAccessibleIndexInParent();
     Rectangle aCellRect;

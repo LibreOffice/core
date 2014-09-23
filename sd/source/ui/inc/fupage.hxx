@@ -41,7 +41,7 @@ class FuPage
     virtual void Activate() SAL_OVERRIDE;
     virtual void Deactivate() SAL_OVERRIDE;
 
-    const SfxItemSet* ExecuteDialog( Window* pParent );
+    const SfxItemSet* ExecuteDialog( vcl::Window* pParent );
 
 protected:
     virtual ~FuPage (void);

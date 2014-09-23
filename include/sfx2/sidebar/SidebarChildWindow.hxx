@@ -35,14 +35,14 @@ class SFX2_DLLPUBLIC SidebarChildWindow
 {
 public:
     SidebarChildWindow(
-        Window* pParent,
+        vcl::Window* pParent,
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
 
     SFX_DECL_CHILDWINDOW_WITHID(SidebarChildWindow);
 
-    static sal_Int32 GetDefaultWidth (Window* pWindow);
+    static sal_Int32 GetDefaultWidth (vcl::Window* pWindow);
 };
 
 

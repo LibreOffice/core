@@ -47,7 +47,7 @@ class SwNavHelpToolBox : public SwHelpToolBox
         SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
 };
 
-class SwNavigationPI : public Window,
+class SwNavigationPI : public vcl::Window,
                         public SfxControllerItem, public SfxListener
 {
     friend class SwNavigationChild;
@@ -137,7 +137,7 @@ protected:
 
 public:
 
-    SwNavigationPI(SfxBindings*, SfxChildWindowContext*, Window*);
+    SwNavigationPI(SfxBindings*, SfxChildWindowContext*, vcl::Window*);
     virtual ~SwNavigationPI();
 
     void            GotoPage(); // jump to page; bindable function
@@ -162,13 +162,13 @@ public:
     bool            IsGlobalMode() const {return    bGlobalMode;}
 
     SwView*         GetCreateView() const;
-    void            CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, Window *pParent);
+    void            CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, vcl::Window *pParent);
 };
 
 class SwNavigationChild : public SfxChildWindowContext
 {
 public:
-    SwNavigationChild( Window* ,
+    SwNavigationChild( vcl::Window* ,
                         sal_uInt16 nId,
                         SfxBindings*,
                         SfxChildWinInfo*  );

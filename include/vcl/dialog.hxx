@@ -27,7 +27,7 @@
 
 // parameter to pass to the dialog constructor if really no parent is wanted
 // whereas NULL chooses the default dialog parent
-#define DIALOG_NO_PARENT ((Window*)0xffffffff)
+#define DIALOG_NO_PARENT ((vcl::Window*)0xffffffff)
 
 
 // - Dialog -
@@ -61,7 +61,7 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
@@ -69,7 +69,7 @@ public:
 
 protected:
     explicit        Dialog( WindowType nType );
-    explicit        Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType );
+    explicit        Dialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
     virtual void    settingOptimalLayoutSize(VclBox *pBox) SAL_OVERRIDE;
 
@@ -79,8 +79,8 @@ protected:
     void set_content_area(VclBox *pBox);
 
 public:
-    explicit        Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-    explicit        Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
+    explicit        Dialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
     virtual         ~Dialog();
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -111,7 +111,7 @@ public:
 
 
     void            EndDialog( long nResult = 0 );
-    static void     EndAllDialogs( Window* pParent=NULL );
+    static void     EndAllDialogs( vcl::Window* pParent=NULL );
 
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
@@ -131,15 +131,15 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
     SAL_DLLPRIVATE         ModelessDialog & operator= (const ModelessDialog &);
 
 public:
-    explicit        ModelessDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    explicit        ModelessDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
 };
 
 // - ModalDialog -
 class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:
-    explicit        ModalDialog( Window* pParent, WinBits nStyle = WB_STDMODAL );
-    explicit        ModalDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    explicit        ModalDialog( vcl::Window* pParent, WinBits nStyle = WB_STDMODAL );
+    explicit        ModalDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
 
 protected:
     using Window::Show;

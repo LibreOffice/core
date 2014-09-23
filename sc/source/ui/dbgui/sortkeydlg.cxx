@@ -11,7 +11,7 @@
 #include "sortdlg.hxx"
 #include <vcl/layout.hxx>
 
-ScSortKeyItem::ScSortKeyItem(Window* pParent)
+ScSortKeyItem::ScSortKeyItem(vcl::Window* pParent)
 {
     m_pUIBuilder = new VclBuilder(pParent, getUIRootDir(), "modules/scalc/ui/sortkey.ui");
 

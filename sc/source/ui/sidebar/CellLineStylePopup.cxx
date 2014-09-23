@@ -23,7 +23,7 @@
 namespace sc { namespace sidebar {
 
 CellLineStylePopup::CellLineStylePopup (
-    Window* pParent,
+    vcl::Window* pParent,
     const ::boost::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator)
 :   Popup(pParent, rControlCreator, OUString("CellLineStyle"))
 {

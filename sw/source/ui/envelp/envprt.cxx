@@ -29,7 +29,7 @@
 #include "envprt.hrc"
 #include <boost/scoped_ptr.hpp>
 
-SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet)
+SwEnvPrtPage::SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvPrinterPage",
         "modules/swriter/ui/envprinterpage.ui", &rSet)
     , pPrt(NULL)
@@ -127,7 +127,7 @@ IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
     return 0;
 }
 
-SfxTabPage* SwEnvPrtPage::Create(Window* pParent, const SfxItemSet* rSet)
+SfxTabPage* SwEnvPrtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
     return new SwEnvPrtPage(pParent, *rSet);
 }

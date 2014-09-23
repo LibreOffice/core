@@ -80,9 +80,9 @@ class SwFormatTablePage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwFormatTablePage( Window* pParent, const SfxItemSet& rSet );
+    SwFormatTablePage( vcl::Window* pParent, const SfxItemSet& rSet );
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet);
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
@@ -129,10 +129,10 @@ class SwTableColumnPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwTableColumnPage( Window* pParent, const SfxItemSet& rSet );
+    SwTableColumnPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwTableColumnPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet);
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
@@ -177,11 +177,11 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK( SplitRowHdl_Impl, TriStateBox* );
     DECL_LINK( HeadLineCBClickHdl, void* p = 0 );
 
-    SwTextFlowPage( Window* pParent, const SfxItemSet& rSet );
+    SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwTextFlowPage();
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet);
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 

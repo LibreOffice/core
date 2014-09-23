@@ -94,8 +94,8 @@ class VCLStatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIn
 
     private:
 
-        static void impl_recalcLayout(Window* pStatusBar   ,
-                                      Window* pParentWindow);
+        static void impl_recalcLayout(vcl::Window* pStatusBar   ,
+                                      vcl::Window* pParentWindow);
 };
 
 } // namespace framework

@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rInAttrs)
+AxisPositionsTabPage::AxisPositionsTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow
                 ,"tp_AxisPositions"
                 ,"modules/schart/ui/tp_AxisPositions.ui"
@@ -84,7 +84,7 @@ AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rIn
     m_pLB_PlaceTicks->SetDropDownLineCount( m_pLB_PlaceTicks->GetEntryCount() );
 }
 
-SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet* rOutAttrs)
+SfxTabPage* AxisPositionsTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
 {
     return new AxisPositionsTabPage(pWindow, *rOutAttrs);
 }

@@ -36,7 +36,7 @@ protected:
     virtual void Apply() SAL_OVERRIDE;
 
 public:
-    SwTableHeightDlg( Window *pParent, SwWrtShell &rS );
+    SwTableHeightDlg( vcl::Window *pParent, SwWrtShell &rS );
 };
 
 #endif

@@ -35,7 +35,7 @@ using namespace ::com::sun::star::text;
 #define FLYINFLY_BORDER 3
 #define DEMOTEXT        "Ij"
 
-SvxSwFrameExample::SvxSwFrameExample( Window *pParent, WinBits nStyle ) :
+SvxSwFrameExample::SvxSwFrameExample( vcl::Window *pParent, WinBits nStyle ) :
 
     Window(pParent, nStyle),
 
@@ -52,7 +52,7 @@ SvxSwFrameExample::SvxSwFrameExample( Window *pParent, WinBits nStyle ) :
     SetMapMode(MAP_PIXEL);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxSwFrameExample(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxSwFrameExample(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxSwFrameExample(pParent, 0);
 }

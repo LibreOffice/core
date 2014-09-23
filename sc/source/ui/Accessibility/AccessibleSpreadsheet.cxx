@@ -1355,7 +1355,7 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
     Rectangle aRect;
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
             aRect = pWindow->GetWindowExtentsRelative(NULL);
     }
@@ -1368,7 +1368,7 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
     Rectangle aRect;
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
             //#101986#; extends to the same window, because the parent is the document and it has the same window
             aRect = pWindow->GetWindowExtentsRelative(pWindow);
@@ -1439,7 +1439,7 @@ Rectangle ScAccessibleSpreadsheet::GetVisArea(ScTabViewShell* pViewShell, ScSpli
     Rectangle aVisArea;
     if (pViewShell)
     {
-        Window* pWindow = pViewShell->GetWindowByPos(eSplitPos);
+        vcl::Window* pWindow = pViewShell->GetWindowByPos(eSplitPos);
         if (pWindow)
         {
             aVisArea.SetPos(pViewShell->GetViewData().GetPixPos(eSplitPos));

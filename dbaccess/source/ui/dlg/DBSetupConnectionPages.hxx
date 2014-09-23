@@ -40,8 +40,8 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        static  OGenericAdministrationPage* CreateSpreadSheetTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        OSpreadSheetConnectionPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
+        static  OGenericAdministrationPage* CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        OSpreadSheetConnectionPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
 
     protected:
         CheckBox *m_pPasswordrequired;
@@ -59,8 +59,8 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-           static   OGenericAdministrationPage* CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        OTextConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
+           static   OGenericAdministrationPage* CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        OTextConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;
     private:
 
@@ -81,8 +81,8 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        static  OGenericAdministrationPage* CreateLDAPTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        OLDAPConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        static  OGenericAdministrationPage* CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual Link getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
 
     protected:
@@ -111,9 +111,9 @@ namespace dbaui
         MySQLNativeSettings m_aMySQLSettings;
 
     public:
-        MySQLNativeSetupPage( Window* _pParent, const SfxItemSet& _rCoreAttrs );
+        MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs );
 
-        static OGenericAdministrationPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
+        static OGenericAdministrationPage* Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
         virtual void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList ) SAL_OVERRIDE;
@@ -132,15 +132,15 @@ namespace dbaui
     class OGeneralSpecialJDBCConnectionPageSetup : public OGenericAdministrationPage
     {
     public:
-        OGeneralSpecialJDBCConnectionPageSetup(   Window* pParent
+        OGeneralSpecialJDBCConnectionPageSetup(   vcl::Window* pParent
                                         , const SfxItemSet& _rCoreAttrs
                                         , sal_uInt16 _nPortId
                                         , sal_uInt16 _nDefaultPortResId
                                         , sal_uInt16 _nHelpTextResId
                                         , sal_uInt16 _nHeaderTextResId
                                         , sal_uInt16 _nDriverClassId );
-    static  OGenericAdministrationPage* CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-    static  OGenericAdministrationPage* CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+    static  OGenericAdministrationPage* CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+    static  OGenericAdministrationPage* CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
@@ -173,8 +173,8 @@ namespace dbaui
     class OJDBCConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-                OJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
-        static  OGenericAdministrationPage* CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+                OJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        static  OGenericAdministrationPage* CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
         virtual bool checkTestConnection() SAL_OVERRIDE;
@@ -202,9 +202,9 @@ namespace dbaui
             VIA_NATIVE
         };
 
-        OMySQLIntroPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs);
+        OMySQLIntroPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
 
-        static OMySQLIntroPageSetup*    CreateMySQLIntroTabPage( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static OMySQLIntroPageSetup*    CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
         ConnectionType      getMySQLMode();
         Link                maClickHdl;
         void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
@@ -232,8 +232,8 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-        static  OGenericAdministrationPage* CreateAuthentificationTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        OAuthentificationPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
+        static  OGenericAdministrationPage* CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        OAuthentificationPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
 
     protected:
         FixedText*  m_pFTHelpText;
@@ -254,7 +254,7 @@ namespace dbaui
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-           static   OGenericAdministrationPage* CreateFinalDBTabPageSetup( Window* pParent, const SfxItemSet& _rAttrSet);
+           static   OGenericAdministrationPage* CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet);
 
         FixedText*   m_pFTFinalHeader;
         FixedText*   m_pFTFinalHelpText;
@@ -265,7 +265,7 @@ namespace dbaui
         CheckBox*    m_pCBStartTableWizard;
         FixedText*   m_pFTFinalText;
 
-        OFinalDBPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
+        OFinalDBPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
         bool IsDatabaseDocumentToBeRegistered();
         bool IsDatabaseDocumentToBeOpened();
         bool IsTableWizardToBeStarted();

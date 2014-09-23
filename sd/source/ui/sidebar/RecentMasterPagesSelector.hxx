@@ -31,7 +31,7 @@ class RecentMasterPagesSelector
 {
 public:
     static MasterPagesSelector* Create (
-        ::Window* pParent,
+        vcl::Window* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
@@ -59,7 +59,7 @@ protected:
 
 private:
     RecentMasterPagesSelector (
-        ::Window* pParent,
+        vcl::Window* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,

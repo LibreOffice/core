@@ -720,14 +720,14 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
     }
 }
 
-NumericField::NumericField( Window* pParent, WinBits nWinStyle ) :
+NumericField::NumericField( vcl::Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
     SetField( this );
     Reformat();
 }
 
-NumericField::NumericField( Window* pParent, const ResId& rResId ) :
+NumericField::NumericField( vcl::Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_NUMERICFIELD )
 {
     rResId.SetRT( RSC_NUMERICFIELD );
@@ -883,7 +883,7 @@ Size NumericField::CalcMinimumSize() const
     return calcMinimumSize(*this, *this);
 }
 
-NumericBox::NumericBox( Window* pParent, WinBits nWinStyle ) :
+NumericBox::NumericBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
@@ -1546,14 +1546,14 @@ sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
                                       meUnit, eOutUnit );
 }
 
-MetricField::MetricField( Window* pParent, WinBits nWinStyle ) :
+MetricField::MetricField( vcl::Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
     SetField( this );
     Reformat();
 }
 
-MetricField::MetricField( Window* pParent, const ResId& rResId ) :
+MetricField::MetricField( vcl::Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_METRICFIELD )
 {
     rResId.SetRT( RSC_METRICFIELD );
@@ -1727,7 +1727,7 @@ void MetricField::CustomConvert()
     maCustomConvertLink.Call( this );
 }
 
-MetricBox::MetricBox( Window* pParent, WinBits nWinStyle ) :
+MetricBox::MetricBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
@@ -1975,7 +1975,7 @@ void CurrencyFormatter::Reformat()
         SetValue( mnLastValue );
 }
 
-CurrencyField::CurrencyField( Window* pParent, WinBits nWinStyle ) :
+CurrencyField::CurrencyField( vcl::Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
     SetField( this );
@@ -2057,7 +2057,7 @@ void CurrencyField::Last()
     SpinField::Last();
 }
 
-CurrencyBox::CurrencyBox( Window* pParent, WinBits nWinStyle ) :
+CurrencyBox::CurrencyBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );

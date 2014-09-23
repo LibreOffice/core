@@ -18,12 +18,12 @@
 
 using namespace std;
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScPivotLayoutTreeList(Window *pParent, VclBuilder::stringmap& )
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScPivotLayoutTreeList(vcl::Window *pParent, VclBuilder::stringmap& )
 {
     return new ScPivotLayoutTreeList(pParent, WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
 }
 
-ScPivotLayoutTreeList::ScPivotLayoutTreeList(Window* pParent, WinBits nBits) :
+ScPivotLayoutTreeList::ScPivotLayoutTreeList(vcl::Window* pParent, WinBits nBits) :
     ScPivotLayoutTreeListBase(pParent, nBits)
 {}
 

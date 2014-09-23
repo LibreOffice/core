@@ -84,7 +84,7 @@ class SvxEditModulesDlg : public ModalDialog
     DECL_LINK(OpenURLHdl_Impl, void *);
 
 public:
-    SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData);
+    SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rData);
     virtual ~SvxEditModulesDlg();
 };
 
@@ -130,7 +130,7 @@ private:
 
     SvxLinguData_Impl*  pLinguData;
 
-    SvxLinguTabPage( Window* pParent, const SfxItemSet& rCoreSet );
+    SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
     SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
     void    AddDicBoxEntry( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
@@ -148,7 +148,7 @@ private:
 
 public:
     virtual             ~SvxLinguTabPage();
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

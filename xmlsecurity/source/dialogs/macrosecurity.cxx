@@ -58,7 +58,7 @@ IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl)
     return 0;
 }
 
-MacroSecurity::MacroSecurity( Window* _pParent,
+MacroSecurity::MacroSecurity( vcl::Window* _pParent,
     const css::uno::Reference< css::uno::XComponentContext> &_rxCtx,
     const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment)
     : TabDialog(_pParent, "MacroSecurityDialog", "xmlsec/ui/macrosecuritydialog.ui")
@@ -88,14 +88,14 @@ MacroSecurity::~MacroSecurity()
     delete m_pTabCtrl->GetTabPage(m_nSecLevelId);
 }
 
-MacroSecurityTP::MacroSecurityTP(Window* _pParent, const OString& rID,
+MacroSecurityTP::MacroSecurityTP(vcl::Window* _pParent, const OString& rID,
     const OUString& rUIXMLDescription, MacroSecurity* _pDlg)
     : TabPage(_pParent, rID, rUIXMLDescription)
     , mpDlg(_pDlg)
 {
 }
 
-MacroSecurityLevelTP::MacroSecurityLevelTP(Window* _pParent, MacroSecurity* _pDlg)
+MacroSecurityLevelTP::MacroSecurityLevelTP(vcl::Window* _pParent, MacroSecurity* _pDlg)
     : MacroSecurityTP(_pParent, "SecurityLevelPage", "xmlsec/ui/securitylevelpage.ui", _pDlg)
 {
     get(m_pVeryHighRB, "vhigh");
@@ -339,7 +339,7 @@ public:
     }
 };
 
-MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(Window* _pParent, MacroSecurity* _pDlg)
+MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pParent, MacroSecurity* _pDlg)
     : MacroSecurityTP(_pParent, "SecurityTrustPage", "xmlsec/ui/securitytrustpage.ui", _pDlg)
 {
     get(m_pTrustCertROFI, "lockcertimg");

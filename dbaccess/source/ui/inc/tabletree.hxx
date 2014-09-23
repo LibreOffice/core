@@ -46,7 +46,7 @@ protected:
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
 
 public:
-    OTableTreeListBox(Window* pParent, WinBits nWinStyle);
+    OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle);
 
     void init(bool bVirtualRoot) { m_bVirtualRoot = bVirtualRoot; }
 

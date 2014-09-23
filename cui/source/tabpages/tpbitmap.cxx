@@ -50,7 +50,7 @@
 
 using namespace com::sun::star;
 
-SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs) :
+SvxBitmapTabPage::SvxBitmapTabPage(  vcl::Window* pParent, const SfxItemSet& rInAttrs) :
 
     SvxTabPage          ( pParent,
                           "BitmapTabPage",
@@ -291,7 +291,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet*  )
 
 
 
-SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
+SfxTabPage* SvxBitmapTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rSet )
 {
     return new SvxBitmapTabPage( pWindow, *rSet );
@@ -949,7 +949,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
 
 
 
-void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
+void SvxBitmapTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT )
 {
     if( pWindow == m_pCtlPixel )
     {
@@ -967,7 +967,7 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
 
 
 
-Window* SvxBitmapTabPage::GetParentLabeledBy( const Window* pLabeled ) const
+vcl::Window* SvxBitmapTabPage::GetParentLabeledBy( const vcl::Window* pLabeled ) const
 {
     if (pLabeled == m_pLbBitmaps)
         return const_cast<FixedText*>(m_pLbBitmapsHidden);

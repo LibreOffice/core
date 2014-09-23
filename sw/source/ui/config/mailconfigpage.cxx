@@ -112,7 +112,7 @@ public:
     virtual ~SwAuthenticationSettingsDialog();
 };
 
-SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
+SwMailConfigPage::SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, "MailConfigPage" , "modules/swriter/ui/mailconfigpage.ui", &rSet),
 
     m_pConfigItem( new SwMailMergeConfigItem )
@@ -138,7 +138,7 @@ SwMailConfigPage::~SwMailConfigPage()
     delete m_pConfigItem;
 }
 
-SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet* rAttrSet)
+SfxTabPage*  SwMailConfigPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
 {
     return new SwMailConfigPage(pParent, *rAttrSet);
 }
@@ -351,7 +351,7 @@ void SwTestAccountSettingsDialog::Test()
     }
 }
 
-SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet)
+SwMailConfigDlg::SwMailConfigDlg(vcl::Window* pParent, SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet)
 {
     // create TabPage

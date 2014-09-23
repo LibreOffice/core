@@ -36,7 +36,7 @@ namespace sfx2
     //= TitledDockingWindow
 
 
-    TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, Window* i_pParent,
+    TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, vcl::Window* i_pParent,
             WinBits i_nStyle )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_nStyle )
         ,m_sTitle()
@@ -50,7 +50,7 @@ namespace sfx2
     }
 
 
-    TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, Window* i_pParent,
+    TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, vcl::Window* i_pParent,
             const ResId& i_rResId )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_rResId )
         ,m_sTitle()

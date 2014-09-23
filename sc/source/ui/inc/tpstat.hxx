@@ -27,10 +27,10 @@
 class ScDocStatPage: public SfxTabPage
 {
 public:
-    static SfxTabPage* Create( Window* pParent, const SfxItemSet* rSet );
+    static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
 private:
-            ScDocStatPage( Window *pParent, const SfxItemSet& rSet );
+            ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet );
             virtual ~ScDocStatPage();
 
 protected:

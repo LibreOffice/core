@@ -208,7 +208,7 @@ OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
 
 Rectangle AccessibleBrowseBox::implGetBoundingBox()
 {
-    Window* pParent = mpBrowseBox->GetAccessibleParentWindow();
+    vcl::Window* pParent = mpBrowseBox->GetAccessibleParentWindow();
     OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
     return mpBrowseBox->GetWindowExtentsRelative( pParent );
 }

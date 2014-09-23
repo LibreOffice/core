@@ -30,7 +30,7 @@ class PreviewValueSet
     : public ValueSet
 {
 public:
-    PreviewValueSet (::Window* pParent);
+    PreviewValueSet (vcl::Window* pParent);
     virtual ~PreviewValueSet (void);
 
     void SetRightMouseClickHandler (const Link& rLink);

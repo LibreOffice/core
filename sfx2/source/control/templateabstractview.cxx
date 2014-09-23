@@ -125,7 +125,7 @@ bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
     return pItem->maTitle.matchIgnoreAsciiCase(maKeyword);
 }
 
-TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
+TemplateAbstractView::TemplateAbstractView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mnCurRegionId(0),
       maAllButton(this, SfxResId(BTN_ALL_TEMPLATES)),
@@ -137,7 +137,7 @@ TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, 
     maFTName.Hide();
 }
 
-TemplateAbstractView::TemplateAbstractView(Window *pParent)
+TemplateAbstractView::TemplateAbstractView(vcl::Window *pParent)
     : ThumbnailView(pParent),
       mnCurRegionId(0),
       maAllButton(this, SfxResId(BTN_ALL_TEMPLATES)),

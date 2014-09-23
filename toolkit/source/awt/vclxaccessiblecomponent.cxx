@@ -143,8 +143,8 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAc
     // checks if the data in the window event is our direct child
     // and returns its accessible
 
-    // MT: Change this later, normally a show/hide event shouldn't have the Window* in pData.
-    Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
+    // MT: Change this later, normally a show/hide event shouldn't have the vcl::Window* in pData.
+    vcl::Window* pChildWindow = (vcl::Window *) rVclWindowEvent.GetData();
     if( pChildWindow && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
         return pChildWindow->GetAccessible( rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW );
     else
@@ -185,7 +185,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
 {
     uno::Any aOldValue, aNewValue;
 
-    Window* pAccWindow = rVclWindowEvent.GetWindow();
+    vcl::Window* pAccWindow = rVclWindowEvent.GetWindow();
     assert(pAccWindow && "VCLXAccessibleComponent::ProcessWindowEvent - Window?");
 
     switch ( rVclWindowEvent.GetId() )
@@ -200,7 +200,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_WINDOW_CHILDDESTROYED:
         {
-            Window* pWindow = (Window*) rVclWindowEvent.GetData();
+            vcl::Window* pWindow = (vcl::Window*) rVclWindowEvent.GetData();
             DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDDESTROYED - Window=?" );
             if ( pWindow->GetAccessible( false ).is() )
             {
@@ -356,17 +356,17 @@ void VCLXAccessibleComponent::disposing()
     mpVCLXindow = NULL;
 }
 
-Window* VCLXAccessibleComponent::GetWindow() const
+vcl::Window* VCLXAccessibleComponent::GetWindow() const
 {
     return GetVCLXWindow() ? GetVCLXWindow()->GetWindow() : NULL;
 }
 
 void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
+        vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -374,7 +374,7 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
             rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
         }
 
-        Window* pLabelFor = pWindow->GetAccessibleRelationLabelFor();
+        vcl::Window* pLabelFor = pWindow->GetAccessibleRelationLabelFor();
         if ( pLabelFor && pLabelFor != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -382,7 +382,7 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
             rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABEL_FOR, aSequence ) );
         }
 
-        Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+        vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if ( pMemberOf && pMemberOf != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -394,7 +394,7 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
 
 void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsVisible() )
@@ -446,11 +446,11 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
         }
 
-        Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+        vcl::Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
 
         while( pWindow && pChild )
         {
-            Window* pWinTemp = pChild->GetWindow( WINDOW_FIRSTCHILD );
+            vcl::Window* pWinTemp = pChild->GetWindow( WINDOW_FIRSTCHILD );
             if( pWinTemp && pWinTemp->GetType() == WINDOW_EDIT )
             {
                 if( !( pWinTemp->GetStyle() & WB_READONLY) ||
@@ -520,7 +520,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
-        Window* pChild = GetWindow()->GetAccessibleChildWindow( (sal_uInt16)i );
+        vcl::Window* pChild = GetWindow()->GetAccessibleChildWindow( (sal_uInt16)i );
         if ( pChild )
             xAcc = pChild->GetAccessible();
     }
@@ -533,7 +533,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getVclPare
     uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
-        Window* pParent = GetWindow()->GetAccessibleParentWindow();
+        vcl::Window* pParent = GetWindow()->GetAccessibleParentWindow();
         if ( pParent )
             xAcc = pParent->GetAccessible();
     }
@@ -568,7 +568,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
     {
         if ( GetWindow() )
         {
-            Window* pParent = GetWindow()->GetAccessibleParentWindow();
+            vcl::Window* pParent = GetWindow()->GetAccessibleParentWindow();
             if ( pParent )
             {
                 //  Iterate over all the parent's children and search for this object.
@@ -701,12 +701,12 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds() throw (uno::RuntimeExcep
 {
     awt::Rectangle aBounds ( 0, 0, 0, 0 );
 
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         Rectangle aRect = pWindow->GetWindowExtentsRelative( NULL );
         aBounds = AWTRectangle( aRect );
-        Window* pParent = pWindow->GetAccessibleParentWindow();
+        vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
             Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );
@@ -778,7 +778,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsControlForeground() )
@@ -805,7 +805,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::Runtim
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsControlBackground() )
@@ -824,7 +824,7 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw
     OExternalLockGuard aGuard( this );
 
     uno::Reference< awt::XFont > xFont;
-    Window* pWindow = GetWindow();
+    vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
         uno::Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), uno::UNO_QUERY );

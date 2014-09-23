@@ -22,7 +22,7 @@
 #include <tools/rc.h>
 #include <vector>
 
-typedef ::std::vector< Window* > ImplMoreWindowList;
+typedef ::std::vector< vcl::Window* > ImplMoreWindowList;
 
 struct ImplMoreButtonData
 {
@@ -31,7 +31,7 @@ struct ImplMoreButtonData
     OUString            maLessText;
 };
 
-void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
+void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     mpMBData     = new ImplMoreButtonData;
     mnDelta      = 0;
@@ -72,7 +72,7 @@ void MoreButton::ShowState()
     }
 }
 
-MoreButton::MoreButton( Window* pParent, WinBits nStyle ) :
+MoreButton::MoreButton( vcl::Window* pParent, WinBits nStyle ) :
     PushButton( WINDOW_MOREBUTTON )
 {
     ImplInit( pParent, nStyle );
@@ -86,7 +86,7 @@ MoreButton::~MoreButton()
 
 void MoreButton::Click()
 {
-    Window*     pParent = GetParent();
+    vcl::Window*     pParent = GetParent();
     Size        aSize( pParent->GetSizePixel() );
     long        nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
 

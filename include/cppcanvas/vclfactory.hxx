@@ -31,7 +31,7 @@
 
 #include <cppcanvas/cppcanvasdllapi.h>
 
-class Window;
+namespace vcl { class Window; }
 class Bitmap;
 class BitmapEx;
 class Polygon;
@@ -70,7 +70,7 @@ namespace cppcanvas
         BitmapCanvasSharedPtr   createBitmapCanvas( const ::com::sun::star::uno::Reference<
                                                           ::com::sun::star::rendering::XBitmapCanvas >& xCanvas );
 
-        SpriteCanvasSharedPtr   createSpriteCanvas( const ::Window& rVCLWindow ) const;
+        SpriteCanvasSharedPtr   createSpriteCanvas( const vcl::Window& rVCLWindow ) const;
         SpriteCanvasSharedPtr   createSpriteCanvas( const ::com::sun::star::uno::Reference<
                                                                ::com::sun::star::rendering::XSpriteCanvas >& xCanvas ) const;
 

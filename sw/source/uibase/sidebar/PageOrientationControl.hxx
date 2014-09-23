@@ -34,7 +34,7 @@ class PageOrientationControl
 {
 public:
     PageOrientationControl(
-        Window* pParent,
+        vcl::Window* pParent,
         PagePropertyPanel& rPanel,
         const bool bLandscape );
     virtual ~PageOrientationControl(void);

@@ -40,7 +40,7 @@
 #include "swmodule.hxx"
 #include "view.hxx"
 
-SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
+SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, "TextGridPage", "modules/swriter/ui/textgridpage.ui", &rSet),
     m_nRubyUserValue(0),
     m_bRubyUserValue(false),
@@ -153,7 +153,7 @@ SwTextGridPage::~SwTextGridPage()
 {
 }
 
-SfxTabPage *SwTextGridPage::Create(Window *pParent, const SfxItemSet *rSet)
+SfxTabPage *SwTextGridPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)
 {
     return new SwTextGridPage(pParent, *rSet);
 }

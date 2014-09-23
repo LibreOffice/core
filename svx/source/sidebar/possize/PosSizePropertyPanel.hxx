@@ -49,7 +49,7 @@ class PosSizePropertyPanel
 {
 public:
     static PosSizePropertyPanel* Create(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
@@ -165,7 +165,7 @@ private:
 
     // constructor/destuctor
     PosSizePropertyPanel(
-        Window* pParent,
+        vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);

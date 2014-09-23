@@ -202,7 +202,7 @@ protected:
                            SvTreeListEntry* pEntry, bool bFilter = false);
 
 public:
-                    ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                ScViewData*      ptrViewData);
 
                     virtual ~ScAcceptChgDlg();

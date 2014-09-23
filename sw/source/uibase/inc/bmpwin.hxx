@@ -25,7 +25,7 @@
 #include <vcl/window.hxx>
 
 // extended page for graphics
-class BmpWindow : public Window
+class BmpWindow : public vcl::Window
 {
 private:
     Graphic     aGraphic;
@@ -41,7 +41,7 @@ private:
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
 public:
-    BmpWindow(Window* pPar, WinBits nStyle);
+    BmpWindow(vcl::Window* pPar, WinBits nStyle);
     virtual ~BmpWindow();
     void MirrorVert(bool bMirror) { bVert = bMirror; Invalidate(); }
     void MirrorHorz(bool bMirror) { bHorz = bMirror; Invalidate(); }

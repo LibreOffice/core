@@ -32,7 +32,7 @@
 |*
 \************************************************************************/
 
-FuConstArc::FuConstArc( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+FuConstArc::FuConstArc( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq )
     : FuConstruct( pViewSh, pWin, pViewP, pDoc, rReq )
 {

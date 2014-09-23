@@ -499,7 +499,7 @@ namespace svxform
 {
 
     NavigatorFrame::NavigatorFrame( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
-                                  Window* _pParent )
+                                  vcl::Window* _pParent )
       :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
       ,SfxControllerItem( SID_FM_FMEXPLORER_CONTROL, *_pBindings )
     {
@@ -603,7 +603,7 @@ namespace svxform
     SFX_IMPL_DOCKINGWINDOW( NavigatorFrameManager, SID_FM_SHOW_FMEXPLORER )
 
 
-    NavigatorFrameManager::NavigatorFrameManager( Window* _pParent, sal_uInt16 _nId,
+    NavigatorFrameManager::NavigatorFrameManager( vcl::Window* _pParent, sal_uInt16 _nId,
                                         SfxBindings* _pBindings, SfxChildWinInfo* _pInfo )
                      :SfxChildWindow( _pParent, _nId )
     {

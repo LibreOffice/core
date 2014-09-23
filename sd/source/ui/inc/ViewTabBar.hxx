@@ -172,7 +172,7 @@ private:
         static because it must not access any of the, not yet initialized
         members.
     */
-    static ::Window* GetAnchorWindow(
+    static vcl::Window* GetAnchorWindow(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XResourceId>& rxViewTabBarId,
         const ::com::sun::star::uno::Reference<

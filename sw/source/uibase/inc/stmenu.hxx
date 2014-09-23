@@ -64,7 +64,7 @@ public:
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
                      ::com::sun::star::uno::Reference< com::sun::star::text::XTextRange > xTextRange );
 
-    sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );
+    sal_uInt16  Execute( const Rectangle& rPopupPos, vcl::Window* pWin );
 };
 
 #endif

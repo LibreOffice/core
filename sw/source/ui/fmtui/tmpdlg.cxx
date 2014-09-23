@@ -67,7 +67,7 @@
 #include <svx/flagsdef.hxx>
 
 // the dialog's carrier
-SwTemplateDlg::SwTemplateDlg(Window* pParent,
+SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
                              SfxStyleSheetBase& rBase,
                              sal_uInt16 nRegion,
                              const OString& sPage,

@@ -24,7 +24,7 @@
 
 class VclSimpleEvent;
 class VclWindowEvent;
-class Window;
+namespace vcl { class Window; }
 
 
 
@@ -34,7 +34,7 @@ class Window;
 class VCLXAccessibleMenuBar :   public OAccessibleMenuComponent
 {
 protected:
-    Window*                 m_pWindow;
+    vcl::Window*                 m_pWindow;
 
     virtual bool            IsFocused() SAL_OVERRIDE;
 

@@ -4930,7 +4930,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
 /**
  * Ctor
  */
-SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
+SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
     DropTargetHelper( this ),
     DragSourceHelper( this ),
@@ -5484,7 +5484,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 {
                     ++nSize;
                 }
-                Window& rWin = rSh.GetView().GetEditWin();
+                vcl::Window& rWin = rSh.GetView().GetEditWin();
                 if ( nSize == 0 )
                 {
                     // When the composition does not exist, use Caret rect instead.
@@ -5852,7 +5852,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
     }
     m_bIsDisplayed = true;
 
-    Window& rWin = rSh.GetView().GetEditWin();
+    vcl::Window& rWin = rSh.GetView().GetEditWin();
     if( m_bIsTip )
     {
         Point aPt( rWin.OutputToScreenPixel( rWin.LogicToPixel(

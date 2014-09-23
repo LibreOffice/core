@@ -95,7 +95,7 @@ class OFieldExpressionControl : public TContainerListenerBase
     bool SaveModified(bool _bAppend);
 
 public:
-    OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, Window *_pParent);
+    OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent);
     virtual ~OFieldExpressionControl();
 
     // XEventListener
@@ -164,7 +164,7 @@ public:
 };
 
 // class OFieldExpressionControl
-OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, Window *_pParent)
+OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent)
     :EditBrowseBox( _pParent, EBBF_NONE, WB_TABSTOP | BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
                               BROWSER_KEEPSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL)
     ,m_aGroupPositions(GROUPS_START_LEN,-1)
@@ -913,7 +913,7 @@ Size OFieldExpressionControl::GetOptimalSize() const
 }
 
 // class OGroupsSortingDialog
-OGroupsSortingDialog::OGroupsSortingDialog(Window* _pParent, bool _bReadOnly,
+OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnly,
                                            OReportController* _pController)
     : FloatingWindow(_pParent, "FloatingSort", "modules/dbreport/ui/floatingsort.ui")
     , OPropertyChangeListener(m_aMutex)
@@ -935,7 +935,7 @@ OGroupsSortingDialog::OGroupsSortingDialog(Window* _pParent, bool _bReadOnly,
     get(m_pHelpWindow, "helptext");
     m_pHelpWindow->set_height_request(GetTextHeight() * 4);
     get(m_pProperties, "properties");
-    m_pFieldExpression = new OFieldExpressionControl(this, get<Window>("box"));
+    m_pFieldExpression = new OFieldExpressionControl(this, get<vcl::Window>("box"));
     m_pFieldExpression->set_hexpand(true);
     m_pFieldExpression->set_vexpand(true);
 

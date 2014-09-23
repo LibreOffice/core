@@ -41,7 +41,7 @@ private:
     SdrModel*           pModel;
 
 public:
-    SvxXMeasurePreview(Window* pParent, WinBits nStyle);
+    SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxXMeasurePreview();
 
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;

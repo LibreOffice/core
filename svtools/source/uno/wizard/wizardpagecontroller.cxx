@@ -102,7 +102,7 @@ namespace svt { namespace uno
         try
         {
             Reference< XWindow > xPageWindow( m_xWizardPage->getWindow(), UNO_SET_THROW );
-            Window* pPageWindow = VCLUnoHelper::GetWindow( xPageWindow );
+            vcl::Window* pPageWindow = VCLUnoHelper::GetWindow( xPageWindow );
             if ( pPageWindow == NULL )
             {
                 // windows created via the XContainerWindowProvider might be controls, not real windows, so resolve

@@ -52,7 +52,7 @@ public:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) SAL_OVERRIDE;
     void                Update( const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -69,7 +69,7 @@ public:
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual vcl::Window*     CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -115,7 +115,7 @@ public:
                       const OUString& rWndTitle );
     SvxLineEndWindow( sal_uInt16 nId,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                      Window* pParentWindow,
+                      vcl::Window* pParentWindow,
                       const OUString& rWndTitle );
     virtual ~SvxLineEndWindow();
 

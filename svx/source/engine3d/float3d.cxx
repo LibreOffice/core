@@ -84,7 +84,7 @@ namespace {
 }
 
 Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
-                SfxChildWindow *pCW, Window* pParent ) :
+                SfxChildWindow *pCW, vcl::Window* pParent ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent,
                                     SVX_RES( RID_SVXFLOAT_3D ) ),
         aBtnGeo             ( this, SVX_RES( BTN_GEO ) ),
@@ -3231,7 +3231,7 @@ ColorLB* Svx3DWin::GetLbByButton( const PushButton* pBtn )
 
 // Derivation from SfxChildWindow as "containers" for effects
 
-Svx3DChildWindow::Svx3DChildWindow( Window* _pParent,
+Svx3DChildWindow::Svx3DChildWindow( vcl::Window* _pParent,
                                                          sal_uInt16 nId,
                                                          SfxBindings* pBindings,
                                                          SfxChildWinInfo* pInfo ) :

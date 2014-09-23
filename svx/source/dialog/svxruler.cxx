@@ -55,11 +55,11 @@
 
 #ifdef DEBUG_RULER
 #include <vcl/lstbox.hxx>
-class RulerDebugWindow : public Window
+class RulerDebugWindow : public vcl::Window
 {
     ListBox aBox;
 public:
-        RulerDebugWindow(Window* pParent) :
+        RulerDebugWindow(vcl::Window* pParent) :
             Window(pParent, WB_BORDER|WB_SIZEMOVE|WB_DIALOGCONTROL|WB_CLIPCHILDREN|WB_SYSTEMWINDOW),
             aBox(this, WB_BORDER)
             {
@@ -89,7 +89,7 @@ void     RulerDebugWindow::AddDebugText(const sal_Char* pDescription, const OUSt
 {
     if(!pDebugWindow)
     {
-        Window* pParent = Application::GetFocusWindow();
+        vcl::Window* pParent = Application::GetFocusWindow();
         while(pParent->GetParent())
             pParent = pParent->GetParent();
         pDebugWindow = new RulerDebugWindow(pParent);
@@ -196,8 +196,8 @@ void SvxRuler_Impl::SetPercSize(sal_uInt16 nSize)
 // Ruler: SetBorders
 
 SvxRuler::SvxRuler(
-            Window* pParent,        // StarView Parent
-            Window* pWin,           // Output window: is used for conversion
+            vcl::Window* pParent,        // StarView Parent
+            vcl::Window* pWin,           // Output window: is used for conversion
                                     // logical units <-> pixels
             sal_uInt16 flags,       // Display flags, see ruler.hxx
             SfxBindings &rBindings, // associated Bindings

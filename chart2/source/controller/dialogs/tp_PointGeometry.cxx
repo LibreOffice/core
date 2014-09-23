@@ -30,7 +30,7 @@
 namespace chart
 {
 
-SchLayoutTabPage::SchLayoutTabPage(Window* pWindow,const SfxItemSet& rInAttrs)
+SchLayoutTabPage::SchLayoutTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs)
      : SfxTabPage(pWindow, "tp_ChartType", "modules/schart/ui/tp_ChartType.ui", &rInAttrs)
      , m_pGeometryResources(0)
 {
@@ -42,7 +42,7 @@ SchLayoutTabPage::~SchLayoutTabPage()
     delete m_pGeometryResources;
 }
 
-SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,
+SfxTabPage* SchLayoutTabPage::Create(vcl::Window* pWindow,
                                         const SfxItemSet* rOutAttrs)
 {
     return new SchLayoutTabPage(pWindow, *rOutAttrs);

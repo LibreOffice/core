@@ -48,7 +48,7 @@ namespace dbaui
 
     class OTableWindow : public ::cppu::BaseMutex
                         ,public ::comphelper::OContainerListener
-                        ,public Window
+                        ,public vcl::Window
     {
         friend class OTableWindowTitle;
         friend class OTableWindowListBox;
@@ -121,7 +121,7 @@ namespace dbaui
         */
         void    impl_updateImage();
 
-        OTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData );
+        OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData );
 
     public:
         virtual ~OTableWindow();

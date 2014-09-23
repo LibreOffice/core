@@ -65,7 +65,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
     {
         mbCreatingPeer = true;
 
-        Window* pParentWin = NULL;
+        vcl::Window* pParentWin = NULL;
         if (rParentPeer.is())
         {
             VCLXWindow* pParent = VCLXWindow::GetImplementation(rParentPeer);

@@ -45,7 +45,7 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
     SAL_DLLPRIVATE SwView*           GetView();
 
 public:
-    NumFormatListBox(Window* pWin, WinBits nStyle);
+    NumFormatListBox(vcl::Window* pWin, WinBits nStyle);
 
     virtual ~NumFormatListBox();
 

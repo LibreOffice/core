@@ -178,7 +178,7 @@ namespace svt
     }
 
 
-    void OControlAccess::setHelpURL( Window* _pControl, const OUString& sHelpURL, bool _bFileView )
+    void OControlAccess::setHelpURL( vcl::Window* _pControl, const OUString& sHelpURL, bool _bFileView )
     {
         OUString sHelpID( sHelpURL );
         INetURLObject aHID( sHelpURL );
@@ -195,7 +195,7 @@ namespace svt
     }
 
 
-    OUString OControlAccess::getHelpURL( Window* _pControl, bool _bFileView )
+    OUString OControlAccess::getHelpURL( vcl::Window* _pControl, bool _bFileView )
     {
         OString aHelpId = _pControl->GetHelpId();
         if ( _bFileView )

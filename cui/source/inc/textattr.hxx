@@ -74,16 +74,16 @@ private:
 
 public:
 
-    SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs );
+    SvxTextAttrPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxTextAttrPage();
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet* );
+    static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
-    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
+    virtual void        PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }

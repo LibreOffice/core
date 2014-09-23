@@ -78,7 +78,7 @@ namespace pcr
 
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(Window* _pParent) SAL_OVERRIDE;
+        virtual Dialog* createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
     };
 
 

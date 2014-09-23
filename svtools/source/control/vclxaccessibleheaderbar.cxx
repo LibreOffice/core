@@ -37,7 +37,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-VCLXHeaderBar::VCLXHeaderBar(Window* pHeaderBar)
+VCLXHeaderBar::VCLXHeaderBar(vcl::Window* pHeaderBar)
 {
     SetWindow(pHeaderBar);
 }

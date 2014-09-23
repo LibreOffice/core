@@ -124,7 +124,7 @@ void ToolTip::DoShow (void)
         if (aBox.Bottom() >= pWindow->GetSizePixel().Height())
             return;
 
-        ::Window* pParent (pWindow.get());
+        vcl::Window* pParent (pWindow.get());
         while (pParent!=NULL && pParent->GetParent()!=NULL)
             pParent = pParent->GetParent();
         const Point aOffset (pWindow->GetWindowExtentsRelative(pParent).TopLeft());

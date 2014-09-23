@@ -25,7 +25,7 @@ class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
         SfxBindings* m_pBindings;
 
     public:
-        SfxInfoBarContainerChild( Window* pParent,
+        SfxInfoBarContainerChild( vcl::Window* pParent,
                                   sal_uInt16 nId,
                                   SfxBindings* pBindings,
                                   SfxChildWinInfo* pInfo );
@@ -38,7 +38,7 @@ class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
 
 /** Class representing a single InfoBar to be added in a SfxInfoBarContainerWindow.
   */
-class SfxInfoBarWindow : public Window
+class SfxInfoBarWindow : public vcl::Window
 {
     private:
         OUString               m_sId;
@@ -47,7 +47,7 @@ class SfxInfoBarWindow : public Window
         std::vector< PushButton* >  m_aActionBtns;
 
     public:
-        SfxInfoBarWindow( Window* parent, const OUString& sId,
+        SfxInfoBarWindow( vcl::Window* parent, const OUString& sId,
                           const OUString& sMessage,
                           std::vector< PushButton* > aButtons );
         virtual ~SfxInfoBarWindow( );
@@ -60,7 +60,7 @@ class SfxInfoBarWindow : public Window
         DECL_LINK( CloseHandler, void* );
 };
 
-class SfxInfoBarContainerWindow : public Window
+class SfxInfoBarContainerWindow : public vcl::Window
 {
     private:
         SfxInfoBarContainerChild*        m_pChildWin;

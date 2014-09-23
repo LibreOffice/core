@@ -43,7 +43,7 @@ private:
                                          SvLBoxButtonKind eButtonKind ) SAL_OVERRIDE;
 
 public:
-    SvxCheckListBox( Window* pParent, WinBits nWinStyle = 0 );
+    SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
     void SetNormalStaticImage(const Image& rNormalStaticImage);
     virtual ~SvxCheckListBox();
 

@@ -43,7 +43,7 @@ class SvxNoSpaceEdit : public Edit
 private:
     bool bOnlyNumeric;
 public:
-    SvxNoSpaceEdit(Window* pParent, WinBits nStyle)
+    SvxNoSpaceEdit(vcl::Window* pParent, WinBits nStyle)
         : Edit(pParent, nStyle)
         , bOnlyNumeric(false)
     {}
@@ -98,11 +98,11 @@ private:
     DECL_LINK( ProxyHdl_Impl, ListBox * );
     DECL_LINK( LoseFocusHdl_Impl, Edit * );
 
-    SvxProxyTabPage( Window* pParent, const SfxItemSet& rSet );
+    SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxProxyTabPage();
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
@@ -111,9 +111,9 @@ public:
 class SvxScriptExecListBox : public ListBox
 { // for adding tooltips to ListBox
 public:
-    SvxScriptExecListBox( Window* pParent, WinBits nStyle = WB_BORDER )
+    SvxScriptExecListBox( vcl::Window* pParent, WinBits nStyle = WB_BORDER )
             :ListBox(pParent, nStyle) {}
-    SvxScriptExecListBox( Window* pParent, const ResId& rResId )
+    SvxScriptExecListBox( vcl::Window* pParent, const ResId& rResId )
             :ListBox(pParent, rResId) {}
 
 protected:
@@ -164,7 +164,7 @@ private:
 
     void                InitControls();
 
-                SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet );
+                SvxSecurityTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual     ~SvxSecurityTabPage();
 
 protected:
@@ -172,7 +172,7 @@ protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
@@ -192,10 +192,10 @@ class SvxEMailTabPage : public SfxTabPage
     DECL_LINK(  FileDialogHdl_Impl, PushButton* ) ;
 
 public:
-    SvxEMailTabPage( Window* pParent, const SfxItemSet& rSet );
+    SvxEMailTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxEMailTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
+    static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

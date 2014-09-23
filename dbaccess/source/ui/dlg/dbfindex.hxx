@@ -112,7 +112,7 @@ protected:
     void checkButtons();
 
 public:
-    ODbaseIndexDialog( Window * pParent, const OUString& aDataSrcName );
+    ODbaseIndexDialog( vcl::Window * pParent, const OUString& aDataSrcName );
 };
 
 }   // namespace dbaui

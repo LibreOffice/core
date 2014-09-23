@@ -62,7 +62,7 @@ protected:
     virtual void Apply() SAL_OVERRIDE;
 
 public:
-    SwBreakDlg( Window *pParent, SwWrtShell &rSh );
+    SwBreakDlg( vcl::Window *pParent, SwWrtShell &rSh );
     virtual ~SwBreakDlg();
 
     OUString    GetTemplateName() { return aTemplate; }

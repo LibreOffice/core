@@ -2333,7 +2333,7 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
 void SwBaseShell::ExecDlg(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    Window *pMDI = &GetView().GetViewFrame()->GetWindow();
+    vcl::Window *pMDI = &GetView().GetViewFrame()->GetWindow();
     // So that from the basic no dialogues for the background views are called:
     bool bBackground = (&GetView() != GetActiveView());
     const SfxPoolItem* pItem = 0;

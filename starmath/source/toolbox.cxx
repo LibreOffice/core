@@ -99,7 +99,7 @@ static sal_uInt16  GetCategoryRID( sal_uInt16 nResId )
 
 SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
                                  SfxChildWindow *pChildWindow,
-                                 Window *pParent)
+                                 vcl::Window *pParent)
     : SfxFloatingWindow(pTmpBindings, pChildWindow, pParent, "FloatingElements",
         "modules/smath/ui/floatingelements.ui")
 {
@@ -127,7 +127,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
     sal_uInt16 i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  ++i)
     {
-        ToolBox *pBox = new ToolBox(get<Window>("box"), SmResId( TOOLBOX_CAT_A + i ));
+        ToolBox *pBox = new ToolBox(get<vcl::Window>("box"), SmResId( TOOLBOX_CAT_A + i ));
         vToolBoxCategories[i] = pBox;
         pBox->SetSelectHdl(LINK(this, SmToolBoxWindow, CmdSelectHdl));
     }
@@ -344,7 +344,7 @@ IMPL_LINK( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
 
 SFX_IMPL_FLOATINGWINDOW_WITHID(SmToolBoxWrapper, SID_TOOLBOXWINDOW);
 
-SmToolBoxWrapper::SmToolBoxWrapper(Window *pParentWindow,
+SmToolBoxWrapper::SmToolBoxWrapper(vcl::Window *pParentWindow,
                                    sal_uInt16 nId, SfxBindings* pBindings,
                                    SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)

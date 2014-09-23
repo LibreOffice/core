@@ -27,7 +27,7 @@ namespace sfx2 { namespace sidebar {
 class SFX2_DLLPUBLIC PopupContainer : public FloatingWindow
 {
 public:
-    PopupContainer (Window* pParent);
+    PopupContainer (vcl::Window* pParent);
     virtual ~PopupContainer (void);
 
     virtual long Notify (NotifyEvent& rNEvt);

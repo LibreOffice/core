@@ -285,7 +285,7 @@ throw ( RuntimeException, std::exception )
     if ( m_bDisposed )
         return;
 
-    Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
     if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR && m_nID != 0 )
     {
         OUString aStrValue;

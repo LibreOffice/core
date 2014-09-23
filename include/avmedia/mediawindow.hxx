@@ -32,7 +32,7 @@
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME -1.0
 
-class Window;
+namespace vcl { class Window; }
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
@@ -53,7 +53,7 @@ namespace avmedia
     class AVMEDIA_DLLPUBLIC MediaWindow
     {
     public:
-                            MediaWindow( Window* parent, bool bInternalMediaControl );
+                            MediaWindow( vcl::Window* parent, bool bInternalMediaControl );
         virtual             ~MediaWindow();
 
         void                setURL( const OUString& rURL, const OUString& rReferer );
@@ -62,7 +62,7 @@ namespace avmedia
         bool                isValid() const;
         Size                getPreferredSize() const;
 
-        Window*             getWindow() const;
+        vcl::Window*             getWindow() const;
 
         void                setPosSize( const Rectangle& rNewRect );
 
@@ -97,9 +97,9 @@ namespace avmedia
         static void         getMediaFilters( FilterNameVector& rFilterNameVector );
         /// @param o_pbLink if not 0, this is an "insert" dialog: display link
         ///                 checkbox and store its state in *o_pbLink
-        static bool         executeMediaURLDialog( Window* pParent,
+        static bool         executeMediaURLDialog( vcl::Window* pParent,
                 OUString& rURL, bool *const o_pbLink );
-        static void         executeFormatErrorBox( Window* pParent );
+        static void         executeFormatErrorBox( vcl::Window* pParent );
         static bool         isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep = false, Size* pPreferredSizePixel = NULL );
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = 0 );

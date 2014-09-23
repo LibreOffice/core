@@ -156,7 +156,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    Window*                                         pParent = mpParent->GetParent();
+    vcl::Window*                                         pParent = mpParent->GetParent();
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if( pParent )
@@ -170,7 +170,7 @@ sal_Int32 SAL_CALL ThumbnailViewAcc::getAccessibleIndexInParent()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    Window*                 pParent = mpParent->GetParent();
+    vcl::Window*                 pParent = mpParent->GetParent();
     sal_Int32               nRet = 0;
 
     if( pParent )
@@ -221,7 +221,7 @@ OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
         aRet = mpParent->GetAccessibleName();
         if (aRet.isEmpty())
         {
-            Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
+            vcl::Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
             if (pLabel && pLabel != mpParent)
                 aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
         }

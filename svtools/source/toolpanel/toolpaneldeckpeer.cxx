@@ -67,7 +67,7 @@ namespace svt
         if ( m_pDeck == NULL )
             throw DisposedException( OUString(), *this );
 
-        Window* pAccessibleParent( m_pDeck->GetAccessibleParentWindow() );
+        vcl::Window* pAccessibleParent( m_pDeck->GetAccessibleParentWindow() );
         ENSURE_OR_RETURN( pAccessibleParent != NULL, "no accessible parent => no accessible context", NULL );
         Reference< XAccessible > xAccessibleParent( pAccessibleParent->GetAccessible(), UNO_SET_THROW );
         return m_aAccessibleFactory.getFactory().createAccessibleToolPanelDeck( xAccessibleParent, *m_pDeck );

@@ -87,7 +87,7 @@ struct ImplEntryType
 class ImplEntryList
 {
 private:
-    Window*         mpWindow;   ///< For getting the current locale when matching strings
+    vcl::Window*         mpWindow;   ///< For getting the current locale when matching strings
     sal_Int32       mnLastSelected;
     sal_Int32       mnSelectionAnchor;
     sal_Int32       mnImages;
@@ -107,7 +107,7 @@ private:
     }
 
 public:
-                    ImplEntryList( Window* pWindow );
+                    ImplEntryList( vcl::Window* pWindow );
                     ~ImplEntryList();
 
     sal_Int32               InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry, bool bSort );
@@ -265,7 +265,7 @@ protected:
 public:
     virtual void  FillLayoutData() const SAL_OVERRIDE;
 
-                    ImplListBoxWindow( Window* pParent, WinBits nWinStyle );
+                    ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle );
                     virtual ~ImplListBoxWindow();
 
     ImplEntryList*  GetEntryList() const { return mpEntryList; }
@@ -410,7 +410,7 @@ protected:
     DECL_LINK(          MRUChanged, void* );
 
 public:
-                    ImplListBox( Window* pParent, WinBits nWinStyle );
+                    ImplListBox( vcl::Window* pParent, WinBits nWinStyle );
                     virtual ~ImplListBox();
 
     const ImplEntryList*    GetEntryList() const            { return maLBWindow.GetEntryList(); }
@@ -418,7 +418,7 @@ public:
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;
-    virtual Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual vcl::Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
 
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr );
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr, const Image& rImage );
@@ -517,7 +517,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-                    ImplListBoxFloatingWindow( Window* pParent );
+                    ImplListBoxFloatingWindow( vcl::Window* pParent );
 
     void            SetImplListBox( ImplListBox* pLB )  { mpImplLB = pLB; }
 
@@ -564,7 +564,7 @@ protected:
     virtual void  FillLayoutData() const SAL_OVERRIDE;
 public:
 
-                    ImplWin( Window* pParent, WinBits nWinStyle = 0 );
+                    ImplWin( vcl::Window* pParent, WinBits nWinStyle = 0 );
                     virtual ~ImplWin() {};
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -606,7 +606,7 @@ private:
     bool            mbDown;
 
 public:
-                    ImplBtn( Window* pParent, WinBits nWinStyle = 0 );
+                    ImplBtn( vcl::Window* pParent, WinBits nWinStyle = 0 );
                     virtual ~ImplBtn() {};
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -615,7 +615,7 @@ public:
     boost::signals2::signal< void ( ImplBtn* ) > buttonDownSignal;
 };
 
-void ImplInitFieldSettings( Window* pWin, bool bFont, bool bForeground, bool bBackground );
+void ImplInitFieldSettings( vcl::Window* pWin, bool bFont, bool bForeground, bool bBackground );
 void ImplInitDropDownButton( PushButton* pButton );
 
 #endif // INCLUDED_VCL_INC_ILSTBOX_HXX

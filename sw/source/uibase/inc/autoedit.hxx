@@ -24,7 +24,7 @@
 class AutoEdit : public Edit
 {
 public:
-    AutoEdit( Window* pParent, ResId aResId ) : Edit( pParent, aResId ){}
+    AutoEdit( vcl::Window* pParent, ResId aResId ) : Edit( pParent, aResId ){}
 
 protected:
     virtual void KeyInput( const KeyEvent& rEvent ) SAL_OVERRIDE;

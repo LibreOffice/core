@@ -48,7 +48,7 @@ private:
     DECL_LINK( LanguageChangeHdl, void * );
 
 public:
-    SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet );
+    SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet );
     virtual ~SdModifyFieldDlg() {}
 
     SvxFieldData*       GetField();

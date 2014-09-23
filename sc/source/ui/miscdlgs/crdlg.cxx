@@ -23,7 +23,7 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-ScColOrRowDlg::ScColOrRowDlg(Window* pParent, const OUString& rStrTitle,
+ScColOrRowDlg::ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
     const OUString& rStrLabel, bool bColDefault)
     : ModalDialog(pParent, "ColOrRowDialog",
         "modules/scalc/ui/colorrowdialog.ui")

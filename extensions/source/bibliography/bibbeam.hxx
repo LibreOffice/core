@@ -70,7 +70,7 @@ namespace bib
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception >
                     getDispatchProviderInterception();
 
-            BibBeamer(Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
+            BibBeamer(vcl::Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
             virtual ~BibBeamer();
 
             void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);

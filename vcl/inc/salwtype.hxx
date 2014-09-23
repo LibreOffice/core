@@ -27,7 +27,7 @@
 class SalGraphics;
 class SalFrame;
 class SalObject;
-class Window;
+namespace vcl { class Window; }
 
 class FontSelectPattern;
 
@@ -234,7 +234,7 @@ struct SalQueryCharPositionEvent
 
 // - SalFrame-Types -
 
-typedef bool (*SALFRAMEPROC)( Window* pInst, SalFrame* pFrame,
+typedef bool (*SALFRAMEPROC)( vcl::Window* pInst, SalFrame* pFrame,
                               sal_uInt16 nEvent, const void* pEvent );
 
 // - SalObject-Events -

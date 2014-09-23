@@ -976,7 +976,7 @@ UUIInteractionHelper::getInteractionHandlerList(
     }
 }
 
-Window *
+vcl::Window *
 UUIInteractionHelper::getParentProperty()
 {
     uno::Reference< awt::XWindow > xWindow = getParentXWindow();
@@ -1010,7 +1010,7 @@ namespace {
 
 sal_uInt16
 executeMessageBox(
-    Window * pParent,
+    vcl::Window * pParent,
     OUString const & rTitle,
     OUString const & rMessage,
     WinBits nButtonMask )
@@ -1042,7 +1042,7 @@ executeMessageBox(
     return aResult;
 }
 
-NameClashResolveDialogResult executeSimpleNameClashResolveDialog( Window *pParent,
+NameClashResolveDialogResult executeSimpleNameClashResolveDialog( vcl::Window *pParent,
                                                                   OUString const & rTargetFolderURL,
                                                                   OUString const & rClashingName,
                                                                   OUString & rProposedNewName,

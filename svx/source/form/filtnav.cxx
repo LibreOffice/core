@@ -1118,7 +1118,7 @@ void FmFilterString::Paint(
     rDev.DrawText( aPos, GetText() );
 }
 
-FmFilterNavigator::FmFilterNavigator( Window* pParent )
+FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
                   :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
                   ,m_pModel( NULL )
                   ,m_pEditingCurrently( NULL )
@@ -1859,7 +1859,7 @@ void FmFilterNavigator::DeleteSelection()
 }
 
 FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
-                              Window* _pParent )
+                              vcl::Window* _pParent )
                      :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
                      ,SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
 {
@@ -1991,7 +1991,7 @@ void FmFilterNavigatorWin::GetFocus()
 SFX_IMPL_DOCKINGWINDOW( FmFilterNavigatorWinMgr, SID_FM_FILTER_NAVIGATOR )
 
 
-FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *_pParent, sal_uInt16 _nId,
+FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( vcl::Window *_pParent, sal_uInt16 _nId,
                                     SfxBindings *_pBindings, SfxChildWinInfo* _pInfo )
                  :SfxChildWindow( _pParent, _nId )
 {

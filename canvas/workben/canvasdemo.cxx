@@ -76,7 +76,7 @@ static void PrintHelp()
 class TestWindow : public Dialog
 {
     public:
-        TestWindow() : Dialog( (Window *) NULL )
+        TestWindow() : Dialog( (vcl::Window *) NULL )
         {
             SetText( OUString( "Canvas test" ) );
             SetSizePixel( Size( 600, 450 ) );

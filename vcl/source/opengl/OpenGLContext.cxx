@@ -376,7 +376,7 @@ GLXFBConfig* getFBConfig(const SystemEnvData* sysData, int& nBestFBC)
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return NULL;
 
-    XLIB_Window win = sysData->aWindow;
+    Window win = sysData->aWindow;
 
     SAL_INFO("vcl.opengl", "parent window: " << win);
 
@@ -436,12 +436,12 @@ GLXFBConfig* getFBConfig(const SystemEnvData* sysData, int& nBestFBC)
 
 #endif
 
-bool OpenGLContext::init( Window* pParent )
+bool OpenGLContext::init( vcl::Window* pParent )
 {
     if(mbInitialized)
         return true;
 
-    m_pWindow.reset(pParent ? NULL : new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
+    m_pWindow.reset(pParent ? NULL : new vcl::Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
     mpWindow = pParent ? pParent : m_pWindow.get();
     m_pChildWindow = 0;
     initWindow();
@@ -814,7 +814,7 @@ bool OpenGLContext::initWindow()
 
 #if defined( WNT ) || defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
 
-SystemWindowData OpenGLContext::generateWinData(Window* /*pParent*/, bool bRequestLegacyContext)
+SystemWindowData OpenGLContext::generateWinData(vcl::Window* /*pParent*/, bool bRequestLegacyContext)
 {
     (void) bRequestLegacyContext;
     SystemWindowData aWinData;
@@ -842,7 +842,7 @@ void initOpenGLFunctionPointers()
 
 }
 
-SystemWindowData OpenGLContext::generateWinData(Window* pParent, bool)
+SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 {
     SystemWindowData aWinData;
     aWinData.nSize = sizeof(aWinData);

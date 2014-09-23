@@ -82,7 +82,7 @@ ControlWrapperBase::~ControlWrapperBase()
 // Single control wrappers
 
 
-DummyWindowWrapper::DummyWindowWrapper( Window& rWindow ) :
+DummyWindowWrapper::DummyWindowWrapper( vcl::Window& rWindow ) :
     SingleControlWrapperType( rWindow )
 {
 }
@@ -258,7 +258,7 @@ TriState ItemConnectionBase::GetShowState( bool bKnown ) const
 // Standard connections
 
 
-DummyItemConnection::DummyItemConnection( sal_uInt16 nSlot, Window& rWindow, ItemConnFlags nFlags ) :
+DummyItemConnection::DummyItemConnection( sal_uInt16 nSlot, vcl::Window& rWindow, ItemConnFlags nFlags ) :
     ItemConnectionBase( nFlags ),
     DummyWindowWrapper( rWindow ),
     mnSlot( nSlot )

@@ -30,7 +30,7 @@ namespace accessibility
     class AccessibleTextHelper;
 }
 class EditView;
-class Window;
+namespace vcl { class Window; }
 
 /** @descr
         This base class provides an implementation of the
@@ -51,7 +51,7 @@ public:
     ScAccessibleEditObject(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,
-        EditView* pEditView, Window* pWin, const OUString& rName,
+        EditView* pEditView, vcl::Window* pWin, const OUString& rName,
         const OUString& rDescription, EditObjectType eObjectType);
 
 protected:
@@ -188,7 +188,7 @@ public:
 private:
     accessibility::AccessibleTextHelper* mpTextHelper;
     EditView*      mpEditView;
-    Window*        mpWindow;
+    vcl::Window*        mpWindow;
     EditObjectType meObjectType;
     bool           mbHasFocus;
 

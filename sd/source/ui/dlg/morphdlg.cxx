@@ -34,7 +34,7 @@ using namespace com::sun::star;
 
 namespace sd {
 
-MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 )
+MorphDlg::MorphDlg( vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 )
     : ModalDialog(pParent, "CrossFadeDialog",
         "modules/sdraw/ui/crossfadedialog.ui")
 {

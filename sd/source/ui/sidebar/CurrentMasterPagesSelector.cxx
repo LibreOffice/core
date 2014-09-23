@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 namespace sd { namespace sidebar {
 
 MasterPagesSelector* CurrentMasterPagesSelector::Create (
-    ::Window* pParent,
+    vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
@@ -67,7 +67,7 @@ MasterPagesSelector* CurrentMasterPagesSelector::Create (
 }
 
 CurrentMasterPagesSelector::CurrentMasterPagesSelector (
-    ::Window* pParent,
+    vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer,

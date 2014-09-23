@@ -26,14 +26,14 @@
 #include <vcl/graph.hxx>
 #include <sfx2/tabdlg.hxx>
 
-class SvxCropExample : public Window
+class SvxCropExample : public vcl::Window
 {
     Size        aFrameSize;
     Point       aTopLeft, aBottomRight;
     Graphic     aGrf;
 
 public:
-    SvxCropExample( Window* pPar, WinBits nStyle );
+    SvxCropExample( vcl::Window* pPar, WinBits nStyle );
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
@@ -93,7 +93,7 @@ class SvxGrfCropPage : public SfxTabPage
     bool            bSetOrigSize;
 
 
-    SvxGrfCropPage( Window *pParent, const SfxItemSet &rSet );
+    SvxGrfCropPage( vcl::Window *pParent, const SfxItemSet &rSet );
     virtual ~SvxGrfCropPage();
 
     DECL_LINK( ZoomHdl, MetricField * );
@@ -111,7 +111,7 @@ class SvxGrfCropPage : public SfxTabPage
 
     Size            GetGrfOrigSize( const Graphic& ) const;
 public:
-    static SfxTabPage *Create( Window *pParent, const SfxItemSet *rSet );
+    static SfxTabPage *Create( vcl::Window *pParent, const SfxItemSet *rSet );
 
     virtual bool FillItemSet( SfxItemSet *rSet ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet *rSet ) SAL_OVERRIDE;

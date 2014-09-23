@@ -30,7 +30,7 @@
 using namespace ::com::sun::star;
 
 // edit insert-field
-sw::DropDownFieldDialog::DropDownFieldDialog(Window *pParent, SwWrtShell &rS,
+sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &rS,
                               SwField* pField, bool bNextButton)
     : SvxStandardDialog(pParent, "DropdownFieldDialog",
         "modules/swriter/ui/dropdownfielddialog.ui")

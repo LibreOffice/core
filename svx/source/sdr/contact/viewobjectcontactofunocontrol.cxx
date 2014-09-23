@@ -260,7 +260,7 @@ namespace sdr { namespace contact {
         Reference< XWindowPeer > xPeer( m_xControl->getPeer() );
         if ( xPeer.is() )
         {
-            Window* pWindow = VCLUnoHelper::GetWindow( xPeer );
+            vcl::Window* pWindow = VCLUnoHelper::GetWindow( xPeer );
             OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
             if ( pWindow )
                 pWindow->Invalidate();
@@ -273,7 +273,7 @@ namespace sdr { namespace contact {
         // no check whether we're valid, this is the responsibility of the caller
 
         // Argh. Why does XView have a setZoom only, but not a getZoom?
-        Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
         OSL_ENSURE( pWindow, "ControlHolder::getZoom: no implementation access!" );
 
         ::basegfx::B2DVector aZoom( 1, 1 );
@@ -434,10 +434,10 @@ namespace sdr { namespace contact {
     {
         if ( !m_rControlContainer.is() )
         {
-            const Window* pWindow = dynamic_cast< const Window* >( &_rDevice );
+            const vcl::Window* pWindow = dynamic_cast< const vcl::Window* >( &_rDevice );
             OSL_ENSURE( pWindow, "InvisibleControlViewAccess::getControlContainer: expected to be called for a window only!" );
             if ( pWindow )
-                m_rControlContainer = VCLUnoHelper::CreateControlContainer( const_cast< Window* >( pWindow ) );
+                m_rControlContainer = VCLUnoHelper::CreateControlContainer( const_cast< vcl::Window* >( pWindow ) );
         }
         return m_rControlContainer;
     }
@@ -1067,7 +1067,7 @@ namespace sdr { namespace contact {
         m_xContainer.set(_rPageView.getControlContainer( _rDevice ), css::uno::UNO_QUERY);
         DBG_ASSERT( (   m_xContainer.is()                                           // either have a XControlContainer
                     ||  (   ( !_rPageView.getControlContainer( _rDevice ).is() )    // or don't have any container,
-                        &&  ( dynamic_cast< const Window* >( &_rDevice ) == NULL )  // which is allowed for non-Window instances only
+                        &&  ( dynamic_cast< const vcl::Window* >( &_rDevice ) == NULL )  // which is allowed for non-Window instances only
                         )
                     ),
             "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: no XContainer at the ControlContainer!" );
@@ -1628,7 +1628,7 @@ namespace sdr { namespace contact {
 
 
     Reference< XControl > ViewObjectContactOfUnoControl::getTemporaryControlForWindow(
-        const Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer, const SdrUnoObj& _rUnoObject )
+        const vcl::Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer, const SdrUnoObj& _rUnoObject )
     {
         ControlHolder aControl;
 

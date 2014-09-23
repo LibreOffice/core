@@ -343,7 +343,7 @@ namespace pcr
     //= OBrowserListBox
 
 
-    OBrowserListBox::OBrowserListBox( Window* pParent, WinBits nWinStyle)
+    OBrowserListBox::OBrowserListBox( vcl::Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle| WB_CLIPCHILDREN)
             ,m_aLinesPlayground(this,WB_DIALOGCONTROL | WB_CLIPCHILDREN)
             ,m_aVScroll(this,WB_VSCROLL|WB_REPEAT|WB_DRAG)
@@ -1096,7 +1096,7 @@ namespace pcr
 
         if ( nPos < m_aLines.size() )
         {
-            Window* pRefWindow = NULL;
+            vcl::Window* pRefWindow = NULL;
             if ( nPos > 0 )
                 pRefWindow = m_aLines[nPos-1].pLine->GetRefWindow();
 
@@ -1105,7 +1105,7 @@ namespace pcr
 
             // the old control and some data about it
             Reference< XPropertyControl > xControl = rLine.pLine->getControl();
-            Window* pControlWindow = rLine.pLine->getControlWindow();
+            vcl::Window* pControlWindow = rLine.pLine->getControlWindow();
             Point aControlPos;
             if ( pControlWindow )
                 aControlPos = pControlWindow->GetPosPixel();
@@ -1189,7 +1189,7 @@ namespace pcr
                 // So, we manually switch this to read-only.
                 if ( xControl.is() && ( xControl->getControlType() == PropertyControlType::Unknown ) )
                 {
-                    Window *pWindow = rLine.pLine->getControlWindow();
+                    vcl::Window *pWindow = rLine.pLine->getControlWindow();
                     Edit* pControlWindowAsEdit = dynamic_cast<Edit*>(pWindow);
                     if (pControlWindowAsEdit)
                         pControlWindowAsEdit->SetReadOnly(true);

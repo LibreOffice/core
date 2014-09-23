@@ -31,7 +31,7 @@
 #include <fldui.hrc>
 
 // edit field-insert
-SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
+SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
                               SwField* pField, bool bNextButton )
     : SvxStandardDialog( pParent, "InputFieldDialog",
         "modules/swriter/ui/inputfielddialog.ui")

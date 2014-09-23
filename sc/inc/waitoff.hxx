@@ -22,15 +22,15 @@
 
 #include <sal/types.h>
 
-class Window;
+namespace vcl { class Window; }
 
 class ScWaitCursorOff
 {
 private:
-    Window*                 pWin;
+    vcl::Window*                 pWin;
     sal_uInt32              nWaiters;
 public:
-                        ScWaitCursorOff( Window* pWin );
+                        ScWaitCursorOff( vcl::Window* pWin );
                         ~ScWaitCursorOff();
 };
 

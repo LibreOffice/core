@@ -27,7 +27,7 @@ namespace dbaui
     class OQueryView : public OJoinDesignView
     {
     public:
-        OQueryView(Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+        OQueryView(vcl::Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OQueryView();
 
         virtual bool isCutAllowed()     = 0;

@@ -29,10 +29,10 @@ namespace svx { namespace sidebar {
 /** Display a panel as placeholder for a not-yet-implemented panel.
 */
 class NotYetImplementedPanel
-    : public Window
+    : public vcl::Window
 {
 public:
-    NotYetImplementedPanel (::Window* pParent);
+    NotYetImplementedPanel (vcl::Window* pParent);
     virtual ~NotYetImplementedPanel (void);
 
 private:

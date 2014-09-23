@@ -39,7 +39,7 @@ namespace svx
 class SvxShowText : public Control
 {
 public:
-                    SvxShowText( Window* pParent,
+                    SvxShowText( vcl::Window* pParent,
                                  bool bCenter = false );
                     virtual ~SvxShowText();
 
@@ -97,7 +97,7 @@ private:
     void fillAllSubsets(ListBox &rListBox);
 
 public:
-                    SvxCharacterMap( Window* pParent, bool bOne=true, const SfxItemSet* pSet=0 );
+                    SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=0 );
                     virtual ~SvxCharacterMap();
 
     void            DisableFontSelection();

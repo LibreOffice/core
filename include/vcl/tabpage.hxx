@@ -30,17 +30,17 @@
 
 
 class VCL_DLLPUBLIC TabPage
-    : public Window
+    : public vcl::Window
     , public VclBuilderContainer
 {
 private:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
 
 public:
-    explicit        TabPage( Window* pParent, WinBits nStyle = 0 );
-    explicit        TabPage( Window *pParent, const OString& rID, const OUString& rUIXMLDescription );
+    explicit        TabPage( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        TabPage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription );
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;

@@ -22,7 +22,7 @@
 
 #include <set>
 
-class Window;
+namespace vcl { class Window; }
 class SystemChildWindow;
 namespace basegfx{ class B2IVector; class B2DHomMatrix; }
 namespace com { namespace sun { namespace star {
@@ -43,7 +43,7 @@ namespace oglcanvas
         SpriteDeviceHelper();
         ~SpriteDeviceHelper();
 
-        void init( Window&                                 rWindow,
+        void init( vcl::Window&                                 rWindow,
                    SpriteCanvas&                           rSpriteCanvas,
                    const ::com::sun::star::awt::Rectangle& rViewArea );
 

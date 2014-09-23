@@ -48,7 +48,7 @@ namespace framework
 {
 
 // class FwkTabControl ---------------------------------------------------
-FwkTabControl::FwkTabControl(Window* pParent)
+FwkTabControl::FwkTabControl(vcl::Window* pParent)
     : TabControl(pParent)
 {
 }
@@ -66,7 +66,7 @@ void FwkTabControl::BroadcastEvent( sal_uLong nEvent )
 // class FwkTabPage ------------------------------------------------
 
 FwkTabPage::FwkTabPage(
-               Window* pParent, const OUString& rPageURL,
+               vcl::Window* pParent, const OUString& rPageURL,
                const css::uno::Reference< css::awt::XContainerWindowEventHandler >& rEventHdl,
                const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider ) :
 
@@ -104,7 +104,7 @@ void FwkTabPage::CreateDialog()
             uno::Reference< awt::XWindowPeer > xWinPeer( xPageControl->getPeer() );
             if ( xWinPeer.is() )
             {
-                Window* pWindow = VCLUnoHelper::GetWindow( xWinPeer );
+                vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWinPeer );
                 if ( pWindow )
                     pWindow->SetStyle( pWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
             }
@@ -172,7 +172,7 @@ void FwkTabPage::Resize()
 }
 
 // class FwkTabWindow ---------------------------------------------
-FwkTabWindow::FwkTabWindow( Window* pParent )
+FwkTabWindow::FwkTabWindow( vcl::Window* pParent )
     : Window(pParent)
     , m_aTabCtrl(this)
 {

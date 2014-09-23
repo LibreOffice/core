@@ -42,7 +42,7 @@ private:
     SvxHlinkDlgMarkWnd* mpParentWnd;
 
 public:
-    SvxHlmarkTreeLBox(Window* pParent, WinBits nStyle);
+    SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle);
 
     void SetParentWnd(SvxHlinkDlgMarkWnd* pParent)
     {

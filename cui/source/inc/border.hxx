@@ -43,7 +43,7 @@ class SvxBorderTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
     static const sal_uInt16*      GetRanges();
 
@@ -58,7 +58,7 @@ protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
-    SvxBorderTabPage( Window* pParent, const SfxItemSet& rCoreAttrs );
+    SvxBorderTabPage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs );
     virtual ~SvxBorderTabPage();
 
     // Controls

@@ -61,12 +61,12 @@ protected:
     sal_uInt16                    nModifier;
 
 public:
-    DropListBox_Impl( Window* pParent, const ResId& rId, SfxCommonTemplateDialog_Impl* pD )
+    DropListBox_Impl( vcl::Window* pParent, const ResId& rId, SfxCommonTemplateDialog_Impl* pD )
         : SvTreeListBox(pParent, rId)
         , pDialog(pD)
         , nModifier(0)
     {}
-    DropListBox_Impl( Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD )
+    DropListBox_Impl( vcl::Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD )
         : SvTreeListBox(pParent, nWinBits)
         , pDialog(pD)
         , nModifier(0)
@@ -159,7 +159,7 @@ protected:
     SfxBindings*                pBindings;
     SfxTemplateControllerItem*  pBoundItems[COUNT_BOUND_FUNC];
 
-    Window*                     pWindow;
+    vcl::Window*                     pWindow;
     SfxModule*                  pModule;
     Timer*                      pTimer;
 
@@ -263,7 +263,7 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
 
-    SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window*, bool );
+    SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window*, bool );
     virtual ~SfxCommonTemplateDialog_Impl();
 
     DECL_LINK( MenuSelectHdl, Menu * );
@@ -274,10 +274,10 @@ public:
     virtual void        EnableHide( bool b = true )  { bCanHide = b; }
     virtual void        EnableShow( bool b = true )  { bCanShow = b; }
 
-    Window*             GetWindow() { return pWindow; }
+    vcl::Window*             GetWindow() { return pWindow; }
 
     void                EnableTreeDrag( bool b = true );
-    void                ExecuteContextMenu_Impl( const Point& rPos, Window* pWin );
+    void                ExecuteContextMenu_Impl( const Point& rPos, vcl::Window* pWin );
     void                EnableExample_Impl( sal_uInt16 nId, bool bEnable );
     SfxStyleFamily      GetActualFamily() const;
     OUString            GetSelectedEntry() const;
@@ -302,7 +302,7 @@ protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 public:
-    DropToolBox_Impl(Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog);
+    DropToolBox_Impl(vcl::Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog);
     virtual ~DropToolBox_Impl();
 };
 // class SfxTemplateDialog_Impl ------------------------------------------
@@ -315,7 +315,7 @@ private:
     friend class DropToolBox_Impl;
     friend class SfxTemplatePanelControl;
 
-    Window* m_pFloat;
+    vcl::Window* m_pFloat;
     bool            m_bZoomIn;
     DropToolBox_Impl    m_aActionTbL;
     ToolBox             m_aActionTbR;

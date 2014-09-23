@@ -39,7 +39,7 @@ class TabControl
     //declare bIsMarked variable
     sal_uInt16    RrePageID;
 public:
-    TabControl (DrawViewShell* pDrViewSh, ::Window* pParent);
+    TabControl (DrawViewShell* pDrViewSh, vcl::Window* pParent);
     virtual ~TabControl (void);
 
     /** Inform all listeners of this control that the current page has been

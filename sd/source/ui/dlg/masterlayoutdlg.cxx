@@ -28,7 +28,7 @@
 
 using namespace ::sd;
 
-MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
+MasterLayoutDialog::MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
     : ModalDialog(pParent, "MasterLayoutDialog", "modules/simpress/ui/masterlayoutdlg.ui")
     , mpDoc(pDoc)
     , mpCurrentPage(pCurrentPage)

@@ -32,13 +32,13 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::util;
 
-SfxTemplateInfoDlg::SfxTemplateInfoDlg (Window *pParent)
+SfxTemplateInfoDlg::SfxTemplateInfoDlg (vcl::Window *pParent)
     : ModalDialog(pParent, "TemplateInfo", "sfx/ui/templateinfodialog.ui")
 {
     get(mpBtnClose, "close");
     get(mpBox, "box");
     get(mpInfoView, "infoDrawingArea");
-    mpPreviewView = new Window(mpBox);
+    mpPreviewView = new vcl::Window(mpBox);
 
     Size aSize(LogicToPixel(Size(250, 160), MAP_APPFONT));
     mpBox->set_width_request(aSize.Width());

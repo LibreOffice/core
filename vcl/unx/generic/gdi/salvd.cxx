@@ -42,7 +42,7 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
 
     if( pData && pData->hDrawable != None )
     {
-        XLIB_Window aRoot;
+        ::Window aRoot;
         int x, y;
         unsigned int w = 0, h = 0, bw, d;
         Display* pDisp = GetGenericData()->GetSalDisplay()->GetDisplay();

@@ -285,7 +285,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
     OSL_ENSURE( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
     if( eState == EE_SPELL_NOLANGUAGE )
     {
-        Window* pParent = GetDialogParent();
+        vcl::Window* pParent = GetDialogParent();
         ScWaitCursorOff aWaitOff( pParent );
         InfoBox( pParent, ScGlobal::GetRscString( STR_NOLANGERR ) ).Execute();
     }
@@ -303,7 +303,7 @@ bool ScSpellingEngine::NeedsConversion()
 
 bool ScSpellingEngine::ShowTableWrapDialog()
 {
-    Window* pParent = GetDialogParent();
+    vcl::Window* pParent = GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
     MessBox aMsgBox( pParent, WinBits( WB_YES_NO | WB_DEF_YES ),
         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
@@ -313,18 +313,18 @@ bool ScSpellingEngine::ShowTableWrapDialog()
 
 void ScSpellingEngine::ShowFinishDialog()
 {
-    Window* pParent = GetDialogParent();
+    vcl::Window* pParent = GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
     InfoBox( pParent, ScGlobal::GetRscString( STR_SPELLING_STOP_OK ) ).Execute();
 }
 
-Window* ScSpellingEngine::GetDialogParent()
+vcl::Window* ScSpellingEngine::GetDialogParent()
 {
     sal_uInt16 nWinId = ScSpellDialogChildWindow::GetChildWindowId();
     SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
     if( pViewFrm->HasChildWindow( nWinId ) )
         if( SfxChildWindow* pChild = pViewFrm->GetChildWindow( nWinId ) )
-            if( Window* pWin = pChild->GetWindow() )
+            if( vcl::Window* pWin = pChild->GetWindow() )
                 if( pWin->IsVisible() )
                     return pWin;
 

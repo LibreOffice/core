@@ -27,6 +27,8 @@ WaitObject::~WaitObject()
         mpWindow->LeaveWait();
 }
 
+namespace vcl {
+
 Size Window::GetOptimalSize() const
 {
     return Size();
@@ -45,7 +47,7 @@ void Window::ImplAdjustNWFSizes()
     default:
         {
             // iterate over children
-            Window* pWin = GetWindow( WINDOW_FIRSTCHILD );
+            vcl::Window* pWin = GetWindow( WINDOW_FIRSTCHILD );
             while( pWin )
             {
                 pWin->ImplAdjustNWFSizes();
@@ -55,5 +57,8 @@ void Window::ImplAdjustNWFSizes()
         break;
     }
 }
+
+} /* namespace vcl */
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

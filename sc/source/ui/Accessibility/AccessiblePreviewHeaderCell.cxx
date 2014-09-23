@@ -341,7 +341,7 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const throw (u
 
     if (mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
             Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);
@@ -438,7 +438,7 @@ void ScAccessiblePreviewHeaderCell::FillTableInfo() const
     if ( mpViewShell && !mpTableInfo )
     {
         Size aOutputSize;
-        Window* pWindow = mpViewShell->GetWindow();
+        vcl::Window* pWindow = mpViewShell->GetWindow();
         if ( pWindow )
             aOutputSize = pWindow->GetOutputSizePixel();
         Point aPoint;

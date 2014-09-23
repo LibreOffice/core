@@ -325,7 +325,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     SbaXDataBrowserController::disposing();
 }
 
-bool SbaTableQueryBrowser::Construct(Window* pParent)
+bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
 {
     if ( !SbaXDataBrowserController::Construct( pParent ) )
         return false;
@@ -1339,7 +1339,7 @@ void SbaTableQueryBrowser::implCheckExternalSlot( sal_uInt16 _nId )
     if ( !m_xMainToolbar.is() )
         return;
 
-    Window* pToolboxWindow = VCLUnoHelper::GetWindow( m_xMainToolbar );
+    vcl::Window* pToolboxWindow = VCLUnoHelper::GetWindow( m_xMainToolbar );
     ToolBox* pToolbox = dynamic_cast< ToolBox* >( pToolboxWindow );
     OSL_ENSURE( pToolbox, "SbaTableQueryBrowser::implCheckExternalSlot: cannot obtain the toolbox window!" );
 

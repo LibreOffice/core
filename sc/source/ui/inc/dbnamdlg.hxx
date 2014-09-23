@@ -35,7 +35,7 @@ class ScDocument;
 class ScDbNameDlg : public ScAnyRefDlg
 {
 public:
-                    ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+                    ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScViewData*    ptrViewData );
                     virtual ~ScDbNameDlg();
 

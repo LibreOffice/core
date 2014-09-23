@@ -32,7 +32,7 @@ public:
                            const OUString& sCommandURL,
                            bool bInsertPage );
 
-    virtual ::Window* createPopupWindow( ::Window* pParent ) SAL_OVERRIDE;
+    virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )

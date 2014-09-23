@@ -18,7 +18,7 @@ class ScCovarianceDialog : public ScMatrixComparisonGenerator
 public:
     ScCovarianceDialog(
         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-        Window* pParent, ScViewData* pViewData);
+        vcl::Window* pParent, ScViewData* pViewData);
 
     virtual bool Close() SAL_OVERRIDE;
 

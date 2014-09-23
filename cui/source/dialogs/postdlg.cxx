@@ -38,7 +38,7 @@
 
 // class SvxPostItDialog -------------------------------------------------
 
-SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
+SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSet,
     bool bPrevNext)
     : SfxModalDialog(pParent, "CommentDialog", "cui/ui/comment.ui")
     , rSet(rCoreSet)

@@ -26,7 +26,7 @@ class GallerySplitter : public Splitter
 {
 public:
     GallerySplitter (
-        Window* pParent,
+        vcl::Window* pParent,
         const ResId& rResId,
         const ::boost::function<void(void)>& rDataChangeFunctor);
     virtual ~GallerySplitter (void);

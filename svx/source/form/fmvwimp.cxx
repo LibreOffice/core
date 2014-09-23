@@ -167,7 +167,7 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
     m_xContext( _rContext ),
     m_pViewImpl( _pViewImpl ),
-    m_pWindow( dynamic_cast< Window* >( &_rWindow.GetPaintWindow().GetOutputDevice() ) )
+    m_pWindow( dynamic_cast< vcl::Window* >( &_rWindow.GetPaintWindow().GetOutputDevice() ) )
 {
 
     // create an XFormController for every form
@@ -684,7 +684,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
     // setting the controller to activate
     if (m_pView->GetFormShell() && m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
     {
-        Window* pWindow = const_cast<Window*>(static_cast<const Window*>(m_pView->GetActualOutDev()));
+        vcl::Window* pWindow = const_cast<vcl::Window*>(static_cast<const vcl::Window*>(m_pView->GetActualOutDev()));
         PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
         for (   PageWindowAdapterList::const_iterator i = m_aPageWindowAdapters.begin();
                 i != m_aPageWindowAdapters.end();
@@ -851,7 +851,7 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
 namespace
 {
 
-    void lcl_ensureControlsOfFormExist_nothrow( const SdrPage& _rPage, const SdrView& _rView, const Window& _rWindow, const Reference< XForm >& _rxForm )
+    void lcl_ensureControlsOfFormExist_nothrow( const SdrPage& _rPage, const SdrView& _rView, const vcl::Window& _rWindow, const Reference< XForm >& _rxForm )
     {
         try
         {
@@ -926,7 +926,7 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
     Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms(), UNO_QUERY ) : Reference< XIndexAccess >() );
 
     const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
-    const Window* pWindow = pAdapter.get() ? pAdapter->getWindow() : NULL;
+    const vcl::Window* pWindow = pAdapter.get() ? pAdapter->getWindow() : NULL;
 
     ENSURE_OR_RETURN( xForms.is() && pWindow, "FmXFormView::OnAutoFocus: could not collect all essentials!", 0L );
 
@@ -965,12 +965,12 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
 
         // ensure that the control is visible
         // 80210 - 12/07/00 - FS
-        const Window* pCurrentWindow = m_pView ? dynamic_cast<const Window*>(m_pView->GetActualOutDev()) : NULL;
+        const vcl::Window* pCurrentWindow = m_pView ? dynamic_cast<const vcl::Window*>(m_pView->GetActualOutDev()) : NULL;
         if ( pCurrentWindow )
         {
             awt::Rectangle aRect = xControlWindow->getPosSize();
             ::Rectangle aNonUnoRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
-            m_pView->MakeVisible( pCurrentWindow->PixelToLogic( aNonUnoRect ), *const_cast< Window* >( pCurrentWindow ) );
+            m_pView->MakeVisible( pCurrentWindow->PixelToLogic( aNonUnoRect ), *const_cast< vcl::Window* >( pCurrentWindow ) );
         }
     }
     catch (const Exception&)

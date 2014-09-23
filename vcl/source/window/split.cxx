@@ -86,7 +86,7 @@ void Splitter::ImplInitHorVer(bool bNew)
     SetPointer( Pointer( ePointerStyle ) );
 }
 
-void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
+void Splitter::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
 {
     Window::ImplInit( pParent, nWinStyle, NULL );
 
@@ -139,7 +139,7 @@ void Splitter::ImplDrawSplitter()
     mpRefWin->InvertTracking( mpRefWin->PixelToLogic(aInvRect), SHOWTRACK_SPLIT );
 }
 
-Splitter::Splitter( Window* pParent, WinBits nStyle ) :
+Splitter::Splitter( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SPLITTER )
 {
     ImplInitSplitterData();
@@ -149,7 +149,7 @@ Splitter::Splitter( Window* pParent, WinBits nStyle ) :
     SetFillColor();
 }
 
-Splitter::Splitter( Window* pParent, const ResId& rResId ) :
+Splitter::Splitter( vcl::Window* pParent, const ResId& rResId ) :
     Window( WINDOW_SPLITTER )
 {
     ImplInitSplitterData();
@@ -187,7 +187,7 @@ void Splitter::SetKeyboardStepSize( long nStepSize )
 Splitter* Splitter::ImplFindSibling()
 {
     // look for another splitter with the same parent but different orientation
-    Window *pWin = GetParent()->GetWindow( WINDOW_FIRSTCHILD );
+    vcl::Window *pWin = GetParent()->GetWindow( WINDOW_FIRSTCHILD );
     Splitter *pSplitter = NULL;
     while( pWin )
     {
@@ -463,7 +463,7 @@ void Splitter::Splitting( Point& /* rSplitPos */ )
 {
 }
 
-void Splitter::SetDragRectPixel( const Rectangle& rDragRect, Window* _pRefWin )
+void Splitter::SetDragRectPixel( const Rectangle& rDragRect, vcl::Window* _pRefWin )
 {
     maDragRect = rDragRect;
     if ( !_pRefWin )

@@ -57,7 +57,7 @@ namespace dbaui
         virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const SAL_OVERRIDE;
 
     public:
-        OQueryTableView(Window* pParent,OQueryDesignView* pView);
+        OQueryTableView(vcl::Window* pParent,OQueryDesignView* pView);
         virtual ~OQueryTableView();
 
         /// base class overwritten: create and delete windows

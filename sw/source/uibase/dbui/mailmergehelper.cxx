@@ -91,7 +91,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         uno::Reference< mail::XMailService >&  rxInMailService,
         const OUString& rInMailServerPassword,
         const OUString& rOutMailServerPassword,
-        Window* pDialogParentWindow )
+        vcl::Window* pDialogParentWindow )
 {
     uno::Reference< mail::XSmtpService > xSmtpServer;
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -185,7 +185,7 @@ struct  SwAddressPreview_Impl
     }
 };
 
-SwAddressPreview::SwAddressPreview(Window* pParent, WinBits nStyle)
+SwAddressPreview::SwAddressPreview(vcl::Window* pParent, WinBits nStyle)
     : Window( pParent, nStyle )
     , aVScrollBar(this, WB_VSCROLL)
     , pImpl(new SwAddressPreview_Impl())
@@ -195,7 +195,7 @@ SwAddressPreview::SwAddressPreview(Window* pParent, WinBits nStyle)
     Show();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwAddressPreview(Window *pParent, VclBuilder::stringmap &rMap)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAddressPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nWinStyle = WB_DIALOGCONTROL;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

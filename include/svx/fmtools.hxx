@@ -70,18 +70,18 @@
 
 #include <set>
 
-class Window;
+namespace vcl { class Window; }
 
 
 // common types
 
 // displaying a database exception for the user
 // display info about a simple css::sdbc::SQLException
-void displayException(const css::sdbc::SQLException&, Window* _pParent = NULL);
-void displayException(const css::sdbc::SQLWarning&, Window* _pParent = NULL);
-SVX_DLLPUBLIC void displayException(const css::sdb::SQLContext&, Window* _pParent = NULL);
-void displayException(const css::sdb::SQLErrorEvent&, Window* _pParent = NULL);
-void displayException(const css::uno::Any&, Window* _pParent = NULL);
+void displayException(const css::sdbc::SQLException&, vcl::Window* _pParent = NULL);
+void displayException(const css::sdbc::SQLWarning&, vcl::Window* _pParent = NULL);
+SVX_DLLPUBLIC void displayException(const css::sdb::SQLContext&, vcl::Window* _pParent = NULL);
+void displayException(const css::sdb::SQLErrorEvent&, vcl::Window* _pParent = NULL);
+void displayException(const css::uno::Any&, vcl::Window* _pParent = NULL);
 
 sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< css::uno::XInterface>& xElement);
 

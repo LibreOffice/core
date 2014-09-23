@@ -67,7 +67,7 @@ private:
     void change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings );
 
 public:
-    HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
+    HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
     virtual ~HeaderFooterDialog();
 
     void ApplyToAll();

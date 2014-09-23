@@ -813,7 +813,7 @@ void PatternFormatter::Reformat()
     }
 }
 
-PatternField::PatternField( Window* pParent, WinBits nWinStyle ) :
+PatternField::PatternField( vcl::Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
     SetField( this );
@@ -863,7 +863,7 @@ void PatternField::Modify()
     SpinField::Modify();
 }
 
-PatternBox::PatternBox( Window* pParent, WinBits nWinStyle ) :
+PatternBox::PatternBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
@@ -1762,7 +1762,7 @@ void DateFormatter::ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart )
     }
 }
 
-DateField::DateField( Window* pParent, WinBits nWinStyle ) :
+DateField::DateField( vcl::Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle ),
     maFirst( GetMin() ),
     maLast( GetMax() )
@@ -1773,7 +1773,7 @@ DateField::DateField( Window* pParent, WinBits nWinStyle ) :
     ResetLastDate();
 }
 
-DateField::DateField( Window* pParent, const ResId& rResId ) :
+DateField::DateField( vcl::Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_DATEFIELD ),
     maFirst( GetMin() ),
     maLast( GetMax() )
@@ -1911,7 +1911,7 @@ void DateField::Last()
     SpinField::Last();
 }
 
-DateBox::DateBox( Window* pParent, WinBits nWinStyle ) :
+DateBox::DateBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
@@ -2642,7 +2642,7 @@ void TimeFormatter::Reformat()
         SetTime( maLastTime );
 }
 
-TimeField::TimeField( Window* pParent, WinBits nWinStyle ) :
+TimeField::TimeField( vcl::Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle ),
     maFirst( GetMin() ),
     maLast( GetMax() )
@@ -2652,7 +2652,7 @@ TimeField::TimeField( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-TimeField::TimeField( Window* pParent, const ResId& rResId ) :
+TimeField::TimeField( vcl::Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_TIMEFIELD ),
     maFirst( GetMin() ),
     maLast( GetMax() )
@@ -2826,7 +2826,7 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
     ReformatAll();
 }
 
-TimeBox::TimeBox( Window* pParent, WinBits nWinStyle ) :
+TimeBox::TimeBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );

@@ -45,7 +45,7 @@ class SwRenameXNamedDlg : public ModalDialog
     DECL_LINK(ModifyHdl, Edit*);
 
 public:
-    SwRenameXNamedDlg( Window* pParent,
+    SwRenameXNamedDlg( vcl::Window* pParent,
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess );
 

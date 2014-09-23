@@ -42,7 +42,7 @@ namespace svt
     }
 
 
-    void DummyPanel::Activate( Window& )
+    void DummyPanel::Activate( vcl::Window& )
     {
     }
 

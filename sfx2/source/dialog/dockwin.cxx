@@ -61,18 +61,18 @@ static const int NUM_OF_DOCKINGWINDOWS = 10;
 
 class SfxTitleDockingWindow : public SfxDockingWindow
 {
-    Window*             m_pWrappedWindow;
+    vcl::Window*             m_pWrappedWindow;
 
 public:
                         SfxTitleDockingWindow(
                             SfxBindings* pBindings ,
                             SfxChildWindow* pChildWin ,
-                            Window* pParent ,
+                            vcl::Window* pParent ,
                             WinBits nBits);
     virtual             ~SfxTitleDockingWindow();
 
-    Window*             GetWrappedWindow() const { return m_pWrappedWindow; }
-    void                SetWrappedWindow(Window* const pWindow);
+    vcl::Window*             GetWrappedWindow() const { return m_pWrappedWindow; }
+    void                SetWrappedWindow(vcl::Window* const pWindow);
 
     virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -119,7 +119,7 @@ static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& 
     return bResult;
 }
 
-SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
+SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
                                       sal_uInt16 nId ,
                                       SfxBindings* pBindings ,
                                       SfxChildWinInfo* pInfo )
@@ -199,7 +199,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
     {
     }
 
-    Window* pContentWindow = VCLUnoHelper::GetWindow(xWindow);
+    vcl::Window* pContentWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( pContentWindow )
         pContentWindow->SetStyle( pContentWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
     pTitleDockWindow->SetWrappedWindow(pContentWindow);
@@ -211,7 +211,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
 }
 
 SfxChildWindow*  SfxDockingWrapper::CreateImpl(
-Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo )
+vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo )
 {
     SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo);
     return pWin;
@@ -239,7 +239,7 @@ SfxChildWinInfo  SfxDockingWrapper::GetInfo() const
 
 SfxTitleDockingWindow::SfxTitleDockingWindow( SfxBindings* pBind ,
                                               SfxChildWindow* pChildWin ,
-                                              Window* pParent ,
+                                              vcl::Window* pParent ,
                                               WinBits nBits ) :
                           SfxDockingWindow( pBind ,
                                             pChildWin ,
@@ -254,7 +254,7 @@ SfxTitleDockingWindow::~SfxTitleDockingWindow()
     delete m_pWrappedWindow;
 }
 
-void SfxTitleDockingWindow::SetWrappedWindow( Window* const pWindow )
+void SfxTitleDockingWindow::SetWrappedWindow( vcl::Window* const pWindow )
 {
     m_pWrappedWindow = pWindow;
     if (m_pWrappedWindow)
@@ -274,7 +274,7 @@ void SfxTitleDockingWindow::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_INITSHOW )
     {
-        Window* pWindow = GetWrappedWindow();
+        vcl::Window* pWindow = GetWrappedWindow();
         if ( pWindow )
         {
             pWindow->SetSizePixel( GetOutputSizePixel() );
@@ -844,7 +844,7 @@ void SfxDockingWindow::Resizing( Size& /*rSize*/ )
 
 
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
-    Window* pParent, WinBits nWinBits) :
+    vcl::Window* pParent, WinBits nWinBits) :
     DockingWindow (pParent, nWinBits),
     pBindings(pBindinx),
     pMgr(pCW),
@@ -895,7 +895,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 
 
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
-    Window* pParent, const ResId& rResId) :
+    vcl::Window* pParent, const ResId& rResId) :
     DockingWindow(pParent, rResId),
     pBindings(pBindinx),
     pMgr(pCW),
@@ -1147,7 +1147,7 @@ void SfxDockingWindow::Initialize_Impl()
     if ( !bSet)
     {
         SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-        Window* pEditWin = pFrame->GetViewShell()->GetWindow();
+        vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
         Point aPos = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
         aPos = GetParent()->ScreenToOutputPixel( aPos );
         SetFloatingPos( aPos );

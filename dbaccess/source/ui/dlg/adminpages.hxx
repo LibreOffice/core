@@ -102,7 +102,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                             m_xORB;
     public:
-        OGenericAdministrationPage(Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet);
+        OGenericAdministrationPage(vcl::Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet);
         /// set a handler which gets called every time something on the page has been modified
         void SetModifiedHandler(const Link& _rHandler) { m_aModifiedHandler = _rHandler; }
 
@@ -256,7 +256,7 @@ namespace dbaui
         /** fits the button size to be large enough to contain the buttons text
         */
         static void fitSizeRightAligned( PushButton& io_button );
-            // why is CalcMinimumSize not a virtual method of ::Window?
+            // why is CalcMinimumSize not a virtual method of vcl::Window?
     };
 
 }   // namespace dbaui

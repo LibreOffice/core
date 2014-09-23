@@ -71,7 +71,7 @@ IMPL_LINK_NOARG(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl)
 
 size_t ScMenuFloatingWindow::MENU_NOT_SELECTED = 999;
 
-ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel) :
+ScMenuFloatingWindow::ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel) :
     PopupMenuFloatingWindow(pParent),
     maOpenTimer(this),
     maCloseTimer(this),
@@ -852,7 +852,7 @@ void ScCheckListMenuWindow::CancelButton::Click()
     ::CancelButton::Click();
 }
 
-ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) :
+ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),
     maChecks(this,  WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
     maChkToggleAll(this, 0),
@@ -1210,7 +1210,7 @@ void ScCheckListMenuWindow::Paint(const Rectangle& rRect)
     DrawRect(Rectangle(aPos,aSize));
 }
 
-Window* ScCheckListMenuWindow::GetPreferredKeyInputWindow()
+vcl::Window* ScCheckListMenuWindow::GetPreferredKeyInputWindow()
 {
     return maTabStopCtrls[mnCurTabStop];
 }
@@ -1327,7 +1327,7 @@ void ScCheckListMenuWindow::addMember(const OUString& rName, bool bVisible)
     maMembers.push_back(aMember);
 }
 
-ScCheckListBox::ScCheckListBox( Window* pParent, WinBits nWinStyle )
+ScCheckListBox::ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle )
    :  SvTreeListBox( pParent, nWinStyle ), mpCheckButton( NULL )
 {
     Init();

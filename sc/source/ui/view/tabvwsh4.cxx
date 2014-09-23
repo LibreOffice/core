@@ -331,7 +331,7 @@ void ScTabViewShell::UpdateOleZoom()
         Size aObjSize = ((const SfxObjectShell*)pDocSh)->GetVisArea().GetSize();
         if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
         {
-            Window* pWin = GetActiveWin();
+            vcl::Window* pWin = GetActiveWin();
             Size aWinHMM = pWin->PixelToLogic( pWin->GetOutputSizePixel(), MAP_100TH_MM );
             SetZoomFactor( Fraction( aWinHMM.Width(),aObjSize.Width() ),
                             Fraction( aWinHMM.Height(),aObjSize.Height() ) );
@@ -434,7 +434,7 @@ void ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     //  auf ganze Zellen anpassen (in 1/100 mm)
 
     Size aPixelSize = rRect.GetSize();
-    Window* pWin = ((ScTabViewShell*)this)->GetActiveWin();
+    vcl::Window* pWin = ((ScTabViewShell*)this)->GetActiveWin();
     Size aLogicSize = pWin->PixelToLogic( aPixelSize );
 
     const ScViewData& rViewData = GetViewData();
@@ -505,7 +505,7 @@ void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::Property
 
 void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::PropertyValue >& rSettings )
 {
-    Window* pOldWin = GetActiveWin();
+    vcl::Window* pOldWin = GetActiveWin();
     bool bFocus = pOldWin && pOldWin->HasFocus();
 
     GetViewData().ReadUserDataSequence(rSettings);
@@ -514,7 +514,7 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
     if ( GetViewData().IsPagebreakMode() )
         SetCurSubShell( GetCurObjectSelectionType(), true );
 
-    Window* pNewWin = GetActiveWin();
+    vcl::Window* pNewWin = GetActiveWin();
     if (pNewWin && pNewWin != pOldWin)
     {
         SetWindow( pNewWin );       //! ist diese ViewShell immer aktiv???
@@ -540,7 +540,7 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
 
 void ScTabViewShell::DoReadUserData( const OUString& rData )
 {
-    Window* pOldWin = GetActiveWin();
+    vcl::Window* pOldWin = GetActiveWin();
     bool bFocus = pOldWin && pOldWin->HasFocus();
 
     GetViewData().ReadUserData(rData);
@@ -549,7 +549,7 @@ void ScTabViewShell::DoReadUserData( const OUString& rData )
     if ( GetViewData().IsPagebreakMode() )
         SetCurSubShell( GetCurObjectSelectionType(), true );
 
-    Window* pNewWin = GetActiveWin();
+    vcl::Window* pNewWin = GetActiveWin();
     if (pNewWin && pNewWin != pOldWin)
     {
         SetWindow( pNewWin );       //! ist diese ViewShell immer aktiv???
@@ -1065,7 +1065,7 @@ bool ScTabViewShell::HasPrintOptionsPage() const
     return true;
 }
 
-SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
+SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -1167,7 +1167,7 @@ void ScTabViewShell::StartSimpleRefDialog(
         pWnd->SetRefString( rInitVal );
         pWnd->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
         ScSimpleRefDlgWrapper::SetAutoReOpen( false );
-        Window* pWin = pWnd->GetWindow();
+        vcl::Window* pWin = pWnd->GetWindow();
         pWin->SetText( rTitle );
         pWnd->StartRefInput();
     }
@@ -1181,7 +1181,7 @@ void ScTabViewShell::StopSimpleRefDialog()
     ScSimpleRefDlgWrapper* pWnd = (ScSimpleRefDlgWrapper*)pViewFrm->GetChildWindow( nId );
     if (pWnd)
     {
-        Window* pWin = pWnd->GetWindow();
+        vcl::Window* pWin = pWnd->GetWindow();
         if (pWin && pWin->IsSystemWindow())
             ((SystemWindow*)pWin)->Close();     // calls abort handler
     }

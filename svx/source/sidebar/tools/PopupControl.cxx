@@ -25,7 +25,7 @@ using ::sfx2::sidebar::Theme;
 namespace svx { namespace sidebar {
 
 PopupControl::PopupControl (
-    Window* pParent,
+    vcl::Window* pParent,
     const ResId& rResId)
     : Control( pParent,rResId)
 {

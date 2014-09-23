@@ -25,7 +25,7 @@
 #include <vcl/dllapi.h>
 
 struct ImplCursorData;
-class Window;
+namespace vcl { class Window; }
 
 // Cursor styles
 #define CURSOR_SHADOW                   ((sal_uInt16)0x0001)
@@ -40,7 +40,7 @@ class VCL_DLLPUBLIC Cursor
 {
 private:
     ImplCursorData* mpData;
-    Window*         mpWindow;           // only for shadow cursor
+    vcl::Window*         mpWindow;           // only for shadow cursor
     long            mnSlant;
     Size            maSize;
     Point           maPos;
@@ -71,8 +71,8 @@ public:
     void            Hide();
     bool            IsVisible() const { return mbVisible; }
 
-    void            SetWindow( Window* pWindow );
-    Window*         GetWindow() const { return mpWindow; }
+    void            SetWindow( vcl::Window* pWindow );
+    vcl::Window*         GetWindow() const { return mpWindow; }
 
     void            SetPos( const Point& rNewPos );
     const Point&    GetPos() const { return maPos; }

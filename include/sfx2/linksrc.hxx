@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace uno
 {
     class Any;
 }}}}
-class Window;
+namespace vcl { class Window; }
 namespace rtl {
     class OUString;
 }
@@ -85,7 +85,7 @@ public:
     virtual bool        IsDataComplete() const;
 
     // Link impl: DECL_LINK( MyEndEditHdl, sfx2::FileDialogHelper* ); <= param is the dialog
-    virtual void        Edit( Window *, SvBaseLink *, const Link& rEndEditHdl );
+    virtual void        Edit( vcl::Window *, SvBaseLink *, const Link& rEndEditHdl );
 
 
     void                AddDataAdvise( SvBaseLink *, const rtl::OUString & rMimeType,

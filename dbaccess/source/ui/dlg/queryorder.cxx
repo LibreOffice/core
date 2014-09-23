@@ -44,7 +44,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
 
-DlgOrderCrit::DlgOrderCrit(Window * pParent,
+DlgOrderCrit::DlgOrderCrit(vcl::Window * pParent,
     const Reference< XConnection>& _rxConnection,
     const Reference< XSingleSelectQueryComposer >& _rxComposer,
     const Reference< XNameAccess>& _rxCols)

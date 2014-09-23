@@ -34,7 +34,7 @@ namespace textconversiondlgs
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
+ChineseTranslationDialog::ChineseTranslationDialog( vcl::Window* pParent )
     : ModalDialog(pParent, "ChineseConversionDialog", "svx/ui/chineseconversiondialog.ui")
     , m_pDictionaryDialog(0)
 {

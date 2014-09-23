@@ -673,7 +673,7 @@ void ScTabView::RemoveHintWindow()
 }
 
 // find window that should not be over the cursor
-static Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
+static vcl::Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
 {
     //! auch Spelling ??? (dann beim Aufruf Membervariable setzen)
 
@@ -683,7 +683,7 @@ static Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
         SfxChildWindow* pChild = pViewFrm->GetChildWindow(SID_SEARCH_DLG);
         if (pChild)
         {
-            Window* pWin = pChild->GetWindow();
+            vcl::Window* pWin = pChild->GetWindow();
             if (pWin && pWin->IsVisible())
                 return pWin;
         }
@@ -695,7 +695,7 @@ static Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
         SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_CHG_ACCEPT);
         if (pChild)
         {
-            Window* pWin = pChild->GetWindow();
+            vcl::Window* pWin = pChild->GetWindow();
             if (pWin && pWin->IsVisible())
                 return pWin;
         }
@@ -769,13 +769,13 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
 
         if ( eMode == SC_FOLLOW_JUMP )
         {
-            Window* pCare = lcl_GetCareWin( aViewData.GetViewShell()->GetViewFrame() );
+            vcl::Window* pCare = lcl_GetCareWin( aViewData.GetViewShell()->GetViewFrame() );
             if (pCare)
             {
                 bool bLimit = false;
                 Rectangle aDlgPixel;
                 Size aWinSize;
-                Window* pWin = GetActiveWin();
+                vcl::Window* pWin = GetActiveWin();
                 if (pWin)
                 {
                     aDlgPixel = pCare->GetWindowExtentsRelative( pWin );

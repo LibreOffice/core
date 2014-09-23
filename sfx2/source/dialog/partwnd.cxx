@@ -51,7 +51,7 @@ SFX_IMPL_DOCKINGWINDOW( SfxPartChildWnd_Impl, SID_BROWSER );
 
 SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 (
-    Window* pParentWnd,
+    vcl::Window* pParentWnd,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo
@@ -101,7 +101,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 (
     SfxBindings* pBind,
     SfxChildWindow* pChildWin,
-    Window* pParent,
+    vcl::Window* pParent,
     WinBits nBits
 )
     : SfxDockingWindow( pBind, pChildWin, pParent, nBits )

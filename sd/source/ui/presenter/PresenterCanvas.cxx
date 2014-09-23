@@ -724,8 +724,8 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
     mbOffsetUpdatePending = false;
     if (mxWindow.is() && rxBaseWindow.is())
     {
-        ::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
-        ::Window* pSharedWindow = VCLUnoHelper::GetWindow(rxBaseWindow);
+        vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
+        vcl::Window* pSharedWindow = VCLUnoHelper::GetWindow(rxBaseWindow);
         if (pWindow!=NULL && pSharedWindow!=NULL)
         {
             Rectangle aBox = pWindow->GetWindowExtentsRelative(pSharedWindow);
@@ -745,11 +745,11 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
 {
     ::basegfx::B2DRectangle aClipRectangle;
 
-    ::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
     if (pWindow == NULL)
         return ::basegfx::B2DRectangle();
 
-    ::Window* pSharedWindow = VCLUnoHelper::GetWindow(mxSharedWindow);
+    vcl::Window* pSharedWindow = VCLUnoHelper::GetWindow(mxSharedWindow);
     if (pSharedWindow == NULL)
         return ::basegfx::B2DRectangle();
 

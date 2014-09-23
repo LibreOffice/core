@@ -41,7 +41,7 @@ class TextCharacterSpacingControl:public svx::sidebar::PopupControl
 {
 public:
     TextCharacterSpacingControl (
-        Window* pParent,
+        vcl::Window* pParent,
         svx::sidebar::TextPropertyPanel& rPanel,
         SfxBindings* pBindings);
     virtual ~TextCharacterSpacingControl();

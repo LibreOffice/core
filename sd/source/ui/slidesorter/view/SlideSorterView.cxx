@@ -348,7 +348,7 @@ void SlideSorterView::UpdateOrientation (void)
     else
     {
         // Get access to the docking window.
-        ::Window* pWindow = mrSlideSorter.GetContentWindow().get();
+        vcl::Window* pWindow = mrSlideSorter.GetContentWindow().get();
         PaneDockingWindow* pDockingWindow = NULL;
         while (pWindow!=NULL && pDockingWindow==NULL)
         {

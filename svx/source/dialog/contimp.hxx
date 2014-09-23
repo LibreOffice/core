@@ -81,7 +81,7 @@ class SvxSuperContourDlg : public SvxContourDlg
 public:
 
                         SvxSuperContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
-                                           Window* pParent);
+                                           vcl::Window* pParent);
                         virtual ~SvxSuperContourDlg();
 
     void                SetExecState( bool bEnable );

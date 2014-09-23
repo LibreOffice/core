@@ -834,7 +834,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
                 if ( xFrame == xCurrentFrame )
                     nActiveItemId = nItemId;
 
-                Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWin && pWin->IsVisible() )
                 {
                     aNewWindowListVector.push_back( pWin->GetText() );
@@ -953,7 +953,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
             Reference< XFrame > xFrame;
             if (( aItem >>= xFrame ) && xFrame.is() && nTaskId == nSlotId )
             {
-                Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 pWin->GrabFocus();
                 pWin->ToTop( TOTOP_RESTOREWHENMIN );
                 break;

@@ -49,7 +49,7 @@ namespace svt
             @param _rOperateOn
                 the window on which to operate
         */
-        virtual void operateOn( const VclWindowEvent& _rTrigger, Window& _rOperateOn ) const = 0;
+        virtual void operateOn( const VclWindowEvent& _rTrigger, vcl::Window& _rOperateOn ) const = 0;
 
         virtual ~IWindowOperator();
     };
@@ -93,7 +93,7 @@ namespace svt
         ::std::auto_ptr< DialogController_Data >    m_pImpl;
 
     public:
-        DialogController( Window& _rInstigator, const PWindowEventFilter& _pEventFilter, const PWindowOperator& _pOperator );
+        DialogController( vcl::Window& _rInstigator, const PWindowEventFilter& _pEventFilter, const PWindowOperator& _pOperator );
         virtual ~DialogController();
 
         /** adds a window to the list of dependent windows
@@ -104,7 +104,7 @@ namespace svt
                 The caller is responsible for life-time control: The given window
                 must live at least as long as the ->DialogController instance does.
         */
-        void    addDependentWindow( Window& _rWindow );
+        void    addDependentWindow( vcl::Window& _rWindow );
 
         /** resets the controller so that no actions happened anymore.
 
@@ -115,7 +115,7 @@ namespace svt
     private:
         void    impl_Init();
         void    impl_updateAll( const VclWindowEvent& _rTriggerEvent );
-        void    impl_update( const VclWindowEvent& _rTriggerEvent, Window& _rWindow );
+        void    impl_update( const VclWindowEvent& _rTriggerEvent, vcl::Window& _rWindow );
 
         DECL_LINK( OnWindowEvent, const VclWindowEvent* );
 
@@ -156,10 +156,10 @@ namespace svt
                 denotes the window which should be enabled when ->_rRadio is checked, and
                 disabled when it's unchecked
         */
-        void    enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow );
-        void    enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2 );
-        void    enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3 );
-        void    enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4, Window& _rDependentWindow5 );
+        void    enableOnRadioCheck( RadioButton& _rRadio, vcl::Window& _rDependentWindow );
+        void    enableOnRadioCheck( RadioButton& _rRadio, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2 );
+        void    enableOnRadioCheck( RadioButton& _rRadio, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2, vcl::Window& _rDependentWindow3 );
+        void    enableOnRadioCheck( RadioButton& _rRadio, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2, vcl::Window& _rDependentWindow3, vcl::Window& _rDependentWindow4, vcl::Window& _rDependentWindow5 );
 
         /** ensures that a given window is enabled or disabled, according to the mark state
             of a given check box
@@ -169,9 +169,9 @@ namespace svt
                 denotes the window which should be enabled when ->_rBox is marked, and
                 disabled when it's unmarked
         */
-        void    enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow );
-        void    enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow1, Window& _rDependentWindow2 );
-        void    enableOnCheckMark( CheckBox& _rBox, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4 );
+        void    enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow );
+        void    enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2 );
+        void    enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2, vcl::Window& _rDependentWindow3, vcl::Window& _rDependentWindow4 );
 
         /** adds a non-standard controller whose functionality is not covered by the other methods
 
@@ -215,7 +215,7 @@ namespace svt
         {
         }
 
-        virtual void operateOn( const VclWindowEvent& /*_rTrigger*/, Window& _rOperateOn ) const SAL_OVERRIDE
+        virtual void operateOn( const VclWindowEvent& /*_rTrigger*/, vcl::Window& _rOperateOn ) const SAL_OVERRIDE
         {
             _rOperateOn.Enable( m_rCheckable.IsChecked() );
         }
@@ -232,9 +232,9 @@ namespace svt
     */
     class SVT_DLLPUBLIC FilterForRadioOrCheckToggle : public IWindowEventFilter
     {
-        const Window&   m_rWindow;
+        const vcl::Window&   m_rWindow;
     public:
-        FilterForRadioOrCheckToggle( const Window& _rWindow )
+        FilterForRadioOrCheckToggle( const vcl::Window& _rWindow )
             :m_rWindow( _rWindow )
         {
         }

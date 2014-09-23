@@ -90,7 +90,7 @@ namespace dbaui
     }
 
     // IndexFieldsControl
-    IndexFieldsControl::IndexFieldsControl( Window* _pParent, WinBits nWinStyle)
+    IndexFieldsControl::IndexFieldsControl( vcl::Window* _pParent, WinBits nWinStyle)
         : EditBrowseBox(_pParent, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, nWinStyle, BROWSER_STANDARD_FLAGS)
         , m_aSeekRow(m_aFields.end())
         , m_pSortingCell(NULL)
@@ -103,7 +103,7 @@ namespace dbaui
         GetDataWindow().SetUniqueId( UID_DLGINDEX_INDEXDETAILS_MAIN );
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDbaIndexFieldsControl(Window *pParent, VclBuilder::stringmap &)
+    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDbaIndexFieldsControl(vcl::Window *pParent, VclBuilder::stringmap &)
     {
         return new IndexFieldsControl (pParent, WB_BORDER | WB_NOTABSTOP);
     }

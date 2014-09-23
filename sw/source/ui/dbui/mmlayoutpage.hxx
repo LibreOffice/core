@@ -49,7 +49,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     PushButton*         m_pUpPB;
     PushButton*         m_pDownPB;
 
-    Window*             m_pExampleContainerWIN;
+    vcl::Window*             m_pExampleContainerWIN;
 
     ListBox*            m_pZoomLB;
 

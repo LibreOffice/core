@@ -59,7 +59,7 @@ using ::std::pair;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-MacroChooser::MacroChooser( Window* pParnt, bool bCreateEntries )
+MacroChooser::MacroChooser( vcl::Window* pParnt, bool bCreateEntries )
     : SfxModalDialog(pParnt, "BasicMacroDialog", "modules/BasicIDE/ui/basicmacrodialog.ui")
     , bNewDelIsDel(true)
     // the Sfx doesn't aske the BasicManger whether modified or not
@@ -232,7 +232,7 @@ short MacroChooser::Execute()
     if ( StarBASIC::IsRunning() )
         m_pCloseButton->GrabFocus();
 
-    Window* pPrevDlgParent = Application::GetDefDialogParent();
+    vcl::Window* pPrevDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
     short nRet = ModalDialog::Execute();
     // #57314# If the BasicIDE has been activated, don't reset the DefModalDialogParent to the inactive document.
@@ -365,7 +365,7 @@ SbMethod* MacroChooser::CreateMacro()
 
         if ( !pModule )
         {
-            pModule = createModImpl( static_cast<Window*>( this ),
+            pModule = createModImpl( static_cast<vcl::Window*>( this ),
                 aDocument, *m_pBasicBox, aLibName, aModName );
         }
 
@@ -749,7 +749,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
         ScriptDocument aDocument( aDesc.GetDocument() );
-        createLibImpl( static_cast<Window*>( this ), aDocument, NULL, m_pBasicBox );
+        createLibImpl( static_cast<vcl::Window*>( this ), aDocument, NULL, m_pBasicBox );
     }
     else if (pButton == m_pNewModButton)
     {
@@ -758,7 +758,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         ScriptDocument aDocument( aDesc.GetDocument() );
         OUString aLibName( aDesc.GetLibName() );
         OUString aModName;
-        createModImpl( static_cast<Window*>( this ), aDocument,
+        createModImpl( static_cast<vcl::Window*>( this ), aDocument,
             *m_pBasicBox, aLibName, aModName, true );
     }
     else if (pButton == m_pOrganizeButton)

@@ -25,7 +25,7 @@
 namespace sd { namespace sidebar {
 
 SlideTransitionPanel::SlideTransitionPanel (
-    ::Window* pParentWindow,
+    ::vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::frame::XFrame>& rxFrame
     )
@@ -41,8 +41,8 @@ SlideTransitionPanel::~SlideTransitionPanel (void)
 {
 }
 
-::Window* SlideTransitionPanel::CreateWrappedControl (
-    ::Window* pParentWindow,
+::vcl::Window* SlideTransitionPanel::CreateWrappedControl (
+    ::vcl::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
 {
     return createSlideTransitionPanel(pParentWindow, rViewShellBase, mxFrame);
@@ -50,7 +50,7 @@ SlideTransitionPanel::~SlideTransitionPanel (void)
 
 css::ui::LayoutSize SlideTransitionPanel::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {
-    Window *pControl = mpWrappedControl.get();
+    vcl::Window *pControl = mpWrappedControl.get();
     sal_Int32 nMinimumHeight = pControl ? pControl->get_preferred_size().Height() : 0;
     return css::ui::LayoutSize(nMinimumHeight,-1, nMinimumHeight);
 }

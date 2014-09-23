@@ -667,7 +667,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  ) throw (
     Reference< XAccessible > xParent;
     if ( m_pDialogWindow )
     {
-        Window* pParent = m_pDialogWindow->GetAccessibleParentWindow();
+        vcl::Window* pParent = m_pDialogWindow->GetAccessibleParentWindow();
         if ( pParent )
             xParent = pParent->GetAccessible();
     }
@@ -684,13 +684,13 @@ sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeE
     sal_Int32 nIndexInParent = -1;
     if ( m_pDialogWindow )
     {
-        Window* pParent = m_pDialogWindow->GetAccessibleParentWindow();
+        vcl::Window* pParent = m_pDialogWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
             for ( sal_uInt16 i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
             {
-                Window* pChild = pParent->GetAccessibleChildWindow( i );
-                if ( pChild == static_cast< Window* >( m_pDialogWindow ) )
+                vcl::Window* pChild = pParent->GetAccessibleChildWindow( i );
+                if ( pChild == static_cast< vcl::Window* >( m_pDialogWindow ) )
                 {
                     nIndexInParent = i;
                     break;

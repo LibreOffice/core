@@ -33,7 +33,7 @@ namespace rptui
         ONavigator(const ONavigator&);
         void operator =(const ONavigator&);
     public:
-           ONavigator( Window* pParent
+           ONavigator( vcl::Window* pParent
                     ,OReportController& _rController);
 
         // window

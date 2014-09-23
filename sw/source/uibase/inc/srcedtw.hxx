@@ -37,7 +37,7 @@ class TextEngine;
 class ExtTextView;
 class DataChangedEvent;
 
-class TextViewOutWin : public Window
+class TextViewOutWin : public vcl::Window
 {
     ExtTextView*    pTextView;
 
@@ -51,7 +51,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
 
 public:
-        TextViewOutWin(Window* pParent, WinBits nBits) :
+        TextViewOutWin(vcl::Window* pParent, WinBits nBits) :
             Window(pParent, nBits), pTextView(0){}
 
     void    SetTextView( ExtTextView* pView ) {pTextView = pView;}
@@ -60,7 +60,7 @@ public:
 
 typedef std::set<sal_uInt16> SyntaxLineSet;
 
-class SwSrcEditWindow : public Window, public SfxListener
+class SwSrcEditWindow : public vcl::Window, public SfxListener
 {
 private:
     class ChangesListener;
@@ -115,7 +115,7 @@ protected:
     DECL_LINK(ScrollHdl, ScrollBar*);
 
 public:
-                    SwSrcEditWindow( Window* pParent, SwSrcView* pParentView );
+                    SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView );
                     virtual ~SwSrcEditWindow();
 
     void            SetScrollBarRanges();

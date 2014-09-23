@@ -181,7 +181,7 @@ namespace dxcanvas
         class DXRenderModule : public IDXRenderModule
         {
         public:
-            explicit DXRenderModule( const ::Window& rWindow );
+            explicit DXRenderModule( const vcl::Window& rWindow );
             ~DXRenderModule();
 
             virtual void lock() const { maMutex.acquire(); }
@@ -211,7 +211,7 @@ namespace dxcanvas
 
         private:
 
-            bool create( const ::Window& rWindow );
+            bool create( const vcl::Window& rWindow );
             bool createDevice();
             bool verifyDevice( const UINT nAdapter );
             UINT getAdapterFromWindow();
@@ -563,7 +563,7 @@ namespace dxcanvas
         // DXRenderModule::DXRenderModule
 
 
-        DXRenderModule::DXRenderModule( const ::Window& rWindow ) :
+        DXRenderModule::DXRenderModule( const vcl::Window& rWindow ) :
             mhWnd(0),
             mpDevice(),
             mpDirect3D9(),
@@ -660,7 +660,7 @@ namespace dxcanvas
         // DXRenderModule::create
 
 
-        bool DXRenderModule::create( const ::Window& rWindow )
+        bool DXRenderModule::create( const vcl::Window& rWindow )
         {
             // TODO(P2): get rid of those fine-grained locking
             ::osl::MutexGuard aGuard( maMutex );
@@ -669,7 +669,7 @@ namespace dxcanvas
 
             mpWindow.reset(
                 new SystemChildWindow(
-                const_cast<Window *>(&rWindow), 0) );
+                const_cast<vcl::Window *>(&rWindow), 0) );
 
             // system child window must not receive mouse events
             mpWindow->SetMouseTransparent( TRUE );
@@ -1336,7 +1336,7 @@ namespace dxcanvas
     // createRenderModule
 
 
-    IDXRenderModuleSharedPtr createRenderModule( const ::Window& rParent )
+    IDXRenderModuleSharedPtr createRenderModule( const vcl::Window& rParent )
     {
         return IDXRenderModuleSharedPtr( new DXRenderModule(rParent) );
     }

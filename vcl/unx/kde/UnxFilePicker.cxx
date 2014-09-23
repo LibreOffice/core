@@ -708,7 +708,7 @@ void UnxFilePicker::initFilePicker()
         // TODO pass here the real parent (not possible for system dialogs
         // yet), and default to GetDefDialogParent() only when the real parent
         // is NULL
-        Window *pParentWin = Application::GetDefDialogParent();
+        vcl::Window *pParentWin = Application::GetDefDialogParent();
         if ( pParentWin )
         {
             const SystemEnvData* pSysData = ((SystemWindow *)pParentWin)->GetSystemData();

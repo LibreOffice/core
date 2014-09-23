@@ -32,7 +32,7 @@
 
 #define VECTORIZE_MAX_EXTENT 512
 
-SdVectorizeDlg::SdVectorizeDlg(Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
+SdVectorizeDlg::SdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
     : ModalDialog(pParent, "VectorizeDialog", "modules/sdraw/ui/vectorize.ui")
     , mpDocSh(pDocShell)
     , aBmp(rBmp)

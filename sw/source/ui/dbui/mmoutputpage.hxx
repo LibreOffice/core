@@ -188,7 +188,7 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
 public:
-    SwSendMailDialog( Window* pParent, SwMailMergeConfigItem& );
+    SwSendMailDialog( vcl::Window* pParent, SwMailMergeConfigItem& );
     virtual ~SwSendMailDialog();
 
     void                AddDocument( SwMailDescriptor& rDesc );
