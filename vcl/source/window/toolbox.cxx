@@ -524,11 +524,12 @@ void ToolBox::ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
         bool bNativeOk = false;
         if( pThis->ImplIsFloatingMode() && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL) )
             bNativeOk = ImplDrawNativeBackground( pThis, aPaintRegion );
-
+        const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
         if( !bNativeOk )
         {
+            const bool isFooter = pThis->GetAlign() == WINDOWALIGN_BOTTOM && !rSetting.GetPersonaFooter().IsEmpty();
             if( !pThis->IsBackground() ||
-                ( pThis->GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() ) )
+                (( pThis->GetAlign() == WINDOWALIGN_TOP && ! rSetting.GetPersonaHeader().IsEmpty() ) || isFooter ) )
             {
                 if( !pThis->IsInPaint() )
                     ImplDrawTransparentBackground( pThis, aPaintRegion );
@@ -1468,9 +1469,11 @@ void ToolBox::ImplInitSettings( bool bFont,
         else
         {
             if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) ||
-                ( GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() ) )
+                ( GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )||
+                ( GetAlign() == WINDOWALIGN_BOTTOM && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()) )
             {
                 SetBackground();
+                SetTextColor(rStyleSettings.GetMenuBarTextColor());
                 SetPaintTransparent( true );
                 SetParentClipMode( PARENTCLIPMODE_NOCLIP );
                 mpData->maDisplayBackground = Wallpaper( rStyleSettings.GetFaceColor() );
