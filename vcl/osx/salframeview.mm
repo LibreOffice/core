@@ -1782,7 +1782,7 @@ private:
 {
     if ( mpReferenceWrapper == nil ) {
         // some frames never become visible ..
-        Window *pWindow = mpFrame -> GetWindow();
+        ::vcl::Window *pWindow = mpFrame -> GetWindow();
         if ( ! pWindow )
             return nil;
 
