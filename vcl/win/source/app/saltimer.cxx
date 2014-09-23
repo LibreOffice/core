@@ -54,11 +54,9 @@ void ImplSalStartTimer( sal_uLong nMS, bool bMutex )
     if (nMS > MAX_SYSPERIOD)
         nMS = MAX_SYSPERIOD;
 
-    // change if it exists, create if not
-    if (pSalData->mnTimerId)
-        ChangeTimerQueueTimer(NULL, pSalData->mnTimerId, nMS, nMS);
-    else
-        CreateTimerQueueTimer(&pSalData->mnTimerId, NULL, SalTimerProc, NULL, nMS, nMS, WT_EXECUTEDEFAULT);
+    // can't change a one-shot timer if it has fired already (odd) so delete & re-create
+    ImplSalStopTimer(pSalData);
+    CreateTimerQueueTimer(&pSalData->mnTimerId, NULL, SalTimerProc, NULL, nMS, nMS, WT_EXECUTEDEFAULT);
 
     pSalData->mnNextTimerTime = pSalData->mnLastEventTime + nMS;
 }
@@ -111,15 +109,10 @@ void CALLBACK SalTimerProc(PVOID, BOOLEAN)
     __try
     {
 #endif
-        SalData* pSalData = GetSalData();
-        ImplSVData* pSVData = ImplGetSVData();
 
-        // don't allow recursive calls (mbInTimerProc is set when the callback
-        // is being processed)
-        if (pSVData->mpSalTimer && !pSalData->mbInTimerProc)
-        {
-            ImplPostMessage(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK, 0, 0);
-        }
+        SalData* pSalData = GetSalData();
+        ImplPostMessage(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK, 0, 0);
+
 #if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     }
     han.Reset();
@@ -149,23 +142,18 @@ void EmitTimerCallback(bool bAllowRecursive)
 
     // Try to acquire the mutex. If we don't get the mutex then we
     // try this a short time later again.
-    if (ImplSalYieldMutexTryToAcquire())
+    if (ImplSalYieldMutexTryToAcquire() &&
+        (pSVData->mpSalTimer && (!pSalData->mbInTimerProc || bAllowRecursive)))
     {
-        if (pSVData->mpSalTimer && (!pSalData->mbInTimerProc || bAllowRecursive))
-        {
-            pSalData->mbInTimerProc = true;
-            pSVData->mpSalTimer->CallCallback();
-            pSalData->mbInTimerProc = false;
-            ImplSalYieldMutexRelease();
-
-            // Run the timer in the correct time, if we start this
-            // with a small timeout, because we don't get the mutex
-            if (pSalData->mnTimerId && (pSalData->mnTimerMS != pSalData->mnTimerOrgMS))
-                ImplSalStartTimer(pSalData->mnTimerOrgMS, false);
-        }
+        pSalData->mbInTimerProc = true;
+        pSVData->mpSalTimer->CallCallback();
+        pSalData->mbInTimerProc = false;
+        ImplSalYieldMutexRelease();
     }
     else
+    {
         ImplSalStartTimer(10, true);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

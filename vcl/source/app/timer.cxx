@@ -70,6 +70,7 @@ static void ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
     if ( !nMS )
         nMS = 1;
 
+    // Assume underlying timers are recurring timers, if same period - just wait.
     if ( nMS != pSVData->mnTimerPeriod )
     {
         pSVData->mnTimerPeriod = nMS;
