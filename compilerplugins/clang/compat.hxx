@@ -23,6 +23,8 @@
 #include "clang/Basic/Linkage.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/Visibility.h"
+#include "clang/Lex/PPCallbacks.h"
+#include "clang/Lex/Preprocessor.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/raw_ostream.h"
@@ -183,6 +185,16 @@ inline clang::NamedDecl * const * end(
     return result.end();
 #else
     return result.second;
+#endif
+}
+
+inline void addPPCallbacks(
+    clang::Preprocessor & preprocessor, clang::PPCallbacks * C)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ > 3
+    preprocessor.addPPCallbacks(std::unique_ptr<clang::PPCallbacks>(C));
+#else
+    preprocessor.addPPCallbacks(C);
 #endif
 }
 

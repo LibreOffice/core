@@ -9,6 +9,7 @@
  *
  */
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 #include <clang/Lex/Preprocessor.h>
@@ -59,7 +60,7 @@ class CheckConfigMacros
 CheckConfigMacros::CheckConfigMacros( const InstantiationData& data )
     : Plugin( data )
     {
-    compiler.getPreprocessor().addPPCallbacks( this );
+    compat::addPPCallbacks(compiler.getPreprocessor(), this);
     }
 
 void CheckConfigMacros::run()
