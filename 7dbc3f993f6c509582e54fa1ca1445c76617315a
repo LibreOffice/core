@@ -33,6 +33,23 @@
       "revId": "7dbc3f993f6c509582e54fa1ca1445c76617315a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_713a92cf",
+        "filename": "javaunohelper/test/com/sun/star/lib/uno/helper/ComponentBase_Test.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-23T13:44:33Z",
+      "side": 1,
+      "message": "This is unusual, to call different methods from unto test method. Just merge the methods in one test method:\n\n  @Test\n  public void dispose() throws Exception\n  {\n    content of dispose()\n    content of test_finalize()\n  }",
+      "revId": "7dbc3f993f6c509582e54fa1ca1445c76617315a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
