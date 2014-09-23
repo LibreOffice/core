@@ -24,6 +24,10 @@ $(eval $(call gb_Module_add_targets,unoxml,\
     Library_unordf \
 ))
 
+$(eval $(call gb_Module_add_slowcheck_targets,unoxml,\
+    CppunitTest_unoxml_domtest \
+))
+
 ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,unoxml,\
     JunitTest_unoxml_complex \
