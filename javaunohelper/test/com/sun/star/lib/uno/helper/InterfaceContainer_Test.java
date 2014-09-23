@@ -26,8 +26,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class InterfaceContainer_Test
 {
@@ -47,26 +59,38 @@ public class InterfaceContainer_Test
     //contains original object + proxies + null value
     List<Object> list3;
 
-    public InterfaceContainer_Test()
+    @Rule public ExpectedException exception = ExpectedException.none();
+
+    /** Class variables are initialized before each Test method */
+    @Before public void setUp() throws Exception
     {
         obj1= new AWeakBase();
         obj2= new AWeakBase();
         obj3= new AWeakBase();
         obj4= new AWeakBase();
+
         proxyObj1Weak1= ProxyProvider.createProxy(obj1, XWeak.class);
         proxyObj3Weak1= ProxyProvider.createProxy(obj3, XWeak.class);
         proxyObj3Weak2= ProxyProvider.createProxy(obj3, XWeak.class);
+        assertNotNull(proxyObj1Weak1);
+        assertNotNull(proxyObj3Weak1);
+        assertNotNull(proxyObj3Weak2);
+
         proxyObj2TypeProv= ProxyProvider.createProxy(obj2, XTypeProvider.class);
         proxyObj3TypeProv= ProxyProvider.createProxy(obj3, XTypeProvider.class);
+        assertNotNull(proxyObj2TypeProv);
+        assertNotNull(proxyObj3TypeProv);
 
         list1= new ArrayList<Object>();
         list1.add(obj1);
         list1.add(obj2);
         list1.add(obj3);
+
         list2= new ArrayList<Object>();
         list2.add(obj1);
         list2.add(proxyObj2TypeProv);
         list2.add(proxyObj3TypeProv);
+
         list3= new ArrayList<Object>();
         list3.add(obj1);
         list3.add(null);
@@ -76,280 +100,220 @@ public class InterfaceContainer_Test
 
     /** Tests add(object), size(), clear();
      */
-    public boolean add()
+    @Test public void add() throws Exception
     {
         logger.log(Level.INFO, "Testing List.add(Object), List.size(), List.clear(), List.isEmpty()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
-        r[i++]= cont.size() == 0;
-        r[i++]= cont.add(obj1);
-        r[i++]= cont.size() == 1;
-        r[i++]= cont.add(obj1); // add the same object again
-        r[i++]= cont.size() == 2;
-        r[i++]= cont.add(proxyObj3TypeProv);
-        r[i++]= cont.size() == 3;
-        r[i++]= cont.isEmpty() ? false: true;
+        assertEquals(cont.size(), 0);
+
+        assertTrue(cont.add(obj1));
+        assertEquals(cont.size(), 1);
+
+        assertTrue(cont.add(obj1)); // add the same object again
+        assertEquals(cont.size(), 2);
+
+        assertTrue(cont.add(proxyObj3TypeProv));
+        assertEquals(cont.size(), 3);
+
+        assertFalse(cont.isEmpty());
         cont.clear();
-        r[i++]= cont.size() == 0;
-        r[i++]= cont.isEmpty();
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(cont.size(), 0);
+        assertTrue(cont.isEmpty());
     }
 
     /**Tests list.addAll(Collection c), list.addAll(int index, Collection c)
      */
-    public boolean listConstructors()
+    @Test public void listConstructors() throws Exception
     {
         logger.log(Level.INFO, "Testing Constructors of InterfaceContainer");
-        boolean r[]= new boolean[50];
-        int i= 0;
         InterfaceContainer cont= new InterfaceContainer(100);
 
-        r[i++]= cont.elementData.length == 100;
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(cont.elementData.length, 100);
     }
-    public boolean trimToSize()
+
+    @Test public void trimToSize() throws Exception
     {
         logger.log(Level.INFO, "Testing InterfaceContainer.trimToSize");
         InterfaceContainer cont= new InterfaceContainer(100);
-        boolean r[]= new boolean[50];
-        int i= 0;
+
         cont.trimToSize();
-        r[i++]= cont.isEmpty();
+        assertTrue(cont.isEmpty());
         cont= new InterfaceContainer(10);
         cont.addAll(list1);
         cont.trimToSize();
-        r[i++]= cont.elementData.length == list1.size();
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(cont.elementData.length, list1.size());
     }
-    public boolean ensureCapacity()
+
+    @Test public void ensureCapacity() throws Exception
     {
         logger.log(Level.INFO, "Testing InterfaceContainer.ensureCapacity");
         InterfaceContainer cont= new InterfaceContainer(10);
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.ensureCapacity(9);
-        r[i++]= cont.elementData.length >= 9;
+        assertTrue(cont.elementData.length >= 9);
+
         cont.ensureCapacity(11);
-        r[i++]= cont.elementData.length >= 11;
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertTrue(cont.elementData.length >= 11);
     }
 
-    public boolean addAll()
+    @Test public void addAll() throws Exception
     {
         logger.log(Level.INFO, "Testing List.addAll(Collection c), List.addAll(int index, Collection c)");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
-        r[i++]= cont.addAll(list1);
-        r[i++]= cont.size() == list1.size();
+        assertTrue(cont.addAll(list1));
+        assertEquals(cont.size(), list1.size());
         for (int c= 0; c < cont.size(); c++)
         {
-            r[i++]= list1.get(c) == cont.get(c);
+            assertEquals(list1.get(c), cont.get(c));
         }
-        cont.add(obj1);
-        r[i++]= cont.addAll(1, list2);
-        r[i++]= cont.get(0) == list1.get(0);
-        r[i++]= cont.get(1) == list2.get(0);
-        r[i++]= cont.get(2) == list2.get(1);
-        r[i++]= cont.get(3) == list2.get(2);
-        r[i++]= cont.get(4) == list1.get(1);
-        r[i++]= cont.get(5) == list1.get(2);
-        r[i++]= cont.get(6) == obj1;
+        assertTrue(cont.add(obj1));
+        assertTrue(cont.addAll(1, list2));
+        assertEquals(cont.get(0), list1.get(0));
+        assertEquals(cont.get(1), list2.get(0));
+        assertEquals(cont.get(2), list2.get(1));
+        assertEquals(cont.get(3), list2.get(2));
+        assertEquals(cont.get(4), list1.get(1));
+        assertEquals(cont.get(5), list1.get(2));
+        assertEquals(cont.get(6), obj1);
+
         cont.clear();
         cont.addAll(list3);
         // the null element in list3 at index 1 is not added to cont
-        r[i++]= cont.get(0) == list3.get(0);
-        r[i++]= cont.get(1) == list3.get(2);
-        r[i++]= cont.get(2) == list3.get(3);
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(cont.get(0), list3.get(0));
+        assertEquals(cont.get(1), list3.get(2));
+        assertEquals(cont.get(2), list3.get(3));
     }
 
     /** Tests List.add(int index, Object element), List.get(int index)
      */
-    public boolean get()
+    @Test public void get() throws Exception
     {
         logger.log(Level.INFO, "Testing List.add(int index, Object element), List.get(int index)");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.add(0, obj1);
         cont.add(1, obj2);
         cont.add(1, proxyObj3Weak1);
         cont.add(3, obj3);
-        r[i++]= cont.get(0) == obj1;
-        r[i++]= cont.get(1) == proxyObj3Weak1;
-        r[i++]= cont.get(2) == obj2;
-        r[i++]= cont.get(3) == obj3;
-        try
-        {
-            cont.add(5, obj1);
-        }catch( java.lang.Exception e)
-        {
-            r[i++]= true;
-        }
 
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(cont.get(0), obj1);
+        assertEquals(cont.get(1), proxyObj3Weak1);
+        assertEquals(cont.get(2), obj2);
+        assertEquals(cont.get(3), obj3);
+
+        exception.expect(IndexOutOfBoundsException.class);
+        cont.add(5, obj1);
     }
+
     /** Tests List.contains
      */
-    public boolean contains()
+    @Test public void contains() throws Exception
     {
         logger.log(Level.INFO, "Testing List.contains()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
-        r[i++]= cont.contains(obj1) ? false : true; // nothing in the list
+        assertFalse(cont.contains(obj1)); // nothing in the list
+
         cont.add(obj1);
         cont.add(proxyObj2TypeProv);
         cont.add(proxyObj3TypeProv);
-        r[i++]= cont.contains(obj1);
-        r[i++]= cont.contains(obj2);
-        r[i++]= cont.contains(proxyObj3Weak1);
-        r[i++]= cont.contains(proxyObj3Weak2);
-        r[i++]= cont.contains(proxyObj1Weak1);
-        r[i++]= cont.contains(obj3);
-        r[i++]= cont.contains(null) ? false : true;
 
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertTrue(cont.contains(obj1));
+        assertTrue(cont.contains(obj2));
+        assertTrue(cont.contains(proxyObj3Weak1));
+        assertTrue(cont.contains(proxyObj3Weak2));
+        assertTrue(cont.contains(proxyObj1Weak1));
+        assertTrue(cont.contains(obj3));
+        assertFalse(cont.contains(null));
     }
+
     /** Tests List.containsAll
      */
-    public boolean containsAll()
+    @Test public void containsAll() throws Exception
     {
         logger.log(Level.INFO, "Testing List.containsAll");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
+
         cont.addAll(list1);
-        r[i++]= cont.containsAll(list1);
+        assertTrue(cont.containsAll(list1));
+
         cont.clear();
         cont.addAll(list2);
-        r[i++]= cont.containsAll(list2);
+        assertTrue(cont.containsAll(list2));
+
         cont.clear();
         cont.addAll(list3); // the null element in list3 is not added to cont
-        r[i++]= cont.containsAll(list3) ? false : true;
+        assertFalse(cont.containsAll(list3));
+
         cont.clear();
         for( int x= 0; x < 6; x++)
             cont.add(obj4);
-        r[i++]= cont.contains(list1) ? false : true;
+        assertFalse(cont.contains(list1));
+
         cont.add(1, list1.get(0));
         cont.add(3, list1.get(1));
         cont.add(5, list1.get(2));
-        r[i++]= cont.contains(list1) ? false : true;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertFalse(cont.contains(list1));
     }
     /** Tests List.indexOf, List.lastIndexOf
      */
-    public boolean indexOf()
+    @Test public void indexOf() throws Exception
     {
         logger.log(Level.INFO, "Testing List.indexOf(Object element), List.lastIndexOf(Object element)");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
+
         cont.addAll(list1);
         cont.addAll(list1);
-        r[i++]= cont.indexOf(obj3) == 2;
-        r[i++]= cont.lastIndexOf(obj3) == 5;
+        assertEquals(cont.indexOf(obj3), 2);
+        assertEquals(cont.lastIndexOf(obj3), 5);
+
         cont.clear();
         cont.addAll(list2);
         cont.addAll(list2);
-        r[i++]= cont.indexOf(proxyObj3Weak1) == 2;
-        r[i++]= cont.lastIndexOf(proxyObj3Weak2) == 5;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(cont.indexOf(proxyObj3Weak1), 2);
+        assertEquals(cont.lastIndexOf(proxyObj3Weak2), 5);
     }
 
     /** Tests List.remove(int index), List.remove(Object element), List.removeAll(Collection c)
      */
-    public boolean remove()
+    @Test public void remove() throws Exception
     {
         logger.log(Level.INFO, "Testing List.remove(int index), List.remove(Object element), List.removeAll(Collection c)");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.addAll(list2);
-        r[i++]=  proxyObj2TypeProv.equals(cont.remove(1));
-        r[i++]= cont.size() == 2;
+        assertTrue(proxyObj2TypeProv.equals(cont.remove(1)));
+        assertEquals(cont.size(), 2);
+
         cont.clear();
         cont.addAll(list2);
-        r[i++]= cont.remove(obj1);
-        r[i++]= cont.remove(proxyObj2TypeProv);
-        r[i++]= cont.remove(proxyObj3Weak2);
-        r[i++]= cont.isEmpty();
+        assertTrue(cont.remove(obj1));
+        assertTrue(cont.remove(proxyObj2TypeProv));
+        assertTrue(cont.remove(proxyObj3Weak2));
+        assertTrue(cont.isEmpty());
+
         cont.clear();
         cont.addAll(list3);
-        r[i++]= cont.removeAll(list3);
-        r[i++]= cont.isEmpty();
-        cont.addAll(list2);
+        assertTrue(cont.removeAll(list3));
+        assertTrue(cont.isEmpty());
 
+        cont.addAll(list2);
         List<Object> list= new ArrayList<Object>();
         list.add(list2.get(0));
         list.add(list2.get(1));
         list.add(proxyObj3Weak2);
-        r[i++]= cont.removeAll(list);
-        r[i++]= cont.isEmpty();
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertTrue(cont.removeAll(list));
+        assertTrue(cont.isEmpty());
     }
 
     /** Tests List.retainAll
      */
-    public boolean retainAll()
+    @Test public void retainAll() throws Exception
     {
         logger.log(Level.INFO, "Testing List.retainAll(Collection c)");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.addAll(list1); //obj1, obj2, obj3
         cont.addAll(list2); //obj1, proxyObj2TypeProv, proxyObj3TypeProv
@@ -357,171 +321,105 @@ public class InterfaceContainer_Test
         list.add(obj1);
         list.add(proxyObj3Weak1);
 
-        r[i++]= cont.retainAll(list);
-        r[i++]= cont.get(0) == obj1;
-        r[i++]= cont.get(1) == obj3;
-        r[i++]= cont.get(2) == obj1;
-        r[i++]= cont.get(3) == proxyObj3TypeProv;
-        r[i++]= 4 == cont.size();
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertTrue(cont.retainAll(list));
+        assertEquals(cont.get(0), obj1);
+        assertEquals(cont.get(1), obj3);
+        assertEquals(cont.get(2), obj1);
+        assertEquals(cont.get(3), proxyObj3TypeProv);
+        assertEquals(cont.size(), 4);
     }
 
     /** Tests List.set(int index, Object element)
      **/
-    public boolean set()
+    @Test public void set() throws Exception
     {
         logger.log(Level.INFO, "Testing List.set(int index, Object element)");
-        boolean r[]= new boolean[50];
-        int i= 0;
         InterfaceContainer cont= new InterfaceContainer();
+
         cont.addAll(list2);
         Object o1= cont.set(0, obj3);
         Object o2= cont.set(2, proxyObj3Weak1);
-        r[i++]= o1 == list2.get(0);
-        r[i++]= o2 == list2.get(2);
-        r[i++]= cont.get(0) == obj3;
-        r[i++]= cont.get(2) == proxyObj3Weak1;
 
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(list2.get(0), o1);
+        assertEquals(list2.get(2), o2);
+        assertEquals(cont.get(0), obj3);
+        assertEquals(cont.get(2), proxyObj3Weak1);
     }
 
     /** Tests List.toArray(), List.toArray(Object[] a)
      */
-    public boolean toArray()
+    @Test public void toArray() throws Exception
     {
         logger.log(Level.INFO, "Testing List.toArray(), List.toArray(Object[] a)");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.addAll(list1);
         Object[] ar= cont.toArray();
         Object[] arOrig= list1.toArray();
-        r[i++]= ar.length == arOrig.length;
+        assertEquals(ar.length, arOrig.length);
+        assertArrayEquals(ar, arOrig);
 
-        r[i]= true;
-        for (int c= 0; c < ar.length; c++)
-            r[i]= r[i] && ar[c] == arOrig[c];
-
-        i++;
         XWeak[] arWeak= new XWeak[3];
         XWeak[] arWeak2= (XWeak[])cont.toArray(arWeak);
-        r[i++]= ar.length == arWeak2.length;
-        r[i]= true;
-        for (int c= 0; c < ar.length; c++)
-            r[i]= r[i] && ar[c] == arWeak2[c];
-
-        i++;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(ar.length, arWeak2.length);
+        assertArrayEquals(ar, arWeak2);
     }
 
-    public boolean Iterator_next()
+    @Test public void Iterator_next() throws Exception
     {
         logger.log(Level.INFO, "Testing InterfaceContainer.iterator, Iterator.next()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.addAll(list1);
         Iterator it= cont.iterator();
-        r[i++]= it.next() == list1.get(0);
-        r[i++]= it.next() == list1.get(1);
-        r[i++]= it.next() == list1.get(2);
-        try
-        {
-            it.next();
-        }catch(java.util.NoSuchElementException ne)
-        {
-            r[i++]= true;
-        }catch(Exception e)
-        {
-            r[i++]= false;
-        }
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(it.next(), list1.get(0));
+        assertEquals(it.next(), list1.get(1));
+        assertEquals(it.next(), list1.get(2));
+        exception.expect(NoSuchElementException.class);
+        it.next();
     }
 
-    public boolean Iterator_hasNext()
+    @Test public void Iterator_hasNext() throws Exception
     {
         logger.log(Level.INFO, "Testing, Iterator.next()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         Iterator it= cont.iterator();
-        r[i++]= ! it.hasNext();
+        assertFalse(it.hasNext());
+
         cont.addAll(list1);
         it= cont.iterator();
-        r[i++]= it.hasNext();
-        it.next();
-        r[i++]= it.hasNext();
-        it.next();
-        r[i++]= it.hasNext();
-        it.next();
-        r[i++]= ! it.hasNext();
+        assertTrue(it.hasNext());
 
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        it.next();
+        assertTrue(it.hasNext());
+
+        it.next();
+        assertTrue(it.hasNext());
+
+        it.next();
+        assertFalse(it.hasNext());
     }
 
-    public boolean Iterator_remove()
+    @Test public void Iterator_remove() throws Exception
     {
         logger.log(Level.INFO, "Testing, Iterator.remove()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         Iterator it= cont.iterator();
-        try
-        {
-            it.remove();
-        }
-        catch( IllegalStateException ie)
-        {
-            r[i++]= true;
-        }
-        catch(java.lang.Exception e)
-        {
-            r[i++]= false;
-        }
+        exception.expect(IllegalStateException.class);
+        it.remove();
+
+        exception = ExpectedException.none();
         cont.add(obj1);
         it= cont.iterator();
         it.next();
         it.remove();
-        r[i++]= cont.isEmpty();
-        try
-        {
-            it.remove();
-        }
-        catch (IllegalStateException ie)
-        {
-            r[i++]= true;
-        }
-        catch (Exception e)
-        {
-            r[i++]= false;
-        }
+        assertTrue(cont.isEmpty());
+        exception.expect(IllegalStateException.class);
+        it.remove();
+
+        exception = ExpectedException.none();
         cont.clear();
         cont.addAll(list1);
         it= cont.iterator();
@@ -530,7 +428,7 @@ public class InterfaceContainer_Test
             it.next();
             it.remove();
         }
-        r[i++]= cont.isEmpty();
+        assertTrue(cont.isEmpty());
 
         // 2 iterators, remove must not impair the other iterator
         cont.clear();
@@ -543,118 +441,63 @@ public class InterfaceContainer_Test
             it.next();
             it.remove();
         }
-        try
-        {
-            for( int c= 0; c < size; c++)
-                it2.next();
-            r[i++]= true;
-        }
-        catch(Exception e)
-        {
-            r[i++]= false;
-        }
-        r[i++]= cont.size() == 0;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        for( int c= 0; c < size; c++)
+            assertNotNull(it2.next());
+        assertEquals(cont.size(), 0);
     }
 
-    public boolean ListIterator_next()
+    @Test public void ListIterator_next() throws Exception
     {
         logger.log(Level.INFO, "Testing InterfaceContainer.listIerator, ListIterator.next()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.addAll(list1);
         Iterator it= cont.listIterator();
-        r[i++]= it.next() == list1.get(0);
-        r[i++]= it.next() == list1.get(1);
-        r[i++]= it.next() == list1.get(2);
-        try
-        {
-            it.next();
-        }catch(java.util.NoSuchElementException ne)
-        {
-            r[i++]= true;
-        }catch(Exception e)
-        {
-            r[i++]= false;
-        }
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(it.next(), list1.get(0));
+        assertEquals(it.next(), list1.get(1));
+        assertEquals(it.next(), list1.get(2));
+        exception.expect(NoSuchElementException.class);
+        it.next();
     }
 
-    public boolean ListIterator_hasNext()
+    @Test public void ListIterator_hasNext() throws Exception
     {
         logger.log(Level.INFO, "Testing ListIterator.hasNext()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         Iterator it= cont.listIterator();
-        r[i++]= ! it.hasNext();
+        assertFalse(it.hasNext());
+
         cont.addAll(list1);
         it= cont.listIterator();
-        r[i++]= it.hasNext();
+        assertTrue(it.hasNext());
         it.next();
-        r[i++]= it.hasNext();
+        assertTrue(it.hasNext());
         it.next();
-        r[i++]= it.hasNext();
+        assertTrue(it.hasNext());
         it.next();
-        r[i++]= ! it.hasNext();
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertFalse(it.hasNext());
     }
 
-    public boolean ListIterator_remove()
+    @Test public void ListIterator_remove() throws Exception
     {
         logger.log(Level.INFO, "Testing ListIterator.remove()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         ListIterator it= cont.listIterator();
-        try
-        {
-            it.remove();
-        }
-        catch( IllegalStateException ie)
-        {
-            r[i++]= true;
-        }
-        catch(java.lang.Exception e)
-        {
-            r[i++]= false;
-        }
+        exception.expect(IllegalStateException.class);
+        it.remove();
+
+        exception = ExpectedException.none();
         cont.add(obj1);
         it= cont.listIterator();
         it.next();
         it.remove();
-        r[i++]= cont.isEmpty();
-        try
-        {
-            it.remove();
-        }
-        catch (IllegalStateException ie)
-        {
-            r[i++]= true;
-        }
-        catch (Exception e)
-        {
-            r[i++]= false;
-        }
+        assertTrue(cont.isEmpty());
+        exception.expect(IllegalStateException.class);
+        it.remove();
+
+        exception = ExpectedException.none();
         cont.clear();
         cont.addAll(list1);
         it= cont.listIterator();
@@ -663,7 +506,7 @@ public class InterfaceContainer_Test
             it.next();
             it.remove();
         }
-        r[i++]= cont.isEmpty();
+        assertTrue(cont.isEmpty());
 
         // 2 iterators, remove must not impair the other iterator
         cont.clear();
@@ -676,56 +519,31 @@ public class InterfaceContainer_Test
             it.next();
             it.remove();
         }
-        try
-        {
-            for( int c= 0; c < size; c++)
-                it2.next();
-            r[i++]= true;
-        }
-        catch(Exception e)
-        {
-            r[i++]= false;
-        }
-        r[i++]= cont.size() == 0;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        for( int c= 0; c < size; c++)
+            assertNotNull(it2.next());
+        assertEquals(cont.size(), 0);
     }
 
-    public boolean ListIterator_hasPrevious()
+    @Test public void ListIterator_hasPrevious() throws Exception
     {
         logger.log(Level.INFO, "Testing ListIterator.hasPrevious()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         ListIterator it= cont.listIterator();
-        r[i++]= ! it.hasPrevious();
+        assertFalse(it.hasPrevious());
         cont.addAll(list1);
         it= cont.listIterator();
         while (it.hasNext())
         {
             it.next();
-            r[i++]= it.hasPrevious();
+            assertTrue(it.hasPrevious());
         }
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
     }
 
-    public boolean ListIterator_previous()
+    @Test public void ListIterator_previous() throws Exception
     {
         logger.log(Level.INFO, "Testing ListIterator.previous()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
-        boolean bOk= true;
 
         cont.addAll(list1);
         // go to the end of our list and list1
@@ -738,53 +556,31 @@ public class InterfaceContainer_Test
 
         while (it.hasPrevious())
         {
-            r[i++]= it.previous() == it_list1.previous();
+            assertEquals(it.previous(), it_list1.previous());
         }
-        try
-        {
-            it.previous();
-            r[i++]= false;
-        }
-        catch (java.util.NoSuchElementException e)
-        {
-            r[i++]=true;
-        }
-
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        exception.expect(NoSuchElementException.class);
+        it.previous();
     }
 
-    public boolean ListIterator_nextIndex()
+    @Test public void ListIterator_nextIndex() throws Exception
     {
         logger.log(Level.INFO, "Testing ListIterator.nextIndex()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
-        boolean bOk= true;
 
-        ListIterator it= cont.listIterator();
+        ListIterator it;
         cont.addAll(list1);
         it= cont.listIterator();
-        r[i++]= it.nextIndex() == 0;
+        assertEquals(it.nextIndex(), 0);
         it.next();
-        r[i++]= it.nextIndex() == 1;
+        assertEquals(it.nextIndex(), 1);
         it.next();
-        r[i++]= it.nextIndex() == 2;
-
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(it.nextIndex(), 2);
     }
-    public boolean ListIterator_previousIndex()
+
+    @Test public void ListIterator_previousIndex() throws Exception
     {
         logger.log(Level.INFO, "Testing ListIterator.previousIndex()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
-        boolean bOk= true;
 
         ListIterator it= cont.listIterator();
         cont.addAll(list1);
@@ -792,48 +588,34 @@ public class InterfaceContainer_Test
         while (it.hasNext())
             it.next();
 
-        r[i++]= it.previousIndex() == 2;
+        assertEquals(it.previousIndex(), 2);
         it.previous();
-        r[i++]= it.previousIndex() == 1;
+        assertEquals(it.previousIndex(), 1);
         it.previous();
-        r[i++]= it.previousIndex() == 0;
+        assertEquals(it.previousIndex(), 0);
         it.previous();
-
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
     }
-    public boolean ListIterator_add()
+
+    @Test public void ListIterator_add() throws Exception
     {
         logger.log(Level.INFO, "Testing ListIterator.add()");
         InterfaceContainer cont= new InterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
-        boolean bOk= true;
 
         ListIterator it= cont.listIterator();
         it.add(obj1);
-        r[i++]= cont.size() == 1;
+        assertEquals(cont.size(), 1);
         it.add(obj2);
-        r[i++]= cont.size() == 2;
+        assertEquals(cont.size(), 2);
         it.add(obj3);
-        r[i++]= it.previous() == obj3;
-        r[i++]= it.previous() == obj2;
-        r[i++]= it.previous() == obj1;
-
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(it.previous(), obj3);
+        assertEquals(it.previous(), obj2);
+        assertEquals(it.previous(), obj1);
     }
 
-    public boolean disposeAndClear()
+    @Test public void disposeAndClear() throws Exception
     {
         logger.log(Level.INFO, "Testing InterfaceContainer.disposeAndClear");
         InterfaceContainer cont= new InterfaceContainer(10);
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.add(obj1);
         cont.add(obj2);
@@ -842,52 +624,8 @@ public class InterfaceContainer_Test
         cont.add(proxyObj3TypeProv);
         logger.log(Level.FINE, "Two proxies are called. Check the output:");
         cont.disposeAndClear(new com.sun.star.lang.EventObject());
-        r[i++]= obj1.nDisposingCalled == 1;
-        r[i++]= obj2.nDisposingCalled == 1;
-        r[i++]= obj3.nDisposingCalled == 1;
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
-    }
-
-
-    public static void main(String[] args)
-    {
-        InterfaceContainer_Test test= new InterfaceContainer_Test();
-        boolean r[]= new boolean[50];
-        int i= 0;
-        r[i++]= test.listConstructors();
-        r[i++]= test.trimToSize();
-        r[i++]= test.ensureCapacity();
-        r[i++]= test.add();
-        r[i++]= test.indexOf();
-        r[i++]= test.contains();
-        r[i++]= test.containsAll();
-        r[i++]= test.get();
-        r[i++]= test.addAll();
-        r[i++]= test.remove();
-        r[i++]= test.retainAll();
-        r[i++]= test.set();
-        r[i++]= test.toArray();
-        r[i++]= test.Iterator_next();
-        r[i++]= test.Iterator_hasNext();
-        r[i++]= test.Iterator_remove();
-        r[i++]= test.ListIterator_next();
-        r[i++]= test.ListIterator_hasNext();
-        r[i++]= test.ListIterator_remove();
-        r[i++]= test.ListIterator_hasPrevious();
-        r[i++]= test.ListIterator_previous();
-        r[i++]= test.ListIterator_nextIndex();
-        r[i++]= test.ListIterator_previousIndex();
-        r[i++]= test.ListIterator_add();
-        r[i++]= test.disposeAndClear();
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, "Test finished.");
-        logger.log(Level.INFO, bOk ? "No errors." : "Errors occurred!!!");
-        System.exit( bOk ? 0: -1 );
+        assertEquals(obj1.nDisposingCalled, 1);
+        assertEquals(obj2.nDisposingCalled, 1);
+        assertEquals(obj3.nDisposingCalled, 1);
     }
 }
