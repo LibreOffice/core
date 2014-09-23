@@ -30,6 +30,8 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <algorithm>
+
 using namespace com::sun::star;
 
 SwBreakIt* g_pBreakIt = 0;
