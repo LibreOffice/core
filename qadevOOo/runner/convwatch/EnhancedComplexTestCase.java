@@ -29,7 +29,6 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
 {
     private void checkExistance(String _sScriptFile, String _sName)
         {
-            // Process testshl = Runtime.getRuntime().exec(scriptFile);
             ProcessHandler aHandler = new ProcessHandler(_sScriptFile);
             aHandler.executeSynchronously();
             TimeHelper.waitInSeconds(1, "wait after ProcessHandler.executeSynchronously()");
