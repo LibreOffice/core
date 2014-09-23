@@ -25,6 +25,8 @@
 #include "tools/gen.hxx"
 #include <vcl/image.hxx>
 
+namespace vcl { class Font; }
+
 namespace sd { namespace slidesorter { namespace view {
 
 /** In contrast to the Layouter that places page objects in the view, the
@@ -133,7 +135,7 @@ private:
     Rectangle maCustomAnimationEffectBoundingBox;
     const Image maTransitionEffectIcon;
     const Image maCustomAnimationEffectIcon;
-    const ::boost::shared_ptr<::vcl::Font> mpPageNumberFont;
+    const boost::shared_ptr< ::vcl::Font> mpPageNumberFont;
 
     Size GetPageNumberAreaSize (const int nPageCount);
     Rectangle CalculatePreviewBoundingBox (
