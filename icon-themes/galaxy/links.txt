@@ -14,8 +14,8 @@ cmd/lc_previoustrackedchange.png cmd/lc_upsearch.png
 cmd/sc_previoustrackedchange.png cmd/sc_upsearch.png
 cmd/lc_nexttrackedchange.png cmd/lc_downsearch.png
 cmd/sc_nexttrackedchange.png cmd/sc_downsearch.png
-cmd/lc_accepttracedchange.png cmd/lc_zoomplus.png
-cmd/sc_accepttracedchange.png cmd/sc_zoomplus.png
+cmd/lc_accepttracedchange.png cmd/lc_zoomin.png
+cmd/sc_accepttracedchange.png cmd/sc_zoomin.png
 cmd/lc_rejecttracedchange.png cmd/lc_zoomminus.png
 cmd/sc_rejecttracedchange.png cmd/sc_zoomminus.png
 cmd/lc_protecttracechangemode.png cmd/lc_chainframes.png
