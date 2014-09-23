@@ -154,7 +154,7 @@ Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParent
 
 void* CreateNewShell( void** pShellReturn, XLIB_Window aParentWindow )
 {
-    XLIB_String n, c;
+    String n, c;
     XtGetApplicationNameAndClass(pXtAppDisplay, &n, &c);
 
     Widget newShell =

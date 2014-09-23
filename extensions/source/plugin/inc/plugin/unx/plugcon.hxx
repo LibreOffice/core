@@ -39,13 +39,8 @@
 #    define USE_MOTIF
 #endif
 
-#define Window      XLIB_Window
-#define Font        XLIB_Font
-#define Time        XLIB_Time
-#define Region      XLIB_Region
-#define String      XLIB_String
-#define Boolean     XLIB_Boolean
-#define XPointer    XLIB_XPointer
+#include <prex.h>
+
 #include <X11/Xlib.h>
 extern "C" {
 #include <X11/Intrinsic.h>
@@ -100,13 +95,7 @@ extern "C" {
 #define GtkWidget void
 #endif
 
-#undef Window
-#undef Font
-#undef Time
-#undef String
-#undef Region
-#undef Boolean
-#undef XPointer
+#include <postx.h>
 
 class ConnectorInstance
 {
