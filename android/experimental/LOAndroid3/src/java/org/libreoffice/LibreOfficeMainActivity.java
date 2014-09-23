@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import org.libreoffice.kit.LibreOfficeKit;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
 
@@ -84,9 +85,7 @@ public class LibreOfficeMainActivity extends Activity {
         mAppContext = this;
         super.onCreate(savedInstanceState);
 
-        if (mMainHandler == null) {
-            mMainHandler = new Handler();
-        }
+        mMainHandler = new Handler();
 
         String inputFile;
 
@@ -101,12 +100,8 @@ public class LibreOfficeMainActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setHomeButtonEnabled(false);
 
-        if (mGeckoLayout == null) {
-            mGeckoLayout = (RelativeLayout) findViewById(R.id.gecko_layout);
-        }
-        if (mDrawerLayout == null) {
-            mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        }
+        mGeckoLayout = (RelativeLayout) findViewById(R.id.gecko_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if (mDocumentPartViewListAdpater == null) {
             mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -115,6 +110,8 @@ public class LibreOfficeMainActivity extends Activity {
             mDrawerList.setAdapter(mDocumentPartViewListAdpater);
             mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
         }
+
+        LibreOfficeKit.loadStatic();
 
         mLayerController = new LayerController(this);
         mLayerClient = new GeckoLayerClient(this);

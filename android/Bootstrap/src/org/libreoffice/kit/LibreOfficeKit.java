@@ -13,15 +13,16 @@ import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
-import java.io.File;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 // final because subclassing would be meaningless.
 public final class LibreOfficeKit
 {
     private long handle;
+
+    public static void loadStatic() {
+
+    }
 
     // private constructor because instantiating would be meaningless
     private LibreOfficeKit()
