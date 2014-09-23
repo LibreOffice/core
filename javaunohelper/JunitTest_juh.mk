@@ -34,12 +34,14 @@ $(eval $(call gb_JunitTest_add_sourcefiles,juh,\
     javaunohelper/test/com/sun/star/comp/helper/ComponentContext_Test \
     javaunohelper/test/com/sun/star/lib/uno/helper/AWeakBase \
     javaunohelper/test/com/sun/star/lib/uno/helper/ComponentBase_Test \
+    javaunohelper/test/com/sun/star/lib/uno/helper/InterfaceContainer_Test \
     javaunohelper/test/com/sun/star/lib/uno/helper/ProxyProvider \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,juh,\
     com.sun.star.comp.helper.ComponentContext_Test \
     com.sun.star.lib.uno.helper.ComponentBase_Test \
+    com.sun.star.lib.uno.helper.InterfaceContainer_Test \
 ))
 
 # vim:set noet sw=4 ts=4:
