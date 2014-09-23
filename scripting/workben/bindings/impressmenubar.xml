@@ -187,6 +187,7 @@
      <menu:menuseparator/>
      <menu:menuitem menu:id="slot:27364" menu:helpid="27364" menu:label="~Author"/>
      <menu:menuitem menu:id="slot:27361" menu:helpid="27361" menu:label="~Page Number"/>
+     <menu:menuitem menu:id="slot:27465" menu:helpid="27465" menu:label="~Page Title"/>
      <menu:menuitem menu:id="slot:27363" menu:helpid="27363" menu:label="~File Name"/>
     </menu:menupopup>
    </menu:menu>

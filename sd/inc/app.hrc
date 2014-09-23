@@ -368,6 +368,7 @@
 #define SID_TITLE_MASTERPAGE                (SID_SD_START+351)
 #define SID_INSERTPAGE_QUICK                (SID_SD_START+352)
 // free
+#define SID_INSERT_FLD_PAGE_TITLE           (SID_SD_START+356)
 #define SID_INSERT_FLD_DATE_VAR             (SID_SD_START+357)
 #define SID_INSERT_FLD_DATE_FIX             (SID_SD_START+358)
 #define SID_INSERT_FLD_TIME_VAR             (SID_SD_START+359)

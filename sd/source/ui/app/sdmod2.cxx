@@ -246,6 +246,33 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
             pInfo->SetRepresentation( aRepresentation );
         }
+
+        else if( dynamic_cast< const SvxPageTitleField*  >(pField) )
+        {
+            OUString aRepresentation(" ");
+
+            ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+            if(pViewSh == NULL)
+            {
+                ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
+                if(pBase)
+                    pViewSh = pBase->GetMainViewShell().get();
+            }
+            if( !pDoc && pViewSh )
+                pDoc = pViewSh->GetDoc();
+
+            bool bMasterView;
+            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+
+            if( pPage && pDoc && !bMasterView )
+            {
+                aRepresentation = pPage->GetName();
+            }
+
+            pInfo->SetRepresentation( aRepresentation );
+        }
+        else if( dynamic_cast< const SvxPagesField*  >(pField) )
+             OUString aRepresentation;
         else if( dynamic_cast< const SvxPagesField*  >(pField) )
         {
             OUString aRepresentation(" ");
