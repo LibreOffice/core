@@ -135,6 +135,7 @@ File gid_File_Exe_Nsplugin
 End
 #endif
 
+#if !defined ENABLE_MACOSX_SANDBOX
 File gid_File_Bin_UIPreviewer
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -145,6 +146,7 @@ File gid_File_Bin_UIPreviewer
     Name = "ui-previewer.exe";
   #endif
 End
+#endif
 
 #if defined UNX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 
