@@ -20,11 +20,12 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport, \
     cppu \
     cppuhelper \
     sal \
-    test \
-    unotest \
     sw \
+    test \
+    tl \
+    unotest \
     vcl \
-	$(gb_UWINAPI) \
+    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_ooxmlimport,\

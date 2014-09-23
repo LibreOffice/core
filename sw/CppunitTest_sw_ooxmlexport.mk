@@ -18,15 +18,15 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlexport, \
 $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlexport, \
     comphelper \
     cppu \
-	cppuhelper \
+    cppuhelper \
     sal \
     sw \
     test \
-	tl \
+    tl \
     unotest \
     utl \
     vcl \
-	$(gb_UWINAPI) \
+    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_ooxmlexport,\
