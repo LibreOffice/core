@@ -18,6 +18,8 @@
 package com.sun.star.comp.helper;
 
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -30,7 +32,10 @@ import org.junit.Test;
 
 public class ComponentContext_Test {
 
+    private static final Logger logger = Logger.getLogger(ComponentContext_Test.class.getName());
+
     @Test public void test() throws Exception {
+        logger.log(Level.INFO, "Testing ComponentContext");
         HashMap<String, Object> table = new HashMap<String, Object>();
         table.put("bla1", new ComponentContextEntry(null, Integer.valueOf(1)));
         XComponentContext xInitialContext = Bootstrap.createInitialComponentContext(table);
