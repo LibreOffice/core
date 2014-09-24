@@ -123,6 +123,6 @@ INTERACTIVE VARIABLES:
        gb_FULLDEPS     Generate and use dependencies (on by default, handle with care).
        gb_COLOR        Use ASCII color output.
        gb_TITLES       Show progress in terminal title.
-       gb_Side         Either "host" of "build" (default to "host").
+       gb_Side         Either "host" or "build" (default to "host").
                        determine if config_host.mk or config_build.mk is used to
                        set the build environment.

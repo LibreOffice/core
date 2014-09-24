@@ -9681,7 +9681,7 @@ dnl Checking for patch
 dnl ***************************************
 AC_PATH_PROG(PATCH, patch)
 if test -z "$PATCH"; then
-    AC_MSG_ERROR([\"patch\" not found in \$PATH, install it])
+    AC_MSG_ERROR(["patch" not found in \$PATH, install it])
 fi
 
 dnl On Solaris, FreeBSD or MacOS X, check if --with-gnu-patch was used
