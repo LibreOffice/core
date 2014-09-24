@@ -1122,8 +1122,8 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
                                     .WriteUInt16( aDateTime.Minutes )
                                     .WriteUInt16( aDateTime.Seconds )
                                     .WriteInt16( nMilliSeconds )
-                                    .WriteInt32( static_cast< sal_Int32 >( aPoint.X() ) )
-                                    .WriteInt32( static_cast< sal_Int32 >( aPoint.Y() ) );
+                                    .WriteInt32( aPoint.X() )
+                                    .WriteInt32( aPoint.Y() );
             }
         }
     }

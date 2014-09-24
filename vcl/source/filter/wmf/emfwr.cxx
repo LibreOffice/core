@@ -657,10 +657,10 @@ void EMFWriter::ImplWriteRect( const Rectangle& rRect )
 {
     const Rectangle aRect( OutputDevice::LogicToLogic ( rRect, maVDev.GetMapMode(), maDestMapMode ));
     m_rStm
-       .WriteInt32( static_cast<sal_Int32>(aRect.Left()) )
-       .WriteInt32( static_cast<sal_Int32>(aRect.Top()) )
-       .WriteInt32( static_cast<sal_Int32>(aRect.Right()) )
-       .WriteInt32( static_cast<sal_Int32>(aRect.Bottom()) );
+       .WriteInt32( aRect.Left() )
+       .WriteInt32( aRect.Top() )
+       .WriteInt32( aRect.Right() )
+       .WriteInt32( aRect.Bottom() );
 }
 
 void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, bool bClose )

@@ -3865,15 +3865,15 @@ void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
                 sal_Int32 nPortionSize = rPortion.mnTextSize >= nCharactersLeft ? nCharactersLeft : rPortion.mnTextSize;
                 sal_Int32 nFlags = 7;
                 nCharactersLeft -= nPortionSize;
-                pStrm ->WriteUInt32( static_cast< sal_uInt32 >( nPortionSize ) )
+                pStrm ->WriteUInt32( nPortionSize )
                        .WriteInt32( nFlags )
-                       .WriteInt16( static_cast< sal_Int16 >( 1 ) )    // spellinfo -> needs rechecking
-                       .WriteInt16( static_cast< sal_Int16 >( LanguageTag( rPortion.meCharLocale ).makeFallback().getLanguageType() ) )
-                       .WriteInt16( static_cast< sal_Int16 >( 0 ) );   // alt language
+                       .WriteInt16( 1 )    // spellinfo -> needs rechecking
+                       .WriteInt16( LanguageTag( rPortion.meCharLocale ).makeFallback().getLanguageType() )
+                       .WriteInt16( 0 );   // alt language
             }
         }
         if ( nCharactersLeft )
-            pStrm->WriteUInt32( nCharactersLeft ).WriteInt32( static_cast< sal_Int32 >( 1 ) ).WriteInt16( static_cast< sal_Int16 >( 1 ) );
+            pStrm->WriteUInt32( nCharactersLeft ).WriteInt32( 1 ).WriteInt16( 1 );
 
     }
 }

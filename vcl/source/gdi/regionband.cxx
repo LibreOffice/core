@@ -264,8 +264,8 @@ void RegionBand::save(SvStream& rOStrm) const
     {
         // put boundaries
         rOStrm.WriteUInt16( (sal_uInt16)STREAMENTRY_BANDHEADER );
-        rOStrm.WriteInt32( static_cast<sal_Int32>(pBand->mnYTop) );
-        rOStrm.WriteInt32( static_cast<sal_Int32>(pBand->mnYBottom) );
+        rOStrm.WriteInt32( pBand->mnYTop );
+        rOStrm.WriteInt32( pBand->mnYBottom );
 
         // put separations of current band
         ImplRegionBandSep* pSep = pBand->mpFirstSep;
@@ -274,8 +274,8 @@ void RegionBand::save(SvStream& rOStrm) const
         {
             // put separation
             rOStrm.WriteUInt16( (sal_uInt16)STREAMENTRY_SEPARATION );
-            rOStrm.WriteInt32( static_cast<sal_Int32>(pSep->mnXLeft) );
-            rOStrm.WriteInt32( static_cast<sal_Int32>(pSep->mnXRight) );
+            rOStrm.WriteInt32( pSep->mnXLeft );
+            rOStrm.WriteInt32( pSep->mnXRight );
 
             // next separation from current band
             pSep = pSep->mpNextSep;

@@ -109,7 +109,7 @@ namespace
               .WriteUInt16( l.GetDistance() );
 
         if (version >= BORDER_LINE_WITH_STYLE_VERSION)
-               stream.WriteUInt16( static_cast<sal_uInt16>(l.GetBorderLineStyle()) );
+               stream.WriteUInt16( l.GetBorderLineStyle() );
 
         return stream;
     }
@@ -709,8 +709,8 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
 
         if( 0x80 & nAutoFirst )
         {
-            rStrm.WriteInt32( static_cast<sal_Int32>(nLeftMargin) );
-            rStrm.WriteInt32( static_cast<sal_Int32>(nRightMargin) );
+            rStrm.WriteInt32( nLeftMargin );
+            rStrm.WriteInt32( nRightMargin );
         }
     }
 
@@ -2180,7 +2180,7 @@ SvStream& SvxBoxItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
         const SvxBorderLine* l = pLine[ i ];
         if( l )
         {
-            rStrm.WriteSChar( static_cast<sal_Int8>(i) );
+            rStrm.WriteSChar(i);
             StoreBorderLine(rStrm, *l, BorderLineVersionFromBoxVersion(nItemVersion));
         }
     }

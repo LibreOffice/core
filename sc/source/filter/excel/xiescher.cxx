@@ -3629,7 +3629,7 @@ OUString XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
     {
         // create a faked BIFF record that can be read by XclImpStream class
         SvMemoryStream aMemStream;
-        aMemStream.WriteUInt16( sal_uInt16( 0 ) ).WriteUInt16( static_cast< sal_uInt16 >( nBufferSize ) );
+        aMemStream.WriteUInt16( sal_uInt16( 0 ) ).WriteUInt16( nBufferSize );
 
         // copy from DFF stream to memory stream
         ::std::vector< sal_uInt8 > aBuffer( nBufferSize );

@@ -370,7 +370,7 @@ void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const OUString& rVal
     rStrm.WriteInt32( nSize );
     // write character array with trailing NUL character
     for( sal_Int32 nIdx = 0; nIdx < rValue.getLength(); ++nIdx )
-        rStrm.WriteUInt16( static_cast< sal_uInt16 >( rValue[ nIdx ] ) );
+        rStrm.WriteUInt16( rValue[ nIdx ] );
     rStrm.WriteUInt16( sal_uInt16( 0 ) );
     // stream is always padded to 32-bit boundary, add 2 bytes on odd character count
     if( (nSize & 1) == 1 )
@@ -483,7 +483,7 @@ void SfxOleBoolProperty::ImplLoad( SvStream& rStrm )
 
 void SfxOleBoolProperty::ImplSave( SvStream& rStrm )
 {
-    rStrm.WriteInt16( static_cast< sal_Int16 >( mbValue ? -1 : 0 ) );
+    rStrm.WriteInt16( mbValue ? -1 : 0 );
 }
 
 

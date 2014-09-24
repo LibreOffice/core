@@ -2385,7 +2385,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 // write data
                 WritePair( rOStm, rStartPt );
-                rOStm.WriteInt32( nWidth ).WriteUInt32( static_cast<sal_uInt32>(eStrikeout) ).WriteUInt32( static_cast<sal_uInt32>(eUnderline) );
+                rOStm.WriteInt32( nWidth ).WriteUInt32( eStrikeout ).WriteUInt32( eUnderline );
                 rOStm.WriteInt32( (sal_Int32) 0 ); // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment
@@ -2437,7 +2437,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             default:
             {
                 OStringBuffer aStr("Missing implementation for Action#: ");
-                aStr.append(static_cast<sal_Int32>(pAction->GetType()));
+                aStr.append(pAction->GetType());
                 aStr.append('!');
                 OSL_FAIL(aStr.getStr());
             }

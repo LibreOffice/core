@@ -1548,10 +1548,10 @@ void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     //#fdo39428 SvStream no longer supports operator<<(long)
     WritePair( rOStm, maPos );
     rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(mnWidth) );
-    rOStm.WriteUInt32( static_cast<sal_uInt32>(meStrikeout) );
-    rOStm.WriteUInt32( static_cast<sal_uInt32>(meUnderline) );
+    rOStm.WriteUInt32( meStrikeout );
+    rOStm.WriteUInt32( meUnderline );
     // new in version 2
-    rOStm.WriteUInt32( static_cast<sal_uInt32>(meOverline) );
+    rOStm.WriteUInt32( meOverline );
 }
 
 void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )

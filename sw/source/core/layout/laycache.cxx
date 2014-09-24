@@ -193,9 +193,9 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             aIo.OpenFlagRec( bFollow ? 0x01 : 0x00,
                                             bFollow ? 8 : 4 );
                             nNdIdx -= nStartOfContent;
-                            aIo.GetStream().WriteUInt32( static_cast<sal_uInt32>(nNdIdx) );
+                            aIo.GetStream().WriteUInt32( nNdIdx );
                             if( bFollow )
-                                aIo.GetStream().WriteUInt32( static_cast<sal_uInt32>(((SwTxtFrm*)pTmp)->GetOfst()) );
+                                aIo.GetStream().WriteUInt32( ((SwTxtFrm*)pTmp)->GetOfst() );
                             aIo.CloseFlagRec();
                             /*  Close Paragraph Record */
                             aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
@@ -234,8 +234,8 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 aIo.OpenRec( SW_LAYCACHE_IO_REC_TABLE );
                                 aIo.OpenFlagRec( 0, 8 );
                                 nNdIdx -= nStartOfContent;
-                                aIo.GetStream().WriteUInt32( static_cast<sal_uInt32>(nNdIdx) )
-                                               .WriteUInt32( static_cast<sal_uInt32>(nOfst) );
+                                aIo.GetStream().WriteUInt32( nNdIdx )
+                                               .WriteUInt32( nOfst );
                                 aIo.CloseFlagRec();
                                 /* Close Table Record  */
                                 aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
@@ -300,8 +300,8 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 sal_Int32 nY = rRct.Top() - pPage->Frm().Top();
                                 aIo.GetStream().WriteUInt16( nPageNum ).WriteUInt32( nOrdNum )
                                                .WriteInt32( nX ).WriteInt32( nY )
-                                               .WriteInt32( static_cast<sal_Int32>(rRct.Width()) )
-                                               .WriteInt32( static_cast<sal_Int32>(rRct.Height()) );
+                                               .WriteInt32( rRct.Width() )
+                                               .WriteInt32( rRct.Height() );
                                 /* Close Fly Record  */
                                 aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
                             }

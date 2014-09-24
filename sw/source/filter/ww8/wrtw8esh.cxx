@@ -2340,7 +2340,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             aPropOpt.Commit( *pStrm );
 
             AddAtom( 4, ESCHER_ClientData );
-            GetStream().WriteInt32( static_cast<sal_Int32>(1) );
+            GetStream().WriteInt32( 1 );
 
             CloseContainer();   // ESCHER_SpContainer
         }
@@ -2809,10 +2809,10 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
     aWinwordAnchoring.WriteData(*this);
 
     AddAtom(4, ESCHER_ClientAnchor);
-    GetStream().WriteInt32( static_cast<sal_Int32>(0) );
+    GetStream().WriteInt32( 0 );
 
     AddAtom(4, ESCHER_ClientData);
-    GetStream().WriteInt32( static_cast<sal_Int32>(1) );
+    GetStream().WriteInt32( 1 );
 }
 
 sal_Int32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,

@@ -393,7 +393,7 @@ SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, sal_uInt16) const
 // virtual
 SvStream & CntUInt32Item::Store(SvStream &rStream, sal_uInt16) const
 {
-    rStream.WriteUInt32( static_cast<sal_uInt32>(m_nValue) );
+    rStream.WriteUInt32( m_nValue );
     return rStream;
 }
 

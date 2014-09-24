@@ -1181,14 +1181,14 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
         // StyleName and Family...
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rC.GetStyle(), eEncoding);
-        rOStream.WriteUInt16( static_cast<sal_uInt16>(rC.GetFamily()) );
+        rOStream.WriteUInt16( rC.GetFamily() );
 
         // Paragraph attributes ...
         rC.GetParaAttribs().Store( rOStream );
 
         // The number of attributes ...
         size_t nAttribs = rC.aAttribs.size();
-        rOStream.WriteUInt16( static_cast<sal_uInt16>(nAttribs) );
+        rOStream.WriteUInt16( nAttribs );
 
         // And the individual attributes
         // Items as Surregate => always 8 bytes per Attribute

@@ -102,11 +102,11 @@ sal_uIntPtr INetMessage::SetHeaderField (
 
 SvStream& INetMessage::operator<< (SvStream& rStrm) const
 {
-    rStrm.WriteUInt32( static_cast<sal_uInt32>(m_nDocSize) );
+    rStrm.WriteUInt32( m_nDocSize );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, m_aDocName, RTL_TEXTENCODING_UTF8);
 
     sal_uIntPtr i, n = m_aHeaderList.size();
-    rStrm.WriteUInt32( static_cast<sal_uInt32>(n) );
+    rStrm.WriteUInt32( n );
 
     for (i = 0; i < n; i++)
         WriteINetMessageHeader( rStrm, *( m_aHeaderList[ i ] ) );
@@ -611,7 +611,7 @@ SvStream& INetRFC822Message::operator<< (SvStream& rStrm) const
     INetMessage::operator<< (rStrm);
 
     for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-        rStrm.WriteUInt32( static_cast<sal_uInt32>(m_nIndex[i]) );
+        rStrm.WriteUInt32( m_nIndex[i] );
 
     return rStrm;
 }
@@ -1017,10 +1017,10 @@ SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
     INetRFC822Message::operator<< (rStrm);
 
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
-        rStrm.WriteUInt32( static_cast<sal_uInt32>(m_nIndex[i]) );
+        rStrm.WriteUInt32( m_nIndex[i] );
 
     write_uInt16_lenPrefixed_uInt8s_FromOString(rStrm, m_aBoundary);
-    rStrm.WriteUInt32( static_cast<sal_uInt32>(aChildren.size()) );
+    rStrm.WriteUInt32( aChildren.size() );
 
     return rStrm;
 }

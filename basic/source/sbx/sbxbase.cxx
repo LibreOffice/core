@@ -376,7 +376,7 @@ bool SbxInfo::StoreData( SvStream& rStrm ) const
         RTL_TEXTENCODING_ASCII_US );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aHelpFile,
         RTL_TEXTENCODING_ASCII_US);
-    rStrm.WriteUInt32( nHelpId ).WriteUInt16( static_cast<sal_uInt16>(aParams.size()) );
+    rStrm.WriteUInt32( nHelpId ).WriteUInt16( aParams.size() );
     for(SbxParams::const_iterator i = aParams.begin(); i != aParams.end(); ++i)
     {
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, i->aName,

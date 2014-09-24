@@ -129,7 +129,7 @@ SvStream& WriteSvtGraphicStroke( SvStream& rOStm, const SvtGraphicStroke& rClass
     rOStm.WriteUInt16( nTmp );
     rOStm.WriteDouble( rClass.mfMiterLimit );
 
-    rOStm.WriteUInt32( static_cast<sal_uInt32>(rClass.maDashArray.size()) );
+    rOStm.WriteUInt32( rClass.maDashArray.size() );
     size_t i;
     for(i=0; i<rClass.maDashArray.size(); ++i)
         rOStm.WriteDouble( rClass.maDashArray[i] );

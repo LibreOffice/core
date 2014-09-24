@@ -508,8 +508,8 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
 
                     SvMemoryStream aMemoryStream( nStrmLen );
                     Point aPt( OutputDevice::LogicToLogic( rPoint, aSrcMapMode, aTargetMapMode ) );
-                    aMemoryStream.WriteInt32( static_cast<sal_Int32>(aPt.X()) )
-                                 .WriteInt32( static_cast<sal_Int32>(aPt.Y()) )
+                    aMemoryStream.WriteInt32( aPt.X() )
+                                 .WriteInt32( aPt.Y() )
                                  .WriteUInt32( nStringLen );
                     for ( i = 0; i < nStringLen; i++ )
                         aMemoryStream.WriteUInt16( rUniStr[ i ] );

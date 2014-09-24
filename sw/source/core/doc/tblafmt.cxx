@@ -1212,7 +1212,7 @@ bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         m_pImpl->m_AutoFormats[0].GetBoxFmt(0).SaveVersionNo(
                 rStream, AUTOFORMAT_FILE_VERSION);
 
-        rStream.WriteUInt16( static_cast<sal_uInt16>(m_pImpl->m_AutoFormats.size() - 1) );
+        rStream.WriteUInt16( m_pImpl->m_AutoFormats.size() - 1 );
         bRet = 0 == rStream.GetError();
 
         for (sal_uInt16 i = 1; bRet && i < m_pImpl->m_AutoFormats.size(); ++i)

@@ -351,7 +351,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
         if ( (nEnd-_nStart) > 0xFF00 )
             rStrm.Seek( _nStart );
     }
-    rStrm.WriteInt32( static_cast<sal_Int32>(nWidth) );
+    rStrm.WriteInt32( nWidth );
     rStrm.WriteUInt16( nStart );
     rStrm.WriteUChar( nJustify );
     rStrm.WriteChar( OUStringToOString(OUString(cSymbol), aFont.GetCharSet()).toChar() );

@@ -483,7 +483,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
     }
     rStream.WriteUInt16( nCharPoolId );
     rStream.WriteUniOrByteString( sCharFmtName, eEncoding );
-    rStream.WriteUInt16( static_cast<sal_uInt16>(aItems.size()) );
+    rStream.WriteUInt16( aItems.size() );
 
     for( sal_uInt16 n = aItems.size(); n; )
     {

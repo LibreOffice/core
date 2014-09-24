@@ -4123,12 +4123,12 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
                                     || pGraphicAttr->IsAdjusted() )
             {
                 SvMemoryStream aSt( sizeof( GraphicAttr ) );
-                aSt.WriteUInt16( static_cast<sal_uInt16>(pGraphicAttr->GetDrawMode()) )
-                   .WriteUInt32( static_cast<sal_uInt32>(pGraphicAttr->GetMirrorFlags()) )
-                   .WriteInt32( static_cast<sal_Int32>(pGraphicAttr->GetLeftCrop()) )
-                   .WriteInt32( static_cast<sal_Int32>(pGraphicAttr->GetTopCrop()) )
-                   .WriteInt32( static_cast<sal_Int32>(pGraphicAttr->GetRightCrop()) )
-                   .WriteInt32( static_cast<sal_Int32>(pGraphicAttr->GetBottomCrop()) )
+                aSt.WriteUInt16( pGraphicAttr->GetDrawMode() )
+                   .WriteUInt32( pGraphicAttr->GetMirrorFlags() )
+                   .WriteInt32( pGraphicAttr->GetLeftCrop() )
+                   .WriteInt32( pGraphicAttr->GetTopCrop() )
+                   .WriteInt32( pGraphicAttr->GetRightCrop() )
+                   .WriteInt32( pGraphicAttr->GetBottomCrop() )
                    .WriteUInt16( pGraphicAttr->GetRotation() )
                    .WriteInt16( pGraphicAttr->GetLuminance() )
                    .WriteInt16( pGraphicAttr->GetContrast() )
@@ -5019,7 +5019,7 @@ void EscherExGlobal::WriteDggAtom( SvStream& rStrm ) const
     sal_uInt32 nDggSize = GetDggAtomSize();
 
     // write the DGG record header (do not include the 8 bytes of the header in the data size)
-    rStrm.WriteUInt32( static_cast< sal_uInt32 >( ESCHER_Dgg << 16 ) ).WriteUInt32( static_cast< sal_uInt32 >( nDggSize - 8 ) );
+    rStrm.WriteUInt32( ESCHER_Dgg << 16 ).WriteUInt32( nDggSize - 8 );
 
     // claculate and write the fixed DGG data
     sal_uInt32 nShapeCount = 0;

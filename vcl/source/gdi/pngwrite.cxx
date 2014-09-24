@@ -243,8 +243,8 @@ bool PNGWriterImpl::Write( SvStream& rOStm )
    /* png signature is always an array of 8 bytes */
     sal_uInt16 nOldMode = rOStm.GetNumberFormatInt();
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    rOStm.WriteUInt32( static_cast<sal_uInt32>(0x89504e47) );
-    rOStm.WriteUInt32( static_cast<sal_uInt32>(0x0d0a1a0a) );
+    rOStm.WriteUInt32( 0x89504e47 );
+    rOStm.WriteUInt32( 0x0d0a1a0a );
 
     std::vector< vcl::PNGWriter::ChunkData >::iterator aBeg( maChunkSeq.begin() );
     std::vector< vcl::PNGWriter::ChunkData >::iterator aEnd( maChunkSeq.end() );

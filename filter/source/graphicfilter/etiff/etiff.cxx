@@ -344,7 +344,7 @@ void TIFFWriter::ImplWritePalette()
     sal_uInt16 i;
     sal_uLong nCurrentPos = m_rOStm.Tell();
     m_rOStm.Seek( mnPalPos + 8 );           // the palette tag entry needs the offset
-    m_rOStm.WriteUInt32( static_cast<sal_uInt32>(nCurrentPos - mnStreamOfs) );  // to the palette colors
+    m_rOStm.WriteUInt32( nCurrentPos - mnStreamOfs );  // to the palette colors
     m_rOStm.Seek( nCurrentPos );
 
     for ( i = 0; i < mnColors; i++ )
@@ -374,7 +374,7 @@ bool TIFFWriter::ImplWriteBody()
 
     sal_uLong nGfxBegin = m_rOStm.Tell();
     m_rOStm.Seek( mnBitmapPos + 8 );        // the strip offset tag entry needs the offset
-    m_rOStm.WriteUInt32( static_cast<sal_uInt32>(nGfxBegin - mnStreamOfs) );        // to the bitmap data
+    m_rOStm.WriteUInt32( nGfxBegin - mnStreamOfs );        // to the bitmap data
     m_rOStm.Seek( nGfxBegin );
 
     StartCompression();
@@ -466,7 +466,7 @@ bool TIFFWriter::ImplWriteBody()
     {
         sal_uLong nGfxEnd = m_rOStm.Tell();
         m_rOStm.Seek( mnStripByteCountPos + 8 );
-        m_rOStm.WriteUInt32( static_cast<sal_uInt32>( nGfxEnd - nGfxBegin ) );      // mnStripByteCountPos needs the size of the compression data
+        m_rOStm.WriteUInt32( nGfxEnd - nGfxBegin );      // mnStripByteCountPos needs the size of the compression data
         m_rOStm.Seek( nGfxEnd );
     }
     return mbStatus;
