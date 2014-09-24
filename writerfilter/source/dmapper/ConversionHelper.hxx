@@ -36,7 +36,6 @@ namespace dmapper{
 namespace ConversionHelper{
 
     // create a border line and return the distance value
-    sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, ::com::sun::star::table::BorderLine2& rToFill );
     void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
                               sal_Int32 nLineColor,
                               ::com::sun::star::table::BorderLine2& rToFill, bool bIsOOXML );

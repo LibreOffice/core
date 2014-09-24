@@ -36,28 +36,6 @@ namespace writerfilter {
 namespace dmapper{
 namespace ConversionHelper{
 
-sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine2& rToFill )
-{
-    //TODO: Lines are always solid
-    //Border
-    //borders are defined as:
-    // 0x XX XX XX XX
-    //    || || || ||
-    //    || || ||  ---- Line width in 1/8 pt
-    //    || || ||
-    //    || ||  ------- Line type: 0 - none 1 - single ... 25 - engrave 3D and 64 - 230 page borders
-    //    || ||
-    //    ||  ---------- Line color
-    //    ||
-    //     ------------- seven bits line space
-    //    -------------- first bit: with shading
-    sal_Int16 nLineThicknessTwip = (sal_Int16)((nSprmValue & 0xff) * 20)/8L ;
-    sal_Int32 nLineType       = ((nSprmValue & 0xff00) >> 8);
-    sal_Int32 nLineColor    = (nSprmValue & 0xff0000)>>16;
-    sal_Int32 nLineDistance = (((nSprmValue & 0x3f000000)>>24) * 2540 + 36)/72L;
-    MakeBorderLine( nLineThicknessTwip, nLineType, nLineColor, rToFill, false);
-    return nLineDistance;
-}
 void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
                                             sal_Int32 nLineColor,
                                             table::BorderLine2& rToFill, bool bIsOOXML )

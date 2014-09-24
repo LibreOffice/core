@@ -1219,83 +1219,48 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_PBdr_bottom:
     case NS_ooxml::LN_CT_PBdr_right:
     case NS_ooxml::LN_CT_PBdr_between:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties.get())
         {
-            //in binary format the borders are directly provided in OOXML they are inside of properties
-            if( IsOOXMLImport() || IsRTFImport() )
+            BorderHandlerPtr pBorderHandler( new BorderHandler( true ) );
+            pProperties->resolve(*pBorderHandler);
+            PropertyIds eBorderId = PropertyIds( 0 );
+            PropertyIds eBorderDistId = PropertyIds( 0 );
+            switch( nSprmId )
             {
-                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                if( pProperties.get())
-                {
-                    BorderHandlerPtr pBorderHandler( new BorderHandler( true ) );
-                    pProperties->resolve(*pBorderHandler);
-                    PropertyIds eBorderId = PropertyIds( 0 );
-                    PropertyIds eBorderDistId = PropertyIds( 0 );
-                    switch( nSprmId )
-                    {
-                        case NS_ooxml::LN_CT_PBdr_top:
-                            eBorderId = PROP_TOP_BORDER;
-                            eBorderDistId = PROP_TOP_BORDER_DISTANCE;
-                        break;
-                        case NS_ooxml::LN_CT_PBdr_left:
-                            eBorderId = PROP_LEFT_BORDER;
-                            eBorderDistId = PROP_LEFT_BORDER_DISTANCE;
-                        break;
-                        case NS_ooxml::LN_CT_PBdr_bottom:
-                            eBorderId = PROP_BOTTOM_BORDER         ;
-                            eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;
-                        break;
-                        case NS_ooxml::LN_CT_PBdr_right:
-                            eBorderId = PROP_RIGHT_BORDER;
-                            eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
-                        break;
-                        case NS_ooxml::LN_CT_PBdr_between:
-                            //not supported
-                        break;
-                        default:;
-                    }
-                    if( eBorderId )
-                        rContext->Insert( eBorderId, uno::makeAny( pBorderHandler->getBorderLine()) , true);
-                    if(eBorderDistId)
-                        rContext->Insert(eBorderDistId, uno::makeAny( pBorderHandler->getLineDistance()), true);
-                    if (nSprmId == NS_ooxml::LN_CT_PBdr_right && pBorderHandler->getShadow())
-                    {
-                        table::ShadowFormat aFormat = writerfilter::dmapper::PropertyMap::getShadowFromBorder(pBorderHandler->getBorderLine());
-                        rContext->Insert(PROP_PARA_SHADOW_FORMAT, uno::makeAny(aFormat));
-                    }
-                }
+            case NS_ooxml::LN_CT_PBdr_top:
+                eBorderId = PROP_TOP_BORDER;
+                eBorderDistId = PROP_TOP_BORDER_DISTANCE;
+                break;
+            case NS_ooxml::LN_CT_PBdr_left:
+                eBorderId = PROP_LEFT_BORDER;
+                eBorderDistId = PROP_LEFT_BORDER_DISTANCE;
+                break;
+            case NS_ooxml::LN_CT_PBdr_bottom:
+                eBorderId = PROP_BOTTOM_BORDER         ;
+                eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;
+                break;
+            case NS_ooxml::LN_CT_PBdr_right:
+                eBorderId = PROP_RIGHT_BORDER;
+                eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
+                break;
+            case NS_ooxml::LN_CT_PBdr_between:
+                //not supported
+                break;
+            default:;
             }
-            else
+            if( eBorderId )
+                rContext->Insert( eBorderId, uno::makeAny( pBorderHandler->getBorderLine()) , true);
+            if(eBorderDistId)
+                rContext->Insert(eBorderDistId, uno::makeAny( pBorderHandler->getLineDistance()), true);
+            if (nSprmId == NS_ooxml::LN_CT_PBdr_right && pBorderHandler->getShadow())
             {
-                table::BorderLine2 aBorderLine;
-                sal_Int32 nLineDistance = ConversionHelper::MakeBorderLine( nIntValue, aBorderLine );
-                PropertyIds eBorderId = PROP_LEFT_BORDER;
-                PropertyIds eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
-                switch( nSprmId )
-                {
-                case NS_ooxml::LN_CT_PBdr_between:
-                    OSL_FAIL( "TODO: inner border is not handled");
-                    break;
-                case NS_ooxml::LN_CT_PBdr_left:
-                    eBorderId = PROP_LEFT_BORDER;
-                    eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
-                    break;
-                case NS_ooxml::LN_CT_PBdr_right:
-                    eBorderId = PROP_RIGHT_BORDER          ;
-                    eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
-                    break;
-                case NS_ooxml::LN_CT_PBdr_top:
-                    eBorderId = PROP_TOP_BORDER            ;
-                    eBorderDistId = PROP_TOP_BORDER_DISTANCE;
-                    break;
-                case NS_ooxml::LN_CT_PBdr_bottom:
-                default:
-                    eBorderId = PROP_BOTTOM_BORDER         ;
-                    eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;
-                }
-                rContext->Insert(eBorderId, uno::makeAny( aBorderLine ));
-                rContext->Insert(eBorderDistId, uno::makeAny( nLineDistance ));
+                table::ShadowFormat aFormat = writerfilter::dmapper::PropertyMap::getShadowFromBorder(pBorderHandler->getBorderLine());
+                rContext->Insert(PROP_PARA_SHADOW_FORMAT, uno::makeAny(aFormat));
             }
         }
+    }
     break;
     case NS_ooxml::LN_CT_PBdr_bar:
         break;
