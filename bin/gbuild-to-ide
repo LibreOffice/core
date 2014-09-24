@@ -872,27 +872,26 @@ if __name__ == '__main__':
                         help='the input file, not normally used, for debugging this script')
     args = parser.parse_args()
     paths = {}
+    generators = {
+        'kdevelop': KdevelopIntegrationGenerator,
+        'xcode': XcodeIntegrationGenerator,
+        'vs2012': VisualStudioIntegrationGenerator,
+        'vim': VimIntegrationGenerator,
+        'debug': DebugIntegrationGenerator}
+
+    if args.ide not in generators.keys():
+        parser.print_help()
+        sys.exit(1)
+
     if args.input:
         gbuildparser = GbuildParser().parse(open(args.input, 'r'))
     else:
         gbuildparser = GbuildParser().parse(sys.stdin)
 
-    if args.ide == 'kdevelop':
-        KdevelopIntegrationGenerator(gbuildparser).emit()
-    elif args.ide == 'xcode':
-        XcodeIntegrationGenerator(gbuildparser).emit()
-    elif args.ide == 'vs2012':
-        VisualStudioIntegrationGenerator(gbuildparser).emit()
-    elif args.ide == 'vim':
-        VimIntegrationGenerator(gbuildparser).emit()
-    elif args.ide == 'debug':
-        DebugIntegrationGenerator(gbuildparser).emit()
-    else:
-        parser.print_help()
-        sys.exit(1)
+    generators[args.ide](gbuildparser).emit()
 
 # Local Variables:
 # indent-tabs-mode: nil
 # End:
 #
-# vim: set noet sw=4 ts=4:
+# vim: set et sw=4 ts=4:
