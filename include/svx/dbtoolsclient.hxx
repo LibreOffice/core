@@ -158,7 +158,7 @@ namespace svxform
         DBToolsObjectFactory();
         virtual ~DBToolsObjectFactory();
 
-        ::std::auto_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
+        ::std::unique_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
             const css::uno::Reference<css::uno::XComponentContext>& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn

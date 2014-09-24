@@ -544,10 +544,8 @@ private:
     OUString  impl_formatText(const OUString& _rText);
 
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ::dbtools::FormattedColumnValue >  m_pValueFormatter;
-    ::std::auto_ptr< ::dbtools::FormattedColumnValue >  m_pPaintFormatter;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pValueFormatter;
+    ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pPaintFormatter;
     css::uno::Reference<css::uno::XComponentContext>    m_xContext;
 };
 

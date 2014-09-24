@@ -58,7 +58,7 @@ namespace connectivity { namespace mozab {
         virtual ~MLdapAttributeMap();
 
     private:
-        ::std::auto_ptr< AttributeMap_Data >    m_pData;
+        ::std::unique_ptr< AttributeMap_Data >    m_pData;
     };
 
 

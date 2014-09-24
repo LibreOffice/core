@@ -72,7 +72,7 @@ namespace param
         /// the component taking the value
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters >         m_xValueDestination;
         /// helper for implementing XPropertySetInfo
-        ::std::auto_ptr< ::cppu::OPropertyArrayHelper >                                 m_pInfoHelper;
+        ::std::unique_ptr< ::cppu::OPropertyArrayHelper >                               m_pInfoHelper;
 
 
     public:

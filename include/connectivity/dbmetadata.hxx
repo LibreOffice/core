@@ -49,7 +49,7 @@ namespace dbtools
     class OOO_DLLPUBLIC_DBTOOLS DatabaseMetaData
     {
     private:
-        ::std::auto_ptr< DatabaseMetaData_Impl >    m_pImpl;
+        ::std::unique_ptr< DatabaseMetaData_Impl >    m_pImpl;
 
     public:
         DatabaseMetaData();

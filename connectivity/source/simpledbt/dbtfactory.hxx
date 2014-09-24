@@ -52,7 +52,7 @@ namespace connectivity
 
         virtual ::rtl::Reference< simple::IDataAccessTools > getDataAccessTools() SAL_OVERRIDE;
 
-        virtual ::std::auto_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
+        virtual ::std::unique_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn

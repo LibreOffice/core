@@ -41,7 +41,7 @@ namespace dbtools
     */
     class OOO_DLLPUBLIC_DBTOOLS StatementComposer : public ::boost::noncopyable
     {
-        ::std::auto_ptr< StatementComposer_Data >   m_pData;
+        ::std::unique_ptr< StatementComposer_Data >   m_pData;
 
     public:
         /** constructs an instance

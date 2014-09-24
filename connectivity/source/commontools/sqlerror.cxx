@@ -90,7 +90,7 @@ namespace connectivity
     private:
         ::osl::Mutex                                            m_aMutex;
         Reference<XComponentContext>                            m_aContext;
-        ::std::auto_ptr< ::comphelper::OfficeResourceBundle >   m_pResources;
+        ::std::unique_ptr< ::comphelper::OfficeResourceBundle > m_pResources;
         bool                                                    m_bAttemptedInit;
     };
 

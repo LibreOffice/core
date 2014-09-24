@@ -103,7 +103,7 @@ namespace connectivity
                                                         //  an operation
             MozabDriver*                            m_pDriver;      //  Pointer to the owning
                                                                     //  driver object
-            ::std::auto_ptr< ConnectionImplData >   m_pImplData;
+            ::std::unique_ptr< ConnectionImplData > m_pImplData;
                 // This is to be able to hold a boost::shared_ptr. If we would hold it as member, it would
                 // not compile the mozillasrc directory, since this directory is compiled without RTTI support
                 // and boost seems to require RTTI on some platforms.

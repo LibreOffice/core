@@ -317,16 +317,14 @@ namespace svxform
     }
 
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ::dbtools::FormattedColumnValue > DBToolsObjectFactory::createFormattedColumnValue(
+    ::std::unique_ptr< ::dbtools::FormattedColumnValue > DBToolsObjectFactory::createFormattedColumnValue(
         const Reference<XComponentContext>& _rContext, const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& _rxColumn )
     {
-        ::std::auto_ptr< ::dbtools::FormattedColumnValue > pValue;
+        ::std::unique_ptr< ::dbtools::FormattedColumnValue > pValue;
         if ( ensureLoaded() )
             pValue = getFactory()->createFormattedColumnValue( _rContext, _rxRowSet, _rxColumn );
         return pValue;
     }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 }   // namespace svxform

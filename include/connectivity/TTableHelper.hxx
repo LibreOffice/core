@@ -81,7 +81,7 @@ namespace connectivity
 
     class OOO_DLLPUBLIC_DBTOOLS OTableHelper : public OTable_TYPEDEF
     {
-        ::std::auto_ptr<OTableHelperImpl> m_pImpl;
+        ::std::unique_ptr<OTableHelperImpl> m_pImpl;
 
         void refreshPrimaryKeys(TStringVector& _rKeys);
         void refreshForeignKeys(TStringVector& _rKeys);
