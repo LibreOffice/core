@@ -81,7 +81,7 @@ public:
     SdrTextAniKindItem(SdrTextAniKind eKind=SDRTEXTANI_NONE): SfxEnumItem(SDRATTR_TEXT_ANIKIND,(sal_uInt16)eKind) {}
     SdrTextAniKindItem(SvStream& rIn)                       : SfxEnumItem(SDRATTR_TEXT_ANIKIND,rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*      Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual sal_uInt16            GetValueCount() const SAL_OVERRIDE; // { return 5; }
             SdrTextAniKind GetValue() const      { return (SdrTextAniKind)SfxEnumItem::GetValue(); }
 

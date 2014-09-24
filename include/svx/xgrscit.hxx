@@ -36,7 +36,7 @@ public:
                             XGradientStepCountItem( sal_uInt16 nStepCount = 0 );
                             XGradientStepCountItem( SvStream& rIn );
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

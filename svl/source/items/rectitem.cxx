@@ -85,7 +85,7 @@ SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
 
 
 
-SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
+SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream) const
 {
     Rectangle aStr;
     ReadRectangle( rStream, aStr );
@@ -94,7 +94,7 @@ SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
 
 
 
-SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxRectangleItem::Store(SvStream &rStream) const
 {
     WriteRectangle( rStream, aVal );
     return rStream;

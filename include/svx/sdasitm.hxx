@@ -69,38 +69,37 @@ private:
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPropSeq;
 
-    public :
+public :
 
-            TYPEINFO_OVERRIDE();
+        TYPEINFO_OVERRIDE();
 
-            SdrCustomShapeGeometryItem();
-            SdrCustomShapeGeometryItem( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
-            SdrCustomShapeGeometryItem( SvStream& rIn, sal_uInt16 nVersion );
-            virtual ~SdrCustomShapeGeometryItem();
+        SdrCustomShapeGeometryItem();
+        SdrCustomShapeGeometryItem( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
+        SdrCustomShapeGeometryItem( SvStream& rIn );
+        virtual ~SdrCustomShapeGeometryItem();
 
-            virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-            virtual bool GetPresentation(SfxItemPresentation ePresentation,
-                                            SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
-                                            OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
+        virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+        virtual bool GetPresentation(SfxItemPresentation ePresentation,
+                                        SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
+                                        OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 
-            virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const SAL_OVERRIDE;
-            virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const SAL_OVERRIDE;
+        virtual SfxPoolItem*        Create( SvStream& ) const SAL_OVERRIDE;
+        virtual SvStream&           Store( SvStream& ) const SAL_OVERRIDE;
 
-            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-            virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const SAL_OVERRIDE;
+        virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
 
-            virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-            virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+        virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+        virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const { return aPropSeq;}
+        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const { return aPropSeq;}
 
-            com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName );
-            com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );
+        com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName );
+        com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );
 
-            void SetPropertyValue( const com::sun::star::beans::PropertyValue& rPropVal );
-            void SetPropertyValue( const OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal );
+        void SetPropertyValue( const com::sun::star::beans::PropertyValue& rPropVal );
+        void SetPropertyValue( const OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal );
 
-            void ClearPropertyValue( const OUString& rPropertyName );
+        void ClearPropertyValue( const OUString& rPropertyName );
 };
 
 class SdrCustomShapeReplacementURLItem : public SfxStringItem

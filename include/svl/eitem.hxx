@@ -51,7 +51,7 @@ public:
     void SetValue(sal_uInt16 nTheValue);
 
     // SfxPoolItem
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream & rStream) const SAL_OVERRIDE;
 
     virtual sal_uInt16 GetEnumValue() const SAL_OVERRIDE;
 
@@ -104,10 +104,10 @@ public:
         SAL_OVERRIDE;
 
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const
+    virtual SfxPoolItem * Create(SvStream & rStream) const
         SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream & rStream) const SAL_OVERRIDE;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 

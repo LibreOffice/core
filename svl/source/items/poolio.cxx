@@ -190,12 +190,6 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
             const sal_uInt16 nSize = GetSize_Impl();
             for ( size_t i = 0; i < nSize && !rStream.GetError(); ++i, ++itrArr, ++ppDefItem )
             {
-                // Get version of the Item
-                sal_uInt16 nItemVersion = (*ppDefItem)->GetVersion( pImp->mnFileFormatVersion );
-                if ( USHRT_MAX == nItemVersion )
-                    // => Was not present in the version that was supposed to be exported
-                    continue;
-
                 // ! Poolable is not even saved in the Pool
                 // And itemsets/plain-items depending on the round
                 if ( *itrArr && IsItemFlag(**ppDefItem, SFX_ITEM_POOLABLE) &&
@@ -205,7 +199,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                     sal_uInt16 nSlotId = GetSlotId( (*ppDefItem)->Which(), false );
                     aWhichIdsRec.NewContent(nSlotId, 0);
                     rStream.WriteUInt16( (*ppDefItem)->Which() );
-                    rStream.WriteUInt16( nItemVersion );
+                    rStream.WriteUInt16( (sal_uInt16)0xff ); // used to be nItemVersion
                     const sal_uInt32 nCount = ::std::min<size_t>( (*itrArr)->size(), SAL_MAX_UINT32 );
                     DBG_ASSERT(nCount, "ItemArr is empty");
                     rStream.WriteUInt32( nCount );
@@ -230,7 +224,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                             }
 
                             if ( !rStream.GetError() )
-                                pItem->Store(rStream, nItemVersion);
+                                pItem->Store(rStream);
                             else
                                 break;
 #ifdef DBG_UTIL_MI
@@ -263,20 +257,14 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
             const SfxPoolItem* pDefaultItem = pImp->ppPoolDefaults[n];
             if ( pDefaultItem )
             {
-                // Get version
-                sal_uInt16 nItemVersion = pDefaultItem->GetVersion( pImp->mnFileFormatVersion );
-                if ( USHRT_MAX == nItemVersion )
-                    // => Was not present in the version yet
-                    continue;
-
                 // Own signature, global signature, version
                 sal_uInt16 nSlotId = GetSlotId( pDefaultItem->Which(), false );
                 aDefsRec.NewContent( nSlotId, 0 );
                 rStream.WriteUInt16( pDefaultItem->Which() );
-                rStream.WriteUInt16( nItemVersion );
+                rStream.WriteUInt16( (sal_uInt16)0xff ); // used to be nItemVersion
 
                 // Item
-                pDefaultItem->Store( rStream, nItemVersion );
+                pDefaultItem->Store( rStream );
             }
         }
     }
@@ -360,7 +348,7 @@ bool SfxItemPool::IsInRange( sal_uInt16 nWhich ) const
 
 // This had to be moved to a method of its own to keep Solaris GCC happy:
 void SfxItemPool_Impl::readTheItems (
-    SvStream & rStream, sal_uInt32 nItemCount, sal_uInt16 nVer,
+    SvStream & rStream, sal_uInt32 nItemCount,
     SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** ppArr)
 {
     SfxMultiRecordReader aItemsRec( &rStream, SFX_ITEMPOOL_REC_ITEMS );
@@ -385,7 +373,7 @@ void SfxItemPool_Impl::readTheItems (
         sal_uInt16 nRef(0);
         rStream.ReadUInt16( nRef );
 
-        pItem = pDefItem->Create(rStream, nVer);
+        pItem = pDefItem->Create(rStream);
         pNewArr->push_back( (SfxPoolItem*) pItem );
 
         if ( !mbPersistentRefCounts )
@@ -643,7 +631,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             }
 
             // Read Items
-            pImp->readTheItems(rStream, nCount, nVersion, pDefItem, ppArr);
+            pImp->readTheItems(rStream, nCount, pDefItem, ppArr);
 
             pImp->bInSetItem = false;
         }
@@ -674,7 +662,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             // Load PoolDefaultItem
             SfxPoolItem *pItem =
                     ( *( pImp->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
-                    ->Create( rStream, nVersion );
+                    ->Create( rStream );
             pItem->SetKind( SFX_ITEMS_POOLDEFAULT );
             *( pImp->ppPoolDefaults + GetIndex_Impl(nWhich) ) = pItem;
         }
@@ -853,7 +841,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             SfxPoolItem *pItem = 0;
             if ( nRef )
             {
-                pItem = pDefItem->Create(rStream, nVersion);
+                pItem = pDefItem->Create(rStream);
 
                 if ( !pImp->mbPersistentRefCounts )
                     // Hold onto them until SfxItemPool::LoadCompleted()
@@ -947,7 +935,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 
         SfxPoolItem *pItem =
             ( *( pImp->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
-            ->Create( rStream, nVersion );
+            ->Create( rStream );
         pItem->SetKind( SFX_ITEMS_POOLDEFAULT );
         *( pImp->ppPoolDefaults + GetIndex_Impl(nWhich) ) = pItem;
 
@@ -1408,17 +1396,14 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
                 "SetItem contains ItemSet with SetItem" );
 
     sal_uInt16 nSlotId = pPool->GetSlotId( rItem.Which(), true );
-    sal_uInt16 nItemVersion = rItem.GetVersion(pImp->mnFileFormatVersion);
-    if ( USHRT_MAX == nItemVersion )
-        return false;
 
     rStream.WriteUInt16( rItem.Which() ).WriteUInt16( nSlotId );
     if ( bDirect || !pPool->StoreSurrogate( rStream, &rItem ) )
     {
-        rStream.WriteUInt16( nItemVersion );
+        rStream.WriteUInt16( (sal_uInt16) 0xff ); // used to be nItemVersion
         rStream.WriteUInt32( (sal_uInt32) 0L ); // Room for length in bytes
         sal_uLong nIStart = rStream.Tell();
-        rItem.Store(rStream, nItemVersion);
+        rItem.Store(rStream);
         sal_uLong nIEnd = rStream.Tell();
         rStream.Seek( nIStart-4 );
         rStream.WriteInt32( (sal_Int32) ( nIEnd-nIStart ) );
@@ -1498,7 +1483,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
         {
             // Load Item directly
             SfxPoolItem *pNewItem =
-                    pRefPool->GetDefaultItem(nWhich).Create(rStream, nVersion);
+                    pRefPool->GetDefaultItem(nWhich).Create(rStream);
             if ( bDontPut )
                 pItem = pNewItem;
             else

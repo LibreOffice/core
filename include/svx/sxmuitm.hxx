@@ -32,7 +32,7 @@ public:
     SdrMeasureUnitItem(FieldUnit eUnit=FUNIT_NONE): SfxEnumItem(SDRATTR_MEASUREUNIT,sal::static_int_cast< sal_uInt16 >(eUnit)) {}
     SdrMeasureUnitItem(SvStream& rIn)             : SfxEnumItem(SDRATTR_MEASUREUNIT,rIn)   {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual sal_uInt16       GetValueCount() const SAL_OVERRIDE; // { return 14; }
             FieldUnit    GetValue() const { return (FieldUnit)SfxEnumItem::GetValue(); }
 

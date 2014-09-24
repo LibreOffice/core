@@ -58,8 +58,6 @@
 #include <fmtornt.hxx>
 #include "swdllapi.h"
 
-struct SwAfVersions;
-
 class SvNumberFormatter;
 
 class SwBoxAutoFmt
@@ -179,9 +177,8 @@ public:
     void SetValueFormat( const OUString& rFmt, LanguageType eLng, LanguageType eSys )
         { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
 
-    bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
-    bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-    bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
+    bool Load( SvStream& rStream );
+    bool Save( SvStream& rStream ) const;
 };
 
 /*
@@ -293,8 +290,8 @@ public:
     void SetValueFormat( const bool bNew )  { bInclValueFormat = bNew; }
     void SetWidthHeight( const bool bNew )  { bInclWidthHeight = bNew; }
 
-    bool Load( SvStream& rStream, const SwAfVersions& );
-    bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
+    bool Load( SvStream& rStream );
+    bool Save( SvStream& rStream ) const;
 };
 
 class SW_DLLPUBLIC SwTableAutoFmtTbl

@@ -33,7 +33,7 @@ public:
     SdrMeasureKindItem(SdrMeasureKind eKind=SDRMEASURE_STD): SfxEnumItem(SDRATTR_MEASUREKIND,sal::static_int_cast< sal_uInt16 >(eKind)) {}
     SdrMeasureKindItem(SvStream& rIn)                      : SfxEnumItem(SDRATTR_MEASUREKIND,rIn)    {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*   Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual sal_uInt16         GetValueCount() const SAL_OVERRIDE; // { return 2; }
             SdrMeasureKind GetValue() const { return (SdrMeasureKind)SfxEnumItem::GetValue(); }
 

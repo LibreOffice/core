@@ -76,13 +76,13 @@ bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8
 }
 
 // virtual
-SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream) const
 {
     return new SfxVisibilityItem(Which(), rStream);
 }
 
 // virtual
-SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxVisibilityItem::Store(SvStream & rStream) const
 {
     rStream.WriteUChar( m_nValue.bVisible );
     return rStream;

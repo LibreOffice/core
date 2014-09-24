@@ -26,8 +26,6 @@
 #include <tools/tenccvt.hxx>
 #include <vcl/dibtools.hxx>
 
-#define BULITEM_VERSION     ((sal_uInt16)2)
-
 
 
 TYPEINIT1(SvxBulletItem,SfxPoolItem);
@@ -61,7 +59,7 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const vcl::Font& rFont )
 
 
 
-vcl::Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
+vcl::Font SvxBulletItem::CreateFont( SvStream& rStream )
 {
     vcl::Font aFont;
     Color aColor;
@@ -83,14 +81,6 @@ vcl::Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     // UNICODE: rStream >> aName; aFont.SetName( aName );
     OUString aName = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
     aFont.SetName( aName );
-
-    if( nVer == 1 )
-    {
-        //#fdo39428 SvStream no longer supports operator>>(long&)
-        sal_Int32 nHeight(0), nWidth(0);
-        rStream.ReadInt32( nHeight ); rStream.ReadInt32( nWidth ); Size aSize( nWidth, nHeight );
-        aFont.SetSize( aSize );
-    }
 
     bool bTemp;
     rStream.ReadCharAsBool( bTemp ); aFont.SetOutline( bTemp );
@@ -120,7 +110,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
     rStrm.ReadUInt16( nStyle );
 
     if( nStyle != BS_BMP )
-        aFont = CreateFont( rStrm, BULITEM_VERSION );
+        aFont = CreateFont( rStrm );
     else
     {
         // Safe Load with Test on empty Bitmap
@@ -199,7 +189,7 @@ SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 
 
-SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
+SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm ) const
 {
     return new SvxBulletItem( rStrm, Which() );
 }
@@ -224,13 +214,6 @@ void SvxBulletItem::SetDefaults_Impl()
     nJustify        = BJ_HLEFT | BJ_VCENTER;
     cSymbol         = ' ';
     nScale          = 75;
-}
-
-
-
-sal_uInt16 SvxBulletItem::GetVersion( sal_uInt16 /*nVersion*/ ) const
-{
-    return BULITEM_VERSION;
 }
 
 
@@ -306,7 +289,7 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 
 
 
-SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxBulletItem::Store( SvStream& rStrm ) const
 {
     // Correction for empty bitmap
     if( ( nStyle == BS_BMP ) &&

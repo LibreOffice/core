@@ -36,7 +36,7 @@ public:
                             XLineEndWidthItem(long nWidth = LINE_END_WIDTH_DEFAULT);
                             XLineEndWidthItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream& rIn) const SAL_OVERRIDE;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;

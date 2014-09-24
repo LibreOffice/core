@@ -39,7 +39,7 @@ public:
                             SdrGrafModeItem( SvStream& rIn ) : SfxEnumItem( SDRATTR_GRAFMODE, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
     GraphicDrawMode         GetValue() const { return (GraphicDrawMode) SfxEnumItem::GetValue(); }
 

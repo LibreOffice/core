@@ -171,14 +171,14 @@ SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
 // Laden/Speichern wird nicht gebraucht!
 
 
-SfxPoolItem* SvxNumberInfoItem::Create( SvStream& /*rStream*/, sal_uInt16 ) const
+SfxPoolItem* SvxNumberInfoItem::Create( SvStream& /*rStream*/ ) const
 {
     return new SvxNumberInfoItem( *this );
 }
 
 
 
-SvStream& SvxNumberInfoItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxNumberInfoItem::Store( SvStream &rStream ) const
 {
     return rStream;
 }

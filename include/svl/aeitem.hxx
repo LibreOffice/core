@@ -51,10 +51,10 @@ public:
 
     virtual sal_uInt16      GetValueCount() const SAL_OVERRIDE;
     virtual sal_uInt16      GetValueByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
-    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
+    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const SAL_OVERRIDE;
-    virtual bool        IsEnabled( sal_uInt16 ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream &) const SAL_OVERRIDE;
+    virtual bool            IsEnabled( sal_uInt16 ) const SAL_OVERRIDE;
     void                    DisableValue( sal_uInt16 );
 };
 

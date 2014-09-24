@@ -48,7 +48,7 @@ public:
     SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SDRTEXTFIT_NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,(sal_uInt16)eFit) {}
     SdrTextFitToSizeTypeItem(SvStream& rIn)                        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,rIn)  {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual sal_uInt16       GetValueCount() const SAL_OVERRIDE;
             SdrFitToSizeType GetValue() const      { return (SdrFitToSizeType)SfxEnumItem::GetValue(); }
 

@@ -1229,7 +1229,7 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-SvStream& SwFmtVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) const
+SvStream& SwFmtVertOrient::Store(SvStream &rStream) const
 {
 #if SAL_TYPES_SIZEOFLONG == 8
     rStream.WriteInt64(m_nYPos);
@@ -1240,7 +1240,7 @@ SvStream& SwFmtVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) cons
     return rStream;
 }
 
-SfxPoolItem* SwFmtVertOrient::Create(SvStream &rStream, sal_uInt16 /*itemVersion*/) const
+SfxPoolItem* SwFmtVertOrient::Create(SvStream &rStream) const
 {
     SwTwips yPos(0);
     sal_Int16 orient(0);

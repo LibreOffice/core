@@ -75,7 +75,7 @@ bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntByteItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * CntByteItem::Create(SvStream & rStream) const
 {
     short nTheValue = 0;
     rStream.ReadInt16( nTheValue );
@@ -83,7 +83,7 @@ SfxPoolItem * CntByteItem::Create(SvStream & rStream, sal_uInt16) const
 }
 
 // virtual
-SvStream & CntByteItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & CntByteItem::Store(SvStream & rStream) const
 {
     rStream.WriteInt16( short(m_nValue) );
     return rStream;
@@ -180,13 +180,13 @@ bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntUInt16Item::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * CntUInt16Item::Create(SvStream & rStream) const
 {
     return new CntUInt16Item(Which(), rStream);
 }
 
 // virtual
-SvStream & CntUInt16Item::Store(SvStream &rStream, sal_uInt16) const
+SvStream & CntUInt16Item::Store(SvStream &rStream) const
 {
     rStream.WriteUInt16( sal_uInt16(m_nValue) );
     return rStream;
@@ -280,13 +280,13 @@ bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntInt32Item::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * CntInt32Item::Create(SvStream & rStream) const
 {
     return new CntInt32Item(Which(), rStream);
 }
 
 // virtual
-SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
+SvStream & CntInt32Item::Store(SvStream &rStream) const
 {
     //fdo#39428 SvStream no longer supports operator<<(long)
     rStream.WriteInt32( m_nValue );
@@ -385,13 +385,13 @@ bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * CntUInt32Item::Create(SvStream & rStream) const
 {
     return new CntUInt32Item(Which(), rStream);
 }
 
 // virtual
-SvStream & CntUInt32Item::Store(SvStream &rStream, sal_uInt16) const
+SvStream & CntUInt32Item::Store(SvStream &rStream) const
 {
     rStream.WriteUInt32( static_cast<sal_uInt32>(m_nValue) );
     return rStream;

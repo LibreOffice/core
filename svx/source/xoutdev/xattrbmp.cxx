@@ -351,14 +351,14 @@ bool XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
         && maGraphicObject == ((const XFillBitmapItem&)rItem).maGraphicObject);
 }
 
-SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn) const
 {
-    return new XFillBitmapItem( rIn, nVer );
+    return new XFillBitmapItem( rIn );
 }
 
-SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XFillBitmapItem::Store( SvStream& rOut ) const
 {
-    NameOrIndex::Store(rOut, nItemVersion);
+    NameOrIndex::Store(rOut);
 
     if(!IsIndex())
     {
@@ -372,11 +372,6 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) cons
 void XFillBitmapItem::SetGraphicObject(const GraphicObject& rGraphicObject)
 {
     maGraphicObject = rGraphicObject;
-}
-
-sal_uInt16 XFillBitmapItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return(2);
 }
 
 bool XFillBitmapItem::GetPresentation(

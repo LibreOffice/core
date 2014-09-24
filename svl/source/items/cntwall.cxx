@@ -37,7 +37,7 @@ CntWallpaperItem::CntWallpaperItem( sal_uInt16 which )
 }
 
 
-CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uInt16 nVersion )
+CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream )
     : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
 {
     sal_uInt32 nMagic = 0;
@@ -46,7 +46,7 @@ CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uIn
     {
         // Okay, data were stored by CntWallpaperItem.
 
-        _aURL = readUnicodeString(rStream, nVersion >= 1);
+        _aURL = readUnicodeString(rStream, true/*bUnicode*/);
         // !!! Color stream operators do not work - they discard any
         // transparency info !!!
         _nColor.Read( rStream, true );
@@ -101,20 +101,13 @@ bool CntWallpaperItem::operator==( const SfxPoolItem& rItem ) const
         ( rWallItem._aURL == _aURL );
 }
 
-// virtual
-sal_uInt16 CntWallpaperItem::GetVersion(sal_uInt16) const
+SfxPoolItem* CntWallpaperItem::Create( SvStream& rStream ) const
 {
-    return 1; // because it uses SfxPoolItem::read/writeUnicodeString()
+    return new CntWallpaperItem( Which(), rStream );
 }
 
 
-SfxPoolItem* CntWallpaperItem::Create( SvStream& rStream, sal_uInt16 nVersion) const
-{
-    return new CntWallpaperItem( Which(), rStream, nVersion );
-}
-
-
-SvStream& CntWallpaperItem::Store( SvStream& rStream, sal_uInt16 ) const
+SvStream& CntWallpaperItem::Store( SvStream& rStream ) const
 {
     rStream.WriteUInt32( CNTWALLPAPERITEM_STREAM_MAGIC );
     writeUnicodeString(rStream, _aURL);

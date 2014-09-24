@@ -64,14 +64,14 @@ SfxPoolItem* SvxZoomSliderItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 
 
-SfxPoolItem* SvxZoomSliderItem::Create( SvStream& /*rStrm*/, sal_uInt16 /*nVersion*/ ) const
+SfxPoolItem* SvxZoomSliderItem::Create( SvStream& /*rStrm*/ ) const
 {
     return 0;
 }
 
 
 
-SvStream& SvxZoomSliderItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxZoomSliderItem::Store( SvStream& rStrm ) const
 {
     return rStrm;
 }

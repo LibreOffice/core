@@ -42,7 +42,7 @@ SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
 
 
 
-SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
+SvStream& SfxFlagItem::Store(SvStream &rStream) const
 {
     rStream.WriteUInt16( nVal );
     return rStream;
@@ -75,7 +75,7 @@ sal_uInt8 SfxFlagItem::GetFlagCount() const
 
 
 
-SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
+SfxPoolItem* SfxFlagItem::Create(SvStream &) const
 {
     DBG_WARNING( "calling Create() on SfxFlagItem -- overload!" );
     return 0;

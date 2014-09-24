@@ -36,7 +36,7 @@ public:
                             XFormTextDistanceItem(long nDist = 0);
                             XFormTextDistanceItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream& rIn) const SAL_OVERRIDE;
 };
 
 #endif

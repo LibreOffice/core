@@ -76,7 +76,7 @@ SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 
 #define MAX_BUF 32000
 
-SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
+SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream ) const
 {
     sal_uInt32 nSize = 0;
     sal_uLong nActRead = 0;
@@ -99,7 +99,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
 
 
 
-SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxLockBytesItem::Store(SvStream &rStream) const
 {
     SvStream aLockBytesStream( _xVal );
     sal_uInt32 nSize = aLockBytesStream.Seek( STREAM_SEEK_TO_END );

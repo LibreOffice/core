@@ -141,19 +141,13 @@ bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 }
 
 
-SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
+SfxPoolItem* SfxPoolItem::Create(SvStream &) const
 {
     return Clone();
 }
 
 
-sal_uInt16 SfxPoolItem::GetVersion( sal_uInt16 ) const
-{
-    return 0;
-}
-
-
-SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxPoolItem::Store(SvStream &rStream) const
 {
     return rStream;
 }

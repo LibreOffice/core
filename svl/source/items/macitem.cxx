@@ -234,17 +234,17 @@ bool SvxMacroItem::GetPresentation
 
 
 
-SvStream& SvxMacroItem::Store( SvStream& rStrm , sal_uInt16 ) const
+SvStream& SvxMacroItem::Store( SvStream& rStrm ) const
 {
     return aMacroTable.Write( rStrm );
 }
 
 
 
-SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
+SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm ) const
 {
     SvxMacroItem* pAttr = new SvxMacroItem( Which() );
-    pAttr->aMacroTable.Read( rStrm, nVersion );
+    pAttr->aMacroTable.Read( rStrm );
     return pAttr;
 }
 
@@ -255,12 +255,5 @@ void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
     aMacroTable.Insert( nEvent, rMacro);
 }
 
-
-
-sal_uInt16 SvxMacroItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
-{
-    return SOFFICE_FILEFORMAT_31 == nFileFormatVersion
-                ? 0 : aMacroTable.GetVersion();
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

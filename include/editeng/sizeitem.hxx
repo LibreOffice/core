@@ -54,8 +54,8 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create(SvStream &) const SAL_OVERRIDE;
+    virtual SvStream&        Store(SvStream &) const SAL_OVERRIDE;
     virtual bool             ScaleMetrics( long nMult, long nDiv ) SAL_OVERRIDE;
     virtual bool             HasMetrics() const SAL_OVERRIDE;
 

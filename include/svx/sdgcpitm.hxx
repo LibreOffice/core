@@ -39,8 +39,7 @@ public:
                                 SvxGrfCrop( nLeftCrop, nRightCrop, nTopCrop, nBottomCrop, nWhichId ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SDGCPITM_HXX

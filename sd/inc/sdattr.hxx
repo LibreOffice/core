@@ -91,8 +91,8 @@ public:
             DiaEffectItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
-            sal_uInt16          GetValueCount() const SAL_OVERRIDE { return FADE_EFFECT_COUNT; }
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
+            sal_uInt16      GetValueCount() const SAL_OVERRIDE { return FADE_EFFECT_COUNT; }
             ::com::sun::star::presentation::FadeEffect      GetValue() const
                             { return (::com::sun::star::presentation::FadeEffect) SfxEnumItem::GetValue(); }
 };
@@ -105,8 +105,8 @@ public:
             DiaSpeedItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
-            sal_uInt16          GetValueCount() const SAL_OVERRIDE { return FADE_SPEED_COUNT; }
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
+            sal_uInt16      GetValueCount() const SAL_OVERRIDE { return FADE_SPEED_COUNT; }
             FadeSpeed       GetValue() const
                             { return (FadeSpeed) SfxEnumItem::GetValue(); }
 };
@@ -119,8 +119,8 @@ public:
             DiaAutoItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
-            sal_uInt16          GetValueCount() const SAL_OVERRIDE { return PRESCHANGE_COUNT; }
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
+            sal_uInt16      GetValueCount() const SAL_OVERRIDE { return PRESCHANGE_COUNT; }
             PresChange      GetValue() const { return (PresChange) SfxEnumItem::GetValue(); }
 };
 

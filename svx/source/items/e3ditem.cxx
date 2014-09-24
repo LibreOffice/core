@@ -70,7 +70,7 @@ SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 
 
 
-SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream) const
 {
     basegfx::B3DVector aStr;
     double fValue;
@@ -82,7 +82,7 @@ SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/
 
 
 
-SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
+SvStream& SvxB3DVectorItem::Store(SvStream &rStream) const
 {
 
     // ## if (nItemVersion)
@@ -124,10 +124,5 @@ bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 }
 
 
-
-sal_uInt16 SvxB3DVectorItem::GetVersion (sal_uInt16 nFileFormatVersion) const
-{
-    return (nFileFormatVersion == SOFFICE_FILEFORMAT_31) ? USHRT_MAX : 0;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

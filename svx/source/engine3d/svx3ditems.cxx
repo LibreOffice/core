@@ -38,20 +38,12 @@ Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal)
 {}
 
-sal_uInt16 Svx3DReducedLineGeometryItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
-SfxPoolItem* Svx3DReducedLineGeometryItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+SfxPoolItem* Svx3DReducedLineGeometryItem::Create(SvStream& rIn) const
 {
     SfxBoolItem* pRetval = new Svx3DReducedLineGeometryItem();
 
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
+    SfxBoolItem aBoolItem(Which(), rIn);
+    pRetval->SetValue(aBoolItem.GetValue());
 
     return pRetval;
 }
@@ -96,20 +88,12 @@ Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
 {}
 
-sal_uInt16 Svx3DSmoothNormalsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
-SfxPoolItem* Svx3DSmoothNormalsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+SfxPoolItem* Svx3DSmoothNormalsItem::Create(SvStream& rIn) const
 {
     SfxBoolItem* pRetval = new Svx3DSmoothNormalsItem();
 
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
+    SfxBoolItem aBoolItem(Which(), rIn);
+    pRetval->SetValue(aBoolItem.GetValue());
 
     return pRetval;
 }
@@ -125,20 +109,12 @@ Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
 {}
 
-sal_uInt16 Svx3DSmoothLidsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
-SfxPoolItem* Svx3DSmoothLidsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+SfxPoolItem* Svx3DSmoothLidsItem::Create(SvStream& rIn) const
 {
     SfxBoolItem* pRetval = new Svx3DSmoothLidsItem();
 
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
+    SfxBoolItem aBoolItem(Which(), rIn);
+    pRetval->SetValue(aBoolItem.GetValue());
 
     return pRetval;
 }
@@ -154,20 +130,12 @@ Svx3DCharacterModeItem::Svx3DCharacterModeItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
 {}
 
-sal_uInt16 Svx3DCharacterModeItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
-SfxPoolItem* Svx3DCharacterModeItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+SfxPoolItem* Svx3DCharacterModeItem::Create(SvStream& rIn) const
 {
     SfxBoolItem* pRetval = new Svx3DCharacterModeItem();
 
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
+    SfxBoolItem aBoolItem(Which(), rIn);
+    pRetval->SetValue(aBoolItem.GetValue());
 
     return pRetval;
 }
@@ -183,20 +151,12 @@ Svx3DCloseFrontItem::Svx3DCloseFrontItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
 {}
 
-sal_uInt16 Svx3DCloseFrontItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
-SfxPoolItem* Svx3DCloseFrontItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+SfxPoolItem* Svx3DCloseFrontItem::Create(SvStream& rIn) const
 {
     SfxBoolItem* pRetval = new Svx3DCloseFrontItem();
 
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
+    SfxBoolItem aBoolItem(Which(), rIn);
+    pRetval->SetValue(aBoolItem.GetValue());
 
     return pRetval;
 }
@@ -212,20 +172,12 @@ Svx3DCloseBackItem::Svx3DCloseBackItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)
 {}
 
-sal_uInt16 Svx3DCloseBackItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
-SfxPoolItem* Svx3DCloseBackItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+SfxPoolItem* Svx3DCloseBackItem::Create(SvStream& rIn) const
 {
     SfxBoolItem* pRetval = new Svx3DCloseBackItem();
 
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
+    SfxBoolItem aBoolItem(Which(), rIn);
+    pRetval->SetValue(aBoolItem.GetValue());
 
     return pRetval;
 }

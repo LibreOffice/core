@@ -56,18 +56,11 @@ CntContentTypeItem::CntContentTypeItem( const CntContentTypeItem& rOrig )
 }
 
 // virtual
-sal_uInt16 CntContentTypeItem::GetVersion(sal_uInt16) const
-{
-    return 1; // because it uses SfxPoolItem::read/writeUnicodeString()
-}
-
-// virtual
-SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
-                                         sal_uInt16 nItemVersion ) const
+SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream ) const
 {
     // CntContentTypeItem used to be derived from CntStringItem, so take that
     // into account:
-    OUString aValue = readUnicodeString(rStream, nItemVersion >= 1);
+    OUString aValue = readUnicodeString(rStream, true/*bUnicode*/);
     sal_uInt32 nMagic = 0;
     rStream.ReadUInt32( nMagic );
     if (nMagic == CNTSTRINGITEM_STREAM_MAGIC)
@@ -84,7 +77,7 @@ SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
 }
 
 // virtual
-SvStream & CntContentTypeItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & CntContentTypeItem::Store(SvStream & rStream) const
 {
     // CntContentTypeItem used to be derived from CntStringItem, so take that
     // into account:

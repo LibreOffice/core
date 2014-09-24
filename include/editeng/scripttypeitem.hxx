@@ -53,7 +53,7 @@ public:
     SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool );
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create( SvStream &, sal_uInt16 nVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create( SvStream & ) const SAL_OVERRIDE;
 
     static const SfxPoolItem* GetItemOfScriptSet( const SfxItemSet& rSet,
                                                     sal_uInt16 nWhich );

@@ -45,17 +45,16 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
 
             TYPEINFO_OVERRIDE();
             SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem();
-            SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion );
+            SdrCustomShapeAdjustmentItem( SvStream& rIn );
             SVX_DLLPUBLIC virtual ~SdrCustomShapeAdjustmentItem();
 
             virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
             virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                             SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
                                             OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
-            virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const SAL_OVERRIDE;
-            virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const SAL_OVERRIDE;
+            virtual SfxPoolItem*        Create( SvStream& ) const SAL_OVERRIDE;
+            virtual SvStream&           Store( SvStream& ) const SAL_OVERRIDE;
             virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-            virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const SAL_OVERRIDE;
 
             virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
             virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;

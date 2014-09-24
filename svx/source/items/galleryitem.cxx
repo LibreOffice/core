@@ -138,12 +138,12 @@ SfxPoolItem* SvxGalleryItem::Clone( SfxItemPool * ) const
     return new SvxGalleryItem( *this );
 }
 
-SvStream& SvxGalleryItem::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxGalleryItem::Store( SvStream& rStream ) const
 {
     return rStream;
 }
 
-SfxPoolItem* SvxGalleryItem::Create(SvStream& , sal_uInt16) const
+SfxPoolItem* SvxGalleryItem::Create(SvStream&) const
 {
     return 0;
 }

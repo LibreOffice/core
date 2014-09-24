@@ -43,7 +43,7 @@ SfxPoolItem* DiaEffectItem::Clone( SfxItemPool* ) const
     return new DiaEffectItem( *this );
 }
 
-SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, sal_uInt16 ) const
+SfxPoolItem* DiaEffectItem::Create( SvStream& rIn ) const
 {
     return new DiaEffectItem( rIn );
 }
@@ -70,7 +70,7 @@ SfxPoolItem* DiaSpeedItem::Clone( SfxItemPool* ) const
     return new DiaSpeedItem( *this );
 }
 
-SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, sal_uInt16 ) const
+SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn ) const
 {
     return new DiaSpeedItem( rIn );
 }
@@ -97,7 +97,7 @@ SfxPoolItem* DiaAutoItem::Clone( SfxItemPool* ) const
     return new DiaAutoItem( *this );
 }
 
-SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, sal_uInt16 ) const
+SfxPoolItem* DiaAutoItem::Create( SvStream& rIn ) const
 {
     return new DiaAutoItem( rIn );
 }

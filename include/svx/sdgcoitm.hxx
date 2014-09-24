@@ -38,7 +38,7 @@ public:
                             SdrGrafRedItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFRED, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
 };
 
 
@@ -55,7 +55,7 @@ public:
                             SdrGrafGreenItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFGREEN, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
 };
 
 
@@ -72,7 +72,7 @@ public:
                             SdrGrafBlueItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFBLUE, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SDGCOITM_HXX

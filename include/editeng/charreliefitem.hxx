@@ -40,9 +40,8 @@ public:
                        const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&       Store(SvStream & rStrm, sal_uInt16 nIVer) const SAL_OVERRIDE;
-    virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream &) const SAL_OVERRIDE;
+    virtual SvStream&       Store(SvStream & rStrm) const SAL_OVERRIDE;
 
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
     virtual sal_uInt16      GetValueCount() const SAL_OVERRIDE;

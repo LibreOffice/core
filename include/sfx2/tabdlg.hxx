@@ -54,7 +54,7 @@ public:
                             SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet );
                             SfxTabDialogItem(const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool=NULL);
     virtual SfxPoolItem*    Clone(SfxItemPool* pToPool) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream& rStream) const SAL_OVERRIDE;
 };
 
 class SFX2_DLLPUBLIC SfxTabDialog : public TabDialog

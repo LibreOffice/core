@@ -30,7 +30,7 @@ TYPEINIT1_FACTORY(SvxHyperlinkItem, SfxPoolItem, new SvxHyperlinkItem(0));
 
 #define HYPERLINKFF_MARKER  0x599401FE
 
-SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxHyperlinkItem::Store( SvStream& rStrm ) const
 {
     // store 'simple' data
     // UNICODE: rStrm << sName;
@@ -114,7 +114,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     return rStrm;
 }
 
-SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm ) const
 {
     SvxHyperlinkItem* pNew = new SvxHyperlinkItem( Which() );
     sal_uInt32 nType;

@@ -35,13 +35,13 @@ SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
 
 
 // virtual
-SfxPoolItem * SfxStringItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxStringItem::Create(SvStream & rStream) const
 {
     return new SfxStringItem(Which(), rStream);
 }
 
 // virtual
-SvStream & SfxStringItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxStringItem::Store(SvStream & rStream) const
 {
     writeByteString(rStream, GetValue());
     return rStream;

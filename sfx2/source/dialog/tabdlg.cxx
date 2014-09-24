@@ -103,7 +103,7 @@ SfxPoolItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
     return new SfxTabDialogItem( *this, pToPool );
 }
 
-SfxPoolItem* SfxTabDialogItem::Create(SvStream& /*rStream*/, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* SfxTabDialogItem::Create(SvStream& /*rStream*/) const
 {
     OSL_FAIL( "Use it only in UI!" );
     return NULL;

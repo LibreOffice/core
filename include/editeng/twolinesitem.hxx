@@ -41,8 +41,8 @@ public:
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVer) const SAL_OVERRIDE;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nIVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream &) const SAL_OVERRIDE;
+    virtual SvStream&       Store(SvStream &) const SAL_OVERRIDE;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -51,8 +51,6 @@ public:
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
-
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFFVer ) const SAL_OVERRIDE;
 
     SvxTwoLinesItem&        operator=( const SvxTwoLinesItem& rCpy )
     {

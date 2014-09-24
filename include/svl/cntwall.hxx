@@ -30,7 +30,7 @@ class SvStream;
 class SVL_DLLPUBLIC CntWallpaperItem : public SfxPoolItem
 {
 private:
-    OUString           _aURL;
+    OUString                _aURL;
     Color                   _nColor;
     sal_uInt16              _nStyle;
 
@@ -38,15 +38,13 @@ public:
                             TYPEINFO_OVERRIDE();
 
                             CntWallpaperItem( sal_uInt16 nWhich );
-                            CntWallpaperItem( sal_uInt16 nWhich, SvStream& rStream, sal_uInt16 nVersion );
+                            CntWallpaperItem( sal_uInt16 nWhich, SvStream& rStream );
                             CntWallpaperItem( const CntWallpaperItem& rCpy );
                             virtual ~CntWallpaperItem();
 
-    virtual sal_uInt16 GetVersion(sal_uInt16) const SAL_OVERRIDE;
-
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual SvStream&       Store( SvStream&, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& ) const SAL_OVERRIDE;
+    virtual SvStream&       Store( SvStream& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
@@ -58,7 +56,7 @@ public:
     void                    SetColor( Color nColor ) { _nColor = nColor; }
     void                    SetStyle( sal_uInt16 nStyle ) { _nStyle = nStyle; }
 
-    const OUString&    GetBitmapURL() const { return _aURL; }
+    const OUString&         GetBitmapURL() const { return _aURL; }
     Color                   GetColor() const { return _nColor; }
     sal_uInt16              GetStyle() const { return _nStyle; }
 };

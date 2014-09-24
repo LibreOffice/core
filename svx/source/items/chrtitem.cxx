@@ -62,7 +62,7 @@ SfxPoolItem* SvxChartStyleItem::Clone(SfxItemPool* /*pPool*/) const
 
 
 
-SfxPoolItem* SvxChartStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* SvxChartStyleItem::Create(SvStream& rIn) const
 {
     return new SvxChartStyleItem(rIn, Which());
 }
@@ -81,7 +81,7 @@ SfxPoolItem* SvxChartDataDescrItem::Clone(SfxItemPool* /*pPool*/) const
 
 
 
-SfxPoolItem* SvxChartDataDescrItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* SvxChartDataDescrItem::Create(SvStream& rIn) const
 {
     return new SvxChartDataDescrItem(rIn, Which());
 }
@@ -108,7 +108,7 @@ SfxPoolItem* SvxChartTextOrderItem::Clone(SfxItemPool* /*pPool*/) const
 
 
 
-SfxPoolItem* SvxChartTextOrderItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* SvxChartTextOrderItem::Create(SvStream& rIn) const
 {
     return new SvxChartTextOrderItem(rIn, Which());
 }
@@ -188,7 +188,7 @@ SfxPoolItem* SvxChartTextOrientItem::Clone(SfxItemPool* /*pPool*/) const
 
 
 
-SfxPoolItem* SvxChartTextOrientItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* SvxChartTextOrientItem::Create(SvStream& rIn) const
 {
     return new SvxChartTextOrientItem(rIn, Which());
 }
@@ -248,7 +248,7 @@ SfxPoolItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
 
 
 
-SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn) const
 {
     double _fVal;
     rIn.ReadDouble( _fVal );
@@ -257,7 +257,7 @@ SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn, sal_uInt16 /*nVersion*/) const
 
 
 
-SvStream& SvxDoubleItem::Store(SvStream& rOut, sal_uInt16 /*nItemVersion*/) const
+SvStream& SvxDoubleItem::Store(SvStream& rOut) const
 {
     rOut.WriteDouble( fVal );
     return rOut;
@@ -322,19 +322,12 @@ SfxPoolItem* SvxChartKindErrorItem::Clone(SfxItemPool* /*pPool*/) const
 
 
 
-SfxPoolItem* SvxChartKindErrorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* SvxChartKindErrorItem::Create(SvStream& rIn) const
 {
     return new SvxChartKindErrorItem(rIn, Which());
 }
 
 
-
-sal_uInt16 SvxChartKindErrorItem::GetVersion (sal_uInt16 nFileFormatVersion) const
-{
-    return (nFileFormatVersion == SOFFICE_FILEFORMAT_31)
-               ? USHRT_MAX
-               : 0;
-}
 
 SvxChartIndicateItem::SvxChartIndicateItem(SvxChartIndicate eOrient,
                                                sal_uInt16 nId) :
@@ -358,19 +351,12 @@ SfxPoolItem* SvxChartIndicateItem::Clone(SfxItemPool* /*pPool*/) const
 
 
 
-SfxPoolItem* SvxChartIndicateItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* SvxChartIndicateItem::Create(SvStream& rIn) const
 {
     return new SvxChartIndicateItem(rIn, Which());
 }
 
 
-
-sal_uInt16 SvxChartIndicateItem::GetVersion (sal_uInt16 nFileFormatVersion) const
-{
-    return (nFileFormatVersion == SOFFICE_FILEFORMAT_31)
-               ? USHRT_MAX
-               : 0;
-}
 
 SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
                                                sal_uInt16 nId) :
@@ -394,19 +380,11 @@ SfxPoolItem* SvxChartRegressItem::Clone(SfxItemPool* /*pPool*/) const
 
 
 
-SfxPoolItem* SvxChartRegressItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* SvxChartRegressItem::Create(SvStream& rIn) const
 {
     return new SvxChartRegressItem(rIn, Which());
 }
 
-
-
-sal_uInt16 SvxChartRegressItem::GetVersion (sal_uInt16 nFileFormatVersion) const
-{
-    return (nFileFormatVersion == SOFFICE_FILEFORMAT_31)
-               ? USHRT_MAX
-               : 0;
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

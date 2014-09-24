@@ -91,42 +91,6 @@ struct AutoFormatSwBlob : ::boost::noncopyable
     }
 };
 
-/// Struct with version numbers of the Items
-struct ScAfVersions
-{
-public:
-    sal_uInt16 nFontVersion;
-    sal_uInt16 nFontHeightVersion;
-    sal_uInt16 nWeightVersion;
-    sal_uInt16 nPostureVersion;
-    sal_uInt16 nUnderlineVersion;
-    sal_uInt16 nOverlineVersion;
-    sal_uInt16 nCrossedOutVersion;
-    sal_uInt16 nContourVersion;
-    sal_uInt16 nShadowedVersion;
-    sal_uInt16 nColorVersion;
-    sal_uInt16 nBoxVersion;
-    sal_uInt16 nLineVersion;
-    sal_uInt16 nBrushVersion;
-
-    sal_uInt16 nAdjustVersion;
-    AutoFormatSwBlob swVersions;
-
-    sal_uInt16 nHorJustifyVersion;
-    sal_uInt16 nVerJustifyVersion;
-    sal_uInt16 nOrientationVersion;
-    sal_uInt16 nMarginVersion;
-    sal_uInt16 nBoolVersion;
-    sal_uInt16 nInt32Version;
-    sal_uInt16 nRotateModeVersion;
-
-    sal_uInt16 nNumFmtVersion;
-
-    ScAfVersions();
-    void Load( SvStream& rStream, sal_uInt16 nVer );
-    void Write(SvStream& rStream, sal_uInt16 fileVersion);
-};
-
 /// Contains all items for one cell of a table autoformat.
 class ScAutoFormatDataField
 {
@@ -243,8 +207,8 @@ public:
     void    SetRotateAngle( const SfxInt32Item& rRotateAngle )      { aRotateAngle.SetValue( rRotateAngle.GetValue() ); }
     void    SetRotateMode( const SvxRotateModeItem& rRotateMode )   { aRotateMode.SetValue( rRotateMode.GetValue() ); }
 
-    bool    Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer );
-    bool    Save( SvStream& rStream, sal_uInt16 fileVersion );
+    bool    Load( SvStream& rStream );
+    bool    Save( SvStream& rStream );
 };
 
 class SC_DLLPUBLIC ScAutoFormatData
@@ -303,8 +267,8 @@ public:
     void                        FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, ScDocument& rDoc ) const;
     void                        GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat );
 
-    bool                        Load( SvStream& rStream, const ScAfVersions& rVersions );
-    bool                        Save( SvStream& rStream, sal_uInt16 fileVersion );
+    bool                        Load( SvStream& rStream );
+    bool                        Save( SvStream& rStream );
 };
 
 class SC_DLLPUBLIC ScAutoFormat
@@ -312,7 +276,6 @@ class SC_DLLPUBLIC ScAutoFormat
     typedef boost::ptr_map<OUString, ScAutoFormatData> MapType;
     MapType maData;
     bool mbSaveLater;
-    ScAfVersions m_aVersions;
 
 public:
     typedef MapType::const_iterator const_iterator;

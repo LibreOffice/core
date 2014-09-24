@@ -30,8 +30,6 @@ class Graphic;
 class GraphicObject;
 class CntWallpaperItem;
 
-#define BRUSH_GRAPHIC_VERSION   ((sal_uInt16)0x0001)
-
 enum SvxGraphicPosition
 {
     GPOS_NONE,
@@ -58,8 +56,7 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     void        ApplyGraphicTransparency_Impl();
     DECL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void *);
     // wird nur von Create benutzt
-    SvxBrushItem( SvStream& rStrm,
-                  sal_uInt16 nVersion, sal_uInt16 nWhich  );
+    SvxBrushItem( SvStream& rStrm, sal_uInt16 nWhich  );
 
 public:
     TYPEINFO_OVERRIDE();
@@ -90,9 +87,8 @@ public:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nVersion ) const SAL_OVERRIDE;
-    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create( SvStream & ) const SAL_OVERRIDE;
+    virtual SvStream&        Store( SvStream& ) const SAL_OVERRIDE;
 
     const Color&    GetColor() const                { return aColor; }
     Color&          GetColor()                      { return aColor; }

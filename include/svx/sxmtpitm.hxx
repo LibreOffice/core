@@ -35,7 +35,7 @@ public:
     SdrMeasureTextHPosItem(SdrMeasureTextHPos ePos=SDRMEASURE_TEXTHAUTO): SfxEnumItem(SDRATTR_MEASURETEXTHPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
     SdrMeasureTextHPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTHPOS,rIn)    {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*   Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual sal_uInt16         GetValueCount() const SAL_OVERRIDE; // { return 4; }
             SdrMeasureTextHPos GetValue() const { return (SdrMeasureTextHPos)SfxEnumItem::GetValue(); }
 
@@ -55,7 +55,7 @@ public:
     SdrMeasureTextVPosItem(SdrMeasureTextVPos ePos=SDRMEASURE_TEXTVAUTO): SfxEnumItem(SDRATTR_MEASURETEXTVPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
     SdrMeasureTextVPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTVPOS,rIn)    {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*   Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual sal_uInt16         GetValueCount() const SAL_OVERRIDE; // { return 5; }
             SdrMeasureTextVPos GetValue() const { return (SdrMeasureTextVPos)SfxEnumItem::GetValue(); }
 

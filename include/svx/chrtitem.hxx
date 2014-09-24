@@ -174,7 +174,7 @@ public:
     SvxChartStyleItem(SvStream& rIn, sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
 
     sal_uInt16 GetValueCount() const SAL_OVERRIDE { return CHSTYLE_COUNT; }
     SvxChartStyle GetValue() const
@@ -192,12 +192,11 @@ public:
     SvxChartRegressItem(SvStream& rIn, sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
 
     sal_uInt16 GetValueCount() const SAL_OVERRIDE { return CHREGRESS_COUNT; }
     SvxChartRegress GetValue() const
         { return (SvxChartRegress)SfxEnumItem::GetValue(); }
-    sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const SAL_OVERRIDE;
 };
 
 
@@ -210,7 +209,7 @@ public:
                           sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
 
     sal_uInt16 GetValueCount() const SAL_OVERRIDE { return CHDESCR_COUNT; }
     SvxChartDataDescr GetValue() const
@@ -229,7 +228,7 @@ public:
                           sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
 
     virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
@@ -249,7 +248,7 @@ public:
                            sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
 
     sal_uInt16 GetValueCount() const SAL_OVERRIDE { return CHTXTORDER_COUNT; }
     SvxChartTextOrient GetValue() const
@@ -268,13 +267,11 @@ public:
                            sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
 
     sal_uInt16 GetValueCount() const SAL_OVERRIDE { return CHERROR_COUNT; }
     SvxChartKindError GetValue() const
         { return (SvxChartKindError)SfxEnumItem::GetValue(); }
-
-    sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const SAL_OVERRIDE;
 };
 
 
@@ -289,13 +286,11 @@ public:
                            sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
 
     sal_uInt16 GetValueCount() const SAL_OVERRIDE { return CHINDICATE_COUNT; }
     SvxChartIndicate GetValue() const
         { return (SvxChartIndicate)SfxEnumItem::GetValue(); }
-
-    sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const SAL_OVERRIDE;
 };
 
 
@@ -320,8 +315,8 @@ public:
 
     virtual bool             operator == (const SfxPoolItem&) const SAL_OVERRIDE;
     virtual SfxPoolItem* Clone(SfxItemPool *pPool = NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVersion) const SAL_OVERRIDE;
-    virtual SvStream& Store(SvStream& rOut, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
+    virtual SvStream& Store(SvStream& rOut) const SAL_OVERRIDE;
 
     virtual double GetMin() const;
     virtual double GetMax() const;

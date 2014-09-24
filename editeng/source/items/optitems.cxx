@@ -141,7 +141,7 @@ bool SfxHyphenRegionItem::GetPresentation
 
 
 
-SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
+SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm ) const
 {
     sal_uInt8 _nMinLead, _nMinTrail;
     rStrm.ReadUChar( _nMinLead ).ReadUChar( _nMinTrail );
@@ -153,7 +153,7 @@ SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
 
 
 
-SvStream& SfxHyphenRegionItem::Store( SvStream& rStrm, sal_uInt16 ) const
+SvStream& SfxHyphenRegionItem::Store( SvStream& rStrm ) const
 {
     rStrm.WriteUChar( (sal_uInt8) GetMinLead() )
          .WriteUChar( (sal_uInt8) GetMinTrail() );

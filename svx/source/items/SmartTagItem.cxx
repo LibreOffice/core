@@ -88,14 +88,14 @@ SfxPoolItem* SvxSmartTagItem::Clone( SfxItemPool * ) const
 
 
 
-SvStream& SvxSmartTagItem::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxSmartTagItem::Store( SvStream& rStream ) const
 {
     return rStream;
 }
 
 
 
-SfxPoolItem* SvxSmartTagItem::Create(SvStream& , sal_uInt16) const
+SfxPoolItem* SvxSmartTagItem::Create(SvStream&) const
 {
     return 0;
 }

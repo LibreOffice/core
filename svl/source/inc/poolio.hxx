@@ -159,7 +159,7 @@ struct SfxItemPool_Impl
         ppPoolDefaults = NULL;
     }
 
-    void readTheItems(SvStream & rStream, sal_uInt32 nCount, sal_uInt16 nVersion,
+    void readTheItems(SvStream & rStream, sal_uInt32 nCount,
                       SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** pArr);
 
     // unit testing

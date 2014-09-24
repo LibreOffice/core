@@ -49,13 +49,10 @@ bool SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const
            nBottom  == ((const SvxGrfCrop&)rAttr).GetBottom();
 }
 
-SfxPoolItem* SvxGrfCrop::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
+SfxPoolItem* SvxGrfCrop::Create( SvStream& rStrm ) const
 {
     sal_Int32 top, left, right, bottom;
     rStrm.ReadInt32( top ).ReadInt32( left ).ReadInt32( right ).ReadInt32( bottom );
-
-    if( GRFCROP_VERSION_SWDEFAULT == nVersion )
-        top = -top, bottom = -bottom, left = -left, right = -right;
 
     SvxGrfCrop* pNew = (SvxGrfCrop*)Clone();
     pNew->SetLeft( left );
@@ -66,12 +63,10 @@ SfxPoolItem* SvxGrfCrop::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 }
 
 
-SvStream& SvxGrfCrop::Store( SvStream& rStrm, sal_uInt16 nVersion ) const
+SvStream& SvxGrfCrop::Store( SvStream& rStrm ) const
 {
     sal_Int32 left = GetLeft(), right = GetRight(),
             top = GetTop(), bottom = GetBottom();
-    if( GRFCROP_VERSION_SWDEFAULT == nVersion )
-        top = -top, bottom = -bottom, left = -left, right = -right;
 
     rStrm.WriteInt32( top ).WriteInt32( left ).WriteInt32( right ).WriteInt32( bottom );
 

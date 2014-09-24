@@ -163,13 +163,13 @@ SfxPoolItem* SfxStringListItem::Clone( SfxItemPool *) const
 }
 
 
-SfxPoolItem* SfxStringListItem::Create( SvStream & rStream, sal_uInt16 ) const
+SfxPoolItem* SfxStringListItem::Create( SvStream & rStream ) const
 {
     return new SfxStringListItem( Which(), rStream );
 }
 
 
-SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
+SvStream& SfxStringListItem::Store( SvStream & rStream ) const
 {
     if( !pImp )
     {

@@ -43,11 +43,6 @@
     700       -500       200       700         -500
 */
 
-#define LRSPACE_16_VERSION      ((sal_uInt16)0x0001)
-#define LRSPACE_TXTLEFT_VERSION ((sal_uInt16)0x0002)
-#define LRSPACE_AUTOFIRST_VERSION ((sal_uInt16)0x0003)
-#define LRSPACE_NEGATIVE_VERSION ((sal_uInt16)0x0004)
-
 class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 {
     short   nFirstLineOfst;     // First-line indent _always_ relative to nTxtLeft
@@ -84,9 +79,8 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create(SvStream &) const SAL_OVERRIDE;
+    virtual SvStream&        Store(SvStream &) const SAL_OVERRIDE;
     virtual bool                 ScaleMetrics( long nMult, long nDiv ) SAL_OVERRIDE;
     virtual bool                 HasMetrics() const SAL_OVERRIDE;
 

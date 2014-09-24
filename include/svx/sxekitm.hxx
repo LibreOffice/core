@@ -38,7 +38,7 @@ public:
     SdrEdgeKindItem(SdrEdgeKind eStyle=SDREDGE_ORTHOLINES): SfxEnumItem(SDRATTR_EDGEKIND,sal::static_int_cast< sal_uInt16 >(eStyle)) {}
     SdrEdgeKindItem(SvStream& rIn)                        : SfxEnumItem(SDRATTR_EDGEKIND,rIn)    {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual sal_uInt16       GetValueCount() const SAL_OVERRIDE; // { return 5; }
             SdrEdgeKind  GetValue() const      { return (SdrEdgeKind)SfxEnumItem::GetValue(); }
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;

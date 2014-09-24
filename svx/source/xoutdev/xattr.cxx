@@ -115,14 +115,14 @@ SfxPoolItem* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
     return new NameOrIndex(*this);
 }
 
-SfxPoolItem* NameOrIndex::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* NameOrIndex::Create(SvStream& rIn) const
 {
     return new NameOrIndex(Which(), rIn);
 }
 
-SvStream& NameOrIndex::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& NameOrIndex::Store( SvStream& rOut ) const
 {
-    SfxStringItem::Store( rOut, nItemVersion );
+    SfxStringItem::Store( rOut );
     rOut.WriteInt32( nPalIndex );
     return rOut;
 }
@@ -306,14 +306,14 @@ bool XColorItem::operator==(const SfxPoolItem& rItem) const
             ((const XColorItem&) rItem).aColor == aColor );
 }
 
-SfxPoolItem* XColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XColorItem::Create(SvStream& rIn) const
 {
     return new XColorItem(Which(), rIn);
 }
 
-SvStream& XColorItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XColorItem::Store( SvStream& rOut ) const
 {
-    NameOrIndex::Store( rOut, nItemVersion );
+    NameOrIndex::Store( rOut );
 
     if ( !IsIndex() )
     {
@@ -366,7 +366,7 @@ SfxPoolItem* XLineStyleItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineStyleItem( *this );
 }
 
-SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineStyleItem::Create(SvStream& rIn) const
 {
     return new XLineStyleItem(rIn);
 }
@@ -689,14 +689,14 @@ bool XLineDashItem::operator==(const SfxPoolItem& rItem) const
              aDash == ((const XLineDashItem&) rItem).aDash );
 }
 
-SfxPoolItem* XLineDashItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineDashItem::Create(SvStream& rIn) const
 {
     return new XLineDashItem(rIn);
 }
 
-SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XLineDashItem::Store( SvStream& rOut ) const
 {
-    NameOrIndex::Store( rOut, nItemVersion );
+    NameOrIndex::Store( rOut );
 
     if (!IsIndex())
     {
@@ -1023,7 +1023,7 @@ SfxPoolItem* XLineWidthItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineWidthItem(*this);
 }
 
-SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineWidthItem::Create(SvStream& rIn) const
 {
     return new XLineWidthItem(rIn);
 }
@@ -1085,7 +1085,7 @@ SfxPoolItem* XLineColorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineColorItem(*this);
 }
 
-SfxPoolItem* XLineColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineColorItem::Create(SvStream& rIn) const
 {
     return new XLineColorItem(rIn);
 }
@@ -1258,14 +1258,14 @@ bool XLineStartItem::operator==(const SfxPoolItem& rItem) const
     return ( NameOrIndex::operator==(rItem) && ((const XLineStartItem&) rItem).maPolyPolygon == maPolyPolygon );
 }
 
-SfxPoolItem* XLineStartItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineStartItem::Create(SvStream& rIn) const
 {
     return new XLineStartItem(rIn);
 }
 
-SvStream& XLineStartItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XLineStartItem::Store( SvStream& rOut ) const
 {
-    NameOrIndex::Store( rOut, nItemVersion );
+    NameOrIndex::Store( rOut );
 
     if (!IsIndex())
     {
@@ -1600,14 +1600,14 @@ bool XLineEndItem::operator==(const SfxPoolItem& rItem) const
     return ( NameOrIndex::operator==(rItem) && ((const XLineEndItem&) rItem).maPolyPolygon == maPolyPolygon );
 }
 
-SfxPoolItem* XLineEndItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineEndItem::Create(SvStream& rIn) const
 {
     return new XLineEndItem(rIn);
 }
 
-SvStream& XLineEndItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XLineEndItem::Store( SvStream& rOut ) const
 {
-    NameOrIndex::Store( rOut, nItemVersion );
+    NameOrIndex::Store( rOut );
 
     if (!IsIndex())
     {
@@ -1914,7 +1914,7 @@ SfxPoolItem* XLineStartWidthItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineStartWidthItem(*this);
 }
 
-SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn) const
 {
     return new XLineStartWidthItem(rIn);
 }
@@ -1964,7 +1964,7 @@ SfxPoolItem* XLineEndWidthItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineEndWidthItem(*this);
 }
 
-SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn) const
 {
     return new XLineEndWidthItem(rIn);
 }
@@ -2014,7 +2014,7 @@ SfxPoolItem* XLineStartCenterItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineStartCenterItem(*this);
 }
 
-SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn) const
 {
     return new XLineStartCenterItem(rIn);
 }
@@ -2065,7 +2065,7 @@ SfxPoolItem* XLineEndCenterItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineEndCenterItem(*this);
 }
 
-SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn) const
 {
     return new XLineEndCenterItem(rIn);
 }
@@ -2118,7 +2118,7 @@ SfxPoolItem* XFillStyleItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFillStyleItem( *this );
 }
 
-SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFillStyleItem::Create(SvStream& rIn) const
 {
     return new XFillStyleItem(rIn);
 }
@@ -2212,7 +2212,7 @@ SfxPoolItem* XFillColorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFillColorItem(*this);
 }
 
-SfxPoolItem* XFillColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFillColorItem::Create(SvStream& rIn) const
 {
     return new XFillColorItem(rIn);
 }
@@ -2263,17 +2263,9 @@ SfxPoolItem* XSecondaryFillColorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XSecondaryFillColorItem(*this);
 }
 
-SfxPoolItem* XSecondaryFillColorItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
+SfxPoolItem* XSecondaryFillColorItem::Create( SvStream& rIn ) const
 {
-    if ( nVer >= 2 )
-        return new XSecondaryFillColorItem( rIn );
-    else
-        return new XSecondaryFillColorItem( "", Color(0,184,255) );
-}
-
-sal_uInt16 XSecondaryFillColorItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
-{
-    return 2;
+    return new XSecondaryFillColorItem( rIn );
 }
 
 bool XSecondaryFillColorItem::GetPresentation
@@ -2414,14 +2406,14 @@ bool XFillGradientItem::operator==(const SfxPoolItem& rItem) const
              aGradient == ((const XFillGradientItem&) rItem).aGradient );
 }
 
-SfxPoolItem* XFillGradientItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+SfxPoolItem* XFillGradientItem::Create(SvStream& rIn) const
 {
-    return new XFillGradientItem(rIn, nVer);
+    return new XFillGradientItem(rIn);
 }
 
-SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XFillGradientItem::Store( SvStream& rOut ) const
 {
-    NameOrIndex::Store( rOut, nItemVersion );
+    NameOrIndex::Store( rOut );
 
     if (!IsIndex())
     {
@@ -2455,14 +2447,6 @@ const XGradient& XFillGradientItem::GetGradientValue() const // GetValue -> GetG
     // ToDo: This should fail. We never called this code with a table so this should always
     // have failed. Thus, I'm thinking that XFillGradientItem can't be an Index.
     return aGradient;
-}
-
-sal_uInt16 XFillGradientItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
-{
-    // !!! this version number also represents the version number of superclasses
-    // !!! (e.g. XFillFloatTransparenceItem); if you make any changes here,
-    // !!! the superclass is also affected
-    return 1;
 }
 
 bool XFillGradientItem::GetPresentation
@@ -2760,13 +2744,6 @@ SfxPoolItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
     return new XFillFloatTransparenceItem( *this );
 }
 
-sal_uInt16 XFillFloatTransparenceItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
-{
-    // !!! if version number of this object must be increased, please   !!!
-    // !!! increase version number of base class XFillGradientItem      !!!
-    return XFillGradientItem::GetVersion( nFileFormatVersion );
-}
-
 bool XFillFloatTransparenceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     return XFillGradientItem::QueryValue( rVal, nMemberId );
@@ -2899,14 +2876,14 @@ bool XFillHatchItem::operator==(const SfxPoolItem& rItem) const
              aHatch == ((const XFillHatchItem&) rItem).aHatch );
 }
 
-SfxPoolItem* XFillHatchItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFillHatchItem::Create(SvStream& rIn) const
 {
     return new XFillHatchItem(rIn);
 }
 
-SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XFillHatchItem::Store( SvStream& rOut ) const
 {
-    NameOrIndex::Store( rOut, nItemVersion );
+    NameOrIndex::Store( rOut );
 
     if (!IsIndex())
     {
@@ -3145,7 +3122,7 @@ SfxPoolItem* XFormTextStyleItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextStyleItem( *this );
 }
 
-SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn) const
 {
     return new XFormTextStyleItem(rIn);
 }
@@ -3187,7 +3164,7 @@ SfxPoolItem* XFormTextAdjustItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextAdjustItem( *this );
 }
 
-SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn) const
 {
     return new XFormTextAdjustItem(rIn);
 }
@@ -3229,7 +3206,7 @@ SfxPoolItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextDistanceItem(*this);
 }
 
-SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn) const
 {
     return new XFormTextDistanceItem(rIn);
 }
@@ -3251,7 +3228,7 @@ SfxPoolItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextStartItem(*this);
 }
 
-SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn) const
 {
     return new XFormTextStartItem(rIn);
 }
@@ -3273,7 +3250,7 @@ SfxPoolItem* XFormTextMirrorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextMirrorItem(*this);
 }
 
-SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn) const
 {
     return new XFormTextMirrorItem(rIn);
 }
@@ -3295,7 +3272,7 @@ SfxPoolItem* XFormTextOutlineItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextOutlineItem(*this);
 }
 
-SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn) const
 {
     return new XFormTextOutlineItem(rIn);
 }
@@ -3318,7 +3295,7 @@ SfxPoolItem* XFormTextShadowItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextShadowItem( *this );
 }
 
-SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn) const
 {
     return new XFormTextShadowItem(rIn);
 }
@@ -3361,7 +3338,7 @@ SfxPoolItem* XFormTextShadowColorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextShadowColorItem(*this);
 }
 
-SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn) const
 {
     return new XFormTextShadowColorItem(rIn);
 }
@@ -3383,7 +3360,7 @@ SfxPoolItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextShadowXValItem(*this);
 }
 
-SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn) const
 {
     return new XFormTextShadowXValItem(rIn);
 }
@@ -3405,7 +3382,7 @@ SfxPoolItem* XFormTextShadowYValItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextShadowYValItem(*this);
 }
 
-SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn) const
 {
     return new XFormTextShadowYValItem(rIn);
 }
@@ -3427,7 +3404,7 @@ SfxPoolItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFormTextHideFormItem(*this);
 }
 
-SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn) const
 {
     return new XFormTextHideFormItem(rIn);
 }
@@ -3465,7 +3442,7 @@ SfxPoolItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
 }
 
 /// create a set item out of a stream
-SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream ) const
 {
     SfxItemSet *pSet2 = new SfxItemSet( *GetItemSet().GetPool(),
                                     XATTR_LINE_FIRST, XATTR_LINE_LAST);
@@ -3474,9 +3451,9 @@ SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*
 }
 
 /// save a set item in a stream
-SvStream& XLineAttrSetItem::Store( SvStream& rStream, sal_uInt16 nItemVersion ) const
+SvStream& XLineAttrSetItem::Store( SvStream& rStream ) const
 {
-    return SfxSetItem::Store( rStream, nItemVersion );
+    return SfxSetItem::Store( rStream );
 }
 
 
@@ -3511,7 +3488,7 @@ SfxPoolItem* XFillAttrSetItem::Clone( SfxItemPool* pPool ) const
 }
 
 /// create a set item out of a stream
-SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream ) const
 {
     SfxItemSet *pSet2 = new SfxItemSet( *GetItemSet().GetPool(),
                                     XATTR_FILL_FIRST, XATTR_FILL_LAST);
@@ -3520,9 +3497,9 @@ SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*
 }
 
 /// save a set item in a stream
-SvStream& XFillAttrSetItem::Store( SvStream& rStream, sal_uInt16 nItemVersion ) const
+SvStream& XFillAttrSetItem::Store( SvStream& rStream ) const
 {
-    return SfxSetItem::Store( rStream, nItemVersion );
+    return SfxSetItem::Store( rStream );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

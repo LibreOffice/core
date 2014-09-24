@@ -38,7 +38,7 @@ public:
                             SdrGrafInvertItem( SvStream& rIn ) : SdrOnOffItem( SDRATTR_GRAFINVERT, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SDGINITM_HXX

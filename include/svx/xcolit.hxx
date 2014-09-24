@@ -49,8 +49,8 @@ public:
 
     virtual bool            operator==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
-    virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream& rIn) const SAL_OVERRIDE;
+    virtual SvStream&       Store(SvStream& rOut) const SAL_OVERRIDE;
 
     const Color&    GetColorValue(const XColorList* pTable = 0) const;
     void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }

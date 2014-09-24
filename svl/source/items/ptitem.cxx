@@ -85,7 +85,7 @@ SfxPoolItem* SfxPointItem::Clone(SfxItemPool *) const
 
 
 
-SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
+SfxPoolItem* SfxPointItem::Create(SvStream &rStream) const
 {
     Point aStr;
     ReadPair( rStream, aStr );
@@ -94,7 +94,7 @@ SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
 
 
 
-SvStream& SfxPointItem::Store(SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxPointItem::Store(SvStream &rStream) const
 {
     WritePair( rStream, aVal );
     return rStream;

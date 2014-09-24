@@ -36,7 +36,7 @@ public:
     SdrPercentItem(sal_uInt16 nId, sal_uInt16 nVal=0): SfxUInt16Item(nId,nVal) {}
     SdrPercentItem(sal_uInt16 nId, SvStream& rIn):  SfxUInt16Item(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
 
     virtual bool GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 };
@@ -54,7 +54,7 @@ public:
     SdrSignedPercentItem( sal_uInt16 nId, sal_Int16 nVal = 0 ) : SfxInt16Item( nId,nVal ) {}
     SdrSignedPercentItem( sal_uInt16 nId, SvStream& rIn ) : SfxInt16Item( nId,rIn ) {}
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create( SvStream& rIn ) const SAL_OVERRIDE;
 
     virtual bool GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 };

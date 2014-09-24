@@ -37,13 +37,10 @@ public:
     CntContentTypeItem( sal_uInt16 nWhich, const OUString& rType );
     CntContentTypeItem( const CntContentTypeItem& rOrig );
 
-    virtual SfxPoolItem* Create( SvStream& rStream,
-                                 sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create( SvStream& rStream ) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream & rStream) const SAL_OVERRIDE;
 
     virtual bool         operator==( const SfxPoolItem& rOrig ) const SAL_OVERRIDE;
-
-    virtual sal_uInt16 GetVersion(sal_uInt16) const SAL_OVERRIDE;
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = NULL ) const SAL_OVERRIDE;
 

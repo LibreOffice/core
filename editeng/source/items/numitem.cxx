@@ -48,9 +48,6 @@
 #define DEF_WRITER_LSPACE   500     //Standard Indentation
 #define DEF_DRAW_LSPACE     800     //Standard Indentation
 
-#define NUMITEM_VERSION_03        0x03
-#define NUMITEM_VERSION_04        0x04
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -187,7 +184,6 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
 {
     sal_uInt16 nTmp16(0);
     sal_Int32  nTmp32(0);
-    rStream.ReadUInt16( nTmp16 ); // Version number
 
     rStream.ReadUInt16( nTmp16 ); SetNumberingType( nTmp16 );
     rStream.ReadUInt16( nTmp16 ); eNumAdjust = ( SvxAdjust )nTmp16;
@@ -210,7 +206,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     if ( hasGraphicBrush )
     {
         pGraphicBrush = new SvxBrushItem( SID_ATTR_BRUSH );
-        pGraphicBrush = (SvxBrushItem*)(pGraphicBrush->Create( rStream, BRUSH_GRAPHIC_VERSION ));
+        pGraphicBrush = (SvxBrushItem*)(pGraphicBrush->Create( rStream ));
     }
     else pGraphicBrush = 0;
     rStream.ReadUInt16( nTmp16 ); eVertOrient = nTmp16;
@@ -251,8 +247,6 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         pBulletFont->SetName(sFontName);
     }
 
-    rStream.WriteUInt16( (sal_uInt16)NUMITEM_VERSION_04 );
-
     rStream.WriteUInt16( (sal_uInt16)GetNumberingType() );
     rStream.WriteUInt16( (sal_uInt16)eNumAdjust );
     rStream.WriteUInt16( (sal_uInt16)nInclUpperLevels );
@@ -280,7 +274,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
             pGraphicBrush->SetGraphicLink("");
         }
 
-        pGraphicBrush->Store(rStream, BRUSH_GRAPHIC_VERSION);
+        pGraphicBrush->Store(rStream);
     }
     else
         rStream.WriteUInt16( (sal_uInt16)0 );
@@ -659,7 +653,6 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     : nLevelCount(0)
 {
     sal_uInt16 nTmp16(0);
-    rStream.ReadUInt16( nTmp16 ); // NUM_ITEM_VERSION
     rStream.ReadUInt16( nLevelCount );
 
     // first nFeatureFlags of old Versions
@@ -687,7 +680,6 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
 
 SvStream& SvxNumRule::Store( SvStream &rStream )
 {
-    rStream.WriteUInt16( (sal_uInt16)NUMITEM_VERSION_03 );
     rStream.WriteUInt16( nLevelCount );
     //first save of nFeatureFlags for old versions
     rStream.WriteUInt16( (sal_uInt16)nFeatureFlags );
@@ -931,7 +923,7 @@ SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule, sal_uInt16 _nWhich ) :
 {
 }
 
-SfxPoolItem* SvxNumBulletItem::Create(SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
+SfxPoolItem* SvxNumBulletItem::Create(SvStream &rStream) const
 {
     SvxNumRule aNumRule( rStream );
     return new SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET );
@@ -958,12 +950,7 @@ SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const
     return new SvxNumBulletItem(*this);
 }
 
-sal_uInt16  SvxNumBulletItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
-{
-    return NUMITEM_VERSION_03;
-}
-
-SvStream&   SvxNumBulletItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/ )const
+SvStream&   SvxNumBulletItem::Store(SvStream &rStream) const
 {
     pNumRule->Store(rStream);
     return rStream;

@@ -185,15 +185,14 @@ public:
                                     OUString &rText,
                                     const IntlWrapper * pIntlWrapper = 0 ) const;
 
-    virtual sal_uInt16       GetVersion( sal_uInt16 nFileFormatVersion ) const;
     virtual bool             ScaleMetrics( long lMult, long lDiv );
     virtual bool             HasMetrics() const;
 
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual SfxPoolItem*     Create( SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*     Create( SvStream & ) const;
+    virtual SvStream&        Store( SvStream & ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const = 0;
 
     sal_uLong                GetRefCount() const { return m_nRefCount; }
@@ -309,8 +308,8 @@ public:
 
     // create a copy of itself
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE = 0;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const SAL_OVERRIDE = 0;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream &) const SAL_OVERRIDE = 0;
+    virtual SvStream&       Store(SvStream &) const SAL_OVERRIDE;
 
     const SfxItemSet&       GetItemSet() const
                             { return *pSet; }

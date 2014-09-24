@@ -86,8 +86,8 @@ public:
     virtual ~SvxBulletItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVersion ) const SAL_OVERRIDE;
-    virtual SvStream&       Store( SvStream & , sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream & ) const SAL_OVERRIDE;
+    virtual SvStream&       Store( SvStream & ) const SAL_OVERRIDE;
 
     OUString            GetFullText() const;
     sal_Unicode         GetSymbol() const { return cSymbol; }
@@ -115,7 +115,6 @@ public:
     void                SetFont( const vcl::Font& rNew) { aFont = rNew; }
     void                SetScale( sal_uInt16 nNew ) { nScale = nNew; }
 
-    virtual sal_uInt16      GetVersion(sal_uInt16 nFileVersion) const SAL_OVERRIDE;
     virtual bool        operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -123,7 +122,7 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
     static void         StoreFont( SvStream&, const vcl::Font& );
-    static vcl::Font    CreateFont( SvStream&, sal_uInt16 nVer );
+    static vcl::Font    CreateFont( SvStream& );
 
     sal_uInt16&         GetValidMask()                  { return nValidMask;    }
     sal_uInt16          GetValidMask() const            { return nValidMask;    }

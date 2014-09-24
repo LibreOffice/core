@@ -133,7 +133,7 @@ SfxPoolItem* ScMergeAttr::Clone( SfxItemPool * ) const
     return new ScMergeAttr(*this);
 }
 
-SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) const
+SfxPoolItem* ScMergeAttr::Create( SvStream& rStream ) const
 {
     sal_Int16   nCol;
     sal_Int16   nRow;
@@ -349,7 +349,7 @@ SfxPoolItem* ScProtectionAttr::Clone( SfxItemPool * ) const
     return new ScProtectionAttr(*this);
 }
 
-SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, sal_uInt16 /* n */ ) const
+SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream ) const
 {
     bool bProtect;
     bool bHFormula;
@@ -653,65 +653,7 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
     return new ScPageHFItem( *this );
 }
 
-static void lcl_SetSpace( OUString& rStr, const ESelection& rSel )
-{
-    // Text replaced by a space to ensure they are positions:
-    sal_Int32 nLen = rSel.nEndPos-rSel.nStartPos;
-    rStr = rStr.replaceAt( rSel.nStartPos, nLen, " " );
-}
-
-static bool lcl_ConvertFields(EditEngine& rEng, const OUString* pCommands)
-{
-    bool bChange = false;
-    sal_Int32 nParCnt = rEng.GetParagraphCount();
-    for (sal_Int32 nPar = 0; nPar<nParCnt; nPar++)
-    {
-        OUString aStr = rEng.GetText( nPar );
-        sal_Int32 nPos;
-
-        while ((nPos = aStr.indexOf(pCommands[0])) != -1)
-        {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[0].getLength() );
-            rEng.QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = true;
-        }
-        while ((nPos = aStr.indexOf(pCommands[1])) != -1)
-        {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[1].getLength() );
-            rEng.QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = true;
-        }
-        while ((nPos = aStr.indexOf(pCommands[2])) != -1)
-        {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[2].getLength() );
-            rEng.QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = true;
-        }
-        while ((nPos = aStr.indexOf(pCommands[3])) != -1)
-        {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[3].getLength() );
-            rEng.QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD ), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = true;
-        }
-        while ((nPos = aStr.indexOf(pCommands[4])) != -1)
-        {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[4].getLength() );
-            rEng.QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = true;
-        }
-        while ((nPos = aStr.indexOf(pCommands[5])) != -1)
-        {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[5].getLength() );
-            rEng.QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = true;
-        }
-    }
-    return bChange;
-}
-
-#define SC_FIELD_COUNT  6
-
-SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
+SfxPoolItem* ScPageHFItem::Create( SvStream& rStream ) const
 {
     EditTextObject* pLeft   = EditTextObject::Create(rStream);
     EditTextObject* pCenter = EditTextObject::Create(rStream);
@@ -743,44 +685,6 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
             pRight = aEngine.CreateTextObject();
         }
     }
-
-    if ( nVer < 1 ) // old field command conversions
-    {
-        sal_uInt16 i;
-        const OUString& rDel = ScGlobal::GetRscString( STR_HFCMD_DELIMITER );
-        OUString aCommands[SC_FIELD_COUNT];
-        for (i=0; i<SC_FIELD_COUNT; i++)
-            aCommands[i] = rDel;
-        aCommands[0] += ScGlobal::GetRscString(STR_HFCMD_PAGE);
-        aCommands[1] += ScGlobal::GetRscString(STR_HFCMD_PAGES);
-        aCommands[2] += ScGlobal::GetRscString(STR_HFCMD_DATE);
-        aCommands[3] += ScGlobal::GetRscString(STR_HFCMD_TIME);
-        aCommands[4] += ScGlobal::GetRscString(STR_HFCMD_FILE);
-        aCommands[5] += ScGlobal::GetRscString(STR_HFCMD_TABLE);
-        for (i=0; i<SC_FIELD_COUNT; i++)
-            aCommands[i] += rDel;
-
-        ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), true );
-        aEngine.SetText(*pLeft);
-        if (lcl_ConvertFields(aEngine,aCommands))
-        {
-            delete pLeft;
-            pLeft = aEngine.CreateTextObject();
-        }
-        aEngine.SetText(*pCenter);
-        if (lcl_ConvertFields(aEngine,aCommands))
-        {
-            delete pCenter;
-            pCenter = aEngine.CreateTextObject();
-        }
-        aEngine.SetText(*pRight);
-        if (lcl_ConvertFields(aEngine,aCommands))
-        {
-            delete pRight;
-            pRight = aEngine.CreateTextObject();
-        }
-    }
-    else if ( nVer < 2 ) {} // nothing to do: SvxFileField is not exchanged for SvxExtFileField
 
     ScPageHFItem* pItem = new ScPageHFItem( Which() );
     pItem->SetArea( pLeft,    SC_HF_LEFTAREA   );
@@ -900,30 +804,15 @@ SfxPoolItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
     return new ScViewObjectModeItem( *this );
 }
 
-sal_uInt16 ScViewObjectModeItem::GetVersion( sal_uInt16 /* nFileVersion */ ) const
+SfxPoolItem* ScViewObjectModeItem::Create( SvStream& rStream ) const
 {
-    return 1;
-}
+    sal_uInt16 nVal;
+    rStream.ReadUInt16( nVal );
 
-SfxPoolItem* ScViewObjectModeItem::Create(
-                                    SvStream&   rStream,
-                                    sal_uInt16      nVersion ) const
-{
-    if ( nVersion == 0 )
-    {
-        // Old Version with AllEnuItem -> produce with Mode "Show"
-        return new ScViewObjectModeItem( Which() );
-    }
-    else
-    {
-        sal_uInt16 nVal;
-        rStream.ReadUInt16( nVal );
+    //#i80528# adapt to new range eventually
+    if((sal_uInt16)VOBJ_MODE_HIDE < nVal) nVal = (sal_uInt16)VOBJ_MODE_SHOW;
 
-        //#i80528# adapt to new range eventually
-        if((sal_uInt16)VOBJ_MODE_HIDE < nVal) nVal = (sal_uInt16)VOBJ_MODE_SHOW;
-
-        return new ScViewObjectModeItem( Which(), (ScVObjMode)nVal);
-    }
+    return new ScViewObjectModeItem( Which(), (ScVObjMode)nVal);
 }
 
 /**
@@ -958,7 +847,7 @@ SfxPoolItem* ScDoubleItem::Clone( SfxItemPool* ) const
     return new ScDoubleItem( *this );
 }
 
-SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) const
+SfxPoolItem* ScDoubleItem::Create( SvStream& rStream ) const
 {
     double nTmp=0;
     rStream.ReadDouble( nTmp );

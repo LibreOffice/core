@@ -36,9 +36,9 @@ public:
 
     SfxStringItem(sal_uInt16 nWhich, SvStream & rStream);
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SfxPoolItem * Create(SvStream & rStream) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream & rStream) const SAL_OVERRIDE;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 };

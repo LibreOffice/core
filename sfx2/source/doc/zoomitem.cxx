@@ -71,7 +71,7 @@ SfxPoolItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 
 
-SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
+SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm ) const
 {
     sal_uInt16 nValue;
     sal_uInt16 nValSet;
@@ -84,7 +84,7 @@ SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) con
 
 
 
-SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxZoomItem::Store( SvStream& rStrm ) const
 {
     rStrm.WriteUInt16( (sal_uInt16)GetValue() )
          .WriteUInt16( nValueSet )

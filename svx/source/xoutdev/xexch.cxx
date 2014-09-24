@@ -67,10 +67,9 @@ SvStream& WriteXFillExchangeData( SvStream& rOStm, const XFillExchangeData& rDat
             if( SfxItemState::SET == rData.pXFillAttrSetItem->GetItemSet().GetItemState( nWhich, false, &pItem ) )
             {
                 VersionCompat   aCompat( rOStm, STREAM_WRITE );
-                const sal_uInt16    nItemVersion2 = pItem->GetVersion( (sal_uInt16) rOStm.GetVersion() );
 
-                rOStm.WriteUInt16( nWhich ).WriteUInt16( nItemVersion2 );
-                pItem->Store( rOStm, nItemVersion2 );
+                rOStm.WriteUInt16( nWhich );
+                pItem->Store( rOStm );
 
                 nItemCount++;
             }
@@ -87,14 +86,14 @@ SvStream& WriteXFillExchangeData( SvStream& rOStm, const XFillExchangeData& rDat
     return rOStm;
 }
 
-/// binary export (currently w/o version control because it is not persistent)
+/// binary import (currently w/o version control because it is not persistent)
 SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 {
     DBG_ASSERT( rData.pPool, "XFillExchangeData has no pool" );
 
     SfxItemSet*     pSet = new SfxItemSet ( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
     sal_uInt32      nItemCount = 0;
-    sal_uInt16          nWhich, nItemVersion;
+    sal_uInt16      nWhich;
 
     rIStm.ReadUInt32( nItemCount );
 
@@ -105,11 +104,11 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
     {
         VersionCompat aCompat( rIStm, STREAM_READ );
 
-        rIStm.ReadUInt16( nWhich ).ReadUInt16( nItemVersion );
+        rIStm.ReadUInt16( nWhich );
 
         if( nWhich )
         {
-            boost::scoped_ptr<SfxPoolItem> pNewItem(rData.pPool->GetDefaultItem( nWhich ).Create( rIStm, nItemVersion ));
+            boost::scoped_ptr<SfxPoolItem> pNewItem(rData.pPool->GetDefaultItem( nWhich ).Create( rIStm ));
 
             if( pNewItem )
             {

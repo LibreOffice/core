@@ -39,12 +39,6 @@
 
 using namespace ::com::sun::star;
 
-#define VERSION_30B     ((sal_uInt16)250)
-#define VERSION_31B     ((sal_uInt16)326)
-#define VERSION_40A     ((sal_uInt16)364)
-#define VERSION_53A     ((sal_uInt16)596)
-#define ACT_NUM_VERSION VERSION_53A
-
 #define CHAPTER_FILENAME "chapter.cfg"
 
 /*
@@ -57,7 +51,6 @@ using namespace ::com::sun::star;
 SwBaseNumRules::SwBaseNumRules( const OUString& rFileName )
     :
     sFileName( rFileName ),
-    nVersion(0),
     bModified( false )
 {
     Init();
@@ -105,9 +98,8 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 n
 
 bool SwBaseNumRules::Store(SvStream &rStream)
 {
-    rStream.WriteUInt16( ACT_NUM_VERSION );
-        // Write, what positions are occupied by a rule
-        // Then write each of the rules
+    // Write, what positions are occupied by a rule
+    // Then write each of the rules
     for(sal_uInt16 i = 0; i < nMaxRules; ++i)
     {
         if(pNumRules[i])
@@ -125,28 +117,12 @@ int SwBaseNumRules::Load(SvStream &rStream)
 {
     int         rc = 0;
 
-    rStream.ReadUInt16( nVersion );
-
-    // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
-    // #55402#
-    if(VERSION_40A == nVersion)
+    unsigned char bRule = sal_False;
+    for(sal_uInt16 i = 0; i < nMaxRules; ++i)
     {
-        OSL_FAIL("Version 364 is not clear #55402#");
-    }
-    else if( VERSION_30B == nVersion || VERSION_31B == nVersion ||
-             ACT_NUM_VERSION >= nVersion )
-    {
-        unsigned char bRule = sal_False;
-        for(sal_uInt16 i = 0; i < nMaxRules; ++i)
-        {
-            rStream.ReadUChar( bRule );
-            if(bRule)
-                pNumRules[i] = new SwNumRulesWithName( rStream, nVersion );
-        }
-    }
-    else
-    {
-        rc = 1;
+        rStream.ReadUChar( bRule );
+        if(bRule)
+            pNumRules[i] = new SwNumRulesWithName( rStream );
     }
 
     return rc;
@@ -212,7 +188,7 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
     return *this;
 }
 
-SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
+SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream )
 {
     rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
     maName = rStream.ReadUniOrByteString(eEncoding);
@@ -220,17 +196,10 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
     char c;
     for(sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
-        if( VERSION_30B == nVersion )
-            c = 1;
-        // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
-        // #55402#
-        else if(nVersion < VERSION_40A && n > 5)
-            c = 0;
-        else
-            rStream.ReadChar( c );
+        rStream.ReadChar( c );
 
         if( c )
-            aFmts[ n ] = new _SwNumFmtGlobal( rStream, nVersion );
+            aFmts[ n ] = new _SwNumFmtGlobal( rStream );
         else
             aFmts[ n ] = 0;
     }
@@ -306,57 +275,31 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const _SwNumFmtGlobal& rFm
         aItems.push_back( rFmt.aItems[ --n ].Clone() );
 }
 
-SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
-                                                        sal_uInt16 nVersion )
+SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream )
     : nCharPoolId( USHRT_MAX )
 {
     rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
     {
         sal_uInt16 nUS;
-        short nShort;
         sal_Char cChar;
         bool bFlag;
         OUString sStr;
 
         rStream.ReadUInt16( nUS );           aFmt.SetNumberingType((sal_Int16)nUS );
-        if( VERSION_53A > nVersion )
-        {
-            rStream.ReadChar( cChar );       aFmt.SetBulletChar( cChar );
-        }
-        else
-        {
-            rStream.ReadUInt16( nUS );       aFmt.SetBulletChar( nUS );
-        }
+        rStream.ReadChar( cChar );           aFmt.SetBulletChar( cChar );
 
         rStream.ReadCharAsBool( bFlag );     aFmt.SetIncludeUpperLevels( bFlag );
 
-        if( VERSION_30B == nVersion )
-        {
-            sal_Int32 nL;
-            rStream.ReadChar( cChar );       aFmt.SetStart( (sal_uInt16)cChar );
+        sal_Int32 nL;
+        rStream.ReadChar( cChar );       aFmt.SetStart( (sal_uInt16)cChar );
 
-            sStr = rStream.ReadUniOrByteString(eEncoding);
-            aFmt.SetPrefix( sStr );
-            sStr = rStream.ReadUniOrByteString(eEncoding);
-            aFmt.SetSuffix( sStr );
-            rStream.ReadUInt16( nUS );        aFmt.SetNumAdjust( SvxAdjust( nUS ) );
-            rStream.ReadInt32( nL );          aFmt.SetLSpace( lNumIndent );
-            rStream.ReadInt32( nL );          aFmt.SetFirstLineOffset( (short)nL );
-        }
-        else                // old start-value was a Byte
-        {
-            rStream.ReadUInt16( nUS );         aFmt.SetStart( nUS );
-            sStr = rStream.ReadUniOrByteString(eEncoding);
-            aFmt.SetPrefix( sStr );
-            sStr = rStream.ReadUniOrByteString(eEncoding);
-            aFmt.SetSuffix( sStr );
-            rStream.ReadUInt16( nUS );         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
-            rStream.ReadUInt16( nUS );         aFmt.SetAbsLSpace( nUS );
-            rStream.ReadInt16( nShort );       aFmt.SetFirstLineOffset( nShort );
-            rStream.ReadUInt16( nUS );         aFmt.SetCharTextDistance( nUS );
-            rStream.ReadInt16( nShort );       aFmt.SetLSpace( nShort );
-            rStream.ReadCharAsBool( bFlag );
-        }
+        sStr = rStream.ReadUniOrByteString(eEncoding);
+        aFmt.SetPrefix( sStr );
+        sStr = rStream.ReadUniOrByteString(eEncoding);
+        aFmt.SetSuffix( sStr );
+        rStream.ReadUInt16( nUS );        aFmt.SetNumAdjust( SvxAdjust( nUS ) );
+        rStream.ReadInt32( nL );          aFmt.SetLSpace( lNumIndent );
+        rStream.ReadInt32( nL );          aFmt.SetFirstLineOffset( (short)nL );
 
         sal_uInt16  nFamily;
         sal_uInt16  nCharSet;
@@ -380,29 +323,23 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         else
             nCharSet = RTL_TEXTENCODING_SYMBOL;
 
-        if( VERSION_53A > nVersion )
-        {
-            sal_Char cEncoded(aFmt.GetBulletChar());
-            aFmt.SetBulletChar(OUString(&cEncoded, 1, nCharSet).toChar());
-        }
+        sal_Char cEncoded(aFmt.GetBulletChar());
+        aFmt.SetBulletChar(OUString(&cEncoded, 1, nCharSet).toChar());
     }
 
-    if( VERSION_30B != nVersion )
+    sal_uInt16 nItemCount;
+    rStream.ReadUInt16( nCharPoolId );
+    sCharFmtName = rStream.ReadUniOrByteString(eEncoding);
+    rStream.ReadUInt16( nItemCount );
+
+    while( nItemCount-- )
     {
-        sal_uInt16 nItemCount;
-        rStream.ReadUInt16( nCharPoolId );
-        sCharFmtName = rStream.ReadUniOrByteString(eEncoding);
-        rStream.ReadUInt16( nItemCount );
-
-        while( nItemCount-- )
-        {
-            sal_uInt16 nWhich, nVers;
-            rStream.ReadUInt16( nWhich ).ReadUInt16( nVers );
-            aItems.push_back( GetDfltAttr( nWhich )->Create( rStream, nVers ) );
-        }
+        sal_uInt16 nWhich;
+        rStream.ReadUInt16( nWhich );
+        aItems.push_back( GetDfltAttr( nWhich )->Create( rStream ) );
     }
 
-    if( VERSION_40A == nVersion && SVX_NUM_BITMAP == aFmt.GetNumberingType() )
+    if( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
         sal_uInt8 cF;
         sal_Int32 nWidth(0), nHeight(0);
@@ -422,14 +359,14 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             {
                 rStream.ReadUInt16( nVer );
                 pBrush = (SvxBrushItem*)GetDfltAttr( RES_BACKGROUND )
-                                        ->Create( rStream, nVer );
+                                        ->Create( rStream );
             }
 
             if( cF & 2 )
             {
                 rStream.ReadUInt16( nVer );
                 pVOrient = (SwFmtVertOrient*)GetDfltAttr( RES_VERT_ORIENT )
-                                        ->Create( rStream, nVer );
+                                        ->Create( rStream );
             }
             sal_Int16 eOrient = text::VertOrientation::NONE;
             if(pVOrient)
@@ -488,12 +425,8 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
     for( sal_uInt16 n = aItems.size(); n; )
     {
         SfxPoolItem* pItem = &aItems[ --n ];
-        sal_uInt16 nIVers = pItem->GetVersion( SOFFICE_FILEFORMAT_50 );
-        OSL_ENSURE( nIVers != USHRT_MAX,
-                "Was'n das: Item-Version USHRT_MAX in der aktuellen Version" );
-        rStream.WriteUInt16( pItem->Which() )
-               .WriteUInt16( nIVers );
-        pItem->Store( rStream, nIVers );
+        rStream.WriteUInt16( pItem->Which() );
+        pItem->Store( rStream );
     }
 
     // Extensions for 40A
@@ -508,15 +441,11 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 
         if( aFmt.GetBrush() )
         {
-            sal_uInt16 nVersion = aFmt.GetBrush()->GetVersion( SOFFICE_FILEFORMAT_50 );
-            rStream.WriteUInt16( nVersion );
-            aFmt.GetBrush()->Store( rStream, nVersion );
+            aFmt.GetBrush()->Store( rStream );
         }
         if( aFmt.GetGraphicOrientation() )
         {
-            sal_uInt16 nVersion = aFmt.GetGraphicOrientation()->GetVersion( SOFFICE_FILEFORMAT_50 );
-            rStream.WriteUInt16( nVersion );
-            aFmt.GetGraphicOrientation()->Store( rStream, nVersion );
+            aFmt.GetGraphicOrientation()->Store( rStream );
         }
     }
 }

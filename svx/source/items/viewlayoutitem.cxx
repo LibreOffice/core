@@ -67,14 +67,14 @@ SfxPoolItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 
 
-SfxPoolItem* SvxViewLayoutItem::Create( SvStream& /*rStrm*/, sal_uInt16 /*nVersion*/ ) const
+SfxPoolItem* SvxViewLayoutItem::Create( SvStream& /*rStrm*/ ) const
 {
     return 0;
 }
 
 
 
-SvStream& SvxViewLayoutItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxViewLayoutItem::Store( SvStream& rStrm ) const
 {
     return rStrm;
 }

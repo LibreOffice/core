@@ -30,8 +30,6 @@
     This item describes the Upper- and Lower space of a page or paragraph.
 */
 
-#define ULSPACE_16_VERSION  ((sal_uInt16)0x0001)
-
 class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
 {
     sal_uInt16 nUpper;  // Upper space
@@ -58,9 +56,8 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create(SvStream &) const SAL_OVERRIDE;
+    virtual SvStream&        Store(SvStream &) const SAL_OVERRIDE;
     virtual bool                 ScaleMetrics( long nMult, long nDiv ) SAL_OVERRIDE;
     virtual bool                 HasMetrics() const SAL_OVERRIDE;
 

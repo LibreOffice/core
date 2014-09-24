@@ -40,7 +40,7 @@ public:
     SdrTextVertAdjustItem(SdrTextVertAdjust eAdj, sal_uInt16 nWhich): SfxEnumItem(nWhich,(sal_uInt16)eAdj) {}
     SdrTextVertAdjustItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_TEXT_VERTADJUST,rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*      Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual sal_uInt16            GetValueCount() const SAL_OVERRIDE; // { return 5; }
             SdrTextVertAdjust GetValue() const      { return (SdrTextVertAdjust)SfxEnumItem::GetValue(); }
 
@@ -67,7 +67,7 @@ public:
     SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj=SDRTEXTHORZADJUST_BLOCK): SfxEnumItem(SDRATTR_TEXT_HORZADJUST,(sal_uInt16)eAdj) {}
     SdrTextHorzAdjustItem(SvStream& rIn)                                 : SfxEnumItem(SDRATTR_TEXT_HORZADJUST,rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*      Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual sal_uInt16        GetValueCount() const SAL_OVERRIDE;
             SdrTextHorzAdjust GetValue() const      { return (SdrTextHorzAdjust)SfxEnumItem::GetValue(); }
 

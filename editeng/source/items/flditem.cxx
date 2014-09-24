@@ -314,7 +314,7 @@ SfxPoolItem* SvxFieldItem::Clone( SfxItemPool* ) const
 
 
 
-SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
+SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm ) const
 {
     SvxFieldData* pData = 0;
     SvPersistStream aPStrm( GetClassManager(), &rStrm );
@@ -331,7 +331,7 @@ SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 
 
-SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxFieldItem::Store( SvStream& rStrm ) const
 {
     DBG_ASSERT( pField, "SvxFieldItem::Store: Field?!" );
     SvPersistStream aPStrm( GetClassManager(), &rStrm );

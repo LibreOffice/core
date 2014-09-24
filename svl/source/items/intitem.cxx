@@ -31,7 +31,7 @@
 TYPEINIT1_AUTOFACTORY(SfxByteItem, CntByteItem);
 
 // virtual
-SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxByteItem::Create(SvStream & rStream) const
 {
     short nValue = 0;
     rStream.ReadInt16( nValue );
@@ -102,13 +102,13 @@ bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
 }
 
 // virtual
-SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxInt16Item::Create(SvStream & rStream) const
 {
     return new SfxInt16Item(Which(), rStream);
 }
 
 // virtual
-SvStream & SfxInt16Item::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxInt16Item::Store(SvStream & rStream) const
 {
     rStream.WriteInt16( short(m_nValue) );
     return rStream;

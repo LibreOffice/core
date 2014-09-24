@@ -31,7 +31,6 @@
     This item Describes a wrap-attribute
     Automatic?, Page or column break, before or after?
 */
-#define FMTBREAK_NOAUTO ((sal_uInt16)0x0001)
 
 class EDITENG_DLLPUBLIC SvxFmtBreakItem : public SfxEnumItem
 {
@@ -55,9 +54,8 @@ public:
     virtual OUString    GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual sal_uInt16       GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 ) const SAL_OVERRIDE;
+    virtual SvStream&        Store( SvStream& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create( SvStream& ) const SAL_OVERRIDE;
     virtual sal_uInt16       GetValueCount() const SAL_OVERRIDE;
 
     // MS VC4.0 messes things up

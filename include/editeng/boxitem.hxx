@@ -39,17 +39,6 @@
 #define BOX_LINE_LEFT   ((sal_uInt16)2)
 #define BOX_LINE_RIGHT  ((sal_uInt16)3)
 
-/**
-This version causes SvxBoxItem to store the 4 cell spacing distances separately
-when serializing to stream.
-*/
-#define BOX_4DISTS_VERSION ((sal_uInt16)1)
-/**
-This version causes SvxBoxItem to store the styles for its border lines when
-serializing to stream.
-*/
-#define BOX_BORDER_STYLE_VERSION ((sal_uInt16)2)
-
 class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
 {
     editeng::SvxBorderLine  *pTop,
@@ -80,9 +69,8 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create(SvStream &) const SAL_OVERRIDE;
+    virtual SvStream&        Store(SvStream &) const SAL_OVERRIDE;
 
     virtual bool             ScaleMetrics( long nMult, long nDiv ) SAL_OVERRIDE;
     virtual bool             HasMetrics() const SAL_OVERRIDE;
@@ -189,8 +177,8 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream &) const SAL_OVERRIDE;
+    virtual SvStream&       Store(SvStream &) const SAL_OVERRIDE;
     virtual bool             ScaleMetrics( long nMult, long nDiv ) SAL_OVERRIDE;
     virtual bool             HasMetrics() const SAL_OVERRIDE;
 

@@ -220,7 +220,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 
 
-SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
+SfxPoolItem* SvxPageItem::Create( SvStream& rStream ) const
 {
     sal_uInt8 eType;
     bool bLand;
@@ -243,7 +243,7 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
 
 
 
-SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxPageItem::Store( SvStream &rStrm ) const
 {
     // UNICODE: rStrm << aDescName;
     rStrm.WriteUniOrByteString(aDescName, rStrm.GetStreamCharSet());
@@ -290,7 +290,7 @@ bool SvxSetItem::GetPresentation
     return false;
 }
 
-SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* SvxSetItem::Create(SvStream &rStrm) const
 {
     SfxItemSet* _pSet = new SfxItemSet( *GetItemSet().GetPool(),
                                        GetItemSet().GetRanges() );
@@ -300,9 +300,9 @@ SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, sal_uInt16 /*nVersion*/) const
     return new SvxSetItem( Which(), *_pSet );
 }
 
-SvStream& SvxSetItem::Store(SvStream &rStrm, sal_uInt16 nItemVersion) const
+SvStream& SvxSetItem::Store(SvStream &rStrm) const
 {
-    GetItemSet().Store( rStrm, nItemVersion );
+    GetItemSet().Store( rStrm );
 
     return rStrm;
 }

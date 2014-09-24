@@ -142,7 +142,7 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
              StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() ) );
 }
 
-SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */ ) const
+SfxPoolItem* ScPatternAttr::Create( SvStream& rStream ) const
 {
     OUString* pStr;
     bool    bHasStyle;
@@ -170,7 +170,7 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
     return pPattern;
 }
 
-SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */) const
+SvStream& ScPatternAttr::Store(SvStream& rStream) const
 {
     rStream.WriteUChar( true );
 

@@ -47,7 +47,7 @@ public:
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
     virtual OUString        GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rStream ) const SAL_OVERRIDE;
 
     inline  SvxHorJustifyItem& operator=(const SvxHorJustifyItem& rHorJustify)
             {
@@ -80,7 +80,7 @@ public:
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
     virtual OUString        GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rStream ) const SAL_OVERRIDE;
 
     inline  SvxVerJustifyItem& operator=(const SvxVerJustifyItem& rVerJustify)
             {
@@ -109,7 +109,7 @@ public:
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
     virtual OUString        GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rStream ) const SAL_OVERRIDE;
 
     SvxJustifyMethodItem& operator=(const SvxJustifyMethodItem& r);
 };

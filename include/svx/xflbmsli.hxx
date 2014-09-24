@@ -31,7 +31,7 @@ public:
                             SVX_DLLPRIVATE XFillBmpSizeLogItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

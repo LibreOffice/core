@@ -92,8 +92,8 @@ public:
     void SetMacroEvents (const sal_uInt16 nEvents) { nMacroEvents = nEvents; }
     sal_uInt16 GetMacroEvents() const { return nMacroEvents; }
 
-    virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SvStream&           Store( SvStream & ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*        Create( SvStream & ) const SAL_OVERRIDE;
 
 };
 

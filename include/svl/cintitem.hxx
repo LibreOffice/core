@@ -57,9 +57,9 @@ public:
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SfxPoolItem * Create(SvStream & rStream) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream & rStream) const SAL_OVERRIDE;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
@@ -116,9 +116,9 @@ public:
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SfxPoolItem * Create(SvStream & rStream) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream & rStream) const SAL_OVERRIDE;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
@@ -175,9 +175,9 @@ public:
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SfxPoolItem * Create(SvStream & rStream) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream &, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream &) const SAL_OVERRIDE;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
@@ -234,9 +234,9 @@ public:
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SfxPoolItem * Create(SvStream & rStream) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream & rStream) const SAL_OVERRIDE;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 

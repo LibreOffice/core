@@ -80,12 +80,12 @@ bool SfxInt64Item::PutValue(
     return false;
 }
 
-SfxPoolItem* SfxInt64Item::Create( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
+SfxPoolItem* SfxInt64Item::Create( SvStream& rStream ) const
 {
     return new SfxInt64Item(Which(), rStream);
 }
 
-SvStream& SfxInt64Item::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SfxInt64Item::Store( SvStream& rStream ) const
 {
     return rStream.WriteInt64(mnValue);
 }

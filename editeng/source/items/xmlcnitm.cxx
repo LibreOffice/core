@@ -73,12 +73,6 @@ bool SvXMLAttrContainerItem::GetPresentation(
     return false;
 }
 
-sal_uInt16 SvXMLAttrContainerItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
-{
-    // This item should never be stored
-    return USHRT_MAX;
-}
-
 bool SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer =

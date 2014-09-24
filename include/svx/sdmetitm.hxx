@@ -35,7 +35,7 @@ public:
     SdrMetricItem(sal_uInt16 nId, sal_Int32 nVal=0):  SfxInt32Item(nId,nVal) {}
     SdrMetricItem(sal_uInt16 nId, SvStream& rIn): SfxInt32Item(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn) const SAL_OVERRIDE;
     virtual bool HasMetrics() const SAL_OVERRIDE;
     virtual bool ScaleMetrics(long nMul, long nDiv) SAL_OVERRIDE;
 

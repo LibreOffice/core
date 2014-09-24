@@ -165,7 +165,7 @@ SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
 
 
 
-SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
+SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream ) const
 {
     return new SfxAllEnumItem( Which(), rStream );
 }

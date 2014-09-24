@@ -125,7 +125,7 @@ SfxPoolItem* SvxOrientationItem::Clone( SfxItemPool* ) const
 
 
 
-SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
+SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream ) const
 {
     sal_uInt16 nVal;
     rStream.ReadUInt16( nVal );
@@ -282,7 +282,7 @@ SfxPoolItem* SvxMarginItem::Clone( SfxItemPool* ) const
 
 
 
-SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
+SfxPoolItem* SvxMarginItem::Create( SvStream& rStream ) const
 {
     sal_Int16   nLeft;
     sal_Int16   nTop;
@@ -297,7 +297,7 @@ SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
 
 
 
-SvStream& SvxMarginItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
+SvStream& SvxMarginItem::Store( SvStream &rStream ) const
 {
     rStream.WriteInt16( nLeftMargin );
     rStream.WriteInt16( nTopMargin );

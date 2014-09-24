@@ -76,7 +76,7 @@ bool SfxSetItem::GetPresentation
 
 
 
-SvStream& SfxSetItem::Store(SvStream& rStream, sal_uInt16) const
+SvStream& SfxSetItem::Store(SvStream& rStream) const
 {
     GetItemSet().Store(rStream);
     return rStream;

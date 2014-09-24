@@ -35,7 +35,7 @@ public:
                             XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence = 0);
                             XFormTextShadowTranspItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = NULL) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream& rIn) const SAL_OVERRIDE;
 };
 
 #endif

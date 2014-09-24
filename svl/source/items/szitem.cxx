@@ -82,7 +82,7 @@ SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
 
 
 
-SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
+SfxPoolItem* SfxSizeItem::Create(SvStream &rStream) const
 {
     Size aStr;
     ReadPair( rStream, aStr );
@@ -91,7 +91,7 @@ SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
 
 
 
-SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxSizeItem::Store(SvStream &rStream) const
 {
     WritePair( rStream, aVal );
     return rStream;

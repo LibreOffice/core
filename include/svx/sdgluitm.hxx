@@ -38,7 +38,7 @@ public:
                             SdrGrafLuminanceItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFLUMINANCE, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
 };
 
 
@@ -55,7 +55,7 @@ public:
                             SdrGrafContrastItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFCONTRAST, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SDGLUITM_HXX

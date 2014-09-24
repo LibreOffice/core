@@ -121,7 +121,7 @@ SfxEnumItem::SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
 TYPEINIT1(SfxEnumItem, SfxEnumItemInterface)
 
 // virtual
-SvStream & SfxEnumItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxEnumItem::Store(SvStream & rStream) const
 {
     rStream.WriteUInt16( m_nValue );
     return rStream;
@@ -202,13 +202,13 @@ bool SfxBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-SfxPoolItem * SfxBoolItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxBoolItem::Create(SvStream & rStream) const
 {
     return new SfxBoolItem(Which(), rStream);
 }
 
 // virtual
-SvStream & SfxBoolItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxBoolItem::Store(SvStream & rStream) const
 {
     rStream.WriteUChar( m_bValue ); // not bool for serialization!
     return rStream;

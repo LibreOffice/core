@@ -36,9 +36,8 @@ public:
                             XLineJointItem( com::sun::star::drawing::LineJoint eLineJoint = com::sun::star::drawing::LineJoint_ROUND );
                             XLineJointItem( SvStream& rIn );
 
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn ) const SAL_OVERRIDE;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
