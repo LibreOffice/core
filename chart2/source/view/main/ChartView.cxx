@@ -2581,6 +2581,9 @@ void ChartView::impl_updateView()
         return;
     }
 
+    if (mrChartModel.hasControllersLocked())
+        return;
+
     if( m_bViewDirty && !m_bInViewUpdate )
     {
         m_bInViewUpdate = true;
