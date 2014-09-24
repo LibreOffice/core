@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <exception>
+#include <memory>
 #include <vector>
 
 #include "boost/scoped_ptr.hpp"
@@ -35,7 +36,6 @@
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
-#include "o3tl/heap_ptr.hxx"
 #include "rtl/byteseq.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -328,7 +328,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             }
             break;
         }
-        o3tl::heap_ptr< IncomingRequest > req(
+        std::unique_ptr< IncomingRequest > req(
             new IncomingRequest(
                 bridge_, tid, oid, obj, type, functionId, synchronous, memberTd,
                 setter, inArgs, ccMode, cc));
@@ -441,7 +441,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
     switch (req.kind) {
     case OutgoingRequest::KIND_NORMAL:
         {
-            o3tl::heap_ptr< IncomingReply > resp(
+            std::unique_ptr< IncomingReply > resp(
                 new IncomingReply(exc, ret, outArgs));
             uno_threadpool_putJob(
                 bridge_->getThreadPool(), tid.getHandle(), resp.get(), 0,
