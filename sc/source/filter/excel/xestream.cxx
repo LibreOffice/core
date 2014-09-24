@@ -939,6 +939,7 @@ XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC )
 
 XclExpXmlStream::~XclExpXmlStream()
 {
+    assert(maStreams.empty() && "Forgotten PopStream()?");
 }
 
 sax_fastparser::FSHelperPtr& XclExpXmlStream::GetCurrentStream()
@@ -1102,6 +1103,12 @@ bool XclExpXmlStream::exportDocument()
             xStatusIndicator->setValue(40);
         aDocRoot.WriteXml( *this );
     }
+
+    PopStream();
+    // Free all FSHelperPtr, to flush data before commiting storage
+    maOpenedStreamMap.clear();
+
+    commitStorage();
 
     if (xStatusIndicator.is())
         xStatusIndicator->end();

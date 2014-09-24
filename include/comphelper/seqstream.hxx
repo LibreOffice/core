@@ -74,26 +74,22 @@ public:
 private:
     inline sal_Int32 avail();
 };
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XOutputStream > OSequenceOutputStream_Base;
 
-class OSequenceOutputStream : public OSequenceOutputStream_Base
+class COMPHELPER_DLLPUBLIC OSequenceOutputStream :
+    public ::cppu::WeakImplHelper1< ::com::sun::star::io::XOutputStream >
 {
 protected:
     ::com::sun::star::uno::Sequence< sal_Int8 >&    m_rSequence;
     double                                          m_nResizeFactor;
     sal_Int32                                       m_nMinimumResize;
     sal_Int32                                       m_nMaximumResize;
+    /** the size of the virtual stream. This is not the size of the sequence,
+        but the number of bytes written into the stream at a given moment.
+     */
     sal_Int32                                       m_nSize;
-        // the size of the virtual stream. This is not the size of the sequence, but the number of bytes written
-        // into the stream at a given moment.
 
-    bool                                        m_bConnected;
-        // closeOutput has been called ?
-
+    bool                                            m_bConnected; ///< closeOutput has been called ?
     ::osl::Mutex                                    m_aMutex;
-
-protected:
-    virtual ~OSequenceOutputStream() { if (m_bConnected) closeOutput(); }
 
 public:
     /** constructs the object. Everything written into the stream through the XOutputStream methods will be forwarded
@@ -117,6 +113,8 @@ public:
         sal_Int32 _nMinimumResize = 128,
         sal_Int32 _nMaximumResize = -1
         );
+
+    virtual ~OSequenceOutputStream() { if (m_bConnected) closeOutput(); }
 
     /// same as XOutputStream::writeBytes (as expected :)
     virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -29,6 +29,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <comphelper/seqstream.hxx>
 #include "sax/fshelper.hxx"
 
 namespace sax_fastparser {
@@ -148,6 +149,11 @@ public:
     void mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND );
 
 private:
+    /// Buffer written to mxOutputStream at the end, called from FSHelper destructor.
+    css::uno::Sequence< sal_Int8 > maOutputData;
+    /// Helper class to dynamically allocate memory when needed for maOutputData.
+    comphelper::OSequenceOutputStream maOutputStream;
+    /// Output stream, usually writing data into files.
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > mxOutputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxFastTokenHandler;
 
