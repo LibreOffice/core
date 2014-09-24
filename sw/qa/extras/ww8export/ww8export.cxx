@@ -363,6 +363,14 @@ DECLARE_WW8EXPORT_TEST(testRedlineExport2, "redline-export-2.odt")
     CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(3), 1), "RedlineType"));
 }
 
+DECLARE_WW8EXPORT_TEST(testRedlineExport3, "redline-export-3.odt")
+{
+    //there must be redline information just on the para-break boundary between para one and two
+    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(1), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(2), 2), "RedlineType"));
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

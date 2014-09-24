@@ -1261,6 +1261,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
         const SwRangeRedline *pRange = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[nPos];
         const SwPosition* pEnd = pRange->End();
         const SwPosition* pStart = pRange->Start();
+        bool bBreak = true;
         // In word the paragraph end marker is a real character, in writer it is not.
         // Here we find out if the para end marker we will emit is affected by
         // redlining, in which case it must be included by the range of character
@@ -1271,11 +1272,25 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
             {
                 // This condition detects if the pseudo-char we will export
                 // should be explicitly included by the redlining char
-                // properties on this node
+                // properties on this node because the redlining ends right
+                // after it
                 return true;
             }
+            bBreak = false;
         }
-        else if (pStart->nNode.GetIndex()-1 == rNd.GetIndex())
+        if (pStart->nNode == rNd)
+        {
+            if (pStart->nContent.GetIndex() == nEnd)
+            {
+                // This condition detects if the pseudo-char we will export
+                // should be explicitly included by the redlining char
+                // properties on this node because the redlining starts right
+                // before it
+                return true;
+            }
+            bBreak = false;
+        }
+        if (pStart->nNode.GetIndex()-1 == rNd.GetIndex())
         {
             if (pStart->nContent.GetIndex() == 0)
             {
@@ -1284,9 +1299,10 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
                 // properties starting on the next node.
                 return true;
             }
+            bBreak = false;
         }
 
-        else
+        if (bBreak)
             break;
     }
     return false;
