@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_d164a64a",
+        "filename": "javaunohelper/test/com/sun/star/lib/uno/helper/InterfaceContainer_Test.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-24T11:24:40Z",
+      "side": 1,
+      "message": "This is wrong idiom in JUnit to achieve what you want: to ensure that exception really happens. JUnit way to that is:\n\nOption 1: use fail() method direct after statement that expects to trow exception\n\n  import static org.junit.Assert.fail;\n  [...]\n  try {\n    cont.add(5, obj1);\n    fail(\"IndexOutOfBoundsException expected\");\n  } catch (IndexOutOfBoundsException e) {\n  }\n\nAnd no temporary var exception is needed with this approach.\n\n\nOption 2: use \"expected\" parameter to @Test annotation. This tells Junit that exception is the expected result so test will be passed (marked as green) when exception is thrown:\n\n  @Test(expected \u003d IndexOutOfBoundsException.class)\n  public void get() {\n    [...]\n    cont.add(5, obj1);\n  }",
+      "revId": "c0dfb2d0d0af38df40979de5ffb3f917c6cdf8e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
