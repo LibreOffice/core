@@ -44,6 +44,7 @@ import android.graphics.RectF;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 
 import org.libreoffice.LOEvent;
 import org.libreoffice.LOKitShell;
@@ -51,64 +52,71 @@ import org.libreoffice.LibreOfficeMainActivity;
 import org.mozilla.gecko.util.FloatUtils;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
-public class GeckoLayerClient {
+public class GeckoLayerClient implements LayerView.Listener {
     private static final String LOGTAG = "GeckoLayerClient";
 
-    private static final long MIN_VIEWPORT_CHANGE_DELAY = 25L;
-    private static final IntSize TILE_SIZE = new IntSize(256, 256);
+    private LayerController mLayerController;
+    private LayerRenderer mLayerRenderer;
+    private boolean mLayerRendererInitialized;
 
-    protected IntSize mScreenSize;
+    private IntSize mScreenSize;
+    private IntSize mWindowSize;
     private DisplayPortMetrics mDisplayPort;
-    protected Layer mTileLayer;
+    private boolean mRecordDrawTimes;
+    private DrawTimingQueue mDrawTimingQueue;
+
+    private Layer mRootLayer;
+
     /* The viewport that Gecko is currently displaying. */
-    protected ViewportMetrics mGeckoViewport;
+    private ViewportMetrics mGeckoViewport;
+
     /* The viewport that Gecko will display when drawing is finished */
-    protected ViewportMetrics mNewGeckoViewport;
-    protected LayerController mLayerController;
+    private ViewportMetrics mNewGeckoViewport;
     private Context mContext;
+    private static final long MIN_VIEWPORT_CHANGE_DELAY = 25L;
     private long mLastViewportChangeTime;
     private boolean mPendingViewportAdjust;
     private boolean mViewportSizeChanged;
+    private boolean mIgnorePaintsPendingViewportSizeChange;
+    private boolean mFirstPaint = true;
+
     // mUpdateViewportOnEndDraw is used to indicate that we received a
     // viewport update notification while drawing. therefore, when the
     // draw finishes, we need to update the entire viewport rather than
     // just the page size. this boolean should always be accessed from
     // inside a transaction, so no synchronization is needed.
     private boolean mUpdateViewportOnEndDraw;
+
     private String mLastCheckerboardColor;
+
+    private static Pattern sColorPattern;
+
+    /* Used as a temporary ViewTransform by syncViewportInfo */
+    private ViewTransform mCurrentViewTransform;
 
     public GeckoLayerClient(Context context) {
         mContext = context;
         mScreenSize = new IntSize(0, 0);
+        mWindowSize = new IntSize(0, 0);
         mDisplayPort = new DisplayPortMetrics();
+        mRecordDrawTimes = true;
+        mDrawTimingQueue = new DrawTimingQueue();
+        mCurrentViewTransform = new ViewTransform(0, 0, 1);
     }
 
-    protected void setupLayer() {
-        if (mTileLayer == null) {
-            Log.i(LOGTAG, "Creating MultiTileLayer");
-            mTileLayer = new MultiTileLayer(TILE_SIZE);
-            mLayerController.setRoot(mTileLayer);
-        }
-    }
-
-    protected void updateLayerAfterDraw() {
-        if (mTileLayer instanceof MultiTileLayer) {
-            ((MultiTileLayer) mTileLayer).invalidate();
-        }
-    }
-
-    protected IntSize getTileSize() {
-        return TILE_SIZE;
-    }
-
-    /**
-     * Attaches the root layer to the layer controller so that Gecko appears.
-     */
+    /** Attaches the root layer to the layer controller so that Gecko appears. */
     public void setLayerController(LayerController layerController) {
+        LayerView view = layerController.getView();
+
         mLayerController = layerController;
 
-        layerController.setRoot(mTileLayer);
+        mRootLayer = new MultiTileLayer(new IntSize(256, 256));
+
+        view.setListener(this);
+        layerController.setRoot(mRootLayer);
+
         if (mGeckoViewport != null) {
             layerController.setViewportMetrics(mGeckoViewport);
         }
@@ -116,10 +124,19 @@ public class GeckoLayerClient {
         sendResizeEventIfNecessary(true);
     }
 
+    DisplayPortMetrics getDisplayPort() {
+        return mDisplayPort;
+    }
+
+    protected void updateLayerAfterDraw() {
+        if (mRootLayer instanceof MultiTileLayer) {
+            ((MultiTileLayer) mRootLayer).invalidate();
+        }
+    }
+
     public void beginDrawing(ViewportMetrics viewportMetrics) {
-        setupLayer();
         mNewGeckoViewport = viewportMetrics;
-        mTileLayer.beginTransaction();
+        mRootLayer.beginTransaction();
     }
 
     public void endDrawing() {
@@ -129,14 +146,10 @@ public class GeckoLayerClient {
                 mUpdateViewportOnEndDraw = false;
                 updateLayerAfterDraw();
             } finally {
-                mTileLayer.endTransaction();
+                mRootLayer.endTransaction();
             }
         }
         Log.i(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - endDrawing");
-    }
-
-    DisplayPortMetrics getDisplayPort() {
-        return mDisplayPort;
     }
 
     protected void updateViewport(boolean onlyUpdatePageSize) {
@@ -150,8 +163,8 @@ public class GeckoLayerClient {
 
         PointF displayportOrigin = mGeckoViewport.getOrigin();
         RectF position = mGeckoViewport.getViewport();
-        mTileLayer.setPosition(RectUtils.round(position));
-        mTileLayer.setResolution(mGeckoViewport.getZoomFactor());
+        mRootLayer.setPosition(RectUtils.round(position));
+        mRootLayer.setResolution(mGeckoViewport.getZoomFactor());
 
         Log.e(LOGTAG, "### updateViewport onlyUpdatePageSize=" + onlyUpdatePageSize + " getTileViewport " + mGeckoViewport);
 
@@ -173,51 +186,39 @@ public class GeckoLayerClient {
 
         DisplayMetrics metrics = new DisplayMetrics();
         LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        View view = mLayerController.getView();
 
         IntSize newScreenSize = new IntSize(metrics.widthPixels, metrics.heightPixels);
+        IntSize newWindowSize = new IntSize(view.getWidth(), view.getHeight());
 
         // Return immediately if the screen size hasn't changed or the viewport
         // size is zero (which indicates that the rendering surface hasn't been
         // allocated yet).
         boolean screenSizeChanged = !mScreenSize.equals(newScreenSize);
+        boolean windowSizeChanged = !mWindowSize.equals(newWindowSize);
 
-        if (!force && !screenSizeChanged) {
+        if (!force && !screenSizeChanged && !windowSizeChanged) {
             return;
         }
 
         mScreenSize = newScreenSize;
+        mWindowSize = newWindowSize;
 
         if (screenSizeChanged) {
             Log.d(LOGTAG, "Screen-size changed to " + mScreenSize);
         }
 
-        IntSize tileSize = getTileSize();
-        LOEvent event = LOEvent.sizeChanged(metrics.widthPixels, metrics.heightPixels, tileSize.width, tileSize.height);
+        if (windowSizeChanged) {
+            Log.d(LOGTAG, "Window-size changed to " + mWindowSize);
+        }
+
+        LOEvent event = LOEvent.sizeChanged(metrics.widthPixels, metrics.heightPixels);
         LOKitShell.sendEvent(event);
     }
 
-    public void render() {
-        adjustViewportWithThrottling();
-    }
-
-    private void adjustViewportWithThrottling() {
-        if (!mLayerController.getRedrawHint())
-            return;
-
-        if (mPendingViewportAdjust)
-            return;
-
-        long timeDelta = System.currentTimeMillis() - mLastViewportChangeTime;
-        if (timeDelta < MIN_VIEWPORT_CHANGE_DELAY) {
-            mLayerController.getView().postDelayed(new AdjustRunnable(), MIN_VIEWPORT_CHANGE_DELAY - timeDelta);
-            mPendingViewportAdjust = true;
-        } else {
-            adjustViewport(null);
-        }
-    }
-
     public void viewportSizeChanged() {
-        mViewportSizeChanged = true;
+        sendResizeEventIfNecessary(true);
+        LOKitShell.viewSizeChanged();
     }
 
     void adjustViewport(DisplayPortMetrics displayPort) {
@@ -234,13 +235,31 @@ public class GeckoLayerClient {
         mDisplayPort = displayPort;
         mGeckoViewport = clampedMetrics;
 
+        if (mRecordDrawTimes) {
+            mDrawTimingQueue.add(displayPort);
+        }
+
         LOKitShell.sendEvent(LOEvent.viewport(clampedMetrics));
         if (mViewportSizeChanged) {
             mViewportSizeChanged = false;
             LOKitShell.viewSizeChanged();
         }
+    }
 
-        mLastViewportChangeTime = System.currentTimeMillis();
+    public void setPageSize(float zoom, float pageWidth, float pageHeight, float cssPageWidth, float cssPageHeight) {
+        synchronized (mLayerController) {
+        // adjust the page dimensions to account for differences in zoom
+        // between the rendered content (which is what the compositor tells us)
+    // and our zoom level (which may have diverged).
+        float ourZoom = mLayerController.getZoomFactor();
+        pageWidth = pageWidth * ourZoom / zoom;
+        pageHeight = pageHeight * ourZoom /zoom;
+        mLayerController.setPageSize(new FloatSize(pageWidth, pageHeight));
+        // Here the page size of the document has changed, but the document being displayed
+        // is still the same. Therefore, we don't need to send anything to browser.js; any
+        // changes we need to make to the display port will get sent the next time we call
+        // adjustViewport().
+        }
     }
 
     public void geometryChanged() {
@@ -250,24 +269,41 @@ public class GeckoLayerClient {
     }
 
     public ViewportMetrics getGeckoViewportMetrics() {
-        // Return a copy, as we modify this inside the Gecko thread
-        if (mGeckoViewport != null)
-            return new ViewportMetrics(mGeckoViewport);
-        return null;
-    }
-
-
-    public void addTile(SubTile tile) {
-        if (mTileLayer instanceof MultiTileLayer) {
-            ((MultiTileLayer) mTileLayer).addTile(tile);
-        }
+        return mGeckoViewport;
     }
 
     public List<SubTile> getTiles() {
-        if (mTileLayer instanceof MultiTileLayer) {
-            return ((MultiTileLayer) mTileLayer).getTiles();
+        if (mRootLayer instanceof MultiTileLayer) {
+            return ((MultiTileLayer) mRootLayer).getTiles();
         }
         return null;
+    }
+
+    public void addTile(SubTile tile) {
+        if (mRootLayer instanceof MultiTileLayer) {
+            ((MultiTileLayer) mRootLayer).addTile(tile);
+        }
+    }
+
+    @Override
+    public void renderRequested() {
+
+    }
+
+    @Override
+    public void compositionPauseRequested() {
+
+    }
+
+    @Override
+    public void compositionResumeRequested() {
+
+    }
+
+    @Override
+    public void surfaceChanged(int width, int height) {
+        compositionResumeRequested();
+        renderRequested();
     }
 
     private class AdjustRunnable implements Runnable {

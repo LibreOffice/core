@@ -20,7 +20,7 @@ public class LOEvent {
     private int mPartIndex;
     private String mFilename;
 
-    public LOEvent(int type, int widthPixels, int heightPixels, int tileWidth, int tileHeight) {
+    public LOEvent(int type, int widthPixels, int heightPixels) {
         mType = type;
         mTypeString = "Size Changed: " + widthPixels + " " + heightPixels;
     }
@@ -56,8 +56,8 @@ public class LOEvent {
         return new LOEvent(DRAW, rect);
     }
 
-    public static LOEvent sizeChanged(int widthPixels, int heightPixels, int tileWidth, int tileHeight) {
-        return new LOEvent(SIZE_CHANGED, widthPixels, heightPixels, tileWidth, tileHeight);
+    public static LOEvent sizeChanged(int widthPixels, int heightPixels) {
+        return new LOEvent(SIZE_CHANGED, widthPixels, heightPixels);
     }
 
     public static LOEvent tileSize(IntSize tileSize) {
