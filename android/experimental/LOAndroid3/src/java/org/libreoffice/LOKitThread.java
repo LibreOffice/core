@@ -152,7 +152,7 @@ public class LOKitThread extends Thread {
             Log.i(LOGTAG, "Done generate thumbnail!");
             if (bitmap != null) {
                 Log.i(LOGTAG, "Setting checkboard image!");
-                mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap);
+                mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
                 Log.i(LOGTAG, "Done setting checkboard image!!");
                 mCheckboardImageSet = true;
             }
