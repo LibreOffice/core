@@ -45,7 +45,7 @@ AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements ) : mpGuardArray(new bo
 
 AutoOGuardArray::~AutoOGuardArray()
 {
-    //!! release auto_ptr's and thus the mutexes locks
+    //!! release scoped_ptr's and thus the mutexes locks
     delete [] mpGuardArray;
 
 }
@@ -216,9 +216,9 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
         const OUString * pString = aPropertyNames.getConstArray();
         PropertyDataHash::const_iterator aEnd = mpInfo->maMap.end(), aIter;
 
-        //!! have an auto_ptr to an array of OGuards in order to have the
+        //!! have a scoped_ptr to an array of OGuards in order to have the
         //!! allocated memory properly freed (exception safe!).
-        //!! Since the array itself has auto_ptrs as members we have to use a
+        //!! Since the array itself has scoped_ptrs as members we have to use a
         //!! helper class 'AutoOGuardArray' in order to have
         //!! the acquired locks properly released.
         AutoOGuardArray aOGuardArray( nCount );
@@ -281,9 +281,9 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
         const OUString * pString = aPropertyNames.getConstArray();
         PropertyDataHash::const_iterator aEnd = mpInfo->maMap.end(), aIter;
 
-        //!! have an auto_ptr to an array of OGuards in order to have the
+        //!! have an scoped_ptr to an array of OGuards in order to have the
         //!! allocated memory properly freed (exception safe!).
-        //!! Since the array itself has auto_ptrs as members we have to use a
+        //!! Since the array itself has scoped_ptrs as members we have to use a
         //!! helper class 'AutoOGuardArray' in order to have
         //!! the acquired locks properly released.
         AutoOGuardArray aOGuardArray( nCount );

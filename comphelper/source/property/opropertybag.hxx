@@ -77,7 +77,7 @@ namespace comphelper
     {
     private:
         /// our IPropertyArrayHelper implementation
-        ::std::auto_ptr< ::cppu::OPropertyArrayHelper >
+        ::std::unique_ptr< ::cppu::OPropertyArrayHelper >
                         m_pArrayHelper;
         ::comphelper::PropertyBag
                         m_aDynamicProperties;

@@ -39,9 +39,10 @@
 #include <typelib/typedescription.hxx>
 
 #include <map>
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
+#include <utility>
 
+#include <boost/noncopyable.hpp>
 
 namespace comphelper
 {
@@ -93,8 +94,8 @@ namespace comphelper
     {
         Type                                        m_aKeyType;
         Type                                        m_aValueType;
-        ::std::auto_ptr< KeyedValues >              m_pValues;
-        ::boost::shared_ptr< IKeyPredicateLess >    m_pKeyCompare;
+        ::std::unique_ptr< KeyedValues >            m_pValues;
+        ::std::shared_ptr< IKeyPredicateLess >      m_pKeyCompare;
         bool                                        m_bMutable;
         MapListeners                                m_aModListeners;
 
@@ -333,7 +334,7 @@ namespace comphelper
     private:
         // since we share our mutex with the main map, we need to keep it alive as long as we live
         Reference< XInterface >     m_xKeepMapAlive;
-        ::std::auto_ptr< MapData >  m_pMapDataCopy;
+        ::std::unique_ptr< MapData > m_pMapDataCopy;
         MapEnumerator               m_aEnumerator;
     };
 
@@ -388,14 +389,14 @@ namespace comphelper
             throw IllegalTypeException("Unsupported value type.", *this );
 
         // create the comparator for the KeyType, and throw if the type is not supported
-        ::std::auto_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, NULL ) );
+        ::std::unique_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, NULL ) );
         if ( !pComparator.get() )
             throw IllegalTypeException("Unsupported key type.", *this );
 
         // init members
         m_aData.m_aKeyType = aKeyType;
         m_aData.m_aValueType = aValueType;
-        m_aData.m_pKeyCompare = pComparator;
+        m_aData.m_pKeyCompare = std::move(pComparator);
         m_aData.m_pValues.reset( new KeyedValues( *m_aData.m_pKeyCompare ) );
         m_aData.m_bMutable = bMutable;
 

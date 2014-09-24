@@ -204,7 +204,7 @@ namespace comphelper
             a default implementation of IKeyPredicateLess, which is able to compare values of the given type. If no
             such default implementation is known for the given type, then <NULL/> is returned.
     */
-    ::std::auto_ptr< IKeyPredicateLess > COMPHELPER_DLLPUBLIC
+    ::std::unique_ptr< IKeyPredicateLess > COMPHELPER_DLLPUBLIC
         getStandardLessPredicate(
             ::com::sun::star::uno::Type const & i_type,
             ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > const & i_collator

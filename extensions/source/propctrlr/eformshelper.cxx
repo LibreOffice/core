@@ -243,9 +243,7 @@ namespace pcr
     {
         if ( !_bDoListen )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > pListenerIterator = m_aPropertyListeners.createIterator();
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr< ::cppu::OInterfaceIteratorHelper > pListenerIterator = m_aPropertyListeners.createIterator();
             while ( pListenerIterator->hasMoreElements() )
             {
                 PropertyEventTranslation* pTranslator = dynamic_cast< PropertyEventTranslation* >( pListenerIterator->next() );
@@ -279,9 +277,7 @@ namespace pcr
             }
             else
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > pListenerIterator = m_aPropertyListeners.createIterator();
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                ::std::unique_ptr< ::cppu::OInterfaceIteratorHelper > pListenerIterator = m_aPropertyListeners.createIterator();
                 while ( pListenerIterator->hasMoreElements() )
                 {
                     Reference< XPropertyChangeListener > xListener( pListenerIterator->next(), UNO_QUERY );
