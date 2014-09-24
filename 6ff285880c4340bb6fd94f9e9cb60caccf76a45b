@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_d4781492",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:33:19Z",
+      "side": 1,
+      "message": "are you sure the weak_ptr will always be valid still? at least assert() it before.",
+      "revId": "6ff285880c4340bb6fd94f9e9cb60caccf76a45b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
