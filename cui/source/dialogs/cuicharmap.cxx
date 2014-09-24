@@ -53,8 +53,6 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     m_pShowChar->SetCentered(true);
     get(m_pShowText, "showtext");
     get(m_pOKBtn, "ok");
-    get(m_pDeleteBtn, "delete");
-    get(m_pDeleteLastBtn, "deletelast");
     get(m_pFontText, "fontft");
     get(m_pFontLB, "fontlb");
     m_pFontLB->SetStyle(m_pFontLB->GetStyle() | WB_SORT);
@@ -67,8 +65,6 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     //lock the size request of this widget to the width of the original .ui string
     m_pCharCodeText->set_width_request(m_pCharCodeText->get_preferred_size().Width());
     get(m_pSymbolText, "symboltext");
-    //lock the size request of this widget to double the height of the label
-    m_pShowText->set_height_request(m_pSymbolText->get_preferred_size().Height() * 3);
 
     SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1, false );
     if ( pItem )
@@ -318,8 +314,6 @@ void SvxCharacterMap::init()
     {
         m_pSymbolText->Hide();
         m_pShowText->Hide();
-        m_pDeleteBtn->Hide();
-        m_pDeleteLastBtn->Hide();
     }
 
     OUString aDefStr( aFont.GetName() );
@@ -368,8 +362,6 @@ void SvxCharacterMap::init()
     m_pShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
     m_pShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
     m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
-    m_pDeleteLastBtn->SetClickHdl( LINK( this, SvxCharacterMap, DeleteLastHdl ) );
-    m_pDeleteBtn->SetClickHdl( LINK( this, SvxCharacterMap, DeleteHdl ) );
 
     if( SvxShowCharSet::getSelectedChar() == ' ')
         m_pOKBtn->Disable();
@@ -526,7 +518,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
 
     }
     m_pOKBtn->Enable();
-    m_pDeleteLastBtn->Enable();
     return 0;
 }
 
@@ -583,28 +574,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl)
     }
 
     m_pOKBtn->Enable();
-    return 0;
-}
-
-
-
-IMPL_LINK_NOARG(SvxCharacterMap, DeleteLastHdl)
-{
-    OUString aCurrentText = m_pShowText->GetText();
-    m_pShowText->SetText( aCurrentText.copy( 0, aCurrentText.getLength() - 1 ) );
-    if ( m_pShowText->GetText() == "" )
-    {
-        m_pOKBtn->Disable();
-        m_pDeleteLastBtn->Disable();
-    }
-    return 0;
-}
-
-IMPL_LINK_NOARG(SvxCharacterMap, DeleteHdl)
-{
-    m_pShowText->SetText( OUString() );
-    m_pOKBtn->Disable();
-    m_pDeleteLastBtn->Disable();
     return 0;
 }
 
