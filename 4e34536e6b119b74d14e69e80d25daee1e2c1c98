@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_f44c3078",
+        "filename": "include/vcl/metric.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:29:55Z",
+      "side": 1,
+      "message": "while you\u0027re cleaning up - a more idiomatic way to say the above is to derive the class from boost::noncopyable\n\n(possibly in a follow-up patch)",
+      "revId": "4e34536e6b119b74d14e69e80d25daee1e2c1c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_d4513410",
+        "filename": "include/vcl/metric.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:29:55Z",
+      "side": 1,
+      "message": "Didn\u0027t try it, but given the nature of the class - I guess all of the above (at least the two ints) could be made const?",
+      "revId": "4e34536e6b119b74d14e69e80d25daee1e2c1c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_b456a804",
+        "filename": "vcl/generic/glyphs/gcach_ftyp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:29:55Z",
+      "side": 1,
+      "message": "If the above whitespace changes are needed to accomodate this here PtrFontCharMap change - fine. Otherwise, preferably via separate patch.\n\nOn the above line in particular - \u0027const\u0027 and the associated type (PtrFontCharMap) should be kept together. That might also save you the reformatting. ;)",
+      "revId": "4e34536e6b119b74d14e69e80d25daee1e2c1c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_945bac2e",
+        "filename": "vcl/inc/headless/svpgdi.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:29:55Z",
+      "side": 1,
+      "message": "All of the above whitespace change is inconsistent, and preferred as a separate patch (you break line-up of variable at the beginning, and you line up functions in the bottom. which way is it? ;))",
+      "revId": "4e34536e6b119b74d14e69e80d25daee1e2c1c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_543e64b9",
+        "filename": "vcl/inc/headless/svpgdi.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:29:55Z",
+      "side": 1,
+      "message": "Inconsistent alignment ;)",
+      "revId": "4e34536e6b119b74d14e69e80d25daee1e2c1c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_344bd85b",
+        "filename": "vcl/inc/quartz/salgdi.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:29:55Z",
+      "side": 1,
+      "message": "(all of the above) - nice, but separate patch please",
+      "revId": "4e34536e6b119b74d14e69e80d25daee1e2c1c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_1448dc5a",
+        "filename": "vcl/source/gdi/impfont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:29:55Z",
+      "side": 1,
+      "message": "that destroy method looks redundant?",
+      "revId": "4e34536e6b119b74d14e69e80d25daee1e2c1c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_3434f8dc",
+        "filename": "vcl/source/outdev/font.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:29:55Z",
+      "side": 1,
+      "message": "this looks redundant?",
+      "revId": "4e34536e6b119b74d14e69e80d25daee1e2c1c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_1431fcec",
+        "filename": "vcl/source/outdev/font.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-09-24T22:29:55Z",
+      "side": 1,
+      "message": "and this",
+      "revId": "4e34536e6b119b74d14e69e80d25daee1e2c1c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
