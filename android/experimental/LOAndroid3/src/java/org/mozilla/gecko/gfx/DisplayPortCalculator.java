@@ -36,7 +36,7 @@ final class DisplayPortCalculator {
     private static final String PREF_DISPLAYPORT_VB_DANGER_Y_INCR = "gfx.displayport.strategy_vb.danger_y_incr";
     private static final String PREF_DISPLAYPORT_PB_VELOCITY_THRESHOLD = "gfx.displayport.strategy_pb.threshold";
 
-    private static DisplayPortStrategy sStrategy = new NoMarginStrategy(null);
+    private static DisplayPortStrategy sStrategy = new DynamicResolutionStrategy(null);
 
     static DisplayPortMetrics calculate(ImmutableViewportMetrics metrics, PointF velocity) {
         return sStrategy.calculate(metrics, (velocity == null ? ZERO_VELOCITY : velocity));

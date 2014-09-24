@@ -118,6 +118,7 @@ public class LibreOfficeMainActivity extends Activity {
         }
 
         mLayerController = new LayerController(this);
+        mLayerController.setAllowZoom(true);
         mLayerClient = new GeckoLayerClient(this);
         mLayerController.setLayerClient(mLayerClient);
         mGeckoLayout.addView(mLayerController.getView(), 0);

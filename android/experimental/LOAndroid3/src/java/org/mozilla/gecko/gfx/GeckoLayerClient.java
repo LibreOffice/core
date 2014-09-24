@@ -172,7 +172,7 @@ public class GeckoLayerClient implements LayerView.Listener {
             // Don't adjust page size when zooming unless zoom levels are
             // approximately equal.
             if (FloatUtils.fuzzyEquals(mLayerController.getZoomFactor(), mGeckoViewport.getZoomFactor())) {
-                mLayerController.setPageSize(mGeckoViewport.getPageSize());
+                mLayerController.setPageSize(mGeckoViewport.getPageSize(), mGeckoViewport.getPageSize());
             }
         } else {
             mLayerController.setViewportMetrics(mGeckoViewport);
@@ -254,7 +254,7 @@ public class GeckoLayerClient implements LayerView.Listener {
         float ourZoom = mLayerController.getZoomFactor();
         pageWidth = pageWidth * ourZoom / zoom;
         pageHeight = pageHeight * ourZoom /zoom;
-        mLayerController.setPageSize(new FloatSize(pageWidth, pageHeight));
+        mLayerController.setPageSize(new FloatSize(pageWidth, pageHeight), new FloatSize(pageWidth, pageHeight));
         // Here the page size of the document has changed, but the document being displayed
         // is still the same. Therefore, we don't need to send anything to browser.js; any
         // changes we need to make to the display port will get sent the next time we call
@@ -296,13 +296,13 @@ public class GeckoLayerClient implements LayerView.Listener {
     }
 
     @Override
-    public void compositionResumeRequested() {
+    public void compositionResumeRequested(int width, int height) {
 
     }
 
     @Override
     public void surfaceChanged(int width, int height) {
-        compositionResumeRequested();
+        compositionResumeRequested(width, height);
         renderRequested();
     }
 
