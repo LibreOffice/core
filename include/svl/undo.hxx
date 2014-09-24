@@ -151,15 +151,12 @@ struct SVL_DLLPUBLIC SfxUndoArray
     really really have to! */
 class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
 
-/*  [Beschreibung]
+/*  [Explanation]
 
-    UndoAction zur Klammerung mehrerer Undos in einer UndoAction.
-    Diese Actions werden vom SfxUndoManager verwendet. Dort
-    wird mit < SfxUndoManager::EnterListAction > eine Klammerebene
-    geoeffnet und mit <SfxUndoManager::LeaveListAction > wieder
-    geschlossen. Redo und Undo auf SfxListUndoActions wirken
-    Elementweise.
-
+    UndoAction to composite multiple Undos in one UndoAction.
+    These actions are used by SfxUndomanager. With < SfxUndoManager::EnterListAction >
+    you can go one composite level down and with < SfxUndoManager::LeaveListAction > up again.
+    Redo and Undo work element wise on SfxListUndoActions.
 */
 {
     public:
@@ -433,18 +430,16 @@ private:
 
 class SVL_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction
 
-/*  [Beschreibung]
+/*  [Explanation]
 
-    Die SfxLinkUndoAction dient zur Verbindung zweier SfxUndoManager. Die
-    im ersten SfxUndoManager eingefuegten SfxUndoAction leiten ihr Undo und Redo
-    an den zweiten weiter, so dass ein Undo und Redo am ersten
-    SfxUndoManager wie eine am zweiten wirkt.
+    SfxLinkUndoAction is used to link two SfxUndoManager. The Undo/Redos inserted
+    in the first SfxUndoManager redict their Undo/Redo to the second. With this it
+    does not matter, if the undo/redo initially was on the first or the second.
 
-    Die SfxLinkUndoAction ist nach dem Einfuegen der SfxUndoAction am
-    zweiten SfxUndoManager einzufuegen. Waehrend der zweite SfxUndoManager
-    vom ersten ferngesteuert wird, duerfen an ihm weder Actions eingefuegt werden,
-    noch darf Undo/Redo aufgerufen werden.
-
+    After inserting SfxLinkUndoAction on the first SfxUndoManager, you have to
+    insert it on the second as well. While the second SfxUndoManager is steered
+    from the first, you must not insert neither Actions nor issue a  undo/redo
+    command to the second, while it is steered by the first.
 */
 
 {

@@ -36,27 +36,27 @@ class Image;
 #define ICNVIEW_FLAG_SELECTED       0x0002
 #define ICNVIEW_FLAG_FOCUSED        0x0004
 #define ICNVIEW_FLAG_IN_USE         0x0008
-#define ICNVIEW_FLAG_CURSORED       0x0010 // Rahmen um Image
-#define ICNVIEW_FLAG_POS_MOVED      0x0020 // per D&D verschoben aber nicht gelockt
-#define ICNVIEW_FLAG_DROP_TARGET    0x0040 // im QueryDrop gesetzt
-#define ICNVIEW_FLAG_BLOCK_EMPHASIS 0x0080 // Emphasis nicht painten
+#define ICNVIEW_FLAG_CURSORED       0x0010 // Border around image
+#define ICNVIEW_FLAG_POS_MOVED      0x0020 // Moved by Drag and Drop, but not logged
+#define ICNVIEW_FLAG_DROP_TARGET    0x0040 // Set in QueryDrop
+#define ICNVIEW_FLAG_BLOCK_EMPHASIS 0x0080 // Do not paint Emphasis
 #define ICNVIEW_FLAG_USER1          0x0100
 #define ICNVIEW_FLAG_USER2          0x0200
-#define ICNVIEW_FLAG_PRED_SET       0x0400 // Predecessor wurde umgesetzt
+#define ICNVIEW_FLAG_PRED_SET       0x0400 // Predecessor moved
 
 enum SvxIconChoiceCtrlTextMode
 {
-    IcnShowTextFull = 1,        // BoundRect nach unten aufplustern
-    IcnShowTextShort,           // Abkuerzung mit "..."
-    IcnShowTextSmart,           // Text komplett anzeigen, wenn moeglich (n.i.)
-    IcnShowTextDontKnow         // Einstellung der View
+    IcnShowTextFull = 1,        //  Enlarge BoundRect southwards
+    IcnShowTextShort,           // Shorten with "..."
+    IcnShowTextSmart,           // Show all text (not implemented)
+    IcnShowTextDontKnow         // Settings of the View
 };
 
 enum SvxIconChoiceCtrlPositionMode
 {
-    IcnViewPositionModeFree = 0,                // freies pixelgenaues Positionieren
-    IcnViewPositionModeAutoArrange = 1,         // automatisches Ausrichten
-    IcnViewPositionModeAutoAdjust = 2,          // automatisches Anordnen
+    IcnViewPositionModeFree = 0,                // Free pixel-perfekt positioning
+    IcnViewPositionModeAutoArrange = 1,         // Auto arrange
+    IcnViewPositionModeAutoAdjust = 2,          // Auto adjust
     IcnViewPositionModeLast = IcnViewPositionModeAutoAdjust
 };
 
@@ -73,26 +73,27 @@ class SvxIconChoiceCtrlEntry
     friend class EntryList_Impl;
     friend class IcnGridMap_Impl;
 
-    Rectangle               aRect;              // Bounding-Rect des Entries
-    Rectangle               aGridRect;          // nur gesetzt im Grid-Modus
+    Rectangle               aRect;              // Bounding-Rect of the entry
+    Rectangle               aGridRect;          // Only valid in Grid-mode
     sal_uLong                   nPos;
 
-    // die Eintragsposition in der Eintragsliste entspricht der beim Insert vorgegebenen
-    // [Sortier-]Reihenfolge (->Reihenfolge der Anker in der Ankerliste!). Im AutoArrange-Modus
-    // kann die sichtbare Reihenfolge aber anders sein. Die Eintraege werden deshalb dann
-    // verkettet
-    SvxIconChoiceCtrlEntry*         pblink;     // backward (linker Nachbar)
-    SvxIconChoiceCtrlEntry*         pflink;     // forward  (rechter Nachbar)
+    /*
+        The insert position in the Insertlist is equal to the (sort) order stated at the Insert
+        (-> Order of the anchors in the anchors-list!). In "AutoArrange" mode the visible order
+        can differ. The entries will be linked because of this.
+    */
+    SvxIconChoiceCtrlEntry*         pblink;     // backward (linker neighbour)
+    SvxIconChoiceCtrlEntry*         pflink;     // forward  (rechter neighbour)
 
     SvxIconChoiceCtrlTextMode       eTextMode;
-    sal_uInt16                  nX,nY;      // fuer Tastatursteuerung
+    sal_uInt16                  nX,nY;      // for keyboard control
     sal_uInt16                  nFlags;
 
     void                    ClearFlags( sal_uInt16 nMask ) { nFlags &= (~nMask); }
     void                    SetFlags( sal_uInt16 nMask ) { nFlags |= nMask; }
     void                    AssignFlags( sal_uInt16 _nFlags ) { nFlags = _nFlags; }
 
-    // setzt den linken Nachbarn (A <-> B  ==>  A <-> this <-> B)
+    // set left neighbour (A <-> B  ==>  A <-> this <-> B)
     void                    SetBacklink( SvxIconChoiceCtrlEntry* pA )
                             {
                                 pA->pflink->pblink = this;      // X <- B
@@ -100,7 +101,7 @@ class SvxIconChoiceCtrlEntry
                                 this->pblink = pA;              // A <- X
                                 pA->pflink = this;              // A -> X
                             }
-    // loest eine Verbindung (A <-> this <-> B  ==>  A <-> B)
+    // Unlink (A <-> this <-> B  ==>  A <-> B)
     void                    Unlink()
                             {
                                 this->pblink->pflink = this->pflink;
@@ -137,8 +138,7 @@ public:
     bool                    IsDropTarget() const { return ((nFlags & ICNVIEW_FLAG_DROP_TARGET) !=0); }
     bool                    IsBlockingEmphasis() const { return ((nFlags & ICNVIEW_FLAG_BLOCK_EMPHASIS) !=0); }
     bool                    IsPosLocked() const { return ((nFlags & ICNVIEW_FLAG_POS_LOCKED) !=0); }
-
-    // Nur bei AutoArrange gesetzt. Den Kopf der Liste gibts per SvxIconChoiceCtrl::GetPredecessorHead
+    // Only set at AutoArrange. The head of the list is accessible via SvxIconChoiceCtrl::GetPredecessorHead
     SvxIconChoiceCtrlEntry*         GetSuccessor() const { return pflink; }
     SvxIconChoiceCtrlEntry*         GetPredecessor() const { return pblink; }
 
@@ -182,22 +182,22 @@ public:
 
 /*
     Window-Bits:
-        WB_ICON             // Text unter dem Icon
-        WB_SMALL_ICON       // Text rechts neben Icon, beliebige Positionierung
-        WB_DETAILS          // Text rechts neben Icon, eingeschraenkte Posit.
+        WB_ICON             // Text beneth the icon
+        WB_SMALL_ICON       // Text right to the icon, position does not mind
+        WB_DETAILS          // Text right to the icon, limited positioning
         WB_BORDER
-        WB_NOHIDESELECTION  // Selektion inaktiv zeichnen, wenn kein Fokus
+        WB_NOHIDESELECTION  // Draw selection inaktively, if not focused.
         WB_NOHSCROLL
         WB_NOVSCROLL
         WB_NOSELECTION
-        WB_SMART_ARRANGE    // im Arrange die Vis-Area beibehalten
-        WB_ALIGN_TOP        // Anordnung zeilenweise von links nach rechts
-        WB_ALIGN_LEFT       // Anordnung spaltenweise von oben nach unten
-        WB_NODRAGSELECTION  // Keine Selektion per Tracking-Rect
-        WB_NOCOLUMNHEADER   // keine Headerbar in Detailsview (Headerbar not implemented)
-        WB_NOPOINTERFOCUS   // Kein GrabFocus im MouseButtonDown
-        WB_HIGHLIGHTFRAME   // der unter der Maus befindliche Eintrag wird hervorgehoben
-        WB_NOASYNCSELECTHDL // Selektionshandler synchron aufrufen, d.h. Events nicht sammeln
+        WB_SMART_ARRANGE    // Keep Vis-Area at arrange
+        WB_ALIGN_TOP        // Align line vy line LTR
+        WB_ALIGN_LEFT       // Align columns from top to bottom
+        WB_NODRAGSELECTION  // No selection with tracking rectangle
+        WB_NOCOLUMNHEADER   // No Headerbar in Details view (Headerbar not implemented)
+        WB_NOPOINTERFOCUS   // No GrabFocus at MouseButtonDown
+        WB_HIGHLIGHTFRAME   // The entry beneth the mouse willbe highlighted
+        WB_NOASYNCSELECTHDL // Do not collect events -> Selection handlers will be called synchronously
 */
 
 #define WB_ICON                 WB_RECTSTYLE
@@ -308,14 +308,14 @@ public:
     void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
     SvxIconChoiceCtrlEntry* GetCursor() const;
 
-    // Neu-Berechnung gecachter View-Daten und Invalidierung im Fenster
+    // Re-calculation of cached view-data and invalidatiopn of those in the view
     void                    InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry );
 
-    // bHit==sal_False: Eintrag gilt als getroffen, wenn Position im BoundRect liegt
-    //     ==sal_True : Bitmap oder Text muss getroffen sein
+    // bHit == false: Entry is selectd, if the BoundRect is selected
+    //      == true : Bitmap or Text must be selected
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, bool bHit = false ) const;
 
-    // in dem sal_uLong wird die Position in der Liste des gefunden Eintrags zurueckgegeben
+    // sal_uLong is the position of the selected element in the list
     SvxIconChoiceCtrlEntry* GetSelectedEntry( sal_uLong& rPos ) const;
 
 #ifdef DBG_UTIL

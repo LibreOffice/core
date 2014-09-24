@@ -276,7 +276,7 @@ public:
 
     virtual DdeData* Get( sal_uLong );
     virtual bool    Put( const DdeData* );
-    virtual void    AdviseLoop( bool );     // AdviseLoop starten/stoppen
+    virtual void    AdviseLoop( bool );     // Start / Stop AdviseLoop
 };
 
 
@@ -293,11 +293,11 @@ public:
     virtual DdeData* Get( sal_uLong );
     virtual bool    Put( const DdeData* );
     virtual bool    Execute( const OUString* );
-        // evt. ein neues anlegen; return 0 -> es konnte nicht angelegt werden
+    // Eventually create a new item. return 0 -> Item creation failed
     virtual bool    MakeItem( const OUString& rItem );
 
-        // es wird ein Warm-/Hot-Link eingerichtet. Return-Wert
-        // besagt ob es geklappt hat
+
+    // A Warm-/Hot-Link is created. Return true if successful
     virtual bool    StartAdviseLoop();
     virtual bool    StopAdviseLoop();
 
@@ -337,8 +337,8 @@ public:
     void            NotifyClient( const OUString& );
     bool            IsSystemTopic();
 
-    void            InsertItem( DdeItem* );     // fuer eigene Ableitungen!
-    DdeItem*        AddItem( const DdeItem& );  // werden kopiert !
+    void            InsertItem( DdeItem* );     // For own superclasses
+    DdeItem*        AddItem( const DdeItem& );  // Will be cloned
     void            RemoveItem( const DdeItem& );
     const OUString&   GetCurItem() { return aItem;  }
     const std::vector<DdeItem*>& GetItems() const  { return aItems; }
@@ -359,7 +359,7 @@ class SVL_DLLPUBLIC DdeService
 public:
     virtual bool    IsBusy();
     virtual OUString GetHelp();
-        // evt. ein neues anlegen; return 0 -> es konnte nicht angelegt werden
+    // Eventually creating a new item. return 0 -> Topic creation failed
     virtual bool    MakeTopic( const OUString& rItem );
 
 protected:
