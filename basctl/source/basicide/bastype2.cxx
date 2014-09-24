@@ -41,6 +41,8 @@
 #include <sfx2/dispatch.hxx>
 
 #include <cassert>
+#include <memory>
+
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -246,7 +248,7 @@ void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eL
         OUString aRootName( GetRootEntryName( rDocument, eLocation ) );
         Image aImage;
         GetRootEntryBitmaps( rDocument, aImage );
-        o3tl::heap_ptr<Entry> e(new DocumentEntry(rDocument, eLocation));
+        std::unique_ptr<Entry> e(new DocumentEntry(rDocument, eLocation));
         AddEntry(
             aRootName,
             aImage,
@@ -309,7 +311,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
             }
             else
             {
-                o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_LIBRARY));
+                std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_LIBRARY));
                 AddEntry(
                     aLibName,
                     Image( IDEResId( nId ) ),
@@ -345,7 +347,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                         SvTreeListEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJ_TYPE_MODULE );
                         if ( !pModuleEntry )
                         {
-                            o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_MODULE));
+                            std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_MODULE));
                             pModuleEntry = AddEntry(
                                 aModName,
                                 Image( IDEResId( RID_IMG_MODULE ) ),
@@ -365,7 +367,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                                 SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                                 if ( !pEntry )
                                 {
-                                    o3tl::heap_ptr<Entry> e(
+                                    std::unique_ptr<Entry> e(
                                         new Entry(OBJ_TYPE_METHOD));
                                     pEntry = AddEntry(
                                         aName,
@@ -404,7 +406,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                     SvTreeListEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJ_TYPE_DIALOG );
                     if ( !pDialogEntry )
                     {
-                        o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_DIALOG));
+                        std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_DIALOG));
                         pDialogEntry = AddEntry(
                             aDlgName,
                             Image( IDEResId( RID_IMG_DIALOG ) ),
@@ -443,7 +445,7 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntr
         }
         else
         {
-            o3tl::heap_ptr<Entry> e(new Entry(eType));
+            std::unique_ptr<Entry> e(new Entry(eType));
             AddEntry(
                 aEntryName,
                 Image( IDEResId( RID_IMG_MODLIB ) ),
@@ -505,7 +507,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
             SvTreeListEntry* pModuleEntry = FindEntry( pLibSubRootEntry, aEntryName, OBJ_TYPE_MODULE );
             if ( !pModuleEntry )
             {
-                o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_MODULE));
+                std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_MODULE));
                 pModuleEntry = AddEntry(
                     aEntryName,
                     Image( IDEResId( RID_IMG_MODULE ) ),
@@ -525,7 +527,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
                     SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                     if ( !pEntry )
                     {
-                        o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_METHOD));
+                        std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_METHOD));
                         pEntry = AddEntry(
                             aName,
                             Image( IDEResId( RID_IMG_MACRO ) ),
@@ -740,7 +742,7 @@ SvTreeListEntry* TreeListBox::AddEntry(
     const Image& rImage,
     SvTreeListEntry* pParent,
     bool bChildrenOnDemand,
-    o3tl::heap_ptr<Entry> * aUserData
+    std::unique_ptr<Entry> * aUserData
 )
 {
     assert(aUserData != 0);

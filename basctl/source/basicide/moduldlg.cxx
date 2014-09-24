@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "baside2.hrc"
 #include "basidesh.hrc"
 
@@ -843,7 +847,7 @@ void ObjectPage::NewDialog()
                         SvTreeListEntry* pEntry = m_pBasicBox->FindEntry( pLibEntry, aDlgName, OBJ_TYPE_DIALOG );
                         if ( !pEntry )
                         {
-                            o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_DIALOG));
+                            std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_DIALOG));
                             pEntry = m_pBasicBox->AddEntry(
                                 aDlgName,
                                 Image( IDEResId( RID_IMG_DIALOG ) ),
@@ -999,7 +1003,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     SvTreeListEntry* pEntry = rBasicBox.FindEntry( pSubRootEntry, aModName, OBJ_TYPE_MODULE );
                     if ( !pEntry )
                     {
-                        o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_MODULE));
+                        std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_MODULE));
                         pEntry = rBasicBox.AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),

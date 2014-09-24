@@ -18,6 +18,7 @@
  */
 
 #include <deque>
+#include <memory>
 
 #include <boost/shared_ptr.hpp>
 
@@ -25,7 +26,6 @@
 #include <math.h>
 
 #include <comphelper/newarray.hxx>
-#include <o3tl/heap_ptr.hxx>
 
 #include "fontmap.hxx"
 #include "formula.h"
@@ -131,7 +131,7 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
     Reference< XInputStream > xInputStream(
         aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY_THROW);
 
-    o3tl::heap_ptr<HStream> stream(new HStream);
+    std::unique_ptr<HStream> stream(new HStream);
     Sequence < sal_Int8 > aBuffer;
     sal_Int32 nRead, nBlock = 32768, nTotal = 0;
     while( true )

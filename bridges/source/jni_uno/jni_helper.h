@@ -20,7 +20,9 @@
 #ifndef INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_HELPER_H
 #define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_HELPER_H
 
-#include <o3tl/heap_ptr.hxx>
+#include <sal/config.h>
+
+#include <memory>
 
 #include "jni_base.h"
 #include "jni_info.h"
@@ -39,7 +41,7 @@ inline void jstring_to_ustring(
     else
     {
         jsize len = jni->GetStringLength( jstr );
-        o3tl::heap_ptr< rtl_mem > mem(
+        std::unique_ptr< rtl_mem > mem(
             rtl_mem::allocate(
                 sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
         rtl_uString * ustr = (rtl_uString *)mem.get();

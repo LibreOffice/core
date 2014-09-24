@@ -64,6 +64,8 @@
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
 #include <cassert>
+#include <memory>
+
 #include <boost/scoped_ptr.hpp>
 
 namespace basctl
@@ -1508,7 +1510,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     sal_uInt16 nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                     sal_uInt16 nId = bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB;
-                    o3tl::heap_ptr<Entry> e(new Entry(OBJ_TYPE_LIBRARY));
+                    std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_LIBRARY));
                     SvTreeListEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
                         Image( IDEResId( nId ) ),

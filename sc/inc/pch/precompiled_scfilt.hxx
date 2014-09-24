@@ -354,7 +354,6 @@
 #include <map>
 #include <math.h>
 #include <memory>
-#include <o3tl/heap_ptr.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/System.hxx>

@@ -11,9 +11,6 @@ to boost, but isn't as of now)."
 [git:o3tl/inc/o3tl/cow_wrapper.hxx]
 A copy-on-write wrapper.
 
-[git:o3tl/inc/o3tl/heap_ptr.hxx]
-heap_ptr<> owns an object on the heap, which will be automatically deleted, when ~heap_ptr<>() is called.
-
 [git:o3tl/inc/o3tl/lazy_update.hxx]
 This template collects data in input type, and updates the output type with the given update functor,
 but only if the output is requested. Useful if updating is expensive, or input changes frequently, but

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <boost/checked_delete.hpp>
-#include <o3tl/heap_ptr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/inetmime.hxx>
@@ -39,6 +38,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <memory>
 
 #include <string.h>
 
@@ -586,10 +586,10 @@ void INetURLObject::setInvalid()
 namespace {
 
 SvMemoryStream * memoryStream(void const * data, sal_Int32 length) {
-    o3tl::heap_ptr<char, boost::checked_array_deleter<char> > b(
+    std::unique_ptr<char, boost::checked_array_deleter<char> > b(
         new char[length]);
     memcpy(b.get(), data, length);
-    o3tl::heap_ptr<SvMemoryStream> s(
+    std::unique_ptr<SvMemoryStream> s(
         new SvMemoryStream(b.get(), length, STREAM_READ));
     s->ObjectOwnsMemory(true);
     b.release();

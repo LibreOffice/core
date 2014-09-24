@@ -20,8 +20,8 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <memory>
 
-#include <o3tl/heap_ptr.hxx>
 #include <sal/alloca.h>
 
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -95,7 +95,7 @@ void Bridge::handle_java_exc(
             + jni.get_stack_trace( jo_exc.get() ) );
     }
 
-    o3tl::heap_ptr< rtl_mem > uno_data( rtl_mem::allocate( td.get()->nSize ) );
+    std::unique_ptr< rtl_mem > uno_data( rtl_mem::allocate( td.get()->nSize ) );
     jvalue val;
     val.l = jo_exc.get();
     map_to_uno(

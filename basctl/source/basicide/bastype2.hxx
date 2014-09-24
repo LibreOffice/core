@@ -19,9 +19,11 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE2_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE2_HXX
 
-#include "doceventnotifier.hxx"
+#include <sal/config.h>
 
-#include <o3tl/heap_ptr.hxx>
+#include <memory>
+
+#include "doceventnotifier.hxx"
 
 #include <svtools/treelistbox.hxx>
 #include <svl/lstner.hxx>
@@ -232,7 +234,7 @@ public:
     SvTreeListEntry*    AddEntry(
         const OUString& rText, const Image& rImage,
         SvTreeListEntry* pParent, bool bChildrenOnDemand,
-        o3tl::heap_ptr<Entry> * aUserData
+        std::unique_ptr<Entry> * aUserData
     );
     void            RemoveEntry (SvTreeListEntry*);
     void            RemoveEntry (ScriptDocument const&);

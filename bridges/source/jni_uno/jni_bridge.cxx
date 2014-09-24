@@ -20,12 +20,12 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <memory>
 
 #include "jni_bridge.h"
 
 #include <boost/static_assert.hpp>
 #include "jvmaccess/unovirtualmachine.hxx"
-#include "o3tl/heap_ptr.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "uno/lbnames.h"
@@ -310,7 +310,7 @@ void JNI_context::java_exc_occurred() const
     }
 
     jsize len = m_env->GetStringLength( (jstring) jo_descr.get() );
-    o3tl::heap_ptr< rtl_mem > ustr_mem(
+    std::unique_ptr< rtl_mem > ustr_mem(
         rtl_mem::allocate(
             sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
     rtl_uString * ustr = (rtl_uString *)ustr_mem.get();
@@ -386,7 +386,7 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
             {
                 jsize len =
                     m_env->GetStringLength( (jstring) jo_stack_trace.get() );
-                o3tl::heap_ptr< rtl_mem > ustr_mem(
+                std::unique_ptr< rtl_mem > ustr_mem(
                     rtl_mem::allocate(
                         sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
                 rtl_uString * ustr = (rtl_uString *)ustr_mem.get();

@@ -49,7 +49,6 @@
 #include <list>
 #include <math.h>
 #include <new>
-#include <o3tl/heap_ptr.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>

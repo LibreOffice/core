@@ -7,11 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <revisionfragment.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/core/fastparser.hxx>
-#include <o3tl/heap_ptr.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sax/tools/converter.hxx>
 #include <editeng/editobj.hxx>
@@ -248,7 +251,7 @@ void RevisionHeadersFragment::onEndElement()
 void RevisionHeadersFragment::finalizeImport()
 {
     ScDocument& rDoc = getScDocument();
-    o3tl::heap_ptr<ScChangeTrack> pCT(new ScChangeTrack(&rDoc));
+    std::unique_ptr<ScChangeTrack> pCT(new ScChangeTrack(&rDoc));
     OUString aSelfUser = pCT->GetUser(); // owner of this document.
     pCT->SetUseFixDateTime(true);
 
