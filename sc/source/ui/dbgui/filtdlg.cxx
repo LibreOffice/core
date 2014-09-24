@@ -1142,15 +1142,18 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
         ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         bool bDoThis = (pLbField->GetSelectEntryPos() != 0);
         rEntry.bDoQuery = bDoThis;
+        bool bByEmptyOrNotByEmpty = false;
 
         if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
         {
             if ( aStrEmpty.equals(aStrVal) )
             {
+                bByEmptyOrNotByEmpty = true;
                 rEntry.SetQueryByEmpty();
             }
             else if ( aStrNotEmpty.equals(aStrVal) )
             {
+                bByEmptyOrNotByEmpty = true;
                 rEntry.SetQueryByNonEmpty();
             }
             else
@@ -1170,7 +1173,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
 
             ScQueryOp eOp  = (ScQueryOp)pLbCond->GetSelectEntryPos();
             rEntry.eOp     = eOp;
-            if (maHasDates[nQE])
+            if (maHasDates[nQE] && !bByEmptyOrNotByEmpty)
                 rItem.meType = ScQueryEntry::ByDate;
         }
     }
