@@ -142,7 +142,7 @@ namespace canvas
                                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener );
 
     private:
-        std::auto_ptr<MapType>  mpMap;
+        std::unique_ptr<MapType> mpMap;
         InputMap                maMapEntries;
     };
 }
