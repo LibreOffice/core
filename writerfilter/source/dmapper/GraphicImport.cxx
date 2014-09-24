@@ -857,6 +857,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                     m_pImpl->bOpaque = false;
         break;
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
+        break;
         case NS_ooxml::LN_CT_Anchor_layoutInCell: // 90991; - ignored
             m_pImpl->bLayoutInCell = nIntValue != 0;
         break;
