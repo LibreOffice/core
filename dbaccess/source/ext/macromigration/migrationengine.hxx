@@ -70,7 +70,7 @@ namespace dbmm
         bool    migrateAll();
 
     private:
-        ::std::auto_ptr< MigrationEngine_Impl > m_pImpl;
+        ::std::unique_ptr< MigrationEngine_Impl > m_pImpl;
     };
 
 } // namespace dbmm

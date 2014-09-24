@@ -123,7 +123,7 @@ namespace dbaui
         bool                m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
         bool                m_bSuspended;               // is true when the controller was already suspended
 
-        ::std::auto_ptr< SelectionNotifier >
+        ::std::unique_ptr< SelectionNotifier >
                                 m_pSelectionNotifier;
         typedef ::std::map< ElementType, ::std::vector< OUString > > SelectionByElementType;
         SelectionByElementType  m_aPendingSelection;
@@ -248,9 +248,9 @@ namespace dbaui
         /** returns the document access for the specific type
             @param  _eType
                 the type
-            @return ::std::auto_ptr<OLinkedDocumentsAccess>
+            @return ::std::unique_ptr<OLinkedDocumentsAccess>
         */
-        ::std::auto_ptr<OLinkedDocumentsAccess> getDocumentsAccess(ElementType _eType);
+        ::std::unique_ptr<OLinkedDocumentsAccess> getDocumentsAccess(ElementType _eType);
 
         /// returns the query definitions of the active data source.
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer> getQueryDefintions() const;

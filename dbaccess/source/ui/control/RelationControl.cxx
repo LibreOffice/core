@@ -59,7 +59,7 @@ namespace dbaui
     {
         friend class OTableListBoxControl;
 
-        ::std::auto_ptr< ::svt::ListBoxControl> m_pListCell;
+        ::std::unique_ptr< ::svt::ListBoxControl> m_pListCell;
         TTableConnectionData::value_type        m_pConnData;
         OTableListBoxControl*                   m_pBoxControl;
         long                                    m_nDataPos;

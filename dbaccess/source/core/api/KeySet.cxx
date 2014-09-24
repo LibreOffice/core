@@ -112,10 +112,6 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  sal_Int32& o_nRowCount)
             :OCacheSet(i_nMaxRows)
             ,m_aParameterValueForCache(_aParameterValueForCache)
-            ,m_pKeyColumnNames(NULL)
-            ,m_pColumnNames(NULL)
-            ,m_pParameterNames(NULL)
-            ,m_pForeignColumnNames(NULL)
             ,m_xTable(_xTable)
             ,m_xTableKeys(_xTableKeys)
             ,m_xComposer(_xComposer)
@@ -151,12 +147,11 @@ void OKeySet::initColumns()
     m_pForeignColumnNames.reset( new SelectColumnsMetaData(bCase) );
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
                                                 const OUString& i_rUpdateTableName,
                                                 const Reference<XDatabaseMetaData>& i_xMeta,
                                                 const Reference<XNameAccess>& i_xQueryColumns,
-                                                ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames)
+                                                ::std::unique_ptr<SelectColumnsMetaData>& o_pKeyColumnNames)
 {
     // first ask the database itself for the best columns which can be used
     Sequence< OUString> aBestColumnNames;
@@ -221,8 +216,6 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
             m_aAutoColumns.push_back( keyColumn->first );
     }
 }
-
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 namespace
 {

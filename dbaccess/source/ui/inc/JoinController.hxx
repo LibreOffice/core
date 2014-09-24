@@ -51,7 +51,7 @@ namespace dbaui
         ::dbtools::SQLExceptionInfo             m_aExceptionInfo;
 
         OAddTableDlg*                               m_pAddTableDialog;
-        ::std::auto_ptr< AddTableDialogContext >    m_pDialogContext;
+        ::std::unique_ptr< AddTableDialogContext >    m_pDialogContext;
         Point                                   m_aMinimumTableViewSize;
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.

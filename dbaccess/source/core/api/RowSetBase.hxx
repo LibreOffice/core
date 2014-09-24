@@ -356,7 +356,7 @@ namespace dbaccess
     class ORowSetNotifier
     {
     private:
-        ::std::auto_ptr<ORowSetNotifierImpl> m_pImpl;
+        ::std::unique_ptr<ORowSetNotifierImpl> m_pImpl;
         ORowSetBase*    m_pRowSet;
             // not acquired! This is not necessary because this class here is to be used on the stack within
             // a method of ORowSetBase (or derivees)

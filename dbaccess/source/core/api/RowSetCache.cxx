@@ -1565,9 +1565,7 @@ bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
     OUString sSql = _xAnalyzer->getQuery();
     OUString sErrorMsg;
     ::connectivity::OSQLParser aSqlParser( m_aContext );
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
     if ( pSqlParseNode.get() && SQL_ISRULE(pSqlParseNode, select_statement) )
     {
         OSQLParseNode* pTableRefCommalist = pSqlParseNode->getByRule(::connectivity::OSQLParseNode::table_ref_commalist);

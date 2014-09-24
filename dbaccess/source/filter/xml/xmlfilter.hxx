@@ -65,18 +65,16 @@ private:
     TInfoSequence                                   m_aInfoSequence;
     Reference< XComponent >                         m_xSrcDoc;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDataSourceElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pLoginElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDatabaseDescriptionElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDataSourceInfoElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocumentsElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pQueryElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pColumnElemTokenMap;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDataSourceElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pLoginElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDatabaseDescriptionElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDataSourceInfoElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDocumentsElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pQueryElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pColumnElemTokenMap;
 
     mutable rtl::Reference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;

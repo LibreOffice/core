@@ -565,7 +565,7 @@ namespace
 
 PopupMenu* DBTreeListBox::CreateContextMenu( void )
 {
-    ::std::auto_ptr< PopupMenu > pContextMenu;
+    ::std::unique_ptr< PopupMenu > pContextMenu;
 
     if ( !m_pContextMenuProvider )
         return pContextMenu.release();

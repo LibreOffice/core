@@ -51,7 +51,7 @@ private:
     typedef ::std::stack< sal_Int32 > PageStack;
     PageStack               m_aCurrentDetailPages;  // ids of all currently enabled (type-dependent) detail pages
 
-    ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+    ::std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
     bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
     bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>

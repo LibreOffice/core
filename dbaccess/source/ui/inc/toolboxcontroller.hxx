@@ -41,7 +41,7 @@ namespace dbaui
         TCommandState   m_aStates;
         sal_uInt16      m_nToolBoxId;
 
-        ::std::auto_ptr<PopupMenu> getMenu();
+        ::std::unique_ptr<PopupMenu> getMenu();
     public:
         OToolboxController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 

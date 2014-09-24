@@ -311,9 +311,7 @@ OApplicationController::~OApplicationController()
         osl_atomic_increment( &m_refCount );
         dispose();
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< vcl::Window> aTemp( getView() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< vcl::Window> aTemp( getView() );
     clearView();
 
 }
@@ -451,9 +449,7 @@ bool OApplicationController::Construct(vcl::Window* _pParent)
 
     if ( !bSuccess )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< vcl::Window> aTemp( getView() );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< vcl::Window> aTemp( getView() );
         clearView();
         return false;
     }
@@ -1069,9 +1065,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     if ( !aArgs.getLength() )
                     {
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                        ::std::auto_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( getView() ));
-                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                        ::std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( getView() ));
                         ::std::vector<SotFormatStringId> aFormatIds;
                         getSupportedFormats(getContainer()->getElementType(),aFormatIds);
                         const ::std::vector<SotFormatStringId>::iterator aEnd = aFormatIds.end();
@@ -1822,9 +1816,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     {
         if ( isStandaloneDocument || !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
             if ( !aHelper->isConnected() )
                 break;
 
@@ -1846,9 +1838,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             if ( !xConnection.is() )
                 break;
 
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< DatabaseObjectView > pDesigner;
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr< DatabaseObjectView > pDesigner;
             ::comphelper::NamedValueCollection aArguments( _rAdditionalArguments );
 
             Any aDataSource;
@@ -1932,9 +1922,7 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
         case E_REPORT:
         case E_FORM:
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
             if ( aHelper->isConnected() )
             {
                 sal_Int32 nCommandType = -1;
@@ -1949,9 +1937,7 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
         case E_QUERY:
         case E_TABLE:
          {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
             if ( aHelper->isConnected() )
             {
                 if ( E_QUERY == _eType )
@@ -1982,9 +1968,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
         case E_FORM:
         case E_REPORT:
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess( _eType );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess( _eType );
             if ( !aHelper->isConnected() )
                 break;
 
@@ -1995,9 +1979,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
         case E_QUERY:
         case E_TABLE:
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< DatabaseObjectView > pDesigner;
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr< DatabaseObjectView > pDesigner;
             SharedConnection xConnection( ensureConnection() );
             if ( !xConnection.is() )
                 break;
@@ -2067,10 +2049,8 @@ void OApplicationController::renameEntry()
     {
         if ( xContainer.is() )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< IObjectNameCheck > pNameChecker;
-            ::std::auto_ptr< OSaveAsDlg > aDialog;
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr< IObjectNameCheck > pNameChecker;
+            ::std::unique_ptr< OSaveAsDlg > aDialog;
 
             Reference<XRename> xRename;
             const ElementType eType = getContainer()->getElementType();

@@ -159,9 +159,7 @@ namespace dbaui
             aFind->second = Event.IsEnabled;
             if ( m_aCommandURL == aFind->first && !Event.IsEnabled )
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                ::std::auto_ptr<PopupMenu> pMenu = getMenu();
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                ::std::unique_ptr<PopupMenu> pMenu = getMenu();
                 sal_uInt16 nCount = pMenu->GetItemCount();
                 for (sal_uInt16 i = 0; i < nCount; ++i)
                 {
@@ -179,10 +177,9 @@ namespace dbaui
             }
         }
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<PopupMenu> OToolboxController::getMenu()
+    ::std::unique_ptr<PopupMenu> OToolboxController::getMenu()
     {
-        ::std::auto_ptr<PopupMenu> pMenu;
+        ::std::unique_ptr<PopupMenu> pMenu;
         if ( m_aStates.size() > 2 )
         {
             pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_APP_NEW ) ) );
@@ -224,7 +221,7 @@ namespace dbaui
         }
         return pMenu;
     }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+
     Reference< ::com::sun::star::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException, std::exception)
     {
         // execute the menu
@@ -232,9 +229,7 @@ namespace dbaui
         ::osl::MutexGuard aGuard(m_aMutex);
 
         ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<PopupMenu> pMenu = getMenu();
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<PopupMenu> pMenu = getMenu();
 
         sal_uInt16 nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
         // "cleanup" the toolbox state

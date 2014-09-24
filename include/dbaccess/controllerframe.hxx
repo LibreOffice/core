@@ -64,7 +64,7 @@ namespace dbaui
         void    frameAction( ::com::sun::star::frame::FrameAction _eAction );
 
     private:
-        ::std::auto_ptr< ControllerFrame_Data > m_pData;
+        ::std::unique_ptr< ControllerFrame_Data > m_pData;
     };
 
 

@@ -39,7 +39,7 @@ namespace dbaui
                                     ,public IDatabaseSettingsDialog
     {
         OModuleClient                                       m_aModuleClient;
-        ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+        ::std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
     protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) SAL_OVERRIDE;

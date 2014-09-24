@@ -67,7 +67,7 @@ namespace dbaccess
         virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        ::std::auto_ptr< DocumentEvents_Data >  m_pData;
+        ::std::unique_ptr< DocumentEvents_Data >  m_pData;
     };
 
 } // namespace dbaccess

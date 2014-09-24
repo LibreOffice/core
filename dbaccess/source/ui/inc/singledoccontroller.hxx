@@ -70,7 +70,7 @@ namespace dbaui
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
-        ::std::auto_ptr< OSingleDocumentController_Data >   m_pData;
+        ::std::unique_ptr< OSingleDocumentController_Data >   m_pData;
     };
 
 } // namespace dbaui

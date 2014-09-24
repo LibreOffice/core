@@ -41,7 +41,7 @@ namespace sdbtools
                     ,public ConnectionDependentComponent
     {
     private:
-        ::std::auto_ptr< TableName_Impl >   m_pImpl;
+        ::std::unique_ptr< TableName_Impl >   m_pImpl;
 
     public:
         /** constructs the instance

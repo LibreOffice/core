@@ -59,7 +59,7 @@ namespace dbaccess
         StorageXMLOutputStream& operator=( const StorageXMLOutputStream& ); // never implemented
 
     private:
-        ::std::auto_ptr< StorageXMLOutputStream_Data >   m_pData;
+        ::std::unique_ptr< StorageXMLOutputStream_Data >   m_pData;
     };
 
     // StorageXMLInputStream
@@ -84,7 +84,7 @@ namespace dbaccess
         StorageXMLInputStream& operator=( const StorageXMLInputStream& );   // never implemented
 
     private:
-        ::std::auto_ptr< StorageXMLInputStream_Data >   m_pData;
+        ::std::unique_ptr< StorageXMLInputStream_Data >   m_pData;
     };
 
 } // namespace dbaccess

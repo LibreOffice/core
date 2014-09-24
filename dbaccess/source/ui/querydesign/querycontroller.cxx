@@ -1254,7 +1254,7 @@ sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
 {
     if ( _nColPos < m_aFieldInformation.getLength() )
     {
-        ::std::auto_ptr<OTableFieldDesc> pField( new OTableFieldDesc());
+        ::std::unique_ptr<OTableFieldDesc> pField( new OTableFieldDesc());
         pField->Load( m_aFieldInformation[ _nColPos ], false );
         return pField->GetColWidth();
     }
@@ -1892,7 +1892,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
             else if ( m_bEscapeProcessing )
             {
                 OUString aErrorMsg;
-                ::std::auto_ptr< ::connectivity::OSQLParseNode > pNode(
+                ::std::unique_ptr< ::connectivity::OSQLParseNode > pNode(
                     m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign ) );
 
                 if ( pNode.get() )

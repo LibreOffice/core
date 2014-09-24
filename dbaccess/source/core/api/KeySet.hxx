@@ -84,12 +84,10 @@ namespace dbaccess
 
         OUpdatedParameter                                       m_aUpdatedParameter;    // contains all parameter which have been updated and are needed for refetching
         ORowSetValueVector                                      m_aParameterValueForCache;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SelectColumnsMetaData>                  m_pKeyColumnNames;      // contains all key column names
-        ::std::auto_ptr<SelectColumnsMetaData>                  m_pColumnNames;         // contains all column names
-        ::std::auto_ptr<SelectColumnsMetaData>                  m_pParameterNames;      // contains all parameter names
-        ::std::auto_ptr<SelectColumnsMetaData>                  m_pForeignColumnNames;  // contains all column names of the rest
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<SelectColumnsMetaData>                  m_pKeyColumnNames;      // contains all key column names
+        ::std::unique_ptr<SelectColumnsMetaData>                  m_pColumnNames;         // contains all column names
+        ::std::unique_ptr<SelectColumnsMetaData>                  m_pParameterNames;      // contains all parameter names
+        ::std::unique_ptr<SelectColumnsMetaData>                  m_pForeignColumnNames;  // contains all column names of the rest
         connectivity::OSQLTable                                 m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xTableKeys;
         // we need a different SQL (statement) for each different combination
@@ -127,13 +125,11 @@ namespace dbaccess
 
         void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
         void initColumns();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         void findTableColumnsMatching_throw( const ::com::sun::star::uno::Any& i_aTable,
                                              const OUString& i_rUpdateTableName,
                                              const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& i_xMeta,
                                              const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns,
-                                             ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+                                             ::std::unique_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
         void ensureStatement( );
         virtual void makeNewStatement( );
         void setOneKeyColumnParameter( sal_Int32 &nPos,

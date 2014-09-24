@@ -39,7 +39,7 @@ namespace dbaui
     protected:
         IController&        m_rController;  // the controller in where we resides in
         FixedLine           m_aSeparator;
-        ::std::auto_ptr< ::svt::AcceleratorExecute> m_pAccel;
+        ::std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
     public:
         ODataView(  vcl::Window* pParent,

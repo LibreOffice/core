@@ -41,7 +41,7 @@ namespace dbaui
                                 ,public IObjectNameCheck
     {
     private:
-        std::auto_ptr< HierarchicalNameCheck_Impl > m_pImpl;
+        std::unique_ptr< HierarchicalNameCheck_Impl > m_pImpl;
 
     public:
         /** constructs a HierarchicalNameCheck instance
@@ -89,7 +89,7 @@ namespace dbaui
                                         ,public IObjectNameCheck
     {
     private:
-        std::auto_ptr< DynamicTableOrQueryNameCheck_Impl > m_pImpl;
+        std::unique_ptr< DynamicTableOrQueryNameCheck_Impl > m_pImpl;
 
     public:
         /** constructs a DynamicTableOrQueryNameCheck instance

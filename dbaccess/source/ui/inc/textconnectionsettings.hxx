@@ -48,7 +48,7 @@ namespace dbaui
         virtual short   Execute() SAL_OVERRIDE;
 
     private:
-        ::std::auto_ptr< OTextConnectionHelper >    m_pTextConnectionHelper;
+        ::std::unique_ptr< OTextConnectionHelper >    m_pTextConnectionHelper;
         OKButton                                    *m_pOK;
         SfxItemSet&                                 m_rItems;
 

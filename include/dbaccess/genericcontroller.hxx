@@ -210,7 +210,7 @@ namespace dbaui
         ::comphelper::NamedValueCollection
                                         m_aInitParameters;
 
-        ::std::auto_ptr< OGenericUnoController_Data >
+        ::std::unique_ptr< OGenericUnoController_Data >
                                         m_pData;
         ODataView*                      m_pView;                // our (VCL) "main window"
 

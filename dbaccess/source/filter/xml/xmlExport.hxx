@@ -91,8 +91,8 @@ class ODBExport : public SvXMLExport
         }
     };
 
-    ::std::auto_ptr< TStringPair >                  m_aAutoIncrement;
-    ::std::auto_ptr< TDelimiter >                   m_aDelimiter;
+    ::std::unique_ptr< TStringPair >                  m_aAutoIncrement;
+    ::std::unique_ptr< TDelimiter >                   m_aDelimiter;
     ::std::vector< TypedPropertyValue >             m_aDataSourceSettings;
     ::std::vector< XMLPropertyState >               m_aCurrentPropertyStates;
     TPropertyStyleMap                               m_aAutoStyleNames;

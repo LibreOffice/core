@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "unodatbr.hxx"
 #include "browserids.hxx"
 #include "listviewitems.hxx"
@@ -27,7 +31,6 @@
 #include "dbu_brw.hrc"
 #include "dbtreemodel.hxx"
 #include "svtools/treelistentry.hxx"
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::frame;
 using namespace ::dbtools;
@@ -203,7 +206,7 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             }
 
             // the connection to which this entry belongs, if any
-            boost::scoped_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
+            std::unique_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
 
             // the images for this entry
             Image aImage;

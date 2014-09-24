@@ -47,7 +47,7 @@ protected:
     SfxItemSet*     m_pOutputSet;
 #ifdef HAVE_ODBC_ADMINISTRATION
     PushButton*     m_pManageDatasources;
-    ::std::auto_ptr< OOdbcManagement >
+    ::std::unique_ptr< OOdbcManagement >
                     m_pODBCManagement;
 #endif
 
