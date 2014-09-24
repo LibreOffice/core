@@ -30,6 +30,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
 public class MultiTypeInterfaceContainer_Test
 {
     private static final Logger logger = Logger.getLogger(MultiTypeInterfaceContainer_Test.class.getName());
@@ -47,8 +53,8 @@ public class MultiTypeInterfaceContainer_Test
     //contains original object + proxies + null value
     List<Object> list3;
 
-    /** Creates a new instance of MultiTypeInterfaceContainer_Test */
-    public MultiTypeInterfaceContainer_Test()
+    /** Class variables are initialized before each Test method */
+    @Before public void setUp() throws Exception
     {
         obj1= new AWeakBase();
         obj2= new AWeakBase();
@@ -58,17 +64,25 @@ public class MultiTypeInterfaceContainer_Test
         proxyObj1Weak1= ProxyProvider.createProxy(obj1, XWeak.class);
         proxyObj3Weak1= ProxyProvider.createProxy(obj3, XWeak.class);
         proxyObj3Weak2= ProxyProvider.createProxy(obj3, XWeak.class);
+        assertNotNull(proxyObj1Weak1);
+        assertNotNull(proxyObj3Weak1);
+        assertNotNull(proxyObj3Weak2);
+
         proxyObj2TypeProv= ProxyProvider.createProxy(obj2, XTypeProvider.class);
         proxyObj3TypeProv= ProxyProvider.createProxy(obj3, XTypeProvider.class);
+        assertNotNull(proxyObj2TypeProv);
+        assertNotNull(proxyObj3TypeProv);
 
         list1= new ArrayList<Object>();
         list1.add(obj1);
         list1.add(obj2);
         list1.add(obj3);
+
         list2= new ArrayList<Object>();
         list2.add(obj1);
         list2.add(proxyObj2TypeProv);
         list2.add(proxyObj3TypeProv);
+
         list3= new ArrayList<Object>();
         list3.add(obj1);
         list3.add(null);
@@ -76,25 +90,26 @@ public class MultiTypeInterfaceContainer_Test
         list3.add(proxyObj3Weak1);
     }
 
-    public boolean addInterface()
+    @Test public void addInterface() throws Exception
     {
         logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.addInterface");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
-        boolean r[]= new boolean[200];
-        int i= 0;
 
         int ci= 0;
         ci= cont.addInterface(new Type(XInterface.class), obj1);
         ci= cont.addInterface(new Type(XInterface.class), obj2);
         ci= cont.addInterface(new Type(XInterface.class), obj3);
-        r[i++]= ci == 3;
+        assertEquals(ci, 3);
+
         ci= cont.addInterface(new Type(XWeak.class), obj1);
         ci= cont.addInterface(new Type(XWeak.class), obj2);
-        r[i++]= ci ==2;
+        assertEquals(ci, 2);
+
         ci= cont.addInterface(null,obj1);
-        r[i++]= ci == 1;
+        assertEquals(ci, 1);
+
         ci= cont.addInterface(new Type(XTypeProvider.class), null);
-        r[i++]= ci == 0;
+        assertEquals(ci, 0);
 
         cont= new MultiTypeInterfaceContainer();
         AWeakBase[] arObj= new AWeakBase[100];
@@ -107,22 +122,14 @@ public class MultiTypeInterfaceContainer_Test
         for (int c=0; c < 100; c++)
         {
             ci= cont.removeInterface(new Type(XInterface.class), arObj[c]);
-            r[i++]= ci == 100 -c -1;
-
+            assertEquals(ci, 100 -c -1);
         }
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
     }
 
-    public boolean getContainedTypes()
+    @Test public void getContainedTypes() throws Exception
     {
         logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.getContainedTypes");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.addInterface(new Type(XInterface.class), obj1);
         cont.addInterface(new Type(XWeak.class), obj1);
@@ -133,39 +140,32 @@ public class MultiTypeInterfaceContainer_Test
         cont.addInterface(XSingleComponentFactory.class, obj1);
         Type[] types= cont.getContainedTypes();
         // 3 types and no XTypeProvider
-        r[i++]= types.length == 5;
+        assertEquals(types.length, 5);
         for (int c= 0; c < types.length; c++)
         {
+            boolean result= false;
             if (types[c] == null)
-                r[i++]= true;
-            else if(types[c].equals( new Type(XTypeProvider.class)))
-                r[i++]= false;
-            else if(types[c].equals(new Type(XInterface.class)))
-                r[i++]= true;
+                result= true;
+            else if (types[c].equals(new Type(XTypeProvider.class)))
+                result= false;
+            else if (types[c].equals(new Type(XInterface.class)))
+                result= true;
             else if (types[c].equals(new Type(XWeak.class)))
-                r[i++]= true;
+                result= true;
             else if (types[c].equals(new Type()))
-                r[i++]= true;
+                result= true;
             else if (types[c].equals(new Type( aObj.getClass())))
-                r[i++]= true;
+                result= true;
             else if (types[c].equals(new Type(XSingleComponentFactory.class)))
-                r[i++]= true;
-            else
-                r[i++]= false;
+                result= true;
+            assertTrue(result);
         }
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
     }
 
-    public boolean getContainer()
+    @Test public void getContainer() throws Exception
     {
         logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.getContainedTypes");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.addInterface(new Type(XInterface.class), obj1);
         cont.addInterface(new Type(XInterface.class), obj2);
@@ -177,61 +177,45 @@ public class MultiTypeInterfaceContainer_Test
 
         InterfaceContainer icont= null;
         icont= cont.getContainer( new Type(XTypeProvider.class));
-        r[i++]= icont.size() == 0;
+        assertEquals(icont.size(), 0);
         icont= cont.getContainer(new Type(XWeak.class));
-        r[i++]= icont.size() == 2;
+        assertEquals(icont.size(), 2);
         icont= cont.getContainer(null);
-        r[i++]= icont.size() == 1;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(icont.size(), 1);
     }
 
-    public boolean removeInterface()
+    @Test public void removeInterface() throws Exception
     {
         logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.removeInterface");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         int count= 0;
         count= cont.removeInterface( new Type(XTypeProvider.class), obj1);
-        r[i++]= count == 0;
+        assertEquals(count, 0);
         count= cont.removeInterface( new Type(XTypeProvider.class), null);
-        r[i++]= count == 0;
+        assertEquals(count, 0);
         count= cont.removeInterface(null, obj2);
-        r[i++]= count == 0;
+        assertEquals(count, 0);
 
         cont.addInterface(new Type(XInterface.class), obj1);
         cont.addInterface(null, obj1);
         count= cont.removeInterface(null, obj2);
         // count must still be 1
-        r[i++]= count == 1;
+        assertEquals(count, 1);
         count= cont.removeInterface(null, obj1);
-        r[i++]= count == 0;
+        assertEquals(count, 0);
         count= cont.removeInterface(new Type(XInterface.class), obj1);
-        r[i++]= count == 0;
-
-          boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(count, 0);
     }
 
-    public boolean clear()
+    @Test public void clear() throws Exception
     {
         logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.clear");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         cont.clear();
         Type[] types= cont.getContainedTypes();
-        r[i++]= types.length == 0;
+        assertEquals(types.length, 0);
         cont.addInterface(new Type(XInterface.class), obj1);
         cont.addInterface(new Type(XInterface.class), obj2);
         cont.addInterface(new Type(XInterface.class), obj3);
@@ -240,24 +224,17 @@ public class MultiTypeInterfaceContainer_Test
         cont.addInterface(null, obj1);
         cont.addInterface(new Type(XTypeProvider.class), null);
         types= cont.getContainedTypes();
-        r[i++]= types.length == 3;
+        assertEquals(types.length, 3);
         cont.clear();
         types= cont.getContainedTypes();
-        r[i++]= types.length == 0;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(types.length, 0);
     }
 
-    public boolean disposeAndClear()
+    @Test public void disposeAndClear() throws Exception
     {
         logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.disposeAndClear");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
-        boolean r[]= new boolean[50];
-        int i= 0;
+
         obj1.nDisposingCalled= 0;
         obj2.nDisposingCalled= 0;
         obj3.nDisposingCalled= 0;
@@ -270,36 +247,10 @@ public class MultiTypeInterfaceContainer_Test
         cont.addInterface(new Type(XTypeProvider.class), obj1);
         cont.disposeAndClear(new com.sun.star.lang.EventObject("blabla"));
 
-        r[i++]= obj1.nDisposingCalled == 3;
-        r[i++]= obj2.nDisposingCalled == 2;
-        r[i++]= obj3.nDisposingCalled == 1;
+        assertEquals(obj1.nDisposingCalled, 3);
+        assertEquals(obj2.nDisposingCalled, 2);
+        assertEquals(obj3.nDisposingCalled, 1);
         Type[] types= cont.getContainedTypes();
-        r[i++]= types.length == 0;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
-    }
-
-
-    public static void main(String[] args)
-    {
-        MultiTypeInterfaceContainer_Test test= new MultiTypeInterfaceContainer_Test();
-        boolean r[]= new boolean[50];
-        int i= 0;
-        r[i++]= test.addInterface();
-        r[i++]= test.getContainedTypes();
-        r[i++]= test.getContainer();
-        r[i++]= test.removeInterface();
-        r[i++]= test.clear();
-        r[i++]= test.disposeAndClear();
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, "Test finished.");
-        logger.log(Level.INFO, bOk ? "No errors." : "Errors occurred!!!");
-        System.exit( bOk ? 0: -1 );
+        assertEquals(types.length, 0);
     }
 }
