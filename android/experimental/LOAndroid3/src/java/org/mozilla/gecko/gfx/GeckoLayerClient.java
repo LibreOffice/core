@@ -67,7 +67,7 @@ public class GeckoLayerClient implements LayerView.Listener {
     private boolean mRecordDrawTimes;
     private DrawTimingQueue mDrawTimingQueue;
 
-    private Layer mRootLayer;
+    private MultiTileLayer mRootLayer;
 
     /* The viewport that Gecko is currently displaying. */
     private ViewportMetrics mGeckoViewport;
@@ -129,9 +129,7 @@ public class GeckoLayerClient implements LayerView.Listener {
     }
 
     protected void updateLayerAfterDraw() {
-        if (mRootLayer instanceof MultiTileLayer) {
-            ((MultiTileLayer) mRootLayer).invalidate();
-        }
+        mRootLayer.invalidate();
     }
 
     public void beginDrawing(ViewportMetrics viewportMetrics) {
@@ -250,7 +248,7 @@ public class GeckoLayerClient implements LayerView.Listener {
         synchronized (mLayerController) {
         // adjust the page dimensions to account for differences in zoom
         // between the rendered content (which is what the compositor tells us)
-    // and our zoom level (which may have diverged).
+        // and our zoom level (which may have diverged).
         float ourZoom = mLayerController.getZoomFactor();
         pageWidth = pageWidth * ourZoom / zoom;
         pageHeight = pageHeight * ourZoom /zoom;
@@ -273,16 +271,11 @@ public class GeckoLayerClient implements LayerView.Listener {
     }
 
     public List<SubTile> getTiles() {
-        if (mRootLayer instanceof MultiTileLayer) {
-            return ((MultiTileLayer) mRootLayer).getTiles();
-        }
-        return null;
+        return mRootLayer.getTiles();
     }
 
     public void addTile(SubTile tile) {
-        if (mRootLayer instanceof MultiTileLayer) {
-            ((MultiTileLayer) mRootLayer).addTile(tile);
-        }
+        mRootLayer.addTile(tile);
     }
 
     @Override

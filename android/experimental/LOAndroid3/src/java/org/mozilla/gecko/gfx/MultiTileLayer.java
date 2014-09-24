@@ -42,7 +42,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.util.Log;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -95,8 +94,6 @@ public class MultiTileLayer extends Layer {
     }
 
     private void validateTiles() {
-        Log.i(LOGTAG, "validateTiles()");
-
         // Set tile origins and resolution
         Point origin = new Point();
         refreshTileMetrics(origin, getResolution(), false);
@@ -120,8 +117,9 @@ public class MultiTileLayer extends Layer {
             RectF layerBounds = layer.getBounds(context);
 
             if (!RectF.intersects(layerBounds, context.viewport)) {
-                if (firstDirtyTile == null)
+                if (firstDirtyTile == null) {
                     firstDirtyTile = layer;
+                }
                 dirtyTiles++;
             } else {
                 // This tile intersects with the screen and is dirty,
@@ -196,8 +194,9 @@ public class MultiTileLayer extends Layer {
         for (SubTile layer : mTiles) {
             // Avoid work, only draw tiles that intersect with the viewport
             RectF layerBounds = layer.getBounds(context);
-            if (RectF.intersects(layerBounds, context.viewport))
+            if (RectF.intersects(layerBounds, context.viewport)) {
                 layer.draw(context);
+            }
         }
     }
 
