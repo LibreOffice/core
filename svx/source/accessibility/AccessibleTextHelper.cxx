@@ -26,6 +26,7 @@
 
 #include <limits.h>
 #include <memory>
+#include <utility>
 #include <algorithm>
 #include <deque>
 #include <osl/mutex.hxx>
@@ -116,9 +117,8 @@ namespace accessibility
         uno::Reference< XAccessible > SAL_CALL getAccessibleAtPoint( const awt::Point& aPoint );
 
         SvxEditSourceAdapter& GetEditSource() const;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+
+        void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
         {
@@ -763,13 +763,10 @@ namespace accessibility
         if( maEditSource.IsValid() )
             EndListening( maEditSource.GetBroadcaster() );
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        maEditSource.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        maEditSource.SetEditSource( ::std::unique_ptr< SvxEditSource >() );
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    void AccessibleTextHelper_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource )
+    void AccessibleTextHelper_Impl::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
     {
 
         // This should only be called with solar mutex locked, i.e. from the main office thread
@@ -778,7 +775,7 @@ namespace accessibility
         ShutdownEditSource();
 
         // set new edit source
-        maEditSource.SetEditSource( pEditSource );
+        maEditSource.SetEditSource( std::move(pEditSource) );
 
         // init child vector to the current child count
         if( maEditSource.IsValid() )
@@ -791,7 +788,6 @@ namespace accessibility
             UpdateVisibleChildren();
         }
     }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     void AccessibleTextHelper_Impl::SetOffset( const Point& rPoint )
     {
@@ -1561,9 +1557,7 @@ namespace accessibility
             EndListening( maEditSource.GetBroadcaster() );
 
         // clear references
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        maEditSource.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        maEditSource.SetEditSource( ::std::unique_ptr< SvxEditSource >() );
         mxFrontEnd = NULL;
     }
 
@@ -1692,17 +1686,13 @@ namespace accessibility
 
     // AccessibleTextHelper implementation (simply forwards to impl)
 
-
-
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    AccessibleTextHelper::AccessibleTextHelper( ::std::auto_ptr< SvxEditSource > pEditSource ) :
+    AccessibleTextHelper::AccessibleTextHelper( ::std::unique_ptr< SvxEditSource > && pEditSource ) :
         mpImpl( new AccessibleTextHelper_Impl() )
     {
         SolarMutexGuard aGuard;
 
-        SetEditSource( pEditSource );
+        SetEditSource( std::move(pEditSource) );
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
     AccessibleTextHelper::~AccessibleTextHelper()
     {
@@ -1723,8 +1713,7 @@ namespace accessibility
 #endif
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    void AccessibleTextHelper::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource )
+    void AccessibleTextHelper::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -1733,13 +1722,12 @@ namespace accessibility
         mpImpl->CheckInvariants();
 #endif
 
-        mpImpl->SetEditSource( pEditSource );
+        mpImpl->SetEditSource( std::move(pEditSource) );
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 #endif
     }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     void AccessibleTextHelper::SetEventSource( const uno::Reference< XAccessible >& rInterface )
     {

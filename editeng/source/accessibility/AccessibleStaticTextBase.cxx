@@ -25,6 +25,7 @@
 
 
 #include <limits.h>
+#include <utility>
 #include <vector>
 #include <algorithm>
 #include <boost/ref.hpp>
@@ -124,9 +125,8 @@ namespace accessibility
 
             return maEditSource;
         }
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+
+        void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
         {
@@ -230,15 +230,13 @@ namespace accessibility
     {
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    void AccessibleStaticTextBase_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource )
+    void AccessibleStaticTextBase_Impl::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
     {
 
-        maEditSource.SetEditSource( pEditSource );
+        maEditSource.SetEditSource( std::move(pEditSource) );
         if( mpTextParagraph )
             mpTextParagraph->SetEditSource( &maEditSource );
     }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     void AccessibleStaticTextBase_Impl::SetOffset( const Point& rPoint )
     {
@@ -495,17 +493,13 @@ namespace accessibility
 
     // AccessibleStaticTextBase implementation
 
-
-
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource >        pEditSource ) :
+    AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::unique_ptr< SvxEditSource > && pEditSource ) :
         mpImpl( new AccessibleStaticTextBase_Impl() )
     {
         SolarMutexGuard aGuard;
 
-        SetEditSource( pEditSource );
+        SetEditSource( std::move(pEditSource) );
     }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     AccessibleStaticTextBase::~AccessibleStaticTextBase()
     {
@@ -526,8 +520,7 @@ namespace accessibility
 #endif
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    void AccessibleStaticTextBase::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource )
+    void AccessibleStaticTextBase::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -535,14 +528,13 @@ namespace accessibility
 
         mpImpl->CheckInvariants();
 
-        mpImpl->SetEditSource( pEditSource );
+        mpImpl->SetEditSource( std::move(pEditSource) );
 
         mpImpl->CheckInvariants();
 #else
-        mpImpl->SetEditSource( pEditSource );
+        mpImpl->SetEditSource( std::move(pEditSource) );
 #endif
     }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     void AccessibleStaticTextBase::SetEventSource( const uno::Reference< XAccessible >& rInterface )
     {

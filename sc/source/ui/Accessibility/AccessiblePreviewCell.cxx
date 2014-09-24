@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <utility>
+
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <tools/gen.hxx>
@@ -281,10 +286,10 @@ void ScAccessiblePreviewCell::CreateTextHelper()
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewCellTextData
             (new ScAccessiblePreviewCellTextData(mpViewShell, maCellAddress));
-        ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewCellTextData));
         SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewCellTextData));
 
-        mpTextHelper = new ::accessibility::AccessibleTextHelper( pEditSource );
+        mpTextHelper = new ::accessibility::AccessibleTextHelper( std::move(pEditSource) );
         mpTextHelper->SetEventSource( this );
 
         // paragraphs in preview are transient

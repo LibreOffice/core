@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <utility>
+
 #include <SidebarTxtControlAcc.hxx>
 
 #include <SidebarTxtControl.hxx>
@@ -168,9 +173,9 @@ SidebarTxtControlAccessibleContext::SidebarTxtControlAccessibleContext( SidebarT
     , mpAccessibleTextHelper( 0 )
     , maMutex()
 {
-    ::std::auto_ptr<SvxEditSource> pEditSource(
+    ::std::unique_ptr<SvxEditSource> pEditSource(
                         new SidebarTextEditSource( mrSidebarTxtControl ) );
-    mpAccessibleTextHelper = new ::accessibility::AccessibleTextHelper( pEditSource );
+    mpAccessibleTextHelper = new ::accessibility::AccessibleTextHelper( std::move(pEditSource) );
     mpAccessibleTextHelper->SetEventSource( mrSidebarTxtControl.GetWindowPeer() );
 }
 

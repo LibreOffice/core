@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <utility>
+
 /* Somehow, under same circumstances, MSVC creates object code for 2
  * inlined functions. Nobody here uses them, so simply define them away
  * so that there be no dupplicate symbols anymore.
@@ -425,10 +430,10 @@ void ScAccessiblePreviewHeaderCell::CreateTextHelper()
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
             (new ScAccessiblePreviewHeaderCellTextData(mpViewShell, OUString(getAccessibleName()), maCellPos, mbColumnHeader, mbRowHeader));
-        ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
         SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
 
-        mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
+        mpTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
         mpTextHelper->SetEventSource(this);
     }
 }

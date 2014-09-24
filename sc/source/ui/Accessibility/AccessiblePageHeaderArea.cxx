@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <utility>
+
 #include <tools/gen.hxx>
 #include "AccessiblePageHeaderArea.hxx"
 #include "AccessibleText.hxx"
@@ -298,10 +303,10 @@ void ScAccessiblePageHeaderArea::CreateTextHelper()
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr < ScAccessibleTextData > pAccessibleHeaderTextData
             (new ScAccessibleHeaderTextData(mpViewShell, mpEditObj, mbHeader, meAdjust));
-        ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleHeaderTextData));
         SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleHeaderTextData));
 
-        mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
+        mpTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
         mpTextHelper->SetEventSource(this);
     }
 }

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <utility>
 
 #include <accessiblecell.hxx>
 
@@ -79,10 +83,8 @@ void AccessibleCell::Init (void)
         if( pOutlinerParaObject )
         {
             // non-empty text -> use full-fledged edit source right away
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource( mxCell->GetObject(), mxCell.get(), *pView, *pWindow) );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            mpText = new AccessibleTextHelper( pEditSource );
+            ::std::unique_ptr<SvxEditSource> pEditSource( new SvxTextEditSource( mxCell->GetObject(), mxCell.get(), *pView, *pWindow) );
+            mpText = new AccessibleTextHelper( std::move(pEditSource) );
             mpText->SetEventSource(this);
         }
 

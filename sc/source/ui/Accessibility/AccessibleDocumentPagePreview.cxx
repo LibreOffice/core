@@ -53,6 +53,7 @@
 #include <sfx2/docfile.hxx>
 #include <comphelper/servicehelper.hxx>
 
+#include <utility>
 #include <vector>
 #include <list>
 #include <algorithm>
@@ -144,10 +145,10 @@ ScNotesChildren::~ScNotesChildren()
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
         (new ScAccessibleNoteTextData(mpViewShell, rString, aCellPos, bMarkNote));
-    ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
     SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
 
-    pTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource);
+    pTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
 
     if (pTextHelper)
     {

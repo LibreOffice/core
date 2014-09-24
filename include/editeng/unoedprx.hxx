@@ -151,9 +151,8 @@ public:
     virtual void                                UpdateData() SAL_OVERRIDE;
     virtual SfxBroadcaster&                     GetBroadcaster() const SAL_OVERRIDE;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    void        SetEditSource( ::std::auto_ptr< SvxEditSource > pAdaptee );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    void        SetEditSource( ::std::unique_ptr< SvxEditSource > && pAdaptee );
+
     bool        IsValid() const { return mbEditSourceValid;}
 
 private:
@@ -161,9 +160,7 @@ private:
     SvxEditSourceAdapter( const SvxEditSourceAdapter& );
     SvxEditSourceAdapter& operator= ( const SvxEditSourceAdapter& );
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< SvxEditSource >    mpAdaptee;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< SvxEditSource >    mpAdaptee;
 
     SvxAccessibleTextAdapter            maTextAdapter;
     SvxAccessibleTextEditViewAdapter    maEditViewAdapter;

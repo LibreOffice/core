@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <utility>
+
 #include "AccessibleEditObject.hxx"
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -366,10 +371,8 @@ void ScAccessibleEditObject::CreateTextHelper()
                 (new ScAccessibleEditLineTextData(NULL, mpWindow));
         }
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
+        ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
+        mpTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
         mpTextHelper->SetEventSource(this);
         mpTextHelper->SetFocus(mbHasFocus);
 

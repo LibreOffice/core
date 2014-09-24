@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <utility>
+
 #include "AccessibleTextHelper.hxx"
 #include "DrawViewWrapper.hxx"
 
@@ -87,9 +92,9 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
             SdrObject * pTextObj = m_pDrawViewWrapper->getNamedSdrObject( aCID );
             if( pTextObj )
             {
-                SvxEditSource * pEditSource = new SvxTextEditSource( *pTextObj, 0, *pView, *pWindow );
+                std::unique_ptr<SvxEditSource> pEditSource(new SvxTextEditSource( *pTextObj, 0, *pView, *pWindow ));
                 m_pTextHelper = new ::accessibility::AccessibleTextHelper(
-                    ::std::auto_ptr< SvxEditSource >( pEditSource ));
+                    std::move(pEditSource));
                 if( m_pTextHelper )
                     m_pTextHelper->SetEventSource( xEventSource );
             }

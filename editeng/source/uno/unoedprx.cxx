@@ -25,6 +25,7 @@
 
 
 #include <limits.h>
+#include <utility>
 #include <vector>
 #include <algorithm>
 #include <osl/mutex.hxx>
@@ -314,9 +315,7 @@ SvxEditSource* SvxEditSourceAdapter::Clone() const
 {
     if( mbEditSourceValid && mpAdaptee.get() )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< SvxEditSource > pClonedAdaptee( mpAdaptee->Clone() );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< SvxEditSource > pClonedAdaptee( mpAdaptee->Clone() );
 
         if( pClonedAdaptee.get() )
         {
@@ -324,7 +323,7 @@ SvxEditSource* SvxEditSourceAdapter::Clone() const
 
             if( pClone )
             {
-                pClone->SetEditSource( pClonedAdaptee );
+                pClone->SetEditSource( std::move(pClonedAdaptee) );
                 return pClone;
             }
         }
@@ -404,12 +403,11 @@ SfxBroadcaster& SvxEditSourceAdapter::GetBroadcaster() const
     return maDummyBroadcaster;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-void SvxEditSourceAdapter::SetEditSource( ::std::auto_ptr< SvxEditSource > pAdaptee )
+void SvxEditSourceAdapter::SetEditSource( ::std::unique_ptr< SvxEditSource > && pAdaptee )
 {
     if( pAdaptee.get() )
     {
-        mpAdaptee = pAdaptee;
+        mpAdaptee = std::move(pAdaptee);
         mbEditSourceValid = true;
     }
     else
@@ -420,7 +418,6 @@ void SvxEditSourceAdapter::SetEditSource( ::std::auto_ptr< SvxEditSource > pAdap
         mbEditSourceValid = false;
     }
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 SvxAccessibleTextAdapter::SvxAccessibleTextAdapter()
     : mpTextForwarder(NULL)

@@ -101,9 +101,8 @@ namespace accessibility
             model) contained in the given SvxEditSource.
 
         */
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        explicit AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource > pEditSource );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        explicit AccessibleStaticTextBase( ::std::unique_ptr< SvxEditSource > && pEditSource );
+
         virtual ~AccessibleStaticTextBase();
 
     private:
@@ -144,16 +143,14 @@ namespace accessibility
             This class does not have a dispose method, since it is not
             a UNO component. Nevertheless, it holds C++ references to
             several core objects, so you should issue a
-            SetEditSource(::std::auto_ptr<SvxEditSource>(NULL)) in
+            SetEditSource(::std::unique_ptr<SvxEditSource>()) in
             your dispose() method.
 
             @param pEditSource
             The new edit source to set. Object ownership is transferred
             from the caller to the callee.
         */
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        virtual void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        virtual void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
         /** Set the event source
 
