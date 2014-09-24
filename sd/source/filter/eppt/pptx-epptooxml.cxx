@@ -384,6 +384,8 @@ bool PowerPointExport::exportDocument() throw (css::uno::RuntimeException, std::
 
     mPresentationFS->endElementNS( XML_p, XML_presentation );
     mPresentationFS.reset();
+    // Free all FSHelperPtr, to flush data before commiting storage
+    mpSlidesFSArray.clear();
 
     commitStorage();
 

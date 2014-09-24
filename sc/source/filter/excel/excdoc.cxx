@@ -879,8 +879,6 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 
     rWorkbook->endElement( XML_workbook );
     rWorkbook.reset();
-
-    rStrm.commitStorage();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

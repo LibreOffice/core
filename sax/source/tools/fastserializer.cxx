@@ -53,7 +53,9 @@ using ::com::sun::star::io::BufferSizeExceededException;
 
 namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( )
-        : mxOutputStream()
+        : maOutputData()
+        , maOutputStream(maOutputData)
+        , mxOutputStream()
         , mxFastTokenHandler()
         , maMarkStack()
         , maClosingBracket((const sal_Int8 *)">", 1)
@@ -112,6 +114,9 @@ namespace sax_fastparser {
     {
         if (!mxOutputStream.is())
             return;
+
+        maOutputStream.flush();
+        mxOutputStream->writeBytes(maOutputData);
     }
 
     void SAL_CALL FastSaxSerializer::writeId( ::sal_Int32 nElement )
@@ -293,7 +298,7 @@ namespace sax_fastparser {
 
         if ( maMarkStack.size() == 1  && eMergeType != MERGE_MARKS_IGNORE)
         {
-            mxOutputStream->writeBytes( maMarkStack.top()->getData() );
+            maOutputStream.writeBytes( maMarkStack.top()->getData() );
             maMarkStack.pop();
             return;
         }
@@ -314,7 +319,7 @@ namespace sax_fastparser {
     void FastSaxSerializer::writeBytes( const Sequence< ::sal_Int8 >& aData ) throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
     {
         if ( maMarkStack.empty() )
-            mxOutputStream->writeBytes( aData );
+            maOutputStream.writeBytes( aData );
         else
             maMarkStack.top()->append( aData );
     }
