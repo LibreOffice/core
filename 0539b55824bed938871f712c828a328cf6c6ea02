@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_91397e44",
+        "filename": "unoxml/CppunitTest_domtest.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-24T09:01:03Z",
+      "side": 1,
+      "message": "please be consistent in the naming of CppunitTests and corresponding CppuntTest_*.mk files, and drop redundant \"test\" parts from CppunitTest names; I\u0027d suggest using\n\n  $(eval $(call gb_CppunitTest_CppunitTest,unoxml_domtest))\n\nand renaming this file to unoxml/CppuntiTest_unoxml_domtest.mk (and remember to adapt Module_unoxml.mk accordingly); that makes it easier to spot what to type if one wants to make just this test,\n\n  make CppunitTest_unoxml_domtest",
+      "revId": "0539b55824bed938871f712c828a328cf6c6ea02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_713f3226",
+        "filename": "unoxml/CppunitTest_domtest.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-24T09:01:03Z",
+      "side": 1,
+      "message": "please be consistent in using spaces or tabs in an *.mk file\n\n(also, these long lists of dependencies smell like you copied them from another CppunitTest?  it is tedious, but for bonus points, you could try trim them down to what is really necessary for /this/ test)",
+      "revId": "0539b55824bed938871f712c828a328cf6c6ea02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_513c362f",
+        "filename": "unoxml/Module_unoxml.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-24T09:01:03Z",
+      "side": 1,
+      "message": "* why is this conditional on OOO_JUNIT_JAR?\n\n* please be consistent with using tabs vs. spaces in a single *.mk\n\n* probably cleaner to sort gb_Module_add_slowcheck_targets before gb_Module_add_subsequentcheck_targets (reflecting the rough order in wich such tests are run: _check_targets, _slowcheck_targets, _subsequentcheck_targets)",
+      "revId": "0539b55824bed938871f712c828a328cf6c6ea02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_31f2ca9b",
+        "filename": "unoxml/test/domtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-24T09:01:03Z",
+      "side": 1,
+      "message": "you can remove that bogus noise comment",
+      "revId": "0539b55824bed938871f712c828a328cf6c6ea02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_11efceb1",
+        "filename": "unoxml/test/domtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-24T09:01:03Z",
+      "side": 1,
+      "message": "better sort that #include into the above block of related includes",
+      "revId": "0539b55824bed938871f712c828a328cf6c6ea02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_f12a02e7",
+        "filename": "unoxml/test/domtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-24T09:01:03Z",
+      "side": 1,
+      "message": "line 49 duplicates line 47",
+      "revId": "0539b55824bed938871f712c828a328cf6c6ea02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_d12f06f5",
+        "filename": "unoxml/test/domtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-24T09:01:03Z",
+      "side": 1,
+      "message": "that causes an\n\n  error: unused parameter \u0027Attribs\u0027 [-Werror,-Wunused-parameter]\n\nplease configure --with-werror and fix those",
+      "revId": "0539b55824bed938871f712c828a328cf6c6ea02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_b1347a4a",
+        "filename": "unoxml/test/domtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-24T09:01:03Z",
+      "side": 1,
+      "message": "you dropped the trailing newline, please add it back  (even though C++11 now allows a missing final newline, some editors would silently add it back themselves, so that the next commit to this file could then trigger another needless change to this line, etc.)",
+      "revId": "0539b55824bed938871f712c828a328cf6c6ea02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
