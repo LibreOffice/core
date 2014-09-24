@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import org.libreoffice.kit.LibreOfficeKit;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
 
@@ -111,19 +110,18 @@ public class LibreOfficeMainActivity extends Activity {
             mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
         }
 
-        LibreOfficeKit.loadStatic();
+        if (sLOKitThread == null) {
+            sLOKitThread = new LOKitThread();
+            sLOKitThread.start();
+        } else {
+            sLOKitThread.clearQueue();
+        }
 
         mLayerController = new LayerController(this);
         mLayerClient = new GeckoLayerClient(this);
         mLayerController.setLayerClient(mLayerClient);
         mGeckoLayout.addView(mLayerController.getView(), 0);
 
-        if (sLOKitThread == null) {
-            sLOKitThread = new LOKitThread();
-            sLOKitThread.start();
-        }
-
-        sLOKitThread.mEventQueue.clear();
         LOKitShell.sendEvent(LOEvent.load(inputFile));
 
         Log.w(LOGTAG, "UI almost up");

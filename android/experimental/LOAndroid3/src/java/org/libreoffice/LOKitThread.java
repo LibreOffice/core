@@ -26,6 +26,7 @@ public class LOKitThread extends Thread {
     private boolean mCheckboardImageSet = false;
 
     public LOKitThread() {
+        TileProviderFactory.initialize();
     }
 
     private RectF normlizeRect(ImmutableViewportMetrics metrics) {
@@ -35,9 +36,9 @@ public class LOKitThread extends Thread {
     }
 
     private Rect roundToTileSize(RectF input, int tileSize) {
-        int minX = (Math.round(input.left)    / tileSize) * tileSize;
-        int minY = (Math.round(input.top)     / tileSize) * tileSize;
-        int maxX = ((Math.round(input.right)  / tileSize) + 1) * tileSize;
+        int minX = (Math.round(input.left) / tileSize) * tileSize;
+        int minY = (Math.round(input.top) / tileSize) * tileSize;
+        int maxX = ((Math.round(input.right) / tileSize) + 1) * tileSize;
         int maxY = ((Math.round(input.bottom) / tileSize) + 1) * tileSize;
         return new Rect(minX, minY, maxX, maxY);
     }
@@ -136,7 +137,7 @@ public class LOKitThread extends Thread {
         if (mTileProvider != null) {
             mTileProvider.close();
         }
-        mTileProvider = new LOKitTileProvider(mApplication.getLayerController(), filename);
+        mTileProvider = TileProviderFactory.create(mApplication.getLayerController(), filename);
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
             updateCheckbardImage();
@@ -190,5 +191,9 @@ public class LOKitThread extends Thread {
     public void queueEvent(LOEvent event) {
         Log.i(LOGTAG, "Event: " + event.getTypeString());
         mEventQueue.add(event);
+    }
+
+    public void clearQueue() {
+        mEventQueue.clear();
     }
 }
