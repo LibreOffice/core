@@ -1807,5 +1807,17 @@
         </prop>
       </group>
     </group>
+    <group oor:name="DataStream">
+        <info>
+          <desc>data stream</desc>
+        </info>
+        <prop oor:name="UpdateTimeout" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
+          <info>
+            <desc>set the Timeout of DataStream updating </desc>
+          </info>
+          <value>2000</value>
+        </prop>
+    </group>
   </component>
 </oor:component-schema>

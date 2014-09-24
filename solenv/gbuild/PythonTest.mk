@@ -15,7 +15,7 @@ gb_PythonTest_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE_GDB)
 ifeq ($(OS),MACOSX)
 gb_PythonTest_DEPS := $(call gb_GeneratedPackage_get_target,python3)
 else
-gb_PythonTest_DEPS := $(call gb_Package_get_target,python3)
+gb_PythonTest_DEPS := $(call gb_ExternalExecutable_get_dependencies,python)
 endif
 gb_PythonTest_DEPS += $(if $(filter-out WNT,$(OS)),$(call gb_Package_get_target,python_shell))
 else
