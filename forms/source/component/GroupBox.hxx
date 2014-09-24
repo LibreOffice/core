@@ -53,7 +53,7 @@ protected:
 };
 
 
-// OGroupBoxControl (nur aus Kompatibilitaet zur 5.0)
+// OGroupBoxControl (only for compatibility for 5.0)
 
 class OGroupBoxControl : public OControl
 {

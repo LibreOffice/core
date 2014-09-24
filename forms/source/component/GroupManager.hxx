@@ -36,22 +36,19 @@
 using namespace comphelper;
 
 /*
- * Der GroupManager horcht an der starform, ob FormComponents eingefuegt oder entfernt
- * werden. Zusaetzlich horcht er bei den FormComponents an den Properties
- * "Name" und "TabIndex". Mit diesen Infos aktualisiert er seine Gruppen.
+ * The GroupManager listens at the StarForm for FormComponent insertion and removal as well as
+ * its properties "Name" and "TabIndex" and updates its Group using this information.
  *
- * Der GroupManager verwaltet eine Gruppe, in der alle Controls nach TabIndex
- * geordnet sind, und ein Array von Gruppen, in dem jede FormComponent noch
- * einmal einer Gruppe dem Namen nach zugeordnet wird.
- * Die einzelnen Gruppen werden ueber eine Map aktiviert, wenn sie mehr als
- * ein Element besitzen.
+ * The GroupManager manages a Group in which all Controls are sorted by TabIndex.
+ * It also manages an array of Groups, in which each FormComponent is assigned a
+ * Group according to its name.
+ * Each Group is activated using a Map, if they contain more than one element.
  *
- * Die Gruppen verwalten intern die FormComponents in zwei Arrays. In dem
- * GroupCompArray werden die Components nach TabIndex und Einfuegepostion
- * sortiert. Da auf dieses Array ueber die FormComponent zugegriffen
- * wird, gibt es noch das GroupCompAccessArray, in dem die FormComponents
- * nach ihrer Speicheradresse sortiert sind. Jedes Element des
- * GroupCompAccessArrays ist mit einem Element des GroupCompArrays verpointert.
+ * The Groups manage the FormComponents internally using two arrays.
+ * In the GroupCompArray the Components are sorted by TabIndex and insertion position.
+ * Because this array is accessed via the FormComponent, we also have the GroupCompAccessArray
+ * in which the FormComponents are sorted by their storage address.
+ * Every element of the GroupCompArray has a pointer to the GroupCompArray.
  */
 namespace frm
 {
@@ -144,7 +141,7 @@ class OGroup
     OGroupCompAccArr    m_aCompAccArray;
 
     OUString m_aGroupName;
-    sal_uInt16  m_nInsertPos;               // Die Einfugeposition der GroupComps wird von der Gruppe bestimmt.
+    sal_uInt16  m_nInsertPos; // The insertion position of the GroupComps is determind by the Group
 
     friend class OGroupLess;
 
@@ -170,10 +167,9 @@ typedef std::vector<OGroupArr::iterator> OActiveGroups;
 
 class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
 {
-    OGroup*         m_pCompGroup;           // Alle Components nach TabIndices sortiert
-    OGroupArr       m_aGroupArr;            // Alle Components nach Gruppen sortiert
-    OActiveGroups   m_aActiveGroupMap;      // In dieser Map werden die Indices aller Gruppen gehalten,
-                                        // die mehr als 1 Element haben
+    OGroup*         m_pCompGroup;           // Sort all Components by TabIndices
+    OGroupArr       m_aGroupArr;            // Sort all Components by group
+    OActiveGroups   m_aActiveGroupMap;      // This map contains all indices of all groups with more than 1 element
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >
                     m_xContainer;

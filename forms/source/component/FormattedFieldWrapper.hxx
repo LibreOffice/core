@@ -46,7 +46,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
 
     rtl::Reference< OEditModel > m_pEditPart;
-        // if we act as formatted this is used to write the EditModel part
+    // if we act as formatted this is used to write the EditModel part
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>     m_xFormattedPart;
     // if we act as formatted, this is the PersistObject interface of our aggregate, used
     // to read and write the FormattedModel part
