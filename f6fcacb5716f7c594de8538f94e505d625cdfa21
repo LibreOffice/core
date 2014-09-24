@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_b13a3ae6",
+        "filename": "javaunohelper/test/com/sun/star/lib/uno/helper/WeakBase_Test.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-24T19:08:48Z",
+      "side": 1,
+      "message": "Why ignore this test? May be annotate it on multiple line:\n\n  @Ignore(\"Obsolete method of XTypeProvider.\")\n  @Test public void getImplementationId() throws Exception\n\nIgnoring junit test methods is normally something temporarily. If this test is broken and is going to be fixed in nea future. When t always wrong, just remove it. Of fix it. Or provide more/better explaination why it is ignored and when it can be activated again if at all.",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 48
+      },
+      "revId": "f6fcacb5716f7c594de8538f94e505d625cdfa21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
