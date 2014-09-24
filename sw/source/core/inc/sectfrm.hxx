@@ -127,7 +127,7 @@ public:
 
     bool IsBalancedSection() const;
 
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) SAL_OVERRIDE;
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const SAL_OVERRIDE;
 
     bool IsFtnAtEnd() const { return bFtnAtEnd; }
     bool IsEndnAtEnd() const { return bEndnAtEnd;   }

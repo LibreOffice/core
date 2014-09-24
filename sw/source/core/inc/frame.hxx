@@ -899,10 +899,10 @@ public:
 
 public:
     // if writer is NULL, dumps the layout structure as XML in layout.xml
-    virtual void dumpAsXml(xmlTextWriterPtr writer = NULL);
-    virtual void dumpInfosAsXml(xmlTextWriterPtr writer);
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
-    void dumpChildrenAsXml(xmlTextWriterPtr writer);
+    virtual void dumpAsXml(xmlTextWriterPtr writer = NULL) const;
+    virtual void dumpInfosAsXml(xmlTextWriterPtr writer) const;
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;
+    void dumpChildrenAsXml(xmlTextWriterPtr writer) const;
     bool IsCollapse() const;
 };
 

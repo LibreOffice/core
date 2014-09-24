@@ -188,7 +188,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
         /** The element name to show in the XML dump.
           */
-        virtual const char* getElementName( ) SAL_OVERRIDE { return "SwAnchoredDrawObject"; }
+        virtual const char* getElementName( ) const SAL_OVERRIDE { return "SwAnchoredDrawObject"; }
 };
 
 #endif

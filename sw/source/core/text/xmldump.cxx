@@ -223,7 +223,7 @@ namespace
     }
 }
 
-void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
+void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
 {
     bool bCreateWriter = ( NULL == writer );
     if ( bCreateWriter )
@@ -292,7 +292,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
         if (IsRootFrm())
         {
             // Root frame has access to the edit shell, so dump the current selection ranges here.
-            SwRootFrm* const pRootFrm = static_cast<SwRootFrm* const>(this);
+            const SwRootFrm* const pRootFrm = static_cast<const SwRootFrm* const>(this);
             SwEditShell* pEditShell = pRootFrm->GetCurrShell()->GetDoc()->GetEditShell();
             xmlTextWriterStartElement(writer, BAD_CAST("shellCrsr"));
             SwPaM* pPaM = pEditShell->getShellCrsr(false);
@@ -316,7 +316,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
         xmlTextWriterEndElement( writer );
 
         // Dump Anchored objects if any
-        SwSortedObjs* pAnchored = GetDrawObjs();
+        const SwSortedObjs* pAnchored = GetDrawObjs();
         if ( pAnchored && pAnchored->size() > 0 )
         {
             xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
@@ -358,7 +358,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
         lcl_freeWriter( writer );
 }
 
-void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer )
+void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer ) const
 {
     // output the Frm
     xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
@@ -373,7 +373,7 @@ void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer )
 // bomb on two string litterals in the format.
 static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
 
-void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
+void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "id" ), "%" SAL_PRIuUINT32, GetFrmId() );
@@ -401,16 +401,16 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     }
 }
 
-void SwFrm::dumpChildrenAsXml( xmlTextWriterPtr writer )
+void SwFrm::dumpChildrenAsXml( xmlTextWriterPtr writer ) const
 {
-    SwFrm *pFrm = GetLower(  );
+    const SwFrm *pFrm = GetLower(  );
     for ( ; pFrm != NULL; pFrm = pFrm->GetNext(  ) )
     {
         pFrm->dumpAsXml( writer );
     }
 }
 
-void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer )
+void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
 {
     bool bCreateWriter = ( NULL == writer );
     if ( bCreateWriter )
@@ -432,7 +432,7 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer )
         lcl_freeWriter( writer );
 }
 
-void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
+void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
@@ -442,7 +442,7 @@ void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTxtFrm*>(m_pPrecede)->GetFrmId() );
 }
 
-void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
+void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
@@ -452,7 +452,7 @@ void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwSectionFrm*>( m_pPrecede )->GetFrmId() );
 }
 
-void SwTabFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
+void SwTabFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )

@@ -1669,7 +1669,7 @@ public:
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
      * @since 3.5
      */
-    void dumpAsXml( xmlTextWriterPtr writer = NULL );
+    void dumpAsXml( xmlTextWriterPtr writer = NULL ) const;
 
     std::vector<Color> GetDocColors();
 

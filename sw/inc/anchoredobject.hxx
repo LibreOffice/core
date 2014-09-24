@@ -542,11 +542,11 @@ class SW_DLLPUBLIC SwAnchoredObject
         /** Dump a bunch of useful data to an XML representation to ease
             layout understanding, debugging and testing.
           */
-        virtual void dumpAsXml( xmlTextWriterPtr pWriter );
+        virtual void dumpAsXml( xmlTextWriterPtr pWriter ) const;
 
         /** The element name to show in the XML dump.
           */
-        virtual const char* getElementName( ) { return "SwAnchoredObject"; }
+        virtual const char* getElementName( ) const { return "SwAnchoredObject"; }
 };
 
 /// Helper class for notify that positioning of an anchored object is in progress.

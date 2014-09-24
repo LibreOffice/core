@@ -81,7 +81,7 @@ public:
     virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwFrmFmt* pFmt) const;
     bool Contains(const SwFrmFmt* pFmt) const;
-    void dumpAsXml(xmlTextWriterPtr w, const char* pName);
+    void dumpAsXml(xmlTextWriterPtr w, const char* pName) const;
     /// free's any remaining child objects
     virtual ~SwFrmFmts();
 };
@@ -93,7 +93,7 @@ public:
     virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwCharFmt* pFmt) const;
     bool Contains(const SwCharFmt* pFmt) const;
-    void dumpAsXml(xmlTextWriterPtr w);
+    void dumpAsXml(xmlTextWriterPtr w) const;
     /// free's any remaining child objects
     virtual ~SwCharFmts();
 };
@@ -104,7 +104,7 @@ public:
     virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
     virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwTxtFmtColl* pFmt) const;
-    void dumpAsXml(xmlTextWriterPtr w);
+    void dumpAsXml(xmlTextWriterPtr w) const;
     virtual ~SwTxtFmtColls() {}
 };
 
@@ -116,7 +116,7 @@ public:
     virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwSectionFmt* pFmt) const;
     bool Contains(const SwSectionFmt* pFmt) const;
-    void dumpAsXml(xmlTextWriterPtr w);
+    void dumpAsXml(xmlTextWriterPtr w) const;
     /// free's any remaining child objects
     virtual ~SwSectionFmts();
 };
@@ -141,7 +141,7 @@ public:
     /// the destructor will free all objects still in the vector
     ~SwNumRuleTbl();
     sal_uInt16 GetPos(const SwNumRule* pRule) const;
-    void dumpAsXml(xmlTextWriterPtr w);
+    void dumpAsXml(xmlTextWriterPtr w) const;
 };
 
 struct CompareSwRedlineTbl
@@ -171,7 +171,7 @@ public:
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();
 
-    void dumpAsXml(xmlTextWriterPtr w);
+    void dumpAsXml(xmlTextWriterPtr w) const;
 
     /** Search next or previous Redline with the same Seq. No.
        Search can be restricted via Lookahaed.
@@ -214,7 +214,7 @@ public:
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();
 
-    void dumpAsXml(xmlTextWriterPtr w);
+    void dumpAsXml(xmlTextWriterPtr w) const;
 
     sal_uInt16 GetSize() const                              {     return m_aExtraRedlines.size();                }
     SwExtraRedline* GetRedline( sal_uInt16 uIndex ) const   {     return m_aExtraRedlines.operator[]( uIndex );  }

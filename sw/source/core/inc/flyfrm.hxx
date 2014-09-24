@@ -284,7 +284,7 @@ public:
     virtual const SwFlyFrmFmt *GetFmt() const SAL_OVERRIDE;
     virtual       SwFlyFrmFmt *GetFmt() SAL_OVERRIDE;
 
-    virtual void dumpAsXml( xmlTextWriterPtr writer ) SAL_OVERRIDE { SwLayoutFrm::dumpAsXml( writer ); };
+    virtual void dumpAsXml( xmlTextWriterPtr writer ) const SAL_OVERRIDE { SwLayoutFrm::dumpAsXml( writer ); };
 
     virtual void Calc() const SAL_OVERRIDE;
 

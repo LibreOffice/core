@@ -215,7 +215,7 @@ public:
 
     sal_uInt16 GetBottomLineSize() const;
 
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) SAL_OVERRIDE;
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
 };

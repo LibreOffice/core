@@ -180,7 +180,7 @@ void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
     writer.endElement();
 }
 
-void SwDoc::dumpAsXml( xmlTextWriterPtr w )
+void SwDoc::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
     writer.startElement( "doc" );
@@ -208,7 +208,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
 
 namespace sw {
 namespace mark {
-void MarkManager::dumpAsXml( xmlTextWriterPtr w )
+void MarkManager::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer(w);
     writer.startElement("markManager");
@@ -287,7 +287,7 @@ void SwFldTypes::dumpAsXml( xmlTextWriterPtr w ) const
     writer.endElement();
 }
 
-void SwNodes::dumpAsXml( xmlTextWriterPtr w )
+void SwNodes::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
     writer.startElement( "swnodes" );
@@ -299,7 +299,7 @@ void SwNodes::dumpAsXml( xmlTextWriterPtr w )
     writer.endElement();
 }
 
-void SwNode::dumpAsXml( xmlTextWriterPtr w )
+void SwNode::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
     const char* name = "???";
@@ -330,7 +330,7 @@ void SwNode::dumpAsXml( xmlTextWriterPtr w )
         writer.endElement(); // end start node
 }
 
-void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
+void SwStartNode::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
     const char* name = "???";
@@ -603,7 +603,7 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
     }
 }
 
-void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w, const char* pName)
+void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w, const char* pName) const
 {
     WriterHelper writer(w);
     if (size())
@@ -638,7 +638,7 @@ void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w, const char* pName)
     }
 }
 
-void SwCharFmts::dumpAsXml(xmlTextWriterPtr w)
+void SwCharFmts::dumpAsXml(xmlTextWriterPtr w) const
 {
     WriterHelper writer(w);
     if (size())
@@ -658,7 +658,7 @@ void SwCharFmts::dumpAsXml(xmlTextWriterPtr w)
     }
 }
 
-void SwSectionFmts::dumpAsXml(xmlTextWriterPtr w)
+void SwSectionFmts::dumpAsXml(xmlTextWriterPtr w) const
 {
     WriterHelper writer(w);
     if (size())
@@ -675,7 +675,7 @@ void SwSectionFmts::dumpAsXml(xmlTextWriterPtr w)
     }
 }
 
-void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w)
+void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w) const
 {
     WriterHelper writer(w);
     if (size())
@@ -695,7 +695,7 @@ void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w)
     }
 }
 
-void SwNumRule::dumpAsXml(xmlTextWriterPtr w)
+void SwNumRule::dumpAsXml(xmlTextWriterPtr w) const
 {
      WriterHelper writer(w);
      writer.startElement("swnumrule");
@@ -707,7 +707,7 @@ void SwNumRule::dumpAsXml(xmlTextWriterPtr w)
      writer.endElement();
 }
 
-void SwNumRuleTbl::dumpAsXml(xmlTextWriterPtr w)
+void SwNumRuleTbl::dumpAsXml(xmlTextWriterPtr w) const
 {
     if (!empty())
     {
@@ -719,7 +719,7 @@ void SwNumRuleTbl::dumpAsXml(xmlTextWriterPtr w)
     }
 }
 
-void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
+void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
     writer.startElement( "text" );
@@ -753,16 +753,16 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
     if (HasHints())
     {
         writer.startElement("hints");
-        SwpHints& rHints = GetSwpHints();
+        const SwpHints& rHints = GetSwpHints();
         for (size_t i = 0; i < rHints.Count(); ++i)
         {
             writer.startElement("hint");
-            SwTxtAttr* pHint = rHints.GetTextHint(i);
+            const SwTxtAttr* pHint = rHints.GetTextHint(i);
 
             if (pHint->GetStart())
                 writer.writeFormatAttribute("start", TMP_FORMAT, pHint->GetStart());
-            if (pHint->GetEnd())
-                writer.writeFormatAttribute("end", TMP_FORMAT, *pHint->GetEnd());
+            if (pHint->End())
+                writer.writeFormatAttribute("end", TMP_FORMAT, *pHint->End());
             writer.writeFormatAttribute("whichId", TMP_FORMAT, pHint->Which());
 
             const char* pWhich = 0;
@@ -801,7 +801,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
     writer.endElement();
 }
 
-void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
+void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
 
@@ -938,7 +938,7 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
     writer.endElement( );    // swredlinetbl
 }
 
-void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
+void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
 

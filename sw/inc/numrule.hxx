@@ -272,7 +272,7 @@ public:
     void SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent );
 
     void Validate();
-    void dumpAsXml(xmlTextWriterPtr w);
+    void dumpAsXml(xmlTextWriterPtr w) const;
     void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
     void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
 };

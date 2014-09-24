@@ -285,7 +285,7 @@ public:
      * Dumps the node structure to the given destination (file nodes.xml in the current directory by default)
      * @since 3.5
      */
-    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
+    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL ) const;
 
 private:
     /// Private constructor because copying is never allowed!!
@@ -318,7 +318,7 @@ public:
     /// Call ChkCondcoll to all ContentNodes of section.
     void CheckSectionCondColl() const;
 
-    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL ) SAL_OVERRIDE;
+    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL ) const SAL_OVERRIDE;
 
 private:
     /// Private constructor because copying is never allowed!!

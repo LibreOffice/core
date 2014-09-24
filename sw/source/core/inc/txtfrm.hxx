@@ -581,7 +581,7 @@ public:
 
     static void repaintTextFrames( const SwTxtNode& rNode );
 
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) SAL_OVERRIDE;
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const SAL_OVERRIDE;
 };
 
 class SwTxtFrmLocker

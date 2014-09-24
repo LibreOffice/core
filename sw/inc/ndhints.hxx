@@ -117,7 +117,9 @@ public:
     inline size_t GetStartOf( const SwTxtAttr *pHt ) const;
     bool Contains( const SwTxtAttr *pHt ) const;
 
-    inline SwTxtAttr * GetTextHint( const size_t nIdx )
+    inline const SwTxtAttr * GetTextHint( const size_t nIdx ) const
+        { return GetStart(nIdx); }
+    inline       SwTxtAttr * GetTextHint( const size_t nIdx )
         { return GetStart(nIdx); }
     inline const SwTxtAttr * operator[]( const size_t nIdx ) const
         { return m_HintStarts[nIdx]; }
