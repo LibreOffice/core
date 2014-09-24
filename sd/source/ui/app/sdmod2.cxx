@@ -272,8 +272,6 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             pInfo->SetRepresentation( aRepresentation );
         }
         else if( dynamic_cast< const SvxPagesField*  >(pField) )
-             OUString aRepresentation;
-        else if( dynamic_cast< const SvxPagesField*  >(pField) )
         {
             OUString aRepresentation(" ");
 
