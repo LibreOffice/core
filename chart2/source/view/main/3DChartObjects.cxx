@@ -79,7 +79,7 @@ const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
     VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
     vcl::Font aFont;
     if(bIs3dText)
-        aFont = vcl::Font("postoffice Bold",Size(0,0));
+        aFont = vcl::Font("Brillante St",Size(0,0));
     else
         aFont = aDevice.GetFont();
     aFont.SetSize(Size(0, 96));
