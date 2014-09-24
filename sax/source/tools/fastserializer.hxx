@@ -204,7 +204,6 @@ private:
     };
 
     ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
-    ::std::stack< boost::shared_ptr< ForMerge > > maSavedMarkStack;
 
 #ifdef DBG_UTIL
     ::std::stack<sal_Int32> m_DebugStartedElements;
