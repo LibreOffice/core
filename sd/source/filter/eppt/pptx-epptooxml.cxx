@@ -1555,9 +1555,6 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
                       .appendAscii( ".xml" )
                       .makeStringAndClear(),
                       "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml" );
-    if( mpMasterFSArray.size() < mnMasterPages )
-        mpMasterFSArray.resize( mnMasterPages );
-    mpMasterFSArray[ nPageNum ] = pFS;
 
     // write theme per master
     WriteTheme( nPageNum );

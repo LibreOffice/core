@@ -141,7 +141,6 @@ private:
 
     LayoutInfo mLayoutInfo[EPP_LAYOUT_SIZE];
     std::vector< ::sax_fastparser::FSHelperPtr > mpSlidesFSArray;
-    std::vector< ::sax_fastparser::FSHelperPtr > mpMasterFSArray;
     sal_Int32 mnLayoutFileIdMax;
 
     sal_uInt32 mnSlideIdMax;
