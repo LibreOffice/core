@@ -27,6 +27,8 @@
 #include <documentlinkmgr.hxx>
 
 #include <config_orcus.h>
+#include "officecfg/Office/Calc.hxx"
+
 
 #if ENABLE_ORCUS
 #if defined WNT
@@ -501,18 +503,11 @@ void DataStream::MoveData()
         default:
             ;
     }
-
     if(mbIsFirst && mbIsUpdate)
     {
-         int nImportTimeout = 0;
-         static char * cenv = getenv( "streamtimeout" );
-         if(cenv)
-         {
-             double nEnv = atof(cenv);
-             nImportTimeout = 1000 * nEnv;
-         }
-         maImportTimer.SetTimeout(nImportTimeout);
-         mbIsFirst = false;
+        sal_Int32 nStreamTimeout = officecfg::Office::Calc::DataStream::UpdateTimeout::get();
+        maImportTimer.SetTimeout(nStreamTimeout);
+        mbIsFirst = false;
     }
 }
 
