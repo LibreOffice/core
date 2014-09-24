@@ -22,6 +22,7 @@
 #include <rtl/math.hxx>
 
 #include <utility>
+#include <algorithm>
 #include <functional>
 #include <vector>
 

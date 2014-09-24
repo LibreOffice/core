@@ -30,6 +30,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/propshlp.hxx>
 
+#include <algorithm>
 #include <vector>
 
 namespace chart
