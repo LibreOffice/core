@@ -15,6 +15,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
@@ -586,7 +587,7 @@ private:
     getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     rtl::Reference< cppuhelper::ServiceManager > manager_;
-    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
+    boost::weak_ptr< cppuhelper::ServiceManager::Data::Implementation >
         implementation_;
 };
 
@@ -595,8 +596,9 @@ ImplementationWrapper::createInstanceWithContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
-    manager_->loadImplementation(Context, implementation_);
-    return implementation_->createInstance(Context, false);
+    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
+    manager_->loadImplementation(Context, impl);
+    return impl->createInstance(Context, false);
 }
 
 css::uno::Reference< css::uno::XInterface >
@@ -605,8 +607,9 @@ ImplementationWrapper::createInstanceWithArgumentsAndContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
-    manager_->loadImplementation(Context, implementation_);
-    return implementation_->createInstanceWithArguments(
+    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
+    manager_->loadImplementation(Context, impl);
+    return impl->createInstanceWithArguments(
         Context, false, Arguments);
 }
 
@@ -629,7 +632,7 @@ ImplementationWrapper::createInstanceWithArguments(
 rtl::OUString ImplementationWrapper::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return implementation_->info->name;
+    return implementation_.lock()->info->name;
 }
 
 sal_Bool ImplementationWrapper::supportsService(rtl::OUString const & ServiceName)
@@ -642,20 +645,21 @@ css::uno::Sequence< rtl::OUString >
 ImplementationWrapper::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    if (implementation_->info->services.size()
+    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
+    if (impl->info->services.size()
         > static_cast< sal_uInt32 >(SAL_MAX_INT32))
     {
         throw css::uno::RuntimeException(
-            ("Implementation " + implementation_->info->name
+            ("Implementation " + impl->info->name
              + " supports too many services"),
             static_cast< cppu::OWeakObject * >(this));
     }
     css::uno::Sequence< rtl::OUString > names(
-        static_cast< sal_Int32 >(implementation_->info->services.size()));
+        static_cast< sal_Int32 >(impl->info->services.size()));
     sal_Int32 i = 0;
     for (std::vector< rtl::OUString >::const_iterator j(
-             implementation_->info->services.begin());
-         j != implementation_->info->services.end(); ++j)
+             impl->info->services.begin());
+         j != impl->info->services.end(); ++j)
     {
         names[i++] = *j;
     }
