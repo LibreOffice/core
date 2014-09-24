@@ -42,7 +42,10 @@ class VCL_DLLPUBLIC Button : public Control
 {
 private:
     ImplCommonButtonData *mpButtonData;
-    Link                  maClickHdl;
+    Link maClickHdl;
+
+    /// Command URL (like .uno:Save) in case the button should handle it.
+    OUString maCommand;
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE                  Button (const Button &);
@@ -72,6 +75,9 @@ public:
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
     const Link&         GetClickHdl() const { return maClickHdl; }
 
+    /// Setup handler for UNO commands so that commands like .uno:Something are handled automagically by this button.
+    void                SetCommandHandler(const OUString& aCommand);
+
     static OUString     GetStandardText( StandardButtonType eButton );
 
     bool            SetModeImage( const Image& rImage );
@@ -87,6 +93,11 @@ public:
     bool                IsSmallSymbol() const;
     void                SetSmallSymbol(bool bSmall = true);
     virtual bool        set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+
+protected:
+
+    /// Handler for click, in case we want the button to handle uno commands (.uno:Something).
+    static long         dispatchCommandHandler(void *, void *pCaller);
 };
 
 

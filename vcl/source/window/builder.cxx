@@ -833,6 +833,8 @@ namespace
 
         Image aImage(VclBuilder::getCommandImage(aCommand, /* bLarge = */ false, xContext, rFrame, aModuleId));
         pButton->SetModeImage(aImage);
+
+        pButton->SetCommandHandler(aCommand);
     }
 
     Button* extractStockAndBuildPushButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
