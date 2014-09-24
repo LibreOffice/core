@@ -20,6 +20,7 @@ import xml.etree.ElementTree as ET
 
 
 class GbuildParserState:
+
     def __init__(self):
         self.target = None
         self.ilib = None
@@ -32,9 +33,10 @@ class GbuildParserState:
 
 
 class GbuildLinkTarget:
+
     def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.cxxflags, self.linked_libs) = (
-        name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
+            name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
 
     def short_name(self):
         return self.name
@@ -44,11 +46,12 @@ class GbuildLinkTarget:
 
     def __str__(self):
         return '%s at %s with include path: %s, isystem includes: %s, defines: %s, objects: %s, cxxflags: %s and linked libs: %s' % (
-        self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects,
+            self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects,
             self.cxxflags, self.linked_libs)
 
 
 class GbuildLib(GbuildLinkTarget):
+
     def __init__(self, name, library, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
         self.library = library
@@ -65,6 +68,7 @@ class GbuildLib(GbuildLinkTarget):
 
 
 class GbuildExe(GbuildLinkTarget):
+
     def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
         self.executable = executable
@@ -103,7 +107,7 @@ class GbuildParser:
     def __mapping_to_dict(self, mapping):
         mapping_dict = {}
         for item in mapping.split(' '):
-            library,target = item.split(':')
+            library, target = item.split(':')
             mapping_dict[target] = library
         return mapping_dict
 
@@ -166,7 +170,6 @@ class GbuildParser:
                               state.cxxflags, state.linked_libs))
                 state = GbuildParserState()
                 continue
-            includematch = GbuildParser.includepattern.match(line)
             if line.find('# INCLUDE :=') == 0:
                 isystemmatch = GbuildParser.isystempattern.findall(line)
                 if isystemmatch:
@@ -196,13 +199,14 @@ class GbuildParser:
                 state.ilib = os.path.basename(ilibmatch.group(1))
                 continue
             if line.find('# T_CXXFLAGS :=') == 0:
-                state.cxxflags = [cxxflag.strip() for cxxflag in GbuildParser.warningpattern.sub('', line.replace('# T_CXXFLAGS :=','')).split(' ') if len(cxxflag) > 1]
+                state.cxxflags = [cxxflag.strip() for cxxflag in GbuildParser.warningpattern.sub('', line.replace('# T_CXXFLAGS :=', '')).split(' ') if len(cxxflag) > 1]
                 continue
-            #we could match a lot of other stuff here if needed for integration rpaths etc.
+            # we could match a lot of other stuff here if needed for integration rpaths etc.
         return self
 
 
 class IdeIntegrationGenerator:
+
     def __init__(self, gbuildparser):
         self.gbuildparser = gbuildparser
 
@@ -211,6 +215,7 @@ class IdeIntegrationGenerator:
 
 
 class DebugIntegrationGenerator(IdeIntegrationGenerator):
+
     def __init__(self, gbuildparser):
         IdeIntegrationGenerator.__init__(self, gbuildparser)
 
@@ -224,6 +229,7 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
 
 
 class VimIntegrationGenerator(IdeIntegrationGenerator):
+
     def __init__(self, gbuildparser):
         IdeIntegrationGenerator.__init__(self, gbuildparser)
 
@@ -236,7 +242,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
                 entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
                 entries.append(entry)
             global_list.extend(entries)
-        export_file = open('compile_commands.json','w') 
+        export_file = open('compile_commands.json', 'w')
         json.dump(global_list, export_file)
 
     def generateCommand(self, lib, file):
@@ -260,7 +266,9 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
         command += file
         return command.replace('-std=gnu++11', '-std=c++11')
 
+
 class KdevelopIntegrationGenerator(IdeIntegrationGenerator):
+
     def encode_int(self, i):
         temp = '%08x' % i
         return '\\x%s\\x%s\\x%s\\x%s' % (temp[0:2], temp[2:4], temp[4:6], temp[6:8])
@@ -291,7 +299,6 @@ Type=%(typenr)d
     def generate_buildsystemconfig(self, configid, moduledir, builddir, title, buildparms=''):
         result = KdevelopIntegrationGenerator.buildsystemconfigtemplate % {'configid': configid, 'builddir': builddir,
                                                                            'title': title}
-        pathid = 0
         result += self.generate_buildsystemconfigtool(configid, 'Clean', 'clean %s' % buildparms,
                                                       self.gbuildparser.makecmd, 3)
         result += self.generate_buildsystemconfigtool(configid, 'Build', 'all %s' % buildparms,
@@ -412,18 +419,18 @@ VersionControl=kdevgit
         self.target_by_location = {}
         self.target_by_path = {}
         for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
-            if not target.location in self.target_by_location:
+            if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
             self.target_by_location[target.location] |= set([target])
             for cxx in target.cxxobjects:
                 path = '/'.join(cxx.split('/')[:-1])
-                if not path in self.target_by_path:
+                if path not in self.target_by_path:
                     self.target_by_path[path] = set()
                 self.target_by_path[path] |= set([target])
         for path in self.target_by_path:
             if len(self.target_by_path[path]) > 1:
                 print('fdo#70422: multiple target use dir %s: %s' % (
-                path, ', '.join([target.short_name() for target in self.target_by_path[path]])))
+                    path, ', '.join([target.short_name() for target in self.target_by_path[path]])))
 
     def emit(self):
         for path in self.target_by_path:
@@ -442,6 +449,7 @@ VersionControl=kdevgit
 
 
 class XcodeIntegrationGenerator(IdeIntegrationGenerator):
+
     def indent(self, file, level):
         if level == 0:
             return
@@ -472,7 +480,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
 
     def write_dict_to_plist(self, dict, file):
         file.write('// !$*UTF8*$!\n')
-        indent = 0
         self.write_dict(dict, file, 0)
 
     def get_product_type(self, modulename):
@@ -574,7 +581,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                    self.subMainGroupId: self.generate_sub_main_group(modulename),
                    self.productGroupId: self.generate_product_group(modulename),
                    self.sourcesBuildPhaseId: self.generate_sources_build_phase(modulename)
-        }
+                   }
         for i in self.sourceList.keys():
             ref = self.sourceList[i]
             objects[i] = {'isa': 'PBXBuildFile',
@@ -604,7 +611,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         IdeIntegrationGenerator.__init__(self, gbuildparser)
         self.target_by_location = {}
         for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
-            if not target.location in self.target_by_location:
+            if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
             self.target_by_location[target.location] |= set([target])
 
@@ -615,11 +622,12 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
 
 
 class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
+
     def __init__(self, gbuildparser):
         IdeIntegrationGenerator.__init__(self, gbuildparser)
         self.solution_directory = './'
         self.configurations = {
-            'Build' : {
+            'Build': {
                 'build': self.module_make_command('%(target)s'),
                 'clean': self.module_make_command('%(target)s.clean'),
                 'rebuild': self.module_make_command('%(target)s.clean %(target)s')
@@ -644,9 +652,10 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             self.target_by_location[target.location] |= set([target])
 
     def module_make_command(self, targets):
-        return '%(sh)s -c "PATH=\\"/bin:$PATH\\"; cd %(location)s && %(makecmd)s -rs ' + targets + '"';
+        return '%(sh)s -c "PATH=\\"/bin:$PATH\\"; cd %(location)s && %(makecmd)s -rs ' + targets + '"'
 
     class Project:
+
         def __init__(self, guid, target, project_path):
             self.guid = guid
             self.target = target
@@ -693,13 +702,13 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
-                        target.short_name(), proj_path, project.guid))
+                         target.short_name(), proj_path, project.guid))
                 libs_in_solution = self.get_dependency_libs(target.linked_libs,
                                                             library_projects)
                 if libs_in_solution:
                     f.write('\tProjectSection(ProjectDependencies) = postProject\n')
                     for lib_guid in libs_in_solution.keys():
-                        f.write('\t\t{%(guid)s} = {%(guid)s}\n' % { 'guid': lib_guid})
+                        f.write('\t\t{%(guid)s} = {%(guid)s}\n' % {'guid': lib_guid})
                     f.write('\tEndProjectSection\n')
                 f.write('EndProject\n')
             f.write('Global\n')
@@ -715,7 +724,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                     params = {'guid': project.guid, 'sol_cfg': cfg, 'proj_cfg': cfg, 'platform': platform}
                     f.write('\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.ActiveCfg = %(proj_cfg)s|%(platform)s\n' % params)
                     # Build.0 is basically 'Build checkbox' in configuration manager
-                    f.write('\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.Build.0 = %(proj_cfg)s|%(platform)s\n'  % params)
+                    f.write('\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.Build.0 = %(proj_cfg)s|%(platform)s\n' % params)
             f.write('\tEndGlobalSection\n')
             f.write('EndGlobal\n')
         print('')
@@ -728,7 +737,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         project_guid = str(uuid.uuid4()).upper()
         ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
         ET.register_namespace('', ns)
-        proj_node = ET.Element('{%s}Project' % ns, DefaultTargets='Build', ToolsVersion='4.0' );
+        proj_node = ET.Element('{%s}Project' % ns, DefaultTargets='Build', ToolsVersion='4.0')
         proj_confs_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns, Label='ProjectConfigurations')
         platform = 'Win32'
         for configuration in self.configurations:
@@ -751,7 +760,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
         for configuration in self.configurations:
             conf_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label="Configuration",
-                Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
+                                      Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
             # Type of project used by the MSBuild to determine build process, see Microsoft.Makefile.targets
             conf_type_node = ET.SubElement(conf_node, '{%s}ConfigurationType' % ns)
             conf_type_node.text = 'Makefile'
@@ -763,16 +772,16 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionSettings')
         for configuration in self.configurations:
             prop_sheets_node = ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='Configuration',
-                Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
+                                             Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
             import_node = ET.SubElement(prop_sheets_node, '{%s}Import' % ns,
-                Project='$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props',
-                Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",
-                Label='LocalAppDataPlatform')
+                                        Project='$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props',
+                                        Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",
+                                        Label='LocalAppDataPlatform')
 
         ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
-        for cfg_name, cfg_targets  in self.configurations.items():
+        for cfg_name, cfg_targets in self.configurations.items():
             conf_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns,
-                Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (cfg_name, platform))
+                                      Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (cfg_name, platform))
             nmake_params = {
                 'sh': os.path.join(self.gbuildparser.binpath, 'dash.exe'),
                 'location': target.location,
@@ -781,11 +790,11 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_build_node = ET.SubElement(conf_node, '{%s}NMakeBuildCommandLine' % ns)
             nmake_build_node.text = cfg_targets['build'] % nmake_params
             nmake_clean_node = ET.SubElement(conf_node, '{%s}NMakeCleanCommandLine' % ns)
-            nmake_clean_node.text =  cfg_targets['clean'] % nmake_params
+            nmake_clean_node.text = cfg_targets['clean'] % nmake_params
             nmake_rebuild_node = ET.SubElement(conf_node, '{%s}NMakeReBuildCommandLine' % ns)
             nmake_rebuild_node.text = cfg_targets['rebuild'] % nmake_params
             nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
-            nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program' , 'soffice.exe')
+            nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.exe')
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
             nmake_defs_node.text = ';'.join(list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
@@ -817,9 +826,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         msbuild_tree = ET.ElementTree(proj_node)
         msbuild_tree.write(project_path, encoding='unicode', xml_declaration=True)
         self.write_filters(project_path + '.filters',
-            os.path.join(self.gbuildparser.srcdir, os.path.basename(target.location)),
-            [cxx_node.get('Include') for cxx_node in cxxobjects_node.findall('{%s}ClCompile' % ns) ],
-            [include_node.get('Include') for include_node in includes_node.findall('{%s}ClInclude' % ns) ])
+                           os.path.join(self.gbuildparser.srcdir, os.path.basename(target.location)),
+                           [cxx_node.get('Include') for cxx_node in cxxobjects_node.findall('{%s}ClCompile' % ns)],
+                           [include_node.get('Include') for include_node in includes_node.findall('{%s}ClInclude' % ns)])
         return project_guid
 
     def get_filter(self, module_dir, proj_file):
@@ -847,7 +856,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
     def write_filters(self, filters_path, module_dir, compile_files, include_files):
         ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
         ET.register_namespace('', ns)
-        proj_node = ET.Element('{%s}Project' % ns, ToolsVersion='4.0' );
+        proj_node = ET.Element('{%s}Project' % ns, ToolsVersion='4.0')
         filters = set()
         compiles_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         filters |= self.add_nodes(compiles_node, module_dir, '{%s}ClCompile' % ns, compile_files)
