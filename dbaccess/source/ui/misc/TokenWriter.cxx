@@ -392,7 +392,7 @@ bool ORTFImportExport::Write()
     for(sal_Int32 j=0; j<nTokenCount; ++j)
     {
         m_pStream->WriteCharPtr( "\\f" );
-        m_pStream->WriteNumber(j);
+        m_pStream->WriteInt32AsString(j);
         m_pStream->WriteCharPtr( "\\fcharset0\\fnil " );
         m_pStream->WriteCharPtr( comphelper::string::getToken(aFonts, j, ';').getStr() );
         m_pStream->WriteChar( ';' );
@@ -401,11 +401,11 @@ bool ORTFImportExport::Write()
     m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
     // write the rtf color table
     m_pStream->WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RED );
-    m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetRed()));
+    m_pStream->WriteUInt32AsString(aColor.GetRed());
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_GREEN );
-    m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetGreen()));
+    m_pStream->WriteUInt32AsString(aColor.GetGreen());
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_BLUE );
-    m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetBlue()));
+    m_pStream->WriteUInt32AsString(aColor.GetBlue());
 
     m_pStream->WriteCharPtr( ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}" )
                 .WriteCharPtr( SAL_NEWLINE_STRING );
@@ -415,7 +415,7 @@ bool ORTFImportExport::Write()
     static char const aCell1[] = "\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx";
 
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH );
-    m_pStream->WriteNumber(static_cast<sal_Int32>(40));
+    m_pStream->WriteInt32AsString(40);
     m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
 
     if(m_xObject.is())
@@ -436,7 +436,7 @@ bool ORTFImportExport::Write()
         for( sal_Int32 i=1; i<=nCount; ++i )
         {
             m_pStream->WriteCharPtr( aCell1 );
-            m_pStream->WriteNumber(i*CELL_X);
+            m_pStream->WriteInt32AsString(i*CELL_X);
             m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
         }
 
@@ -542,7 +542,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
     {
         ++kk;
         m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH );
-        m_pStream->WriteNumber(static_cast<sal_Int32>(40));
+        m_pStream->WriteInt32AsString(40);
         m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
 
         static char const aCell2[] = "\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx";
@@ -551,7 +551,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
         for ( sal_Int32 i=1; i<=_nColumnCount; ++i )
         {
             m_pStream->WriteCharPtr( aCell2 );
-            m_pStream->WriteNumber(i*CELL_X);
+            m_pStream->WriteInt32AsString(i*CELL_X);
             m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
         }
 
@@ -715,7 +715,7 @@ void OHTMLImportExport::WriteBody()
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( " { " ).WriteCharPtr( sFontFamily ).WriteChar( '"' ).WriteCharPtr( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() ).WriteChar( '\"' );
         // TODO : think about the encoding of the font name
     m_pStream->WriteCharPtr( "; " ).WriteCharPtr( sFontSize );
-    m_pStream->WriteNumber(static_cast<sal_Int32>(m_aFont.Height));
+    m_pStream->WriteInt32AsString(m_aFont.Height);
     m_pStream->WriteChar( '}' );
 
     OUT_LF();

@@ -326,8 +326,8 @@ public:
     SvStream&       WriteDouble( const double& rDouble );
     SvStream&       WriteCharPtr( const char* pBuf );
 
-    SvStream&       WriteNumber( sal_uInt32 nUInt32 );
-    SvStream&       WriteNumber( sal_Int32 nInt32 );
+    SvStream&       WriteUInt32AsString( sal_uInt32 nUInt32 );
+    SvStream&       WriteInt32AsString( sal_Int32 nInt32 );
 
     sal_Size        Read( void* pData, sal_Size nSize );
     sal_Size        Write( const void* pData, sal_Size nSize );

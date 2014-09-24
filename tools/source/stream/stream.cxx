@@ -1506,7 +1506,7 @@ void SvStream::RefreshBuffer()
     bIoRead = bIoWrite = false;
 }
 
-SvStream& SvStream::WriteNumber(sal_Int32 nInt32)
+SvStream& SvStream::WriteInt32AsString(sal_Int32 nInt32)
 {
     char buffer[12];
     sal_Size nLen = sprintf(buffer, "%" SAL_PRIdINT32, nInt32);
@@ -1514,7 +1514,7 @@ SvStream& SvStream::WriteNumber(sal_Int32 nInt32)
     return *this;
 }
 
-SvStream& SvStream::WriteNumber(sal_uInt32 nUInt32)
+SvStream& SvStream::WriteUInt32AsString(sal_uInt32 nUInt32)
 {
     char buffer[11];
     sal_Size nLen = sprintf(buffer, "%" SAL_PRIuUINT32, nUInt32);
