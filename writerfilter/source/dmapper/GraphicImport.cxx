@@ -779,9 +779,23 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape") ||
                                 xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
                         {
+                            // You would expect that position and rotation are
+                            // independent, but they are not. Till we are not
+                            // there yet to handle all scaling, translation and
+                            // rotation with a single transformation matrix,
+                            // make sure there is no rotation set when we set
+                            // the position.
+                            sal_Int32 nRotation = 0;
+                            xShapeProps->getPropertyValue("RotateAngle") >>= nRotation;
+                            if (nRotation)
+                                xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(sal_Int32(0)));
+
                             // Position of the groupshape should be set after children have been added.
                             // fdo#80555: also set position for graphic shapes here
                             m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
+
+                            if (nRotation)
+                                xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
                         }
                         m_pImpl->applyRelativePosition(xShapeProps);
 

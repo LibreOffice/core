@@ -272,6 +272,17 @@ DECLARE_OOXMLEXPORT_TEST(testChartDupe, "chart-dupe.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEmbeddedObjects->getCount());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testPositionAndRotation, "position-and-rotation.docx")
+{
+    // The document should look like: "This line is tricky, <image> because only 'This line is tricky,' is on the left."
+    // But the image was pushed down, so it did not break the line into two text portions.
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Should be 1559, was -5639
+    CPPUNIT_ASSERT(xShape->getPosition().X > 1500);
+    // Should be 88, was 473
+    CPPUNIT_ASSERT(xShape->getPosition().Y < 100);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
