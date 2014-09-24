@@ -56,7 +56,7 @@ class OImageButtonControl : public OClickableImageBaseControl,
                             public OImageButtonControl_BASE
 {
 protected:
-    // UNO Anbindung
+    // UNO Binding
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
@@ -66,7 +66,7 @@ public:
     IMPLEMENTATION_NAME(OImageButtonControl);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
-    // UNO Anbindung
+    // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OClickableImageBaseControl)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

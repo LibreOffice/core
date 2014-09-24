@@ -31,26 +31,22 @@
 namespace frm
 {
 
-
-
 // OFormsCollection
-// Implementiert den UNO-Container fuer Formulare
-// enthaelt alle zugeordneten Forms
-// dieses Container kann selbst den Context fuer Formulare darstellen
-// oder aussen einen Context uebergeben bekommen
+// Implements the UNO Container for Forms and contains all assigend Forms.
+// It can either represent the Context for Forms or be passed a Context.
 
 typedef ::cppu::OComponentHelper FormsCollectionComponentBase;
 typedef ::cppu::ImplHelper2<    ::com::sun::star::form::XForms
                                 ,::com::sun::star::lang::XServiceInfo > OFormsCollection_BASE;
 
-    // else MSVC kills itself on some statements
+// else MSVC kills itself on some statements
 class OFormsCollection
         :public FormsCollectionComponentBase
         ,public OInterfaceContainer
         ,public OFormsCollection_BASE
 {
     ::osl::Mutex                m_aMutex;
-    ::comphelper::InterfaceRef  m_xParent;          // Parent
+    ::comphelper::InterfaceRef  m_xParent; // Parent
 
 public:
     OFormsCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);

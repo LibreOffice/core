@@ -196,7 +196,7 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
-    // Is the control on a form with a submit URL?
+    // Is the control located in a form with a Submit URL?
     Reference<com::sun::star::beans::XPropertySet>  xSet(getModel(), UNO_QUERY);
     if( !xSet.is() )
         return;
@@ -223,13 +223,13 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
             if (hasProperty(PROPERTY_CLASSID, xFCSet) &&
                 getINT16(xFCSet->getPropertyValue(PROPERTY_CLASSID)) == FormComponentType::TEXTFIELD)
             {
-                // Found another edit ==> no submit
+                // Found another Edit -> Do not submit then
                 if (xFCSet != xSet)
                     return;
             }
         }
     }
-    // Still in the handler, trigger submit asynchronous
+    // Because we're still in the Handler, execute submit asynchronously
     if( m_nKeyEvent )
         Application::RemoveUserEvent( m_nKeyEvent );
     m_nKeyEvent = Application::PostUserEvent( LINK(this, OFormattedControl,
@@ -283,7 +283,7 @@ void OFormattedModel::implConstruct()
 }
 OFormattedModel::OFormattedModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_SUN_CONTROL_FORMATTEDFIELD, true, true )
-                            // use the old control name for compytibility reasons
+    // use the old control name for compytibility reasons
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
 {
     implConstruct();
@@ -363,17 +363,17 @@ void OFormattedModel::describeFixedProperties( Sequence< Property >& _rProps ) c
 void OFormattedModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
     OEditBaseModel::describeAggregateProperties( _rAggregateProps );
-    // TreatAsNumeric not transient : we want to bind it to the UI (necessary, because EffectiveDefault
-    // - could be text or numbers - for making sense)
+    // TreatAsNumeric is not transient: we want to attach it to the UI
+    // This is necessary to make EffectiveDefault (which may be text or a number) meaningful
     ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, PropertyAttribute::TRANSIENT);
-    // same for FormatKey
+    // Same for FormatKey
     // (though the paragraph above for the TreatAsNumeric does not hold anymore - we do not have an UI for this.
     // But we have for the format key ...)
     ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATKEY, 0, PropertyAttribute::TRANSIENT);
     RemoveProperty(_rAggregateProps, PROPERTY_STRICTFORMAT);
-        // no strict format property for formatted fields: it does not make sense, 'cause
-        // there is no general way to decide which characters/sub strings are allowed during the input of an
-        // arbitraryly formatted control
+    // no strict format property for formatted fields: it does not make sense, 'cause
+    // there is no general way to decide which characters/sub strings are allowed during the input of an
+    // arbitraryly formatted control
 }
 
 void OFormattedModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
@@ -492,7 +492,7 @@ Reference< XNumberFormatsSupplier > OFormattedModel::calcFormatsSupplier() const
 {
     Reference<XNumberFormatsSupplier>  xSupplier;
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::calcFormatsSupplier : have no aggregate !");
-    // check if my aggregated model has a FormatSupplier
+    // Does my aggregate model have a FormatSupplier?
     if( m_xAggregateSet.is() )
         m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
     if (!xSupplier.is())
@@ -501,7 +501,7 @@ Reference< XNumberFormatsSupplier > OFormattedModel::calcFormatsSupplier() const
     if (!xSupplier.is())
         xSupplier = calcDefaultFormatsSupplier();
     DBG_ASSERT(xSupplier.is(), "OFormattedModel::calcFormatsSupplier : no supplier !");
-        // now it should be there
+    // We should have one by now
     return xSupplier;
 }
 
@@ -509,9 +509,9 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
 {
     Reference<XChild>  xMe;
     query_interface(static_cast<XWeak*>(const_cast<OFormattedModel*>(this)), xMe);
-    // now we are sure, in case of an aggregation, to get the right object
+    // By this we make sure that we get the right object even when aggregating
     DBG_ASSERT(xMe.is(), "OFormattedModel::calcFormFormatsSupplier : I should have a content interface !");
-    // expand to the top, till we get to an initial form (starting with my own parent)
+    // Iterate through until we reach a StartForm (starting with an own Parent)
     Reference<XChild>  xParent(xMe->getParent(), UNO_QUERY);
     Reference<XForm>  xNextParentForm(xParent, UNO_QUERY);
     while (!xNextParentForm.is() && xParent.is())
@@ -524,7 +524,7 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
         OSL_FAIL("OFormattedModel::calcFormFormatsSupplier : have no ancestor which is a form !");
         return NULL;
     }
-    // the FormatSupplier of my ancestor (if he owns one)
+    // The FormatSupplier of my ancestor (if it has one)
     Reference< XRowSet > xRowSet( xNextParentForm, UNO_QUERY );
     Reference< XNumberFormatsSupplier > xSupplier;
     if (xRowSet.is())
@@ -540,7 +540,7 @@ Reference< XNumberFormatsSupplier > OFormattedModel::calcDefaultFormatsSupplier(
 // XBoundComponent
 void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    // HACK : our onConnectedDbColumn accesses our NumberFormatter which locks the solar mutex (as it doesn't have
+    // HACK: our onConnectedDbColumn accesses our NumberFormatter which locks the solar mutex (as it doesn't have
     // an own one). To prevent deadlocks with other threads which may request a property from us in an
     // UI-triggered action (e.g. an tooltip) we lock the solar mutex _here_ before our base class locks
     // it's own muext (which is used for property requests)
@@ -566,7 +566,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
     {   // all the following doesn't make any sense if we have no aggregate ...
         Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
         DBG_ASSERT( aSupplier.hasValue(), "OFormattedModel::onConnectedDbColumn : invalid property value !" );
-        // this should already be initiated and correctly set by the constructor or the read function
+        // This should've been set to the correct value in the ctor or in the read
         Any aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         if ( !(aFmtKey >>= nFormatKey ) )
         {   // nobody gave us a format to use. So we examine the field we're bound to for a
@@ -598,7 +598,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                 aSupplier >>= m_xOriginalFormatter;
                 m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
                 m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, aFmtKey);
-                // adapt the numeric-flag to my bound field
+                // Adapt the NumericFalg to my bound field
                 if (xField.is())
                 {
                     m_bNumeric = false;
@@ -640,7 +640,7 @@ void OFormattedModel::onDisconnectedDbColumn()
 {
     OEditBaseModel::onDisconnectedDbColumn();
     if (m_xOriginalFormatter.is())
-    {   // the aggregated model has no format information
+    {   // Our aggregated model does not hold any Format information
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any());
         setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny(m_bOriginalNumeric));
@@ -656,8 +656,9 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
     OEditBaseModel::write(_rxOutStream);
     _rxOutStream->writeShort(0x0003);
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::write : have no aggregate !");
-    // take my format (possibly void) into a persistent format (the supplier together with the key
-    // would also be persistent, but saving the whole supplier would be overhead)
+    // Bring my Format (may be void) to a persistent Format.
+    // The Supplier together with the Key is already persistent, but that doesn't mean
+    // we have to save the Supplier (which would be quite some overhead)
         Reference<XNumberFormatsSupplier>  xSupplier;
         Any aFmtKey;
     bool bVoidKey = true;
@@ -670,12 +671,12 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
         }
         aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         bVoidKey = (!xSupplier.is() || !aFmtKey.hasValue()) || (isLoaded() && m_xOriginalFormatter.is());
-            // (no formatter and/or key) or (loaded and fakes formatter)
+        // (no Format and/or Key) OR (loaded and faked Formatter)
     }
     _rxOutStream->writeBoolean(!bVoidKey);
     if (!bVoidKey)
     {
-        // build persistent data with the FormatKey and the formatter
+        // Create persistent values from the FormatKey and the Formatter
         Any aKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         sal_Int32 nKey = aKey.hasValue() ? getINT32(aKey) : 0;
         Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
@@ -702,8 +703,8 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
     // version 2 : write the properties common to all OEditBaseModels
     writeCommonEditProperties(_rxOutStream);
     // version 3 : write the effective value property of the aggregate
-    // Due to a bug within the UnoControlFormattedFieldModel implementation (our default aggregate) this props value isn't correctly read
-    // and this can't be corrected without being incompatible.
+    // Due to a bug within the UnoControlFormattedFieldModel implementation (our default aggregate)
+    // this props value isn't correctly read and this can't be corrected without being incompatible.
     // so we have our own handling.
     // and to be a little bit more compatible we make the following section skippable
     {
@@ -711,7 +712,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
         // a sub version within the skippable block
         _rxOutStream->writeShort(0x0000);
         // version 0: the effective value of the aggregate
-                Any aEffectiveValue;
+        Any aEffectiveValue;
         if (m_xAggregateSet.is())
         {
             try { aEffectiveValue = m_xAggregateSet->getPropertyValue(PROPERTY_EFFECTIVE_VALUE); } catch(const Exception&) { }
@@ -757,7 +758,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
                 LanguageType eDescriptionLanguage = (LanguageType)_rxInStream->readLong();
                 // and let a formatter roll dice based on that to create a key...
                 xSupplier = calcFormatsSupplier();
-                    // calcFormatsSupplier first takes the one from the model, then one from the starform, then a new one...
+                // calcFormatsSupplier first takes the one from the model, then one from the starform, then a new one...
                 Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
                 if (xFormats.is())
                 {
@@ -953,9 +954,9 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
     {
         double fValue = 0;
         OSL_VERIFY( aControlValue >>= fValue );
-            // if this asserts ... well, the somebody set the TreatAsNumeric property to false,
-            // and the control value is a string. This implies some weird misconfiguration
-            // of the FormattedModel, so we won't care for it for the moment.
+        // if this asserts ... well, the somebody set the TreatAsNumeric property to false,
+        // and the control value is a string. This implies some weird misconfiguration
+        // of the FormattedModel, so we won't care for it for the moment.
         aExternalValue <<= fValue != 0.0;
     }
     break;
@@ -963,9 +964,9 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
     {
         double fValue = 0;
         OSL_VERIFY( aControlValue >>= fValue );
-            // if this asserts ... well, the somebody set the TreatAsNumeric property to false,
-            // and the control value is a string. This implies some weird misconfiguration
-            // of the FormattedModel, so we won't care for it for the moment.
+        // if this asserts ... well, the somebody set the TreatAsNumeric property to false,
+        // and the control value is a string. This implies some weird misconfiguration
+        // of the FormattedModel, so we won't care for it for the moment.
         if ( aExternalValueType.equals( cppu::UnoType< UNODate >::get() ) )
         {
             aExternalValue <<= DBTypeConversion::toDate( fValue, m_aNullDate );

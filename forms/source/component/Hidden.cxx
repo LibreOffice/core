@@ -146,7 +146,7 @@ void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutSt
     // Version
     _rxOutStream->writeShort(0x0002);
 
-    // Wert
+    // Value
     _rxOutStream << m_sHiddenValue;
 
     OControlModel::write(_rxOutStream);

@@ -47,7 +47,7 @@ InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const Reference<XMultiSer
 
 OImageButtonModel::OImageButtonModel(const Reference<XComponentContext>& _rxFactory)
                     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON )
-                                    // use the old control name for compytibility reasons
+                    // use the old control name for compytibility reasons
 {
     m_nClassId = FormComponentType::IMAGEBUTTON;
 }
@@ -173,7 +173,7 @@ OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rx
 {
     increment(m_refCount);
     {
-        // als MouseListener anmelden
+        // Register as MouseListener
         Reference< awt::XWindow >  xComp;
         query_aggregation( m_xAggregate, xComp);
         if (xComp.is())
@@ -182,7 +182,7 @@ OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rx
     decrement(m_refCount);
 }
 
-// UNO Anbindung
+// UNO Binding
 Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
 {
     Any aReturn = OClickableImageBaseControl::queryAggregation(_rType);
@@ -208,8 +208,8 @@ void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::
     }
     else
     {
-        // Sonst nicht. Dann darf man aber auf keinen Fal die Listener
-        // benachrichtigen, auch dann nicht, wenn er spaeter hinzukommt.
+        // Or else don't; we must not notify the listeners in that case.
+        // Even not if its added later on.
         aGuard.clear();
         actionPerformed_Impl( false, e );
     }

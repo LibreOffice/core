@@ -43,7 +43,7 @@ class OGridColumn;
     struct ColumnDescription : public ElementDescription
     {
     public:
-        OGridColumn*                pColumn;        // not owned by this instance! only to prevent duplicate XUnoTunnel usage
+        OGridColumn*                pColumn; // not owned by this instance! only to prevent duplicate XUnoTunnel usage
     };
 
 
@@ -69,10 +69,10 @@ class OGridControlModel :public OControlModel
                                             m_aRowSetChangeListeners;
 
 // [properties]
-    ::com::sun::star::uno::Any              m_aRowHeight;           // Zeilenhoehe
+    ::com::sun::star::uno::Any              m_aRowHeight; // Row height
     ::com::sun::star::uno::Any              m_aTabStop;
     ::com::sun::star::uno::Any              m_aBackgroundColor;
-    ::com::sun::star::uno::Any              m_aCursorColor;             // transient
+    ::com::sun::star::uno::Any              m_aCursorColor; // transient
     ::com::sun::star::uno::Any              m_aBorderColor;
     OUString                         m_aDefaultControl;
     OUString                         m_sHelpText;
@@ -81,10 +81,10 @@ class OGridControlModel :public OControlModel
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSelection;
 
 // [properties]
-    OUString             m_sHelpURL;                 // URL
-    sal_Int16                   m_nBorder;
-    sal_Int16                   m_nWritingMode;
-    sal_Int16                   m_nContextWritingMode;
+    OUString                m_sHelpURL;                 // URL
+    sal_Int16               m_nBorder;
+    sal_Int16               m_nWritingMode;
+    sal_Int16               m_nContextWritingMode;
     bool                    m_bEnableVisible    : 1;
     bool                    m_bEnable           : 1;
     bool                    m_bNavigation       : 1;
@@ -100,7 +100,7 @@ protected:
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OGridControlModel );
 
-    // UNO Anbindung
+    // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
