@@ -790,5 +790,5 @@ unchanged:
  
  $(GEN_ROOT)/%.res: $(SRC_ROOT)/%.rc
 -	windres --output-format=coff --include-dir=$(<D) $< $@
-+	windres --output-format=coff --include-dir=$(<D) --target=pe-i386 $< $@
++	rc.exe $(SOLARINC) /fo $@ $<
 only in patch2:
