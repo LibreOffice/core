@@ -116,7 +116,6 @@ void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInSt
     // Version
     sal_uInt16 nVersion = _rxInStream->readShort();
     DBG_ASSERT(nVersion > 0, "OGroupBoxModel::read : version 0 ? this should never have been written !");
-        // ups, ist das Englisch richtig ? ;)
 
     if (nVersion == 2)
         readHelpTextCompatibly(_rxInStream);

@@ -154,7 +154,7 @@ void OControl::doSetDelegator()
     decrement( m_refCount );
 }
 
-// UNO Anbindung
+// UNO Binding
 Any SAL_CALL OControl::queryAggregation( const Type& _rType ) throw(RuntimeException, std::exception)
 {
     // ask the base class
@@ -758,13 +758,13 @@ void SAL_CALL OControlModel::write(const Reference<css::io::XObjectOutputStream>
     xMark->jumpToFurthest();
     xMark->deleteMark(nMark);
 
-    // 2. wrting a version number
+    // 2. writing a version number
     _rxOutStream->writeShort(0x0003);
 
     // 3. writing the general properties
     ::comphelper::operator<<( _rxOutStream, m_aName);
     _rxOutStream->writeShort(m_nTabIndex);
-    ::comphelper::operator<<( _rxOutStream, m_aTag); // 3. version
+    ::comphelper::operator<<( _rxOutStream, m_aTag); // 3rd version
 
     // IMPORTANT NOTE!
     // don't write any new members here: this wouldn't be compatible with older versions, as OControlModel

@@ -117,7 +117,7 @@ public:
     bool operator() (const OGroupComp& lhs, const OGroupComp& rhs) const
     {
         bool bResult;
-        // TabIndex von 0 wird hinten einsortiert
+        // TabIndex of 0 will be added at the end
         if (lhs.m_nTabIndex == rhs.GetTabIndex())
             bResult = lhs.m_nPos < rhs.GetPos();
         else if (lhs.m_nTabIndex && rhs.GetTabIndex())
@@ -164,20 +164,19 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
             m_aCompArray.erase( m_aCompArray.begin() + nGroupCompPos );
 
             /*
-            Durch das Entfernen der GroupComp ist die Einfuegeposition
-            ungueltig geworden. Sie braucht hier aber nicht angepasst werden,
-            da sie fortlaufend vergeben wird und damit immer
-            aufsteigend eindeutig ist.
-            */
+             * By removing the GroupComp the insertion position has become invalid.
+             * We do not to change it here, however, because its passed on continously
+             * and ascending distinctively.
+             */
         }
         else
         {
-            OSL_FAIL( "OGroup::RemoveComponent: Component nicht in Gruppe" );
+            OSL_FAIL( "OGroup::RemoveComponent: Component not in Group" );
         }
     }
     else
     {
-        OSL_FAIL( "OGroup::RemoveComponent: Component nicht in Gruppe" );
+        OSL_FAIL( "OGroup::RemoveComponent: Component not in Group" );
     }
 }
 
@@ -243,7 +242,7 @@ void OGroupManager::removeFromGroupMap(const OUString& _sGroupName,const Referen
         // group exists
         aFind->second.RemoveComponent( _xSet );
 
-        // Wenn Anzahl der Gruppenelemente == 1 ist, Gruppe deaktivieren
+        // If the count of Group elements == 1 -> deactivate Group
         sal_Int32 nCount = aFind->second.Count();
         if ( nCount == 1 || nCount == 0 )
         {
@@ -263,7 +262,7 @@ void OGroupManager::removeFromGroupMap(const OUString& _sGroupName,const Referen
     }
 
 
-    // Bei Component als PropertyChangeListener abmelden
+    // Deregister as PropertyChangeListener at Component
     _xSet->removePropertyChangeListener( PROPERTY_NAME, this );
     if (hasProperty(PROPERTY_GROUP_NAME, _xSet))
         _xSet->removePropertyChangeListener( PROPERTY_GROUP_NAME, this );
@@ -297,7 +296,7 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
 
     removeFromGroupMap(sGroupName,xSet);
 
-    // Component neu einordnen
+    // Re-insert Component
     InsertElement( xSet );
 }
 
@@ -359,15 +358,15 @@ void OGroupManager::getGroupByName(const OUString& _rName, Sequence< Reference<X
 
 void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
 {
-    // Nur ControlModels
+    // Only ControlModels
     Reference<XControlModel>  xControl(xSet, UNO_QUERY);
     if (!xControl.is() )
         return;
 
-    // Component in CompGroup aufnehmen
+    // Add Component to CompGroup
     m_pCompGroup->InsertComponent( xSet );
 
-    // Component in Gruppe aufnehmen
+    // Add Component to Group
     OUString sGroupName( GetGroupName( xSet ) );
 
     OGroupArr::iterator aFind = m_aGroupArr.find(sGroupName);
@@ -403,24 +402,24 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
             m_aActiveGroupMap.push_back(  aFind );
     }
 
-    // Bei Component als PropertyChangeListener anmelden
+    // Register as PropertyChangeListener at Component
     xSet->addPropertyChangeListener( PROPERTY_NAME, this );
     if (hasProperty(PROPERTY_GROUP_NAME, xSet))
         xSet->addPropertyChangeListener( PROPERTY_GROUP_NAME, this );
 
-    // Tabindex muss nicht jeder unterstuetzen
+    // Not everyone needs to support Tabindex
     if (hasProperty(PROPERTY_TABINDEX, xSet))
         xSet->addPropertyChangeListener( PROPERTY_TABINDEX, this );
 }
 
 void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
 {
-    // Nur ControlModels
+    // Only ControlModels
     Reference<XControlModel>  xControl(xSet, UNO_QUERY);
     if (!xControl.is() )
         return;
 
-    // Component aus Gruppe entfernen
+    // Remove Component from Group
     OUString     sGroupName( GetGroupName( xSet ) );
 
     removeFromGroupMap(sGroupName,xSet);

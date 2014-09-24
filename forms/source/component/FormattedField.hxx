@@ -44,7 +44,7 @@ class OFormattedModel
 
         sal_Int32                           m_nFieldType;
         sal_Int16                           m_nKeyType;
-        bool                            m_bOriginalNumeric      : 1,
+        bool                                m_bOriginalNumeric      : 1,
                                             m_bNumeric              : 1;    // analogous for the TreatAsNumeric-property
 
     protected:
