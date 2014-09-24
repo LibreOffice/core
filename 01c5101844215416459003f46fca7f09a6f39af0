@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_f130c209",
+        "filename": "solenv/gbuild/platform/com_MSC_class.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-24T19:00:23Z",
+      "side": 1,
+      "message": "I wonder how it was working until now? We have number of python tests.",
+      "revId": "01c5101844215416459003f46fca7f09a6f39af0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
