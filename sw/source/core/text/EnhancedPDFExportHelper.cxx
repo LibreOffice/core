@@ -1933,10 +1933,14 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             SwRects aTmp;
             aTmp.insert( aTmp.begin(), mrSh.SwCrsrShell::_GetCrsr()->begin(), mrSh.SwCrsrShell::_GetCrsr()->end() );
             OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
-            const SwRect aLinkRect( aTmp[ 0 ] );
 
             mrSh._GetCrsr()->RestoreSavePos();
             mrSh.SwCrsrShell::ClearMark();
+
+            if (aTmp.empty())
+                continue;
+
+            const SwRect aLinkRect( aTmp[ 0 ] );
 
             // Goto footnote text:
             if ( mrSh.GotoFtnTxt() )
