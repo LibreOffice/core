@@ -28,6 +28,7 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <algorithm>
 
 namespace dbmm
 {
