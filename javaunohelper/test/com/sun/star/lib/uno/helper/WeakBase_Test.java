@@ -18,120 +18,104 @@
 
 package com.sun.star.lib.uno.helper;
 
-import com.sun.star.uno.Type;
 import com.sun.star.bridge.XBridgeSupplier2;
-import com.sun.star.uno.XReference;
-import com.sun.star.uno.XWeak;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.XAdapter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.XReference;
+import com.sun.star.uno.XWeak;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class WeakBase_Test
 {
 
     private static final Logger logger = Logger.getLogger(WeakBase_Test.class.getName());
 
-    public boolean getTypes()
+    @Test public void getTypes() throws Exception
     {
         logger.log(Level.INFO, "Testing WeakBase.getTypes");
-        boolean[] r= new boolean[50];
-        int i= 0;
-
         SomeClass comp= new SomeClass();
+
         Type[] types= comp.getTypes(); //XWeak,XTypeProvider,XReference,XBridgeSupplier2
-        r[i++]= types.length == 4;
+        assertEquals(types.length, 4);
         for (int c= 0; c < types.length; c++)
         {
+            boolean result= false;
             if (types[c].equals( new Type( XWeak.class)))
-                r[i++]= true;
+                result= true;
             else if (types[c].equals(new Type(XTypeProvider.class)))
-                r[i++]= true;
+                result= true;
             else if (types[c].equals(new Type(XReference.class)))
-                r[i++]= true;
+                result= true;
             else if (types[c].equals(new Type(XBridgeSupplier2.class)))
-                r[i++]= true;
-            else
-                r[i++]= false;
-
+                result= true;
+            assertTrue(result);
         }
 
         Foo1 f1= new Foo1();
         Foo1 f2= new Foo1();
         Type[] t1= f1.getTypes();
         Type[] t2= f2.getTypes();
-        r[i++]= t1.equals(t2);
+        assertArrayEquals(t1, t2);
         Foo2 f3= new Foo2();
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
     }
 
-    public boolean getImplementationId()
+    @Ignore("Obsolete method of XTypeProvider.") @Test public void getImplementationId() throws Exception
     {
         logger.log(Level.INFO, "Testing WeakBase.getImplementationId");
-        boolean[] r= new boolean[50];
-        int i= 0;
-
         SomeClass comp= new SomeClass();
+
         // byte 0 - 3 contain hashcode and the remaining bytes represent the classname
         byte [] ar= comp.getImplementationId();
 
-        StringBuffer buff= new StringBuffer();
+        StringBuilder buff= new StringBuilder();
         for (int c= 0; c < ar.length - 4; c++){
             buff.append((char) ar[4 + c]);
         }
         String retStr= buff.toString();
-        r[i++]= retStr.equals("com.sun.star.lib.uno.helper.SomeClass");
+        assertTrue(retStr.equals("com.sun.star.lib.uno.helper.SomeClass"));
 
         Foo1 f1= new Foo1();
         Foo1 f2= new Foo1();
-        r[i++]= f1.getImplementationId().equals(f2.getImplementationId());
+        assertArrayEquals(f1.getImplementationId(), f2.getImplementationId());
         Foo2 f3= new Foo2();
-        r[i++]= ! f1.getImplementationId().equals(f3.getImplementationId());
+        assertNotEquals(f1.getImplementationId(), f3.getImplementationId());
         Foo3 f4= new Foo3();
-        r[i++]= ! f1.getImplementationId().equals(f4.getImplementationId());
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertNotEquals(f1.getImplementationId(), f4.getImplementationId());
     }
 
-    public boolean queryAdapter()
+    @Test public void queryAdapter() throws Exception
     {
         logger.log(Level.INFO, "Testing WeakBase.queryAdapter, XAdapter tests");
-        boolean[] r= new boolean[50];
-        int i= 0;
-
         SomeClass comp= new SomeClass();
+
         XAdapter adapter= comp.queryAdapter();
         MyRef aRef1= new MyRef();
         MyRef aRef2= new MyRef();
         adapter.addReference(aRef1);
         adapter.addReference(aRef2);
 
-        r[i++]= adapter.queryAdapted() == comp;
+        assertSame(adapter.queryAdapted(), comp);
         comp= null;
-        logger.log(Level.FINE, "Wait 5 sec");
-        for(int c= 0; c < 50; c++)
-        {
-            try
-            {
-                Thread.sleep(100);
-                System.gc();
-                System.runFinalization();
-            }catch (InterruptedException ie)
-            {
-            }
-        }
+        logger.log(Level.FINE, "Wait 51ms (-XX:MaxGCPauseMillis=50)");
+        System.gc();
+        System.runFinalization();
+        Thread.sleep(51);
 
-        r[i++]= aRef1.nDisposeCalled == 1;
-        r[i++]= aRef2.nDisposeCalled == 1;
-        r[i++]= adapter.queryAdapted() == null;
+        assertEquals(aRef1.nDisposeCalled, 1);
+        assertEquals(aRef2.nDisposeCalled, 1);
+        assertNull(adapter.queryAdapted());
         adapter.removeReference(aRef1); // should not do any harm
         adapter.removeReference(aRef2);
 
@@ -144,45 +128,14 @@ public class WeakBase_Test
         adapter.addReference(aRef2);
 
         adapter.removeReference(aRef1);
-        logger.log(Level.FINE, "Wait 5 sec");
+        logger.log(Level.FINE, "Wait 51ms (-XX:MaxGCPauseMillis=50)");
         comp= null;
-        for(int c= 0; c < 50; c++)
-        {
-            try
-            {
-                Thread.sleep(100);
-                System.gc();
-                System.runFinalization();
-            }catch (InterruptedException ie)
-            {
-            }
-        }
-        r[i++]= aRef1.nDisposeCalled == 0;
-        r[i++]= aRef2.nDisposeCalled == 1;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        System.gc();
+        System.runFinalization();
+        Thread.sleep(51);
+        assertEquals(aRef1.nDisposeCalled, 0);
+        assertEquals(aRef2.nDisposeCalled, 1);
     }
-
-    public static void main(String[] args)
-    {
-        WeakBase_Test test= new WeakBase_Test();
-        boolean r[]= new boolean[50];
-        int i= 0;
-        r[i++]= test.getTypes();
-        r[i++]= test.getImplementationId();
-        r[i++]= test.queryAdapter();
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "No errors." : "Errors occurred!");
-        System.exit( bOk ? 0: -1 );
-    }
-
 }
 
 interface Aint
