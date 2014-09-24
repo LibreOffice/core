@@ -152,7 +152,9 @@ private:
     OUString                        sDefaultStyle;
     bool                            bInSpecialMode;
 
+private:
     void            ReleaseFocus();
+    Color           TestColorsVisible(const Color &FontCol, const Color &BackCol);
 };
 
 class SvxFontNameBox_Impl : public FontNameBox
@@ -540,6 +542,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
             if ( pFontItem && pFontHeightItem )
             {
                 OutputDevice *pDevice = rUDEvt.GetDevice();
+                Color aFontCol, aBackCol;
 
                 Size aFontSize( 0, pFontHeightItem->GetHeight() );
                 Size aPixelSize( pDevice->LogicToPixel( aFontSize, pShell->GetMapUnit() ) );
@@ -599,21 +602,32 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 // text color, when we are not selected
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_COLOR );
-                if ( pItem && rUDEvt.GetItemId() != GetSelectEntryPos() )
-                {
-                    Color aColor( static_cast< const SvxColorItem* >( pItem )->GetValue() );
-                    if ( aColor != COL_AUTO )
-                        pDevice->SetTextColor( aColor );
-                }
+                if ( NULL != pItem )
+                    aFontCol = Color( static_cast< const SvxColorItem* >( pItem )->GetValue() );
+                else
+                    aFontCol = COL_AUTO;
 
                 // background color
                 pItem = aItemSet.GetItem( SID_ATTR_BRUSH );
-                if ( pItem && rUDEvt.GetItemId() != GetSelectEntryPos() )
+                if ( NULL != pItem )
+                    aBackCol = Color( static_cast< const SvxBrushItem* >( pItem )->GetColor() );
+                else
+                    aBackCol = COL_AUTO;
+
+                if ( rUDEvt.GetItemId() != GetSelectEntryPos() )
                 {
-                    Color aColor( static_cast< const SvxBrushItem* >( pItem )->GetColor() );
-                    if ( aColor != COL_AUTO )
+                    // test is the color difference, then only change the Font-Color
+                    if(( aFontCol != COL_AUTO ) || ( aBackCol != COL_AUTO ))
+                        aFontCol = TestColorsVisible(aFontCol, aBackCol);
+
+                    // text color, when we are not selected
+                    if ( aFontCol != COL_AUTO )
+                        pDevice->SetTextColor( aFontCol );
+
+                    // background color
+                    if ( aBackCol != COL_AUTO )
                     {
-                        pDevice->SetFillColor( aColor );
+                        pDevice->SetFillColor( aBackCol );
                         pDevice->DrawRect( rUDEvt.GetRect() );
                     }
                 }
@@ -654,6 +668,55 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         }
     }
 }
+
+// calculate the RGB to Percent and make the average
+static float CalcToPercent(const Color &Col)
+{
+    return (Col.GetRed() / 256.0f + Col.GetGreen() / 256.0f + Col.GetBlue() / 256.0f) / 3;
+}
+
+// calculate the new Color, always made light-colored, in dependencies of the max-value
+static sal_uInt8 CalcChgColor(sal_uInt8 Col, sal_uInt8 ChgVal)
+{
+    return (Col + ChgVal) > 255 ? Col - ChgVal : Col + ChgVal;
+}
+
+
+// test is the color between Font- and background-color to be identify
+// return is always the Font-Color
+//        when under the threshold it make a little bit light or darker,
+//        in other case do not change the origin color
+Color SvxStyleBox_Impl::TestColorsVisible(const Color &FontCol, const Color &BackCol)
+{
+    const float      Threshold = 10.0;     // 10%   when greater then color can be identify
+    const sal_uInt8  ChgVal = 25;          // increase/decrease the R,G,B value of this value
+    float fontPre,   backPre, diff;
+    sal_uInt8        red, gre, blu;
+    Color            retCol,
+                     bckCol = BackCol != COL_AUTO ? BackCol : GetDisplayBackground().GetColor();
+
+
+    fontPre = CalcToPercent(FontCol);
+    backPre = CalcToPercent(bckCol);
+
+    diff    = fontPre - backPre;
+    diff    = diff < 0 ? diff * -100.0f : diff * 100.0f;
+
+    if (diff > Threshold)
+        retCol = FontCol;
+    else
+    {
+        red = CalcChgColor(FontCol.GetRed()  , ChgVal);
+        gre = CalcChgColor(FontCol.GetGreen(), ChgVal);
+        blu = CalcChgColor(FontCol.GetBlue() , ChgVal);
+
+        retCol = Color(red, gre, blu);
+    }
+
+    return retCol;
+}
+
+
 
 static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
 {
