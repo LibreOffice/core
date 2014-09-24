@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_341d1867",
+        "filename": "javaunohelper/test/com/sun/star/lib/uno/helper/WeakBase_Test.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-24T21:37:17Z",
+      "side": 1,
+      "message": "This doesn\u0027t compile here:\n\n $ make JunitTest_juh\nmake -j 8 -rs -f /home/davido/projects/libo/Makefile.gbuild JunitTest_juh\n[build JCS] JunitTest/juh\n[build LNK] Library/libsotlo.so\n/home/davido/projects/libo/javaunohelper/test/com/sun/star/lib/uno/helper/WeakBase_Test.java:33: error: cannot find symbol\nimport static org.junit.Assert.assertNotEquals;\n^\n  symbol:   static assertNotEquals\n  location: class\n\nThat\u0027s because on my system junit.jar is apparently too old:\n\n  $ javap -classpath /usr/share/java/junit4.jar org.junit.Assert | grep -i assertNotEquals\n\nSo you would need to avoid using it unless we increase junit JAR version and make configure fail when junit is older then this version.",
+      "range": {
+        "startLine": 33,
+        "startChar": 31,
+        "endLine": 33,
+        "endChar": 46
+      },
+      "revId": "4f64af87320ec896d31532c7465b4a33272364bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_141a1c6f",
+        "filename": "javaunohelper/test/com/sun/star/lib/uno/helper/WeakBase_Test.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-24T21:37:17Z",
+      "side": 1,
+      "message": "I missed this in my previous review. Don\u0027t do this. To verify against null use:\n\n  assertNull(adapter.queryAdapted());",
+      "range": {
+        "startLine": 93,
+        "startChar": 8,
+        "endLine": 93,
+        "endChar": 49
+      },
+      "revId": "4f64af87320ec896d31532c7465b4a33272364bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
