@@ -274,10 +274,16 @@ void XMLTextMarkImportContext::EndElement()
                                 m_rHelper.GetText()->createTextCursorByRange(
                                     xEndRange);
                             try {
-                            xInsertionCursor->gotoRange(xStartRange, sal_True);
-                            } catch (uno::Exception&) {
-                                OSL_ENSURE(false,
-                                    "cannot go to end position of bookmark");
+                                xInsertionCursor->gotoRange(xStartRange, sal_True);
+                                if (xInsertionCursor->isCollapsed())
+                                {
+                                    xInsertionCursor = m_rHelper.GetText()->createTextCursorByRange(xStartRange);
+                                    xInsertionCursor->gotoRange(xStartRange, sal_False);
+                                }
+                            }
+                            catch (uno::Exception&)
+                            {
+                                OSL_ENSURE(false, "cannot go to end position of bookmark");
                             }
 
                             //DBG_ASSERT(! xInsertionCursor->isCollapsed(),
