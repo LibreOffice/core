@@ -100,10 +100,6 @@ public:
     void SAL_CALL singleFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
-    /// receives notification of character data.
-    void SAL_CALL characters( const OUString& aChars )
-        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-
     void SAL_CALL setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -113,6 +109,9 @@ public:
     // C++ helpers
     void SAL_CALL writeId( ::sal_Int32 Element );
     OString SAL_CALL getId( ::sal_Int32 Element );
+
+    void write( const OUString& s );
+    void write( const OString& s );
 
     static OUString escapeXml( const OUString& s );
 
@@ -216,7 +215,6 @@ private:
 #endif
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
-    void write( const OUString& s );
     void writeOutput( const css::uno::Sequence< ::sal_Int8 >& aData )
         throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
 
