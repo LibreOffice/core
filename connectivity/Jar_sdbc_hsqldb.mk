@@ -14,9 +14,8 @@ $(eval $(call gb_Jar_use_externals,sdbc_hsqldb,\
 	hsqldb \
 ))
 
-# FIXME: is this really necessary?
 $(eval $(call gb_Jar_add_manifest_classpath,sdbc_hsqldb,\
-	.. \
+	$(if $(filter MACOSX,$(OS)),../../Frameworks/,..) \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,sdbc_hsqldb,com))
