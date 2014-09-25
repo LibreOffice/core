@@ -48,26 +48,25 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         try {
             Enumeration enumer = SVersionRCFile.createInstance().getVersions();
 
-            while (enumer.hasMoreElements()) {
+            while(enumer.hasMoreElements()) {
                 OfficeInstallation oi = (OfficeInstallation)enumer.nextElement();
                 installationsComboBox.addItem(oi);
             }
-        }
-        catch (IOException ioe) {
+        } catch(IOException ioe) {
             installationsComboBox.addItem("<empty>");
         }
 
-        if (orig != null) {
+        if(orig != null) {
             installationsComboBox.setSelectedItem(orig);
             installPath.setText(orig.getPath());
         }
 
         installationsComboBox.addActionListener(
-            new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    installationsComboBoxActionPerformed(evt);
-                }
+        new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                installationsComboBoxActionPerformed(evt);
             }
+        }
         );
 
         // Provide a name in the title bar.
@@ -163,20 +162,20 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int result = chooser.showDialog(null, null);
 
-        if (result == JFileChooser.APPROVE_OPTION) {
+        if(result == JFileChooser.APPROVE_OPTION) {
             target = chooser.getSelectedFile();
 
             String path;
+
             try {
                 path = target.getCanonicalPath();
-            }
-            catch (IOException ioe) {
+            } catch(IOException ioe) {
                 path = target.getAbsolutePath();
             }
 
             OfficeInstallation oi = new OfficeInstallation(path, path);
 
-            if (oi.supportsFramework()) {
+            if(oi.supportsFramework()) {
                 installPath.setText(path);
                 panel.setSelectedPath(oi);
             }

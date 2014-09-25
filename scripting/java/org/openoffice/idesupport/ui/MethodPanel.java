@@ -61,7 +61,7 @@ public class MethodPanel extends JPanel {
         Object[] selections = list.getSelectedValues();
         ScriptEntry[] entries = new ScriptEntry[selections.length];
 
-        for (int i = 0; i < selections.length; i++) {
+        for(int i = 0; i < selections.length; i++) {
             entries[i] = (ScriptEntry)selections[i];
         }
 
@@ -86,12 +86,13 @@ public class MethodPanel extends JPanel {
     private void initValues(String language) {
         MethodFinder finder;
 
-        if (language == null)
+        if(language == null) {
             finder = JavaFinder.getInstance(classpath);
-        else if (language.toLowerCase().equals("beanshell"))
+        } else if(language.toLowerCase().equals("beanshell"))
             finder = new ExtensionFinder(language, new String[] {".bsh"});
-        else
+        else {
             finder = JavaFinder.getInstance(classpath);
+        }
 
         values = finder.findMethods(basedir);
     }

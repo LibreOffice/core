@@ -23,86 +23,69 @@ import java.io.InputStream;
 
 import com.sun.star.io.XInputStream;
 
-public class XInputStreamImpl implements XInputStream
-{
+public class XInputStreamImpl implements XInputStream {
     private InputStream is;
-    public XInputStreamImpl( InputStream is )
-    {
+    public XInputStreamImpl(InputStream is) {
         this.is = is;
     }
 
-    public int readBytes( /*OUT*/byte[][] aData, /*IN*/int nBytesToRead ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException
-    {
+    public int readBytes(/*OUT*/byte[][] aData, /*IN*/int nBytesToRead) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException {
         aData[ 0 ] = new byte[ nBytesToRead ];
 
         int totalBytesRead = 0;
 
-        try
-        {
+        try {
             int bytesRead;
-            while ( ( bytesRead = is.read( aData[ 0 ], totalBytesRead, nBytesToRead ) ) > 0 && ( totalBytesRead < nBytesToRead ) )
-            {
+
+            while((bytesRead = is.read(aData[ 0 ], totalBytesRead, nBytesToRead)) > 0 && (totalBytesRead < nBytesToRead)) {
                 totalBytesRead += bytesRead;
                 nBytesToRead -= bytesRead;
             }
-        }
-        catch ( IOException e )
-        {
+        } catch(IOException e) {
             throw new com.sun.star.io.IOException(e);
-        }
-        catch ( IndexOutOfBoundsException aie )
-        {
+        } catch(IndexOutOfBoundsException aie) {
             throw new com.sun.star.io.BufferSizeExceededException(aie);
         }
+
         return totalBytesRead;
     }
 
-    public int readSomeBytes( /*OUT*/byte[][] aData, /*IN*/int nMaxBytesToRead ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException
-    {
+    public int readSomeBytes(/*OUT*/byte[][] aData, /*IN*/int nMaxBytesToRead) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException {
         int bytesToRead = nMaxBytesToRead;
         int availableBytes = available();
-        if ( availableBytes < nMaxBytesToRead )
-        {
+
+        if(availableBytes < nMaxBytesToRead) {
             bytesToRead = availableBytes;
         }
-        int read =  readBytes( aData, bytesToRead );
+
+        int read =  readBytes(aData, bytesToRead);
         return read;
     }
 
-    public void skipBytes( /*IN*/int nBytesToSkip ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException
-    {
-        try
-        {
-            is.skip( nBytesToSkip );
-        }
-        catch ( IOException e )
-        {
+    public void skipBytes(/*IN*/int nBytesToSkip) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException {
+        try {
+            is.skip(nBytesToSkip);
+        } catch(IOException e) {
             throw new com.sun.star.io.IOException(e);
         }
     }
 
-    public int available(  ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException
-    {
+    public int available() throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException {
         int bytesAvail = 0;
-        try
-        {
+
+        try {
             bytesAvail = is.available();
-        }
-        catch ( IOException e )
-        {
+        } catch(IOException e) {
             throw new com.sun.star.io.IOException(e);
         }
+
         return bytesAvail;
     }
 
-    public void closeInput(  ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException
-    {
-        try
-        {
+    public void closeInput() throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException {
+        try {
             is.close();
-        }
-        catch( IOException e )
-        {
+        } catch(IOException e) {
             throw new com.sun.star.io.IOException(e);
         }
     }

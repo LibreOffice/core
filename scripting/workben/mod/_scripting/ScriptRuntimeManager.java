@@ -28,21 +28,22 @@ import lib.TestParameters;
 public class ScriptRuntimeManager extends TestCase {
 
     @Override
-    public void initialize( TestParameters tParam, PrintWriter log ) {
+    public void initialize(TestParameters tParam, PrintWriter log) {
     }
 
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log ) throws StatusException {
 
-    log.println("creating test environment");
+    public synchronized TestEnvironment createTestEnvironment(
+        TestParameters Param, PrintWriter log) throws StatusException {
+
+        log.println("creating test environment");
 
         XInterface oObj = null;
 
         try {
             oObj = (XInterface) Param.getMSF().createInstance
-                ("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager");
-        } catch (com.sun.star.uno.Exception e) {
+                   ("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager");
+        } catch(com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;
         }
 
@@ -53,7 +54,8 @@ public class ScriptRuntimeManager extends TestCase {
     }
 
     @Override
-    public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
+
+    public synchronized void disposeTestEnvironment(TestEnvironment tEnv,
             TestParameters tParam) {
     }
 }

@@ -55,14 +55,13 @@ public class PlainSourceView extends JScrollPane
            so we don't get a storm of DocumentEvents during loading */
         ta.getDocument().removeDocumentListener(this);
 
-        if (!isModified)
-        {
+        if(!isModified) {
             int pos = ta.getCaretPosition();
             ta.setText(model.getText());
+
             try {
                 ta.setCaretPosition(pos);
-            }
-            catch (IllegalArgumentException iae) {
+            } catch(IllegalArgumentException iae) {
                 // do nothing and allow JTextArea to set it's own position
             }
         }
@@ -72,8 +71,7 @@ public class PlainSourceView extends JScrollPane
             int line = ta.getLineStartOffset(model.getCurrentPosition());
             Rectangle rect = ta.modelToView(line);
             ta.scrollRectToVisible(rect);
-        }
-        catch (Exception e) {
+        } catch(Exception e) {
             // couldn't scroll to line, do nothing
         }
 
@@ -125,7 +123,7 @@ public class PlainSourceView extends JScrollPane
     private void doChanged() {
         isModified = true;
 
-        if (linecount != ta.getLineCount()) {
+        if(linecount != ta.getLineCount()) {
             gg.update();
             linecount = ta.getLineCount();
         }
@@ -164,7 +162,8 @@ class GlyphGutter extends JComponent {
         int lineCount = textArea.getLineCount() + 1;
 
         String dummy = Integer.toString(lineCount);
-        if (dummy.length() < 2) {
+
+        if(dummy.length() < 2) {
             dummy = DUMMY_STRING;
         }
 
@@ -195,11 +194,12 @@ class GlyphGutter extends JComponent {
         int startLine = clip.y / h;
         int endLine = (clip.y + clip.height) / h + 1;
         int width = getWidth();
-        if (endLine > lineCount) {
+
+        if(endLine > lineCount) {
             endLine = lineCount;
         }
 
-        for (int i = startLine; i < endLine; i++) {
+        for(int i = startLine; i < endLine; i++) {
             String text;
             text = Integer.toString(i + 1) + " ";
             int y = i * h;
@@ -208,7 +208,7 @@ class GlyphGutter extends JComponent {
             int x = width - ascent;
 
             // if currentPosition is not -1 then a red arrow will be drawn
-            if (i == view.getCurrentPosition()) {
+            if(i == view.getCurrentPosition()) {
                 drawArrow(g, ascent, x, y);
             }
         }
@@ -221,12 +221,15 @@ class GlyphGutter extends JComponent {
         int dy = y;
         arrow.addPoint(dx, dy + 3);
         arrow.addPoint(dx + 5, dy + 3);
-        for (x = dx + 5; x <= dx + 10; x++, y++) {
+
+        for(x = dx + 5; x <= dx + 10; x++, y++) {
             arrow.addPoint(x, y);
         }
-        for (x = dx + 9; x >= dx + 5; x--, y++) {
+
+        for(x = dx + 9; x >= dx + 5; x--, y++) {
             arrow.addPoint(x, y);
         }
+
         arrow.addPoint(dx + 5, dy + 7);
         arrow.addPoint(dx, dy + 7);
 

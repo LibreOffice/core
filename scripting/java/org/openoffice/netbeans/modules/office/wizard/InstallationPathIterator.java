@@ -40,16 +40,16 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
 
     protected WizardDescriptor.Panel[] createPanels() {
         return new WizardDescriptor.Panel[] {
-            new SelectPathPanel()
-        };
+                   new SelectPathPanel()
+               };
     }
 
     // And the list of step names:
 
     protected String[] createSteps() {
         return new String[] {
-            "Select OpenOffice.org Installation"
-        };
+                   "Select OpenOffice.org Installation"
+               };
     }
 
     // --- The rest probably does not need to be touched. ---
@@ -63,9 +63,10 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
     }
     private transient WizardDescriptor.Panel[] panels = null;
     protected final WizardDescriptor.Panel[] getPanels() {
-        if (panels == null) {
+        if(panels == null) {
             panels = createPanels();
         }
+
         return panels;
     }
 
@@ -74,9 +75,10 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
     private transient String[] steps = null;
     // Also package-accessible to descriptor:
     protected final String[] getSteps() {
-        if (steps == null) {
+        if(steps == null) {
             steps = createSteps();
         }
+
         return steps;
     }
 
@@ -87,7 +89,7 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
 
     public String name() {
         return NbBundle.getMessage(InstallationPathIterator.class, "TITLE_x_of_y",
-        Integer.valueOf(index + 1), Integer.valueOf(getPanels().length));
+                                   Integer.valueOf(index + 1), Integer.valueOf(getPanels().length));
     }
 
     public boolean hasNext() {
@@ -97,11 +99,17 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
         return index > 0;
     }
     public void nextPanel() {
-        if (!hasNext()) throw new NoSuchElementException();
+        if(!hasNext()) {
+            throw new NoSuchElementException();
+        }
+
         index++;
     }
     public void previousPanel() {
-        if (!hasPrevious()) throw new NoSuchElementException();
+        if(!hasPrevious()) {
+            throw new NoSuchElementException();
+        }
+
         index--;
     }
     public WizardDescriptor.Panel current() {

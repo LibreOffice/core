@@ -38,10 +38,10 @@ public class ParcelDescriptor {
 
     // File name to be used for parcel descriptor files
     public static final String
-        PARCEL_DESCRIPTOR_NAME = "parcel-descriptor.xml";
+    PARCEL_DESCRIPTOR_NAME = "parcel-descriptor.xml";
 
     // Collection of all ParcelDescriptor created for files
-    private static final Map<File,ParcelDescriptor> PARCEL_DESCRIPTOR_MAP = new HashMap<File,ParcelDescriptor>(5);
+    private static final Map<File, ParcelDescriptor> PARCEL_DESCRIPTOR_MAP = new HashMap<File, ParcelDescriptor>(5);
 
     // This is the default contents of a parcel descriptor to be used when
     // creating empty descriptors
@@ -53,7 +53,7 @@ public class ParcelDescriptor {
     private File file = null;
     private Document document = null;
     private String language = null;
-    private Map<String,String> languagedepprops = new HashMap<String,String>(3);
+    private Map<String, String> languagedepprops = new HashMap<String, String>(3);
 
 
 
@@ -61,13 +61,14 @@ public class ParcelDescriptor {
 
     public ParcelDescriptor() throws IOException {
         ByteArrayInputStream bis = null;
+
         try {
             bis = new ByteArrayInputStream(EMPTY_DOCUMENT);
             this.document = XMLParserFactory.getParser().parse(bis);
-        }
-        finally {
-            if (bis != null)
+        } finally {
+            if(bis != null) {
                 bis.close();
+            }
         }
     }
 
@@ -87,29 +88,32 @@ public class ParcelDescriptor {
     private ParcelDescriptor(File file, String language) throws IOException {
         this.file = file;
 
-        if (file.exists()) {
+        if(file.exists()) {
             FileInputStream fis = null;
+
             try {
                 fis = new FileInputStream(file);
                 this.document = XMLParserFactory.getParser().parse(fis);
-            }
-            finally {
-                if (fis != null)
+            } finally {
+                if(fis != null) {
                     fis.close();
+                }
             }
-        }
-        else {
+        } else {
             ByteArrayInputStream bis = null;
+
             try {
                 bis = new ByteArrayInputStream(EMPTY_DOCUMENT);
                 this.document = XMLParserFactory.getParser().parse(bis);
-            }
-            finally {
-                if (bis != null)
+            } finally {
+                if(bis != null) {
                     bis.close();
+                }
             }
+
             setLanguage(language);
         }
+
         initLanguageProperties();
     }
 
@@ -122,24 +126,24 @@ public class ParcelDescriptor {
     }
 
     public String getLanguage() {
-        if (language == null) {
-            if (document != null) {
+        if(language == null) {
+            if(document != null) {
                 Element e = document.getDocumentElement();
                 language = e.getAttribute("language");
             }
         }
+
         return language;
     }
 
     public void setLanguage(String language) {
         this.language = language;
 
-        if (document != null) {
+        if(document != null) {
             try {
                 Element e = document.getDocumentElement();
                 e.setAttribute("language", language);
-            }
-            catch (DOMException de) {
+            } catch(DOMException de) {
             }
         }
     }
@@ -149,14 +153,15 @@ public class ParcelDescriptor {
         NodeList scriptNodes;
         int len;
 
-        if (document == null ||
-            (scriptNodes = document.getElementsByTagName("script")) == null ||
-            (len = scriptNodes.getLength()) == 0)
+        if(document == null ||
+           (scriptNodes = document.getElementsByTagName("script")) == null ||
+           (len = scriptNodes.getLength()) == 0) {
             return new ScriptEntry[0];
+        }
 
-        for (int i = 0; i < len; i++) {
+        for(int i = 0; i < len; i++) {
             String language, languagename, logicalname, description = "";
-            Map<String,String> langProps = new HashMap<String,String>();
+            Map<String, String> langProps = new HashMap<String, String>();
             NodeList nl;
             Element tmp;
 
@@ -164,24 +169,23 @@ public class ParcelDescriptor {
             language = scriptElement.getAttribute("language");
 
             nl = scriptElement.getElementsByTagName("logicalname");
-            if (nl == null)
+
+            if(nl == null) {
                 logicalname = "";
-            else {
+            } else {
                 tmp = (Element)nl.item(0);
                 logicalname = tmp.getAttribute("value");
             }
 
             // get the text of the description element
             nl = scriptElement.getElementsByTagName("locale");
-            if (nl != null)
-            {
+
+            if(nl != null) {
                 nl = nl.item(0).getChildNodes();
-                if (nl != null)
-                {
-                    for (int j = 0 ; j < nl.getLength(); j++)
-                    {
-                        if (nl.item(j).getNodeName().equals("description"))
-                        {
+
+                if(nl != null) {
+                    for(int j = 0 ; j < nl.getLength(); j++) {
+                        if(nl.item(j).getNodeName().equals("description")) {
                             CharacterData cd =
                                 (CharacterData)nl.item(j).getFirstChild();
                             description = cd.getData().trim();
@@ -191,45 +195,51 @@ public class ParcelDescriptor {
             }
 
             nl = scriptElement.getElementsByTagName("functionname");
-            if (nl == null) {
+
+            if(nl == null) {
                 languagename = "";
             } else {
                 tmp = (Element)nl.item(0);
                 languagename = tmp.getAttribute("value");
             }
+
             nl = scriptElement.getElementsByTagName("languagedepprops");
-            if ( nl != null && nl.getLength() > 0 )
-            {
+
+            if(nl != null && nl.getLength() > 0) {
 
                 NodeList props = ((Element)nl.item(0)).getElementsByTagName("prop");
-                if ( props != null )
-                {
-                    for ( int j=0; j < props.getLength(); j++ )
-                    {
+
+                if(props != null) {
+                    for(int j = 0; j < props.getLength(); j++) {
                         tmp = (Element)props.item(j);
                         String key = tmp.getAttribute("name");
                         String val = tmp.getAttribute("value");
-                        langProps.put( key,val );
+                        langProps.put(key, val);
                     }
                 }
             }
-            ScriptEntry entry = new ScriptEntry(language, languagename, "", langProps,description);
+
+            ScriptEntry entry = new ScriptEntry(language, languagename, "", langProps, description);
             scripts.add(entry);
         }
+
         return scripts.toArray(new ScriptEntry[scripts.size()]);
     }
 
     public void setScriptEntries(ScriptEntry[] scripts) {
         clearEntries();
-        for (ScriptEntry script : scripts) {
+
+        for(ScriptEntry script : scripts) {
             addScriptEntry(script);
         }
     }
 
     public void setScriptEntries(Iterator<ScriptEntry> scripts) {
         clearEntries();
-        while (scripts.hasNext())
+
+        while(scripts.hasNext()) {
             addScriptEntry(scripts.next());
+        }
     }
 
     private String getLanguageProperty(String name) {
@@ -242,21 +252,21 @@ public class ParcelDescriptor {
         NodeList nl = document.getElementsByTagName("languagedepprops");
         int len;
 
-        if (nl != null && (len = nl.getLength()) != 0) {
+        if(nl != null && (len = nl.getLength()) != 0) {
 
-            for (int i = 0; i < len; i++) {
+            for(int i = 0; i < len; i++) {
                 Element e = (Element)nl.item(i);
                 NodeList nl2 = e.getElementsByTagName("prop");
                 int len2;
 
-                if (nl2 != null && (len2 = nl2.getLength()) != 0) {
-                    for (int j = 0; j < len2; j++) {
+                if(nl2 != null && (len2 = nl2.getLength()) != 0) {
+                    for(int j = 0; j < len2; j++) {
                         Element e2 = (Element)nl2.item(j);
 
                         String name = e2.getAttribute("name");
                         String value = e2.getAttribute("value");
 
-                        if (getLanguageProperty(name) == null) {
+                        if(getLanguageProperty(name) == null) {
                             languagedepprops.put(name, value);
                         }
                     }
@@ -270,14 +280,12 @@ public class ParcelDescriptor {
         Element main = document.getDocumentElement();
         int len;
 
-        if ((scriptNodes = document.getElementsByTagName("script")) != null &&
-            (len = scriptNodes.getLength()) != 0)
-        {
-            for (int i = len - 1; i >= 0; i--) {
+        if((scriptNodes = document.getElementsByTagName("script")) != null &&
+           (len = scriptNodes.getLength()) != 0) {
+            for(int i = len - 1; i >= 0; i--) {
                 try {
                     main.removeChild(scriptNodes.item(i));
-                }
-                catch (DOMException de) {
+                } catch(DOMException de) {
                     // ignore
                 }
             }
@@ -289,28 +297,27 @@ public class ParcelDescriptor {
         Element main = document.getDocumentElement();
         int len;
 
-        if ((scriptNodes = document.getElementsByTagName("script")) != null &&
-            (len = scriptNodes.getLength()) != 0)
-        {
-            for (int i = len - 1; i >= 0; i--) {
+        if((scriptNodes = document.getElementsByTagName("script")) != null &&
+           (len = scriptNodes.getLength()) != 0) {
+            for(int i = len - 1; i >= 0; i--) {
                 try {
                     Element scriptElement = (Element)scriptNodes.item(i);
                     String languagename = "";
 
                     NodeList nl =
                         scriptElement.getElementsByTagName("functionname");
-                    if (nl == null) {
+
+                    if(nl == null) {
                         continue;
                     } else {
                         Element tmp = (Element)nl.item(0);
                         languagename = tmp.getAttribute("value");
                     }
 
-                    if (languagename.equals(script.getLanguageName())) {
+                    if(languagename.equals(script.getLanguageName())) {
                         main.removeChild(scriptElement);
                     }
-                }
-                catch (DOMException de) {
+                } catch(DOMException de) {
                     // ignore
                 }
             }
@@ -332,10 +339,11 @@ public class ParcelDescriptor {
 
         tempitem = document.createElement("description");
         String description = script.getDescription();
-        if (description == null || description.length() == 0)
-        {
+
+        if(description == null || description.length() == 0) {
             description = script.getLogicalName();
         }
+
         tempitem.appendChild(document.createTextNode(description));
         item.appendChild(tempitem);
 
@@ -349,18 +357,20 @@ public class ParcelDescriptor {
         item.setAttribute("value", script.getLanguageName());
         root.appendChild(item);
 
-        if (languagedepprops != null && languagedepprops.size() != 0) {
+        if(languagedepprops != null && languagedepprops.size() != 0) {
             String key;
             item = document.createElement("languagedepprops");
 
             Iterator<String> iter = languagedepprops.keySet().iterator();
-            while (iter.hasNext()) {
+
+            while(iter.hasNext()) {
                 tempitem = document.createElement("prop");
                 key = iter.next();
                 tempitem.setAttribute("name", key);
                 tempitem.setAttribute("value", languagedepprops.get(key));
                 item.appendChild(tempitem);
             }
+
             root.appendChild(item);
         }
 

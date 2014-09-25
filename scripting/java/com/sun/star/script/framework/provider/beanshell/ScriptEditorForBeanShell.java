@@ -43,8 +43,7 @@ import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
 
 public class ScriptEditorForBeanShell
-    implements ScriptEditor, ActionListener
-{
+    implements ScriptEditor, ActionListener {
     private JFrame frame;
     private String filename;
 
@@ -59,7 +58,7 @@ public class ScriptEditorForBeanShell
     private static ScriptEditorForBeanShell theScriptEditorForBeanShell;
 
     // global list of ScriptEditors, key is URL of file being edited
-    private static Map<URL,ScriptEditorForBeanShell> BEING_EDITED = new HashMap<URL,ScriptEditorForBeanShell>();
+    private static Map<URL, ScriptEditorForBeanShell> BEING_EDITED = new HashMap<URL, ScriptEditorForBeanShell>();
 
     // template for new BeanShell scripts
     private static String BSHTEMPLATE;
@@ -74,18 +73,17 @@ public class ScriptEditorForBeanShell
             StringBuilder buf = new StringBuilder();
             byte[] b = new byte[1024];
             int len;
-            while ((len = in.read(b)) != -1) {
+
+            while((len = in.read(b)) != -1) {
                 buf.append(new String(b, 0, len));
             }
 
             in.close();
 
             BSHTEMPLATE = buf.toString();
-        }
-        catch (IOException ioe) {
+        } catch(IOException ioe) {
             BSHTEMPLATE = "// BeanShell script";
-        }
-        catch (Exception e) {
+        } catch(Exception e) {
             BSHTEMPLATE = "// BeanShell script";
         }
     }
@@ -93,13 +91,13 @@ public class ScriptEditorForBeanShell
     /**
      *  Returns the global ScriptEditorForBeanShell instance.
      */
-    public static synchronized ScriptEditorForBeanShell getEditor()
-    {
-        if (theScriptEditorForBeanShell == null)
-        {
+
+    public static synchronized ScriptEditorForBeanShell getEditor() {
+        if(theScriptEditorForBeanShell == null) {
             theScriptEditorForBeanShell =
                 new ScriptEditorForBeanShell();
         }
+
         return theScriptEditorForBeanShell;
     }
 
@@ -111,9 +109,8 @@ public class ScriptEditorForBeanShell
      * @return             The ScriptEditorForBeanShell associated with
      *                     the given URL if one exists, otherwise null.
      */
-    public static ScriptEditorForBeanShell getEditor(URL url)
-    {
-        synchronized (BEING_EDITED) {
+    public static ScriptEditorForBeanShell getEditor(URL url) {
+        synchronized(BEING_EDITED) {
             return BEING_EDITED.get(url);
         }
     }
@@ -122,8 +119,7 @@ public class ScriptEditorForBeanShell
      *  Returns whether or not the script source being edited in this
      *  ScriptEditorForBeanShell has been modified
      */
-    public boolean isModified()
-    {
+    public boolean isModified() {
         return view.isModified();
     }
 
@@ -132,8 +128,7 @@ public class ScriptEditorForBeanShell
      *
      *  @return            The text displayed in this ScriptEditorForBeanShell
      */
-    public String getText()
-    {
+    public String getText() {
         return view.getText();
     }
 
@@ -160,9 +155,8 @@ public class ScriptEditorForBeanShell
      *  Indicates the line where error occurred
      *
      */
-    public void indicateErrorLine( int lineNum )
-    {
-        model.indicateErrorLine( lineNum );
+    public void indicateErrorLine(int lineNum) {
+        model.indicateErrorLine(lineNum);
     }
     /**
      *  Executes the script edited by the editor
@@ -170,7 +164,7 @@ public class ScriptEditorForBeanShell
      */
     public Object execute() throws Exception {
         frame.toFront();
-        return model.execute( context, cl );
+        return model.execute(context, cl);
     }
     /**
      *  Opens an editor window for the specified ScriptMetaData.
@@ -181,41 +175,44 @@ public class ScriptEditorForBeanShell
      * @param  entry       The metadata describing the script
      */
     public void edit(final XScriptContext context, ScriptMetaData entry) {
-        if (entry != null ) {
+        if(entry != null) {
             try {
                 ClassLoader cl = null;
+
                 try {
-                    cl = ClassLoaderFactory.getURLClassLoader( entry );
+                    cl = ClassLoaderFactory.getURLClassLoader(entry);
+                } catch(Exception ignore) { // TODO re-examine error handling
                 }
-                catch (Exception ignore) // TODO re-examine error handling
-                {
-                }
+
                 final ClassLoader theCl = cl;
                 String sUrl = entry.getParcelLocation();
-                if ( !sUrl.endsWith( "/" ) )
-                {
+
+                if(!sUrl.endsWith("/")) {
                     sUrl += "/";
                 }
+
                 sUrl +=  entry.getLanguageName();
                 final URL url = entry.getSourceURL();
                 SwingInvocation.invoke(
-                    new Runnable() {
-                        public void run() {
-                            ScriptEditorForBeanShell editor;
-                            synchronized (BEING_EDITED) {
-                                editor = BEING_EDITED.get(url);
-                                if (editor == null) {
-                                    editor = new ScriptEditorForBeanShell(
-                                        context, theCl, url);
-                                    BEING_EDITED.put(url, editor);
-                                }
+                new Runnable() {
+                    public void run() {
+                        ScriptEditorForBeanShell editor;
+
+                        synchronized(BEING_EDITED) {
+                            editor = BEING_EDITED.get(url);
+
+                            if(editor == null) {
+                                editor = new ScriptEditorForBeanShell(
+                                    context, theCl, url);
+                                BEING_EDITED.put(url, editor);
                             }
-                            editor.frame.toFront();
                         }
-                    });
-            }
-            catch (IOException ioe) {
-                showErrorMessage( "Error loading file: " + ioe.getMessage() );
+
+                        editor.frame.toFront();
+                    }
+                });
+            } catch(IOException ioe) {
+                showErrorMessage("Error loading file: " + ioe.getMessage());
             }
         }
     }
@@ -224,33 +221,30 @@ public class ScriptEditorForBeanShell
     }
 
     private ScriptEditorForBeanShell(XScriptContext context, ClassLoader cl,
-        URL url)
-    {
+                                     URL url) {
         this.context   = context;
         this.scriptURL = url;
         this.model     = new ScriptSourceModel(url);
         this.filename  = url.getFile();
         this.cl = cl;
+
         try {
             Class<?> c = Class.forName(
-                "org.openoffice.netbeans.editor.NetBeansSourceView");
+                             "org.openoffice.netbeans.editor.NetBeansSourceView");
 
             Class<?>[] types = new Class[] { ScriptSourceModel.class };
 
             java.lang.reflect.Constructor<?> ctor = c.getConstructor(types);
 
-            if (ctor != null) {
+            if(ctor != null) {
                 Object[] args = new Object[] { this.model };
                 this.view = (ScriptSourceView) ctor.newInstance(args);
-            }
-            else {
+            } else {
                 this.view = new PlainSourceView(model);
             }
-        }
-        catch (java.lang.Error err) {
+        } catch(java.lang.Error err) {
             this.view = new PlainSourceView(model);
-        }
-        catch (Exception e) {
+        } catch(Exception e) {
             this.view = new PlainSourceView(model);
         }
 
@@ -261,7 +255,7 @@ public class ScriptEditorForBeanShell
 
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(frame, message,
-            "Error", JOptionPane.ERROR_MESSAGE);
+                                      "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private void initUI() {
@@ -269,24 +263,24 @@ public class ScriptEditorForBeanShell
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         frame.addWindowListener(
-            new WindowAdapter()
-            {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    doClose();
-                }
+        new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                doClose();
             }
+        }
         );
 
         String[] labels = {"Run", "Clear", "Save", "Close"};
         JPanel p = new JPanel();
         p.setLayout(new FlowLayout());
 
-        for (String label : labels) {
+        for(String label : labels) {
             JButton b = new JButton(label);
             b.addActionListener(this);
             p.add(b);
-            if (label.equals("Save") && filename == null) {
+
+            if(label.equals("Save") && filename == null) {
                 b.setEnabled(false);
             }
         }
@@ -299,25 +293,23 @@ public class ScriptEditorForBeanShell
     }
 
     private void doClose() {
-        if (view.isModified()) {
+        if(view.isModified()) {
             int result = JOptionPane.showConfirmDialog(frame,
-                "The script has been modified. " +
-                "Do you want to save the changes?");
+                         "The script has been modified. " +
+                         "Do you want to save the changes?");
 
-            if (result == JOptionPane.CANCEL_OPTION)
-            {
+            if(result == JOptionPane.CANCEL_OPTION) {
                 // don't close the window, just return
                 return;
-            }
-            else if (result == JOptionPane.YES_OPTION)
-            {
+            } else if(result == JOptionPane.YES_OPTION) {
                 boolean saveSuccess = saveTextArea();
-                if (!saveSuccess)
-                {
+
+                if(!saveSuccess) {
                     return;
                 }
             }
         }
+
         frame.dispose();
         shutdown();
     }
@@ -325,70 +317,62 @@ public class ScriptEditorForBeanShell
     private boolean saveTextArea() {
         boolean result = true;
 
-        if (!view.isModified()) {
+        if(!view.isModified()) {
             return true;
         }
 
         OutputStream fos = null;
+
         try {
             String s = view.getText();
             fos = scriptURL.openConnection().getOutputStream();
-            if ( fos  != null) {
+
+            if(fos  != null) {
                 fos.write(s.getBytes());
-            }
-            else
-            {
+            } else {
                 showErrorMessage(
-                    "Error saving script: Could not open stream for file" );
+                    "Error saving script: Could not open stream for file");
                 result = false;
             }
+
             view.setModified(false);
-       }
-       catch (IOException ioe) {
-           showErrorMessage( "Error saving script: " + ioe.getMessage() );
-           result = false;
-       }
-       catch (Exception e) {
-           showErrorMessage( "Error saving script: " + e.getMessage() );
-           result = false;
-       }
-        finally {
-            if (fos != null) {
+        } catch(IOException ioe) {
+            showErrorMessage("Error saving script: " + ioe.getMessage());
+            result = false;
+        } catch(Exception e) {
+            showErrorMessage("Error saving script: " + e.getMessage());
+            result = false;
+        } finally {
+            if(fos != null) {
                 try {
                     fos.flush();
                     fos.close();
-                }
-                catch (IOException ignore) {
+                } catch(IOException ignore) {
                 }
             }
         }
+
         return result;
     }
 
-    private void shutdown()
-    {
-        synchronized (BEING_EDITED) {
+    private void shutdown() {
+        synchronized(BEING_EDITED) {
             BEING_EDITED.remove(scriptURL);
         }
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Run")) {
-            try
-            {
+        if(e.getActionCommand().equals("Run")) {
+            try {
                 execute();
-            }
-            catch (Exception invokeException ) {
+            } catch(Exception invokeException) {
                 showErrorMessage(invokeException.getMessage());
             }
-        }
-        else if (e.getActionCommand().equals("Close")) {
+        } else if(e.getActionCommand().equals("Close")) {
             doClose();
-        }
-        else if (e.getActionCommand().equals("Save")) {
+        } else if(e.getActionCommand().equals("Save")) {
             saveTextArea();
-        }
-        else if (e.getActionCommand().equals("Clear")) {
+        } else if(e.getActionCommand().equals("Clear")) {
             view.clear();
         }
     }

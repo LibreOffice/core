@@ -28,69 +28,59 @@ public class XInputStreamWrapper extends InputStream {
     }
 
     @Override
-    public int read() throws java.io.IOException
-    {
+    public int read() throws java.io.IOException {
         byte[][] byteRet = new byte[1][0];
         long numRead;
 
         try {
             numRead = m_xInputStream.readBytes(byteRet, 1);
-        }
-        catch (com.sun.star.io.IOException ioe) {
+        } catch(com.sun.star.io.IOException ioe) {
             throw new java.io.IOException(ioe.getMessage());
         }
 
-        if (numRead != 1) {
+        if(numRead != 1) {
             return -1;
         }
+
         return byteRet[0][0];
     }
 
     @Override
-    public int read( byte[] b ) throws java.io.IOException
-    {
+    public int read(byte[] b) throws java.io.IOException {
         byte[][] byteRet = new byte[1][];
         byteRet[0] = b;
-        try
-        {
-           return m_xInputStream.readBytes( byteRet, b.length );
-        }
-        catch ( com.sun.star.io.IOException ioe)
-        {
+
+        try {
+            return m_xInputStream.readBytes(byteRet, b.length);
+        } catch(com.sun.star.io.IOException ioe) {
             throw new java.io.IOException(ioe.getMessage());
         }
     }
 
     @Override
-    public long skip(long n) throws java.io.IOException
-    {
+    public long skip(long n) throws java.io.IOException {
         try {
             m_xInputStream.skipBytes((int)n);
             return n;
-        }
-        catch (com.sun.star.io.IOException ioe) {
+        } catch(com.sun.star.io.IOException ioe) {
             throw new java.io.IOException(ioe.getMessage());
         }
     }
 
     @Override
-    public int available() throws java.io.IOException
-    {
+    public int available() throws java.io.IOException {
         try {
             return m_xInputStream.available();
-        }
-        catch (com.sun.star.io.IOException ioe) {
+        } catch(com.sun.star.io.IOException ioe) {
             throw new java.io.IOException(ioe.getMessage());
         }
     }
 
     @Override
-    public void close() throws java.io.IOException
-    {
+    public void close() throws java.io.IOException {
         try {
             m_xInputStream.closeInput();
-        }
-        catch (com.sun.star.io.IOException ioe) {
+        } catch(com.sun.star.io.IOException ioe) {
             throw new java.io.IOException(ioe.getMessage());
         }
     }

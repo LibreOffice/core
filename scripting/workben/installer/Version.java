@@ -31,8 +31,8 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
 
     /** Creates new form Welcome */
     public Version(InstallWizard wizard) {
-        this.wizard=wizard;
-    setBackground(Color.white);
+        this.wizard = wizard;
+        setBackground(Color.white);
         initComponents();
     }
 
@@ -49,21 +49,18 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         System.out.println("Initialising versions");
 
         File fileVersions = null;
-    try
-    {
+
+        try {
             fileVersions = InstUtil.buildSversionLocation();
-    }
-    catch(IOException eFnF)
-    {
+        } catch(IOException eFnF) {
             System.err.println("Cannot find sversion.ini/.sversionrc");
             JOptionPane.showMessageDialog(this, eFnF.getMessage(), "File not Found", JOptionPane.ERROR_MESSAGE);
             wizard.exitForm();
-    }
+        }
 
         try {
             props = InstUtil.getOfficeVersions(fileVersions);
-        }
-        catch (IOException eIO) {
+        } catch(IOException eIO) {
             //Message about no installed versions found
             System.err.println("Failed to parse SVERSION");
             JOptionPane.showMessageDialog(this, "There was a problem reading from the Office settings file.", "Parse Error", JOptionPane.ERROR_MESSAGE);
@@ -71,51 +68,57 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         }
 
         tableModel = new MyTableModel(props);
-    if (tableModel.getRowCount() == 0)
-    {
+
+        if(tableModel.getRowCount() == 0) {
             JOptionPane.showMessageDialog(this, "No compatible versions of Office were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);
             wizard.exitForm();
-    }
+        }
 
         tableModel.addTableModelListener(this);
         JTable tableVersions = new JTable(tableModel) {
             @Override
-            public String getToolTipText(MouseEvent event)
-            {
-                int col = columnAtPoint( event.getPoint() );
-                if (col != 2)
-                    return null;
+            public String getToolTipText(MouseEvent event) {
+                int col = columnAtPoint(event.getPoint());
 
-                int row = rowAtPoint( event.getPoint() );
+                if(col != 2) {
+                    return null;
+                }
+
+                int row = rowAtPoint(event.getPoint());
                 Object o = getValueAt(row, col);
 
-                if (o == null)
+                if(o == null) {
                     return null;
+                }
 
-                if (o.toString().equals(""))
+                if(o.toString().equals("")) {
                     return null;
+                }
 
                 return o.toString();
             }
 
             @Override
-            public Point getToolTipLocation(MouseEvent event)
-            {
-                int col = columnAtPoint( event.getPoint() );
-                if (col != 2)
-                    return null;
+            public Point getToolTipLocation(MouseEvent event) {
+                int col = columnAtPoint(event.getPoint());
 
-                int row = rowAtPoint( event.getPoint() );
-                Object o = getValueAt(row,col);
-
-                if (o == null)
+                if(col != 2) {
                     return null;
+                }
 
-                if (o.toString().equals(""))
+                int row = rowAtPoint(event.getPoint());
+                Object o = getValueAt(row, col);
+
+                if(o == null) {
                     return null;
+                }
+
+                if(o.toString().equals("")) {
+                    return null;
+                }
 
                 Point pt = getCellRect(row, col, true).getLocation();
-                pt.translate(-1,-2);
+                pt.translate(-1, -2);
                 return pt;
             }
         };
@@ -123,7 +126,7 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         JScrollPane scroll = new JScrollPane(tableVersions);
 
         tableVersions.setPreferredSize(
-            new Dimension(InstallWizard.DEFWIDTH,InstallWizard.DEFHEIGHT));
+            new Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT));
 
         tableVersions.setRowSelectionAllowed(false);
         tableVersions.setColumnSelectionAllowed(false);
@@ -138,7 +141,7 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         add(area, BorderLayout.NORTH);
         add(versionPanel, BorderLayout.CENTER);
         //nav = new NavPanel(wizard, true, false, true, InstallWizard.WELCOME, InstallWizard.FINAL);
-    nav = new NavPanel(wizard, true, false, true, InstallWizard.WELCOME, InstallWizard.FINAL);
+        nav = new NavPanel(wizard, true, false, true, InstallWizard.WELCOME, InstallWizard.FINAL);
         nav.setNextListener(this);
         add(nav, BorderLayout.SOUTH);
 
@@ -153,51 +156,51 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         int totalWidth = 0;
         Object[] longValues = model.longValues;
 
-        for (int i = 0; i < 3; i++) {
+        for(int i = 0; i < 3; i++) {
             column = table.getColumnModel().getColumn(i);
 
             try {
                 comp = column.getHeaderRenderer().
-                             getTableCellRendererComponent(
-                                 null, column.getHeaderValue(),
-                                 false, false, 0, 0);
+                       getTableCellRendererComponent(
+                           null, column.getHeaderValue(),
+                           false, false, 0, 0);
                 headerWidth = comp.getPreferredSize().width;
-            } catch (NullPointerException e) {
+            } catch(NullPointerException e) {
                 // System.err.println("Null pointer exception!");
                 // System.err.println("  getHeaderRenderer returns null in 1.3.");
                 // System.err.println("  The replacement is getDefaultRenderer.");
             }
 
             // need to replace spaces in String before getting preferred width
-            if (longValues[i] instanceof String) {
+            if(longValues[i] instanceof String) {
                 longValues[i] = ((String)longValues[i]).replace(' ', '_');
             }
 
             System.out.println("longValues: " + longValues[i]);
             comp = table.getDefaultRenderer(model.getColumnClass(i)).
-                         getTableCellRendererComponent(
-                             table, longValues[i],
-                             false, false, 0, i);
+                   getTableCellRendererComponent(
+                       table, longValues[i],
+                       false, false, 0, i);
             cellWidth = comp.getPreferredSize().width;
 
             preferredWidth = Math.max(headerWidth, cellWidth);
 
-            if (false) {
+            if(false) {
                 System.out.println("Initializing width of column "
-                    + i + ". "
-                    + "preferredWidth = " + preferredWidth
-                    + "; totalWidth = " + totalWidth
-                    + "; leftWidth = " + (InstallWizard.DEFWIDTH - totalWidth));
+                                   + i + ". "
+                                   + "preferredWidth = " + preferredWidth
+                                   + "; totalWidth = " + totalWidth
+                                   + "; leftWidth = " + (InstallWizard.DEFWIDTH - totalWidth));
             }
 
             //XXX: Before Swing 1.1 Beta 2, use setMinWidth instead.
-            if (i == 2) {
-                if (preferredWidth > InstallWizard.DEFWIDTH - totalWidth)
+            if(i == 2) {
+                if(preferredWidth > InstallWizard.DEFWIDTH - totalWidth) {
                     column.setPreferredWidth(InstallWizard.DEFWIDTH - totalWidth);
-                else
+                } else {
                     column.setPreferredWidth(preferredWidth);
-            }
-            else {
+                }
+            } else {
                 column.setMinWidth(preferredWidth);
                 totalWidth += preferredWidth;
             }
@@ -213,19 +216,21 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
     public void actionPerformed(ActionEvent ev) {
         InstallWizard.clearLocations();
         int len = tableModel.data.size();
-        for (int i = 0; i < len; i++) {
+
+        for(int i = 0; i < len; i++) {
             ArrayList<?> list = tableModel.data.get(i);
-            if (((Boolean)list.get(0)).booleanValue())
+
+            if(((Boolean)list.get(0)).booleanValue()) {
                 InstallWizard.storeLocation((String)list.get(2));
+            }
         }
     }
 
 
     public void tableChanged(TableModelEvent e) {
-        if (tableModel.isAnySelected()) {
+        if(tableModel.isAnySelected()) {
             nav.enableNext(true);
-        }
-        else {
+        } else {
             nav.enableNext(false);
         }
     }
@@ -244,42 +249,44 @@ class MyTableModel extends AbstractTableModel {
     private String colNames[] = {"", "Name", "Location"};
     Object[] longValues = new Object[] {Boolean.TRUE, "Name", "Location"};
 
-    MyTableModel (Properties properties) {
+    MyTableModel(Properties properties) {
         data = new ArrayList<ArrayList<Object>>();
         boolean isWindows =
             (System.getProperty("os.name").indexOf("Windows") != -1);
-        for (Enumeration e = properties.propertyNames(); e.hasMoreElements() ;) {
+
+        for(Enumeration e = properties.propertyNames(); e.hasMoreElements() ;) {
             String key = (String)e.nextElement();
             String path = null;
 
-            if ( !( key.startsWith("#") ) &&
-                  ( path = properties.getProperty(key)) != null) {
+            if(!(key.startsWith("#")) &&
+               (path = properties.getProperty(key)) != null) {
                 String pkgChkPath = path + File.separator + "program" + File.separator;
-                if ( isWindows )
-                {
+
+                if(isWindows) {
                     pkgChkPath += "pkgchk.exe";
-                }
-                else
-                {
+                } else {
                     pkgChkPath += "pkgchk";
                 }
-                File pkgChk = new File( pkgChkPath );
-                if ( pkgChk.exists() )
-                {
+
+                File pkgChk = new File(pkgChkPath);
+
+                if(pkgChk.exists()) {
                     ArrayList<Object> row = new ArrayList<Object>();
                     row.add(0, Boolean.FALSE);
 
                     row.add(1, key);
-                    if (key.length() > ((String)longValues[1]).length()) {
+
+                    if(key.length() > ((String)longValues[1]).length()) {
                         longValues[1] = key;
                     }
 
                     row.add(2, path);
-                    if (path.length() > ((String)longValues[2]).length()) {
+
+                    if(path.length() > ((String)longValues[2]).length()) {
                         longValues[2] = path;
                     }
 
-                data.add(row);
+                    data.add(row);
                 }
             }
         }
@@ -299,9 +306,10 @@ class MyTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int col) {
-        if (row < 0 || row > getRowCount() ||
-            col < 0 || col > getColumnCount())
+        if(row < 0 || row > getRowCount() ||
+           col < 0 || col > getColumnCount()) {
             return null;
+        }
 
         ArrayList<?> aRow = data.get(row);
         return aRow.get(col);
@@ -328,12 +336,15 @@ class MyTableModel extends AbstractTableModel {
 
     public boolean isAnySelected() {
         Iterator iter = data.iterator();
-        while (iter.hasNext()) {
+
+        while(iter.hasNext()) {
             ArrayList<?> row = (ArrayList<?>)iter.next();
-            if (((Boolean)row.get(0)).booleanValue()) {
+
+            if(((Boolean)row.get(0)).booleanValue()) {
                 return true;
             }
         }
+
         return false;
     }
 

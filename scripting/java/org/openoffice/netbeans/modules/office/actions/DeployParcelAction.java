@@ -56,11 +56,11 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
     private static final String BROWSE_LABEL = "Office Document...";
     private static final String DEPLOY_LABEL = "Deploy To";
 
-    public String getName () {
+    public String getName() {
         return DEPLOY_LABEL;
     }
 
-    public HelpCtx getHelpCtx () {
+    public HelpCtx getHelpCtx() {
         return HelpCtx.DEFAULT_HELP;
     }
 
@@ -79,13 +79,14 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
                     (ParcelCookie)nodes[0].getCookie(ParcelCookie.class);
 
                 File target = new File(oi.getPath(File.separator + label +
-                    File.separator + "Scripts"));
+                                                  File.separator + "Scripts"));
 
                 File langdir = new File(target, parcelCookie.getLanguage());
 
-                if (!langdir.exists()) {
+                if(!langdir.exists()) {
                     boolean response = askIfCreateDirectory(langdir);
-                    if (!response) {
+
+                    if(!response) {
                         return;
                     }
                 }
@@ -110,8 +111,11 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 File target = getTargetFile();
-                if (target == null)
+
+                if(target == null) {
                     return;
+                }
+
                 deploy(target);
             }
         });
@@ -120,15 +124,15 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
         return menu;
     }
 
-    protected int mode () {
+    protected int mode() {
         return MODE_ONE;
     }
 
-    protected Class[] cookieClasses () {
+    protected Class[] cookieClasses() {
         return new Class[] { ParcelCookie.class };
     }
 
-    protected void performAction (Node[] activatedNodes) {
+    protected void performAction(Node[] activatedNodes) {
         // do nothing, should not happen
     }
 
@@ -141,7 +145,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
             public void run() {
                 boolean result = parcelCookie.deploy(target);
 
-                if (result && target.isDirectory()) {
+                if(result && target.isDirectory()) {
                     showNagDialog();
                 }
             }
@@ -150,29 +154,31 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
     private boolean askIfCreateDirectory(File directory) {
         String message = directory.getAbsolutePath() + " does not exist. " +
-            "Do you want to create it now?";
+                         "Do you want to create it now?";
 
         NotifyDescriptor d = new NotifyDescriptor.Confirmation(
             message, NotifyDescriptor.OK_CANCEL_OPTION);
         TopManager.getDefault().notify(d);
 
-        if (d.getValue() == NotifyDescriptor.CANCEL_OPTION)
+        if(d.getValue() == NotifyDescriptor.CANCEL_OPTION) {
             return false;
+        }
 
         boolean result;
+
         try {
             result = directory.mkdirs();
-        }
-        catch (SecurityException se) {
+        } catch(SecurityException se) {
             result = false;
         }
 
-        if (!result) {
+        if(!result) {
             String tmp = "Error creating: " + directory.getAbsolutePath();
             NotifyDescriptor d2 = new NotifyDescriptor.Message(
                 tmp, NotifyDescriptor.ERROR_MESSAGE);
             TopManager.getDefault().notify(d2);
         }
+
         return result;
     }
 
@@ -185,19 +191,20 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
     private void showNagDialog() {
         String message = "If you currently have Office running you will " +
-            "need to click on the Tools/Scripting Add-on's/Refresh All Scripts " +
-            " menu item in Office so that the scripts in this parcel can be detected.";
+                         "need to click on the Tools/Scripting Add-on's/Refresh All Scripts " +
+                         " menu item in Office so that the scripts in this parcel can be detected.";
 
         OfficeSettings settings = OfficeSettings.getDefault();
 
-        if (settings.getWarnAfterDirDeploy()) {
+        if(settings.getWarnAfterDirDeploy()) {
             NagDialog warning = NagDialog.createInformationDialog(
-                message, "Show this message in future", true);
+                                    message, "Show this message in future", true);
 
             warning.show();
 
-            if (!warning.getState())
+            if(!warning.getState()) {
                 settings.setWarnAfterDirDeploy(false);
+            }
         }
     }
 
@@ -210,12 +217,14 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setFileFilter(new FileFilter() {
             public boolean accept(File file) {
-                if (file.isDirectory() ||
-                    file.getName().endsWith(".sxw") ||
-                    file.getName().endsWith(".sxc") ||
-                    file.getName().endsWith(".sxd") ||
-                    file.getName().endsWith(".sxi"))
+                if(file.isDirectory() ||
+                   file.getName().endsWith(".sxw") ||
+                   file.getName().endsWith(".sxc") ||
+                   file.getName().endsWith(".sxd") ||
+                   file.getName().endsWith(".sxi")) {
                     return true;
+                }
+
                 return false;
             }
 
@@ -226,9 +235,10 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
         int result = chooser.showDialog(null, null);
 
-        if (result == JFileChooser.APPROVE_OPTION) {
+        if(result == JFileChooser.APPROVE_OPTION) {
             target = chooser.getSelectedFile();
         }
+
         return target;
     }
 }

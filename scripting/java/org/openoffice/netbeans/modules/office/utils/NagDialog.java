@@ -36,7 +36,7 @@ public class NagDialog {
     private JCheckBox checkbox;
 
     private NagDialog(String message, String prompt, boolean initialState,
-        int type) {
+                      int type) {
         initUI(message, prompt, initialState, type);
     }
 
@@ -46,7 +46,7 @@ public class NagDialog {
             message, prompt, initialState, JOptionPane.INFORMATION_MESSAGE);
 
         result.setDescriptor(new NotifyDescriptor.Message(result.getPanel(),
-            NotifyDescriptor.PLAIN_MESSAGE));
+                             NotifyDescriptor.PLAIN_MESSAGE));
 
         return result;
     }
@@ -57,8 +57,8 @@ public class NagDialog {
             message, prompt, initialState, JOptionPane.QUESTION_MESSAGE);
 
         result.setDescriptor(new NotifyDescriptor.Confirmation(
-            result.getPanel(), NotifyDescriptor.OK_CANCEL_OPTION,
-            NotifyDescriptor.PLAIN_MESSAGE));
+                                 result.getPanel(), NotifyDescriptor.OK_CANCEL_OPTION,
+                                 NotifyDescriptor.PLAIN_MESSAGE));
 
         return result;
     }
@@ -82,21 +82,21 @@ public class NagDialog {
     }
 
     private void initUI(String message, String prompt, boolean initialState,
-        int type) {
+                        int type) {
 
         this.panel = new JPanel();
         JOptionPane optionPane = new JOptionPane(message, type, 0, null,
-            new Object[0], null)
-            {
-                public int getMaxCharactersPerLineCount() {
-                    return 100;
-                }
-            };
+        new Object[0], null) {
+            public int getMaxCharactersPerLineCount() {
+                return 100;
+            }
+        };
         optionPane.setUI(new javax.swing.plaf.basic.BasicOptionPaneUI() {
             public Dimension getMinimumOptionPaneSize() {
-                if (minimumSize == null) {
+                if(minimumSize == null) {
                     return new Dimension(MinimumWidth, 50);
                 }
+
                 return new Dimension(minimumSize.width, 50);
             }
         });

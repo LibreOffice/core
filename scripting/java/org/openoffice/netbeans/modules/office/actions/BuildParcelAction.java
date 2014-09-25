@@ -40,7 +40,7 @@ public class BuildParcelAction extends BuildAllAction {
     protected void performAction(Node[] activatedNodes) {
         FrameworkJarChecker.mountDependencies();
 
-        for (int i = 0; i < activatedNodes.length; i++) {
+        for(int i = 0; i < activatedNodes.length; i++) {
             ArrayList v = new ArrayList(1);
             v.addElement(activatedNodes[i]);
 
@@ -48,12 +48,13 @@ public class BuildParcelAction extends BuildAllAction {
             CompilerTask task = job.start();
             task.waitFinished();
 
-            if (task.isSuccessful()) {
+            if(task.isSuccessful()) {
                 ParcelFolderCookie cookie = (ParcelFolderCookie)
-                    activatedNodes[i].getCookie(ParcelFolderCookie.class);
+                                            activatedNodes[i].getCookie(ParcelFolderCookie.class);
 
-                if (cookie != null)
+                if(cookie != null) {
                     cookie.generate();
+                }
             }
         }
     }

@@ -40,10 +40,12 @@ public class _XFunction extends MultiMethodTest {
     public void before() throws StatusException {
         log.println("getting provider");
         oProvider = (XFunctionProvider) tEnv.getObjRelation("provider");
-        if (oProvider == null)
+
+        if(oProvider == null) {
             log.println("it's null");
-        else
+        } else {
             log.println("it's not null");
+        }
     }
 
     public void _invoke() {
@@ -54,14 +56,13 @@ public class _XFunction extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 result &= runInvokeTest((Parameters)tests.next());
             }
-        }
-        else {
+        } else {
             result = false;
         }
 
@@ -85,7 +86,7 @@ public class _XFunction extends MultiMethodTest {
 
         log.println(testdata.get("description"));
 
-        try{
+        try {
             Object[] aParams = new Object[0];
             short[][] aOutParamIndex = new short[1][];
             aOutParamIndex[0] = new short[0];
@@ -93,60 +94,60 @@ public class _XFunction extends MultiMethodTest {
             aOutParam[0] = new Object[0];
 
             XFunction func = oProvider.getFunction(logicalname);
-            if (func == null) {
+
+            if(func == null) {
                 log.println("Couldn't get XFunction for:" + logicalname);
                 return false;
             }
 
-            Object ret = func.invoke( aParams, aOutParamIndex, aOutParam );
+            Object ret = func.invoke(aParams, aOutParamIndex, aOutParam);
 
-            if (ret != null) {
+            if(ret != null) {
                 gotreturntype = ret.getClass().getName();
                 gotreturnvalue = ret.toString();
             }
 
             output = "success";
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae) {
+        } catch(com.sun.star.lang.IllegalArgumentException iae) {
             log.println("Couldn't invoke script:" + iae);
             output = "com.sun.star.lang.IllegalArgumentException";
-        }
-        catch (com.sun.star.script.CannotConvertException cce) {
+        } catch(com.sun.star.script.CannotConvertException cce) {
             log.println("Couldn't invoke script:" + cce);
             output = "com.sun.star.script.CannotConvertException";
-        }
-        catch (com.sun.star.reflection.InvocationTargetException ite) {
+        } catch(com.sun.star.reflection.InvocationTargetException ite) {
             log.println("Couldn't invoke script:" + ite);
             output = "com.sun.star.reflection.InvocationTargetException";
-        }
-        catch (com.sun.star.uno.RuntimeException re) {
+        } catch(com.sun.star.uno.RuntimeException re) {
             log.println("Couldn't invoke script:" + re);
             output = "com.sun.star.uno.RuntimeException";
-        }
-        catch(java.lang.Exception e){
+        } catch(java.lang.Exception e) {
             log.println("Couldn't invoke script:" + e);
             output = "java.lang.Exception";
         }
 
-        if (expreturntype != null) {
+        if(expreturntype != null) {
             log.println("expected return type: " + expreturntype +
-                ", got return type: " + gotreturntype);
+                        ", got return type: " + gotreturntype);
 
-            if (!gotreturntype.equals(expreturntype))
+            if(!gotreturntype.equals(expreturntype)) {
                 result = false;
+            }
         }
 
-        if (expreturnvalue != null) {
+        if(expreturnvalue != null) {
             log.println("expected return value: " + expreturnvalue +
-                ", got return value: " + gotreturnvalue);
+                        ", got return value: " + gotreturnvalue);
 
-            if (!gotreturnvalue.equals(expreturnvalue))
+            if(!gotreturnvalue.equals(expreturnvalue)) {
                 result = false;
+            }
         }
 
         log.println("expected: " + expected + ", output: " + output);
-        if (!output.equals(expected))
+
+        if(!output.equals(expected)) {
             result = false;
+        }
 
         return result;
     }

@@ -31,44 +31,41 @@ import com.sun.star.script.framework.runtime.XScriptContext;
 public class DebugRunner {
 
     private static final String FILE_URL_PREFIX =
-            System.getProperty("os.name").startsWith("Windows") == true ?
-            "file:///" : "file://";
+        System.getProperty("os.name").startsWith("Windows") == true ?
+        "file:///" : "file://";
 
     public void go(final XScriptContext xsctxt, String language, String uri,
-        String filename) {
+                   String filename) {
 
         OOScriptDebugger debugger;
         String path = "";
 
-        if (language.equals("JavaScript")) {
+        if(language.equals("JavaScript")) {
             debugger = new OORhinoDebugger();
-        }
-        else if (language.equals("BeanShell")) {
+        } else if(language.equals("BeanShell")) {
             debugger = new OOBeanShellDebugger();
-        }
-        else {
+        } else {
             return;
         }
 
-        if (uri.startsWith(FILE_URL_PREFIX)) {
+        if(uri.startsWith(FILE_URL_PREFIX)) {
             uri = URLDecoder.decode(uri);
             String s = uri.substring(FILE_URL_PREFIX.length());
             File f = new File(s);
 
-            if (f.exists()) {
-                if (f.isDirectory()) {
-                    if (!filename.equals("")) {
+            if(f.exists()) {
+                if(f.isDirectory()) {
+                    if(!filename.equals("")) {
                         path = new File(f, filename).getAbsolutePath();
                     }
-                }
-                else {
+                } else {
                     path = f.getAbsolutePath();
                 }
             }
+
             debugger.go(xsctxt, path);
-        }
-        else {
-            if (!uri.endsWith("/")) {
+        } else {
+            if(!uri.endsWith("/")) {
                 uri += "/";
             }
 
@@ -77,13 +74,12 @@ public class DebugRunner {
 
             try {
                 is = PathUtils.getScriptFileStream(
-                    script, xsctxt.getComponentContext());
+                         script, xsctxt.getComponentContext());
 
-                if (is != null) {
+                if(is != null) {
                     debugger.go(xsctxt, is);
                 }
-            }
-            catch (IOException ioe) {
+            } catch(IOException ioe) {
                 System.out.println("Error loading script: " + script);
             }
         }

@@ -48,10 +48,10 @@ public class _XScriptInfo extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 Parameters testdata = (Parameters)tests.next();
                 String expected = testdata.get("expected");
                 String output = "";
@@ -63,8 +63,7 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
 
@@ -79,10 +78,10 @@ public class _XScriptInfo extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 Parameters testdata = (Parameters)tests.next();
                 String expected = testdata.get("expected");
                 String output = "";
@@ -94,10 +93,10 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.endsWith(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getParcelURI()", result);
     }
 
@@ -109,10 +108,10 @@ public class _XScriptInfo extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 Parameters testdata = (Parameters)tests.next();
                 String expected = testdata.get("expected");
                 String output = "";
@@ -124,10 +123,10 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getLanguage()", result);
     }
 
@@ -139,10 +138,10 @@ public class _XScriptInfo extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 Parameters testdata = (Parameters)tests.next();
                 String expected = testdata.get("expected");
                 String output = "";
@@ -154,10 +153,10 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getFunctionName()", result);
     }
 
@@ -168,10 +167,10 @@ public class _XScriptInfo extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 Parameters testdata = (Parameters)tests.next();
                 String expected = testdata.get("expected");
                 String output = "";
@@ -182,10 +181,10 @@ public class _XScriptInfo extends MultiMethodTest {
                     XPropertySet langProps = oObj.getLanguageProperties();
                     output = (String)langProps.getPropertyValue("classpath");
 
-                    if (output == null)
+                    if(output == null) {
                         output = "null";
-                }
-                catch( com.sun.star.uno.Exception e) {
+                    }
+                } catch(com.sun.star.uno.Exception e) {
                     log.println("caught UNO Exception:" + e);
                     output = "com.sun.star.uno.Exception";
                 }
@@ -193,6 +192,7 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
             }
         }
+
         tRes.tested("getLanguageProperties()", true);
     }
 
@@ -204,10 +204,10 @@ public class _XScriptInfo extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 Parameters testdata = (Parameters)tests.next();
                 String expected = testdata.get("expected");
                 String output = "";
@@ -216,20 +216,21 @@ public class _XScriptInfo extends MultiMethodTest {
 
                 String[] fileSets = oObj.getFileSetNames();
 
-                if (fileSets == null)
+                if(fileSets == null) {
                     output = "null";
-                else if (fileSets.length != 1)
+                } else if(fileSets.length != 1) {
                     output = "WrongNumberOfFileSets";
-                else
+                } else {
                     output = fileSets[0];
+                }
 
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getFileSetNames()", result);
     }
 
@@ -241,10 +242,10 @@ public class _XScriptInfo extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 Parameters testdata = (Parameters)tests.next();
                 String expected = testdata.get("expected");
                 String output = "";
@@ -254,20 +255,21 @@ public class _XScriptInfo extends MultiMethodTest {
                 String[] filesInFileSet =
                     oObj.getFilesInFileSet(oObj.getFileSetNames()[0]);
 
-                if (filesInFileSet == null)
+                if(filesInFileSet == null) {
                     output = "null";
-                else if (filesInFileSet.length != 1)
+                } else if(filesInFileSet.length != 1) {
                     output = "WrongNumberOfFilesInFileSet";
-                else
+                } else {
                     output = filesInFileSet[0];
+                }
 
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getFilesInFileSet()", result);
     }
 
@@ -279,10 +281,10 @@ public class _XScriptInfo extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 Parameters testdata = (Parameters)tests.next();
                 String expected = testdata.get("expected");
                 String output = "";
@@ -291,17 +293,17 @@ public class _XScriptInfo extends MultiMethodTest {
 
                 output = oObj.getDescription();
 
-                if (output == null)
+                if(output == null) {
                     output = "null";
-                else if (output.length() == 0)
+                } else if(output.length() == 0) {
                     output = "empty";
+                }
 
                 log.println("expected: [" + expected + "], output: [" +
-                    output + "]");
+                            output + "]");
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
 

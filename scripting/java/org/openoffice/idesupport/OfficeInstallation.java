@@ -37,21 +37,22 @@ public class OfficeInstallation implements java.io.Serializable {
 
         this.name = name;
 
-        if (path.startsWith(FILE_URL_PREFIX)) {
+        if(path.startsWith(FILE_URL_PREFIX)) {
             this.url = path;
             path = URLDecoder.decode(path);
             path = path.substring(FILE_URL_PREFIX.length());
 
-            if (System.getProperty("os.name").startsWith("Windows"))
+            if(System.getProperty("os.name").startsWith("Windows")) {
                 path = path.replace('/', File.separatorChar);
+            }
 
             this.path = path;
-        }
-        else {
+        } else {
             this.path = path;
 
-            if (System.getProperty("os.name").startsWith("Windows"))
+            if(System.getProperty("os.name").startsWith("Windows")) {
                 path = path.replace(File.separatorChar, '/');
+            }
 
             this.url = FILE_URL_PREFIX + path;
         }

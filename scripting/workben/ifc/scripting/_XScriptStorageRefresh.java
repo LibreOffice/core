@@ -44,14 +44,14 @@ public class _XScriptStorageRefresh extends MultiMethodTest {
         Collection c =
             (Collection) tEnv.getObjRelation("_refresh");
 
-        if (c == null) {
+        if(c == null) {
             tRes.tested("refresh()", false);
             return;
         }
 
         Iterator tests = c.iterator();
 
-        while (tests.hasNext()) {
+        while(tests.hasNext()) {
             Parameters testdata = (Parameters)tests.next();
             String expected = testdata.get("expected");
             String output = "";
@@ -61,14 +61,15 @@ public class _XScriptStorageRefresh extends MultiMethodTest {
             try {
                 oObj.refresh();
                 output = "success";
-            }
-            catch (com.sun.star.uno.RuntimeException re) {
+            } catch(com.sun.star.uno.RuntimeException re) {
                 log.println("Caught RuntimeException: " + re);
                 output = "com.sun.star.uno.RuntimeException";
             }
+
             log.println("expected: " + expected + ", output: " + output);
             result &= output.equals(expected);
         }
+
         tRes.tested("refresh()", result);
     }
 }

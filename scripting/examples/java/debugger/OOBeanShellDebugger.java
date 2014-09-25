@@ -64,16 +64,15 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
 
     /* Entry point for script execution */
     public void go(XScriptContext context, String filename) {
-        if (filename != null && filename != "") {
+        if(filename != null && filename != "") {
             try {
                 FileInputStream fis = new FileInputStream(filename);
                 this.filename = filename;
                 go(context, fis);
-            }
-            catch (IOException ioe) {
+            } catch(IOException ioe) {
                 JOptionPane.showMessageDialog(frame,
-                    "Error loading file: " + ioe.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                                              "Error loading file: " + ioe.getMessage(),
+                                              "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -83,14 +82,13 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         this.context = context;
         initUI();
 
-        if (in != null) {
+        if(in != null) {
             try {
                 loadFile(in);
-            }
-            catch (IOException ioe) {
+            } catch(IOException ioe) {
                 JOptionPane.showMessageDialog(frame,
-                    "Error loading stream: " + ioe.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                                              "Error loading stream: " + ioe.getMessage(),
+                                              "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -104,15 +102,14 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         byte[] contents = new byte[1024];
         int len = 0, pos = 0;
 
-        while ((len = in.read(contents, 0, 1024)) != -1) {
+        while((len = in.read(contents, 0, 1024)) != -1) {
             ta.insert(new String(contents, 0, len), pos);
             pos += len;
         }
 
         try {
             in.close();
-        }
-        catch (IOException ignore) {
+        } catch(IOException ignore) {
         }
 
         /* Update the GlyphGutter and add back the DocumentListener */
@@ -139,12 +136,12 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         JPanel p = new JPanel();
         p.setLayout(new FlowLayout());
 
-        for (int i = 0; i < labels.length; i++) {
+        for(int i = 0; i < labels.length; i++) {
             JButton b = new JButton(labels[i]);
             b.addActionListener(this);
             p.add(b);
 
-            if (labels[i].equals("Save") && filename == null) {
+            if(labels[i].equals("Save") && filename == null) {
                 b.setEnabled(false);
             }
         }
@@ -171,7 +168,7 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
     /* If the number of lines in the JTextArea has changed then update the
        GlyphGutter */
     public void doChanged(DocumentEvent e) {
-        if (linecount != ta.getLineCount()) {
+        if(linecount != ta.getLineCount()) {
             gg.update();
             linecount = ta.getLineCount();
         }
@@ -190,29 +187,28 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
                 try {
                     interpreter.set("context", context);
                     interpreter.eval(ta.getText());
-                }
-                catch (bsh.EvalError err) {
+                } catch(bsh.EvalError err) {
                     currentPosition = err.getErrorLineNumber() - 1;
+
                     try {
                         // scroll to line of the error
                         int line = ta.getLineStartOffset(currentPosition);
                         Rectangle rect = ta.modelToView(line);
                         ta.scrollRectToVisible(rect);
-                    }
-                    catch (Exception e) {
+                    } catch(Exception e) {
                         // couldn't scroll to line, do nothing
                     }
+
                     gg.repaint();
 
                     JOptionPane.showMessageDialog(frame, "Error at line " +
-                        String.valueOf(err.getErrorLineNumber()) +
-                        "\n\n: " + err.getErrorText(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                }
-                catch (Exception e) {
+                                                  String.valueOf(err.getErrorLineNumber()) +
+                                                  "\n\n: " + err.getErrorText(),
+                                                  "Error", JOptionPane.ERROR_MESSAGE);
+                } catch(Exception e) {
                     JOptionPane.showMessageDialog(frame,
-                        "Error: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                                                  "Error: " + e.getMessage(),
+                                                  "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -223,9 +219,10 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
         JFileChooser chooser = new JFileChooser();
         chooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
             public boolean accept(File f) {
-                if (f.isDirectory() || f.getName().endsWith(".bsh")) {
+                if(f.isDirectory() || f.getName().endsWith(".bsh")) {
                     return true;
                 }
+
                 return false;
             }
 
@@ -236,9 +233,10 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
 
         int ret = chooser.showSaveDialog(frame);
 
-        if (ret == JFileChooser.APPROVE_OPTION) {
+        if(ret == JFileChooser.APPROVE_OPTION) {
             filename = chooser.getSelectedFile().getAbsolutePath();
-            if (!filename.endsWith(".bsh")) {
+
+            if(!filename.endsWith(".bsh")) {
                 filename += ".bsh";
             }
         }
@@ -246,29 +244,27 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
     }
 
     private void saveTextArea() {
-        if (filename == null) {
+        if(filename == null) {
             promptForSaveName();
         }
 
         FileOutputStream fos = null;
-        if (filename != null) {
+
+        if(filename != null) {
             try {
                 File f = new File(filename);
                 fos = new FileOutputStream(f);
                 String s = ta.getText();
                 fos.write(s.getBytes(), 0, s.length());
-            }
-            catch (IOException ioe) {
+            } catch(IOException ioe) {
                 JOptionPane.showMessageDialog(frame,
-                    "Error saving file: " + ioe.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            finally {
-                if (fos != null) {
+                                              "Error saving file: " + ioe.getMessage(),
+                                              "Error", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                if(fos != null) {
                     try {
                         fos.close();
-                    }
-                    catch (IOException ignore) {
+                    } catch(IOException ignore) {
                     }
                 }
             }
@@ -276,16 +272,13 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Run")) {
+        if(e.getActionCommand().equals("Run")) {
             startExecution();
-        }
-        else if (e.getActionCommand().equals("Close")) {
+        } else if(e.getActionCommand().equals("Close")) {
             frame.dispose();
-        }
-        else if (e.getActionCommand().equals("Save")) {
+        } else if(e.getActionCommand().equals("Save")) {
             saveTextArea();
-        }
-        else if (e.getActionCommand().equals("Clear")) {
+        } else if(e.getActionCommand().equals("Clear")) {
             ta.setText("");
         }
     }
@@ -319,7 +312,8 @@ class GlyphGutter extends JComponent {
         int lineCount = textArea.getLineCount() + 1;
 
         String dummy = Integer.toString(lineCount);
-        if (dummy.length() < 2) {
+
+        if(dummy.length() < 2) {
             dummy = DUMMY_STRING;
         }
 
@@ -349,11 +343,12 @@ class GlyphGutter extends JComponent {
         int startLine = clip.y / h;
         int endLine = (clip.y + clip.height) / h + 1;
         int width = getWidth();
-        if (endLine > lineCount) {
+
+        if(endLine > lineCount) {
             endLine = lineCount;
         }
 
-        for (int i = startLine; i < endLine; i++) {
+        for(int i = startLine; i < endLine; i++) {
             String text;
             text = Integer.toString(i + 1) + " ";
             int w = metrics.stringWidth(text);
@@ -363,7 +358,7 @@ class GlyphGutter extends JComponent {
             int x = width - ascent;
 
             // if currentPosition is not -1 then a red arrow will be drawn
-            if (i == debugger.getCurrentPosition()) {
+            if(i == debugger.getCurrentPosition()) {
                 drawArrow(g, ascent, x, y);
             }
         }
@@ -376,12 +371,15 @@ class GlyphGutter extends JComponent {
         int dy = y;
         arrow.addPoint(dx, dy + 3);
         arrow.addPoint(dx + 5, dy + 3);
-        for (x = dx + 5; x <= dx + 10; x++, y++) {
+
+        for(x = dx + 5; x <= dx + 10; x++, y++) {
             arrow.addPoint(x, y);
         }
-        for (x = dx + 9; x >= dx + 5; x--, y++) {
+
+        for(x = dx + 9; x >= dx + 5; x--, y++) {
             arrow.addPoint(x, y);
         }
+
         arrow.addPoint(dx + 5, dy + 7);
         arrow.addPoint(dx, dy + 7);
 

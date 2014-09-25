@@ -60,65 +60,64 @@ public class JavaFinder implements MethodFinder {
         ArrayList<ScriptEntry> result = new ArrayList<ScriptEntry>(10);
         ScriptEntry[] empty = new ScriptEntry[0];
 
-        if (basedir == null || !basedir.exists() ||
-            !basedir.isDirectory())
+        if(basedir == null || !basedir.exists() ||
+           !basedir.isDirectory()) {
             return empty;
+        }
 
         parcelName = basedir.getName();
-        if (parcelName.equals(ParcelZipper.CONTENTS_DIRNAME))
+
+        if(parcelName.equals(ParcelZipper.CONTENTS_DIRNAME)) {
             parcelName = basedir.getParentFile().getName();
+        }
 
         String[] classNames = findClassNames(basedir);
-        if (classNames != null && classNames.length != 0) {
+
+        if(classNames != null && classNames.length != 0) {
 
             ClassLoader classloader;
 
-            if (classpath == null)
+            if(classpath == null) {
                 classloader = getClassLoader(basedir);
-            else
+            } else {
                 classloader = getClassLoader();
+            }
 
-            for (int i = 0; i < classNames.length; i++)
-            {
-                try
-                {
+            for(int i = 0; i < classNames.length; i++) {
+                try {
                     Class clazz = classloader.loadClass(classNames[i]);
                     Method[] methods = clazz.getDeclaredMethods();
-                    for (int k = 0; k < methods.length; k++)
-                    {
-                        if (Modifier.isPublic(methods[k].getModifiers()))
-                        {
+
+                    for(int k = 0; k < methods.length; k++) {
+                        if(Modifier.isPublic(methods[k].getModifiers())) {
                             Class[] params = methods[k].getParameterTypes();
-                            if(params.length > 0)
-                            {
-                                if(params[0].getName().equals(FIRST_PARAM))
-                                {
+
+                            if(params.length > 0) {
+                                if(params[0].getName().equals(FIRST_PARAM)) {
                                     ScriptEntry entry =
                                         new ScriptEntry(classNames[i] + "." +
-                                            methods[k].getName(), parcelName);
+                                                        methods[k].getName(), parcelName);
                                     result.add(entry);
                                 }
                             }
                         }
                     }
-                }
-                catch (ClassNotFoundException e)
-                {
+                } catch(ClassNotFoundException e) {
                     System.err.println("Caught ClassNotFoundException loading: "
-                        + classNames[i]);
+                                       + classNames[i]);
                     continue;
-                }
-                catch (NoClassDefFoundError nc)
-                {
+                } catch(NoClassDefFoundError nc) {
                     System.err.println("Caught NoClassDefFoundErr loading: " +
-                        classNames[i]);
+                                       classNames[i]);
                     continue;
                 }
             }
         }
 
-        if (result.size() != 0)
+        if(result.size() != 0) {
             return result.toArray(empty);
+        }
+
         return empty;
     }
 
@@ -126,15 +125,15 @@ public class JavaFinder implements MethodFinder {
         int len = classpath.size();
         ArrayList<URL> urls = new ArrayList<URL>(len);
 
-        for (int i = 0; i < len; i++) {
+        for(int i = 0; i < len; i++) {
             try {
                 String s = classpath.get(i);
                 s = SVersionRCFile.toFileURL(s);
 
-                if (s != null)
+                if(s != null) {
                     urls.add(new URL(s));
-            }
-            catch (MalformedURLException mue) {
+                }
+            } catch(MalformedURLException mue) {
             }
         }
 
@@ -148,32 +147,32 @@ public class JavaFinder implements MethodFinder {
         try {
             Iterator<OfficeInstallation> offices = SVersionRCFile.createInstance().getVersions();
 
-            while (offices.hasNext()) {
+            while(offices.hasNext()) {
                 OfficeInstallation oi = offices.next();
                 String unoil = SVersionRCFile.getPathForUnoil(oi.getPath());
 
-                if (unoil != null) {
+                if(unoil != null) {
                     files.add(new File(unoil, "unoil.jar"));
                     break;
                 }
             }
-        }
-        catch (IOException ioe) {
+        } catch(IOException ioe) {
             return null;
         }
 
         URL[] urls = new URL[files.size()];
         String urlpath;
         File f;
-        for (int i = 0; i < urls.length; i++) {
+
+        for(int i = 0; i < urls.length; i++) {
             try {
                 f = files.get(i);
                 urlpath = SVersionRCFile.toFileURL(f.getAbsolutePath());
 
-                if (urlpath != null)
+                if(urlpath != null) {
                     urls[i] = new URL(urlpath);
-            }
-            catch (MalformedURLException mue) {
+                }
+            } catch(MalformedURLException mue) {
                 // do nothing, go on to next file
             }
         }
@@ -185,42 +184,45 @@ public class JavaFinder implements MethodFinder {
         ArrayList<File> result = new ArrayList<File>();
         File[] children = basedir.listFiles();
 
-        for (int i = 0; i < children.length; i++) {
-            if (children[i].isDirectory())
+        for(int i = 0; i < children.length; i++) {
+            if(children[i].isDirectory()) {
                 result.addAll(findFiles(children[i], suffix));
-            else if (children[i].getName().endsWith(suffix))
+            } else if(children[i].getName().endsWith(suffix)) {
                 result.add(children[i]);
+            }
         }
+
         return result;
     }
 
-    private String[] findClassNames(File basedir)
-    {
+    private String[] findClassNames(File basedir) {
         ArrayList<File> classFiles = findFiles(basedir, CLASS_SUFFIX);
-        if(classFiles == null || classFiles.size() == 0)
+
+        if(classFiles == null || classFiles.size() == 0) {
             return null;
+        }
 
         ArrayList<File> javaFiles = findFiles(basedir, JAVA_SUFFIX);
-        if(javaFiles == null || javaFiles.size() == 0)
+
+        if(javaFiles == null || javaFiles.size() == 0) {
             return null;
+        }
 
         ArrayList<String> result = new ArrayList<String>();
-        for (int i = 0; i < classFiles.size(); i++)
-        {
+
+        for(int i = 0; i < classFiles.size(); i++) {
             File classFile = classFiles.get(i);
             String className = classFile.getName();
             className = className.substring(0, className.lastIndexOf(CLASS_SUFFIX));
             boolean finished = false;
 
 
-            for (int j = 0; j < javaFiles.size() && !finished; j++)
-            {
+            for(int j = 0; j < javaFiles.size() && !finished; j++) {
                 File javaFile = javaFiles.get(j);
                 String javaName = javaFile.getName();
                 javaName = javaName.substring(0, javaName.lastIndexOf(JAVA_SUFFIX));
 
-                if (javaName.equals(className))
-                {
+                if(javaName.equals(className)) {
                     String path = classFile.getAbsolutePath();
                     path = path.substring(basedir.getAbsolutePath().length() + 1);
                     path = path.replace(File.separatorChar, '.');
@@ -232,6 +234,7 @@ public class JavaFinder implements MethodFinder {
                 }
             }
         }
+
         return result.toArray(new String[result.size()]);
     }
 }

@@ -47,14 +47,13 @@ public class _XFunctionProvider extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 result &= runGetFunctionTest((Parameters)tests.next());
             }
-        }
-        else {
+        } else {
             result = false;
         }
 
@@ -71,10 +70,11 @@ public class _XFunctionProvider extends MultiMethodTest {
 
         XFunction function = oObj.getFunction(logicalname);
 
-        if (function == null)
+        if(function == null) {
             output = "null";
-        else
+        } else {
             output = "XFunction.class";
+        }
 
         log.println("expected: " + expected + ", output: " + output);
         return (output.equals(expected));

@@ -52,34 +52,39 @@ public class ParcelFolderDataLoader extends UniFileLoader {
     }
 
     protected FileObject findPrimaryFile(FileObject fo) {
-        if (!fo.isFolder())
+        if(!fo.isFolder()) {
             return null;
+        }
 
         FileObject contents = fo.getFileObject(ParcelZipper.CONTENTS_DIRNAME);
-        if (contents == null)
+
+        if(contents == null) {
             return null;
+        }
 
         FileObject descriptor = contents.getFileObject(ParcelZipper.PARCEL_DESCRIPTOR_XML);
-        if (descriptor == null)
+
+        if(descriptor == null) {
             return null;
+        }
 
         return fo;
     }
 
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
-            SystemAction.get(CompileParcelAction.class),
-            SystemAction.get(BuildParcelAction.class),
-            SystemAction.get(ConfigureParcelAction.class),
-            null,
-            SystemAction.get(CutAction.class),
-            SystemAction.get(CopyAction.class),
-            null,
-            SystemAction.get(DeleteAction.class),
-            SystemAction.get(RenameAction.class),
-            null,
-            SystemAction.get(PropertiesAction.class),
-        };
+                   SystemAction.get(CompileParcelAction.class),
+                   SystemAction.get(BuildParcelAction.class),
+                   SystemAction.get(ConfigureParcelAction.class),
+                   null,
+                   SystemAction.get(CutAction.class),
+                   SystemAction.get(CopyAction.class),
+                   null,
+                   SystemAction.get(DeleteAction.class),
+                   SystemAction.get(RenameAction.class),
+                   null,
+                   SystemAction.get(PropertiesAction.class),
+               };
     }
 
     protected MultiDataObject createMultiObject(FileObject primaryFile) throws DataObjectExistsException, IOException {

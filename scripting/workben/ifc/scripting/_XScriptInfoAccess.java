@@ -48,14 +48,13 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 result &= runGetScriptLogicalNamesTest((Parameters)tests.next());
             }
-        }
-        else {
+        } else {
             result = false;
         }
 
@@ -69,21 +68,21 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
         log.println(testdata.get("description"));
 
-            log.println("In _XScriptInfoAccess.getScriptLogicalNames()");
-            String[] logicalNames = oObj.getScriptLogicalNames();
+        log.println("In _XScriptInfoAccess.getScriptLogicalNames()");
+        String[] logicalNames = oObj.getScriptLogicalNames();
 
-            if (logicalNames == null)
-                output = "null";
-            else if (logicalNames.length == 0)
-                output = "empty";
-            else {
-                for (int i = 0; i < logicalNames.length; i++) {
-                    if (logicalNames[i].equals(expected)) {
-                        output = logicalNames[i];
-                        break;
-                    }
+        if(logicalNames == null) {
+            output = "null";
+        } else if(logicalNames.length == 0) {
+            output = "empty";
+        } else {
+            for(int i = 0; i < logicalNames.length; i++) {
+                if(logicalNames[i].equals(expected)) {
+                    output = logicalNames[i];
+                    break;
                 }
             }
+        }
 
         log.println("expected: " + expected + ", output: " + output);
         return (output.equals(expected));
@@ -97,14 +96,13 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 result &= runGetImplementationsTest((Parameters)tests.next());
             }
-        }
-        else {
+        } else {
             result = false;
         }
 
@@ -119,22 +117,22 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
         log.println(testdata.get("description"));
 
-    // performs a basic check to see if 1 match (XScriptInfo) is returned
-    // the XScriptInfo object is tested more completely in _XScriptInfo
-    // which is drive from ScriptInfo
+        // performs a basic check to see if 1 match (XScriptInfo) is returned
+        // the XScriptInfo object is tested more completely in _XScriptInfo
+        // which is drive from ScriptInfo
 
         try {
             XScriptInfo[] impls = oObj.getImplementations(logicalname);
 
             // should only be one match
-            if (impls == null)
+            if(impls == null) {
                 output = "null";
-            else if (impls.length == 0)
+            } else if(impls.length == 0) {
                 output = "empty";
-            else
+            } else {
                 output = impls[0].getLogicalName();
-        }
-        catch (com.sun.star.uno.Exception e) {
+            }
+        } catch(com.sun.star.uno.Exception e) {
             log.println("Caught UNO Exception:" + e);
             output = "com.sun.star.uno.Exception";
         }
@@ -151,14 +149,13 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 result &= runGetAllImplementationsTest((Parameters)tests.next());
             }
-        }
-        else {
+        } else {
             result = false;
         }
 
@@ -174,18 +171,19 @@ public class _XScriptInfoAccess extends MultiMethodTest {
         log.println(testdata.get("description"));
 
         Object obj = ScriptingUtils.getDefault().getScriptStorage(
-            tParam.getMSF(), location);
+                         tParam.getMSF(), location);
 
         XScriptInfoAccess access = UnoRuntime.queryInterface(XScriptInfoAccess.class, obj);
 
         XScriptInfo[] impls = access.getAllImplementations();
 
-        if (impls == null || impls.length == 0) {
+        if(impls == null || impls.length == 0) {
             output = "empty";
-        }
-        else {
-            for (int i = 0; i < impls.length - 1; i++)
+        } else {
+            for(int i = 0; i < impls.length - 1; i++) {
                 output += impls[i].getLogicalName() + ",";
+            }
+
             output += impls[impls.length - 1].getLogicalName();
         }
 

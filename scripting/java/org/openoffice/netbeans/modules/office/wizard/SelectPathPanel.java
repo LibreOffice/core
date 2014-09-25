@@ -36,7 +36,7 @@ import org.openoffice.idesupport.SVersionRCFile;
 /** A single panel descriptor for a wizard.
  * You probably want to make a wizard iterator to hold it.
  */
-public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel */ {
+public class SelectPathPanel implements WizardDescriptor.Panel { /* .FinishPanel */
 
     /** The visual component that displays this panel.
      * If you need to access the component from this class,
@@ -49,11 +49,10 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
     public SelectPathPanel() {
         office = OfficeSettings.getDefault().getOfficeDirectory();
 
-        if (office == null) {
+        if(office == null) {
             try {
                 office = SVersionRCFile.createInstance().getDefaultVersion();
-            }
-            catch (java.io.IOException ioe) {}
+            } catch(java.io.IOException ioe) {}
         }
     }
 
@@ -62,9 +61,10 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
     // but never displayed, or not all panels are displayed, it is better to
     // create only those which really need to be visible.
     public Component getComponent() {
-        if (component == null) {
+        if(component == null) {
             component = new SelectPathVisualPanel(this);
         }
+
         return component;
     }
 
@@ -87,22 +87,25 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
 
     private final Set listeners = new HashSet(1); // Set<ChangeListener>
     public final void addChangeListener(ChangeListener l) {
-        synchronized (listeners) {
+        synchronized(listeners) {
             listeners.add(l);
         }
     }
     public final void removeChangeListener(ChangeListener l) {
-        synchronized (listeners) {
+        synchronized(listeners) {
             listeners.remove(l);
         }
     }
     protected final void fireChangeEvent() {
         Iterator it;
-        synchronized (listeners) {
+
+        synchronized(listeners) {
             it = new HashSet(listeners).iterator();
         }
+
         ChangeEvent ev = new ChangeEvent(this);
-        while (it.hasNext()) {
+
+        while(it.hasNext()) {
             ((ChangeListener)it.next()).stateChanged(ev);
         }
     }

@@ -41,13 +41,17 @@ public class ParcelDescriptorDataObject extends MultiDataObject {
 
     private void init() {
         FileObject fo = getPrimaryFile();
-        if (FileUtil.toFile(fo) != null)
+
+        if(FileUtil.toFile(fo) != null) {
             canParse = true;
+        }
 
         CookieSet cookies = getCookieSet();
         cookies.add(new ParcelDescriptorEditorSupport(this));
-        if (canParse)
+
+        if(canParse) {
             cookies.add(new ParcelDescriptorParserSupport(getPrimaryFile()));
+        }
     }
 
     public HelpCtx getHelpCtx() {
@@ -55,10 +59,11 @@ public class ParcelDescriptorDataObject extends MultiDataObject {
     }
 
     protected Node createNodeDelegate() {
-        if (canParse)
+        if(canParse) {
             return new ParcelDescriptorDataNode(this);
-        else
+        } else {
             return new ParcelDescriptorDataNode(this, Children.LEAF);
+        }
     }
 
     // If you made an Editor Support you will want to add these methods:

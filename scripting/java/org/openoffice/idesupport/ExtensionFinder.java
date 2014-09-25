@@ -39,18 +39,23 @@ public class ExtensionFinder implements MethodFinder {
         ArrayList<ScriptEntry> files = new ArrayList<ScriptEntry>(10);
         ScriptEntry[] empty = new ScriptEntry[0];
 
-        if (basedir == null || !basedir.exists() ||
-            !basedir.isDirectory())
+        if(basedir == null || !basedir.exists() ||
+           !basedir.isDirectory()) {
             return empty;
+        }
 
         parcelName = basedir.getName();
-        if (parcelName.equals(ParcelZipper.CONTENTS_DIRNAME))
+
+        if(parcelName.equals(ParcelZipper.CONTENTS_DIRNAME)) {
             parcelName = basedir.getParentFile().getName();
+        }
 
         findFiles(files, basedir, parcelName);
 
-        if (files.size() != 0)
+        if(files.size() != 0) {
             return files.toArray(empty);
+        }
+
         return empty;
     }
 
@@ -58,16 +63,16 @@ public class ExtensionFinder implements MethodFinder {
         File[] children = basedir.listFiles();
         File f;
 
-        for (int i = 0; i < children.length; i++) {
+        for(int i = 0; i < children.length; i++) {
             f = children[i];
 
-            if (f.isDirectory())
+            if(f.isDirectory()) {
                 findFiles(list, f, parcelName);
-            else {
-                for (int j = 0; j < extensions.length; j++) {
-                    if (f.getName().endsWith(extensions[j])) {
+            } else {
+                for(int j = 0; j < extensions.length; j++) {
+                    if(f.getName().endsWith(extensions[j])) {
                         ScriptEntry entry = new ScriptEntry(language,
-                            f.getName(), parcelName);
+                                                            f.getName(), parcelName);
                         list.add(entry);
                         break;
                     }

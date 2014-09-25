@@ -33,116 +33,111 @@ import util.AccessibilityTools;
 */
 public class SecurityDialogUtil extends Thread {
 
-private XMultiServiceFactory xMSF = null;
-private String errorMsg;
-private String btnName;
-private boolean checkBox;
+    private XMultiServiceFactory xMSF = null;
+    private String errorMsg;
+    private String btnName;
+    private boolean checkBox;
 
-/**
- * Constructor.
- */
-public SecurityDialogUtil(XMultiServiceFactory xMSF, String btnName, boolean checkBox )
-{
-    this.xMSF = xMSF;
-    this.btnName = btnName;
-    this.checkBox = checkBox;
-    this.errorMsg = "";
-}
-
-/**
- * Returns the error message that occurred while
- * accessing and pressing the button.
- * @return Error message.
- */
-public String getErrorMessage()
-{
-    return errorMsg;
-}
-
-
-
-/**
- * Press the named button in the currently visible dialog box.
- */
-@Override
-public void run()
-{
-    // wait for the message box to appear
-    try
-    {
-        Thread.sleep(4000) ;
-    }
-    catch (InterruptedException e)
-    {
-        System.err.println("While waiting :" + e.getMessage()) ;
+    /**
+     * Constructor.
+     */
+    public SecurityDialogUtil(XMultiServiceFactory xMSF, String btnName, boolean checkBox) {
+        this.xMSF = xMSF;
+        this.btnName = btnName;
+        this.checkBox = checkBox;
+        this.errorMsg = "";
     }
 
-    // access the message box
-
-     XAccessibleContext xCon = null;
-    try
-    {
-        XInterface x = (XInterface) xMSF.createInstance(
-                                    "com.sun.star.awt.Toolkit") ;
-        XExtendedToolkit tk =
-                UnoRuntime.queryInterface(
-                                XExtendedToolkit.class,x);
-        new AccessibilityTools();
-        XWindow xWindow = UnoRuntime.queryInterface(
-                                XWindow.class,tk.getActiveTopWindow());
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-        xCon = xRoot.getAccessibleContext();
+    /**
+     * Returns the error message that occurred while
+     * accessing and pressing the button.
+     * @return Error message.
+     */
+    public String getErrorMessage() {
+        return errorMsg;
     }
-    catch (Exception e)
-    {
-        errorMsg="Exception while using Accessibility\n"+
-                                                    e.getMessage();
-        return;
-    }
-    // get the button
-    XInterface oObj = null;
-    try
-    {
-        int count = xCon.getAccessibleChildCount();
-        for (int i=0; i<count; i++) {
-            XAccessible xAcc = xCon.getAccessibleChild(i);
-            String name =
-                    xAcc.getAccessibleContext().getAccessibleName();
-            // check for button
-            if ( name.equals( btnName ) && ( UnoRuntime.queryInterface(
-                                    XButton.class, xAcc ) != null ) )
-            {
-                oObj = xAcc.getAccessibleContext();
-            }
-            // check for checkbox
-            if ( checkBox &&  ( UnoRuntime.queryInterface( XCheckBox.class, xAcc ) != null ) )
-            {
-                // want to do this action now
-                // probably equates to toggle cb
-                XAccessibleAction xAction =
-                        UnoRuntime.queryInterface(
-                XAccessibleAction.class, xAcc.getAccessibleContext());
-                xAction.doAccessibleAction(0);
 
-                // might be worth using oObj2 to double check the new state??
-            }
+
+
+    /**
+     * Press the named button in the currently visible dialog box.
+     */
+    @Override
+    public void run() {
+        // wait for the message box to appear
+        try {
+            Thread.sleep(4000) ;
+        } catch(InterruptedException e) {
+            System.err.println("While waiting :" + e.getMessage()) ;
         }
-        if (oObj == null) {
-            errorMsg="No button has been found:\n"+
-                     "No action is triggered.";
+
+        // access the message box
+
+        XAccessibleContext xCon = null;
+
+        try {
+            XInterface x = (XInterface) xMSF.createInstance(
+                               "com.sun.star.awt.Toolkit") ;
+            XExtendedToolkit tk =
+                UnoRuntime.queryInterface(
+                    XExtendedToolkit.class, x);
+            new AccessibilityTools();
+            XWindow xWindow = UnoRuntime.queryInterface(
+                                  XWindow.class, tk.getActiveTopWindow());
+            XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+            xCon = xRoot.getAccessibleContext();
+        } catch(Exception e) {
+            errorMsg = "Exception while using Accessibility\n" +
+                       e.getMessage();
             return;
         }
-        // press button
-        XAccessibleAction xAction =
+
+        // get the button
+        XInterface oObj = null;
+
+        try {
+            int count = xCon.getAccessibleChildCount();
+
+            for(int i = 0; i < count; i++) {
+                XAccessible xAcc = xCon.getAccessibleChild(i);
+                String name =
+                    xAcc.getAccessibleContext().getAccessibleName();
+
+                // check for button
+                if(name.equals(btnName) && (UnoRuntime.queryInterface(
+                                                XButton.class, xAcc) != null)) {
+                    oObj = xAcc.getAccessibleContext();
+                }
+
+                // check for checkbox
+                if(checkBox && (UnoRuntime.queryInterface(XCheckBox.class, xAcc) != null)) {
+                    // want to do this action now
+                    // probably equates to toggle cb
+                    XAccessibleAction xAction =
+                        UnoRuntime.queryInterface(
+                            XAccessibleAction.class, xAcc.getAccessibleContext());
+                    xAction.doAccessibleAction(0);
+
+                    // might be worth using oObj2 to double check the new state??
+                }
+            }
+
+            if(oObj == null) {
+                errorMsg = "No button has been found:\n" +
+                           "No action is triggered.";
+                return;
+            }
+
+            // press button
+            XAccessibleAction xAction =
                 UnoRuntime.queryInterface(
-        XAccessibleAction.class, oObj);
-        xAction.doAccessibleAction(0);
+                    XAccessibleAction.class, oObj);
+            xAction.doAccessibleAction(0);
+        } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            errorMsg = "Exception\n" +
+                       e.getMessage();
+        }
     }
-    catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-        errorMsg="Exception\n"+
-                        e.getMessage();
-    }
-}
 
 }
 

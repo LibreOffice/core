@@ -40,8 +40,7 @@ import org.openoffice.idesupport.LocalOffice;
  * with options appropriate for establishing local connection.
  */
 public final class LocalOfficeImpl
-    extends LocalOffice
-{
+    extends LocalOffice {
     private final static String     STORAGE_MRG_SINGLETON =
         "/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager";
 
@@ -57,11 +56,10 @@ public final class LocalOfficeImpl
      */
     @Override
     protected void connect(String officePath, int port)
-        throws ConnectException
-    {
+    throws ConnectException {
         try {
             bootstrap(port);
-        } catch (java.lang.Exception ex) {
+        } catch(java.lang.Exception ex) {
             throw new ConnectException(ex.getMessage());
         }
     }
@@ -72,35 +70,34 @@ public final class LocalOfficeImpl
      * @param uri is an identifier of storage has to be refreshed.
      */
     @Override
-    public void refreshStorage(String uri)
-    {
+    public void refreshStorage(String uri) {
         try {
             Object  object = null;
             object      = mComponentContext.getValueByName(STORAGE_MRG_SINGLETON);
             XScriptStorageManager storageMgr;
             storageMgr  = UnoRuntime.queryInterface(
-                XScriptStorageManager.class, object);
+                              XScriptStorageManager.class, object);
             storageMgr.refreshScriptStorage(uri);
-        } catch (java.lang.Exception ex) {
-System.out.println("*** LocalOfficeImpl.refreshStorage: FAILED " + ex.getMessage());
-System.out.println("*** LocalOfficeImpl.refreshStorage: FAILED " + ex.getClass().getName());
+        } catch(java.lang.Exception ex) {
+            System.out.println("*** LocalOfficeImpl.refreshStorage: FAILED " + ex.getMessage());
+            System.out.println("*** LocalOfficeImpl.refreshStorage: FAILED " + ex.getClass().getName());
         }
-System.out.println("*** LocalOfficeImpl.refreshStorage: DONE");
+
+        System.out.println("*** LocalOfficeImpl.refreshStorage: DONE");
     }
 
     /**
      * Closes the connection to the running office.
      */
     @Override
-    public void disconnect()
-    {
-/*
-        if(mComponentFactory != null) {
-            XComponent  comp    = (XComponent)UnoRuntime.queryInterface(
-                XComponent.class, mComponentFactory);
-            comp.dispose();
-        }
-*/
+    public void disconnect() {
+        /*
+                if(mComponentFactory != null) {
+                    XComponent  comp    = (XComponent)UnoRuntime.queryInterface(
+                        XComponent.class, mComponentFactory);
+                    comp.dispose();
+                }
+        */
     }
 
     /**
@@ -112,22 +109,21 @@ System.out.println("*** LocalOfficeImpl.refreshStorage: DONE");
      * @param port is a communication port.
      */
     private void bootstrap(int port)
-        throws java.lang.Exception
-    {
+    throws java.lang.Exception {
         Object          object;
         mComponentContext   = Bootstrap.createInitialComponentContext(null);
         XUnoUrlResolver urlresolver = UnoUrlResolver.create(mComponentContext);
         object              = urlresolver.resolve(
-            "uno:socket,host=localhost,port=" +
-            port +
-            ";urp;StarOffice.ServiceManager");
+                                  "uno:socket,host=localhost,port=" +
+                                  port +
+                                  ";urp;StarOffice.ServiceManager");
         mComponentFactory   = UnoRuntime.queryInterface(
-            XMultiComponentFactory.class, object);
+                                  XMultiComponentFactory.class, object);
         XPropertySet    factoryProps;
         factoryProps        = UnoRuntime.queryInterface(
-            XPropertySet.class, mComponentFactory);
+                                  XPropertySet.class, mComponentFactory);
         object              = factoryProps.getPropertyValue("DefaultContext");
         mComponentContext   = UnoRuntime.queryInterface(
-            XComponentContext.class, object);
+                                  XComponentContext.class, object);
     }
 }

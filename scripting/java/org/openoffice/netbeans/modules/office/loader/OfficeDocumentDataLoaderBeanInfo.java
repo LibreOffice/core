@@ -46,14 +46,14 @@ public class OfficeDocumentDataLoaderBeanInfo extends SimpleBeanInfo {
         try {
             // I.e. MultiFileLoader.class or UniFileLoader.class.
             return new BeanInfo[] {Introspector.getBeanInfo(OfficeDocumentDataLoader.class.getSuperclass())};
-        } catch (IntrospectionException ie) {
+        } catch(IntrospectionException ie) {
             ErrorManager.getDefault().notify(ie);
             return null;
         }
     }
 
     public Image getIcon(int type) {
-        if (type == BeanInfo.ICON_COLOR_16x16 || type == BeanInfo.ICON_MONO_16x16) {
+        if(type == BeanInfo.ICON_COLOR_16x16 || type == BeanInfo.ICON_MONO_16x16) {
             return Utilities.loadImage("org/openoffice/netbeans/modules/office/resources/OfficeIcon.gif");
         } else {
             return Utilities.loadImage("org/openoffice/netbeans/modules/office/resources/OfficeIcon32.gif");

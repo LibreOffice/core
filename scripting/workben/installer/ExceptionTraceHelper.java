@@ -21,36 +21,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 // class for propagating the exception stack traces across the Java/UNO bridge
-public class ExceptionTraceHelper
-{
-    public static String getTrace( Exception e )
-    {
+public class ExceptionTraceHelper {
+    public static String getTrace(Exception e) {
         ByteArrayOutputStream baos = null;
         PrintStream ps = null;
         String result = "";
-        try
-        {
-            baos = new ByteArrayOutputStream( 128 );
-            ps = new PrintStream( baos );
-            e.printStackTrace( ps );
-        }
-        finally
-        {
-            try
-            {
-                if ( baos != null )
-                {
+
+        try {
+            baos = new ByteArrayOutputStream(128);
+            ps = new PrintStream(baos);
+            e.printStackTrace(ps);
+        } finally {
+            try {
+                if(baos != null) {
                     baos.close();
                 }
-                if ( ps != null )
-                {
+
+                if(ps != null) {
                     ps.close();
                 }
-            }
-            catch ( Exception excp )
-            {
+            } catch(Exception excp) {
             }
         }
+
         return result;
     }
 }

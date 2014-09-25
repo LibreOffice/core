@@ -30,9 +30,11 @@ public class BinaryOnlyFilter implements FileFilter {
         return filter;
     }
     public boolean validate(String name) {
-        for (int i = 0; i < EXTENSIONS.length; i++)
-            if (name.endsWith(EXTENSIONS[i]))
+        for(int i = 0; i < EXTENSIONS.length; i++)
+            if(name.endsWith(EXTENSIONS[i])) {
                 return true;
+            }
+
         return false;
     }
 

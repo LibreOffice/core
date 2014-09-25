@@ -24,7 +24,7 @@ import javax.swing.*;
 public class ZipData {
 
     public boolean extractEntry(String entry, String destination,
-            JLabel statusLabel) {
+                                JLabel statusLabel) {
 
         OutputStream out = null;
         InputStream in = null;
@@ -32,53 +32,58 @@ public class ZipData {
         System.out.println("Copying: " + entry);
         System.out.println("To: " + destination);
 
-        if (statusLabel != null) {
+        if(statusLabel != null) {
             statusLabel.setText("Copying " + entry);
         }
 
         String entryName;
-        if (entry.lastIndexOf("/") != -1) {
+
+        if(entry.lastIndexOf("/") != -1) {
             entryName = entry.substring(entry.lastIndexOf("/") + 1);
         } else {
             entryName = entry;
         }
 
         String destName;
-        if (destination.lastIndexOf(File.separator) != -1) {
+
+        if(destination.lastIndexOf(File.separator) != -1) {
             destName = destination.substring(destination
-                    .lastIndexOf(File.separator) + 1);
+                                             .lastIndexOf(File.separator) + 1);
         } else {
             destName = destination;
         }
 
-        if (!destName.equals(entryName))
+        if(!destName.equals(entryName)) {
             destination = destination.concat(entryName);
+        }
 
         System.out.println("Unzipping " + entry + " to " + destination);
 
-        if (!entry.startsWith("/"))
+        if(!entry.startsWith("/")) {
             entry = "/" + entry;
+        }
 
         in = this.getClass().getResourceAsStream(entry);
-        if (in == null) {
+
+        if(in == null) {
             System.err.println("File " + entry + " not found in jar file");
 
-            if (statusLabel != null)
+            if(statusLabel != null)
                 statusLabel.setText("Failed extracting " + entry
-                        + "see SFramework.log for more information");
+                                    + "see SFramework.log for more information");
 
             return false;
         }
 
         try {
             out = new FileOutputStream(destination);
-        } catch (IOException ioe) {
+        } catch(IOException ioe) {
             System.err.println("Error opening " + destination + ": "
-                    + ioe.getMessage());
+                               + ioe.getMessage());
 
-            if (statusLabel != null)
+            if(statusLabel != null)
                 statusLabel.setText("Error opening" + destination
-                        + "see SFramework.log for more information");
+                                    + "see SFramework.log for more information");
 
             return false;
         }
@@ -87,23 +92,26 @@ public class ZipData {
             byte[] bytes = new byte[1024];
             int len;
 
-            while ((len = in.read(bytes)) != -1)
+            while((len = in.read(bytes)) != -1) {
                 out.write(bytes, 0, len);
-        } catch (IOException ioe) {
+            }
+        } catch(IOException ioe) {
             System.err.println("Error writing " + destination + ": "
-                    + ioe.getMessage());
+                               + ioe.getMessage());
 
-            if (statusLabel != null)
+            if(statusLabel != null)
                 statusLabel.setText("Failed writing " + destination
-                        + "see SFramework.log for more information");
+                                    + "see SFramework.log for more information");
+
             return false;
         } finally {
             try {
                 in.close();
                 out.close();
-            } catch (IOException ioe) {
+            } catch(IOException ioe) {
             }
         }
+
         return true;
     }
 }

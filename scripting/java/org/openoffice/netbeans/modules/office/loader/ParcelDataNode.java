@@ -55,7 +55,7 @@ public class ParcelDataNode extends DataNode {
         boolean isCut = false;
 
         public ParcelPasteType(ParcelDataNode sourceParcel,
-            File targetDocument, boolean isCut) {
+                               File targetDocument, boolean isCut) {
             this.sourceParcel = sourceParcel;
             this.targetDocument = targetDocument;
             this.isCut = isCut;
@@ -66,15 +66,15 @@ public class ParcelDataNode extends DataNode {
                 (ParcelCookie)sourceParcel.getCookie(ParcelCookie.class);
             parcelCookie.deploy(targetDocument);
 
-            if (isCut) {
+            if(isCut) {
                 FileObject fo = sourceParcel.getDataObject().getPrimaryFile();
+
                 try {
                     fo.delete();
-                }
-                catch (IOException ioe) {}
+                } catch(IOException ioe) {}
+
                 return ExTransferable.EMPTY;
-            }
-            else {
+            } else {
                 return null;
             }
         }

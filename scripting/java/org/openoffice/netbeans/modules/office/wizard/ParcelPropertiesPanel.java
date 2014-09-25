@@ -48,9 +48,10 @@ public class ParcelPropertiesPanel implements WizardDescriptor.FinishPanel {
     // but never displayed, or not all panels are displayed, it is better to
     // create only those which really need to be visible.
     public Component getComponent() {
-        if (component == null) {
+        if(component == null) {
             component = new ParcelPropertiesVisualPanel(this);
         }
+
         return component;
     }
 

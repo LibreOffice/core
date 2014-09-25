@@ -57,24 +57,24 @@ public class JavaKit extends ExtKit {
 
     public static final String JAVA_MIME_TYPE = "text/x-java"; // NOI18N
 
-    static final long serialVersionUID =-5445829962533684922L;
+    static final long serialVersionUID = -5445829962533684922L;
 
     static {
-        Settings.addInitializer( new JavaSettingsInitializer( JavaKit.class ) );
+        Settings.addInitializer(new JavaSettingsInitializer(JavaKit.class));
         Settings.reset();
 
         URL skeleton = null, body = null;
         skeleton = JavaKit.class.getResource("OOo.jcs");
         body     = JavaKit.class.getResource("OOo.jcb");
 
-        if (skeleton != null && body != null) {
+        if(skeleton != null && body != null) {
             DAFileProvider provider = new DAFileProvider(
                 new URLAccessor(skeleton),
                 new URLAccessor(body));
 
             JCBaseFinder finder = new JCBaseFinder();
-            finder.append( provider );
-            JavaCompletion.setFinder( finder );
+            finder.append(provider);
+            JavaCompletion.setFinder(finder);
         }
     }
 
@@ -110,7 +110,7 @@ public class JavaKit extends ExtKit {
 
     protected void initDocument(BaseDocument doc) {
         doc.addLayer(new JavaDrawLayerFactory.JavaLayer(),
-                JavaDrawLayerFactory.JAVA_LAYER_VISIBILITY);
+                     JavaDrawLayerFactory.JAVA_LAYER_VISIBILITY);
         doc.addDocumentListener(new JavaDrawLayerFactory.LParenWatcher());
     }
 
@@ -131,8 +131,7 @@ public class JavaKit extends ExtKit {
         /** Not implemented
          */
         public void append(byte[] buffer, int off, int len)
-            throws IOException
-        {
+        throws IOException {
             throw new IllegalArgumentException("read only!");
         }
 
@@ -150,7 +149,8 @@ public class JavaKit extends ExtKit {
          */
         public void read(byte[] buffer, int off, int len) throws IOException {
             InputStream str = getStream(actOff);
-            while (len > 0) {
+
+            while(len > 0) {
                 int count = str.read(buffer, off, len);
                 streamOff += count;
                 off += count;
@@ -162,13 +162,14 @@ public class JavaKit extends ExtKit {
          *  @param requestWrite if true, file is opened for read/write
          */
         public void open(boolean requestWrite) throws IOException {
-            if(requestWrite)
+            if(requestWrite) {
                 throw new IllegalArgumentException("read only!");
+            }
         }
 
         /** Closes DataAccessor file resource  */
         public void close() throws IOException {
-            if (stream != null) {
+            if(stream != null) {
                 stream.close();
                 stream = null;
             }
@@ -181,7 +182,7 @@ public class JavaKit extends ExtKit {
          *             at which the next read or write occurs.
          */
         public long getFilePointer() throws IOException {
-           return actOff;
+            return actOff;
         }
 
         /** Clears the file and sets the offset to 0 */
@@ -201,7 +202,7 @@ public class JavaKit extends ExtKit {
          *  offset position
          */
         private InputStream getStream(int off) throws IOException {
-            if (streamOff > off && stream != null) {
+            if(streamOff > off && stream != null) {
                 stream.close();
                 stream = null;
             }
@@ -211,10 +212,13 @@ public class JavaKit extends ExtKit {
                 streamOff = 0;
             }
 
-            while (streamOff < off) {
+            while(streamOff < off) {
                 long len = stream.skip(off - streamOff);
                 streamOff += (int)len;
-                if (len == 0) throw new IOException("EOF");
+
+                if(len == 0) {
+                    throw new IOException("EOF");
+                }
             }
 
             return stream;
@@ -224,7 +228,7 @@ public class JavaKit extends ExtKit {
             try {
                 int l =  url.openConnection().getContentLength();
                 return l;
-            } catch (IOException e) {
+            } catch(IOException e) {
                 return 0;
             }
         }
