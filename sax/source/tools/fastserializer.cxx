@@ -99,9 +99,13 @@ namespace sax_fastparser {
         return sBuf.makeStringAndClear();
     }
 
-    void FastSaxSerializer::write( const OUString& s )
+    void FastSaxSerializer::write( const OUString& sOutput )
     {
-        OString sOutput( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ) );
+        write( OUStringToOString(sOutput, RTL_TEXTENCODING_UTF8) );
+    }
+
+    void FastSaxSerializer::write( const OString& sOutput )
+    {
         writeBytes( Sequence< sal_Int8 >(
                     reinterpret_cast< const sal_Int8*>( sOutput.getStr() ),
                     sOutput.getLength() ) );
@@ -189,12 +193,6 @@ namespace sax_fastparser {
         writeFastAttributeList(Attribs);
 
         writeBytes(toUnoSequence(maSlashAndClosingBracket));
-    }
-
-    void SAL_CALL FastSaxSerializer::characters( const OUString& aChars )
-        throw (SAXException, RuntimeException)
-    {
-        write( aChars );
     }
 
     void SAL_CALL FastSaxSerializer::setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )

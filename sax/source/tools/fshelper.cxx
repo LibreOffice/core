@@ -107,28 +107,34 @@ void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, XFastAttribut
 
 FastSerializerHelper* FastSerializerHelper::write(const char* value)
 {
-    return write(OUString::createFromAscii(value));
+    return write(OString(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::write(const OUString& value)
 {
-    mpSerializer->characters(value);
+    mpSerializer->write(value);
+    return this;
+}
+
+FastSerializerHelper* FastSerializerHelper::write(const OString& value)
+{
+    mpSerializer->write(value);
     return this;
 }
 
 FastSerializerHelper* FastSerializerHelper::write(sal_Int32 value)
 {
-    return write(OUString::number(value));
+    return write(OString::number(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::write(sal_Int64 value)
 {
-    return write(OUString::number(value));
+    return write(OString::number(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::write(double value)
 {
-    return write(OUString::number(value));
+    return write(OString::number(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::writeEscaped(const char* value)
