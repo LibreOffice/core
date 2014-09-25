@@ -1222,9 +1222,9 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
     (*m_pFileStream).WriteUChar( aDate.GetMonth() );
     (*m_pFileStream).WriteUChar( aDate.GetDay() );
     (*m_pFileStream).WriteUInt32( (sal_uInt32)0 );                                             // number of data records
-    (*m_pFileStream).WriteUInt16( (sal_uInt16)((m_pColumns->getCount()+1) * 32 + 1) );  // header information,
+    (*m_pFileStream).WriteUInt16( ((m_pColumns->getCount()+1) * 32 + 1) );  // header information,
                                                                         // pColumns contains always an additional column
-    (*m_pFileStream).WriteUInt16( (sal_uInt16) 0 );                                     // record length will be determined later
+    (*m_pFileStream).WriteUInt16( 0 );                                     // record length will be determined later
     m_pFileStream->Write(aBuffer, 20);
 
     sal_uInt16 nRecLength = 1;                                              // Length 1 for deleted flag

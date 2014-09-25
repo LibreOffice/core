@@ -191,7 +191,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
             0x7ffffff > (( lLen  = aStream.GetSize() )
                                     / sizeof( sal_Unicode )) + 1 )
         {
-            aStream.WriteUInt16( (sal_Unicode)'\0' );
+            aStream.WriteUInt16( '\0' );
 
             aStream.Seek( 0 );
             aStream.ResetError();

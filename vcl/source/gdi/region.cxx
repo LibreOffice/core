@@ -1642,7 +1642,7 @@ SvStream& WriteRegion( SvStream& rOStrm, const Region& rRegion )
         aRegionType = REGION_RECTANGLE;
     }
 
-    rOStrm.WriteUInt16( (sal_uInt16)aRegionType );
+    rOStrm.WriteUInt16( aRegionType );
 
     // get RegionBand
     const RegionBand* pRegionBand = rRegion.getRegionBand();

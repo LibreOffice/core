@@ -263,7 +263,7 @@ void RegionBand::save(SvStream& rOStrm) const
     while(pBand)
     {
         // put boundaries
-        rOStrm.WriteUInt16( (sal_uInt16)STREAMENTRY_BANDHEADER );
+        rOStrm.WriteUInt16( STREAMENTRY_BANDHEADER );
         rOStrm.WriteInt32( pBand->mnYTop );
         rOStrm.WriteInt32( pBand->mnYBottom );
 
@@ -273,7 +273,7 @@ void RegionBand::save(SvStream& rOStrm) const
         while(pSep)
         {
             // put separation
-            rOStrm.WriteUInt16( (sal_uInt16)STREAMENTRY_SEPARATION );
+            rOStrm.WriteUInt16( STREAMENTRY_SEPARATION );
             rOStrm.WriteInt32( pSep->mnXLeft );
             rOStrm.WriteInt32( pSep->mnXRight );
 
@@ -285,7 +285,7 @@ void RegionBand::save(SvStream& rOStrm) const
     }
 
     // put endmarker
-    rOStrm.WriteUInt16( (sal_uInt16)STREAMENTRY_END );
+    rOStrm.WriteUInt16( STREAMENTRY_END );
 }
 
 bool RegionBand::isSingleRectangle() const

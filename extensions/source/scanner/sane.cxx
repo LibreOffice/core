@@ -604,10 +604,10 @@ bool Sane::Start( BitmapTransporter& rBitmap )
     aConverter.WriteUInt32( (sal_uInt32)40 );
     aConverter.WriteUInt32( (sal_uInt32)0 ); // fill in width later
     aConverter.WriteUInt32( (sal_uInt32)0 ); // fill in height later
-    aConverter.WriteUInt16( (sal_uInt16)1 );
+    aConverter.WriteUInt16( 1 );
     // create header for 24 bits
     // correct later if necessary
-    aConverter.WriteUInt16( (sal_uInt16)24 );
+    aConverter.WriteUInt16( 24 );
     aConverter.WriteUInt32( (sal_uInt32)0 );
     aConverter.WriteUInt32( (sal_uInt32)0 );
     aConverter.WriteUInt32( (sal_uInt32)0 );
@@ -768,10 +768,10 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 aConverter.Seek( 10 );
                 aConverter.WriteUInt32( (sal_uInt32)64 );
                 aConverter.Seek( 28 );
-                aConverter.WriteUInt16( (sal_uInt16) 1 );
+                aConverter.WriteUInt16( 1 );
                 aConverter.Seek( 54 );
                 // write color table
-                aConverter.WriteUInt16( (sal_uInt16)0xffff );
+                aConverter.WriteUInt16( 0xffff );
                 aConverter.WriteUChar( 0xff );
                 aConverter.WriteUChar( 0 );
                 aConverter.WriteUInt32( (sal_uInt32)0 );
@@ -782,7 +782,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                  aConverter.Seek( 10 );
                  aConverter.WriteUInt32( (sal_uInt32)1084 );
                 aConverter.Seek( 28 );
-                aConverter.WriteUInt16( (sal_uInt16) 8 );
+                aConverter.WriteUInt16( 8 );
                 aConverter.Seek( 54 );
                 // write color table
                 for( nLine = 0; nLine < 256; nLine++ )

@@ -148,7 +148,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
 
     // version 1
     WriteColor( rOStm, rImplWallpaper.maColor );
-    rOStm.WriteUInt16( (sal_uInt16) rImplWallpaper.meStyle );
+    rOStm.WriteUInt16( rImplWallpaper.meStyle );
 
     // version 2
     rOStm.WriteUChar( bRect ).WriteUChar( bGrad ).WriteUChar( bBmp ).WriteUChar( bDummy ).WriteUChar( bDummy ).WriteUChar( bDummy );

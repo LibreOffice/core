@@ -352,7 +352,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const PolyPolygon& rPol
                 nAllFlagCount);             // Flags themselves
 
             rOStm.WriteInt32( nActionSize );
-            rOStm.WriteUInt16( (sal_uInt16)nAllPolygonCount );
+            rOStm.WriteUInt16( nAllPolygonCount );
 
             for(a = 0; a < nPolygonCount; a++)
             {

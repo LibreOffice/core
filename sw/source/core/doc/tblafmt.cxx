@@ -535,7 +535,7 @@ bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, sNumFmtString,
         RTL_TEXTENCODING_UTF8);
-    rStream.WriteUInt16( (sal_uInt16)eSysLanguage ).WriteUInt16( (sal_uInt16)eNumFmtLanguage );
+    rStream.WriteUInt16( eSysLanguage ).WriteUInt16( eNumFmtLanguage );
 
     return 0 == rStream.GetError();
 }
@@ -574,7 +574,7 @@ bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) co
     rStream.WriteUInt16( aRotateAngle.GetVersion( fileVersion ) );
     rStream.WriteUInt16( aRotateMode.GetVersion( fileVersion ) );
 
-    rStream.WriteUInt16( (sal_uInt16)0 );       // NumberFormat
+    rStream.WriteUInt16( 0 );       // NumberFormat
 
     return 0 == rStream.GetError();
 }

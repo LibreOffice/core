@@ -75,7 +75,7 @@ void SvMetaModule::Save( SvPersistStream & rStm )
 {
     SvMetaExtern::Save( rStm );
 
-    rStm.WriteUInt16( (sal_uInt16)(MODULE_VER | IDL_WRITE_COMPILER) ); // Version
+    rStm.WriteUInt16( (MODULE_VER | IDL_WRITE_COMPILER) ); // Version
 
     WriteSvDeclPersistList( rStm, aClassList );
     WriteSvDeclPersistList( rStm, aTypeList );
@@ -96,7 +96,7 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     // write length of compiler data
     sal_uLong nPos = rStm.Tell();
     rStm.Seek( nLenPos );
-    rStm.WriteUInt16( (sal_uInt16)( nPos - nLenPos - sizeof( sal_uInt16 ) ) );
+    rStm.WriteUInt16( ( nPos - nLenPos - sizeof( sal_uInt16 ) ) );
     rStm.Seek( nPos );
 }
 

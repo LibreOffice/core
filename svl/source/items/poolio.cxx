@@ -224,7 +224,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                                 rStream.WriteUInt16( convertSfxItemKindToUInt16(pItem->GetKind()) );
                             else
                             {
-                                rStream.WriteUInt16( (sal_uInt16) pItem->GetRefCount() );
+                                rStream.WriteUInt16( pItem->GetRefCount() );
                                 if( pItem->GetRefCount() > SFX_ITEMS_OLD_MAXREF )
                                     rStream.SetError( ERRCODE_IO_NOTSTORABLEINBINARYFORMAT );
                             }

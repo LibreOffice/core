@@ -301,13 +301,13 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aDesignName,
         RTL_TEXTENCODING_UTF8);
 
-    rOut.WriteUInt16( (sal_uInt16)rDesign.m_eMode );
+    rOut.WriteUInt16( rDesign.m_eMode );
     rOut.WriteUChar( rDesign.m_bContentPage );
     rOut.WriteUChar( rDesign.m_bNotes );
     rOut.WriteUInt16( rDesign.m_nResolution );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aCompression,
         RTL_TEXTENCODING_UTF8);
-    rOut.WriteUInt16( (sal_uInt16)rDesign.m_eFormat );
+    rOut.WriteUInt16( rDesign.m_eFormat );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aAuthor,
         RTL_TEXTENCODING_UTF8);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aEMail,
@@ -328,7 +328,7 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     rOut.WriteUChar( rDesign.m_bUseAttribs );
     rOut.WriteUChar( rDesign.m_bUseColor );
 
-    rOut.WriteUInt16( (sal_uInt16)rDesign.m_eScript );
+    rOut.WriteUInt16( rDesign.m_eScript );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aURL,
         RTL_TEXTENCODING_UTF8);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aCGI,

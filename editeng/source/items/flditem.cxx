@@ -432,8 +432,8 @@ void SvxDateField::Load( SvPersistStream & rStm )
 void SvxDateField::Save( SvPersistStream & rStm )
 {
     rStm.WriteUInt32( nFixDate );
-    rStm.WriteUInt16( (sal_uInt16)eType );
-    rStm.WriteUInt16( (sal_uInt16)eFormat );
+    rStm.WriteUInt16( eType );
+    rStm.WriteUInt16( eFormat );
 }
 
 
@@ -593,7 +593,7 @@ void SvxURLField::Load( SvPersistStream & rStm )
 
 void SvxURLField::Save( SvPersistStream & rStm )
 {
-    rStm.WriteUInt16( (sal_uInt16)eFormat );
+    rStm.WriteUInt16( eFormat );
 
     write_unicode( rStm, aURL );
     write_unicode( rStm, aRepresentation );
@@ -841,8 +841,8 @@ void SvxExtTimeField::Load( SvPersistStream & rStm )
 void SvxExtTimeField::Save( SvPersistStream & rStm )
 {
     rStm.WriteInt64(m_nFixTime);
-    rStm.WriteUInt16( (sal_uInt16) eType );
-    rStm.WriteUInt16( (sal_uInt16) eFormat );
+    rStm.WriteUInt16( eType );
+    rStm.WriteUInt16( eFormat );
 }
 
 
@@ -989,8 +989,8 @@ void SvxExtFileField::Save( SvPersistStream & rStm )
     // UNICODE: rStm << aFile;
     rStm.WriteUniOrByteString(aFile, rStm.GetStreamCharSet());
 
-    rStm.WriteUInt16( (sal_uInt16) eType );
-    rStm.WriteUInt16( (sal_uInt16) eFormat );
+    rStm.WriteUInt16( eType );
+    rStm.WriteUInt16( eFormat );
 }
 
 
@@ -1145,8 +1145,8 @@ void SvxAuthorField::Save( SvPersistStream & rStm )
     write_unicode( rStm, aFirstName );
     write_unicode( rStm, aShortName );
 
-    rStm.WriteUInt16( (sal_uInt16) eType );
-    rStm.WriteUInt16( (sal_uInt16) eFormat );
+    rStm.WriteUInt16( eType );
+    rStm.WriteUInt16( eFormat );
 }
 
 

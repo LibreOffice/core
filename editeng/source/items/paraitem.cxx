@@ -268,7 +268,7 @@ SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*
 {
     rStrm.WriteSChar(   GetPropLineSpace() )
          .WriteInt16(  GetInterLineSpace() )
-         .WriteUInt16( (sal_uInt16) GetLineHeight() )
+         .WriteUInt16( GetLineHeight() )
          .WriteSChar(    GetLineSpaceRule() )
          .WriteSChar(    GetInterLineSpaceRule() );
     return rStrm;

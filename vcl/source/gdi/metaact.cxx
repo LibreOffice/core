@@ -2979,7 +2979,7 @@ void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
-    rOStm.WriteUInt16( (sal_uInt16) maAlign );
+    rOStm.WriteUInt16( maAlign );
 }
 
 void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -3216,7 +3216,7 @@ void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
-    rOStm.WriteUInt16( (sal_uInt16) meRasterOp );
+    rOStm.WriteUInt16( meRasterOp );
 }
 
 void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )

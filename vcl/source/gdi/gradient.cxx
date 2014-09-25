@@ -303,7 +303,7 @@ SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImpl_Gradie
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Gradient.meStyle );
+    rOStm.WriteUInt16( rImpl_Gradient.meStyle );
     WriteColor( rOStm, rImpl_Gradient.maStartColor );
     WriteColor( rOStm, rImpl_Gradient.maEndColor );
     rOStm.WriteUInt16( rImpl_Gradient.mnAngle )

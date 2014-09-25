@@ -654,7 +654,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
 
     // Image Size:
     pMET->WriteUChar( 0x94 ).WriteUChar( 0x09 ).WriteUChar( 0x02 );
-    pMET->WriteUInt16( (sal_uInt16) 0 ).WriteUInt16( (sal_uInt16) 0 );
+    pMET->WriteUInt16( 0 ).WriteUInt16( 0 );
     WriteBigEndianShort((sal_uInt16)nHeight);
     WriteBigEndianShort((sal_uInt16)nWidth);
 
@@ -1152,7 +1152,7 @@ void METWriter::WillWriteOrder(sal_uInt32 nNextOrderMaximumLength)
 void METWriter::METBitBlt(Point aPt, Size aSize, const Size& rBmpSizePixel)
 {
     WillWriteOrder(46);
-    pMET->WriteUChar( 0xd6 ).WriteUChar( 44 ).WriteUInt16( (sal_uInt16)0 ).WriteUInt16( (sal_uInt16) 0x00cc );
+    pMET->WriteUChar( 0xd6 ).WriteUChar( 44 ).WriteUInt16( 0 ).WriteUInt16( 0x00cc );
     WriteBigEndianLong(nActBitmapId++);
     pMET->WriteUChar( 0x02 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
     WritePoint(Point(aPt.X(),aPt.Y()+aSize.Height()));
@@ -1240,7 +1240,7 @@ void METWriter::METEndArea()
 void METWriter::METBeginPath(sal_uInt32 nPathId)
 {
     WillWriteOrder(8);
-    pMET->WriteUChar( 0xd0 ).WriteUChar( 6 ).WriteUInt16( (sal_uInt16) 0 ).WriteUInt32( nPathId );
+    pMET->WriteUChar( 0xd0 ).WriteUChar( 6 ).WriteUInt16( 0 ).WriteUInt32( nPathId );
 }
 
 
@@ -2414,9 +2414,9 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
     // now at first we write the head of the segment:
     pMET->WriteUChar( 0x70 ).WriteUChar( 0x0e ).WriteUInt32( (sal_uInt32)0 );
     pMET->WriteUChar( 0x70 ).WriteUChar( 0x10 ); // Flags
-    pMET->WriteUInt16( (sal_uInt16)0 ); // Lo-Word of the length of the segment data  (Big Endian)
+    pMET->WriteUInt16( 0 ); // Lo-Word of the length of the segment data  (Big Endian)
     pMET->WriteUInt32( (sal_uInt32)0 );  // Reserved
-    pMET->WriteUInt16( (sal_uInt16)0 ); // Hi-Word of the length of the segment (Big Endian) (Ohh Ohh OS2)
+    pMET->WriteUInt16( 0 ); // Hi-Word of the length of the segment (Big Endian) (Ohh Ohh OS2)
     // Annotation: we're writing the correct data length again below
 
     // now all orders are being written out:

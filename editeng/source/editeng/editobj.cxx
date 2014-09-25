@@ -1077,7 +1077,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
     // Store Current text encoding ...
     rtl_TextEncoding eEncoding = GetSOStoreTextEncoding( osl_getThreadTextEncoding() );
-    rOStream.WriteUInt16( (sal_uInt16) eEncoding );
+    rOStream.WriteUInt16( eEncoding );
 
     // The number of paragraphs ...
     size_t nParagraphs = aContents.size();

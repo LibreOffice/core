@@ -204,7 +204,7 @@ sal_uInt32 PPTWriter::ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream
               .WriteInt32( nXOrigin ).WriteInt32( nYOrigin )              // Origin
               .WriteUChar( 1 )                          // Bool1 varScale - Set if zoom to fit is set
               .WriteUChar( 0 )                          // bool1 draftMode - Not used
-              .WriteUInt16( (sal_uInt16)0 )                         // padword
+              .WriteUInt16( 0 )                         // padword
               .WriteUInt32( (sal_uInt32)( ( 7 << 4 ) | ( EPP_GuideAtom << 16 ) ) ).WriteUInt32( (sal_uInt32)8 )
               .WriteUInt32( (sal_uInt32)0 )     // Type of the guide. If the guide is horizontal this value is zero. If it's vertical, it's one.
               .WriteInt32( nPosition1 )    // Position of the guide in master coordinates. X coordinate if it's vertical, and Y coordinate if it's horizontal.
@@ -228,7 +228,7 @@ sal_uInt32 PPTWriter::ImplOutlineViewInfoContainer( SvStream* pStrm )
               .WriteInt32( (sal_Int32)-780 ).WriteInt32( (sal_Int32)-84 ) // Origin
               .WriteUChar( 1 )                  // bool1 varScale - Set if zoom to fit is set
               .WriteUChar( 0 )                  // bool1 draftMode - Not used
-              .WriteUInt16( (sal_uInt16)0 );                // padword
+              .WriteUInt16( 0 );                // padword
     }
     return nSize;
 }
@@ -270,7 +270,7 @@ sal_uInt32 PPTWriter::ImplProgBinaryTagContainer( SvStream* pStrm, SvMemoryStrea
         pStrm->WriteUInt32( (sal_uInt32)( 0xf | ( EPP_ProgBinaryTag << 16 ) ) ).WriteUInt32( (sal_uInt32)0 )
               .WriteUInt32( (sal_uInt32)( EPP_CString << 16 ) ).WriteUInt32( (sal_uInt32)14 )
               .WriteUInt32( (sal_uInt32)0x5f005f ).WriteUInt32( (sal_uInt32)0x50005f )
-              .WriteUInt32( (sal_uInt32)0x540050 ).WriteUInt16( (sal_uInt16)0x39 );
+              .WriteUInt32( (sal_uInt32)0x540050 ).WriteUInt16( 0x39 );
     }
     if ( pStrm && pBinTagStrm )
     {
@@ -373,12 +373,12 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
     }
     maHyperlink.push_back( EPPTHyperlink( sBookmarkURL, nType ) );
 
-    mpExEmbed->WriteUInt16( (sal_uInt16)0xf )
-               .WriteUInt16( (sal_uInt16)EPP_ExHyperlink )
+    mpExEmbed->WriteUInt16( 0xf )
+               .WriteUInt16( EPP_ExHyperlink )
                .WriteUInt32( (sal_uInt32)0 );
     sal_uInt32 nHyperSize, nHyperStart = mpExEmbed->Tell();
-    mpExEmbed->WriteUInt16( (sal_uInt16)0 )
-               .WriteUInt16( (sal_uInt16)EPP_ExHyperlinkAtom )
+    mpExEmbed->WriteUInt16( 0 )
+               .WriteUInt16( EPP_ExHyperlinkAtom )
                .WriteUInt32( (sal_uInt32)4 )
                .WriteUInt32( nHyperId );
 
@@ -406,7 +406,7 @@ bool PPTWriter::ImplCloseDocument()
         SvMemoryStream aTxMasterStyleAtomStrm( 0x200, 0x200 );
         {
             EscherExAtom aTxMasterStyleAtom( aTxMasterStyleAtomStrm, EPP_TxMasterStyleAtom, EPP_TEXTTYPE_Other );
-            aTxMasterStyleAtomStrm.WriteUInt16( (sal_uInt16)5 );        // paragraph count
+            aTxMasterStyleAtomStrm.WriteUInt16( 5 );        // paragraph count
             sal_uInt16 nLev;
             bool bFirst = true;
             for ( nLev = 0; nLev < 5; nLev++ )
@@ -444,11 +444,11 @@ bool PPTWriter::ImplCloseDocument()
         // CREATE HYPERLINK CONTAINER
         if ( nExEmbedSize )
         {
-            mpStrm->WriteUInt16( (sal_uInt16)0xf )
-                   .WriteUInt16( (sal_uInt16)EPP_ExObjList )
+            mpStrm->WriteUInt16( 0xf )
+                   .WriteUInt16( EPP_ExObjList )
                    .WriteUInt32( (sal_uInt32)( nExEmbedSize + 12 ) )
-                   .WriteUInt16( (sal_uInt16)0 )
-                   .WriteUInt16( (sal_uInt16)EPP_ExObjListAtom )
+                   .WriteUInt16( 0 )
+                   .WriteUInt16( EPP_ExObjListAtom )
                    .WriteUInt32( (sal_uInt32)4 )
                    .WriteUInt32( (sal_uInt32)mnExEmbed );
             mpPptEscherEx->InsertPersistOffset( EPP_Persist_ExObj, mpStrm->Tell() );
@@ -456,15 +456,15 @@ bool PPTWriter::ImplCloseDocument()
         }
 
         // CREATE ENVIRONMENT
-        mpStrm->WriteUInt16( (sal_uInt16)0xf ).WriteUInt16( (sal_uInt16)EPP_Environment ).WriteUInt32( (sal_uInt32)nEnvironment );
+        mpStrm->WriteUInt16( 0xf ).WriteUInt16( EPP_Environment ).WriteUInt32( (sal_uInt32)nEnvironment );
 
         // Open Container ( EPP_SrKinsoku )
-        mpStrm->WriteUInt16( (sal_uInt16)0x2f ).WriteUInt16( (sal_uInt16)EPP_SrKinsoku ).WriteUInt32( (sal_uInt32)12 );
+        mpStrm->WriteUInt16( 0x2f ).WriteUInt16( EPP_SrKinsoku ).WriteUInt32( (sal_uInt32)12 );
         mpPptEscherEx->AddAtom( 4, EPP_SrKinsokuAtom, 0, 3 );
         mpStrm->WriteInt32( (sal_Int32)0 );                        // SrKinsoku Level 0
 
         // Open Container ( EPP_FontCollection )
-        mpStrm->WriteUInt16( (sal_uInt16)0xf ).WriteUInt16( (sal_uInt16)EPP_FontCollection ).WriteUInt32( (sal_uInt32)maFontCollection.GetCount() * 76 );
+        mpStrm->WriteUInt16( 0xf ).WriteUInt16( EPP_FontCollection ).WriteUInt32( (sal_uInt32)maFontCollection.GetCount() * 76 );
 
         for ( sal_uInt32 i = 0; i < maFontCollection.GetCount(); i++ )
         {
@@ -745,7 +745,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         if ( nPropertyFlags & 0xf )
             rOut.WriteInt16( nBulletFlags );
         if ( nPropertyFlags & 0x80 )
-            rOut.WriteUInt16( (sal_uInt16)( pPara->cBulletId ) );
+            rOut.WriteUInt16( ( pPara->cBulletId ) );
         if ( nPropertyFlags & 0x10 )
             rOut.WriteUInt16( nFontId );
         if ( nPropertyFlags & 0x40 )
@@ -766,17 +766,17 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             rOut.WriteUInt32( nBulletColor );
         }
         if ( nPropertyFlags & 0x00000800 )
-            rOut.WriteUInt16( (sal_uInt16)( pPara->mnTextAdjust ) );
+            rOut.WriteUInt16( ( pPara->mnTextAdjust ) );
         if ( nPropertyFlags & 0x00001000 )
-            rOut.WriteUInt16( (sal_uInt16)( nLineSpacing ) );
+            rOut.WriteUInt16( ( nLineSpacing ) );
         if ( nPropertyFlags & 0x00002000 )
-            rOut.WriteUInt16( (sal_uInt16)( pPara->mnLineSpacingTop ) );
+            rOut.WriteUInt16( ( pPara->mnLineSpacingTop ) );
         if ( nPropertyFlags & 0x00004000 )
-            rOut.WriteUInt16( (sal_uInt16)( pPara->mnLineSpacingBottom ) );
+            rOut.WriteUInt16( ( pPara->mnLineSpacingBottom ) );
         if ( nPropertyFlags & 0x100 )
-            rOut.WriteUInt16( (sal_uInt16)(pPara->nTextOfs) );
+            rOut.WriteUInt16( (pPara->nTextOfs) );
         if (  nPropertyFlags & 0x400 )
-            rOut.WriteUInt16( (sal_uInt16)(pPara->nBulletOfs) );
+            rOut.WriteUInt16( (pPara->nBulletOfs) );
         if ( nPropertyFlags & 0x000e0000 )
         {
             sal_uInt16 nAsianSettings = 0;
@@ -960,13 +960,13 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 .WriteUInt32( nPropertyFlags );          //PropertyFlags
 
             if ( nPropertyFlags & 0xffff )
-                rOut.WriteUInt16( (sal_uInt16)( nCharAttr ) );
+                rOut.WriteUInt16( ( nCharAttr ) );
             if ( nPropertyFlags & 0x00010000 )
                 rOut.WriteUInt16( rPortion.mnFont );
             if ( nPropertyFlags & 0x00200000 )
                 rOut.WriteUInt16( rPortion.mnAsianOrComplexFont );
             if ( nPropertyFlags & 0x00020000 )
-                rOut.WriteUInt16( (sal_uInt16)( rPortion.mnCharHeight ) );
+                rOut.WriteUInt16( ( rPortion.mnCharHeight ) );
             if ( nPropertyFlags & 0x00040000 )
                 rOut.WriteUInt32( (sal_uInt32)nCharColor );
             if ( nPropertyFlags & 0x00080000 )
@@ -1113,7 +1113,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             rOut.WriteUInt32( (sal_uInt32)( EPP_DateTimeMCAtom << 16 ) ).WriteUInt32( (sal_uInt32)8 )
                                 .WriteUInt32( (sal_uInt32)( pFieldEntry->nFieldStartPos ) )         // TxtOffset to TxtField;
                                 .WriteUChar( ( pFieldEntry->nFieldType & 0xff ) )       // Type
-                                .WriteUChar( 0 ).WriteUInt16( (sal_uInt16)0 );                      // PadBytes
+                                .WriteUChar( 0 ).WriteUInt16( 0 );                      // PadBytes
                         }
                         break;
                         case 3 :
@@ -1276,7 +1276,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                 pRuleOut->WriteUInt32( nTextRulerAtomFlags );
                 if ( nTextRulerAtomFlags & 4 )
                 {
-                    pRuleOut->WriteUInt16( (sal_uInt16)nTabCount );
+                    pRuleOut->WriteUInt16( nTabCount );
                     for ( i = 0; i < nTabs; i++ )
                     {
                         sal_uInt16 nPosition = (sal_uInt16)( ( pTabStop[ i ].Position / 4.40972 ) + nTextOfs );
@@ -1369,7 +1369,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         rExtBuStr.WriteUInt32( (sal_uInt32)nNumberingType );
                     }
                     if ( nBulletFlags & 0x2000000 )
-                        rExtBuStr.WriteUInt16( (sal_uInt16)pBulletPara->nStartWith );
+                        rExtBuStr.WriteUInt16( pBulletPara->nStartWith );
                     rExtBuStr.WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );
                 }
                 sal_uInt32 nBulletSize = ( rExtBuStr.Tell() - nPos2 ) - 8;
@@ -1895,7 +1895,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
        .WriteUInt16( nOrder )                                   // order of build ( 1.. )
        .WriteUInt16( nSlideCount ).WriteUChar( nBuildType ).WriteUChar( nFlyMethod ).WriteUChar( nFlyDirection )
        .WriteUChar( nAfterEffect ).WriteUChar( nSubEffect ).WriteUChar( nOleVerb )
-       .WriteUInt16( (sal_uInt16)0 );                               // PadWord
+       .WriteUInt16( 0 );                               // PadWord
 }
 
 void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eCa, bool bMediaClickAction )
@@ -2118,7 +2118,7 @@ bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage, const
         mpStrm->WriteUInt32( (sal_uInt32)0 )                // PlacementID
                .WriteUChar( nPlaceHolderId )    // PlaceHolderID
                .WriteUChar( 0 )                 // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
-               .WriteUInt16( (sal_uInt16)0 );               // padword
+               .WriteUInt16( 0 );               // padword
         mpPptEscherEx->CloseContainer();        // ESCHER_ClientData
 
         if ( aClientTextBox.Tell() )
@@ -2816,7 +2816,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 mpStrm->WriteUInt32( (sal_uInt32)0 )                                                        // PlacementID
                                        .WriteUChar( EPP_PLACEHOLDER_MASTERTITLE )                               // PlaceHolderID
                                        .WriteUChar( 0 )                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
-                                       .WriteUInt16( (sal_uInt16)0 );                                                       // padword
+                                       .WriteUInt16( 0 );                                                       // padword
                                 mpPptEscherEx->CloseContainer();    // ESCHER_ClientData
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientTextbox );
                                 mpPptEscherEx->AddAtom( 4, EPP_TextHeaderAtom );
@@ -2831,9 +2831,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                     mpStrm->WriteUInt16( nChar );
                                 }
                                 mpPptEscherEx->AddAtom( 6, EPP_BaseTextPropAtom );
-                                mpStrm->WriteUInt32( (sal_uInt32)( mnTextSize + 1 ) ).WriteUInt16( (sal_uInt16)0 );
+                                mpStrm->WriteUInt32( (sal_uInt32)( mnTextSize + 1 ) ).WriteUInt16( 0 );
                                 mpPptEscherEx->AddAtom( 10, EPP_TextSpecInfoAtom );
-                                mpStrm->WriteUInt32( (sal_uInt32)( mnTextSize + 1 ) ).WriteUInt32( (sal_uInt32)1 ).WriteUInt16( (sal_uInt16)0 );
+                                mpStrm->WriteUInt32( (sal_uInt32)( mnTextSize + 1 ) ).WriteUInt32( (sal_uInt32)1 ).WriteUInt16( 0 );
                                 mpPptEscherEx->CloseContainer();    // ESCHER_ClientTextBox
                                 mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
                             }
@@ -2909,7 +2909,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 mpStrm->WriteUInt32( (sal_uInt32)1 )                                                        // PlacementID
                                        .WriteUChar( PlaceHolderID )/*(sal_uInt8)EPP_PLACEHOLDER_MASTERBODY */                                   // PlaceHolderID
                                        .WriteUChar( 0 )                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
-                                       .WriteUInt16( (sal_uInt16)0 );                                                       // padword
+                                       .WriteUInt16( 0 );                                                       // padword
                                 mpPptEscherEx->CloseContainer();    // ESCHER_ClientData
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientTextbox );       // printf
                                 mpPptEscherEx->AddAtom( 4, EPP_TextHeaderAtom );
@@ -2933,7 +2933,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 }
                                 mpPptEscherEx->EndAtom( EPP_BaseTextPropAtom );
                                 mpPptEscherEx->AddAtom( 10, EPP_TextSpecInfoAtom );
-                                mpStrm->WriteUInt32( (sal_uInt32)( mnTextSize ) ).WriteUInt32( (sal_uInt32)1 ).WriteUInt16( (sal_uInt16)0 );
+                                mpStrm->WriteUInt32( (sal_uInt32)( mnTextSize ) ).WriteUInt32( (sal_uInt32)1 ).WriteUInt16( 0 );
 
                                 mpPptEscherEx->CloseContainer();    // ESCHER_ClientTextBox
                                 mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
@@ -3135,24 +3135,24 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         // SJ: creating the Media RefObj
                         sal_uInt32 nRefId = ++mnExEmbed;
 
-                        mpExEmbed->WriteUInt16( (sal_uInt16)0xf )
-                                   .WriteUInt16( (sal_uInt16)EPP_ExMCIMovie )       // PPT_PST_ExAviMovie
+                        mpExEmbed->WriteUInt16( 0xf )
+                                   .WriteUInt16( EPP_ExMCIMovie )       // PPT_PST_ExAviMovie
                                    .WriteUInt32( (sal_uInt32)0 );
                         sal_uInt32 nSize, nStart = mpExEmbed->Tell();
-                        mpExEmbed->WriteUInt16( (sal_uInt16)0 )
-                                   .WriteUInt16( (sal_uInt16)EPP_ExObjRefAtom )
+                        mpExEmbed->WriteUInt16( 0 )
+                                   .WriteUInt16( EPP_ExObjRefAtom )
                                    .WriteUInt32( (sal_uInt32)4 )
                                    .WriteUInt32( nRefId );
-                        mpExEmbed->WriteUInt16( (sal_uInt16)0xf )
-                                   .WriteUInt16( (sal_uInt16)EPP_ExVideo )
+                        mpExEmbed->WriteUInt16( 0xf )
+                                   .WriteUInt16( EPP_ExVideo )
                                    .WriteUInt32( (sal_uInt32)0 );
 
-                        mpExEmbed->WriteUInt16( (sal_uInt16)0 )
-                                   .WriteUInt16( (sal_uInt16)EPP_ExMediaAtom )
+                        mpExEmbed->WriteUInt16( 0 )
+                                   .WriteUInt16( EPP_ExMediaAtom )
                                    .WriteUInt32( (sal_uInt32)8 )
                                    .WriteUInt32( nRefId )
-                                   .WriteUInt16( (sal_uInt16)0 )
-                                   .WriteUInt16( (sal_uInt16)0x435 );
+                                   .WriteUInt16( 0 )
+                                   .WriteUInt16( 0x435 );
 
                         sal_uInt16 i, nStringLen = (sal_uInt16)aMediaURL.getLength();
                         mpExEmbed->WriteUInt32( (sal_uInt32)( EPP_CString << 16 ) ).WriteUInt32( (sal_uInt32)( nStringLen * 2 ) );
@@ -3171,14 +3171,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                         if ( !pClientData )
                             pClientData = new SvMemoryStream( 0x200, 0x200 );
-                        pClientData->WriteUInt16( (sal_uInt16)0 )
-                                    .WriteUInt16( (sal_uInt16)EPP_ExObjRefAtom )
+                        pClientData->WriteUInt16( 0 )
+                                    .WriteUInt16( EPP_ExObjRefAtom )
                                     .WriteUInt32( (sal_uInt32)4 )
                                     .WriteUInt32( nRefId );
                         // write EPP_InteractiveInfo container for no_action
                         pClientData->WriteUInt32( (sal_uInt32)( ( EPP_InteractiveInfo << 16 ) | 0xf ) ).WriteUInt32( (sal_uInt32)24 );
-                        pClientData->WriteUInt16( (sal_uInt16)0 )
-                                    .WriteUInt16( (sal_uInt16)EPP_InteractiveInfoAtom )
+                        pClientData->WriteUInt16( 0 )
+                                    .WriteUInt16( EPP_InteractiveInfoAtom )
                                     .WriteUInt32( (sal_uInt32)16 )
                                     .WriteUInt32( (sal_uInt32) 0 )
                                     .WriteUInt32( (sal_uInt32) 0 )
@@ -3252,7 +3252,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 .WriteInt32( nPlacementID )                // PlacementID
                                 .WriteUChar( nPlaceHolderAtom ) // PlaceHolderID
                                 .WriteUChar( 0 )                // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
-                                .WriteUInt16( (sal_uInt16)0 );              // padword
+                                .WriteUInt16( 0 );              // padword
                 }
                 if ( nOlePictureId )
                 {
@@ -3634,7 +3634,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 aMemStrm.ObjectOwnsMemory( false );
                 aMemStrm.WriteUInt16( nRowCount )
                         .WriteUInt16( nRowCount )
-                        .WriteUInt16( (sal_uInt16)4 );
+                        .WriteUInt16( 4 );
 
                 std::vector< std::pair< sal_Int32, sal_Int32 > >::const_iterator aIter( aRows.begin() );
                 while( aIter != aRows.end() )

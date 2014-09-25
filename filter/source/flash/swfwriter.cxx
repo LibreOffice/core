@@ -148,7 +148,7 @@ void Writer::storeTo( Reference< XOutputStream > &xOutStream )
     }
 
     // Endtag
-    mpMovieStream->WriteUInt16( (sal_uInt16)0 );
+    mpMovieStream->WriteUInt16( 0 );
 
     Tag aHeader( 0xff );
 

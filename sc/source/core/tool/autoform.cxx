@@ -201,7 +201,7 @@ void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
     rStream.WriteUInt16( SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(fileVersion) );
 
-    rStream.WriteUInt16( (sal_uInt16)0 );       // Num-Format
+    rStream.WriteUInt16( 0 );       // Num-Format
 }
 
 ScAutoFormatDataField::ScAutoFormatDataField() :
@@ -1091,7 +1091,7 @@ bool ScAutoFormat::Save()
 
         bRet &= (rStream.GetError() == 0);
 
-        rStream.WriteUInt16( (sal_uInt16)(maData.size() - 1) );
+        rStream.WriteUInt16( (maData.size() - 1) );
         bRet &= (rStream.GetError() == 0);
         MapType::iterator it = maData.begin(), itEnd = maData.end();
         if (it != itEnd)

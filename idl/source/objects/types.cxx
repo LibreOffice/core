@@ -851,7 +851,7 @@ void SvMetaType::Save( SvPersistStream & rStm )
     if( nMask & 0x0040 ) WriteSvIdentifier( rStm, aSbxName );
     if( nMask & 0x0080 ) WriteSvIdentifier( rStm, aOdlName );
     if( nMask & 0x0100 ) WriteSvDeclPersistList( rStm, *pAttrList );
-    if( nMask & 0x0800 ) rStm.WriteUInt16( (sal_uInt16)nType );
+    if( nMask & 0x0800 ) rStm.WriteUInt16( nType );
     if( nMask & 0x1000 ) rStm.WriteChar( cParserChar );
     if( nMask & 0x2000 ) WriteSvIdentifier( rStm, aCName );
     if( nMask & 0x4000 ) WriteSvIdentifier( rStm, aBasicName );

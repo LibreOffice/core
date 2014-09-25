@@ -1938,7 +1938,7 @@ bool StarBASIC::StoreData( SvStream& r ) const
     {
         return false;
     }
-    r.WriteUInt16( (sal_uInt16) pModules->Count() );
+    r.WriteUInt16( pModules->Count() );
     for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
     {
         SbModule* p = (SbModule*) pModules->Get( i );

@@ -229,7 +229,7 @@ SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo 
     VersionCompat aCompat( rOStm, STREAM_WRITE, 4 );
 
     // version 1
-    rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meStyle ).WriteInt32( rImplLineInfo.mnWidth );
+    rOStm.WriteUInt16( rImplLineInfo.meStyle ).WriteInt32( rImplLineInfo.mnWidth );
 
     // since version2
     rOStm.WriteUInt16( rImplLineInfo.mnDashCount ).WriteInt32( rImplLineInfo.mnDashLen );
@@ -237,10 +237,10 @@ SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo 
     rOStm.WriteInt32( rImplLineInfo.mnDistance );
 
     // since version3
-    rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meLineJoin );
+    rOStm.WriteUInt16( rImplLineInfo.meLineJoin );
 
     // since version4
-    rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meLineCap );
+    rOStm.WriteUInt16( rImplLineInfo.meLineCap );
 
     return rOStm;
 }

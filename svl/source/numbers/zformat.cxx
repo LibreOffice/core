@@ -1983,7 +1983,7 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
 
     rHdr.StartEntry();
     rStream.WriteUniOrByteString( aFormatstring, rStream.GetStreamCharSet() );
-    rStream.WriteInt16( eType ).WriteDouble( fLimit1 ).WriteDouble( fLimit2 ).WriteUInt16( (sal_uInt16) eOp1 ).WriteUInt16( (sal_uInt16) eOp2 )
+    rStream.WriteInt16( eType ).WriteDouble( fLimit1 ).WriteDouble( fLimit2 ).WriteUInt16( eOp1 ).WriteUInt16( eOp2 )
            .WriteUChar( bOldStandard ).WriteUChar( bIsUsed );
     for (sal_uInt16 i = 0; i < 4; i++)
     {

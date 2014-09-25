@@ -322,7 +322,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
 
             if (!IsError(aWriter.Write(xWrt)))
             {
-                aStream.WriteUInt16( (sal_Unicode)'\0' );
+                aStream.WriteUInt16( '\0' );
 
                 const sal_Unicode *p = (sal_Unicode*)aStream.GetBuffer();
                 if (p)

@@ -135,7 +135,7 @@ SvStream& WriteImplHatch( SvStream& rOStm, const ImplHatch& rImplHatch )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm.WriteUInt16( (sal_uInt16) rImplHatch.meStyle );
+    rOStm.WriteUInt16( rImplHatch.meStyle );
     WriteColor( rOStm, rImplHatch.maColor );
     rOStm.WriteInt32( rImplHatch.mnDistance ).WriteUInt16( rImplHatch.mnAngle );
 

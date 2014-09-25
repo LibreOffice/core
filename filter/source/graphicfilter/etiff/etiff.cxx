@@ -279,7 +279,7 @@ bool TIFFWriter::ImplWriteHeader( bool bMultiPage )
 
         // (OFS8) TIFF image file directory (IFD)
         mnCurrentTagCountPos = m_rOStm.Tell();
-        m_rOStm.WriteUInt16( (sal_uInt16)0 );               // the number of tagentrys is to insert later
+        m_rOStm.WriteUInt16( 0 );               // the number of tagentrys is to insert later
 
         sal_uInt32 nSubFileFlags = 0;
         if ( bMultiPage )
@@ -350,17 +350,17 @@ void TIFFWriter::ImplWritePalette()
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        m_rOStm.WriteUInt16( (sal_uInt16)( rColor.GetRed() << 8 ) );
+        m_rOStm.WriteUInt16( ( rColor.GetRed() << 8 ) );
     }
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        m_rOStm.WriteUInt16( (sal_uInt16)( rColor.GetGreen() << 8 ) );
+        m_rOStm.WriteUInt16( ( rColor.GetGreen() << 8 ) );
     }
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        m_rOStm.WriteUInt16( (sal_uInt16)( rColor.GetBlue() << 8 ) );
+        m_rOStm.WriteUInt16( ( rColor.GetBlue() << 8 ) );
     }
 }
 

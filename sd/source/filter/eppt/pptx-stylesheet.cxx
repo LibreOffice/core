@@ -121,8 +121,8 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
     else
     {
         rSt.WriteUInt16( rLev.mnAsianOrComplexFont )
-           .WriteUInt16( (sal_uInt16)0xffff )       // unknown
-           .WriteUInt16( (sal_uInt16)0xffff )       // unknown
+           .WriteUInt16( 0xffff )       // unknown
+           .WriteUInt16( 0xffff )       // unknown
            .WriteUInt16( rLev.mnFontHeight )
            .WriteUInt32( nFontColor )
            .WriteUInt16( rLev.mnEscapement );
@@ -326,15 +326,15 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
         {
             rOut.WriteUInt32( (sal_uInt32)( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) ) )
                 .WriteUInt32( (sal_uInt32)( 5 * 16 + 2 ) )
-                .WriteUInt16( (sal_uInt16)5 );              // depth
+                .WriteUInt16( 5 );              // depth
         }
         sal_uInt16 nBulletId = rLev.mnBulletId;
         if ( rLev.mnNumberingType != SVX_NUM_BITMAP )
             nBulletId = 0xffff;
         rOut.WriteUInt32( (sal_uInt32)0x03800000 )
-            .WriteUInt16( (sal_uInt16)nBulletId )
+            .WriteUInt16( nBulletId )
             .WriteUInt32( (sal_uInt32)rLev.mnMappedNumType )
-            .WriteUInt16( (sal_uInt16)rLev.mnBulletStart )
+            .WriteUInt16( rLev.mnBulletStart )
             .WriteUInt32( (sal_uInt32)0 );
     }
 
@@ -377,8 +377,8 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
     else
     {
         rSt.WriteUInt16( rLev.mnDefaultTab )
-           .WriteUInt16( (sal_uInt16)0 )
-           .WriteUInt16( (sal_uInt16)0 )
+           .WriteUInt16( 0 )
+           .WriteUInt16( 0 )
            .WriteUInt16( rLev.mnAsianSettings )
            .WriteUInt16( rLev.mnBiDi );
     }
@@ -485,9 +485,9 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
 
     rSt.WriteUInt32( (sal_uInt32)( EPP_TxCFStyleAtom << 16 ) )  // recordheader
        .WriteUInt32( SizeOfTxCFStyleAtom() - 8 )
-       .WriteUInt16( (sal_uInt16)( 0x80 | nCharFlags ) )
-       .WriteUInt16( (sal_uInt16)nFlags )
-       .WriteUInt16( (sal_uInt16)nCharFlags )
+       .WriteUInt16( ( 0x80 | nCharFlags ) )
+       .WriteUInt16( nFlags )
+       .WriteUInt16( nCharFlags )
        .WriteInt32( (sal_Int32)-1 )                            // ?
        .WriteUInt16( rCharStyle.mnFontHeight )
        .WriteUInt32( rCharStyle.mnFontColor );

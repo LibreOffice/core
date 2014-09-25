@@ -1297,9 +1297,9 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     sal_uInt32          nCount = GetObjectCount();
     bool                bRel;
 
-    rOStm.WriteUInt16( (sal_uInt16) 0x0004 );
+    rOStm.WriteUInt16( 0x0004 );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, GetRealName(), RTL_TEXTENCODING_UTF8);
-    rOStm.WriteUInt32( nCount ).WriteUInt16( (sal_uInt16) osl_getThreadTextEncoding() );
+    rOStm.WriteUInt32( nCount ).WriteUInt16( osl_getThreadTextEncoding() );
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -1351,7 +1351,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
 
         rOStm.WriteUChar( bRel );
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aPath, RTL_TEXTENCODING_UTF8);
-        rOStm.WriteUInt32( pObj->nOffset ).WriteUInt16( (sal_uInt16) pObj->eObjKind );
+        rOStm.WriteUInt32( pObj->nOffset ).WriteUInt16( pObj->eObjKind );
     }
 
     // more recently, a 512-byte reserve buffer is written,

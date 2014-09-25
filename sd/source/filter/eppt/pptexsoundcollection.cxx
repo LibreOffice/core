@@ -198,7 +198,7 @@ void ExSoundCollection::Write( SvStream& rSt ) const
         sal_uInt32 nSoundCount = maEntries.size();
 
         // create SoundCollection Container
-        rSt.WriteUInt16( (sal_uInt16)0xf ).WriteUInt16( (sal_uInt16)EPP_SoundCollection ).WriteUInt32( (sal_uInt32)( GetSize() - 8 ) );
+        rSt.WriteUInt16( 0xf ).WriteUInt16( EPP_SoundCollection ).WriteUInt32( (sal_uInt32)( GetSize() - 8 ) );
 
         // create SoundCollAtom ( reference to the next free SoundId );
         rSt.WriteUInt32( (sal_uInt32)( EPP_SoundCollAtom << 16 ) ).WriteUInt32( (sal_uInt32)4 ).WriteUInt32( nSoundCount );

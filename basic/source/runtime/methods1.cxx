@@ -995,7 +995,7 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxBYTE:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)SbxBYTE ); // VarType Id
+            pStrm->WriteUInt16( SbxBYTE ); // VarType Id
         }
         pStrm->WriteUChar( rVar.GetByte() );
         break;
@@ -1009,7 +1009,7 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxUINT:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)SbxINTEGER ); // VarType Id
+            pStrm->WriteUInt16( SbxINTEGER ); // VarType Id
         }
         pStrm->WriteInt16( rVar.GetInteger() );
         break;
@@ -1018,7 +1018,7 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxULONG:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)SbxLONG ); // VarType Id
+            pStrm->WriteUInt16( SbxLONG ); // VarType Id
         }
         pStrm->WriteInt32( rVar.GetLong() );
         break;
@@ -1026,14 +1026,14 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxSALUINT64:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)SbxSALINT64 ); // VarType Id
+            pStrm->WriteUInt16( SbxSALINT64 ); // VarType Id
         }
         pStrm->WriteUInt64( (sal_uInt64)rVar.GetInt64() );
         break;
     case SbxSINGLE:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)eType ); // VarType Id
+            pStrm->WriteUInt16( eType ); // VarType Id
         }
         pStrm->WriteFloat( rVar.GetSingle() );
         break;
@@ -1043,7 +1043,7 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxDATE:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)eType ); // VarType Id
+            pStrm->WriteUInt16( eType ); // VarType Id
         }
         pStrm->WriteDouble( rVar.GetDouble() );
         break;
@@ -1056,7 +1056,7 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
             {
                 if( bIsVariant )
                 {
-                    pStrm->WriteUInt16( (sal_uInt16)SbxSTRING );
+                    pStrm->WriteUInt16( SbxSTRING );
                 }
                 pStrm->WriteUniOrByteString( rStr, osl_getThreadTextEncoding() );
             }

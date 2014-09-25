@@ -118,7 +118,7 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
 {
     sal_uLong nDataEnd = rStream.Tell();
 
-    rStream.WriteUInt16( (sal_uInt16) SV_NUMID_SIZES );
+    rStream.WriteUInt16( SV_NUMID_SIZES );
     rStream.WriteUInt32( aMemStream.Tell() );
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 

@@ -254,7 +254,7 @@ SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
     VersionCompat* pCompat = new VersionCompat( rOStream, STREAM_WRITE, 2 );
 
     // Version 1
-    rOStream.WriteUInt16( (sal_uInt16) rGfxLink.GetType() ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
+    rOStream.WriteUInt16( rGfxLink.GetType() ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
 
     // Version 2
     WritePair( rOStream, rGfxLink.GetPrefSize() );

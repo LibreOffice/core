@@ -1476,7 +1476,7 @@ bool SvxShadowItem::GetPresentation
 SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm.WriteSChar(  GetLocation() )
-         .WriteUInt16( (sal_uInt16) GetWidth() )
+         .WriteUInt16( GetWidth() )
          .WriteUChar( (aShadowColor.GetTransparency() > 0) );
     WriteColor( rStrm, GetColor() );
     WriteColor( rStrm, GetColor() );
@@ -2166,7 +2166,7 @@ bool SvxBoxItem::GetPresentation
 
 SvStream& SvxBoxItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
-    rStrm.WriteUInt16( (sal_uInt16) GetDistance() );
+    rStrm.WriteUInt16( GetDistance() );
     const SvxBorderLine* pLine[ 4 ];    // top, left, right, bottom
     pLine[ 0 ] = GetTop();
     pLine[ 1 ] = GetLeft();
@@ -2195,10 +2195,10 @@ SvStream& SvxBoxItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 
     if( nItemVersion >= BOX_4DISTS_VERSION && (cLine & 0x10) != 0 )
     {
-        rStrm.WriteUInt16( (sal_uInt16)nTopDist )
-             .WriteUInt16( (sal_uInt16)nLeftDist )
-             .WriteUInt16( (sal_uInt16)nRightDist )
-             .WriteUInt16( (sal_uInt16)nBottomDist );
+        rStrm.WriteUInt16( nTopDist )
+             .WriteUInt16( nLeftDist )
+             .WriteUInt16( nRightDist )
+             .WriteUInt16( nBottomDist );
     }
 
     return rStrm;
@@ -2568,7 +2568,7 @@ SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
     if ( IsMinDist() )
         cFlags |= 0x04;
     rStrm.WriteSChar(    cFlags )
-         .WriteUInt16( (sal_uInt16) GetDefDist() );
+         .WriteUInt16( GetDefDist() );
     const SvxBorderLine* pLine[ 2 ];
     pLine[ 0 ] = GetHori();
     pLine[ 1 ] = GetVert();

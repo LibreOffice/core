@@ -325,7 +325,7 @@ void SvPersistStream::WriteCompressed( SvStream & rStm, sal_uInt32 nVal )
         rStm.WriteUChar( (LEN_4 | (nVal >> 24)) );
         // 2nd highest sal_uInt8
         rStm.WriteUChar( (nVal >> 16) );
-        rStm.WriteUInt16( (sal_uInt16)(nVal) );
+        rStm.WriteUInt16( (nVal) );
     }
     else
 #endif

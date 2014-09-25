@@ -735,10 +735,10 @@ SfxPoolItem* SvxFontHeightItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxFontHeightItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
-    rStrm.WriteUInt16( (sal_uInt16)GetHeight() );
+    rStrm.WriteUInt16( GetHeight() );
 
     if( FONTHEIGHT_UNIT_VERSION <= nItemVersion )
-        rStrm.WriteUInt16( GetProp() ).WriteUInt16( (sal_uInt16)GetPropUnit() );
+        rStrm.WriteUInt16( GetProp() ).WriteUInt16( GetPropUnit() );
     else
     {
         // When exporting to the old versions the relative information is lost
@@ -1760,7 +1760,7 @@ SfxPoolItem* SvxPropSizeItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxPropSizeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUInt16( (sal_uInt16) GetValue() );
+    rStrm.WriteUInt16( GetValue() );
     return rStrm;
 }
 
@@ -2432,7 +2432,7 @@ SfxPoolItem* SvxLanguageItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxLanguageItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUInt16( (sal_uInt16) GetValue() );
+    rStrm.WriteUInt16( GetValue() );
     return rStrm;
 }
 
@@ -2703,7 +2703,7 @@ SfxPoolItem* SvxEmphasisMarkItem::Clone( SfxItemPool * ) const
 SvStream& SvxEmphasisMarkItem::Store( SvStream& rStrm,
                                      sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUInt16( (sal_uInt16)GetValue() );
+    rStrm.WriteUInt16( GetValue() );
     return rStrm;
 }
 
@@ -3104,10 +3104,10 @@ SvStream& SvxCharScaleWidthItem::Store( SvStream& rStream, sal_uInt16 nVer ) con
     {
         // see comment in Create()....
         rRet.SeekRel( -1*(long)sizeof(sal_uInt16) );
-        rRet.WriteUInt16( (sal_uInt16)0 );
+        rRet.WriteUInt16( 0 );
         rRet.WriteUInt16( GetValue() );
         // Really ugly, but not a problem for reading the doc in 5.2
-        rRet.WriteUInt16( (sal_uInt16)0x1234 );
+        rRet.WriteUInt16( 0x1234 );
     }
     return rRet;
 }

@@ -85,12 +85,12 @@ void PptEscherEx::ImplWriteOptAtom( SvStream& rSt )
     {
         rSt.WriteUInt32( (sal_uInt32)( ( ESCHER_OPT << 16 ) | ( ESCHER_OPT_COUNT << 4 ) | 0x3 ) )
            .WriteUInt32( (sal_uInt32)( nSize - 8 ) )
-           .WriteUInt16( (sal_uInt16)ESCHER_Prop_fillColor )           .WriteUInt32( (sal_uInt32)0xffb800 )
-           .WriteUInt16( (sal_uInt16)ESCHER_Prop_fillBackColor )       .WriteUInt32( (sal_uInt32)0 )
-           .WriteUInt16( (sal_uInt16)ESCHER_Prop_fNoFillHitTest )      .WriteUInt32( (sal_uInt32)0x00100010 )
-           .WriteUInt16( (sal_uInt16)ESCHER_Prop_lineColor )           .WriteUInt32( (sal_uInt32)0x8000001 )
-           .WriteUInt16( (sal_uInt16)ESCHER_Prop_fNoLineDrawDash )     .WriteUInt32( (sal_uInt32)0x00080008 )
-           .WriteUInt16( (sal_uInt16)ESCHER_Prop_shadowColor )         .WriteUInt32( (sal_uInt32)0x8000002 );
+           .WriteUInt16( ESCHER_Prop_fillColor )           .WriteUInt32( (sal_uInt32)0xffb800 )
+           .WriteUInt16( ESCHER_Prop_fillBackColor )       .WriteUInt32( (sal_uInt32)0 )
+           .WriteUInt16( ESCHER_Prop_fNoFillHitTest )      .WriteUInt32( (sal_uInt32)0x00100010 )
+           .WriteUInt16( ESCHER_Prop_lineColor )           .WriteUInt32( (sal_uInt32)0x8000001 )
+           .WriteUInt16( ESCHER_Prop_fNoLineDrawDash )     .WriteUInt32( (sal_uInt32)0x00080008 )
+           .WriteUInt16( ESCHER_Prop_shadowColor )         .WriteUInt32( (sal_uInt32)0x8000002 );
     }
 }
 
@@ -125,7 +125,7 @@ PptEscherEx::~PptEscherEx()
 
 void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance )
 {
-    mpOutStrm->WriteUInt16( (sal_uInt16)( ( nRecInstance << 4 ) | 0xf  ) ).WriteUInt16( n_EscherContainer ).WriteUInt32( (sal_uInt32)0 );
+    mpOutStrm->WriteUInt16( ( ( nRecInstance << 4 ) | 0xf  ) ).WriteUInt16( n_EscherContainer ).WriteUInt32( (sal_uInt32)0 );
     mOffsets.push_back( mpOutStrm->Tell() - 4 );
     mRecTypes.push_back( n_EscherContainer );
 

@@ -1415,19 +1415,19 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
         if (mbInline)
         {
             rEx.AddAtom(18, DFF_msofbtUDefProp, 3, 3); //Prop id is 0xF122
-            rSt.WriteUInt16( (sal_uInt16)0x0390 ).WriteUInt32( 3 );
-            rSt.WriteUInt16( (sal_uInt16)0x0392 ).WriteUInt32( 3 );
+            rSt.WriteUInt16( 0x0390 ).WriteUInt32( 3 );
+            rSt.WriteUInt16( 0x0392 ).WriteUInt32( 3 );
             //This sub property is required to be in the dummy inline frame as
             //well
-            rSt.WriteUInt16( (sal_uInt16)0x053F ).WriteUInt32( nInlineHack );
+            rSt.WriteUInt16( 0x053F ).WriteUInt32( nInlineHack );
         }
         else
         {
             rEx.AddAtom(24, DFF_msofbtUDefProp, 3, 4 ); //Prop id is 0xF122
-            rSt.WriteUInt16( (sal_uInt16)0x038F ).WriteUInt32( mnXAlign );
-            rSt.WriteUInt16( (sal_uInt16)0x0390 ).WriteUInt32( mnXRelTo );
-            rSt.WriteUInt16( (sal_uInt16)0x0391 ).WriteUInt32( mnYAlign );
-            rSt.WriteUInt16( (sal_uInt16)0x0392 ).WriteUInt32( mnYRelTo );
+            rSt.WriteUInt16( 0x038F ).WriteUInt32( mnXAlign );
+            rSt.WriteUInt16( 0x0390 ).WriteUInt32( mnXRelTo );
+            rSt.WriteUInt16( 0x0391 ).WriteUInt32( mnYAlign );
+            rSt.WriteUInt16( 0x0392 ).WriteUInt32( mnYRelTo );
         }
     }
 }
@@ -1516,7 +1516,7 @@ void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShape
     WriteFrmExtraData(rFmt);
 
     AddAtom(6, DFF_msofbtUDefProp, 3, 1); //Prop id is 0xF122
-    GetStream().WriteUInt16( (sal_uInt16)0x053F ).WriteUInt32( nInlineHack );
+    GetStream().WriteUInt16( 0x053F ).WriteUInt32( nInlineHack );
 
     CloseContainer();   // ESCHER_SpContainer
 }
@@ -2204,8 +2204,8 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     OpenContainer( ESCHER_DggContainer );
 
     sal_uInt16 nColorCount = 4;
-    pStrm ->WriteUInt16( (sal_uInt16)( nColorCount << 4 ) )     // instance
-           .WriteUInt16( (sal_uInt16)ESCHER_SplitMenuColors )   // record type
+    pStrm ->WriteUInt16( ( nColorCount << 4 ) )     // instance
+           .WriteUInt16( ESCHER_SplitMenuColors )   // record type
            .WriteUInt32( (sal_uInt32)( nColorCount * 4 ) )      // size
            .WriteUInt32( (sal_uInt32)0x08000004 )
            .WriteUInt32( (sal_uInt32)0x08000001 )

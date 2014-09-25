@@ -1231,7 +1231,7 @@ void AnimationExporter::writeZString( SvStream& rStrm, const OUString& rVal )
     sal_Int32 i;
     for ( i = 0; i < rVal.getLength(); i++ )
         rStrm.WriteUInt16( rVal[ i ] );
-    rStrm.WriteUInt16( (sal_Unicode)0 );
+    rStrm.WriteUInt16( 0 );
 }
 
 void AnimationExporter::exportAnimAction( SvStream& rStrm, const Reference< XAnimationNode >& xNode )

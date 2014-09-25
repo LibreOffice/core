@@ -130,7 +130,7 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
     aPStm.SetContextFlags( nFlags );
 
     aPStm.WriteUInt32( (sal_uInt32)DATABASE_SIGNATURE );
-    aPStm.WriteUInt16( (sal_uInt16)DATABASE_VER );
+    aPStm.WriteUInt16( DATABASE_VER );
 
     bool bOnlyStreamedObjs = false;
     if( nFlags & IDL_WRITE_CALLING )

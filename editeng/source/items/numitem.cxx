@@ -251,13 +251,13 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         pBulletFont->SetName(sFontName);
     }
 
-    rStream.WriteUInt16( (sal_uInt16)NUMITEM_VERSION_04 );
+    rStream.WriteUInt16( NUMITEM_VERSION_04 );
 
-    rStream.WriteUInt16( (sal_uInt16)GetNumberingType() );
-    rStream.WriteUInt16( (sal_uInt16)eNumAdjust );
-    rStream.WriteUInt16( (sal_uInt16)nInclUpperLevels );
+    rStream.WriteUInt16( GetNumberingType() );
+    rStream.WriteUInt16( eNumAdjust );
+    rStream.WriteUInt16( nInclUpperLevels );
     rStream.WriteUInt16( nStart );
-    rStream.WriteUInt16( (sal_uInt16)cBullet );
+    rStream.WriteUInt16( cBullet );
 
     rStream.WriteInt16( nFirstLineOffset );
     rStream.WriteInt16( nAbsLSpace );
@@ -270,7 +270,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     rStream.WriteUniOrByteString(sCharStyleName, eEnc);
     if(pGraphicBrush)
     {
-        rStream.WriteUInt16( (sal_uInt16)1 );
+        rStream.WriteUInt16( 1 );
 
         // in SD or SI force bullet itself to be stored,
         // for that purpose throw away link when link and graphic
@@ -283,16 +283,16 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         pGraphicBrush->Store(rStream, BRUSH_GRAPHIC_VERSION);
     }
     else
-        rStream.WriteUInt16( (sal_uInt16)0 );
+        rStream.WriteUInt16( 0 );
 
-    rStream.WriteUInt16( (sal_uInt16)eVertOrient );
+    rStream.WriteUInt16( eVertOrient );
     if(pBulletFont)
     {
-        rStream.WriteUInt16( (sal_uInt16)1 );
+        rStream.WriteUInt16( 1 );
         WriteFont( rStream, *pBulletFont );
     }
     else
-        rStream.WriteUInt16( (sal_uInt16)0 );
+        rStream.WriteUInt16( 0 );
     WritePair( rStream, aGraphicSize );
 
     Color nTempColor = nBulletColor;
@@ -302,8 +302,8 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     rStream.WriteUInt16( nBulletRelSize );
     rStream.WriteUInt16( (sal_uInt16)IsShowSymbol() );
 
-    rStream.WriteUInt16( ( sal_uInt16 ) mePositionAndSpaceMode );
-    rStream.WriteUInt16( ( sal_uInt16 ) meLabelFollowedBy );
+    rStream.WriteUInt16(  mePositionAndSpaceMode );
+    rStream.WriteUInt16(  meLabelFollowedBy );
     rStream.WriteInt32( ( sal_Int32 ) mnListtabPos );
     rStream.WriteInt32( ( sal_Int32 ) mnFirstLineIndent );
     rStream.WriteInt32( ( sal_Int32 ) mnIndentAt );
@@ -687,12 +687,12 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
 
 SvStream& SvxNumRule::Store( SvStream &rStream )
 {
-    rStream.WriteUInt16( (sal_uInt16)NUMITEM_VERSION_03 );
+    rStream.WriteUInt16( NUMITEM_VERSION_03 );
     rStream.WriteUInt16( nLevelCount );
     //first save of nFeatureFlags for old versions
-    rStream.WriteUInt16( (sal_uInt16)nFeatureFlags );
+    rStream.WriteUInt16( nFeatureFlags );
     rStream.WriteUInt16( (sal_uInt16)bContinuousNumbering );
-    rStream.WriteUInt16( (sal_uInt16)eNumberingType );
+    rStream.WriteUInt16( eNumberingType );
 
     FontToSubsFontConverter pConverter = 0;
     bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && ( rStream.GetVersion() );
@@ -715,7 +715,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
             rStream.WriteUInt16( 0 | nSetFlag );
     }
     //second save of nFeatureFlags for new versions
-    rStream.WriteUInt16( (sal_uInt16)nFeatureFlags );
+    rStream.WriteUInt16( nFeatureFlags );
     if(pConverter)
         DestroyFontToSubsFontConverter(pConverter);
 

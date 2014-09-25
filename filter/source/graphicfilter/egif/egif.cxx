@@ -322,9 +322,9 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
         // write dummy palette with two entries (black/white);
         // we do this only because of a bug in Photoshop, since those can't
         // read pictures without a global color palette
-        m_rGIF.WriteUInt16( (sal_uInt16) 0 );
-        m_rGIF.WriteUInt16( (sal_uInt16) 255 );
-        m_rGIF.WriteUInt16( (sal_uInt16) 65535 );
+        m_rGIF.WriteUInt16( 0 );
+        m_rGIF.WriteUInt16( 255 );
+        m_rGIF.WriteUInt16( 65535 );
 
         if( m_rGIF.GetError() )
             bStatus = false;

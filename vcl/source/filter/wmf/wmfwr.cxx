@@ -294,12 +294,12 @@ void WMFWriter::WMFRecord_CreateBrushIndirect(const Color& rColor)
     WriteRecordHeader(0x00000007,W_META_CREATEBRUSHINDIRECT);
 
     if( rColor==Color(COL_TRANSPARENT) )
-        pWMF->WriteUInt16( (sal_uInt16) W_BS_HOLLOW );
+        pWMF->WriteUInt16( W_BS_HOLLOW );
     else
-        pWMF->WriteUInt16( (sal_uInt16) W_BS_SOLID );
+        pWMF->WriteUInt16( W_BS_SOLID );
 
     WriteColor( rColor );
-    pWMF->WriteUInt16( (sal_uInt16) 0 );
+    pWMF->WriteUInt16( 0 );
 }
 
 void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
@@ -424,9 +424,9 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
         nCheckSum = rtl_crc32( nCheckSum, pData, nLen );
 
     WriteRecordHeader( 3 + 9 + ( ( nLen + 1 ) >> 1 ), W_META_ESCAPE );
-    pWMF->WriteUInt16( (sal_uInt16)W_MFCOMMENT )
-         .WriteUInt16( (sal_uInt16)( nLen + 14 ) )  // we will always have a fourteen byte escape header:
-         .WriteUInt16( (sal_uInt16)0x4f4f )         // OO
+    pWMF->WriteUInt16( W_MFCOMMENT )
+         .WriteUInt16( ( nLen + 14 ) )  // we will always have a fourteen byte escape header:
+         .WriteUInt16( 0x4f4f )         // OO
          .WriteUInt32( (sal_uInt32)0xa2c2a )        // evil magic number
          .WriteUInt32( (sal_uInt32)nCheckSum )      // crc32 checksum about nEsc & pData
          .WriteUInt32( (sal_uInt32)nEsc );          // escape number
@@ -558,7 +558,7 @@ void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
     sal_uInt16 nNewTextLen = static_cast<sal_uInt16>(rByteString.getLength());
-    pWMF->WriteUInt16( nNewTextLen ).WriteUInt16( (sal_uInt16)0 );
+    pWMF->WriteUInt16( nNewTextLen ).WriteUInt16( 0 );
     write_uInt8s_FromOString(*pWMF, rByteString, nNewTextLen);
     if ( nNewTextLen & 1 )
         pWMF->WriteUChar( 0 );
@@ -581,7 +581,7 @@ void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
             OString aTemp(&nUniChar, 1, aSrcFont.GetCharSet());
             j = aTemp.getLength();
             while ( --j > 0 )
-                pWMF->WriteUInt16( (sal_uInt16)0 );
+                pWMF->WriteUInt16( 0 );
         }
     }
     pConvertedDXAry.reset();
@@ -655,7 +655,7 @@ void WMFWriter::WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly)
     }
     WriteRecordHeader(0,W_META_POLYPOLYGON);
     pWMF->WriteUInt16( nCount );
-    for (i=0; i<nCount; i++) pWMF->WriteUInt16( (sal_uInt16)(aSimplePolyPoly.GetObject(i).GetSize()) );
+    for (i=0; i<nCount; i++) pWMF->WriteUInt16( (aSimplePolyPoly.GetObject(i).GetSize()) );
     for (i=0; i<nCount; i++) {
         pPoly=&(aSimplePolyPoly.GetObject(i));
         nSize=pPoly->GetSize();
@@ -697,14 +697,14 @@ void WMFWriter::WMFRecord_SelectObject(sal_uInt16 nObjectHandle)
 void WMFWriter::WMFRecord_SetBkMode(bool bTransparent)
 {
     WriteRecordHeader(0x00000004,W_META_SETBKMODE);
-    if (bTransparent) pWMF->WriteUInt16( (sal_uInt16)W_TRANSPARENT );
-    else                    pWMF->WriteUInt16( (sal_uInt16)W_OPAQUE );
+    if (bTransparent) pWMF->WriteUInt16( W_TRANSPARENT );
+    else                    pWMF->WriteUInt16( W_OPAQUE );
 }
 
 void WMFWriter::WMFRecord_SetStretchBltMode()
 {
     WriteRecordHeader( 0x00000004, W_META_SETSTRETCHBLTMODE );
-    pWMF->WriteUInt16( (sal_uInt16) 3 ); // STRETCH_DELETESCANS
+    pWMF->WriteUInt16( 3 ); // STRETCH_DELETESCANS
 }
 
 void WMFWriter::WMFRecord_SetPixel(const Point & rPoint, const Color & rColor)
@@ -1661,13 +1661,13 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
     }
 
     nMetafileHeaderPos=pWMF->Tell();
-    pWMF->WriteUInt16( (sal_uInt16)0x0001 )           // type: file
-         .WriteUInt16( (sal_uInt16)0x0009 )           // header length in words
-         .WriteUInt16( (sal_uInt16)0x0300 )           // Version as BCD number
+    pWMF->WriteUInt16( 0x0001 )           // type: file
+         .WriteUInt16( 0x0009 )           // header length in words
+         .WriteUInt16( 0x0300 )           // Version as BCD number
          .WriteUInt32( (sal_uInt32) 0x00000000 )      // file length (without 1st header), is later corrected by UpdateHeader()
-         .WriteUInt16( (sal_uInt16)MAXOBJECTHANDLES ) // maxmimum number of simultaneous objects
+         .WriteUInt16( MAXOBJECTHANDLES ) // maxmimum number of simultaneous objects
          .WriteUInt32( (sal_uInt32) 0x00000000 )      // maximum record length, is later corrected by UpdateHeader()
-         .WriteUInt16( (sal_uInt16)0x0000 );          // reserved
+         .WriteUInt16( 0x0000 );          // reserved
 }
 
 void WMFWriter::UpdateHeader()
@@ -1891,8 +1891,8 @@ void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sa
 {
    // according to http://msdn.microsoft.com/en-us/library/dd366152%28PROT.13%29.aspx
    WriteRecordHeader( 0, W_META_ESCAPE );
-   pWMF->WriteUInt16( (sal_uInt16)W_MFCOMMENT )         // same as META_ESCAPE_ENHANCED_METAFILE
-         .WriteUInt16( (sal_uInt16)( nCurSize + 34 ) )  // we will always have a 34 byte escape header:
+   pWMF->WriteUInt16( W_MFCOMMENT )         // same as META_ESCAPE_ENHANCED_METAFILE
+         .WriteUInt16( ( nCurSize + 34 ) )  // we will always have a 34 byte escape header:
          .WriteUInt32( (sal_uInt32) 0x43464D57 )        // WMFC
          .WriteUInt32( (sal_uInt32) 0x00000001 )        // Comment type
          .WriteUInt32( (sal_uInt32) 0x00010000 )        // version

@@ -786,8 +786,8 @@ bool SvNumberFormatter::Save( SvStream& rStream ) const
     ImpSvNumMultipleWriteHeader aHdr( rStream );
     // As of 364i we store what SYSTEM locale really was, before it was hard
     // coded LANGUAGE_SYSTEM.
-    rStream.WriteUInt16( (sal_uInt16) SV_NUMBERFORMATTER_VERSION );
-    rStream.WriteUInt16( (sal_uInt16) SvtSysLocale().GetLanguageTag().getLanguageType() ).WriteUInt16( (sal_uInt16) IniLnge );
+    rStream.WriteUInt16( SV_NUMBERFORMATTER_VERSION );
+    rStream.WriteUInt16( SvtSysLocale().GetLanguageTag().getLanguageType() ).WriteUInt16( IniLnge );
 
     const SvNumberFormatTable* pTable = &aFTable;
     SvNumberFormatTable::const_iterator it = pTable->begin();
@@ -801,8 +801,8 @@ bool SvNumberFormatter::Save( SvStream& rStream ) const
              pEntry->GetNewStandardDefined() || (it->first % SV_COUNTRY_LANGUAGE_OFFSET == 0) )
         {
             rStream.WriteUInt32( it->first )
-                   .WriteUInt16( (sal_uInt16) LANGUAGE_SYSTEM )
-                   .WriteUInt16( (sal_uInt16) pEntry->GetLanguage() );
+                   .WriteUInt16( LANGUAGE_SYSTEM )
+                   .WriteUInt16( pEntry->GetLanguage() );
             pEntry->Save(rStream, aHdr);
         }
         ++it;
@@ -811,7 +811,7 @@ bool SvNumberFormatter::Save( SvStream& rStream ) const
 
     // as of SV_NUMBERFORMATTER_VERSION_YEAR2000
     aHdr.StartEntry();
-    rStream.WriteUInt16( (sal_uInt16) GetYear2000() );
+    rStream.WriteUInt16( GetYear2000() );
     aHdr.EndEntry();
 
     return rStream.GetError() ? false : true;

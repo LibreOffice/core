@@ -707,15 +707,15 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm.WriteUniOrByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
     WritePair( rOStm, rImpl_Font.maSize );
 
-    rOStm.WriteUInt16( (sal_uInt16) GetStoreCharSet( rImpl_Font.meCharSet ) );
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meFamily );
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.mePitch );
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meWeight );
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meUnderline );
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meStrikeout );
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meItalic );
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.maLanguageTag.getLanguageType( false) );
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meWidthType );
+    rOStm.WriteUInt16( GetStoreCharSet( rImpl_Font.meCharSet ) );
+    rOStm.WriteUInt16( rImpl_Font.meFamily );
+    rOStm.WriteUInt16( rImpl_Font.mePitch );
+    rOStm.WriteUInt16( rImpl_Font.meWeight );
+    rOStm.WriteUInt16( rImpl_Font.meUnderline );
+    rOStm.WriteUInt16( rImpl_Font.meStrikeout );
+    rOStm.WriteUInt16( rImpl_Font.meItalic );
+    rOStm.WriteUInt16( rImpl_Font.maLanguageTag.getLanguageType( false) );
+    rOStm.WriteUInt16( rImpl_Font.meWidthType );
 
     rOStm.WriteInt16( rImpl_Font.mnOrientation );
 
@@ -726,12 +726,12 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
 
     // new in version 2
     rOStm.WriteUChar(        rImpl_Font.meRelief );
-    rOStm.WriteUInt16( (sal_uInt16)   rImpl_Font.maCJKLanguageTag.getLanguageType( false) );
+    rOStm.WriteUInt16(   rImpl_Font.maCJKLanguageTag.getLanguageType( false) );
     rOStm.WriteUChar( rImpl_Font.mbVertical );
-    rOStm.WriteUInt16( (sal_uInt16)   rImpl_Font.meEmphasisMark );
+    rOStm.WriteUInt16(   rImpl_Font.meEmphasisMark );
 
     // new in version 3
-    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meOverline );
+    rOStm.WriteUInt16( rImpl_Font.meOverline );
 
     return rOStm;
 }

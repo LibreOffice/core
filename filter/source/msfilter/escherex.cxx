@@ -302,7 +302,7 @@ extern "C" int SAL_CALL EscherPropSortFunc( const void* p1, const void* p2 )
 
 void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uInt16 nRecType )
 {
-    rSt.WriteUInt16( (sal_uInt16)( ( nCountCount << 4 ) | ( nVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( nCountSize );
+    rSt.WriteUInt16( ( ( nCountCount << 4 ) | ( nVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( nCountSize );
     if ( nSortCount )
     {
         qsort( pSortStruct, nSortCount, sizeof( EscherPropSortStruct ), EscherPropSortFunc );
@@ -3113,7 +3113,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             std::vector< EnhancedCustomShapeEquation >::const_iterator aEnd ( aEquations.end() );
                             while( aIter != aEnd )
                             {
-                                aOut.WriteUInt16( (sal_uInt16)aIter->nOperation )
+                                aOut.WriteUInt16( aIter->nOperation )
                                     .WriteInt16( aIter->nPara[ 0 ] )
                                     .WriteInt16( aIter->nPara[ 1 ] )
                                     .WriteInt16( aIter->nPara[ 2 ] );
@@ -4179,7 +4179,7 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, s
     }
 
     rSt.Write( &mnIdentifier[ 0 ], 16 );
-    rSt.WriteUInt16( (sal_uInt16)0 )
+    rSt.WriteUInt16( 0 )
        .WriteUInt32( (sal_uInt32)( mnSize + mnSizeExtra ) )
        .WriteUInt32( mnRefCount )
        .WriteUInt32( nPictureOffset )
@@ -4462,13 +4462,13 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                            .WriteUInt32( (sal_uInt32)0 );
                 nAtomSize = rPicOutStrm.Tell();
                  if ( eBlibType == PNG )
-                    rPicOutStrm.WriteUInt16( (sal_uInt16)0x0606 );
+                    rPicOutStrm.WriteUInt16( 0x0606 );
                 else if ( eBlibType == WMF )
-                    rPicOutStrm.WriteUInt16( (sal_uInt16)0x0403 );
+                    rPicOutStrm.WriteUInt16( 0x0403 );
                 else if ( eBlibType == EMF )
-                    rPicOutStrm.WriteUInt16( (sal_uInt16)0x0402 );
+                    rPicOutStrm.WriteUInt16( 0x0402 );
                 else if ( eBlibType == PEG )
-                    rPicOutStrm.WriteUInt16( (sal_uInt16)0x0505 );
+                    rPicOutStrm.WriteUInt16( 0x0505 );
             }
 
             // fdo#69607 do not compress WMF files if we are in OOXML export
@@ -4556,7 +4556,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                    .WriteUInt32( nWidth )
                    .WriteUInt32( nHeight )
                    .WriteUInt32( p_EscherBlibEntry->mnSize )
-                   .WriteUInt16( (sal_uInt16)0xfe00 );  // compression Flags
+                   .WriteUInt16( 0xfe00 );  // compression Flags
                     rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
                 }
             }
@@ -4887,8 +4887,8 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
     if ( nCount )
     {
         sal_uInt32  nRecHdPos, nCurrentPos, nSize;
-        rStrm  .WriteUInt16( (sal_uInt16)( ( nCount << 4 ) | 0xf ) )    // open an ESCHER_SolverContainer
-               .WriteUInt16( (sal_uInt16)ESCHER_SolverContainer )
+        rStrm  .WriteUInt16( ( ( nCount << 4 ) | 0xf ) )    // open an ESCHER_SolverContainer
+               .WriteUInt16( ESCHER_SolverContainer )
                .WriteUInt32( (sal_uInt32)0 );
 
         nRecHdPos = rStrm.Tell() - 4;
@@ -5244,7 +5244,7 @@ bool EscherEx::InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue )
 
 void EscherEx::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 {
-    mpOutStrm->WriteUInt16( (sal_uInt16)( ( nRecInstance << 4 ) | 0xf  ) ).WriteUInt16( nEscherContainer ).WriteUInt32( (sal_uInt32)0 );
+    mpOutStrm->WriteUInt16( ( ( nRecInstance << 4 ) | 0xf  ) ).WriteUInt16( nEscherContainer ).WriteUInt32( (sal_uInt32)0 );
     mOffsets.push_back( mpOutStrm->Tell() - 4 );
     mRecTypes.push_back( nEscherContainer );
     switch( nEscherContainer )
@@ -5347,13 +5347,13 @@ void EscherEx::EndAtom( sal_uInt16 nRecType, int nRecVersion, int nRecInstance )
     sal_uInt32  nOldPos = mpOutStrm->Tell();
     mpOutStrm->Seek( mnCountOfs );
     sal_uInt32 nSize = nOldPos - mnCountOfs;
-    mpOutStrm->WriteUInt16( (sal_uInt16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( (sal_uInt32)( nSize - 8 ) );
+    mpOutStrm->WriteUInt16( ( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( (sal_uInt32)( nSize - 8 ) );
     mpOutStrm->Seek( nOldPos );
 }
 
 void EscherEx::AddAtom( sal_uInt32 nAtomSize, sal_uInt16 nRecType, int nRecVersion, int nRecInstance )
 {
-    mpOutStrm->WriteUInt16( (sal_uInt16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( nAtomSize );
+    mpOutStrm->WriteUInt16( ( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( nAtomSize );
 }
 
 void EscherEx::AddChildAnchor( const Rectangle& rRect )

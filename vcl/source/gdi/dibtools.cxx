@@ -1363,10 +1363,10 @@ bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess& rAcc, bool bUseDI
     const sal_uInt32 nPalCount((rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() : isBitfieldCompression(rAcc.GetScanlineFormat()) ? 3UL : 0UL));
     const sal_uInt32 nOffset(14 + (bUseDIBV5 ? DIBV5HEADERSIZE : DIBINFOHEADERSIZE) + nPalCount * 4UL);
 
-    rOStm.WriteUInt16( (sal_uInt16)0x4D42 ); // 'MB' from BITMAPFILEHEADER
+    rOStm.WriteUInt16( 0x4D42 ); // 'MB' from BITMAPFILEHEADER
     rOStm.WriteUInt32( (sal_uInt32)(nOffset + (rAcc.Height() * rAcc.GetScanlineSize())) );
-    rOStm.WriteUInt16( (sal_uInt16)0 );
-    rOStm.WriteUInt16( (sal_uInt16)0 );
+    rOStm.WriteUInt16( 0 );
+    rOStm.WriteUInt16( 0 );
     rOStm.WriteUInt32( nOffset );
 
     return( rOStm.GetError() == 0UL );

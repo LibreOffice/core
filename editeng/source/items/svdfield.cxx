@@ -45,7 +45,7 @@ void SdrMeasureField::Load(SvPersistStream& rIn)
 
 void SdrMeasureField::Save(SvPersistStream& rOut)
 {
-    rOut.WriteUInt16( (sal_uInt16)eMeasureFieldKind );
+    rOut.WriteUInt16( eMeasureFieldKind );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

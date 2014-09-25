@@ -534,13 +534,13 @@ bool SbxArray::StoreData( SvStream& rStrm ) const
         if (pEntry->mpVar && (pEntry->mpVar->GetFlags() & SBX_DONTSTORE) == SBX_NONE)
             nElem++;
     }
-    rStrm.WriteUInt16( (sal_uInt16) nElem );
+    rStrm.WriteUInt16( nElem );
     for( n = 0; n < mpVarEntries->size(); n++ )
     {
         SbxVarEntry* pEntry = (*mpVarEntries)[n];
         if (pEntry->mpVar && (pEntry->mpVar->GetFlags() & SBX_DONTSTORE) == SBX_NONE)
         {
-            rStrm.WriteUInt16( (sal_uInt16) n );
+            rStrm.WriteUInt16( n );
             if (!pEntry->mpVar->Store(rStrm))
                 return false;
         }

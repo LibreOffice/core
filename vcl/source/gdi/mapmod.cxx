@@ -60,7 +60,7 @@ SvStream& WriteImplMapMode( SvStream& rOStm, const ImplMapMode& rImplMapMode )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm.WriteUInt16( (sal_uInt16) rImplMapMode.meUnit );
+    rOStm.WriteUInt16( rImplMapMode.meUnit );
     WritePair( rOStm, rImplMapMode.maOrigin );
     WriteFraction( rOStm, rImplMapMode.maScaleX );
     WriteFraction( rOStm, rImplMapMode.maScaleY );
