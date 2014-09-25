@@ -52,6 +52,7 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     get(m_pShowChar, "showchar");
     m_pShowChar->SetCentered(true);
     get(m_pShowText, "showtext");
+    m_pShowText->SetMaxTextLen(CHARMAP_MAXLEN);
     get(m_pOKBtn, "ok");
     get(m_pFontText, "fontft");
     get(m_pFontLB, "fontlb");
@@ -507,13 +508,25 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
     if ( !bOne )
     {
         OUString aText = m_pShowText->GetText();
+        Selection aSelection = m_pShowText->GetSelection();
+        aSelection.Justify();
+        long nLen = aSelection.Len();
 
-        if ( aText.getLength() != CHARMAP_MAXLEN )
+        if ( aText.getLength() != CHARMAP_MAXLEN || nLen > 0 )
         {
             sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
             // using the new UCS4 constructor
             OUString aOUStr( &cChar, 1 );
-            m_pShowText->SetText( aText + aOUStr );
+
+            long nPos = aSelection.Min();
+            if( aText.getLength() )
+            {
+                m_pShowText->SetText( aText.copy( 0, nPos ) + aOUStr + aText.copy( nPos + nLen ) );
+            }
+            else
+                m_pShowText->SetText( aOUStr );
+
+            m_pShowText->SetSelection( Selection( nPos + 1 ) );
         }
 
     }
