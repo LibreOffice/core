@@ -25,14 +25,14 @@ function header {
 	<style>
 	* { margin: 0; padding: 0; }
 	body { font-family: sans-serif; font-size: 12px; }
-	#head { padding: 20px; background: #18A303; }
+        #head { padding: 20px; background: #00A500; }
 	#head a { color: #000; }
 	#body { padding: 20px; }
 	#foot { padding: 10px; font-size: 9px; border-top: 1px #18A303 solid; margin-top: 25px; }
 	p { line-height: 1.7em; margin-bottom: 1em; }
 	pre { margin-bottom: 0.5em; }
-	.multi-col { -moz-column-width: 13em; -webkit-column-width: 13em; -moz-column-gap: 1em; -webkit-column-gap: 1em; }
-	h1 {margin-bottom: 0.5em;}
+        .multi-col { -moz-column-width: 20em; -webkit-column-width: 20em; -moz-column-gap: 1em; -webkit-column-gap: 1em; }
+        h1 { margin-bottom: 0.5em; }
 	h2,h3,h4 { margin: 1.3em 0 0.5em 0; }
 	ul, ol { margin: 0.5em 1.5em; }
 	</style>
@@ -42,7 +42,7 @@ function header {
 	<h1>$title</h1>
 	<p>$breadcrumb</p>
 	</div>
-	<div id="body">
+        <div id="body" style="multi-col">
 EOF
 }
 
@@ -87,7 +87,7 @@ function proc_text {
 function setup {
   parm=$1
   if [ -z "${!parm}" ] ; then
-	echo "grep \"${parm}=\" ./config_host.mk | sed -re \" s/${parm}=//\")"  
+    echo "grep \"${parm}=\" ./config_host.mk | sed -re \" s/${parm}=//\")"
     echo "$parm=$(grep \"${parm}=\" ./config_host.mk | sed -re \" s/${parm}=//\")"
     eval "$parm=$(grep \"${parm}=\" ./config_host.mk | sed -re \" s/${parm}=//\")"
   fi
@@ -224,7 +224,7 @@ for module_name in *; do
     else
       empty_modules[${#empty_modules[*]}]=$module_name
 	fi
-  fi  
+  fi
 done
 if [ ${#empty_modules[*]} -gt 0 ]; then
   echo -e "<p>&nbsp;</p><p>READMEs were not available for these modules:</p><ul>\n" >> "$BASE_OUTPUT/index.html"
