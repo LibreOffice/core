@@ -40,16 +40,16 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
 
     protected WizardDescriptor.Panel[] createPanels() {
         return new WizardDescriptor.Panel[] {
-            new SelectPathPanel()
-        };
+                   new SelectPathPanel()
+               };
     }
 
     // And the list of step names:
 
     protected String[] createSteps() {
         return new String[] {
-            "Select OpenOffice.org Installation"
-        };
+                   "Select OpenOffice.org Installation"
+               };
     }
 
     // --- The rest probably does not need to be touched. ---
@@ -66,6 +66,7 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
         if (panels == null) {
             panels = createPanels();
         }
+
         return panels;
     }
 
@@ -77,6 +78,7 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
         if (steps == null) {
             steps = createSteps();
         }
+
         return steps;
     }
 
@@ -87,7 +89,7 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
 
     public String name() {
         return NbBundle.getMessage(InstallationPathIterator.class, "TITLE_x_of_y",
-        Integer.valueOf(index + 1), Integer.valueOf(getPanels().length));
+                                   Integer.valueOf(index + 1), Integer.valueOf(getPanels().length));
     }
 
     public boolean hasNext() {
@@ -98,10 +100,12 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
     }
     public void nextPanel() {
         if (!hasNext()) throw new NoSuchElementException();
+
         index++;
     }
     public void previousPanel() {
         if (!hasPrevious()) throw new NoSuchElementException();
+
         index--;
     }
     public WizardDescriptor.Panel current() {

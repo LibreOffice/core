@@ -49,25 +49,24 @@ public class NetBeansSourceView extends JPanel
 
         try {
             Class kitClass = Class.forName(
-                NetBeansSourceView.class.getPackage().getName() + ".JavaKit");
+                                 NetBeansSourceView.class.getPackage().getName() + ".JavaKit");
 
             JEditorPane.registerEditorKitForContentType(
                 "text/x-java", kitClass.getName(), kitClass.getClassLoader());
-        }
-        catch( ClassNotFoundException exc ) {
+        } catch (ClassNotFoundException exc) {
         }
     }
 
     private class MyLocalizer implements LocaleSupport.Localizer {
         private ResourceBundle bundle;
 
-        public MyLocalizer( String bundleName ) {
-            bundle = ResourceBundle.getBundle( bundleName );
+        public MyLocalizer(String bundleName) {
+            bundle = ResourceBundle.getBundle(bundleName);
         }
 
         // Localizer
-        public String getString( String key ) {
-            return bundle.getString( key );
+        public String getString(String key) {
+            return bundle.getString(key);
         }
     }
 
@@ -102,10 +101,10 @@ public class NetBeansSourceView extends JPanel
         }
 
         java.net.URL url = null;
+
         try {
             url = f.toURL();
-        }
-        catch (java.net.MalformedURLException mue) {
+        } catch (java.net.MalformedURLException mue) {
             System.err.println("Invalid file");
             System.exit(-1);
         }
@@ -120,11 +119,11 @@ public class NetBeansSourceView extends JPanel
     }
 
     // Code grabbed from NetBeans editor module
-    public void scrollToLine(int line)
-    {
+    public void scrollToLine(int line) {
         BaseDocument doc = Utilities.getDocument(pane);
 
         int pos = -1;
+
         if (doc != null) {
             // Obtain the offset where to jump
             pos = Utilities.getRowStartFromLineOffset(doc, line);
@@ -132,11 +131,11 @@ public class NetBeansSourceView extends JPanel
 
         if (pos != -1) {
             Caret caret = pane.getCaret();
+
             if (caret instanceof BaseCaret) { // support extended scroll mode
                 BaseCaret bCaret = (BaseCaret)caret;
                 bCaret.setDot(pos, bCaret, EditorUI.SCROLL_FIND);
-            }
-            else {
+            } else {
                 caret.setDot(pos);
             }
         }
@@ -151,16 +150,14 @@ public class NetBeansSourceView extends JPanel
            so we don't get a storm of DocumentEvents during loading */
         pane.getDocument().removeDocumentListener(this);
 
-        if (!isModified)
-        {
+        if (!isModified) {
             pane.setText(model.getText());
         }
 
         // scroll to current position of the model
         try {
             scrollToLine(model.getCurrentPosition());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // couldn't scroll to line, do nothing
         }
 

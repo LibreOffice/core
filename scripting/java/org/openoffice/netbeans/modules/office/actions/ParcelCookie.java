@@ -21,8 +21,7 @@ package org.openoffice.netbeans.modules.office.actions;
 import java.io.File;
 import org.openide.nodes.Node;
 
-public interface ParcelCookie extends Node.Cookie
-{
+public interface ParcelCookie extends Node.Cookie {
     File getFile();
 
     String getLanguage();

@@ -43,28 +43,25 @@ public class CommandLineTools {
 
         // Get the URL for the Office DTD directory and pass it to the
         // XMLParserFactory so that Office xml files can be parsed
-        if (officePath == null)
-        {
+        if (officePath == null) {
             try {
                 SVersionRCFile sv = SVersionRCFile.createInstance();
-                if (sv.getDefaultVersion() != null)
-                {
+
+                if (sv.getDefaultVersion() != null) {
                     officePath = sv.getDefaultVersion().getPath();
                 }
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
                 System.err.println("Error getting Office directory");
             }
         }
 
-        if (officePath == null)
-        {
+        if (officePath == null) {
             driver.fatalUsage("Error: Office Installation path not set");
         }
 
         File officeDir = new File(officePath);
-        if (!officeDir.exists() || !officeDir.isDirectory())
-        {
+
+        if (!officeDir.exists() || !officeDir.isDirectory()) {
             driver.fatalUsage(
                 "Error: Office Installation path not valid: " + officePath);
         }
@@ -78,8 +75,7 @@ public class CommandLineTools {
         else {
             try {
                 command.execute();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 driver.fatal("Error: " + e.getMessage());
             }
         }
@@ -91,17 +87,17 @@ public class CommandLineTools {
 
     private void printUsage() {
         System.out.println("java " + getClass().getName() + " -h " +
-            "prints this message");
+                           "prints this message");
         System.out.println("java " + getClass().getName() +
-            " [-o Path to Office Installation] " +
-            "-d <script parcel zip file> " +
-            "<destination document or directory>");
+                           " [-o Path to Office Installation] " +
+                           "-d <script parcel zip file> " +
+                           "<destination document or directory>");
         System.out.println("java " + getClass().getName() +
-            " [-o Path to Office Installation] " +
-            "-g [parcel root directory] [options] [script names]");
+                           " [-o Path to Office Installation] " +
+                           "-g [parcel root directory] [options] [script names]");
         System.out.println("options:");
         System.out.println("\t[-l language[=supported extension 1[" +
-            File.pathSeparator + "supported extension 2]]]");
+                           File.pathSeparator + "supported extension 2]]]");
         System.out.println("\t[-p name=value]");
         System.out.println("\t[-v]");
     }
@@ -121,8 +117,7 @@ public class CommandLineTools {
 
         if (args.length < 1) {
             return null;
-        }
-        else if (args[0].equals("-h")) {
+        } else if (args[0].equals("-h")) {
             return new Command() {
                 public void execute() {
                     printUsage();
@@ -132,24 +127,24 @@ public class CommandLineTools {
 
         int i = 0;
 
-        if(args[0].equals("-o")) {
-            officePath = args[i+1];
+        if (args[0].equals("-o")) {
+            officePath = args[i + 1];
             i += 2;
         }
 
-        if(args[i].equals("-d")) {
+        if (args[i].equals("-d")) {
             if ((args.length - i) != 3)
                 return null;
             else
-                return new DeployCommand(args[i+1], args[i+2]);
-        }
-        else if(args[i].equals("-g")) {
+                return new DeployCommand(args[i + 1], args[i + 2]);
+        } else if (args[i].equals("-g")) {
 
             if ((args.length - i) == 1)
                 return new GenerateCommand(System.getProperty("user.dir"));
 
             GenerateCommand command;
             i++;
+
             if (!args[i].startsWith("-"))
                 command = new GenerateCommand(args[i++]);
             else
@@ -158,19 +153,18 @@ public class CommandLineTools {
             for (; i < args.length; i++) {
                 if (args[i].equals("-l")) {
                     command.setLanguage(args[++i]);
-                }
-                else if (args[i].equals("-p")) {
+                } else if (args[i].equals("-p")) {
                     command.addProperty(args[++i]);
-                }
-                else if (args[i].equals("-v")) {
+                } else if (args[i].equals("-v")) {
                     command.setVerbose();
-                }
-                else {
+                } else {
                     command.addScript(args[i]);
                 }
             }
+
             return command;
         }
+
         return null;
     }
 
@@ -207,13 +201,13 @@ public class CommandLineTools {
                     extensions = new String[tokenizer.countTokens()];
                     int i = 0;
 
-                    while(tokenizer.hasMoreTokens())
+                    while (tokenizer.hasMoreTokens())
                         extensions[i++] = (String)tokenizer.nextToken();
-                }
-                else {
+                } else {
                     extensions = new String[1];
                     extensions[0] = ext;
                 }
+
                 this.finder = new ExtensionFinder(this.language, extensions);
             }
         }
@@ -244,6 +238,7 @@ public class CommandLineTools {
         public void addScript(ScriptEntry entry) {
             if (scripts == null)
                 scripts = new ArrayList(3);
+
             scripts.add(entry);
         }
 
@@ -251,15 +246,14 @@ public class CommandLineTools {
 
             if (!basedir.isDirectory()) {
                 throw new Exception(basedir.getName() + " is not a directory");
-            }
-            else if (!contents.exists()) {
+            } else if (!contents.exists()) {
                 throw new Exception(basedir.getName() +
-                    " does not contain a Contents directory");
+                                    " does not contain a Contents directory");
             }
 
             if (language == null && !parcelxml.exists()) {
                 throw new Exception(parcelxml.getName() + " not found and language " +
-                    "not specified");
+                                    "not specified");
             }
 
             if (language != null && parcelxml.exists()) {
@@ -271,8 +265,8 @@ public class CommandLineTools {
 
                 if (!desclang.equals(language.toLowerCase()))
                     throw new Exception(parcelxml.getName() + " already exists, " +
-                        "and has a different language attribute: " +
-                        desc.getLanguage());
+                                        "and has a different language attribute: " +
+                                        desc.getLanguage());
             }
 
             if (language != null && scripts == null) {
@@ -282,6 +276,7 @@ public class CommandLineTools {
                 log("Searching for " + language + " scripts");
 
                 ScriptEntry[] entries = finder.findMethods(contents);
+
                 for (int i = 0; i < entries.length; i++) {
                     addScript(entries[i]);
                     log("Found: " + entries[i].getLogicalName());
@@ -294,6 +289,7 @@ public class CommandLineTools {
 
                 ParcelDescriptor desc = new ParcelDescriptor(parcelxml, language);
                 desc.setScriptEntries((ScriptEntry[])scripts.toArray(new ScriptEntry[scripts.size()]));
+
                 if (properties.size() != 0) {
                     Enumeration enumer = properties.keys();
 
@@ -305,9 +301,9 @@ public class CommandLineTools {
                         desc.setLanguageProperty(name, value);
                     }
                 }
+
                 desc.write();
-            }
-            else {
+            } else {
                 if (!parcelxml.exists())
                     throw new Exception("No valid scripts found");
             }
@@ -335,7 +331,7 @@ public class CommandLineTools {
         public void execute() throws Exception {
             ParcelZipper.getParcelZipper().deployParcel(source, target);
             System.out.println(source.getName() +
-                " successfully deployed to " + target.getAbsolutePath());
+                               " successfully deployed to " + target.getAbsolutePath());
         }
     }
 }

@@ -36,7 +36,7 @@ public class OfficeDocumentDataNode extends DataNode {
 
     public OfficeDocumentDataNode(OfficeDocumentDataObject obj) {
         this(obj, new OfficeDocumentChildren((OfficeDocumentCookie)
-            obj.getCookie(OfficeDocumentCookie.class)));
+                                             obj.getCookie(OfficeDocumentCookie.class)));
     }
 
     public OfficeDocumentDataNode(OfficeDocumentDataObject obj, Children ch) {
@@ -67,6 +67,7 @@ public class OfficeDocumentDataNode extends DataNode {
         }
 
         Node[] moves = NodeTransfer.nodes(t, NodeTransfer.MOVE);
+
         if (moves != null) {
             for (int i = 0; i < moves.length; i++) {
                 if (moves[i] instanceof ParcelDataNode) {

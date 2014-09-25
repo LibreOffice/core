@@ -56,8 +56,7 @@ public class ScriptPanel extends JPanel {
 
             try {
                 entry = (ScriptEntry) entries[i].clone();
-            }
-            catch (CloneNotSupportedException cnse) {
+            } catch (CloneNotSupportedException cnse) {
                 entry = new ScriptEntry(entries[i].getLanguage(),
                                         entries[i].getLanguageName(),
                                         entries[i].getLocation());
@@ -108,8 +107,10 @@ public class ScriptPanel extends JPanel {
 
     private void tableFocusLost() {
         TableCellEditor editor = table.getCellEditor();
+
         if (editor != null) {
             Object value = editor.getCellEditorValue();
+
             if (value != null)
                 model.setValueAt(value,
                                  table.getEditingRow(), table.getEditingColumn());
@@ -118,16 +119,19 @@ public class ScriptPanel extends JPanel {
 
     private class ScriptTableModel extends AbstractTableModel {
         final String[] columnNames = {"Exported Method",
-                                      "Script Name"};
+                                      "Script Name"
+                                     };
 
         private ArrayList<ScriptEntry> scripts;
         private int nextRow;
 
         public ScriptTableModel(ScriptEntry[] entries) {
             scripts = new ArrayList<ScriptEntry>(entries.length + 11);
+
             for (int i = 0; i < entries.length; i++) {
                 scripts.add(entries[i]);
             }
+
             nextRow = entries.length;
         }
 

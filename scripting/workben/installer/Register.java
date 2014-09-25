@@ -20,85 +20,87 @@ package installer;
 
 import java.io.*;
 import javax.swing.*;
-public class Register{
+public class Register {
 
 
     public static boolean register(String path, JLabel statusLabel) {
         String[] packages = {"ooscriptframe.zip", "bshruntime.zip", "jsruntime.zip"};
 
-    try {
-        boolean goodResult = false;
-        String env[] = new String[1];
+        try {
+            boolean goodResult = false;
+            String env[] = new String[1];
             ExecCmd command = new ExecCmd();
-        boolean isWindows =
+            boolean isWindows =
                 (System.getProperty("os.name").indexOf("Windows") != -1);
 
-        String progpath = path.concat("program" + File.separator);
+            String progpath = path.concat("program" + File.separator);
 
             statusLabel.setText("Registering Scripting Framework...");
 
             // pkgchk Scripting Framework Components
             statusLabel.setText("Registering Scripting Framework Components...");
-        System.out.println("Registering Scripting Framework Components...");
+            System.out.println("Registering Scripting Framework Components...");
 
             for (int i = 0; i < packages.length; i++) {
                 String cmd = "";
 
-            if (!isWindows) {
-            env[0]="LD_LIBRARY_PATH=" + progpath;
+                if (!isWindows) {
+                    env[0] = "LD_LIBRARY_PATH=" + progpath;
 
-            goodResult = command.exec("chmod a+x " + progpath + "pkgchk", null );
+                    goodResult = command.exec("chmod a+x " + progpath + "pkgchk", null);
 
-            if ( goodResult ){
+                    if (goodResult) {
                         cmd = progpath + "pkgchk -s -f " + progpath + packages[i];
 
-                System.err.println(cmd);
+                        System.err.println(cmd);
                         goodResult = command.exec(cmd, env);
                     }
-                }
-            else {
+                } else {
                     cmd = "\"" + progpath + "pkgchk.exe\" -s -f \"" + progpath +
-                        packages[i] + "\"";
+                          packages[i] + "\"";
 
-            System.err.println(cmd);
-                    goodResult =command.exec(cmd,null);
+                    System.err.println(cmd);
+                    goodResult = command.exec(cmd, null);
 
-            }
+                }
+
                 if (!goodResult) {
                     System.err.println("\nPkgChk Failed");
 
-            if(!isWindows)
-                System.err.println("Command: " + cmd + "\n" + env[0]);
-            else
-            System.err.println("Command: \"" + cmd + "\"");
+                    if (!isWindows)
+                        System.err.println("Command: " + cmd + "\n" + env[0]);
+                    else
+                        System.err.println("Command: \"" + cmd + "\"");
 
-            statusLabel.setText(
+                    statusLabel.setText(
                         "PkgChk Failed, please view SFrameworkInstall.log");
 
-            return false;
+                    return false;
                 }
-        }
+            }
 
             // updating StarBasic libraries
             statusLabel.setText("Updating StarBasic libraries...");
-            if(!FileUpdater.updateScriptXLC(path, statusLabel)) {
-            statusLabel.setText("Updating user/basic/script.xlc failed, please view SFrameworkInstall.log");
-            return false;
-        }
-            if(!FileUpdater.updateDialogXLC(path, statusLabel)) {
-            statusLabel.setText("Updating user/basic/dialog.xlc failed, please view SFrameworkInstall.log");
+
+            if (!FileUpdater.updateScriptXLC(path, statusLabel)) {
+                statusLabel.setText("Updating user/basic/script.xlc failed, please view SFrameworkInstall.log");
+                return false;
+            }
+
+            if (!FileUpdater.updateDialogXLC(path, statusLabel)) {
+                statusLabel.setText("Updating user/basic/dialog.xlc failed, please view SFrameworkInstall.log");
+                return false;
+            }
+
+        } catch (Exception e) {
+            String message = "\nError installing scripting package, please view SFrameworkInstall.log.";
+            System.out.println(message);
+            e.printStackTrace();
+            statusLabel.setText(message);
             return false;
         }
 
-    }
-    catch(Exception e){
-        String message = "\nError installing scripting package, please view SFrameworkInstall.log.";
-        System.out.println(message);
-        e.printStackTrace();
-        statusLabel.setText(message);
-        return false;
-    }
-    return true;
+        return true;
     }// register
 
 }//Register

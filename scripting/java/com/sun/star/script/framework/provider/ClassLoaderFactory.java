@@ -26,24 +26,22 @@ import com.sun.star.script.framework.container.ScriptMetaData;
 /**
  *  Class Loader Factory
  */
-public class ClassLoaderFactory
-{
+public class ClassLoaderFactory {
     private ClassLoaderFactory() {}
 
-    public static ClassLoader getURLClassLoader( ScriptMetaData scriptData )
-    {
+    public static ClassLoader getURLClassLoader(ScriptMetaData scriptData) {
         ClassLoader parent = scriptData.getClass().getClassLoader();
         URL[] classPath = scriptData.getClassPath();
-        LogUtils.DEBUG("Classpath has length " + classPath.length );
-        for ( int i=0; i < classPath.length; i++ )
-        {
-            LogUtils.DEBUG("ClassPath " + i + "} is " + classPath[ i ].toString() );
+        LogUtils.DEBUG("Classpath has length " + classPath.length);
+
+        for (int i = 0; i < classPath.length; i++) {
+            LogUtils.DEBUG("ClassPath " + i + "} is " + classPath[ i ].toString());
         }
-        return getURLClassLoader( parent, classPath );
+
+        return getURLClassLoader(parent, classPath);
     }
-    private static ClassLoader getURLClassLoader( ClassLoader parent, URL[] classpath)
-    {
-        return new URLClassLoader( classpath, parent);
+    private static ClassLoader getURLClassLoader(ClassLoader parent, URL[] classpath) {
+        return new URLClassLoader(classpath, parent);
     }
 
 }

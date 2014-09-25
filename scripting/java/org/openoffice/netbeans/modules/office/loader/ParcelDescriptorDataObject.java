@@ -41,11 +41,13 @@ public class ParcelDescriptorDataObject extends MultiDataObject {
 
     private void init() {
         FileObject fo = getPrimaryFile();
+
         if (FileUtil.toFile(fo) != null)
             canParse = true;
 
         CookieSet cookies = getCookieSet();
         cookies.add(new ParcelDescriptorEditorSupport(this));
+
         if (canParse)
             cookies.add(new ParcelDescriptorParserSupport(getPrimaryFile()));
     }

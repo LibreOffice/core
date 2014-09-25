@@ -52,8 +52,7 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
                 OfficeInstallation oi = (OfficeInstallation)enumer.nextElement();
                 installationsComboBox.addItem(oi);
             }
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             installationsComboBox.addItem("<empty>");
         }
 
@@ -63,11 +62,11 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         }
 
         installationsComboBox.addActionListener(
-            new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    installationsComboBoxActionPerformed(evt);
-                }
+        new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                installationsComboBoxActionPerformed(evt);
             }
+        }
         );
 
         // Provide a name in the title bar.
@@ -167,10 +166,10 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
             target = chooser.getSelectedFile();
 
             String path;
+
             try {
                 path = target.getCanonicalPath();
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
                 path = target.getAbsolutePath();
             }
 

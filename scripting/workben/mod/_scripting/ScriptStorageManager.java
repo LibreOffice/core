@@ -32,31 +32,32 @@ import lib.TestParameters;
 public class ScriptStorageManager extends TestCase {
 
     @Override
-    public void initialize( TestParameters tParam, PrintWriter log ) {
+    public void initialize(TestParameters tParam, PrintWriter log) {
     }
 
     @Override
+
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log ) throws StatusException {
+        TestParameters Param, PrintWriter log) throws StatusException {
 
         XInterface oObj = null;
-    Object oInterface = null;
+        Object oInterface = null;
 
-    try {
+        try {
             XMultiServiceFactory xMSF = Param.getMSF();
             XPropertySet xProp = UnoRuntime.queryInterface(
-                                                XPropertySet.class, xMSF);
+                                     XPropertySet.class, xMSF);
             // get context
             XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class,
-            xProp.getPropertyValue("DefaultContext"));
+                                         xProp.getPropertyValue("DefaultContext"));
             // get the script storage manager from context
             oInterface = xContext.getValueByName("/singletons/" +
-                        "drafts.com.sun.star.script.framework.storage.theScriptStorageManager");
+                                                 "drafts.com.sun.star.script.framework.storage.theScriptStorageManager");
+        } catch (Exception e) {
+            log.println("ScriptStorageManager singleton service not available");
+            e.printStackTrace();
         }
-        catch( Exception e ) {
-            log.println("ScriptStorageManager singleton service not available" );
-        e.printStackTrace();
-        }
+
         oObj = (XInterface) oInterface;
 
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
@@ -66,7 +67,8 @@ public class ScriptStorageManager extends TestCase {
     }
 
     @Override
-    public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
+
+    public synchronized void disposeTestEnvironment(TestEnvironment tEnv,
             TestParameters tParam) {
     }
 }

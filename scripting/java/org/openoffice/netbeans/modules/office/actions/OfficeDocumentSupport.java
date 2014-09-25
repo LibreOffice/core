@@ -44,8 +44,7 @@ import org.openoffice.netbeans.modules.office.loader.OfficeDocumentDataObject;
 import org.openoffice.netbeans.modules.office.utils.ZipMounter;
 import org.openoffice.netbeans.modules.office.utils.ManifestParser;
 
-public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie, FileChangeListener
-{
+public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie, FileChangeListener {
     protected OfficeDocumentDataObject dataObj;
     private boolean isMounted = false;
     private OfficeDocument document;
@@ -54,12 +53,13 @@ public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie, 
     public OfficeDocumentSupport(OfficeDocumentDataObject dataObj) {
         this.dataObj = dataObj;
         FileObject fo = dataObj.getPrimaryFile();
+
         try {
             this.document = new OfficeDocument(FileUtil.toFile(fo));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
         fo.addFileChangeListener(this);
     }
 
@@ -69,26 +69,24 @@ public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie, 
         try {
             ZipMounter.getZipMounter().mountZipFile(file);
             isMounted = true;
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             ErrorManager.getDefault().notify(ioe);
-        }
-        catch (PropertyVetoException pve) {
+        } catch (PropertyVetoException pve) {
             ErrorManager.getDefault().notify(pve);
         }
     }
 
-    public void open () {
+    public void open() {
         File file = FileUtil.toFile(dataObj.getPrimaryFile());
 
         OfficeSettings settings = OfficeSettings.getDefault();
         File soffice = new File(settings.getOfficeDirectory().getPath(
-            File.separator + "soffice"));
+                                    File.separator + "soffice"));
 
         try {
-            Process p = Runtime.getRuntime ().exec (new String[] {
-                soffice.getAbsolutePath(), file.getAbsolutePath ()
-            });
+            Process p = Runtime.getRuntime().exec(new String[] {
+                                                      soffice.getAbsolutePath(), file.getAbsolutePath()
+                                                  });
         } catch (IOException ioe) {
             ErrorManager.getDefault().notify(ioe);
         }

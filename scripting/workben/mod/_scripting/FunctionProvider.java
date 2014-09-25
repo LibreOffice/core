@@ -34,25 +34,27 @@ public class FunctionProvider extends TestCase {
 
     String docPath = null;
     @Override
-    public void initialize( TestParameters tParam, PrintWriter log ) {
+    public void initialize(TestParameters tParam, PrintWriter log) {
     }
 
     @Override
+
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log ) throws StatusException {
+        TestParameters tParam, PrintWriter log) throws StatusException {
         XInterface oObj = null;
-    log.println("creating test environment");
+        log.println("creating test environment");
+
         try {
 
             XMultiServiceFactory xMSF = tParam.getMSF();
 
-            Object xInterface = xMSF.createInstance( "com.sun.star.frame.Desktop" );
-            XDesktop dtop = UnoRuntime.queryInterface( XDesktop.class,
-                xInterface );
+            Object xInterface = xMSF.createInstance("com.sun.star.frame.Desktop");
+            XDesktop dtop = UnoRuntime.queryInterface(XDesktop.class,
+                            xInterface);
 
             XModel model = dtop.getCurrentFrame().getController().getModel();
             oObj  =
-                (XInterface)xMSF.createInstanceWithArguments( "drafts.com.sun.star.script.framework.provider.FunctionProvider", new Object[]{ model } );
+                (XInterface)xMSF.createInstanceWithArguments("drafts.com.sun.star.script.framework.provider.FunctionProvider", new Object[] { model });
 
 
         } catch (com.sun.star.uno.Exception e) {
@@ -66,7 +68,8 @@ public class FunctionProvider extends TestCase {
     }
 
     @Override
-    public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
+
+    public synchronized void disposeTestEnvironment(TestEnvironment tEnv,
             TestParameters tParam) {
     }
 }

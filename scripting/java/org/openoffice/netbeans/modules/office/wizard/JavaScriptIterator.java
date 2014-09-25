@@ -58,17 +58,17 @@ public class JavaScriptIterator implements TemplateWizard.Iterator {
 
     protected WizardDescriptor.Panel[] createPanels() {
         return new WizardDescriptor.Panel[] {
-            // keep the default 2nd panel:
-            wiz.targetChooser(),
-        };
+                   // keep the default 2nd panel:
+                   wiz.targetChooser(),
+               };
     }
 
     // And the list of step names:
 
     protected String[] createSteps() {
         return new String[] {
-            null,
-        };
+                   null,
+               };
     }
 
     private DataFolder checkTarget(DataFolder folder) {
@@ -80,21 +80,23 @@ public class JavaScriptIterator implements TemplateWizard.Iterator {
             if (fs instanceof OpenOfficeDocFileSystem && fo.isRoot()) {
                 FileObject scripts =
                     fo.getFileObject(OpenOfficeDocFileSystem.SCRIPTS_ROOT);
+
                 if (scripts == null)
                     scripts =
                         fo.createFolder(OpenOfficeDocFileSystem.SCRIPTS_ROOT);
 
                 FileObject javafolder = scripts.getFileObject("java");
+
                 if (javafolder == null)
                     javafolder = scripts.createFolder("java");
 
                 DataFolder subfolder = new DataFolder(javafolder);
                 return subfolder;
             }
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             /* do nothing, we will just return the folder we were passed in */
         }
+
         return folder;
     }
 
@@ -105,6 +107,7 @@ public class JavaScriptIterator implements TemplateWizard.Iterator {
 
         DataObject template = wiz.getTemplate();
         DataObject result;
+
         if (name == null) {
             // Default name.
             result = template.createFromTemplate(targetFolder);
@@ -113,6 +116,7 @@ public class JavaScriptIterator implements TemplateWizard.Iterator {
         }
 
         FileObject tmp = result.getPrimaryFile();
+
         if (tmp.getExt().equals("java")) {
             try {
                 PackageRemover.removeDeclaration(FileUtil.toFile(tmp));
@@ -120,13 +124,12 @@ public class JavaScriptIterator implements TemplateWizard.Iterator {
                 // IssueZilla 11986 - rename the FileObject
                 // so the JavaNode is resynchronized
                 tmp.rename(tmp.lock(), tmp.getName(), tmp.getExt());
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
                 NotifyDescriptor d = new NotifyDescriptor.Message(
-                 "Error removing package declaration from file: " +
-                 tmp.getNameExt() +
-                 ". You should manually remove this declaration " +
-                 "before building the Parcel Recipe");
+                    "Error removing package declaration from file: " +
+                    tmp.getNameExt() +
+                    ". You should manually remove this declaration " +
+                    "before building the Parcel Recipe");
                 TopManager.getDefault().notify(d);
             }
         }
@@ -150,14 +153,17 @@ public class JavaScriptIterator implements TemplateWizard.Iterator {
         panels = createPanels();
         // Make sure list of steps is accurate.
         String[] steps = createSteps();
+
         for (int i = 0; i < panels.length; i++) {
             Component c = panels[i].getComponent();
+
             if (steps[i] == null) {
                 // Default step name to component name of panel.
                 // Mainly useful for getting the name of the target
                 // chooser to appear in the list of steps.
                 steps[i] = c.getName();
             }
+
             if (c instanceof JComponent) { // assume Swing components
                 JComponent jc = (JComponent)c;
                 // Step #.
@@ -189,10 +195,12 @@ public class JavaScriptIterator implements TemplateWizard.Iterator {
     }
     public void nextPanel() {
         if (!hasNext()) throw new NoSuchElementException();
+
         index++;
     }
     public void previousPanel() {
         if (!hasPrevious()) throw new NoSuchElementException();
+
         index--;
     }
     public WizardDescriptor.Panel current() {

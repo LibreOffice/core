@@ -48,16 +48,19 @@ public class OfficeDocumentChildren extends Children.Keys
         }
 
         Enumeration parcels = document.getParcels();
+
         if (!parcels.hasMoreElements()) {
             setKeys(Collections.EMPTY_SET);
             return;
         }
 
         ArrayList keys = new ArrayList();
+
         while (parcels.hasMoreElements()) {
             String parcel = (String)parcels.nextElement();
             keys.add(parcel);
         }
+
         setKeys(keys);
     }
 
@@ -101,8 +104,8 @@ public class OfficeDocumentChildren extends Children.Keys
 
         protected SystemAction[] createActions() {
             return new SystemAction[] {
-                SystemAction.get(DeleteAction.class),
-            };
+                       SystemAction.get(DeleteAction.class),
+                   };
         }
 
         public HelpCtx getHelpCtx() {
@@ -116,12 +119,12 @@ public class OfficeDocumentChildren extends Children.Keys
         public void destroy() throws IOException {
             OfficeSettings settings = OfficeSettings.getDefault();
             String message = "If you already have this document open in " +
-                "Office, please close it before continuing. Click OK to " +
-                "delete this parcel.";
+                             "Office, please close it before continuing. Click OK to " +
+                             "delete this parcel.";
 
             if (settings.getWarnBeforeParcelDelete()) {
                 NagDialog warning = NagDialog.createConfirmationDialog(
-                    message, "Show this message in future", true);
+                                        message, "Show this message in future", true);
 
                 boolean result = warning.show();
 
@@ -131,6 +134,7 @@ public class OfficeDocumentChildren extends Children.Keys
                 if (!result)
                     return;
             }
+
             super.destroy();
             document.removeParcel(name);
         }

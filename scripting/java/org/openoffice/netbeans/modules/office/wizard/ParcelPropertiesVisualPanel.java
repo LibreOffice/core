@@ -140,8 +140,10 @@ public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
 
     private void changeName() {
         String name = recipeName.getText().trim();
+
         if (name.length() == 0)
             name = null;
+
         panel.setName(name);
     }
 

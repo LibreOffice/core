@@ -60,8 +60,7 @@ public class OfficeSettings extends SystemOption {
                     setOfficeDirectory(oi);
                     return;
                 }
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
             }
         }
     }

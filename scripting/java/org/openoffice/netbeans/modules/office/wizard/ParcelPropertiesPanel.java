@@ -51,6 +51,7 @@ public class ParcelPropertiesPanel implements WizardDescriptor.FinishPanel {
         if (component == null) {
             component = new ParcelPropertiesVisualPanel(this);
         }
+
         return component;
     }
 

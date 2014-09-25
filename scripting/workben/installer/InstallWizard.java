@@ -26,76 +26,75 @@ import java.net.*;
 import java.io.*;
 
 public class InstallWizard extends javax.swing.JFrame implements ActionListener {
-/*
-    private static class ShutdownHook extends Thread {
-        public void run()
-    {
-            if (InstallWizard.isInstallStarted())
+    /*
+        private static class ShutdownHook extends Thread {
+            public void run()
+        {
+                if (InstallWizard.isInstallStarted())
+                {
+                    // Check for and backup any config.xml files
+                    // Check for and backup any StarBasic macro files
+                    // Check for and backup ProtocolHandler
+
+                    if (!InstallWizard.isPatchedTypes())
             {
-                // Check for and backup any config.xml files
-                // Check for and backup any StarBasic macro files
-                // Check for and backup ProtocolHandler
-
-                if (!InstallWizard.isPatchedTypes())
-        {
-                    File backup = new File(InstUtil.getTmpDir(), "TypeDetection.xml");
-                    File destination = new File(InstallWizard.getTypesPath());
-                    InstUtil.copy(backup, destination); //Restore typedetection.xml
-        }
-        if (!InstallWizard.isPatchedJava())
-        {
-                    File backup = new File(InstUtil.getTmpDir(), "Java.xml");
-                    File destination = new File(InstallWizard.getJavaPath());
-                    InstUtil.copy(backup, destination); //Restore typedetection.xml
-        }
-        if (!InstallWizard.isPatchedRDB())
-        {
-                    File backup = new File(InstUtil.getTmpDir(), "applicat.rdb");
-                    File destination = new File(InstallWizard.getJavaPath());
-                    //InstUtil.copy(backup, destination); //Restore typedetection.xml
-        }
-
-                System.out.println( "ShutdownHook" );
+                        File backup = new File(InstUtil.getTmpDir(), "TypeDetection.xml");
+                        File destination = new File(InstallWizard.getTypesPath());
+                        InstUtil.copy(backup, destination); //Restore typedetection.xml
+            }
+            if (!InstallWizard.isPatchedJava())
+            {
+                        File backup = new File(InstUtil.getTmpDir(), "Java.xml");
+                        File destination = new File(InstallWizard.getJavaPath());
+                        InstUtil.copy(backup, destination); //Restore typedetection.xml
+            }
+            if (!InstallWizard.isPatchedRDB())
+            {
+                        File backup = new File(InstUtil.getTmpDir(), "applicat.rdb");
+                        File destination = new File(InstallWizard.getJavaPath());
+                        //InstUtil.copy(backup, destination); //Restore typedetection.xml
             }
 
-            InstUtil.removeTmpDir();
-    }
-    }// class ShutdownHook
+                    System.out.println( "ShutdownHook" );
+                }
 
-    static {
-        Runtime rt=Runtime.getRuntime();
-        rt.addShutdownHook(new ShutdownHook());
-    }
-*/
+                InstUtil.removeTmpDir();
+        }
+        }// class ShutdownHook
+
+        static {
+            Runtime rt=Runtime.getRuntime();
+            rt.addShutdownHook(new ShutdownHook());
+        }
+    */
     /** Creates new form InstallWizard */
     public InstallWizard() {
         super("Office Scripting Framework Installer - Early Developer Release");
 
-     try {
-         System.out.print("All diagnostic output is being redirected to SFrameworkInstall.log\n");
-         System.out.print("Location: "+  System.getProperty( "user.dir" ) +
-             File.separator + "SFrameworkInstall.log\n");
+        try {
+            System.out.print("All diagnostic output is being redirected to SFrameworkInstall.log\n");
+            System.out.print("Location: " +  System.getProperty("user.dir") +
+                             File.separator + "SFrameworkInstall.log\n");
 
-         LogStream log = new LogStream( "SFrameworkInstall.log" );
-                 System.setErr(log);
+            LogStream log = new LogStream("SFrameworkInstall.log");
+            System.setErr(log);
 
-                 System.setOut(log);
-     }
-     catch( FileNotFoundException fnfe ) {
-         System.err.println("Office Scripting Framework Installer - Error: ");
-         System.err.println("Unable to create log file for installation.");
-         exitForm();
-     }
+            System.setOut(log);
+        } catch (FileNotFoundException fnfe) {
+            System.err.println("Office Scripting Framework Installer - Error: ");
+            System.err.println("Unable to create log file for installation.");
+            exitForm();
+        }
 
-    setBackground(new Color(0,0,0));
-    locations = new ArrayList<String>();
-    Point center = new Point( 400, 400 );
-    int windowWidth=200;
-    int windowHeight=300;
-    setSize(windowWidth,windowHeight);
-    setBounds((center.x-windowWidth/2)-115,(center.y-windowWidth/2)-100, windowWidth,windowHeight);
-    initComponents();
-    setResizable(false);
+        setBackground(new Color(0, 0, 0));
+        locations = new ArrayList<String>();
+        Point center = new Point(400, 400);
+        int windowWidth = 200;
+        int windowHeight = 300;
+        setSize(windowWidth, windowHeight);
+        setBounds((center.x - windowWidth / 2) - 115, (center.y - windowWidth / 2) - 100, windowWidth, windowHeight);
+        initComponents();
+        setResizable(false);
     }
 
     /** This method is called from within the constructor to
@@ -137,40 +136,39 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         screens.add(WELCOME, new Welcome(this));
         version = new Version(this);
         screens.add(VERSIONS, version);
-    _final = new Final(this);
+        _final = new Final(this);
         screens.add(FINAL, _final);
 
-    boolean hasIDEInstallation = ( InstUtil.hasNetbeansInstallation() ) ;
+        boolean hasIDEInstallation = (InstUtil.hasNetbeansInstallation()) ;
 
-    if( hasIDEInstallation )
-    {
-        idewelcome = new IdeWelcome(this);
-        screens.add(IDEWELCOME, idewelcome);
-        ideversion = new IdeVersion(this);
-        screens.add(IDEVERSIONS, ideversion);
-        idefinal = new IdeFinal(this);
-        screens.add(IDEFINAL, idefinal);
-    }
+        if (hasIDEInstallation) {
+            idewelcome = new IdeWelcome(this);
+            screens.add(IDEWELCOME, idewelcome);
+            ideversion = new IdeVersion(this);
+            screens.add(IDEVERSIONS, ideversion);
+            idefinal = new IdeFinal(this);
+            screens.add(IDEFINAL, idefinal);
+        }
+
         getContentPane().add(screens, java.awt.BorderLayout.CENTER);
 
-    navNext.addActionListener(this);
-    navNext.addActionListener(version);
-    navNext.addActionListener(_final);
+        navNext.addActionListener(this);
+        navNext.addActionListener(version);
+        navNext.addActionListener(_final);
 
-    if( hasIDEInstallation )
-    {
-        navNext.addActionListener(ideversion);
-        navNext.addActionListener(idefinal);
-    }
+        if (hasIDEInstallation) {
+            navNext.addActionListener(ideversion);
+            navNext.addActionListener(idefinal);
+        }
 
-    navCancel.addActionListener(this);
-    navBack.addActionListener(this);
+        navCancel.addActionListener(this);
+        navBack.addActionListener(this);
 
 
-    URL url = this.getClass().getResource("sidebar.jpg");
-    JLabel sideBar = new JLabel();
-    sideBar.setIcon(new ImageIcon(url));
-    getContentPane().add (sideBar, java.awt.BorderLayout.WEST);
+        URL url = this.getClass().getResource("sidebar.jpg");
+        JLabel sideBar = new JLabel();
+        sideBar.setIcon(new ImageIcon(url));
+        getContentPane().add(sideBar, java.awt.BorderLayout.WEST);
         pack();
     }// initComponents
 
@@ -180,41 +178,33 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     }
 
 
-    public void actionPerformed(ActionEvent e)
-    {
-        if (e.getSource() == navNext)
-    {
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == navNext) {
             ((CardLayout)screens.getLayout()).next(screens);
-    }
+        }
 
-    if (e.getSource() == navCancel)
-    {
+        if (e.getSource() == navCancel) {
             exitForm();
-    }
+        }
 
-    if (e.getSource() == navBack)
-    {
+        if (e.getSource() == navBack) {
             ((CardLayout)screens.getLayout()).previous(screens);
-    }
+        }
     }// actionPerformed
 
-    public static void storeLocation(String path)
-    {
+    public static void storeLocation(String path) {
         locations.add(path);
     }
 
-    public static ArrayList<String> getLocations()
-    {
+    public static ArrayList<String> getLocations() {
         return locations;
     }
 
-    public static void clearLocations()
-    {
+    public static void clearLocations() {
         locations.clear();
     }
 
-    public void show(String cardName)
-    {
+    public void show(String cardName) {
         ((CardLayout)screens.getLayout()).show(screens, cardName);
     }
 
@@ -231,14 +221,19 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
                 printUsage();
                 System.exit(0);
             }
+
             if (args[i].equals("-office"))
                 officePath = args[++i];
+
             if (args[i].equals("-netbeans"))
                 netbeansPath = args[++i];
+
             if (args[i].equals("-net"))
                 bNetworkInstall = true;
+
             if (args[i].equals("-bindings"))
                 bBindingsInstall = true;
+
             i++;
         }
 
@@ -250,21 +245,20 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
 
         try {
             System.out.println("Log file is: " +
-                System.getProperty("user.dir") +
-                File.separator + "SFrameworkInstall.log");
+                               System.getProperty("user.dir") +
+                               File.separator + "SFrameworkInstall.log");
 
-            LogStream log = new LogStream( "SFrameworkInstall.log" );
+            LogStream log = new LogStream("SFrameworkInstall.log");
             System.setErr(log);
             System.setOut(log);
-        }
-        catch( FileNotFoundException fnfe ) {
+        } catch (FileNotFoundException fnfe) {
             System.err.println("Error: Unable to create log file: "
-                + fnfe.getMessage());
+                               + fnfe.getMessage());
             System.exit(-1);
         }
 
         if (officePath != null) {
-            XmlUpdater xud = new XmlUpdater(officePath, label, progressbar, bNetworkInstall, bBindingsInstall );
+            XmlUpdater xud = new XmlUpdater(officePath, label, progressbar, bNetworkInstall, bBindingsInstall);
             xud.run();
         }
 
@@ -292,23 +286,19 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
 
 
 
-    public static synchronized void setPatchedTypes(boolean value)
-    {
+    public static synchronized void setPatchedTypes(boolean value) {
         bPatchedTypes = value;
     }
 
-    public static synchronized void setPatchedJava(boolean value)
-    {
+    public static synchronized void setPatchedJava(boolean value) {
         bPatchedJava = value;
     }
 
-    public static synchronized void setPatchedRDB(boolean value)
-    {
+    public static synchronized void setPatchedRDB(boolean value) {
         bPatchedRDB = value;
     }
 
-    public static synchronized void setInstallStarted(boolean value)
-    {
+    public static synchronized void setInstallStarted(boolean value) {
         bInstallStarted = value;
     }
 
