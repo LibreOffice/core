@@ -94,7 +94,6 @@ interface Window
     SID_STYLE_DESIGNER // ole(no) api(final/play/rec)
     [
         ExecMethod = ChildWindowExecute ;
-        StateMethod = ChildWindowState ;
     ]
     SID_RECORDING_FLOATWINDOW // ole(no) api(final/play/rec)
     [

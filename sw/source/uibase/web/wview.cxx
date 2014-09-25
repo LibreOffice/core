@@ -76,7 +76,6 @@ SFX_IMPL_INTERFACE(SwWebView, SwView, SW_RES(RID_WEBTOOLS_TOOLBOX) )
 
 void SwWebView::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
 

@@ -54,7 +54,6 @@ void ScTabViewShell::InitInterface_Impl()
                                             ScResId(RID_OBJECTBAR_TOOLS));
 
     GetStaticInterface()->RegisterChildWindow(FID_INPUTLINE_STATUS);
-    GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
 
     GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);

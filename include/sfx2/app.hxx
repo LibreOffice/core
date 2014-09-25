@@ -175,7 +175,6 @@ public:
     * @param pArgs Takes ownership
     */
     sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, bool bCopy=true, SfxItemSet* pArgs = 0 );
-    SfxTemplateDialog*          GetTemplateDialog();
     vcl::Window*                     GetTopWindow() const;
 
     // members
