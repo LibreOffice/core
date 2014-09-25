@@ -106,10 +106,24 @@ void SAL_CALL Connection::release() throw()
     relase_ChildImpl();
 }
 
+struct ConnectionGuard
+{
+    oslInterlockedCount& m_refCount;
+    ConnectionGuard(oslInterlockedCount& refCount)
+        : m_refCount(refCount)
+    {
+        osl_atomic_increment(&m_refCount);
+    }
+    ~ConnectionGuard()
+    {
+        osl_atomic_decrement(&m_refCount);
+    }
+};
+
 void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)
     throw (SQLException, RuntimeException, std::exception)
 {
-    osl_atomic_increment( &m_refCount );
+    ConnectionGuard aGuard(m_refCount);
 
     try
     {
@@ -308,8 +322,6 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
     {
         throw std::runtime_error("Generic Firebird::Exception");
     }
-
-    osl_atomic_decrement( &m_refCount );
 }
 
 void Connection::notifyDatabaseModified()
