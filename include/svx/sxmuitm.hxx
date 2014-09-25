@@ -24,8 +24,8 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-// Vorgabe einer Masseinheit. Der Zahlenwert wird in diese Einheit umgerechnet
-// (ausgehend von der MapUnit des Models). Diese Einheit wird dann ggf. auch angezeigt.
+// specification of the unit if measurement. The numerical quantity value is converted in this unity.
+// (based on the facts of the MapUnit of the model). This unity is displayed if necessary.
 class SVX_DLLPUBLIC SdrMeasureUnitItem: public SfxEnumItem {
 public:
     TYPEINFO_OVERRIDE();

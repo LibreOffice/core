@@ -31,7 +31,7 @@ namespace basegfx { class B3DRange; } // end of namespace basegfx
 
 /*************************************************************************
 |*
-|* enums fuer Projektion und Seitenverhaeltnis
+|* enums for projection and aspect ratio
 |*
 \************************************************************************/
 
@@ -48,31 +48,31 @@ enum AspectMapType  { AS_NO_MAPPING, AS_HOLD_SIZE, AS_HOLD_X, AS_HOLD_Y };
 class SVX_DLLPUBLIC Viewport3D
 {
  protected:
-    basegfx::B3DHomMatrix       aViewTf;        // die eigentliche Transformationsmatrix
+    basegfx::B3DHomMatrix       aViewTf;        // the real transformations matrix
     basegfx::B3DPoint           aVRP;           // View Reference Point
     basegfx::B3DVector          aVPN;           // View Plane Normal
     basegfx::B3DVector          aVUV;           // View Up Vector
-    basegfx::B3DPoint           aPRP;           // Projection Reference Point(View-Koordinaten)
-                                    // bisher wird nur die Z-Koordinate beachtet
+    basegfx::B3DPoint           aPRP;           // Projection Reference Point(View-coordinates)
+                                    // up to now only the z-coordinate is considered
     double          fVPD;           // View Plane Distance
-    double          fNearClipDist;  // Abstand der vorderen Clippingebene
-    double          fFarClipDist;   // Abstand der hinteren Clippingebene
+    double          fNearClipDist;  // distance of the near Clipping level
+    double          fFarClipDist;   // distance of the far Clipping level
 
-    ProjectionType  eProjection;    // Art der Projektion
-    AspectMapType   eAspectMapping; // Flag fuer Seitenverhaeltnis-Anpassung
-                                    // bei Ausgabe auf das Geraet
-    Rectangle aDeviceRect;          // Position und Groesse des Ausgabebereichs
+    ProjectionType  eProjection;    // kind of the projection
+    AspectMapType   eAspectMapping; // flag for the acclimatization of the aspect ratio
+                                    // for display on the device
+    Rectangle aDeviceRect;          // position and size of the output area
 
     struct
     {
-        double X, Y, W, H;          // Position und Groesse des View-Windows
-    } aViewWin;                     // in View-Koordinaten
+        double X, Y, W, H;          // position and size of the view window
+    } aViewWin;                     // in view coordinates
 
-    basegfx::B3DPoint       aViewPoint;     // Beobachterstandpunkt in Weltkoordinaten;
-                                    // wird mit der Transformation berechnet
-    bool            bTfValid;       // Flag, ob Transformation gueltig ist
+    basegfx::B3DPoint       aViewPoint;     //observers position in world coordinates;
+                                    // is calculated by the transformation
+    bool            bTfValid;       // flag, if transformation is valid
 
-    double fWRatio;                 // Device/View-Seitenverhaeltnisse
+    double fWRatio;                 // device/view aspect ratio
     double fHRatio;
 
     void MakeTransform(void);
@@ -107,7 +107,7 @@ class SVX_DLLPUBLIC Viewport3D
     void SetDeviceWindow(const Rectangle& rRect);
     const Rectangle& GetDeviceWindow() const { return aDeviceRect; }
 
-    // Beobachterstandpunkt in Weltkoordinaten zurueckgeben
+    // returns observers position in world coordinates
     const basegfx::B3DPoint&    GetViewPoint();
 };
 

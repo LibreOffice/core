@@ -23,17 +23,17 @@
 #include <svx/sdynitm.hxx>
 #include <svx/sdangitm.hxx>
 
-// die 2 folgenden sind noch nicht implementiert!
-// Text auf einen wirklich fixen Winkel festnageln.
-// Der Textwinkel ist dann auch unabhaengig vom Winkel der Masslinie.
-// Setzt TextUpsideDown, TextRota90 sowie TextAutoAngle ausser Kraft. (n.i.)
+// The two following are not implemented yet!
+// Nail text down to a fix angle.
+// The text angle is independet of the dimension line.
+// Abrogate TextUpsideDown, TextRota90 and TextAutoAngle. (n.i.)
 class SdrMeasureTextIsFixedAngleItem: public SdrYesNoItem {
 public:
     SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn) {}
     SdrMeasureTextIsFixedAngleItem(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,rIn) {}
 };
 
-// Der Winkel des Textes in 1/100deg. 0=Horizontal von links nach rechts zu lesen. (n.i.)
+//Angle of the text in 1/100deg. 0=horizontal; read from left to right. (n.i.)
 class SdrMeasureTextFixedAngleItem: public SdrAngleItem {
 public:
     SdrMeasureTextFixedAngleItem(long nVal=0): SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
