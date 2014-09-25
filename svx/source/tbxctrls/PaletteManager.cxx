@@ -34,6 +34,7 @@ PaletteManager::PaletteManager() :
     mnNumOfPalettes(2),
     mnCurrentPalette(0),
     mnColorCount(0),
+    mpBtnUpdater(NULL),
     mLastColor(COL_AUTO)
 {
     LoadPalettes();
@@ -201,7 +202,8 @@ void PaletteManager::PopupColorPicker(const OUString& aCommand)
     aColorDlg.SetMode( svtools::ColorPickerMode_MODIFY );
     if( aColorDlg.Execute() == RET_OK )
     {
-        mpBtnUpdater->Update( aColorDlg.GetColor() );
+        if (mpBtnUpdater)
+            mpBtnUpdater->Update( aColorDlg.GetColor() );
         mLastColor = aColorDlg.GetColor();
         AddRecentColor( mLastColor );
         DispatchColorCommand(aCommand, mLastColor);
