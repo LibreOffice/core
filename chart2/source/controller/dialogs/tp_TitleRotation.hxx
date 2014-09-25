@@ -21,7 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
-#include <svx/wrapfield.hxx>
 #include <svx/orienthelper.hxx>
 #include <vcl/fixed.hxx>
 #include "TextDirectionListBox.hxx"
@@ -34,7 +33,7 @@ class SchAlignmentTabPage : public SfxTabPage
 private:
     svx::DialControl*        m_pCtrlDial;
     FixedText*               m_pFtRotate;
-    svx::WrapField*          m_pNfRotate;
+    NumericField*            m_pNfRotate;
     TriStateBox*             m_pCbStacked;
     svx::OrientationHelper*  m_pOrientHlp;
     FixedText*               m_pFtTextDirection;

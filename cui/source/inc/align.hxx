@@ -45,7 +45,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/dialcontrol.hxx>
-#include <svx/wrapfield.hxx>
 #include <svx/frmdirlbox.hxx>
 
 namespace svx {
@@ -86,7 +85,7 @@ private:
 
     DialControl*         m_pCtrlDial;
     FixedText*           m_pFtRotate;
-    WrapField*           m_pNfRotate;
+    NumericField*        m_pNfRotate;
     FixedText*           m_pFtRefEdge;
     ValueSet*            m_pVsRefEdge;
     TriStateBox*         m_pCbStacked;

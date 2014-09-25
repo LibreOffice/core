@@ -23,7 +23,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <svx/dialcontrol.hxx>
-#include <svx/wrapfield.hxx>
 #include <svx/orienthelper.hxx>
 #include "TextDirectionListBox.hxx"
 
@@ -51,7 +50,7 @@ private:
     FixedText*           m_pFlOrient;
     svx::DialControl*    m_pCtrlDial;
     FixedText*           m_pFtRotate;
-    svx::WrapField*      m_pNfRotate;
+    NumericField*        m_pNfRotate;
     TriStateBox*         m_pCbStacked;
     svx::OrientationHelper* m_pOrientHlp;
 

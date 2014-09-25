@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustmentDEGREE">
     <property name="upper">359</property>
@@ -387,12 +388,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-WrapField" id="NF_LABEL_DEGREES">
+                      <object class="GtkSpinButton" id="NF_LABEL_DEGREES">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentDEGREE</property>
+                        <property name="wrap">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

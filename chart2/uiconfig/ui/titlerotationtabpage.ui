@@ -33,7 +33,7 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="svxlo-WrapField" id="OrientDegree">
+                  <object class="GtkSpinButton" id="OrientDegree">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_top">40</property>

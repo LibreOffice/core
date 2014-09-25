@@ -150,7 +150,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/swframeposstrings \
     svx/source/dialog/txencbox \
     svx/source/dialog/txenctab \
-    svx/source/dialog/wrapfield \
     svx/source/engine3d/float3d \
     svx/source/items/algitem \
     svx/source/items/hlnkitem \
