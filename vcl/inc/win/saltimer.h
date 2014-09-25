@@ -28,9 +28,8 @@ public:
     WinSalTimer() {}
     virtual ~WinSalTimer();
 
-    // overload all pure virtual methods
-    void            Start( sal_uIntPtr nMS );
-    void            Stop();
+    virtual void Start(sal_uIntPtr nMS) SAL_OVERRIDE;
+    virtual void Stop() SAL_OVERRIDE;
 };
 
 #endif
