@@ -63,8 +63,7 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
 
@@ -94,10 +93,10 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.endsWith(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getParcelURI()", result);
     }
 
@@ -124,10 +123,10 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getLanguage()", result);
     }
 
@@ -154,10 +153,10 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getFunctionName()", result);
     }
 
@@ -184,8 +183,7 @@ public class _XScriptInfo extends MultiMethodTest {
 
                     if (output == null)
                         output = "null";
-                }
-                catch( com.sun.star.uno.Exception e) {
+                } catch (com.sun.star.uno.Exception e) {
                     log.println("caught UNO Exception:" + e);
                     output = "com.sun.star.uno.Exception";
                 }
@@ -193,6 +191,7 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
             }
         }
+
         tRes.tested("getLanguageProperties()", true);
     }
 
@@ -226,10 +225,10 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getFileSetNames()", result);
     }
 
@@ -264,10 +263,10 @@ public class _XScriptInfo extends MultiMethodTest {
                 log.println("expected: " + expected + ", output: " + output);
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
+
         tRes.tested("getFilesInFileSet()", result);
     }
 
@@ -297,11 +296,10 @@ public class _XScriptInfo extends MultiMethodTest {
                     output = "empty";
 
                 log.println("expected: [" + expected + "], output: [" +
-                    output + "]");
+                            output + "]");
                 result &= output.equals(expected);
             }
-        }
-        else {
+        } else {
             result = false;
         }
 

@@ -62,17 +62,17 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
 
     protected WizardDescriptor.Panel[] createPanels() {
         return new WizardDescriptor.Panel[] {
-            new ParcelPropertiesPanel(),
-        };
+                   new ParcelPropertiesPanel(),
+               };
     }
 
     // And the list of step names:
 
     protected String[] createSteps() {
         return new String[] {
-            // null,
-            "Parcel Properties",
-        };
+                   // null,
+                   "Parcel Properties",
+               };
     }
 
     private DataFolder checkTarget(DataFolder folder) {
@@ -84,21 +84,23 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
             if (fs instanceof OpenOfficeDocFileSystem && fo.isRoot()) {
                 FileObject scripts =
                     fo.getFileObject(OpenOfficeDocFileSystem.SCRIPTS_ROOT);
+
                 if (scripts == null)
                     scripts =
                         fo.createFolder(OpenOfficeDocFileSystem.SCRIPTS_ROOT);
 
                 FileObject javafolder = scripts.getFileObject("java");
+
                 if (javafolder == null)
                     javafolder = scripts.createFolder("java");
 
                 DataFolder subfolder = new DataFolder(javafolder);
                 return subfolder;
             }
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             /* do nothing, we will just return the folder we were passed in */
         }
+
         return folder;
     }
 
@@ -111,6 +113,7 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
 
         DataObject template = wiz.getTemplate();
         DataObject result;
+
         if (name == null) {
             // Default name.
             result = template.createFromTemplate(targetFolder);
@@ -152,14 +155,17 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
         panels = createPanels();
         // Make sure list of steps is accurate.
         String[] steps = createSteps();
+
         for (int i = 0; i < panels.length; i++) {
             Component c = panels[i].getComponent();
+
             if (steps[i] == null) {
                 // Default step name to component name of panel.
                 // Mainly useful for getting the name of the target
                 // chooser to appear in the list of steps.
                 steps[i] = c.getName();
             }
+
             if (c instanceof JComponent) { // assume Swing components
                 JComponent jc = (JComponent)c;
                 // Step #.
@@ -191,10 +197,12 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
     }
     public void nextPanel() {
         if (!hasNext()) throw new NoSuchElementException();
+
         index++;
     }
     public void previousPanel() {
         if (!hasPrevious()) throw new NoSuchElementException();
+
         index--;
     }
     public WizardDescriptor.Panel current() {

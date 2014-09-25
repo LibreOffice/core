@@ -46,8 +46,7 @@ public class OfficeInstallation implements java.io.Serializable {
                 path = path.replace('/', File.separatorChar);
 
             this.path = path;
-        }
-        else {
+        } else {
             this.path = path;
 
             if (System.getProperty("os.name").startsWith("Windows"))

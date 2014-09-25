@@ -32,14 +32,14 @@ public class SVersionRCFile {
 
     private static final String DEFAULT_NAME =
         System.getProperty("os.name").startsWith("Windows") ?
-            System.getProperty("user.home") + File.separator +
-            "Application Data" + File.separator + "sversion.ini" :
-            System.getProperty("user.home") + File.separator +
-            ".sversionrc";
+        System.getProperty("user.home") + File.separator +
+        "Application Data" + File.separator + "sversion.ini" :
+        System.getProperty("user.home") + File.separator +
+        ".sversionrc";
 
     public static final String FILE_URL_PREFIX =
         System.getProperty("os.name").startsWith("Windows") ?
-            "file:///" : "file://";
+        "file:///" : "file://";
 
 
 
@@ -72,13 +72,13 @@ public class SVersionRCFile {
     }
 
     public static SVersionRCFile createInstance() {
-        return(createInstance(DEFAULT_NAME));
+        return (createInstance(DEFAULT_NAME));
     }
 
     private static SVersionRCFile createInstance(String name) {
         SVersionRCFile result = null;
 
-        synchronized(SVersionRCFile.class) {
+        synchronized (SVersionRCFile.class) {
             result = files.get(name);
 
             if (result == null) {
@@ -86,6 +86,7 @@ public class SVersionRCFile {
                 files.put(name, result);
             }
         }
+
         return result;
     }
 
@@ -108,15 +109,14 @@ public class SVersionRCFile {
                 br = new BufferedReader(new FileReader(sversionrc));
                 load(br);
                 lastModified = l;
-            }
-            catch (FileNotFoundException fnfe) {
+            } catch (FileNotFoundException fnfe) {
                 throw new IOException(fnfe.getMessage());
-            }
-            finally {
+            } finally {
                 if (br != null)
                     br.close();
             }
         }
+
         return versions.iterator();
     }
 
@@ -124,10 +124,10 @@ public class SVersionRCFile {
         String s;
 
         while ((s = br.readLine()) != null &&
-              !(s.equals(VERSIONS_LINE))) {}
+               !(s.equals(VERSIONS_LINE))) {}
 
         while ((s = br.readLine()) != null &&
-              s.length() != 0) {
+               s.length() != 0) {
             StringTokenizer tokens = new StringTokenizer(s, "=");
             int count = tokens.countTokens();
 
@@ -137,6 +137,7 @@ public class SVersionRCFile {
             String name = tokens.nextToken();
             String path = tokens.nextToken();
             OfficeInstallation oi = new OfficeInstallation(name, path);
+
             if (oi.supportsFramework()) {
                 versions.add(oi);
                 defaultversion = oi;
@@ -152,8 +153,7 @@ public class SVersionRCFile {
 
         try {
             path = f.getCanonicalPath();
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             return null;
         }
 
@@ -169,33 +169,33 @@ public class SVersionRCFile {
         return buf.toString();
     }
 
-    public static String getPathForUnoil(String officeInstall)
-    {
+    public static String getPathForUnoil(String officeInstall) {
         File unopkgdir = new File(officeInstall, UNOPACKAGEDIR);
-        if(!unopkgdir.exists())
-        {
+
+        if (!unopkgdir.exists()) {
             return null;
         }
+
         File scriptf = null;
         String[] listunopkg = unopkgdir.list();
         int size = listunopkg.length;
-        for(int i=0; i<size; i++)
-        {
-            if (listunopkg[i].toLowerCase().indexOf(SCRIPTF)>-1)
-            {
+
+        for (int i = 0; i < size; i++) {
+            if (listunopkg[i].toLowerCase().indexOf(SCRIPTF) > -1) {
                 scriptf = new File(unopkgdir, listunopkg[i]);
             }
         }
-        if(scriptf != null)
-        {
+
+        if (scriptf != null) {
             File unoil = new File(scriptf, UNOILJAR);
-            if(unoil.exists())
-            {
+
+            if (unoil.exists()) {
                 String path = unoil.getParent();
                 path = path.substring(path.indexOf(UNOPACKAGEDIR));
                 return officeInstall + path;
             }
         }
+
         return null;
     }
 
@@ -208,10 +208,10 @@ public class SVersionRCFile {
             ov = new SVersionRCFile(args[0]);
 
         Iterator<OfficeInstallation> enumer;
+
         try {
             enumer = ov.getVersions();
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             System.err.println("Error getting versions: " + ioe.getMessage());
             return;
         }
@@ -219,7 +219,7 @@ public class SVersionRCFile {
         while (enumer.hasNext()) {
             OfficeInstallation oi = enumer.next();
             System.out.println("Name: " + oi.getName() + ", Path: " + oi.getPath() +
-                ", URL: " + oi.getURL());
+                               ", URL: " + oi.getURL());
         }
     }
 }

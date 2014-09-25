@@ -47,70 +47,64 @@ public class IdeUpdater extends Thread {
         if (!installPath.endsWith(File.separator))
             installPath += File.separator;
 
-    File netbeansLauncher = new File( installPath + "bin" );
+        File netbeansLauncher = new File(installPath + "bin");
 
-    if( netbeansLauncher.isDirectory() ) {
-        isNetbeansPath = true;
-        installPath = installPath +"modules" + File.separator;
-    }
+        if (netbeansLauncher.isDirectory()) {
+            isNetbeansPath = true;
+            installPath = installPath + "modules" + File.separator;
+        }
 
-    System.out.println( "IdeUpdater installPath is " + installPath + " isNetbeansPath is " + isNetbeansPath );
+        System.out.println("IdeUpdater installPath is " + installPath + " isNetbeansPath is " + isNetbeansPath);
         this.installPath = installPath;
         this.statusLabel = statusLabel;
-    listeners = new ArrayList<InstallListener>();
-    threadSuspended = false;
-    progressBar=pBar;
-    progressBar.setStringPainted(true);
+        listeners = new ArrayList<InstallListener>();
+        threadSuspended = false;
+        progressBar = pBar;
+        progressBar.setStringPainted(true);
     }// XmlUpdater
 
 
     @Override
     public void run() {
 
-    internalThread = Thread.currentThread();
+        internalThread = Thread.currentThread();
 
-    progressBar.setString("Unzipping Required Files");
+        progressBar.setString("Unzipping Required Files");
         ZipData zd = new ZipData();
 
-    // Adding IDE support
-    if( isNetbeansPath ) {
-        if (!zd.extractEntry("ide/office.jar",installPath, statusLabel))
-            {
-            onInstallComplete();
-            return;
-        }
-    }
-    else {
-        if (!zd.extractEntry("ide/idesupport.jar",installPath, statusLabel))
-            {
-            onInstallComplete();
-            return;
-        }
-        if (!zd.extractEntry("ide/OfficeScripting.jar",installPath, statusLabel))
-            {
-            onInstallComplete();
-            return;
-        }
-    }
+        // Adding IDE support
+        if (isNetbeansPath) {
+            if (!zd.extractEntry("ide/office.jar", installPath, statusLabel)) {
+                onInstallComplete();
+                return;
+            }
+        } else {
+            if (!zd.extractEntry("ide/idesupport.jar", installPath, statusLabel)) {
+                onInstallComplete();
+                return;
+            }
 
-    statusLabel.setText("Installation Complete");
-    progressBar.setString("Installation Complete");
-    progressBar.setValue(10);
-    onInstallComplete();
+            if (!zd.extractEntry("ide/OfficeScripting.jar", installPath, statusLabel)) {
+                onInstallComplete();
+                return;
+            }
+        }
+
+        statusLabel.setText("Installation Complete");
+        progressBar.setString("Installation Complete");
+        progressBar.setValue(10);
+        onInstallComplete();
 
     }// run
 
 
-    public void addInstallListener(InstallListener listener)
-    {
+    public void addInstallListener(InstallListener listener) {
         listeners.add(listener);
     }// addInstallListener
 
 
-    private void onInstallComplete()
-    {
-        for( InstallListener l : listeners)
-        {
+    private void onInstallComplete() {
+        for (InstallListener l : listeners) {
             l.installationComplete(null);
         }
     }// onInstallComplete

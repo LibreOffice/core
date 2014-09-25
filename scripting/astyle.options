@@ -8,8 +8,8 @@
 --unpad-paren
 --align-reference=name
 --pad-oper
+--pad-header
 --unpad-paren
---add-brackets
 -s4
 --indent-col1-comments
 --lineend=linux

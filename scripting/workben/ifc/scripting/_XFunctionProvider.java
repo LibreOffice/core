@@ -53,8 +53,7 @@ public class _XFunctionProvider extends MultiMethodTest {
             while (tests.hasNext()) {
                 result &= runGetFunctionTest((Parameters)tests.next());
             }
-        }
-        else {
+        } else {
             result = false;
         }
 

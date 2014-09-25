@@ -51,8 +51,10 @@ public class ParcelDescriptorChildren extends Children.Keys implements ChangeLis
         }
 
         ArrayList keys = new ArrayList(len);
+
         for (int i = 0; i < len; i++)
             keys.add(nl.item(i));
+
         setKeys(keys);
     }
 

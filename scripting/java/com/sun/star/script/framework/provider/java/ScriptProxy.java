@@ -26,8 +26,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @see        java.lang.reflect.Method
  */
-public class ScriptProxy
-{
+public class ScriptProxy {
     private Object m_targetObject;
     private Method m_method;
 
@@ -38,8 +37,7 @@ public class ScriptProxy
      *
      * @param  method  Description of the Parameter
      */
-    public ScriptProxy( Method method )
-    {
+    public ScriptProxy(Method method) {
         this.m_method = method;
     }
 
@@ -50,8 +48,7 @@ public class ScriptProxy
      *
      * @param  obj  The new targetObject value
      */
-    public void setTargetObject( Object obj )
-    {
+    public void setTargetObject(Object obj) {
         m_targetObject = obj;
     }
 
@@ -67,11 +64,10 @@ public class ScriptProxy
      * @see                                   java.lang.reflect.Method for the exceptions
      *                                          that may be thrown
      */
-    public  Object invoke( Object[] args )
+    public  Object invoke(Object[] args)
     throws IllegalAccessException, InvocationTargetException,
-                IllegalArgumentException
-    {
-        return m_method.invoke( m_targetObject, args );
+        IllegalArgumentException {
+        return m_method.invoke(m_targetObject, args);
     }
 }
 

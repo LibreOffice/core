@@ -33,46 +33,44 @@ public class FrameworkJarChecker {
 
     public static void mountDependencies() {
         String unoilPath = SVersionRCFile.getPathForUnoil(
-            OfficeSettings.getDefault().getOfficeDirectory().getPath());
+                               OfficeSettings.getDefault().getOfficeDirectory().getPath());
 
         if (unoilPath == null)
             return;
 
         File unoilFile = new File(unoilPath + File.separator + "unoil.jar");
         JarFileSystem jfs = new JarFileSystem();
+
         try {
             jfs.setJarFile(unoilFile);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             return;
-        }
-        catch (PropertyVetoException pve) {
+        } catch (PropertyVetoException pve) {
             return;
         }
 
         FileSystem result;
+
         try {
             result =
                 Repository.getDefault().findFileSystem(jfs.getSystemName());
-        }
-        catch(Exception exp) {
+        } catch (Exception exp) {
             result = null;
-        }
-        finally {
+        } finally {
             jfs.removeNotify();
         }
 
-        if(result == null) {
+        if (result == null) {
             JarFileSystem newjfs = new JarFileSystem();
+
             try {
                 newjfs.setJarFile(unoilFile);
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
+                return;
+            } catch (PropertyVetoException pve) {
                 return;
             }
-            catch (PropertyVetoException pve) {
-                return;
-            }
+
             Repository.getDefault().addFileSystem(newjfs);
             newjfs.setHidden(true);
         }
@@ -80,31 +78,31 @@ public class FrameworkJarChecker {
 
     public static void unmountDependencies() {
         String unoilPath = SVersionRCFile.getPathForUnoil(
-            OfficeSettings.getDefault().getOfficeDirectory().getPath());
+                               OfficeSettings.getDefault().getOfficeDirectory().getPath());
 
         if (unoilPath == null)
             return;
 
         File unoilFile = new File(unoilPath + File.separator + "unoil.jar");
         JarFileSystem jfs = new JarFileSystem();
+
         try {
             jfs.setJarFile(unoilFile);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             return;
-        }
-        catch (PropertyVetoException pve) {
+        } catch (PropertyVetoException pve) {
             return;
         }
 
         FileSystem result;
+
         try {
             result =
                 Repository.getDefault().findFileSystem(jfs.getSystemName());
-            if(result != null)
+
+            if (result != null)
                 Repository.getDefault().removeFileSystem(result);
-        }
-        catch(Exception exp) {
+        } catch (Exception exp) {
         }
     }
 
@@ -115,13 +113,13 @@ public class FrameworkJarChecker {
             return;
 
         String message = "The Office Scripting Framework support jar file " +
-            "is not mounted, so Office scripts will not compile. NetBeans " +
-            "is going to mount this jar file automatically.";
+                         "is not mounted, so Office scripts will not compile. NetBeans " +
+                         "is going to mount this jar file automatically.";
 
         String prompt = "Show this message in future.";
 
         NagDialog warning = NagDialog.createInformationDialog(
-            message, prompt, true);
+                                message, prompt, true);
 
         if (!warning.getState()) {
             settings.setWarnBeforeMount(false);
