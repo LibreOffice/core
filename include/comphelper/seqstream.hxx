@@ -89,7 +89,6 @@ protected:
     sal_Int32                                       m_nSize;
 
     bool                                            m_bConnected; ///< closeOutput has been called ?
-    ::osl::Mutex                                    m_aMutex;
 
 public:
     /** constructs the object. Everything written into the stream through the XOutputStream methods will be forwarded
