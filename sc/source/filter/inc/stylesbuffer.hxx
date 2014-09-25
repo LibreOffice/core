@@ -669,6 +669,8 @@ public:
     /** Writes all formatting attributes to the passed property set. */
     void                writeToPropertySet( PropertySet& rPropSet ) const;
 
+    void writeToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange ) const;
+
     const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );
 
 private:
@@ -912,6 +914,7 @@ public:
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;
+    void writeCellXfToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange, sal_Int32 nXfId ) const;
 
     bool                hasBorder( sal_Int32 nBorderId ) const;
 private:

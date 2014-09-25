@@ -77,6 +77,7 @@
 #include "attrib.hxx"
 #include "globstr.hrc"
 #include "xlconst.hxx"
+#include <documentimport.hxx>
 
 using ::com::sun::star::table::BorderLine2;
 namespace oox {
@@ -2191,9 +2192,10 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     StylesBuffer& rStyles = getStyles();
 
-    // create and set cell style
-    if( isCellXf() )
-        rPropMap.setProperty( PROP_CellStyle, rStyles.createCellStyle( maModel.mnStyleXfId ));
+    // create and set cell style.
+
+    // TODO : We should gradually move things to writeToDoc, to set cell
+    // styles to the document directly.
 
     if( maModel.mbFontUsed )
         rStyles.writeFontToPropertyMap( rPropMap, maModel.mnFontId );
@@ -2221,6 +2223,26 @@ void Xf::writeToPropertySet( PropertySet& rPropSet ) const
     PropertyMap aPropMap;
     writeToPropertyMap( aPropMap );
     rPropSet.setProperties( aPropMap );
+}
+
+void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRange ) const
+{
+    if (isCellXf())
+    {
+        const StylesBuffer& rStyles = getStyles();
+        OUString aStyleName = rStyles.createCellStyle(maModel.mnStyleXfId);
+
+        ScStyleSheet* pStyleSheet =
+            static_cast<ScStyleSheet*>(
+                rDoc.getDoc().GetStyleSheetPool()->Find(aStyleName, SFX_STYLE_FAMILY_PARA));
+
+        if (pStyleSheet)
+        {
+            rDoc.getDoc().ApplyStyleAreaTab(
+                rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow, rRange.Sheet,
+                *pStyleSheet);
+        }
+    }
 }
 
 const ::ScPatternAttr&
@@ -3146,6 +3168,16 @@ void StylesBuffer::writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nX
 {
     if( Xf* pXf = maCellXfs.get( nXfId ).get() )
         pXf->writeToPropertySet( rPropSet );
+}
+
+void StylesBuffer::writeCellXfToDoc(
+    ScDocumentImport& rDoc, const table::CellRangeAddress& rRange, sal_Int32 nXfId ) const
+{
+    Xf* pXf = maCellXfs.get(nXfId).get();
+    if (!pXf)
+        return;
+
+    pXf->writeToDoc(rDoc, rRange);
 }
 
 bool StylesBuffer::hasBorder( sal_Int32 nBorderId ) const
