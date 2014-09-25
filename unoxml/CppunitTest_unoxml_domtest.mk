@@ -10,7 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,unoxml_domtest))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,unoxml_domtest, \
-    unoxml/test/domtest \
+    unoxml/qa/unit/domtest \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,unoxml_domtest,\

@@ -37,9 +37,7 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
-#include "../source/dom/documentbuilder.hxx"
 
-using namespace ::DOM;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
