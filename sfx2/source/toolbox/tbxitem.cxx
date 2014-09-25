@@ -549,9 +549,9 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= aItemStatus;
                     SfxItemState tmpState = (SfxItemState) aItemStatus.State;
                     // make sure no-one tries to send us a combination of states
-                    if (eState != SfxItemState::UNKNOWN && eState != SfxItemState::DISABLED &&
-                        eState != SfxItemState::READONLY && eState != SfxItemState::DONTCARE &&
-                        eState != SfxItemState::DEFAULT && eState != SfxItemState::SET)
+                    if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
+                        tmpState != SfxItemState::READONLY && tmpState != SfxItemState::DONTCARE &&
+                        tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
                         throw ::com::sun::star::uno::RuntimeException("unknown status");
                     eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
@@ -1103,9 +1103,9 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= aItemStatus;
                     SfxItemState tmpState = (SfxItemState) aItemStatus.State;
                     // make sure no-one tries to send us a combination of states
-                    if (eState != SfxItemState::UNKNOWN && eState != SfxItemState::DISABLED &&
-                        eState != SfxItemState::READONLY && eState != SfxItemState::DONTCARE &&
-                        eState != SfxItemState::DEFAULT && eState != SfxItemState::SET)
+                    if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
+                        tmpState != SfxItemState::READONLY && tmpState != SfxItemState::DONTCARE &&
+                        tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
                         throw ::com::sun::star::uno::RuntimeException("unknown status");
                     eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
