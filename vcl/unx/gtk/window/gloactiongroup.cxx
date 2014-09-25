@@ -430,6 +430,8 @@ g_lo_action_group_clear (GLOActionGroup  *group)
     {
         g_lo_action_group_remove (group, (gchar*) element->data);
     }
+
+    g_list_free (keys);
 }
 
 #endif
