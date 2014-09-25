@@ -59,6 +59,7 @@ enum
 ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : Control( pParent, nWinStyle )
 {
+    mpItemAttrs = NULL;
     ImplInit();
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
 }
@@ -215,7 +216,7 @@ void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
         SetBackground( aColor );
     }
 
-
+    delete mpItemAttrs;
     mpItemAttrs = new ThumbnailItemAttributes;
     mpItemAttrs->aFillColor = maColor.getBColor();
     mpItemAttrs->aHighlightColor = rStyleSettings.GetHighlightColor().getBColor();
