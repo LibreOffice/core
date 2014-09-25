@@ -121,6 +121,8 @@ Menu::Menu()
       nMenuFlags(0),
       nDefaultItem(0),
       nSelectedId(0),
+      nImgOrChkPos(0),
+      nTextPos(0),
       bCanceled(false),
       bInCallback(false),
       bKilled(false),
