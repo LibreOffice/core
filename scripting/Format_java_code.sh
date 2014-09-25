@@ -1,2 +1,2 @@
 #!/bin/bash
-astyle --options=astyle-java.conf --verbose --recursive ./*.java
+astyle --options=astyle.options --verbose --recursive ./*.java
