@@ -889,7 +889,7 @@ if __name__ == '__main__':
         'debug': DebugIntegrationGenerator}
 
     if args.ide not in generators.keys():
-        parser.print_help()
+        print("Invalid ide. valid values are %s" % ','.join(generators.keys()))
         sys.exit(1)
 
     if args.input:
