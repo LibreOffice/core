@@ -1665,7 +1665,7 @@ DECLARE_OOXMLIMPORT_TEST(lineWpsOnly, "line-wps-only.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Check position, it was -7223 as it was set after the CustomShapeGeometry property.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(208), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(210), xShape->getPosition().X);
 }
 
 DECLARE_OOXMLIMPORT_TEST(lineRotation, "line-rotation.docx")

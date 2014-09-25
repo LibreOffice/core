@@ -290,6 +290,20 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(xStyle, "CharFontName"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDrawingmlFlipv, "drawingml-flipv.docx")
+{
+    // The problem was that the shape had vertical flip only, but then we added rotation as well on export.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        xmlXPathObjectPtr pXPath = getXPathNode(pXmlDoc, "//a:xfrm");
+        xmlNodeSetPtr pXmlNodes = pXPath->nodesetval;
+        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+        // The attribute existed, so xmlGetProp() returned non-NULL.
+        CPPUNIT_ASSERT_EQUAL(static_cast<xmlChar*>(0), xmlGetProp(pXmlNode, BAD_CAST("rot")));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

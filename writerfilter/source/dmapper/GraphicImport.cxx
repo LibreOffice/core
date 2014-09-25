@@ -749,11 +749,14 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if (m_pImpl->isYSizeValis())
                             aSize.Height = m_pImpl->getYSize();
 
+                        // TODO: avoid this setSize(), just send the size to
+                        // oox, so it can set the right transformation matrix
+                        // right away.
                         uno::Any aRotation;
                         if (bKeepRotation)
                             aRotation = xShapeProps->getPropertyValue("RotateAngle");
                         m_xShape->setSize(aSize);
-                        if (bKeepRotation)
+                        if (bKeepRotation && aRotation.hasValue() && aRotation.get<sal_Int32>() != 0)
                             xShapeProps->setPropertyValue("RotateAngle", aRotation);
 
                         m_pImpl->bIsGraphic = true;
