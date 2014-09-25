@@ -21,10 +21,9 @@ package com.sun.star.script.framework.provider;
 import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.container.ScriptMetaData;
 
-public interface ScriptEditor
-{
+public interface ScriptEditor {
     Object execute() throws Exception;
-    void indicateErrorLine( int lineNum );
+    void indicateErrorLine(int lineNum);
     void edit(XScriptContext context, ScriptMetaData entry);
     String getTemplate();
     String getExtension();

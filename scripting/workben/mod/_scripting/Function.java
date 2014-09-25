@@ -38,29 +38,33 @@ public class Function extends TestCase {
     private String doc = "doc_with_beanshell_scripts.sxw";
 
     @Override
-    public void initialize( TestParameters tParam, PrintWriter log ) {
+    public void initialize(TestParameters tParam, PrintWriter log) {
     }
 
     @Override
+
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log ) throws StatusException {
+        TestParameters tParam, PrintWriter log) throws StatusException {
         XInterface oObj = null;
-    XFunctionProvider provider = null;
+        XFunctionProvider provider = null;
 
         log.println("creating test environment");
+
         try {
 
             XMultiServiceFactory xMSF = tParam.getMSF();
             SOfficeFactory SOF = null;
-            SOF = SOfficeFactory.getFactory( xMSF );
+            SOF = SOfficeFactory.getFactory(xMSF);
             String docPath = util.utils.getFullTestURL(doc);
-            XComponent doc = SOF.loadDocument( docPath );
-            XModel model = UnoRuntime.queryInterface( XModel.class,
-                doc );
+            XComponent doc = SOF.loadDocument(docPath);
+            XModel model = UnoRuntime.queryInterface(XModel.class,
+                           doc);
             oObj  =
-                (XInterface)xMSF.createInstanceWithArguments( "drafts.com.sun.star.script.framework.provider.FunctionProvider", new Object[]{ model } );
-            provider = UnoRuntime.queryInterface( XFunctionProvider.class, oObj );
-            oObj = provider.getFunction( script );
+                (XInterface)
+                xMSF.createInstanceWithArguments("drafts.com.sun.star.script.framework.provider.FunctionProvider",
+                                                 new Object[] { model });
+            provider = UnoRuntime.queryInterface(XFunctionProvider.class, oObj);
+            oObj = provider.getFunction(script);
 
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
@@ -75,7 +79,8 @@ public class Function extends TestCase {
     }
 
     @Override
-    public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
+
+    public synchronized void disposeTestEnvironment(TestEnvironment tEnv,
             TestParameters tParam) {
     }
 }

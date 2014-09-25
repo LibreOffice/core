@@ -22,7 +22,8 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
-public class Final extends javax.swing.JPanel implements ActionListener, InstallListener {
+public class Final extends javax.swing.JPanel implements
+    ActionListener, InstallListener {
 
     /** Creates new form Welcome */
     public Final(InstallWizard wizard) {
@@ -40,7 +41,8 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
     private void initComponents() {//GEN-BEGIN:initComponents
         statusPanel = new javax.swing.JPanel();
         statusPanel.setBackground(java.awt.Color.white);
-        statusLine = new javax.swing.JLabel("Ready", javax.swing.JLabel.CENTER);
+        statusLine = new javax.swing.JLabel("Ready",
+                                            javax.swing.JLabel.CENTER);
 
         setLayout(new java.awt.BorderLayout());
 
@@ -50,7 +52,8 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
         statusPanel.add(statusLine, java.awt.BorderLayout.CENTER);
 
         add(statusPanel, java.awt.BorderLayout.CENTER);
-        nav = new NavPanel(wizard, true, true, true, InstallWizard.VERSIONS, "");
+        nav = new NavPanel(wizard, true, true, true, InstallWizard.VERSIONS,
+                           "");
         nav.setNextListener(this);
         nav.removeCancelListener(nav);
         nav.setCancelListener(this);
@@ -63,14 +66,14 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
 
     @Override
     public java.awt.Dimension getPreferredSize() {
-        return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
+        return new java.awt.Dimension(InstallWizard.DEFWIDTH,
+                                      InstallWizard.DEFHEIGHT);
     }
 
     public void actionPerformed(ActionEvent e) {
-    // navNext is "Install"
-        if (e.getSource() == nav.navNext)
-    {
-            JProgressBar progressBar=new JProgressBar();
+        // navNext is "Install"
+        if (e.getSource() == nav.navNext) {
+            JProgressBar progressBar = new JProgressBar();
             progressBar.setMaximum(10);
             progressBar.setValue(0);
             statusPanel.add(progressBar, java.awt.BorderLayout.SOUTH);
@@ -79,50 +82,50 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
             nav.enableCancel(false);
             ArrayList<?> locations = InstallWizard.getLocations();
             // Returned 1
-            String path=null;
-            for (int i =0;i<locations.size();i++){
-                path= (String)locations.get(i);
-            xud = new XmlUpdater(path, statusLine,progressBar,InstallWizard.bNetworkInstall,InstallWizard.bBindingsInstall);
-        xud.addInstallListener(this);
-        InstallWizard.setInstallStarted(true);
-        InstallWizard.setPatchedTypes(false);
-        InstallWizard.setPatchedJava(false);
-        InstallWizard.setPatchedRDB(false);
-        xud.start();
+            String path = null;
+
+            for (int i = 0; i < locations.size(); i++) {
+                path = (String)locations.get(i);
+                xud = new XmlUpdater(path, statusLine, progressBar,
+                                     InstallWizard.bNetworkInstall, InstallWizard.bBindingsInstall);
+                xud.addInstallListener(this);
+                InstallWizard.setInstallStarted(true);
+                InstallWizard.setPatchedTypes(false);
+                InstallWizard.setPatchedJava(false);
+                InstallWizard.setPatchedRDB(false);
+                xud.start();
             }
         }
 
-    // set to "Exit" at end of installation process
-    if (e.getSource() == nav.navCancel) {
-        int answer = JOptionPane.showConfirmDialog(wizard, "Are you sure you want to exit?");
-        if (answer == JOptionPane.YES_OPTION)
-        {
-            wizard.exitForm();
+        // set to "Exit" at end of installation process
+        if (e.getSource() == nav.navCancel) {
+            int answer = JOptionPane.showConfirmDialog(wizard,
+                         "Are you sure you want to exit?");
+
+            if (answer == JOptionPane.YES_OPTION) {
+                wizard.exitForm();
+            } else {
+                return;
+            }
         }
-        else
-        {
-            return;
-        }
-    }
     }// actionPerformed
 
 
     public void installationComplete(InstallationEvent ev) {
-    if( InstUtil.hasNetbeansInstallation() ) {
-        nav.removeCancelListener(this);
-        nav.setCancelListener(nav);
-        nav.navCancel.setText("Finish");
-        nav.enableIDE(true);
-        nav.enableCancel(true);
-        xud = null;
-    }
-    else {
-        nav.removeCancelListener(this);
-        nav.setCancelListener(nav);
-        nav.navCancel.setText("Finish");
-        nav.enableCancel(true);
-        xud = null;
-    }
+        if (InstUtil.hasNetbeansInstallation()) {
+            nav.removeCancelListener(this);
+            nav.setCancelListener(nav);
+            nav.navCancel.setText("Finish");
+            nav.enableIDE(true);
+            nav.enableCancel(true);
+            xud = null;
+        } else {
+            nav.removeCancelListener(this);
+            nav.setCancelListener(nav);
+            nav.navCancel.setText("Finish");
+            nav.enableCancel(true);
+            xud = null;
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

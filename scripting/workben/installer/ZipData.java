@@ -24,7 +24,7 @@ import javax.swing.*;
 public class ZipData {
 
     public boolean extractEntry(String entry, String destination,
-            JLabel statusLabel) {
+                                JLabel statusLabel) {
 
         OutputStream out = null;
         InputStream in = null;
@@ -37,6 +37,7 @@ public class ZipData {
         }
 
         String entryName;
+
         if (entry.lastIndexOf("/") != -1) {
             entryName = entry.substring(entry.lastIndexOf("/") + 1);
         } else {
@@ -44,9 +45,10 @@ public class ZipData {
         }
 
         String destName;
+
         if (destination.lastIndexOf(File.separator) != -1) {
             destName = destination.substring(destination
-                    .lastIndexOf(File.separator) + 1);
+                                             .lastIndexOf(File.separator) + 1);
         } else {
             destName = destination;
         }
@@ -60,12 +62,13 @@ public class ZipData {
             entry = "/" + entry;
 
         in = this.getClass().getResourceAsStream(entry);
+
         if (in == null) {
             System.err.println("File " + entry + " not found in jar file");
 
             if (statusLabel != null)
                 statusLabel.setText("Failed extracting " + entry
-                        + "see SFramework.log for more information");
+                                    + "see SFramework.log for more information");
 
             return false;
         }
@@ -74,11 +77,11 @@ public class ZipData {
             out = new FileOutputStream(destination);
         } catch (IOException ioe) {
             System.err.println("Error opening " + destination + ": "
-                    + ioe.getMessage());
+                               + ioe.getMessage());
 
             if (statusLabel != null)
                 statusLabel.setText("Error opening" + destination
-                        + "see SFramework.log for more information");
+                                    + "see SFramework.log for more information");
 
             return false;
         }
@@ -91,11 +94,12 @@ public class ZipData {
                 out.write(bytes, 0, len);
         } catch (IOException ioe) {
             System.err.println("Error writing " + destination + ": "
-                    + ioe.getMessage());
+                               + ioe.getMessage());
 
             if (statusLabel != null)
                 statusLabel.setText("Failed writing " + destination
-                        + "see SFramework.log for more information");
+                                    + "see SFramework.log for more information");
+
             return false;
         } finally {
             try {
@@ -104,6 +108,7 @@ public class ZipData {
             } catch (IOException ioe) {
             }
         }
+
         return true;
     }
 }

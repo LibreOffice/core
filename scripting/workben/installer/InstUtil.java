@@ -35,12 +35,14 @@ public class InstUtil {
         String os = System.getProperty("os.name");
 
         if (os.indexOf("Windows") != -1) {
-            boolean bSVersionInHomeDir = new File(thePath.toString() + "sversion.ini").exists();
+            boolean bSVersionInHomeDir = new File(thePath.toString() +
+                                                  "sversion.ini").exists();
 
             if (!bSVersionInHomeDir) {
                 thePath.append("Application Data");
                 thePath.append(File.separator);
             }
+
             theFile = findVersionFile(new File(thePath.toString()));
         } else if (os.indexOf("SunOS") != -1) {
             thePath.append(".sversionrc");
@@ -50,14 +52,14 @@ public class InstUtil {
             theFile = new File(thePath.toString());
         }
 
-        if (theFile == null)
-        {
+        if (theFile == null) {
             throw new IOException("Could not locate the OpenOffice settings file.\nAre you sure StarOffice is installed on your system?");
         }
-        if  (!theFile.exists())
-        {
+
+        if (!theFile.exists()) {
             throw new IOException("Could not locate the OpenOffice settings file.\nAre you sure StarOffice is installed on your system?");
         }
+
         return theFile;
     }
 
@@ -65,28 +67,28 @@ public class InstUtil {
 
     public static boolean hasNetbeansInstallation() {
         boolean result = false;
-        result = checkForSupportedVersion( getNetbeansLocation(), versions );
+        result = checkForSupportedVersion(getNetbeansLocation(), versions);
 
         if (!result)
             System.out.println("No supported version of NetBeans found.");
+
         return result;
     }
 
-    private static boolean checkForSupportedVersion( Properties installs, String[] supportedVersions )
-    {
-        if ( installs != null )
-        {
-            for ( int index = 0; index < supportedVersions.length; index++ )
-            {
+    private static boolean checkForSupportedVersion(Properties installs,
+            String[] supportedVersions) {
+        if (installs != null) {
+            for (int index = 0; index < supportedVersions.length; index++) {
                 String key = supportedVersions[ index ];
-                if ( installs.getProperty(key) != null )
-                {
+
+                if (installs.getProperty(key) != null) {
                     // at least one supported version for netbeans present, so return;
                     return true;
                 }
 
             }
         }
+
         return false;
     }
 
@@ -96,95 +98,93 @@ public class InstUtil {
 
 
     public static Properties getNetbeansLocation() {
-    Properties results = new Properties();
+        Properties results = new Properties();
 
-    StringBuffer str = new StringBuffer();
+        StringBuffer str = new StringBuffer();
         str.append(System.getProperty("user.home"));
         str.append(File.separator);
-    StringBuffer thePath = new StringBuffer(str.toString());
+        StringBuffer thePath = new StringBuffer(str.toString());
 
         String os = System.getProperty("os.name");
 
-    if (os.indexOf("Windows") != -1) {
-        thePath.append(".netbeans");
+        if (os.indexOf("Windows") != -1) {
+            thePath.append(".netbeans");
         } else if (os.indexOf("SunOS") != -1) {
-        thePath.append(".netbeans");
+            thePath.append(".netbeans");
         } else if (os.indexOf("Linux") != -1) {
-        thePath.append(".netbeans");
-    }
-
-    if ( thePath.toString().indexOf( ".netbeans" ) == -1 )
-        return null;
-    else if ( new File( thePath.append( File.separator+"3.4"+File.separator ).toString() ).isDirectory() ) {
-
-        System.out.println( "Found NetBeans 3.4 user directory: " + thePath );
-        File netbeansLogFile = new File( thePath.toString() + File.separator + "system" + File.separator + "ide.log" );
-        if( netbeansLogFile.exists() ) {
-            String installPath = getNetbeansInstallation( netbeansLogFile );
-            File f = new File(installPath);
-            results.put("NetBeans 3.4", f.getPath()+File.separator);
-            System.out.println( "NetBeans Installation directory: " + f.getPath());
-        }
-        else {
-            System.out.println( "No NetBeans log file found" );
-                        return null;
-        }
-    }
-        else
-        {
-        System.out.println( "No NetBeans user directory found" );
-        return null;
+            thePath.append(".netbeans");
         }
 
+        if (thePath.toString().indexOf(".netbeans") == -1)
+            return null;
+        else if (new File(thePath.append(File.separator + "3.4" +
+                                         File.separator).toString()).isDirectory()) {
 
-    return results;
-    }
+            System.out.println("Found NetBeans 3.4 user directory: " + thePath);
+            File netbeansLogFile = new File(thePath.toString() + File.separator +
+                                            "system" + File.separator + "ide.log");
 
-
-
-    private static String getNetbeansInstallation( File logFile ) {
-        String installPath = "";
-        try {
-        BufferedReader reader = new BufferedReader(new FileReader(logFile));
-
-        for (String s = reader.readLine(); s != null; s = reader.readLine()) {
-        if( s.indexOf( "IDE Install" ) != -1 ) {
-            int pathStart = s.indexOf( "=" ) + 2;
-            installPath = s.substring( pathStart, s.length() );
-            int pathEnd = installPath.indexOf( ";");
-            installPath = installPath.substring( 0, pathEnd ) +File.separator;
-            break;
-        }
-        }
-        reader.close();
-        }
-        catch( IOException ioe ) {
-        System.out.println( "Error reading Netbeans location information" );
+            if (netbeansLogFile.exists()) {
+                String installPath = getNetbeansInstallation(netbeansLogFile);
+                File f = new File(installPath);
+                results.put("NetBeans 3.4", f.getPath() + File.separator);
+                System.out.println("NetBeans Installation directory: " + f.getPath());
+            } else {
+                System.out.println("No NetBeans log file found");
+                return null;
             }
+        } else {
+            System.out.println("No NetBeans user directory found");
+            return null;
+        }
+
+
+        return results;
+    }
+
+
+
+    private static String getNetbeansInstallation(File logFile) {
+        String installPath = "";
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(logFile));
+
+            for (String s = reader.readLine(); s != null; s = reader.readLine()) {
+                if (s.indexOf("IDE Install") != -1) {
+                    int pathStart = s.indexOf("=") + 2;
+                    installPath = s.substring(pathStart, s.length());
+                    int pathEnd = installPath.indexOf(";");
+                    installPath = installPath.substring(0, pathEnd) + File.separator;
+                    break;
+                }
+            }
+
+            reader.close();
+        } catch (IOException ioe) {
+            System.out.println("Error reading Netbeans location information");
+        }
 
         return installPath;
     }
 
 
-    private static File findVersionFile(File start)
-    {
+    private static File findVersionFile(File start) {
         File versionFile = null;
 
         File files[] = start.listFiles(new VersionFilter());
-        if (files.length == 0)
-        {
+
+        if (files.length == 0) {
             File dirs[] = start.listFiles(new DirFilter());
-            for (int i=0; i< dirs.length; i++)
-            {
+
+            for (int i = 0; i < dirs.length; i++) {
                 versionFile = findVersionFile(dirs[i]);
-                if (versionFile != null)
-                {
+
+                if (versionFile != null) {
                     break;
                 }
             }
-        }
-        else
-        {
+        } else {
             versionFile = files[0];
         }
 
@@ -194,67 +194,75 @@ public class InstUtil {
     private static boolean verifySversionExists(File sversionFile) {
         if (!sversionFile.exists())
             return false;
+
         return true;
     }
 
-    public static Properties getOfficeVersions(File sversionFile) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(sversionFile));
+    public static Properties getOfficeVersions(File sversionFile) throws
+        IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(
+                    sversionFile));
         String sectionName = null;
         Properties results = new Properties();
 
         for (String s = reader.readLine(); s != null; s = reader.readLine()) {
             if (s.length() == 0)
                 continue;
+
             if (s.charAt(0) == '[') {
                 sectionName = s.substring(1, s.length() - 1);
                 continue;
             }
-            if ((sectionName != null) && sectionName.equalsIgnoreCase("Versions")) {
-                int equals = s.indexOf( "=" );
-        String officeName = s.substring(0, equals );
 
-        String instPath = s.substring(equals + 8, s.length());
-        String [] parts = new String[2];
-        parts[0] = officeName;
-        parts[1] = instPath + File.separator;
+            if ((sectionName != null)
+                && sectionName.equalsIgnoreCase("Versions")) {
+                int equals = s.indexOf("=");
+                String officeName = s.substring(0, equals);
+
+                String instPath = s.substring(equals + 8, s.length());
+                String [] parts = new String[2];
+                parts[0] = officeName;
+                parts[1] = instPath + File.separator;
 
                 if (parts.length == 2) {
-            try {
+                    try {
                         URL url = new URL("file://" + parts[1].trim());
-            String opSys =System.getProperty("os.name");
-            if (opSys.indexOf("Windows")!=-1){
-                String windowsPath = URLDecoder.decode( url.getPath() );
-                boolean firstSlash = true;
-                while( windowsPath.indexOf("/") != -1 ) {
-                    int forwardSlashPos = windowsPath.indexOf("/");
-                    String firstPart = windowsPath.substring( 0, forwardSlashPos );
-                    String lastPart = windowsPath.substring( forwardSlashPos + 1, windowsPath.length() );
-                    if( firstSlash ) {
-                        windowsPath = lastPart;
-                        firstSlash = false;
+                        String opSys = System.getProperty("os.name");
+
+                        if (opSys.indexOf("Windows") != -1) {
+                            String windowsPath = URLDecoder.decode(url.getPath());
+                            boolean firstSlash = true;
+
+                            while (windowsPath.indexOf("/") != -1) {
+                                int forwardSlashPos = windowsPath.indexOf("/");
+                                String firstPart = windowsPath.substring(0, forwardSlashPos);
+                                String lastPart = windowsPath.substring(forwardSlashPos + 1,
+                                                                        windowsPath.length());
+
+                                if (firstSlash) {
+                                    windowsPath = lastPart;
+                                    firstSlash = false;
+                                } else {
+                                    windowsPath = firstPart + "\\" + lastPart;
+                                }
+                            }
+
+                            int lastSlash = windowsPath.lastIndexOf("\\");
+                            windowsPath = windowsPath.substring(0, lastSlash);
+                            results.put(parts[0].trim(), windowsPath);
+                        } else {
+                            results.put(parts[0].trim(), URLDecoder.decode(url.getPath()));
+                        }
+                    } catch (MalformedURLException eSyntax) {
+                        results.put(parts[0].trim(), parts[1].trim());
+                        System.err.println("GotHereException");
                     }
-                    else {
-                        windowsPath = firstPart + "\\" + lastPart;
-                    }
-                }
-                int lastSlash = windowsPath.lastIndexOf("\\");
-                windowsPath = windowsPath.substring( 0, lastSlash );
-                results.put( parts[0].trim(), windowsPath );
-            }
-            else {
-                results.put(parts[0].trim(), URLDecoder.decode(url.getPath()));
-            }
-                    }
-                    catch (MalformedURLException eSyntax) {
-            results.put(parts[0].trim(), parts[1].trim());
-            System.err.println("GotHereException");
-                    }
-                }
-                else {
+                } else {
                     System.out.println("not splitting on equals");
                 }
             }
         }
+
         reader.close();
         return results;
     }
@@ -266,31 +274,34 @@ public class InstUtil {
     private static boolean isCorrectJavaVersion() {
         if (System.getProperty("java.version").startsWith("1.4"))
             return true;
+
         return false;
     }
 
     public static void main(String args[]) {
         InstUtil inst = new InstUtil();
         File f = null;
-        try
-        {
+
+        try {
             f = InstUtil.buildSversionLocation();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
+
         if (!InstUtil.verifySversionExists(f)) {
             System.err.println("Problem with sversion.ini");
         }
+
         try {
             InstUtil.getOfficeVersions(f);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println(e);
         }
+
         System.out.println(InstUtil.getJavaVersion());
+
         if (!InstUtil.isCorrectJavaVersion()) {
             System.err.println("Not correct Java Version");
         }
@@ -301,19 +312,14 @@ public class InstUtil {
 
 
 
-class DirFilter implements java.io.FileFilter
-{
-    public boolean accept(File aFile)
-    {
+class DirFilter implements java.io.FileFilter {
+    public boolean accept(File aFile) {
         return aFile.isDirectory();
     }
 }
-class VersionFilter implements java.io.FileFilter
-{
-    public boolean accept(File aFile)
-    {
-        if (aFile.getName().compareToIgnoreCase("sversion.ini") == 0)
-        {
+class VersionFilter implements java.io.FileFilter {
+    public boolean accept(File aFile) {
+        if (aFile.getName().compareToIgnoreCase("sversion.ini") == 0) {
             return true;
         }
 

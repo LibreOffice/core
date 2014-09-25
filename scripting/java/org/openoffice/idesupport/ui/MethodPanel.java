@@ -41,7 +41,8 @@ public class MethodPanel extends JPanel {
     private JList list;
     private ScriptEntry[] values;
 
-    public MethodPanel(File basedir, ArrayList<String> classpath, String language) {
+    public MethodPanel(File basedir, ArrayList<String> classpath,
+                       String language) {
         this.basedir = basedir;
         this.classpath = classpath;
 
@@ -49,7 +50,8 @@ public class MethodPanel extends JPanel {
         initUI();
     }
 
-    public void reload(File basedir, ArrayList<String> classpath, String language) {
+    public void reload(File basedir, ArrayList<String> classpath,
+                       String language) {
         this.basedir = basedir;
         this.classpath = classpath;
 

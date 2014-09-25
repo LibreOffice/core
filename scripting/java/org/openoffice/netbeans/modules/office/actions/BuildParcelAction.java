@@ -50,7 +50,7 @@ public class BuildParcelAction extends BuildAllAction {
 
             if (task.isSuccessful()) {
                 ParcelFolderCookie cookie = (ParcelFolderCookie)
-                    activatedNodes[i].getCookie(ParcelFolderCookie.class);
+                                            activatedNodes[i].getCookie(ParcelFolderCookie.class);
 
                 if (cookie != null)
                     cookie.generate();

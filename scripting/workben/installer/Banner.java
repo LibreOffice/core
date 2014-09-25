@@ -20,31 +20,26 @@ package installer;
 
 import java.awt.*;
 
-public class Banner extends Canvas
-{
+public class Banner extends Canvas {
     Image img;
-    Banner()
-    {
+    Banner() {
         setBackground(Color.white);
         img = Toolkit.getDefaultToolkit().createImage("sidebar.jpg");
     }
 
     @Override
-    public void paint(Graphics g)
-    {
+    public void paint(Graphics g) {
         g.drawImage(img, 0, 0, Color.white, null);
         g.dispose();
     }
 
     @Override
-    public void update(Graphics g)
-    {
+    public void update(Graphics g) {
         super.update(g);
     }
 
     @Override
-    public Dimension getPreferredSize()
-    {
+    public Dimension getPreferredSize() {
         return new Dimension(137, 358);
     }
 

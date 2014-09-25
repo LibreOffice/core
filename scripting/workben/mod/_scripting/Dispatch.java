@@ -43,30 +43,36 @@ import com.sun.star.util.XURLTransformer;
 public class Dispatch extends TestCase {
     private String scriptURL = "script://HighlightText.showForm";
     @Override
-    public void initialize( TestParameters tParam, PrintWriter log ) {
+    public void initialize(TestParameters tParam, PrintWriter log) {
     }
 
     @Override
+
     public synchronized TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log ) throws StatusException {
-    log.println("creating test environment");
+        TestParameters tParam, PrintWriter log) throws StatusException {
+        log.println("creating test environment");
         XInterface oObj = null;
         URL dispatchURL = null;
+
         try {
 
             XMultiServiceFactory xMSF = tParam.getMSF();
             SOfficeFactory SOF = null;
-            SOF = SOfficeFactory.getFactory( xMSF );
-            String docPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
-            XComponent doc = SOF.loadDocument( docPath );
-            XModel model = UnoRuntime.queryInterface( XModel.class,
-                doc );
+            SOF = SOfficeFactory.getFactory(xMSF);
+            String docPath =
+                util.utils.getFullTestURL("ExampleSpreadSheetLatest.sxc");
+            XComponent doc = SOF.loadDocument(docPath);
+            XModel model = UnoRuntime.queryInterface(XModel.class,
+                           doc);
             XFrame frame = model.getCurrentController().getFrame();
-            oObj = ( XInterface )xMSF.createInstanceWithArguments( "com.sun.star.comp.ScriptProtocolHandler", new Object[] { frame } );
+            oObj = (XInterface)
+                   xMSF.createInstanceWithArguments("com.sun.star.comp.ScriptProtocolHandler",
+                                                    new Object[] { frame });
 
-            XURLTransformer xParser=UnoRuntime.queryInterface(XURLTransformer.class,
-                tParam.getMSF().createInstance
-                    ("com.sun.star.util.URLTransformer"));
+            XURLTransformer xParser = UnoRuntime.queryInterface(
+                                          XURLTransformer.class,
+                                          tParam.getMSF().createInstance
+                                          ("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of
             // URL objects.
             URL[] aParseURL = new URL[1];
@@ -81,13 +87,14 @@ public class Dispatch extends TestCase {
         }
 
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
-        tEnv.addObjRelation( "XDispatchProvider.URL", scriptURL );
-        tEnv.addObjRelation( "XDispatch.URL", dispatchURL );
+        tEnv.addObjRelation("XDispatchProvider.URL", scriptURL);
+        tEnv.addObjRelation("XDispatch.URL", dispatchURL);
         return tEnv ;
     }
 
     @Override
-    public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
+
+    public synchronized void disposeTestEnvironment(TestEnvironment tEnv,
             TestParameters tParam) {
     }
 }

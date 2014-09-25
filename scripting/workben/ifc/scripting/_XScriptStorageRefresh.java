@@ -61,14 +61,15 @@ public class _XScriptStorageRefresh extends MultiMethodTest {
             try {
                 oObj.refresh();
                 output = "success";
-            }
-            catch (com.sun.star.uno.RuntimeException re) {
+            } catch (com.sun.star.uno.RuntimeException re) {
                 log.println("Caught RuntimeException: " + re);
                 output = "com.sun.star.uno.RuntimeException";
             }
+
             log.println("expected: " + expected + ", output: " + output);
             result &= output.equals(expected);
         }
+
         tRes.tested("refresh()", result);
     }
 }

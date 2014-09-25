@@ -45,6 +45,7 @@ public class ManifestParser implements XMLParser {
         if (parser == null) {
             parser = new ManifestParser();
         }
+
         return parser;
     }
 
@@ -53,25 +54,23 @@ public class ManifestParser implements XMLParser {
         Document result = null;
 
         try {
-            OfficeInstallation oi = OfficeSettings.getDefault().getOfficeDirectory();
+            OfficeInstallation oi =
+                OfficeSettings.getDefault().getOfficeDirectory();
             String id = oi.getURL("share/dtd/officedocument/1_0/");
 
             is = new InputSource(inputStream);
             is.setSystemId(id);
 
             result = XMLUtil.parse(is, false, false, null, null);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             System.out.println("IO Error parsing stream.");
             return null;
-        }
-        catch (SAXParseException spe) {
+        } catch (SAXParseException spe) {
             System.out.println("Sax Error parsing stream: " + spe.getMessage());
             System.out.println("\tPublicId: " + spe.getPublicId());
             System.out.println("\tSystemId: " + spe.getSystemId());
             return null;
-        }
-        catch (SAXException se) {
+        } catch (SAXException se) {
             System.out.println("Sax Error parsing stream: " + se.getMessage());
             return null;
         }

@@ -38,46 +38,43 @@ public class PathUtils {
 
         BOOTSTRAP_NAME = m_windows ? "bootstrap.ini" : "bootstraprc";
     }
-    public static String getOidForModel( XModel xModel )
-    {
+    public static String getOidForModel(XModel xModel) {
         String oid = "";
-        if ( xModel != null )
-        {
-            try
-            {
-                Method getOid = IQueryInterface.class.getMethod("getOid", (java.lang.Class[])null);
-                if ( getOid != null )
-                {
-                    oid = (String)getOid.invoke( xModel, new Object[0] );
+
+        if (xModel != null) {
+            try {
+                Method getOid = IQueryInterface.class.getMethod("getOid",
+                                (java.lang.Class[])null);
+
+                if (getOid != null) {
+                    oid = (String)getOid.invoke(xModel, new Object[0]);
                 }
 
-            }
-            catch ( Exception ignore )
-            {
+            } catch (Exception ignore) {
             }
         }
+
         return oid;
     }
-    static  public String make_url( String baseUrl, String url )
-    {
-        StringBuilder buff = new StringBuilder( baseUrl.length() + url.length() );
-        buff.append( baseUrl );
-        StringTokenizer t = new StringTokenizer( url, "/");
-        while ( t.hasMoreElements() )
-        {
-           if ( buff.charAt( buff.length() - 1 ) != '/' )
-           {
-               buff.append('/');
-           }
-           try
-           {
-               buff.append( java.net.URLEncoder.encode( (String)t.nextElement(), "UTF-8" ) );
-           }
-           catch (java.io.UnsupportedEncodingException e)
-           {
-               e.printStackTrace();
-           }
+    static  public String make_url(String baseUrl, String url) {
+        StringBuilder buff = new StringBuilder(baseUrl.length() +
+                                               url.length());
+        buff.append(baseUrl);
+        StringTokenizer t = new StringTokenizer(url, "/");
+
+        while (t.hasMoreElements()) {
+            if (buff.charAt(buff.length() - 1) != '/') {
+                buff.append('/');
+            }
+
+            try {
+                buff.append(java.net.URLEncoder.encode((String)t.nextElement(),
+                                                       "UTF-8"));
+            } catch (java.io.UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
+
         return buff.toString();
     }
 

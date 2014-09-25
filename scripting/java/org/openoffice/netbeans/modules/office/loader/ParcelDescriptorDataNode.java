@@ -33,7 +33,8 @@ public class ParcelDescriptorDataNode extends DataNode {
         this(obj, Children.LEAF);
     }
 
-    public ParcelDescriptorDataNode(ParcelDescriptorDataObject obj, Children ch) {
+    public ParcelDescriptorDataNode(ParcelDescriptorDataObject obj,
+                                    Children ch) {
         super(obj, ch);
         setHidden(true);
         setIconBase("/org/openoffice/netbeans/modules/office/resources/OfficeIcon");

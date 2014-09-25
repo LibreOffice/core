@@ -35,7 +35,8 @@ import org.openide.util.NbBundle;
 /** A single panel descriptor for a wizard.
  * You probably want to make a wizard iterator to hold it.
  */
-public class ParcelPropertiesPanel implements WizardDescriptor.FinishPanel {
+public class ParcelPropertiesPanel implements
+    WizardDescriptor.FinishPanel {
 
     /** The visual component that displays this panel.
      * If you need to access the component from this class,
@@ -51,6 +52,7 @@ public class ParcelPropertiesPanel implements WizardDescriptor.FinishPanel {
         if (component == null) {
             component = new ParcelPropertiesVisualPanel(this);
         }
+
         return component;
     }
 

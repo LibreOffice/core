@@ -20,12 +20,14 @@ package installer;
 
 import java.awt.event.*;
 
-public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
+public class IdeWelcome extends javax.swing.JPanel implements
+    ActionListener {
 
     /** Creates new form Welcome */
     public IdeWelcome(InstallWizard wizard) {
         this.wizard = wizard;
-        setBorder(new javax.swing.border.EtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+        setBorder(new javax.swing.border.EtchedBorder(
+                      javax.swing.border.EtchedBorder.RAISED));
         initComponents();
     }
 
@@ -45,13 +47,15 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
         area.setLineWrap(true);
         area.setText("\n Click Next to include Scripting Framework support for IDEs.");
         area.append("\n Click Cancel exit the Installation process. \n");
-    if( InstUtil.hasNetbeansInstallation() ) {
-        area.append("\n \tA version of Netbeans has been detected. \n");
-    }
+
+        if (InstUtil.hasNetbeansInstallation()) {
+            area.append("\n \tA version of Netbeans has been detected. \n");
+        }
 
         welcomePanel.add(area, java.awt.BorderLayout.CENTER);
         add(welcomePanel, java.awt.BorderLayout.CENTER);
-        NavPanel nav = new NavPanel(wizard, false, true, true, "", InstallWizard.IDEVERSIONS);
+        NavPanel nav = new NavPanel(wizard, false, true, true, "",
+                                    InstallWizard.IDEVERSIONS);
         nav.setNextListener(this);
         add(nav, java.awt.BorderLayout.SOUTH);
 
@@ -59,11 +63,11 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
 
     @Override
     public java.awt.Dimension getPreferredSize() {
-        return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
+        return new java.awt.Dimension(InstallWizard.DEFWIDTH,
+                                      InstallWizard.DEFHEIGHT);
     }
 
-    public void actionPerformed(ActionEvent ev)
-    {
+    public void actionPerformed(ActionEvent ev) {
         //Perform next actions here...
     }
 
