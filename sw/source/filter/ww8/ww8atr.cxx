@@ -3693,9 +3693,9 @@ sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
 void WW8AttributeOutput::TableRowEnd(sal_uInt32 nDepth)
 {
     if ( nDepth == 1 )
-        m_rWW8Export.WriteChar( (sal_uInt8)0x07 );
+        m_rWW8Export.WriteChar( 0x07 );
     else if ( nDepth > 1 )
-        m_rWW8Export.WriteChar( (sal_uInt8)0x0d );
+        m_rWW8Export.WriteChar( 0x0d );
 
     //Technically in a word document this is a different value for a row ends
     //that are not row ends directly after a cell with a graphic. But it

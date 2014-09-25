@@ -2533,7 +2533,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     sal_Int32   nATemp = labs( (sal_Int32)( ( fNumber - nPTemp ) * 100000 ) );
 
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
-        mpPS->WriteChar( (sal_Char)'-' );
+        mpPS->WriteChar( '-' );
 
     const OString aNumber1(OString::number(nPTemp));
     mpPS->WriteCharPtr( aNumber1.getStr() );

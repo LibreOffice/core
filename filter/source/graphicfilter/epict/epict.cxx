@@ -308,7 +308,7 @@ void PictWriter::WriteString( const OUString & rString )
     sal_Int32 nLen = aString.getLength();
     if ( nLen > 255 )
         nLen = 255;
-    pPict->WriteUChar(  (sal_uInt8)nLen  );
+    pPict->WriteUChar( nLen  );
     for (sal_Int32 i = 0; i < nLen; ++i)
         pPict->WriteChar( aString[i] );
 }
@@ -1054,9 +1054,9 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 nPos = pPict->Tell();
                 pPict->Seek( nDstRowPos );
                 if ( nDstRowBytes > 250 )
-                    pPict->WriteUInt16(  (sal_uInt16)( nPos - nDstRowPos - 2 )  );
+                    pPict->WriteUInt16( nPos - nDstRowPos - 2 );
                 else
-                    pPict->WriteUChar(  (sal_uInt8)( nPos - nDstRowPos - 1 )  );
+                    pPict->WriteUChar( nPos - nDstRowPos - 1 );
                 pPict->Seek( nPos );
 
                 // count percentages, Callback, check errors:
@@ -1245,9 +1245,9 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 nPos = pPict->Tell();
                 pPict->Seek( nDstRowPos );
                 if ( nDstRowBytes > 250 )
-                    pPict->WriteUInt16(  (sal_uInt16)( nPos - nDstRowPos - 2 )  );
+                    pPict->WriteUInt16( nPos - nDstRowPos - 2 );
                 else
-                    pPict->WriteUChar(  (sal_uInt8)( nPos - nDstRowPos - 1 )  );
+                    pPict->WriteUChar( nPos - nDstRowPos - 1 );
                 pPict->Seek( nPos );
             }
 

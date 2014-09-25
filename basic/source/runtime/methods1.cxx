@@ -1028,7 +1028,7 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
         {
             pStrm->WriteUInt16( SbxSALINT64 ); // VarType Id
         }
-        pStrm->WriteUInt64( (sal_uInt64)rVar.GetInt64() );
+        pStrm->WriteUInt64( rVar.GetInt64() );
         break;
     case SbxSINGLE:
         if( bIsVariant )

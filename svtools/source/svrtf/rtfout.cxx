@@ -87,11 +87,11 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
             case '\\':
             case '}':
             case '{':
-                rStream.WriteChar( '\\' ).WriteChar( (sal_Char)c );
+                rStream.WriteChar( '\\' ).WriteChar( c );
                 break;
             default:
                 if (c >= ' ' && c <= '~')
-                    rStream.WriteChar( (sal_Char)c );
+                    rStream.WriteChar( c );
                 else
                 {
                     //If we can't convert to the dest encoding, or if

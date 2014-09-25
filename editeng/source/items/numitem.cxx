@@ -304,9 +304,9 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
 
     rStream.WriteUInt16(  mePositionAndSpaceMode );
     rStream.WriteUInt16(  meLabelFollowedBy );
-    rStream.WriteInt32( ( sal_Int32 ) mnListtabPos );
-    rStream.WriteInt32( ( sal_Int32 ) mnFirstLineIndent );
-    rStream.WriteInt32( ( sal_Int32 ) mnIndentAt );
+    rStream.WriteInt32( mnListtabPos );
+    rStream.WriteInt32( mnFirstLineIndent );
+    rStream.WriteInt32( mnIndentAt );
 
     return rStream;
 }

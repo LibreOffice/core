@@ -1118,7 +1118,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         break;
                         case 3 :
                         {
-                            rOut.WriteUInt32( ( EPP_SlideNumberMCAtom << 16 ) ).WriteUInt32( (sal_uInt32 ) 4 )
+                            rOut.WriteUInt32( ( EPP_SlideNumberMCAtom << 16 ) ).WriteUInt32( 4 )
                                 .WriteUInt32( ( pFieldEntry->nFieldStartPos ) );
                         }
                         break;
@@ -1185,13 +1185,13 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         break;
                         case 6 :
                         {
-                            rOut.WriteUInt32( ( EPP_HeaderMCAtom << 16 ) ).WriteUInt32( (sal_uInt32 ) 4 )
+                            rOut.WriteUInt32( ( EPP_HeaderMCAtom << 16 ) ).WriteUInt32( 4 )
                                 .WriteUInt32( ( pFieldEntry->nFieldStartPos ) );
                         }
                         break;
                         case 7 :
                         {
-                            rOut.WriteUInt32( ( EPP_FooterMCAtom << 16 ) ).WriteUInt32( (sal_uInt32 ) 4 )
+                            rOut.WriteUInt32( ( EPP_FooterMCAtom << 16 ) ).WriteUInt32( 4 )
                                 .WriteUInt32( ( pFieldEntry->nFieldStartPos ) );
                         }
                         break;

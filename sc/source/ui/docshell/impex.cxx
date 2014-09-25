@@ -344,7 +344,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sa
     // mba: no BaseURL for data exchange
     if( ExportStream( aStrm, OUString(), nFmt ) )
     {
-        aStrm.WriteChar( (sal_Char) 0 );
+        aStrm.WriteChar( 0 );
         aStrm.Seek( STREAM_SEEK_TO_END );
         if( aStrm.Tell() <= nSizeLimit )
         {

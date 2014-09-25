@@ -2229,7 +2229,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     for( ; i--; pSdrObjs = rWrt.pSdrObjs, pTxtBxs = rWrt.pTxtBxs )
     {
         // "dummy char" (or any Count ?) - why? This knows only M$
-        GetStream().WriteChar( (sal_Char)i );
+        GetStream().WriteChar( i );
 
         OpenContainer( ESCHER_DgContainer );
 
