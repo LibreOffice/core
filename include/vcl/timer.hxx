@@ -27,6 +27,7 @@
 struct ImplTimerData;
 struct ImplSVData;
 
+/// Base-class for timers - usually a simple, one-shot timeout
 class VCL_DLLPUBLIC Timer
 {
 protected:
@@ -51,6 +52,7 @@ public:
     sal_uLong       GetTimeout() const { return mnTimeout; }
     bool            IsActive() const { return mbActive; }
 
+    /// Make it possible to associate a callback with this timeout
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
     const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }
 
@@ -60,7 +62,8 @@ public:
     static void ImplTimerCallbackProc();
 };
 
-
+/// An auto-timer is a multi-shot timer re-emitting itself at
+/// interval until destroyed.
 class VCL_DLLPUBLIC AutoTimer : public Timer
 {
 public:
