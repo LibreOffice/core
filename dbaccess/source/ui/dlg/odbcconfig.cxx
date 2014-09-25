@@ -296,9 +296,8 @@ protected:
 };
 
 // OOdbcManagement
-OOdbcManagement::OOdbcManagement( const Link& _rAsyncFinishCallback )
-    :m_pProcessWait( NULL )
-    ,m_aAsyncFinishCallback( _rAsyncFinishCallback )
+OOdbcManagement::OOdbcManagement(const Link& rAsyncFinishCallback)
+    : m_aAsyncFinishCallback(rAsyncFinishCallback)
 {
 }
 
