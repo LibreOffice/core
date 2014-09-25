@@ -2030,7 +2030,7 @@ SfxPoolItem* SvxKerningItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxKerningItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteInt16( (short) GetValue() );
+    rStrm.WriteInt16( GetValue() );
     return rStrm;
 }
 
@@ -2271,7 +2271,7 @@ SvStream& SvxEscapementItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*
             _nEsc = DFLT_ESC_SUB;
     }
     rStrm.WriteUChar( GetProp() )
-         .WriteInt16( (short) _nEsc );
+         .WriteInt16( _nEsc );
     return rStrm;
 }
 

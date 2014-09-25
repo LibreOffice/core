@@ -182,7 +182,7 @@ SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */)
         rStream.WriteUniOrByteString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                                     rStream.GetStreamCharSet() );
 
-    rStream.WriteInt16( (short)SFX_STYLE_FAMILY_PARA );  // wg. altem Dateiformat
+    rStream.WriteInt16( SFX_STYLE_FAMILY_PARA );  // wg. altem Dateiformat
 
     GetItemSet().Store( rStream );
 

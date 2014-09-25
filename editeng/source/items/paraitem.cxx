@@ -267,7 +267,7 @@ SfxPoolItem* SvxLineSpacingItem::Create(SvStream& rStrm, sal_uInt16) const
 SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm.WriteSChar(   GetPropLineSpace() )
-         .WriteInt16( (short)  GetInterLineSpace() )
+         .WriteInt16(  GetInterLineSpace() )
          .WriteUInt16( (sal_uInt16) GetLineHeight() )
          .WriteSChar(    GetLineSpaceRule() )
          .WriteSChar(    GetInterLineSpaceRule() );

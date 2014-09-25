@@ -3114,9 +3114,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             while( aIter != aEnd )
                             {
                                 aOut.WriteUInt16( (sal_uInt16)aIter->nOperation )
-                                    .WriteInt16( (sal_Int16)aIter->nPara[ 0 ] )
-                                    .WriteInt16( (sal_Int16)aIter->nPara[ 1 ] )
-                                    .WriteInt16( (sal_Int16)aIter->nPara[ 2 ] );
+                                    .WriteInt16( aIter->nPara[ 0 ] )
+                                    .WriteInt16( aIter->nPara[ 1 ] )
+                                    .WriteInt16( aIter->nPara[ 2 ] );
                                 ++aIter;
                             }
                             sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
@@ -5368,10 +5368,10 @@ void EscherEx::AddChildAnchor( const Rectangle& rRect )
 void EscherEx::AddClientAnchor( const Rectangle& rRect )
 {
     AddAtom( 8, ESCHER_ClientAnchor );
-    mpOutStrm->WriteInt16( (sal_Int16)rRect.Top() )
-              .WriteInt16( (sal_Int16)rRect.Left() )
-              .WriteInt16( (sal_Int16)( rRect.GetWidth()  + rRect.Left() ) )
-              .WriteInt16( (sal_Int16)( rRect.GetHeight() + rRect.Top() ) );
+    mpOutStrm->WriteInt16( rRect.Top() )
+              .WriteInt16( rRect.Left() )
+              .WriteInt16( ( rRect.GetWidth()  + rRect.Left() ) )
+              .WriteInt16( ( rRect.GetHeight() + rRect.Top() ) );
 }
 
 EscherExHostAppData* EscherEx::EnterAdditionalTextGroup()
@@ -5458,7 +5458,7 @@ bool EscherEx::SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect
         sal_uInt32 nCurrentPos = mpOutStrm->Tell();
         if ( DoSeek( ESCHER_Persist_Grouping_Logic | ( nGroupLevel - 1 ) ) )
         {
-            mpOutStrm->WriteInt16( (sal_Int16)rRect.Top() ).WriteInt16( (sal_Int16)rRect.Left() ).WriteInt16( (sal_Int16)rRect.Right() ).WriteInt16( (sal_Int16)rRect.Bottom() );
+            mpOutStrm->WriteInt16( rRect.Top() ).WriteInt16( rRect.Left() ).WriteInt16( rRect.Right() ).WriteInt16( rRect.Bottom() );
             mpOutStrm->Seek( nCurrentPos );
         }
     }

@@ -146,8 +146,8 @@ bool StgCompObjStream::Store()
         return false;
     Seek( 0L );
     OString aAsciiUserName(OUStringToOString(aUserName, RTL_TEXTENCODING_MS_1252));
-    WriteInt16( (sal_Int16) 1 );          // Version?
-    WriteInt16( (sal_Int16) -2 );                     // 0xFFFE = Byte Order Indicator
+    WriteInt16(  1 );          // Version?
+    WriteInt16(  -2 );                     // 0xFFFE = Byte Order Indicator
     WriteInt32( (sal_Int32) 0x0A03 );         // Windows 3.10
     WriteInt32( (sal_Int32) -1L );
     WriteClsId( *this, aClsId );             // Class ID

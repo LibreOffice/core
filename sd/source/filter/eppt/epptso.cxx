@@ -532,10 +532,10 @@ bool PPTWriter::ImplCloseDocument()
         mpStyleSheet->WriteTxCFStyleAtom( *mpStrm );        // create style that is used for new standard objects
         mpPptEscherEx->AddAtom( 10, EPP_TxSIStyleAtom );
         mpStrm->WriteUInt32( (sal_uInt32)7 )                        // ?
-               .WriteInt16( (sal_Int16)2 )                         // ?
+               .WriteInt16( 2 )                         // ?
                .WriteUChar( 9 )                         // ?
                .WriteUChar( 8 )                         // ?
-               .WriteInt16( (sal_Int16)0 );                        // ?
+               .WriteInt16( 0 );                        // ?
 
         mpStrm->Write( aTxMasterStyleAtomStrm.GetData(), aTxMasterStyleAtomStrm.Tell() );
         maSoundCollection.Write( *mpStrm );
@@ -749,7 +749,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         if ( nPropertyFlags & 0x10 )
             rOut.WriteUInt16( nFontId );
         if ( nPropertyFlags & 0x40 )
-            rOut.WriteInt16( (sal_Int16)nBuRealSize );
+            rOut.WriteInt16( nBuRealSize );
         if ( nPropertyFlags & 0x20 )
         {
             sal_uInt32 nBulletColor = pPara->nBulletColor;
@@ -2112,7 +2112,7 @@ bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage, const
         aPropOpt.CreateShapeProperties( mXShape );
         aPropOpt.Commit( *mpStrm );
         mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-        mpStrm->WriteInt16( (sal_Int16)maRect.Top() ).WriteInt16( (sal_Int16)maRect.Left() ).WriteInt16( (sal_Int16)maRect.Right() ).WriteInt16( (sal_Int16)maRect.Bottom() );      // oben, links, rechts, unten ????
+        mpStrm->WriteInt16( maRect.Top() ).WriteInt16( maRect.Left() ).WriteInt16( maRect.Right() ).WriteInt16( maRect.Bottom() );      // oben, links, rechts, unten ????
         mpPptEscherEx->OpenContainer( ESCHER_ClientData );
         mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
         mpStrm->WriteUInt32( (sal_uInt32)0 )                // PlacementID
@@ -2810,7 +2810,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt );
                                 aPropertyOptions.Commit( *mpStrm );
                                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-                                mpStrm->WriteInt16( (sal_Int16)maRect.Top() ).WriteInt16( (sal_Int16)maRect.Left() ).WriteInt16( (sal_Int16)maRect.Right() ).WriteInt16( (sal_Int16)maRect.Bottom() );      // top, left, right, bottom ????
+                                mpStrm->WriteInt16( maRect.Top() ).WriteInt16( maRect.Left() ).WriteInt16( maRect.Right() ).WriteInt16( maRect.Bottom() );      // top, left, right, bottom ????
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientData );
                                 mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
                                 mpStrm->WriteUInt32( (sal_uInt32)0 )                                                        // PlacementID
@@ -2902,7 +2902,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt2 );
                                 aPropOpt2.Commit( *mpStrm );
                                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-                                mpStrm->WriteInt16( (sal_Int16)maRect.Top() ).WriteInt16( (sal_Int16)maRect.Left() ).WriteInt16( (sal_Int16)maRect.Right() ).WriteInt16( (sal_Int16)maRect.Bottom() );  // top, left, right, bottom ????
+                                mpStrm->WriteInt16( maRect.Top() ).WriteInt16( maRect.Left() ).WriteInt16( maRect.Right() ).WriteInt16( maRect.Bottom() );  // top, left, right, bottom ????
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientData );
                                 mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
                                 sal_uInt8 PlaceHolderID = ( mType == "presentation.Subtitle") ? EPP_PLACEHOLDER_MASTERSUBTITLE:EPP_PLACEHOLDER_MASTERBODY;

@@ -690,7 +690,7 @@ bool PPTWriter::ImplCreateDocument()
     mpPptEscherEx->InsertPersistOffset( EPP_MAINNOTESMASTER_PERSIST_KEY, mpStrm->Tell() );
     mpStrm->WriteUInt32( (sal_uInt32)0 )                        // Reference to NotesMaster ( 0 if none );
            .WriteUInt32( (sal_uInt32)0 )                        // Reference to HandoutMaster ( 0 if none );
-           .WriteInt16( (sal_Int16)1 )                         // Number of the first slide;
+           .WriteInt16( 1 )                         // Number of the first slide;
            .WriteUInt16( nSlideType )                           // Size of the document slides ( default: EPP_SLIDESIZETYPEONSCREEN )
            .WriteUChar( 0 )                         // bool1 indicates if document was saved with embedded true type fonts
            .WriteUChar( 0 )                         // bool1 indicates if the placeholders on the title slide are omitted
@@ -1437,8 +1437,8 @@ bool PPTWriter::ImplWriteAtomEnding()
            .WriteUInt32( nPersistOfs )                      // File offset to persist pointers for this save operation
            .WriteUInt32( (sal_uInt32)1 )                        // Persist reference to the document persist object
            .WriteUInt32( (sal_uInt32)nPersistEntrys )           // max persists written, Seed value for persist object id management
-           .WriteInt16( (sal_Int16)EPP_LastViewTypeSlideView ) // last view type
-           .WriteInt16( (sal_Int16)0x12 );                     // padword
+           .WriteInt16( EPP_LastViewTypeSlideView ) // last view type
+           .WriteInt16( 0x12 );                     // padword
 
     return true;
 }

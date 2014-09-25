@@ -2580,9 +2580,9 @@ SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
         {
             rStrm.WriteChar( (char) i );
             WriteColor( rStrm, l->GetColor() );
-            rStrm.WriteInt16( (short) l->GetOutWidth() )
-                 .WriteInt16( (short) l->GetInWidth() )
-                 .WriteInt16( (short) l->GetDistance() );
+            rStrm.WriteInt16( l->GetOutWidth() )
+                 .WriteInt16( l->GetInWidth() )
+                 .WriteInt16( l->GetDistance() );
         }
     }
     rStrm.WriteChar( (char) 2 );
@@ -3189,14 +3189,14 @@ SvStream& SvxLineItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
     if( pLine )
     {
         WriteColor( rStrm, pLine->GetColor() );
-        rStrm.WriteInt16( (short)pLine->GetOutWidth() )
-             .WriteInt16( (short)pLine->GetInWidth() )
-             .WriteInt16( (short)pLine->GetDistance() );
+        rStrm.WriteInt16( pLine->GetOutWidth() )
+             .WriteInt16( pLine->GetInWidth() )
+             .WriteInt16( pLine->GetDistance() );
     }
     else
     {
         WriteColor( rStrm, Color() );
-        rStrm.WriteInt16( (short)0 ).WriteInt16( (short)0 ).WriteInt16( (short)0 );
+        rStrm.WriteInt16( 0 ).WriteInt16( 0 ).WriteInt16( 0 );
     }
     return rStrm;
 }

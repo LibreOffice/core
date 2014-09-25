@@ -235,7 +235,7 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
             {
                 AddAtom( 8, ESCHER_ClientAnchor );
                 PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
-                mpOutStrm->WriteInt16( (sal_Int16)aRect.Top() ).WriteInt16( (sal_Int16)aRect.Left() ).WriteInt16( (sal_Int16)aRect.Right() ).WriteInt16( (sal_Int16)aRect.Bottom() );
+                mpOutStrm->WriteInt16( aRect.Top() ).WriteInt16( aRect.Left() ).WriteInt16( aRect.Right() ).WriteInt16( aRect.Bottom() );
             }
             else
             {

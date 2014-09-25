@@ -267,8 +267,8 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     }
     r .WriteInt32( (sal_Int32) eCharSet )
       .WriteInt32( (sal_Int32) nDimBase )
-      .WriteInt16( (sal_Int16) nFlags )
-      .WriteInt16( (sal_Int16) 0 )
+      .WriteInt16(  nFlags )
+      .WriteInt16(  0 )
       .WriteInt32( (sal_Int32) 0 )
       .WriteInt32( (sal_Int32) 0 );
 

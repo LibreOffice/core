@@ -2425,7 +2425,7 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) co
 
     if (!IsIndex())
     {
-        rOut.WriteInt16( (sal_Int16)aGradient.GetGradientStyle() );
+        rOut.WriteInt16( aGradient.GetGradientStyle() );
 
         sal_uInt16 nTmp;
 
@@ -2910,7 +2910,7 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
     if (!IsIndex())
     {
-        rOut.WriteInt16( (sal_Int16)aHatch.GetHatchStyle() );
+        rOut.WriteInt16( aHatch.GetHatchStyle() );
 
         sal_uInt16 nTmp;
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetRed() ); rOut.WriteUInt16( nTmp );

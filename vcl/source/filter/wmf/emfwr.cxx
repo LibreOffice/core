@@ -223,8 +223,8 @@ void EMFWriter::WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSiz
     if (nDivY)
         nDPIY /= nDivY; // DPI Y
 
-    m_rStm.WriteInt16( (sal_Int16) EmfPlusHeader );
-    m_rStm.WriteInt16( (sal_Int16) 0x01 )  // Flags - Dual Mode // TODO: Check this
+    m_rStm.WriteInt16(  EmfPlusHeader );
+    m_rStm.WriteInt16(  0x01 )  // Flags - Dual Mode // TODO: Check this
           .WriteInt32( (sal_Int32) 0x1C )  // Size
           .WriteInt32( (sal_Int32) 0x10 )  // Data Size
           .WriteInt32( (sal_Int32) 0xdbc01002 ) // (lower 12bits) 1-> v1 2-> v1.1 // TODO: Check this

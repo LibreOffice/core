@@ -211,13 +211,13 @@ void WMFWriter::CountActionsAndBitmaps( const GDIMetaFile & rMTF )
 void WMFWriter::WritePointXY(const Point & rPoint)
 {
     Point aPt( OutputDevice::LogicToLogic(rPoint,aSrcMapMode,aTargetMapMode) );
-    pWMF->WriteInt16( (short)aPt.X() ).WriteInt16( (short)aPt.Y() );
+    pWMF->WriteInt16( aPt.X() ).WriteInt16( aPt.Y() );
 }
 
 void WMFWriter::WritePointYX(const Point & rPoint)
 {
     Point aPt( OutputDevice::LogicToLogic(rPoint,aSrcMapMode,aTargetMapMode) );
-    pWMF->WriteInt16( (short)aPt.Y() ).WriteInt16( (short)aPt.X() );
+    pWMF->WriteInt16( aPt.Y() ).WriteInt16( aPt.X() );
 }
 
 sal_Int32 WMFWriter::ScaleWidth( sal_Int32 nDX )
@@ -229,13 +229,13 @@ sal_Int32 WMFWriter::ScaleWidth( sal_Int32 nDX )
 void WMFWriter::WriteSize(const Size & rSize)
 {
     Size aSz( OutputDevice::LogicToLogic(rSize,aSrcMapMode,aTargetMapMode) );
-    pWMF->WriteInt16( (short)aSz.Width() ).WriteInt16( (short)aSz.Height() );
+    pWMF->WriteInt16( aSz.Width() ).WriteInt16( aSz.Height() );
 }
 
 void WMFWriter::WriteHeightWidth(const Size & rSize)
 {
     Size aSz( OutputDevice::LogicToLogic(rSize,aSrcMapMode,aTargetMapMode) );
-    pWMF->WriteInt16( (short)aSz.Height() ).WriteInt16( (short)aSz.Width() );
+    pWMF->WriteInt16( aSz.Height() ).WriteInt16( aSz.Width() );
 }
 
 void WMFWriter::WriteRectangle(const Rectangle & rRect)
@@ -309,7 +309,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
 
     WriteRecordHeader(0x00000000,W_META_CREATEFONTINDIRECT);
     WriteHeightWidth(Size(rFont.GetSize().Width(),-rFont.GetSize().Height()));
-    pWMF->WriteInt16( (short)rFont.GetOrientation() ).WriteInt16( (short)rFont.GetOrientation() );
+    pWMF->WriteInt16( rFont.GetOrientation() ).WriteInt16( rFont.GetOrientation() );
 
     switch (rFont.GetWeight()) {
         case WEIGHT_THIN:       nWeight=W_FW_THIN;       break;
@@ -673,7 +673,7 @@ void WMFWriter::WMFRecord_Rectangle(const Rectangle & rRect)
 void WMFWriter::WMFRecord_RestoreDC()
 {
     WriteRecordHeader(0x00000004,W_META_RESTOREDC);
-    pWMF->WriteInt16( (short)-1 );
+    pWMF->WriteInt16( -1 );
 }
 
 void WMFWriter::WMFRecord_RoundRect(const Rectangle & rRect, long nHorzRound, long nVertRound)
@@ -799,7 +799,7 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
         }
     }
 
-    pWMF->WriteUInt32( nROP ).             WriteInt16( (short) 0 ).             WriteInt16( (short) rBitmap.GetSizePixel().Height() ).             WriteInt16( (short) rBitmap.GetSizePixel().Width() ).             WriteInt16( (short) 0 ).             WriteInt16( (short) 0 );
+    pWMF->WriteUInt32( nROP ).             WriteInt16( 0 ).             WriteInt16( rBitmap.GetSizePixel().Height() ).             WriteInt16( rBitmap.GetSizePixel().Width() ).             WriteInt16( 0 ).             WriteInt16( 0 );
 
     WriteHeightWidth(rSize);
     WritePointYX(rPoint);

@@ -282,14 +282,14 @@ Polygon PictWriter::PolyPolygonToPolygon(const PolyPolygon & rPolyPoly)
 void PictWriter::WritePoint(const Point & rPoint)
 {
     Point aPoint = OutputDevice::LogicToLogic( rPoint, aSrcMapMode, aTargetMapMode );
-    pPict->WriteInt16( (short)aPoint.Y() ).WriteInt16( (short)aPoint.X() );
+    pPict->WriteInt16( aPoint.Y() ).WriteInt16( aPoint.X() );
 }
 
 
 void PictWriter::WriteSize(const Size & rSize)
 {
     OutputDevice::LogicToLogic( rSize, aSrcMapMode, aTargetMapMode ); // -Wall is this needed.
-    pPict->WriteInt16( (short)rSize.Height() ).WriteInt16( (short)rSize.Width() );
+    pPict->WriteInt16( rSize.Height() ).WriteInt16( rSize.Width() );
 }
 
 
@@ -327,8 +327,8 @@ Rectangle PictWriter::MapRectangle( const Rectangle& rRect )
 void PictWriter::WriteRectangle(const Rectangle & rRect)
 {
     Rectangle aRect( MapRectangle( rRect ) );
-    pPict ->WriteInt16( (sal_Int16)aRect.Top() ).WriteInt16( (sal_Int16)aRect.Left() )
-           .WriteInt16( (sal_Int16)aRect.Bottom() ).WriteInt16( (sal_Int16)aRect.Right() );
+    pPict ->WriteInt16( aRect.Top() ).WriteInt16( aRect.Left() )
+           .WriteInt16( aRect.Bottom() ).WriteInt16( aRect.Right() );
 }
 
 void PictWriter::WritePolygon(const Polygon & rPoly)
@@ -713,8 +713,8 @@ void PictWriter::WriteOpcode_ClipRect( const Rectangle& rRect )
     ++aRect.Right();
     pPict ->WriteUInt16( (sal_uInt16)1 )    // opcode 1
            .WriteUInt16( (sal_uInt16)10 )   // data size
-           .WriteInt16( (sal_Int16)aRect.Top() ).WriteInt16( (sal_Int16)aRect.Left() )
-           .WriteInt16( (sal_Int16)aRect.Bottom() ).WriteInt16( (sal_Int16)aRect.Right() );
+           .WriteInt16( aRect.Top() ).WriteInt16( aRect.Left() )
+           .WriteInt16( aRect.Bottom() ).WriteInt16( aRect.Right() );
     aClipRect = aRect;
 }
 
@@ -2055,8 +2055,8 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                         Rectangle aRect( pAt->aClipRect );
                         pPict ->WriteUInt16( (sal_uInt16)1 )    // opcode 1
                                .WriteUInt16( (sal_uInt16)10 )   // data size
-                               .WriteInt16( (sal_Int16)aRect.Top() ).WriteInt16( (sal_Int16)aRect.Left() )
-                               .WriteInt16( (sal_Int16)aRect.Bottom() ).WriteInt16( (sal_Int16)aRect.Right() );
+                               .WriteInt16( aRect.Top() ).WriteInt16( aRect.Left() )
+                               .WriteInt16( aRect.Bottom() ).WriteInt16( aRect.Right() );
                     }
                     aClipRect=pAt->aClipRect;
                     pAttrStack=pAt->pSucc;
