@@ -110,10 +110,6 @@ sal_Int64 SAL_CALL Seekable::getLength() throw( io::IOException, uno::RuntimeExc
         bOk = true;
     }
 
-    if (!bOk)
-        throw io::IOException("Getting size unsupported",
-            static_cast< cppu::OWeakObject * >(this));
-
     return nSize;
 }
 
