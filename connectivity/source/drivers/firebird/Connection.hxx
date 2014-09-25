@@ -149,7 +149,7 @@ namespace connectivity
              * versions.
              */
             void rebuildIndexes()
-                throw (css::sdbc::SQLException, css::uno::RuntimeException);
+                throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
             void buildTypeInfo()
                 throw (css::sdbc::SQLException);
 
@@ -176,8 +176,9 @@ namespace connectivity
 
             virtual void construct( const ::rtl::OUString& url,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info)
-            throw(::com::sun::star::sdbc::SQLException,
-                  ::com::sun::star::uno::RuntimeException);
+            throw(css::sdbc::SQLException,
+                  css::uno::RuntimeException,
+                  std::exception);
 
             ::rtl::OUString getConnectionURL()  const   {return m_sConnectionURL;}
             bool        isEmbedded()        const   {return m_bIsEmbedded;}
