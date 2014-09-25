@@ -46,13 +46,18 @@ class TimerTest : public test::BootstrapFixture
 public:
     TimerTest() : BootstrapFixture(true, false) {}
 
+#ifdef TEST_WATCHDOG
     void testWatchdog();
+#endif
     void testDurations();
     void testAutoTimer();
     void testRecursiveTimer();
     void testSlowTimerCallback();
 
     CPPUNIT_TEST_SUITE(TimerTest);
+#ifdef TEST_WATCHDOG
+    CPPUNIT_TEST(testWatchdog);
+#endif
     CPPUNIT_TEST(testDurations);
     CPPUNIT_TEST(testAutoTimer);
     CPPUNIT_TEST(testRecursiveTimer);
@@ -61,6 +66,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
+#ifdef TEST_WATCHDOG
 void TimerTest::testWatchdog()
 {
     // out-wait the watchdog.
@@ -69,6 +75,7 @@ void TimerTest::testWatchdog()
     aWait.Nanosec = 0;
     osl::Thread::wait( aWait );
 }
+#endif
 
 // --------------------------------------------------------------------
 
@@ -83,7 +90,7 @@ public:
         Start();
         mrBool = false;
     }
-    virtual void Timeout()
+    virtual void Timeout() SAL_OVERRIDE
     {
         mrBool = true;
         Application::EndYield();
@@ -117,7 +124,7 @@ public:
         Start();
         mrCount = 0;
     }
-    virtual void Timeout()
+    virtual void Timeout() SAL_OVERRIDE
     {
         mrCount++;
     }
@@ -142,7 +149,7 @@ public:
         SetTimeout( nMS );
         Start();
     }
-    virtual void Timeout()
+    virtual void Timeout() SAL_OVERRIDE
     {
         for (int i = 0; i < 100; i++)
             Application::Yield();
@@ -171,7 +178,7 @@ public:
         Start();
         mbSlow = false;
     }
-    virtual void Timeout()
+    virtual void Timeout() SAL_OVERRIDE
     {
         TimeValue aWait;
         aWait.Seconds = 1;
