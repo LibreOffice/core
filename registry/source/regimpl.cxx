@@ -541,11 +541,11 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
 
     if (!regName.isEmpty())
     {
-        ORegistry* pReg = new ORegistry();
+        std::unique_ptr<ORegistry> pReg(new ORegistry());
 
         if (!pReg->initRegistry(regName, REG_READWRITE))
         {
-            delete pReg;
+            pReg.reset();
 
             OUString systemName;
             if ( FileBase::getSystemPathFromFileURL(regName, systemName) != FileBase::E_None )
