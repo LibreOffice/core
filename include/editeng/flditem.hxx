@@ -25,7 +25,6 @@
 #include <svl/poolitem.hxx>
 #include <tools/pstm.hxx>
 #include <editeng/editengdllapi.h>
-#include <../sd/inc/sdpage.hxx> // for Page Title field
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
