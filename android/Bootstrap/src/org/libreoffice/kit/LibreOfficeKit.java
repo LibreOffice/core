@@ -66,10 +66,6 @@ public final class LibreOfficeKit
         String cacheDir = activity.getApplication().getCacheDir().getAbsolutePath();
         String apkFile = activity.getApplication().getPackageResourcePath();
 
-        if (!initializeNative(dataDir, cacheDir, apkFile)) {
-            return;
-        }
-
         // If we notice that a fonts.conf file was extracted, automatically
         // set the FONTCONFIG_FILE env var.
         InputStream inputStream = null;
@@ -86,6 +82,10 @@ public final class LibreOfficeKit
 
         // TMPDIR is used by osl_getTempDirURL()
         putenv("TMPDIR=" + activity.getCacheDir().getAbsolutePath());
+
+        if (!initializeNative(dataDir, cacheDir, apkFile)) {
+            return;
+        }
 
         initializeDone = true;
     }
