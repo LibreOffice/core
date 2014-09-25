@@ -2328,7 +2328,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     for ( i = 0; i < aStrArr.size(); ++i )
                     {
                         const OUString& sAuthor = aStrArr[i].first;
-                        rWrt.pTableStrm->WriteUChar( (sal_uInt8)sAuthor.getLength() );
+                        rWrt.pTableStrm->WriteUChar( sAuthor.getLength() );
                         SwWW8Writer::WriteString8(*rWrt.pTableStrm, sAuthor, false,
                                 RTL_TEXTENCODING_MS_1252);
                     }

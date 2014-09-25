@@ -246,7 +246,7 @@ void WMFWriter::WriteRectangle(const Rectangle & rRect)
 
 void WMFWriter::WriteColor(const Color & rColor)
 {
-    pWMF->WriteUChar( (sal_uInt8) rColor.GetRed() ).WriteUChar( (sal_uInt8) rColor.GetGreen() ).WriteUChar( (sal_uInt8) rColor.GetBlue() ).WriteUChar( (sal_uInt8) 0 );
+    pWMF->WriteUChar(  rColor.GetRed() ).WriteUChar( rColor.GetGreen() ).WriteUChar( rColor.GetBlue() ).WriteUChar( 0 );
 }
 
 void WMFWriter::WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType)
@@ -263,7 +263,7 @@ void WMFWriter::UpdateRecordHeader()
 
     nPos=pWMF->Tell(); nSize=nPos-nActRecordPos;
     if ((nSize & 1)!=0) {
-        pWMF->WriteUChar( (sal_uInt8)0 );
+        pWMF->WriteUChar( 0 );
         nPos++; nSize++;
     }
     nSize/=2;
@@ -326,9 +326,9 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
     }
     pWMF->WriteUInt16( nWeight );
 
-    if (rFont.GetItalic()==ITALIC_NONE)       pWMF->WriteUChar( (sal_uInt8)0 ); else  pWMF->WriteUChar( (sal_uInt8)1 );
-    if (rFont.GetUnderline()==UNDERLINE_NONE) pWMF->WriteUChar( (sal_uInt8)0 ); else  pWMF->WriteUChar( (sal_uInt8)1 );
-    if (rFont.GetStrikeout()==STRIKEOUT_NONE) pWMF->WriteUChar( (sal_uInt8)0 ); else  pWMF->WriteUChar( (sal_uInt8)1 );
+    if (rFont.GetItalic()==ITALIC_NONE)       pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
+    if (rFont.GetUnderline()==UNDERLINE_NONE) pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
+    if (rFont.GetStrikeout()==STRIKEOUT_NONE) pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
 
     rtl_TextEncoding  eFontNameEncoding = rFont.GetCharSet();
     sal_uInt8         nCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontNameEncoding );
@@ -338,7 +338,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
         nCharSet = W_ANSI_CHARSET;
     pWMF->WriteUChar( nCharSet );
 
-    pWMF->WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 );
+    pWMF->WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 );
 
     switch (rFont.GetPitch()) {
         case PITCH_FIXED:    nPitchFamily=W_FIXED_PITCH;    break;
@@ -432,7 +432,7 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
          .WriteUInt32( (sal_uInt32)nEsc );          // escape number
     pWMF->Write( pData, nLen );
     if ( nLen & 1 )
-        pWMF->WriteUChar( (sal_uInt8)0 );          // pad byte
+        pWMF->WriteUChar( 0 );          // pad byte
 }
 
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
@@ -561,7 +561,7 @@ void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
     pWMF->WriteUInt16( nNewTextLen ).WriteUInt16( (sal_uInt16)0 );
     write_uInt8s_FromOString(*pWMF, rByteString, nNewTextLen);
     if ( nNewTextLen & 1 )
-        pWMF->WriteUChar( (sal_uInt8)0 );
+        pWMF->WriteUChar( 0 );
 
     sal_Int32 nOriginalTextLen = rString.getLength();
     boost::scoped_array<sal_Int16> pConvertedDXAry(new sal_Int16[ nOriginalTextLen ]);
@@ -824,7 +824,7 @@ void WMFWriter::TrueTextOut(const Point & rPoint, const OString& rString)
 
     write_uInt16_lenPrefixed_uInt8s_FromOString(*pWMF, rString);
     sal_Int32 nLen = rString.getLength();
-    if ((nLen&1)!=0) pWMF->WriteUChar( (sal_uInt8)0 );
+    if ((nLen&1)!=0) pWMF->WriteUChar( 0 );
     WritePointYX(rPoint);
     UpdateRecordHeader();
 }
@@ -1678,7 +1678,7 @@ void WMFWriter::UpdateHeader()
     nPos=pWMF->Tell();                 // endposition = total size of file
     nFileSize=nPos-nMetafileHeaderPos; // subtract size of 1st header
     if ((nFileSize&1)!=0) {            // if needed round to words
-        pWMF->WriteUChar( (sal_uInt8)0 );
+        pWMF->WriteUChar( 0 );
         nPos++;
         nFileSize++;
     }

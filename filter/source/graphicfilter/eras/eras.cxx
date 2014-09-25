@@ -249,15 +249,15 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
         {
             if ( mnRepCount == 0 )
             {
-                m_rOStm.WriteUChar( (sal_uInt8)mnRepVal );
+                m_rOStm.WriteUChar( mnRepVal );
                 if ( mnRepVal == 0x80 )
-                    m_rOStm.WriteUChar( (sal_uInt8)0 );
+                    m_rOStm.WriteUChar( 0 );
             }
             else
             {
-                m_rOStm.WriteUChar( (sal_uInt8)0x80 );
-                m_rOStm.WriteUChar( (sal_uInt8)mnRepCount );
-                m_rOStm.WriteUChar( (sal_uInt8)mnRepVal );
+                m_rOStm.WriteUChar( 0x80 );
+                m_rOStm.WriteUChar( mnRepCount );
+                m_rOStm.WriteUChar( mnRepVal );
             }
             mnRepVal = nPutThis;
             mnRepCount = 0;

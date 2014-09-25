@@ -1201,8 +1201,8 @@ bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         // Attention: We need to save a general Header here
         sal_uInt16 nVal = AUTOFORMAT_ID;
         rStream.WriteUInt16( nVal )
-               .WriteUChar( (sal_uInt8)2 ) // Character count of the Header including this value
-               .WriteUChar( (sal_uInt8)GetStoreCharSet( ::osl_getThreadTextEncoding() ) );
+               .WriteUChar( 2 ) // Character count of the Header including this value
+               .WriteUChar( GetStoreCharSet( ::osl_getThreadTextEncoding() ) );
 
         bRet = 0 == rStream.GetError();
         if (!bRet)

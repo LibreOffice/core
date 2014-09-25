@@ -722,7 +722,7 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
             WritePair( rOStm, rAnimation.maGlobalSize );
             rOStm.WriteUInt16( (sal_uInt16) ( ( ANIMATION_TIMEOUT_ON_CLICK == rAnimBmp.nWait ) ? 65535 : rAnimBmp.nWait ) );
             rOStm.WriteUInt16( (sal_uInt16) rAnimBmp.eDisposal );
-            rOStm.WriteUChar( (sal_uInt8) rAnimBmp.bUserInput );
+            rOStm.WriteUChar( rAnimBmp.bUserInput );
             rOStm.WriteUInt32( (sal_uInt32) rAnimation.mnLoopCount );
             rOStm.WriteUInt32( nDummy32 ); // Unused
             rOStm.WriteUInt32( nDummy32 ); // Unused

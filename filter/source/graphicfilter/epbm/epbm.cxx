@@ -128,9 +128,9 @@ bool PBMWriter::ImplWriteHeader()
             m_rOStm.WriteCharPtr( "P1\x0a" );
 
         ImplWriteNumber( mnWidth );
-        m_rOStm.WriteUChar( (sal_uInt8)32 );
+        m_rOStm.WriteUChar( 32 );
         ImplWriteNumber( mnHeight );
-        m_rOStm.WriteUChar( (sal_uInt8)10 );
+        m_rOStm.WriteUChar( 10 );
     }
     else mbStatus = false;
     return mbStatus;
@@ -155,7 +155,7 @@ void PBMWriter::ImplWriteBody()
                     m_rOStm.WriteUChar( nBYTE );
             }
             if ( ( x & 7 ) != 0 )
-                m_rOStm.WriteUChar( (sal_uInt8)( nBYTE << ( ( x ^ 7 ) + 1 ) ) );
+                m_rOStm.WriteUChar( ( nBYTE << ( ( x ^ 7 ) + 1 ) ) );
         }
     }
     else
@@ -169,11 +169,11 @@ void PBMWriter::ImplWriteBody()
                 if (!( --nxCount ) )
                 {
                     nxCount = 69;
-                    m_rOStm.WriteUChar( (sal_uInt8)10 );
+                    m_rOStm.WriteUChar( 10 );
                 }
-                m_rOStm.WriteUChar( (sal_uInt8)( ( mpAcc->GetPixelIndex( y, x ) ^ 1 ) + '0' ) ) ;
+                m_rOStm.WriteUChar( ( ( mpAcc->GetPixelIndex( y, x ) ^ 1 ) + '0' ) ) ;
             }
-            m_rOStm.WriteUChar( (sal_uInt8)10 );
+            m_rOStm.WriteUChar( 10 );
         }
     }
 }

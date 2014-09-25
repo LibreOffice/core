@@ -154,11 +154,11 @@ bool XPMWriter::ImplWriteHeader()
     {
         m_rOStm.WriteCharPtr( "/* XPM */\x0astatic char * image[] = \x0a{\x0a\x22" );
         ImplWriteNumber( mnWidth );
-        m_rOStm.WriteUChar( (sal_uInt8)32 );
+        m_rOStm.WriteUChar( 32 );
         ImplWriteNumber( mnHeight );
-        m_rOStm.WriteUChar( (sal_uInt8)32 );
+        m_rOStm.WriteUChar( 32 );
         ImplWriteNumber( mnColors );
-        m_rOStm.WriteUChar( (sal_uInt8)32 );
+        m_rOStm.WriteUChar( 32 );
         ImplWriteNumber( ( mnColors > 26 ) ? 2 : 1 );
         m_rOStm.WriteCharPtr( "\x22,\x0a" );
     }
@@ -178,7 +178,7 @@ void XPMWriter::ImplWritePalette()
     {
         m_rOStm.WriteCharPtr( "\x22" );
         ImplWritePixel( i );
-        m_rOStm.WriteUChar( (sal_uInt8)32 );
+        m_rOStm.WriteUChar( 32 );
         if ( nTransIndex != i )
         {
             ImplWriteColor( i );
@@ -196,7 +196,7 @@ void XPMWriter::ImplWriteBody()
     for ( sal_uLong y = 0; y < mnHeight; y++ )
     {
         ImplCallback( (sal_uInt16)( ( 100 * y ) / mnHeight ) );         // processing output in percent
-        m_rOStm.WriteUChar( (sal_uInt8)0x22 );
+        m_rOStm.WriteUChar( 0x22 );
         for ( sal_uLong x = 0; x < mnWidth; x++ )
         {
             ImplWritePixel( mpAcc->GetPixelIndex( y, x ) );
@@ -221,11 +221,11 @@ void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
     if ( mnColors > 26 )
     {
         sal_uInt8 nDiff = (sal_uInt8) ( nCol / 26 );
-        m_rOStm.WriteUChar( (sal_uInt8)( nDiff + 'A' ) );
-        m_rOStm.WriteUChar( (sal_uInt8)( nCol - ( nDiff*26 ) + 'A' ) );
+        m_rOStm.WriteUChar( ( nDiff + 'A' ) );
+        m_rOStm.WriteUChar( ( nCol - ( nDiff*26 ) + 'A' ) );
     }
     else
-        m_rOStm.WriteUChar( (sal_uInt8)( nCol + 'A' ) );
+        m_rOStm.WriteUChar( ( nCol + 'A' ) );
 }
 
 

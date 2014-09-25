@@ -983,8 +983,8 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
         rOStm.Write( pBuf.get(), nBufCount );
     }
 
-    rOStm.WriteUChar( (sal_uInt8) 0 );
-    rOStm.WriteUChar( (sal_uInt8) 1 );
+    rOStm.WriteUChar( 0 );
+    rOStm.WriteUChar( 1 );
 
     return( rOStm.GetError() == 0UL );
 }
@@ -1592,7 +1592,7 @@ bool WriteDIBBitmapEx(
     {
         rOStm.WriteUInt32( (sal_uInt32)0x25091962 );
         rOStm.WriteUInt32( (sal_uInt32)0xACB20201 );
-        rOStm.WriteUChar( (sal_uInt8)rSource.eTransparent );
+        rOStm.WriteUChar( rSource.eTransparent );
 
         if(TRANSPARENT_BITMAP == rSource.eTransparent)
         {

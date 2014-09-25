@@ -1707,7 +1707,7 @@ bool SbModule::StoreData( SvStream& rStrm ) const
         pImage->aOUSource = aOUSource;
         pImage->aComment = aComment;
         pImage->aName = GetName();
-        rStrm.WriteUChar( (sal_uInt8) 1 );
+        rStrm.WriteUChar( 1 );
         // # PCode is saved only for legacy formats only
         // It should be noted that it probably isn't necessary
         // It would be better not to store the image ( more flexible with
@@ -1724,7 +1724,7 @@ bool SbModule::StoreData( SvStream& rStrm ) const
         aImg.aOUSource = aOUSource;
         aImg.aComment = aComment;
         aImg.aName = GetName();
-        rStrm.WriteUChar( (sal_uInt8) 1 );
+        rStrm.WriteUChar( 1 );
         return aImg.Save( rStrm );
     }
 }
@@ -1843,7 +1843,7 @@ bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
             pImage->aComment = aComment;
             pImage->aName = GetName();
 
-            rStrm.WriteUChar( (sal_uInt8) 1 );
+            rStrm.WriteUChar( 1 );
                     if ( nVer )
                         bRet = pImage->Save( rStrm, B_EXT_IMG_VERSION );
                     else
@@ -2075,7 +2075,7 @@ bool SbMethod::StoreData( SvStream& rStrm ) const
          .WriteInt16( (sal_Int16) nLine1 )
          .WriteInt16( (sal_Int16) nLine2 )
          .WriteInt16( (sal_Int16) nStart )
-         .WriteUChar( (sal_uInt8)  bInvalid );
+         .WriteUChar(  bInvalid );
     return true;
 }
 

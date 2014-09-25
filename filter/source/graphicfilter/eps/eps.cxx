@@ -1537,7 +1537,7 @@ void PSWriter::ImplRect( const Rectangle & rRect )
         mpPS->WriteCharPtr( "neg 0 rl " );
         ImplClosePathDraw();
     }
-    mpPS->WriteUChar( (sal_uInt8)10 );
+    mpPS->WriteUChar( 10 );
     mnCursorPos = 0;
 }
 
@@ -1899,7 +1899,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                     ImplWriteHexByte( pAcc->GetPixelIndex( y, x ) );
                 }
             }
-            mpPS->WriteUChar( (sal_uInt8)10 );
+            mpPS->WriteUChar( 10 );
         }
         else    // Level 2
         {
@@ -2238,7 +2238,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
 
 void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
 {
-    mpPS->WriteUChar( (sal_uInt8)'/' );             //convert the font pOriginalName using ISOLatin1Encoding
+    mpPS->WriteUChar( '/' );             //convert the font pOriginalName using ISOLatin1Encoding
     mpPS->WriteCharPtr( pOriginalName );
     switch ( maFont.GetWeight() )
     {
@@ -2391,18 +2391,18 @@ inline void PSWriter::ImplExecMode( sal_uLong nMode )
         if ( mnCursorPos >= PS_LINESIZE )
         {
             mnCursorPos = 0;
-            mpPS->WriteUChar( (sal_uInt8)0xa );
+            mpPS->WriteUChar( 0xa );
             return;
         }
     }
     if ( nMode & PS_SPACE )
     {
-            mpPS->WriteUChar( (sal_uInt8)32 );
+            mpPS->WriteUChar( 32 );
             mnCursorPos++;
     }
     if ( nMode & PS_RET )
     {
-        mpPS->WriteUChar( (sal_uInt8)0xa );
+        mpPS->WriteUChar( 0xa );
         mnCursorPos = 0;
     }
 }
@@ -2414,7 +2414,7 @@ inline void PSWriter::ImplWriteLine( const char* pString, sal_uLong nMode )
     sal_uLong i = 0;
     while ( pString[ i ] )
     {
-        mpPS->WriteUChar( (sal_uInt8)pString[ i++ ] );
+        mpPS->WriteUChar( pString[ i++ ] );
     }
     mnCursorPos += i;
     ImplExecMode( nMode );
@@ -2542,7 +2542,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     if ( nATemp )
     {
         int zCount = 0;
-        mpPS->WriteUChar( (sal_uInt8)'.' );
+        mpPS->WriteUChar( '.' );
         mnCursorPos++;
         const OString aNumber2(OString::number(nATemp));
 
@@ -2552,7 +2552,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
             mnCursorPos += 6 - nLen;
             for ( n = 0; n < ( 5 - nLen ); n++ )
             {
-                mpPS->WriteUChar( (sal_uInt8)'0' );
+                mpPS->WriteUChar( '0' );
             }
         }
         mnCursorPos += nLen;
@@ -2577,7 +2577,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
 {
     if ( nNumber < 0 )
     {
-        mpPS->WriteUChar( (sal_uInt8)'-' );
+        mpPS->WriteUChar( '-' );
         nNumber = -nNumber;
         mnCursorPos++;
     }
@@ -2586,15 +2586,15 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
     long nStSize =  ( nCount + 1 ) - nLen;
     if ( nStSize >= 1 )
     {
-        mpPS->WriteUChar( (sal_uInt8)'0' );
+        mpPS->WriteUChar( '0' );
         mnCursorPos++;
     }
     if ( nStSize >= 2 )
     {
-        mpPS->WriteUChar( (sal_uInt8)'.' );
+        mpPS->WriteUChar( '.' );
         for ( long i = 1; i < nStSize; i++ )
         {
-            mpPS->WriteUChar( (sal_uInt8)'0' );
+            mpPS->WriteUChar( '0' );
             mnCursorPos++;
         }
     }
@@ -2603,7 +2603,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
     {
         if ( n == nLen - nCount )
         {
-            mpPS->WriteUChar( (sal_uInt8)'.' );
+            mpPS->WriteUChar( '.' );
             mnCursorPos++;
         }
         mpPS->WriteChar( aScaleFactor[n] );
@@ -2625,14 +2625,14 @@ void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
 void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode )
 {
     if ( ( nNumb >> 4 ) > 9 )
-        mpPS->WriteUChar( (sal_uInt8)( ( nNumb >> 4 ) + 'A' - 10 ) );
+        mpPS->WriteUChar( ( ( nNumb >> 4 ) + 'A' - 10 ) );
     else
-        mpPS->WriteUChar( (sal_uInt8)( ( nNumb >> 4 ) + '0' ) );
+        mpPS->WriteUChar( ( ( nNumb >> 4 ) + '0' ) );
 
     if ( ( nNumb & 0xf ) > 9 )
-        mpPS->WriteUChar( (sal_uInt8)( ( nNumb & 0xf ) + 'A' - 10 ) );
+        mpPS->WriteUChar( ( ( nNumb & 0xf ) + 'A' - 10 ) );
     else
-        mpPS->WriteUChar( (sal_uInt8)( ( nNumb & 0xf ) + '0' ) );
+        mpPS->WriteUChar( ( ( nNumb & 0xf ) + '0' ) );
     mnCursorPos += 2;
     ImplExecMode( nMode );
 }

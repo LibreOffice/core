@@ -1589,7 +1589,7 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
             {
                 const OUString &rString = rStrings[n];
                 const OUString aNm(rString.copy(0, std::min<sal_Int32>(rString.getLength(), 255)));
-                rStrm.WriteUChar( (sal_uInt8)aNm.getLength() );
+                rStrm.WriteUChar( aNm.getLength() );
                 SwWW8Writer::WriteString8(rStrm, aNm, false,
                     RTL_TEXTENCODING_MS_1252);
                 if (nExtraLen)
@@ -1796,7 +1796,7 @@ void WW8Export::WriteChar( sal_Unicode c )
     if( pPiece->IsUnicode() )
         Strm().WriteUInt16( c );
     else
-        Strm().WriteUChar( (sal_uInt8)c );
+        Strm().WriteUChar( c );
 }
 
 void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )

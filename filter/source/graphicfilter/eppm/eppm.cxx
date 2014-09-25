@@ -126,11 +126,11 @@ bool PPMWriter::ImplWriteHeader()
             m_rOStm.WriteCharPtr( "P3\x0a" );
 
         ImplWriteNumber( mnWidth );
-        m_rOStm.WriteUChar( (sal_uInt8)32 );
+        m_rOStm.WriteUChar( 32 );
         ImplWriteNumber( mnHeight );
-        m_rOStm.WriteUChar( (sal_uInt8)32 );
+        m_rOStm.WriteUChar( 32 );
         ImplWriteNumber( 255 );         // max. col.
-        m_rOStm.WriteUChar( (sal_uInt8)10 );
+        m_rOStm.WriteUChar( 10 );
     }
     else
         mbStatus = false;
@@ -166,7 +166,7 @@ void PPMWriter::ImplWriteBody()
                 if ( nCount < 0 )
                 {
                     nCount = 69;
-                    m_rOStm.WriteUChar( (sal_uInt8)10 );
+                    m_rOStm.WriteUChar( 10 );
                 }
                 nDat[0] = mpAcc->GetPixel( y, x ).GetRed();
                 nDat[1] = mpAcc->GetPixel( y, x ).GetGreen();
@@ -176,12 +176,12 @@ void PPMWriter::ImplWriteBody()
                     nNumb = nDat[ i ] / 100;
                     if ( nNumb )
                     {
-                        m_rOStm.WriteUChar( (sal_uInt8)( nNumb + '0' ) );
+                        m_rOStm.WriteUChar( ( nNumb + '0' ) );
                         nDat[ i ] -= ( nNumb * 100 );
                         nNumb = nDat[ i ] / 10;
-                        m_rOStm.WriteUChar( (sal_uInt8)( nNumb + '0' ) );
+                        m_rOStm.WriteUChar( ( nNumb + '0' ) );
                         nDat[ i ] -= ( nNumb * 10 );
-                        m_rOStm.WriteUChar( (sal_uInt8)( nDat[ i ] + '0' ) );
+                        m_rOStm.WriteUChar( ( nDat[ i ] + '0' ) );
                         nCount -= 4;
                     }
                     else
@@ -189,21 +189,21 @@ void PPMWriter::ImplWriteBody()
                         nNumb = nDat[ i ] / 10;
                         if ( nNumb )
                         {
-                            m_rOStm.WriteUChar( (sal_uInt8)( nNumb + '0' ) );
+                            m_rOStm.WriteUChar( ( nNumb + '0' ) );
                             nDat[ i ] -= ( nNumb * 10 );
-                            m_rOStm.WriteUChar( (sal_uInt8)( nDat[ i ] + '0' ) );
+                            m_rOStm.WriteUChar( ( nDat[ i ] + '0' ) );
                             nCount -= 3;
                         }
                         else
                         {
-                            m_rOStm.WriteUChar( (sal_uInt8)( nDat[ i ] + '0' ) );
+                            m_rOStm.WriteUChar( ( nDat[ i ] + '0' ) );
                             nCount -= 2;
                         }
                     }
-                    m_rOStm.WriteUChar( (sal_uInt8)' ' );
+                    m_rOStm.WriteUChar( ' ' );
                 }
             }
-            m_rOStm.WriteUChar( (sal_uInt8)10 );
+            m_rOStm.WriteUChar( 10 );
         }
     }
 }

@@ -1084,8 +1084,8 @@ bool ScAutoFormat::Save()
         // Attention: A common header has to be saved
         sal_uInt16 nVal = AUTOFORMAT_ID;
         rStream.WriteUInt16( nVal )
-               .WriteUChar( (sal_uInt8)2 )         // Number of chars of the header including this
-               .WriteUChar( (sal_uInt8)::GetSOStoreTextEncoding(
+               .WriteUChar( 2 )         // Number of chars of the header including this
+               .WriteUChar( ::GetSOStoreTextEncoding(
                     osl_getThreadTextEncoding() ) );
         m_aVersions.Write(rStream, fileVersion);
 

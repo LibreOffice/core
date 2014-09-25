@@ -708,7 +708,7 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
 
         WritePICFHeader(rStrm, rFly, mm, nWidth, nHeight,
             rGrfNd.GetpSwAttrSet());
-        rStrm.WriteUChar( (sal_uInt8)aFileN.getLength() );    // write Pascal-String
+        rStrm.WriteUChar( aFileN.getLength() );    // write Pascal-String
         SwWW8Writer::WriteString8(rStrm, aFileN, false,
             RTL_TEXTENCODING_MS_1252);
     }

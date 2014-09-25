@@ -370,16 +370,16 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const PolyPolygon& rPol
 
                     if(rCandidate.HasFlags())
                     {
-                        rOStm.WriteUChar( (sal_uInt8)true );
+                        rOStm.WriteUChar( true );
 
                         for(sal_uInt16 c(0); c < nPointCount; c++)
                         {
-                            rOStm.WriteUChar( (sal_uInt8)rCandidate.GetFlags(c) );
+                            rOStm.WriteUChar( rCandidate.GetFlags(c) );
                         }
                     }
                     else
                     {
-                        rOStm.WriteUChar( (sal_uInt8)false );
+                        rOStm.WriteUChar( false );
                     }
                 }
             }

@@ -4166,16 +4166,16 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, s
 
     rSt.WriteUInt32( (sal_uInt32)( ( ESCHER_BSE << 16 ) | ( ( (sal_uInt16)meBlibType << 4 ) | 2 ) ) )
        .WriteUInt32( (sal_uInt32)( 36 + nResize ) )
-       .WriteUChar( (sal_uInt8)meBlibType );
+       .WriteUChar( meBlibType );
 
     switch ( meBlibType )
     {
         case EMF :
         case WMF :  // converting EMF/WMF on OS2 to Pict
-            rSt.WriteUChar( (sal_uInt8)PICT );
+            rSt.WriteUChar( PICT );
         break;
         default:
-            rSt.WriteUChar( (sal_uInt8)meBlibType );
+            rSt.WriteUChar( meBlibType );
     }
 
     rSt.Write( &mnIdentifier[ 0 ], 16 );
@@ -4500,7 +4500,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
                 rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( (sal_uInt32)( p_EscherBlibEntry->mnSize + nExtra ) );
                 rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
-                rPicOutStrm.WriteUChar( (sal_uInt8)0xff );
+                rPicOutStrm.WriteUChar( 0xff );
                 rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
             }
             else

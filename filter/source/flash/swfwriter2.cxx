@@ -153,20 +153,20 @@ void Tag::write( SvStream &out )
 
         sal_uInt16 nCode = ( mnTagId << 6 ) | ( bLarge ? 0x3f : _uInt16(nSz) );
 
-        out.WriteUChar( (sal_uInt8)nCode );
-        out.WriteUChar( (sal_uInt8)(nCode >> 8) );
+        out.WriteUChar( nCode );
+        out.WriteUChar( (nCode >> 8) );
 
         if( bLarge )
         {
             sal_uInt32 nTmp = nSz;
 
-            out.WriteUChar( (sal_uInt8)nTmp );
+            out.WriteUChar( nTmp );
             nTmp >>= 8;
-            out.WriteUChar( (sal_uInt8)nTmp );
+            out.WriteUChar( nTmp );
             nTmp >>= 8;
-            out.WriteUChar( (sal_uInt8)nTmp );
+            out.WriteUChar( nTmp );
             nTmp >>= 8;
-            out.WriteUChar( (sal_uInt8)nTmp );
+            out.WriteUChar( nTmp );
         }
     }
 
@@ -198,15 +198,15 @@ void Tag::addI16( sal_Int16 nValue )
 
 void Tag::addUI16( sal_uInt16 nValue )
 {
-    WriteUChar( (sal_uInt8)nValue );
-    WriteUChar( (sal_uInt8)(nValue >> 8) );
+    WriteUChar( nValue );
+    WriteUChar( (nValue >> 8) );
 }
 
 
 
 void Tag::addUI8( sal_uInt8 nValue )
 {
-    WriteUChar( (sal_uInt8)nValue );
+    WriteUChar( nValue );
 }
 
 

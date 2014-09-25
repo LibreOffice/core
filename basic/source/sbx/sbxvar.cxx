@@ -581,7 +581,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 bool SbxVariable::StoreData( SvStream& rStrm ) const
 {
-    rStrm.WriteUChar( (sal_uInt8) 0xFF );      // Marker
+    rStrm.WriteUChar( 0xFF );      // Marker
     bool bValStore;
     if( this->IsA( TYPE(SbxMethod) ) )
     {
@@ -612,12 +612,12 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
     rStrm.WriteUInt32( (sal_uInt32)nUserData );
     if( pInfo.Is() )
     {
-        rStrm.WriteUChar( (sal_uInt8) 2 );     // Version 2: with UserData!
+        rStrm.WriteUChar( 2 );     // Version 2: with UserData!
         pInfo->StoreData( rStrm );
     }
     else
     {
-        rStrm.WriteUChar( (sal_uInt8) 0 );
+        rStrm.WriteUChar( 0 );
     }
     // Save private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE )

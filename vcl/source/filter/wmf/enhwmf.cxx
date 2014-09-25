@@ -1191,8 +1191,8 @@ bool EnhWMFReader::ReadEnhWMF()
                             char* pBuf = new char[ nSize ];
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                             aTmp.ObjectOwnsMemory( true );
-                            aTmp.WriteUChar( (sal_uInt8)'B' )
-                                .WriteUChar( (sal_uInt8)'M' )
+                            aTmp.WriteUChar( 'B' )
+                                .WriteUChar( 'M' )
                                 .WriteUInt32( (sal_uInt32)cbBitsSrc )
                                 .WriteUInt16( (sal_uInt16)0 )
                                 .WriteUInt16( (sal_uInt16)0 )
@@ -1255,8 +1255,8 @@ bool EnhWMFReader::ReadEnhWMF()
                             char* pBuf = new char[ nSize ];
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                             aTmp.ObjectOwnsMemory( true );
-                            aTmp.WriteUChar( (sal_uInt8)'B' )
-                                .WriteUChar( (sal_uInt8)'M' )
+                            aTmp.WriteUChar( 'B' )
+                                .WriteUChar( 'M' )
                                 .WriteUInt32( (sal_uInt32)cbBitsSrc )
                                 .WriteUInt16( (sal_uInt16)0 )
                                 .WriteUInt16( (sal_uInt16)0 )
@@ -1325,8 +1325,8 @@ bool EnhWMFReader::ReadEnhWMF()
                             char* pBuf = new char[ nSize ];
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                             aTmp.ObjectOwnsMemory( true );
-                            aTmp.WriteUChar( (sal_uInt8)'B' )
-                               .WriteUChar( (sal_uInt8)'M' )
+                            aTmp.WriteUChar( 'B' )
+                               .WriteUChar( 'M' )
                                .WriteUInt32( (sal_uInt32)cbBitsSrc )
                                .WriteUInt16( (sal_uInt16)0 )
                                .WriteUInt16( (sal_uInt16)0 )
@@ -1565,8 +1565,8 @@ bool EnhWMFReader::ReadEnhWMF()
 
                                 SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                                 aTmp.ObjectOwnsMemory( true );
-                                aTmp.WriteUChar( (sal_uInt8)'B' )
-                                    .WriteUChar( (sal_uInt8)'M' )
+                                aTmp.WriteUChar( 'B' )
+                                    .WriteUChar( 'M' )
                                     .WriteUInt32( (sal_uInt32)cbBits )
                                     .WriteUInt16( (sal_uInt16)0 )
                                     .WriteUInt16( (sal_uInt16)0 )

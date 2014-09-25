@@ -74,7 +74,7 @@ void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
                                               RTL_TEXTENCODING_ASCII_US));
         rStm.WriteInt32( (sal_Int32) (aAsciiCbFmt.getLength() + 1) );
         rStm.WriteCharPtr( (const char *)aAsciiCbFmt.getStr() );
-        rStm.WriteUChar( (sal_uInt8) 0 );
+        rStm.WriteUChar( 0 );
     }
     else if( nFormat )
     {

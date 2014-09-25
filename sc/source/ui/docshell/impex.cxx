@@ -265,7 +265,7 @@ bool ScImportExport::ExportData( const OUString& rMimeType,
     if( ExportStream( aStrm, OUString(),
                 SotExchange::GetFormatIdFromMimeType( rMimeType ) ))
     {
-        aStrm.WriteUChar( (sal_uInt8) 0 );
+        aStrm.WriteUChar( 0 );
         rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
                                         (sal_Int8*)aStrm.GetData(),
                                         aStrm.Seek( STREAM_SEEK_TO_END ) );

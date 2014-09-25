@@ -462,7 +462,7 @@ void PictWriter::WriteOpcode_TxFace(const vcl::Font & rFont)
     if (rFont.IsShadow())               nFace|=0x10;
 
     if (bDstTxFaceValid==false || nDstTxFace!=nFace) {
-        pPict->WriteUInt16( (sal_uInt16)0x0004 ).WriteUChar( nFace ).WriteUChar( (sal_uInt8)0 );
+        pPict->WriteUInt16( (sal_uInt16)0x0004 ).WriteUChar( nFace ).WriteUChar( 0 );
         nDstTxFace=nFace;
         bDstTxFaceValid=true;
     }
@@ -656,20 +656,20 @@ void PictWriter::WriteOpcode_Text(const Point & rPoint, const OUString& rString,
     }
     else if (dv==0)
     {
-        pPict->WriteUInt16( (sal_uInt16)0x0029 ).WriteUChar( (sal_uInt8)dh );
+        pPict->WriteUInt16( (sal_uInt16)0x0029 ).WriteUChar( dh );
     }
     else if (dh==0)
     {
-        pPict->WriteUInt16( (sal_uInt16)0x002a ).WriteUChar( (sal_uInt8)dv );
+        pPict->WriteUInt16( (sal_uInt16)0x002a ).WriteUChar( dv );
     }
     else
     {
-        pPict->WriteUInt16( (sal_uInt16)0x002b ).WriteUChar( (sal_uInt8)dh ).WriteUChar( (sal_uInt8)dv );
+        pPict->WriteUInt16( (sal_uInt16)0x002b ).WriteUChar( dh ).WriteUChar( dv );
     }
 
     WriteString( rString );
     if (((pPict->Tell()-nPos)&1)!=0)
-        pPict->WriteUChar( (sal_uInt8)0 );
+        pPict->WriteUChar( 0 );
 
     aDstTextPosition = aPoint;
     bDstTextPositionValid=true;
@@ -697,7 +697,7 @@ void PictWriter::WriteOpcode_FontName(const vcl::Font & rFont)
             pPict->WriteUInt16( (sal_uInt16)0x002c ).WriteUInt16( nDataLen ).WriteUInt16( nFontId );
             WriteString( rFont.GetName() );
             if ( ( nFontNameLen & 1 ) == 0 )
-                pPict->WriteUChar( (sal_uInt8)0 );
+                pPict->WriteUChar( 0 );
         }
         pPict->WriteUInt16( (sal_uInt16)0x0003 ).WriteUInt16( nFontId );
         aDstFontName=rFont.GetName();
@@ -955,10 +955,10 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         {                                   // don't pack
             for ( ny = 0; ny < nHeight; ny++ )
             {
-                pPict->WriteUChar( (sal_uInt8)0 );
-                pPict->WriteUChar( (sal_uInt8)pAcc->GetPixel( ny, 0 ).GetRed() );
-                pPict->WriteUChar( (sal_uInt8)pAcc->GetPixel( ny, 0 ).GetGreen() );
-                pPict->WriteUChar( (sal_uInt8)pAcc->GetPixel( ny, 0 ).GetBlue() );
+                pPict->WriteUChar( 0 );
+                pPict->WriteUChar( pAcc->GetPixel( ny, 0 ).GetRed() );
+                pPict->WriteUChar( pAcc->GetPixel( ny, 0 ).GetGreen() );
+                pPict->WriteUChar( pAcc->GetPixel( ny, 0 ).GetBlue() );
                 // count percentages, Callback, check errors:
                 nActBitmapPercent = ( ny * 70 / nHeight ) + 30; // (30% already added up to the writing of the Win-BMP file)
                 MayCallback();
@@ -990,7 +990,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 if ( nDstRowBytes > 250 )
                     pPict->WriteUInt16( (sal_uInt16)0 );
                 else
-                    pPict->WriteUChar( (sal_uInt8)0 );
+                    pPict->WriteUChar( 0 );
 
                 // loop trough components:
                 for ( nc = 0; nc < 4; nc++ )
@@ -1185,7 +1185,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 if ( nDstRowBytes > 250 )
                     pPict->WriteUInt16( (sal_uInt16)0 );
                 else
-                    pPict->WriteUChar( (sal_uInt8)0 );
+                    pPict->WriteUChar( 0 );
 
                 // loop trough bytes of the row:
                 nx=0;
@@ -1261,7 +1261,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
 
     // Map-Data has to be an even number of bytes:
     if ( ( ( pPict->Tell() - nDstMapPos ) & 1 ) != 0 )
-        pPict->WriteUChar( (sal_uInt8)0 );
+        pPict->WriteUChar( 0 );
 
     // counting Bitmaps:
     nWrittenBitmaps++;

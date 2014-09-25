@@ -112,11 +112,11 @@ bool SwBaseNumRules::Store(SvStream &rStream)
     {
         if(pNumRules[i])
         {
-            rStream.WriteUChar( (unsigned char) sal_True );
+            rStream.WriteUChar(  sal_True );
             pNumRules[i]->Store( rStream );
         }
         else
-            rStream.WriteUChar( (unsigned char) sal_False );
+            rStream.WriteUChar(  sal_False );
     }
     return true;
 }

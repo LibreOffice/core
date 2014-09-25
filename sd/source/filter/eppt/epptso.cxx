@@ -202,8 +202,8 @@ sal_uInt32 PPTWriter::ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream
               .WriteInt32( nScaling ).WriteInt32( (sal_Int32)100 ).WriteInt32( nScaling ).WriteInt32( (sal_Int32)100 )  // scaling atom - Keeps the previous scale
               .WriteInt32( (sal_Int32)0x17ac ).WriteInt32( nMasterCoordinate )// Origin - Keeps the origin in master coordinates
               .WriteInt32( nXOrigin ).WriteInt32( nYOrigin )              // Origin
-              .WriteUChar( (sal_uInt8)1 )                          // Bool1 varScale - Set if zoom to fit is set
-              .WriteUChar( (sal_uInt8)0 )                          // bool1 draftMode - Not used
+              .WriteUChar( 1 )                          // Bool1 varScale - Set if zoom to fit is set
+              .WriteUChar( 0 )                          // bool1 draftMode - Not used
               .WriteUInt16( (sal_uInt16)0 )                         // padword
               .WriteUInt32( (sal_uInt32)( ( 7 << 4 ) | ( EPP_GuideAtom << 16 ) ) ).WriteUInt32( (sal_uInt32)8 )
               .WriteUInt32( (sal_uInt32)0 )     // Type of the guide. If the guide is horizontal this value is zero. If it's vertical, it's one.
@@ -226,8 +226,8 @@ sal_uInt32 PPTWriter::ImplOutlineViewInfoContainer( SvStream* pStrm )
               .WriteInt32( (sal_Int32)170 ).WriteInt32( (sal_Int32)200 ).WriteInt32( (sal_Int32)170 ).WriteInt32( (sal_Int32)200 )  // scaling atom - Keeps the previous scale
               .WriteInt32( (sal_Int32)0x17ac ).WriteInt32( (sal_Int32)0xdda )    // Origin - Keeps the origin in master coordinates
               .WriteInt32( (sal_Int32)-780 ).WriteInt32( (sal_Int32)-84 ) // Origin
-              .WriteUChar( (sal_uInt8)1 )                  // bool1 varScale - Set if zoom to fit is set
-              .WriteUChar( (sal_uInt8)0 )                  // bool1 draftMode - Not used
+              .WriteUChar( 1 )                  // bool1 varScale - Set if zoom to fit is set
+              .WriteUChar( 0 )                  // bool1 draftMode - Not used
               .WriteUInt16( (sal_uInt16)0 );                // padword
     }
     return nSize;
@@ -533,8 +533,8 @@ bool PPTWriter::ImplCloseDocument()
         mpPptEscherEx->AddAtom( 10, EPP_TxSIStyleAtom );
         mpStrm->WriteUInt32( (sal_uInt32)7 )                        // ?
                .WriteInt16( (sal_Int16)2 )                         // ?
-               .WriteUChar( (sal_uInt8)9 )                         // ?
-               .WriteUChar( (sal_uInt8)8 )                         // ?
+               .WriteUChar( 9 )                         // ?
+               .WriteUChar( 8 )                         // ?
                .WriteInt16( (sal_Int16)0 );                        // ?
 
         mpStrm->Write( aTxMasterStyleAtomStrm.GetData(), aTxMasterStyleAtomStrm.Tell() );
@@ -1112,8 +1112,8 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         {
                             rOut.WriteUInt32( (sal_uInt32)( EPP_DateTimeMCAtom << 16 ) ).WriteUInt32( (sal_uInt32)8 )
                                 .WriteUInt32( (sal_uInt32)( pFieldEntry->nFieldStartPos ) )         // TxtOffset to TxtField;
-                                .WriteUChar( (sal_uInt8)( pFieldEntry->nFieldType & 0xff ) )       // Type
-                                .WriteUChar( (sal_uInt8)0 ).WriteUInt16( (sal_uInt16)0 );                      // PadBytes
+                                .WriteUChar( ( pFieldEntry->nFieldType & 0xff ) )       // Type
+                                .WriteUChar( 0 ).WriteUInt16( (sal_uInt16)0 );                      // PadBytes
                         }
                         break;
                         case 3 :
@@ -1166,12 +1166,12 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                 .WriteUInt32( (sal_uInt32)( EPP_InteractiveInfoAtom << 16 ) ).WriteUInt32( (sal_uInt32)16 )
                                 .WriteUInt32( (sal_uInt32)0 )                                   // soundref
                                 .WriteUInt32( nHyperId )                                        // hyperlink id
-                                .WriteUChar( (sal_uInt8)4 )                                    // hyperlink action
-                                .WriteUChar( (sal_uInt8)0 )                                    // ole verb
-                                .WriteUChar( (sal_uInt8)0 )                                    // jump
-                                .WriteUChar( (sal_uInt8)0 )                                    // flags
-                                .WriteUChar( (sal_uInt8)8 )                                    // hyperlink type ?
-                                .WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 )
+                                .WriteUChar( 4 )                                    // hyperlink action
+                                .WriteUChar( 0 )                                    // ole verb
+                                .WriteUChar( 0 )                                    // jump
+                                .WriteUChar( 0 )                                    // flags
+                                .WriteUChar( 8 )                                    // hyperlink type ?
+                                .WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 )
                                 .WriteUInt32( (sal_uInt32)( EPP_TxInteractiveInfoAtom << 16 ) ).WriteUInt32( (sal_uInt32)8 )
                                 .WriteUInt32( (sal_uInt32)( pFieldEntry->nFieldStartPos ) )
                                 .WriteUInt32( (sal_uInt32)( pFieldEntry->nFieldEndPos ) );
@@ -2116,8 +2116,8 @@ bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage, const
         mpPptEscherEx->OpenContainer( ESCHER_ClientData );
         mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
         mpStrm->WriteUInt32( (sal_uInt32)0 )                // PlacementID
-               .WriteUChar( (sal_uInt8)nPlaceHolderId )    // PlaceHolderID
-               .WriteUChar( (sal_uInt8)0 )                 // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
+               .WriteUChar( nPlaceHolderId )    // PlaceHolderID
+               .WriteUChar( 0 )                 // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
                .WriteUInt16( (sal_uInt16)0 );               // padword
         mpPptEscherEx->CloseContainer();        // ESCHER_ClientData
 
@@ -2814,8 +2814,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientData );
                                 mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
                                 mpStrm->WriteUInt32( (sal_uInt32)0 )                                                        // PlacementID
-                                       .WriteUChar( (sal_uInt8)EPP_PLACEHOLDER_MASTERTITLE )                               // PlaceHolderID
-                                       .WriteUChar( (sal_uInt8)0 )                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
+                                       .WriteUChar( EPP_PLACEHOLDER_MASTERTITLE )                               // PlaceHolderID
+                                       .WriteUChar( 0 )                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
                                        .WriteUInt16( (sal_uInt16)0 );                                                       // padword
                                 mpPptEscherEx->CloseContainer();    // ESCHER_ClientData
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientTextbox );
@@ -2908,7 +2908,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 sal_uInt8 PlaceHolderID = ( mType == "presentation.Subtitle") ? EPP_PLACEHOLDER_MASTERSUBTITLE:EPP_PLACEHOLDER_MASTERBODY;
                                 mpStrm->WriteUInt32( (sal_uInt32)1 )                                                        // PlacementID
                                        .WriteUChar( PlaceHolderID )/*(sal_uInt8)EPP_PLACEHOLDER_MASTERBODY */                                   // PlaceHolderID
-                                       .WriteUChar( (sal_uInt8)0 )                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
+                                       .WriteUChar( 0 )                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
                                        .WriteUInt16( (sal_uInt16)0 );                                                       // padword
                                 mpPptEscherEx->CloseContainer();    // ESCHER_ClientData
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientTextbox );       // printf
@@ -3016,10 +3016,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                .WriteUInt32( (sal_uInt32)0 )    // follow colorscheme : 0->do not follow
                                                     //                      1->follow collorscheme
                                                     //                      2->follow text and background scheme
-                               .WriteUChar( (sal_uInt8)1 )     // (bool)set if embedded server can not be locked
-                               .WriteUChar( (sal_uInt8)0 )     // (bool)do not need to send dimension
-                               .WriteUChar( (sal_uInt8)0 )     // (bool)is object a world table
-                               .WriteUChar( (sal_uInt8)0 );    // pad byte
+                               .WriteUChar( 1 )     // (bool)set if embedded server can not be locked
+                               .WriteUChar( 0 )     // (bool)do not need to send dimension
+                               .WriteUChar( 0 )     // (bool)is object a world table
+                               .WriteUChar( 0 );    // pad byte
 
                     PPTExOleObjEntry* pE = new PPTExOleObjEntry( NORMAL_OLE_OBJECT, mpExEmbed->Tell() );
                     pE->xShape = mXShape;
@@ -3182,10 +3182,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                     .WriteUInt32( (sal_uInt32)16 )
                                     .WriteUInt32( (sal_uInt32) 0 )
                                     .WriteUInt32( (sal_uInt32) 0 )
-                                    .WriteUChar( (sal_uInt8) 6 )
-                                    .WriteUChar( (sal_uInt8) 0 )
-                                    .WriteUChar( (sal_uInt8) 0 )
-                                    .WriteUChar( (sal_uInt8) 0 )
+                                    .WriteUChar( 6 )
+                                    .WriteUChar( 0 )
+                                    .WriteUChar( 0 )
+                                    .WriteUChar( 0 )
                                     .WriteUInt32( (sal_uInt32) 0 );
                     }
                 }
@@ -3250,8 +3250,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                     pClientData->WriteUInt32( (sal_uInt32)( EPP_OEPlaceholderAtom << 16 ) ).WriteUInt32( (sal_uInt32)8 )
                                 .WriteInt32( nPlacementID )                // PlacementID
-                                .WriteUChar( (sal_uInt8)nPlaceHolderAtom ) // PlaceHolderID
-                                .WriteUChar( (sal_uInt8)0 )                // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
+                                .WriteUChar( nPlaceHolderAtom ) // PlaceHolderID
+                                .WriteUChar( 0 )                // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
                                 .WriteUInt16( (sal_uInt16)0 );              // padword
                 }
                 if ( nOlePictureId )

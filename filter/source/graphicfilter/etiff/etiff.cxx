@@ -506,13 +506,13 @@ inline void TIFFWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
     nOffset -= nCodeLen;
     while ( nOffset < 24 )
     {
-        m_rOStm.WriteUChar( (sal_uInt8)( dwShift >> 24 ) );
+        m_rOStm.WriteUChar( ( dwShift >> 24 ) );
         dwShift <<= 8;
         nOffset += 8;
     }
     if ( nCode == 257 && nOffset != 32 )
     {
-        m_rOStm.WriteUChar( (sal_uInt8)( dwShift >> 24 ) );
+        m_rOStm.WriteUChar( ( dwShift >> 24 ) );
     }
 }
 

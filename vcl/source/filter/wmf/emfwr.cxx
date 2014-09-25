@@ -423,7 +423,7 @@ void EMFWriter::ImplEndRecord()
         m_rStm.WriteUInt32( (sal_uInt32)( ( nActPos - mnRecordPos ) + nFillBytes ) );
         m_rStm.Seek( nActPos );
         while( nFillBytes-- )
-            m_rStm.WriteUChar( (sal_uInt8)0 );
+            m_rStm.WriteUChar( 0 );
         mnRecordCount++;
         mbRecordOpen = false;
     }
@@ -530,11 +530,11 @@ void EMFWriter::ImplCheckTextAttr()
         }
 
         m_rStm.WriteInt32( nWeight );
-        m_rStm.WriteUChar( (sal_uInt8) ( ( ITALIC_NONE == rFont.GetItalic() ) ? 0 : 1 ) );
-        m_rStm.WriteUChar( (sal_uInt8) ( ( UNDERLINE_NONE == rFont.GetUnderline() ) ? 0 : 1 ) );
-        m_rStm.WriteUChar( (sal_uInt8) ( ( STRIKEOUT_NONE == rFont.GetStrikeout() ) ? 0 : 1 ) );
-        m_rStm.WriteUChar( (sal_uInt8) ( ( RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet() ) ? 2 : 0 ) );
-        m_rStm.WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 );
+        m_rStm.WriteUChar( ( ( ITALIC_NONE == rFont.GetItalic() ) ? 0 : 1 ) );
+        m_rStm.WriteUChar( ( ( UNDERLINE_NONE == rFont.GetUnderline() ) ? 0 : 1 ) );
+        m_rStm.WriteUChar( ( ( STRIKEOUT_NONE == rFont.GetStrikeout() ) ? 0 : 1 ) );
+        m_rStm.WriteUChar( ( ( RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet() ) ? 2 : 0 ) );
+        m_rStm.WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 );
 
         switch( rFont.GetPitch() )
         {
@@ -576,7 +576,7 @@ void EMFWriter::ImplCheckTextAttr()
         m_rStm.WriteUInt32( (sal_uInt32) 0 );
 
         // dummy elfPanose
-        m_rStm.WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 );
+        m_rStm.WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 );
 
         // fill record to get a record size divideable by 4
         m_rStm.WriteUInt16( (sal_uInt16) 0 );

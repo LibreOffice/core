@@ -772,8 +772,8 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 aConverter.Seek( 54 );
                 // write color table
                 aConverter.WriteUInt16( (sal_uInt16)0xffff );
-                aConverter.WriteUChar( (sal_uInt8)0xff );
-                aConverter.WriteUChar( (sal_uInt8)0 );
+                aConverter.WriteUChar( 0xff );
+                aConverter.WriteUChar( 0 );
                 aConverter.WriteUInt32( (sal_uInt32)0 );
                 aConverter.Seek( 64 );
             }
@@ -787,10 +787,10 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 // write color table
                 for( nLine = 0; nLine < 256; nLine++ )
                 {
-                    aConverter.WriteUChar( (sal_uInt8)nLine );
-                    aConverter.WriteUChar( (sal_uInt8)nLine );
-                    aConverter.WriteUChar( (sal_uInt8)nLine );
-                    aConverter.WriteUChar( (sal_uInt8)0 );
+                    aConverter.WriteUChar( nLine );
+                    aConverter.WriteUChar( nLine );
+                    aConverter.WriteUChar( nLine );
+                    aConverter.WriteUChar( 0 );
                 }
                 aConverter.Seek( 1084 );
             }

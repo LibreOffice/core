@@ -1164,8 +1164,8 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
         const SvxTabStop& rTab = (*this)[ i ];
         rStrm.WriteInt32( rTab.GetTabPos() )
              .WriteSChar( (sal_Int8) rTab.GetAdjustment() )
-             .WriteUChar( (unsigned char) rTab.GetDecimal() )
-             .WriteUChar( (unsigned char) rTab.GetFill() );
+             .WriteUChar(  rTab.GetDecimal() )
+             .WriteUChar(  rTab.GetFill() );
     }
 
     if ( bStoreDefTabs )
@@ -1174,8 +1174,8 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
             SvxTabStop aSwTabStop(nNew, SVX_TAB_ADJUST_DEFAULT);
             rStrm.WriteInt32( aSwTabStop.GetTabPos() )
                  .WriteSChar( (sal_Int8) aSwTabStop.GetAdjustment() )
-                 .WriteUChar( (unsigned char) aSwTabStop.GetDecimal() )
-                 .WriteUChar( (unsigned char) aSwTabStop.GetFill() );
+                 .WriteUChar(  aSwTabStop.GetDecimal() )
+                 .WriteUChar(  aSwTabStop.GetFill() );
             nNew += nDefDist;
         }
 

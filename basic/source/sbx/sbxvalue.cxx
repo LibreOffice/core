@@ -1605,14 +1605,14 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             {
                 if( PTR_CAST(SbxValue,aData.pObj) != this )
                 {
-                    r.WriteUChar( (sal_uInt8) 1 );
+                    r.WriteUChar( 1 );
                     return aData.pObj->Store( r );
                 }
                 else
-                    r.WriteUChar( (sal_uInt8) 2 );
+                    r.WriteUChar( 2 );
             }
             else
-                r.WriteUChar( (sal_uInt8) 0 );
+                r.WriteUChar( 0 );
             break;
         case SbxCHAR:
         {

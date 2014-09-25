@@ -372,8 +372,8 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
 {
     bool bToBats = IsStarSymbol( GetFamilyName() );
 
-    rStrm.WriteUChar( (sal_uInt8) GetFamily() ).WriteUChar( (sal_uInt8) GetPitch() )
-         .WriteUChar( (sal_uInt8)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet())) );
+    rStrm.WriteUChar( GetFamily() ).WriteUChar( GetPitch() )
+         .WriteUChar( (bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet())) );
 
     OUString aStoreFamilyName( GetFamilyName() );
     if( bToBats )
@@ -482,7 +482,7 @@ sal_uInt16 SvxPostureItem::GetValueCount() const
 
 SvStream& SvxPostureItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8)GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -637,7 +637,7 @@ SfxPoolItem* SvxWeightItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxWeightItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8)GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -1258,7 +1258,7 @@ sal_uInt16 SvxTextLineItem::GetValueCount() const
 
 SvStream& SvxTextLineItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8)GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -1476,7 +1476,7 @@ SfxPoolItem* SvxCrossedOutItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCrossedOutItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8)GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -1563,7 +1563,7 @@ SfxPoolItem* SvxShadowedItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxShadowedItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8) GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -1612,7 +1612,7 @@ SfxPoolItem* SvxAutoKernItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxAutoKernItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8) GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -1982,7 +1982,7 @@ SfxPoolItem* SvxCharSetColorItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCharSetColorItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8)GetSOStoreTextEncoding(GetCharSet()) );
+    rStrm.WriteUChar( GetSOStoreTextEncoding(GetCharSet()) );
     WriteColor( rStrm, GetValue() );
     return rStrm;
 }
@@ -2141,7 +2141,7 @@ SfxPoolItem* SvxCaseMapItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCaseMapItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8) GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -2270,7 +2270,7 @@ SvStream& SvxEscapementItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*
         else if( DFLT_ESC_AUTO_SUB == _nEsc )
             _nEsc = DFLT_ESC_SUB;
     }
-    rStrm.WriteUChar( (sal_uInt8) GetProp() )
+    rStrm.WriteUChar( GetProp() )
          .WriteInt16( (short) _nEsc );
     return rStrm;
 }
@@ -2652,7 +2652,7 @@ SfxPoolItem* SvxBlinkItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxBlinkItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8) GetValue() );
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 

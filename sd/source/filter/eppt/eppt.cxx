@@ -276,7 +276,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
                .WriteUChar( nTransitionType )
                .WriteUInt16( nBuildFlags )
                .WriteUChar( nSpeed )
-               .WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 );
+               .WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 );
     }
 
     ImplCreateHeaderFooters( mXPagePropSet );
@@ -363,7 +363,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->OpenContainer( EPP_MainMaster );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
     mpStrm->WriteInt32( (sal_Int32)EPP_LAYOUT_TITLEANDBODYSLIDE )  // slide layout -> title and body slide
-           .WriteUChar( (sal_uInt8)1 ).WriteUChar( (sal_uInt8)2 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 )     // placeholderID
+           .WriteUChar( 1 ).WriteUChar( 2 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 )     // placeholderID
            .WriteUInt32( (sal_uInt32)0 )        // master ID (equals null at a master page)
            .WriteUInt32( (sal_uInt32)0 )        // notes ID (equals null if no notes are present)
            .WriteUInt16( (sal_uInt16)0 )        // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
@@ -479,14 +479,14 @@ bool PPTWriter::ImplCreateCurrentUserStream()
     mpCurUserStrm->WriteUInt32( (sal_uInt32)0x0 )                   // OffsetToCurrentEdit;
                   .WriteUInt16( (sal_uInt16)nLenOfUserName )
                   .WriteUInt16( (sal_uInt16)0x3f4 )                 // DocFileVersion
-                  .WriteUChar( (sal_uInt8)3 )                      // MajorVersion
-                  .WriteUChar( (sal_uInt8)0 )                      // MinorVersion
+                  .WriteUChar( 3 )                      // MajorVersion
+                  .WriteUChar( 0 )                      // MinorVersion
                   .WriteUInt16( (sal_uInt16)0 );                    // Pad Word
     pUserName[ nLenOfUserName ] = 8;
     mpCurUserStrm->Write( pUserName, nLenOfUserName + 1 );
     for ( sal_uInt32 i = 0x15 + nLenOfUserName; i < nSizeOfRecord; i++ )
     {
-        mpCurUserStrm->WriteUChar( (sal_uInt8)0 );                 // pad bytes
+        mpCurUserStrm->WriteUChar( 0 );                 // pad bytes
     }
     mpCurUserStrm->Seek( nEditPos );
     return true;
@@ -692,10 +692,10 @@ bool PPTWriter::ImplCreateDocument()
            .WriteUInt32( (sal_uInt32)0 )                        // Reference to HandoutMaster ( 0 if none );
            .WriteInt16( (sal_Int16)1 )                         // Number of the first slide;
            .WriteUInt16( nSlideType )                           // Size of the document slides ( default: EPP_SLIDESIZETYPEONSCREEN )
-           .WriteUChar( (sal_uInt8)0 )                         // bool1 indicates if document was saved with embedded true type fonts
-           .WriteUChar( (sal_uInt8)0 )                         // bool1 indicates if the placeholders on the title slide are omitted
-           .WriteUChar( (sal_uInt8)0 )                         // bool1 right to left ( flag for Bidi version )
-           .WriteUChar( (sal_uInt8)1 );                            // bool1 visibility of comments shapes
+           .WriteUChar( 0 )                         // bool1 indicates if document was saved with embedded true type fonts
+           .WriteUChar( 0 )                         // bool1 indicates if the placeholders on the title slide are omitted
+           .WriteUChar( 0 )                         // bool1 right to left ( flag for Bidi version )
+           .WriteUChar( 1 );                            // bool1 visibility of comments shapes
 
     mpPptEscherEx->PtInsert( EPP_Persist_Document, mpStrm->Tell() );
 

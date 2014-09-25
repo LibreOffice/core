@@ -98,11 +98,11 @@ SvStream& WriteSvVersion(SvStream & rStm, const SvVersion & r )
 
         int n = r.GetMajorVersion() << 4;
         n |= r.GetMinorVersion();
-        rStm.WriteUChar( (sal_uInt8)n );
+        rStm.WriteUChar( n );
     }
     else
     {
-        rStm.WriteUChar( (sal_uInt8)0 );
+        rStm.WriteUChar( 0 );
         rStm.WriteUInt16( r.GetMajorVersion() );
         rStm.WriteUInt16( r.GetMinorVersion() );
     }

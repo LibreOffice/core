@@ -302,8 +302,8 @@ void METWriter::WriteClipRect( const Rectangle& rRect )
         METEndPath();
     }
     WillWriteOrder(8);
-    pMET->WriteUChar( (sal_uInt8)0xb4 ).WriteUChar( (sal_uInt8)6 )
-         .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0 ).WriteUInt32( nPathId );
+    pMET->WriteUChar( 0xb4 ).WriteUChar( 6 )
+         .WriteUChar( 0x00 ).WriteUChar( 0 ).WriteUInt32( nPathId );
 }
 
 void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
@@ -343,7 +343,7 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
 
 void METWriter::WriteBigEndianShort(sal_uInt16 nWord)
 {
-    pMET->WriteUChar( (sal_uInt8)(nWord>>8) ).WriteUChar( (sal_uInt8)(nWord&0x00ff) );
+    pMET->WriteUChar( (nWord>>8) ).WriteUChar( (nWord&0x00ff) );
 }
 
 
@@ -368,7 +368,7 @@ void METWriter::WriteFieldIntroducer(sal_uInt16 nFieldSize, sal_uInt16 nFieldTyp
 {
     nActualFieldStartPos=pMET->Tell();
     WriteBigEndianShort(nFieldSize);
-    pMET->WriteUChar( (sal_uInt8)0xd3 ).WriteUInt16( nFieldType ).WriteUChar( nFlags ).WriteUInt16( nSegSeqNum );
+    pMET->WriteUChar( 0xd3 ).WriteUInt16( nFieldType ).WriteUChar( nFlags ).WriteUInt16( nSegSeqNum );
 }
 
 
@@ -465,13 +465,13 @@ void METWriter::WriteChrSets()
 
         WriteBigEndianShort(0x0050);
 
-        pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
-        pMET->WriteUChar( (sal_uInt8)0xa4 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x01 );
-        pMET->WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
+        pMET->WriteUChar( 0x0c ).WriteUChar( 0x02 ).WriteUChar( 0x84 ).WriteUChar( 0x00 );
+        pMET->WriteUChar( 0xa4 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x01 );
+        pMET->WriteUChar( 0x01 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
 
-        pMET->WriteUChar( (sal_uInt8)0x04 ).WriteUChar( (sal_uInt8)0x24 ).WriteUChar( (sal_uInt8)0x05 ).WriteUChar( (sal_uInt8)pCS->nSet );
+        pMET->WriteUChar( 0x04 ).WriteUChar( 0x24 ).WriteUChar( 0x05 ).WriteUChar( pCS->nSet );
 
-        pMET->WriteUChar( (sal_uInt8)0x14 ).WriteUChar( (sal_uInt8)0x1f );
+        pMET->WriteUChar( 0x14 ).WriteUChar( 0x1f );
         switch (pCS->eWeight)
         {
             case WEIGHT_THIN:       nbyte=1; break;
@@ -486,16 +486,16 @@ void METWriter::WriteChrSets()
             default:                nbyte=5;
         }
         pMET->WriteUChar( nbyte );
-        pMET->WriteUChar( (sal_uInt8)0x05 );
-        pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
-        pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
-        pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
-        pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x0c );
+        pMET->WriteUChar( 0x05 );
+        pMET->WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
+        pMET->WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
+        pMET->WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
+        pMET->WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x0c );
 
-        pMET->WriteUChar( (sal_uInt8)0x06 ).WriteUChar( (sal_uInt8)0x20 ).WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0xd4 );
-        pMET->WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x52 );
+        pMET->WriteUChar( 0x06 ).WriteUChar( 0x20 ).WriteUChar( 0x03 ).WriteUChar( 0xd4 );
+        pMET->WriteUChar( 0x03 ).WriteUChar( 0x52 );
 
-        pMET->WriteUChar( (sal_uInt8)0x24 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x00 );
+        pMET->WriteUChar( 0x24 ).WriteUChar( 0x02 ).WriteUChar( 0x08 ).WriteUChar( 0x00 );
         OString n(OUStringToOString(pCS->aName,
             osl_getThreadTextEncoding()));
         for (i=0; i<32; i++)
@@ -520,7 +520,7 @@ void METWriter::WriteColorAttributeTable(sal_uInt32 nFieldId, BitmapPalette* pPa
 
     //--- The Field 'Color Attribute Table':
     WriteFieldIntroducer(0,BlkColAtrMagic,0,0);
-    pMET->WriteUChar( nBasePartFlags ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( nBasePartLCTID ); // 'Base Part'
+    pMET->WriteUChar( nBasePartFlags ).WriteUChar( 0x00 ).WriteUChar( nBasePartLCTID ); // 'Base Part'
     if (pPalette!=NULL)
     {
         nIndex=0;
@@ -528,18 +528,18 @@ void METWriter::WriteColorAttributeTable(sal_uInt32 nFieldId, BitmapPalette* pPa
         {
             nNumI=pPalette->GetEntryCount()-nIndex;
             if (nNumI>81) nNumI=81;
-            pMET->WriteUChar( (sal_uInt8)(11+nNumI*3) );                   // length of the parameter
-            pMET->WriteUChar( (sal_uInt8)1 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)1 );        // typ: element list, Reserved, Format: RGB
-            pMET->WriteUChar( (sal_uInt8)0 ); WriteBigEndianShort(nIndex); // start-Index (3 Bytes)
-            pMET->WriteUChar( (sal_uInt8)8 ).WriteUChar( (sal_uInt8)8 ).WriteUChar( (sal_uInt8)8 );        // Bits per component R,G,B
-            pMET->WriteUChar( (sal_uInt8)3 );                              // number of bytes per entry
+            pMET->WriteUChar( (11+nNumI*3) );                   // length of the parameter
+            pMET->WriteUChar( 1 ).WriteUChar( 0 ).WriteUChar( 1 );        // typ: element list, Reserved, Format: RGB
+            pMET->WriteUChar( 0 ); WriteBigEndianShort(nIndex); // start-Index (3 Bytes)
+            pMET->WriteUChar( 8 ).WriteUChar( 8 ).WriteUChar( 8 );        // Bits per component R,G,B
+            pMET->WriteUChar( 3 );                              // number of bytes per entry
             for (i=0; i<nNumI; i++)
             {
                 const BitmapColor& rCol = (*pPalette)[ nIndex ];
 
-                pMET->WriteUChar( (sal_uInt8) rCol.GetRed() );
-                pMET->WriteUChar( (sal_uInt8) rCol.GetGreen() );
-                pMET->WriteUChar( (sal_uInt8) rCol.GetBlue() );
+                pMET->WriteUChar(  rCol.GetRed() );
+                pMET->WriteUChar(  rCol.GetGreen() );
+                pMET->WriteUChar(  rCol.GetBlue() );
                 nIndex++;
             }
         }
@@ -547,8 +547,8 @@ void METWriter::WriteColorAttributeTable(sal_uInt32 nFieldId, BitmapPalette* pPa
     else
     {
         // 'Trible Generating'
-        pMET->WriteUChar( (sal_uInt8)0x0a ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0x00 );
-        pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x08 );
+        pMET->WriteUChar( 0x0a ).WriteUChar( 0x02 ).WriteUChar( 0x00 ).WriteUChar( 0x01 ).WriteUChar( 0x00 );
+        pMET->WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x08 ).WriteUChar( 0x08 ).WriteUChar( 0x08 );
     }
     UpdateFieldSize();
 
@@ -626,9 +626,9 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
         //--- The Field 'Map Color Attribute Table':
         WriteFieldIntroducer(26,MapColAtrMagic,0,0);
         WriteBigEndianShort(0x0012);
-        pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
+        pMET->WriteUChar( 0x0c ).WriteUChar( 0x02 ).WriteUChar( 0x84 ).WriteUChar( 0x00 );
         WriteFieldId(nActColMapId);
-        pMET->WriteUChar( (sal_uInt8)0x04 ).WriteUChar( (sal_uInt8)0x24 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0x01 );
+        pMET->WriteUChar( 0x04 ).WriteUChar( 0x24 ).WriteUChar( 0x07 ).WriteUChar( 0x01 );
 
         //--- The Field 'End Object Environment Group':
         WriteFieldIntroducer(16,EndObjEnvMagic,0,0);
@@ -637,7 +637,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
 
     //--- The Field 'Image Data Descriptor':
     WriteFieldIntroducer(17,DscImgObjMagic,0,0);
-    pMET->WriteUChar( (sal_uInt8)0x01 ); // Unit of measure: tens of centimeters
+    pMET->WriteUChar( 0x01 ); // Unit of measure: tens of centimeters
     WriteBigEndianShort((sal_uInt16)nResX);
     WriteBigEndianShort((sal_uInt16)nResY);
     WriteBigEndianShort((sal_uInt16)nWidth);
@@ -647,32 +647,32 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     WriteFieldIntroducer(0,DatImgObjMagic,0,0);
 
     // Begin Segment:
-    pMET->WriteUChar( (sal_uInt8)0x70 ).WriteUChar( (sal_uInt8)0x00 );
+    pMET->WriteUChar( 0x70 ).WriteUChar( 0x00 );
 
     // Begin Image Content:
-    pMET->WriteUChar( (sal_uInt8)0x91 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0xff );
+    pMET->WriteUChar( 0x91 ).WriteUChar( 0x01 ).WriteUChar( 0xff );
 
     // Image Size:
-    pMET->WriteUChar( (sal_uInt8)0x94 ).WriteUChar( (sal_uInt8)0x09 ).WriteUChar( (sal_uInt8)0x02 );
+    pMET->WriteUChar( 0x94 ).WriteUChar( 0x09 ).WriteUChar( 0x02 );
     pMET->WriteUInt16( (sal_uInt16) 0 ).WriteUInt16( (sal_uInt16) 0 );
     WriteBigEndianShort((sal_uInt16)nHeight);
     WriteBigEndianShort((sal_uInt16)nWidth);
 
     // Image Encoding:
-    pMET->WriteUChar( (sal_uInt8)0x95 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x03 );
+    pMET->WriteUChar( 0x95 ).WriteUChar( 0x02 ).WriteUChar( 0x03 ).WriteUChar( 0x03 );
 
     // Image IDE-Size:
-    pMET->WriteUChar( (sal_uInt8)0x96 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)nBitsPerPixel );
+    pMET->WriteUChar( 0x96 ).WriteUChar( 0x01 ).WriteUChar( nBitsPerPixel );
 
     if (nBitsPerPixel<=8) {
         // Image LUT-ID
-        pMET->WriteUChar( (sal_uInt8)0x97 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0x01 );
+        pMET->WriteUChar( 0x97 ).WriteUChar( 0x01 ).WriteUChar( 0x01 );
     }
     else {
         // IDE Structure
-        pMET->WriteUChar( (sal_uInt8)0x9b ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x01 );
-        pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x08 );
-        pMET->WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x08 );
+        pMET->WriteUChar( 0x9b ).WriteUChar( 0x08 ).WriteUChar( 0x00 ).WriteUChar( 0x01 );
+        pMET->WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x08 );
+        pMET->WriteUChar( 0x08 ).WriteUChar( 0x08 );
     }
 
     boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nBytesPerLine]);
@@ -709,10 +709,10 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     pBuf.reset();
 
     // End Image Content:
-    pMET->WriteUChar( (sal_uInt8)0x93 ).WriteUChar( (sal_uInt8)0x00 );
+    pMET->WriteUChar( 0x93 ).WriteUChar( 0x00 );
 
     // End Segment:
-    pMET->WriteUChar( (sal_uInt8)0x71 ).WriteUChar( (sal_uInt8)0x00 );
+    pMET->WriteUChar( 0x71 ).WriteUChar( 0x00 );
 
     // finalize the last field 'Image Picture Data':
     UpdateFieldSize();
@@ -839,9 +839,9 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //  8         Coordinate types in data
     //       0x04Intel16
     //       0x05Intel32
-    pMET->WriteUChar( (sal_uInt8)0xf7 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0xb0 ).WriteUChar( (sal_uInt8)0x00 )
-         .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x23 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0x01 )
-         .WriteUChar( (sal_uInt8)0x05 );
+    pMET->WriteUChar( 0xf7 ).WriteUChar( 0x07 ).WriteUChar( 0xb0 ).WriteUChar( 0x00 )
+         .WriteUChar( 0x00 ).WriteUChar( 0x23 ).WriteUChar( 0x01 ).WriteUChar( 0x01 )
+         .WriteUChar( 0x05 );
 
     //  0         0xF6 Set Picture Descriptor
     //  1         Length of following data
@@ -871,8 +871,8 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //       GPS Y bottom, Y top
     //       GPS Z near, Z far
     Size aUnitsPerDecimeter=OutputDevice::LogicToLogic(Size(10,10),MapMode(MAP_CM),aPictureMapMode);
-    pMET->WriteUChar( (sal_uInt8)0xf6 ).WriteUChar( (sal_uInt8)0x28 ).WriteUChar( (sal_uInt8)0x40 ).WriteUChar( (sal_uInt8)0x00 )
-         .WriteUChar( (sal_uInt8)0x05 ).WriteUChar( (sal_uInt8)0x01 )
+    pMET->WriteUChar( 0xf6 ).WriteUChar( 0x28 ).WriteUChar( 0x40 ).WriteUChar( 0x00 )
+         .WriteUChar( 0x05 ).WriteUChar( 0x01 )
          .WriteUInt32( (sal_uInt32)(aUnitsPerDecimeter.Width()) )
          .WriteUInt32( (sal_uInt32)(aUnitsPerDecimeter.Height()) )
          .WriteUInt32( (sal_uInt32)0 )
@@ -893,9 +893,9 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //  8         Geometrics
     //       0x04  Intel16
     //       0x05  Intel32
-    pMET->WriteUChar( (sal_uInt8)0x21 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0xe0 )
-         .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x8f ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x05 )
-         .WriteUChar( (sal_uInt8)0x05 );
+    pMET->WriteUChar( 0x21 ).WriteUChar( 0x07 ).WriteUChar( 0x08 ).WriteUChar( 0xe0 )
+         .WriteUChar( 0x00 ).WriteUChar( 0x8f ).WriteUChar( 0x00 ).WriteUChar( 0x05 )
+         .WriteUChar( 0x05 );
 
     //  0         0x21 Set Current Defaults
     //  1         Length of following data
@@ -903,8 +903,8 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //  3-4       Mask 0xCC0C
     //  5         Names 0x8F
     //  6-n       M11, M12, M21, M22, M41, M42   Matrix elements
-    pMET->WriteUChar( (sal_uInt8)0x21 ).WriteUChar( (sal_uInt8)0x1c ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0xcc )
-         .WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x8f )
+    pMET->WriteUChar( 0x21 ).WriteUChar( 0x1c ).WriteUChar( 0x07 ).WriteUChar( 0xcc )
+         .WriteUChar( 0x0c ).WriteUChar( 0x8f )
          .WriteUInt32( (sal_uInt32)0x00010000 ).WriteUInt32( (sal_uInt32)0x00000000 ).WriteUInt32( (sal_uInt32)0x00000000 )
          .WriteUInt32( (sal_uInt32)0x00010000 ).WriteUInt32( (sal_uInt32)0x00000000 ).WriteUInt32( (sal_uInt32)0x00000000 );
 
@@ -975,11 +975,11 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //       (1 byte)        - Character mix
     //       (1 byte)        - Character background mix (G=2 or 4 depending on the Geometrics
     //            parameter of Set Default Parameter Format)
-    pMET->WriteUChar( (sal_uInt8)0x21 ).WriteUChar( (sal_uInt8)0x10 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x40 )
-         .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x8f )
-         .WriteUChar( (sal_uInt8)0xaa ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 )
-         .WriteUChar( (sal_uInt8)0x44 ).WriteUChar( (sal_uInt8)0x04 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 )
-         .WriteUChar( (sal_uInt8)0xa8 ).WriteUChar( (sal_uInt8)0xaa ).WriteUChar( (sal_uInt8)0x40 ).WriteUChar( (sal_uInt8)0x44 );
+    pMET->WriteUChar( 0x21 ).WriteUChar( 0x10 ).WriteUChar( 0x02 ).WriteUChar( 0x40 )
+         .WriteUChar( 0x00 ).WriteUChar( 0x8f )
+         .WriteUChar( 0xaa ).WriteUChar( 0x02 ).WriteUChar( 0x00 ).WriteUChar( 0x00 )
+         .WriteUChar( 0x44 ).WriteUChar( 0x04 ).WriteUChar( 0x00 ).WriteUChar( 0x00 )
+         .WriteUChar( 0xa8 ).WriteUChar( 0xaa ).WriteUChar( 0x40 ).WriteUChar( 0x44 );
 
     //  0         0x21 Set Current Defaults
     //  1         Length of following data
@@ -1009,10 +1009,10 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //       (1 byte)       - Marker mix
     //       (1 byte)       - Marker background mix (G=2 or 4 depending on the Geometrics
     //            parameter of Set Default Parameter Format)
-    pMET->WriteUChar( (sal_uInt8)0x21 ).WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x40 )
-         .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x8f )
-         .WriteUChar( (sal_uInt8)0x66 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 )
-         .WriteUChar( (sal_uInt8)0x66 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
+    pMET->WriteUChar( 0x21 ).WriteUChar( 0x0c ).WriteUChar( 0x03 ).WriteUChar( 0x40 )
+         .WriteUChar( 0x00 ).WriteUChar( 0x8f )
+         .WriteUChar( 0x66 ).WriteUChar( 0x02 ).WriteUChar( 0x00 ).WriteUChar( 0x00 )
+         .WriteUChar( 0x66 ).WriteUChar( 0x02 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
 
     //  0         0x21 Set Current Defaults
     //  1         Length of following data
@@ -1121,9 +1121,9 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //       4-7     Bit-map handle
     //       8       Lcid
     if (nNumberOfBitmaps>0) {
-        pMET->WriteUChar( (sal_uInt8)0xe7 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0x80 ).WriteUChar( (sal_uInt8)0x00 );
+        pMET->WriteUChar( 0xe7 ).WriteUChar( 0x07 ).WriteUChar( 0x80 ).WriteUChar( 0x00 );
         WriteBigEndianLong(nActBitmapId);
-        pMET->WriteUChar( (sal_uInt8)0xfe );
+        pMET->WriteUChar( 0xfe );
     }
 
     UpdateFieldSize();
@@ -1152,9 +1152,9 @@ void METWriter::WillWriteOrder(sal_uInt32 nNextOrderMaximumLength)
 void METWriter::METBitBlt(Point aPt, Size aSize, const Size& rBmpSizePixel)
 {
     WillWriteOrder(46);
-    pMET->WriteUChar( (sal_uInt8)0xd6 ).WriteUChar( (sal_uInt8)44 ).WriteUInt16( (sal_uInt16)0 ).WriteUInt16( (sal_uInt16) 0x00cc );
+    pMET->WriteUChar( 0xd6 ).WriteUChar( 44 ).WriteUInt16( (sal_uInt16)0 ).WriteUInt16( (sal_uInt16) 0x00cc );
     WriteBigEndianLong(nActBitmapId++);
-    pMET->WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
+    pMET->WriteUChar( 0x02 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
     WritePoint(Point(aPt.X(),aPt.Y()+aSize.Height()));
     WritePoint(Point(aPt.X()+aSize.Width(),aPt.Y()));
     pMET->WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 )
@@ -1167,10 +1167,10 @@ void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
     sal_Int32 nWidth = OutputDevice::LogicToLogic( Size( rLineInfo.GetWidth(),0 ), aPictureMapMode, aTargetMapMode ).Width();
 
     WillWriteOrder( 8 );            // set stroke linewidth
-    pMET  ->WriteUChar( (sal_uInt8)0x15 )
-           .WriteUChar( (sal_uInt8)6 )
-           .WriteUChar( (sal_uInt8)0 )             // Flags
-           .WriteUChar( (sal_uInt8)0 )
+    pMET  ->WriteUChar( 0x15 )
+           .WriteUChar( 6 )
+           .WriteUChar( 0 )             // Flags
+           .WriteUChar( 0 )
            .WriteInt32( nWidth );
 
     if ( rLineInfo.GetStyle() != LINE_SOLID )
@@ -1201,83 +1201,83 @@ void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
                 break;  // not handled -Wall
         }
         WillWriteOrder( 2 );
-        pMET->WriteUChar( (sal_uInt8)0x18 ).WriteUChar( nStyle );     // set LineType
+        pMET->WriteUChar( 0x18 ).WriteUChar( nStyle );     // set LineType
     }
 }
 
 void METWriter::METPopLineInfo( const LineInfo& rLineInfo )
 {
     WillWriteOrder( 8 );            // set stroke linewidth
-    pMET  ->WriteUChar( (sal_uInt8)0x15 )
-           .WriteUChar( (sal_uInt8)6 )
-           .WriteUChar( (sal_uInt8)0 )             // Flags
-           .WriteUChar( (sal_uInt8)0 )
+    pMET  ->WriteUChar( 0x15 )
+           .WriteUChar( 6 )
+           .WriteUChar( 0 )             // Flags
+           .WriteUChar( 0 )
            .WriteUInt32( (sal_uInt32)1 );
 
     if ( rLineInfo.GetStyle() != LINE_SOLID )
     {
         WillWriteOrder( 2 );
-        pMET->WriteUChar( (sal_uInt8)0x18 ).WriteUChar( (sal_uInt8)0 );       // set LineType
+        pMET->WriteUChar( 0x18 ).WriteUChar( 0 );       // set LineType
     }
 }
 
 void METWriter::METBeginArea(bool bBoundaryLine)
 {
     WillWriteOrder(2);
-    pMET->WriteUChar( (sal_uInt8)0x68 );
-    if (bBoundaryLine) pMET->WriteUChar( (sal_uInt8)0xc0 );
-    else               pMET->WriteUChar( (sal_uInt8)0x80 );
+    pMET->WriteUChar( 0x68 );
+    if (bBoundaryLine) pMET->WriteUChar( 0xc0 );
+    else               pMET->WriteUChar( 0x80 );
 }
 
 
 void METWriter::METEndArea()
 {
     WillWriteOrder(2);
-    pMET->WriteUChar( (sal_uInt8)0x60 ).WriteUChar( (sal_uInt8)0 );
+    pMET->WriteUChar( 0x60 ).WriteUChar( 0 );
 }
 
 
 void METWriter::METBeginPath(sal_uInt32 nPathId)
 {
     WillWriteOrder(8);
-    pMET->WriteUChar( (sal_uInt8)0xd0 ).WriteUChar( (sal_uInt8)6 ).WriteUInt16( (sal_uInt16) 0 ).WriteUInt32( nPathId );
+    pMET->WriteUChar( 0xd0 ).WriteUChar( 6 ).WriteUInt16( (sal_uInt16) 0 ).WriteUInt32( nPathId );
 }
 
 
 void METWriter::METEndPath()
 {
     WillWriteOrder(2);
-    pMET->WriteUChar( (sal_uInt8)0x7f ).WriteUChar( (sal_uInt8)0 );
+    pMET->WriteUChar( 0x7f ).WriteUChar( 0 );
 }
 
 
 void METWriter::METFillPath(sal_uInt32 nPathId)
 {
     WillWriteOrder(8);
-    pMET->WriteUChar( (sal_uInt8)0xd7 ).WriteUChar( (sal_uInt8)6 )
-         .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0 ).WriteUInt32( nPathId );
+    pMET->WriteUChar( 0xd7 ).WriteUChar( 6 )
+         .WriteUChar( 0x00 ).WriteUChar( 0 ).WriteUInt32( nPathId );
 }
 
 
 void METWriter::METOutlinePath(sal_uInt32 nPathId)
 {
     WillWriteOrder(8);
-    pMET->WriteUChar( (sal_uInt8)0xd4 ).WriteUChar( (sal_uInt8)6 )
-         .WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUInt32( nPathId );
+    pMET->WriteUChar( 0xd4 ).WriteUChar( 6 )
+         .WriteUChar( 0 ).WriteUChar( 0 ).WriteUInt32( nPathId );
 }
 
 
 void METWriter::METCloseFigure()
 {
     WillWriteOrder(2);
-    pMET->WriteUChar( (sal_uInt8)0x7d ).WriteUChar( (sal_uInt8)0 );
+    pMET->WriteUChar( 0x7d ).WriteUChar( 0 );
 }
 
 
 void METWriter::METMove(Point aPt)
 {
     WillWriteOrder(10);
-    pMET->WriteUChar( (sal_uInt8)0x21 ).WriteUChar( (sal_uInt8)8 );
+    pMET->WriteUChar( 0x21 ).WriteUChar( 8 );
     WritePoint(aPt);
 }
 
@@ -1285,7 +1285,7 @@ void METWriter::METMove(Point aPt)
 void METWriter::METLine(Point aPt1, Point aPt2)
 {
     WillWriteOrder(18);
-    pMET->WriteUChar( (sal_uInt8)0xc1 ).WriteUChar( (sal_uInt8)16 );
+    pMET->WriteUChar( 0xc1 ).WriteUChar( 16 );
     WritePoint(aPt1); WritePoint(aPt2);
 }
 
@@ -1302,13 +1302,13 @@ void METWriter::METLine(const Polygon & rPolygon)
         if (nOrderPoints>30) nOrderPoints=30;
         WillWriteOrder(nOrderPoints*8+2);
         if (bFirstOrder) {
-            pMET->WriteUChar( (sal_uInt8)0xc1 ); // Line at given pos
+            pMET->WriteUChar( 0xc1 ); // Line at given pos
             bFirstOrder=false;
         }
         else {
-            pMET->WriteUChar( (sal_uInt8)0x81 ); // Line at current pos
+            pMET->WriteUChar( 0x81 ); // Line at current pos
         }
-        pMET->WriteUChar( (sal_uInt8)(nOrderPoints*8) );
+        pMET->WriteUChar( (nOrderPoints*8) );
         for (j=0; j<nOrderPoints; j++) WritePoint(rPolygon.GetPoint(i++));
     }
 }
@@ -1328,7 +1328,7 @@ void METWriter::METLine(const PolyPolygon & rPolyPolygon)
 void METWriter::METLineAtCurPos(Point aPt)
 {
     WillWriteOrder(10);
-    pMET->WriteUChar( (sal_uInt8)0x81 ).WriteUChar( (sal_uInt8)8 );
+    pMET->WriteUChar( 0x81 ).WriteUChar( 8 );
     WritePoint(aPt);
 }
 
@@ -1341,7 +1341,7 @@ void METWriter::METBox(bool bFill, bool bBoundary,
     if (bBoundary) nFlags|=0x20;
 
     WillWriteOrder(28);
-    pMET->WriteUChar( (sal_uInt8)0xc0 ).WriteUChar( (sal_uInt8)26 ).WriteUChar( nFlags ).WriteUChar( (sal_uInt8)0 );
+    pMET->WriteUChar( 0xc0 ).WriteUChar( 26 ).WriteUChar( nFlags ).WriteUChar( 0 );
     WritePoint(aRect.BottomLeft());
     WritePoint(aRect.TopRight());
     pMET->WriteUInt32( nHAxis ).WriteUInt32( nVAxis );
@@ -1351,7 +1351,7 @@ void METWriter::METBox(bool bFill, bool bBoundary,
 void METWriter::METFullArc(Point aCenter, double fMultiplier)
 {
     WillWriteOrder(14);
-    pMET->WriteUChar( (sal_uInt8)0xc7 ).WriteUChar( (sal_uInt8)12 );
+    pMET->WriteUChar( 0xc7 ).WriteUChar( 12 );
     WritePoint(aCenter);
     pMET->WriteInt32( (sal_Int32)(fMultiplier*65536.0+0.5) );
 }
@@ -1367,7 +1367,7 @@ void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
     while (fSweepAngle>360.0) fSweepAngle-=360.0;
     while (fSweepAngle<.00) fSweepAngle+=360.0;
     WillWriteOrder(22);
-    pMET->WriteUChar( (sal_uInt8)0xa3 ).WriteUChar( (sal_uInt8)20 );
+    pMET->WriteUChar( 0xa3 ).WriteUChar( 20 );
     WritePoint(aCenter);
     pMET->WriteInt32( (sal_Int32)(fMultiplier*65536.0+0.5) );
     pMET->WriteInt32( (sal_Int32)(fStartAngle*65536.0+0.5) );
@@ -1381,18 +1381,18 @@ void METWriter::METChrStr( Point aPt, const OUString& aUniStr )
         osl_getThreadTextEncoding()));
     sal_uInt16 nLen = aStr.getLength();
     WillWriteOrder( 11 + nLen );
-    pMET->WriteUChar( (sal_uInt8)0xc3 ).WriteUChar( (sal_uInt8)( 9 + nLen ) );
+    pMET->WriteUChar( 0xc3 ).WriteUChar( ( 9 + nLen ) );
     WritePoint(aPt);
     for (sal_uInt16 i = 0; i < nLen; ++i)
         pMET->WriteChar( aStr[i] );
-    pMET->WriteUChar( (sal_uInt8)0 );
+    pMET->WriteUChar( 0 );
 }
 
 
 void METWriter::METSetArcParams(sal_Int32 nP, sal_Int32 nQ, sal_Int32 nR, sal_Int32 nS)
 {
     WillWriteOrder(18);
-    pMET->WriteUChar( (sal_uInt8)0x22 ).WriteUChar( (sal_uInt8)16 ).WriteInt32( nP ).WriteInt32( nQ ).WriteInt32( nR ).WriteInt32( nS );
+    pMET->WriteUChar( 0x22 ).WriteUChar( 16 ).WriteInt32( nP ).WriteInt32( nQ ).WriteInt32( nR ).WriteInt32( nS );
 }
 
 
@@ -1402,10 +1402,10 @@ void METWriter::METSetColor(Color aColor)
     aMETColor=aColor;
 
     WillWriteOrder(6);
-    pMET->WriteUChar( (sal_uInt8)0xa6 ).WriteUChar( (sal_uInt8)4 ).WriteUChar( (sal_uInt8)0 )
-         .WriteUChar( (sal_uInt8)(aColor.GetBlue()) )
-         .WriteUChar( (sal_uInt8)(aColor.GetGreen()) )
-         .WriteUChar( (sal_uInt8)(aColor.GetRed()) );
+    pMET->WriteUChar( 0xa6 ).WriteUChar( 4 ).WriteUChar( 0 )
+         .WriteUChar( (aColor.GetBlue()) )
+         .WriteUChar( (aColor.GetGreen()) )
+         .WriteUChar( (aColor.GetRed()) );
 }
 
 
@@ -1415,10 +1415,10 @@ void METWriter::METSetBackgroundColor(Color aColor)
     aMETBackgroundColor=aColor;
 
     WillWriteOrder(6);
-    pMET->WriteUChar( (sal_uInt8)0xa7 ).WriteUChar( (sal_uInt8)4 ).WriteUChar( (sal_uInt8)0 )
-         .WriteUChar( (sal_uInt8)(aColor.GetBlue()) )
-         .WriteUChar( (sal_uInt8)(aColor.GetGreen()) )
-         .WriteUChar( (sal_uInt8)(aColor.GetRed()) );
+    pMET->WriteUChar( 0xa7 ).WriteUChar( 4 ).WriteUChar( 0 )
+         .WriteUChar( (aColor.GetBlue()) )
+         .WriteUChar( (aColor.GetGreen()) )
+         .WriteUChar( (aColor.GetRed()) );
 }
 
 void METWriter::METSetMix(RasterOp eROP)
@@ -1438,7 +1438,7 @@ void METWriter::METSetMix(RasterOp eROP)
     }
 
     WillWriteOrder(2);
-    pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( nMix );
+    pMET->WriteUChar( 0x0c ).WriteUChar( nMix );
 }
 
 
@@ -1450,7 +1450,7 @@ void METWriter::METSetChrCellSize(Size aSize)
     aMETChrCellSize=aSize;
     WillWriteOrder(10);
     if (aSize.Width()==0) aSize.Width()=aSize.Height();
-    pMET->WriteUChar( (sal_uInt8)0x33 ).WriteUChar( (sal_uInt8)8 ).WriteInt32( (sal_Int32)aSize.Width() ).WriteInt32( (sal_Int32)aSize.Height() );
+    pMET->WriteUChar( 0x33 ).WriteUChar( 8 ).WriteInt32( (sal_Int32)aSize.Width() ).WriteInt32( (sal_Int32)aSize.Height() );
 }
 
 
@@ -1474,7 +1474,7 @@ void METWriter::METSetChrAngle(short nAngle)
     }
 
     WillWriteOrder(10);
-    pMET->WriteUChar( (sal_uInt8)0x34 ).WriteUChar( (sal_uInt8)8 ).WriteInt32( nax ).WriteInt32( nay );
+    pMET->WriteUChar( 0x34 ).WriteUChar( 8 ).WriteInt32( nax ).WriteInt32( nay );
 }
 
 
@@ -1485,7 +1485,7 @@ void METWriter::METSetChrSet(sal_uInt8 nSet)
 
     nMETChrSet=nSet;
     WillWriteOrder(2);
-    pMET->WriteUChar( (sal_uInt8)0x38 ).WriteUChar( nSet );
+    pMET->WriteUChar( 0x38 ).WriteUChar( nSet );
 }
 
 
@@ -2348,18 +2348,18 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
     //--- The Field 'Map Color Attribute Table':
     WriteFieldIntroducer(22,MapColAtrMagic,0,0);
     WriteBigEndianShort(0x000e);
-    pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
+    pMET->WriteUChar( 0x0c ).WriteUChar( 0x02 ).WriteUChar( 0x84 ).WriteUChar( 0x00 );
     WriteFieldId(4);
 
     //--- The first Field 'Map Coded Font':
     WriteFieldIntroducer(32,MapCodFntMagic,0,0);
     WriteBigEndianShort(0x0018);
-    pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
-    pMET->WriteUChar( (sal_uInt8)0xff ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
-    pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
-    pMET->WriteUChar( (sal_uInt8)0x04 ).WriteUChar( (sal_uInt8)0x24 ).WriteUChar( (sal_uInt8)0x05 ).WriteUChar( (sal_uInt8)0x00 );
-    pMET->WriteUChar( (sal_uInt8)0x06 ).WriteUChar( (sal_uInt8)0x20 );
-    pMET->WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x97 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0xb5 );
+    pMET->WriteUChar( 0x0c ).WriteUChar( 0x02 ).WriteUChar( 0x84 ).WriteUChar( 0x00 );
+    pMET->WriteUChar( 0xff ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
+    pMET->WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
+    pMET->WriteUChar( 0x04 ).WriteUChar( 0x24 ).WriteUChar( 0x05 ).WriteUChar( 0x00 );
+    pMET->WriteUChar( 0x06 ).WriteUChar( 0x20 );
+    pMET->WriteUChar( 0x03 ).WriteUChar( 0x97 ).WriteUChar( 0x01 ).WriteUChar( 0xb5 );
 
     //--- The additional Fields 'Map Coded Font':
     CreateChrSets(pMTF);
@@ -2371,9 +2371,9 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
     {
         WriteFieldIntroducer(29,MapDatResMagic,0,0);
         WriteBigEndianShort(0x0015);
-        pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
+        pMET->WriteUChar( 0x0c ).WriteUChar( 0x02 ).WriteUChar( 0x84 ).WriteUChar( 0x00 );
         WriteFieldId(nId);
-        pMET->WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0x22 ).WriteUChar( (sal_uInt8)0x10 );
+        pMET->WriteUChar( 0x07 ).WriteUChar( 0x22 ).WriteUChar( 0x10 );
         pMET->WriteUInt32( (sal_uInt32)nId );
         nId++;
     }
@@ -2412,8 +2412,8 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
     nNumberOfDataFields++;
 
     // now at first we write the head of the segment:
-    pMET->WriteUChar( (sal_uInt8)0x70 ).WriteUChar( (sal_uInt8)0x0e ).WriteUInt32( (sal_uInt32)0 );
-    pMET->WriteUChar( (sal_uInt8)0x70 ).WriteUChar( (sal_uInt8)0x10 ); // Flags
+    pMET->WriteUChar( 0x70 ).WriteUChar( 0x0e ).WriteUInt32( (sal_uInt32)0 );
+    pMET->WriteUChar( 0x70 ).WriteUChar( 0x10 ); // Flags
     pMET->WriteUInt16( (sal_uInt16)0 ); // Lo-Word of the length of the segment data  (Big Endian)
     pMET->WriteUInt32( (sal_uInt32)0 );  // Reserved
     pMET->WriteUInt16( (sal_uInt16)0 ); // Hi-Word of the length of the segment (Big Endian) (Ohh Ohh OS2)
@@ -2479,10 +2479,10 @@ void METWriter::WriteDocument(const GDIMetaFile * pMTF)
     //--- The Field 'Begin Document':
     WriteFieldIntroducer(0,BegDocumnMagic,0,0);
     WriteFieldId(1);
-    pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
-    pMET->WriteUChar( (sal_uInt8)0x05 ).WriteUChar( (sal_uInt8)0x18 ).WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x00 );
-    pMET->WriteUChar( (sal_uInt8)0x06 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0xd4 ).WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x52 );
-    pMET->WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x65 ).WriteUChar( (sal_uInt8)0x00 );
+    pMET->WriteUChar( 0x00 ).WriteUChar( 0x00 );
+    pMET->WriteUChar( 0x05 ).WriteUChar( 0x18 ).WriteUChar( 0x03 ).WriteUChar( 0x0c ).WriteUChar( 0x00 );
+    pMET->WriteUChar( 0x06 ).WriteUChar( 0x01 ).WriteUChar( 0x03 ).WriteUChar( 0xd4 ).WriteUChar( 0x03 ).WriteUChar( 0x52 );
+    pMET->WriteUChar( 0x03 ).WriteUChar( 0x65 ).WriteUChar( 0x00 );
     UpdateFieldSize();
 
     //--- The Content:
