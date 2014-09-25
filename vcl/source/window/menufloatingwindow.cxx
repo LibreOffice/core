@@ -67,7 +67,6 @@ void MenuFloatingWindow::doShutdown()
         // otherwise the entry will not be read when the menu is opened again
         if( nHighlightedItem != ITEMPOS_INVALID )
             pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
-        pMenu->SetHighlightItem(ITEMPOS_INVALID);
         if (!bKeyInput && pMenu && pMenu->pStartedFrom && !pMenu->pStartedFrom->IsMenuBar())
         {
             // #102461# remove highlight in parent
@@ -692,7 +691,6 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
             }
         }
         HighlightItem( nHighlightedItem, true );
-        pMenu->SetHighlightItem(nHighlightedItem);
         pMenu->ImplCallHighlight( nHighlightedItem );
     }
     else

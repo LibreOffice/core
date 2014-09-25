@@ -140,8 +140,6 @@ private:
     sal_uInt16          nDefaultItem;       // Id of default item
     sal_uInt16          nSelectedId;
 
-    sal_uInt16          nHighlightedItem;
-
     // for output:
     sal_uInt16          nImgOrChkPos;
     sal_uInt16          nTextPos;
@@ -255,8 +253,6 @@ public:
     MenuItemType        GetItemType( sal_uInt16 nPos ) const;
     sal_uInt16          GetCurItemId() const { return nSelectedId;}
     OString             GetCurItemIdent() const;
-
-    void                SetHighlightItem(sal_uInt16 nHighlightedItem);
 
     void                SetDefaultItem( sal_uInt16 nItemId )    { nDefaultItem = nItemId; }
     sal_uInt16          GetDefaultItem() const              { return nDefaultItem; }

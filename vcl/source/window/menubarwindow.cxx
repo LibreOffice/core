@@ -508,7 +508,6 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         HighlightItem( nHighlightedItem, true );
     else if ( nRolloveredItem != ITEMPOS_INVALID )
         HighlightItem( nRolloveredItem, true );
-    pMenu->SetHighlightItem(nHighlightedItem);
     pMenu->ImplCallHighlight(nHighlightedItem);
 
     if( mbAutoPopup )

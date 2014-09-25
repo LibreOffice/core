@@ -722,12 +722,6 @@ MenuItemType Menu::GetItemType( sal_uInt16 nPos ) const
         return MENUITEM_DONTKNOW;
 }
 
-void Menu::SetHighlightItem( sal_uInt16 nItem )
-{
-    nHighlightedItem = nItem;
-}
-
-
 OString Menu::GetCurItemIdent() const
 {
     const MenuItemData* pData = pItemList->GetData(nSelectedId);
