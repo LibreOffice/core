@@ -58,7 +58,6 @@ public class LOKitThread extends Thread {
     }
 
     private boolean draw() throws InterruptedException {
-        Log.i(LOGTAG, "tilerender draw");
         int pageWidth = mTileProvider.getPageWidth();
         int pageHeight = mTileProvider.getPageHeight();
 
@@ -75,25 +74,26 @@ public class LOKitThread extends Thread {
 
         mOldRect = rect;
 
-        Log.i(LOGTAG, "tilerender rect: " + rect);
+        Log.i(LOGTAG, "tilerender RECT: " + rect);
 
         long start = System.currentTimeMillis();
+        int noOfRemoved = 0;
 
         ArrayList<SubTile> removeTiles = new ArrayList<SubTile>();
         for (SubTile tile : layerClient.getTiles()) {
             Rect tileRect = new Rect(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
             if (!Rect.intersects(rect, tileRect)) {
-                Log.i(LOGTAG, "tilerender delete " + tileRect);
                 tile.destroy();
                 removeTiles.add(tile);
+                noOfRemoved++;
             }
         }
-        Log.i(LOGTAG, "TileRendering Remove: " + (System.currentTimeMillis() - start));
 
         layerClient.getTiles().removeAll(removeTiles);
 
-        Log.i(LOGTAG, "TileRendering Clear: " + (System.currentTimeMillis() - start));
-
+        Log.i(LOGTAG, "TileRendering Clear: " + noOfRemoved + " in " + (System.currentTimeMillis() - start) + "ms");
+        start = System.currentTimeMillis();
+        int noOfAdded = 0;
         for (int y = rect.top; y < rect.bottom; y += TILE_SIZE) {
             for (int x = rect.left; x < rect.right; x += TILE_SIZE) {
                 if (x > pageWidth) {
@@ -111,14 +111,14 @@ public class LOKitThread extends Thread {
                 if (!contains) {
                     SubTile tile = mTileProvider.createTile(x, y);
                     layerClient.addTile(tile);
+                    noOfAdded++;
                 }
             }
         }
 
-        Log.i(LOGTAG, "TileRendering Add: " + (System.currentTimeMillis() - start));
-
         layerClient.endDrawing();
-        Log.i(LOGTAG, "tilerender end draw");
+
+        Log.i(LOGTAG, "TileRendering Add: " + noOfAdded + " in " + (System.currentTimeMillis() - start)  + "ms");
 
         return true;
     }
@@ -127,6 +127,7 @@ public class LOKitThread extends Thread {
         mTileProvider.changePart(partIndex);
         GeckoLayerClient layerClient = mApplication.getLayerClient();
         layerClient.getTiles().clear();
+        updateCheckbardImage();
         LOKitShell.sendEvent(LOEvent.draw(new Rect()));
     }
 
