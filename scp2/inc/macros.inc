@@ -57,22 +57,11 @@
 #endif
 
 #ifdef UNX
-    #define LIBNAME(name)                     STRING(CONCAT4(lib,name,DLLPOSTFIX,UNXSUFFIX))
     #define EXENAME(name)                     STRING(name)
     #define PROFILENAME(name)                 STRING(CONCAT2(name,rc))
-    #define SPECIAL_NAME(name)                STRING(CONCAT3(lib,name,UNXSUFFIX))
-    #ifdef MACOSX
-       #define SPECIAL_NAME_VER(name,version)    STRING(CONCAT5(lib,name,.,version,UNXSUFFIX))
-    #else
-       #define SPECIAL_NAME_VER(name,version)    STRING(CONCAT5(lib,name,UNXSUFFIX,.,version))
-    #endif
-    #define SPECIAL_COMPONENT_LIB_NAME(name)  STRING(CONCAT2(name,UNXSUFFIX))
 #else
-    #define LIBNAME(name)                     STRING(CONCAT3(name,DLLPOSTFIX,.dll))
     #define EXENAME(name)                     STRING(CONCAT2(name,.exe))
     #define PROFILENAME(name)                 STRING(CONCAT2(name,.ini))
-    #define SPECIAL_NAME(name)                STRING(CONCAT2(name,.dll))
-    #define SPECIAL_COMPONENT_LIB_NAME(name)  STRING(CONCAT2(name,.dll))
 #endif
 
 #ifdef MACOSX
