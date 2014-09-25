@@ -447,6 +447,7 @@ void NumericFormatter::ImplInit()
     mnType              = FORMAT_NUMERIC;
     mbThousandSep       = true;
     mbShowTrailingZeros = true;
+    mbWrapOnLimits      = false;
 
     // for fields
     mnSpinSize          = 1;
@@ -655,7 +656,7 @@ void NumericFormatter::FieldDown()
     else
         nValue = (nRemainder == 0) ? nValue - mnSpinSize : nValue - mnSpinSize - nRemainder;
 
-    nValue = ClipAgainstMinMax(mnMin);
+    nValue = ClipAgainstMinMax(nValue);
 
     ImplNewFieldValue( nValue );
 }
@@ -706,9 +707,9 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
 sal_Int64 NumericFormatter::ClipAgainstMinMax(sal_Int64 nValue) const
 {
     if (nValue > mnMax)
-        nValue = mnMax;
+        nValue = mbWrapOnLimits ? mnMin : mnMax;
     else if (nValue < mnMin)
-        nValue = mnMin;
+        nValue = mbWrapOnLimits ? mnMax : mnMin;
     return nValue;
 }
 
@@ -739,6 +740,8 @@ bool NumericField::set_property(const OString &rKey, const OString &rValue)
         SetDecimalDigits(rValue.toInt32());
     else if (rKey == "spin-size")
         SetSpinSize(rValue.toInt32());
+    else if (rKey == "wrap")
+        mbWrapOnLimits = toBool(rValue);
     else
         return SpinField::set_property(rKey, rValue);
     return true;

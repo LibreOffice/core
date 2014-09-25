@@ -154,6 +154,7 @@ protected:
     sal_uInt16                  mnDecimalDigits;
     bool                    mbThousandSep;
     bool                    mbShowTrailingZeros;
+    bool                    mbWrapOnLimits;
 
     // the members below are used in all derivatives of NumericFormatter
     // not in NumericFormatter itself.
