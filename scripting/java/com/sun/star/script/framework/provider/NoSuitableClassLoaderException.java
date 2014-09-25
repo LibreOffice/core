@@ -18,14 +18,12 @@
 
 package com.sun.star.script.framework.provider;
 
-public class NoSuitableClassLoaderException extends Exception
-{
+public class NoSuitableClassLoaderException extends Exception {
     /**
      * Constructs an <code>NoSuitableClassLoaderException</code> with <code>null</code>
      * as its error detail message.
      */
-    public NoSuitableClassLoaderException()
-    {
+    public NoSuitableClassLoaderException() {
         super();
     }
     /**
@@ -36,8 +34,7 @@ public class NoSuitableClassLoaderException extends Exception
      *
      * @param   s   the detail message.
      */
-    public NoSuitableClassLoaderException(String s)
-    {
+    public NoSuitableClassLoaderException(String s) {
         super(s);
     }
 

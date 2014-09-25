@@ -67,8 +67,7 @@ public class _XScriptSecurity extends MultiMethodTest {
             while (tests.hasNext()) {
                 result &= runCheckPermissionTest((Parameters)tests.next());
             }
-        }
-        else {
+        } else {
             result = false;
         }
 
@@ -110,200 +109,196 @@ public class _XScriptSecurity extends MultiMethodTest {
 
         // get the officeBasic setting
         int officeBasic = 0;
-        if( runmacro.equals("never") )
-        {
+
+        if (runmacro.equals("never")) {
             officeBasic = 0;
-        }
-        else if ( runmacro.equals("pathlist") )
-        {
+        } else if (runmacro.equals("pathlist")) {
             officeBasic = 1;
-        }
-        else if ( runmacro.equals("always") )
-        {
+        } else if (runmacro.equals("always")) {
             officeBasic = 2;
         }
 
         // should pathlist include doc?
         String secureURLs = null;
-        if( pathlist.equals("true") )
-        {
+
+        if (pathlist.equals("true")) {
             String uri = util.utils.getFullTestURL(location);
             secureURLs = uri.substring(0,  uri.lastIndexOf('/'));
         }
 
-        if ( !setSecurity( officeBasic, confirm, warning, secureURLs ) )
-        {
-            log.println( "failed to set security" );
+        if (!setSecurity(officeBasic, confirm, warning, secureURLs)) {
+            log.println("failed to set security");
             return false;
         }
 
-        if( dialog.equals( "true" ) )
-        {
+        if (dialog.equals("true")) {
             // is the checkbox to be ticked?
             boolean checkBox = false;
-            if( checkBoxStr.equals( "true" ) )
-            {
+
+            if (checkBoxStr.equals("true")) {
                 checkBox = true;
             }
-            new SecurityDialogUtil( tParam.getMSF(), buttonName, checkBox ).start();
+
+            new SecurityDialogUtil(tParam.getMSF(), buttonName, checkBox).start();
         }
+
         // need to set up dialog utils thread first
         int storageId = getStorageId(location);
 
         try {
             String uri = util.utils.getFullTestURL(location);
-            oObj.checkPermission(uri, "execute" );
+            oObj.checkPermission(uri, "execute");
             output = "true";
-        }
-        catch (com.sun.star.security.AccessControlException ace) {
+        } catch (com.sun.star.security.AccessControlException ace) {
             log.println("Couldn't invoke script:" + ace);
             output = "com.sun.star.security.AccessControlException";
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae) {
+        } catch (com.sun.star.lang.IllegalArgumentException iae) {
             log.println("Couldn't invoke script:" + iae);
             output = "com.sun.star.lang.IllegalArgumentException";
-        }
-        catch (com.sun.star.uno.RuntimeException re) {
+        } catch (com.sun.star.uno.RuntimeException re) {
             log.println("Couldn't invoke script:" + re);
             output = "com.sun.star.uno.RuntimeException";
         }
 
         log.println("expected: " + expected + ", output: " + output);
-        if (output.equals(expected))
-        {
-            if( checkpath.equals("true") )
-            {
+
+        if (output.equals(expected)) {
+            if (checkpath.equals("true")) {
                 String setPath  = getPathList();
                 String expectedPath = "empty";
-                if( checkBoxStr.equals( "true" ) )
-                {
+
+                if (checkBoxStr.equals("true")) {
                     String uri = util.utils.getFullTestURL(location);
                     expectedPath = uri.substring(0,  uri.lastIndexOf('/'));
                 }
+
                 log.println("pathlist: expected: " + expectedPath + ", output: " + setPath);
-                return setPath.equals( expectedPath );
+                return setPath.equals(expectedPath);
             }
+
             return true;
-        }
-        else
+        } else
             return false;
     }
 
-    private String getPathList()
-    {
+    private String getPathList() {
         String result = "";
+
         try {
-        Object oProv = tParam.getMSF().createInstance(
-            "com.sun.star.configuration.ConfigurationProvider" );
+            Object oProv = tParam.getMSF().createInstance(
+                               "com.sun.star.configuration.ConfigurationProvider");
 
-        XMultiServiceFactory xProv = UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
+            XMultiServiceFactory xProv = UnoRuntime.queryInterface(
+                                             XMultiServiceFactory.class, oProv);
 
-        //the path to the security settings in the registry
-        PropertyValue aPathArg = new PropertyValue();
-        aPathArg.Name="nodepath";
-        aPathArg.Value="org.openoffice.Office.Common/Security/Scripting";
-        // we don't want to cache the write
-        PropertyValue aModeArg = new PropertyValue();
-        aModeArg.Name="lazywrite";
-        aModeArg.Value=Boolean.FALSE;
+            //the path to the security settings in the registry
+            PropertyValue aPathArg = new PropertyValue();
+            aPathArg.Name = "nodepath";
+            aPathArg.Value = "org.openoffice.Office.Common/Security/Scripting";
+            // we don't want to cache the write
+            PropertyValue aModeArg = new PropertyValue();
+            aModeArg.Name = "lazywrite";
+            aModeArg.Value = Boolean.FALSE;
 
-        Object[]  aArgs = new Object[2];
-        aArgs[0]=aPathArg;
-        aArgs[1]=aModeArg;
-        Object oConfigUpdate = xProv.createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess",
-            aArgs );
-        XPropertySet xPropertySet = UnoRuntime.queryInterface(
-                XPropertySet.class, oConfigUpdate );
+            Object[]  aArgs = new Object[2];
+            aArgs[0] = aPathArg;
+            aArgs[1] = aModeArg;
+            Object oConfigUpdate = xProv.createInstanceWithArguments(
+                                       "com.sun.star.configuration.ConfigurationAccess",
+                                       aArgs);
+            XPropertySet xPropertySet = UnoRuntime.queryInterface(
+                                            XPropertySet.class, oConfigUpdate);
 
-        String[] paths = (String[])xPropertySet.getPropertyValue("SecureURL");
-        if (paths == null || paths.length == 0)
-            result = "empty";
-        else
-            result = paths[0];
+            String[] paths = (String[])xPropertySet.getPropertyValue("SecureURL");
 
-        } catch (Exception e)
-        {
+            if (paths == null || paths.length == 0)
+                result = "empty";
+            else
+                result = paths[0];
+
+        } catch (Exception e) {
             result = e.getClass().getName() + " getting list of secure URLs";
         }
+
         return result;
     }
 
-    private boolean setSecurity( int officeBasic, String confirm,
-                                String warning, String secureURLs )
-    {
-        boolean success=false;
+    private boolean setSecurity(int officeBasic, String confirm,
+                                String warning, String secureURLs) {
+        boolean success = false;
+
         try {
-        Object oProv = tParam.getMSF().createInstance(
-            "com.sun.star.configuration.ConfigurationProvider" );
+            Object oProv = tParam.getMSF().createInstance(
+                               "com.sun.star.configuration.ConfigurationProvider");
 
-        XMultiServiceFactory xProv = UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
+            XMultiServiceFactory xProv = UnoRuntime.queryInterface(
+                                             XMultiServiceFactory.class, oProv);
 
-        //the path to the security settings in the registry
-        PropertyValue aPathArg = new PropertyValue();
-        aPathArg.Name="nodepath";
-        aPathArg.Value="org.openoffice.Office.Common/Security/Scripting";
-        // we don't want to cache the write
-        PropertyValue aModeArg = new PropertyValue();
-        aModeArg.Name="lazywrite";
-        aModeArg.Value=Boolean.FALSE;
+            //the path to the security settings in the registry
+            PropertyValue aPathArg = new PropertyValue();
+            aPathArg.Name = "nodepath";
+            aPathArg.Value = "org.openoffice.Office.Common/Security/Scripting";
+            // we don't want to cache the write
+            PropertyValue aModeArg = new PropertyValue();
+            aModeArg.Name = "lazywrite";
+            aModeArg.Value = Boolean.FALSE;
 
-        Object[]  aArgs = new Object[2];
-        aArgs[0]=aPathArg;
-        aArgs[1]=aModeArg;
-        Object oConfigUpdate = xProv.createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationUpdateAccess",
-            aArgs );
-        XNameReplace xNameReplace = UnoRuntime.queryInterface(
-                XNameReplace.class, oConfigUpdate );
-        XChangesBatch xChangesBatch = UnoRuntime.queryInterface(
-                XChangesBatch.class, oConfigUpdate );
+            Object[]  aArgs = new Object[2];
+            aArgs[0] = aPathArg;
+            aArgs[1] = aModeArg;
+            Object oConfigUpdate = xProv.createInstanceWithArguments(
+                                       "com.sun.star.configuration.ConfigurationUpdateAccess",
+                                       aArgs);
+            XNameReplace xNameReplace = UnoRuntime.queryInterface(
+                                            XNameReplace.class, oConfigUpdate);
+            XChangesBatch xChangesBatch = UnoRuntime.queryInterface(
+                                              XChangesBatch.class, oConfigUpdate);
 
-        Object[] aSecureURLs;
-        if (secureURLs == null) {
-            aSecureURLs = new Object[0];
-        }
-        else {
-            aSecureURLs = new Object[1];
-            aSecureURLs[0] = secureURLs;
-        }
-        log.println("setting SecureURL");
-        xNameReplace.replaceByName( "SecureURL", aSecureURLs );
+            Object[] aSecureURLs;
 
-        log.println("setting OfficeBasic");
-        xNameReplace.replaceByName( "OfficeBasic", Integer.valueOf(officeBasic) );
+            if (secureURLs == null) {
+                aSecureURLs = new Object[0];
+            } else {
+                aSecureURLs = new Object[1];
+                aSecureURLs[0] = secureURLs;
+            }
 
-        Boolean bConfirm = null;
-        if( ( confirm != null ) && ( confirm.equals("true") ) )
-        {
-            bConfirm = Boolean.TRUE;
-        }
-        else
-        {
-            bConfirm = Boolean.FALSE;
-        }
-        log.println("setting Confirmation");
-        xNameReplace.replaceByName( "Confirmation", bConfirm );
+            log.println("setting SecureURL");
+            xNameReplace.replaceByName("SecureURL", aSecureURLs);
 
-        Boolean bWarning = null;
-        if( ( warning != null ) && ( warning.equals("true") ) )
-        {
-            bWarning = Boolean.TRUE;
-        }
-        else
-        {
-            bWarning = Boolean.FALSE;
-        }
-        log.println("setting Warning");
-        xNameReplace.replaceByName( "Warning", bWarning );
+            log.println("setting OfficeBasic");
+            xNameReplace.replaceByName("OfficeBasic", Integer.valueOf(officeBasic));
 
-        // and now commit the changes
-        xChangesBatch.commitChanges();
-        success=true;
+            Boolean bConfirm = null;
+
+            if ((confirm != null) && (confirm.equals("true"))) {
+                bConfirm = Boolean.TRUE;
+            } else {
+                bConfirm = Boolean.FALSE;
+            }
+
+            log.println("setting Confirmation");
+            xNameReplace.replaceByName("Confirmation", bConfirm);
+
+            Boolean bWarning = null;
+
+            if ((warning != null) && (warning.equals("true"))) {
+                bWarning = Boolean.TRUE;
+            } else {
+                bWarning = Boolean.FALSE;
+            }
+
+            log.println("setting Warning");
+            xNameReplace.replaceByName("Warning", bWarning);
+
+            // and now commit the changes
+            xChangesBatch.commitChanges();
+            success = true;
         } catch (Exception e) {
             log.println("Error updating security settings: " +
-                e.getMessage() );
+                        e.getMessage());
         }
+
         return success;
     }
 
@@ -315,23 +310,23 @@ public class _XScriptSecurity extends MultiMethodTest {
         if (storageManager == null) {
             try {
                 XPropertySet xProp = UnoRuntime.queryInterface(
-                    XPropertySet.class, tParam.getMSF());
+                                         XPropertySet.class, tParam.getMSF());
 
                 XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class,
-                xProp.getPropertyValue("DefaultContext"));
+                                             xProp.getPropertyValue("DefaultContext"));
 
                 XInterface ifc = (XInterface)
-                    xContext.getValueByName("/singletons/drafts.com.sun.star." +
-                    "script.framework.storage.theScriptStorageManager");
+                                 xContext.getValueByName("/singletons/drafts.com.sun.star." +
+                                         "script.framework.storage.theScriptStorageManager");
 
                 storageManager = UnoRuntime.queryInterface(XScriptStorageManager.class, ifc);
-            }
-            catch( Exception e ) {
+            } catch (Exception e) {
                 return -1;
             }
         }
 
         access = getXSimpleFileAccess();
+
         if (access == null)
             return -1;
 
@@ -345,13 +340,13 @@ public class _XScriptSecurity extends MultiMethodTest {
 
         try {
             Object fa = tParam.getMSF().createInstance(
-                "com.sun.star.ucb.SimpleFileAccess");
+                            "com.sun.star.ucb.SimpleFileAccess");
 
             access = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
-        }
-        catch (com.sun.star.uno.Exception e) {
+        } catch (com.sun.star.uno.Exception e) {
             return null;
         }
+
         return access;
     }
 

@@ -57,19 +57,20 @@ public class ParcelDataLoader extends UniFileLoader {
 
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
-            SystemAction.get(DeployParcelAction.class),
-            null,
-            SystemAction.get(CutAction.class),
-            SystemAction.get(CopyAction.class),
-            null,
-            SystemAction.get(DeleteAction.class),
-            SystemAction.get(RenameAction.class),
-            null,
-            SystemAction.get(PropertiesAction.class),
-        };
+                   SystemAction.get(DeployParcelAction.class),
+                   null,
+                   SystemAction.get(CutAction.class),
+                   SystemAction.get(CopyAction.class),
+                   null,
+                   SystemAction.get(DeleteAction.class),
+                   SystemAction.get(RenameAction.class),
+                   null,
+                   SystemAction.get(PropertiesAction.class),
+               };
     }
 
-    protected MultiDataObject createMultiObject(FileObject primaryFile) throws DataObjectExistsException, IOException {
+    protected MultiDataObject createMultiObject(FileObject primaryFile) throws
+        DataObjectExistsException, IOException {
         return new ParcelDataObject(primaryFile, this);
     }
 }

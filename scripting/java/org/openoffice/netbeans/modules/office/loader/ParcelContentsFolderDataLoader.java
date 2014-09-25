@@ -55,19 +55,20 @@ public class ParcelContentsFolderDataLoader extends UniFileLoader {
 
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
-            SystemAction.get(PasteAction.class),
-            SystemAction.get(NewAction.class),
-            // null,
-            // SystemAction.get(PropertiesAction.class),
-        };
+                   SystemAction.get(PasteAction.class),
+                   SystemAction.get(NewAction.class),
+                   // null,
+                   // SystemAction.get(PropertiesAction.class),
+               };
     }
 
     protected MultiDataObject createMultiObject(FileObject primaryFile)
-        throws DataObjectExistsException {
+    throws DataObjectExistsException {
         return new ParcelContentsFolder(primaryFile, this);
     }
 
-    protected MultiDataObject.Entry createPrimaryEntry(MultiDataObject obj, FileObject primaryFile) {
+    protected MultiDataObject.Entry createPrimaryEntry(MultiDataObject obj,
+            FileObject primaryFile) {
         return new FileEntry.Folder(obj, primaryFile);
     }
 }

@@ -36,51 +36,58 @@ public class ScriptInfo extends TestCase {
 
     String docPath = null;
     @Override
-    public void initialize( TestParameters tParam, PrintWriter log ) {
+    public void initialize(TestParameters tParam, PrintWriter log) {
         // Get path to test documents
-        String rootDocPath = ( String )tParam.get( "TEST_DOCUMENT_PATH" );
-        System.out.println( "TEST_DOCUMENT_PATH is " + rootDocPath );
-        rootDocPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
-        if ( rootDocPath != null && rootDocPath.length() > 1 ){
+        String rootDocPath = (String)tParam.get("TEST_DOCUMENT_PATH");
+        System.out.println("TEST_DOCUMENT_PATH is " + rootDocPath);
+        rootDocPath = util.utils.getFullTestURL("ExampleSpreadSheetLatest.sxc");
+
+        if (rootDocPath != null && rootDocPath.length() > 1) {
             // convert all "\\" to "/", necessary for UCB
-            if ( rootDocPath.indexOf( "\\" ) > 0 ){
-                rootDocPath = rootDocPath.replace( '\\','/' );
-        }
+            if (rootDocPath.indexOf("\\") > 0) {
+                rootDocPath = rootDocPath.replace('\\', '/');
+            }
+
             System.out.println("After processing the path is " + rootDocPath);
-        // encode the ulr (for UCB)
-            String encodedPath = URLEncoder.encode( rootDocPath );
-            System.out.println("The encoded path is " + encodedPath );
+            // encode the ulr (for UCB)
+            String encodedPath = URLEncoder.encode(rootDocPath);
+            System.out.println("The encoded path is " + encodedPath);
             docPath = "vnd.sun.star.pkg://" + encodedPath;
-            System.out.println( "docPath path is " + docPath );
+            System.out.println("docPath path is " + docPath);
         }
 
     }
 
     @Override
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log ) throws StatusException {
 
-    log.println("creating test environment");
-        if ( docPath == null ){
+    public synchronized TestEnvironment createTestEnvironment(
+        TestParameters tParam, PrintWriter log) throws StatusException {
+
+        log.println("creating test environment");
+
+        if (docPath == null) {
             log.println("Testdata not set up, docPath is null");
             throw new StatusException(
                 "Can't create object environment, no test document available",
-                new Exception() ) ;
+                new Exception()) ;
         }
 
         XInterface oObj = null;
         XSimpleFileAccess access = null;
+
         try {
             XMultiServiceFactory xMSF = tParam.getMSF();
             Object xInterface =
-                xMSF.createInstance( "com.sun.star.ucb.SimpleFileAccess" );
-            access = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
+                xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+            access = UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
             Object storageObj = xMSF.createInstanceWithArguments(
-                "drafts.com.sun.star.script.framework.storage.ScriptStorage",
-                new Object[]{ access, Integer.valueOf(99), docPath } );
-            XScriptInfoAccess infoAccess = UnoRuntime.queryInterface(XScriptInfoAccess.class, storageObj);
-            XScriptInfo[] infos = infoAccess.getImplementations("script://MemoryUtils.MemUsage?location=document");
-           oObj = infos[0];
+                                    "drafts.com.sun.star.script.framework.storage.ScriptStorage",
+                                    new Object[] { access, Integer.valueOf(99), docPath });
+            XScriptInfoAccess infoAccess = UnoRuntime.queryInterface(
+                                               XScriptInfoAccess.class, storageObj);
+            XScriptInfo[] infos =
+                infoAccess.getImplementations("script://MemoryUtils.MemUsage?location=document");
+            oObj = infos[0];
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;
         }
@@ -92,7 +99,8 @@ public class ScriptInfo extends TestCase {
     }
 
     @Override
-    public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
+
+    public synchronized void disposeTestEnvironment(TestEnvironment tEnv,
             TestParameters tParam) {
     }
 }

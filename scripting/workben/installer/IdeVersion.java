@@ -26,12 +26,13 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
-public class IdeVersion extends javax.swing.JPanel implements ActionListener, TableModelListener {
+public class IdeVersion extends javax.swing.JPanel implements ActionListener,
+    TableModelListener {
 
     /** Creates new form Welcome */
     public IdeVersion(InstallWizard wizard) {
-        this.wizard=wizard;
-    setBackground(Color.white);
+        this.wizard = wizard;
+        setBackground(Color.white);
         initComponents();
     }
 
@@ -46,47 +47,49 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         setLayout(new BorderLayout());
 
 
-    try {
-        Properties netbeansProps = InstUtil.getNetbeansLocation();
-        Properties ideProps = new Properties();
-        if(netbeansProps!=null )
-        {
+        try {
+            Properties netbeansProps = InstUtil.getNetbeansLocation();
+            Properties ideProps = new Properties();
+
+            if (netbeansProps != null) {
                 System.out.println("**** Found netbeans install");
-        for( int n = 0; n < netbeansProps.size(); n++ ) {
-            for( int v = 0; v < InstUtil.versions.length; v++ ) {
-                System.out.println("n: " +n+" v: " +v);
-                String key = InstUtil.versions[v];
-                System.out.println("It got here1");
-                String path = null;
-                if ( (path = netbeansProps.getProperty(key) ) != null ) {
-                    ideProps.put(key, path);
+
+                for (int n = 0; n < netbeansProps.size(); n++) {
+                    for (int v = 0; v < InstUtil.versions.length; v++) {
+                        System.out.println("n: " + n + " v: " + v);
+                        String key = InstUtil.versions[v];
+                        System.out.println("It got here1");
+                        String path = null;
+
+                        if ((path = netbeansProps.getProperty(key)) != null) {
+                            ideProps.put(key, path);
+                        }
+                    }
                 }
             }
-        }
-        }
-        props = ideProps;
-        }
-        catch (Exception e) {
+
+            props = ideProps;
+        } catch (Exception e) {
             System.err.println("Exception thrown in initComponents");
         }
 
-    tableModel = new MyTableModelIDE (props, InstUtil.versions);
+        tableModel = new MyTableModelIDE(props, InstUtil.versions);
 
-    if (tableModel.getRowCount() == 0)
-    {
-            JOptionPane.showMessageDialog(this, "No compatible IDEs were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);
-    }
+        if (tableModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No compatible IDEs were found.",
+                                          "Invalid versions", JOptionPane.ERROR_MESSAGE);
+        }
 
         tableModel.addTableModelListener(this);
         JTable tableVersions = new JTable(tableModel) {
             @Override
-            public String getToolTipText(MouseEvent event)
-            {
-                int col = columnAtPoint( event.getPoint() );
+            public String getToolTipText(MouseEvent event) {
+                int col = columnAtPoint(event.getPoint());
+
                 if (col != 2)
                     return null;
 
-                int row = rowAtPoint( event.getPoint() );
+                int row = rowAtPoint(event.getPoint());
                 Object o = getValueAt(row, col);
 
                 if (o == null)
@@ -99,14 +102,14 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
             }
 
             @Override
-            public Point getToolTipLocation(MouseEvent event)
-            {
-                int col = columnAtPoint( event.getPoint() );
+            public Point getToolTipLocation(MouseEvent event) {
+                int col = columnAtPoint(event.getPoint());
+
                 if (col != 2)
                     return null;
 
-                int row = rowAtPoint( event.getPoint() );
-                Object o = getValueAt(row,col);
+                int row = rowAtPoint(event.getPoint());
+                Object o = getValueAt(row, col);
 
                 if (o == null)
                     return null;
@@ -115,7 +118,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
                     return null;
 
                 Point pt = getCellRect(row, col, true).getLocation();
-                pt.translate(-1,-2);
+                pt.translate(-1, -2);
                 return pt;
             }
         };
@@ -123,7 +126,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         JScrollPane scroll = new JScrollPane(tableVersions);
 
         tableVersions.setPreferredSize(
-            new Dimension(InstallWizard.DEFWIDTH,InstallWizard.DEFHEIGHT));
+            new Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT));
 
         tableVersions.setRowSelectionAllowed(false);
         tableVersions.setColumnSelectionAllowed(false);
@@ -132,12 +135,14 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         initColumnSizes(tableVersions, tableModel);
         versionPanel.add(scroll);
 
-        JTextArea area = new JTextArea("Please select IDEs below that you wish to add Scripting support to");
+        JTextArea area = new
+        JTextArea("Please select IDEs below that you wish to add Scripting support to");
         area.setLineWrap(true);
         area.setEditable(false);
         add(area, BorderLayout.NORTH);
         add(versionPanel, BorderLayout.CENTER);
-        nav = new NavPanel(wizard, true, false, true, InstallWizard.IDEWELCOME, InstallWizard.IDEFINAL);
+        nav = new NavPanel(wizard, true, false, true, InstallWizard.IDEWELCOME,
+                           InstallWizard.IDEFINAL);
         nav.setNextListener(this);
         add(nav, BorderLayout.SOUTH);
 
@@ -153,8 +158,10 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     public void actionPerformed(ActionEvent ev) {
         InstallWizard.clearLocations();
         int len = tableModel.data.size();
+
         for (int i = 0; i < len; i++) {
             ArrayList<?> list = tableModel.data.get(i);
+
             if (((Boolean)list.get(0)).booleanValue())
                 InstallWizard.storeLocation((String)list.get(2));
         }
@@ -164,8 +171,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     public void tableChanged(TableModelEvent e) {
         if (tableModel.isAnySelected()) {
             nav.enableNext(true);
-        }
-        else {
+        } else {
             nav.enableNext(false);
         }
     }
@@ -184,9 +190,9 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
 
             try {
                 comp = column.getHeaderRenderer().
-                             getTableCellRendererComponent(
-                                 null, column.getHeaderValue(),
-                                 false, false, 0, 0);
+                       getTableCellRendererComponent(
+                           null, column.getHeaderValue(),
+                           false, false, 0, 0);
                 headerWidth = comp.getPreferredSize().width;
             } catch (NullPointerException e) {
                 // System.err.println("Null pointer exception!");
@@ -201,19 +207,19 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
 
             System.out.println("longValues: " + longValues[i]);
             comp = table.getDefaultRenderer(model.getColumnClass(i)).
-                         getTableCellRendererComponent(
-                             table, longValues[i],
-                             false, false, 0, i);
+                   getTableCellRendererComponent(
+                       table, longValues[i],
+                       false, false, 0, i);
             cellWidth = comp.getPreferredSize().width;
 
             preferredWidth = Math.max(headerWidth, cellWidth);
 
             if (false) {
                 System.out.println("Initializing width of column "
-                    + i + ". "
-                    + "preferredWidth = " + preferredWidth
-                    + "; totalWidth = " + totalWidth
-                    + "; leftWidth = " + (InstallWizard.DEFWIDTH - totalWidth));
+                                   + i + ". "
+                                   + "preferredWidth = " + preferredWidth
+                                   + "; totalWidth = " + totalWidth
+                                   + "; leftWidth = " + (InstallWizard.DEFWIDTH - totalWidth));
             }
 
             //XXX: Before Swing 1.1 Beta 2, use setMinWidth instead.
@@ -222,8 +228,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
                     column.setPreferredWidth(InstallWizard.DEFWIDTH - totalWidth);
                 else
                     column.setPreferredWidth(preferredWidth);
-            }
-            else {
+            } else {
                 column.setMinWidth(preferredWidth);
                 totalWidth += preferredWidth;
             }
@@ -236,17 +241,18 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     private NavPanel nav;
     // End of variables declaration//GEN-END:variables
 
-  }
+}
 
 class MyTableModelIDE extends AbstractTableModel {
     ArrayList<ArrayList<Object>> data;
     private String colNames[] = {"", "IDE Name", "IDE Location"};
     Object[] longValues = new Object[] {Boolean.TRUE, "Name", "Location"};
 
-    MyTableModelIDE (Properties properties, String [] validVersions) {
+    MyTableModelIDE(Properties properties, String [] validVersions) {
         data = new ArrayList<ArrayList<Object>>();
 
         int len = validVersions.length;
+
         for (int i = 0; i < len; i++) {
             String key = validVersions[i];
             String path = null;
@@ -256,11 +262,13 @@ class MyTableModelIDE extends AbstractTableModel {
                 row.add(0, Boolean.FALSE);
 
                 row.add(1, key);
+
                 if (key.length() > ((String)longValues[1]).length()) {
                     longValues[1] = key;
                 }
 
                 row.add(2, path);
+
                 if (path.length() > ((String)longValues[2]).length()) {
                     longValues[2] = path;
                 }
@@ -292,35 +300,38 @@ class MyTableModelIDE extends AbstractTableModel {
         return aRow.get(col);
     }
 
-        @Override
-        public Class getColumnClass(int c) {
+    @Override
+    public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
-        }
+    }
 
-        @Override
-        public boolean isCellEditable(int row, int col) {
-          return (col == 0);
-        }
+    @Override
+    public boolean isCellEditable(int row, int col) {
+        return (col == 0);
+    }
 
-        @Override
-        public void setValueAt(Object value, int row, int col) {
+    @Override
+    public void setValueAt(Object value, int row, int col) {
         ArrayList<Object> aRow = data.get(row);
         aRow.set(col, value);
         fireTableCellUpdated(row, col);
-        }
+    }
 
 
 
-        public boolean isAnySelected() {
+    public boolean isAnySelected() {
         Iterator iter = data.iterator();
+
         while (iter.hasNext()) {
             ArrayList<?> row = (ArrayList<?>)iter.next();
+
             if (((Boolean)row.get(0)).booleanValue()) {
-            return true;
+                return true;
             }
         }
+
         return false;
-        }
+    }
 
 }
 

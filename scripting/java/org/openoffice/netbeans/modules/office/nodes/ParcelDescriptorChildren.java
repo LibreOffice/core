@@ -31,7 +31,8 @@ import org.openoffice.netbeans.modules.office.actions.ParcelDescriptorParserCook
 /** List of children of a containing node.
  * Remember to document what your permitted keys are!
  */
-public class ParcelDescriptorChildren extends Children.Keys implements ChangeListener {
+public class ParcelDescriptorChildren extends Children.Keys implements
+    ChangeListener {
 
     private ParcelDescriptorParserCookie parserCookie = null;
 
@@ -51,8 +52,10 @@ public class ParcelDescriptorChildren extends Children.Keys implements ChangeLis
         }
 
         ArrayList keys = new ArrayList(len);
+
         for (int i = 0; i < len; i++)
             keys.add(nl.item(i));
+
         setKeys(keys);
     }
 

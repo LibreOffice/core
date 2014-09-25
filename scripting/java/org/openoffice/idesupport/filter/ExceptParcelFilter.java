@@ -26,8 +26,7 @@ public class ExceptParcelFilter implements FileFilter {
     private ExceptParcelFilter() {
     }
 
-    public void setParcelToRemove(String parcelName)
-    {
+    public void setParcelToRemove(String parcelName) {
         ExceptParcelFilter.parcelName = parcelName;
     }
 
@@ -37,6 +36,7 @@ public class ExceptParcelFilter implements FileFilter {
     public boolean validate(String name) {
         if (name.startsWith(ExceptParcelFilter.parcelName))
             return true;
+
         return false;
     }
 

@@ -23,9 +23,11 @@ import java.awt.*;
 import java.awt.event.*;
 public class NavPanel extends JPanel implements ActionListener {
 
-    NavPanel(InstallWizard wizard, boolean bBack, boolean bNext, boolean bCancel, String prev, String next) {
+    NavPanel(InstallWizard wizard, boolean bBack, boolean bNext, boolean bCancel,
+             String prev, String next) {
         setBackground(Color.white);
-        setBorder(new javax.swing.border.EtchedBorder(javax.swing.border.EtchedBorder.LOWERED));
+        setBorder(new javax.swing.border.EtchedBorder(
+                      javax.swing.border.EtchedBorder.LOWERED));
         this.wizard = wizard;
         this.next = next;
         this.prev = prev;
@@ -36,7 +38,7 @@ public class NavPanel extends JPanel implements ActionListener {
 
         gridBagConstraints1 = new java.awt.GridBagConstraints();
         gridBagConstraints1.insets = new java.awt.Insets(1, 1, 1, 1);
-      gridBagConstraints1.anchor = GridBagConstraints.WEST;
+        gridBagConstraints1.anchor = GridBagConstraints.WEST;
 
         gridBagConstraints2 = new java.awt.GridBagConstraints();
         gridBagConstraints2.gridx = 2;
@@ -70,24 +72,26 @@ public class NavPanel extends JPanel implements ActionListener {
     }
 
     public void enableIDE(boolean bEnable) {
-    ideDetected = bEnable;
+        ideDetected = bEnable;
     }
 
     public void actionPerformed(ActionEvent ev) {
         if ((ev.getSource() == navNext) && (next.length() != 0)) {
             wizard.show(next);
         }
+
         if ((ev.getSource() == navBack) && (prev.length() != 0)) {
             wizard.show(prev);
         }
+
         if (ev.getSource() == navCancel) {
-        if( ideDetected ) {
-            wizard.show(InstallWizard.IDEWELCOME);
-        }
-        else {
-            wizard.exitForm();
-        }
-        enableIDE(false);
+            if (ideDetected) {
+                wizard.show(InstallWizard.IDEWELCOME);
+            } else {
+                wizard.exitForm();
+            }
+
+            enableIDE(false);
         }
     }
 
@@ -107,8 +111,7 @@ public class NavPanel extends JPanel implements ActionListener {
 
 
 
-    public void removeCancelListener(ActionListener listener)
-    {
+    public void removeCancelListener(ActionListener listener) {
         navCancel.removeActionListener(listener);
     }
 

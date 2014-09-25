@@ -18,23 +18,19 @@
 
 package installer;
 
-public class InstallationEvent
-{
+public class InstallationEvent {
     private Object source;
     private String message;
-    InstallationEvent(Object source, String message)
-    {
+    InstallationEvent(Object source, String message) {
         this.source = source;
         this.message = message;
     }
 
-    public Object getSource()
-    {
+    public Object getSource() {
         return source;
     }
 
-    public String getMessage()
-    {
+    public String getMessage() {
         return message;
     }
 }

@@ -32,27 +32,28 @@ public class OfficeModule extends ModuleInstall {
 
     private static final long serialVersionUID = -8499324854301243852L;
 
-    public void installed () {
+    public void installed() {
         WizardDescriptor wiz = new InstallationPathDescriptor();
         TopManager.getDefault().createDialog(wiz).show();
 
-        if(wiz.getValue() == NotifyDescriptor.OK_OPTION) {
+        if (wiz.getValue() == NotifyDescriptor.OK_OPTION) {
             OfficeInstallation oi = (OfficeInstallation)
-                wiz.getProperty(InstallationPathDescriptor.PROP_INSTALLPATH);
+                                    wiz.getProperty(InstallationPathDescriptor.PROP_INSTALLPATH);
 
             OfficeSettings settings = OfficeSettings.getDefault();
             settings.setOfficeDirectory(oi);
         }
+
         FrameworkJarChecker.mountDependencies();
         XMLParserFactory.setParser(ManifestParser.getManifestParser());
     }
 
-    public void restored () {
+    public void restored() {
         FrameworkJarChecker.mountDependencies();
         XMLParserFactory.setParser(ManifestParser.getManifestParser());
     }
 
-    public boolean closing () {
+    public boolean closing() {
         FrameworkJarChecker.unmountDependencies();
         return true;
     }
