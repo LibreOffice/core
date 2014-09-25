@@ -202,12 +202,13 @@ void ImplWriteFillColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle 
 void ImplWriteFont( SvStream& rOStm, const vcl::Font& rFont,
                     rtl_TextEncoding& rActualCharSet )
 {
-    char    aName[32];
+    char    aName[33];
     short   nWeight;
 
     OString aByteName(OUStringToOString(rFont.GetName(),
         rOStm.GetStreamCharSet()));
     strncpy( aName, aByteName.getStr(), 32 );
+    aName[32] = 0;
 
     switch ( rFont.GetWeight() )
     {
