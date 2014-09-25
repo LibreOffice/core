@@ -49,35 +49,35 @@ public:
     }
 
     IdxType add( const T& rContent, bool* pbFound) {
-	assert( pbFound != NULL);
-	if( !size_) {
-		*pbFound = false;
-		return cache::ignore;
-	}
-	// try to insert into the map
-	list_.push_front( rContent); // create a temp entry
-	typedef std::pair<typename LruList::iterator, IdxType> MappedType;
-	typedef std::pair<typename LruItMap::iterator,bool> MapPair;
-	MapPair aMP = map_.insert( MappedType( list_.begin(), 0));
-	*pbFound = !aMP.second;
+        assert( pbFound != NULL);
+        if( !size_) {
+            *pbFound = false;
+            return cache::ignore;
+        }
+        // try to insert into the map
+        list_.push_front( rContent); // create a temp entry
+        typedef std::pair<typename LruList::iterator, IdxType> MappedType;
+        typedef std::pair<typename LruItMap::iterator,bool> MapPair;
+        MapPair aMP = map_.insert( MappedType( list_.begin(), 0));
+        *pbFound = !aMP.second;
 
-	if( !aMP.second) { // insertion not needed => found the entry
-		list_.pop_front(); // remove the temp entry
-		list_.splice( list_.begin(), list_, aMP.first->first); // the found entry is moved to front
-		return aMP.first->second;
-	}
+        if( !aMP.second) { // insertion not needed => found the entry
+            list_.pop_front(); // remove the temp entry
+            list_.splice( list_.begin(), list_, aMP.first->first); // the found entry is moved to front
+            return aMP.first->second;
+        }
 
-	// test insertion successful => it was new so we keep it
-	IdxType n = static_cast<IdxType>( map_.size() - 1);
-	if( n >= size_) { // cache full => replace the LRU entry
-		// find the least recently used element in the map
-		typename LruItMap::iterator it = map_.find( --list_.end());
-		n = it->second;
-		map_.erase( it); // remove it from the map
-		list_.pop_back(); // remove from the list
-	}
-	aMP.first->second = n;
-	return n;
+        // test insertion successful => it was new so we keep it
+        IdxType n = static_cast<IdxType>( map_.size() - 1);
+        if( n >= size_) { // cache full => replace the LRU entry
+            // find the least recently used element in the map
+            typename LruItMap::iterator it = map_.find( --list_.end());
+            n = it->second;
+            map_.erase( it); // remove it from the map
+            list_.pop_back(); // remove from the list
+        }
+        aMP.first->second = n;
+        return n;
     }
 
 private:
