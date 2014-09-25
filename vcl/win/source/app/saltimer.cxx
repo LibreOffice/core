@@ -72,9 +72,9 @@ void WinSalTimer::Start( sal_uLong nMS )
     if ( pSalData->mpFirstInstance )
     {
         if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
-            ImplPostMessage( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
+            PostMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
         else
-            ImplSendMessage( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
+            SendMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
     }
     else
         ImplSalStartTimer( nMS, FALSE );
@@ -111,7 +111,7 @@ void CALLBACK SalTimerProc(PVOID, BOOLEAN)
 #endif
 
         SalData* pSalData = GetSalData();
-        ImplPostMessage(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK, 0, 0);
+        PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK, 0, 0);
 
 #if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     }

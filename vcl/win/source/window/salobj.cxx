@@ -112,7 +112,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                     ImplSalYieldMutexRelease();
                 }
                 else
-                    ImplPostMessage( pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
+                    PostMessageW( pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
             }
         }
         else if ( pData->message == WM_KILLFOCUS )
@@ -129,7 +129,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                         ImplSalYieldMutexRelease();
                     }
                     else
-                        ImplPostMessage( pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
+                        PostMessageW( pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
                 }
                 else
                     pObject->mhLastFocusWnd = (HWND)pData->wParam;
@@ -153,7 +153,7 @@ bool ImplSalPreDispatchMsg( MSG* pMsg )
         ImplSalYieldMutexAcquireWithWait();
         pObject = ImplFindSalObject( pMsg->hwnd );
         if ( pObject && !pObject->IsMouseTransparent() )
-            ImplPostMessage( pObject->mhWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+            PostMessageW( pObject->mhWnd, SALOBJ_MSG_TOTOP, 0, 0 );
         ImplSalYieldMutexRelease();
     }
 
@@ -288,7 +288,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             ImplSalYieldMutexAcquireWithWait();
             pSysObj = GetSalObjWindowPtr( hWnd );
             if ( pSysObj && !pSysObj->IsMouseTransparent() )
-                ImplPostMessage( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+                PostMessageW( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
             ImplSalYieldMutexRelease();
             }
             break;
@@ -302,7 +302,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
                 rDef = FALSE;
             }
             else
-                ImplPostMessage( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+                PostMessageW( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
             break;
 
         case SALOBJ_MSG_POSTFOCUS:
@@ -319,7 +319,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
                 ImplSalYieldMutexRelease();
             }
             else
-                ImplPostMessage( hWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
+                PostMessageW( hWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
             rDef = FALSE;
             break;
 
@@ -416,7 +416,7 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
                     MapWindowPoints( hWnd, hWndParent, &pt, 1 );
                     lParam = MAKELPARAM( (WORD) pt.x, (WORD) pt.y );
 
-                    nRet = ImplSendMessage( hWndParent, nMsg, wParam, lParam );
+                    nRet = SendMessageW( hWndParent, nMsg, wParam, lParam );
                     rDef = FALSE;
                 }
             }
@@ -582,7 +582,7 @@ WinSalObject::~WinSalObject()
     if ( hWndParent &&
          ::GetActiveWindow() == hWndParent &&
          !GetWindow( hWndParent, GW_CHILD ) )
-        ImplSendMessage( hWndParent, SAL_MSG_FORCEPALETTE, 0, 0 );
+        SendMessageW( hWndParent, SAL_MSG_FORCEPALETTE, 0, 0 );
 }
 
 void WinSalObject::ResetClipRegion()

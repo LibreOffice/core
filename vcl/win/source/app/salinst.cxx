@@ -152,7 +152,7 @@ void SalYieldMutex::release()
 
                 mpInstData->mpSalWaitMutex->acquire();
                 if ( mpInstData->mnYieldWaitCount )
-                    ImplPostMessage( mpInstData->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
+                    PostMessageW( mpInstData->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
                 mnThreadId = 0;
                 mnCount--;
                 m_mutex.release();
@@ -227,10 +227,10 @@ void ImplSalYieldMutexAcquireWithWait()
                     pInst->mnYieldWaitCount++;
                     pInst->mpSalWaitMutex->release();
                     MSG aTmpMsg;
-                    ImplGetMessage( &aTmpMsg, pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, SAL_MSG_RELEASEWAITYIELD );
+                    GetMessageW( &aTmpMsg, pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, SAL_MSG_RELEASEWAITYIELD );
                     pInst->mnYieldWaitCount--;
                     if ( pInst->mnYieldWaitCount )
-                        ImplPostMessage( pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
+                        PostMessageW( pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
                 }
             }
         }
@@ -579,7 +579,7 @@ static void ImplSalDispatchMessage( MSG* pMsg )
         if ( ImplSalPreDispatchMsg( pMsg ) )
             return;
     }
-    LRESULT lResult = ImplDispatchMessage( pMsg );
+    LRESULT lResult = DispatchMessageW( pMsg );
     if ( pSalData->mpFirstObject )
         ImplSalPostDispatchMsg( pMsg, lResult );
 }
@@ -592,7 +592,7 @@ void ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
     int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
     do
     {
-        if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
+        if ( PeekMessageW( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
             TranslateMessage( &aMsg );
             ImplSalDispatchMessage( &aMsg );
@@ -605,7 +605,7 @@ void ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 
     if ( bWait && ! bWasMsg )
     {
-        if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
+        if ( GetMessageW( &aMsg, 0, 0, 0 ) )
         {
             TranslateMessage( &aMsg );
             ImplSalDispatchMessage( &aMsg );
@@ -640,7 +640,7 @@ void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if( ImplGetSVData()->maAppData.mnModalMode )
             Sleep(1);
         else
-            ImplSendMessage( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
+            SendMessageW( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
 
         n = nCount;
         while ( n )
@@ -683,7 +683,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             {
             WinSalInstance* pInst = GetSalData()->mpFirstInstance;
             if ( pInst && pInst->mnYieldWaitCount )
-                ImplPostMessage( hWnd, SAL_MSG_RELEASEWAITYIELD, wParam, lParam );
+                PostMessageW( hWnd, SAL_MSG_RELEASEWAITYIELD, wParam, lParam );
             }
             rDef = FALSE;
             break;
@@ -785,7 +785,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
     {
         // revert bugfix for #108919# which never reported timeouts when called from the timer handler
         // which made the application completely unresponsive during background formatting
-        if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
+        if ( PeekMessageW( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
             return true;
     }
     else
@@ -793,7 +793,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
         if ( nType & VCL_INPUT_MOUSE )
         {
             // Test for mouse input
-            if ( ImplPeekMessage( &aMsg, 0, WM_MOUSEFIRST, WM_MOUSELAST,
+            if ( PeekMessageW( &aMsg, 0, WM_MOUSEFIRST, WM_MOUSELAST,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
         }
@@ -801,7 +801,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
         if ( nType & VCL_INPUT_KEYBOARD )
         {
             // Test for key input
-            if ( ImplPeekMessage( &aMsg, 0, WM_KEYDOWN, WM_KEYDOWN,
+            if ( PeekMessageW( &aMsg, 0, WM_KEYDOWN, WM_KEYDOWN,
                                   PM_NOREMOVE | PM_NOYIELD ) )
             {
                 if ( (aMsg.wParam == VK_SHIFT)   ||
@@ -816,23 +816,23 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
         if ( nType & VCL_INPUT_PAINT )
         {
             // Test for paint input
-            if ( ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT,
+            if ( PeekMessageW( &aMsg, 0, WM_PAINT, WM_PAINT,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
 
-            if ( ImplPeekMessage( &aMsg, 0, WM_SIZE, WM_SIZE,
+            if ( PeekMessageW( &aMsg, 0, WM_SIZE, WM_SIZE,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
 
-            if ( ImplPeekMessage( &aMsg, 0, SAL_MSG_POSTCALLSIZE, SAL_MSG_POSTCALLSIZE,
+            if ( PeekMessageW( &aMsg, 0, SAL_MSG_POSTCALLSIZE, SAL_MSG_POSTCALLSIZE,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
 
-            if ( ImplPeekMessage( &aMsg, 0, WM_MOVE, WM_MOVE,
+            if ( PeekMessageW( &aMsg, 0, WM_MOVE, WM_MOVE,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
 
-            if ( ImplPeekMessage( &aMsg, 0, SAL_MSG_POSTMOVE, SAL_MSG_POSTMOVE,
+            if ( PeekMessageW( &aMsg, 0, SAL_MSG_POSTMOVE, SAL_MSG_POSTMOVE,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
         }
@@ -840,7 +840,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
         if ( nType & VCL_INPUT_TIMER )
         {
             // Test for timer input
-            if ( ImplPeekMessage( &aMsg, 0, WM_TIMER, WM_TIMER,
+            if ( PeekMessageW( &aMsg, 0, WM_TIMER, WM_TIMER,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
 
@@ -849,7 +849,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
         if ( nType & VCL_INPUT_OTHER )
         {
             // Test for any input
-            if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
+            if ( PeekMessageW( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
         }
     }
@@ -864,9 +864,9 @@ void SalTimer::Start( sal_uLong nMS )
     if ( pSalData->mpFirstInstance )
     {
         if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
-            ImplPostMessage( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
+            PostMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
         else
-            ImplSendMessage( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
+            SendMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
     }
     else
         ImplSalStartTimer( nMS, FALSE );
@@ -875,7 +875,7 @@ void SalTimer::Start( sal_uLong nMS )
 SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
 {
     // to switch to Main-Thread
-    return (SalFrame*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
+    return (SalFrame*)(sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
 }
 
 SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
@@ -886,12 +886,12 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameSty
         hWndParent = static_cast<WinSalFrame*>(pParent)->mhWnd;
     else
         hWndParent = 0;
-    return (SalFrame*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)hWndParent );
+    return (SalFrame*)(sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)hWndParent );
 }
 
 void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 {
-    ImplSendMessage( mhComWnd, SAL_MSG_DESTROYFRAME, 0, (LPARAM)pFrame );
+    SendMessageW( mhComWnd, SAL_MSG_DESTROYFRAME, 0, (LPARAM)pFrame );
 }
 
 SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
@@ -899,12 +899,12 @@ SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          bool /*bShow*/ )
 {
     // to switch to Main-Thread
-    return (SalObject*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
+    return (SalObject*)(sal_IntPtr)SendMessageW( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
 }
 
 void WinSalInstance::DestroyObject( SalObject* pObject )
 {
-    ImplSendMessage( mhComWnd, SAL_MSG_DESTROYOBJECT, 0, (LPARAM)pObject );
+    SendMessageW( mhComWnd, SAL_MSG_DESTROYOBJECT, 0, (LPARAM)pObject );
 }
 
 void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )

@@ -288,13 +288,6 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 // Call the Timer's callback from the main thread
 #define SAL_MSG_TIMER_CALLBACK      (WM_USER+162)
 
-// A/W-Wrapper
-BOOL    ImplPostMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
-BOOL    ImplSendMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
-BOOL    ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax );
-BOOL    ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg );
-LONG        ImplDispatchMessage( CONST MSG *lpMsg );
-
 inline void SetWindowPtr( HWND hWnd, WinSalFrame* pThis )
 {
     SetWindowLongPtr( hWnd, SAL_FRAME_THIS, (LONG_PTR)pThis );

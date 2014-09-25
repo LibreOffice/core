@@ -1915,7 +1915,7 @@ void ImplReleaseTempFonts( SalData& rSalData )
     // notify every other application
     // unless the temp fonts were installed as private fonts
     if( nCount > 0 )
-        ::PostMessage( HWND_BROADCAST, WM_FONTCHANGE, 0, NULL );
+        PostMessageW( HWND_BROADCAST, WM_FONTCHANGE, 0, NULL );
 #endif // FR_PRIVATE
 }
 

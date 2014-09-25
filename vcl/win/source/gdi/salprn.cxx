@@ -1331,10 +1331,10 @@ BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
     {
         // process messages
         MSG aMsg;
-        if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
+        if ( PeekMessageW( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
             TranslateMessage( &aMsg );
-            ImplDispatchMessage( &aMsg );
+            DispatchMessageW( &aMsg );
 
             i++;
             if ( i > 15 )
@@ -1511,10 +1511,10 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     {
         // process messages
         MSG aMsg;
-        if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
+        if ( PeekMessageW( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
             TranslateMessage( &aMsg );
-            ImplDispatchMessage( &aMsg );
+            DispatchMessageW( &aMsg );
 
             i++;
             if ( i > 15 )
@@ -1524,7 +1524,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
             bWhile = FALSE;
     }
     while ( bWhile );
-    ImplPostMessage( GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0 );
+    PostMessageW( GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0 );
 
     // bring up a file choser if printing to file port but no file name given
     OUString aOutFileName;
@@ -1621,7 +1621,7 @@ bool WinSalPrinter::AbortJob()
     if ( hDC )
     {
         SalData* pSalData = GetSalData();
-        ImplPostMessage( pSalData->mpFirstInstance->mhComWnd,
+        PostMessageW( pSalData->mpFirstInstance->mhComWnd,
                          SAL_MSG_PRINTABORTJOB, (WPARAM)hDC, 0 );
     }
 

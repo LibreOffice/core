@@ -75,29 +75,4 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
     return nRet;
 }
 
-BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
-{
-    return PostMessageW( hWnd, nMsg, wParam, lParam );
-}
-
-BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
-{
-    return SendMessageW( hWnd, nMsg, wParam, lParam );
-}
-
-BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
-{
-    return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
-}
-
-BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
-{
-    return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
-}
-
-LONG ImplDispatchMessage( CONST MSG *lpMsg )
-{
-    return DispatchMessageW( lpMsg );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

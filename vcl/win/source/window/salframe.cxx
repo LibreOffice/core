@@ -676,7 +676,7 @@ static UINT ImplSalGetWheelScrollLines()
     if ( hWndMsWheel )
     {
         UINT nGetScrollLinesMsgId = RegisterWindowMessage( MSH_SCROLL_LINES );
-        nScrLines = (UINT)ImplSendMessage( hWndMsWheel, nGetScrollLinesMsgId, 0, 0 );
+        nScrLines = (UINT)SendMessageW( hWndMsWheel, nGetScrollLinesMsgId, 0, 0 );
     }
 
     if ( !nScrLines )
@@ -992,7 +992,7 @@ SalGraphics* WinSalFrame::AcquireGraphics()
             mpGraphics2->mbScreen    = TRUE;
         }
 
-        HDC hDC = (HDC)(sal_IntPtr)ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
+        HDC hDC = (HDC)(sal_IntPtr)SendMessageW( pSalData->mpFirstInstance->mhComWnd,
                                         SAL_MSG_GETDC,
                                         (WPARAM)mhWnd, 0 );
         if ( hDC )
@@ -1052,7 +1052,7 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
             if ( mpGraphics2->mhDefPal )
                 SelectPalette( mpGraphics2->getHDC(), mpGraphics2->mhDefPal, TRUE );
             ImplSalDeInitGraphics( mpGraphics2 );
-            ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
+            SendMessageW( pSalData->mpFirstInstance->mhComWnd,
                              SAL_MSG_RELEASEDC,
                              (WPARAM)mhWnd,
                              (LPARAM)mpGraphics2->getHDC() );
@@ -1066,7 +1066,7 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool WinSalFrame::PostEvent( void* pData )
 {
-    return (bool)ImplPostMessage( mhWnd, SAL_MSG_USEREVENT, 0, (LPARAM)pData );
+    return (bool)PostMessageW( mhWnd, SAL_MSG_USEREVENT, 0, (LPARAM)pData );
 }
 
 void WinSalFrame::SetTitle( const OUString& rTitle )
@@ -1092,8 +1092,8 @@ void WinSalFrame::SetIcon( sal_uInt16 nIcon )
     DBG_ASSERT( hIcon ,   "WinSalFrame::SetIcon(): Could not load large icon !" );
     DBG_ASSERT( hSmIcon , "WinSalFrame::SetIcon(): Could not load small icon !" );
 
-    ImplSendMessage( mhWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon );
-    ImplSendMessage( mhWnd, WM_SETICON, ICON_SMALL, (LPARAM)hSmIcon );
+    SendMessageW( mhWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon );
+    SendMessageW( mhWnd, WM_SETICON, ICON_SMALL, (LPARAM)hSmIcon );
 }
 
 void WinSalFrame::SetMenu( SalMenu* pSalMenu )
@@ -1212,7 +1212,7 @@ void WinSalFrame::Show( bool bVisible, bool bNoActivate )
     // in the thread of the window, which has create this window.
     // We post this message to avoid deadlocks
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
-        ImplPostMessage( mhWnd, SAL_MSG_SHOW, bVisible, bNoActivate );
+        PostMessageW( mhWnd, SAL_MSG_SHOW, bVisible, bNoActivate );
     else
         ImplSalShow( mhWnd, bVisible, bNoActivate );
 }
@@ -1508,7 +1508,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     // create a new hwnd with the same styles
     HWND hWndParent = hNewParentWnd;
     // forward to main thread
-    HWND hWnd = (HWND) (sal_IntPtr) ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
+    HWND hWnd = (HWND) (sal_IntPtr) SendMessageW( pSalData->mpFirstInstance->mhComWnd,
                                         bAsChild ? SAL_MSG_RECREATECHILDHWND : SAL_MSG_RECREATEHWND,
                                         (WPARAM) hWndParent, (LPARAM)pThis->mhWnd );
 
@@ -1525,7 +1525,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
             if( bNeedCacheDC )
             {
                 // re-create cached DC
-                HDC hDC = (HDC)(sal_IntPtr)ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
+                HDC hDC = (HDC)(sal_IntPtr)SendMessageW( pSalData->mpFirstInstance->mhComWnd,
                                                 SAL_MSG_GETDC,
                                                 (WPARAM) hWnd, 0 );
                 if ( hDC )
@@ -1581,7 +1581,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     systemChildren.clear();
 
     // Now destroy original HWND in the thread where it was created.
-    ImplSendMessage( GetSalData()->mpFirstInstance->mhComWnd,
+    SendMessageW( GetSalData()->mpFirstInstance->mhComWnd,
                      SAL_MSG_DESTROYHWND, (WPARAM) 0, (LPARAM)hWndOld);
 }
 
@@ -2051,7 +2051,7 @@ void WinSalFrame::ToTop( sal_uInt16 nFlags )
     // in the thread of the window, which has create this window.
     // We post this message to avoid deadlocks
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
-        ImplPostMessage( mhWnd, SAL_MSG_TOTOP, nFlags, 0 );
+        PostMessageW( mhWnd, SAL_MSG_TOTOP, nFlags, 0 );
     else
         ImplSalToTop( mhWnd, nFlags );
 }
@@ -2198,7 +2198,7 @@ void WinSalFrame::CaptureMouse( bool bCapture )
         nMsg = SAL_MSG_CAPTUREMOUSE;
     else
         nMsg = SAL_MSG_RELEASEMOUSE;
-    ImplSendMessage( mhWnd, nMsg, 0, 0 );
+    SendMessageW( mhWnd, nMsg, 0, 0 );
 }
 
 void WinSalFrame::SetPointerPos( long nX, long nY )
@@ -2283,7 +2283,7 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
 void WinSalFrame::SetInputContext( SalInputContext* pContext )
 {
     // Must be called in the main thread!
-    ImplSendMessage( mhWnd, SAL_MSG_SETINPUTCONTEXT, 0, (LPARAM)(void*)pContext );
+    SendMessageW( mhWnd, SAL_MSG_SETINPUTCONTEXT, 0, (LPARAM)(void*)pContext );
 }
 
 static void ImplSalFrameEndExtTextInput( HWND hWnd, sal_uInt16 nFlags )
@@ -2305,7 +2305,7 @@ static void ImplSalFrameEndExtTextInput( HWND hWnd, sal_uInt16 nFlags )
 void WinSalFrame::EndExtTextInput( sal_uInt16 nFlags )
 {
     // Must be called in the main thread!
-    ImplSendMessage( mhWnd, SAL_MSG_ENDEXTTEXTINPUT, (WPARAM)nFlags, 0 );
+    SendMessageW( mhWnd, SAL_MSG_ENDEXTTEXTINPUT, (WPARAM)nFlags, 0 );
 }
 
 static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
@@ -3046,7 +3046,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         vcl::Window *pWin = pFrame->GetWindow();
         if( pWin && pWin->ImplGetWindowImpl()->mpFrameData->mnFocusId )
         {
-            ImplPostMessage( hWnd, nMsg, wParam, lParam );
+            PostMessageW( hWnd, nMsg, wParam, lParam );
             return 1;
         }
     }
@@ -3086,7 +3086,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             if ( aMouseEvt.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2) )
             {
                 MSG aTempMsg;
-                if ( ImplPeekMessage( &aTempMsg, hWnd, WM_MOUSEFIRST, WM_MOUSELAST, PM_NOREMOVE | PM_NOYIELD ) )
+                if ( PeekMessageW( &aTempMsg, hWnd, WM_MOUSEFIRST, WM_MOUSELAST, PM_NOREMOVE | PM_NOYIELD ) )
                 {
                     if ( (aTempMsg.message == WM_MOUSEMOVE) &&
                          (aTempMsg.wParam == wParam) )
@@ -3097,7 +3097,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             SalData* pSalData = GetSalData();
             // Test for MouseLeave
             if ( pSalData->mhWantLeaveMsg && (pSalData->mhWantLeaveMsg != hWnd) )
-                ImplSendMessage( pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, GetMessagePos() );
+                SendMessageW( pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, GetMessagePos() );
 
             pSalData->mhWantLeaveMsg = hWnd;
             // Start MouseLeave-Timer
@@ -3568,7 +3568,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 // The WM_CHAR message is always at the beginning of the
                 // message queue. Also it is made certain that there is always only
                 // one WM_CHAR message in the queue.
-                bCharPeek = ImplPeekMessage( &aCharMsg, hWnd,
+                bCharPeek = PeekMessageW( &aCharMsg, hWnd,
                                              WM_CHAR, WM_CHAR, PM_NOREMOVE | PM_NOYIELD );
                 if ( bCharPeek && (nDeadChar == aCharMsg.wParam) )
                 {
@@ -3577,7 +3577,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
                     if ( wParam == VK_BACK )
                     {
-                        ImplPeekMessage( &aCharMsg, hWnd,
+                        PeekMessageW( &aCharMsg, hWnd,
                                          nCharMsg, nCharMsg, PM_REMOVE | PM_NOYIELD );
                         return 0;
                     }
@@ -3586,7 +3586,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 {
                     if ( !bCharPeek )
                     {
-                        bCharPeek = ImplPeekMessage( &aCharMsg, hWnd,
+                        bCharPeek = PeekMessageW( &aCharMsg, hWnd,
                                                     WM_SYSCHAR, WM_SYSCHAR, PM_NOREMOVE | PM_NOYIELD );
                         nCharMsg = WM_SYSCHAR;
                     }
@@ -3642,7 +3642,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                     nDeadChar = 0;
                     if ( nRet )
                     {
-                        ImplPeekMessage( &aCharMsg, hWnd,
+                        PeekMessageW( &aCharMsg, hWnd,
                                          nCharMsg, nCharMsg, PM_REMOVE | PM_NOYIELD );
                     }
                     else
@@ -3790,7 +3790,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
             {
                 RECT* pRect = new RECT;
                 CopyRect( pRect, &aUpdateRect );
-                ImplPostMessage( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
+                PostMessageW( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
             }
             EndPaint( hWnd, &aPs );
         }
@@ -3826,7 +3826,7 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
         delete pRect;
     }
     else
-        ImplPostMessage( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
+        PostMessageW( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
 }
 
 static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect )
@@ -3968,7 +3968,7 @@ static void ImplHandleMoveMsg( HWND hWnd )
         ImplSalYieldMutexRelease();
     }
     else
-        ImplPostMessage( hWnd, SAL_MSG_POSTMOVE, 0, 0 );
+        PostMessageW( hWnd, SAL_MSG_POSTMOVE, 0, 0 );
 }
 
 static void ImplCallSizeHdl( HWND hWnd )
@@ -3989,7 +3989,7 @@ static void ImplCallSizeHdl( HWND hWnd )
         ImplSalYieldMutexRelease();
     }
     else
-        ImplPostMessage( hWnd, SAL_MSG_POSTCALLSIZE, 0, 0 );
+        PostMessageW( hWnd, SAL_MSG_POSTCALLSIZE, 0, 0 );
 }
 
 static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
@@ -4044,7 +4044,7 @@ static void ImplHandleFocusMsg( HWND hWnd )
         ImplSalYieldMutexRelease();
     }
     else
-        ImplPostMessage( hWnd, SAL_MSG_POSTFOCUS, 0, 0 );
+        PostMessageW( hWnd, SAL_MSG_POSTFOCUS, 0, 0 );
 }
 
 static void ImplHandleCloseMsg( HWND hWnd )
@@ -4060,7 +4060,7 @@ static void ImplHandleCloseMsg( HWND hWnd )
         ImplSalYieldMutexRelease();
     }
     else
-        ImplPostMessage( hWnd, WM_CLOSE, 0, 0 );
+        PostMessageW( hWnd, WM_CLOSE, 0, 0 );
 }
 
 static long ImplHandleShutDownMsg( HWND hWnd )
@@ -4145,7 +4145,7 @@ static void ImplHandleForcePalette( HWND hWnd )
     {
         if ( !ImplSalYieldMutexTryToAcquire() )
         {
-            ImplPostMessage( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
+            PostMessageW( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
             return;
         }
 
@@ -4195,9 +4195,9 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         if ( ImplSalYieldMutexTryToAcquire() )
             bReleaseMutex = TRUE;
         else if ( nMsg == WM_QUERYNEWPALETTE )
-            ImplPostMessage( hWnd, SAL_MSG_POSTQUERYNEWPAL, wParam, lParam );
+            PostMessageW( hWnd, SAL_MSG_POSTQUERYNEWPAL, wParam, lParam );
         else /* ( nMsg == WM_PALETTECHANGED ) */
-            ImplPostMessage( hWnd, SAL_MSG_POSTPALCHANGED, wParam, lParam );
+            PostMessageW( hWnd, SAL_MSG_POSTPALCHANGED, wParam, lParam );
     }
 
     WinSalVirtualDevice*pTempVD;
@@ -5455,7 +5455,7 @@ void SalTestMouseLeave()
         POINT aPt;
         GetCursorPos( &aPt );
         if ( pSalData->mhWantLeaveMsg != WindowFromPoint( aPt ) )
-            ImplSendMessage( pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, MAKELPARAM( aPt.x, aPt.y ) );
+            SendMessageW( pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, MAKELPARAM( aPt.x, aPt.y ) );
     }
 }
 
@@ -5480,7 +5480,7 @@ static int ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     if ( hWheelWnd && (hWheelWnd != hWnd) &&
          (hWheelWnd != ::GetFocus()) && IsWindowEnabled( hWheelWnd ) )
     {
-        rResult = ImplSendMessage( hWheelWnd, nMsg, wParam, lParam );
+        rResult = SendMessageW( hWheelWnd, nMsg, wParam, lParam );
         return FALSE;
     }
 
@@ -5688,7 +5688,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             // and not recursively, as at all other places it is set only as
             // the background palette.
             if ( LOWORD( wParam ) != WA_INACTIVE )
-                ImplSendMessage( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
+                SendMessageW( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
             break;
 
         case WM_ENABLE:
@@ -5906,7 +5906,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 HWND hWheelWnd = ::GetFocus();
                 if ( hWheelWnd && (hWheelWnd != hWnd) )
                 {
-                    nRet = ImplSendMessage( hWheelWnd, nMsg, wParam, lParam );
+                    nRet = SendMessageW( hWheelWnd, nMsg, wParam, lParam );
                     rDef = FALSE;
                 }
                 else
@@ -5925,8 +5925,8 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             if( pSalData->mnNextTimerTime < nCurTime )
             {
                 MSG aMsg;
-                if( ! ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT, PM_NOREMOVE | PM_NOYIELD ) )
-                    ImplPostMessage( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_POSTTIMER, 0, nCurTime );
+                if( ! PeekMessageW( &aMsg, 0, WM_PAINT, WM_PAINT, PM_NOREMOVE | PM_NOYIELD ) )
+                    PostMessageW( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_POSTTIMER, 0, nCurTime );
             }
         }
     }
