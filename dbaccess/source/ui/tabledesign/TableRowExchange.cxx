@@ -37,7 +37,7 @@ namespace dbaui
             ::std::vector< ::boost::shared_ptr<OTableRow> >* pRows = reinterpret_cast< ::std::vector< ::boost::shared_ptr<OTableRow> >* >(pUserObject);
             if(pRows)
             {
-                (*rxOStm).WriteInt32( (sal_Int32)pRows->size() ); // first stream the size
+                (*rxOStm).WriteInt32( pRows->size() ); // first stream the size
                 ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = pRows->begin();
                 ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = pRows->end();
                 for(;aIter != aEnd;++aIter)

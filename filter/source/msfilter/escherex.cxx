@@ -4549,8 +4549,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                         nHeight = aPrefSize.Height() * 360;
                     }
                     rPicOutStrm.WriteUInt32( nUncompressedSize ) // WMFSize without FileHeader
-                   .WriteInt32( (sal_Int32)0 )     // since we can't find out anymore what the original size of
-                   .WriteInt32( (sal_Int32)0 )     // the WMF (without Fileheader) was we write 10cm / x
+                   .WriteInt32( 0 )     // since we can't find out anymore what the original size of
+                   .WriteInt32( 0 )     // the WMF (without Fileheader) was we write 10cm / x
                    .WriteUInt32( nPrefWidth )
                    .WriteUInt32( nPrefHeight )
                    .WriteUInt32( nWidth )
@@ -5359,10 +5359,10 @@ void EscherEx::AddAtom( sal_uInt32 nAtomSize, sal_uInt16 nRecType, int nRecVersi
 void EscherEx::AddChildAnchor( const Rectangle& rRect )
 {
     AddAtom( 16, ESCHER_ChildAnchor );
-    mpOutStrm ->WriteInt32( (sal_Int32)rRect.Left() )
-               .WriteInt32( (sal_Int32)rRect.Top() )
-               .WriteInt32( (sal_Int32)rRect.Right() )
-               .WriteInt32( (sal_Int32)rRect.Bottom() );
+    mpOutStrm ->WriteInt32( rRect.Left() )
+               .WriteInt32( rRect.Top() )
+               .WriteInt32( rRect.Right() )
+               .WriteInt32( rRect.Bottom() );
 }
 
 void EscherEx::AddClientAnchor( const Rectangle& rRect )
@@ -5390,10 +5390,10 @@ sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const Rectangle* pB
     AddAtom( 16, ESCHER_Spgr, 1 );
     PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel,
                         mpOutStrm->Tell() );
-    mpOutStrm ->WriteInt32( (sal_Int32)aRect.Left() )  // Bounding box for the grouped shapes to which they will be attached
-               .WriteInt32( (sal_Int32)aRect.Top() )
-               .WriteInt32( (sal_Int32)aRect.Right() )
-               .WriteInt32( (sal_Int32)aRect.Bottom() );
+    mpOutStrm ->WriteInt32( aRect.Left() )  // Bounding box for the grouped shapes to which they will be attached
+               .WriteInt32( aRect.Top() )
+               .WriteInt32( aRect.Right() )
+               .WriteInt32( aRect.Bottom() );
 
     sal_uInt32 nShapeId = GenerateShapeId();
     if ( !mnGroupLevel )
@@ -5440,10 +5440,10 @@ bool EscherEx::SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect 
         sal_uInt32 nCurrentPos = mpOutStrm->Tell();
         if ( DoSeek( ESCHER_Persist_Grouping_Snap | ( nGroupLevel - 1 ) ) )
         {
-            mpOutStrm ->WriteInt32( (sal_Int32)rRect.Left() )  // Bounding box for the grouped shapes to which they will be attached
-                       .WriteInt32( (sal_Int32)rRect.Top() )
-                       .WriteInt32( (sal_Int32)rRect.Right() )
-                       .WriteInt32( (sal_Int32)rRect.Bottom() );
+            mpOutStrm ->WriteInt32( rRect.Left() )  // Bounding box for the grouped shapes to which they will be attached
+                       .WriteInt32( rRect.Top() )
+                       .WriteInt32( rRect.Right() )
+                       .WriteInt32( rRect.Bottom() );
             mpOutStrm->Seek( nCurrentPos );
         }
     }

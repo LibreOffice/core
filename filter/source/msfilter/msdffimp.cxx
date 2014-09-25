@@ -154,17 +154,17 @@ static sal_uInt32 nMSOleObjCntr = 0;
 void Impl_OlePres::Write( SvStream & rStm )
 {
     WriteClipboardFormat( rStm, FORMAT_GDIMETAFILE );
-    rStm.WriteInt32( (sal_Int32)(nJobLen +4) );       // a TargetDevice that's always empty
+    rStm.WriteInt32( (nJobLen +4) );       // a TargetDevice that's always empty
     if( nJobLen )
         rStm.Write( pJob, nJobLen );
     rStm.WriteUInt32( (sal_uInt32)nAspect );
-    rStm.WriteInt32( (sal_Int32)-1 );      //L-Index always -1
-    rStm.WriteInt32( (sal_Int32)nAdvFlags );
-    rStm.WriteInt32( (sal_Int32)0 );       //Compression
-    rStm.WriteInt32( (sal_Int32)aSize.Width() );
-    rStm.WriteInt32( (sal_Int32)aSize.Height() );
+    rStm.WriteInt32( -1 );      //L-Index always -1
+    rStm.WriteInt32( nAdvFlags );
+    rStm.WriteInt32( 0 );       //Compression
+    rStm.WriteInt32( aSize.Width() );
+    rStm.WriteInt32( aSize.Height() );
     sal_uLong nPos = rStm.Tell();
-    rStm.WriteInt32( (sal_Int32)0 );
+    rStm.WriteInt32( 0 );
 
     if( GetFormat() == FORMAT_GDIMETAFILE && pMtf )
     {

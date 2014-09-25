@@ -220,10 +220,10 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
         OpenContainer( ESCHER_SpContainer );
         AddAtom( 16, ESCHER_Spgr, 1 );
         PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
-        mpOutStrm ->WriteInt32( (sal_Int32)aRect.Left() )  // bounding box for the grouped shapes to which they are attached
-                   .WriteInt32( (sal_Int32)aRect.Top() )
-                   .WriteInt32( (sal_Int32)aRect.Right() )
-                   .WriteInt32( (sal_Int32)aRect.Bottom() );
+        mpOutStrm ->WriteInt32( aRect.Left() )  // bounding box for the grouped shapes to which they are attached
+                   .WriteInt32( aRect.Top() )
+                   .WriteInt32( aRect.Right() )
+                   .WriteInt32( aRect.Bottom() );
 
         nShapeId = GenerateShapeId();
         if ( !mnGroupLevel )
@@ -241,10 +241,10 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
             {
                 AddAtom( 16, ESCHER_ChildAnchor );
                 PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
-                mpOutStrm ->WriteInt32( (sal_Int32)aRect.Left() )
-                           .WriteInt32( (sal_Int32)aRect.Top() )
-                           .WriteInt32( (sal_Int32)aRect.Right() )
-                           .WriteInt32( (sal_Int32)aRect.Bottom() );
+                mpOutStrm ->WriteInt32( aRect.Left() )
+                           .WriteInt32( aRect.Top() )
+                           .WriteInt32( aRect.Right() )
+                           .WriteInt32( aRect.Bottom() );
             }
         }
         if ( pClientData )

@@ -1627,7 +1627,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxINT:
         {
             sal_uInt8 n = SAL_TYPES_SIZEOFINT;
-            r.WriteUChar( n ).WriteInt32( (sal_Int32)aData.nInt );
+            r.WriteUChar( n ).WriteInt32( aData.nInt );
             break;
         }
         case SbxUINT:

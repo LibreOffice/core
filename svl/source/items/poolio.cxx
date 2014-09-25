@@ -1421,7 +1421,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
         rItem.Store(rStream, nItemVersion);
         sal_uLong nIEnd = rStream.Tell();
         rStream.Seek( nIStart-4 );
-        rStream.WriteInt32( (sal_Int32) ( nIEnd-nIStart ) );
+        rStream.WriteInt32( ( nIEnd-nIStart ) );
         rStream.Seek( nIEnd );
     }
 

@@ -172,7 +172,7 @@ SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
 {
     if( !pImp )
     {
-        rStream.WriteInt32( (sal_Int32) 0 );
+        rStream.WriteInt32( 0 );
         return rStream;
     }
 

@@ -72,18 +72,18 @@ void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
     {
         OString aAsciiCbFmt(OUStringToOString(aCbFmt,
                                               RTL_TEXTENCODING_ASCII_US));
-        rStm.WriteInt32( (sal_Int32) (aAsciiCbFmt.getLength() + 1) );
+        rStm.WriteInt32( (aAsciiCbFmt.getLength() + 1) );
         rStm.WriteCharPtr( (const char *)aAsciiCbFmt.getStr() );
         rStm.WriteUChar( 0 );
     }
     else if( nFormat )
     {
-        rStm.WriteInt32( (sal_Int32) -1 )         // for Windows
-            .WriteInt32( (sal_Int32) nFormat );
+        rStm.WriteInt32( -1 )         // for Windows
+            .WriteInt32( nFormat );
     }
     else
     {
-        rStm.WriteInt32( (sal_Int32) 0 );         // no clipboard format
+        rStm.WriteInt32( 0 );         // no clipboard format
     }
 }
 

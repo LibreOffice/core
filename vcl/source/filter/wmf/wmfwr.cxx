@@ -777,7 +777,7 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
     // we first write the bitmap at the right position
     // and overwrite later the FILEHEADER with the parameters.
     nPosAnf=pWMF->Tell(); // remember position, where parameters should be stored
-    pWMF->WriteInt32( (sal_Int32)0 ).WriteInt32( (sal_Int32)0 ); // replenish 8 bytes (these 8 bytes +
+    pWMF->WriteInt32( 0 ).WriteInt32( 0 ); // replenish 8 bytes (these 8 bytes +
                                            // 14 bytes superfluous FILEHEADER
                                            // = 22 bytes parameter)
 

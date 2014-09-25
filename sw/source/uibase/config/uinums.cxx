@@ -500,8 +500,8 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 
     if( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
-        rStream.WriteInt32( (sal_Int32)aFmt.GetGraphicSize().Width() )
-               .WriteInt32( (sal_Int32)aFmt.GetGraphicSize().Height() );
+        rStream.WriteInt32( aFmt.GetGraphicSize().Width() )
+               .WriteInt32( aFmt.GetGraphicSize().Height() );
         sal_uInt8 cFlg = ( 0 != aFmt.GetBrush() ? 1 : 0 ) +
                     ( 0 != aFmt.GetGraphicOrientation() ? 2 : 0 );
         rStream.WriteUChar( cFlg );

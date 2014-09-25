@@ -86,7 +86,7 @@ bool SbiGood( SvStream& r )
 sal_uIntPtr SbiOpenRecord( SvStream& r, sal_uInt16 nSignature, sal_uInt16 nElem )
 {
     sal_Size nPos = r.Tell();
-    r.WriteUInt16( nSignature ).WriteInt32( (sal_Int32) 0 ).WriteUInt16( nElem );
+    r.WriteUInt16( nSignature ).WriteInt32( 0 ).WriteUInt16( nElem );
     return nPos;
 }
 
@@ -95,7 +95,7 @@ void SbiCloseRecord( SvStream& r, sal_Size nOff )
 {
     sal_Size nPos = r.Tell();
     r.Seek( nOff + 2 );
-    r.WriteInt32( (sal_Int32) ( nPos - nOff - 8 ) );
+    r.WriteInt32( ( nPos - nOff - 8 ) );
     r.Seek( nPos );
 }
 
@@ -259,18 +259,18 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     eCharSet = GetSOStoreTextEncoding( eCharSet );
     if ( bLegacy )
     {
-        r.WriteInt32( (sal_Int32) B_LEGACYVERSION );
+        r.WriteInt32( B_LEGACYVERSION );
     }
     else
     {
-        r.WriteInt32( (sal_Int32) B_CURVERSION );
+        r.WriteInt32( B_CURVERSION );
     }
-    r .WriteInt32( (sal_Int32) eCharSet )
-      .WriteInt32( (sal_Int32) nDimBase )
+    r .WriteInt32( eCharSet )
+      .WriteInt32( nDimBase )
       .WriteInt16(  nFlags )
       .WriteInt16(  0 )
-      .WriteInt32( (sal_Int32) 0 )
-      .WriteInt32( (sal_Int32) 0 );
+      .WriteInt32( 0 )
+      .WriteInt32( 0 );
 
     // Name?
     if( !aName.isEmpty() && SbiGood( r ) )

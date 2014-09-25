@@ -198,9 +198,9 @@ sal_uInt32 PPTWriter::ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream
               .WriteUInt32( (sal_uInt32)( EPP_SlideViewInfoAtom << 16 ) ).WriteUInt32( (sal_uInt32)3 )
               .WriteUChar( bShowGuides ).WriteUChar( bSnapToGrid ).WriteUChar( bSnapToShape )
               .WriteUInt32( (sal_uInt32)( EPP_ViewInfoAtom << 16 ) ).WriteUInt32( (sal_uInt32)52 )
-              .WriteInt32( nScaling ).WriteInt32( (sal_Int32)100 ).WriteInt32( nScaling ).WriteInt32( (sal_Int32)100 )  // scaling atom - Keeps the current scale
-              .WriteInt32( nScaling ).WriteInt32( (sal_Int32)100 ).WriteInt32( nScaling ).WriteInt32( (sal_Int32)100 )  // scaling atom - Keeps the previous scale
-              .WriteInt32( (sal_Int32)0x17ac ).WriteInt32( nMasterCoordinate )// Origin - Keeps the origin in master coordinates
+              .WriteInt32( nScaling ).WriteInt32( 100 ).WriteInt32( nScaling ).WriteInt32( 100 )  // scaling atom - Keeps the current scale
+              .WriteInt32( nScaling ).WriteInt32( 100 ).WriteInt32( nScaling ).WriteInt32( 100 )  // scaling atom - Keeps the previous scale
+              .WriteInt32( 0x17ac ).WriteInt32( nMasterCoordinate )// Origin - Keeps the origin in master coordinates
               .WriteInt32( nXOrigin ).WriteInt32( nYOrigin )              // Origin
               .WriteUChar( 1 )                          // Bool1 varScale - Set if zoom to fit is set
               .WriteUChar( 0 )                          // bool1 draftMode - Not used
@@ -209,7 +209,7 @@ sal_uInt32 PPTWriter::ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream
               .WriteUInt32( (sal_uInt32)0 )     // Type of the guide. If the guide is horizontal this value is zero. If it's vertical, it's one.
               .WriteInt32( nPosition1 )    // Position of the guide in master coordinates. X coordinate if it's vertical, and Y coordinate if it's horizontal.
               .WriteUInt32( (sal_uInt32)( ( 7 << 4 ) | ( EPP_GuideAtom << 16 ) ) ).WriteUInt32( (sal_uInt32)8 )
-              .WriteInt32( (sal_Int32)1 )      // Type of the guide. If the guide is horizontal this value is zero. If it's vertical, it's one.
+              .WriteInt32( 1 )      // Type of the guide. If the guide is horizontal this value is zero. If it's vertical, it's one.
               .WriteInt32( nPosition2 );   // Position of the guide in master coordinates. X coordinate if it's vertical, and Y coordinate if it's horizontal.
     }
     return nSize;
@@ -222,10 +222,10 @@ sal_uInt32 PPTWriter::ImplOutlineViewInfoContainer( SvStream* pStrm )
     {
         pStrm->WriteUInt32( (sal_uInt32)( 0xf | ( EPP_OutlineViewInfo << 16 ) ) ).WriteUInt32( (sal_uInt32)( nSize - 8 ) )
               .WriteUInt32( (sal_uInt32)( EPP_ViewInfoAtom << 16 ) ).WriteUInt32( (sal_uInt32)52 )
-              .WriteInt32( (sal_Int32)170 ).WriteInt32( (sal_Int32)200 ).WriteInt32( (sal_Int32)170 ).WriteInt32( (sal_Int32)200 )  // scaling atom - Keeps the current scale
-              .WriteInt32( (sal_Int32)170 ).WriteInt32( (sal_Int32)200 ).WriteInt32( (sal_Int32)170 ).WriteInt32( (sal_Int32)200 )  // scaling atom - Keeps the previous scale
-              .WriteInt32( (sal_Int32)0x17ac ).WriteInt32( (sal_Int32)0xdda )    // Origin - Keeps the origin in master coordinates
-              .WriteInt32( (sal_Int32)-780 ).WriteInt32( (sal_Int32)-84 ) // Origin
+              .WriteInt32( 170 ).WriteInt32( 200 ).WriteInt32( 170 ).WriteInt32( 200 )  // scaling atom - Keeps the current scale
+              .WriteInt32( 170 ).WriteInt32( 200 ).WriteInt32( 170 ).WriteInt32( 200 )  // scaling atom - Keeps the previous scale
+              .WriteInt32( 0x17ac ).WriteInt32( 0xdda )    // Origin - Keeps the origin in master coordinates
+              .WriteInt32( -780 ).WriteInt32( -84 ) // Origin
               .WriteUChar( 1 )                  // bool1 varScale - Set if zoom to fit is set
               .WriteUChar( 0 )                  // bool1 draftMode - Not used
               .WriteUInt16( 0 );                // padword
@@ -348,8 +348,8 @@ sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
             mpPptEscherEx->InsertPersistOffset( EPP_MAINMASTER_PERSIST_KEY | i, pStrm->Tell() );
             pStrm->WriteUInt32( (sal_uInt32)0 )                 // psrReference - logical reference to the slide persist object ( EPP_MAINMASTER_PERSIST_KEY )
                   .WriteUInt32( (sal_uInt32)0 )                 // flags - only bit 3 used, if set then slide contains shapes other than placeholders
-                  .WriteInt32( (sal_Int32)0 )                  // numberTexts - number of placeholder texts stored with the persist object. Allows to display outline view without loading the slide persist objects
-                  .WriteInt32( (sal_Int32)( 0x80000000 | i ) ) // slideId - Unique slide identifier, used for OLE link monikers for example
+                  .WriteInt32( 0 )                  // numberTexts - number of placeholder texts stored with the persist object. Allows to display outline view without loading the slide persist objects
+                  .WriteInt32( ( 0x80000000 | i ) ) // slideId - Unique slide identifier, used for OLE link monikers for example
                   .WriteUInt32( (sal_uInt32)0 );                // reserved, usually 0
         }
     }
@@ -461,7 +461,7 @@ bool PPTWriter::ImplCloseDocument()
         // Open Container ( EPP_SrKinsoku )
         mpStrm->WriteUInt16( 0x2f ).WriteUInt16( EPP_SrKinsoku ).WriteUInt32( (sal_uInt32)12 );
         mpPptEscherEx->AddAtom( 4, EPP_SrKinsokuAtom, 0, 3 );
-        mpStrm->WriteInt32( (sal_Int32)0 );                        // SrKinsoku Level 0
+        mpStrm->WriteInt32( 0 );                        // SrKinsoku Level 0
 
         // Open Container ( EPP_FontCollection )
         mpStrm->WriteUInt16( 0xf ).WriteUInt16( EPP_FontCollection ).WriteUInt32( (sal_uInt32)maFontCollection.GetCount() * 76 );
@@ -3618,10 +3618,10 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
             mpPptEscherEx->OpenContainer( ESCHER_SpgrContainer );
             mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
             mpPptEscherEx->AddAtom( 16, ESCHER_Spgr, 1 );
-            mpStrm    ->WriteInt32( (sal_Int32)maRect.Left() ) // Bounding box for the grouped shapes to which they are attached
-                       .WriteInt32( (sal_Int32)maRect.Top() )
-                       .WriteInt32( (sal_Int32)maRect.Right() )
-                       .WriteInt32( (sal_Int32)maRect.Bottom() );
+            mpStrm    ->WriteInt32( maRect.Left() ) // Bounding box for the grouped shapes to which they are attached
+                       .WriteInt32( maRect.Top() )
+                       .WriteInt32( maRect.Right() )
+                       .WriteInt32( maRect.Bottom() );
 
             sal_uInt32 nShapeId = mpPptEscherEx->GenerateShapeId();
             mpPptEscherEx->AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );     // Flags: Group | Patriarch

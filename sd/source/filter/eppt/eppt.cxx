@@ -362,7 +362,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_MainMaster );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    mpStrm->WriteInt32( (sal_Int32)EPP_LAYOUT_TITLEANDBODYSLIDE )  // slide layout -> title and body slide
+    mpStrm->WriteInt32( EPP_LAYOUT_TITLEANDBODYSLIDE )  // slide layout -> title and body slide
            .WriteUChar( 1 ).WriteUChar( 2 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 )     // placeholderID
            .WriteUInt32( (sal_uInt32)0 )        // master ID (equals null at a master page)
            .WriteUInt32( (sal_uInt32)0 )        // notes ID (equals null if no notes are present)
@@ -684,9 +684,9 @@ bool PPTWriter::ImplCreateDocument()
     mpPptEscherEx->AddAtom( 40, EPP_DocumentAtom, 1 );
     mpStrm->WriteUInt32( nWidth )                           // Slide Size in Master coordinates X
            .WriteUInt32( nHeight )                          //   "     "   "    "        "      Y
-           .WriteInt32( (sal_Int32)maNotesPageSize.Width )     // Notes Page Size                  X
-           .WriteInt32( (sal_Int32)maNotesPageSize.Height )    //   "     "   "                    Y
-           .WriteInt32( (sal_Int32)1 ).WriteInt32( (sal_Int32)2 );            // the scale used when the Powerpoint document is embedded. the default is 1:2
+           .WriteInt32( maNotesPageSize.Width )     // Notes Page Size                  X
+           .WriteInt32( maNotesPageSize.Height )    //   "     "   "                    Y
+           .WriteInt32( 1 ).WriteInt32( 2 );            // the scale used when the Powerpoint document is embedded. the default is 1:2
     mpPptEscherEx->InsertPersistOffset( EPP_MAINNOTESMASTER_PERSIST_KEY, mpStrm->Tell() );
     mpStrm->WriteUInt32( (sal_uInt32)0 )                        // Reference to NotesMaster ( 0 if none );
            .WriteUInt32( (sal_uInt32)0 )                        // Reference to HandoutMaster ( 0 if none );
@@ -720,8 +720,8 @@ bool PPTWriter::ImplCreateDocument()
         mpPptEscherEx->InsertPersistOffset( EPP_MAINSLIDE_PERSIST_KEY | i, mpStrm->Tell() );
         mpStrm->WriteUInt32( (sal_uInt32)0 )                                // psrReference - logical reference to the slide persist object ( EPP_MAINSLIDE_PERSIST_KEY )
                .WriteUInt32( (sal_uInt32)4 )                                // flags - only bit 3 used, if set then slide contains shapes other than placeholders
-               .WriteInt32( (sal_Int32)0 )                                     // numberTexts - number of placeholder texts stored with the persist object.  Allows to display outline view without loading the slide persist objects
-               .WriteInt32( (sal_Int32)i + 0x100 )                             // slideId - Unique slide identifier, used for OLE link monikers for example
+               .WriteInt32( 0 )                                     // numberTexts - number of placeholder texts stored with the persist object.  Allows to display outline view without loading the slide persist objects
+               .WriteInt32( i + 0x100 )                             // slideId - Unique slide identifier, used for OLE link monikers for example
                .WriteUInt32( (sal_uInt32)0 );                               // reserved, usually 0
 
         if ( !GetPageByIndex( i, NORMAL ) )                     // very exciting: once again through all pages
@@ -745,8 +745,8 @@ bool PPTWriter::ImplCreateDocument()
         mpPptEscherEx->InsertPersistOffset( EPP_MAINNOTES_PERSIST_KEY | i, mpStrm->Tell() );
         mpStrm->WriteUInt32( (sal_uInt32)0 )
                .WriteUInt32( (sal_uInt32)4 )
-               .WriteInt32( (sal_Int32)0 )
-               .WriteInt32( (sal_Int32)i + 0x100 )
+               .WriteInt32( 0 )
+               .WriteInt32( i + 0x100 )
                .WriteUInt32( (sal_uInt32)0 );
     }
     mpPptEscherEx->CloseContainer();        // EPP_SlideListWithText
@@ -1289,7 +1289,7 @@ void PPTWriter::ImplWriteOLE( )
                         xStm->WriteUInt32( (sal_uInt32)0 )        // no ClipboardId
                                .WriteUInt32( (sal_uInt32)4 )        // no target device
                                .WriteUInt32( (sal_uInt32)1 )        // aspect ratio
-                               .WriteInt32( (sal_Int32)-1 )        // L-Index
+                               .WriteInt32( -1 )        // L-Index
                                .WriteUInt32( (sal_uInt32)0 )        // Advanced Flags
                                .WriteUInt32( (sal_uInt32)0 )        // compression
                                .WriteUInt32( (sal_uInt32)0 )        // Size
@@ -1431,7 +1431,7 @@ bool PPTWriter::ImplWriteAtomEnding()
 
     mpCurUserStrm->WriteUInt32( (sal_uInt32)nPos );             // set offset to current edit
     mpPptEscherEx->AddAtom( 28, EPP_UserEditAtom );
-    mpStrm->WriteInt32( (sal_Int32)0x100 )                     // last slide ID
+    mpStrm->WriteInt32( 0x100 )                     // last slide ID
            .WriteUInt32( (sal_uInt32)0x03000dbc )               // minor and major app version that did the save
            .WriteUInt32( (sal_uInt32)0 )                        // offset last save, 0 after a full save
            .WriteUInt32( nPersistOfs )                      // File offset to persist pointers for this save operation

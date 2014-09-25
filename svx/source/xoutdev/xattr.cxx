@@ -700,7 +700,7 @@ SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
     if (!IsIndex())
     {
-        rOut.WriteInt32( (sal_Int32) aDash.GetDashStyle() );
+        rOut.WriteInt32( aDash.GetDashStyle() );
         rOut.WriteUInt16( aDash.GetDots() );
         rOut.WriteUInt32( (sal_uInt32) aDash.GetDotLen() );
         rOut.WriteUInt16( aDash.GetDashes() );
@@ -2436,7 +2436,7 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) co
         nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetGreen() ); rOut.WriteUInt16( nTmp );
         nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetBlue() ); rOut.WriteUInt16( nTmp );
 
-        rOut.WriteInt32( (sal_Int32) aGradient.GetAngle() );
+        rOut.WriteInt32( aGradient.GetAngle() );
         rOut.WriteUInt16( aGradient.GetBorder() );
         rOut.WriteUInt16( aGradient.GetXOffset() );
         rOut.WriteUInt16( aGradient.GetYOffset() );
@@ -2917,8 +2917,8 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetGreen() ); rOut.WriteUInt16( nTmp );
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetBlue() ); rOut.WriteUInt16( nTmp );
 
-        rOut.WriteInt32( (sal_Int32) aHatch.GetDistance() );
-        rOut.WriteInt32( (sal_Int32) aHatch.GetAngle() );
+        rOut.WriteInt32( aHatch.GetDistance() );
+        rOut.WriteInt32( aHatch.GetAngle() );
     }
 
     return rOut;

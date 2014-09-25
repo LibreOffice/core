@@ -334,7 +334,7 @@ namespace svt
 
             // store the info about the children
             // the number
-            m_rStorage.WriteInt32( (sal_Int32)_rContent.size() );
+            m_rStorage.WriteInt32( _rContent.size() );
             // their URLs ( the local name is not enough, since URL might be not a hierarchical one, "expand:" for example )
             ::std::for_each(
                 _rContent.getSubContents().begin(),
@@ -540,7 +540,7 @@ namespace svt
 
             // store the template root folders
             // the size
-            m_pCacheStream->WriteInt32( (sal_Int32)m_aCurrentState.size() );
+            m_pCacheStream->WriteInt32( m_aCurrentState.size() );
             // the complete URLs
             ::std::for_each(
                 m_aCurrentState.begin(),

@@ -104,7 +104,7 @@ namespace dbaui
         OFieldDescription* pFieldDesc = _rRow.GetActFieldDescr();
         if(pFieldDesc)
         {
-            _rStr.WriteInt32( (sal_Int32)1 );
+            _rStr.WriteInt32( 1 );
             _rStr.WriteUniOrByteString(pFieldDesc->GetName(), _rStr.GetStreamCharSet());
             _rStr.WriteUniOrByteString(pFieldDesc->GetDescription(), _rStr.GetStreamCharSet());
             _rStr.WriteUniOrByteString(pFieldDesc->GetHelpText(), _rStr.GetStreamCharSet());
@@ -127,13 +127,13 @@ namespace dbaui
             _rStr.WriteInt32( pFieldDesc->GetScale() );
             _rStr.WriteInt32( pFieldDesc->GetIsNullable() );
             _rStr.WriteInt32( pFieldDesc->GetFormatKey() );
-            _rStr.WriteInt32( (sal_Int32)pFieldDesc->GetHorJustify() );
+            _rStr.WriteInt32( pFieldDesc->GetHorJustify() );
             _rStr.WriteInt32( pFieldDesc->IsAutoIncrement() ? 1 : 0 );
             _rStr.WriteInt32( pFieldDesc->IsPrimaryKey() ? 1 : 0 );
             _rStr.WriteInt32( pFieldDesc->IsCurrency() ? 1 : 0 );
         }
         else
-            _rStr.WriteInt32( (sal_Int32)0 );
+            _rStr.WriteInt32( 0 );
         return _rStr;
     }
     SvStream& ReadOTableRow( SvStream& _rStr, OTableRow& _rRow )

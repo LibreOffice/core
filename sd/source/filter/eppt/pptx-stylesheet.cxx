@@ -488,7 +488,7 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
        .WriteUInt16( ( 0x80 | nCharFlags ) )
        .WriteUInt16( nFlags )
        .WriteUInt16( nCharFlags )
-       .WriteInt32( (sal_Int32)-1 )                            // ?
+       .WriteInt32( -1 )                            // ?
        .WriteUInt16( rCharStyle.mnFontHeight )
        .WriteUInt32( rCharStyle.mnFontColor );
 }

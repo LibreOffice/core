@@ -358,8 +358,8 @@ void METWriter::WritePoint(Point aPt)
 {
     Point aNewPt = OutputDevice::LogicToLogic( aPt, aPictureMapMode, aTargetMapMode );
 
-    pMET->WriteInt32( (sal_Int32) ( aNewPt.X() - aPictureRect.Left() ) )
-         .WriteInt32( (sal_Int32) ( aPictureRect.Bottom() - aNewPt.Y() ) );
+    pMET->WriteInt32( ( aNewPt.X() - aPictureRect.Left() ) )
+         .WriteInt32( ( aPictureRect.Bottom() - aNewPt.Y() ) );
 }
 
 
@@ -1353,7 +1353,7 @@ void METWriter::METFullArc(Point aCenter, double fMultiplier)
     WillWriteOrder(14);
     pMET->WriteUChar( 0xc7 ).WriteUChar( 12 );
     WritePoint(aCenter);
-    pMET->WriteInt32( (sal_Int32)(fMultiplier*65536.0+0.5) );
+    pMET->WriteInt32( (fMultiplier*65536.0+0.5) );
 }
 
 
@@ -1369,9 +1369,9 @@ void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
     WillWriteOrder(22);
     pMET->WriteUChar( 0xa3 ).WriteUChar( 20 );
     WritePoint(aCenter);
-    pMET->WriteInt32( (sal_Int32)(fMultiplier*65536.0+0.5) );
-    pMET->WriteInt32( (sal_Int32)(fStartAngle*65536.0+0.5) );
-    pMET->WriteInt32( (sal_Int32)(fSweepAngle*65536.0+0.5) );
+    pMET->WriteInt32( (fMultiplier*65536.0+0.5) );
+    pMET->WriteInt32( (fStartAngle*65536.0+0.5) );
+    pMET->WriteInt32( (fSweepAngle*65536.0+0.5) );
 }
 
 
@@ -1450,7 +1450,7 @@ void METWriter::METSetChrCellSize(Size aSize)
     aMETChrCellSize=aSize;
     WillWriteOrder(10);
     if (aSize.Width()==0) aSize.Width()=aSize.Height();
-    pMET->WriteUChar( 0x33 ).WriteUChar( 8 ).WriteInt32( (sal_Int32)aSize.Width() ).WriteInt32( (sal_Int32)aSize.Height() );
+    pMET->WriteUChar( 0x33 ).WriteUChar( 8 ).WriteInt32( aSize.Width() ).WriteInt32( aSize.Height() );
 }
 
 

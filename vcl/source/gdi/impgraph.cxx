@@ -1228,7 +1228,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
 
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
-            rOStm.WriteInt32( (sal_Int32) 0 );
+            rOStm.WriteInt32( 0 );
 
             WritePair( rOStm, aSize );
             WriteMapMode( rOStm, aMapMode );
@@ -1238,11 +1238,11 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         else
         {
             // write old style (<=4.0) header
-            rOStm.WriteInt32( (sal_Int32) meType );
+            rOStm.WriteInt32( meType );
 
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
-            rOStm.WriteInt32( (sal_Int32) 0 );
+            rOStm.WriteInt32( 0 );
             rOStm.WriteInt32( aSize.Width() );
             rOStm.WriteInt32( aSize.Height() );
             rOStm.WriteInt32( aMapMode.GetMapUnit() );
