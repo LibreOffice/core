@@ -35,9 +35,12 @@ import org.openoffice.idesupport.OfficeInstallation;
 public class OfficeSettings extends SystemOption {
 
     public static final String OFFICE_DIRECTORY = "OfficeDirectory";
-    public static final String WARN_BEFORE_DOC_DEPLOY = "WarnBeforeDocDeploy";
-    public static final String WARN_BEFORE_PARCEL_DELETE = "WarnBeforeParcelDelete";
-    public static final String WARN_AFTER_DIR_DEPLOY = "WarnAfterDirDeploy";
+    public static final String WARN_BEFORE_DOC_DEPLOY =
+        "WarnBeforeDocDeploy";
+    public static final String WARN_BEFORE_PARCEL_DELETE =
+        "WarnBeforeParcelDelete";
+    public static final String WARN_AFTER_DIR_DEPLOY =
+        "WarnAfterDirDeploy";
     public static final String WARN_BEFORE_MOUNT = "WarnBeforeMount";
 
     protected void initialize() {
@@ -60,8 +63,7 @@ public class OfficeSettings extends SystemOption {
                     setOfficeDirectory(oi);
                     return;
                 }
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
             }
         }
     }
@@ -95,7 +97,8 @@ public class OfficeSettings extends SystemOption {
     }
 
     public boolean getWarnBeforeParcelDelete() {
-        return ((Boolean)getProperty(WARN_BEFORE_PARCEL_DELETE)).booleanValue();
+        return ((Boolean)getProperty(
+                    WARN_BEFORE_PARCEL_DELETE)).booleanValue();
     }
 
     public void setWarnBeforeParcelDelete(boolean value) {

@@ -41,8 +41,9 @@ import org.openoffice.netbeans.modules.office.actions.ParcelFolderCookie;
 import org.openoffice.netbeans.modules.office.utils.PackageRemover;
 
 public class ParcelContentsFolder extends DataFolder {
-    public ParcelContentsFolder(FileObject pf, ParcelContentsFolderDataLoader loader)
-        throws DataObjectExistsException {
+    public ParcelContentsFolder(FileObject pf,
+                                ParcelContentsFolderDataLoader loader)
+    throws DataObjectExistsException {
         super(pf, loader);
     }
 
@@ -59,11 +60,11 @@ public class ParcelContentsFolder extends DataFolder {
                         DataFolder contents = (DataFolder)getDataObject();
                         ParcelFolderCookie cookie =
                             (ParcelFolderCookie)contents.getFolder().
-                                getCookie(ParcelFolderCookie.class);
+                            getCookie(ParcelFolderCookie.class);
 
                         String language = cookie.getLanguage();
                         ParcelContentsFolder.createEmptyScript(contents,
-                            language);
+                                                               language);
                     }
                 };
                 return newtypes;
@@ -71,16 +72,15 @@ public class ParcelContentsFolder extends DataFolder {
         };
     }
 
-    public static void createEmptyScript(DataFolder parent, String language) {
+    public static void createEmptyScript(DataFolder parent,
+                                         String language) {
         String sourceFile = "Templates/OfficeScripting/EmptyScript/Empty";
 
         if (language.toLowerCase().equals("java")) {
             sourceFile += ".java";
-        }
-        else if (language.toLowerCase().equals("beanshell")) {
+        } else if (language.toLowerCase().equals("beanshell")) {
             sourceFile += ".bsh";
-        }
-        else {
+        } else {
             NotifyDescriptor d = new NotifyDescriptor.Message(
                 "Language not defined for this Parcel Folder");
             TopManager.getDefault().notify(d);
@@ -89,36 +89,37 @@ public class ParcelContentsFolder extends DataFolder {
 
         FileSystem fs = Repository.getDefault().getDefaultFileSystem();
         DataObject result = null;
+
         try {
             DataObject dObj = DataObject.find(fs.findResource(sourceFile));
             result = dObj.createFromTemplate(parent);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             ErrorManager.getDefault().notify(ioe);
         }
 
         FileObject fo = result.getPrimaryFile();
+
         if (fo.getExt().equals("java")) {
             FileLock lock = null;
+
             try {
                 PackageRemover.removeDeclaration(FileUtil.toFile(fo));
 
                 // IssueZilla 11986 - rename the FileObject
                 // so the JavaNode is resynchronized
                 lock = fo.lock();
+
                 if (lock != null) {
                     fo.rename(lock, fo.getName(), fo.getExt());
                 }
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
                 NotifyDescriptor d = new NotifyDescriptor.Message(
-                 "Error removing package declaration from file: " +
-                 fo.getNameExt() +
-                 ". You should manually remove this declaration " +
-                 "before building the Parcel Recipe");
+                    "Error removing package declaration from file: " +
+                    fo.getNameExt() +
+                    ". You should manually remove this declaration " +
+                    "before building the Parcel Recipe");
                 TopManager.getDefault().notify(d);
-            }
-            finally {
+            } finally {
                 if (lock != null) {
                     lock.releaseLock();
                 }

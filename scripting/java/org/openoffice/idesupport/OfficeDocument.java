@@ -29,23 +29,22 @@ import java.util.zip.ZipFile;
 
 import org.openoffice.idesupport.zip.ParcelZipper;
 
-public class OfficeDocument
-{
+public class OfficeDocument {
     public static final String PARCEL_PREFIX_DIR =
         ParcelZipper.PARCEL_PREFIX_DIR;
 
     public static final String[] OFFICE_EXTENSIONS =
-        {".sxc" , ".sxw", ".sxi", ".sxd"};
+    {".sxc" , ".sxw", ".sxi", ".sxd"};
     public static final String OFFICE_PRODUCT_NAME = "OpenOffice.org";
 
     private File file = null;
 
-    public OfficeDocument(File file) throws IllegalArgumentException
-    {
+    public OfficeDocument(File file) throws IllegalArgumentException {
         if (!file.exists() || file.isDirectory() || !isOfficeFile(file)) {
             throw new IllegalArgumentException("This is not a valid " +
-                OFFICE_PRODUCT_NAME + " document.");
+                                               OFFICE_PRODUCT_NAME + " document.");
         }
+
         this.file = file;
     }
 
@@ -53,6 +52,7 @@ public class OfficeDocument
         for (int i = 0; i < OFFICE_EXTENSIONS.length; i++)
             if (file.getName().endsWith(OFFICE_EXTENSIONS[i]))
                 return true;
+
         return false;
     }
 
@@ -61,15 +61,13 @@ public class OfficeDocument
         ArrayList<String> parcels = new ArrayList<String>();
         ZipFile zp = null;
 
-        try
-        {
+        try {
             zp = new ZipFile(this.file);
 
-            for (Enumeration enumer = zp.entries(); enumer.hasMoreElements(); )
-            {
+            for (Enumeration enumer = zp.entries(); enumer.hasMoreElements();) {
                 ZipEntry ze = (ZipEntry)enumer.nextElement();
-                if (ze.getName().endsWith(ParcelZipper.PARCEL_DESCRIPTOR_XML))
-                {
+
+                if (ze.getName().endsWith(ParcelZipper.PARCEL_DESCRIPTOR_XML)) {
                     String tmp = ze.getName();
                     int end = tmp.lastIndexOf('/');
                     tmp = tmp.substring(0, end);
@@ -78,19 +76,15 @@ public class OfficeDocument
                     parcels.add(parcelName);
                 }
             }
-        }
-        catch(ZipException ze) {
+        } catch (ZipException ze) {
             ze.printStackTrace();
-        }
-        catch(IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
-        }
-        finally {
+        } finally {
             if (zp != null) {
                 try {
                     zp.close();
-                }
-                catch (IOException asdf) {
+                } catch (IOException asdf) {
                 }
             }
         }
@@ -102,11 +96,11 @@ public class OfficeDocument
 
         try {
             ParcelZipper.getParcelZipper().removeParcel(file, parcelName);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
             return false;
         }
+
         return true;
     }
 }

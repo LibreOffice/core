@@ -39,7 +39,8 @@ public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
         languagesComboBox.addItem("BeanShell");
 
         // Provide a name in the title bar.
-        setName(NbBundle.getMessage(ParcelPropertiesVisualPanel.class, "TITLE_ParcelPropertiesVisualPanel"));
+        setName(NbBundle.getMessage(ParcelPropertiesVisualPanel.class,
+                                    "TITLE_ParcelPropertiesVisualPanel"));
     }
 
     /** This method is called from within the constructor to
@@ -99,7 +100,8 @@ public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 12, 11, 12);
         add(jLabel2, gridBagConstraints);
 
-        languagesComboBox.addActionListener(new java.awt.event.ActionListener() {
+        languagesComboBox.addActionListener(new
+        java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 languagesComboBoxActionPerformed(evt);
             }
@@ -121,27 +123,34 @@ public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
 
     }//GEN-END:initComponents
 
-    private void recipeNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_recipeNameFocusGained
+    private void recipeNameFocusGained(java.awt.event.FocusEvent
+                                       evt) {//GEN-FIRST:event_recipeNameFocusGained
         recipeName.selectAll();
     }//GEN-LAST:event_recipeNameFocusGained
 
-    private void recipeNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_recipeNameFocusLost
+    private void recipeNameFocusLost(java.awt.event.FocusEvent
+                                     evt) {//GEN-FIRST:event_recipeNameFocusLost
         changeName();
     }//GEN-LAST:event_recipeNameFocusLost
 
-    private void languagesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_languagesComboBoxActionPerformed
+    private void languagesComboBoxActionPerformed(
+        java.awt.event.ActionEvent
+        evt) {//GEN-FIRST:event_languagesComboBoxActionPerformed
         String language = (String)languagesComboBox.getSelectedItem();
         panel.setLanguage(language);
     }//GEN-LAST:event_languagesComboBoxActionPerformed
 
-    private void recipeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipeNameActionPerformed
+    private void recipeNameActionPerformed(java.awt.event.ActionEvent
+                                           evt) {//GEN-FIRST:event_recipeNameActionPerformed
         changeName();
     }//GEN-LAST:event_recipeNameActionPerformed
 
     private void changeName() {
         String name = recipeName.getText().trim();
+
         if (name.length() == 0)
             name = null;
+
         panel.setName(name);
     }
 

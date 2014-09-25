@@ -36,28 +36,30 @@ public class UCBStreamHandler extends URLStreamHandler {
     public final static String separator = "/ucb/";
 
     private XSimpleFileAccess m_xSimpleFileAccess = null;
-    private HashMap<String,InputStream> m_jarStreamMap = new HashMap<String,InputStream>(12);
+    private HashMap<String, InputStream> m_jarStreamMap = new
+    HashMap<String, InputStream>(12);
     private static String m_ucbscheme;
 
-    public UCBStreamHandler( String scheme, XSimpleFileAccess xSFA )
-    {
-        LogUtils.DEBUG( "UCBStreamHandler ctor, scheme = " + scheme );
+    public UCBStreamHandler(String scheme, XSimpleFileAccess xSFA) {
+        LogUtils.DEBUG("UCBStreamHandler ctor, scheme = " + scheme);
         UCBStreamHandler.m_ucbscheme = scheme;
         this.m_xSimpleFileAccess = xSFA;
     }
 
     @Override
     public void parseURL(URL url, String spec, int start, int limit) {
-        LogUtils.DEBUG("**XUCBStreamHandler, parseURL: " + url + " spec: " + spec + " start: " + start + " limit: " + limit );
+        LogUtils.DEBUG("**XUCBStreamHandler, parseURL: " + url + " spec: " +
+                       spec + " start: " + start + " limit: " + limit);
 
         String file = url.getFile();
+
         if (file == null)
             file =  spec.substring(start, limit);
         else
             file += spec.substring(start, limit);
 
-        LogUtils.DEBUG("**For scheme = " + m_ucbscheme );
-        LogUtils.DEBUG("**Setting path = " + file );
+        LogUtils.DEBUG("**For scheme = " + m_ucbscheme);
+        LogUtils.DEBUG("**Setting path = " + file);
         setURL(url, m_ucbscheme, null, -1, null, null, file, null, null);
     }
 
@@ -78,69 +80,70 @@ public class UCBStreamHandler extends URLStreamHandler {
 
         @Override
         public InputStream getInputStream() throws IOException {
-            LogUtils.DEBUG("UCBConnectionHandler GetInputStream on " + url );
+            LogUtils.DEBUG("UCBConnectionHandler GetInputStream on " + url);
             String sUrl = url.toString();
+
             if (sUrl.lastIndexOf(separator) == -1) {
-                LogUtils.DEBUG("getInputStream straight file load" );
+                LogUtils.DEBUG("getInputStream straight file load");
                 return getFileStreamFromUCB(sUrl);
-            }
-            else {
-                String path = sUrl.substring(0, sUrl.lastIndexOf(separator) );
+            } else {
+                String path = sUrl.substring(0, sUrl.lastIndexOf(separator));
                 String file = sUrl.substring(
-                    sUrl.lastIndexOf(separator) + separator.length());
-                LogUtils.DEBUG("getInputStream, load of file from another file eg. " + file + " from " + path );
+                                  sUrl.lastIndexOf(separator) + separator.length());
+                LogUtils.DEBUG("getInputStream, load of file from another file eg. " +
+                               file + " from " + path);
                 return getUCBStream(file, path);
             }
         }
         @Override
         public OutputStream getOutputStream() throws IOException {
-            LogUtils.DEBUG("UCBConnectionHandler getOutputStream on " + url );
+            LogUtils.DEBUG("UCBConnectionHandler getOutputStream on " + url);
             OutputStream os = null;
-            try
-            {
+
+            try {
                 String sUrl = url.toString();
-                if ( !( sUrl.lastIndexOf(separator) == -1) ) {
+
+                if (!(sUrl.lastIndexOf(separator) == -1)) {
                     String path = sUrl.substring(0, sUrl.lastIndexOf(separator));
 
-                    if ( m_xSimpleFileAccess.isReadOnly( path ) )
-                    {
+                    if (m_xSimpleFileAccess.isReadOnly(path)) {
                         throw new java.io.IOException("File is read only");
                     }
 
-                    LogUtils.DEBUG("getOutputStream, create o/p  stream  for file eg. " + path  );
+                    LogUtils.DEBUG("getOutputStream, create o/p  stream  for file eg. " +
+                                   path);
 
                     // we will only deal with simple file write
-                    XOutputStream xos = m_xSimpleFileAccess.openFileWrite( path );
-                    XTruncate xtrunc = UnoRuntime.queryInterface( XTruncate.class, xos );
-                    if ( xtrunc != null )
-                    {
+                    XOutputStream xos = m_xSimpleFileAccess.openFileWrite(path);
+                    XTruncate xtrunc = UnoRuntime.queryInterface(XTruncate.class, xos);
+
+                    if (xtrunc != null) {
                         xtrunc.truncate();
                     }
-                    os = new XOutputStreamWrapper( xos );
+
+                    os = new XOutputStreamWrapper(xos);
                 }
-                if ( os == null )
-                {
-                    throw new IOException("Failed to get OutputStream for " + sUrl );
+
+                if (os == null) {
+                    throw new IOException("Failed to get OutputStream for " + sUrl);
                 }
-            }
-            catch ( com.sun.star.ucb.CommandAbortedException cae )
-            {
-                LogUtils.DEBUG("caught exception: " + cae.toString() + " getting writable stream from " + url );
+            } catch (com.sun.star.ucb.CommandAbortedException cae) {
+                LogUtils.DEBUG("caught exception: " + cae.toString() +
+                               " getting writable stream from " + url);
                 throw new IOException(cae);
-            }
-            catch ( com.sun.star.uno.Exception e )
-            {
-                LogUtils.DEBUG("caught unknown exception: " + e.toString() + " getting writable stream from " + url );
+            } catch (com.sun.star.uno.Exception e) {
+                LogUtils.DEBUG("caught unknown exception: " + e.toString() +
+                               " getting writable stream from " + url);
                 throw new IOException(e);
             }
+
             return os;
         }
     }
 
 
     private InputStream getUCBStream(String file, String path)
-        throws IOException
-    {
+    throws IOException {
         InputStream is = null;
         InputStream result = null;
 
@@ -151,42 +154,38 @@ public class UCBStreamHandler extends URLStreamHandler {
                 if (is == null) {
                     is = getFileStreamFromUCB(path);
                     m_jarStreamMap.put(path, is);
-                }
-                else {
+                } else {
                     try {
                         is.reset();
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         is.close();
                         is = getFileStreamFromUCB(path);
                         m_jarStreamMap.put(path, is);
                     }
                 }
+
                 result = getFileStreamFromJarStream(file, is);
-            }
-            else
-            {
-                String fileUrl = PathUtils.make_url(path,file);
+            } else {
+                String fileUrl = PathUtils.make_url(path, file);
                 result = getFileStreamFromUCB(fileUrl);
             }
-        }
-        finally {
+        } finally {
             if (is != null) {
                 try {
                     is.close();
-                }
-                catch (IOException ioe) {
+                } catch (IOException ioe) {
                     LogUtils.DEBUG("Caught exception closing stream: " +
-                        ioe.getMessage());
+                                   ioe.getMessage());
                 }
             }
         }
+
         return result;
     }
 
-    private InputStream getFileStreamFromJarStream(String file, InputStream is)
-        throws IOException
-    {
+    private InputStream getFileStreamFromJarStream(String file,
+            InputStream is)
+    throws IOException {
         ZipEntry entry;
 
         ZipInputStream zis = new ZipInputStream(is);
@@ -198,33 +197,33 @@ public class UCBStreamHandler extends URLStreamHandler {
                 return zis;
             }
         }
+
         return null;
     }
 
     private InputStream getFileStreamFromUCB(String path)
-        throws IOException
-    {
+    throws IOException {
         InputStream result = null;
         XInputStream xInputStream = null;
 
         try {
-            LogUtils.DEBUG("Trying to read from " + path );
+            LogUtils.DEBUG("Trying to read from " + path);
             xInputStream = m_xSimpleFileAccess.openFileRead(path);
-            LogUtils.DEBUG("sfa appeared to read file " );
+            LogUtils.DEBUG("sfa appeared to read file ");
             byte[][] inputBytes = new byte[1][];
 
             int sz = m_xSimpleFileAccess.getSize(path);
+
             // TODO don't depend on result of available() or size()
             // just read stream 'till complete
-            if ( sz == 0 )
-            {
-                if ( xInputStream.available() > 0 )
-                {
+            if (sz == 0) {
+                if (xInputStream.available() > 0) {
                     sz = xInputStream.available();
                 }
             }
-            LogUtils.DEBUG("size of file " + path  + " is " + sz );
-            LogUtils.DEBUG("available = " + xInputStream.available() );
+
+            LogUtils.DEBUG("size of file " + path  + " is " + sz);
+            LogUtils.DEBUG("available = " + xInputStream.available());
             inputBytes[0] = new byte[sz];
 
             int ln = xInputStream.readBytes(inputBytes, sz);
@@ -235,27 +234,23 @@ public class UCBStreamHandler extends URLStreamHandler {
             }
 
             result = new ByteArrayInputStream(inputBytes[0]);
-        }
-        catch (com.sun.star.io.IOException ioe) {
-            LogUtils.DEBUG("caught exception " + ioe );
+        } catch (com.sun.star.io.IOException ioe) {
+            LogUtils.DEBUG("caught exception " + ioe);
             throw new IOException(ioe.getMessage());
-        }
-        catch (com.sun.star.uno.Exception e) {
-            LogUtils.DEBUG("caught exception " + e );
+        } catch (com.sun.star.uno.Exception e) {
+            LogUtils.DEBUG("caught exception " + e);
             throw new IOException(e.getMessage());
-        }
-        finally
-        {
+        } finally {
             if (xInputStream != null) {
                 try {
                     xInputStream.closeInput();
-                }
-                catch (Exception e2) {
+                } catch (Exception e2) {
                     LogUtils.DEBUG(
                         "Error closing XInputStream:" + e2.getMessage());
                 }
             }
         }
+
         return result;
     }
 

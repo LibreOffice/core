@@ -59,6 +59,7 @@ public class OfficeDocumentDataLoader extends UniFileLoader {
 
     protected FileObject findPrimaryFile(FileObject fo) {
         ExtensionList extensions = getExtensions();
+
         if (!extensions.isRegistered(fo))
             return null;
 
@@ -67,32 +68,32 @@ public class OfficeDocumentDataLoader extends UniFileLoader {
 
         try {
             jarFs.setJarFile(document);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
+            return null;
+        } catch (Exception e) {
             return null;
         }
-        catch (Exception e) {
-            return null;
-        }
+
         return fo;
     }
 
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
-            SystemAction.get(OpenAction.class),
-            null,
-            SystemAction.get(CutAction.class),
-            SystemAction.get(CopyAction.class),
-            SystemAction.get(PasteAction.class),
-            null,
-            SystemAction.get(DeleteAction.class),
-            SystemAction.get(RenameAction.class),
-            null,
-            SystemAction.get(PropertiesAction.class),
-        };
+                   SystemAction.get(OpenAction.class),
+                   null,
+                   SystemAction.get(CutAction.class),
+                   SystemAction.get(CopyAction.class),
+                   SystemAction.get(PasteAction.class),
+                   null,
+                   SystemAction.get(DeleteAction.class),
+                   SystemAction.get(RenameAction.class),
+                   null,
+                   SystemAction.get(PropertiesAction.class),
+               };
     }
 
-    protected MultiDataObject createMultiObject(FileObject primaryFile) throws DataObjectExistsException, IOException {
+    protected MultiDataObject createMultiObject(FileObject primaryFile)
+    throws DataObjectExistsException, IOException {
         return new OfficeDocumentDataObject(primaryFile, this);
     }
 }

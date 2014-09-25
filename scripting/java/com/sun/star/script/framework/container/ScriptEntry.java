@@ -27,7 +27,7 @@ public class ScriptEntry implements Cloneable {
     private String logicalname = "";
     private String description = "";
 
-    private Map<String,String> languagedepprops;
+    private Map<String, String> languagedepprops;
 
     public ScriptEntry(String language, String languagename,
                        String location) {
@@ -39,11 +39,10 @@ public class ScriptEntry implements Cloneable {
         // as logical name also
         this.logicalname = languagename;
         this.location = location;
-        this.languagedepprops =  new HashMap<String,String>();
+        this.languagedepprops =  new HashMap<String, String>();
     }
 
-    public ScriptEntry(ScriptEntry entry)
-    {
+    public ScriptEntry(ScriptEntry entry) {
         this.language = entry.language;
         this.languagename = entry.languagename;
         this.logicalname = entry.languagename;
@@ -53,15 +52,15 @@ public class ScriptEntry implements Cloneable {
     }
 
     public ScriptEntry(String language, String languagename,
-                       String location, Map<String,String> languagedepprops) {
-        this( language, languagename, location );
+                       String location, Map<String, String> languagedepprops) {
+        this(language, languagename, location);
         this.languagedepprops = languagedepprops;
     }
 
     public ScriptEntry(String language, String languagename,
-                       String location, Map<String,String> languagedepprops,
+                       String location, Map<String, String> languagedepprops,
                        String description) {
-        this( language, languagename, location );
+        this(language, languagename, location);
         this.languagedepprops = languagedepprops;
         this.description = description;
     }
@@ -77,14 +76,13 @@ public class ScriptEntry implements Cloneable {
 
     public boolean equals(ScriptEntry other) {
         return language.equals(other.getLanguage()) &&
-                languagename.equals(other.getLanguageName()) &&
-                logicalname.equals(other.getLogicalName()) &&
-                languagedepprops.equals(other.getLanguageProperties()) &&
-                location.equals(other.getLocation());
+               languagename.equals(other.getLanguageName()) &&
+               logicalname.equals(other.getLogicalName()) &&
+               languagedepprops.equals(other.getLanguageProperties()) &&
+               location.equals(other.getLocation());
     }
 
-    public Map<String,String> getLanguageProperties()
-    {
+    public Map<String, String> getLanguageProperties() {
         return languagedepprops;
     }
 
@@ -114,6 +112,8 @@ public class ScriptEntry implements Cloneable {
 
     @Override
     public String toString() {
-        return "\nLogicalName = " + logicalname +  "\nLanguageName = " + languagename + "\nLocation = " + location + "\nLanguaguageProperties = " + languagedepprops;
+        return "\nLogicalName = " + logicalname +  "\nLanguageName = " +
+               languagename + "\nLocation = " + location +
+               "\nLanguaguageProperties = " + languagedepprops;
     }
 }

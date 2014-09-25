@@ -20,14 +20,14 @@ package org.openoffice.idesupport.filter;
 
 public class ExceptParcelFilter implements FileFilter {
     private static final String DESCRIPTION = "Remove specified Parcel";
-    private static final ExceptParcelFilter filter = new ExceptParcelFilter();
+    private static final ExceptParcelFilter filter = new
+    ExceptParcelFilter();
     private static String parcelName = null;
 
     private ExceptParcelFilter() {
     }
 
-    public void setParcelToRemove(String parcelName)
-    {
+    public void setParcelToRemove(String parcelName) {
         ExceptParcelFilter.parcelName = parcelName;
     }
 
@@ -37,6 +37,7 @@ public class ExceptParcelFilter implements FileFilter {
     public boolean validate(String name) {
         if (name.startsWith(ExceptParcelFilter.parcelName))
             return true;
+
         return false;
     }
 

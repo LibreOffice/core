@@ -27,7 +27,8 @@ import org.openide.util.Utilities;
 
 /** Description of {@link ParcelDescriptorDataLoader}.
  */
-public class ParcelDescriptorDataLoaderBeanInfo extends SimpleBeanInfo {
+public class ParcelDescriptorDataLoaderBeanInfo extends
+    SimpleBeanInfo {
 
     // If you have additional properties:
     /*
@@ -55,7 +56,8 @@ public class ParcelDescriptorDataLoaderBeanInfo extends SimpleBeanInfo {
     }
 
     public Image getIcon(int type) {
-        if (type == BeanInfo.ICON_COLOR_16x16 || type == BeanInfo.ICON_MONO_16x16) {
+        if (type == BeanInfo.ICON_COLOR_16x16
+            || type == BeanInfo.ICON_MONO_16x16) {
             return Utilities.loadImage("org/openoffice/netbeans/modules/office/loaders/ParcelDescriptorDataIcon.gif");
         } else {
             return Utilities.loadImage("org/openoffice/netbeans/modules/office/loaders/ParcelDescriptorDataIcon32.gif");

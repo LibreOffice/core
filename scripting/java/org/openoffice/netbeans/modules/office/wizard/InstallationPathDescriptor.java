@@ -41,11 +41,13 @@ public class InstallationPathDescriptor extends WizardDescriptor {
     public InstallationPathDescriptor() {
         this(new InstallationPathIterator());
     }
-    private InstallationPathDescriptor(InstallationPathIterator iterator) {
+    private InstallationPathDescriptor(InstallationPathIterator
+                                       iterator) {
         super(iterator);
         this.iterator = iterator;
         // Set title for the dialog:
-        setTitle(NbBundle.getMessage(InstallationPathDescriptor.class, "TITLE_wizard"));
+        setTitle(NbBundle.getMessage(InstallationPathDescriptor.class,
+                                     "TITLE_wizard"));
         // Make the left pane appear:
         putProperty("WizardPanel_autoWizardStyle", Boolean.TRUE); // NOI18N
         // Make the left pane show list of steps etc.:
@@ -56,7 +58,8 @@ public class InstallationPathDescriptor extends WizardDescriptor {
     protected void updateState() {
         super.updateState();
         putProperty("WizardPanel_contentData", iterator.getSteps()); // NOI18N
-        putProperty("WizardPanel_contentSelectedIndex", Integer.valueOf(iterator.getIndex())); // NOI18N
+        putProperty("WizardPanel_contentSelectedIndex",
+                    Integer.valueOf(iterator.getIndex())); // NOI18N
     }
 
 }

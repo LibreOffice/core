@@ -51,23 +51,25 @@ import org.openoffice.idesupport.LocalOffice;
 import org.openoffice.netbeans.modules.office.utils.NagDialog;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 
-public class DeployParcelAction extends CookieAction implements Presenter.Popup {
+public class DeployParcelAction extends CookieAction implements
+    Presenter.Popup {
 
     private static final String BROWSE_LABEL = "Office Document...";
     private static final String DEPLOY_LABEL = "Deploy To";
 
-    public String getName () {
+    public String getName() {
         return DEPLOY_LABEL;
     }
 
-    public HelpCtx getHelpCtx () {
+    public HelpCtx getHelpCtx() {
         return HelpCtx.DEFAULT_HELP;
     }
 
     public JMenuItem getPopupPresenter() {
         JMenuPlus menu = new JMenuPlus(DEPLOY_LABEL);
         JMenuItem item, user, share;
-        final OfficeInstallation oi = OfficeSettings.getDefault().getOfficeDirectory();
+        final OfficeInstallation oi =
+            OfficeSettings.getDefault().getOfficeDirectory();
 
         ActionListener listener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -79,12 +81,13 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
                     (ParcelCookie)nodes[0].getCookie(ParcelCookie.class);
 
                 File target = new File(oi.getPath(File.separator + label +
-                    File.separator + "Scripts"));
+                                                  File.separator + "Scripts"));
 
                 File langdir = new File(target, parcelCookie.getLanguage());
 
                 if (!langdir.exists()) {
                     boolean response = askIfCreateDirectory(langdir);
+
                     if (!response) {
                         return;
                     }
@@ -110,8 +113,10 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 File target = getTargetFile();
+
                 if (target == null)
                     return;
+
                 deploy(target);
             }
         });
@@ -120,15 +125,15 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
         return menu;
     }
 
-    protected int mode () {
+    protected int mode() {
         return MODE_ONE;
     }
 
-    protected Class[] cookieClasses () {
+    protected Class[] cookieClasses() {
         return new Class[] { ParcelCookie.class };
     }
 
-    protected void performAction (Node[] activatedNodes) {
+    protected void performAction(Node[] activatedNodes) {
         // do nothing, should not happen
     }
 
@@ -150,7 +155,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
     private boolean askIfCreateDirectory(File directory) {
         String message = directory.getAbsolutePath() + " does not exist. " +
-            "Do you want to create it now?";
+                         "Do you want to create it now?";
 
         NotifyDescriptor d = new NotifyDescriptor.Confirmation(
             message, NotifyDescriptor.OK_CANCEL_OPTION);
@@ -160,10 +165,10 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
             return false;
 
         boolean result;
+
         try {
             result = directory.mkdirs();
-        }
-        catch (SecurityException se) {
+        } catch (SecurityException se) {
             result = false;
         }
 
@@ -173,6 +178,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
                 tmp, NotifyDescriptor.ERROR_MESSAGE);
             TopManager.getDefault().notify(d2);
         }
+
         return result;
     }
 
@@ -185,14 +191,14 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
     private void showNagDialog() {
         String message = "If you currently have Office running you will " +
-            "need to click on the Tools/Scripting Add-on's/Refresh All Scripts " +
-            " menu item in Office so that the scripts in this parcel can be detected.";
+                         "need to click on the Tools/Scripting Add-on's/Refresh All Scripts " +
+                         " menu item in Office so that the scripts in this parcel can be detected.";
 
         OfficeSettings settings = OfficeSettings.getDefault();
 
         if (settings.getWarnAfterDirDeploy()) {
             NagDialog warning = NagDialog.createInformationDialog(
-                message, "Show this message in future", true);
+                                    message, "Show this message in future", true);
 
             warning.show();
 
@@ -216,6 +222,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
                     file.getName().endsWith(".sxd") ||
                     file.getName().endsWith(".sxi"))
                     return true;
+
                 return false;
             }
 
@@ -229,6 +236,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
         if (result == JFileChooser.APPROVE_OPTION) {
             target = chooser.getSelectedFile();
         }
+
         return target;
     }
 }

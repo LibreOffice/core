@@ -37,6 +37,7 @@ public class ScriptingUtils {
     public static synchronized ScriptingUtils getDefault() {
         if (utils == null)
             utils = new ScriptingUtils();
+
         return utils;
     }
 
@@ -44,7 +45,8 @@ public class ScriptingUtils {
 
 
 
-    public Object getScriptStorage(XMultiServiceFactory xMSF, String location) {
+    public Object getScriptStorage(XMultiServiceFactory xMSF,
+                                   String location) {
         int id = getStorageId(xMSF, location);
         return storageManager.getScriptStorage(id);
     }
@@ -63,23 +65,25 @@ public class ScriptingUtils {
         if (storageManager == null) {
             try {
                 XPropertySet xProp = UnoRuntime.queryInterface(
-                    XPropertySet.class, xMSF);
+                                         XPropertySet.class, xMSF);
 
-                XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class,
-                xProp.getPropertyValue("DefaultContext"));
+                XComponentContext xContext = UnoRuntime.queryInterface(
+                                                 XComponentContext.class,
+                                                 xProp.getPropertyValue("DefaultContext"));
 
                 XInterface ifc = (XInterface)
-                    xContext.getValueByName("/singletons/drafts.com.sun.star." +
-                    "script.framework.storage.theScriptStorageManager");
+                                 xContext.getValueByName("/singletons/drafts.com.sun.star." +
+                                         "script.framework.storage.theScriptStorageManager");
 
-                storageManager = UnoRuntime.queryInterface(XScriptStorageManager.class, ifc);
-            }
-            catch( Exception e ) {
+                storageManager = UnoRuntime.queryInterface(
+                                     XScriptStorageManager.class, ifc);
+            } catch (Exception e) {
                 return -1;
             }
         }
 
         access = getXSimpleFileAccess(xMSF);
+
         if (access == null)
             return -1;
 
@@ -88,7 +92,8 @@ public class ScriptingUtils {
         return id;
     }
 
-    private XSimpleFileAccess getXSimpleFileAccess(XMultiServiceFactory xMSF) {
+    private XSimpleFileAccess getXSimpleFileAccess(XMultiServiceFactory
+            xMSF) {
         XSimpleFileAccess access = null;
 
         try {
@@ -96,10 +101,10 @@ public class ScriptingUtils {
                 xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
 
             access = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
-        }
-        catch (com.sun.star.uno.Exception e) {
+        } catch (com.sun.star.uno.Exception e) {
             return null;
         }
+
         return access;
     }
 }

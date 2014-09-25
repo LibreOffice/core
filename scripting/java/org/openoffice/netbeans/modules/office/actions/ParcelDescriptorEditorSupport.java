@@ -32,7 +32,8 @@ import org.openoffice.netbeans.modules.office.loader.ParcelDescriptorDataObject;
 /** Support for editing a data object as text.
  */
 // Replace OpenCookie with EditCookie or maybe ViewCookie as desired:
-public class ParcelDescriptorEditorSupport extends DataEditorSupport implements EditorCookie, OpenCookie, CloseCookie, PrintCookie {
+public class ParcelDescriptorEditorSupport extends DataEditorSupport
+    implements EditorCookie, OpenCookie, CloseCookie, PrintCookie {
 
     /** Create a new editor support.
      * @param obj the data object whose primary file will be edited as text
@@ -51,12 +52,16 @@ public class ParcelDescriptorEditorSupport extends DataEditorSupport implements 
         if (!super.notifyModified()) {
             return false;
         }
-        ParcelDescriptorDataObject obj = (ParcelDescriptorDataObject)getDataObject();
+
+        ParcelDescriptorDataObject obj = (ParcelDescriptorDataObject)
+                                         getDataObject();
+
         if (obj.getCookie(SaveCookie.class) == null) {
             obj.setModified(true);
             // You must implement this method on the object:
             obj.addSaveCookie(new Save());
         }
+
         return true;
     }
 
@@ -64,13 +69,16 @@ public class ParcelDescriptorEditorSupport extends DataEditorSupport implements 
      * Here, removing the save cookie from the object and marking it unmodified.
      */
     protected void notifyUnmodified() {
-        ParcelDescriptorDataObject obj = (ParcelDescriptorDataObject)getDataObject();
+        ParcelDescriptorDataObject obj = (ParcelDescriptorDataObject)
+                                         getDataObject();
         SaveCookie save = (SaveCookie)obj.getCookie(SaveCookie.class);
+
         if (save != null) {
             // You must implement this method on the object:
             obj.removeSaveCookie(save);
             obj.setModified(false);
         }
+
         super.notifyUnmodified();
     }
 
@@ -88,7 +96,8 @@ public class ParcelDescriptorEditorSupport extends DataEditorSupport implements 
      * Note this may be serialized as part of the window system and so
      * should be static, and use the transient modifier where needed.
      */
-    private static class ParcelDescriptorEnv extends DataEditorSupport.Env {
+    private static class ParcelDescriptorEnv extends
+        DataEditorSupport.Env {
 
         /** Create a new environment based on the data object.
          * @param obj the data object to edit
@@ -111,7 +120,8 @@ public class ParcelDescriptorEditorSupport extends DataEditorSupport implements 
          * @throws IOException if the lock could not be taken
          */
         protected FileLock takeLock() throws IOException {
-            return ((ParcelDescriptorDataObject)getDataObject()).getPrimaryEntry().takeLock();
+            return ((ParcelDescriptorDataObject)
+                    getDataObject()).getPrimaryEntry().takeLock();
         }
 
         /** Find the editor support this environment represents.
@@ -120,7 +130,8 @@ public class ParcelDescriptorEditorSupport extends DataEditorSupport implements 
          * @return the editor support
          */
         public CloneableOpenSupport findCloneableOpenSupport() {
-            return (ParcelDescriptorEditorSupport)getDataObject().getCookie(ParcelDescriptorEditorSupport.class);
+            return (ParcelDescriptorEditorSupport)getDataObject().getCookie(
+                       ParcelDescriptorEditorSupport.class);
         }
 
     }

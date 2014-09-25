@@ -34,22 +34,23 @@ import org.openide.util.NbBundle;
  * Used to create a wizard. Create one or more
  * panels from template as needed too.
  */
-public class InstallationPathIterator implements WizardDescriptor.Iterator {
+public class InstallationPathIterator implements
+    WizardDescriptor.Iterator {
 
     // You should define what panels you want to use here:
 
     protected WizardDescriptor.Panel[] createPanels() {
         return new WizardDescriptor.Panel[] {
-            new SelectPathPanel()
-        };
+                   new SelectPathPanel()
+               };
     }
 
     // And the list of step names:
 
     protected String[] createSteps() {
         return new String[] {
-            "Select OpenOffice.org Installation"
-        };
+                   "Select OpenOffice.org Installation"
+               };
     }
 
     // --- The rest probably does not need to be touched. ---
@@ -66,6 +67,7 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
         if (panels == null) {
             panels = createPanels();
         }
+
         return panels;
     }
 
@@ -77,6 +79,7 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
         if (steps == null) {
             steps = createSteps();
         }
+
         return steps;
     }
 
@@ -86,8 +89,9 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
     // or disappear dynamically, go ahead.
 
     public String name() {
-        return NbBundle.getMessage(InstallationPathIterator.class, "TITLE_x_of_y",
-        Integer.valueOf(index + 1), Integer.valueOf(getPanels().length));
+        return NbBundle.getMessage(InstallationPathIterator.class,
+                                   "TITLE_x_of_y",
+                                   Integer.valueOf(index + 1), Integer.valueOf(getPanels().length));
     }
 
     public boolean hasNext() {
@@ -98,10 +102,12 @@ public class InstallationPathIterator implements WizardDescriptor.Iterator {
     }
     public void nextPanel() {
         if (!hasNext()) throw new NoSuchElementException();
+
         index++;
     }
     public void previousPanel() {
         if (!hasPrevious()) throw new NoSuchElementException();
+
         index--;
     }
     public WizardDescriptor.Panel current() {

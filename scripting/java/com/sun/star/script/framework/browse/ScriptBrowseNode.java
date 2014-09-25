@@ -46,8 +46,7 @@ import com.sun.star.script.framework.provider.ScriptProvider;
 import com.sun.star.script.framework.container.*;
 
 public class ScriptBrowseNode extends PropertySet
-    implements XBrowseNode, XInvocation
-{
+    implements XBrowseNode, XInvocation {
     private ScriptProvider provider;
 
     private Parcel parent;
@@ -58,37 +57,35 @@ public class ScriptBrowseNode extends PropertySet
     private boolean deletable = false;
     private boolean renamable = false;
 
-    public ScriptBrowseNode( ScriptProvider provider, Parcel parent,
-        String name )
-    {
+    public ScriptBrowseNode(ScriptProvider provider, Parcel parent,
+                            String name) {
         this.provider = provider;
         this.name = name;
         this.parent = parent;
-        XComponentContext xCtx = provider.getScriptingContext().getComponentContext();
+        XComponentContext xCtx =
+            provider.getScriptingContext().getComponentContext();
         XMultiComponentFactory xFac = xCtx.getServiceManager();
-        try
-        {
-            ScriptMetaData data = (ScriptMetaData)parent.getByName( name );
-            XSimpleFileAccess xSFA = UnoRuntime.queryInterface( XSimpleFileAccess.class,
-                xFac.createInstanceWithContext(
-                    "com.sun.star.ucb.SimpleFileAccess",
-                    xCtx ) );
 
-            if (provider.hasScriptEditor())
-            {
+        try {
+            ScriptMetaData data = (ScriptMetaData)parent.getByName(name);
+            XSimpleFileAccess xSFA = UnoRuntime.queryInterface(
+                                         XSimpleFileAccess.class,
+                                         xFac.createInstanceWithContext(
+                                             "com.sun.star.ucb.SimpleFileAccess",
+                                             xCtx));
+
+            if (provider.hasScriptEditor()) {
                 this.editable = true;
-                try
-                {
+
+                try {
                     if (!parent.isUnoPkg()
-                            && !xSFA.isReadOnly(parent.getPathToParcel()))
-                    {
+                        && !xSFA.isReadOnly(parent.getPathToParcel())) {
                         this.deletable = true;
                         this.renamable = true;
                     }
                 }
                 // TODO propagate errors
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     LogUtils.DEBUG("Caught exception in creation of ScriptBrowseNode");
                     LogUtils.DEBUG(LogUtils.getTrace(e));
                 }
@@ -97,21 +94,21 @@ public class ScriptBrowseNode extends PropertySet
 
         }
         // TODO fix exception types to be caught here, should we rethrow?
-        catch (  Exception e )
-        {
-            LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
+        catch (Exception e) {
+            LogUtils.DEBUG("** caught exception getting script data for " + name +
+                           " ->" + e.toString());
         }
 
         registerProperty("Deletable", new Type(boolean.class),
-            (short)0, "deletable");
+                         (short)0, "deletable");
         registerProperty("Editable", new Type(boolean.class),
-            (short)0, "editable");
+                         (short)0, "editable");
         registerProperty("Renamable", new Type(boolean.class),
-            (short)0, "renamable");
+                         (short)0, "renamable");
         registerProperty("URI", new Type(String.class),
-            (short)0, "uri");
+                         (short)0, "uri");
         registerProperty("Description", new Type(String.class),
-            (short)0, "description");
+                         (short)0, "description");
     }
 
 
@@ -136,18 +133,18 @@ public class ScriptBrowseNode extends PropertySet
         return getName();
     }
 
-    public void updateURI( Parcel p ) {
+    public void updateURI(Parcel p) {
         parent = p;
         ScriptMetaData data = null;
-        try
-        {
-            data = (ScriptMetaData)parent.getByName( name );
+
+        try {
+            data = (ScriptMetaData)parent.getByName(name);
         }
 
         // TODO fix exception types to be caught here, should we rethrow?
-        catch (  Exception e )
-        {
-            LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
+        catch (Exception e) {
+            LogUtils.DEBUG("** caught exception getting script data for " + name +
+                           " ->" + e.toString());
         }
     }
     // implementation of XInvocation interface
@@ -157,10 +154,9 @@ public class ScriptBrowseNode extends PropertySet
 
     public Object invoke(String aFunctionName, Object[] aParams,
                          short[][] aOutParamIndex, Object[][] aOutParam)
-        throws com.sun.star.lang.IllegalArgumentException,
-               com.sun.star.script.CannotConvertException,
-               com.sun.star.reflection.InvocationTargetException
-    {
+    throws com.sun.star.lang.IllegalArgumentException,
+        com.sun.star.script.CannotConvertException,
+        com.sun.star.reflection.InvocationTargetException {
         // Initialise the out parameters - not used but prevents error in
         // UNO bridge
         aOutParamIndex[0] = new short[0];
@@ -168,83 +164,67 @@ public class ScriptBrowseNode extends PropertySet
 
         Any result = new Any(new Type(Boolean.class), Boolean.TRUE);
 
-        if (aFunctionName.equals("Editable"))
-        {
-            if (!editable)
-            {
+        if (aFunctionName.equals("Editable")) {
+            if (!editable) {
                 NoSupportException nse = new NoSupportException(
-                    aFunctionName + " is not editable " );
+                    aFunctionName + " is not editable ");
 
                 throw new InvocationTargetException(
-                    "Scripting framework error editing script", null, nse );
+                    "Scripting framework error editing script", null, nse);
             }
 
             XScriptContext ctxt =  provider.getScriptingContext();
             ScriptMetaData data = null;
-            try
-            {
-                data = (ScriptMetaData)parent.getByName( name );
-            }
-            catch ( NoSuchElementException nse )
-            {
+
+            try {
+                data = (ScriptMetaData)parent.getByName(name);
+            } catch (NoSuchElementException nse) {
                 throw new com.sun.star.lang.IllegalArgumentException(
-                    name + " does not exist or can't be found " );
-            }
-            catch (  com.sun.star.lang.WrappedTargetException wte )
-            {
+                    name + " does not exist or can't be found ");
+            } catch (com.sun.star.lang.WrappedTargetException wte) {
                 // rethrow
                 throw new InvocationTargetException(
                     "Scripting framework editing script ",
-                        null, wte.TargetException );
+                    null, wte.TargetException);
             }
 
             provider.getScriptEditor().edit(ctxt, data);
-        }
-        else if (aFunctionName.equals("Deletable"))
-        {
-            if (!deletable)
-            {
+        } else if (aFunctionName.equals("Deletable")) {
+            if (!deletable) {
                 NoSupportException nse = new NoSupportException(
-                    aFunctionName + " is not supported for this node" );
+                    aFunctionName + " is not supported for this node");
 
                 throw new InvocationTargetException(
-                      "Scripting framework error deleting script", null, nse );
+                    "Scripting framework error deleting script", null, nse);
             }
-            try
-            {
-                parent.removeByName( name );
+
+            try {
+                parent.removeByName(name);
                 result = new Any(new Type(Boolean.class), Boolean.TRUE);
-            }
-            catch ( NoSuchElementException nse )
-            {
+            } catch (NoSuchElementException nse) {
                 throw new com.sun.star.lang.IllegalArgumentException(
-                    name + " does not exist or can't be found " );
-            }
-            catch ( WrappedTargetException wte )
-            {
+                    name + " does not exist or can't be found ");
+            } catch (WrappedTargetException wte) {
                 // rethrow
                 throw new InvocationTargetException(
                     "Scripting framework deleting script ",
-                        null, wte.TargetException );
+                    null, wte.TargetException);
             }
 
-        }
-        else if (aFunctionName.equals("Renamable"))
-        {
+        } else if (aFunctionName.equals("Renamable")) {
             result = new Any(new Type(XBrowseNode.class), new XBrowseNode[0]);
-            if (!renamable)
-            {
+
+            if (!renamable) {
                 NoSupportException nse = new NoSupportException(
-                    aFunctionName + " is not supported for this node" );
+                    aFunctionName + " is not supported for this node");
 
                 throw new InvocationTargetException(
-                    "Scripting framework error renaming script", null, nse );
+                    "Scripting framework error renaming script", null, nse);
             }
 
-            try
-            {
+            try {
                 String newName = AnyConverter.toString(aParams[0]);
-                ScriptMetaData oldData = (ScriptMetaData)parent.getByName( name );
+                ScriptMetaData oldData = (ScriptMetaData)parent.getByName(name);
                 oldData.loadSource();
                 String oldSource = oldData.getSource();
 
@@ -254,40 +234,33 @@ public class ScriptBrowseNode extends PropertySet
                 String language = provider.getName();
 
                 ScriptEntry entry = new ScriptEntry(
-                    language, languageName, "", new HashMap<String,String>() );
+                    language, languageName, "", new HashMap<String, String>());
 
                 ScriptMetaData data = new ScriptMetaData(
-                    parent, entry, oldSource );
+                    parent, entry, oldSource);
 
-                parent.insertByName( languageName, data );
+                parent.insertByName(languageName, data);
 
                 LogUtils.DEBUG("Now remove old script");
-                parent.removeByName( name );
+                parent.removeByName(name);
 
                 name = languageName;
                 result = new Any(new Type(XBrowseNode.class), this);
-            }
-            catch ( NoSuchElementException nse )
-            {
+            } catch (NoSuchElementException nse) {
                 throw new com.sun.star.lang.IllegalArgumentException(
-                    name + " does not exist or can't be found " );
-            }
-            catch ( ElementExistException eee )
-            {
+                    name + " does not exist or can't be found ");
+            } catch (ElementExistException eee) {
                 // rethrow
                 throw new InvocationTargetException(
                     "Scripting framework error renaming script ",
-                        null, eee );
-            }
-            catch ( WrappedTargetException wte )
-            {
+                    null, eee);
+            } catch (WrappedTargetException wte) {
                 // rethrow
                 throw new InvocationTargetException(
                     "Scripting framework rename script ",
-                        null, wte.TargetException );
+                    null, wte.TargetException);
             }
-        }
-        else {
+        } else {
             throw new com.sun.star.lang.IllegalArgumentException(
                 "Function " + aFunctionName + " not supported.");
         }
@@ -296,15 +269,13 @@ public class ScriptBrowseNode extends PropertySet
     }
 
     public void setValue(String aPropertyName, Object aValue)
-        throws com.sun.star.beans.UnknownPropertyException,
-               com.sun.star.script.CannotConvertException,
-               com.sun.star.reflection.InvocationTargetException
-    {
+    throws com.sun.star.beans.UnknownPropertyException,
+        com.sun.star.script.CannotConvertException,
+        com.sun.star.reflection.InvocationTargetException {
     }
 
     public Object getValue(String aPropertyName)
-        throws com.sun.star.beans.UnknownPropertyException
-    {
+    throws com.sun.star.beans.UnknownPropertyException {
         return null;
     }
 

@@ -29,7 +29,8 @@ import org.openoffice.netbeans.modules.office.actions.*;
 
 public class OfficeDocumentDataObject extends MultiDataObject {
 
-    public OfficeDocumentDataObject(FileObject pf, OfficeDocumentDataLoader loader) throws DataObjectExistsException {
+    public OfficeDocumentDataObject(FileObject pf,
+                                    OfficeDocumentDataLoader loader) throws DataObjectExistsException {
         super(pf, loader);
         init();
     }

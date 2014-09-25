@@ -28,8 +28,10 @@ public final class SwingInvocation {
     public static void invoke(final Runnable doRun) {
         new Thread("SwingInvocation") {
             @Override
-            public void run() { SwingUtilities.invokeLater(doRun); }
-        }.start();
+            public void run() {
+                SwingUtilities.invokeLater(doRun);
+            }
+        } .start();
     }
 
     private SwingInvocation() {}

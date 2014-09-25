@@ -36,7 +36,8 @@ import org.openoffice.idesupport.SVersionRCFile;
 /** A single panel descriptor for a wizard.
  * You probably want to make a wizard iterator to hold it.
  */
-public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel */ {
+public class SelectPathPanel implements
+    WizardDescriptor.Panel { /* .FinishPanel */
 
     /** The visual component that displays this panel.
      * If you need to access the component from this class,
@@ -52,8 +53,7 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
         if (office == null) {
             try {
                 office = SVersionRCFile.createInstance().getDefaultVersion();
-            }
-            catch (java.io.IOException ioe) {}
+            } catch (java.io.IOException ioe) {}
         }
     }
 
@@ -65,6 +65,7 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
         if (component == null) {
             component = new SelectPathVisualPanel(this);
         }
+
         return component;
     }
 
@@ -98,10 +99,13 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
     }
     protected final void fireChangeEvent() {
         Iterator it;
+
         synchronized (listeners) {
             it = new HashSet(listeners).iterator();
         }
+
         ChangeEvent ev = new ChangeEvent(this);
+
         while (it.hasNext()) {
             ((ChangeListener)it.next()).stateChanged(ev);
         }

@@ -42,7 +42,8 @@ public class ParcelDescriptorDataLoader extends UniFileLoader {
     }
 
     protected String defaultDisplayName() {
-        return OfficeDocument.OFFICE_PRODUCT_NAME + " Script Parcel Descriptor";
+        return OfficeDocument.OFFICE_PRODUCT_NAME +
+               " Script Parcel Descriptor";
     }
 
     protected void initialize() {
@@ -53,20 +54,21 @@ public class ParcelDescriptorDataLoader extends UniFileLoader {
 
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
-            SystemAction.get(OpenAction.class),
-            null,
-            SystemAction.get(CutAction.class),
-            SystemAction.get(CopyAction.class),
-            SystemAction.get(PasteAction.class),
-            null,
-            SystemAction.get(DeleteAction.class),
-            SystemAction.get(RenameAction.class),
-            null,
-            SystemAction.get(PropertiesAction.class),
-        };
+                   SystemAction.get(OpenAction.class),
+                   null,
+                   SystemAction.get(CutAction.class),
+                   SystemAction.get(CopyAction.class),
+                   SystemAction.get(PasteAction.class),
+                   null,
+                   SystemAction.get(DeleteAction.class),
+                   SystemAction.get(RenameAction.class),
+                   null,
+                   SystemAction.get(PropertiesAction.class),
+               };
     }
 
-    protected MultiDataObject createMultiObject(FileObject primaryFile) throws DataObjectExistsException, IOException {
+    protected MultiDataObject createMultiObject(FileObject primaryFile)
+    throws DataObjectExistsException, IOException {
         return new ParcelDescriptorDataObject(primaryFile, this);
     }
 }

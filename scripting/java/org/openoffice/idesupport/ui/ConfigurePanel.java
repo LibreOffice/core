@@ -53,7 +53,7 @@ public class ConfigurePanel extends JPanel {
         "Choose What to Export as Scripts";
 
     public ConfigurePanel(String basedir, ArrayList<String> classpath,
-        ParcelDescriptor descriptor) {
+                          ParcelDescriptor descriptor) {
 
         this.basedir = new File(basedir);
         this.classpath = classpath;
@@ -62,17 +62,17 @@ public class ConfigurePanel extends JPanel {
     }
 
     public ConfigurePanel(String basedir, ArrayList<String> classpath)
-        throws IOException {
+    throws IOException {
 
         this.basedir = new File(basedir);
         this.classpath = classpath;
         this.descriptor = new ParcelDescriptor(new File(this.basedir,
-            ParcelZipper.PARCEL_DESCRIPTOR_XML));
+                                               ParcelZipper.PARCEL_DESCRIPTOR_XML));
         initUI();
     }
 
     public void reload(String basedir, ArrayList<String> classpath,
-        ParcelDescriptor descriptor) {
+                       ParcelDescriptor descriptor) {
 
         if (basedir != null)
             this.basedir = new File(basedir);
@@ -85,12 +85,12 @@ public class ConfigurePanel extends JPanel {
         }
 
         methodPanel.reload(this.basedir, this.classpath,
-            descriptor.getLanguage());
+                           descriptor.getLanguage());
         scriptPanel.reload(descriptor.getScriptEntries());
     }
 
     public void reload(String basedir, ArrayList<String> classpath)
-        throws IOException {
+    throws IOException {
 
         if (basedir != null)
             this.basedir = new File(basedir);
@@ -99,10 +99,10 @@ public class ConfigurePanel extends JPanel {
             this.classpath = classpath;
 
         this.descriptor = new ParcelDescriptor(new File(this.basedir,
-            ParcelZipper.PARCEL_DESCRIPTOR_XML));
+                                               ParcelZipper.PARCEL_DESCRIPTOR_XML));
 
         methodPanel.reload(this.basedir, this.classpath,
-            descriptor.getLanguage());
+                           descriptor.getLanguage());
         scriptPanel.reload(descriptor.getScriptEntries());
     }
 
@@ -116,7 +116,8 @@ public class ConfigurePanel extends JPanel {
 
         JPanel leftPanel = new JPanel();
         JPanel methodButtons = initMethodButtons();
-        methodPanel = new MethodPanel(basedir, classpath, descriptor.getLanguage());
+        methodPanel = new MethodPanel(basedir, classpath,
+                                      descriptor.getLanguage());
 
         leftPanel.setLayout(new BorderLayout());
         leftPanel.add(methodPanel, BorderLayout.CENTER);
@@ -163,16 +164,17 @@ public class ConfigurePanel extends JPanel {
     private JPanel initMethodButtons() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        ImageIcon icon = new ImageIcon(getClass().getResource("/org/openoffice/idesupport/ui/add.gif"));
+        ImageIcon icon = new ImageIcon(
+            getClass().getResource("/org/openoffice/idesupport/ui/add.gif"));
         JButton addButton = new JButton("Add", icon);
         addButton.setHorizontalTextPosition(AbstractButton.LEFT);
 
         addButton.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    scriptPanel.addScriptEntries(methodPanel.getSelectedEntries());
-                }
+        new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                scriptPanel.addScriptEntries(methodPanel.getSelectedEntries());
             }
+        }
         );
 
         GridBagConstraints gbc = new java.awt.GridBagConstraints();
@@ -199,19 +201,19 @@ public class ConfigurePanel extends JPanel {
         JButton removeAllButton = new JButton("Remove All");
 
         removeButton.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    scriptPanel.removeSelectedRows();
-                }
+        new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                scriptPanel.removeSelectedRows();
             }
+        }
         );
 
         removeAllButton.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    scriptPanel.removeAllRows();
-                }
+        new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                scriptPanel.removeAllRows();
             }
+        }
         );
 
         panel.add(removeButton);

@@ -28,20 +28,19 @@ import com.sun.star.ucb.XSimpleFileAccess2;
 
 import java.io.*;
 
-public class Parcel implements XNameContainer
-{
+public class Parcel implements XNameContainer {
     private ParcelDescriptor m_descriptor;
     private String name;
     protected ParcelContainer parent;
     protected XSimpleFileAccess m_xSFA;
-    public Parcel( XSimpleFileAccess xSFA, ParcelContainer parent, ParcelDescriptor desc, String parcelName )
-    {
-       this( parent, desc, parcelName );
-       this.m_xSFA = xSFA;
+    public Parcel(XSimpleFileAccess xSFA, ParcelContainer parent,
+                  ParcelDescriptor desc, String parcelName) {
+        this(parent, desc, parcelName);
+        this.m_xSFA = xSFA;
     }
 
-    private Parcel( ParcelContainer parent, ParcelDescriptor desc, String parcelName )
-    {
+    private Parcel(ParcelContainer parent, ParcelDescriptor desc,
+                   String parcelName) {
         this.parent = parent;
         this.m_descriptor = desc;
         this.name = parcelName;
@@ -53,23 +52,24 @@ public class Parcel implements XNameContainer
      *
      * @return    <tt>true</tt> if has parent <tt>false</tt> otherwise
      */
-    public boolean isUnoPkg() { return parent.isUnoPkg(); }
+    public boolean isUnoPkg() {
+        return parent.isUnoPkg();
+    }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
-    public java.lang.Object getByName( String aName ) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
-    {
-        LogUtils.DEBUG("** Parcel.getByName for " + aName  );
+    public java.lang.Object getByName(String aName) throws
+        com.sun.star.container.NoSuchElementException,
+        com.sun.star.lang.WrappedTargetException {
+        LogUtils.DEBUG("** Parcel.getByName for " + aName);
         ScriptEntry thescript = null;
-        try
-        {
-            if ( m_descriptor != null && hasElements() )
-            {
+
+        try {
+            if (m_descriptor != null && hasElements()) {
                 ScriptEntry[] scripts = m_descriptor.getScriptEntries();
-                if ( scripts.length != 0 )
-                {
+
+                if (scripts.length != 0) {
                     for (ScriptEntry script : scripts) {
                         if (script.getLanguageName().equals(aName)) {
                             thescript = script;
@@ -80,51 +80,50 @@ public class Parcel implements XNameContainer
             }
         }
         // catch unknown or un-checked exceptions
-        catch ( Exception e )
-        {
+        catch (Exception e) {
             throw new com.sun.star.lang.WrappedTargetException(e);
         }
-        if ( thescript == null )
-        {
-            LogUtils.DEBUG("No script for " + aName );
-            throw new com.sun.star.container.NoSuchElementException("No script named " + aName );
-        }
-        ScriptMetaData data = new ScriptMetaData( this, thescript, null );
 
-        LogUtils.DEBUG("returning date  for " + aName );
+        if (thescript == null) {
+            LogUtils.DEBUG("No script for " + aName);
+            throw new com.sun.star.container.NoSuchElementException("No script named "
+                    + aName);
+        }
+
+        ScriptMetaData data = new ScriptMetaData(this, thescript, null);
+
+        LogUtils.DEBUG("returning date  for " + aName);
         return data;
     }
-    public String[] getElementNames()
-    {
+    public String[] getElementNames() {
         String[] results = new String[0];
-        if ( m_descriptor != null )
-        {
+
+        if (m_descriptor != null) {
             ScriptEntry[] scripts = m_descriptor.getScriptEntries();
             results = new String[ scripts.length ];
-            for ( int index = 0; index < scripts.length; index++ )
-            {
+
+            for (int index = 0; index < scripts.length; index++) {
                 results[ index ] = scripts[ index ].getLanguageName();
             }
         }
+
         return results;
     }
-    public boolean hasByName( String aName )
-    {
+    public boolean hasByName(String aName) {
 
         boolean result = true;
         Object containee  = null;
-        try
-        {
-            containee = getByName( aName );
-            if ( containee != null )
-            {
+
+        try {
+            containee = getByName(aName);
+
+            if (containee != null) {
                 result = true;
             }
-        }
-        catch( Exception e )
-        {
+        } catch (Exception e) {
             result = false;
         }
+
         return result;
     }
 
@@ -136,151 +135,150 @@ public class Parcel implements XNameContainer
         return new Type();
     }
 
-    public boolean hasElements()
-    {
-        return m_descriptor != null && m_descriptor.getScriptEntries().length > 0;
+    public boolean hasElements() {
+        return m_descriptor != null
+               && m_descriptor.getScriptEntries().length > 0;
     }
 
-    public void replaceByName( String aName, java.lang.Object aElement ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
-   {
-       // TODO check type of aElement
-       // if not ok, throw IllegalArgument
-       if ( m_descriptor != null )
-       {
-           try
-           {
-               ScriptEntry script = (ScriptEntry)getByName( aName );
-               if ( script != null )
-               {
-                   //m_descriptor.removeScriptEntry( script );
-                   // TODO needs to create source file ( if there is one )
-                   //m_descriptor.write();
-               }
-               else
-               {
-                   throw new com.sun.star.container.NoSuchElementException("No script named " + aName );
-               }
+    public void replaceByName(String aName,
+                              java.lang.Object aElement) throws
+        com.sun.star.lang.IllegalArgumentException,
+        com.sun.star.container.NoSuchElementException,
+        com.sun.star.lang.WrappedTargetException {
+        // TODO check type of aElement
+        // if not ok, throw IllegalArgument
+        if (m_descriptor != null) {
+            try {
+                ScriptEntry script = (ScriptEntry)getByName(aName);
+
+                if (script != null) {
+                    //m_descriptor.removeScriptEntry( script );
+                    // TODO needs to create source file ( if there is one )
+                    //m_descriptor.write();
+                } else {
+                    throw new com.sun.star.container.NoSuchElementException("No script named "
+                            + aName);
+                }
 
 
-           }
-           // TO DO should catch specified exceptions
-           catch ( Exception e )
-           {
-               throw new com.sun.star.lang.WrappedTargetException();
-           }
+            }
+            // TO DO should catch specified exceptions
+            catch (Exception e) {
+                throw new com.sun.star.lang.WrappedTargetException();
+            }
 
-       }
-   }
+        }
+    }
 
     // create
-    public void insertByName( String aName, java.lang.Object aElement ) throws com.sun.star.lang.IllegalArgumentException, ElementExistException, com.sun.star.lang.WrappedTargetException
-    {
+    public void insertByName(String aName,
+                             java.lang.Object aElement) throws
+        com.sun.star.lang.IllegalArgumentException, ElementExistException,
+        com.sun.star.lang.WrappedTargetException {
         // TODO check the type of aElement and throw#
         // if not appropriate
-        try
-        {
-            if ( hasByName( aName ) )
-            {
-                throw new ElementExistException( aName );
+        try {
+            if (hasByName(aName)) {
+                throw new ElementExistException(aName);
             }
+
             ScriptMetaData script = (ScriptMetaData)aElement;
 
-            if (  script.hasSource() )
-            {
+            if (script.hasSource()) {
                 LogUtils.DEBUG("Inserting source: " + script.getSource());
-                if ( !script.writeSourceFile() )
-                {
-                    throw new com.sun.star.lang.WrappedTargetException( "Failed to create source file " + script.getLanguageName() );
+
+                if (!script.writeSourceFile()) {
+                    throw new com.sun.star.lang.WrappedTargetException("Failed to create source file "
+                            + script.getLanguageName());
                 }
             }
-            m_descriptor.addScriptEntry( script );
+
+            m_descriptor.addScriptEntry(script);
             writeParcelDescriptor();
-        }
-        catch ( Exception e )
-        {
-            LogUtils.DEBUG("Failed to insert entry " + aName + ": " + e.getMessage());
+        } catch (Exception e) {
+            LogUtils.DEBUG("Failed to insert entry " + aName + ": " +
+                           e.getMessage());
             throw new com.sun.star.lang.WrappedTargetException(e);
         }
     }
 
 
     private void writeParcelDescriptor()
-        throws com.sun.star.ucb.CommandAbortedException,
-               com.sun.star.io.IOException,
-               com.sun.star.uno.Exception, java.io.IOException
-    {
+    throws com.sun.star.ucb.CommandAbortedException,
+        com.sun.star.io.IOException,
+        com.sun.star.uno.Exception, java.io.IOException {
         String pathToDescriptor = PathUtils.make_url(
-            getPathToParcel(),  ParcelDescriptor.PARCEL_DESCRIPTOR_NAME );
+                                      getPathToParcel(),  ParcelDescriptor.PARCEL_DESCRIPTOR_NAME);
 
-        XSimpleFileAccess2 xSFA2 = UnoRuntime.queryInterface( XSimpleFileAccess2.class, m_xSFA );
+        XSimpleFileAccess2 xSFA2 = UnoRuntime.queryInterface(
+                                       XSimpleFileAccess2.class, m_xSFA);
 
-        if ( xSFA2 != null )
-        {
+        if (xSFA2 != null) {
             ByteArrayOutputStream bos = null;
             ByteArrayInputStream bis = null;
             XInputStreamImpl xis = null;
-            try
-            {
-                bos = new ByteArrayOutputStream( 1024 );
-                m_descriptor.write( bos );
-                bis = new ByteArrayInputStream( bos.toByteArray() );
 
-                xis = new XInputStreamImpl( bis );
-                xSFA2.writeFile( pathToDescriptor, xis );
-            }
-            finally
-            {
+            try {
+                bos = new ByteArrayOutputStream(1024);
+                m_descriptor.write(bos);
+                bis = new ByteArrayInputStream(bos.toByteArray());
+
+                xis = new XInputStreamImpl(bis);
+                xSFA2.writeFile(pathToDescriptor, xis);
+            } finally {
                 if (bos != null) bos.close();
+
                 if (bis != null) bis.close();
+
                 if (xis != null) xis.closeInput();
             }
         }
     }
 
     // delete
-    public void removeByName( String Name ) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
-    {
-        try
-        {
-            ScriptMetaData script = (ScriptMetaData)getByName( Name );
-            if ( script != null )
-            {
-                if ( !script.removeSourceFile() )
-                {
-                    LogUtils.DEBUG("** Parcel.removeByName Failed to remove script " + Name);
-                    throw new com.sun.star.lang.WrappedTargetException("Failed to remove script " + Name);
+    public void removeByName(String Name) throws
+        com.sun.star.container.NoSuchElementException,
+        com.sun.star.lang.WrappedTargetException {
+        try {
+            ScriptMetaData script = (ScriptMetaData)getByName(Name);
+
+            if (script != null) {
+                if (!script.removeSourceFile()) {
+                    LogUtils.DEBUG("** Parcel.removeByName Failed to remove script " +
+                                   Name);
+                    throw new com.sun.star.lang.WrappedTargetException("Failed to remove script "
+                            + Name);
                 }
-                LogUtils.DEBUG("** Parcel.removeByName have removed script source file " + Name);
-                m_descriptor.removeScriptEntry( script );
+
+                LogUtils.DEBUG("** Parcel.removeByName have removed script source file "
+                               + Name);
+                m_descriptor.removeScriptEntry(script);
                 writeParcelDescriptor();
-            }
-            else
-            {
-                throw new com.sun.star.container.NoSuchElementException( "No script named " + Name );
+            } else {
+                throw new com.sun.star.container.NoSuchElementException("No script named "
+                        + Name);
             }
 
-        }
-        catch ( Exception e )
-        {
-            LogUtils.DEBUG("** Parcel.removeByName Exception: " + e );
+        } catch (Exception e) {
+            LogUtils.DEBUG("** Parcel.removeByName Exception: " + e);
             throw new com.sun.star.lang.WrappedTargetException(e);
         }
 
     }
     // rename parcel
-    public void rename( String name )
-    {
+    public void rename(String name) {
         this.name = name;
     }
 
-    public ParcelContainer getParent() { return parent; }
+    public ParcelContainer getParent() {
+        return parent;
+    }
     /**
      * Returns the path of this  <tt>Parcel</tt>
      *
      * @return    <tt>String</tt> path to parcel
     */
-    public String getPathToParcel()
-    {
+    public String getPathToParcel() {
         String path = parent.getParcelContainerDir() + "/" + name;
         return path;
     }
