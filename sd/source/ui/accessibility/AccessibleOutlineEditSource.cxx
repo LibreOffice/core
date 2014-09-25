@@ -207,7 +207,7 @@ namespace accessibility
     {
         if( aNotify )
         {
-            ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
+            ::std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
 
             if( aHint.get() )
                 Broadcast( *aHint.get() );

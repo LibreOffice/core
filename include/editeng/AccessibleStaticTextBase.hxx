@@ -261,9 +261,7 @@ namespace accessibility
     private:
 
         /// @dyn
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        const std::auto_ptr< AccessibleStaticTextBase_Impl > mpImpl;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        const std::unique_ptr< AccessibleStaticTextBase_Impl > mpImpl;
 
     };
 

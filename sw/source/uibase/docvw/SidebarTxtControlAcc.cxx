@@ -35,8 +35,6 @@
 #include <svx/AccessibleTextHelper.hxx>
 #include <editeng/outliner.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 namespace sw { namespace sidebarwindows {
 
 // declaration and implementation of <SvxEditSource>
@@ -119,7 +117,7 @@ IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify*, pNotify)
 {
     if ( pNotify )
     {
-        boost::scoped_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( pNotify ) );
+        std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( pNotify ) );
 
         if( aHint.get() )
         {

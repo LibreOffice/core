@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/uno/XInterface.hpp>
 #include <vcl/svapp.hxx>
 
@@ -47,7 +51,6 @@
 #include <svx/svdotable.hxx>
 #include "../table/cell.hxx"
 #include <svx/sdrpaintwindow.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -1020,7 +1023,7 @@ IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify && !mbNotificationsDisabled )
     {
-        boost::scoped_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
+        std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
 
         if( aHint.get() )
             Broadcast( *aHint.get() );

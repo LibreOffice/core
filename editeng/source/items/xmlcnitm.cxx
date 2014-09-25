@@ -108,7 +108,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
     }
     else
     {
-        std::auto_ptr<SvXMLAttrContainerData> pNewImpl(new SvXMLAttrContainerData);
+        std::unique_ptr<SvXMLAttrContainerData> pNewImpl(new SvXMLAttrContainerData);
 
         try
         {
