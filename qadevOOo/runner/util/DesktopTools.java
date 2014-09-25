@@ -411,46 +411,6 @@ public class DesktopTools
 
     }
 
-    /**
-     * This function docks the Stylist onto the right side of the window.</p>
-     * Note:<P>
-     * Since the svt.viewoptions cache the view configuration at start up
-     * the chage of the docking will be effective at a restart.
-     * @param xMSF the XMultiServiceFactory
-     */
-    public static void dockStylist(XMultiServiceFactory xMSF)
-    {
-        // prepare Window-Settings
-        try
-        {
-            ConfigHelper aConfig = new ConfigHelper(xMSF,
-                    "org.openoffice.Office.Views", false);
-
-            aConfig.getOrInsertGroup("Windows", "5539");
-
-            aConfig.updateGroupProperty(
-                    "Windows", "5539", "WindowState", "952,180,244,349;1;0,0,0,0;");
-
-            aConfig.insertOrUpdateExtensibleGroupProperty(
-                    "Windows", "5539", "UserData", "Data", "V2,V,0,AL:(5,16,0/0/244/349,244;610)");
-
-            // Is node "SplitWindow2" available? If not, instert it.
-            aConfig.getOrInsertGroup("Windows", "SplitWindow2");
-
-            aConfig.insertOrUpdateExtensibleGroupProperty(
-                    "Windows", "SplitWindow2", "UserData", "UserItem", "V1,2,1,0,5539");
-
-            aConfig.flush();
-            aConfig = null;
-
-        }
-        catch (com.sun.star.uno.Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-
 
     /**
      * This function brings a document to the front.<P>
