@@ -988,7 +988,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rF
             ((nPrcHeight && nPrcHeight!=255) || aPixelSz.Height()) )
         {
             OString sHeight;
-            if (nPrcWidth)
+            if (nPrcHeight)
                 sHeight = OString::number(static_cast<sal_Int32>(nPrcHeight)) + "%";
             else
                 sHeight = OString::number(static_cast<sal_Int32>(aPixelSz.Height()));
