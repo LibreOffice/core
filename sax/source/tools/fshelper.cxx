@@ -35,6 +35,7 @@ FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >&
     mxTokenHandler = css::xml::sax::FastTokenHandler::create(xContext);
 
     mpSerializer->setFastTokenHandler( mxTokenHandler );
+    assert(xOutputStream.is()); // cannot do anything without that
     mpSerializer->setOutputStream( xOutputStream );
     if( bWriteHeader )
         mpSerializer->startDocument();

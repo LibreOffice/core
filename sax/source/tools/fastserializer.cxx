@@ -72,9 +72,6 @@ namespace sax_fastparser {
 
     void SAL_CALL FastSaxSerializer::startDocument(  ) throw (SAXException, RuntimeException)
     {
-        assert(mxOutputStream.is()); // cannot do anything without that
-        if (!mxOutputStream.is())
-            return;
         rtl::ByteSequence aXmlHeader((const sal_Int8*) "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n", 56);
         writeBytes(toUnoSequence(aXmlHeader));
     }
@@ -112,9 +109,6 @@ namespace sax_fastparser {
 
     void SAL_CALL FastSaxSerializer::endDocument(  ) throw (SAXException, RuntimeException)
     {
-        if (!mxOutputStream.is())
-            return;
-
         maOutputStream.flush();
         mxOutputStream->writeBytes(maOutputData);
     }
@@ -151,9 +145,6 @@ namespace sax_fastparser {
     void SAL_CALL FastSaxSerializer::startFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
         throw (SAXException, RuntimeException)
     {
-        if (!mxOutputStream.is())
-            return;
-
         if ( !maMarkStack.empty() )
             maMarkStack.top()->setCurrentElement( Element );
 
@@ -172,9 +163,6 @@ namespace sax_fastparser {
     void SAL_CALL FastSaxSerializer::endFastElement( ::sal_Int32 Element )
         throw (SAXException, RuntimeException)
     {
-        if (!mxOutputStream.is())
-            return;
-
 #ifdef DBG_UTIL
         assert(!m_DebugStartedElements.empty());
         // Well-formedness constraint: Element Type Match
@@ -192,9 +180,6 @@ namespace sax_fastparser {
     void SAL_CALL FastSaxSerializer::singleFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
         throw (SAXException, RuntimeException)
     {
-        if (!mxOutputStream.is())
-            return;
-
         if ( !maMarkStack.empty() )
             maMarkStack.top()->setCurrentElement( Element );
 
@@ -209,9 +194,6 @@ namespace sax_fastparser {
     void SAL_CALL FastSaxSerializer::characters( const OUString& aChars )
         throw (SAXException, RuntimeException)
     {
-        if (!mxOutputStream.is())
-            return;
-
         write( aChars );
     }
 
@@ -219,7 +201,6 @@ namespace sax_fastparser {
         throw (::com::sun::star::uno::RuntimeException)
     {
         mxOutputStream = xOutputStream;
-        assert(mxOutputStream.is()); // cannot do anything without that
     }
 
     void SAL_CALL FastSaxSerializer::setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
