@@ -489,6 +489,8 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
 
         }
     }
+
+    assert(m_xHandler.is()); // can't do anything without that
 }
 
 static sal_Int16 lcl_getUnit( const OUString& rValue )
