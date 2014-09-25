@@ -39,7 +39,6 @@
 package org.mozilla.gecko.gfx;
 
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 
@@ -53,44 +52,16 @@ public class MultiTileLayer extends Layer {
     private static final String LOGTAG = "GeckoMultiTileLayer";
 
     private final List<SubTile> mTiles;
-    private IntSize mTileSize;
-    private IntSize mSize;
 
-    public MultiTileLayer(IntSize tileSize) {
+    public MultiTileLayer() {
         super();
-        mTileSize = tileSize;
         mTiles = new CopyOnWriteArrayList<SubTile>();
-        mSize = new IntSize(0,0);
-    }
-
-    public void invalidate(Rect dirtyRect) {
-        if (!inTransaction()) {
-            throw new RuntimeException("invalidate() is only valid inside a transaction");
-        }
-
-        for (SubTile layer : mTiles) {
-            Rect rect = layer.getPosition();
-            Rect tileRect = new Rect(layer.x, layer.y, layer.x + rect.width(), layer.y + rect.height());
-
-            if (tileRect.intersect(dirtyRect)) {
-                tileRect.offset(-layer.x, -layer.y);
-                layer.invalidate();
-            }
-        }
     }
 
     public void invalidate() {
         for (SubTile layer : mTiles) {
             layer.invalidate();
         }
-    }
-
-    public void setSize(IntSize size) {
-        mSize = size;
-    }
-
-    public IntSize getSize() {
-        return mSize;
     }
 
     private void validateTiles() {
@@ -141,7 +112,6 @@ public class MultiTileLayer extends Layer {
     }
 
     private void refreshTileMetrics(Point origin, float resolution, boolean inTransaction) {
-        IntSize size = getSize();
         for (SubTile layer : mTiles) {
             if (!inTransaction) {
                 layer.beginTransaction();

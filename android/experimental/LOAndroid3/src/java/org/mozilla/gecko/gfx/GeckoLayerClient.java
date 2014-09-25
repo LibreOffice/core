@@ -112,7 +112,7 @@ public class GeckoLayerClient implements LayerView.Listener {
 
         mLayerController = layerController;
 
-        mRootLayer = new MultiTileLayer(new IntSize(256, 256));
+        mRootLayer = new MultiTileLayer();
 
         view.setListener(this);
         layerController.setRoot(mRootLayer);
