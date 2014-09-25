@@ -100,4 +100,10 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_wmf_test \
 ))
 
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Module_add_check_targets,vcl,\
+	CppunitTest_vcl_timer \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
