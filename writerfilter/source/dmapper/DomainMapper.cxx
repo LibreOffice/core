@@ -306,7 +306,16 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
         case NS_ooxml::LN_CT_Fonts_ascii:
             if (m_pImpl->GetTopContext())
+            {
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sStringValue ));
+                if (m_pImpl->GetTopContextType() == CONTEXT_PARAGRAPH && m_pImpl->GetTopContext()->isSet(PROP_NUMBERING_RULES))
+                {
+                    // Font of the paragraph mark should be used for the numbering as well.
+                    uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
+                    if (xCharStyle.is())
+                        xCharStyle->setPropertyValue("CharFontName", uno::makeAny(sStringValue));
+                }
+            }
             break;
         case NS_ooxml::LN_CT_Fonts_asciiTheme:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "asciiTheme", ThemeTable::getStringForTheme(nIntValue));

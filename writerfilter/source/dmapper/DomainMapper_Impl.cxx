@@ -4816,7 +4816,21 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
         sal_Int32 nListLevel = -1;
         uno::Reference<container::XIndexAccess> xLevels = GetCurrentNumberingRules(&nListLevel);
         if (!xLevels.is())
-            return xRet;
+        {
+            // In case numbering rules is not found via a style, try the direct formatting instead.
+            boost::optional<PropertyMap::Property> oProp = m_pTopContext->getProperty(PROP_NUMBERING_RULES);
+            if (oProp)
+            {
+                xLevels.set(oProp->second, uno::UNO_QUERY);
+                // Found the rules, then also try to look up our numbering level.
+                oProp = m_pTopContext->getProperty(PROP_NUMBERING_LEVEL);
+                if (oProp)
+                    oProp->second >>= nListLevel;
+            }
+
+            if (!xLevels.is())
+                return xRet;
+        }
         uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(nListLevel) >>= aProps;
         for (int i = 0; i < aProps.getLength(); ++i)

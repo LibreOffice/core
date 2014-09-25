@@ -283,6 +283,13 @@ DECLARE_OOXMLEXPORT_TEST(testPositionAndRotation, "position-and-rotation.docx")
     CPPUNIT_ASSERT(xShape->getPosition().Y < 100);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
+{
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName("ListLabel 1"), uno::UNO_QUERY);
+    // This was Calibri, i.e. custom font of the numbering itself ("1.\t") was lost on import.
+    CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(xStyle, "CharFontName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
