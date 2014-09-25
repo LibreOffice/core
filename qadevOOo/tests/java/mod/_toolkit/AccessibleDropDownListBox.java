@@ -115,7 +115,8 @@ public class AccessibleDropDownListBox extends TestCase {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(
                                          Param.getMSF());
-            DesktopTools.dockStylist(Param.getMSF());
+            // Dock the Navigator to supply an AccessibleDropDownListBox
+            DesktopTools.dockNavigator(Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
