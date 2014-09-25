@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_libraries,unoxml_domtest, \
     cppuhelper \
     sal \
     test \
+    unotest \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,unoxml_domtest))
