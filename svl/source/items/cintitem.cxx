@@ -222,7 +222,6 @@ CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream)
     : SfxPoolItem(which)
     , m_nValue(0)
 {
-    //fdo#39428 SvStream no longer supports operator>>(long&)
     rStream.ReadInt32( m_nValue );
 }
 
@@ -288,7 +287,6 @@ SfxPoolItem * CntInt32Item::Create(SvStream & rStream, sal_uInt16) const
 // virtual
 SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
 {
-    //fdo#39428 SvStream no longer supports operator<<(long)
     rStream.WriteInt32( m_nValue );
     return rStream;
 }

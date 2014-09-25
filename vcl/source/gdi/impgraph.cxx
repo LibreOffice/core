@@ -976,7 +976,6 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
     const sal_uLong     nStartPos = rIStm.Tell();
     sal_uInt32      nId;
     sal_uLong           nHeaderLen;
-    //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32       nType;
     sal_Int32       nLen;
     const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
@@ -1012,7 +1011,6 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
     else
     {
         // read old style header
-        //#fdo39428 SvStream no longer supports operator>>(long&)
         sal_Int32 nWidth, nHeight;
         sal_Int32 nMapMode, nScaleNumX, nScaleDenomX;
         sal_Int32 nScaleNumY, nScaleDenomY, nOffsX, nOffsY;

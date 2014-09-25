@@ -194,7 +194,6 @@ SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
     sal_uInt16          nTmp16(0);
     sal_Int32       nTmp32(0);
 
-    //#fdo39428 SvStream no longer supports operator>>(long&)
     rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meStyle = (LineStyle) nTmp16;
     rIStm.ReadInt32( nTmp32 );
     rImplLineInfo.mnWidth = nTmp32;
@@ -229,7 +228,6 @@ SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo 
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 4 );
 
-    //#fdo39428 SvStream no longer supports operator<<(long)
     // version 1
     rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meStyle ).WriteInt32( rImplLineInfo.mnWidth );
 

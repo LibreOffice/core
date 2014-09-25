@@ -1559,7 +1559,6 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
         {
             for( i = 0; i < nPoints; i++ )
             {
-                //fdo#39428 SvStream no longer supports operator>>(long&)
                 sal_Int32 nTmpX(0), nTmpY(0);
                 rIStream.ReadInt32( nTmpX ).ReadInt32( nTmpY );
                 rPoly.mpImplPolygon->mpPointAry[i].X() = nTmpX;

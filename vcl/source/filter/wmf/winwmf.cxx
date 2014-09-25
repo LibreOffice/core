@@ -982,7 +982,6 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                 SvMemoryStream aMemoryStream( nEscLen );
                                                 aMemoryStream.Write( pData.get(), nEscLen );
                                                 aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
-                                                //#fdo39428 SvStream no longer supports operator>>(long&)
                                                 sal_Int32 nTmpX(0), nTmpY(0);
                                                 aMemoryStream.ReadInt32( nTmpX )
                                                              .ReadInt32( nTmpY )

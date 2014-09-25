@@ -1545,7 +1545,6 @@ void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, STREAM_WRITE, 2);
 
-    //#fdo39428 SvStream no longer supports operator<<(long)
     WritePair( rOStm, maPos );
     rOStm.WriteInt32( mnWidth );
     rOStm.WriteUInt32( meStrikeout );
@@ -1558,7 +1557,6 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, STREAM_READ);
 
-    //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTempWidth(0);
     ReadPair( rIStm, maPos );
     rIStm.ReadInt32( nTempWidth );
@@ -2643,14 +2641,12 @@ void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
-    //#fdo39428 SvStream no longer supports operator<<(long)
     rOStm.WriteInt32( mnHorzMove ).WriteInt32( mnVertMove );
 }
 
 void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, STREAM_READ);
-    //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmpHM(0), nTmpVM(0);
     rIStm.ReadInt32( nTmpHM ).ReadInt32( nTmpVM );
     mnHorzMove = nTmpHM;

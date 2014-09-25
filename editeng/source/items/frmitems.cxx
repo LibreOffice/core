@@ -358,7 +358,6 @@ bool SvxSizeItem::GetPresentation
 
 SvStream& SvxSizeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    //#fdo39428 SvStream no longer supports operator<<(long)
     rStrm.WriteInt32( aSize.Width() );
     rStrm.WriteInt32( aSize.Height() );
     return rStrm;
@@ -384,7 +383,6 @@ bool SvxSizeItem::HasMetrics() const
 
 SfxPoolItem* SvxSizeItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
-    //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nWidth(0), nHeight(0);
     rStrm.ReadInt32( nWidth ).ReadInt32( nHeight );
 

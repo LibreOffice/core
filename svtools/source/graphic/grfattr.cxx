@@ -86,7 +86,6 @@ SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
 
     if( aCompat.GetVersion() >= 2 )
     {
-        //#fdo39428 SvStream no longer supports operator>>(long&)
         sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
         rIStm.ReadInt32( nTmpL ).ReadInt32( nTmpT ).ReadInt32( nTmpR ).ReadInt32( nTmpB );
         rAttr.mnLeftCrop = nTmpL;
@@ -110,7 +109,6 @@ SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr )
     rOStm.WriteUInt32( rAttr.mnMirrFlags ).WriteUInt16( rAttr.mnRotate10 );
     rOStm.WriteInt16( rAttr.mnContPercent ).WriteInt16( rAttr.mnLumPercent ).WriteInt16( rAttr.mnRPercent ).WriteInt16( rAttr.mnGPercent ).WriteInt16( rAttr.mnBPercent );
     rOStm.WriteUChar( rAttr.mbInvert ).WriteUChar( rAttr.mcTransparency ).WriteUInt16( (sal_uInt16) rAttr.meDrawMode );
-    //#fdo39428 SvStream no longer supports operator<<(long)
     rOStm.WriteInt32( rAttr.mnLeftCrop )
          .WriteInt32( rAttr.mnTopCrop )
          .WriteInt32( rAttr.mnRightCrop )

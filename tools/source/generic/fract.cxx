@@ -486,7 +486,6 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 
 SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
 {
-    //fdo#39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmp(0);
     rIStream.ReadInt32( nTmp );
     rFract.nNumerator = nTmp;
@@ -497,7 +496,6 @@ SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
 
 SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 {
-    //fdo#39428 SvStream no longer supports operator<<(long)
     rOStream.WriteInt32( rFract.nNumerator );
     rOStream.WriteInt32( rFract.nDenominator );
     return rOStream;

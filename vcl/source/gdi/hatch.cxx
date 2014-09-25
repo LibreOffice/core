@@ -125,7 +125,6 @@ SvStream& ReadImplHatch( SvStream& rIStm, ImplHatch& rImplHatch )
     sal_Int32       nTmp32(0);
 
     rIStm.ReadUInt16( nTmp16 ); rImplHatch.meStyle = (HatchStyle) nTmp16;
-    //#fdo39428 SvStream no longer supports operator>>(long&)
     ReadColor( rIStm, rImplHatch.maColor ).ReadInt32( nTmp32 ).ReadUInt16( rImplHatch.mnAngle );
     rImplHatch.mnDistance = nTmp32;
 

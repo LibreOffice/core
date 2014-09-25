@@ -70,7 +70,6 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
     SfxPoolItem( which ),
     pImp(NULL)
 {
-    //fdo#39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nEntryCount;
     rStream.ReadInt32( nEntryCount );
 
@@ -173,7 +172,6 @@ SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
 {
     if( !pImp )
     {
-        //fdo#39428 SvStream no longer supports operator<<(long)
         rStream.WriteInt32( (sal_Int32) 0 );
         return rStream;
     }

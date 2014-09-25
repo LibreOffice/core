@@ -25,7 +25,6 @@ SvStream& ReadPair( SvStream& rIStream, Pair& rPair )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Pair::>> - Solar-Version not set on rIStream" );
 
-    //39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmpA(0), nTmpB(0);
     rIStream.ReadInt32( nTmpA ).ReadInt32( nTmpB );
     rPair.nA = nTmpA;

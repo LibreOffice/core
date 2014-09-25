@@ -456,7 +456,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Identifier
     rIStm.ReadInt16( nSize );                                 // Size
     rIStm.ReadInt16( nVersion );                              // Version
-    //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmp32(0);
     rIStm.ReadInt32( nTmp32 );
     aPrefSz.Width() = nTmp32;                       // PrefSize.Width()
@@ -1261,7 +1260,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_TEXTLINE_COMMENT ):
                 {
                     Point   aStartPt;
-                    //#fdo39428 SvStream no longer supports operator>>(long&)
                     sal_Int32  nWidth;
                     sal_uInt32 nStrikeout;
                     sal_uInt32 nUnderline;
