@@ -301,7 +301,7 @@ public:
         are cached and converted in the finalizeImport() call. */
     void                setColumnModel( const ColumnModel& rModel );
     /** Converts column default cell formatting. */
-    void                convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId ) const;
+    void convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId );
 
     /** Sets default height and hidden state for all unused rows in the sheet. */
     void                setDefaultRowSettings( double fHeight, bool bCustomHeight, bool bHidden, bool bThickTop, bool bThickBottom );
@@ -827,13 +827,18 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
     }
 }
 
-void WorksheetGlobals::convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId ) const
+void WorksheetGlobals::convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId )
 {
     CellRangeAddress aRange( getSheetIndex(), nFirstCol, 0, nLastCol, mrMaxApiPos.Row );
     if( getAddressConverter().validateCellRange( aRange, true, false ) )
     {
+        const StylesBuffer& rStyles = getStyles();
+
         PropertySet aPropSet( getCellRange( aRange ) );
-        getStyles().writeCellXfToPropertySet( aPropSet, nXfId );
+        rStyles.writeCellXfToPropertySet(aPropSet, nXfId);
+
+        ScDocumentImport& rDoc = getDocImport();
+        rStyles.writeCellXfToDoc(rDoc, aRange, nXfId);
     }
 }
 
