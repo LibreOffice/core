@@ -3940,7 +3940,7 @@ Any Window::GetSystemDataAny() const
 
 bool ImplDoTiledRendering()
 {
-#if !HAVE_FEATURE_DESKTOP
+#if !HAVE_FEATURE_DESKTOP && !ANDROID
     // We do tiled rendering only for iOS at the moment, actually, but
     // let's see what happens if we assume it for Android, too.
     return true;
