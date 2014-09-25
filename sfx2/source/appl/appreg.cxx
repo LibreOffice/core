@@ -54,7 +54,6 @@ void SfxApplication::Registrations_Impl()
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
     SfxNavigatorWrapper::RegisterChildWindow( false, NULL, SFX_CHILDWIN_NEVERHIDE );
     SfxPartChildWnd_Impl::RegisterChildWindow();
-    SfxTemplateDialogWrapper::RegisterChildWindow(true);
     SfxDockingWrapper::RegisterChildWindow();
     SfxInfoBarContainerChild::RegisterChildWindow( true, NULL, SFX_CHILDWIN_NEVERHIDE );
 

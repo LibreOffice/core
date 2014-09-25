@@ -412,33 +412,33 @@ public class DesktopTools
     }
 
     /**
-     * This function docks the Stylist onto the right side of the window.</p>
+     * This function docks the Navigator onto the right side of the window.</p>
      * Note:<P>
      * Since the svt.viewoptions cache the view configuration at start up
      * the chage of the docking will be effective at a restart.
      * @param xMSF the XMultiServiceFactory
      */
-    public static void dockStylist(XMultiServiceFactory xMSF)
+    public static void dockNavigator(XMultiServiceFactory xMSF)
     {
-        // prepare Window-Settings
+        // prepare Window settings
         try
         {
             ConfigHelper aConfig = new ConfigHelper(xMSF,
                     "org.openoffice.Office.Views", false);
 
-            aConfig.getOrInsertGroup("Windows", "5539");
+            aConfig.getOrInsertGroup("Windows", "10366");
 
             aConfig.updateGroupProperty(
-                    "Windows", "5539", "WindowState", "952,180,244,349;1;0,0,0,0;");
+                    "Windows", "10366", "WindowState", "952,180,244,349;1;0,0,0,0;");
 
             aConfig.insertOrUpdateExtensibleGroupProperty(
-                    "Windows", "5539", "UserData", "Data", "V2,V,0,AL:(5,16,0/0/244/349,244;610)");
+                    "Windows", "10366", "UserData", "Data", "V2,V,0,AL:(5,16,0/0/244/349,244;610)");
 
-            // Is node "SplitWindow2" available? If not, instert it.
+            // Is node "SplitWindow2" available? If not, insert it.
             aConfig.getOrInsertGroup("Windows", "SplitWindow2");
 
             aConfig.insertOrUpdateExtensibleGroupProperty(
-                    "Windows", "SplitWindow2", "UserData", "UserItem", "V1,2,1,0,5539");
+                    "Windows", "SplitWindow2", "UserData", "UserItem", "V1,2,1,0,10366");
 
             aConfig.flush();
             aConfig = null;
@@ -449,7 +449,6 @@ public class DesktopTools
             e.printStackTrace();
         }
     }
-
 
 
     /**
