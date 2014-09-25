@@ -702,7 +702,7 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
 
         // From 6.0 onwards, do not write Magic numbers...
         DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "Change File format SvxLRSpaceItem!" );
-        rStrm.WriteUInt32( (sal_uInt32) BULLETLR_MARKER );
+        rStrm.WriteUInt32( BULLETLR_MARKER );
         rStrm.WriteInt16( nSaveFI );
 
         if( 0x80 & nAutoFirst )

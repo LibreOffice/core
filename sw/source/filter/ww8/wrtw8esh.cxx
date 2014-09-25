@@ -1505,7 +1505,7 @@ SwBasicEscherEx::~SwBasicEscherEx()
 void SwBasicEscherEx::WriteFrmExtraData(const SwFrmFmt&)
 {
     AddAtom(4, ESCHER_ClientAnchor);
-    GetStream().WriteUInt32( (sal_uInt32)0x80000000 );
+    GetStream().WriteUInt32( 0x80000000 );
 }
 
 void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId)
@@ -1588,7 +1588,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
     aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0 );
     aPropOpt.Commit( GetStream() );
     AddAtom(4, ESCHER_ClientAnchor);
-    GetStream().WriteUInt32( (sal_uInt32)0x80000000 );
+    GetStream().WriteUInt32( 0x80000000 );
     CloseContainer();
 
     return 0;
@@ -2206,11 +2206,11 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     sal_uInt16 nColorCount = 4;
     pStrm ->WriteUInt16( ( nColorCount << 4 ) )     // instance
            .WriteUInt16( ESCHER_SplitMenuColors )   // record type
-           .WriteUInt32( (sal_uInt32)( nColorCount * 4 ) )      // size
-           .WriteUInt32( (sal_uInt32)0x08000004 )
-           .WriteUInt32( (sal_uInt32)0x08000001 )
-           .WriteUInt32( (sal_uInt32)0x08000002 )
-           .WriteUInt32( (sal_uInt32)0x100000f7 );
+           .WriteUInt32( ( nColorCount * 4 ) )      // size
+           .WriteUInt32( 0x08000004 )
+           .WriteUInt32( 0x08000001 )
+           .WriteUInt32( 0x08000002 )
+           .WriteUInt32( 0x100000f7 );
 
     CloseContainer();   // ESCHER_DggContainer
 

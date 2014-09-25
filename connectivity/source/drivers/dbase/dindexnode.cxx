@@ -680,9 +680,9 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 {
     const ODbaseIndex& rIndex = rPage.GetIndex();
     if (!rIndex.isUnique() || rPage.IsLeaf())
-        rStream.WriteUInt32( (sal_uInt32)aKey.nRecord ); // key
+        rStream.WriteUInt32( aKey.nRecord ); // key
     else
-        rStream.WriteUInt32( (sal_uInt32)0 );   // key
+        rStream.WriteUInt32( 0 );   // key
 
     if (rIndex.getHeader().db_keytype) // double
     {

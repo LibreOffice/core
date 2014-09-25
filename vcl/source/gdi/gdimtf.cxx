@@ -2859,7 +2859,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     rOStm.WriteUInt32( nStmCompressMode );
     WriteMapMode( rOStm, aPrefMapMode );
     WritePair( rOStm, aPrefSize );
-    rOStm.WriteUInt32( (sal_uInt32) GetActionSize() );
+    rOStm.WriteUInt32( GetActionSize() );
 
     delete pCompat;
 

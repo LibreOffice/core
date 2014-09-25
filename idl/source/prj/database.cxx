@@ -129,7 +129,7 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
     SvPersistStream aPStm( *IDLAPP->pClassMgr, &rStm );
     aPStm.SetContextFlags( nFlags );
 
-    aPStm.WriteUInt32( (sal_uInt32)DATABASE_SIGNATURE );
+    aPStm.WriteUInt32( DATABASE_SIGNATURE );
     aPStm.WriteUInt16( DATABASE_VER );
 
     bool bOnlyStreamedObjs = false;

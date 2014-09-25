@@ -1193,10 +1193,10 @@ bool EnhWMFReader::ReadEnhWMF()
                             aTmp.ObjectOwnsMemory( true );
                             aTmp.WriteUChar( 'B' )
                                 .WriteUChar( 'M' )
-                                .WriteUInt32( (sal_uInt32)cbBitsSrc )
+                                .WriteUInt32( cbBitsSrc )
                                 .WriteUInt16( 0 )
                                 .WriteUInt16( 0 )
-                                .WriteUInt32( (sal_uInt32)cbBmiSrc + 14 );
+                                .WriteUInt32( cbBmiSrc + 14 );
                             pWMF->Seek( nStart + offBmiSrc );
                             pWMF->Read( pBuf + 14, cbBmiSrc );
                             pWMF->Seek( nStart + offBitsSrc );
@@ -1257,10 +1257,10 @@ bool EnhWMFReader::ReadEnhWMF()
                             aTmp.ObjectOwnsMemory( true );
                             aTmp.WriteUChar( 'B' )
                                 .WriteUChar( 'M' )
-                                .WriteUInt32( (sal_uInt32)cbBitsSrc )
+                                .WriteUInt32( cbBitsSrc )
                                 .WriteUInt16( 0 )
                                 .WriteUInt16( 0 )
-                                .WriteUInt32( (sal_uInt32)cbBmiSrc + 14 );
+                                .WriteUInt32( cbBmiSrc + 14 );
                             pWMF->Seek( nStart + offBmiSrc );
                             pWMF->Read( pBuf + 14, cbBmiSrc );
                             pWMF->Seek( nStart + offBitsSrc );
@@ -1327,10 +1327,10 @@ bool EnhWMFReader::ReadEnhWMF()
                             aTmp.ObjectOwnsMemory( true );
                             aTmp.WriteUChar( 'B' )
                                .WriteUChar( 'M' )
-                               .WriteUInt32( (sal_uInt32)cbBitsSrc )
+                               .WriteUInt32( cbBitsSrc )
                                .WriteUInt16( 0 )
                                .WriteUInt16( 0 )
-                               .WriteUInt32( (sal_uInt32)cbBmiSrc + 14 );
+                               .WriteUInt32( cbBmiSrc + 14 );
                             pWMF->Seek( nStart + offBmiSrc );
                             pWMF->Read( pBuf + 14, cbBmiSrc );
                             pWMF->Seek( nStart + offBitsSrc );
@@ -1567,10 +1567,10 @@ bool EnhWMFReader::ReadEnhWMF()
                                 aTmp.ObjectOwnsMemory( true );
                                 aTmp.WriteUChar( 'B' )
                                     .WriteUChar( 'M' )
-                                    .WriteUInt32( (sal_uInt32)cbBits )
+                                    .WriteUInt32( cbBits )
                                     .WriteUInt16( 0 )
                                     .WriteUInt16( 0 )
-                                    .WriteUInt32( (sal_uInt32)cbBmi + 14 );
+                                    .WriteUInt32( cbBmi + 14 );
                                 pWMF->Seek( nStart + offBmi );
                                 pWMF->Read( pBuf + 14, cbBmi );
                                 pWMF->Seek( nStart + offBits );

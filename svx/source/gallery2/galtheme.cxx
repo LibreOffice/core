@@ -1361,7 +1361,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     const long      nReservePos = rOStm.Tell();
     boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, STREAM_WRITE, 2 ));
 
-    rOStm.WriteUInt32( (sal_uInt32) GetId() ).WriteUChar( IsThemeNameFromResource() ); // From version 2 and up
+    rOStm.WriteUInt32( GetId() ).WriteUChar( IsThemeNameFromResource() ); // From version 2 and up
 
     pCompat.reset();
 

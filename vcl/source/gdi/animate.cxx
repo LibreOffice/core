@@ -708,7 +708,7 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
             WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
 
         // Write identifier ( SDANIMA1 )
-        rOStm.WriteUInt32( (sal_uInt32) 0x5344414e ).WriteUInt32( (sal_uInt32) 0x494d4931 );
+        rOStm.WriteUInt32( 0x5344414e ).WriteUInt32( 0x494d4931 );
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
         {
@@ -723,7 +723,7 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
             rOStm.WriteUInt16( ( ( ANIMATION_TIMEOUT_ON_CLICK == rAnimBmp.nWait ) ? 65535 : rAnimBmp.nWait ) );
             rOStm.WriteUInt16( rAnimBmp.eDisposal );
             rOStm.WriteUChar( rAnimBmp.bUserInput );
-            rOStm.WriteUInt32( (sal_uInt32) rAnimation.mnLoopCount );
+            rOStm.WriteUInt32( rAnimation.mnLoopCount );
             rOStm.WriteUInt32( nDummy32 ); // Unused
             rOStm.WriteUInt32( nDummy32 ); // Unused
             rOStm.WriteUInt32( nDummy32 ); // Unused

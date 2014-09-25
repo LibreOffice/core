@@ -596,24 +596,24 @@ bool Sane::Start( BitmapTransporter& rBitmap )
 
     // write bitmap stream header
     aConverter.WriteChar( 'B' ).WriteChar( 'M' );
-    aConverter.WriteUInt32( (sal_uInt32) 0 );
-    aConverter.WriteUInt32( (sal_uInt32) 0 );
-    aConverter.WriteUInt32( (sal_uInt32) 60 );
+    aConverter.WriteUInt32( 0 );
+    aConverter.WriteUInt32( 0 );
+    aConverter.WriteUInt32( 60 );
 
     // write BITMAPINFOHEADER
-    aConverter.WriteUInt32( (sal_uInt32)40 );
-    aConverter.WriteUInt32( (sal_uInt32)0 ); // fill in width later
-    aConverter.WriteUInt32( (sal_uInt32)0 ); // fill in height later
+    aConverter.WriteUInt32( 40 );
+    aConverter.WriteUInt32( 0 ); // fill in width later
+    aConverter.WriteUInt32( 0 ); // fill in height later
     aConverter.WriteUInt16( 1 );
     // create header for 24 bits
     // correct later if necessary
     aConverter.WriteUInt16( 24 );
-    aConverter.WriteUInt32( (sal_uInt32)0 );
-    aConverter.WriteUInt32( (sal_uInt32)0 );
-    aConverter.WriteUInt32( (sal_uInt32)0 );
-    aConverter.WriteUInt32( (sal_uInt32)0 );
-    aConverter.WriteUInt32( (sal_uInt32)0 );
-    aConverter.WriteUInt32( (sal_uInt32)0 );
+    aConverter.WriteUInt32( 0 );
+    aConverter.WriteUInt32( 0 );
+    aConverter.WriteUInt32( 0 );
+    aConverter.WriteUInt32( 0 );
+    aConverter.WriteUInt32( 0 );
+    aConverter.WriteUInt32( 0 );
 
     for( nStream=0; nStream < 3 && bSuccess ; nStream++ )
     {
@@ -754,11 +754,11 @@ bool Sane::Start( BitmapTransporter& rBitmap )
 #endif
 
                 aConverter.Seek( 18 );
-                aConverter.WriteUInt32( (sal_uInt32)nWidth );
-                aConverter.WriteUInt32( (sal_uInt32)nHeight );
+                aConverter.WriteUInt32( nWidth );
+                aConverter.WriteUInt32( nHeight );
                 aConverter.Seek( 38 );
-                aConverter.WriteUInt32( (sal_uInt32)(1000*nWidth/nWidthMM) );
-                aConverter.WriteUInt32( (sal_uInt32)(1000*nHeight/nHeightMM) );
+                aConverter.WriteUInt32( (1000*nWidth/nWidthMM) );
+                aConverter.WriteUInt32( (1000*nHeight/nHeightMM) );
                 bWidthSet = true;
             }
             aConverter.Seek(60);
@@ -766,7 +766,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
             if( eType == FrameStyle_BW )
             {
                 aConverter.Seek( 10 );
-                aConverter.WriteUInt32( (sal_uInt32)64 );
+                aConverter.WriteUInt32( 64 );
                 aConverter.Seek( 28 );
                 aConverter.WriteUInt16( 1 );
                 aConverter.Seek( 54 );
@@ -774,13 +774,13 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 aConverter.WriteUInt16( 0xffff );
                 aConverter.WriteUChar( 0xff );
                 aConverter.WriteUChar( 0 );
-                aConverter.WriteUInt32( (sal_uInt32)0 );
+                aConverter.WriteUInt32( 0 );
                 aConverter.Seek( 64 );
             }
             else if( eType == FrameStyle_Gray )
             {
                  aConverter.Seek( 10 );
-                 aConverter.WriteUInt32( (sal_uInt32)1084 );
+                 aConverter.WriteUInt32( 1084 );
                 aConverter.Seek( 28 );
                 aConverter.WriteUInt16( 8 );
                 aConverter.Seek( 54 );
@@ -873,7 +873,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
     int nPos = aConverter.Tell();
 
     aConverter.Seek( 2 );
-    aConverter.WriteUInt32( (sal_uInt32) nPos+1 );
+    aConverter.WriteUInt32( nPos+1 );
     aConverter.Seek( 0 );
 
     rBitmap.unlock();

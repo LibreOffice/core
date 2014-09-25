@@ -324,18 +324,18 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
         SvStream& rOut = rBuProv.aBuExMasterStream;
         if ( !nLev )
         {
-            rOut.WriteUInt32( (sal_uInt32)( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) ) )
-                .WriteUInt32( (sal_uInt32)( 5 * 16 + 2 ) )
+            rOut.WriteUInt32( ( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) ) )
+                .WriteUInt32( ( 5 * 16 + 2 ) )
                 .WriteUInt16( 5 );              // depth
         }
         sal_uInt16 nBulletId = rLev.mnBulletId;
         if ( rLev.mnNumberingType != SVX_NUM_BITMAP )
             nBulletId = 0xffff;
-        rOut.WriteUInt32( (sal_uInt32)0x03800000 )
+        rOut.WriteUInt32( 0x03800000 )
             .WriteUInt16( nBulletId )
-            .WriteUInt32( (sal_uInt32)rLev.mnMappedNumType )
+            .WriteUInt32( rLev.mnMappedNumType )
             .WriteUInt16( rLev.mnBulletStart )
-            .WriteUInt32( (sal_uInt32)0 );
+            .WriteUInt32( 0 );
     }
 
     sal_uInt32 nParaFlags = 0x3ffdff;
@@ -483,7 +483,7 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
     sal_uInt32 nCharFlags = rCharStyle.mnFlags;
     nCharFlags &= CharAttr_Italic | CharAttr_Bold | CharAttr_Underline | CharAttr_Shadow;
 
-    rSt.WriteUInt32( (sal_uInt32)( EPP_TxCFStyleAtom << 16 ) )  // recordheader
+    rSt.WriteUInt32( ( EPP_TxCFStyleAtom << 16 ) )  // recordheader
        .WriteUInt32( SizeOfTxCFStyleAtom() - 8 )
        .WriteUInt16( ( 0x80 | nCharFlags ) )
        .WriteUInt16( nFlags )

@@ -2210,10 +2210,10 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                     return;
                 }
                 // write (Windows-)BITMAPINFOHEADER:
-                (p->pBMP)->WriteUInt32( (sal_uInt32)40 ).WriteUInt32( p->nWidth ).WriteUInt32( p->nHeight );
+                (p->pBMP)->WriteUInt32( 40 ).WriteUInt32( p->nWidth ).WriteUInt32( p->nHeight );
                 (p->pBMP)->WriteUInt16( 1 ).WriteUInt16( p->nBitsPerPixel );
-                (p->pBMP)->WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );
-                (p->pBMP)->WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );
+                (p->pBMP)->WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 );
+                (p->pBMP)->WriteUInt32( 0 ).WriteUInt32( 0 );
                 // write color table:
                 if (p->nBitsPerPixel<=8) {
                     sal_uInt16 i, nColTabSize=1<<(p->nBitsPerPixel);

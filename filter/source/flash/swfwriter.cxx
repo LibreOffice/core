@@ -159,7 +159,7 @@ void Writer::storeTo( Reference< XOutputStream > &xOutStream )
 
     sal_uInt32 nSizePos = aHeader.Tell();
 
-    aHeader.WriteUInt32( (sal_uInt32)0 );
+    aHeader.WriteUInt32( 0 );
 
     Rectangle aDocRect( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
 
@@ -174,7 +174,7 @@ void Writer::storeTo( Reference< XOutputStream > &xOutStream )
     const sal_uInt32 nSize = aHeader.Tell() + mpFontsStream->Tell() + mpMovieStream->Tell();
 
     aHeader.Seek( nSizePos );
-    aHeader.WriteUInt32( (sal_uInt32)nSize );
+    aHeader.WriteUInt32( nSize );
 
     ImplCopySvStreamToXOutputStream( aHeader, xOutStream );
     ImplCopySvStreamToXOutputStream( *mpFontsStream, xOutStream );

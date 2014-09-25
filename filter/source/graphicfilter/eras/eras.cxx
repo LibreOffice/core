@@ -148,17 +148,17 @@ bool RASWriter::ImplWriteHeader()
     }
         if ( mbStatus && mnWidth && mnHeight && mnDepth )
     {
-        m_rOStm.WriteUInt32( (sal_uInt32)0x59a66a95 ).WriteUInt32( (sal_uInt32)mnWidth ).WriteUInt32( (sal_uInt32)mnHeight )
-           .WriteUInt32( (sal_uInt32)mnDepth )
-           .WriteUInt32( (sal_uInt32)(( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight) )
-           .WriteUInt32( (sal_uInt32)2 );
+        m_rOStm.WriteUInt32( 0x59a66a95 ).WriteUInt32( mnWidth ).WriteUInt32( mnHeight )
+           .WriteUInt32( mnDepth )
+           .WriteUInt32( (( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight) )
+           .WriteUInt32( 2 );
 
         if ( mnDepth > 8 )
-            m_rOStm.WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );
+            m_rOStm.WriteUInt32( 0 ).WriteUInt32( 0 );
         else
         {
 
-            m_rOStm.WriteUInt32( (sal_uInt32)1 ).WriteUInt32( (sal_uInt32)( mnColors * 3 ) );
+            m_rOStm.WriteUInt32( 1 ).WriteUInt32( ( mnColors * 3 ) );
         }
     }
     else mbStatus = false;

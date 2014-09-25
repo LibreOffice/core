@@ -1221,7 +1221,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 
     (*m_pFileStream).WriteUChar( aDate.GetMonth() );
     (*m_pFileStream).WriteUChar( aDate.GetDay() );
-    (*m_pFileStream).WriteUInt32( (sal_uInt32)0 );                                             // number of data records
+    (*m_pFileStream).WriteUInt32( 0 );                                             // number of data records
     (*m_pFileStream).WriteUInt16( ((m_pColumns->getCount()+1) * 32 + 1) );  // header information,
                                                                         // pColumns contains always an additional column
     (*m_pFileStream).WriteUInt16( 0 );                                     // record length will be determined later

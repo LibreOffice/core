@@ -1079,7 +1079,7 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
     if( bWriteMode )
     {
         aRecords.push_back( RecTypeSize(cType, nPos) );
-        pStream->WriteUInt32( (sal_uInt32) 0 );
+        pStream->WriteUInt32( 0 );
     }
     else
     {

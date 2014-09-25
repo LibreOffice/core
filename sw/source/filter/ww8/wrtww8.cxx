@@ -3854,7 +3854,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     if (type==2) {
         pDataStrm->WriteUInt16( 0xFFFF );
         const int items=aListItems.size();
-        pDataStrm->WriteUInt32( (sal_uInt32)items );
+        pDataStrm->WriteUInt32( items );
         for(int i=0;i<items;i++) {
             OUString item=aListItems[i];
             SwWW8Writer::WriteString_xstz( *pDataStrm, item, false );

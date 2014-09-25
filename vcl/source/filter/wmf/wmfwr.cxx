@@ -427,9 +427,9 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
     pWMF->WriteUInt16( W_MFCOMMENT )
          .WriteUInt16( ( nLen + 14 ) )  // we will always have a fourteen byte escape header:
          .WriteUInt16( 0x4f4f )         // OO
-         .WriteUInt32( (sal_uInt32)0xa2c2a )        // evil magic number
-         .WriteUInt32( (sal_uInt32)nCheckSum )      // crc32 checksum about nEsc & pData
-         .WriteUInt32( (sal_uInt32)nEsc );          // escape number
+         .WriteUInt32( 0xa2c2a )        // evil magic number
+         .WriteUInt32( nCheckSum )      // crc32 checksum about nEsc & pData
+         .WriteUInt32( nEsc );          // escape number
     pWMF->Write( pData, nLen );
     if ( nLen & 1 )
         pWMF->WriteUChar( 0 );          // pad byte
@@ -1664,9 +1664,9 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
     pWMF->WriteUInt16( 0x0001 )           // type: file
          .WriteUInt16( 0x0009 )           // header length in words
          .WriteUInt16( 0x0300 )           // Version as BCD number
-         .WriteUInt32( (sal_uInt32) 0x00000000 )      // file length (without 1st header), is later corrected by UpdateHeader()
+         .WriteUInt32( 0x00000000 )      // file length (without 1st header), is later corrected by UpdateHeader()
          .WriteUInt16( MAXOBJECTHANDLES ) // maxmimum number of simultaneous objects
-         .WriteUInt32( (sal_uInt32) 0x00000000 )      // maximum record length, is later corrected by UpdateHeader()
+         .WriteUInt32( 0x00000000 )      // maximum record length, is later corrected by UpdateHeader()
          .WriteUInt16( 0x0000 );          // reserved
 }
 
@@ -1893,11 +1893,11 @@ void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sa
    WriteRecordHeader( 0, W_META_ESCAPE );
    pWMF->WriteUInt16( W_MFCOMMENT )         // same as META_ESCAPE_ENHANCED_METAFILE
          .WriteUInt16( ( nCurSize + 34 ) )  // we will always have a 34 byte escape header:
-         .WriteUInt32( (sal_uInt32) 0x43464D57 )        // WMFC
-         .WriteUInt32( (sal_uInt32) 0x00000001 )        // Comment type
-         .WriteUInt32( (sal_uInt32) 0x00010000 )        // version
+         .WriteUInt32( 0x43464D57 )        // WMFC
+         .WriteUInt32( 0x00000001 )        // Comment type
+         .WriteUInt32( 0x00010000 )        // version
          .WriteUInt16( nCheckSum )                      // check sum
-         .WriteUInt32( (sal_uInt32) 0 )                 // flags = 0
+         .WriteUInt32( 0 )                 // flags = 0
          .WriteUInt32( nRecCounts )                     // total number of records
          .WriteUInt32( nCurSize )                       // size of this record's data
          .WriteUInt32( nRemainingSize )                 // remaining size of data in following records, missing in MSDN documentation

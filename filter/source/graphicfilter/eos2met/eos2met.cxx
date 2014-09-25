@@ -873,12 +873,12 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     Size aUnitsPerDecimeter=OutputDevice::LogicToLogic(Size(10,10),MapMode(MAP_CM),aPictureMapMode);
     pMET->WriteUChar( 0xf6 ).WriteUChar( 0x28 ).WriteUChar( 0x40 ).WriteUChar( 0x00 )
          .WriteUChar( 0x05 ).WriteUChar( 0x01 )
-         .WriteUInt32( (sal_uInt32)(aUnitsPerDecimeter.Width()) )
-         .WriteUInt32( (sal_uInt32)(aUnitsPerDecimeter.Height()) )
-         .WriteUInt32( (sal_uInt32)0 )
-         .WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)aPictureRect.GetWidth() )
-         .WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)aPictureRect.GetHeight() )
-         .WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );
+         .WriteUInt32( (aUnitsPerDecimeter.Width()) )
+         .WriteUInt32( (aUnitsPerDecimeter.Height()) )
+         .WriteUInt32( 0 )
+         .WriteUInt32( 0 ).WriteUInt32( aPictureRect.GetWidth() )
+         .WriteUInt32( 0 ).WriteUInt32( aPictureRect.GetHeight() )
+         .WriteUInt32( 0 ).WriteUInt32( 0 );
 
     //  0         0x21 Set Current Defaults
     //  1         Length of following data
@@ -905,8 +905,8 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     //  6-n       M11, M12, M21, M22, M41, M42   Matrix elements
     pMET->WriteUChar( 0x21 ).WriteUChar( 0x1c ).WriteUChar( 0x07 ).WriteUChar( 0xcc )
          .WriteUChar( 0x0c ).WriteUChar( 0x8f )
-         .WriteUInt32( (sal_uInt32)0x00010000 ).WriteUInt32( (sal_uInt32)0x00000000 ).WriteUInt32( (sal_uInt32)0x00000000 )
-         .WriteUInt32( (sal_uInt32)0x00010000 ).WriteUInt32( (sal_uInt32)0x00000000 ).WriteUInt32( (sal_uInt32)0x00000000 );
+         .WriteUInt32( 0x00010000 ).WriteUInt32( 0x00000000 ).WriteUInt32( 0x00000000 )
+         .WriteUInt32( 0x00010000 ).WriteUInt32( 0x00000000 ).WriteUInt32( 0x00000000 );
 
     //  0         0x21 Set Current Defaults
     //  1         Length of following data
@@ -1157,9 +1157,9 @@ void METWriter::METBitBlt(Point aPt, Size aSize, const Size& rBmpSizePixel)
     pMET->WriteUChar( 0x02 ).WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
     WritePoint(Point(aPt.X(),aPt.Y()+aSize.Height()));
     WritePoint(Point(aPt.X()+aSize.Width(),aPt.Y()));
-    pMET->WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 )
-         .WriteUInt32( (sal_uInt32)(rBmpSizePixel.Width()) )
-         .WriteUInt32( (sal_uInt32)(rBmpSizePixel.Height()) );
+    pMET->WriteUInt32( 0 ).WriteUInt32( 0 )
+         .WriteUInt32( (rBmpSizePixel.Width()) )
+         .WriteUInt32( (rBmpSizePixel.Height()) );
 }
 
 void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
@@ -1212,7 +1212,7 @@ void METWriter::METPopLineInfo( const LineInfo& rLineInfo )
            .WriteUChar( 6 )
            .WriteUChar( 0 )             // Flags
            .WriteUChar( 0 )
-           .WriteUInt32( (sal_uInt32)1 );
+           .WriteUInt32( 1 );
 
     if ( rLineInfo.GetStyle() != LINE_SOLID )
     {
@@ -2374,7 +2374,7 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
         pMET->WriteUChar( 0x0c ).WriteUChar( 0x02 ).WriteUChar( 0x84 ).WriteUChar( 0x00 );
         WriteFieldId(nId);
         pMET->WriteUChar( 0x07 ).WriteUChar( 0x22 ).WriteUChar( 0x10 );
-        pMET->WriteUInt32( (sal_uInt32)nId );
+        pMET->WriteUInt32( nId );
         nId++;
     }
 
@@ -2412,10 +2412,10 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
     nNumberOfDataFields++;
 
     // now at first we write the head of the segment:
-    pMET->WriteUChar( 0x70 ).WriteUChar( 0x0e ).WriteUInt32( (sal_uInt32)0 );
+    pMET->WriteUChar( 0x70 ).WriteUChar( 0x0e ).WriteUInt32( 0 );
     pMET->WriteUChar( 0x70 ).WriteUChar( 0x10 ); // Flags
     pMET->WriteUInt16( 0 ); // Lo-Word of the length of the segment data  (Big Endian)
-    pMET->WriteUInt32( (sal_uInt32)0 );  // Reserved
+    pMET->WriteUInt32( 0 );  // Reserved
     pMET->WriteUInt16( 0 ); // Hi-Word of the length of the segment (Big Endian) (Ohh Ohh OS2)
     // Annotation: we're writing the correct data length again below
 

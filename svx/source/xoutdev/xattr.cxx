@@ -702,10 +702,10 @@ SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
     {
         rOut.WriteInt32( aDash.GetDashStyle() );
         rOut.WriteUInt16( aDash.GetDots() );
-        rOut.WriteUInt32( (sal_uInt32) aDash.GetDotLen() );
+        rOut.WriteUInt32( aDash.GetDotLen() );
         rOut.WriteUInt16( aDash.GetDashes() );
-        rOut.WriteUInt32( (sal_uInt32) aDash.GetDashLen() );
-        rOut.WriteUInt32( (sal_uInt32) aDash.GetDistance() );
+        rOut.WriteUInt32( aDash.GetDashLen() );
+        rOut.WriteUInt32( aDash.GetDistance() );
     }
 
     return rOut;

@@ -42,10 +42,10 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     // UNICODE: rStrm << sTarget;
     rStrm.WriteUniOrByteString(sTarget, rStrm.GetStreamCharSet());
 
-    rStrm.WriteUInt32( (sal_uInt32) eType );
+    rStrm.WriteUInt32( eType );
 
     // marker for versioninfo
-    rStrm.WriteUInt32( (sal_uInt32) HYPERLINKFF_MARKER );
+    rStrm.WriteUInt32( HYPERLINKFF_MARKER );
 
     // new data
     // UNICODE: rStrm << sIntName;

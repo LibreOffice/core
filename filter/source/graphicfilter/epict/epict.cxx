@@ -904,7 +904,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         nDstRowBytes = nWidth * 4;
 
         // writing Opcode and BaseAddr (?):
-        pPict->WriteUInt16( 0x009a ).WriteUInt32( (sal_uInt32)0x000000ff );
+        pPict->WriteUInt16( 0x009a ).WriteUInt32( 0x000000ff );
 
         // Normally we want to produce packing type 4 (run length encoding
         // for 32-bit pixels). But if RowBytes<8 is true, generally all data is
@@ -924,16 +924,16 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
               .WriteUInt16( nWidth )                // X2-position of the bitmap in the source
               .WriteUInt16( 0x0000 )                // Version
               .WriteUInt16( nPackType )             // Packing type
-              .WriteUInt32( (sal_uInt32) 0x00000000 )            // Packing size (?)
-              .WriteUInt32( (sal_uInt32) 0x00480000 )            // H-Res
-              .WriteUInt32( (sal_uInt32) 0x00480000 )            // V-Res
+              .WriteUInt32( 0x00000000 )            // Packing size (?)
+              .WriteUInt32( 0x00480000 )            // H-Res
+              .WriteUInt32( 0x00480000 )            // V-Res
               .WriteUInt16( 0x0010 )                // Pixel type (?)
               .WriteUInt16( 0x0020 )                // Pixel size: 32 bit
               .WriteUInt16( 0x0004 )                // CmpCount: 4 components
               .WriteUInt16( 0x0008 )                // CmpSize: 8 bits
-              .WriteUInt32( (sal_uInt32) 0x00000000 )            // PlaneBytes (?)
-              .WriteUInt32( (sal_uInt32) 0x00000000 )            // (?)
-              .WriteUInt32( (sal_uInt32) 0x00000000 );           // (?)
+              .WriteUInt32( 0x00000000 )            // PlaneBytes (?)
+              .WriteUInt32( 0x00000000 )            // (?)
+              .WriteUInt32( 0x00000000 );           // (?)
 
         // Source-Rectangle schreiben:
         pPict->WriteUInt16( 0x0000 )                // Y1-position on the bitmap
@@ -1108,20 +1108,20 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
               .WriteUInt16( nWidth )                // X2-position of the bitmap in the source
               .WriteUInt16( 0x0000 )                // Version
               .WriteUInt16( nPackType )             // Packing type
-              .WriteUInt32( (sal_uInt32) 0x00000000 )            // Packing size (?)
-              .WriteUInt32( (sal_uInt32) 0x00480000 )            // H-Res
-              .WriteUInt32( (sal_uInt32) 0x00480000 )            // V-Res
+              .WriteUInt32( 0x00000000 )            // Packing size (?)
+              .WriteUInt32( 0x00480000 )            // H-Res
+              .WriteUInt32( 0x00480000 )            // V-Res
               .WriteUInt16( 0x0000 )                // Pixel type (?)
               .WriteUInt16( nBitsPerPixel )         // Pixel size
               .WriteUInt16( 0x0001 )                // CmpCount: 1 component
               .WriteUInt16( nBitsPerPixel )         // CmpSize
-              .WriteUInt32( (sal_uInt32) 0x00000000 )            // PlaneBytes (?)
-              .WriteUInt32( (sal_uInt32) 0x00000000 )            // (?)
-              .WriteUInt32( (sal_uInt32) 0x00000000 );           // (?)
+              .WriteUInt32( 0x00000000 )            // PlaneBytes (?)
+              .WriteUInt32( 0x00000000 )            // (?)
+              .WriteUInt32( 0x00000000 );           // (?)
 
         // writing and reading the palette:
         nColTabSize = pAcc->GetPaletteEntryCount();
-        pPict->WriteUInt32( (sal_uInt32)0 ).WriteUInt16( 0x8000 ).WriteUInt16( ( nColTabSize - 1 ) );
+        pPict->WriteUInt32( 0 ).WriteUInt16( 0x8000 ).WriteUInt16( ( nColTabSize - 1 ) );
 
         for ( i = 0; i < nColTabSize; i++ )
         {
@@ -2140,7 +2140,7 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
     Rectangle   aRect( aPoint, aSize );
 
     // 512 Bytes "trash" at the beginning:
-    for (i=0;i<128;i++) pPict->WriteUInt32( (sal_uInt32)0 );
+    for (i=0;i<128;i++) pPict->WriteUInt32( 0 );
 
     // Lo-16-Bits of the file size without the 512 bytes trash:
     pPict->WriteUInt16( 0 ); // gets corrected later on by UpdateHeader()
@@ -2149,16 +2149,16 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
     WriteRectangle( aRect );
 
     // Version 2:
-    pPict->WriteUInt32( (sal_uInt32)0x001102ff );
+    pPict->WriteUInt32( 0x001102ff );
 
     // Extended-Version-2-Header:
     pPict->WriteUInt16( 0x0c00 )                            // Opcode
           .WriteUInt16( 0xfffe )                            // Version (?)
           .WriteUInt16( 0x0000 )                            // Reserved
-          .WriteUInt32( (sal_uInt32) 0x00480000 )                        // hRes
-          .WriteUInt32( (sal_uInt32) 0x00480000 );
+          .WriteUInt32( 0x00480000 )                        // hRes
+          .WriteUInt32( 0x00480000 );
     WriteRectangle( aRect );
-    pPict->WriteUInt32( (sal_uInt32)0x00000000 );                        // Reserved
+    pPict->WriteUInt32( 0x00000000 );                        // Reserved
 
     // many import filters demand the declaration
     // of a clipping area at the beginning

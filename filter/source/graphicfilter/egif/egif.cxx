@@ -377,8 +377,8 @@ void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
         m_rGIF.Write( "STARDIV 5.0", 11 );
         m_rGIF.WriteUChar( 0x09 );
         m_rGIF.WriteUChar( 0x01 );
-        m_rGIF.WriteUInt32( (sal_uInt32) rSize100.Width() );
-        m_rGIF.WriteUInt32( (sal_uInt32) rSize100.Height() );
+        m_rGIF.WriteUInt32( rSize100.Width() );
+        m_rGIF.WriteUInt32( rSize100.Height() );
         m_rGIF.WriteUChar( 0x00 );
     }
 }

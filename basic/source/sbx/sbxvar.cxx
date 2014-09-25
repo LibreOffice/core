@@ -609,7 +609,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
     }
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, maName,
                                                       RTL_TEXTENCODING_ASCII_US);
-    rStrm.WriteUInt32( (sal_uInt32)nUserData );
+    rStrm.WriteUInt32( nUserData );
     if( pInfo.Is() )
     {
         rStrm.WriteUChar( 2 );     // Version 2: with UserData!

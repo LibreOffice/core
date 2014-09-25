@@ -259,16 +259,16 @@ bool SbxBase::Store( SvStream& rStrm )
 {
     if( ( nFlags & SBX_DONTSTORE ) == SBX_NONE )
     {
-        rStrm.WriteUInt32( (sal_uInt32) GetCreator() )
+        rStrm.WriteUInt32( GetCreator() )
              .WriteUInt16( GetSbxId() )
              .WriteUInt16( GetFlags() )
              .WriteUInt16( GetVersion() );
         sal_Size nOldPos = rStrm.Tell();
-        rStrm.WriteUInt32( (sal_uInt32) 0L );
+        rStrm.WriteUInt32( 0L );
         bool bRes = StoreData( rStrm );
         sal_Size nNewPos = rStrm.Tell();
         rStrm.Seek( nOldPos );
-        rStrm.WriteUInt32( (sal_uInt32) ( nNewPos - nOldPos ) );
+        rStrm.WriteUInt32( ( nNewPos - nOldPos ) );
         rStrm.Seek( nNewPos );
         if( rStrm.GetError() != SVSTREAM_OK )
             bRes = false;
@@ -383,7 +383,7 @@ bool SbxInfo::StoreData( SvStream& rStrm ) const
             RTL_TEXTENCODING_ASCII_US);
         rStrm.WriteUInt16( i->eType )
              .WriteUInt16( i->nFlags )
-             .WriteUInt32( (sal_uInt32) i->nUserData );
+             .WriteUInt32( i->nUserData );
     }
     return true;
 }

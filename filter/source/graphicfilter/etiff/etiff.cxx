@@ -177,9 +177,9 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterCo
     // we will use the BIG Endian Mode
     // TIFF header
     m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    m_rOStm.WriteUInt32( (sal_uInt32)0x4d4d002a );      // TIFF identifier
+    m_rOStm.WriteUInt32( 0x4d4d002a );      // TIFF identifier
     mnLatestIfdPos = m_rOStm.Tell();
-    m_rOStm.WriteUInt32( (sal_uInt32)0 );
+    m_rOStm.WriteUInt32( 0 );
 
     Animation   aAnimation;
     Bitmap      aBmp;
@@ -274,7 +274,7 @@ bool TIFFWriter::ImplWriteHeader( bool bMultiPage )
     {
         sal_uInt32 nCurrentPos = m_rOStm.Tell();
         m_rOStm.Seek( mnLatestIfdPos );
-        m_rOStm.WriteUInt32( (sal_uInt32)( nCurrentPos - mnStreamOfs ) );   // offset to the IFD
+        m_rOStm.WriteUInt32( ( nCurrentPos - mnStreamOfs ) );   // offset to the IFD
         m_rOStm.Seek( nCurrentPos );
 
         // (OFS8) TIFF image file directory (IFD)
@@ -329,7 +329,7 @@ bool TIFFWriter::ImplWriteHeader( bool bMultiPage )
 
         // and last we write zero to close the num dir entries list
         mnLatestIfdPos = m_rOStm.Tell();
-        m_rOStm.WriteUInt32( (sal_uInt32)0 );               // there are no more IFD
+        m_rOStm.WriteUInt32( 0 );               // there are no more IFD
     }
     else
         mbStatus = false;
@@ -478,9 +478,9 @@ void TIFFWriter::ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResoluti
 {
     sal_uLong nCurrentPos = m_rOStm.Tell();
     m_rOStm.Seek( nStreamPos + 8 );
-    m_rOStm.WriteUInt32( (sal_uInt32)nCurrentPos - mnStreamOfs );
+    m_rOStm.WriteUInt32( nCurrentPos - mnStreamOfs );
     m_rOStm.Seek( nCurrentPos );
-    m_rOStm.WriteUInt32( (sal_uInt32)1 );
+    m_rOStm.WriteUInt32( 1 );
     m_rOStm.WriteUInt32( nResolutionUnit );
 }
 

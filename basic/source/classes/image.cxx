@@ -322,7 +322,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 
         for( i = 0; i < nStrings && SbiGood( r ); i++ )
         {
-            r.WriteUInt32( (sal_uInt32) pStringOff[ i ] );
+            r.WriteUInt32( pStringOff[ i ] );
         }
         // Then the String-Block
         boost::scoped_array<char> pByteStrings(new char[ nStringSize ]);
@@ -332,7 +332,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             OString aStr(OUStringToOString(OUString(pStrings + nOff), eCharSet));
             memcpy( pByteStrings.get() + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
         }
-        r.WriteUInt32( (sal_uInt32) nStringSize );
+        r.WriteUInt32( nStringSize );
         r.Write( pByteStrings.get(), nStringSize );
 
         pByteStrings.reset();

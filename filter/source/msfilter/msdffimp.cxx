@@ -157,7 +157,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     rStm.WriteInt32( (nJobLen +4) );       // a TargetDevice that's always empty
     if( nJobLen )
         rStm.Write( pJob, nJobLen );
-    rStm.WriteUInt32( (sal_uInt32)nAspect );
+    rStm.WriteUInt32( nAspect );
     rStm.WriteInt32( -1 );      //L-Index always -1
     rStm.WriteInt32( nAdvFlags );
     rStm.WriteInt32( 0 );       //Compression
@@ -196,7 +196,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     }
     sal_uLong nEndPos = rStm.Tell();
     rStm.Seek( nPos );
-    rStm.WriteUInt32( (sal_uInt32)(nEndPos - nPos - 4) );
+    rStm.WriteUInt32( (nEndPos - nPos - 4) );
     rStm.Seek( nEndPos );
 }
 

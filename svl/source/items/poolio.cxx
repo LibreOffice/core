@@ -1416,7 +1416,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     if ( bDirect || !pPool->StoreSurrogate( rStream, &rItem ) )
     {
         rStream.WriteUInt16( nItemVersion );
-        rStream.WriteUInt32( (sal_uInt32) 0L ); // Room for length in bytes
+        rStream.WriteUInt32( 0L ); // Room for length in bytes
         sal_uLong nIStart = rStream.Tell();
         rItem.Store(rStream, nItemVersion);
         sal_uLong nIEnd = rStream.Tell();

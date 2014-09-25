@@ -1798,7 +1798,7 @@ void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any a
         if ( bCreate2b01Atom )
         {
             EscherExAtom a2b01Atom( rStrm, 0x2b01 );
-            rStrm.WriteUInt32( (sal_uInt32)1 );     // ?
+            rStrm.WriteUInt32( 1 );     // ?
         }
     }
 }

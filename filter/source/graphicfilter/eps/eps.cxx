@@ -375,10 +375,10 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
 
     if ( mnPreview & EPS_PREVIEW_TIFF )
     {
-        rTargetStream.WriteUInt32( (sal_uInt32)0xC6D3D0C5 );
+        rTargetStream.WriteUInt32( 0xC6D3D0C5 );
         nStreamPosition = rTargetStream.Tell();
-        rTargetStream.WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 )
-           .WriteUInt32( nStreamPosition + 26 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt16( 0xffff );
+        rTargetStream.WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 )
+           .WriteUInt32( nStreamPosition + 26 ).WriteUInt32( 0 ).WriteUInt16( 0xffff );
 
         sal_uInt32 nErrCode;
         if ( mbGrayScale )
