@@ -37,10 +37,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
-
-    // Dieses Item nimmt sowohl metrische als auch
-    // Prozentwerte ( sind negativ ) auf; das muessen
-    // wir hier beruecksichtigen
+    // This item records both metrical and percentage quotation (negative);
+    // We have to consider that.
     SVX_DLLPRIVATE virtual bool HasMetrics() const SAL_OVERRIDE;
 };
 
@@ -58,10 +56,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
-
-    // Dieses Item nimmt sowohl metrische als auch
-    // Prozentwerte ( sind negativ ) auf; das muessen
-    // wir hier beruecksichtigen
+    // This item records both metrical and percentage quotation (negative);
+    // We have to consider that.
     SVX_DLLPRIVATE virtual bool HasMetrics() const SAL_OVERRIDE;
 };
 

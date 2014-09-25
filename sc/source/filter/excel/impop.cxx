@@ -121,7 +121,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
 {
     nBdshtTab = 0;
 
-    // Root-Daten fuellen - nach new's ohne Root als Parameter
+    // fill in root data - after new's without root as parameter
     pExcRoot = &GetOldRoot();
     pExcRoot->pIR = this;   // ExcRoot -> XclImpRoot
     pExcRoot->eDateiTyp = BiffX;
@@ -139,7 +139,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
 
     bTabTruncated = false;
 
-    // Excel-Dokument per Default auf 31.12.1899, entspricht Excel-Einstellungen mit 1.1.1900
+    // Excel document per Default on 31.12.1899, accords to Excel settings with 1.1.1900
     ScDocOptions aOpt = pD->GetDocOptions();
     aOpt.SetDate( 30, 12, 1899 );
     pD->SetDocOptions( aOpt );
@@ -413,11 +413,11 @@ void ImportExcel::Row25( void )
     sal_uInt16  nRow, nRowHeight;
 
     aIn >> nRow;
-    aIn.Ignore( 4 );   // Mic und Mac ueberspringen
+    aIn.Ignore( 4 );
 
     if( ValidRow( nRow ) )
     {
-        aIn >> nRowHeight;  // direkt in Twips angegeben
+        aIn >> nRowHeight;  // specify direct in Twips
         aIn.Ignore( 2 );
 
         if( GetBiff() == EXC_BIFF2 )
@@ -455,7 +455,7 @@ void ImportExcel::Bof2( void )
 
 void ImportExcel::Eof( void )
 {
-    //  POST: darf nur nach einer GUELTIGEN Tabelle gerufen werden!
+    //  POST: cannot be called after an invalid table!
     EndSheet();
     IncCurrScTab();
 }
@@ -503,7 +503,7 @@ void ImportExcel::Columndefault( void )
     for( sal_uInt16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
     {
         aIn >> nOpt0;
-        aIn.Ignore( 2 );   // nur 0. Attribut-Byte benutzt
+        aIn.Ignore( 2 );   // only 0. Attribut-Byte used
 
         if( nOpt0 & 0x80 )  // Col hidden?
             pColRowBuff->HideCol( nCol );
@@ -530,7 +530,7 @@ void ImportExcel::Array25( void )
 
     if( ValidColRow( nLastCol, nLastRow ) )
     {
-        // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
+        // the read mark is now on the formula, length in nFormLen
         const ScTokenArray* pErgebnis;
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
@@ -766,7 +766,7 @@ void ImportExcel::Hideobj( void )
     switch( nHide )
     {
         case 1:                         // Placeholders
-            eOle   = VOBJ_MODE_SHOW;    // in Excel 97 werden nur Charts als Platzhalter angezeigt
+            eOle   = VOBJ_MODE_SHOW;    // in Excel 97 only charts as place holder are displayed
             eChart = VOBJ_MODE_SHOW;    //#i80528# VOBJ_MODE_DUMMY replaced by VOBJ_MODE_SHOW now
             eDraw  = VOBJ_MODE_SHOW;
             break;
@@ -823,7 +823,7 @@ void ImportExcel::Shrfmla( void )
     aIn.Ignore( 2 );
     aIn >> nLenExpr;
 
-    // jetzt steht Lesemarke an der Formel
+    // read mark is now on the formula
 
     const ScTokenArray* pErgebnis;
 
@@ -954,13 +954,13 @@ void ImportExcel::Row34( void )
     sal_uInt16  nRow, nRowHeight, nGrbit, nXF;
 
     aIn >> nRow;
-    aIn.Ignore( 4 );   // Mic und Mac ueberspringen
+    aIn.Ignore( 4 );
 
     SCROW nScRow = static_cast< SCROW >( nRow );
 
     if( ValidRow( nScRow ) )
     {
-        aIn >> nRowHeight;  // direkt in Twips angegeben
+        aIn >> nRowHeight;  // specify direct in Twips
         aIn.Ignore( 4 );
 
         nRowHeight = nRowHeight & 0x7FFF; // Bit 15: Row Height not changed manually
@@ -1007,7 +1007,7 @@ void ImportExcel::Array34( void )
 
     if( ValidColRow( nLastCol, nLastRow ) )
     {
-        // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
+        // the read mark is now on the formula, length in nFormLen
         const ScTokenArray* pErgebnis;
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),

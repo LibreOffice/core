@@ -37,30 +37,24 @@ Beschreibung
 
 class WizardDialog
 
-Diese Klasse dient als Basis fuer einen WizardDialog. Als
-Basisfunktionalitaet wird das Anordnen der Controls angeboten und
-Hilfesmethoden fuer das Umschalten von TabPages. Der Dialog
-ordnet bei einer Groessenanderung die Controls auch wieder
-entsprechend an.
+This class is the base for WizardDialog. The basic functionality is to
+order the Controls. Besides it's a helper method for switching the TabPages.
+The dialog orders the Controls when their size changed.
 
 --------------------------------------------------------------------------
 
-Mit SetPageSizePixel() kann als Groesse die Groesse der groessten
-TabPage vorgegeben werden. Wenn der Dialog angezeigt wird, wird
-zu dem Zeitpunkt wenn noch keine Groesse gesetzt wurde, dafuer
-die entsprechende Dialoggroesse berechnet und gesetzt. Wenn mit
-SetPageSizePixel() keine Groesse gesetzt wurde, wird als Groesse
-die maximale Groesse der zu diesem Zeitpunkt zugewiesenen TabPages
-berechnet und genommen.
+SetPageSizePixel() sets the biggest TabPage size. When the dialog
+should be displayed, first the dialog size is calculated and set.
+If there is no size set with SetPageSizePixel(), max size of the
+current TabPage is set as default.
 
-ShowPrevPage()/ShowNextPage() zeigt die vorherige/naechste TabPage
-an. Dazu wird zuerst der Deactivate-Handler vom Dialog gerufen und
-wenn dieser sal_True zurueckgegeben hat, wird der Acivate-Handler
-vom Dialog gerufen und die entsprechende TabPage angezeigt.
-Finnsh() kann gerufen werden, wenn der Finnish-Button betaetigt
-wird. Dort wird dann auch noch der Deactivate-Page-Handler vom
-Dialog und der aktuellen TabPage gerufen und dann der Dialog
-beendet (Close() oder EndDialog()).
+ShowPrevPage()/ShowNextPage() shows the previous/next TabPage.
+First the Deactivate-Handler is called by dialog and if the return
+value is sal_True the Active-Handler is called by dialog and the
+corresponding TabPage is showed. Finnish() can only be called
+if the Finnish-Button is activated. Then the Deactivate-Page-Handler
+is called by dialog and by the current TabPage. Now the dialog ends
+(Close() or EndDialog()).
 
 Mit AddPage()/RemovePage()/SetPage() koennen die TabPages dem Wizard
 bekannt gemacht werden. Es wird immer die TabPage des aktuellen Levels
