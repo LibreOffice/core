@@ -180,7 +180,7 @@ void ImplSalAcquireYieldMutex( sal_uLong nCount );
 
 LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
-void EmitTimerCallback(bool bAllowRecursive);
+void EmitTimerCallback();
 
 void SalTestMouseLeave();
 bool ImplWriteLastError( DWORD lastError, const char *szApiCall );

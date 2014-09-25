@@ -345,7 +345,6 @@ SalData::SalData()
     mnNextTimerTime = 0;
     mnLastEventTime = 0;
     mnTimerId = 0;              // windows timer id
-    mbInTimerProc = FALSE;      // timer event is currently being dispatched
     mhSalObjMsgHook = 0;        // hook to get interesting msg for SalObject
     mhWantLeaveMsg = 0;         // window handle, that want a MOUSELEAVE message
     mpMouseLeaveTimer = 0;      // Timer for MouseLeave Test
@@ -731,10 +730,22 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_POSTTIMER:
-            EmitTimerCallback(/*bAllowRecursive = */ true);
+            EmitTimerCallback();
             break;
         case SAL_MSG_TIMER_CALLBACK:
-            EmitTimerCallback(/*bAllowRecursive = */ false);
+            EmitTimerCallback();
+            MSG aMsg;
+            while (PeekMessageW(&aMsg, 0, SAL_MSG_TIMER_CALLBACK, SAL_MSG_TIMER_CALLBACK, PM_REMOVE))
+            {
+                // nothing; just remove all the SAL_MSG_TIMER_CALLBACKs that
+                // accumulated in the queue during the EmitTimerCallback(),
+                // otherwise it happens with short timeouts and long callbacks
+                // that no other events will ever be processed, as the queue
+                // is full of SAL_MSG_TIMER_CALLBACKs.
+                // It is impossible to limit the amount of them being emited
+                // in the first place, as they are emited asynchronously, but
+                // here we are already fully synchronized.
+            }
             break;
     }
 

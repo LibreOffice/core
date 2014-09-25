@@ -54,9 +54,11 @@ void ImplSalStartTimer( sal_uLong nMS, bool bMutex )
     if (nMS > MAX_SYSPERIOD)
         nMS = MAX_SYSPERIOD;
 
-    // can't change a one-shot timer if it has fired already (odd) so delete & re-create
-    ImplSalStopTimer(pSalData);
-    CreateTimerQueueTimer(&pSalData->mnTimerId, NULL, SalTimerProc, NULL, nMS, nMS, WT_EXECUTEDEFAULT);
+    // change if it exists, create if not
+    if (pSalData->mnTimerId)
+        ChangeTimerQueueTimer(NULL, pSalData->mnTimerId, nMS, nMS);
+    else
+        CreateTimerQueueTimer(&pSalData->mnTimerId, NULL, SalTimerProc, NULL, nMS, nMS, WT_EXECUTEDEFAULT);
 
     pSalData->mnNextTimerTime = pSalData->mnLastEventTime + nMS;
 }
@@ -111,6 +113,10 @@ void CALLBACK SalTimerProc(PVOID, BOOLEAN)
 #endif
 
         SalData* pSalData = GetSalData();
+
+        // always post message when the timer fires, we will remove the ones
+        // that happened during execution of the callback later directly from
+        // the message queue
         PostMessageW(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK, 0, 0);
 
 #if defined ( __MINGW32__ ) && !defined ( _WIN64 )
@@ -128,11 +134,8 @@ void CALLBACK SalTimerProc(PVOID, BOOLEAN)
 
 We assured that by posting the message from the SalTimeProc only, the real
 call then happens when the main thread gets SAL_MSG_TIMER_CALLBACK.
-
-@param bAllowRecursive allows to skip the check that assures that two timeouts
-do not overlap.
 */
-void EmitTimerCallback(bool bAllowRecursive)
+void EmitTimerCallback()
 {
     SalData* pSalData = GetSalData();
     ImplSVData* pSVData = ImplGetSVData();
@@ -142,13 +145,15 @@ void EmitTimerCallback(bool bAllowRecursive)
 
     // Try to acquire the mutex. If we don't get the mutex then we
     // try this a short time later again.
-    if (ImplSalYieldMutexTryToAcquire() &&
-        (pSVData->mpSalTimer && (!pSalData->mbInTimerProc || bAllowRecursive)))
+    if (pSVData->mpSalTimer && ImplSalYieldMutexTryToAcquire())
     {
-        pSalData->mbInTimerProc = true;
         pSVData->mpSalTimer->CallCallback();
-        pSalData->mbInTimerProc = false;
         ImplSalYieldMutexRelease();
+
+        // Run the timer in the correct time, if we started this
+        // with a small timeout, because we didn't get the mutex
+        if (pSalData->mnTimerId && (pSalData->mnTimerMS != pSalData->mnTimerOrgMS))
+            ImplSalStartTimer(pSalData->mnTimerOrgMS, false);
     }
     else
     {
