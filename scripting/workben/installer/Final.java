@@ -67,10 +67,9 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
     }
 
     public void actionPerformed(ActionEvent e) {
-    // navNext is "Install"
-        if (e.getSource() == nav.navNext)
-    {
-            JProgressBar progressBar=new JProgressBar();
+        // navNext is "Install"
+        if(e.getSource() == nav.navNext) {
+            JProgressBar progressBar = new JProgressBar();
             progressBar.setMaximum(10);
             progressBar.setValue(0);
             statusPanel.add(progressBar, java.awt.BorderLayout.SOUTH);
@@ -79,50 +78,48 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
             nav.enableCancel(false);
             ArrayList<?> locations = InstallWizard.getLocations();
             // Returned 1
-            String path=null;
-            for (int i =0;i<locations.size();i++){
-                path= (String)locations.get(i);
-            xud = new XmlUpdater(path, statusLine,progressBar,InstallWizard.bNetworkInstall,InstallWizard.bBindingsInstall);
-        xud.addInstallListener(this);
-        InstallWizard.setInstallStarted(true);
-        InstallWizard.setPatchedTypes(false);
-        InstallWizard.setPatchedJava(false);
-        InstallWizard.setPatchedRDB(false);
-        xud.start();
+            String path = null;
+
+            for(int i = 0; i < locations.size(); i++) {
+                path = (String)locations.get(i);
+                xud = new XmlUpdater(path, statusLine, progressBar, InstallWizard.bNetworkInstall, InstallWizard.bBindingsInstall);
+                xud.addInstallListener(this);
+                InstallWizard.setInstallStarted(true);
+                InstallWizard.setPatchedTypes(false);
+                InstallWizard.setPatchedJava(false);
+                InstallWizard.setPatchedRDB(false);
+                xud.start();
             }
         }
 
-    // set to "Exit" at end of installation process
-    if (e.getSource() == nav.navCancel) {
-        int answer = JOptionPane.showConfirmDialog(wizard, "Are you sure you want to exit?");
-        if (answer == JOptionPane.YES_OPTION)
-        {
-            wizard.exitForm();
+        // set to "Exit" at end of installation process
+        if(e.getSource() == nav.navCancel) {
+            int answer = JOptionPane.showConfirmDialog(wizard, "Are you sure you want to exit?");
+
+            if(answer == JOptionPane.YES_OPTION) {
+                wizard.exitForm();
+            } else {
+                return;
+            }
         }
-        else
-        {
-            return;
-        }
-    }
     }// actionPerformed
 
 
     public void installationComplete(InstallationEvent ev) {
-    if( InstUtil.hasNetbeansInstallation() ) {
-        nav.removeCancelListener(this);
-        nav.setCancelListener(nav);
-        nav.navCancel.setText("Finish");
-        nav.enableIDE(true);
-        nav.enableCancel(true);
-        xud = null;
-    }
-    else {
-        nav.removeCancelListener(this);
-        nav.setCancelListener(nav);
-        nav.navCancel.setText("Finish");
-        nav.enableCancel(true);
-        xud = null;
-    }
+        if(InstUtil.hasNetbeansInstallation()) {
+            nav.removeCancelListener(this);
+            nav.setCancelListener(nav);
+            nav.navCancel.setText("Finish");
+            nav.enableIDE(true);
+            nav.enableCancel(true);
+            xud = null;
+        } else {
+            nav.removeCancelListener(this);
+            nav.setCancelListener(nav);
+            nav.navCancel.setText("Finish");
+            nav.enableCancel(true);
+            xud = null;
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

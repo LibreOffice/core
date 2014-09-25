@@ -28,15 +28,15 @@ import com.sun.star.text.XText;
  *
  */
 public class HelloWorld {
-  public static void printHW(XScriptContext xSc) {
+    public static void printHW(XScriptContext xSc) {
 
-    // getting the text document object
-    XTextDocument xtextdocument = (XTextDocument) UnoRuntime.queryInterface(
-XTextDocument.class, xSc.getDocument());
-    XText xText = xtextdocument.getText();
-    XTextRange xTextRange = xText.getEnd();
-    xTextRange.setString( "Hello World (in Java)" );
+        // getting the text document object
+        XTextDocument xtextdocument = (XTextDocument) UnoRuntime.queryInterface(
+                                          XTextDocument.class, xSc.getDocument());
+        XText xText = xtextdocument.getText();
+        XTextRange xTextRange = xText.getEnd();
+        xTextRange.setString("Hello World (in Java)");
 
-  }// printHW
+    }// printHW
 
 }

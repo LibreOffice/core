@@ -21,101 +21,83 @@ import com.sun.star.io.XOutputStream;
 
 
 public class XOutputStreamWrapper extends OutputStream {
-        private XOutputStream m_xOutputStream;
-        public XOutputStreamWrapper(XOutputStream xOs ) {
-            this.m_xOutputStream = xOs;
-        }
-        @Override
-        public void write(int b)
-                        throws java.io.IOException
-        {
-            if ( m_xOutputStream == null )
-            {
-                throw new java.io.IOException("Stream is null");
-            }
-            byte[] bytes = new byte[1];
-            bytes[0] = (byte) b;
-            try
-            {
-                m_xOutputStream.writeBytes( bytes );
-            }
-            catch ( com.sun.star.io.IOException ioe )
-            {
-                throw new java.io.IOException(ioe.getMessage());
-            }
-        }
-        @Override
-        public void write(byte[] b)
-                        throws java.io.IOException
-        {
-
-            if ( m_xOutputStream == null )
-            {
-                throw new java.io.IOException( "Stream is null" );
-            }
-            try
-            {
-                m_xOutputStream.writeBytes( b );
-            }
-            catch ( com.sun.star.io.IOException ioe )
-            {
-                throw new java.io.IOException(ioe.getMessage());
-            }
-        }
-        @Override
-        public void write( byte[] b, int off, int len )
-                        throws java.io.IOException
-        {
-            if ( m_xOutputStream == null )
-            {
-                throw new java.io.IOException( "Stream is null" );
-            }
-            byte[] bytes = new byte[len];
-            System.arraycopy(b, off, bytes, 0, len);
-            try
-            {
-                m_xOutputStream.writeBytes(bytes);
-            }
-            catch ( com.sun.star.io.IOException ioe )
-            {
-                throw new java.io.IOException(ioe.getMessage());
-            }
-        }
-
-        @Override
-        public void flush()
-            throws java.io.IOException
-        {
-            if ( m_xOutputStream == null )
-            {
-                throw new java.io.IOException( "Stream is null" );
-            }
-            try
-            {
-                m_xOutputStream.flush();
-            }
-            catch ( com.sun.star.io.IOException ioe )
-            {
-                throw new java.io.IOException(ioe.getMessage());
-            }
-        }
-        @Override
-        public void close()
-            throws java.io.IOException
-        {
-            if ( m_xOutputStream == null )
-            {
-                throw new java.io.IOException( "Stream is null" );
-            }
-            try
-            {
-                m_xOutputStream.closeOutput();
-            }
-            catch ( com.sun.star.io.IOException ioe )
-            {
-                throw new java.io.IOException(ioe.getMessage());
-            }
-        }
-
+    private XOutputStream m_xOutputStream;
+    public XOutputStreamWrapper(XOutputStream xOs) {
+        this.m_xOutputStream = xOs;
     }
+    @Override
+    public void write(int b)
+    throws java.io.IOException {
+        if(m_xOutputStream == null) {
+            throw new java.io.IOException("Stream is null");
+        }
+
+        byte[] bytes = new byte[1];
+        bytes[0] = (byte) b;
+
+        try {
+            m_xOutputStream.writeBytes(bytes);
+        } catch(com.sun.star.io.IOException ioe) {
+            throw new java.io.IOException(ioe.getMessage());
+        }
+    }
+    @Override
+    public void write(byte[] b)
+    throws java.io.IOException {
+
+        if(m_xOutputStream == null) {
+            throw new java.io.IOException("Stream is null");
+        }
+
+        try {
+            m_xOutputStream.writeBytes(b);
+        } catch(com.sun.star.io.IOException ioe) {
+            throw new java.io.IOException(ioe.getMessage());
+        }
+    }
+    @Override
+    public void write(byte[] b, int off, int len)
+    throws java.io.IOException {
+        if(m_xOutputStream == null) {
+            throw new java.io.IOException("Stream is null");
+        }
+
+        byte[] bytes = new byte[len];
+        System.arraycopy(b, off, bytes, 0, len);
+
+        try {
+            m_xOutputStream.writeBytes(bytes);
+        } catch(com.sun.star.io.IOException ioe) {
+            throw new java.io.IOException(ioe.getMessage());
+        }
+    }
+
+    @Override
+    public void flush()
+    throws java.io.IOException {
+        if(m_xOutputStream == null) {
+            throw new java.io.IOException("Stream is null");
+        }
+
+        try {
+            m_xOutputStream.flush();
+        } catch(com.sun.star.io.IOException ioe) {
+            throw new java.io.IOException(ioe.getMessage());
+        }
+    }
+    @Override
+    public void close()
+    throws java.io.IOException {
+        if(m_xOutputStream == null) {
+            throw new java.io.IOException("Stream is null");
+        }
+
+        try {
+            m_xOutputStream.closeOutput();
+        } catch(com.sun.star.io.IOException ioe) {
+            throw new java.io.IOException(ioe.getMessage());
+        }
+    }
+
+}
 

@@ -45,9 +45,10 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
         area.setLineWrap(true);
         area.setText("\n Click Next to include Scripting Framework support for IDEs.");
         area.append("\n Click Cancel exit the Installation process. \n");
-    if( InstUtil.hasNetbeansInstallation() ) {
-        area.append("\n \tA version of Netbeans has been detected. \n");
-    }
+
+        if(InstUtil.hasNetbeansInstallation()) {
+            area.append("\n \tA version of Netbeans has been detected. \n");
+        }
 
         welcomePanel.add(area, java.awt.BorderLayout.CENTER);
         add(welcomePanel, java.awt.BorderLayout.CENTER);
@@ -62,8 +63,7 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
         return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
     }
 
-    public void actionPerformed(ActionEvent ev)
-    {
+    public void actionPerformed(ActionEvent ev) {
         //Perform next actions here...
     }
 

@@ -35,8 +35,7 @@ public class XmlUpdater extends Thread {
     private boolean threadSuspended;
     private JProgressBar progressBar;
 
-    private final String[] bakFiles =
-    {
+    private final String[] bakFiles = {
         "writermenubar.xml",
         "writerkeybinding.xml",
         "calcmenubar.xml",
@@ -49,8 +48,7 @@ public class XmlUpdater extends Thread {
         "META-INF" + File.separator + "manifest.xml"
     };
 
-    private final String[] dirs =
-    {
+    private final String[] dirs = {
         "java" + File.separator + "Highlight",
         "java" + File.separator + "MemoryUsage",
         "java" + File.separator + "ScriptFrmwrkHelper",
@@ -62,8 +60,7 @@ public class XmlUpdater extends Thread {
         "javascript" + File.separator + "ExportSheetsToHTML"
     };
 
-    private final String[] names =
-    {
+    private final String[] names = {
         "java/Highlight/HighlightUtil.java",
         "java/Highlight/HighlightText.java",
         "java/Highlight/Highlight.jar",
@@ -94,14 +91,14 @@ public class XmlUpdater extends Thread {
     };
 
 
-    public XmlUpdater(String installPath, JLabel statusLabel,JProgressBar pBar, boolean netInstall, boolean bindingsInstall) {
+    public XmlUpdater(String installPath, JLabel statusLabel, JProgressBar pBar, boolean netInstall, boolean bindingsInstall) {
         this.installPath = installPath;
         this.statusLabel = statusLabel;
         this.netInstall = netInstall;
         this.bindingsInstall = bindingsInstall;
         listeners = new ArrayList<InstallListener>();
         threadSuspended = false;
-        progressBar=pBar;
+        progressBar = pBar;
         progressBar.setStringPainted(true);
     }// XmlUpdater
 
@@ -109,8 +106,7 @@ public class XmlUpdater extends Thread {
 
 
 
-    public void setResume()
-    {
+    public void setResume() {
         threadSuspended = false;
         notify();
     }// setResume
@@ -121,115 +117,113 @@ public class XmlUpdater extends Thread {
 
         internalThread = Thread.currentThread();
 
-        String progpath=installPath;
-        progpath= progpath.concat(File.separator+"program"+File.separator);
+        String progpath = installPath;
+        progpath = progpath.concat(File.separator + "program" + File.separator);
 
-        String starBasicPath=installPath;
-        starBasicPath= starBasicPath.concat(File.separator+"share"+File.separator+"basic"+File.separator+"ScriptBindingLibrary"+File.separator);
+        String starBasicPath = installPath;
+        starBasicPath = starBasicPath.concat(File.separator + "share" + File.separator + "basic" + File.separator + "ScriptBindingLibrary" + File.separator);
 
-        String regSchemaOfficePath=installPath;
-        regSchemaOfficePath= regSchemaOfficePath.concat(File.separator+"share"+File.separator+"registry"+File.separator+"schema"+File.separator+"org"+File.separator+"openoffice"+File.separator+"Office"+File.separator);
+        String regSchemaOfficePath = installPath;
+        regSchemaOfficePath = regSchemaOfficePath.concat(File.separator + "share" + File.separator + "registry" + File.separator + "schema" + File.separator + "org" + File.separator + "openoffice" + File.separator + "Office" + File.separator);
 
         progressBar.setString("Unzipping Required Files");
         ZipData zd = new ZipData();
 
 
-        if( (!netInstall) || bindingsInstall) {
-            String configPath=installPath;
-            configPath= configPath.concat(File.separator+"user"+File.separator+"config"+File.separator+"soffice.cfg"+File.separator);
-            String manifestPath=configPath + "META-INF" + File.separator;
+        if((!netInstall) || bindingsInstall) {
+            String configPath = installPath;
+            configPath = configPath.concat(File.separator + "user" + File.separator + "config" + File.separator + "soffice.cfg" + File.separator);
+            String manifestPath = configPath + "META-INF" + File.separator;
 
             //Adding <Office>/user/config/soffice.cfg/
-            File configDir = new File( configPath );
-            if( !configDir.isDirectory() ) {
-                if( !configDir.mkdir() ) {
-                    System.out.println( "creating  " + configDir + "directory failed");
-                }
-                else {
-                    System.out.println( configDir + "directory created");
-                }
-            }
-            else
-                System.out.println( "soffice.cfg exists" );
+            File configDir = new File(configPath);
 
-            File manifestDir = new File( manifestPath );
-            if( !manifestDir.isDirectory() ) {
-                if( !manifestDir.mkdir() ) {
-                    System.out.println( "creating " + manifestPath + "directory failed");
+            if(!configDir.isDirectory()) {
+                if(!configDir.mkdir()) {
+                    System.out.println("creating  " + configDir + "directory failed");
+                } else {
+                    System.out.println(configDir + "directory created");
                 }
-                else {
-                    System.out.println( manifestPath + " directory created");
-                }
+            } else {
+                System.out.println("soffice.cfg exists");
             }
-            else
-                System.out.println( manifestPath + " exists" );
+
+            File manifestDir = new File(manifestPath);
+
+            if(!manifestDir.isDirectory()) {
+                if(!manifestDir.mkdir()) {
+                    System.out.println("creating " + manifestPath + "directory failed");
+                } else {
+                    System.out.println(manifestPath + " directory created");
+                }
+            } else {
+                System.out.println(manifestPath + " exists");
+            }
 
             // Backup the confguration files in
             // <office>/user/config/soffice.cfg/
             // If they already exist.
 
-            for( int i=0; i < bakFiles.length; i++ )
-            {
+            for(int i = 0; i < bakFiles.length; i++) {
                 String pathNameBak = configPath + bakFiles[i];
-                File origFile = new File( pathNameBak );
-                if( origFile.exists() )
-                {
-                    System.out.println( "Attempting to backup " + pathNameBak + " to " + pathNameBak + ".bak" );
-                    if(! origFile.renameTo( new File( pathNameBak + ".bak" ) ) )
-                    {
-                        System.out.println( "Failed to backup " + pathNameBak + " to " + pathNameBak + ".bak" );
+                File origFile = new File(pathNameBak);
+
+                if(origFile.exists()) {
+                    System.out.println("Attempting to backup " + pathNameBak + " to " + pathNameBak + ".bak");
+
+                    if(! origFile.renameTo(new File(pathNameBak + ".bak"))) {
+                        System.out.println("Failed to backup " + pathNameBak + " to " + pathNameBak + ".bak");
                     }
                 }
             }
 
             // Adding Office configuration files
-            if (!zd.extractEntry("bindingdialog/writermenubar.xml",configPath, statusLabel))
-            {
+            if(!zd.extractEntry("bindingdialog/writermenubar.xml", configPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/writerkeybinding.xml",configPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/writerkeybinding.xml", configPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/calcmenubar.xml",configPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/calcmenubar.xml", configPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/calckeybinding.xml",configPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/calckeybinding.xml", configPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/impressmenubar.xml",configPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/impressmenubar.xml", configPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/impresskeybinding.xml",configPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/impresskeybinding.xml", configPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/drawmenubar.xml",configPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/drawmenubar.xml", configPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/drawkeybinding.xml",configPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/drawkeybinding.xml", configPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/eventbindings.xml",configPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/eventbindings.xml", configPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/manifest.xml",manifestPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/manifest.xml", manifestPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
@@ -238,39 +232,35 @@ public class XmlUpdater extends Thread {
         if(!bindingsInstall) {
             // Adding new directories to Office
             // Adding <Office>/user/basic/ScriptBindingLibrary/
-            File scriptBindingLib = new File( starBasicPath );
-            if( !scriptBindingLib.isDirectory() ) {
-                if( !scriptBindingLib.mkdir() ) {
-                    System.out.println( "ScriptBindingLibrary failed");
+            File scriptBindingLib = new File(starBasicPath);
+
+            if(!scriptBindingLib.isDirectory()) {
+                if(!scriptBindingLib.mkdir()) {
+                    System.out.println("ScriptBindingLibrary failed");
+                } else {
+                    System.out.println("ScriptBindingLibrary directory created");
                 }
-                else {
-                    System.out.println( "ScriptBindingLibrary directory created");
-                }
+            } else {
+                System.out.println("ScriptBindingLibrary exists");
             }
-            else
-                System.out.println( "ScriptBindingLibrary exists" );
 
             // Adding Scripting Framework and tools
-            if (!zd.extractEntry("sframework/ooscriptframe.zip",progpath, statusLabel))
-            {
+            if(!zd.extractEntry("sframework/ooscriptframe.zip", progpath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
 
-            if (!zd.extractEntry("sframework/bshruntime.zip",progpath, statusLabel))
-            {
+            if(!zd.extractEntry("sframework/bshruntime.zip", progpath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
 
-            if (!zd.extractEntry("sframework/jsruntime.zip",progpath, statusLabel))
-            {
+            if(!zd.extractEntry("sframework/jsruntime.zip", progpath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
 
-            if (!zd.extractEntry("schema/Scripting.xcs",regSchemaOfficePath, statusLabel))
-            {
+            if(!zd.extractEntry("schema/Scripting.xcs", regSchemaOfficePath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
@@ -279,33 +269,35 @@ public class XmlUpdater extends Thread {
 
             progressBar.setString("Registering Scripting Framework");
             progressBar.setValue(3);
-            if(!Register.register(installPath+File.separator, statusLabel) ) {
-               onInstallComplete();
-               return;
+
+            if(!Register.register(installPath + File.separator, statusLabel)) {
+                onInstallComplete();
+                return;
             }
+
             progressBar.setValue(5);
 
             String path = installPath + File.separator +
-                "share" + File.separator + "Scripts" + File.separator;
+                          "share" + File.separator + "Scripts" + File.separator;
 
-            for (int i = 0; i < dirs.length; i++) {
+            for(int i = 0; i < dirs.length; i++) {
                 File dir = new File(path + dirs[i]);
 
-                if (!dir.exists()) {
-                    if (!dir.mkdirs()) {
+                if(!dir.exists()) {
+                    if(!dir.mkdirs()) {
                         System.err.println("Error making dir: " +
-                            dir.getAbsolutePath());
+                                           dir.getAbsolutePath());
                         onInstallComplete();
                         return;
                     }
                 }
             }
 
-            for (int i = 0; i < names.length; i++) {
+            for(int i = 0; i < names.length; i++) {
                 String source = "/examples/" + names[i];
                 String dest = path + names[i].replace('/', File.separatorChar);
 
-                if (!zd.extractEntry(source, dest, statusLabel)) {
+                if(!zd.extractEntry(source, dest, statusLabel)) {
                     onInstallComplete();
                     return;
                 }
@@ -313,43 +305,42 @@ public class XmlUpdater extends Thread {
 
 
             // Adding binding dialog
-            if (!zd.extractEntry("bindingdialog/ScriptBinding.xba",starBasicPath, statusLabel))
-            {
+            if(!zd.extractEntry("bindingdialog/ScriptBinding.xba", starBasicPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/MenuBinding.xdl",starBasicPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/MenuBinding.xdl", starBasicPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/KeyBinding.xdl",starBasicPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/KeyBinding.xdl", starBasicPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/EventsBinding.xdl",starBasicPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/EventsBinding.xdl", starBasicPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/HelpBinding.xdl",starBasicPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/HelpBinding.xdl", starBasicPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/EditDebug.xdl",starBasicPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/EditDebug.xdl", starBasicPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/dialog.xlb",starBasicPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/dialog.xlb", starBasicPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
-            if (!zd.extractEntry("bindingdialog/script.xlb",starBasicPath, statusLabel))
-            {
+
+            if(!zd.extractEntry("bindingdialog/script.xlb", starBasicPath, statusLabel)) {
                 onInstallComplete();
                 return;
             }
@@ -364,16 +355,13 @@ public class XmlUpdater extends Thread {
     }// run
 
 
-    public void addInstallListener(InstallListener listener)
-    {
+    public void addInstallListener(InstallListener listener) {
         listeners.add(listener);
     }// addInstallListener
 
 
-    private void onInstallComplete()
-    {
-        for (InstallListener l : listeners)
-        {
+    private void onInstallComplete() {
+        for(InstallListener l : listeners) {
             l.installationComplete(null);
         }
     }// onInstallComplete

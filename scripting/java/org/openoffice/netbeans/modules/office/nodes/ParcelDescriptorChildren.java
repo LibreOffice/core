@@ -43,16 +43,19 @@ public class ParcelDescriptorChildren extends Children.Keys implements ChangeLis
         NodeList nl;
         int len;
 
-        if (parserCookie == null ||
-            (nl = parserCookie.getScriptElements()) == null ||
-            (len = nl.getLength()) == 0) {
+        if(parserCookie == null ||
+           (nl = parserCookie.getScriptElements()) == null ||
+           (len = nl.getLength()) == 0) {
             setKeys(Collections.EMPTY_SET);
             return;
         }
 
         ArrayList keys = new ArrayList(len);
-        for (int i = 0; i < len; i++)
+
+        for(int i = 0; i < len; i++) {
             keys.add(nl.item(i));
+        }
+
         setKeys(keys);
     }
 

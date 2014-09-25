@@ -28,7 +28,7 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
     public IdeFinal(InstallWizard wizard) {
         this.wizard = wizard;
         setBackground(java.awt.Color.white);
-    ideupdater = null;
+        ideupdater = null;
         initComponents();
     }
 
@@ -39,7 +39,7 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
      */
     private void initComponents() {//GEN-BEGIN:initComponents
         statusPanel = new javax.swing.JPanel();
-    statusPanel.setBackground(java.awt.Color.white);
+        statusPanel.setBackground(java.awt.Color.white);
         statusLine = new javax.swing.JLabel("Ready", javax.swing.JLabel.CENTER);
 
         setLayout(new java.awt.BorderLayout());
@@ -50,12 +50,12 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
         statusPanel.add(statusLine, java.awt.BorderLayout.CENTER);
 
         add(statusPanel, java.awt.BorderLayout.CENTER);
-    nav = new NavPanel(wizard, true, true, true, InstallWizard.IDEVERSIONS, "");
-    nav.setNextListener(this);
-    nav.removeCancelListener(nav);
-    nav.setCancelListener(this);
-    nav.navNext.setText("Install");
-    add(nav, java.awt.BorderLayout.SOUTH);
+        nav = new NavPanel(wizard, true, true, true, InstallWizard.IDEVERSIONS, "");
+        nav.setNextListener(this);
+        nav.removeCancelListener(nav);
+        nav.setCancelListener(this);
+        nav.navNext.setText("Install");
+        add(nav, java.awt.BorderLayout.SOUTH);
     }//GEN-END:initComponents
 
     @Override
@@ -64,10 +64,9 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
     }
 
     public void actionPerformed(ActionEvent e) {
-    // navNext is "Install"
-        if (e.getSource() == nav.navNext)
-    {
-            JProgressBar progressBar=new JProgressBar();
+        // navNext is "Install"
+        if(e.getSource() == nav.navNext) {
+            JProgressBar progressBar = new JProgressBar();
             progressBar.setMaximum(10);
             progressBar.setValue(0);
             statusPanel.add(progressBar, java.awt.BorderLayout.SOUTH);
@@ -76,29 +75,28 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
             nav.enableCancel(false);
             ArrayList<?> locations = InstallWizard.getLocations();
             // Returned 1
-            String path=null;
-            for (int i =0;i<locations.size();i++){
-                path= (String)locations.get(i);
+            String path = null;
 
-            ideupdater = new IdeUpdater( path, statusLine, progressBar );
-        ideupdater.addInstallListener(this);
-        InstallWizard.setInstallStarted(true);
-        ideupdater.start();
+            for(int i = 0; i < locations.size(); i++) {
+                path = (String)locations.get(i);
+
+                ideupdater = new IdeUpdater(path, statusLine, progressBar);
+                ideupdater.addInstallListener(this);
+                InstallWizard.setInstallStarted(true);
+                ideupdater.start();
             }
         }
 
-    // set to "Exit" at end of installation process
-    if (e.getSource() == nav.navCancel) {
-        int answer = JOptionPane.showConfirmDialog(wizard, "Are you sure you want to exit?");
-        if (answer == JOptionPane.YES_OPTION)
-        {
-            wizard.exitForm();
+        // set to "Exit" at end of installation process
+        if(e.getSource() == nav.navCancel) {
+            int answer = JOptionPane.showConfirmDialog(wizard, "Are you sure you want to exit?");
+
+            if(answer == JOptionPane.YES_OPTION) {
+                wizard.exitForm();
+            } else {
+                return;
+            }
         }
-        else
-        {
-            return;
-        }
-    }
     }// actionPerformed
 
 

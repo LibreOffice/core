@@ -32,63 +32,62 @@ import org.openide.filesystems.*;
 import org.openide.xml.XMLUtil;
 
 public class ParcelDescriptorParserSupport
-    implements ParcelDescriptorParserCookie, FileChangeListener
-{
+    implements ParcelDescriptorParserCookie, FileChangeListener {
     private FileObject fo;
     private Document document;
     private Set listeners;
 
-    public ParcelDescriptorParserSupport(FileObject fo)
-    {
+    public ParcelDescriptorParserSupport(FileObject fo) {
         this.fo = fo;
         fo.addFileChangeListener(this);
     }
 
-    private synchronized void parseFile()
-    {
+    private synchronized void parseFile() {
         File file = FileUtil.toFile(fo);
         InputSource is;
 
         try {
             is = new InputSource(new FileInputStream(file));
-        }
-        catch (FileNotFoundException fnfe) {
+        } catch(FileNotFoundException fnfe) {
             System.out.println("Couldn't find file: " + file.getName());
             return;
         }
 
         document = null;
+
         try {
             document = XMLUtil.parse(is, false, false, null, null);
-        }
-        catch (IOException ioe) {
+        } catch(IOException ioe) {
             System.out.println("IO Error parsing file: " + file.getName());
-        }
-        catch (SAXException se) {
+        } catch(SAXException se) {
             System.out.println("Sax Error parsing file: " + file.getName());
         }
     }
 
-    public synchronized NodeList getScriptElements()
-    {
-        if (document == null)
+    public synchronized NodeList getScriptElements() {
+        if(document == null) {
             parseFile();
+        }
 
-        if (document != null)
+        if(document != null) {
             return document.getElementsByTagName("script");
+        }
+
         return null;
     }
 
     public void addChangeListener(ChangeListener cl) {
-        if (listeners == null)
+        if(listeners == null) {
             listeners = new HashSet();
+        }
 
         listeners.add(cl);
     }
 
     public void removeChangeListener(ChangeListener cl) {
-        if (listeners == null)
+        if(listeners == null) {
             return;
+        }
 
         listeners.remove(cl);
     }
@@ -96,11 +95,12 @@ public class ParcelDescriptorParserSupport
     public void fileChanged(FileEvent fe) {
         parseFile();
 
-        if (listeners != null) {
+        if(listeners != null) {
             Iterator iter = listeners.iterator();
 
-            while (iter.hasNext())
+            while(iter.hasNext()) {
                 ((ChangeListener)iter.next()).stateChanged(new ChangeEvent(this));
+            }
         }
     }
 

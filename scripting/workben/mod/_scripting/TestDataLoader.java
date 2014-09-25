@@ -41,8 +41,9 @@ public class TestDataLoader {
         File testdatadir = new File(filename);
         File f = new File(testdatadir, name + ".csv");
 
-        if (!f.exists())
+        if(!f.exists()) {
             return;
+        }
 
 
         try {
@@ -51,23 +52,22 @@ public class TestDataLoader {
             String s, previous, current;
             ArrayList<Parameters> list = new ArrayList<Parameters>(11);
 
-            if ((s = in.readLine()) != null) {
+            if((s = in.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(s, ";");
 
                 current = previous = st.nextToken();
                 list.add(getParameters(st));
-            }
-            else {
+            } else {
                 in.close();
                 return;
             }
 
-            while ((s = in.readLine()) != null) {
+            while((s = in.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(s, ";");
 
                 current = st.nextToken();
 
-                if (!current.equals(previous)) {
+                if(!current.equals(previous)) {
                     tEnv.addObjRelation(previous, list);
                     previous = current;
                     list = new ArrayList<Parameters>(11);
@@ -78,32 +78,36 @@ public class TestDataLoader {
 
             tEnv.addObjRelation(previous, list);
             in.close();
-        }
-        catch (IOException ioe) {
+        } catch(IOException ioe) {
         }
     }
 
     private static Parameters getParameters(StringTokenizer st) {
         String separator = "=";
-        HashMap<String,Object> map = new HashMap<String,Object>(5);
+        HashMap<String, Object> map = new HashMap<String, Object>(5);
 
-        while (st.hasMoreTokens()) {
+        while(st.hasMoreTokens()) {
             String pair = st.nextToken();
             StringTokenizer tokens = new StringTokenizer(pair, separator);
 
             String name;
             String value;
 
-            if (tokens.countTokens() < 2)
+            if(tokens.countTokens() < 2) {
                 continue;
+            }
 
             name = tokens.nextToken();
-            if (tokens.countTokens() == 1)
+
+            if(tokens.countTokens() == 1) {
                 value = tokens.nextToken();
-            else {
+            } else {
                 StringBuffer buf = new StringBuffer(tokens.nextToken());
-                while (tokens.hasMoreTokens())
+
+                while(tokens.hasMoreTokens()) {
                     buf.append(separator).append(tokens.nextToken());
+                }
+
                 value = buf.toString();
             }
 

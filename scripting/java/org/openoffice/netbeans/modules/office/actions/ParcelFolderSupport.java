@@ -58,8 +58,7 @@ import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.idesupport.filter.FileFilter;
 import org.openoffice.idesupport.ui.ConfigurePanel;
 
-public class ParcelFolderSupport implements ParcelFolderCookie
-{
+public class ParcelFolderSupport implements ParcelFolderCookie {
     protected ParcelFolder parcelFolder;
     private ConfigurePanel configuror = null;
 
@@ -70,10 +69,9 @@ public class ParcelFolderSupport implements ParcelFolderCookie
     public String getLanguage() {
         ParcelDescriptor descriptor = getParcelDescriptor();
 
-        if (descriptor == null) {
+        if(descriptor == null) {
             return "";
-        }
-        else {
+        } else {
             return descriptor.getLanguage();
         }
     }
@@ -81,10 +79,9 @@ public class ParcelFolderSupport implements ParcelFolderCookie
     public String getClasspath() {
         ParcelDescriptor descriptor = getParcelDescriptor();
 
-        if (descriptor == null) {
+        if(descriptor == null) {
             return "";
-        }
-        else {
+        } else {
             return descriptor.getLanguageProperty("classpath");
         }
     }
@@ -92,13 +89,12 @@ public class ParcelFolderSupport implements ParcelFolderCookie
     public void setClasspath(String value) {
         ParcelDescriptor descriptor = getParcelDescriptor();
 
-        if (descriptor != null) {
+        if(descriptor != null) {
             descriptor.setLanguageProperty("classpath", value);
 
             try {
                 descriptor.write();
-            }
-            catch (IOException ioe) {
+            } catch(IOException ioe) {
                 ErrorManager.getDefault().notify(ioe);
             }
         }
@@ -108,7 +104,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         FileObject primary = parcelFolder.getPrimaryFile();
 
         File contents = FileUtil.toFile(
-            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
+                            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
 
         return ParcelDescriptor.getParcelDescriptor(contents);
     }
@@ -128,32 +124,30 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         // use the Parcel Recipe directory as the target directory
         File targetDir = FileUtil.toFile(parcelFolder.getPrimaryFile());
         File targetfile = new File(targetDir, File.separator +
-            parcelBase.getName() + "." + ParcelZipper.PARCEL_EXTENSION);
+                                   parcelBase.getName() + "." + ParcelZipper.PARCEL_EXTENSION);
 
         boolean proceed = configure();
-        if (!proceed) {
+
+        if(!proceed) {
             return;
         }
 
         final OutputWriter out =
             ParcelSupport.getOutputWindowWriter(parcelDir.getName() + " (generating)");
+
         try {
             out.println("Generating: " + parcelDir.getName(), null);
             ParcelZipper.getParcelZipper().zipParcel(contentsDir, targetfile, node.getFileFilter());
             out.println("\nGENERATION SUCCESSFUL.");
             out.println("\nRight click on the generated parcel to deploy it");
 
-            if (targetDir.equals(parcelDir)) {
+            if(targetDir.equals(parcelDir)) {
                 parcelBase.refresh(true);
             }
-        }
-        catch (IOException ioe) {
-            out.println("GENERATION FAILED: reason: " + ioe.getClass().getName() + ": "+ ioe.getMessage());
-        }
-        finally
-        {
-            if( out != null)
-            {
+        } catch(IOException ioe) {
+            out.println("GENERATION FAILED: reason: " + ioe.getClass().getName() + ": " + ioe.getMessage());
+        } finally {
+            if(out != null) {
                 out.close();
             }
         }
@@ -164,49 +158,47 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         FileObject primary = parcelFolder.getPrimaryFile();
 
         File contents = FileUtil.toFile(
-            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
+                            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
 
         ArrayList<String> classpath = getConfigureClasspath();
         classpath.add(contents.getAbsolutePath());
 
         try {
             ParcelDescriptor descriptor = getParcelDescriptor();
-            if (descriptor == null) {
+
+            if(descriptor == null) {
                 descriptor = ParcelDescriptor.createParcelDescriptor(contents);
             }
 
-            if (configuror == null) {
+            if(configuror == null) {
                 configuror = new ConfigurePanel(contents.getAbsolutePath(),
-                    classpath, descriptor);
-            }
-            else {
+                                                classpath, descriptor);
+            } else {
                 configuror.reload(contents.getAbsolutePath(), classpath,
-                    descriptor);
+                                  descriptor);
             }
-        }
-        catch (IOException ioe) {
+        } catch(IOException ioe) {
             ErrorManager.getDefault().notify(ioe);
             return false;
         }
 
         DialogDescriptor dd = new DialogDescriptor(configuror,
-            ConfigurePanel.DIALOG_TITLE);
+                ConfigurePanel.DIALOG_TITLE);
 
         Dialog dialog = TopManager.getDefault().createDialog(dd);
         dialog.show();
 
-        if (dd.getValue() == DialogDescriptor.OK_OPTION) {
+        if(dd.getValue() == DialogDescriptor.OK_OPTION) {
             try {
                 ParcelDescriptor descriptor = configuror.getConfiguration();
                 descriptor.write();
-            }
-            catch (Exception e) {
+            } catch(Exception e) {
                 ErrorManager.getDefault().notify(e);
             }
-        }
-        else {
+        } else {
             return false;
         }
+
         return true;
     }
 
@@ -214,34 +206,36 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         ArrayList<String> result = new ArrayList<String>();
 
         String classpath = NbClassPath.createRepositoryPath().getClassPath();
-        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
-        {
+
+        if(System.getProperty("os.name").startsWith("Windows")) {
             // under windows path is enclosed by quotes
             // e.g. C:\path1;d:\path2 would appear as
             // "C:\path1;d:\path2" therefore for us
             // we need to remove 1 character at either end of the
             // classpath returned from "createRepositoryPath().getClassPath()"
 
-            if ( classpath.startsWith("\"") && classpath.endsWith("\"") )
-            {
-               StringBuffer buff = new StringBuffer(classpath);
-               buff.delete(0,1);
-               buff.delete( buff.length() - 1, buff.length() );
-               classpath = buff.toString();
+            if(classpath.startsWith("\"") && classpath.endsWith("\"")) {
+                StringBuffer buff = new StringBuffer(classpath);
+                buff.delete(0, 1);
+                buff.delete(buff.length() - 1, buff.length());
+                classpath = buff.toString();
             }
         }
+
         StringTokenizer tokens = new StringTokenizer(classpath, File.pathSeparator);
 
-        while(tokens.hasMoreTokens())
+        while(tokens.hasMoreTokens()) {
             result.addElement(tokens.nextToken());
+        }
 
         OfficeSettings settings = OfficeSettings.getDefault();
         File classesDir = new File(settings.getOfficeDirectory().getPath(
-            File.separator + "program" + File.separator + "classes"));
+                                       File.separator + "program" + File.separator + "classes"));
         File[] jarfiles = classesDir.listFiles();
 
-        for (int i = 0; i < jarfiles.length; i++)
+        for(int i = 0; i < jarfiles.length; i++) {
             result.addElement(jarfiles[i].getAbsolutePath());
+        }
 
         return result;
     }

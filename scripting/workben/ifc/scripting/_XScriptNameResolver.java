@@ -56,14 +56,13 @@ public class _XScriptNameResolver extends MultiMethodTest {
 
         Iterator tests;
 
-        if (c != null) {
+        if(c != null) {
             tests = c.iterator();
 
-            while (tests.hasNext()) {
+            while(tests.hasNext()) {
                 result &= runResolveTest((Parameters)tests.next());
             }
-        }
-        else {
+        } else {
             result = false;
         }
 
@@ -81,7 +80,7 @@ public class _XScriptNameResolver extends MultiMethodTest {
 
         log.println(description + ": " + logicalname);
 
-        HashMap<String,Object> map = new HashMap<String,Object>();
+        HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("SCRIPTING_DOC_STORAGE_ID", Integer.valueOf(storageId));
         map.put("SCRIPTING_DOC_URI", util.utils.getFullTestURL(location));
 
@@ -91,22 +90,20 @@ public class _XScriptNameResolver extends MultiMethodTest {
         try {
             XInterface ifc = (XInterface) oObj.resolve(logicalname, args);
 
-            if (ifc == null)
+            if(ifc == null) {
                 output = "null";
-            else if (UnoRuntime.queryInterface(XScriptInfo.class, ifc) == null)
+            } else if(UnoRuntime.queryInterface(XScriptInfo.class, ifc) == null) {
                 output = "null";
-            else
+            } else {
                 output = "XScriptInfo.class";
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae) {
+            }
+        } catch(com.sun.star.lang.IllegalArgumentException iae) {
             log.println("caught IllegalArgumentException: " + iae);
             output = "com.sun.star.lang.IllegalArgumentException";
-        }
-        catch (com.sun.star.script.CannotConvertException cce) {
+        } catch(com.sun.star.script.CannotConvertException cce) {
             log.println("caught CannotConvertException: " + cce);
             output = "com.sun.star.script.CannotConvertException";
-        }
-        catch (com.sun.star.uno.RuntimeException re) {
+        } catch(com.sun.star.uno.RuntimeException re) {
             log.println("caught RuntimeException: " + re);
             output = "com.sun.star.uno.RuntimeException";
         }
@@ -117,37 +114,40 @@ public class _XScriptNameResolver extends MultiMethodTest {
 
     private int getStorageId(String location) {
 
-        if (location.equals("share"))
+        if(location.equals("share")) {
             return 0;
+        }
 
-        if (location.equals("user"))
+        if(location.equals("user")) {
             return 1;
+        }
 
         XSimpleFileAccess access = null;
         String uri = util.utils.getFullTestURL(location);
 
-        if (storageManager == null) {
+        if(storageManager == null) {
             try {
                 XPropertySet xProp = UnoRuntime.queryInterface(
-                    XPropertySet.class, tParam.getMSF());
+                                         XPropertySet.class, tParam.getMSF());
 
                 XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class,
-                xProp.getPropertyValue("DefaultContext"));
+                                             xProp.getPropertyValue("DefaultContext"));
 
                 XInterface ifc = (XInterface)
-                    xContext.getValueByName("/singletons/drafts.com.sun.star." +
-                    "script.framework.storage.theScriptStorageManager");
+                                 xContext.getValueByName("/singletons/drafts.com.sun.star." +
+                                         "script.framework.storage.theScriptStorageManager");
 
                 storageManager = UnoRuntime.queryInterface(XScriptStorageManager.class, ifc);
-            }
-            catch( Exception e ) {
+            } catch(Exception e) {
                 return -1;
             }
         }
 
         access = getXSimpleFileAccess();
-        if (access == null)
+
+        if(access == null) {
             return -1;
+        }
 
         int id = storageManager.createScriptStorageWithURI(access, uri);
 
@@ -159,13 +159,13 @@ public class _XScriptNameResolver extends MultiMethodTest {
 
         try {
             Object fa = tParam.getMSF().createInstance(
-                "com.sun.star.ucb.SimpleFileAccess");
+                            "com.sun.star.ucb.SimpleFileAccess");
 
             access = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
-        }
-        catch (com.sun.star.uno.Exception e) {
+        } catch(com.sun.star.uno.Exception e) {
             return null;
         }
+
         return access;
     }
 }

@@ -48,20 +48,19 @@ public class OfficeSettings extends SystemOption {
         setWarnAfterDirDeploy(true);
         setWarnBeforeMount(true);
 
-        if (getOfficeDirectory() == null) {
+        if(getOfficeDirectory() == null) {
             SVersionRCFile sversion = SVersionRCFile.createInstance();
 
             try {
                 Enumeration enum = sversion.getVersions();
                 OfficeInstallation oi;
 
-                while (enum.hasMoreElements()) {
+                while(enum.hasMoreElements()) {
                     oi = (OfficeInstallation)enum.nextElement();
                     setOfficeDirectory(oi);
                     return;
                 }
-            }
-            catch (IOException ioe) {
+            } catch(IOException ioe) {
             }
         }
     }

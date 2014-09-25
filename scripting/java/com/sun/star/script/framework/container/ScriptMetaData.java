@@ -42,49 +42,45 @@ public class ScriptMetaData extends ScriptEntry {
     private Parcel parent;
 
 
-    public ScriptMetaData( Parcel parent, ScriptEntry entry,
-                           String source )
-    {
-        super( entry );
+    public ScriptMetaData(Parcel parent, ScriptEntry entry,
+                          String source) {
+        super(entry);
         this.parent = parent;
-        if ( source != null )
-        {
+
+        if(source != null) {
             this.hasSource = true;
             this.source = source;
         }
 
     }
 
-    public boolean hasSource()
-    {
+    public boolean hasSource() {
         return hasSource;
     }
 
     public String getSource() {
-        return ( source !=null && hasSource ) ? source : null;
+        return (source != null && hasSource) ? source : null;
     }
 
     public byte[] getSourceBytes() {
-        return ( source !=null && hasSource ) ? source.getBytes() : null;
+        return (source != null && hasSource) ? source.getBytes() : null;
     }
 
     public boolean equals(ScriptMetaData other) {
         return super.equals(other) && hasSource == other.hasSource();
     }
 
-    public String getScriptFullURL()
-    {
+    public String getScriptFullURL() {
         String url = "vnd.sun.star.script:" + parent.getName() + "." + getLanguageName() +
-            "?" + "language=" + getLanguage() +
-            "&location=" + getParcelLocation();
-         return url;
+                     "?" + "language=" + getLanguage() +
+                     "&location=" + getParcelLocation();
+        return url;
     }
 
-    public String getShortFormScriptURL()
-    {
+    public String getShortFormScriptURL() {
         String url = "vnd.sun.star.script:" + parent.getName() + "." + getLanguageName() +
-            "?" + "language=" + getLanguage() +
-            "&location=" + getLocationPlaceHolder();
+                     "?" + "language=" + getLanguage() +
+                     "&location=" + getLocationPlaceHolder();
         return url;
     }
 
@@ -111,78 +107,60 @@ public class ScriptMetaData extends ScriptEntry {
     private static final String UNO_SHARED_PACKAGES2 =
         SHARE + "/uno_packages";
 
-    public static String getLocationPlaceHolder(String url, String pkgname)
-    {
+    public static String getLocationPlaceHolder(String url, String pkgname) {
         String result = "Unknown";
 
-        if ( url.contains(UNO_USER_PACKAGES1) ||
-             url.contains(UNO_USER_PACKAGES2) )
-        {
-            result = PathUtils.make_url( "user:uno_packages", pkgname );
-        }
-        else if ( url.contains(UNO_SHARED_PACKAGES1) ||
-                  url.contains(UNO_SHARED_PACKAGES2) )
-        {
-            result = PathUtils.make_url( "share:uno_packages", pkgname );
-        }
-        else if ( url.indexOf(SHARE) == 0 )
-        {
+        if(url.contains(UNO_USER_PACKAGES1) ||
+           url.contains(UNO_USER_PACKAGES2)) {
+            result = PathUtils.make_url("user:uno_packages", pkgname);
+        } else if(url.contains(UNO_SHARED_PACKAGES1) ||
+                  url.contains(UNO_SHARED_PACKAGES2)) {
+            result = PathUtils.make_url("share:uno_packages", pkgname);
+        } else if(url.indexOf(SHARE) == 0) {
             result = "share";
-        }
-        else if ( url.indexOf(USER) == 0 )
-        {
+        } else if(url.indexOf(USER) == 0) {
             result = "user";
-        }
-        else if ( url.indexOf("vnd.sun.star.tdoc:") == 0 )
-        {
+        } else if(url.indexOf("vnd.sun.star.tdoc:") == 0) {
             result = "document";
         }
+
         return result;
     }
 
-    public String getLocationPlaceHolder()
-    {
+    public String getLocationPlaceHolder() {
         String placeHolder = "Unknown";
         String pathToParcel = parent.getPathToParcel();
 
-        if ( pathToParcel.contains(UNO_USER_PACKAGES1) ||
-             pathToParcel.contains(UNO_USER_PACKAGES2) )
-        {
+        if(pathToParcel.contains(UNO_USER_PACKAGES1) ||
+           pathToParcel.contains(UNO_USER_PACKAGES2)) {
             // it's a package
             placeHolder = "user:uno_packages";
             String unoPkg = parent.parent.getName();
-            if ( unoPkg != null )
-            {
-                placeHolder = PathUtils.make_url( placeHolder, unoPkg );
+
+            if(unoPkg != null) {
+                placeHolder = PathUtils.make_url(placeHolder, unoPkg);
             }
-        }
-        else if ( pathToParcel.contains(UNO_SHARED_PACKAGES1) ||
-                  pathToParcel.contains(UNO_SHARED_PACKAGES2) )
-        {
+        } else if(pathToParcel.contains(UNO_SHARED_PACKAGES1) ||
+                  pathToParcel.contains(UNO_SHARED_PACKAGES2)) {
             //its a package
             placeHolder = "share:uno_packages";
             String unoPkg = parent.parent.getName();
-            if ( unoPkg != null )
-            {
-                placeHolder = PathUtils.make_url( placeHolder, unoPkg );
+
+            if(unoPkg != null) {
+                placeHolder = PathUtils.make_url(placeHolder, unoPkg);
             }
-        }
-        else if ( pathToParcel.indexOf(SHARE) == 0 )
-        {
+        } else if(pathToParcel.indexOf(SHARE) == 0) {
             placeHolder = "share";
-        }
-        else if ( pathToParcel.indexOf(USER) == 0 )
-        {
+        } else if(pathToParcel.indexOf(USER) == 0) {
             placeHolder = "user";
-        }
-        else if ( pathToParcel.indexOf("vnd.sun.star.tdoc:") == 0 )
-        {
+        } else if(pathToParcel.indexOf("vnd.sun.star.tdoc:") == 0) {
             placeHolder = "document";
         }
+
         // TODO handling document packages ??? not really sure of package url
-/*        else
-        {
-        } */
+        /*        else
+                {
+                } */
         return placeHolder;
     }
 
@@ -193,76 +171,68 @@ public class ScriptMetaData extends ScriptEntry {
     // Also if it is to remain needs to be renamed to getParcelLocationURL
 
     // return  URL string  to parcel
-    public String getParcelLocation()
-    {
+    public String getParcelLocation() {
         return parent.getPathToParcel();
     }
 
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "\nParcelLocation = " + getParcelLocation() + "\nLocationPlaceHolder = " + locationPlaceHolder + super.toString();
     }
 
-    public URL[] getClassPath()
-    {
-    try
-    {
-        String classpath = getLanguageProperties().get("classpath");
+    public URL[] getClassPath() {
+        try {
+            String classpath = getLanguageProperties().get("classpath");
 
-        if ( classpath == null )
-        {
-            classpath = "";
-        }
-
-        String parcelPath = getParcelLocation();
-        // make sure path ends with /
-        if ( !parcelPath.endsWith("/") )
-        {
-            parcelPath += "/";
-        }
-
-        // replace \ with /
-        parcelPath = parcelPath.replace( '\\', '/' );
-
-        ArrayList<URL> classPathVec =  new ArrayList<URL>();
-        StringTokenizer stk = new StringTokenizer(classpath, ":");
-        while (  stk.hasMoreElements() )
-        {
-            String relativeClasspath =  stk.nextToken();
-            String pathToProcess  = PathUtils.make_url( parcelPath, relativeClasspath);
-            URL url = createURL( pathToProcess );
-            if ( url != null )
-            {
-                classPathVec.add (  url  );
+            if(classpath == null) {
+                classpath = "";
             }
 
-        }
-        if ( classPathVec.size() == 0)
-        {
-            URL url = createURL( parcelPath );
-            if ( url != null )
-            {
-                classPathVec.add(url);
+            String parcelPath = getParcelLocation();
+
+            // make sure path ends with /
+            if(!parcelPath.endsWith("/")) {
+                parcelPath += "/";
             }
+
+            // replace \ with /
+            parcelPath = parcelPath.replace('\\', '/');
+
+            ArrayList<URL> classPathVec =  new ArrayList<URL>();
+            StringTokenizer stk = new StringTokenizer(classpath, ":");
+
+            while(stk.hasMoreElements()) {
+                String relativeClasspath =  stk.nextToken();
+                String pathToProcess  = PathUtils.make_url(parcelPath, relativeClasspath);
+                URL url = createURL(pathToProcess);
+
+                if(url != null) {
+                    classPathVec.add(url);
+                }
+
+            }
+
+            if(classPathVec.size() == 0) {
+                URL url = createURL(parcelPath);
+
+                if(url != null) {
+                    classPathVec.add(url);
+                }
+            }
+
+            return  classPathVec.toArray(new URL[classPathVec.size()]);
+        } catch(Exception e) {
+            LogUtils.DEBUG("Failed to build class path " + e.toString());
+            LogUtils.DEBUG(LogUtils.getTrace(e));
+            return new URL[0];
         }
 
-        return  classPathVec.toArray( new URL[classPathVec.size()]);
     }
-    catch ( Exception e )
-    {
-        LogUtils.DEBUG("Failed to build class path " + e.toString() );
-        LogUtils.DEBUG( LogUtils.getTrace( e ) );
-        return new URL[0];
-    }
-
-    }
-    private URL createURL( String path ) throws java.net.MalformedURLException
-    {
+    private URL createURL(String path) throws java.net.MalformedURLException {
         int indexOfColon = path.indexOf(':');
-        String scheme = path.substring( 0, indexOfColon );
-        UCBStreamHandler handler = new UCBStreamHandler( scheme, parent.m_xSFA);
+        String scheme = path.substring(0, indexOfColon);
+        UCBStreamHandler handler = new UCBStreamHandler(scheme, parent.m_xSFA);
 
         path += UCBStreamHandler.separator;
         return new URL(null, path, handler);
@@ -270,87 +240,81 @@ public class ScriptMetaData extends ScriptEntry {
 
     // TODO should decide whether this should throw or not
     // decide whether it should be public or protected ( final ? )
-    public void loadSource()
-    {
-            try
-            {
-                URL sourceUrl = getSourceURL();
-                LogUtils.DEBUG("** In load source BUT not loading yet for " + sourceUrl );
+    public void loadSource() {
+        try {
+            URL sourceUrl = getSourceURL();
+            LogUtils.DEBUG("** In load source BUT not loading yet for " + sourceUrl);
 
-                if ( sourceUrl != null )
-                {
-                    StringBuilder buf = new StringBuilder();
-                    InputStream in = sourceUrl.openStream();
+            if(sourceUrl != null) {
+                StringBuilder buf = new StringBuilder();
+                InputStream in = sourceUrl.openStream();
 
-                    byte[] contents = new byte[1024];
-                    int len;
-                    while ((len = in.read(contents, 0, 1024)) != -1) {
-                        buf.append(new String(contents, 0, len));
-                    }
+                byte[] contents = new byte[1024];
+                int len;
 
-                    try {
-                        in.close();
-                    }
-                    catch (java.io.IOException ignore ) {
-                        LogUtils.DEBUG("** Failed to read scriot from url " + ignore.toString() );
-                    }
-
-                    source = buf.toString();
-                    hasSource = true;
+                while((len = in.read(contents, 0, 1024)) != -1) {
+                    buf.append(new String(contents, 0, len));
                 }
-            }
-            catch (java.io.IOException e) {
-                LogUtils.DEBUG("** Failed to read scriot from url " + e.toString());
-            }
 
+                try {
+                    in.close();
+                } catch(java.io.IOException ignore) {
+                    LogUtils.DEBUG("** Failed to read scriot from url " + ignore.toString());
+                }
+
+                source = buf.toString();
+                hasSource = true;
+            }
+        } catch(java.io.IOException e) {
+            LogUtils.DEBUG("** Failed to read scriot from url " + e.toString());
         }
-    protected boolean writeSourceFile()
-    {
+
+    }
+    protected boolean writeSourceFile() {
         String sourceFilePath = parent.getPathToParcel() + "/" + getLanguageName();
         boolean result = false;
-        try
-        {
-            XSimpleFileAccess2 xSFA2 = UnoRuntime.queryInterface( XSimpleFileAccess2.class,
-                parent.m_xSFA );
-            if ( xSFA2 != null )
-            {
-                ByteArrayInputStream bis = new ByteArrayInputStream( getSourceBytes() );
-                XInputStreamImpl xis = new XInputStreamImpl( bis );
-                xSFA2.writeFile( sourceFilePath, xis );
+
+        try {
+            XSimpleFileAccess2 xSFA2 = UnoRuntime.queryInterface(XSimpleFileAccess2.class,
+                                       parent.m_xSFA);
+
+            if(xSFA2 != null) {
+                ByteArrayInputStream bis = new ByteArrayInputStream(getSourceBytes());
+                XInputStreamImpl xis = new XInputStreamImpl(bis);
+                xSFA2.writeFile(sourceFilePath, xis);
                 xis.closeInput();
                 result = true;
             }
         }
         // TODO re-examine exception processing should probably throw
         // exceptions back to caller
-        catch ( Exception ignore )
+        catch(Exception ignore)
 
         {
         }
+
         return result;
     }
-    protected boolean removeSourceFile()
-    {
+    protected boolean removeSourceFile() {
         String parcelLocation = parent.getPathToParcel();
         String sourceFilePath = parcelLocation + "/" + getLanguageName();
         boolean result = false;
-        try
-        {
-            parent.m_xSFA.kill( sourceFilePath );
+
+        try {
+            parent.m_xSFA.kill(sourceFilePath);
             result = true;
         }
         // TODO reexamine exception handling
-        catch ( Exception e )
-        {
+        catch(Exception e) {
         }
+
         return result;
     }
 
-    public URL getSourceURL() throws java.net.MalformedURLException
-    {
+    public URL getSourceURL() throws java.net.MalformedURLException {
         String sUrl = getParcelLocation();
-        sUrl = PathUtils.make_url( sUrl, getLanguageName() );
-        LogUtils.DEBUG("Creating script url for " + sUrl );
-        return createURL( sUrl );
+        sUrl = PathUtils.make_url(sUrl, getLanguageName());
+        LogUtils.DEBUG("Creating script url for " + sUrl);
+        return createURL(sUrl);
     }
 }

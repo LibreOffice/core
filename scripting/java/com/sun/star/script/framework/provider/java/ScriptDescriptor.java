@@ -26,13 +26,12 @@ import java.util.StringTokenizer;
  * The <code>ScriptDescriptor</code> object is used to store the search
  * criteria that should be used for finding a particular script
  */
-public class ScriptDescriptor
-{
+public class ScriptDescriptor {
     private String m_name;
     private String m_methodName;
     private String m_className;
     private List<String> m_classpath;
-    private ArrayList<Class<?>> m_argumentTypes = new ArrayList<Class<?>>( 11 );
+    private ArrayList<Class<?>> m_argumentTypes = new ArrayList<Class<?>>(11);
 
     /**
      * Constructs a ScriptDescriptor for the given name
@@ -40,19 +39,17 @@ public class ScriptDescriptor
      * @param  name                          Script Name
      * @exception  IllegalArgumentException  if the given name does not contain a "."
      */
-    public ScriptDescriptor( String name )
-    throws IllegalArgumentException
-    {
-        int idx = name.lastIndexOf( '.' );
+    public ScriptDescriptor(String name)
+    throws IllegalArgumentException {
+        int idx = name.lastIndexOf('.');
 
-        if ( idx == -1 )
-        {
-            throw new IllegalArgumentException( "Invalid method name" );
+        if(idx == -1) {
+            throw new IllegalArgumentException("Invalid method name");
         }
 
         this.m_name = name;
-        this.m_methodName = name.substring( idx + 1 );
-        this.m_className = name.substring( 0, idx );
+        this.m_methodName = name.substring(idx + 1);
+        this.m_className = name.substring(0, idx);
     }
 
     /**
@@ -60,8 +57,7 @@ public class ScriptDescriptor
      *
      * @return    The Script Name value
      */
-    public String getName()
-    {
+    public String getName() {
         return m_name;
     }
 
@@ -70,8 +66,7 @@ public class ScriptDescriptor
      *
      * @return    The Script Name value
      */
-    public String getClassName()
-    {
+    public String getClassName() {
         return m_className;
     }
 
@@ -81,8 +76,7 @@ public class ScriptDescriptor
      *
      * @return    The methodName value
      */
-    public String getMethodName()
-    {
+    public String getMethodName() {
         return m_methodName;
     }
 
@@ -92,12 +86,11 @@ public class ScriptDescriptor
      *
      * @param  classpath  The new classpath value
      */
-    public void setClasspath( String classpath )
-    {
-        StringTokenizer stk = new StringTokenizer( classpath, ":" );
-        while( stk.hasMoreElements() )
-        {
-            this.m_classpath.add( (String) stk.nextElement() );
+    public void setClasspath(String classpath) {
+        StringTokenizer stk = new StringTokenizer(classpath, ":");
+
+        while(stk.hasMoreElements()) {
+            this.m_classpath.add((String) stk.nextElement());
         }
     }
 
@@ -106,8 +99,7 @@ public class ScriptDescriptor
      *
      * @param  classpath  The new classpath value
      */
-    public void setClasspath( List<String> classpath )
-    {
+    public void setClasspath(List<String> classpath) {
         this.m_classpath = classpath;
     }
 
@@ -117,8 +109,7 @@ public class ScriptDescriptor
      *
      * @return    The classpath value
      */
-    public List<String> getClasspath()
-    {
+    public List<String> getClasspath() {
         return m_classpath;
     }
 
@@ -129,9 +120,9 @@ public class ScriptDescriptor
      *
      * @param  clazz  The feature to be added to the ArgumentType attribute
      */
-    public synchronized void addArgumentType( Class<?> clazz )
-    {
-        m_argumentTypes.add( clazz );
+
+    public synchronized void addArgumentType(Class<?> clazz) {
+        m_argumentTypes.add(clazz);
     }
 
 
@@ -146,13 +137,14 @@ public class ScriptDescriptor
      *
      * @return    The argumentTypes value
      */
+
     public synchronized Class<?>[]
-    getArgumentTypes()
-    {
-        if ( m_argumentTypes.size() > 0 )
-            return m_argumentTypes.toArray( new Class[ m_argumentTypes.size() ] );
-        else
+    getArgumentTypes() {
+        if(m_argumentTypes.size() > 0) {
+            return m_argumentTypes.toArray(new Class[ m_argumentTypes.size() ]);
+        } else {
             return null;
+        }
     }
 
 
@@ -163,24 +155,22 @@ public class ScriptDescriptor
      * @return    The scriptName including the parameters.
      */
     @Override
-    public String toString()
-    {
-        StringBuilder description = new StringBuilder( m_name );
+    public String toString() {
+        StringBuilder description = new StringBuilder(m_name);
         Class<?>[] types = getArgumentTypes();
 
-        description.append( " (" );
+        description.append(" (");
 
-        if ( types != null )
-        {
-            for ( int i = 0; i < types.length - 1; i++ )
-            {
-                description.append( types[ i ].getName() );
-                description.append( ", " );
+        if(types != null) {
+            for(int i = 0; i < types.length - 1; i++) {
+                description.append(types[ i ].getName());
+                description.append(", ");
             }
 
-            description.append( types[ types.length - 1 ].getName() );
+            description.append(types[ types.length - 1 ].getName());
         }
-        description.append( ")" );
+
+        description.append(")");
 
         return description.toString();
     }

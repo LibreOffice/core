@@ -48,15 +48,18 @@ public class ParcelDescriptorEditorSupport extends DataEditorSupport implements 
      * @return true if the modification is acceptable
      */
     protected boolean notifyModified() {
-        if (!super.notifyModified()) {
+        if(!super.notifyModified()) {
             return false;
         }
+
         ParcelDescriptorDataObject obj = (ParcelDescriptorDataObject)getDataObject();
-        if (obj.getCookie(SaveCookie.class) == null) {
+
+        if(obj.getCookie(SaveCookie.class) == null) {
             obj.setModified(true);
             // You must implement this method on the object:
             obj.addSaveCookie(new Save());
         }
+
         return true;
     }
 
@@ -66,11 +69,13 @@ public class ParcelDescriptorEditorSupport extends DataEditorSupport implements 
     protected void notifyUnmodified() {
         ParcelDescriptorDataObject obj = (ParcelDescriptorDataObject)getDataObject();
         SaveCookie save = (SaveCookie)obj.getCookie(SaveCookie.class);
-        if (save != null) {
+
+        if(save != null) {
             // You must implement this method on the object:
             obj.removeSaveCookie(save);
             obj.setModified(false);
         }
+
         super.notifyUnmodified();
     }
 

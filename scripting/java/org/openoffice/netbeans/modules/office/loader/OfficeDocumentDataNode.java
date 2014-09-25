@@ -36,7 +36,7 @@ public class OfficeDocumentDataNode extends DataNode {
 
     public OfficeDocumentDataNode(OfficeDocumentDataObject obj) {
         this(obj, new OfficeDocumentChildren((OfficeDocumentCookie)
-            obj.getCookie(OfficeDocumentCookie.class)));
+                                             obj.getCookie(OfficeDocumentCookie.class)));
     }
 
     public OfficeDocumentDataNode(OfficeDocumentDataObject obj, Children ch) {
@@ -52,14 +52,14 @@ public class OfficeDocumentDataNode extends DataNode {
     protected void createPasteTypes(Transferable t, List ls) {
         Node[] copies = NodeTransfer.nodes(t, NodeTransfer.COPY);
 
-        if (copies != null) {
-            for (int i = 0; i < copies.length; i++) {
-                if (copies[i] instanceof ParcelDataNode) {
+        if(copies != null) {
+            for(int i = 0; i < copies.length; i++) {
+                if(copies[i] instanceof ParcelDataNode) {
                     File source = FileUtil.toFile(((ParcelDataNode)copies[i]).getDataObject().getPrimaryFile());
                     File target = FileUtil.toFile(getDataObject().getPrimaryFile());
 
-                    if (source.exists()  && source.canRead() &&
-                        target.exists() && target.canWrite()) {
+                    if(source.exists()  && source.canRead() &&
+                       target.exists() && target.canWrite()) {
                         ls.add(new ParcelDataNode.ParcelPasteType((ParcelDataNode)copies[i], target, false));
                     }
                 }
@@ -67,14 +67,15 @@ public class OfficeDocumentDataNode extends DataNode {
         }
 
         Node[] moves = NodeTransfer.nodes(t, NodeTransfer.MOVE);
-        if (moves != null) {
-            for (int i = 0; i < moves.length; i++) {
-                if (moves[i] instanceof ParcelDataNode) {
+
+        if(moves != null) {
+            for(int i = 0; i < moves.length; i++) {
+                if(moves[i] instanceof ParcelDataNode) {
                     File source = FileUtil.toFile(((ParcelDataNode)moves[i]).getDataObject().getPrimaryFile());
                     File target = FileUtil.toFile(getDataObject().getPrimaryFile());
 
-                    if (source.exists() && source.canRead() &&
-                        target.exists() && target.canWrite()) {
+                    if(source.exists() && source.canRead() &&
+                       target.exists() && target.canWrite()) {
                         ls.add(new ParcelDataNode.ParcelPasteType((ParcelDataNode)moves[i], target, true));
                     }
                 }

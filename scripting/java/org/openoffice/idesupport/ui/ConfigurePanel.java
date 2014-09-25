@@ -53,7 +53,7 @@ public class ConfigurePanel extends JPanel {
         "Choose What to Export as Scripts";
 
     public ConfigurePanel(String basedir, ArrayList<String> classpath,
-        ParcelDescriptor descriptor) {
+                          ParcelDescriptor descriptor) {
 
         this.basedir = new File(basedir);
         this.classpath = classpath;
@@ -62,47 +62,51 @@ public class ConfigurePanel extends JPanel {
     }
 
     public ConfigurePanel(String basedir, ArrayList<String> classpath)
-        throws IOException {
+    throws IOException {
 
         this.basedir = new File(basedir);
         this.classpath = classpath;
         this.descriptor = new ParcelDescriptor(new File(this.basedir,
-            ParcelZipper.PARCEL_DESCRIPTOR_XML));
+                                               ParcelZipper.PARCEL_DESCRIPTOR_XML));
         initUI();
     }
 
     public void reload(String basedir, ArrayList<String> classpath,
-        ParcelDescriptor descriptor) {
+                       ParcelDescriptor descriptor) {
 
-        if (basedir != null)
+        if(basedir != null) {
             this.basedir = new File(basedir);
+        }
 
-        if (classpath != null)
+        if(classpath != null) {
             this.classpath = classpath;
+        }
 
-        if (descriptor != null) {
+        if(descriptor != null) {
             this.descriptor = descriptor;
         }
 
         methodPanel.reload(this.basedir, this.classpath,
-            descriptor.getLanguage());
+                           descriptor.getLanguage());
         scriptPanel.reload(descriptor.getScriptEntries());
     }
 
     public void reload(String basedir, ArrayList<String> classpath)
-        throws IOException {
+    throws IOException {
 
-        if (basedir != null)
+        if(basedir != null) {
             this.basedir = new File(basedir);
+        }
 
-        if (classpath != null)
+        if(classpath != null) {
             this.classpath = classpath;
+        }
 
         this.descriptor = new ParcelDescriptor(new File(this.basedir,
-            ParcelZipper.PARCEL_DESCRIPTOR_XML));
+                                               ParcelZipper.PARCEL_DESCRIPTOR_XML));
 
         methodPanel.reload(this.basedir, this.classpath,
-            descriptor.getLanguage());
+                           descriptor.getLanguage());
         scriptPanel.reload(descriptor.getScriptEntries());
     }
 
@@ -168,11 +172,11 @@ public class ConfigurePanel extends JPanel {
         addButton.setHorizontalTextPosition(AbstractButton.LEFT);
 
         addButton.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    scriptPanel.addScriptEntries(methodPanel.getSelectedEntries());
-                }
+        new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                scriptPanel.addScriptEntries(methodPanel.getSelectedEntries());
             }
+        }
         );
 
         GridBagConstraints gbc = new java.awt.GridBagConstraints();
@@ -199,19 +203,19 @@ public class ConfigurePanel extends JPanel {
         JButton removeAllButton = new JButton("Remove All");
 
         removeButton.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    scriptPanel.removeSelectedRows();
-                }
+        new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                scriptPanel.removeSelectedRows();
             }
+        }
         );
 
         removeAllButton.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    scriptPanel.removeAllRows();
-                }
+        new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                scriptPanel.removeAllRows();
             }
+        }
         );
 
         panel.add(removeButton);

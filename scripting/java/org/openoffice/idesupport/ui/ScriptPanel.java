@@ -51,13 +51,12 @@ public class ScriptPanel extends JPanel {
     }
 
     public void addScriptEntries(ScriptEntry[] entries) {
-        for (int i = 0; i < entries.length; i++) {
+        for(int i = 0; i < entries.length; i++) {
             ScriptEntry entry;
 
             try {
                 entry = (ScriptEntry) entries[i].clone();
-            }
-            catch (CloneNotSupportedException cnse) {
+            } catch(CloneNotSupportedException cnse) {
                 entry = new ScriptEntry(entries[i].getLanguage(),
                                         entries[i].getLanguageName(),
                                         entries[i].getLocation());
@@ -70,7 +69,7 @@ public class ScriptPanel extends JPanel {
     public void removeSelectedRows() {
         int[] selections = table.getSelectedRows();
 
-        for (int i = selections.length - 1; i >= 0; i--) {
+        for(int i = selections.length - 1; i >= 0; i--) {
             model.remove(selections[i]);
         }
     }
@@ -108,9 +107,11 @@ public class ScriptPanel extends JPanel {
 
     private void tableFocusLost() {
         TableCellEditor editor = table.getCellEditor();
-        if (editor != null) {
+
+        if(editor != null) {
             Object value = editor.getCellEditorValue();
-            if (value != null)
+
+            if(value != null)
                 model.setValueAt(value,
                                  table.getEditingRow(), table.getEditingColumn());
         }
@@ -118,16 +119,19 @@ public class ScriptPanel extends JPanel {
 
     private class ScriptTableModel extends AbstractTableModel {
         final String[] columnNames = {"Exported Method",
-                                      "Script Name"};
+                                      "Script Name"
+                                     };
 
         private ArrayList<ScriptEntry> scripts;
         private int nextRow;
 
         public ScriptTableModel(ScriptEntry[] entries) {
             scripts = new ArrayList<ScriptEntry>(entries.length + 11);
-            for (int i = 0; i < entries.length; i++) {
+
+            for(int i = 0; i < entries.length; i++) {
                 scripts.add(entries[i]);
             }
+
             nextRow = entries.length;
         }
 
@@ -172,10 +176,11 @@ public class ScriptPanel extends JPanel {
 
             entry = scripts.get(row);
 
-            if (col == 0)
+            if(col == 0) {
                 result = entry.getLanguageName();
-            else if (col == 1)
+            } else if(col == 1) {
                 result = entry.getLogicalName();
+            }
 
             return result;
         }

@@ -25,13 +25,11 @@ public class LogUtils {
 
     private static boolean m_bDebugEnabled = false;
 
-    static
-    {
+    static {
         String debugFlag =
             System.getProperties().getProperty("ScriptJavaRuntimeDebug");
 
-        if (debugFlag != null && debugFlag.length() > 0)
-        {
+        if(debugFlag != null && debugFlag.length() > 0) {
             m_bDebugEnabled = debugFlag.equalsIgnoreCase("true");
         }
     }
@@ -45,42 +43,34 @@ public class LogUtils {
     *
     * @param  msg  message to be displayed
     */
-    public static void DEBUG(String msg)
-    {
-        if (m_bDebugEnabled)
-        {
+    public static void DEBUG(String msg) {
+        if(m_bDebugEnabled) {
             System.out.println(msg);
         }
     }
 
-    public static String getTrace( Exception e )
-    {
+    public static String getTrace(Exception e) {
         ByteArrayOutputStream baos = null;
         PrintStream ps = null;
         String result = "";
-        try
-        {
-            baos = new ByteArrayOutputStream( );
-            ps = new PrintStream( baos );
-            e.printStackTrace( ps );
-        }
-        finally
-        {
-            try
-            {
-                if ( baos != null )
-                {
+
+        try {
+            baos = new ByteArrayOutputStream();
+            ps = new PrintStream(baos);
+            e.printStackTrace(ps);
+        } finally {
+            try {
+                if(baos != null) {
                     baos.close();
                 }
-                if ( ps != null )
-                {
+
+                if(ps != null) {
                     ps.close();
                 }
-            }
-            catch ( Exception excp )
-            {
+            } catch(Exception excp) {
             }
         }
+
         return result;
     }
 }

@@ -44,8 +44,7 @@ import org.openoffice.netbeans.modules.office.utils.NagDialog;
 import org.openoffice.netbeans.modules.office.utils.ZipMounter;
 import org.openoffice.netbeans.modules.office.utils.ManifestParser;
 
-public class ParcelSupport implements ParcelCookie
-{
+public class ParcelSupport implements ParcelCookie {
     private FileObject fo;
     private ParcelZipper zipper = ParcelZipper.getParcelZipper();
     private String language = null;
@@ -59,29 +58,26 @@ public class ParcelSupport implements ParcelCookie
     }
 
     public String getLanguage() {
-        if (language == null) {
+        if(language == null) {
             try {
                 language = zipper.getParcelLanguage(getFile());
-            }
-            catch (IOException ioe) {
+            } catch(IOException ioe) {
                 return null;
             }
         }
+
         return language;
     }
 
-    public void mount()
-    {
+    public void mount() {
         File parcel = FileUtil.toFile(fo);
 
-        if (parcel != null) {
+        if(parcel != null) {
             try {
                 ZipMounter.getZipMounter().mountZipFile(parcel);
-            }
-            catch (IOException ioe) {
+            } catch(IOException ioe) {
                 ErrorManager.getDefault().notify(ioe);
-            }
-            catch (PropertyVetoException pve) {
+            } catch(PropertyVetoException pve) {
                 ErrorManager.getDefault().notify(pve);
             }
         }
@@ -90,23 +86,25 @@ public class ParcelSupport implements ParcelCookie
     public boolean deploy(File target) {
         File source = FileUtil.toFile(fo);
 
-        if (!target.isDirectory()) {
+        if(!target.isDirectory()) {
             OfficeSettings settings = OfficeSettings.getDefault();
             String message = "If you already have this document open in " +
-                "Office, please close it before continuing. Click OK to " +
-                "continue deployment.";
+                             "Office, please close it before continuing. Click OK to " +
+                             "continue deployment.";
 
-            if (settings.getWarnBeforeDocDeploy()) {
+            if(settings.getWarnBeforeDocDeploy()) {
                 NagDialog warning = NagDialog.createConfirmationDialog(
-                    message, "Show this message in future", true);
+                                        message, "Show this message in future", true);
 
                 boolean result = warning.show();
 
-                if (!warning.getState())
+                if(!warning.getState()) {
                     settings.setWarnBeforeDocDeploy(false);
+                }
 
-                if (!result)
+                if(!result) {
                     return false;
+                }
             }
         }
 
@@ -114,39 +112,41 @@ public class ParcelSupport implements ParcelCookie
             getOutputWindowWriter(fo.getName() + " (deploying)");
 
         try {
-            if (!zipper.isOverwriteNeeded(source, target))
-                if (!promptForOverwrite(source, target))
+            if(!zipper.isOverwriteNeeded(source, target))
+                if(!promptForOverwrite(source, target)) {
                     return false;
-        }
-        catch (IOException ioe) {
-           out.println("DEPLOYMENT FAILED: reason: " +
-               ioe.getClass().getName() + ": "+ ioe.getMessage());
-           return false;
+                }
+        } catch(IOException ioe) {
+            out.println("DEPLOYMENT FAILED: reason: " +
+                        ioe.getClass().getName() + ": " + ioe.getMessage());
+            return false;
         }
 
         try {
             out.println("Deploying: " + fo.getName() +
-                "\nTo: " + target.getAbsolutePath(), null);
+                        "\nTo: " + target.getAbsolutePath(), null);
 
             zipper.deployParcel(source, target);
 
             out.println("\nDEPLOYMENT SUCCESSFUL.");
 
             FileObject[] fileobjs = FileUtil.fromFile(target);
-            if (fileobjs != null) {
-                for (int i = 0; i < fileobjs.length; i++)
+
+            if(fileobjs != null) {
+                for(int i = 0; i < fileobjs.length; i++) {
                     fileobjs[i].refresh(true);
+                }
+            }
+        } catch(IOException ioe) {
+            out.println("DEPLOYMENT FAILED: reason: " +
+                        ioe.getClass().getName() + ": " + ioe.getMessage());
+            return false;
+        } finally {
+            if(out != null) {
+                out.close();
             }
         }
-        catch (IOException ioe) {
-           out.println("DEPLOYMENT FAILED: reason: " +
-               ioe.getClass().getName() + ": "+ ioe.getMessage());
-           return false;
-        }
-        finally {
-            if( out != null)
-                out.close();
-        }
+
         return true;
     }
 
@@ -156,19 +156,20 @@ public class ParcelSupport implements ParcelCookie
         io.setOutputVisible(true);
 
         OutputWriter out = io.getOut();
+
         try {
             out.reset();
-        }
-        catch( IOException e) {
+        } catch(IOException e) {
             e.printStackTrace(System.err);
         }
+
         out.println(Calendar.getInstance().getTime() + ":\n");
         return out;
     }
 
     private boolean promptForOverwrite(File source, File target) {
         String message = source.getName() + " has already been deployed " +
-            "to this target. Do you wish to overwrite it?";
+                         "to this target. Do you wish to overwrite it?";
 
         NotifyDescriptor d = new NotifyDescriptor.Confirmation(
             message, NotifyDescriptor.OK_CANCEL_OPTION);

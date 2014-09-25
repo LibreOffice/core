@@ -37,8 +37,10 @@ public class XMLParserFactory {
     private XMLParserFactory() {}
 
     public static synchronized XMLParser getParser() {
-        if (parser == null)
+        if(parser == null) {
             parser = new DefaultParser();
+        }
+
         return parser;
     }
 
@@ -64,21 +66,19 @@ public class XMLParserFactory {
 
                 InputSource is = new InputSource(inputStream);
 
-                if (officedtdurl != null) {
+                if(officedtdurl != null) {
                     is.setSystemId(officedtdurl);
                 }
 
                 result = builder.parse(is);
-            }
-            catch (SAXParseException spe) {
+            } catch(SAXParseException spe) {
                 throw new IOException(spe.getMessage());
-            }
-            catch (SAXException se) {
+            } catch(SAXException se) {
                 throw new IOException(se.getMessage());
-            }
-            catch (ParserConfigurationException pce) {
+            } catch(ParserConfigurationException pce) {
                 throw new IOException(pce.getMessage());
             }
+
             return result;
         }
 
@@ -91,16 +91,15 @@ public class XMLParserFactory {
             // this code is based on the code used by the NetBeans
             // class XMLUtilImpl in the openide module
             try {
-                if (name.equals("com.sun.xml.tree.XmlDocument") ||
-                    name.equals("org.apache.crimson.tree.XmlDocument")) {
+                if(name.equals("com.sun.xml.tree.XmlDocument") ||
+                   name.equals("org.apache.crimson.tree.XmlDocument")) {
 
                     // these DOM implementations are self writing
                     Method write;
                     write = clazz.getDeclaredMethod("write",
-                        new Class[] {OutputStream.class});
+                                                    new Class[] {OutputStream.class});
                     write.invoke(doc, new Object[] {out});
-                }
-                else {
+                } else {
                     // try xerces serialize package using introspection
                     ClassLoader cl = this.getClass().getClassLoader();
 
@@ -109,16 +108,16 @@ public class XMLParserFactory {
 
                     try {
                         serializerClass = Class.forName(
-                            "org.apache.xml.serialize.XMLSerializer", true, cl);
+                                              "org.apache.xml.serialize.XMLSerializer", true, cl);
                         formatterClass = Class.forName(
-                            "org.apache.xml.serialize.OutputFormat", true, cl);
-                    } catch (ClassNotFoundException cnfe) {
+                                             "org.apache.xml.serialize.OutputFormat", true, cl);
+                    } catch(ClassNotFoundException cnfe) {
                         String prefix = "com.sun.org.apache.xml.internal.";
 
                         serializerClass = Class.forName(
-                            prefix +  "serialize.XMLSerializer" , true, cl);
+                                              prefix +  "serialize.XMLSerializer" , true, cl);
                         formatterClass = Class.forName(
-                            prefix + "serialize.OutputFormat", true, cl);
+                                             prefix + "serialize.OutputFormat", true, cl);
                     }
 
                     Object serializerObject = serializerClass.newInstance();
@@ -126,36 +125,36 @@ public class XMLParserFactory {
 
                     // improve output readability using the OutputFormat class
                     Method method = formatterClass.getMethod("setMethod",
-                        new Class[] {String.class});
+                                    new Class[] {String.class});
                     method.invoke(formatterObject, new Object[] {"xml"});
                     method = formatterClass.getMethod("setIndenting",
-                        new Class[] {Boolean.TYPE});
+                                                      new Class[] {Boolean.TYPE});
                     method.invoke(formatterObject, new Object[] {Boolean.TRUE});
 
                     // now set up an instance of XMLSerializer with our
                     // OutputStream and serialize our Document
                     method = serializerClass.getMethod("setOutputByteStream",
-                        new Class[] {OutputStream.class});
+                                                       new Class[] {OutputStream.class});
                     method.invoke(serializerObject, new Object[] {out});
                     method = serializerClass.getMethod("setOutputFormat",
-                        new Class[] {formatterClass});
+                                                       new Class[] {formatterClass});
                     method.invoke(serializerObject,
-                        new Object[] {formatterObject});
+                                  new Object[] {formatterObject});
 
                     method = serializerClass.getMethod("asDOMSerializer",
-                        new Class[0]);
+                                                       new Class[0]);
                     Object impl = method.invoke(serializerObject,
-                        new Object[0]);
+                                                new Object[0]);
 
                     method = impl.getClass().getMethod("serialize",
-                        new Class[] {Document.class});
+                                                       new Class[] {Document.class});
                     method.invoke(impl, new Object[] {doc});
                 }
-            } catch (NoSuchMethodException ex) {
+            } catch(NoSuchMethodException ex) {
                 throw new IOException(ex.getMessage());
-            } catch (ClassNotFoundException ex) {
+            } catch(ClassNotFoundException ex) {
                 throw new IOException(ex.getMessage());
-            } catch (Exception ex) {
+            } catch(Exception ex) {
                 throw new IOException(ex.getMessage());
             }
         }
