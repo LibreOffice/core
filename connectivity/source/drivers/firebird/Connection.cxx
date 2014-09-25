@@ -26,6 +26,8 @@
 #include "Tables.hxx"
 #include "Util.hxx"
 
+#include <stdexcept>
+
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
