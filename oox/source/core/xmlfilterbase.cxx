@@ -713,6 +713,10 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
     {
         if ( !aprop[n].Name.isEmpty() )
         {
+            // Ignore empty string property as well.
+            if (aprop[n].Value.has<OUString>() && aprop[n].Value.get<OUString>().isEmpty())
+                continue;
+
             OString aName = OUStringToOString( aprop[n].Name, RTL_TEXTENCODING_ASCII_US );
             // pid starts from 2 not from 1 as MS supports pid from 2
             OString pid =  OUStringToOString( OUString::number(n + 2), RTL_TEXTENCODING_ASCII_US );
