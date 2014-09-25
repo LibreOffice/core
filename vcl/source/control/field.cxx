@@ -417,11 +417,7 @@ bool NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64& rVa
         return true;
     else
     {
-        sal_Int64 nTempVal = rValue;
-        if ( nTempVal > mnMax )
-            nTempVal = mnMax;
-        else if ( nTempVal < mnMin )
-            nTempVal = mnMin;
+        sal_Int64 nTempVal = ClipAgainstMinMax(rValue);
 
         if ( GetErrorHdl().IsSet() && (rValue != nTempVal) )
         {
@@ -487,11 +483,7 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
 
         if ( NUMERICFORMATTER_VALUE & nMask )
         {
-            mnFieldValue = pMgr->ReadLong();
-            if ( mnFieldValue > mnMax )
-                mnFieldValue = mnMax;
-            else if ( mnFieldValue < mnMin )
-                mnFieldValue = mnMin;
+            mnFieldValue = ClipAgainstMinMax(pMgr->ReadLong());
             mnLastValue = mnFieldValue;
         }
 
@@ -554,10 +546,7 @@ OUString NumericFormatter::CreateFieldText( sal_Int64 nValue ) const
 
 void NumericFormatter::ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection )
 {
-    if ( nNewValue > mnMax )
-        nNewValue = mnMax;
-    else if ( nNewValue < mnMin )
-        nNewValue = mnMin;
+    nNewValue = ClipAgainstMinMax(nNewValue);
     mnLastValue = nNewValue;
 
     if ( GetField() )
@@ -579,11 +568,7 @@ sal_Int64 NumericFormatter::GetValue() const
     if ( ImplNumericGetValue( GetField()->GetText(), nTempValue,
                               GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
     {
-        if ( nTempValue > mnMax )
-            nTempValue = mnMax;
-        else if ( nTempValue < mnMin )
-            nTempValue = mnMin;
-        return nTempValue;
+        return ClipAgainstMinMax(nTempValue);
     }
     else
         return mnLastValue;
@@ -656,8 +641,7 @@ void NumericFormatter::FieldUp()
     else
         nValue = (nRemainder == 0) ? nValue + mnSpinSize : nValue - nRemainder;
 
-    if ( nValue > mnMax )
-        nValue = mnMax;
+    nValue = ClipAgainstMinMax(nValue);
 
     ImplNewFieldValue( nValue );
 }
@@ -671,8 +655,7 @@ void NumericFormatter::FieldDown()
     else
         nValue = (nRemainder == 0) ? nValue - mnSpinSize : nValue - mnSpinSize - nRemainder;
 
-    if ( nValue < mnMin )
-        nValue = mnMin;
+    nValue = ClipAgainstMinMax(mnMin);
 
     ImplNewFieldValue( nValue );
 }
@@ -718,6 +701,15 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
             GetField()->Modify();
         }
     }
+}
+
+sal_Int64 NumericFormatter::ClipAgainstMinMax(sal_Int64 nValue) const
+{
+    if (nValue > mnMax)
+        nValue = mnMax;
+    else if (nValue < mnMin)
+        nValue = mnMin;
+    return nValue;
 }
 
 NumericField::NumericField( vcl::Window* pParent, WinBits nWinStyle ) :
@@ -1944,11 +1936,7 @@ sal_Int64 CurrencyFormatter::GetValue() const
     sal_Int64 nTempValue;
     if ( ImplCurrencyGetValue( GetField()->GetText(), nTempValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
     {
-        if ( nTempValue > mnMax )
-            nTempValue = mnMax;
-        else if ( nTempValue < mnMin )
-            nTempValue = mnMin;
-        return nTempValue;
+        return ClipAgainstMinMax(nTempValue);
     }
     else
         return mnLastValue;
