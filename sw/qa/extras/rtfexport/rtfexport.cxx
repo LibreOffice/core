@@ -691,6 +691,13 @@ DECLARE_RTFEXPORT_TEST(testAbi10076, "abi10076.odt")
     // Just make sure that we don't crash after exporting a fully calculated layout.
 }
 
+DECLARE_RTFEXPORT_TEST(testNumberingFont, "numbering-font.rtf")
+{
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName("ListLabel 1"), uno::UNO_QUERY);
+    // This was Liberation Serif, i.e. custom font of the numbering itself ("1.\t") was lost on import.
+    CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(xStyle, "CharFontName"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
