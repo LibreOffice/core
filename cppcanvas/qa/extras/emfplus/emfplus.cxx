@@ -51,6 +51,7 @@ public:
     {
         mxComponent = loadFromDesktop(getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(pName), "com.sun.star.drawing.DrawingDocument");
         SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+        CPPUNIT_ASSERT(pModel);
         SfxObjectShell* pShell = pModel->GetObjectShell();
         boost::shared_ptr<GDIMetaFile> pMetaFile = pShell->GetPreviewMetaFile();
         BitmapEx aResultBitmap;
