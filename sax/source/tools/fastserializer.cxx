@@ -53,8 +53,8 @@ using ::com::sun::star::io::BufferSizeExceededException;
 
 namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( )
-        : maOutputData()
-        , maOutputStream(maOutputData)
+        : maOutputData(0x4000)
+        , maOutputStream(maOutputData, 1.3, 0x1000, 0x4000)
         , mxOutputStream()
         , mxFastTokenHandler()
         , maMarkStack()
@@ -298,7 +298,7 @@ namespace sax_fastparser {
 
         if ( maMarkStack.size() == 1  && eMergeType != MERGE_MARKS_IGNORE)
         {
-            maOutputStream.writeBytes( maMarkStack.top()->getData() );
+            writeOutput( maMarkStack.top()->getData() );
             maMarkStack.pop();
             return;
         }
@@ -319,9 +319,20 @@ namespace sax_fastparser {
     void FastSaxSerializer::writeBytes( const Sequence< ::sal_Int8 >& aData ) throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
     {
         if ( maMarkStack.empty() )
-            maOutputStream.writeBytes( aData );
+            writeOutput( aData );
         else
             maMarkStack.top()->append( aData );
+    }
+
+    void FastSaxSerializer::writeOutput( const Sequence< ::sal_Int8 >& aData ) throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
+    {
+        maOutputStream.writeBytes( aData );
+        // Write when the sequence gets big enough
+        if (maOutputStream.getSize() > 0x10000)
+        {
+            maOutputStream.flush();
+            mxOutputStream->writeBytes(maOutputData);
+        }
     }
 
     FastSaxSerializer::Int8Sequence& FastSaxSerializer::ForMerge::getData()

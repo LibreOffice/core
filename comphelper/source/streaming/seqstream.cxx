@@ -214,6 +214,8 @@ void SAL_CALL OSequenceOutputStream::flush(  ) throw(NotConnectedException, Buff
 
     // cut the sequence to the real size
     m_rSequence.realloc(m_nSize);
+    // and next time write to the beginning
+    m_nSize = 0;
 }
 
 

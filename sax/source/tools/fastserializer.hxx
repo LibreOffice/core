@@ -217,6 +217,8 @@ private:
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
     void write( const OUString& s );
+    void writeOutput( const css::uno::Sequence< ::sal_Int8 >& aData )
+        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
 
 protected:
     rtl::ByteSequence maClosingBracket;
