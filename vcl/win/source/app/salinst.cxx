@@ -332,7 +332,6 @@ void SalData::initKeyCodeMap()
 SalData::SalData()
 {
     mhInst = 0;                 // default instance handle
-    mhPrevInst = 0;             // previous instance handle
     mnCmdShow = 0;              // default frame show style
     mhDitherPal = 0;            // dither palette
     mhDitherDIB = 0;            // dither memory handle
@@ -435,7 +434,6 @@ void InitSalMain()
         aSI.cb = sizeof( aSI );
         GetStartupInfo( &aSI );
         pData->mhInst                   = GetModuleHandle( NULL );
-        pData->mhPrevInst               = NULL;
         pData->mnCmdShow                = aSI.wShowWindow;
     }
 }
@@ -464,44 +462,41 @@ SalInstance* CreateSalInstance()
     pSalData->mnAppThreadId = GetCurrentThreadId();
 
     // register frame class
-    if ( !pSalData->mhPrevInst )
-    {
-        WNDCLASSEXW aWndClassEx;
-        aWndClassEx.cbSize          = sizeof( aWndClassEx );
-        aWndClassEx.style           = CS_OWNDC;
-        aWndClassEx.lpfnWndProc     = SalFrameWndProcW;
-        aWndClassEx.cbClsExtra      = 0;
-        aWndClassEx.cbWndExtra      = SAL_FRAME_WNDEXTRA;
-        aWndClassEx.hInstance       = pSalData->mhInst;
-        aWndClassEx.hCursor         = 0;
-        aWndClassEx.hbrBackground   = 0;
-        aWndClassEx.lpszMenuName    = 0;
-        aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAMEW;
-        ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
-        if ( !RegisterClassExW( &aWndClassEx ) )
-            return NULL;
+    WNDCLASSEXW aWndClassEx;
+    aWndClassEx.cbSize          = sizeof( aWndClassEx );
+    aWndClassEx.style           = CS_OWNDC;
+    aWndClassEx.lpfnWndProc     = SalFrameWndProcW;
+    aWndClassEx.cbClsExtra      = 0;
+    aWndClassEx.cbWndExtra      = SAL_FRAME_WNDEXTRA;
+    aWndClassEx.hInstance       = pSalData->mhInst;
+    aWndClassEx.hCursor         = 0;
+    aWndClassEx.hbrBackground   = 0;
+    aWndClassEx.lpszMenuName    = 0;
+    aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAMEW;
+    ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
+    if ( !RegisterClassExW( &aWndClassEx ) )
+        return NULL;
 
-        aWndClassEx.hIcon           = 0;
-        aWndClassEx.hIconSm         = 0;
-        aWndClassEx.style          |= CS_SAVEBITS;
-        aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEW;
-        if ( !RegisterClassExW( &aWndClassEx ) )
-            return NULL;
+    aWndClassEx.hIcon           = 0;
+    aWndClassEx.hIconSm         = 0;
+    aWndClassEx.style          |= CS_SAVEBITS;
+    aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEW;
+    if ( !RegisterClassExW( &aWndClassEx ) )
+        return NULL;
 
-        // shadow effect for popups on XP
-        if( aSalShlData.mbWXP )
-            aWndClassEx.style       |= CS_DROPSHADOW;
-        aWndClassEx.lpszClassName   = SAL_TMPSUBFRAME_CLASSNAMEW;
-        if ( !RegisterClassExW( &aWndClassEx ) )
-            return NULL;
+    // shadow effect for popups on XP
+    if( aSalShlData.mbWXP )
+        aWndClassEx.style       |= CS_DROPSHADOW;
+    aWndClassEx.lpszClassName   = SAL_TMPSUBFRAME_CLASSNAMEW;
+    if ( !RegisterClassExW( &aWndClassEx ) )
+        return NULL;
 
-        aWndClassEx.style           = 0;
-        aWndClassEx.lpfnWndProc     = SalComWndProcW;
-        aWndClassEx.cbWndExtra      = 0;
-        aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEW;
-        if ( !RegisterClassExW( &aWndClassEx ) )
-            return NULL;
-    }
+    aWndClassEx.style           = 0;
+    aWndClassEx.lpfnWndProc     = SalComWndProcW;
+    aWndClassEx.cbWndExtra      = 0;
+    aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEW;
+    if ( !RegisterClassExW( &aWndClassEx ) )
+        return NULL;
 
     HWND hComWnd = CreateWindowExW( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
                                L"", WS_POPUP, 0, 0, 0, 0, 0, 0,

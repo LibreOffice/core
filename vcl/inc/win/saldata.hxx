@@ -74,7 +74,6 @@ public:
 
 public:
     HINSTANCE               mhInst;                 // default instance handle
-    HINSTANCE               mhPrevInst;             // previous instance handle
     int                     mnCmdShow;              // default frame show style
     HPALETTE                mhDitherPal;            // dither palette
     HGLOBAL                 mhDitherDIB;            // dither memory handle
