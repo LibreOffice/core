@@ -38,7 +38,7 @@ void ImplSalStopTimer(SalData* pSalData)
 {
     HANDLE hTimer = pSalData->mnTimerId;
     pSalData->mnTimerId = 0;
-    DeleteTimerQueueTimer(NULL, hTimer, 0);
+    DeleteTimerQueueTimer(NULL, hTimer, INVALID_HANDLE_VALUE);
 }
 
 void ImplSalStartTimer( sal_uLong nMS, bool bMutex )

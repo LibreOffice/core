@@ -43,6 +43,12 @@ void Timer::ImplDeInitTimer()
     ImplSVData*     pSVData = ImplGetSVData();
     ImplTimerData*  pTimerData = pSVData->mpFirstTimerData;
 
+    // on WNT the timer queue thread needs killing
+    if (pSVData->mpSalTimer)
+    {
+        pSVData->mpSalTimer->Stop();
+    }
+
     if ( pTimerData )
     {
         do
@@ -60,9 +66,10 @@ void Timer::ImplDeInitTimer()
 
         pSVData->mpFirstTimerData   = NULL;
         pSVData->mnTimerPeriod      = 0;
-        delete pSVData->mpSalTimer;
-        pSVData->mpSalTimer = NULL;
     }
+
+    delete pSVData->mpSalTimer;
+    pSVData->mpSalTimer = 0;
 }
 
 static void ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
