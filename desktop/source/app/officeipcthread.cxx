@@ -57,7 +57,7 @@ const int OfficeIPCThread::sc_nShSeqLength = 5;
 
 namespace {
 
-#if HAVE_FEATURE_DESKTOP
+//#if HAVE_FEATURE_DESKTOP
 
 static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
 static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
@@ -87,7 +87,7 @@ OString readStringFromPipe(osl::StreamPipe & pipe) {
     }
 }
 
-#endif
+//#endif
 
 }
 
@@ -104,7 +104,7 @@ namespace desktop
 
 namespace {
 
-#if HAVE_FEATURE_DESKTOP
+//#if HAVE_FEATURE_DESKTOP
 
 class Parser: public CommandLineArgs::Supplier {
 public:
@@ -241,7 +241,7 @@ bool addArgument(OStringBuffer &rArguments, char prefix,
     return true;
 }
 
-#endif
+//#endif
 
 }
 
@@ -449,7 +449,7 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
 
 OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
-#if HAVE_FEATURE_DESKTOP
+//#if HAVE_FEATURE_DESKTOP
     ::osl::MutexGuard   aGuard( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
@@ -604,15 +604,15 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
         return IPC_STATUS_2ND_OFFICE;
     }
-#else
-    pGlobalOfficeIPCThread = rtl::Reference< OfficeIPCThread >(new OfficeIPCThread);
-#endif
+// #else
+//     pGlobalOfficeIPCThread = rtl::Reference< OfficeIPCThread >(new OfficeIPCThread);
+// #endif
     return IPC_STATUS_OK;
 }
 
 void OfficeIPCThread::DisableOfficeIPCThread(bool join)
 {
-#if HAVE_FEATURE_DESKTOP
+//#if HAVE_FEATURE_DESKTOP
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
@@ -635,9 +635,9 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
             pOfficeIPCThread->join();
         }
     }
-#else
-    (void) join;
-#endif
+//#else
+//     (void) join;
+// #endif
 }
 
 OfficeIPCThread::OfficeIPCThread() :
@@ -689,7 +689,7 @@ bool OfficeIPCThread::IsEnabled()
 
 void OfficeIPCThread::execute()
 {
-#if HAVE_FEATURE_DESKTOP
+//#if HAVE_FEATURE_DESKTOP
     do
     {
         osl::StreamPipe aStreamPipe;
@@ -967,7 +967,7 @@ void OfficeIPCThread::execute()
             salhelper::Thread::wait( tval );
         }
     } while( schedule() );
-#endif
+//#endif
 }
 
 static void AddToDispatchList(
