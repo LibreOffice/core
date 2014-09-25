@@ -1629,6 +1629,8 @@ private:
     (void) replacementRange; // FIXME - use it!
 #endif
 
+    YIELD_GUARD;
+
     if( ![aString isKindOfClass:[NSAttributedString class]] )
         aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
     NSRange rangeToReplace = [self hasMarkedText] ? [self markedRange] : [self selectedRange];
