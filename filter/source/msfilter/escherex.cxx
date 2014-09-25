@@ -4290,7 +4290,7 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
                 rSt.WriteUInt16( n16 );
                 // record type
                 pMergePicStreamBSE->ReadUInt16( n16 );
-                rSt.WriteUInt16( sal_uInt16( ESCHER_BlipFirst + nBlibType ) );
+                rSt.WriteUInt16( ESCHER_BlipFirst + nBlibType );
                 DBG_ASSERT( n16 == ESCHER_BlipFirst + nBlibType , "EscherGraphicProvider::WriteBlibStoreContainer: BLIP record types differ" );
                 sal_uInt32 n32;
                 // record size

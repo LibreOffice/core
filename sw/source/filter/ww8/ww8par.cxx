@@ -1120,7 +1120,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         SvMemoryStream aMemStream;
         struct HyperLinksTable hlStr;
         sal_uInt16 mnRawRecId,mnRawRecSize;
-        aMemStream.WriteUInt16( sal_uInt16( 0 ) ).WriteUInt16( nBufferSize );
+        aMemStream.WriteUInt16( 0 ).WriteUInt16( nBufferSize );
 
         // copy from DFF stream to memory stream
         ::std::vector< sal_uInt8 > aBuffer( nBufferSize );

@@ -679,8 +679,8 @@ SfxPoolItem* SdrFractionItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 SvStream& SdrFractionItem::Store(SvStream& rOut, sal_uInt16 /*nItemVers*/) const
 {
-    rOut.WriteInt32( sal_Int32(nValue.GetNumerator()) );
-    rOut.WriteInt32( sal_Int32(nValue.GetDenominator()) );
+    rOut.WriteInt32( nValue.GetNumerator() );
+    rOut.WriteInt32( nValue.GetDenominator() );
     return rOut;
 }
 

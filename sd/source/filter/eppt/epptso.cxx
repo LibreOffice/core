@@ -1068,7 +1068,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
     PPTExParaSheet& rParaSheet = mpStyleSheet->GetParaSheet( nTextInstance );
 
     rOut.WriteUInt32( (sal_uInt32)( ( EPP_TextHeaderAtom << 16 ) | ( nAtomInstance << 4 ) ) ).WriteUInt32( (sal_uInt32)4 )
-        .WriteInt32( sal_Int32(nTextInstance) );
+        .WriteInt32( nTextInstance );
 
     if ( mbEmptyPresObj )
         mnTextSize = 0;

@@ -87,11 +87,10 @@ SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const Transferable
     rOStm.SeekRel( 4 );
     WriteSvGlobalName( rOStm, rObjDesc.maClassName );
     rOStm.WriteUInt32( nViewAspect );
-    //#fdo39428 Remove SvStream operator<<(long)
-    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rObjDesc.maSize.Width()) );
-    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rObjDesc.maSize.Height()) );
-    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rObjDesc.maDragStartPos.X()) );
-    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rObjDesc.maDragStartPos.Y()) );
+    rOStm.WriteInt32( rObjDesc.maSize.Width() );
+    rOStm.WriteInt32( rObjDesc.maSize.Height() );
+    rOStm.WriteInt32( rObjDesc.maDragStartPos.X() );
+    rOStm.WriteInt32( rObjDesc.maDragStartPos.Y() );
     rOStm.WriteUniOrByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
     rOStm.WriteUniOrByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
     rOStm.WriteUInt32( nSig1 ).WriteUInt32( nSig2 );

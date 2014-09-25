@@ -701,7 +701,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
         sal_uInt16 nSetFlag(aFmtsSet[i] ? 2 : 0); // fdo#68648 store that too
         if(aFmts[i])
         {
-            rStream.WriteUInt16( sal_uInt16(1 | nSetFlag) );
+            rStream.WriteUInt16( 1 | nSetFlag );
             if(bConvertBulletFont && aFmts[i]->GetBulletFont())
             {
                 if(!pConverter)
@@ -712,7 +712,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
             aFmts[i]->Store(rStream, pConverter);
         }
         else
-            rStream.WriteUInt16( sal_uInt16(0 | nSetFlag) );
+            rStream.WriteUInt16( 0 | nSetFlag );
     }
     //second save of nFeatureFlags for new versions
     rStream.WriteUInt16( (sal_uInt16)nFeatureFlags );

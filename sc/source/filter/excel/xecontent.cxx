@@ -171,7 +171,7 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
             sal_uInt16 nRecPos = rStrm.GetRawRecPos() + 4;
             aExtSst.WriteUInt32( nStrmPos )             // stream position
                    .WriteUInt16( nRecPos )              // position from start of SST or CONTINUE
-                   .WriteUInt16( sal_uInt16( 0 ) );     // reserved
+                   .WriteUInt16( 0 );     // reserved
         }
 
         rStrm << **aIt;

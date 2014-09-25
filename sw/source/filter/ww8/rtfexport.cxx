@@ -769,7 +769,7 @@ bool RtfExport::DisallowInheritingOutlineNumbering(const SwFmt& rFmt)
             if (((const SwTxtFmtColl*)pParent)->IsAssignedToListLevelOfOutlineStyle())
             {
                 // Level 9 disables the outline
-                Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LEVEL).WriteInt32(sal_Int32(9));
+                Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LEVEL).WriteInt32(9);
 
                 bRet = true;
             }

@@ -1418,7 +1418,7 @@ bool PPTWriter::ImplWriteAtomEnding()
             mpStrm->Seek( nOfs );               // Fill the VBAInfoAtom with the correct index to the persisttable
             mpStrm->WriteUInt32( nPersistEntrys )
                    .WriteUInt32( n1 )
-                   .WriteInt32( sal_Int32(2) );
+                   .WriteInt32( 2 );
             mpStrm->Seek( nOldPos );
 
         }

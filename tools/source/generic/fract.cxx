@@ -498,8 +498,8 @@ SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
 SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 {
     //fdo#39428 SvStream no longer supports operator<<(long)
-    rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rFract.nNumerator) );
-    rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rFract.nDenominator) );
+    rOStream.WriteInt32( rFract.nNumerator );
+    rOStream.WriteInt32( rFract.nDenominator );
     return rOStream;
 }
 

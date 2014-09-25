@@ -139,8 +139,8 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         rStream.WriteUInt16( SFX_ITEMPOOL_TAG_TRICK4OLD );
 
         // Work around SfxStyleSheet bug
-        rStream.WriteUInt16( sal_uInt16(0) ); // Version
-        rStream.WriteUInt16( sal_uInt16(0) ); // Count (or else 2nd loop breaks)
+        rStream.WriteUInt16( 0 ); // Version
+        rStream.WriteUInt16( 0 ); // Count (or else 2nd loop breaks)
     }
 
     // Every Pool as a whole is a record
@@ -172,7 +172,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 
             // Workaround for bug in SetVersionMap 312
             if ( SOFFICE_FILEFORMAT_31 == pImp->mnFileFormatVersion )
-                rStream.WriteUInt16( sal_uInt16(nNewWhich+1) );
+                rStream.WriteUInt16( nNewWhich+1 );
         }
     }
 

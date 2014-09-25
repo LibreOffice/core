@@ -111,10 +111,10 @@ SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr )
     rOStm.WriteInt16( rAttr.mnContPercent ).WriteInt16( rAttr.mnLumPercent ).WriteInt16( rAttr.mnRPercent ).WriteInt16( rAttr.mnGPercent ).WriteInt16( rAttr.mnBPercent );
     rOStm.WriteUChar( rAttr.mbInvert ).WriteUChar( rAttr.mcTransparency ).WriteUInt16( (sal_uInt16) rAttr.meDrawMode );
     //#fdo39428 SvStream no longer supports operator<<(long)
-    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnLeftCrop) )
-         .WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnTopCrop) )
-         .WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnRightCrop) )
-         .WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnBottomCrop) );
+    rOStm.WriteInt32( rAttr.mnLeftCrop )
+         .WriteInt32( rAttr.mnTopCrop )
+         .WriteInt32( rAttr.mnRightCrop )
+         .WriteInt32( rAttr.mnBottomCrop );
 
     return rOStm;
 }

@@ -231,12 +231,12 @@ SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo 
 
     //#fdo39428 SvStream no longer supports operator<<(long)
     // version 1
-    rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meStyle ).WriteInt32( sal::static_int_cast<sal_Int32>(rImplLineInfo.mnWidth) );
+    rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meStyle ).WriteInt32( rImplLineInfo.mnWidth );
 
     // since version2
-    rOStm.WriteUInt16( rImplLineInfo.mnDashCount ).WriteInt32( sal::static_int_cast<sal_Int32>(rImplLineInfo.mnDashLen) );
-    rOStm.WriteUInt16( rImplLineInfo.mnDotCount ).WriteInt32( sal::static_int_cast<sal_Int32>(rImplLineInfo.mnDotLen) );
-    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rImplLineInfo.mnDistance) );
+    rOStm.WriteUInt16( rImplLineInfo.mnDashCount ).WriteInt32( rImplLineInfo.mnDashLen );
+    rOStm.WriteUInt16( rImplLineInfo.mnDotCount ).WriteInt32( rImplLineInfo.mnDotLen );
+    rOStm.WriteInt32( rImplLineInfo.mnDistance );
 
     // since version3
     rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meLineJoin );

@@ -739,11 +739,11 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
             const sal_uInt8* const pnPattern = sppnPatterns[ ::std::min< size_t >( rFillData.mnPattern - 2, SAL_N_ELEMENTS( sppnPatterns ) ) ];
             // create 2-colored 8x8 DIB
             SvMemoryStream aMemStrm;
-            aMemStrm.WriteUInt32( sal_uInt32( 12 ) ).WriteInt16( sal_Int16( 8 ) ).WriteInt16( sal_Int16( 8 ) ).WriteUInt16( sal_uInt16( 1 ) ).WriteUInt16( sal_uInt16( 1 ) );
-            aMemStrm.WriteUChar( sal_uInt8( 0xFF ) ).WriteUChar( sal_uInt8( 0xFF ) ).WriteUChar( sal_uInt8( 0xFF ) );
-            aMemStrm.WriteUChar( sal_uInt8( 0x00 ) ).WriteUChar( sal_uInt8( 0x00 ) ).WriteUChar( sal_uInt8( 0x00 ) );
+            aMemStrm.WriteUInt32( 12 ).WriteInt16( 8 ).WriteInt16( 8 ).WriteUInt16( 1 ).WriteUInt16( 1 );
+            aMemStrm.WriteUChar( 0xFF ).WriteUChar( 0xFF ).WriteUChar( 0xFF );
+            aMemStrm.WriteUChar( 0x00 ).WriteUChar( 0x00 ).WriteUChar( 0x00 );
             for( size_t nIdx = 0; nIdx < 8; ++nIdx )
-                aMemStrm.WriteUInt32( sal_uInt32( pnPattern[ nIdx ] ) ); // 32-bit little-endian
+                aMemStrm.WriteUInt32( pnPattern[ nIdx ] ); // 32-bit little-endian
             aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
             Bitmap aBitmap;
             ReadDIB(aBitmap, aMemStrm, false);
@@ -3629,7 +3629,7 @@ OUString XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
     {
         // create a faked BIFF record that can be read by XclImpStream class
         SvMemoryStream aMemStream;
-        aMemStream.WriteUInt16( sal_uInt16( 0 ) ).WriteUInt16( nBufferSize );
+        aMemStream.WriteUInt16( 0 ).WriteUInt16( nBufferSize );
 
         // copy from DFF stream to memory stream
         ::std::vector< sal_uInt8 > aBuffer( nBufferSize );

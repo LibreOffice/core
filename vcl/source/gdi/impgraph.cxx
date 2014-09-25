@@ -1226,8 +1226,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             // write new style header
             VersionCompat* pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
 
-            //#fdo39428 SvStream no longer supports operator<<(long)
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(meType) );
+            rOStm.WriteInt32( meType );
 
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
@@ -1246,16 +1245,15 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
             rOStm.WriteInt32( (sal_Int32) 0 );
-            //#fdo39428 SvStream no longer supports operator<<(long)
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Width()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Height()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetMapUnit()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().GetNumerator()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().GetDenominator()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().GetNumerator()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().GetDenominator()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetOrigin().X()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetOrigin().Y()) );
+            rOStm.WriteInt32( aSize.Width() );
+            rOStm.WriteInt32( aSize.Height() );
+            rOStm.WriteInt32( aMapMode.GetMapUnit() );
+            rOStm.WriteInt32( aMapMode.GetScaleX().GetNumerator() );
+            rOStm.WriteInt32( aMapMode.GetScaleX().GetDenominator() );
+            rOStm.WriteInt32( aMapMode.GetScaleY().GetNumerator() );
+            rOStm.WriteInt32( aMapMode.GetScaleY().GetDenominator() );
+            rOStm.WriteInt32( aMapMode.GetOrigin().X() );
+            rOStm.WriteInt32( aMapMode.GetOrigin().Y() );
         }
 
         // write data block
@@ -1270,8 +1268,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             {
                 const sal_uLong nStmPos2 = rOStm.Tell();
                 rOStm.Seek( nDataFieldPos );
-                //fdo39428 SvStream no longer supports operator<<(long)
-                rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(nStmPos2 - nDataStart) );
+                rOStm.WriteInt32( nStmPos2 - nDataStart );
                 rOStm.Seek( nStmPos2 );
                 bRet = true;
             }

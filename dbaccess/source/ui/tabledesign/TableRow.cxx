@@ -112,12 +112,12 @@ namespace dbaui
             Any aValue = pFieldDesc->GetControlDefault();
             if ( aValue >>= nValue )
             {
-                _rStr.WriteInt32( sal_Int32(1) );
+                _rStr.WriteInt32( 1 );
                 _rStr.WriteDouble( nValue );
             }
             else
             {
-                _rStr.WriteInt32( sal_Int32(2) );
+                _rStr.WriteInt32( 2 );
                 _rStr.WriteUniOrByteString(::comphelper::getString(aValue), _rStr.GetStreamCharSet());
             }
 
@@ -128,9 +128,9 @@ namespace dbaui
             _rStr.WriteInt32( pFieldDesc->GetIsNullable() );
             _rStr.WriteInt32( pFieldDesc->GetFormatKey() );
             _rStr.WriteInt32( (sal_Int32)pFieldDesc->GetHorJustify() );
-            _rStr.WriteInt32( sal_Int32(pFieldDesc->IsAutoIncrement() ? 1 : 0) );
-            _rStr.WriteInt32( sal_Int32(pFieldDesc->IsPrimaryKey() ? 1 : 0) );
-            _rStr.WriteInt32( sal_Int32(pFieldDesc->IsCurrency() ? 1 : 0) );
+            _rStr.WriteInt32( pFieldDesc->IsAutoIncrement() ? 1 : 0 );
+            _rStr.WriteInt32( pFieldDesc->IsPrimaryKey() ? 1 : 0 );
+            _rStr.WriteInt32( pFieldDesc->IsCurrency() ? 1 : 0 );
         }
         else
             _rStr.WriteInt32( (sal_Int32)0 );

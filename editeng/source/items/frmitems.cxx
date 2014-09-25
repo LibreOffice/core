@@ -359,8 +359,8 @@ bool SvxSizeItem::GetPresentation
 SvStream& SvxSizeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
     //#fdo39428 SvStream no longer supports operator<<(long)
-    rStrm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Width()) );
-    rStrm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Height()) );
+    rStrm.WriteInt32( aSize.Width() );
+    rStrm.WriteInt32( aSize.Height() );
     return rStrm;
 }
 

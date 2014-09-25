@@ -839,7 +839,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         const sal_uLong nOffPos = m_rStm.Tell();
         m_rStm.SeekRel( 16 );
 
-        m_rStm.WriteUInt32( (sal_uInt32) 0 ).WriteInt32( sal_Int32( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP ) );
+        m_rStm.WriteUInt32( (sal_uInt32) 0 ).WriteInt32( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
         ImplWriteSize( rSz );
 
         WriteDIB(rBmp, aMemStm, true, false);

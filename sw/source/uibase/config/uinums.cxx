@@ -462,13 +462,13 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
             nPitch = (sal_uInt16)pFnt->GetPitch();
         }
 
-        rStream.WriteUInt16( sal_uInt16(aFmt.GetNumberingType()) )
+        rStream.WriteUInt16( aFmt.GetNumberingType() )
                .WriteUInt16( aFmt.GetBulletChar() )
                .WriteUChar( aFmt.GetIncludeUpperLevels() > 0 )
                .WriteUInt16( aFmt.GetStart() );
         rStream.WriteUniOrByteString( aFmt.GetPrefix(), eEncoding );
         rStream.WriteUniOrByteString( aFmt.GetSuffix(), eEncoding );
-        rStream.WriteUInt16( sal_uInt16( aFmt.GetNumAdjust() ) )
+        rStream.WriteUInt16( aFmt.GetNumAdjust() )
                .WriteInt16( aFmt.GetAbsLSpace() )
                .WriteInt16( aFmt.GetFirstLineOffset() )
                .WriteInt16( aFmt.GetCharTextDistance() )

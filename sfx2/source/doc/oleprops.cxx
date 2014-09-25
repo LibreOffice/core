@@ -360,7 +360,7 @@ void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const OUString& rValu
     rStrm.WriteInt32( nSize );
     // write character array with trailing NUL character
     rStrm.Write(aEncoded.getStr(), aEncoded.getLength());
-    rStrm.WriteUChar( sal_uInt8( 0 ) );
+    rStrm.WriteUChar( 0 );
 }
 
 void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const OUString& rValue ) const
@@ -371,10 +371,10 @@ void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const OUString& rVal
     // write character array with trailing NUL character
     for( sal_Int32 nIdx = 0; nIdx < rValue.getLength(); ++nIdx )
         rStrm.WriteUInt16( rValue[ nIdx ] );
-    rStrm.WriteUInt16( sal_uInt16( 0 ) );
+    rStrm.WriteUInt16( 0 );
     // stream is always padded to 32-bit boundary, add 2 bytes on odd character count
     if( (nSize & 1) == 1 )
-        rStrm.WriteUInt16( sal_uInt16( 0 ) );
+        rStrm.WriteUInt16( 0 );
 }
 
 
@@ -1060,7 +1060,7 @@ void SfxOleSection::ImplSave( SvStream& rStrm )
     sal_Int32 nPropCount = static_cast< sal_Int32 >( maPropMap.size() + 1 );
     if( maDictProp.HasPropertyNames() )
         ++nPropCount;
-    rStrm.WriteUInt32( sal_uInt32( 0 ) ).WriteInt32( nPropCount );
+    rStrm.WriteUInt32( 0 ).WriteInt32( nPropCount );
 
     // write placeholders for property ID/position pairs
     sal_Size nPropPosPos = rStrm.Tell();
@@ -1137,7 +1137,7 @@ void SfxOleSection::SaveProperty( SvStream& rStrm, SfxOlePropertyBase& rProp, sa
     SaveObject( rStrm, rProp );
     // align to 32-bit
     while( (rStrm.Tell() & 3) != 0 )
-        rStrm.WriteUChar( sal_uInt8( 0 ) );
+        rStrm.WriteUChar( 0 );
     // write property ID/position pair
     rStrm.Seek( rnPropPosPos );
     rStrm.WriteInt32( rProp.GetPropId() ).WriteUInt32( nPropPos );
@@ -1247,10 +1247,10 @@ void SfxOlePropertySet::ImplSave( SvStream& rStrm )
     // write property set header
     SvGlobalName aGuid;
     sal_Int32 nSectCount = static_cast< sal_Int32 >( maSectionMap.size() );
-    rStrm  .WriteUInt16( sal_uInt16( 0xFFFE ) )     // byte order
-           .WriteUInt16( sal_uInt16( 0 ) )          // version
-           .WriteUInt16( sal_uInt16( 1 ) )          // OS minor version
-           .WriteUInt16( sal_uInt16( 2 ) );         // OS type always windows for text encoding
+    rStrm  .WriteUInt16( 0xFFFE )     // byte order
+           .WriteUInt16( 0 )          // version
+           .WriteUInt16( 1 )          // OS minor version
+           .WriteUInt16( 2 );         // OS type always windows for text encoding
     WriteSvGlobalName( rStrm, aGuid );                    // unused guid
     rStrm  .WriteInt32( nSectCount );              // number of sections
 

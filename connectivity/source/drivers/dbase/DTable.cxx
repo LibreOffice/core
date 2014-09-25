@@ -1308,7 +1308,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 
             (*m_pFileStream).WriteChar( cTyp );
             if ( nDbaseType == VisualFoxPro )
-                (*m_pFileStream).WriteUInt32( sal_uInt32(nRecLength-1) );
+                (*m_pFileStream).WriteUInt32( nRecLength-1 );
             else
                 m_pFileStream->Write(aBuffer, 4);
 
@@ -1422,7 +1422,7 @@ bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     m_pMemoStream->SetStreamSize(512);
 
     m_pMemoStream->Seek(0L);
-    (*m_pMemoStream).WriteUInt32( sal_uInt32(1) );                  // pointer to the first free block
+    (*m_pMemoStream).WriteUInt32( 1 );                  // pointer to the first free block
 
     m_pMemoStream->Flush();
     delete m_pMemoStream;

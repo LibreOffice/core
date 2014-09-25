@@ -212,7 +212,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
         SwWW8Writer::WriteLong(tmpStrm, rTarFrm.getLength()+1);
         SwWW8Writer::WriteString16(tmpStrm, rTarFrm, false);
 
-        tmpStrm.WriteUInt16( sal_uInt16( 0 ) );
+        tmpStrm.WriteUInt16( 0 );
 
         mnFlags |= WW8_HLINK_FRAME;
     }
@@ -238,7 +238,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
         //For UNICODE
         SwWW8Writer::WriteLong(tmpStrm, 2*aFileName.getLength()+6);
         SwWW8Writer::WriteLong(tmpStrm, 2*aFileName.getLength());
-        tmpStrm.WriteUInt16( sal_uInt16(0x0003) );
+        tmpStrm.WriteUInt16( 0x0003 );
         SwWW8Writer::WriteString16(tmpStrm, aFileName, false);
     }
     else if( eProtocol != INET_PROT_NOT_VALID )
@@ -270,7 +270,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
     }
 
     rStrm.Write( maGuidStdLink,16 );
-    rStrm .WriteUInt32( sal_uInt32( 2 ) )
+    rStrm .WriteUInt32( 2 )
           .WriteUInt32( mnFlags );
     tmpStrm.Seek( STREAM_SEEK_TO_BEGIN );
     sal_uInt32 const nLen = tmpStrm.remainingSize();
@@ -1415,8 +1415,8 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
         if (mbInline)
         {
             rEx.AddAtom(18, DFF_msofbtUDefProp, 3, 3); //Prop id is 0xF122
-            rSt.WriteUInt16( (sal_uInt16)0x0390 ).WriteUInt32( sal_uInt32(3) );
-            rSt.WriteUInt16( (sal_uInt16)0x0392 ).WriteUInt32( sal_uInt32(3) );
+            rSt.WriteUInt16( (sal_uInt16)0x0390 ).WriteUInt32( 3 );
+            rSt.WriteUInt16( (sal_uInt16)0x0392 ).WriteUInt32( 3 );
             //This sub property is required to be in the dummy inline frame as
             //well
             rSt.WriteUInt16( (sal_uInt16)0x053F ).WriteUInt32( nInlineHack );
@@ -2113,11 +2113,11 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
                 sal_uInt16 nLen = aPoly.GetSize();
                 aPolyDump.WriteUInt16( nLen );
                 aPolyDump.WriteUInt16( nLen );
-                aPolyDump.WriteUInt16( sal_uInt16(8) );
+                aPolyDump.WriteUInt16( 8 );
                 for (sal_uInt16 nI = 0; nI < nLen; ++nI)
                 {
-                    aPolyDump.WriteUInt32( sal_uInt32(aPoly[nI].X()) );
-                    aPolyDump.WriteUInt32( sal_uInt32(aPoly[nI].Y()) );
+                    aPolyDump.WriteUInt32( aPoly[nI].X() );
+                    aPolyDump.WriteUInt32( aPoly[nI].Y() );
                 }
 
                 sal_uInt16 nArrLen = msword_cast<sal_uInt16>(aPolyDump.Tell());

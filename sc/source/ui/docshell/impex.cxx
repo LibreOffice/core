@@ -450,9 +450,9 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, sa
             WriteUnicodeOrByteString( rStrm, aRefName, true );
             WriteUnicodeOrByteString( rStrm, aExtraBits, true );
             if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
-                rStrm.WriteUInt16( sal_Unicode(0) );
+                rStrm.WriteUInt16( 0 );
             else
-                rStrm.WriteChar( sal_Char(0) );
+                rStrm.WriteChar( 0 );
             return rStrm.GetError() == SVSTREAM_OK;
         }
     }
@@ -487,14 +487,14 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const OUString& 
             }
         }
         if ( bZero )
-            rStrm.WriteUInt16( sal_Unicode(0) );
+            rStrm.WriteUInt16( 0 );
     }
     else
     {
         OString aByteStr(OUStringToOString(rString, eEnc));
         rStrm.WriteCharPtr( aByteStr.getStr() );
         if ( bZero )
-            rStrm.WriteChar( sal_Char(0) );
+            rStrm.WriteChar( 0 );
     }
 }
 
@@ -506,13 +506,13 @@ void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
         switch ( rStrm.GetLineDelimiter() )
         {
             case LINEEND_CR :
-                rStrm.WriteUInt16( sal_Unicode('\r') );
+                rStrm.WriteUInt16( '\r' );
             break;
             case LINEEND_LF :
-                rStrm.WriteUInt16( sal_Unicode('\n') );
+                rStrm.WriteUInt16( '\n' );
             break;
             default:
-                rStrm.WriteUInt16( sal_Unicode('\r') ).WriteUInt16( sal_Unicode('\n') );
+                rStrm.WriteUInt16( '\r' ).WriteUInt16( '\n' );
         }
     }
     else

@@ -1598,9 +1598,8 @@ SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
         {
             for( i = 0; i < nPoints; i++ )
             {
-                //fdo#39428 SvStream no longer supports operator<<(long)
-                rOStream.WriteInt32( sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].X() ) )
-                        .WriteInt32( sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].Y() ) );
+                rOStream.WriteInt32( rPoly.mpImplPolygon->mpPointAry[i].X() )
+                        .WriteInt32( rPoly.mpImplPolygon->mpPointAry[i].Y() );
             }
         }
     }
@@ -1633,7 +1632,7 @@ void Polygon::ImplWrite( SvStream& rOStream ) const
 {
     bool bHasPolyFlags = mpImplPolygon->mpFlagAry != NULL;
     WritePolygon( rOStream, *this );
-    rOStream.WriteUChar(sal_uInt8(bHasPolyFlags));
+    rOStream.WriteUChar(bHasPolyFlags);
 
     if ( bHasPolyFlags )
         rOStream.Write( mpImplPolygon->mpFlagAry, mpImplPolygon->mnPoints );
