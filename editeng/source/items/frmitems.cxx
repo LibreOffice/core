@@ -1236,7 +1236,7 @@ SvStream& SvxProtectItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
     if( IsPosProtected() )   cProt |= 0x01;
     if( IsSizeProtected() )  cProt |= 0x02;
     if( IsCntntProtected() ) cProt |= 0x04;
-    rStrm.WriteSChar( (sal_Int8) cProt );
+    rStrm.WriteSChar(  cProt );
     return rStrm;
 }
 
@@ -1475,12 +1475,12 @@ bool SvxShadowItem::GetPresentation
 
 SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteSChar( (sal_Int8) GetLocation() )
+    rStrm.WriteSChar(  GetLocation() )
          .WriteUInt16( (sal_uInt16) GetWidth() )
          .WriteUChar( (aShadowColor.GetTransparency() > 0) );
     WriteColor( rStrm, GetColor() );
     WriteColor( rStrm, GetColor() );
-    rStrm.WriteSChar( (sal_Int8)(aShadowColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
+    rStrm.WriteSChar( (aShadowColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
     return rStrm;
 }
 
@@ -2567,7 +2567,7 @@ SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
         cFlags |= 0x02;
     if ( IsMinDist() )
         cFlags |= 0x04;
-    rStrm.WriteSChar( (sal_Int8)   cFlags )
+    rStrm.WriteSChar(    cFlags )
          .WriteUInt16( (sal_uInt16) GetDefDist() );
     const SvxBorderLine* pLine[ 2 ];
     pLine[ 0 ] = GetHori();
@@ -2967,9 +2967,9 @@ SfxPoolItem* SvxFmtBreakItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxFmtBreakItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
-    rStrm.WriteSChar( (sal_Int8)GetValue() );
+    rStrm.WriteSChar( GetValue() );
     if( FMTBREAK_NOAUTO > nItemVersion )
-        rStrm.WriteSChar( (sal_Int8)0x01 );
+        rStrm.WriteSChar( 0x01 );
     return rStrm;
 }
 
@@ -3818,7 +3818,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
     rStream.WriteUChar( false );
     WriteColor( rStream, aColor );
     WriteColor( rStream, aColor );
-    rStream.WriteSChar( (sal_Int8)(aColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
+    rStream.WriteSChar( (aColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
 
     sal_uInt16 nDoLoad = 0;
 
@@ -3845,7 +3845,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
         // UNICODE: rStream << maStrFilter;
         rStream.WriteUniOrByteString(maStrFilter, rStream.GetStreamCharSet());
     }
-    rStream.WriteSChar( (sal_Int8)eGraphicPos );
+    rStream.WriteSChar( eGraphicPos );
     return rStream;
 }
 
