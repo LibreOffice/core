@@ -66,20 +66,20 @@ public class _XScriptStorageManager extends MultiMethodTest {
 
             if (access == null) {
                 output = "Couldn't create XSimpleFileAccess";
-            }
-            else {
+            } else {
                 try {
                     int id = oObj.createScriptStorage(access);
                     output = "success";
-                }
-                catch (com.sun.star.uno.RuntimeException re) {
+                } catch (com.sun.star.uno.RuntimeException re) {
                     log.println("Exception from createScriptStorage: " + re);
                     output = "com.sun.star.uno.RuntimeException";
                 }
             }
+
             log.println("expected: " + expected + ", output: " + output);
             result &= output.equals(expected);
         }
+
         tRes.tested("createScriptStorage()", result);
     }
 
@@ -116,18 +116,18 @@ public class _XScriptStorageManager extends MultiMethodTest {
                     output = "null";
                 else {
                     Object info = UnoRuntime.queryInterface(
-                        XScriptInfoAccess.class, ifc);
+                                      XScriptInfoAccess.class, ifc);
 
                     if (info == null)
                         output = "null";
                     else
                         output = "XScriptInfoAccess.class";
                 }
-            }
-            catch (com.sun.star.uno.RuntimeException re) {
+            } catch (com.sun.star.uno.RuntimeException re) {
                 log.println("Caught RuntimeException: " + re);
                 output = "com.sun.star.uno.RuntimeException";
             }
+
             log.println("expected: " + expected + ", output: " + output);
             result &= output.equals(expected);
         }
@@ -165,21 +165,22 @@ public class _XScriptStorageManager extends MultiMethodTest {
                     output = "null";
                 else {
                     Object info = UnoRuntime.queryInterface(
-                        XScriptInfoAccess.class, ifc);
+                                      XScriptInfoAccess.class, ifc);
 
                     if (info == null)
                         output = "null";
                     else
                         output = "XScriptInfoAccess.class";
                 }
-            }
-            catch (com.sun.star.uno.RuntimeException re) {
+            } catch (com.sun.star.uno.RuntimeException re) {
                 log.println("Caught RuntimeException: " + re);
                 output = "com.sun.star.uno.RuntimeException";
             }
+
             log.println("expected: " + expected + ", output: " + output);
             result &= output.equals(expected);
         }
+
         tRes.tested("getScriptStorage()", result);
     }
 
@@ -209,14 +210,15 @@ public class _XScriptStorageManager extends MultiMethodTest {
                 log.println("calling refreshScriptStorage with URI: " + uri);
                 oObj.refreshScriptStorage(uri);
                 output = "success";
-            }
-            catch (com.sun.star.uno.RuntimeException re) {
+            } catch (com.sun.star.uno.RuntimeException re) {
                 log.println("Caught RuntimeException: " + re);
                 output = "com.sun.star.uno.RuntimeException";
             }
+
             log.println("expected: " + expected + ", output: " + output);
             result &= output.equals(expected);
         }
+
         tRes.tested("refreshScriptStorage()", result);
     }
 
@@ -231,6 +233,7 @@ public class _XScriptStorageManager extends MultiMethodTest {
         String uri = util.utils.getFullTestURL(location);
 
         XSimpleFileAccess access = getXSimpleFileAccess();
+
         if (access == null)
             return -1;
 
@@ -242,13 +245,13 @@ public class _XScriptStorageManager extends MultiMethodTest {
 
         try {
             Object fa = tParam.getMSF().createInstance(
-                "com.sun.star.ucb.SimpleFileAccess");
+                            "com.sun.star.ucb.SimpleFileAccess");
 
             access = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
-        }
-        catch (com.sun.star.uno.Exception e) {
+        } catch (com.sun.star.uno.Exception e) {
             return null;
         }
+
         return access;
     }
 }

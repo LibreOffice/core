@@ -31,7 +31,8 @@ import org.openoffice.netbeans.modules.office.actions.*;
  */
 public class ParcelDataObject extends MultiDataObject {
 
-    public ParcelDataObject(FileObject pf, ParcelDataLoader loader) throws DataObjectExistsException {
+    public ParcelDataObject(FileObject pf,
+                            ParcelDataLoader loader) throws DataObjectExistsException {
         super(pf, loader);
         init();
     }

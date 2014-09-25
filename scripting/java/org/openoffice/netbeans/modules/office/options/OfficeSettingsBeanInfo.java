@@ -39,54 +39,53 @@ public class OfficeSettingsBeanInfo extends SimpleBeanInfo {
         try {
             PropertyDescriptor[] props = new PropertyDescriptor[] {
                 new PropertyDescriptor(OfficeSettings.OFFICE_DIRECTORY,
-                               OfficeSettings.class,
-                               "get" + OfficeSettings.OFFICE_DIRECTORY,
-                               "set" + OfficeSettings.OFFICE_DIRECTORY),
+                                       OfficeSettings.class,
+                                       "get" + OfficeSettings.OFFICE_DIRECTORY,
+                                       "set" + OfficeSettings.OFFICE_DIRECTORY),
                 new PropertyDescriptor(OfficeSettings.WARN_BEFORE_DOC_DEPLOY,
-                               OfficeSettings.class,
-                               "get" + OfficeSettings.WARN_BEFORE_DOC_DEPLOY,
-                               "set" + OfficeSettings.WARN_BEFORE_DOC_DEPLOY),
+                                       OfficeSettings.class,
+                                       "get" + OfficeSettings.WARN_BEFORE_DOC_DEPLOY,
+                                       "set" + OfficeSettings.WARN_BEFORE_DOC_DEPLOY),
                 new PropertyDescriptor(OfficeSettings.WARN_BEFORE_PARCEL_DELETE,
-                               OfficeSettings.class,
-                               "get" + OfficeSettings.WARN_BEFORE_PARCEL_DELETE,
-                               "set" + OfficeSettings.WARN_BEFORE_PARCEL_DELETE),
+                                       OfficeSettings.class,
+                                       "get" + OfficeSettings.WARN_BEFORE_PARCEL_DELETE,
+                                       "set" + OfficeSettings.WARN_BEFORE_PARCEL_DELETE),
                 new PropertyDescriptor(OfficeSettings.WARN_AFTER_DIR_DEPLOY,
-                               OfficeSettings.class,
-                               "get" + OfficeSettings.WARN_AFTER_DIR_DEPLOY,
-                               "set" + OfficeSettings.WARN_AFTER_DIR_DEPLOY),
+                                       OfficeSettings.class,
+                                       "get" + OfficeSettings.WARN_AFTER_DIR_DEPLOY,
+                                       "set" + OfficeSettings.WARN_AFTER_DIR_DEPLOY),
                 new PropertyDescriptor(OfficeSettings.WARN_BEFORE_MOUNT,
-                               OfficeSettings.class,
-                               "get" + OfficeSettings.WARN_BEFORE_MOUNT,
-                               "set" + OfficeSettings.WARN_BEFORE_MOUNT)
+                                       OfficeSettings.class,
+                                       "get" + OfficeSettings.WARN_BEFORE_MOUNT,
+                                       "set" + OfficeSettings.WARN_BEFORE_MOUNT)
             };
 
             props[0].setDisplayName(NbBundle.getMessage(
-                OfficeSettingsBeanInfo.class, "PROP_OfficeDirectory"));
+                                        OfficeSettingsBeanInfo.class, "PROP_OfficeDirectory"));
             props[0].setShortDescription(NbBundle.getMessage(
-                OfficeSettingsBeanInfo.class, "HINT_OfficeDirectory"));
+                                             OfficeSettingsBeanInfo.class, "HINT_OfficeDirectory"));
             props[0].setPropertyEditorClass(OfficeDirectoryEditor.class);
 
             props[1].setDisplayName(NbBundle.getMessage(
-                OfficeSettingsBeanInfo.class, "PROP_WarnBeforeDocDeploy"));
+                                        OfficeSettingsBeanInfo.class, "PROP_WarnBeforeDocDeploy"));
             props[1].setShortDescription(NbBundle.getMessage(
-                OfficeSettingsBeanInfo.class, "HINT_WarnBeforeDocDeploy"));
+                                             OfficeSettingsBeanInfo.class, "HINT_WarnBeforeDocDeploy"));
             props[1].setHidden(true);
 
             props[2].setDisplayName(NbBundle.getMessage(
-                OfficeSettingsBeanInfo.class, "PROP_WarnAfterDirDeploy"));
+                                        OfficeSettingsBeanInfo.class, "PROP_WarnAfterDirDeploy"));
             props[2].setShortDescription(NbBundle.getMessage(
-                OfficeSettingsBeanInfo.class, "HINT_WarnAfterDirDeploy"));
+                                             OfficeSettingsBeanInfo.class, "HINT_WarnAfterDirDeploy"));
             props[2].setHidden(true);
 
             props[3].setDisplayName(NbBundle.getMessage(
-                OfficeSettingsBeanInfo.class, "PROP_WarnBeforeMount"));
+                                        OfficeSettingsBeanInfo.class, "PROP_WarnBeforeMount"));
             props[3].setShortDescription(NbBundle.getMessage(
-                OfficeSettingsBeanInfo.class, "HINT_WarnBeforeMount"));
+                                             OfficeSettingsBeanInfo.class, "HINT_WarnBeforeMount"));
             props[3].setHidden(true);
 
             return props;
-        }
-        catch (IntrospectionException ie) {
+        } catch (IntrospectionException ie) {
             ErrorManager.getDefault().notify(ie);
             return null;
         }
@@ -105,18 +104,18 @@ public class OfficeSettingsBeanInfo extends SimpleBeanInfo {
 
         private SelectPathPanel panel;
 
-        public String getAsText () {
+        public String getAsText() {
             return ((OfficeInstallation)getValue()).getPath();
         }
 
-        public void setAsText (String path) {
+        public void setAsText(String path) {
             OfficeInstallation oi = new OfficeInstallation(path);
 
             if (!oi.supportsFramework())
                 throw new IllegalArgumentException(path +
-                    " is not a valid Office install");
+                                                   " is not a valid Office install");
             else
-                setValue (oi);
+                setValue(oi);
         }
 
         public Component getCustomEditor() {

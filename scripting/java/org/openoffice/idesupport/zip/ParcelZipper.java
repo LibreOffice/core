@@ -24,8 +24,7 @@ import org.openoffice.idesupport.filter.FileFilter;
 import org.openoffice.idesupport.filter.BinaryOnlyFilter;
 import org.openoffice.idesupport.xml.Manifest;
 
-public class ParcelZipper
-{
+public class ParcelZipper {
     public static final String PARCEL_PREFIX_DIR = "Scripts/";
     private static final String PARCEL_EXTENSION = "sxp";
     public static final String CONTENTS_DIRNAME = "Contents";
@@ -42,6 +41,7 @@ public class ParcelZipper
     public static synchronized ParcelZipper getParcelZipper() {
         if (zipper == null)
             zipper = new ParcelZipper();
+
         return zipper;
     }
 
@@ -52,7 +52,7 @@ public class ParcelZipper
 
 
     public String removeParcel(File document, String parcelName)
-        throws IOException {
+    throws IOException {
 
         ZipInputStream documentStream = null;
         ZipOutputStream outStream = null;
@@ -60,6 +60,7 @@ public class ParcelZipper
 
         if (!parcelName.startsWith(PARCEL_PREFIX_DIR))
             parcelName = PARCEL_PREFIX_DIR + parcelName;
+
         manifest = removeParcelFromManifest(document, parcelName);
 
         // first write contents of document to tmpfile
@@ -76,38 +77,36 @@ public class ParcelZipper
 
             while ((inEntry = documentStream.getNextEntry()) != null) {
 
-                if(inEntry.getName().startsWith(parcelName))
+                if (inEntry.getName().startsWith(parcelName))
                     continue;
 
                 outEntry = new ZipEntry(inEntry);
                 outStream.putNextEntry(outEntry);
 
-                if(inEntry.getName().equals("META-INF/manifest.xml") &&
-                   manifest != null) {
+                if (inEntry.getName().equals("META-INF/manifest.xml") &&
+                    manifest != null) {
                     InputStream manifestStream = null;
+
                     try {
                         manifestStream = manifest.getInputStream();
+
                         while ((len = manifestStream.read(bytes)) != -1)
                             outStream.write(bytes, 0, len);
-                    }
-                    finally {
+                    } finally {
                         if (manifestStream != null)
                             manifestStream.close();
                     }
-                }
-                else if (!inEntry.isDirectory()) {
+                } else if (!inEntry.isDirectory()) {
                     while ((len = documentStream.read(bytes)) != -1)
                         outStream.write(bytes, 0, len);
                 }
 
                 outStream.closeEntry();
             }
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             tmpfile.delete();
             throw ioe;
-        }
-        finally {
+        } finally {
             if (documentStream != null)
                 documentStream.close();
 
@@ -118,8 +117,7 @@ public class ParcelZipper
         if (!document.delete()) {
             tmpfile.delete();
             throw new IOException("Could not overwrite " + document);
-        }
-        else
+        } else
             tmpfile.renameTo(document);
 
         return document.getAbsolutePath();
@@ -132,18 +130,16 @@ public class ParcelZipper
         try {
             documentZip = new ZipFile(document);
             ZipEntry original = documentZip.getEntry("META-INF/manifest.xml");
+
             if (original != null) {
                 result = new Manifest(documentZip.getInputStream(original));
             }
-        }
-        catch (IOException ioe) {
-        }
-        finally {
+        } catch (IOException ioe) {
+        } finally {
             try {
                 if (documentZip != null)
                     documentZip.close();
-            }
-            catch (IOException ioe) {}
+            } catch (IOException ioe) {}
         }
 
         return result;
@@ -153,6 +149,7 @@ public class ParcelZipper
         Manifest result = null;
 
         result = getManifestFromDocument(document);
+
         if (result == null)
             return null;
 

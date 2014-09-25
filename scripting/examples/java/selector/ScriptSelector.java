@@ -63,25 +63,23 @@ public class ScriptSelector {
 
     private ScriptSelectorPanel selectorPanel;
 
-    public ScriptSelector()
-    {
+    public ScriptSelector() {
     }
 
-    public void showOrganizer(final XScriptContext ctxt)
-    {
+    public void showOrganizer(final XScriptContext ctxt) {
         try {
             XBrowseNode root = getRootNode(ctxt);
 
             final XScriptProvider msp =
                 (XScriptProvider)UnoRuntime.queryInterface(
-                 XScriptProvider.class, root);
+                    XScriptProvider.class, root);
 
             final JFrame client = new JFrame("Script");
 
             selectorPanel = new ScriptSelectorPanel(root);
 
             final JButton runButton, closeButton, createButton,
-                          editButton, deleteButton;
+                  editButton, deleteButton;
 
             runButton = new JButton("Run");
             runButton.setEnabled(false);
@@ -111,27 +109,24 @@ public class ScriptSelector {
             southButtons.add(deleteButton);
 
             selectorPanel.tree.addTreeSelectionListener(
-                new TreeSelectionListener() {
-                    public void valueChanged(TreeSelectionEvent e) {
-                        XBrowseNode xbn = selectorPanel.getSelection();
-                        XPropertySet props = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class, xbn);
+            new TreeSelectionListener() {
+                public void valueChanged(TreeSelectionEvent e) {
+                    XBrowseNode xbn = selectorPanel.getSelection();
+                    XPropertySet props = (XPropertySet)
+                                         UnoRuntime.queryInterface(XPropertySet.class, xbn);
 
-                        checkEnabled(props, "Creatable", createButton);
-                        checkEnabled(props, "Deletable", deleteButton);
-                        checkEnabled(props, "Editable", editButton);
+                    checkEnabled(props, "Creatable", createButton);
+                    checkEnabled(props, "Deletable", deleteButton);
+                    checkEnabled(props, "Editable", editButton);
 
-                        if (xbn != null &&
-                            xbn.getType() == BrowseNodeTypes.SCRIPT)
-                        {
-                            runButton.setEnabled(true);
-                        }
-                        else
-                        {
-                            runButton.setEnabled(false);
-                        }
+                    if (xbn != null &&
+                        xbn.getType() == BrowseNodeTypes.SCRIPT) {
+                        runButton.setEnabled(true);
+                    } else {
+                        runButton.setEnabled(false);
                     }
                 }
+            }
             );
 
             ActionListener listener = new ActionListener() {
@@ -149,36 +144,31 @@ public class ScriptSelector {
                             num[0] = new short[0];
 
                             script.invoke(new Object[0], num, out);
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }
-                    else if (event.getSource() == closeButton) {
+                    } else if (event.getSource() == closeButton) {
                         client.dispose();
-                    }
-                    else if (event.getSource() == editButton) {
+                    } else if (event.getSource() == editButton) {
                         DefaultMutableTreeNode node =
-                          (DefaultMutableTreeNode)
-                          selectorPanel.tree.getLastSelectedPathComponent();
+                            (DefaultMutableTreeNode)
+                            selectorPanel.tree.getLastSelectedPathComponent();
 
                         if (node == null) return;
 
                         showEditor(ctxt, node);
-                    }
-                    else if (event.getSource() == createButton) {
+                    } else if (event.getSource() == createButton) {
                         DefaultMutableTreeNode node =
-                          (DefaultMutableTreeNode)
-                          selectorPanel.tree.getLastSelectedPathComponent();
+                            (DefaultMutableTreeNode)
+                            selectorPanel.tree.getLastSelectedPathComponent();
 
                         if (node == null) return;
 
                         doCreate(ctxt, node);
-                    }
-                    else if (event.getSource() == deleteButton) {
+                    } else if (event.getSource() == deleteButton) {
                         DefaultMutableTreeNode node =
-                          (DefaultMutableTreeNode)
-                          selectorPanel.tree.getLastSelectedPathComponent();
+                            (DefaultMutableTreeNode)
+                            selectorPanel.tree.getLastSelectedPathComponent();
 
                         if (node == null) return;
 
@@ -217,114 +207,96 @@ public class ScriptSelector {
             client.setLocation(x, y);
 
             client.show();
-        }
-        catch (com.sun.star.uno.RuntimeException rue) {
+        } catch (com.sun.star.uno.RuntimeException rue) {
             rue.printStackTrace();
-        }
-        catch (java.lang.Exception e) {
+        } catch (java.lang.Exception e) {
             e.printStackTrace();
         }
     }
 
     public void showOrganizer(final XScriptContext ctxt,
-        final com.sun.star.awt.MouseEvent e)
-    {
+                              final com.sun.star.awt.MouseEvent e) {
         showOrganizer(ctxt);
     }
 
     public void showOrganizer(final XScriptContext ctxt,
-        final com.sun.star.awt.ActionEvent e)
-    {
+                              final com.sun.star.awt.ActionEvent e) {
         showOrganizer(ctxt);
     }
 
     private void doDelete(
-        XScriptContext ctxt, DefaultMutableTreeNode node)
-    {
+        XScriptContext ctxt, DefaultMutableTreeNode node) {
         Object obj = node.getUserObject();
         XInvocation inv =
             (XInvocation)UnoRuntime.queryInterface(
-            XInvocation.class, obj);
+                XInvocation.class, obj);
         Object[] args = new Object[] { ctxt };
+
         try {
             Object result = inv.invoke("Deletable", args,
-                new short[1][0], new Object[1][0]);
+                                       new short[1][0], new Object[1][0]);
 
-            if (result != null && AnyConverter.toBoolean(result) == true)
-            {
+            if (result != null && AnyConverter.toBoolean(result) == true) {
                 selectorPanel.removeNode(node);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void doCreate(
-        XScriptContext ctxt, DefaultMutableTreeNode node)
-    {
+        XScriptContext ctxt, DefaultMutableTreeNode node) {
         Object obj = node.getUserObject();
         XInvocation inv =
             (XInvocation)UnoRuntime.queryInterface(
-            XInvocation.class, obj);
+                XInvocation.class, obj);
         Object[] args = new Object[] { ctxt };
+
         try {
             Object result = inv.invoke("Creatable", args,
-                new short[1][0], new Object[1][0]);
+                                       new short[1][0], new Object[1][0]);
 
-            if (result != null)
-            {
+            if (result != null) {
                 XBrowseNode xbn = (XBrowseNode)
-                    AnyConverter.toObject(new Type(XBrowseNode.class), result);
+                                  AnyConverter.toObject(new Type(XBrowseNode.class), result);
                 selectorPanel.addNode(node, xbn);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void showEditor(
-        XScriptContext ctxt, DefaultMutableTreeNode node)
-    {
+        XScriptContext ctxt, DefaultMutableTreeNode node) {
         Object obj = node.getUserObject();
         XInvocation inv =
             (XInvocation)UnoRuntime.queryInterface(
-            XInvocation.class, obj);
+                XInvocation.class, obj);
         Object[] args = new Object[] { ctxt };
+
         try {
             inv.invoke("Editable", args,
-                new short[1][0], new Object[1][0]);
-        }
-        catch (Exception e) {
+                       new short[1][0], new Object[1][0]);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void checkEnabled(XPropertySet props, String name,
-        JButton button)
-    {
+                              JButton button) {
         boolean enable = false;
 
-        try
-        {
-            if (props != null)
-            {
+        try {
+            if (props != null) {
                 Object o = props.getPropertyValue(name);
                 enable = AnyConverter.toBoolean(
-                    props.getPropertyValue(name));
+                             props.getPropertyValue(name));
             }
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae)
-        {
+        } catch (com.sun.star.lang.IllegalArgumentException iae) {
             // leave enable set to false
-        }
-        catch (com.sun.star.beans.UnknownPropertyException upe)
-        {
+        } catch (com.sun.star.beans.UnknownPropertyException upe) {
             // leave enable set to false
-        }
-        catch (com.sun.star.lang.WrappedTargetException wte)
-        {
+        } catch (com.sun.star.lang.WrappedTargetException wte) {
             // leave enable set to false
         }
 
@@ -339,12 +311,13 @@ public class ScriptSelector {
         XComponentContext xcc = ctxt.getComponentContext();
         XMultiComponentFactory xmcf = xcc.getServiceManager();
         XBrowseNodeFactory xBrowseFac = (XBrowseNodeFactory)
-            UnoRuntime.queryInterface( XBrowseNodeFactory.class, xcc.getValueByName(
-                "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") );
+                                        UnoRuntime.queryInterface(XBrowseNodeFactory.class, xcc.getValueByName(
+                                                "/singletons/com.sun.star.script.browse.theBrowseNodeFactory"));
 
 
         result = (XBrowseNode)UnoRuntime.queryInterface(
-           XBrowseNode.class, xBrowseFac.createView( BrowseNodeFactoryViewTypes.MACROORGANIZER ) );
+                     XBrowseNode.class, xBrowseFac.createView(
+                         BrowseNodeFactoryViewTypes.MACROORGANIZER));
         return result;
     }
 }
@@ -356,15 +329,14 @@ class ScriptSelectorPanel extends JPanel {
     public JTree tree;
     public DefaultTreeModel treeModel;
 
-    public ScriptSelectorPanel(XBrowseNode root)
-    {
+    public ScriptSelectorPanel(XBrowseNode root) {
         this.myrootnode = root;
         initUI();
     }
 
     public XBrowseNode getSelection() {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-            tree.getLastSelectedPathComponent();
+                                      tree.getLastSelectedPathComponent();
 
         if (node == null) {
             return null;
@@ -377,11 +349,11 @@ class ScriptSelectorPanel extends JPanel {
         setLayout(new BorderLayout());
 
         DefaultMutableTreeNode top =
-            new DefaultMutableTreeNode(myrootnode) {
-                public String toString() {
-                    return ((XBrowseNode)getUserObject()).getName();
-                }
-            };
+        new DefaultMutableTreeNode(myrootnode) {
+            public String toString() {
+                return ((XBrowseNode)getUserObject()).getName();
+            }
+        };
         initNodes(myrootnode, top);
         treeModel = new DefaultTreeModel(top);
         tree = new JTree(treeModel);
@@ -389,13 +361,13 @@ class ScriptSelectorPanel extends JPanel {
         tree.setCellRenderer(new ScriptTreeRenderer());
 
         tree.getSelectionModel().setSelectionMode
-            (TreeSelectionModel.SINGLE_TREE_SELECTION);
+        (TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
                 XBrowseNode xbn = getSelection();
                 XPropertySet props = (XPropertySet)UnoRuntime.queryInterface(
-                    XPropertySet.class, xbn);
+                                         XPropertySet.class, xbn);
 
                 if (xbn == null) {
                     textField.setText("");
@@ -403,16 +375,16 @@ class ScriptSelectorPanel extends JPanel {
                 }
 
                 String str = xbn.getName();
-                if (xbn.getType() == BrowseNodeTypes.SCRIPT && props != null)
-                {
+
+                if (xbn.getType() == BrowseNodeTypes.SCRIPT && props != null) {
                     try {
                         str = AnyConverter.toString(
-                            props.getPropertyValue("URI"));
-                    }
-                    catch (Exception ignore) {
+                                  props.getPropertyValue("URI"));
+                    } catch (Exception ignore) {
                         // default will be used
                     }
                 }
+
                 textField.setText(str);
             }
         });
@@ -426,6 +398,7 @@ class ScriptSelectorPanel extends JPanel {
 
     public void removeNode(DefaultMutableTreeNode node) {
         MutableTreeNode parent = (MutableTreeNode)(node.getParent());
+
         if (parent != null) {
             treeModel.removeNodeFromParent(node);
         }
@@ -433,19 +406,18 @@ class ScriptSelectorPanel extends JPanel {
 
     public void addNode(DefaultMutableTreeNode parent, XBrowseNode xbn) {
         DefaultMutableTreeNode newNode =
-            new DefaultMutableTreeNode(xbn) {
-                public String toString() {
-                    return ((XBrowseNode)getUserObject()).getName();
-                }
-            };
+        new DefaultMutableTreeNode(xbn) {
+            public String toString() {
+                return ((XBrowseNode)getUserObject()).getName();
+            }
+        };
 
         treeModel.insertNodeInto(newNode, parent, parent.getChildCount());
         tree.scrollPathToVisible(new TreePath(newNode.getPath()));
     }
 
     private void initNodes(XBrowseNode parent, DefaultMutableTreeNode top) {
-        if ( parent == null || parent.hasChildNodes() == false )
-        {
+        if (parent == null || parent.hasChildNodes() == false) {
             return;
         }
 
@@ -454,22 +426,21 @@ class ScriptSelectorPanel extends JPanel {
         try {
             if (children != null) {
                 for (int i = 0; i < children.length; i++) {
-                    if ( children[i] == null )
-                    {
+                    if (children[i] == null) {
                         continue;
                     }
+
                     DefaultMutableTreeNode newNode =
-                        new DefaultMutableTreeNode(children[i]) {
-                            public String toString() {
-                                return ((XBrowseNode)getUserObject()).getName();
-                            }
-                        };
+                    new DefaultMutableTreeNode(children[i]) {
+                        public String toString() {
+                            return ((XBrowseNode)getUserObject()).getName();
+                        }
+                    };
                     top.add(newNode);
                     initNodes(children[i], newNode);
                 }
             }
-        }
-        catch (java.lang.Exception e) {
+        } catch (java.lang.Exception e) {
             e.printStackTrace();
         }
     }
@@ -488,28 +459,27 @@ class ScriptTreeRenderer extends DefaultTreeCellRenderer {
     }
 
     public Component getTreeCellRendererComponent(
-                        JTree tree,
-                        Object value,
-                        boolean sel,
-                        boolean expanded,
-                        boolean leaf,
-                        int row,
-                        boolean hasFocus) {
+        JTree tree,
+        Object value,
+        boolean sel,
+        boolean expanded,
+        boolean leaf,
+        int row,
+        boolean hasFocus) {
 
         super.getTreeCellRendererComponent(
-                        tree, value, sel,
-                        expanded, leaf, row,
-                        hasFocus);
+            tree, value, sel,
+            expanded, leaf, row,
+            hasFocus);
 
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
         XBrowseNode xbn = (XBrowseNode)node.getUserObject();
+
         if (xbn.getType() == BrowseNodeTypes.SCRIPT) {
             setIcon(scriptIcon);
-        }
-        else if(xbn.getType() == BrowseNodeTypes.CONTAINER) {
+        } else if (xbn.getType() == BrowseNodeTypes.CONTAINER) {
             setIcon(containerIcon);
-        }
-        else if(xbn.getType() == BrowseNodeTypes.ROOT) {
+        } else if (xbn.getType() == BrowseNodeTypes.ROOT) {
             setIcon(sofficeIcon);
         }
 

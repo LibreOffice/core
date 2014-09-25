@@ -25,13 +25,11 @@ import com.sun.star.document.XScriptInvocationContext;
 
 import com.sun.star.script.provider.XScriptContext;
 
-public class EditorScriptContext implements XScriptContext
-{
+public class EditorScriptContext implements XScriptContext {
     private XDesktop m_xDeskTop;
     private XComponentContext  m_xComponentContext;
-    public EditorScriptContext( XComponentContext xmComponentContext,
-        XDesktop xDesktop )
-    {
+    public EditorScriptContext(XComponentContext xmComponentContext,
+                               XDesktop xDesktop) {
         this.m_xComponentContext = xmComponentContext;
         this.m_xDeskTop = xDesktop;
     }
@@ -41,18 +39,16 @@ public class EditorScriptContext implements XScriptContext
 
         @return  XModel interface
     */
-    public XModel getDocument()
-    {
-        XModel xModel = UnoRuntime.queryInterface( XModel.class,
-             m_xDeskTop.getCurrentComponent() );
+    public XModel getDocument() {
+        XModel xModel = UnoRuntime.queryInterface(XModel.class,
+                        m_xDeskTop.getCurrentComponent());
 
         return xModel;
     }
 
-    public XScriptInvocationContext getInvocationContext()
-    {
+    public XScriptInvocationContext getInvocationContext() {
         XScriptInvocationContext xContext = UnoRuntime.queryInterface(
-                XScriptInvocationContext.class, getDocument() );
+                                                XScriptInvocationContext.class, getDocument());
         return xContext;
     }
 
@@ -61,8 +57,7 @@ public class EditorScriptContext implements XScriptContext
 
         @return  XDesktop interface
     */
-    public XDesktop getDesktop()
-    {
+    public XDesktop getDesktop() {
         return m_xDeskTop;
     }
 
@@ -71,9 +66,8 @@ public class EditorScriptContext implements XScriptContext
 
         @return  XComponentContext interface
     */
-    public XComponentContext getComponentContext()
-    {
-       return m_xComponentContext;
+    public XComponentContext getComponentContext() {
+        return m_xComponentContext;
     }
 
 }

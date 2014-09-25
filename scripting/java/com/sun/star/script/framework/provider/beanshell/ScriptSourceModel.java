@@ -30,7 +30,7 @@ public class ScriptSourceModel {
     private URL file = null;
     private ScriptSourceView view = null;
 
-    public ScriptSourceModel(URL file ) {
+    public ScriptSourceModel(URL file) {
         this.file = file;
     }
 
@@ -40,14 +40,14 @@ public class ScriptSourceModel {
 
         byte[] contents = new byte[1024];
         int len;
+
         while ((len = in.read(contents, 0, 1024)) != -1) {
             buf.append(new String(contents, 0, len));
         }
 
         try {
             in.close();
-        }
-        catch (IOException ignore) {
+        } catch (IOException ignore) {
         }
 
         return buf.toString();
@@ -58,8 +58,7 @@ public class ScriptSourceModel {
 
         try {
             result = load();
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             // do nothing, empty string will be returned
         }
 
@@ -74,52 +73,51 @@ public class ScriptSourceModel {
         this.view = view;
     }
 
-    public Object execute(final XScriptContext context, ClassLoader cl )
-        throws Exception
-    {
-                if ( cl != null )
-                {
-                    // sets this threads class loader
-                    // hopefully any threads spawned by this
-                    // will inherit this cl
-                    // this enables any class files imported
-                    // from the interpreter to be loaded
-                    // note: setting the classloader on the
-                    // interpreter has a slightly different
-                    // meaning in that the classloader for
-                    // the interpreter seems only to look for
-                    // source files ( bla.java ) in the classpath
-                    Thread.currentThread().setContextClassLoader(cl);
-                }
-                bsh.Interpreter interpreter = new bsh.Interpreter();
-                if ( cl != null )
-                {
-                    // additionally set class loader on the interpreter
-                    // to allow it to load java classes defined in source
-                    // files e.g. bla.java
-                    interpreter.getNameSpace().clear();
-                }
+    public Object execute(final XScriptContext context, ClassLoader cl)
+    throws Exception {
+        if (cl != null) {
+            // sets this threads class loader
+            // hopefully any threads spawned by this
+            // will inherit this cl
+            // this enables any class files imported
+            // from the interpreter to be loaded
+            // note: setting the classloader on the
+            // interpreter has a slightly different
+            // meaning in that the classloader for
+            // the interpreter seems only to look for
+            // source files ( bla.java ) in the classpath
+            Thread.currentThread().setContextClassLoader(cl);
+        }
+
+        bsh.Interpreter interpreter = new bsh.Interpreter();
+
+        if (cl != null) {
+            // additionally set class loader on the interpreter
+            // to allow it to load java classes defined in source
+            // files e.g. bla.java
+            interpreter.getNameSpace().clear();
+        }
 
 
-                // reset position
-                currentPosition = -1;
-                view.update();
+        // reset position
+        currentPosition = -1;
+        view.update();
 
-                interpreter.set("XSCRIPTCONTEXT", context);
-                interpreter.set("ARGUMENTS", new Object[0]);
+        interpreter.set("XSCRIPTCONTEXT", context);
+        interpreter.set("ARGUMENTS", new Object[0]);
 
-                Object result;
-                if (view.isModified()) {
-                    result = interpreter.eval(view.getText());
-                }
-                else {
-                    result = interpreter.eval(getText());
-                }
+        Object result;
+
+        if (view.isModified()) {
+            result = interpreter.eval(view.getText());
+        } else {
+            result = interpreter.eval(getText());
+        }
+
         return result;
     }
-    public void indicateErrorLine( int lineNum )
-    {
-        System.out.println("Beanshell indicateErrorLine " + lineNum );
+    public void indicateErrorLine(int lineNum) {
+        System.out.println("Beanshell indicateErrorLine " + lineNum);
         currentPosition = lineNum - 1;
         view.update();
     }

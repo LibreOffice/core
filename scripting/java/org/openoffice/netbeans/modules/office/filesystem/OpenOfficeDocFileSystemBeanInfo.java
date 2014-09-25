@@ -31,8 +31,7 @@ import org.openide.util.Utilities;
  * Description of the OpenOffice.org Document filesystem.
  */
 public class OpenOfficeDocFileSystemBeanInfo
-    extends SimpleBeanInfo
-{
+    extends SimpleBeanInfo {
     private static String ICONLOCATION =
         "org/openoffice/netbeans/modules/office/resources";
     private static String COLORICON16NAME =
@@ -43,49 +42,47 @@ public class OpenOfficeDocFileSystemBeanInfo
     /**
      * Retrieves an additional bean information.
      */
-    public BeanInfo[] getAdditionalBeanInfo()
-    {
+    public BeanInfo[] getAdditionalBeanInfo() {
         try {
             return new BeanInfo[] {
-                Introspector.getBeanInfo(FileSystem.class)
-            };
+                       Introspector.getBeanInfo(FileSystem.class)
+                   };
         } catch (IntrospectionException ie) {
             ErrorManager.getDefault().notify(ie);
             return null;
         }
     }
-/*
-    // If you have a visual dialog to customize configuration of the
-    // filesystem:
-    public BeanDescriptor getBeanDescriptor()
-    {
-        return new BeanDescriptor(OpenOfficeDocFileSystem.class,
-            OpenOfficeDocFileSystemCustomizer.class);
-    }
-*/
+    /*
+        // If you have a visual dialog to customize configuration of the
+        // filesystem:
+        public BeanDescriptor getBeanDescriptor()
+        {
+            return new BeanDescriptor(OpenOfficeDocFileSystem.class,
+                OpenOfficeDocFileSystemCustomizer.class);
+        }
+    */
     /**
      * Retrieves bean property descriptors.
      */
-    public PropertyDescriptor[] getPropertyDescriptors()
-    {
+    public PropertyDescriptor[] getPropertyDescriptors() {
         try {
             // Included only to make it a writable property (it is read-only
             // in FileSystem):
             PropertyDescriptor readOnly = new PropertyDescriptor(
                 "readOnly", OpenOfficeDocFileSystem.class);
             readOnly.setDisplayName(NbBundle.getMessage(
-                OpenOfficeDocFileSystemBeanInfo.class, "PROP_readOnly"));
+                                        OpenOfficeDocFileSystemBeanInfo.class, "PROP_readOnly"));
             readOnly.setShortDescription(NbBundle.getMessage(
-                OpenOfficeDocFileSystemBeanInfo.class, "HINT_readOnly"));
+                                             OpenOfficeDocFileSystemBeanInfo.class, "HINT_readOnly"));
 
             // This could be whatever properties you use to configure the
             // filesystem:
             PropertyDescriptor document = new PropertyDescriptor(
                 "Document", OpenOfficeDocFileSystem.class);
             document.setDisplayName(NbBundle.getMessage(
-                OpenOfficeDocFileSystemBeanInfo.class, "PROP_document"));
+                                        OpenOfficeDocFileSystemBeanInfo.class, "PROP_document"));
             document.setShortDescription(NbBundle.getMessage(
-                OpenOfficeDocFileSystemBeanInfo.class, "HINT_document"));
+                                             OpenOfficeDocFileSystemBeanInfo.class, "HINT_document"));
             // Request to the property editor that it be permitted only to
             // choose directories:
             document.setValue("directories", Boolean.FALSE);    // NOI18N
@@ -101,9 +98,8 @@ public class OpenOfficeDocFileSystemBeanInfo
     /**
      * Retrieves an icon by the icon type.
      */
-    public Image getIcon(int type)
-    {
-        if((type == BeanInfo.ICON_COLOR_16x16) ||
+    public Image getIcon(int type) {
+        if ((type == BeanInfo.ICON_COLOR_16x16) ||
             (type == BeanInfo.ICON_MONO_16x16)) {
             return Utilities.loadImage(COLORICON16NAME);
         } else {

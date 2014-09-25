@@ -24,8 +24,9 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
 
     /** Creates new form Welcome */
     public Welcome(InstallWizard wizard) {
-    this.wizard = wizard;
-    setBorder(new javax.swing.border.EtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+        this.wizard = wizard;
+        setBorder(new javax.swing.border.EtchedBorder(
+                      javax.swing.border.EtchedBorder.RAISED));
         initComponents();
     }
 
@@ -37,7 +38,7 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
     private void initComponents() {//GEN-BEGIN:initComponents
         welcomePanel = new javax.swing.JPanel();
         area = new javax.swing.JTextArea();
-    nextButtonEnable = true;
+        nextButtonEnable = true;
 
         setLayout(new java.awt.BorderLayout());
 
@@ -46,19 +47,20 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
         area.setLineWrap(true);
 
         String message = "\n\tOffice Scripting Framework Version 0.3" +
-            "\n\n\n\tPlease ensure that you have exited from Office";
+                         "\n\n\n\tPlease ensure that you have exited from Office";
 
-    setUpWelcomePanel(message);
+        setUpWelcomePanel(message);
 
     }//GEN-END:initComponents
 
-    private void setUpWelcomePanel(String message){
-    area.setText( message );
+    private void setUpWelcomePanel(String message) {
+        area.setText(message);
         welcomePanel.add(area, java.awt.BorderLayout.CENTER);
         add(welcomePanel, java.awt.BorderLayout.CENTER);
-    NavPanel nav = new NavPanel(wizard, false, nextButtonEnable, true, "", InstallWizard.VERSIONS);
-    nav.setNextListener(this);
-    add(nav, java.awt.BorderLayout.SOUTH);
+        NavPanel nav = new NavPanel(wizard, false, nextButtonEnable, true, "",
+                                    InstallWizard.VERSIONS);
+        nav.setNextListener(this);
+        add(nav, java.awt.BorderLayout.SOUTH);
     }
 
 
@@ -67,8 +69,7 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
         return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
     }
 
-    public void actionPerformed(ActionEvent ev)
-    {
+    public void actionPerformed(ActionEvent ev) {
         //Perform next actions here...
     }
 

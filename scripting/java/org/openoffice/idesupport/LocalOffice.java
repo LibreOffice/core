@@ -28,8 +28,7 @@ import java.net.ConnectException;
  * office has to be started with options appropriate for establishing
  * local connection.
  */
-public class LocalOffice
-{
+public class LocalOffice {
 
 
     /**
@@ -40,15 +39,13 @@ public class LocalOffice
      * @param port is a communication port.
      */
     protected void connect(String officePath, int port)
-        throws ConnectException
-    {
+    throws ConnectException {
     }
 
     /**
      * Closes the connection to the running office.
      */
-    public void disconnect()
-    {
+    public void disconnect() {
     }
 
     /**
@@ -56,7 +53,6 @@ public class LocalOffice
      *
      * @param uri is an identifier of storage has to be refreshed.
      */
-    public void refreshStorage(String uri)
-    {
+    public void refreshStorage(String uri) {
     }
 }

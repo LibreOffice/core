@@ -18,7 +18,6 @@
 
 package installer;
 
-public interface InstallListener
-{
+public interface InstallListener {
     void installationComplete(InstallationEvent e);
 }

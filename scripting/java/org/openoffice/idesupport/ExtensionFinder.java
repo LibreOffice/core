@@ -44,6 +44,7 @@ public class ExtensionFinder implements MethodFinder {
             return empty;
 
         parcelName = basedir.getName();
+
         if (parcelName.equals(ParcelZipper.CONTENTS_DIRNAME))
             parcelName = basedir.getParentFile().getName();
 
@@ -51,10 +52,12 @@ public class ExtensionFinder implements MethodFinder {
 
         if (files.size() != 0)
             return files.toArray(empty);
+
         return empty;
     }
 
-    private void findFiles(ArrayList<ScriptEntry> list, File basedir, String parcelName) {
+    private void findFiles(ArrayList<ScriptEntry> list, File basedir,
+                           String parcelName) {
         File[] children = basedir.listFiles();
         File f;
 
@@ -67,7 +70,7 @@ public class ExtensionFinder implements MethodFinder {
                 for (int j = 0; j < extensions.length; j++) {
                     if (f.getName().endsWith(extensions[j])) {
                         ScriptEntry entry = new ScriptEntry(language,
-                            f.getName(), parcelName);
+                                                            f.getName(), parcelName);
                         list.add(entry);
                         break;
                     }

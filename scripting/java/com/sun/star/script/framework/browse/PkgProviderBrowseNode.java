@@ -25,14 +25,17 @@ import com.sun.star.script.framework.log.*;
 import com.sun.star.script.framework.container.*;
 
 
-public class PkgProviderBrowseNode extends ProviderBrowseNode
-{
+public class PkgProviderBrowseNode extends ProviderBrowseNode {
 
-    public PkgProviderBrowseNode( ScriptProvider provider, ParcelContainer container, XComponentContext xCtx ) {
-        super( provider, container, xCtx );
-        LogUtils.DEBUG("*** PkgProviderBrowseNode ctor container name = " + container.getName());
-        LogUtils.DEBUG("*** PkgProviderBrowseNode ctor container path = " + container.getParcelContainerDir());
-        LogUtils.DEBUG("*** PkgProviderBrowseNode ctor, container has num parcels = " + container.getElementNames().length);
+    public PkgProviderBrowseNode(ScriptProvider provider, ParcelContainer container,
+                                 XComponentContext xCtx) {
+        super(provider, container, xCtx);
+        LogUtils.DEBUG("*** PkgProviderBrowseNode ctor container name = " +
+                       container.getName());
+        LogUtils.DEBUG("*** PkgProviderBrowseNode ctor container path = " +
+                       container.getParcelContainerDir());
+        LogUtils.DEBUG("*** PkgProviderBrowseNode ctor, container has num parcels = " +
+                       container.getElementNames().length);
     }
 
     @Override

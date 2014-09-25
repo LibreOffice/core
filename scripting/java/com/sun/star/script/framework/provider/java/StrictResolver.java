@@ -28,14 +28,12 @@ import com.sun.star.script.framework.log.LogUtils;
  * method accepting all of the arguments specified in the ScriptDescriptor
  * can be found in the Class.
  */
-public class StrictResolver implements Resolver
-{
+public class StrictResolver implements Resolver {
     /**
      *Constructor for the StrictResolver object
      */
-    public StrictResolver()
-    {
-        LogUtils.DEBUG( this.getClass().getName() + " created" );
+    public StrictResolver() {
+        LogUtils.DEBUG(this.getClass().getName() + " created");
     }
 
     /**
@@ -47,49 +45,40 @@ public class StrictResolver implements Resolver
      * @param  c   the Class file in which to search for the method
      * @return     the ScriptProxy matching the criteria, or null if no match is found
      */
-    public ScriptProxy getProxy( ScriptDescriptor sd, Class<?> c )
-    throws NoSuchMethodException
-    {
+    public ScriptProxy getProxy(ScriptDescriptor sd, Class<?> c)
+    throws NoSuchMethodException {
         Method m = null;
 
-        LogUtils.DEBUG( "StrictResolver.getProxy() for: " + sd.toString() );
+        LogUtils.DEBUG("StrictResolver.getProxy() for: " + sd.toString());
 
-        try
-        {
-            m = resolveArguments( sd, c );
-        }
-        catch ( ClassNotFoundException e )
-        {
-            throw new NoSuchMethodException( "StrictResolver.getProxy: Can't find method: "
-            + sd.getMethodName() + ":" + e.getMessage() );
-        }
-        catch ( NoSuchMethodException e )
-        {
-            throw new NoSuchMethodException( "StrictResolver.getProxy: Can't find method: "
-                + sd.getMethodName() + ":" + e.getMessage() );
+        try {
+            m = resolveArguments(sd, c);
+        } catch (ClassNotFoundException e) {
+            throw new NoSuchMethodException("StrictResolver.getProxy: Can't find method: "
+                                            + sd.getMethodName() + ":" + e.getMessage());
+        } catch (NoSuchMethodException e) {
+            throw new NoSuchMethodException("StrictResolver.getProxy: Can't find method: "
+                                            + sd.getMethodName() + ":" + e.getMessage());
         }
 
-        ScriptProxy sp = new ScriptProxy( m );
+        ScriptProxy sp = new ScriptProxy(m);
 
         int modifiers = m.getModifiers();
-        if ( !Modifier.isStatic( modifiers ) )
-        {
+
+        if (!Modifier.isStatic(modifiers)) {
             Object o;
-            try
-            {
+
+            try {
                 o = c.newInstance();
+            } catch (InstantiationException ie) {
+                throw new NoSuchMethodException("getScriptProxy: Can't instantiate: " +
+                                                c.getName());
+            } catch (IllegalAccessException iae) {
+                throw new NoSuchMethodException("getScriptProxy: Can't access: "
+                                                + c.getName());
             }
-            catch ( InstantiationException ie )
-            {
-                throw new NoSuchMethodException( "getScriptProxy: Can't instantiate: " +
-                    c.getName() );
-            }
-            catch ( IllegalAccessException iae )
-            {
-                throw new NoSuchMethodException( "getScriptProxy: Can't access: "
-                    + c.getName() );
-            }
-            sp.setTargetObject( o );
+
+            sp.setTargetObject(o);
         }
 
         return sp;
@@ -105,10 +94,9 @@ public class StrictResolver implements Resolver
      * @exception  ClassNotFoundException
      * @exception  NoSuchMethodException
      */
-    private Method resolveArguments( ScriptDescriptor sd, Class<?> c )
-    throws ClassNotFoundException, NoSuchMethodException
-    {
-        return c.getMethod( sd.getMethodName(), sd.getArgumentTypes() );
+    private Method resolveArguments(ScriptDescriptor sd, Class<?> c)
+    throws ClassNotFoundException, NoSuchMethodException {
+        return c.getMethod(sd.getMethodName(), sd.getArgumentTypes());
     }
 }
 

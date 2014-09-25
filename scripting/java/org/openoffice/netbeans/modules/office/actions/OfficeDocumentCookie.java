@@ -22,8 +22,7 @@ import java.util.Enumeration;
 import javax.swing.event.ChangeListener;
 import org.openide.nodes.Node;
 
-public interface OfficeDocumentCookie extends Node.Cookie
-{
+public interface OfficeDocumentCookie extends Node.Cookie {
     void mount();
     Enumeration getParcels();
     void removeParcel(String name);

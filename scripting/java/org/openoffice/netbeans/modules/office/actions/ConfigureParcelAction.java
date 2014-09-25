@@ -43,15 +43,15 @@ public class ConfigureParcelAction extends CookieAction {
         return HelpCtx.DEFAULT_HELP;
     }
 
-    protected void performAction(final Node[] activatedNodes)
-    {
+    protected void performAction(final Node[] activatedNodes) {
         FrameworkJarChecker.mountDependencies();
 
         RequestProcessor.getDefault().post(new Runnable() {
             public void run() {
                 for (int i = 0; i < activatedNodes.length; i++) {
                     ParcelFolderCookie pfc = (ParcelFolderCookie)
-                        activatedNodes[i].getCookie(ParcelFolderCookie.class);
+                                             activatedNodes[i].getCookie(ParcelFolderCookie.class);
+
                     if (pfc != null)
                         pfc.configure();
                 }

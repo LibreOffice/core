@@ -53,14 +53,13 @@ public class Manifest {
 
         try {
             root = (Element)
-                document.getElementsByTagName("manifest:manifest").item(0);
+                   document.getElementsByTagName("manifest:manifest").item(0);
 
             el = document.createElement("manifest:file-entry");
             el.setAttribute("manifest:media-type", type);
             el.setAttribute("manifest:full-path", entry);
             root.appendChild(el);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Error adding entry: " + e.getMessage());
         }
     }
@@ -78,25 +77,28 @@ public class Manifest {
 
         try {
             root = (Element)
-                document.getElementsByTagName("manifest:manifest").item(0);
+                   document.getElementsByTagName("manifest:manifest").item(0);
 
             NodeList nl = root.getElementsByTagName("manifest:file-entry");
+
             if (nl == null || (len = nl.getLength()) == 0)
                 return;
 
             ArrayList<Element> list = new ArrayList<Element>();
+
             for (int i = 0; i < len; i++) {
                 el = (Element)nl.item(i);
+
                 if (el.getAttribute("manifest:full-path").startsWith(entry)) {
                     list.add(el);
                 }
             }
 
             Iterator iter = list.iterator();
+
             while (iter.hasNext())
                 root.removeChild((Element)iter.next());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Error removing entry: " + e.getMessage());
         }
     }
@@ -109,8 +111,7 @@ public class Manifest {
             out = new ByteArrayOutputStream();
             write(out);
             result = new ByteArrayInputStream(out.toByteArray());
-        }
-        finally {
+        } finally {
             if (out != null)
                 out.close();
         }

@@ -56,8 +56,7 @@ public class TestDataLoader {
 
                 current = previous = st.nextToken();
                 list.add(getParameters(st));
-            }
-            else {
+            } else {
                 in.close();
                 return;
             }
@@ -78,14 +77,13 @@ public class TestDataLoader {
 
             tEnv.addObjRelation(previous, list);
             in.close();
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
         }
     }
 
     private static Parameters getParameters(StringTokenizer st) {
         String separator = "=";
-        HashMap<String,Object> map = new HashMap<String,Object>(5);
+        HashMap<String, Object> map = new HashMap<String, Object>(5);
 
         while (st.hasMoreTokens()) {
             String pair = st.nextToken();
@@ -98,12 +96,15 @@ public class TestDataLoader {
                 continue;
 
             name = tokens.nextToken();
+
             if (tokens.countTokens() == 1)
                 value = tokens.nextToken();
             else {
                 StringBuffer buf = new StringBuffer(tokens.nextToken());
+
                 while (tokens.hasMoreTokens())
                     buf.append(separator).append(tokens.nextToken());
+
                 value = buf.toString();
             }
 

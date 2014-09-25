@@ -34,18 +34,21 @@ public class ParcelDescriptorDataObject extends MultiDataObject {
 
     private boolean canParse = false;
 
-    public ParcelDescriptorDataObject(FileObject pf, ParcelDescriptorDataLoader loader) throws DataObjectExistsException {
+    public ParcelDescriptorDataObject(FileObject pf,
+                                      ParcelDescriptorDataLoader loader) throws DataObjectExistsException {
         super(pf, loader);
         init();
     }
 
     private void init() {
         FileObject fo = getPrimaryFile();
+
         if (FileUtil.toFile(fo) != null)
             canParse = true;
 
         CookieSet cookies = getCookieSet();
         cookies.add(new ParcelDescriptorEditorSupport(this));
+
         if (canParse)
             cookies.add(new ParcelDescriptorParserSupport(getPrimaryFile()));
     }

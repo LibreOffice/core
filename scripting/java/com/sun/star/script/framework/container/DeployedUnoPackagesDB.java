@@ -40,11 +40,11 @@ public class DeployedUnoPackagesDB {
 
     public DeployedUnoPackagesDB() throws IOException {
         ByteArrayInputStream bis = null;
+
         try {
             bis = new ByteArrayInputStream(EMPTY_DOCUMENT);
             this.document = XMLParserFactory.getParser().parse(bis);
-        }
-        finally {
+        } finally {
             if (bis != null)
                 bis.close();
         }
@@ -58,8 +58,7 @@ public class DeployedUnoPackagesDB {
         this(XMLParserFactory.getParser().parse(is));
     }
 
-    public String[] getDeployedPackages( String language )
-    {
+    public String[] getDeployedPackages(String language) {
         ArrayList<String> packageUrls = new ArrayList<String>(4);
         Element main = document.getDocumentElement();
         Element root = null;
@@ -67,38 +66,36 @@ public class DeployedUnoPackagesDB {
         NodeList langNodes = null;
 
         if ((langNodes = main.getElementsByTagName("language")) != null &&
-            (len = langNodes.getLength()) != 0)
-        {
-            for ( int i=0; i<len; i++ )
-            {
-                Element e = (Element)langNodes.item( i );
-                if ( e.getAttribute("value").equals(language) )
-                {
+            (len = langNodes.getLength()) != 0) {
+            for (int i = 0; i < len; i++) {
+                Element e = (Element)langNodes.item(i);
+
+                if (e.getAttribute("value").equals(language)) {
                     root = e;
                     break;
                 }
             }
         }
-        if ( root != null )
-        {
+
+        if (root != null) {
             len = 0;
             NodeList packages = null;
+
             if ((packages = root.getElementsByTagName("package")) != null &&
-                (len = packages.getLength()) != 0)
-            {
+                (len = packages.getLength()) != 0) {
 
-                for ( int i=0; i<len; i++ )
-                {
+                for (int i = 0; i < len; i++) {
 
-                    Element e = (Element)packages.item( i );
-                    packageUrls.add( e.getAttribute("value") );
+                    Element e = (Element)packages.item(i);
+                    packageUrls.add(e.getAttribute("value"));
                 }
             }
         }
-        if ( !packageUrls.isEmpty() )
-        {
-            return packageUrls.toArray( new String[packageUrls.size()] );
+
+        if (!packageUrls.isEmpty()) {
+            return packageUrls.toArray(new String[packageUrls.size()]);
         }
+
         return new String[0];
     }
 
@@ -111,52 +108,49 @@ public class DeployedUnoPackagesDB {
     }
 
 
-    public boolean removePackage( String language, String url )
-    {
+    public boolean removePackage(String language, String url) {
         Element main = document.getDocumentElement();
         Element langNode = null;
         int len = 0;
         NodeList langNodes = null;
         boolean result = false;
+
         if ((langNodes = main.getElementsByTagName("language")) != null &&
-            (len = langNodes.getLength()) != 0)
-        {
-            for ( int i=0; i<len; i++ )
-            {
-                Element e = (Element)langNodes.item( i );
-                if ( e.getAttribute("value").equals(language) )
-                {
+            (len = langNodes.getLength()) != 0) {
+            for (int i = 0; i < len; i++) {
+                Element e = (Element)langNodes.item(i);
+
+                if (e.getAttribute("value").equals(language)) {
                     langNode = e;
                     break;
                 }
             }
         }
-        if ( langNode != null )
-        {
+
+        if (langNode != null) {
             len = 0;
             NodeList packages = null;
-            if ((packages = langNode.getElementsByTagName("package")) != null &&
-                (len = packages.getLength()) != 0)
-            {
-                for ( int i=0; i<len; i++ )
-                {
 
-                    Element e = (Element)packages.item( i );
+            if ((packages = langNode.getElementsByTagName("package")) != null &&
+                (len = packages.getLength()) != 0) {
+                for (int i = 0; i < len; i++) {
+
+                    Element e = (Element)packages.item(i);
                     String value =  e.getAttribute("value");
 
-                    if ( value.equals(url) )
-                    {
-                        langNode.removeChild( e );
+                    if (value.equals(url)) {
+                        langNode.removeChild(e);
                         result = true;
                         break;
                     }
                 }
             }
         }
+
         return result;
     }
 
-    public void addPackage(String language, String url ) {
+    public void addPackage(String language, String url) {
         Element main = document.getDocumentElement();
         Element langNode = null;
         Element pkgNode = null;
@@ -165,25 +159,24 @@ public class DeployedUnoPackagesDB {
         NodeList langNodes = null;
 
         if ((langNodes = document.getElementsByTagName("language")) != null &&
-            (len = langNodes.getLength()) != 0)
-        {
-            for ( int i=0; i<len; i++ )
-            {
-                Element e = (Element)langNodes.item( i );
-                if ( e.getAttribute("value").equals(language) )
-                {
+            (len = langNodes.getLength()) != 0) {
+            for (int i = 0; i < len; i++) {
+                Element e = (Element)langNodes.item(i);
+
+                if (e.getAttribute("value").equals(language)) {
                     langNode = e;
                     break;
                 }
             }
         }
-        if ( langNode == null )
-        {
+
+        if (langNode == null) {
             langNode = document.createElement("language");
-            langNode.setAttribute( "value", language );
+            langNode.setAttribute("value", language);
         }
+
         pkgNode = document.createElement("package");
-        pkgNode.setAttribute( "value", url );
+        pkgNode.setAttribute("value", url);
 
         langNode.appendChild(pkgNode);
         //add to the Top Element

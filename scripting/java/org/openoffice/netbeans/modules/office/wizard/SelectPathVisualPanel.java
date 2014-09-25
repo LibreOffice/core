@@ -52,8 +52,7 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
                 OfficeInstallation oi = (OfficeInstallation)enumer.nextElement();
                 installationsComboBox.addItem(oi);
             }
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             installationsComboBox.addItem("<empty>");
         }
 
@@ -63,15 +62,16 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         }
 
         installationsComboBox.addActionListener(
-            new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    installationsComboBoxActionPerformed(evt);
-                }
+        new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                installationsComboBoxActionPerformed(evt);
             }
+        }
         );
 
         // Provide a name in the title bar.
-        setName(NbBundle.getMessage(SelectPathVisualPanel.class, "TITLE_SelectPathVisualPanel"));
+        setName(NbBundle.getMessage(SelectPathVisualPanel.class,
+                                    "TITLE_SelectPathVisualPanel"));
     }
 
     private void installationsComboBoxActionPerformed(
@@ -155,7 +155,8 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
 
     }//GEN-END:initComponents
 
-    private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
+    private void browseButtonActionPerformed(java.awt.event.ActionEvent
+            evt) {//GEN-FIRST:event_browseButtonActionPerformed
         // Add your handling code here:
         File target = null;
 
@@ -167,10 +168,10 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
             target = chooser.getSelectedFile();
 
             String path;
+
             try {
                 path = target.getCanonicalPath();
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
                 path = target.getAbsolutePath();
             }
 

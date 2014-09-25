@@ -54,10 +54,10 @@ public class ScriptNode extends AbstractNode {
 
     protected SystemAction[] createActions() {
         return new SystemAction[] {
-            SystemAction.get(ToolsAction.class),
-            null,
-            SystemAction.get(PropertiesAction.class),
-        };
+                   SystemAction.get(ToolsAction.class),
+                   null,
+                   SystemAction.get(PropertiesAction.class),
+               };
     }
 
     public HelpCtx getHelpCtx() {
@@ -75,12 +75,14 @@ public class ScriptNode extends AbstractNode {
     protected Sheet createSheet() {
         Sheet sheet = super.createSheet();
         Sheet.Set props = sheet.get(Sheet.PROPERTIES);
+
         if (props == null) {
             props = Sheet.createPropertiesSet();
             sheet.put(props);
         }
 
         org.openide.nodes.Node.Property prop = null;
+
         if ((prop = getStringProperty(LOGICAL_NAME)) != null)
             props.put(prop);
 
@@ -92,7 +94,8 @@ public class ScriptNode extends AbstractNode {
 
     private org.openide.nodes.Node.Property getStringProperty(String name) {
         NodeList nl = element.getElementsByTagName(name);
-        if(nl.getLength() != 1)
+
+        if (nl.getLength() != 1)
             return null;
 
         Element nameElement = (Element)nl.item(0);
@@ -107,7 +110,7 @@ public class ScriptNode extends AbstractNode {
 
         public StringProperty(ScriptNode sn, String name, String value) {
             super(value, String.class, name,
-                "The name of the java language method for this script");
+                  "The name of the java language method for this script");
             this.sn = sn;
             this.name = name;
             this.value = value;

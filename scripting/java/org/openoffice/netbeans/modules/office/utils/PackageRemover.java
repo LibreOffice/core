@@ -39,24 +39,25 @@ public class PackageRemover {
 
         try {
             String line;
+
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("package")) {
                     String newDeclaration = evaluate(line);
+
                     if (newDeclaration != null) {
                         out.write(newDeclaration, 0, newDeclaration.length());
                         out.newLine();
                     }
-                }
-                else {
+                } else {
                     out.write(line, 0, line.length());
                     out.newLine();
                 }
             }
-        }
-        finally {
+        } finally {
             if (in != null) {
                 in.close();
             }
+
             if (out != null) {
                 out.close();
             }
@@ -65,8 +66,7 @@ public class PackageRemover {
         if (!source.delete()) {
             tmp.delete();
             throw new IOException("Could not overwrite " + source);
-        }
-        else {
+        } else {
             tmp.renameTo(source);
         }
     }
@@ -74,10 +74,12 @@ public class PackageRemover {
     public static String evaluate(String line) {
 
         int idx = line.indexOf(ParcelZipper.CONTENTS_DIRNAME);
+
         if (idx == -1)
             return line;
 
         idx = idx + ParcelZipper.CONTENTS_DIRNAME.length();
+
         if (line.charAt(idx) == '.')
             return "package " + line.substring(idx + 1);;
 
@@ -89,8 +91,7 @@ public class PackageRemover {
 
         try {
             removeDeclaration(source);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
