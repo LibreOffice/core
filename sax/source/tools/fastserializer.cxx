@@ -271,7 +271,7 @@ namespace sax_fastparser {
 
             writeBytes(toUnoSequence(maEqualSignAndQuote));
 
-            write(escapeXml(Attribs->getValue(pFastAttr[j].Token)));
+            write(escapeXml(pFastAttr[j].Value));
 
             writeBytes(toUnoSequence(maQuote));
         }
