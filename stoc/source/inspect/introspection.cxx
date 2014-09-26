@@ -466,7 +466,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
 
         case MAP_FIELD:
         {
-            Reference<XIdlField> xField = (XIdlField*)(aInterfaceSeq1.getConstArray()[ nSequenceIndex ].get());
+            Reference<XIdlField> xField = static_cast<XIdlField*>(aInterfaceSeq1.getConstArray()[ nSequenceIndex ].get());
             Reference<XIdlField2> xField2(xField, UNO_QUERY);
             if( xField2.is() )
             {
@@ -491,7 +491,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
         case MAP_SETONLY:
         {
             // Retrieve set-Methods
-            Reference<XIdlMethod> xMethod = (XIdlMethod*)(aInterfaceSeq2.getConstArray()[ nSequenceIndex ].get());
+            Reference<XIdlMethod> xMethod = static_cast<XIdlMethod*>(aInterfaceSeq2.getConstArray()[ nSequenceIndex ].get());
             if( xMethod.is() )
             {
                 Sequence<Any> args( 1 );
@@ -582,7 +582,7 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
 
         case MAP_FIELD:
         {
-            Reference<XIdlField> xField = (XIdlField*)(aInterfaceSeq1.getConstArray()[ nSequenceIndex ].get());
+            Reference<XIdlField> xField = static_cast<XIdlField*>(aInterfaceSeq1.getConstArray()[ nSequenceIndex ].get());
             if( xField.is() )
             {
                 aRet = xField->get( obj );
@@ -600,7 +600,7 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
         case MAP_GETSET:
         {
             // get-Methode holen
-            Reference<XIdlMethod> xMethod = (XIdlMethod*)(aInterfaceSeq1.getConstArray()[ nSequenceIndex ].get());
+            Reference<XIdlMethod> xMethod = static_cast<XIdlMethod*>(aInterfaceSeq1.getConstArray()[ nSequenceIndex ].get());
             if( xMethod.is() )
             {
                 Sequence<Any> args;

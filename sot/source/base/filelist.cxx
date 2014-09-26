@@ -73,7 +73,7 @@ void FileList::Save( SvStream& rOStm )
 
 void FileList::Assign( const SvDataCopyStream& rCopyStream )
 {
-    *this = (const FileList&)rCopyStream;
+    *this = static_cast<const FileList&>(rCopyStream);
 }
 
 /******************************************************************************

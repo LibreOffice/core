@@ -139,7 +139,7 @@ namespace
     OUString getLibraryLocation()
     {
         OUString libraryFileUrl;
-        OSL_VERIFY(osl::Module::getUrlFromAddress((void *)(sal_IntPtr)getLibraryLocation, libraryFileUrl));
+        OSL_VERIFY(osl::Module::getUrlFromAddress(reinterpret_cast<void *>(getLibraryLocation), libraryFileUrl));
         return getDirFromFile(libraryFileUrl);
     }
 
@@ -388,7 +388,7 @@ bool getJavaProps(const OUString & exePath,
     //next to the plugin, except on OS X where it is in ../Resources/java relative
     //to the plugin.
     OUString sThisLib;
-    if (osl_getModuleURLFromAddress((void *) (sal_IntPtr)& getJavaProps,
+    if (osl_getModuleURLFromAddress(reinterpret_cast<void *>(&getJavaProps),
                                     & sThisLib.pData) == sal_False)
     {
         return false;

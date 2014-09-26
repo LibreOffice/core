@@ -909,7 +909,7 @@ struct hashObjectContainer_Impl
 {
     size_t operator()(const Reference< XInterface > & xRef) const
     {
-        return (size_t)xRef.get();
+        return reinterpret_cast<size_t>(xRef.get());
     }
 };
 

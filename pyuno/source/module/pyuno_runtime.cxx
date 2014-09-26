@@ -561,7 +561,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             {
                 sal_Int64 that = tunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
                 if( that )
-                    return ((Adapter*)sal::static_int_cast< sal_IntPtr >(that))->getWrappedObject();
+                    return reinterpret_cast<Adapter*>(that)->getWrappedObject();
             }
         }
         //This is just like the struct case:
@@ -837,8 +837,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                 // object got already bridged !
                 Reference< com::sun::star::lang::XUnoTunnel > tunnel( adapterObject, UNO_QUERY );
 
-                Adapter *pAdapter = ( Adapter * )
-                    sal::static_int_cast< sal_IntPtr >(
+                Adapter *pAdapter = reinterpret_cast<Adapter*>(
                         tunnel->getSomething(
                             ::pyuno::Adapter::getUnoTunnelImplementationId() ) );
 

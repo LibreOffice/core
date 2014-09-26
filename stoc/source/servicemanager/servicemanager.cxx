@@ -132,7 +132,7 @@ struct hashRef_Impl
     {
         // query to XInterface. The cast to XInterface* must be the same for the same object
         Reference<XInterface > x( Reference<XInterface >::query( rName ) );
-        return (size_t)x.get();
+        return reinterpret_cast<size_t>(x.get());
     }
 };
 

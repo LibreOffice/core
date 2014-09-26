@@ -678,7 +678,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // all versions below 1.5.1
     int n = 0;
     options[n].optionString= (char *) "abort";
-    options[n].extraInfo= (void* )(sal_IntPtr)abort_handler;
+    options[n].extraInfo= reinterpret_cast<void*>(abort_handler);
     ++n;
     OString sClassPathOption;
     for (int i = 0; i < cOptions; i++)

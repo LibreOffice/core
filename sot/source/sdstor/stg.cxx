@@ -827,7 +827,7 @@ bool Storage::MoveTo( const OUString& rElem, BaseStorage* pODest, const OUString
         Storage *pOther = PTR_CAST( Storage, pODest );
         if( pOther && pIo == pOther->pIo && rElem == rNew )
         {
-            Storage *p = (Storage*) pODest;
+            Storage *p = static_cast<Storage*>(pODest);
             Storage *pDest = p;
             // both storages are conventional storages, use implementation dependent code
             if( !pElem->IsContained( pDest->pEntry ) )

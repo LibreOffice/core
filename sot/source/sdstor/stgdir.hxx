@@ -114,8 +114,8 @@ class StgIterator : public StgAvlIterator
 {
 public:
     StgIterator( StgDirEntry& rStg ) : StgAvlIterator( rStg.pDown ) {}
-    StgDirEntry* First() { return (StgDirEntry*) StgAvlIterator::First(); }
-    StgDirEntry* Next()  { return (StgDirEntry*) StgAvlIterator::Next();  }
+    StgDirEntry* First() { return static_cast<StgDirEntry*>( StgAvlIterator::First() ); }
+    StgDirEntry* Next()  { return static_cast<StgDirEntry*>( StgAvlIterator::Next() );  }
 };
 
 #endif

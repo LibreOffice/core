@@ -77,7 +77,7 @@ static OUString invadp_getImplementationName()
 struct hash_ptr
 {
     inline size_t operator() ( void * p ) const
-        { return (size_t)p; }
+        { return reinterpret_cast<size_t>(p); }
 };
 typedef boost::unordered_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
 typedef boost::unordered_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;

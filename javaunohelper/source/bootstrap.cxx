@@ -76,7 +76,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             while (nPos < len)
             {
                 // name
-                jstring jstr = (jstring)jni_env->GetObjectArrayElement( jpairs, nPos );
+                jstring jstr = static_cast<jstring>(jni_env->GetObjectArrayElement( jpairs, nPos ));
                 if (JNI_FALSE != jni_env->ExceptionCheck())
                 {
                     jni_env->ExceptionClear();
@@ -86,7 +86,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                 {
                     OUString name( ::javaunohelper::jstring_to_oustring( jstr, jni_env ) );
                     // value
-                    jstr = (jstring)jni_env->GetObjectArrayElement( jpairs, nPos +1 );
+                    jstr = static_cast<jstring>(jni_env->GetObjectArrayElement( jpairs, nPos +1 ));
                     if (JNI_FALSE != jni_env->ExceptionCheck())
                     {
                         jni_env->ExceptionClear();

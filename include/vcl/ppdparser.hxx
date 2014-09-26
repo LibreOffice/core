@@ -108,7 +108,7 @@ public:
 struct PPDKeyhash
 {
     size_t operator()( const PPDKey * pKey) const
-        { return (size_t)pKey; }
+        { return reinterpret_cast<size_t>(pKey); }
 };
 
 

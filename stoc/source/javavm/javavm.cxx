@@ -1245,7 +1245,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:FindClass java.lang.Class", 0);
                     jmethodID jmName= pJNIEnv->GetMethodID( jcClass,"getName","()Ljava/lang/String;");
                     if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID java.lang.Class.getName", 0);
-                    jstring jsClass= (jstring) pJNIEnv->CallObjectMethod( jcSec, jmName);
+                    jstring jsClass= static_cast<jstring>(pJNIEnv->CallObjectMethod( jcSec, jmName));
                     const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, NULL);
                     OUString sName( jcharName);
                     jboolean bIsSandbox;
