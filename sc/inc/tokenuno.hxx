@@ -136,9 +136,7 @@ public:
 class ScFormulaOpCodeMapperObj : public formula::FormulaOpCodeMapperObj
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> && _pCompiler);
 };
 
 #endif

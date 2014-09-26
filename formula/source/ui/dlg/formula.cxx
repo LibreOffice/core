@@ -133,7 +133,7 @@ namespace formula
     public:
         mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
         uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
-        ::std::auto_ptr<FormulaTokenArray>                      m_pTokenArray;
+        ::std::unique_ptr<FormulaTokenArray>                    m_pTokenArray;
         mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aSpecialOpCodes;
         mutable const sheet::FormulaOpCodeMapEntry*             m_pSpecialOpCodesEnd;
         mutable uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;

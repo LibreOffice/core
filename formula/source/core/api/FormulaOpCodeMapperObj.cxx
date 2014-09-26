@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <utility>
+
 #include "formula/FormulaOpCodeMapperObj.hxx"
 #include "formula/opcode.hxx"
 #include <comphelper/sequence.hxx>
@@ -30,12 +35,10 @@ sal_Bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const OUString& _rSer
     return cppu::supportsService(this, _rServiceName);
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-FormulaOpCodeMapperObj::FormulaOpCodeMapperObj(::std::auto_ptr<FormulaCompiler> _pCompiler)
-: m_pCompiler(_pCompiler)
+FormulaOpCodeMapperObj::FormulaOpCodeMapperObj(::std::unique_ptr<FormulaCompiler> && _pCompiler)
+: m_pCompiler(std::move(_pCompiler))
 {
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 FormulaOpCodeMapperObj::~FormulaOpCodeMapperObj()
 {
@@ -102,16 +105,11 @@ uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNa
     return aSeq;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 uno::Reference< uno::XInterface > SAL_CALL FormulaOpCodeMapperObj::create(
                 uno::Reference< uno::XComponentContext > const & /*_xContext*/)
 {
-    return static_cast<sheet::XFormulaOpCodeMapper*>(new FormulaOpCodeMapperObj(::std::auto_ptr<FormulaCompiler>(new FormulaCompiler())));
+    return static_cast<sheet::XFormulaOpCodeMapper*>(new FormulaOpCodeMapperObj(::std::unique_ptr<FormulaCompiler>(new FormulaCompiler())));
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
-
-
-
 
 } // formula
 

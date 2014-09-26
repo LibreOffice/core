@@ -59,9 +59,7 @@ public:
     virtual ~FormulaModalDialog();
 
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<FormulaDlg_Impl> m_pImpl;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
 
 protected:
 
@@ -99,9 +97,7 @@ public:
                                     , IControlReferenceHandler* _pDlg = NULL );
     virtual ~FormulaDlg();
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<FormulaDlg_Impl> m_pImpl;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
 
     DECL_LINK( UpdateFocusHdl, void*);
 protected:

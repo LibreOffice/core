@@ -33,7 +33,7 @@ namespace formula
 {
     class FORMULA_DLLPUBLIC FormulaHelper
     {
-        ::std::auto_ptr<SvtSysLocale>   m_pSysLocale;
+        ::std::unique_ptr<SvtSysLocale> m_pSysLocale;
         const CharClass*                m_pCharClass;
         const IFunctionManager*         m_pFunctionManager;
         const sal_Unicode open;

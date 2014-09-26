@@ -491,11 +491,9 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
     return !bError;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler)
-: formula::FormulaOpCodeMapperObj(_pCompiler)
+ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> && _pCompiler)
+: formula::FormulaOpCodeMapperObj(std::move(_pCompiler))
 {
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

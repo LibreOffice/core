@@ -76,7 +76,7 @@ public:
     virtual OUString getCurrentFormula() const SAL_OVERRIDE;
 
     virtual formula::IFunctionManager* getFunctionManager() SAL_OVERRIDE;
-    virtual ::std::auto_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) SAL_OVERRIDE;
+    virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const SAL_OVERRIDE;
     virtual ::com::sun::star::table::CellAddress getReferencePosition() const SAL_OVERRIDE;

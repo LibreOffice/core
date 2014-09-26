@@ -147,7 +147,7 @@ namespace formula
         virtual void setReferenceInput(const FormEditData* _pData) = 0;
 
         virtual IFunctionManager*   getFunctionManager() = 0;
-        virtual ::std::auto_ptr<FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) = 0;
+        virtual ::std::unique_ptr<FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) = 0;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;
