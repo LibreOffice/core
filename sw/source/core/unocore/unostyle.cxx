@@ -692,7 +692,7 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nTempIndex)
                     aRet.setValue(&xStyle, cppu::UnoType<style::XStyle>::get());
                 }
                 else
-                    throw container::NoSuchElementException();
+                    throw uno::RuntimeException();
             }
             else
                 throw lang::IndexOutOfBoundsException();
