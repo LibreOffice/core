@@ -327,6 +327,16 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
 // #i33136#
 bool FuPoor::doConstructOrthogonal() const
 {
+    // Check whether an image is selected -> they should scale proportionally
+    if (pView->AreObjectsMarked())
+    {
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        if (rMarkList.GetMarkCount() == 1)
+        {
+            if (rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF)
+                return true;
+        }
+    }
     return false;
 }
 
