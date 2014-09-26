@@ -39,9 +39,14 @@
 package org.mozilla.gecko.gfx;
 
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.util.Log;
 
+import org.libreoffice.TileProvider;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -49,9 +54,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Encapsulates the logic needed to draw a layer made of multiple tiles.
  */
 public class MultiTileLayer extends Layer {
-    private static final String LOGTAG = "GeckoMultiTileLayer";
+    private static final String LOGTAG = "MultiTileLayer";
 
+    private static int TILE_SIZE = 256;
     private final List<SubTile> mTiles;
+    private TileProvider tileProvider;
+    private float currentZoomFactor;
+    private RectF tileViewPort = new RectF();
+    private FloatSize currentPageSize = new FloatSize(0, 0);
+    private boolean shouldRefreshZoom = true;
 
     public MultiTileLayer() {
         super();
@@ -118,7 +129,12 @@ public class MultiTileLayer extends Layer {
             }
 
             if (origin != null) {
-                layer.getPosition().offsetTo(origin.x + layer.x, origin.y + layer.y);
+                Rect position = layer.getPosition();
+                int positionX = origin.x + Math.round(layer.x / layer.zoom);
+                int positionY = origin.y + Math.round(layer.y / layer.zoom);
+                int tileSize = Math.round(256.0f / layer.zoom);
+                position.set(positionX, positionY, positionX + tileSize, positionY + tileSize);
+                layer.setPosition(position);
             }
             if (resolution >= 0.0f) {
                 layer.setResolution(resolution);
@@ -128,11 +144,6 @@ public class MultiTileLayer extends Layer {
                 layer.endTransaction();
             }
         }
-    }
-
-    public void setPosition(Point newOrigin) {
-        super.getPosition().offsetTo(newOrigin.x, newOrigin.y);
-        refreshTileMetrics(newOrigin, -1, true);
     }
 
     @Override
@@ -155,15 +166,47 @@ public class MultiTileLayer extends Layer {
         for (SubTile layer : mTiles) {
             layer.endTransaction();
         }
-
         super.endTransaction();
+    }
+
+    private RectF normlizeRect(RectF rect, FloatSize pageSize) {
+        return new RectF(rect.left / pageSize.width, rect.top / pageSize.height, rect.right / pageSize.width, rect.bottom / pageSize.height);
+    }
+
+    private RectF roundToTileSize(RectF input, int tileSize) {
+        float minX = (Math.round(input.left) / tileSize) * tileSize;
+        float minY = (Math.round(input.top) / tileSize) * tileSize;
+        float maxX = ((Math.round(input.right) / tileSize) + 1) * tileSize;
+        float maxY = ((Math.round(input.bottom) / tileSize) + 1) * tileSize;
+        return new RectF(minX, minY, maxX, maxY);
+    }
+
+    private RectF inflate(RectF rect, float inflateSize) {
+        RectF newRect = new RectF(rect);
+        newRect.left -= inflateSize;
+        newRect.left = newRect.left < 0.0f ? 0.0f : newRect.left;
+
+        newRect.top -= inflateSize;
+        newRect.top = newRect.top < 0.0f ? 0.0f : newRect.top;
+
+        newRect.right += inflateSize;
+        newRect.bottom += inflateSize;
+
+        return newRect;
     }
 
     @Override
     public void draw(RenderContext context) {
+        if (tileProvider == null) {
+            return;
+        }
+
+        currentPageSize = context.pageSize;
+
         for (SubTile layer : mTiles) {
             // Avoid work, only draw tiles that intersect with the viewport
             RectF layerBounds = layer.getBounds(context);
+
             if (RectF.intersects(layerBounds, context.viewport)) {
                 layer.draw(context);
             }
@@ -180,12 +223,63 @@ public class MultiTileLayer extends Layer {
         return validRegion;
     }
 
-    public void addTile(SubTile tile) {
-        mTiles.add(tile);
+    public void setTileProvider(TileProvider tileProvider) {
+        this.tileProvider = tileProvider;
     }
 
-    public List<SubTile> getTiles() {
-        return mTiles;
+    public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics) {
+        if (currentZoomFactor != viewportMetrics.zoomFactor) {
+            currentZoomFactor = viewportMetrics.zoomFactor;
+            mTiles.clear();
+        }
+
+        RectF newTileViewPort = inflate(roundToTileSize(viewportMetrics.getViewport(), TILE_SIZE), TILE_SIZE);
+
+        Log.i(LOGTAG, "reevaluateTiles ( " + viewportMetrics + " )");
+
+        if (tileViewPort != newTileViewPort) {
+            tileViewPort = newTileViewPort;
+            clearTiles();
+            addNewTiles();
+        }
+    }
+
+    private void addNewTiles() {
+        for (float y = tileViewPort.top; y < tileViewPort.bottom; y += TILE_SIZE) {
+            if (y > currentPageSize.height) {
+                continue;
+            }
+            for (float x = tileViewPort.left; x < tileViewPort.right; x += TILE_SIZE) {
+                if (x > currentPageSize.width) {
+                    continue;
+                }
+                boolean contains = false;
+                for (SubTile tile : mTiles) {
+                    if (tile.x == x && tile.y == y) {
+                        contains = true;
+                    }
+                }
+                if (!contains) {
+                    CairoImage image = tileProvider.createTile(x, y, currentZoomFactor);
+                    SubTile tile = new SubTile(image, (int)x, (int)y, currentZoomFactor);
+                    tile.beginTransaction();
+                    mTiles.add(tile);
+                }
+            }
+        }
+    }
+
+    private void clearTiles() {
+        ArrayList<SubTile> removeTiles = new ArrayList<SubTile>();
+        for (SubTile tile : mTiles) {
+            RectF tileRect = new RectF(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
+            if (!RectF.intersects(tileViewPort, tileRect)) {
+                tile.destroy();
+                removeTiles.add(tile);
+            }
+        }
+
+        mTiles.removeAll(removeTiles);
     }
 }
 

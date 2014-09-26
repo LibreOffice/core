@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.gfx.SubTile;
 
 public class MockTileProvider implements TileProvider {
     private static final int TILE_SIZE = 256;
@@ -45,9 +44,9 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
-    public SubTile createTile(int x, int y) {
-        int tiles = (getPageWidth() / TILE_SIZE) + 1;
-        int tileNumber = (y / TILE_SIZE) * tiles + (x / TILE_SIZE);
+    public CairoImage createTile(float x, float y, float zoom) {
+        int tiles = (int) (getPageWidth() / TILE_SIZE) + 1;
+        int tileNumber = (int) ((y / TILE_SIZE) * tiles + (x / TILE_SIZE));
         tileNumber %= 9;
         tileNumber += 1; // 0 to 1 based numbering
 
@@ -55,10 +54,8 @@ public class MockTileProvider implements TileProvider {
         Bitmap bitmap = layerController.getDrawable(imageName);
 
         CairoImage image = new BufferedCairoImage(bitmap);
-        SubTile tile = new SubTile(image, x, y);
-        tile.beginTransaction();
 
-        return tile;
+        return image;
     }
 
     @Override

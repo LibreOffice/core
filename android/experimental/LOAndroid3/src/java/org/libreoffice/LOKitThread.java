@@ -2,123 +2,42 @@ package org.libreoffice;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.util.Log;
 
 import org.mozilla.gecko.gfx.FloatSize;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
-import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
-import org.mozilla.gecko.gfx.SubTile;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 
-import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
-    private static final int TILE_SIZE = 256;
     public LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
     private ViewportMetrics mViewportMetrics;
-    private Rect mOldRect;
     private boolean mCheckboardImageSet = false;
 
     public LOKitThread() {
         TileProviderFactory.initialize();
     }
 
-    private RectF normlizeRect(ImmutableViewportMetrics metrics) {
-        RectF rect = metrics.getViewport();
-        float zoomFactor = metrics.zoomFactor;
-        return new RectF(rect.left / zoomFactor, rect.top / zoomFactor, rect.right / zoomFactor, rect.bottom / zoomFactor);
-    }
-
-    private Rect roundToTileSize(RectF input, int tileSize) {
-        int minX = (Math.round(input.left) / tileSize) * tileSize;
-        int minY = (Math.round(input.top) / tileSize) * tileSize;
-        int maxX = ((Math.round(input.right) / tileSize) + 1) * tileSize;
-        int maxY = ((Math.round(input.bottom) / tileSize) + 1) * tileSize;
-        return new Rect(minX, minY, maxX, maxY);
-    }
-
-    private Rect inflate(Rect rect, int inflateSize) {
-        Rect newRect = new Rect(rect);
-        newRect.left -= inflateSize;
-        newRect.left = newRect.left < 0 ? 0 : newRect.left;
-
-        newRect.top -= inflateSize;
-        newRect.top = newRect.top < 0 ? 0 : newRect.top;
-
-        newRect.right += inflateSize;
-        newRect.bottom += inflateSize;
-
-        return newRect;
-    }
-
     private boolean draw() throws InterruptedException {
         int pageWidth = mTileProvider.getPageWidth();
         int pageHeight = mTileProvider.getPageHeight();
 
-        mViewportMetrics = new ViewportMetrics();
         FloatSize size = new FloatSize(pageWidth, pageHeight);
+        mViewportMetrics = new ViewportMetrics();
         mViewportMetrics.setPageSize(size, size);
 
         GeckoLayerClient layerClient = mApplication.getLayerClient();
-        layerClient.beginDrawing(mViewportMetrics);
 
-        ImmutableViewportMetrics metrics = mApplication.getLayerController().getViewportMetrics();
-        RectF viewport = normlizeRect(metrics);
-        Rect rect = inflate(roundToTileSize(viewport, TILE_SIZE), TILE_SIZE);
+        layerClient.beginDrawing();
 
-        mOldRect = rect;
+        layerClient.reevaluateTiles();
 
-        Log.i(LOGTAG, "tilerender RECT: " + rect);
-
-        long start = System.currentTimeMillis();
-        int noOfRemoved = 0;
-
-        ArrayList<SubTile> removeTiles = new ArrayList<SubTile>();
-        for (SubTile tile : layerClient.getTiles()) {
-            Rect tileRect = new Rect(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
-            if (!Rect.intersects(rect, tileRect)) {
-                tile.destroy();
-                removeTiles.add(tile);
-                noOfRemoved++;
-            }
-        }
-
-        layerClient.getTiles().removeAll(removeTiles);
-
-        Log.i(LOGTAG, "TileRendering Clear: " + noOfRemoved + " in " + (System.currentTimeMillis() - start) + "ms");
-        start = System.currentTimeMillis();
-        int noOfAdded = 0;
-        for (int y = rect.top; y < rect.bottom; y += TILE_SIZE) {
-            for (int x = rect.left; x < rect.right; x += TILE_SIZE) {
-                if (x > pageWidth) {
-                    continue;
-                }
-                if (y > pageHeight) {
-                    continue;
-                }
-                boolean contains = false;
-                for (SubTile tile : layerClient.getTiles()) {
-                    if (tile.x == x && tile.y == y) {
-                        contains = true;
-                    }
-                }
-                if (!contains) {
-                    SubTile tile = mTileProvider.createTile(x, y);
-                    layerClient.addTile(tile);
-                    noOfAdded++;
-                }
-            }
-        }
-
-        layerClient.endDrawing();
-
-        Log.i(LOGTAG, "TileRendering Add: " + noOfAdded + " in " + (System.currentTimeMillis() - start)  + "ms");
+        layerClient.endDrawing(mViewportMetrics);
 
         return true;
     }
@@ -126,7 +45,6 @@ public class LOKitThread extends Thread {
     private void changePart(int partIndex) throws InterruptedException {
         mTileProvider.changePart(partIndex);
         GeckoLayerClient layerClient = mApplication.getLayerClient();
-        layerClient.getTiles().clear();
         updateCheckbardImage();
         LOKitShell.sendEvent(LOEvent.draw(new Rect()));
     }
@@ -138,7 +56,10 @@ public class LOKitThread extends Thread {
         if (mTileProvider != null) {
             mTileProvider.close();
         }
+        GeckoLayerClient layerClient = mApplication.getLayerClient();
         mTileProvider = TileProviderFactory.create(mApplication.getLayerController(), filename);
+        layerClient.setTileProvider(mTileProvider);
+
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
             updateCheckbardImage();

@@ -8,10 +8,12 @@ package org.mozilla.gecko.gfx;
 public class SubTile extends SingleTileLayer {
     public int x;
     public int y;
+    public float zoom;
 
-    public SubTile(CairoImage mImage, int mX, int mY) {
+    public SubTile(CairoImage mImage, int x, int y, float zoom) {
         super(mImage);
-        x = mX;
-        y = mY;
+        this.x = x;
+        this.y = y;
+        this.zoom = zoom;
     }
 }

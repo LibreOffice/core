@@ -9,7 +9,6 @@ import org.libreoffice.kit.Office;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.gfx.SubTile;
 
 import java.nio.ByteBuffer;
 
@@ -19,17 +18,17 @@ public class LOKitTileProvider implements TileProvider {
     public final Office mOffice;
     public final Document mDocument;
     private final LayerController mLayerController;
-    private final double mTileWidth;
-    private final double mTileHeight;
+    private final float mTileWidth;
+    private final float mTileHeight;
     private final String mInputFile;
 
-    private double mDPI;
-    private double mWidthTwip;
-    private double mHeightTwip;
+    private float mDPI;
+    private float mWidthTwip;
+    private float mHeightTwip;
 
     public LOKitTileProvider(LayerController layerController, String input) {
         mLayerController = layerController;
-        mDPI = (double) LOKitShell.getDpi();
+        mDPI = (float) LOKitShell.getDpi();
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
 
@@ -66,12 +65,12 @@ public class LOKitTileProvider implements TileProvider {
         }
     }
 
-    private double twipToPixel(double input, double dpi) {
-        return input / 1440.0 * dpi;
+    private float twipToPixel(float input, float dpi) {
+        return input / 1440.0f * dpi;
     }
 
-    private double pixelToTwip(double input, double dpi) {
-        return (input / dpi) * 1440.0;
+    private float pixelToTwip(float input, float dpi) {
+        return (input / dpi) * 1440.0f;
     }
 
     private boolean checkDocument() {
@@ -108,12 +107,12 @@ public class LOKitTileProvider implements TileProvider {
     }
 
     @Override
-    public SubTile createTile(int x, int y) {
+    public CairoImage createTile(float x, float y, float zoom) {
         ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
         Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
 
         if (mDocument != null) {
-            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) pixelToTwip(x, mDPI), (int) pixelToTwip(y, mDPI), (int) mTileWidth, (int) mTileHeight);
+            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, Math.round(pixelToTwip(x, mDPI)/zoom), Math.round(pixelToTwip(y, mDPI)/ zoom), Math.round(mTileWidth / zoom), Math.round(mTileHeight/zoom));
         } else {
             Log.e(LOGTAG, "Document is null!!");
         }
@@ -121,9 +120,8 @@ public class LOKitTileProvider implements TileProvider {
         bitmap.copyPixelsFromBuffer(buffer);
 
         CairoImage image = new BufferedCairoImage(bitmap);
-        SubTile tile = new SubTile(image, x, y);
-        tile.beginTransaction();
-        return tile;
+
+        return image;
     }
 
     @Override

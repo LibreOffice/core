@@ -3,7 +3,7 @@ package org.libreoffice;
 
 import android.graphics.Bitmap;
 
-import org.mozilla.gecko.gfx.SubTile;
+import org.mozilla.gecko.gfx.CairoImage;
 
 public interface TileProvider {
     int getPageWidth();
@@ -12,7 +12,7 @@ public interface TileProvider {
 
     boolean isReady();
 
-    SubTile createTile(int x, int y);
+    CairoImage createTile(float x, float y, float zoom);
 
     void changePart(int partIndex);
 

@@ -39,7 +39,6 @@
 package org.mozilla.gecko.gfx;
 
 import android.content.Context;
-import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
@@ -49,17 +48,13 @@ import android.view.View;
 import org.libreoffice.LOEvent;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
+import org.libreoffice.TileProvider;
 import org.mozilla.gecko.util.FloatUtils;
-
-import java.util.List;
-import java.util.regex.Pattern;
 
 public class GeckoLayerClient implements LayerView.Listener {
     private static final String LOGTAG = "GeckoLayerClient";
 
     private LayerController mLayerController;
-    private LayerRenderer mLayerRenderer;
-    private boolean mLayerRendererInitialized;
 
     private IntSize mScreenSize;
     private IntSize mWindowSize;
@@ -75,26 +70,8 @@ public class GeckoLayerClient implements LayerView.Listener {
     /* The viewport that Gecko will display when drawing is finished */
     private ViewportMetrics mNewGeckoViewport;
     private Context mContext;
-    private static final long MIN_VIEWPORT_CHANGE_DELAY = 25L;
-    private long mLastViewportChangeTime;
     private boolean mPendingViewportAdjust;
     private boolean mViewportSizeChanged;
-    private boolean mIgnorePaintsPendingViewportSizeChange;
-    private boolean mFirstPaint = true;
-
-    // mUpdateViewportOnEndDraw is used to indicate that we received a
-    // viewport update notification while drawing. therefore, when the
-    // draw finishes, we need to update the entire viewport rather than
-    // just the page size. this boolean should always be accessed from
-    // inside a transaction, so no synchronization is needed.
-    private boolean mUpdateViewportOnEndDraw;
-
-    private String mLastCheckerboardColor;
-
-    private static Pattern sColorPattern;
-
-    /* Used as a temporary ViewTransform by syncViewportInfo */
-    private ViewTransform mCurrentViewTransform;
 
     public GeckoLayerClient(Context context) {
         mContext = context;
@@ -103,7 +80,6 @@ public class GeckoLayerClient implements LayerView.Listener {
         mDisplayPort = new DisplayPortMetrics();
         mRecordDrawTimes = true;
         mDrawTimingQueue = new DrawTimingQueue();
-        mCurrentViewTransform = new ViewTransform(0, 0, 1);
     }
 
     /** Attaches the root layer to the layer controller so that Gecko appears. */
@@ -128,21 +104,17 @@ public class GeckoLayerClient implements LayerView.Listener {
         return mDisplayPort;
     }
 
-    protected void updateLayerAfterDraw() {
-        mRootLayer.invalidate();
-    }
-
-    public void beginDrawing(ViewportMetrics viewportMetrics) {
-        mNewGeckoViewport = viewportMetrics;
+    public void beginDrawing() {
         mRootLayer.beginTransaction();
+
     }
 
-    public void endDrawing() {
+    public void endDrawing(ViewportMetrics viewportMetrics) {
         synchronized (mLayerController) {
             try {
-                updateViewport(!mUpdateViewportOnEndDraw);
-                mUpdateViewportOnEndDraw = false;
-                updateLayerAfterDraw();
+                mNewGeckoViewport = viewportMetrics;
+                updateViewport(true);
+                mRootLayer.invalidate();
             } finally {
                 mRootLayer.endTransaction();
             }
@@ -159,7 +131,6 @@ public class GeckoLayerClient implements LayerView.Listener {
         mGeckoViewport = mNewGeckoViewport;
         mGeckoViewport.setSize(viewportSize);
 
-        PointF displayportOrigin = mGeckoViewport.getOrigin();
         RectF position = mGeckoViewport.getViewport();
         mRootLayer.setPosition(RectUtils.round(position));
         mRootLayer.setResolution(mGeckoViewport.getZoomFactor());
@@ -252,7 +223,7 @@ public class GeckoLayerClient implements LayerView.Listener {
         float ourZoom = mLayerController.getZoomFactor();
         pageWidth = pageWidth * ourZoom / zoom;
         pageHeight = pageHeight * ourZoom /zoom;
-        mLayerController.setPageSize(new FloatSize(pageWidth, pageHeight), new FloatSize(pageWidth, pageHeight));
+        mLayerController.setPageSize(new FloatSize(pageWidth, pageHeight), new FloatSize(cssPageWidth, cssPageHeight));
         // Here the page size of the document has changed, but the document being displayed
         // is still the same. Therefore, we don't need to send anything to browser.js; any
         // changes we need to make to the display port will get sent the next time we call
@@ -262,20 +233,13 @@ public class GeckoLayerClient implements LayerView.Listener {
 
     public void geometryChanged() {
         sendResizeEventIfNecessary(false);
-        if (mLayerController.getRedrawHint())
+        if (mLayerController.getRedrawHint()) {
             adjustViewport(null);
+        }
     }
 
     public ViewportMetrics getGeckoViewportMetrics() {
         return mGeckoViewport;
-    }
-
-    public List<SubTile> getTiles() {
-        return mRootLayer.getTiles();
-    }
-
-    public void addTile(SubTile tile) {
-        mRootLayer.addTile(tile);
     }
 
     @Override
@@ -297,6 +261,14 @@ public class GeckoLayerClient implements LayerView.Listener {
     public void surfaceChanged(int width, int height) {
         compositionResumeRequested(width, height);
         renderRequested();
+    }
+
+    public void setTileProvider(TileProvider tileProvider) {
+        mRootLayer.setTileProvider(tileProvider);
+    }
+
+    public void reevaluateTiles() {
+        mRootLayer.reevaluateTiles(mLayerController.getViewportMetrics());
     }
 
     private class AdjustRunnable implements Runnable {
