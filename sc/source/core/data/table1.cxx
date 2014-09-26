@@ -82,7 +82,7 @@ ScProgress* GetProgressBar(
 
 void GetOptimalHeightsInColumn(
     sc::RowHeightContext& rCxt, ScColumn* pCol, SCROW nStartRow, SCROW nEndRow,
-    vector<sal_uInt16>& aHeights, ScProgress* pProgress, sal_uInt32 nProgressStart )
+    ScProgress* pProgress, sal_uInt32 nProgressStart )
 {
     SCSIZE nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
 
@@ -90,20 +90,22 @@ void GetOptimalHeightsInColumn(
     //  (mit der letzten Spalte in der Hoffnung, dass die am ehesten noch auf
     //   Standard formatiert ist)
 
-    pCol[MAXCOL].GetOptimalHeight(rCxt, nStartRow, nEndRow, &aHeights[0], 0, 0);
+    std::vector<sal_uInt16>& rHeights = rCxt.getHeightArray();
+
+    pCol[MAXCOL].GetOptimalHeight(rCxt, nStartRow, nEndRow, 0, 0);
 
     //  daraus Standardhoehe suchen, die im unteren Bereich gilt
 
-    sal_uInt16 nMinHeight = aHeights[nCount-1];
+    sal_uInt16 nMinHeight = rHeights[nCount-1];
     SCSIZE nPos = nCount-1;
-    while ( nPos && aHeights[nPos-1] >= nMinHeight )
+    while ( nPos && rHeights[nPos-1] >= nMinHeight )
         --nPos;
     SCROW nMinStart = nStartRow + nPos;
 
     sal_uLong nWeightedCount = 0;
     for (SCCOL nCol=0; nCol<MAXCOL; nCol++)     // MAXCOL schon oben
     {
-        pCol[nCol].GetOptimalHeight(rCxt, nStartRow, nEndRow, &aHeights[0], nMinHeight, nMinStart);
+        pCol[nCol].GetOptimalHeight(rCxt, nStartRow, nEndRow, nMinHeight, nMinStart);
 
         if (pProgress)
         {
@@ -155,9 +157,10 @@ struct SetRowHeightRangeFunc : public OptimalHeightsFuncObjBase
     }
 };
 
-bool SetOptimalHeightsToRows(OptimalHeightsFuncObjBase& rFuncObj,
-    ScBitMaskCompressedArray<SCROW, sal_uInt8>* pRowFlags, SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtra,
-    const vector<sal_uInt16>& aHeights, bool bForce)
+bool SetOptimalHeightsToRows(
+    sc::RowHeightContext& rCxt,
+    OptimalHeightsFuncObjBase& rFuncObj,
+    ScBitMaskCompressedArray<SCROW, sal_uInt8>* pRowFlags, SCROW nStartRow, SCROW nEndRow )
 {
     SCSIZE nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
     bool bChanged = false;
@@ -174,9 +177,9 @@ bool SetOptimalHeightsToRows(OptimalHeightsFuncObjBase& rFuncObj,
         SCSIZE nMoreRows = nRegionEndRow - ( nStartRow+i );     // additional equal rows after first
 
         bool bAutoSize = ((nRowFlag & CR_MANUALSIZE) == 0);
-        if ( bAutoSize || bForce )
+        if (bAutoSize || rCxt.isForceAutoSize())
         {
-            if (nExtra)
+            if (rCxt.getExtraHeight())
             {
                 if (bAutoSize)
                     pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag | CR_MANUALSIZE);
@@ -188,7 +191,7 @@ bool SetOptimalHeightsToRows(OptimalHeightsFuncObjBase& rFuncObj,
             {
                 if (nLast)
                 {
-                    if (aHeights[nInner]+nExtra == nLast)
+                    if (rCxt.getHeightArray()[nInner] + rCxt.getExtraHeight() == nLast)
                         nRngEnd = nStartRow+nInner;
                     else
                     {
@@ -198,7 +201,7 @@ bool SetOptimalHeightsToRows(OptimalHeightsFuncObjBase& rFuncObj,
                 }
                 if (!nLast)
                 {
-                    nLast = aHeights[nInner]+nExtra;
+                    nLast = rCxt.getHeightArray()[nInner] + rCxt.getExtraHeight();
                     nRngStart = nStartRow+nInner;
                     nRngEnd = nStartRow+nInner;
                 }
@@ -465,13 +468,12 @@ bool ScTable::SetOptimalHeight(
 
     ScProgress* pProgress = GetProgressBar(nCount, GetWeightedCount(), pOuterProgress, pDocument);
 
-    vector<sal_uInt16> aHeights(nCount, 0);
+    rCxt.getHeightArray().resize(nCount, 0);
 
-    GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, aHeights, pProgress, nProgressStart);
+    GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
 
     SetRowHeightRangeFunc aFunc(this, rCxt.getPPTX(), rCxt.getPPTY());
-    bool bChanged = SetOptimalHeightsToRows(
-        aFunc, pRowFlags, nStartRow, nEndRow, rCxt.getExtraHeight(), aHeights, rCxt.isForceAutoSize());
+    bool bChanged = SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags, nStartRow, nEndRow);
 
     if ( pProgress != pOuterProgress )
         delete pProgress;
@@ -493,13 +495,12 @@ void ScTable::SetOptimalHeightOnly(
 
     ScProgress* pProgress = GetProgressBar(nCount, GetWeightedCount(), pOuterProgress, pDocument);
 
-    vector<sal_uInt16> aHeights(nCount, 0);
+    rCxt.getHeightArray().resize(nCount, 0);
 
-    GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, aHeights, pProgress, nProgressStart);
+    GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
 
     SetRowHeightOnlyFunc aFunc(this);
-    SetOptimalHeightsToRows(
-        aFunc, pRowFlags, nStartRow, nEndRow, rCxt.getExtraHeight(), aHeights, rCxt.isForceAutoSize());
+    SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags, nStartRow, nEndRow);
 
     if ( pProgress != pOuterProgress )
         delete pProgress;

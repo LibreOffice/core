@@ -32,6 +32,11 @@ void RowHeightContext::setForceAutoSize( bool b )
     mbForceAutoSize = b;
 }
 
+std::vector<sal_uInt16>& RowHeightContext::getHeightArray()
+{
+    return maHeights;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
