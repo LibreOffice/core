@@ -14,12 +14,16 @@
 
 #include <tools/rational.hxx>
 
+#include <vector>
+
 class OutputDevice;
 
 namespace sc {
 
 class SC_DLLPUBLIC RowHeightContext
 {
+    std::vector<sal_uInt16> maHeights;
+
     double mfPPTX;
     double mfPPTY;
     boost::rational<sal_Int64> maZoomX;
@@ -48,6 +52,8 @@ public:
 
     void setForceAutoSize( bool b );
     bool isForceAutoSize() const { return mbForceAutoSize;}
+
+    std::vector<sal_uInt16>& getHeightArray();
 };
 
 }

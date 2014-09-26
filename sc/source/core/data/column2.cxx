@@ -772,9 +772,9 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
 //  (is only evaluated with bStdAllowed)
 
 void ScColumn::GetOptimalHeight(
-    sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight,
-    sal_uInt16 nMinHeight, SCROW nMinStart )
+    sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, sal_uInt16 nMinHeight, SCROW nMinStart )
 {
+    std::vector<sal_uInt16>& rHeights = rCxt.getHeightArray();
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow );
 
     SCROW nStart = -1;
@@ -865,8 +865,8 @@ void ScColumn::GetOptimalHeight(
                     nStdEnd = (nMinStart>0) ? nMinStart-1 : 0;
 
                 for (SCROW nRow = nStart; nRow <= nStdEnd; ++nRow)
-                    if (nDefHeight > pHeight[nRow-nStartRow])
-                        pHeight[nRow-nStartRow] = nDefHeight;
+                    if (nDefHeight > rHeights[nRow-nStartRow])
+                        rHeights[nRow-nStartRow] = nDefHeight;
 
                 if ( bStdOnly )
                 {
@@ -887,22 +887,22 @@ void ScColumn::GetOptimalHeight(
                             {
                                 if ( nCjkHeight == 0 )
                                     nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
-                                if (nCjkHeight > pHeight[nRow-nStartRow])
-                                    pHeight[nRow-nStartRow] = nCjkHeight;
+                                if (nCjkHeight > rHeights[nRow-nStartRow])
+                                    rHeights[nRow-nStartRow] = nCjkHeight;
                             }
                             else if ( nScript == SCRIPTTYPE_COMPLEX )
                             {
                                 if ( nCtlHeight == 0 )
                                     nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
-                                if (nCtlHeight > pHeight[nRow-nStartRow])
-                                    pHeight[nRow-nStartRow] = nCtlHeight;
+                                if (nCtlHeight > rHeights[nRow-nStartRow])
+                                    rHeights[nRow-nStartRow] = nCtlHeight;
                             }
                             else
                             {
                                 if ( nLatHeight == 0 )
                                     nLatHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
-                                if (nLatHeight > pHeight[nRow-nStartRow])
-                                    pHeight[nRow-nStartRow] = nLatHeight;
+                                if (nLatHeight > rHeights[nRow-nStartRow])
+                                    rHeights[nRow-nStartRow] = nLatHeight;
                             }
                         }
                     }
@@ -928,8 +928,8 @@ void ScColumn::GetOptimalHeight(
                                     ( GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
                                                         rCxt.getZoomX(), rCxt.getZoomY(), false, aOptions,
                                                         &pPattern) / rCxt.getPPTY() );
-                            if (nHeight > pHeight[nRow-nStartRow])
-                                pHeight[nRow-nStartRow] = nHeight;
+                            if (nHeight > rHeights[nRow-nStartRow])
+                                rHeights[nRow-nStartRow] = nHeight;
                             // Pattern changed due to calculation? => sync.
                             if (pPattern != pOldPattern)
                             {
