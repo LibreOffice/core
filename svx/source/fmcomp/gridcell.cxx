@@ -4170,7 +4170,8 @@ sal_Int16 SAL_CALL FmXListBoxCell::getSelectedItemPos() throw( RuntimeException,
     {
         UpdateFromColumn();
         sal_Int32 nPos = m_pBox->GetSelectEntryPos();
-        assert(nPos < SHRT_MAX);
+        if (nPos > SHRT_MAX || nPos < SHRT_MIN)
+            throw std::out_of_range("awt::XListBox::getSelectedItemPos can only return a short");
         return nPos;
     }
     return 0;
