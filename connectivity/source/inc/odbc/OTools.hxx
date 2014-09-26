@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OTOOLS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OTOOLS_HXX
 
-#include "odbc/OFunctiondefs.hxx"
+#include <connectivity/odbc.hxx>
 #include "odbc/odbcbasedllapi.hxx"
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/util/Date.hpp>

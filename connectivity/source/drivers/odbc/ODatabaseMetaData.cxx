@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#include "odbc/OFunctiondefs.hxx"
+#include <connectivity/odbc.hxx>
 #include "stdio.h"
 #include "TPrivilegesResultSet.hxx"
 #include <connectivity/dbexception.hxx>

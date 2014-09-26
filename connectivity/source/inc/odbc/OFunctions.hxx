@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONS_HXX
 
-#include "odbc/OFunctiondefs.hxx"
+#include <connectivity/odbc.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
 

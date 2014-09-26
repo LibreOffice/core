@@ -20,12 +20,6 @@
 #include <config_folders.h>
 #include "odbcconfig.hxx"
 
-#ifdef SYSTEM_ODBC_HEADERS
-#include <sqltypes.h>
-#else
-#include <odbc/sqltypes.h>
-#endif
-
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -49,35 +43,7 @@
 #endif
 #endif
 
-// just to go with calling convention of windows
-// so don't touch this
-#if defined(WNT)
-#undef SQL_API
-#define SQL_API __stdcall
-// At least under some circumstances, the below #include <odbc/sqlext.h> re-
-// defines SQL_API to an empty string, leading to a compiler warning on MSC; to
-// not break the current behavior, this is worked around by locally disabling
-// that warning:
-#if defined _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4005)
-#endif
-#endif // defined(WNT)
-
-#ifdef SYSTEM_ODBC_HEADERS
-#include <sqlext.h>
-#else
-#include <odbc/sqlext.h>
-#endif
-
-#if defined(WNT)
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-#undef SQL_API
-#define SQL_API __stdcall
-#endif // defined(WNT)
-// from here on you can do what you want to
+#include <connectivity/odbc.hxx>
 
 #else
 

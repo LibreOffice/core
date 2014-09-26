@@ -23,7 +23,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase2.hxx>
-#include "odbc/OFunctiondefs.hxx"
+#include <connectivity/odbc.hxx>
 #include "odbc/odbcbasedllapi.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <osl/module.h>

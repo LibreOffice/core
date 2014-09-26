@@ -21,7 +21,7 @@
 
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include "odbc/OFunctiondefs.hxx"
+#include <connectivity/odbc.hxx>
 #include "odbc/odbcbasedllapi.hxx"
 #include <connectivity/OSubComponent.hxx>
 #include <connectivity/CommonTools.hxx>
