@@ -41,6 +41,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 
+#include <svx/svdobj.hxx>
+#include <svx/unoapi.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -749,15 +751,18 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if (m_pImpl->isYSizeValis())
                             aSize.Height = m_pImpl->getYSize();
 
-                        // TODO: avoid this setSize(), just send the size to
-                        // oox, so it can set the right transformation matrix
-                        // right away.
-                        uno::Any aRotation;
+                        sal_Int32 nRotation = 0;
                         if (bKeepRotation)
-                            aRotation = xShapeProps->getPropertyValue("RotateAngle");
+                        {
+                            // Use internal API, getPropertyValue(RotateAngle)
+                            // would use GetObjectRotation(), which is not what
+                            // we want.
+                            if (SdrObject* pShape = GetSdrObjectFromXShape(m_xShape))
+                                nRotation = pShape->GetRotateAngle();
+                        }
                         m_xShape->setSize(aSize);
-                        if (bKeepRotation && aRotation.hasValue() && aRotation.get<sal_Int32>() != 0)
-                            xShapeProps->setPropertyValue("RotateAngle", aRotation);
+                        if (bKeepRotation)
+                            xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
 
                         m_pImpl->bIsGraphic = true;
 

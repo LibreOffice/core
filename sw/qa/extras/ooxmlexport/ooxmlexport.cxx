@@ -304,6 +304,17 @@ DECLARE_OOXMLEXPORT_TEST(testDrawingmlFlipv, "drawingml-flipv.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRot90Fliph, "rot90-fliph.docx")
+{
+    // The problem was that a shape rotation of 90° got turned into 270° after roundtrip.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        assertXPath(pXmlDoc, "//a:xfrm", "flipH", "1");
+        // This was 16200000 (270 * 60000).
+        assertXPath(pXmlDoc, "//a:xfrm", "rot", "5400000");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
