@@ -139,12 +139,14 @@ FastSerializerHelper* FastSerializerHelper::write(double value)
 
 FastSerializerHelper* FastSerializerHelper::writeEscaped(const char* value)
 {
-    return writeEscaped(OUString::createFromAscii(value));
+    mpSerializer->write(OString(value), true);
+    return this;
 }
 
 FastSerializerHelper* FastSerializerHelper::writeEscaped(const OUString& value)
 {
-    return write(FastSaxSerializer::escapeXml(value));
+    mpSerializer->write(value, true);
+    return this;
 }
 
 FastSerializerHelper* FastSerializerHelper::writeId(sal_Int32 tokenId)
