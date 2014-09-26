@@ -315,6 +315,17 @@ DECLARE_OOXMLEXPORT_TEST(testRot90Fliph, "rot90-fliph.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRot180Flipv, "rot180-flipv.docx")
+{
+    // 180° rotation got lost after roundtrip.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        assertXPath(pXmlDoc, "//a:xfrm", "flipV", "1");
+        // This attribute was completely missing.
+        assertXPath(pXmlDoc, "//a:xfrm", "rot", "10800000");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

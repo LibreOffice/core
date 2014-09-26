@@ -1169,7 +1169,13 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
     }
     if (!bSuppressRotation)
     {
+        // See SdrObjCustomShape::NbcRotate().
+        int nSwap = 0;
+        if (bFlipH)
+            nSwap ^= 1;
         if (bFlipV)
+            nSwap ^= 1;
+        if (nSwap)
         {
             nRotation=(nRotation+18000)%36000;
         }

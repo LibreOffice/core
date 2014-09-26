@@ -418,7 +418,9 @@ Reference< XShape > Shape::createAndInsert(
                             aServiceName == "com.sun.star.drawing.ConnectorShape" );
     bool bUseRotationTransform = ( !mbWps ||
             aServiceName == "com.sun.star.drawing.LineShape" ||
-            aServiceName == "com.sun.star.drawing.GroupShape" );
+            aServiceName == "com.sun.star.drawing.GroupShape" ||
+            mbFlipH ||
+            mbFlipV );
 
     basegfx::B2DHomMatrix aTransformation;
 
@@ -458,7 +460,10 @@ Reference< XShape > Shape::createAndInsert(
     if( maPosition.X != 0 || maPosition.Y != 0)
     {
         // if global position is used, add it to transformation
-        aTransformation.translate( maPosition.X, maPosition.Y );
+        if (mbWps && aParentTransformation.isIdentity())
+            aTransformation.translate( maPosition.X * 360, maPosition.Y * 360);
+        else
+            aTransformation.translate( maPosition.X, maPosition.Y );
     }
 
     aTransformation = aParentTransformation*aTransformation;
@@ -986,7 +991,7 @@ Reference< XShape > Shape::createAndInsert(
         // These can have a custom geometry, so position should be set here,
         // after creation but before custom shape handling, using the position
         // we got from the caller.
-        if (mbWps && aServiceName != "com.sun.star.text.TextFrame")
+        if (mbWps && aServiceName == "com.sun.star.drawing.LineShape")
             mxShape->setPosition(maPosition);
 
         if( bIsCustomShape )

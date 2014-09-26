@@ -1048,7 +1048,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloating, "table-floating.docx")
         // After import, table is inside a TextFrame.
         uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
         // This was 0, should be the the opposite of (left margin + half of the border width).
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-198), getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-199), getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
         // Was 0 as well, should be the right margin.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xShape, "RightMargin"));
     }

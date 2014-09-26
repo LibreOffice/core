@@ -319,17 +319,17 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childpo
 
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xChildGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2119 : -2121), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11338 : 11335), xChildGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2119 : -2122), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11336 : 11333), xChildGroup->getPosition().Y);
 
     xGroup.set(xChildGroup, uno::UNO_QUERY);
     xChildGroup.set(xGroup->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -1856 : -1858), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11338 : 11335), xChildGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11336 : 11333), xChildGroup->getPosition().Y);
 
     xChildGroup.set(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2119 : -2121), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 14028 : 14025), xChildGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2119 : -2122), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 14026 : 14023), xChildGroup->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGradientFillTheme, "dml-gradientfill-theme.docx")

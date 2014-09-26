@@ -363,17 +363,19 @@ public:
                 uno::makeAny(nVertOrient));
     }
 
-    void applyRelativePosition(uno::Reference< beans::XPropertySet > xGraphicObjectProperties) const
+    void applyRelativePosition(uno::Reference< beans::XPropertySet > xGraphicObjectProperties, bool bRelativeOnly = false) const
     {
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_POSITION),
-                uno::makeAny(nLeftPosition));
+        if (!bRelativeOnly)
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_POSITION),
+                                                       uno::makeAny(nLeftPosition));
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_RELATION ),
                 uno::makeAny(nHoriRelation));
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_TOGGLE ),
                 uno::makeAny(bPageToggle));
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_POSITION),
-                uno::makeAny(nTopPosition));
+        if (!bRelativeOnly)
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_POSITION),
+                                                       uno::makeAny(nTopPosition));
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_RELATION ),
                 uno::makeAny(nVertRelation));
     }
@@ -805,7 +807,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             if (nRotation)
                                 xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
                         }
-                        m_pImpl->applyRelativePosition(xShapeProps);
+                        m_pImpl->applyRelativePosition(xShapeProps, /*bRelativeOnly=*/true);
 
                         xShapeProps->setPropertyValue("SurroundContour", uno::makeAny(m_pImpl->bContour));
                         m_pImpl->applyMargins(xShapeProps);
