@@ -220,7 +220,7 @@
           <value>com.sun.star.svx.FontHeightToolBoxController</value>
         </prop>
       </node>
-      <node oor:name="c15" oor:op="replace">
+      <node oor:name="c25" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:CurrencyList</value>
         </prop>
