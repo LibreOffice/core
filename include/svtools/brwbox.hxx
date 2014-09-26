@@ -271,6 +271,30 @@ private:
     }               uRow;
     MultiSelection* pColSel;        // selected column-ids
 
+    //fdo#83943, detect if making the cursor position
+    //visible is impossible to achieve
+    struct CursorMoveAttempt
+    {
+        long m_nCol;
+        long m_nRow;
+        bool m_bScrolledToReachCell;
+        CursorMoveAttempt(long nCol, long nRow, bool bScrolledToReachCell)
+            : m_nCol(nCol)
+            , m_nRow(nRow)
+            , m_bScrolledToReachCell(bScrolledToReachCell)
+        {
+        }
+        bool operator==(const CursorMoveAttempt& r) const
+        {
+            return m_nCol == r.m_nCol &&
+                   m_nRow == r.m_nRow &&
+                   m_bScrolledToReachCell == r.m_bScrolledToReachCell;
+        }
+        bool operator!=(const CursorMoveAttempt& r) const { return !(*this == r); }
+    };
+    typedef std::stack<CursorMoveAttempt> GotoStack;
+    GotoStack       m_aGotoStack;
+
     ::std::auto_ptr< ::svt::BrowseBoxImpl >  m_pImpl;       // impl structure of the BrowseBox object
 
     bool            m_bFocusOnlyCursor; // hide cursor if we don't have the focus

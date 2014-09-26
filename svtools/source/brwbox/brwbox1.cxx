@@ -1560,7 +1560,6 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId)
 
 bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowColMove)
 {
-
     if (!bColumnCursor)
         return false;
 
@@ -1579,6 +1578,8 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
         DoHideCursor( "GoToColumnId" );
         nCurColId = nColId;
 
+        bool bScrolled = false;
+
         sal_uInt16 nFirstPos = nFirstCol;
         sal_uInt16 nWidth = (sal_uInt16)pColumn->Width();
         sal_uInt16 nLastPos = GetColumnAtXPosPixel(
@@ -1591,11 +1592,25 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
                 ScrollColumns( nNewPos-nFirstPos );
             else if ( nNewPos > nLastPos )
                 ScrollColumns( nNewPos-nLastPos );
+            bScrolled = true;
         }
 
         DoShowCursor( "GoToColumnId" );
         if (!bRowColMove)
-            CursorMoved();
+        {
+            //try to move to nCurRow, nColId
+            CursorMoveAttempt aAttempt(nCurRow, nColId, bScrolled);
+            //Detect if we are already in a call to BrowseBox::GoToColumnId
+            //but the the attempt is impossible and we are simply recursing
+            //into BrowseBox::GoToColumnId with the same impossible to
+            //fulfill conditions
+            if (m_aGotoStack.empty() || aAttempt != m_aGotoStack.top())
+            {
+                m_aGotoStack.push(aAttempt);
+                CursorMoved();
+                m_aGotoStack.pop();
+            }
+        }
         return true;
     }
     return true;
