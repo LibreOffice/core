@@ -695,9 +695,12 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         // to LOK in an external program).
         if (!osl_areCommandArgsSet())
         {
+            SAL_INFO("lok", "commandArgs not previously set");
             osl_setCommandArgs(2, pArgs);
         }
+        SAL_INFO("lok", "attempting to initalize UNO");
         initialize_uno(aAppURL);
+        SAL_INFO("lok", "uno successfully initalized");
         force_c_locale();
 
         // Force headless -- this is only for bitmap rendering.
@@ -719,9 +722,13 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         // the Thread from wherever (it's done again in Desktop::Main), and can
         // then use it to wait until we're definitely ready to continue.
 
+        SAL_INFO("lok", "enabling OfficeIPCThread");
         OfficeIPCThread::EnableOfficeIPCThread();
+        SAL_INFO("lok", "starting soffice_main");
         pthread_create(&(pLib->maThread), 0, lo_startmain, NULL);
+        SAL_INFO("lok", "waiting for OfficeIPCThread");
         OfficeIPCThread::WaitForReady();
+        SAL_INFO("lok", "OfficeIPCThread ready -- continuing");
 
         // If the Thread has been disabled again that indicates that a
         // restart is required (or in any case we don't have a useable
