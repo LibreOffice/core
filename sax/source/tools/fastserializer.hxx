@@ -213,18 +213,11 @@ private:
 #endif
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
+    /// Write to maOutputData and if it's big enough flush that to mxOutputStream
+    void writeOutput( const sal_Int8* pStr, size_t nLen )
+        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
     void writeOutput( const css::uno::Sequence< ::sal_Int8 >& aData )
         throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
-
-protected:
-    rtl::ByteSequence maClosingBracket;
-    rtl::ByteSequence maSlashAndClosingBracket;
-    rtl::ByteSequence maColon;
-    rtl::ByteSequence maOpeningBracket;
-    rtl::ByteSequence maOpeningBracketAndSlash;
-    rtl::ByteSequence maQuote;
-    rtl::ByteSequence maEqualSignAndQuote;
-    rtl::ByteSequence maSpace;
 
     /** Forward the call to the output stream, or write to the stack.
 

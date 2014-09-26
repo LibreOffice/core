@@ -119,6 +119,8 @@ public:
 
     /// same as XOutputStream::writeBytes (as expected :)
     virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL writeBytes( const sal_Int8* pStr, sal_Int32 nLen )
+        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
     /** Resizes the sequence used for writing to the really used size.
      *  Next time, writeBytes will write to the beginning of the sequence.
     */
