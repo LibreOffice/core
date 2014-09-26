@@ -1327,17 +1327,20 @@ void SwCrsrShell::UpdateCrsrPos()
 }
 
 // #i65475# - if Point/Mark in hidden sections, move them out
-static void lcl_CheckHiddenSection( SwNodeIndex& rIdx )
+static bool lcl_CheckHiddenSection( SwNodeIndex& rIdx )
 {
+    bool bOk = true;
     const SwSectionNode* pSectNd = rIdx.GetNode().FindSectionNode();
     if( pSectNd && pSectNd->GetSection().IsHiddenFlag() )
     {
         SwNodeIndex aTmp( *pSectNd );
         const SwNode* pFrmNd =
-        rIdx.GetNodes().FindPrvNxtFrmNode( aTmp, pSectNd->EndOfSectionNode() );
-        SAL_WARN_IF( !pFrmNd, "sw", "found no Node with Frames" );
+            rIdx.GetNodes().FindPrvNxtFrmNode( aTmp, pSectNd->EndOfSectionNode() );
+        bOk = pFrmNd != NULL;
+        SAL_WARN_IF(!bOk, "sw", "found no Node with Frames");
         rIdx = aTmp;
     }
+    return bOk;
 }
 
 /// Try to set the cursor to the next visible content node.
