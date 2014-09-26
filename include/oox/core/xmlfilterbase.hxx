@@ -252,7 +252,7 @@ private:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const SAL_OVERRIDE;
 
 private:
-    ::std::auto_ptr< XmlFilterBaseImpl > mxImpl;
+    ::std::unique_ptr< XmlFilterBaseImpl > mxImpl;
     sal_Int32 mnRelId;
     sal_Int32 mnMaxDocId;
 };

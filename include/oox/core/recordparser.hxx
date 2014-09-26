@@ -73,7 +73,7 @@ private:
     RecordInputSource   maSource;
     ::rtl::Reference< FragmentHandler > mxHandler;
     ::rtl::Reference< prv::Locator > mxLocator;
-    ::std::auto_ptr< prv::ContextStack > mxStack;
+    ::std::unique_ptr< prv::ContextStack > mxStack;
     RecordInfoMap       maStartMap;
     RecordInfoMap       maEndMap;
 };
