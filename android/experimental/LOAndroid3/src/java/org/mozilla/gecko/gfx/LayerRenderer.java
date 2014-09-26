@@ -188,11 +188,9 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     @Override
     protected void finalize() throws Throwable {
         try {
-            if (mCoordByteBuffer != null) {
-                DirectBufferAllocator.free(mCoordByteBuffer);
-                mCoordByteBuffer = null;
-                mCoordBuffer = null;
-            }
+            DirectBufferAllocator.free(mCoordByteBuffer);
+            mCoordByteBuffer = null;
+            mCoordBuffer = null;
         } finally {
             super.finalize();
         }
@@ -332,14 +330,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         if (mFrameRateLayer != null) {
             moveFrameRateLayer(width, height);
         }
-
-        // updating the state in the view/controller/client should be
-        // done on the main UI thread, not the GL renderer thread
-        mView.post(new Runnable() {
-            public void run() {
-                mView.setViewportSize(new IntSize(width, height));
-            }
-        });
 
         /* TODO: Throw away tile images? */
     }

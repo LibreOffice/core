@@ -80,6 +80,10 @@ public class LayerController {
         layerClient.setLayerController(this);
     }
 
+    public void destroy() {
+        mPanZoomController.destroy();
+    }
+
     public void setForceRedraw() {
         mForceRedraw = true;
     }
@@ -93,24 +97,8 @@ public class LayerController {
         return mViewportMetrics.getViewport();
     }
 
-    public RectF getCssViewport() {
-        return mViewportMetrics.getCssViewport();
-    }
-
     public FloatSize getViewportSize() {
         return mViewportMetrics.getSize();
-    }
-
-    public RectF getPageRect() {
-        return mViewportMetrics.getPageRect();
-    }
-
-    public RectF getCssPageRect() {
-        return mViewportMetrics.getCssPageRect();
-    }
-
-    public PointF getOrigin() {
-        return mViewportMetrics.getOrigin();
     }
 
     public float getZoomFactor() {
@@ -321,11 +309,6 @@ public class LayerController {
 
     public void setAllowZoom(final boolean aValue) {
         mAllowZoom = aValue;
-        mView.post(new Runnable() {
-            public void run() {
-                mView.getTouchEventHandler().setDoubleTapEnabled(aValue);
-            }
-        });
     }
 
     public boolean getAllowZoom() {
