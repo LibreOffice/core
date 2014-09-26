@@ -10,10 +10,16 @@ public class SubTile extends SingleTileLayer {
     public int y;
     public float zoom;
 
+    public boolean markedForRemoval = false;
+
     public SubTile(CairoImage mImage, int x, int y, float zoom) {
         super(mImage);
         this.x = x;
         this.y = y;
         this.zoom = zoom;
+    }
+
+    public void markForRemoval() {
+        markedForRemoval = true;
     }
 }

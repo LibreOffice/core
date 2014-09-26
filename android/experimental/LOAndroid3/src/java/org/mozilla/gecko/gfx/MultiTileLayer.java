@@ -45,6 +45,7 @@ import android.graphics.Region;
 import android.util.Log;
 
 import org.libreoffice.TileProvider;
+import org.mozilla.gecko.util.FloatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -230,7 +231,6 @@ public class MultiTileLayer extends Layer {
     public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics) {
         if (currentZoomFactor != viewportMetrics.zoomFactor) {
             currentZoomFactor = viewportMetrics.zoomFactor;
-            mTiles.clear();
         }
 
         RectF newTileViewPort = inflate(roundToTileSize(viewportMetrics.getViewport(), TILE_SIZE), TILE_SIZE);
@@ -239,9 +239,21 @@ public class MultiTileLayer extends Layer {
 
         if (tileViewPort != newTileViewPort) {
             tileViewPort = newTileViewPort;
-            clearTiles();
+            cleanTiles();
             addNewTiles();
+            markTiles();
         }
+    }
+
+    private void cleanTiles() {
+        List<SubTile> tilesToRemove = new ArrayList<SubTile>();
+        for(SubTile tile : mTiles) {
+            if (tile.markedForRemoval) {
+                tile.destroy();
+                tilesToRemove.add(tile);
+            }
+        }
+        mTiles.removeAll(tilesToRemove);
     }
 
     private void addNewTiles() {
@@ -269,17 +281,17 @@ public class MultiTileLayer extends Layer {
         }
     }
 
-    private void clearTiles() {
-        ArrayList<SubTile> removeTiles = new ArrayList<SubTile>();
+    private void markTiles() {
         for (SubTile tile : mTiles) {
-            RectF tileRect = new RectF(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
-            if (!RectF.intersects(tileViewPort, tileRect)) {
-                tile.destroy();
-                removeTiles.add(tile);
+            if (FloatUtils.fuzzyEquals(tile.zoom, currentZoomFactor)) {
+                RectF tileRect = new RectF(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
+                if (!RectF.intersects(tileViewPort, tileRect)) {
+                    tile.markForRemoval();
+                }
+            } else {
+                tile.markForRemoval();
             }
         }
-
-        mTiles.removeAll(removeTiles);
     }
 }
 
