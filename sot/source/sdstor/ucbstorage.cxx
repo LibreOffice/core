@@ -2018,9 +2018,9 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
         aPath += m_aName;
     aPath += "/";
     aProps[0].Name = "MediaType";
-    aProps[0].Value <<= (OUString ) m_aContentType;
+    aProps[0].Value <<= m_aContentType;
     aProps[1].Name = "FullPath";
-    aProps[1].Value <<= (OUString ) aPath;
+    aProps[1].Value <<= aPath;
     rSequence[ nProps++ ] = aProps;
 
     if ( m_bIsRoot )
@@ -2041,9 +2041,9 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
             OUString aElementPath( aPath );
             aElementPath += pElement->m_aName;
             aProps[0].Name = "MediaType";
-            aProps[0].Value <<= (OUString ) pElement->GetContentType();
+            aProps[0].Value <<= pElement->GetContentType();
             aProps[1].Name = "FullPath";
-            aProps[1].Value <<= (OUString ) aElementPath;
+            aProps[1].Value <<= aElementPath;
             rSequence[ nProps++ ] = aProps;
         }
     }
@@ -2202,7 +2202,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // name ( title ) of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
-                        aAny <<= (OUString) pElement->m_aName;
+                        aAny <<= pElement->m_aName;
                         pContent->setPropertyValue("Title", aAny );
                     }
 
@@ -2211,7 +2211,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // mediatype of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
-                        aAny <<= (OUString) pElement->GetContentType();
+                        aAny <<= pElement->GetContentType();
                         pContent->setPropertyValue("MediaType", aAny );
                     }
 
@@ -2258,7 +2258,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // commit the media type to the JAR file
                     // clipboard format and ClassId will be retrieved from the media type when the file is loaded again
                     Any aType;
-                    aType <<= (OUString) m_aContentType;
+                    aType <<= m_aContentType;
                     m_pContent->setPropertyValue("MediaType", aType );
 
                     if (  m_bIsLinked )

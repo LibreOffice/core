@@ -308,7 +308,7 @@ void StgCache::Close()
 {
     if( bFile )
     {
-        ((SvFileStream*) pStrm)->Close();
+        static_cast<SvFileStream*>(pStrm)->Close();
         SetError( pStrm->GetError() );
     }
 }

@@ -266,7 +266,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
             // Send event
             while ( aIterator.hasMoreElements() )
             {
-                ((XContainerListener*)aIterator.next())->elementInserted (aEvent);
+                static_cast<XContainerListener*>(aIterator.next())->elementInserted (aEvent);
             }
         }
     }
@@ -313,7 +313,7 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
 
                     while ( aIterator.hasMoreElements() )
                     {
-                        ((XContainerListener*)aIterator.next())->elementRemoved (aEvent);
+                        static_cast<XContainerListener*>(aIterator.next())->elementRemoved (aEvent);
                     }
                 }
                 // Break "for" !

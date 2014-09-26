@@ -357,7 +357,7 @@ sal_uLong StgIo::ValidateFATs()
         bool bRet1 = !pV->IsError(), bRet2 = true ;
         delete pV;
 
-        SvFileStream *pFileStrm = ( SvFileStream *) GetStrm();
+        SvFileStream *pFileStrm = static_cast<SvFileStream *>( GetStrm() );
         if ( !pFileStrm )
             return FAT_INMEMORYERROR;
 

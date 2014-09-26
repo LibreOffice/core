@@ -96,7 +96,7 @@ short StgDirEntry::Compare( const StgAvlNode* p ) const
     short nResult = -1;
     if ( p )
     {
-        const StgDirEntry* pEntry = (const StgDirEntry*) p;
+        const StgDirEntry* pEntry = static_cast<const StgDirEntry*>(p);
         nResult = aEntry.Compare( pEntry->aEntry );
     }
     return nResult;
@@ -114,11 +114,13 @@ void StgDirEntry::Enum( sal_Int32& n )
     nEntry = n++;
     if( pLeft )
     {
-        ((StgDirEntry*) pLeft)->Enum( n ); nLeft = ((StgDirEntry*) pLeft)->nEntry;
+        static_cast<StgDirEntry*>(pLeft)->Enum( n );
+        nLeft = static_cast<StgDirEntry*>(pLeft)->nEntry;
     }
     if( pRight )
     {
-        ((StgDirEntry*) pRight)->Enum( n ); nRight = ((StgDirEntry*) pRight)->nEntry;
+        static_cast<StgDirEntry*>(pRight)->Enum( n );
+        nRight = static_cast<StgDirEntry*>(pRight)->nEntry;
     }
     if( pDown )
     {
@@ -135,9 +137,9 @@ void StgDirEntry::Enum( sal_Int32& n )
 void StgDirEntry::DelTemp( bool bForce )
 {
     if( pLeft )
-        ((StgDirEntry*) pLeft)->DelTemp( false );
+        static_cast<StgDirEntry*>(pLeft)->DelTemp( false );
     if( pRight )
-        ((StgDirEntry*) pRight)->DelTemp( false );
+        static_cast<StgDirEntry*>(pRight)->DelTemp( false );
     if( pDown )
     {
         // If the storage is dead, of course all elements are dead, too
@@ -173,10 +175,10 @@ bool StgDirEntry::Store( StgDirStrm& rStrm )
     // Do not store the current (maybe not commited) entry
     aSave.Store( pEntry );
     if( pLeft )
-        if( !((StgDirEntry*) pLeft)->Store( rStrm ) )
+        if( !static_cast<StgDirEntry*>(pLeft)->Store( rStrm ) )
             return false;
     if( pRight )
-        if( !((StgDirEntry*) pRight)->Store( rStrm ) )
+        if( !static_cast<StgDirEntry*>(pRight)->Store( rStrm ) )
             return false;
     if( pDown )
         if( !pDown->Store( rStrm ) )
@@ -213,10 +215,10 @@ bool StgDirEntry::StoreStreams( StgIo& rIo )
     if( !StoreStream( rIo ) )
         return false;
     if( pLeft )
-        if( !((StgDirEntry*) pLeft)->StoreStreams( rIo ) )
+        if( !static_cast<StgDirEntry*>(pLeft)->StoreStreams( rIo ) )
             return false;
     if( pRight )
-        if( !((StgDirEntry*) pRight)->StoreStreams( rIo ) )
+        if( !static_cast<StgDirEntry*>(pRight)->StoreStreams( rIo ) )
             return false;
     if( pDown )
         if( !pDown->StoreStreams( rIo ) )
@@ -230,9 +232,9 @@ void StgDirEntry::RevertAll()
 {
     aEntry = aSave;
     if( pLeft )
-        ((StgDirEntry*) pLeft)->RevertAll();
+        static_cast<StgDirEntry*>(pLeft)->RevertAll();
     if( pRight )
-        ((StgDirEntry*) pRight)->RevertAll();
+        static_cast<StgDirEntry*>(pRight)->RevertAll();
     if( pDown )
         pDown->RevertAll();
 }
@@ -243,9 +245,9 @@ bool StgDirEntry::IsDirty()
 {
     if( bDirty || bInvalid )
         return true;
-    if( pLeft && ((StgDirEntry*) pLeft)->IsDirty() )
+    if( pLeft && static_cast<StgDirEntry*>(pLeft)->IsDirty() )
         return true;
-    if( pRight && ((StgDirEntry*) pRight)->IsDirty() )
+    if( pRight && static_cast<StgDirEntry*>(pRight)->IsDirty() )
         return true;
     if( pDown && pDown->IsDirty() )
         return true;
@@ -985,7 +987,7 @@ StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, const OUString& rName )
         }
         // Look in the directory attached to the entry
         StgDirEntry aTest( aEntry );
-        return (StgDirEntry*) rStg.pDown->Find( &aTest );
+        return static_cast<StgDirEntry*>( rStg.pDown->Find( &aTest ) );
     }
     else
         return NULL;

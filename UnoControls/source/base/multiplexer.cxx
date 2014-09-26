@@ -48,7 +48,7 @@ namespace unocontrols{
         {                                                                                                                           \
             if( aIterator.hasMoreElements() )                                                                                       \
             {                                                                                                                       \
-                INTERFACE * pListener = (INTERFACE *)aIterator.next();                                                          \
+                INTERFACE * pListener = static_cast<INTERFACE *>(aIterator.next());                                                 \
                 try                                                                                                                 \
                 {                                                                                                                   \
                     pListener->METHOD( aLocalEvent );                                                                               \
