@@ -2194,7 +2194,7 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
 
     // create and set cell style.
 
-    // TODO : We should gradually move things to writeToDoc, to set cell
+    // TODO : We should gradually move things to writeToDoc(), to set cell
     // styles to the document directly.
 
     if( maModel.mbFontUsed )
@@ -2209,13 +2209,6 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
         rStyles.writeBorderToPropertyMap( rPropMap, maModel.mnBorderId );
     if( maModel.mbAreaUsed )
         rStyles.writeFillToPropertyMap( rPropMap, maModel.mnFillId );
-    if( maModel.mbAlignUsed || maModel.mbBorderUsed )
-        rPropMap.setProperty( PROP_RotateReference, meRotationRef);
-
-    sal_Int32 eRotRef = ::com::sun::star::table::CellVertJustify2::STANDARD;
-    if (maModel.mbBorderUsed && rStyles.hasBorder(maModel.mnBorderId) && maAlignment.getApiData().mnRotation)
-        eRotRef = ::com::sun::star::table::CellVertJustify2::BOTTOM;
-    rPropMap.setProperty( PROP_RotateReference, eRotRef);
 }
 
 void Xf::writeToPropertySet( PropertySet& rPropSet ) const
@@ -2227,9 +2220,11 @@ void Xf::writeToPropertySet( PropertySet& rPropSet ) const
 
 void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRange ) const
 {
+    const StylesBuffer& rStyles = getStyles();
+
     if (isCellXf())
     {
-        const StylesBuffer& rStyles = getStyles();
+        // Cell style name.
         OUString aStyleName = rStyles.createCellStyle(maModel.mnStyleXfId);
 
         ScStyleSheet* pStyleSheet =
@@ -2243,6 +2238,23 @@ void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRan
                 *pStyleSheet);
         }
     }
+
+    boost::scoped_ptr<ScPatternAttr> pAttr(new ScPatternAttr(rDoc.getDoc().GetPool()));
+
+    {
+        SvxRotateMode eRotateMode = SVX_ROTATE_MODE_STANDARD;
+
+        if (maModel.mbBorderUsed && rStyles.hasBorder(maModel.mnBorderId) && maAlignment.getApiData().mnRotation)
+            eRotateMode = SVX_ROTATE_MODE_BOTTOM;
+
+        SvxRotateModeItem aItem(eRotateMode, ATTR_ROTATE_MODE);
+        ScfTools::PutItem(pAttr->GetItemSet(), aItem, false);
+    }
+
+    // TODO : Move more properties from writeToPropertyMap().
+
+    rDoc.getDoc().ApplyPatternAreaTab(
+        rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow, rRange.Sheet, *pAttr);
 }
 
 const ::ScPatternAttr&
