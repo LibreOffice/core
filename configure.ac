@@ -9392,10 +9392,10 @@ if test "$enable_coinmp" != "no"; then
     ENABLE_COINMP=TRUE
     AC_MSG_RESULT([yes])
     if test "$with_system_coinmp" = "yes"; then
-	SYSTEM_COINMP=TRUE
-	PKG_CHECK_MODULES( COINMP, coinmp )
+    SYSTEM_COINMP=TRUE
+    PKG_CHECK_MODULES( COINMP, coinmp )
     else
-    	BUILD_TYPE="$BUILD_TYPE COINMP"
+        BUILD_TYPE="$BUILD_TYPE COINMP"
     fi
 else
     AC_MSG_RESULT([no])
