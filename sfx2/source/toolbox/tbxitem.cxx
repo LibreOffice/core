@@ -1456,7 +1456,7 @@ SfxPopupWindow* SfxCurrencyToolBoxControl::CreatePopupWindow()
     PropertyValue aPropValue;
 
     aPropValue.Name = "CommandURL";
-    aPropValue.Value <<= OUString( ".uno:NumberFormatCurrency" );
+    aPropValue.Value <<= OUString( ".uno:CurrencyList" );
     aArgs[0] <<= aPropValue;
 
     aPropValue.Name = "Frame";
