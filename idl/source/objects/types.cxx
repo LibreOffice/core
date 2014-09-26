@@ -100,25 +100,25 @@ void SvMetaAttribute::Save( SvPersistStream & rStm )
 SvMetaType * SvMetaAttribute::GetType() const
 {
     if( aType.Is() || !GetRef() ) return aType;
-    return ((SvMetaAttribute *)GetRef())->GetType();
+    return static_cast<SvMetaAttribute *>(GetRef())->GetType();
 }
 
 const SvNumberIdentifier & SvMetaAttribute::GetSlotId() const
 {
     if( aSlotId.IsSet() || !GetRef() ) return aSlotId;
-    return ((SvMetaAttribute *)GetRef())->GetSlotId();
+    return static_cast<SvMetaAttribute *>(GetRef())->GetSlotId();
 }
 
 bool SvMetaAttribute::GetReadonly() const
 {
     if( aReadonly.IsSet() || !GetRef() ) return aReadonly;
-    return ((SvMetaAttribute *)GetRef())->GetReadonly();
+    return static_cast<SvMetaAttribute *>(GetRef())->GetReadonly();
 }
 
 bool SvMetaAttribute::GetExport() const
 {
     if( aExport.IsSet() || !GetRef() ) return aExport;
-    return ((SvMetaAttribute *)GetRef())->GetExport();
+    return static_cast<SvMetaAttribute *>(GetRef())->GetExport();
 }
 
 bool SvMetaAttribute::GetHidden() const
@@ -129,13 +129,13 @@ bool SvMetaAttribute::GetHidden() const
     else if( aHidden.IsSet() || !GetRef() )
         return aHidden;
     else
-        return ((SvMetaAttribute *)GetRef())->GetHidden();
+        return static_cast<SvMetaAttribute *>(GetRef())->GetHidden();
 }
 
 bool SvMetaAttribute::GetAutomation() const
 {
     if( aAutomation.IsSet() || !GetRef() ) return aAutomation;
-    return ((SvMetaAttribute *)GetRef())->GetAutomation();
+    return static_cast<SvMetaAttribute *>(GetRef())->GetAutomation();
 }
 
 bool SvMetaAttribute::GetIsCollection() const
@@ -152,13 +152,13 @@ bool SvMetaAttribute::GetIsCollection() const
         return aIsCollection;
     }
 
-    return ((SvMetaSlot *)GetRef())->GetIsCollection();
+    return static_cast<SvMetaSlot *>(GetRef())->GetIsCollection();
 }
 
 bool SvMetaAttribute::GetReadOnlyDoc() const
 {
     if( aReadOnlyDoc.IsSet() || !GetRef() ) return aReadOnlyDoc;
-    return ((SvMetaSlot *)GetRef())->GetReadOnlyDoc();
+    return static_cast<SvMetaSlot *>(GetRef())->GetReadOnlyDoc();
 }
 
 bool SvMetaAttribute::IsMethod() const
@@ -883,7 +883,7 @@ void SvMetaType::SetType( int nT )
 SvMetaType * SvMetaType::GetBaseType() const
 {
     if( GetRef() && GetType() == TYPE_BASE )
-        return ((SvMetaType *)GetRef())->GetBaseType();
+        return static_cast<SvMetaType *>(GetRef())->GetBaseType();
     return (SvMetaType *)this;
 }
 
@@ -891,7 +891,7 @@ SvMetaType * SvMetaType::GetReturnType() const
 {
     DBG_ASSERT( GetType() == TYPE_METHOD, "no method" );
     DBG_ASSERT( GetRef(), "no return type" );
-    return (SvMetaType *)GetRef();
+    return static_cast<SvMetaType *>(GetRef());
 }
 
 const OString& SvMetaType::GetBasicName() const
@@ -899,7 +899,7 @@ const OString& SvMetaType::GetBasicName() const
     if( aBasicName.IsSet() || !GetRef() )
         return aBasicName.getString();
     else
-        return ((SvMetaType*)GetRef())->GetBasicName();
+        return static_cast<SvMetaType*>(GetRef())->GetBasicName();
 }
 
 OString SvMetaType::GetBasicPostfix() const
@@ -915,7 +915,7 @@ bool SvMetaType::GetIn() const
     if( aIn.IsSet() || !GetRef() )
         return aIn;
     else
-        return ((SvMetaType *)GetRef())->GetIn();
+        return static_cast<SvMetaType *>(GetRef())->GetIn();
 }
 
 bool SvMetaType::GetOut() const
@@ -923,7 +923,7 @@ bool SvMetaType::GetOut() const
     if( aOut.IsSet() || !GetRef() )
         return aOut;
     else
-        return ((SvMetaType *)GetRef())->GetOut();
+        return static_cast<SvMetaType *>(GetRef())->GetOut();
 }
 
 void SvMetaType::SetCall0( int e )
@@ -947,7 +947,7 @@ int SvMetaType::GetCall0() const
     if( aCall0.IsSet() || !GetRef() )
         return aCall0;
     else
-        return ((SvMetaType *)GetRef())->GetCall0();
+        return static_cast<SvMetaType *>(GetRef())->GetCall0();
 }
 
 void SvMetaType::SetCall1( int e )
@@ -971,7 +971,7 @@ int SvMetaType::GetCall1() const
     if( aCall1.IsSet() || !GetRef() )
         return aCall1;
     else
-        return ((SvMetaType *)GetRef())->GetCall1();
+        return static_cast<SvMetaType *>(GetRef())->GetCall1();
 }
 
 const OString& SvMetaType::GetSvName() const
@@ -979,7 +979,7 @@ const OString& SvMetaType::GetSvName() const
     if( aSvName.IsSet() || !GetRef() )
         return aSvName.getString();
     else
-        return ((SvMetaType *)GetRef())->GetSvName();
+        return static_cast<SvMetaType *>(GetRef())->GetSvName();
 }
 
 const OString& SvMetaType::GetSbxName() const
@@ -987,7 +987,7 @@ const OString& SvMetaType::GetSbxName() const
     if( aSbxName.IsSet() || !GetRef() )
         return aSbxName.getString();
     else
-        return ((SvMetaType *)GetRef())->GetSbxName();
+        return static_cast<SvMetaType *>(GetRef())->GetSbxName();
 }
 
 const OString& SvMetaType::GetOdlName() const
@@ -995,7 +995,7 @@ const OString& SvMetaType::GetOdlName() const
     if( aOdlName.IsSet() || !GetRef() )
         return aOdlName.getString();
     else
-        return ((SvMetaType *)GetRef())->GetOdlName();
+        return static_cast<SvMetaType *>(GetRef())->GetOdlName();
 }
 
 const OString& SvMetaType::GetCName() const
@@ -1003,7 +1003,7 @@ const OString& SvMetaType::GetCName() const
     if( aCName.IsSet() || !GetRef() )
         return aCName.getString();
     else
-        return ((SvMetaType *)GetRef())->GetCName();
+        return static_cast<SvMetaType *>(GetRef())->GetCName();
 }
 
 bool SvMetaType::SetName( const OString& rName, SvIdlDataBase * pBase )
@@ -1283,7 +1283,7 @@ void SvMetaType::WriteHeaderSvIdl( SvIdlDataBase & rBase,
                 rOutStm.WriteCharPtr( SvHash_typedef()->GetName().getStr() ).WriteChar( ' ' );
             if( GetRef() )
             {
-                ((SvMetaType *)GetRef())->WriteTheType( rBase, rOutStm, nTab, WRITE_IDL );
+                static_cast<SvMetaType *>(GetRef())->WriteTheType( rBase, rOutStm, nTab, WRITE_IDL );
                 rOutStm.WriteChar( ' ' );
             }
             rOutStm.WriteCharPtr( GetName().getString().getStr() );
@@ -1292,7 +1292,7 @@ void SvMetaType::WriteHeaderSvIdl( SvIdlDataBase & rBase,
         case TYPE_METHOD:
         {
             rOutStm.WriteCharPtr( SvHash_typedef()->GetName().getStr() ).WriteChar( ' ' );
-            ((SvMetaType *)GetRef())->WriteTheType( rBase, rOutStm, nTab, WRITE_IDL );
+            static_cast<SvMetaType *>(GetRef())->WriteTheType( rBase, rOutStm, nTab, WRITE_IDL );
             rOutStm.WriteChar( ' ' ).WriteCharPtr( GetName().getString().getStr() ).WriteCharPtr( "( " );
             WriteContextSvIdl( rBase, rOutStm, nTab );
             rOutStm.WriteCharPtr( " )" );

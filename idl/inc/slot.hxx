@@ -169,7 +169,7 @@ protected:
 public:
             SV_DECL_META_FACTORY1( SvMetaSlot, SvMetaReference, 11 )
             SvMetaObject *  MakeClone() const;
-            SvMetaSlot *Clone() const { return (SvMetaSlot *)MakeClone(); }
+            SvMetaSlot *Clone() const { return static_cast<SvMetaSlot *>(MakeClone()); }
 
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );

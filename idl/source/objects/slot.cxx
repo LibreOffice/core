@@ -314,90 +314,90 @@ OString SvMetaSlot::GetMangleName( bool bVariable ) const
 SvMetaType * SvMetaSlot::GetSlotType() const
 {
     if( aSlotType.Is() || !GetRef() ) return aSlotType;
-    return ((SvMetaSlot *)GetRef())->GetSlotType();
+    return static_cast<SvMetaSlot *>(GetRef())->GetSlotType();
 }
 SvMetaAttribute * SvMetaSlot::GetMethod() const
 {
     if( aMethod.Is() || !GetRef() ) return aMethod;
-    return ((SvMetaSlot *)GetRef())->GetMethod();
+    return static_cast<SvMetaSlot *>(GetRef())->GetMethod();
 }
 bool SvMetaSlot::GetHasCoreId() const
 {
     if( aHasCoreId.IsSet() || !GetRef() ) return aHasCoreId;
-    return ((SvMetaSlot *)GetRef())->GetHasCoreId();
+    return static_cast<SvMetaSlot *>(GetRef())->GetHasCoreId();
 }
 const OString& SvMetaSlot::GetGroupId() const
 {
     if( !aGroupId.getString().isEmpty() || !GetRef() ) return aGroupId.getString();
-    return ((SvMetaSlot *)GetRef())->GetGroupId();
+    return static_cast<SvMetaSlot *>(GetRef())->GetGroupId();
 }
 const OString& SvMetaSlot::GetDisableFlags() const
 {
     if( !aDisableFlags.getString().isEmpty() || !GetRef() ) return aDisableFlags.getString();
-    return ((SvMetaSlot *)GetRef())->GetDisableFlags();
+    return static_cast<SvMetaSlot *>(GetRef())->GetDisableFlags();
 }
 const OString& SvMetaSlot::GetConfigId() const
 {
     if( !aConfigId.getString().isEmpty() || !GetRef() ) return aConfigId.getString();
-    return ((SvMetaSlot *)GetRef())->GetConfigId();
+    return static_cast<SvMetaSlot *>(GetRef())->GetConfigId();
 }
 const OString& SvMetaSlot::GetExecMethod() const
 {
     if( !aExecMethod.getString().isEmpty() || !GetRef() ) return aExecMethod.getString();
-    return ((SvMetaSlot *)GetRef())->GetExecMethod();
+    return static_cast<SvMetaSlot *>(GetRef())->GetExecMethod();
 }
 const OString& SvMetaSlot::GetStateMethod() const
 {
     if( !aStateMethod.getString().isEmpty() || !GetRef() ) return aStateMethod.getString();
-    return ((SvMetaSlot *)GetRef())->GetStateMethod();
+    return static_cast<SvMetaSlot *>(GetRef())->GetStateMethod();
 }
 const OString& SvMetaSlot::GetDefault() const
 {
     if( !aDefault.getString().isEmpty() || !GetRef() ) return aDefault.getString();
-    return ((SvMetaSlot *)GetRef())->GetDefault();
+    return static_cast<SvMetaSlot *>(GetRef())->GetDefault();
 }
 bool SvMetaSlot::GetPseudoSlots() const
 {
     if( aPseudoSlots.IsSet() || !GetRef() ) return aPseudoSlots;
-    return ((SvMetaSlot *)GetRef())->GetPseudoSlots();
+    return static_cast<SvMetaSlot *>(GetRef())->GetPseudoSlots();
 }
 bool SvMetaSlot::GetCachable() const
 {
     // Cachable and Volatile are exclusive
     if( !GetRef() || aCachable.IsSet() || aVolatile.IsSet() )
          return aCachable;
-    return ((SvMetaSlot *)GetRef())->GetCachable();
+    return static_cast<SvMetaSlot *>(GetRef())->GetCachable();
 }
 bool SvMetaSlot::GetVolatile() const
 {
     // Cachable and Volatile are exclusive
     if( !GetRef() || aVolatile.IsSet() || aCachable.IsSet() )
         return aVolatile;
-    return ((SvMetaSlot *)GetRef())->GetVolatile();
+    return static_cast<SvMetaSlot *>(GetRef())->GetVolatile();
 }
 bool SvMetaSlot::GetToggle() const
 {
     if( aToggle.IsSet() || !GetRef() ) return aToggle;
-    return ((SvMetaSlot *)GetRef())->GetToggle();
+    return static_cast<SvMetaSlot *>(GetRef())->GetToggle();
 }
 bool SvMetaSlot::GetAutoUpdate() const
 {
     if( aAutoUpdate.IsSet() || !GetRef() ) return aAutoUpdate;
-    return ((SvMetaSlot *)GetRef())->GetAutoUpdate();
+    return static_cast<SvMetaSlot *>(GetRef())->GetAutoUpdate();
 }
 bool SvMetaSlot::GetSynchron() const
 {
     // Synchron and Asynchron are exclusive
     if( !GetRef() || aSynchron.IsSet() || aAsynchron.IsSet() )
         return aSynchron;
-    return ((SvMetaSlot *)GetRef())->GetSynchron();
+    return static_cast<SvMetaSlot *>(GetRef())->GetSynchron();
 }
 bool SvMetaSlot::GetAsynchron() const
 {
     // Synchron and Asynchron are exclusive
     if( !GetRef() || aAsynchron.IsSet() || aSynchron.IsSet() )
         return aAsynchron;
-    return ((SvMetaSlot *)GetRef())->GetAsynchron();
+    return static_cast<SvMetaSlot *>(GetRef())->GetAsynchron();
 }
 bool SvMetaSlot::GetRecordPerItem() const
 {
@@ -405,7 +405,7 @@ bool SvMetaSlot::GetRecordPerItem() const
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
       || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
         return aRecordPerItem;
-    return ((SvMetaSlot *)GetRef())->GetRecordPerItem();
+    return static_cast<SvMetaSlot *>(GetRef())->GetRecordPerItem();
 }
 bool SvMetaSlot::GetRecordPerSet() const
 {
@@ -413,7 +413,7 @@ bool SvMetaSlot::GetRecordPerSet() const
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
       || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
         return aRecordPerSet;
-    return ((SvMetaSlot *)GetRef())->GetRecordPerSet();
+    return static_cast<SvMetaSlot *>(GetRef())->GetRecordPerSet();
 }
 bool SvMetaSlot::GetRecordManual() const
 {
@@ -421,7 +421,7 @@ bool SvMetaSlot::GetRecordManual() const
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
       || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
         return aRecordManual;
-    return ((SvMetaSlot *)GetRef())->GetRecordManual();
+    return static_cast<SvMetaSlot *>(GetRef())->GetRecordManual();
 }
 bool SvMetaSlot::GetNoRecord() const
 {
@@ -429,71 +429,71 @@ bool SvMetaSlot::GetNoRecord() const
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
       || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
         return aNoRecord;
-    return ((SvMetaSlot *)GetRef())->GetNoRecord();
+    return static_cast<SvMetaSlot *>(GetRef())->GetNoRecord();
 }
 bool SvMetaSlot::GetRecordAbsolute() const
 {
     if( !GetRef() || aRecordAbsolute.IsSet() )
         return aRecordAbsolute;
-    return ((SvMetaSlot *)GetRef())->GetRecordAbsolute();
+    return static_cast<SvMetaSlot *>(GetRef())->GetRecordAbsolute();
 }
 bool SvMetaSlot::GetHasDialog() const
 {
     if( aHasDialog.IsSet() || !GetRef() ) return aHasDialog;
-    return ((SvMetaSlot *)GetRef())->GetHasDialog();
+    return static_cast<SvMetaSlot *>(GetRef())->GetHasDialog();
 }
 const OString& SvMetaSlot::GetPseudoPrefix() const
 {
     if( !aPseudoPrefix.getString().isEmpty() || !GetRef() ) return aPseudoPrefix.getString();
-    return ((SvMetaSlot *)GetRef())->GetPseudoPrefix();
+    return static_cast<SvMetaSlot *>(GetRef())->GetPseudoPrefix();
 }
 bool SvMetaSlot::GetMenuConfig() const
 {
     if( aMenuConfig.IsSet() || !GetRef() ) return aMenuConfig;
-    return ((SvMetaSlot *)GetRef())->GetMenuConfig();
+    return static_cast<SvMetaSlot *>(GetRef())->GetMenuConfig();
 }
 bool SvMetaSlot::GetToolBoxConfig() const
 {
     if( aToolBoxConfig.IsSet() || !GetRef() ) return aToolBoxConfig;
-    return ((SvMetaSlot *)GetRef())->GetToolBoxConfig();
+    return static_cast<SvMetaSlot *>(GetRef())->GetToolBoxConfig();
 }
 bool SvMetaSlot::GetStatusBarConfig() const
 {
     if( aStatusBarConfig.IsSet() || !GetRef() ) return aStatusBarConfig;
-    return ((SvMetaSlot *)GetRef())->GetStatusBarConfig();
+    return static_cast<SvMetaSlot *>(GetRef())->GetStatusBarConfig();
 }
 bool SvMetaSlot::GetAccelConfig() const
 {
     if( aAccelConfig.IsSet() || !GetRef() ) return aAccelConfig;
-    return ((SvMetaSlot *)GetRef())->GetAccelConfig();
+    return static_cast<SvMetaSlot *>(GetRef())->GetAccelConfig();
 }
 bool SvMetaSlot::GetFastCall() const
 {
     if( aFastCall.IsSet() || !GetRef() ) return aFastCall;
-    return ((SvMetaSlot *)GetRef())->GetFastCall();
+    return static_cast<SvMetaSlot *>(GetRef())->GetFastCall();
 }
 bool SvMetaSlot::GetContainer() const
 {
     if( aContainer.IsSet() || !GetRef() ) return aContainer;
-    return ((SvMetaSlot *)GetRef())->GetContainer();
+    return static_cast<SvMetaSlot *>(GetRef())->GetContainer();
 }
 
 bool SvMetaSlot::GetImageRotation() const
 {
     if( aImageRotation.IsSet() || !GetRef() ) return aImageRotation;
-    return ((SvMetaSlot *)GetRef())->GetImageRotation();
+    return static_cast<SvMetaSlot *>(GetRef())->GetImageRotation();
 }
 
 bool SvMetaSlot::GetImageReflection() const
 {
     if( aImageReflection.IsSet() || !GetRef() ) return aImageReflection;
-    return ((SvMetaSlot *)GetRef())->GetImageReflection();
+    return static_cast<SvMetaSlot *>(GetRef())->GetImageReflection();
 }
 
 const OString& SvMetaSlot::GetUnoName() const
 {
     if( aUnoName.IsSet() || !GetRef() ) return aUnoName.getString();
-    return ((SvMetaSlot *)GetRef())->GetUnoName();
+    return static_cast<SvMetaSlot *>(GetRef())->GetUnoName();
 }
 
 void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
