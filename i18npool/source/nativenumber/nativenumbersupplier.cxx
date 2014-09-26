@@ -520,50 +520,55 @@ static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
 OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                 sal_Int16 nNativeNumberMode, Sequence< sal_Int32 >& offset) throw (RuntimeException)
 {
+    if (!isValidNatNum(rLocale, nNativeNumberMode))
+        return aNumberString;
+
+    sal_Int16 langnum = getLanguageNumber(rLocale);
+    if (langnum == -1)
+        return aNumberString;
+
     const Number *number = 0;
     sal_Int16 num = -1;
 
-    if (isValidNatNum(rLocale, nNativeNumberMode)) {
-        sal_Int16 langnum = getLanguageNumber(rLocale);
-        switch (nNativeNumberMode) {
-            case NativeNumberMode::NATNUM0: // Ascii
-                return NativeToAscii(aNumberString,  0, aNumberString.getLength(), offset, useOffset);
-            case NativeNumberMode::NATNUM1: // Char, Lower
-                num = natnum1[langnum];
-                break;
-            case NativeNumberMode::NATNUM2: // Char, Upper
-                num = natnum2[langnum];
-                break;
-            case NativeNumberMode::NATNUM3: // Char, FullWidth
-                num = NumberChar_FullWidth;
-                break;
-            case NativeNumberMode::NATNUM4: // Text, Lower, Long
-                number = &natnum4[langnum];
-                break;
-            case NativeNumberMode::NATNUM5: // Text, Upper, Long
-                number = &natnum5[langnum];
-                break;
-            case NativeNumberMode::NATNUM6: // Text, FullWidth
-                number = &natnum6[langnum];
-                break;
-            case NativeNumberMode::NATNUM7: // Text. Lower, Short
-                number = &natnum7[langnum];
-                break;
-            case NativeNumberMode::NATNUM8: // Text, Upper, Short
-                number = &natnum8[langnum];
-                break;
-            case NativeNumberMode::NATNUM9: // Char, Hangul
-                num = NumberChar_Hangul_ko;
-                break;
-            case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
-                number = &natnum10;
-                break;
-            case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
-                number = &natnum11;
-                break;
-            default:
-                break;
-        }
+    switch (nNativeNumberMode)
+    {
+        case NativeNumberMode::NATNUM0: // Ascii
+            return NativeToAscii(aNumberString,  0, aNumberString.getLength(), offset, useOffset);
+        case NativeNumberMode::NATNUM1: // Char, Lower
+            num = natnum1[langnum];
+            break;
+        case NativeNumberMode::NATNUM2: // Char, Upper
+            num = natnum2[langnum];
+            break;
+        case NativeNumberMode::NATNUM3: // Char, FullWidth
+            num = NumberChar_FullWidth;
+            break;
+        case NativeNumberMode::NATNUM4: // Text, Lower, Long
+            number = &natnum4[langnum];
+            break;
+        case NativeNumberMode::NATNUM5: // Text, Upper, Long
+            number = &natnum5[langnum];
+            break;
+        case NativeNumberMode::NATNUM6: // Text, FullWidth
+            number = &natnum6[langnum];
+            break;
+        case NativeNumberMode::NATNUM7: // Text. Lower, Short
+            number = &natnum7[langnum];
+            break;
+        case NativeNumberMode::NATNUM8: // Text, Upper, Short
+            number = &natnum8[langnum];
+            break;
+        case NativeNumberMode::NATNUM9: // Char, Hangul
+            num = NumberChar_Hangul_ko;
+            break;
+        case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
+            number = &natnum10;
+            break;
+        case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
+            number = &natnum11;
+            break;
+        default:
+            break;
     }
 
     if (number || num >= 0) {
