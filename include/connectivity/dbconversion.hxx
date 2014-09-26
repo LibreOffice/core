@@ -123,11 +123,11 @@ namespace dbtools
         /** convert a double which is a date value relative to a given fixed date into a date value relative
             to the standard db null date.
         */
-        OOO_DLLPUBLIC_DBTOOLS inline double toStandardDbDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal + toDays(_rNullDate); }
+        inline double toStandardDbDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal + toDays(_rNullDate); }
         /** convert a double which is a date value relative to the standard db null date into a date value relative
             to a given fixed date.
         */
-        OOO_DLLPUBLIC_DBTOOLS inline double toNullDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal - toDays(_rNullDate); }
+        inline double toNullDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal - toDays(_rNullDate); }
 
         // return the date from the numberformatsupplier or the STANDARD_DATE (1900,1,1)
         OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Date getNULLDate(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > &xSupplier);
