@@ -110,10 +110,8 @@ public:
     void SAL_CALL writeId( ::sal_Int32 Element );
     OString SAL_CALL getId( ::sal_Int32 Element );
 
-    void write( const OUString& s );
-    void write( const OString& s );
-
-    static OUString escapeXml( const OUString& s );
+    void write( const OUString& s, bool bEscape = false );
+    void write( const OString& s, bool bEscape = false );
 
 public:
     /** From now on, don't write directly to the stream, but to top of a stack.
@@ -233,6 +231,7 @@ protected:
         The latter in the case that we are inside a mark().
      */
     void writeBytes( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void writeBytes( const char* pStr, size_t nLen ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 };
 
 } // namespace sax_fastparser

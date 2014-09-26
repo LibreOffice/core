@@ -76,39 +76,36 @@ namespace sax_fastparser {
         writeBytes(toUnoSequence(aXmlHeader));
     }
 
-    OUString FastSaxSerializer::escapeXml( const OUString& s )
+    void FastSaxSerializer::write( const OUString& sOutput, bool bEscape )
     {
-        OUStringBuffer sBuf( s.getLength() );
-        const sal_Unicode* pStr = s.getStr();
-        sal_Int32 nLen = s.getLength();
-        for( sal_Int32 i = 0; i < nLen; ++i)
+        write( OUStringToOString(sOutput, RTL_TEXTENCODING_UTF8), bEscape );
+    }
+
+    void FastSaxSerializer::write( const OString& sOutput, bool bEscape )
+    {
+        if (!bEscape)
         {
-            sal_Unicode c = pStr[ i ];
+            writeBytes( sOutput.getStr(), sOutput.getLength() );
+            return;
+        }
+
+        const char* pStr = sOutput.getStr();
+        sal_Int32 nLen = sOutput.getLength();
+        for (sal_Int32 i = 0; i < nLen; ++i)
+        {
+            char c = pStr[ i ];
             switch( c )
             {
-                case '<':   sBuf.appendAscii( "&lt;" );     break;
-                case '>':   sBuf.appendAscii( "&gt;" );     break;
-                case '&':   sBuf.appendAscii( "&amp;" );    break;
-                case '\'':  sBuf.appendAscii( "&apos;" );   break;
-                case '"':   sBuf.appendAscii( "&quot;" );   break;
-                case '\n':  sBuf.appendAscii( "&#10;" );    break;
-                case '\r':  sBuf.appendAscii( "&#13;" );    break;
-                default:    sBuf.append( c );               break;
+                case '<':   writeBytes( "&lt;", 4 );     break;
+                case '>':   writeBytes( "&gt;", 4 );     break;
+                case '&':   writeBytes( "&amp;", 5 );    break;
+                case '\'':  writeBytes( "&apos;", 6 );   break;
+                case '"':   writeBytes( "&quot;", 6 );   break;
+                case '\n':  writeBytes( "&#10;", 5 );    break;
+                case '\r':  writeBytes( "&#13;", 5 );    break;
+                default:    writeBytes( &c, 1 );          break;
             }
         }
-        return sBuf.makeStringAndClear();
-    }
-
-    void FastSaxSerializer::write( const OUString& sOutput )
-    {
-        write( OUStringToOString(sOutput, RTL_TEXTENCODING_UTF8) );
-    }
-
-    void FastSaxSerializer::write( const OString& sOutput )
-    {
-        writeBytes( Sequence< sal_Int8 >(
-                    reinterpret_cast< const sal_Int8*>( sOutput.getStr() ),
-                    sOutput.getLength() ) );
     }
 
     void SAL_CALL FastSaxSerializer::endDocument(  ) throw (SAXException, RuntimeException)
@@ -226,7 +223,7 @@ namespace sax_fastparser {
 #endif
             write(rAttrName);
             writeBytes(toUnoSequence(maEqualSignAndQuote));
-            write(escapeXml(pAttr[i].Value));
+            write(pAttr[i].Value, true);
             writeBytes(toUnoSequence(maQuote));
         }
 
@@ -250,7 +247,7 @@ namespace sax_fastparser {
 
             writeBytes(toUnoSequence(maEqualSignAndQuote));
 
-            write(escapeXml(pFastAttr[j].Value));
+            write(pFastAttr[j].Value, true);
 
             writeBytes(toUnoSequence(maQuote));
         }
@@ -293,6 +290,13 @@ namespace sax_fastparser {
             case MERGE_MARKS_IGNORE  :  break;
 
         }
+    }
+
+    void FastSaxSerializer::writeBytes( const char* pStr, size_t nLen )
+        throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
+    {
+        writeBytes( Sequence< sal_Int8 >(
+            reinterpret_cast<const sal_Int8*>(pStr), nLen) );
     }
 
     void FastSaxSerializer::writeBytes( const Sequence< ::sal_Int8 >& aData ) throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
