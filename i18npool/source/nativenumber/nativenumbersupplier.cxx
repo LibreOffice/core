@@ -611,28 +611,38 @@ sal_Unicode SAL_CALL NativeNumberSupplierService::getNativeNumberChar( const sal
                     return j;
         return inChar;
     }
-    else if (isNumber(inChar) && isValidNatNum(rLocale, nNativeNumberMode)) {
-        sal_Int16 langnum = getLanguageNumber(rLocale);
-        switch (nNativeNumberMode) {
-            case NativeNumberMode::NATNUM1: // Char, Lower
-            case NativeNumberMode::NATNUM4: // Text, Lower, Long
-            case NativeNumberMode::NATNUM7: // Text. Lower, Short
-                return NumberChar[natnum1[langnum]][inChar - NUMBER_ZERO];
-            case NativeNumberMode::NATNUM2: // Char, Upper
-            case NativeNumberMode::NATNUM5: // Text, Upper, Long
-            case NativeNumberMode::NATNUM8: // Text, Upper, Short
-                return NumberChar[natnum2[langnum]][inChar - NUMBER_ZERO];
-            case NativeNumberMode::NATNUM3: // Char, FullWidth
-            case NativeNumberMode::NATNUM6: // Text, FullWidth
-                return NumberChar[NumberChar_FullWidth][inChar - NUMBER_ZERO];
-            case NativeNumberMode::NATNUM9: // Char, Hangul
-            case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
-            case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
-                return NumberChar[NumberChar_Hangul_ko][inChar - NUMBER_ZERO];
-            default:
-                break;
-        }
+
+    if (!isNumber(inChar))
+        return inChar;
+
+    if (!isValidNatNum(rLocale, nNativeNumberMode))
+        return inChar;
+
+    sal_Int16 langnum = getLanguageNumber(rLocale);
+    if (langnum == -1)
+        return inChar;
+
+    switch (nNativeNumberMode)
+    {
+        case NativeNumberMode::NATNUM1: // Char, Lower
+        case NativeNumberMode::NATNUM4: // Text, Lower, Long
+        case NativeNumberMode::NATNUM7: // Text. Lower, Short
+            return NumberChar[natnum1[langnum]][inChar - NUMBER_ZERO];
+        case NativeNumberMode::NATNUM2: // Char, Upper
+        case NativeNumberMode::NATNUM5: // Text, Upper, Long
+        case NativeNumberMode::NATNUM8: // Text, Upper, Short
+            return NumberChar[natnum2[langnum]][inChar - NUMBER_ZERO];
+        case NativeNumberMode::NATNUM3: // Char, FullWidth
+        case NativeNumberMode::NATNUM6: // Text, FullWidth
+            return NumberChar[NumberChar_FullWidth][inChar - NUMBER_ZERO];
+        case NativeNumberMode::NATNUM9: // Char, Hangul
+        case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
+        case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
+            return NumberChar[NumberChar_Hangul_ko][inChar - NUMBER_ZERO];
+        default:
+            break;
     }
+
     return inChar;
 }
 
