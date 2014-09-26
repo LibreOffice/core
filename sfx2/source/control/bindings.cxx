@@ -146,37 +146,6 @@ public:
     InvalidateSlotMap       m_aInvalidateSlots; // store slots which are invalidated while in update
 };
 
-
-
-struct SfxFoundCache_Impl
-{
-    sal_uInt16      nSlotId;   // the Slot-Id
-    sal_uInt16      nWhichId;  // If available: Which-Id, else: nSlotId
-    const SfxSlot*  pSlot;     // Pointer to <Master-Slot>
-    SfxStateCache*  pCache;    // Pointer to StatusCache, if possible NULL
-
-    SfxFoundCache_Impl(sal_uInt16 nS, sal_uInt16 nW, const SfxSlot *pS, SfxStateCache *pC ):
-        nSlotId(nS),
-        nWhichId(nW),
-        pSlot(pS),
-        pCache(pC)
-    {}
-};
-
-
-
-class SfxFoundCacheArr_Impl : public std::vector<SfxFoundCache_Impl*>
-{
-public:
-    ~SfxFoundCacheArr_Impl()
-    {
-        for(const_iterator it = begin(); it != end(); ++it)
-            delete *it;
-    }
-};
-
-
-
 SfxBindings::SfxBindings()
 :   pImp(new SfxBindings_Impl),
     pDispatcher(0),
@@ -378,8 +347,8 @@ void SfxBindings::Update_Impl
                 rDispat.GetShell(pMsgServer->GetShellLevel())->GetInterface();
             for ( sal_uInt16 nPos = 0; nPos < aFound.size(); ++nPos )
             {
-                const SfxFoundCache_Impl *pFound = aFound[nPos];
-                sal_uInt16 nWhich = pFound->nWhichId;
+                const SfxFoundCache_Impl& rFound = aFound[nPos];
+                sal_uInt16 nWhich = rFound.nWhichId;
                 const SfxPoolItem *pItem = 0;
                 SfxItemState eState = pSet->GetItemState(nWhich, true, &pItem);
                 if ( eState == SfxItemState::DEFAULT && SfxItemPool::IsWhich(nWhich) )
@@ -400,7 +369,7 @@ void SfxBindings::Update_Impl
         SfxFoundCache_Impl aFoundCache(
                             pCache->GetId(), 0,
                             pRealSlot, pCache );
-        UpdateControllers_Impl( 0, &aFoundCache, 0, SfxItemState::DISABLED);
+        UpdateControllers_Impl( 0, aFoundCache, 0, SfxItemState::DISABLED);
     }
 }
 
@@ -1390,12 +1359,12 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     sal_uInt16 i = 0;
     while ( i < rFound.size() )
     {
-        pRanges[j++] = rFound[i]->nWhichId;
+        pRanges[j++] = rFound[i].nWhichId;
             // consecutive numbers
         for ( ; i < rFound.size()-1; ++i )
-            if ( rFound[i]->nWhichId+1 != rFound[i+1]->nWhichId )
+            if ( rFound[i].nWhichId+1 != rFound[i+1].nWhichId )
                 break;
-        pRanges[j++] = rFound[i++]->nWhichId;
+        pRanges[j++] = rFound[i++].nWhichId;
     }
     pRanges[j] = 0; // terminating NULL
     SfxItemSet *pSet = new SfxItemSet(rPool, pRanges.get());
@@ -1408,16 +1377,16 @@ SfxItemSet* SfxBindings::CreateSet_Impl
 void SfxBindings::UpdateControllers_Impl
 (
     const SfxInterface*         pIF,    // Id of the current serving Interface
-    const SfxFoundCache_Impl*   pFound, // Cache, Slot, Which etc.
+    const SfxFoundCache_Impl&   rFound, // Cache, Slot, Which etc.
     const SfxPoolItem*          pItem,  // item to send to controller
     SfxItemState                eState  // state of item
 )
 {
-    DBG_ASSERT( !pFound->pSlot || SFX_KIND_ENUM != pFound->pSlot->GetKind(),
+    DBG_ASSERT( !rFound.pSlot || SFX_KIND_ENUM != rFound.pSlot->GetKind(),
                 "direct update of enum slot isn't allowed" );
 
-    SfxStateCache* pCache = pFound->pCache;
-    const SfxSlot* pSlot = pFound->pSlot;
+    SfxStateCache* pCache = rFound.pCache;
+    const SfxSlot* pSlot = rFound.pSlot;
     DBG_ASSERT( !pCache || !pSlot || pCache->GetId() == pSlot->GetSlotId(), "SID mismatch" );
 
     // bound until now, the Controller to update the Slot.
@@ -1429,7 +1398,7 @@ void SfxBindings::UpdateControllers_Impl
             pCache->SetState( SfxItemState::DONTCARE, (SfxPoolItem *)-1 );
         }
         else if ( SfxItemState::DEFAULT == eState &&
-                    pFound->nWhichId > SFX_WHICH_MAX )
+                    rFound.nWhichId > SFX_WHICH_MAX )
         {
             // no Status or Default but without Pool
             SfxVoidItem aVoid(0);
@@ -1471,7 +1440,7 @@ void SfxBindings::UpdateControllers_Impl
                 pEnumCache->Invalidate(false);
 
                 // HACK(CONTROL/SELECT Kram) ???
-                if ( eState == SfxItemState::DONTCARE && pFound->nWhichId == 10144 )
+                if ( eState == SfxItemState::DONTCARE && rFound.nWhichId == 10144 )
                 {
                     SfxVoidItem aVoid(0);
                     pEnumCache->SetState( SfxItemState::UNKNOWN, &aVoid );
@@ -1491,7 +1460,7 @@ void SfxBindings::UpdateControllers_Impl
                 {
                     // Determine enum value
                     sal_uInt16 nValue = pEnumItem->GetEnumValue();
-                    SfxBoolItem aBool( pFound->nWhichId, pSlave->GetValue() == nValue );
+                    SfxBoolItem aBool( rFound.nWhichId, pSlave->GetValue() == nValue );
                     pEnumCache->SetState(SfxItemState::DEFAULT, &aBool);
                 }
                 else

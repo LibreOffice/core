@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 
 //  some other includes
@@ -50,8 +51,6 @@ class SfxDispatcher;
 class SfxBindings;
 class SfxBindings_Impl;
 class Timer;
-struct SfxFoundCache_Impl;
-class SfxFoundCacheArr_Impl;
 class SfxWorkWindow;
 class SfxUnoControllerItem;
 
@@ -74,6 +73,22 @@ enum SfxPopupAction
     SFX_POPUP_SHOW
 };
 
+struct SfxFoundCache_Impl
+{
+    sal_uInt16      nSlotId;   // the Slot-Id
+    sal_uInt16      nWhichId;  // If available: Which-Id, else: nSlotId
+    const SfxSlot*  pSlot;     // Pointer to <Master-Slot>
+    SfxStateCache*  pCache;    // Pointer to StatusCache, if possible NULL
+
+    SfxFoundCache_Impl(sal_uInt16 nS, sal_uInt16 nW, const SfxSlot *pS, SfxStateCache *pC ):
+        nSlotId(nS),
+        nWhichId(nW),
+        pSlot(pS),
+        pCache(pC)
+    {}
+};
+
+typedef boost::ptr_vector<SfxFoundCache_Impl> SfxFoundCacheArr_Impl;
 
 class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
 
@@ -117,7 +132,7 @@ private:
     SAL_DLLPRIVATE void Update_Impl( SfxStateCache* pCache );
     SAL_DLLPRIVATE void UpdateControllers_Impl(
                             const SfxInterface* pIF,
-                            const SfxFoundCache_Impl* pFound,
+                            const SfxFoundCache_Impl& rFound,
                             const SfxPoolItem *pItem,
                             SfxItemState eItemState );
     SAL_DLLPRIVATE SfxStateCache* GetStateCache( sal_uInt16 nId, sal_uInt16 *pPos);
