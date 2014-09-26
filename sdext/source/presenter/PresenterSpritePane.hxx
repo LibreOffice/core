@@ -56,7 +56,7 @@ public:
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    using css::lang::XEventListener::disposing;
+    using PresenterPaneBase::disposing;
 
     ::boost::shared_ptr<PresenterSprite> GetSprite();
 
