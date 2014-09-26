@@ -406,7 +406,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/dataaccessdescriptor \
     svx/source/form/datalistener \
     svx/source/form/datanavi \
-    svx/source/form/dbtoolsclient \
     svx/source/form/delayedevent \
     svx/source/form/fmcontrolbordermanager \
     svx/source/form/fmcontrollayout \

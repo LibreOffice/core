@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 #define INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 
-#include "svx/dbtoolsclient.hxx"
 #include "svx/ParseContext.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

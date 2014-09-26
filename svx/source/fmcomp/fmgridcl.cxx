@@ -86,6 +86,7 @@ using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::svxform;
 using namespace ::svx;
+using namespace ::dbtools;
 
 OUString FieldServiceFromId(sal_Int32 nID)
 {
@@ -274,7 +275,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             try
             {
                 OUString sSignificantSource( sDatasouce.isEmpty() ? sDatabaseLocation : sDatasouce );
-                xConnection = OStaticDataAccessTools().getConnection_withFeedback(sSignificantSource, OUString(), OUString(),
+                xConnection = getConnection_withFeedback(sSignificantSource, OUString(), OUString(),
                                   static_cast<FmGridControl*>(GetParent())->getContext() );
             }
             catch(NoSuchElementException&)
@@ -386,7 +387,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
     try
     {
         // need number formats
-        Reference< XNumberFormatsSupplier > xSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, true);
+        Reference< XNumberFormatsSupplier > xSupplier = getNumberFormats(xConnection, true);
         Reference< XNumberFormats >  xNumberFormats;
         if (xSupplier.is())
             xNumberFormats = xSupplier->getNumberFormats();
@@ -912,7 +913,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
                 // ein paar Properties hinueberretten
                 Reference< XPropertySet > xReplaced( xCols->getByIndex( nPos ), UNO_QUERY );
 
-                OStaticDataAccessTools().TransferFormComponentProperties(
+                TransferFormComponentProperties(
                     xReplaced, xNewCol, Application::GetSettings().GetUILanguageTag().getLocale() );
 
                 xCols->replaceByIndex( nPos, makeAny( xNewCol ) );

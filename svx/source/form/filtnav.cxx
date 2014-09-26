@@ -68,7 +68,7 @@
 using namespace ::svxform;
 using namespace ::connectivity::simple;
 using namespace ::connectivity;
-
+using namespace ::dbtools;
 
 
 namespace svxform
@@ -865,13 +865,12 @@ bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUString&
     {
         Reference< XFormController > xFormController( pFormItem->GetController() );
         // obtain the connection of the form belonging to the controller
-        OStaticDataAccessTools aStaticTools;
         Reference< XRowSet > xRowSet( xFormController->getModel(), UNO_QUERY_THROW );
-        Reference< XConnection > xConnection( aStaticTools.getRowSetConnection( xRowSet ) );
+        Reference< XConnection > xConnection( getConnection( xRowSet ) );
 
         // obtain a number formatter for this connection
         // TODO: shouldn't this be cached?
-        Reference< XNumberFormatsSupplier > xFormatSupplier = aStaticTools.getNumberFormats( xConnection, true );
+        Reference< XNumberFormatsSupplier > xFormatSupplier = getNumberFormats( xConnection, true );
         Reference< XNumberFormatter > xFormatter( NumberFormatter::create( comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
         xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
 
