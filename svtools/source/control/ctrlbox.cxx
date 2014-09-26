@@ -1692,7 +1692,7 @@ void FontSizeBox::Fill( const vcl::FontInfo* pInfo, const FontList* pList )
                 OUString    aSizeName = aFontSizeNames.GetIndexName( i );
                 sal_IntPtr  nSize = aFontSizeNames.GetIndexSize( i );
                 ComboBox::InsertEntry( aSizeName, nPos );
-                ComboBox::SetEntryData( nPos, (void*)(-nSize) ); // mark as special
+                ComboBox::SetEntryData( nPos, reinterpret_cast<void*>(-nSize) ); // mark as special
                 nPos++;
             }
         }
@@ -1706,7 +1706,7 @@ void FontSizeBox::Fill( const vcl::FontInfo* pInfo, const FontList* pList )
                 if ( !aSizeName.isEmpty() )
                 {
                     ComboBox::InsertEntry( aSizeName, nPos );
-                    ComboBox::SetEntryData( nPos, (void*)(-(*pTempAry)) ); // mark as special
+                    ComboBox::SetEntryData( nPos, reinterpret_cast<void*>(-(*pTempAry)) ); // mark as special
                     nPos++;
                 }
                 pTempAry++;
@@ -1719,7 +1719,7 @@ void FontSizeBox::Fill( const vcl::FontInfo* pInfo, const FontList* pList )
     while ( *pTempAry )
     {
         InsertValue( *pTempAry, FUNIT_NONE, nPos );
-        ComboBox::SetEntryData( nPos, (void*)(*pTempAry) );
+        ComboBox::SetEntryData( nPos, reinterpret_cast<void*>(*pTempAry) );
         nPos++;
         pTempAry++;
     }

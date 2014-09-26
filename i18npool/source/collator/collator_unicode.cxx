@@ -364,7 +364,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             */
             icu::Locale icuLocale( LanguageTagIcu::getIcuLocale( LanguageTag( rLocale), rAlgorithm));
             // load ICU collator
-            collator = (RuleBasedCollator*) icu::Collator::createInstance(icuLocale, status);
+            collator = static_cast<RuleBasedCollator*>( icu::Collator::createInstance(icuLocale, status) );
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
     }

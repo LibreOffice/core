@@ -303,7 +303,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                               const Rectangle* pRect,
                               sal_uLong )
 {
-    vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? (vcl::Window*) pDev : NULL;
+    vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(pDev) : NULL;
     ImplControlValue aControlValue(0);
     Rectangle aCtrlRegion;
     ControlState nState(0);
@@ -1553,7 +1553,7 @@ void HeaderBar::SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::sta
     if ( !xPeer.is() && bCreate )
     {
         ::com::sun::star::awt::XWindowPeer* mxPeer = new VCLXHeaderBar(this);
-        m_pVCLXHeaderBar = (VCLXHeaderBar*)(mxPeer);
+        m_pVCLXHeaderBar = static_cast<VCLXHeaderBar*>(mxPeer);
         SetComponentInterface(mxPeer);
         return mxPeer;
     }

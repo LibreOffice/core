@@ -47,8 +47,8 @@
 
 #define DRAWTEXT_FLAGS_SMALLICON (TEXT_DRAW_LEFT|TEXT_DRAW_ENDELLIPSIS|TEXT_DRAW_CLIP)
 
-#define EVENTID_SHOW_CURSOR             ((void*)1)
-#define EVENTID_ADJUST_SCROLLBARS       ((void*)2)
+#define EVENTID_SHOW_CURSOR             (reinterpret_cast<void*>(1))
+#define EVENTID_ADJUST_SCROLLBARS       (reinterpret_cast<void*>(2))
 
 static bool bEndScrollInvalidate = true;
 

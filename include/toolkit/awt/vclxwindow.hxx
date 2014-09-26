@@ -23,6 +23,7 @@
 #include <toolkit/dllapi.h>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
+#include <vcl/window.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
@@ -46,7 +47,6 @@
 #include <list>
 #include <boost/function.hpp>
 
-namespace vcl { class Window; }
 class VclSimpleEvent;
 class VclWindowEvent;
 struct SystemParentData;
@@ -129,7 +129,7 @@ public:
     virtual ~VCLXWindow();
 
     virtual void    SetWindow( vcl::Window* pWindow );
-    vcl::Window*    GetWindow() const                                   { return (vcl::Window*)GetOutputDevice(); }
+    vcl::Window*    GetWindow() const { return static_cast<vcl::Window*>(GetOutputDevice()); }
 
     void    suspendVclEventListening( );
     void    resumeVclEventListening( );

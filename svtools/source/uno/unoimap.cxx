@@ -207,7 +207,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     {
     case IMAP_OBJ_RECTANGLE:
         {
-            const Rectangle aRect( ((IMapRectangleObject*)&rMapObject)->GetRectangle(false) );
+            const Rectangle aRect( static_cast<const IMapRectangleObject*>(&rMapObject)->GetRectangle(false) );
             maBoundary.X = aRect.Left();
             maBoundary.Y = aRect.Top();
             maBoundary.Width = aRect.GetWidth();
@@ -216,8 +216,8 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         break;
     case IMAP_OBJ_CIRCLE:
         {
-            mnRadius = (sal_Int32)((IMapCircleObject*)&rMapObject)->GetRadius(false);
-            const Point aPoint( ((IMapCircleObject*)&rMapObject)->GetCenter(false) );
+            mnRadius = (sal_Int32)static_cast<const IMapCircleObject*>(&rMapObject)->GetRadius(false);
+            const Point aPoint( static_cast<const IMapCircleObject*>(&rMapObject)->GetCenter(false) );
 
             maCenter.X = aPoint.X();
             maCenter.Y = aPoint.Y();
@@ -226,7 +226,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     case IMAP_OBJ_POLYGON:
     default:
         {
-            const Polygon aPoly( ((IMapPolygonObject*)&rMapObject)->GetPolygon(false) );
+            const Polygon aPoly( static_cast<const IMapPolygonObject*>(&rMapObject)->GetPolygon(false) );
 
             const sal_uInt16 nCount = aPoly.GetSize();
             maPolygon.realloc( nCount );

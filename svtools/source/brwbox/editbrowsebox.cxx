@@ -77,11 +77,11 @@ namespace svt
         sal_uInt16 nColId = GetCurItemId();
         if (nColId)
         {
-            sal_uInt32 nAutoWidth = ((EditBrowseBox*)GetParent())->GetAutoColumnWidth(nColId);
-            if (nAutoWidth != ((EditBrowseBox*)GetParent())->GetColumnWidth(nColId))
+            sal_uInt32 nAutoWidth = static_cast<EditBrowseBox*>(GetParent())->GetAutoColumnWidth(nColId);
+            if (nAutoWidth != static_cast<EditBrowseBox*>(GetParent())->GetColumnWidth(nColId))
             {
-                ((EditBrowseBox*)GetParent())->SetColumnWidth(nColId, nAutoWidth);
-                ((EditBrowseBox*)GetParent())->ColumnResized(nColId);
+                static_cast<EditBrowseBox*>(GetParent())->SetColumnWidth(nColId, nAutoWidth);
+                static_cast<EditBrowseBox*>(GetParent())->ColumnResized(nColId);
             }
         }
     }

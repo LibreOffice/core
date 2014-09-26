@@ -377,7 +377,7 @@ void GraphicObject::Save( SvStream& rOStm )
 
 void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
 {
-    *this = (const GraphicObject& ) rCopyStream;
+    *this = static_cast<const GraphicObject&>(rCopyStream);
 }
 
 OString GraphicObject::GetUniqueID() const
@@ -395,7 +395,10 @@ OString GraphicObject::GetUniqueID() const
 
 SvStream* GraphicObject::GetSwapStream() const
 {
-    return( HasSwapStreamHdl() ? (SvStream*) mpSwapStreamHdl->Call( (void*) this ) : GRFMGR_AUTOSWAPSTREAM_NONE );
+    if( HasSwapStreamHdl() )
+        return reinterpret_cast<SvStream*>( mpSwapStreamHdl->Call( const_cast<void*>(reinterpret_cast<const void*>(this)) ) );
+    else
+        return GRFMGR_AUTOSWAPSTREAM_NONE;
 }
 
 void GraphicObject::SetAttr( const GraphicAttr& rAttr )

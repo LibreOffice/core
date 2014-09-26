@@ -53,7 +53,7 @@ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
         while ( pWindow )
         {
             if ( pWindow->IsSystemWindow() )
-                pTopMostSysWin = (SystemWindow*)pWindow;
+                pTopMostSysWin = static_cast<SystemWindow*>(pWindow);
             pWindow = pWindow->GetParent();
         }
         pWindow = pTopMostSysWin;
@@ -464,7 +464,7 @@ void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
-        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
+        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
 
@@ -473,7 +473,7 @@ ToolbarMenu::~ToolbarMenu()
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
-        ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( this );
+        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
 
     if ( mpImpl->mxStatusListener.is() )
     {

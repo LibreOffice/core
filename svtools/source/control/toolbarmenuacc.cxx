@@ -71,10 +71,10 @@ IMPL_LINK( ToolbarMenuAcc, WindowEventListener, VclSimpleEvent*, pEvent )
      */
     if ( mpParent && pEvent && pEvent->ISA( VclWindowEvent ) && (pEvent->GetId() != VCLEVENT_WINDOW_ENDPOPUPMODE) )
     {
-        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
-        if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
+        DBG_ASSERT( static_cast<VclWindowEvent*>(pEvent)->GetWindow(), "Window???" );
+        if( !static_cast<VclWindowEvent*>(pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
         {
-            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+            ProcessWindowEvent( *static_cast<VclWindowEvent*>(pEvent) );
         }
     }
     return 0;

@@ -461,7 +461,7 @@ bool SvTreeListBox::IsEntryMnemonicsEnabled() const
 
 IMPL_LINK_INLINE_START( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
 {
-    return (sal_IntPtr)(CloneEntry((SvTreeListEntry*)pEntry));
+    return reinterpret_cast<sal_IntPtr>(CloneEntry((SvTreeListEntry*)pEntry));
 }
 IMPL_LINK_INLINE_END( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
 
@@ -634,7 +634,7 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
     nCurEntrySelPos = 0; // selection counter for NotifyMoving/Copying
     bool bSuccess = true;
     std::vector<SvTreeListEntry*> aList;
-    bool bClone = ( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
+    bool bClone = ( pSource->GetModel() != GetModel() );
     Link aCloneLink( pModel->GetCloneLink() );
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
 
@@ -691,7 +691,7 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     nCurEntrySelPos = 0; // selection counter for NotifyMoving/Copying
     bool bSuccess = true;
     std::vector<SvTreeListEntry*> aList;
-    bool bClone = ( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
+    bool bClone = ( pSource->GetModel() != GetModel() );
     Link aCloneLink( pModel->GetCloneLink() );
     if ( bClone )
         pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
@@ -1390,19 +1390,19 @@ namespace
 
 void SvTreeListBox::AddBoxToDDList_Impl( const SvTreeListBox& rB )
 {
-    sal_uLong nVal = (sal_uLong)&rB;
+    sal_uLong nVal = reinterpret_cast<sal_uLong>(&rB);
     SortLBoxes::get().insert( nVal );
 }
 
 void SvTreeListBox::RemoveBoxFromDDList_Impl( const SvTreeListBox& rB )
 {
-    sal_uLong nVal = (sal_uLong)&rB;
+    sal_uLong nVal = reinterpret_cast<sal_uLong>(&rB);
     SortLBoxes::get().erase( nVal );
 }
 
 IMPL_STATIC_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8*, pAction )
 {
-    sal_uLong nVal = (sal_uLong)pThis;
+    sal_uLong nVal = reinterpret_cast<sal_uLong>(pThis);
     std::set<sal_uLong> &rSortLBoxes = SortLBoxes::get();
     std::set<sal_uLong>::const_iterator it = rSortLBoxes.find(nVal);
     if( it != rSortLBoxes.end() )
@@ -1776,7 +1776,7 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
 OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
 {
     DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): no entry" );
-    SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): item not found" );
     return pItem->GetText();
 }
@@ -1870,7 +1870,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
 
 void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
 {
-    SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     DBG_ASSERT(pItem,"SetText:Item not found");
     pItem->SetText(rStr);
     pItem->InitViewData( this, pEntry, 0 );
@@ -1879,7 +1879,7 @@ void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
 
 void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& aBmp )
 {
-    SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
 
     DBG_ASSERT(pItem,"SetExpBmp:Item not found");
     pItem->SetBitmap2( aBmp );
@@ -1897,7 +1897,7 @@ void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& a
 
 void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry* pEntry,const Image& aBmp )
 {
-    SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
 
     DBG_ASSERT(pItem,"SetExpBmp:Item not found");
     pItem->SetBitmap1( aBmp );
@@ -1945,7 +1945,7 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
 
     if( nTreeFlags & TREEFLAG_CHKBTN )
     {
-        SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         if( pItem )
         {
             long nWidth = pItem->GetSize(this, pEntry).Width();
@@ -1964,7 +1964,7 @@ void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState 
 {
     if( nTreeFlags & TREEFLAG_CHKBTN )
     {
-        SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         if(!(pItem && pItem->CheckModification()))
             return ;
         switch( eState )
@@ -1989,7 +1989,7 @@ void SvTreeListBox::SetCheckButtonInvisible( SvTreeListEntry* pEntry)
 {
     if( nTreeFlags & TREEFLAG_CHKBTN )
     {
-        SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         pItem->SetStateInvisible();
         InvalidateEntry( pEntry );
     }
@@ -2000,7 +2000,7 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) cons
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     if( nTreeFlags & TREEFLAG_CHKBTN )
     {
-        SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         if(!pItem)
             return SV_BUTTON_TRISTATE;
         sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
@@ -2030,16 +2030,16 @@ SvTreeListEntry* SvTreeListBox::CloneEntry( SvTreeListEntry* pSource )
     Image aExpEntryBmp;
     SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox;
 
-    SvLBoxString* pStringItem = (SvLBoxString*)(pSource->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    SvLBoxString* pStringItem = static_cast<SvLBoxString*>(pSource->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     if( pStringItem )
         aStr = pStringItem->GetText();
-    SvLBoxContextBmp* pBmpItem = (SvLBoxContextBmp*)(pSource->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    SvLBoxContextBmp* pBmpItem = static_cast<SvLBoxContextBmp*>(pSource->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
     if( pBmpItem )
     {
         aCollEntryBmp = pBmpItem->GetBitmap1( );
         aExpEntryBmp  = pBmpItem->GetBitmap2( );
     }
-    SvLBoxButton* pButtonItem = (SvLBoxButton*)(pSource->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+    SvLBoxButton* pButtonItem = static_cast<SvLBoxButton*>(pSource->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
     if( pButtonItem )
         eButtonKind = pButtonItem->GetKind();
     SvTreeListEntry* pClone = CreateEntry();
@@ -2771,7 +2771,7 @@ void SvTreeListBox::EditedText( const OUString& rStr )
     {
         if( EditedEntry( pEdEntry, rStr ) )
         {
-            ((SvLBoxString*)pEdItem)->SetText( rStr );
+            static_cast<SvLBoxString*>(pEdItem)->SetText( rStr );
             pModel->InvalidateEntry( pEdEntry );
         }
         if( GetSelectionCount() == 0 )
@@ -3598,8 +3598,8 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
 {
     const SvTreeListEntry* pLeft = pData->pLeft;
     const SvTreeListEntry* pRight = pData->pRight;
-    OUString aLeft( ((SvLBoxString*)(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
-    OUString aRight( ((SvLBoxString*)(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
+    OUString aLeft( static_cast<const SvLBoxString*>(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING))->GetText());
+    OUString aRight( static_cast<const SvLBoxString*>(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING))->GetText());
     pImp->UpdateStringSorter();
     return pImp->m_pStringSorter->compare(aLeft, aRight);
 }

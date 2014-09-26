@@ -288,8 +288,8 @@ throw ( RuntimeException, std::exception )
     vcl::Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
     if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR && m_nID != 0 )
     {
-        OUString aStrValue;
-        StatusBar*    pStatusBar = (StatusBar *)pWindow;
+        OUString   aStrValue;
+        StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
 
         if ( Event.State >>= aStrValue )
             pStatusBar->SetItemText( m_nID, aStrValue );

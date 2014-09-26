@@ -202,7 +202,7 @@ namespace svt
 
     bool ListBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
-        ListBoxControl& rBox = GetListBox();
+        const ListBoxControl& rBox = GetListBox();
         switch (rEvt.GetKeyCode().GetCode())
         {
             case KEY_UP:
@@ -349,7 +349,7 @@ namespace svt
 
     CheckBox& CheckBoxCellController::GetCheckBox() const
     {
-        return ((CheckBoxControl &)GetWindow()).GetBox();
+        return static_cast<CheckBoxControl &>(GetWindow()).GetBox();
     }
 
 
@@ -367,7 +367,7 @@ namespace svt
 
     void CheckBoxCellController::SetModifyHdl(const Link& rLink)
     {
-        ((CheckBoxControl &)GetWindow()).SetModifyHdl(rLink);
+        static_cast<CheckBoxControl &>(GetWindow()).SetModifyHdl(rLink);
     }
 
 

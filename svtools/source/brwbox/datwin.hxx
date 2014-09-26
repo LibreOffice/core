@@ -162,7 +162,7 @@ public:
     BrowseEvent     CreateBrowseEvent( const Point& rPosPixel );
     void            Repaint();
     BrowseBox*      GetParent() const
-                         { return (BrowseBox*) Window::GetParent(); }
+                         { return static_cast<BrowseBox*>( Window::GetParent() ); }
     const OUString& GetRealRowCount() const { return aRealRowCount; }
 
     void            SetUpdateMode( bool bMode );

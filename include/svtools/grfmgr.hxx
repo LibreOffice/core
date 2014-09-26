@@ -33,10 +33,10 @@
 
 // AutoSwap defines
 
-#define GRFMGR_AUTOSWAPSTREAM_LINK      ((SvStream*)0x00000000UL)
-#define GRFMGR_AUTOSWAPSTREAM_LOADED    ((SvStream*)0xfffffffdUL)
-#define GRFMGR_AUTOSWAPSTREAM_TEMP      ((SvStream*)0xfffffffeUL)
-#define GRFMGR_AUTOSWAPSTREAM_NONE      ((SvStream*)0xffffffffUL)
+#define GRFMGR_AUTOSWAPSTREAM_LINK      (reinterpret_cast<SvStream*>(0x00000000UL))
+#define GRFMGR_AUTOSWAPSTREAM_LOADED    (reinterpret_cast<SvStream*>(0xfffffffdUL))
+#define GRFMGR_AUTOSWAPSTREAM_TEMP      (reinterpret_cast<SvStream*>(0xfffffffeUL))
+#define GRFMGR_AUTOSWAPSTREAM_NONE      (reinterpret_cast<SvStream*>(0xffffffffUL))
 
 // Adjustment defines
 

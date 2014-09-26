@@ -112,7 +112,7 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
         static_cast<CalendarField*>(pWindow)->EnableNone();
         static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( true );
         *ppNewComp = new SVTXDateField;
-        ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
+        static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<DateField*>(pWindow) );
     }
     else if (aServiceName.equalsIgnoreAsciiCase("roadmap") )
     {
@@ -214,7 +214,7 @@ void VCLXMultiLineEdit::setText( const OUString& aText ) throw(::com::sun::star:
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pEdit = (MultiLineEdit*)GetWindow();
+    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pEdit )
     {
         pEdit->SetText( aText );
@@ -231,7 +231,7 @@ void VCLXMultiLineEdit::insertText( const ::com::sun::star::awt::Selection& rSel
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pEdit = (MultiLineEdit*)GetWindow();
+    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pEdit )
     {
         setSelection( rSel );
@@ -244,7 +244,7 @@ OUString VCLXMultiLineEdit::getText() throw(::com::sun::star::uno::RuntimeExcept
     SolarMutexGuard aGuard;
 
     OUString aText;
-    MultiLineEdit* pEdit = (MultiLineEdit*)GetWindow();
+    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pEdit )
         aText = pEdit->GetText( meLineEndType );
     return aText;
@@ -255,7 +255,7 @@ OUString VCLXMultiLineEdit::getSelectedText() throw(::com::sun::star::uno::Runti
     SolarMutexGuard aGuard;
 
     OUString aText;
-    MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pMultiLineEdit)
         aText = pMultiLineEdit->GetSelected( meLineEndType );
     return aText;
@@ -266,7 +266,7 @@ void VCLXMultiLineEdit::setSelection( const ::com::sun::star::awt::Selection& aS
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pMultiLineEdit )
     {
         pMultiLineEdit->SetSelection( Selection( aSelection.Min, aSelection.Max ) );
@@ -278,7 +278,7 @@ void VCLXMultiLineEdit::setSelection( const ::com::sun::star::awt::Selection& aS
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Selection aSel;
-    MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pMultiLineEdit )
     {
         aSel.Min = pMultiLineEdit->GetSelection().Min();
@@ -291,7 +291,7 @@ sal_Bool VCLXMultiLineEdit::isEditable() throw(::com::sun::star::uno::RuntimeExc
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
     return ( pMultiLineEdit && !pMultiLineEdit->IsReadOnly() && pMultiLineEdit->IsEnabled() ) ? sal_True : sal_False;
 }
 
@@ -299,7 +299,7 @@ void VCLXMultiLineEdit::setEditable( sal_Bool bEditable ) throw(::com::sun::star
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pMultiLineEdit )
         pMultiLineEdit->SetReadOnly( !bEditable );
 }
@@ -308,7 +308,7 @@ void VCLXMultiLineEdit::setMaxTextLen( sal_Int16 nLen ) throw(::com::sun::star::
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pMultiLineEdit )
         pMultiLineEdit->SetMaxTextLen( nLen );
 }
@@ -317,7 +317,7 @@ sal_Int16 VCLXMultiLineEdit::getMaxTextLen() throw(::com::sun::star::uno::Runtim
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
     return pMultiLineEdit ? (sal_Int16)pMultiLineEdit->GetMaxTextLen() : (sal_Int16)0;
 }
 
@@ -326,7 +326,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeE
     SolarMutexGuard aGuard;
 
     OUString aText;
-    MultiLineEdit* pEdit = (MultiLineEdit*)GetWindow();
+    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pEdit )
         aText = pEdit->GetTextLines( meLineEndType );
     return aText;
@@ -337,7 +337,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeE
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz;
-    MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pEdit )
         aSz = AWTSize(pEdit->CalcMinimumSize());
     return aSz;
@@ -353,7 +353,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeE
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz = rNewSize;
-    MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pEdit )
         aSz = AWTSize(pEdit->CalcAdjustedSize( VCLSize(rNewSize )));
     return aSz;
@@ -364,7 +364,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeE
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz;
-    MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pEdit )
         aSz = AWTSize(pEdit->CalcBlockSize( nCols, nLines ));
     return aSz;
@@ -375,7 +375,7 @@ void VCLXMultiLineEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines 
     SolarMutexGuard aGuard;
 
     nCols = nLines = 0;
-    MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
+    MultiLineEdit* pEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pEdit )
     {
         sal_uInt16 nC, nL;
@@ -411,7 +411,7 @@ void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const ::com::
 {
     SolarMutexGuard aGuard;
 
-    MultiLineEdit* pMultiLineEdit = (MultiLineEdit*)GetWindow();
+    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pMultiLineEdit )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -468,7 +468,7 @@ void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const ::com::
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    MultiLineEdit* pMultiLineEdit = (MultiLineEdit*)GetWindow();
+    MultiLineEdit* pMultiLineEdit = static_cast<MultiLineEdit*>(GetWindow());
     if ( pMultiLineEdit )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -541,7 +541,7 @@ VCLXFileControl::VCLXFileControl() : maTextListeners( *this )
 
 VCLXFileControl::~VCLXFileControl()
 {
-    FileControl* pControl = (FileControl*) GetWindow();
+    FileControl* pControl = static_cast<FileControl*>(GetWindow());
     if ( pControl )
         pControl->GetEdit().SetModifyHdl( Link() );
 }
@@ -566,7 +566,7 @@ void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const 
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pControl = (FileControl*)GetWindow();
+    FileControl* pControl = static_cast<FileControl*>(GetWindow());
     if ( pControl )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -631,7 +631,7 @@ void VCLXFileControl::insertText( const ::com::sun::star::awt::Selection& rSel, 
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = (FileControl*) GetWindow();
+    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
     if ( pFileControl )
     {
         pFileControl->GetEdit().SetSelection( Selection( rSel.Min, rSel.Max ) );
@@ -655,7 +655,7 @@ OUString VCLXFileControl::getSelectedText() throw(::com::sun::star::uno::Runtime
     SolarMutexGuard aGuard;
 
     OUString aText;
-    FileControl* pFileControl = (FileControl*) GetWindow();
+    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
     if ( pFileControl)
         aText = pFileControl->GetEdit().GetSelected();
     return aText;
@@ -666,7 +666,7 @@ void VCLXFileControl::setSelection( const ::com::sun::star::awt::Selection& aSel
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = (FileControl*) GetWindow();
+    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
     if ( pFileControl )
         pFileControl->GetEdit().SetSelection( Selection( aSelection.Min, aSelection.Max ) );
 }
@@ -676,7 +676,7 @@ void VCLXFileControl::setSelection( const ::com::sun::star::awt::Selection& aSel
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Selection aSel;
-    FileControl* pFileControl = (FileControl*) GetWindow();
+    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
     if ( pFileControl )
     {
         aSel.Min = pFileControl->GetEdit().GetSelection().Min();
@@ -689,7 +689,7 @@ sal_Bool VCLXFileControl::isEditable() throw(::com::sun::star::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = (FileControl*) GetWindow();
+    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
     return ( pFileControl && !pFileControl->GetEdit().IsReadOnly() && pFileControl->GetEdit().IsEnabled() ) ? sal_True : sal_False;
 }
 
@@ -697,7 +697,7 @@ void VCLXFileControl::setEditable( sal_Bool bEditable ) throw(::com::sun::star::
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = (FileControl*) GetWindow();
+    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
     if ( pFileControl )
         pFileControl->GetEdit().SetReadOnly( !bEditable );
 }
@@ -706,7 +706,7 @@ void VCLXFileControl::setMaxTextLen( sal_Int16 nLen ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = (FileControl*) GetWindow();
+    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
     if ( pFileControl )
         pFileControl->GetEdit().SetMaxTextLen( nLen );
 }
@@ -715,7 +715,7 @@ sal_Int16 VCLXFileControl::getMaxTextLen() throw(::com::sun::star::uno::RuntimeE
 {
     SolarMutexGuard aGuard;
 
-    FileControl* pFileControl = (FileControl*) GetWindow();
+    FileControl* pFileControl = static_cast<FileControl*>(GetWindow());
     return pFileControl ? pFileControl->GetEdit().GetMaxTextLen() : 0;
 }
 
@@ -734,7 +734,7 @@ IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl)
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz;
-    FileControl* pControl = (FileControl*) GetWindow();
+    FileControl* pControl = static_cast<FileControl*>(GetWindow());
     if ( pControl )
     {
         Size aTmpSize = pControl->GetEdit().CalcMinimumSize();
@@ -756,7 +756,7 @@ IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl)
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz =rNewSize;
-    FileControl* pControl = (FileControl*) GetWindow();
+    FileControl* pControl = static_cast<FileControl*>(GetWindow());
     if ( pControl )
     {
         ::com::sun::star::awt::Size aMinSz = getMinimumSize();
@@ -771,7 +771,7 @@ IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl)
     SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz;
-    FileControl* pControl = (FileControl*) GetWindow();
+    FileControl* pControl = static_cast<FileControl*>(GetWindow());
     if ( pControl )
     {
         aSz = AWTSize(pControl->GetEdit().CalcSize( nCols ));
@@ -786,7 +786,7 @@ void VCLXFileControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) 
 
     nCols = 0;
     nLines = 1;
-    FileControl* pControl = (FileControl*) GetWindow();
+    FileControl* pControl = static_cast<FileControl*>(GetWindow());
     if ( pControl )
         nCols = pControl->GetEdit().GetMaxVisChars();
 }
@@ -1984,7 +1984,7 @@ void SVTXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
 {
     SolarMutexGuard aGuard;
 
-    DoubleCurrencyField* pField = (DoubleCurrencyField*)GetFormattedField();
+    DoubleCurrencyField* pField = static_cast<DoubleCurrencyField*>(GetFormattedField());
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -2019,7 +2019,7 @@ void SVTXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
 
     ::com::sun::star::uno::Any aReturn;
 
-    DoubleCurrencyField* pField = (DoubleCurrencyField*)GetFormattedField();
+    DoubleCurrencyField* pField = static_cast<DoubleCurrencyField*>(GetFormattedField());
     if ( pField )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -2069,7 +2069,7 @@ VCLXProgressBar::~VCLXProgressBar()
 
 void VCLXProgressBar::ImplUpdateValue()
 {
-    ProgressBar* pProgressBar = (ProgressBar*) GetWindow();
+    ProgressBar* pProgressBar = static_cast<ProgressBar*>(GetWindow());
     if ( pProgressBar )
     {
         sal_Int32 nVal;
@@ -2200,7 +2200,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const ::com::su
 {
     SolarMutexGuard aGuard;
 
-    ProgressBar* pProgressBar = (ProgressBar*)GetWindow();
+    ProgressBar* pProgressBar = static_cast<ProgressBar*>(GetWindow());
     if ( pProgressBar )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -2259,7 +2259,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const ::com::su
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    ProgressBar* pProgressBar = (ProgressBar*)GetWindow();
+    ProgressBar* pProgressBar = static_cast<ProgressBar*>(GetWindow());
     if ( pProgressBar )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );

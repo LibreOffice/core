@@ -451,8 +451,8 @@ sal_Int32 SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRig
             IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
             const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
 
-            nCompare = pCollator->compareString( ((SvLBoxString*)pLeftItem)->GetText(),
-                                    ((SvLBoxString*)pRightItem)->GetText());
+            nCompare = pCollator->compareString( static_cast<SvLBoxString*>(pLeftItem)->GetText(),
+                                    static_cast<SvLBoxString*>(pRightItem)->GetText());
 
             if (nCompare == 0)
                 nCompare = -1;

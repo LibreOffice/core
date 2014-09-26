@@ -34,7 +34,7 @@
 
 
 #define SCROLL_FLAGS (SCROLL_CLIP | SCROLL_NOCHILDREN)
-#define getDataWindow() ((BrowserDataWin*)pDataWin)
+#define getDataWindow() (static_cast<BrowserDataWin*>(pDataWin))
 
 using namespace com::sun::star::accessibility::AccessibleEventId;
 using namespace com::sun::star::accessibility::AccessibleTableModelChangeType;
@@ -586,7 +586,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
             nMaxWidth -= getDataWindow()->bAutoSizeLastCol
                     ? GetFieldRect(nItemId).Left()
                     : GetFrozenWidth();
-            if ( ( (BrowserDataWin*)pDataWin )->bAutoSizeLastCol || nWidth > (sal_uLong)nMaxWidth )
+            if ( static_cast<BrowserDataWin*>(pDataWin )->bAutoSizeLastCol || nWidth > (sal_uLong)nMaxWidth )
             {
                 nWidth = nMaxWidth > 16 ? nMaxWidth : nOldWidth;
                 nWidth = QueryColumnResize( nItemId, nWidth );
@@ -642,7 +642,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
                 getDataWindow()->Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
                 Rectangle aInvRect( nX, 0, nX + std::max( nWidth, (sal_uLong)nOldWidth ), USHRT_MAX );
                 Control::Invalidate( aInvRect, INVALIDATE_NOCHILDREN );
-                ( (BrowserDataWin*)pDataWin )->Invalidate( aInvRect );
+                static_cast<BrowserDataWin*>( pDataWin )->Invalidate( aInvRect );
             }
             else
             {
@@ -2277,7 +2277,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
         WB_VSCROLL | ( ( nMode & BROWSER_THUMBDRAGGING ) ? WB_DRAG : 0 );
     pVScroll = ( nMode & BROWSER_TRACKING_TIPS ) == BROWSER_TRACKING_TIPS
                 ? new BrowserScrollBar( this, nVScrollWinBits,
-                                        (BrowserDataWin*) pDataWin )
+                                        static_cast<BrowserDataWin*>( pDataWin ) )
                 : new ScrollBar( this, nVScrollWinBits );
     pVScroll->SetLineSize( 1 );
     pVScroll->SetPageSize(1);
@@ -2399,9 +2399,9 @@ BrowserHeader* BrowseBox::CreateHeaderBar( BrowseBox* pParent )
 
 void BrowseBox::SetHeaderBar( BrowserHeader* pHeaderBar )
 {
-    delete ( (BrowserDataWin*)pDataWin )->pHeaderBar;
-    ( (BrowserDataWin*)pDataWin )->pHeaderBar = pHeaderBar;
-    ( (BrowserDataWin*)pDataWin )->pHeaderBar->SetStartDragHdl( LINK( this, BrowseBox, StartDragHdl ) );
+    delete static_cast<BrowserDataWin*>(pDataWin)->pHeaderBar;
+    static_cast<BrowserDataWin*>( pDataWin )->pHeaderBar = pHeaderBar;
+    static_cast<BrowserDataWin*>( pDataWin )->pHeaderBar->SetStartDragHdl( LINK( this, BrowseBox, StartDragHdl ) );
 }
 
 long BrowseBox::GetTitleHeight() const
@@ -2409,7 +2409,7 @@ long BrowseBox::GetTitleHeight() const
     long nHeight;
     // ask the header bar for the text height (if possible), as the header bar's font is adjusted with
     // our (and the header's) zoom factor
-    HeaderBar* pHeaderBar = ( (BrowserDataWin*)pDataWin )->pHeaderBar;
+    HeaderBar* pHeaderBar = static_cast<BrowserDataWin*>( pDataWin )->pHeaderBar;
     if ( pHeaderBar )
         nHeight = pHeaderBar->GetTextHeight();
     else

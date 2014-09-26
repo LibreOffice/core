@@ -29,7 +29,7 @@
 
 using namespace ::com::sun::star::datatransfer;
 
-#define getDataWindow() ((BrowserDataWin*)pDataWin)
+#define getDataWindow() (static_cast<BrowserDataWin*>(pDataWin))
 
 
 
@@ -406,9 +406,9 @@ void BrowseBox::DrawCursor()
     {
         // on these platforms, the StarView focus works correctly
         if ( bReallyHide )
-            ((Control*)pDataWin)->HideFocus();
+            static_cast<Control*>(pDataWin)->HideFocus();
         else
-            ((Control*)pDataWin)->ShowFocus( aCursor );
+            static_cast<Control*>(pDataWin)->ShowFocus( aCursor );
     }
     else
     {
@@ -1125,7 +1125,7 @@ void BrowseBox::UpdateScrollbars()
         return;
 
     // protect against recursion
-    BrowserDataWin *pBDW = (BrowserDataWin*) pDataWin;
+    BrowserDataWin *pBDW = static_cast<BrowserDataWin*>( pDataWin );
     if ( pBDW->bInUpdateScrollbars )
     {
         pBDW->bHadRecursion = true;
@@ -1545,7 +1545,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
         bResizing = false;
     }
     else
-        MouseButtonUp( BrowserMouseEvent( (BrowserDataWin*)pDataWin,
+        MouseButtonUp( BrowserMouseEvent( static_cast<BrowserDataWin*>(pDataWin),
                 MouseEvent( Point( rEvt.GetPosPixel().X(),
                         rEvt.GetPosPixel().Y() - pDataWin->GetPosPixel().Y() ),
                     rEvt.GetClicks(), rEvt.GetMode(), rEvt.GetButtons(),

@@ -2075,7 +2075,7 @@ void OStorage::BroadcastModifiedIfNecessary()
            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
            while ( pIterator.hasMoreElements( ) )
            {
-               ( ( util::XModifyListener* )pIterator.next( ) )->modified( aSource );
+               static_cast<util::XModifyListener*>( pIterator.next( ) )->modified( aSource );
            }
     }
 }
@@ -2112,16 +2112,16 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
             switch( nMessage )
             {
                 case STOR_MESS_PRECOMMIT:
-                       ( ( embed::XTransactionListener* )pIterator.next( ) )->preCommit( aSource );
+                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preCommit( aSource );
                     break;
                 case STOR_MESS_COMMITED:
-                       ( ( embed::XTransactionListener* )pIterator.next( ) )->commited( aSource );
+                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->commited( aSource );
                     break;
                 case STOR_MESS_PREREVERT:
-                       ( ( embed::XTransactionListener* )pIterator.next( ) )->preRevert( aSource );
+                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preRevert( aSource );
                     break;
                 case STOR_MESS_REVERTED:
-                       ( ( embed::XTransactionListener* )pIterator.next( ) )->reverted( aSource );
+                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->reverted( aSource );
                     break;
             }
            }

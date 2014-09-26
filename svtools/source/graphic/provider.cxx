@@ -658,7 +658,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                     }
                     case( META_PUSH_ACTION ):
                     {
-                        const MetaPushAction* pA = (const MetaPushAction*)pAction;
+                        const MetaPushAction* pA = static_cast<const MetaPushAction*>(pAction);
                         aDummyVDev.Push( pA->GetFlags() );
                         break;
                     }

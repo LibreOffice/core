@@ -1288,7 +1288,7 @@ sal_IntPtr SortedResultSet::FindPos( SortListData *pEntry,
         nCompare = Compare( pEntry, pMid );
 
         if ( !nCompare )
-            nCompare = ((sal_IntPtr) pEntry ) - ( (sal_IntPtr) pMid );
+            nCompare = reinterpret_cast<sal_IntPtr>(pEntry) - reinterpret_cast<sal_IntPtr>(pMid);
 
         if ( nCompare < 0 ) // pEntry < pMid
             nEnd = nMid - 1;
@@ -1421,7 +1421,7 @@ void SortedResultSet::Initialize(
     for ( i=1; i<maS2O.Count(); i++ )
         maO2S.Insert( (void*) 0, i );   // Insert( data, pos )
     for ( i=1; i<maS2O.Count(); i++ )
-        maO2S.Replace( (void*) i, maS2O[ i ] ); // Insert( data, pos )
+        maO2S.Replace( reinterpret_cast<void*>(i), maS2O[ i ] ); // Insert( data, pos )
 
     mnCount = maS2O.Count() - 1;
 }
@@ -1491,7 +1491,7 @@ void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
         pData = new SortListData( nEnd );
 
         maS2O.Insert( pData, nEnd );    // Insert( Value, Position )
-        maO2S.Insert( (void*)nEnd, (sal_uInt32)(nPos+i) );  // Insert( Value, Position )
+        maO2S.Insert( reinterpret_cast<void*>(nEnd), (sal_uInt32)(nPos+i) );  // Insert( Value, Position )
     }
 
     mnCount += nCount;
@@ -1517,16 +1517,16 @@ void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEv
     // in the original2sorted list
     for ( i=0; i < (sal_uInt32) nCount; i++ )
     {
-        sal_IntPtr nSortPos = (sal_IntPtr) maO2S.GetObject( nPos );
+        sal_IntPtr nSortPos = reinterpret_cast<sal_IntPtr>( maO2S.GetObject( nPos ) );
         maO2S.Remove( (sal_uInt32) nPos );
 
         for ( j=1; j<=maO2S.Count(); j++ )
         {
-            sal_IntPtr nVal = (sal_IntPtr) maO2S.GetObject( j );
+            sal_IntPtr nVal = reinterpret_cast<sal_IntPtr>( maO2S.GetObject( j ) );
             if ( nVal > nSortPos )
             {
                 --nVal;
-                maO2S.Replace( (void*) nVal, j );
+                maO2S.Replace( reinterpret_cast<void*>(nVal), j );
             }
         }
 
@@ -1562,7 +1562,7 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
 
     for ( i=0; i<nCount; i++ )
     {
-        nSortPos = (sal_IntPtr) maO2S.GetObject( nPos+i );
+        nSortPos = reinterpret_cast<sal_IntPtr>(maO2S.GetObject( nPos+i ));
         pData = maS2O.GetData( nSortPos );
         pData->mnCurPos += nOffset;
     }
@@ -1571,7 +1571,7 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
     {
         for ( i=nPos+nOffset; i<nPos; i++ )
         {
-            nSortPos = (sal_IntPtr) maO2S.GetObject( i );
+            nSortPos = reinterpret_cast<sal_IntPtr>(maO2S.GetObject( i ));
             pData = maS2O.GetData( nSortPos );
             pData->mnCurPos += nCount;
         }
@@ -1582,7 +1582,7 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
         sal_IntPtr nEnd = nStart + nOffset;
         for ( i=nStart; i<nEnd; i++ )
         {
-            nSortPos = (sal_IntPtr) maO2S.GetObject( i );
+            nSortPos = reinterpret_cast<sal_IntPtr>(maO2S.GetObject( i ));
             pData = maS2O.GetData( nSortPos );
             pData->mnCurPos -= nCount;
         }
@@ -1591,7 +1591,7 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
     // remember the to be moved entries
     boost::scoped_array<sal_IntPtr> pTmpArr(new sal_IntPtr[ nCount ]);
     for ( i=0; i<nCount; i++ )
-        pTmpArr[i] = (sal_IntPtr)maO2S.GetObject( (sal_uInt32)( nPos+i ) );
+        pTmpArr[i] = reinterpret_cast<sal_IntPtr>(maO2S.GetObject( (sal_uInt32)( nPos+i ) ));
 
     // now move the entries, which are in the way
     if ( nOffset < 0 )
@@ -1604,8 +1604,8 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
         // same for i here
         for ( i=0; i>nOffset; i-- )
         {
-            sal_IntPtr nVal = (sal_IntPtr) maO2S.GetObject( (sal_uInt32)( nFrom+i ) );
-            maO2S.Replace( (void*) nVal, (sal_uInt32)( nTo+i ) );
+            sal_IntPtr nVal = reinterpret_cast<sal_IntPtr>( maO2S.GetObject( (sal_uInt32)( nFrom+i ) ) );
+            maO2S.Replace( reinterpret_cast<void*>(nVal), (sal_uInt32)( nTo+i ) );
         }
 
     }
@@ -1614,8 +1614,8 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
         sal_IntPtr nStart = nPos + nCount;
         for ( i=0; i<nOffset; i++ )
         {
-            sal_IntPtr nVal = (sal_IntPtr) maO2S.GetObject( (sal_uInt32)( nStart+i ) );
-            maO2S.Replace( (void*) nVal, (sal_uInt32)( nPos+i ) );
+            sal_IntPtr nVal = reinterpret_cast<sal_IntPtr>( maO2S.GetObject( (sal_uInt32)( nStart+i ) ) );
+            maO2S.Replace( reinterpret_cast<void*>(nVal), (sal_uInt32)( nPos+i ) );
         }
     }
 
@@ -1623,7 +1623,7 @@ void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffs
     nTo = nPos + nOffset;
     for ( i=0; i<nCount; i++ )
     {
-        maO2S.Replace( (void*)pTmpArr[ i ], (sal_uInt32)( nTo+i ) );
+        maO2S.Replace( reinterpret_cast<void*>(pTmpArr[ i ]), (sal_uInt32)( nTo+i ) );
     }
 }
 
@@ -1683,7 +1683,7 @@ void SortedResultSet::SetChanged( sal_IntPtr nPos, sal_IntPtr nCount )
 {
     for ( sal_IntPtr i=0; i<nCount; i++ )
     {
-        sal_IntPtr nSortPos = (sal_IntPtr) maO2S.GetObject( nPos );
+        sal_IntPtr nSortPos = reinterpret_cast<sal_IntPtr>(maO2S.GetObject( nPos ));
         if ( nSortPos < mnLastSort )
         {
             SortListData *pData = maS2O.GetData( nSortPos );
@@ -1715,7 +1715,7 @@ void SortedResultSet::ResortModified( EventList* pList )
             pData->mbModified = false;
             if ( nCompare != 0 )
             {
-                nCurPos = (sal_IntPtr) maO2S.GetObject( (sal_uInt32) pData->mnCurPos );
+                nCurPos = reinterpret_cast<sal_IntPtr>( maO2S.GetObject( (sal_uInt32) pData->mnCurPos ) );
                 if ( nCompare < 0 )
                 {
                     nNewPos = FindPos( pData, 1, nCurPos-1 );
@@ -1738,15 +1738,15 @@ void SortedResultSet::ResortModified( EventList* pList )
                     maS2O.Insert( pData, nNewPos );
                         for ( j=1; j<maO2S.Count(); j++ )
                     {
-                        nVal = (sal_IntPtr) maO2S.GetObject( (sal_uInt32)( j ) );
+                        nVal = reinterpret_cast<sal_IntPtr>( maO2S.GetObject( (sal_uInt32)j ) );
                         if ( ( nStart <= nVal ) && ( nVal <= nEnd ) )
                         {
                             nVal += nOffset;
-                            maO2S.Replace( (void*) (nVal), (sal_uInt32)( j ) );
+                            maO2S.Replace( reinterpret_cast<void*>(nVal), (sal_uInt32)j );
                         }
                     }
 
-                    maO2S.Replace( (void*) nNewPos, (sal_uInt32) pData->mnCurPos );
+                    maO2S.Replace( reinterpret_cast<void*>(nNewPos), (sal_uInt32) pData->mnCurPos );
 
                     pAction = new ListAction;
                     pAction->Position = nCurPos;
@@ -1786,11 +1786,11 @@ void SortedResultSet::ResortNew( EventList* pList )
                 // maO2S liste korigieren
                 for ( j=1; j<(sal_IntPtr)maO2S.Count(); j++ )
                 {
-                    nVal = (sal_IntPtr) maO2S.GetObject( (sal_uInt32)( j ) );
+                    nVal = reinterpret_cast<sal_IntPtr>(maO2S.GetObject( (sal_uInt32)j ));
                     if ( nVal >= nNewPos )
-                        maO2S.Replace( (void*) (nVal+1), (sal_uInt32)( j ) );
+                        maO2S.Replace( reinterpret_cast<void*>(nVal+1), (sal_uInt32)( j ) );
                 }
-                maO2S.Replace( (void*) nNewPos, (sal_uInt32) pData->mnCurPos );
+                maO2S.Replace( reinterpret_cast<void*>(nNewPos), (sal_uInt32) pData->mnCurPos );
             }
             mnLastSort++;
             pList->AddEvent( ListActionType::INSERTED, nNewPos, 1 );

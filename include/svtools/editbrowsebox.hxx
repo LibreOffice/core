@@ -27,6 +27,7 @@
 #include <vcl/window.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/spinfld.hxx>
 
 #include <vcl/button.hxx>
 #include <svtools/brwbox.hxx>
@@ -256,7 +257,8 @@ namespace svt
     public:
         TYPEINFO_OVERRIDE();
         SpinCellController(SpinField* pSpinField);
-        SpinField& GetSpinWindow() const {return (SpinField &)GetWindow();}
+        const SpinField& GetSpinWindow() const { return static_cast<const SpinField &>(GetWindow()); }
+        SpinField& GetSpinWindow() { return static_cast<SpinField &>(GetWindow()); }
 
         virtual void SetModified() SAL_OVERRIDE;
         virtual bool IsModified() const SAL_OVERRIDE;
@@ -342,7 +344,7 @@ namespace svt
         TYPEINFO_OVERRIDE();
 
         ComboBoxCellController(ComboBoxControl* pParent);
-        ComboBoxControl& GetComboBox() const {return (ComboBoxControl &)GetWindow();}
+        ComboBoxControl& GetComboBox() const { return static_cast<ComboBoxControl &>(GetWindow()); }
 
         virtual bool IsModified() const SAL_OVERRIDE;
         virtual void ClearModified() SAL_OVERRIDE;
@@ -375,7 +377,8 @@ namespace svt
         TYPEINFO_OVERRIDE();
 
         ListBoxCellController(ListBoxControl* pParent);
-        ListBoxControl& GetListBox() const {return (ListBoxControl &)GetWindow();}
+        const ListBoxControl& GetListBox() const { return static_cast<const ListBoxControl &>(GetWindow()); }
+        ListBoxControl& GetListBox() { return static_cast<ListBoxControl &>(GetWindow()); }
 
         virtual bool IsModified() const SAL_OVERRIDE;
         virtual void ClearModified() SAL_OVERRIDE;

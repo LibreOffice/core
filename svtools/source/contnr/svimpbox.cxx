@@ -405,7 +405,7 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
         return;
 
     SvTreeListEntry* pNext = pView->NextVisible(pStartEntry, nRealDelta);
-    if( (sal_uLong)pNext == (sal_uLong)pStartEntry )
+    if( pNext == pStartEntry )
         return;
 
     ShowCursor( false );
@@ -445,7 +445,7 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
         return;
 
     SvTreeListEntry* pPrev = pView->PrevVisible(pStartEntry, nRealDelta);
-    if( (sal_uLong)pPrev == (sal_uLong)pStartEntry )
+    if( pPrev == pStartEntry )
         return;
 
     nFlags &= (~F_FILLING);
@@ -807,7 +807,7 @@ bool SvImpLBox::EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPosPixel, 
     Rectangle aRect( pView->GetFocusRect( pEntry, nLine ));
     aRect.Right() = GetOutputSize().Width() - pView->GetMapMode().GetOrigin().X();
 
-    SvLBoxContextBmp* pBmp = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    SvLBoxContextBmp* pBmp = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
     aRect.Left() -= pBmp->GetSize(pView,pEntry).Width();
     aRect.Left() -= 4; // a little tolerance
 
@@ -907,7 +907,7 @@ void SvImpLBox::Paint( const Rectangle& rRect )
             aVerSBar.SetThumbPos( 0 );
             StopUserEvent();
             ShowCursor( true );
-            nCurUserEvent = Application::PostUserEvent(LINK(this,SvImpLBox,MyUserEvent),(void*)1);
+            nCurUserEvent = Application::PostUserEvent(LINK(this,SvImpLBox,MyUserEvent), reinterpret_cast<void*>(1));
             return;
         }
     }
@@ -1906,7 +1906,7 @@ bool SvImpLBox::ButtonDownCheckCtrl(
     SvLBoxItem* pItem = pView->GetItem(pEntry,rMEvt.GetPosPixel().X(),&pActiveTab);
     if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
-        pActiveButton = (SvLBoxButton*)pItem;
+        pActiveButton = static_cast<SvLBoxButton*>(pItem);
         pActiveEntry = pEntry;
         if( pCursor == pActiveEntry )
             pView->HideFocus();
@@ -2338,7 +2338,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
                 if( nDelta )
                 {
-                    DBG_ASSERT(pNewCursor&&(sal_uLong)pNewCursor!=(sal_uLong)pCursor,"Cursor?");
+                    DBG_ASSERT(pNewCursor && pNewCursor!=pCursor, "Cursor?");
                     aSelEng.CursorPosChanging( bShift, bMod1 );
                     if( IsEntryInView( pNewCursor ) )
                         SetCursor( pNewCursor );
@@ -2366,7 +2366,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
                 if( nDelta && pNewCursor )
                 {
-                    DBG_ASSERT(pNewCursor&&(sal_uLong)pNewCursor!=(sal_uLong)pCursor,"Cursor?");
+                    DBG_ASSERT(pNewCursor && pNewCursor!=pCursor, "Cursor?");
                     aSelEng.CursorPosChanging( bShift, bMod1 );
                     if( IsEntryInView( pNewCursor ) )
                         SetCursor( pNewCursor );
@@ -3190,7 +3190,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
         {
             // recalculate text rectangle
             SvLBoxTab* pTab;
-            SvLBoxString* pItem = (SvLBoxString*)(pView->GetItem( pEntry, aPos.X(), &pTab ));
+            SvLBoxString* pItem = static_cast<SvLBoxString*>(pView->GetItem( pEntry, aPos.X(), &pTab ));
             if (!pItem || pItem->GetType() != SV_ITEM_ID_LBOXSTRING)
                 return false;
 

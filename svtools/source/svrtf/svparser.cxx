@@ -50,7 +50,7 @@ struct SvParser_Impl
         , nNextCh(0)
         , nSaveToken(0)
         , hConv( 0 )
-        , hContext( (rtl_TextToUnicodeContext)1 )
+        , hContext( reinterpret_cast<rtl_TextToUnicodeContext>(1) )
     {
     }
 
@@ -115,7 +115,7 @@ void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
                                              pImplData->hContext );
             rtl_destroyTextToUnicodeConverter( pImplData->hConv );
             pImplData->hConv = 0;
-            pImplData->hContext = (rtl_TextToUnicodeContext )1;
+            pImplData->hContext = reinterpret_cast<rtl_TextToUnicodeContext>(1);
         }
 
         if( rtl_isOctetTextEncoding(eEnc) ||
@@ -276,7 +276,7 @@ sal_Unicode SvParser::GetNextChar()
                     {
                         // The conversion wasn't successful because we haven't
                         // read enough characters.
-                        if( pImplData->hContext != (rtl_TextToUnicodeContext)1 )
+                        if( pImplData->hContext != reinterpret_cast<rtl_TextToUnicodeContext>(1) )
                         {
                             while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
                             {

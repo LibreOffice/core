@@ -95,7 +95,7 @@ public:
                     ImplTabButton( TabBar* pParent, WinBits nWinStyle = 0 ) :
                     PushButton( pParent, nWinStyle | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOLIGHTBORDER | WB_NOPOINTERFOCUS  ) {}
 
-    TabBar*         GetParent() const { return (TabBar*)Window::GetParent(); }
+    TabBar*         GetParent() const { return static_cast<TabBar*>(Window::GetParent()); }
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
@@ -147,7 +147,7 @@ class ImplTabSizer : public vcl::Window
 public:
                     ImplTabSizer( TabBar* pParent, WinBits nWinStyle = 0 );
 
-    TabBar*         GetParent() const { return (TabBar*)Window::GetParent(); }
+    TabBar*         GetParent() const { return static_cast<TabBar*>(Window::GetParent()); }
 
 private:
     void            ImplTrack( const Point& rScreenPos );
@@ -254,7 +254,7 @@ private:
 public:
                     TabBarEdit( TabBar* pParent, WinBits nWinStyle = 0 );
 
-    TabBar*         GetParent() const { return (TabBar*)Window::GetParent(); }
+    TabBar*         GetParent() const { return static_cast<TabBar*>(Window::GetParent()); }
 
     void            SetPostEvent() { mbPostEvt = true; }
     void            ResetPostEvent() { mbPostEvt = false; }
@@ -284,7 +284,7 @@ bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
             {
                 if ( !mbPostEvt )
                 {
-                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)sal_False ) )
+                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(sal_False) ) )
                         mbPostEvt = true;
                 }
                 return true;
@@ -293,7 +293,7 @@ bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
             {
                 if ( !mbPostEvt )
                 {
-                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)sal_True ) )
+                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(sal_True) ) )
                         mbPostEvt = true;
                 }
                 return true;
@@ -310,7 +310,7 @@ void TabBarEdit::LoseFocus()
 {
     if ( !mbPostEvt )
     {
-        if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)sal_False ) )
+        if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(sal_False) ) )
             mbPostEvt = true;
     }
 

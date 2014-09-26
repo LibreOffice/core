@@ -176,7 +176,7 @@ protected:
 
     sal_Int32                   nKeyToSetDelayed;
 
-    FormattedField*             GetFormattedField() const { return (FormattedField*)GetWindow(); }
+    FormattedField*             GetFormattedField() const { return static_cast<FormattedField*>(GetWindow()); }
 
 public:
     SVTXFormattedField();

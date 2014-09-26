@@ -315,7 +315,7 @@ void SvTabListBox::SetEntryText(const OUString& rStr, SvTreeListEntry* pEntry, s
             if (!nCol || nCol==0xFFFF)
             {
                 const OUString aTemp(GetToken(rStr, nIndex));
-                ((SvLBoxString*)pStr)->SetText( aTemp );
+                static_cast<SvLBoxString*>(pStr)->SetText( aTemp );
                 if (!nCol && nIndex<0)
                     break;
             }
@@ -551,7 +551,7 @@ void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
 bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
-    SvLBoxButton* pItem = (SvLBoxButton*)( pEntry->GetItem( nCol + 1 ) );
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>( pEntry->GetItem( nCol + 1 ) );
 
     if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
@@ -683,7 +683,7 @@ bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriSta
         sal_uInt16 nItemCount = pEntry->ItemCount();
         if ( nItemCount > ( _nColumn + 1 ) )
         {
-            SvLBoxButton* pItem = (SvLBoxButton*)( pEntry->GetItem( _nColumn + 1 ) );
+            SvLBoxButton* pItem = static_cast<SvLBoxButton*>( pEntry->GetItem( _nColumn + 1 ) );
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 bRet = true;

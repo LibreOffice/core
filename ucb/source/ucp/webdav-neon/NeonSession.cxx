@@ -103,7 +103,7 @@ struct hashPtr
 {
     size_t operator()( const ne_request* p ) const
     {
-        return (size_t)p;
+        return reinterpret_cast<size_t>(p);
     }
 };
 

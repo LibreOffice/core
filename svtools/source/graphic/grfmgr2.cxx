@@ -945,7 +945,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
 
             if( pOutputDevice->GetOutDevType() == OUTDEV_WINDOW )
             {
-                const Region aPaintRgn( ( (vcl::Window*) pOutputDevice )->GetPaintRegion() );
+                const Region aPaintRgn( static_cast<vcl::Window*>( pOutputDevice )->GetPaintRegion() );
                 if( !aPaintRgn.IsNull() )
                     aOutRect.Intersection( pOutputDevice->LogicToPixel( aPaintRgn.GetBoundRect() ) );
             }
@@ -1160,7 +1160,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 case META_FONT_ACTION:
                 {
                     // taking care of font width default if scaling metafile.
-                    MetaFontAction* pA = (MetaFontAction*)pAct;
+                    MetaFontAction* pA = static_cast<MetaFontAction*>(pAct);
                     vcl::Font aFont( pA->GetFont() );
                     if ( !aFont.GetWidth() )
                     {
@@ -1204,7 +1204,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 case META_BMP_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpAction* pAction = (MetaBmpAction*)pAct;
+                        MetaBmpAction* pAction = static_cast<MetaBmpAction*>(pAct);
 
                         rOutBmpEx = checkMetadataBitmap(
                             BitmapEx( pAction->GetBitmap()),
@@ -1221,7 +1221,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 case META_BMPSCALE_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpScaleAction* pAction = (MetaBmpScaleAction*)pAct;
+                        MetaBmpScaleAction* pAction = static_cast<MetaBmpScaleAction*>(pAct);
 
                         rOutBmpEx = checkMetadataBitmap(
                             BitmapEx( pAction->GetBitmap()),
@@ -1239,7 +1239,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 case META_BMPSCALEPART_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpScalePartAction* pAction = (MetaBmpScalePartAction*)pAct;
+                        MetaBmpScalePartAction* pAction = static_cast<MetaBmpScalePartAction*>(pAct);
 
                         rOutBmpEx = checkMetadataBitmap(
                                                     BitmapEx( pAction->GetBitmap() ),
@@ -1258,7 +1258,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 case META_BMPEX_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpExAction* pAction = (MetaBmpExAction*)pAct;
+                        MetaBmpExAction* pAction = static_cast<MetaBmpExAction*>(pAct);
 
                         rOutBmpEx = checkMetadataBitmap(
                             pAction->GetBitmapEx(),
@@ -1275,7 +1275,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 case META_BMPEXSCALE_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpExScaleAction* pAction = (MetaBmpExScaleAction*)pAct;
+                        MetaBmpExScaleAction* pAction = static_cast<MetaBmpExScaleAction*>(pAct);
 
                         rOutBmpEx = checkMetadataBitmap(
                             pAction->GetBitmapEx(),
@@ -1293,7 +1293,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 case META_BMPEXSCALEPART_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpExScalePartAction* pAction = (MetaBmpExScalePartAction*)pAct;
+                        MetaBmpExScalePartAction* pAction = static_cast<MetaBmpExScalePartAction*>(pAct);
 
                         rOutBmpEx = checkMetadataBitmap( pAction->GetBitmapEx(),
                                                     pAction->GetSrcPoint(),
@@ -1311,7 +1311,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     // these actions actually output something (that's
                     // different from a bitmap)
                 case META_RASTEROP_ACTION:
-                    if( ((MetaRasterOpAction*)pAct)->GetRasterOp() == ROP_OVERPAINT )
+                    if( static_cast<MetaRasterOpAction*>(pAct)->GetRasterOp() == ROP_OVERPAINT )
                         break;
                     // FALLTHROUGH intended
                 case META_PIXEL_ACTION:

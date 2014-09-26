@@ -167,15 +167,15 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
         switch( pObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
-                ( (IMapRectangleObject*) pObj )->WriteCERN( rOStm, rBaseURL );
+                static_cast<IMapRectangleObject*>( pObj )->WriteCERN( rOStm, rBaseURL );
             break;
 
             case( IMAP_OBJ_CIRCLE ):
-                ( (IMapCircleObject*) pObj )->WriteCERN( rOStm, rBaseURL );
+                static_cast<IMapCircleObject*>( pObj )->WriteCERN( rOStm, rBaseURL );
             break;
 
             case( IMAP_OBJ_POLYGON ):
-                ( (IMapPolygonObject*) pObj )->WriteCERN( rOStm, rBaseURL );
+                static_cast<IMapPolygonObject*>( pObj )->WriteCERN( rOStm, rBaseURL );
             break;
 
             default:
@@ -196,15 +196,15 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
         switch( pObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
-                ( (IMapRectangleObject*) pObj )->WriteNCSA( rOStm, rBaseURL );
+                static_cast<IMapRectangleObject*>( pObj )->WriteNCSA( rOStm, rBaseURL );
             break;
 
             case( IMAP_OBJ_CIRCLE ):
-                ( (IMapCircleObject*) pObj )->WriteNCSA( rOStm, rBaseURL );
+                static_cast<IMapCircleObject*>( pObj )->WriteNCSA( rOStm, rBaseURL );
             break;
 
             case( IMAP_OBJ_POLYGON ):
-                ( (IMapPolygonObject*) pObj )->WriteNCSA( rOStm, rBaseURL );
+                static_cast<IMapPolygonObject*>( pObj )->WriteNCSA( rOStm, rBaseURL );
             break;
 
             default:

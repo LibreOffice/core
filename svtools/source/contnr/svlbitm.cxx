@@ -221,7 +221,7 @@ SvLBoxItem* SvLBoxString::Create() const
 
 void SvLBoxString::Clone( SvLBoxItem* pSource )
 {
-    maText = ((SvLBoxString*)pSource)->maText;
+    maText = static_cast<SvLBoxString*>(pSource)->maText;
 }
 
 void SvLBoxString::InitViewData(
@@ -291,7 +291,7 @@ SvLBoxItem* SvLBoxBmp::Create() const
 
 void SvLBoxBmp::Clone( SvLBoxItem* pSource )
 {
-    aBmp = ((SvLBoxBmp*)pSource)->aBmp;
+    aBmp = static_cast<SvLBoxBmp*>(pSource)->aBmp;
 }
 
 // ***************************************************************
@@ -393,7 +393,7 @@ SvLBoxItem* SvLBoxButton::Create() const
 
 void SvLBoxButton::Clone( SvLBoxItem* pSource )
 {
-    pData = ((SvLBoxButton*)pSource)->pData;
+    pData = static_cast<SvLBoxButton*>(pSource)->pData;
 }
 
 void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, vcl::Window* i_pParent )

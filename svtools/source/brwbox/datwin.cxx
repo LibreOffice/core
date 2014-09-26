@@ -45,7 +45,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 
     if( rDev.GetOutDevType() == OUTDEV_WINDOW )
     {
-        vcl::Window *pWin = (vcl::Window*) &rDev;
+        vcl::Window *pWin = static_cast<vcl::Window*>( &rDev );
         if( bPressed )
             pWin->DrawSelectionBackground( aRect, 0, true, false, false );
     }

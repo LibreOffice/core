@@ -46,7 +46,7 @@ HTMLOutContext::HTMLOutContext( rtl_TextEncoding eDestEnc )
     DBG_ASSERT( m_hConv,
         "HTMLOutContext::HTMLOutContext: no converter for source encoding" );
     m_hContext = m_hConv ? rtl_createUnicodeToTextContext( m_hConv )
-                     : (rtl_TextToUnicodeContext)1;
+                     : reinterpret_cast<rtl_TextToUnicodeContext>(1);
 }
 
 HTMLOutContext::~HTMLOutContext()
@@ -642,7 +642,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
             case( IMAP_OBJ_RECTANGLE ):
                 {
                     const IMapRectangleObject* pRectObj =
-                        (const IMapRectangleObject *)pObj;
+                        static_cast<const IMapRectangleObject *>(pObj);
                     pShape = OOO_STRING_SVTOOLS_HTML_SH_rect;
                     Rectangle aRect( pRectObj->GetRectangle() );
 
@@ -660,7 +660,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
             case( IMAP_OBJ_CIRCLE ):
                 {
                     const IMapCircleObject* pCirc =
-                        (const IMapCircleObject *)pObj;
+                        static_cast<const IMapCircleObject *>(pObj);
                     pShape= OOO_STRING_SVTOOLS_HTML_SH_circ;
                     Point aCenter( pCirc->GetCenter() );
                     long nOff = pCirc->GetRadius();
@@ -677,7 +677,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
             case( IMAP_OBJ_POLYGON ):
                 {
                     const IMapPolygonObject* pPolyObj =
-                        (const IMapPolygonObject *)pObj;
+                        static_cast<const IMapPolygonObject *>(pObj);
                     pShape= OOO_STRING_SVTOOLS_HTML_SH_poly;
                     Polygon aPoly( pPolyObj->GetPolygon() );
                     sal_uInt16 nCount = aPoly.GetSize();

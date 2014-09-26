@@ -564,7 +564,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                 case META_BMP_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpAction* pAction = (MetaBmpAction*)pAct;
+                        MetaBmpAction* pAction = static_cast<MetaBmpAction*>(pAct);
 
                         checkMetadataBitmap(
                             BitmapEx( pAction->GetBitmap()),
@@ -581,7 +581,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                 case META_BMPSCALE_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpScaleAction* pAction = (MetaBmpScaleAction*)pAct;
+                        MetaBmpScaleAction* pAction = static_cast<MetaBmpScaleAction*>(pAct);
 
                         checkMetadataBitmap(
                             BitmapEx( pAction->GetBitmap()),
@@ -599,7 +599,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                 case META_BMPSCALEPART_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpScalePartAction* pAction = (MetaBmpScalePartAction*)pAct;
+                        MetaBmpScalePartAction* pAction = static_cast<MetaBmpScalePartAction*>(pAct);
 
                         checkMetadataBitmap(        BitmapEx( pAction->GetBitmap() ),
                                                     pAction->GetSrcPoint(),
@@ -617,7 +617,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                 case META_BMPEX_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpExAction* pAction = (MetaBmpExAction*)pAct;
+                        MetaBmpExAction* pAction = static_cast<MetaBmpExAction*>(pAct);
 
                         checkMetadataBitmap(
                             pAction->GetBitmapEx(),
@@ -634,7 +634,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                 case META_BMPEXSCALE_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpExScaleAction* pAction = (MetaBmpExScaleAction*)pAct;
+                        MetaBmpExScaleAction* pAction = static_cast<MetaBmpExScaleAction*>(pAct);
 
                         checkMetadataBitmap(
                             pAction->GetBitmapEx(),
@@ -652,7 +652,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                 case META_BMPEXSCALEPART_ACTION:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
-                        MetaBmpExScalePartAction* pAction = (MetaBmpExScalePartAction*)pAct;
+                        MetaBmpExScalePartAction* pAction = static_cast<MetaBmpExScalePartAction*>(pAct);
 
                         checkMetadataBitmap( pAction->GetBitmapEx(),
                                                     pAction->GetSrcPoint(),
@@ -670,7 +670,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                     // these actions actually output something (that's
                     // different from a bitmap)
                 case META_RASTEROP_ACTION:
-                    if( ((MetaRasterOpAction*)pAct)->GetRasterOp() == ROP_OVERPAINT )
+                    if( static_cast<MetaRasterOpAction*>(pAct)->GetRasterOp() == ROP_OVERPAINT )
                         break;
                     // FALLTHROUGH intended
                 case META_PIXEL_ACTION:

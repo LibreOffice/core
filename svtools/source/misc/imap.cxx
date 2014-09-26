@@ -584,15 +584,15 @@ ImageMap::ImageMap( const ImageMap& rImageMap )
         switch( pCopyObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
-                maList.push_back( new IMapRectangleObject( *(IMapRectangleObject*) pCopyObj ) );
+                maList.push_back( new IMapRectangleObject( *static_cast<IMapRectangleObject*>( pCopyObj ) ) );
             break;
 
             case( IMAP_OBJ_CIRCLE ):
-                maList.push_back( new IMapCircleObject( *(IMapCircleObject*) pCopyObj ) );
+                maList.push_back( new IMapCircleObject( *static_cast<IMapCircleObject*>( pCopyObj ) ) );
             break;
 
             case( IMAP_OBJ_POLYGON ):
-                maList.push_back( new IMapPolygonObject( *(IMapPolygonObject*) pCopyObj ) );
+                maList.push_back( new IMapPolygonObject( *static_cast<IMapPolygonObject*>( pCopyObj ) ) );
             break;
 
             default:
@@ -652,15 +652,15 @@ ImageMap& ImageMap::operator=( const ImageMap& rImageMap )
         switch( pCopyObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
-                maList.push_back( new IMapRectangleObject( *(IMapRectangleObject*) pCopyObj ) );
+                maList.push_back( new IMapRectangleObject( *static_cast<IMapRectangleObject*>(pCopyObj) ) );
             break;
 
             case( IMAP_OBJ_CIRCLE ):
-                maList.push_back( new IMapCircleObject( *(IMapCircleObject*) pCopyObj ) );
+                maList.push_back( new IMapCircleObject( *static_cast<IMapCircleObject*>(pCopyObj) ) );
             break;
 
             case( IMAP_OBJ_POLYGON ):
-                maList.push_back( new IMapPolygonObject( *(IMapPolygonObject*) pCopyObj ) );
+                maList.push_back( new IMapPolygonObject( *static_cast<IMapPolygonObject*>(pCopyObj) ) );
             break;
 
             default:
@@ -701,21 +701,21 @@ bool ImageMap::operator==( const ImageMap& rImageMap )
                 {
                     case( IMAP_OBJ_RECTANGLE ):
                     {
-                        if ( !( (IMapRectangleObject*) pObj )->IsEqual( *(IMapRectangleObject*) pEqObj ) )
+                        if ( !( static_cast<IMapRectangleObject*>(pObj) )->IsEqual( *static_cast<IMapRectangleObject*>(pEqObj) ) )
                             bDifferent = true;
                     }
                     break;
 
                     case( IMAP_OBJ_CIRCLE ):
                     {
-                        if ( !( (IMapCircleObject*) pObj )->IsEqual( *(IMapCircleObject*) pEqObj ) )
+                        if ( !( static_cast<IMapCircleObject*>(pObj) )->IsEqual( *static_cast<IMapCircleObject*>(pEqObj) ) )
                             bDifferent = true;
                     }
                     break;
 
                     case( IMAP_OBJ_POLYGON ):
                     {
-                        if ( !( (IMapPolygonObject*) pObj )->IsEqual( *(IMapPolygonObject*) pEqObj ) )
+                        if ( !( static_cast<IMapPolygonObject*>(pObj) )->IsEqual( *static_cast<IMapPolygonObject*>(pEqObj) ) )
                             bDifferent = true;
                     }
                     break;
@@ -771,15 +771,15 @@ void ImageMap::InsertIMapObject( const IMapObject& rIMapObject )
     switch( rIMapObject.GetType() )
     {
         case( IMAP_OBJ_RECTANGLE ):
-            maList.push_back( new IMapRectangleObject( (IMapRectangleObject&) rIMapObject ) );
+            maList.push_back( new IMapRectangleObject( static_cast<const IMapRectangleObject&>( rIMapObject ) ) );
         break;
 
         case( IMAP_OBJ_CIRCLE ):
-            maList.push_back( new IMapCircleObject( (IMapCircleObject&) rIMapObject ) );
+            maList.push_back( new IMapCircleObject( static_cast<const IMapCircleObject&>( rIMapObject ) ) );
         break;
 
         case( IMAP_OBJ_POLYGON ):
-            maList.push_back( new IMapPolygonObject( (IMapPolygonObject&) rIMapObject ) );
+            maList.push_back( new IMapPolygonObject( static_cast<const IMapPolygonObject&>( rIMapObject ) ) );
         break;
 
         default:
@@ -835,15 +835,15 @@ void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
         switch( pObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
-                ( (IMapRectangleObject*) pObj )->Scale( rFracX, rFracY );
+                static_cast<IMapRectangleObject*>( pObj )->Scale( rFracX, rFracY );
             break;
 
             case( IMAP_OBJ_CIRCLE ):
-                ( (IMapCircleObject*) pObj )->Scale( rFracX, rFracY );
+                static_cast<IMapCircleObject*>( pObj )->Scale( rFracX, rFracY );
             break;
 
             case( IMAP_OBJ_POLYGON ):
-                ( (IMapPolygonObject*) pObj )->Scale( rFracX, rFracY );
+                static_cast<IMapPolygonObject*>( pObj )->Scale( rFracX, rFracY );
             break;
 
             default:
