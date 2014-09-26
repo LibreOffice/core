@@ -62,8 +62,8 @@ public class MultiTileLayer extends Layer {
     private TileProvider tileProvider;
     private float currentZoomFactor;
     private RectF tileViewPort = new RectF();
-    private FloatSize currentPageSize = new FloatSize(0, 0);
     private boolean shouldRefreshZoom = true;
+    private RectF currentPageRect = new RectF();
 
     public MultiTileLayer() {
         super();
@@ -202,7 +202,7 @@ public class MultiTileLayer extends Layer {
             return;
         }
 
-        currentPageSize = context.pageSize;
+        currentPageRect = context.pageRect;
 
         for (SubTile layer : mTiles) {
             // Avoid work, only draw tiles that intersect with the viewport
@@ -258,11 +258,11 @@ public class MultiTileLayer extends Layer {
 
     private void addNewTiles() {
         for (float y = tileViewPort.top; y < tileViewPort.bottom; y += TILE_SIZE) {
-            if (y > currentPageSize.height) {
+            if (y > currentPageRect.height()) {
                 continue;
             }
             for (float x = tileViewPort.left; x < tileViewPort.right; x += TILE_SIZE) {
-                if (x > currentPageSize.width) {
+                if (x > currentPageRect.width()) {
                     continue;
                 }
                 boolean contains = false;

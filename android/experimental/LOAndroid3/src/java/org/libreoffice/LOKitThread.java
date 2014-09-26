@@ -2,9 +2,9 @@ package org.libreoffice;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
-import org.mozilla.gecko.gfx.FloatSize;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 
@@ -27,9 +27,9 @@ public class LOKitThread extends Thread {
         int pageWidth = mTileProvider.getPageWidth();
         int pageHeight = mTileProvider.getPageHeight();
 
-        FloatSize size = new FloatSize(pageWidth, pageHeight);
+        RectF rect = new RectF(0, 0, pageWidth, pageHeight);
         mViewportMetrics = new ViewportMetrics();
-        mViewportMetrics.setPageSize(size, size);
+        mViewportMetrics.setPageRect(rect, rect);
 
         GeckoLayerClient layerClient = mApplication.getLayerClient();
 

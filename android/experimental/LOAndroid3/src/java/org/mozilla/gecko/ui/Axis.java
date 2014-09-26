@@ -116,6 +116,7 @@ abstract class Axis {
 
     protected abstract float getOrigin();
     protected abstract float getViewportLength();
+    protected abstract float getPageStart();
     protected abstract float getPageLength();
 
     Axis(SubdocumentScrollHelper subscroller) {
@@ -124,6 +125,10 @@ abstract class Axis {
 
     private float getViewportEnd() {
         return getOrigin() + getViewportLength();
+    }
+
+    private float getPageEnd() {
+        return getPageStart() + getPageLength();
     }
 
     void startTouch(float pos) {
@@ -167,8 +172,8 @@ abstract class Axis {
     }
 
     private Overscroll getOverscroll() {
-        boolean minus = (getOrigin() < 0.0f);
-        boolean plus = (getViewportEnd() > getPageLength());
+        boolean minus = (getOrigin() < getPageStart());
+        boolean plus = (getViewportEnd() > getPageEnd());
         if (minus && plus) {
             return Overscroll.BOTH;
         } else if (minus) {
@@ -184,10 +189,10 @@ abstract class Axis {
     // overscrolled on this axis, returns 0.
     private float getExcess() {
         switch (getOverscroll()) {
-            case MINUS:     return -getOrigin();
-            case PLUS:      return getViewportEnd() - getPageLength();
-            case BOTH:      return getViewportEnd() - getPageLength() - getOrigin();
-            default:        return 0.0f;
+        case MINUS:     return getPageStart() - getOrigin();
+        case PLUS:      return getViewportEnd() - getPageEnd();
+        case BOTH:      return (getViewportEnd() - getPageEnd()) + (getPageStart() - getOrigin());
+        default:        return 0.0f;
         }
     }
 
@@ -202,7 +207,7 @@ abstract class Axis {
             return !mScrollingDisabled;
         } else {
             return getViewportLength() <= getPageLength() - MIN_SCROLLABLE_DISTANCE &&
-                    !mScrollingDisabled;
+                   !mScrollingDisabled;
         }
     }
 
