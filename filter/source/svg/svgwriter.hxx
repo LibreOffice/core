@@ -132,7 +132,7 @@ struct SVGShapeDescriptor
     Color                       maShapeLineColor;
     sal_Int32                   mnStrokeWidth;
     SvtGraphicStroke::DashArray maDashArray;
-    ::std::auto_ptr< Gradient > mapShapeGradient;
+    ::std::unique_ptr< Gradient > mapShapeGradient;
     OUString             maId;
 
     basegfx::B2DLineJoin                maLineJoin;
@@ -300,7 +300,7 @@ private:
     sal_Int32                                   mnCurMaskId;
     sal_Int32                                   mnCurPatternId;
     ::std::stack< SVGAttributeWriter* >         maContextStack;
-    ::std::auto_ptr< SVGShapeDescriptor >       mapCurShape;
+    ::std::unique_ptr< SVGShapeDescriptor >     mapCurShape;
     SVGExport&                                  mrExport;
     SVGFontExport&                              mrFontExport;
     SVGAttributeWriter*                         mpContext;

@@ -1415,9 +1415,7 @@ public:
 class InteractionInfo
 {
     bool mbHasInteraction;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<SvMemoryStream>       mpHyperlinkRecord;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<SvMemoryStream>       mpHyperlinkRecord;
     InteractionInfo();
 
 public:
@@ -1426,9 +1424,7 @@ public:
         mpHyperlinkRecord.reset( pStream );
     }
     bool    hasInteraction() { return mbHasInteraction; }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const std::auto_ptr< SvMemoryStream >&  getHyperlinkRecord() { return mpHyperlinkRecord; }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    const std::unique_ptr< SvMemoryStream >&  getHyperlinkRecord() { return mpHyperlinkRecord; }
 };
 
 class EscherExHostAppData
@@ -1567,7 +1563,7 @@ class ImplEscherExSdr;
 class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 {
     protected:
-        typedef ::std::auto_ptr< ImplEscherExSdr > ImplEscherExSdrPtr;
+        typedef ::std::unique_ptr< ImplEscherExSdr > ImplEscherExSdrPtr;
 
         EscherExGlobalRef           mxGlobal;
         ImplEscherExSdrPtr          mpImplEscherExSdr;

@@ -39,7 +39,7 @@ class SVGDialog : public ::svt::OGenericUnoDialog,
 {
 private:
 
-    ::std::auto_ptr< ResMgr >                                               mapResMgr;
+    ::std::unique_ptr< ResMgr >                                             mapResMgr;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > maMediaDescriptor;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > maFilterData;
     com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >    mxSrcDoc;

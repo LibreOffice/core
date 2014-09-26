@@ -44,7 +44,7 @@ class MSFILTER_DLLPUBLIC CustomToolBarImportHelper
         css::uno::Reference< css::graphic::XGraphic > image;
     };
     std::vector< iconcontrolitem > iconcommands;
-    std::auto_ptr< MSOCommandConvertor > pMSOCmdConvertor;
+    std::unique_ptr< MSOCommandConvertor > pMSOCmdConvertor;
     css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > m_xCfgSupp;
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xAppCfgMgr;
     SfxObjectShell& mrDocSh;

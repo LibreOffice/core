@@ -267,9 +267,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             aPropOpt.AddOpt( ESCHER_Prop_wzName, aShapeName );
         if ( InteractionInfo* pInteraction = mpHostAppData ? mpHostAppData->GetInteractionInfo():NULL )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            const std::auto_ptr< SvMemoryStream >& pMemStrm = pInteraction->getHyperlinkRecord();
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            const std::unique_ptr< SvMemoryStream >& pMemStrm = pInteraction->getHyperlinkRecord();
             if ( pMemStrm.get() )
             {
                 pMemStrm->ObjectOwnsMemory( false );
