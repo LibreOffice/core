@@ -24,6 +24,7 @@
 #include "svx/dbtoolsclient.hxx"
 #include "svx/fmtools.hxx"
 #include <svtools/stringtransfer.hxx>
+#include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 
 #include "fmprop.hrc"
@@ -59,6 +60,8 @@
 #include <cstdlib>
 #include <map>
 
+using namespace ::dbtools;
+using namespace ::dbtools::DBTypeConversion;
 using namespace ::svxform;
 using namespace ::svt;
 using namespace ::com::sun::star::beans;
@@ -1374,8 +1377,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
     // get a new formatter and data cursor
     m_xFormatter = NULL;
-    OStaticDataAccessTools aStaticTools;
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = aStaticTools.getNumberFormats(aStaticTools.getRowSetConnection(_xCursor), true);
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = getNumberFormats(getConnection(_xCursor), true);
     if (xSupplier.is())
     {
         m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(

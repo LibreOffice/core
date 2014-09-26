@@ -63,6 +63,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/longcurr.hxx>
 #include <vcl/settings.hxx>
+#include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 
 #include <math.h>
@@ -81,6 +82,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using namespace ::dbtools::DBTypeConversion;
+using namespace ::dbtools;
 
 using ::com::sun::star::util::XNumberFormatter;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
@@ -1171,7 +1173,7 @@ void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRect
 OUString DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
 {
     const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
-    ::dbtools::FormattedColumnValue fmter( xFormatter, xPS );
+    FormattedColumnValue fmter( xFormatter, xPS );
 
     return fmter.getFormattedValue();
 }
@@ -1324,7 +1326,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         Reference< XRowSet >  xCursorForm(xCursor, UNO_QUERY);
         if (xCursorForm.is())
         {   // wenn wir vom Cursor den Formatter nehmen, dann auch den Key vom Feld, an das wir gebunden sind
-            m_xSupplier = getNumberFormats(getRowSetConnection(xCursorForm), false);
+            m_xSupplier = getNumberFormats(getConnection(xCursorForm), false);
 
             if (m_rColumn.GetField().is())
                 nFormatKey = ::comphelper::getINT32(m_rColumn.GetField()->getPropertyValue(FM_PROP_FORMATKEY));
@@ -1795,7 +1797,7 @@ OUString DbPatternField::impl_formatText( const OUString& _rText )
 OUString DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
     bool bIsForPaint = _rxField != m_rColumn.GetField();
-    ::std::unique_ptr< ::dbtools::FormattedColumnValue >& rpFormatter = bIsForPaint ? m_pPaintFormatter : m_pValueFormatter;
+    ::std::unique_ptr< FormattedColumnValue >& rpFormatter = bIsForPaint ? m_pPaintFormatter : m_pValueFormatter;
 
     if ( !rpFormatter.get() )
     {
@@ -1918,7 +1920,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         if ( m_rColumn.GetParent().getDataSource() )
             xForm = Reference< XRowSet >( ( Reference< XInterface > )*m_rColumn.GetParent().getDataSource(), UNO_QUERY );
         if ( xForm.is() )
-            xSupplier = getNumberFormats( getRowSetConnection( xForm ), true );
+            xSupplier = getNumberFormats( getConnection( xForm ), true );
         SvNumberFormatter* pFormatterUsed = NULL;
         if ( xSupplier.is() )
         {
@@ -2926,7 +2928,7 @@ bool DbFilterField::commitControl()
 
                 Reference< XRowSet > xDataSourceRowSet(
                     (Reference< XInterface >)*m_rColumn.GetParent().getDataSource(), UNO_QUERY);
-                Reference< XConnection >  xConnection(getRowSetConnection(xDataSourceRowSet));
+                Reference< XConnection >  xConnection(getConnection(xDataSourceRowSet));
 
                 xParseNode->parseNodeToPredicateStr(aPreparedText,
                                                     xConnection,
@@ -3019,7 +3021,7 @@ void DbFilterField::Update()
         Reference< XTablesSupplier > xSupTab;
         xFormProp->getPropertyValue("SingleSelectQueryComposer") >>= xSupTab;
 
-        Reference< XConnection >  xConnection(getRowSetConnection(xForm));
+        Reference< XConnection >  xConnection(getConnection(xForm));
         if (!xSupTab.is())
             return;
 

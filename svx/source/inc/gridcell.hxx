@@ -197,8 +197,7 @@ private:
 // benoetigt
 
 class DbCellControl
-        :public ::svxform::OStaticDataAccessTools
-        ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
+        :public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
         ,public ::comphelper::OPropertyChangeListener
 {
 private:
