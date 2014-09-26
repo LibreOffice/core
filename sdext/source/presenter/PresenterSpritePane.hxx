@@ -52,25 +52,25 @@ public:
     PresenterSpritePane (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterSpritePane (void);
+    virtual ~PresenterSpritePane();
 
-    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     using css::lang::XEventListener::disposing;
 
-    ::boost::shared_ptr<PresenterSprite> GetSprite (void);
+    ::boost::shared_ptr<PresenterSprite> GetSprite();
 
-    static OUString getImplementationName_static (void);
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static();
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
     // XPane
 
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
+    virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XWindowListener
@@ -100,7 +100,7 @@ private:
     virtual void CreateCanvases (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas) SAL_OVERRIDE;
-    void UpdateCanvases (void);
+    void UpdateCanvases();
 };
 
 } } // end of namespace ::sd::presenter
