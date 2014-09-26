@@ -27,6 +27,8 @@
 #include "biffinputstream.hxx"
 #include "editutil.hxx"
 
+#include <vcl/svapp.hxx>
+
 namespace oox {
 namespace xls {
 
@@ -402,6 +404,9 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, co
     OUString sString;
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
         sString += (*aIt)->getText();
+
+    // fdo#84370 - diving into editeng is not thread safe.
+    SolarMutexGuard aGuard;
 
     rEE.SetText( sString );
 
