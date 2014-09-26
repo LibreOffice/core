@@ -179,7 +179,7 @@ VtableFactory::VtableFactory(): m_arena(
     rtl_arena_create(
         "bridges::cpp_uno::shared::VtableFactory",
         sizeof (void *), // to satisfy alignment requirements
-        0, reinterpret_cast< rtl_arena_type * >(-1), allocExec, freeExec, 0))
+        0, nullptr, allocExec, freeExec, 0))
 {
     if (m_arena == 0) {
         throw std::bad_alloc();
