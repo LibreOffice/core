@@ -1,0 +1,30 @@
+--- hunspell/src/hunspell/affixmgr.cxx	2014-09-24 16:11:10.750421303 +0200
++++ build/hunspell/src/hunspell/affixmgr.cxx	2014-09-26 15:25:09.448688908 +0200
+@@ -2400,8 +2400,10 @@
+                       }
+                       mystrcat(*result, presult, MAXLNLEN);
+                       if (m || (*m != '\0')) {
+-                        sprintf(*result + strlen(*result), "%c%s%s%s", MSEP_FLD,
++                        char m2[MAXLNLEN];
++                        sprintf(m2, "%c%s%s%s", MSEP_FLD,
+                             MORPH_PART, word + i, line_uniq_app(&m, MSEP_REC));
++                        mystrcat(*result, m2, MAXLNLEN);
+                       }
+                       if (m) free(m);
+                       mystrcat(*result, "\n", MAXLNLEN);
+@@ -2481,11 +2483,13 @@
+                       }
+                       mystrcat(*result, presult, MAXLNLEN);
+                       if (m && (*m != '\0')) {
+-                        sprintf(*result + strlen(*result), "%c%s%s%s", MSEP_FLD,
++                        char m2[MAXLNLEN];
++                        sprintf(m2, "%c%s%s%s", MSEP_FLD,
+                             MORPH_PART, word + i, line_uniq_app(&m, MSEP_REC));
++                        mystrcat(*result, m2, MAXLNLEN);
+                       }
+                       if (m) free(m);
+-                      sprintf(*result + strlen(*result), "%c", MSEP_REC);
++                      if (strlen(*result) + 1 < MAXLNLEN) sprintf(*result + strlen(*result), "%c", MSEP_REC);
+                       ok = 1;
+             }
+ 
