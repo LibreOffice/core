@@ -23,7 +23,6 @@
 #include <svx/gridctrl.hxx>
 
 #include "sqlparserclient.hxx"
-#include "typeconversionclient.hxx"
 
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/form/XBoundControl.hpp>
@@ -198,8 +197,7 @@ private:
 // benoetigt
 
 class DbCellControl
-        :public ::svxform::OTypeConversionClient
-        ,public ::svxform::OStaticDataAccessTools
+        :public ::svxform::OStaticDataAccessTools
         ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
         ,public ::comphelper::OPropertyChangeListener
 {

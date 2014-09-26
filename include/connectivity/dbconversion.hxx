@@ -69,11 +69,10 @@ namespace dbtools
 {
 
 
-    class OOO_DLLPUBLIC_DBTOOLS DBTypeConversion
+    namespace DBTypeConversion
     {
-    public:
-        static ::com::sun::star::util::Date getStandardDate();
-        static void setValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>& xVariant,
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Date getStandardDate();
+        OOO_DLLPUBLIC_DBTOOLS void setValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>& xVariant,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                     const ::com::sun::star::util::Date& rNullDate,
                                     const OUString& rString,
@@ -81,68 +80,68 @@ namespace dbtools
                                     sal_Int16 nFieldType,
                                     sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException);
 
-        static void setValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>& xVariant,
+        OOO_DLLPUBLIC_DBTOOLS void setValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>& xVariant,
                              const ::com::sun::star::util::Date& rNullDate,
                              const double& rValue,
                              sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException);
 
-        static double getValue( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& xVariant, const ::com::sun::star::util::Date& rNullDate );
+        OOO_DLLPUBLIC_DBTOOLS double getValue( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& xVariant, const ::com::sun::star::util::Date& rNullDate );
 
         // get the columnvalue as string with a default format given by the column or a default format
         // for the type
-        static OUString getFormattedValue(
+        OOO_DLLPUBLIC_DBTOOLS OUString getFormattedValue(
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                         const ::com::sun::star::lang::Locale& _rLocale,
                                         const ::com::sun::star::util::Date& rNullDate);
 
-        static OUString getFormattedValue(
+        OOO_DLLPUBLIC_DBTOOLS OUString getFormattedValue(
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _xColumn,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                         const ::com::sun::star::util::Date& rNullDate,
                                         sal_Int32 nKey,
                                         sal_Int16 nKeyType);
 
-        static ::com::sun::star::util::Date     toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
-        static ::com::sun::star::util::Date     toDate(const OUString& _sSQLDate);
-        static ::com::sun::star::util::Time     toTime(double dVal, short nDigits = 9);
-        static ::com::sun::star::util::Time     toTime(const OUString& _sSQLDate);
-        static ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
-        static ::com::sun::star::util::DateTime toDateTime(const OUString& _sSQLDate);
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Date     toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Date     toDate(const OUString& _sSQLDate);
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Time     toTime(double dVal, short nDigits = 9);
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Time     toTime(const OUString& _sSQLDate);
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::DateTime toDateTime(const OUString& _sSQLDate);
 
-        static sal_Int64 getNsFromTime(const ::com::sun::star::util::Time& rVal);
+        OOO_DLLPUBLIC_DBTOOLS sal_Int64 getNsFromTime(const ::com::sun::star::util::Time& rVal);
 
-        static sal_Int32 toDays(const ::com::sun::star::util::Date& _rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        OOO_DLLPUBLIC_DBTOOLS sal_Int32 toDays(const ::com::sun::star::util::Date& _rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
 
-        static double   toDouble(const ::com::sun::star::util::Date& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
-        static double   toDouble(const ::com::sun::star::util::Time& rVal);
-        static double   toDouble(const ::com::sun::star::util::DateTime& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        OOO_DLLPUBLIC_DBTOOLS double   toDouble(const ::com::sun::star::util::Date& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        OOO_DLLPUBLIC_DBTOOLS double   toDouble(const ::com::sun::star::util::Time& rVal);
+        OOO_DLLPUBLIC_DBTOOLS double   toDouble(const ::com::sun::star::util::DateTime& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
 
-        static ::com::sun::star::util::Date toDate(sal_Int32 _nVal);
-        static ::com::sun::star::util::Time toTime(sal_Int64 _nVal);
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Date toDate(sal_Int32 _nVal);
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Time toTime(sal_Int64 _nVal);
 
         /** convert a double which is a date value relative to a given fixed date into a date value relative
             to the standard db null date.
         */
-        static double toStandardDbDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal + toDays(_rNullDate); }
+        OOO_DLLPUBLIC_DBTOOLS inline double toStandardDbDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal + toDays(_rNullDate); }
         /** convert a double which is a date value relative to the standard db null date into a date value relative
             to a given fixed date.
         */
-        static double toNullDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal - toDays(_rNullDate); }
+        OOO_DLLPUBLIC_DBTOOLS inline double toNullDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal - toDays(_rNullDate); }
 
         // return the date from the numberformatsupplier or the STANDARD_DATE (1900,1,1)
-        static ::com::sun::star::util::Date getNULLDate(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > &xSupplier);
+        OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::util::Date getNULLDate(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > &xSupplier);
 
         // return the date in the format %04d-%02d-%02d
-        static OUString toDateString(const ::com::sun::star::util::Date& rDate);
+        OOO_DLLPUBLIC_DBTOOLS OUString toDateString(const ::com::sun::star::util::Date& rDate);
         // return the time in the format %02d:%02d:%02d
-        static OUString toTimeStringS(const ::com::sun::star::util::Time& rTime);
+        OOO_DLLPUBLIC_DBTOOLS OUString toTimeStringS(const ::com::sun::star::util::Time& rTime);
         // return the time in the format %02d:%02d:%02d.%09d
-        static OUString toTimeString(const ::com::sun::star::util::Time& rTime);
+        OOO_DLLPUBLIC_DBTOOLS OUString toTimeString(const ::com::sun::star::util::Time& rTime);
         // return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d.%09d
-        static OUString toDateTimeString(const ::com::sun::star::util::DateTime& _rDateTime);
+        OOO_DLLPUBLIC_DBTOOLS OUString toDateTimeString(const ::com::sun::star::util::DateTime& _rDateTime);
         // return the any in an sql standard format
-        static OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, bool bQuote,
+        OOO_DLLPUBLIC_DBTOOLS OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, bool bQuote,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >&  _rxTypeConverter);
 
         /** converts a Unicode string into a 8-bit string, using the given encoding
@@ -161,7 +160,7 @@ namespace dbtools
             @return
                 the length of the converted string
         */
-        static sal_Int32 convertUnicodeString(
+        OOO_DLLPUBLIC_DBTOOLS sal_Int32 convertUnicodeString(
             const OUString& _rSource,
             OString&  _rDest,
             rtl_TextEncoding _eEncoding
@@ -190,13 +189,13 @@ namespace dbtools
             @return
                 the length of the converted string
         */
-        static sal_Int32 convertUnicodeStringToLength(
+        OOO_DLLPUBLIC_DBTOOLS sal_Int32 convertUnicodeStringToLength(
             const OUString& _rSource,
             OString&  _rDest,
             sal_Int32 _nMaxLen,
             rtl_TextEncoding _eEncoding
        );
-    };
+    }
 
 
 }   // namespace dbtools

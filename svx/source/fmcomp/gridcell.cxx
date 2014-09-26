@@ -63,6 +63,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/longcurr.hxx>
 #include <vcl/settings.hxx>
+#include <connectivity/dbconversion.hxx>
 
 #include <math.h>
 #include <stdio.h>
@@ -79,6 +80,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
+using namespace ::dbtools::DBTypeConversion;
 
 using ::com::sun::star::util::XNumberFormatter;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;

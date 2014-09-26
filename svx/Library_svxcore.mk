@@ -444,7 +444,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/sdbdatacolumn \
     svx/source/form/sqlparserclient \
     svx/source/form/stringlistresource \
-    svx/source/form/typeconversionclient \
     svx/source/form/typemap \
     svx/source/form/xfm_addcondition \
 ))

@@ -24,6 +24,7 @@
 #include "svx/dbtoolsclient.hxx"
 #include "svx/fmtools.hxx"
 #include <svtools/stringtransfer.hxx>
+#include <connectivity/dbconversion.hxx>
 
 #include "fmprop.hrc"
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -874,7 +875,7 @@ DbGridControl::DbGridControl(
             ,m_pSeekCursor(NULL)
             ,m_nSeekPos(-1)
             ,m_nTotalCount(-1)
-            ,m_aNullDate(OTypeConversionClient().getStandardDate())
+            ,m_aNullDate(::dbtools::DBTypeConversion::getStandardDate())
             ,m_nMode(DEFAULT_BROWSE_MODE)
             ,m_nCurrentPos(-1)
             ,m_nDeleteEvent(0)
