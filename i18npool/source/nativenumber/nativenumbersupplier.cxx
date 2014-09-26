@@ -687,8 +687,11 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplierService::convertToXmlAttr
 
     sal_Int16 number = NumberChar_HalfWidth, type = attShort;
 
+    sal_Int16 langnum = -1;
     if (isValidNatNum(rLocale, nNativeNumberMode)) {
-        sal_Int16 langnum = getLanguageNumber(rLocale);
+        langnum = getLanguageNumber(rLocale);
+    }
+    if (langnum != -1) {
         switch (nNativeNumberMode) {
             case NativeNumberMode::NATNUM0: // Ascii
                 number = NumberChar_HalfWidth;
