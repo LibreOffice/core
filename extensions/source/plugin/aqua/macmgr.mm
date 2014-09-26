@@ -584,7 +584,7 @@ static rtl::OUString FindFolderURL(  FSVolumeRefNum vRefNum, OSType folderType )
     return aRet;
 }
 
-Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() throw()
+Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() throw(css::uno::RuntimeException, std::exception)
 {
     static Sequence<PluginDescription> aDescriptions;
     static sal_Bool bHavePlugins = sal_False;

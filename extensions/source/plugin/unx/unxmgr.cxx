@@ -234,7 +234,7 @@ static void CheckPluginRegistryFiles( const OString& rPath, list< PluginDescript
         closedir( pDIR );
 }
 
-Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() throw()
+Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() throw(css::uno::RuntimeException, std::exception)
 {
     static Sequence<PluginDescription> aDescriptions;
     static bool bHavePlugins = false;

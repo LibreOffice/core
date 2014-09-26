@@ -299,7 +299,7 @@ static void add_SO_Plugins( PluginLocationMap & rPlugins )
 }
 
 
-Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(void) throw()
+Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions() throw(css::uno::RuntimeException, std::exception)
 {
     Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
     static Sequence<PluginDescription > s_aDescriptions( 0 );
