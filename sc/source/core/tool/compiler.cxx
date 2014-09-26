@@ -2819,8 +2819,8 @@ bool ScCompiler::IsMacro( const OUString& rName )
     // formulas are compiled from a threaded import may result in a deadlock.
     // Check first if we actually could acquire it and if not bail out.
     /* FIXME: yes, but how ... */
-    comphelper::SolarMutex& rSolarMutex = Application::GetSolarMutex();
-    if (!rSolarMutex.tryToAcquire())
+    vcl::SolarMutexTryAndBuyGuard g;
+    if (!g.isAcquired())
     {
         SAL_WARN( "sc.core", "ScCompiler::IsMacro - SolarMutex would deadlock, not obtaining Basic");
         return false;   // bad luck
@@ -2854,7 +2854,6 @@ bool ScCompiler::IsMacro( const OUString& rName )
     SbxMethod* pMeth = (SbxMethod*) pObj->Find( aName, SbxCLASS_METHOD );
     if( !pMeth )
     {
-        rSolarMutex.release();
         return false;
     }
     // It really should be a BASIC function!
@@ -2862,12 +2861,10 @@ bool ScCompiler::IsMacro( const OUString& rName )
      || ( pMeth->IsFixed() && pMeth->GetType() == SbxEMPTY )
      || !pMeth->ISA(SbMethod) )
     {
-        rSolarMutex.release();
         return false;
     }
     maRawToken.SetExternal( aName.getStr() );
     maRawToken.eOp = ocMacro;
-    rSolarMutex.release();
     return true;
 #endif
 }

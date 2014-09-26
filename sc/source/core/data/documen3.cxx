@@ -877,13 +877,12 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
             // This check is done after calling EndListening, so a later BroadcastUno call
             // won't touch this object.
 
-            comphelper::SolarMutex& rSolarMutex = Application::GetSolarMutex();
-            if ( rSolarMutex.tryToAcquire() )
+            vcl::SolarMutexTryAndBuyGuard g;
+            if (g.isAcquired())
             {
                 // BroadcastUno is always called with the SolarMutex locked, so if it
                 // can be acquired, this is within the same thread (should not happen)
                 OSL_FAIL( "RemoveUnoObject called from BroadcastUno" );
-                rSolarMutex.release();
             }
             else
             {

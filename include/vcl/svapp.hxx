@@ -1659,6 +1659,53 @@ protected:
     comphelper::SolarMutex& m_solarMutex;
 };
 
+namespace vcl
+{
+
+/** guard class that uses tryToAcquire() and has isAcquired() to check
+ */
+class SolarMutexTryAndBuyGuard
+    : private boost::noncopyable
+{
+    private:
+        bool m_isAcquired;
+#if OSL_DEBUG_LEVEL > 0
+        bool m_isChecked;
+#endif
+        comphelper::SolarMutex& m_rSolarMutex;
+
+    public:
+
+    SolarMutexTryAndBuyGuard()
+        : m_isAcquired(false)
+#if OSL_DEBUG_LEVEL > 0
+        , m_isChecked(false)
+#endif
+        , m_rSolarMutex(Application::GetSolarMutex())
+
+    {
+        m_isAcquired = m_rSolarMutex.tryToAcquire();
+    }
+
+    ~SolarMutexTryAndBuyGuard()
+    {
+#if OSL_DEBUG_LEVEL > 0
+        assert(m_isChecked);
+#endif
+        if (m_isAcquired)
+            m_rSolarMutex.release();
+    }
+
+    bool isAcquired()
+    {
+#if OSL_DEBUG_LEVEL > 0
+        m_isChecked = true;
+#endif
+        return m_isAcquired;
+    }
+};
+
+} // namespace vcl
 
 /**
  A helper class that calls Application::ReleaseSolarMutex() in its constructor
