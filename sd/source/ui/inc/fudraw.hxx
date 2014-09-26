@@ -78,6 +78,7 @@ protected:
     bool    bDragHelpLine;
     sal_uInt16  nHelpLine;
     bool    bPermanent;
+    bool bIsImageSelected;
 
 };
 

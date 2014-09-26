@@ -93,10 +93,20 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = false;
-
     bDragHelpLine = false;
-
     aMDPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
+
+    // Check whether an image is selected
+    bIsImageSelected = false;
+    if (mpView->AreObjectsMarked())
+    {
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+        if (rMarkList.GetMarkCount() == 1)
+        {
+            SdrMark* pMark = rMarkList.GetMark(0);
+            bIsImageSelected = pMark->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF;
+        }
+    }
 
     if ( rMEvt.IsLeft() )
     {
@@ -217,7 +227,6 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
     bool bOrtho = false;
-
     bool bRestricted = true;
 
     if (mpView->IsDragObj())
@@ -235,10 +244,10 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
     if (mpView->IsAction())
     {
         // #i33136#
-        if(bRestricted && doConstructOrthogonal())
+        if(bIsImageSelected || (bRestricted && doConstructOrthogonal()))
         {
-            // Restrict movement:
-            // rectangle->quadrat, ellipse->circle etc.
+            // Scale proportionally by default:
+            // rectangle->quadrat, ellipse->circle, Images etc.
             bOrtho = !rMEvt.IsShift();
         }
         else
