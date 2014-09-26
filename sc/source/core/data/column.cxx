@@ -2839,17 +2839,21 @@ class FindEditCellsHandler
     sc::CellStoreType::iterator miCellPos;
 
 public:
-    FindEditCellsHandler(ScColumn& rColumn, sc::CellTextAttrStoreType& rAttrs,
-            const sc::CellStoreType::iterator& rCellItr) :
-        mrColumn(rColumn), miAttrPos(rAttrs.begin()), miCellPos(rCellItr) {}
+    FindEditCellsHandler(ScColumn& rCol) :
+        mrColumn(rCol),
+        miAttrPos(rCol.GetCellAttrStore().begin()),
+        miCellPos(rCol.GetCellStore().begin()) {}
 
     bool operator() (size_t, const EditTextObject*)
     {
+        // This is definitely an edit text cell.
         return true;
     }
 
     bool operator() (size_t nRow, const ScFormulaCell* p)
     {
+        // With a formula cell, it's considered an edit text cell when either
+        // the result is multi-line or it has more than one script types.
         sal_uInt8 nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow, miCellPos);
         if (IsAmbiguousScriptNonZero(nScriptType))
             return true;
@@ -2857,13 +2861,19 @@ public:
         return const_cast<ScFormulaCell*>(p)->IsMultilineResult();
     }
 
+    /**
+     * Callback for a block of other types.
+     */
     std::pair<size_t,bool> operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
         typedef std::pair<size_t,bool> RetType;
 
         if (node.type == sc::element_type_empty)
+            // Ignore empty blocks.
             return RetType(0, false);
 
+        // Check the script type of a non-empty element and see if it has
+        // multiple script types.
         for (size_t i = 0; i < nDataSize; ++i)
         {
             SCROW nRow = node.position + i + nOffset;
@@ -2873,6 +2883,7 @@ public:
                 return RetType(i+nOffset, true);
         }
 
+        // No edit text cell found.
         return RetType(0, false);
     }
 };
@@ -3238,7 +3249,7 @@ bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst)
 {
     //  used in GetOptimalHeight - ambiguous script type counts as edit cell
 
-    FindEditCellsHandler aFunc(*this, maCellTextAttrs, maCells.begin());
+    FindEditCellsHandler aFunc(*this);
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos =
         sc::FindFormulaEditText(maCells, nStartRow, nEndRow, aFunc);
 
