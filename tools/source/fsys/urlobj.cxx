@@ -604,7 +604,7 @@ std::unique_ptr<SvMemoryStream> INetURLObject::getData()
 {
     if( GetProtocol() != INET_PROT_DATA )
     {
-        return NULL;
+        return nullptr;
     }
 
     OUString sURLPath = GetURLPath( DECODE_WITH_CHARSET, RTL_TEXTENCODING_ISO_8859_1 );
@@ -633,7 +633,7 @@ std::unique_ptr<SvMemoryStream> INetURLObject::getData()
                 aDecodedData.getArray(), aDecodedData.getLength());
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 namespace unnamed_tools_urlobj {
