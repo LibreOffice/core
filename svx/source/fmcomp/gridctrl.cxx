@@ -3545,23 +3545,16 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : NULL;
     if (pColumn)
     {
-        bool bAcquiredPaintSafety = false;
-        while (!m_bWantDestruction && !bAcquiredPaintSafety)
-            bAcquiredPaintSafety  = Application::GetSolarMutex().tryToAcquire();
+        boost::scoped_ptr<vcl::SolarMutexTryAndBuyGuard> pGuard;
+        while (!m_bWantDestruction && (!pGuard || !pGuard->isAcquired()))
+            pGuard.reset(new vcl::SolarMutexTryAndBuyGuard);
 
         if (m_bWantDestruction)
         {   // at this moment, within another thread, our destructor tries to destroy the listener which called this method
             // => don't do anything
             // 73365 - 23.02.00 - FS
-            if (bAcquiredPaintSafety)
-                // though the above while-loop suggests that (m_bWantDestruction && bAcquiredPaintSafety) is impossible,
-                // it isnt't, as m_bWantDestruction isn't protected with any mutex
-                Application::GetSolarMutex().release();
             return;
         }
-        // here we got the solar mutex, transfer it to a guard for safety reasons
-        SolarMutexGuard aPaintSafety;
-        Application::GetSolarMutex().release();
 
         // and finally do the update ...
         pColumn->UpdateFromField(m_xCurrentRow, m_xFormatter);
