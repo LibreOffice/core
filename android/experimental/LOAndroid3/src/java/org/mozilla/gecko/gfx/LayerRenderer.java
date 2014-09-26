@@ -319,7 +319,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     }
 
     private RenderContext createContext(RectF viewport, RectF pageRect, float zoomFactor) {
-        return new RenderContext(viewport, pageRect, new IntSize(mSurfaceWidth, mSurfaceHeight), zoomFactor, mPositionHandle, mTextureHandle,
+        return new RenderContext(viewport, pageRect, zoomFactor, mPositionHandle, mTextureHandle,
                                  mCoordBuffer);
     }
 
