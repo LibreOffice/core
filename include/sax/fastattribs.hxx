@@ -52,22 +52,24 @@ typedef std::vector< UnknownAttribute > UnknownAttributeList;
 /// A native C++ interface to tokenisation
 class SAX_DLLPUBLIC FastTokenHandlerBase
 {
-    public:
-        virtual ~FastTokenHandlerBase();
-        virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const = 0;
-};
+ public:
+    virtual ~FastTokenHandlerBase();
+    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const = 0;
 
-/// avoid constantly allocating and freeing sequences.
-class SAX_DLLPUBLIC FastTokenLookup
-{
-    static const int mnUtf8BufferSize = 128;
-    css::uno::Sequence< sal_Int8 > maUtf8Buffer;
-public:
-    FastTokenLookup();
-    sal_Int32 getTokenFromChars(
-        const css::uno::Reference< css::xml::sax::XFastTokenHandler > &mxTokenHandler,
-        FastTokenHandlerBase *pTokenHandler,
-        const char *pStr, size_t nLength = 0 );
+    /**
+     * Client method to attempt the use of this interface if possible.
+     * @xTokenHandler - the UNO handle for the token lookup interface
+     * @pTokenHandler - a dynamic_cast version of @xTokenHandler to this interface
+     * @pStr - string buffer to lookup
+     * @nLength - optional length of chars in that buffer
+     *
+     * @return Tokenized form of pStr
+     */
+    static sal_Int32 getTokenFromChars(
+                         const css::uno::Reference<
+                             css::xml::sax::XFastTokenHandler > &xTokenHandler,
+                         FastTokenHandlerBase *pTokenHandler /* can be NULL */,
+                         const char *pStr, size_t nLength = 0 );
 };
 
 class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastAttributeList >
@@ -112,8 +114,6 @@ private:
     UnknownAttributeList maUnknownAttributes;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxTokenHandler;
     FastTokenHandlerBase *mpTokenHandler;
-
-    FastTokenLookup maTokenLookup;
 };
 
 }

@@ -127,9 +127,10 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXExcept
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-            return maTokenLookup.getTokenFromChars( mxTokenHandler, mpTokenHandler,
-                                                    mpChunk + maAttributeValues[ i ],
-                                                    AttributeValueLength( i ) );
+            return FastTokenHandlerBase::getTokenFromChars(
+                       mxTokenHandler, mpTokenHandler,
+                       mpChunk + maAttributeValues[ i ],
+                       AttributeValueLength( i ) );
 
     throw SAXException();
 }
@@ -138,9 +139,10 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-            return maTokenLookup.getTokenFromChars( mxTokenHandler, mpTokenHandler,
-                                                    mpChunk + maAttributeValues[ i ],
-                                                    AttributeValueLength( i ) );
+            return FastTokenHandlerBase::getTokenFromChars(
+                       mxTokenHandler, mpTokenHandler,
+                       mpChunk + maAttributeValues[ i ],
+                       AttributeValueLength( i ) );
 
     return Default;
 }
@@ -229,16 +231,7 @@ sal_Int32 FastAttributeList::AttributeValueLength(sal_Int32 i)
     return maAttributeValues[i + 1] - maAttributeValues[i] - 1;
 }
 
-FastTokenLookup::FastTokenLookup()
-{
-    maUtf8Buffer.realloc( mnUtf8BufferSize );
-}
-
-/**
- * Avoid doing any memory allocation if we can, instead keep a
- * pet sequence around and do some heavy petting on it.
- */
-sal_Int32 FastTokenLookup::getTokenFromChars(
+sal_Int32 FastTokenHandlerBase::getTokenFromChars(
         const css::uno::Reference< css::xml::sax::XFastTokenHandler > &xTokenHandler,
         FastTokenHandlerBase *pTokenHandler,
         const char *pToken, size_t nLen /* = 0 */ )

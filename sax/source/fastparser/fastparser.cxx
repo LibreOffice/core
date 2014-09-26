@@ -253,7 +253,6 @@ private:
 
     Entity *mpTop;                          /// std::stack::top() is amazingly slow => cache this.
     ::std::stack< Entity > maEntities;      /// Entity stack for each call of parseStream().
-    FastTokenLookup maTokenLookup;
 };
 
 } // namespace sax_fastparser
@@ -646,9 +645,9 @@ void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const sal_Char*
 
 sal_Int32 FastSaxParserImpl::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0 */ )
 {
-    return maTokenLookup.getTokenFromChars( getEntity().mxTokenHandler,
-                                            getEntity().mpTokenHandler,
-                                            pToken, nLen );
+    return FastTokenHandlerBase::getTokenFromChars( getEntity().mxTokenHandler,
+                                                    getEntity().mpTokenHandler,
+                                                    pToken, nLen );
 }
 
 sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefixLen, const sal_Char* pName, int nNameLen ) throw (SAXException)
