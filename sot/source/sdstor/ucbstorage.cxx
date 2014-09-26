@@ -2454,7 +2454,7 @@ void UCBStorage::SetClass( const SvGlobalName & rClass, sal_uLong nOriginalClipF
 
 void UCBStorage::SetClassId( const ClsId& rClsId )
 {
-    pImp->m_aClassId = SvGlobalName( (const CLSID&) rClsId );
+    pImp->m_aClassId = SvGlobalName( rClsId );
     if ( pImp->m_aClassId == SvGlobalName() )
         return;
 

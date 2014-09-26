@@ -259,20 +259,12 @@ sal_uInt32 OleHelper::encodeOleColor( sal_Int32 nRgbColor )
 
 void OleHelper::exportGuid( BinaryOutputStream& rOStr, const SvGlobalName& rId )
 {
-    const sal_uInt8* pBytes = rId.GetBytes();
-    sal_uInt32 a;
-    memcpy(&a, pBytes, sizeof(sal_uInt32));
-    rOStr<< a;
-
-    sal_uInt16 b;
-    memcpy(&b, pBytes+4, sizeof(sal_uInt16));
-    rOStr << b;
-
-    memcpy(&b, pBytes+6, sizeof(sal_uInt16));
-    rOStr << b;
-
-    rOStr.writeArray( (sal_uInt8 *)&pBytes[ 8 ], 8 );
+    rOStr << rId.GetCLSID().Data1;
+    rOStr << rId.GetCLSID().Data2;
+    rOStr << rId.GetCLSID().Data3;
+    rOStr.writeArray( &rId.GetCLSID().Data4, 8 );
 }
+
 OUString OleHelper::importGuid( BinaryInputStream& rInStrm )
 {
     OUStringBuffer aBuffer;

@@ -977,11 +977,11 @@ SvGlobalName Storage::GetClassName()
 {
     StgCompObjStream aCompObj( *this, false );
     if( aCompObj.Load() )
-        return SvGlobalName( (const CLSID&) aCompObj.GetClsId() );
+        return SvGlobalName( aCompObj.GetClsId() );
     pIo->ResetError();
 
     if ( pEntry )
-        return SvGlobalName( (const CLSID&) pEntry->aEntry.GetClassId() );
+        return SvGlobalName( pEntry->aEntry.GetClassId() );
 
     return SvGlobalName();
 }
@@ -1041,7 +1041,7 @@ const ClsId& Storage::GetClassId() const
     if ( pEntry )
         return pEntry->aEntry.GetClassId();
 
-    static ClsId aDummyId = {0,0,0,0,0,0,0,0,0,0,0};
+    static ClsId aDummyId = {0,0,0,{0,0,0,0,0,0,0,0}};
     return aDummyId;
 }
 

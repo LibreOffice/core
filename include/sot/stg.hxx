@@ -43,12 +43,7 @@ class StgIo;
 class StgDirEntry;
 class StgStrm;
 class SvGlobalName;
-struct ClsId
-{
-    sal_Int32   n1;
-    sal_Int16   n2, n3;
-    sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
-};
+typedef struct SvGUID ClsId;
 
 class SOT_DLLPUBLIC StorageBase : public SvRefBase
 {

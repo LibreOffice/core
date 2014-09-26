@@ -1822,9 +1822,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                     {
                         if ( xObjStor->GetClassName() == SvGlobalName() )
                         {
-                            ClsId aId( pObjStor->GetClassId() );
-                            xObjStor->SetClass( SvGlobalName( aId.n1, aId.n2, aId.n3, aId.n4, aId.n5, aId.n6, aId.n7, aId.n8, aId.n9, aId.n10, aId.n11 ),
-                                pObjStor->GetFormat(), pObjStor->GetUserName() );
+                            xObjStor->SetClass( SvGlobalName( pObjStor->GetClassId() ), pObjStor->GetFormat(), pObjStor->GetUserName() );
                         }
                         SotStorageStreamRef xSrcTst = xObjStor->OpenSotStream( "\1Ole" );
                         if ( xSrcTst.Is() )

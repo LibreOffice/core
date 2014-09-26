@@ -24,9 +24,17 @@
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
+struct SvGUID
+{
+    sal_uInt32 Data1;
+    sal_uInt16 Data2;
+    sal_uInt16 Data3;
+    sal_uInt8  Data4[8];
+};
+
 struct ImpSvGlobalName
 {
-    sal_uInt8       szData[ 16 ];
+    struct SvGUID   szData;
     sal_uInt16      nRefCount;
 
     enum Empty { EMPTY };
@@ -41,14 +49,6 @@ struct ImpSvGlobalName
     bool        operator == ( const ImpSvGlobalName & rObj ) const;
 };
 
-#ifdef WNT
-struct _GUID;
-typedef struct _GUID GUID;
-#else
-struct GUID;
-#endif
-
-typedef GUID CLSID;
 class SvStream;
 
 class TOOLS_DLLPUBLIC SvGlobalName
@@ -93,9 +93,8 @@ public:
     bool          MakeId( const OUString & rId );
     OUString      GetHexName() const;
 
-                  SvGlobalName( const CLSID & rId );
-    const CLSID & GetCLSID() const { return *(CLSID *)pImp->szData; }
-    const sal_uInt8* GetBytes() const { return pImp->szData; }
+                  SvGlobalName( const SvGUID & rId );
+    const SvGUID& GetCLSID() const { return pImp->szData; }
 
     // platform independent representation of a "GlobalName"
     // maybe transported remotely

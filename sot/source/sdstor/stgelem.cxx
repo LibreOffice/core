@@ -37,34 +37,34 @@ static const sal_uInt8 cStgSignature[ 8 ] = { 0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A
 
 SvStream& ReadClsId( SvStream& r, ClsId& rId )
 {
-    r.ReadInt32( rId.n1 )
-     .ReadInt16( rId.n2 )
-     .ReadInt16( rId.n3 )
-     .ReadUChar( rId.n4 )
-     .ReadUChar( rId.n5 )
-     .ReadUChar( rId.n6 )
-     .ReadUChar( rId.n7 )
-     .ReadUChar( rId.n8 )
-     .ReadUChar( rId.n9 )
-     .ReadUChar( rId.n10 )
-     .ReadUChar( rId.n11 );
+    r.ReadUInt32( rId.Data1 )
+     .ReadUInt16( rId.Data2 )
+     .ReadUInt16( rId.Data3 )
+     .ReadUChar( rId.Data4[0] )
+     .ReadUChar( rId.Data4[1] )
+     .ReadUChar( rId.Data4[2] )
+     .ReadUChar( rId.Data4[3] )
+     .ReadUChar( rId.Data4[4] )
+     .ReadUChar( rId.Data4[5] )
+     .ReadUChar( rId.Data4[6] )
+     .ReadUChar( rId.Data4[7] );
     return r;
 }
 
 SvStream& WriteClsId( SvStream& r, const ClsId& rId )
 {
     return
-       r .WriteInt32( (sal_Int32) rId.n1 )
-         .WriteInt16( (sal_Int16) rId.n2 )
-         .WriteInt16( (sal_Int16) rId.n3 )
-         .WriteUChar( (sal_uInt8) rId.n4 )
-         .WriteUChar( (sal_uInt8) rId.n5 )
-         .WriteUChar( (sal_uInt8) rId.n6 )
-         .WriteUChar( (sal_uInt8) rId.n7 )
-         .WriteUChar( (sal_uInt8) rId.n8 )
-         .WriteUChar( (sal_uInt8) rId.n9 )
-         .WriteUChar( (sal_uInt8) rId.n10 )
-         .WriteUChar( (sal_uInt8) rId.n11 );
+       r .WriteUInt32( rId.Data1 )
+         .WriteUInt16( rId.Data2 )
+         .WriteUInt16( rId.Data3 )
+         .WriteUChar( rId.Data4[0] )
+         .WriteUChar( rId.Data4[1] )
+         .WriteUChar( rId.Data4[2] )
+         .WriteUChar( rId.Data4[3] )
+         .WriteUChar( rId.Data4[4] )
+         .WriteUChar( rId.Data4[5] )
+         .WriteUChar( rId.Data4[6] )
+         .WriteUChar( rId.Data4[7] );
 }
 
 ///////////////////////////// class StgHeader

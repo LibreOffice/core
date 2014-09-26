@@ -81,7 +81,7 @@ bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
                 xModel, ::com::sun::star::uno::UNO_QUERY );
             if ( xTunnel.is() )
             {
-                ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( (sal_Int8*) SvGlobalName( SFX_GLOBAL_CLASSID ).GetBytes(), 16 );
+                ::com::sun::star::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
                 sal_Int64 nHandle = xTunnel->getSomething( aSeq );
                 if ( nHandle )
                 {
