@@ -585,7 +585,9 @@ void INetURLObject::setInvalid()
 
 namespace {
 
-SvMemoryStream * memoryStream(void const * data, sal_Int32 length) {
+std::unique_ptr<SvMemoryStream> memoryStream(
+        void const * data, sal_Int32 length)
+{
     std::unique_ptr<char, boost::checked_array_deleter<char> > b(
         new char[length]);
     memcpy(b.get(), data, length);
@@ -593,12 +595,12 @@ SvMemoryStream * memoryStream(void const * data, sal_Int32 length) {
         new SvMemoryStream(b.get(), length, STREAM_READ));
     s->ObjectOwnsMemory(true);
     b.release();
-    return s.release();
+    return s;
 }
 
 }
 
-SvMemoryStream* INetURLObject::getData()
+std::unique_ptr<SvMemoryStream> INetURLObject::getData()
 {
     if( GetProtocol() != INET_PROT_DATA )
     {

@@ -26,6 +26,8 @@
 #include <rtl/textenc.h>
 #include <sal/types.h>
 
+#include <memory>
+
 class SvMemoryStream;
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -854,7 +856,7 @@ public:
         const;
 
     // Data URLs:
-    SvMemoryStream* getData();
+    std::unique_ptr<SvMemoryStream> getData();
 
     // POP3 and URLs:
 

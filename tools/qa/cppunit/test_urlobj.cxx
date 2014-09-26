@@ -246,7 +246,7 @@ namespace tools_urlobj
 
         void urlobjTest_data() {
             INetURLObject url;
-            SvMemoryStream * strm;
+            std::unique_ptr<SvMemoryStream> strm;
             unsigned char const * buf;
 
             url = INetURLObject("data:");
@@ -259,7 +259,7 @@ namespace tools_urlobj
             strm = url.getData();
             CPPUNIT_ASSERT(strm != 0);
             CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(0), strm->GetSize());
-            delete strm;
+            strm.reset();
 
             url = INetURLObject("data:,,%C3%A4%90");
             CPPUNIT_ASSERT(!url.HasError());
@@ -271,7 +271,7 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(0xC3, int(buf[1]));
             CPPUNIT_ASSERT_EQUAL(0xA4, int(buf[2]));
             CPPUNIT_ASSERT_EQUAL(0x90, int(buf[3]));
-            delete strm;
+            strm.reset();
 
             url = INetURLObject("data:base64,");
             //TODO: CPPUNIT_ASSERT(url.HasError());
@@ -283,14 +283,14 @@ namespace tools_urlobj
             strm = url.getData();
             CPPUNIT_ASSERT(strm != 0);
             CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(0), strm->GetSize());
-            delete strm;
+            strm.reset();
 
             url = INetURLObject("data:;bAsE64,");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != 0);
             CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(0), strm->GetSize());
-            delete strm;
+            strm.reset();
 
             url = INetURLObject("data:;base64,YWJjCg==");
             CPPUNIT_ASSERT(!url.HasError());
@@ -302,7 +302,7 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(0x62, int(buf[1]));
             CPPUNIT_ASSERT_EQUAL(0x63, int(buf[2]));
             CPPUNIT_ASSERT_EQUAL(0x0A, int(buf[3]));
-            delete strm;
+            strm.reset();
 
             url = INetURLObject("data:;base64,YWJjCg=");
             CPPUNIT_ASSERT(!url.HasError());
@@ -324,7 +324,7 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(0x51, int(buf[1]));
             CPPUNIT_ASSERT_EQUAL(0x3D, int(buf[2]));
             CPPUNIT_ASSERT_EQUAL(0x3D, int(buf[3]));
-            delete strm;
+            strm.reset();
 
             url = INetURLObject("http://example.com");
             CPPUNIT_ASSERT(!url.HasError());

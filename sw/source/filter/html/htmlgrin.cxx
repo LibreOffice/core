@@ -698,12 +698,11 @@ IMAGE_SETEVENT:
     INetURLObject aGraphicURL( sGrfNm );
     if( aGraphicURL.GetProtocol() == INET_PROT_DATA )
     {
-        SvMemoryStream* pStream = aGraphicURL.getData();
+        std::unique_ptr<SvMemoryStream> const pStream(aGraphicURL.getData());
         if (pStream)
         {
             if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *pStream))
                 sGrfNm = "";
-            delete pStream;
         }
     }
     // sBaseURL is empty if the source is clipboard
