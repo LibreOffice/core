@@ -1102,7 +1102,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         if ( HasFocus() )
             nState |= CTRL_STATE_FOCUSED;
 
-        Region aClipRgn( GetActiveClipRegion() );
+        vcl::Region aClipRgn( GetActiveClipRegion() );
         aClipRgn.Intersect( aRect );
         if( !rRect.IsEmpty() )
             aClipRgn.Intersect( rRect );
@@ -1197,7 +1197,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
             ImplTabItem* pItem = &mpTabCtrlData->maItemList[idx];
             if ( pItem != pCurItem )
             {
-                Region aClipRgn( GetActiveClipRegion() );
+                vcl::Region aClipRgn( GetActiveClipRegion() );
                 aClipRgn.Intersect( pItem->maRect );
                 if( !rRect.IsEmpty() )
                     aClipRgn.Intersect( rRect );
@@ -1213,7 +1213,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
 
         if ( pCurItem )
         {
-            Region aClipRgn( GetActiveClipRegion() );
+            vcl::Region aClipRgn( GetActiveClipRegion() );
             aClipRgn.Intersect( pCurItem->maRect );
             if( !rRect.IsEmpty() )
                 aClipRgn.Intersect( rRect );
@@ -1543,7 +1543,7 @@ bool TabControl::PreNotify( NotifyEvent& rNEvt )
                 Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
                 if( pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()) )
                 {
-                    Region aClipRgn;
+                    vcl::Region aClipRgn;
                     if( pLastRect )
                     {
                         // allow for slightly bigger tabitems

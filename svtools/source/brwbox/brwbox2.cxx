@@ -821,7 +821,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
     }
 
     // draw our own content (with clipping)
-    Region aRegion(Rectangle(aRealPos, aRealSize));
+    vcl::Region aRegion(Rectangle(aRealPos, aRealSize));
     pDev->SetClipRegion( pDev->PixelToLogic( aRegion ) );
 
     // do we have to paint the background
@@ -986,7 +986,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
                         aFieldSize.Height() = aOverallAreaBRPos.Y() + 1 - aPos.Y();
                     }
 
-                    Region aClipToField(Rectangle(aPos, aFieldSize));
+                    vcl::Region aClipToField(Rectangle(aPos, aFieldSize));
                     _rOut.SetClipRegion(aClipToField);
                 }
                 pCol->Draw( *this, _rOut, aPos, false );

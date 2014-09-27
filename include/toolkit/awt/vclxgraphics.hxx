@@ -33,7 +33,7 @@
 #include <vcl/vclenum.hxx>
 
 class OutputDevice;
-class Region;
+namespace vcl { class Region; }
 
 
 #define INITOUTDEV_FONT         0x0001
@@ -63,7 +63,7 @@ private:
     Color           maLineColor;
     Color           maFillColor;
     RasterOp        meRasterOp;
-    Region*         mpClipRegion;
+    vcl::Region*         mpClipRegion;
 
     void initAttrs();
 

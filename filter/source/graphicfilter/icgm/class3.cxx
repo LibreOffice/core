@@ -117,7 +117,7 @@ void CGM::ImplDoClass3()
         break;
         case 0x0b : /*Save Primitive Context */break;           // NS
         case 0x0c : /*Restore Primitive Context */break;        // NS
-        case 0x11 : /*Protection Region Indicator */break;
+        case 0x11 : /*Protection vcl::Region Indicator */break;
         case 0x12 : /*Generalized Text Path Mode */break;       // NS
         case 0x13 : /*Mitre Limit*/
             pElement->nMitreLimit = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );

@@ -548,7 +548,7 @@ void X11SalGraphics::ResetClipRegion()
     }
 }
 
-bool X11SalGraphics::setClipRegion( const Region& i_rClip )
+bool X11SalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
     if( mpClipRegion )
         XDestroyRegion( mpClipRegion );

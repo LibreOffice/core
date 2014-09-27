@@ -232,7 +232,7 @@ void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProv
     m_pMarkHandleProvider = pMarkHandleProvider;
 }
 
-void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* /* pRedirector */)
+void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* /* pRedirector */)
 {
     svtools::ColorConfig aColorConfig;
     Color aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );

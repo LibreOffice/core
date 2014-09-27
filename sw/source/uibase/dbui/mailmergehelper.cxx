@@ -425,7 +425,7 @@ void SwAddressPreview::StateChanged( StateChangedType nStateChange )
 void SwAddressPreview::DrawText_Impl(
         const OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected)
 {
-    SetClipRegion( Region( Rectangle(rTopLeft, rSize)) );
+    SetClipRegion( vcl::Region( Rectangle(rTopLeft, rSize)) );
     if(bIsSelected)
     {
         //selection rectangle

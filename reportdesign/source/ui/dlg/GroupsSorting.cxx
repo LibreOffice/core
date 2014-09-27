@@ -555,7 +555,7 @@ void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rR
 
     if( aPos.X() < rRect.Right() || aPos.X() + aTextSize.Width() > rRect.Right() ||
         aPos.Y() < rRect.Top() || aPos.Y() + aTextSize.Height() > rRect.Bottom() )
-        rDev.SetClipRegion(Region(rRect));
+        rDev.SetClipRegion(vcl::Region(rRect));
 
     rDev.DrawText( aPos, aText );
 

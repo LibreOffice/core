@@ -168,7 +168,7 @@ void Svx3DPreviewControl::Resize()
 
 void Svx3DPreviewControl::Paint(const Rectangle& rRect)
 {
-    mp3DView->CompleteRedraw(this, Region(rRect));
+    mp3DView->CompleteRedraw(this, vcl::Region(rRect));
 }
 
 void Svx3DPreviewControl::MouseButtonDown(const MouseEvent& rMEvt)

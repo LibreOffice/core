@@ -604,15 +604,15 @@ void ImplPopupFloatWin::DrawBorder()
     Point aPt;
     Rectangle aRect( aPt, GetOutputSizePixel() );
 
-    Region oldClipRgn( GetClipRegion( ) );
-    Region aClipRgn( aRect );
+    vcl::Region oldClipRgn( GetClipRegion( ) );
+    vcl::Region aClipRgn( aRect );
     Rectangle aItemClipRect( ImplGetItemEdgeClipRect() );
     if( !aItemClipRect.IsEmpty() )
     {
         aItemClipRect.SetPos( AbsoluteScreenToOutputPixel( aItemClipRect.TopLeft() ) );
 
         // draw the excluded border part with the background color of a toolbox
-        SetClipRegion( Region( aItemClipRect ) );
+        SetClipRegion( vcl::Region( aItemClipRect ) );
         SetLineColor( GetSettings().GetStyleSettings().GetFaceColor() );
         DrawRect( aRect );
 

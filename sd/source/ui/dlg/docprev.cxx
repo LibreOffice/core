@@ -269,7 +269,7 @@ void SdDocPreviewWin::updateViewSettings()
         // Use new StandardCheckVisisbilityRedirector
         StandardCheckVisisbilityRedirector aRedirector;
         const Rectangle aRedrawRectangle = Rectangle( Point(), aNewSize );
-        Region aRedrawRegion(aRedrawRectangle);
+        vcl::Region aRedrawRegion(aRedrawRectangle);
         pView->SdrPaintView::CompleteRedraw(&aVDev,aRedrawRegion,&aRedirector);
 
             aVDev.Pop();

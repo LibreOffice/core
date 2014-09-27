@@ -221,7 +221,9 @@ namespace
     }
 } // end of anonymous namespace
 
-bool Region::IsEmpty() const
+namespace vcl {
+
+bool vcl::Region::IsEmpty() const
 {
     return !mbIsNull && !mpB2DPolyPolygon.get() && !mpPolyPolygon.get() && !mpRegionBand.get();
 }
@@ -275,7 +277,7 @@ RegionBand* ImplCreateRegionBandFromPolyPolygon(const PolyPolygon& rPolyPolygon)
     return pRetval;
 }
 
-PolyPolygon Region::ImplCreatePolyPolygonFromRegionBand() const
+PolyPolygon vcl::Region::ImplCreatePolyPolygonFromRegionBand() const
 {
     PolyPolygon aRetval;
 
@@ -297,7 +299,7 @@ PolyPolygon Region::ImplCreatePolyPolygonFromRegionBand() const
     return aRetval;
 }
 
-basegfx::B2DPolyPolygon Region::ImplCreateB2DPolyPolygonFromRegionBand() const
+basegfx::B2DPolyPolygon vcl::Region::ImplCreateB2DPolyPolygonFromRegionBand() const
 {
     PolyPolygon aPoly(ImplCreatePolyPolygonFromRegionBand());
 
@@ -360,7 +362,7 @@ Region::Region(const basegfx::B2DPolyPolygon& rPolyPoly)
     }
 }
 
-Region::Region(const Region& rRegion)
+Region::Region(const vcl::Region& rRegion)
 :   mpB2DPolyPolygon(rRegion.mpB2DPolyPolygon),
     mpPolyPolygon(rRegion.mpPolyPolygon),
     mpRegionBand(rRegion.mpRegionBand),
@@ -372,7 +374,7 @@ Region::~Region()
 {
 }
 
-void Region::ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly )
+void vcl::Region::ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly )
 {
     const sal_uInt16 nPolyCount = rPolyPoly.Count();
 
@@ -398,7 +400,7 @@ void Region::ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly )
     }
 }
 
-void Region::ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPolyPoly )
+void vcl::Region::ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPolyPoly )
 {
     if(rPolyPoly.count() && !rPolyPoly.getB2DRange().isEmpty())
     {
@@ -407,7 +409,7 @@ void Region::ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPolyPoly 
     }
 }
 
-void Region::Move( long nHorzMove, long nVertMove )
+void vcl::Region::Move( long nHorzMove, long nVertMove )
 {
     if(IsNull() || IsEmpty())
     {
@@ -454,7 +456,7 @@ void Region::Move( long nHorzMove, long nVertMove )
     }
 }
 
-void Region::Scale( double fScaleX, double fScaleY )
+void vcl::Region::Scale( double fScaleX, double fScaleY )
 {
     if(IsNull() || IsEmpty())
     {
@@ -501,7 +503,7 @@ void Region::Scale( double fScaleX, double fScaleY )
     }
 }
 
-bool Region::Union( const Rectangle& rRect )
+bool vcl::Region::Union( const Rectangle& rRect )
 {
     if(rRect.IsEmpty())
     {
@@ -542,7 +544,7 @@ bool Region::Union( const Rectangle& rRect )
                 basegfx::tools::solvePolygonOperationOr(
                     aThisPolyPoly,
                     basegfx::B2DPolyPolygon(aRectPoly)));
-            *this = Region(aClip);
+            *this = vcl::Region(aClip);
         }
 
         return true;
@@ -583,7 +585,7 @@ bool Region::Union( const Rectangle& rRect )
     return true;
 }
 
-bool Region::Intersect( const Rectangle& rRect )
+bool vcl::Region::Intersect( const Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
     {
@@ -676,7 +678,7 @@ bool Region::Intersect( const Rectangle& rRect )
     return true;
 }
 
-bool Region::Exclude( const Rectangle& rRect )
+bool vcl::Region::Exclude( const Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
     {
@@ -718,7 +720,7 @@ bool Region::Exclude( const Rectangle& rRect )
         const basegfx::B2DPolyPolygon aOtherPolyPoly(aRectPoly);
         const basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationDiff(aThisPolyPoly, aOtherPolyPoly);
 
-        *this = Region(aClip);
+        *this = vcl::Region(aClip);
 
         return true;
     }
@@ -757,7 +759,7 @@ bool Region::Exclude( const Rectangle& rRect )
     return true;
 }
 
-bool Region::XOr( const Rectangle& rRect )
+bool vcl::Region::XOr( const Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
     {
@@ -801,7 +803,7 @@ bool Region::XOr( const Rectangle& rRect )
         const basegfx::B2DPolyPolygon aOtherPolyPoly(aRectPoly);
         const basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationXor(aThisPolyPoly, aOtherPolyPoly);
 
-        *this = Region(aClip);
+        *this = vcl::Region(aClip);
 
         return true;
     }
@@ -842,7 +844,7 @@ bool Region::XOr( const Rectangle& rRect )
     return true;
 }
 
-bool Region::Union( const Region& rRegion )
+bool vcl::Region::Union( const vcl::Region& rRegion )
 {
     if(rRegion.IsEmpty())
     {
@@ -853,7 +855,7 @@ bool Region::Union( const Region& rRegion )
     if(rRegion.IsNull())
     {
         // extending with null region -> null region
-        *this = Region(true);
+        *this = vcl::Region(true);
         return true;
     }
 
@@ -891,7 +893,7 @@ bool Region::Union( const Region& rRegion )
         // use logical OR operation
         basegfx::B2DPolyPolygon aClip(basegfx::tools::solvePolygonOperationOr(aThisPolyPoly, aOtherPolyPoly));
 
-        *this = Region( aClip );
+        *this = vcl::Region( aClip );
         return true;
     }
 
@@ -930,7 +932,7 @@ bool Region::Union( const Region& rRegion )
     return true;
 }
 
-bool Region::Intersect( const Region& rRegion )
+bool vcl::Region::Intersect( const vcl::Region& rRegion )
 {
     // same instance data? -> nothing to do!
     if(getB2DPolyPolygon() && getB2DPolyPolygon() == rRegion.getB2DPolyPolygon())
@@ -1001,7 +1003,7 @@ bool Region::Intersect( const Region& rRegion )
                 aThisPolyPoly,
                 true,
                 false));
-        *this = Region( aClip );
+        *this = vcl::Region( aClip );
         return true;
     }
 
@@ -1027,7 +1029,7 @@ bool Region::Intersect( const Region& rRegion )
     if(pCurrent->getRectangleCount() + 2 < pSource->getRectangleCount())
     {
         // when we have less rectangles, turn around the call
-        Region aTempRegion = rRegion;
+        vcl::Region aTempRegion = rRegion;
         aTempRegion.Intersect( *this );
         *this = aTempRegion;
     }
@@ -1052,7 +1054,7 @@ bool Region::Intersect( const Region& rRegion )
     return true;
 }
 
-bool Region::Exclude( const Region& rRegion )
+bool vcl::Region::Exclude( const vcl::Region& rRegion )
 {
     if ( rRegion.IsEmpty() )
     {
@@ -1099,7 +1101,7 @@ bool Region::Exclude( const Region& rRegion )
         aOtherPolyPoly = basegfx::tools::prepareForPolygonOperation( aOtherPolyPoly );
 
         basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationDiff( aThisPolyPoly, aOtherPolyPoly );
-        *this = Region( aClip );
+        *this = vcl::Region( aClip );
         return true;
     }
 
@@ -1137,7 +1139,7 @@ bool Region::Exclude( const Region& rRegion )
     return true;
 }
 
-bool Region::XOr( const Region& rRegion )
+bool vcl::Region::XOr( const vcl::Region& rRegion )
 {
     if ( rRegion.IsEmpty() )
     {
@@ -1187,7 +1189,7 @@ bool Region::XOr( const Region& rRegion )
         aOtherPolyPoly = basegfx::tools::prepareForPolygonOperation( aOtherPolyPoly );
 
         basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationXor( aThisPolyPoly, aOtherPolyPoly );
-        *this = Region( aClip );
+        *this = vcl::Region( aClip );
         return true;
     }
 
@@ -1227,7 +1229,7 @@ bool Region::XOr( const Region& rRegion )
     return true;
 }
 
-Rectangle Region::GetBoundRect() const
+Rectangle vcl::Region::GetBoundRect() const
 {
     if(IsEmpty())
     {
@@ -1274,7 +1276,7 @@ Rectangle Region::GetBoundRect() const
     return Rectangle();
 }
 
-const PolyPolygon Region::GetAsPolyPolygon() const
+const PolyPolygon vcl::Region::GetAsPolyPolygon() const
 {
     if(getPolyPolygon())
     {
@@ -1285,7 +1287,7 @@ const PolyPolygon Region::GetAsPolyPolygon() const
     {
         // the polygon needs to be converted, buffer the down converion
         const PolyPolygon aPolyPolgon(*getB2DPolyPolygon());
-        const_cast< Region* >(this)->mpPolyPolygon.reset(new PolyPolygon(aPolyPolgon));
+        const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new PolyPolygon(aPolyPolgon));
 
         return *getPolyPolygon();
     }
@@ -1294,7 +1296,7 @@ const PolyPolygon Region::GetAsPolyPolygon() const
     {
         // the BandRegion needs to be converted, buffer the converion
         const PolyPolygon aPolyPolgon(ImplCreatePolyPolygonFromRegionBand());
-        const_cast< Region* >(this)->mpPolyPolygon.reset(new PolyPolygon(aPolyPolgon));
+        const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new PolyPolygon(aPolyPolgon));
 
         return *getPolyPolygon();
     }
@@ -1302,7 +1304,7 @@ const PolyPolygon Region::GetAsPolyPolygon() const
     return PolyPolygon();
 }
 
-const basegfx::B2DPolyPolygon Region::GetAsB2DPolyPolygon() const
+const basegfx::B2DPolyPolygon vcl::Region::GetAsB2DPolyPolygon() const
 {
     if(getB2DPolyPolygon())
     {
@@ -1313,7 +1315,7 @@ const basegfx::B2DPolyPolygon Region::GetAsB2DPolyPolygon() const
     {
         // the polygon needs to be converted, buffer the up conversion. This will be preferred from now.
         const basegfx::B2DPolyPolygon aB2DPolyPolygon(getPolyPolygon()->getB2DPolyPolygon());
-        const_cast< Region* >(this)->mpB2DPolyPolygon.reset(new basegfx::B2DPolyPolygon(aB2DPolyPolygon));
+        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon.reset(new basegfx::B2DPolyPolygon(aB2DPolyPolygon));
 
         return *getB2DPolyPolygon();
     }
@@ -1322,7 +1324,7 @@ const basegfx::B2DPolyPolygon Region::GetAsB2DPolyPolygon() const
     {
         // the BandRegion needs to be converted, buffer the converion
         const basegfx::B2DPolyPolygon aB2DPolyPolygon(ImplCreateB2DPolyPolygonFromRegionBand());
-        const_cast< Region* >(this)->mpB2DPolyPolygon.reset(new basegfx::B2DPolyPolygon(aB2DPolyPolygon));
+        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon.reset(new basegfx::B2DPolyPolygon(aB2DPolyPolygon));
 
         return *getB2DPolyPolygon();
     }
@@ -1330,26 +1332,26 @@ const basegfx::B2DPolyPolygon Region::GetAsB2DPolyPolygon() const
     return basegfx::B2DPolyPolygon();
 }
 
-const RegionBand* Region::GetAsRegionBand() const
+const RegionBand* vcl::Region::GetAsRegionBand() const
 {
     if(!getRegionBand())
     {
         if(getB2DPolyPolygon())
         {
             // convert B2DPolyPolygon to RegionBand, buffer it and return it
-            const_cast< Region* >(this)->mpRegionBand.reset(ImplCreateRegionBandFromPolyPolygon(PolyPolygon(*getB2DPolyPolygon())));
+            const_cast< vcl::Region* >(this)->mpRegionBand.reset(ImplCreateRegionBandFromPolyPolygon(PolyPolygon(*getB2DPolyPolygon())));
         }
         else if(getPolyPolygon())
         {
             // convert B2DPolyPolygon to RegionBand, buffer it and return it
-            const_cast< Region* >(this)->mpRegionBand.reset(ImplCreateRegionBandFromPolyPolygon(*getPolyPolygon()));
+            const_cast< vcl::Region* >(this)->mpRegionBand.reset(ImplCreateRegionBandFromPolyPolygon(*getPolyPolygon()));
         }
     }
 
     return getRegionBand();
 }
 
-bool Region::IsInside( const Point& rPoint ) const
+bool vcl::Region::IsInside( const Point& rPoint ) const
 {
     if(IsEmpty())
     {
@@ -1380,7 +1382,7 @@ bool Region::IsInside( const Point& rPoint ) const
     return false;
 }
 
-bool Region::IsInside( const Rectangle& rRect ) const
+bool vcl::Region::IsInside( const Rectangle& rRect ) const
 {
     if(IsEmpty())
     {
@@ -1401,14 +1403,14 @@ bool Region::IsInside( const Rectangle& rRect ) const
     }
 
     // create region from rectangle and intersect own region
-    Region aRegion(rRect);
+    vcl::Region aRegion(rRect);
     aRegion.Exclude(*this);
 
     // rectangle is inside if exclusion is empty
     return aRegion.IsEmpty();
 }
 
-bool Region::IsOver( const Rectangle& rRect ) const
+bool vcl::Region::IsOver( const Rectangle& rRect ) const
 {
     if(IsEmpty())
     {
@@ -1425,14 +1427,14 @@ bool Region::IsOver( const Rectangle& rRect ) const
     // Can we optimize this ??? - is used in StarDraw for brushes pointers
     // Why we have no IsOver for Regions ???
     // create region from rectangle and intersect own region
-    Region aRegion(rRect);
+    vcl::Region aRegion(rRect);
     aRegion.Intersect( *this );
 
     // rectangle is over if include is not empty
     return !aRegion.IsEmpty();
 }
 
-void Region::SetNull()
+void vcl::Region::SetNull()
 {
     // reset all content
     mpB2DPolyPolygon.reset();
@@ -1441,7 +1443,7 @@ void Region::SetNull()
     mbIsNull = true;
 }
 
-void Region::SetEmpty()
+void vcl::Region::SetEmpty()
 {
     // reset all content
     mpB2DPolyPolygon.reset();
@@ -1450,7 +1452,7 @@ void Region::SetEmpty()
     mbIsNull = false;
 }
 
-Region& Region::operator=( const Region& rRegion )
+Region& vcl::Region::operator=( const vcl::Region& rRegion )
 {
     // reset all content
     mpB2DPolyPolygon = rRegion.mpB2DPolyPolygon;
@@ -1461,7 +1463,7 @@ Region& Region::operator=( const Region& rRegion )
     return *this;
 }
 
-Region& Region::operator=( const Rectangle& rRect )
+Region& vcl::Region::operator=( const Rectangle& rRect )
 {
     mpB2DPolyPolygon.reset();
     mpPolyPolygon.reset();
@@ -1471,7 +1473,7 @@ Region& Region::operator=( const Rectangle& rRect )
     return *this;
 }
 
-bool Region::operator==( const Region& rRegion ) const
+bool vcl::Region::operator==( const vcl::Region& rRegion ) const
 {
     if(IsNull() && rRegion.IsNull())
     {
@@ -1517,8 +1519,8 @@ bool Region::operator==( const Region& rRegion ) const
     {
         // one of both has a B2DPolyPolygon based region, ensure both have it
         // by evtl. conversion
-        const_cast< Region* >(this)->GetAsB2DPolyPolygon();
-        const_cast< Region& >(rRegion).GetAsB2DPolyPolygon();
+        const_cast< vcl::Region* >(this)->GetAsB2DPolyPolygon();
+        const_cast< vcl::Region& >(rRegion).GetAsB2DPolyPolygon();
 
         return *rRegion.getB2DPolyPolygon() == *getB2DPolyPolygon();
     }
@@ -1527,8 +1529,8 @@ bool Region::operator==( const Region& rRegion ) const
     {
         // one of both has a B2DPolyPolygon based region, ensure both have it
         // by evtl. conversion
-        const_cast< Region* >(this)->GetAsPolyPolygon();
-        const_cast< Region& >(rRegion).GetAsPolyPolygon();
+        const_cast< vcl::Region* >(this)->GetAsPolyPolygon();
+        const_cast< vcl::Region& >(rRegion).GetAsPolyPolygon();
 
         return *rRegion.getPolyPolygon() == *getPolyPolygon();
     }
@@ -1545,7 +1547,7 @@ bool Region::operator==( const Region& rRegion ) const
     return false;
 }
 
-SvStream& ReadRegion(SvStream& rIStrm, Region& rRegion)
+SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
 {
     VersionCompat aCompat(rIStrm, STREAM_READ);
     sal_uInt16 nVersion(0);
@@ -1604,7 +1606,7 @@ SvStream& ReadRegion(SvStream& rIStrm, Region& rRegion)
     return rIStrm;
 }
 
-SvStream& WriteRegion( SvStream& rOStrm, const Region& rRegion )
+SvStream& WriteRegion( SvStream& rOStrm, const vcl::Region& rRegion )
 {
     const sal_uInt16 nVersion(2);
     VersionCompat aCompat(rOStrm, STREAM_WRITE, nVersion);
@@ -1676,7 +1678,7 @@ SvStream& WriteRegion( SvStream& rOStrm, const Region& rRegion )
     return rOStrm;
 }
 
-void Region::GetRegionRectangles(RectangleVector& rTarget) const
+void vcl::Region::GetRegionRectangles(RectangleVector& rTarget) const
 {
     // clear returnvalues
     rTarget.clear();
@@ -1744,9 +1746,9 @@ static inline bool ImplPolygonRectTest( const Polygon& rPoly, Rectangle* pRectOu
     return bIsRect;
 }
 
-Region Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
+vcl::Region vcl::Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    //return Region( rPolyPoly );
+    //return vcl::Region( rPolyPoly );
 
     // check if it's worth extracting the XOr'ing the Rectangles
     // empiricism shows that break even between XOr'ing rectangles separately
@@ -1770,10 +1772,10 @@ Region Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
 
     if( nPolygonPolygons > nPolygonRects )
     {
-        return Region( rPolyPoly );
+        return vcl::Region( rPolyPoly );
     }
 
-    Region aResult;
+    vcl::Region aResult;
     Rectangle aRect;
 
     for( sal_uInt16 i = 0; i < nPolygons; i++ )
@@ -1786,11 +1788,13 @@ Region Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
         }
         else
         {
-            aResult.XOr( Region(rPoly) );
+            aResult.XOr( vcl::Region(rPoly) );
         }
     }
 
     return aResult;
 }
+
+} /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

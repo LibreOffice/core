@@ -48,7 +48,7 @@ struct ImplCalcToTopData
 {
     ImplCalcToTopData*  mpNext;
     vcl::Window*             mpWindow;
-    Region*             mpInvalidateRegion;
+    vcl::Region*             mpInvalidateRegion;
 };
 
 namespace vcl {
@@ -219,9 +219,9 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
         {
             // calculate region, where the window overlaps with other windows
             Point aPoint( mnOutOffX, mnOutOffY );
-            Region  aRegion( Rectangle( aPoint,
+            vcl::Region  aRegion( Rectangle( aPoint,
                                         Size( mnOutWidth, mnOutHeight ) ) );
-            Region  aInvalidateRegion;
+            vcl::Region  aInvalidateRegion;
             ImplCalcOverlapRegionOverlaps( aRegion, aInvalidateRegion );
 
             if ( !aInvalidateRegion.IsEmpty() )
@@ -230,7 +230,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
                 pPrevData->mpNext           = pData;
                 pData->mpNext               = NULL;
                 pData->mpWindow             = this;
-                pData->mpInvalidateRegion   = new Region( aInvalidateRegion );
+                pData->mpInvalidateRegion   = new vcl::Region( aInvalidateRegion );
             }
         }
     }

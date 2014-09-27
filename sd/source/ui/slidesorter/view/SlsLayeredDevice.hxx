@@ -54,7 +54,7 @@ public:
     void InvalidateAllLayers (
         const Rectangle& rInvalidationBox);
     void InvalidateAllLayers (
-        const Region& rInvalidationRegion);
+        const vcl::Region& rInvalidationRegion);
 
     void RegisterPainter (
         const SharedILayerPainter& rPainter,
@@ -65,7 +65,7 @@ public:
         const sal_Int32 nLayer);
 
     bool HandleMapModeChange (void);
-    void Repaint (const Region& rRepaintRegion);
+    void Repaint (const vcl::Region& rRepaintRegion);
 
     void Resize (void);
 

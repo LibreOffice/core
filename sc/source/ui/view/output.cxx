@@ -1483,7 +1483,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
         mpDev->IntersectClipRegion( aClipRect );
     }
     else
-        mpDev->SetClipRegion( Region( aClipRect ) );
+        mpDev->SetClipRegion( vcl::Region( aClipRect ) );
 
     svx::frame::Array& rArray = mrTabInfo.maArray;
     boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D( ));
@@ -1822,9 +1822,9 @@ drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
 
 // Printer
 
-Region ScOutputData::GetChangedAreaRegion()
+vcl::Region ScOutputData::GetChangedAreaRegion()
 {
-    Region aRegion;
+    vcl::Region aRegion;
     Rectangle aDrawingRect;
     bool bHad(false);
     long nPosY = nScrY;
@@ -1901,7 +1901,7 @@ bool ScOutputData::SetChangedClip()
 
     bool bRet = (aPoly.Count() != 0);
     if (bRet)
-        mpDev->SetClipRegion(Region(aPoly));
+        mpDev->SetClipRegion(vcl::Region(aPoly));
     return bRet;
 }
 

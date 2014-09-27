@@ -175,7 +175,7 @@ void FrameBorder::AddClickRect( const Rectangle& rRect )
 
 bool FrameBorder::ContainsClickPoint( const Point& rPos ) const
 {
-    return Region( maClickArea ).IsInside( rPos );
+    return vcl::Region( maClickArea ).IsInside( rPos );
 }
 
 Rectangle FrameBorder::GetClickBoundRect() const

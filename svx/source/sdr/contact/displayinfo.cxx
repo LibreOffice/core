@@ -46,7 +46,7 @@ namespace sdr
         }
 
         // access to RedrawArea
-        void DisplayInfo::SetRedrawArea(const Region& rRegion)
+        void DisplayInfo::SetRedrawArea(const vcl::Region& rRegion)
         {
             maRedrawArea = rRegion;
         }

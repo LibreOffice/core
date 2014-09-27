@@ -193,7 +193,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
                 Invalidate();
             else
             {
-                Region aInvalidRegion( aOldThumbRect );
+                vcl::Region aInvalidRegion( aOldThumbRect );
                 aInvalidRegion.Union( maThumbRect );
 
                 if( !IsBackground() && GetParent() )

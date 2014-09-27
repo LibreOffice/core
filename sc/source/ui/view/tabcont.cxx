@@ -454,14 +454,14 @@ void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 
     if (!bDisable)
     {
-        Region aRegion( Rectangle(0,0,0,0) );
+        vcl::Region aRegion( Rectangle(0,0,0,0) );
         CommandEvent aCEvt( rPosPixel, COMMAND_STARTDRAG, true );   // needed for StartDrag
         if (TabBar::StartDrag( aCEvt, aRegion ))
             DoDrag( aRegion );
     }
 }
 
-void ScTabControl::DoDrag( const Region& /* rRegion */ )
+void ScTabControl::DoDrag( const vcl::Region& /* rRegion */ )
 {
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();

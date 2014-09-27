@@ -297,7 +297,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 if(pA->IsClipping())
                 {
-                    const Region& rRegion = pA->GetRegion();
+                    const vcl::Region& rRegion = pA->GetRegion();
                     const basegfx::B2DPolyPolygon aNewClip(rRegion.GetAsB2DPolyPolygon());
 
                     aClips.back() = aNewClip;
@@ -333,7 +333,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
             case META_ISECTREGIONCLIPREGION_ACTION :
             {
                 const MetaISectRegionClipRegionAction* pA = static_cast< const MetaISectRegionClipRegionAction* >(pAction);
-                const Region& rRegion = pA->GetRegion();
+                const vcl::Region& rRegion = pA->GetRegion();
 
                 if(!rRegion.IsEmpty() && aClips.size() && aClips.back().count())
                 {

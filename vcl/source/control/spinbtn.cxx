@@ -457,16 +457,16 @@ bool SpinButton::PreNotify( NotifyEvent& rNEvt )
                 Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
                 if( pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()) )
                 {
-                    Region aRgn( GetActiveClipRegion() );
+                    vcl::Region aRgn( GetActiveClipRegion() );
                     if( pLastRect )
                     {
-                        SetClipRegion(Region(*pLastRect));
+                        SetClipRegion(vcl::Region(*pLastRect));
                         Paint( *pLastRect );
                         SetClipRegion( aRgn );
                     }
                     if( pRect )
                     {
-                        SetClipRegion(Region(*pRect));
+                        SetClipRegion(vcl::Region(*pRect));
                         Paint( *pRect );
                         SetClipRegion( aRgn );
                     }

@@ -199,7 +199,7 @@ public:
             The returned region has to be repainted to reflect the updated
             selection states.
     */
-    Region RestoreSelection (void);
+    ::vcl::Region RestoreSelection (void);
 
     /** Typically called from controller::Listener this method handles the
         insertion and deletion of single pages.

@@ -29,7 +29,7 @@
 
 // predeclarations
 
-class Region;
+namespace vcl { class Region; }
 
 namespace sdr { namespace contact {
     class DisplayInfo;

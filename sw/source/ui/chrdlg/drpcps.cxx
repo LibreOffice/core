@@ -349,7 +349,7 @@ void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
     Size aOutputSizePixel( GetOutputSizePixel() );
 
     DrawRect(Rectangle(Point(0, 0), aOutputSizePixel ));
-    SetClipRegion(Region(Rectangle(
+    SetClipRegion(vcl::Region(Rectangle(
         Point(BORDER, BORDER),
         Size (aOutputSizePixel.Width () - 2 * BORDER,
               aOutputSizePixel.Height() - 2 * BORDER))));

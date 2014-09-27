@@ -420,7 +420,7 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
 #endif
 }
 
-#define Region QtXRegion
+#define vcl::Region QtXRegion
 #include <qframe.h>
 #undef Region
 

@@ -58,8 +58,8 @@ namespace sdr
             // Internal methods for buffering
             void ImpPrepareBufferDevice();
             void ImpRestoreBackground() const ;
-            void ImpRestoreBackground(const Region& rRegionPixel) const;
-            void ImpSaveBackground(const Region& rRegion, OutputDevice* pPreRenderDevice = 0L);
+            void ImpRestoreBackground(const vcl::Region& rRegionPixel) const;
+            void ImpSaveBackground(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = 0L);
 
             OverlayManagerBuffered(
                 OutputDevice& rOutputDevice,
@@ -71,7 +71,7 @@ namespace sdr
                 bool bRefreshWithPreRendering = false);
 
             // complete redraw
-            virtual void completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice = 0L) const SAL_OVERRIDE;
+            virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = 0L) const SAL_OVERRIDE;
 
             // flush. Do buffered updates.
             virtual void flush() SAL_OVERRIDE;
@@ -80,7 +80,7 @@ namespace sdr
             virtual void copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize) SAL_OVERRIDE;
 
             // restore part of background. Implemented form buffered versions only.
-            virtual void restoreBackground(const Region& rRegion) const SAL_OVERRIDE;
+            virtual void restoreBackground(const vcl::Region& rRegion) const SAL_OVERRIDE;
 
             // invalidate the given range at local OutputDevice
             virtual void invalidateRange(const basegfx::B2DRange& rRange) SAL_OVERRIDE;

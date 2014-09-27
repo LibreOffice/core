@@ -656,7 +656,7 @@ void WinSalObject::EndSetClipRegion()
 {
     HRGN hRegion;
 
-    // create a ClipRegion from the Region data
+    // create a ClipRegion from the vcl::Region data
     if ( mpClipRgnData->rdh.nCount == 1 )
     {
         RECT* pRect = &(mpClipRgnData->rdh.rcBound);

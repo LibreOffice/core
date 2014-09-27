@@ -2440,7 +2440,7 @@ MetaClipRegionAction::MetaClipRegionAction() :
 MetaClipRegionAction::~MetaClipRegionAction()
 {}
 
-MetaClipRegionAction::MetaClipRegionAction( const Region& rRegion, bool bClip ) :
+MetaClipRegionAction::MetaClipRegionAction( const vcl::Region& rRegion, bool bClip ) :
     MetaAction  ( META_CLIPREGION_ACTION ),
     maRegion    ( rRegion ),
     mbClip      ( bClip )
@@ -2552,7 +2552,7 @@ MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction() :
 MetaISectRegionClipRegionAction::~MetaISectRegionClipRegionAction()
 {}
 
-MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( const Region& rRegion ) :
+MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( const vcl::Region& rRegion ) :
     MetaAction  ( META_ISECTREGIONCLIPREGION_ACTION ),
     maRegion    ( rRegion )
 {

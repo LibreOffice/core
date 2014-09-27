@@ -262,7 +262,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
 
     bool bClipRegion = pOutDev->IsClipRegion();
     bool bMetafile = pOutDev->GetConnectMetaFile();
-    Region aOldRegion = pOutDev->GetClipRegion();
+    vcl::Region aOldRegion = pOutDev->GetClipRegion();
 
     // If one existed => intersection!
     // Use Push/pop for creating the Meta file

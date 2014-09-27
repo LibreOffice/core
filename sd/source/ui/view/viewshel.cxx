@@ -1370,7 +1370,7 @@ void ViewShell::Paint (const Rectangle&, ::sd::Window* )
 {
 }
 
-void ViewShell::Draw(OutputDevice &, const Region &)
+void ViewShell::Draw(OutputDevice &, const vcl::Region &)
 {
 }
 

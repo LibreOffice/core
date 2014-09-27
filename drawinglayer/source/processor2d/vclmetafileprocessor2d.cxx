@@ -1782,10 +1782,10 @@ namespace drawinglayer
                             if(maClipPolyPolygon.count())
                             {
                                 // set VCL clip region; subdivide before conversion to tools polygon. Subdivision necessary (!)
-                                // Removed subdivision and fixed in Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
+                                // Removed subdivision and fixed in vcl::Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
                                 // the ClipRegion is built from the Polygon. A AdaptiveSubdivide on the source polygon was missing there
                                 mpOutputDevice->Push(PUSH_CLIPREGION);
-                                mpOutputDevice->SetClipRegion(Region(maClipPolyPolygon));
+                                mpOutputDevice->SetClipRegion(vcl::Region(maClipPolyPolygon));
 
                                 // recursively paint content
                                 // #i121267# Only need to process sub-content when clip polygon is *not* empty.

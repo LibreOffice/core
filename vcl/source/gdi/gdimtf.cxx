@@ -528,7 +528,7 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
 void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
                         const Size& rSize, size_t nPos )
 {
-    Region  aDrawClipRegion;
+    vcl::Region  aDrawClipRegion;
     MapMode aDrawMap( GetPrefMapMode() );
     Size    aDestSize( pOut->LogicToPixel( rSize ) );
 
@@ -840,7 +840,7 @@ void GDIMetaFile::Clip( const Rectangle& i_rClipRect )
         else if( nType == META_CLIPREGION_ACTION )
         {
             MetaClipRegionAction* pOldAct = (MetaClipRegionAction*)pAct;
-            Region aNewReg( aCurRect );
+            vcl::Region aNewReg( aCurRect );
             if( pOldAct->IsClipping() )
                 aNewReg.Intersect( pOldAct->GetRegion() );
             MetaClipRegionAction* pNewAct = new MetaClipRegionAction( aNewReg, true );
@@ -1279,7 +1279,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     MetaClipRegionAction* pAct = (MetaClipRegionAction*) pAction;
 
                     if( pAct->IsClipping() && pAct->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
-                        aMtf.AddAction( new MetaClipRegionAction( Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), true ) );
+                        aMtf.AddAction( new MetaClipRegionAction( vcl::Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), true ) );
                     else
                     {
                         pAction->Duplicate();
@@ -1291,7 +1291,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_ISECTRECTCLIPREGION_ACTION ):
                 {
                     MetaISectRectClipRegionAction*  pAct = (MetaISectRectClipRegionAction*) pAction;
-                    aMtf.AddAction( new MetaISectRegionClipRegionAction(Region(
+                    aMtf.AddAction( new MetaISectRegionClipRegionAction(vcl::Region(
                         ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor,
                             aRotOffset, fSin, fCos )) ) );
                 }
@@ -1300,10 +1300,10 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_ISECTREGIONCLIPREGION_ACTION ):
                 {
                     MetaISectRegionClipRegionAction*    pAct = (MetaISectRegionClipRegionAction*) pAction;
-                    const Region&                       rRegion = pAct->GetRegion();
+                    const vcl::Region&                       rRegion = pAct->GetRegion();
 
                     if( rRegion.HasPolyPolygonOrB2DPolyPolygon() )
-                        aMtf.AddAction( new MetaISectRegionClipRegionAction( Region( ImplGetRotatedPolyPolygon( rRegion.GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) ) );
+                        aMtf.AddAction( new MetaISectRegionClipRegionAction( vcl::Region( ImplGetRotatedPolyPolygon( rRegion.GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) ) );
                     else
                     {
                         pAction->Duplicate();
@@ -2605,7 +2605,7 @@ sal_uLong GDIMetaFile::GetChecksum() const
             case META_CLIPREGION_ACTION :
             {
                 MetaClipRegionAction& rAct = dynamic_cast<MetaClipRegionAction&>(*pAction);
-                const Region& rRegion = rAct.GetRegion();
+                const vcl::Region& rRegion = rAct.GetRegion();
 
                 if(rRegion.HasPolyPolygonOrB2DPolyPolygon())
                 {

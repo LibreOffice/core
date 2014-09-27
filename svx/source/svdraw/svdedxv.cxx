@@ -301,7 +301,7 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
 
             if(nViewAnz)
             {
-                const Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
+                const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
                 const Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
 
                 for(sal_uInt32 i(0); i < nViewAnz; i++)

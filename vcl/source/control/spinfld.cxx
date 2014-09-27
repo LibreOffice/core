@@ -98,8 +98,8 @@ bool ImplDrawNativeSpinfield( vcl::Window *pWin, const SpinbuttonValue& rSpinbut
             // convert from screen space to borderwin space
             aClipRect.SetPos( pBorder->ScreenToOutputPixel(pWin->OutputToScreenPixel(aClipRect.TopLeft())) );
 
-            Region oldRgn( pBorder->GetClipRegion() );
-            pBorder->SetClipRegion( Region( aClipRect ) );
+            vcl::Region oldRgn( pBorder->GetClipRegion() );
+            pBorder->SetClipRegion( vcl::Region( aClipRect ) );
 
             Point aPt;
             Size aSize( pBorder->GetOutputSizePixel() );    // the size of the border window, i.e., the whole control
@@ -116,7 +116,7 @@ bool ImplDrawNativeSpinfield( vcl::Window *pWin, const SpinbuttonValue& rSpinbut
             bNativeOK = pBorder->DrawNativeControl( CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn, CTRL_STATE_ENABLED,
                         rSpinbuttonValue, OUString() );
 
-            pBorder->SetClipRegion(Region(oldRgn));
+            pBorder->SetClipRegion(vcl::Region(oldRgn));
         }
     }
     return bNativeOK;
@@ -879,16 +879,16 @@ bool SpinField::PreNotify( NotifyEvent& rNEvt )
                     else
                     {
                         // paint directly
-                        Region aRgn( GetActiveClipRegion() );
+                        vcl::Region aRgn( GetActiveClipRegion() );
                         if( pLastRect )
                         {
-                            SetClipRegion(Region(*pLastRect));
+                            SetClipRegion(vcl::Region(*pLastRect));
                             Paint( *pLastRect );
                             SetClipRegion( aRgn );
                         }
                         if( pRect )
                         {
-                            SetClipRegion(Region(*pRect));
+                            SetClipRegion(vcl::Region(*pRect));
                             Paint( *pRect );
                             SetClipRegion( aRgn );
                         }

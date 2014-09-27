@@ -1022,7 +1022,7 @@ class VCL_DLLPUBLIC MetaClipRegionAction : public MetaAction
 {
 private:
 
-    Region              maRegion;
+    vcl::Region              maRegion;
     bool                mbClip;
 
     virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
@@ -1037,12 +1037,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-                        MetaClipRegionAction( const Region& rRegion, bool bClip );
+                        MetaClipRegionAction( const vcl::Region& rRegion, bool bClip );
 
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const Region&       GetRegion() const { return maRegion; }
+    const vcl::Region&       GetRegion() const { return maRegion; }
     bool                IsClipping() const { return mbClip; }
 };
 
@@ -1076,7 +1076,7 @@ class VCL_DLLPUBLIC MetaISectRegionClipRegionAction : public MetaAction
 {
 private:
 
-    Region              maRegion;
+    vcl::Region              maRegion;
 
     virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
@@ -1090,12 +1090,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-    explicit            MetaISectRegionClipRegionAction( const Region& );
+    explicit            MetaISectRegionClipRegionAction( const vcl::Region& );
 
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const Region&       GetRegion() const { return maRegion; }
+    const vcl::Region&       GetRegion() const { return maRegion; }
 };
 
 class VCL_DLLPUBLIC MetaMoveClipRegionAction : public MetaAction

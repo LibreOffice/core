@@ -92,7 +92,7 @@ public:
         ViewShell* pViewSh=NULL);
     virtual ~View (void);
 
-    void                    CompleteRedraw( OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
+    void                    CompleteRedraw( OutputDevice* pOutDev, const ::vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
 
     virtual bool            GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
     virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);

@@ -138,7 +138,7 @@ void OReportSection::Paint( const Rectangle& rRect )
         ++m_nPaintEntranceCount;
          // repaint, get PageView and prepare Region
         SdrPageView* pPgView = m_pView->GetSdrPageView();
-        const Region aPaintRectRegion(rRect);
+        const vcl::Region aPaintRectRegion(rRect);
 
         // #i74769#
         SdrPaintWindow* pTargetPaintWindow = 0;

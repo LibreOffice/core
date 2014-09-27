@@ -862,7 +862,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
     if( pVector )
     {
-        Region aClip( GetClipRegion() );
+        vcl::Region aClip( GetClipRegion() );
         if( meOutDevType == OUTDEV_WINDOW )
             aClip.Intersect( Rectangle( Point(), GetOutputSize() ) );
         if( mpOutDevData && mpOutDevData->mpRecordLayout )

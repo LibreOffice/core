@@ -1274,7 +1274,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         //   but this can be discutable...
         aRect.setWidth(aRect.getWidth()+1);
         aRect.setHeight(aRect.getHeight()+1);
-        pVirDev->SetClipRegion( Region( aRect ) );
+        pVirDev->SetClipRegion( vcl::Region( aRect ) );
         break;
     }
     case 0x0002:   // BkPat

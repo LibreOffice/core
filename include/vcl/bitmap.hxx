@@ -609,7 +609,7 @@ public:
 
         @return the generated region.
      */
-    Region                  CreateRegion( const Color& rColor, const Rectangle& rRect ) const;
+    vcl::Region                  CreateRegion( const Color& rColor, const Rectangle& rRect ) const;
 
     /** Replace all pixel where the given mask is on with the specified color
 
