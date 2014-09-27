@@ -416,9 +416,9 @@ void CGM::ImplDoClass5()
         case 0x31 : /*Symbol Color*/ break;                     // NS
         case 0x32 : /*Symbol Size*/ break;                      // NS
         case 0x33 : /*Symbol Orientation*/ break;               // NS
-        case 0x50 : /*Block Text Region Margins*/ break;
-        case 0x51 : /*Block Text Region Expansion*/ break;
-        case 0x52 : /*Block Text Region Anchor*/ break;
+        case 0x50 : /*Block Text vcl::Region Margins*/ break;
+        case 0x51 : /*Block Text vcl::Region Expansion*/ break;
+        case 0x52 : /*Block Text vcl::Region Anchor*/ break;
         case 0x53 : /*Block Text Paragraph Horizontal Alignment*/ break;
         case 0x54 : /*Block Text Paragraph Vertical Alignment*/ break;
         case 0x55 : /*Block Text Line Flow*/ break;

@@ -52,7 +52,7 @@ ClientView::~ClientView()
 
 void ClientView::InvalidateOneWin(vcl::Window& rWin)
 {
-    Region aRegion;
+    vcl::Region aRegion;
     CompleteRedraw(&rWin, aRegion);
 }
 
@@ -63,10 +63,10 @@ void ClientView::InvalidateOneWin(vcl::Window& rWin)
 
 void ClientView::InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect)
 {
-    CompleteRedraw(&rWin, Region(rRect));
+    CompleteRedraw(&rWin, vcl::Region(rRect));
 }
 
-void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector )
+void ClientView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
     DrawView::CompleteRedraw(pOutDev, rReg, pRedirector);
 }

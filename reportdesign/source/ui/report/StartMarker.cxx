@@ -110,7 +110,7 @@ void OStartMarker::Paint( const Rectangle& rRect )
         const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
         nSize = aSize.Width() - nVRulerWidth;
         aSize.Width() += nCornerWidth;
-        SetClipRegion(Region(PixelToLogic(Rectangle(Point(),Size(nSize,aSize.Height())))));
+        SetClipRegion(vcl::Region(PixelToLogic(Rectangle(Point(),Size(nSize,aSize.Height())))));
     }
 
     Rectangle aWholeRect(Point(),aSize);

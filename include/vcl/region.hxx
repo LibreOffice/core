@@ -31,18 +31,22 @@ class RegionBand;
 class Polygon;
 class PolyPolygon;
 namespace vcl { class Window; }
+class OutputDevice;
+class Bitmap;
 
 typedef boost::shared_ptr< RegionBand > RegionBandPtr;
 typedef boost::shared_ptr< PolyPolygon > PolyPolygonPtr;
 typedef boost::shared_ptr< basegfx::B2DPolyPolygon > B2DPolyPolygonPtr;
 typedef std::vector< Rectangle > RectangleVector;
 
+namespace vcl {
+
 class VCL_DLLPUBLIC Region
 {
 private:
-    friend class OutputDevice;
-    friend class vcl::Window;
-    friend class Bitmap;
+    friend class ::OutputDevice;
+    friend class ::vcl::Window;
+    friend class ::Bitmap;
 
     // possible contents
     B2DPolyPolygonPtr           mpB2DPolyPolygon;
@@ -66,7 +70,7 @@ public:
     explicit Region(const Polygon& rPolygon);
     explicit Region(const PolyPolygon& rPolyPoly);
     explicit Region(const basegfx::B2DPolyPolygon&);
-    Region(const Region& rRegion);
+    Region(const vcl::Region& rRegion);
     ~Region();
 
     // direct access to contents
@@ -87,10 +91,10 @@ public:
     bool Intersect( const Rectangle& rRegion );
     bool Exclude( const Rectangle& rRegion );
     bool XOr( const Rectangle& rRegion );
-    bool Union( const Region& rRegion );
-    bool Intersect( const Region& rRegion );
-    bool Exclude( const Region& rRegion );
-    bool XOr( const Region& rRegion );
+    bool Union( const vcl::Region& rRegion );
+    bool Intersect( const vcl::Region& rRegion );
+    bool Exclude( const vcl::Region& rRegion );
+    bool XOr( const vcl::Region& rRegion );
 
     bool IsEmpty() const;
     bool IsNull() const { return mbIsNull;}
@@ -106,31 +110,32 @@ public:
     bool IsInside( const Rectangle& rRect ) const;
     bool IsOver( const Rectangle& rRect ) const;
 
-    Region& operator=( const Region& rRegion );
-    Region& operator=( const Rectangle& rRect );
+    vcl::Region& operator=( const vcl::Region& rRegion );
+    vcl::Region& operator=( const Rectangle& rRect );
 
-    bool operator==( const Region& rRegion ) const;
-    bool operator!=( const Region& rRegion ) const { return !(Region::operator==( rRegion )); }
+    bool operator==( const vcl::Region& rRegion ) const;
+    bool operator!=( const vcl::Region& rRegion ) const { return !(Region::operator==( rRegion )); }
 
-    friend VCL_DLLPUBLIC SvStream& ReadRegion( SvStream& rIStm, Region& rRegion );
-    friend VCL_DLLPUBLIC SvStream& WriteRegion( SvStream& rOStm, const Region& rRegion );
+    friend VCL_DLLPUBLIC SvStream& ReadRegion( SvStream& rIStm, vcl::Region& rRegion );
+    friend VCL_DLLPUBLIC SvStream& WriteRegion( SvStream& rOStm, const vcl::Region& rRegion );
 
     /* workaround: faster conversion for PolyPolygons
      * if half of the Polygons contained in rPolyPoly are actually
-     * rectangles, then the returned Region will be constructed by
+     * rectangles, then the returned vcl::Region will be constructed by
      * XOr'ing the contained Polygons together; in the case of
      * only Rectangles this can be up to eight times faster than
      * Region( const PolyPolygon& ).
-     * Caution: this is only useful if the Region is known to be
+     * Caution: this is only useful if the vcl::Region is known to be
      * changed to rectangles; e.g. if being set as clip region
      */
-    static Region GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly );
+    static vcl::Region GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly );
 };
 
+} /* namespace vcl */
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const Region& rRegion)
+    std::basic_ostream<charT, traits> & stream, const vcl::Region& rRegion)
 {
     if (rRegion.IsEmpty())
         return stream << "EMPTY";

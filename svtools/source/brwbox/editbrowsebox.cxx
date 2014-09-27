@@ -361,7 +361,7 @@ namespace svt
             Point aPos( rRect.TopLeft() );
 
             if ( ( aImageSize.Width() > rRect.GetWidth() ) || ( aImageSize.Height() > rRect.GetHeight() ) )
-                rDev.SetClipRegion(Region(rRect));
+                rDev.SetClipRegion(vcl::Region(rRect));
 
             if ( aImageSize.Width() < rRect.GetWidth() )
                 aPos.X() += ( rRect.GetWidth() - aImageSize.Width() ) / 2;

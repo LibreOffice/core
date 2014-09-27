@@ -124,7 +124,7 @@ long MenuFloatingWindow::ImplGetStartY() const
     return -nY;
 }
 
-Region MenuFloatingWindow::ImplCalcClipRegion( bool bIncludeLogo ) const
+vcl::Region MenuFloatingWindow::ImplCalcClipRegion( bool bIncludeLogo ) const
 {
     Size aOutSz = GetOutputSizePixel();
     Point aPos;
@@ -135,7 +135,7 @@ Region MenuFloatingWindow::ImplCalcClipRegion( bool bIncludeLogo ) const
     if ( pMenu && pMenu->pLogo && !bIncludeLogo )
         aRect.Left() += pMenu->pLogo->aBitmap.GetSizePixel().Width();
 
-    Region aRegion(aRect);
+    vcl::Region aRegion(aRect);
     if ( pMenu && pMenu->pLogo && bIncludeLogo && nScrollerHeight )
         aRegion.Union( Rectangle( Point(), Size( pMenu->pLogo->aBitmap.GetSizePixel().Width(), aOutSz.Height() ) ) );
 

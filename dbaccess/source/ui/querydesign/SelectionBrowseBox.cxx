@@ -1207,7 +1207,7 @@ bool OSelectionBrowseBox::SeekRow(long nRow)
 
 void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
-    rDev.SetClipRegion(Region(rRect));
+    rDev.SetClipRegion(vcl::Region(rRect));
 
     OTableFieldDescRef pEntry = NULL;
     sal_uInt16 nPos = GetColumnPos(nColumnId);

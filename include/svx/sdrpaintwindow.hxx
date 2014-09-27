@@ -60,7 +60,7 @@ public:
     ~SdrPreRenderDevice();
 
     void PreparePreRenderDevice();
-    void OutputPreRenderDevice(const Region& rExpandedRegion);
+    void OutputPreRenderDevice(const vcl::Region& rExpandedRegion);
 
     OutputDevice& GetOriginalOutputDevice() const { return mrOutputDevice; }
     OutputDevice& GetPreRenderDevice() { return maPreRenderDevice; }
@@ -85,7 +85,7 @@ private:
     SdrPreRenderDevice*                                 mpPreRenderDevice;
 
     // The RedrawRegion used for rendering
-    Region                                              maRedrawRegion;
+    vcl::Region                                              maRedrawRegion;
 
     // bitfield
     // #i72889# flag if this is only a temporary target for repaint, default is false
@@ -112,7 +112,7 @@ public:
     rtl::Reference< ::sdr::overlay::OverlayManager > GetOverlayManager() const;
 
     // #i73602# add flag if buffer shall be used
-    void DrawOverlay(const Region& rRegion);
+    void DrawOverlay(const vcl::Region& rRegion);
 
     // calculate visible area and return
     Rectangle GetVisibleArea() const;
@@ -132,12 +132,12 @@ public:
     // prepare PreRendering (evtl.)
     void PreparePreRenderDevice();
     void DestroyPreRenderDevice();
-    void OutputPreRenderDevice(const Region& rExpandedRegion);
+    void OutputPreRenderDevice(const vcl::Region& rExpandedRegion);
     SdrPreRenderDevice* GetPreRenderDevice() const { return mpPreRenderDevice; }
 
     // RedrawRegion
-    const Region& GetRedrawRegion() const { return maRedrawRegion;}
-    void SetRedrawRegion(const Region& rNew);
+    const vcl::Region& GetRedrawRegion() const { return maRedrawRegion;}
+    void SetRedrawRegion(const vcl::Region& rNew);
 
     // #i72889# read/write access to TempoparyTarget
     bool getTemporaryTarget() const { return (bool)mbTemporaryTarget; }

@@ -196,7 +196,7 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
         }
 
         // OD 19.08.2002 #99657#
-        //     Region of a fly frame with transparent background or a transparent
+        //     vcl::Region of a fly frame with transparent background or a transparent
         //     shadow have not to be subtracted from paint region
         if ( pFly->IsBackgroundTransparent() ||
              pFly->IsShadowTransparent() )

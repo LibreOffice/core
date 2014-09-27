@@ -253,7 +253,7 @@ extern const sal_uLong nVCLLut[ 256 ];
 class VCL_DLLPUBLIC OutputDevice: private boost::noncopyable
 {
     friend class Application;
-    friend class Bitmap;
+    friend class ::Bitmap;
     friend class ImplImageBmp;
     friend class Printer;
     friend class System;
@@ -310,7 +310,7 @@ private:
     ImplThresholdRes                maThresRes;
     OutDevType                      meOutDevType;
     OutDevViewType                  meOutDevViewType;
-    Region                          maRegion;           // contains the clip region, see SetClipRegion(...)
+    vcl::Region                          maRegion;           // contains the clip region, see SetClipRegion(...)
     Color                           maLineColor;
     Color                           maFillColor;
     vcl::Font                       maFont;
@@ -491,7 +491,7 @@ private:
     SAL_DLLPRIVATE void         ImplGetFrameDev     ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
                                                       OutputDevice& rOutDev );
     SAL_DLLPRIVATE void         ImplDrawFrameDev    ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                                      const OutputDevice& rOutDev, const Region& rRegion );
+                                                      const OutputDevice& rOutDev, const vcl::Region& rRegion );
     ///@}
 
 
@@ -611,18 +611,18 @@ private:
 
 public:
 
-    Region                      GetClipRegion() const;
+    vcl::Region                      GetClipRegion() const;
     void                        SetClipRegion();
-    void                        SetClipRegion( const Region& rRegion );
-    bool                        SelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
+    void                        SetClipRegion( const vcl::Region& rRegion );
+    bool                        SelectClipRegion( const vcl::Region&, SalGraphics* pGraphics = NULL );
 
     bool                        IsClipRegion() const { return mbClipRegion; }
 
     void                        MoveClipRegion( long nHorzMove, long nVertMove );
     void                        IntersectClipRegion( const Rectangle& rRect );
-    void                        IntersectClipRegion( const Region& rRegion );
+    void                        IntersectClipRegion( const vcl::Region& rRegion );
 
-    virtual Region              GetActiveClipRegion() const;
+    virtual vcl::Region              GetActiveClipRegion() const;
 
 protected:
 
@@ -631,7 +631,7 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE void         SetDeviceClipRegion( const Region* pRegion );
+    SAL_DLLPRIVATE void         SetDeviceClipRegion( const vcl::Region* pRegion );
     ///@}
 
 
@@ -1234,7 +1234,7 @@ public:
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
     SAL_DLLPRIVATE void         ReMirror( Rectangle &rRect ) const;
-    SAL_DLLPRIVATE void         ReMirror( Region &rRegion ) const;
+    SAL_DLLPRIVATE void         ReMirror( vcl::Region &rRegion ) const;
     SAL_DLLPRIVATE bool         ImplIsRecordLayout() const;
     virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
@@ -1616,7 +1616,7 @@ public:
     Polygon                     LogicToPixel( const Polygon& rLogicPoly ) const;
     PolyPolygon                 LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
-    Region                      LogicToPixel( const Region& rLogicRegion )const;
+    vcl::Region                      LogicToPixel( const vcl::Region& rLogicRegion )const;
     Point                       LogicToPixel( const Point& rLogicPt,
                                               const MapMode& rMapMode ) const;
     Size                        LogicToPixel( const Size& rLogicSize,
@@ -1631,7 +1631,7 @@ public:
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                               const MapMode& rMapMode ) const;
-    Region                      LogicToPixel( const Region& rLogicRegion,
+    vcl::Region                      LogicToPixel( const vcl::Region& rLogicRegion,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolygon         LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const;
 
@@ -1641,7 +1641,7 @@ public:
     Polygon                     PixelToLogic( const Polygon& rDevicePoly ) const;
     PolyPolygon                 PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
-    Region                      PixelToLogic( const Region& rDeviceRegion ) const;
+    vcl::Region                      PixelToLogic( const vcl::Region& rDeviceRegion ) const;
     Point                       PixelToLogic( const Point& rDevicePt,
                                               const MapMode& rMapMode ) const;
     Size                        PixelToLogic( const Size& rDeviceSize,
@@ -1656,7 +1656,7 @@ public:
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
                                               const MapMode& rMapMode ) const;
-    Region                      PixelToLogic( const Region& rDeviceRegion,
+    vcl::Region                      PixelToLogic( const vcl::Region& rDeviceRegion,
                                               const MapMode& rMapMode ) const;
 
     Point                       LogicToLogic( const Point&      rPtSource,
@@ -1856,9 +1856,9 @@ private:
 
      @param         rPixelRect  Const reference to region.
 
-     @returns Region based on device pixel coordinates and units.
+     @returns vcl::Region based on device pixel coordinates and units.
      */
-    SAL_DLLPRIVATE Region       ImplPixelToDevicePixel( const Region& rRegion ) const;
+    SAL_DLLPRIVATE vcl::Region       ImplPixelToDevicePixel( const vcl::Region& rRegion ) const;
 
     /** Invalidate the view transformation.
 

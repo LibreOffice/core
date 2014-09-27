@@ -206,7 +206,7 @@ void AboutDialog::Resize()
 
 void AboutDialog::Paint( const Rectangle& rRect )
 {
-    SetClipRegion(Region(rRect));
+    SetClipRegion(vcl::Region(rRect));
 
     Size aSize(GetOutputSizePixel());
     Point aPos(aSize.Width() - aBackgroundBitmap.GetSizePixel().Width(),

@@ -466,7 +466,7 @@ IMapObject* IMapWindow::GetIMapObj( const SdrObject* pSdrObj ) const
 
 void IMapWindow::Command(const CommandEvent& rCEvt)
 {
-    Region  aRegion;
+    vcl::Region  aRegion;
 
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {

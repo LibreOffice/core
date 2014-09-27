@@ -495,7 +495,7 @@ void ChartController::execute_Paint( const Rectangle& rRect )
             SolarMutexGuard aGuard;
             DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
             if(pDrawViewWrapper)
-                pDrawViewWrapper->CompleteRedraw(m_pChartWindow, Region(rRect) );
+                pDrawViewWrapper->CompleteRedraw(m_pChartWindow, vcl::Region(rRect) );
         }
     }
     catch( const uno::Exception & ex )

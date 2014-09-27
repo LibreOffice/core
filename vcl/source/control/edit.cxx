@@ -561,8 +561,8 @@ void Edit::ImplRepaint(bool bLayout)
         // save graphics state
         Push();
         // first calculate higlighted and non highlighted clip regions
-        Region aHiglightClipRegion;
-        Region aNormalClipRegion;
+        vcl::Region aHiglightClipRegion;
+        vcl::Region aNormalClipRegion;
         Selection aTmpSel( maSelection );
         aTmpSel.Justify();
         // selection is highlighted
@@ -619,7 +619,7 @@ void Edit::ImplRepaint(bool bLayout)
         {
             for( int n = 0; n < 2; n++ )
             {
-                Region aRegion;
+                vcl::Region aRegion;
                 if( n == 0 )
                 {
                     SetTextColor( aNormalTextColor );
@@ -639,7 +639,7 @@ void Edit::ImplRepaint(bool bLayout)
                 for( i = 0; i < mpIMEInfos->nLen; )
                 {
                     sal_uInt16 nAttr = mpIMEInfos->pAttribs[i];
-                    Region aClip;
+                    vcl::Region aClip;
                     int nIndex = i;
                     while( nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
                     {
@@ -1029,7 +1029,7 @@ void Edit::ImplPaintBorder( long nXStart, long nXEnd )
         if( pBorder )
         {
             // set proper clipping region to not overdraw the whole control
-            Region aClipRgn = GetPaintRegion();
+            vcl::Region aClipRgn = GetPaintRegion();
             if( !aClipRgn.IsNull() )
             {
                 // transform clipping region to border window's coordinate system
@@ -1055,7 +1055,7 @@ void Edit::ImplPaintBorder( long nXStart, long nXEnd )
                     aClipRgn.Move( aBorderOffs.X(), aBorderOffs.Y() );
                 }
 
-                Region oldRgn( pBorder->GetClipRegion() );
+                vcl::Region oldRgn( pBorder->GetClipRegion() );
                 pBorder->SetClipRegion( aClipRgn );
 
                 pBorder->Paint( Rectangle() );

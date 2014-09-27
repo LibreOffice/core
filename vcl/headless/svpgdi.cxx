@@ -279,7 +279,7 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
 // ensureClipFor() or ensureClip() need to be called before
 // real rendering. FIXME: we should prolly push this down to
 // bitmapdevice instead.
-bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
+bool SvpSalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
     m_aClipRegion = i_rClip;
     m_aClipMap.reset();

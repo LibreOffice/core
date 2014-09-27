@@ -260,9 +260,9 @@ public:
                                                long& rRight, long& rBottom, const ToolBox *pThis );
     static SAL_DLLPRIVATE void ImplDrawGrip( ToolBox* pThis );
     static SAL_DLLPRIVATE void ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapper *pWrapper );
-    static SAL_DLLPRIVATE bool ImplDrawNativeBackground( ToolBox* pThis, const Region &rRegion );
-    static SAL_DLLPRIVATE void ImplDrawTransparentBackground( ToolBox* pThis, const Region &rRegion );
-    static SAL_DLLPRIVATE void ImplDrawConstantBackground( ToolBox* pThis, const Region &rRegion, bool bIsInPopupMode );
+    static SAL_DLLPRIVATE bool ImplDrawNativeBackground( ToolBox* pThis, const vcl::Region &rRegion );
+    static SAL_DLLPRIVATE void ImplDrawTransparentBackground( ToolBox* pThis, const vcl::Region &rRegion );
+    static SAL_DLLPRIVATE void ImplDrawConstantBackground( ToolBox* pThis, const vcl::Region &rRegion, bool bIsInPopupMode );
     static SAL_DLLPRIVATE void ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect );
     static SAL_DLLPRIVATE void ImplErase( ToolBox* pThis, const Rectangle &rRect, bool bHighlight = false, bool bHasOpenPopup = false );
     static SAL_DLLPRIVATE void ImplDrawBorder( ToolBox* pWin );

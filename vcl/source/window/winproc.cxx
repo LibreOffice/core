@@ -1517,7 +1517,7 @@ static void ImplHandlePaint( vcl::Window* pWindow, const Rectangle& rBoundRect, 
     pWindow->ImplGetWindowImpl()->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
 
     // trigger paint for all windows that live in the new paint region
-    Region aRegion( rBoundRect );
+    vcl::Region aRegion( rBoundRect );
     pWindow->ImplInvalidateOverlapFrameRegion( aRegion );
     if( bImmediateUpdate )
     {

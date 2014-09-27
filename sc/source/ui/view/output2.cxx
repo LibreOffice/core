@@ -1958,7 +1958,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                                 mpDev->IntersectClipRegion( aAreaParam.maClipRect );
                             }
                             else
-                                mpDev->SetClipRegion( Region( aAreaParam.maClipRect ) );
+                                mpDev->SetClipRegion( vcl::Region( aAreaParam.maClipRect ) );
                         }
 
                         Point aURLStart( nJustPosX, nJustPosY );    // copy before modifying for orientation
@@ -3039,7 +3039,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                 mpDev->IntersectClipRegion( aLogicClip );
             }
             else
-                mpDev->SetClipRegion( Region( aLogicClip ) );
+                mpDev->SetClipRegion( vcl::Region( aLogicClip ) );
         }
     }
 
@@ -3227,7 +3227,7 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
                 mpDev->IntersectClipRegion( aLogicClip );
             }
             else
-                mpDev->SetClipRegion( Region( aLogicClip ) );
+                mpDev->SetClipRegion( vcl::Region( aLogicClip ) );
         }
     }
 
@@ -4015,7 +4015,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
                 mpDev->IntersectClipRegion( aLogicClip );
             }
             else
-                mpDev->SetClipRegion( Region( aLogicClip ) );
+                mpDev->SetClipRegion( vcl::Region( aLogicClip ) );
         }
     }
 
@@ -4364,7 +4364,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
                 mpDev->IntersectClipRegion( aLogicClip );
             }
             else
-                mpDev->SetClipRegion( Region( aLogicClip ) );
+                mpDev->SetClipRegion( vcl::Region( aLogicClip ) );
         }
     }
 
@@ -5090,7 +5090,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                         mpDev->IntersectClipRegion( aAreaParam.maClipRect );
                                     }
                                     else
-                                        mpDev->SetClipRegion( Region( aAreaParam.maClipRect ) );
+                                        mpDev->SetClipRegion( vcl::Region( aAreaParam.maClipRect ) );
                                 }
 
                                 Point aLogicStart;

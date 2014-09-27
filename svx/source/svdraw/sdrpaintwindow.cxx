@@ -141,10 +141,10 @@ void SdrPreRenderDevice::PreparePreRenderDevice()
     maPreRenderDevice.SetSettings(mrOutputDevice.GetSettings());
 }
 
-void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
+void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegion)
 {
     // region to pixels
-    const Region aRegionPixel(mrOutputDevice.LogicToPixel(rExpandedRegion));
+    const vcl::Region aRegionPixel(mrOutputDevice.LogicToPixel(rExpandedRegion));
     //RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
     //Rectangle aRegionRectanglePixel;
 
@@ -341,7 +341,7 @@ void SdrPaintWindow::DestroyPreRenderDevice()
     }
 }
 
-void SdrPaintWindow::OutputPreRenderDevice(const Region& rExpandedRegion)
+void SdrPaintWindow::OutputPreRenderDevice(const vcl::Region& rExpandedRegion)
 {
     if(mpPreRenderDevice)
     {
@@ -350,7 +350,7 @@ void SdrPaintWindow::OutputPreRenderDevice(const Region& rExpandedRegion)
 }
 
 // #i73602# add flag if buffer shall be used
-void SdrPaintWindow::DrawOverlay(const Region& rRegion)
+void SdrPaintWindow::DrawOverlay(const vcl::Region& rRegion)
 {
     // ## force creation of OverlayManager since the first repaint needs to
     // save the background to get a controlled start into overlay mechanism
@@ -370,7 +370,7 @@ void SdrPaintWindow::DrawOverlay(const Region& rRegion)
 }
 
 
-void SdrPaintWindow::SetRedrawRegion(const Region& rNew)
+void SdrPaintWindow::SetRedrawRegion(const vcl::Region& rNew)
 {
     maRedrawRegion = rNew;
 }

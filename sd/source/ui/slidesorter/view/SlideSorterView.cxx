@@ -575,7 +575,7 @@ void SlideSorterView::RequestRepaint (const Rectangle& rRepaintBox)
     }
 }
 
-void SlideSorterView::RequestRepaint (const Region& rRepaintRegion)
+void SlideSorterView::RequestRepaint (const vcl::Region& rRepaintRegion)
 {
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
@@ -602,7 +602,7 @@ static double gnLastFrameStart = 0;
 
 void SlideSorterView::CompleteRedraw (
     OutputDevice* pDevice,
-    const Region& rPaintArea,
+    const vcl::Region& rPaintArea,
     sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     (void)pRedirector;

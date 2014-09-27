@@ -52,7 +52,7 @@ protected:
 public:
     // Read the options of an image map
     // <MAP>: sal_True = Image-Map has a name
-    // <AREA>: sal_True = Image-Map has now one Region more
+    // <AREA>: sal_True = Image-Map has now one vcl::Region more
     static bool ParseMapOptions(ImageMap* pImageMap, const HTMLOptions& rOptions);
     bool ParseMapOptions(ImageMap * pImageMap)
     { return ParseMapOptions(pImageMap, GetOptions()); }

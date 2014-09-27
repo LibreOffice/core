@@ -30,7 +30,7 @@ struct SystemGraphicsData;
 class VCL_DLLPUBLIC VirtualDevice : public OutputDevice
 {
     friend class Application;
-    friend class OutputDevice;
+    friend class ::OutputDevice;
     friend class Printer;
 
 private:

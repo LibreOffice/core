@@ -1773,7 +1773,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     aDstFillColor = aSrcFillColor = Color( COL_WHITE );
     CreateSelectDeleteBrush( aDstFillColor );
 
-    aDstClipRegion = aSrcClipRegion = Region();
+    aDstClipRegion = aSrcClipRegion = vcl::Region();
     bDstIsClipping = bSrcIsClipping = false;
 
     vcl::Font aFont;

@@ -377,7 +377,7 @@ void StatusBar::ImplDrawItem( bool bOffScreen, sal_uInt16 nPos, bool bDrawText, 
         mpImplData->mpVirDev->SetOutputSizePixel( aTextRectSize );
     else
     {
-        Region aRegion( aTextRect );
+        vcl::Region aRegion( aTextRect );
         SetClipRegion( aRegion );
     }
 

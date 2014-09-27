@@ -212,7 +212,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     // Secure the Device settings
     pDev->Push();
 
-    Region aRegion;
+    vcl::Region aRegion;
     if( pDev->IsClipRegion() && pDev->GetOutDevType() != OUTDEV_PRINTER )
     {
         aRegion = pDev->GetClipRegion();

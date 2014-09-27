@@ -236,7 +236,7 @@ namespace sdr
             }
         }
 
-        void OverlayManager::completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice) const
+        void OverlayManager::completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice) const
         {
             if(!rRegion.IsEmpty() && maOverlayObjects.size())
             {
@@ -266,7 +266,7 @@ namespace sdr
             // unbuffered versions do nothing here
         }
 
-        void OverlayManager::restoreBackground(const Region& /*rRegion*/) const
+        void OverlayManager::restoreBackground(const vcl::Region& /*rRegion*/) const
         {
             // unbuffered versions do nothing here
         }

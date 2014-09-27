@@ -40,8 +40,8 @@ namespace unotools
     {
     private:
         BitmapEx                                       m_aBmpEx;
-        Bitmap                                         m_aBitmap;
-        Bitmap                                         m_aAlpha;
+        ::Bitmap                                       m_aBitmap;
+        ::Bitmap                                       m_aAlpha;
         BitmapReadAccess*                              m_pBmpAcc;
         BitmapReadAccess*                              m_pAlphaAcc;
         com::sun::star::uno::Sequence<sal_Int8>        m_aComponentTags;

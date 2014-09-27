@@ -260,7 +260,7 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
             }
             if ( (aTxtPos.X()+nTxtWidth) > aRect.Right() )
             {
-                maVirDev.SetClipRegion( Region( aRect ) );
+                maVirDev.SetClipRegion( vcl::Region( aRect ) );
                 maVirDev.DrawText( aTxtPos, pItem->maText );
                 maVirDev.SetClipRegion();
             }
@@ -304,7 +304,7 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
                 if ( aImageSize.Width()  > aRectSize.Width() ||
                      aImageSize.Height() > aRectSize.Height() )
                 {
-                    maVirDev.SetClipRegion( Region( aRect ) );
+                    maVirDev.SetClipRegion( vcl::Region( aRect ) );
                     maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle);
                     maVirDev.SetClipRegion();
                 }
@@ -2113,7 +2113,7 @@ void ValueSet::EndSelection()
     mbSelection = false;
 }
 
-bool ValueSet::StartDrag( const CommandEvent& rEvent, Region& rRegion )
+bool ValueSet::StartDrag( const CommandEvent& rEvent, vcl::Region& rRegion )
 {
     if ( rEvent.GetCommand() != COMMAND_STARTDRAG )
         return false;
@@ -2143,7 +2143,7 @@ bool ValueSet::StartDrag( const CommandEvent& rEvent, Region& rRegion )
         Select();
     }
 
-    Region aRegion;
+    vcl::Region aRegion;
 
     // assign region
     rRegion = aRegion;

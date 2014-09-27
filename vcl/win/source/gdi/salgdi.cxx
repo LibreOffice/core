@@ -780,7 +780,7 @@ void WinSalGraphics::ResetClipRegion()
     SelectClipRgn( getHDC(), 0 );
 }
 
-bool WinSalGraphics::setClipRegion( const Region& i_rClip )
+bool WinSalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
     if ( mhRegion )
     {
@@ -793,14 +793,14 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
 
     // #i122149# try to avoid usage of PolyPolygon ClipRegions when PolyPolygon is no curve
     // and only contains horizontal/vertical edges. In that case, use the fallback
-    // in GetRegionRectangles which will use Region::GetAsRegionBand() which will do
+    // in GetRegionRectangles which will use vcl::Region::GetAsRegionBand() which will do
     // the correct polygon-to-RegionBand transformation.
     // Background is that when using the same Rectangle as rectangle or as Polygon
     // clip region will lead to different results; the polygon-based one will be
     // one pixel less to the right and down (see GDI docu for CreatePolygonRgn). This
     // again is because of the polygon-nature and it's classic handling when filling.
     // This also means that all cases which use a 'true' polygon-based incarnation of
-    // a Region should know what they do - it may lead to repaint errors.
+    // a vcl::Region should know what they do - it may lead to repaint errors.
     if(bUsePolygon && bTryToAvoidPolygon)
     {
         const basegfx::B2DPolyPolygon aPolyPolygon( i_rClip.GetAsB2DPolyPolygon() );

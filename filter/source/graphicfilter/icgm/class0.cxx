@@ -102,8 +102,8 @@ void CGM::ImplDoClass0()
             mpOutAct->EndFigure();
             mbFigure = false;
         break;
-        case 0x0d : /*Begin Protection Region */break;
-        case 0x0e : /*End Protection Region */break;
+        case 0x0d : /*Begin Protection vcl::Region */break;
+        case 0x0e : /*End Protection vcl::Region */break;
         case 0x0f : /*Begin Compound Line */break;
         case 0x10 : /*End Compound Line */break;
         case 0x11 : /*Begin Compound Text Path */break;
@@ -111,8 +111,8 @@ void CGM::ImplDoClass0()
         case 0x13 : /*Begin Tile Array */break;                 // NS
         case 0x14 : /*End Tile Array */break;                   // NS
         case 0xff : /*Filter Setup */break;
-        case 0xfe : /*Begin Block Text Region */break;
-        case 0xfd : /*End Block Text Region */break;
+        case 0xfe : /*Begin Block Text vcl::Region */break;
+        case 0xfd : /*End Block Text vcl::Region */break;
         case 0xfc : /*Begin Group*/
             mpOutAct->BeginGroup();
         break;

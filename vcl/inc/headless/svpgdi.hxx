@@ -120,7 +120,7 @@ public:
 #endif
 
 protected:
-    Region                               m_aClipRegion;
+    vcl::Region                               m_aClipRegion;
 
 protected:
     virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
@@ -141,7 +141,7 @@ public:
     virtual long            GetGraphicsWidth() const SAL_OVERRIDE;
 
     virtual void            ResetClipRegion() SAL_OVERRIDE;
-    virtual bool            setClipRegion( const Region& ) SAL_OVERRIDE;
+    virtual bool            setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
 
     virtual void            SetLineColor() SAL_OVERRIDE;
     virtual void            SetLineColor( SalColor nSalColor ) SAL_OVERRIDE;

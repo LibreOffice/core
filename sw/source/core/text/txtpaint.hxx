@@ -25,7 +25,7 @@ class SwRect;               // SwSaveClip
 
 class SwSaveClip
 {
-    Region   aClip;
+    vcl::Region   aClip;
     const bool     bOn;
           bool     bChg;
 protected:

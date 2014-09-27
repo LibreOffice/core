@@ -1079,7 +1079,7 @@ public:
         maFont(rParent.GetFont())
     {
         // #i36013# exclude push buttons from painting area
-        mrParent.SetClipRegion( Region(mrParent.GetPageArea()) );
+        mrParent.SetClipRegion( vcl::Region(mrParent.GetPageArea()) );
     }
 
     ~TabBarPaintGuard()
@@ -2451,7 +2451,7 @@ OString TabBar::GetHelpId( sal_uInt16 nPageId ) const
 
 
 
-bool TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
+bool TabBar::StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion )
 {
     if ( !(mnWinStyle & WB_DRAG) || (rCEvt.GetCommand() != COMMAND_STARTDRAG) )
         return false;
@@ -2486,7 +2486,7 @@ bool TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     }
     mbInSelect = false;
 
-    Region aRegion;
+    vcl::Region aRegion;
 
     // assign region
     rRegion = aRegion;
@@ -2618,7 +2618,7 @@ void TabBar::HideDropPos()
             nX = pItem->maRect.Left();
             // immediately call Paint, as it is not possible during drag and drop
             Rectangle aRect( nX-1, nY1, nX+3, nY2 );
-            Region aRegion( aRect );
+            vcl::Region aRegion( aRect );
             SetClipRegion( aRegion );
             Paint( aRect );
             SetClipRegion();
@@ -2629,7 +2629,7 @@ void TabBar::HideDropPos()
             nX = pItem->maRect.Right();
             // immediately call Paint, as it is not possible during drag and drop
             Rectangle aRect( nX-2, nY1, nX+1, nY2 );
-            Region aRegion( aRect );
+            vcl::Region aRegion( aRect );
             SetClipRegion( aRegion );
             Paint( aRect );
             SetClipRegion();

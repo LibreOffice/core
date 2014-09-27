@@ -39,7 +39,7 @@ public:
         DrawViewShell* pShell);
     virtual ~ClientView (void);
 
-    virtual void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
+    virtual void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
 
     /* if the view should not do a Invalidate() on the windows, you have to
        overload the following two methods and do something different */

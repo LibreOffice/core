@@ -213,7 +213,7 @@ public:
     virtual long            GetGraphicsHeight() const;
 
     virtual void            ResetClipRegion() SAL_OVERRIDE;
-    virtual bool            setClipRegion( const Region& ) SAL_OVERRIDE;
+    virtual bool            setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
 
     virtual void            SetLineColor() SAL_OVERRIDE;
     virtual void            SetLineColor( SalColor nSalColor ) SAL_OVERRIDE;
