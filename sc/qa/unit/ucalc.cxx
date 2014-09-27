@@ -5965,6 +5965,165 @@ void Test::testTransliterateText()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaToValue()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    m_pDoc->InsertTab(0, "Test");
+
+    const char* aData[][3] = {
+        { "=1", "=RC[-1]*2", "=ISFORMULA(RC[-1])" },
+        { "=2", "=RC[-1]*2", "=ISFORMULA(RC[-1])" },
+        { "=3", "=RC[-1]*2", "=ISFORMULA(RC[-1])" },
+        { "=4", "=RC[-1]*2", "=ISFORMULA(RC[-1])" },
+        { "=5", "=RC[-1]*2", "=ISFORMULA(RC[-1])" },
+        { "=6", "=RC[-1]*2", "=ISFORMULA(RC[-1])" },
+    };
+
+    ScAddress aPos(1,2,0); // B3
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "1",  "2", "TRUE" },
+            { "2",  "4", "TRUE" },
+            { "3",  "6", "TRUE" },
+            { "4",  "8", "TRUE" },
+            { "5", "10", "TRUE" },
+            { "6", "12", "TRUE" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Convert B5:C6 to static values, and check the result.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScRange aConvRange(1,4,0,2,5,0); // B5:C6
+    rFunc.ConvertFormulaToValue(aConvRange, true, false);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "1",  "2",  "TRUE" },
+            { "2",  "4",  "TRUE" },
+            { "3",  "6", "FALSE" },
+            { "4",  "8", "FALSE" },
+            { "5", "10",  "TRUE" },
+            { "6", "12",  "TRUE" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Converted");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Make sure that B3:B4 and B7:B8 are formula cells.
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,2,0)) == CELLTYPE_FORMULA);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,3,0)) == CELLTYPE_FORMULA);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,6,0)) == CELLTYPE_FORMULA);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,7,0)) == CELLTYPE_FORMULA);
+
+    // Make sure that B5:C6 are numeric cells.
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,4,0)) == CELLTYPE_VALUE);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,5,0)) == CELLTYPE_VALUE);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(2,4,0)) == CELLTYPE_VALUE);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(2,5,0)) == CELLTYPE_VALUE);
+
+    // Make sure that formula cells in C3:C4 and C7:C8 are grouped.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(2,2,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(pFC->GetSharedTopRow() == 2);
+    CPPUNIT_ASSERT(pFC->GetSharedLength() == 2);
+    pFC = m_pDoc->GetFormulaCell(ScAddress(2,6,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(pFC->GetSharedTopRow() == 6);
+    CPPUNIT_ASSERT(pFC->GetSharedLength() == 2);
+
+    // Undo and check.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "1",  "2", "TRUE" },
+            { "2",  "4", "TRUE" },
+            { "3",  "6", "TRUE" },
+            { "4",  "8", "TRUE" },
+            { "5", "10", "TRUE" },
+            { "6", "12", "TRUE" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "After undo");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // B3:B8 should all be (ungrouped) formula cells.
+    for (SCROW i = 2; i <= 7; ++i)
+    {
+        pFC = m_pDoc->GetFormulaCell(ScAddress(1,i,0));
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT(!pFC->IsShared());
+    }
+
+    // C3:C8 should be shared formula cells.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(2,2,0));
+    CPPUNIT_ASSERT(pFC->GetSharedTopRow() == 2);
+    CPPUNIT_ASSERT(pFC->GetSharedLength() == 6);
+
+    // Redo and check.
+    pUndoMgr->Redo();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "1",  "2",  "TRUE" },
+            { "2",  "4",  "TRUE" },
+            { "3",  "6", "FALSE" },
+            { "4",  "8", "FALSE" },
+            { "5", "10",  "TRUE" },
+            { "6", "12",  "TRUE" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Converted");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Make sure that B3:B4 and B7:B8 are formula cells.
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,2,0)) == CELLTYPE_FORMULA);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,3,0)) == CELLTYPE_FORMULA);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,6,0)) == CELLTYPE_FORMULA);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,7,0)) == CELLTYPE_FORMULA);
+
+    // Make sure that B5:C6 are numeric cells.
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,4,0)) == CELLTYPE_VALUE);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(1,5,0)) == CELLTYPE_VALUE);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(2,4,0)) == CELLTYPE_VALUE);
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(2,5,0)) == CELLTYPE_VALUE);
+
+    // Make sure that formula cells in C3:C4 and C7:C8 are grouped.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(2,2,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(pFC->GetSharedTopRow() == 2);
+    CPPUNIT_ASSERT(pFC->GetSharedLength() == 2);
+    pFC = m_pDoc->GetFormulaCell(ScAddress(2,6,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(pFC->GetSharedTopRow() == 6);
+    CPPUNIT_ASSERT(pFC->GetSharedLength() == 2);
+
+    // Undo again and make sure the recovered formulas in C5:C6 still track B5:B6.
+    pUndoMgr->Undo();
+    m_pDoc->SetValue(ScAddress(1,4,0), 10);
+    m_pDoc->SetValue(ScAddress(1,5,0), 11);
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(2,4,0)));
+    CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(ScAddress(2,5,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testMixData()
 {
     m_pDoc->InsertTab(0, "Test");
