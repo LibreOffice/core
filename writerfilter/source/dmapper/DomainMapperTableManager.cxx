@@ -373,7 +373,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 // DomainMapperTableHandler::endTableGetCellProperties() can we
                 // handle the combination of the cell direction and paragraph
                 // alignment as necessary.
-                pPropMap->Insert(PROP_CELL_DIRECTION, uno::Any(sal_Int32(3)));
+                pPropMap->Insert(PROP_CELL_DIRECTION, uno::Any(sal_Int32(nIntValue)));
 
                 bool bInsertCellProps = true;
                 switch ( nIntValue )
