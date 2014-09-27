@@ -89,6 +89,8 @@ struct ImplStyleData
     Color                           maActiveColor;
     Color                           maActiveColor2;
     Color                           maActiveTextColor;
+    Color                           maAlternatingRowColor;
+    Color                           maAlternatingRowColor2;
     Color                           maButtonTextColor;
     Color                           maButtonRolloverTextColor;
     Color                           maCheckedColor;
@@ -561,6 +563,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maActiveColor( rData.maActiveColor ),
     maActiveColor2( rData.maActiveColor2 ),
     maActiveTextColor( rData.maActiveTextColor ),
+    maAlternatingRowColor( rData.maAlternatingRowColor ),
+    maAlternatingRowColor2( rData.maAlternatingRowColor2 ),
     maButtonTextColor( rData.maButtonTextColor ),
     maButtonRolloverTextColor( rData.maButtonRolloverTextColor ),
     maCheckedColor( rData.maCheckedColor ),
@@ -741,6 +745,8 @@ void ImplStyleData::SetStandardStyles()
     maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
     maHighlightLinkColor        = Color( COL_LIGHTBLUE );
     maFontColor                 = Color( COL_BLACK );
+    maAlternatingRowColor       = Color( COL_WHITE );
+    maAlternatingRowColor2      = Color( 0xEE, 0xEE, 0xEE );
 
     mnBorderSize                = 1;
     mnTitleHeight               = 18;
@@ -1381,6 +1387,32 @@ const Color&
 StyleSettings::GetInactiveTabColor() const
 {
     return mpData->maInactiveTabColor;
+}
+
+void
+StyleSettings::SetAlternatingRowColor( const Color& rColor )
+{
+    CopyData();
+    mpData->maAlternatingRowColor = rColor;
+}
+
+const Color&
+StyleSettings::GetAlternatingRowColor() const
+{
+    return mpData->maAlternatingRowColor;
+}
+
+void
+StyleSettings::SetAlternatingRowColor2( const Color& rColor )
+{
+    CopyData();
+    mpData->maAlternatingRowColor2 = rColor;
+}
+
+const Color&
+StyleSettings::GetAlternatingRowColor2() const
+{
+    return mpData->maAlternatingRowColor2;
 }
 
 void
