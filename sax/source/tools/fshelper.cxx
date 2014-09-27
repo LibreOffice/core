@@ -109,7 +109,8 @@ void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, XFastAttribut
 
 FastSerializerHelper* FastSerializerHelper::write(const char* value)
 {
-    return write(OString(value));
+    mpSerializer->write(value, 0, false);
+    return this;
 }
 
 FastSerializerHelper* FastSerializerHelper::write(const OUString& value)
@@ -141,7 +142,7 @@ FastSerializerHelper* FastSerializerHelper::write(double value)
 
 FastSerializerHelper* FastSerializerHelper::writeEscaped(const char* value)
 {
-    mpSerializer->write(OString(value), true);
+    mpSerializer->write(value, 0, true);
     return this;
 }
 

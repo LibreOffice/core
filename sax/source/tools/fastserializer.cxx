@@ -83,14 +83,20 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::write( const OString& sOutput, bool bEscape )
     {
+        write( sOutput.getStr(), sOutput.getLength(), bEscape );
+    }
+
+    void FastSaxSerializer::write( const char* pStr, sal_Int32 nLen, bool bEscape )
+    {
+        if (nLen == 0)
+            nLen = strlen(pStr);
+
         if (!bEscape)
         {
-            writeBytes( sOutput.getStr(), sOutput.getLength() );
+            writeBytes( pStr, nLen );
             return;
         }
 
-        const char* pStr = sOutput.getStr();
-        sal_Int32 nLen = sOutput.getLength();
         for (sal_Int32 i = 0; i < nLen; ++i)
         {
             char c = pStr[ i ];
@@ -222,7 +228,7 @@ namespace sax_fastparser {
 
             writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
 
-            write(pAttrList->getFastAttributeValue(j), true);
+            write(pAttrList->getFastAttributeValue(j), pAttrList->AttributeValueLength(j), true);
 
             writeBytes(sQuote, N_CHARS(sQuote));
         }

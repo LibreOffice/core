@@ -87,6 +87,7 @@ public:
     void addUnknown( const OString& rName, const sal_Char* pValue );
     const std::vector< sal_Int32 >&  getFastAttributeTokens() const { return maAttributeTokens; }
     const char* getFastAttributeValue(size_t nIndex) const { return mpChunk + maAttributeValues[nIndex]; }
+    sal_Int32 AttributeValueLength(size_t i) const { return maAttributeValues[i + 1] - maAttributeValues[i] - 1; }
 
     // performance sensitive shortcuts to avoid allocation ...
     bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt);
@@ -101,9 +102,6 @@ public:
     virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::Attribute > SAL_CALL getUnknownAttributes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::FastAttribute > SAL_CALL getFastAttributes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-private:
-    inline sal_Int32 AttributeValueLength(sal_Int32 i);
 
 private:
     sal_Char *mpChunk; ///< buffer to store all attribute values - null terminated strings

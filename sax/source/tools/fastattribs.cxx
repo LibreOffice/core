@@ -225,12 +225,6 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (Runtim
     return aSeq;
 }
 
-sal_Int32 FastAttributeList::AttributeValueLength(sal_Int32 i)
-{
-    // Pointers to null terminated strings
-    return maAttributeValues[i + 1] - maAttributeValues[i] - 1;
-}
-
 sal_Int32 FastTokenHandlerBase::getTokenFromChars(
         const css::uno::Reference< css::xml::sax::XFastTokenHandler > &xTokenHandler,
         FastTokenHandlerBase *pTokenHandler,
