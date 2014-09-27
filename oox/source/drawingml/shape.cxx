@@ -401,7 +401,7 @@ Reference< XShape > Shape::createAndInsert(
     bool bIsEmbMedia = false;
     SAL_INFO("oox.drawingml", OSL_THIS_FUNC << " id: " << msId);
 
-    awt::Rectangle aShapeRectHmm( maPosition.X / 360, maPosition.Y / 360, maSize.Width / 360, maSize.Height / 360 );
+    awt::Rectangle aShapeRectHmm( maPosition.X / EMU_PER_HMM, maPosition.Y / EMU_PER_HMM, maSize.Width / EMU_PER_HMM, maSize.Height / EMU_PER_HMM );
 
     OUString aServiceName;
     if( rServiceName == "com.sun.star.drawing.GraphicObjectShape" &&
@@ -461,14 +461,14 @@ Reference< XShape > Shape::createAndInsert(
     {
         // if global position is used, add it to transformation
         if (mbWps && aParentTransformation.isIdentity())
-            aTransformation.translate( maPosition.X * 360, maPosition.Y * 360);
+            aTransformation.translate( maPosition.X * EMU_PER_HMM, maPosition.Y * EMU_PER_HMM);
         else
             aTransformation.translate( maPosition.X, maPosition.Y );
     }
 
     aTransformation = aParentTransformation*aTransformation;
     aParentTransformation = aTransformation;
-    aTransformation.scale(1/360.0, 1/360.0);
+    aTransformation.scale(1/double(EMU_PER_HMM), 1/double(EMU_PER_HMM));
 
     // special for lineshape
     if ( aServiceName == "com.sun.star.drawing.LineShape" )
