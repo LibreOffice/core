@@ -819,7 +819,7 @@ public class PanZoomController
             spanRatio = 1.0f - (1.0f - spanRatio) * resistance;
 
         synchronized (mController) {
-            float newZoomFactor = mController.getZoomFactor() * spanRatio;
+            float newZoomFactor = mController.getViewportMetrics().zoomFactor * spanRatio;
             float minZoomFactor = 0.0f;
             float maxZoomFactor = MAX_ZOOM;
 
@@ -920,9 +920,9 @@ public class PanZoomController
      */
     private boolean animatedZoomTo(RectF zoomToRect) {
         setState(PanZoomState.ANIMATED_ZOOM);
-        final float startZoom = mController.getZoomFactor();
+        final float startZoom = mController.getViewportMetrics().zoomFactor;
 
-        RectF viewport = mController.getViewport();
+        RectF viewport = getMetrics().getViewport();
         // 1. adjust the aspect ratio of zoomToRect to match that of the current viewport,
         // enlarging as necessary (if it gets too big, it will get shrunk in the next step).
         // while enlarging make sure we enlarge equally on both sides to keep the target rect

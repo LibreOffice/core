@@ -582,7 +582,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             /* Draw the drop shadow, if we need to. */
             RectF untransformedPageRect = new RectF(0.0f, 0.0f, mPageRect.width(),
                                                     mPageRect.height());
-            if (!untransformedPageRect.contains(mView.getController().getViewport()))
+            if (!untransformedPageRect.contains(mFrameMetrics.getViewport()))
                 mShadowLayer.draw(mPageContext);
 
             /* Draw the 'checkerboard'. We use gfx.show_checkerboard_pattern to
