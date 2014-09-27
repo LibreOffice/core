@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae2911b_0c1a176f",
+        "filename": "sw/uiconfig/swriter/ui/attachnamedialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-27T17:14:17Z",
+      "side": 1,
+      "message": "Is this change intentional?",
+      "revId": "28249cb6a1be092830d96ab850efed7b1a0695f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
