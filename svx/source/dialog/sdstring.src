@@ -177,7 +177,7 @@ String STR_EXTFILTER_ALL
 
 String STR_INSERT_SOUND_TITLE
 {
-    Text [ en-US ] = "Insert sound" ;
+    Text [ en-US ] = "Insert audio" ;
 };
 
 String STR_INSERT_VIDEO_TITLE

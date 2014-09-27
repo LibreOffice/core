@@ -349,7 +349,7 @@ String STR_UNDO_CHANGE_TITLE_AND_LAYOUT
 };
 String STR_WAV_FILE
 {
-    Text [ en-US ] = "Sound" ;
+    Text [ en-US ] = "Audio" ;
 };
 String STR_MIDI_FILE
 {
@@ -577,7 +577,7 @@ String STR_CLICK_ACTION_INVISIBLE
 };
 String STR_CLICK_ACTION_SOUND
 {
-    Text [ en-US ] = "Play sound" ;
+    Text [ en-US ] = "Play audio" ;
 };
 String STR_CLICK_ACTION_VERB
 {
@@ -605,7 +605,7 @@ String STR_EFFECTDLG_ACTION
 };
 String STR_EFFECTDLG_SOUND
 {
-    Text [ en-US ] = "Sound" ;
+    Text [ en-US ] = "Audio" ;
 };
 String STR_EFFECTDLG_PAGE_OBJECT
 {
@@ -967,7 +967,7 @@ String STR_UNDO_GRAFFILTER
 
 String STR_WARNING_NOSOUNDFILE
 {
-    Text [ en-US ] = "The file %\nis not a valid sound file !" ;
+    Text [ en-US ] = "The file %\nis not a valid audio file !" ;
 };
 
 String STR_UNDO_CONVERT_TO_METAFILE
