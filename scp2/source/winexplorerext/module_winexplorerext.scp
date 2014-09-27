@@ -21,8 +21,10 @@
 #include "AutoInstall/winexplorerextbinarytable"
 #include "AutoInstall/winexplorerext"
 #include "AutoInstall/winexplorerextnt6"
+#ifdef BUILD_X64
 #include "AutoInstall/winexplorerextwin64"
 #include "AutoInstall/winexplorerextwin64nt6"
+#endif
 
 Module gid_Module_Optional_Winexplorerext
     MOD_NAME_DESC ( MODULE_OPTIONAL_WINDOWS_EXPLORER_EXTENSIONS );
@@ -37,6 +39,7 @@ Module gid_Module_Optional_Winexplorerext
              gid_File_Tmp_Userinstall_Winexplorerext_Inf);    
 End
 
+#ifdef BUILD_X64
 Module gid_Module_Optional_Winexplorerext_x64
     ParentID = gid_Module_Optional_Winexplorerext;
     Name = "gid_Module_Optional_Winexplorerext_x64";
@@ -52,3 +55,4 @@ Module gid_Module_Optional_Winexplorerext_x64
              gid_File_Lib_Msvcp110,
              gid_File_Lib_Msvcr110);
 End
+#endif
