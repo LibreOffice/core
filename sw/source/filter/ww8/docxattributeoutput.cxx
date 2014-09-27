@@ -7332,7 +7332,7 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
             case text::RelOrientation::CHAR:
             case text::RelOrientation::PRINT_AREA:
             case text::RelOrientation::TEXT_LINE:
-                sVAnchor = OString( "column" );
+                sVAnchor = OString( "text" );
                 break;
             case text::RelOrientation::FRAME:
             case text::RelOrientation::PAGE_LEFT:
