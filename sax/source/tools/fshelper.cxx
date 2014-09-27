@@ -20,6 +20,7 @@
 #include <sax/fshelper.hxx>
 #include "fastserializer.hxx"
 #include <com/sun/star/xml/sax/FastTokenHandler.hpp>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -30,11 +31,10 @@ namespace sax_fastparser {
 
 FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream, bool bWriteHeader ) :
     mpSerializer(new FastSaxSerializer())
+  , maAttrList(Reference< xml::sax::XFastTokenHandler >())
 {
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_SET_THROW );
-    mxTokenHandler = css::xml::sax::FastTokenHandler::create(xContext);
-
-    mpSerializer->setFastTokenHandler( mxTokenHandler );
+    mpSerializer->setFastTokenHandler( css::xml::sax::FastTokenHandler::create(xContext) );
     assert(xOutputStream.is()); // cannot do anything without that
     mpSerializer->setOutputStream( xOutputStream );
     if( bWriteHeader )
@@ -51,7 +51,7 @@ void FastSerializerHelper::startElementInternal(sal_Int32 elementTokenId, ...)
 {
     va_list args;
     va_start( args, elementTokenId );
-    FastAttributeList* pAttrList = new FastAttributeList( mxTokenHandler );
+    maAttrList.clear();
 
     while (true)
     {
@@ -60,11 +60,10 @@ void FastSerializerHelper::startElementInternal(sal_Int32 elementTokenId, ...)
             break;
         const char* pValue = va_arg(args, const char*);
         if (pValue)
-            pAttrList->add(nName, pValue);
+            maAttrList.add(nName, pValue);
     }
 
-    const com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> xAttrList(pAttrList);
-    mpSerializer->startFastElement(elementTokenId, xAttrList);
+    mpSerializer->startFastElement(elementTokenId, &maAttrList);
     va_end( args );
 }
 
@@ -72,7 +71,7 @@ void FastSerializerHelper::singleElementInternal(sal_Int32 elementTokenId, ...)
 {
     va_list args;
     va_start( args, elementTokenId );
-    FastAttributeList* pAttrList = new FastAttributeList( mxTokenHandler );
+    maAttrList.clear();
 
     while (true)
     {
@@ -81,11 +80,10 @@ void FastSerializerHelper::singleElementInternal(sal_Int32 elementTokenId, ...)
             break;
         const char* pValue = va_arg(args, const char*);
         if  (pValue)
-            pAttrList->add(nName, pValue);
+            maAttrList.add(nName, pValue);
     }
 
-    const com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> xAttrList(pAttrList);
-    mpSerializer->singleFastElement(elementTokenId, xAttrList);
+    mpSerializer->singleFastElement(elementTokenId, &maAttrList);
     va_end( args );
 }
 
@@ -96,13 +94,17 @@ void FastSerializerHelper::endElement(sal_Int32 elementTokenId)
 
 void FastSerializerHelper::startElement(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
 {
-    mpSerializer->startFastElement(elementTokenId, xAttrList);
+    FastAttributeList* pAttrList = dynamic_cast< FastAttributeList* >(xAttrList.get());
+    assert(pAttrList);
+    mpSerializer->startFastElement(elementTokenId, pAttrList);
 }
 
 
 void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
 {
-    mpSerializer->singleFastElement(elementTokenId, xAttrList);
+    FastAttributeList* pAttrList = dynamic_cast< FastAttributeList* >(xAttrList.get());
+    assert(pAttrList);
+    mpSerializer->singleFastElement(elementTokenId, pAttrList);
 }
 
 FastSerializerHelper* FastSerializerHelper::write(const char* value)
@@ -172,7 +174,7 @@ void FastSerializerHelper::mergeTopMarks( MergeMarksEnum eMergeType )
 
 FastAttributeList * FastSerializerHelper::createAttrList()
 {
-    return new FastAttributeList( mxTokenHandler );
+    return new FastAttributeList( Reference< xml::sax::XFastTokenHandler >() );
 }
 
 

@@ -22,15 +22,14 @@
 
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <rtl/byteseq.hxx>
+
+#include <comphelper/seqstream.hxx>
+#include <sax/fastattribs.hxx>
+#include <sax/fshelper.hxx>
 
 #include <stack>
 #include <map>
-
 #include <boost/shared_ptr.hpp>
-
-#include <comphelper/seqstream.hxx>
-#include "sax/fshelper.hxx"
 
 namespace sax_fastparser {
 
@@ -67,11 +66,11 @@ public:
             <b>or</b> operation.
 
         @param Attribs
-            Contains a <type>XFastAttrbitueList</type> to access the attributes
+            Contains a <type>FastAttributeList</type> to access the attributes
             from the element.
 
     */
-    void startFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
+    void startFastElement( ::sal_Int32 Element, FastAttributeList* Attribs );
 
     /** receives notification of the end of an known element.
         @see startFastElement
@@ -91,11 +90,11 @@ public:
             <b>or</b> operation.
 
         @param Attribs
-            Contains a <type>XFastAttrbitueList</type> to access the attributes
+            Contains a <type>FastAttributeList</type> to access the attributes
             from the element.
 
     */
-    void singleFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
+    void singleFastElement( ::sal_Int32 Element, FastAttributeList* Attribs );
 
     void setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream );
     void setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler );
@@ -206,7 +205,7 @@ private:
     ::std::stack<sal_Int32> m_DebugStartedElements;
 #endif
 
-    void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
+    void writeFastAttributeList( FastAttributeList* pAttrList );
     /// Write to maOutputData and if it's big enough flush that to mxOutputStream
     void writeOutput( const sal_Int8* pStr, size_t nLen );
     void writeOutput( const css::uno::Sequence< ::sal_Int8 >& aData );

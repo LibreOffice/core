@@ -129,7 +129,7 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXExcept
         if (maAttributeTokens[i] == Token)
             return FastTokenHandlerBase::getTokenFromChars(
                        mxTokenHandler, mpTokenHandler,
-                       mpChunk + maAttributeValues[ i ],
+                       getFastAttributeValue(i),
                        AttributeValueLength( i ) );
 
     throw SAXException();
@@ -141,7 +141,7 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
         if (maAttributeTokens[i] == Token)
             return FastTokenHandlerBase::getTokenFromChars(
                        mxTokenHandler, mpTokenHandler,
-                       mpChunk + maAttributeValues[ i ],
+                       getFastAttributeValue(i),
                        AttributeValueLength( i ) );
 
     return Default;
@@ -154,7 +154,7 @@ bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt)
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            rInt = rtl_str_toInt32( mpChunk + maAttributeValues[i], 10 );
+            rInt = rtl_str_toInt32( getFastAttributeValue(i), 10 );
             return true;
         }
     return false;
@@ -166,7 +166,7 @@ bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble)
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            rDouble = rtl_str_toDouble( mpChunk + maAttributeValues[i] );
+            rDouble = rtl_str_toDouble( getFastAttributeValue(i) );
             return true;
         }
     return false;
@@ -191,7 +191,7 @@ OUString FastAttributeList::getValue( ::sal_Int32 Token ) throw (SAXException, R
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-            return OUString( mpChunk + maAttributeValues[i], AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
+            return OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
 
     throw SAXException();
 }
@@ -200,7 +200,7 @@ OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token ) throw (Runtime
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-            return OUString( mpChunk + maAttributeValues[i], AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
+            return OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
 
     return OUString();
 }
@@ -219,7 +219,7 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (Runtim
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
     {
         pAttr->Token = maAttributeTokens[i];
-        pAttr->Value = OUString( mpChunk + maAttributeValues[i], AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
+        pAttr->Value = OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
         pAttr++;
     }
     return aSeq;

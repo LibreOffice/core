@@ -85,6 +85,8 @@ public:
     void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue );
     void addUnknown( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue );
     void addUnknown( const OString& rName, const sal_Char* pValue );
+    const std::vector< sal_Int32 >&  getFastAttributeTokens() const { return maAttributeTokens; }
+    const char* getFastAttributeValue(size_t nIndex) const { return mpChunk + maAttributeValues[nIndex]; }
 
     // performance sensitive shortcuts to avoid allocation ...
     bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt);
