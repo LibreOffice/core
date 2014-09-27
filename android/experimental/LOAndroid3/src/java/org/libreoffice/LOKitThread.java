@@ -7,8 +7,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.mozilla.gecko.gfx.GeckoLayerClient;
+import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.gfx.ViewportMetrics;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -18,7 +18,7 @@ public class LOKitThread extends Thread {
     public LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
-    private ViewportMetrics mViewportMetrics;
+    private ImmutableViewportMetrics mViewportMetrics;
     private boolean mCheckboardImageSet = false;
     private GeckoLayerClient mLayerClient;
     private LayerController mController;
@@ -33,8 +33,8 @@ public class LOKitThread extends Thread {
 
         RectF rect = new RectF(0, 0, pageWidth, pageHeight);
         DisplayMetrics displayMetrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
-        mViewportMetrics = new ViewportMetrics(displayMetrics);
-        mViewportMetrics.setPageRect(rect, rect);
+        mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
+        mViewportMetrics = mViewportMetrics.setPageRect(rect, rect);
 
         GeckoLayerClient layerClient = mApplication.getLayerClient();
 

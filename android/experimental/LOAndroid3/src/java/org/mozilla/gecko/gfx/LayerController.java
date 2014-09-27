@@ -67,7 +67,7 @@ public class LayerController implements PanZoomTarget {
         mContext = context;
         mForceRedraw = true;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        mViewportMetrics = new ImmutableViewportMetrics(new ViewportMetrics(displayMetrics));
+        mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
         mPanZoomController = new PanZoomController(this);
         mView = new LayerView(context, this);
         mCheckerboardShouldShowChecks = true;
@@ -127,9 +127,7 @@ public class LayerController implements PanZoomTarget {
      * result in an infinite loop.
      */
     public void setViewportSize(FloatSize size) {
-        ViewportMetrics viewportMetrics = new ViewportMetrics(mViewportMetrics);
-        viewportMetrics.setSize(size);
-        mViewportMetrics = new ImmutableViewportMetrics(viewportMetrics);
+        mViewportMetrics = mViewportMetrics.setViewportSize(size.width, size.height);
 
         if (mLayerClient != null) {
             mLayerClient.viewportSizeChanged();
@@ -144,9 +142,7 @@ public class LayerController implements PanZoomTarget {
         if (mViewportMetrics.getCssPageRect().equals(cssRect))
             return;
 
-        ViewportMetrics viewportMetrics = new ViewportMetrics(mViewportMetrics);
-        viewportMetrics.setPageRect(rect, cssRect);
-        mViewportMetrics = new ImmutableViewportMetrics(viewportMetrics);
+        mViewportMetrics = mViewportMetrics.setPageRect(rect, cssRect);
 
         // Page size is owned by the layer client, so no need to notify it of
         // this change.
@@ -163,20 +159,19 @@ public class LayerController implements PanZoomTarget {
      * Sets the entire viewport metrics at once.
      * You must hold the monitor while calling this.
      */
-    public void setViewportMetrics(ViewportMetrics viewport) {
-        mViewportMetrics = new ImmutableViewportMetrics(viewport);
+    public void setViewportMetrics(ImmutableViewportMetrics viewport) {
+        mViewportMetrics = viewport;
         mView.requestRender();
         notifyLayerClientOfGeometryChange();
     }
 
-    public void setAnimationTarget(ViewportMetrics viewport) {
+    public void setAnimationTarget(ImmutableViewportMetrics viewport) {
         if (mLayerClient != null) {
             // We know what the final viewport of the animation is going to be, so
             // immediately request a draw of that area by setting the display port
             // accordingly. This way we should have the content pre-rendered by the
             // time the animation is done.
-            ImmutableViewportMetrics metrics = new ImmutableViewportMetrics(viewport);
-            DisplayPortMetrics displayPort = DisplayPortCalculator.calculate(metrics, null);
+            DisplayPortMetrics displayPort = DisplayPortCalculator.calculate(viewport, null);
             mLayerClient.adjustViewport(displayPort);
         }
     }
@@ -232,9 +227,9 @@ public class LayerController implements PanZoomTarget {
         ImmutableViewportMetrics viewportMetrics = mViewportMetrics;
         PointF origin = viewportMetrics.getOrigin();
         float zoom = viewportMetrics.zoomFactor;
-        ViewportMetrics geckoViewport = mLayerClient.getGeckoViewportMetrics();
+        ImmutableViewportMetrics geckoViewport = mLayerClient.getGeckoViewportMetrics();
         PointF geckoOrigin = geckoViewport.getOrigin();
-        float geckoZoom = geckoViewport.getZoomFactor();
+        float geckoZoom = geckoViewport.zoomFactor;
 
         // viewPoint + origin gives the coordinate in device pixels from the top-left corner of the page.
         // Divided by zoom, this gives us the coordinate in CSS pixels from the top-left corner of the page.

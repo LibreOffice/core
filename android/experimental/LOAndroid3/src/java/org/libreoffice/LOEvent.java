@@ -2,8 +2,8 @@ package org.libreoffice;
 
 import android.graphics.Rect;
 
+import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.ViewportMetrics;
 
 public class LOEvent {
 
@@ -15,7 +15,7 @@ public class LOEvent {
     public static final int LOAD = 6;
 
     public int mType;
-    private ViewportMetrics mViewportMetrics;
+    private ImmutableViewportMetrics mViewportMetrics;
     private String mTypeString;
     private int mPartIndex;
     private String mFilename;
@@ -35,7 +35,7 @@ public class LOEvent {
         mTypeString = "Tile size";
     }
 
-    public LOEvent(int type, ViewportMetrics viewportMetrics) {
+    public LOEvent(int type, ImmutableViewportMetrics viewportMetrics) {
         mType = type;
         mTypeString = "Viewport";
         mViewportMetrics = viewportMetrics;
@@ -64,7 +64,7 @@ public class LOEvent {
         return new LOEvent(TILE_SIZE, tileSize);
     }
 
-    public static LOEvent viewport(ViewportMetrics viewportMetrics) {
+    public static LOEvent viewport(ImmutableViewportMetrics viewportMetrics) {
         return new LOEvent(VIEWPORT, viewportMetrics);
     }
 
@@ -80,7 +80,7 @@ public class LOEvent {
         return mTypeString;
     }
 
-    public ViewportMetrics getViewport() {
+    public ImmutableViewportMetrics getViewport() {
         return mViewportMetrics;
     }
 

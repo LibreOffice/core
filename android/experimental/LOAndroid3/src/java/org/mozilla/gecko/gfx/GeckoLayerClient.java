@@ -65,10 +65,10 @@ public class GeckoLayerClient implements LayerView.Listener {
     private MultiTileLayer mRootLayer;
 
     /* The viewport that Gecko is currently displaying. */
-    private ViewportMetrics mGeckoViewport;
+    private ImmutableViewportMetrics mGeckoViewport;
 
     /* The viewport that Gecko will display when drawing is finished */
-    private ViewportMetrics mNewGeckoViewport;
+    private ImmutableViewportMetrics mNewGeckoViewport;
     private Context mContext;
     private boolean mPendingViewportAdjust;
     private boolean mViewportSizeChanged;
@@ -109,7 +109,7 @@ public class GeckoLayerClient implements LayerView.Listener {
 
     }
 
-    public void endDrawing(ViewportMetrics viewportMetrics) {
+    public void endDrawing(ImmutableViewportMetrics viewportMetrics) {
         synchronized (mLayerController) {
             try {
                 mNewGeckoViewport = viewportMetrics;
@@ -128,19 +128,18 @@ public class GeckoLayerClient implements LayerView.Listener {
         // java is the One True Source of this information, and allowing JS
         // to override can lead to race conditions where this data gets clobbered.
         FloatSize viewportSize = mLayerController.getViewportSize();
-        mGeckoViewport = mNewGeckoViewport;
-        mGeckoViewport.setSize(viewportSize);
+        mGeckoViewport = mNewGeckoViewport.setViewportSize(viewportSize.width, viewportSize.height);
 
         RectF position = mGeckoViewport.getViewport();
         mRootLayer.setPosition(RectUtils.round(position));
-        mRootLayer.setResolution(mGeckoViewport.getZoomFactor());
+        mRootLayer.setResolution(mGeckoViewport.zoomFactor);
 
         Log.e(LOGTAG, "### updateViewport onlyUpdatePageSize=" + onlyUpdatePageSize + " getTileViewport " + mGeckoViewport);
 
         if (onlyUpdatePageSize) {
             // Don't adjust page size when zooming unless zoom levels are
             // approximately equal.
-            if (FloatUtils.fuzzyEquals(mLayerController.getViewportMetrics().zoomFactor, mGeckoViewport.getZoomFactor())) {
+            if (FloatUtils.fuzzyEquals(mLayerController.getViewportMetrics().zoomFactor, mGeckoViewport.zoomFactor)) {
                 mLayerController.setPageRect(mGeckoViewport.getPageRect(), mGeckoViewport.getCssPageRect());
             }
         } else {
@@ -193,8 +192,7 @@ public class GeckoLayerClient implements LayerView.Listener {
     void adjustViewport(DisplayPortMetrics displayPort) {
         ImmutableViewportMetrics metrics = mLayerController.getViewportMetrics();
 
-        ViewportMetrics clampedMetrics = new ViewportMetrics(metrics);
-        clampedMetrics.setViewport(clampedMetrics.getClampedViewport());
+        ImmutableViewportMetrics clampedMetrics = metrics.clamp();
 
         if (displayPort == null) {
             displayPort = DisplayPortCalculator.calculate(metrics,
@@ -244,7 +242,7 @@ public class GeckoLayerClient implements LayerView.Listener {
         }
     }
 
-    public ViewportMetrics getGeckoViewportMetrics() {
+    public ImmutableViewportMetrics getGeckoViewportMetrics() {
         return mGeckoViewport;
     }
 
