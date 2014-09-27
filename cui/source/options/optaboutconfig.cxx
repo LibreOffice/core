@@ -170,6 +170,13 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& r
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rValue));
 
     m_pPrefBox->Insert( pEntry );
+
+    //Set streak: white and grey alternately
+    SvTreeListEntry* pPrev = m_pPrefBox->Prev( pEntry );
+    if( pPrev )
+        pEntry->SetBackColor( pPrev->GetBackColor() == Color(255, 255, 255) ? Color(238,238,238) : Color(255,255,255) );
+    else
+        pEntry->SetBackColor( Color(255,255,255) );
 }
 
 void CuiAboutConfigTabPage::Reset()
