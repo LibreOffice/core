@@ -157,6 +157,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     aTabs[4] = aTabs[3] + fWidth * 8;
 
     m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
+    m_pPrefBox->SetAlternatingRow( true );
 }
 
 void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue)

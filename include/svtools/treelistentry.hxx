@@ -56,6 +56,7 @@ class SVT_DLLPUBLIC SvTreeListEntry
     bool                bIsMarked;
     void*               pUserData;
     sal_uInt16          nEntryFlags;
+    Color               maBackColor;
 
 private:
     void ClearChildren();
@@ -101,6 +102,9 @@ public:
 
     bool GetIsMarked() const { return bIsMarked; }
     void SetMarked( bool IsMarked ) { bIsMarked = IsMarked; }
+
+    void SetBackColor( const Color& aColor ) { maBackColor = aColor; }
+    Color GetBackColor() const { return maBackColor; }
 };
 
 #endif
