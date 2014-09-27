@@ -18,13 +18,13 @@
  */
 
 #include "fastserializer.hxx"
-#include <rtl/ustrbuf.hxx>
-
-#include <comphelper/sequenceasvector.hxx>
 
 #include <com/sun/star/xml/Attribute.hpp>
 #include <com/sun/star/xml/FastAttribute.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+
+#include <rtl/ustrbuf.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 #include <string.h>
 
@@ -73,7 +73,7 @@ namespace sax_fastparser {
     }
     FastSaxSerializer::~FastSaxSerializer() {}
 
-    void SAL_CALL FastSaxSerializer::startDocument(  ) throw (SAXException, RuntimeException)
+    void FastSaxSerializer::startDocument()
     {
         writeBytes(sXmlHeader, N_CHARS(sXmlHeader));
     }
@@ -110,13 +110,13 @@ namespace sax_fastparser {
         }
     }
 
-    void SAL_CALL FastSaxSerializer::endDocument(  ) throw (SAXException, RuntimeException)
+    void FastSaxSerializer::endDocument()
     {
         maOutputStream.flush();
         mxOutputStream->writeBytes(maOutputData);
     }
 
-    void SAL_CALL FastSaxSerializer::writeId( ::sal_Int32 nElement )
+    void FastSaxSerializer::writeId( ::sal_Int32 nElement )
     {
         if( HAS_NAMESPACE( nElement ) ) {
             writeBytes(mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
@@ -127,7 +127,7 @@ namespace sax_fastparser {
     }
 
 #ifdef DBG_UTIL
-    OString SAL_CALL FastSaxSerializer::getId( ::sal_Int32 nElement )
+    OString FastSaxSerializer::getId( ::sal_Int32 nElement )
     {
         if (HAS_NAMESPACE(nElement)) {
             Sequence<sal_Int8> const ns(
@@ -145,8 +145,7 @@ namespace sax_fastparser {
     }
 #endif
 
-    void SAL_CALL FastSaxSerializer::startFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
-        throw (SAXException, RuntimeException)
+    void FastSaxSerializer::startFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
     {
         if ( !maMarkStack.empty() )
             maMarkStack.top()->setCurrentElement( Element );
@@ -163,8 +162,7 @@ namespace sax_fastparser {
         writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
     }
 
-    void SAL_CALL FastSaxSerializer::endFastElement( ::sal_Int32 Element )
-        throw (SAXException, RuntimeException)
+    void FastSaxSerializer::endFastElement( ::sal_Int32 Element )
     {
 #ifdef DBG_UTIL
         assert(!m_DebugStartedElements.empty());
@@ -180,8 +178,7 @@ namespace sax_fastparser {
         writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
     }
 
-    void SAL_CALL FastSaxSerializer::singleFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
-        throw (SAXException, RuntimeException)
+    void FastSaxSerializer::singleFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
     {
         if ( !maMarkStack.empty() )
             maMarkStack.top()->setCurrentElement( Element );
@@ -194,14 +191,12 @@ namespace sax_fastparser {
         writeBytes(sSlashAndClosingBracket, N_CHARS(sSlashAndClosingBracket));
     }
 
-    void SAL_CALL FastSaxSerializer::setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
-        throw (::com::sun::star::uno::RuntimeException)
+    void FastSaxSerializer::setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
     {
         mxOutputStream = xOutputStream;
     }
 
-    void SAL_CALL FastSaxSerializer::setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
-        throw (::com::sun::star::uno::RuntimeException)
+    void FastSaxSerializer::setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
     {
         mxFastTokenHandler = xFastTokenHandler;
     }
@@ -295,13 +290,11 @@ namespace sax_fastparser {
     }
 
     void FastSaxSerializer::writeBytes( const Sequence< sal_Int8 >& rData )
-        throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
     {
         writeBytes( reinterpret_cast<const char*>(rData.getConstArray()), rData.getLength() );
     }
 
     void FastSaxSerializer::writeBytes( const char* pStr, size_t nLen )
-        throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
     {
         if ( maMarkStack.empty() )
             writeOutput( reinterpret_cast<const sal_Int8*>(pStr), nLen );
@@ -310,13 +303,12 @@ namespace sax_fastparser {
                 reinterpret_cast<const sal_Int8*>(pStr), nLen) );
     }
 
-    void FastSaxSerializer::writeOutput( const Sequence< ::sal_Int8 >& aData ) throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
+    void FastSaxSerializer::writeOutput( const Sequence< ::sal_Int8 >& aData )
     {
         writeOutput( aData.getConstArray(), aData.getLength() );
     }
 
     void FastSaxSerializer::writeOutput( const sal_Int8* pStr, size_t nLen )
-        throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
     {
         maOutputStream.writeBytes( pStr, nLen );
         // Write when the sequence gets big enough
