@@ -847,8 +847,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     assert(pDlg); //Dialog create fail!
 
                     short nResult = pDlg->Execute();
-                    //When picking Cell Range, other Tab may be switched. Need restore the correct tab
-                    pTabViewShell->SetTabNo( nTab );
                     if ( nResult == RET_OK )
                     {
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();

@@ -153,11 +153,21 @@ void ScTPValidationValue::RefInputDonePostHdl()
         m_pBtnRef->SetParent( m_pRefGrid );
 
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+    {
         pValidationDlg->get_refinput_shrink_parent()->Hide();
+        ScViewData* pViewData = pValidationDlg->GetTabViewShell()->GetViewData();
+        SCTAB nCurTab = pViewData->GetTabNo();
+        SCTAB nRefTab = pViewData->GetRefTabNo();
+        // If RefInput switched to a different sheet from the data sheet,
+        // switch back: fdo#53920
+        if ( nCurTab != nRefTab )
+        {
+             pViewData->GetViewShell()->SetTabNo( nRefTab );
+        }
+    }
 
     if( m_pRefEdit && !m_pRefEdit->HasFocus() )
         m_pRefEdit->GrabFocus();
-
 }
 
 bool ScValidationDlg::Close()
