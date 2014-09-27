@@ -19,8 +19,6 @@ import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 import org.mozilla.gecko.util.FloatUtils;
 
-import java.util.Arrays;
-import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,26 +50,6 @@ public class PanZoomController
 
     // The maximum amount we allow you to zoom into a page
     private static final float MAX_ZOOM = 4.0f;
-
-    /* 16 precomputed frames of the _ease-out_ animation from the CSS Transitions specification. */
-    private static float[] ZOOM_ANIMATION_FRAMES = new float[] {
-        0.00000f,   /* 0 */
-        0.10211f,   /* 1 */
-        0.19864f,   /* 2 */
-        0.29043f,   /* 3 */
-        0.37816f,   /* 4 */
-        0.46155f,   /* 5 */
-        0.54054f,   /* 6 */
-        0.61496f,   /* 7 */
-        0.68467f,   /* 8 */
-        0.74910f,   /* 9 */
-        0.80794f,   /* 10 */
-        0.86069f,   /* 11 */
-        0.90651f,   /* 12 */
-        0.94471f,   /* 13 */
-        0.97401f,   /* 14 */
-        0.99309f,   /* 15 */
-    };
 
     private enum PanZoomState {
         NOTHING,        /* no touch-start events received */
@@ -125,6 +103,13 @@ public class PanZoomController
         mSubscroller.destroy();
     }
 
+    private final static float easeOut(float t) {
+        // ease-out approx.
+        // -(t-1)^2+1
+        t = t-1;
+        return -t*t+1;
+    }
+
     private void setState(PanZoomState state) {
         mState = state;
     }
@@ -142,23 +127,6 @@ public class PanZoomController
         if (mMainThread != Thread.currentThread()) {
             // log with full stack trace
             Log.e(LOGTAG, "Uh-oh, we're running on the wrong thread!", new Exception());
-        }
-    }
-
-    private void setZoomAnimationFrames(String frames) {
-        try {
-            if (frames.length() > 0) {
-                StringTokenizer st = new StringTokenizer(frames, ",");
-                float[] values = new float[st.countTokens()];
-                for (int i = 0; i < values.length; i++) {
-                    values[i] = Float.parseFloat(st.nextToken());
-                }
-                ZOOM_ANIMATION_FRAMES = values;
-            }
-        } catch (NumberFormatException e) {
-            Log.e(LOGTAG, "Error setting zoom animation frames", e);
-        } finally {
-            Log.i(LOGTAG, "Zoom animation frames: " + Arrays.toString(ZOOM_ANIMATION_FRAMES));
         }
     }
 
@@ -357,6 +325,8 @@ public class PanZoomController
     }
 
     private boolean onTouchCancel(MotionEvent event) {
+        cancelTouch();
+
         if (mState == PanZoomState.WAITING_LISTENERS) {
             // we might get a cancel event from the TouchEventHandler while in the
             // WAITING_LISTENERS state if the touch listeners prevent-default the
@@ -367,7 +337,6 @@ public class PanZoomController
             return false;
         }
 
-        cancelTouch();
         // ensure we snap back if we're overscrolled
         bounce();
         return false;
@@ -392,7 +361,9 @@ public class PanZoomController
         mY.startTouch(y);
         mLastEventTime = time;
 
-        if (angle < AXIS_LOCK_ANGLE || angle > (Math.PI - AXIS_LOCK_ANGLE)) {
+        if (!mX.scrollable() || !mY.scrollable()) {
+            setState(PanZoomState.PANNING);
+        } else if (angle < AXIS_LOCK_ANGLE || angle > (Math.PI - AXIS_LOCK_ANGLE)) {
             mY.setScrollingDisabled(true);
             setState(PanZoomState.PANNING_LOCKED);
         } else if (Math.abs(angle - (Math.PI / 2)) < AXIS_LOCK_ANGLE) {
@@ -507,7 +478,7 @@ public class PanZoomController
         mAnimationTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() { mTarget.post(runnable); }
-        }, 0, 1000L/60L);
+        }, 0, (int)Axis.MS_PER_FRAME);
     }
 
     /* Stops the fling or bounce animation. */
@@ -607,7 +578,7 @@ public class PanZoomController
             }
 
             /* Perform the next frame of the bounce-back animation. */
-            if (mBounceFrame < ZOOM_ANIMATION_FRAMES.length) {
+            if (mBounceFrame < (int)(256f/Axis.MS_PER_FRAME)) {
                 advanceBounce();
                 return;
             }
@@ -621,7 +592,7 @@ public class PanZoomController
         /* Performs one frame of a bounce animation. */
         private void advanceBounce() {
             synchronized (mTarget.getLock()) {
-                float t = ZOOM_ANIMATION_FRAMES[mBounceFrame];
+                float t = easeOut(mBounceFrame * Axis.MS_PER_FRAME / 256f);
                 ViewportMetrics newMetrics = mBounceStartMetrics.interpolate(mBounceEndMetrics, t);
                 mTarget.setViewportMetrics(newMetrics);
                 mBounceFrame++;
@@ -818,7 +789,7 @@ public class PanZoomController
          * Apply edge resistance if we're zoomed out smaller than the page size by scaling the zoom
          * factor toward 1.0.
          */
-        float resistance = Math.min(mX.getEdgeResistance(), mY.getEdgeResistance());
+        float resistance = Math.min(mX.getEdgeResistance(true), mY.getEdgeResistance(true));
         if (spanRatio > 1.0f)
             spanRatio = 1.0f + (spanRatio - 1.0f) * resistance;
         else
@@ -977,5 +948,14 @@ public class PanZoomController
     public void abortPanning() {
         checkMainThread();
         bounce();
+    }
+
+    public void setOverScrollMode(int overscrollMode) {
+        mX.setOverScrollMode(overscrollMode);
+        mY.setOverScrollMode(overscrollMode);
+    }
+
+    public int getOverScrollMode() {
+        return mX.getOverScrollMode();
     }
 }
