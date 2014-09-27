@@ -25,7 +25,6 @@
 #endif
 
 /* X Types */
-#undef Region
 #undef Icon
 #undef Time
 

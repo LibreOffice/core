@@ -282,7 +282,7 @@ void SdrPageView::PrePaint()
     }
 }
 
-void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
+void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     if(GetPage())
     {
@@ -345,11 +345,11 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::con
 
                     // Copy existing paint region to use the same as prepared in BeginDrawLayer
                     SdrPaintWindow& rExistingPaintWindow = pPreparedTarget->GetPaintWindow();
-                    const Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                    const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
                     bool bUseRect(false);
                     if (!rRect.IsEmpty())
                     {
-                        Region r(rExistingRegion);
+                        vcl::Region r(rExistingRegion);
                         r.Intersect(rRect);
                         // fdo#74435: FIXME: visibility check broken if empty
                         if (!r.IsEmpty())
@@ -358,7 +358,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::con
                     if (!bUseRect)
                         aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
                     else
-                        aTemporaryPaintWindow.SetRedrawRegion(Region(rRect));
+                        aTemporaryPaintWindow.SetRedrawRegion(vcl::Region(rRect));
 
                     // patch the ExistingPageWindow
                     pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
@@ -386,7 +386,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::con
                     {
                         SdrPageWindow* pExistingPageWindow = GetPageWindow(0L);
                         SdrPaintWindow& rExistingPaintWindow = pExistingPageWindow->GetPaintWindow();
-                        const Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                        const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
                         aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
                     }
 

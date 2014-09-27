@@ -23,7 +23,7 @@
 
 #include <sal/types.h>
 
-#define Region QtXRegion
+#define vcl::Region QtXRegion
 
 #include <kapplication.h>
 

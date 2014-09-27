@@ -238,13 +238,13 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
         return false;
 }
 
-void SalGraphics::mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack ) const
+void SalGraphics::mirror( vcl::Region& rRgn, const OutputDevice *pOutDev, bool bBack ) const
 {
     if( rRgn.HasPolyPolygonOrB2DPolyPolygon() )
     {
         const basegfx::B2DPolyPolygon aPolyPoly(mirror(rRgn.GetAsB2DPolyPolygon(), pOutDev, bBack));
 
-        rRgn = Region(aPolyPoly);
+        rRgn = vcl::Region(aPolyPoly);
     }
     else
     {
@@ -368,11 +368,11 @@ basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rP
     return aRet;
 }
 
-bool SalGraphics::SetClipRegion( const Region& i_rClip, const OutputDevice *pOutDev )
+bool SalGraphics::SetClipRegion( const vcl::Region& i_rClip, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        Region aMirror( i_rClip );
+        vcl::Region aMirror( i_rClip );
         mirror( aMirror, pOutDev );
         return setClipRegion( aMirror );
     }

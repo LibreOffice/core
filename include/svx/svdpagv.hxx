@@ -35,7 +35,7 @@
 
 
 
-class Region;
+namespace vcl { class Region; }
 class SdrObjList;
 class SdrObject;
 class SdrPage;
@@ -166,7 +166,7 @@ public:
     void PrePaint();
 
     // rReg bezieht sich auf's OutDev, nicht auf die Page
-    void CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
+    void CompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
 
     // write access to mpPreparedPageWindow
     void setPreparedPageWindow(SdrPageWindow* pKnownTarget);

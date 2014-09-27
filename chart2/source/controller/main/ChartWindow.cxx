@@ -290,7 +290,7 @@ void ChartWindow::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
         m_pOpenGLWindow->Invalidate( rRect, nFlags );
     }
 }
-void ChartWindow::Invalidate( const Region& rRegion, sal_uInt16 nFlags )
+void ChartWindow::Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;

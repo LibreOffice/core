@@ -68,7 +68,7 @@ private:
     void            InitMenuClipRegion();
 
 protected:
-    Region          ImplCalcClipRegion( bool bIncludeLogo = true ) const;
+    vcl::Region          ImplCalcClipRegion( bool bIncludeLogo = true ) const;
     void            ImplDrawScroller( bool bUp );
     using Window::ImplScroll;
     void            ImplScroll( const Point& rMousePos );

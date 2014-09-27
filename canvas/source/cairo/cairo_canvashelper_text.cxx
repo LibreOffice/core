@@ -131,7 +131,7 @@ namespace cairocanvas
         // accumulate non-empty clips into one region
         // ==========================================
 
-        Region aClipRegion;
+        vcl::Region aClipRegion;
 
         if( viewState.Clip.is() )
         {
@@ -147,7 +147,7 @@ namespace cairocanvas
                     ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
                                                                     viewState.AffineTransform ) );
 
-                aClipRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
+                aClipRegion = vcl::Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
             }
         }
 
@@ -166,7 +166,7 @@ namespace cairocanvas
             if( aClipPoly.count() )
             {
                 // setup non-empty clipping
-                Region aRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
+                vcl::Region aRegion = vcl::Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
 
                 if( aClipRegion.IsEmpty() )
                     aClipRegion = aRegion;

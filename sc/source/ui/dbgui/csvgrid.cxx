@@ -1027,7 +1027,7 @@ EditEngine* ScCsvGrid::GetEditEngine()
 
 void ScCsvGrid::ImplSetColumnClipRegion( OutputDevice& rOutDev, sal_uInt32 nColIndex )
 {
-    rOutDev.SetClipRegion( Region( Rectangle(
+    rOutDev.SetClipRegion( vcl::Region( Rectangle(
         std::max( GetColumnX( nColIndex ), GetFirstX() ) + 1, 0,
         std::min( GetColumnX( nColIndex + 1 ), GetLastX() ), GetHeight() - 1 ) ) );
 }
@@ -1296,7 +1296,7 @@ void ScCsvGrid::ImplDrawHorzScrolled( sal_Int32 nOldPos )
 
     ImplInvertCursor( GetRulerCursorPos() + (nPos - nOldPos) );
     Rectangle aRectangle( GetFirstX(), 0, GetLastX(), GetHeight() - 1 );
-    Region aClipReg( aRectangle );
+    vcl::Region aClipReg( aRectangle );
     maBackgrDev.SetClipRegion( aClipReg );
     maBackgrDev.CopyArea( aDest, aSrc, maWinSize );
     maBackgrDev.SetClipRegion();

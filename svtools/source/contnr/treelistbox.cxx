@@ -2890,7 +2890,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
     // Did we turn on the scrollbar within PreparePaints? If yes, we have to set
     // the ClipRegion anew.
     if( !bHorSBar && pImp->HasHorScrollBar() )
-        SetClipRegion( Region(pImp->GetClipRegionRect()) );
+        SetClipRegion( vcl::Region(pImp->GetClipRegionRect()) );
 
     Point aEntryPos( GetMapMode().GetOrigin() );
     aEntryPos.X() *= -1; // conversion document coordinates
@@ -2916,7 +2916,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
 
     if( !bHasClipRegion && nWindowStyle & WB_HSCROLL )
     {
-        SetClipRegion( Region(pImp->GetClipRegionRect()) );
+        SetClipRegion( vcl::Region(pImp->GetClipRegionRect()) );
         bHasClipRegion = true;
     }
 
@@ -2959,7 +2959,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
         {
             if( !bHasClipRegion && nX + aSize.Width() >= nMaxRight )
             {
-                SetClipRegion( Region(pImp->GetClipRegionRect()) );
+                SetClipRegion( vcl::Region(pImp->GetClipRegionRect()) );
                 bHasClipRegion = true;
             }
             aEntryPos.X() = nX;

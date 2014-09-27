@@ -156,7 +156,7 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
 
     // Labels
-    SetClipRegion(Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
+    SetClipRegion(vcl::Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
     SetFillColor( COL_LIGHTGRAYBLUE );
     const sal_Int32 nRows = std::min<sal_Int32>(2, aItem.nRows);
     const sal_Int32 nCols = std::min<sal_Int32>(2, aItem.nCols);

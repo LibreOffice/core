@@ -42,7 +42,7 @@ private:
     Size            maDispSz;
     Size            maRestSz;
     MapMode         maMap;
-    Region          maClip;
+    vcl::Region          maClip;
     VirtualDevice*  mpBackground;
     VirtualDevice*  mpRestore;
     sal_uLong           mnActPos;

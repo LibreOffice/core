@@ -361,20 +361,20 @@ namespace
 
 namespace
 {
-    /** helper to convert a Region to a B2DPolyPolygon
+    /** helper to convert a vcl::Region to a B2DPolyPolygon
         when it does not yet contain one. In the future
         this may be expanded to merge the polygons created
         from rectangles or use a special algo to directly turn
         the spans of regions to a single, already merged
         PolyPolygon.
      */
-    basegfx::B2DPolyPolygon getB2DPolyPolygonFromRegion(const Region& rRegion)
+    basegfx::B2DPolyPolygon getB2DPolyPolygonFromRegion(const vcl::Region& rRegion)
     {
         basegfx::B2DPolyPolygon aRetval;
 
         if(!rRegion.IsEmpty())
         {
-            Region aRegion(rRegion);
+            vcl::Region aRegion(rRegion);
 
             aRetval = aRegion.GetAsB2DPolyPolygon();
         }
@@ -940,9 +940,9 @@ namespace
     }
 
     /** helper to take needed action on ClipRegion change. This method needs to be called
-        on any Region change, e.g. at the obvious actions doing this, but also at pop-calls
-        which change the Region of the current context. It takes care of creating the
-        current embeddec context, set the new Region at the context and eventually prepare
+        on any vcl::Region change, e.g. at the obvious actions doing this, but also at pop-calls
+        which change the vcl::Region of the current context. It takes care of creating the
+        current embeddec context, set the new vcl::Region at the context and eventually prepare
         a new target for embracing new geometry to the current region
      */
     void HandleNewClipRegion(
@@ -1608,9 +1608,9 @@ namespace
 
         It tries to handle clipping no longer as Regions and spans of Rectangles, but as PolyPolygon
         ClipRegions with (where possible) high precision by using the best possible data quality
-        from the Region. The Region is unavoidable as data container, but nowadays allows the transport
+        from the Region. The vcl::Region is unavoidable as data container, but nowadays allows the transport
         of Polygon-based clip regions. Where this is not used, a Polygon is constructed from the
-        Region ranges. All primitive clipping uses the MaskPrimitive2D with Polygon-based clipping.
+        vcl::Region ranges. All primitive clipping uses the MaskPrimitive2D with Polygon-based clipping.
 
         I have marked the single MetaActions with:
 
@@ -2505,7 +2505,7 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*)pAction;
-                    const Region& rNewRegion = pA->GetRegion();
+                    const vcl::Region& rNewRegion = pA->GetRegion();
 
                     if(rNewRegion.IsEmpty())
                     {

@@ -91,7 +91,7 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
             pOut->SetClipRegion();
         else
         {
-            const Region aClipRegion( aRect );
+            const vcl::Region aClipRegion( aRect );
             pOut->SetClipRegion( aClipRegion );
         }
 #ifdef DBG_UTIL

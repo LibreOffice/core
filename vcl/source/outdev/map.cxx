@@ -648,12 +648,12 @@ Rectangle OutputDevice::ImplDevicePixelToLogic( const Rectangle& rPixelRect ) co
                                         maThresRes.mnThresPixToLogY )-maMapRes.mnMapOfsY );
 }
 
-Region OutputDevice::ImplPixelToDevicePixel( const Region& rRegion ) const
+vcl::Region OutputDevice::ImplPixelToDevicePixel( const vcl::Region& rRegion ) const
 {
     if ( !mnOutOffX && !mnOutOffY )
         return rRegion;
 
-    Region aRegion( rRegion );
+    vcl::Region aRegion( rRegion );
     aRegion.Move( mnOutOffX+mnOutOffOrigX, mnOutOffY+mnOutOffOrigY );
     return aRegion;
 }
@@ -1070,7 +1070,7 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
     return aTransformedPoly;
 }
 
-Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
+vcl::Region OutputDevice::LogicToPixel( const vcl::Region& rLogicRegion ) const
 {
 
     if(!mbMap || rLogicRegion.IsNull() || rLogicRegion.IsEmpty())
@@ -1078,15 +1078,15 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
         return rLogicRegion;
     }
 
-    Region aRegion;
+    vcl::Region aRegion;
 
     if(rLogicRegion.getB2DPolyPolygon())
     {
-        aRegion = Region(LogicToPixel(*rLogicRegion.getB2DPolyPolygon()));
+        aRegion = vcl::Region(LogicToPixel(*rLogicRegion.getB2DPolyPolygon()));
     }
     else if(rLogicRegion.getPolyPolygon())
     {
-        aRegion = Region(LogicToPixel(*rLogicRegion.getPolyPolygon()));
+        aRegion = vcl::Region(LogicToPixel(*rLogicRegion.getPolyPolygon()));
     }
     else if(rLogicRegion.getRegionBand())
     {
@@ -1240,7 +1240,7 @@ basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogi
     return aTransformedPoly;
 }
 
-Region OutputDevice::LogicToPixel( const Region& rLogicRegion, const MapMode& rMapMode ) const
+vcl::Region OutputDevice::LogicToPixel( const vcl::Region& rLogicRegion, const MapMode& rMapMode ) const
 {
 
     if(rMapMode.IsDefault() || rLogicRegion.IsNull() || rLogicRegion.IsEmpty())
@@ -1248,15 +1248,15 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion, const MapMode& rM
         return rLogicRegion;
     }
 
-    Region aRegion;
+    vcl::Region aRegion;
 
     if(rLogicRegion.getB2DPolyPolygon())
     {
-        aRegion = Region(LogicToPixel(*rLogicRegion.getB2DPolyPolygon(), rMapMode));
+        aRegion = vcl::Region(LogicToPixel(*rLogicRegion.getB2DPolyPolygon(), rMapMode));
     }
     else if(rLogicRegion.getPolyPolygon())
     {
-        aRegion = Region(LogicToPixel(*rLogicRegion.getPolyPolygon(), rMapMode));
+        aRegion = vcl::Region(LogicToPixel(*rLogicRegion.getPolyPolygon(), rMapMode));
     }
     else if(rLogicRegion.getRegionBand())
     {
@@ -1375,7 +1375,7 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     return aTransformedPoly;
 }
 
-Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
+vcl::Region OutputDevice::PixelToLogic( const vcl::Region& rDeviceRegion ) const
 {
 
     if(!mbMap || rDeviceRegion.IsNull() || rDeviceRegion.IsEmpty())
@@ -1383,15 +1383,15 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
         return rDeviceRegion;
     }
 
-    Region aRegion;
+    vcl::Region aRegion;
 
     if(rDeviceRegion.getB2DPolyPolygon())
     {
-        aRegion = Region(PixelToLogic(*rDeviceRegion.getB2DPolyPolygon()));
+        aRegion = vcl::Region(PixelToLogic(*rDeviceRegion.getB2DPolyPolygon()));
     }
     else if(rDeviceRegion.getPolyPolygon())
     {
-        aRegion = Region(PixelToLogic(*rDeviceRegion.getPolyPolygon()));
+        aRegion = vcl::Region(PixelToLogic(*rDeviceRegion.getPolyPolygon()));
     }
     else if(rDeviceRegion.getRegionBand())
     {
@@ -1549,7 +1549,7 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     return aTransformedPoly;
 }
 
-Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& rMapMode ) const
+vcl::Region OutputDevice::PixelToLogic( const vcl::Region& rDeviceRegion, const MapMode& rMapMode ) const
 {
 
     if(rMapMode.IsDefault() || rDeviceRegion.IsNull() || rDeviceRegion.IsEmpty())
@@ -1557,15 +1557,15 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
         return rDeviceRegion;
     }
 
-    Region aRegion;
+    vcl::Region aRegion;
 
     if(rDeviceRegion.getB2DPolyPolygon())
     {
-        aRegion = Region(PixelToLogic(*rDeviceRegion.getB2DPolyPolygon(), rMapMode));
+        aRegion = vcl::Region(PixelToLogic(*rDeviceRegion.getB2DPolyPolygon(), rMapMode));
     }
     else if(rDeviceRegion.getPolyPolygon())
     {
-        aRegion = Region(PixelToLogic(*rDeviceRegion.getPolyPolygon(), rMapMode));
+        aRegion = vcl::Region(PixelToLogic(*rDeviceRegion.getPolyPolygon(), rMapMode));
     }
     else if(rDeviceRegion.getRegionBand())
     {

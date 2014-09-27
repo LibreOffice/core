@@ -322,7 +322,7 @@ public:
     void    DrawSelectiveObjects(const sal_uInt16 nLayer);
 
     bool    SetChangedClip();       // sal_False = not
-    Region  GetChangedAreaRegion();
+    vcl::Region  GetChangedAreaRegion();
 
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );

@@ -87,7 +87,7 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
             // #i74769# work with SdrPaintWindow directly
             // #i76114# pass bDisableIntersect = true, because the intersection of the table area
             // with the Window's paint region can be empty
-            Region aRectRegion(aRect);
+            vcl::Region aRectRegion(aRect);
             mpTargetPaintWindow = pLocalDrawView->BeginDrawLayers(mpDev, aRectRegion, true);
             OSL_ENSURE(mpTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
 

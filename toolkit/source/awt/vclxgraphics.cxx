@@ -278,7 +278,7 @@ void VCLXGraphics::setClipRegion( const uno::Reference< awt::XRegion >& rxRegion
 
     delete mpClipRegion;
     if ( rxRegion.is() )
-        mpClipRegion = new Region( VCLUnoHelper::GetRegion( rxRegion ) );
+        mpClipRegion = new vcl::Region( VCLUnoHelper::GetRegion( rxRegion ) );
     else
         mpClipRegion = NULL;
 }
@@ -289,9 +289,9 @@ void VCLXGraphics::intersectClipRegion( const uno::Reference< awt::XRegion >& rx
 
     if ( rxRegion.is() )
     {
-        Region aRegion( VCLUnoHelper::GetRegion( rxRegion ) );
+        vcl::Region aRegion( VCLUnoHelper::GetRegion( rxRegion ) );
         if ( !mpClipRegion )
-            mpClipRegion = new Region( aRegion );
+            mpClipRegion = new vcl::Region( aRegion );
         else
             mpClipRegion->Intersect( aRegion );
     }
@@ -371,7 +371,7 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
         }
 
         if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight)
-            mpOutputDevice->IntersectClipRegion(Region(Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1)));
+            mpOutputDevice->IntersectClipRegion(vcl::Region(Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1)));
 
         mpOutputDevice->DrawBitmapEx( aPos, aSz, aBmpEx );
     }

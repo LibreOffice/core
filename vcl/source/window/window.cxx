@@ -573,8 +573,8 @@ Window::~Window()
 WindowImpl::WindowImpl( WindowType nType )
 {
     maZoom                              = Fraction( 1, 1 );
-    maWinRegion                         = Region(true);
-    maWinClipRegion                     = Region(true);
+    maWinRegion                         = vcl::Region(true);
+    maWinClipRegion                     = vcl::Region(true);
     mpWinData                           = NULL;                      // Extra Window Data, that we dont need for all windows
     mpOverlapData                       = NULL;                      // Overlap Data
     mpFrameData                         = NULL;                      // Frame Data
@@ -1499,8 +1499,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
     long    nOldOutOffY     = mnOutOffY;
     long    nOldOutWidth    = mnOutWidth;
     long    nOldOutHeight   = mnOutHeight;
-    Region* pOverlapRegion  = NULL;
-    Region* pOldRegion      = NULL;
+    vcl::Region* pOverlapRegion  = NULL;
+    vcl::Region* pOldRegion      = NULL;
 
     if ( IsReallyVisible() )
     {
@@ -1509,7 +1509,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 
         Rectangle aOldWinRect( Point( nOldOutOffX, nOldOutOffY ),
                                Size( nOldOutWidth, nOldOutHeight ) );
-        pOldRegion = new Region( aOldWinRect );
+        pOldRegion = new vcl::Region( aOldWinRect );
         if ( mpWindowImpl->mbWinRegion )
             pOldRegion->Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
 
@@ -1594,7 +1594,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         {
             if ( bCopyBits && !pOverlapRegion )
             {
-                pOverlapRegion = new Region();
+                pOverlapRegion = new vcl::Region();
                 ImplCalcOverlapRegion( Rectangle( Point( mnOutOffX, mnOutOffY ),
                                                   Size( mnOutWidth, mnOutHeight ) ),
                                        *pOverlapRegion, false, true, true );
@@ -1612,7 +1612,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         {
             if ( bCopyBits && !pOverlapRegion )
             {
-                pOverlapRegion = new Region();
+                pOverlapRegion = new vcl::Region();
                 ImplCalcOverlapRegion( Rectangle( Point( mnOutOffX, mnOutOffY ),
                                                   Size( mnOutWidth, mnOutHeight ) ),
                                        *pOverlapRegion, false, true, true );
@@ -1704,7 +1704,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                     if ( bCopyBits && bParentPaint && !HasPaintEvent() )
                     {
                         Point aPoint( mnOutOffX, mnOutOffY );
-                        Region aRegion( Rectangle( aPoint,
+                        vcl::Region aRegion( Rectangle( aPoint,
                                                    Size( mnOutWidth, mnOutHeight ) ) );
                         if ( mpWindowImpl->mbWinRegion )
                             aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
@@ -1756,7 +1756,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 else
                 {
                     Point aPoint( mnOutOffX, mnOutOffY );
-                    Region aRegion( Rectangle( aPoint,
+                    vcl::Region aRegion( Rectangle( aPoint,
                                                Size( mnOutWidth, mnOutHeight ) ) );
                     aRegion.Exclude( *pOldRegion );
                     if ( mpWindowImpl->mbWinRegion )
@@ -1771,7 +1771,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             if ( bNewPos ||
                  (mnOutWidth < nOldOutWidth) || (mnOutHeight < nOldOutHeight) )
             {
-                Region aRegion( *pOldRegion );
+                vcl::Region aRegion( *pOldRegion );
                 if ( !mpWindowImpl->mbPaintTransparent )
                     ImplExcludeWindowRegion( aRegion );
                 ImplClipBoundaries( aRegion, false, true );
@@ -2263,7 +2263,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
         if ( mpWindowImpl->mbReallyVisible )
         {
-            Region  aInvRegion;
+            vcl::Region  aInvRegion;
             bool    bSaveBack = false;
 
             if ( ImplIsOverlapWindow() && !mpWindowImpl->mbFrame )

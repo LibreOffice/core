@@ -104,12 +104,12 @@ namespace sdr
             const Rectangle aRegionRectanglePixel(
                 maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
                 maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
-            const Region aRegionPixel(aRegionRectanglePixel);
+            const vcl::Region aRegionPixel(aRegionRectanglePixel);
 
             ImpRestoreBackground(aRegionPixel);
         }
 
-        void OverlayManagerBuffered::ImpRestoreBackground(const Region& rRegionPixel) const
+        void OverlayManagerBuffered::ImpRestoreBackground(const vcl::Region& rRegionPixel) const
         {
             // MapModes off
             const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
@@ -178,7 +178,7 @@ namespace sdr
             ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(bMapModeWasEnabledSource);
         }
 
-        void OverlayManagerBuffered::ImpSaveBackground(const Region& rRegion, OutputDevice* pPreRenderDevice)
+        void OverlayManagerBuffered::ImpSaveBackground(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice)
         {
             // prepare source
             OutputDevice& rSource = (pPreRenderDevice) ? *pPreRenderDevice : getOutputDevice();
@@ -187,14 +187,14 @@ namespace sdr
             ImpPrepareBufferDevice();
 
             // build region which needs to be copied
-            Region aRegion(rSource.LogicToPixel(rRegion));
+            vcl::Region aRegion(rSource.LogicToPixel(rRegion));
 
             // limit to PaintRegion if it's a window. This will be evtl. the expanded one,
             // but always the exact redraw area
             if(OUTDEV_WINDOW == rSource.GetOutDevType())
             {
                 vcl::Window& rWindow = (vcl::Window&)rSource;
-                Region aPaintRegionPixel = rWindow.LogicToPixel(rWindow.GetPaintRegion());
+                vcl::Region aPaintRegionPixel = rWindow.LogicToPixel(rWindow.GetPaintRegion());
                 aRegion.Intersect(aPaintRegionPixel);
 
                 // #i72754# Make sure content is completetly rendered, the window
@@ -452,7 +452,7 @@ namespace sdr
             }
         }
 
-        void OverlayManagerBuffered::completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice) const
+        void OverlayManagerBuffered::completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice) const
         {
             if(!rRegion.IsEmpty())
             {
@@ -477,10 +477,10 @@ namespace sdr
             maBufferDevice.CopyArea(rDestPt, rSrcPt, rSrcSize);
         }
 
-        void OverlayManagerBuffered::restoreBackground(const Region& rRegion) const
+        void OverlayManagerBuffered::restoreBackground(const vcl::Region& rRegion) const
         {
             // restore
-            const Region aRegionPixel(getOutputDevice().LogicToPixel(rRegion));
+            const vcl::Region aRegionPixel(getOutputDevice().LogicToPixel(rRegion));
             ImpRestoreBackground(aRegionPixel);
 
             // call parent

@@ -646,7 +646,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     // all UserDraw if required
     if ( nBits & HIB_USERDRAW )
     {
-        Region aRegion( aRect );
+        vcl::Region aRegion( aRect );
         if ( pRect )
             aRegion.Intersect( *pRect );
         pDev->SetClipRegion( aRegion );
@@ -1072,7 +1072,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         // check for overflow on some systems
         if ( aItemRect.Right() > 16000 )
             aItemRect.Right() = 16000;
-        Region aRegion( aRect );
+        vcl::Region aRegion( aRect );
         pDev->SetClipRegion( aRegion );
         ImplDrawItem( pDev, i, false, false, aItemRect, &aRect, nFlags );
         pDev->SetClipRegion();

@@ -147,7 +147,7 @@ void SwViewShell::PrePaint()
     }
 }
 
-void SwViewShell::DLPrePaint2(const Region& rRegion)
+void SwViewShell::DLPrePaint2(const vcl::Region& rRegion)
 {
     if(mPrePostPaintRegions.empty())
     {
@@ -188,7 +188,7 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
 
     if( mPrePostPaintRegions.size() > 1 )
     {
-        Region current = mPrePostPaintRegions.top();
+        vcl::Region current = mPrePostPaintRegions.top();
         mPrePostPaintRegions.pop();
         if( current != mPrePostPaintRegions.top())
             Imp()->GetDrawView()->UpdateDrawLayersRegion(mpPrePostOutDev, mPrePostPaintRegions.top());
@@ -345,7 +345,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                             // --> OD 2007-07-26 #i79947#
                             // #i72754# start Pre/PostPaint encapsulation before mpOut is changed to the buffering VDev
-                            const Region aRepaintRegion(aRect.SVRect());
+                            const vcl::Region aRepaintRegion(aRect.SVRect());
                             DLPrePaint2(aRepaintRegion);
                             // <--
 
@@ -377,7 +377,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                         // seems to work (and does technically) but fails with transparent objects. Since the
                         // region given to BeginDarwLayers() defines the clip region for DrawingLayer paint,
                         // transparent objects in the single rectangles will indeed be painted multiple times.
-                        DLPrePaint2(Region(aRect.SVRect()));
+                        DLPrePaint2(vcl::Region(aRect.SVRect()));
 
                         if ( bPaintsFromSystem )
                             PaintDesktop( aRect );
@@ -458,7 +458,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
                 pVout->SetFillColor( mpOut->GetFillColor() );
 
                 // #i72754# start Pre/PostPaint encapsulation before mpOut is changed to the buffering VDev
-                const Region aRepaintRegion(VisArea().SVRect());
+                const vcl::Region aRepaintRegion(VisArea().SVRect());
                 DLPrePaint2(aRepaintRegion);
 
                 OutputDevice *pOld = mpOut;
@@ -1243,7 +1243,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                 // is used when mpWin == 0 (wrong but widely used).
                 vcl::Window* pOldWin = mpWin;
                 mpWin = 0;
-                DLPrePaint2(Region(aRect.SVRect()));
+                DLPrePaint2(vcl::Region(aRect.SVRect()));
                 mpWin = pOldWin;
 
                 // SW paint stuff
@@ -1337,7 +1337,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                     {
                             // start paint on logic base
                             const Rectangle aTargetLogic(Imp()->aSmoothRect.SVRect());
-                            DLPrePaint2(Region(aTargetLogic));
+                            DLPrePaint2(vcl::Region(aTargetLogic));
 
                             // get target rectangle in discrete pixels
                             OutputDevice& rTargetDevice = mpTargetPaintWindow->GetTargetOutputDevice();
@@ -1507,7 +1507,7 @@ void SwViewShell::_PaintDesktop( const SwRegionRects &rRegion )
         // to be removed again
 
         // #i68597# inform Drawinglayer about display change
-        DLPrePaint2(Region(aRectangle));
+        DLPrePaint2(vcl::Region(aRectangle));
 
         // #i75172# needed to move line/Fill color setters into loop since DLPrePaint2
         // may exchange GetOut(), that's it's purpose. This happens e.g. at print preview.
@@ -1690,7 +1690,7 @@ void SwViewShell::Paint(const Rectangle &rRect)
                 {
                     // --> OD 2009-08-12 #i101192#
                     // start Pre/PostPaint encapsulation to avoid screen blinking
-                    const Region aRepaintRegion(aRect.SVRect());
+                    const vcl::Region aRepaintRegion(aRect.SVRect());
                     DLPrePaint2(aRepaintRegion);
 
                     // <--
@@ -1722,7 +1722,7 @@ void SwViewShell::Paint(const Rectangle &rRect)
 
         if ( mbInEndAction && GetWin() )
         {
-            const Region aRegion(GetWin()->GetPaintRegion());
+            const vcl::Region aRegion(GetWin()->GetPaintRegion());
             RectangleVector aRectangles;
             aRegion.GetRegionRectangles(aRectangles);
 
@@ -1741,7 +1741,7 @@ void SwViewShell::Paint(const Rectangle &rRect)
                   GetOut() == GetWin() )
         {
             // #i68597#
-            const Region aDLRegion(rRect);
+            const vcl::Region aDLRegion(rRect);
             DLPrePaint2(aDLRegion);
 
             mpOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );

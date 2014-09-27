@@ -23,7 +23,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 
-#define Region QtXRegion
+#define vcl::Region QtXRegion
 #include <QImage>
 #undef Region
 

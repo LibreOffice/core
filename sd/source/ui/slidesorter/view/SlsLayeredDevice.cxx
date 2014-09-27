@@ -74,7 +74,7 @@ void DeviceCopy (
         rSourceDevice);
 }
 
-void ForAllRectangles (const Region& rRegion, ::boost::function<void(const Rectangle&)> aFunction)
+void ForAllRectangles (const vcl::Region& rRegion, ::boost::function<void(const Rectangle&)> aFunction)
 {
     OSL_ASSERT(aFunction);
     RectangleVector aRectangles;
@@ -108,7 +108,7 @@ public:
 
     void Initialize (const SharedSdWindow& rpTargetWindow);
     void InvalidateRectangle (const Rectangle& rInvalidationBox);
-    void InvalidateRegion (const Region& rInvalidationRegion);
+    void InvalidateRegion (const vcl::Region& rInvalidationRegion);
     void Validate (const MapMode& rMapMode);
     void Repaint (
         OutputDevice& rTargetDevice,
@@ -122,7 +122,7 @@ public:
 private:
     ::boost::shared_ptr<VirtualDevice> mpLayerDevice;
     ::std::vector<SharedILayerPainter> maPainters;
-    Region maInvalidationRegion;
+    vcl::Region maInvalidationRegion;
 
     void ValidateRectangle (const Rectangle& rBox);
 };
@@ -190,7 +190,7 @@ void LayeredDevice::InvalidateAllLayers (const Rectangle& rInvalidationArea)
         (*mpLayers)[nLayer]->InvalidateRectangle(rInvalidationArea);
 }
 
-void LayeredDevice::InvalidateAllLayers (const Region& rInvalidationRegion)
+void LayeredDevice::InvalidateAllLayers (const vcl::Region& rInvalidationRegion)
 {
     for (sal_uInt32 nLayer=0; nLayer<mpLayers->size(); ++nLayer)
         (*mpLayers)[nLayer]->InvalidateRegion(rInvalidationRegion);
@@ -254,7 +254,7 @@ void LayeredDevice::RemovePainter (
         mpLayers->pop_back();
 }
 
-void LayeredDevice::Repaint (const Region& rRepaintRegion)
+void LayeredDevice::Repaint (const vcl::Region& rRepaintRegion)
 {
     // Validate the contents of all layers (that have their own devices.)
     ::std::for_each(
@@ -396,7 +396,7 @@ void Layer::InvalidateRectangle (const Rectangle& rInvalidationBox)
     maInvalidationRegion.Union(rInvalidationBox);
 }
 
-void Layer::InvalidateRegion (const Region& rInvalidationRegion)
+void Layer::InvalidateRegion (const vcl::Region& rInvalidationRegion)
 {
     maInvalidationRegion.Union(rInvalidationRegion);
 }
@@ -405,7 +405,7 @@ void Layer::Validate (const MapMode& rMapMode)
 {
     if (mpLayerDevice && ! maInvalidationRegion.IsEmpty())
     {
-        Region aRegion (maInvalidationRegion);
+        vcl::Region aRegion (maInvalidationRegion);
         maInvalidationRegion.SetEmpty();
 
         mpLayerDevice->SetMapMode(rMapMode);
@@ -419,7 +419,7 @@ void Layer::ValidateRectangle (const Rectangle& rBox)
 {
     if ( ! mpLayerDevice)
         return;
-    const Region aSavedClipRegion (mpLayerDevice->GetClipRegion());
+    const vcl::Region aSavedClipRegion (mpLayerDevice->GetClipRegion());
     mpLayerDevice->IntersectClipRegion(rBox);
 
     for (::std::vector<SharedILayerPainter>::const_iterator

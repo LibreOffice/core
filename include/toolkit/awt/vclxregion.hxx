@@ -40,7 +40,7 @@ class VCLXRegion :  public ::com::sun::star::awt::XRegion,
 {
 private:
     ::osl::Mutex    maMutex;
-    Region          maRegion;
+    vcl::Region          maRegion;
 
 protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
@@ -49,8 +49,8 @@ public:
                     VCLXRegion();
                     virtual ~VCLXRegion();
 
-    void            SetRegion( const Region& rRegion )  { maRegion = rRegion; }
-    const Region&   GetRegion() const                   { return maRegion; }
+    void            SetRegion( const vcl::Region& rRegion )  { maRegion = rRegion; }
+    const vcl::Region&   GetRegion() const                   { return maRegion; }
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

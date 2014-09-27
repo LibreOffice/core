@@ -409,10 +409,10 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
             } break;
 
             case 0x18: case 0x38: { // circle
-                Region ClipMerk=rOut.GetClipRegion();
+                vcl::Region ClipMerk=rOut.GetClipRegion();
                 double a;
 
-                rOut.SetClipRegion(Region(Rectangle(x1,y1,x2,y2)));
+                rOut.SetClipRegion(vcl::Region(Rectangle(x1,y1,x2,y2)));
                 cx=(x1+x2) /2;
                 cy=(y1+y2) /2;
                 dx=x2-x1+1;
@@ -526,40 +526,40 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
         b0=Int1;
         switch (F.FBFarbe & 0x38) {
             case 0x08: { // vertical
-                Region ClipMerk=rOut.GetClipRegion();
+                vcl::Region ClipMerk=rOut.GetClipRegion();
                 i0=y1;
                 i=y1;
                 while (i<=y2) {
                     b=Int1+sal_Int16((sal_Int32)(Int2-Int1)*(sal_Int32)(i-y1) /(sal_Int32)(y2-y1+1));
                     if (b!=b0) {
                         SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
-                        rOut.SetClipRegion(Region(Rectangle(x1,i0,x2,i-1)));
+                        rOut.SetClipRegion(vcl::Region(Rectangle(x1,i0,x2,i-1)));
                         rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                         i0=i; b0=b;
                     }
                     i++;
                 }
                 SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
-                rOut.SetClipRegion(Region(Rectangle(x1,i0,x2,y2)));
+                rOut.SetClipRegion(vcl::Region(Rectangle(x1,i0,x2,y2)));
                 rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                 rOut.SetClipRegion(ClipMerk);
             } break;
             case 0x28: { // horizontal
-                Region ClipMerk=rOut.GetClipRegion();
+                vcl::Region ClipMerk=rOut.GetClipRegion();
                 i0=x1;
                 i=x1;
                 while (i<=x2) {
                     b=Int1+sal_Int16((sal_Int32)(Int2-Int1)*(sal_Int32)(i-x1) /(sal_Int32)(x2-x1+1));
                     if (b!=b0) {
                         SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
-                        rOut.SetClipRegion(Region(Rectangle(i0,y1,i-1,y2)));
+                        rOut.SetClipRegion(vcl::Region(Rectangle(i0,y1,i-1,y2)));
                         rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                         i0=i; b0=b;
                     }
                     i++;
                 }
                 SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
-                rOut.SetClipRegion(Region(Rectangle(i0,y1,x2,y2)));
+                rOut.SetClipRegion(vcl::Region(Rectangle(i0,y1,x2,y2)));
                 rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                 rOut.SetClipRegion(ClipMerk);
             } break;

@@ -35,7 +35,7 @@
 
 // predeclarations
 
-class Region;
+namespace vcl { class Region; }
 class SdrUnoObj;
 class SdrPageView;
 
@@ -101,7 +101,7 @@ public:
 
     // the repaint method. For migration from pPaintProc, use one more parameter
     void PrePaint();
-    void PrepareRedraw(const Region& rReg);
+    void PrepareRedraw(const vcl::Region& rReg);
     void RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedirector) const;
     void RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector) const;
 

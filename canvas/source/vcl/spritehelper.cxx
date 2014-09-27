@@ -262,7 +262,7 @@ namespace vclcanvas
                             rTargetSurface.DrawPolyPolygon(PolyPolygon(aClipPoly)); // #i76339#
                         }
 
-                        Region aClipRegion( aClipPoly );
+                        vcl::Region aClipRegion( aClipPoly );
                         rTargetSurface.SetClipRegion( aClipRegion );
                     }
                 }

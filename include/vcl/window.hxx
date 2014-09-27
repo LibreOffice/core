@@ -425,8 +425,8 @@ public:
     SAL_DLLPRIVATE vcl::Window*         ImplGetParent() const;
     SAL_DLLPRIVATE vcl::Window*         ImplFindWindow( const Point& rFramePos );
 
-    SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                 ImplInvalidateOverlapFrameRegion( const Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const vcl::Region* pRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplInvalidateOverlapFrameRegion( const vcl::Region& rRegion );
 
     SAL_DLLPRIVATE bool                 ImplSetClipFlag( bool bSysObjOnlySmaller = false );
 
@@ -482,15 +482,15 @@ protected:
 
     SAL_DLLPRIVATE Point                ImplOutputToFrame( const Point& rPos );
 
-    SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const Region* rRegion, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                 ImplValidate( const Region* rRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const vcl::Region* rRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplValidate( const vcl::Region* rRegion, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
     SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
 
     SAL_DLLPRIVATE vcl::Window*              ImplGetBorderWindow() const;
 
-    SAL_DLLPRIVATE void                 ImplInvalidate( const Region* rRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplInvalidate( const vcl::Region* rRegion, sal_uInt16 nFlags );
 
     SAL_DLLPRIVATE sal_uInt16           ImplHitTest( const Point& rFramePos );
 
@@ -499,7 +499,7 @@ protected:
     SAL_DLLPRIVATE void                 ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_uInt16 nFlags );
 
     SAL_DLLPRIVATE void                 ImplSaveOverlapBackground();
-    SAL_DLLPRIVATE bool                 ImplRestoreOverlapBackground( Region& rInvRegion );
+    SAL_DLLPRIVATE bool                 ImplRestoreOverlapBackground( vcl::Region& rInvRegion );
     SAL_DLLPRIVATE void                 ImplInvalidateAllOverlapBackgrounds();
 
     SAL_DLLPRIVATE bool                 ImplSetClipFlagChildren( bool bSysObjOnlySmaller = false );
@@ -540,33 +540,33 @@ private:
     SAL_DLLPRIVATE void                 ImplPointToLogic( vcl::Font& rFont ) const;
     SAL_DLLPRIVATE void                 ImplLogicToPoint( vcl::Font& rFont ) const;
 
-    SAL_DLLPRIVATE bool                 ImplSysObjClip( const Region* pOldRegion );
+    SAL_DLLPRIVATE bool                 ImplSysObjClip( const vcl::Region* pOldRegion );
     SAL_DLLPRIVATE void                 ImplUpdateSysObjChildrenClip();
     SAL_DLLPRIVATE void                 ImplUpdateSysObjOverlapsClip();
     SAL_DLLPRIVATE void                 ImplUpdateSysObjClip();
 
-    SAL_DLLPRIVATE void                 ImplIntersectWindowClipRegion( Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplIntersectWindowRegion( Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplExcludeWindowRegion( Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplExcludeOverlapWindows( Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplExcludeOverlapWindows2( Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplIntersectWindowClipRegion( vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplIntersectWindowRegion( vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplExcludeWindowRegion( vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplExcludeOverlapWindows( vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplExcludeOverlapWindows2( vcl::Region& rRegion );
 
-    SAL_DLLPRIVATE void                 ImplClipBoundaries( Region& rRegion, bool bThis, bool bOverlaps );
-    SAL_DLLPRIVATE bool                 ImplClipChildren( Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplClipAllChildren( Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplClipSiblings( Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplClipBoundaries( vcl::Region& rRegion, bool bThis, bool bOverlaps );
+    SAL_DLLPRIVATE bool                 ImplClipChildren( vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplClipAllChildren( vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplClipSiblings( vcl::Region& rRegion );
 
     SAL_DLLPRIVATE void                 ImplInitWinClipRegion();
     SAL_DLLPRIVATE void                 ImplInitWinChildClipRegion();
-    SAL_DLLPRIVATE Region*              ImplGetWinChildClipRegion();
+    SAL_DLLPRIVATE vcl::Region*              ImplGetWinChildClipRegion();
 
-    SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows2( const Region& rInterRegion, Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
+    SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows( const vcl::Region& rInterRegion, vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows2( const vcl::Region& rInterRegion, vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplCalcOverlapRegionOverlaps( const vcl::Region& rInterRegion, vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplCalcOverlapRegion( const Rectangle& rSourceRect, vcl::Region& rRegion,
                                                                bool bChildren, bool bParent, bool bSiblings );
 
-    SAL_DLLPRIVATE void                 ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags );
+    SAL_DLLPRIVATE void                 ImplCallPaint( const vcl::Region* pRegion, sal_uInt16 nPaintFlags );
     SAL_DLLPRIVATE void                 ImplCallOverlapPaint();
     SAL_DLLPRIVATE void                 ImplPostPaint();
 
@@ -642,7 +642,7 @@ private:
                                         ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
 
 public:
-    virtual Region                      GetActiveClipRegion() const SAL_OVERRIDE;
+    virtual vcl::Region                      GetActiveClipRegion() const SAL_OVERRIDE;
 
 protected:
     // Single argument ctors shall be explicit.
@@ -811,16 +811,16 @@ public:
     sal_uInt16                          GetParentClipMode() const;
 
     void                                SetWindowRegionPixel();
-    void                                SetWindowRegionPixel( const Region& rRegion );
-    const Region&                       GetWindowRegionPixel() const;
+    void                                SetWindowRegionPixel( const vcl::Region& rRegion );
+    const vcl::Region&                       GetWindowRegionPixel() const;
     bool                                IsWindowRegionPixel() const;
-    Region                              GetWindowClipRegionPixel( sal_uInt16 nFlags = 0 ) const;
-    Region                              GetPaintRegion() const;
+    vcl::Region                              GetWindowClipRegionPixel( sal_uInt16 nFlags = 0 ) const;
+    vcl::Region                              GetPaintRegion() const;
     bool                                IsInPaint() const;
     // while IsInPaint returns true ExpandPaintClipRegion adds the
     // submitted region to the paint clip region so you can
     // paint additional parts of your window if necessary
-    void                                ExpandPaintClipRegion( const Region& rRegion );
+    void                                ExpandPaintClipRegion( const vcl::Region& rRegion );
 
     void                                SetParent( vcl::Window* pNewParent );
     vcl::Window*                             GetParent() const;
@@ -953,7 +953,7 @@ public:
                                                 const Rectangle& rRect, sal_uInt16 nFlags = 0 );
     virtual void                        Invalidate( sal_uInt16 nFlags = 0 );
     virtual void                        Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
-    virtual void                        Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 );
+    virtual void                        Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags = 0 );
     void                                Validate( sal_uInt16 nFlags = 0 );
     bool                                HasPaintEvent() const;
     void                                Update();

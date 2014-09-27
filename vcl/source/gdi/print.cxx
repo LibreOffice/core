@@ -288,7 +288,7 @@ void Printer::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
     }
 
     Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
-    IntersectClipRegion(Region(rPolyPoly));
+    IntersectClipRegion(vcl::Region(rPolyPoly));
     SetLineColor( GetFillColor() );
     const bool bOldMap = mbMap;
     EnableMapMode( false );
@@ -868,7 +868,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
             pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
 
         // walk through all rectangles of mask
-        const Region aWorkRgn(aMask.CreateRegion(COL_BLACK, Rectangle(Point(), aMask.GetSizePixel())));
+        const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, Rectangle(Point(), aMask.GetSizePixel())));
         RectangleVector aRectangles;
         aWorkRgn.GetRegionRectangles(aRectangles);
 

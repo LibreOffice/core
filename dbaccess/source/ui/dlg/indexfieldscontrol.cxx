@@ -144,7 +144,7 @@ namespace dbaui
         // clipping
         if (aPos.X() < _rRect.Right() || aPos.X() + TxtSize.Width() > _rRect.Right() ||
             aPos.Y() < _rRect.Top() || aPos.Y() + TxtSize.Height() > _rRect.Bottom())
-            _rDev.SetClipRegion(Region(_rRect));
+            _rDev.SetClipRegion(vcl::Region(_rRect));
 
         // allow for a disabled control ...
         bool bEnabled = IsEnabled();

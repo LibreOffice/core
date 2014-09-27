@@ -1832,7 +1832,7 @@ bool AquaSalGraphics::supportsOperation( OutDevSupportType eType ) const
     return bRet;
 }
 
-bool AquaSalGraphics::setClipRegion( const Region& i_rClip )
+bool AquaSalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
     // release old clip path
     if( mxClipPath )

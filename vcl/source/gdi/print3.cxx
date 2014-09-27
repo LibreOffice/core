@@ -1013,7 +1013,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     o_rMtf.AddAction( new MetaPushAction( PUSH_ALL ) );
 
     // clip to page rect
-    o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), true ) );
+    o_rMtf.AddAction( new MetaClipRegionAction( vcl::Region( i_rClipRect ), true ) );
 
     // append the subpage
     io_rSubPage.WindStart();

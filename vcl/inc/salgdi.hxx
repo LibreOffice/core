@@ -91,7 +91,7 @@ public:
     virtual ~SalGraphics();
 
 protected:
-    virtual bool            setClipRegion( const Region& ) = 0;
+    virtual bool            setClipRegion( const vcl::Region& ) = 0;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void            drawPixel( long nX, long nY ) = 0;
@@ -317,7 +317,7 @@ public:
     void                    mirror( long& nX, long& nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
     bool                mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
-    void                    mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack = false ) const;
+    void                    mirror( vcl::Region& rRgn, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( ImplControlValue&, const OutputDevice*, bool bBack = false ) const;
     basegfx::B2DPoint       mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *pOutDev, bool bBack = false ) const;
     basegfx::B2DPolygon     mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *pOutDev, bool bBack = false ) const;
@@ -325,7 +325,7 @@ public:
 
     // non virtual methods; these do possible coordinate mirroring and
     // then delegate to protected virtual methods
-    bool                    SetClipRegion( const Region&, const OutputDevice *pOutDev );
+    bool                    SetClipRegion( const vcl::Region&, const OutputDevice *pOutDev );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     void                    DrawPixel( long nX, long nY, const OutputDevice *pOutDev );

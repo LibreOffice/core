@@ -19,7 +19,6 @@
 
 /* not protected, do only include once! */
 
-#undef Region
 #undef PolyPolygon
 #undef Polygon
 #undef Rectangle

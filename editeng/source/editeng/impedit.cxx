@@ -141,7 +141,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 }
 
 
-void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputDevice* pTargetDevice )
+void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, OutputDevice* pTargetDevice )
 {
     if ( GetSelectionMode() == EE_SELMODE_HIDDEN )
         return;
@@ -159,7 +159,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
 
     OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pOutWin;
     bool bClipRegion = pTarget->IsClipRegion();
-    Region aOldRegion = pTarget->GetClipRegion();
+    vcl::Region aOldRegion = pTarget->GetClipRegion();
 
     if ( !pRegion )
     {
@@ -286,7 +286,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
 
     if ( pRegion )
     {
-        *pRegion = Region( *pPolyPoly );
+        *pRegion = vcl::Region( *pPolyPoly );
         delete pPolyPoly;
     }
     else

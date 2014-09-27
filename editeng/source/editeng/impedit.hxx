@@ -308,7 +308,7 @@ public:
     bool        HasSelection() const { return aEditSelection.HasRange(); }
 
     void            DrawSelection() { DrawSelection( aEditSelection ); }
-    void            DrawSelection( EditSelection, Region* pRegion = NULL, OutputDevice* pTargetDevice = NULL );
+    void            DrawSelection( EditSelection, vcl::Region* pRegion = NULL, OutputDevice* pTargetDevice = NULL );
 
     vcl::Window*         GetWindow() const           { return pOutWin; }
 

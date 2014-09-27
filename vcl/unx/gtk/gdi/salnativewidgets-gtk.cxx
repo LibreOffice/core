@@ -512,7 +512,7 @@ void GtkSalGraphics::ResetClipRegion()
     X11SalGraphics::ResetClipRegion();
 }
 
-bool GtkSalGraphics::setClipRegion( const Region& i_rClip )
+bool GtkSalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
     m_aClipRegion = i_rClip;
     bool bRet = X11SalGraphics::setClipRegion( m_aClipRegion );
@@ -795,7 +795,7 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     }
 
     Rectangle aCtrlRect( rControlRegion );
-    Region aClipRegion( m_aClipRegion );
+    vcl::Region aClipRegion( m_aClipRegion );
     if( aClipRegion.IsNull() )
         aClipRegion = aCtrlRect;
 

@@ -568,7 +568,7 @@ void SdrPaintView::PrePaint()
 
 // #define SVX_REPAINT_TIMER_TEST
 
-void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
+void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
 #ifdef SVX_REPAINT_TIMER_TEST
 #define REMEMBERED_TIMES_COUNT  (10)
@@ -593,7 +593,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
     // rReg may be made more granular (fine) with using it. Normally, rReg
     // does come from Window::Paint() anyways and thus is based on a single
     // rectangle which was derived from exactly that repaint region
-    Region aOptimizedRepaintRegion(rReg);
+    vcl::Region aOptimizedRepaintRegion(rReg);
 
     if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
     {
@@ -723,7 +723,7 @@ SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut)
     return pPaintWindow;
 }
 
-void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
+void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     // redraw all PageViews with the target. This may expand the RedrawRegion
     // at the PaintWindow, plus taking care of FormLayer expansion
@@ -767,7 +767,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
 
 
 
-SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
+SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect)
 {
     // #i74769# use BeginCompleteRedraw() as common base
     SdrPaintWindow* pPaintWindow = BeginCompleteRedraw(pOut);
@@ -779,7 +779,7 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& 
 
         if(pKnownTarget)
         {
-            Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, bDisableIntersect );
+            vcl::Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, bDisableIntersect );
 
             // prepare redraw
             pKnownTarget->PrepareRedraw(aOptimizedRepaintRegion);
@@ -804,7 +804,7 @@ void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLa
     }
 }
 
-void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
+void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect)
 {
     SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
     OSL_ENSURE(pPaintWindow, "SdrPaintView::UpdateDrawLayersRegion: No SdrPaintWindow (!)");
@@ -815,20 +815,20 @@ void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const Region& rReg
 
         if(pKnownTarget)
         {
-            Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, bDisableIntersect );
+            vcl::Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, bDisableIntersect );
             pKnownTarget->GetPaintWindow().SetRedrawRegion(aOptimizedRepaintRegion);
             mpPageView->setPreparedPageWindow(pKnownTarget); // already set actually
         }
     }
 }
 
-Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
+vcl::Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect)
 {
     // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
     // rReg may be made more granular (fine) with using it. Normally, rReg
     // does come from Window::Paint() anyways and thus is based on a single
     // rectangle which was derived from exactly that repaint region
-    Region aOptimizedRepaintRegion(rReg);
+    vcl::Region aOptimizedRepaintRegion(rReg);
 
     // #i76114# Intersecting the region with the Window's paint region is disabled
     // for print preview in Calc, because the intersection can be empty (if the paint

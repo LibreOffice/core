@@ -261,7 +261,7 @@ void ContourWindow::Paint( const Rectangle& rRect )
     }
 
     // #i75482#
-    const Region aRepaintRegion(rRect);
+    const vcl::Region aRepaintRegion(rRect);
     pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
     pView->EndCompleteRedraw(*pPaintWindow, true);
 }
