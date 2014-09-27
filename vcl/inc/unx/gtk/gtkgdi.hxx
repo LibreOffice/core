@@ -117,7 +117,7 @@ private:
 class GtkSalGraphics : public X11SalGraphics
 {
     GtkWidget           *m_pWindow;
-    Region               m_aClipRegion;
+    vcl::Region               m_aClipRegion;
 
 public:
                         GtkSalGraphics( GtkSalFrame *, GtkWidget *window );
@@ -149,7 +149,7 @@ public:
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 
-    virtual bool            setClipRegion( const Region& ) SAL_OVERRIDE;
+    virtual bool            setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
     virtual void            ResetClipRegion() SAL_OVERRIDE;
 
     // some themes set the background pixmap of our window EVERY time

@@ -159,7 +159,7 @@ public:
     float                   mfCurrentFontScale;
     HPEN                    mhPen;              // Pen
     HBRUSH                  mhBrush;            // Brush
-    HRGN                    mhRegion;           // Region Handle
+    HRGN                    mhRegion;           // vcl::Region Handle
     HPEN                    mhDefPen;           // DefaultPen
     HBRUSH                  mhDefBrush;         // DefaultBrush
     HFONT                   mhDefFont;          // DefaultFont
@@ -200,7 +200,7 @@ public:
     virtual ~WinSalGraphics();
 
 protected:
-    virtual bool        setClipRegion( const Region& );
+    virtual bool        setClipRegion( const vcl::Region& );
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY );
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor );

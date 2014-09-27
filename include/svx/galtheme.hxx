@@ -67,7 +67,7 @@ class ListBox;
 
 struct GalDragParams
 {
-    Region  aDragRegion;
+    vcl::Region  aDragRegion;
     sal_uIntPtr nDragObjPos;
     OUString aThemeName;
     OUString aFileName;

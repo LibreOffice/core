@@ -85,7 +85,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                 mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
 
                 Push( PUSH_CLIPREGION );
-                IntersectClipRegion(Region(rPolyPoly));
+                IntersectClipRegion(vcl::Region(rPolyPoly));
                 DrawGradient( aBoundRect, rGradient );
                 Pop();
 

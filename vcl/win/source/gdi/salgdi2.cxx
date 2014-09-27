@@ -301,7 +301,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
         // invalidate regions that were not copied
         bool    bInvalidate = true;
 
-        // Combine Invalidate Region with existing ClipRegion
+        // Combine Invalidate vcl::Region with existing ClipRegion
         HRGN    hTempRgn = CreateRectRgn( 0, 0, 0, 0 );
         if ( GetClipRgn( getHDC(), hTempRgn ) == 1 )
         {

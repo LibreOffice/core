@@ -156,7 +156,7 @@ namespace sdr
             OutputDevice* pOutDev = TryToGetOutputDevice();
             OSL_ENSURE(0 != pOutDev, "ObjectContactOfPageView without OutDev, someone has overloaded TryToGetOutputDevice wrong (!)");
             bool bClipRegionPushed(false);
-            const Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
+            const vcl::Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
 
             if(!rRedrawArea.IsEmpty())
             {

@@ -505,9 +505,9 @@ void SlideSorterModel::SaveCurrentSelection (void)
     }
 }
 
-Region SlideSorterModel::RestoreSelection (void)
+vcl::Region SlideSorterModel::RestoreSelection (void)
 {
-    Region aRepaintRegion;
+    vcl::Region aRepaintRegion;
     PageEnumeration aPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
     while (aPages.HasMoreElements())
     {

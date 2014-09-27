@@ -3247,7 +3247,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                          (pPage->Frm().*fnRect->fnGetLeft)(),
                          (pPage->Frm().*fnRect->fnGetWidth)() );
                     aPageRectTemp._Intersection( pSh->VisArea() );
-                    Region aPageRectRegion( aPageRectTemp.SVRect() );
+                    vcl::Region aPageRectRegion( aPageRectTemp.SVRect() );
                     aPageRectRegion.Exclude( aPaintRect.SVRect() );
                     pSh->GetWin()->Invalidate( aPageRectRegion, INVALIDATE_CHILDREN );
                 }
@@ -3263,7 +3263,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                 {
                     // #i75172# if called from SwViewShell::ImplEndAction it sould no longer
                     // really be used but handled by SwViewShell::ImplEndAction already
-                    const Region aDLRegion(aPaintRect.SVRect());
+                    const vcl::Region aDLRegion(aPaintRect.SVRect());
                     pSh->DLPrePaint2(aDLRegion);
                 }
 
@@ -3395,7 +3395,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                 // #i75172# if called from SwViewShell::ImplEndAction it sould no longer
                 // really be used but handled by SwViewShell::ImplEndAction already
                 {
-                    const Region aDLRegion(aPaintRect.SVRect());
+                    const vcl::Region aDLRegion(aPaintRect.SVRect());
                     pSh->DLPrePaint2(aDLRegion);
                 }
 
@@ -4222,7 +4222,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                     SwViewShell *pSh = getRootFrm()->GetCurrShell();
                     if ( !pOut->GetConnectMetaFile() || !pSh || !pSh->GetWin() )
                     {
-                        pOut->SetClipRegion(Region(aPoly));
+                        pOut->SetClipRegion(vcl::Region(aPoly));
                     }
                     for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                         PaintBackground( aRegion[i], pPage, rAttrs, false, true );
@@ -7597,7 +7597,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
             aOut.SSize().Height()+= 2*nPixelSzH;
 
         // #i92711# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
-        const Region aRepaintRegion(aOut.SVRect());
+        const vcl::Region aRepaintRegion(aOut.SVRect());
         pSh->DLPrePaint2(aRepaintRegion);
 
         vcl::Window *pWin = pSh->GetWin();

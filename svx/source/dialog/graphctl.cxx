@@ -255,7 +255,7 @@ void GraphCtrl::Paint( const Rectangle& rRect )
             aGraphic.Draw(&rTarget, Point(), aGraphSize);
         }
 
-        const Region aRepaintRegion(rRect);
+        const vcl::Region aRepaintRegion(rRect);
         pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
         pView->EndCompleteRedraw(*pPaintWindow, true);
     }

@@ -365,7 +365,7 @@ public:
 
 
     // used internally for Draw/Impress/sch/chart2
-    virtual void CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
+    virtual void CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
 
     // #i72889# used from CompleteRedraw() implementation internally, added to be able to do a complete redraw in single steps
 
@@ -376,16 +376,16 @@ public:
     // EndCompleteRedraw does the necessary refreshes, evtl. paints text edit and overlay and evtl destroys the
     // SdrPaintWindow again. This means: the SdrPaintWindow is no longer safe after this closing call.
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
-    virtual void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
+    virtual void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 
     // used for the other applications basctl/sc/sw which call DrawLayer at PageViews
     // #i74769# Interface change to use common BeginCompleteRedraw/EndCompleteRedraw
     // #i76114# bDisableIntersect disables intersecting rReg with the Window's paint region
-    SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect = false);
+    SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect = false);
     // used when the region passed to BeginDrawLayers needs to be changed
-    void UpdateDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect = false);
+    void UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect = false);
     void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 protected:
@@ -393,7 +393,7 @@ protected:
     // used to paint the form layer after the PreRender device is flushed (painted) to the window.
     void ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const;
 
-    Region OptimizeDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect);
+    vcl::Region OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect);
 
 public:
     bool IsPageVisible() const { return bPageVisible; }             // Seite (weisse Flaeche) malen oder nicht

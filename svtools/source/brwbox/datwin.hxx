@@ -173,7 +173,7 @@ public:
     void            DoOutstandingInvalidations();
     void            Invalidate( sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
     void            Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
-    void            Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE
+    void            Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE
                     { Control::Invalidate( rRegion, nFlags ); }
 
 protected:

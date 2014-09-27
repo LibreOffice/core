@@ -607,7 +607,7 @@ namespace vclcanvas
             }
             else
             {
-                const Region aPolyClipRegion( rPoly );
+                const vcl::Region aPolyClipRegion( rPoly );
 
                 rOutDev.Push( PUSH_CLIPREGION );
                 rOutDev.SetClipRegion( aPolyClipRegion );
@@ -1034,7 +1034,7 @@ namespace vclcanvas
                             aPolyPoly.Translate( ::Point( -aPolygonDeviceRect.Left(),
                                                           -aPolygonDeviceRect.Top() ) );
 
-                            const Region aPolyClipRegion( aPolyPoly );
+                            const vcl::Region aPolyClipRegion( aPolyPoly );
 
                             aVDev.SetClipRegion( aPolyClipRegion );
                             textureFill( aVDev,
@@ -1069,7 +1069,7 @@ namespace vclcanvas
                         }
                         else
                         {
-                            const Region aPolyClipRegion( aPolyPoly );
+                            const vcl::Region aPolyClipRegion( aPolyPoly );
 
                             rOutDev.Push( PUSH_CLIPREGION );
                             rOutDev.SetClipRegion( aPolyClipRegion );

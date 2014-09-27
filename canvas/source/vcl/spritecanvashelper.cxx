@@ -89,7 +89,7 @@ namespace vclcanvas
             // scrolled sprite content outside this area)
             rOutDev.EnableMapMode( false );
             rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
-            rOutDev.SetClipRegion(Region(rRequestedArea));
+            rOutDev.SetClipRegion(vcl::Region(rRequestedArea));
 
             // repaint affected sprite directly to output device (at
             // the actual screen output position)
@@ -275,7 +275,7 @@ namespace vclcanvas
             // clips. besides that, will interfere with animations (as for
             // Window-invalidate repaints, only parts of the window will
             // be redrawn otherwise)
-            const Region aFullWindowRegion( Rectangle(aEmptyPoint,
+            const vcl::Region aFullWindowRegion( Rectangle(aEmptyPoint,
                                                       aOutDevSize) );
             pTargetWindow->ExpandPaintClipRegion(aFullWindowRegion);
         }

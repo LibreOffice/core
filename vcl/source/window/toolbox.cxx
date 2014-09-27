@@ -453,7 +453,7 @@ void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapp
 
 }
 
-bool ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const Region & )
+bool ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const vcl::Region & )
 {
     // use NWF
     Point aPt;
@@ -464,7 +464,7 @@ bool ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const Region & )
                                     aCtrlRegion, nState, ImplControlValue(), OUString() );
 }
 
-void ToolBox::ImplDrawTransparentBackground( ToolBox* pThis, const Region &rRegion )
+void ToolBox::ImplDrawTransparentBackground( ToolBox* pThis, const vcl::Region &rRegion )
 {
     // just invalidate to trigger paint of the parent
 
@@ -477,7 +477,7 @@ void ToolBox::ImplDrawTransparentBackground( ToolBox* pThis, const Region &rRegi
     pThis->mpData->mbIsPaintLocked = bOldPaintLock;
 }
 
-void ToolBox::ImplDrawConstantBackground( ToolBox* pThis, const Region &rRegion, bool bIsInPopupMode )
+void ToolBox::ImplDrawConstantBackground( ToolBox* pThis, const vcl::Region &rRegion, bool bIsInPopupMode )
 {
     // draw a constant color
     if( !bIsInPopupMode )
@@ -499,7 +499,7 @@ void ToolBox::ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
     bool bIsInPopupMode = pThis->ImplIsInPopupMode();
 
-    Region aPaintRegion( rRect );
+    vcl::Region aPaintRegion( rRect );
 
     // make sure we do not invalidate/erase too much
     if( pThis->IsInPaint() )
@@ -3031,7 +3031,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
             bClip = true;
             Rectangle aTempRect( pItem->maRect.Left()+1, pItem->maRect.Top()+1,
                                  pItem->maRect.Right()-1, pItem->maRect.Bottom()-1 );
-            Region aTempRegion( aTempRect );
+            vcl::Region aTempRegion( aTempRect );
             SetClipRegion( aTempRegion );
         }
         else

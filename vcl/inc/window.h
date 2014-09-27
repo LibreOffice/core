@@ -118,7 +118,7 @@ struct ImplWinData
 struct ImplOverlapData
 {
     VirtualDevice*      mpSaveBackDev;          //< saved background bitmap
-    Region*             mpSaveBackRgn;          //< saved region, which must be invalidated
+    vcl::Region*             mpSaveBackRgn;          //< saved region, which must be invalidated
     vcl::Window*        mpNextBackWin;          //< next window with saved background
     sal_uIntPtr         mnSaveBackSize;         //< bitmap size of saved background
     bool                mbSaveBack;             //< true: save background
@@ -259,11 +259,11 @@ public:
     ::std::vector< FixedText* > m_aMnemonicLabels;
     ImplAccessibleInfos* mpAccessibleInfos;
     VCLXWindow*         mpVCLXWindow;
-    Region              maWinRegion;            //< region to 'shape' the VCL window (frame coordinates)
-    Region              maWinClipRegion;        //< the (clipping) region that finally corresponds to the VCL window (frame coordinates)
-    Region              maInvalidateRegion;     //< region that has to be redrawn (frame coordinates)
-    Region*             mpChildClipRegion;      //< child clip region if CLIPCHILDREN is set (frame coordinates)
-    Region*             mpPaintRegion;          //< only set during Paint() method call (window coordinates)
+    vcl::Region              maWinRegion;            //< region to 'shape' the VCL window (frame coordinates)
+    vcl::Region              maWinClipRegion;        //< the (clipping) region that finally corresponds to the VCL window (frame coordinates)
+    vcl::Region              maInvalidateRegion;     //< region that has to be redrawn (frame coordinates)
+    vcl::Region*             mpChildClipRegion;      //< child clip region if CLIPCHILDREN is set (frame coordinates)
+    vcl::Region*             mpPaintRegion;          //< only set during Paint() method call (window coordinates)
     WinBits             mnStyle;
     WinBits             mnPrevStyle;
     WinBits             mnExtendedStyle;

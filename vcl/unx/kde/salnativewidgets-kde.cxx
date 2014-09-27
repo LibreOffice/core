@@ -1704,7 +1704,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     Size aBSize( qBoundingRect.width(), qBoundingRect.height() );
     rNativeBoundingRegion = Rectangle( aBPoint, aBSize );
 
-    // Region of the content
+    // vcl::Region of the content
     Point aPoint( qRect.x(), qRect.y() );
     Size  aSize( qRect.width(), qRect.height() );
     rNativeContentRegion = Rectangle( aPoint, aSize );

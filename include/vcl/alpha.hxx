@@ -72,7 +72,7 @@ public:
 
 private:
     friend class BitmapEx;
-    friend class OutputDevice;
+    friend class ::OutputDevice;
     friend bool VCL_DLLPUBLIC ReadDIBBitmapEx(BitmapEx& rTarget, SvStream& rIStm);
 
     SAL_DLLPRIVATE const Bitmap&    ImplGetBitmap() const;

@@ -1005,7 +1005,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_CLIPREGION_ACTION ):
                 {
-                    Region  aRegion;
+                    vcl::Region  aRegion;
                     sal_Int16   nRegType;
                     sal_Int16   bIntersect;
                     bool    bClip = false;
@@ -1023,7 +1023,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             Rectangle aRegRect;
 
                             ImplReadRect( rIStm, aRegRect );
-                            aRegion = Region( aRegRect );
+                            aRegion = vcl::Region( aRegRect );
                             bClip = true;
                         }
                         break;
@@ -1031,7 +1031,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         case( 2 ):
                         {
                             ImplReadPoly( rIStm, aActionPoly );
-                            aRegion = Region( aActionPoly );
+                            aRegion = vcl::Region( aActionPoly );
                             bClip = true;
                         }
                         break;
@@ -1049,7 +1049,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 aPolyPoly.Insert( aActionPoly );
                             }
 
-                            aRegion = Region( aPolyPoly );
+                            aRegion = vcl::Region( aPolyPoly );
                             bClip = true;
                         }
                         break;
@@ -1937,7 +1937,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_CLIPREGION_ACTION ):
             {
                 const MetaClipRegionAction* pAct = static_cast<const MetaClipRegionAction*>(pAction);
-                const Region&               rRegion = pAct->GetRegion();
+                const vcl::Region&          rRegion = pAct->GetRegion();
                 Rectangle                   aClipRect;
 
                 rOStm.WriteInt16(  GDI_CLIPREGION_ACTION );

@@ -602,8 +602,8 @@ void SvImpLBox::RecalcFocusRect()
         long nY = GetEntryLine( pCursor );
         Rectangle aRect = pView->GetFocusRect( pCursor, nY );
         CalcCellFocusRect( pCursor, aRect );
-        Region aOldClip( pView->GetClipRegion());
-        Region aClipRegion( GetClipRegionRect() );
+        vcl::Region aOldClip( pView->GetClipRegion());
+        vcl::Region aClipRegion( GetClipRegionRect() );
         pView->SetClipRegion( aClipRegion );
         pView->ShowFocus( aRect );
         pView->SetClipRegion( aOldClip );
@@ -687,8 +687,8 @@ void SvImpLBox::ShowCursor( bool bShow )
 {
     if( !bShow || !pCursor || !pView->HasFocus() )
     {
-        Region aOldClip( pView->GetClipRegion());
-        Region aClipRegion( GetClipRegionRect() );
+        vcl::Region aOldClip( pView->GetClipRegion());
+        vcl::Region aClipRegion( GetClipRegionRect() );
         pView->SetClipRegion( aClipRegion );
         pView->HideFocus();
         pView->SetClipRegion( aOldClip );
@@ -698,8 +698,8 @@ void SvImpLBox::ShowCursor( bool bShow )
         long nY = GetEntryLine( pCursor );
         Rectangle aRect = pView->GetFocusRect( pCursor, nY );
         CalcCellFocusRect( pCursor, aRect );
-        Region aOldClip( pView->GetClipRegion());
-        Region aClipRegion( GetClipRegionRect() );
+        vcl::Region aOldClip( pView->GetClipRegion());
+        vcl::Region aClipRegion( GetClipRegionRect() );
         pView->SetClipRegion( aClipRegion );
         pView->ShowFocus( aRect );
         pView->SetClipRegion( aOldClip );
@@ -936,7 +936,7 @@ void SvImpLBox::Paint( const Rectangle& rRect )
         nStartLine--;
     }
 
-    Region aClipRegion( GetClipRegionRect() );
+    vcl::Region aClipRegion( GetClipRegionRect() );
 
     // first draw the lines, then clip them!
     pView->SetClipRegion();
@@ -3399,8 +3399,8 @@ void SvImpLBox::ShowFocusRect( const SvTreeListEntry* pEntry )
     {
         long nY = GetEntryLine( (SvTreeListEntry*)pEntry );
         Rectangle aRect = pView->GetFocusRect( (SvTreeListEntry*)pEntry, nY );
-        Region aOldClip( pView->GetClipRegion());
-        Region aClipRegion( GetClipRegionRect() );
+        vcl::Region aOldClip( pView->GetClipRegion());
+        vcl::Region aClipRegion( GetClipRegionRect() );
         pView->SetClipRegion( aClipRegion );
         pView->ShowFocus( aRect );
         pView->SetClipRegion( aOldClip );

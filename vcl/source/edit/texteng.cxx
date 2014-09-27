@@ -2047,7 +2047,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                             {
                                                 sal_uInt16 nL;
 
-                                                // 1) Region before Selection
+                                                // 1) vcl::Region before Selection
                                                 if ( aTextStart < *pSelStart )
                                                 {
                                                     nL = pSelStart->GetIndex() - nTmpIndex;
@@ -2057,7 +2057,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                     nTmpIndex = nTmpIndex + nL;
 
                                                 }
-                                                // 2) Region with Selection
+                                                // 2) vcl::Region with Selection
                                                 nL = nEnd-nTmpIndex;
                                                 if ( aTextEnd > *pSelEnd )
                                                     nL = pSelEnd->GetIndex() - nTmpIndex;
@@ -2073,7 +2073,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                     nTmpIndex = nTmpIndex + nL;
                                                 }
 
-                                                // 3) Region after Selection
+                                                // 3) vcl::Region after Selection
                                                 if ( nTmpIndex < nEnd )
                                                 {
                                                     nL = nEnd-nTmpIndex;

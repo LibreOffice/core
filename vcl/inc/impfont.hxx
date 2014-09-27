@@ -88,7 +88,7 @@ private:
 
 class ImplFontMetric
 {
-    friend class OutputDevice;
+    friend class ::OutputDevice;
 
 private:
     long    mnAscent;      // Ascent

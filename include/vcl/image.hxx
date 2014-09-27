@@ -47,7 +47,7 @@ enum ImageColorTransform
 class VCL_DLLPUBLIC Image
 {
     friend class ImageList;
-    friend class OutputDevice;
+    friend class ::OutputDevice;
 
 public:
                     Image();

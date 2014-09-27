@@ -1565,7 +1565,7 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
     // Draw Frame
     if ( nDrawFlags & BORDERWINDOW_DRAW_FRAME )
     {
-        Region oldClipRgn( pDev->GetClipRegion( ) );
+        vcl::Region oldClipRgn( pDev->GetClipRegion( ) );
 
         // for popups, don't draw part of the frame
         if ( pData->mnTitleType == BORDERWINDOW_TITLE_POPUP )
@@ -1573,7 +1573,7 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
             FloatingWindow *pWin = dynamic_cast< FloatingWindow* >( pData->mpBorderWindow->GetWindow( WINDOW_CLIENT ) );
             if ( pWin )
             {
-                Region aClipRgn( aInRect );
+                vcl::Region aClipRgn( aInRect );
                 Rectangle aItemClipRect( pWin->ImplGetItemEdgeClipRect() );
                 if( !aItemClipRect.IsEmpty() )
                 {
@@ -2070,7 +2070,7 @@ void ImplBorderWindow::InvalidateBorder()
         if ( nLeftBorder || nTopBorder || nRightBorder || nBottomBorder )
         {
             Rectangle   aWinRect( Point( 0, 0 ), GetOutputSizePixel() );
-            Region      aRegion( aWinRect );
+            vcl::Region      aRegion( aWinRect );
             aWinRect.Left()   += nLeftBorder;
             aWinRect.Top()    += nTopBorder;
             aWinRect.Right()  -= nRightBorder;

@@ -684,7 +684,7 @@ void SvxIconChoiceCtrl_Impl::Paint( const Rectangle& rRect )
     bool bResetClipRegion = false;
     if( !pView->IsClipRegion() )
     {
-        Region const aOutputArea( GetOutputRect() );
+        vcl::Region const aOutputArea( GetOutputRect() );
         bResetClipRegion = true;
         pView->SetClipRegion( aOutputArea );
     }
@@ -734,7 +734,7 @@ void SvxIconChoiceCtrl_Impl::RepaintEntries( sal_uInt16 nEntryFlagsMask )
     if( !pView->IsClipRegion() )
     {
         bResetClipRegion = true;
-        pView->SetClipRegion(Region(aOutRect));
+        pView->SetClipRegion(vcl::Region(aOutRect));
     }
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
@@ -1813,7 +1813,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
         Rectangle aOutputArea( GetOutputRect() );
         if( aOutputArea.IsOver(aTextRect) || aOutputArea.IsOver(aBmpRect) )
         {
-            pView->SetClipRegion(Region(aOutputArea));
+            pView->SetClipRegion(vcl::Region(aOutputArea));
             bResetClipRegion = true;
         }
     }
@@ -2727,7 +2727,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const Rectangle& rRect, bool bAdd,
     if( !pView->IsClipRegion() )
     {
         bResetClipRegion = true;
-        pView->SetClipRegion(Region(GetOutputRect()));
+        pView->SetClipRegion(vcl::Region(GetOutputRect()));
     }
 
     for( size_t nPos = 0; nPos < nCount; nPos++ )

@@ -144,7 +144,7 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
     long nTextStart = bLayoutRTL ? aInner.Right() - aTextSize.Width() + 1 : aInner.Left();
 
     bool bWasClip = false;
-    Region aOldClip;
+    vcl::Region aOldClip;
     bool bClip = ( aTextSize.Width() > aOuter.Right() - nBWidth - aInner.Left() );
     if ( bClip )
     {
@@ -155,7 +155,7 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
         }
         long nClipStartX = bLayoutRTL ? aOuter.Left() + nBWidth : aInner.Left();
         long nClipEndX = bLayoutRTL ? aInner.Right() : aOuter.Right() - nBWidth;
-        pDev->SetClipRegion( Region(Rectangle( nClipStartX, nButtonY + nVer/2,
+        pDev->SetClipRegion( vcl::Region(Rectangle( nClipStartX, nButtonY + nVer/2,
                             nClipEndX, nButtonY + nVer/2 + aTextSize.Height())) );
     }
 
@@ -603,7 +603,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             if(pDrawView)
             {
                 // #i74769# Use new BeginDrawLayers() interface
-                Region aDrawingRegion(aDrawingRectLogic);
+                vcl::Region aDrawingRegion(aDrawingRectLogic);
                 pTargetPaintWindow = pDrawView->BeginDrawLayers(this, aDrawingRegion);
                 OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
 
@@ -1250,7 +1250,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
             Rectangle aRect = GetListValButtonRect( aListValPos );
             aComboButton.SetPosPixel( aRect.TopLeft() );
             aComboButton.SetSizePixel( aRect.GetSize() );
-            pContentDev->SetClipRegion(Region(aRect));
+            pContentDev->SetClipRegion(vcl::Region(aRect));
             aComboButton.Draw( false, false );
             pContentDev->SetClipRegion();           // always called from Draw() without clip region
             aComboButton.SetPosPixel( aOldPos );    // restore old state

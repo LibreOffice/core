@@ -455,7 +455,7 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
  * Paint-method: Redirect event to the view
  */
 
-void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
+void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
 {
     if( mpVDev )
     {
@@ -491,7 +491,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::co
  * Paint-Event during running slide show
  */
 
-void DrawView::PresPaint(const Region& rRegion)
+void DrawView::PresPaint(const vcl::Region& rRegion)
 {
     if(mpViewSh)
     {

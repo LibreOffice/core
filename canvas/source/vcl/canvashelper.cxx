@@ -1232,7 +1232,7 @@ namespace vclcanvas
         // accumulate non-empty clips into one region
         // ==========================================
 
-        Region aClipRegion(true);
+        vcl::Region aClipRegion(true);
 
         if( viewState.Clip.is() )
         {
@@ -1247,7 +1247,7 @@ namespace vclcanvas
                     ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
                                                                     viewState.AffineTransform ) );
 
-                aClipRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
+                aClipRegion = vcl::Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
             }
             else
             {
@@ -1270,7 +1270,7 @@ namespace vclcanvas
             if( aClipPoly.count() )
             {
                 // setup non-empty clipping
-                Region aRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
+                vcl::Region aRegion = vcl::Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
                 aClipRegion.Intersect( aRegion );
             }
             else

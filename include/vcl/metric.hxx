@@ -115,7 +115,7 @@ public:
 
 
 private:
-    friend class OutputDevice;
+    friend class ::OutputDevice;
     void                Reset( const ImplFontCharMap* pNewMap = NULL );
 
     // prevent assignment and copy construction
@@ -125,7 +125,7 @@ private:
 
 class VCL_DLLPUBLIC TextRectInfo
 {
-    friend class OutputDevice;
+    friend class ::OutputDevice;
 
 private:
     long            mnMaxWidth;

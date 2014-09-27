@@ -225,12 +225,12 @@ void X11SalGraphics::DeInit()
     SetDrawable( None, m_nXScreen );
 }
 
-void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
+void X11SalGraphics::SetClipRegion( GC pGC, Region pXReg ) const
 {
     Display *pDisplay = GetXDisplay();
 
     int n = 0;
-    XLIB_Region Regions[3];
+    Region Regions[3];
 
     if( mpClipRegion )
         Regions[n++] = mpClipRegion;
@@ -244,7 +244,7 @@ void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
         XSetRegion( pDisplay, pGC, Regions[0] );
     else
     {
-        XLIB_Region pTmpRegion = XCreateRegion();
+        Region pTmpRegion = XCreateRegion();
         XIntersectRegion( Regions[0], Regions[1], pTmpRegion );
 
         XSetRegion( pDisplay, pGC, pTmpRegion );
@@ -548,7 +548,7 @@ void X11SalGraphics::ResetClipRegion()
     }
 }
 
-bool X11SalGraphics::setClipRegion( const Region& i_rClip )
+bool X11SalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
     if( mpClipRegion )
         XDestroyRegion( mpClipRegion );
@@ -884,14 +884,14 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
     if( nBrushColor_ != SALCOLOR_NONE )
     {
         sal_uInt32      i, n;
-        XLIB_Region pXRegA  = NULL;
+        Region pXRegA  = NULL;
 
         for( i = 0; i < nPoly; i++ ) {
             n = pPoints[i];
             SalPolyLine Points( n, pPtAry[i] );
             if( n > 2 )
             {
-                XLIB_Region pXRegB = XPolygonRegion( &Points[0], n+1, WindingRule );
+                Region pXRegB = XPolygonRegion( &Points[0], n+1, WindingRule );
                 if( !pXRegA )
                     pXRegA = pXRegB;
                 else

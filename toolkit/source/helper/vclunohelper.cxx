@@ -126,9 +126,9 @@ vcl::Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::
     return pVCLXWindow ? pVCLXWindow->GetWindow() : NULL;
 }
 
-Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion )
+vcl::Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion )
 {
-    Region aRegion;
+    vcl::Region aRegion;
     VCLXRegion* pVCLRegion = VCLXRegion::GetImplementation( rxRegion );
     if ( pVCLRegion )
         aRegion = pVCLRegion->GetRegion();

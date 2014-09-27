@@ -54,7 +54,7 @@ public:
                     unsigned long nDrawable, const XRenderPictureAttributes* ) const;
     void        ChangePicture( Picture, unsigned long nValueMask,
                     const XRenderPictureAttributes* ) const;
-    void        SetPictureClipRegion( Picture, XLIB_Region ) const;
+    void        SetPictureClipRegion( Picture, Region ) const;
     void        CompositePicture( int nOp, Picture aSrc, Picture aMask, Picture aDst,
                     int nXSrc, int nYSrc, int nXMask, int nYMask,
                     int nXDst, int nYDst, unsigned nWidth, unsigned nHeight ) const;
@@ -112,7 +112,7 @@ inline void XRenderPeer::ChangePicture( Picture aPicture,
 }
 
 inline void XRenderPeer::SetPictureClipRegion( Picture aPicture,
-    XLIB_Region aXlibRegion ) const
+    Region aXlibRegion ) const
 {
     XRenderSetPictureClipRegion( mpDisplay, aPicture, aXlibRegion );
 }

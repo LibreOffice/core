@@ -294,7 +294,7 @@ void PreviewRenderer::PaintPage (
 {
     // Paint the page.
     Rectangle aPaintRectangle (Point(0,0), pPage->GetSize());
-    Region aRegion (aPaintRectangle);
+    vcl::Region aRegion (aPaintRectangle);
 
     // Turn off online spelling and redlining.
     SdrOutliner* pOutliner = NULL;

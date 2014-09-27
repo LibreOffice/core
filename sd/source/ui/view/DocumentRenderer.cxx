@@ -300,7 +300,7 @@ namespace {
             pView->DrawMarkedObj(rPrinter);
         else
             rPrintView.CompleteRedraw(&rPrinter,
-                    Region(Rectangle(Point(0,0), rPage.GetSize())));
+                    vcl::Region(Rectangle(Point(0,0), rPage.GetSize())));
 
         rPrinter.SetMapMode(aOriginalMapMode);
 

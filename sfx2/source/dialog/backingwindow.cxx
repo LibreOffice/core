@@ -348,7 +348,7 @@ void BackingWindow::Paint( const Rectangle& )
     Resize();
 
     Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
-    Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+    vcl::Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
 
     aClip.Exclude( maStartCentButtons );
 

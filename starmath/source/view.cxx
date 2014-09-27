@@ -1315,7 +1315,7 @@ void SmViewShell::Impl_Print(
                                           OutputMapMode);
 
     rOutDev.SetMapMode(OutputMapMode);
-    rOutDev.SetClipRegion(Region(aOutRect));
+    rOutDev.SetClipRegion(vcl::Region(aOutRect));
     GetDoc()->DrawFormula(rOutDev, aPos, false);
     rOutDev.SetClipRegion();
 

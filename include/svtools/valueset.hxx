@@ -277,7 +277,7 @@ private:
 
 protected:
 
-    bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
+    bool            StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion );
 
 protected:
 

@@ -467,7 +467,7 @@ void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const
 }
 
 void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                     const OutputDevice& rOutDev, const Region& rRegion )
+                                     const OutputDevice& rOutDev, const vcl::Region& rRegion )
 {
 
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
@@ -813,11 +813,11 @@ void    OutputDevice::ReMirror( Rectangle &rRect ) const
     rRect.Right() = rRect.Left() + nWidth;
 }
 
-void OutputDevice::ReMirror( Region &rRegion ) const
+void OutputDevice::ReMirror( vcl::Region &rRegion ) const
 {
     RectangleVector aRectangles;
     rRegion.GetRegionRectangles(aRectangles);
-    Region aMirroredRegion;
+    vcl::Region aMirroredRegion;
 
     for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {

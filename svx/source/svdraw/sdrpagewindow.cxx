@@ -165,7 +165,7 @@ void SdrPageWindow::PrePaint()
     }
 }
 
-void SdrPageWindow::PrepareRedraw(const Region& rReg)
+void SdrPageWindow::PrepareRedraw(const vcl::Region& rReg)
 {
     // give OC the chance to do ProcessDisplay preparations
     if(HasObjectContact())
@@ -280,7 +280,7 @@ void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedire
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
     // create PaintInfoRec; use Rectangle only temporarily
-    const Region& rRegion = GetPaintWindow().GetRedrawRegion();
+    const vcl::Region& rRegion = GetPaintWindow().GetRedrawRegion();
 
     // create processing data
     sdr::contact::DisplayInfo aDisplayInfo;
@@ -340,7 +340,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectC
         const bool bControlLayerProcessingActive(nControlLayerId == *pId);
 
         // create PaintInfoRec, use Rectangle only temporarily
-        const Region& rRegion = GetPaintWindow().GetRedrawRegion();
+        const vcl::Region& rRegion = GetPaintWindow().GetRedrawRegion();
 
         // create processing data
         sdr::contact::DisplayInfo aDisplayInfo;

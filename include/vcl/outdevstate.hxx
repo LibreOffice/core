@@ -108,7 +108,7 @@ public:
 
     MapMode*        mpMapMode;
     bool            mbMapActive;
-    Region*         mpClipRegion;
+    vcl::Region*         mpClipRegion;
     Color*          mpLineColor;
     Color*          mpFillColor;
     vcl::Font*      mpFont;

@@ -60,7 +60,7 @@ public:
     void ForceInvalidate();
     virtual void Invalidate( sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
     virtual void Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
-    virtual void Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+    virtual void Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 

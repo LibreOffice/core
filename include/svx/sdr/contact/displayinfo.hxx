@@ -36,7 +36,7 @@ namespace sdr
 
             // The redraw area, in logical coordinates of OutputDevice. If Region
             // is empty, everything needs to be redrawn
-            Region                                          maRedrawArea;
+            vcl::Region                                          maRedrawArea;
 
             // bitfield
 
@@ -77,8 +77,8 @@ namespace sdr
             const SetOfByte& GetProcessLayers() const { return maProcessLayers; }
 
             // access to RedrawArea
-            void SetRedrawArea(const Region& rRegion);
-            const Region& GetRedrawArea() const { return maRedrawArea; }
+            void SetRedrawArea(const vcl::Region& rRegion);
+            const vcl::Region& GetRedrawArea() const { return maRedrawArea; }
 
             // Access to ControlLayerProcessingActive flag
             void SetControlLayerProcessingActive(bool bDoPaint);

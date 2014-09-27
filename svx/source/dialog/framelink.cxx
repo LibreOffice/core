@@ -719,7 +719,7 @@ inline Polygon lclCreatePolygon( const PointVec& rPoints )
 }
 
 /** Returns a polygon constructed from the five passed points. */
-Region lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, const Point& rP4, const Point& rP5 )
+vcl::Region lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, const Point& rP4, const Point& rP5 )
 {
     PointVec aPoints;
     aPoints.reserve( 5 );
@@ -728,7 +728,7 @@ Region lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, c
     aPoints.push_back( rP3 );
     aPoints.push_back( rP4 );
     aPoints.push_back( rP5 );
-    return Region(lclCreatePolygon(aPoints));
+    return vcl::Region(lclCreatePolygon(aPoints));
 }
 
 /** Sets the color of the passed frame style to the output device.
@@ -989,7 +989,7 @@ void lclPushCrossingClipRegion( OutputDevice& rDev, const Rectangle& rRect, bool
     LinePoints aLPoints( lclGetDiagLineEnds( rRect, !bTLBR, lclGetPrimEnd( rCrossStyle ) ) );
     LinePoints aRPoints( lclGetDiagLineEnds( rRect, !bTLBR, lclGetSecnBeg( rCrossStyle ) ) );
 
-    Region aClipReg;
+    vcl::Region aClipReg;
     if( bTLBR )
     {
         aClipReg = lclCreatePolygon(

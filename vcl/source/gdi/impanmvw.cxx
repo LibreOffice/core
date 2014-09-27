@@ -155,7 +155,7 @@ void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, 
 void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
 {
     VirtualDevice   aVDev;
-    boost::scoped_ptr<Region> pOldClip(!maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL);
+    boost::scoped_ptr<vcl::Region> pOldClip(!maClip.IsNull() ? new vcl::Region( mpOut->GetClipRegion() ) : NULL);
 
     aVDev.SetOutputSizePixel( maSzPix, false );
     nPos = std::min( nPos, (sal_uLong) mpParent->Count() - 1UL );
@@ -266,7 +266,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 
         if( !pVDev )
         {
-            boost::scoped_ptr<Region> pOldClip(!maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL);
+            boost::scoped_ptr<vcl::Region> pOldClip(!maClip.IsNull() ? new vcl::Region( mpOut->GetClipRegion() ) : NULL);
 
             if( pOldClip )
                 mpOut->SetClipRegion( maClip );

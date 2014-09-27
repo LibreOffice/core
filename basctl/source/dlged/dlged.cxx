@@ -551,7 +551,7 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
 
     // repaint, get PageView and prepare Region
     SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
-    const Region aPaintRectRegion(aPaintRect);
+    const vcl::Region aPaintRectRegion(aPaintRect);
 
 
     // #i74769#

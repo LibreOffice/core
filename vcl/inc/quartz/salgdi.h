@@ -225,7 +225,7 @@ public:
     // InvalidateContext does an UnsetState and sets mrContext to 0
     void                    InvalidateContext();
 
-    virtual bool            setClipRegion( const Region& ) SAL_OVERRIDE;
+    virtual bool            setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void            drawPixel( long nX, long nY ) SAL_OVERRIDE;

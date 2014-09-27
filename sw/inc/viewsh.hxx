@@ -71,7 +71,7 @@ class SwTxtFrm;
 class BitmapEx;
 
 struct SwAccessibilityOptions;
-class Region;
+namespace vcl { class Region; }
 class SwPostItMgr;
 class SdrPaintWindow;
 class SwAccessibleMap;
@@ -231,12 +231,12 @@ public:
 
     // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
 protected:
-    std::stack<Region>          mPrePostPaintRegions; // acts also as a lock counter (empty == not locked)
+    std::stack<vcl::Region> mPrePostPaintRegions; // acts also as a lock counter (empty == not locked)
     OutputDevice*           mpPrePostOutDev;
     MapMode                 maPrePostMapMode;
 public:
     void PrePaint();
-    void DLPrePaint2(const Region& rRegion);
+    void DLPrePaint2(const vcl::Region& rRegion);
     void DLPostPaint2(bool bPaintFormLayer);
     const MapMode& getPrePostMapMode() const { return maPrePostMapMode; }
 

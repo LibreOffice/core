@@ -24,7 +24,6 @@
 #define Rectangle    BLA_Rectangle
 #define Polygon      BLA_Polygon
 #define PolyPolygon  BLA_PolyPolygon
-#define Region       WIN_Region
 #define Folder       WIN_Folder
 #define GradientStyle_RECT  WIN_GradientStyle_RECT
 

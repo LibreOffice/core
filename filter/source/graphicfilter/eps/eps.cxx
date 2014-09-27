@@ -207,7 +207,7 @@ private:
     void                ImplPolyPoly( const PolyPolygon & rPolyPolygon, bool bTextOutline = false );
     void                ImplPolyLine( const Polygon & rPolygon );
 
-    void                ImplSetClipRegion( Region& rRegion );
+    void                ImplSetClipRegion( vcl::Region& rRegion );
     void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
     void                ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
@@ -994,7 +994,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_ISECTRECTCLIPREGION_ACTION:
             {
                 const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pMA;
-                Region aRegion( pA->GetRect() );
+                vcl::Region aRegion( pA->GetRect() );
                 ImplSetClipRegion( aRegion );
             }
             break;
@@ -1002,7 +1002,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_CLIPREGION_ACTION:
             {
                 const MetaClipRegionAction* pA = (const MetaClipRegionAction*) pMA;
-                Region aRegion( pA->GetRegion() );
+                vcl::Region aRegion( pA->GetRegion() );
                 ImplSetClipRegion( aRegion );
             }
             break;
@@ -1010,7 +1010,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_ISECTREGIONCLIPREGION_ACTION:
             {
                 const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*) pMA;
-                Region aRegion( pA->GetRegion() );
+                vcl::Region aRegion( pA->GetRegion() );
                 ImplSetClipRegion( aRegion );
             }
             break;
@@ -1692,7 +1692,7 @@ void PSWriter::ImplPolyLine( const Polygon & rPoly )
 
 
 
-void PSWriter::ImplSetClipRegion( Region& rClipRegion )
+void PSWriter::ImplSetClipRegion( vcl::Region& rClipRegion )
 {
     if ( !rClipRegion.IsEmpty() )
     {
@@ -1782,7 +1782,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         bool    bDoTrans = false;
 
         Rectangle   aRect;
-        Region      aRegion;
+        vcl::Region      aRegion;
 
         if ( pMaskBitmap )
         {
@@ -1795,7 +1795,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                         nHeight = 8;
                 }
                 aRect = Rectangle( Point( 0, nHeightOrg - nHeightLeft ), Size( (long)nWidth, (long)nHeight ) );
-                aRegion = Region( pMaskBitmap->CreateRegion( COL_BLACK, aRect ) );
+                aRegion = vcl::Region( pMaskBitmap->CreateRegion( COL_BLACK, aRect ) );
 
                 if( mnLevel == 1 )
                 {

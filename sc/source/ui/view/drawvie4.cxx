@@ -97,7 +97,7 @@ bool ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         BrkAction();
 
         Rectangle aMarkedRect = GetAllMarkedRect();
-        Region aRegion( aMarkedRect );
+        vcl::Region aRegion( aMarkedRect );
 
         aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
 

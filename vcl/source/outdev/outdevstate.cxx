@@ -130,7 +130,7 @@ void OutputDevice::Push( PushFlags nFlags )
     if ( nFlags & PUSH_CLIPREGION )
     {
         if ( mbClipRegion )
-            pState->mpClipRegion = new Region( maRegion );
+            pState->mpClipRegion = new vcl::Region( maRegion );
         else
             pState->mpClipRegion = NULL;
     }

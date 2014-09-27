@@ -294,9 +294,9 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     boost::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
-    Region aTestRegion( GetActiveClipRegion() );
+    vcl::Region aTestRegion( GetActiveClipRegion() );
     aTestRegion.Intersect( rControlRegion );
-    if (aTestRegion == Region(rControlRegion))
+    if (aTestRegion == vcl::Region(rControlRegion))
         nState |= CTRL_CACHING_ALLOWED;   // control is not clipped, caching allowed
 
     bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );

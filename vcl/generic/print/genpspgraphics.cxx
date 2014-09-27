@@ -312,7 +312,7 @@ void GenPspGraphics::ResetClipRegion()
     m_pPrinterGfx->ResetClipRegion();
 }
 
-bool GenPspGraphics::setClipRegion( const Region& i_rClip )
+bool GenPspGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
     // TODO: support polygonal clipregions here
     RectangleVector aRectangles;

@@ -3771,7 +3771,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
         Paint( pVDev, aTmpRect, aStartPos );
 
         bool bClipRegion = false;
-        Region aOldRegion;
+        vcl::Region aOldRegion;
         MapMode aOldMapMode;
         if ( GetTextRanger() )
         {
@@ -3790,7 +3790,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
             MapMode aNewMapMode( aOldMapMode );
             aNewMapMode.SetOrigin( aOrigin );
             pTarget->SetMapMode( aNewMapMode );
-            pTarget->SetClipRegion( Region( GetTextRanger()->GetPolyPolygon() ) );
+            pTarget->SetClipRegion( vcl::Region( GetTextRanger()->GetPolyPolygon() ) );
         }
 
         pTarget->DrawOutDev( aClipRect.TopLeft(), aClipRect.GetSize(),
@@ -3839,7 +3839,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
         }
 
         bool bClipRegion = pTarget->IsClipRegion();
-        Region aOldRegion = pTarget->GetClipRegion();
+        vcl::Region aOldRegion = pTarget->GetClipRegion();
         pTarget->IntersectClipRegion( aClipRect );
 
         Paint( pTarget, aClipRect, aStartPos );

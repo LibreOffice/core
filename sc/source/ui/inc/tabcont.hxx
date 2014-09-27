@@ -37,7 +37,7 @@ private:
     sal_uInt16      nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
     bool            bErrorShown;
 
-    void            DoDrag( const Region& rRegion );
+    void            DoDrag( const vcl::Region& rRegion );
 
     sal_uInt16          GetMaxId() const;
     SCTAB           GetPrivatDropPos(const Point& rPos );

@@ -41,7 +41,7 @@
 #include "VCLKDEApplication.hxx"
 
 /* ********* Hack, but needed because of conflicting types... */
-#define Region QtXRegion
+#define vcl::Region QtXRegion
 
 #include <kfiledialog.h>
 #include <kwindowsystem.h>

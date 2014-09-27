@@ -1361,9 +1361,9 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
     return aNewBmp;
 }
 
-Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
+vcl::Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
 {
-    Region              aRegion;
+    vcl::Region              aRegion;
     Rectangle           aRect( rRect );
     BitmapReadAccess*   pReadAcc = ( (Bitmap*) this )->AcquireReadAccess();
 

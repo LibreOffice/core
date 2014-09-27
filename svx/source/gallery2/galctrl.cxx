@@ -409,7 +409,7 @@ sal_Int8 GalleryIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 void GalleryIconView::StartDrag( sal_Int8, const Point& )
 {
     const CommandEvent  aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, true );
-    Region              aRegion;
+    vcl::Region              aRegion;
 
     // call this to initiate dragging for ValueSet
     ValueSet::StartDrag( aEvt, aRegion );

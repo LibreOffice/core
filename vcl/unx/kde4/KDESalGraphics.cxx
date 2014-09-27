@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define Region QtXRegion
+#define vcl::Region QtXRegion
 
 #include <QStyle>
 #include <QStyleOption>
@@ -198,7 +198,7 @@ namespace
 
 #ifdef IMAGE_BASED_PAINTING
 // There is a small catch with this function, although hopefully only philosophical.
-// Officially Xlib's Region is an opaque data type, with only functions for manipulating it.
+// Officially Xlib's vcl::Region is an opaque data type, with only functions for manipulating it.
 // However, whoever designed it apparently didn't give it that much thought, as it's impossible
 // to find out what exactly a region actually is (except for really weird ways like XClipBox()
 // and repeated XPointInRegion(), which would be awfully slow). Fortunately, the header file
@@ -209,7 +209,7 @@ namespace
 // without IMAGE_BASED_PAINTING (in which case QApplication::setGraphicsSystem( "native" ) may
 // be needed too).
 #include <X11/Xregion.h>
-static QRegion XRegionToQRegion( XLIB_Region xr )
+static QRegion XRegionToQRegion( Region xr )
 {
     QRegion qr;
     for( int i = 0;
@@ -615,7 +615,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         GC gc = GetFontGC();
         if( gc )
         {
-            XLIB_Region pTempClipRegion = NULL;
+            Region pTempClipRegion = NULL;
             if( clipRegion )
             {
                 pTempClipRegion = XCreateRegion();
@@ -933,7 +933,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         Size aBSize( boundingRect.width(), boundingRect.height() );
         nativeBoundingRegion = Rectangle( aBPoint, aBSize );
 
-        // Region of the content
+        // vcl::Region of the content
         Point aPoint( contentRect.x(), contentRect.y() );
         Size  aSize( contentRect.width(), contentRect.height() );
         nativeContentRegion = Rectangle( aPoint, aSize );

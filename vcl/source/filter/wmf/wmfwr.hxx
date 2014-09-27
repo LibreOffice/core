@@ -39,7 +39,7 @@ struct WMFWriterAttrStackMember
     RasterOp eRasterOp;
     vcl::Font aFont;
     MapMode aMapMode;
-    Region aClipRegion;
+    vcl::Region aClipRegion;
     PushFlags nFlags;
 };
 
@@ -76,7 +76,7 @@ private:
     vcl::Font aSrcFont;
     MapMode   aSrcMapMode;
     bool      bSrcIsClipping;
-    Region    aSrcClipRegion;
+    vcl::Region    aSrcClipRegion;
     WMFWriterAttrStackMember * pAttrStack;
 
     sal_uInt32    eSrcHorTextAlign;
@@ -93,7 +93,7 @@ private:
     sal_uInt32    eDstHorTextAlign;
 
     bool      bDstIsClipping; // ???: not taken into account at the moment
-    Region    aDstClipRegion; // ???: not taken into account at the moment
+    vcl::Region    aDstClipRegion; // ???: not taken into account at the moment
     bool bHandleAllocated[MAXOBJECTHANDLES];             // which handles have been assigned
     sal_uInt16 nDstPenHandle,nDstFontHandle,nDstBrushHandle; // which handles are owned by
                                                          // Selected-Objects

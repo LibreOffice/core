@@ -1270,8 +1270,8 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
                 Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
                 if( pRect != pLastRect || pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow() )
                 {
-                    Region aRgn( GetActiveClipRegion() );
-                    Region aClipRegion;
+                    vcl::Region aRgn( GetActiveClipRegion() );
+                    vcl::Region aClipRegion;
 
                     if ( pRect )
                         aClipRegion.Union( *pRect );

@@ -126,7 +126,7 @@ den Handlern gerufen werden:
 
 StartDrag       - Muss aus dem Commnad-Handler gerufen werden. Als Parameter
                   muss der CommandEvent uebergeben werden und eine Referenz
-                  auf eine Region. Diese Region muss dann bei ExecuteDrag()
+                  auf eine Region. Diese vcl::Region muss dann bei ExecuteDrag()
                   uebergeben werden, wenn der Rueckgabewert sagt, das
                   ExecuteDrag durchgefuehrt werden soll. Falls der Eintrag
                   nicht selektiert ist, wird er vorher als aktueller
@@ -495,7 +495,7 @@ public:
     /** Returns true, if the control draws from right to left (see SetEffectiveRTL()). */
     bool            IsEffectiveRTL() const;
 
-    bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
+    bool            StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion );
     sal_uInt16      ShowDropPos( const Point& rPos );
     void            HideDropPos();
     bool            SwitchPage( const Point& rPos );

@@ -36,7 +36,7 @@
 // predeclarations
 
 class OutputDevice;
-class Region;
+namespace vcl { class Region; }
 
 namespace sdr { namespace overlay {
     class OverlayObject;
@@ -99,7 +99,7 @@ namespace sdr
             const drawinglayer::geometry::ViewInformation2D getCurrentViewInformation2D() const;
 
             // complete redraw
-            virtual void completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice = 0) const;
+            virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = 0) const;
 
             // flush. Do buffered updates.
             virtual void flush();
@@ -108,7 +108,7 @@ namespace sdr
             virtual void copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize);
 
             // restore part of background. Implemented form buffered versions only.
-            virtual void restoreBackground(const Region& rRegion) const;
+            virtual void restoreBackground(const vcl::Region& rRegion) const;
 
             // get the OutputDevice
             OutputDevice& getOutputDevice() const { return rmOutputDevice; }
