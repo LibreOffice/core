@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.mozilla.gecko.gfx.GeckoLayerClient;
+import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -19,6 +20,8 @@ public class LOKitThread extends Thread {
     private TileProvider mTileProvider;
     private ViewportMetrics mViewportMetrics;
     private boolean mCheckboardImageSet = false;
+    private GeckoLayerClient mLayerClient;
+    private LayerController mController;
 
     public LOKitThread() {
         TileProviderFactory.initialize();
@@ -55,16 +58,21 @@ public class LOKitThread extends Thread {
         if (mApplication == null) {
             mApplication = LibreOfficeMainActivity.mAppContext;
         }
+
+        mController = mApplication.getLayerController();
+        mLayerClient = mApplication.getLayerClient();
+
         if (mTileProvider != null) {
             mTileProvider.close();
         }
-        GeckoLayerClient layerClient = mApplication.getLayerClient();
-        mTileProvider = TileProviderFactory.create(mApplication.getLayerController(), filename);
-        layerClient.setTileProvider(mTileProvider);
+
+        mTileProvider = TileProviderFactory.create(mController, filename);
+        mLayerClient.setTileProvider(mTileProvider);
 
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
             updateCheckbardImage();
+            mController.setForceRedraw();
         }
         return isReady;
     }
