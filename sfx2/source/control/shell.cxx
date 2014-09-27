@@ -45,6 +45,7 @@
 #include <sidebar/ContextChangeBroadcaster.hxx>
 
 #include <map>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 // Maps the Which() field to a pointer to a SfxPoolItem
 class SfxItemPtrMap : public std::map<sal_uInt16, SfxPoolItem*>
@@ -59,15 +60,7 @@ public:
 
 TYPEINIT0(SfxShell);
 
-class SfxVerbSlotArr_Impl : public std::vector<SfxSlot*>
-{
-public:
-    ~SfxVerbSlotArr_Impl()
-    {
-        for(const_iterator it = begin(); it != end(); ++it)
-            delete *it;
-    }
-};
+typedef boost::ptr_vector<SfxSlot> SfxVerbSlotArr_Impl;
 
 using namespace com::sun::star;
 
@@ -592,9 +585,9 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
 
         if (!pImp->aSlotArr.empty())
         {
-            SfxSlot *pSlot = pImp->aSlotArr[0];
-            pNewSlot->pNextSlot = pSlot->pNextSlot;
-            pSlot->pNextSlot = pNewSlot;
+            SfxSlot& rSlot = pImp->aSlotArr[0];
+            pNewSlot->pNextSlot = rSlot.pNextSlot;
+            rSlot.pNextSlot = pNewSlot;
         }
         else
             pNewSlot->pNextSlot = pNewSlot;
@@ -660,7 +653,7 @@ const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
     DBG_ASSERT(nIndex < rList.getLength(),"Wrong VerbId!");
 
     if (nIndex < rList.getLength())
-        return pImp->aSlotArr[nIndex];
+        return &pImp->aSlotArr[nIndex];
     else
         return 0;
 }
