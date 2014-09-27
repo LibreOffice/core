@@ -21,7 +21,6 @@
 
 #include <com/sun/star/xml/Attribute.hpp>
 #include <com/sun/star/xml/FastAttribute.hpp>
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceasvector.hxx>
@@ -40,7 +39,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::xml::FastAttribute;
 using ::com::sun::star::xml::Attribute;
 using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::io::NotConnectedException;
 using ::com::sun::star::io::IOException;
@@ -145,7 +143,7 @@ namespace sax_fastparser {
     }
 #endif
 
-    void FastSaxSerializer::startFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
+    void FastSaxSerializer::startFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList )
     {
         if ( !maMarkStack.empty() )
             maMarkStack.top()->setCurrentElement( Element );
@@ -157,7 +155,7 @@ namespace sax_fastparser {
         writeBytes(sOpeningBracket, N_CHARS(sOpeningBracket));
 
         writeId(Element);
-        writeFastAttributeList(Attribs);
+        writeFastAttributeList(pAttrList);
 
         writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
     }
@@ -178,7 +176,7 @@ namespace sax_fastparser {
         writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
     }
 
-    void FastSaxSerializer::singleFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
+    void FastSaxSerializer::singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList )
     {
         if ( !maMarkStack.empty() )
             maMarkStack.top()->setCurrentElement( Element );
@@ -186,7 +184,7 @@ namespace sax_fastparser {
         writeBytes(sOpeningBracket, N_CHARS(sOpeningBracket));
 
         writeId(Element);
-        writeFastAttributeList(Attribs);
+        writeFastAttributeList(pAttrList);
 
         writeBytes(sSlashAndClosingBracket, N_CHARS(sSlashAndClosingBracket));
     }
@@ -200,38 +198,18 @@ namespace sax_fastparser {
     {
         mxFastTokenHandler = xFastTokenHandler;
     }
-    void FastSaxSerializer::writeFastAttributeList( const Reference< XFastAttributeList >& Attribs )
+
+    void FastSaxSerializer::writeFastAttributeList( FastAttributeList* pAttrList )
     {
 #ifdef DBG_UTIL
         ::std::set<OUString> DebugAttributes;
 #endif
-        Sequence< Attribute > aAttrSeq = Attribs->getUnknownAttributes();
-        const Attribute *pAttr = aAttrSeq.getConstArray();
-        sal_Int32 nAttrLength = aAttrSeq.getLength();
-        for (sal_Int32 i = 0; i < nAttrLength; i++)
+        const std::vector< sal_Int32 >& Tokens = pAttrList->getFastAttributeTokens();
+        for (size_t j = 0; j < Tokens.size(); j++)
         {
             writeBytes(sSpace, N_CHARS(sSpace));
 
-            OUString const& rAttrName(pAttr[i].Name);
-#ifdef DBG_UTIL
-            // Well-formedness constraint: Unique Att Spec
-            assert(DebugAttributes.find(rAttrName) == DebugAttributes.end());
-            DebugAttributes.insert(rAttrName);
-#endif
-            write(rAttrName);
-            writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
-            write(pAttr[i].Value, true);
-            writeBytes(sQuote, N_CHARS(sQuote));
-        }
-
-        Sequence< FastAttribute > aFastAttrSeq = Attribs->getFastAttributes();
-        const FastAttribute *pFastAttr = aFastAttrSeq.getConstArray();
-        sal_Int32 nFastAttrLength = aFastAttrSeq.getLength();
-        for (sal_Int32 j = 0; j < nFastAttrLength; j++)
-        {
-            writeBytes(sSpace, N_CHARS(sSpace));
-
-            sal_Int32 nToken = pFastAttr[j].Token;
+            sal_Int32 nToken = Tokens[j];
             writeId(nToken);
 
 #ifdef DBG_UTIL
@@ -244,7 +222,7 @@ namespace sax_fastparser {
 
             writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
 
-            write(pFastAttr[j].Value, true);
+            write(pAttrList->getFastAttributeValue(j), true);
 
             writeBytes(sQuote, N_CHARS(sQuote));
         }

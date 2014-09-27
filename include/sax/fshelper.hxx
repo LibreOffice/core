@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SAX_FSHELPER_HXX
 #define INCLUDED_SAX_FSHELPER_HXX
 
-#include <com/sun/star/uno/XReference.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <stdarg.h>
 #include <boost/shared_ptr.hpp>
 #include <sax/fastattribs.hxx>
@@ -185,8 +183,7 @@ private:
     void singleElementInternal(sal_Int32 elementTokenId, ...);
 
     FastSaxSerializer* mpSerializer;
-    com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastTokenHandler> mxTokenHandler;
-
+    FastAttributeList maAttrList;
 };
 
 typedef boost::shared_ptr< FastSerializerHelper > FSHelperPtr;
