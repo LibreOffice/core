@@ -339,6 +339,7 @@ OutputPosition
 OverlapSequence
 PageScale
 PageStyle
+PageToggle
 PageViewZoomValue
 PaintTransparent
 ParaAdjust
