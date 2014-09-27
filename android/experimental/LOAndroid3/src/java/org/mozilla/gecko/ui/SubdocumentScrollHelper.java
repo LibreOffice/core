@@ -7,15 +7,10 @@ package org.mozilla.gecko.ui;
 
 import android.graphics.PointF;
 import android.os.Handler;
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 class SubdocumentScrollHelper {
     private static final String LOGTAG = "GeckoSubdocumentScrollHelper";
 
-    private final PanZoomController mPanZoomController;
     private final Handler mUiHandler;
 
     /* This is the amount of displacement we have accepted but not yet sent to JS; this is
@@ -38,8 +33,7 @@ class SubdocumentScrollHelper {
      * the subdocument; we use this to decide when we have reached the end of the subdocument. */
     private boolean mScrollSucceeded;
 
-    SubdocumentScrollHelper(PanZoomController controller) {
-        mPanZoomController = controller;
+    SubdocumentScrollHelper() {
         // mUiHandler will be bound to the UI thread since that's where this constructor runs
         mUiHandler = new Handler();
         mPendingDisplacement = new PointF();
@@ -58,14 +52,6 @@ class SubdocumentScrollHelper {
             mPendingDisplacement.x += displacement.x;
             mPendingDisplacement.y += displacement.y;
             return true;
-        }
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("x", displacement.x);
-            json.put("y", displacement.y);
-        } catch (JSONException e) {
-            Log.e(LOGTAG, "Error forming subwindow scroll message: ", e);
         }
 
         mOverrideScrollAck = false;

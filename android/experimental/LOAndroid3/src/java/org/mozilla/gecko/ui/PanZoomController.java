@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
+import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.ViewportMetrics;
@@ -111,7 +112,7 @@ public class PanZoomController
 
     public PanZoomController(LayerController controller) {
         mController = controller;
-        mSubscroller = new SubdocumentScrollHelper(this);
+        mSubscroller = new SubdocumentScrollHelper();
         mX = new AxisX(mSubscroller);
         mY = new AxisY(mSubscroller);
 
@@ -705,14 +706,16 @@ public class PanZoomController
         float minZoomFactor = 0.0f;
         float maxZoomFactor = MAX_ZOOM;
 
-        if (mController.getMinZoom() > 0)
-            minZoomFactor = mController.getMinZoom();
-        if (mController.getMaxZoom() > 0)
-            maxZoomFactor = mController.getMaxZoom();
+        ZoomConstraints constraints = mController.getZoomConstraints();
 
-        if (!mController.getAllowZoom()) {
+        if (constraints.getMinZoom() > 0)
+            minZoomFactor = constraints.getMinZoom();
+        if (constraints.getMaxZoom() > 0)
+            maxZoomFactor = constraints.getMaxZoom();
+
+        if (!constraints.getAllowZoom()) {
             // If allowZoom is false, clamp to the default zoom level.
-            maxZoomFactor = minZoomFactor = mController.getDefaultZoom();
+            maxZoomFactor = minZoomFactor = constraints.getDefaultZoom();
         }
 
         // Ensure minZoomFactor keeps the page at least as big as the viewport.
@@ -782,7 +785,7 @@ public class PanZoomController
         if (mState == PanZoomState.ANIMATED_ZOOM)
             return false;
 
-        if (!mController.getAllowZoom())
+        if (!mController.getZoomConstraints().getAllowZoom())
             return false;
 
         setState(PanZoomState.PINCHING);
@@ -820,10 +823,12 @@ public class PanZoomController
             float minZoomFactor = 0.0f;
             float maxZoomFactor = MAX_ZOOM;
 
-            if (mController.getMinZoom() > 0)
-                minZoomFactor = mController.getMinZoom();
-            if (mController.getMaxZoom() > 0)
-                maxZoomFactor = mController.getMaxZoom();
+            ZoomConstraints constraints = mController.getZoomConstraints();
+
+            if (constraints.getMinZoom() > 0)
+                minZoomFactor = constraints.getMinZoom();
+            if (constraints.getMaxZoom() > 0)
+                maxZoomFactor = constraints.getMaxZoom();
 
             if (newZoomFactor < minZoomFactor) {
                 // apply resistance when zooming past minZoomFactor,

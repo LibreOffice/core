@@ -11,7 +11,6 @@ import android.util.DisplayMetrics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.libreoffice.LibreOfficeMainActivity;
 import org.mozilla.gecko.util.FloatUtils;
 
 /**
@@ -26,10 +25,7 @@ public class ViewportMetrics {
     private RectF mViewportRect;
     private float mZoomFactor;
 
-    public ViewportMetrics() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
+    public ViewportMetrics(DisplayMetrics metrics) {
         mPageRect = new RectF(0, 0, metrics.widthPixels, metrics.heightPixels);
         mCssPageRect = new RectF(0, 0, metrics.widthPixels, metrics.heightPixels);
         mViewportRect = new RectF(0, 0, metrics.widthPixels, metrics.heightPixels);
@@ -59,20 +55,19 @@ public class ViewportMetrics {
         mZoomFactor = viewport.zoomFactor;
     }
 
-
     public ViewportMetrics(JSONObject json) throws JSONException {
         float x = (float)json.getDouble("x");
         float y = (float)json.getDouble("y");
         float width = (float)json.getDouble("width");
         float height = (float)json.getDouble("height");
-        float pageLeft = 0.0f;
-        float pageTop = 0.0f;
-        float pageRight = (float)json.getDouble("pageWidth");
-        float pageBottom = (float)json.getDouble("pageHeight");
-        float cssPageLeft = 0.0f;
-        float cssPageTop = 0.0f;
-        float cssPageRight = (float)json.getDouble("cssPageWidth");
-        float cssPageBottom = (float)json.getDouble("cssPageHeight");
+        float pageLeft = (float)json.getDouble("pageLeft");
+        float pageTop = (float)json.getDouble("pageTop");
+        float pageRight = (float)json.getDouble("pageRight");
+        float pageBottom = (float)json.getDouble("pageBottom");
+        float cssPageLeft = (float)json.getDouble("cssPageLeft");
+        float cssPageTop = (float)json.getDouble("cssPageTop");
+        float cssPageRight = (float)json.getDouble("cssPageRight");
+        float cssPageBottom = (float)json.getDouble("cssPageBottom");
         float zoom = (float)json.getDouble("zoom");
 
         mPageRect = new RectF(pageLeft, pageTop, pageRight, pageBottom);
@@ -178,7 +173,7 @@ public class ViewportMetrics {
      * page size, the offset, and the zoom factor.
      */
     public ViewportMetrics interpolate(ViewportMetrics to, float t) {
-        ViewportMetrics result = new ViewportMetrics();
+        ViewportMetrics result = new ViewportMetrics(this);
         result.mPageRect = RectUtils.interpolate(mPageRect, to.mPageRect, t);
         result.mCssPageRect = RectUtils.interpolate(mCssPageRect, to.mCssPageRect, t);
         result.mZoomFactor = FloatUtils.interpolate(mZoomFactor, to.mZoomFactor, t);
@@ -227,4 +222,3 @@ public class ViewportMetrics {
         return buff.toString();
     }
 }
-

@@ -12,8 +12,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 
+import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.ui.PanZoomController;
 import org.mozilla.gecko.ui.SimpleScaleGestureDetector;
 
@@ -56,21 +58,19 @@ public class LayerController {
     private int mCheckerboardColor = Color.WHITE;
     private boolean mCheckerboardShouldShowChecks;
 
-    private boolean mAllowZoom;
-    private float mDefaultZoom;
-    private float mMinZoom;
-    private float mMaxZoom;
+    private ZoomConstraints mZoomConstraints;
 
     private boolean mForceRedraw;
 
     public LayerController(Context context) {
         mContext = context;
-
         mForceRedraw = true;
-        mViewportMetrics = new ImmutableViewportMetrics(new ViewportMetrics());
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        mViewportMetrics = new ImmutableViewportMetrics(new ViewportMetrics(displayMetrics));
         mPanZoomController = new PanZoomController(this);
         mView = new LayerView(context, this);
         mCheckerboardShouldShowChecks = true;
+        mZoomConstraints = new ZoomConstraints(false);
     }
 
     public void setRoot(Layer layer) { mRootLayer = layer; }
@@ -307,35 +307,11 @@ public class LayerController {
         mView.requestRender();
     }
 
-    public void setAllowZoom(final boolean aValue) {
-        mAllowZoom = aValue;
+    public void setZoomConstraints(ZoomConstraints constraints) {
+        mZoomConstraints = constraints;
     }
 
-    public boolean getAllowZoom() {
-        return mAllowZoom;
-    }
-
-    public void setDefaultZoom(float aValue) {
-        mDefaultZoom = aValue;
-    }
-
-    public float getDefaultZoom() {
-        return mDefaultZoom;
-    }
-
-    public void setMinZoom(float aValue) {
-        mMinZoom = aValue;
-    }
-
-    public float getMinZoom() {
-        return mMinZoom;
-    }
-
-    public void setMaxZoom(float aValue) {
-        mMaxZoom = aValue;
-    }
-
-    public float getMaxZoom() {
-        return mMaxZoom;
+    public ZoomConstraints getZoomConstraints() {
+        return mZoomConstraints;
     }
 }

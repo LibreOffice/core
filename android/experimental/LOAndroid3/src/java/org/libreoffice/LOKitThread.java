@@ -3,6 +3,7 @@ package org.libreoffice;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -28,7 +29,8 @@ public class LOKitThread extends Thread {
         int pageHeight = mTileProvider.getPageHeight();
 
         RectF rect = new RectF(0, 0, pageWidth, pageHeight);
-        mViewportMetrics = new ViewportMetrics();
+        DisplayMetrics displayMetrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
+        mViewportMetrics = new ViewportMetrics(displayMetrics);
         mViewportMetrics.setPageRect(rect, rect);
 
         GeckoLayerClient layerClient = mApplication.getLayerClient();

@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
 
@@ -118,7 +119,7 @@ public class LibreOfficeMainActivity extends Activity {
         }
 
         mLayerController = new LayerController(this);
-        mLayerController.setAllowZoom(true);
+        mLayerController.setZoomConstraints(new ZoomConstraints(true));
         mLayerClient = new GeckoLayerClient(this);
         mLayerController.setLayerClient(mLayerClient);
         mGeckoLayout.addView(mLayerController.getView(), 0);
