@@ -28,6 +28,8 @@
 #pragma warning(disable:4005)
 #endif
 
+#include <prewin.h>
+
 // just to go with calling convention of windows
 #if SYSTEM_ODBC_HEADERS
 #include <windows.h>
@@ -53,6 +55,8 @@
 #endif
 
 #define SDB_ODBC_CHAR UCHAR
+
+#include <postwin.h>
 
 #endif
 
