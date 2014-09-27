@@ -223,6 +223,7 @@
       <menu:menu menu:id=".uno:GraphicMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertGraphic"/>
+          <menu:menuitem menu:id=".uno:InsertAVMedia"/>
           <menu:menu menu:id=".uno:Scan">
             <menu:menupopup>
               <menu:menuitem menu:id=".uno:TwainSelect"/>
@@ -232,7 +233,6 @@
           <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:InsertAVMedia"/>
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObject"/>
