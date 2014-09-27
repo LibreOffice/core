@@ -29,6 +29,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,juh,\
     javaunohelper/com/sun/star/lib/uno/helper/ComponentBase \
     javaunohelper/com/sun/star/lib/uno/helper/InterfaceContainer \
     javaunohelper/com/sun/star/lib/uno/helper/MultiTypeInterfaceContainer \
+    javaunohelper/com/sun/star/lib/uno/helper/PropertySet \
     javaunohelper/com/sun/star/lib/uno/helper/WeakAdapter \
     javaunohelper/com/sun/star/lib/uno/helper/WeakBase \
     javaunohelper/test/com/sun/star/comp/helper/ComponentContext_Test \
@@ -36,6 +37,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,juh,\
     javaunohelper/test/com/sun/star/lib/uno/helper/ComponentBase_Test \
     javaunohelper/test/com/sun/star/lib/uno/helper/InterfaceContainer_Test \
     javaunohelper/test/com/sun/star/lib/uno/helper/MultiTypeInterfaceContainer_Test \
+    javaunohelper/test/com/sun/star/lib/uno/helper/PropertySet_Test \
     javaunohelper/test/com/sun/star/lib/uno/helper/ProxyProvider \
     javaunohelper/test/com/sun/star/lib/uno/helper/WeakBase_Test \
 ))
@@ -45,6 +47,7 @@ $(eval $(call gb_JunitTest_add_classes,juh,\
     com.sun.star.lib.uno.helper.ComponentBase_Test \
     com.sun.star.lib.uno.helper.InterfaceContainer_Test \
     com.sun.star.lib.uno.helper.MultiTypeInterfaceContainer_Test \
+    com.sun.star.lib.uno.helper.PropertySet_Test \
     com.sun.star.lib.uno.helper.WeakBase_Test \
 ))
 
