@@ -105,6 +105,7 @@ public:
 
     void write( const OUString& s, bool bEscape = false );
     void write( const OString& s, bool bEscape = false );
+    void write( const char* pStr, sal_Int32 nLen, bool bEscape = false );
 
 public:
     /** From now on, don't write directly to the stream, but to top of a stack.
