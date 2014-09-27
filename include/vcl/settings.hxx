@@ -358,6 +358,12 @@ public:
     void                            SetInactiveTabColor( const Color& rColor );
     const Color&                    GetInactiveTabColor() const;
 
+    void                            SetAlternatingRowColor( const Color& rColor );
+    const Color&                    GetAlternatingRowColor() const;
+
+    void                            SetAlternatingRowColor2( const Color& rColor );
+    const Color&                    GetAlternatingRowColor2() const;
+
     void                            SetHighContrastMode(bool bHighContrast );
     bool                            GetHighContrastMode() const;
 
