@@ -41,18 +41,18 @@ class FastSaxSerializer
     typedef ::com::sun::star::uno::Sequence< ::sal_Int32 > Int32Sequence;
 
 public:
-    explicit FastSaxSerializer();
+    FastSaxSerializer();
     ~FastSaxSerializer();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream() {return mxOutputStream;}
 
     /** called by the parser when parsing of an XML stream is started.
      */
-    void SAL_CALL startDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    void startDocument();
 
     /** called by the parser after the last XML element of a stream is processed.
      */
-    void SAL_CALL endDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    void endDocument();
 
     /** receives notification of the beginning of an element.
 
@@ -71,14 +71,12 @@ public:
             from the element.
 
     */
-    void SAL_CALL startFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
-        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    void startFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
 
     /** receives notification of the end of an known element.
         @see startFastElement
      */
-    void SAL_CALL endFastElement( ::sal_Int32 Element )
-        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    void endFastElement( ::sal_Int32 Element );
 
     /** receives notification of the beginning of a single element.
 
@@ -97,18 +95,14 @@ public:
             from the element.
 
     */
-    void SAL_CALL singleFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
-        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    void singleFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
 
-    void SAL_CALL setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    void SAL_CALL setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
-        throw (::com::sun::star::uno::RuntimeException);
+    void setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream );
+    void setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler );
 
     // C++ helpers
-    void SAL_CALL writeId( ::sal_Int32 Element );
-    OString SAL_CALL getId( ::sal_Int32 Element );
+    void writeId( ::sal_Int32 Element );
+    OString getId( ::sal_Int32 Element );
 
     void write( const OUString& s, bool bEscape = false );
     void write( const OString& s, bool bEscape = false );
@@ -214,17 +208,15 @@ private:
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
     /// Write to maOutputData and if it's big enough flush that to mxOutputStream
-    void writeOutput( const sal_Int8* pStr, size_t nLen )
-        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
-    void writeOutput( const css::uno::Sequence< ::sal_Int8 >& aData )
-        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
+    void writeOutput( const sal_Int8* pStr, size_t nLen );
+    void writeOutput( const css::uno::Sequence< ::sal_Int8 >& aData );
 
     /** Forward the call to the output stream, or write to the stack.
 
         The latter in the case that we are inside a mark().
      */
-    void writeBytes( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void writeBytes( const char* pStr, size_t nLen ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void writeBytes( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData );
+    void writeBytes( const char* pStr, size_t nLen );
 };
 
 } // namespace sax_fastparser
