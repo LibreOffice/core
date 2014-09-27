@@ -10368,7 +10368,10 @@ dnl Check whether to enable COLLADA support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable COLLADA support])
 ENABLE_COLLADA=
-if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE" -a "$have_std_shared_ptr" = "yes"; then
+if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE"; then
+    if test "$have_std_shared_ptr" = "no"; then
+        AC_MSG_ERROR([Collada support needs std::shared_ptr. Use a newer C++ compiler])
+    fi
     AC_MSG_RESULT([yes])
     ENABLE_COLLADA=TRUE
     AC_DEFINE(HAVE_FEATURE_COLLADA,1)
