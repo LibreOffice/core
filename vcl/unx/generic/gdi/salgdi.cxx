@@ -884,7 +884,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
     if( nBrushColor_ != SALCOLOR_NONE )
     {
         sal_uInt32      i, n;
-        Region pXRegA  = NULL;
+        Region          pXRegA  = NULL;
 
         for( i = 0; i < nPoly; i++ ) {
             n = pPoints[i];

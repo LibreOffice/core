@@ -29,13 +29,13 @@
 class ImplRegionBand;
 class RegionBand;
 class Polygon;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 namespace vcl { class Window; }
 class OutputDevice;
 class Bitmap;
 
 typedef boost::shared_ptr< RegionBand > RegionBandPtr;
-typedef boost::shared_ptr< PolyPolygon > PolyPolygonPtr;
+typedef boost::shared_ptr< tools::PolyPolygon > PolyPolygonPtr;
 typedef boost::shared_ptr< basegfx::B2DPolyPolygon > B2DPolyPolygonPtr;
 typedef std::vector< Rectangle > RectangleVector;
 
@@ -57,10 +57,10 @@ private:
     bool                        mbIsNull : 1;
 
     // helpers
-    SAL_DLLPRIVATE void ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly );
+    SAL_DLLPRIVATE void ImplCreatePolyPolyRegion( const tools::PolyPolygon& rPolyPoly );
     SAL_DLLPRIVATE void ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPolyPoly );
 
-    SAL_DLLPRIVATE PolyPolygon ImplCreatePolyPolygonFromRegionBand() const;
+    SAL_DLLPRIVATE tools::PolyPolygon ImplCreatePolyPolygonFromRegionBand() const;
     SAL_DLLPRIVATE basegfx::B2DPolyPolygon ImplCreateB2DPolyPolygonFromRegionBand() const;
 
 public:
@@ -68,19 +68,19 @@ public:
     explicit Region(bool bIsNull = false); // default creates empty region, with true a null region is created
     explicit Region(const Rectangle& rRect);
     explicit Region(const Polygon& rPolygon);
-    explicit Region(const PolyPolygon& rPolyPoly);
+    explicit Region(const tools::PolyPolygon& rPolyPoly);
     explicit Region(const basegfx::B2DPolyPolygon&);
     Region(const vcl::Region& rRegion);
     ~Region();
 
     // direct access to contents
     const basegfx::B2DPolyPolygon* getB2DPolyPolygon() const { return mpB2DPolyPolygon.get(); }
-    const PolyPolygon* getPolyPolygon() const { return mpPolyPolygon.get(); }
+    const tools::PolyPolygon* getPolyPolygon() const { return mpPolyPolygon.get(); }
     const RegionBand* getRegionBand() const { return mpRegionBand.get(); }
 
     // access with converters, the asked data will be created from the most
     // valuable data, buffered and returned
-    const PolyPolygon GetAsPolyPolygon() const;
+    const tools::PolyPolygon GetAsPolyPolygon() const;
     const basegfx::B2DPolyPolygon GetAsB2DPolyPolygon() const;
     const RegionBand* GetAsRegionBand() const;
 
@@ -124,11 +124,11 @@ public:
      * rectangles, then the returned vcl::Region will be constructed by
      * XOr'ing the contained Polygons together; in the case of
      * only Rectangles this can be up to eight times faster than
-     * Region( const PolyPolygon& ).
+     * Region( const tools::PolyPolygon& ).
      * Caution: this is only useful if the vcl::Region is known to be
      * changed to rectangles; e.g. if being set as clip region
      */
-    static vcl::Region GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly );
+    static vcl::Region GetRegionFromPolyPolygon( const tools::PolyPolygon& rPolyPoly );
 };
 
 } /* namespace vcl */

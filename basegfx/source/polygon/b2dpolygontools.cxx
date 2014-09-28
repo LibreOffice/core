@@ -3449,7 +3449,7 @@ namespace basegfx
                 OSL_ENSURE(com::sun::star::drawing::PolygonFlags_CONTROL != ePolygonFlag && bControlA == bControlB,
                     "UnoPolygonBezierCoordsToB2DPolygon: Illegal source polygon (!)");
 
-                // the previous writes used the B2DPolyPoygon -> PolyPolygon converter
+                // the previous writes used the B2DPolyPoygon -> tools::PolyPolygon converter
                 // which did not create minimal PolyPolygons, but created all control points
                 // as null vectors (identical points). Because of the former P(CA)(CB)-norm of
                 // B2DPolygon and it's unused sign of being the zero-vector and CA and CB being

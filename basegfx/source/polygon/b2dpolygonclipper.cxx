@@ -474,7 +474,7 @@ namespace basegfx
                                 else
                                 {
                                     // use common aIntersectionRange as result, convert
-                                    // to expected PolyPolygon form
+                                    // to expected tools::PolyPolygon form
                                     return basegfx::B2DPolyPolygon(
                                         basegfx::tools::createPolygonFromRect(aIntersectionRange));
                                 }
@@ -489,7 +489,7 @@ namespace basegfx
                     // Also get rid of some not-needed polygons (neutral, no area -> when
                     // no intersections, these are tubes).
                     // Now it is possible to correct the orientations in the cut-free
-                    // polygons to values corresponding to painting the PolyPolygon with
+                    // polygons to values corresponding to painting the tools::PolyPolygon with
                     // a XOR-WindingRule.
                     aMergePolyPolygonA = solveCrossovers(aMergePolyPolygonA);
                     aMergePolyPolygonA = stripNeutralPolygons(aMergePolyPolygonA);

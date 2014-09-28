@@ -2425,7 +2425,7 @@ SwTwips SwFlyFrm::CalcAutoWidth() const
 
 /// OD 16.04.2003 #i13147# - If called for paint and the <SwNoTxtFrm> contains
 /// a graphic, load of intrinsic graphic has to be avoided.
-bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
+bool SwFlyFrm::GetContour( tools::PolyPolygon&   rContour,
                            const bool _bForPaint ) const
 {
     bool bRet = false;

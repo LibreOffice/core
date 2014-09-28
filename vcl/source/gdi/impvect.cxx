@@ -639,7 +639,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
     if( pRAcc )
     {
-        PolyPolygon         aPolyPoly;
+        tools::PolyPolygon         aPolyPoly;
         double              fPercent = 0.0;
         double              fPercentStep_2 = 0.0;
         const long          nWidth = pRAcc->Width();
@@ -731,7 +731,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 }
 
 bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
-                                    PolyPolygon& rPolyPoly,
+                                    tools::PolyPolygon& rPolyPoly,
                                     sal_uLong nFlags, const Link* pProgress )
 {
     boost::scoped_ptr<Bitmap> pBmp(new Bitmap( rMonoBmp ));
@@ -824,11 +824,11 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
     return bRet;
 }
 
-void ImplVectorizer::ImplLimitPolyPoly( PolyPolygon& rPolyPoly )
+void ImplVectorizer::ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
 {
     if( rPolyPoly.Count() > VECT_POLY_MAX )
     {
-        PolyPolygon aNewPolyPoly;
+        tools::PolyPolygon aNewPolyPoly;
         long        nReduce = 0;
         sal_uInt16      nNewCount;
 
@@ -943,7 +943,7 @@ ImplVectMap* ImplVectorizer::ImplExpand( BitmapReadAccess* pRAcc, const Color& r
     return pMap;
 }
 
-void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags )
+void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags )
 {
     const long nWidth = pMap->Width(), nHeight= pMap->Height();
 

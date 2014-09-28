@@ -34,7 +34,7 @@ class SvStream;
 class Color;
 class BitmapEx;
 class Polygon;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class Gradient;
 
 
@@ -106,11 +106,11 @@ private:
                                                         const Size& rOffset, double fSin, double fCos );
     SAL_DLLPRIVATE Polygon         ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt,
                                                           const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE PolyPolygon     ImplGetRotatedPolyPolygon( const PolyPolygon& rPoly, const Point& rRotatePt,
+    SAL_DLLPRIVATE tools::PolyPolygon     ImplGetRotatedPolyPolygon( const tools::PolyPolygon& rPoly, const Point& rRotatePt,
                                                               const Size& rOffset, double fSin, double fCos );
     SAL_DLLPRIVATE void            ImplAddGradientEx( GDIMetaFile&          rMtf,
                                                       const OutputDevice&   rMapDev,
-                                                      const PolyPolygon&    rPolyPoly,
+                                                      const tools::PolyPolygon&    rPolyPoly,
                                                       const Gradient&       rGrad       );
     SAL_DLLPRIVATE bool          ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize );
     SAL_DLLPRIVATE void          ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );

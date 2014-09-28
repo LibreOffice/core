@@ -37,7 +37,7 @@ namespace basegfx
 
 namespace cppcanvas
 {
-    // forward declaration, since PolyPolygon also derives from CanvasGraphic
+    // forward declaration, since tools::PolyPolygon also derives from CanvasGraphic
     typedef ::boost::shared_ptr< class PolyPolygon > PolyPolygonSharedPtr;
 
 

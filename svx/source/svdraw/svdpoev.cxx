@@ -484,7 +484,7 @@ bool SdrPolyEditView::IsOpenCloseMarkedObjectsPossible() const
         {
             // #i76617# Do not yet use basegfx::B2DPolygon since curve definitions
             // are different and methods need to be changed thoroughly with interaction rework
-            const PolyPolygon aPathPolyPolygon(pMarkedPathObject->GetPathPoly());
+            const tools::PolyPolygon aPathPolyPolygon(pMarkedPathObject->GetPathPoly());
             const sal_uInt16 nPolygonCount(aPathPolyPolygon.Count());
 
             for(sal_uInt16 b(0); !bRetval && b < nPolygonCount; b++)

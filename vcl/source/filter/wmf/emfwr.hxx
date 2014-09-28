@@ -73,9 +73,9 @@ private:
     void                ImplWritePoint( const Point& rPoint );
     void                ImplWriteSize( const Size& rSize);
     void                ImplWriteRect( const Rectangle& rRect );
-    void                ImplWritePath( const PolyPolygon& rPolyPoly, bool bClose );
+    void                ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClose );
     void                ImplWritePolygonRecord( const Polygon& rPoly, bool bClose );
-    void                ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly );
+    void                ImplWritePolyPolygonRecord( const tools::PolyPolygon& rPolyPoly );
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, sal_uInt32 nROP );
     void                ImplWriteTextRecord( const Point& rPos, const OUString& rText, const long* pDXArray, sal_uInt32 nWidth );
 

@@ -63,7 +63,7 @@ void E3dPolygonObj::CreateDefaultNormals()
 {
     basegfx::B3DPolyPolygon aPolyNormals;
 
-    // Create a complete PolyPolygon with the plane normal
+    // Create a complete tools::PolyPolygon with the plane normal
     for(sal_uInt32 a(0L); a < aPolyPoly3D.count(); a++)
     {
         // Find source polygon
@@ -92,7 +92,7 @@ void E3dPolygonObj::CreateDefaultNormals()
 void E3dPolygonObj::CreateDefaultTexture()
 {
     basegfx::B2DPolyPolygon aPolyTexture;
-    // Create a complete PolyPolygon with the texture coordinates
+    // Create a complete tools::PolyPolygon with the texture coordinates
     // The texture coordinates extend over X,Y and Z
     // on the whole extreme values in the range 0.0 .. 1.0
     for(sal_uInt32 a(0L); a < aPolyPoly3D.count(); a++)

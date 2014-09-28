@@ -707,7 +707,7 @@ namespace drawinglayer
                                     // a single polygon fill. The form of the fill depends on tiling
                                     if(rFillGraphicAttribute.getTiling())
                                     {
-                                        // with tiling, fill the whole PolyPolygon with the modifier color
+                                        // with tiling, fill the whole tools::PolyPolygon with the modifier color
                                         basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolyPolygon);
 
                                         aLocalPolyPolygon.transform(maCurrentTransformation);
@@ -718,7 +718,7 @@ namespace drawinglayer
                                     else
                                     {
                                         // without tiling, only the area common to the bitmap tile and the
-                                        // PolyPolygon is filled. Create the bitmap tile area in object
+                                        // tools::PolyPolygon is filled. Create the bitmap tile area in object
                                         // coordinates. For this, the object transformation needs to be created
                                         // from the already scaled PolyPolygon. The tile area in object
                                         // coordinates wil always be non-rotated, so it's not necessary to

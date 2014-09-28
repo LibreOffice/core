@@ -1170,7 +1170,7 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
     {
     case OWN_ATTR_VALUE_POLYPOLYGON:
     {
-        // PolyPolygon in eine struct PolyPolygon packen
+        // tools::PolyPolygon in eine struct tools::PolyPolygon packen
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PointSequenceSequence aRetval( rPolyPoly.count() );
 
@@ -1181,7 +1181,7 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
     }
     case OWN_ATTR_BASE_GEOMETRY:
     {
-        // pack a PolyPolygon in struct PolyPolygon
+        // pack a tools::PolyPolygon in struct PolyPolygon
         basegfx::B2DPolyPolygon aNewPolyPolygon;
         basegfx::B2DHomMatrix aNewHomogenMatrix;
 
@@ -1195,7 +1195,7 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
     }
     case OWN_ATTR_VALUE_POLYGON:
     {
-        // PolyPolygon in eine struct PolyPolygon packen
+        // tools::PolyPolygon in eine struct tools::PolyPolygon packen
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
 
         sal_Int32 nCount = 0;
@@ -1331,7 +1331,7 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, con
     {
     case OWN_ATTR_VALUE_POLYPOLYGONBEZIER:
     {
-        // PolyPolygon in eine struct PolyPolygon packen
+        // tools::PolyPolygon in eine struct tools::PolyPolygon packen
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PolyPolygonBezierCoords aRetval;
         basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier(rPolyPoly, aRetval);
@@ -1341,7 +1341,7 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, con
     }
     case OWN_ATTR_BASE_GEOMETRY:
     {
-        // PolyPolygon in eine struct PolyPolygon packen
+        // tools::PolyPolygon in eine struct tools::PolyPolygon packen
         basegfx::B2DPolyPolygon aNewPolyPolygon;
         basegfx::B2DHomMatrix aNewHomogenMatrix;
         mpObj.get()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);

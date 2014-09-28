@@ -273,7 +273,7 @@ void CGM::ImplDoClass4()
                 sal_uInt16      nPoints = 0;
                 boost::scoped_array<Point> pPoints(new Point[ 0x4000 ]);
 
-                PolyPolygon aPolyPolygon;
+                tools::PolyPolygon aPolyPolygon;
                 FloatPoint  aFloatPoint;
                 sal_uInt32      nEdgeFlag;
                 while ( mnParaSize < mnElementSize )

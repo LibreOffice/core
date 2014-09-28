@@ -688,7 +688,7 @@ void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, bool bClose )
     }
 }
 
-void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
+void EMFWriter::ImplWritePolyPolygonRecord( const tools::PolyPolygon& rPolyPoly )
 {
     sal_uInt16 n, i, nPolyCount = rPolyPoly.Count();
 
@@ -737,7 +737,7 @@ void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
     }
 }
 
-void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, bool bClosed )
+void EMFWriter::ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClosed )
 {
     if ( bClosed )
         ImplCheckFillAttr();
@@ -969,7 +969,7 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
                 const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                ImplWritePolyPolygonRecord(PolyPolygon(Polygon(aPolygon)));
+                ImplWritePolyPolygonRecord(tools::PolyPolygon(Polygon(aPolygon)));
             }
 
             maVDev.SetLineColor(aOldLineColor);
@@ -1192,7 +1192,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_TRANSPARENT_ACTION:
             {
-                const PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
+                const tools::PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
                 if( rPolyPoly.Count() )
                     ImplWritePlusFillPolygonRecord( rPolyPoly[0], static_cast<const MetaTransparentAction*>(pAction)->GetTransparence() );
                 ImplCheckFillAttr();

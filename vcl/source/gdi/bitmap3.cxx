@@ -2409,7 +2409,7 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
     }
 }
 
-bool Bitmap::Vectorize( PolyPolygon& rPolyPoly, sal_uLong nFlags, const Link* pProgress )
+bool Bitmap::Vectorize( tools::PolyPolygon& rPolyPoly, sal_uLong nFlags, const Link* pProgress )
 {
     return ImplVectorizer().ImplVectorize( *this, rPolyPoly, nFlags, pProgress );
 }

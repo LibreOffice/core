@@ -34,7 +34,7 @@ namespace drawinglayer
         /** SdrExtrudePrimitive3D class
 
             This 3D primitive expands the SdrPrimitive3D to a 3D extrude definition.
-            The given 2D PolyPolygon geometry is imagined as lying on the XY-plane in 3D
+            The given 2D tools::PolyPolygon geometry is imagined as lying on the XY-plane in 3D
             and gets extruded in Z-Direction by Depth.
 
             Various possibilities e.g. for creating diagonals (edge roudings in 3D)

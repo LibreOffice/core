@@ -1327,10 +1327,10 @@ public:
     bool        IsFontWork() const;
 
     // helper functions which are also used by the escher import
-    static PolyPolygon  GetPolyPolygon(
+    static tools::PolyPolygon  GetPolyPolygon(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape
                         );
-    static PolyPolygon  GetPolyPolygon( const ::com::sun::star::uno::Any& rSource );
+    static tools::PolyPolygon  GetPolyPolygon( const ::com::sun::star::uno::Any& rSource );
     static MSO_SPT      GetCustomShapeType(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                             sal_uInt32& nMirrorFlags

@@ -348,7 +348,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 // Number of points of each polygon. Determine total number of points
                 boost::scoped_array<sal_uInt16> xPolygonPointCounts(new sal_uInt16[nPolyCount]);
                 sal_uInt16* pnPoints = xPolygonPointCounts.get();
-                PolyPolygon aPolyPoly(nPolyCount, nPolyCount);
+                tools::PolyPolygon aPolyPoly(nPolyCount, nPolyCount);
                 sal_uInt16 nPoints = 0;
                 for (sal_uInt16 a = 0; a < nPolyCount && pWMF->good(); ++a)
                 {
@@ -906,7 +906,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadInt16( nObjIndex );
             if ( !nObjIndex )
             {
-                PolyPolygon aEmptyPolyPoly;
+                tools::PolyPolygon aEmptyPolyPoly;
                 pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY, true );
             }
         }

@@ -944,7 +944,7 @@ namespace basegfx
 {
     namespace tools
     {
-        // convert Source PolyPolygon to trapezoids
+        // convert Source tools::PolyPolygon to trapezoids
         void trapezoidSubdivide(B2DTrapezoidVector& ro_Result, const B2DPolyPolygon& rSourcePolyPolygon)
         {
             trapezoidhelper::TrapezoidSubdivider aTrapezoidSubdivider(rSourcePolyPolygon);

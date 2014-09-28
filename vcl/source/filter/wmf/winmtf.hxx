@@ -287,7 +287,7 @@ class WinMtfClipPath
 public :
     WinMtfClipPath(): maClip() {};
 
-    void        setClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode );
+    void        setClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode );
     void        intersectClipRect( const Rectangle& rRect );
     void        excludeClipRect( const Rectangle& rRect );
     void        moveClipRegion( const Size& rSize );
@@ -302,7 +302,7 @@ public :
                 };
 };
 
-class WinMtfPathObj : public PolyPolygon
+class WinMtfPathObj : public tools::PolyPolygon
 {
     bool    bClosed;
 
@@ -322,7 +322,7 @@ public:
     void        AddPoint( const Point& rPoint );
     void        AddPolygon( const Polygon& rPoly );
     void        AddPolyLine( const Polygon& rPoly );
-    void        AddPolyPolygon( const PolyPolygon& rPolyPolygon );
+    void        AddPolyPolygon( const tools::PolyPolygon& rPolyPolygon );
 };
 
 struct WinMtfFontStyle
@@ -640,12 +640,12 @@ class WinMtfOutput
     Rectangle           ImplMap( const Rectangle& rRectangle );
     void                ImplMap( vcl::Font& rFont );
     Polygon&            ImplMap( Polygon& rPolygon );
-    PolyPolygon&        ImplMap( PolyPolygon& rPolyPolygon );
+    tools::PolyPolygon&        ImplMap( tools::PolyPolygon& rPolyPolygon );
     Polygon&            ImplScale( Polygon& rPolygon );
-    PolyPolygon&        ImplScale( PolyPolygon& rPolyPolygon );
+    tools::PolyPolygon&        ImplScale( tools::PolyPolygon& rPolyPolygon );
     void                ImplResizeObjectArry( sal_uInt32 nNewEntry );
     void                ImplSetNonPersistentLineColorTransparenz();
-    void                ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly );
+    void                ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void                ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx& rBitmap );
 
 public:
@@ -695,7 +695,7 @@ public:
 
     void                ClearPath(){ aPathObj.Init(); };
     void                ClosePath(){ aPathObj.ClosePath(); };
-    const PolyPolygon&  GetPathObj(){ return aPathObj; };
+    const tools::PolyPolygon&  GetPathObj(){ return aPathObj; };
 
     void                MoveTo( const Point& rPoint, bool bRecordPath = false );
     void                LineTo( const Point& rPoint, bool bRecordPath = false );
@@ -725,7 +725,7 @@ public:
                             //For ReadAndDrawPolygon template compatibility
                             DrawPolygon(rPolygon, bRecordPath);
                         }
-    void                DrawPolyPolygon( PolyPolygon& rPolyPolygon, bool bRecordPath = false );
+    void                DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bRecordPath = false );
     void                DrawPolyLine(
                             Polygon& rPolygon,
                             bool bDrawTo = false,
@@ -748,7 +748,7 @@ public:
     void                ExcludeClipRect( const Rectangle& rRect );
     void                MoveClipRegion( const Size& rSize );
     void                SetClipPath(
-                            const PolyPolygon& rPolyPoly,
+                            const tools::PolyPolygon& rPolyPoly,
                             sal_Int32 nClippingMode,
                             bool bIsMapped
                         );

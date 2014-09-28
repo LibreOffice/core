@@ -543,7 +543,7 @@ namespace drawinglayer
                             }
                             else
                             {
-                                OSL_ENSURE(bSamePolygonCount, "Slice PolyPolygon with different Polygon count (!)");
+                                OSL_ENSURE(bSamePolygonCount, "Slice tools::PolyPolygon with different Polygon count (!)");
                                 OSL_ENSURE(bSamePointCount, "Slice Polygon with different point count (!)");
                             }
                         }

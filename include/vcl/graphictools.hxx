@@ -83,8 +83,8 @@ public:
         See accessor method descriptions for argument description
      */
     SvtGraphicStroke( const Polygon&        rPath,
-                      const PolyPolygon&    rStartArrow,
-                      const PolyPolygon&    rEndArrow,
+                      const tools::PolyPolygon&    rStartArrow,
+                      const tools::PolyPolygon&    rEndArrow,
                       double                fTransparency,
                       double                fStrokeWidth,
                       CapType               aCap,
@@ -108,7 +108,7 @@ public:
         width, it has to fit every stroke with every stroke width
         exactly.
      */
-    void            getStartArrow       ( PolyPolygon& ) const;
+    void            getStartArrow       ( tools::PolyPolygon& ) const;
     /** Get the polygon that is put at the end of the line
 
         The polygon is in a special normalized position, and already
@@ -122,7 +122,7 @@ public:
         arrow does have this width, it has to fit every stroke with
         every stroke width exactly.
      */
-    void            getEndArrow         ( PolyPolygon& ) const;
+    void            getEndArrow         ( tools::PolyPolygon& ) const;
     /** Get stroke transparency
 
         @return the transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
@@ -155,7 +155,7 @@ public:
         arrow does have this width, it will fit every stroke with
         every stroke width exactly.
      */
-    void    setStartArrow       ( const PolyPolygon& );
+    void    setStartArrow       ( const tools::PolyPolygon& );
     /** Set the polygon that is put at the end of the line
 
         The polygon has to be in a special normalized position, and
@@ -169,7 +169,7 @@ public:
         arrow does have this width, it will fit every stroke with
         every stroke width exactly.
      */
-    void    setEndArrow         ( const PolyPolygon& );
+    void    setEndArrow         ( const tools::PolyPolygon& );
     /// Affine scaling in both X and Y dimensions
     void    scale               ( double fScaleX, double fScaleY );
 
@@ -179,8 +179,8 @@ private:
     VCL_DLLPUBLIC friend SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass );
 
     Polygon         maPath;
-    PolyPolygon     maStartArrow;
-    PolyPolygon     maEndArrow;
+    tools::PolyPolygon     maStartArrow;
+    tools::PolyPolygon     maEndArrow;
     double          mfTransparency;
     double          mfStrokeWidth;
     CapType         maCapType;
@@ -281,7 +281,7 @@ public:
 
         See accessor method descriptions for argument description
      */
-    SvtGraphicFill( const PolyPolygon&  rPath,
+    SvtGraphicFill( const tools::PolyPolygon&  rPath,
                     Color               aFillColor,
                     double              fTransparency,
                     FillRule            aFillRule,
@@ -298,7 +298,7 @@ public:
 
     // accessors
     /// Query path to fill
-    void            getPath             ( PolyPolygon& ) const;
+    void            getPath             ( tools::PolyPolygon& ) const;
     /// Get color used for solid fills
     const Color&    getFillColor        () const { return maFillColor;}
     /** Get stroke transparency
@@ -348,14 +348,14 @@ public:
 
     // mutators
     /// Set path to fill
-    void    setPath             ( const PolyPolygon& rPath );
+    void    setPath             ( const tools::PolyPolygon& rPath );
 
 private:
     // friends
     VCL_DLLPUBLIC friend SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass );
     VCL_DLLPUBLIC friend SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass );
 
-    PolyPolygon     maPath;
+    tools::PolyPolygon     maPath;
     Color           maFillColor;
     double          mfTransparency;
     FillRule        maFillRule;

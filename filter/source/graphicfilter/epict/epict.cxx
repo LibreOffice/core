@@ -110,7 +110,7 @@ private:
         // counts the bitmaps and actions (nNumberOfActions and nNumberOfBitmaps
         // have to be set to 0 at the beginning, since this method is recursive)
 
-    Polygon PolyPolygonToPolygon(const PolyPolygon & rPoly);
+    Polygon PolyPolygonToPolygon(const tools::PolyPolygon & rPoly);
         // generates a relatively sane polygon on the basis of a PolyPolygon
 
     Rectangle MapRectangle( const Rectangle& rRect );
@@ -219,7 +219,7 @@ void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
 }
 
 
-Polygon PictWriter::PolyPolygonToPolygon(const PolyPolygon & rPolyPoly)
+Polygon PictWriter::PolyPolygonToPolygon(const tools::PolyPolygon & rPolyPoly)
 {
     sal_uInt16 nCount,nSize1,nSize2,np,i1,i2,i3,nBestIdx1,nBestIdx2;
     long nDistSqr,nBestDistSqr, nCountdownTests;
@@ -1667,9 +1667,9 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*) pMA;
 
-                const PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
+                const tools::PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
                 sal_uInt16 nPolyCount = rPolyPoly.Count();
-                PolyPolygon aSimplePolyPoly( rPolyPoly );
+                tools::PolyPolygon aSimplePolyPoly( rPolyPoly );
                 for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
                 {
                     if ( aSimplePolyPoly[ i ].HasFlags() )
@@ -2074,7 +2074,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_TRANSPARENT_ACTION:
             {
-                const PolyPolygon& rPolyPoly = ( (const MetaTransparentAction*) pMA )->GetPolyPolygon();
+                const tools::PolyPolygon& rPolyPoly = ( (const MetaTransparentAction*) pMA )->GetPolyPolygon();
 
                 if (aFillColor!=Color( COL_TRANSPARENT ))
                 {

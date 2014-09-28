@@ -1866,7 +1866,7 @@ vcl::Region ScOutputData::GetChangedAreaRegion()
 
 bool ScOutputData::SetChangedClip()
 {
-    PolyPolygon aPoly;
+    tools::PolyPolygon aPoly;
 
     Rectangle aDrawingRect;
     aDrawingRect.Left() = nScrX;
@@ -2078,10 +2078,10 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                 Rectangle aLowerLeft ( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 );
                 Rectangle aUpperRight( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 );
 
-                mpDev->DrawTransparent( PolyPolygon( Polygon( aLowerRight ) ), lclCornerRectTransparency );
-                mpDev->DrawTransparent( PolyPolygon( Polygon( aUpperLeft  ) ), lclCornerRectTransparency );
-                mpDev->DrawTransparent( PolyPolygon( Polygon( aLowerLeft  ) ), lclCornerRectTransparency );
-                mpDev->DrawTransparent( PolyPolygon( Polygon( aUpperRight ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( tools::PolyPolygon( Polygon( aLowerRight ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( tools::PolyPolygon( Polygon( aUpperLeft  ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( tools::PolyPolygon( Polygon( aLowerLeft  ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( tools::PolyPolygon( Polygon( aUpperRight ) ), lclCornerRectTransparency );
             }
         }
     }

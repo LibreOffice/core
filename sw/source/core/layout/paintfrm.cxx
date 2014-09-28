@@ -1709,7 +1709,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
         /// draw background transparent
         if( _pOut->GetFillColor() != aColor.GetRGBColor() )
             _pOut->SetFillColor( aColor.GetRGBColor() );
-        PolyPolygon aPoly( _rAlignedPaintRect.SVRect() );
+        tools::PolyPolygon aPoly( _rAlignedPaintRect.SVRect() );
         _pOut->DrawTransparent( aPoly, nTransparencyPercent );
     }
     else
@@ -2181,7 +2181,7 @@ void DrawGraphic(
                 // background region have to be drawn transparent.
                 // Thus, create a poly-polygon from the region and draw it with
                 // the corresponding transparency precent.
-                PolyPolygon aDrawPoly( rOut.SVRect() );
+                tools::PolyPolygon aDrawPoly( rOut.SVRect() );
                 if ( aGrf.HasArea() )
                 {
                     if ( !bGrfIsTransparent )
@@ -4108,7 +4108,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     {
         bool bContour = GetFmt()->GetSurround().IsContour();
-        PolyPolygon aPoly;
+        tools::PolyPolygon aPoly;
         if ( bContour )
         {
             // OD 16.04.2003 #i13147# - add 2nd parameter with value <sal_True>

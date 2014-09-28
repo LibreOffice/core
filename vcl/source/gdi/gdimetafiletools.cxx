@@ -69,7 +69,7 @@ namespace
                     {
                         rTarget.AddAction(
                             new MetaPolyPolygonAction(
-                                PolyPolygon(aResult)));
+                                tools::PolyPolygon(aResult)));
                     }
                 }
             }
@@ -105,7 +105,7 @@ namespace
                     // add clipped geometry
                     rTarget.AddAction(
                         new MetaGradientExAction(
-                            PolyPolygon(aResult),
+                            tools::PolyPolygon(aResult),
                             rGradient));
                 }
             }
@@ -191,7 +191,7 @@ namespace
         aPixelPoly.transform(aTransform);
 
         // to fill the non-covered parts, use the Xor fill rule of
-        // PolyPolygon painting. Start with a all-covering polygon and
+        // tools::PolyPolygon painting. Start with a all-covering polygon and
         // add the clip polygon one
         basegfx::B2DPolyPolygon aInvertPixelPoly;
 
@@ -693,7 +693,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case META_POLYPOLYGON_ACTION :
                 {
                     const MetaPolyPolygonAction* pA = static_cast< const MetaPolyPolygonAction* >(pAction);
-                    const PolyPolygon& rPoly = pA->GetPolyPolygon();
+                    const tools::PolyPolygon& rPoly = pA->GetPolyPolygon();
 
                     bDone = handleGeometricContent(
                         aClips.back(),
@@ -872,7 +872,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     else if(rComment.equalsIgnoreAsciiCase("XPATHFILL_SEQ_BEGIN"))
                     {
                         SvtGraphicFill aFilling;
-                        PolyPolygon aPath;
+                        tools::PolyPolygon aPath;
 
                         {   // read SvtGraphicFill
                             SvMemoryStream aMemStm((void*)pA->GetData(), pA->GetDataSize(),STREAM_READ);
@@ -896,7 +896,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                 if(aResult != aSource)
                                 {
                                     // add clipped geometry
-                                    aFilling.setPath(PolyPolygon(aResult));
+                                    aFilling.setPath(tools::PolyPolygon(aResult));
                                     addSvtGraphicFill(aFilling, aTarget);
                                     bDone = true;
                                 }
@@ -904,7 +904,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             else
                             {
                                 // exchange with empty polygon
-                                aFilling.setPath(PolyPolygon());
+                                aFilling.setPath(tools::PolyPolygon());
                                 addSvtGraphicFill(aFilling, aTarget);
                                 bDone = true;
                             }
@@ -989,7 +989,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case META_GRADIENTEX_ACTION :
                 {
                     const MetaGradientExAction* pA = static_cast< const MetaGradientExAction* >(pAction);
-                    const PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
+                    const tools::PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
 
                     bDone = handleGradientContent(
                         aClips.back(),

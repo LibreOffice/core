@@ -38,7 +38,7 @@ class VirtualDevice;
 class Gradient;
 class Rectangle;
 namespace vcl { class Font; }
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class Point;
 class MetaCommentAction;
 
@@ -259,7 +259,7 @@ static float GetSwapFloat( SvStream& rSt )
                                     const char*  pCommentString,
                                     sal_uInt16       nType ) const;
 
-            void createGradientAction( const ::PolyPolygon&           rPoly,
+            void createGradientAction( const ::tools::PolyPolygon&    rPoly,
                                        const ::Gradient&              rGradient,
                                        const ActionFactoryParameters& rParms,
                                        bool                           bIsPolygonRectangle,

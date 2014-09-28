@@ -37,7 +37,7 @@ namespace
     /** Return <TRUE/> when the given polygon is rectiliner and oriented so that
         all sides are either horizontal or vertical.
     */
-    bool ImplIsPolygonRectilinear (const PolyPolygon& rPolyPoly)
+    bool ImplIsPolygonRectilinear (const tools::PolyPolygon& rPolyPoly)
     {
         // Iterate over all polygons.
         const sal_uInt16 nPolyCount = rPolyPoly.Count();
@@ -82,7 +82,7 @@ namespace
             A new RegionBand object is returned that contains the bands that
             represent the given poly-polygon.
     */
-    RegionBand* ImplRectilinearPolygonToBands(const PolyPolygon& rPolyPoly)
+    RegionBand* ImplRectilinearPolygonToBands(const tools::PolyPolygon& rPolyPoly)
     {
         OSL_ASSERT(ImplIsPolygonRectilinear (rPolyPoly));
 
@@ -180,7 +180,7 @@ namespace
     /** Convert a general polygon (one for which ImplIsPolygonRectilinear()
         returns <FALSE/>) to bands.
     */
-    RegionBand* ImplGeneralPolygonToBands(const PolyPolygon& rPolyPoly, const Rectangle& rPolygonBoundingBox)
+    RegionBand* ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const Rectangle& rPolygonBoundingBox)
     {
         long nLineID = 0L;
 
@@ -229,7 +229,7 @@ bool vcl::Region::IsEmpty() const
 }
 
 
-RegionBand* ImplCreateRegionBandFromPolyPolygon(const PolyPolygon& rPolyPolygon)
+RegionBand* ImplCreateRegionBandFromPolyPolygon(const tools::PolyPolygon& rPolyPolygon)
 {
     RegionBand* pRetval = 0;
 
@@ -237,7 +237,7 @@ RegionBand* ImplCreateRegionBandFromPolyPolygon(const PolyPolygon& rPolyPolygon)
     {
         // ensure to subdivide when bezier segemnts are used, it's going to
         // be expanded to rectangles
-        PolyPolygon aPolyPolygon;
+        tools::PolyPolygon aPolyPolygon;
 
         rPolyPolygon.AdaptiveSubdivide(aPolyPolygon);
 
@@ -277,9 +277,9 @@ RegionBand* ImplCreateRegionBandFromPolyPolygon(const PolyPolygon& rPolyPolygon)
     return pRetval;
 }
 
-PolyPolygon vcl::Region::ImplCreatePolyPolygonFromRegionBand() const
+tools::PolyPolygon vcl::Region::ImplCreatePolyPolygonFromRegionBand() const
 {
-    PolyPolygon aRetval;
+    tools::PolyPolygon aRetval;
 
     if(getRegionBand())
     {
@@ -301,7 +301,7 @@ PolyPolygon vcl::Region::ImplCreatePolyPolygonFromRegionBand() const
 
 basegfx::B2DPolyPolygon vcl::Region::ImplCreateB2DPolyPolygonFromRegionBand() const
 {
-    PolyPolygon aPoly(ImplCreatePolyPolygonFromRegionBand());
+    tools::PolyPolygon aPoly(ImplCreatePolyPolygonFromRegionBand());
 
     return aPoly.getB2DPolyPolygon();
 }
@@ -336,7 +336,7 @@ Region::Region(const Polygon& rPolygon)
     }
 }
 
-Region::Region(const PolyPolygon& rPolyPoly)
+Region::Region(const tools::PolyPolygon& rPolyPoly)
 :   mpB2DPolyPolygon(),
     mpPolyPolygon(),
     mpRegionBand(),
@@ -374,7 +374,7 @@ Region::~Region()
 {
 }
 
-void vcl::Region::ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly )
+void vcl::Region::ImplCreatePolyPolyRegion( const tools::PolyPolygon& rPolyPoly )
 {
     const sal_uInt16 nPolyCount = rPolyPoly.Count();
 
@@ -392,7 +392,7 @@ void vcl::Region::ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly )
             }
             else
             {
-                mpPolyPolygon.reset(new PolyPolygon(rPolyPoly));
+                mpPolyPolygon.reset(new tools::PolyPolygon(rPolyPoly));
             }
 
             mbIsNull = false;
@@ -434,11 +434,11 @@ void vcl::Region::Move( long nHorzMove, long nVertMove )
     }
     else if(getPolyPolygon())
     {
-        PolyPolygon aPoly(*getPolyPolygon());
+        tools::PolyPolygon aPoly(*getPolyPolygon());
 
         aPoly.Move(nHorzMove, nVertMove);
         mpB2DPolyPolygon.reset();
-        mpPolyPolygon.reset(aPoly.Count() ? new PolyPolygon(aPoly) : 0);
+        mpPolyPolygon.reset(aPoly.Count() ? new tools::PolyPolygon(aPoly) : 0);
         mpRegionBand.reset();
     }
     else if(getRegionBand())
@@ -481,11 +481,11 @@ void vcl::Region::Scale( double fScaleX, double fScaleY )
     }
     else if(getPolyPolygon())
     {
-        PolyPolygon aPoly(*getPolyPolygon());
+        tools::PolyPolygon aPoly(*getPolyPolygon());
 
         aPoly.Scale(fScaleX, fScaleY);
         mpB2DPolyPolygon.reset();
-        mpPolyPolygon.reset(aPoly.Count() ? new PolyPolygon(aPoly) : 0);
+        mpPolyPolygon.reset(aPoly.Count() ? new tools::PolyPolygon(aPoly) : 0);
         mpRegionBand.reset();
     }
     else if(getRegionBand())
@@ -629,7 +629,7 @@ bool vcl::Region::Intersect( const Rectangle& rRect )
         }
         else // if(getPolyPolygon())
         {
-            PolyPolygon aPoly(*getPolyPolygon());
+            tools::PolyPolygon aPoly(*getPolyPolygon());
 
             // use the PolyPolygon::Clip method for rectangles, this is
             // fairly simple (does not even use GPC) and saves us from
@@ -637,7 +637,7 @@ bool vcl::Region::Intersect( const Rectangle& rRect )
             aPoly.Clip(rRect);
 
             mpB2DPolyPolygon.reset();
-            mpPolyPolygon.reset(aPoly.Count() ? new PolyPolygon(aPoly) : 0);
+            mpPolyPolygon.reset(aPoly.Count() ? new tools::PolyPolygon(aPoly) : 0);
             mpRegionBand.reset();
         }
 
@@ -1276,7 +1276,7 @@ Rectangle vcl::Region::GetBoundRect() const
     return Rectangle();
 }
 
-const PolyPolygon vcl::Region::GetAsPolyPolygon() const
+const tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
 {
     if(getPolyPolygon())
     {
@@ -1286,8 +1286,8 @@ const PolyPolygon vcl::Region::GetAsPolyPolygon() const
     if(getB2DPolyPolygon())
     {
         // the polygon needs to be converted, buffer the down converion
-        const PolyPolygon aPolyPolgon(*getB2DPolyPolygon());
-        const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new PolyPolygon(aPolyPolgon));
+        const tools::PolyPolygon aPolyPolgon(*getB2DPolyPolygon());
+        const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new tools::PolyPolygon(aPolyPolgon));
 
         return *getPolyPolygon();
     }
@@ -1295,13 +1295,13 @@ const PolyPolygon vcl::Region::GetAsPolyPolygon() const
     if(getRegionBand())
     {
         // the BandRegion needs to be converted, buffer the converion
-        const PolyPolygon aPolyPolgon(ImplCreatePolyPolygonFromRegionBand());
-        const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new PolyPolygon(aPolyPolgon));
+        const tools::PolyPolygon aPolyPolgon(ImplCreatePolyPolygonFromRegionBand());
+        const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new tools::PolyPolygon(aPolyPolgon));
 
         return *getPolyPolygon();
     }
 
-    return PolyPolygon();
+    return tools::PolyPolygon();
 }
 
 const basegfx::B2DPolyPolygon vcl::Region::GetAsB2DPolyPolygon() const
@@ -1339,7 +1339,7 @@ const RegionBand* vcl::Region::GetAsRegionBand() const
         if(getB2DPolyPolygon())
         {
             // convert B2DPolyPolygon to RegionBand, buffer it and return it
-            const_cast< vcl::Region* >(this)->mpRegionBand.reset(ImplCreateRegionBandFromPolyPolygon(PolyPolygon(*getB2DPolyPolygon())));
+            const_cast< vcl::Region* >(this)->mpRegionBand.reset(ImplCreateRegionBandFromPolyPolygon(tools::PolyPolygon(*getB2DPolyPolygon())));
         }
         else if(getPolyPolygon())
         {
@@ -1593,7 +1593,7 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
 
                 if(bHasPolyPolygon)
                 {
-                    PolyPolygon* pNewPoly = new PolyPolygon();
+                    tools::PolyPolygon* pNewPoly = new tools::PolyPolygon();
                     ReadPolyPolygon( rIStrm, *pNewPoly );
                     rRegion.mpPolyPolygon.reset(pNewPoly);
                 }
@@ -1669,7 +1669,7 @@ SvStream& WriteRegion( SvStream& rOStrm, const vcl::Region& rRegion )
     if(bHasPolyPolygon)
     {
         // #i105373#
-        PolyPolygon aNoCurvePolyPolygon;
+        tools::PolyPolygon aNoCurvePolyPolygon;
         rRegion.GetAsPolyPolygon().AdaptiveSubdivide(aNoCurvePolyPolygon);
 
         WritePolyPolygon( rOStrm, aNoCurvePolyPolygon );
@@ -1746,7 +1746,7 @@ static inline bool ImplPolygonRectTest( const Polygon& rPoly, Rectangle* pRectOu
     return bIsRect;
 }
 
-vcl::Region vcl::Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
+vcl::Region vcl::Region::GetRegionFromPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     //return vcl::Region( rPolyPoly );
 

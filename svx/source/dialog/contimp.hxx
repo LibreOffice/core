@@ -34,7 +34,7 @@ class SvxSuperContourDlg : public SvxContourDlg
     Graphic             aUndoGraphic;
     Graphic             aRedoGraphic;
     Graphic             aUpdateGraphic;
-    PolyPolygon         aUpdatePolyPoly;
+    tools::PolyPolygon         aUpdatePolyPoly;
     Timer               aUpdateTimer;
     Timer               aCreateTimer;
     Size                aLastSize;
@@ -91,8 +91,8 @@ public:
     const Graphic&      GetGraphic() const { return aGraphic; }
     bool                IsGraphicChanged() const { return nGrfChanged > 0UL; }
 
-    void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
-    PolyPolygon         GetPolyPolygon( bool bRescaleToGraphic = true );
+    void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
+    tools::PolyPolygon         GetPolyPolygon( bool bRescaleToGraphic = true );
 
     void                SetEditingObject( void* pObj ) { pCheckObj = pObj; }
     const void*         GetEditingObject() const { return pCheckObj; }
@@ -101,7 +101,7 @@ public:
     bool                IsRedoPossible() const;
 
     void                UpdateGraphic( const Graphic& rGraphic, bool bGraphicLinked,
-                                const PolyPolygon* pPolyPoly = NULL,
+                                const tools::PolyPolygon* pPolyPoly = NULL,
                                 void* pEditingObj = NULL );
 };
 

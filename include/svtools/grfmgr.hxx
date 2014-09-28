@@ -201,7 +201,7 @@ private:
                                 Point& rPt,
                                 Size& rSz,
                                 const GraphicAttr* pAttr,
-                                PolyPolygon& rClipPolyPoly,
+                                tools::PolyPolygon& rClipPolyPoly,
                                 bool& bRectClipRegion
                             ) const;
 

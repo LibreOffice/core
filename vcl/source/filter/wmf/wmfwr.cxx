@@ -496,7 +496,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
                 aSrcLineColor = Color( COL_TRANSPARENT );
                 SetLineAndFillAttr();
                 pVirDev->SetFont( aSrcFont );
-                std::vector<PolyPolygon> aPolyPolyVec;
+                std::vector<tools::PolyPolygon> aPolyPolyVec;
                 if ( pVirDev->GetTextOutlines( aPolyPolyVec, rUniStr ) )
                 {
                     sal_uInt32 nDXCount = pDXAry ? nStringLen : 0;
@@ -519,10 +519,10 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
                     aMemoryStream.WriteUInt32( nSkipActions );
                     WMFRecord_Escape( PRIVATE_ESCAPE_UNICODE, nStrmLen, (const sal_Int8*)aMemoryStream.GetData() );
 
-                    std::vector<PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
+                    std::vector<tools::PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
                     while ( aIter != aPolyPolyVec.end() )
                     {
-                        PolyPolygon aPolyPoly( *aIter++ );
+                        tools::PolyPolygon aPolyPoly( *aIter++ );
                         aPolyPoly.Move( rPoint.X(), rPoint.Y() );
                         WMFRecord_PolyPolygon( aPolyPoly );
                     }
@@ -637,13 +637,13 @@ void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
     for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
 }
 
-void WMFWriter::WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly)
+void WMFWriter::WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly)
 {
     const Polygon * pPoly;
     sal_uInt16 nCount,nSize,i,j;
 
     nCount=rPolyPoly.Count();
-    PolyPolygon aSimplePolyPoly( rPolyPoly );
+    tools::PolyPolygon aSimplePolyPoly( rPolyPoly );
     for ( i = 0; i < nCount; i++ )
     {
         if ( aSimplePolyPoly[ i ].HasFlags() )

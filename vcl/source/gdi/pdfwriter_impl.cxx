@@ -1547,7 +1547,7 @@ void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OS
     }
 }
 
-void PDFWriterImpl::PDFPage::appendPolyPolygon( const PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose ) const
+void PDFWriterImpl::PDFPage::appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
     sal_uInt16 nPolygons = rPolyPoly.Count();
     for( sal_uInt16 n = 0; n < nPolygons; n++ )
@@ -7708,7 +7708,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     // write eventual emphasis marks
     if( m_aCurrentPDFState.m_aFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
     {
-        PolyPolygon             aEmphPoly;
+        tools::PolyPolygon             aEmphPoly;
         Rectangle               aEmphRect1;
         Rectangle               aEmphRect2;
         long                    nEmphYOff;
@@ -7795,7 +7795,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 }
 
 void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
-                                      const PolyPolygon& rPolyPoly, bool bPolyLine,
+                                      const tools::PolyPolygon& rPolyPoly, bool bPolyLine,
                                       const Rectangle& rRect1, const Rectangle& rRect2 )
 {
     // TODO: pass nWidth as width of this mark
@@ -7811,7 +7811,7 @@ void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
         }
         else
         {
-            PolyPolygon aPolyPoly = rPolyPoly;
+            tools::PolyPolygon aPolyPoly = rPolyPoly;
             aPolyPoly.Move( nX, nY );
             drawPolyPolygon( aPolyPoly );
         }
@@ -8539,7 +8539,7 @@ void PDFWriterImpl::drawPolygon( const Polygon& rPoly )
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::drawPolyPolygon( const PolyPolygon& rPolyPoly )
+void PDFWriterImpl::drawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     MARK( "drawPolyPolygon" );
 
@@ -8564,7 +8564,7 @@ void PDFWriterImpl::drawPolyPolygon( const PolyPolygon& rPolyPoly )
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nTransparentPercent )
+void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt32 nTransparentPercent )
 {
     DBG_ASSERT( nTransparentPercent <= 100, "invalid alpha value" );
     nTransparentPercent = nTransparentPercent % 100;
@@ -10313,7 +10313,7 @@ void PDFWriterImpl::drawGradient( const Rectangle& rRect, const Gradient& rGradi
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch )
+void PDFWriterImpl::drawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
     MARK( "drawHatch" );
 
@@ -10321,7 +10321,7 @@ void PDFWriterImpl::drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch
 
     if( rPolyPoly.Count() )
     {
-        PolyPolygon     aPolyPoly( rPolyPoly );
+        tools::PolyPolygon     aPolyPoly( rPolyPoly );
 
         aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
         push( PUSH_LINECOLOR );

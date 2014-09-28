@@ -201,14 +201,14 @@ namespace drawinglayer
     {
         /** PolyPolygonColorPrimitive2D class
 
-            This primitive defines a PolyPolygon filled with a single color.
+            This primitive defines a tools::PolyPolygon filled with a single color.
             This is one of the non-decomposable primitives, so a renderer
             should process it.
          */
         class DRAWINGLAYER_DLLPUBLIC PolyPolygonColorPrimitive2D : public BasePrimitive2D
         {
         private:
-            /// the PolyPolygon geometry
+            /// the tools::PolyPolygon geometry
             basegfx::B2DPolyPolygon                 maPolyPolygon;
 
             /// the polygon fill color
@@ -245,14 +245,14 @@ namespace drawinglayer
     {
         /** PolyPolygonColorPrimitive2D class
 
-            This primitive defines a PolyPolygon filled with a gradient. The
+            This primitive defines a tools::PolyPolygon filled with a gradient. The
             decomosition will create a MaskPrimitive2D containing a
             FillGradientPrimitive2D.
          */
         class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            /// the PolyPolygon geometry
+            /// the tools::PolyPolygon geometry
             basegfx::B2DPolyPolygon                     maPolyPolygon;
 
             /// the definition range
@@ -298,14 +298,14 @@ namespace drawinglayer
     {
         /** PolyPolygonHatchPrimitive2D class
 
-            This primitive defines a PolyPolygon filled with a hatch. The
+            This primitive defines a tools::PolyPolygon filled with a hatch. The
             decomosition will create a MaskPrimitive2D containing a
             FillHatchPrimitive2D.
          */
         class DRAWINGLAYER_DLLPUBLIC PolyPolygonHatchPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            /// the PolyPolygon geometry
+            /// the tools::PolyPolygon geometry
             basegfx::B2DPolyPolygon                     maPolyPolygon;
 
             /// the definition range
@@ -357,14 +357,14 @@ namespace drawinglayer
     {
         /** PolyPolygonGraphicPrimitive2D class
 
-            This primitive defines a PolyPolygon filled with bitmap data
+            This primitive defines a tools::PolyPolygon filled with bitmap data
             (including transparence). The decomosition will create a MaskPrimitive2D
             containing a FillGraphicPrimitive2D.
          */
         class DRAWINGLAYER_DLLPUBLIC PolyPolygonGraphicPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            /// the PolyPolygon geometry
+            /// the tools::PolyPolygon geometry
             basegfx::B2DPolyPolygon                     maPolyPolygon;
 
             /// the definition range
@@ -410,14 +410,14 @@ namespace drawinglayer
     {
         /** PolyPolygonSelectionPrimitive2D class
 
-            This primitive defines a PolyPolygon which gets filled with a defined color
+            This primitive defines a tools::PolyPolygon which gets filled with a defined color
             and a defined transparence, but also gets extended ('grown') by the given
             discrete size (thus being a view-dependent primitive)
          */
         class DRAWINGLAYER_DLLPUBLIC PolyPolygonSelectionPrimitive2D : public DiscreteMetricDependentPrimitive2D
         {
         private:
-            /// the PolyPolygon geometry
+            /// the tools::PolyPolygon geometry
             basegfx::B2DPolyPolygon                 maPolyPolygon;
 
             /// the color

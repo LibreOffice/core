@@ -73,7 +73,7 @@ public:
 class SvStream;
 class ImplPolygon;
 class ImplPolyPolygon;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 
 namespace basegfx
 {
@@ -195,19 +195,21 @@ public:
     explicit Polygon(const ::basegfx::B2DPolygon& rPolygon);
 };
 
+namespace tools {
+
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED PolyPolygon
 {
 private:
     ImplPolyPolygon*    mpImplPolyPolygon;
 
-    TOOLS_DLLPRIVATE void  ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, sal_uIntPtr nOperation ) const;
+    TOOLS_DLLPRIVATE void  ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, sal_uIntPtr nOperation ) const;
     TOOLS_DLLPRIVATE void *ImplCreateArtVpath() const;
     TOOLS_DLLPRIVATE void  ImplSetFromArtVpath( void *pVpath );
 
 public:
                         PolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
                         PolyPolygon( const Polygon& rPoly );
-                        PolyPolygon( const PolyPolygon& rPolyPoly );
+                        PolyPolygon( const tools::PolyPolygon& rPolyPoly );
                         ~PolyPolygon();
 
     void                Insert( const Polygon& rPoly, sal_uInt16 nPos = POLYPOLY_APPEND );
@@ -242,11 +244,11 @@ public:
         the original polygon is guaranteed to be smaller than one
         pixel.
      */
-    void                AdaptiveSubdivide( PolyPolygon& rResult, const double d = 1.0 ) const;
-    static PolyPolygon  SubdivideBezier( const PolyPolygon& rPolyPoly );
+    void                AdaptiveSubdivide( tools::PolyPolygon& rResult, const double d = 1.0 ) const;
+    static tools::PolyPolygon  SubdivideBezier( const tools::PolyPolygon& rPolyPoly );
 
-    void                GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void                GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
+    void                GetIntersection( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult ) const;
+    void                GetUnion( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult ) const;
 
     void                Move( long nHorzMove, long nVertMove );
     void                Translate( const Point& rTrans );
@@ -257,15 +259,15 @@ public:
     const Polygon&      operator[]( sal_uInt16 nPos ) const { return GetObject( nPos ); }
     Polygon&            operator[]( sal_uInt16 nPos );
 
-    PolyPolygon&        operator=( const PolyPolygon& rPolyPoly );
-    bool                operator==( const PolyPolygon& rPolyPoly ) const;
-    bool                operator!=( const PolyPolygon& rPolyPoly ) const
+    tools::PolyPolygon&        operator=( const tools::PolyPolygon& rPolyPoly );
+    bool                operator==( const tools::PolyPolygon& rPolyPoly ) const;
+    bool                operator!=( const tools::PolyPolygon& rPolyPoly ) const
                             { return !(PolyPolygon::operator==( rPolyPoly )); }
 
-    bool                IsEqual( const PolyPolygon& rPolyPoly ) const;
+    bool                IsEqual( const tools::PolyPolygon& rPolyPoly ) const;
 
-    TOOLS_DLLPUBLIC friend SvStream&    ReadPolyPolygon( SvStream& rIStream, PolyPolygon& rPolyPoly );
-    TOOLS_DLLPUBLIC friend SvStream&    WritePolyPolygon( SvStream& rOStream, const PolyPolygon& rPolyPoly );
+    TOOLS_DLLPUBLIC friend SvStream&    ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly );
+    TOOLS_DLLPUBLIC friend SvStream&    WritePolyPolygon( SvStream& rOStream, const tools::PolyPolygon& rPolyPoly );
 
     void                Read( SvStream& rIStream );
     void                Write( SvStream& rOStream ) const;
@@ -278,12 +280,14 @@ public:
      explicit PolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
-typedef std::vector< PolyPolygon > PolyPolyVector;
+} /* namespace tools */
+
+typedef std::vector< tools::PolyPolygon > PolyPolyVector;
 
 
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const PolyPolygon& rPolyPoly)
+    std::basic_ostream<charT, traits> & stream, const tools::PolyPolygon& rPolyPoly)
 {
     if (!rPolyPoly.Count())
         stream << "EMPTY";

@@ -782,7 +782,7 @@ namespace drawinglayer
                     }
                     else
                     {
-                        // direct draw of PolyPolygon with color
+                        // direct draw of tools::PolyPolygon with color
                         const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
 
                         mpOutputDevice->SetFillColor(Color(aPolygonColor));
@@ -898,7 +898,7 @@ namespace drawinglayer
                                     {
                                         case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D:
                                         {
-                                            // single transparent PolyPolygon identified, use directly
+                                            // single transparent tools::PolyPolygon identified, use directly
                                             const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = static_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(pBasePrimitive);
                                             OSL_ENSURE(pPoPoColor, "OOps, PrimitiveID and PrimitiveType do not match (!)");
                                             bDrawTransparentUsed = tryDrawPolyPolygonColorPrimitive2DDirect(*pPoPoColor, rUniTransparenceCandidate.getTransparence());
@@ -1149,7 +1149,7 @@ namespace drawinglayer
                         ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
 
                         // draw hatch using VCL
-                        mpOutputDevice->DrawHatch(PolyPolygon(Polygon(aHatchPolygon)), aVCLHatch);
+                        mpOutputDevice->DrawHatch(tools::PolyPolygon(Polygon(aHatchPolygon)), aVCLHatch);
                     }
                     break;
                 }

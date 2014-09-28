@@ -2085,7 +2085,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
     mpFS->endElementNS(  XML_a, XML_prstGeom );
 }
 
-void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
+void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
 {
     if( rPolyPolygon.Count() < 1 )
         return;

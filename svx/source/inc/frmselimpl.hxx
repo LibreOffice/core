@@ -58,7 +58,7 @@ public:
 
     inline void         ClearFocusArea() { maFocusArea.Clear(); }
     void                AddFocusPolygon( const Polygon& rFocus );
-    void                MergeFocusToPolyPolygon( PolyPolygon& rPPoly ) const;
+    void                MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const;
 
     inline void         ClearClickArea() { maClickArea.Clear(); }
     void                AddClickRect( const Rectangle& rRect );
@@ -79,8 +79,8 @@ private:
     FrameBorderType     meKeyRight;     /// Right neighbor for keyboard control.
     FrameBorderType     meKeyTop;       /// Upper neighbor for keyboard control.
     FrameBorderType     meKeyBottom;    /// Lower neighbor for keyboard control.
-    PolyPolygon         maFocusArea;    /// Focus drawing areas.
-    PolyPolygon         maClickArea;    /// Mouse click areas.
+    tools::PolyPolygon         maFocusArea;    /// Focus drawing areas.
+    tools::PolyPolygon         maClickArea;    /// Mouse click areas.
     bool                mbEnabled;      /// true = Border enabled in control.
     bool                mbSelected;     /// true = Border selected in control.
 };

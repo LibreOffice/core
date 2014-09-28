@@ -267,7 +267,7 @@ void GraphicObject::ImplAutoSwapIn()
 }
 
 bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
-                                       PolyPolygon& rClipPolyPoly, bool& bRectClipRegion ) const
+                                       tools::PolyPolygon& rClipPolyPoly, bool& bRectClipRegion ) const
 {
     bool bRet = false;
 
@@ -525,7 +525,7 @@ bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& 
         Size aSz( rSz );
         if ( pAttr && pAttr->IsCropped() )
         {
-            PolyPolygon aClipPolyPoly;
+            tools::PolyPolygon aClipPolyPoly;
             bool        bRectClip;
             ImplGetCropParams( pOut, aPt, aSz, pAttr, aClipPolyPoly, bRectClip );
         }
@@ -578,7 +578,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 
     if( bCropped )
     {
-        PolyPolygon aClipPolyPoly;
+        tools::PolyPolygon aClipPolyPoly;
         bool        bRectClip;
         const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 
@@ -650,7 +650,7 @@ bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
 
             if( aGrfAttr.IsCropped() )
             {
-                PolyPolygon aClipPolyPoly;
+                tools::PolyPolygon aClipPolyPoly;
                 bool bRectClip;
                 const bool bCrop = ImplGetCropParams( &rOutDev,
                                                       aPt, aSz,
@@ -723,7 +723,7 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
 
             if( bCropped )
             {
-                PolyPolygon aClipPolyPoly;
+                tools::PolyPolygon aClipPolyPoly;
                 bool        bRectClip;
                 const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 

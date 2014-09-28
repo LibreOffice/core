@@ -2417,7 +2417,7 @@ namespace
 
                     if(pA->IsClipping())
                     {
-                        // new clipping. Get PolyPolygon and transform with current transformation
+                        // new clipping. Get tools::PolyPolygon and transform with current transformation
                         basegfx::B2DPolyPolygon aNewClipPolyPolygon(getB2DPolyPolygonFromRegion(pA->GetRegion()));
 
                         aNewClipPolyPolygon.transform(rPropertyHolders.Current().getTransformation());

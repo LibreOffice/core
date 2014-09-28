@@ -1439,7 +1439,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         pNoTxt->SetContour(0);
                     else if(aValue >>= aParam)
                     {
-                        PolyPolygon aPoly((sal_uInt16)aParam.getLength());
+                        tools::PolyPolygon aPoly((sal_uInt16)aParam.getLength());
                         for(sal_Int32 i = 0; i < aParam.getLength(); i++)
                         {
                             const :: drawing::PointSequence* pPointSeq = aParam.getConstArray();
@@ -2004,7 +2004,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                 if(pEntry->nWID == FN_PARAM_COUNTOUR_PP)
                 {
-                    PolyPolygon aContour;
+                    tools::PolyPolygon aContour;
                     if( pNoTxt->GetContourAPI( aContour ) )
                     {
                         drawing::PointSequenceSequence aPtSeq(aContour.Count());

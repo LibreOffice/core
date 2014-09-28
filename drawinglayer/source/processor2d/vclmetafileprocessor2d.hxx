@@ -95,7 +95,7 @@ namespace drawinglayer
             /// Convert the fWidth to the same space as its coordinates.
             double getTransformedLineWidth( double fWidth ) const;
 
-            /// the current clipping PolyPolygon from MaskPrimitive2D
+            /// the current clipping tools::PolyPolygon from MaskPrimitive2D
             basegfx::B2DPolyPolygon             maClipPolyPolygon;
 
             /// the target MetaFile

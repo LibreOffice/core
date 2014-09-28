@@ -764,8 +764,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
         case XmlShapeTypeDrawPolyPolygonShape:  // closed PolyPolygon
         case XmlShapeTypeDrawPolyLineShape:     // open PolyPolygon
-        case XmlShapeTypeDrawClosedBezierShape: // closed PolyPolygon containing curves
-        case XmlShapeTypeDrawOpenBezierShape:   // open PolyPolygon containing curves
+        case XmlShapeTypeDrawClosedBezierShape: // closed tools::PolyPolygon containing curves
+        case XmlShapeTypeDrawOpenBezierShape:   // open tools::PolyPolygon containing curves
         {
             ImpExportPolygonShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
@@ -3532,7 +3532,7 @@ void XMLShapeExport::ImpExport3DShape(
             case XmlShapeTypeDraw3DLatheObject:
             case XmlShapeTypeDraw3DExtrudeObject:
             {
-                // write special 3DLathe/3DExtrude attributes, get 3D PolyPolygon as drawing::PolyPolygonShape3D
+                // write special 3DLathe/3DExtrude attributes, get 3D tools::PolyPolygon as drawing::PolyPolygonShape3D
                 aAny = xPropSet->getPropertyValue("D3DPolyPolygon3D");
                 drawing::PolyPolygonShape3D xPolyPolygon3D;
                 aAny >>= xPolyPolygon3D;
@@ -3542,7 +3542,7 @@ void XMLShapeExport::ImpExport3DShape(
                     basegfx::tools::UnoPolyPolygonShape3DToB3DPolyPolygon(
                         xPolyPolygon3D));
 
-                // convert to 2D PolyPolygon using identity 3D transformation (just grep X and Y)
+                // convert to 2D tools::PolyPolygon using identity 3D transformation (just grep X and Y)
                 const basegfx::B3DHomMatrix aB3DHomMatrixFor2DConversion;
                 const basegfx::B2DPolyPolygon aPolyPolygon(
                     basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(

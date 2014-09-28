@@ -37,12 +37,12 @@ namespace com { namespace sun { namespace star { namespace rendering
 } } } }
 
 
-/* Definition of PolyPolygon interface */
+/* Definition of tools::PolyPolygon interface */
 
 namespace cppcanvas
 {
 
-    /** This interface defines a PolyPolygon canvas object
+    /** This interface defines a tools::PolyPolygon canvas object
 
         Consider this object part of the view, and not of the model
         data. Although the given polygon is typically copied and held

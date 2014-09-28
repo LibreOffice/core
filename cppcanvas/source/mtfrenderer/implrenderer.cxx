@@ -492,7 +492,7 @@ namespace cppcanvas
             return bRet;
         }
 
-        void ImplRenderer::createGradientAction( const ::PolyPolygon&           rPoly,
+        void ImplRenderer::createGradientAction( const ::tools::PolyPolygon&    rPoly,
                                                  const ::Gradient&              rGradient,
                                                  const ActionFactoryParameters& rParms,
                                                  bool                           bIsPolygonRectangle,
@@ -1743,7 +1743,7 @@ namespace cppcanvas
                                         aTexture.RepeatModeY = rendering::TexturingMode::NONE;
                                     }
 
-                                    ::PolyPolygon aPath;
+                                    ::tools::PolyPolygon aPath;
                                     aFill.getPath( aPath );
 
                                     ::basegfx::B2DPolyPolygon aPoly( aPath.getB2DPolyPolygon() );

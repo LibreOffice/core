@@ -101,7 +101,7 @@ void setupMethodStubs( functor_vector_type& res )
     const Rectangle   aRect2(aPt3,aPt4);
     const Polygon     aPoly(aRect);
     const Polygon     aPoly2(aRect2);
-    PolyPolygon       aPolyPoly(aPoly);
+    tools::PolyPolygon       aPolyPoly(aPoly);
     aPolyPoly.Insert( aPoly2 );
     Polygon           aPoly3(aPoly2);
     aPoly3.Rotate( aPoly3.GetBoundRect().Center(),
@@ -202,11 +202,11 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aPoly ));
 
-    /* void DrawPolyPolygon( const PolyPolygon& rPolyPoly ); */
+    /* void DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly ); */
     add(res,
         "DrawPolyPolygon",
         boost::bind(
-            (void (OutputDevice::*)( const PolyPolygon& ))
+            (void (OutputDevice::*)( const tools::PolyPolygon& ))
                 &OutputDevice::DrawPolyPolygon,
             _1,
             aPolyPoly ));
@@ -696,16 +696,16 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aRect,aGradient ));
 
-    /* void DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient ); */
+    /* void DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient ); */
     add(res,
         "DrawGradient(polygon)",
         boost::bind(
-            (void (OutputDevice::*)( const PolyPolygon&, const Gradient& ))(
+            (void (OutputDevice::*)( const tools::PolyPolygon&, const Gradient& ))(
                 &OutputDevice::DrawGradient),
             _1,
             aPoly3,aGradient ));
 
-    /* void DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch ); */
+    /* void DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch ); */
     add(res,
         "DrawHatch",
         boost::bind(
@@ -737,13 +737,13 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aRect,Size(10,20),GRID_HORZLINES|GRID_VERTLINES ));
 
-    /* void DrawTransparent( const PolyPolygon& rPolyPoly,
+    /* void DrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                          sal_uInt16 nTransparencePercent );
     */
     add(res,
         "DrawTransparent",
         boost::bind(
-            (void (OutputDevice::*)( const PolyPolygon&, sal_uInt16 ))(
+            (void (OutputDevice::*)( const tools::PolyPolygon&, sal_uInt16 ))(
                 &OutputDevice::DrawTransparent),
             _1,
             aPoly3,(sal_uInt16)50 ));
@@ -808,7 +808,7 @@ void outDevGrind( OutputDevice& rTarget, sal_Int32 nTurns=100 )
     const Polygon   aPoly1( aClipRect );
     Polygon         aPoly2( aClipRect );
     aPoly2.Rotate(aClipRect.Center(),450);
-    PolyPolygon     aClipPoly(aPoly1);
+    tools::PolyPolygon     aClipPoly(aPoly1);
     aClipPoly.Insert(aPoly2);
 
     functor_vector_type::const_iterator       iter = aMethods.begin();

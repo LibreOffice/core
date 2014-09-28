@@ -41,8 +41,8 @@ SvtGraphicStroke::SvtGraphicStroke() :
 }
 
 SvtGraphicStroke::SvtGraphicStroke( const Polygon&      rPath,
-                                    const PolyPolygon&  rStartArrow,
-                                    const PolyPolygon&  rEndArrow,
+                                    const tools::PolyPolygon&  rStartArrow,
+                                    const tools::PolyPolygon&  rEndArrow,
                                     double              fTransparency,
                                     double              fStrokeWidth,
                                     CapType             aCap,
@@ -66,12 +66,12 @@ void SvtGraphicStroke::getPath( Polygon& rPath ) const
     rPath = maPath;
 }
 
-void SvtGraphicStroke::getStartArrow( PolyPolygon& rPath ) const
+void SvtGraphicStroke::getStartArrow( tools::PolyPolygon& rPath ) const
 {
     rPath = maStartArrow;
 }
 
-void SvtGraphicStroke::getEndArrow( PolyPolygon& rPath ) const
+void SvtGraphicStroke::getEndArrow( tools::PolyPolygon& rPath ) const
 {
     rPath = maEndArrow;
 }
@@ -91,12 +91,12 @@ void SvtGraphicStroke::setPath( const Polygon& rPoly )
     maPath = rPoly;
 }
 
-void SvtGraphicStroke::setStartArrow( const PolyPolygon& rPoly )
+void SvtGraphicStroke::setStartArrow( const tools::PolyPolygon& rPoly )
 {
     maStartArrow = rPoly;
 }
 
-void SvtGraphicStroke::setEndArrow( const PolyPolygon& rPoly )
+void SvtGraphicStroke::setEndArrow( const tools::PolyPolygon& rPoly )
 {
     maEndArrow = rPoly;
 }
@@ -181,7 +181,7 @@ SvtGraphicFill::SvtGraphicFill() :
 {
 }
 
-SvtGraphicFill::SvtGraphicFill( const PolyPolygon&  rPath,
+SvtGraphicFill::SvtGraphicFill( const tools::PolyPolygon&  rPath,
                                 Color               aFillColor,
                                 double              fTransparency,
                                 FillRule            aFillRule,
@@ -212,7 +212,7 @@ SvtGraphicFill::SvtGraphicFill( const PolyPolygon&  rPath,
 {
 }
 
-void SvtGraphicFill::getPath( PolyPolygon& rPath ) const
+void SvtGraphicFill::getPath( tools::PolyPolygon& rPath ) const
 {
     rPath = maPath;
 }
@@ -234,7 +234,7 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
     rGraphic = maFillGraphic;
 }
 
-void SvtGraphicFill::setPath( const PolyPolygon& rPath )
+void SvtGraphicFill::setPath( const tools::PolyPolygon& rPath )
 {
     maPath = rPath;
 }

@@ -61,7 +61,7 @@ void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
         ReadPair( rIStm, rPoly[ i ] );
 }
 
-void ImplReadPolyPoly( SvStream& rIStm, PolyPolygon& rPolyPoly )
+void ImplReadPolyPoly( SvStream& rIStm, tools::PolyPolygon& rPolyPoly )
 {
     Polygon aPoly;
     sal_Int32   nPolyCount;
@@ -75,7 +75,7 @@ void ImplReadPolyPoly( SvStream& rIStm, PolyPolygon& rPolyPoly )
     }
 }
 
-void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
+void ImplWritePolyPolyAction( SvStream& rOStm, const tools::PolyPolygon& rPolyPoly )
 {
     const sal_uInt16    nPoly = rPolyPoly.Count();
     sal_uInt16          nPoints = 0;
@@ -311,7 +311,7 @@ void ImplSkipActions( SvStream& rIStm, sal_uLong nSkipCount )
     }
 }
 
-bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const PolyPolygon& rPolyPolygon, bool bOnlyWhenCurve)
+bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygon& rPolyPolygon, bool bOnlyWhenCurve)
 {
     const sal_uInt16 nPolygonCount(rPolyPolygon.Count());
 
@@ -391,7 +391,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const PolyPolygon& rPol
     return false;
 }
 
-void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
+void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPolyPoly)
 {
     rPolyPoly.Clear();
     sal_uInt16 nPolygonCount(0);
@@ -571,8 +571,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case (GDI_EXTENDEDPOLYGON_ACTION) :
                 {
-                    // read the PolyPolygon in every case
-                    PolyPolygon aInputPolyPolygon;
+                    // read the tools::PolyPolygon in every case
+                    tools::PolyPolygon aInputPolyPolygon;
                     ImplReadExtendedPolyPolygonAction(rIStm, aInputPolyPolygon);
 
                     // now check if it can be set somewhere
@@ -760,7 +760,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_POLYPOLYGON_ACTION ):
                 {
-                    PolyPolygon aPolyPoly;
+                    tools::PolyPolygon aPolyPoly;
 
                     ImplReadPolyPoly( rIStm, aPolyPoly );
 
@@ -1038,7 +1038,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                         case( 3 ):
                         {
-                            PolyPolygon aPolyPoly;
+                            tools::PolyPolygon aPolyPoly;
                             sal_Int32       nPolyCount;
 
                             rIStm.ReadInt32( nPolyCount );
@@ -1172,7 +1172,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_TRANSPARENT_COMMENT ):
                 {
-                    PolyPolygon aPolyPoly;
+                    tools::PolyPolygon aPolyPoly;
                     sal_Int32       nFollowingActionCount;
                     sal_Int16       nTrans;
 
@@ -1207,7 +1207,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_HATCH_COMMENT ):
                 {
-                    PolyPolygon aPolyPoly;
+                    tools::PolyPolygon aPolyPoly;
                     Hatch       aHatch;
                     sal_Int32       nFollowingActionCount;
 
@@ -1279,7 +1279,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_GRADIENTEX_COMMENT ):
                 {
-                    PolyPolygon aPolyPoly;
+                    tools::PolyPolygon aPolyPoly;
                     Gradient    aGradient;
                     sal_Int32       nFollowingActionCount;
 
@@ -1627,7 +1627,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 nCount++;
 
-                const PolyPolygon aPolyPolygon(pAct->GetPolygon());
+                const tools::PolyPolygon aPolyPolygon(pAct->GetPolygon());
                 if(ImplWriteExtendedPolyPolygonAction(rOStm, aPolyPolygon, true))
                 {
                     nCount++;
@@ -1675,7 +1675,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 nCount++;
 
-                const PolyPolygon aPolyPolygon(pAct->GetPolygon());
+                const tools::PolyPolygon aPolyPolygon(pAct->GetPolygon());
                 if(ImplWriteExtendedPolyPolygonAction(rOStm, aPolyPolygon, true))
                 {
                     nCount++;
@@ -2143,10 +2143,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TRANSPARENT_ACTION ):
             {
-                const PolyPolygon&  rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
-                const sal_Int16     nTrans = static_cast<const MetaTransparentAction*>(pAction)->GetTransparence();
-                const sal_Int16     nBrushStyle = ( nTrans < 38 ) ? 8 : ( nTrans < 63 ) ? 9 : 10;
-                sal_uLong           nOldPos, nNewPos;
+                const tools::PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
+                const sal_Int16           nTrans = static_cast<const MetaTransparentAction*>(pAction)->GetTransparence();
+                const sal_Int16           nBrushStyle = ( nTrans < 38 ) ? 8 : ( nTrans < 63 ) ? 9 : 10;
+                sal_uLong                 nOldPos, nNewPos;
 
                 // write transparence comment
                 rOStm.WriteInt16(  GDI_TRANSPARENT_COMMENT );
@@ -2264,8 +2264,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_HATCH_ACTION ):
             {
-                const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pAction);
-                const PolyPolygon&      rPolyPoly = pA->GetPolyPolygon();
+                const MetaHatchAction*    pA = static_cast<const MetaHatchAction*>(pAction);
+                const tools::PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
                 const Hatch&            rHatch = pA->GetHatch();
                 sal_uLong               nOldPos, nNewPos, nAddCount;
 

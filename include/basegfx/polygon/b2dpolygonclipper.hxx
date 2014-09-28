@@ -33,7 +33,7 @@ namespace basegfx
 
     namespace tools
     {
-        // This method clips the given PolyPolygon against a horizontal or vertical axis (parallell to X or Y axis). The axis is
+        // This method clips the given tools::PolyPolygon against a horizontal or vertical axis (parallell to X or Y axis). The axis is
         // defined by bParallelToXAxis (true -> it's parallel to the X-Axis of the coordinate system, else to the Y-Axis) and the
         // fValueOnOtherAxis (gives the translation to the coordinate system axis). For example, when You want to define
         // a clip axis parallel to X.Axis and 100 above it, use bParallelToXAxis = true and fValueOnOtherAxis = 100.
@@ -42,16 +42,16 @@ namespace basegfx
         BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolyPolygonOnParallelAxis(const B2DPolyPolygon& rCandidate, bool bParallelToXAxis, bool bAboveAxis, double fValueOnOtherAxis, bool bStroke);
         BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolygonOnParallelAxis(const B2DPolygon& rCandidate, bool bParallelToXAxis, bool bAboveAxis, double fValueOnOtherAxis, bool bStroke);
 
-        // Clip the given PolyPolygon against the given range. bInside defines if the result will contain the
+        // Clip the given tools::PolyPolygon against the given range. bInside defines if the result will contain the
         // parts which are contained in the range or vice versa.
         // The switch bStroke decides if the polygon is interpreted as area (false) or strokes (true).
         BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolyPolygonOnRange(const B2DPolyPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke);
         BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolygonOnRange(const B2DPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke);
 
-        // Clip given PolyPolygon against given clipping polygon.
+        // Clip given tools::PolyPolygon against given clipping polygon.
         // The switch bStroke decides if the polygon is interpreted as area (false) or strokes (true).
         // With stroke polygons, You get all line snippets inside rCip.
-        // With filled polygons, You get all PolyPolygon parts which were inside rClip.
+        // With filled polygons, You get all tools::PolyPolygon parts which were inside rClip.
         // The switch bInside decides if the parts inside the clip polygon or outside shall be created.
         // The clip polygon is always assumed closed, even when it's isClosed() is false.
         BASEGFX_DLLPUBLIC B2DPolyPolygon clipPolyPolygonOnPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke);

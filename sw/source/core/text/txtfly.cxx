@@ -225,9 +225,9 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         {
             // GetContour() causes the graphic to be loaded, which may cause
             // the graphic to change its size, call ClrObject()
-            PolyPolygon aPoly;
+            tools::PolyPolygon aPoly;
             if( !((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetContour( aPoly ) )
-                aPoly = PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
+                aPoly = tools::PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
                                      GetFlyFrm()->Frm().SVRect() );
             aPolyPolygon.clear();
             aPolyPolygon.append(aPoly.getB2DPolyPolygon());

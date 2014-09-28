@@ -3532,13 +3532,13 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
         if( bRoundEdges )
         {
             Polygon aPoly( aRect, nCornerRadius, nCornerRadius );
-            PolyPolygon aPolyPoly( aPoly );
+            tools::PolyPolygon aPolyPoly( aPoly );
             DrawTransparent( aPolyPoly, nPercent );
         }
         else
         {
             Polygon aPoly( aRect );
-            PolyPolygon aPolyPoly( aPoly );
+            tools::PolyPolygon aPolyPoly( aPoly );
             DrawTransparent( aPolyPoly, nPercent );
         }
     }

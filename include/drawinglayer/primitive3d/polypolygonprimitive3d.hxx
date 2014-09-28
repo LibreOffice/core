@@ -34,7 +34,7 @@ namespace drawinglayer
     {
         /** PolyPolygonMaterialPrimitive3D class
 
-            This primitive defines a planar 3D PolyPolygon filled with a single color.
+            This primitive defines a planar 3D tools::PolyPolygon filled with a single color.
             This is one of the non-decomposable primitives, so a renderer
             should process it.
 
@@ -43,7 +43,7 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC PolyPolygonMaterialPrimitive3D : public BasePrimitive3D
         {
         private:
-            /// the PolyPolygon geometry
+            /// the tools::PolyPolygon geometry
             basegfx::B3DPolyPolygon                     maPolyPolygon;
 
             /// the fill parameters

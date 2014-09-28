@@ -683,7 +683,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     {
         if (const SwNoTxtNode* pNd = sw::util::GetNoTxtNodeFromSwFrmFmt(*pFrmFmt))
         {
-            const PolyPolygon* pPolyPoly = pNd->HasContour();
+            const tools::PolyPolygon* pPolyPoly = pNd->HasContour();
             if (pPolyPoly && pPolyPoly->Count())
             {
                 nWrapToken = XML_wrapTight;

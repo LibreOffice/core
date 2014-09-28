@@ -266,7 +266,7 @@ namespace drawinglayer
                     for(sal_uInt32 b(0L); b < aAreaPolyPolygon.count(); b++)
                     {
                         // put into single polyPolygon primitives to make clear that this is NOT meant
-                        // to be painted as a single PolyPolygon (XORed as fill rule). Alternatively, a
+                        // to be painted as a single tools::PolyPolygon (XORed as fill rule). Alternatively, a
                         // melting process may be used here one day.
                         const basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
                         static bool bTestByUsingRandomColor(false);

@@ -451,7 +451,7 @@ void VCLXGraphics::drawPolyPolygon( const uno::Sequence< uno::Sequence< sal_Int3
     {
         InitOutputDevice( INITOUTDEV_CLIPREGION|INITOUTDEV_RASTEROP|INITOUTDEV_COLORS );
         sal_uInt16 nPolys = (sal_uInt16) DataX.getLength();
-        PolyPolygon aPolyPoly( nPolys );
+        tools::PolyPolygon aPolyPoly( nPolys );
         for ( sal_uInt16 n = 0; n < nPolys; n++ )
             aPolyPoly[n] = VCLUnoHelper::CreatePolygon( DataX.getConstArray()[n], DataY.getConstArray()[n] );
 

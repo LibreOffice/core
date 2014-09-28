@@ -707,7 +707,7 @@ void Splitter::Paint( const Rectangle& rPaintRect )
     DrawRect( rPaintRect );
 
     Polygon aPoly( rPaintRect );
-    PolyPolygon aPolyPoly( aPoly );
+    tools::PolyPolygon aPolyPoly( aPoly );
     DrawTransparent( aPolyPoly, 85 );
 
     if( mbKbdSplitting )

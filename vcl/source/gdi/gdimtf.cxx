@@ -874,10 +874,10 @@ Polygon GDIMetaFile::ImplGetRotatedPolygon( const Polygon& rPoly, const Point& r
     return aRet;
 }
 
-PolyPolygon GDIMetaFile::ImplGetRotatedPolyPolygon( const PolyPolygon& rPolyPoly, const Point& rRotatePt,
+tools::PolyPolygon GDIMetaFile::ImplGetRotatedPolyPolygon( const tools::PolyPolygon& rPolyPoly, const Point& rRotatePt,
                                                     const Size& rOffset, double fSin, double fCos )
 {
-    PolyPolygon aRet( rPolyPoly );
+    tools::PolyPolygon aRet( rPolyPoly );
 
     aRet.Rotate( rRotatePt, fSin, fCos );
     aRet.Move( rOffset.Width(), rOffset.Height() );
@@ -887,7 +887,7 @@ PolyPolygon GDIMetaFile::ImplGetRotatedPolyPolygon( const PolyPolygon& rPolyPoly
 
 void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
                                      const OutputDevice&  rMapDev,
-                                     const PolyPolygon&   rPolyPoly,
+                                     const tools::PolyPolygon&   rPolyPoly,
                                      const Gradient&      rGrad     )
 {
     // Generate comment, GradientEx and Gradient actions (within DrawGradient)
@@ -1212,7 +1212,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                                 {
                                     SvtGraphicFill aFill;
                                     ReadSvtGraphicFill( aMemStm, aFill );
-                                    PolyPolygon aPath;
+                                    tools::PolyPolygon aPath;
                                     aFill.getPath( aPath );
                                     aFill.setPath( ImplGetRotatedPolyPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
                                     WriteSvtGraphicFill( aDest, aFill );
@@ -2714,7 +2714,7 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
             case( META_POLYGON_ACTION ): nSizeBytes += static_cast<MetaPolygonAction*>( pAction )->GetPolygon().GetSize() * sizeof( Point ); break;
             case( META_POLYPOLYGON_ACTION ):
             {
-                const PolyPolygon& rPolyPoly = static_cast<MetaPolyPolygonAction*>( pAction )->GetPolyPolygon();
+                const tools::PolyPolygon& rPolyPoly = static_cast<MetaPolyPolygonAction*>( pAction )->GetPolyPolygon();
 
                 for( sal_uInt16 n = 0; n < rPolyPoly.Count(); ++n )
                     nSizeBytes += ( rPolyPoly[ n ].GetSize() * sizeof( Point ) );

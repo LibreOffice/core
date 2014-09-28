@@ -40,7 +40,7 @@
 #include <svtools/embedhlp.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class SwDoc;
 class DateTime;
 class CommandExtTextInputData;
@@ -593,8 +593,8 @@ public:
     bool IsGrfSwapOut( bool bOnlyLinked = false ) const;
     sal_uInt16 GetGraphicType() const;
 
-    const PolyPolygon *GetGraphicPolygon() const;
-    void SetGraphicPolygon( const PolyPolygon *pPoly );
+    const tools::PolyPolygon *GetGraphicPolygon() const;
+    void SetGraphicPolygon( const tools::PolyPolygon *pPoly );
 
     /** If there's an automatic, not manipulated polygon at the selected
      notxtnode, it has to be deleted, e.g. cause the object has changed. */

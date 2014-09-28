@@ -153,9 +153,9 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     // but someone switches the update mode!
 
     // pRegion: When not NULL, then only calculate Region.
-    PolyPolygon* pPolyPoly = NULL;
+    tools::PolyPolygon* pPolyPoly = NULL;
     if ( pRegion )
-        pPolyPoly = new PolyPolygon;
+        pPolyPoly = new tools::PolyPolygon;
 
     OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pOutWin;
     bool bClipRegion = pTarget->IsClipRegion();
@@ -301,7 +301,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     }
 }
 
-void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly )
+void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly )
 {
     if ( rDocPosTopLeft.X() != rDocPosBottomRight.X() )
     {

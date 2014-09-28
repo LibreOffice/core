@@ -31,7 +31,7 @@
 
 #define OUTDEV_POLYPOLY_STACKBUF        32
 
-void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
+void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
 
     if( mpMetaFile )
@@ -119,7 +119,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
     }
     else
     {
-        // #100127# moved real PolyPolygon draw to separate method,
+        // #100127# moved real tools::PolyPolygon draw to separate method,
         // have to call recursively, avoiding duplicate
         // ImplLogicToDevicePixel calls
         ImplDrawPolyPolygon( nPoly, ImplLogicToDevicePixel( rPolyPoly ) );
@@ -237,7 +237,7 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
 {
 
     if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPolyPolygonAction( PolyPolygon( rB2DPolyPoly ) ) );
+        mpMetaFile->AddAction( new MetaPolyPolygonAction( tools::PolyPolygon( rB2DPolyPoly ) ) );
 
     // call helper
     ImplDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
@@ -310,13 +310,13 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
     }
 
     // fallback to old polygon drawing if needed
-    const PolyPolygon aToolsPolyPolygon( rB2DPolyPoly );
-    const PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel( aToolsPolyPolygon );
+    const tools::PolyPolygon aToolsPolyPolygon( rB2DPolyPoly );
+    const tools::PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel( aToolsPolyPolygon );
     ImplDrawPolyPolygon( aPixelPolyPolygon.Count(), aPixelPolyPolygon );
 }
 
 // #100127# Extracted from OutputDevice::DrawPolyPolygon()
-void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly )
+void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolygon& rPolyPoly )
 {
     // AW: This crashes on empty PolyPolygons, avoid that
     if(!nPoly)
@@ -388,7 +388,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
         {
             if( !mpGraphics->DrawPolyPolygonBezier( j, pPointAry, pPointAryAry, pFlagAryAry, this ) )
             {
-                PolyPolygon aPolyPoly = PolyPolygon::SubdivideBezier( rPolyPoly );
+                tools::PolyPolygon aPolyPoly = tools::PolyPolygon::SubdivideBezier( rPolyPoly );
                 ImplDrawPolyPolygon( aPolyPoly.Count(), aPolyPoly );
             }
         }
@@ -406,7 +406,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
     }
 }
 
-void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly )
+void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly )
 {
     if( pClipPolyPoly )
     {
@@ -424,18 +424,18 @@ void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pCl
     }
 }
 
-void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly )
+void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly )
 {
-    PolyPolygon* pPolyPoly;
+    tools::PolyPolygon* pPolyPoly;
 
     if( pClipPolyPoly )
     {
-        pPolyPoly = new PolyPolygon;
+        pPolyPoly = new tools::PolyPolygon;
         rPolyPoly.GetIntersection( *pClipPolyPoly, *pPolyPoly );
     }
     else
     {
-        pPolyPoly = (PolyPolygon*) &rPolyPoly;
+        pPolyPoly = (tools::PolyPolygon*) &rPolyPoly;
     }
     if( pPolyPoly->Count() == 1 )
     {

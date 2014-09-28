@@ -694,7 +694,7 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                    Vectorize(
-                                PolyPolygon& rPolyPoly,
+                                tools::PolyPolygon& rPolyPoly,
                                 sal_uLong nFlags = BMP_VECTORIZE_OUTER,
                                 const Link* pProgress = NULL );
 

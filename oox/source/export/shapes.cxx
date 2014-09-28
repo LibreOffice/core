@@ -184,7 +184,7 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, bool bCl
     FSHelperPtr pFS = GetFS();
     pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
 
-    PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
+    tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     Rectangle aRect( aPolyPolygon.GetBoundRect() );
 
 #if OSL_DEBUG_LEVEL > 0
@@ -635,7 +635,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
 
     pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
 
-    PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
+    tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     if( aPolyPolygon.Count() == 1 && aPolyPolygon[ 0 ].GetSize() == 2)
     {
         const Polygon& rPoly = aPolyPolygon[ 0 ];

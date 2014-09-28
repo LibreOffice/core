@@ -47,7 +47,7 @@ void WinMtfClipPath::excludeClipRect( const Rectangle& rRect )
         vcl::unotools::b2DRectangleFromRectangle(rRect));
 }
 
-void WinMtfClipPath::setClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
+void WinMtfClipPath::setClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
 {
     const basegfx::B2DPolyPolygon& rB2DPoly=rPolyPolygon.getB2DPolyPolygon();
     switch ( nClippingMode )
@@ -91,7 +91,7 @@ void WinMtfPathObj::AddPoint( const Point& rPoint )
 {
     if ( bClosed )
         Insert( Polygon(), POLYPOLY_APPEND );
-    Polygon& rPoly = ((PolyPolygon&)*this)[ Count() - 1 ];
+    Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
     rPoly.Insert( rPoly.GetSize(), rPoint, POLY_NORMAL );
     bClosed = false;
 }
@@ -100,7 +100,7 @@ void WinMtfPathObj::AddPolyLine( const Polygon& rPolyLine )
 {
     if ( bClosed )
         Insert( Polygon(), POLYPOLY_APPEND );
-    Polygon& rPoly = ((PolyPolygon&)*this)[ Count() - 1 ];
+    Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
     rPoly.Insert( rPoly.GetSize(), rPolyLine );
     bClosed = false;
 }
@@ -111,7 +111,7 @@ void WinMtfPathObj::AddPolygon( const Polygon& rPoly )
     bClosed = true;
 }
 
-void WinMtfPathObj::AddPolyPolygon( const PolyPolygon& rPolyPoly )
+void WinMtfPathObj::AddPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     sal_uInt16 i, nCount = rPolyPoly.Count();
     for ( i = 0; i < nCount; i++ )
@@ -123,7 +123,7 @@ void WinMtfPathObj::ClosePath()
 {
     if ( Count() )
     {
-        Polygon& rPoly = ((PolyPolygon&)*this)[ Count() - 1 ];
+        Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
         if ( rPoly.GetSize() > 2 )
         {
             Point aFirst( rPoly[ 0 ] );
@@ -497,7 +497,7 @@ Polygon& WinMtfOutput::ImplScale( Polygon& rPolygon )
     return rPolygon;
 }
 
-PolyPolygon& WinMtfOutput::ImplScale( PolyPolygon& rPolyPolygon )
+tools::PolyPolygon& WinMtfOutput::ImplScale( tools::PolyPolygon& rPolyPolygon )
 {
     sal_uInt16 nPolys = rPolyPolygon.Count();
     for (sal_uInt16 i = 0; i < nPolys; ++i)
@@ -507,7 +507,7 @@ PolyPolygon& WinMtfOutput::ImplScale( PolyPolygon& rPolyPolygon )
     return rPolyPolygon;
 }
 
-PolyPolygon& WinMtfOutput::ImplMap( PolyPolygon& rPolyPolygon )
+tools::PolyPolygon& WinMtfOutput::ImplMap( tools::PolyPolygon& rPolyPolygon )
 {
     sal_uInt16 nPolys = rPolyPolygon.Count();
     for ( sal_uInt16 i = 0; i < nPolys; ImplMap( rPolyPolygon[ i++ ] ) ) ;
@@ -636,7 +636,7 @@ void WinMtfOutput::ImplResizeObjectArry( sal_uInt32 nNewEntrys )
     vGDIObj.resize(nNewEntrys, NULL);
 }
 
-void WinMtfOutput::ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly )
+void WinMtfOutput::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     if ( rPolyPoly.Count() )
     {
@@ -781,10 +781,10 @@ void WinMtfOutput::MoveClipRegion( const Size& rSize )
     aClipPath.moveClipRegion( ImplMap( rSize ) );
 }
 
-void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
+void WinMtfOutput::SetClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
 {
     mbClipNeedsUpdate = true;
-    PolyPolygon aPolyPolygon(rPolyPolygon);
+    tools::PolyPolygon aPolyPolygon(rPolyPolygon);
 
     if (!bIsMapped)
     {
@@ -1038,9 +1038,9 @@ void WinMtfOutput::DrawRect( const Rectangle& rRect, bool bEdge )
     if ( mbComplexClip )
     {
         Polygon aPoly( ImplMap( rRect ) );
-        PolyPolygon aPolyPolyRect( aPoly );
-        PolyPolygon aDest;
-        PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPolyRect, aDest );
+        tools::PolyPolygon aPolyPolyRect( aPoly );
+        tools::PolyPolygon aDest;
+        tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPolyRect, aDest );
         ImplDrawClippedPolyPolygon( aDest );
     }
     else
@@ -1185,9 +1185,9 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, bool bRecordPath )
 
         if ( mbComplexClip )
         {
-            PolyPolygon aPolyPoly( rPolygon );
-            PolyPolygon aDest;
-            PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPoly, aDest );
+            tools::PolyPolygon aPolyPoly( rPolygon );
+            tools::PolyPolygon aDest;
+            tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPoly, aDest );
             ImplDrawClippedPolyPolygon( aDest );
         }
         else
@@ -1215,7 +1215,7 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, bool bRecordPath )
                 if (maLatestFillStyle.aType != FillStylePattern)
                     mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
                 else {
-                    SvtGraphicFill aFill = SvtGraphicFill( PolyPolygon( rPolygon ),
+                    SvtGraphicFill aFill = SvtGraphicFill( tools::PolyPolygon( rPolygon ),
                                                            Color(),
                                                            0.0,
                                                            SvtGraphicFill::fillNonZero,
@@ -1245,7 +1245,7 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, bool bRecordPath )
     }
 }
 
-void WinMtfOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon, bool bRecordPath )
+void WinMtfOutput::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bRecordPath )
 {
     UpdateClipRegion();
 
@@ -1259,8 +1259,8 @@ void WinMtfOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon, bool bRecordPath 
 
         if ( mbComplexClip )
         {
-            PolyPolygon aDest;
-            PolyPolygon(aClipPath.getClipPath()).GetIntersection( rPolyPolygon, aDest );
+            tools::PolyPolygon aDest;
+            tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( rPolyPolygon, aDest );
             ImplDrawClippedPolyPolygon( aDest );
         }
         else
@@ -1516,7 +1516,7 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
         aVDev.SetMapMode( aMapMode );
         aVDev.SetOutputSizePixel( aSizePixel );
         aVDev.SetFillColor( Color( COL_BLACK ) );
-        const PolyPolygon aClip( aClipPath.getClipPath() );
+        const tools::PolyPolygon aClip( aClipPath.getClipPath() );
         aVDev.DrawPolyPolygon( aClip );
         const Point aEmptyPoint;
 

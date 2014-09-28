@@ -354,7 +354,7 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
         // set parameters
         if(!maPoints.isEmpty() && !maViewBox.isEmpty())
         {
-            // import 2d PolyPolygon from svg:d
+            // import 2d tools::PolyPolygon from svg:d
             basegfx::B2DPolyPolygon aPolyPolygon;
 
             if(basegfx::tools::importFromSvgD(aPolyPolygon, maPoints, GetImport().needFixPositionAfterZ(), 0))
@@ -377,7 +377,7 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
             }
             else
             {
-                OSL_ENSURE(false, "Error on importing svg:d for 3D PolyPolygon (!)");
+                OSL_ENSURE(false, "Error on importing svg:d for 3D tools::PolyPolygon (!)");
             }
         }
 

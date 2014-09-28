@@ -25,7 +25,7 @@
 
 class ContourWindow : public GraphCtrl
 {
-    PolyPolygon         aPolyPoly;
+    tools::PolyPolygon         aPolyPoly;
     Color               aPipetteColor;
     Rectangle           aWorkRect;
     Link                aPipetteLink;
@@ -52,8 +52,8 @@ public:
     ContourWindow(vcl::Window* pParent, WinBits nBits);
     virtual ~ContourWindow();
 
-    void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
-    const PolyPolygon&  GetPolyPolygon();
+    void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
+    const tools::PolyPolygon&  GetPolyPolygon();
 
     void                SetPipetteMode( const bool bPipette ) { bPipetteMode = bPipette; }
     bool                IsPipetteMode() const { return bPipetteMode; }
