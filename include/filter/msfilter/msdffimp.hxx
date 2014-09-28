@@ -54,7 +54,7 @@ class SvStream;
 class SdrObject;
 class SdrOle2Obj;
 class Polygon;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class FmFormModel;
 class SdrModel;
 class SwFlyFrmFmt;

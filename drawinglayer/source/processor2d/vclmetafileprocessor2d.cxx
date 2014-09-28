@@ -213,11 +213,11 @@ namespace
         Needed to fix fdo#37559
 
         @param rPoly
-        PolyPolygon to filter
+        tools::PolyPolygon to filter
 
         @return converted tools PolyPolygon, w/o one-point fills
      */
-    PolyPolygon getFillPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly )
+    tools::PolyPolygon getFillPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly )
     {
         // filter input rPoly
         basegfx::B2DPolyPolygon aPoly;
@@ -228,7 +228,7 @@ namespace
             if( !aCandidate.isClosed() || aCandidate.count() > 1 )
                 aPoly.append(aCandidate);
         }
-        return PolyPolygon(aPoly);
+        return tools::PolyPolygon(aPoly);
     }
 
 } // end of anonymous namespace
@@ -521,8 +521,8 @@ namespace drawinglayer
 
                 pRetval = new SvtGraphicStroke(
                     Polygon(aLocalPolygon),
-                    PolyPolygon(aStartArrow),
-                    PolyPolygon(aEndArrow),
+                    tools::PolyPolygon(aStartArrow),
+                    tools::PolyPolygon(aEndArrow),
                     mfCurrentUnifiedTransparence,
                     fLineWidth,
                     eCap,
@@ -590,7 +590,7 @@ namespace drawinglayer
             is rendered by VCL (and thus fragmented to polygon color actions and others). On that base, e.g.
             the Metafile to SdrObject import creates it's gradient objects.
             Best (and safest) way to support it here is to use PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D,
-            map it back to the corresponding tools PolyPolygon and the Gradient and just call
+            map it back to the corresponding tools tools::PolyPolygon and the Gradient and just call
             OutputDevice::DrawGradient which creates the necessary compatible actions.
 
             XPATHFILL_SEQ_BEGIN, XPATHFILL_SEQ_END:
@@ -624,7 +624,7 @@ namespace drawinglayer
             contained path accordingly.
             The other one is SdrObject::Imp_DrawLineGeometry. It's done when MetaFile is set at OutDev and
             only when geometry is a single polygon (!). I see no reason for that; in the PS exporter this
-            would hinder to make use of PolyPolygon strokes. I will need to add support at:
+            would hinder to make use of tools::PolyPolygon strokes. I will need to add support at:
                 PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D
                 PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D
                 PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D
@@ -1541,7 +1541,7 @@ namespace drawinglayer
 
                     // #i111954# do NOT use decomposition, but use direct VCL-command
                     // process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    const PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
+                    const tools::PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
                     const HatchStyle aHatchStyle(
                         attribute::HATCHSTYLE_SINGLE == rFillHatchAttribute.getStyle() ? HATCH_SINGLE :
                         attribute::HATCHSTYLE_DOUBLE == rFillHatchAttribute.getStyle() ? HATCH_DOUBLE :
@@ -1616,7 +1616,7 @@ namespace drawinglayer
                         // necessary to again remove this subdivision since it decreases possible
                         // printing quality (not even resolution-dependent for now). THB will tell
                         // me when that task is fixed in the master
-                        const PolyPolygon aToolsPolyPolygon(
+                        const tools::PolyPolygon aToolsPolyPolygon(
                             getFillPolyPolygon(
                                 basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon)));
 
@@ -1848,7 +1848,7 @@ namespace drawinglayer
                             // Check also for correct ID to exclude derived implementations
                             if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
                             {
-                                // single transparent PolyPolygon identified, use directly
+                                // single transparent tools::PolyPolygon identified, use directly
                                 const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
                                 basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
 
@@ -1900,7 +1900,7 @@ namespace drawinglayer
                                 }
 
                                 mpOutputDevice->DrawTransparent(
-                                    PolyPolygon(aLocalPolyPolygon),
+                                    tools::PolyPolygon(aLocalPolyPolygon),
                                     nTransPercentVcl);
 
                                 if(bSupportSvtGraphicFill)

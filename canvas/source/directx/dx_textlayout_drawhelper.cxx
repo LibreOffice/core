@@ -171,7 +171,7 @@ namespace dxcanvas
                 }
 
                 aClipPoly.transform(aMatrix);
-                const vcl::Region& rClipRegion = vcl::Region(PolyPolygon(aClipPoly));
+                const vcl::Region& rClipRegion = vcl::Region(tools::PolyPolygon(aClipPoly));
                 aVirtualDevice.IntersectClipRegion(rClipRegion);
             }
 
@@ -179,7 +179,7 @@ namespace dxcanvas
             {
                 ::basegfx::B2DPolyPolygon aClipPoly(dxcanvas::tools::polyPolygonFromXPolyPolygon2D(rRenderState.Clip));
                 aClipPoly.transform(aWorldTransform);
-                const vcl::Region& rClipRegion = vcl::Region(PolyPolygon(aClipPoly));
+                const vcl::Region& rClipRegion = vcl::Region(tools::PolyPolygon(aClipPoly));
                 aVirtualDevice.IntersectClipRegion(rClipRegion);
             }
 

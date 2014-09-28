@@ -34,7 +34,7 @@ namespace basegfx
         // extra points there. Result will have no touches or intersections on an edge, only on points
         BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate);
 
-        // look for polypolygon-intersections and polypolygon-touches (point of poly A on an edge of poly B) in given PolyPolygon and add
+        // look for polypolygon-intersections and polypolygon-touches (point of poly A on an edge of poly B) in given tools::PolyPolygon and add
         // extra points there. Result will have no touches or intersections between contained polygons on an edge, only on points. For
         // convenience, the correction for self-intersections for each member polygon will be used, too.
         // Changed: Self intersections are searched by default, but may be switched off by 2nd parameter.

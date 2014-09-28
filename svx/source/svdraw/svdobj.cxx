@@ -1250,7 +1250,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
             if(nSize > 1)
             {
                 // the topology for contour is correctly a vector of PolyPolygons; for
-                // historical reasons cut it back to a single PolyPolygon here
+                // historical reasons cut it back to a single tools::PolyPolygon here
                 for(sal_uInt32 a(0); a < nSize; a++)
                 {
                     aRetval.append(rResult[a]);
@@ -2528,7 +2528,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
             // check for fill rsults
             if(!aExtractedLineFills.empty())
             {
-                // merge to a single PolyPolygon (OR)
+                // merge to a single tools::PolyPolygon (OR)
                 aMergedLineFillPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(aExtractedLineFills);
             }
         }

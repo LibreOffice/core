@@ -47,7 +47,7 @@ namespace cppcanvas
     class PolyPolygon;
     class Canvas;
 
-    // forward declaration, since PolyPolygon also references Canvas
+    // forward declaration, since tools::PolyPolygon also references Canvas
     typedef ::boost::shared_ptr< PolyPolygon > PolyPolygonSharedPtr;
 
     // forward declaration, since cloneCanvas() also references Canvas

@@ -75,7 +75,7 @@ public:
 
       For _non_ contour-flow objects, this is simply the overlap area of
       BoundRect (including spacing), and the line, for contour-flow,
-      the PolyPolygon of the object gets traversed
+      the tools::PolyPolygon of the object gets traversed
      */
     static const SwRect CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
                                        const SwRect &rLine,

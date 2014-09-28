@@ -44,7 +44,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
     bVertical( bVert )
 {
     sal_uInt32 nCount(rPolyPolygon.count());
-    mpPolyPolygon = new PolyPolygon( (sal_uInt16)nCount );
+    mpPolyPolygon = new tools::PolyPolygon( (sal_uInt16)nCount );
 
     for(sal_uInt32 i(0L); i < nCount; i++)
     {
@@ -56,7 +56,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
     if( pLinePolyPolygon )
     {
         nCount = pLinePolyPolygon->count();
-        mpLinePolyPolygon = new PolyPolygon();
+        mpLinePolyPolygon = new tools::PolyPolygon();
 
         for(sal_uInt32 i(0L); i < nCount; i++)
         {
@@ -135,8 +135,8 @@ public:
         { if( nMin > nL ) nMin = nL; if( nMax < nR ) nMax = nR; }
     sal_uInt16 Area( const Point& rPt );
     void NoteUpLow( long nA, const sal_uInt8 nArea );
-    void Calc( const PolyPolygon& rPoly );
-    void Concat( const PolyPolygon* pPoly );
+    void Calc( const tools::PolyPolygon& rPoly );
+    void Concat( const tools::PolyPolygon* pPoly );
     // inlines
     void NoteLast() { if( bMultiple ) NoteRange( nAct == nFirst ); }
     void SetClosed( const bool bNew ){ bClosed = bNew; }
@@ -300,7 +300,7 @@ void SvxBoundArgs::NoteRange( bool bToggle )
     }
 }
 
-void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
+void SvxBoundArgs::Calc( const tools::PolyPolygon& rPoly )
 {
     sal_uInt16 nCount;
     nAct = 0;
@@ -488,7 +488,7 @@ void SvxBoundArgs::Add()
     }
 }
 
-void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
+void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
 {
     SetConcat( true );
     DBG_ASSERT( pPoly, "Nothing to do?" );

@@ -417,7 +417,7 @@ namespace vclcanvas
                 // here, keep it all the way and only change the vertex values
                 // in the loop below (as ::Polygon is a pimpl class, creating
                 // one every loop turn would really stress the mem allocator)
-                ::PolyPolygon           aTempPolyPoly;
+                ::tools::PolyPolygon    aTempPolyPoly;
                 ::Polygon               aTempPoly2( static_cast<sal_uInt16>(nNumPoints+1) );
 
                 aTempPoly2[0] = rBounds.TopLeft();
@@ -540,7 +540,7 @@ namespace vclcanvas
                            OutputDevice*                                   p2ndOutDev,
                            const ::canvas::ParametricPolyPolygon::Values&  rValues,
                            const std::vector< ::Color >&                   rColors,
-                           const PolyPolygon&                              rPoly,
+                           const ::tools::PolyPolygon&                     rPoly,
                            const rendering::ViewState&                     viewState,
                            const rendering::RenderState&                   renderState,
                            const rendering::Texture&                       texture,
@@ -675,7 +675,7 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
             const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
-            PolyPolygon aPolyPoly( tools::mapPolyPolygon(
+            ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon(
                                        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon),
                                        viewState, renderState ) );
 

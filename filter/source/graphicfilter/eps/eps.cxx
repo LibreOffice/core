@@ -202,9 +202,9 @@ private:
     void                ImplWriteLineInfo( const LineInfo& rLineInfo );
     void                ImplRect( const Rectangle & rRectangle );
     void                ImplRectFill ( const Rectangle & rRectangle );
-    void                ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev );
-    void                ImplIntersect( const PolyPolygon& rPolyPoly );
-    void                ImplPolyPoly( const PolyPolygon & rPolyPolygon, bool bTextOutline = false );
+    void                ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev );
+    void                ImplIntersect( const tools::PolyPolygon& rPolyPoly );
+    void                ImplPolyPoly( const tools::PolyPolygon & rPolyPolygon, bool bTextOutline = false );
     void                ImplPolyLine( const Polygon & rPolygon );
 
     void                ImplSetClipRegion( vcl::Region& rRegion );
@@ -654,7 +654,7 @@ void PSWriter::ImplWriteEpilog()
 
 void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 {
-    PolyPolygon aFillPath;
+    tools::PolyPolygon aFillPath;
 
     for( size_t nCurAction = 0, nCount = rMtf.GetActionSize(); nCurAction < nCount; nCurAction++ )
     {
@@ -715,7 +715,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 Rectangle   aRect = ( ( (const MetaEllipseAction*) pMA )->GetRect() );
                 Point       aCenter = aRect.Center();
                 Polygon     aPoly( aCenter, aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
-                PolyPolygon aPolyPoly( aPoly );
+                tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
             break;
@@ -724,7 +724,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 Polygon aPoly( ( (const MetaArcAction*)pMA )->GetRect(), ( (const MetaArcAction*)pMA )->GetStartPoint(),
                     ( (const MetaArcAction*)pMA )->GetEndPoint(), POLY_ARC );
-                PolyPolygon aPolyPoly( aPoly );
+                tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
             break;
@@ -733,7 +733,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 Polygon aPoly( ( (const MetaPieAction*)pMA )->GetRect(), ( (const MetaPieAction*)pMA )->GetStartPoint(),
                     ( (const MetaPieAction*)pMA )->GetEndPoint(), POLY_PIE );
-                PolyPolygon aPolyPoly( aPoly );
+                tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
             break;
@@ -742,7 +742,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 Polygon aPoly( ( (const MetaChordAction*)pMA )->GetRect(), ( (const MetaChordAction*)pMA )->GetStartPoint(),
                     ( (const MetaChordAction*)pMA )->GetEndPoint(), POLY_CHORD );
-                PolyPolygon aPolyPoly( aPoly );
+                tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
             break;
@@ -791,7 +791,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_POLYGON_ACTION :
             {
-                PolyPolygon aPolyPoly( ( (const MetaPolygonAction*) pMA )->GetPolygon() );
+                tools::PolyPolygon aPolyPoly( ( (const MetaPolygonAction*) pMA )->GetPolygon() );
                 ImplPolyPoly( aPolyPoly );
             }
             break;
@@ -926,14 +926,14 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_GRADIENT_ACTION :
             {
-                PolyPolygon aPolyPoly( ( (const MetaGradientAction*)pMA)->GetRect() );
+                tools::PolyPolygon aPolyPoly( ( (const MetaGradientAction*)pMA)->GetRect() );
                 ImplWriteGradient( aPolyPoly, ( (const MetaGradientAction*) pMA )->GetGradient(), rVDev );
             }
             break;
 
             case META_GRADIENTEX_ACTION :
             {
-                PolyPolygon aPolyPoly( ( (const MetaGradientExAction*)pMA)->GetPolyPolygon() );
+                tools::PolyPolygon aPolyPoly( ( (const MetaGradientExAction*)pMA)->GetPolyPolygon() );
                 ImplWriteGradient( aPolyPoly, ( (const MetaGradientExAction*) pMA )->GetGradient(), rVDev );
             }
             break;
@@ -1282,7 +1282,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 {
                     if ( aFillPath.Count() )
                     {
-                        aFillPath = PolyPolygon();
+                        aFillPath = tools::PolyPolygon();
                         ImplWriteLine( "gr" );
                     }
                 }
@@ -1304,8 +1304,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                             Polygon aPath;
                             aStroke.getPath( aPath );
 
-                            PolyPolygon aStartArrow;
-                            PolyPolygon aEndArrow;
+                            tools::PolyPolygon aStartArrow;
+                            tools::PolyPolygon aEndArrow;
 //                          double fTransparency( aStroke.getTransparency() );
                             double fStrokeWidth( aStroke.getStrokeWidth() );
                             SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
@@ -1341,7 +1341,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 case SvtGraphicFill::fillSolid :
                                 {
                                     bSkipSequence = true;
-                                    PolyPolygon aPolyPoly;
+                                    tools::PolyPolygon aPolyPoly;
                                     aFill.getPath( aPolyPoly );
                                     sal_uInt16 i, nPolyCount = aPolyPoly.Count();
                                     if ( nPolyCount )
@@ -1416,7 +1416,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                         aTempMtf.AddAction( rMtf.GetAction( nBitmapAction )->Clone() );
                                         ImplWriteActions( aTempMtf, rVDev );
                                         ImplWriteLine( "gr" );
-                                        aFillPath = PolyPolygon();
+                                        aFillPath = tools::PolyPolygon();
                                     }
                                     else
                                         nCurAction = nCommentStartAction + 1;
@@ -1588,7 +1588,7 @@ void PSWriter::ImplAddPath( const Polygon & rPolygon )
 
 
 
-void PSWriter::ImplIntersect( const PolyPolygon& rPolyPoly )
+void PSWriter::ImplIntersect( const tools::PolyPolygon& rPolyPoly )
 {
     sal_uInt16 i, nPolyCount = rPolyPoly.Count();
     for ( i = 0; i < nPolyCount; )
@@ -1606,7 +1606,7 @@ void PSWriter::ImplIntersect( const PolyPolygon& rPolyPoly )
 
 
 
-void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
+void PSWriter::ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
 {
     VirtualDevice   l_aVDev;
     GDIMetaFile     aTmpMtf;
@@ -1617,7 +1617,7 @@ void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& 
 
 
 
-void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, bool bTextOutline )
+void PSWriter::ImplPolyPoly( const tools::PolyPolygon & rPolyPoly, bool bTextOutline )
 {
     sal_uInt16 i, nPolyCount = rPolyPoly.Count();
     if ( nPolyCount )
@@ -2158,7 +2158,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
         }
         bool bOldLineColor = bLineColor;
         bLineColor = false;
-        std::vector<PolyPolygon> aPolyPolyVec;
+        std::vector<tools::PolyPolygon> aPolyPolyVec;
         if ( aVirDev.GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, -1, true, nWidth, pDXArry ) )
         {
             // always adjust text position to match baseline alignment
@@ -2171,7 +2171,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
                 ImplWriteF( nRotation, 1 );
                 mpPS->WriteCharPtr( "r " );
             }
-            std::vector<PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
+            std::vector<tools::PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
             while ( aIter != aPolyPolyVec.end() )
                 ImplPolyPoly( *aIter++, true );
             ImplWriteLine( "pom" );

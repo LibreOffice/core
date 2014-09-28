@@ -245,7 +245,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     OutputDevice *pOut = pSh->GetOut();
     pOut->Push();
     bool bClip = true;
-    PolyPolygon aPoly;
+    tools::PolyPolygon aPoly;
 
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();

@@ -996,7 +996,7 @@ MetaPolyPolygonAction::MetaPolyPolygonAction() :
 MetaPolyPolygonAction::~MetaPolyPolygonAction()
 {}
 
-MetaPolyPolygonAction::MetaPolyPolygonAction( const PolyPolygon& rPolyPoly ) :
+MetaPolyPolygonAction::MetaPolyPolygonAction( const tools::PolyPolygon& rPolyPoly ) :
     MetaAction  ( META_POLYPOLYGON_ACTION ),
     maPolyPoly  ( rPolyPoly )
 {}
@@ -2252,7 +2252,7 @@ MetaGradientExAction::MetaGradientExAction() :
     MetaAction  ( META_GRADIENTEX_ACTION )
 {}
 
-MetaGradientExAction::MetaGradientExAction( const PolyPolygon& rPolyPoly, const Gradient& rGradient ) :
+MetaGradientExAction::MetaGradientExAction( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient ) :
     MetaAction  ( META_GRADIENTEX_ACTION ),
     maPolyPoly  ( rPolyPoly ),
     maGradient  ( rGradient )
@@ -2300,7 +2300,7 @@ void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
 
     // #i105373# see comment at MetaTransparentAction::Write
-    PolyPolygon aNoCurvePolyPolygon;
+    tools::PolyPolygon aNoCurvePolyPolygon;
     maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
 
     WritePolyPolygon( rOStm, aNoCurvePolyPolygon );
@@ -2321,7 +2321,7 @@ MetaHatchAction::MetaHatchAction() :
 MetaHatchAction::~MetaHatchAction()
 {}
 
-MetaHatchAction::MetaHatchAction( const PolyPolygon& rPolyPoly, const Hatch& rHatch ) :
+MetaHatchAction::MetaHatchAction( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch ) :
     MetaAction  ( META_HATCH_ACTION ),
     maPolyPoly  ( rPolyPoly ),
     maHatch     ( rHatch )
@@ -2362,7 +2362,7 @@ void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
 
     // #i105373# see comment at MetaTransparentAction::Write
-    PolyPolygon aNoCurvePolyPolygon;
+    tools::PolyPolygon aNoCurvePolyPolygon;
     maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
 
     WritePolyPolygon( rOStm, aNoCurvePolyPolygon );
@@ -3235,7 +3235,7 @@ MetaTransparentAction::MetaTransparentAction() :
 MetaTransparentAction::~MetaTransparentAction()
 {}
 
-MetaTransparentAction::MetaTransparentAction( const PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent ) :
+MetaTransparentAction::MetaTransparentAction( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent ) :
     MetaAction      ( META_TRANSPARENT_ACTION ),
     maPolyPoly      ( rPolyPoly ),
     mnTransPercent  ( nTransPercent )
@@ -3275,7 +3275,7 @@ void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
 
-    // #i105373# The PolyPolygon in this action may be a curve; this
+    // #i105373# The tools::PolyPolygon in this action may be a curve; this
     // was ignored until now what is an error. To make older office
     // versions work with MetaFiles, i opt for applying AdaptiveSubdivide
     // to the PolyPoylgon.
@@ -3284,7 +3284,7 @@ void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     // correctly, but not here :-( ).
     // The golden solution would be to combine both, but i think it's
     // not necessary; a good subdivision will be sufficient.
-    PolyPolygon aNoCurvePolyPolygon;
+    tools::PolyPolygon aNoCurvePolyPolygon;
     maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
 
     WritePolyPolygon( rOStm, aNoCurvePolyPolygon );
@@ -3566,12 +3566,12 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
                     aPath.Move( nXMove, nYMove );
                     aStroke.setPath( aPath );
 
-                    PolyPolygon aStartArrow;
+                    tools::PolyPolygon aStartArrow;
                     aStroke.getStartArrow(aStartArrow);
                     aStartArrow.Move(nXMove, nYMove);
                     aStroke.setStartArrow(aStartArrow);
 
-                    PolyPolygon aEndArrow;
+                    tools::PolyPolygon aEndArrow;
                     aStroke.getEndArrow(aEndArrow);
                     aEndArrow.Move(nXMove, nYMove);
                     aStroke.setEndArrow(aEndArrow);
@@ -3583,7 +3583,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
                     SvtGraphicFill aFill;
                     ReadSvtGraphicFill( aMemStm, aFill );
 
-                    PolyPolygon aPath;
+                    tools::PolyPolygon aPath;
                     aFill.getPath( aPath );
                     aPath.Move( nXMove, nYMove );
                     aFill.setPath( aPath );
@@ -3623,7 +3623,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 {
                     SvtGraphicFill aFill;
                     ReadSvtGraphicFill( aMemStm, aFill );
-                    PolyPolygon aPath;
+                    tools::PolyPolygon aPath;
                     aFill.getPath( aPath );
                     aPath.Scale( fXScale, fYScale );
                     aFill.setPath( aPath );

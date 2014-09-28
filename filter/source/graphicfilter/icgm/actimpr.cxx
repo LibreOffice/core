@@ -717,7 +717,7 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
 
 
 
-void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
+void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon )
 {
     sal_uInt32 nNumPolys = rPolyPolygon.Count();
     if ( nNumPolys && ImplCreateShape( "com.sun.star.drawing.ClosedBezierShape" ) )

@@ -260,7 +260,7 @@ protected:
     void ShowDDCursor( const Rectangle& rRect );
     void HideDDCursor();
 
-    void ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly );
+    void ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly );
 
 public:
                     ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindow );

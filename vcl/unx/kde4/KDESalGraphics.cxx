@@ -209,7 +209,7 @@ namespace
 // without IMAGE_BASED_PAINTING (in which case QApplication::setGraphicsSystem( "native" ) may
 // be needed too).
 #include <X11/Xregion.h>
-static QRegion XRegionToQRegion( XLIB_Region xr )
+static QRegion XRegionToQRegion( Region xr )
 {
     QRegion qr;
     for( int i = 0;
@@ -615,7 +615,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         GC gc = GetFontGC();
         if( gc )
         {
-            XLIB_Region pTempClipRegion = NULL;
+            Region pTempClipRegion = NULL;
             if( clipRegion )
             {
                 pTempClipRegion = XCreateRegion();

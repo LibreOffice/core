@@ -25,7 +25,7 @@
 
 
 
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 
 namespace sdr
 {

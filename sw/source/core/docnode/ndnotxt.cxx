@@ -85,11 +85,11 @@ bool SwNoTxtNode::SavePersistentData()
     return true;
 }
 
-void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, bool bAutomatic )
+void SwNoTxtNode::SetContour( const tools::PolyPolygon *pPoly, bool bAutomatic )
 {
     delete pContour;
     if ( pPoly )
-        pContour = new PolyPolygon( *pPoly );
+        pContour = new tools::PolyPolygon( *pPoly );
     else
         pContour = 0;
     bAutomaticContour = bAutomatic;
@@ -100,13 +100,13 @@ void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, bool bAutomatic )
 void SwNoTxtNode::CreateContour()
 {
     OSL_ENSURE( !pContour, "Contour available." );
-    pContour = new PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic()));
+    pContour = new tools::PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic()));
     bAutomaticContour = true;
     bContourMapModeValid = true;
     bPixelContour = false;
 }
 
-const PolyPolygon *SwNoTxtNode::HasContour() const
+const tools::PolyPolygon *SwNoTxtNode::HasContour() const
 {
     if( !bContourMapModeValid )
     {
@@ -178,23 +178,23 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
     return pContour;
 }
 
-void SwNoTxtNode::GetContour( PolyPolygon &rPoly ) const
+void SwNoTxtNode::GetContour( tools::PolyPolygon &rPoly ) const
 {
     OSL_ENSURE( pContour, "Contour not available." );
     rPoly = *HasContour();
 }
 
-void SwNoTxtNode::SetContourAPI( const PolyPolygon *pPoly )
+void SwNoTxtNode::SetContourAPI( const tools::PolyPolygon *pPoly )
 {
     delete pContour;
     if ( pPoly )
-        pContour = new PolyPolygon( *pPoly );
+        pContour = new tools::PolyPolygon( *pPoly );
     else
         pContour = 0;
     bContourMapModeValid = false;
 }
 
-bool SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
+bool SwNoTxtNode::GetContourAPI( tools::PolyPolygon &rContour ) const
 {
     if( !pContour )
         return false;
@@ -213,7 +213,7 @@ bool SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
             sal_uInt16 nPolyCount = rContour.Count();
             for( sal_uInt16 j=0; j<nPolyCount; j++ )
             {
-                // --> OD #i102238# - use the right <PolyPolygon> instance
+                // --> OD #i102238# - use the right <tools::PolyPolygon> instance
                 Polygon& rPoly = rContour[j];
                 // <--
 

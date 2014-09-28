@@ -546,7 +546,7 @@ typedef CGPathRef NPCGRegion;
 #elif defined(XP_WIN)
 typedef HRGN NPRegion;
 #elif defined(XP_UNIX) && defined(MOZ_X11)
-typedef vcl::Region NPRegion;
+typedef Region NPRegion;
 #elif defined(XP_SYMBIAN)
 typedef QRegion* NPRegion;
 #else

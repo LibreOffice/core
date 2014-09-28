@@ -52,7 +52,7 @@ void OEndMarker::Paint( const Rectangle& /*rRect*/ )
     Size aSize = GetSizePixel();
     aSize.Width() += nCornerSpace;
     Rectangle aWholeRect(Point(-nCornerSpace,0),aSize);
-    PolyPolygon aPoly;
+    tools::PolyPolygon aPoly;
     aPoly.Insert(Polygon(aWholeRect,nCornerSpace,nCornerSpace));
 
     Color aStartColor(m_nColor);

@@ -208,7 +208,7 @@ private:
     void METMove(Point aPt);
     void METLine(Point aPt1, Point aPt2);
     void METLine(const Polygon & rPolygon);
-    void METLine(const PolyPolygon & rPolyPolygon);
+    void METLine(const tools::PolyPolygon & rPolyPolygon);
     void METLineAtCurPos(Point aPt);
     void METBox(bool bFill, bool bBoundary,
                 Rectangle aRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis);
@@ -1314,7 +1314,7 @@ void METWriter::METLine(const Polygon & rPolygon)
 }
 
 
-void METWriter::METLine(const PolyPolygon & rPolyPolygon)
+void METWriter::METLine(const tools::PolyPolygon & rPolyPolygon)
 {
     sal_uInt16 i,nCount;
     nCount=rPolyPolygon.Count();
@@ -1818,7 +1818,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             {
                 const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*) pMA;
 
-                PolyPolygon aSimplePolyPoly( pA->GetPolyPolygon() );
+                tools::PolyPolygon aSimplePolyPoly( pA->GetPolyPolygon() );
                 sal_uInt16 i, nCount = aSimplePolyPoly.Count();
                 for ( i = 0; i < nCount; i++ )
                 {

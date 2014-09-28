@@ -328,13 +328,13 @@ void SwEditShell::GetGrfNms( OUString* pGrfName, OUString* pFltName,
     }
 }
 
-const PolyPolygon *SwEditShell::GetGraphicPolygon() const
+const tools::PolyPolygon *SwEditShell::GetGraphicPolygon() const
 {
     SwNoTxtNode *pNd = GetCrsr()->GetNode().GetNoTxtNode();
     return pNd->HasContour();
 }
 
-void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
+void SwEditShell::SetGraphicPolygon( const tools::PolyPolygon *pPoly )
 {
     SwNoTxtNode *pNd = GetCrsr()->GetNode().GetNoTxtNode();
     StartAllAction();

@@ -147,7 +147,7 @@ namespace cairocanvas
                     ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
                                                                     viewState.AffineTransform ) );
 
-                aClipRegion = vcl::Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
+                aClipRegion = vcl::Region::GetRegionFromPolyPolygon( tools::PolyPolygon( aClipPoly ) );
             }
         }
 
@@ -166,7 +166,7 @@ namespace cairocanvas
             if( aClipPoly.count() )
             {
                 // setup non-empty clipping
-                vcl::Region aRegion = vcl::Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
+                vcl::Region aRegion = vcl::Region::GetRegionFromPolyPolygon( tools::PolyPolygon( aClipPoly ) );
 
                 if( aClipRegion.IsEmpty() )
                     aClipRegion = aRegion;

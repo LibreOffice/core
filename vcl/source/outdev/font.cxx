@@ -269,7 +269,7 @@ SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
     return aSysFontData;
 }
 
-void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine,
+void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine,
                                         Rectangle& rRect1, Rectangle& rRect2,
                                         long& rYOff, long& rWidth,
                                         FontEmphasisMark eEmphasis,
@@ -1845,7 +1845,7 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
 }
 
 void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
-                                         const PolyPolygon& rPolyPoly, bool bPolyLine,
+                                         const tools::PolyPolygon& rPolyPoly, bool bPolyLine,
                                          const Rectangle& rRect1, const Rectangle& rRect2 )
 {
     if( IsRTLEnabled() )
@@ -1865,7 +1865,7 @@ void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
         }
         else
         {
-            PolyPolygon aPolyPoly = rPolyPoly;
+            tools::PolyPolygon aPolyPoly = rPolyPoly;
             aPolyPoly.Move( nX, nY );
             DrawPolyPolygon( aPolyPoly );
         }
@@ -1897,7 +1897,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     EnableMapMode( false );
 
     FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
-    PolyPolygon         aPolyPoly;
+    tools::PolyPolygon         aPolyPoly;
     Rectangle           aRect1;
     Rectangle           aRect2;
     long                nEmphasisYOff;

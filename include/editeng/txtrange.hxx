@@ -24,7 +24,7 @@
 #include <tools/gen.hxx>
 #include <deque>
 
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class Rectangle;
 
 namespace basegfx {
@@ -43,8 +43,8 @@ class EDITENG_DLLPUBLIC TextRanger
         RangeCache(const Range& rng) : range(rng) {};
     };
     std::deque<RangeCache> mRangeCache; //!< Cached range calculations.
-    PolyPolygon *mpPolyPolygon; // Surface polygon
-    PolyPolygon *mpLinePolyPolygon; // Line polygon
+    tools::PolyPolygon *mpPolyPolygon; // Surface polygon
+    tools::PolyPolygon *mpLinePolyPolygon; // Line polygon
     Rectangle *pBound;  // Comprehensive rectangle
     sal_uInt16 nCacheSize;  // Cache-Size
     sal_uInt16 nRight;      // Distance Contour-Text
@@ -75,8 +75,8 @@ public:
     bool IsInner() const { return bInner; }
     bool IsVertical() const { return bVertical; }
     bool HasBorder() const { return nRight || nLeft; }
-    const PolyPolygon& GetPolyPolygon() const { return *mpPolyPolygon; }
-    const PolyPolygon* GetLinePolygon() const { return mpLinePolyPolygon; }
+    const tools::PolyPolygon& GetPolyPolygon() const { return *mpPolyPolygon; }
+    const tools::PolyPolygon* GetLinePolygon() const { return mpLinePolyPolygon; }
     const Rectangle& GetBoundRect()
         { return pBound ? static_cast< const Rectangle& >(*pBound) : _GetBoundRect(); }
     void SetUpper( sal_uInt16 nNew ){ nUpper = nNew; }

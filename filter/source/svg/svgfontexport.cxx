@@ -234,7 +234,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 
                     {
                         const Point         aPos;
-                        const PolyPolygon   aMissingGlyphPolyPoly( Rectangle( aPos, aSize ) );
+                        const tools::PolyPolygon   aMissingGlyphPolyPoly( Rectangle( aPos, aSize ) );
 
                         mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( aMissingGlyphPolyPoly, false ) );
 
@@ -258,7 +258,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 
 void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr )
 {
-    PolyPolygon         aPolyPoly;
+    tools::PolyPolygon         aPolyPoly;
     const sal_Unicode   nSpace = ' ';
 
     if( rOut.GetTextOutline( aPolyPoly, rCellStr ) )

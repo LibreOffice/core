@@ -90,7 +90,7 @@ SvxContourDlg::~SvxContourDlg()
 {
 }
 
-PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
+tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                                               const Rectangle* pRect,
                                               const sal_uIntPtr nFlags )
 {
@@ -166,7 +166,7 @@ PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     aBmp.SetPrefSize( rGraphic.GetPrefSize() );
     aBmp.SetPrefMapMode( rGraphic.GetPrefMapMode() );
 
-    return PolyPolygon( XOutBitmap::GetCountour( aBmp, nContourFlags, 128, pRect ) );
+    return tools::PolyPolygon( XOutBitmap::GetCountour( aBmp, nContourFlags, 128, pRect ) );
 }
 
 // Loop through to super class, no virtual Methods to not become incompatible
@@ -182,7 +182,7 @@ bool SvxContourDlg::IsGraphicChanged() const
     return pSuperClass->IsGraphicChanged();
 }
 
-PolyPolygon SvxContourDlg::GetPolyPolygon()
+tools::PolyPolygon SvxContourDlg::GetPolyPolygon()
 {
     return pSuperClass->GetPolyPolygon( true );
 }
@@ -193,7 +193,7 @@ const void* SvxContourDlg::GetEditingObject() const
 }
 
 void SvxContourDlg::Update( const Graphic& rGraphic, bool bGraphicLinked,
-                            const PolyPolygon* pPolyPoly, void* pEditingObj )
+                            const tools::PolyPolygon* pPolyPoly, void* pEditingObj )
 {
     pSuperClass->UpdateGraphic( rGraphic, bGraphicLinked, pPolyPoly, pEditingObj );
 }
@@ -315,11 +315,11 @@ void SvxSuperContourDlg::SetGraphic( const Graphic& rGraphic )
     m_pContourWnd->SetGraphic( aGraphic );
 }
 
-void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
+void SvxSuperContourDlg::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     DBG_ASSERT(  m_pContourWnd->GetGraphic().GetType() != GRAPHIC_NONE, "Graphic must've been set first!" );
 
-    PolyPolygon     aPolyPoly( rPolyPoly );
+    tools::PolyPolygon     aPolyPoly( rPolyPoly );
     const MapMode   aMap100( MAP_100TH_MM );
     const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
     OutputDevice*   pOutDev = Application::GetDefaultDevice();
@@ -344,9 +344,9 @@ void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     m_pContourWnd->GetSdrModel()->SetChanged( true );
 }
 
-PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
+tools::PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
 {
-    PolyPolygon aRetPolyPoly( m_pContourWnd->GetPolyPolygon() );
+    tools::PolyPolygon aRetPolyPoly( m_pContourWnd->GetPolyPolygon() );
 
     if ( bRescaleToGraphic )
     {
@@ -375,7 +375,7 @@ PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
 }
 
 void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, bool _bGraphicLinked,
-                                 const PolyPolygon* pPolyPoly, void* pEditingObj )
+                                 const tools::PolyPolygon* pPolyPoly, void* pEditingObj )
 {
     aUpdateGraphic = rGraphic;
     bUpdateGraphicLinked = _bGraphicLinked;
@@ -384,7 +384,7 @@ void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, bool _bGraphicL
     if ( pPolyPoly )
         aUpdatePolyPoly = *pPolyPoly;
     else
-        aUpdatePolyPoly = PolyPolygon();
+        aUpdatePolyPoly = tools::PolyPolygon();
 
     aUpdateTimer.Start();
 }
@@ -556,7 +556,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
         bGraphicLinked = bUpdateGraphicLinked;
 
         aUpdateGraphic = Graphic();
-        aUpdatePolyPoly = PolyPolygon();
+        aUpdatePolyPoly = tools::PolyPolygon();
         bUpdateGraphicLinked = false;
 
         m_pContourWnd->GetSdrModel()->SetChanged( false );

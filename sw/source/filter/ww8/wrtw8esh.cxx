@@ -2103,7 +2103,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
     {
         if (const SwNoTxtNode *pNd = GetNoTxtNodeFromSwFrmFmt(rFmt))
         {
-            const PolyPolygon *pPolyPoly = pNd->HasContour();
+            const tools::PolyPolygon *pPolyPoly = pNd->HasContour();
             if (pPolyPoly && pPolyPoly->Count())
             {
                 Polygon aPoly = CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);

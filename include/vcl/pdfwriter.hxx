@@ -48,7 +48,7 @@ class GDIMetaFile;
 class MapMode;
 class Polygon;
 class LineInfo;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class Bitmap;
 class BitmapEx;
 class Image;
@@ -791,7 +791,7 @@ The following structure describes the permissions used in PDF security
                                       const LineInfo& rLineInfo );
     void                DrawPolyLine( const Polygon& rPoly, const ExtLineInfo& rInfo );
     void                DrawPolygon( const Polygon& rPoly );
-    void                DrawPolyPolygon( const PolyPolygon& rPolyPoly );
+    void                DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void                DrawRect( const Rectangle& rRect );
     void                DrawRect( const Rectangle& rRect,
                                   sal_uLong nHorzRount, sal_uLong nVertRound );
@@ -810,12 +810,12 @@ The following structure describes the permissions used in PDF security
                                       const BitmapEx& rBitmapEx );
 
     void                DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
-    void                DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
-    void                DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
+    void                DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
 
     void                DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
-    void                DrawTransparent( const PolyPolygon& rPolyPoly,
+    void                DrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                          sal_uInt16 nTransparencePercent );
 
     /** Start a transparency group

@@ -76,7 +76,7 @@ class MapMode;
 class Color;
 namespace vcl { class Font; }
 class KeyEvent;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class Size;
 class Point;
 class Rectangle;

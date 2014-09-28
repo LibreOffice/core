@@ -790,7 +790,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 }
                 case META_POLYPOLYGON_ACTION:
                 {
-                    const PolyPolygon aPoly(
+                    const tools::PolyPolygon aPoly(
                         static_cast<const MetaPolyPolygonAction*>(pCurrAct)->GetPolyPolygon());
                     if( aPoly.Count() != 1 ||
                         !basegfx::tools::isRectangle(

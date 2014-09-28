@@ -98,8 +98,8 @@ protected:
     XID             m_aXRenderPicture;
     CairoFontsCache m_aCairoFontsCache;
 
-    XLIB_Region     pPaintRegion_;
-    XLIB_Region     mpClipRegion;
+    Region          pPaintRegion_;
+    Region          mpClipRegion;
 
     GC              pPenGC_;        // Pen attributes
     SalColor        nPenColor_;
@@ -143,7 +143,7 @@ protected:
 
     using SalGraphics::SetClipRegion;
     void            SetClipRegion( GC          pGC,
-                                   XLIB_Region pXReg = NULL ) const;
+                                   Region      pXReg = NULL ) const;
 
     GC              GetTrackingGC();
     GC              GetInvertGC();

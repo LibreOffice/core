@@ -59,9 +59,9 @@ namespace
         return Polygon(rPoly);
     }
 
-    PolyPolygon toPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly )
+    tools::PolyPolygon toPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly )
     {
-        PolyPolygon aTarget;
+        tools::PolyPolygon aTarget;
         for (sal_uInt32 i = 0; i < rPolyPoly.count(); ++i)
             aTarget.Insert(toPolygon(rPolyPoly.getB2DPolygon(i)));
 
@@ -267,7 +267,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         if( bDrawnOk )
         {
             if( mpMetaFile )
-                mpMetaFile->AddAction( new MetaTransparentAction( PolyPolygon( rB2DPolyPoly ), static_cast< sal_uInt16 >(fTransparency * 100.0)));
+                mpMetaFile->AddAction( new MetaTransparentAction( tools::PolyPolygon( rB2DPolyPoly ), static_cast< sal_uInt16 >(fTransparency * 100.0)));
 
             return;
         }
@@ -277,7 +277,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     DrawTransparent(toPolyPolygon(rB2DPolyPoly), static_cast<sal_uInt16>(fTransparency * 100.0));
 }
 
-void OutputDevice::DrawInvisiblePolygon( const PolyPolygon& rPolyPoly )
+void OutputDevice::DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly )
 {
     // short circuit if the polygon border is invisible too
     if( !mbLineColor )
@@ -290,7 +290,7 @@ void OutputDevice::DrawInvisiblePolygon( const PolyPolygon& rPolyPoly )
     Pop();
 }
 
-bool OutputDevice::DrawTransparentNatively ( const PolyPolygon& rPolyPoly,
+bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly,
                                              sal_uInt16 nTransparencePercent )
 {
     bool bDrawn = false;
@@ -363,7 +363,7 @@ bool OutputDevice::DrawTransparentNatively ( const PolyPolygon& rPolyPoly,
     return bDrawn;
 }
 
-void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
+void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                             sal_uInt16 nTransparencePercent )
 {
     // debug helper:
@@ -379,7 +379,7 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     mpMetaFile = NULL;
 
-    PolyPolygon aPolyPoly( LogicToPixel( rPolyPoly ) );
+    tools::PolyPolygon aPolyPoly( LogicToPixel( rPolyPoly ) );
     Rectangle aPolyRect( aPolyPoly.GetBoundRect() );
     Point aPoint;
     Rectangle aDstRect( aPoint, GetOutputSizePixel() );
@@ -597,7 +597,7 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
     mpAlphaVDev = pOldAlphaVDev;
 }
 
-void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
+void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                     sal_uInt16 nTransparencePercent )
 {
     // short circuit for drawing an opaque polygon

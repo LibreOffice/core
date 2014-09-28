@@ -111,7 +111,7 @@ namespace basegfx
         // flip polygon direction
         void flip();
 
-        // test if PolyPolygon has double points
+        // test if tools::PolyPolygon has double points
         bool hasDoublePoints() const;
 
         // remove double points, at the begin/end and follow-ups, too

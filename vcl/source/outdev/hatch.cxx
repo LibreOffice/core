@@ -41,7 +41,7 @@ extern "C" int SAL_CALL HatchCmpFnc( const void* p1, const void* p2 )
     return ( nX1 > nX2 ? 1 : nX1 == nX2 ? nY1 > nY2 ? 1: nY1 == nY2 ? 0 : -1 : -1 );
 }
 
-void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch )
+void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
 
     Hatch aHatch( rHatch );
@@ -93,7 +93,7 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
 
     if( rPolyPoly.Count() )
     {
-        PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
+        tools::PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
         bool            bOldMap = mbMap;
 
@@ -115,11 +115,11 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         mpAlphaVDev->DrawHatch( rPolyPoly, rHatch );
 }
 
-void OutputDevice::AddHatchActions( const PolyPolygon& rPolyPoly, const Hatch& rHatch,
+void OutputDevice::AddHatchActions( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch,
                                     GDIMetaFile& rMtf )
 {
 
-    PolyPolygon aPolyPoly( rPolyPoly );
+    tools::PolyPolygon aPolyPoly( rPolyPoly );
     aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME | POLY_OPTIMIZE_CLOSE );
 
     if( aPolyPoly.Count() )
@@ -135,7 +135,7 @@ void OutputDevice::AddHatchActions( const PolyPolygon& rPolyPoly, const Hatch& r
     }
 }
 
-void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf )
+void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf )
 {
     if(rPolyPoly.Count())
     {
@@ -153,7 +153,7 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch,
         if(bIsCurve)
         {
             OSL_ENSURE(false, "DrawHatch does *not* support curves, falling back to AdaptiveSubdivide()...");
-            PolyPolygon aPolyPoly;
+            tools::PolyPolygon aPolyPoly;
 
             rPolyPoly.AdaptiveSubdivide(aPolyPoly);
             DrawHatch(aPolyPoly, rHatch, bMtf);
@@ -315,7 +315,7 @@ void OutputDevice::CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt
     }
 }
 
-void OutputDevice::DrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly,
+void OutputDevice::DrawHatchLine( const Line& rLine, const tools::PolyPolygon& rPolyPoly,
                                       Point* pPtBuffer, bool bMtf )
 {
     double  fX, fY;

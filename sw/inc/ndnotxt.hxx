@@ -21,7 +21,7 @@
 
 #include "node.hxx"
 
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 
 // SwNoTxtNode
 
@@ -30,7 +30,7 @@ class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
     friend class SwNodes;
     friend class SwNoTxtFrm;
 
-    PolyPolygon *pContour;
+    tools::PolyPolygon *pContour;
     bool bAutomaticContour : 1; // automatic contour polygon, not manipulated
     bool bContourMapModeValid : 1; // contour map mode is not the graphics's
                                    // preferred map mode, but either
@@ -65,21 +65,21 @@ public:
     OUString GetDescription() const;
     void SetDescription( const OUString& rDescription, bool bBroadcast = false );
 
-    void               SetContour( const PolyPolygon *pPoly,
+    void               SetContour( const tools::PolyPolygon *pPoly,
                                    bool bAutomatic = false );
-    const PolyPolygon *HasContour() const;
+    const tools::PolyPolygon *HasContour() const;
     bool               _HasContour() const { return pContour!=0; };
-    void               GetContour( PolyPolygon &rPoly ) const;
+    void               GetContour( tools::PolyPolygon &rPoly ) const;
     void               CreateContour();
 
     void               SetAutomaticContour( bool bSet ) { bAutomaticContour = bSet; }
     bool               HasAutomaticContour() const { return bAutomaticContour; }
 
     // set either a MM100 or pixel contour
-    void               SetContourAPI( const PolyPolygon *pPoly );
+    void               SetContourAPI( const tools::PolyPolygon *pPoly );
 
     // get either a MM100 or pixel contour, return sal_False if no contour is set.
-    bool               GetContourAPI( PolyPolygon &rPoly ) const;
+    bool               GetContourAPI( tools::PolyPolygon &rPoly ) const;
 
     void               SetPixelContour( bool bSet ) { bPixelContour = bSet; }
     bool               IsPixelContour() const;

@@ -413,7 +413,7 @@ class VCL_DLLPUBLIC MetaPolyPolygonAction : public MetaAction
 {
 private:
 
-    PolyPolygon         maPolyPoly;
+    tools::PolyPolygon  maPolyPoly;
 
     virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
@@ -427,12 +427,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-    explicit            MetaPolyPolygonAction( const PolyPolygon& );
+    explicit            MetaPolyPolygonAction( const tools::PolyPolygon& );
 
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
+    const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
 };
 
 class VCL_DLLPUBLIC MetaTextAction : public MetaAction
@@ -937,7 +937,7 @@ class VCL_DLLPUBLIC MetaGradientExAction : public MetaAction
 {
 private:
 
-    PolyPolygon         maPolyPoly;
+    tools::PolyPolygon  maPolyPoly;
     Gradient            maGradient;
 
     virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
@@ -952,12 +952,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-                        MetaGradientExAction( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+                        MetaGradientExAction( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
+    const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Gradient&     GetGradient() const { return maGradient; }
 };
 
@@ -965,7 +965,7 @@ class VCL_DLLPUBLIC MetaHatchAction : public MetaAction
 {
 private:
 
-    PolyPolygon         maPolyPoly;
+    tools::PolyPolygon  maPolyPoly;
     Hatch               maHatch;
 
     virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
@@ -980,12 +980,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-                        MetaHatchAction( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
+                        MetaHatchAction( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
 
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
+    const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Hatch&        GetHatch() const { return maHatch; }
 };
 
@@ -1410,7 +1410,7 @@ class VCL_DLLPUBLIC MetaTransparentAction : public MetaAction
 {
 private:
 
-    PolyPolygon         maPolyPoly;
+    tools::PolyPolygon      maPolyPoly;
     sal_uInt16              mnTransPercent;
 
     virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
@@ -1425,12 +1425,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-                        MetaTransparentAction( const PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent );
+                        MetaTransparentAction( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent );
 
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
+    const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
 };
 

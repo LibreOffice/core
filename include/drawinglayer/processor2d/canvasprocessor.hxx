@@ -82,7 +82,7 @@ namespace drawinglayer
             // SvtOptionsDrawinglayer incarnation to react on diverse settings
             const SvtOptionsDrawinglayer                            maDrawinglayerOpt;
 
-            // the current clipping PolyPolygon from MaskPrimitive2D, always in
+            // the current clipping tools::PolyPolygon from MaskPrimitive2D, always in
             // object coordinates
             basegfx::B2DPolyPolygon                                 maClipPolyPolygon;
 

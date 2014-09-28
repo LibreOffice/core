@@ -282,7 +282,7 @@ class DemoRenderer
             aStrokeAttrs.StartCapType = rendering::PathCapType::BUTT;
             aStrokeAttrs.EndCapType = rendering::PathCapType::BUTT;
             aStrokeAttrs.JoinType = rendering::PathJoinType::MITER;
-            //fprintf( stderr, "FIXME: stroking a PolyPolygon doesn't show up\n" );
+            //fprintf( stderr, "FIXME: stroking a tools::PolyPolygon doesn't show up\n" );
             //yes it does
             mxCanvas->strokePolyPolygon( xPP, maViewState, aRenderState, aStrokeAttrs );
             // FIXME: do this instead:

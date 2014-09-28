@@ -22,7 +22,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <tools/gen.hxx>
 
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 
 namespace sdr
 {

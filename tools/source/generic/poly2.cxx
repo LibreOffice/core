@@ -69,6 +69,8 @@ ImplPolyPolygon::~ImplPolyPolygon()
     }
 }
 
+namespace tools {
+
 PolyPolygon::PolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
 {
     if ( nInitSize > MAX_POLYGONS )
@@ -93,7 +95,7 @@ PolyPolygon::PolyPolygon( const Polygon& rPoly )
         mpImplPolyPolygon = new ImplPolyPolygon( 16, 16 );
 }
 
-PolyPolygon::PolyPolygon( const PolyPolygon& rPolyPoly )
+PolyPolygon::PolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFFFFFE, "PolyPolygon: RefCount overflow" );
 
@@ -238,7 +240,7 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
         if(bIsCurve)
         {
             OSL_ENSURE(false, "Optimize does *not* support curves, falling back to AdaptiveSubdivide()...");
-            PolyPolygon aPolyPoly;
+            tools::PolyPolygon aPolyPoly;
 
             AdaptiveSubdivide(aPolyPoly);
             aPolyPoly.Optimize(nOptimizeFlags, pData);
@@ -282,7 +284,7 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
     }
 }
 
-void PolyPolygon::AdaptiveSubdivide( PolyPolygon& rResult, const double d ) const
+void PolyPolygon::AdaptiveSubdivide( tools::PolyPolygon& rResult, const double d ) const
 {
     rResult.Clear();
 
@@ -295,10 +297,10 @@ void PolyPolygon::AdaptiveSubdivide( PolyPolygon& rResult, const double d ) cons
     }
 }
 
-PolyPolygon PolyPolygon::SubdivideBezier( const PolyPolygon& rPolyPoly )
+tools::PolyPolygon PolyPolygon::SubdivideBezier( const tools::PolyPolygon& rPolyPoly )
 {
     sal_uInt16 i, nPolys = rPolyPoly.Count();
-    PolyPolygon aPolyPoly( nPolys );
+    tools::PolyPolygon aPolyPoly( nPolys );
     for( i=0; i<nPolys; ++i )
         aPolyPoly.Insert( Polygon::SubdivideBezier( rPolyPoly.GetObject(i) ) );
 
@@ -306,20 +308,20 @@ PolyPolygon PolyPolygon::SubdivideBezier( const PolyPolygon& rPolyPoly )
 }
 
 
-void PolyPolygon::GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
+void PolyPolygon::GetIntersection( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult ) const
 {
     ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_INT );
 }
 
-void PolyPolygon::GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
+void PolyPolygon::GetUnion( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult ) const
 {
     ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_UNION );
 }
 
-void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, sal_uIntPtr nOperation ) const
+void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, sal_uIntPtr nOperation ) const
 {
     // Convert to B2DPolyPolygon, temporarily. It might be
-    // advantageous in the future, to have a PolyPolygon adaptor that
+    // advantageous in the future, to have a tools::PolyPolygon adaptor that
     // just simulates a B2DPolyPolygon here...
     basegfx::B2DPolyPolygon aMergePolyPolygonA( getB2DPolyPolygon() );
     basegfx::B2DPolyPolygon aMergePolyPolygonB( rPolyPoly.getB2DPolyPolygon() );
@@ -363,7 +365,7 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
         }
     }
 
-    rResult = PolyPolygon( aMergePolyPolygonA );
+    rResult = tools::PolyPolygon( aMergePolyPolygonA );
 }
 
 sal_uInt16 PolyPolygon::Count() const
@@ -519,7 +521,7 @@ Polygon& PolyPolygon::operator[]( sal_uInt16 nPos )
     return *(mpImplPolyPolygon->mpPolyAry[nPos]);
 }
 
-PolyPolygon& PolyPolygon::operator=( const PolyPolygon& rPolyPoly )
+PolyPolygon& PolyPolygon::operator=( const tools::PolyPolygon& rPolyPoly )
 {
     if (this == &rPolyPoly)
         return *this;
@@ -537,7 +539,7 @@ PolyPolygon& PolyPolygon::operator=( const PolyPolygon& rPolyPoly )
     return *this;
 }
 
-bool PolyPolygon::operator==( const PolyPolygon& rPolyPoly ) const
+bool PolyPolygon::operator==( const tools::PolyPolygon& rPolyPoly ) const
 {
     if ( rPolyPoly.mpImplPolyPolygon == mpImplPolyPolygon )
         return true;
@@ -545,7 +547,7 @@ bool PolyPolygon::operator==( const PolyPolygon& rPolyPoly ) const
         return false;
 }
 
-bool PolyPolygon::IsEqual( const PolyPolygon& rPolyPoly ) const
+bool PolyPolygon::IsEqual( const tools::PolyPolygon& rPolyPoly ) const
 {
     bool bIsEqual = true;
     if ( Count() != rPolyPoly.Count() )
@@ -565,7 +567,7 @@ bool PolyPolygon::IsEqual( const PolyPolygon& rPolyPoly ) const
     return bIsEqual;
 }
 
-SvStream& ReadPolyPolygon( SvStream& rIStream, PolyPolygon& rPolyPoly )
+SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
@@ -592,12 +594,12 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, PolyPolygon& rPolyPoly )
         }
     }
     else
-        rPolyPoly = PolyPolygon();
+        rPolyPoly = tools::PolyPolygon();
 
     return rIStream;
 }
 
-SvStream& WritePolyPolygon( SvStream& rOStream, const PolyPolygon& rPolyPoly )
+SvStream& WritePolyPolygon( SvStream& rOStream, const tools::PolyPolygon& rPolyPoly )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "PolyPolygon::<< - Solar-Version not set on rOStream" );
 
@@ -641,7 +643,7 @@ void PolyPolygon::Read( SvStream& rIStream )
         }
     }
     else
-        *this = PolyPolygon();
+        *this = tools::PolyPolygon();
 }
 
 void PolyPolygon::Write( SvStream& rOStream ) const
@@ -695,5 +697,7 @@ PolyPolygon::PolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
         mpImplPolyPolygon = new ImplPolyPolygon( 16, 16 );
     }
 }
+
+} /* namespace tools */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

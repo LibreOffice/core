@@ -69,7 +69,7 @@ class SfxUndoAction;
 class XFillAttrSetItem;
 class XLineAttrSetItem;
 class SfxItemPool;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class SfxPoolItem;
 class SdrVirtObj;
 class SdrDragView;
@@ -591,7 +591,7 @@ public:
     virtual OUString TakeObjNamePlural() const;
 
     // Das Xor-Polygon wird von der View zu Draggen des Objektes benoetigt.
-    // Alle Polygone innerhalb des PolyPolygon werden als PolyLine interpretiert.
+    // Alle Polygone innerhalb des tools::PolyPolygon werden als PolyLine interpretiert.
     // Moechte man ein geschlossenes Polygon, so muss man es explizit schliessen.
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
@@ -868,7 +868,7 @@ public:
     // In this case it would have to:
     // - set SOLID_BRUSH with the color of the given pen,
     // - set NULL_PEN, and
-    // - generate PolyPolygon with two polygons with four supporting points each.
+    // - generate tools::PolyPolygon with two polygons with four supporting points each.
     // In each case the return value is a SdrObject*, because it is also
     // allowed to return group objects (e.g. for SdrTextObj).
     // In the case of the conversion from TextObj to PathObj,

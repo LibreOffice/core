@@ -292,7 +292,7 @@ namespace basegfx
         // third coordinate.
         BASEGFX_DLLPUBLIC B3DPolygon createB3DPolygonFromB2DPolygon(const B2DPolygon& rCandidate, double fZCoordinate = 0.0);
 
-        // create 2d PolyPolygon from given 3d PolyPolygon. All coordinates are transformed using the given
+        // create 2d tools::PolyPolygon from given 3d PolyPolygon. All coordinates are transformed using the given
         // matrix and the resulting x,y is used to form the new polygon.
         BASEGFX_DLLPUBLIC B2DPolygon createB2DPolygonFromB3DPolygon(const B3DPolygon& rCandidate, const B3DHomMatrix& rMat);
 
