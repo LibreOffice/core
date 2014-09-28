@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae2911b_0c9c5768",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-28T19:45:34Z",
+      "side": 1,
+      "message": "Not sure whether it\u0027s good to use hard-coded colors here.\nHow does this look with a dark theme?\n\nMaybe we can get these colors from the theme somehow.",
+      "revId": "d4aa1d8b913daf517d209fb2b45732e278496da7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
