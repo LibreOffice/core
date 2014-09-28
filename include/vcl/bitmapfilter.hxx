@@ -16,8 +16,9 @@
 class VCL_DLLPUBLIC BitmapFilter
 {
 public:
-    BitmapFilter();
-    virtual ~BitmapFilter();
+                 BitmapFilter();
+    virtual      ~BitmapFilter();
+
     virtual bool filter(Bitmap& rBitmap) = 0;
 };
 

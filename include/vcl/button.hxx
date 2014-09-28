@@ -34,10 +34,6 @@
 class UserDrawEvent;
 class ImplCommonButtonData;
 
-
-// - Button -
-
-
 class VCL_DLLPUBLIC Button : public Control
 {
 private:

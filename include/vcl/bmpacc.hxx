@@ -67,6 +67,53 @@ class VCL_DLLPUBLIC BitmapReadAccess
 {
     friend class BitmapWriteAccess;
 
+public:
+                                BitmapReadAccess( Bitmap& rBitmap );
+    virtual                     ~BitmapReadAccess();
+
+    inline bool                 operator!() const;
+
+    inline long                 Width() const;
+    inline long                 Height() const;
+    inline Point                TopLeft() const;
+    inline Point                BottomRight() const;
+
+    inline bool                 IsTopDown() const;
+    inline bool                 IsBottomUp() const;
+
+    inline sal_uLong            GetScanlineFormat() const;
+    inline sal_uLong            GetScanlineSize() const;
+
+    inline sal_uInt16           GetBitCount() const;
+    inline BitmapColor          GetBestMatchingColor( const BitmapColor& rBitmapColor );
+
+    inline Scanline             GetBuffer() const;
+    inline Scanline             GetScanline( long nY ) const;
+
+    inline bool                 HasPalette() const;
+    inline const BitmapPalette& GetPalette() const;
+    inline sal_uInt16           GetPaletteEntryCount() const;
+    inline const BitmapColor&   GetPaletteColor( sal_uInt16 nColor ) const;
+    inline const BitmapColor&   GetBestPaletteColor( const BitmapColor& rBitmapColor ) const;
+    sal_uInt16                  GetBestPaletteIndex( const BitmapColor& rBitmapColor ) const;
+
+    inline bool                 HasColorMask() const;
+    inline ColorMask&           GetColorMask() const;
+
+    inline BitmapColor          GetPixelFromData( const sal_uInt8* pData, long nX ) const;
+    inline void                 SetPixelOnData( sal_uInt8* pData, long nX, const BitmapColor& rBitmapColor );
+    inline BitmapColor          GetPixel( long nY, long nX ) const;
+    inline BitmapColor          GetColor( long nY, long nX ) const;
+    inline sal_uInt8            GetPixelIndex( long nY, long nX ) const;
+    inline sal_uInt8            GetLuminance( long nY, long nX ) const;
+
+    /** Get the interpolated color at coordinates fY, fX; if outside, return rFallback */
+    BitmapColor                 GetInterpolatedColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const;
+
+    /** Get the color at coordinates fY, fX; if outside, return rFallback. Automatically does the correct
+        inside/outside checks, e.g. static_cast< sal_uInt32 >(-0.25) *is* 0, not -1 and has to be outside */
+    BitmapColor                 GetColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const;
+
 private:
 
                                 BitmapReadAccess() {}
@@ -83,14 +130,15 @@ protected:
     bool                        mbModify;
 
 
-SAL_DLLPRIVATE  void            ImplCreate( Bitmap& rBitmap );
-SAL_DLLPRIVATE  void            ImplDestroy();
-SAL_DLLPRIVATE  bool            ImplSetAccessPointers( sal_uLong nFormat );
+    SAL_DLLPRIVATE  void        ImplCreate( Bitmap& rBitmap );
+    SAL_DLLPRIVATE  void        ImplDestroy();
+    SAL_DLLPRIVATE  bool        ImplSetAccessPointers( sal_uLong nFormat );
 
 public:
 
-SAL_DLLPRIVATE  void            ImplZeroInitUnusedBits();
-SAL_DLLPRIVATE  BitmapBuffer*   ImplGetBitmapBuffer() const { return mpBuffer; }
+    SAL_DLLPRIVATE  void        ImplZeroInitUnusedBits();
+    SAL_DLLPRIVATE  BitmapBuffer*
+                                ImplGetBitmapBuffer() const { return mpBuffer; }
 
                                 DECL_FORMAT( _1BIT_MSB_PAL )
                                 DECL_FORMAT( _1BIT_LSB_PAL )
@@ -108,55 +156,10 @@ SAL_DLLPRIVATE  BitmapBuffer*   ImplGetBitmapBuffer() const { return mpBuffer; }
                                 DECL_FORMAT( _32BIT_TC_BGRA )
                                 DECL_FORMAT( _32BIT_TC_RGBA )
                                 DECL_FORMAT( _32BIT_TC_MASK )
+
 protected:
                                 BitmapReadAccess( Bitmap& rBitmap, bool bModify );
 
-public:
-                                BitmapReadAccess( Bitmap& rBitmap );
-    virtual                     ~BitmapReadAccess();
-
-    inline bool                 operator!() const;
-
-    inline long                 Width() const;
-    inline long                 Height() const;
-    inline Point                TopLeft() const;
-    inline Point                BottomRight() const;
-
-    inline bool                 IsTopDown() const;
-    inline bool                 IsBottomUp() const;
-
-    inline sal_uLong                GetScanlineFormat() const;
-    inline sal_uLong                GetScanlineSize() const;
-
-    inline sal_uInt16               GetBitCount() const;
-    inline BitmapColor          GetBestMatchingColor( const BitmapColor& rBitmapColor );
-
-    inline Scanline             GetBuffer() const;
-    inline Scanline             GetScanline( long nY ) const;
-
-    inline bool                 HasPalette() const;
-    inline const BitmapPalette& GetPalette() const;
-    inline sal_uInt16               GetPaletteEntryCount() const;
-    inline const BitmapColor&   GetPaletteColor( sal_uInt16 nColor ) const;
-    inline const BitmapColor&   GetBestPaletteColor( const BitmapColor& rBitmapColor ) const;
-    sal_uInt16                      GetBestPaletteIndex( const BitmapColor& rBitmapColor ) const;
-
-    inline bool                 HasColorMask() const;
-    inline ColorMask&           GetColorMask() const;
-
-    inline BitmapColor          GetPixelFromData( const sal_uInt8* pData, long nX ) const;
-    inline void                 SetPixelOnData( sal_uInt8* pData, long nX, const BitmapColor& rBitmapColor );
-    inline BitmapColor          GetPixel( long nY, long nX ) const;
-    inline BitmapColor          GetColor( long nY, long nX ) const;
-    inline sal_uInt8            GetPixelIndex( long nY, long nX ) const;
-    inline sal_uInt8            GetLuminance( long nY, long nX ) const;
-
-    /** Get the interpolated color at coordinates fY, fX; if outside, return rFallback */
-    BitmapColor GetInterpolatedColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const;
-
-    /** Get the color at coordinates fY, fX; if outside, return rFallback. Automatically does the correct
-        inside/outside checks, e.g. static_cast< sal_uInt32 >(-0.25) *is* 0, not -1 and has to be outside */
-    BitmapColor GetColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const;
 };
 
 // - BitmapWriteAccess -

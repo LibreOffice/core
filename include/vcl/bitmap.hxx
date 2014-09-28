@@ -60,7 +60,7 @@
 #define BMP_VECTORIZE_BOUND_ONLY    0x00000004UL
 #define BMP_VECTORIZE_REDUCE_EDGES  0x00000008UL
 
-#define BMP_COL_TRANS                   Color( 252, 3, 251 )
+#define BMP_COL_TRANS               Color( 252, 3, 251 )
 
 enum BmpConversion
 {
@@ -127,39 +127,6 @@ enum BmpFilter
 
 class VCL_DLLPUBLIC BmpFilterParam
 {
-    friend class Bitmap;
-    friend class BitmapEx;
-    friend class Animation;
-
-private:
-    BmpFilter       meFilter;
-    sal_uLong       mnProgressStart;
-    sal_uLong       mnProgressEnd;
-
-public:
-    struct MosaicTileSize
-    {
-        sal_uLong mnTileWidth;
-        sal_uLong mnTileHeight;
-    };
-
-    struct EmbossAngles
-    {
-        sal_uInt16 mnAzimuthAngle100;
-        sal_uInt16 mnElevationAngle100;
-    };
-
-private:
-    union
-    {
-        sal_uInt16  mnSepiaPercent;
-        sal_uInt8   mcSolarGreyThreshold;
-        double      mnRadius;
-
-        MosaicTileSize maMosaicTileSize;
-        EmbossAngles maEmbossAngles;
-    };
-
 public:
 
     BmpFilterParam( sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
@@ -190,36 +157,68 @@ public:
             maEmbossAngles.mnAzimuthAngle100 = nEmbossAzimuthAngle100;
             maEmbossAngles.mnElevationAngle100 = nEmbossElevationAngle100;
         }
+
+private:
+    friend class Bitmap;
+    friend class BitmapEx;
+    friend class Animation;
+
+private:
+    BmpFilter       meFilter;
+    sal_uLong       mnProgressStart;
+    sal_uLong       mnProgressEnd;
+
+public:
+    struct MosaicTileSize
+    {
+        sal_uLong   mnTileWidth;
+        sal_uLong   mnTileHeight;
+    };
+
+    struct EmbossAngles
+    {
+        sal_uInt16  mnAzimuthAngle100;
+        sal_uInt16  mnElevationAngle100;
+    };
+
+private:
+    union
+    {
+        sal_uInt16  mnSepiaPercent;
+        sal_uInt8   mcSolarGreyThreshold;
+        double      mnRadius;
+
+        MosaicTileSize maMosaicTileSize;
+        EmbossAngles maEmbossAngles;
+    };
+
 };
 
-
 // Resample kernels
-
 
 class Kernel
 {
 
 public:
-    Kernel () {}
-    virtual ~Kernel() {}
+                    Kernel () {}
+    virtual         ~Kernel() {}
 
-    virtual double GetWidth() const = 0;
-    virtual double Calculate( double x ) const = 0;
+    virtual double  GetWidth() const = 0;
+    virtual double  Calculate( double x ) const = 0;
 };
 
 class Lanczos3Kernel : public Kernel
 {
-    typedef boost::math::policies::policy<
-        boost::math::policies::promote_double<false> > SincPolicy;
 public:
-    Lanczos3Kernel() : Kernel () {}
-    virtual double GetWidth() const SAL_OVERRIDE { return 3.0; }
-    virtual double Calculate (double x) const SAL_OVERRIDE
+                    Lanczos3Kernel() : Kernel () {}
+
+    virtual double  GetWidth() const SAL_OVERRIDE { return 3.0; }
+    virtual double  Calculate (double x) const SAL_OVERRIDE
     {
         return (-3.0 <= x && x < 3.0) ? SincFilter(x) * SincFilter( x / 3.0 ) : 0.0;
     }
 
-    inline double SincFilter(double x) const
+    inline double   SincFilter(double x) const
     {
         if (x == 0.0)
         {
@@ -228,14 +227,20 @@ public:
         x = x * M_PI;
         return boost::math::sinc_pi(x, SincPolicy());
     }
+
+private:
+    typedef boost::math::policies::policy<
+        boost::math::policies::promote_double<false> > SincPolicy;
 };
 
-class BicubicKernel : public Kernel {
+class BicubicKernel : public Kernel
+{
 public:
-    BicubicKernel() : Kernel () {}
+                    BicubicKernel() : Kernel () {}
+
 private:
-    virtual double GetWidth() const SAL_OVERRIDE { return 2.0; }
-    virtual double Calculate (double x) const SAL_OVERRIDE
+    virtual double  GetWidth() const SAL_OVERRIDE { return 2.0; }
+    virtual double  Calculate (double x) const SAL_OVERRIDE
     {
         if (x < 0.0)
         {
@@ -254,12 +259,13 @@ private:
     }
 };
 
-class BilinearKernel : public Kernel {
+class BilinearKernel : public Kernel
+{
 public:
-    BilinearKernel() : Kernel () {}
+                    BilinearKernel() : Kernel () {}
 private:
-    virtual double GetWidth() const SAL_OVERRIDE { return 1.0; }
-    virtual double Calculate (double x) const SAL_OVERRIDE
+    virtual double  GetWidth() const SAL_OVERRIDE { return 1.0; }
+    virtual double  Calculate (double x) const SAL_OVERRIDE
     {
         if (x < 0.0)
         {
@@ -273,12 +279,14 @@ private:
     }
 };
 
-class BoxKernel : public Kernel {
+class BoxKernel : public Kernel
+{
 public:
-    BoxKernel() : Kernel () {}
+                    BoxKernel() : Kernel () {}
+
 private:
-    virtual double GetWidth() const SAL_OVERRIDE { return 0.5; }
-    virtual double Calculate (double x) const SAL_OVERRIDE
+    virtual double  GetWidth() const SAL_OVERRIDE { return 0.5; }
+    virtual double  Calculate (double x) const SAL_OVERRIDE
     {
         if (-0.5 <= x && x < 0.5)
             return 1.0;
@@ -313,67 +321,14 @@ struct BitmapSystemData
 
 class VCL_DLLPUBLIC Bitmap
 {
-private:
-
-    ImpBitmap*          mpImpBmp;
-    MapMode             maPrefMapMode;
-    Size                maPrefSize;
-
 public:
 
-    SAL_DLLPRIVATE void                 ImplReleaseRef();
-    SAL_DLLPRIVATE void                 ImplMakeUnique();
-                   ImpBitmap*           ImplGetImpBitmap() const { return mpImpBmp;}
-    SAL_DLLPRIVATE void                 ImplSetImpBitmap( ImpBitmap* pImpBmp );
-    SAL_DLLPRIVATE void                 ImplAssignWithSize( const Bitmap& rBitmap );
-
-    SAL_DLLPRIVATE void                 ImplAdaptBitCount(Bitmap& rNew) const;
-    SAL_DLLPRIVATE bool             ImplScaleFast( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE bool             ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE bool             ImplScaleSuper( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE bool             ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel);
-
-    SAL_DLLPRIVATE bool                 ImplConvolutionPass( Bitmap& aNewBitmap, const int nNewSize, BitmapReadAccess* pReadAcc,
-                                                int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount );
-
-    SAL_DLLPRIVATE bool             ImplMakeMono( sal_uInt8 cThreshold );
-    SAL_DLLPRIVATE bool             ImplMakeMonoDither();
-    SAL_DLLPRIVATE bool             ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool             ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor = NULL );
-    SAL_DLLPRIVATE bool             ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor = NULL );
-    SAL_DLLPRIVATE bool             ImplConvertGhosted();
-    SAL_DLLPRIVATE bool             ImplDitherMatrix();
-    SAL_DLLPRIVATE bool             ImplDitherFloyd();
-    SAL_DLLPRIVATE bool             ImplDitherFloyd16();
-    SAL_DLLPRIVATE bool             ImplReduceSimple( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE bool             ImplReducePopular( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE bool             ImplReduceMedian( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE void                 ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
-                                                long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
-                                                long nColors, long nPixels, long& rIndex );
-    SAL_DLLPRIVATE bool             ImplConvolute3( const long* pMatrix, long nDivisor,
-                                                            const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool             ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool             ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool             ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool             ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool             ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool             ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE bool             ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
-
-    SAL_DLLPRIVATE bool                 ImplSeparableBlurFilter( const double aRadius = 0.7 );
-    SAL_DLLPRIVATE bool                 ImplSeparableUnsharpenFilter( const double aRadius = 0.7 );
-    SAL_DLLPRIVATE bool                 ImplDuotoneFilter( const sal_uLong nColorOne,  sal_uLong nColorTwo );
-    SAL_DLLPRIVATE void                 ImplBlurContributions( const int aSize, const int aNumberOfContributions,
-                                                double* pBlurVector, double*& pWeights, int*& pPixels, int*& pCount );
-public:
-
-    Bitmap();
-    Bitmap( const Bitmap& rBitmap );
-    Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = NULL );
-    Bitmap( const ResId& rResId );
-    Bitmap( SalBitmap* pSalBitmap );
-    virtual ~Bitmap();
+                            Bitmap();
+                            Bitmap( const Bitmap& rBitmap );
+                            Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = NULL );
+                            Bitmap( const ResId& rResId );
+                            Bitmap( SalBitmap* pSalBitmap );
+    virtual                 ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );
     inline bool             operator!() const;
@@ -394,9 +349,9 @@ public:
 
     Size                    GetSizePixel() const;
 
-    sal_uInt16                  GetBitCount() const;
-    inline sal_uLong            GetColorCount() const;
-    inline sal_uLong            GetSizeBytes() const;
+    sal_uInt16              GetBitCount() const;
+    inline sal_uLong        GetColorCount() const;
+    inline sal_uLong        GetSizeBytes() const;
     bool                    HasGreyPalette() const;
     /** get system dependent bitmap data
 
@@ -407,16 +362,17 @@ public:
     */
     bool                    GetSystemData( BitmapSystemData& rData ) const;
 
-    sal_uLong                   GetChecksum() const;
+    sal_uLong               GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
     Bitmap                  GetColorTransformedBitmap() const;
 
-    static const BitmapPalette& GetGreyPalette( int nEntries );
+    static const BitmapPalette&
+                            GetGreyPalette( int nEntries );
 
 public:
 
-    bool MakeMono( sal_uInt8 cThreshold );
+    bool                    MakeMono( sal_uInt8 cThreshold );
 
 
     /** Convert bitmap format
@@ -438,8 +394,9 @@ public:
 
         @return true, if the color reduction operation was completed successfully.
      */
-    bool                    ReduceColors( sal_uInt16 nNewColorCount,
-                                          BmpReduce eReduce = BMP_REDUCE_SIMPLE );
+    bool                    ReduceColors(
+                                sal_uInt16 nNewColorCount,
+                                BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     /** Apply a dither algorithm to the bitmap
 
@@ -483,8 +440,9 @@ public:
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    bool                    Expand( sal_uLong nDX, sal_uLong nDY,
-                                    const Color* pInitColor = NULL );
+    bool                    Expand(
+                                sal_uLong nDX, sal_uLong nDY,
+                                const Color* pInitColor = NULL );
 
     /** Copy a rectangular area from another bitmap
 
@@ -508,12 +466,15 @@ public:
         nothing had to be done, e.g. because one of the rectangles are
         empty.
      */
-    bool                    CopyPixel( const Rectangle& rRectDst,
-                                       const Rectangle& rRectSrc,
-                                       const Bitmap* pBmpSrc = NULL );
+    bool                    CopyPixel(
+                                const Rectangle& rRectDst,
+                                const Rectangle& rRectSrc,
+                                const Bitmap* pBmpSrc = NULL );
 
-    bool    CopyPixel_AlphaOptimized( const Rectangle& rRectDst, const Rectangle& rRectSrc,
-                           const Bitmap* pBmpSrc = NULL);
+    bool                    CopyPixel_AlphaOptimized(
+                                const Rectangle& rRectDst,
+                                const Rectangle& rRectSrc,
+                                const Bitmap* pBmpSrc = NULL );
 
     /** Perform boolean operations with another bitmap
 
@@ -525,8 +486,9 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    CombineSimple( const Bitmap& rMask,
-                                           BmpCombine eCombine );
+    bool                    CombineSimple(
+                                const Bitmap& rMask,
+                                BmpCombine eCombine );
 
     /** Alpha-blend the given bitmap against a specified uniform
           background color.
@@ -544,8 +506,9 @@ public:
 
         @return true, if blending was successful, false otherwise
      */
-    bool                    Blend( const AlphaMask& rAlpha,
-                                   const Color&     rBackgroundColor );
+    bool                    Blend(
+                                const AlphaMask& rAlpha,
+                                const Color& rBackgroundColor );
 
     /** Fill the entire bitmap with the given color
 
@@ -600,7 +563,7 @@ public:
 
     // Adapt the BitCount of rNew to BitCount of lolal, including grey or color paltette
     // Can be used to create alpha/mask bitmaps after their processing in 24bit
-    void AdaptBitCount(Bitmap& rNew) const;
+    void                    AdaptBitCount(Bitmap& rNew) const;
 
     /** Rotate bitmap by the specified angle
 
@@ -707,8 +670,11 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Replace( const Color* pSearchColors, const Color* rReplaceColors,
-                                     sal_uLong nColorCount, sal_uLong* pTols = NULL );
+    bool                    Replace(
+                                const Color* pSearchColors,
+                                const Color* rReplaceColors,
+                                sal_uLong nColorCount,
+                                sal_uLong* pTols = NULL );
 
     /** Convert the bitmap to a PolyPolygon
 
@@ -727,9 +693,10 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Vectorize( PolyPolygon& rPolyPoly,
-                                       sal_uLong nFlags = BMP_VECTORIZE_OUTER,
-                                       const Link* pProgress = NULL );
+    bool                    Vectorize(
+                                PolyPolygon& rPolyPoly,
+                                sal_uLong nFlags = BMP_VECTORIZE_OUTER,
+                                const Link* pProgress = NULL );
 
     /** Convert the bitmap to a meta file
 
@@ -752,9 +719,11 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce = 0,
-                                       sal_uLong nFlags = BMP_VECTORIZE_INNER,
-                                       const Link* pProgress = NULL );
+    bool                    Vectorize(
+                                GDIMetaFile& rMtf,
+                                sal_uInt8 cReduce = 0,
+                                sal_uLong nFlags = BMP_VECTORIZE_INNER,
+                                const Link* pProgress = NULL );
 
     /** Change various global color characteristics
 
@@ -786,14 +755,15 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Adjust( short nLuminancePercent = 0,
-                                    short nContrastPercent = 0,
-                                    short nChannelRPercent = 0,
-                                    short nChannelGPercent = 0,
-                                    short nChannelBPercent = 0,
-                                    double fGamma = 1.0,
-                                    bool bInvert = false,
-                                    bool msoBrightness = false );
+    bool                    Adjust(
+                                short nLuminancePercent = 0,
+                                short nContrastPercent = 0,
+                                short nChannelRPercent = 0,
+                                short nChannelGPercent = 0,
+                                short nChannelBPercent = 0,
+                                double fGamma = 1.0,
+                                bool bInvert = false,
+                                bool msoBrightness = false );
 
     /** Apply specified filter to the bitmap
 
@@ -808,9 +778,75 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Filter( BmpFilter eFilter,
-                                    const BmpFilterParam* pFilterParam = NULL,
-                                    const Link* pProgress = NULL );
+    bool                    Filter(
+                                BmpFilter eFilter,
+                                const BmpFilterParam* pFilterParam = NULL,
+                                const Link* pProgress = NULL );
+
+public:
+
+    SAL_DLLPRIVATE void     ImplReleaseRef();
+    SAL_DLLPRIVATE void     ImplMakeUnique();
+    ImpBitmap*              ImplGetImpBitmap() const { return mpImpBmp;}
+    SAL_DLLPRIVATE void     ImplSetImpBitmap( ImpBitmap* pImpBmp );
+    SAL_DLLPRIVATE void     ImplAssignWithSize( const Bitmap& rBitmap );
+
+    SAL_DLLPRIVATE void     ImplAdaptBitCount(Bitmap& rNew) const;
+    SAL_DLLPRIVATE bool     ImplScaleFast( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE bool     ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE bool     ImplScaleSuper( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE bool     ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel);
+
+    SAL_DLLPRIVATE bool     ImplConvolutionPass(
+                                Bitmap& aNewBitmap,
+                                const int nNewSize,
+                                BitmapReadAccess* pReadAcc,
+                                int aNumberOfContributions,
+                                double* pWeights,
+                                int* pPixels,
+                                int* pCount );
+
+    SAL_DLLPRIVATE bool     ImplMakeMono( sal_uInt8 cThreshold );
+    SAL_DLLPRIVATE bool     ImplMakeMonoDither();
+    SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
+    SAL_DLLPRIVATE bool     ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor = NULL );
+    SAL_DLLPRIVATE bool     ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor = NULL );
+    SAL_DLLPRIVATE bool     ImplConvertGhosted();
+    SAL_DLLPRIVATE bool     ImplDitherMatrix();
+    SAL_DLLPRIVATE bool     ImplDitherFloyd();
+    SAL_DLLPRIVATE bool     ImplDitherFloyd16();
+    SAL_DLLPRIVATE bool     ImplReduceSimple( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE bool     ImplReducePopular( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE bool     ImplReduceMedian( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE void     ImplMedianCut(
+                                sal_uLong* pColBuf,
+                                BitmapPalette& rPal,
+                                long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
+                                long nColors, long nPixels, long& rIndex );
+
+    SAL_DLLPRIVATE bool     ImplConvolute3(
+                                const long* pMatrix, long nDivisor,
+                                const BmpFilterParam* pFilterParam,
+                                const Link* pProgress );
+
+    SAL_DLLPRIVATE bool     ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE bool     ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE bool     ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE bool     ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE bool     ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE bool     ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE bool     ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
+
+    SAL_DLLPRIVATE bool     ImplSeparableBlurFilter( const double aRadius = 0.7 );
+    SAL_DLLPRIVATE bool     ImplSeparableUnsharpenFilter( const double aRadius = 0.7 );
+    SAL_DLLPRIVATE bool     ImplDuotoneFilter( const sal_uLong nColorOne,  sal_uLong nColorTwo );
+    SAL_DLLPRIVATE void     ImplBlurContributions(
+                                const int aSize,
+                                const int aNumberOfContributions,
+                                double* pBlurVector,
+                                double*& pWeights,
+                                int*& pPixels,
+                                int*& pCount );
 
 public:
 
@@ -822,6 +858,13 @@ public:
         ScopedReadAccess;
     typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess >
         ScopedWriteAccess;
+
+private:
+
+    ImpBitmap*              mpImpBmp;
+    MapMode                 maPrefMapMode;
+    Size                    maPrefSize;
+
 };
 
 inline bool Bitmap::operator!() const

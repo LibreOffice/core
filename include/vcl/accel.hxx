@@ -34,65 +34,69 @@ class VCL_DLLPUBLIC Accelerator : public Resource
     friend class ImplAccelManager;
 
 private:
-    ImplAccelData*  mpData;
-    OUString        maHelpStr;
-    Link            maActivateHdl;
-    Link            maDeactivateHdl;
-    Link            maSelectHdl;
+    ImplAccelData*          mpData;
+    OUString                maHelpStr;
+    Link                    maActivateHdl;
+    Link                    maDeactivateHdl;
+    Link                    maSelectHdl;
 
     // Will be set by AcceleratorManager
-    vcl::KeyCode    maCurKeyCode;
-    sal_uInt16      mnCurId;
-    sal_uInt16      mnCurRepeat;
-    bool        mbIsCancel;
-    bool*       mpDel;
+    vcl::KeyCode            maCurKeyCode;
+    sal_uInt16              mnCurId;
+    sal_uInt16              mnCurRepeat;
+    bool                    mbIsCancel;
+    bool*                   mpDel;
 
-    SAL_DLLPRIVATE  void        ImplInit();
-    SAL_DLLPRIVATE  void        ImplCopyData( ImplAccelData& rAccelData );
-    SAL_DLLPRIVATE  void        ImplDeleteData();
-    SAL_DLLPRIVATE  void        ImplInsertAccel( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode,
-                                     bool bEnable, Accelerator* pAutoAccel );
+    SAL_DLLPRIVATE  void    ImplInit();
+    SAL_DLLPRIVATE  void    ImplCopyData( ImplAccelData& rAccelData );
+    SAL_DLLPRIVATE  void    ImplDeleteData();
+    SAL_DLLPRIVATE  void    ImplInsertAccel(
+                                sal_uInt16 nItemId,
+                                const vcl::KeyCode& rKeyCode,
+                                bool bEnable,
+                                Accelerator* pAutoAccel );
 
-    SAL_DLLPRIVATE  ImplAccelEntry* ImplGetAccelData( const vcl::KeyCode& rKeyCode ) const;
+    SAL_DLLPRIVATE  ImplAccelEntry*
+                            ImplGetAccelData( const vcl::KeyCode& rKeyCode ) const;
 
 protected:
-    SAL_DLLPRIVATE  void        ImplLoadRes( const ResId& rResId );
+    SAL_DLLPRIVATE  void    ImplLoadRes( const ResId& rResId );
 
 public:
-                    Accelerator();
-                    Accelerator( const Accelerator& rAccel );
-                    Accelerator( const ResId& rResId );
-    virtual         ~Accelerator();
+                            Accelerator();
+                            Accelerator( const Accelerator& rAccel );
+                            Accelerator( const ResId& rResId );
+    virtual                 ~Accelerator();
 
-    virtual void    Activate();
-    virtual void    Deactivate();
-    virtual void    Select();
+    virtual void            Activate();
+    virtual void            Deactivate();
+    virtual void            Select();
 
-    void            InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode );
-    void            InsertItem( const ResId& rResId );
+    void                    InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode );
+    void                    InsertItem( const ResId& rResId );
 
-    sal_uInt16          GetCurItemId() const { return mnCurId; }
-    const vcl::KeyCode& GetCurKeyCode() const { return maCurKeyCode; }
-    sal_uInt16          GetCurRepeat() const { return mnCurRepeat; }
-    bool            IsCancel() const { return mbIsCancel; }
+    sal_uInt16              GetCurItemId() const { return mnCurId; }
+    const vcl::KeyCode&     GetCurKeyCode() const { return maCurKeyCode; }
+    sal_uInt16              GetCurRepeat() const { return mnCurRepeat; }
+    bool                    IsCancel() const { return mbIsCancel; }
 
-    sal_uInt16          GetItemCount() const;
-    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
-    vcl::KeyCode        GetKeyCode( sal_uInt16 nItemId ) const;
+    sal_uInt16              GetItemCount() const;
+    sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
+    vcl::KeyCode            GetKeyCode( sal_uInt16 nItemId ) const;
 
-    Accelerator*    GetAccel( sal_uInt16 nItemId ) const;
+    Accelerator*            GetAccel( sal_uInt16 nItemId ) const;
 
-    void            SetHelpText( const OUString& rHelpText ) { maHelpStr = rHelpText; }
-    const OUString& GetHelpText() const { return maHelpStr; }
+    void                    SetHelpText( const OUString& rHelpText ) { maHelpStr = rHelpText; }
+    const OUString&         GetHelpText() const { return maHelpStr; }
 
-    void            SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
-    const Link&     GetActivateHdl() const { return maActivateHdl; }
-    void            SetDeactivateHdl( const Link& rLink ) { maDeactivateHdl = rLink; }
-    const Link&     GetDeactivateHdl() const { return maDeactivateHdl; }
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
+    void                    SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
+    const Link&             GetActivateHdl() const { return maActivateHdl; }
+    void                    SetDeactivateHdl( const Link& rLink ) { maDeactivateHdl = rLink; }
+    const Link&             GetDeactivateHdl() const { return maDeactivateHdl; }
+    void                    SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
+    const Link&             GetSelectHdl() const { return maSelectHdl; }
 
-    Accelerator&    operator=( const Accelerator& rAccel );
+    Accelerator&            operator=( const Accelerator& rAccel );
 };
 
 #endif // INCLUDED_VCL_ACCEL_HXX
