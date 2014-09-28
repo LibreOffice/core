@@ -7291,121 +7291,123 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
 
 void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert )
 {
+    OString sAlign;
+    switch( rFlyVert.GetVertOrient() )
+    {
+        case text::VertOrientation::NONE:
+            break;
+        case text::VertOrientation::CENTER:
+        case text::VertOrientation::LINE_CENTER:
+            sAlign = OString( "center" );
+            break;
+        case text::VertOrientation::BOTTOM:
+        case text::VertOrientation::LINE_BOTTOM:
+            sAlign = OString( "bottom" );
+            break;
+        case text::VertOrientation::TOP:
+        case text::VertOrientation::LINE_TOP:
+        default:
+            sAlign = OString( "top" );
+            break;
+    }
+    OString sVAnchor( "page" );
+    switch ( rFlyVert.GetRelationOrient( ) )
+    {
+        case text::RelOrientation::CHAR:
+        case text::RelOrientation::PRINT_AREA:
+        case text::RelOrientation::TEXT_LINE:
+            sVAnchor = OString( "text" );
+            break;
+        case text::RelOrientation::FRAME:
+        case text::RelOrientation::PAGE_LEFT:
+        case text::RelOrientation::PAGE_RIGHT:
+        case text::RelOrientation::FRAME_LEFT:
+        case text::RelOrientation::FRAME_RIGHT:
+            sVAnchor = OString( "margin" );
+            break;
+        case text::RelOrientation::PAGE_FRAME:
+        case text::RelOrientation::PAGE_PRINT_AREA:
+        default:
+            break;
+    }
+
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
         m_rExport.SdrExporter().getTextFrameStyle().append(";margin-top:").append(double(rFlyVert.GetPos()) / 20).append("pt");
+        if ( !sAlign.isEmpty() )
+            m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical:").append(sAlign);
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-vertical-relative:").append(sVAnchor);
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        OString sAlign;
-        switch( rFlyVert.GetVertOrient() )
-        {
-            case text::VertOrientation::NONE:
-                break;
-            case text::VertOrientation::CENTER:
-            case text::VertOrientation::LINE_CENTER:
-                sAlign = OString( "center" );
-                break;
-            case text::VertOrientation::BOTTOM:
-            case text::VertOrientation::LINE_BOTTOM:
-                sAlign = OString( "bottom" );
-                break;
-            case text::VertOrientation::TOP:
-            case text::VertOrientation::LINE_TOP:
-            default:
-                sAlign = OString( "top" );
-                break;
-        }
-
         if ( !sAlign.isEmpty() )
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_yAlign ), sAlign.getStr() );
         else
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_y ),
                 OString::number( rFlyVert.GetPos() ).getStr() );
-
-        OString sVAnchor( "page" );
-        switch ( rFlyVert.GetRelationOrient( ) )
-        {
-            case text::RelOrientation::CHAR:
-            case text::RelOrientation::PRINT_AREA:
-            case text::RelOrientation::TEXT_LINE:
-                sVAnchor = OString( "text" );
-                break;
-            case text::RelOrientation::FRAME:
-            case text::RelOrientation::PAGE_LEFT:
-            case text::RelOrientation::PAGE_RIGHT:
-            case text::RelOrientation::FRAME_LEFT:
-            case text::RelOrientation::FRAME_RIGHT:
-                sVAnchor = OString( "margin" );
-                break;
-            case text::RelOrientation::PAGE_FRAME:
-            case text::RelOrientation::PAGE_PRINT_AREA:
-            default:
-                break;
-        }
-
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_vAnchor ), sVAnchor.getStr() );
     }
 }
 
 void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori )
 {
+    OString sAlign;
+    switch( rFlyHori.GetHoriOrient() )
+    {
+        case text::HoriOrientation::NONE:
+            break;
+        case text::HoriOrientation::LEFT:
+            sAlign = OString( rFlyHori.IsPosToggle( ) ? "inside" : "left" );
+            break;
+        case text::HoriOrientation::RIGHT:
+            sAlign = OString( rFlyHori.IsPosToggle( ) ? "outside" : "right" );
+            break;
+        case text::HoriOrientation::CENTER:
+        case text::HoriOrientation::FULL: // FULL only for tables
+        default:
+            sAlign = OString( "center" );
+            break;
+    }
+    OString sHAnchor( "page" );
+    switch ( rFlyHori.GetRelationOrient( ) )
+    {
+        case text::RelOrientation::CHAR:
+        case text::RelOrientation::PRINT_AREA:
+            sHAnchor = OString( "text" );
+            break;
+        case text::RelOrientation::FRAME:
+        case text::RelOrientation::PAGE_LEFT:
+        case text::RelOrientation::PAGE_RIGHT:
+        case text::RelOrientation::FRAME_LEFT:
+        case text::RelOrientation::FRAME_RIGHT:
+            sHAnchor = OString( "margin" );
+            break;
+        case text::RelOrientation::PAGE_FRAME:
+        case text::RelOrientation::PAGE_PRINT_AREA:
+        default:
+            break;
+    }
+
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
         m_rExport.SdrExporter().getTextFrameStyle().append(";margin-left:").append(double(rFlyHori.GetPos()) / 20).append("pt");
+        if ( !sAlign.isEmpty() )
+            m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal:").append(sAlign);
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-position-horizontal-relative:").append(sHAnchor);
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        OString sAlign;
-        switch( rFlyHori.GetHoriOrient() )
-        {
-            case text::HoriOrientation::NONE:
-                break;
-            case text::HoriOrientation::LEFT:
-                sAlign = OString( rFlyHori.IsPosToggle( ) ? "inside" : "left" );
-                break;
-            case text::HoriOrientation::RIGHT:
-                sAlign = OString( rFlyHori.IsPosToggle( ) ? "outside" : "right" );
-                break;
-            case text::HoriOrientation::CENTER:
-            case text::HoriOrientation::FULL: // FULL only for tables
-            default:
-                sAlign = OString( "center" );
-                break;
-        }
-
         if ( !sAlign.isEmpty() )
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_xAlign ), sAlign.getStr() );
         else
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_x ),
                 OString::number( rFlyHori.GetPos() ).getStr() );
-
-        OString sHAnchor( "page" );
-        switch ( rFlyHori.GetRelationOrient( ) )
-        {
-            case text::RelOrientation::CHAR:
-            case text::RelOrientation::PRINT_AREA:
-                sHAnchor = OString( "text" );
-                break;
-            case text::RelOrientation::FRAME:
-            case text::RelOrientation::PAGE_LEFT:
-            case text::RelOrientation::PAGE_RIGHT:
-            case text::RelOrientation::FRAME_LEFT:
-            case text::RelOrientation::FRAME_RIGHT:
-                sHAnchor = OString( "margin" );
-                break;
-            case text::RelOrientation::PAGE_FRAME:
-            case text::RelOrientation::PAGE_PRINT_AREA:
-            default:
-                break;
-        }
-
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_hAnchor ), sHAnchor.getStr() );
     }
 }
