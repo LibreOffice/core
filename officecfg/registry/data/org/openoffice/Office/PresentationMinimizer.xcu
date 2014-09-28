@@ -52,7 +52,7 @@
             <value xml:lang="en-US">~Delete</value>
         </prop>
         <prop oor:name="STR_GRAPHIC_OPTIMIZATION">
-            <value xml:lang="en-US">Choose settings for optimizing pictures and graphics</value>
+            <value xml:lang="en-US">Choose settings for optimizing images</value>
         </prop>
         <prop oor:name="STR_IMAGE_OPTIMIZATION">
             <value xml:lang="en-US">Graphics</value>

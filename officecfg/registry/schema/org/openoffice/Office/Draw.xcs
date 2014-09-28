@@ -202,7 +202,7 @@
           <!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
           <info>
             <desc>Indicates whether to show only outlines of graphical objects.</desc>
-            <label>Picture placeholders</label>
+            <label>Image placeholders</label>
           </info>
           <value>false</value>
         </prop>

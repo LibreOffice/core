@@ -275,7 +275,7 @@
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
           <info>
             <desc>Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
-            <label>Picture placeholders</label>
+            <label>Image placeholders</label>
           </info>
           <value>false</value>
         </prop>

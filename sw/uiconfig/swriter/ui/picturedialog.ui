@@ -4,7 +4,7 @@
   <object class="GtkDialog" id="PictureDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Picture</property>
+    <property name="title" translatable="yes">Image</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -149,7 +149,7 @@
               <object class="GtkLabel" id="picture">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Picture</property>
+                <property name="label" translatable="yes">Image</property>
               </object>
               <packing>
                 <property name="position">4</property>

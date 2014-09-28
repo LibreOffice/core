@@ -147,7 +147,7 @@
     {\
         Identifier = SID_SELECT_BACKGROUND ; \
         HelpId = CMD_SID_SELECT_BACKGROUND ; \
-        Text [ en-US ] = "Set Background Picture for Slide ..." ; \
+        Text [ en-US ] = "Set Background Image for Slide ..." ; \
     };
 #define MN_DISPLAY_MASTER_BACKGROUND \
     MenuItem\
@@ -855,7 +855,7 @@
     {\
         Identifier = SID_ATTR_GRAF_CROP ; \
         HelpId = CMD_SID_ATTR_GRAF_CROP ; \
-        Text [ en-US ] = "Crop Picture..." ; \
+        Text [ en-US ] = "Crop Image..." ; \
     };
 
 #define MN_GLUE_INSERT_POINT\

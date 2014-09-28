@@ -697,7 +697,7 @@ String STR_CAPTION_FRAME
 
 String STR_CAPTION_GRAPHIC
 {
-    Text [ en-US ] = "%PRODUCTNAME Writer Picture";
+    Text [ en-US ] = "%PRODUCTNAME Writer Image";
 };
 
 String STR_CAPTION_OLE

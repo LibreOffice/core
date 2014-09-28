@@ -1219,7 +1219,7 @@ Menu MN_GRF_POPUPMENU
         {
             Identifier = FN_FORMAT_GRAFIC_DLG ;
             HelpId = CMD_FN_FORMAT_GRAFIC_DLG ;
-            Text [ en-US ] = "~Picture..." ;
+            Text [ en-US ] = "~Image..." ;
         };
         MN_FRM_CAPTION_ITEM
         SEPARATOR;

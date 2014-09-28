@@ -1258,7 +1258,7 @@
       </node>
       <node oor:name=".uno:GraphicDraft" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Picture Placeholders</value>
+          <value xml:lang="en-US">Image Placeholders</value>
         </prop>
       </node>
       <node oor:name=".uno:FillDraft" oor:op="replace">

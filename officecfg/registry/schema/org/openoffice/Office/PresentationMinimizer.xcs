@@ -58,7 +58,7 @@
 			</prop>
 			<prop oor:name="RemoveCropArea" oor:type="xs:boolean">
 				<info>
-					<desc>Specifies if the crop area of a picture has to be removed</desc>
+					<desc>Specifies if the crop area of an image should be removed</desc>
 				</info>
 				<value>true</value>
 			</prop>
