@@ -48,7 +48,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
     private final LayerView mView;
     private final SingleTileLayer mBackgroundLayer;
-    private final ScreenshotLayer mCheckerboardLayer;
+    private final ScreenshotLayer mScreenshotLayer;
     private final NinePatchTileLayer mShadowLayer;
     private TextLayer mFrameRateLayer;
     private final ScrollbarLayer mHorizScrollLayer;
@@ -81,9 +81,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     private int mTextureHandle;
     private int mSampleHandle;
     private int mTMatrixHandle;
-
-    private int mSurfaceWidth;
-    private int mSurfaceHeight;
 
     // column-major matrix applied to each vertex to shift the viewport from
     // one ranging from (-1, -1),(1,1) to (0,0),(1,1) and to scale all sizes by
@@ -129,33 +126,33 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         "}\n";
 
     public void setCheckerboardBitmap(Bitmap bitmap, float pageWidth, float pageHeight) {
-        mCheckerboardLayer.setBitmap(bitmap);
-        mCheckerboardLayer.beginTransaction();
+        mScreenshotLayer.setBitmap(bitmap);
+        mScreenshotLayer.beginTransaction();
         try {
-            mCheckerboardLayer.setPosition(new Rect(0, 0, Math.round(pageWidth),
+            mScreenshotLayer.setPosition(new Rect(0, 0, Math.round(pageWidth),
                                                     Math.round(pageHeight)));
-            mCheckerboardLayer.invalidate();
+            mScreenshotLayer.invalidate();
         } finally {
-            mCheckerboardLayer.endTransaction();
+            mScreenshotLayer.endTransaction();
         }
     }
 
     public void updateCheckerboardBitmap(Bitmap bitmap, float x, float y,
                                          float width, float height,
                                          float pageWidth, float pageHeight) {
-        mCheckerboardLayer.updateBitmap(bitmap, x, y, width, height);
-        mCheckerboardLayer.beginTransaction();
+        mScreenshotLayer.updateBitmap(bitmap, x, y, width, height);
+        mScreenshotLayer.beginTransaction();
         try {
-            mCheckerboardLayer.setPosition(new Rect(0, 0, Math.round(pageWidth),
+            mScreenshotLayer.setPosition(new Rect(0, 0, Math.round(pageWidth),
                                                     Math.round(pageHeight)));
-            mCheckerboardLayer.invalidate();
+            mScreenshotLayer.invalidate();
         } finally {
-            mCheckerboardLayer.endTransaction();
+            mScreenshotLayer.endTransaction();
         }
     }
 
     public void resetCheckerboard() {
-        mCheckerboardLayer.reset();
+        mScreenshotLayer.reset();
     }
 
     public LayerRenderer(LayerView view) {
@@ -166,7 +163,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         CairoImage backgroundImage = new BufferedCairoImage(controller.getBackgroundPattern());
         mBackgroundLayer = new SingleTileLayer(true, backgroundImage);
 
-        mCheckerboardLayer = ScreenshotLayer.create();
+        mScreenshotLayer = ScreenshotLayer.create();
 
         CairoImage shadowImage = new BufferedCairoImage(controller.getShadowPattern());
         mShadowLayer = new NinePatchTileLayer(shadowImage);
@@ -193,6 +190,20 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             mCoordBuffer = null;
         } finally {
             super.finalize();
+        }
+    }
+
+    public void destroy() {
+        DirectBufferAllocator.free(mCoordByteBuffer);
+        mCoordByteBuffer = null;
+        mCoordBuffer = null;
+        mScreenshotLayer.destroy();
+        mBackgroundLayer.destroy();
+        mShadowLayer.destroy();
+        mHorizScrollLayer.destroy();
+        mVertScrollLayer.destroy();
+        if (mFrameRateLayer != null) {
+            mFrameRateLayer.destroy();
         }
     }
 
@@ -322,9 +333,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
-        mSurfaceWidth = width;
-        mSurfaceHeight = height;
-
         GLES20.glViewport(0, 0, width, height);
 
         if (mFrameRateLayer != null) {
@@ -510,7 +518,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             if (rootLayer != null) mUpdated &= rootLayer.update(mPageContext);  // called on compositor thread
             mUpdated &= mBackgroundLayer.update(mScreenContext);    // called on compositor thread
             mUpdated &= mShadowLayer.update(mPageContext);  // called on compositor thread
-            mUpdated &= mCheckerboardLayer.update(mPageContext);   // called on compositor thread
+            mUpdated &= mScreenshotLayer.update(mPageContext);   // called on compositor thread
             if (mFrameRateLayer != null) mUpdated &= mFrameRateLayer.update(mScreenContext); // called on compositor thread
             mUpdated &= mVertScrollLayer.update(mPageContext);  // called on compositor thread
             mUpdated &= mHorizScrollLayer.update(mPageContext); // called on compositor thread
@@ -591,13 +599,13 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             if (mView.getController().checkerboardShouldShowChecks()) {
                 /* Find the area the root layer will render into, to mask the checkerboard layer */
                 Rect rootMask = getMaskForLayer(mView.getController().getRoot());
-                mCheckerboardLayer.setMask(rootMask);
+                mScreenshotLayer.setMask(rootMask);
 
                 /* Scissor around the page-rect, in case the page has shrunk
                  * since the screenshot layer was last updated.
                  */
                 setScissorRect(); // Calls glEnable(GL_SCISSOR_TEST))
-                mCheckerboardLayer.draw(mPageContext);
+                mScreenshotLayer.draw(mPageContext);
             }
         }
 
@@ -644,7 +652,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
                 /* restrict the viewport to page bounds so we don't
                  * count overscroll as checkerboard */
-                if (!viewport.intersect(0, 0, mPageRect.width(), mPageRect.height())) {
+                if (!viewport.intersect(mPageRect)) {
                     /* if the rectangles don't intersect
                        intersect() doesn't change viewport
                        so we set it to empty by hand */
