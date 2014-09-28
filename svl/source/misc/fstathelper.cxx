@@ -31,7 +31,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 
 bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
-                                        Date* pDate, Time* pTime )
+                                        Date* pDate, tools::Time* pTime )
 {
     bool bRet = false;
     try
@@ -48,7 +48,7 @@ bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
             if( pDate )
                 *pDate = Date( pDT->Day, pDT->Month, pDT->Year );
             if( pTime )
-                *pTime = Time( pDT->Hours, pDT->Minutes,
+                *pTime = tools::Time( pDT->Hours, pDT->Minutes,
                                pDT->Seconds, pDT->NanoSeconds );
         }
     }

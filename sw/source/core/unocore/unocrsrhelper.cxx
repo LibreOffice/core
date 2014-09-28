@@ -1206,7 +1206,7 @@ void makeRedline( SwPaM& rPaM,
     if( aDateTimeValue >>= aStamp )
     {
        aRedlineData.SetTimeStamp(
-        DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
+        DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), tools::Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
     }
 
     SwRedlineExtraData_FormattingChanges* pRedlineExtraData = NULL;
@@ -1328,7 +1328,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     if( aDateTimeValue >>= aStamp )
     {
        aRedlineData.SetTimeStamp(
-        DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
+        DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), tools::Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
     }
 
     SwTableRowRedline* pRedline = new SwTableRowRedline( aRedlineData, rTableLine );
@@ -1385,7 +1385,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     if( aDateTimeValue >>= aStamp )
     {
        aRedlineData.SetTimeStamp(
-        DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
+        DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), tools::Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
     }
 
     SwTableCellRedline* pRedline = new SwTableCellRedline( aRedlineData, rTableBox );

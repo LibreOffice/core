@@ -293,7 +293,7 @@ void ORowSetValue::free()
                 break;
             case DataType::TIME:
                 delete (::com::sun::star::util::Time*)m_aValue.m_pValue;
-                TRACE_FREE( Time )
+                TRACE_FREE( tools::Time )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::TIMESTAMP:
@@ -369,7 +369,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 break;
             case DataType::TIME:
                 m_aValue.m_pValue   = new Time(*(Time*)_rRH.m_aValue.m_pValue);
-                TRACE_ALLOC( Time )
+                TRACE_ALLOC( tools::Time )
                 break;
             case DataType::TIMESTAMP:
                 m_aValue.m_pValue   = new DateTime(*(DateTime*)_rRH.m_aValue.m_pValue);
@@ -512,7 +512,7 @@ ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
     return *this;
 }
 
-ORowSetValue& ORowSetValue::operator=(const Time& _rRH)
+ORowSetValue& ORowSetValue::operator=(const css::util::Time& _rRH)
 {
     if(m_eTypeKind != DataType::TIME)
         free();
@@ -520,7 +520,7 @@ ORowSetValue& ORowSetValue::operator=(const Time& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new Time(_rRH);
-        TRACE_ALLOC( Time )
+        TRACE_ALLOC( tools::Time )
         m_eTypeKind = DataType::TIME;
         m_bNull = false;
     }
@@ -750,19 +750,19 @@ ORowSetValue& ORowSetValue::operator=(const Any& _rAny)
 }
 
 
-bool operator==(const Date& _rLH,const Date& _rRH)
+bool operator==(const Date& _rLH, const Date& _rRH)
 {
     return _rLH.Day == _rRH.Day && _rLH.Month == _rRH.Month && _rLH.Year == _rRH.Year;
 }
 
 
-bool operator==(const Time& _rLH,const Time& _rRH)
+bool operator==(const css::util::Time& _rLH, const css::util::Time& _rRH)
 {
     return _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.NanoSeconds == _rRH.NanoSeconds;
 }
 
 
-bool operator==(const DateTime& _rLH,const DateTime& _rRH)
+bool operator==(const DateTime& _rLH, const DateTime& _rRH)
 {
     return _rLH.Day == _rRH.Day && _rLH.Month == _rRH.Month && _rLH.Year == _rRH.Year &&
         _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.NanoSeconds == _rRH.NanoSeconds;
@@ -2153,7 +2153,7 @@ namespace detail
         virtual float                       getFloat() const = 0;
         virtual double                      getDouble() const = 0;
         virtual Date                        getDate() const = 0;
-        virtual Time                        getTime() const = 0;
+        virtual css::util::Time             getTime() const = 0;
         virtual DateTime                    getTimestamp() const = 0;
         virtual Sequence< sal_Int8 >        getBytes() const = 0;
         virtual Reference< XBlob >          getBlob() const = 0;
@@ -2183,7 +2183,7 @@ namespace detail
         virtual float                       getFloat() const SAL_OVERRIDE            { return m_xRow->getFloat( m_nPos ); };
         virtual double                      getDouble() const SAL_OVERRIDE           { return m_xRow->getDouble( m_nPos ); };
         virtual Date                        getDate() const SAL_OVERRIDE             { return m_xRow->getDate( m_nPos ); };
-        virtual Time                        getTime() const SAL_OVERRIDE             { return m_xRow->getTime( m_nPos ); };
+        virtual css::util::Time             getTime() const SAL_OVERRIDE             { return m_xRow->getTime( m_nPos ); };
         virtual DateTime                    getTimestamp() const SAL_OVERRIDE        { return m_xRow->getTimestamp( m_nPos ); };
         virtual Sequence< sal_Int8 >        getBytes() const SAL_OVERRIDE            { return m_xRow->getBytes( m_nPos ); };
         virtual Reference< XBlob >          getBlob() const SAL_OVERRIDE             { return m_xRow->getBlob( m_nPos ); };
@@ -2214,7 +2214,7 @@ namespace detail
         virtual float                       getFloat() const SAL_OVERRIDE            { return m_xColumn->getFloat(); };
         virtual double                      getDouble() const SAL_OVERRIDE           { return m_xColumn->getDouble(); };
         virtual Date                        getDate() const SAL_OVERRIDE             { return m_xColumn->getDate(); };
-        virtual Time                        getTime() const SAL_OVERRIDE             { return m_xColumn->getTime(); };
+        virtual css::util::Time             getTime() const SAL_OVERRIDE             { return m_xColumn->getTime(); };
         virtual DateTime                    getTimestamp() const SAL_OVERRIDE        { return m_xColumn->getTimestamp(); };
         virtual Sequence< sal_Int8 >        getBytes() const SAL_OVERRIDE            { return m_xColumn->getBytes(); };
         virtual Reference< XBlob >          getBlob() const SAL_OVERRIDE             { return m_xColumn->getBlob(); };

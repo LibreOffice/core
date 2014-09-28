@@ -252,7 +252,7 @@ OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rPara
 
 OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString) const
 {
-    Time aTime = DBTypeConversion::toTime(rString);
+    css::util::Time aTime = DBTypeConversion::toTime(rString);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
 
     Reference< XNumberFormatTypes >  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
@@ -1065,7 +1065,7 @@ OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
         }
         case DataType::TIME:
         {
-            Time aTime = DBTypeConversion::toTime(fValue);
+            css::util::Time aTime = DBTypeConversion::toTime(fValue);
             OUString aString = DBTypeConversion::toTimeString(aTime);
             pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_T));
             pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));

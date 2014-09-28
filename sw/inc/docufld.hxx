@@ -465,7 +465,7 @@ public:
 
     inline const DateTime   GetDateTime() const             { return aDateTime; }
     inline const Date       GetDate() const                 { return aDateTime.GetDate(); }
-    inline const Time       GetTime() const                 { return aDateTime.GetTime(); }
+    inline const tools::Time GetTime() const                 { return aDateTime.GetTime(); }
 
     /// Author
     virtual OUString        GetPar1() const SAL_OVERRIDE;

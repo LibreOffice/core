@@ -2259,7 +2259,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
  *  methods for XDropTargetDropContext
  */
 
-void SelectionManager::dropComplete( bool bSuccess, ::Window aDropWindow, XLIB_Time )
+void SelectionManager::dropComplete( bool bSuccess, ::Window aDropWindow, Time )
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
@@ -2448,7 +2448,7 @@ bool SelectionManager::updateDragAction( int modifierState )
     return bRet;
 }
 
-void SelectionManager::sendDropPosition( bool bForce, XLIB_Time eventTime )
+void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
@@ -2825,7 +2825,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
     return bHandled;
 }
 
-void SelectionManager::accept( sal_Int8 dragOperation, ::Window aDropWindow, XLIB_Time )
+void SelectionManager::accept( sal_Int8 dragOperation, ::Window aDropWindow, Time )
 {
     if( aDropWindow == m_aCurrentDropWindow )
     {
@@ -2845,7 +2845,7 @@ void SelectionManager::accept( sal_Int8 dragOperation, ::Window aDropWindow, XLI
     }
 }
 
-void SelectionManager::reject( ::Window aDropWindow, XLIB_Time )
+void SelectionManager::reject( ::Window aDropWindow, Time )
 {
     if( aDropWindow == m_aCurrentDropWindow )
     {
@@ -3457,7 +3457,7 @@ void SelectionManager::dragDoDispatch()
  */
 
 
-void SelectionManager::setCursor( sal_Int32 cursor, ::Window aDropWindow, XLIB_Time )
+void SelectionManager::setCursor( sal_Int32 cursor, ::Window aDropWindow, Time )
 {
     osl::MutexGuard aGuard( m_aMutex );
     if( aDropWindow == m_aDropWindow && Cursor(cursor) != m_aCurrentCursor )
@@ -3471,7 +3471,7 @@ void SelectionManager::setCursor( sal_Int32 cursor, ::Window aDropWindow, XLIB_T
     }
 }
 
-void SelectionManager::setImage( sal_Int32, ::Window, XLIB_Time )
+void SelectionManager::setImage( sal_Int32, ::Window, Time )
 {
 }
 
@@ -3780,7 +3780,7 @@ sal_Bool SelectionManager::handleEvent(const Any& event)
     if( (event >>= aSeq) )
     {
         XEvent* pEvent = (XEvent*)aSeq.getArray();
-        XLIB_Time nTimestamp = CurrentTime;
+        Time nTimestamp = CurrentTime;
         if( pEvent->type == ButtonPress || pEvent->type == ButtonRelease )
             nTimestamp = pEvent->xbutton.time;
         else if( pEvent->type == XLIB_KeyPress || pEvent->type == KeyRelease )

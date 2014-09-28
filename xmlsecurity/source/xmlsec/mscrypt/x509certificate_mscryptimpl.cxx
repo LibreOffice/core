@@ -302,7 +302,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
         {
             if( FileTimeToSystemTime( &localFileTime, &explTime ) ) {
                 //Convert the time to readable local time
-                dateTime.NanoSeconds = explTime.wMilliseconds * ::Time::nanoPerMilli ;
+                dateTime.NanoSeconds = explTime.wMilliseconds * ::tools::Time::nanoPerMilli ;
                 dateTime.Seconds = explTime.wSecond ;
                 dateTime.Minutes = explTime.wMinute ;
                 dateTime.Hours = explTime.wHour ;
@@ -328,7 +328,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
         {
             if( FileTimeToSystemTime( &localFileTime, &explTime ) ) {
                 //Convert the time to readable local time
-                dateTime.NanoSeconds = explTime.wMilliseconds * ::Time::nanoPerMilli ;
+                dateTime.NanoSeconds = explTime.wMilliseconds * ::tools::Time::nanoPerMilli ;
                 dateTime.Seconds = explTime.wSecond ;
                 dateTime.Minutes = explTime.wMinute ;
                 dateTime.Hours = explTime.wHour ;

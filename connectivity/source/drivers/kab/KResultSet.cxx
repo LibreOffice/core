@@ -338,7 +338,7 @@ cssu::DateTime SAL_CALL KabResultSet::getTimestamp(sal_Int32 columnIndex) throw(
                 nRet.Hours = nRevision.time().hour();
                 nRet.Minutes = nRevision.time().minute();
                 nRet.Seconds = nRevision.time().second();
-                nRet.NanoSeconds = nRevision.time().msec() * ::Time::nanoPerMilli;
+                nRet.NanoSeconds = nRevision.time().msec() * ::tools::Time::nanoPerMilli;
                 return nRet;
             }
         }

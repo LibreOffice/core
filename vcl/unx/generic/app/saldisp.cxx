@@ -2292,7 +2292,7 @@ extern "C"
     }
 }
 
-XLIB_Time SalDisplay::GetLastUserEventTime( bool i_bAlwaysReget ) const
+Time SalDisplay::GetLastUserEventTime( bool i_bAlwaysReget ) const
 {
     if( m_nLastUserEventTime == CurrentTime || i_bAlwaysReget )
     {

@@ -231,7 +231,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
     else
     {
         // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-        sal_Int64 n = Time( Time::SYSTEM ).GetTime();
+        sal_Int64 n = ::tools::Time( ::tools::Time::SYSTEM ).GetTime();
         n += Date( Date::SYSTEM ).GetDate();
         n += rand();
         // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)

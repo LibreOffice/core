@@ -227,7 +227,7 @@ SvxFieldData* SdFieldPopup::GetField()
 
             if( (pTimeField->GetType() == SVXTIMETYPE_VAR) && (eType == SVXTIMETYPE_FIX) )
             {
-                Time aTime( Time::SYSTEM );
+                tools::Time aTime( tools::Time::SYSTEM );
                 ( (SvxExtTimeField*) pNewField )->SetFixTime( aTime );
             }
 

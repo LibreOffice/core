@@ -617,7 +617,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
             nClicks = pChild->ImplGetFrameData()->mnClickCount;
         }
 
-        pSVData->maAppData.mnLastInputTime = Time::GetSystemTicks();
+        pSVData->maAppData.mnLastInputTime = tools::Time::GetSystemTicks();
     }
 
     DBG_ASSERT( pChild, "ImplHandleMouseEvent: pChild == NULL" );
@@ -836,7 +836,7 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
     ImplSVData* pSVData = ImplGetSVData();
 
     // determine last input time
-    pSVData->maAppData.mnLastInputTime = Time::GetSystemTicks();
+    pSVData->maAppData.mnLastInputTime = tools::Time::GetSystemTicks();
 
     // #127104# workaround for destroyed windows
     if( pWindow->ImplGetWindowImpl() == NULL )
@@ -915,7 +915,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, sal_uInt16 nSVEvent,
     bool bCtrlF6 = (aKeyCode.GetCode() == KEY_F6) && aKeyCode.IsMod1();
 
     // determine last input time
-    pSVData->maAppData.mnLastInputTime = Time::GetSystemTicks();
+    pSVData->maAppData.mnLastInputTime = tools::Time::GetSystemTicks();
 
     // handle tracking window
     if ( nSVEvent == EVENT_KEYINPUT )
@@ -2299,7 +2299,7 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
             MouseEvent*     pMouseEvt = (MouseEvent*) pEvent;
             SalMouseEvent   aSalMouseEvent;
 
-            aSalMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalMouseEvent.mnTime = tools::Time::GetSystemTicks();
             aSalMouseEvent.mnX = pMouseEvt->GetPosPixel().X();
             aSalMouseEvent.mnY = pMouseEvt->GetPosPixel().Y();
             aSalMouseEvent.mnButton = 0;
@@ -2319,7 +2319,7 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
             MouseEvent*     pMouseEvt = (MouseEvent*) pEvent;
             SalMouseEvent   aSalMouseEvent;
 
-            aSalMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalMouseEvent.mnTime = tools::Time::GetSystemTicks();
             aSalMouseEvent.mnX = pMouseEvt->GetPosPixel().X();
             aSalMouseEvent.mnY = pMouseEvt->GetPosPixel().Y();
             aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
@@ -2336,7 +2336,7 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
             MouseEvent*     pMouseEvt = (MouseEvent*) pEvent;
             SalMouseEvent   aSalMouseEvent;
 
-            aSalMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalMouseEvent.mnTime = tools::Time::GetSystemTicks();
             aSalMouseEvent.mnX = pMouseEvt->GetPosPixel().X();
             aSalMouseEvent.mnY = pMouseEvt->GetPosPixel().Y();
             aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
@@ -2527,7 +2527,7 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
             {
             ZoomEvent* pZoomEvent = (ZoomEvent*) pEvent;
             SalWheelMouseEvent aSalWheelMouseEvent;
-            aSalWheelMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalWheelMouseEvent.mnTime = tools::Time::GetSystemTicks();
             aSalWheelMouseEvent.mnX = pZoomEvent->GetCenter().getX();
             aSalWheelMouseEvent.mnY = pZoomEvent->GetCenter().getY();
             // Pass on the scale as a percentage * 100 of current zoom factor
@@ -2543,7 +2543,7 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
             {
             ScrollEvent* pScrollEvent = (ScrollEvent*) pEvent;
             SalWheelMouseEvent aSalWheelMouseEvent;
-            aSalWheelMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalWheelMouseEvent.mnTime = tools::Time::GetSystemTicks();
             aSalWheelMouseEvent.mbDeltaIsPixel = true;
             // event location holds delta values instead
             aSalWheelMouseEvent.mnX = long(pScrollEvent->GetXOffset());

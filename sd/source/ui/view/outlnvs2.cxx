@@ -503,7 +503,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
                 case SID_INSERT_FLD_TIME_FIX:
                     pFieldItem.reset(new SvxFieldItem(
-                        SvxExtTimeField( Time( Time::SYSTEM ), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD ));
+                        SvxExtTimeField( ::tools::Time( ::tools::Time::SYSTEM ), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_TIME_VAR:

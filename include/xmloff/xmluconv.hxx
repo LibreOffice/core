@@ -44,7 +44,7 @@
 
 // predeclarations
 
-class Time;
+namespace tools { class Time; }
 
 namespace com { namespace sun { namespace star {
     namespace util { struct DateTime; }

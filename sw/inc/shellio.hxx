@@ -194,7 +194,7 @@ class SW_DLLPUBLIC Reader
     OUString aTemplateNm;
 
     Date aDStamp;
-    Time aTStamp;
+    tools::Time aTStamp;
     DateTime aChkDateTime;
 
 protected:

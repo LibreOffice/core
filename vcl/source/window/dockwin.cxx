@@ -86,7 +86,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                                     DockingWindow* pDockingWin ) :
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
-        mnLastTicks( Time::GetSystemTicks() ),
+        mnLastTicks( tools::Time::GetSystemTicks() ),
         mbInMove( false ),
         mnLastUserEvent( 0 )
 {
@@ -148,7 +148,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
 
     mnLastUserEvent = 0;
     if( mpDockWin->IsDockable()                             &&
-        (Time::GetSystemTicks() - mnLastTicks > 500)        &&
+        (tools::Time::GetSystemTicks() - mnLastTicks > 500)        &&
         ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) &&
         !(aState.mnState & KEY_MOD1) )  // i43499 CTRL disables docking now
     {

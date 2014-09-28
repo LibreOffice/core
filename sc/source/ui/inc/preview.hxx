@@ -48,7 +48,7 @@ private:
     long            nTabStart;          // First (real) page of the sheet
     long            nDisplayStart;      // same as above, relative to the start of counting
     Date            aDate;
-    Time            aTime;
+    tools::Time     aTime;
     long            nTotalPages;
     Size            aPageSize;          // for GetOptimalZoom
     ScPrintState    aState;

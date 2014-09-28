@@ -130,7 +130,7 @@ namespace pcr
             case NUMBERFORMAT_TIME:
             case NUMBERFORMAT_DATETIME:
                 {
-                    Time aCurrentTime( Time::SYSTEM );
+                    tools::Time aCurrentTime( tools::Time::SYSTEM );
                     nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(aCurrentTime.GetTime()));
                 }
                 break;

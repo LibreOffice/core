@@ -607,8 +607,8 @@ void ElementDescriptor::readTimeAttr( OUString const & rPropName, OUString const
             util::Time aUTime;
             if (a >>= aUTime)
             {
-                ::Time aTTime(aUTime);
-                addAttribute( rAttrName, OUString::number( aTTime.GetTime() / ::Time::nanoPerCenti ) );
+                ::tools::Time aTTime(aUTime);
+                addAttribute( rAttrName, OUString::number( aTTime.GetTime() / ::tools::Time::nanoPerCenti ) );
             }
             else
                 OSL_FAIL( "### internal error" );

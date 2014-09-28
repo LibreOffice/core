@@ -171,7 +171,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
     OUString sShareAutoCorrFile, sUserAutoCorrFile;
     // If the AutoCorr file is newer
     Date aModifiedDate;
-    Time aModifiedTime, aLastCheckTime;
+    tools::Time aModifiedTime, aLastCheckTime;
 
     SvStringsISortDtor*     pCplStt_ExcptLst;
     SvStringsISortDtor*     pWrdStt_ExcptLst;

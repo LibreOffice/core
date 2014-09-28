@@ -345,7 +345,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     aWin.Bottom() -= nMargin;
     if(!aWin.IsInside(aPixPt)) {
         static sal_uLong last_tick = 0;
-        sal_uLong current_tick = Time::GetSystemTicks();
+        sal_uLong current_tick = tools::Time::GetSystemTicks();
         if((current_tick-last_tick) > 500) {
             last_tick = current_tick;
             if(!m_bOldIdleSet) {

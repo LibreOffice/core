@@ -103,7 +103,7 @@ class SwSidebarWin : public vcl::Window
 
         virtual OUString GetAuthor() = 0;
         virtual Date    GetDate() = 0;
-        virtual Time    GetTime() = 0;
+        virtual tools::Time GetTime() = 0;
 
         void            ExecuteCommand(sal_uInt16 nSlot);
         void            InitControls();

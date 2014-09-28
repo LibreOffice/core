@@ -272,7 +272,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_pInStream(NULL),
     m_pOutStream(NULL),
     pOrigFilter( 0 ),
-    aExpireTime( Date( Date::SYSTEM ) + 10, Time( Time::SYSTEM ) ),
+    aExpireTime( Date( Date::SYSTEM ) + 10, tools::Time( tools::Time::SYSTEM ) ),
     pTempFile( NULL ),
     nLastStorageError( 0 ),
     m_nSignatureState( SIGNATURESTATE_NOSIGNATURES )

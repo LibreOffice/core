@@ -105,10 +105,10 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                                         NUMBERFORMAT_TIME, ScGlobal::eLnge );
 
                     util::Time aTime = xRow->getTime(nRowPos);
-                    nVal = aTime.Hours       / static_cast<double>(::Time::hourPerDay)   +
-                           aTime.Minutes     / static_cast<double>(::Time::minutePerDay) +
-                           aTime.Seconds     / static_cast<double>(::Time::secondPerDay) +
-                           aTime.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
+                    nVal = aTime.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
+                           aTime.Minutes     / static_cast<double>(::tools::Time::minutePerDay) +
+                           aTime.Seconds     / static_cast<double>(::tools::Time::secondPerDay) +
+                           aTime.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerDay);
                     bEmptyFlag = xRow->wasNull();
                     bValue = true;
                 }
@@ -123,10 +123,10 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                     util::DateTime aStamp = xRow->getTimestamp(nRowPos);
                     nVal = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) -
                                                 *pFormTable->GetNullDate() ) +
-                           aStamp.Hours       / static_cast<double>(::Time::hourPerDay)   +
-                           aStamp.Minutes     / static_cast<double>(::Time::minutePerDay) +
-                           aStamp.Seconds     / static_cast<double>(::Time::secondPerDay) +
-                           aStamp.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
+                           aStamp.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
+                           aStamp.Minutes     / static_cast<double>(::tools::Time::minutePerDay) +
+                           aStamp.Seconds     / static_cast<double>(::tools::Time::secondPerDay) +
+                           aStamp.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerDay);
                     bEmptyFlag = xRow->wasNull();
                     bValue = true;
                 }

@@ -290,7 +290,7 @@ void SAL_CALL MacabPreparedStatement::setDate(sal_Int32, const Date&) throw(SQLE
 ::dbtools::throwFunctionNotSupportedSQLException("setDate", NULL);
 }
 
-void SAL_CALL MacabPreparedStatement::setTime(sal_Int32, const Time&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabPreparedStatement::setTime(sal_Int32, const tools::Time&) throw(SQLException, RuntimeException)
 {
 
 

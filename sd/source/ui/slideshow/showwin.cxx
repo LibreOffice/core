@@ -187,7 +187,7 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
             {
                 // if this is not the first mouse move while hidden, see if
                 // enough time has pasted to show mouse pointer again
-                sal_uLong nTime = Time::GetSystemTicks();
+                sal_uLong nTime = ::tools::Time::GetSystemTicks();
                 if( (nTime - mnFirstMouseMove) >= SHOW_MOUSE_TIMEOUT )
                 {
                     ShowPointer( true );
@@ -202,7 +202,7 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
                 // if this is the first mouse move, note current
                 // time and start idle timer to cancel show mouse pointer
                 // again if not enough mouse movement is measured
-                mnFirstMouseMove = Time::GetSystemTicks();
+                mnFirstMouseMove = ::tools::Time::GetSystemTicks();
                 maMouseTimer.SetTimeout( 2*SHOW_MOUSE_TIMEOUT );
                 maMouseTimer.Start();
             }
@@ -516,7 +516,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
             const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
             aText += " ( ";
-            aText += aLocaleData.getDuration( Time( 0, 0, mnPauseTimeout ) );
+            aText += aLocaleData.getDuration( ::tools::Time( 0, 0, mnPauseTimeout ) );
             aText += " )";
             aVDev.DrawText( Point( aOffset.Width(), 0 ), aText );
             DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, aVDev );

@@ -96,7 +96,7 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     nTabStart( 0 ),
     nDisplayStart( 0 ),
     aDate( Date::SYSTEM ),
-    aTime( Time::SYSTEM ),
+    aTime( tools::Time::SYSTEM ),
     nTotalPages( 0 ),
     pLocationData( NULL ),
     pDrawView( NULL ),
@@ -695,7 +695,7 @@ void ScPreview::DataChanged(bool bNewTime)
     if (bNewTime)
     {
         aDate = Date( Date::SYSTEM );
-        aTime = Time( Time::SYSTEM );
+        aTime = tools::Time( tools::Time::SYSTEM );
     }
 
     bValid = false;

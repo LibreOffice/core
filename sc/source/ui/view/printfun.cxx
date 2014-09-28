@@ -1032,7 +1032,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     else
         aFieldData.nTotalPages = nTotalPages;
 
-    SetDateTime( Date( Date::SYSTEM ), Time( Time::SYSTEM ) );
+    SetDateTime( Date( Date::SYSTEM ), tools::Time( tools::Time::SYSTEM ) );
 
     if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
         aFieldData.aTitle = pDocShell->getDocProperties()->getTitle();
@@ -1068,7 +1068,7 @@ void ScPrintFunc::GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr )
     rDocFtr = aFtr.nHeight;
 }
 
-void ScPrintFunc::SetDateTime( const Date& rDate, const Time& rTime )
+void ScPrintFunc::SetDateTime( const Date& rDate, const tools::Time& rTime )
 {
     aFieldData.aDate = rDate;
     aFieldData.aTime = rTime;

@@ -107,7 +107,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
         //Convert the time to readable local time
         PR_ExplodeTime( notBefore, PR_LocalTimeParameters, &explTime ) ;
 
-        dateTime.NanoSeconds = static_cast< sal_Int32 >( explTime.tm_usec * ::Time::nanoPerMicro  );
+        dateTime.NanoSeconds = static_cast< sal_Int32 >( explTime.tm_usec * ::tools::Time::nanoPerMicro  );
         dateTime.Seconds = static_cast< sal_Int16 >( explTime.tm_sec  );
         dateTime.Minutes = static_cast< sal_Int16 >( explTime.tm_min  );
         dateTime.Hours = static_cast< sal_Int16 >( explTime.tm_hour  );
@@ -136,7 +136,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
         //Convert the time to readable local time
         PR_ExplodeTime( notAfter, PR_LocalTimeParameters, &explTime ) ;
 
-        dateTime.NanoSeconds = static_cast< sal_Int16 >( explTime.tm_usec * ::Time::nanoPerMicro );
+        dateTime.NanoSeconds = static_cast< sal_Int16 >( explTime.tm_usec * ::tools::Time::nanoPerMicro );
         dateTime.Seconds = static_cast< sal_Int16 >( explTime.tm_sec  );
         dateTime.Minutes = static_cast< sal_Int16 >( explTime.tm_min  );
         dateTime.Hours = static_cast< sal_Int16 >( explTime.tm_hour  );

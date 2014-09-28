@@ -174,7 +174,7 @@ void ScShareDocumentDlg::UpdateView()
                         sal_uInt16 nHours = sal::static_int_cast< sal_uInt16 >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
                         sal_uInt16 nMinutes = sal::static_int_cast< sal_uInt16 >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
                         Date aDate( nDay, nMonth, nYear );
-                        Time aTime( nHours, nMinutes );
+                        tools::Time aTime( nHours, nMinutes );
                         DateTime aDateTime( aDate, aTime );
 
                         OUString aString( aUser );
@@ -229,7 +229,7 @@ void ScShareDocumentDlg::UpdateView()
 
         util::DateTime uDT(xDocProps->getModificationDate());
         Date d(uDT.Day, uDT.Month, uDT.Year);
-        Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
+        tools::Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
         DateTime aDateTime(d,t);
 
         aString += formatTime(aDateTime, *ScGlobal::pLocaleData);

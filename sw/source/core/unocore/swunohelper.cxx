@@ -240,7 +240,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
                                         ::Date( aStamp.Day,
                                                 aStamp.Month,
                                                 aStamp.Year ),
-                                        ::Time( aStamp.Hours,
+                                        ::tools::Time( aStamp.Hours,
                                                 aStamp.Minutes,
                                                 aStamp.Seconds,
                                                 aStamp.NanoSeconds ));

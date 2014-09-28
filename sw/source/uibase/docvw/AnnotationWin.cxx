@@ -308,7 +308,7 @@ Date SwAnnotationWin::GetDate()
     return mpFld->GetDate();
 }
 
-Time SwAnnotationWin::GetTime()
+tools::Time SwAnnotationWin::GetTime()
 {
     return mpFld->GetTime();
 }

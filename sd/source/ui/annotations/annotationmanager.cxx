@@ -160,7 +160,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
         else if (aDate.IsValidAndGregorian() )
             sRet = rLocalData.getDate(aDate);
 
-        Time aTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds );
+        ::tools::Time aTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds );
         if(aTime.GetTime() != 0)
             sRet = sRet + " "  + rLocalData.getTime( aTime,false );
     }

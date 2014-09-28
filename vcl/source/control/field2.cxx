@@ -2053,7 +2053,7 @@ static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, bool 
     return true;
 }
 
-static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
+static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
                               TimeFieldFormat eFormat, bool bDuration,
                               const LocaleDataWrapper& rLocaleDataWrapper, bool _bSkipInvalidCharacters = true )
 {
@@ -2062,7 +2062,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     short       nMinute = 0;
     short       nSecond = 0;
     sal_Int64   nNanoSec = 0;
-    Time        aTime( 0, 0, 0 );
+    tools::Time        aTime( 0, 0, 0 );
 
     if ( rStr.isEmpty() )
         return false;
@@ -2220,7 +2220,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
         if ( (nHour == 12) && ( ( aUpperCaseStr.indexOf( aAM ) >= 0 ) || ( aUpperCaseStr.indexOf( aAM2 ) >= 0 ) ) )
             nHour = 0;
 
-        aTime = Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,
+        aTime = tools::Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,
                       (sal_uInt32)nNanoSec );
     }
     else
@@ -2238,7 +2238,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
             nNanoSec    = nNanoSec < 0 ? -nNanoSec : nNanoSec;
         }
 
-        aTime = Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,
+        aTime = tools::Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,
                       (sal_uInt32)nNanoSec );
         if ( bNegative )
             aTime = -aTime;
@@ -2251,11 +2251,11 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
 
 bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
 {
-    Time aTime( 0, 0, 0 );
+    tools::Time aTime( 0, 0, 0 );
     if ( !ImplTimeGetValue( rStr, aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() ) )
         return true;
 
-    Time aTempTime = aTime;
+    tools::Time aTempTime = aTime;
     if ( aTempTime > GetMax() )
         aTempTime = GetMax() ;
     else if ( aTempTime < GetMin() )
@@ -2266,11 +2266,11 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
         maCorrectedTime = aTempTime;
         if ( !GetErrorHdl().Call( this ) )
         {
-            maCorrectedTime = Time( Time::SYSTEM );
+            maCorrectedTime = tools::Time( tools::Time::SYSTEM );
             return false;
         }
         else
-            maCorrectedTime = Time( Time::SYSTEM );
+            maCorrectedTime = tools::Time( tools::Time::SYSTEM );
     }
 
     bool bSecond = false;
@@ -2302,7 +2302,7 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
         {
             if ( aTempTime.GetHour() > 12 )
             {
-                Time aT( aTempTime );
+                tools::Time aT( aTempTime );
                 aT.SetHour( aT.GetHour() % 12 );
                 rOutStr = ImplGetLocaleDataWrapper().getTime( aT, bSecond, b100Sec );
             }
@@ -2326,7 +2326,7 @@ void TimeField::ImplTimeSpinArea( bool bUp )
     if ( GetField() )
     {
         sal_Int32 nTimeArea = 0;
-        Time aTime( GetTime() );
+        tools::Time aTime( GetTime() );
         OUString aText( GetText() );
         Selection aSelection( GetField()->GetSelection() );
 
@@ -2365,15 +2365,15 @@ void TimeField::ImplTimeSpinArea( bool bUp )
 
         if ( nTimeArea )
         {
-            Time aAddTime( 0, 0, 0 );
+            tools::Time aAddTime( 0, 0, 0 );
             if ( nTimeArea == 1 )
-                aAddTime = Time( 1, 0 );
+                aAddTime = tools::Time( 1, 0 );
             else if ( nTimeArea == 2 )
-                aAddTime = Time( 0, 1 );
+                aAddTime = tools::Time( 0, 1 );
             else if ( nTimeArea == 3 )
-                aAddTime = Time( 0, 0, 1 );
+                aAddTime = tools::Time( 0, 0, 1 );
             else if ( nTimeArea == 4 )
-                aAddTime = Time( 0, 0, 0, 1 );
+                aAddTime = tools::Time( 0, 0, 0, 1 );
 
             if ( !bUp )
                 aAddTime = -aAddTime;
@@ -2381,10 +2381,10 @@ void TimeField::ImplTimeSpinArea( bool bUp )
             aTime += aAddTime;
             if ( !IsDuration() )
             {
-                Time aAbsMaxTime( 23, 59, 59, 999999999 );
+                tools::Time aAbsMaxTime( 23, 59, 59, 999999999 );
                 if ( aTime > aAbsMaxTime )
                     aTime = aAbsMaxTime;
-                Time aAbsMinTime( 0, 0 );
+                tools::Time aAbsMinTime( 0, 0 );
                 if ( aTime < aAbsMinTime )
                     aTime = aAbsMinTime;
             }
@@ -2405,7 +2405,7 @@ TimeFormatter::TimeFormatter() :
     maLastTime( 0, 0 ),
     maMin( 0, 0 ),
     maMax( 23, 59, 59, 999999999 ),
-    maCorrectedTime( Time::SYSTEM ),
+    maCorrectedTime( tools::Time::SYSTEM ),
     mbEnforceValidValue( true ),
     maFieldTime( 0, 0 )
 {
@@ -2421,13 +2421,13 @@ void TimeFormatter::ImplLoadRes( const ResId& rResId )
 
         if ( TIMEFORMATTER_MIN & nMask )
         {
-            SetMin( Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
+            SetMin( tools::Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
             pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
         }
 
         if ( TIMEFORMATTER_MAX & nMask )
         {
-            SetMax( Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
+            SetMax( tools::Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
             pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
         }
 
@@ -2442,7 +2442,7 @@ void TimeFormatter::ImplLoadRes( const ResId& rResId )
 
         if ( TIMEFORMATTER_VALUE & nMask )
         {
-            maFieldTime = Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
+            maFieldTime = tools::Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
             if ( maFieldTime > GetMax() )
                 maFieldTime = GetMax();
             if ( maFieldTime < GetMin() )
@@ -2463,14 +2463,14 @@ void TimeFormatter::ReformatAll()
     Reformat();
 }
 
-void TimeFormatter::SetMin( const Time& rNewMin )
+void TimeFormatter::SetMin( const tools::Time& rNewMin )
 {
     maMin = rNewMin;
     if ( !IsEmptyFieldValue() )
         ReformatAll();
 }
 
-void TimeFormatter::SetMax( const Time& rNewMax )
+void TimeFormatter::SetMax( const tools::Time& rNewMax )
 {
     maMax = rNewMax;
     if ( !IsEmptyFieldValue() )
@@ -2495,14 +2495,14 @@ void TimeFormatter::SetDuration( bool bNewDuration )
     ReformatAll();
 }
 
-void TimeFormatter::SetTime( const Time& rNewTime )
+void TimeFormatter::SetTime( const tools::Time& rNewTime )
 {
     SetUserTime( rNewTime );
     maFieldTime = maLastTime;
     SetEmptyFieldValueData( false );
 }
 
-void TimeFormatter::ImplNewFieldValue( const Time& rTime )
+void TimeFormatter::ImplNewFieldValue( const tools::Time& rTime )
 {
     if ( GetField() )
     {
@@ -2518,7 +2518,7 @@ void TimeFormatter::ImplNewFieldValue( const Time& rTime )
             aSelection.Max() = SELECTION_MAX;
         }
 
-        Time aOldLastTime = maLastTime;
+        tools::Time aOldLastTime = maLastTime;
         ImplSetUserTime( rTime, &aSelection );
         maLastTime = aOldLastTime;
 
@@ -2531,9 +2531,9 @@ void TimeFormatter::ImplNewFieldValue( const Time& rTime )
     }
 }
 
-void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelection )
+void TimeFormatter::ImplSetUserTime( const tools::Time& rNewTime, Selection* pNewSelection )
 {
-    Time aNewTime = rNewTime;
+    tools::Time aNewTime = rNewTime;
     if ( aNewTime > GetMax() )
         aNewTime = GetMax();
     else if ( aNewTime < GetMin() )
@@ -2573,7 +2573,7 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
             {
                 if ( aNewTime.GetHour() > 12 )
                 {
-                    Time aT( aNewTime );
+                    tools::Time aT( aNewTime );
                     aT.SetHour( aT.GetHour() % 12 );
                     aStr = ImplGetLocaleDataWrapper().getTime( aT, bSec, b100Sec );
                 }
@@ -2589,14 +2589,14 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
     }
 }
 
-void TimeFormatter::SetUserTime( const Time& rNewTime )
+void TimeFormatter::SetUserTime( const tools::Time& rNewTime )
 {
     ImplSetUserTime( rNewTime );
 }
 
-Time TimeFormatter::GetTime() const
+tools::Time TimeFormatter::GetTime() const
 {
-    Time aTime( 0, 0, 0 );
+    tools::Time aTime( 0, 0, 0 );
 
     if ( GetField() )
     {
@@ -2680,12 +2680,12 @@ void TimeField::ImplLoadRes( const ResId& rResId )
 
         if ( TIMEFIELD_FIRST & nMask )
         {
-            maFirst = Time( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
+            maFirst = tools::Time( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
         }
         if ( TIMEFIELD_LAST & nMask )
         {
-            maLast = Time( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
+            maLast = tools::Time( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
         }
     }
@@ -2720,7 +2720,7 @@ bool TimeField::Notify( NotifyEvent& rNEvt )
                 Reformat();
             else
             {
-                Time aTime( 0, 0, 0 );
+                tools::Time aTime( 0, 0, 0 );
                 if ( ImplTimeGetValue( GetText(), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper(), false ) )
                     // even with strict text analysis, our text is a valid time -> do a complete
                     // reformat

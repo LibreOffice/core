@@ -61,13 +61,13 @@ namespace
     ::com::sun::star::util::Time lcl_getTime(double _nValue)
     {
         ::com::sun::star::util::Time aTime;
-        sal_uInt64 nIntValue = static_cast<sal_uInt64>(_nValue * ::Time::nanoSecPerDay);
-        aTime.NanoSeconds = nIntValue % ::Time::nanoSecPerSec;
-        nIntValue /= ::Time::nanoSecPerSec;
-        aTime.Seconds = nIntValue % ::Time::secondPerMinute;
-        nIntValue /= ::Time::secondPerMinute;
-        aTime.Minutes = nIntValue % ::Time::minutePerHour;
-        nIntValue /= ::Time::minutePerHour;
+        sal_uInt64 nIntValue = static_cast<sal_uInt64>(_nValue * ::tools::Time::nanoSecPerDay);
+        aTime.NanoSeconds = nIntValue % ::tools::Time::nanoSecPerSec;
+        nIntValue /= ::tools::Time::nanoSecPerSec;
+        aTime.Seconds = nIntValue % ::tools::Time::secondPerMinute;
+        nIntValue /= ::tools::Time::secondPerMinute;
+        aTime.Minutes = nIntValue % ::tools::Time::minutePerHour;
+        nIntValue /= ::tools::Time::minutePerHour;
         OSL_ENSURE(nIntValue < 24, "lcl_getTime: more than a day?");
         aTime.Hours = nIntValue;
 
@@ -199,7 +199,7 @@ Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpe
                     case TYPE_TIME:
                     {
                         OSL_ENSURE(((sal_uInt32)nValue) == 0,
-                            "PropertyConversion::convertString: a Time value with more than a fractional part?");
+                            "PropertyConversion::convertString: a tools::Time value with more than a fractional part?");
                         aReturn <<= lcl_getTime(nValue);
                     }
                     break;
