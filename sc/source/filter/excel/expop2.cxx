@@ -45,7 +45,7 @@ ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
     ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meTextEnc ),
     XclExpRoot( rExpData )
 {
-    // nur Teil der Root-Daten gebraucht
+    // only need part of the Root data
     pExcRoot = &GetOldRoot();
     pExcRoot->pER = this;   // ExcRoot -> XclExpRoot
     pExcRoot->eDateiTyp = Biff5;
