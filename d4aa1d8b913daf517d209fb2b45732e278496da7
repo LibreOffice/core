@@ -16,6 +16,24 @@
       "revId": "d4aa1d8b913daf517d209fb2b45732e278496da7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae2911b_6c7cfb20",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000464
+      },
+      "writtenOn": "2014-09-28T20:21:38Z",
+      "side": 1,
+      "message": "Ok! I\u0027ll try it, but I don\u0027t know where can I find these themes.",
+      "parentUuid": "3ae2911b_0c9c5768",
+      "revId": "d4aa1d8b913daf517d209fb2b45732e278496da7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
