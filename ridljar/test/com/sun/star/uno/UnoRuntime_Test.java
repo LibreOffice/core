@@ -111,9 +111,9 @@ public final class UnoRuntime_Test {
         Object v1 = t1.context.getValueByName("");
         Object v2 = t2.context.getValueByName("");
         assertFalse(t1.context == t2.context);
-        assertTrue(v1 == t1);
-        assertTrue(v2 == t2);
-        assertFalse(v1 == v2);
+        assertSame(v1, t1);
+        assertSame(v2, t2);
+        assertNotSame(v1, v2);
     }
 
     private interface Ifc extends XInterface {}
