@@ -1447,7 +1447,7 @@ private:
             }
 
             if (mpOptions->IsTime())
-                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( Time( Time::SYSTEM ), false, false );
+                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( ::tools::Time( ::tools::Time::SYSTEM ), false, false );
 
             // Draw should use specified paper size when printing, except for booklets
             if (!mpOptions->IsBooklet() && mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_DRAW)

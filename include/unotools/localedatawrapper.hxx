@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 class Date;
-class Time;
+namespace tools { class Time; }
 class CalendarWrapper;
 
 enum DateFormat {
@@ -241,9 +241,9 @@ public:
     DateFormat          getLongDateFormat() const;
     /// only numerical values of Gregorian calendar
     OUString       getDate( const Date& rDate ) const;
-    OUString       getTime( const Time& rTime, bool bSec = true,
+    OUString       getTime( const tools::Time& rTime, bool bSec = true,
                             bool b100Sec = false ) const;
-    OUString       getDuration( const Time& rTime,
+    OUString       getDuration( const tools::Time& rTime,
                             bool bSec = true, bool b100Sec = false ) const;
 
                         /** The CalendarWrapper already <b>MUST</b>

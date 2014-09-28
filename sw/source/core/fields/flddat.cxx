@@ -148,15 +148,15 @@ Date SwDateTimeField::GetDate(bool bUseOffset) const
     return aDate;
 }
 
-Time SwDateTimeField::GetTime(bool bUseOffset) const
+tools::Time SwDateTimeField::GetTime(bool bUseOffset) const
 {
     double fDummy;
     double fFract = modf(GetValue(), &fDummy);
     DateTime aDT((long)fDummy, 0);
     aDT += fFract;
     if (bUseOffset)
-         aDT += Time(0, nOffset);
-    return (Time)aDT;
+         aDT += tools::Time(0, nOffset);
+    return (tools::Time)aDT;
 }
 
 bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const

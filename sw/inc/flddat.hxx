@@ -24,7 +24,7 @@
 
 class DateTime;
 class Date;
-class Time;
+namespace tools { class Time; }
 
 enum SwDateFormat
 {
@@ -115,7 +115,7 @@ public:
         inline long             GetOffset() const           { return nOffset; }
 
         Date                    GetDate(bool bUseOffset = false) const;
-        Time                    GetTime(bool bUseOffset = false) const;
+        tools::Time             GetTime(bool bUseOffset = false) const;
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 

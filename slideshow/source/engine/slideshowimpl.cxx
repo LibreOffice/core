@@ -157,11 +157,11 @@ private:
         animations.
     */
     canvas::tools::ElapsedTime maTimer;
-    /** Time between the display of frames.  Enforced only when mbIsActive
+    /** tools::Time between the display of frames.  Enforced only when mbIsActive
         is <TRUE/>.
     */
     const double mnFrameDuration;
-    /** Time (of maTimer) when the next frame shall be displayed.
+    /** tools::Time (of maTimer) when the next frame shall be displayed.
         Synchronize() will wait until this time.
     */
     double mnNextFrameTargetTime;
@@ -2086,7 +2086,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             // commit frame to screen
             maScreenUpdater.commitUpdates();
         }
-        // Time held until here
+        // tools::Time held until here
 
         const bool bActivitiesLeft = (! maActivitiesQueue.isEmpty());
         const bool bTimerEventsLeft = (! maEventQueue.isEmpty());

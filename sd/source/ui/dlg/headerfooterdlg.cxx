@@ -467,7 +467,7 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
     mpCBDateTimeFormat->Clear();
 
     Date aDate( Date::SYSTEM );
-    Time aTime( Time::SYSTEM );
+    tools::Time aTime( tools::Time::SYSTEM );
 
     int nFormat;
     for( nFormat = 0; nFormat < nDateTimeFormatsCount; nFormat++ )

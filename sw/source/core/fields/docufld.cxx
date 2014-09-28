@@ -903,13 +903,13 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             sal_Int32 dur = xDocProps->getEditingDuration();
             // If Seconds > 0 then bSec should be TRUE otherwise Seconds
             // information will be lost if file has EditTime in Seconds format.
-            aStr = pLocalData->getTime( Time(dur/3600, (dur%3600)/60, dur%60),
+            aStr = pLocalData->getTime( tools::Time(dur/3600, (dur%3600)/60, dur%60),
                                         (dur%60 > 0 ? true : false), false);
         }
         else
         {
             sal_Int32 dur = xDocProps->getEditingDuration();
-            double fVal = Time(dur/3600, (dur%3600)/60, dur%60).GetTimeInDays();
+            double fVal = tools::Time(dur/3600, (dur%3600)/60, dur%60).GetTimeInDays();
             aStr = ExpandValue(fVal, nFormat, nLang);
         }
         break;
@@ -938,7 +938,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             OUString aName( xDocProps->getAuthor() );
             util::DateTime uDT( xDocProps->getCreationDate() );
             Date aD(uDT.Day, uDT.Month, uDT.Year);
-            Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
+            tools::Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
             DateTime aDate(aD,aT);
             if( nSub == DI_CREATE )
                 ;       // das wars schon!!
@@ -947,7 +947,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                 aName = xDocProps->getModifiedBy();
                 uDT = xDocProps->getModificationDate();
                 Date bD(uDT.Day, uDT.Month, uDT.Year);
-                Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
+                tools::Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
                 DateTime bDate(bD,bT);
                 aDate = bDate;
             }
@@ -956,7 +956,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                 aName = xDocProps->getPrintedBy();
                 uDT = xDocProps->getPrintDate();
                 Date bD(uDT.Day, uDT.Month, uDT.Year);
-                Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
+                tools::Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
                 DateTime bDate(bD,bT);
                 aDate = bDate;
             }

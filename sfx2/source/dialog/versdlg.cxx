@@ -95,7 +95,7 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTa
         pInfo->aAuthor = rInfo[n].Author;
 
         Date aDate ( rInfo[n].TimeStamp.Day,   rInfo[n].TimeStamp.Month,   rInfo[n].TimeStamp.Year );
-        Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.NanoSeconds );
+        tools::Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.NanoSeconds );
 
         pInfo->aCreationDate = DateTime( aDate, aTime );
         aTableList.push_back( pInfo );
@@ -112,7 +112,7 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < document::CmisVe
         pInfo->aAuthor = rInfo[n].Author;
 
         Date aDate ( rInfo[n].TimeStamp.Day,   rInfo[n].TimeStamp.Month,   rInfo[n].TimeStamp.Year );
-        Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.NanoSeconds );
+        tools::Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.NanoSeconds );
 
         pInfo->aCreationDate = DateTime( aDate, aTime );
         aTableList.push_back( pInfo );

@@ -26,7 +26,6 @@
 
 /* X Types */
 #undef Icon
-#undef Time
 
 #undef Min
 #undef Max

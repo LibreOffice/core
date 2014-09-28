@@ -2154,7 +2154,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                  comphelper::string::getTokenCount(aContent, ';') == 2 )
             {
                 Date aDate( (sal_uLong)aContent.getToken(0, ';').toInt32() );
-                Time aTime( (sal_uLong)aContent.getToken(1, ';').toInt32() );
+                tools::Time aTime( (sal_uLong)aContent.getToken(1, ';').toInt32() );
                 DateTime aDateTime( aDate, aTime );
                 ::util::DateTime uDT(aDateTime.GetNanoSec(),
                     aDateTime.GetSec(), aDateTime.GetMin(),

@@ -31,6 +31,8 @@ class ResId;
            25 hours or 10 minus 20 seconds being (non-negative) 10 seconds.
 */
 
+namespace tools {
+
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Time
 {
 private:
@@ -68,7 +70,7 @@ public:
                     Time( TimeInitSystem );
                     Time( const ResId & rResId );
                     Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
-                    Time( const Time& rTime );
+                    Time( const tools::Time& rTime );
                     Time( const ::com::sun::star::util::Time& rTime );
                     Time( sal_uInt32 nHour, sal_uInt32 nMin,
                           sal_uInt32 nSec = 0, sal_uInt64 nNanoSec = 0 );
@@ -103,22 +105,22 @@ public:
                     /// 12 hours == 0.5 days
     double          GetTimeInDays() const;
 
-    bool            IsBetween( const Time& rFrom, const Time& rTo ) const
+    bool            IsBetween( const tools::Time& rFrom, const tools::Time& rTo ) const
                     { return ((nTime >= rFrom.nTime) && (nTime <= rTo.nTime)); }
 
-    bool            IsEqualIgnoreNanoSec( const Time& rTime ) const;
+    bool            IsEqualIgnoreNanoSec( const tools::Time& rTime ) const;
 
-    bool            operator ==( const Time& rTime ) const
+    bool            operator ==( const tools::Time& rTime ) const
                     { return (nTime == rTime.nTime); }
-    bool            operator !=( const Time& rTime ) const
+    bool            operator !=( const tools::Time& rTime ) const
                     { return (nTime != rTime.nTime); }
-    bool            operator  >( const Time& rTime ) const
+    bool            operator  >( const tools::Time& rTime ) const
                     { return (nTime > rTime.nTime); }
-    bool            operator  <( const Time& rTime ) const
+    bool            operator  <( const tools::Time& rTime ) const
                     { return (nTime < rTime.nTime); }
-    bool            operator >=( const Time& rTime ) const
+    bool            operator >=( const tools::Time& rTime ) const
                     { return (nTime >= rTime.nTime); }
-    bool            operator <=( const Time& rTime ) const
+    bool            operator <=( const tools::Time& rTime ) const
                     { return (nTime <= rTime.nTime); }
 
     static Time     GetUTCOffset();
@@ -127,14 +129,16 @@ public:
     void            ConvertToUTC()       { *this -= Time::GetUTCOffset(); }
     void            ConvertToLocalTime() { *this += Time::GetUTCOffset(); }
 
-    Time&           operator =( const Time& rTime );
+    tools::Time&           operator =( const tools::Time& rTime );
     Time            operator -() const
                         { return Time( -nTime ); }
-    Time&           operator +=( const Time& rTime );
-    Time&           operator -=( const Time& rTime );
-    TOOLS_DLLPUBLIC friend Time     operator +( const Time& rTime1, const Time& rTime2 );
-    TOOLS_DLLPUBLIC friend Time     operator -( const Time& rTime1, const Time& rTime2 );
+    tools::Time&           operator +=( const tools::Time& rTime );
+    tools::Time&           operator -=( const tools::Time& rTime );
+    TOOLS_DLLPUBLIC friend Time     operator +( const tools::Time& rTime1, const tools::Time& rTime2 );
+    TOOLS_DLLPUBLIC friend Time     operator -( const tools::Time& rTime1, const tools::Time& rTime2 );
 };
+
+} /* namespace tools */
 
 #endif
 

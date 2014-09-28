@@ -61,7 +61,7 @@ protected:
     OUString sBaseURL;                  // base URL - has to be set at the Readers and Writers
     SwBlockNames aNames;                // Liste aller Bausteine
     Date aDateModified;                 // fuers abgleichen bei den Aktionen
-    Time aTimeModified;
+    tools::Time aTimeModified;
     SwDoc* pDoc;                        // Austauschdokument
     sal_uInt16 nCur;                        // aktueller Index
     bool bReadOnly : 1;

@@ -1604,7 +1604,7 @@ void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDF
             util::DateTime aDateTime( xAnnotation->getDateTime() );
 
             Date aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
-            Time aTime( Time::EMPTY );
+            ::tools::Time aTime( ::tools::Time::EMPTY );
             OUString aStr( SvxDateTimeField::GetFormatted( aDate, aTime, SVXDATEFORMAT_B, *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
 
             vcl::PDFNote aNote;

@@ -214,9 +214,9 @@ IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
         ScChgsDateMode eMode = (ScChgsDateMode) m_pFilterCtr->GetDateMode();
         aChangeViewSet.SetTheDateMode( eMode );
         Date aFirstDate( m_pFilterCtr->GetFirstDate() );
-        Time aFirstTime( m_pFilterCtr->GetFirstTime() );
+        tools::Time aFirstTime( m_pFilterCtr->GetFirstTime() );
         Date aLastDate( m_pFilterCtr->GetLastDate() );
-        Time aLastTime( m_pFilterCtr->GetLastTime() );
+        tools::Time aLastTime( m_pFilterCtr->GetLastTime() );
         aChangeViewSet.SetTheFirstDateTime( DateTime( aFirstDate, aFirstTime ) );
         aChangeViewSet.SetTheLastDateTime( DateTime( aLastDate, aLastTime ) );
         aChangeViewSet.SetHasAuthor(m_pFilterCtr->IsAuthor());

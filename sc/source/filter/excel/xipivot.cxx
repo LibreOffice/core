@@ -160,7 +160,7 @@ void XclImpPCItem::ReadSxdatetime( XclImpStream& rStrm )
     sal_uInt16 nYear, nMonth;
     sal_uInt8 nDay, nHour, nMin, nSec;
     rStrm >> nYear >> nMonth >> nDay >> nHour >> nMin >> nSec;
-    SetDateTime( DateTime( Date( nDay, nMonth, nYear ), Time( nHour, nMin, nSec ) ) );
+    SetDateTime( DateTime( Date( nDay, nMonth, nYear ), tools::Time( nHour, nMin, nSec ) ) );
 }
 
 void XclImpPCItem::ReadSxempty( XclImpStream& rStrm )

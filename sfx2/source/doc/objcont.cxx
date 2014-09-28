@@ -216,10 +216,10 @@ void SfxObjectShell::UpdateDocInfoForSave()
 
 
 static void
-lcl_add(util::Duration & rDur, Time const& rTime)
+lcl_add(util::Duration & rDur, tools::Time const& rTime)
 {
     // here we don't care about overflow: rDur is converted back to seconds
-    // anyway, and Time cannot store more than ~4000 hours
+    // anyway, and tools::Time cannot store more than ~4000 hours
     rDur.Hours   += rTime.GetHour();
     rDur.Minutes += rTime.GetMin();
     rDur.Seconds += rTime.GetSec();
@@ -236,9 +236,9 @@ void SfxObjectShell::UpdateTime_Impl(
 
     // Initialize some local member! Its necessary for wollow operations!
     DateTime    aNow( DateTime::SYSTEM );   // Date and time at current moment
-    Time        n24Time     (24,0,0,0)  ;   // Time-value for 24 hours - see follow calculation
+    tools::Time        n24Time     (24,0,0,0)  ;   // Time-value for 24 hours - see follow calculation
     sal_uIntPtr     nDays       = 0         ;   // Count of days between now and last editing
-    Time        nAddTime    (0)         ;   // Value to add on aOldTime
+    tools::Time        nAddTime    (0)         ;   // Value to add on aOldTime
 
     // Safe impossible cases!
     // User has changed time to the past between last editing and now ... its not possible!!!
@@ -254,7 +254,7 @@ void SfxObjectShell::UpdateTime_Impl(
         if (nDays==0)
         {
             // If no day between now and last editing - calculate time directly.
-            nAddTime    =   (const Time&)aNow - (const Time&)pImp->nTime ;
+            nAddTime    =   (const tools::Time&)aNow - (const tools::Time&)pImp->nTime ;
         }
         else if (nDays<=31)
         {
@@ -265,7 +265,7 @@ void SfxObjectShell::UpdateTime_Impl(
             // nAddTime = (24h - nTime) + (nDays * 24h) + aNow
             --nDays;
              nAddTime    =  nDays*n24Time.GetTime() ;
-            nAddTime    +=  n24Time-(const Time&)pImp->nTime        ;
+            nAddTime    +=  n24Time-(const tools::Time&)pImp->nTime        ;
             nAddTime    +=  aNow                    ;
         }
 

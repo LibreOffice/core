@@ -433,7 +433,7 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
 void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, OUString& rUser, DateTime& aDateTime)
 {
     Date aDate(aInfo.aDateTime.Day, aInfo.aDateTime.Month, aInfo.aDateTime.Year);
-    Time aTime(aInfo.aDateTime.Hours, aInfo.aDateTime.Minutes, aInfo.aDateTime.Seconds, aInfo.aDateTime.NanoSeconds);
+    tools::Time aTime(aInfo.aDateTime.Hours, aInfo.aDateTime.Minutes, aInfo.aDateTime.Seconds, aInfo.aDateTime.NanoSeconds);
     aDateTime.SetDate( aDate.GetDate() );
     aDateTime.SetTime( aTime.GetTime() );
 
@@ -454,7 +454,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, O
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
 {
-    DateTime aDateTime( Date(0), Time(0) );
+    DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
@@ -467,7 +467,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsActio
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelAction* pAction)
 {
-    DateTime aDateTime( Date(0), Time(0) );
+    DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
@@ -483,7 +483,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
     OSL_ENSURE(pAction->pMoveRanges, "no move ranges");
     if (pAction->pMoveRanges)
     {
-        DateTime aDateTime( Date(0), Time(0) );
+        DateTime aDateTime( Date(0), tools::Time(0) );
         OUString aUser;
         ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
@@ -498,7 +498,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
 {
-    DateTime aDateTime( Date(0), Time(0) );
+    DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
@@ -519,7 +519,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContent
         sInputString = pAction->pCellInfo->sInputString;
     }
 
-    DateTime aDateTime( Date(0), Time(0) );
+    DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 

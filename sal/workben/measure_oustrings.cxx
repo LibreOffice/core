@@ -86,7 +86,7 @@ public:
             std::cout << "Unavailable" << std::endl;
         currenttest++;
 #ifndef HAVE_CALLGRIND
-        std::cout << "    Elapsed Time is: " << m_nEndTime - m_nStartTime << "ms" << std::endl;
+        std::cout << "    Elapsed tools::Time is: " << m_nEndTime - m_nStartTime << "ms" << std::endl;
 #endif
     }
 };

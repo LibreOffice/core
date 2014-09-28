@@ -201,9 +201,9 @@ namespace x11 {
             bool                        m_bOwner;
             ::Window                    m_aLastOwner;
             PixmapHolder*               m_pPixmap;
-            // m_nOrigXLIB_Timestamp contains the XLIB_Timestamp at which the seclection
-            // was acquired; needed for XLIB_TimeSTAMP target
-            XLIB_Time                        m_nOrigTimestamp;
+            // m_nOrigTimestamp contains the Timestamp at which the seclection
+            // was acquired; needed for TimeSTAMP target
+            Time                        m_nOrigTimestamp;
 
             Selection() : m_eState( Inactive ),
                           m_pAdaptor( NULL ),
@@ -253,7 +253,7 @@ namespace x11 {
         css::uno::Reference< css::awt::XDisplayConnection >
                                     m_xDisplayConnection;
         sal_Int32                   m_nSelectionTimeout;
-        XLIB_Time                   m_nSelectionTimestamp;
+        Time                        m_nSelectionTimestamp;
 
         // members used for Xdnd
 
@@ -268,14 +268,14 @@ namespace x11 {
         // set to true on first XdndPosition or XdndLeave
         bool                        m_bDropEnterSent;
         ::Window                    m_aCurrentDropWindow;
-        // XLIB_Time code of XdndDrop
-        XLIB_Time                   m_nDropTime;
+        // Time code of XdndDrop
+        Time                        m_nDropTime;
         sal_Int8                    m_nLastDropAction;
         // XTransferable for Xdnd with foreign drag source
         css::uno::Reference< css::datatransfer::XTransferable >
                                     m_xDropTransferable;
         int                         m_nLastX, m_nLastY;
-        XLIB_Time                   m_nDropTimestamp;
+        Time                        m_nDropTimestamp;
         // set to true when calling drop()
         // if another XdndEnter is received this shows that
         // someone forgot to call dropComplete - we should reset
@@ -310,7 +310,7 @@ namespace x11 {
         bool                        m_bDropSent;
         time_t                      m_nDropTimeout;
         bool                        m_bWaitingForPrimaryConversion;
-        XLIB_Time                   m_nDragTimestamp;
+        Time                        m_nDragTimestamp;
 
         // drag cursors
         Cursor                      m_aMoveCursor;
@@ -386,7 +386,7 @@ namespace x11 {
 
         // dnd helpers
         void sendDragStatus( Atom nDropAction );
-        void sendDropPosition( bool bForce, XLIB_Time eventXLIB_Time );
+        void sendDropPosition( bool bForce, Time eventTime );
         bool updateDragAction( int modifierState );
         int getXdndVersion( ::Window aXLIB_Window, ::Window& rProxy );
         Cursor createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY );
@@ -454,14 +454,14 @@ namespace x11 {
         void deregisterDropTarget( ::Window aXLIB_Window );
 
         // for XDropTarget{Drag|Drop}Context
-        void accept( sal_Int8 dragOperation, ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
-        void reject( ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
-        void dropComplete( bool success, ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void accept( sal_Int8 dragOperation, ::Window aDropXLIB_Window, Time aTimestamp );
+        void reject( ::Window aDropXLIB_Window, Time aTimestamp );
+        void dropComplete( bool success, ::Window aDropXLIB_Window, Time aTimestamp );
 
         // for XDragSourceContext
         sal_Int32 getCurrentCursor() { return m_aCurrentCursor;}
-        void setCursor( sal_Int32 cursor, ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
-        void setImage( sal_Int32 image, ::Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void setCursor( sal_Int32 cursor, ::Window aDropXLIB_Window, Time aTimestamp );
+        void setImage( sal_Int32 image, ::Window aDropXLIB_Window, Time aTimestamp );
         void transferablesFlavorsChanged();
 
         void shutdown() throw();

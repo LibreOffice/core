@@ -1670,7 +1670,7 @@ sal_uLong SwFldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberF
 
             fValue = aDate - *pNullDate;
 
-            Time aTime( Time::SYSTEM );
+            tools::Time aTime( tools::Time::SYSTEM );
 
             sal_uLong nNumFmtTime = (sal_uLong)aTime.GetSec() + (sal_uLong)aTime.GetMin() * 60L +
                           (sal_uLong)aTime.GetHour() * 3600L;

@@ -220,10 +220,10 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
                 rNumType = NUMBERFORMAT_TIME;
 
                 util::Time aTime = mxRow->getTime(nCol+1);
-                fValue = aTime.Hours       / static_cast<double>(::Time::hourPerDay)   +
-                         aTime.Minutes     / static_cast<double>(::Time::minutePerDay) +
-                         aTime.Seconds     / static_cast<double>(::Time::secondPerDay) +
-                         aTime.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
+                fValue = aTime.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
+                         aTime.Minutes     / static_cast<double>(::tools::Time::minutePerDay) +
+                         aTime.Seconds     / static_cast<double>(::tools::Time::secondPerDay) +
+                         aTime.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerDay);
                 rData.SetValue(fValue);
                 break;
             }
@@ -233,10 +233,10 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
 
                 util::DateTime aStamp = mxRow->getTimestamp(nCol+1);
                 fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - maNullDate ) +
-                         aStamp.Hours       / static_cast<double>(::Time::hourPerDay)   +
-                         aStamp.Minutes     / static_cast<double>(::Time::minutePerDay) +
-                         aStamp.Seconds     / static_cast<double>(::Time::secondPerDay) +
-                         aStamp.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
+                         aStamp.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
+                         aStamp.Minutes     / static_cast<double>(::tools::Time::minutePerDay) +
+                         aStamp.Seconds     / static_cast<double>(::tools::Time::secondPerDay) +
+                         aStamp.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerDay);
                 rData.SetValue(fValue);
                 break;
             }

@@ -804,11 +804,11 @@ namespace xforms
     {
         Any aTypedValue = Convert::get().toAny( value, getCppuType() );
 
-        Time aValue;
+        css::util::Time aValue;
         if ( !( aTypedValue >>= aValue ) )
             return false;
 
-        ::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds );
+        ::tools::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds );
         // no loss/rounding; IEEE 754 double-precision floating-point
         // has a mantissa of 53 bits; we need at the very most 50 bits:
         // format of aToolsTime.GetTime() is (in decimal) hhmmssnnnnnnnnn
@@ -830,9 +830,9 @@ namespace xforms
 
     void OTimeType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
     {
-        Time aValue;
+        css::util::Time aValue;
         OSL_VERIFY( _rValue >>= aValue );
-        ::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds );
+        ::tools::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds );
         _rDoubleValue = aToolsTime.GetTime();
     }
 
@@ -855,7 +855,7 @@ namespace xforms
         {
             ::DateTime aToolsValue(
                 ::Date( _rValue.Day, _rValue.Month, _rValue.Year ),
-                ::Time( _rValue.Hours, _rValue.Minutes, _rValue.Seconds, _rValue.NanoSeconds )
+                ::tools::Time( _rValue.Hours, _rValue.Minutes, _rValue.Seconds, _rValue.NanoSeconds )
             );
 
             double fValue = 0;

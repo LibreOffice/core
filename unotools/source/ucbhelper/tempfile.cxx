@@ -210,7 +210,7 @@ public:
             osl::MutexGuard g(osl::Mutex::getGlobalMutex());
             globalValue
                 = ((globalValue == SAL_MAX_UINT32
-                    ? Time::GetSystemTicks() : globalValue + 1)
+                    ? tools::Time::GetSystemTicks() : globalValue + 1)
                    % max);
             v = globalValue;
         }

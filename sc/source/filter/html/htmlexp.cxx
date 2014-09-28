@@ -156,7 +156,7 @@ static void lcl_AddStamp( OUString& rStr, const OUString& rName,
     const LocaleDataWrapper& rLoc )
 {
     Date aD(rDateTime.Day, rDateTime.Month, rDateTime.Year);
-    Time aT(rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds,
+    tools::Time aT(rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds,
             rDateTime.NanoSeconds);
     DateTime aDateTime(aD,aT);
 

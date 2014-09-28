@@ -2071,7 +2071,7 @@ void ScExternalRefManager::enableDocTimer( bool bEnable )
         {
             DocShellMap::iterator it = maDocShells.begin(), itEnd = maDocShells.end();
             for (; it != itEnd; ++it)
-                it->second.maLastAccess = Time(Time::SYSTEM);
+                it->second.maLastAccess = tools::Time(tools::Time::SYSTEM);
 
             maSrcDocTimer.Start();
         }
@@ -2272,7 +2272,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
         // document already loaded.
 
         SfxObjectShell* p = itr->second.maShell;
-        itr->second.maLastAccess = Time( Time::SYSTEM );
+        itr->second.maLastAccess = tools::Time( tools::Time::SYSTEM );
         return &static_cast<ScDocShell*>(p)->GetDocument();
     }
 
@@ -2283,7 +2283,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
         //document is unsaved document
 
         SfxObjectShell* p = itr->second.maShell;
-        itr->second.maLastAccess = Time( Time::SYSTEM );
+        itr->second.maLastAccess = tools::Time( tools::Time::SYSTEM );
         return &static_cast<ScDocShell*>(p)->GetDocument();
     }
 
@@ -2747,13 +2747,13 @@ bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
     {
         it->second.maShell->DoClose();
         it->second.maShell = xDocShell;
-        it->second.maLastAccess = Time(Time::SYSTEM);
+        it->second.maLastAccess = tools::Time(tools::Time::SYSTEM);
     }
     else
     {
         SrcShell aSrcDoc;
         aSrcDoc.maShell = xDocShell;
-        aSrcDoc.maLastAccess = Time(Time::SYSTEM);
+        aSrcDoc.maLastAccess = tools::Time(tools::Time::SYSTEM);
         cacheNewDocShell(nFileId, aSrcDoc);
     }
 
@@ -2947,7 +2947,7 @@ void ScExternalRefManager::purgeStaleSrcDocument(sal_Int32 nTimeOut)
     for (; itr != itrEnd; ++itr)
     {
         // in 100th of a second.
-        sal_Int32 nSinceLastAccess = (Time( Time::SYSTEM ) - itr->second.maLastAccess).GetTime();
+        sal_Int32 nSinceLastAccess = (tools::Time( tools::Time::SYSTEM ) - itr->second.maLastAccess).GetTime();
         if (nSinceLastAccess >= nTimeOut)
         {
             // Timed out.  Let's close this, and exit the loop.

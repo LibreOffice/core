@@ -405,26 +405,26 @@ public:
 class VCL_DLLPUBLIC TimeFormatter : public FormatterBase
 {
 private:
-    Time                    maLastTime;
-    Time                    maMin;
-    Time                    maMax;
-    Time                    maCorrectedTime;
+    tools::Time             maLastTime;
+    tools::Time             maMin;
+    tools::Time             maMax;
+    tools::Time             maCorrectedTime;
     TimeFieldFormat         meFormat;
-    sal_uInt16                  mnTimeFormat;
+    sal_uInt16              mnTimeFormat;
     bool                    mbDuration;
     bool                    mbEnforceValidValue;
 
     SAL_DLLPRIVATE void     ImplInit();
 
 protected:
-    Time                    maFieldTime;
+    tools::Time             maFieldTime;
 
                             TimeFormatter();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE bool     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
-    SAL_DLLPRIVATE void     ImplNewFieldValue( const Time& rTime );
-    SAL_DLLPRIVATE void     ImplSetUserTime( const Time& rNewTime, Selection* pNewSelection = NULL );
+    SAL_DLLPRIVATE void     ImplNewFieldValue( const tools::Time& rTime );
+    SAL_DLLPRIVATE void     ImplSetUserTime( const tools::Time& rNewTime, Selection* pNewSelection = NULL );
     SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:
@@ -439,10 +439,10 @@ public:
     virtual void            Reformat() SAL_OVERRIDE;
     virtual void            ReformatAll() SAL_OVERRIDE;
 
-    void                    SetMin( const Time& rNewMin );
-    const Time&             GetMin() const { return maMin; }
-    void                    SetMax( const Time& rNewMax );
-    const Time&             GetMax() const { return maMax; }
+    void                    SetMin( const tools::Time& rNewMin );
+    const tools::Time&             GetMin() const { return maMin; }
+    void                    SetMax( const tools::Time& rNewMax );
+    const tools::Time&             GetMax() const { return maMax; }
 
     void                    SetTimeFormat( TimeFormat eNewFormat );
     TimeFormat              GetTimeFormat() const { return (TimeFormat)mnTimeFormat;}
@@ -453,14 +453,14 @@ public:
     void                    SetDuration( bool mbDuration );
     bool                    IsDuration() const { return mbDuration; }
 
-    void                    SetTime( const Time& rNewTime );
-    void                    SetUserTime( const Time& rNewTime );
-    Time                    GetTime() const;
+    void                    SetTime( const tools::Time& rNewTime );
+    void                    SetUserTime( const tools::Time& rNewTime );
+    tools::Time             GetTime() const;
     void                    SetEmptyTime() { FormatterBase::SetEmptyFieldValue(); }
     bool                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
-    Time                    GetCorrectedTime() const { return maCorrectedTime; }
+    tools::Time             GetCorrectedTime() const { return maCorrectedTime; }
 
-    static Time             GetInvalidTime() { return Time( 99, 99, 99 ); }
+    static tools::Time      GetInvalidTime() { return tools::Time( 99, 99, 99 ); }
 
     /** enables or disables the enforcement of valid values
 
@@ -662,8 +662,8 @@ public:
 class VCL_DLLPUBLIC TimeField : public SpinField, public TimeFormatter
 {
 private:
-    Time                    maFirst;
-    Time                    maLast;
+    tools::Time                    maFirst;
+    tools::Time                    maLast;
 
 protected:
     SAL_DLLPRIVATE void     ImplTimeSpinArea( bool bUp );
@@ -685,10 +685,10 @@ public:
     virtual void            First() SAL_OVERRIDE;
     virtual void            Last() SAL_OVERRIDE;
 
-    void                    SetFirst( const Time& rNewFirst )   { maFirst = rNewFirst; }
-    Time                    GetFirst() const                    { return maFirst; }
-    void                    SetLast( const Time& rNewLast )     { maLast = rNewLast; }
-    Time                    GetLast() const                     { return maLast; }
+    void                    SetFirst( const tools::Time& rNewFirst )   { maFirst = rNewFirst; }
+    tools::Time             GetFirst() const                    { return maFirst; }
+    void                    SetLast( const tools::Time& rNewLast )     { maLast = rNewLast; }
+    tools::Time             GetLast() const                     { return maLast; }
 
     void                    SetExtFormat( ExtTimeFieldFormat eFormat );
 };

@@ -570,20 +570,20 @@ namespace xmloff
                 }
                 else if (_rValue >>= aTime)
                 {
-                    fValue = aTime.Hours       / static_cast<double>(::Time::hourPerDay) +
-                             aTime.Minutes     / static_cast<double>(::Time::minutePerDay) +
-                             aTime.Seconds     / static_cast<double>(::Time::secondPerDay) +
-                             aTime.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
+                    fValue = aTime.Hours       / static_cast<double>(::tools::Time::hourPerDay) +
+                             aTime.Minutes     / static_cast<double>(::tools::Time::minutePerDay) +
+                             aTime.Seconds     / static_cast<double>(::tools::Time::secondPerDay) +
+                             aTime.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerDay);
                 }
                 else if (_rValue >>= aDateTime)
                 {
                     DateTime aToolsDateTime( DateTime::EMPTY );
                     ::utl::typeConvert(aDateTime, aToolsDateTime);
                     // the time part (the digits behind the comma)
-                    fValue = aTime.Hours       / static_cast<double>(::Time::hourPerDay) +
-                             aTime.Minutes     / static_cast<double>(::Time::minutePerDay) +
-                             aTime.Seconds     / static_cast<double>(::Time::secondPerDay) +
-                             aTime.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
+                    fValue = aTime.Hours       / static_cast<double>(::tools::Time::hourPerDay) +
+                             aTime.Minutes     / static_cast<double>(::tools::Time::minutePerDay) +
+                             aTime.Seconds     / static_cast<double>(::tools::Time::secondPerDay) +
+                             aTime.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerDay);
                     // plus the data part (the digits in front of the comma)
                     fValue += aToolsDateTime.GetDate();
                 }

@@ -790,7 +790,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         }   break;
         case FormComponentType::TIMEFIELD:
         {
-            // <name>=<value> // Value is a Time with the format HH:MM:SS
+            // <name>=<value> // Value is a tools::Time with the format HH:MM:SS
                              // no value (NULL) means empty value
             if( hasProperty(PROPERTY_TIME, xComponentSet) )
             {
@@ -799,7 +799,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 sal_Int32 nInt32Val = 0;
                 if (aVal >>= nInt32Val)
                 {
-                    ::Time aTime(nInt32Val);
+                    ::tools::Time aTime(nInt32Val);
                     OUStringBuffer aBuffer;
                     appendDigits( aTime.GetHour(), 2, aBuffer );
                     aBuffer.append( '-' );
