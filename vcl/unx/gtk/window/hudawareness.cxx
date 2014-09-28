@@ -56,6 +56,7 @@ hud_awareness_register (GDBusConnection       *connection,
                         GError               **error)
 {
   static GDBusInterfaceInfo *iface;
+  static GDBusNodeInfo *info;
   GDBusInterfaceVTable vtable;
   HudAwarenessHandle *handle;
   guint object_id;
@@ -66,7 +67,6 @@ hud_awareness_register (GDBusConnection       *connection,
   if G_UNLIKELY (iface == NULL)
     {
       GError *local_error = NULL;
-      GDBusNodeInfo *info;
 
       info = g_dbus_node_info_new_for_xml ("<node>"
                                              "<interface name='com.canonical.hud.Awareness'>"
@@ -82,13 +82,13 @@ hud_awareness_register (GDBusConnection       *connection,
       g_assert (iface != NULL);
     }
 
-  handle = g_slice_new (HudAwarenessHandle);
+  handle = (HudAwarenessHandle*) g_malloc (sizeof (HudAwarenessHandle));
 
-  object_id = g_dbus_connection_register_object (connection, object_path, iface, &vtable, handle, NULL, error);
+  object_id = g_dbus_connection_register_object (connection, object_path, iface, &vtable, handle, &g_free, error);
 
   if (object_id == 0)
     {
-      g_slice_free (HudAwarenessHandle, handle);
+      g_free (handle);
       return 0;
     }
 
