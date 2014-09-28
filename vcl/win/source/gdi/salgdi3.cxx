@@ -444,7 +444,7 @@ void ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
 bool WinGlyphFallbackSubstititution::HasMissingChars( const PhysicalFontFace* pFace, const OUString& rMissingChars ) const
 {
     const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFace);
-    const FontCharMapPtr pCharMap = pWinFont->GetFontCharMap();
+    FontCharMapPtr pCharMap = pWinFont->GetFontCharMap();
     if( !pCharMap )
     {
         // construct a Size structure as the parameter of constructor of class FontSelectPattern
@@ -1296,7 +1296,7 @@ void ImplWinFontData::ReadCmapTable( HDC hDC ) const
         mbDisableGlyphApi |= aResult.mbRecoded;
         aResult.mbSymbolic = bIsSymbolFont;
         if( aResult.mnRangeCount > 0 )
-            mpUnicodeMap = new FontCharMap( aResult );
+            mpUnicodeMap.reset(new FontCharMap( aResult ));
     }
 
     if( !mpUnicodeMap )
