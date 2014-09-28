@@ -1192,7 +1192,7 @@ bool ImportContext::importTimeProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        ::Time aTTime(toInt32( aValue ) * ::Time::nanoPerCenti);
+        ::tools::Time aTTime(toInt32( aValue ) * ::tools::Time::nanoPerCenti);
         util::Time aUTime(aTTime.GetUNOTime());
         _xControlModel->setPropertyValue( rPropName, makeAny( aUTime ) );
         return true;

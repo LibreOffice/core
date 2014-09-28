@@ -127,7 +127,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
     const bool  bWindow = !( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
     const long  nPause = ( ( const SfxUInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_PAUSE_TIMEOUT ) ).GetValue();
 
-    aTmfPause->SetTime( Time( 0, 0, nPause ) );
+    aTmfPause->SetTime( tools::Time( 0, 0, nPause ) );
     // set cursor in timefield
     Edit *pEdit = aTmfPause->GetField();
     Selection aSel( pEdit->GetMaxTextLen(), pEdit->GetMaxTextLen() );

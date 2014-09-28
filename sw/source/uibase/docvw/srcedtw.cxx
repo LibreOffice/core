@@ -574,7 +574,7 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
 
 IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 {
-    Time aSyntaxCheckStart( Time::SYSTEM );
+    tools::Time aSyntaxCheckStart( tools::Time::SYSTEM );
     SAL_WARN_IF(pTextView == 0, "sw", "No View yet, but syntax highlighting?!");
 
     bHighlighting = true;
@@ -596,7 +596,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
                 nCount++;
                 if(aSyntaxLineTable.empty())
                     break;
-                if((Time( Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime()) > MAX_HIGHLIGHTTIME )
+                if((tools::Time( tools::Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime()) > MAX_HIGHLIGHTTIME )
                 {
                     pTimer->SetTimeout( 2 * SYNTAX_HIGHLIGHT_TIMEOUT );
                     break;
@@ -611,7 +611,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
         DoSyntaxHighlight( nLine );
         aSyntaxLineTable.erase(nLine);
         nCount ++;
-        if(Time( Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
+        if(tools::Time( tools::Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
         {
             pTimer->SetTimeout( 2 * SYNTAX_HIGHLIGHT_TIMEOUT );
             break;

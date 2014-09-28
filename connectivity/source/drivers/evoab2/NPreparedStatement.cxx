@@ -187,7 +187,7 @@ void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, co
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const Time& /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const css::util::Time& /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setTime", *this );
 }

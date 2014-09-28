@@ -685,7 +685,7 @@ void DbgDialogTest( vcl::Window* pWindow )
                 else if ( pChild->GetType() == WINDOW_TIMEFIELD )
                 {
                     TimeField* pField = static_cast<TimeField*>(pChild);
-                    if ( pField->GetMax() == Time( 23, 59, 59, 99 ) )
+                    if ( pField->GetMax() == tools::Time( 23, 59, 59, 99 ) )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_DATEFIELD )
@@ -715,7 +715,7 @@ void DbgDialogTest( vcl::Window* pWindow )
                 else if ( pChild->GetType() == WINDOW_TIMEBOX )
                 {
                     TimeBox* pBox = static_cast<TimeBox*>(pChild);
-                    if ( pBox->GetMax() == Time( 23, 59, 59, 99 ) )
+                    if ( pBox->GetMax() == tools::Time( 23, 59, 59, 99 ) )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_DATEBOX )

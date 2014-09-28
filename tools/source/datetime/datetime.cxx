@@ -30,7 +30,7 @@ bool DateTime::IsBetween( const DateTime& rFrom, const DateTime& rTo ) const
 bool DateTime::operator >( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
-         (Date::operator==( rDateTime ) && Time::operator>( rDateTime )) )
+         (Date::operator==( rDateTime ) && tools::Time::operator>( rDateTime )) )
         return true;
     else
         return false;
@@ -39,7 +39,7 @@ bool DateTime::operator >( const DateTime& rDateTime ) const
 bool DateTime::operator <( const DateTime& rDateTime ) const
 {
     if ( (Date::operator<( rDateTime )) ||
-         (Date::operator==( rDateTime ) && Time::operator<( rDateTime )) )
+         (Date::operator==( rDateTime ) && tools::Time::operator<( rDateTime )) )
         return true;
     else
         return false;
@@ -48,7 +48,7 @@ bool DateTime::operator <( const DateTime& rDateTime ) const
 bool DateTime::operator >=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
-         (Date::operator==( rDateTime ) && Time::operator>=( rDateTime )) )
+         (Date::operator==( rDateTime ) && tools::Time::operator>=( rDateTime )) )
         return true;
     else
         return false;
@@ -57,7 +57,7 @@ bool DateTime::operator >=( const DateTime& rDateTime ) const
 bool DateTime::operator <=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator<( rDateTime )) ||
-         (Date::operator==( rDateTime ) && Time::operator<=( rDateTime )) )
+         (Date::operator==( rDateTime ) && tools::Time::operator<=( rDateTime )) )
         return true;
     else
         return false;
@@ -78,9 +78,9 @@ long DateTime::GetSecFromDateTime( const Date& rDate ) const
     }
 }
 
-DateTime& DateTime::operator +=( const Time& rTime )
+DateTime& DateTime::operator +=( const tools::Time& rTime )
 {
-    Time aTime = *this;
+    tools::Time aTime = *this;
     aTime += rTime;
     sal_uInt16 nHours = aTime.GetHour();
     if ( aTime.GetTime() > 0 )
@@ -102,14 +102,14 @@ DateTime& DateTime::operator +=( const Time& rTime )
         Date::operator--();
         aTime = Time( 24, 0, 0 )+aTime;
     }
-    Time::operator=( aTime );
+    tools::Time::operator=( aTime );
 
     return *this;
 }
 
-DateTime& DateTime::operator -=( const Time& rTime )
+DateTime& DateTime::operator -=( const tools::Time& rTime )
 {
-    Time aTime = *this;
+    tools::Time aTime = *this;
     aTime -= rTime;
     sal_uInt16 nHours = aTime.GetHour();
     if ( aTime.GetTime() > 0 )
@@ -131,7 +131,7 @@ DateTime& DateTime::operator -=( const Time& rTime )
         Date::operator--();
         aTime = Time( 24, 0, 0 )+aTime;
     }
-    Time::operator=( aTime );
+    tools::Time::operator=( aTime );
 
     return *this;
 }
@@ -150,14 +150,14 @@ DateTime operator -( const DateTime& rDateTime, long nDays )
     return aDateTime;
 }
 
-DateTime operator +( const DateTime& rDateTime, const Time& rTime )
+DateTime operator +( const DateTime& rDateTime, const tools::Time& rTime )
 {
     DateTime aDateTime( rDateTime );
     aDateTime += rTime;
     return aDateTime;
 }
 
-DateTime operator -( const DateTime& rDateTime, const Time& rTime )
+DateTime operator -( const DateTime& rDateTime, const tools::Time& rTime )
 {
     DateTime aDateTime( rDateTime );
     aDateTime -= rTime;
@@ -180,8 +180,8 @@ DateTime& DateTime::operator +=( double fTimeInDays )
     Date::operator+=( long(fInt) );     // full days
     if ( fFrac )
     {
-        Time aTime(0);  // default ctor calls system time, we don't need that
-        fFrac *= ::Time::nanoSecPerDay;   // time expressed in nanoseconds
+        tools::Time aTime(0);  // default ctor calls system time, we don't need that
+        fFrac *= ::tools::Time::nanoSecPerDay;   // time expressed in nanoseconds
         aTime.MakeTimeFromNS( static_cast<sal_Int64>(fFrac) );    // method handles negative ns
         operator+=( aTime );
     }
@@ -202,7 +202,7 @@ double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
     if ( nTime )
     {
         double fTime = double(nTime);
-        fTime /= ::Time::nanoSecPerDay; // convert from nanoseconds to fraction
+        fTime /= ::tools::Time::nanoSecPerDay; // convert from nanoseconds to fraction
         if ( nDays < 0 && fTime > 0.0 )
             fTime = 1.0 - fTime;
         return double(nDays) + fTime;
@@ -259,7 +259,7 @@ DateTime DateTime::CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const
     Date _aDate(
         (sal_uInt16)( nDays + 1 ), nMonths,
         sal::static_int_cast< sal_uInt16 >(nYears + 1601) );
-    Time _aTime( sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
+    tools::Time _aTime( sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
                  sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 ) )      % sal_Int64( 60 ) ),
                  sal_uIntPtr( ( aTime / ( a100nPerSecond ) )           % sal_Int64( 60 ) ),
                  (aTime % a100nPerSecond) * 100 );

@@ -123,7 +123,7 @@ private:
     HelpButton      aBtnHelp;
 
     vcl::Window*       pWin;
-    ::std::vector< ::std::pair<BitmapEx*, Time*> > m_FrameList;
+    ::std::vector< ::std::pair<BitmapEx*, ::tools::Time*> > m_FrameList;
     static const size_t EMPTY_FRAMELIST = ULONG_MAX;
     size_t          m_nCurrentFrame;
     SdDrawDocument* pMyDoc;

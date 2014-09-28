@@ -646,7 +646,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
             DUMP_ICU_CAL_MSG(("%s\n","setValue() after Zone/DST glitch resubmit"));
             DUMP_I18N_CAL_MSG(("%s\n","setValue() after Zone/DST glitch resubmit"));
 
-            // Time zone transition => resubmit.
+            // tools::Time zone transition => resubmit.
             // TZ=America/St_Johns date <= 1935-03-30
             //      -3:30:52 (!) instead of -3:30
             //      if first submission included time zone -3:30 that would be wrong.

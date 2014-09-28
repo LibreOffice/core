@@ -576,7 +576,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
     static bool bTimesInited(false);
     static sal_uInt32 nRepeatCount(10L);
     static double fLastTimes[REMEMBERED_TIMES_COUNT];
-    const sal_uInt32 nStartTime(Time::GetSystemTicks());
+    const sal_uInt32 nStartTime(tools::Time::GetSystemTicks());
     sal_uInt32 count(1L);
     sal_uInt32 a;
 
@@ -650,7 +650,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
 
     if(bDoTimerTest)
     {
-        const sal_uInt32 nStopTime(Time::GetSystemTicks());
+        const sal_uInt32 nStopTime(tools::Time::GetSystemTicks());
         const sal_uInt32 nNeededTime(nStopTime - nStartTime);
         const double fTimePerPaint((double)nNeededTime / (double)nRepeatCount);
 

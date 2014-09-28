@@ -127,7 +127,7 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
     {
         util::Time aTime;
         OSL_VERIFY(m_aDefault >>= aTime);
-        _rxOutStream->writeHyper(::Time(aTime).GetTime());
+        _rxOutStream->writeHyper(::tools::Time(aTime).GetTime());
     }
     else if ((nAnyMask & DEFAULT_DATE) == DEFAULT_DATE)
     {
@@ -193,7 +193,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
         }
         else if ((nAnyMask & DEFAULT_TIME) == DEFAULT_TIME)
         {
-            m_aDefault <<= ::Time(_rxInStream->readHyper()).GetUNOTime();
+            m_aDefault <<= ::tools::Time(_rxInStream->readHyper()).GetUNOTime();
         }
         else if ((nAnyMask & DEFAULT_DATE) == DEFAULT_DATE)
         {

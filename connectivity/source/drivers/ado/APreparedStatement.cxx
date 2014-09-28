@@ -307,7 +307,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
     setParameter(parameterIndex,adDBDate,sizeof(x),x);
 }
 
-void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& x ) throw(SQLException, RuntimeException)
 {
     setParameter(parameterIndex,adDBTime,sizeof(x),x);
 }

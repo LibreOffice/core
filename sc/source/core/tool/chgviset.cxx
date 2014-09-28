@@ -135,7 +135,7 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
                     // Set the next minute as the start time and assume that
                     // the document isn't saved, reloaded, edited and filter set
                     // all together during the gap between those two times.
-                    aFirstDateTime += Time( 0, 1 );
+                    aFirstDateTime += tools::Time( 0, 1 );
                     aFirstDateTime.SetSec(0);
                     aFirstDateTime.SetNanoSec(0);
                 }

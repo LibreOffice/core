@@ -97,17 +97,17 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             case 9: // DateTime dd/mm/yy H:MM:SS PM
                 lclCreateTextFields( aFields, xModel, "datetime13" );
                 break;
-            case 10: // Time H:MM
+            case 10: // tools::Time H:MM
                 bIsDate = false;
                 break;
-            case 11: // Time H:MM:SS
+            case 11: // tools::Time H:MM:SS
                 bIsDate = false;
                 // this is the default format
                 break;
-            case 12: // Time H:MM PM
+            case 12: // tools::Time H:MM PM
                 bIsDate = false;
                 break;
-            case 13: // Time H:MM:SS PM
+            case 13: // tools::Time H:MM:SS PM
                 bIsDate = false;
                 break;
             }

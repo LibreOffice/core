@@ -87,16 +87,16 @@ Timer::Timer()
 {
 }
 
-Timer::Timer( const TTimeValue& Time )
-    : m_aTimeOut( Time ),
+Timer::Timer( const TTimeValue& rTime )
+    : m_aTimeOut( rTime ),
       m_aExpired( 0 ),
       m_aRepeatDelta( 0 ),
       m_pNext( NULL )
 {
 }
 
-Timer::Timer( const TTimeValue& Time, const TTimeValue& Repeat )
-    : m_aTimeOut( Time ),
+Timer::Timer( const TTimeValue& rTime, const TTimeValue& Repeat )
+    : m_aTimeOut( rTime ),
       m_aExpired( 0 ),
       m_aRepeatDelta( Repeat ),
       m_pNext( NULL )

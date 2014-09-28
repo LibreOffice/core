@@ -23,7 +23,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED DateTime : public Date, public Time
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED DateTime : public Date, public tools::Time
 {
 public:
     enum DateTimeInitSystem
@@ -42,8 +42,8 @@ public:
                     DateTime( const DateTime& rDateTime ) :
                         Date( rDateTime ), Time( rDateTime ) {}
                     DateTime( const Date& rDate ) : Date( rDate ), Time(0) {}
-                    DateTime( const Time& rTime ) : Date(0), Time( rTime ) {}
-                    DateTime( const Date& rDate, const Time& rTime ) :
+                    DateTime( const tools::Time& rTime ) : Date(0), Time( rTime ) {}
+                    DateTime( const Date& rDate, const tools::Time& rTime ) :
                         Date( rDate ), Time( rTime ) {}
 
     bool            IsBetween( const DateTime& rFrom,
@@ -79,16 +79,16 @@ public:
     DateTime&       operator +=( double fTimeInDays );
     DateTime&       operator -=( double fTimeInDays )
                         { return operator+=( -fTimeInDays ); }
-    DateTime&       operator +=( const Time& rTime );
-    DateTime&       operator -=( const Time& rTime );
+    DateTime&       operator +=( const tools::Time& rTime );
+    DateTime&       operator -=( const tools::Time& rTime );
 
     TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, long nDays );
     TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, long nDays );
     TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, double fTimeInDays );
     TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, double fTimeInDays )
                         { return operator+( rDateTime, -fTimeInDays ); }
-    TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, const Time& rTime );
-    TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, const Time& rTime );
+    TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, const tools::Time& rTime );
+    TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, const tools::Time& rTime );
     TOOLS_DLLPUBLIC friend double   operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 );
     TOOLS_DLLPUBLIC friend long     operator -( const DateTime& rDateTime, const Date& rDate )
                         { return (const Date&) rDateTime - rDate; }

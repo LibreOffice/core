@@ -2661,7 +2661,7 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
                        .ReadInt32( nPosX )
                        .ReadInt32( nPosY );
 
-                aDateTime.NanoSeconds *= ::Time::nanoPerMilli;
+                aDateTime.NanoSeconds *= ::tools::Time::nanoPerMilli;
             }
             break;
         }
@@ -6299,7 +6299,7 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
         pField1 = new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_VAR, eDateFormat ), EE_FEATURE_FIELD );
     if ( eTimeFormat != SVXTIMEFORMAT_APPDEFAULT )
     {
-        SvxFieldItem* pFieldItem = new SvxFieldItem( SvxExtTimeField( Time( Time::SYSTEM ), SVXTIMETYPE_VAR, eTimeFormat ), EE_FEATURE_FIELD );
+        SvxFieldItem* pFieldItem = new SvxFieldItem( SvxExtTimeField( tools::Time( tools::Time::SYSTEM ), SVXTIMETYPE_VAR, eTimeFormat ), EE_FEATURE_FIELD );
         if ( pField1 )
             pField2 = pFieldItem;
         else

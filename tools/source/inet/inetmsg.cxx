@@ -224,7 +224,7 @@ INetRFC822Message::~INetRFC822Message()
 
 /* ParseDateField and local helper functions.
  *
- * Parses a String in (implied) GMT format into class Date and Time objects.
+ * Parses a String in (implied) GMT format into class Date and tools::Time objects.
  * Four formats are accepted:
  *
  *  [Wkd,] 1*2DIGIT Mon 2*4DIGIT 00:00:00 [GMT]  (rfc1123)
@@ -335,7 +335,7 @@ bool INetRFC822Message::ParseDateField (
                 sal_uInt16 nOffset = ParseNumber (aDateField, nIndex);
                 if (nOffset > 0)
                 {
-                    Time aDiff( Time::EMPTY );
+                    tools::Time aDiff( tools::Time::EMPTY );
                     aDiff.SetHour   (nOffset / 100);
                     aDiff.SetMin    (nOffset % 100);
                     aDiff.SetSec    (0);
@@ -352,7 +352,7 @@ bool INetRFC822Message::ParseDateField (
     else if (comphelper::string::isdigitAsciiString(aDateField))
     {
         // Format: delta seconds.
-        Time aDelta (0);
+        tools::Time aDelta (0);
         aDelta.SetTime (aDateField.toInt32() * 100);
 
         DateTime aNow( DateTime::SYSTEM );
@@ -977,7 +977,7 @@ bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
     {
         // Generate a unique boundary from current time.
         sal_Char sTail[16 + 1];
-        Time aCurTime( Time::SYSTEM );
+        tools::Time aCurTime( tools::Time::SYSTEM );
         sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); // we can be on a 64bit architecture
         nThis = ( ( nThis >> 32 ) ^ nThis ) & SAL_MAX_UINT32;
         sprintf (sTail, "%08X%08X",

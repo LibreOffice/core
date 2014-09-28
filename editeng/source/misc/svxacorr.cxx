@@ -1551,7 +1551,7 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
 
     SvxAutoCorrectLanguageListsPtr pLists = 0;
 
-    Time nMinTime( 0, 2 ), nAktTime( Time::SYSTEM ), nLastCheckTime( Time::EMPTY );
+    tools::Time nMinTime( 0, 2 ), nAktTime( tools::Time::SYSTEM ), nLastCheckTime( tools::Time::EMPTY );
 
     std::map<LanguageTag, long>::iterator nFndPos = aLastFileTable.find(rLanguageTag);
     if(nFndPos != aLastFileTable.end() &&
@@ -1925,8 +1925,8 @@ SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
 :   sShareAutoCorrFile( rShareAutoCorrectFile ),
     sUserAutoCorrFile( rUserAutoCorrectFile ),
     aModifiedDate( Date::EMPTY ),
-    aModifiedTime( Time::EMPTY ),
-    aLastCheckTime( Time::EMPTY ),
+    aModifiedTime( tools::Time::EMPTY ),
+    aLastCheckTime( tools::Time::EMPTY ),
     pCplStt_ExcptLst( 0 ),
     pWrdStt_ExcptLst( 0 ),
     pAutocorr_List( 0 ),
@@ -1947,12 +1947,12 @@ bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
     // Access the file system only every 2 minutes to check the date stamp
     bool bRet = false;
 
-    Time nMinTime( 0, 2 );
-    Time nAktTime( Time::SYSTEM );
+    tools::Time nMinTime( 0, 2 );
+    tools::Time nAktTime( tools::Time::SYSTEM );
     if( aLastCheckTime > nAktTime ||                    // overflow?
         ( nAktTime -= aLastCheckTime ) > nMinTime )     // min time past
     {
-        Date aTstDate( Date::EMPTY ); Time aTstTime( Time::EMPTY );
+        Date aTstDate( Date::EMPTY ); tools::Time aTstTime( tools::Time::EMPTY );
         if( FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
                                             &aTstDate, &aTstTime ) &&
             ( aModifiedDate != aTstDate || aModifiedTime != aTstTime ))
@@ -1967,7 +1967,7 @@ bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
                 delete pAutocorr_List, pAutocorr_List = 0;
             nFlags &= ~(CplSttLstLoad | WrdSttLstLoad | ChgWordLstLoad );
         }
-        aLastCheckTime = Time( Time::SYSTEM );
+        aLastCheckTime = tools::Time( tools::Time::SYSTEM );
     }
     return bRet;
 }
@@ -2038,7 +2038,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
         // Set time stamp
         FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
                                         &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time( Time::SYSTEM );
+        aLastCheckTime = tools::Time( tools::Time::SYSTEM );
     }
 
 }
@@ -2138,7 +2138,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     // Set time stamp
     FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
                                     &aModifiedDate, &aModifiedTime );
-    aLastCheckTime = Time( Time::SYSTEM );
+    aLastCheckTime = tools::Time( tools::Time::SYSTEM );
 
     return pAutocorr_List;
 }
@@ -2184,7 +2184,7 @@ bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
         // Set time stamp
         FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time( Time::SYSTEM );
+        aLastCheckTime = tools::Time( tools::Time::SYSTEM );
         aRet = true;
     }
     return aRet;
@@ -2205,7 +2205,7 @@ bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const OUString& rNew)
         // Set time stamp
         FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time( Time::SYSTEM );
+        aLastCheckTime = tools::Time( tools::Time::SYSTEM );
         aRet = true;
     }
     return aRet;
@@ -2238,7 +2238,7 @@ void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
     // Set time stamp
     FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
-    aLastCheckTime = Time( Time::SYSTEM );
+    aLastCheckTime = tools::Time( tools::Time::SYSTEM );
 }
 
 void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList )
@@ -2282,7 +2282,7 @@ void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
     // Set time stamp
     FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
-    aLastCheckTime = Time( Time::SYSTEM );
+    aLastCheckTime = tools::Time( tools::Time::SYSTEM );
 }
 
 void SvxAutoCorrectLanguageLists::SetWrdSttExceptList( SvStringsISortDtor* pList )

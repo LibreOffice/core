@@ -124,7 +124,7 @@ const sal_uInt16 BIFF_PCDEFINITION_ENABLEREFRESH    = 0x0020;
 /** Adjusts the weird date format read from binary streams.
 
     Dates before 1900-Mar-01 are stored including the non-existing leap day
-    1900-02-29. Time values (without date) are stored as times of day
+    1900-02-29. tools::Time values (without date) are stored as times of day
     1900-Jan-00. Nothing has to be done when the workbook is stored in 1904
     date mode (dates before 1904-Jan-01 will not occur in this case).
  */

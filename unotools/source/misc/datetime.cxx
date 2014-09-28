@@ -205,7 +205,7 @@ void typeConvert(const DateTime& _rDateTime, css::util::DateTime& _rOut)
 void typeConvert(const css::util::DateTime& _rDateTime, DateTime& _rOut)
 {
     Date aDate(_rDateTime.Day, _rDateTime.Month, _rDateTime.Year);
-    Time aTime(_rDateTime.Hours, _rDateTime.Minutes, _rDateTime.Seconds, _rDateTime.NanoSeconds);
+    tools::Time aTime(_rDateTime.Hours, _rDateTime.Minutes, _rDateTime.Seconds, _rDateTime.NanoSeconds);
     _rOut = DateTime(aDate, aTime);
 }
 
@@ -338,7 +338,7 @@ bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
     return bSuccess;
 }
 
-/** convert ISO8601 Time String to util::Time */
+/** convert ISO8601 tools::Time String to util::Time */
 bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
 {
     bool bSuccess = true;

@@ -52,7 +52,7 @@ namespace svt
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
     aToolsDT = ::DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
-                           Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.NanoSeconds ) );
+                           tools::Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.NanoSeconds ) );
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;

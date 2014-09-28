@@ -411,9 +411,9 @@ void MediaControl::implUpdateTimeField( double fCurTime )
         SvtSysLocale aSysLocale;
         const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
 
-        aTimeString += rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( fCurTime ) ) ) ) +
+        aTimeString += rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( fCurTime ) ) ) ) +
             " / " +
-            rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( maItem.getDuration() ) )) );
+            rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( maItem.getDuration() ) )) );
 
         if( maTimeEdit.GetText() != aTimeString )
             maTimeEdit.SetText( aTimeString );

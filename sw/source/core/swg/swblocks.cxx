@@ -87,7 +87,7 @@ short SwImpBlocks::GetFileType( const OUString& rFile )
 SwImpBlocks::SwImpBlocks( const OUString& rFile, bool )
     : aFile( rFile ),
     aDateModified( Date::EMPTY ),
-    aTimeModified( Time::EMPTY ),
+    aTimeModified( tools::Time::EMPTY ),
     pDoc( 0 ), nCur( (sal_uInt16)-1 ),
     bReadOnly( true ), bInPutMuchBlocks( false ),
     bInfoChanged(false)
@@ -193,7 +193,7 @@ void SwImpBlocks::AddName( const OUString& rShort, const OUString& rLong,
 bool SwImpBlocks::IsFileChanged() const
 {
     Date aTempDateModified( aDateModified );
-    Time aTempTimeModified( aTimeModified );
+    tools::Time aTempTimeModified( aTimeModified );
     return FStatHelper::GetModifiedDateTimeOfFile( aFile,
                             &aTempDateModified, &aTempTimeModified ) &&
           ( aDateModified != aTempDateModified ||

@@ -1331,7 +1331,7 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
     return OUString(aBuf, pBuf-aBuf);
 }
 
-OUString LocaleDataWrapper::getTime( const Time& rTime, bool bSec, bool b100Sec ) const
+OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
 //!TODO: leading zeros et al
@@ -1403,13 +1403,13 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
     return aStr;
 }
 
-OUString LocaleDataWrapper::getDuration( const Time& rTime, bool bSec, bool b100Sec ) const
+OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
 
-    if ( rTime < Time( 0 ) )
+    if ( rTime < tools::Time( 0 ) )
         pBuf = ImplAddString( pBuf, ' ' );
 
     if ( true /* IsTimeLeadingZero() */ )

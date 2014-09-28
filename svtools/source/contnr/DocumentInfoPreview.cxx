@@ -156,7 +156,7 @@ void ODocumentInfoPreview::insertDateTime(
 {
     DateTime aToolsDT(
         Date(value.Day, value.Month, value.Year),
-        Time(
+        tools::Time(
             value.Hours, value.Minutes, value.Seconds, value.NanoSeconds));
     if (aToolsDT.IsValidAndGregorian()) {
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );

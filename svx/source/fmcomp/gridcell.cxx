@@ -2355,7 +2355,7 @@ namespace
                     _rField.SetText( sTime );
                 else
                 {
-                    _rField.SetTime( ::Time( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds ) );
+                    _rField.SetTime( ::tools::Time( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds ) );
                     sTime = _rField.GetText();
                 }
             }
@@ -2386,7 +2386,7 @@ void DbTimeField::updateFromModel( Reference< XPropertySet > _rxModel )
 
     util::Time aTime;
     if ( _rxModel->getPropertyValue( FM_PROP_DATE ) >>= aTime )
-        static_cast< TimeField* >( m_pWindow )->SetTime( ::Time( aTime ) );
+        static_cast< TimeField* >( m_pWindow )->SetTime( ::tools::Time( aTime ) );
     else
         static_cast< TimeField* >( m_pWindow )->SetText( OUString() );
 }

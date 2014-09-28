@@ -1102,7 +1102,7 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) thr
 }
 
 
-void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const Time& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const css::util::Time& x ) throw(SQLException, RuntimeException, std::exception)
 {
     TIME_STRUCT aVal = OTools::TimeToOdbcTime(x);
     updateValue(columnIndex,SQL_TIME,&aVal);

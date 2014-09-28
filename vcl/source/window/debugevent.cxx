@@ -122,7 +122,7 @@ static void InitKeyEvent( SalKeyEvent &rKeyEvent )
     if (nRand < 0.001)
         rKeyEvent.mnTime = getRandom() * ULONG_MAX;
     else
-        rKeyEvent.mnTime = Time::GetSystemTicks();
+        rKeyEvent.mnTime = tools::Time::GetSystemTicks();
 
     if (getRandom() < 0.01)
         rKeyEvent.mnRepeat = getRandom() * 20;

@@ -288,7 +288,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                         case TYPE_TIME:
                         {
                             OSL_ENSURE(((sal_uInt32)nValue) == 0,
-                                "OPropertyImport::convertString: a Time value with more than a fractional part?");
+                                "OPropertyImport::convertString: a tools::Time value with more than a fractional part?");
                             aReturn <<= implGetTime(nValue);
                         }
                         break;

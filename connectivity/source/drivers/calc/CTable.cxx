@@ -362,12 +362,12 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                 {
                     double fCellVal = xCell->getValue();
                     double fTime = fCellVal - rtl::math::approxFloor( fCellVal );
-                    sal_Int64 nIntTime = static_cast<sal_Int64>(rtl::math::round( fTime * static_cast<double>(::Time::nanoSecPerDay) ));
-                    if ( nIntTime ==  ::Time::nanoSecPerDay)
+                    sal_Int64 nIntTime = static_cast<sal_Int64>(rtl::math::round( fTime * static_cast<double>(::tools::Time::nanoSecPerDay) ));
+                    if ( nIntTime ==  ::tools::Time::nanoSecPerDay)
                         nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
                     ::com::sun::star::util::Time aTime;
-                    aTime.NanoSeconds = (sal_uInt32)( nIntTime % ::Time::nanoSecPerSec );
-                    nIntTime /= ::Time::nanoSecPerSec;
+                    aTime.NanoSeconds = (sal_uInt32)( nIntTime % ::tools::Time::nanoSecPerSec );
+                    nIntTime /= ::tools::Time::nanoSecPerSec;
                     aTime.Seconds = (sal_uInt16)( nIntTime % 60 );
                     nIntTime /= 60;
                     aTime.Minutes = (sal_uInt16)( nIntTime % 60 );
@@ -386,8 +386,8 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     double fDays = ::rtl::math::approxFloor( fCellVal );
                     double fTime = fCellVal - fDays;
                     long nIntDays = (long)fDays;
-                    sal_Int64 nIntTime = ::rtl::math::round( fTime * static_cast<double>(::Time::nanoSecPerDay) );
-                    if ( nIntTime == ::Time::nanoSecPerDay )
+                    sal_Int64 nIntTime = ::rtl::math::round( fTime * static_cast<double>(::tools::Time::nanoSecPerDay) );
+                    if ( nIntTime == ::tools::Time::nanoSecPerDay )
                     {
                         nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
                         ++nIntDays;                         // (next day)
@@ -395,8 +395,8 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
 
                     ::com::sun::star::util::DateTime aDateTime;
 
-                    aDateTime.NanoSeconds = (sal_uInt16)( nIntTime % ::Time::nanoSecPerSec );
-                    nIntTime /= ::Time::nanoSecPerSec;
+                    aDateTime.NanoSeconds = (sal_uInt16)( nIntTime % ::tools::Time::nanoSecPerSec );
+                    nIntTime /= ::tools::Time::nanoSecPerSec;
                     aDateTime.Seconds = (sal_uInt16)( nIntTime % 60 );
                     nIntTime /= 60;
                     aDateTime.Minutes = (sal_uInt16)( nIntTime % 60 );

@@ -196,7 +196,7 @@ struct ScHeaderFieldData
     OUString    aShortDocName;      // pure file name
     OUString    aTabName;
     Date        aDate;
-    Time        aTime;
+    tools::Time aTime;
     long        nPageNo;
     long        nTotalPages;
     SvxNumType  eNumType;

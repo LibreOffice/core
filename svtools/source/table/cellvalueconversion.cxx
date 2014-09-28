@@ -76,7 +76,7 @@ namespace svt
 
         double lcl_convertTimeToDays( long const i_hours, long const i_minutes, long const i_seconds, long const i_100thSeconds )
         {
-            return Time( i_hours, i_minutes, i_seconds, i_100thSeconds ).GetTimeInDays();
+            return tools::Time( i_hours, i_minutes, i_seconds, i_100thSeconds ).GetTimeInDays();
         }
     }
 
@@ -296,7 +296,7 @@ namespace svt
 
             // extract
             UnoTime aTimeValue;
-            ENSURE_OR_RETURN( i_value >>= aTimeValue, "allowed for Time values only", returnValue );
+            ENSURE_OR_RETURN( i_value >>= aTimeValue, "allowed for tools::Time values only", returnValue );
 
             // convert
             returnValue += lcl_convertTimeToDays(

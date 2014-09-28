@@ -524,7 +524,7 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 column)
     MutexGuard aGuard(m_aMutex);
 
     checkColumnIndex(column);
-    Time t;
+    tools::Time t;
     OUString timeString = getString(column);
     OUString token;
     sal_Int32 nIndex, i=0;
@@ -562,7 +562,7 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
     checkColumnIndex(column);
     DateTime dt;
     Date d = getDate(column);
-    Time t = getTime(column);
+    tools::Time t = getTime(column);
 
     dt.Year = d.Year;
     dt.Month = d.Month;
@@ -1088,7 +1088,7 @@ void SAL_CALL OResultSet::updateDate(sal_Int32 column, const Date& /* x */)
 /* }}} */
 
 /* {{{ OResultSet::updateTime() -U- */
-void SAL_CALL OResultSet::updateTime(sal_Int32 column, const Time& /* x */)
+void SAL_CALL OResultSet::updateTime(sal_Int32 column, const tools::Time& /* x */)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::updateTime");

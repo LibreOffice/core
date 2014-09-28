@@ -81,7 +81,7 @@ Size SFX2_DLLPUBLIC getPreviewOptionsSize(const vcl::Window *pReference)
 OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper)
 {
     Date aDate(22, 12, 2000);
-    Time aTime(22, 59, 59);
+    tools::Time aTime(22, 59, 59);
     DateTime aDateTime(aDate, aTime);
     return formatTime(aDateTime, rWrapper);
 }

@@ -64,7 +64,7 @@ DateTime DTTM2DateTime( long lDTTM )
                                             Friday=5
                                             Saturday=6)
     */
-    DateTime aDateTime(Date( 0 ), Time( 0 ));
+    DateTime aDateTime(Date( 0 ), ::tools::Time( 0 ));
     if( lDTTM )
     {
         sal_uInt16 lMin = (sal_uInt16)(lDTTM & 0x0000003F);
@@ -76,7 +76,7 @@ DateTime DTTM2DateTime( long lDTTM )
         sal_uInt16 lMon = (sal_uInt16)(lDTTM & 0x0000000F);
         lDTTM >>= 4;
         sal_uInt16 lYear= (sal_uInt16)(lDTTM & 0x000001FF) + 1900;
-        aDateTime = DateTime(Date(lDay, lMon, lYear), Time(lHour, lMin));
+        aDateTime = DateTime(Date(lDay, lMon, lYear), tools::Time(lHour, lMin));
     }
     return aDateTime;
 }

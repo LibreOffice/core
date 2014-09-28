@@ -252,7 +252,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     bool bBtnGetOneObjectEnabled = aBtnGetOneObject.IsEnabled();
 
     // calculate overall time
-    Time aTime( 0 );
+    tools::Time aTime( 0 );
     long nFullTime;
     if( aRbtBitmap.IsChecked() )
     {
@@ -296,7 +296,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 
         if( aRbtBitmap.IsChecked() )
         {
-            Time *const pTime = m_FrameList[i].second;
+            tools::Time *const pTime = m_FrameList[i].second;
             assert(pTime);
 
             aTimeField.SetTime( *pTime );
@@ -378,7 +378,7 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
         sal_uLong n = static_cast<sal_uLong>(aNumFldBitmap.GetValue());
         if( n > 0 )
         {
-            Time *const pTime = m_FrameList[n - 1].second;
+            tools::Time *const pTime = m_FrameList[n - 1].second;
             if( pTime )
                 aTimeField.SetTime( *pTime );
         }
@@ -506,7 +506,7 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 {
     sal_uLong nPos = static_cast<sal_uLong>(aNumFldBitmap.GetValue() - 1);
 
-    Time *const pTime = m_FrameList[nPos].second;
+    tools::Time *const pTime = m_FrameList[nPos].second;
 
     *pTime = aTimeField.GetTime();
 
@@ -627,11 +627,11 @@ void AnimationWindow::ResetAttrs()
 void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                     SfxProgress* pProgress ) const
 {
-    clock_t aEnd = Time::GetSystemTicks() + nMilliSeconds;
-    clock_t aCurrent = Time::GetSystemTicks();
+    clock_t aEnd = tools::Time::GetSystemTicks() + nMilliSeconds;
+    clock_t aCurrent = tools::Time::GetSystemTicks();
     while (aCurrent < aEnd)
     {
-        aCurrent = Time::GetSystemTicks();
+        aCurrent = tools::Time::GetSystemTicks();
 
         if( pProgress )
             pProgress->SetState( nTime + nMilliSeconds + aCurrent - aEnd );
@@ -847,7 +847,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         }
 
                         long nTime = rAnimBmp.nWait;
-                        Time* pTime = new Time( 0, 0, nTime / 100, nTime % 100 );
+                        ::tools::Time* pTime = new ::tools::Time( 0, 0, nTime / 100, nTime % 100 );
                         m_FrameList.insert(
                                 m_FrameList.begin() + m_nCurrentFrame + 1,
                                 ::std::make_pair(pBitmapEx, pTime));
@@ -874,7 +874,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         SdrExchangeView::GetObjGraphic(
                             pSnapShot->GetModel(), pSnapShot).GetBitmapEx() );
 
-                    Time* pTime = new Time( aTimeField.GetTime() );
+                    ::tools::Time* pTime = new ::tools::Time( aTimeField.GetTime() );
 
                     m_FrameList.insert(
                             m_FrameList.begin() + m_nCurrentFrame + 1,
@@ -895,7 +895,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
             BitmapEx *const pBitmapEx =
                 new BitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
 
-            Time* pTime = new Time( aTimeField.GetTime() );
+            ::tools::Time* pTime = new ::tools::Time( aTimeField.GetTime() );
 
             m_FrameList.insert(
                     m_FrameList.begin() + m_nCurrentFrame + 1,
@@ -925,7 +925,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         SdrExchangeView::GetObjGraphic(
                             pObject->GetModel(), pObject).GetBitmapEx() );
 
-                    Time* pTime = new Time( aTimeField.GetTime() );
+                    ::tools::Time* pTime = new ::tools::Time( aTimeField.GetTime() );
 
                     m_FrameList.insert(
                         m_FrameList.begin() + m_nCurrentFrame + 1,
@@ -1015,7 +1015,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
         for (size_t i = 0; i < nCount; ++i)
         {
-            Time *const pTime = m_FrameList[i].second;
+            tools::Time *const pTime = m_FrameList[i].second;
             long  nTime = pTime->GetNanoSec();
             nTime += pTime->GetSec() * 100;
 

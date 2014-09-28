@@ -182,7 +182,7 @@ IMPL_LINK_NOARG_INLINE_END(SvxPostItDialog, NextHdl)
 IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
 {
     Date aDate( Date::SYSTEM );
-    Time aTime( Time::SYSTEM );
+    tools::Time aTime( tools::Time::SYSTEM );
     OUString aTmp( SvtUserOptions().GetID() );
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     OUString aStr( m_pEditED->GetText() );

@@ -24,7 +24,7 @@
 #include <svl/svldllapi.h>
 
 class Date;
-class Time;
+namespace tools { class Time; }
 
 namespace FStatHelper {
 
@@ -39,7 +39,7 @@ namespace FStatHelper {
     @return     it was be able to get the date/time stamp
 */
 SVL_DLLPUBLIC bool GetModifiedDateTimeOfFile( const OUString& rURL,
-                                    Date* pDate, Time* pTime );
+                                    Date* pDate, tools::Time* pTime );
 
 /** Return if under the URL a document exist. This is only a wrapper for the
     UCB.IsContent.

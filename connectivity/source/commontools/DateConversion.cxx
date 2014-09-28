@@ -173,7 +173,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                 }   break;
                 case DataType::TIME:
                 {
-                    Time aTime;
+                    css::util::Time aTime;
                     bool bOk = false;
                     if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE)
                     {

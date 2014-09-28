@@ -28,7 +28,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 class Date;
-class Time;
+namespace tools { class Time; }
 class DateTime;
 
 namespace utl

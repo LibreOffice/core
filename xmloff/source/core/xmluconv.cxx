@@ -305,21 +305,21 @@ bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <com::
     return false;
 }
 
-/** convert double to ISO Date Time String */
+/** convert double to ISO Date tools::Time String */
 void SvXMLUnitConverter::convertDateTime(OUStringBuffer& rBuffer,
                      const double& fDateTime, bool const bAddTimeIf0AM)
 {
     convertDateTime(rBuffer, fDateTime, m_pImpl->m_aNullDate, bAddTimeIf0AM);
 }
 
-/** convert ISO Date Time String to double */
+/** convert ISO Date tools::Time String to double */
 bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
                      const OUString& rString)
 {
     return convertDateTime(fDateTime, rString, m_pImpl->m_aNullDate);
 }
 
-/** convert double to ISO Date Time String */
+/** convert double to ISO Date tools::Time String */
 void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
         const double& fDateTime,
         const com::sun::star::util::Date& aTempNullDate,
@@ -427,7 +427,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     }
 }
 
-/** convert ISO Date Time String to double */
+/** convert ISO Date tools::Time String to double */
 bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
                             const OUString& rString, const com::sun::star::util::Date& aTempNullDate)
 {
@@ -444,10 +444,10 @@ bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
         double Min = aDateTime.Minutes;
         double Sec = aDateTime.Seconds;
         double NanoSec = aDateTime.NanoSeconds;
-        fTempDateTime += Hour    / ::Time::hourPerDay;
-        fTempDateTime += Min     / ::Time::minutePerDay;
-        fTempDateTime += Sec     / ::Time::secondPerDay;
-        fTempDateTime += NanoSec / ::Time::nanoSecPerDay;
+        fTempDateTime += Hour    / ::tools::Time::hourPerDay;
+        fTempDateTime += Min     / ::tools::Time::minutePerDay;
+        fTempDateTime += Sec     / ::tools::Time::secondPerDay;
+        fTempDateTime += NanoSec / ::tools::Time::nanoSecPerDay;
         fDateTime = fTempDateTime;
     }
     return bSuccess;

@@ -58,7 +58,7 @@ namespace svt
 
     SvStream& WriteDateTime( SvStream& _rStorage, const util::DateTime& _rDate )
     {
-        sal_uInt16 hundredthSeconds = static_cast< sal_uInt16 >( _rDate.NanoSeconds / Time::nanoPerCenti );
+        sal_uInt16 hundredthSeconds = static_cast< sal_uInt16 >( _rDate.NanoSeconds / tools::Time::nanoPerCenti );
         _rStorage.WriteUInt16( hundredthSeconds );
 
         _rStorage.WriteUInt16( _rDate.Seconds );
@@ -76,7 +76,7 @@ namespace svt
     {
         sal_uInt16 hundredthSeconds;
         _rStorage.ReadUInt16( hundredthSeconds );
-        _rDate.NanoSeconds = static_cast< sal_uInt32 >( hundredthSeconds ) * Time::nanoPerCenti;
+        _rDate.NanoSeconds = static_cast< sal_uInt32 >( hundredthSeconds ) * tools::Time::nanoPerCenti;
 
         _rStorage.ReadUInt16( _rDate.Seconds );
         _rStorage.ReadUInt16( _rDate.Minutes );

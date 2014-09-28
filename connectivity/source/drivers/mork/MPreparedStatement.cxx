@@ -228,7 +228,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const D
 
 
 
-void SAL_CALL OPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const Time& /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const css::util::Time& /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setTime", *this );
 }

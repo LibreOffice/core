@@ -401,7 +401,7 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 nIndex, const Date& rDate)
     setValue< ISC_DATE >(nIndex, aISCDate, SQL_TYPE_DATE);
 }
 
-void SAL_CALL OPreparedStatement::setTime( sal_Int32 nIndex, const Time& rTime)
+void SAL_CALL OPreparedStatement::setTime( sal_Int32 nIndex, const css::util::Time& rTime)
     throw(SQLException, RuntimeException, std::exception)
 {
     struct tm aCTime;

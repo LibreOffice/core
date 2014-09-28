@@ -201,7 +201,7 @@ static util::DateTime getTime(sal_Int64 const nTime)
     util::DateTime aTime;
     memset( &aTime, 0, sizeof( util::DateTime ) );
 
-    Time aTempTime( nTime );
+    tools::Time aTempTime( nTime );
 
     aTime.NanoSeconds = aTempTime.GetNanoSec();
     aTime.Seconds = aTempTime.GetSec();
@@ -211,9 +211,9 @@ static util::DateTime getTime(sal_Int64 const nTime)
     return aTime;
 }
 
-inline Time setTime( util::DateTime& rDate )
+inline tools::Time setTime( util::DateTime& rDate )
 {
-    return Time( rDate.Hours, rDate.Minutes, rDate.Seconds, rDate.NanoSeconds  );
+    return tools::Time( rDate.Hours, rDate.Minutes, rDate.Seconds, rDate.NanoSeconds  );
 }
 
 
@@ -398,7 +398,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         {
             if( mnServiceId != text::textfield::Type::TIME && mnServiceId != text::textfield::Type::DATE )
             {
-                Time aTime( setTime( mpImpl->maDateTime ) );
+                tools::Time aTime( setTime( mpImpl->maDateTime ) );
                 pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
 
                 if( mpImpl->mnInt32 >= SVXTIMEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXTIMEFORMAT_AM_HMSH )

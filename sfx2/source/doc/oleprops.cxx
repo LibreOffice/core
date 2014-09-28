@@ -39,7 +39,7 @@ using ::com::sun::star::uno::makeAny;
 
 using namespace ::com::sun::star;
 
-#define TIMESTAMP_INVALID_DATETIME      ( DateTime ( Date ( 1, 1, 1601 ), Time ( 0, 0, 0 ) ) )  /// Invalid value for date and time to create invalid instance of TimeStamp.
+#define TIMESTAMP_INVALID_DATETIME      ( DateTime ( Date ( 1, 1, 1601 ), tools::Time ( 0, 0, 0 ) ) )  /// Invalid value for date and time to create invalid instance of TimeStamp.
 /// Invalid value for date and time to create invalid instance of TimeStamp.
 #define TIMESTAMP_INVALID_UTILDATETIME  (util::DateTime(0, 0, 0, 0, 1, 1, 1601, false))
 /// Invalid value for date to create invalid instance of TimeStamp.
@@ -592,7 +592,7 @@ void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
                 static_cast< sal_uInt16 >( maDateTime.Day ),
                 static_cast< sal_uInt16 >( maDateTime.Month ),
                 static_cast< sal_uInt16 >( maDateTime.Year ) ),
-            Time(
+            tools::Time(
                 static_cast< sal_uIntPtr >( maDateTime.Hours ),
                 static_cast< sal_uIntPtr >( maDateTime.Minutes ),
                 static_cast< sal_uIntPtr >( maDateTime.Seconds ),
