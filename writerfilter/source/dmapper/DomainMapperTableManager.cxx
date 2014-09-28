@@ -378,13 +378,13 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 bool bInsertCellProps = true;
                 switch ( nIntValue )
                 {
-                    case 1:  // tbRl
+                    case NS_ooxml::LN_Value_ST_TextDirection_tbRl:
                     // Binary filter takes BiDirection into account ( but I have no idea about that here )
                     // or even what it is. But... here's where to handle it if it becomes an issue
                         pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::TB_RL ));
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
                         break;
-                    case 3:  // btLr
+                    case NS_ooxml::LN_Value_ST_TextDirection_btLr:
                         {
                         // We have to fake this text direction
                          pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::LR_TB ));
@@ -400,13 +400,13 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         m_bHasBtlrCell = true;
                         }
                         break;
-                    case 4: // lrTbV
+                    case NS_ooxml::LN_Value_ST_TextDirection_lrTbV:
                         pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::LR_TB ));
                         break;
-                    case 5: // tbRlV
+                    case NS_ooxml::LN_Value_ST_TextDirection_tbRlV:
                         pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::TB_RL ));
                         break;
-                    case 0: // lrTb
+                    case NS_ooxml::LN_Value_ST_TextDirection_lrTb:
                     case NS_ooxml::LN_Value_ST_TextDirection_tbLrV:
                     default:
                        // Ignore - we can't handle these

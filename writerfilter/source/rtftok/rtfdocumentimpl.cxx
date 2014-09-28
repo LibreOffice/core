@@ -2768,19 +2768,19 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
     case RTF_CLTXLRTB:
-        nParam = 0;
+        nParam = NS_ooxml::LN_Value_ST_TextDirection_lrTb;
         break;
     case RTF_CLTXTBRL:
-        nParam = 1;
+        nParam = NS_ooxml::LN_Value_ST_TextDirection_tbRl;
         break;
     case RTF_CLTXBTLR:
-        nParam = 3;
+        nParam = NS_ooxml::LN_Value_ST_TextDirection_btLr;
         break;
     case RTF_CLTXLRTBV:
-        nParam = 4;
+        nParam = NS_ooxml::LN_Value_ST_TextDirection_lrTbV;
         break;
     case RTF_CLTXTBRLV:
-        nParam = 5;
+        nParam = NS_ooxml::LN_Value_ST_TextDirection_tbRlV;
         break;
     default:
         break;

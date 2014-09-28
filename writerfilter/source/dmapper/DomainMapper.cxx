@@ -1683,13 +1683,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         sal_Int16 nDirection = text::WritingMode_LR_TB;
         switch( nIntValue )
         {
-            case 0:
-            case 4:
+            case NS_ooxml::LN_Value_ST_TextDirection_lrTb:
+            case NS_ooxml::LN_Value_ST_TextDirection_lrTbV:
                 nDirection = text::WritingMode_LR_TB;
             break;
-            case 1:
-            case 2:
-            case 3:
+            case NS_ooxml::LN_Value_ST_TextDirection_tbRl:
+            case NS_ooxml::LN_Value_ST_TextDirection_btLr:
                 nDirection = text::WritingMode_TB_RL;
             break;
             default:;
