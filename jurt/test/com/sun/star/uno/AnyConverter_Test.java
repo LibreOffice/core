@@ -19,8 +19,9 @@
 package com.sun.star.uno;
 
 import com.sun.star.lang.XTypeProvider;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 public final class AnyConverter_Test {
     Any anyBool;
@@ -37,20 +38,35 @@ public final class AnyConverter_Test {
     Any anyVoid;
     Any anyXTypeProvider;
 
-    Boolean aBool= Boolean.TRUE;
-    Character aChar= new Character('A');
-    Byte aByte= Byte.valueOf((byte) 111);
-    Short aShort= Short.valueOf((short) 11111);
-    Integer aInt= Integer.valueOf( 1111111);
-    Long aLong= Long.valueOf( 0xffffffff);
-    Float aFloat= new Float( 3.14);
-    Double aDouble= new Double( 3.145);
-    Object aObj= new ATypeProvider();
-    String aStr= "I am a string";
-    Type aType= new Type(String.class);
-    byte[] arByte= new byte[] {1,2,3};
+    Boolean aBool;
+    Character aChar;
+    Byte aByte;
+    Short aShort;
+    Integer aInt;
+    Long aLong;
+    Float aFloat;
+    Double aDouble;
+    Object aObj;
+    String aStr;
+    Type aType;
+    byte[] arByte;
 
-    public AnyConverter_Test() {
+    /** Class variables are initialized before each Test method */
+    @Before public void setUp() throws Exception
+    {
+        aBool= Boolean.TRUE;
+        aChar= new Character('A');
+        aByte= Byte.valueOf((byte) 111);
+        aShort= Short.valueOf((short) 11111);
+        aInt= Integer.valueOf( 1111111);
+        aLong= Long.valueOf( 0xffffffff);
+        aFloat= new Float( 3.14);
+        aDouble= new Double( 3.145);
+        aObj= new ATypeProvider();
+        aStr= "I am a string";
+        aType= new Type(String.class);
+        arByte= new byte[] {1,2,3};
+
         anyVoid= new Any(new Type(void.class), null);
         anyBool= new Any(new Type(Boolean.TYPE), aBool);
         anyChar= new Any(new Type(Character.TYPE), aChar);
