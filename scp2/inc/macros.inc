@@ -447,7 +447,6 @@ End
     End
 
 #else
-#endif
 
 #define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) \
     RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
@@ -457,6 +456,8 @@ End
         Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
         Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
     End
+
+#endif
 
 #else
 #define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) // empty
