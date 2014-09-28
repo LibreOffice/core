@@ -42,7 +42,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.util.Log;
 
 import org.libreoffice.TileProvider;
 import org.mozilla.gecko.util.FloatUtils;
@@ -51,23 +50,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * Encapsulates the logic needed to draw a layer made of multiple tiles.
- */
 public class MultiTileLayer extends Layer {
     private static final String LOGTAG = "MultiTileLayer";
 
     private static int TILE_SIZE = 256;
-    private final List<SubTile> mTiles;
+    private final List<SubTile> mTiles = new CopyOnWriteArrayList<SubTile>();
     private TileProvider tileProvider;
-    private float currentZoomFactor;
     private RectF tileViewPort = new RectF();
-    private boolean shouldRefreshZoom = true;
-    private RectF currentPageRect = new RectF();
 
     public MultiTileLayer() {
         super();
-        mTiles = new CopyOnWriteArrayList<SubTile>();
     }
 
     public void invalidate() {
@@ -131,10 +123,10 @@ public class MultiTileLayer extends Layer {
 
             if (origin != null) {
                 Rect position = layer.getPosition();
-                int positionX = origin.x + Math.round(layer.x / layer.zoom);
-                int positionY = origin.y + Math.round(layer.y / layer.zoom);
-                int tileSize = Math.round(256.0f / layer.zoom);
-                position.set(positionX, positionY, positionX + tileSize, positionY + tileSize);
+                float positionX = origin.x + (layer.x / layer.zoom);
+                float positionY = origin.y + (layer.y / layer.zoom);
+                float tileSize = TILE_SIZE / layer.zoom;
+                position.set((int) positionX, (int) positionY, (int) (positionX + tileSize + 1), (int) (positionY + tileSize + 1));
                 layer.setPosition(position);
             }
             if (resolution >= 0.0f) {
@@ -170,10 +162,6 @@ public class MultiTileLayer extends Layer {
         super.endTransaction();
     }
 
-    private RectF normlizeRect(RectF rect, FloatSize pageSize) {
-        return new RectF(rect.left / pageSize.width, rect.top / pageSize.height, rect.right / pageSize.width, rect.bottom / pageSize.height);
-    }
-
     private RectF roundToTileSize(RectF input, int tileSize) {
         float minX = (Math.round(input.left) / tileSize) * tileSize;
         float minY = (Math.round(input.top) / tileSize) * tileSize;
@@ -198,12 +186,6 @@ public class MultiTileLayer extends Layer {
 
     @Override
     public void draw(RenderContext context) {
-        if (tileProvider == null) {
-            return;
-        }
-
-        currentPageRect = context.pageRect;
-
         for (SubTile layer : mTiles) {
             // Avoid work, only draw tiles that intersect with the viewport
             RectF layerBounds = layer.getBounds(context);
@@ -229,19 +211,13 @@ public class MultiTileLayer extends Layer {
     }
 
     public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics) {
-        if (currentZoomFactor != viewportMetrics.zoomFactor) {
-            currentZoomFactor = viewportMetrics.zoomFactor;
-        }
-
         RectF newTileViewPort = inflate(roundToTileSize(viewportMetrics.getViewport(), TILE_SIZE), TILE_SIZE);
-
-        Log.i(LOGTAG, "reevaluateTiles ( " + viewportMetrics + " )");
 
         if (tileViewPort != newTileViewPort) {
             tileViewPort = newTileViewPort;
             cleanTiles();
-            addNewTiles();
-            markTiles();
+            addNewTiles(viewportMetrics);
+            markTiles(viewportMetrics);
         }
     }
 
@@ -256,24 +232,24 @@ public class MultiTileLayer extends Layer {
         mTiles.removeAll(tilesToRemove);
     }
 
-    private void addNewTiles() {
+    private void addNewTiles(ImmutableViewportMetrics viewportMetrics) {
         for (float y = tileViewPort.top; y < tileViewPort.bottom; y += TILE_SIZE) {
-            if (y > currentPageRect.height()) {
+            if (y > viewportMetrics.getPageHeight()) {
                 continue;
             }
             for (float x = tileViewPort.left; x < tileViewPort.right; x += TILE_SIZE) {
-                if (x > currentPageRect.width()) {
+                if (x > viewportMetrics.getPageWidth()) {
                     continue;
                 }
                 boolean contains = false;
                 for (SubTile tile : mTiles) {
-                    if (tile.x == x && tile.y == y) {
+                    if (tile.x == x && tile.y == y && tile.zoom == viewportMetrics.zoomFactor) {
                         contains = true;
                     }
                 }
                 if (!contains) {
-                    CairoImage image = tileProvider.createTile(x, y, currentZoomFactor);
-                    SubTile tile = new SubTile(image, (int)x, (int)y, currentZoomFactor);
+                    CairoImage image = tileProvider.createTile(x, y, viewportMetrics.zoomFactor);
+                    SubTile tile = new SubTile(image, (int)x, (int)y, viewportMetrics.zoomFactor);
                     tile.beginTransaction();
                     mTiles.add(tile);
                 }
@@ -281,9 +257,9 @@ public class MultiTileLayer extends Layer {
         }
     }
 
-    private void markTiles() {
+    private void markTiles(ImmutableViewportMetrics viewportMetrics) {
         for (SubTile tile : mTiles) {
-            if (FloatUtils.fuzzyEquals(tile.zoom, currentZoomFactor)) {
+            if (FloatUtils.fuzzyEquals(tile.zoom, viewportMetrics.zoomFactor)) {
                 RectF tileRect = new RectF(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
                 if (!RectF.intersects(tileViewPort, tileRect)) {
                     tile.markForRemoval();

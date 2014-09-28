@@ -28,10 +28,7 @@ public class LOKitThread extends Thread {
     }
 
     private boolean draw() throws InterruptedException {
-        int pageWidth = mTileProvider.getPageWidth();
-        int pageHeight = mTileProvider.getPageHeight();
-
-        RectF rect = new RectF(0, 0, pageWidth, pageHeight);
+        RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         DisplayMetrics displayMetrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
         mViewportMetrics = mViewportMetrics.setPageRect(rect, rect);
@@ -72,6 +69,8 @@ public class LOKitThread extends Thread {
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
             updateCheckbardImage();
+            RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
+            mController.setPageRect(rect, rect);
             mController.setForceRedraw();
         }
         return isReady;
@@ -79,13 +78,9 @@ public class LOKitThread extends Thread {
 
     private void updateCheckbardImage() {
         if (!mCheckboardImageSet) {
-            Log.i(LOGTAG, "Generate thumbnail!");
             Bitmap bitmap = mTileProvider.thumbnail();
-            Log.i(LOGTAG, "Done generate thumbnail!");
             if (bitmap != null) {
-                Log.i(LOGTAG, "Setting checkboard image!");
                 mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
-                Log.i(LOGTAG, "Done setting checkboard image!!");
                 mCheckboardImageSet = true;
             }
         }

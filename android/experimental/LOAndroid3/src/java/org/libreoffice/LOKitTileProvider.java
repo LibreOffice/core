@@ -112,7 +112,11 @@ public class LOKitTileProvider implements TileProvider {
         Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
 
         if (mDocument != null) {
-            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, Math.round(pixelToTwip(x, mDPI)/zoom), Math.round(pixelToTwip(y, mDPI)/ zoom), Math.round(mTileWidth / zoom), Math.round(mTileHeight/zoom));
+            float twipX = pixelToTwip(x, mDPI) / zoom;
+            float twipY = pixelToTwip(y, mDPI) / zoom;
+            float twipWidth  = mTileWidth / zoom;
+            float twipHeight = mTileHeight / zoom;
+            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) twipX, (int) twipY, (int)twipWidth, (int)twipHeight);
         } else {
             Log.e(LOGTAG, "Document is null!!");
         }
