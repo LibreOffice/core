@@ -8,10 +8,13 @@ package org.mozilla.gecko.gfx;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.opengl.GLES20;
 
 import org.libreoffice.kit.DirectBufferAllocator;
 
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 
 public class ScreenshotLayer extends SingleTileLayer {
     private static final int SCREENSHOT_SIZE_LIMIT = 1048576;
@@ -75,8 +78,61 @@ public class ScreenshotLayer extends SingleTileLayer {
 
     @Override
     public void draw(RenderContext context) {
-        if (mHasImage)
-            super.draw(context);
+        // mTextureIDs may be null here during startup if Layer.java's draw method
+        // failed to acquire the transaction lock and call performUpdates.
+        if (!initialized())
+            return;
+
+        float txl, txr, txb, txt;
+
+        Rect position = getPosition();
+
+        float bw = mBufferSize.width;
+        float bh = mBufferSize.height;
+        float iw = mImageSize.width;
+        float ih = mImageSize.height;
+
+        float pw = context.pageRect.width();
+        float ph = context.pageRect.height();
+
+        float vl = context.viewport.left;
+        float vr = context.viewport.right;
+        float vt = context.viewport.top;
+        float vb = context.viewport.bottom;
+
+        float vw =  vr - vl;
+        float vh =  vb - vt;
+
+        txl = (iw/bw) * (vl / pw);
+        txr = (iw/bw) * (vr / pw);
+        txt = 1.0f - ((ih/bh) * (vt / ph));
+        txb = 1.0f - ((ih/bh) * (vb / ph));
+
+        float[] coords = {
+                0.0f, 0.0f, 0.0f, txl, txb,
+                0.0f, 1.0f, 0.0f, txl, txt,
+                1.0f, 0.0f, 0.0f, txr, txb,
+                1.0f, 1.0f, 0.0f, txr, txt,
+        };
+
+        FloatBuffer coordBuffer = context.coordBuffer;
+        int positionHandle = context.positionHandle;
+        int textureHandle = context.textureHandle;
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTextureID());
+
+        // Make sure we are at position zero in the buffer
+        coordBuffer.position(0);
+        coordBuffer.put(coords);
+
+        // Vertex coordinates are x,y,z starting at position 0 into the buffer.
+        coordBuffer.position(0);
+        GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 20, coordBuffer);
+
+        // Texture coordinates are texture_x, texture_y starting at position 3 into the buffer.
+        coordBuffer.position(3);
+        GLES20.glVertexAttribPointer(textureHandle, 2, GLES20.GL_FLOAT, false, 20, coordBuffer);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
     }
 
     /** A Cairo image that simply saves a buffer of pixel data. */
