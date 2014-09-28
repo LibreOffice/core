@@ -120,10 +120,10 @@ bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
     }
 
     if( rTabNum == 0xFFFF )
-    {// neue Tabelle erzeugen
+    {// create new table
         SCTAB   nNewTabNum;
         if( pCur->bSWB )
-        {// Tabelle ist im selben Workbook!
+        {// table is in the same workbook!
             if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
             {
                 rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
@@ -133,7 +133,7 @@ bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
                 rTabNum = 0xFFFD;
         }
         else if( pExcRoot->pIR->GetDocShell() )
-        {// Tabelle ist 'echt' extern
+        {// table is 'really' external
             if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
             {
                 OUString      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
@@ -145,8 +145,8 @@ bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
                     return true;
                 }
                 else
-                    rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
-                                            //  wohl auch nicht mehr gehen...
+                    rTabNum = 0xFFFE;       // no table is created for now -> and likely
+                                            //  will not be created later...
             }
             else
                 rTabNum = 0xFFFE;

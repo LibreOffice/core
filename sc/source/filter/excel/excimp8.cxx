@@ -448,7 +448,7 @@ void ImportExcel8::PostDocLoad( void )
 
     ImportExcel::PostDocLoad();
 
-    // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
+    // check scenarios; Attention: This increases the table count of the document!!
     if( !pD->IsClipboard() && maScenList.aEntries.size() )
     {
         pD->UpdateChartListenerCollection();    // references in charts must be updated

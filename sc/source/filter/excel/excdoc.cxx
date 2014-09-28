@@ -228,7 +228,7 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
 
     Add( new XclExpUInt16Record( EXC_ID_FNGROUPCOUNT, 14 ) );
 
-    // erst Namen- und Tabellen-Eintraege aufbauen
+    // first setup table names and contents
 
     for( nC = 0 ; nC < nScTabCount ; nC++ )
         if( rTabInfo.IsExportTab( nC ) )
@@ -370,7 +370,7 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     rR.pTabId = new XclExpChTrTabId( std::max( nExcTabCount, nCodenames ) );
     Add( rR.pTabId );
 
-    // erst Namen- und Tabellen-Eintraege aufbauen
+    // first setup table names and contents
 
     for( nC = 0 ; nC < nScTabCount ; nC++ )
         if( rTabInfo.IsExportTab( nC ) )

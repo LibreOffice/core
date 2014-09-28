@@ -1127,7 +1127,7 @@ void ImportExcel::Bof4( void )
 
 void ImportExcel::Bof5( void )
 {
-    //POST: eDateiTyp = Typ der zu lesenden Datei
+    //POST: eDateiTyp = Type of the file to be read
     sal_uInt16      nSubType, nVers;
     BiffTyp     eDatei;
 

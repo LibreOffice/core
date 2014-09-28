@@ -42,41 +42,41 @@ TokenStack::~TokenStack()
     delete[] pStack;
 }
 
-// !ACHTUNG!: nach Aussen hin beginnt die Nummerierung mit 1!
-// !ACHTUNG!: SC-Token werden mit einem Offset nScTokenOff abgelegt
-//              -> Unterscheidung von anderen Token
+// !ATTENTION!": to the outside the numbering starts with 1!
+// !ATTENTION!": SC-Token are stored with an offset nScTokenOff
+//                  -> to distinguish from other tokens
 
 TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     mrStringPool(rSPool)
 {
     sal_uInt16  nLauf = nScTokenOff;
 
-    // Sammelstelle fuer Id-Folgen
+    // pool for Id-sequences
     nP_Id = 256;
     pP_Id = new sal_uInt16[ nP_Id ];
 
-    // Sammelstelle fuer Ids
+    // pool for Ids
     nElement = 32;
     pElement = new sal_uInt16[ nElement ];
     pType = new E_TYPE[ nElement ];
     pSize = new sal_uInt16[ nElement ];
     nP_IdLast = 0;
 
-    // Sammelstelle fuer Strings
+    // pool for strings
     nP_Str = 4;
     ppP_Str = new OUString *[ nP_Str ];
     for( nLauf = 0 ; nLauf < nP_Str ; nLauf++ )
         ppP_Str[ nLauf ] = NULL;
 
-    // Sammelstelle fuer double
+    // pool for double
     nP_Dbl = 8;
     pP_Dbl = new double[ nP_Dbl ];
 
-    // Sammelstelle fuer error codes
+    // pool for error codes
     nP_Err = 8;
     pP_Err = new sal_uInt16[ nP_Err ];
 
-    // Sammelstellen fuer Referenzen
+    // pool for References
     nP_RefTr = 32;
     ppP_RefTr = new ScSingleRefData *[ nP_RefTr ];
     for( nLauf = 0 ; nLauf < nP_RefTr ; nLauf++ )
@@ -561,7 +561,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
     for( ; nAnz > 0 ; nAnz--, pAkt++ )
     {
         if( *pAkt < nScTokenOff )
-        {// Rekursion oder nicht?
+        {// recursion or not?
             if (*pAkt >= nElementAkt)
             {
                 DBG_ERRORFILE( "TokenPool::GetElementRek: *pAkt >= nElementAkt");
@@ -575,7 +575,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
                     bRet = GetElement( *pAkt );
             }
         }
-        else    // elementarer SC_Token
+        else    // elementary SC_Token
             pScToken->AddOpCode( ( DefTokenId ) ( *pAkt - nScTokenOff ) );
     }
 
@@ -593,12 +593,12 @@ void TokenPool::operator >>( TokenId& rId )
         if (!GrowElement())
             return;
 
-    pElement[ nElementAkt ] = nP_IdLast;    // Start der Token-Folge
-    pType[ nElementAkt ] = T_Id;            // Typinfo eintragen
+    pElement[ nElementAkt ] = nP_IdLast;    // Start of Token-sequence
+    pType[ nElementAkt ] = T_Id;            // set Typeinfo
     pSize[ nElementAkt ] = nP_IdAkt - nP_IdLast;
-        // von nP_IdLast bis nP_IdAkt-1 geschrieben -> Laenge der Folge
+        // write from nP_IdLast to nP_IdAkt-1 -> length of the sequence
 
-    nElementAkt++;          // Startwerte fuer naechste Folge
+    nElementAkt++;          // start value for next sequence
     nP_IdLast = nP_IdAkt;
 }
 
@@ -613,16 +613,16 @@ const TokenId TokenPool::Store( const double& rDouble )
             return (const TokenId) nElementAkt+1;
 
     pElement[ nElementAkt ] = nP_DblAkt;    // Index in Double-Array
-    pType[ nElementAkt ] = T_D;             // Typinfo Double eintragen
+    pType[ nElementAkt ] = T_D;             // set Typeinfo Double
 
     pP_Dbl[ nP_DblAkt ] = rDouble;
 
-    pSize[ nElementAkt ] = 1;           // eigentlich Banane
+    pSize[ nElementAkt ] = 1;               // does not matter
 
     nElementAkt++;
     nP_DblAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // return old value + 1!
 }
 
 const TokenId TokenPool::Store( const sal_uInt16 nIndex )
@@ -632,8 +632,7 @@ const TokenId TokenPool::Store( const sal_uInt16 nIndex )
 
 const TokenId TokenPool::Store( const OUString& rString )
 {
-    // weitgehend nach Store( const sal_Char* ) kopiert, zur Vermeidung
-    //  eines temporaeren Strings in "
+    // mostly copied to Store( const sal_Char* ), to avoid a temporary string
     if( nElementAkt >= nElement )
         if (!GrowElement())
             return (const TokenId) nElementAkt+1;
@@ -643,14 +642,14 @@ const TokenId TokenPool::Store( const OUString& rString )
             return (const TokenId) nElementAkt+1;
 
     pElement[ nElementAkt ] = nP_StrAkt;    // Index in String-Array
-    pType[ nElementAkt ] = T_Str;           // Typinfo String eintragen
+    pType[ nElementAkt ] = T_Str;           // set Typeinfo String
 
-    // String anlegen
+    // create String
     if( !ppP_Str[ nP_StrAkt ] )
-        //...aber nur, wenn noch nicht vorhanden
+        //...but only, if it does not exist already
         ppP_Str[ nP_StrAkt ] = new (::std::nothrow) OUString( rString );
     else
-        //...ansonsten nur kopieren
+        //...copy otherwise
         *ppP_Str[ nP_StrAkt ] = rString;
 
     if (ppP_Str[ nP_StrAkt ])
@@ -662,7 +661,7 @@ const TokenId TokenPool::Store( const OUString& rString )
     nElementAkt++;
     nP_StrAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // return old value + 1!
 }
 
 const TokenId TokenPool::Store( const ScSingleRefData& rTr )
@@ -676,7 +675,7 @@ const TokenId TokenPool::Store( const ScSingleRefData& rTr )
             return (const TokenId) nElementAkt+1;
 
     pElement[ nElementAkt ] = nP_RefTrAkt;
-    pType[ nElementAkt ] = T_RefC;          // Typinfo Cell-Reff eintragen
+    pType[ nElementAkt ] = T_RefC;          // set Typeinfo Cell-Ref
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
         ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr );
@@ -686,7 +685,7 @@ const TokenId TokenPool::Store( const ScSingleRefData& rTr )
     nElementAkt++;
     nP_RefTrAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // return old value + 1!
 }
 
 const TokenId TokenPool::Store( const ScComplexRefData& rTr )
@@ -700,7 +699,7 @@ const TokenId TokenPool::Store( const ScComplexRefData& rTr )
             return (const TokenId) nElementAkt+1;
 
     pElement[ nElementAkt ] = nP_RefTrAkt;
-    pType[ nElementAkt ] = T_RefA;          // Typinfo Area-Reff eintragen
+    pType[ nElementAkt ] = T_RefA;          // setTypeinfo Area-Ref
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
         ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr.Ref1 );
@@ -716,7 +715,7 @@ const TokenId TokenPool::Store( const ScComplexRefData& rTr )
 
     nElementAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // return old value + 1!
 }
 
 const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
@@ -730,7 +729,7 @@ const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
             return (const TokenId) nElementAkt+1;
 
     pElement[ nElementAkt ] = nP_ExtAkt;
-    pType[ nElementAkt ] = T_Ext;           // Typinfo String eintragen
+    pType[ nElementAkt ] = T_Ext;           // set Typeinfo String
 
     if( ppP_Ext[ nP_ExtAkt ] )
     {
@@ -743,7 +742,7 @@ const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
     nElementAkt++;
     nP_ExtAkt++;
 
-    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // return old value + 1!
 }
 
 const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
@@ -891,16 +890,16 @@ bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
     {// existent?
         nId--;
         if( T_Id == pType[ nId ] )
-        {// Tokenfolge?
+        {// Token-Sequence?
             if( pSize[ nId ] == 1 )
-            {// GENAU 1 Token
+            {// EXACTLY 1 Token
                 sal_uInt16 nPid = pElement[ nId ];
                 if (nPid < nP_Id)
                 {
                     sal_uInt16 nSecId = pP_Id[ nPid ];
                     if( nSecId >= nScTokenOff )
                     {// Default-Token?
-                        return ( DefTokenId ) ( nSecId - nScTokenOff ) == eId;  // Gesuchter?
+                        return ( DefTokenId ) ( nSecId - nScTokenOff ) == eId;  // wanted?
                     }
                 }
             }

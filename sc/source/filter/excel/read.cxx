@@ -56,22 +56,22 @@ FltError ImportExcel::Read( void )
     // call to GetCurrSheetDrawing() cannot be cached (changes in new sheets)
 
     enum Zustand {
-        Z_BiffNull, // Nicht in gueltigem Biff-Format
-        Z_Biff2,    // Biff2: nur eine Tabelle
+        Z_BiffNull, // not a valid Biff-Format
+        Z_Biff2,    // Biff2: only one table
 
-        Z_Biff3,    // Biff3: nur eine Tabelle
+        Z_Biff3,    // Biff3: only one table
 
-        Z_Biff4,    // Biff4: nur eine Tabelle
+        Z_Biff4,    // Biff4: only one table
         Z_Biff4W,   // Biff4 Workbook: Globals
-        Z_Biff4T,   // Biff4 Workbook: eine Tabelle selbst
-        Z_Biff4E,   // Biff4 Workbook: zwischen den Tabellen
+        Z_Biff4T,   // Biff4 Workbook: a table itself
+        Z_Biff4E,   // Biff4 Workbook: between tables
 
         Z_Biff5WPre,// Biff5: Prefetch Workbook
         Z_Biff5W,   // Biff5: Globals
-        Z_Biff5TPre,// Biff5: Prefetch fuer Shrfmla/Array Formula
-        Z_Biff5T,   // Biff5: eine Tabelle selbst
-        Z_Biff5E,   // Biff5: zwischen den Tabellen
-        Z_Biffn0,   // Alle Biffs: Tabelle bis naechstesss EOF ueberlesen
+        Z_Biff5TPre,// Biff5: Prefetch for Shrfmla/Array Formula
+        Z_Biff5T,   // Biff5: a table itself
+        Z_Biff5E,   // Biff5: between tables
+        Z_Biffn0,   // all Biffs: skip table till next EOF
         Z_Ende };
 
     Zustand             eAkt = Z_BiffNull, ePrev = Z_BiffNull;
@@ -184,7 +184,7 @@ FltError ImportExcel::Read( void )
 
                                     nBdshtTab = 0;
 
-                                    aIn.StoreGlobalPosition(); // und Position merken
+                                    aIn.StoreGlobalPosition(); // store position
                                 }
                                 else if( pExcRoot->eDateiTyp == Biff5 )
                                 {
@@ -192,7 +192,7 @@ FltError ImportExcel::Read( void )
                                     NewTable();
                                     eAkt = Z_Biff5TPre;  // Shrfmla Prefetch, Row-Prefetch
                                     nBofLevel = 0;
-                                    aIn.StoreGlobalPosition(); // und Position merken
+                                    aIn.StoreGlobalPosition(); // store position
                                 }
                             break;
                             default:
@@ -703,7 +703,7 @@ FltError ImportExcel::Read( void )
                             case Biff5M4:
                                 eAkt = Z_Biff5TPre; // Shrfmla Prefetch, Row-Prefetch
                                 nBofLevel = 0;
-                                aIn.StoreGlobalPosition(); // und Position merken
+                                aIn.StoreGlobalPosition(); // store position
                             break;
                             case Biff5C:    // chart sheet
                                 GetCurrSheetDrawing().ReadTabChart( maStrm );
@@ -1118,7 +1118,7 @@ FltError ImportExcel8::Read( void )
 
                         bSheetHasCodeName = false; // reset
 
-                        aIn.SeekGlobalPosition();         // und zurueck an alte Position
+                        aIn.SeekGlobalPosition();         // and back to old position
                         break;
                     }
                     case 0x12:  SheetProtect(); break;
