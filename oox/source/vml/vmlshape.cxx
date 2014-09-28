@@ -473,12 +473,38 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 {
     if ( rTypeModel.maPositionHorizontal == "center" )
         rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
+    else if ( rTypeModel.maPositionHorizontal == "left" )
+        rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::LEFT));
+    else if ( rTypeModel.maPositionHorizontal == "right" )
+        rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::RIGHT));
+    else if ( rTypeModel.maPositionHorizontal == "inside" )
+    {
+        rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::LEFT));
+        rPropSet.setAnyProperty(PROP_PageToggle, makeAny(sal_True));
+    }
+    else if ( rTypeModel.maPositionHorizontal == "outside" )
+    {
+        rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::RIGHT));
+        rPropSet.setAnyProperty(PROP_PageToggle, makeAny(sal_True));
+    }
 
     if ( rTypeModel.maPositionHorizontalRelative == "page" )
         rPropSet.setAnyProperty(PROP_HoriOrientRelation, makeAny(text::RelOrientation::PAGE_FRAME));
+    else if ( rTypeModel.maPositionVerticalRelative == "margin" )
+        rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
+    else if ( rTypeModel.maPositionVerticalRelative == "text" )
+        rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
 
     if ( rTypeModel.maPositionVertical == "center" )
         rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::CENTER));
+    else if ( rTypeModel.maPositionVertical == "top" )
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::TOP));
+    else if ( rTypeModel.maPositionVertical == "bottom" )
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::BOTTOM));
+    else if ( rTypeModel.maPositionVertical == "inside" )
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::LINE_TOP));
+    else if ( rTypeModel.maPositionVertical == "outside" )
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::LINE_BOTTOM));
 
     if ( rTypeModel.maPosition == "absolute" )
     {
@@ -495,7 +521,6 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
         }
         else
         {
-            // Vertical placement relative to margin, because parent style must not modify vertical position
             rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
         }
     }

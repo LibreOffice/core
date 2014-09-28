@@ -7301,13 +7301,17 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
             sAlign = OString( "center" );
             break;
         case text::VertOrientation::BOTTOM:
-        case text::VertOrientation::LINE_BOTTOM:
             sAlign = OString( "bottom" );
             break;
+        case text::VertOrientation::LINE_BOTTOM:
+            sAlign = OString( "outside" );
+            break;
         case text::VertOrientation::TOP:
+            sAlign = OString( "top" );
+            break;
         case text::VertOrientation::LINE_TOP:
         default:
-            sAlign = OString( "top" );
+            sAlign = OString( "inside" );
             break;
     }
     OString sVAnchor( "page" );
