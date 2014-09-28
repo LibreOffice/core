@@ -1694,7 +1694,7 @@ sal_uLong WinSalGraphics::GetKernPairs()
     return mnFontKernPairCount;
 }
 
-const FontCharMap* WinSalGraphics::GetFontCharMap() const
+const FontCharMapPtr WinSalGraphics::GetFontCharMap() const
 {
     if( !mpWinFontData[0] )
         return FontCharMap::GetDefaultMap();
@@ -2477,7 +2477,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     if( aRawCffData.get() )
     {
         pWinFontData->UpdateFromHDC( getHDC() );
-        const FontCharMapPtr pCharMap = pWinFontData->GetFontCharMap();
+        FontCharMapPtr pCharMap = pWinFontData->GetFontCharMap();
 
         sal_GlyphId aRealGlyphIds[ 256 ];
         for( int i = 0; i < nGlyphCount; ++i )
