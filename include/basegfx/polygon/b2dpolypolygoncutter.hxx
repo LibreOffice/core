@@ -138,7 +138,7 @@ namespace basegfx
             @param rInput
             The source PolyPolygons
 
-            @return A single PolyPolygon containing the Or-merged result
+            @return A single tools::PolyPolygon containing the Or-merged result
         */
         BASEGFX_DLLPUBLIC B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput);
 

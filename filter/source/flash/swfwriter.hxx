@@ -41,7 +41,7 @@
 
 class GDIMetaFile;
 class BitmapEx;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class Gradient;
 class SvtGraphicFill;
 class SvtGraphicStroke;
@@ -273,7 +273,7 @@ public:
     void storeTo( com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutStream );
 
     // geometry
-    void setClipping( const PolyPolygon* pClipPolyPolygon );
+    void setClipping( const tools::PolyPolygon* pClipPolyPolygon );
 
     /** defines a flash shape from a filled polygon.
         The coordinates must be in twips */
@@ -281,11 +281,11 @@ public:
 
     /** defines a flash shape from a filled polypolygon.
         The coordinates must be in twips */
-    sal_uInt16 defineShape( const PolyPolygon& rPolyPoly, const FillStyle& rFillStyle );
+    sal_uInt16 defineShape( const tools::PolyPolygon& rPolyPoly, const FillStyle& rFillStyle );
 
     /** defines a flash shape from a outlined polypolygon.
         The coordinates must be in twips */
-    sal_uInt16 defineShape( const PolyPolygon& rPolyPoly, sal_uInt16 nLineWidth, const Color& rLineColor );
+    sal_uInt16 defineShape( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nLineWidth, const Color& rLineColor );
 
     /** defines a flash shape from a vcl metafile.
         The mapmode of the metafile is used to map all coordinates to twips.
@@ -329,7 +329,7 @@ public:
 private:
     Point                   map( const Point& rPoint ) const;
     Size                    map( const Size& rSize ) const;
-    void                    map( PolyPolygon& rPolyPolygon ) const;
+    void                    map( tools::PolyPolygon& rPolyPolygon ) const;
     sal_Int32               mapRelative( sal_Int32 n100thMM ) const;
 
     void startTag( sal_uInt8 nTagId );
@@ -343,11 +343,11 @@ private:
     void Impl_writeActions( const GDIMetaFile& rMtf );
     void Impl_writePolygon( const Polygon& rPoly, bool bFilled );
     void Impl_writePolygon( const Polygon& rPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor );
-    void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, sal_uInt8 nTransparence = 0);
-    void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor );
+    void Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bFilled, sal_uInt8 nTransparence = 0);
+    void Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor );
     void Impl_writeText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth );
     void Impl_writeText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor );
-    void Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL );
     void Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY );
     void Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY );
@@ -397,7 +397,7 @@ private:
 
     VirtualDevice*  mpVDev;
 
-    const PolyPolygon* mpClipPolyPolygon;
+    const tools::PolyPolygon* mpClipPolyPolygon;
 
     /** holds the information of the objects defined in the movie stream
         while executing defineShape

@@ -619,7 +619,7 @@ namespace sw
             return false;
         }
 
-        Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly)
+        Polygon PolygonFromPolyPolygon(const tools::PolyPolygon &rPolyPoly)
         {
             if(1 == rPolyPoly.Count())
             {
@@ -662,7 +662,7 @@ namespace sw
             }
         }
 
-        Polygon CorrectWordWrapPolygonForExport(const PolyPolygon& rPolyPoly, const SwNoTxtNode* pNd)
+        Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTxtNode* pNd)
         {
             Polygon aPoly(PolygonFromPolyPolygon(rPolyPoly));
             const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();

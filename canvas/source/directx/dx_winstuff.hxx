@@ -50,7 +50,7 @@
 #define ULONG win32ULONG
 #define GradientStyle_RECT win32GradientStyle_RECT
 #define Polygon win32Polygon
-#define PolyPolygon win32PolyPolygon
+#define tools::PolyPolygon win32PolyPolygon
 #undef WB_LEFT
 #undef WB_RIGHT
 

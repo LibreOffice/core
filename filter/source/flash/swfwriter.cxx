@@ -334,13 +334,13 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
 
 sal_uInt16 Writer::defineShape( const Polygon& rPoly, const FillStyle& rFillStyle )
 {
-    const PolyPolygon aPolyPoly( rPoly );
+    const tools::PolyPolygon aPolyPoly( rPoly );
     return defineShape( aPolyPoly, rFillStyle );
 }
 
 
 
-sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, const FillStyle& rFillStyle )
+sal_uInt16 Writer::defineShape( const tools::PolyPolygon& rPolyPoly, const FillStyle& rFillStyle )
 {
     sal_uInt16 nShapeId = createID();
 
@@ -384,7 +384,7 @@ sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, const FillStyle& r
 
 
 
-sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, sal_uInt16 nLineWidth, const Color& rLineColor )
+sal_uInt16 Writer::defineShape( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nLineWidth, const Color& rLineColor )
 {
     sal_uInt16 nShapeId = createID();
 

@@ -518,7 +518,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     {
                                         bool bNotFound = true;
 
-                                        PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aXShape ) );
+                                        tools::PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aXShape ) );
                                         sal_uInt16 k, j, nPolySize = aPolyPoly.Count();
                                         if ( nPolySize )
                                         {

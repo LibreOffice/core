@@ -176,7 +176,7 @@ public:
 
     void WritePresetShape( const char* pShape );
     void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const ::com::sun::star::beans::PropertyValue& rProp );
-    void WritePolyPolygon( const PolyPolygon& rPolyPolygon );
+    void WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon );
     void WriteFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
     void WriteShapeStyle( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteShapeEffects( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );

@@ -1698,11 +1698,11 @@ Polygon& SVGActionWriter::ImplMap( const Polygon& rPoly, Polygon& rDstPoly ) con
     return( rDstPoly );
 }
 
-PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon& rDstPolyPoly ) const
+tools::PolyPolygon& SVGActionWriter::ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const
 {
     Polygon aPoly;
 
-    rDstPolyPoly = PolyPolygon();
+    rDstPolyPoly = tools::PolyPolygon();
 
     for( sal_uInt16 i = 0, nCount = rPolyPoly.Count(); i < nCount; ++i )
     {
@@ -1712,7 +1712,7 @@ PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon
     return( rDstPolyPoly );
 }
 
-OUString SVGActionWriter::GetPathString( const PolyPolygon& rPolyPoly, bool bLine )
+OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine )
 {
     OUString         aPathData;
     const OUString   aBlank( " " );
@@ -1919,10 +1919,10 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs,
 
 }
 
-void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, bool bLineOnly,
+void SVGActionWriter::ImplWritePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bLineOnly,
                                             bool bApplyMapping )
 {
-    PolyPolygon aPolyPoly;
+    tools::PolyPolygon aPolyPoly;
 
     if( bApplyMapping )
         ImplMap( rPolyPoly, aPolyPoly );
@@ -1940,7 +1940,7 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, bool b
 
 void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, bool bApplyMapping )
 {
-    PolyPolygon aPolyPoly;
+    tools::PolyPolygon aPolyPoly;
 
     if( bApplyMapping )
         ImplMap( rShape.maShapePolyPoly, aPolyPoly );
@@ -2029,7 +2029,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, bool bAp
     ImplWritePolyPolygon( aPolyPoly, bLineOnly, false );
 }
 
-void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
+void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                                         const Hatch* pHatch,
                                         const Gradient* pGradient,
                                         sal_uInt32 nWriteFlags )
@@ -2086,7 +2086,7 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
     }
 }
 
-void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
+void SVGActionWriter::ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient,
                                            sal_uInt32 nWriteFlags)
 {
     if ( rGradient.GetStyle() == GradientStyle_LINEAR ||
@@ -2100,7 +2100,7 @@ void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const G
     }
 }
 
-void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
+void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPoly,
                                                const Gradient& rGradient )
 {
     if( rPolyPoly.Count() )
@@ -2282,7 +2282,7 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
         {
             SvXMLElementExport aElemMask( mrExport, XML_NAMESPACE_NONE, aXMLElemMask, true, true );
 
-            const PolyPolygon aPolyPolygon( PolyPolygon( Rectangle( rDestPt, rDestSize ) ) );
+            const tools::PolyPolygon aPolyPolygon( tools::PolyPolygon( Rectangle( rDestPt, rDestSize ) ) );
             Gradient aGradient( rGradient );
 
             // swap gradient stops to adopt SVG mask
@@ -2858,7 +2858,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     const MetaPolyPolygonAction*    pA = (const MetaPolyPolygonAction*) pAction;
-                    const PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
+                    const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
 
                     if( rPolyPoly.Count() )
                     {
@@ -2875,7 +2875,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaGradientAction*   pA = (const MetaGradientAction*) pAction;
                     const Polygon               aRectPoly( pA->GetRect() );
-                    const PolyPolygon           aRectPolyPoly( aRectPoly );
+                    const tools::PolyPolygon           aRectPolyPoly( aRectPoly );
 
                     ImplWriteGradientEx( aRectPolyPoly, pA->GetGradient(), nWriteFlags );
                 }
@@ -2907,7 +2907,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     const MetaTransparentAction*    pA = (const MetaTransparentAction*) pAction;
-                    const PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
+                    const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
 
                     if( rPolyPoly.Count() )
                     {
@@ -3010,7 +3010,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( bSkip )
                     {
-                        PolyPolygon aShapePolyPoly;
+                        tools::PolyPolygon aShapePolyPoly;
 
                         aFill.getPath( aShapePolyPoly );
 
@@ -3076,7 +3076,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     SvMemoryStream      aMemStm( (void*) pA->GetData(), pA->GetDataSize(), STREAM_READ );
                     SvtGraphicStroke    aStroke;
-                    PolyPolygon         aStartArrow, aEndArrow;
+                    tools::PolyPolygon         aStartArrow, aEndArrow;
 
                     ReadSvtGraphicStroke( aMemStm, aStroke );
                     aStroke.getStartArrow( aStartArrow );

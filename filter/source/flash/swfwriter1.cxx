@@ -84,7 +84,7 @@ Size Writer::map( const Size& rSize ) const
 
 
 
-void Writer::map( PolyPolygon& rPolyPolygon ) const
+void Writer::map( tools::PolyPolygon& rPolyPolygon ) const
 {
     const sal_uInt16 nPolyCount = rPolyPolygon.Count();
     if( nPolyCount )
@@ -262,7 +262,7 @@ void Writer::Impl_addEndShapeRecord( BitStream& rBits )
 
 void Writer::Impl_writePolygon( const Polygon& rPoly, bool bFilled )
 {
-    PolyPolygon aPolyPoly( rPoly );
+    tools::PolyPolygon aPolyPoly( rPoly );
     Impl_writePolyPolygon( aPolyPoly, bFilled );
 }
 
@@ -270,13 +270,13 @@ void Writer::Impl_writePolygon( const Polygon& rPoly, bool bFilled )
 
 void Writer::Impl_writePolygon( const Polygon& rPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor )
 {
-    PolyPolygon aPolyPoly( rPoly );
+    tools::PolyPolygon aPolyPoly( rPoly );
     Impl_writePolyPolygon( aPolyPoly, bFilled, rFillColor, rLineColor );
 }
 
 
 
-void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, sal_uInt8 nTransparence /* = 0 */ )
+void Writer::Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bFilled, sal_uInt8 nTransparence /* = 0 */ )
 {
     Color aLineColor( mpVDev->GetLineColor() );
     if( 0 == aLineColor.GetTransparency() )
@@ -289,9 +289,9 @@ void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, 
 
 
 
-void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor )
+void Writer::Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor )
 {
-    PolyPolygon aPolyPoly( rPolyPoly );
+    tools::PolyPolygon aPolyPoly( rPolyPoly );
 
     if( aPolyPoly.Count() )
     {
@@ -325,11 +325,11 @@ void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, 
 
 
 /** A gradient is a transition from one color to another, rendered inside a given polypolygon */
-void Writer::Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient )
+void Writer::Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient )
 {
     if( rPolyPoly.Count() )
     {
-        PolyPolygon aPolyPolygon( rPolyPoly );
+        tools::PolyPolygon aPolyPolygon( rPolyPoly );
         map( aPolyPolygon );
 
         if( (rGradient.GetStyle() == GradientStyle_LINEAR && rGradient.GetAngle() == 900) || (rGradient.GetStyle() == GradientStyle_RADIAL)  )
@@ -359,7 +359,7 @@ void Writer::Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient&
 
 
 
-void Writer::setClipping( const PolyPolygon* pClipPolyPolygon )
+void Writer::setClipping( const tools::PolyPolygon* pClipPolyPolygon )
 {
     mpClipPolyPolygon = pClipPolyPolygon;
 }
@@ -516,7 +516,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
     if( bRTL || (nScriptType != ScriptType::LATIN) )
     {
         // todo: optimize me as this will generate a huge amount of duplicate polygons
-        PolyPolygon aPolyPoygon;
+        tools::PolyPolygon aPolyPoygon;
         mpVDev->GetTextOutline( aPolyPoygon, rText, 0, 0, (sal_uInt16)nLen, true, nWidth, pDXArray );
         aPolyPoygon.Translate( rPos );
         Impl_writePolyPolygon( aPolyPoygon, true, aTextColor, aTextColor );
@@ -1173,7 +1173,7 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
 {
     Polygon aPolygon;
     rStroke.getPath( aPolygon );
-    PolyPolygon aPolyPolygon( aPolygon );
+    tools::PolyPolygon aPolyPolygon( aPolygon );
 
     map( aPolyPolygon );
 
@@ -1183,12 +1183,12 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
     if(SvtGraphicStroke::joinRound != rStroke.getJoinType())
         return false;
 
-    PolyPolygon aStartArrow;
+    tools::PolyPolygon aStartArrow;
     rStroke.getStartArrow( aStartArrow );
     if( 0 != aStartArrow.Count() )
         return false;       // todo: Implement line ends
 
-    PolyPolygon aEndArrow;
+    tools::PolyPolygon aEndArrow;
     rStroke.getEndArrow( aEndArrow );
     if( 0 != aEndArrow.Count() )
         return false;       // todo: Implement line ends
@@ -1215,7 +1215,7 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
 */
 bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
 {
-    PolyPolygon aPolyPolygon;
+    tools::PolyPolygon aPolyPolygon;
     rFilling.getPath( aPolyPolygon );
 
     Rectangle aOldRect( aPolyPolygon.GetBoundRect() );
@@ -1365,7 +1365,7 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
                 const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                Impl_writePolyPolygon(PolyPolygon(Polygon(aPolygon)), true );
+                Impl_writePolyPolygon(tools::PolyPolygon(Polygon(aPolygon)), true );
             }
 
             mpVDev->SetLineColor(aOldLineColor);
@@ -1510,7 +1510,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_POLYPOLYGON_ACTION ):
             {
                 const MetaPolyPolygonAction*    pA = (const MetaPolyPolygonAction*) pAction;
-                const PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
+                const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
 
                 if( rPolyPoly.Count() )
                     Impl_writePolyPolygon( rPolyPoly, true );
@@ -1546,7 +1546,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_TRANSPARENT_ACTION ):
             {
                 const MetaTransparentAction*    pA = (const MetaTransparentAction*) pAction;
-                const PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
+                const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
 
                 if( rPolyPoly.Count() )
                 {

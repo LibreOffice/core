@@ -47,7 +47,7 @@ namespace basegfx
         {
             B2DPolyPolygon aRetval;
             OSL_ENSURE(rCandidate.count() > 1L, "createAreaGeometryForLineStartEnd: Line polygon has too less points (!)");
-            OSL_ENSURE(rArrow.count() > 0L, "createAreaGeometryForLineStartEnd: Empty arrow PolyPolygon (!)");
+            OSL_ENSURE(rArrow.count() > 0L, "createAreaGeometryForLineStartEnd: Empty arrow tools::PolyPolygon (!)");
             OSL_ENSURE(fWidth > 0.0, "createAreaGeometryForLineStartEnd: Width too small (!)");
             OSL_ENSURE(fDockingPosition >= 0.0 && fDockingPosition <= 1.0,
                 "createAreaGeometryForLineStartEnd: fDockingPosition out of range [0.0 .. 1.0] (!)");

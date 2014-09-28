@@ -127,7 +127,7 @@ public:
 
 struct SVGShapeDescriptor
 {
-    PolyPolygon                 maShapePolyPoly;
+    tools::PolyPolygon                 maShapePolyPoly;
     Color                       maShapeFillColor;
     Color                       maShapeLineColor;
     sal_Int32                   mnStrokeWidth;
@@ -334,7 +334,7 @@ private:
     Size&                   ImplMap( const Size& rSz, Size& rDstSz ) const;
     Rectangle&              ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const;
     Polygon&                ImplMap( const Polygon& rPoly, Polygon& rDstPoly ) const;
-    PolyPolygon&            ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon& rDstPolyPoly ) const;
+    tools::PolyPolygon&            ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
 
     void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL,
                                            bool bApplyMapping = true );
@@ -342,14 +342,14 @@ private:
                                            bool bApplyMapping = true );
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY,
                                               bool bApplyMapping = true );
-    void                    ImplWritePattern( const PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
+    void                    ImplWritePattern( const tools::PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
     void                    ImplAddLineAttr( const LineInfo &rAttrs,
                                              bool bApplyMapping = true );
-    void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, bool bLineOnly,
+    void                    ImplWritePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bLineOnly,
                                                   bool bApplyMapping = true );
     void                    ImplWriteShape( const SVGShapeDescriptor& rShape, bool bApplyMapping = true );
-    void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags);
-    void                    ImplWriteGradientLinear( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                    ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags);
+    void                    ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
     Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
     Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
@@ -372,7 +372,7 @@ private:
 
 public:
 
-    static OUString  GetPathString( const PolyPolygon& rPolyPoly, bool bLine );
+    static OUString  GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine );
     static sal_uLong        GetChecksum( const MetaAction* pAction );
 
 public:

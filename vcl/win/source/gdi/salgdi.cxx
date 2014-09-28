@@ -791,7 +791,7 @@ bool WinSalGraphics::setClipRegion( const vcl::Region& i_rClip )
     bool bUsePolygon(i_rClip.HasPolyPolygonOrB2DPolyPolygon());
     static bool bTryToAvoidPolygon(true);
 
-    // #i122149# try to avoid usage of PolyPolygon ClipRegions when PolyPolygon is no curve
+    // #i122149# try to avoid usage of tools::PolyPolygon ClipRegions when tools::PolyPolygon is no curve
     // and only contains horizontal/vertical edges. In that case, use the fallback
     // in GetRegionRectangles which will use vcl::Region::GetAsRegionBand() which will do
     // the correct polygon-to-RegionBand transformation.
@@ -949,7 +949,7 @@ bool WinSalGraphics::setClipRegion( const vcl::Region& i_rClip )
         // create clip region from ClipRgnData
         if(0 == mpClipRgnData->rdh.nCount)
         {
-            // #i123585# region is empty; this may happen when e.g. a PolyPolygon is given
+            // #i123585# region is empty; this may happen when e.g. a tools::PolyPolygon is given
             // that contains no polygons or only empty ones (no width/height). This is
             // perfectly fine and we are done, except setting it (see end of method)
         }

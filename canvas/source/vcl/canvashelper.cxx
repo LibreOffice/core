@@ -294,7 +294,7 @@ namespace vclcanvas
 
             const ::basegfx::B2DPolyPolygon& rPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
-            const PolyPolygon aPolyPoly( tools::mapPolyPolygon( rPolyPoly, viewState, renderState ) );
+            const ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon( rPolyPoly, viewState, renderState ) );
 
             if( rPolyPoly.isClosed() )
             {
@@ -419,7 +419,7 @@ namespace vclcanvas
             // user coordinates.
             aStrokedPolyPoly.transform( aMatrix );
 
-            const PolyPolygon aVCLPolyPoly( aStrokedPolyPoly );
+            const ::tools::PolyPolygon aVCLPolyPoly( aStrokedPolyPoly );
 
             // TODO(F2): When using alpha here, must handle that via
             // temporary surface or somesuch.
@@ -504,7 +504,7 @@ namespace vclcanvas
             ::basegfx::B2DPolyPolygon aB2DPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
-            const PolyPolygon aPolyPoly( tools::mapPolyPolygon(
+            const ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon(
                                              aB2DPolyPoly,
                                              viewState, renderState ) );
             const bool bSourceAlpha( renderState.CompositeOperation == rendering::CompositeOperation::SOURCE );
@@ -1247,7 +1247,7 @@ namespace vclcanvas
                     ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
                                                                     viewState.AffineTransform ) );
 
-                aClipRegion = vcl::Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
+                aClipRegion = vcl::Region::GetRegionFromPolyPolygon( ::tools::PolyPolygon( aClipPoly ) );
             }
             else
             {
@@ -1270,7 +1270,7 @@ namespace vclcanvas
             if( aClipPoly.count() )
             {
                 // setup non-empty clipping
-                vcl::Region aRegion = vcl::Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
+                vcl::Region aRegion = vcl::Region::GetRegionFromPolyPolygon( ::tools::PolyPolygon( aClipPoly ) );
                 aClipRegion.Intersect( aRegion );
             }
             else

@@ -124,7 +124,7 @@ namespace basegfx
         };
 
         /** the PointIndexSet itself; it allows to define a 'selection'of
-            points in a PolyPolygon by giving the polygon and point index.
+            points in a tools::PolyPolygon by giving the polygon and point index.
             Adding points double makes no sense, hence the std::set
          */
         typedef std::set< PointIndex > PointIndexSet;
@@ -181,11 +181,11 @@ namespace basegfx
         // organisation, e.g. same amount of polygons
         BASEGFX_DLLPUBLIC B2DPolyPolygon interpolate(const B2DPolyPolygon& rOld1, const B2DPolyPolygon& rOld2, double t);
 
-        // create 3d PolyPolygon from given 2d PolyPolygon. The given fZCoordinate is used to expand the
+        // create 3d tools::PolyPolygon from given 2d PolyPolygon. The given fZCoordinate is used to expand the
         // third coordinate.
         BASEGFX_DLLPUBLIC B3DPolyPolygon createB3DPolyPolygonFromB2DPolyPolygon(const B2DPolyPolygon& rCandidate, double fZCoordinate = 0.0);
 
-        // create 2d PolyPolygon from given 3d PolyPolygon. All coordinates are transformed using the given
+        // create 2d tools::PolyPolygon from given 3d PolyPolygon. All coordinates are transformed using the given
         // matrix and the resulting x,y is used to form the new polygon.
         BASEGFX_DLLPUBLIC B2DPolyPolygon createB2DPolyPolygonFromB3DPolyPolygon(const B3DPolyPolygon& rCandidate, const B3DHomMatrix& rMat);
 
@@ -205,7 +205,7 @@ namespace basegfx
         /** Predicate whether a given poly-polygon is a rectangle.
 
             @param rPoly
-            PolyPolygon to check
+            tools::PolyPolygon to check
 
             @return true, if the poly-polygon describes a rectangle
             (contains exactly one polygon, polygon is closed, and the

@@ -31,14 +31,14 @@
 void OutputDevice::DrawGradient( const Rectangle& rRect,
                                  const Gradient& rGradient )
 {
-    // Convert rectangle to a PolyPolygon by first converting to a Polygon
+    // Convert rectangle to a tools::PolyPolygon by first converting to a Polygon
     Polygon aPolygon ( rRect );
-    PolyPolygon aPolyPoly ( aPolygon );
+    tools::PolyPolygon aPolyPoly ( aPolygon );
 
     DrawGradient ( aPolyPoly, rGradient );
 }
 
-void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
+void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
 {
     if ( mnDrawMode & DRAWMODE_NOGRADIENT )
@@ -120,7 +120,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
                 if( !mbOutputClipped )
                 {
-                    PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
+                    tools::PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
 
                     // draw gradients without border
                     if( mbLineColor || mbInitLineColor )
@@ -177,7 +177,7 @@ namespace
 
 void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
                                        const Gradient& rGradient,
-                                       bool bMtf, const PolyPolygon* pClipPolyPoly )
+                                       bool bMtf, const tools::PolyPolygon* pClipPolyPoly )
 {
     // get BoundRect of rotated rectangle
     Rectangle aRect;
@@ -372,7 +372,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
 
 void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
                                             const Gradient& rGradient,
-                                            bool bMtf, const PolyPolygon* pClipPolyPoly )
+                                            bool bMtf, const tools::PolyPolygon* pClipPolyPoly )
 {
     // Determine if we output via Polygon or PolyPolygon
     // For all rasteroperations other then Overpaint always use PolyPolygon,
@@ -380,7 +380,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
 
-    boost::scoped_ptr<PolyPolygon> pPolyPoly;
+    boost::scoped_ptr<tools::PolyPolygon> pPolyPoly;
     Rectangle       aRect;
     Point           aCenter;
     Color           aStartCol( rGradient.GetStartColor() );
@@ -399,7 +399,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
     if ( UsePolyPolygonForComplexGradient() || bMtf )
-        pPolyPoly.reset(new PolyPolygon( 2 ));
+        pPolyPoly.reset(new tools::PolyPolygon( 2 ));
 
     // last parameter - true if complex gradient, false if linear
     long nStepCount = GetGradientSteps( rGradient, rRect, bMtf, true );
@@ -486,7 +486,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
         nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
-        // either slow PolyPolygon output or fast Polygon-Paiting
+        // either slow tools::PolyPolygon output or fast Polygon-Paiting
         if( pPolyPoly )
         {
             bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output

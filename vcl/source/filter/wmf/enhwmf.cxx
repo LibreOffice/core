@@ -355,7 +355,7 @@ SvStream& operator>>(SvStream& rInStream, XForm& rXForm)
     return rInStream;
 }
 
-static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen )
+static bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen )
 {
     if (nLen == 0)
         return false;
@@ -382,8 +382,8 @@ static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt3
             Rectangle aRectangle(Point(nx1, ny1), Point(nx2, ny2));
 
             Polygon aPolygon(aRectangle);
-            PolyPolygon aPolyPolyOr1(aPolygon);
-            PolyPolygon aPolyPolyOr2(rPolyPoly);
+            tools::PolyPolygon aPolyPolyOr1(aPolygon);
+            tools::PolyPolygon aPolyPolyOr2(rPolyPoly);
             rPolyPoly.GetUnion(aPolyPolyOr1, aPolyPolyOr2);
             rPolyPoly = aPolyPolyOr2;
         }
@@ -590,7 +590,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
         if ( pWMF->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - pWMF->Tell() ) )
         {
             // Get polygon points
-            PolyPolygon aPolyPoly(nPoly, nPoly);
+            tools::PolyPolygon aPolyPoly(nPoly, nPoly);
             for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
             {
                 const sal_uInt16 nPointCount(pnPoints[i]);
@@ -1149,7 +1149,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     pWMF->ReadInt32(cbRgnData);
                     pWMF->ReadInt32(nClippingMode);
 
-                    PolyPolygon aPolyPoly;
+                    tools::PolyPolygon aPolyPoly;
                     if (cbRgnData)
                         ImplReadRegion(aPolyPoly, *pWMF, nRecSize);
                     pOut->SetClipPath(aPolyPoly, nClippingMode, false);
@@ -1523,7 +1523,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 case EMR_FILLRGN :
                 {
                     sal_uInt32 nLen;
-                    PolyPolygon aPolyPoly;
+                    tools::PolyPolygon aPolyPoly;
                     pWMF->SeekRel( 0x10 );
                     pWMF->ReadUInt32( nLen ).ReadUInt32( nIndex );
 

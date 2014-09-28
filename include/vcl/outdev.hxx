@@ -781,14 +781,14 @@ public:
 
         @see DrawPolyLine
      */
-    void                        DrawPolyPolygon( const PolyPolygon& rPolyPoly );
+    void                        DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
 
 private:
 
-    SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly = NULL );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly = NULL );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly );
+    SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly = NULL );
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly = NULL );
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolygon& rPolyPoly );
     // #i101491#
     // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
     // without MetaFile processing
@@ -825,7 +825,7 @@ public:
 
 public:
     void                        DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
-    void                        DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                        DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
     void                        AddGradientActions(
                                     const Rectangle& rRect,
@@ -840,8 +840,8 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const tools::PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const tools::PolyPolygon* pClipPolyPoly );
 
     SAL_DLLPRIVATE long         GetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
 
@@ -857,23 +857,23 @@ private:
 public:
 
 #ifdef _MSC_VER
-    void                        DrawHatch( const PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
-    void                        AddHatchActions( const PolyPolygon& rPolyPoly,
+    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
+    void                        AddHatchActions( const tools::PolyPolygon& rPolyPoly,
                                                  const ::Hatch& rHatch,
                                                  GDIMetaFile& rMtf );
 #else
-    void                        DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
-    void                        AddHatchActions( const PolyPolygon& rPolyPoly,
+    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
+    void                        AddHatchActions( const tools::PolyPolygon& rPolyPoly,
                                                  const Hatch& rHatch,
                                                  GDIMetaFile& rMtf );
 #endif
 
-    void                        DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
+    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
 
 private:
 
     SAL_DLLPRIVATE void         CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
-    SAL_DLLPRIVATE void         DrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
+    SAL_DLLPRIVATE void         DrawHatchLine( const Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
     ///@}
 
 
@@ -1001,7 +1001,7 @@ public:
 
     Rectangle                   ImplGetTextBoundRect( const SalLayout& );
 
-    bool                        GetTextOutline( PolyPolygon&,
+    bool                        GetTextOutline( tools::PolyPolygon&,
                                                 const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                 sal_Int32 nLen = -1, bool bOptimize = true,
                                                 sal_uLong nLayoutWidth = 0, const long* pDXArray = NULL ) const;
@@ -1156,7 +1156,7 @@ public:
      */
     SystemFontData              GetSysFontData( int nFallbacklevel ) const;
 
-    SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2,
+    SAL_DLLPRIVATE void         ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2,
                                                      long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE static FontEmphasisMark
                                 ImplGetEmphasisMarkStyle( const vcl::Font& rFont );
@@ -1216,7 +1216,7 @@ private:
     SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
                                                        long nMaxWidth, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
 
-    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );
     ///@}
 
@@ -1512,7 +1512,7 @@ public:
     virtual sal_uInt16          GetAlphaBitCount() const;
 
 
-    void                        DrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    void                        DrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency);
     void                        DrawTransparent(
                                         const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
@@ -1520,12 +1520,12 @@ public:
 
 protected:
 
-    virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
-    void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
+    virtual void                EmulateDrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    void                        DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly );
 
 private:
 
-    SAL_DLLPRIVATE bool         DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    SAL_DLLPRIVATE bool         DrawTransparentNatively( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     ///@}
 
 
@@ -1614,7 +1614,7 @@ public:
     Size                        LogicToPixel( const Size& rLogicSize ) const;
     Rectangle                   LogicToPixel( const Rectangle& rLogicRect ) const;
     Polygon                     LogicToPixel( const Polygon& rLogicPoly ) const;
-    PolyPolygon                 LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const;
+    tools::PolyPolygon          LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
     vcl::Region                      LogicToPixel( const vcl::Region& rLogicRegion )const;
     Point                       LogicToPixel( const Point& rLogicPt,
@@ -1627,7 +1627,7 @@ public:
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolygon         LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
                                               const MapMode& rMapMode ) const;
-    PolyPolygon                 LogicToPixel( const PolyPolygon& rLogicPolyPoly,
+    tools::PolyPolygon          LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                               const MapMode& rMapMode ) const;
@@ -1639,7 +1639,7 @@ public:
     Size                        PixelToLogic( const Size& rDeviceSize ) const;
     Rectangle                   PixelToLogic( const Rectangle& rDeviceRect ) const;
     Polygon                     PixelToLogic( const Polygon& rDevicePoly ) const;
-    PolyPolygon                 PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const;
+    tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
     vcl::Region                      PixelToLogic( const vcl::Region& rDeviceRegion ) const;
     Point                       PixelToLogic( const Point& rDevicePt,
@@ -1652,7 +1652,7 @@ public:
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolygon         PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
                                               const MapMode& rMapMode ) const;
-    PolyPolygon                 PixelToLogic( const PolyPolygon& rDevicePolyPoly,
+    tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
                                               const MapMode& rMapMode ) const;
@@ -1842,7 +1842,7 @@ private:
 
      @returns Polypolygon based on physical device pixel coordinates and units.
      */
-    SAL_DLLPRIVATE PolyPolygon  ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyPoly ) const;
+    SAL_DLLPRIVATE tools::PolyPolygon  ImplLogicToDevicePixel( const tools::PolyPolygon& rLogicPolyPoly ) const;
 
     /** Convert a line in logical units to a line in physical device pixel units.
 

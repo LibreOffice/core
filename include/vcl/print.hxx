@@ -288,7 +288,7 @@ protected:
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     BitmapEx& rBitmapEx ) SAL_OVERRIDE;
 
-    virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent ) SAL_OVERRIDE;
+    virtual void                EmulateDrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent ) SAL_OVERRIDE;
 
     virtual void                InitFont() const SAL_OVERRIDE;
     virtual void                SetFontOrientation( ImplFontEntry* const pFontEntry ) const SAL_OVERRIDE;

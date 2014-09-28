@@ -80,14 +80,14 @@ public:
     const Graphic&      GetGraphic() const;
     bool                IsGraphicChanged() const;
 
-    PolyPolygon         GetPolyPolygon();
+    tools::PolyPolygon         GetPolyPolygon();
 
     const void*         GetEditingObject() const;
 
     void                Update( const Graphic& rGraphic, bool bGraphicLinked,
-                                const PolyPolygon* pPolyPoly = NULL, void* pEditingObj = NULL );
+                                const tools::PolyPolygon* pPolyPoly = NULL, void* pEditingObj = NULL );
 
-    static PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
+    static tools::PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
                                             const Rectangle* pRect = NULL,
                                             const sal_uIntPtr nFlags = 0L );
 };

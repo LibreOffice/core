@@ -1366,7 +1366,7 @@ bool ServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) c
 class PolyArgs
 {
 public:
-                PolyArgs( PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints );
+                PolyArgs( tools::PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints );
                 ~PolyArgs();
 
     void        AddPoint( long nX, long nY, PolyFlags);
@@ -1376,7 +1376,7 @@ public:
     long        GetPosY() const { return maPosition.y;}
 
 private:
-    PolyPolygon& mrPolyPoly;
+    tools::PolyPolygon& mrPolyPoly;
 
     Point*      mpPointAry;
     sal_uInt8*       mpFlagAry;
@@ -1388,7 +1388,7 @@ private:
     bool        bHasOffline;
 };
 
-PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
+PolyArgs::PolyArgs( tools::PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
 :   mrPolyPoly(rPolyPoly),
     mnMaxPoints(nMaxPoints),
     mnPoints(0),
@@ -1566,7 +1566,7 @@ bool ServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     }
 
     long nMaxPoints = 1 + rOutline.n_points * 3;
-    PolyPolygon aToolPolyPolygon;
+    tools::PolyPolygon aToolPolyPolygon;
     PolyArgs aPolyArg( aToolPolyPolygon, nMaxPoints );
 
     /*int nAngle =*/ ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );

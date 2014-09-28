@@ -247,7 +247,7 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
-void Printer::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
+void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                        sal_uInt16 nTransparencePercent )
 {
     // #110958# Disable alpha VDev, we perform the necessary

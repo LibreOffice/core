@@ -100,9 +100,9 @@ FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
 }
 
 /** Merges the rSource polypolygon into the rDest polypolygon. */
-inline void lclPolyPolyUnion( PolyPolygon& rDest, const PolyPolygon& rSource )
+inline void lclPolyPolyUnion( tools::PolyPolygon& rDest, const tools::PolyPolygon& rSource )
 {
-    const PolyPolygon aTmp( rDest );
+    const tools::PolyPolygon aTmp( rDest );
     aTmp.GetUnion( rSource, rDest );
 }
 
@@ -163,7 +163,7 @@ void FrameBorder::AddFocusPolygon( const Polygon& rFocus )
     lclPolyPolyUnion( maFocusArea, rFocus );
 }
 
-void FrameBorder::MergeFocusToPolyPolygon( PolyPolygon& rPPoly ) const
+void FrameBorder::MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const
 {
     lclPolyPolyUnion( rPPoly, maFocusArea );
 }
@@ -528,7 +528,7 @@ void FrameSelectorImpl::DrawBackground()
         mnLine1 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
 
     // draw the white space for enabled frame borders
-    PolyPolygon aPPoly;
+    tools::PolyPolygon aPPoly;
     for( FrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
         (*aIt)->MergeFocusToPolyPolygon( aPPoly );
     aPPoly.Optimize( POLY_OPTIMIZE_CLOSE );
@@ -676,7 +676,7 @@ void FrameSelectorImpl::CopyVirDevToControl()
 
 void FrameSelectorImpl::DrawAllTrackingRects()
 {
-    PolyPolygon aPPoly;
+    tools::PolyPolygon aPPoly;
     if( mrFrameSel.IsAnyBorderSelected() )
     {
         for( SelFrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt )

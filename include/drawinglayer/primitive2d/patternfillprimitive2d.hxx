@@ -33,10 +33,10 @@ namespace drawinglayer
     {
         /** PatternFillPrimitive2D class
 
-            This primitive allows filling a given PolyPolygon with a pattern
+            This primitive allows filling a given tools::PolyPolygon with a pattern
             defined by a sequence of primitives which are mapped to  the unit range.
             The pattern is defined using a reference range which defines a rectangular
-            area relative to the PolyPolygon (in unit coordinates) which is virtually
+            area relative to the tools::PolyPolygon (in unit coordinates) which is virtually
             infinitely repeated.
          */
         class DRAWINGLAYER_DLLPUBLIC PatternFillPrimitive2D : public BufferedDecompositionPrimitive2D

@@ -154,7 +154,7 @@ private:
     void WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
     void WMFRecord_Polygon(const Polygon & rPoly);
     void WMFRecord_PolyLine(const Polygon & rPoly);
-    void WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly);
+    void WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly);
     void WMFRecord_Rectangle(const Rectangle & rRect);
     void WMFRecord_RestoreDC();
     void WMFRecord_RoundRect(const Rectangle & rRect, long nHorzRound, long nVertRound);

@@ -1943,7 +1943,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
              what I actually see in word
             */
 
-            PolyPolygon aPoly(*pRecord->pWrapPolygon);
+            tools::PolyPolygon aPoly(*pRecord->pWrapPolygon);
             const Size &rSize = pNd->GetTwipSize();
             /*
              Move to the left by 15twips, and rescale to

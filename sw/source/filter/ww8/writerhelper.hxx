@@ -732,17 +732,17 @@ namespace sw
             a PolyPolygon
 
             @param rPolyPoly
-            The PolyPolygon to try and turn into a Polygon
+            The tools::PolyPolygon to try and turn into a Polygon
 
             @return best fit Polygon from rPolyPoly
 
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly);
+        Polygon PolygonFromPolyPolygon(const tools::PolyPolygon &rPolyPoly);
 
         /// Undo all scaling / move tricks of the wrap polygon done during import.
-        Polygon CorrectWordWrapPolygonForExport(const PolyPolygon& rPolyPoly, const SwNoTxtNode* pNd);
+        Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTxtNode* pNd);
 
         /** Make setting a drawing object's layer in a Writer document easy
 

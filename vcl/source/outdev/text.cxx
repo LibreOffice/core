@@ -2758,7 +2758,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
             // convert character image into outline
             Bitmap aBmp( aVDev.GetBitmap(Point(0, 0), aSize));
 
-            PolyPolygon aPolyPoly;
+            tools::PolyPolygon aPolyPoly;
             bool bVectorized = aBmp.Vectorize(aPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES);
             if( !bVectorized )
                 bSuccess = false;
@@ -2826,12 +2826,12 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     rResultVector.reserve( aB2DPolyPolyVector.size() );
     ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
     for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
-        rResultVector.push_back(PolyPolygon(*aIt)); // #i76339#
+        rResultVector.push_back(tools::PolyPolygon(*aIt)); // #i76339#
 
     return true;
 }
 
-bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly, const OUString& rStr,
+bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString& rStr,
                                        sal_Int32 nBase, sal_Int32 nIndex, sal_Int32 nLen,
                                        bool bOptimize, sal_uLong nTWidth, const long* pDXArray ) const
 {

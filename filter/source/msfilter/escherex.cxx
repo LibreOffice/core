@@ -862,7 +862,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
     if ( EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, sLine, false ) )
     {
-        PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aAny ) );
+        tools::PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aAny ) );
         if ( aPolyPoly.Count() && aPolyPoly[ 0 ].GetSize() )
         {
             bIsArrow = true;
@@ -1401,7 +1401,7 @@ GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, cons
     aOut.SetLineColor();
     aOut.SetFillColor(bFillBackground ? rBackColor : Color(COL_TRANSPARENT));
     aOut.DrawRect(rRect);
-    aOut.DrawHatch(PolyPolygon(rRect), Hatch((HatchStyle)rHatch.Style, Color(rHatch.Color), rHatch.Distance, (sal_uInt16)rHatch.Angle));
+    aOut.DrawHatch(tools::PolyPolygon(rRect), Hatch((HatchStyle)rHatch.Style, Color(rHatch.Color), rHatch.Distance, (sal_uInt16)rHatch.Angle));
     aMtf.Stop();
     aMtf.WindStart();
     aMtf.SetPrefMapMode(MapMode(MAP_100TH_MM));
@@ -1774,9 +1774,9 @@ bool EscherPropertyContainer::CreateGraphicProperties(
     return bRetValue;
 }
 
-PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
+tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
 {
-    PolyPolygon aRetPolyPoly;
+    tools::PolyPolygon aRetPolyPoly;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXPropSet;
     ::com::sun::star::uno::Any aAny( rXShape->queryInterface(
         cppu::UnoType<com::sun::star::beans::XPropertySet>::get()));
@@ -1801,12 +1801,12 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
     return aRetPolyPoly;
 }
 
-PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno::Any& rAny )
+tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno::Any& rAny )
 {
     bool bNoError = true;
 
     Polygon aPolygon;
-    PolyPolygon aPolyPolygon;
+    tools::PolyPolygon aPolyPolygon;
 
     if ( rAny.getValueType() == cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get())
     {
@@ -2024,7 +2024,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
     bool    bRetValue = true;
     bool    bLine = ( nFlags & ESCHER_CREATEPOLYGON_LINE ) != 0;
 
-    PolyPolygon aPolyPolygon;
+    tools::PolyPolygon aPolyPolygon;
 
     if ( pPolygon )
         aPolyPolygon.Insert( *pPolygon, POLYPOLY_APPEND );
@@ -2385,7 +2385,7 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                                 {
                                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgePath ) )
                                     {
-                                        PolyPolygon aPolyPolygon = GetPolyPolygon( aAny );
+                                        tools::PolyPolygon aPolyPolygon = GetPolyPolygon( aAny );
                                         Polygon aPoly;
                                         if ( aPolyPolygon.Count() > 0 )
                                         {
@@ -4792,7 +4792,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
                         // #i74631# use explicit constructor here. Also XPolyPolygon is not necessary,
                         // reducing to PolyPolygon
-                        const PolyPolygon aPolyPoly(((SdrPathObj*)pPoly)->GetPathPoly());
+                        const tools::PolyPolygon aPolyPoly(((SdrPathObj*)pPoly)->GetPathPoly());
 
                         for ( a = 0; a < aPolyPoly.Count(); a++ )
                         {

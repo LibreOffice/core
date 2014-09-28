@@ -126,7 +126,7 @@ namespace basegfx
             to [F_PI .. 0.01 * F_PI].
 
             @return
-            The PolyPolygon containing the geometry of the extended line by
+            The tools::PolyPolygon containing the geometry of the extended line by
             it's line width. Contains bezier segments and edge roundings as
             needed and defined.
         */

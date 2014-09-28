@@ -34,10 +34,10 @@ class ImplVectorizer
 private:
 
     ImplVectMap*    ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
-    void            ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags );
+    void            ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags );
     bool            ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
     bool            ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const;
-    void            ImplLimitPolyPoly( PolyPolygon& rPolyPoly );
+    void            ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
 
 public:
 
@@ -46,7 +46,7 @@ public:
 
     bool            ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
                                    sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress );
-    bool            ImplVectorize( const Bitmap& rMonoBmp, PolyPolygon& rPolyPoly,
+    bool            ImplVectorize( const Bitmap& rMonoBmp, tools::PolyPolygon& rPolyPoly,
                                    sal_uLong nFlags, const Link* pProgress );
 };
 

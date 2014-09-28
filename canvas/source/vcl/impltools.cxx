@@ -150,7 +150,7 @@ namespace vclcanvas
             return true;
         }
 
-        bool isRectangle( const PolyPolygon& rPolyPoly )
+        bool isRectangle( const ::tools::PolyPolygon& rPolyPoly )
         {
             // exclude some cheap cases first
             if( rPolyPoly.Count() != 1 )
@@ -184,7 +184,7 @@ namespace vclcanvas
             return ::vcl::unotools::pointFromB2DPoint( aPoint );
         }
 
-        ::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&  rPoly,
+        ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&  rPoly,
                                       const rendering::ViewState&       rViewState,
                                       const rendering::RenderState&     rRenderState )
         {
@@ -197,7 +197,7 @@ namespace vclcanvas
 
             aTemp.transform( aMatrix );
 
-            return ::PolyPolygon( aTemp );
+            return ::tools::PolyPolygon( aTemp );
         }
 
         ::BitmapEx transformBitmap( const BitmapEx&                 rBitmap,

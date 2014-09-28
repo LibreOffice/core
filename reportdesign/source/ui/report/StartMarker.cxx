@@ -116,7 +116,7 @@ void OStartMarker::Paint( const Rectangle& rRect )
     Rectangle aWholeRect(Point(),aSize);
     {
         const ColorChanger aColors( this, m_nTextBoundaries, m_nColor );
-        PolyPolygon aPoly;
+        tools::PolyPolygon aPoly;
         aPoly.Insert(Polygon(aWholeRect,nCornerWidth,nCornerWidth));
 
         Color aStartColor(m_nColor);

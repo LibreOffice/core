@@ -581,12 +581,12 @@ Polygon OutputDevice::ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const
     return aPoly;
 }
 
-PolyPolygon OutputDevice::ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyPoly ) const
+tools::PolyPolygon OutputDevice::ImplLogicToDevicePixel( const tools::PolyPolygon& rLogicPolyPoly ) const
 {
     if ( !mbMap && !mnOutOffX && !mnOutOffY )
         return rLogicPolyPoly;
 
-    PolyPolygon aPolyPoly( rLogicPolyPoly );
+    tools::PolyPolygon aPolyPoly( rLogicPolyPoly );
     sal_uInt16      nPoly = aPolyPoly.Count();
     for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
@@ -1038,13 +1038,13 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
     return aPoly;
 }
 
-PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const
+tools::PolyPolygon OutputDevice::LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly ) const
 {
 
     if ( !mbMap )
         return rLogicPolyPoly;
 
-    PolyPolygon aPolyPoly( rLogicPolyPoly );
+    tools::PolyPolygon aPolyPoly( rLogicPolyPoly );
     sal_uInt16      nPoly = aPolyPoly.Count();
     for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
@@ -1205,14 +1205,14 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
     return aPoly;
 }
 
-PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly,
+tools::PolyPolygon OutputDevice::LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly,
     const MapMode& rMapMode ) const
 {
 
     if ( rMapMode.IsDefault() )
         return rLogicPolyPoly;
 
-    PolyPolygon aPolyPoly( rLogicPolyPoly );
+    tools::PolyPolygon aPolyPoly( rLogicPolyPoly );
     sal_uInt16              nPoly = aPolyPoly.Count();
     for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
@@ -1351,13 +1351,13 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
     return aPoly;
 }
 
-PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const
+tools::PolyPolygon OutputDevice::PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const
 {
 
     if ( !mbMap )
         return rDevicePolyPoly;
 
-    PolyPolygon aPolyPoly( rDevicePolyPoly );
+    tools::PolyPolygon aPolyPoly( rDevicePolyPoly );
     sal_uInt16      nPoly = aPolyPoly.Count();
     for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
@@ -1514,14 +1514,14 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
     return aPoly;
 }
 
-PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly,
+tools::PolyPolygon OutputDevice::PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly,
     const MapMode& rMapMode ) const
 {
 
     if ( rMapMode.IsDefault() )
         return rDevicePolyPoly;
 
-    PolyPolygon aPolyPoly( rDevicePolyPoly );
+    tools::PolyPolygon aPolyPoly( rDevicePolyPoly );
     sal_uInt16      nPoly = aPolyPoly.Count();
     for( sal_uInt16 i = 0; i < nPoly; i++ )
     {

@@ -56,7 +56,7 @@ class Pointer;
 class CommandEvent;
 class MapMode;
 class OutputDevice;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class SfxStyleSheetPool;
 class SfxStyleSheet;
 class SfxItemPool;

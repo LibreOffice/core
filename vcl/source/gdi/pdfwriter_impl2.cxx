@@ -50,7 +50,7 @@ using namespace com::sun::star::beans;
 
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
 
-void PDFWriterImpl::implWriteGradient( const PolyPolygon& i_rPolyPoly, const Gradient& i_rGradient,
+void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, const Gradient& i_rGradient,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
 {
     GDIMetaFile        aTmpMtf;
@@ -362,7 +362,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     }
                     else
                     {
-                        const PolyPolygon aPolyPoly( pA->GetRect() );
+                        const tools::PolyPolygon aPolyPoly( pA->GetRect() );
                         implWriteGradient( aPolyPoly, rGradient, pDummyVDev, i_rContext );
                     }
                 }
@@ -562,8 +562,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 Polygon aPath;
                                 aStroke.getPath( aPath );
 
-                                PolyPolygon aStartArrow;
-                                PolyPolygon aEndArrow;
+                                tools::PolyPolygon aStartArrow;
+                                tools::PolyPolygon aEndArrow;
                                 double fTransparency( aStroke.getTransparency() );
                                 double fStrokeWidth( aStroke.getStrokeWidth() );
                                 SvtGraphicStroke::DashArray aDashArray;
@@ -649,7 +649,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     double fTransparency = aFill.getTransparency();
                                     if ( fTransparency == 0.0 )
                                     {
-                                        PolyPolygon aPath;
+                                        tools::PolyPolygon aPath;
                                         aFill.getPath( aPath );
 
                                         bSkipSequence = true;
@@ -733,7 +733,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     }
 
                                     // draw polypolygon with pattern fill
-                                    PolyPolygon aPath;
+                                    tools::PolyPolygon aPath;
                                     aFill.getPath( aPath );
                                     m_rOuterFace.DrawPolyPolygon( aPath, nPattern, aFill.getFillRule() == SvtGraphicFill::fillEvenOdd );
 

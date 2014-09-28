@@ -166,7 +166,7 @@ void PDFWriter::DrawPolyLine( const Polygon& rPoly, const ExtLineInfo& rInfo )
     pImplementation->drawPolyLine( rPoly, rInfo );
 }
 
-void PDFWriter::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
+void PDFWriter::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     pImplementation->drawPolyPolygon( rPolyPoly );
 }
@@ -186,7 +186,7 @@ void PDFWriter::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize, const
     pImplementation->drawBitmap( rDestPt, rDestSize, rBitmap );
 }
 
-void PDFWriter::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch )
+void PDFWriter::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
     pImplementation->drawHatch( rPolyPoly, rHatch );
 }
@@ -196,7 +196,7 @@ void PDFWriter::DrawGradient( const Rectangle& rRect, const Gradient& rGradient 
     pImplementation->drawGradient( rRect, rGradient );
 }
 
-void PDFWriter::DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient )
+void PDFWriter::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient )
 {
     pImplementation->push(PUSH_CLIPREGION);
     pImplementation->setClipRegion( rPolyPoly.getB2DPolyPolygon() );
@@ -209,7 +209,7 @@ void PDFWriter::DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpap
     pImplementation->drawWallpaper( rRect, rWallpaper );
 }
 
-void PDFWriter::DrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent )
+void PDFWriter::DrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent )
 {
     pImplementation->drawTransparent( rPolyPoly, nTransparencePercent );
 }

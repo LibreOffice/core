@@ -149,7 +149,7 @@ public:
         // appends a polygon optionally closing it
         void appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
         // appends a polypolygon optionally closing the subpaths
-        void appendPolyPolygon( const PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
+        void appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
         // appends a polypolygon optionally closing the subpaths
         void appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
         // converts a length (either vertical or horizontal; this
@@ -1017,7 +1017,7 @@ i12626
     bool checkEmitStructure();
 
     /* draws an emphasis mark */
-    void drawEmphasisMark(  long nX, long nY, const PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+    void drawEmphasisMark(  long nX, long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
 
     /* true if PDF/A-1a or PDF/A-1b is output */
     bool            m_bIsPDF_A1;
@@ -1057,7 +1057,7 @@ i12626
     bool prepareEncryption( const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
 
     // helper for playMetafile
-    void implWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
+    void implWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient,
                             VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
     void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx,
                            VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
@@ -1216,7 +1216,7 @@ public:
     void drawLine( const Point& rStart, const Point& rStop );
     void drawLine( const Point& rStart, const Point& rStop, const LineInfo& rInfo );
     void drawPolygon( const Polygon& rPoly );
-    void drawPolyPolygon( const PolyPolygon& rPolyPoly );
+    void drawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void drawPolyLine( const Polygon& rPoly );
     void drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo );
     void drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo );
@@ -1233,9 +1233,9 @@ public:
     void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
 
     void drawGradient( const Rectangle& rRect, const Gradient& rGradient );
-    void drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
+    void drawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
     void drawWallpaper( const Rectangle& rRect, const Wallpaper& rWall );
-    void drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nTransparentPercent );
+    void drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt32 nTransparentPercent );
     void beginTransparencyGroup();
     void endTransparencyGroup( const Rectangle& rBoundingBox, sal_uInt32 nTransparentPercent );
 

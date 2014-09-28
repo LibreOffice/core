@@ -34,16 +34,16 @@ namespace drawinglayer
         /** MaskPrimitive2D class
 
             This is the central masking primitive. It's a grouping
-            primitive and contains a PolyPolygon which defines the visible
+            primitive and contains a tools::PolyPolygon which defines the visible
             area. Only visualisation parts of the Child primitive sequence
-            inside of the mask PolyPolygon is defined to be visible.
+            inside of the mask tools::PolyPolygon is defined to be visible.
 
             This primitive should be handled by a renderer. If it is not handled,
             it decomposes to its Child content, and thus the visualisation would
             contaiun no clips.
 
             The geometrc range of this primitive is completely defined by the Mask
-            PolyPolygon since by definition nothing outside of the mask is visible.
+            tools::PolyPolygon since by definition nothing outside of the mask is visible.
          */
         class DRAWINGLAYER_DLLPUBLIC MaskPrimitive2D : public GroupPrimitive2D
         {

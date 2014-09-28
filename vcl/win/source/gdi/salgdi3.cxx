@@ -2371,7 +2371,7 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
 
     delete[] pData;
 
-    // rescaling needed for the PolyPolygon conversion
+    // rescaling needed for the tools::PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
         const double fFactor(mfCurrentFontScale/256);

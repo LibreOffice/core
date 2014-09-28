@@ -47,7 +47,7 @@ namespace drawinglayer
 
             This is the basic primitive for representing a text portion. It contains
             all needed information. If it is not handled by a renderer, its decomposition
-            will provide the text PolyPolygon outlines as filled polygons, correctly
+            will provide the text tools::PolyPolygon outlines as filled polygons, correctly
             transformed.
 
             To get better text quality, it is suggested to handle tis primitive directly

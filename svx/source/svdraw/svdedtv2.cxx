@@ -1376,7 +1376,7 @@ bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolygon, 
 bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, bool bMakeLines) const
 {
     bool bOtherObjs(false);    // true=objects other than PathObj's existent
-    bool bMin1PolyPoly(false); // true=at least 1 PolyPolygon with more than one Polygon existent
+    bool bMin1PolyPoly(false); // true=at least 1 tools::PolyPolygon with more than one Polygon existent
     SdrObjList* pOL = pObj->GetSubList();
 
     if(pOL)

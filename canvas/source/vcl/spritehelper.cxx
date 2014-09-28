@@ -259,7 +259,7 @@ namespace vclcanvas
                             rTargetSurface.SetLineColor( Color( 0,255,0 ) );
                             rTargetSurface.SetFillColor();
 
-                            rTargetSurface.DrawPolyPolygon(PolyPolygon(aClipPoly)); // #i76339#
+                            rTargetSurface.DrawPolyPolygon(::tools::PolyPolygon(aClipPoly)); // #i76339#
                         }
 
                         vcl::Region aClipRegion( aClipPoly );
@@ -302,7 +302,7 @@ namespace vclcanvas
 
                 if( mbShowSpriteBounds )
                 {
-                    ::PolyPolygon aMarkerPoly(
+                    ::tools::PolyPolygon aMarkerPoly(
                         ::canvas::tools::getBoundMarksPolyPolygon(
                             ::basegfx::B2DRectangle(aOutPos.X(),
                                                     aOutPos.Y(),

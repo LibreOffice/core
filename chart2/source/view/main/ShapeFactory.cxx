@@ -85,7 +85,7 @@ void ShapeFactory::setPageSize(uno::Reference< drawing::XShapes >, const awt::Si
 {
 }
 
-//  diverse PolyPolygon create methods
+//  diverse tools::PolyPolygon create methods
 
 uno::Any createPolyPolygon_Cube(
             const drawing::Direction3D& rSize, double fRoundedEdge, bool bRounded = true )

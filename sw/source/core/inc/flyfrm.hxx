@@ -31,7 +31,7 @@ class SwBorderAttrs;
 class SwVirtFlyDrawObj;
 class SwFrmFmts;
 class SwAttrSetChg;
-class PolyPolygon;
+namespace tools { class PolyPolygon; }
 class SwFlyDrawContact;
 class SwFmt;
 
@@ -226,7 +226,7 @@ public:
 
     // #i13147# - add parameter <_bForPaint> to avoid load of
     // the graphic during paint. Default value: sal_False
-    bool GetContour( PolyPolygon&   rContour,
+    bool GetContour( tools::PolyPolygon&   rContour,
                      const bool _bForPaint = false ) const;
 
     // Paint on this shell (consider Preview, print flag, etc. recursively)?

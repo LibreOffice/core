@@ -213,7 +213,7 @@ struct OSPalette {
 struct OSArea {
     OSArea    * pSucc;
     sal_uInt8   nFlags;
-    PolyPolygon aPPoly;
+    tools::PolyPolygon aPPoly;
     bool    bClosed;
     Color       aCol;
     Color       aBgCol;
@@ -226,7 +226,7 @@ struct OSPath
 {
     OSPath*     pSucc;
     sal_uInt32  nID;
-    PolyPolygon aPPoly;
+    tools::PolyPolygon aPPoly;
     bool    bClosed;
     bool    bStroke;
 };
@@ -395,7 +395,7 @@ private:
     bool    IsLineInfo();
     void        DrawPolyLine( const Polygon& rPolygon );
     void        DrawPolygon( const Polygon& rPolygon );
-    void        DrawPolyPolygon( const PolyPolygon& rPolygon );
+    void        DrawPolyPolygon( const tools::PolyPolygon& rPolygon );
     sal_uInt16  ReadBigEndianWord();
     sal_uLong   ReadBigEndian3BytesLong();
     sal_uLong   ReadLittleEndian3BytesLong();
@@ -493,7 +493,7 @@ void OS2METReader::DrawPolygon( const Polygon& rPolygon )
         pVirDev->DrawPolygon( rPolygon );
 }
 
-void OS2METReader::DrawPolyPolygon( const PolyPolygon& rPolyPolygon )
+void OS2METReader::DrawPolyPolygon( const tools::PolyPolygon& rPolyPolygon )
 {
     if ( IsLineInfo() )
     {
@@ -513,7 +513,7 @@ void OS2METReader::AddPointsToArea(const Polygon & rPoly)
     sal_uInt16 nOldSize, nNewSize,i;
 
     if (pAreaStack==NULL || rPoly.GetSize()==0) return;
-    PolyPolygon * pPP=&(pAreaStack->aPPoly);
+    tools::PolyPolygon * pPP=&(pAreaStack->aPPoly);
     if (pPP->Count()==0 || pAreaStack->bClosed) pPP->Insert(rPoly);
     else {
         Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
@@ -534,7 +534,7 @@ void OS2METReader::AddPointsToPath(const Polygon & rPoly)
     sal_uInt16 nOldSize, nNewSize,i;
 
     if (pPathStack==NULL || rPoly.GetSize()==0) return;
-    PolyPolygon * pPP=&(pPathStack->aPPoly);
+    tools::PolyPolygon * pPP=&(pPathStack->aPPoly);
     if (pPP->Count()==0 /*|| pPathStack->bClosed==sal_True*/) pPP->Insert(rPoly);
     else {
         Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
@@ -1190,7 +1190,7 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
 void OS2METReader::ReadPolygons()
 {
     sal_uInt32 i,j,nNumPolys, nNumPoints;
-    PolyPolygon aPolyPoly;
+    tools::PolyPolygon aPolyPoly;
     Polygon aPoly;
     Point aPoint;
     sal_uInt8 nFlags;

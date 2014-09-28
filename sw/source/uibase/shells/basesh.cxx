@@ -963,7 +963,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         aSet.Put( aSur );
                         rSh.SetFlyFrmAttr( aSet );
                     }
-                    const PolyPolygon aPoly( pDlg->GetPolyPolygon() );
+                    const tools::PolyPolygon aPoly( pDlg->GetPolyPolygon() );
                     rSh.SetGraphicPolygon( &aPoly );
                     if ( pDlg->IsGraphicChanged() )
                         rSh.ReRead( OUString(), OUString(), &pDlg->GetGraphic());

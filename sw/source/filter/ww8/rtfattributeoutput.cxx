@@ -3737,7 +3737,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         {
             if (const SwNoTxtNode* pNd = sw::util::GetNoTxtNodeFromSwFrmFmt(*pFlyFrmFmt))
             {
-                const PolyPolygon* pPolyPoly = pNd->HasContour();
+                const tools::PolyPolygon* pPolyPoly = pNd->HasContour();
                 if (pPolyPoly && pPolyPoly->Count())
                 {
                     Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);

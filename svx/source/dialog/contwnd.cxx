@@ -47,7 +47,7 @@ ContourWindow::~ContourWindow()
 {
 }
 
-void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
+void ContourWindow::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     SdrPage*        pPage = (SdrPage*) pModel->GetPage( 0 );
     const sal_uInt16    nPolyCount = rPolyPoly.Count();
@@ -90,13 +90,13 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     pModel->SetChanged( false );
 }
 
-const PolyPolygon& ContourWindow::GetPolyPolygon()
+const tools::PolyPolygon& ContourWindow::GetPolyPolygon()
 {
     if ( pModel->IsChanged() )
     {
         SdrPage* pPage = (SdrPage*) pModel->GetPage( 0 );
 
-        aPolyPoly = PolyPolygon();
+        aPolyPoly = tools::PolyPolygon();
 
         if ( pPage && pPage->GetObjCount() )
         {
@@ -104,7 +104,7 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
             // Not sure if subdivision is needed for ContourWindow, but maybe it cannot handle
             // curves at all. Keeping subdivision here for security
             const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(pPathObj->GetPathPoly()));
-            aPolyPoly = PolyPolygon(aB2DPolyPolygon);
+            aPolyPoly = tools::PolyPolygon(aB2DPolyPolygon);
         }
 
         pModel->SetChanged( false );
@@ -148,7 +148,7 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         const Point aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        SetPolyPolygon( PolyPolygon() );
+        SetPolyPolygon( tools::PolyPolygon() );
         aWorkRect = Rectangle( aLogPt, aLogPt );
         Paint( Rectangle( Point(), GetGraphicSize() ) );
         SetEditMode( true );
@@ -206,7 +206,7 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
         if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
         {
-            PolyPolygon _aPolyPoly( GetPolyPolygon() );
+            tools::PolyPolygon _aPolyPoly( GetPolyPolygon() );
 
             _aPolyPoly.Clip( aWorkRect );
             SetPolyPolygon( _aPolyPoly );
@@ -249,7 +249,7 @@ void ContourWindow::Paint( const Rectangle& rRect )
 
     if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
     {
-        PolyPolygon _aPolyPoly( 2, 2 );
+        tools::PolyPolygon _aPolyPoly( 2, 2 );
         const Color aOldFillColor( GetFillColor() );
 
         _aPolyPoly.Insert( Rectangle( Point(), GetGraphicSize() ) );
