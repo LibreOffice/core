@@ -400,7 +400,7 @@ Time SAL_CALL MacabResultSet::getTime(sal_Int32) throw(SQLException, RuntimeExce
 
 ::dbtools::throwFunctionNotSupportedSQLException("getTime", NULL);
 
-    Time nRet;
+    tools::Time nRet;
     return nRet;
 }
 
@@ -823,7 +823,7 @@ void SAL_CALL MacabResultSet::updateDate(sal_Int32, const Date&) throw(SQLExcept
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateTime(sal_Int32, const Time&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateTime(sal_Int32, const tools::Time&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);

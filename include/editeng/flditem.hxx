@@ -276,12 +276,12 @@ private:
 public:
     SV_DECL_PERSIST1( SvxExtTimeField, SvxFieldData, com::sun::star::text::textfield::Type::EXTENDED_TIME )
                             SvxExtTimeField();
-    explicit                SvxExtTimeField( const Time& rTime,
+    explicit                SvxExtTimeField( const tools::Time& rTime,
                                 SvxTimeType eType = SVXTIMETYPE_VAR,
                                 SvxTimeFormat eFormat = SVXTIMEFORMAT_STANDARD );
 
     sal_Int64               GetFixTime() const { return m_nFixTime; }
-    void SetFixTime( const Time& rTime ) { m_nFixTime = rTime.GetTime(); }
+    void SetFixTime( const tools::Time& rTime ) { m_nFixTime = rTime.GetTime(); }
 
     SvxTimeType             GetType() const { return eType; }
     void                    SetType( SvxTimeType eTp ) { eType = eTp; }
@@ -292,7 +292,7 @@ public:
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.
     OUString           GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
-    static OUString    GetFormatted( Time& rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    static OUString    GetFormatted( tools::Time& rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
@@ -418,7 +418,7 @@ public:
     SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, com::sun::star::text::textfield::Type::PRESENTATION_DATE_TIME )
     SvxDateTimeField();
 
-    static OUString    GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    static OUString    GetFormatted( Date& rDate, tools::Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;

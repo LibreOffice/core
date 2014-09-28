@@ -2202,7 +2202,7 @@ util::DateTime InputObjectBase::dumpFileTime( const String& rName )
     // file time is in 10^-7 seconds (100 nanoseconds), convert to nanoseconds
     nFileTime *= 100;
     // entire days
-    sal_Int64 nDays = nFileTime / sal_Int64( ::Time::nanoSecPerDay );
+    sal_Int64 nDays = nFileTime / sal_Int64( ::tools::Time::nanoSecPerDay );
     // number of entire years
     sal_Int64 nYears = (nDays - (nDays / (4 * 365)) + (nDays / (100 * 365)) - (nDays / (400 * 365))) / 365;
     // remaining days in the year
@@ -2225,16 +2225,16 @@ util::DateTime InputObjectBase::dumpFileTime( const String& rName )
     // the day
     aDateTime.Day = static_cast< sal_uInt16 >( nDaysInYear + 1 );
     // number of nanoseconds in the day
-    sal_Int64 nTimeInDay = nFileTime % sal_Int64( ::Time::nanoSecPerDay );
+    sal_Int64 nTimeInDay = nFileTime % sal_Int64( ::tools::Time::nanoSecPerDay );
     // nanoseconds
-    aDateTime.NanoSeconds = static_cast< sal_uInt32 >( nTimeInDay % ::Time::nanoSecPerSec );
-    nTimeInDay /= ::Time::nanoSecPerSec;
+    aDateTime.NanoSeconds = static_cast< sal_uInt32 >( nTimeInDay % ::tools::Time::nanoSecPerSec );
+    nTimeInDay /= ::tools::Time::nanoSecPerSec;
     // seconds
-    aDateTime.Seconds = static_cast< sal_uInt16 >( nTimeInDay % ::Time::secondPerMinute );
-    nTimeInDay /= ::Time::secondPerMinute;
+    aDateTime.Seconds = static_cast< sal_uInt16 >( nTimeInDay % ::tools::Time::secondPerMinute );
+    nTimeInDay /= ::tools::Time::secondPerMinute;
     // minutes
-    aDateTime.Minutes = static_cast< sal_uInt16 >( nTimeInDay % ::Time::minutePerHour );
-    nTimeInDay /= ::Time::minutePerHour;
+    aDateTime.Minutes = static_cast< sal_uInt16 >( nTimeInDay % ::tools::Time::minutePerHour );
+    nTimeInDay /= ::tools::Time::minutePerHour;
     // hours
     aDateTime.Hours = static_cast< sal_uInt16 >( nTimeInDay );
 

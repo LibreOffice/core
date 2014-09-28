@@ -252,7 +252,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     bool bBtnGetOneObjectEnabled = aBtnGetOneObject.IsEnabled();
 
     // calculate overall time
-    Time aTime( 0 );
+    tools::Time aTime( 0 );
     long nFullTime;
     if( aRbtBitmap.IsChecked() )
     {
@@ -296,7 +296,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 
         if( aRbtBitmap.IsChecked() )
         {
-            Time *const pTime = m_FrameList[i].second;
+            tools::Time *const pTime = m_FrameList[i].second;
             assert(pTime);
 
             aTimeField.SetTime( *pTime );
@@ -378,7 +378,7 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
         sal_uLong n = static_cast<sal_uLong>(aNumFldBitmap.GetValue());
         if( n > 0 )
         {
-            Time *const pTime = m_FrameList[n - 1].second;
+            tools::Time *const pTime = m_FrameList[n - 1].second;
             if( pTime )
                 aTimeField.SetTime( *pTime );
         }
@@ -506,7 +506,7 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 {
     sal_uLong nPos = static_cast<sal_uLong>(aNumFldBitmap.GetValue() - 1);
 
-    Time *const pTime = m_FrameList[nPos].second;
+    tools::Time *const pTime = m_FrameList[nPos].second;
 
     *pTime = aTimeField.GetTime();
 
@@ -627,11 +627,11 @@ void AnimationWindow::ResetAttrs()
 void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                     SfxProgress* pProgress ) const
 {
-    clock_t aEnd = Time::GetSystemTicks() + nMilliSeconds;
-    clock_t aCurrent = Time::GetSystemTicks();
+    clock_t aEnd = tools::Time::GetSystemTicks() + nMilliSeconds;
+    clock_t aCurrent = tools::Time::GetSystemTicks();
     while (aCurrent < aEnd)
     {
-        aCurrent = Time::GetSystemTicks();
+        aCurrent = tools::Time::GetSystemTicks();
 
         if( pProgress )
             pProgress->SetState( nTime + nMilliSeconds + aCurrent - aEnd );
@@ -1015,7 +1015,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
         for (size_t i = 0; i < nCount; ++i)
         {
-            Time *const pTime = m_FrameList[i].second;
+            tools::Time *const pTime = m_FrameList[i].second;
             long  nTime = pTime->GetNanoSec();
             nTime += pTime->GetSec() * 100;
 

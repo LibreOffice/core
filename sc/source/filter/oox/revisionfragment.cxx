@@ -301,7 +301,7 @@ void RevisionHeadersFragment::importHeader( const AttributeList& rAttribs )
         util::DateTime aDateTime;
         sax::Converter::parseDateTime(aDateTime, 0, aDateTimeStr);
         Date aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
-        Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
+        tools::Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
         aMetadata.maDateTime.SetDate(aDate.GetDate());
         aMetadata.maDateTime.SetTime(aTime.GetTime());
     }

@@ -1289,7 +1289,7 @@ void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pN
     else
     {
         nDate = Date( Date::SYSTEM ).GetDate();
-        nTime = Time( Time::SYSTEM ).GetTime();
+        nTime = tools::Time( tools::Time::SYSTEM ).GetTime();
     }
 
     sal_uInt16 aTypes[5] = {
@@ -1354,7 +1354,7 @@ void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pN
                     {
                         bChgd = true;
                         ((SwDateTimeField*)pFmtFld->GetField())->SetDateTime(
-                                                    DateTime(Date(nDate), Time(nTime)) );
+                                                    DateTime(Date(nDate), tools::Time(nTime)) );
                     }
                     break;
 

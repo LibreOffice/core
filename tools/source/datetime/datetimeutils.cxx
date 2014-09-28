@@ -57,7 +57,7 @@ OString DateTimeToOString( const DateTime& rDateTime )
 
 OString DateToOString( const Date& rDate )
 {
-    Time aTime( Time::EMPTY );
+    tools::Time aTime( tools::Time::EMPTY );
     return DateTimeToOString( DateTime( rDate, aTime ) );
 }
 

@@ -174,7 +174,7 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
     officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::set(
         objectCacheSize, batch);
 
-    const Time aTime( m_pTfGraphicObjectTime->GetTime() );
+    const tools::Time aTime( m_pTfGraphicObjectTime->GetTime() );
     sal_Int32 objectReleaseTime =
         aTime.GetSec() + aTime.GetMin() * 60 + aTime.GetHour() * 3600;
     officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::set(
@@ -227,7 +227,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet* rSet )
     sal_Int32 nTime =
         officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::
         get();
-    Time aTime( (sal_uInt16)( nTime / 3600 ), (sal_uInt16)( ( nTime % 3600 ) / 60 ), (sal_uInt16)( ( nTime % 3600 ) % 60 ) );
+    tools::Time aTime( (sal_uInt16)( nTime / 3600 ), (sal_uInt16)( ( nTime % 3600 ) / 60 ), (sal_uInt16)( ( nTime % 3600 ) % 60 ) );
     m_pTfGraphicObjectTime->SetTime( aTime );
 
     GraphicCacheConfigHdl(m_pNfGraphicCache);

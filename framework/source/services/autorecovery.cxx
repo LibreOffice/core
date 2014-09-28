@@ -372,7 +372,7 @@ private:
     bool m_bListenForConfigChanges;
 
     /** @short  specify the time intervall between two save actions.
-        @descr  Time is measured in [min].
+        @descr  tools::Time is measured in [min].
      */
     sal_Int32 m_nAutoSaveTimeIntervall;
 

@@ -133,7 +133,7 @@ void FiltersTest::testDir(const OUString &rFilter,
     unsigned int nFilterFlags, unsigned int nClipboardID,
     unsigned int nFilterVersion, bool bExport)
 {
-    fprintf(stderr, "File tested,Test Result,Execution Time (ms)\n");
+    fprintf(stderr, "File tested,Test Result,Execution tools::Time (ms)\n");
     recursiveScan(test::pass, rFilter,
         rURL + "pass",
         rUserData, nFilterFlags, nClipboardID, nFilterVersion, bExport);

@@ -262,7 +262,7 @@ ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( !lhs.empty() )
         return ORowSetValue();
 
-    Time aCurTime( Time::SYSTEM );
+    tools::Time aCurTime( tools::Time::SYSTEM );
     return ::com::sun::star::util::Time(aCurTime.GetNanoSec(),
             aCurTime.GetSec(), aCurTime.GetMin(), aCurTime.GetHour(),
             false);

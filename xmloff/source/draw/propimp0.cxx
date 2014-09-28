@@ -68,7 +68,7 @@ bool XMLDurationPropertyHdl::exportXML(
     {
         util::Duration aDuration;
         aDuration.Seconds = static_cast<sal_uInt16>(nVal);
-        aDuration.NanoSeconds = static_cast<sal_uInt32>((nVal - aDuration.Seconds) * ::Time::nanoSecPerSec);
+        aDuration.NanoSeconds = static_cast<sal_uInt32>((nVal - aDuration.Seconds) * ::tools::Time::nanoSecPerSec);
 
         OUStringBuffer aOut;
         ::sax::Converter::convertDuration(aOut, aDuration);

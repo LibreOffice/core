@@ -426,7 +426,7 @@ SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const OUStri
 Reader::Reader()
     : pTemplate(0),
     aDStamp( Date::EMPTY ),
-    aTStamp( Time::EMPTY ),
+    aTStamp( tools::Time::EMPTY ),
     aChkDateTime( DateTime::EMPTY ),
     pStrm(0), pMedium(0), bInsertMode(false),
     bTmplBrowseMode(false), bReadUTF8(false), bBlockMode(false), bOrganizerMode(false),
@@ -467,7 +467,7 @@ SwDoc* Reader::GetTemplateDoc()
         if( !pTemplate || aCurrDateTime >= aChkDateTime )
         {
             Date aTstDate( Date::EMPTY );
-            Time aTstTime( Time::EMPTY );
+            tools::Time aTstTime( tools::Time::EMPTY );
             if( FStatHelper::GetModifiedDateTimeOfFile(
                             aTDir.GetMainURL( INetURLObject::NO_DECODE ),
                             &aTstDate, &aTstTime ) &&

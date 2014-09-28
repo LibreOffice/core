@@ -2653,14 +2653,14 @@ bool TabBar::SwitchPage( const Point& rPos )
         if ( nSwitchId != mnSwitchId )
         {
             mnSwitchId = nSwitchId;
-            mnSwitchTime = Time::GetSystemTicks();
+            mnSwitchTime = tools::Time::GetSystemTicks();
         }
         else
         {
             // change only after 500 ms
             if ( mnSwitchId != GetCurPageId() )
             {
-                if ( Time::GetSystemTicks() > mnSwitchTime+500 )
+                if ( tools::Time::GetSystemTicks() > mnSwitchTime+500 )
                 {
                     mbInSwitching = true;
                     if ( ImplDeactivatePage() )

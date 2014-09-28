@@ -45,7 +45,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
 
         virtual OUString GetAuthor() SAL_OVERRIDE;
         virtual Date    GetDate() SAL_OVERRIDE;
-        virtual Time    GetTime() SAL_OVERRIDE;
+        virtual tools::Time GetTime() SAL_OVERRIDE;
 
         virtual sal_uInt32 MoveCaret() SAL_OVERRIDE;
 

@@ -951,7 +951,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
 
     ULONG nTime = 0;
     if ( bTiming )
-        nTime = Time::GetSystemTicks();
+        nTime = tools::Time::GetSystemTicks();
 
     uno::Any aResult = executeCommand( rName, aArg, bPrint );
 
@@ -1122,7 +1122,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
 
     if ( bTiming )
     {
-        nTime = Time::GetSystemTicks() - nTime;
+        nTime = tools::Time::GetSystemTicks() - nTime;
         OUString aText = "Operation took " + OUString::number(nTime) + " ms.";
         print( aText );
     }
@@ -1134,7 +1134,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
 {
     ULONG nTime = 0;
     if ( bTiming )
-        nTime = Time::GetSystemTicks();
+        nTime = tools::Time::GetSystemTicks();
 
     OpenStack aStack;
     aStack.push( OpenStackEntry( m_xContent, 0 ) );
@@ -1197,7 +1197,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
 
     if ( bTiming )
     {
-        nTime = Time::GetSystemTicks() - nTime;
+        nTime = tools::Time::GetSystemTicks() - nTime;
         OUString aText = "Operation took "  + OUString::number(nTime) + " ms.";
         print( aText );
     }

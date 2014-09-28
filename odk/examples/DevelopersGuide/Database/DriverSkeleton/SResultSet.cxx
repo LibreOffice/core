@@ -332,7 +332,7 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    Time nRet;
+    tools::Time nRet;
     return nRet;
 }
 
@@ -657,7 +657,7 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) thr
 }
 
 
-void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const Time& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const tools::Time& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);

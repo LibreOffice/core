@@ -340,8 +340,8 @@ SalData::SalData()
     mpDitherDiff = 0;           // Dither mapping table
     mpDitherLow = 0;            // Dither mapping table
     mpDitherHigh = 0;           // Dither mapping table
-    mnTimerMS = 0;              // Current Time (in MS) of the Timer
-    mnTimerOrgMS = 0;           // Current Original Time (in MS)
+    mnTimerMS = 0;              // Current tools::Time (in MS) of the Timer
+    mnTimerOrgMS = 0;           // Current Original tools::Time (in MS)
     mnNextTimerTime = 0;
     mnLastEventTime = 0;
     mnTimerId = 0;              // windows timer id

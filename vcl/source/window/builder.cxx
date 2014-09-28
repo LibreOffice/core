@@ -3330,19 +3330,19 @@ void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustme
 
         if (rKey == "upper")
         {
-            Time aUpper(rValue.toInt32());
+            tools::Time aUpper(rValue.toInt32());
             rTarget.SetMax(aUpper);
             rTarget.SetLast(aUpper);
         }
         else if (rKey == "lower")
         {
-            Time aLower(rValue.toInt32());
+            tools::Time aLower(rValue.toInt32());
             rTarget.SetMin(aLower);
             rTarget.SetFirst(aLower);
         }
         else if (rKey == "value")
         {
-            Time aValue(rValue.toInt32());
+            tools::Time aValue(rValue.toInt32());
             rTarget.SetTime(aValue);
         }
         else

@@ -50,7 +50,7 @@ namespace xmloff
 
     OUString VCLTimeHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
-        Time aTime;
+        tools::Time aTime;
         OSL_VERIFY( i_propertyValue >>= aTime );
 
         Duration aDuration; // default-inited to 0
@@ -67,7 +67,7 @@ namespace xmloff
     bool VCLTimeHandler::getPropertyValues( const OUString& i_attributeValue, PropertyValues& o_propertyValues ) const
     {
         Duration aDuration;
-        Time aTime;
+        tools::Time aTime;
         if (::sax::Converter::convertDuration( aDuration, i_attributeValue ))
         {
             aTime = Time(aDuration.NanoSeconds, aDuration.Seconds,
@@ -84,7 +84,7 @@ namespace xmloff
                 return false;
             }
             // legacy integer was in centiseconds
-            nVCLTime *= ::Time::nanoPerCenti;
+            nVCLTime *= ::tools::Time::nanoPerCenti;
             aTime = ::Time(nVCLTime).GetUNOTime();
         }
 

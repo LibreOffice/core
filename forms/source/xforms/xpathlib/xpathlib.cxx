@@ -233,7 +233,7 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
         xmlXPathReturnEmptyString(ctxt);
 }
 
-// Date and Time Functions
+// Date and tools::Time Functions
 
 static OString makeDateTimeString (const DateTime& aDateTime, bool bUTC = true)
 {
@@ -277,7 +277,7 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     3.2.7.2 Canonical representation
     The canonical representation for dateTime is defined by prohibiting certain options
     from the Lexical representation (par.3.2.7.1). Specifically, either the time zone must
-    be omitted or, if present, the time zone must be Coordinated Universal Time (UTC)
+    be omitted or, if present, the time zone must be Coordinated Universal tools::Time (UTC)
     indicated by a "Z".
     */
     DateTime aDateTime( DateTime::SYSTEM );
@@ -317,7 +317,7 @@ static bool parseDateTime(const OUString& aString, DateTime& aDateTime)
     sal_Int32 nSecond = aTimeString.getToken(0, ':', nIndex).toInt32();
 
     Date tmpDate((sal_uInt16)nDay, (sal_uInt16)nMonth, (sal_uInt16)nYear);
-    Time tmpTime(nHour, nMinute, nSecond);
+    tools::Time tmpTime(nHour, nMinute, nSecond);
     DateTime tmpDateTime(tmpDate, tmpTime);
     if (aString.indexOf(aUTCString) < 0)
         tmpDateTime.ConvertToUTC();

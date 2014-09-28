@@ -325,7 +325,7 @@ void SwHTMLParser::NewField()
     case RES_TIMEFLD:
         {
             sal_uLong nNumFmt = 0;
-            sal_Int64 nTime = Time( Time::SYSTEM ).GetTime();
+            sal_Int64 nTime = Time( tools::Time::SYSTEM ).GetTime();
             sal_Int32 nDate = Date( Date::SYSTEM ).GetDate();
             sal_uInt16 nSub = 0;
             bool bValidFmt = false;

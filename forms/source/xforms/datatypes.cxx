@@ -806,7 +806,7 @@ namespace xforms
     {
         Any aTypedValue = Convert::get().toAny( value, getCppuType() );
 
-        Time aValue;
+        tools::Time aValue;
         if ( !( aTypedValue >>= aValue ) )
             return false;
 
@@ -832,7 +832,7 @@ namespace xforms
 
     void OTimeType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
     {
-        Time aValue;
+        tools::Time aValue;
         OSL_VERIFY( _rValue >>= aValue );
         ::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds );
         _rDoubleValue = aToolsTime.GetTime();

@@ -39,6 +39,8 @@ void Resource::GetRes( const ResId& rResId )
     IncrementRes( sizeof( RSHEADER_TYPE ) );
 }
 
+namespace tools {
+
 Time::Time( const ResId& rResId )
 {
     nTime = 0;
@@ -59,8 +61,10 @@ Time::Time( const ResId& rResId )
         // TODO: when we change the place that writes this binary resource format to match:
         // SetNanoSec( pResMgr->ReadLong() );
         // In the meantime:
-        SetNanoSec( pResMgr->ReadShort() * ::Time::nanoPerCenti );
+        SetNanoSec( pResMgr->ReadShort() * ::tools::Time::nanoPerCenti );
 }
+
+} /* namespace tools */
 
 Date::Date( const ResId& rResId ) : nDate(0)
 {

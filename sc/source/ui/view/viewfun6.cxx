@@ -281,7 +281,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                 break;
             case NUMBERFORMAT_TIME:
                 {
-                    Time aActTime( Time::SYSTEM );
+                    tools::Time aActTime( tools::Time::SYSTEM );
                     fVal = aActTime.GetTimeInDays();
                 }
                 break;
@@ -394,7 +394,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                 break;
             case NUMBERFORMAT_TIME:
                 {
-                    Time aActTime( Time::SYSTEM );
+                    tools::Time aActTime( tools::Time::SYSTEM );
                     fVal = aActTime.GetTimeInDays();
                 }
                 break;
@@ -404,7 +404,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                     case NUMBERFORMAT_DATE:
                         {
                             double fDate = rtl::math::approxFloor( fCell);
-                            Time aActTime( Time::SYSTEM );
+                            tools::Time aActTime( tools::Time::SYSTEM );
                             fVal = fDate + aActTime.GetTimeInDays();
                         }
                         break;

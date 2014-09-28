@@ -1076,7 +1076,7 @@ sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
             }
         case DataType::TIME :
             {
-                Time aOne, aTwo;
+                tools::Time aOne, aTwo;
                 sal_Int32   nTmp;
 
                 if ( xResultOne->absolute( nIndexOne ) )

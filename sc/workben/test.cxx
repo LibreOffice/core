@@ -427,7 +427,7 @@ void lcl_Annotations( FixedText& aTimeText )
 
                             if (xPos && xControl)
                             {
-                                sal_uLong nStart = Time::GetSystemTicks();
+                                sal_uLong nStart = tools::Time::GetSystemTicks();
 
                                 xAnnotationText->setText(L"bla");
                                 xCursor->gotoEnd(false);
@@ -441,7 +441,7 @@ void lcl_Annotations( FixedText& aTimeText )
                                     xPos->setText(L"dumdi");
                                 }
 
-                                sal_uLong nEnd = Time::GetSystemTicks();
+                                sal_uLong nEnd = tools::Time::GetSystemTicks();
                                 aTimeText.SetText(String(nEnd-nStart)+String(" ms"));
                             }
                         }
@@ -585,7 +585,7 @@ void lcl_Cells( FixedText& aTimeText )
     if (xDoc)
     {
         long nCount = 0;
-        sal_uLong nStart = Time::GetSystemTicks();
+        sal_uLong nStart = tools::Time::GetSystemTicks();
 
         XActionLockableRef xLock = (XActionLockable*)
                             xDoc->queryInterface(XActionLockable::getSmartUik());
@@ -624,7 +624,7 @@ void lcl_Cells( FixedText& aTimeText )
             }
         }
 
-        sal_uLong nEnd = Time::GetSystemTicks();
+        sal_uLong nEnd = tools::Time::GetSystemTicks();
         aTimeText.SetText(String(nCount)+String(" ")+String(nEnd-nStart)+String(" ms"));
 
 //      if (xLock)
@@ -1510,9 +1510,9 @@ IMPL_LINK_NOARG(MyWindow, CountHdl)
     {
         case 0:
             {
-                sal_uLong nStart = Time::GetSystemTicks();
+                sal_uLong nStart = tools::Time::GetSystemTicks();
                 lcl_DoCount();
-                sal_uLong nEnd = Time::GetSystemTicks();
+                sal_uLong nEnd = tools::Time::GetSystemTicks();
                 aTimeText.SetText(String("Count: ")+String(nEnd-nStart)+String(" ms"));
             }
             break;
