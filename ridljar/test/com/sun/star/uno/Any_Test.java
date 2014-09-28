@@ -18,18 +18,22 @@
 
 package com.sun.star.uno;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public final class Any_Test {
+
+    private static final Logger logger = Logger.getLogger(Any_Test.class.getName());
+
     @Test public void testAnyAny() {
-        boolean caught = false;
         try {
             new Any(Type.ANY, null);
+            fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
-            caught = true;
+            logger.log(Level.FINE, "IllegalArgumentException caught");
         }
-        assertTrue(caught);
     }
 
     @Test public void testComplete() {
