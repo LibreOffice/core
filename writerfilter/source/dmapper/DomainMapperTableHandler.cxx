@@ -116,9 +116,17 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
 PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr pStyleSheet, StyleSheetTablePtr pStyleSheetTable)
 {
     PropertyMapPtr pRet;
+
+    if (!pStyleSheet)
+        return pRet;
+
     if(!pStyleSheet->sBaseStyleIdentifier.isEmpty())
     {
         const StyleSheetEntryPtr pParentStyleSheet = pStyleSheetTable->FindStyleSheetByISTD( pStyleSheet->sBaseStyleIdentifier );
+        //a loop in the style hierarchy, bail out
+        if (pParentStyleSheet == pStyleSheet)
+            return pRet;
+
         pRet = lcl_SearchParentStyleSheetAndMergeProperties( pParentStyleSheet, pStyleSheetTable );
     }
     else
@@ -126,7 +134,10 @@ PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntr
         pRet.reset( new PropertyMap );
     }
 
-    pRet->InsertProps(pStyleSheet->pProperties);
+    if (pRet)
+    {
+        pRet->InsertProps(pStyleSheet->pProperties);
+    }
 
     return pRet;
 }
@@ -291,6 +302,9 @@ namespace
 
 bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const PropertyIds nId, TableInfo& rInfo, table::BorderLine2& rLine)
 {
+    if (!pTableProperties)
+        return false;
+
     PropertyMap::iterator aTblBorderIter = pTableProperties->find(nId);
     if( aTblBorderIter != pTableProperties->end() )
     {
