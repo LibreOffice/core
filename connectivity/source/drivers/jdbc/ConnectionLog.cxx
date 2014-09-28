@@ -93,7 +93,7 @@ namespace comphelper { namespace log { namespace convert
     }
 
 
-    OUString convertLogArgToString( const Time& _rTime )
+    OUString convertLogArgToString( const css::util::Time& _rTime )
     {
         char buffer[ 30 ];
         const size_t buffer_size = sizeof( buffer );

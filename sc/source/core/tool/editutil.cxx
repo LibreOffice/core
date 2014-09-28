@@ -780,7 +780,7 @@ static OUString lcl_GetNumStr(sal_Int32 nNo, SvxNumType eType)
 ScHeaderFieldData::ScHeaderFieldData()
     :
         aDate( Date::EMPTY ),
-        aTime( Time::EMPTY )
+        aTime( tools::Time::EMPTY )
 {
     nPageNo = nTotalPages = 0;
     eNumType = SVX_ARABIC;

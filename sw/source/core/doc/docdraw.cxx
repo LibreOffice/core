@@ -577,7 +577,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
         else if ( pField && pField->ISA(SvxExtTimeField))
         {
-            // Time field
+            // tools::Time field
             pInfo->SetRepresentation(
                 ((const SvxExtTimeField*) pField)->GetFormatted(
                         *GetNumberFormatter( true ), LANGUAGE_SYSTEM) );

@@ -39,12 +39,12 @@ struct ExchangeData
     GalleryTheme*   pTheme;
     OUString        aEditedTitle;
     Date            aThemeChangeDate;
-    Time            aThemeChangeTime;
+    tools::Time     aThemeChangeTime;
 
     ExchangeData()
         : pTheme(NULL)
         , aThemeChangeDate( Date::EMPTY )
-        , aThemeChangeTime( Time::EMPTY )
+        , aThemeChangeTime( tools::Time::EMPTY )
         {
         }
 };

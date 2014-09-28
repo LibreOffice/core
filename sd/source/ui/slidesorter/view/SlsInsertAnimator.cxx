@@ -82,7 +82,7 @@ public:
     ::std::vector<Point> maStartOffset;
     /// Target offset of each item in the run at the end of the current animation.
     ::std::vector<Point> maEndOffset;
-    /// Time at which the current animation started.
+    /// tools::Time at which the current animation started.
     double mnStartTime;
 
     class Comparator

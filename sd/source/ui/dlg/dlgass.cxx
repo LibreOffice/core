@@ -521,9 +521,9 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link& rFinishLin
     mpPage3PresTypeLiveRB->SetClickHdl( LINK(this,AssistentDlgImpl, PresTypeHdl ));
     mpPage3PresTypeKioskRB->SetClickHdl( LINK(this,AssistentDlgImpl, PresTypeHdl ));
     mpPage3PresTimeTMF->SetFormat( TIMEF_SEC );
-    mpPage3PresTimeTMF->SetTime( Time( 0, 0, 10 ) );
+    mpPage3PresTimeTMF->SetTime( ::tools::Time( 0, 0, 10 ) );
     mpPage3BreakTMF->SetFormat( TIMEF_SEC );
-    mpPage3BreakTMF->SetTime( Time( 0, 0, 10 ) );
+    mpPage3BreakTMF->SetTime( ::tools::Time( 0, 0, 10 ) );
     mpPage3LogoCB->Check();
 
     // set cursor in timefield

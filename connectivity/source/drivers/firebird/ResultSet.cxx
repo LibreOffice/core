@@ -621,7 +621,7 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 nIndex)
 Time SAL_CALL OResultSet::getTime(sal_Int32 nIndex)
     throw(SQLException, RuntimeException, std::exception)
 {
-    return safelyRetrieveValue< Time >(nIndex, SQL_TYPE_TIME);
+    return safelyRetrieveValue< css::util::Time >(nIndex, SQL_TYPE_TIME);
 }
 
 DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 nIndex)

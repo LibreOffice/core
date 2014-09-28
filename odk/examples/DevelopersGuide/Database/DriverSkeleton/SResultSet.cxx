@@ -326,13 +326,13 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 }
 
 
-Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+css::util::Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    Time nRet;
+    css::util::Time nRet;
     return nRet;
 }
 
@@ -657,7 +657,7 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) thr
 }
 
 
-void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const Time& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const css::util::Time& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);

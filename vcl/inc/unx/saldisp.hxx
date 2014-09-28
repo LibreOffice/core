@@ -276,7 +276,7 @@ protected:
 
     bool            m_bUseRandRWrapper; // don't use randr on gtk, use gdk signals there
 
-    mutable XLIB_Time  m_nLastUserEventTime; // mutable because changed on first access
+    mutable Time    m_nLastUserEventTime; // mutable because changed on first access
 
     virtual bool    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
@@ -353,7 +353,7 @@ public:
     const Pair     &GetResolution() const { return aResolution_; }
     sal_uLong       GetProperties() const { return PROPERTY_DEFAULT; }
     sal_uLong       GetMaxRequestSize() const { return nMaxRequestSize_; }
-    XLIB_Time       GetLastUserEventTime( bool bAlwaysReget = false ) const;
+    Time            GetLastUserEventTime( bool bAlwaysReget = false ) const;
 
     bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate, long i_nTimeout = 1000 ) const;
     SalXLib*        GetXLib() const { return pXLib_; }

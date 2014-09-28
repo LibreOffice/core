@@ -2360,7 +2360,7 @@ RTLFUNC(Second)
 double Now_Impl()
 {
     Date aDate( Date::SYSTEM );
-    Time aTime( Time::SYSTEM );
+    tools::Time aTime( tools::Time::SYSTEM );
     double aSerial = (double)GetDayDiff( aDate );
     long nSeconds = aTime.GetHour();
     nSeconds *= 3600;
@@ -2388,7 +2388,7 @@ RTLFUNC(Time)
 
     if ( !bWrite )
     {
-        Time aTime( Time::SYSTEM );
+        tools::Time aTime( tools::Time::SYSTEM );
         SbxVariable* pMeth = rPar.Get( 0 );
         OUString aRes;
         if( pMeth->IsFixed() )
@@ -2442,7 +2442,7 @@ RTLFUNC(Timer)
     (void)pBasic;
     (void)bWrite;
 
-    Time aTime( Time::SYSTEM );
+    tools::Time aTime( tools::Time::SYSTEM );
     long nSeconds = aTime.GetHour();
     nSeconds *= 3600;
     nSeconds += aTime.GetMin() * 60;
@@ -3212,7 +3212,7 @@ RTLFUNC(FileDateTime)
     else
     {
         OUString aPath = rPar.Get(1)->GetOUString();
-        Time aTime( Time::EMPTY );
+        tools::Time aTime( tools::Time::EMPTY );
         Date aDate( Date::EMPTY );
         if( hasUno() )
         {
@@ -3222,7 +3222,7 @@ RTLFUNC(FileDateTime)
                 try
                 {
                     util::DateTime aUnoDT = xSFI->getDateTimeModified( aPath );
-                    aTime = Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.NanoSeconds );
+                    aTime = tools::Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.NanoSeconds );
                     aDate = Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year );
                 }
                 catch(const Exception & )
@@ -3241,7 +3241,7 @@ RTLFUNC(FileDateTime)
             oslDateTime aDT;
             osl_getDateTimeFromTimeValue( &aTimeVal, &aDT );
 
-            aTime = Time( aDT.Hours, aDT.Minutes, aDT.Seconds, aDT.NanoSeconds );
+            aTime = tools::Time( aDT.Hours, aDT.Minutes, aDT.Seconds, aDT.NanoSeconds );
             aDate = Date( aDT.Day, aDT.Month, aDT.Year );
         }
 
@@ -4954,11 +4954,11 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& 
 double implTimeSerial( sal_Int16 nHours, sal_Int16 nMinutes, sal_Int16 nSeconds )
 {
     return
-        static_cast<double>( nHours * ::Time::secondPerHour +
-                             nMinutes * ::Time::secondPerMinute +
+        static_cast<double>( nHours * ::tools::Time::secondPerHour +
+                             nMinutes * ::tools::Time::secondPerMinute +
                              nSeconds)
         /
-        static_cast<double>( ::Time::secondPerDay );
+        static_cast<double>( ::tools::Time::secondPerDay );
 }
 
 bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,

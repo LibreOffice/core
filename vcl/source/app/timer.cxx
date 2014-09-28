@@ -92,7 +92,7 @@ void Timer::ImplTimerCallbackProc()
     ImplTimerData*  pPrevTimerData;
     sal_uLong       nMinPeriod = MAX_TIMER_PERIOD;
     sal_uLong       nDeltaTime;
-    sal_uLong       nTime = Time::GetSystemTicks();
+    sal_uLong       nTime = tools::Time::GetSystemTicks();
 
     if ( pSVData->mbNoCallTimer )
         return;
@@ -133,7 +133,7 @@ void Timer::ImplTimerCallbackProc()
     }
 
     // determine new time
-    sal_uLong nNewTime = Time::GetSystemTicks();
+    sal_uLong nNewTime = tools::Time::GetSystemTicks();
     pPrevTimerData = NULL;
     pTimerData = pSVData->mpFirstTimerData;
     while ( pTimerData )
@@ -263,7 +263,7 @@ void Timer::Start()
         // insert timer and start
         mpTimerData = new ImplTimerData;
         mpTimerData->mpTimer        = this;
-        mpTimerData->mnUpdateTime   = Time::GetSystemTicks();
+        mpTimerData->mnUpdateTime   = tools::Time::GetSystemTicks();
         mpTimerData->mnTimerUpdate  = pSVData->mnTimerUpdate;
         mpTimerData->mbDelete       = false;
         mpTimerData->mbInTimeout    = false;
@@ -291,7 +291,7 @@ void Timer::Start()
     }
     else
     {
-        mpTimerData->mnUpdateTime    = Time::GetSystemTicks();
+        mpTimerData->mnUpdateTime    = tools::Time::GetSystemTicks();
         mpTimerData->mnTimerUpdate   = pSVData->mnTimerUpdate;
         mpTimerData->mbDelete        = false;
     }

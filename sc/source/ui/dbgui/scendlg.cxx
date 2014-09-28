@@ -86,7 +86,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName,
 
     OUString aComment(sCreatedBy + " " + aUserOpt.GetFirstName() + " " +aUserOpt.GetLastName()
               + ", " + sOn + " " + ScGlobal::GetpLocaleData()->getDate(Date(Date::SYSTEM))
-              + ", " + ScGlobal::GetpLocaleData()->getTime(Time(Time::SYSTEM)));
+              + ", " + ScGlobal::GetpLocaleData()->getTime(tools::Time(tools::Time::SYSTEM)));
 
     m_pEdComment->SetText(aComment);
     m_pEdName->SetText(rName);

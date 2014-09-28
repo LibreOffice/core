@@ -622,7 +622,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     XSync( GetXDisplay(), False );
     setXEmbedInfo();
 
-    XLIB_Time nUserTime = (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_TOOLWINDOW) ) == 0 ?
+    Time nUserTime = (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_TOOLWINDOW) ) == 0 ?
         pDisplay_->GetLastUserEventTime() : 0;
     pDisplay_->getWMAdaptor()->setUserTime( this, nUserTime );
 
@@ -1225,7 +1225,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
                           );
         }
 
-        XLIB_Time nUserTime = 0;
+        Time nUserTime = 0;
         if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) == 0 )
             nUserTime = pDisplay_->GetLastUserEventTime( true );
         GetDisplay()->getWMAdaptor()->setUserTime( this, nUserTime );

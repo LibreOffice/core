@@ -197,7 +197,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
 
 
 
-void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time& aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& aVal ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);

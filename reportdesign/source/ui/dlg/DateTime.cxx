@@ -177,7 +177,7 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
     double nValue = 0;
     if ( _bTime )
     {
-        Time aCurrentTime( Time::SYSTEM );
+        tools::Time aCurrentTime( tools::Time::SYSTEM );
         nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(aCurrentTime.GetTime()));
     }
     else

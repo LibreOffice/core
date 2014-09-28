@@ -350,12 +350,12 @@ IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )
         {
-            const sal_uLong nTime = Time::GetSystemTicks();
+            const sal_uLong nTime = tools::Time::GetSystemTicks();
             ImplDelData aDel( this );
             pWindow->Command( aCEvt );
             if( aDel.IsDead() )
                 return 0;
-            mnRepaintTime = std::max( Time::GetSystemTicks() - nTime, (sal_uLong)1 );
+            mnRepaintTime = std::max( tools::Time::GetSystemTicks() - nTime, (sal_uLong)1 );
             ImplRecalcScrollValues();
         }
     }

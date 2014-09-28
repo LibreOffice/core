@@ -235,7 +235,7 @@ void Help::HideTip( sal_uLong nId )
     // trigger update, so that a Paint is instantly triggered since we do not save the background
     pFrameWindow->ImplUpdateAll();
     delete pHelpWin;
-    ImplGetSVData()->maHelpData.mnLastHelpHideTime = Time::GetSystemTicks();
+    ImplGetSVData()->maHelpData.mnLastHelpHideTime = tools::Time::GetSystemTicks();
 }
 
 HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle ) :
@@ -517,7 +517,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, sal_uIn
 
     if (!pHelpWin && !rHelpText.isEmpty())
     {
-        sal_uLong nCurTime = Time::GetSystemTicks();
+        sal_uLong nCurTime = tools::Time::GetSystemTicks();
         if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
             ||  ( ( nStyle & QUICKHELP_NO_DELAY ) != 0 )
             )
@@ -557,7 +557,7 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
         pHelpWin->Hide();
         delete pHelpWin;
         if( bUpdateHideTime )
-            pSVData->maHelpData.mnLastHelpHideTime = Time::GetSystemTicks();
+            pSVData->maHelpData.mnLastHelpHideTime = tools::Time::GetSystemTicks();
     }
 }
 

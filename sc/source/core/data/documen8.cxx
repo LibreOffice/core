@@ -474,7 +474,7 @@ public:
     IdleCalcTextWidthScope(ScDocument& rDoc, ScAddress& rCalcPos) :
         mrDoc(rDoc),
         mrCalcPos(rCalcPos),
-        mnStartTime(Time::GetSystemTicks()),
+        mnStartTime(tools::Time::GetSystemTicks()),
         mpStylePool(rDoc.GetStyleSheetPool()),
         mnOldSearchMask(mpStylePool->GetSearchMask()),
         meOldFamily(mpStylePool->GetSearchFamily()),
@@ -683,7 +683,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
         // Quit if either 1) its duration exceeds 50 ms, or 2) there is any
         // pending event after processing 32 cells.
-        if ((50L < Time::GetSystemTicks() - aScope.getStartTime()) || (nCount > 31 && Application::AnyInput(ABORT_EVENTS)))
+        if ((50L < tools::Time::GetSystemTicks() - aScope.getStartTime()) || (nCount > 31 && Application::AnyInput(ABORT_EVENTS)))
             nCount = CALCMAX;
     }
 

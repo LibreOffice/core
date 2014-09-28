@@ -453,7 +453,7 @@ bool Application::AnyInput( sal_uInt16 nType )
 
 sal_uLong Application::GetLastInputInterval()
 {
-    return (Time::GetSystemTicks()-ImplGetSVData()->maAppData.mnLastInputTime);
+    return (tools::Time::GetSystemTicks()-ImplGetSVData()->maAppData.mnLastInputTime);
 }
 
 extern int nImplSysDialog;

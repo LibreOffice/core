@@ -1649,7 +1649,7 @@ void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
                                 ? xDocProps->getCreationDate()
                                 : xDocProps->getModificationDate() );
             Date d(uDT.Day, uDT.Month, uDT.Year);
-            Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
+            tools::Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
             DateTime aDT(d,t);
 
             if( !aTmp.isEmpty() )

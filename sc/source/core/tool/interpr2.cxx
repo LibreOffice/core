@@ -108,11 +108,11 @@ void ScInterpreter::ScGetActTime()
     nFuncFmtType = NUMBERFORMAT_DATETIME;
     Date aActDate( Date::SYSTEM );
     long nDiff = aActDate - *(pFormatter->GetNullDate());
-    Time aActTime( Time::SYSTEM );
-    double nTime = aActTime.GetHour()    / static_cast<double>(::Time::hourPerDay)   +
-                   aActTime.GetMin()     / static_cast<double>(::Time::minutePerDay) +
-                   aActTime.GetSec()     / static_cast<double>(::Time::secondPerDay) +
-                   aActTime.GetNanoSec() / static_cast<double>(::Time::nanoSecPerDay);
+    tools::Time aActTime( tools::Time::SYSTEM );
+    double nTime = aActTime.GetHour()    / static_cast<double>(::tools::Time::hourPerDay)   +
+                   aActTime.GetMin()     / static_cast<double>(::tools::Time::minutePerDay) +
+                   aActTime.GetSec()     / static_cast<double>(::tools::Time::secondPerDay) +
+                   aActTime.GetNanoSec() / static_cast<double>(::tools::Time::nanoSecPerDay);
     PushDouble( (double) nDiff + nTime );
 }
 
@@ -141,15 +141,15 @@ void ScInterpreter::ScGetMin()
 {
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
-    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::Time::secondPerHour;
-    PushDouble( (double) (nVal / ::Time::secondPerMinute) );
+    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::tools::Time::secondPerHour;
+    PushDouble( (double) (nVal / ::tools::Time::secondPerMinute) );
 }
 
 void ScInterpreter::ScGetSec()
 {
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
-    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::Time::secondPerMinute;
+    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::tools::Time::secondPerMinute;
     PushDouble( (double) nVal );
 }
 
@@ -157,7 +157,7 @@ void ScInterpreter::ScGetHour()
 {
     double fTime = GetDouble();
     fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
-    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) / ::Time::secondPerHour;
+    long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) / ::tools::Time::secondPerHour;
     PushDouble((double) nVal);
 }
 
@@ -459,7 +459,7 @@ void ScInterpreter::ScGetTime()
         double nSec = GetDouble();
         double nMin = GetDouble();
         double nHour = GetDouble();
-        double fTime = fmod( (nHour * ::Time::secondPerHour) + (nMin * ::Time::secondPerMinute) + nSec, DATE_TIME_FACTOR) / DATE_TIME_FACTOR;
+        double fTime = fmod( (nHour * ::tools::Time::secondPerHour) + (nMin * ::tools::Time::secondPerMinute) + nSec, DATE_TIME_FACTOR) / DATE_TIME_FACTOR;
         if (fTime < 0)
             PushIllegalArgument();
         else

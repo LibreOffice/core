@@ -81,7 +81,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     if (nFieldType != text::textfield::Type::TIME)
                     {
                         util::DateTime aDateTime = xPropSet->getPropertyValue(UNO_TC_PROP_DATE_TIME).get<util::DateTime>();
-                        Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
+                        tools::Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
 
                         bool bIsFixed = false;
                         xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
@@ -787,7 +787,7 @@ SV_IMPL_PERSIST1( SvxExtTimeField, SvxFieldData );
 
 
 SvxExtTimeField::SvxExtTimeField()
-    : m_nFixTime( Time(Time::SYSTEM).GetTime() )
+    : m_nFixTime( tools::Time(tools::Time::SYSTEM).GetTime() )
 {
     eType = SVXTIMETYPE_VAR;
     eFormat = SVXTIMEFORMAT_STANDARD;
@@ -795,7 +795,7 @@ SvxExtTimeField::SvxExtTimeField()
 
 
 
-SvxExtTimeField::SvxExtTimeField( const Time& rTime, SvxTimeType eT, SvxTimeFormat eF )
+SvxExtTimeField::SvxExtTimeField( const tools::Time& rTime, SvxTimeType eT, SvxTimeFormat eF )
     : m_nFixTime( rTime.GetTime() )
 {
     eType = eT;
@@ -849,15 +849,15 @@ void SvxExtTimeField::Save( SvPersistStream & rStm )
 
 OUString SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
-    Time aTime( Time::EMPTY );
+    tools::Time aTime( tools::Time::EMPTY );
     if ( eType == SVXTIMETYPE_FIX )
         aTime.SetTime(m_nFixTime);
     else
-        aTime = Time( Time::SYSTEM ); // current time
+        aTime = tools::Time( tools::Time::SYSTEM ); // current time
     return GetFormatted( aTime, eFormat, rFormatter, eLang );
 }
 
-OUString SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
+OUString SvxExtTimeField::GetFormatted( tools::Time& aTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
 {
     switch( eFormat )
     {
@@ -1269,7 +1269,7 @@ void SvxDateTimeField::Save( SvPersistStream & /*rStm*/ )
 SvxDateTimeField::SvxDateTimeField() {}
 
 OUString SvxDateTimeField::GetFormatted(
-    Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage )
+    Date& rDate, tools::Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage )
 {
     OUString aRet;
 

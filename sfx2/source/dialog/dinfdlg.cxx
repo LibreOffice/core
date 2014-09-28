@@ -176,7 +176,7 @@ OUString ConvertDateTime_Impl( const OUString& rName,
     const util::DateTime& uDT, const LocaleDataWrapper& rWrapper )
 {
     Date aD(uDT.Day, uDT.Month, uDT.Year);
-    Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
+    tools::Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
      const OUString pDelim ( ", " );
      OUString aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
@@ -719,7 +719,7 @@ namespace
         const LocaleDataWrapper& rWrapper( Application::GetSettings().GetLocaleDataWrapper() );
 
         Date aDate( _nDate );
-        Time aTime( _nTime );
+        tools::Time aTime( _nTime );
         OUString aStr( rWrapper.getDate( aDate ) );
         aStr += ", ";
         aStr += rWrapper.getTime( aTime );
@@ -809,7 +809,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     OUString aEmpty;
     m_pChangeValFt->SetText( aEmpty );
     m_pPrintValFt->SetText( aEmpty );
-    const Time aTime( 0 );
+    const tools::Time aTime( 0 );
     m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aTime ) );
     m_pDocNoValFt->SetText(OUString('1'));
     bHandleDelete = true;
@@ -1093,7 +1093,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     const long nTime = m_pInfoItem->getEditingDuration();
     if ( m_bUseUserData )
     {
-        const Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
+        const tools::Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
         m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aT ) );
         m_pDocNoValFt->SetText( OUString::number(
             m_pInfoItem->getEditingCycles() ) );
@@ -1804,7 +1804,7 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     else if ( rAny >>= aTmpDateTime )
     {
         pNewLine->m_aDateField.SetDate( Date( aTmpDateTime.Day, aTmpDateTime.Month, aTmpDateTime.Year ) );
-        pNewLine->m_aTimeField.SetTime( Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.NanoSeconds ) );
+        pNewLine->m_aTimeField.SetTime( tools::Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.NanoSeconds ) );
         pNewLine->m_aTimeField.m_isUTC = aTmpDateTime.IsUTC;
         nType = CUSTOM_TYPE_DATETIME;
     }
@@ -1819,7 +1819,7 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     {
         util::DateTime const& rDT(aTmpDateTimeTZ.DateTimeInTZ);
         pNewLine->m_aDateField.SetDate( Date( rDT.Day, rDT.Month, rDT.Year ) );
-        pNewLine->m_aTimeField.SetTime( Time( rDT.Hours, rDT.Minutes,
+        pNewLine->m_aTimeField.SetTime( tools::Time( rDT.Hours, rDT.Minutes,
                     rDT.Seconds, rDT.NanoSeconds ) );
         pNewLine->m_aTimeField.m_isUTC = rDT.IsUTC;
         pNewLine->m_aDateField.m_TZ = aTmpDateTimeTZ.Timezone;
@@ -1939,7 +1939,7 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
             else if ( CUSTOM_TYPE_DATETIME == nType )
             {
                 Date aTmpDate = pLine->m_aDateField.GetDate();
-                Time aTmpTime = pLine->m_aTimeField.GetTime();
+                tools::Time aTmpTime = pLine->m_aTimeField.GetTime();
                 util::DateTime const aDateTime(aTmpTime.GetNanoSec(),
                     aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
                     aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear(),
@@ -2211,7 +2211,7 @@ CmisDateTime::CmisDateTime( vcl::Window* pParent, const util::DateTime& aDateTim
     m_aDateField->Show( true );
     m_aTimeField->Show( true );
     m_aDateField->SetDate( Date( aDateTime.Day, aDateTime.Month, aDateTime.Year ) );
-    m_aTimeField->SetTime( Time( aDateTime.Hours, aDateTime.Minutes,
+    m_aTimeField->SetTime( tools::Time( aDateTime.Hours, aDateTime.Minutes,
                            aDateTime.Seconds, aDateTime.NanoSeconds ) );
 }
 
@@ -2495,7 +2495,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     it != pLine->m_aDateTimes.end(); ++it, ++k)
                 {
                     Date aTmpDate = (*it)->m_aDateField->GetDate();
-                    Time aTmpTime = (*it)->m_aTimeField->GetTime();
+                    tools::Time aTmpTime = (*it)->m_aTimeField->GetTime();
                     util::DateTime aDateTime( aTmpTime.GetNanoSec(), aTmpTime.GetSec(),
                                               aTmpTime.GetMin(), aTmpTime.GetHour(),
                                               aTmpDate.GetDay(), aTmpDate.GetMonth(),

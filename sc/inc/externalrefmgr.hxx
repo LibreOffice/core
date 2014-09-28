@@ -419,9 +419,9 @@ private:
     struct SrcShell
     {
         SfxObjectShellRef   maShell;
-        Time                maLastAccess;
+        tools::Time         maLastAccess;
 
-        SrcShell() : maLastAccess( Time::SYSTEM ) {}
+        SrcShell() : maLastAccess( tools::Time::SYSTEM ) {}
     };
 
     typedef ::boost::unordered_map<sal_uInt16, SrcShell>           DocShellMap;

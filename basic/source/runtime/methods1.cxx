@@ -1412,7 +1412,7 @@ RTLFUNC(GetSystemTicks)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    rPar.Get(0)->PutLong( Time::GetSystemTicks() );
+    rPar.Get(0)->PutLong( tools::Time::GetSystemTicks() );
 }
 
 RTLFUNC(GetPathSeparator)

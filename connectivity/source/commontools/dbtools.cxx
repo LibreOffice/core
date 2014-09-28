@@ -1080,7 +1080,7 @@ try
 
             if (hasProperty(sPropDefaultTime, xNewProps) && !bIsString)
             {   // Completely analogous to time
-                Time aTime = DBTypeConversion::toTime(getDouble(aEffectiveDefault));
+                css::util::Time aTime = DBTypeConversion::toTime(getDouble(aEffectiveDefault));
                 xNewProps->setPropertyValue(sPropDefaultTime, makeAny(aTime));
             }
 

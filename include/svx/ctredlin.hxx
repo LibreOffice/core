@@ -120,8 +120,8 @@ public:
     void            SetDateTimeMode(sal_uInt16 nMode);
     void            SetFirstDate(const Date&);
     void            SetLastDate(const Date&);
-    void            SetFirstTime(const Time&);
-    void            SetLastTime(const Time&);
+    void            SetFirstTime(const tools::Time&);
+    void            SetLastTime(const tools::Time&);
     void            SetFilterAuthor(bool bFlag=true);
     void            SetAuthor(const OUString &);
     void            SetFilterComment(bool bFlag=true);
@@ -209,13 +209,13 @@ public:
 
     Date            GetFirstDate() const;
     void            SetFirstDate(const Date &aDate);
-    Time            GetFirstTime() const;
-    void            SetFirstTime(const Time &aTime);
+    tools::Time     GetFirstTime() const;
+    void            SetFirstTime(const tools::Time &aTime);
 
     Date            GetLastDate() const;
     void            SetLastDate(const Date &aDate);
-    Time            GetLastTime() const;
-    void            SetLastTime(const Time &aTime);
+    tools::Time     GetLastTime() const;
+    void            SetLastTime(const tools::Time &aTime);
 
     void            SetDateMode(sal_uInt16 nMode);
     sal_uInt16          GetDateMode();

@@ -199,8 +199,8 @@ void SvxRedlinTable::UpdateFilterTest()
     sal_uInt16 nYEAR=aDateMax.GetYear()+100;
     aDateMax.SetYear(nYEAR);
     Date aDateMin(1,1,1989);
-    Time aTMin(0);
-    Time aTMax(23,59,59);
+    tools::Time aTMin(0);
+    tools::Time aTMax(23,59,59);
 
 
     DateTime aDTMin(aDateMin);
@@ -257,12 +257,12 @@ void SvxRedlinTable::SetLastDate(const Date& aDate)
     aDaTiLast.SetDate(aDate.GetDate());
 }
 
-void SvxRedlinTable::SetFirstTime(const Time& aTime)
+void SvxRedlinTable::SetFirstTime(const tools::Time& aTime)
 {
     aDaTiFirst.SetTime(aTime.GetTime());
 }
 
-void SvxRedlinTable::SetLastTime(const Time& aTime)
+void SvxRedlinTable::SetLastTime(const tools::Time& aTime)
 {
     aDaTiLast.SetTime(aTime.GetTime());
 }
@@ -586,7 +586,7 @@ SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     RowEnableHdl(m_pCbComment);
 
     Date aDate( Date::SYSTEM );
-    Time aTime( Time::SYSTEM );
+    tools::Time aTime( tools::Time::SYSTEM );
     m_pDfDate->SetDate(aDate);
     m_pTfDate->SetTime(aTime);
     m_pDfDate2->SetDate(aDate);
@@ -681,12 +681,12 @@ void SvxTPFilter::SetFirstDate(const Date &aDate)
     m_pDfDate->SetDate(aDate);
 }
 
-Time SvxTPFilter::GetFirstTime() const
+tools::Time SvxTPFilter::GetFirstTime() const
 {
     return m_pTfDate->GetTime();
 }
 
-void SvxTPFilter::SetFirstTime(const Time &aTime)
+void SvxTPFilter::SetFirstTime(const tools::Time &aTime)
 {
     m_pTfDate->SetTime(aTime);
 }
@@ -702,12 +702,12 @@ void SvxTPFilter::SetLastDate(const Date &aDate)
     m_pDfDate2->SetDate(aDate);
 }
 
-Time SvxTPFilter::GetLastTime() const
+tools::Time SvxTPFilter::GetLastTime() const
 {
     return m_pTfDate2->GetTime();
 }
 
-void SvxTPFilter::SetLastTime(const Time &aTime)
+void SvxTPFilter::SetLastTime(const tools::Time &aTime)
 {
     m_pTfDate2->SetTime(aTime);
 }
@@ -911,7 +911,7 @@ IMPL_LINK( SvxTPFilter, RowEnableHdl, CheckBox*, pCB )
 IMPL_LINK( SvxTPFilter, TimeHdl, ImageButton*,pIB )
 {
     Date aDate( Date::SYSTEM );
-    Time aTime( Time::SYSTEM );
+    tools::Time aTime( tools::Time::SYSTEM );
     if (pIB == m_pIbClock)
     {
         m_pDfDate->SetDate(aDate);
@@ -1009,7 +1009,7 @@ IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
 {
 
     Date aDate( Date::SYSTEM );
-    Time aTime(0);
+    tools::Time aTime(0);
     if (m_pDfDate==pTF)
     {
         if(m_pDfDate->GetText().isEmpty())

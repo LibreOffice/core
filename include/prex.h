@@ -29,9 +29,6 @@
  */
 #define Icon        HIDE_XLIB_Icon
 
-/* Types from <X11/X.h> that clash, but we do use. */
-#define Time        XLIB_Time
-
 #if defined __cplusplus
 extern "C" {
 #endif

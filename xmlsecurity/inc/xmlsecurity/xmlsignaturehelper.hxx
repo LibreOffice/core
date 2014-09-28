@@ -36,7 +36,7 @@
 
 class XSecController;
 class Date;
-class Time;
+namespace tools { class Time; }
 
 namespace com {
 namespace sun {
@@ -165,7 +165,7 @@ public:
     void SetX509Certificate(sal_Int32 nSecurityId, const OUString& ouX509IssuerName,
         const OUString& ouX509SerialNumber, const OUString& ouX509Cert);
 
-    void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime );
+    void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const tools::Time& rTime );
 
     void        AddForSigning( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, bool bBinary );
     bool        CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );

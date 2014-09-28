@@ -111,10 +111,10 @@ getLocalizedDatTimeStr(
 {
     OUString aDateTimeStr;
     Date  aDate( Date::EMPTY );
-    Time  aTime( Time::EMPTY );
+    tools::Time  aTime( tools::Time::EMPTY );
 
     aDate = Date( rDateTime.Day, rDateTime.Month, rDateTime.Year );
-    aTime = Time( rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds );
+    aTime = tools::Time( rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds );
 
     LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
     SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( xContext, eUILang );

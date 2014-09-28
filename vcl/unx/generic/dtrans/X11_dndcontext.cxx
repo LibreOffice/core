@@ -29,7 +29,7 @@ using namespace x11;
 
 DropTargetDropContext::DropTargetDropContext(
     ::Window aDropWindow,
-    XLIB_Time aTimestamp,
+    Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
         m_nTimestamp( aTimestamp ),
@@ -63,7 +63,7 @@ void DropTargetDropContext::dropComplete( sal_Bool success ) throw(std::exceptio
 
 DropTargetDragContext::DropTargetDragContext(
     ::Window aDropWindow,
-    XLIB_Time aTimestamp,
+    Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
         m_nTimestamp( aTimestamp ),
@@ -92,7 +92,7 @@ void DropTargetDragContext::rejectDrag() throw(std::exception)
 
 DragSourceContext::DragSourceContext(
     ::Window aDropWindow,
-    XLIB_Time aTimestamp,
+    Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
         m_nTimestamp( aTimestamp ),

@@ -115,12 +115,12 @@ IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback)
             // Execute as many steps as fit into the time span of length
             // mnMaxTimePerStep.  Note that the last step may take longer
             // than allowed.
-            sal_uInt32 nStartTime (Time( Time::SYSTEM ).GetMSFromTime());
+            sal_uInt32 nStartTime (::tools::Time( ::tools::Time::SYSTEM ).GetMSFromTime());
             SAL_INFO("sd.tools", OSL_THIS_FUNC << ": starting TimerBasedTaskExecution at " << nStartTime);
             do
             {
                 mpTask->RunNextStep();
-                sal_uInt32 nDuration (Time( Time::SYSTEM ).GetMSFromTime()-nStartTime);
+                sal_uInt32 nDuration (::tools::Time( ::tools::Time::SYSTEM ).GetMSFromTime()-nStartTime);
                 SAL_INFO("sd.tools", OSL_THIS_FUNC << ": executed step in " << nDuration);
                 if (nDuration > mnMaxTimePerStep)
                     break;

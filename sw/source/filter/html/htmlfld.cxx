@@ -325,7 +325,7 @@ void SwHTMLParser::NewField()
     case RES_TIMEFLD:
         {
             sal_uLong nNumFmt = 0;
-            sal_Int64 nTime = Time( Time::SYSTEM ).GetTime();
+            sal_Int64 nTime = tools::Time( tools::Time::SYSTEM ).GetTime();
             sal_Int32 nDate = Date( Date::SYSTEM ).GetDate();
             sal_uInt16 nSub = 0;
             bool bValidFmt = false;
@@ -371,7 +371,7 @@ void SwHTMLParser::NewField()
                                           nSub, nNumFmt );
 
             if (nSub & FIXEDFLD)
-                ((SwDateTimeField *)pFld)->SetDateTime( DateTime(Date(nDate), Time(nTime)) );
+                ((SwDateTimeField *)pFld)->SetDateTime( DateTime(Date(nDate), tools::Time(nTime)) );
         }
         break;
 

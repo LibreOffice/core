@@ -277,7 +277,7 @@ void SAL_CALL KabPreparedStatement::setDate(sal_Int32, const Date&) throw(SQLExc
 ::dbtools::throwFunctionNotSupportedSQLException("setDate", NULL);
 }
 
-void SAL_CALL KabPreparedStatement::setTime(sal_Int32, const Time&) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabPreparedStatement::setTime(sal_Int32, const tools::Time&) throw(SQLException, RuntimeException, std::exception)
 {
 
 
