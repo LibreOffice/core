@@ -90,6 +90,10 @@ PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntr
     if(!pStyleSheet->sBaseStyleIdentifier.isEmpty())
     {
         const StyleSheetEntryPtr pParentStyleSheet = pStyleSheetTable->FindStyleSheetByISTD( pStyleSheet->sBaseStyleIdentifier );
+        //a loop in the style hierarchy, bail out
+        if (pParentStyleSheet == pStyleSheet)
+            return pRet;
+
         pRet = lcl_SearchParentStyleSheetAndMergeProperties( pParentStyleSheet, pStyleSheetTable );
     }
     else
