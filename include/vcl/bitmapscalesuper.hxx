@@ -24,13 +24,16 @@
 
 class VCL_DLLPUBLIC BitmapScaleSuper : public BitmapFilter
 {
-    double mrScaleX;
-    double mrScaleY;
-
 public:
-    BitmapScaleSuper(const double& rScaleX, const double& rScaleY);
-    virtual ~BitmapScaleSuper();
-    virtual bool filter(Bitmap& rBitmap) SAL_OVERRIDE;
+                    BitmapScaleSuper(const double& rScaleX, const double& rScaleY);
+    virtual         ~BitmapScaleSuper();
+
+    virtual bool    filter(Bitmap& rBitmap) SAL_OVERRIDE;
+
+private:
+    double          mrScaleX;
+    double          mrScaleY;
+
 };
 
 #endif // INCLUDED_VCL_BITMAPSCALESUPER_HXX

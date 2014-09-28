@@ -29,50 +29,52 @@ class Link;
 class VCL_DLLPUBLIC VclAbstractDialog
 {
 public:
-    virtual short           Execute() = 0;
-    virtual                 ~VclAbstractDialog();
+    virtual             ~VclAbstractDialog();
+
+    virtual short       Execute() = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractDialog2
 {
 public:
-    virtual void            StartExecuteModal( const Link& rEndDialogHdl ) = 0;
-    virtual long            GetResult() = 0;
-    virtual                 ~VclAbstractDialog2();
+    virtual             ~VclAbstractDialog2();
+
+    virtual void        StartExecuteModal( const Link& rEndDialogHdl ) = 0;
+    virtual long        GetResult() = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractTerminatedDialog : public VclAbstractDialog
 {
 public:
-    virtual void            EndDialog(long nResult =0) = 0;
+    virtual void        EndDialog(long nResult =0) = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractRefreshableDialog : public VclAbstractDialog
 {
 public:
-    virtual void            Update() = 0;
-    virtual void            Sync() = 0;
+    virtual void        Update() = 0;
+    virtual void        Sync() = 0;
 };
 
 class VCL_DLLPUBLIC AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
 {
 public:
-    virtual OUString  GetPasswordToOpen() const   = 0;
-    virtual OUString  GetPasswordToModify() const = 0;
-    virtual bool      IsRecommendToOpenReadonly() const = 0;
+    virtual OUString    GetPasswordToOpen() const   = 0;
+    virtual OUString    GetPasswordToModify() const = 0;
+    virtual bool        IsRecommendToOpenReadonly() const = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
-                                        virtual ~VclAbstractDialogFactory();    // needed for export of vtable
-    static VclAbstractDialogFactory*    Create();
+    virtual             ~VclAbstractDialogFactory();    // needed for export of vtable
+    static VclAbstractDialogFactory* Create();
     // nDialogId was previously a ResId without ResMgr; the ResourceId is now
     // an implementation detail of the factory
-    virtual VclAbstractDialog*          CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId ) = 0;
+    virtual VclAbstractDialog* CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId ) = 0;
 
     // creates instance of PasswordToOpenModifyDialog from cui
-    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
+    virtual AbstractPasswordToOpenModifyDialog* CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
 };
 
 #endif

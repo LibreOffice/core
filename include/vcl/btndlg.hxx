@@ -37,32 +37,9 @@ class PushButton;
 
 class VCL_DLLPUBLIC ButtonDialog : public Dialog
 {
-private:
-    boost::ptr_vector<ImplBtnDlgItem> maItemList;
-    Size                maPageSize;
-    Size                maCtrlSize;
-    long                mnButtonSize;
-    sal_uInt16              mnCurButtonId;
-    sal_uInt16              mnFocusButtonId;
-    bool                mbFormat;
-    Link                maClickHdl;
-
-    SAL_DLLPRIVATE void             ImplInitButtonDialogData();
-    SAL_DLLPRIVATE PushButton*      ImplCreatePushButton( sal_uInt16 nBtnFlags );
-    SAL_DLLPRIVATE ImplBtnDlgItem*  ImplGetItem( sal_uInt16 nId ) const;
-    DECL_DLLPRIVATE_LINK(           ImplClickHdl, PushButton* pBtn );
-    SAL_DLLPRIVATE void             ImplPosControls();
-
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE      ButtonDialog( const ButtonDialog & );
-    SAL_DLLPRIVATE      ButtonDialog& operator=( const ButtonDialog& );
-protected:
-                        ButtonDialog( WindowType nType );
-    SAL_DLLPRIVATE long ImplGetButtonSize();
-
 public:
                         ButtonDialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
-                        virtual ~ButtonDialog();
+    virtual             ~ButtonDialog();
 
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
@@ -72,11 +49,12 @@ public:
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
     const Size&         GetPageSizePixel() const { return maPageSize; }
 
-    sal_uInt16              GetCurButtonId() const { return mnCurButtonId; }
+    sal_uInt16          GetCurButtonId() const { return mnCurButtonId; }
 
     void                AddButton( const OUString& rText, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
     void                AddButton( StandardButtonType eType, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
     void                RemoveButton( sal_uInt16 nId );
+
     void                Clear();
     sal_uInt16          GetButtonId( sal_uInt16 nButton ) const;
     PushButton*         GetPushButton( sal_uInt16 nId ) const;
@@ -84,10 +62,36 @@ public:
     void                SetButtonHelpText( sal_uInt16 nId, const OUString& rText );
 
     void                SetFocusButton( sal_uInt16 nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
-    sal_uInt16              GetFocusButton() const { return mnFocusButtonId; }
+    sal_uInt16          GetFocusButton() const { return mnFocusButtonId; }
 
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
     const Link&         GetClickHdl() const { return maClickHdl; }
+
+protected:
+                        ButtonDialog( WindowType nType );
+    SAL_DLLPRIVATE long ImplGetButtonSize();
+
+private:
+    // Copy assignment is forbidden and not implemented.
+    SAL_DLLPRIVATE      ButtonDialog( const ButtonDialog & );
+    SAL_DLLPRIVATE      ButtonDialog& operator=( const ButtonDialog& );
+
+private:
+    boost::ptr_vector<ImplBtnDlgItem> maItemList;
+    Size                maPageSize;
+    Size                maCtrlSize;
+    long                mnButtonSize;
+    sal_uInt16          mnCurButtonId;
+    sal_uInt16          mnFocusButtonId;
+    bool                mbFormat;
+    Link                maClickHdl;
+
+    SAL_DLLPRIVATE void             ImplInitButtonDialogData();
+    SAL_DLLPRIVATE PushButton*      ImplCreatePushButton( sal_uInt16 nBtnFlags );
+    SAL_DLLPRIVATE ImplBtnDlgItem*  ImplGetItem( sal_uInt16 nId ) const;
+    DECL_DLLPRIVATE_LINK(           ImplClickHdl, PushButton* pBtn );
+    SAL_DLLPRIVATE void             ImplPosControls();
+
 };
 
 #endif // INCLUDED_VCL_BTNDLG_HXX

@@ -27,14 +27,11 @@
 #include <basegfx/color/bcolormodifier.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace rendering {
     class XBitmapCanvas;
 } } } }
-
-
-// - TransparentType -
-
 
 enum TransparentType
 {
@@ -43,28 +40,9 @@ enum TransparentType
     TRANSPARENT_BITMAP
 };
 
-
-// - BitmapEx -
-
-
 class VCL_DLLPUBLIC BitmapEx
 {
-private:
-    friend class ImpGraphic;
-    friend bool VCL_DLLPUBLIC WriteDIBBitmapEx(const BitmapEx& rSource, SvStream& rOStm);
-
-    Bitmap              aBitmap;
-    Bitmap              aMask;
-    Size                aBitmapSize;
-    Color               aTransparentColor;
-    TransparentType     eTransparent;
-    bool            bAlpha;
-
 public:
-
-
-    SAL_DLLPRIVATE  ImpBitmap*  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
-    SAL_DLLPRIVATE  ImpBitmap*  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
 
                         BitmapEx();
                         BitmapEx( const ResId& rResId );
@@ -115,9 +93,9 @@ public:
     const Color&        GetTransparentColor() const { return aTransparentColor; }
     void                SetTransparentColor( const Color& rColor ) { aTransparentColor = rColor; }
 
-    sal_uInt16              GetBitCount() const { return aBitmap.GetBitCount(); }
-    sal_uLong               GetSizeBytes() const;
-    sal_uLong               GetChecksum() const;
+    sal_uInt16          GetBitCount() const { return aBitmap.GetBitCount(); }
+    sal_uLong           GetSizeBytes() const;
+    sal_uLong           GetChecksum() const;
 
 public:
 
@@ -140,8 +118,9 @@ public:
 
         @return true, if the color reduction operation was completed successfully.
      */
-    bool                ReduceColors( sal_uInt16 nNewColorCount,
-                                      BmpReduce eReduce = BMP_REDUCE_SIMPLE );
+    bool                ReduceColors(
+                            sal_uInt16 nNewColorCount,
+                            BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     /** Apply a dither algorithm to the bitmap
 
@@ -188,9 +167,10 @@ public:
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    bool                Expand( sal_uLong nDX, sal_uLong nDY,
-                                const Color* pInitColor = NULL,
-                                bool bExpandTransparent = false );
+    bool                Expand(
+                            sal_uLong nDX, sal_uLong nDY,
+                            const Color* pInitColor = NULL,
+                            bool bExpandTransparent = false );
 
     /** Copy a rectangular area from another bitmap
 
@@ -214,9 +194,10 @@ public:
         nothing had to be done, e.g. because one of the rectangles are
         empty.
      */
-    bool                CopyPixel( const Rectangle& rRectDst,
-                                   const Rectangle& rRectSrc,
-                                   const BitmapEx* pBmpExSrc = NULL );
+    bool                CopyPixel(
+                            const Rectangle& rRectDst,
+                            const Rectangle& rRectSrc,
+                            const BitmapEx* pBmpExSrc = NULL );
 
     /** Fill the entire bitmap with the given color
 
@@ -253,7 +234,9 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
+    bool                Scale(
+                            const Size& rNewSize,
+                            sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
 
     /** Scale the bitmap
 
@@ -268,7 +251,10 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
+    bool                Scale(
+                            const double& rScaleX,
+                            const double& rScaleY,
+                            sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
 
     /** Rotate bitmap by the specified angle
 
@@ -283,7 +269,9 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                Rotate( long nAngle10, const Color& rFillColor );
+    bool                Rotate(
+                            long nAngle10,
+                            const Color& rFillColor );
 
     /** Replace all pixel having the search color with the specified color
 
@@ -300,7 +288,10 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
+    bool                Replace(
+                            const Color& rSearchColor,
+                            const Color& rReplaceColor,
+                            sal_uLong nTol = 0 );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -320,8 +311,11 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                Replace( const Color* pSearchColors, const Color* pReplaceColors,
-                                 sal_uLong nColorCount, const sal_uLong* pTols = NULL );
+    bool                Replace(
+                            const Color* pSearchColors,
+                            const Color* pReplaceColors,
+                            sal_uLong nColorCount,
+                            const sal_uLong* pTols = NULL );
 
     /** Change various global color characteristics
 
@@ -353,14 +347,15 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                Adjust( short nLuminancePercent = 0,
-                                short nContrastPercent = 0,
-                                short nChannelRPercent = 0,
-                                short nChannelGPercent = 0,
-                                short nChannelBPercent = 0,
-                                double fGamma = 1.0,
-                                bool bInvert = false,
-                                bool msoBrightness = false );
+    bool                Adjust(
+                            short nLuminancePercent = 0,
+                            short nContrastPercent = 0,
+                            short nChannelRPercent = 0,
+                            short nChannelGPercent = 0,
+                            short nChannelBPercent = 0,
+                            double fGamma = 1.0,
+                            bool bInvert = false,
+                            bool msoBrightness = false );
 
     /** Apply specified filter to the bitmap
 
@@ -375,9 +370,10 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                Filter( BmpFilter eFilter,
-                                const BmpFilterParam* pFilterParam = NULL,
-                                const Link* pProgress = NULL );
+    bool                Filter(
+                            BmpFilter eFilter,
+                            const BmpFilterParam* pFilterParam = NULL,
+                            const Link* pProgress = NULL );
 
     /** Get transparency at given position
 
@@ -390,7 +386,9 @@ public:
         @return transparency value in the range of [0 .. 255] where
                 0 is not transparent, 255 is fully transparent
      */
-    sal_uInt8 GetTransparency(sal_Int32 nX, sal_Int32 nY) const;
+    sal_uInt8           GetTransparency(
+                            sal_Int32 nX,
+                            sal_Int32 nY) const;
 
     /** Create transformed Bitmap
 
@@ -407,11 +405,11 @@ public:
         @param bSmooth
         Defines if pixel interpolation is to be used to create the result
     */
-    BitmapEx TransformBitmapEx(
-        double fWidth,
-        double fHeight,
-        const basegfx::B2DHomMatrix& rTransformation,
-        bool bSmooth = true) const;
+    BitmapEx            TransformBitmapEx(
+                            double fWidth,
+                            double fHeight,
+                            const basegfx::B2DHomMatrix& rTransformation,
+                            bool bSmooth = true) const;
 
     /** Create transformed Bitmap
 
@@ -434,27 +432,42 @@ public:
 
         @return The transformed bitmap
     */
-    BitmapEx getTransformed(
-        const basegfx::B2DHomMatrix& rTransformation,
-        const basegfx::B2DRange& rVisibleRange,
-        double fMaximumArea = 500000.0,
-        bool bSmooth = true) const;
+    BitmapEx            getTransformed(
+                            const basegfx::B2DHomMatrix& rTransformation,
+                            const basegfx::B2DRange& rVisibleRange,
+                            double fMaximumArea = 500000.0,
+                            bool bSmooth = true) const;
 
     /** Create ColorStack-modified version of this BitmapEx
 
         @param rBColorModifierStack
         A ColrModifierStack which defines how each pixel has to be modified
     */
-    BitmapEx ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack) const;
+    BitmapEx            ModifyBitmapEx( const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
-public:
-
-    static BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);
+    static BitmapEx     AutoScaleBitmap( BitmapEx & aBitmap, const long aStandardSize );
 
     /// populate from a canvas implementation
-    bool Create( const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::rendering::XBitmapCanvas > &xBitmapCanvas,
-                 const Size &rSize );
+    bool                Create(
+                            const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
+                            const Size &rSize );
+public:
+
+    SAL_DLLPRIVATE  ImpBitmap*  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
+    SAL_DLLPRIVATE  ImpBitmap*  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
+
+
+private:
+    friend class ImpGraphic;
+    friend bool VCL_DLLPUBLIC WriteDIBBitmapEx(const BitmapEx& rSource, SvStream& rOStm);
+
+    Bitmap              aBitmap;
+    Bitmap              aMask;
+    Size                aBitmapSize;
+    Color               aTransparentColor;
+    TransparentType     eTransparent;
+    bool                bAlpha;
+
 };
 
 
@@ -497,8 +510,6 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
     Color aColorTopRight,
     Color aColorBottomRight,
     Color aColorBottomLeft);
-
-
 
 #endif // INCLUDED_VCL_BITMAPEX_HXX
 
