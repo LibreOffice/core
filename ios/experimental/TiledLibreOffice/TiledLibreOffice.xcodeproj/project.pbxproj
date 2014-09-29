@@ -400,6 +400,9 @@
 		BE6DC8FA19D9A6E500AFB393 /* officeipcthread.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = officeipcthread.cxx; path = ../../../desktop/source/app/officeipcthread.cxx; sourceTree = "<group>"; };
 		BE6DC8FB19D9A6E500AFB393 /* sofficemain.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sofficemain.cxx; path = ../../../desktop/source/app/sofficemain.cxx; sourceTree = "<group>"; };
 		BE6DC8FC19D9A6E500AFB393 /* userinstall.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = userinstall.cxx; path = ../../../desktop/source/app/userinstall.cxx; sourceTree = "<group>"; };
+		BE6DC8FD19D9AF6100AFB393 /* IconThemeInfo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IconThemeInfo.cxx; path = ../../../vcl/source/app/IconThemeInfo.cxx; sourceTree = "<group>"; };
+		BE6DC8FE19D9AF6100AFB393 /* IconThemeScanner.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IconThemeScanner.cxx; path = ../../../vcl/source/app/IconThemeScanner.cxx; sourceTree = "<group>"; };
+		BE6DC8FF19D9AF6100AFB393 /* IconThemeSelector.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IconThemeSelector.cxx; path = ../../../vcl/source/app/IconThemeSelector.cxx; sourceTree = "<group>"; };
 		BE6F3D67192E286B00D6FCC0 /* bitmap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmap.cxx; path = ../../../vcl/source/outdev/bitmap.cxx; sourceTree = "<group>"; };
 		BE6F3D68192E286B00D6FCC0 /* clipping.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clipping.cxx; path = ../../../vcl/source/outdev/clipping.cxx; sourceTree = "<group>"; };
 		BE6F3D69192E286B00D6FCC0 /* curvedshapes.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = curvedshapes.cxx; path = ../../../vcl/source/outdev/curvedshapes.cxx; sourceTree = "<group>"; };
@@ -968,6 +971,9 @@
 				BE0898EA1860D42B0021A679 /* dndhelp.cxx */,
 				BE0898EB1860D42B0021A679 /* help.cxx */,
 				BE0898EC1860D42B0021A679 /* i18nhelp.cxx */,
+				BE6DC8FD19D9AF6100AFB393 /* IconThemeInfo.cxx */,
+				BE6DC8FE19D9AF6100AFB393 /* IconThemeScanner.cxx */,
+				BE6DC8FF19D9AF6100AFB393 /* IconThemeSelector.cxx */,
 				BE0898ED1860D42B0021A679 /* idlemgr.cxx */,
 				BE0898EE1860D42B0021A679 /* salvtables.cxx */,
 				BE0898EF1860D42B0021A679 /* session.cxx */,
