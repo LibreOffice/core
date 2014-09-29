@@ -91,7 +91,7 @@ void SvxColorValueSet::loadColorVector(const std::vector<Color>& rColorVector, c
     if(rNamePrefix.getLength() != 0)
     {
         for(std::vector<Color>::const_iterator it = rColorVector.begin();
-            it != rColorVector.end(); it++, nStartIndex++)
+            it != rColorVector.end(); ++it, nStartIndex++)
         {
             InsertItem(nStartIndex, *it, rNamePrefix + OUString::number(nStartIndex));
         }
@@ -99,7 +99,7 @@ void SvxColorValueSet::loadColorVector(const std::vector<Color>& rColorVector, c
     else
     {
         for(std::vector<Color>::const_iterator it = rColorVector.begin();
-            it != rColorVector.end(); it++, nStartIndex++)
+            it != rColorVector.end(); ++it, nStartIndex++)
         {
             InsertItem(nStartIndex, *it, "");
         }
