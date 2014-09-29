@@ -126,12 +126,16 @@ public class UCBStreamHandler extends URLStreamHandler {
             catch ( com.sun.star.ucb.CommandAbortedException cae )
             {
                 LogUtils.DEBUG("caught exception: " + cae.toString() + " getting writable stream from " + url );
-                throw new IOException(cae);
+                IOException newEx = new IOException(cae.getMessage());
+                newEx.initCause(cae);
+                throw newEx;
             }
             catch ( com.sun.star.uno.Exception e )
             {
                 LogUtils.DEBUG("caught unknown exception: " + e.toString() + " getting writable stream from " + url );
-                throw new IOException(e);
+                IOException newEx = new IOException(e.getMessage());
+                newEx.initCause(e);
+                throw newEx;
             }
             return os;
         }
