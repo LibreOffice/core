@@ -34,6 +34,24 @@
       "revId": "d4aa1d8b913daf517d209fb2b45732e278496da7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae2911b_ace663e6",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2014-09-29T07:29:46Z",
+      "side": 1,
+      "message": "http://opengrok.libreoffice.org/xref/core/include/vcl/settings.hxx#200",
+      "parentUuid": "3ae2911b_6c7cfb20",
+      "revId": "d4aa1d8b913daf517d209fb2b45732e278496da7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
