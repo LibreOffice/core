@@ -7327,10 +7327,10 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
         case text::RelOrientation::PAGE_RIGHT:
         case text::RelOrientation::FRAME_LEFT:
         case text::RelOrientation::FRAME_RIGHT:
+        case text::RelOrientation::PAGE_PRINT_AREA:
             sVAnchor = OString( "margin" );
             break;
         case text::RelOrientation::PAGE_FRAME:
-        case text::RelOrientation::PAGE_PRINT_AREA:
         default:
             break;
     }
@@ -7387,10 +7387,10 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
         case text::RelOrientation::PAGE_RIGHT:
         case text::RelOrientation::FRAME_LEFT:
         case text::RelOrientation::FRAME_RIGHT:
+        case text::RelOrientation::PAGE_PRINT_AREA:
             sHAnchor = OString( "margin" );
             break;
         case text::RelOrientation::PAGE_FRAME:
-        case text::RelOrientation::PAGE_PRINT_AREA:
         default:
             break;
     }
