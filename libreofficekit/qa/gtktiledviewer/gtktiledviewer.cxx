@@ -50,7 +50,7 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     }
     else if ( pDocViewQuad )
     {
-        fCurrentZoom = lok_docview_quad_get_zoom( LOK_DOCVIEW_QUAD(pDocView) );
+        fCurrentZoom = lok_docview_quad_get_zoom( LOK_DOCVIEW_QUAD(pDocViewQuad) );
     }
 
     if ( strcmp(sName, "gtk-zoom-in") == 0)
