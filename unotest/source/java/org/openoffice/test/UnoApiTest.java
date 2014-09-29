@@ -19,8 +19,6 @@
 package org.openoffice.test;
 
 import org.openoffice.Runner;
-import org.openoffice.test.OfficeConnection;
-import org.openoffice.test.Argument;
 import static org.junit.Assert.*;
 
 public final class UnoApiTest {
