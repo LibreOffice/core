@@ -28,6 +28,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <config_features.h>
 
@@ -85,7 +86,7 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
     // remove .tmp extension
     sOutput = sOutput.copy(0, sOutput.getLength()-4);
 
-    std::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
+    boost::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
     asset->setBundleOutputPath(OUStringToOString( sOutput, RTL_TEXTENCODING_UTF8 ).getStr());
 
     // If *.dae file is not in the local file system, then copy it to a temp folder for the conversion
