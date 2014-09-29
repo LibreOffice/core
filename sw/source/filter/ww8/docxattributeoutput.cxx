@@ -7320,9 +7320,9 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
         case text::RelOrientation::CHAR:
         case text::RelOrientation::PRINT_AREA:
         case text::RelOrientation::TEXT_LINE:
+        case text::RelOrientation::FRAME:
             sVAnchor = OString( "text" );
             break;
-        case text::RelOrientation::FRAME:
         case text::RelOrientation::PAGE_LEFT:
         case text::RelOrientation::PAGE_RIGHT:
         case text::RelOrientation::FRAME_LEFT:
@@ -7380,9 +7380,9 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
     {
         case text::RelOrientation::CHAR:
         case text::RelOrientation::PRINT_AREA:
+        case text::RelOrientation::FRAME:
             sHAnchor = OString( "text" );
             break;
-        case text::RelOrientation::FRAME:
         case text::RelOrientation::PAGE_LEFT:
         case text::RelOrientation::PAGE_RIGHT:
         case text::RelOrientation::FRAME_LEFT:
