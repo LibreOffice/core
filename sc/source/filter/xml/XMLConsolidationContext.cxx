@@ -38,7 +38,7 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
     bLinkToSource( false ),
     bTargetAddr(false)
 {
-    ScXMLImport::MutexGuard aGuard(GetScImport());
+    rImport.LockSolarMutex();
     if( !xAttrList.is() ) return;
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
@@ -78,6 +78,7 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
 
 ScXMLConsolidationContext::~ScXMLConsolidationContext()
 {
+    GetScImport().UnlockSolarMutex();
 }
 
 SvXMLImportContext *ScXMLConsolidationContext::CreateChildContext(
@@ -136,7 +137,6 @@ void ScXMLConsolidationContext::EndElement()
         if( pDoc )
             pDoc->SetConsolidateDlgData( &aConsParam );
     }
-    GetScImport().UnlockSolarMutex();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
