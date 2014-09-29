@@ -419,10 +419,18 @@ namespace
 #ifdef BRDEBUG
     fprintf(stderr,"cpp_mediate2\n");
 #endif
-    OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
-      throw RuntimeException( "illegal vtable index!", (XInterface *)pThis );
+        SAL_WARN(
+            "bridges",
+            "illegal " << OUString::unacquired(&pTypeDescr->aBase.pTypeName)
+                << " vtable index " << nFunctionIndex << "/"
+                << pTypeDescr->nMapFunctionIndexToMemberIndex);
+        throw RuntimeException(
+            ("illegal " + OUString::unacquired(&pTypeDescr->aBase.pTypeName)
+             + " vtable index " + OUString::number(nFunctionIndex) + "/"
+             + OUString::number(pTypeDescr->nMapFunctionIndexToMemberIndex)),
+            (XInterface *)pThis);
     }
 
     // determine called method

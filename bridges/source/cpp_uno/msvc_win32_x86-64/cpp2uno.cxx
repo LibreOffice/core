@@ -239,10 +239,19 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 
     typelib_InterfaceTypeDescription * pTD = pCppI->getTypeDescr();
 
-    OSL_ENSURE( nFunctionIndex < pTD->nMapFunctionIndexToMemberIndex, "### illegal vtable index!\n" );
     if ( nFunctionIndex >= pTD->nMapFunctionIndexToMemberIndex )
-        throw RuntimeException("Illegal vtable index!",
-                                reinterpret_cast<XInterface *>( pCppI ) );
+    {
+        SAL_WARN(
+            "bridges",
+            "illegal " << OUString::unacquired(&pTypeDescr->aBase.pTypeName)
+                << " vtable index " << nFunctionIndex << "/"
+                << pTypeDescr->nMapFunctionIndexToMemberIndex);
+        throw RuntimeException(
+            ("illegal " + OUString::unacquired(&pTypeDescr->aBase.pTypeName)
+             + " vtable index " + OUString::number(nFunctionIndex) + "/"
+             + OUString::number(pTypeDescr->nMapFunctionIndexToMemberIndex)),
+            reinterpret_cast<XInterface *>( pCppI ) );
+    }
 
     // Determine called method
     int nMemberPos = pTD->pMapFunctionIndexToMemberIndex[nFunctionIndex];
