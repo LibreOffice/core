@@ -55,7 +55,9 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             bytesAvail = xin.available();
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
 
         return(bytesAvail);
@@ -66,7 +68,9 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             xin.closeInput();
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
     }
 
@@ -79,15 +83,17 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
             if (bytesRead <= 0) {
                return (-1);
             } else {
-        int tmpInt = tmp[0][0];
-        if (tmpInt< 0 ){
-            tmpInt = 256 +tmpInt;
-        }
+                int tmpInt = tmp[0][0];
+                if (tmpInt< 0 ){
+                    tmpInt = 256 +tmpInt;
+                }
                 return(tmpInt);
             }
 
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
     }
 
@@ -107,7 +113,9 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
                 System.arraycopy(tmp[0], 0, b, 0, b.length);
             }
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
 
         return (bytesRead);
@@ -117,31 +125,31 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
     public int read(byte[] b, int off, int len) throws IOException {
         byte [][] tmp = new byte [1][b.length];
         try {
-        long bytesRead;
+            long bytesRead;
             int av = xin.available();
-        if ( av != 0 && len > av) {
-          bytesRead = xin.readBytes(tmp, av);
-        }
-        else{
-        bytesRead = xin.readBytes(tmp,len);
-        }
+            if ( av != 0 && len > av) {
+                bytesRead = xin.readBytes(tmp, av);
+            }
+            else{
+                bytesRead = xin.readBytes(tmp,len);
+            }
             // Casting bytesRead to an int is okay, since the user can
             // only pass in an integer length to read, so the bytesRead
             // must <= len.
 
             if (bytesRead <= 0) {
                 return(-1);
-        } else if (bytesRead < len) {
-        System.arraycopy(tmp[0], 0, b, off, (int)bytesRead);
-        } else {
+            } else if (bytesRead < len) {
+                System.arraycopy(tmp[0], 0, b, off, (int)bytesRead);
+            } else {
                 System.arraycopy(tmp[0], 0, b, off, len);
-        }
+            }
 
-        return ((int)bytesRead);
-
-
+            return ((int)bytesRead);
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
     }
 
@@ -155,7 +163,9 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             avail = xin.available();
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
 
         do {
@@ -170,7 +180,9 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
             try {
                 xin.skipBytes(tmpIntVal);
             } catch (Exception e) {
-                throw new IOException(e);
+                IOException newEx = new IOException(e.getMessage());
+                newEx.initCause(e);
+                throw newEx;
             }
         } while (tmpLongVal > 0);
 

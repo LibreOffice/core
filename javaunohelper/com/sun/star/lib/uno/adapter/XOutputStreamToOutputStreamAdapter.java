@@ -53,7 +53,9 @@ public final class XOutputStreamToOutputStreamAdapter extends OutputStream {
         try {
             xout.closeOutput();
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
     }
 
@@ -62,17 +64,21 @@ public final class XOutputStreamToOutputStreamAdapter extends OutputStream {
         try {
             xout.flush();
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
     }
 
     @Override
     public void write(byte[] b) throws IOException {
 
-    try {
+        try {
             xout.writeBytes(b);
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
     }
 
@@ -88,7 +94,9 @@ public final class XOutputStreamToOutputStreamAdapter extends OutputStream {
         try {
             xout.writeBytes(tmp);
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
     }
 
@@ -101,7 +109,9 @@ public final class XOutputStreamToOutputStreamAdapter extends OutputStream {
         try {
             xout.writeBytes(oneByte);
         } catch (Exception e) {
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
     }
 }
