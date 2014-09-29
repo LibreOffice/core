@@ -44,7 +44,7 @@ namespace utl
         typedef ::comphelper::OModule   BaseClass;
 
     private:
-        ::std::auto_ptr< OComponentResModuleImpl >  m_pImpl;
+        ::std::unique_ptr< OComponentResModuleImpl >  m_pImpl;
 
     public:
         OComponentResourceModule( const OString& _rResFilePrefix );
