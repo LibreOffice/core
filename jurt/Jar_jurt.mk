@@ -19,7 +19,11 @@ $(eval $(call gb_Jar_set_packageroot,jurt,com))
 $(eval $(call gb_Jar_set_manifest,jurt,$(SRCDIR)/jurt/util/manifest))
 
 $(eval $(call gb_Jar_add_manifest_classpath,jurt, \
-    ridl.jar unoloader.jar ../../lib/ ../bin/))
+    ridl.jar \
+    unoloader.jar \
+	$(if $(filter MACOSX,$(OS)),../../Frameworks/, \
+		$(if $(filter WNT,$(OS)),../bin/,../../lib/)) \
+))
 
 $(eval $(call gb_Jar_add_sourcefiles,jurt,\
     jurt/com/sun/star/comp/bridgefactory/BridgeFactory \
