@@ -205,7 +205,7 @@
     </group>
     <group oor:name="FileType">
       <info>
-        <desc>Contains information about a linked file, i.e. an Image file.</desc>
+        <desc>Contains information about a linked file, i.e. an image file.</desc>
       </info>
       <prop oor:name="Name" oor:type="xs:string">
         <info>
@@ -1001,7 +1001,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
-            <desc>Specifies whether Images and Objects are displayed.</desc>
+            <desc>Specifies whether images and objects are displayed.</desc>
             <label>Images and Objects</label>
           </info>
           <value>true</value>
@@ -1961,7 +1961,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies whether Images are printed.</desc>
+            <desc>Specifies whether images are printed.</desc>
             <label>Images</label>
           </info>
           <value>true</value>
@@ -1971,7 +1971,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies whether Tables are printed.</desc>
+            <desc>Specifies whether tables are printed.</desc>
             <label>Tables</label>
           </info>
           <value>true</value>
@@ -1981,7 +1981,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies whether Drawings are printed.</desc>
+            <desc>Specifies whether drawings are printed.</desc>
             <label>Drawings</label>
           </info>
           <value>true</value>
@@ -2689,7 +2689,7 @@
         </prop>
         <prop oor:name="Automatic" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies how Tables, Images, Frames and Office documents, which have been inserted as OLE objects, are labeled</desc>
+            <desc>Specifies how tables, images, frames and office documents, which have been inserted as OLE objects, are labeled</desc>
             <label>Automatic</label>
           </info>
           <value>false</value>
@@ -2966,11 +2966,11 @@
           <group oor:name="Graphic">
             <!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Graphic -->
             <info>
-              <desc>Settings for insertion of captions for Images.</desc>
+              <desc>Settings for insertion of captions for images.</desc>
             </info>
             <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
               <info>
-                <desc>Determines if the caption settings are valid for an Image in a text document.</desc>
+                <desc>Determines if the caption settings are valid for an image in a text document.</desc>
                 <label>Writer Image</label>
               </info>
               <value>false</value>
@@ -3095,7 +3095,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
+                  <desc>Determines whether the border and shadow attributes of the image frame should be applied to the newly inserted caption frame surrounding the image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3238,7 +3238,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
+                  <desc>Determines whether the border and shadow attributes of the image frame should be applied to the newly inserted caption frame surrounding the image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3376,7 +3376,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
+                  <desc>Determines whether the border and shadow attributes of the image frame should be applied to the newly inserted caption frame surrounding the image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3514,7 +3514,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
+                  <desc>Determines whether the border and shadow attributes of the image frame should be applied to the newly inserted caption frame surrounding the image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3523,11 +3523,11 @@
           <group oor:name="Image">
             <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Image -->
             <info>
-              <desc>Specifies the settings for inserting captions for Image documents.</desc>
+              <desc>Specifies the settings for inserting captions for image documents.</desc>
             </info>
             <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
               <info>
-                <desc>Determines if the caption settings are valid for an Image object.</desc>
+                <desc>Determines if the caption settings are valid for an image object.</desc>
                 <label>Image</label>
               </info>
               <value>false</value>
@@ -3652,7 +3652,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
+                  <desc>Determines whether the border and shadow attributes of the image frame should be applied to the newly inserted caption frame surrounding the image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3790,7 +3790,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
+                  <desc>Determines whether the border and shadow attributes of the image frame should be applied to the newly inserted caption frame surrounding the image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3928,7 +3928,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
+                  <desc>Determines whether the border and shadow attributes of the image frame should be applied to the newly inserted caption frame surrounding the image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -4066,7 +4066,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
+                  <desc>Determines whether the border and shadow attributes of the image frame should be applied to the newly inserted caption frame surrounding the image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -5410,7 +5410,7 @@
         </info>
         <prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
           <info>
-            <desc>Specifies whether the Image Object Bar or the Text Object Bar is visible when an Image is selected.</desc>
+            <desc>Specifies whether the Image Object Bar or the Text Object Bar is visible when an image is selected.</desc>
           </info>
           <value>-1</value>
         </prop>
@@ -5851,7 +5851,7 @@
           <!--OldLocation: Soffice.cfg -->
           <!--UIHints: Numbering/Bullets dialog - Customize - Graphics - Keep Ratio-->
           <info>
-            <desc>Maintains the proportions of Images when the size is modified.</desc>
+            <desc>Maintains the proportions of images when the size is modified.</desc>
           </info>
           <value>false</value>
         </prop>

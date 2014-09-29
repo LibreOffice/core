@@ -153,11 +153,11 @@ Resource RID_SW_ERRHDL
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
     {
-        Text [ en-US ] = "Some OLE objects could only be loaded as Images." ;
+        Text [ en-US ] = "Some OLE objects could only be loaded as images." ;
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
     {
-        Text [ en-US ] = "Some OLE objects could only be saved as Images." ;
+        Text [ en-US ] = "Some OLE objects could only be saved as images." ;
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
     {

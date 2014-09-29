@@ -313,7 +313,7 @@ String STR_STATSTR_AUTOFORMAT
 
 String STR_STATSTR_IMPGRF
 {
-    Text [ en-US ] = "Importing Images..." ;
+    Text [ en-US ] = "Importing images..." ;
 };
 
 String STR_STATSTR_SEARCH

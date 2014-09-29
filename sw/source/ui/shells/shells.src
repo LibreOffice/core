@@ -33,11 +33,11 @@ String STR_GRFILTER_IOERROR
 };
 String STR_GRFILTER_FORMATERROR
 {
-        Text [ en-US ] = "Unknown Image format" ;
+        Text [ en-US ] = "Unknown image format" ;
 };
 String STR_GRFILTER_VERSIONERROR
 {
-        Text [ en-US ] = "This Image file version is not supported" ;
+        Text [ en-US ] = "This image file version is not supported" ;
 };
 String STR_GRFILTER_FILTERERROR
 {
@@ -45,7 +45,7 @@ String STR_GRFILTER_FILTERERROR
 };
 String STR_GRFILTER_TOOBIG
 {
-    Text [ en-US ] = "Not enough memory to insert the Image." ;
+    Text [ en-US ] = "Not enough memory to insert the image." ;
 };
 String STR_INSERT_GRAPHIC
 {

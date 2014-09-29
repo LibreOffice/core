@@ -153,7 +153,7 @@ String STR_EVENT_IMAGE_ABORT
 };
 String STR_EVENT_IMAGE_ERROR
 {
-    Text [ en-US ] = "Could not load Image" ;
+    Text [ en-US ] = "Could not load image" ;
 };
 String STR_EVENT_FRM_KEYINPUT_A
 {
@@ -249,7 +249,7 @@ String STR_IDXEXAMPLE_IDXTXT_TABLE1
 };
 String STR_IDXEXAMPLE_IDXTXT_IMAGE1
 {
-    Text [ en-US ] = "Image 1: This is Image 1" ;
+    Text [ en-US ] = "Image 1: This is image 1" ;
 };
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
