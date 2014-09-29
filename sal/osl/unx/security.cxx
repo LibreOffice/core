@@ -22,6 +22,12 @@
 #include <cstddef>
 #include <limits>
 
+#ifdef IOS
+#include <premac.h>
+#import <Foundation/Foundation.h>
+#include <postmac.h>
+#endif
+
 #include "system.h"
 
 #include <osl/security.h>
@@ -322,6 +328,19 @@ static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirec
     if (bRet)
         return bRet;
 }
+#endif
+
+#ifdef IOS
+    {
+        // Let's pretend the app-specific "Documents" directory is the home directory for now
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *userDirectory = [paths objectAtIndex:0];
+        if ([userDirectory length] < nMax)
+        {
+            strcpy(pszDirectory, [userDirectory UTF8String]);
+            return sal_True;
+        }
+    }
 #endif
 
     /* if current user, check also environment for HOME */
