@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae2911b_6c6d1b32",
+        "filename": "include/vcl/metric.hxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-29T09:20:28Z",
+      "side": 1,
+      "message": "please do not introduce new instances of sal_uLong; see its documentation in tools/solar.h for details",
+      "revId": "a7d3ac3083d1dfd48129e82f90c3b4a3e97cca72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
