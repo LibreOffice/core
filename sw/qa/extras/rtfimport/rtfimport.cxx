@@ -1536,7 +1536,7 @@ DECLARE_RTFIMPORT_TEST(testFdo68291, "fdo68291.odt")
     paste("fdo68291-paste.rtf", xEnd);
 
     // This was "Standard", causing an unwanted page break on next paste.
-    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(1), "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), uno::Reference<beans::XPropertySet>(getParagraph(1), uno::UNO_QUERY)->getPropertyValue("PageDescName"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo69384, "hello.rtf")
@@ -1630,8 +1630,8 @@ DECLARE_RTFIMPORT_TEST(testContSectionPageBreak, "cont-section-pagebreak.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("SECOND"), xParaSecond->getString());
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
                          getProperty<style::BreakType>(xParaSecond, "BreakType"));
-    CPPUNIT_ASSERT_EQUAL(OUString(""),
-                         getProperty<OUString>(xParaSecond, "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(),
+                         uno::Reference<beans::XPropertySet>(xParaSecond, uno::UNO_QUERY)->getPropertyValue("PageDescName"));
     // actually not sure how many paragraph there should be between
     // SECOND and THIRD - important is that the page break is on there
     uno::Reference<text::XTextRange> xParaNext = getParagraph(3);
@@ -1642,8 +1642,8 @@ DECLARE_RTFIMPORT_TEST(testContSectionPageBreak, "cont-section-pagebreak.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("THIRD"), xParaThird->getString());
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
                          getProperty<style::BreakType>(xParaThird, "BreakType"));
-    CPPUNIT_ASSERT_EQUAL(OUString(""),
-                         getProperty<OUString>(xParaThird, "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(),
+                         uno::Reference<beans::XPropertySet>(xParaThird, uno::UNO_QUERY)->getPropertyValue("PageDescName"));
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }

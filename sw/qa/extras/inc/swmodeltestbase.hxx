@@ -403,7 +403,10 @@ protected:
     {
         uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY_THROW );
         T data = T();
-        properties->getPropertyValue( name ) >>= data;
+        if (!(properties->getPropertyValue(name) >>= data))
+        {
+            CPPUNIT_FAIL("the property is of unexpected type or void");
+        }
         return data;
     }
 
@@ -412,7 +415,10 @@ protected:
     {
         uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY_THROW );
         T data = T();
-        properties->getPropertyValue( name ) >>= data;
+        if (!(properties->getPropertyValue(name) >>= data))
+        {
+            CPPUNIT_FAIL("the property is of unexpected type or void");
+        }
         return data;
     }
 
