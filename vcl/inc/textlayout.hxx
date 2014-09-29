@@ -102,7 +102,7 @@ namespace vcl
         ControlTextRenderer& operator=( const ControlTextRenderer& );   // never implemented
 
     private:
-        ::std::auto_ptr< ReferenceDeviceTextLayout >   m_pImpl;
+        ::std::unique_ptr< ReferenceDeviceTextLayout >   m_pImpl;
     };
 
 } // namespace vcl

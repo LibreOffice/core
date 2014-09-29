@@ -121,7 +121,7 @@ namespace vcl
     struct MnemonicEngine_Data;
     class VCL_DLLPUBLIC MnemonicEngine
     {
-        ::std::auto_ptr< MnemonicEngine_Data >  m_pData;
+        ::std::unique_ptr< MnemonicEngine_Data >  m_pData;
 
     public:
         MnemonicEngine( IMnemonicEntryList& _rEntryList );
