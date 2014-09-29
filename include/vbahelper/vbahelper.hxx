@@ -173,7 +173,7 @@ public:
 
 class VBAHELPER_DLLPUBLIC ConcreteXShapeGeometryAttributes : public AbstractGeometryAttributes
 {
-    std::auto_ptr< ShapeHelper > m_pShapeHelper;
+    std::unique_ptr< ShapeHelper > m_pShapeHelper;
 public:
     ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
     virtual double getLeft() const SAL_OVERRIDE;

@@ -49,7 +49,7 @@ protected:
 
     bool bIsDialog;
     OUString m_sLibraryAndCodeName;
-    std::auto_ptr< ov::AbstractGeometryAttributes > mpGeometryHelper;
+    std::unique_ptr< ov::AbstractGeometryAttributes > mpGeometryHelper;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
     css::uno::Reference< css::uno::XInterface > m_xControl;
     css::uno::Reference< css::frame::XModel > m_xModel;

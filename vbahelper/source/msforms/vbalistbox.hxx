@@ -33,9 +33,7 @@ typedef cppu::ImplInheritanceHelper2<ScVbaControl, ov::msforms::XListBox, css::s
 class ScVbaListBox : public ListBoxImpl_BASE
     ,public PropListener
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ListControlHelper > mpListHelper;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr< ListControlHelper > mpListHelper;
     OUString sSourceName;
     OUString msDftPropName;
 
