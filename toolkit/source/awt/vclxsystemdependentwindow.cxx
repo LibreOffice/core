@@ -71,18 +71,18 @@ IMPL_XTYPEPROVIDER_END
     vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        const SystemEnvData* pSysData = ((SystemChildWindow *)pWindow)->GetSystemData();
+        const SystemEnvData* pSysData = static_cast<SystemChildWindow *>(pWindow)->GetSystemData();
         if( pSysData )
         {
 #if (defined WNT)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
             {
-                 aRet <<= (sal_IntPtr)pSysData->hWnd;
+                 aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->hWnd);
             }
 #elif (defined MACOSX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
             {
-                 aRet <<= (sal_IntPtr)pSysData->mpNSView;
+                 aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->mpNSView);
             }
 #elif (defined ANDROID)
             // Nothing

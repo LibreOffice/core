@@ -112,10 +112,10 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
          */
     if ( pEvent && pEvent->ISA( VclWindowEvent ) && mxWindow.is() /* #122218# */ && (pEvent->GetId() != VCLEVENT_WINDOW_ENDPOPUPMODE) )
     {
-        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
-        if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
+        DBG_ASSERT( static_cast<VclWindowEvent*>(pEvent)->GetWindow(), "Window???" );
+        if( !static_cast<VclWindowEvent*>(pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
         {
-            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+            ProcessWindowEvent( *static_cast<VclWindowEvent*>(pEvent) );
         }
     }
     return 0;
@@ -126,13 +126,13 @@ IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, p
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) && mxWindow.is() /* #i68079# */ )
     {
-        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
-        if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
+        DBG_ASSERT( static_cast<VclWindowEvent*>(pEvent)->GetWindow(), "Window???" );
+        if( !static_cast<VclWindowEvent*>(pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
         {
             // #103087# to prevent an early release of the component
             uno::Reference< accessibility::XAccessibleContext > xTmp = this;
 
-            ProcessWindowChildEvent( *(VclWindowEvent*)pEvent );
+            ProcessWindowChildEvent( *static_cast<VclWindowEvent*>(pEvent) );
         }
     }
     return 0;
@@ -442,7 +442,7 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         if( pWindow && pWindow->GetType() == WINDOW_COMBOBOX )
         {
             if( !( pWindow->GetStyle() & WB_READONLY) ||
-                !((Edit*)pWindow)->IsReadOnly() )
+                !static_cast<Edit*>(pWindow)->IsReadOnly() )
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
         }
 
@@ -454,14 +454,14 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
             if( pWinTemp && pWinTemp->GetType() == WINDOW_EDIT )
             {
                 if( !( pWinTemp->GetStyle() & WB_READONLY) ||
-                    !((Edit*)pWinTemp)->IsReadOnly() )
+                    !static_cast<Edit*>(pWinTemp)->IsReadOnly() )
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
                 break;
             }
             if( pChild->GetType() == WINDOW_EDIT )
             {
                 if( !( pChild->GetStyle() & WB_READONLY) ||
-                    !((Edit*)pChild)->IsReadOnly())
+                    !static_cast<Edit*>(pChild)->IsReadOnly())
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
                 break;
             }

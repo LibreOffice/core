@@ -91,7 +91,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
 #endif
 
     // set system parent
-    ((WorkWindow*)pWindow)->SetPluginParent( &aSysParentData );
+    static_cast<WorkWindow*>(pWindow)->SetPluginParent( &aSysParentData );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

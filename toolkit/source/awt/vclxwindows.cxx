@@ -440,7 +440,7 @@ void VCLXButton::setActionCommand( const OUString& rCommand ) throw(::com::sun::
     SolarMutexGuard aGuard;
 
     Size aSz;
-    PushButton* pButton = (PushButton*) GetWindow();
+    PushButton* pButton = static_cast<PushButton*>(GetWindow());
     if ( pButton )
         aSz = pButton->CalcMinimumSize();
     return AWTSize(aSz);
@@ -459,7 +459,7 @@ void VCLXButton::setActionCommand( const OUString& rCommand ) throw(::com::sun::
     SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
-    PushButton* pButton = (PushButton*) GetWindow();
+    PushButton* pButton = static_cast<PushButton*>( GetWindow() );
     if ( pButton )
     {
         Size aMinSz = pButton->CalcMinimumSize();
@@ -486,7 +486,7 @@ void VCLXButton::setProperty( const OUString& PropertyName, const ::com::sun::st
 {
     SolarMutexGuard aGuard;
 
-    Button* pButton = (Button*)GetWindow();
+    Button* pButton = static_cast<Button*>(GetWindow());
     if ( pButton )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -515,7 +515,7 @@ void VCLXButton::setProperty( const OUString& PropertyName, const ::com::sun::st
                 {
                     sal_Int16 n = sal_Int16();
                     if ( Value >>= n )
-                        ((PushButton*)pButton)->SetState( (TriState)n );
+                        static_cast<PushButton*>(pButton)->SetState( (TriState)n );
                 }
             }
             break;
@@ -532,7 +532,7 @@ void VCLXButton::setProperty( const OUString& PropertyName, const ::com::sun::st
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    Button* pButton = (Button*)GetWindow();
+    Button* pButton = static_cast<Button*>(GetWindow());
     if ( pButton )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -555,7 +555,7 @@ void VCLXButton::setProperty( const OUString& PropertyName, const ::com::sun::st
             {
                 if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
                 {
-                     aProp <<= (sal_Int16)((PushButton*)pButton)->GetState();
+                     aProp <<= (sal_Int16)static_cast<PushButton*>(pButton)->GetState();
                 }
             }
             break;
@@ -690,7 +690,7 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
 {
     SolarMutexGuard aGuard;
 
-    ImageControl* pImageControl = (ImageControl*)GetWindow();
+    ImageControl* pImageControl = static_cast<ImageControl*>(GetWindow());
 
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -727,7 +727,7 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    ImageControl* pImageControl = (ImageControl*)GetWindow();
+    ImageControl* pImageControl = static_cast<ImageControl*>(GetWindow());
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
 
     switch ( nPropType )
@@ -859,7 +859,7 @@ void VCLXCheckBox::setState( short n ) throw(::com::sun::star::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    CheckBox* pCheckBox = (CheckBox*)GetWindow();
+    CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
     if ( pCheckBox)
     {
         TriState eState;
@@ -888,7 +888,7 @@ short VCLXCheckBox::getState() throw(::com::sun::star::uno::RuntimeException, st
     SolarMutexGuard aGuard;
 
     short nState = -1;
-    CheckBox* pCheckBox = (CheckBox*)GetWindow();
+    CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
     if ( pCheckBox )
     {
         switch ( pCheckBox->GetState() )
@@ -907,7 +907,7 @@ void VCLXCheckBox::enableTriState( sal_Bool b ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    CheckBox* pCheckBox = (CheckBox*)GetWindow();
+    CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
     if ( pCheckBox)
         pCheckBox->EnableTriState( b );
 }
@@ -917,7 +917,7 @@ void VCLXCheckBox::enableTriState( sal_Bool b ) throw(::com::sun::star::uno::Run
     SolarMutexGuard aGuard;
 
     Size aSz;
-    CheckBox* pCheckBox = (CheckBox*) GetWindow();
+    CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
     if ( pCheckBox )
         aSz = pCheckBox->CalcMinimumSize();
     return AWTSize(aSz);
@@ -933,7 +933,7 @@ void VCLXCheckBox::enableTriState( sal_Bool b ) throw(::com::sun::star::uno::Run
     SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
-    CheckBox* pCheckBox = (CheckBox*) GetWindow();
+    CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
     if ( pCheckBox )
     {
         Size aMinSz = pCheckBox->CalcMinimumSize();
@@ -949,7 +949,7 @@ void VCLXCheckBox::setProperty( const OUString& PropertyName, const ::com::sun::
 {
     SolarMutexGuard aGuard;
 
-    CheckBox* pCheckBox = (CheckBox*)GetWindow();
+    CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
     if ( pCheckBox )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -986,7 +986,7 @@ void VCLXCheckBox::setProperty( const OUString& PropertyName, const ::com::sun::
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    CheckBox* pCheckBox = (CheckBox*)GetWindow();
+    CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
     if ( pCheckBox )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1021,7 +1021,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 // in during the listener call. To prevent the resulting crashs, we keep us
                 // alive as long as we're here
 
-            CheckBox* pCheckBox = (CheckBox*)GetWindow();
+            CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
             if ( pCheckBox )
             {
                 if ( maItemListeners.getLength() )
@@ -1121,7 +1121,7 @@ void VCLXRadioButton::setProperty( const OUString& PropertyName, const ::com::su
 {
     SolarMutexGuard aGuard;
 
-    RadioButton* pButton = (RadioButton*)GetWindow();
+    RadioButton* pButton = static_cast<RadioButton*>(GetWindow());
     if ( pButton )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1164,7 +1164,7 @@ void VCLXRadioButton::setProperty( const OUString& PropertyName, const ::com::su
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    RadioButton* pButton = (RadioButton*)GetWindow();
+    RadioButton* pButton = static_cast<RadioButton*>(GetWindow());
     if ( pButton )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1231,7 +1231,7 @@ void VCLXRadioButton::setState( sal_Bool b ) throw(::com::sun::star::uno::Runtim
 {
     SolarMutexGuard aGuard;
 
-    RadioButton* pRadioButton = (RadioButton*)GetWindow();
+    RadioButton* pRadioButton = static_cast<RadioButton*>(GetWindow());
     if ( pRadioButton)
     {
         pRadioButton->Check( b );
@@ -1250,7 +1250,7 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    RadioButton* pRadioButton = (RadioButton*)GetWindow();
+    RadioButton* pRadioButton = static_cast<RadioButton*>(GetWindow());
     return pRadioButton ? pRadioButton->IsChecked() : sal_False;
 }
 
@@ -1259,7 +1259,7 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
     SolarMutexGuard aGuard;
 
     Size aSz;
-    RadioButton* pRadioButton = (RadioButton*) GetWindow();
+    RadioButton* pRadioButton = static_cast<RadioButton*>(GetWindow());
     if ( pRadioButton )
         aSz = pRadioButton->CalcMinimumSize();
     return AWTSize(aSz);
@@ -1275,7 +1275,7 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
     SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
-    RadioButton* pRadioButton = (RadioButton*) GetWindow();
+    RadioButton* pRadioButton = static_cast<RadioButton*>(GetWindow());
     if ( pRadioButton )
     {
         Size aMinSz = pRadioButton->CalcMinimumSize();
@@ -1321,7 +1321,7 @@ void VCLXRadioButton::ImplClickedOrToggled( bool bToggled )
 {
     // In the formulars, RadioChecked is not enabled, call itemStateChanged only for click
     // In the dialog editor, RadioChecked is enabled, call itemStateChanged only for bToggled
-    RadioButton* pRadioButton = (RadioButton*)GetWindow();
+    RadioButton* pRadioButton = static_cast<RadioButton*>(GetWindow());
     if ( pRadioButton && ( pRadioButton->IsRadioCheckEnabled() == bToggled ) && ( bToggled || pRadioButton->IsStateChanged() ) && maItemListeners.getLength() )
     {
         ::com::sun::star::awt::ItemEvent aEvent;
@@ -1377,7 +1377,7 @@ void VCLXSpinField::up() throw(::com::sun::star::uno::RuntimeException, std::exc
 {
     SolarMutexGuard aGuard;
 
-    SpinField* pSpinField = (SpinField*) GetWindow();
+    SpinField* pSpinField = static_cast<SpinField*>(GetWindow());
     if ( pSpinField )
         pSpinField->Up();
 }
@@ -1386,7 +1386,7 @@ void VCLXSpinField::down() throw(::com::sun::star::uno::RuntimeException, std::e
 {
     SolarMutexGuard aGuard;
 
-    SpinField* pSpinField = (SpinField*) GetWindow();
+    SpinField* pSpinField = static_cast<SpinField*>(GetWindow());
     if ( pSpinField )
         pSpinField->Down();
 }
@@ -1395,7 +1395,7 @@ void VCLXSpinField::first() throw(::com::sun::star::uno::RuntimeException, std::
 {
     SolarMutexGuard aGuard;
 
-    SpinField* pSpinField = (SpinField*) GetWindow();
+    SpinField* pSpinField = static_cast<SpinField*>(GetWindow());
     if ( pSpinField )
         pSpinField->First();
 }
@@ -1404,7 +1404,7 @@ void VCLXSpinField::last() throw(::com::sun::star::uno::RuntimeException, std::e
 {
     SolarMutexGuard aGuard;
 
-    SpinField* pSpinField = (SpinField*) GetWindow();
+    SpinField* pSpinField = static_cast<SpinField*>(GetWindow());
     if ( pSpinField )
         pSpinField->Last();
 }
@@ -1546,7 +1546,7 @@ void VCLXListBox::addItem( const OUString& aItem, sal_Int16 nPos ) throw(::com::
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
         pBox->InsertEntry( aItem, nPos );
 }
@@ -1555,7 +1555,7 @@ void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< OUString>& aI
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
     {
         sal_uInt16 nP = nPos;
@@ -1579,7 +1579,7 @@ void VCLXListBox::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::s
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
     {
         for ( sal_uInt16 n = nCount; n; )
@@ -1591,7 +1591,7 @@ sal_Int16 VCLXListBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcept
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     return pBox ? pBox->GetEntryCount() : 0;
 }
 
@@ -1600,7 +1600,7 @@ OUString VCLXListBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::Run
     SolarMutexGuard aGuard;
 
     OUString aItem;
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
         aItem = pBox->GetEntry( nPos );
     return aItem;
@@ -1611,7 +1611,7 @@ OUString VCLXListBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::Run
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Sequence< OUString> aSeq;
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
     {
         sal_uInt16 nEntries = pBox->GetEntryCount();
@@ -1629,7 +1629,7 @@ sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::Runtime
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     return pBox ? pBox->GetSelectEntryPos() : 0;
 }
 
@@ -1638,7 +1638,7 @@ sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::Runtime
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Sequence<sal_Int16> aSeq;
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
     {
         sal_uInt16 nSelEntries = pBox->GetSelectEntryCount();
@@ -1654,7 +1654,7 @@ OUString VCLXListBox::getSelectedItem() throw(::com::sun::star::uno::RuntimeExce
     SolarMutexGuard aGuard;
 
     OUString aItem;
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
         aItem = pBox->GetSelectEntry();
     return aItem;
@@ -1665,7 +1665,7 @@ OUString VCLXListBox::getSelectedItem() throw(::com::sun::star::uno::RuntimeExce
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Sequence< OUString> aSeq;
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
     {
         sal_uInt16 nSelEntries = pBox->GetSelectEntryCount();
@@ -1680,7 +1680,7 @@ void VCLXListBox::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(::com:
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox && ( pBox->IsEntryPosSelected( nPos ) != bool(bSelect) ) )
     {
         pBox->SelectEntryPos( nPos, bSelect );
@@ -1699,7 +1699,7 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
     {
         bool bChanged = false;
@@ -1730,7 +1730,7 @@ void VCLXListBox::selectItem( const OUString& rItemText, sal_Bool bSelect ) thro
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
     {
         OUString aItemText( rItemText );
@@ -1743,7 +1743,7 @@ void VCLXListBox::setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::sta
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
         pBox->SetDropDownLineCount( nLines );
 }
@@ -1753,7 +1753,7 @@ sal_Int16 VCLXListBox::getDropDownLineCount() throw(::com::sun::star::uno::Runti
     SolarMutexGuard aGuard;
 
     sal_Int16 nLines = 0;
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
         nLines = pBox->GetDropDownLineCount();
     return nLines;
@@ -1764,7 +1764,7 @@ sal_Bool VCLXListBox::isMutipleMode() throw(::com::sun::star::uno::RuntimeExcept
     SolarMutexGuard aGuard;
 
     bool bMulti = false;
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
         bMulti = pBox->IsMultiSelectionEnabled();
     return bMulti;
@@ -1774,7 +1774,7 @@ void VCLXListBox::setMultipleMode( sal_Bool bMulti ) throw(::com::sun::star::uno
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
         pBox->EnableMultiSelection( bMulti );
 }
@@ -1783,7 +1783,7 @@ void VCLXListBox::makeVisible( sal_Int16 nEntry ) throw(::com::sun::star::uno::R
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pBox = (ListBox*) GetWindow();
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
     if ( pBox )
         pBox->SetTopEntry( nEntry );
 }
@@ -1799,7 +1799,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         case VCLEVENT_LISTBOX_SELECT:
         {
-            ListBox* pListBox = (ListBox*)GetWindow();
+            ListBox* pListBox = static_cast<ListBox*>(GetWindow());
 
             if( pListBox )
             {
@@ -1826,7 +1826,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 ::com::sun::star::awt::ActionEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.ActionCommand = ((ListBox*)GetWindow())->GetSelectEntry();
+                aEvent.ActionCommand = static_cast<ListBox*>(GetWindow())->GetSelectEntry();
                 maActionListeners.actionPerformed( aEvent );
             }
             break;
@@ -1848,7 +1848,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
 {
     SolarMutexGuard aGuard;
 
-    ListBox* pListBox = (ListBox*)GetWindow();
+    ListBox* pListBox = static_cast<ListBox*>(GetWindow());
     if ( pListBox )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1926,7 +1926,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    ListBox* pListBox = (ListBox*)GetWindow();
+    ListBox* pListBox = static_cast<ListBox*>(GetWindow());
     if ( pListBox )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1980,7 +1980,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
     SolarMutexGuard aGuard;
 
     Size aSz;
-    ListBox* pListBox = (ListBox*) GetWindow();
+    ListBox* pListBox = static_cast<ListBox*>(GetWindow());
     if ( pListBox )
         aSz = pListBox->CalcMinimumSize();
     return AWTSize(aSz);
@@ -1991,7 +1991,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
     SolarMutexGuard aGuard;
 
     Size aSz;
-    ListBox* pListBox = (ListBox*) GetWindow();
+    ListBox* pListBox = static_cast<ListBox*>(GetWindow());
     if ( pListBox )
     {
         aSz = pListBox->CalcMinimumSize();
@@ -2006,7 +2006,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
     SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
-    ListBox* pListBox = (ListBox*) GetWindow();
+    ListBox* pListBox = static_cast<ListBox*>(GetWindow());
     if ( pListBox )
         aSz = pListBox->CalcAdjustedSize( aSz );
     return AWTSize(aSz);
@@ -2017,7 +2017,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
     SolarMutexGuard aGuard;
 
     Size aSz;
-    ListBox* pListBox = (ListBox*) GetWindow();
+    ListBox* pListBox = static_cast<ListBox*>(GetWindow());
     if ( pListBox )
         aSz = pListBox->CalcBlockSize( nCols, nLines );
     return AWTSize(aSz);
@@ -2028,7 +2028,7 @@ void VCLXListBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) thro
     SolarMutexGuard aGuard;
 
     nCols = nLines = 0;
-    ListBox* pListBox = (ListBox*) GetWindow();
+    ListBox* pListBox = static_cast<ListBox*>(GetWindow());
     if ( pListBox )
     {
         sal_uInt16 nC, nL;
@@ -2040,7 +2040,7 @@ void VCLXListBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) thro
 
 void VCLXListBox::ImplCallItemListeners()
 {
-    ListBox* pListBox = (ListBox*) GetWindow();
+    ListBox* pListBox = static_cast<ListBox*>(GetWindow());
     if ( pListBox && maItemListeners.getLength() )
     {
         ::com::sun::star::awt::ItemEvent aEvent;
@@ -2230,7 +2230,7 @@ void VCLXMessageBox::setMessageText( const OUString& rText ) throw(::com::sun::s
 {
     SolarMutexGuard aGuard;
 
-    MessBox* pBox = (MessBox*)GetWindow();
+    MessBox* pBox = static_cast<MessBox*>(GetWindow());
     if ( pBox )
         pBox->SetMessText( rText );
 }
@@ -2240,7 +2240,7 @@ OUString VCLXMessageBox::getMessageText() throw(::com::sun::star::uno::RuntimeEx
     SolarMutexGuard aGuard;
 
     OUString aText;
-    MessBox* pBox = (MessBox*)GetWindow();
+    MessBox* pBox = static_cast<MessBox*>(GetWindow());
     if ( pBox )
         aText = pBox->GetMessText();
     return aText;
@@ -2250,7 +2250,7 @@ sal_Int16 VCLXMessageBox::execute() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    MessBox* pBox = (MessBox*)GetWindow();
+    MessBox* pBox = static_cast<MessBox*>(GetWindow());
     return pBox ? pBox->Execute() : 0;
 }
 
@@ -2339,7 +2339,7 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException, s
     sal_Int16 nRet = 0;
     if ( GetWindow() )
     {
-        Dialog* pDlg = (Dialog*) GetWindow();
+        Dialog* pDlg = static_cast<Dialog*>(GetWindow());
         vcl::Window* pParent = pDlg->GetWindow( WINDOW_PARENTOVERLAP );
         vcl::Window* pOldParent = NULL;
         vcl::Window* pSetParent = NULL;
@@ -2392,7 +2392,7 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
     ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
 
     SolarMutexGuard aGuard;
-    Dialog* pDlg = (Dialog*) GetWindow();
+    Dialog* pDlg = static_cast<Dialog*>(GetWindow());
     if ( pDlg )
         pDlg->GetDrawWindowBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
 
@@ -2406,7 +2406,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    Dialog* pDialog = (Dialog*)GetWindow();
+    Dialog* pDialog = static_cast<Dialog*>(GetWindow());
     if ( pDialog )
     {
         bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
@@ -2559,7 +2559,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
     SolarMutexGuard aGuard;
     OSL_TRACE(" **** VCLXMultiPage::setProperty( %s )", OUStringToOString( PropertyName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    TabControl* pTabControl = (TabControl*)GetWindow();
+    TabControl* pTabControl = static_cast<TabControl*>(GetWindow());
     if ( pTabControl )
     {
         bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
@@ -2715,14 +2715,14 @@ void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         case VCLEVENT_TABPAGE_DEACTIVATE:
         {
-            sal_uLong nPageID = (sal_uLong)( rVclWindowEvent.GetData() );
+            sal_uLong nPageID = reinterpret_cast<sal_uLong>( rVclWindowEvent.GetData() );
             maTabListeners.deactivated( nPageID );
             break;
 
         }
         case VCLEVENT_TABPAGE_ACTIVATE:
         {
-            sal_uLong nPageID = (sal_uLong)( rVclWindowEvent.GetData() );
+            sal_uLong nPageID = reinterpret_cast<sal_uLong>( rVclWindowEvent.GetData() );
             maTabListeners.activated( nPageID );
             break;
         }
@@ -2810,7 +2810,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    TabPage* pTabPage = (TabPage*)GetWindow();
+    TabPage* pTabPage = static_cast<TabPage*>(GetWindow());
     if ( pTabPage )
     {
         bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
@@ -2921,7 +2921,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
             {
                 // open the URL
                 OUString sURL;
-                FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
+                FixedHyperlink* pBase = static_cast<FixedHyperlink*>(GetWindow());
                 if ( pBase )
                     sURL = pBase->GetURL();
                 Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute( ::com::sun::star::system::SystemShellExecute::create(
@@ -2956,7 +2956,7 @@ void VCLXFixedHyperlink::setText( const OUString& Text ) throw(::com::sun::star:
 {
     SolarMutexGuard aGuard;
 
-    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
+    FixedHyperlink* pBase = static_cast<FixedHyperlink*>(GetWindow());
     if (pBase)
         pBase->SetText(Text);
 }
@@ -2976,7 +2976,7 @@ void VCLXFixedHyperlink::setURL( const OUString& URL ) throw(::com::sun::star::u
 {
     SolarMutexGuard aGuard;
 
-    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
+    FixedHyperlink* pBase = static_cast<FixedHyperlink*>(GetWindow());
     if ( pBase )
         pBase->SetURL( URL );
 }
@@ -2986,7 +2986,7 @@ OUString VCLXFixedHyperlink::getURL(  ) throw(::com::sun::star::uno::RuntimeExce
     SolarMutexGuard aGuard;
 
     OUString aText;
-    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
+    FixedHyperlink* pBase = static_cast<FixedHyperlink*>(GetWindow());
     if ( pBase )
         aText = pBase->GetURL();
     return aText;
@@ -3049,7 +3049,7 @@ void VCLXFixedHyperlink::removeActionListener( const ::com::sun::star::uno::Refe
     SolarMutexGuard aGuard;
 
     Size aSz;
-    FixedText* pFixedText = (FixedText*)GetWindow();
+    FixedText* pFixedText = static_cast<FixedText*>(GetWindow());
     if ( pFixedText )
         aSz = pFixedText->CalcMinimumSize();
     return AWTSize(aSz);
@@ -3076,7 +3076,7 @@ void VCLXFixedHyperlink::setProperty( const OUString& PropertyName, const ::com:
 {
     SolarMutexGuard aGuard;
 
-    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
+    FixedHyperlink* pBase = static_cast<FixedHyperlink*>(GetWindow());
     if ( pBase )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -3111,7 +3111,7 @@ void VCLXFixedHyperlink::setProperty( const OUString& PropertyName, const ::com:
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
+    FixedHyperlink* pBase = static_cast<FixedHyperlink*>(GetWindow());
     if ( pBase )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -3279,7 +3279,7 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
     SolarMutexGuard aGuard;
 
     Size aSz;
-    FixedText* pFixedText = (FixedText*)GetWindow();
+    FixedText* pFixedText = static_cast<FixedText*>(GetWindow());
     if ( pFixedText )
         aSz = pFixedText->CalcMinimumSize();
     return AWTSize(aSz);
@@ -3295,7 +3295,7 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
     SolarMutexGuard aGuard;
 
     Size aAdjustedSize( VCLUnoHelper::ConvertToVCLSize( rMaxSize ) );
-    FixedText* pFixedText = (FixedText*)GetWindow();
+    FixedText* pFixedText = static_cast<FixedText*>(GetWindow());
     if ( pFixedText )
         aAdjustedSize = pFixedText->CalcMinimumSize( rMaxSize.Width );
     return VCLUnoHelper::ConvertToAWTSize( aAdjustedSize );
@@ -3384,7 +3384,7 @@ void VCLXScrollBar::setValue( sal_Int32 n ) throw(::com::sun::star::uno::Runtime
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     if ( pScrollBar )
         pScrollBar->DoScroll( n );
 }
@@ -3393,7 +3393,7 @@ void VCLXScrollBar::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 n
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     if ( pScrollBar )
     {
         pScrollBar->SetVisibleSize( nVisible );
@@ -3406,7 +3406,7 @@ sal_Int32 VCLXScrollBar::getValue() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     return pScrollBar ? pScrollBar->GetThumbPos() : 0;
 }
 
@@ -3414,7 +3414,7 @@ void VCLXScrollBar::setMaximum( sal_Int32 n ) throw(::com::sun::star::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     if ( pScrollBar )
         pScrollBar->SetRangeMax( n );
 }
@@ -3423,7 +3423,7 @@ sal_Int32 VCLXScrollBar::getMaximum() throw(::com::sun::star::uno::RuntimeExcept
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     return pScrollBar ? pScrollBar->GetRangeMax() : 0;
 }
 
@@ -3448,7 +3448,7 @@ void VCLXScrollBar::setLineIncrement( sal_Int32 n ) throw(::com::sun::star::uno:
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     if ( pScrollBar )
         pScrollBar->SetLineSize( n );
 }
@@ -3457,7 +3457,7 @@ sal_Int32 VCLXScrollBar::getLineIncrement() throw(::com::sun::star::uno::Runtime
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     return pScrollBar ? pScrollBar->GetLineSize() : 0;
 }
 
@@ -3465,7 +3465,7 @@ void VCLXScrollBar::setBlockIncrement( sal_Int32 n ) throw(::com::sun::star::uno
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     if ( pScrollBar )
         pScrollBar->SetPageSize( n );
 }
@@ -3474,7 +3474,7 @@ sal_Int32 VCLXScrollBar::getBlockIncrement() throw(::com::sun::star::uno::Runtim
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     return pScrollBar ? pScrollBar->GetPageSize() : 0;
 }
 
@@ -3482,7 +3482,7 @@ void VCLXScrollBar::setVisibleSize( sal_Int32 n ) throw(::com::sun::star::uno::R
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     if ( pScrollBar )
         pScrollBar->SetVisibleSize( n );
 }
@@ -3491,7 +3491,7 @@ sal_Int32 VCLXScrollBar::getVisibleSize() throw(::com::sun::star::uno::RuntimeEx
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     return pScrollBar ? pScrollBar->GetVisibleSize() : 0;
 }
 
@@ -3537,7 +3537,7 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun:
 {
     SolarMutexGuard aGuard;
 
-    ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     if ( pScrollBar )
     {
         bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
@@ -3653,7 +3653,7 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun:
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
+    ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
     if ( pScrollBar )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -3730,7 +3730,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
             if ( maAdjustmentListeners.getLength() )
             {
-                ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
+                ScrollBar* pScrollBar = static_cast<ScrollBar*>(GetWindow());
 
                 if( pScrollBar )
                 {
@@ -3870,7 +3870,7 @@ void VCLXEdit::setText( const OUString& aText ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    Edit* pEdit = (Edit*)GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
     {
         pEdit->SetText( aText );
@@ -3887,7 +3887,7 @@ void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const O
 {
     SolarMutexGuard aGuard;
 
-    Edit* pEdit = (Edit*)GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
     {
         pEdit->SetSelection( Selection( rSel.Min, rSel.Max ) );
@@ -3917,7 +3917,7 @@ OUString VCLXEdit::getSelectedText() throw(::com::sun::star::uno::RuntimeExcepti
     SolarMutexGuard aGuard;
 
     OUString aText;
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit)
         aText = pEdit->GetSelected();
     return aText;
@@ -3928,7 +3928,7 @@ void VCLXEdit::setSelection( const ::com::sun::star::awt::Selection& aSelection 
 {
     SolarMutexGuard aGuard;
 
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
         pEdit->SetSelection( Selection( aSelection.Min, aSelection.Max ) );
 }
@@ -3938,7 +3938,7 @@ void VCLXEdit::setSelection( const ::com::sun::star::awt::Selection& aSelection 
     SolarMutexGuard aGuard;
 
     Selection aSel;
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
         aSel = pEdit->GetSelection();
     return ::com::sun::star::awt::Selection( aSel.Min(), aSel.Max() );
@@ -3948,7 +3948,7 @@ sal_Bool VCLXEdit::isEditable() throw(::com::sun::star::uno::RuntimeException, s
 {
     SolarMutexGuard aGuard;
 
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     return ( pEdit && !pEdit->IsReadOnly() && pEdit->IsEnabled() ) ? sal_True : sal_False;
 }
 
@@ -3956,7 +3956,7 @@ void VCLXEdit::setEditable( sal_Bool bEditable ) throw(::com::sun::star::uno::Ru
 {
     SolarMutexGuard aGuard;
 
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
         pEdit->SetReadOnly( !bEditable );
 }
@@ -3966,7 +3966,7 @@ void VCLXEdit::setMaxTextLen( sal_Int16 nLen ) throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
         pEdit->SetMaxTextLen( nLen );
 }
@@ -3975,7 +3975,7 @@ sal_Int16 VCLXEdit::getMaxTextLen() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     return pEdit ? pEdit->GetMaxTextLen() : 0;
 }
 
@@ -3983,7 +3983,7 @@ void VCLXEdit::setEchoChar( sal_Unicode cEcho ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
         pEdit->SetEchoChar( cEcho );
 }
@@ -3992,7 +3992,7 @@ void VCLXEdit::setProperty( const OUString& PropertyName, const ::com::sun::star
 {
     SolarMutexGuard aGuard;
 
-    Edit* pEdit = (Edit*)GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -4038,7 +4038,7 @@ void VCLXEdit::setProperty( const OUString& PropertyName, const ::com::sun::star
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    Edit* pEdit = (Edit*)GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -4070,7 +4070,7 @@ void VCLXEdit::setProperty( const OUString& PropertyName, const ::com::sun::star
     SolarMutexGuard aGuard;
 
     Size aSz;
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
         aSz = pEdit->CalcMinimumSize();
     return AWTSize(aSz);
@@ -4081,7 +4081,7 @@ void VCLXEdit::setProperty( const OUString& PropertyName, const ::com::sun::star
     SolarMutexGuard aGuard;
 
     Size aSz;
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
     {
         aSz = pEdit->CalcMinimumSize();
@@ -4107,7 +4107,7 @@ void VCLXEdit::setProperty( const OUString& PropertyName, const ::com::sun::star
     SolarMutexGuard aGuard;
 
     Size aSz;
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
     {
         if ( nCols )
@@ -4124,7 +4124,7 @@ void VCLXEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(:
 
     nLines = 1;
     nCols = 0;
-    Edit* pEdit = (Edit*) GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
         nCols = pEdit->GetMaxVisChars();
 }
@@ -4250,7 +4250,7 @@ void VCLXComboBox::addItem( const OUString& aItem, sal_Int16 nPos ) throw(::com:
 {
     SolarMutexGuard aGuard;
 
-    ComboBox* pBox = (ComboBox*) GetWindow();
+    ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
     if ( pBox )
         pBox->InsertEntry( aItem, nPos );
 }
@@ -4259,7 +4259,7 @@ void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< OUString>& a
 {
     SolarMutexGuard aGuard;
 
-    ComboBox* pBox = (ComboBox*) GetWindow();
+    ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
     if ( pBox )
     {
         sal_uInt16 nP = nPos;
@@ -4280,7 +4280,7 @@ void VCLXComboBox::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::
 {
     SolarMutexGuard aGuard;
 
-    ComboBox* pBox = (ComboBox*) GetWindow();
+    ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
     if ( pBox )
     {
         for ( sal_uInt16 n = nCount; n; )
@@ -4292,7 +4292,7 @@ sal_Int16 VCLXComboBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    ComboBox* pBox = (ComboBox*) GetWindow();
+    ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
     return pBox ? pBox->GetEntryCount() : 0;
 }
 
@@ -4301,7 +4301,7 @@ OUString VCLXComboBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::Ru
     SolarMutexGuard aGuard;
 
     OUString aItem;
-    ComboBox* pBox = (ComboBox*) GetWindow();
+    ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
     if ( pBox )
         aItem = pBox->GetEntry( nPos );
     return aItem;
@@ -4312,7 +4312,7 @@ OUString VCLXComboBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::Ru
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Sequence< OUString> aSeq;
-    ComboBox* pBox = (ComboBox*) GetWindow();
+    ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
     if ( pBox )
     {
         sal_uInt16 nEntries = pBox->GetEntryCount();
@@ -4330,7 +4330,7 @@ void VCLXComboBox::setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::st
 {
     SolarMutexGuard aGuard;
 
-    ComboBox* pBox = (ComboBox*) GetWindow();
+    ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
     if ( pBox )
         pBox->SetDropDownLineCount( nLines );
 }
@@ -4340,7 +4340,7 @@ sal_Int16 VCLXComboBox::getDropDownLineCount() throw(::com::sun::star::uno::Runt
     SolarMutexGuard aGuard;
 
     sal_Int16 nLines = 0;
-    ComboBox* pBox = (ComboBox*) GetWindow();
+    ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
     if ( pBox )
         nLines = pBox->GetDropDownLineCount();
     return nLines;
@@ -4350,7 +4350,7 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::
 {
     SolarMutexGuard aGuard;
 
-    ComboBox* pComboBox = (ComboBox*)GetWindow();
+    ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
     if ( pComboBox )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -4407,7 +4407,7 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
-    ComboBox* pComboBox = (ComboBox*)GetWindow();
+    ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
     if ( pComboBox )
     {
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -4455,7 +4455,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_COMBOBOX_SELECT:
             if ( maItemListeners.getLength() )
             {
-                ComboBox* pComboBox = (ComboBox*)GetWindow();
+                ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
                 if( pComboBox )
                 {
                     if ( !pComboBox->IsTravelSelect() )
@@ -4494,7 +4494,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     SolarMutexGuard aGuard;
 
     Size aSz;
-    ComboBox* pComboBox = (ComboBox*) GetWindow();
+    ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
     if ( pComboBox )
         aSz = pComboBox->CalcMinimumSize();
     return AWTSize(aSz);
@@ -4505,7 +4505,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     SolarMutexGuard aGuard;
 
     Size aSz;
-    ComboBox* pComboBox = (ComboBox*) GetWindow();
+    ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
     if ( pComboBox )
     {
         aSz = pComboBox->CalcMinimumSize();
@@ -4520,7 +4520,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
-    ComboBox* pComboBox = (ComboBox*) GetWindow();
+    ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
     if ( pComboBox )
         aSz = pComboBox->CalcAdjustedSize( aSz );
     return AWTSize(aSz);
@@ -4531,7 +4531,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     SolarMutexGuard aGuard;
 
     Size aSz;
-    ComboBox* pComboBox = (ComboBox*) GetWindow();
+    ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
     if ( pComboBox )
         aSz = pComboBox->CalcBlockSize( nCols, nLines );
     return AWTSize(aSz);
@@ -4542,7 +4542,7 @@ void VCLXComboBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) thr
     SolarMutexGuard aGuard;
 
     nCols = nLines = 0;
-    ComboBox* pComboBox = (ComboBox*) GetWindow();
+    ComboBox* pComboBox = static_cast<ComboBox*>(GetWindow());
     if ( pComboBox )
     {
         sal_uInt16 nC, nL;
@@ -4846,8 +4846,8 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const ::com::sun:
             {
                 if ( bVoid )
                 {
-                    ((DateField*)GetWindow())->EnableEmptyFieldValue( true );
-                    ((DateField*)GetWindow())->SetEmptyFieldValue();
+                    static_cast<DateField*>(GetWindow())->EnableEmptyFieldValue( true );
+                    static_cast<DateField*>(GetWindow())->SetEmptyFieldValue();
                 }
                 else
                 {
@@ -4875,14 +4875,14 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const ::com::sun:
             {
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
-                    ((DateField*)GetWindow())->SetExtDateFormat( (ExtDateFieldFormat) n );
+                    static_cast<DateField*>(GetWindow())->SetExtDateFormat( (ExtDateFieldFormat) n );
             }
             break;
             case BASEPROPERTY_DATESHOWCENTURY:
             {
                 bool b = bool();
                 if ( Value >>= b )
-                     ((DateField*)GetWindow())->SetShowDateCentury( b );
+                     static_cast<DateField*>(GetWindow())->SetShowDateCentury( b );
             }
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
@@ -4928,7 +4928,7 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const ::com::sun:
             break;
             case BASEPROPERTY_DATESHOWCENTURY:
             {
-                aProp <<= ((DateField*)GetWindow())->IsShowDateCentury();
+                aProp <<= static_cast<DateField*>(GetWindow())->IsShowDateCentury();
             }
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
@@ -4950,7 +4950,7 @@ void VCLXDateField::setDate( const util::Date& aDate ) throw(::com::sun::star::u
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
     {
         pDateField->SetDate( aDate );
@@ -4967,7 +4967,7 @@ util::Date VCLXDateField::getDate() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         return pDateField->GetDate().GetUNODate();
     else
@@ -4978,7 +4978,7 @@ void VCLXDateField::setMin( const util::Date& aDate ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         pDateField->SetMin( aDate );
 }
@@ -4987,7 +4987,7 @@ util::Date VCLXDateField::getMin() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         return pDateField->GetMin().GetUNODate();
     else
@@ -4998,7 +4998,7 @@ void VCLXDateField::setMax( const util::Date& aDate ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         pDateField->SetMax( aDate );
 }
@@ -5007,7 +5007,7 @@ util::Date VCLXDateField::getMax() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         return pDateField->GetMax().GetUNODate();
     else
@@ -5018,7 +5018,7 @@ void VCLXDateField::setFirst( const util::Date& aDate ) throw(::com::sun::star::
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         pDateField->SetFirst( aDate );
 }
@@ -5027,7 +5027,7 @@ util::Date VCLXDateField::getFirst() throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         return pDateField->GetFirst().GetUNODate();
     else
@@ -5038,7 +5038,7 @@ void VCLXDateField::setLast( const util::Date& aDate ) throw(::com::sun::star::u
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         pDateField->SetLast( aDate );
 }
@@ -5047,7 +5047,7 @@ util::Date VCLXDateField::getLast() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         return pDateField->GetLast().GetUNODate();
     else
@@ -5058,7 +5058,7 @@ void VCLXDateField::setLongFormat( sal_Bool bLong ) throw(::com::sun::star::uno:
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
         pDateField->SetLongFormat( bLong );
 }
@@ -5067,7 +5067,7 @@ sal_Bool VCLXDateField::isLongFormat() throw(::com::sun::star::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     return pDateField ? pDateField->IsLongFormat() : sal_False;
 }
 
@@ -5075,7 +5075,7 @@ void VCLXDateField::setEmpty() throw(::com::sun::star::uno::RuntimeException, st
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     if ( pDateField )
     {
         pDateField->SetEmptyDate();
@@ -5092,7 +5092,7 @@ sal_Bool VCLXDateField::isEmpty() throw(::com::sun::star::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    DateField* pDateField = (DateField*) GetWindow();
+    DateField* pDateField = static_cast<DateField*>(GetWindow());
     return pDateField ? pDateField->IsEmptyDate() : sal_False;
 }
 
@@ -5183,7 +5183,7 @@ void VCLXTimeField::setTime( const util::Time& aTime ) throw(::com::sun::star::u
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
     {
         pTimeField->SetTime( aTime );
@@ -5200,7 +5200,7 @@ util::Time VCLXTimeField::getTime() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         return pTimeField->GetTime().GetUNOTime();
     else
@@ -5211,7 +5211,7 @@ void VCLXTimeField::setMin( const util::Time& aTime ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         pTimeField->SetMin( aTime );
 }
@@ -5220,7 +5220,7 @@ util::Time VCLXTimeField::getMin() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         return pTimeField->GetMin().GetUNOTime();
     else
@@ -5231,7 +5231,7 @@ void VCLXTimeField::setMax( const util::Time& aTime ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         pTimeField->SetMax( aTime );
 }
@@ -5240,7 +5240,7 @@ util::Time VCLXTimeField::getMax() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         return pTimeField->GetMax().GetUNOTime();
     else
@@ -5251,7 +5251,7 @@ void VCLXTimeField::setFirst( const util::Time& aTime ) throw(::com::sun::star::
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         pTimeField->SetFirst( aTime );
 }
@@ -5260,7 +5260,7 @@ util::Time VCLXTimeField::getFirst() throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         return pTimeField->GetFirst().GetUNOTime();
     else
@@ -5271,7 +5271,7 @@ void VCLXTimeField::setLast( const util::Time& aTime ) throw(::com::sun::star::u
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         pTimeField->SetLast( aTime );
 }
@@ -5280,7 +5280,7 @@ util::Time VCLXTimeField::getLast() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         return pTimeField->GetLast().GetUNOTime();
     else
@@ -5291,7 +5291,7 @@ void VCLXTimeField::setEmpty() throw(::com::sun::star::uno::RuntimeException, st
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     if ( pTimeField )
         pTimeField->SetEmptyTime();
 }
@@ -5300,7 +5300,7 @@ sal_Bool VCLXTimeField::isEmpty() throw(::com::sun::star::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = (TimeField*) GetWindow();
+    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
     return pTimeField ? pTimeField->IsEmptyTime() : sal_False;
 }
 
@@ -5330,8 +5330,8 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
             {
                 if ( bVoid )
                 {
-                    ((TimeField*)GetWindow())->EnableEmptyFieldValue( true );
-                    ((TimeField*)GetWindow())->SetEmptyFieldValue();
+                    static_cast<TimeField*>(GetWindow())->EnableEmptyFieldValue( true );
+                    static_cast<TimeField*>(GetWindow())->SetEmptyFieldValue();
                 }
                 else
                 {
@@ -5359,7 +5359,7 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
             {
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
-                    ((TimeField*)GetWindow())->SetExtFormat( (ExtTimeFieldFormat) n );
+                    static_cast<TimeField*>(GetWindow())->SetExtFormat( (ExtTimeFieldFormat) n );
             }
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
@@ -5482,7 +5482,7 @@ void VCLXNumericField::setValue( double Value ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
     {
         // shift long value using decimal digits
@@ -5492,7 +5492,7 @@ void VCLXNumericField::setValue( double Value ) throw(::com::sun::star::uno::Run
             (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
 
         // #107218# Call same listeners like VCL would do after user interaction
-        Edit* pEdit = (Edit*)GetWindow();
+        Edit* pEdit = static_cast<Edit*>(GetWindow());
         if ( pEdit )
         {
             SetSynthesizingVCLEvent( true );
@@ -5507,7 +5507,7 @@ double VCLXNumericField::getValue() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     return pNumericFormatter
         ? ImplCalcDoubleValue( (double)pNumericFormatter->GetValue(), pNumericFormatter->GetDecimalDigits() )
         : 0;
@@ -5517,7 +5517,7 @@ void VCLXNumericField::setMin( double Value ) throw(::com::sun::star::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
         pNumericFormatter->SetMin(
             (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
@@ -5527,7 +5527,7 @@ double VCLXNumericField::getMin() throw(::com::sun::star::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     return pNumericFormatter
         ? ImplCalcDoubleValue( (double)pNumericFormatter->GetMin(), pNumericFormatter->GetDecimalDigits() )
         : 0;
@@ -5537,7 +5537,7 @@ void VCLXNumericField::setMax( double Value ) throw(::com::sun::star::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
         pNumericFormatter->SetMax(
             (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
@@ -5547,7 +5547,7 @@ double VCLXNumericField::getMax() throw(::com::sun::star::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     return pNumericFormatter
         ? ImplCalcDoubleValue( (double)pNumericFormatter->GetMax(), pNumericFormatter->GetDecimalDigits() )
         : 0;
@@ -5557,7 +5557,7 @@ void VCLXNumericField::setFirst( double Value ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = (NumericField*) GetWindow();
+    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
     if ( pNumericField )
         pNumericField->SetFirst(
             (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
@@ -5567,7 +5567,7 @@ double VCLXNumericField::getFirst() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = (NumericField*) GetWindow();
+    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
     return pNumericField
         ? ImplCalcDoubleValue( (double)pNumericField->GetFirst(), pNumericField->GetDecimalDigits() )
         : 0;
@@ -5577,7 +5577,7 @@ void VCLXNumericField::setLast( double Value ) throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = (NumericField*) GetWindow();
+    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
     if ( pNumericField )
         pNumericField->SetLast(
             (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
@@ -5587,7 +5587,7 @@ double VCLXNumericField::getLast() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = (NumericField*) GetWindow();
+    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
     return pNumericField
         ? ImplCalcDoubleValue( (double)pNumericField->GetLast(), pNumericField->GetDecimalDigits() )
         : 0;
@@ -5608,7 +5608,7 @@ void VCLXNumericField::setSpinSize( double Value ) throw(::com::sun::star::uno::
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = (NumericField*) GetWindow();
+    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
     if ( pNumericField )
         pNumericField->SetSpinSize(
             (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
@@ -5618,7 +5618,7 @@ double VCLXNumericField::getSpinSize() throw(::com::sun::star::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = (NumericField*) GetWindow();
+    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
     return pNumericField
         ? ImplCalcDoubleValue( (double)pNumericField->GetSpinSize(), pNumericField->GetDecimalDigits() )
         : 0;
@@ -5628,7 +5628,7 @@ void VCLXNumericField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::sta
 {
     SolarMutexGuard aGuard;
 
-    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
     {
         double n = getValue();
@@ -5641,7 +5641,7 @@ sal_Int16 VCLXNumericField::getDecimalDigits() throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     return pNumericFormatter ? pNumericFormatter->GetDecimalDigits() : 0;
 }
 
@@ -5660,8 +5660,8 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
             {
                 if ( bVoid )
                 {
-                    ((NumericField*)GetWindow())->EnableEmptyFieldValue( true );
-                    ((NumericField*)GetWindow())->SetEmptyFieldValue();
+                    static_cast<NumericField*>(GetWindow())->EnableEmptyFieldValue( true );
+                    static_cast<NumericField*>(GetWindow())->SetEmptyFieldValue();
                 }
                 else
                 {
@@ -5703,7 +5703,7 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
             {
                 bool b = bool();
                 if ( Value >>= b )
-                     ((NumericField*)GetWindow())->SetUseThousandSep( b );
+                     static_cast<NumericField*>(GetWindow())->SetUseThousandSep( b );
             }
             break;
             default:
@@ -5747,7 +5747,7 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                aProp <<= ((NumericField*)GetWindow())->IsUseThousandSep();
+                aProp <<= static_cast<NumericField*>(GetWindow())->IsUseThousandSep();
             }
             break;
             default:
@@ -5807,7 +5807,7 @@ VCLXMetricField::~VCLXMetricField()
 
 MetricFormatter *VCLXMetricField::GetMetricFormatter() throw(::com::sun::star::uno::RuntimeException)
 {
-    MetricFormatter *pFormatter = (MetricFormatter *) GetFormatter();
+    MetricFormatter *pFormatter = static_cast<MetricFormatter *>(GetFormatter());
     if (!pFormatter)
         throw ::com::sun::star::uno::RuntimeException();
     return pFormatter;
@@ -5815,7 +5815,7 @@ MetricFormatter *VCLXMetricField::GetMetricFormatter() throw(::com::sun::star::u
 
 MetricField *VCLXMetricField::GetMetricField() throw(::com::sun::star::uno::RuntimeException)
 {
-    MetricField *pField = (MetricField *) GetWindow();
+    MetricField *pField = static_cast<MetricField *>(GetWindow());
     if (!pField)
         throw ::com::sun::star::uno::RuntimeException();
     return pField;
@@ -5873,7 +5873,7 @@ METRIC_MAP_PAIR(Last,  Field)
 void VCLXMetricField::CallListeners()
 {
     // #107218# Call same listeners like VCL would do after user interaction
-    Edit* pEdit = (Edit*)GetWindow();
+    Edit* pEdit = static_cast<Edit*>(GetWindow());
     if ( pEdit )
     {
         SetSynthesizingVCLEvent( true );
@@ -5929,7 +5929,7 @@ sal_Int16 VCLXMetricField::getDecimalDigits() throw(::com::sun::star::uno::Runti
 {
     SolarMutexGuard aGuard;
 
-    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     return pNumericFormatter ? pNumericFormatter->GetDecimalDigits() : 0;
 }
 
@@ -5953,21 +5953,21 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const ::com::su
             {
                 bool b = false;
                 if ( Value >>= b )
-                     ((NumericField*)GetWindow())->SetUseThousandSep( b );
+                     static_cast<NumericField*>(GetWindow())->SetUseThousandSep( b );
             }
             break;
             case BASEPROPERTY_UNIT:
             {
                 sal_uInt16 nVal = 0;
                 if ( Value >>= nVal )
-                    ((MetricField*)GetWindow())->SetUnit( (FieldUnit) nVal );
+                    static_cast<MetricField*>(GetWindow())->SetUnit( (FieldUnit) nVal );
                 break;
             }
             case BASEPROPERTY_CUSTOMUNITTEXT:
             {
                 OUString aStr;
                 if ( Value >>= aStr )
-                    ((MetricField*)GetWindow())->SetCustomUnitText( aStr );
+                    static_cast<MetricField*>(GetWindow())->SetCustomUnitText( aStr );
                 break;
             }
             default:
@@ -5991,13 +5991,13 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const ::com::su
         switch ( nPropType )
         {
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
-                aProp <<= ((NumericField*)GetWindow())->IsUseThousandSep();
+                aProp <<= static_cast<NumericField*>(GetWindow())->IsUseThousandSep();
                 break;
             case BASEPROPERTY_UNIT:
-                aProp <<= (sal_uInt16) ((MetricField*)GetWindow())->GetUnit();
+                aProp <<= (sal_uInt16) (static_cast<MetricField*>(GetWindow())->GetUnit());
                 break;
             case BASEPROPERTY_CUSTOMUNITTEXT:
-                aProp <<= OUString (((MetricField*)GetWindow())->GetCustomUnitText());
+                aProp <<= OUString( static_cast<MetricField*>(GetWindow())->GetCustomUnitText() );
                 break;
             default:
             {
@@ -6078,7 +6078,7 @@ void VCLXCurrencyField::setValue( double Value ) throw(::com::sun::star::uno::Ru
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
+    LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     if ( pCurrencyFormatter )
     {
         // shift long value using decimal digits
@@ -6088,7 +6088,7 @@ void VCLXCurrencyField::setValue( double Value ) throw(::com::sun::star::uno::Ru
             ImplCalcLongValue( Value, pCurrencyFormatter->GetDecimalDigits() ) );
 
         // #107218# Call same listeners like VCL would do after user interaction
-        Edit* pEdit = (Edit*)GetWindow();
+        Edit* pEdit = static_cast<Edit*>(GetWindow());
         if ( pEdit )
         {
             SetSynthesizingVCLEvent( true );
@@ -6103,7 +6103,7 @@ double VCLXCurrencyField::getValue() throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
+    LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     return pCurrencyFormatter
         ? ImplCalcDoubleValue( (double)pCurrencyFormatter->GetValue(), pCurrencyFormatter->GetDecimalDigits() )
         : 0;
@@ -6113,7 +6113,7 @@ void VCLXCurrencyField::setMin( double Value ) throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
+    LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     if ( pCurrencyFormatter )
         pCurrencyFormatter->SetMin(
             ImplCalcLongValue( Value, pCurrencyFormatter->GetDecimalDigits() ) );
@@ -6123,7 +6123,7 @@ double VCLXCurrencyField::getMin() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
+    LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     return pCurrencyFormatter
         ? ImplCalcDoubleValue( (double)pCurrencyFormatter->GetMin(), pCurrencyFormatter->GetDecimalDigits() )
         : 0;
@@ -6133,7 +6133,7 @@ void VCLXCurrencyField::setMax( double Value ) throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
+    LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     if ( pCurrencyFormatter )
         pCurrencyFormatter->SetMax(
             ImplCalcLongValue( Value, pCurrencyFormatter->GetDecimalDigits() ) );
@@ -6143,7 +6143,7 @@ double VCLXCurrencyField::getMax() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
+    LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     return pCurrencyFormatter
         ? ImplCalcDoubleValue( (double)pCurrencyFormatter->GetMax(), pCurrencyFormatter->GetDecimalDigits() )
         : 0;
@@ -6153,7 +6153,7 @@ void VCLXCurrencyField::setFirst( double Value ) throw(::com::sun::star::uno::Ru
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
+    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
     if ( pCurrencyField )
         pCurrencyField->SetFirst(
             ImplCalcLongValue( Value, pCurrencyField->GetDecimalDigits() ) );
@@ -6163,7 +6163,7 @@ double VCLXCurrencyField::getFirst() throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
+    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
     return pCurrencyField
         ? ImplCalcDoubleValue( (double)pCurrencyField->GetFirst(), pCurrencyField->GetDecimalDigits() )
         : 0;
@@ -6173,7 +6173,7 @@ void VCLXCurrencyField::setLast( double Value ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
+    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
     if ( pCurrencyField )
         pCurrencyField->SetLast(
             ImplCalcLongValue( Value, pCurrencyField->GetDecimalDigits() ) );
@@ -6183,7 +6183,7 @@ double VCLXCurrencyField::getLast() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
+    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
     return pCurrencyField
         ? ImplCalcDoubleValue( (double)pCurrencyField->GetLast(), pCurrencyField->GetDecimalDigits() )
         : 0;
@@ -6193,7 +6193,7 @@ void VCLXCurrencyField::setSpinSize( double Value ) throw(::com::sun::star::uno:
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
+    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
     if ( pCurrencyField )
         pCurrencyField->SetSpinSize(
             ImplCalcLongValue( Value, pCurrencyField->GetDecimalDigits() ) );
@@ -6203,7 +6203,7 @@ double VCLXCurrencyField::getSpinSize() throw(::com::sun::star::uno::RuntimeExce
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
+    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
     return pCurrencyField
         ? ImplCalcDoubleValue( (double)pCurrencyField->GetSpinSize(), pCurrencyField->GetDecimalDigits() )
         : 0;
@@ -6224,7 +6224,7 @@ void VCLXCurrencyField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::st
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
+    LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     if ( pCurrencyFormatter )
     {
         double n = getValue();
@@ -6237,7 +6237,7 @@ sal_Int16 VCLXCurrencyField::getDecimalDigits() throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
+    LongCurrencyFormatter* pCurrencyFormatter = static_cast<LongCurrencyFormatter*>(GetFormatter());
     return pCurrencyFormatter ? pCurrencyFormatter->GetDecimalDigits() : 0;
 }
 
@@ -6256,8 +6256,8 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             {
                 if ( bVoid )
                 {
-                    ((LongCurrencyField*)GetWindow())->EnableEmptyFieldValue( true );
-                    ((LongCurrencyField*)GetWindow())->SetEmptyFieldValue();
+                    static_cast<LongCurrencyField*>(GetWindow())->EnableEmptyFieldValue( true );
+                    static_cast<LongCurrencyField*>(GetWindow())->SetEmptyFieldValue();
                 }
                 else
                 {
@@ -6299,14 +6299,14 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             {
                 OUString aString;
                 if ( Value >>= aString )
-                     ((LongCurrencyField*)GetWindow())->SetCurrencySymbol( aString );
+                     static_cast<LongCurrencyField*>(GetWindow())->SetCurrencySymbol( aString );
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
                 bool b = bool();
                 if ( Value >>= b )
-                     ((LongCurrencyField*)GetWindow())->SetUseThousandSep( b );
+                     static_cast<LongCurrencyField*>(GetWindow())->SetUseThousandSep( b );
             }
             break;
             default:
@@ -6350,12 +6350,12 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                aProp <<= OUString( ((LongCurrencyField*)GetWindow())->GetCurrencySymbol() );
+                aProp <<= OUString( static_cast<LongCurrencyField*>(GetWindow())->GetCurrencySymbol() );
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                aProp <<= ((LongCurrencyField*)GetWindow())->IsUseThousandSep();
+                aProp <<= static_cast<LongCurrencyField*>(GetWindow())->IsUseThousandSep();
             }
             break;
             default:
@@ -6427,7 +6427,7 @@ void VCLXPatternField::setMasks( const OUString& EditMask, const OUString& Liter
 {
     SolarMutexGuard aGuard;
 
-    PatternField* pPatternField = (PatternField*) GetWindow();
+    PatternField* pPatternField = static_cast<PatternField*>(GetWindow());
     if ( pPatternField )
     {
         pPatternField->SetMask( OUStringToOString(EditMask, RTL_TEXTENCODING_ASCII_US), LiteralMask );
@@ -6438,7 +6438,7 @@ void VCLXPatternField::getMasks( OUString& EditMask, OUString& LiteralMask ) thr
 {
     SolarMutexGuard aGuard;
 
-    PatternField* pPatternField = (PatternField*) GetWindow();
+    PatternField* pPatternField = static_cast<PatternField*>(GetWindow());
     if ( pPatternField )
     {
         EditMask = OStringToOUString(pPatternField->GetEditMask(), RTL_TEXTENCODING_ASCII_US);
@@ -6450,7 +6450,7 @@ void VCLXPatternField::setString( const OUString& Str ) throw(::com::sun::star::
 {
     SolarMutexGuard aGuard;
 
-    PatternField* pPatternField = (PatternField*) GetWindow();
+    PatternField* pPatternField = static_cast<PatternField*>(GetWindow());
     if ( pPatternField )
     {
         pPatternField->SetString( Str );
@@ -6462,7 +6462,7 @@ OUString VCLXPatternField::getString() throw(::com::sun::star::uno::RuntimeExcep
     SolarMutexGuard aGuard;
 
     OUString aString;
-    PatternField* pPatternField = (PatternField*) GetWindow();
+    PatternField* pPatternField = static_cast<PatternField*>(GetWindow());
     if ( pPatternField )
         aString = pPatternField->GetString();
     return aString;

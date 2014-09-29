@@ -83,9 +83,9 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
     DBG_ASSERT( pEvent && pEvent->ISA( VclMenuEvent ), "Unknown Event!" );
     if ( pEvent && pEvent->ISA( VclMenuEvent ) )
     {
-        DBG_ASSERT( ((VclMenuEvent*)pEvent)->GetMenu() && mpMenu, "Menu???" );
+        DBG_ASSERT( static_cast<VclMenuEvent*>(pEvent)->GetMenu() && mpMenu, "Menu???" );
 
-        VclMenuEvent* pMenuEvent = (VclMenuEvent*)pEvent;
+        VclMenuEvent* pMenuEvent = static_cast<VclMenuEvent*>(pEvent);
         if ( pMenuEvent->GetMenu() == mpMenu )  // Also called for the root menu
         {
             switch ( pMenuEvent->GetId() )
@@ -434,7 +434,7 @@ throw(css::uno::RuntimeException, std::exception)
         *pNewRef = rxPopupMenu;
         maPopupMenuRefs.push_back( pNewRef );
 
-        mpMenu->SetPopupMenu( nItemId, (PopupMenu*) pVCLMenu->GetMenu() );
+        mpMenu->SetPopupMenu( nItemId, static_cast<PopupMenu*>( pVCLMenu->GetMenu() ) );
     }
 }
 
@@ -452,7 +452,7 @@ throw(css::uno::RuntimeException, std::exception)
         for ( size_t n = maPopupMenuRefs.size(); n; )
         {
             css::uno::Reference< css::awt::XPopupMenu > * pRef = maPopupMenuRefs[ --n ];
-            Menu* pM = ((VCLXMenu*)pRef->get())->GetMenu();
+            Menu* pM = static_cast<VCLXMenu*>(pRef->get())->GetMenu();
             if ( pM == pMenu )
             {
                 aRef = *pRef;
@@ -463,7 +463,7 @@ throw(css::uno::RuntimeException, std::exception)
         // if the popup men is not created by stardiv.Toolkit.VCLXPopupMenu
         if( !aRef.is() )
         {
-            aRef = new VCLXPopupMenu( (PopupMenu*)pMenu );
+            aRef = new VCLXPopupMenu( static_cast<PopupMenu*>(pMenu) );
         }
     }
     return aRef;
@@ -535,7 +535,7 @@ throw(css::uno::RuntimeException, std::exception)
     sal_Int16 nRet = 0;
     if ( mpMenu && IsPopupMenu() )
     {
-        nRet = ((PopupMenu*)mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ),
+        nRet = static_cast<PopupMenu*>(mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ),
                                               VCLRectangle( rPos ),
                                               nFlags | POPUPMENU_NOMOUSEUPCLOSE );
     }
@@ -735,7 +735,7 @@ throw (css::uno::RuntimeException, std::exception)
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( mpMenu && IsPopupMenu() )
-        ( (PopupMenu*) mpMenu )->EndExecute();
+        static_cast<PopupMenu*>( mpMenu )->EndExecute();
 }
 
 

@@ -83,18 +83,18 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException, std::exc
     vcl::Window* pWindow = GetWindowImpl();
     if ( pWindow )
     {
-        const SystemEnvData* pSysData = ((SystemWindow *)pWindow)->GetSystemData();
+        const SystemEnvData* pSysData = static_cast<SystemWindow *>(pWindow)->GetSystemData();
         if( pSysData )
         {
 #if (defined WNT)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
             {
-                 aRet <<= (sal_IntPtr)pSysData->hWnd;
+                 aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->hWnd);
             }
 #elif (defined MACOSX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
             {
-                 aRet <<= (sal_IntPtr)pSysData->mpNSView;
+                 aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->mpNSView);
             }
 #elif (defined ANDROID)
             // Nothing
@@ -136,7 +136,7 @@ void VCLXTopWindow_Base::toFront(  ) throw(::com::sun::star::uno::RuntimeExcepti
 
     vcl::Window* pWindow = GetWindowImpl();
     if ( pWindow )
-        ((WorkWindow*)pWindow)->ToTop( TOTOP_RESTOREWHENMIN );
+        static_cast<WorkWindow*>(pWindow)->ToTop( TOTOP_RESTOREWHENMIN );
 }
 
 void VCLXTopWindow_Base::toBack(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -147,7 +147,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
 {
     SolarMutexGuard aGuard;
 
-    SystemWindow* pWindow = (SystemWindow*) GetWindowImpl();
+    SystemWindow* pWindow = dynamic_cast<SystemWindow*>( GetWindowImpl() );
     if ( pWindow )
     {
         pWindow->SetMenuBar( NULL );
@@ -155,7 +155,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
         {
             VCLXMenu* pMenu = VCLXMenu::GetImplementation( rxMenu );
             if ( pMenu && !pMenu->IsPopupMenu() )
-                pWindow->SetMenuBar( (MenuBar*) pMenu->GetMenu() );
+                pWindow->SetMenuBar( static_cast<MenuBar*>( pMenu->GetMenu() ));
         }
     }
     mxMenuBar = rxMenu;

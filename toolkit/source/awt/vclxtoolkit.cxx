@@ -746,7 +746,9 @@ void SAL_CALL VCLXToolkit::disposing()
         ByteBufferWrapper *bbw = (ByteBufferWrapper *) (intptr_t) addressOfMemoryBufferForSharedArrayWrapper;
         pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( bbw->pointer(), *bbw ));
 #else
-        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( (sal_uInt8*) (sal_uIntPtr) addressOfMemoryBufferForSharedArrayWrapper ));
+        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ),
+            Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset),
+            basebmp::RawMemorySharedArray( reinterpret_cast<sal_uInt8*>( addressOfMemoryBufferForSharedArrayWrapper )));
 #endif
     } else {
         pV->SetOutputSizePixel( Size( Width, Height ) );
@@ -827,7 +829,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_COMBOBOX:
                 pNewWindow = new ComboBox( pParent, nWinBits|WB_AUTOHSCROLL );
-                ((ComboBox*)pNewWindow)->EnableAutoSize( false );
+                static_cast<ComboBox*>(pNewWindow)->EnableAutoSize( false );
                 *ppNewComp = new VCLXComboBox;
             break;
             case WINDOW_CURRENCYBOX:
@@ -837,7 +839,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new CurrencyField( pParent, nWinBits );
                 static_cast<CurrencyField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
-                ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(CurrencyField*)pNewWindow );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<CurrencyField*>(pNewWindow) );
             break;
             case WINDOW_DATEBOX:
                 pNewWindow = new DateBox( pParent, nWinBits );
@@ -846,7 +848,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new DateField( pParent, nWinBits );
                 static_cast<DateField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXDateField;
-                ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pNewWindow );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<DateField*>(pNewWindow) );
             break;
             case WINDOW_DOCKINGAREA:
                 pNewWindow = new DockingAreaWindow( pParent );
@@ -902,7 +904,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_LISTBOX:
                 pNewWindow = new ListBox( pParent, nWinBits|WB_SIMPLEMODE|WB_AUTOHSCROLL );
-                ((ListBox*)pNewWindow)->EnableAutoSize( false );
+                static_cast<ListBox*>(pNewWindow)->EnableAutoSize( false );
                 *ppNewComp = new VCLXListBox;
             break;
             case WINDOW_LONGCURRENCYBOX:
@@ -911,7 +913,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_LONGCURRENCYFIELD:
                 pNewWindow = new LongCurrencyField( pParent, nWinBits );
                 *ppNewComp = new VCLXCurrencyField;
-                ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(LongCurrencyField*)pNewWindow );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<LongCurrencyField*>(pNewWindow) );
             break;
             case WINDOW_MENUBUTTON:
                 pNewWindow = new MenuButton( pParent, nWinBits );
@@ -927,7 +929,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_METRICFIELD:
                 pNewWindow = new MetricField( pParent, nWinBits );
                 *ppNewComp = new VCLXMetricField;
-                ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(MetricField*)pNewWindow );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<MetricField*>(pNewWindow) );
             break;
             case WINDOW_DIALOG:
             case WINDOW_MODALDIALOG:
@@ -962,7 +964,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new NumericField( pParent, nWinBits );
                 static_cast<NumericField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
-                ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(NumericField*)pNewWindow );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<NumericField*>(pNewWindow) );
             break;
             case WINDOW_OKBUTTON:
                 pNewWindow = new OKButton( pParent, nWinBits );
@@ -974,7 +976,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_PATTERNFIELD:
                 pNewWindow = new PatternField( pParent, nWinBits );
                 *ppNewComp = new VCLXPatternField;
-                ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(PatternField*)pNewWindow );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<PatternField*>(pNewWindow) );
             break;
             case WINDOW_PUSHBUTTON:
                 pNewWindow = new PushButton( pParent, nWinBits );
@@ -1047,7 +1049,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new TimeField( pParent, nWinBits );
                 static_cast<TimeField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXTimeField;
-                ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(TimeField*)pNewWindow );
+                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<TimeField*>(pNewWindow) );
             break;
             case WINDOW_TOOLBOX:
                 pNewWindow = new ToolBox( pParent, nWinBits );
