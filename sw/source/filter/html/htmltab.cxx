@@ -3141,7 +3141,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
         const HTMLOptions& rOptions = rParser.GetOptions();
         for (size_t i = rOptions.size(); i; )
         {
-            const HTMLOption& rOption = *rOptions[--i];
+            const HTMLOption& rOption = rOptions[--i];
             switch( rOption.GetToken() )
             {
             case HTML_O_ID:
@@ -3898,7 +3898,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         const HTMLOptions& rHTMLOptions = GetOptions();
                         for (size_t i = 0; i < rHTMLOptions.size(); ++i)
                         {
-                            const HTMLOption& rOption = *rHTMLOptions[i];
+                            const HTMLOption& rOption = rHTMLOptions[i];
                             if( HTML_O_ALIGN==rOption.GetToken() )
                             {
                                 SvxAdjust eAdjust =
@@ -4188,7 +4188,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
             const HTMLOptions& rHTMLOptions = GetOptions();
             for (size_t i = rHTMLOptions.size(); i; )
             {
-                const HTMLOption& rOption = *rHTMLOptions[--i];
+                const HTMLOption& rOption = rHTMLOptions[--i];
                 switch( rOption.GetToken() )
                 {
                 case HTML_O_ID:
@@ -4388,7 +4388,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             const HTMLOptions& rHTMLOptions = GetOptions();
             for (size_t i = rHTMLOptions.size(); i; )
             {
-                const HTMLOption& rOption = *rHTMLOptions[--i];
+                const HTMLOption& rOption = rHTMLOptions[--i];
                 switch( rOption.GetToken() )
                 {
                 case HTML_O_ID:
@@ -4575,7 +4575,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
             const HTMLOptions& rColGrpOptions = GetOptions();
             for (size_t i = rColGrpOptions.size(); i; )
             {
-                const HTMLOption& rOption = *rColGrpOptions[--i];
+                const HTMLOption& rOption = rColGrpOptions[--i];
                 switch( rOption.GetToken() )
                 {
                 case HTML_O_ID:
@@ -4659,7 +4659,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                 const HTMLOptions& rColOptions = GetOptions();
                 for (size_t i = rColOptions.size(); i; )
                 {
-                    const HTMLOption& rOption = *rColOptions[--i];
+                    const HTMLOption& rOption = rColOptions[--i];
                     switch( rOption.GetToken() )
                     {
                     case HTML_O_ID:
@@ -4804,7 +4804,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         const HTMLOptions& rHTMLOptions = GetOptions();
         for ( size_t i = rHTMLOptions.size(); i; )
         {
-            const HTMLOption& rOption = *rHTMLOptions[--i];
+            const HTMLOption& rOption = rHTMLOptions[--i];
             if( HTML_O_ALIGN == rOption.GetToken() )
             {
                 if (rOption.GetString().equalsIgnoreAsciiCase(
@@ -5033,7 +5033,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
 
     for (size_t i = rOptions.size(); i; )
     {
-        const HTMLOption& rOption = *rOptions[--i];
+        const HTMLOption& rOption = rOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:

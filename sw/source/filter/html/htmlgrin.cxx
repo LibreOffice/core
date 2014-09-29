@@ -330,7 +330,7 @@ void SwHTMLParser::InsertImage()
     {
         sal_uInt16 nEvent = 0;
         ScriptType eScriptType2 = eDfltScriptType;
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
             case HTML_O_ID:
@@ -833,7 +833,7 @@ void SwHTMLParser::InsertBodyOptions()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         OUString aEvent;
         bool bSetEvent = false;
@@ -1072,7 +1072,7 @@ void SwHTMLParser::NewAnchor()
     {
         sal_uInt16 nEvent = 0;
         ScriptType eScriptType2 = eDfltScriptType;
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
             case HTML_O_NAME:

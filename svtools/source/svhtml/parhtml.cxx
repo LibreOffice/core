@@ -38,7 +38,6 @@
 #include <svtools/htmlkywd.hxx>
 
 #include <memory>
-#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -1583,7 +1582,8 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
             std::unique_ptr<HTMLOption> pOption(
                 new HTMLOption(sal::static_int_cast<sal_uInt16>(nToken), sName, aValue));
 
-            maOptions.push_back(std::move(pOption));
+            maOptions.push_back(pOption.get());
+            pOption.release();
         }
         else
             // Ignore white space and unexpected characters
@@ -2068,7 +2068,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
 
     for ( size_t i = aOptions.size(); i; )
     {
-        const HTMLOption& aOption = *aOptions[--i];
+        const HTMLOption& aOption = aOptions[--i];
         switch ( aOption.GetToken() )
         {
             case HTML_O_NAME:

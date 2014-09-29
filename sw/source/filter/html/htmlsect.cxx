@@ -72,7 +72,7 @@ void SwHTMLParser::NewDivision( int nToken )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -549,7 +549,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:

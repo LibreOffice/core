@@ -20,13 +20,10 @@
 #ifndef INCLUDED_SVTOOLS_PARHTML_HXX
 #define INCLUDED_SVTOOLS_PARHTML_HXX
 
-#include <sal/config.h>
-
-#include <memory>
-#include <vector>
-
 #include <svtools/svtdllapi.h>
 #include <svtools/svparser.hxx>
+
+#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace document {
@@ -121,7 +118,7 @@ public:
     //SvxAdjust GetAdjust() const;                      // <P,TH,TD ALIGN=>
 };
 
-typedef std::vector<std::unique_ptr<HTMLOption>> HTMLOptions;
+typedef ::boost::ptr_vector<HTMLOption> HTMLOptions;
 
 class SVT_DLLPUBLIC HTMLParser : public SvParser
 {

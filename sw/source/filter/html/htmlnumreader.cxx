@@ -137,7 +137,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -440,7 +440,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
             case HTML_O_VALUE:

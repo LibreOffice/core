@@ -137,7 +137,7 @@ void OHTMLReader::NextToken( int nToken )
                     const HTMLOptions& rHtmlOptions = GetOptions();
                     for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
                     {
-                        const HTMLOption& rOption = *rHtmlOptions[i];
+                        const HTMLOption& rOption = rHtmlOptions[i];
                         switch( rOption.GetToken() )
                         {
                             case HTML_O_WIDTH:
@@ -294,7 +294,7 @@ void OHTMLReader::fetchOptions()
     const HTMLOptions& options = GetOptions();
     for (size_t i = 0, n = options.size(); i < n; ++i)
     {
-        const HTMLOption& rOption = *options[i];
+        const HTMLOption& rOption = options[i];
         switch( rOption.GetToken() )
         {
             case HTML_O_SDVAL:
@@ -315,7 +315,7 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
     const HTMLOptions& rHtmlOptions = GetOptions();
     for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
     {
-        const HTMLOption& rOption = *rHtmlOptions[i];
+        const HTMLOption& rOption = rHtmlOptions[i];
         switch( rOption.GetToken() )
         {
             case HTML_O_ALIGN:
@@ -343,7 +343,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
     const HTMLOptions& rHtmlOptions = GetOptions();
     for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
     {
-        const HTMLOption& rOption = *rHtmlOptions[i];
+        const HTMLOption& rOption = rHtmlOptions[i];
         switch( rOption.GetToken() )
         {
         case HTML_O_COLOR:

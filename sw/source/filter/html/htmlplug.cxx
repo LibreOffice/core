@@ -311,7 +311,7 @@ void SwHTMLParser::InsertEmbed()
     // Wert einer Option beruecksichtigt werden.
     for (size_t i = 0, n = rHTMLOptions.size(); i < n; ++i)
     {
-        const HTMLOption& rOption = *rHTMLOptions[i];
+        const HTMLOption& rOption = rHTMLOptions[i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -507,7 +507,7 @@ void SwHTMLParser::NewObject()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -675,7 +675,7 @@ void SwHTMLParser::InsertApplet()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -800,7 +800,7 @@ void SwHTMLParser::InsertParam()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = *rHTMLOptions[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_NAME:
@@ -833,7 +833,7 @@ void SwHTMLParser::InsertFloatingFrame()
     // Erstmal die Optionen f?r das Writer-Frame-Format holen
     for (size_t i = 0, n = rHTMLOptions.size(); i < n; ++i)
     {
-        const HTMLOption& rOption = *rHTMLOptions[i];
+        const HTMLOption& rOption = rHTMLOptions[i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:

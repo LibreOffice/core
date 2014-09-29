@@ -61,7 +61,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
 
     for (size_t i = 0, n = rOptions.size(); i < n; ++i)
     {
-        const HTMLOption& aOption = *rOptions[i];
+        const HTMLOption& aOption = rOptions[i];
         switch( aOption.GetToken() )
         {
         case HTML_O_BORDERCOLOR:

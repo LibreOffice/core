@@ -52,7 +52,7 @@ bool HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
 
     for( size_t i = aScriptOptions.size(); i; )
     {
-        const HTMLOption& aOption = *aScriptOptions[--i];
+        const HTMLOption& aOption = aScriptOptions[--i];
         switch( aOption.GetToken() )
         {
         case HTML_O_LANGUAGE:
