@@ -40,9 +40,8 @@ namespace toolkitform
 
     /** creates a PDF compatible control descriptor for the given control
     */
-    void TOOLKIT_DLLPUBLIC describePDFControl(
+    std::unique_ptr<vcl::PDFWriter::AnyWidget> TOOLKIT_DLLPUBLIC describePDFControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
-            ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget >& _rpDescriptor,
             ::vcl::PDFExtOutDevData& i_pdfExportData
         );
 

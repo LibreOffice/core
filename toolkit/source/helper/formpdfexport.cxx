@@ -254,22 +254,22 @@ namespace toolkitform
 
     /** creates a PDF compatible control descriptor for the given control
     */
-    void TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl,
-        ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget >& _rpDescriptor, ::vcl::PDFExtOutDevData& i_pdfExportData )
+    std::unique_ptr<vcl::PDFWriter::AnyWidget> TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl,
+        ::vcl::PDFExtOutDevData& i_pdfExportData )
     {
-        _rpDescriptor.reset();
+        std::unique_ptr<vcl::PDFWriter::AnyWidget> Descriptor;
         OSL_ENSURE( _rxControl.is(), "describePDFControl: invalid (NULL) control!" );
         if ( !_rxControl.is() )
-            return;
+            return Descriptor;
 
         try
         {
             Reference< XPropertySet > xModelProps( _rxControl->getModel(), UNO_QUERY );
             sal_Int16 nControlType = classifyFormControl( xModelProps );
-            _rpDescriptor.reset( createDefaultWidget( nControlType ) );
-            if ( !_rpDescriptor.get() )
+            Descriptor.reset( createDefaultWidget( nControlType ) );
+            if ( !Descriptor.get() )
                 // no PDF widget available for this
-                return;
+                return Descriptor;
 
             Reference< XPropertySetInfo > xPSI( xModelProps->getPropertySetInfo() );
             Reference< XServiceInfo > xSI( xModelProps, UNO_QUERY );
@@ -282,9 +282,9 @@ namespace toolkitform
 
 
             // Name, Description, Text
-            OSL_VERIFY( xModelProps->getPropertyValue( OUString(FM_PROP_NAME) ) >>= _rpDescriptor->Name );
+            OSL_VERIFY( xModelProps->getPropertyValue( OUString(FM_PROP_NAME) ) >>= Descriptor->Name );
             static const OUString FM_PROP_HELPTEXT("HelpText");
-            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_HELPTEXT ) >>= _rpDescriptor->Description );
+            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_HELPTEXT ) >>= Descriptor->Description );
             Any aText;
             static const OUString FM_PROP_TEXT("Text");
             static const OUString FM_PROP_LABEL("Label");
@@ -293,13 +293,13 @@ namespace toolkitform
             else if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
                 aText = xModelProps->getPropertyValue( FM_PROP_LABEL );
             if ( aText.hasValue() )
-                OSL_VERIFY( aText >>= _rpDescriptor->Text );
+                OSL_VERIFY( aText >>= Descriptor->Text );
 
 
             // readonly
             static const OUString FM_PROP_READONLY("ReadOnly");
             if ( xPSI->hasPropertyByName( FM_PROP_READONLY ) )
-                OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= _rpDescriptor->ReadOnly );
+                OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= Descriptor->ReadOnly );
 
 
             // border
@@ -309,16 +309,16 @@ namespace toolkitform
                 {
                     sal_Int16 nBorderType = 0;
                     OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_BORDER ) >>= nBorderType );
-                    _rpDescriptor->Border = ( nBorderType != 0 );
+                    Descriptor->Border = ( nBorderType != 0 );
 
                     OUString sBorderColorPropertyName( "BorderColor" );
                     if ( xPSI->hasPropertyByName( sBorderColorPropertyName ) )
                     {
                         sal_Int32 nBoderColor = COL_TRANSPARENT;
                         if ( xModelProps->getPropertyValue( sBorderColorPropertyName ) >>= nBoderColor )
-                            _rpDescriptor->BorderColor = Color( nBoderColor );
+                            Descriptor->BorderColor = Color( nBoderColor );
                         else
-                            _rpDescriptor->BorderColor = Color( COL_BLACK );
+                            Descriptor->BorderColor = Color( COL_BLACK );
                     }
                 }
             }
@@ -330,8 +330,8 @@ namespace toolkitform
             {
                 sal_Int32 nBackColor = COL_TRANSPARENT;
                 xModelProps->getPropertyValue( FM_PROP_BACKGROUNDCOLOR ) >>= nBackColor;
-                _rpDescriptor->Background = true;
-                _rpDescriptor->BackgroundColor = Color( nBackColor );
+                Descriptor->Background = true;
+                Descriptor->BackgroundColor = Color( nBackColor );
             }
 
 
@@ -341,12 +341,12 @@ namespace toolkitform
             {
                 sal_Int32 nTextColor = COL_TRANSPARENT;
                 xModelProps->getPropertyValue( FM_PROP_TEXTCOLOR ) >>= nTextColor;
-                _rpDescriptor->TextColor = Color( nTextColor );
+                Descriptor->TextColor = Color( nTextColor );
             }
 
 
             // text style
-            _rpDescriptor->TextStyle = 0;
+            Descriptor->TextStyle = 0;
 
             // multi line and word break
             // The MultiLine property of the control is mapped to both the "MULTILINE" and
@@ -357,7 +357,7 @@ namespace toolkitform
                 bool bMultiLine = false;
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_MULTILINE ) >>= bMultiLine );
                 if ( bMultiLine )
-                    _rpDescriptor->TextStyle |= TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
+                    Descriptor->TextStyle |= TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
             }
 
             // horizontal alignment
@@ -370,9 +370,9 @@ namespace toolkitform
                 // means something else than LEFT?
                 switch ( nAlign )
                 {
-                case awt::TextAlign::LEFT:  _rpDescriptor->TextStyle |= TEXT_DRAW_LEFT; break;
-                case awt::TextAlign::CENTER:  _rpDescriptor->TextStyle |= TEXT_DRAW_CENTER; break;
-                case awt::TextAlign::RIGHT:  _rpDescriptor->TextStyle |= TEXT_DRAW_RIGHT; break;
+                case awt::TextAlign::LEFT:  Descriptor->TextStyle |= TEXT_DRAW_LEFT; break;
+                case awt::TextAlign::CENTER:  Descriptor->TextStyle |= TEXT_DRAW_CENTER; break;
+                case awt::TextAlign::RIGHT:  Descriptor->TextStyle |= TEXT_DRAW_RIGHT; break;
                 default:
                     OSL_FAIL( "describePDFControl: invalid text align!" );
                 }
@@ -387,9 +387,9 @@ namespace toolkitform
                     xModelProps->getPropertyValue( sVertAlignPropertyName ) >>= nAlign;
                     switch ( nAlign )
                     {
-                    case VerticalAlignment_TOP:  _rpDescriptor->TextStyle |= TEXT_DRAW_TOP; break;
-                    case VerticalAlignment_MIDDLE:  _rpDescriptor->TextStyle |= TEXT_DRAW_VCENTER; break;
-                    case VerticalAlignment_BOTTOM:  _rpDescriptor->TextStyle |= TEXT_DRAW_BOTTOM; break;
+                    case VerticalAlignment_TOP:  Descriptor->TextStyle |= TEXT_DRAW_TOP; break;
+                    case VerticalAlignment_MIDDLE:  Descriptor->TextStyle |= TEXT_DRAW_VCENTER; break;
+                    case VerticalAlignment_BOTTOM:  Descriptor->TextStyle |= TEXT_DRAW_BOTTOM; break;
                     default:
                         OSL_FAIL( "describePDFControl: invalid vertical text align!" );
                     }
@@ -402,7 +402,7 @@ namespace toolkitform
             {
                 FontDescriptor aUNOFont;
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_FONT ) >>= aUNOFont );
-                _rpDescriptor->TextFont = VCLUnoHelper::CreateFont( aUNOFont, vcl::Font() );
+                Descriptor->TextFont = VCLUnoHelper::CreateFont( aUNOFont, vcl::Font() );
             }
 
             // tab order
@@ -411,19 +411,19 @@ namespace toolkitform
             {
                 sal_Int16 nIndex = -1;
                 OSL_VERIFY( xModelProps->getPropertyValue( aTabIndexString ) >>= nIndex );
-                _rpDescriptor->TabOrder = nIndex;
+                Descriptor->TabOrder = nIndex;
             }
 
 
             // special widget properties
 
             // edits
-            if ( _rpDescriptor->getType() == ::vcl::PDFWriter::Edit )
+            if ( Descriptor->getType() == ::vcl::PDFWriter::Edit )
             {
-                ::vcl::PDFWriter::EditWidget* pEditWidget = static_cast< ::vcl::PDFWriter::EditWidget* >( _rpDescriptor.get() );
+                ::vcl::PDFWriter::EditWidget* pEditWidget = static_cast< ::vcl::PDFWriter::EditWidget* >( Descriptor.get() );
 
                 // multiline (already flagged in the TextStyle)
-                pEditWidget->MultiLine = ( _rpDescriptor->TextStyle & TEXT_DRAW_MULTILINE ) != 0;
+                pEditWidget->MultiLine = ( Descriptor->TextStyle & TEXT_DRAW_MULTILINE ) != 0;
 
                 // password input
                 OUString sEchoCharPropName( "EchoChar" );
@@ -454,9 +454,9 @@ namespace toolkitform
 
 
             // buttons
-            if ( _rpDescriptor->getType() == ::vcl::PDFWriter::PushButton )
+            if ( Descriptor->getType() == ::vcl::PDFWriter::PushButton )
             {
-                ::vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< ::vcl::PDFWriter::PushButtonWidget* >( _rpDescriptor.get() );
+                ::vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< ::vcl::PDFWriter::PushButtonWidget* >( Descriptor.get() );
                 FormButtonType eButtonType = FormButtonType_PUSH;
                 OSL_VERIFY( xModelProps->getPropertyValue("ButtonType") >>= eButtonType );
                 static const OUString FM_PROP_TARGET_URL("TargetURL");
@@ -507,7 +507,7 @@ namespace toolkitform
                 // In PDF files, buttons are either reset, url or submit buttons. So if we have a simple PUSH button
                 // in a document, then this means that we do not export a SubmitToURL, which means that in PDF,
                 // the button is used as reset button.
-                // Is this desired? If no, we would have to reset _rpDescriptor to NULL here, in case eButtonType
+                // Is this desired? If no, we would have to reset Descriptor to NULL here, in case eButtonType
                 // != FormButtonType_SUBMIT && != FormButtonType_RESET
 
                 // the PDF exporter defaults the text style, if 0. To prevent this, we have to transfer the UNO
@@ -519,9 +519,9 @@ namespace toolkitform
 
             // check boxes
             static const OUString FM_PROP_STATE("State");
-            if ( _rpDescriptor->getType() == ::vcl::PDFWriter::CheckBox )
+            if ( Descriptor->getType() == ::vcl::PDFWriter::CheckBox )
             {
-                ::vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< ::vcl::PDFWriter::CheckBoxWidget* >( _rpDescriptor.get() );
+                ::vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< ::vcl::PDFWriter::CheckBoxWidget* >( Descriptor.get() );
                 sal_Int16 nState = 0;
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_STATE ) >>= nState );
                 pCheckBoxWidget->Checked = ( nState != 0 );
@@ -529,9 +529,9 @@ namespace toolkitform
 
 
             // radio buttons
-            if ( _rpDescriptor->getType() == ::vcl::PDFWriter::RadioButton )
+            if ( Descriptor->getType() == ::vcl::PDFWriter::RadioButton )
             {
-                ::vcl::PDFWriter::RadioButtonWidget* pRadioWidget = static_cast< ::vcl::PDFWriter::RadioButtonWidget* >( _rpDescriptor.get() );
+                ::vcl::PDFWriter::RadioButtonWidget* pRadioWidget = static_cast< ::vcl::PDFWriter::RadioButtonWidget* >( Descriptor.get() );
                 sal_Int16 nState = 0;
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_STATE ) >>= nState );
                 pRadioWidget->Selected = ( nState != 0 );
@@ -549,9 +549,9 @@ namespace toolkitform
 
 
             // list boxes
-            if ( _rpDescriptor->getType() == ::vcl::PDFWriter::ListBox )
+            if ( Descriptor->getType() == ::vcl::PDFWriter::ListBox )
             {
-                ::vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< ::vcl::PDFWriter::ListBoxWidget* >( _rpDescriptor.get() );
+                ::vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< ::vcl::PDFWriter::ListBoxWidget* >( Descriptor.get() );
 
                 // drop down
                 static const OUString FM_PROP_DROPDOWN("Dropdown");
@@ -583,9 +583,9 @@ namespace toolkitform
 
 
             // combo boxes
-            if ( _rpDescriptor->getType() == ::vcl::PDFWriter::ComboBox )
+            if ( Descriptor->getType() == ::vcl::PDFWriter::ComboBox )
             {
-                ::vcl::PDFWriter::ComboBoxWidget* pComboWidget = static_cast< ::vcl::PDFWriter::ComboBoxWidget* >( _rpDescriptor.get() );
+                ::vcl::PDFWriter::ComboBoxWidget* pComboWidget = static_cast< ::vcl::PDFWriter::ComboBoxWidget* >( Descriptor.get() );
 
                 // entries
                 getStringItemVector( xModelProps, pComboWidget->Entries );
@@ -598,12 +598,13 @@ namespace toolkitform
 
             // text line ends
             // some controls may (always or dependent on other settings) return UNIX line ends
-            _rpDescriptor->Text = convertLineEnd(_rpDescriptor->Text, LINEEND_CRLF);
+            Descriptor->Text = convertLineEnd(Descriptor->Text, LINEEND_CRLF);
         }
         catch( const Exception& )
         {
             OSL_FAIL( "describePDFControl: caught an exception!" );
         }
+        return Descriptor;
     }
 
 
