@@ -326,6 +326,17 @@ DECLARE_OOXMLEXPORT_TEST(testRot180Flipv, "rot180-flipv.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRot270Flipv, "rot270-flipv.docx")
+{
+    // 270° rotation got turned into 90° after roundtrip.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        assertXPath(pXmlDoc, "//a:xfrm", "flipV", "1");
+        // This was 5400000.
+        assertXPath(pXmlDoc, "//a:xfrm", "rot", "16200000");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1166,19 +1166,10 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
             aPos.X-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Width/2-facsin*sin(nRotation*F_PI18000)*aSize.Height/2;
             aPos.Y-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Height/2+facsin*sin(nRotation*F_PI18000)*aSize.Width/2;
         }
-    }
-    if (!bSuppressRotation)
-    {
-        // See SdrObjCustomShape::NbcRotate().
-        int nSwap = 0;
-        if (bFlipH)
-            nSwap ^= 1;
-        if (bFlipV)
-            nSwap ^= 1;
-        if (nSwap)
-        {
-            nRotation=(nRotation+18000)%36000;
-        }
+
+        // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
+        uno::Reference<beans::XPropertySet> xPropertySet(rXShape, uno::UNO_QUERY);
+        xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
     }
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
