@@ -44,7 +44,9 @@ class XConnectionOutputStream_Adapter extends OutputStream {
         try {
             _xConnection.write(_bytes);
         } catch(com.sun.star.io.IOException ioException) {
-            throw new IOException(ioException);
+            IOException ex = new IOException(ioException.getMessage());
+            ex.initCause(ioException);
+            throw ex;
         }
 
         if(DEBUG) System.err.println("#### " + this.getClass()  + " - one byte written:" +  _bytes[0]);
@@ -65,7 +67,9 @@ class XConnectionOutputStream_Adapter extends OutputStream {
         try {
             _xConnection.write(bytes);
         } catch(com.sun.star.io.IOException ioException) {
-            throw new IOException(ioException);
+            IOException ex = new IOException(ioException.getMessage());
+            ex.initCause(ioException);
+            throw ex;
         }
     }
 
@@ -74,7 +78,9 @@ class XConnectionOutputStream_Adapter extends OutputStream {
         try {
             _xConnection.flush();
         } catch(com.sun.star.io.IOException ioException) {
-            throw new IOException(ioException);
+            IOException ex = new IOException(ioException.getMessage());
+            ex.initCause(ioException);
+            throw ex;
         }
     }
 }
