@@ -489,7 +489,7 @@ void GtkData::deInitNWF( void )
         if( gWidgetData[i].gCacheWindow )
             gtk_widget_destroy( gWidgetData[i].gCacheWindow );
         if( gWidgetData[i].gMenuWidget )
-            gtk_widget_destroy( gWidgetData[i].gMenuWidget );
+            g_object_unref (gWidgetData[i].gMenuWidget);
         if( gWidgetData[i].gTooltipPopup )
             gtk_widget_destroy( gWidgetData[i].gTooltipPopup );
         if( gWidgetData[i].gDialog )
@@ -4399,6 +4399,8 @@ static void NWEnsureGTKMenu( SalX11Screen nScreen )
         gWidgetData[nScreen].gMenuItemRadioMenuWidget     = gtk_radio_menu_item_new_with_label( NULL, "b" );
         gWidgetData[nScreen].gMenuItemSeparatorMenuWidget = gtk_menu_item_new();
         gWidgetData[nScreen].gImageMenuItem               = gtk_image_menu_item_new();
+
+        g_object_ref_sink (gWidgetData[nScreen].gMenuWidget);
 
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemMenuWidget );
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemCheckMenuWidget );
