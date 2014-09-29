@@ -60,7 +60,7 @@ namespace accessibility
 
             return first queue element, ownership transfers to caller
         */
-        ::std::auto_ptr< SfxHint > PopFront();
+        ::std::unique_ptr< SfxHint > PopFront();
 
         /** Apply functor to every queue member
 

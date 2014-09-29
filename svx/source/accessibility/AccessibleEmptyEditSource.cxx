@@ -269,12 +269,8 @@ namespace accessibility
         if( mrObj.GetModel() )
             EndListening( *mrObj.GetModel() );
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< SvxEditSource > pProxySource( new AccessibleProxyEditSource_Impl(mrObj, mrView, mrViewWindow) );
-        ::std::auto_ptr< SvxEditSource > tmp = mpEditSource;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        mpEditSource = pProxySource;
-        pProxySource = tmp;
+        ::std::unique_ptr< SvxEditSource > pProxySource( new AccessibleProxyEditSource_Impl(mrObj, mrView, mrViewWindow) );
+        mpEditSource.swap(pProxySource);
 
         // register as listener
         StartListening( mpEditSource->GetBroadcaster() );

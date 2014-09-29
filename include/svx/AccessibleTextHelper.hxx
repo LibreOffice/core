@@ -411,7 +411,7 @@ namespace accessibility
     private:
 
         /// @dyn
-        const std::auto_ptr< AccessibleTextHelper_Impl > mpImpl;
+        const std::unique_ptr< AccessibleTextHelper_Impl > mpImpl;
 
     };
 

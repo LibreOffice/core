@@ -1222,9 +1222,7 @@ namespace accessibility
 
         while( !maEventQueue.IsEmpty() )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< SfxHint > pHint( maEventQueue.PopFront() );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr< SfxHint > pHint( maEventQueue.PopFront() );
             if( pHint.get() )
             {
                 const SfxHint& rHint = *(pHint.get());

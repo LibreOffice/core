@@ -47,7 +47,7 @@ namespace sdr { namespace contact {
     class SVX_DLLPRIVATE ViewContactOfUnoControl : public ViewContactOfSdrObj
     {
     private:
-        ::std::auto_ptr< ViewContactOfUnoControl_Impl >   m_pImpl;
+        ::std::unique_ptr< ViewContactOfUnoControl_Impl >   m_pImpl;
 
     public:
         // access to SdrObject

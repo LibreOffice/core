@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <basic/sbxvar.hxx>
@@ -39,8 +43,6 @@
 #include <svx/svdouno.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/sdrobjectfilter.hxx>
-
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -325,7 +327,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 if ( !pFormShell || !pDrawView || !pWindow )
                     break;
 
-                boost::scoped_ptr< ::svx::ISdrObjectFilter > pFilter( pFormShell->CreateFocusableControlFilter(
+                std::unique_ptr< ::svx::ISdrObjectFilter > pFilter( pFormShell->CreateFocusableControlFilter(
                     *pDrawView, *pWindow ) );
                 if ( !pFilter.get() )
                     break;

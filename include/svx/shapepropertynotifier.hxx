@@ -129,7 +129,7 @@ namespace svx
         void    disposing();
 
     private:
-        ::std::auto_ptr< PropertyChangeNotifier_Data >  m_pData;
+        ::std::unique_ptr< PropertyChangeNotifier_Data >  m_pData;
     };
 
 

@@ -182,7 +182,7 @@ namespace svxform
         ::svxform::DelayedEvent     m_aActivationEvent;
         ::svxform::DelayedEvent     m_aDeactivationEvent;
 
-        ::std::auto_ptr< ColumnInfoCache >
+        ::std::unique_ptr< ColumnInfoCache >
                                     m_pColumnInfoCache;
 
         sal_Int32                   m_nCurrentFilterPosition;   // current level for filtering (or-criteria)

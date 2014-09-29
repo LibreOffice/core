@@ -1377,17 +1377,15 @@ namespace
 }
 
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr< ::svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice ) const
+::std::unique_ptr< ::svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice ) const
 {
-    ::std::auto_ptr< ::svx::ISdrObjectFilter > pFilter;
+    ::std::unique_ptr< ::svx::ISdrObjectFilter > pFilter;
 
     if ( !i_rView.IsDesignMode() )
         pFilter.reset( new FocusableControlsFilter( i_rView, i_rDevice ) );
 
     return pFilter;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxModel, const SdrView& _rView, const OutputDevice& _rDevice, Reference< XControl >& _out_rxControl ) const

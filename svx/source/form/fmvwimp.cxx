@@ -1548,9 +1548,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
 
     // the label
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< SdrUnoObj > pLabel;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< SdrUnoObj > pLabel;
     Reference< XPropertySet > xLabelModel;
     if ( bNeedLabel )
     {
@@ -1581,10 +1579,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     }
 
     // the control
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
+    ::std::unique_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
         SdrObjFactory::MakeNewObject( _nInventor, _nControlObjectID, _pControlPage, _pModel ) ) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     OSL_ENSURE( pControl.get(), "FmXFormView::createControlLabelPair: could not create the control!" );
     if ( !pControl.get() )
         return false;

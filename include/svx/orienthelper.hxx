@@ -89,7 +89,7 @@ public:
     void                EnableStackedTriState( bool bEnable = true );
 
 private:
-    std::auto_ptr< OrientationHelper_Impl > mpImpl;
+    std::unique_ptr< OrientationHelper_Impl > mpImpl;
 };
 
 

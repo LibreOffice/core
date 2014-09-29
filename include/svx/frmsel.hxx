@@ -190,7 +190,7 @@ protected:
     virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
 private:
-    std::auto_ptr< FrameSelectorImpl > mxImpl;
+    std::unique_ptr< FrameSelectorImpl > mxImpl;
 };
 
 

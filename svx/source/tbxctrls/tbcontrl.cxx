@@ -18,6 +18,8 @@
  */
 
 #include <string>
+#include <utility>
+
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
@@ -165,9 +167,7 @@ class SvxFontNameBox_Impl : public FontNameBox
     using Window::Update;
 private:
     const FontList*                pFontList;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<FontList>      m_aOwnFontList;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<FontList>    m_aOwnFontList;
     vcl::Font                      aCurFont;
     Size                           aLogicalSize;
     OUString                       aCurText;
@@ -210,9 +210,7 @@ public:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    void     SetOwnFontList(::std::auto_ptr<FontList> _aOwnFontList) { m_aOwnFontList = _aOwnFontList; }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    void     SetOwnFontList(::std::unique_ptr<FontList> && _aOwnFontList) { m_aOwnFontList = std::move(_aOwnFontList); }
 };
 
 // SelectHdl needs the Modifiers, get them in MouseButtonUp
@@ -745,11 +743,9 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
             (SvxFontListItem*)pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
     else
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<FontList> aFontList(new FontList( pBox ));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<FontList> aFontList(new FontList( pBox ));
         *ppFontList = aFontList.get();
-        pBox->SetOwnFontList(aFontList);
+        pBox->SetOwnFontList(std::move(aFontList));
         bChanged = true;
     }
 
@@ -1021,7 +1017,7 @@ void SvxFontNameBox_Impl::Select()
     FontNameBox::Select();
 
     Sequence< PropertyValue > aArgs( 1 );
-    std::auto_ptr<SvxFontItem> pFontItem;
+    std::unique_ptr<SvxFontItem> pFontItem;
     if ( pFontList )
     {
         vcl::FontInfo aInfo( pFontList->Get( GetText(),
