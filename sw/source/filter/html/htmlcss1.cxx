@@ -1684,7 +1684,7 @@ void SwHTMLParser::NewStyle()
     const HTMLOptions& rOptions2 = GetOptions();
     for (size_t i = rOptions2.size(); i; )
     {
-        const HTMLOption& rOption = rOptions2[--i];
+        const HTMLOption& rOption = *rOptions2[--i];
         if( HTML_O_TYPE == rOption.GetToken() )
             sType = rOption.GetString();
     }
@@ -1763,7 +1763,7 @@ void SwHTMLParser::InsertLink()
         const HTMLOptions& rOptions2 = GetOptions();
         for (size_t i = rOptions2.size(); i; )
         {
-            const HTMLOption& rOption = rOptions2[--i];
+            const HTMLOption& rOption = *rOptions2[--i];
             switch( rOption.GetToken() )
             {
                 case HTML_O_REL:

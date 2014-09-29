@@ -117,7 +117,7 @@ void EditHTMLParser::NextToken( int nToken )
         bool bEquiv = false;
         for ( size_t i = 0; i < nArrLen; i++ )
         {
-            const HTMLOption& aOption = aOptions[i];
+            const HTMLOption& aOption = *aOptions[i];
             switch( aOption.GetToken() )
             {
                 case HTML_O_HTTPEQUIV:
@@ -711,7 +711,7 @@ void EditHTMLParser::StartPara( bool bReal )
         SvxAdjust eAdjust = SVX_ADJUST_LEFT;
         for ( size_t i = 0, n = aOptions.size(); i < n; ++i )
         {
-            const HTMLOption& aOption = aOptions[i];
+            const HTMLOption& aOption = *aOptions[i];
             switch( aOption.GetToken() )
             {
                 case HTML_O_ALIGN:
@@ -772,7 +772,7 @@ void EditHTMLParser::AnchorStart()
 
         for ( size_t i = 0, n = aOptions.size(); i < n; ++i )
         {
-            const HTMLOption& aOption = aOptions[i];
+            const HTMLOption& aOption = *aOptions[i];
             switch( aOption.GetToken() )
             {
                 case HTML_O_HREF:

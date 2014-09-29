@@ -172,7 +172,7 @@ namespace svt
                      GetComponentInterface( bool i_bCreate ) SAL_OVERRIDE;
 
     private:
-        ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;
+        ::std::unique_ptr< ToolPanelDeck_Impl >   m_pImpl;
     };
 
 

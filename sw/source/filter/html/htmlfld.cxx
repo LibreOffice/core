@@ -219,7 +219,7 @@ void SwHTMLParser::NewField()
 
     for ( i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_TYPE:

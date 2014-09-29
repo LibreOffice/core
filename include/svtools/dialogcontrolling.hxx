@@ -90,7 +90,7 @@ namespace svt
     class SVT_DLLPUBLIC DialogController
     {
     private:
-        ::std::auto_ptr< DialogController_Data >    m_pImpl;
+        ::std::unique_ptr< DialogController_Data >    m_pImpl;
 
     public:
         DialogController( vcl::Window& _rInstigator, const PWindowEventFilter& _pEventFilter, const PWindowOperator& _pOperator );
@@ -138,7 +138,7 @@ namespace svt
     class SVT_DLLPUBLIC ControlDependencyManager
     {
     private:
-        ::std::auto_ptr< ControlDependencyManager_Data >    m_pImpl;
+        ::std::unique_ptr< ControlDependencyManager_Data >    m_pImpl;
 
     public:
         ControlDependencyManager();

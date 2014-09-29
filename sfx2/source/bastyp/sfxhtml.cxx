@@ -94,7 +94,7 @@ bool SfxHTMLParser::ParseMapOptions(
 
     for (size_t i = rOptions.size(); i; )
     {
-        const HTMLOption& aOption = rOptions[--i];
+        const HTMLOption& aOption = *rOptions[--i];
         switch( aOption.GetToken() )
         {
         case HTML_O_NAME:
@@ -126,7 +126,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
     {
         sal_uInt16 nEvent = 0;
         ScriptType eScrpType = STARBASIC;
-        const HTMLOption& rOption = rOptions[--i];
+        const HTMLOption& rOption = *rOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_NAME:

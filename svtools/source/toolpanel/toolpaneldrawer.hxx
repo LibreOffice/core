@@ -96,7 +96,7 @@ namespace svt
         using Window::Paint;
 
     private:
-        ::std::auto_ptr< VirtualDevice >    m_pPaintDevice;
+        ::std::unique_ptr< VirtualDevice >  m_pPaintDevice;
         DrawerVisualization                 m_aVisualization;
         bool                                m_bFocused;
         bool                                m_bExpanded;

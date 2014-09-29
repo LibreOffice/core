@@ -270,7 +270,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = 0, n = rHTMLOptions.size(); i < n; ++i)
     {
-        const HTMLOption& rOption = rHTMLOptions[i];
+        const HTMLOption& rOption = *rHTMLOptions[i];
         switch( rOption.GetToken() )
         {
             case HTML_O_ID:

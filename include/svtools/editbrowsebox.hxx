@@ -491,7 +491,7 @@ namespace svt
 
         sal_Int32   m_nBrowserFlags;
         ImageList   m_aStatusImages;
-        ::std::auto_ptr< EditBrowseBoxImpl> m_aImpl;
+        ::std::unique_ptr< EditBrowseBoxImpl> m_aImpl;
 
     protected:
         BrowserHeader*  pHeader;

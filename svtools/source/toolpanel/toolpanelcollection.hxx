@@ -52,7 +52,7 @@ namespace svt
         virtual void        RemoveListener( IToolPanelDeckListener& i_rListener ) SAL_OVERRIDE;
 
     private:
-        ::std::auto_ptr< ToolPanelCollection_Data > m_pData;
+        ::std::unique_ptr< ToolPanelCollection_Data > m_pData;
     };
 
 

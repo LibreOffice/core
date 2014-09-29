@@ -295,7 +295,7 @@ private:
     typedef std::stack<CursorMoveAttempt> GotoStack;
     GotoStack       m_aGotoStack;
 
-    ::std::auto_ptr< ::svt::BrowseBoxImpl >  m_pImpl;       // impl structure of the BrowseBox object
+    ::std::unique_ptr< ::svt::BrowseBoxImpl >  m_pImpl;       // impl structure of the BrowseBox object
 
     bool            m_bFocusOnlyCursor; // hide cursor if we don't have the focus
     Color           m_aCursorColor;     // special color for cursor, COL_TRANSPARENT for usual (VCL-painted) "inverted" cursor

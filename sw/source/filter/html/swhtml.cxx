@@ -1288,7 +1288,7 @@ void SwHTMLParser::NextToken( int nToken )
             const HTMLOptions& rHTMLOptions = GetOptions();
             for (size_t i = rHTMLOptions.size(); i; )
             {
-                const HTMLOption& rOption = rHTMLOptions[--i];
+                const HTMLOption& rOption = *rHTMLOptions[--i];
                 switch( rOption.GetToken() )
                 {
                 case HTML_O_HREF:
@@ -1900,7 +1900,7 @@ void SwHTMLParser::NextToken( int nToken )
             const HTMLOptions& rHTMLOptions = GetOptions();
             for (size_t i = rHTMLOptions.size(); i; )
             {
-                const HTMLOption& rOption = rHTMLOptions[--i];
+                const HTMLOption& rOption = *rHTMLOptions[--i];
                 if( HTML_O_DIR == rOption.GetToken() )
                 {
                     const OUString& rDir = rOption.GetString();
@@ -3430,7 +3430,7 @@ void SwHTMLParser::NewStdAttr( int nToken )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -3483,7 +3483,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -3563,7 +3563,7 @@ void SwHTMLParser::NewBasefontAttr()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_SIZE:
@@ -3664,7 +3664,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_SIZE:
@@ -3883,7 +3883,7 @@ void SwHTMLParser::NewPara()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
             case HTML_O_ID:
@@ -4002,7 +4002,7 @@ void SwHTMLParser::NewHeading( int nToken )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
             case HTML_O_ID:
@@ -4126,7 +4126,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
             case HTML_O_ID:
@@ -4254,7 +4254,7 @@ void SwHTMLParser::NewDefList()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
             case HTML_O_ID:
@@ -4769,7 +4769,7 @@ void SwHTMLParser::NewCharFmt( int nToken )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -4837,7 +4837,7 @@ void SwHTMLParser::InsertSpacer()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -5039,7 +5039,7 @@ void SwHTMLParser::InsertIDOption()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         if( HTML_O_ID==rOption.GetToken() )
         {
             aId = rOption.GetString();
@@ -5077,7 +5077,7 @@ void SwHTMLParser::InsertLineBreak()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
             case HTML_O_CLEAR:
@@ -5224,7 +5224,7 @@ void SwHTMLParser::InsertHorzRule()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:
@@ -5377,7 +5377,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_NAME:

@@ -84,7 +84,7 @@ namespace svt
                         GetComponentInterface( bool i_bCreate ) SAL_OVERRIDE;
 
     private:
-        ::std::auto_ptr< PanelTabBar_Impl > m_pImpl;
+        ::std::unique_ptr< PanelTabBar_Impl > m_pImpl;
     };
 
 

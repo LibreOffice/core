@@ -83,7 +83,7 @@ namespace svt
                             ) SAL_OVERRIDE;
 
     private:
-        ::std::auto_ptr< TabDeckLayouter_Data > m_pData;
+        ::std::unique_ptr< TabDeckLayouter_Data > m_pData;
     };
 
 

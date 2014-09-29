@@ -1259,7 +1259,7 @@ void SwHTMLParser::NewForm( bool bAppend )
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
         bool bSetEvent = false;
@@ -1428,7 +1428,7 @@ void SwHTMLParser::InsertInput()
     const HTMLOptions& rHTMLOptions = GetOptions( &nKeepCRLFToken );
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
         bool bSetEvent = false;
@@ -1911,7 +1911,7 @@ void SwHTMLParser::NewTextArea()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
         bool bSetEvent = false;
@@ -2193,7 +2193,7 @@ void SwHTMLParser::NewSelect()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
         bool bSetEvent = false;
@@ -2480,7 +2480,7 @@ void SwHTMLParser::InsertSelectOption()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption& rOption = rHTMLOptions[--i];
+        const HTMLOption& rOption = *rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
         case HTML_O_ID:

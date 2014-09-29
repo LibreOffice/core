@@ -37,7 +37,7 @@ typedef ::cppu::WeakImplHelper2< graphic::XGraphicObject, css::lang::XServiceInf
 class GObjectImpl : public GObjectAccess_BASE
 {
      ::osl::Mutex m_aMutex;
-     std::auto_ptr< GraphicObject > mpGObject;
+     std::unique_ptr< GraphicObject > mpGObject;
 public:
     GObjectImpl(uno::Sequence< uno::Any > const & args) throw (uno::RuntimeException);
 
