@@ -116,8 +116,8 @@ public class HsqlDatabase extends AbstractDatabase
                 createStatement.append(", ");
             }
 
-            createStatement.append("\"" + columns[i].getName());
-            createStatement.append("\" " + columns[i].getTypeName());
+            createStatement.append("\"").append(columns[i].getName());
+            createStatement.append("\" ").append(columns[i].getTypeName());
 
             if (columns[i].isRequired())
             {
@@ -150,7 +150,7 @@ public class HsqlDatabase extends AbstractDatabase
                 {
                     foreignKeyRefsForTable.append(", ");
                 }
-                foreignKeyRefsForTable.append("\"" + columns[i].getForeignColumn() + "\"");
+                foreignKeyRefsForTable.append("\"").append(columns[i].getForeignColumn()).append("\"");
                 foreignKeyRefs.put(foreignTable, foreignKeyRefsForTable.toString());
             }
         }
