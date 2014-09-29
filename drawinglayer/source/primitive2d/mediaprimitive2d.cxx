@@ -112,7 +112,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const MediaPrimitive2D& rCompare = (MediaPrimitive2D&)rPrimitive;
+                const MediaPrimitive2D& rCompare = static_cast<const MediaPrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
                     && getURL() == rCompare.getURL()

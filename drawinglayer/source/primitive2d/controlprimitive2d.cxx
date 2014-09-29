@@ -289,7 +289,7 @@ namespace drawinglayer
             // use base class compare operator
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const ControlPrimitive2D& rCompare = (ControlPrimitive2D&)rPrimitive;
+                const ControlPrimitive2D& rCompare = static_cast<const ControlPrimitive2D&>(rPrimitive);
 
                 if(getTransform() == rCompare.getTransform())
                 {
