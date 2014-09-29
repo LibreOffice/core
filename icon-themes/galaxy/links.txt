@@ -6,3 +6,13 @@ cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 cmd/lc_zoommode.png cmd/lc_zoomoptimal.png
 cmd/sc_zoommode.png cmd/sc_zoomoptimal.png
+cmd/sc_showtrackedchanges.png cmd/sc_addwatch.png
+cmd/sc_trackchanges.png cmd/sc_recsave.png
+cmd/sc_previoustrackedchange.png cmd/sc_navigateback.png
+cmd/sc_nexttrackedchange.png cmd/sc_navigateforward.png
+cmd/sc_accepttracedchange.png cmd/sc_yes.png
+cmd/sc_rejecttracedchange.png cmd/sc_no.png
+cmd/sc_protecttracechangemode.png cmd/sc_chainframes.png
+cmd/sc_commentchangetracking.png cmd/sc_editdoc.png
+cmd/sc_accepttrackedchanges.png cmd/sc_insertobjectfloatingframe.png
+cmd/sc_comparedocuments.png cmd/sc_copy.png
