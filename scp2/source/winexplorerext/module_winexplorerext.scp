@@ -36,7 +36,7 @@ Module gid_Module_Optional_Winexplorerext
     Files = (auto_winexplorerextbinarytable_ALL,
              auto_winexplorerext_ALL,
              auto_winexplorerextnt6_ALL,
-             gid_File_Tmp_Userinstall_Winexplorerext_Inf);    
+             gid_File_Tmp_Userinstall_Winexplorerext_Inf);
 End
 
 #ifdef BUILD_X64
