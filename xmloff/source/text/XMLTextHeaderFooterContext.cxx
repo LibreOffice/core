@@ -68,7 +68,9 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
             if (bLeft)
             {
                 aAny = xPropSet->getPropertyValue( sShareContent );
-                sal_Bool bShared = *(sal_Bool *)aAny.getValue();
+                bool bShared;
+                if (!(aAny >>= bShared))
+                    assert(false); // should return a value!
                 if( bShared )
                 {
                     // Don't share headers any longer
@@ -80,7 +82,9 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
             if (bFirst)
             {
                 aAny = xPropSet->getPropertyValue( sShareContentFirst );
-                sal_Bool bSharedFirst = aAny.has<sal_Bool>() && *(sal_Bool *)aAny.getValue();
+                bool bSharedFirst;
+                if (!(aAny >>= bSharedFirst))
+                    assert(false); // should return a value!
                 if( bSharedFirst )
                 {
                     // Don't share first/right headers any longer
