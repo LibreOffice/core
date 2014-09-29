@@ -327,7 +327,7 @@ namespace accessibility
 
     Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) const
     {
-        Reference< XAccessible > xParent = (Reference< XAccessible >)m_aParent;
+        Reference< XAccessible > xParent(m_aParent);
         if ( !xParent.is() )
         {
             OSL_ENSURE( m_aEntryPath.size(), "AccessibleListBoxEntry::getAccessibleParent: invalid path!" );

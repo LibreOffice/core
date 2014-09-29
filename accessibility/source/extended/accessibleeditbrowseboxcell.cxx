@@ -198,7 +198,7 @@ namespace accessibility
     void SAL_CALL EditBrowseBoxTableCellAccess::disposing()
     {
         // dispose our context, if it still alive
-        Reference< XComponent > xMyContext( (Reference< XAccessibleContext >)m_aContext, UNO_QUERY );
+        Reference< XComponent > xMyContext( m_aContext.get(), UNO_QUERY );
         if ( xMyContext.is() )
         {
             try
