@@ -425,6 +425,23 @@ SwXStyleFamily::~SwXStyleFamily()
 
 }
 
+static bool lcl_GetHeaderFooterItem(
+        SfxItemSet const& rSet, OUString const& rPropName, bool const bFooter,
+        SvxSetItem const*& o_rpItem)
+{
+    SfxItemState eState = rSet.GetItemState(
+        (bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+        false, reinterpret_cast<const SfxPoolItem**>(&o_rpItem));
+    if (SfxItemState::SET != eState &&
+        rPropName == UNO_NAME_FIRST_IS_SHARED)
+    {   // fdo#79269 header may not exist, check footer then
+        eState = rSet.GetItemState(
+            (!bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+            false, reinterpret_cast<const SfxPoolItem**>(&o_rpItem));
+    }
+    return SfxItemState::SET == eState;
+}
+
 static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
     SfxStyleFamily eFamily, OUString *pString, sal_uInt16 nIndex = USHRT_MAX)
 {
@@ -2867,10 +2884,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                     {
                         const SvxSetItem* pSetItem;
 
-                        if(SfxItemState::SET == rSet.GetItemState(
-                            bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                            false,
-                            (const SfxPoolItem**)&pSetItem))
+                        if (lcl_GetHeaderFooterItem(rSet, sPropName, bFooter, pSetItem))
                         {
                             // retarget the SfxItemSet to the HeaderFooter SfxSetItem's SfxItenSet
                             pSourceSet = &pSetItem->GetItemSet();
@@ -3420,18 +3434,8 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     {
                         // it is a Header/Footer entry, access the SvxSetItem containing it's information
                         const SvxSetItem* pSetItem = 0;
-
-                        SfxItemState eState = aBaseImpl.GetItemSet().GetItemState(
-                            (bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                            false, reinterpret_cast<const SfxPoolItem**>(&pSetItem));
-                        if (SfxItemState::SET != eState &&
-                            rPropName == UNO_NAME_FIRST_IS_SHARED)
-                        {   // fdo#79269 header may not exist, check footer then
-                            eState = aBaseImpl.GetItemSet().GetItemState(
-                                (!bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                                false, reinterpret_cast<const SfxPoolItem**>(&pSetItem));
-                        }
-                        if (SfxItemState::SET == eState)
+                        if (lcl_GetHeaderFooterItem(aBaseImpl.GetItemSet(),
+                                    rPropName, bFooter, pSetItem))
                         {
                             lcl_putItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
 
@@ -3532,7 +3536,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     const bool bHeader(rPropName.startsWith("Header"));
                     const bool bFooter(rPropName.startsWith("Footer"));
 
-                    if(bHeader || bFooter || rPropName == UNO_NAME_FIRST_IS_SHARED)
+                    if (bHeader || bFooter)
                     {
                         const SvxSetItem* pSetItem = 0;
 
@@ -3736,17 +3740,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         const SfxItemSet& rSet = xStyle->GetItemSet();
                         const SvxSetItem* pSetItem;
 
-                        SfxItemState eState = rSet.GetItemState(
-                            (bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                            false, reinterpret_cast<const SfxPoolItem**>(&pSetItem));
-                        if (SfxItemState::SET != eState &&
-                            rPropName == UNO_NAME_FIRST_IS_SHARED)
-                        {   // fdo#79269 header may not exist, check footer then
-                            eState = rSet.GetItemState(
-                                (!bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                                false, reinterpret_cast<const SfxPoolItem**>(&pSetItem));
-                        }
-                        if (SfxItemState::SET == eState)
+                        if (lcl_GetHeaderFooterItem(rSet, rPropName, bFooter, pSetItem))
                         {
                             // get from SfxItemSet of the corresponding SfxSetItem
                             const SfxItemSet& rSetSet = pSetItem->GetItemSet();
@@ -3813,7 +3807,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                     const bool bHeader(rPropName.startsWith("Header"));
                     const bool bFooter(rPropName.startsWith("Footer"));
 
-                    if(bHeader || bFooter || rPropName == UNO_NAME_FIRST_IS_SHARED)
+                    if (bHeader || bFooter)
                     {
                         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
                         const SfxItemSet& rSet = xStyle->GetItemSet();
