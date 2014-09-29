@@ -6712,6 +6712,9 @@ you must use the "--with-jdk-home" configure option explicitly])
             if test "$_os" = "WINNT"; then
                 JAVA_HOME=`echo $JAVA_HOME | $SED "s,\.[[eE]][[xX]][[eE]]$,,"`
             fi
+
+            # set to limit VM usage for JunitTests
+            JAVAIFLAGS=-Xmx64M
         fi
     else
         AC_MSG_ERROR([Java not found. You need at least jdk-1.5, or gcj-4])
