@@ -229,7 +229,9 @@ public class ListBox extends TestCase
             }
 
             // create the table taking all those foreign keys
-            m_database.createTable( new HsqlTableDescriptor( m_foreignKeyTableName, foreignKeyColumns.toArray( new HsqlColumnDescriptor[0] ) ) );
+            m_database.createTable( new HsqlTableDescriptor(
+                    m_foreignKeyTableName,
+                    foreignKeyColumns.toArray( new HsqlColumnDescriptor[foreignKeyColumns.size()] ) ) );
             // fill in some data
             foreignKeyInsertSQL.append( ")" );
             XPreparedStatement statement = connection.prepareStatement( foreignKeyInsertSQL.toString() );
