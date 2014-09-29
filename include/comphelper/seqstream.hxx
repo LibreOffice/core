@@ -74,21 +74,26 @@ public:
 private:
     inline sal_Int32 avail();
 };
+typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XOutputStream > OSequenceOutputStream_Base;
 
-class COMPHELPER_DLLPUBLIC OSequenceOutputStream :
-    public ::cppu::WeakImplHelper1< ::com::sun::star::io::XOutputStream >
+class OSequenceOutputStream : public OSequenceOutputStream_Base
 {
 protected:
     ::com::sun::star::uno::Sequence< sal_Int8 >&    m_rSequence;
     double                                          m_nResizeFactor;
     sal_Int32                                       m_nMinimumResize;
     sal_Int32                                       m_nMaximumResize;
-    /** the size of the virtual stream. This is not the size of the sequence,
-        but the number of bytes written into the stream at a given moment.
-     */
     sal_Int32                                       m_nSize;
+        // the size of the virtual stream. This is not the size of the sequence, but the number of bytes written
+        // into the stream at a given moment.
 
-    bool                                            m_bConnected; ///< closeOutput has been called ?
+    bool                                        m_bConnected;
+        // closeOutput has been called ?
+
+    ::osl::Mutex                                    m_aMutex;
+
+protected:
+    virtual ~OSequenceOutputStream() { if (m_bConnected) closeOutput(); }
 
 public:
     /** constructs the object. Everything written into the stream through the XOutputStream methods will be forwarded
@@ -113,20 +118,13 @@ public:
         sal_Int32 _nMaximumResize = -1
         );
 
-    virtual ~OSequenceOutputStream() { if (m_bConnected) closeOutput(); }
-
-    sal_Int32 getSize() const { return m_nSize; }
-
     /// same as XOutputStream::writeBytes (as expected :)
     virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL writeBytes( const sal_Int8* pStr, sal_Int32 nLen )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
-    /** Resizes the sequence used for writing to the really used size.
-     *  Next time, writeBytes will write to the beginning of the sequence.
-    */
+    /// this is a dummy in this implementation, no buffering is used
     virtual void SAL_CALL flush(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    /** Calls flush() and closes the output stream to prevent further manipulation with the sequence.
-        Every subsequent call to one of the XOutputStream methods will throw a <code>NotConnectedException</code>.
+    /** closes the output stream. In the case of this class, this means that the sequence used for writing is
+        resized to the really used size and not used any further, every subsequent call to one of the XOutputStream
+        methods will throw a <code>NotConnectedException</code>.
     */
     virtual void SAL_CALL closeOutput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };

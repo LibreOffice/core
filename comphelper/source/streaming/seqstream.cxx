@@ -156,19 +156,15 @@ OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double
         // this heuristic is as good as any other ... supply better parameters if you don't like it :)
 }
 
+
 void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rData ) throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
-    writeBytes(_rData.getConstArray(), _rData.getLength());
-}
-
-void SAL_CALL OSequenceOutputStream::writeBytes( const sal_Int8* pStr, sal_Int32 nLen )
-    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
-{
+    MutexGuard aGuard(m_aMutex);
     if (!m_bConnected)
         throw NotConnectedException();
 
     // ensure the sequence has enough space left
-    if (m_nSize + nLen > m_rSequence.getLength())
+    if (m_nSize + _rData.getLength() > m_rSequence.getLength())
     {
         sal_Int32 nCurrentLength = m_rSequence.getLength();
         sal_Int32 nNewLength = static_cast< sal_Int32 >(
@@ -182,18 +178,18 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const sal_Int8* pStr, sal_Int32
             // such a large step is not allowed
             nNewLength = nCurrentLength + m_nMaximumResize;
 
-        if (nNewLength < m_nSize + nLen)
+        if (nNewLength < m_nSize + _rData.getLength())
         {   // it's not enough .... the data would not fit
 
             // let's take the double amount of the length of the data to be written, as the next write
             // request could be as large as this one
-            sal_Int32 nNewGrowth = nLen * 2;
+            sal_Int32 nNewGrowth = _rData.getLength() * 2;
             if ((m_nMaximumResize > 0) && (nNewGrowth > m_nMaximumResize))
             {   // we came to the limit, again ...
                 nNewGrowth = m_nMaximumResize;
-                if (nNewGrowth + nCurrentLength < m_nSize + nLen)
+                if (nNewGrowth + nCurrentLength < m_nSize + _rData.getLength())
                     // but it would not fit if we respect the limit
-                    nNewGrowth = m_nSize + nLen - nCurrentLength;
+                    nNewGrowth = m_nSize + _rData.getLength() - nCurrentLength;
             }
             nNewLength = nCurrentLength + nNewGrowth;
         }
@@ -204,29 +200,33 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const sal_Int8* pStr, sal_Int32
         m_rSequence.realloc(nNewLength);
     }
 
-    OSL_ENSURE(m_rSequence.getLength() >= m_nSize + nLen,
+    OSL_ENSURE(m_rSequence.getLength() >= m_nSize + _rData.getLength(),
         "ooops ... the realloc algorithm seems to be wrong :( !");
 
-    memcpy(m_rSequence.getArray() + m_nSize, pStr, nLen);
-    m_nSize += nLen;
+    memcpy(m_rSequence.getArray() + m_nSize, _rData.getConstArray(), _rData.getLength());
+    m_nSize += _rData.getLength();
 }
 
 
 void SAL_CALL OSequenceOutputStream::flush(  ) throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
+    MutexGuard aGuard(m_aMutex);
     if (!m_bConnected)
         throw NotConnectedException();
 
     // cut the sequence to the real size
     m_rSequence.realloc(m_nSize);
-    // and next time write to the beginning
-    m_nSize = 0;
 }
 
 
 void SAL_CALL OSequenceOutputStream::closeOutput(  ) throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
-    flush();
+    MutexGuard aGuard(m_aMutex);
+    if (!m_bConnected)
+        throw NotConnectedException();
+
+    // cut the sequence to the real size
+    m_rSequence.realloc(m_nSize);
     // and don't allow any further accesses
     m_bConnected = false;
 }
