@@ -75,7 +75,7 @@ public class DateValidator extends integration.forms.ControlValidator
         java.util.Calendar today = java.util.Calendar.getInstance();
         java.util.Calendar date = (java.util.Calendar) today.clone();
         today.set(java.util.Calendar.DATE, 1);
-        date.set(dateValue.Year, dateValue.Month, 1);
+        date.set(dateValue.Year, dateValue.Month -1, 1); // Month value is 0-based. e.g., 0 for January.
         date.add(java.util.Calendar.MONTH, -1);
         return date.compareTo(today) == 0;
     }
