@@ -384,6 +384,22 @@
 		BE55B14F18DB6DE700950228 /* EnhancedCustomShapeHandle.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShapeHandle.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShapeHandle.cxx; sourceTree = "<group>"; };
 		BE55B15018DB6DE700950228 /* EnhancedCustomShapeTypeNames.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShapeTypeNames.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx; sourceTree = "<group>"; };
 		BE55B15118DB6DE700950228 /* tbxcustomshapes.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbxcustomshapes.cxx; path = ../../../svx/source/customshapes/tbxcustomshapes.cxx; sourceTree = "<group>"; };
+		BE6DC8ED19D9A6E500AFB393 /* app.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = app.cxx; path = ../../../desktop/source/app/app.cxx; sourceTree = "<group>"; };
+		BE6DC8EE19D9A6E500AFB393 /* appinit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appinit.cxx; path = ../../../desktop/source/app/appinit.cxx; sourceTree = "<group>"; };
+		BE6DC8EF19D9A6E500AFB393 /* check_ext_deps.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = check_ext_deps.cxx; path = ../../../desktop/source/app/check_ext_deps.cxx; sourceTree = "<group>"; };
+		BE6DC8F019D9A6E500AFB393 /* cmdlineargs.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cmdlineargs.cxx; path = ../../../desktop/source/app/cmdlineargs.cxx; sourceTree = "<group>"; };
+		BE6DC8F119D9A6E500AFB393 /* cmdlinehelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cmdlinehelp.cxx; path = ../../../desktop/source/app/cmdlinehelp.cxx; sourceTree = "<group>"; };
+		BE6DC8F219D9A6E500AFB393 /* configinit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = configinit.cxx; path = ../../../desktop/source/app/configinit.cxx; sourceTree = "<group>"; };
+		BE6DC8F319D9A6E500AFB393 /* desktopcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = desktopcontext.cxx; path = ../../../desktop/source/app/desktopcontext.cxx; sourceTree = "<group>"; };
+		BE6DC8F419D9A6E500AFB393 /* desktopcontext.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = desktopcontext.hxx; path = ../../../desktop/source/app/desktopcontext.hxx; sourceTree = "<group>"; };
+		BE6DC8F519D9A6E500AFB393 /* desktopresid.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = desktopresid.cxx; path = ../../../desktop/source/app/desktopresid.cxx; sourceTree = "<group>"; };
+		BE6DC8F619D9A6E500AFB393 /* dispatchwatcher.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dispatchwatcher.cxx; path = ../../../desktop/source/app/dispatchwatcher.cxx; sourceTree = "<group>"; };
+		BE6DC8F719D9A6E500AFB393 /* langselect.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = langselect.cxx; path = ../../../desktop/source/app/langselect.cxx; sourceTree = "<group>"; };
+		BE6DC8F819D9A6E500AFB393 /* lockfile2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lockfile2.cxx; path = ../../../desktop/source/app/lockfile2.cxx; sourceTree = "<group>"; };
+		BE6DC8F919D9A6E500AFB393 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../../../desktop/source/app/main.c; sourceTree = "<group>"; };
+		BE6DC8FA19D9A6E500AFB393 /* officeipcthread.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = officeipcthread.cxx; path = ../../../desktop/source/app/officeipcthread.cxx; sourceTree = "<group>"; };
+		BE6DC8FB19D9A6E500AFB393 /* sofficemain.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sofficemain.cxx; path = ../../../desktop/source/app/sofficemain.cxx; sourceTree = "<group>"; };
+		BE6DC8FC19D9A6E500AFB393 /* userinstall.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = userinstall.cxx; path = ../../../desktop/source/app/userinstall.cxx; sourceTree = "<group>"; };
 		BE6F3D67192E286B00D6FCC0 /* bitmap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmap.cxx; path = ../../../vcl/source/outdev/bitmap.cxx; sourceTree = "<group>"; };
 		BE6F3D68192E286B00D6FCC0 /* clipping.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clipping.cxx; path = ../../../vcl/source/outdev/clipping.cxx; sourceTree = "<group>"; };
 		BE6F3D69192E286B00D6FCC0 /* curvedshapes.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = curvedshapes.cxx; path = ../../../vcl/source/outdev/curvedshapes.cxx; sourceTree = "<group>"; };
@@ -913,6 +929,7 @@
 				BE35B58A188FFA43001B7439 /* cppuhelper */,
 				BED531661937389B00830918 /* cppcanvas */,
 				BE82C47118CA18D70050EB79 /* drawinglayer */,
+				BE6DC8EB19D9A66B00AFB393 /* desktop */,
 				BECA60D9191026BA00B24A7E /* framework */,
 				BE03BF9418FC199B00620DC7 /* i18npool */,
 				BE55B10818DB673300950228 /* oox */,
@@ -1390,6 +1407,37 @@
 				BE55B15118DB6DE700950228 /* tbxcustomshapes.cxx */,
 			);
 			name = customshapes;
+			sourceTree = "<group>";
+		};
+		BE6DC8EB19D9A66B00AFB393 /* desktop */ = {
+			isa = PBXGroup;
+			children = (
+				BE6DC8EC19D9A6AD00AFB393 /* app */,
+			);
+			name = desktop;
+			sourceTree = "<group>";
+		};
+		BE6DC8EC19D9A6AD00AFB393 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				BE6DC8ED19D9A6E500AFB393 /* app.cxx */,
+				BE6DC8EE19D9A6E500AFB393 /* appinit.cxx */,
+				BE6DC8EF19D9A6E500AFB393 /* check_ext_deps.cxx */,
+				BE6DC8F019D9A6E500AFB393 /* cmdlineargs.cxx */,
+				BE6DC8F119D9A6E500AFB393 /* cmdlinehelp.cxx */,
+				BE6DC8F219D9A6E500AFB393 /* configinit.cxx */,
+				BE6DC8F319D9A6E500AFB393 /* desktopcontext.cxx */,
+				BE6DC8F419D9A6E500AFB393 /* desktopcontext.hxx */,
+				BE6DC8F519D9A6E500AFB393 /* desktopresid.cxx */,
+				BE6DC8F619D9A6E500AFB393 /* dispatchwatcher.cxx */,
+				BE6DC8F719D9A6E500AFB393 /* langselect.cxx */,
+				BE6DC8F819D9A6E500AFB393 /* lockfile2.cxx */,
+				BE6DC8F919D9A6E500AFB393 /* main.c */,
+				BE6DC8FA19D9A6E500AFB393 /* officeipcthread.cxx */,
+				BE6DC8FB19D9A6E500AFB393 /* sofficemain.cxx */,
+				BE6DC8FC19D9A6E500AFB393 /* userinstall.cxx */,
+			);
+			name = app;
 			sourceTree = "<group>";
 		};
 		BE6F3D66192E283300D6FCC0 /* outdev */ = {
