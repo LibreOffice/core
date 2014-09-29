@@ -6715,6 +6715,8 @@ you must use the "--with-jdk-home" configure option explicitly])
 
             # set to limit VM usage for JunitTests
             JAVAIFLAGS=-Xmx64M
+            # set to limit VM usage for javac
+            JAVAFLAGS=-J-Xmx128M
         fi
     else
         AC_MSG_ERROR([Java not found. You need at least jdk-1.5, or gcj-4])
@@ -7033,6 +7035,7 @@ AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVADOC)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVAIFLAGS)
+AC_SUBST(JAVAFLAGS)
 AC_SUBST(JAVA_CLASSPATH_NOT_SET)
 AC_SUBST(JAVA_HOME)
 AC_SUBST(JAVA_SOURCE_VER)
