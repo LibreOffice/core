@@ -295,6 +295,14 @@ protected:
         return true;
     }
 
+    /**
+     * Override this function if validation is wanted
+     */
+    virtual bool mustValidate(const char* /*filename*/) const
+    {
+        return false;
+    }
+
 private:
     void dumpLayout()
     {
@@ -574,15 +582,18 @@ protected:
         xComponent->dispose();
         mbExported = true;
         mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
-        if(aFilterName == "Office Open XML Text")
+        if (mustValidate(filename))
         {
-            // too many validation errors right now
-            // validate(maTempFile.GetFileName(), test::OOXML);
-        }
-        else if(aFilterName == "writer8")
-        {
-            // still a few validation errors
-            // validate(maTempFile.GetFileName(), test::ODF);
+            if(aFilterName == "Office Open XML Text")
+            {
+                // too many validation errors right now
+                validate(maTempFile.GetFileName(), test::OOXML);
+            }
+            else if(aFilterName == "writer8")
+            {
+                // still a few validation errors
+                validate(maTempFile.GetFileName(), test::ODF);
+            }
         }
 
         if (mpXmlBuffer)

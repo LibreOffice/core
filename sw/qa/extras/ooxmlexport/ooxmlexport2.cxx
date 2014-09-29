@@ -74,6 +74,19 @@ protected:
         // If the testcase is stored in some other format, it's pointless to test.
         return (OString(filename).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
+
+    /**
+     * Validation handling
+     */
+    bool mustValidate(const char* filename) const SAL_OVERRIDE
+    {
+        const char* aWhitelist[] = {
+            "zoom.docx"
+        };
+        std::vector<const char*> vWhitelist(aWhitelist, aWhitelist + SAL_N_ELEMENTS(aWhitelist));
+
+        return std::find(vWhitelist.begin(), vWhitelist.end(), filename) != vWhitelist.end();
+    }
 };
 
 #if !defined(WNT)
