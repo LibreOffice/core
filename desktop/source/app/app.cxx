@@ -161,6 +161,8 @@ static oslSignalHandler pSignalHandler = 0;
 
 namespace {
 
+#if HAVE_FEATURE_EXTENSIONS
+
 void removeTree(OUString const & url) {
     osl::Directory dir(url);
     osl::FileBase::RC rc = dir.open();
@@ -319,6 +321,8 @@ bool cleanExtensionCache() {
         "cannot close " << fw.getURL() << " after writing: " << +rc);
     return true;
 }
+
+#endif
 
 bool shouldLaunchQuickstart()
 {
@@ -587,7 +591,9 @@ void Desktop::Init()
     SAL_INFO( "desktop.app",  "desktop (cd100003) ::Desktop::Init" );
     SetBootstrapStatus(BS_OK);
 
+#if HAVE_FEATURE_EXTENSIONS
     m_bCleanedExtensionCache = cleanExtensionCache();
+#endif
 
     // We need to have service factory before going further, but see fdo#37195.
     // Doing this will mmap common.rdb, making it not overwritable on windows,
