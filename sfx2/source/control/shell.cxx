@@ -44,19 +44,11 @@
 #include <sfx2/msgpool.hxx>
 #include <sidebar/ContextChangeBroadcaster.hxx>
 
-#include <map>
+#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 // Maps the Which() field to a pointer to a SfxPoolItem
-class SfxItemPtrMap : public std::map<sal_uInt16, SfxPoolItem*>
-{
-public:
-    ~SfxItemPtrMap()
-    {
-        for(iterator it = begin(); it != end(); ++it)
-            delete it->second;
-    }
-};
+typedef boost::ptr_map<sal_uInt16, SfxPoolItem> SfxItemPtrMap;
 
 TYPEINIT0(SfxShell);
 
@@ -164,7 +156,7 @@ const SfxPoolItem* SfxShell::GetItem
     sal_uInt16  nSlotId         // Slot-Id of the querying <SfxPoolItem>s
 )   const
 {
-    SfxItemPtrMap::iterator it = pImp->aItems.find( nSlotId );
+    SfxItemPtrMap::const_iterator it = pImp->aItems.find( nSlotId );
     if( it != pImp->aItems.end() )
         return it->second;
     return 0;
@@ -183,15 +175,14 @@ void SfxShell::PutItem
     // MSC made a mess here of WNT/W95, beware of changes
     SfxPoolItem *pItem = rItem.Clone();
     SfxPoolItemHint aItemHint( pItem );
-    const sal_uInt16 nWhich = rItem.Which();
+    sal_uInt16 nWhich = rItem.Which();
 
     SfxItemPtrMap::iterator it = pImp->aItems.find( nWhich );
     if( it != pImp->aItems.end() )
     {
-        SfxPoolItem *pLoopItem = it->second;
         // Replace Item
-        delete pLoopItem;
-        it->second = pItem;
+        pImp->aItems.erase( it );
+        pImp->aItems.insert( nWhich, pItem );
 
         // if active, notify Bindings
         SfxDispatcher *pDispat = GetDispatcher();
@@ -212,7 +203,7 @@ void SfxShell::PutItem
     else
     {
         Broadcast( aItemHint );
-        pImp->aItems[ pItem->Which() ] = pItem;
+        pImp->aItems.insert( nWhich, pItem );
     }
 }
 
