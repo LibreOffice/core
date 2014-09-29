@@ -18,19 +18,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:ShowTrackedChanges" toolbar:style="image text" toolbar:helpid="10624"/>
- <toolbar:toolbaritem xlink:href=".uno:TrackChanges" toolbar:style="image text" toolbar:helpid="10725"/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowTrackedChanges" toolbar:text="Show" toolbar:helpid="10624"/>
+ <toolbar:toolbaritem xlink:href=".uno:TrackChanges" toolbar:text="Record" toolbar:helpid="10725"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:PreviousTrackedChange" toolbar:text="Previous" toolbar:style="image text" />
- <toolbar:toolbaritem xlink:href=".uno:NextTrackedChange" toolbar:text="Next" toolbar:style="image text" />
- <toolbar:toolbaritem xlink:href=".uno:AcceptTracedChange" toolbar:text="Accept" toolbar:style="image text" toolbar:helpid="10625"/>
- <toolbar:toolbaritem xlink:href=".uno:RejectTracedChange" toolbar:text="Reject" toolbar:style="image text" toolbar:helpid="10626"/>
- <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChanges" toolbar:text="More" toolbar:style="image text" toolbar:helpid="10622"/>
+ <toolbar:toolbaritem xlink:href=".uno:PreviousTrackedChange" toolbar:text="Previous"/>
+ <toolbar:toolbaritem xlink:href=".uno:NextTrackedChange" toolbar:text="Next"/>
+ <toolbar:toolbaritem xlink:href=".uno:AcceptTracedChange" toolbar:text="Accept" toolbar:helpid="10625"/>
+ <toolbar:toolbaritem xlink:href=".uno:RejectTracedChange" toolbar:text="Reject" toolbar:helpid="10626"/>
+ <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChanges" toolbar:text="List" toolbar:helpid="10622"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:CommentChangeTracking" toolbar:style="image text" toolbar:helpid="10625"/>
- <toolbar:toolbaritem xlink:href=".uno:ProtectTraceChangeMode" toolbar:text="Protect" toolbar:style="image text" toolbar:helpid="10625"/>
+ <toolbar:toolbaritem xlink:href=".uno:CommentChangeTracking" toolbar:text="Comment" toolbar:helpid="10625"/>
+ <toolbar:toolbaritem xlink:href=".uno:ProtectTraceChangeMode" toolbar:text="Protect" toolbar:helpid="10625"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:CompareDocuments" toolbar:text="Compare" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CompareDocuments" toolbar:text="Compare"/>
  <toolbar:toolbaritem xlink:href=".uno:MergeDocuments" toolbar:text="Merge" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:visible="false" toolbar:helpid="10625"/>
 </toolbar:toolbar>
