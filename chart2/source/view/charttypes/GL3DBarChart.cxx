@@ -128,6 +128,8 @@ void RenderThread::renderFrame()
 
     mpChart->mpWindow->getContext().makeCurrent();
     mpChart->renderFrame();
+    // FIXME: SwapBuffers can take a considerable time, it'd be
+    // nice if we didn't hold the chart mutex while doing that.
     mpChart->mpWindow->getContext().swapBuffers();
     mpChart->mpWindow->getContext().resetCurrent();
 }
@@ -1176,6 +1178,7 @@ int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
 void GL3DBarChart::updateScreenText()
 {
     SharedResourceAccess(maCond1, maCond2);
+    osl::MutexGuard aGuard(maMutex);
     maScreenTextShapes.clear();
     mpRenderer->ReleaseScreenTextShapes();
     updateRenderFPS();
