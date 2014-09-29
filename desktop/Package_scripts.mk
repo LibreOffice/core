@@ -23,7 +23,7 @@ endif
 
 ifneq ($(OS),WNT)
 
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/unoinfo,unoinfo.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/unoinfo,$(if $(filter MACOSX,$(OS)),unoinfo-mac.sh,unoinfo.sh)))
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/unopkg,unopkg.sh))
 
 endif
