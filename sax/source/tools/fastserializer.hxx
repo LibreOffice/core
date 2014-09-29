@@ -23,9 +23,9 @@
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
-#include <comphelper/seqstream.hxx>
 #include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
+#include <CachedOutputStream.hxx>
 
 #include <stack>
 #include <map>
@@ -43,7 +43,7 @@ public:
     FastSaxSerializer();
     ~FastSaxSerializer();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream() {return mxOutputStream;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream();
 
     /** called by the parser when parsing of an XML stream is started.
      */
@@ -140,12 +140,8 @@ public:
     void mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND );
 
 private:
-    /// Buffer written to mxOutputStream at the end, called from FSHelper destructor.
-    css::uno::Sequence< sal_Int8 > maOutputData;
-    /// Helper class to dynamically allocate memory when needed for maOutputData.
-    comphelper::OSequenceOutputStream maOutputStream;
-    /// Output stream, usually writing data into files.
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > mxOutputStream;
+    /// Helper class to cache data and write in chunks to XOutputStream
+    CachedOutputStream maCachedOutputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxFastTokenHandler;
 
     class ForMerge
@@ -207,7 +203,6 @@ private:
 #endif
 
     void writeFastAttributeList( FastAttributeList* pAttrList );
-    /// Write to maOutputData and if it's big enough flush that to mxOutputStream
     void writeOutput( const sal_Int8* pStr, size_t nLen );
     void writeOutput( const css::uno::Sequence< ::sal_Int8 >& aData );
 
