@@ -151,14 +151,17 @@ public abstract class TileLayer extends Layer {
         // XXX TexSubImage2D is too broken to rely on on Adreno, and very slow
         //     on other chipsets, so we always upload the entire buffer.
         IntSize bufferSize = mImage.getSize();
+
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, glInfo.internalFormat, mSize.width,
                             mSize.height, 0, glInfo.format, glInfo.type, imageBuffer);
+
     }
 
     private void bindAndSetGLParameters() {
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureIDs[0]);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
-                               GLES20.GL_NEAREST);
+                               GLES20.GL_LINEAR);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
                                GLES20.GL_LINEAR);
 
