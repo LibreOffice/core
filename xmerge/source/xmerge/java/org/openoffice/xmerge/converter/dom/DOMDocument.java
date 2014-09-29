@@ -298,7 +298,9 @@ public class DOMDocument
         catch (Exception e) {
             // We may get some other errors, but the bottom line is that
             // the steps being executed no longer work
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
 
         byte bytes[] = baos.toByteArray();

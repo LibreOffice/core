@@ -813,14 +813,18 @@ public abstract class OfficeDocument
                     return writer.toString().getBytes();
                 } catch (Exception e) {
                     // We don't have another parser
-                    throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl, e);
+                    IOException newEx = new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
+                    newEx.initCause(e);
+                    throw newEx;
                 }
             }
         }
         catch (Exception e) {
             // We may get some other errors, but the bottom line is that
             // the steps being executed no longer work
-            throw new IOException(e);
+            IOException newEx = new IOException(e.getMessage());
+            newEx.initCause(e);
+            throw newEx;
         }
 
         byte bytes[] = baos.toByteArray();
