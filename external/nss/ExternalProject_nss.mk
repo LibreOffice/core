@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 
 $(call gb_ExternalProject_get_state_target,nss,configure):
 	$(call gb_ExternalProject_run,configure,\
-		$(if $(filter MSC,$(COM)),LIB="$(ILIB)") \
+		$(if $(filter MSC,$(COM)),INCLUDE="$(COMPATH)/include" LIB="$(ILIB)") \
 		$(if $(CROSS_COMPILING),\
 			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 		nspr/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
