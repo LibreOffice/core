@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae2911b_8c396744",
+        "filename": "odk/examples/DevelopersGuide/Database/DriverSkeleton/SPreparedStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-29T07:54:54Z",
+      "side": 1,
+      "message": "that\u0027s presumably about css::util::Time (corresponding to an offapi UNOIDL struct), not tools::Time that\u0027s not part of the URE interface and not accessible from external code",
+      "revId": "7dce777caac83af30b987089339c13767521e925",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
