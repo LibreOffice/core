@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae2911b_ecbb4b74",
+        "filename": "accessibility/source/extended/AccessibleBrowseBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-29T13:35:45Z",
+      "side": 1,
+      "message": "if you don\u0027t want to harden via an intermediate Reference\u003cXAccessible\u003e var, probably better to drop the intermediate WeakReference\u003cXAccessible\u003e var (and also probably better to not use NULL in new C++11 code),\n\n  OSL_ENSURE(m_pImpl-\u003em_aCreator.get() \u003d\u003d nullptr, \"...\");",
+      "revId": "0df728a5330f1a292e8f237bed6841f736f58e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae2911b_ccc08fe3",
+        "filename": "accessibility/source/extended/AccessibleBrowseBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-29T13:35:45Z",
+      "side": 1,
+      "message": "no, this introduces a TOCTOU race",
+      "revId": "0df728a5330f1a292e8f237bed6841f736f58e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae2911b_8cba876d",
+        "filename": "accessibility/source/extended/AccessibleGridControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-29T13:35:45Z",
+      "side": 1,
+      "message": "no, this introduces a TOCTOU race",
+      "revId": "0df728a5330f1a292e8f237bed6841f736f58e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae2911b_2c9393fc",
+        "filename": "accessibility/source/extended/AccessibleToolPanelDeckTabBar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-29T13:35:45Z",
+      "side": 1,
+      "message": "...or drop the \"NULL\" completely,\n\n  Reference\u003cXAccessible\u003e()",
+      "revId": "0df728a5330f1a292e8f237bed6841f736f58e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
