@@ -52,7 +52,7 @@ public:
   virtual com::sun::star::uno::Any getOOoData() = 0;
 };
 
-typedef std::auto_ptr<DataProvider> DataProviderPtr_t;
+typedef std::unique_ptr<DataProvider> DataProviderPtr_t;
 
 class DataFlavorMapper
 {
