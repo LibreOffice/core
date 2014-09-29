@@ -452,7 +452,7 @@ public:
     virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
 
 private:
-    std::auto_ptr< MultiControlWrapperHelper_Impl > mxImpl;
+    std::unique_ptr< MultiControlWrapperHelper_Impl > mxImpl;
 };
 
 

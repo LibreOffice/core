@@ -290,7 +290,6 @@ SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 ,   m_bGotFrameOwnership(false)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pController(0)
-,   m_pAccExec(0)
 {}
 
 SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))

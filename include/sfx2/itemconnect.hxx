@@ -243,8 +243,8 @@ public:
     typedef typename ControlWrpT::ControlType               ControlType;
     typedef typename ControlWrpT::ControlValueType          ControlValueType;
 
-    typedef std::auto_ptr< ItemWrpT >                       ItemWrapperRef;
-    typedef std::auto_ptr< ControlWrpT >                    ControlWrapperRef;
+    typedef std::unique_ptr< ItemWrpT >                     ItemWrapperRef;
+    typedef std::unique_ptr< ControlWrpT >                  ControlWrapperRef;
 
     /** Receives pointer to a newly created control wrapper.
         @descr  Takes ownership of the control wrapper. */
@@ -454,7 +454,7 @@ protected:
     virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) SAL_OVERRIDE;
 
 private:
-    std::auto_ptr< ItemConnectionArrayImpl > mxImpl;
+    std::unique_ptr< ItemConnectionArrayImpl > mxImpl;
 };
 
 

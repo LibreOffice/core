@@ -251,7 +251,7 @@ private:
         const OUString & i_rIdref) const SAL_OVERRIDE;
 
     struct XmlIdRegistry_Impl;
-    ::std::auto_ptr<XmlIdRegistry_Impl> m_pImpl;
+    ::std::unique_ptr<XmlIdRegistry_Impl> m_pImpl;
 };
 
 // MetadatableUndo ---------------------------------------------------
@@ -343,7 +343,7 @@ private:
         const bool i_isInContent);
 
     struct XmlIdRegistry_Impl;
-    ::std::auto_ptr<XmlIdRegistry_Impl> m_pImpl;
+    ::std::unique_ptr<XmlIdRegistry_Impl> m_pImpl;
 };
 
 

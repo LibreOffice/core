@@ -30,7 +30,7 @@ struct SfxSecurityPage_Impl;
 
 class SfxSecurityPage : public SfxTabPage
 {
-    std::auto_ptr< SfxSecurityPage_Impl > m_pImpl;
+    std::unique_ptr< SfxSecurityPage_Impl > m_pImpl;
 
 protected:
     SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& );

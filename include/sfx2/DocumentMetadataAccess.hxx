@@ -198,7 +198,7 @@ public:
             ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
 
 private:
-    std::auto_ptr<DocumentMetadataAccess_Impl> m_pImpl;
+    std::unique_ptr<DocumentMetadataAccess_Impl> m_pImpl;
 };
 
 } // namespace sfx2

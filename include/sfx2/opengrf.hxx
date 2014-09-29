@@ -50,7 +50,7 @@ private:
     SFX2_DLLPRIVATE SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);
     SFX2_DLLPRIVATE SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & );
 
-    const std::auto_ptr< SvxOpenGrf_Impl >  mpImpl;
+    const std::unique_ptr< SvxOpenGrf_Impl >  mpImpl;
 };
 
 #endif // _SVX_OPENGRF_HXX
