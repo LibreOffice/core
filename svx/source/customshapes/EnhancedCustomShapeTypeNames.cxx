@@ -301,7 +301,7 @@ MSO_SPT EnhancedCustomShapeTypeNames::Get( const OUString& rShapeType )
 
 OUString EnhancedCustomShapeTypeNames::Get( const MSO_SPT eShapeType )
 {
-    return eShapeType <= mso_sptTextBox
+    return (eShapeType <= mso_sptTextBox && eShapeType >= mso_sptMin)
         ? OUString::createFromAscii( pNameTypeTableArray[ eShapeType ].pS )
         : OUString();
 }
