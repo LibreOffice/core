@@ -909,13 +909,22 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
             SfxWhichIter aIter( *pParagraphMarkerProperties );
             sal_uInt16 nWhichId = aIter.FirstWhich();
             const SfxPoolItem* pItem = 0;
+            // Did we already produce a <w:sz> element?
+            bool bFontSizeWritten = false;
             while( nWhichId )
             {
                 if( SfxItemState::SET == pParagraphMarkerProperties->GetItemState( nWhichId, true, &pItem ))
                 {
                     SAL_INFO( "sw.ww8", "nWhichId " << nWhichId);
                     if (isCHRATR( nWhichId ))
-                        OutputItem( *pItem );
+                    {
+                        // Will this item produce a <w:sz> element?
+                        bool bFontSizeItem = nWhichId == RES_CHRATR_FONTSIZE || nWhichId == RES_CHRATR_CJK_FONTSIZE;
+                        if (!bFontSizeWritten || !bFontSizeItem)
+                            OutputItem( *pItem );
+                        if (bFontSizeItem)
+                            bFontSizeWritten = true;
+                    }
                 }
                 nWhichId = aIter.NextWhich();
             }
