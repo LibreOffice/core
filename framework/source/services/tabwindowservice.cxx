@@ -452,24 +452,24 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
     {
         try
         {
-            css::awt::XTabListener* pListener = (css::awt::XTabListener*)pIterator.next();
+            css::awt::XTabListener* pListener = static_cast<css::awt::XTabListener*>(pIterator.next());
 
             switch (nEventId)
             {
                 case VCLEVENT_TABPAGE_ACTIVATE :
-                    pListener->activated( (sal_Int32)(sal_uLong)pWinEvt->GetData() );
+                    pListener->activated( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
                     break;
 
                 case VCLEVENT_TABPAGE_DEACTIVATE :
-                    pListener->deactivated( (sal_Int32)(sal_uLong)pWinEvt->GetData() );
+                    pListener->deactivated( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
                     break;
 
                 case VCLEVENT_TABPAGE_INSERTED :
-                    pListener->inserted( (sal_Int32)(sal_uLong)pWinEvt->GetData() );
+                    pListener->inserted( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
                     break;
 
                 case VCLEVENT_TABPAGE_REMOVED :
-                    pListener->removed( (sal_Int32)(sal_uLong)pWinEvt->GetData() );
+                    pListener->removed( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
                     break;
 
                 case VCLEVENT_TABPAGE_PAGETEXTCHANGED :

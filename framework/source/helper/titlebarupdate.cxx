@@ -185,7 +185,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         ( pWindow->GetType() == WINDOW_WORKWINDOW )
        )
     {
-        WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
         pWorkWindow->SetApplicationID( sApplicationID );
     }
     // <- VCL SYNCHRONIZED
@@ -302,7 +302,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
         ( pWindow->GetType() == WINDOW_WORKWINDOW )
        )
     {
-        WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
         pWorkWindow->SetIcon( (sal_uInt16)nIcon );
 
         css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
@@ -336,7 +336,7 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
         ( pWindow->GetType() == WINDOW_WORKWINDOW )
        )
     {
-        WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+        WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
         pWorkWindow->SetText( sTitle );
     }
     // <- VCL SYNCHRONIZED

@@ -172,7 +172,7 @@ void LayoutManager::impl_clearUpMenuBar()
         {
             MenuBar* pSetMenuBar = 0;
             if ( m_xInplaceMenuBar.is() )
-                pSetMenuBar = (MenuBar *)m_pInplaceMenuBar->GetMenuBar();
+                pSetMenuBar = static_cast<MenuBar *>(m_pInplaceMenuBar->GetMenuBar());
             else
             {
                 Reference< awt::XMenuBar > xMenuBar;
@@ -194,7 +194,7 @@ void LayoutManager::impl_clearUpMenuBar()
 
                 VCLXMenu* pAwtMenuBar = VCLXMenu::GetImplementation( xMenuBar );
                 if ( pAwtMenuBar )
-                    pSetMenuBar = (MenuBar*)pAwtMenuBar->GetMenu();
+                    pSetMenuBar = static_cast<MenuBar*>(pAwtMenuBar->GetMenu());
             }
 
             MenuBar* pTopMenuBar = pSysWindow->GetMenuBar();
@@ -759,11 +759,11 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
 
         MenuBar* pMenuBar( 0 );
         if ( xInplaceMenuBar.is() )
-            pMenuBar = (MenuBar *)pInplaceMenuBar->GetMenuBar();
+            pMenuBar = static_cast<MenuBar *>(pInplaceMenuBar->GetMenuBar());
         else
         {
             MenuBarWrapper* pMenuBarWrapper = (static_cast< MenuBarWrapper* >(xMenuBar.get()) );
-            pMenuBar = (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar();
+            pMenuBar = static_cast<MenuBar *>(pMenuBarWrapper->GetMenuBarManager()->GetMenuBar());
         }
 
         SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
@@ -865,12 +865,12 @@ void LayoutManager::implts_createProgressBar()
     xContainerWindow = m_xContainerWindow;
     aWriteLock.clear();
 
-    bool            bRecycled = xProgressBarBackup.is();
+    bool                bRecycled = xProgressBarBackup.is();
     ProgressBarWrapper* pWrapper  = 0;
     if ( bRecycled )
-        pWrapper = (ProgressBarWrapper*)xProgressBarBackup.get();
+        pWrapper = static_cast<ProgressBarWrapper*>(xProgressBarBackup.get());
     else if ( xProgressBar.is() )
-        pWrapper = (ProgressBarWrapper*)xProgressBar.get();
+        pWrapper = static_cast<ProgressBarWrapper*>(xProgressBar.get());
     else
         pWrapper = new ProgressBarWrapper();
 
@@ -925,7 +925,7 @@ void LayoutManager::implts_backupProgressBarWrapper()
     // The internal used ProgressBarWrapper can handle a NULL reference.
     if ( m_xProgressBarBackup.is() )
     {
-        ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)m_xProgressBarBackup.get();
+        ProgressBarWrapper* pWrapper = static_cast<ProgressBarWrapper*>(m_xProgressBarBackup.get());
         if ( pWrapper )
             pWrapper->setStatusBar( Reference< awt::XWindow >(), false );
     }
@@ -960,7 +960,7 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
         xWindow = Reference< awt::XWindow >( xStatusBar->getRealInterface(), UNO_QUERY );
     else if ( xProgressBar.is() )
     {
-        ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
+        ProgressBarWrapper* pWrapper = static_cast<ProgressBarWrapper*>(xProgressBar.get());
         if ( pWrapper )
             xWindow = pWrapper->getStatusBar();
     }
@@ -977,7 +977,7 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
             vcl::Window* pOldParentWindow = pWindow->GetParent();
             if ( pParentWindow != pOldParentWindow )
                 pWindow->SetParent( pParentWindow );
-            ((StatusBar *)pWindow)->SetPosSizePixel( rPos, rSize );
+            static_cast<StatusBar *>(pWindow)->SetPosSizePixel( rPos, rSize );
         }
     }
 }
@@ -1003,7 +1003,7 @@ bool LayoutManager::implts_showProgressBar()
         }
         else if ( xProgressBar.is() )
         {
-            ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
+            ProgressBarWrapper* pWrapper = static_cast<ProgressBarWrapper*>(xProgressBar.get());
             if ( pWrapper )
                 xWindow = pWrapper->getStatusBar();
         }
@@ -1040,7 +1040,7 @@ bool LayoutManager::implts_hideProgressBar()
     if ( xProgressBar.is() )
     {
         Reference< awt::XWindow > xStatusBar;
-        ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
+        ProgressBarWrapper* pWrapper = static_cast<ProgressBarWrapper*>(xProgressBar.get());
         if ( pWrapper )
             xWindow = pWrapper->getStatusBar();
         Reference< ui::XUIElement > xStatusBarElement = m_aStatusBarElement.m_xUIElement;
@@ -1181,7 +1181,7 @@ throw (uno::RuntimeException)
         if ( pSysWindow )
         {
             if ( pMenuBarWrapper )
-                pSysWindow->SetMenuBar((MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar(), m_xFrame);
+                pSysWindow->SetMenuBar(static_cast<MenuBar *>(pMenuBarWrapper->GetMenuBarManager()->GetMenuBar()), m_xFrame);
             else
                 pSysWindow->SetMenuBar(0);
         }
@@ -1486,7 +1486,7 @@ throw (RuntimeException, std::exception)
                             VCLXMenu* pAwtMenuBar = VCLXMenu::GetImplementation( xMenuBar );
                             if ( pAwtMenuBar )
                             {
-                                MenuBar* pMenuBar = (MenuBar*)pAwtMenuBar->GetMenu();
+                                MenuBar* pMenuBar = static_cast<MenuBar*>(pAwtMenuBar->GetMenu());
                                 if ( pMenuBar )
                                 {
                                     pSysWindow->SetMenuBar(pMenuBar, m_xFrame);
@@ -2475,7 +2475,7 @@ throw (uno::RuntimeException, std::exception)
         xWindow = Reference< awt::XWindow >( xStatusBar->getRealInterface(), UNO_QUERY );
     else if ( xProgressBar.is() && !xStatusBar.is() && bProgressBarVisible )
     {
-        ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)xProgressBar.get();
+        ProgressBarWrapper* pWrapper = static_cast<ProgressBarWrapper*>(xProgressBar.get());
         if ( pWrapper )
             xWindow = pWrapper->getStatusBar();
     }
@@ -2560,12 +2560,12 @@ bool LayoutManager::implts_resetMenuBar()
 
     MenuBar* pSetMenuBar = 0;
     if ( m_xInplaceMenuBar.is() )
-        pSetMenuBar = (MenuBar *)m_pInplaceMenuBar->GetMenuBar();
+        pSetMenuBar = static_cast<MenuBar *>(m_pInplaceMenuBar->GetMenuBar());
     else
     {
         MenuBarWrapper* pMenuBarWrapper = static_cast< MenuBarWrapper* >( m_xMenuBar.get() );
         if ( pMenuBarWrapper )
-            pSetMenuBar = (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar();
+            pSetMenuBar = static_cast<MenuBar*>(pMenuBarWrapper->GetMenuBarManager()->GetMenuBar());
     }
     aWriteLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -2634,7 +2634,7 @@ void LayoutManager::implts_notifyListeners( short nEvent, uno::Any aInfoParam )
         {
             try
             {
-                ((frame::XLayoutManagerListener*)pIterator.next())->layoutEvent( aSource, nEvent, aInfoParam );
+                static_cast<frame::XLayoutManagerListener*>(pIterator.next())->layoutEvent( aSource, nEvent, aInfoParam );
             }
             catch( const uno::RuntimeException& )
             {

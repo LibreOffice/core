@@ -57,7 +57,7 @@ static OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& x
         {
             sal_uLong nMask  = WINDOWSTATE_MASK_ALL;
             nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
-            sWindowState = ((SystemWindow*)pWindow)->GetWindowState(nMask);
+            sWindowState = static_cast<SystemWindow*>(pWindow)->GetWindowState(nMask);
         }
     }
     // <- SOLAR SAFE ----------------------------
@@ -85,11 +85,11 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
         (
             // dont overwrite a might existing minimized mode!
             (pWindow->GetType() != WINDOW_WORKWINDOW) ||
-            (!((WorkWindow*)pWindow)->IsMinimized() )
+            (!static_cast<WorkWindow*>(pWindow)->IsMinimized() )
         )
        )
     {
-        ((SystemWindow*)pWindow)->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
+        static_cast<SystemWindow*>(pWindow)->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
     }
 
     // <- SOLAR SAFE ----------------------------

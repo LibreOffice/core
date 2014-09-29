@@ -240,7 +240,7 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
             sal_uLong nMask  =   WINDOWSTATE_MASK_ALL;
                   nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
             sWindowState = OStringToOUString(
-                            ((SystemWindow*)pWindow)->GetWindowState(nMask),
+                            static_cast<SystemWindow*>(pWindow)->GetWindowState(nMask),
                             RTL_TEXTENCODING_UTF8);
         }
         // <- SOLAR SAFE ------------------------
@@ -272,8 +272,8 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     if (!bSystemWindow && !bWorkWindow)
         return;
 
-    SystemWindow* pSystemWindow = (SystemWindow*)pWindow;
-    WorkWindow*   pWorkWindow   = (WorkWindow*  )pWindow;
+    SystemWindow* pSystemWindow = static_cast<SystemWindow*>(pWindow);
+    WorkWindow*   pWorkWindow   = static_cast<WorkWindow*  >(pWindow);
 
     // dont save this special state!
     if (pWorkWindow->IsMinimized())

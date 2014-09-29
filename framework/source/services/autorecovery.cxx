@@ -3561,7 +3561,7 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
 {
     // Helper shares mutex with us -> threadsafe!
     ::cppu::OInterfaceContainerHelper* pListenerForURL = 0;
-    OUString                    sJob            = AutoRecovery::implst_getJobDescription(eJob);
+    OUString                           sJob            = AutoRecovery::implst_getJobDescription(eJob);
 
     // inform listener, which are registered for any URLs(!)
     pListenerForURL = m_lListener.getContainer(sJob);
@@ -3572,7 +3572,7 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
         {
             try
             {
-                css::uno::Reference< css::frame::XStatusListener > xListener(((css::frame::XStatusListener*)pIt.next()), css::uno::UNO_QUERY);
+                css::uno::Reference< css::frame::XStatusListener > xListener(static_cast<css::frame::XStatusListener*>(pIt.next()), css::uno::UNO_QUERY);
                 xListener->statusChanged(aEvent);
             }
             catch(const css::uno::RuntimeException&)

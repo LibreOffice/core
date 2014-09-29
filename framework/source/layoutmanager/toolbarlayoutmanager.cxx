@@ -536,7 +536,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
             vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
             if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
             {
-                ToolBox* pToolbar = (ToolBox *)pWindow;
+                ToolBox* pToolbar = static_cast<ToolBox *>(pWindow);
                 sal_uInt16 nMenuType = pToolbar->GetMenuType();
                 if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "ConfigureDialog" ))
                     pToolbar->SetMenuType( nMenuType & ~TOOLBOX_MENUTYPE_CUSTOMIZE );
@@ -825,7 +825,7 @@ bool ToolbarLayoutManager::dockToolbar( const OUString& rResourceURL, ui::Dockin
                         pWindow = VCLUnoHelper::GetWindow( xWindow );
                         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
                         {
-                            pToolBox = (ToolBox *)pWindow;
+                            pToolBox = static_cast<ToolBox *>(pWindow);
 
                             // We have to set the alignment of the toolbox. It's possible that the toolbox is moved from a
                             // horizontal to a vertical docking area!
@@ -917,7 +917,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
         {
             OUString aToolbarName;
             OUString aCommand;
-            ToolBox*        pToolBox = getToolboxPtr( ((VclWindowEvent*)pEvent)->GetWindow() );
+            ToolBox*        pToolBox = getToolboxPtr( static_cast<VclWindowEvent*>(pEvent)->GetWindow() );
 
             if ( pToolBox )
             {
@@ -965,7 +965,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
         {
             if ( !implts_isToolbarCreationActive() )
             {
-                ToolBox* pToolBox = getToolboxPtr( ((VclWindowEvent*)pEvent)->GetWindow() );
+                ToolBox* pToolBox = getToolboxPtr( static_cast<VclWindowEvent*>(pEvent)->GetWindow() );
                 if ( pToolBox )
                 {
                     OUString aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );
@@ -1163,7 +1163,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                         pWindow->SetText( aGenericAddonTitle );
                     if ( pWindow->GetType() == WINDOW_TOOLBOX )
                     {
-                        ToolBox* pToolbar = (ToolBox *)pWindow;
+                        ToolBox* pToolbar = static_cast<ToolBox *>(pWindow);
                         pToolbar->SetMenuType();
                     }
                 }
@@ -1417,7 +1417,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
                 if ( rElement.m_bNoClose )
                     pWindow->SetStyle( pWindow->GetStyle() & ~WB_CLOSEABLE );
                 if ( pWindow->GetType() == WINDOW_TOOLBOX )
-                    pToolBox = (ToolBox *)pWindow;
+                    pToolBox = static_cast<ToolBox *>(pWindow);
             }
             if ( pToolBox )
             {
@@ -2473,7 +2473,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
                 uno::Reference< awt::XWindow > xWindow = rRowColumnWindowData.aRowColumnWindows[i];
                 vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
-                    aMinSize = ((ToolBox *)pWindow)->CalcMinimumWindowSizePixel();
+                    aMinSize = static_cast<ToolBox *>(pWindow)->CalcMinimumWindowSizePixel();
             }
 
             if (( aMinSize.Width() > 0 ) && ( aMinSize.Height() > 0 ))
@@ -2636,7 +2636,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
         pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
         pDockWindow        = VCLUnoHelper::GetWindow( xWindow );
         if ( pDockWindow && pDockWindow->GetType() == WINDOW_TOOLBOX )
-            pToolBox = (ToolBox *)pDockWindow;
+            pToolBox = static_cast<ToolBox *>(pDockWindow);
 
         aDockingAreaRect = ::Rectangle( pDockingAreaWindow->GetPosPixel(), pDockingAreaWindow->GetSizePixel() );
         if ( pToolBox )
@@ -3293,7 +3293,7 @@ throw (uno::RuntimeException, std::exception)
             pWindow = VCLUnoHelper::GetWindow( xWindow );
             if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
             {
-                ToolBox* pToolBox = (ToolBox *)pWindow;
+                ToolBox* pToolBox = static_cast<ToolBox *>(pWindow);
                 aUIElement.m_aFloatingData.m_nLines        = pToolBox->GetFloatingLines();
                 aUIElement.m_aFloatingData.m_bIsHorizontal = isToolboxHorizontalAligned( pToolBox );
             }
@@ -3386,7 +3386,7 @@ throw (uno::RuntimeException, std::exception)
             vcl::Window*  pWindow = VCLUnoHelper::GetWindow( xWindow );
             ToolBox* pToolBox = 0;
             if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
-                pToolBox = (ToolBox *)pWindow;
+                pToolBox = static_cast<ToolBox *>(pWindow);
 
             if ( eDockingArea != -1 )
             {
@@ -3539,7 +3539,7 @@ throw (uno::RuntimeException, std::exception)
         vcl::Window*  pWindow = VCLUnoHelper::GetWindow( uno::Reference< awt::XWindow >( e.Source, uno::UNO_QUERY ));
         ToolBox* pToolBox = 0;
         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
-            pToolBox = (ToolBox *)pWindow;
+            pToolBox = static_cast<ToolBox *>(pWindow);
 
         if ( pToolBox )
         {
@@ -3640,7 +3640,7 @@ throw (uno::RuntimeException, std::exception)
         pWindow = VCLUnoHelper::GetWindow( xWindow );
 
         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
-            pToolBox = (ToolBox *)pWindow;
+            pToolBox = static_cast<ToolBox *>(pWindow);
     }
 
     if ( !bDockingInProgress )

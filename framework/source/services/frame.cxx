@@ -1758,7 +1758,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
         {
             try
             {
-                ((css::util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
+                static_cast<css::util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
             }
             catch( const css::uno::RuntimeException& )
             {
@@ -1792,7 +1792,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
         {
             try
             {
-                ((css::util::XCloseListener*)pIterator.next())->notifyClosing( aSource );
+                static_cast<css::util::XCloseListener*>(pIterator.next())->notifyClosing( aSource );
             }
             catch( const css::uno::RuntimeException& )
             {
@@ -2857,7 +2857,7 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
         {
             try
             {
-                ((css::frame::XFrameActionListener*)aIterator.next())->frameAction( aFrameActionEvent );
+                static_cast<css::frame::XFrameActionListener*>(aIterator.next())->frameAction( aFrameActionEvent );
             }
             catch( const css::uno::RuntimeException& )
             {
@@ -2975,7 +2975,7 @@ void Frame::implts_setIconOnWindow()
                 ( pWindow->GetType() == WINDOW_WORKWINDOW )
                 )
             {
-                WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+                WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
                 pWorkWindow->SetIcon( (sal_uInt16)nIcon );
             }
         }
