@@ -3322,15 +3322,17 @@ com::sun::star::style::TabAlign DomainMapper::getTabAlignFromValue(const sal_Int
 {
     switch (nIntValue)
     {
-    case 0:
-    case 4: // bar not supported
-    case 5: // num not supported
+    case NS_ooxml::LN_Value_ST_TabJc_start:
+    case NS_ooxml::LN_Value_ST_TabJc_left:
+    case NS_ooxml::LN_Value_ST_TabJc_bar: // bar not supported
+    case NS_ooxml::LN_Value_ST_TabJc_num: // num not supported
         return com::sun::star::style::TabAlign_LEFT;
-    case 1:
+    case NS_ooxml::LN_Value_ST_TabJc_center:
         return com::sun::star::style::TabAlign_CENTER;
-    case 2:
+    case NS_ooxml::LN_Value_ST_TabJc_end:
+    case NS_ooxml::LN_Value_ST_TabJc_right:
         return com::sun::star::style::TabAlign_RIGHT;
-    case 3:
+    case NS_ooxml::LN_Value_ST_TabJc_decimal:
         return com::sun::star::style::TabAlign_DECIMAL;
     }
     return com::sun::star::style::TabAlign_LEFT;

@@ -17068,13 +17068,13 @@
     </resource>
     <resource name="ST_TabJc" resource="List">
       <value tokenid="ooxml:Value_ST_TabJc_clear">clear</value>
-      <value tokenid="0">start</value>
-      <value tokenid="0">left</value>
-      <value tokenid="1">center</value>
-      <value tokenid="2">end</value>
-      <value tokenid="2">right</value>
-      <value tokenid="3">decimal</value>
-      <value tokenid="4">bar</value>
+      <value tokenid="ooxml:Value_ST_TabJc_start">start</value>
+      <value tokenid="ooxml:Value_ST_TabJc_left">left</value>
+      <value tokenid="ooxml:Value_ST_TabJc_center">center</value>
+      <value tokenid="ooxml:Value_ST_TabJc_end">end</value>
+      <value tokenid="ooxml:Value_ST_TabJc_right">right</value>
+      <value tokenid="ooxml:Value_ST_TabJc_decimal">decimal</value>
+      <value tokenid="ooxml:Value_ST_TabJc_bar">bar</value>
       <value tokenid="ooxml:Value_ST_TabJc_num">num</value>
     </resource>
     <resource name="ST_TabTlc" resource="List">

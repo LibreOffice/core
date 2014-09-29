@@ -2513,13 +2513,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
     case RTF_TQR:
-        nParam = 2;
+        nParam = NS_ooxml::LN_Value_ST_TabJc_right;
         break;
     case RTF_TQC:
-        nParam = 1;
+        nParam = NS_ooxml::LN_Value_ST_TabJc_center;
         break;
     case RTF_TQDEC:
-        nParam = 3;
+        nParam = NS_ooxml::LN_Value_ST_TabJc_decimal;
         break;
     default:
         break;
