@@ -275,7 +275,7 @@ AccessibleGridControl::implGetHeaderBar( AccessibleTableControlObjType eObjType 
         if( !pxMember->is() )
         {
             AccessibleGridControlHeader* pHeaderBar = new AccessibleGridControlHeader(
-                (Reference< XAccessible >)m_pImpl->m_aCreator, m_aTable, eObjType );
+                m_pImpl->m_aCreator, m_aTable, eObjType );
 
             if ( TCTYPE_COLUMNHEADERBAR == eObjType)
                 m_pImpl->m_pColumnHeaderBar = pHeaderBar;
@@ -310,8 +310,8 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
 
 AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
 {
-    Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
-        OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
+    Reference< XAccessible > xCreator(m_pImpl->m_aCreator);
+    OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
     return new AccessibleGridControlTable( xCreator, m_aTable, TCTYPE_TABLE );
 }
 

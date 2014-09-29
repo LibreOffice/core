@@ -198,7 +198,7 @@ sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex ) throw (
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    CheckBox* pCheckBox = (CheckBox*) GetWindow();
+    CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
     VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
     if ( pCheckBox && pVCLXCheckBox )
     {
@@ -328,7 +328,7 @@ Any VCLXAccessibleCheckBox::getMaximumValue(  ) throw (RuntimeException, std::ex
 
     Any aValue;
 
-    CheckBox* pCheckBox = (CheckBox*) GetWindow();
+    CheckBox* pCheckBox = static_cast<CheckBox*>(GetWindow());
     if ( pCheckBox && pCheckBox->IsTriStateEnabled() )
         aValue <<= (sal_Int32) 2;
     else

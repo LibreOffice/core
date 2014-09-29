@@ -76,7 +76,7 @@ AccessibleBrowseBox::AccessibleBrowseBox(
 void AccessibleBrowseBox::setCreator( const Reference< XAccessible >& _rxCreator )
 {
 #if OSL_DEBUG_LEVEL > 0
-    Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
+    Reference< XAccessible > xCreator(m_pImpl->m_aCreator);
     OSL_ENSURE( !xCreator.is(), "accessibility/extended/AccessibleBrowseBox::setCreator: creator already set!" );
 #endif
     m_pImpl->m_aCreator = _rxCreator;
@@ -250,7 +250,7 @@ AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
         if( !pxMember->is() )
         {
             AccessibleBrowseBoxHeaderBar* pHeaderBar = new AccessibleBrowseBoxHeaderBar(
-                (Reference< XAccessible >)m_pImpl->m_aCreator, *mpBrowseBox, eObjType );
+                m_pImpl->m_aCreator, *mpBrowseBox, eObjType );
 
             if ( BBTYPE_COLUMNHEADERBAR == eObjType)
                 m_pImpl->m_pColumnHeaderBar = pHeaderBar;
@@ -286,7 +286,7 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
 
 AccessibleBrowseBoxTable* AccessibleBrowseBox::createAccessibleTable()
 {
-    Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
+    Reference< XAccessible > xCreator(m_pImpl->m_aCreator);
     OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
     return new AccessibleBrowseBoxTable( xCreator, *mpBrowseBox );
 }
