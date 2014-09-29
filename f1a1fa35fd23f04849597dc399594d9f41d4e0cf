@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae2911b_cc7d2fe9",
+        "filename": "sw/uiconfig/swriter/toolbar/changes.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-29T09:12:15Z",
+      "side": 1,
+      "message": "I think we don\u0027t need these toolbar:text definitions anymore - we should just use the default tooltips and improve these if they need to.",
+      "revId": "f1a1fa35fd23f04849597dc399594d9f41d4e0cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
