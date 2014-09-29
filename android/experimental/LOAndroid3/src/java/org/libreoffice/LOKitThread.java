@@ -1,7 +1,6 @@
 package org.libreoffice;
 
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,11 +14,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
-    public LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
+    private LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
     private ImmutableViewportMetrics mViewportMetrics;
-    private boolean mCheckboardImageSet = false;
     private GeckoLayerClient mLayerClient;
     private LayerController mController;
 
@@ -36,19 +34,26 @@ public class LOKitThread extends Thread {
         GeckoLayerClient layerClient = mApplication.getLayerClient();
 
         layerClient.beginDrawing();
-
         layerClient.reevaluateTiles();
-
         layerClient.endDrawing(mViewportMetrics);
 
         return true;
     }
 
+    private void refresh() {
+        Bitmap bitmap = mTileProvider.thumbnail();
+        if (bitmap != null) {
+            mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
+        }
+
+        RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
+        mController.setPageRect(rect, rect);
+        mController.setForceRedraw();
+    }
+
     private void changePart(int partIndex) throws InterruptedException {
         mTileProvider.changePart(partIndex);
-        GeckoLayerClient layerClient = mApplication.getLayerClient();
-        updateCheckbardImage();
-        LOKitShell.sendEvent(LOEvent.draw(new Rect()));
+        refresh();
     }
 
     private boolean load(String filename) {
@@ -68,22 +73,9 @@ public class LOKitThread extends Thread {
 
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
-            updateCheckbardImage();
-            RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
-            mController.setPageRect(rect, rect);
-            mController.setForceRedraw();
+            refresh();
         }
         return isReady;
-    }
-
-    private void updateCheckbardImage() {
-        if (!mCheckboardImageSet) {
-            Bitmap bitmap = mTileProvider.thumbnail();
-            if (bitmap != null) {
-                mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
-                mCheckboardImageSet = true;
-            }
-        }
     }
 
     public void run() {
