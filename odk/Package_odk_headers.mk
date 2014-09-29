@@ -88,7 +88,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	osl/conditn.h \
 	osl/conditn.hxx \
 	osl/diagnose.h \
-	osl/diagnose.hxx \
 	osl/doublecheckedlocking.h \
 	osl/endian.h \
 	osl/file.h \
