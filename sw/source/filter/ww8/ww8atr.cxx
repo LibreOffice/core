@@ -850,21 +850,13 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                 if (SfxItemState::SET != aSet.GetItemState(RES_SURROUND))
                     aSet.Put(SwFmtSurround(SURROUND_NONE));
 
-                const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rFrmFmt.GetAttrSet().GetItem(XATTR_FILLSTYLE)));
-                if (pXFillStyleItem)
+                // Construct an SvxBrushItem, as expected by the exporters.
+                if (rFrmFmt.IsAdaptedToNewFillProperties())
                 {
-                    switch (pXFillStyleItem->GetValue())
+                    const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rFrmFmt.GetAttrSet().GetItem(XATTR_FILLSTYLE)));
+                    if (pXFillStyleItem)
                     {
-                    case drawing::FillStyle_NONE:
-                        break;
-                    case drawing::FillStyle_SOLID:
-                    {
-                        // Construct an SvxBrushItem, as expected by the exporters.
                         aSet.Put(getSvxBrushItemFromSourceSet(rFrmFmt.GetAttrSet(), RES_BACKGROUND));
-                        break;
-                    }
-                    default:
-                        break;
                     }
                 }
 

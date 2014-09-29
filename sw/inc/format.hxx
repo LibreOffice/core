@@ -334,6 +334,7 @@ public:
 
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
+    virtual bool IsAdaptedToNewFillProperties() const;
 };
 
 inline void SwFmt::SetName( const sal_Char* pNewName,

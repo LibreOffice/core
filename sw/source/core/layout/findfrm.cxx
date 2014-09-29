@@ -570,6 +570,18 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrm::getSdrAllFillAttri
     }
 }
 
+bool SwFrm::IsAdaptedToNewFillProperties() const
+{
+    if (IsCntntFrm())
+    {
+        return true;
+    }
+    else
+    {
+        return static_cast< const SwLayoutFrm* >(this)->GetFmt()->IsAdaptedToNewFillProperties();
+    }
+}
+
 /*
  *  SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()
  *         _FindNextCnt() visits tables and sections and only returns SwCntntFrms.

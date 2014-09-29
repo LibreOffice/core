@@ -2423,6 +2423,11 @@ SwFrmFmt::SwFrmFmt(
 {
 }
 
+bool SwFrmFmt::IsAdaptedToNewFillProperties() const
+{
+    return true;
+}
+
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     SwFmtHeader *pH = 0;
@@ -2438,7 +2443,7 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             RES_FOOTER, false, (const SfxPoolItem**)&pF );
 
         //UUUU reset fill information
-        if(maFillAttributes.get() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+        if (maFillAttributes.get() && IsAdaptedToNewFillProperties())
         {
             SfxItemIter aIter(*((SwAttrSetChg*)pNew)->GetChgSet());
             bool bReset(false);
@@ -2457,7 +2462,7 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     else if(RES_FMT_CHG == nWhich)
     {
         //UUUU reset fill information on format change (e.g. style changed)
-        if(maFillAttributes.get() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+        if (maFillAttributes.get() && IsAdaptedToNewFillProperties())
         {
             maFillAttributes.reset();
         }
@@ -2978,7 +2983,7 @@ OUString SwFlyFrmFmt::GetObjDescription() const
 bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
     //UUUU
-    if((RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()) && getSdrAllFillAttributesHelper())
+    if (IsAdaptedToNewFillProperties() && getSdrAllFillAttributesHelper())
     {
         return getSdrAllFillAttributesHelper()->isTransparent();
     }
@@ -3021,7 +3026,7 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
 bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
 {
     //UUUU
-    if((RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()) && getSdrAllFillAttributesHelper())
+    if (IsAdaptedToNewFillProperties() && getSdrAllFillAttributesHelper())
     {
         return !getSdrAllFillAttributesHelper()->isUsed();
     }
@@ -3252,7 +3257,7 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
 //UUUU
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrmFmt::getSdrAllFillAttributesHelper() const
 {
-    if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
+    if (IsAdaptedToNewFillProperties())
     {
         // create FillAttributes on demand
         if(!maFillAttributes.get())

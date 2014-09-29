@@ -138,6 +138,7 @@ public:
 
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const SAL_OVERRIDE;
+    virtual bool IsAdaptedToNewFillProperties() const SAL_OVERRIDE;
 };
 
 // The FlyFrame-Format

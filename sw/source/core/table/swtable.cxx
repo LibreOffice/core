@@ -2353,6 +2353,21 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     SwFrmFmt::Modify( pOld, pNew );
 }
 
+bool SwTableBoxFmt::IsAdaptedToNewFillProperties() const
+{
+    return false;
+}
+
+bool SwTableFmt::IsAdaptedToNewFillProperties() const
+{
+    return false;
+}
+
+bool SwTableLineFmt::IsAdaptedToNewFillProperties() const
+{
+    return false;
+}
+
 bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
                             bool& rIsEmptyTxtNd ) const
 {

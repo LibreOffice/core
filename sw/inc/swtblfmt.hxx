@@ -41,6 +41,8 @@ public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFmt)
+
+    virtual bool IsAdaptedToNewFillProperties() const SAL_OVERRIDE;
 };
 
 class SwTableLineFmt : public SwFrmFmt
@@ -61,6 +63,8 @@ public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFmt)
+
+    virtual bool IsAdaptedToNewFillProperties() const SAL_OVERRIDE;
 };
 
 class SW_DLLPUBLIC SwTableBoxFmt : public SwFrmFmt
@@ -84,6 +88,8 @@ public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFmt)
+
+    virtual bool IsAdaptedToNewFillProperties() const SAL_OVERRIDE;
 };
 
 #endif

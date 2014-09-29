@@ -207,17 +207,21 @@ SwFrmNotify::~SwFrmNotify()
     if ( bPrtWidth || bPrtHeight )
     {
         //UUUU
-        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pFrm->getSdrAllFillAttributesHelper());
-
-        if(aFillAttributes.get() && aFillAttributes->isUsed())
+        bool bUseNewFillProperties(false);
+        if (pFrm->IsAdaptedToNewFillProperties())
         {
-            //UUUU use SetCompletePaint if needed
-            if(aFillAttributes->needCompleteRepaint())
+            drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pFrm->getSdrAllFillAttributesHelper());
+            if(aFillAttributes.get() && aFillAttributes->isUsed())
             {
-                pFrm->SetCompletePaint();
+                bUseNewFillProperties = true;
+                //UUUU use SetCompletePaint if needed
+                if(aFillAttributes->needCompleteRepaint())
+                {
+                    pFrm->SetCompletePaint();
+                }
             }
         }
-        else
+        if (!bUseNewFillProperties)
         {
             const SvxGraphicPosition ePos = pFrm->GetAttrSet()->GetBackground().GetGraphicPos();
             if(GPOS_NONE != ePos && GPOS_TILED != ePos)

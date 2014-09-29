@@ -27,6 +27,7 @@
 #include <hints.hxx>
 #include <paratr.hxx>
 #include <swcache.hxx>
+#include <swtblfmt.hxx>
 #include <svl/grabbagitem.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
@@ -390,9 +391,14 @@ bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     return true;
 }
 
+bool SwFmt::IsAdaptedToNewFillProperties() const
+{
+    return false;
+}
+
 const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
 {
-    if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+    if (RES_BACKGROUND == nWhich && IsAdaptedToNewFillProperties())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or makeBackgroundBrushItem (simple fallback is in place and used)");
@@ -411,7 +417,7 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
 
 SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem ) const
 {
-    if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+    if (RES_BACKGROUND == nWhich && IsAdaptedToNewFillProperties())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or SwFmt::GetBackgroundStat (simple fallback is in place and used)");
@@ -446,7 +452,7 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
 
 SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) const
 {
-    if (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
+    if (IsAdaptedToNewFillProperties())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
@@ -483,7 +489,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     bool bRet = false;
 
     //UUUU
-    if(RES_BACKGROUND == rAttr.Which() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+    if (RES_BACKGROUND == rAttr.Which() && IsAdaptedToNewFillProperties())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -584,8 +590,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
         GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aTempSet);
     }
 
-    //UUUU   FlyFrame              PageStyle
-    if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
+    if (IsAdaptedToNewFillProperties())
     {
         const SfxPoolItem* pSource = 0;
 
@@ -818,8 +823,7 @@ void SwFmt::SetGrabBagItem(const uno::Any& rVal)
 //UUUU
 SvxBrushItem SwFmt::makeBackgroundBrushItem(bool bInP) const
 {
-    //UUUU   FlyFrame              PageStyle
-    if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
+    if (IsAdaptedToNewFillProperties())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
