@@ -331,7 +331,7 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
     // get the repertoire of the current font
     virtual const ImplFontCharMap*
-                            GetFontCharMap() const SAL_OVERRIDE;
+                            GetImplFontCharMap() const SAL_OVERRIDE;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
