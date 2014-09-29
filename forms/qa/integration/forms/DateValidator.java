@@ -72,10 +72,11 @@ public class DateValidator extends integration.forms.ControlValidator
 
     private boolean isNextMonthsDate( com.sun.star.util.Date dateValue )
     {
+        java.util.Calendar cal = java.util.Calendar.getInstance();
         int overallMonth = dateValue.Year * 12 + dateValue.Month - 1;
 
-        int todaysMonth = new java.util.Date().getMonth();
-        int todaysYear = new java.util.Date().getYear() + 1900;
+        int todaysMonth = cal.get(java.util.Calendar.MONTH);
+        int todaysYear = cal.get(java.util.Calendar.YEAR);
         int todaysOverallMonth = todaysYear * 12 + todaysMonth;
 
         return overallMonth == todaysOverallMonth;
