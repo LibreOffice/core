@@ -4410,16 +4410,16 @@ RTLFUNC(Load)
     }
 
 
-    SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
+    SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     if ( pObj )
     {
         if( pObj->IsA( TYPE( SbUserFormModule ) ) )
         {
-            ((SbUserFormModule*)pObj)->Load();
+            static_cast<SbUserFormModule*>(pObj)->Load();
         }
         else if( pObj->IsA( TYPE( SbxObject ) ) )
         {
-            SbxVariable* pVar = ((SbxObject*)pObj)->Find( OUString("Load"), SbxCLASS_METHOD );
+            SbxVariable* pVar = static_cast<SbxObject*>(pObj)->Find( OUString("Load"), SbxCLASS_METHOD );
             if( pVar )
             {
                 pVar->GetInteger();
@@ -4441,17 +4441,17 @@ RTLFUNC(Unload)
     }
 
 
-    SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
+    SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     if ( pObj )
     {
         if( pObj->IsA( TYPE( SbUserFormModule ) ) )
         {
-            SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
+            SbUserFormModule* pFormModule = static_cast<SbUserFormModule*>(pObj);
             pFormModule->Unload();
         }
         else if( pObj->IsA( TYPE( SbxObject ) ) )
         {
-            SbxVariable* pVar = ((SbxObject*)pObj)->Find( OUString("Unload"), SbxCLASS_METHOD );
+            SbxVariable* pVar = static_cast<SbxObject*>(pObj)->Find( OUString("Unload"), SbxCLASS_METHOD );
             if( pVar )
             {
                 pVar->GetInteger();
@@ -4480,7 +4480,7 @@ RTLFUNC(LoadPicture)
         Graphic aGraphic(aBmp);
 
         SbxObjectRef xRef = new SbStdPicture;
-        ((SbStdPicture*)(SbxObject*)xRef)->SetGraphic( aGraphic );
+        static_cast<SbStdPicture*>((SbxObject*)xRef)->SetGraphic( aGraphic );
         rPar.Get(0)->PutObject( xRef );
     }
 }
@@ -4497,11 +4497,11 @@ RTLFUNC(SavePicture)
         return;
     }
 
-    SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
+    SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     if( pObj->IsA( TYPE( SbStdPicture ) ) )
     {
         SvFileStream aOStream( rPar.Get(2)->GetOUString(), STREAM_WRITE | STREAM_TRUNC );
-        Graphic aGraphic = ((SbStdPicture*)pObj)->GetGraphic();
+        Graphic aGraphic = static_cast<SbStdPicture*>(pObj)->GetGraphic();
         WriteGraphic( aOStream, aGraphic );
     }
 }

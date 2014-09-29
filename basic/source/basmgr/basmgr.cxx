@@ -677,7 +677,7 @@ void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInfo& rInf
     sal_uInt16 nModCount = pBasic->GetModules()->Count();
     for ( sal_uInt16 nMod = 0 ; nMod < nModCount ; nMod++ )
     {
-        SbModule* pModule = (SbModule*)pBasic->GetModules()->Get( nMod );
+        SbModule* pModule = static_cast<SbModule*>(pBasic->GetModules()->Get( nMod ));
         DBG_ASSERT( pModule, "Module not received!" );
 
         OUString aModName = pModule->GetName();
@@ -1010,7 +1010,7 @@ bool BasicManager::HasExeCode( const OUString& sLib )
         sal_uInt16 nMods = pMods ? pMods->Count() : 0;
         for( sal_uInt16 i = 0; i < nMods; i++ )
         {
-            SbModule* p = (SbModule*) pMods->Get( i );
+            SbModule* p = static_cast<SbModule*>( pMods->Get( i ) );
             if ( p )
                 if ( p->HasExeCode() )
                     return true;
@@ -1169,7 +1169,7 @@ bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
     {
         if( xNew->IsA( TYPE(StarBASIC) ) )
         {
-            StarBASIC* pNew = (StarBASIC*)(SbxBase*) xNew;
+            StarBASIC* pNew = static_cast<StarBASIC*>((SbxBase*) xNew);
             // Use the Parent of the old BASICs
             if( rOldBasic.Is() )
             {
@@ -1206,7 +1206,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, bool bReference ) const
 
     for ( sal_uInt16 nMod = 0; nMod < pLib->GetModules()->Count(); nMod++ )
     {
-        SbModule* pModule = (SbModule*)pLib->GetModules()->Get( nMod );
+        SbModule* pModule = static_cast<SbModule*>(pLib->GetModules()->Get( nMod ));
         DBG_ASSERT( pModule, "Module not received!" );
         if ( !pModule->IsCompiled() && !StarBASIC::GetErrorCode() )
         {
@@ -1724,10 +1724,10 @@ namespace
                     sal_uInt16 nModCount = pLib->GetModules()->Count();
                     for( sal_uInt16 nMod = 0; nMod < nModCount; ++nMod )
                     {
-                        SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
+                        SbModule* pMod = static_cast<SbModule*>(pLib->GetModules()->Get( nMod ));
                         if ( pMod && rTransliteration.isEqual( pMod->GetName(), sModule ) )
                         {
-                            SbMethod* pMethod = (SbMethod*)pMod->Find( sMacro, SbxCLASS_METHOD );
+                            SbMethod* pMethod = static_cast<SbMethod*>(pMod->Find( sMacro, SbxCLASS_METHOD ));
                             if( pMethod )
                             {
                                 return pMethod;
@@ -2103,7 +2103,7 @@ sal_Bool DialogContainer_Impl::hasElements()
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( pVar->ISA( SbxObject ) && ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
+        if ( pVar->ISA( SbxObject ) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
         {
             bRet = true;
             break;
@@ -2118,14 +2118,14 @@ uno::Any DialogContainer_Impl::getByName( const OUString& aName )
 {
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
     if( !( pVar && pVar->ISA( SbxObject ) &&
-           ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) ) )
+           ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) ) )
     {
         throw container::NoSuchElementException();
     }
 
     uno::Reference< script::XStarBasicDialogInfo > xDialog =
         (XStarBasicDialogInfo*)new DialogInfo_Impl
-            ( aName, implGetDialogData( (SbxObject*)pVar ) );
+            ( aName, implGetDialogData( static_cast<SbxObject*>(pVar) ) );
 
     uno::Any aRetAny;
     aRetAny <<= xDialog;
@@ -2144,7 +2144,7 @@ uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( pVar->ISA( SbxObject ) && ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
+        if ( pVar->ISA( SbxObject ) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
         {
             pRetSeq[ nDialogCounter ] = OUString( pVar->GetName() );
             nDialogCounter++;
@@ -2160,7 +2160,7 @@ sal_Bool DialogContainer_Impl::hasByName( const OUString& aName )
     bool bRet = false;
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
     if( pVar && pVar->ISA( SbxObject ) &&
-           ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
+           ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
     {
         bRet = true;
     }
@@ -2200,7 +2200,7 @@ void DialogContainer_Impl::removeByName( const OUString& Name )
     (void)Name;
     SbxVariable* pVar = mpLib->GetObjects()->Find( Name, SbxCLASS_DONTCARE );
     if( !( pVar && pVar->ISA( SbxObject ) &&
-           ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) ) )
+           ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) ) )
     {
         throw container::NoSuchElementException();
     }

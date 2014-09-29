@@ -537,7 +537,7 @@ StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic )
         SbxObject* pParent = pActiveModule->GetParent();
         if( pParent && pParent->ISA(StarBASIC) )
         {
-            pCurBasic = (StarBASIC*)pParent;
+            pCurBasic = static_cast<StarBASIC*>(pParent);
         }
     }
     return pCurBasic;
@@ -570,7 +570,7 @@ SbMethod* SbiInstance::GetCaller( sal_uInt16 nLevel )
 // Attention: pMeth can also be NULL (on a call of the init-code)
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
-         : rBasic( *(StarBASIC*)pm->pParent ), pInst( GetSbData()->pInst ),
+         : rBasic( *static_cast<StarBASIC*>(pm->pParent) ), pInst( GetSbData()->pInst ),
            pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), mpExtCaller(0), m_nLastTime(0)
 {
     nFlags    = pe ? pe->GetDebugFlags() : 0;
@@ -1653,7 +1653,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
     else if( refVar->ISA(SbProcedureProperty) )
         return false;
 
-    SbxObjectRef xValObj = (SbxObject*)refVal->GetObject();
+    SbxObjectRef xValObj = static_cast<SbxObject*>(refVal->GetObject());
     if( !xValObj.Is() || xValObj->ISA(SbUnoAnyObject) )
         return false;
 
@@ -1674,7 +1674,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
         // will trigger an error, we need to squash those here.
         // Alternatively it is possible that the same scenario
         // could overwrite and existing error. Lets prevent that
-        SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
+        SbxObjectRef xVarObj = static_cast<SbxObject*>(refVar->GetObject());
         if ( eOldErr != SbxERR_OK )
             SbxBase::SetError( eOldErr );
         else
@@ -1788,7 +1788,7 @@ struct DimAsNewRecoverItem
 struct SbxVariablePtrHash
 {
     size_t operator()( SbxVariable* pVar ) const
-        { return (size_t)pVar; }
+        { return reinterpret_cast<size_t>(pVar); }
 };
 
 typedef boost::unordered_map< SbxVariable*, DimAsNewRecoverItem,
@@ -2258,7 +2258,7 @@ void SbiRuntime::StepREDIMP()
     {
         SbxBase* pElemObj = refVar->GetObject();
         SbxDimArray* pNewArray = PTR_CAST(SbxDimArray,pElemObj);
-        SbxDimArray* pOldArray = (SbxDimArray*)(SbxArray*)refRedimpArray;
+        SbxDimArray* pOldArray = static_cast<SbxDimArray*>((SbxArray*)refRedimpArray);
         if( pNewArray )
         {
             short nDimsNew = pNewArray->GetDims();
@@ -3080,7 +3080,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
         }
         case FOR_EACH_COLLECTION:
         {
-            BasicCollection* pCollection = (BasicCollection*)(SbxVariable*)pForStk->refEnd;
+            BasicCollection* pCollection = static_cast<BasicCollection*>((SbxVariable*)pForStk->refEnd);
             SbxArrayRef xItemArray = pCollection->xItemArray;
             sal_Int32 nCount = xItemArray->Count32();
             if( pForStk->nCurCollectionIndex < nCount )
@@ -3242,17 +3242,17 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     // we don't know the type of uno properties that are (maybevoid)
     if ( t == SbxEMPTY && refVal->ISA(SbUnoProperty) )
     {
-        SbUnoProperty* pProp = (SbUnoProperty*)pVal;
+        SbUnoProperty* pProp = static_cast<SbUnoProperty*>(pVal);
         t = pProp->getRealType();
     }
     if( t == SbxOBJECT )
     {
         SbxObject* pObj;
         if( pVal->IsA( TYPE(SbxObject) ) )
-            pObj = (SbxObject*) pVal;
+            pObj = static_cast<SbxObject*>( pVal );
         else
         {
-            pObj = (SbxObject*) refVal->GetObject();
+            pObj = static_cast<SbxObject*>( refVal->GetObject() );
             if( pObj && !pObj->IsA( TYPE(SbxObject) ) )
                 pObj = NULL;
         }
@@ -3575,7 +3575,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             // has to know the difference between Left$() and Left()
 
             // because the methods' parameters are cut away in PopVar()
-            SbxVariable* pNew = new SbxMethod( *((SbxMethod*)pElem) );
+            SbxVariable* pNew = new SbxMethod( *(static_cast<SbxMethod*>(pElem)) );
             //OLD: SbxVariable* pNew = new SbxVariable( *pElem );
 
             pElem->SetParameters(0);
@@ -3734,7 +3734,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                     SbxBaseRef pObj = (SbxBase*)p->GetObject();
                     if( pObj && pObj->ISA(SbUnoObject) )
                     {
-                        SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
+                        SbUnoObject* pUnoObj = static_cast<SbUnoObject*>((SbxBase*)pObj);
                         Any aAny = pUnoObj->getUnoAny();
 
                         if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
@@ -3862,7 +3862,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             {
                 if( pObj->ISA(SbUnoObject) )
                 {
-                    SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
+                    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>((SbxBase*)pObj);
                     Any aAny = pUnoObj->getUnoAny();
 
                     if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
@@ -3933,7 +3933,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 {
                                     if( pDfltObj->ISA(SbUnoObject) )
                                     {
-                                        pUnoObj = (SbUnoObject*)(SbxBase*)pDfltObj;
+                                        pUnoObj = static_cast<SbUnoObject*>((SbxBase*)pDfltObj);
                                         Any aUnoAny = pUnoObj->getUnoAny();
 
                                         if( aUnoAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
@@ -3961,7 +3961,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 if ( refTemp )
                                 {
                                     meth->SetParameters( pPar );
-                                    SbxVariable* pNew = new SbxMethod( *(SbxMethod*)meth );
+                                    SbxVariable* pNew = new SbxMethod( *static_cast<SbxMethod*>(meth) );
                                     pElem = pNew;
                                 }
                             }
@@ -3973,7 +3973,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                 }
                 else if( pObj->ISA(BasicCollection) )
                 {
-                    BasicCollection* pCol = (BasicCollection*)(SbxBase*)pObj;
+                    BasicCollection* pCol = static_cast<BasicCollection*>((SbxBase*)pObj);
                     pElem = new SbxVariable( SbxVARIANT );
                     pPar->Put( pElem, 0 );
                     pCol->CollItem( pPar );
@@ -4393,7 +4393,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     if( xObj->ISA(SbxDimArray) )
     {
         SbxBase* pObj = (SbxBase*)xObj;
-        pArray = (SbxDimArray*)pObj;
+        pArray = static_cast<SbxDimArray*>(pObj);
 
         short nDims = pArray->GetDims();
         sal_Int32 nTotalSize = 0;
@@ -4436,7 +4436,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         }
     }
 
-    SbxDimArray* pOldArray = (SbxDimArray*)(SbxArray*)refRedimpArray;
+    SbxDimArray* pOldArray = static_cast<SbxDimArray*>((SbxArray*)refRedimpArray);
     if( pArray && pOldArray )
     {
         short nDimsNew = pArray->GetDims();
