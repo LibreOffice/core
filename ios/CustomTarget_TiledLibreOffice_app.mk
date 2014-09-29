@@ -85,7 +85,7 @@ TiledLibreOffice_setup:
 	file=$(TiledLibreOffice_resource)/rc; \
 	echo '[Bootstrap]'                                       >  $$file; \
 	echo 'URE_BOOTSTRAP=file://$$APP_DATA_DIR/fundamentalrc' >> $$file; \
-	echo 'HOME=$$APP_DATA_DIR/tmp'                           >> $$file;
+	echo 'HOME=$$SYSUSERHOME'                                >> $$file;
 
 	# Set up fundamentalrc, unorc, bootstraprc and versionrc.
 	# Do we really need all these?
@@ -104,7 +104,7 @@ TiledLibreOffice_setup:
 	echo '[Bootstrap]'                                                              >  $$file; \
 	echo 'InstallMode=<installmode>'                                                >> $$file; \
 	echo "ProductKey=LibreOffice $(PRODUCTVERSION)"                                 >> $$file; \
-	echo 'UserInstallation=file://$$APP_DATA_DIR/../Library/Application%20Support'  >> $$file;
+	echo 'UserInstallation=$$SYSUSERHOME/userinstallation'                          >> $$file;
 
 	# Is this really needed?
 	file=$(TiledLibreOffice_resource)/program/versionrc; \
