@@ -62,9 +62,7 @@ static const char sXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\" stand
 
 namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( )
-        : maOutputData(0x4000)
-        , maOutputStream(maOutputData, 1.3, 0x1000, 0x4000)
-        , mxOutputStream()
+        : maCachedOutputStream()
         , mxFastTokenHandler()
         , maMarkStack()
     {
@@ -116,8 +114,7 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::endDocument()
     {
-        maOutputStream.flush();
-        mxOutputStream->writeBytes(maOutputData);
+        maCachedOutputStream.flush();
     }
 
     void FastSaxSerializer::writeId( ::sal_Int32 nElement )
@@ -197,7 +194,12 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
     {
-        mxOutputStream = xOutputStream;
+        maCachedOutputStream.setOutputStream( xOutputStream );
+    }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > FastSaxSerializer::getOutputStream()
+    {
+        return maCachedOutputStream.getOutputStream();
     }
 
     void FastSaxSerializer::setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
@@ -294,13 +296,7 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::writeOutput( const sal_Int8* pStr, size_t nLen )
     {
-        maOutputStream.writeBytes( pStr, nLen );
-        // Write when the sequence gets big enough
-        if (maOutputStream.getSize() > 0x10000)
-        {
-            maOutputStream.flush();
-            mxOutputStream->writeBytes(maOutputData);
-        }
+        maCachedOutputStream.writeBytes( pStr, nLen );
     }
 
     FastSaxSerializer::Int8Sequence& FastSaxSerializer::ForMerge::getData()
