@@ -322,7 +322,6 @@ public class LayerView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void changeCheckerboardBitmap(Bitmap bitmap, float pageWidth, float pageHeight) {
-        mRenderer.resetCheckerboard();
         mRenderer.setCheckerboardBitmap(bitmap, pageWidth, pageHeight);
     }
 }
