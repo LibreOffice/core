@@ -58,7 +58,7 @@ void ImplSalStartTimer( sal_uLong nMS, bool bMutex )
     if (pSalData->mnTimerId)
         ChangeTimerQueueTimer(NULL, pSalData->mnTimerId, nMS, nMS);
     else
-        CreateTimerQueueTimer(&pSalData->mnTimerId, NULL, SalTimerProc, NULL, nMS, nMS, WT_EXECUTEDEFAULT);
+        CreateTimerQueueTimer(&pSalData->mnTimerId, NULL, SalTimerProc, NULL, nMS, nMS, WT_EXECUTEINTIMERTHREAD);
 
     pSalData->mnNextTimerTime = pSalData->mnLastEventTime + nMS;
 }
