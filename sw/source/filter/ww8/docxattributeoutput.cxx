@@ -891,6 +891,8 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
     if ( pRedlineParagraphMarkerDeleted || pRedlineParagraphMarkerInserted || pParagraphMarkerProperties)
     {
         m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+        // mark() before paragraph mark properties child elements.
+        InitCollectedRunProperties();
 
         if(pParagraphMarkerProperties)
         {
@@ -948,6 +950,8 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
             EndRedline( pRedlineParagraphMarkerInserted );
         }
 
+        // mergeTopMarks() after paragraph mark properties child elements.
+        m_pSerializer->mergeTopMarks();
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
 
