@@ -119,7 +119,12 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         if (!Bootstrap::get("URE_BOOTSTRAP", uri)) {
             Bootstrap::set(
                 "URE_BOOTSTRAP",
-                Bootstrap::encode(path + SAL_CONFIGFILE("fundamental")));
+                Bootstrap::encode(
+                    path +
+#if defined MACOSX
+                    "../Resources/"
+#endif
+                    SAL_CONFIGFILE("fundamental")));
         }
 
         // create default local component context
