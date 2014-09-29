@@ -16,6 +16,24 @@
       "revId": "a7d3ac3083d1dfd48129e82f90c3b4a3e97cca72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1adf8d57_aba40908",
+        "filename": "include/vcl/metric.hxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-29T22:31:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ae2911b_6c6d1b32",
+      "revId": "a7d3ac3083d1dfd48129e82f90c3b4a3e97cca72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
