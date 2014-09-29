@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include <cstring>
@@ -119,7 +121,12 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         if (!Bootstrap::get("URE_BOOTSTRAP", uri)) {
             Bootstrap::set(
                 "URE_BOOTSTRAP",
-                Bootstrap::encode(path + SAL_CONFIGFILE("fundamental")));
+                Bootstrap::encode(
+                    path +
+#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+                    "../Resources/"
+#endif
+                    SAL_CONFIGFILE("fundamental")));
         }
 
         // create default local component context
