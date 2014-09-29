@@ -36,7 +36,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <info>
-            <desc>Specifies whether Images and Objects are displayed.</desc>
+            <desc>Specifies whether images and objects are displayed.</desc>
             <label>Images and Objects</label>
           </info>
           <value>true</value>
@@ -592,7 +592,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies whether Images are printed.</desc>
+            <desc>Specifies whether images are printed.</desc>
             <label>Images</label>
           </info>
           <value>true</value>
@@ -923,7 +923,7 @@
         </info>
         <prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
           <info>
-            <desc>Specifies whether the Image Object Bar or the Text Object Bar/Web is the visible toolbar when a Image is selected.</desc>
+            <desc>Specifies whether the Image Object Bar or the Text Object Bar/Web is the visible toolbar when a image is selected.</desc>
           </info>
           <value>-1</value>
         </prop>
@@ -975,7 +975,7 @@
         <!--OldLocation: Soffice.cfg -->
         <!--UIHints: HTML document in readonly mode - context menu of an Image - Add Image - As Link / Copy-->
         <info>
-          <desc>Specifies whether an Image is embedded or added as link when it is inserted into the Gallery.</desc>
+          <desc>Specifies whether an image is embedded or added as link when it is inserted into the Gallery.</desc>
         </info>
         <value>true</value>
       </prop>
