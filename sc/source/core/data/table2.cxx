@@ -484,47 +484,47 @@ void ScTable::CopyToClip(
     sc::CopyToClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     ScTable* pTable )
 {
-    if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
+    if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
+        return;
+
+    //  copy content
+    //local range names need to be copied first for formula cells
+    if (!pTable->mpRangeName && mpRangeName)
+        pTable->mpRangeName = new ScRangeName(*mpRangeName);
+
+    SCCOL i;
+
+    for ( i = nCol1; i <= nCol2; i++)
+        aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->aCol[i]);  // notes are handled at column level
+
+    //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
+    //  also for all preceding columns/rows, to have valid positions for drawing objects
+
+    if (pColWidth && pTable->pColWidth)
+        for (i=0; i<=nCol2; i++)
+            pTable->pColWidth[i] = pColWidth[i];
+
+    pTable->CopyColHidden(*this, 0, nCol2);
+    pTable->CopyColFiltered(*this, 0, nCol2);
+    if (pDBDataNoName)
+        pTable->SetAnonymousDBData(new ScDBData(*pDBDataNoName));
+
+    if (pRowFlags && pTable->pRowFlags && mpRowHeights && pTable->mpRowHeights)
     {
-        //  copy content
-        //local range names need to be copied first for formula cells
-        if (!pTable->mpRangeName && mpRangeName)
-            pTable->mpRangeName = new ScRangeName(*mpRangeName);
-
-        SCCOL i;
-
-        for ( i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->aCol[i]);  // notes are handled at column level
-
-        //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
-        //  also for all preceding columns/rows, to have valid positions for drawing objects
-
-        if (pColWidth && pTable->pColWidth)
-            for (i=0; i<=nCol2; i++)
-                pTable->pColWidth[i] = pColWidth[i];
-
-        pTable->CopyColHidden(*this, 0, nCol2);
-        pTable->CopyColFiltered(*this, 0, nCol2);
-        if (pDBDataNoName)
-            pTable->SetAnonymousDBData(new ScDBData(*pDBDataNoName));
-
-        if (pRowFlags && pTable->pRowFlags && mpRowHeights && pTable->mpRowHeights)
-        {
-            pTable->pRowFlags->CopyFromAnded( *pRowFlags, 0, nRow2, CR_MANUALSIZE);
-            pTable->CopyRowHeight(*this, 0, nRow2, 0);
-        }
-
-        pTable->CopyRowHidden(*this, 0, nRow2);
-        pTable->CopyRowFiltered(*this, 0, nRow2);
-
-        //  ggf. Formeln durch Werte ersetzen
-
-        if ( IsProtected() )
-            for (i = nCol1; i <= nCol2; i++)
-                pTable->aCol[i].RemoveProtected(nRow1, nRow2);
-
-        pTable->mpCondFormatList.reset(new ScConditionalFormatList(pTable->pDocument, *mpCondFormatList));
+        pTable->pRowFlags->CopyFromAnded( *pRowFlags, 0, nRow2, CR_MANUALSIZE);
+        pTable->CopyRowHeight(*this, 0, nRow2, 0);
     }
+
+    pTable->CopyRowHidden(*this, 0, nRow2);
+    pTable->CopyRowFiltered(*this, 0, nRow2);
+
+    //  ggf. Formeln durch Werte ersetzen
+
+    if ( IsProtected() )
+        for (i = nCol1; i <= nCol2; i++)
+            pTable->aCol[i].RemoveProtected(nRow1, nRow2);
+
+    pTable->mpCondFormatList.reset(new ScConditionalFormatList(pTable->pDocument, *mpCondFormatList));
 }
 
 void ScTable::CopyToClip(
