@@ -24,14 +24,14 @@ package org.openoffice.xmerge.converter.xml.sxc;
 public interface SxcConstants {
 
     /** Family name for column styles. */
-    String COLUMN_STYLE_FAMILY = "table-column";
+    static final String COLUMN_STYLE_FAMILY = "table-column";
 
     /** Family name for row styles. */
-    String ROW_STYLE_FAMILY = "table-row";
+    static final String ROW_STYLE_FAMILY = "table-row";
 
     /** Family name for table-cell styles. */
-    String TABLE_CELL_STYLE_FAMILY = "table-cell";
+    static final String TABLE_CELL_STYLE_FAMILY = "table-cell";
 
     /** Name of the default style. */
-    String DEFAULT_STYLE = "Default";
+    static final String DEFAULT_STYLE = "Default";
 }
