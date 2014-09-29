@@ -355,11 +355,14 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             aXFillColorItem.PutValue(*pXFillColorItem);
             rToSet.Put(aXFillColorItem);
         }
-        else if (aXFillStyleItem.GetValue() == drawing::FillStyle_SOLID && pCol)
+        else if (aXFillStyleItem.GetValue() == drawing::FillStyle_SOLID && (pCol || pRGBCol))
         {
             // Fill style is set to solid, but no fill color is given.
             // On the other hand, we have a BackColor, so use that.
-            aBrush.PutValue(*pCol, MID_BACK_COLOR);
+            if (pCol)
+                aBrush.PutValue(*pCol, MID_BACK_COLOR);
+            else
+                aBrush.PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
             setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
         }
 

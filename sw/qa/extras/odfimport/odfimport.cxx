@@ -478,6 +478,16 @@ DECLARE_ODFIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.odt")
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xParagraph, 2), "CharWeight"));
 }
 
+DECLARE_ODFIMPORT_TEST(fdo81223, "fdo81223.odt")
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nValue(0);
+    xFrame->getPropertyValue("BackColor") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xfeffffff), nValue);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

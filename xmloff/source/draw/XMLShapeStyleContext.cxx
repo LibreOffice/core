@@ -53,8 +53,7 @@ XMLShapeStyleContext::XMLShapeStyleContext(
     SvXMLStylesContext& rStyles,
     sal_uInt16 nFamily)
 :   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
-    m_bIsNumRuleAlreadyConverted( false ),
-    m_bIsFillStyleAlreadyConverted(false) //UUUU
+    m_bIsNumRuleAlreadyConverted( false )
 {
 }
 
@@ -184,18 +183,6 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                 property->mnIndex = -1;
             }
         }
-    }
-
-    //UUUU need to filter out old fill definitions when the new ones are used. The new
-    // ones are used when a FillStyle is defined
-    if(!m_bIsFillStyleAlreadyConverted && GetProperties().size())
-    {
-        if(doNewDrawingLayerFillStyleDefinitionsExist(OUString("FillStyle")))
-        {
-            deactivateOldFillStyleDefinitions(getStandardSet());
-        }
-
-        m_bIsFillStyleAlreadyConverted = true;
     }
 
     struct _ContextID_Index_Pair aContextIDs[] =
