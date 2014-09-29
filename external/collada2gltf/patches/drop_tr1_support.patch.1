@@ -1,0 +1,403 @@
+diff -urN -U 4 COLLADA2GLTF/assetModifiers/GLTFFlipUVModifier.cpp COLLADA2GLTF_/assetModifiers/GLTFFlipUVModifier.cpp
+--- COLLADA2GLTF/assetModifiers/GLTFFlipUVModifier.cpp	2014-05-25 11:30:45.116840301 +0200
++++ COLLADA2GLTF_/assetModifiers/GLTFFlipUVModifier.cpp	2014-09-29 14:35:52.315612818 +0200
+@@ -25,9 +25,6 @@
+ #include "GLTFFlipUVModifier.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/COLLADA2GLTFWriter.cpp COLLADA2GLTF_/COLLADA2GLTFWriter.cpp
+--- COLLADA2GLTF/COLLADA2GLTFWriter.cpp	2014-05-25 11:30:45.111840284 +0200
++++ COLLADA2GLTF_/COLLADA2GLTFWriter.cpp	2014-09-29 14:35:52.299612815 +0200
+@@ -35,9 +35,6 @@
+ #include <algorithm>
+ 
+ 
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ using namespace COLLADAFW;
+ using namespace COLLADABU;
+diff -urN -U 4 COLLADA2GLTF/convert/animationConverter.cpp COLLADA2GLTF_/convert/animationConverter.cpp
+--- COLLADA2GLTF/convert/animationConverter.cpp	2014-05-25 11:30:45.116840301 +0200
++++ COLLADA2GLTF_/convert/animationConverter.cpp	2014-09-29 14:35:52.315612818 +0200
+@@ -9,9 +9,6 @@
+ #include "GLTF-Open3DGC.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/convert/meshConverter.cpp COLLADA2GLTF_/convert/meshConverter.cpp
+--- COLLADA2GLTF/convert/meshConverter.cpp	2014-05-25 11:30:45.117840304 +0200
++++ COLLADA2GLTF_/convert/meshConverter.cpp	2014-09-29 14:35:52.311612817 +0200
+@@ -23,9 +23,6 @@
+ //--- X3DGC
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ 
+diff -urN -U 4 COLLADA2GLTF/extensions/o3dgc-compression/GLTF-Open3DGC.cpp COLLADA2GLTF_/extensions/o3dgc-compression/GLTF-Open3DGC.cpp
+--- COLLADA2GLTF/extensions/o3dgc-compression/GLTF-Open3DGC.cpp	2014-05-25 11:30:45.143840389 +0200
++++ COLLADA2GLTF_/extensions/o3dgc-compression/GLTF-Open3DGC.cpp	2014-09-29 14:35:52.299612815 +0200
+@@ -40,9 +40,6 @@
+ 
+ using namespace o3dgc;
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFAccessor.cpp COLLADA2GLTF_/GLTF/GLTFAccessor.cpp
+--- COLLADA2GLTF/GLTF/GLTFAccessor.cpp	2014-05-25 11:30:45.111840284 +0200
++++ COLLADA2GLTF_/GLTF/GLTFAccessor.cpp	2014-09-29 14:35:52.307612816 +0200
+@@ -27,9 +27,6 @@
+ #include "GLTF.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFAnimation.cpp COLLADA2GLTF_/GLTF/GLTFAnimation.cpp
+--- COLLADA2GLTF/GLTF/GLTFAnimation.cpp	2014-05-25 11:30:45.112840287 +0200
++++ COLLADA2GLTF_/GLTF/GLTFAnimation.cpp	2014-09-29 14:35:52.311612817 +0200
+@@ -28,9 +28,6 @@
+ 
+ using namespace rapidjson;
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFAsset.cpp COLLADA2GLTF_/GLTF/GLTFAsset.cpp
+--- COLLADA2GLTF/GLTF/GLTFAsset.cpp	2014-05-25 11:30:45.112840287 +0200
++++ COLLADA2GLTF_/GLTF/GLTFAsset.cpp	2014-09-29 14:35:52.307612816 +0200
+@@ -7,9 +7,6 @@
+ #include "geometryHelpers.h"
+ #include "../shaders/commonProfileShaders.h"
+ 
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFBuffer.cpp COLLADA2GLTF_/GLTF/GLTFBuffer.cpp
+--- COLLADA2GLTF/GLTF/GLTFBuffer.cpp	2014-05-25 11:30:45.112840287 +0200
++++ COLLADA2GLTF_/GLTF/GLTFBuffer.cpp	2014-09-29 14:35:52.303612815 +0200
+@@ -29,9 +29,6 @@
+ 
+ using namespace rapidjson;
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFConfig.cpp COLLADA2GLTF_/GLTF/GLTFConfig.cpp
+--- COLLADA2GLTF/GLTF/GLTFConfig.cpp	2014-05-25 11:30:45.112840287 +0200
++++ COLLADA2GLTF_/GLTF/GLTFConfig.cpp	2014-09-29 14:35:52.303612815 +0200
+@@ -24,9 +24,6 @@
+ #include "GLTF.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFEffect.cpp COLLADA2GLTF_/GLTF/GLTFEffect.cpp
+--- COLLADA2GLTF/GLTF/GLTFEffect.cpp	2014-05-25 11:30:45.113840291 +0200
++++ COLLADA2GLTF_/GLTF/GLTFEffect.cpp	2014-09-29 14:35:52.307612816 +0200
+@@ -28,9 +28,6 @@
+ #include "../shaders/commonProfileShaders.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFExtraDataHandler.cpp COLLADA2GLTF_/GLTF/GLTFExtraDataHandler.cpp
+--- COLLADA2GLTF/GLTF/GLTFExtraDataHandler.cpp	2014-05-25 11:30:45.113840291 +0200
++++ COLLADA2GLTF_/GLTF/GLTFExtraDataHandler.cpp	2014-09-29 14:35:52.299612815 +0200
+@@ -8,12 +8,9 @@
+
+ #include <vector> //FIXME: this should be included by OpenCOLLADA.
+ #include "../GLTFOpenCOLLADA.h"
+-#include "GLTFExtraDataHandler.h"
+ #include "GLTF.h"
++#include "GLTFExtraDataHandler.h"
+
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFExtraDataHandler.h COLLADA2GLTF_/GLTF/GLTFExtraDataHandler.h
+--- COLLADA2GLTF/GLTF/GLTFExtraDataHandler.h	2014-05-25 11:30:45.113840291 +0200
++++ COLLADA2GLTF_/GLTF/GLTFExtraDataHandler.h	2014-09-29 14:37:50.127630964 +0200
+@@ -6,14 +6,6 @@
+ 
+ #include "COLLADASaxFWLIExtraDataCallbackHandler.h"
+ 
+-#if (defined(WIN32) || defined(_LIBCPP_VERSION) || __cplusplus > 199711L)
+-#include <memory>
+-#include <unordered_map>
+-#else
+-#include <tr1/memory>
+-#include <tr1/unordered_map>
+-#endif
+-
+ namespace GLTF
+ {
+     class JSONObject;
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFExtras.cpp COLLADA2GLTF_/GLTF/GLTFExtras.cpp
+--- COLLADA2GLTF/GLTF/GLTFExtras.cpp	2014-05-25 11:30:45.113840291 +0200
++++ COLLADA2GLTF_/GLTF/GLTFExtras.cpp	2014-09-29 14:35:52.303612815 +0200
+@@ -24,9 +24,6 @@
+ #include "GLTF.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTF.h COLLADA2GLTF_/GLTF/GLTF.h
+--- COLLADA2GLTF/GLTF/GLTF.h	2014-05-25 11:30:45.111840284 +0200
++++ COLLADA2GLTF_/GLTF/GLTF.h	2014-09-29 14:37:33.531629524 +0200
+@@ -42,13 +42,8 @@
+ #include <cstddef>
+ #include <cstdint>
+ 
+-#if (defined(WIN32) || defined(_LIBCPP_VERSION) || __cplusplus > 199711L)
+ #include <memory>
+ #include <unordered_map>
+-#else 
+-#include <tr1/memory>
+-#include <tr1/unordered_map>
+-#endif
+ 
+ // RapidJSON headers
+ #include "prettywriter.h"	
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFInputStream.cpp COLLADA2GLTF_/GLTF/GLTFInputStream.cpp
+--- COLLADA2GLTF/GLTF/GLTFInputStream.cpp	2014-05-25 11:30:45.113840291 +0200
++++ COLLADA2GLTF_/GLTF/GLTFInputStream.cpp	2014-09-29 14:35:52.299612815 +0200
+@@ -23,9 +23,6 @@
+ 
+ #include "GLTF.h"
+ 
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFMesh.cpp COLLADA2GLTF_/GLTF/GLTFMesh.cpp
+--- COLLADA2GLTF/GLTF/GLTFMesh.cpp	2014-05-25 11:30:45.113840291 +0200
++++ COLLADA2GLTF_/GLTF/GLTFMesh.cpp	2014-09-29 14:35:52.303612815 +0200
+@@ -29,9 +29,6 @@
+ #include "../helpers/geometryHelpers.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFOutputStream.cpp COLLADA2GLTF_/GLTF/GLTFOutputStream.cpp
+--- COLLADA2GLTF/GLTF/GLTFOutputStream.cpp	2014-05-25 11:30:45.113840291 +0200
++++ COLLADA2GLTF_/GLTF/GLTFOutputStream.cpp	2014-09-29 14:35:52.311612817 +0200
+@@ -23,9 +23,6 @@
+ 
+ #include "GLTF.h"
+ 
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFPrimitive.cpp COLLADA2GLTF_/GLTF/GLTFPrimitive.cpp
+--- COLLADA2GLTF/GLTF/GLTFPrimitive.cpp	2014-05-25 11:30:45.114840294 +0200
++++ COLLADA2GLTF_/GLTF/GLTFPrimitive.cpp	2014-09-29 14:35:52.303612815 +0200
+@@ -27,9 +27,6 @@
+ #include "GLTF.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFSkin.cpp COLLADA2GLTF_/GLTF/GLTFSkin.cpp
+--- COLLADA2GLTF/GLTF/GLTFSkin.cpp	2014-05-25 11:30:45.114840294 +0200
++++ COLLADA2GLTF_/GLTF/GLTFSkin.cpp	2014-09-29 14:35:52.303612815 +0200
+@@ -24,9 +24,6 @@
+ #include "GLTF.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/GLTF/GLTFWriter.cpp COLLADA2GLTF_/GLTF/GLTFWriter.cpp
+--- COLLADA2GLTF/GLTF/GLTFWriter.cpp	2014-05-25 11:30:45.115840297 +0200
++++ COLLADA2GLTF_/GLTF/GLTFWriter.cpp	2014-09-29 14:35:52.307612816 +0200
+@@ -29,9 +29,6 @@
+ #include "GLTFAsset.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/GLTFOpenCOLLADAUtils.cpp COLLADA2GLTF_/GLTFOpenCOLLADAUtils.cpp
+--- COLLADA2GLTF/GLTFOpenCOLLADAUtils.cpp	2014-05-25 11:30:45.115840297 +0200
++++ COLLADA2GLTF_/GLTFOpenCOLLADAUtils.cpp	2014-09-29 14:35:52.295612814 +0200
+@@ -25,9 +25,6 @@
+ #include "GLTFOpenCOLLADA.h"
+ #include "GLTFOpenCOLLADAUtils.h"
+ 
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ void fillFloatPtrFromOpenCOLLADAMatrix4(const COLLADABU::Math::Matrix4 &matrix, float *m) {
+diff -urN -U 4 COLLADA2GLTF/helpers/geometryHelpers.cpp COLLADA2GLTF_/helpers/geometryHelpers.cpp
+--- COLLADA2GLTF/helpers/geometryHelpers.cpp	2014-05-25 11:30:45.143840389 +0200
++++ COLLADA2GLTF_/helpers/geometryHelpers.cpp	2014-09-29 14:35:52.291612813 +0200
+@@ -27,9 +27,6 @@
+ #include "geometryHelpers.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/helpers/mathHelpers.cpp COLLADA2GLTF_/helpers/mathHelpers.cpp
+--- COLLADA2GLTF/helpers/mathHelpers.cpp	2014-05-25 11:30:45.143840389 +0200
++++ COLLADA2GLTF_/helpers/mathHelpers.cpp	2014-09-29 14:35:52.291612813 +0200
+@@ -26,9 +26,6 @@
+ #include "mathHelpers.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF
+diff -urN -U 4 COLLADA2GLTF/JSON/JSONArray.cpp COLLADA2GLTF_/JSON/JSONArray.cpp
+--- COLLADA2GLTF/JSON/JSONArray.cpp	2014-05-25 11:30:45.115840297 +0200
++++ COLLADA2GLTF_/JSON/JSONArray.cpp	2014-09-29 14:35:52.315612818 +0200
+@@ -32,9 +32,6 @@
+ #include "document.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/JSON/JSONNumber.cpp COLLADA2GLTF_/JSON/JSONNumber.cpp
+--- COLLADA2GLTF/JSON/JSONNumber.cpp	2014-05-25 11:30:45.115840297 +0200
++++ COLLADA2GLTF_/JSON/JSONNumber.cpp	2014-09-29 14:35:52.315612818 +0200
+@@ -27,9 +27,6 @@
+ #include "GLTF.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/JSON/JSONObject.cpp COLLADA2GLTF_/JSON/JSONObject.cpp
+--- COLLADA2GLTF/JSON/JSONObject.cpp	2014-05-25 11:30:45.116840301 +0200
++++ COLLADA2GLTF_/JSON/JSONObject.cpp	2014-09-29 14:35:52.315612818 +0200
+@@ -29,9 +29,6 @@
+ #include "document.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ 
+diff -urN -U 4 COLLADA2GLTF/JSON/JSONString.cpp COLLADA2GLTF_/JSON/JSONString.cpp
+--- COLLADA2GLTF/JSON/JSONString.cpp	2014-05-25 11:30:45.116840301 +0200
++++ COLLADA2GLTF_/JSON/JSONString.cpp	2014-09-29 14:35:52.315612818 +0200
+@@ -30,9 +30,6 @@
+ #include "GLTF.h"
+ 
+ using namespace std;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ 
+ namespace GLTF 
+ {
+diff -urN -U 4 COLLADA2GLTF/JSON/JSONValue.cpp COLLADA2GLTF_/JSON/JSONValue.cpp
+--- COLLADA2GLTF/JSON/JSONValue.cpp	2014-05-25 11:30:45.116840301 +0200
++++ COLLADA2GLTF_/JSON/JSONValue.cpp	2014-09-29 14:35:52.315612818 +0200
+@@ -27,9 +27,6 @@
+ #include "GLTF.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ namespace GLTF 
+diff -urN -U 4 COLLADA2GLTF/main.cpp COLLADA2GLTF_/main.cpp
+--- COLLADA2GLTF/main.cpp	2014-05-25 11:30:45.143840389 +0200
++++ COLLADA2GLTF_/main.cpp	2014-09-29 14:35:52.295612814 +0200
+@@ -41,9 +41,6 @@
+ #include "JSONObject.h"
+ 
+ using namespace rapidjson;
+-#if __cplusplus <= 199711L
+-using namespace std::tr1;
+-#endif
+ using namespace std;
+ 
+ #ifndef _CRT_SECURE_NO_WARNINGS
