@@ -805,6 +805,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
             {
                 implFlushDocument( false );
                 xBodyText = 0;
+                EndListening( *&xDocSh );
                 xDocSh.Clear();
             }
         }
