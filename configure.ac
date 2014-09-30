@@ -6378,27 +6378,6 @@ fi
 AC_SUBST(CXXFLAGS_CXX11)
 AC_SUBST(HAVE_CXX11)
 
-AC_MSG_CHECKING([for std::shared_ptr])
-if test "$HAVE_CXX11" = "TRUE" -a "$GCC" = "yes"; then
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-    AC_LANG_PUSH([C++])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-        #include <memory>
-        using std::shared_ptr;
-        ])],
-      [ have_std_shared_ptr=yes ],
-      [ have_std_shared_ptr=no ]
-    )
-    AC_LANG_POP([C++])
-    CXXFLAGS=$save_CXXFLAGS
-elif test "$COM" = "MSC"; then
-    have_std_shared_ptr=yes
-else
-    have_std_shared_ptr=no
-fi
-AC_MSG_RESULT([$have_std_shared_ptr])
-
 dnl ==================================
 dnl Check for C++11 "= delete" support
 dnl ==================================
@@ -10603,7 +10582,7 @@ dnl Check whether to enable COLLADA support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable COLLADA support])
 ENABLE_COLLADA=
-if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE" -a "$have_std_shared_ptr" = "yes"; then
+if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE"; then
     AC_MSG_RESULT([yes])
     ENABLE_COLLADA=TRUE
     AC_DEFINE(HAVE_FEATURE_COLLADA,1)
