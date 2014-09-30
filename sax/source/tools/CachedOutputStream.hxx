@@ -22,28 +22,17 @@ namespace sax_fastparser {
 
 class CachedOutputStream
 {
-    /// realloc aligns to this value
-    static const sal_Int32 mnMinimumResize = 0x1000;
     /// When buffer hits this size, it's written to mxOutputStream
     static const sal_Int32 mnMaximumSize = 0x10000;
 
     /// Output stream, usually writing data into files.
     css::uno::Reference< css::io::XOutputStream > mxOutputStream;
-    sal_Int32 mnCacheAllocatedSize;
     sal_Int32 mnCacheWrittenSize;
-    sal_Int8* mpCache;
+    sal_Int8 mpCache[ mnMaximumSize ];
 
 public:
-    CachedOutputStream() : mnCacheAllocatedSize(mnMinimumResize)
-                         , mnCacheWrittenSize(0)
-    {
-        mpCache = static_cast<sal_Int8 *>(malloc(mnCacheAllocatedSize));
-    }
-
-    ~CachedOutputStream()
-    {
-        free(mpCache);
-    }
+    CachedOutputStream() : mnCacheWrittenSize(0) {}
+    ~CachedOutputStream() {}
 
     css::uno::Reference< css::io::XOutputStream > getOutputStream() const
     {
@@ -58,30 +47,21 @@ public:
     /// cache string and if limit is hit, flush
     void writeBytes( const sal_Int8* pStr, sal_Int32 nLen )
     {
-        // Writer does some elements sorting, so it can accumulate
-        // pretty big strings in FastSaxSerializer::ForMerge.
-        // In that case, just flush data and write immediately.
-        if (nLen > mnMaximumSize)
-        {
-            flush();
-            mxOutputStream->writeBytes( css::uno::Sequence<sal_Int8>(pStr, nLen) );
-            return;
-        }
-
         // Write when the buffer gets big enough
         if (mnCacheWrittenSize + nLen > mnMaximumSize)
+        {
             flush();
 
-        sal_Int32 nMissingBytes = mnCacheWrittenSize + nLen - mnCacheAllocatedSize;
-        // Ensure the buffer has enough space left
-        if (nMissingBytes > 0)
-        {
-            // Round off to the next multiple of mnMinimumResize
-            mnCacheAllocatedSize = mnCacheAllocatedSize +
-                ((nMissingBytes + mnMinimumResize - 1) / mnMinimumResize) * mnMinimumResize;
-            mpCache = static_cast<sal_Int8 *>(realloc(mpCache, mnCacheAllocatedSize));
+            // Writer does some elements sorting, so it can accumulate
+            // pretty big strings in FastSaxSerializer::ForMerge.
+            // In that case, just flush data and write immediately.
+            if (nLen > mnMaximumSize)
+            {
+                mxOutputStream->writeBytes( css::uno::Sequence<sal_Int8>(pStr, nLen) );
+                return;
+            }
         }
-        assert(mnCacheWrittenSize + nLen <= mnCacheAllocatedSize);
+
         memcpy(mpCache + mnCacheWrittenSize, pStr, nLen);
         mnCacheWrittenSize += nLen;
     }
