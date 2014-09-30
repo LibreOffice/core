@@ -157,6 +157,7 @@ writer_factory_list = [
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
     ("libwriterfilterlo.a", "writerfilter_component_getFactory"),
+    ("libtextfdlo.a", "textfd_component_getFactory"),
     ]
 
 writer_constructor_list = [
