@@ -1146,7 +1146,7 @@ REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_reader_create(
         *result = 0;
         return true;
     }
-    std::auto_ptr< TypeRegistryEntry > entry;
+    std::unique_ptr< TypeRegistryEntry > entry;
     try {
         entry.reset(
             new TypeRegistryEntry(
