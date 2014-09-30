@@ -176,7 +176,7 @@ public class LibreOfficeMainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), LibreOfficeMainActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.setData(Uri.parse("file:///assets/license.txt"));
                 startActivity(intent);
             }
@@ -187,7 +187,7 @@ public class LibreOfficeMainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), LibreOfficeMainActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.setData(Uri.parse("file:///assets/notice.txt"));
                 startActivity(intent);
             }
