@@ -862,7 +862,7 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
     while (aRangeOfDefaults[nRange] != 0)
     {
         for (sal_uInt16 nWhich = aRangeOfDefaults[nRange];
-             nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich)
+             nWhich <= aRangeOfDefaults[nRange + 1]; ++nWhich)
         {
             const SfxPoolItem& rSourceAttr =
                 rSource.mpAttrPool->GetDefaultItem(nWhich);
