@@ -16,7 +16,7 @@ public interface TileProvider {
 
     void changePart(int partIndex);
 
-    Bitmap thumbnail();
+    Bitmap thumbnail(int size);
 
     void close();
 }

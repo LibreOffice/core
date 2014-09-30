@@ -41,7 +41,7 @@ public class LOKitThread extends Thread {
     }
 
     private void refresh() {
-        Bitmap bitmap = mTileProvider.thumbnail();
+        Bitmap bitmap = mTileProvider.thumbnail(1000);
         if (bitmap != null) {
             mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         }
