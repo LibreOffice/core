@@ -178,7 +178,7 @@ namespace frm
     private:
         OImageProducerThread_Impl*          m_pThread;
         ::cppu::OInterfaceContainerHelper   m_aSubmissionVetoListeners;
-        ::std::auto_ptr< ControlFeatureInterception >
+        ::std::unique_ptr< ControlFeatureInterception >
                                             m_pFeatureInterception;
 
     protected:

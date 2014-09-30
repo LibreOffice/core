@@ -192,8 +192,7 @@ namespace xforms
 
     namespace
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        static void lcl_initializePatternMatcher( ::std::auto_ptr< RegexMatcher >& _rpMatcher, const OUString& _rPattern )
+        static void lcl_initializePatternMatcher( ::std::unique_ptr< RegexMatcher >& _rpMatcher, const OUString& _rPattern )
         {
             UErrorCode nMatchStatus = U_ZERO_ERROR;
             UnicodeString aIcuPattern( reinterpret_cast<const UChar *>(_rPattern.getStr()), _rPattern.getLength() );    // UChar != sal_Unicode in MinGW
@@ -201,7 +200,6 @@ namespace xforms
             OSL_ENSURE( U_SUCCESS( nMatchStatus ), "lcl_initializePatternMatcher: invalid pattern property!" );
                 // if asserts, then something changed our pattern without going to convertFastPropertyValue/checkPropertySanity
         }
-        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         static bool lcl_matchString( RegexMatcher& _rMatcher, const OUString& _rText )
         {

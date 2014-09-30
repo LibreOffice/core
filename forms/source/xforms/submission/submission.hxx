@@ -117,7 +117,7 @@ protected:
     css::uno::Reference< css::uno::XComponentContext >      m_xContext;
     OUString m_aEncoding;
 
-    ::std::auto_ptr< CSerialization > createSerialization(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler
+    ::std::unique_ptr< CSerialization > createSerialization(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler
                                                   ,com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment>& _rOutEnv);
 
 public:

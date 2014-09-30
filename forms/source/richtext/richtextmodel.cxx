@@ -90,7 +90,6 @@ namespace frm
     ORichTextModel::ORichTextModel( const ORichTextModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OControlModel       ( _pOriginal, _rxFactory, false )
         ,FontControlModel    ( _pOriginal                        )
-        ,m_pEngine           ( NULL                              )
         ,m_bSettingEngineText( false                             )
         ,m_aModifyListeners  ( m_aMutex                          )
     {

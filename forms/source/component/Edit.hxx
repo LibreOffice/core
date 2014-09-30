@@ -34,7 +34,7 @@ namespace frm
 class OEditModel
                 :public OEditBaseModel
 {
-    ::std::auto_ptr< ::dbtools::FormattedColumnValue >
+    ::std::unique_ptr< ::dbtools::FormattedColumnValue >
                                 m_pValueFormatter;
     bool                    m_bMaxTextLenModified : 1;  // set to <TRUE/> when we change the MaxTextLen of the aggregate
 

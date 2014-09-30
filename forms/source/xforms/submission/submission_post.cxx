@@ -48,7 +48,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const css::uno::Reference<
 {
     // PUT always uses application/xml
     css::uno::Reference< XCommandEnvironment > aEnvironment;
-    auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
+    unique_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
     try {
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment, comphelper::getProcessComponentContext());

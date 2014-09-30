@@ -35,7 +35,7 @@ class OPatternModel
 {
 private:
     ::com::sun::star::uno::Any  m_aLastKnownValue;
-    ::std::auto_ptr< ::dbtools::FormattedColumnValue >
+    ::std::unique_ptr< ::dbtools::FormattedColumnValue >
                                 m_pFormattedValue;
 
 protected:

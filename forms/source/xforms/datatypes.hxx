@@ -62,7 +62,7 @@ namespace xforms
         sal_uInt16      m_nWST;
         // </properties>
 
-        ::std::auto_ptr< U_NAMESPACE_QUALIFIER RegexMatcher >
+        ::std::unique_ptr< U_NAMESPACE_QUALIFIER RegexMatcher >
                         m_pPatternMatcher;
         bool            m_bPatternMatcherDirty;
 

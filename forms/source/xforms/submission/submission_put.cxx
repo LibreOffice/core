@@ -45,7 +45,7 @@ CSubmissionPut::CSubmissionPut(const OUString& aURL, const css::uno::Reference< 
 CSubmission::SubmissionResult CSubmissionPut::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
     css::uno::Reference< XCommandEnvironment > aEnvironment;
-    auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
+    unique_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
     try {
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment, comphelper::getProcessComponentContext());

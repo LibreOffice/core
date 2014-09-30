@@ -72,7 +72,7 @@ namespace frm
         void    setConnection       ( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
 
     private:
-        ::std::auto_ptr< CachedRowSet_Data >    m_pData;
+        ::std::unique_ptr< CachedRowSet_Data >    m_pData;
     };
 
 

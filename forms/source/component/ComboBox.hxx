@@ -60,7 +60,7 @@ class OComboBoxModel
     ::com::sun::star::form::ListSourceType  m_eListSourceType;      // ListSource's type
     bool                                    m_bEmptyIsNull;         // Empty string is interpreted as NULL
 
-    ::std::auto_ptr< ::dbtools::FormattedColumnValue > m_pValueFormatter;
+    ::std::unique_ptr< ::dbtools::FormattedColumnValue > m_pValueFormatter;
 
 
 
