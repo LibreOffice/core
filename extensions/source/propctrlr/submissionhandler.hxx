@@ -70,7 +70,7 @@ namespace pcr
     {
     private:
         ::osl::Mutex                                m_aMutex;
-        ::std::auto_ptr< SubmissionHelper >         m_pHelper;
+        ::std::unique_ptr< SubmissionHelper >       m_pHelper;
         ::comphelper::OPropertyChangeMultiplexer*   m_pPropChangeMultiplexer;
 
     public:

@@ -69,7 +69,7 @@ namespace pcr
     class ComposedPropertyUIUpdate
     {
     private:
-        ::std::auto_ptr< MapHandlerToUI >       m_pCollectedUIs;
+        ::std::unique_ptr< MapHandlerToUI >     m_pCollectedUIs;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >
                                                 m_xDelegatorUI;
         oslInterlockedCount                     m_nSuspendCounter;

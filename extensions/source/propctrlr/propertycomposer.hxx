@@ -60,9 +60,7 @@ namespace pcr
 
     private:
         HandlerArray                                    m_aSlaveHandlers;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< ComposedPropertyUIUpdate >     m_pUIRequestComposer;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< ComposedPropertyUIUpdate >   m_pUIRequestComposer;
         PropertyChangeListeners                         m_aPropertyListeners;
         bool                                            m_bSupportedPropertiesAreKnown;
         PropertyBag                                     m_aSupportedProperties;

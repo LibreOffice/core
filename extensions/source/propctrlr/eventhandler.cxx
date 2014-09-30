@@ -854,7 +854,7 @@ namespace pcr
         if ( !pFactory )
             return InteractiveSelectionResult_Cancelled;
 
-        ::std::auto_ptr< VclAbstractDialog > pDialog( pFactory->CreateSvxMacroAssignDlg(
+        ::std::unique_ptr< VclAbstractDialog > pDialog( pFactory->CreateSvxMacroAssignDlg(
             PropertyHandlerHelper::getDialogParentWindow( m_xContext ),
             impl_getContextFrame_nothrow(),
             m_bIsDialogElement,

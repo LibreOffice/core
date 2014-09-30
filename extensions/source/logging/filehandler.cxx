@@ -93,7 +93,7 @@ namespace logging
         Reference<XComponentContext>    m_xContext;
         LogHandlerHelper                m_aHandlerHelper;
         OUString                 m_sFileURL;
-        ::std::auto_ptr< ::osl::File >  m_pFile;
+        ::std::unique_ptr< ::osl::File >  m_pFile;
         FileValidity                    m_eFileValidity;
 
     protected:

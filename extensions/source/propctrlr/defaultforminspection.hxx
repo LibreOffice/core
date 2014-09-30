@@ -39,9 +39,7 @@ namespace pcr
         bool                                        m_bConstructed;
 
         /// access to property meta data
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< OPropertyInfoService >     m_pInfoService;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< OPropertyInfoService >   m_pInfoService;
 
     protected:
         virtual ~DefaultFormComponentInspectorModel();

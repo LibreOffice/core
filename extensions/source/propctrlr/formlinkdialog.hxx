@@ -47,12 +47,10 @@ namespace pcr
         FixedText*                      m_pExplanation;
         FixedText*                      m_pDetailLabel;
         FixedText*                      m_pMasterLabel;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< FieldLinkRow > m_aRow1;
-        ::std::auto_ptr< FieldLinkRow > m_aRow2;
-        ::std::auto_ptr< FieldLinkRow > m_aRow3;
-        ::std::auto_ptr< FieldLinkRow > m_aRow4;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< FieldLinkRow > m_aRow1;
+        ::std::unique_ptr< FieldLinkRow > m_aRow2;
+        ::std::unique_ptr< FieldLinkRow > m_aRow3;
+        ::std::unique_ptr< FieldLinkRow > m_aRow4;
         OKButton*                       m_pOK;
         PushButton*                     m_pSuggest;
 

@@ -94,7 +94,7 @@ namespace pcr
         /// type converter, needed on various occasions
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >    m_xTypeConverter;
         /// access to property meta data
-        ::std::auto_ptr< OPropertyInfoService >                                         m_pInfoService;
+        ::std::unique_ptr< OPropertyInfoService >                                       m_pInfoService;
 
     protected:
         PropertyHandler(

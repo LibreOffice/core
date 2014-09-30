@@ -38,7 +38,7 @@ namespace pcr
     class XSDValidationPropertyHandler : public XSDValidationPropertyHandler_Base
     {
     private:
-        ::std::auto_ptr< XSDValidationHelper >  m_pHelper;
+        ::std::unique_ptr< XSDValidationHelper >  m_pHelper;
 
     public:
         XSDValidationPropertyHandler(

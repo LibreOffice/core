@@ -121,7 +121,7 @@ namespace pcr
         PropertyHandlerMultiRepository                  m_aDependencyHandlers;
         PropertyHandlerRef                              m_xInteractiveHandler;
 
-        ::std::auto_ptr< ComposedPropertyUIUpdate >     m_pUIRequestComposer;
+        ::std::unique_ptr< ComposedPropertyUIUpdate >   m_pUIRequestComposer;
 
         /// our InspectorModel
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >
