@@ -420,9 +420,7 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
 #endif
 }
 
-#define vcl::Region QtXRegion
 #include <qframe.h>
-#undef Region
 
 int KDEXLib::getFrameWidth()
 {

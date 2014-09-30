@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define vcl::Region QtXRegion
-
 #include <QStyle>
 #include <kapplication.h>
 

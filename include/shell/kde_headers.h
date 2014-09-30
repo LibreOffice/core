@@ -37,11 +37,6 @@
 #pragma GCC system_header
 #endif
 
-
-/* ********* Hack, but needed because of conflicting types... */
-#define vcl::Region QtXRegion
-
-
 /* ********* Qt headers */
 #include <qaccessible.h>
 #include <qcheckbox.h>

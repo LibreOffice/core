@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define vcl::Region QtXRegion
 #include <QApplication>
-#undef Region
 
 #include "KDEData.hxx"
 #include "KDESalInstance.hxx"

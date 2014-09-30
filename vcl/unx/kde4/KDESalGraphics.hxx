@@ -23,9 +23,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 
-#define vcl::Region QtXRegion
 #include <QImage>
-#undef Region
 
 /** handles graphics drawings requests and performs the needed drawing operations */
 class KDESalGraphics : public X11SalGraphics
