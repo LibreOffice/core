@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1adf8d57_8bceedb2",
+        "filename": "include/vcl/metric.hxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-30T07:38:22Z",
+      "side": 1,
+      "message": "please keep things simple and do not introduce a global typedef for something trivial that is used in a single place",
+      "revId": "a13cebdd884d3c23eeb8c05888d5bebe2edbbea6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
