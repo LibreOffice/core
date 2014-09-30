@@ -493,7 +493,9 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     ScTableInfo aTabInfo;
     pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
-                                        nScaleX, nScaleY, false, bFormula );
+                    nScaleX, nScaleY,
+                    pDev, MapMode(), // TODO: fix this -- use pViewData if possible, otherwise?
+                    false, bFormula );
     lcl_HidePrint( aTabInfo, nX1, nX2 );
 
     if (bEmbed)
@@ -1337,7 +1339,9 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
         ScTableInfo aTabInfo;
         pBorderDoc->FillInfo( aTabInfo, 0,0, 0,0, 0,
-                                            nScaleX, nScaleY, false, false );
+                              nScaleX, nScaleY,
+                              pDev, MapMode(), // TODO: same as above
+                              false, false );
         OSL_ENSURE(aTabInfo.mnArrCount,"nArrCount == 0");
 
         aTabInfo.mpRowInfo[1].nHeight = (sal_uInt16) nEffHeight;
@@ -1553,7 +1557,9 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
     ScTableInfo aTabInfo;
     pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nPrintTab,
-                                        nScaleX, nScaleY, true, aTableParam.bFormulas );
+                    nScaleX, nScaleY,
+                    pDev, MapMode(), // TODO: same here
+                    true, aTableParam.bFormulas );
     lcl_HidePrint( aTabInfo, nX1, nX2 );
 
     if (bEmbed)
