@@ -21,6 +21,7 @@ class EditTextObject;
 class ScDocument;
 class ScColumn;
 class ScAddress;
+struct ScAttrEntry;
 class ScTokenArray;
 class ScFormulaCell;
 class ScStyleSheet;
@@ -80,6 +81,13 @@ public:
         const ScRange& rRange, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGrammar);
 
     void setTableOpCells(const ScRange& rRange, const ScTabOpParam& rParam);
+
+    /**
+     * Set an array of cell attributes to specified column.  This call
+     * transfers the ownership of the ScAttrEntry array from the caller to the
+     * column.
+     */
+    void setAttrEntries( SCTAB nTab, SCCOL nCol, ScAttrEntry* pData, size_t nSize );
 
     void finalize();
 

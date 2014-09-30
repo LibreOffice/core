@@ -1949,7 +1949,7 @@ void XclImpXFRangeBuffer::SetMerge( SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2,
 
 void XclImpXFRangeBuffer::Finalize()
 {
-    ScDocument& rDoc = GetDoc();
+    ScDocumentImport& rDoc = GetDocImport();
     SCTAB nScTab = GetCurrScTab();
 
     // apply patterns
@@ -1982,7 +1982,7 @@ void XclImpXFRangeBuffer::Finalize()
             {
                 ScAttrEntry aEntry;
                 aEntry.nRow = MAXROW;
-                aEntry.pPattern = rDoc.GetDefPattern();
+                aEntry.pPattern = rDoc.getDoc().GetDefPattern();
                 aAttrs.push_back(aEntry);
             }
 
@@ -1993,7 +1993,7 @@ void XclImpXFRangeBuffer::Finalize()
             for (size_t i = 0; itr != itrEnd; ++itr, ++i)
                 pData[i] = *itr;
 
-            rDoc.SetAttrEntries(nScCol, nScTab, pData, static_cast<SCSIZE>(nAttrSize));
+            rDoc.setAttrEntries(nScTab, nScCol, pData, static_cast<SCSIZE>(nAttrSize));
         }
     }
 
@@ -2017,13 +2017,13 @@ void XclImpXFRangeBuffer::Finalize()
             SetBorderLine( *pRange, nScTab, BOX_LINE_BOTTOM );
         // do merge
         if( bMultiCol || bMultiRow )
-            rDoc.DoMerge( nScTab, rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
+            rDoc.getDoc().DoMerge( nScTab, rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
         // #i93609# merged range in a single row: test if manual row height is needed
         if( !bMultiRow )
         {
-            bool bTextWrap = static_cast< const SfxBoolItem* >( rDoc.GetAttr( rStart.Col(), rStart.Row(), rStart.Tab(), ATTR_LINEBREAK ) )->GetValue();
-            if( !bTextWrap && (rDoc.GetCellType( rStart ) == CELLTYPE_EDIT) )
-                if (const EditTextObject* pEditObj = rDoc.GetEditText(rStart))
+            bool bTextWrap = static_cast<const SfxBoolItem*>( rDoc.getDoc().GetAttr( rStart.Col(), rStart.Row(), rStart.Tab(), ATTR_LINEBREAK ) )->GetValue();
+            if( !bTextWrap && (rDoc.getDoc().GetCellType( rStart ) == CELLTYPE_EDIT) )
+                if (const EditTextObject* pEditObj = rDoc.getDoc().GetEditText(rStart))
                     bTextWrap = pEditObj->GetParagraphCount() > 1;
             if( bTextWrap )
                 GetOldRoot().pColRowBuff->SetManualRowHeight( rStart.Row() );

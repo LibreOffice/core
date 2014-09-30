@@ -1005,6 +1005,22 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
     }
 }
 
+ScColumn* ScTable::FetchColumn( SCCOL nCol )
+{
+    if (!ValidCol(nCol))
+        return NULL;
+
+    return &aCol[nCol];
+}
+
+const ScColumn* ScTable::FetchColumn( SCCOL nCol ) const
+{
+    if (!ValidCol(nCol))
+        return NULL;
+
+    return &aCol[nCol];
+}
+
 void ScTable::StartAllListeners()
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
@@ -2372,14 +2388,6 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
         for (SCCOL i = nStartCol; i <= nEndCol; i++)
             aCol[i].ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray);
     }
-}
-
-bool ScTable::SetAttrEntries(SCCOL nCol, ScAttrEntry* pData, SCSIZE nSize)
-{
-    if (!ValidCol(nCol))
-        return false;
-
-    return aCol[nCol].SetAttrEntries(pData, nSize);
 }
 
 void ScTable::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,

@@ -610,7 +610,6 @@ public:
     void        ApplyPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                   const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = NULL );
-    bool        SetAttrEntries(SCCOL nCol, ScAttrEntry* pData, SCSIZE nSize);
 
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr, bool bPutToPool = false )
                     {
@@ -1097,6 +1096,9 @@ private:
 
     // Clipboard transpose for notes
     void TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2);
+
+    ScColumn* FetchColumn( SCCOL nCol );
+    const ScColumn* FetchColumn( SCCOL nCol ) const;
 
     /**
      * Use this to iterate through non-empty visible cells in a single column.

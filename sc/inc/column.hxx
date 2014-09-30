@@ -411,7 +411,6 @@ public:
     void        ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
     void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                   ScEditDataArray* pDataArray = NULL );
-    bool        SetAttrEntries(ScAttrEntry* pData, SCSIZE nSize);
     void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, bool bPutToPool = false );
     void        SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr, bool bPutToPool = false );

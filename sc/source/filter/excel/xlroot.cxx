@@ -82,6 +82,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mrMedium( rMedium ),
     mxRootStrg( xRootStrg ),
     mrDoc( rDoc ),
+    maDocImport(mrDoc),
     maDefPassword( "VelvetSweatshop" ),
     meTextEnc( eTextEnc ),
     meSysLang( Application::GetSettings().GetLanguageTag().getLanguageType() ),
@@ -263,6 +264,26 @@ SotStorageStreamRef XclRoot::OpenStream( SotStorageRef xStrg, const OUString& rS
 SotStorageStreamRef XclRoot::OpenStream( const OUString& rStrmName ) const
 {
     return OpenStream( GetRootStorage(), rStrmName );
+}
+
+ScDocument& XclRoot::GetDoc() const
+{
+    return mrData.mrDoc;
+}
+
+ScDocument* XclRoot::GetDocPtr() const
+{
+    return &mrData.mrDoc;
+}
+
+ScDocumentImport& XclRoot::GetDocImport()
+{
+    return mrData.maDocImport;
+}
+
+const ScDocumentImport& XclRoot::GetDocImport() const
+{
+    return mrData.maDocImport;
 }
 
 SfxObjectShell* XclRoot::GetDocShell() const

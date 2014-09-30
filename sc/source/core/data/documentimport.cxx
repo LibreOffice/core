@@ -20,6 +20,7 @@
 #include "compiler.hxx"
 #include "paramisc.hxx"
 #include "listenercontext.hxx"
+#include <attarray.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
@@ -406,6 +407,19 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
                 rColCells.set(pBlockPos->miCellPos, nRow, pCell);
         }
     }
+}
+
+void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, ScAttrEntry* pData, size_t nSize )
+{
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    ScColumn* pCol = pTab->FetchColumn(nCol);
+    if (!pCol)
+        return;
+
+    pCol->pAttrArray->SetAttrEntries(pData, nSize);
 }
 
 namespace {

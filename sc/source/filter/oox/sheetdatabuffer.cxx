@@ -456,7 +456,7 @@ void SheetDataBuffer::finalizeImport()
         }
     }
 
-    ScDocument& rDoc = getScDocument();
+    ScDocumentImport& rDoc = getDocImport();
     StylesBuffer& rStyles = getStyles();
     for ( ColStyles::iterator col = maStylesPerColumn.begin(), col_end = maStylesPerColumn.end(); col != col_end; ++col )
     {
@@ -474,8 +474,8 @@ void SheetDataBuffer::finalizeImport()
         {
             ScAttrEntry aEntry;
             aEntry.nRow = MAXROW;
-            aEntry.pPattern = rDoc.GetPattern(nScCol, 0, getSheetIndex());
-            rDoc.GetPool()->Put(*aEntry.pPattern);
+            aEntry.pPattern = rDoc.getDoc().GetPattern(nScCol, 0, getSheetIndex());
+            rDoc.getDoc().GetPool()->Put(*aEntry.pPattern);
             aAttrs.push_back(aEntry);
         }
 
@@ -485,7 +485,7 @@ void SheetDataBuffer::finalizeImport()
         for (size_t i = 0; itr != itrEnd; ++itr, ++i)
             pData[i] = *itr;
 
-        rDoc.SetAttrEntries(nScCol, getSheetIndex(), pData, static_cast<SCSIZE>(nAttrSize));
+        rDoc.setAttrEntries(getSheetIndex(), nScCol, pData, static_cast<SCSIZE>(nAttrSize));
     }
 
     // merge all cached merged ranges and update right/bottom cell borders

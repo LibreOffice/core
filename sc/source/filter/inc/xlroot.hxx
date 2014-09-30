@@ -26,6 +26,7 @@
 #include <sot/storage.hxx>
 #include "xlconst.hxx"
 #include "xltools.hxx"
+#include <documentimport.hxx>
 #include <boost/shared_ptr.hpp>
 
 namespace comphelper { class IDocPasswordVerifier; }
@@ -80,6 +81,7 @@ struct XclRootData
     SfxMedium&          mrMedium;           /// The medium to import from.
     SotStorageRef       mxRootStrg;         /// The root OLE storage of imported/exported file.
     ScDocument&         mrDoc;              /// The source or destination document.
+    ScDocumentImport    maDocImport;
     OUString            maDocUrl;           /// Document URL of imported/exported file.
     OUString            maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
     OUString            maUserName;         /// Current user name.
@@ -202,9 +204,13 @@ public:
     SotStorageStreamRef OpenStream( const OUString& rStrmName ) const;
 
     /** Returns the destination document (import) or source document (export). */
-    inline ScDocument&  GetDoc() const { return mrData.mrDoc; }
+    ScDocument& GetDoc() const;
     /** Returns pointer to the destination document (import) or source document (export). */
-    inline ScDocument*  GetDocPtr() const { return &mrData.mrDoc; }
+    ScDocument* GetDocPtr() const;
+
+    ScDocumentImport& GetDocImport();
+    const ScDocumentImport& GetDocImport() const;
+
     /** Returns the object shell of the Calc document. May be 0 (i.e. import from clipboard). */
     SfxObjectShell*     GetDocShell() const;
     /** Returns the object model of the Calc document. */
