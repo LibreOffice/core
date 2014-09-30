@@ -20,14 +20,6 @@ $(eval $(call gb_Jar_use_jars,officebean,\
 $(eval $(call gb_Jar_set_packageroot,officebean,com))
 
 $(eval $(call gb_Jar_add_sourcefiles,officebean,\
-	bean/com/sun/star/beans/ContainerFactory \
-	bean/com/sun/star/beans/JavaWindowPeerFake \
-	bean/com/sun/star/beans/LocalOfficeConnection \
-	bean/com/sun/star/beans/LocalOfficeWindow \
-	bean/com/sun/star/beans/NativeConnection \
-	bean/com/sun/star/beans/NativeService \
-	bean/com/sun/star/beans/OfficeConnection \
-	bean/com/sun/star/beans/OfficeWindow \
 	bean/com/sun/star/comp/beans/ContainerFactory \
 	bean/com/sun/star/comp/beans/Controller \
 	bean/com/sun/star/comp/beans/Frame \
