@@ -74,7 +74,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                 if( bShared )
                 {
                     // Don't share headers any longer
-                    bShared = sal_False;
+                    bShared = false;
                     aAny.setValue( &bShared, ::getBooleanCppuType() );
                     xPropSet->setPropertyValue( sShareContent, aAny );
                 }
@@ -88,7 +88,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                 if( bSharedFirst )
                 {
                     // Don't share first/right headers any longer
-                    bSharedFirst = sal_False;
+                    bSharedFirst = false;
                     aAny.setValue( &bSharedFirst, ::getBooleanCppuType() );
                     xPropSet->setPropertyValue( sShareContentFirst, aAny );
                 }
