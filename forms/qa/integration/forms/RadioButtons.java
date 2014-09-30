@@ -308,7 +308,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     private String stateString( short[] states )
     {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for ( int i=0; i<states.length; ++i )
             buf.append( states[i] );
         return buf.toString();
