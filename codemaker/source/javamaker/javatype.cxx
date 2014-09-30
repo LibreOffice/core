@@ -656,9 +656,7 @@ void addTypeInfo(
                 | ClassFile::ACC_FINAL),
             "UNOTYPEINFO", "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;",
             0, "");
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< ClassFile::Code > code(classFile->newCode());
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        std::unique_ptr< ClassFile::Code > code(classFile->newCode());
         code->loadIntegerConstant(static_cast< sal_Int32 >(typeInfos));
         code->instrAnewarray("com/sun/star/lib/uno/typeinfo/TypeInfo");
         sal_Int32 index = 0;
@@ -693,14 +691,12 @@ void handleEnumType(
 {
     assert(entity.is());
     OString className(codemaker::convertString(name).replace('.', '/'));
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile > cf(
+    std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
             className, "com/sun/star/uno/Enum", ""));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     OString classDescriptor("L" + className + ";");
     for (std::vector< unoidl::EnumTypeEntity::Member >::const_iterator i(
              entity->getMembers().begin());
@@ -719,9 +715,7 @@ void handleEnumType(
             fieldName + "_value", "I",
             cf->addIntegerInfo(i->value), "");
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile::Code > code(cf->newCode());
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
     code->loadLocalInteger(1);
     code->instrInvokespecial("com/sun/star/uno/Enum", "<init>", "(I)V");
@@ -763,9 +757,7 @@ void handleEnumType(
          <= 2 * size)
         || size > SAL_MAX_INT32)
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< ClassFile::Code > defCode(cf->newCode());
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        std::unique_ptr< ClassFile::Code > defCode(cf->newCode());
         defCode->instrAconstNull();
         defCode->instrAreturn();
         std::list< ClassFile::Code * > blocks;
@@ -781,9 +773,7 @@ void handleEnumType(
                 }
             }
             last = value;
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            std::auto_ptr< ClassFile::Code > blockCode(cf->newCode());
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            std::unique_ptr< ClassFile::Code > blockCode(cf->newCode());
             blockCode->instrGetstatic(className, i->second, classDescriptor);
             blockCode->instrAreturn();
             blocks.push_back(blockCode.get());
@@ -796,9 +786,7 @@ void handleEnumType(
             delete *i;
         }
     } else{
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< ClassFile::Code > defCode(cf->newCode());
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        std::unique_ptr< ClassFile::Code > defCode(cf->newCode());
         defCode->instrAconstNull();
         defCode->instrAreturn();
         std::list< std::pair< sal_Int32, ClassFile::Code * > > blocks;
@@ -806,9 +794,7 @@ void handleEnumType(
         for (std::map< sal_Int32, OString >::iterator i(map.begin());
              i != map.end(); ++i)
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            std::auto_ptr< ClassFile::Code > blockCode(cf->newCode());
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            std::unique_ptr< ClassFile::Code > blockCode(cf->newCode());
             blockCode->instrGetstatic(className, i->second, classDescriptor);
             blockCode->instrAreturn();
             blocks.push_back(std::make_pair(i->first, blockCode.get()));
@@ -1419,13 +1405,11 @@ void handlePlainStructType(
             replace('.', '/');
         dependencies->insert(entity->getDirectBase());
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile > cf(
+    std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
             className, superClass, ""));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     std::vector< TypeInfo > typeInfo;
     sal_Int32 index = 0;
     for (std::vector< unoidl::PlainStructTypeEntity::Member >::const_iterator i(
@@ -1436,9 +1420,7 @@ void handlePlainStructType(
             manager, dependencies, cf.get(), &typeInfo, -1, i->type, i->name,
             index++);
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile::Code > code(cf->newCode());
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
     code->instrInvokespecial(superClass, "<init>", "()V");
     sal_uInt16 stack = 0;
@@ -1512,13 +1494,11 @@ void handlePolyStructType(
         }
     }
     sig.append(">Ljava/lang/Object;");
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile > cf(
+    std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
             className, "java/lang/Object", sig.makeStringAndClear()));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     std::vector< TypeInfo > typeInfo;
     index = 0;
     for (std::vector< unoidl::PolymorphicStructTypeTemplateEntity::Member >::
@@ -1540,9 +1520,7 @@ void handlePolyStructType(
             manager, dependencies, cf.get(), &typeInfo, typeParameterIndex,
             i->type, i->name, index++);
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile::Code > code(cf->newCode());
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
     code->instrInvokespecial("java/lang/Object", "<init>", "()V");
     sal_uInt16 stack = 0;
@@ -1648,13 +1626,11 @@ void handleExceptionType(
             replace('.', '/');
         dependencies->insert(entity->getDirectBase());
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile > cf(
+    std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
             className, superClass, ""));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     std::vector< TypeInfo > typeInfo;
     sal_Int32 index = 0;
     if (baseRuntimeException) {
@@ -1674,9 +1650,7 @@ void handleExceptionType(
     }
 
     // create default constructor
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile::Code > code(cf->newCode());
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
     code->instrInvokespecial(superClass, "<init>", "()V");
     sal_uInt16 stack = 0;
@@ -1922,14 +1896,12 @@ void handleInterfaceType(
     assert(entity.is());
     assert(dependencies != 0);
     OString className(codemaker::convertString(name).replace('.', '/'));
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile > cf(
+    std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_INTERFACE
                 | ClassFile::ACC_ABSTRACT),
             className, "java/lang/Object", ""));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity->getDirectMandatoryBases().begin());
          i != entity->getDirectMandatoryBases().end(); ++i)
@@ -2080,14 +2052,12 @@ void handleConstantGroup(
 {
     assert(entity.is());
     OString className(codemaker::convertString(name).replace('.', '/'));
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile > cf(
+    std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_INTERFACE
                 | ClassFile::ACC_ABSTRACT),
             className, "java/lang/Object", ""));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     for (std::vector< unoidl::ConstantGroupEntity::Member >::const_iterator i(
              entity->getMembers().begin());
          i != entity->getMembers().end(); ++i)
@@ -2181,9 +2151,7 @@ void addConstructor(
     assert(classFile != 0);
     MethodDescriptor desc(manager, dependencies, returnType, 0, 0);
     desc.addParameter("com.sun.star.uno.XComponentContext", false, false, 0);
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile::Code > code(classFile->newCode());
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr< ClassFile::Code > code(classFile->newCode());
     code->loadLocalReference(0);
     // stack: context
     code->instrInvokeinterface(
@@ -2336,14 +2304,12 @@ void handleService(
     OString unoName(codemaker::convertString(name));
     OString className(
         translateUnoidlEntityNameToJavaFullyQualifiedName(name, "service"));
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile > cf(
+    std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
             className, "java/lang/Object", ""));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!entity->getConstructors().empty()) {
         OString realJavaBaseName(
             codemaker::convertString(entity->getBase()));
@@ -2363,9 +2329,7 @@ void handleService(
         }
         // Synthetic castInstance method:
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            std::auto_ptr< ClassFile::Code > code(cf->newCode());
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            std::unique_ptr< ClassFile::Code > code(cf->newCode());
             code->instrNew("com/sun/star/uno/Type");
             // stack: type
             code->instrDup();
@@ -2441,19 +2405,15 @@ void handleSingleton(
     dependencies->insert("com.sun.star.uno.DeploymentException");
     dependencies->insert("com.sun.star.uno.TypeClass");
     dependencies->insert("com.sun.star.uno.XComponentContext");
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile > cf(
+    std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
             className, "java/lang/Object", ""));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     MethodDescriptor desc(manager, dependencies, entity->getBase(), 0, 0);
     desc.addParameter("com.sun.star.uno.XComponentContext", false, false, 0);
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< ClassFile::Code > code(cf->newCode());
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
     // stack: context
     code->loadStringConstant("/singletons/" + unoName);

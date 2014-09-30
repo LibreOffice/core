@@ -35,7 +35,7 @@ using codemaker::ExceptionTree;
 using codemaker::ExceptionTreeNode;
 
 ExceptionTreeNode * ExceptionTreeNode::add(rtl::OString const & theName) {
-    std::auto_ptr< ExceptionTreeNode > node(new ExceptionTreeNode(theName));
+    std::unique_ptr< ExceptionTreeNode > node(new ExceptionTreeNode(theName));
     children.push_back(node.get());
     return node.release();
 }
