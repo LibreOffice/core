@@ -215,13 +215,13 @@ public class MultiTileLayer extends Layer {
 
         if (tileViewPort != newTileViewPort) {
             tileViewPort = newTileViewPort;
-            cleanTiles();
+            clearMarkedTiles();
             addNewTiles(viewportMetrics);
             markTiles(viewportMetrics);
         }
     }
 
-    private void cleanTiles() {
+    private void clearMarkedTiles() {
         List<SubTile> tilesToRemove = new ArrayList<SubTile>();
         for(SubTile tile : mTiles) {
             if (tile.markedForRemoval) {
@@ -268,6 +268,10 @@ public class MultiTileLayer extends Layer {
                 tile.markForRemoval();
             }
         }
+    }
+
+    public void clearAllTiles() {
+        mTiles.clear();
     }
 }
 

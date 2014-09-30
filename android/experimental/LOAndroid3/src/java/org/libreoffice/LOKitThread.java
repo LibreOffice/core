@@ -53,6 +53,7 @@ public class LOKitThread extends Thread {
 
     private void changePart(int partIndex) throws InterruptedException {
         mTileProvider.changePart(partIndex);
+        mLayerClient.clearAllTiles();
         refresh();
     }
 
