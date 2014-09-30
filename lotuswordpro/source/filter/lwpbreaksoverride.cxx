@@ -73,7 +73,7 @@ LwpBreaksOverride::LwpBreaksOverride(LwpBreaksOverride const& rOther)
     : LwpOverride(rOther)
     , m_pNextStyle(0)
 {
-    std::auto_ptr<LwpAtomHolder> pNextStyle(::clone(rOther.m_pNextStyle));
+    std::unique_ptr<LwpAtomHolder> pNextStyle(::clone(rOther.m_pNextStyle));
     m_pNextStyle = pNextStyle.release();
 }
 

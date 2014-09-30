@@ -361,7 +361,7 @@ void LwpPara::RegisterStyle()
 
     if (GetParaStyle()->GetIndent())
     {
-        std::auto_ptr<LwpIndentOverride> pIndentOverride(GetParaStyle()->GetIndent()->clone());
+        std::unique_ptr<LwpIndentOverride> pIndentOverride(GetParaStyle()->GetIndent()->clone());
         delete m_pIndentOverride;
         m_pIndentOverride = pIndentOverride.release();
     }

@@ -104,7 +104,7 @@ using namespace OpenStormBento;
  bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
 {
     pCompressed->Seek(0);
-    std::auto_ptr<SvStream> aDecompressed(new SvMemoryStream(4096, 4096));
+    std::unique_ptr<SvStream> aDecompressed(new SvMemoryStream(4096, 4096));
     unsigned char buffer[512];
     pCompressed->Read(buffer, 16);
     aDecompressed->Write(buffer, 16);

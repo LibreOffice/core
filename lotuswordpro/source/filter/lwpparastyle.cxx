@@ -442,9 +442,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
     else
         pParentPara = NULL;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<LwpIndentOverride> pTotalIndent(new LwpIndentOverride);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<LwpIndentOverride> pTotalIndent(new LwpIndentOverride);
     if (pIndent->IsUseRelative() && pParentPara)
     {
         LwpIndentOverride* pParentIndent = pParentPara->GetIndent();

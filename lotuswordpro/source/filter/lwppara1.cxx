@@ -388,13 +388,11 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     LwpOverride* pBreaks = pParaStyle->GetBreaks();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<LwpBreaksOverride> pFinalBreaks(
+    std::unique_ptr<LwpBreaksOverride> pFinalBreaks(
         pBreaks
             ? polymorphic_downcast<LwpBreaksOverride*>(pBreaks->clone())
             : new LwpBreaksOverride)
         ;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // get local breaks
     pBreaks = static_cast<LwpParaBreaksProperty*>(pProps)->GetLocalParaBreaks();
@@ -475,13 +473,11 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             m_bHasBullet = true;
 
             LwpOverride* pBullet= pParaStyle->GetBulletOverride();
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            std::auto_ptr<LwpBulletOverride> pFinalBullet(
+            std::unique_ptr<LwpBulletOverride> pFinalBullet(
                 pBullet
                     ? polymorphic_downcast<LwpBulletOverride*>(pBullet->clone())
                     : new LwpBulletOverride)
                 ;
-            SAL_WNODEPRECATED_DECLARATIONS_POP
 
             boost::scoped_ptr<LwpBulletOverride> const pLocalBullet2(pLocalBullet->clone());
             pLocalBullet2->Override(pFinalBullet.get());
@@ -515,9 +511,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
                     m_pSilverBullet->SetFoundry(m_pFoundry);
             }
 
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            std::auto_ptr<LwpBulletOverride> pBulletOverride(pBullOver->clone());
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            std::unique_ptr<LwpBulletOverride> pBulletOverride(pBullOver->clone());
             delete m_pBullOver;
             m_pBullOver = pBulletOverride.release();
         }
@@ -537,9 +531,7 @@ void LwpPara::OverrideParaNumbering(LwpParaProperty* pProps)
     }
 
     LwpNumberingOverride* pParaNumbering = pParaStyle->GetNumberingOverride();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<LwpNumberingOverride> pOver(new LwpNumberingOverride);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<LwpNumberingOverride> pOver(new LwpNumberingOverride);
     //Override with the local numbering, if any
     if (pProps)
     {
