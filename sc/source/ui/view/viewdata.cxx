@@ -629,7 +629,7 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY,
 
     // We probably don't want these limits for tiled rendering, hence
     // we make them optional.
-    if ( !bIgnoreLimits )
+    if ( bIgnoreLimits )
     {
         const Fraction aFrac20( 1, 5 );
         const Fraction aFrac400( 4, 1 );
