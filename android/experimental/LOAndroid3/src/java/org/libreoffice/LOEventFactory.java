@@ -30,4 +30,8 @@ public class LOEventFactory {
     public static LOEvent load(String inputFile) {
         return new LOEvent(LOEvent.LOAD, inputFile);
     }
+
+    public static LOEvent redraw() {
+        return new LOEvent(LOEvent.REDRAW);
+    }
 }

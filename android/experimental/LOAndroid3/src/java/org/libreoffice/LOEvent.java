@@ -13,12 +13,17 @@ public class LOEvent {
     public static final int DRAW = 4;
     public static final int CHANGE_PART = 5;
     public static final int LOAD = 6;
+    public static final int REDRAW = 7;
 
     public int mType;
     private ImmutableViewportMetrics mViewportMetrics;
     private String mTypeString;
     private int mPartIndex;
     private String mFilename;
+
+    public LOEvent(int type) {
+        mType = type;
+    }
 
     public LOEvent(int type, int widthPixels, int heightPixels) {
         mType = type;
