@@ -81,7 +81,7 @@ bool HelpParser::CreatePO(
     SimpleXMLParser aParser;
     //TODO: explicit BOM handling?
 
-    std::auto_ptr <XMLFile> file ( aParser.Execute( sHelpFile, pXmlFile ) );
+    std::unique_ptr <XMLFile> file ( aParser.Execute( sHelpFile, pXmlFile ) );
 
     if(file.get() == NULL)
     {
