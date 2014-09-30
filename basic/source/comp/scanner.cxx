@@ -491,25 +491,28 @@ bool SbiScanner::NextSym()
             if( *pLine == cSep )
             {
                 pLine++; nCol++;
-                if( *pLine != cSep || cSep == ']' ) break;
+                if( *pLine != cSep || cSep == ']' )
+                {
+                    // If VBA Interop then doen't eat the [] chars
+                    if ( cSep == ']' && bVBASupportOn )
+                        aSym = aLine.copy( n - 1, nCol - n  + 1);
+                    else
+                        aSym = aLine.copy( n, nCol - n - 1 );
+                    // get out duplicate string delimiters
+                    OUStringBuffer aSymBuf;
+                    for ( sal_Int32 i = 0, len = aSym.getLength(); i < len; ++i )
+                    {
+                        aSymBuf.append( aSym[i] );
+                        if ( aSym[i] == cSep && ( i+1 < len ) && aSym[i+1] == cSep )
+                            ++i;
+                    }
+                    aSym = aSymBuf.makeStringAndClear();
+                    if( cSep != ']' )
+                        eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
+                    break;
+                }
             } else aError = OUString(cSep), GenError( SbERR_EXPECTED );
         }
-        // If VBA Interop then doen't eat the [] chars
-        if ( cSep == ']' && bVBASupportOn )
-            aSym = aLine.copy( n - 1, nCol - n  + 1);
-        else
-            aSym = aLine.copy( n, nCol - n - 1 );
-        // get out duplicate string delimiters
-        OUStringBuffer aSymBuf;
-        for ( sal_Int32 i = 0, len = aSym.getLength(); i < len; ++i )
-        {
-            aSymBuf.append( aSym[i] );
-            if ( aSym[i] == cSep && ( i+1 < len ) && aSym[i+1] == cSep )
-                ++i;
-        }
-        aSym = aSymBuf.makeStringAndClear();
-        if( cSep != ']' )
-            eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
     }
     // invalid characters:
     else if( ( *pLine & 0xFF ) >= 0x7F )
