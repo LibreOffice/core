@@ -385,24 +385,24 @@ void SvxStyleBox_Impl::ReleaseFocus()
 
 IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu)
 {
+    ReleaseFocus();
+    OUString sEntry = OUString( (GetEntry(GetSelectEntryPos())) );
+    Sequence< PropertyValue > aArgs( 2 );
+    aArgs[0].Name   = "Param";
+    aArgs[0].Value  = makeAny( sEntry );
+    aArgs[1].Name   = "Family";
+    aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
+
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
     switch(nMenuId) {
-        case RID_SVX_APPLY_STYLE:
+        case RID_SVX_UPDATE_STYLE:
         {
-            nCurSel = GetSelectEntryPos();
-            SetText(GetEntry(nCurSel));
-            Select();
+            SfxToolBoxControl::Dispatch( m_xDispatchProvider,
+                OUString( ".uno:StyleUpdateByExample" ), aArgs );
             break;
         }
         case RID_SVX_MODIFY_STYLE:
         {
-            OUString sEntry = OUString( (GetEntry(GetSelectEntryPos())) );
-            ReleaseFocus();
-            Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name   = "Param";
-            aArgs[0].Value  = makeAny( sEntry );
-            aArgs[1].Name   = "Family";
-            aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
                 OUString( ".uno:EditStyle" ), aArgs );
             break;
@@ -535,22 +535,18 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
 
         switch ( nCode )
         {
-            case KEY_RETURN:
+            case KEY_CONTEXTMENU:
             {
                 if(IsInDropDown())
                 {
                     sal_uInt16 nItem = GetSelectEntryPos() - 1;
                     if(nItem < MAX_STYLES_ENTRIES)
-                        m_pButtons[nItem]->KeyInput(*rNEvt.GetKeyEvent());
+                        m_pButtons[nItem]->ExecuteMenu();
                     nHandled = true;
-                }
-                else
-                {
-                    nHandled = true;
-                    Select();
                 }
                 break;
             }
+            case KEY_RETURN:
             case KEY_TAB:
             {
                 if ( KEY_TAB == nCode )

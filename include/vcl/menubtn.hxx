@@ -45,7 +45,6 @@ private:
     Link            maSelectHdl;
 
     SAL_DLLPRIVATE void    ImplInitMenuButtonData();
-    SAL_DLLPRIVATE void    ImplExecuteMenu();
     DECL_DLLPRIVATE_LINK(  ImplMenuTimeoutHdl, void* );
 
     // Copy assignment is forbidden and not implemented.
@@ -67,6 +66,8 @@ public:
 
     virtual void    Activate() SAL_OVERRIDE;
     virtual void    Select();
+
+    void            ExecuteMenu();
 
     void            SetMenuMode( sal_uInt16 nMode );
     sal_uInt16      GetMenuMode() const { return mnMenuMode; }

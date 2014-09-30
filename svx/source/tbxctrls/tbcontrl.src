@@ -79,7 +79,7 @@ String RID_SVXSTR_LINECOLOR
 ComboBox RID_SVXTBX_STYLE
 {
     HelpId = HID_STYLE_LISTBOX ;
-    Size = MAP_APPFONT ( 50 , 86 ) ;
+    Size = MAP_APPFONT ( 60 , 86 ) ;
     DropDown = TRUE ;
     Sort = TRUE ;
     AutoHScroll = TRUE ;
@@ -94,13 +94,13 @@ Menu RID_SVX_STYLE_MENU
     {
         MenuItem
         {
-            Identifier = RID_SVX_APPLY_STYLE ;
-            Text [ en-US ] = "Apply style" ;
+            Identifier = RID_SVX_UPDATE_STYLE ;
+            Text [ en-US ] = "Update Style Based on Selection" ;
         };
         MenuItem
         {
             Identifier = RID_SVX_MODIFY_STYLE ;
-            Text [ en-US ] = "Modify style" ;
+            Text [ en-US ] = "Edit Style" ;
         };
     };
 };

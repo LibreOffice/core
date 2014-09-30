@@ -46,7 +46,7 @@ void MenuButton::ImplInit( Window* pParent, WinBits nStyle )
     EnableRTL( Application::GetSettings().GetLayoutRTL() );
 }
 
-void MenuButton::ImplExecuteMenu()
+void MenuButton::ExecuteMenu()
 {
     Activate();
 
@@ -120,7 +120,7 @@ IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
     {
         if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
             GrabFocus();
-        ImplExecuteMenu();
+        ExecuteMenu();
     }
 
     return 0;
@@ -154,7 +154,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
                 GrabFocus();
-            ImplExecuteMenu();
+            ExecuteMenu();
         }
     }
 }
@@ -164,11 +164,11 @@ void MenuButton::KeyInput( const KeyEvent& rKEvt )
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aKeyCode.GetCode();
     if ( (nCode == KEY_DOWN) && aKeyCode.IsMod2() )
-        ImplExecuteMenu();
+        ExecuteMenu();
     else if ( !(mnMenuMode & MENUBUTTON_MENUMODE_TIMED) &&
               !aKeyCode.GetModifier() &&
               ((nCode == KEY_RETURN) || (nCode == KEY_SPACE)) )
-        ImplExecuteMenu();
+        ExecuteMenu();
     else
         PushButton::KeyInput( rKEvt );
 }
