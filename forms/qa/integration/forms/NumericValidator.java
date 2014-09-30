@@ -48,9 +48,7 @@ public class NumericValidator extends integration.forms.ControlValidator
                 return false;
             if ( !isProperRange( value ) )
                 return false;
-            if ( !isProperDigitCount( value ) )
-                return false;
-            return true;
+            return isProperDigitCount( value );
         }
         catch( java.lang.Exception e )
         {

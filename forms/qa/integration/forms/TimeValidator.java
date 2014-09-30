@@ -52,9 +52,7 @@ public class TimeValidator extends integration.forms.ControlValidator
                     com.sun.star.util.Time.class, Value);
             if ( isInvalidTime( timeValue ) )
                 return false;
-            if ( !isFullHour( timeValue ) )
-                return false;
-            return true;
+            return isFullHour( timeValue );
         }
         catch( java.lang.Exception e )
         {

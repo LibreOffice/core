@@ -44,9 +44,7 @@ public class TextValidator extends integration.forms.ControlValidator
             String value = (String)Value;
             if ( containsZs( value ) )
                 return false;
-            if ( !isProperChunks( value ) )
-                return false;
-            return true;
+            return isProperChunks( value );
         }
         catch( java.lang.Exception e )
         {
@@ -61,10 +59,7 @@ public class TextValidator extends integration.forms.ControlValidator
 
     private boolean containsZs( String value )
     {
-        if  (  ( value.indexOf( 'Z' ) != -1 )
-            || ( value.indexOf( 'z' ) != -1 )
-            )
-            return true;
-        return false;
+        return ( value.indexOf( 'Z' ) != -1 )
+            || ( value.indexOf( 'z' ) != -1 );
     }
 }

@@ -61,9 +61,7 @@ public class BooleanValidator extends integration.forms.ControlValidator
                 return false;
 
             boolean value = ((Boolean)Value).booleanValue();
-            if ( m_preventChecked && ( value ) )
-                return false;
-            return true;
+            return !(m_preventChecked && ( value ));
         }
         catch( java.lang.Exception e )
         {
