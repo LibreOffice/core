@@ -249,10 +249,10 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
     {
         Fraction aScaleX;
         Fraction aScaleY;
-        if (pDrView)
-            pDrView->GetScale( aScaleX, aScaleY );
-        else
-        {
+        // if (pDrView)
+        //     pDrView->GetScale( aScaleX, aScaleY );
+        // else
+        // {
             SCCOL nEndCol = 0;
             SCROW nEndRow = 0;
             pDoc->GetTableArea( nTab, nEndCol, nEndRow );
@@ -262,7 +262,7 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
                                     pViewData->GetZoomX(),pViewData->GetZoomY(),
                                     pViewData->GetPPTX(),pViewData->GetPPTY(),
                                     aScaleX,aScaleY );
-        }
+        // }
         aDrawMode.SetScaleX(aScaleX);
         aDrawMode.SetScaleY(aScaleY);
     }
