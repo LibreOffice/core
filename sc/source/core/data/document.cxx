@@ -4437,14 +4437,6 @@ void ScDocument::ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
             maTabs[nTab]->ApplyPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rAttr );
 }
 
-bool ScDocument::SetAttrEntries(SCCOL nCol, SCTAB nTab, ScAttrEntry* pData, SCSIZE nSize)
-{
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return false;
-
-    return maTabs[nTab]->SetAttrEntries(nCol, pData, nSize);
-}
-
 void ScDocument::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScMarkData& rMark, const ScPatternAttr& rPattern, short nNewType )
 {
