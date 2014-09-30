@@ -779,9 +779,7 @@ double VDataSeries::getYMeanValue() const
 
 Symbol* getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< Symbol > apSymbolProps( new Symbol() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< Symbol > apSymbolProps( new Symbol() );
     try
     {
         if( xProp->getPropertyValue("Symbol") >>= *apSymbolProps )
@@ -927,9 +925,7 @@ uno::Reference<beans::XPropertySet> VDataSeries::getPropertiesOfSeries() const
 
 DataPointLabel* getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< DataPointLabel > apLabel( new DataPointLabel() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< DataPointLabel > apLabel( new DataPointLabel() );
     try
     {
         if( !(xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= *apLabel) )

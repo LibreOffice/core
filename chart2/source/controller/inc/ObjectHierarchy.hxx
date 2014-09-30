@@ -74,7 +74,7 @@ public:
 
 private:
 
-    ::std::auto_ptr< impl::ImplObjectHierarchy > m_apImpl;
+    ::std::unique_ptr< impl::ImplObjectHierarchy > m_apImpl;
 };
 
 class ObjectKeyNavigation

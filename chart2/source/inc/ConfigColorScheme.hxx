@@ -73,7 +73,7 @@ private:
     // member variables
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >        m_xContext;
-    ::std::auto_ptr< impl::ChartConfigItem >              m_apChartConfigItem;
+    ::std::unique_ptr< impl::ChartConfigItem >              m_apChartConfigItem;
     mutable ::com::sun::star::uno::Sequence< sal_Int64 >  m_aColorSequence;
     mutable sal_Int32                                     m_nNumberOfColors;
     bool                                                  m_bNeedsUpdate;

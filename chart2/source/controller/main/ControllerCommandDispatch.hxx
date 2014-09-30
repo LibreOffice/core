@@ -113,8 +113,8 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XDispatch > m_xDispatch;
 
-    ::std::auto_ptr< impl::ModelState > m_apModelState;
-    ::std::auto_ptr< impl::ControllerState > m_apControllerState;
+    ::std::unique_ptr< impl::ModelState > m_apModelState;
+    ::std::unique_ptr< impl::ControllerState > m_apControllerState;
 
     mutable ::std::map< OUString, bool > m_aCommandAvailability;
     mutable ::std::map< OUString, ::com::sun::star::uno::Any > m_aCommandArguments;

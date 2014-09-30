@@ -67,7 +67,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
-// this is needed to properly destroy the auto_ptr to the AcceleratorExecute
+// this is needed to properly destroy the unique_ptr to the AcceleratorExecute
 // object in the DTOR
 #include <svtools/acceleratorexecute.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
