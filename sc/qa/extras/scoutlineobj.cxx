@@ -79,7 +79,10 @@ void ScOutlineObj::setUp()
 void ScOutlineObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
+    {
         closeDocument(mxComponent);
+        mxComponent.clear();
+    }
 
     CalcUnoApiTest::tearDown();
 }

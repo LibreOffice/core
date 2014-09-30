@@ -119,7 +119,10 @@ void ScCellRangeObj::setUp()
 void ScCellRangeObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
+    {
         closeDocument(mxComponent);
+        mxComponent.clear();
+    }
 
     CalcUnoApiTest::tearDown();
 }

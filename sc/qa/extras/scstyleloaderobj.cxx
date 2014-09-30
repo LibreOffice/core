@@ -109,9 +109,15 @@ void ScStyleLoaderObj::tearDown()
     if (nTest == NUMBER_OF_TESTS)
     {
       if (mxSourceComponent.is())
+      {
           closeDocument(mxSourceComponent);
+          mxSourceComponent.clear();
+      }
       if (mxTargetComponent.is())
+      {
           closeDocument(mxTargetComponent);
+          mxTargetComponent.clear();
+      }
     }
     CalcUnoApiTest::tearDown();
 }

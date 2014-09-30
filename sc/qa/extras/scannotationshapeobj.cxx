@@ -63,6 +63,7 @@ void ScAnnotationShapeObj::tearDown()
     {
         mxField.clear();
         closeDocument(mxComponent);
+        mxComponent.clear();
     }
 
     UnoApiTest::tearDown();

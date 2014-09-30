@@ -64,7 +64,10 @@ void ScModelObj::setUp()
 void ScModelObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
+    {
         closeDocument(mxComponent);
+        mxComponent.clear();
+    }
 
     UnoApiTest::tearDown();
 }

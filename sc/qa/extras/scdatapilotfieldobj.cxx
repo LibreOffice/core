@@ -94,7 +94,10 @@ void ScDataPilotFieldObj::setUp()
 void ScDataPilotFieldObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
+    {
         closeDocument(mxComponent);
+        mxComponent.clear();
+    }
 
     CalcUnoApiTest::tearDown();
 }

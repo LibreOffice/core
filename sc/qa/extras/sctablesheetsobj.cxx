@@ -102,7 +102,10 @@ void ScTableSheetsObj::setUp()
 void ScTableSheetsObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
+    {
         closeDocument(mxComponent);
+        mxComponent.clear();
+    }
 
     CalcUnoApiTest::tearDown();
 }

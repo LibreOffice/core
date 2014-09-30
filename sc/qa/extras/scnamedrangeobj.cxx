@@ -102,7 +102,10 @@ void ScNamedRangeObj::setUp()
 void ScNamedRangeObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
+    {
         closeDocument(mxComponent);
+        mxComponent.clear();
+    }
 
     CalcUnoApiTest::tearDown();
 }

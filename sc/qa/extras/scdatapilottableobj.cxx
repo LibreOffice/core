@@ -148,7 +148,10 @@ void ScDataPilotTableObj::setUp()
 void ScDataPilotTableObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
+    {
         closeDocument(mxComponent);
+        mxComponent.clear();
+    }
 
     CalcUnoApiTest::tearDown();
 }
