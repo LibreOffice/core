@@ -87,6 +87,8 @@ namespace basprov
 
     BasicScriptImpl::~BasicScriptImpl()
     {
+        SolarMutexGuard g;
+
         if ( m_documentBasicManager )
             EndListening( *m_documentBasicManager );
     }
