@@ -325,7 +325,7 @@ void SwCrsrShell::SttCrsrMove()
 void SwCrsrShell::EndCrsrMove( const bool bIdleEnd )
 {
     OSL_ENSURE( m_nCrsrMove, "EndCrsrMove() without SttCrsrMove()." );
-    EndAction( bIdleEnd );
+    EndAction( bIdleEnd, true );
     if( !--m_nCrsrMove )
         m_bInCMvVisportChgd = false;
 }
