@@ -158,7 +158,7 @@ private:
     PopupMenu                       m_aMenu;
 
     void            ReleaseFocus();
-
+    Color           TestColorsVisible(const Color &FontCol, const Color &BackCol);
     DECL_LINK( MenuSelectHdl, Menu * );
 };
 
@@ -653,23 +653,38 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 pDevice->SetFont( aFont );
 
-                // text color, when we are not selected
+                Color aFontCol, aBackCol;
+                bool  IsNotSelect = rUDEvt.GetItemId() != GetSelectEntryPos();
+
+                // text color
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_COLOR );
-                if ( pItem && rUDEvt.GetItemId() != GetSelectEntryPos() )
-                {
-                    Color aColor( static_cast< const SvxColorItem* >( pItem )->GetValue() );
-                    if ( aColor != COL_AUTO )
-                        pDevice->SetTextColor( aColor );
-                }
+                if ( NULL != pItem )
+                    aFontCol = Color( static_cast< const SvxColorItem* >( pItem )->GetValue() );
+                else
+                    aFontCol = COL_AUTO;
 
                 // background color
                 pItem = aItemSet.GetItem( SID_ATTR_BRUSH );
-                if ( pItem && rUDEvt.GetItemId() != GetSelectEntryPos() )
+                if ( NULL != pItem )
+                    aBackCol = Color( static_cast< const SvxBrushItem* >( pItem )->GetColor() );
+                else
+                    aBackCol = COL_AUTO;
+
+                // test is the font-, background-color not different, then change the Font-Color
+                if( (aFontCol != COL_AUTO) || (aBackCol != COL_AUTO) )
+                    aFontCol = TestColorsVisible(aFontCol, (aBackCol != COL_AUTO) ? aBackCol : pDevice->GetBackground().GetColor());
+
+                // text color, when we are not selected
+                if ( (aFontCol != COL_AUTO) && IsNotSelect )
+                    pDevice->SetTextColor( aFontCol );
+
+                // background color
+                if (pItem && IsNotSelect)
                 {
-                    Color aColor( static_cast< const SvxBrushItem* >( pItem )->GetColor() );
-                    if ( aColor != COL_AUTO )
+                    // background color,  when we are not selected
+                    if ( aBackCol != COL_AUTO )
                     {
-                        pDevice->SetFillColor( aColor );
+                        pDevice->SetFillColor( aBackCol );
                         pDevice->DrawRect( rUDEvt.GetRect() );
                     }
 
@@ -731,6 +746,31 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         }
     }
 }
+
+// test is the color between Font- and background-color to be identify
+// return is always the Font-Color
+//        when both light or dark, change the Contrast
+//        in other case do not change the origin color
+//        when the color is R=G=B=128 the DecreaseContast make 128 the need a exception
+Color SvxStyleBox_Impl::TestColorsVisible(const Color &FontCol, const Color &BackCol)
+{
+    const sal_uInt8  ChgVal = 60;       // increase/decrease the Contrast
+
+    Color  retCol = FontCol;
+    if ((FontCol.IsDark() == BackCol.IsDark()) && (FontCol.IsBright() == BackCol.IsBright()))
+    {
+        sal_uInt8 lumi = retCol.GetLuminance();
+
+        if((lumi > 120) && (lumi < 140))
+            retCol.DecreaseLuminance(ChgVal / 2);
+        else
+            retCol.DecreaseContrast(ChgVal);
+    }
+
+    return retCol;
+}
+
+
 
 static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
 {
