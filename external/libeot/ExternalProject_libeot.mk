@@ -22,6 +22,7 @@ $(call gb_ExternalProject_get_state_target,libeot,build) :
 			--enable-static \
 			--disable-shared \
 			--disable-debug \
+			CFLAGS='$(filter-out -std=gnu89,$(CFLAGS))' \
 		&& $(MAKE) $(if $(VERBOSE)$(verbose),V=1) \
 	)
 
