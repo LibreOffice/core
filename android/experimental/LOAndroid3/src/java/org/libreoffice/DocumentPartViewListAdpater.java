@@ -34,7 +34,11 @@ public class DocumentPartViewListAdpater extends ArrayAdapter<DocumentPartView> 
         Log.i(LOGTAG, "getView - " + documentPartView.getPartName());
 
         ImageView imageView = (ImageView) view.findViewById(R.id.image);
-        imageView.setImageResource(R.drawable.writer);
+        if (documentPartView.getThumbnail() != null) {
+            imageView.setImageBitmap(documentPartView.getThumbnail());
+        } else {
+            imageView.setImageResource(R.drawable.writer);
+        }
 
         return view;
     }

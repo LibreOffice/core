@@ -67,7 +67,9 @@ public class LOKitTileProvider implements TileProvider {
                     }
                 }
                 Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
-                final DocumentPartView partView = new DocumentPartView(i, partName);
+
+                mDocument.setPart(i);
+                final DocumentPartView partView = new DocumentPartView(i, partName, thumbnail(128));
                 LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
             }
 
@@ -129,9 +131,9 @@ public class LOKitTileProvider implements TileProvider {
         if (mDocument != null) {
             float twipX = pixelToTwip(x, mDPI) / zoom;
             float twipY = pixelToTwip(y, mDPI) / zoom;
-            float twipWidth  = mTileWidth / zoom;
+            float twipWidth = mTileWidth / zoom;
             float twipHeight = mTileHeight / zoom;
-            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) twipX, (int) twipY, (int)twipWidth, (int)twipHeight);
+            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) twipX, (int) twipY, (int) twipWidth, (int) twipHeight);
         } else {
             Log.e(LOGTAG, "Document is null!!");
         }
