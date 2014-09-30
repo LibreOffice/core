@@ -206,6 +206,17 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
     _destructData( pValue, pType, 0, release );
 }
 
+/**
+    @since LibreOffice 4.4
+*/
+CPPU_DLLPUBLIC void SAL_CALL uno_type_destructSequence(
+    void * pSeq, typelib_TypeDescriptionReference * pType,
+    uno_ReleaseFunc release )
+    SAL_THROW_EXTERN_C()
+{
+    idestructSequence_already_decremented((uno_Sequence*)pSeq, pType, 0, release );
+}
+
 CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
     void * pValue,
     typelib_TypeDescription * pTypeDescr,

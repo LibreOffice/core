@@ -147,6 +147,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_copyAndConvertData(
 CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
     void * pValue, struct _typelib_TypeDescription * pTypeDescr, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
+
 /** Destructs a given value; does NOT free its memory!
 
     @param pValue           value to be destructed
@@ -156,6 +157,20 @@ CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
 */
 CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
     void * pValue, struct _typelib_TypeDescriptionReference * pType, uno_ReleaseFunc release )
+    SAL_THROW_EXTERN_C();
+
+/** Destructs a given value; does NOT free its memory!
+    This is meant to be called from destructors that have been optimised to do the decrement-and-check
+    in the destructor body before calling this method.
+
+    @param pSeq             sequence value to be destructed
+    @param pType            type of value
+    @param release          function called each time an interface pointer needs to be released;
+                            defaults (0) to uno
+    @since LibreOffice 4.4
+*/
+CPPU_DLLPUBLIC void SAL_CALL uno_type_destructSequence(
+    void * pSeq, struct _typelib_TypeDescriptionReference * pType, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
 /** Default constructs a value. All simple types are set to 0, enums are set to their default value.

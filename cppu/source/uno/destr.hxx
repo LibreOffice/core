@@ -256,6 +256,34 @@ inline sal_Int32 idestructElements(
 }
 
 
+inline void idestructSequence_already_decremented(
+    uno_Sequence * pSeq,
+    typelib_TypeDescriptionReference * pType,
+    typelib_TypeDescription * pTypeDescr,
+    uno_ReleaseFunc release )
+{
+    if (pSeq->nElements > 0)
+    {
+        if (pTypeDescr)
+        {
+            idestructElements(
+                pSeq->elements,
+                ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
+                pSeq->nElements, release );
+        }
+        else
+        {
+            TYPELIB_DANGER_GET( &pTypeDescr, pType );
+            idestructElements(
+                pSeq->elements,
+                ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
+                pSeq->nElements, release );
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+        }
+    }
+    ::rtl_freeMemory( pSeq );
+}
+
 inline void idestructSequence(
     uno_Sequence * pSeq,
     typelib_TypeDescriptionReference * pType,
@@ -264,29 +292,9 @@ inline void idestructSequence(
 {
     if (osl_atomic_decrement( &pSeq->nRefCount ) == 0)
     {
-        if (pSeq->nElements > 0)
-        {
-            if (pTypeDescr)
-            {
-                idestructElements(
-                    pSeq->elements,
-                    ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
-                    pSeq->nElements, release );
-            }
-            else
-            {
-                TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                idestructElements(
-                    pSeq->elements,
-                    ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
-                    pSeq->nElements, release );
-                TYPELIB_DANGER_RELEASE( pTypeDescr );
-            }
-        }
-        ::rtl_freeMemory( pSeq );
+        idestructSequence_already_decremented(pSeq, pType, pTypeDescr, release);
     }
 }
-
 
 inline void _destructData(
     void * pValue,
@@ -333,6 +341,15 @@ inline void _destructData(
     default:
         break;
     }
+}
+
+inline void _destructData_already_decremented(
+    uno_Sequence * pSeq,
+    typelib_TypeDescriptionReference * pType,
+    typelib_TypeDescription * pTypeDescr,
+    uno_ReleaseFunc release )
+{
+        idestructSequence_already_decremented(pSeq, pType, pTypeDescr, release );
 }
 
 }
