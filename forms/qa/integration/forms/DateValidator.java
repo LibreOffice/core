@@ -54,9 +54,7 @@ public class DateValidator extends integration.forms.ControlValidator
             if ( isDedicatedInvalidDate( dateValue ) )
                 return false;
 
-            if ( !isNextMonthsDate( dateValue ) )
-                return false;
-            return true;
+            return isNextMonthsDate( dateValue );
         }
         catch( java.lang.Exception e )
         {

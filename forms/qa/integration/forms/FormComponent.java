@@ -103,9 +103,7 @@ public class FormComponent
     /* ------------------------------------------------------------------ */
     public String[] getElementNames()
     {
-        if ( m_nameAccess != null )
-            return m_nameAccess.getElementNames();
-        return new String[]{};
+        return ( m_nameAccess != null ) ? m_nameAccess.getElementNames() : new String[]{};
     }
 
 
@@ -113,9 +111,7 @@ public class FormComponent
     /* ------------------------------------------------------------------ */
     public int getCount()
     {
-        if ( m_indexAccess != null )
-            return m_indexAccess.getCount();
-        return 0;
+        return ( m_indexAccess != null ) ? m_indexAccess.getCount() : 0;
     }
 
     /* ------------------------------------------------------------------ */
@@ -149,17 +145,13 @@ public class FormComponent
     /* ------------------------------------------------------------------ */
     public FormComponent getParent()
     {
-        if ( m_child != null )
-            return new FormComponent( m_child.getParent() );
-        return new FormComponent();
+        return ( m_child != null ) ? new FormComponent( m_child.getParent() ) : new FormComponent();
     }
 
     /* ------------------------------------------------------------------ */
     public String getName()
     {
-        if ( m_named != null )
-            return m_named.getName();
-        return "";
+        return ( m_named != null ) ? m_named.getName() : "";
     }
 
     /* ------------------------------------------------------------------ */
@@ -167,8 +159,6 @@ public class FormComponent
     {
         XServiceInfo si = UnoRuntime.queryInterface(
             XServiceInfo.class, m_component );
-        if ( si != null )
-            return si.getImplementationName();
-        return "";
+        return ( si != null ) ? si.getImplementationName() : "";
     }
 }

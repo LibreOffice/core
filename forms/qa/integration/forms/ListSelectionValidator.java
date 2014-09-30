@@ -40,9 +40,7 @@ public class ListSelectionValidator extends integration.forms.ControlValidator
         try
         {
             short[] selectionIndexes = (short[])Value;
-            if ( selectionIndexes.length > 2 )
-                return false;
-            return true;
+            return selectionIndexes.length <= 2;
         }
         catch( java.lang.Exception e )
         {
