@@ -53,6 +53,8 @@ ScForbiddenCharsObj::ScForbiddenCharsObj( ScDocShell* pDocSh ) :
 
 ScForbiddenCharsObj::~ScForbiddenCharsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

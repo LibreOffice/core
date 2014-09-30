@@ -42,6 +42,8 @@ ScAddressConversionObj::ScAddressConversionObj(ScDocShell* pDocSh, bool _bIsRang
 
 ScAddressConversionObj::~ScAddressConversionObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

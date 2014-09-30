@@ -1440,6 +1440,8 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
 
 ScCellRangesBase::~ScCellRangesBase()
 {
+    SolarMutexGuard g;
+
     //  call RemoveUnoObject first, so no notification can happen
     //  during ForgetCurrentAttrs
 
@@ -8996,6 +8998,8 @@ ScCellsObj::ScCellsObj(ScDocShell* pDocSh, const ScRangeList& rR) :
 
 ScCellsObj::~ScCellsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -9093,6 +9097,8 @@ void ScCellsEnumeration::CheckPos_Impl()
 
 ScCellsEnumeration::~ScCellsEnumeration()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
     delete pMark;
@@ -9188,6 +9194,8 @@ ScCellFormatsObj::ScCellFormatsObj(ScDocShell* pDocSh, const ScRange& rRange) :
 
 ScCellFormatsObj::~ScCellFormatsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -9317,6 +9325,8 @@ ScCellFormatsEnumeration::ScCellFormatsEnumeration(ScDocShell* pDocSh, const ScR
 
 ScCellFormatsEnumeration::~ScCellFormatsEnumeration()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
     delete pIter;
@@ -9416,6 +9426,8 @@ ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange
 
 ScUniqueCellFormatsObj::~ScUniqueCellFormatsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -9672,6 +9684,8 @@ ScUniqueCellFormatsEnumeration::ScUniqueCellFormatsEnumeration(ScDocShell* pDocS
 
 ScUniqueCellFormatsEnumeration::~ScUniqueCellFormatsEnumeration()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

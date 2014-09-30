@@ -92,6 +92,8 @@ ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, Sc
 
 ScNamedRangeObj::~ScNamedRangeObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -473,6 +475,8 @@ ScNamedRangesObj::ScNamedRangesObj(ScDocShell* pDocSh) :
 
 ScNamedRangesObj::~ScNamedRangesObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -935,6 +939,8 @@ ScLabelRangeObj::ScLabelRangeObj(ScDocShell* pDocSh, bool bCol, const ScRange& r
 
 ScLabelRangeObj::~ScLabelRangeObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -1054,6 +1060,8 @@ ScLabelRangesObj::ScLabelRangesObj(ScDocShell* pDocSh, bool bCol) :
 
 ScLabelRangesObj::~ScLabelRangesObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

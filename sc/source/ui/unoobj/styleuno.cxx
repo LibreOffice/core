@@ -403,6 +403,8 @@ ScStyleFamiliesObj::ScStyleFamiliesObj(ScDocShell* pDocSh) :
 
 ScStyleFamiliesObj::~ScStyleFamiliesObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -618,6 +620,8 @@ ScStyleFamilyObj::ScStyleFamilyObj(ScDocShell* pDocSh, SfxStyleFamily eFam) :
 
 ScStyleFamilyObj::~ScStyleFamilyObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -974,6 +978,8 @@ void ScStyleObj::InitDoc( ScDocShell* pNewDocSh, const OUString& rNewName )
 
 ScStyleObj::~ScStyleObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

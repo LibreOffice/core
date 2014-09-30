@@ -82,6 +82,8 @@ ScDocDefaultsObj::ScDocDefaultsObj(ScDocShell* pDocSh) :
 
 ScDocDefaultsObj::~ScDocDefaultsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

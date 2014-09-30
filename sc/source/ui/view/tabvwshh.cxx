@@ -231,6 +231,8 @@ void ScTabViewShell::AddAccessibilityObject( SfxListener& rObject )
 
 void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
 {
+    SolarMutexGuard g;
+
     if (pAccessibilityBroadcaster)
     {
         rObject.EndListening( *pAccessibilityBroadcaster );

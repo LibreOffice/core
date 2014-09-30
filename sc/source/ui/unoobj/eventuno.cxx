@@ -37,6 +37,8 @@ ScSheetEventsObj::ScSheetEventsObj(ScDocShell* pDocSh, SCTAB nT) :
 
 ScSheetEventsObj::~ScSheetEventsObj()
 {
+    SolarMutexGuard g;
+
     if (mpDocShell)
         mpDocShell->GetDocument().RemoveUnoObject(*this);
 }

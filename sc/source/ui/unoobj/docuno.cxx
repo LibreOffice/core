@@ -362,6 +362,8 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
 
 ScModelObj::~ScModelObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 
@@ -2425,6 +2427,8 @@ ScDrawPagesObj::ScDrawPagesObj(ScDocShell* pDocSh) :
 
 ScDrawPagesObj::~ScDrawPagesObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -2535,6 +2539,8 @@ ScTableSheetsObj::ScTableSheetsObj(ScDocShell* pDocSh) :
 
 ScTableSheetsObj::~ScTableSheetsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -2943,6 +2949,8 @@ ScTableColumnsObj::ScTableColumnsObj(ScDocShell* pDocSh, SCTAB nT, SCCOL nSC, SC
 
 ScTableColumnsObj::~ScTableColumnsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -3209,6 +3217,8 @@ ScTableRowsObj::ScTableRowsObj(ScDocShell* pDocSh, SCTAB nT, SCROW nSR, SCROW nE
 
 ScTableRowsObj::~ScTableRowsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -3484,6 +3494,8 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableRowsObj )
 
 ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -3536,6 +3548,8 @@ ScAnnotationsObj::ScAnnotationsObj(ScDocShell* pDocSh, SCTAB nT) :
 
 ScAnnotationsObj::~ScAnnotationsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -3666,6 +3680,8 @@ ScScenariosObj::ScScenariosObj(ScDocShell* pDocSh, SCTAB nT) :
 
 ScScenariosObj::~ScScenariosObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

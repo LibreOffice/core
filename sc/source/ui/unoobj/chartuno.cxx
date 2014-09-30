@@ -96,6 +96,8 @@ ScChartsObj::ScChartsObj(ScDocShell* pDocSh, SCTAB nT) :
 
 ScChartsObj::~ScChartsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -455,6 +457,8 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN)
 
 ScChartObj::~ScChartObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

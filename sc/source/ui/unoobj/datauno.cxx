@@ -998,6 +998,8 @@ ScFilterDescriptorBase::ScFilterDescriptorBase(ScDocShell* pDocShell) :
 
 ScFilterDescriptorBase::~ScFilterDescriptorBase()
 {
+    SolarMutexGuard g;
+
     if (pDocSh)
         pDocSh->GetDocument().RemoveUnoObject(*this);
 }
@@ -1653,6 +1655,8 @@ ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab) :
 
 ScDatabaseRangeObj::~ScDatabaseRangeObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -2210,6 +2214,8 @@ ScDatabaseRangesObj::ScDatabaseRangesObj(ScDocShell* pDocSh) :
 
 ScDatabaseRangesObj::~ScDatabaseRangesObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -2405,6 +2411,8 @@ ScUnnamedDatabaseRangesObj::ScUnnamedDatabaseRangesObj(ScDocShell* pDocSh) :
 
 ScUnnamedDatabaseRangesObj::~ScUnnamedDatabaseRangesObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

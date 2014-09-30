@@ -1011,6 +1011,8 @@ ScChart2DataProvider::ScChart2DataProvider( ScDocument* pDoc )
 
 ScChart2DataProvider::~ScChart2DataProvider()
 {
+    SolarMutexGuard g;
+
     if ( m_pDocument )
         m_pDocument->RemoveUnoObject( *this);
 }
@@ -2411,6 +2413,8 @@ ScChart2DataSource::ScChart2DataSource( ScDocument* pDoc)
 
 ScChart2DataSource::~ScChart2DataSource()
 {
+    SolarMutexGuard g;
+
     if ( m_pDocument )
         m_pDocument->RemoveUnoObject( *this);
 }
@@ -2515,6 +2519,8 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
 
 ScChart2DataSequence::~ScChart2DataSequence()
 {
+    SolarMutexGuard g;
+
     if ( m_pDocument )
     {
         m_pDocument->RemoveUnoObject( *this);

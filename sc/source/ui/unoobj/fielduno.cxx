@@ -289,6 +289,8 @@ ScCellFieldsObj::ScCellFieldsObj(
 
 ScCellFieldsObj::~ScCellFieldsObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 

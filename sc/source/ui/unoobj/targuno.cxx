@@ -75,6 +75,8 @@ ScLinkTargetTypesObj::ScLinkTargetTypesObj(ScDocShell* pDocSh) :
 
 ScLinkTargetTypesObj::~ScLinkTargetTypesObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -142,6 +144,8 @@ ScLinkTargetTypeObj::ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT) :
 
 ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

@@ -89,6 +89,8 @@ ScDocumentConfiguration::ScDocumentConfiguration(ScDocShell* pDocSh)
 
 ScDocumentConfiguration::~ScDocumentConfiguration()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

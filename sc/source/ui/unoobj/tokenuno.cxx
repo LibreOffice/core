@@ -72,6 +72,8 @@ ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
 
 ScFormulaParserObj::~ScFormulaParserObj()
 {
+    SolarMutexGuard g;
+
     if (mpDocShell)
         mpDocShell->GetDocument().RemoveUnoObject(*this);
 }

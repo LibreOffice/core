@@ -35,6 +35,8 @@ ScDrawDefaultsObj::ScDrawDefaultsObj(ScDocShell* pDocSh) :
 
 ScDrawDefaultsObj::~ScDrawDefaultsObj() throw ()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }

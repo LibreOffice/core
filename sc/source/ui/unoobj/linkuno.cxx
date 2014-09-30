@@ -82,6 +82,8 @@ ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, const OUString& rName) :
 
 ScSheetLinkObj::~ScSheetLinkObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -380,6 +382,8 @@ ScSheetLinksObj::ScSheetLinksObj(ScDocShell* pDocSh) :
 
 ScSheetLinksObj::~ScSheetLinksObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -607,6 +611,8 @@ ScAreaLinkObj::ScAreaLinkObj(ScDocShell* pDocSh, size_t nP) :
 
 ScAreaLinkObj::~ScAreaLinkObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -923,6 +929,8 @@ ScAreaLinksObj::ScAreaLinksObj(ScDocShell* pDocSh) :
 
 ScAreaLinksObj::~ScAreaLinksObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -1049,6 +1057,8 @@ ScDDELinkObj::ScDDELinkObj(ScDocShell* pDocSh, const OUString& rA,
 
 ScDDELinkObj::~ScDDELinkObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
@@ -1246,6 +1256,8 @@ ScDDELinksObj::ScDDELinksObj(ScDocShell* pDocSh) :
 
 ScDDELinksObj::~ScDDELinksObj()
 {
+    SolarMutexGuard g;
+
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
 }
