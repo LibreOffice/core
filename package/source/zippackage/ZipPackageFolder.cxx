@@ -336,7 +336,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
     {
         // if pTempEntry is necessary, it will be released and passed to the ZipOutputStream
         // and be deleted in the ZipOutputStream destructor
-        auto_ptr < ZipEntry > pAutoTempEntry ( new ZipEntry );
+        unique_ptr < ZipEntry > pAutoTempEntry ( new ZipEntry );
         ZipEntry* pTempEntry = pAutoTempEntry.get();
 
         // In case the entry we are reading is also the entry we are writing, we will
