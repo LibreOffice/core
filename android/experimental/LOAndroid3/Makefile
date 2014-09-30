@@ -9,6 +9,7 @@ all: build-ant
 # The package of this app
 APP_PACKAGE=org.libreoffice
 
+DISABLE_UI=TRUE
 BOOTSTRAPDIR=../../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 

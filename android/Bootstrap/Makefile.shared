@@ -135,9 +135,15 @@ copy-stuff:
 	cp $(SRC_ROOT)/readlicense_oo/license/NOTICE assets/notice.txt
 	cp $(WORKDIR)/ComponentTarget/i18npool/util/i18npool.component assets/ComponentTarget/i18npool/util
 #
+	rm -Rf assets/share # pre-clean it
 	mkdir -p assets/share/config
 	cp -R $(INSTDIR)/share/registry assets/share
-	cp -R $(INSTDIR)/share/config/soffice.cfg assets/share/config
+	if ! test z$(DISABLE_UI) = zTRUE; then \
+		echo "Copying UI files into the apk"; \
+		cp -R $(INSTDIR)/share/config/soffice.cfg assets/share/config; \
+	else \
+		echo "Skipping UI files"; \
+	fi
 
 	mkdir -p assets/unpack/program
 	echo '[Bootstrap]' > assets/unpack/program/sofficerc
