@@ -24,9 +24,6 @@
 }
 #endif
 
-/* X Types */
-#undef Icon
-
 #undef Min
 #undef Max
 #undef DestroyAll
