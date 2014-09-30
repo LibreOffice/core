@@ -201,10 +201,10 @@ namespace dmapper {
             case NS_ooxml::LN_CT_TcPrBase_vAlign://90694
             {
                 sal_Int16 nVertOrient = text::VertOrientation::NONE;
-                switch( nIntValue ) //0 - top 1 - center 3 - bottom (ST_VerticalJc)
+                switch( nIntValue )
                 {
-                    case 1: nVertOrient = text::VertOrientation::CENTER; break;
-                    case 3: nVertOrient = text::VertOrientation::BOTTOM; break;
+                    case NS_ooxml::LN_Value_ST_VerticalJc_center: nVertOrient = text::VertOrientation::CENTER; break;
+                    case NS_ooxml::LN_Value_ST_VerticalJc_bottom: nVertOrient = text::VertOrientation::BOTTOM; break;
                     default:;
                 };
                 TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
@@ -216,10 +216,10 @@ namespace dmapper {
                     OUString aVertOrient;
                     switch( nIntValue )
                     {
-                        case 0: aVertOrient = "top"; break;
-                        case 1: aVertOrient = "center"; break;
-                        case 2: aVertOrient = "both"; break;
-                        case 3: aVertOrient = "bottom"; break;
+                        case NS_ooxml::LN_Value_ST_VerticalJc_top: aVertOrient = "top"; break;
+                        case NS_ooxml::LN_Value_ST_VerticalJc_center: aVertOrient = "center"; break;
+                        case NS_ooxml::LN_Value_ST_VerticalJc_both: aVertOrient = "both"; break;
+                        case NS_ooxml::LN_Value_ST_VerticalJc_bottom: aVertOrient = "bottom"; break;
                     };
                     if (!aVertOrient.isEmpty())
                     {

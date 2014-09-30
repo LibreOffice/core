@@ -3074,13 +3074,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         switch (nKeyword)
         {
         case RTF_CLVERTALT:
-            nParam = 0;
+            nParam = NS_ooxml::LN_Value_ST_VerticalJc_top;
             break;
         case RTF_CLVERTALC:
-            nParam = 1;
+            nParam = NS_ooxml::LN_Value_ST_VerticalJc_center;
             break;
         case RTF_CLVERTALB:
-            nParam = 3;
+            nParam = NS_ooxml::LN_Value_ST_VerticalJc_bottom;
             break;
         default:
             break;

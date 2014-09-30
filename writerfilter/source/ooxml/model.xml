@@ -17714,10 +17714,10 @@
       <element name="col" tokenid="ooxml:CT_Columns_col"/>
     </resource>
     <resource name="ST_VerticalJc" resource="List">
-      <value tokenid="0">top</value>
-      <value tokenid="1">center</value>
-      <value tokenid="2">both</value>
-      <value tokenid="3">bottom</value>
+      <value tokenid="ooxml:Value_ST_VerticalJc_top">top</value>
+      <value tokenid="ooxml:Value_ST_VerticalJc_center">center</value>
+      <value tokenid="ooxml:Value_ST_VerticalJc_both">both</value>
+      <value tokenid="ooxml:Value_ST_VerticalJc_bottom">bottom</value>
     </resource>
     <resource name="CT_VerticalJc" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_VerticalJc_val" action="setValue"/>
