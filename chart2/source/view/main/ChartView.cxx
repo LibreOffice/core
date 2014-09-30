@@ -321,8 +321,8 @@ ChartView::~ChartView()
 
     if( m_pDrawModelWrapper.get() )
     {
-        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
         SolarMutexGuard aSolarGuard;
+        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
         m_pDrawModelWrapper.reset();
     }
     m_xDrawPage = NULL;
@@ -2882,6 +2882,8 @@ void SAL_CALL ChartView::removeVetoableChangeListener( const OUString& /* Proper
 Reference< uno::XInterface > ChartView::createInstance( const OUString& aServiceSpecifier )
     throw (uno::Exception, uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aSolarGuard;
+
     SdrModel* pModel = ( m_pDrawModelWrapper ? &m_pDrawModelWrapper->getSdrModel() : NULL );
     if ( pModel )
     {
