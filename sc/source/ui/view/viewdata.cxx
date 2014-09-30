@@ -2179,6 +2179,43 @@ void ScViewData::CalcPPT()
 
     maPaintMapMode.SetScaleX( aScaleX );
     maPaintMapMode.SetScaleY( GetZoomY());
+
+    nPPTX = ScGlobal::nScreenPPTX * (double) GetZoomX();
+    if (pDocShell)
+        nPPTX = nPPTX / (double) pDocShell->GetOutputFactor();   // Faktor ist Drucker zu Bildschirm
+    nPPTY = ScGlobal::nScreenPPTY * (double) GetZoomY();
+
+    //  if detective objects are present,
+    //  try to adjust horizontal scale so the most common column width has minimal rounding errors,
+    //  to avoid differences between cell and drawing layer output
+
+    if ( pDoc && pDoc->HasDetectiveObjects(nTabNo) )
+    {
+        SCCOL nEndCol = 0;
+        SCROW nDummy = 0;
+        pDoc->GetTableArea( nTabNo, nEndCol, nDummy );
+        if (nEndCol<20)
+            nEndCol = 20;           // same end position as when determining draw scale
+
+        sal_uInt16 nTwips = pDoc->GetCommonWidth( nEndCol, nTabNo );
+        if ( nTwips )
+        {
+            double fOriginal = nTwips * nPPTX;
+            if ( fOriginal < static_cast<double>(nEndCol) )
+            {
+                //  if one column is smaller than the column count,
+                //  rounding errors are likely to add up to a whole column.
+
+                double fRounded = ::rtl::math::approxFloor( fOriginal + 0.5 );
+                if ( fRounded > 0.0 )
+                {
+                    double fScale = fRounded / fOriginal + 1E-6;
+                    if ( fScale >= 0.9 && fScale <= 1.1 )
+                        nPPTX *= fScale;
+                }
+            }
+        }
+    }
 }
 
 #define SC_OLD_TABSEP   '/'
