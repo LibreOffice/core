@@ -1974,17 +1974,22 @@ void ScViewData::RecalcPixPos()             // after zoom changes
 {
     for (sal_uInt16 eWhich=0; eWhich<2; eWhich++)
     {
-        long nPixPosX = 0;
+        long nPosXTwips = 0;
         SCCOL nPosX = pThisTab->nPosX[eWhich];
         for (SCCOL i=0; i<nPosX; i++)
-            nPixPosX -= ToPixel(pDoc->GetColWidth(i,nTabNo), nPPTX);
-        pThisTab->nPixPosX[eWhich] = nPixPosX;
+            nPosXTwips += pDoc->GetColWidth(i,nTabNo);
 
-        long nPixPosY = 0;
-        SCROW nPosY = pThisTab->nPosY[eWhich];
-        for (SCROW j=0; j<nPosY; j++)
-            nPixPosY -= ToPixel(pDoc->GetRowHeight(j,nTabNo), nPPTY);
-        pThisTab->nPixPosY[eWhich] = nPixPosY;
+        long nPosYTwips = 0;
+        SCCOL nPosY = pThisTab->nPosY[eWhich];
+        for (SCCOL i=0; i<nPosY; i++)
+            nPosYTwips += pDoc->GetRowHeight(i,nTabNo);
+
+        Point aPosTwips = Point( nPosXTwips, nPosYTwips );
+        Point aPosPix =
+            Application::GetDefaultDevice()->LogicToPixel( aPosTwips,
+                                                           maPaintMapMode );
+        pThisTab->nPixPosX[eWhich] = aPosPix.getX();
+        pThisTab->nPixPosY[eWhich] = aPosPix.getY();
     }
 }
 
@@ -2005,10 +2010,8 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     SCCOL nCol;
     SCROW nRow;
-    sal_uInt16 nTSize;
-    long nSizePix;
-    long nScrPosX = 0;
-    long nScrPosY = 0;
+    long nScrPosXTwips = 0;
+    long nScrPosYTwips = 0;
 
     SetActivePart( SC_SPLIT_BOTTOMLEFT );
     SetPosX( SC_SPLIT_LEFT, nCol1 );
@@ -2016,25 +2019,20 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 
     for (nCol=nCol1; nCol<=nCol2; nCol++)
     {
-        nTSize = pDoc->GetColWidth( nCol, nTabNo );
-        if (nTSize)
-        {
-            nSizePix = ToPixel( nTSize, nPPTX );
-            nScrPosX += (sal_uInt16) nSizePix;
-        }
+        nScrPosXTwips += pDoc->GetColWidth( nCol, nTabNo );
     }
 
     for (nRow=nRow1; nRow<=nRow2; nRow++)
     {
-        nTSize = pDoc->GetRowHeight( nRow, nTabNo );
-        if (nTSize)
-        {
-            nSizePix = ToPixel( nTSize, nPPTY );
-            nScrPosY += (sal_uInt16) nSizePix;
-        }
+        nScrPosYTwips = pDoc->GetRowHeight( nRow, nTabNo );
     }
 
-    aScrSize = Size( nScrPosX, nScrPosY );
+    Size aScrSizeTwips = Size( nScrPosXTwips, nScrPosYTwips );
+
+    aScrSize =
+        Application::GetDefaultDevice()->PixelToLogic( aScrSizeTwips,
+                                                       maPaintMapMode );
+
 }
 
 void ScViewData::SetScreenPos( const Point& rVisAreaStart )
