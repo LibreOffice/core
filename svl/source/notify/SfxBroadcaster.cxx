@@ -25,6 +25,7 @@
 
 #include <svl/SfxBroadcaster.hxx>
 #include <algorithm>
+#include <tools/debug.hxx>
 
 TYPEINIT0(SfxBroadcaster);
 
@@ -85,6 +86,7 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 
 void SfxBroadcaster::AddListener( SfxListener& rListener )
 {
+    DBG_TESTSOLARMUTEX();
     if (m_RemovedPositions.empty()) {
         m_Listeners.push_back(&rListener);
     }
@@ -122,6 +124,7 @@ void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 
 void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
+    DBG_TESTSOLARMUTEX();
     SfxListenerArr_Impl::iterator aIter = std::find(
             m_Listeners.begin(), m_Listeners.end(), &rListener);
     assert(aIter != m_Listeners.end()); // "RemoveListener: Listener unknown"
