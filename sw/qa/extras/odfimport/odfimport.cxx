@@ -272,6 +272,41 @@ DECLARE_ODFIMPORT_TEST(testFdo60842, "fdo60842.odt")
     getCell(xTable, "E1", "01/04/2012");
 }
 
+DECLARE_ODFIMPORT_TEST(testFdo79269, "fdo79269.odt")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+
+    // The problem was that the first-footer was shared.
+    uno::Reference<beans::XPropertySet> xPropSet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropSet, "FirstIsShared"));
+
+    uno::Reference<text::XTextRange> xFooter1 = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "FooterTextFirst");
+    CPPUNIT_ASSERT_EQUAL(OUString("forst"), xFooter1->getString());
+    uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "FooterText");
+    CPPUNIT_ASSERT_EQUAL(OUString("second"), xFooter->getString());
+}
+
+DECLARE_ODFIMPORT_TEST(testFdo79269_header, "fdo79269_header.odt")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+
+    uno::Reference<beans::XPropertySet> xPropSet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropSet, "FirstIsShared"));
+
+    uno::Reference<text::XTextRange> xFooter1 = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "HeaderTextFirst");
+    CPPUNIT_ASSERT_EQUAL(OUString("forst"), xFooter1->getString());
+    uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "HeaderText");
+    CPPUNIT_ASSERT_EQUAL(OUString("second"), xFooter->getString());
+}
+
 DECLARE_ODFIMPORT_TEST(testFdo56272, "fdo56272.odt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
