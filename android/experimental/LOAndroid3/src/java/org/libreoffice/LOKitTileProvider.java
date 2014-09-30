@@ -157,7 +157,9 @@ public class LOKitTileProvider implements TileProvider {
     @Override
     public void close() {
         Log.i(LOGTAG, "Document destroyed: " + mInputFile);
-        mDocument.destroy();
+        if (mDocument != null) {
+            mDocument.destroy();
+        }
     }
 
     @Override
