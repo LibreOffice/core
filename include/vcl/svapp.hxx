@@ -1669,7 +1669,7 @@ class SolarMutexTryAndBuyGuard
 {
     private:
         bool m_isAcquired;
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
         bool m_isChecked;
 #endif
         comphelper::SolarMutex& m_rSolarMutex;
@@ -1678,7 +1678,7 @@ class SolarMutexTryAndBuyGuard
 
     SolarMutexTryAndBuyGuard()
         : m_isAcquired(false)
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
         , m_isChecked(false)
 #endif
         , m_rSolarMutex(Application::GetSolarMutex())
@@ -1689,7 +1689,7 @@ class SolarMutexTryAndBuyGuard
 
     ~SolarMutexTryAndBuyGuard()
     {
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
         assert(m_isChecked);
 #endif
         if (m_isAcquired)
@@ -1698,7 +1698,7 @@ class SolarMutexTryAndBuyGuard
 
     bool isAcquired()
     {
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
         m_isChecked = true;
 #endif
         return m_isAcquired;
