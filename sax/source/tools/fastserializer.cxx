@@ -210,7 +210,7 @@ namespace sax_fastparser {
     void FastSaxSerializer::writeFastAttributeList( FastAttributeList* pAttrList )
     {
 #ifdef DBG_UTIL
-        ::std::set<OUString> DebugAttributes;
+        ::std::set<OString> DebugAttributes;
 #endif
         const std::vector< sal_Int32 >& Tokens = pAttrList->getFastAttributeTokens();
         for (size_t j = 0; j < Tokens.size(); j++)
@@ -222,10 +222,9 @@ namespace sax_fastparser {
 
 #ifdef DBG_UTIL
             // Well-formedness constraint: Unique Att Spec
-            OUString const name(OStringToOUString(getId(nToken),
-                                                  RTL_TEXTENCODING_UTF8));
-            assert(DebugAttributes.find(name) == DebugAttributes.end());
-            DebugAttributes.insert(name);
+            OString const nameId(getId(nToken));
+            assert(DebugAttributes.find(nameId) == DebugAttributes.end());
+            DebugAttributes.insert(nameId);
 #endif
 
             writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
