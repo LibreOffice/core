@@ -129,11 +129,8 @@ public class CheckOGroupBoxModel
         Property[] properties = m_xPropSet.getPropertySetInfo().getProperties();
         ArrayList<String> tNames = new ArrayList<String>();
 
-        for (int i = 0; i < properties.length; i++)
+        for (Property property : properties)
         {
-
-            Property property = properties[i];
-            String name = property.Name;
             boolean isWritable = ((property.Attributes
                     & PropertyAttribute.READONLY) == 0);
             boolean isNotNull = ((property.Attributes
@@ -143,9 +140,8 @@ public class CheckOGroupBoxModel
 
             if (isWritable && isNotNull && isBound)
             {
-                tNames.add(name);
+                tNames.add(property.Name);
             }
-
         } // endfor
 
         //get a array of bound properties
