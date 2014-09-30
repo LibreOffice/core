@@ -43,42 +43,49 @@ public class LOKitTileProvider implements TileProvider {
         if (checkDocument()) {
             int parts = mDocument.getParts();
             Log.i(LOGTAG, "Document parts: " + parts);
-            if (parts >= 1) {
-                mDocument.setPart(0);
-            }
-            for (int i = 0; i < parts; i++) {
-                String partName = mDocument.getPartName(i);
-                if (partName.isEmpty()) {
-                    switch (mDocument.getDocumentType()) {
-                        case Document.DOCTYPE_DRAWING:
-                        case Document.DOCTYPE_TEXT:
-                            partName = "Page " + (i + 1);
-                            break;
-                        case Document.DOCTYPE_SPREADSHEET:
-                            partName = "Sheet " + (i + 1);
-                            break;
-                        case Document.DOCTYPE_PRESENTATION:
-                            partName = "Slide " + (i + 1);
-                            break;
-                        case Document.DOCTYPE_OTHER:
-                        default:
-                            partName = "Part " + (i + 1);
-                            break;
+
+            LibreOfficeMainActivity.mAppContext.getDocumentPartView().clear();
+
+            if (parts > 1) {
+                for (int i = 0; i < parts; i++) {
+                    String partName = mDocument.getPartName(i);
+                    if (partName.isEmpty()) {
+                        partName = getGenericPartName(i);
                     }
-                }
-                Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
+                    Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
 
-                mDocument.setPart(i);
-                final DocumentPartView partView = new DocumentPartView(i, partName, thumbnail(128));
-                LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
+                    mDocument.setPart(i);
+                    final DocumentPartView partView = new DocumentPartView(i, partName, thumbnail(128));
+                    LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
+                }
             }
 
-            LibreOfficeMainActivity.mAppContext.mMainHandler.post(new Runnable() {
+            mDocument.setPart(0);
+
+            LOKitShell.getMainHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdpater().notifyDataSetChanged();
                 }
             });
+        }
+    }
+
+    private String getGenericPartName(int i) {
+        if (mDocument == null) {
+            return "";
+        }
+        switch (mDocument.getDocumentType()) {
+            case Document.DOCTYPE_DRAWING:
+            case Document.DOCTYPE_TEXT:
+                return "Page " + (i + 1);
+            case Document.DOCTYPE_SPREADSHEET:
+                return "Sheet " + (i + 1);
+            case Document.DOCTYPE_PRESENTATION:
+                return "Slide " + (i + 1);
+            case Document.DOCTYPE_OTHER:
+            default:
+                return "Part " + (i + 1);
         }
     }
 
