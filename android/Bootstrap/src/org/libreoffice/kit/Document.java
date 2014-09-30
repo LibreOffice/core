@@ -18,6 +18,12 @@ public class Document {
     public static final int PART_MODE_SLIDENOTES = 3;
     public static final int PART_MODE_EMBEDDEDOBJ = 4;
 
+    public static final int DOCTYPE_TEXT = 0;
+    public static final int DOCTYPE_SPREADSHEET = 1;
+    public static final int DOCTYPE_PRESENTATION = 2;
+    public static final int DOCTYPE_DRAWING = 3;
+    public static final int DOCTYPE_OTHER = 4;
+
     private final long handle;
 
     public Document(long handle) {
