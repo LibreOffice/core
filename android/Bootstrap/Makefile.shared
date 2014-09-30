@@ -130,8 +130,9 @@ copy-stuff:
 	for F in program/services/services ure/share/misc/services; do \
 		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$$APP_DATA_DIR/lib/!g' <$(INSTDIR)/$$F.rdb >assets/$$F.rdb; \
 	done
-	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt \
-		assets
+	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt assets/example.odt
+	cp $(SRC_ROOT)/readlicense_oo/license/LICENSE assets/license.txt
+	cp $(SRC_ROOT)/readlicense_oo/license/NOTICE assets/notice.txt
 	cp $(WORKDIR)/ComponentTarget/i18npool/util/i18npool.component assets/ComponentTarget/i18npool/util
 #
 	mkdir -p assets/share/config
