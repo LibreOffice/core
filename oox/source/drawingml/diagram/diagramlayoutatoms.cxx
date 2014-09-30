@@ -394,7 +394,15 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
             const DiagramData::StringMap::value_type::second_type::const_iterator aVecEnd=aNodeName->second.end();
             while( aVecIter != aVecEnd )
             {
-                DiagramData::PointNameMap::const_iterator aDataNode2=rDgm.getData()->getPointNameMap().find(aVecIter->first);
+                DiagramData::PointNameMap& rMap = rDgm.getData()->getPointNameMap();
+                DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(aVecIter->first);
+                if (aDataNode2 == rMap.end())
+                {
+                    //busted, skip it
+                    ++aVecIter;
+                    continue;
+                }
+
                 if( aVecIter->second == 0 )
                 {
                     // grab shape attr from topmost element(s)
