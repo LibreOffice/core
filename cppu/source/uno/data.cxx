@@ -206,6 +206,14 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
     _destructData( pValue, pType, 0, release );
 }
 
+CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData_already_decremented(
+    void * pValue, typelib_TypeDescriptionReference * pType,
+    uno_ReleaseFunc release )
+    SAL_THROW_EXTERN_C()
+{
+    _destructData_already_decremented( pValue, pType, 0, release );
+}
+
 CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
     void * pValue,
     typelib_TypeDescription * pTypeDescr,
