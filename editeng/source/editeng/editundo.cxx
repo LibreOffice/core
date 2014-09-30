@@ -187,7 +187,7 @@ void EditUndoDelContent::Redo()
     if (pEE->IsCallParaInsertedOrDeleted())
         pEE->ParagraphDeleted( nNode );
 
-    DeletedNodeInfo* pInf = new DeletedNodeInfo( (sal_uLong)pContentNode, nNode );
+    DeletedNodeInfo* pInf = new DeletedNodeInfo( reinterpret_cast<sal_uLong>(pContentNode), nNode );
     pEE->AppendDeletedNodeInfo(pInf);
     pEE->UpdateSelections();
 
@@ -253,9 +253,9 @@ void EditUndoConnectParas::Undo()
     if (GetEditEngine()->GetStyleSheetPool())
     {
         if ( !aLeftStyleName.isEmpty() )
-            GetEditEngine()->SetStyleSheet( nNode, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily ) );
+            GetEditEngine()->SetStyleSheet( nNode, static_cast<SfxStyleSheet*>(GetEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily )) );
         if ( !aRightStyleName.isEmpty() )
-            GetEditEngine()->SetStyleSheet( nNode+1, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aRightStyleName, eRightStyleFamily ) );
+            GetEditEngine()->SetStyleSheet( nNode+1, static_cast<SfxStyleSheet*>(GetEditEngine()->GetStyleSheetPool()->Find( aRightStyleName, eRightStyleFamily )) );
     }
 
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
@@ -451,7 +451,7 @@ EditUndoSetStyleSheet::~EditUndoSetStyleSheet()
 void EditUndoSetStyleSheet::Undo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    GetEditEngine()->SetStyleSheet( nPara, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aPrevName, ePrevFamily ) );
+    GetEditEngine()->SetStyleSheet( nPara, static_cast<SfxStyleSheet*>(GetEditEngine()->GetStyleSheetPool()->Find( aPrevName, ePrevFamily )) );
     GetEditEngine()->SetParaAttribsOnly( nPara, aPrevParaAttribs );
     lcl_DoSetSelection( GetEditEngine()->GetActiveView(), nPara );
 }
@@ -459,7 +459,7 @@ void EditUndoSetStyleSheet::Undo()
 void EditUndoSetStyleSheet::Redo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    GetEditEngine()->SetStyleSheet( nPara, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aNewName, eNewFamily ) );
+    GetEditEngine()->SetStyleSheet( nPara, static_cast<SfxStyleSheet*>(GetEditEngine()->GetStyleSheetPool()->Find( aNewName, eNewFamily )) );
     lcl_DoSetSelection( GetEditEngine()->GetActiveView(), nPara );
 }
 

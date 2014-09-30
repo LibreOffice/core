@@ -53,7 +53,7 @@ bool SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( rItem.ISA(SvXMLAttrContainerItem),
                "SvXMLAttrContainerItem::operator ==(): Bad type");
-    return *pImpl == *((const SvXMLAttrContainerItem&)rItem).pImpl;
+    return *pImpl == *static_cast<const SvXMLAttrContainerItem&>(rItem).pImpl;
 }
 
 int SvXMLAttrContainerItem::Compare( const SfxPoolItem &/*rWith*/ ) const
@@ -98,7 +98,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
         xRef = *(Reference<XInterface>*)rVal.getValue();
         Reference<XUnoTunnel> xTunnel(xRef, UNO_QUERY);
         if( xTunnel.is() )
-            pContainer = (SvUnoAttributeContainer*)(sal_uLong)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId());
+            pContainer = reinterpret_cast<SvUnoAttributeContainer*>((sal_uLong)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId()));
     }
 
     if( pContainer )

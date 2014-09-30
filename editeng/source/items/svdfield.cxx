@@ -33,7 +33,7 @@ SvxFieldData* SdrMeasureField::Clone() const
 
 bool SdrMeasureField::operator==(const SvxFieldData& rSrc) const
 {
-    return eMeasureFieldKind==((SdrMeasureField&)rSrc).GetMeasureFieldKind();
+    return eMeasureFieldKind == static_cast<const SdrMeasureField&>(rSrc).GetMeasureFieldKind();
 }
 
 void SdrMeasureField::Load(SvPersistStream& rIn)

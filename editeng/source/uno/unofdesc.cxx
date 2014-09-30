@@ -133,7 +133,7 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
 {
     const SfxPoolItem* pItem = NULL;
     {
-        SvxFontItem* pFontItem = (SvxFontItem*)&rSet.Get( EE_CHAR_FONTINFO, true );
+        const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(&rSet.Get( EE_CHAR_FONTINFO, true ));
         rDesc.Name      = pFontItem->GetFamilyName();
         rDesc.StyleName = pFontItem->GetStyleName();
         rDesc.Family    = sal::static_int_cast< sal_Int16 >(
@@ -173,7 +173,7 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
             aStrikeOut >>= rDesc.Strikeout;
     }
     {
-        SvxWordLineModeItem* pWLMItem = (SvxWordLineModeItem*)&rSet.Get( EE_CHAR_WLM, true );
+        const SvxWordLineModeItem* pWLMItem = static_cast<const SvxWordLineModeItem*>(&rSet.Get( EE_CHAR_WLM, true ));
         rDesc.WordLineMode = pWLMItem->GetValue();
     }
 }

@@ -90,7 +90,7 @@ SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nPre
     else if( XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_AUTOMATIC_STYLES ) )
     {
         pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
-        GetImport().GetTextImport()->SetAutoStyles( (SvXMLStylesContext*)pContext );
+        GetImport().GetTextImport()->SetAutoStyles( static_cast<SvXMLStylesContext*>(pContext) );
 
     }
     else

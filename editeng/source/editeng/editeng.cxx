@@ -1127,7 +1127,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
 
 
                         sal_Int32 nPara = pImpEditEngine->GetEditDoc().GetPos( pNode );
-                        SfxBoolItem aBulletState( (const SfxBoolItem&) pImpEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE ) );
+                        SfxBoolItem aBulletState( static_cast<const SfxBoolItem&>( pImpEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE ) ) );
                         bool bBulletIsVisible = aBulletState.GetValue() ? true : false;
 
                         // just toggling EE_PARA_BULLETSTATE should be fine for both cases...

@@ -65,16 +65,16 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
     {
         case EE_PARA_WRITINGDIR:
             aDebStr.append("WritingDir=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxFrameDirectionItem&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxFrameDirectionItem&>(rItem).GetValue()));
         break;
         case EE_PARA_OUTLLRSPACE:
         case EE_PARA_LRSPACE:
             aDebStr.append("FI=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxLRSpaceItem&)rItem).GetTxtFirstLineOfst()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTxtFirstLineOfst()));
             aDebStr.append(", LI=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxLRSpaceItem&)rItem).GetTxtLeft()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTxtLeft()));
             aDebStr.append(", RI=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxLRSpaceItem&)rItem).GetRight()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetRight()));
         break;
         case EE_PARA_NUMBULLET:
             aDebStr.append("NumItem ");
@@ -83,7 +83,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
                 aDebStr.append("Level");
                 aDebStr.append(static_cast<sal_Int32>(nLevel));
                 aDebStr.append('=');
-                const SvxNumberFormat* pFmt = ((const SvxNumBulletItem&)rItem).GetNumRule()->Get( nLevel );
+                const SvxNumberFormat* pFmt = static_cast<const SvxNumBulletItem&>(rItem).GetNumRule()->Get( nLevel );
                 if ( pFmt )
                 {
                     aDebStr.append('(');
@@ -107,45 +107,45 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         break;
         case EE_PARA_BULLETSTATE:
             aDebStr.append("ShowBullet=");
-            aDebStr.append(static_cast<sal_Int32>(((SfxBoolItem&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue()));
         break;
         case EE_PARA_HYPHENATE:
             aDebStr.append("Hyphenate=");
-            aDebStr.append(static_cast<sal_Int32>(((SfxBoolItem&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue()));
         break;
         case EE_PARA_OUTLLEVEL:
             aDebStr.append("Level=");
-            aDebStr.append(static_cast<sal_Int32>(((SfxInt16Item&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SfxInt16Item&>(rItem).GetValue()));
         break;
         case EE_PARA_ULSPACE:
             aDebStr.append("SB=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxULSpaceItem&)rItem).GetUpper()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxULSpaceItem&>(rItem).GetUpper()));
             aDebStr.append(", SA=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxULSpaceItem&)rItem).GetLower()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxULSpaceItem&>(rItem).GetLower()));
         break;
         case EE_PARA_SBL:
             aDebStr.append("SBL=");
-            if ( ((SvxLineSpacingItem&)rItem).GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
+            if ( static_cast<const SvxLineSpacingItem&>(rItem).GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
             {
                 aDebStr.append("Min: ");
-                aDebStr.append(static_cast<sal_Int32>(((SvxLineSpacingItem&)rItem).GetInterLineSpace()));
+                aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpace()));
             }
-            else if ( ((SvxLineSpacingItem&)rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+            else if ( static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
                 aDebStr.append("Prop: ");
-                aDebStr.append(static_cast<sal_Int32>(((SvxLineSpacingItem&)rItem).GetPropLineSpace()));
+                aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetPropLineSpace()));
             }
             else
                 aDebStr.append("Unsupported Type!");
         break;
         case EE_PARA_JUST:
             aDebStr.append("SvxAdust=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxAdjustItem&)rItem).GetAdjust()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxAdjustItem&>(rItem).GetAdjust()));
         break;
         case EE_PARA_TABS:
         {
             aDebStr.append("Tabs: ");
-            const SvxTabStopItem& rTabs = (const SvxTabStopItem&) rItem;
+            const SvxTabStopItem& rTabs = static_cast<const SvxTabStopItem&>(rItem);
             aDebStr.append(static_cast<sal_Int32>(rTabs.Count()));
             if ( rTabs.Count() )
             {
@@ -164,12 +164,12 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
             aDebStr.append("Language=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxLanguageItem&)rItem).GetLanguage()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLanguageItem&>(rItem).GetLanguage()));
         break;
         case EE_CHAR_COLOR:
         {
             aDebStr.append("Color= ");
-            Color aColor( ((SvxColorItem&)rItem).GetValue() );
+            Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
             aDebStr.append(static_cast<sal_Int32>(aColor.GetRed()));
             aDebStr.append(", ");
             aDebStr.append(static_cast<sal_Int32>(aColor.GetGreen()));
@@ -180,7 +180,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_BKGCOLOR:
         {
             aDebStr.append("FillColor= ");
-            Color aColor( ((SvxBackgroundColorItem&)rItem).GetValue() );
+            Color aColor( static_cast<const SvxBackgroundColorItem&>(rItem).GetValue() );
             aDebStr.append(static_cast<sal_Int32>(aColor.GetRed()));
             aDebStr.append(", ");
             aDebStr.append(static_cast<sal_Int32>(aColor.GetGreen()));
@@ -193,9 +193,9 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_FONTINFO_CTL:
         {
             aDebStr.append("Font=");
-            aDebStr.append(OUStringToOString(((SvxFontItem&)rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US));
+            aDebStr.append(OUStringToOString(static_cast<const SvxFontItem&>(rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US));
             aDebStr.append(" (CharSet: ");
-            aDebStr.append(static_cast<sal_Int32>(((SvxFontItem&)rItem).GetCharSet()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxFontItem&>(rItem).GetCharSet()));
             aDebStr.append(')');
         }
         break;
@@ -204,8 +204,8 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_FONTHEIGHT_CTL:
         {
             aDebStr.append("Groesse=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxFontHeightItem&)rItem).GetHeight()));
-            Size aSz( 0, ((SvxFontHeightItem&)rItem).GetHeight() );
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxFontHeightItem&>(rItem).GetHeight()));
+            Size aSz( 0, static_cast<const SvxFontHeightItem&>(rItem).GetHeight() );
             SfxMapUnit eUnit = rPool.GetMetric( rItem.Which() );
             MapMode aItemMapMode( (MapUnit) eUnit );
             MapMode aPntMap( MAP_POINT );
@@ -217,7 +217,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_FONTWIDTH:
         {
             aDebStr.append("Breite=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxCharScaleWidthItem&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxCharScaleWidthItem&>(rItem).GetValue()));
             aDebStr.append('%');
         }
         break;
@@ -225,57 +225,57 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_WEIGHT_CJK:
         case EE_CHAR_WEIGHT_CTL:
             aDebStr.append("FontWeight=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxWeightItem&)rItem).GetWeight()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxWeightItem&>(rItem).GetWeight()));
         break;
         case EE_CHAR_UNDERLINE:
             aDebStr.append("FontUnderline=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxUnderlineItem&)rItem).GetLineStyle()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle()));
         break;
         case EE_CHAR_OVERLINE:
             aDebStr.append("FontOverline=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxOverlineItem&)rItem).GetLineStyle()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxOverlineItem&>(rItem).GetLineStyle()));
         break;
         case EE_CHAR_EMPHASISMARK:
             aDebStr.append("FontUnderline=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxEmphasisMarkItem&)rItem).GetEmphasisMark()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxEmphasisMarkItem&>(rItem).GetEmphasisMark()));
         break;
         case EE_CHAR_RELIEF:
             aDebStr.append("FontRelief=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxCharReliefItem&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxCharReliefItem&>(rItem).GetValue()));
         break;
         case EE_CHAR_STRIKEOUT:
             aDebStr.append("FontStrikeout=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxCrossedOutItem&)rItem).GetStrikeout()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxCrossedOutItem&>(rItem).GetStrikeout()));
         break;
         case EE_CHAR_ITALIC:
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
             aDebStr.append("FontPosture=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxPostureItem&)rItem).GetPosture()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxPostureItem&>(rItem).GetPosture()));
         break;
         case EE_CHAR_OUTLINE:
             aDebStr.append("FontOutline=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxContourItem&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxContourItem&>(rItem).GetValue()));
         break;
         case EE_CHAR_SHADOW:
             aDebStr.append("FontShadowed=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxShadowedItem&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxShadowedItem&>(rItem).GetValue()));
         break;
         case EE_CHAR_ESCAPEMENT:
             aDebStr.append("Escape=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxEscapementItem&)rItem).GetEsc()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxEscapementItem&>(rItem).GetEsc()));
             aDebStr.append(", ");
-            aDebStr.append(static_cast<sal_Int32>(((SvxEscapementItem&)rItem).GetProp()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxEscapementItem&>(rItem).GetProp()));
         break;
         case EE_CHAR_PAIRKERNING:
             aDebStr.append("PairKerning=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxAutoKernItem&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxAutoKernItem&>(rItem).GetValue()));
         break;
         case EE_CHAR_KERNING:
         {
             aDebStr.append("Kerning=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxKerningItem&)rItem).GetValue()));
-            Size aSz( 0, (short)((SvxKerningItem&)rItem).GetValue() );
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxKerningItem&>(rItem).GetValue()));
+            Size aSz( 0, (short)static_cast<const SvxKerningItem&>(rItem).GetValue() );
             SfxMapUnit eUnit = rPool.GetMetric( rItem.Which() );
             MapMode aItemMapMode( (MapUnit) eUnit );
             MapMode aPntMap( MAP_POINT );
@@ -286,7 +286,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         break;
         case EE_CHAR_WLM:
             aDebStr.append("WordLineMode=");
-            aDebStr.append(static_cast<sal_Int32>(((SvxWordLineModeItem&)rItem).GetValue()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxWordLineModeItem&>(rItem).GetValue()));
         break;
         case EE_CHAR_XMLATTRIBS:
             aDebStr.append("XMLAttribs=...");

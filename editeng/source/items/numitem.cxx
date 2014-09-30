@@ -210,7 +210,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     if ( hasGraphicBrush )
     {
         pGraphicBrush = new SvxBrushItem( SID_ATTR_BRUSH );
-        pGraphicBrush = (SvxBrushItem*)(pGraphicBrush->Create( rStream, BRUSH_GRAPHIC_VERSION ));
+        pGraphicBrush = static_cast<SvxBrushItem*>(pGraphicBrush->Create( rStream, BRUSH_GRAPHIC_VERSION ));
     }
     else pGraphicBrush = 0;
     rStream.ReadUInt16( nTmp16 ); eVertOrient = nTmp16;
@@ -405,7 +405,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
     else if ( !pGraphicBrush || (pGraphicBrush && !(*pBrushItem == *pGraphicBrush)) )
     {
         delete pGraphicBrush;
-        pGraphicBrush =  (SvxBrushItem*)pBrushItem->Clone();
+        pGraphicBrush =  static_cast<SvxBrushItem*>(pBrushItem->Clone());
         pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
    }
 
@@ -950,7 +950,7 @@ SvxNumBulletItem::~SvxNumBulletItem()
 
 bool SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
 {
-    return *pNumRule == *((SvxNumBulletItem&)rCopy).pNumRule;
+    return *pNumRule == *static_cast<const SvxNumBulletItem&>(rCopy).pNumRule;
 }
 
 SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const

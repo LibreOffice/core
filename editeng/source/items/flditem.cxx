@@ -358,7 +358,7 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
 
-    const SvxFieldData* pOtherFld = ((const SvxFieldItem&)rItem).GetField();
+    const SvxFieldData* pOtherFld = static_cast<const SvxFieldItem&>(rItem).GetField();
     if ( !pField && !pOtherFld )
         return true;
 
@@ -407,7 +407,7 @@ bool SvxDateField::operator==( const SvxFieldData& rOther ) const
     if ( rOther.Type() != Type() )
         return false;
 
-    const SvxDateField& rOtherFld = (const SvxDateField&) rOther;
+    const SvxDateField& rOtherFld = static_cast<const SvxDateField&>(rOther);
     return ( ( nFixDate == rOtherFld.nFixDate ) &&
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
@@ -545,7 +545,7 @@ bool SvxURLField::operator==( const SvxFieldData& rOther ) const
     if ( rOther.Type() != Type() )
         return false;
 
-    const SvxURLField& rOtherFld = (const SvxURLField&) rOther;
+    const SvxURLField& rOtherFld = static_cast<const SvxURLField&>(rOther);
     return ( ( eFormat == rOtherFld.eFormat ) &&
                 ( aURL == rOtherFld.aURL ) &&
                 ( aRepresentation == rOtherFld.aRepresentation ) &&
@@ -816,7 +816,7 @@ bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
     if ( rOther.Type() != Type() )
         return false;
 
-    const SvxExtTimeField& rOtherFld = (const SvxExtTimeField&) rOther;
+    const SvxExtTimeField& rOtherFld = static_cast<const SvxExtTimeField&>(rOther);
     return ((m_nFixTime == rOtherFld.m_nFixTime) &&
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
@@ -960,7 +960,7 @@ bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
     if ( rOther.Type() != Type() )
         return false;
 
-    const SvxExtFileField& rOtherFld = (const SvxExtFileField&) rOther;
+    const SvxExtFileField& rOtherFld = static_cast<const SvxExtFileField&>(rOther);
     return ( ( aFile == rOtherFld.aFile ) &&
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
@@ -1112,7 +1112,7 @@ bool SvxAuthorField::operator==( const SvxFieldData& rOther ) const
     if ( rOther.Type() != Type() )
         return false;
 
-    const SvxAuthorField& rOtherFld = (const SvxAuthorField&) rOther;
+    const SvxAuthorField& rOtherFld = static_cast<const SvxAuthorField&>(rOther);
     return ( ( aName == rOtherFld.aName ) &&
                 ( aFirstName == rOtherFld.aFirstName ) &&
                 ( aShortName == rOtherFld.aShortName ) &&

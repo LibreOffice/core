@@ -90,14 +90,14 @@ using namespace editeng;
 // Some helper functions
 // char
 inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
-    { return (const SvxEscapementItem&)rSet.Get( nId,bInP); }
+    { return static_cast<const SvxEscapementItem&>(rSet.Get( nId,bInP)); }
 inline const SvxLineSpacingItem& GetLineSpacing(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
-    { return (const SvxLineSpacingItem&)rSet.Get( nId,bInP); }
+    { return static_cast<const SvxLineSpacingItem&>(rSet.Get( nId,bInP)); }
 // frm
 inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
-    { return (const SvxLRSpaceItem&)rSet.Get( nId,bInP); }
+    { return static_cast<const SvxLRSpaceItem&>(rSet.Get( nId,bInP)); }
 inline const SvxULSpaceItem& GetULSpace(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
-    { return (const SvxULSpaceItem&)rSet.Get( nId,bInP); }
+    { return static_cast<const SvxULSpaceItem&>(rSet.Get( nId,bInP)); }
 
 void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
                                     SfxPoolItem& rItem )
@@ -805,12 +805,12 @@ ATTR_SETUNDERLINE:
                     {
                         // is switched off ?
                         if( UNDERLINE_NONE ==
-                            ((SvxUnderlineItem*)pItem)->GetLineStyle() )
+                            static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle() )
                             break;
-                        aUL = *(SvxUnderlineItem*)pItem;
+                        aUL = *static_cast<const SvxUnderlineItem*>(pItem);
                     }
                     else
-                        aUL = (const SvxUnderlineItem&)pSet->Get( aPlainMap.nUnderline, false );
+                        aUL = static_cast<const SvxUnderlineItem&>(pSet->Get( aPlainMap.nUnderline, false ));
 
                     if( UNDERLINE_NONE == aUL.GetLineStyle() )
                         aUL.SetLineStyle( UNDERLINE_SINGLE );
@@ -900,12 +900,12 @@ ATTR_SETOVERLINE:
                     {
                         // is switched off ?
                         if( UNDERLINE_NONE ==
-                            ((SvxOverlineItem*)pItem)->GetLineStyle() )
+                            static_cast<const SvxOverlineItem*>(pItem)->GetLineStyle() )
                             break;
-                        aOL = *(SvxOverlineItem*)pItem;
+                        aOL = *static_cast<const SvxOverlineItem*>(pItem);
                     }
                     else
-                        aOL = (const SvxOverlineItem&)pSet->Get( aPlainMap.nOverline, false );
+                        aOL = static_cast<const SvxOverlineItem&>(pSet->Get( aPlainMap.nOverline, false ));
 
                     if( UNDERLINE_NONE == aOL.GetLineStyle() )
                         aOL.SetLineStyle( UNDERLINE_SINGLE );
@@ -1395,7 +1395,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     SvxBoxItem aAttr( aPardMap.nBox );
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet.GetItemState( aPardMap.nBox, false, &pItem ) )
-        aAttr = *(SvxBoxItem*)pItem;
+        aAttr = *static_cast<const SvxBoxItem*>(pItem);
 
     SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0 );  // Simple plain line
     bool bContinue = true;

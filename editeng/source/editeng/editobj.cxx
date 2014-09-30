@@ -95,7 +95,8 @@ XParaPortionList::XParaPortionList(
     OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY) :
     aRefMapMode(pRefDev->GetMapMode()), nStretchX(_nStretchX), nStretchY(_nStretchY)
 {
-    nRefDevPtr = (sal_uIntPtr)pRefDev; nPaperWidth = nPW;
+    nRefDevPtr = reinterpret_cast<sal_uIntPtr>(pRefDev);
+    nPaperWidth = nPW;
     eRefDevType = pRefDev->GetOutDevType();
 }
 
@@ -1101,7 +1102,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         bool bSymbolPara = false;
         if (rC.GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SfxItemState::SET)
         {
-            const SvxFontItem& rFontItem = (const SvxFontItem&)rC.GetParaAttribs().Get(EE_CHAR_FONTINFO);
+            const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(rC.GetParaAttribs().Get(EE_CHAR_FONTINFO));
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
                 aBuffer = OStringBuffer(OUStringToOString(rC.GetText(), RTL_TEXTENCODING_SYMBOL));
@@ -1114,7 +1115,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
             if (rAttr.GetItem()->Which() == EE_CHAR_FONTINFO)
             {
-                const SvxFontItem& rFontItem = (const SvxFontItem&)*rAttr.GetItem();
+                const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(*rAttr.GetItem());
                 if ( ( !bSymbolPara && ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL ) )
                       || ( bSymbolPara && ( rFontItem.GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                 {
@@ -1150,7 +1151,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         FontToSubsFontConverter hConv = NULL;
         if (rC.GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SfxItemState::SET)
         {
-            hConv = CreateFontToSubsFontConverter( ((const SvxFontItem&)rC.GetParaAttribs().Get( EE_CHAR_FONTINFO )).GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+            hConv = CreateFontToSubsFontConverter( static_cast<const SvxFontItem&>(rC.GetParaAttribs().Get( EE_CHAR_FONTINFO )).GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
         }
         if ( hConv )
         {
@@ -1311,7 +1312,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 {
                     sal_Char cEncodedChar = aByteString[nStart];
                     sal_Unicode cChar = OUString(&cEncodedChar, 1,
-                        ((SvxCharSetColorItem*)pItem)->GetCharSet()).toChar();
+                        static_cast<const SvxCharSetColorItem*>(pItem)->GetCharSet()).toChar();
                     pC->SetText(pC->GetText().replaceAt(nStart, 1, OUString(cChar)));
                 }
                 else
@@ -1336,7 +1337,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         bool bSymbolPara = false;
         if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SfxItemState::SET )
         {
-            const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
+            const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pC->GetParaAttribs().Get( EE_CHAR_FONTINFO ));
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
                 pC->SetText(OStringToOUString(aByteString, RTL_TEXTENCODING_SYMBOL));
@@ -1349,7 +1350,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
             const XEditAttribute& rAttr = pC->aAttribs[--nAttr];
             if ( rAttr.GetItem()->Which() == EE_CHAR_FONTINFO )
             {
-                const SvxFontItem& rFontItem = (const SvxFontItem&)*rAttr.GetItem();
+                const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(*rAttr.GetItem());
                 if ( ( !bSymbolPara && ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL ) )
                       || ( bSymbolPara && ( rFontItem.GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                 {
@@ -1392,7 +1393,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         // Maybe old symbol font as paragraph attribute?
         if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SfxItemState::SET )
         {
-            const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
+            const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pC->GetParaAttribs().Get( EE_CHAR_FONTINFO ));
             FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
             if ( hConv )
             {

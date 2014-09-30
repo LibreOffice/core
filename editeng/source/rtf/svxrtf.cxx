@@ -811,8 +811,8 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
     const vcl::Font* pFont;
     if( it == aFontTbl.end() )
     {
-        const SvxFontItem& rDfltFont = (const SvxFontItem&)
-                        pAttrPool->GetDefaultItem( aPlainMap.nFont );
+        const SvxFontItem& rDfltFont = static_cast<const SvxFontItem&>(
+                        pAttrPool->GetDefaultItem( aPlainMap.nFont ));
         pDfltFont->SetName( rDfltFont.GetStyleName() );
         pDfltFont->SetFamily( rDfltFont.GetFamily() );
         pFont = pDfltFont;

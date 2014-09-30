@@ -317,11 +317,11 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                     mpImpl->mbBoolean2 = true;
                     // #i35416# for variable date field, don't use invalid "0000-00-00" date,
                     // use current date instead
-                    bool bFixed = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
+                    bool bFixed = static_cast<const SvxDateField*>(pData)->GetType() == SVXDATETYPE_FIX;
                     mpImpl->maDateTime = getDate( bFixed ?
-                                            ((SvxDateField*)pData)->GetFixDate() :
+                                            static_cast<const SvxDateField*>(pData)->GetFixDate() :
                                             Date( Date::SYSTEM ).GetDate() );
-                    mpImpl->mnInt32 = ((SvxDateField*)pData)->GetFormat();
+                    mpImpl->mnInt32 = static_cast<const SvxDateField*>(pData)->GetFormat();
                     mpImpl->mbBoolean1 = bFixed;
                 }
                 break;
@@ -334,36 +334,36 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
 
             case text::textfield::Type::EXTENDED_TIME:
                 mpImpl->mbBoolean2 = false;
-                mpImpl->maDateTime = getTime( ((SvxExtTimeField*)pData)->GetFixTime() );
-                mpImpl->mbBoolean1 = ((SvxExtTimeField*)pData)->GetType() == SVXTIMETYPE_FIX;
-                mpImpl->mnInt32 = ((SvxExtTimeField*)pData)->GetFormat();
+                mpImpl->maDateTime = getTime( static_cast<const SvxExtTimeField*>(pData)->GetFixTime() );
+                mpImpl->mbBoolean1 = static_cast<const SvxExtTimeField*>(pData)->GetType() == SVXTIMETYPE_FIX;
+                mpImpl->mnInt32 = static_cast<const SvxExtTimeField*>(pData)->GetFormat();
                 break;
 
             case text::textfield::Type::URL:
-                mpImpl->msString1 = ((SvxURLField*)pData)->GetRepresentation();
-                mpImpl->msString2 = ((SvxURLField*)pData)->GetTargetFrame();
-                mpImpl->msString3 = ((SvxURLField*)pData)->GetURL();
+                mpImpl->msString1 = static_cast<const SvxURLField*>(pData)->GetRepresentation();
+                mpImpl->msString2 = static_cast<const SvxURLField*>(pData)->GetTargetFrame();
+                mpImpl->msString3 = static_cast<const SvxURLField*>(pData)->GetURL();
                 mpImpl->mnInt16 = sal::static_int_cast< sal_Int16 >(
-                    ((SvxURLField*)pData)->GetFormat());
+                    static_cast<const SvxURLField*>(pData)->GetFormat());
                 break;
 
             case text::textfield::Type::EXTENDED_FILE:
-                mpImpl->msString1 = ((SvxExtFileField*)pData)->GetFile();
-                mpImpl->mbBoolean1 = ((SvxExtFileField*)pData)->GetType() == SVXFILETYPE_FIX;
-                mpImpl->mnInt16 = getFileNameDisplayFormat(((SvxExtFileField*)pData)->GetFormat());
+                mpImpl->msString1 = static_cast<const SvxExtFileField*>(pData)->GetFile();
+                mpImpl->mbBoolean1 = static_cast<const SvxExtFileField*>(pData)->GetType() == SVXFILETYPE_FIX;
+                mpImpl->mnInt16 = getFileNameDisplayFormat(static_cast<const SvxExtFileField*>(pData)->GetFormat());
                 break;
 
             case text::textfield::Type::AUTHOR:
-                mpImpl->msString1  = ((SvxAuthorField*)pData)->GetFormatted();
-                mpImpl->msString2  = ((SvxAuthorField*)pData)->GetFormatted();
+                mpImpl->msString1  = static_cast<const SvxAuthorField*>(pData)->GetFormatted();
+                mpImpl->msString2  = static_cast<const SvxAuthorField*>(pData)->GetFormatted();
                 mpImpl->mnInt16    = sal::static_int_cast< sal_Int16 >(
-                    ((SvxAuthorField*)pData)->GetFormat());
-                mpImpl->mbBoolean1 = ((SvxAuthorField*)pData)->GetType() == SVXAUTHORTYPE_FIX;
-                mpImpl->mbBoolean2 = ((SvxAuthorField*)pData)->GetFormat() != SVXAUTHORFORMAT_SHORTNAME;
+                    static_cast<const SvxAuthorField*>(pData)->GetFormat());
+                mpImpl->mbBoolean1 = static_cast<const SvxAuthorField*>(pData)->GetType() == SVXAUTHORTYPE_FIX;
+                mpImpl->mbBoolean2 = static_cast<const SvxAuthorField*>(pData)->GetFormat() != SVXAUTHORFORMAT_SHORTNAME;
                 break;
 
             case text::textfield::Type::MEASURE:
-                mpImpl->mnInt16     = sal::static_int_cast< sal_Int16 >(((SdrMeasureField*)pData)->GetMeasureFieldKind());
+                mpImpl->mnInt16     = sal::static_int_cast< sal_Int16 >(static_cast<const SdrMeasureField*>(pData)->GetMeasureFieldKind());
                 break;
             }
         }
@@ -392,7 +392,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
             Date aDate( setDate( mpImpl->maDateTime ) );
             pData = new SvxDateField( aDate, mpImpl->mbBoolean1?SVXDATETYPE_FIX:SVXDATETYPE_VAR );
             if( mpImpl->mnInt32 >= SVXDATEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXDATEFORMAT_F )
-                ((SvxDateField*)pData)->SetFormat( (SvxDateFormat)mpImpl->mnInt32 );
+                static_cast<SvxDateField*>(pData)->SetFormat( (SvxDateFormat)mpImpl->mnInt32 );
         }
         else
         {
@@ -402,7 +402,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
                 pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
 
                 if( mpImpl->mnInt32 >= SVXTIMEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXTIMEFORMAT_AM_HMSH )
-                    ((SvxExtTimeField*)pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInt32 );
+                    static_cast<SvxExtTimeField*>(pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInt32 );
             }
             else
             {
@@ -415,9 +415,9 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
     case text::textfield::Type::URL:
         pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1, !mpImpl->msString1.isEmpty() ? SVXURLFORMAT_REPR : SVXURLFORMAT_URL );
-        ((SvxURLField*)pData)->SetTargetFrame( mpImpl->msString2 );
+        static_cast<SvxURLField*>(pData)->SetTargetFrame( mpImpl->msString2 );
         if( mpImpl->mnInt16 >= SVXURLFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXURLFORMAT_REPR )
-            ((SvxURLField*)pData)->SetFormat( (SvxURLFormat)mpImpl->mnInt16 );
+            static_cast<SvxURLField*>(pData)->SetFormat( (SvxURLFormat)mpImpl->mnInt16 );
         break;
 
     case text::textfield::Type::PAGE:
@@ -478,11 +478,11 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
         if( !mpImpl->mbBoolean2 )
         {
-            ((SvxAuthorField*)pData)->SetFormat( SVXAUTHORFORMAT_SHORTNAME );
+            static_cast<SvxAuthorField*>(pData)->SetFormat( SVXAUTHORFORMAT_SHORTNAME );
         }
         else if( mpImpl->mnInt16 >= SVXAUTHORFORMAT_FULLNAME || mpImpl->mnInt16 <= SVXAUTHORFORMAT_SHORTNAME )
         {
-            ((SvxAuthorField*)pData)->SetFormat( (SvxAuthorFormat) mpImpl->mnInt16 );
+            static_cast<SvxAuthorField*>(pData)->SetFormat( (SvxAuthorFormat) mpImpl->mnInt16 );
         }
 
         break;

@@ -81,7 +81,7 @@ EditCharAttribFont::EditCharAttribFont( const SvxFontItem& rAttr, sal_uInt16 _nS
 
 void EditCharAttribFont::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    const SvxFontItem& rAttr = (const SvxFontItem&)(*GetItem());
+    const SvxFontItem& rAttr = static_cast<const SvxFontItem&>(*GetItem());
 
     rFont.SetName( rAttr.GetFamilyName() );
     rFont.SetFamily( rAttr.GetFamily() );
@@ -100,7 +100,7 @@ EditCharAttribItalic::EditCharAttribItalic( const SvxPostureItem& rAttr, sal_uIn
 
 void EditCharAttribItalic::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetItalic( ((const SvxPostureItem*)GetItem())->GetPosture() );
+    rFont.SetItalic( static_cast<const SvxPostureItem*>(GetItem())->GetPosture() );
 }
 
 
@@ -114,7 +114,7 @@ EditCharAttribWeight::EditCharAttribWeight( const SvxWeightItem& rAttr, sal_uInt
 
 void EditCharAttribWeight::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetWeight( (FontWeight)((const SvxWeightItem*)GetItem())->GetValue() );
+    rFont.SetWeight( (FontWeight)static_cast<const SvxWeightItem*>(GetItem())->GetValue() );
 }
 
 
@@ -128,10 +128,10 @@ EditCharAttribUnderline::EditCharAttribUnderline( const SvxUnderlineItem& rAttr,
 
 void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 {
-    rFont.SetUnderline( (FontUnderline)((const SvxUnderlineItem*)GetItem())->GetValue() );
+    rFont.SetUnderline( (FontUnderline)static_cast<const SvxUnderlineItem*>(GetItem())->GetValue() );
 
     if ( pOutDev )
-        pOutDev->SetTextLineColor( ((const SvxUnderlineItem*)GetItem())->GetColor() );
+        pOutDev->SetTextLineColor( static_cast<const SvxUnderlineItem*>(GetItem())->GetColor() );
 
 }
 
@@ -146,9 +146,9 @@ EditCharAttribOverline::EditCharAttribOverline( const SvxOverlineItem& rAttr, sa
 
 void EditCharAttribOverline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 {
-    rFont.SetOverline( (FontUnderline)((const SvxOverlineItem*)GetItem())->GetValue() );
+    rFont.SetOverline( (FontUnderline)static_cast<const SvxOverlineItem*>(GetItem())->GetValue() );
     if ( pOutDev )
-        pOutDev->SetOverlineColor( ((const SvxOverlineItem*)GetItem())->GetColor() );
+        pOutDev->SetOverlineColor( static_cast<const SvxOverlineItem*>(GetItem())->GetColor() );
 }
 
 
@@ -163,7 +163,7 @@ EditCharAttribFontHeight::EditCharAttribFontHeight( const SvxFontHeightItem& rAt
 void EditCharAttribFontHeight::SetFont( SvxFont& rFont, OutputDevice* )
 {
     // Property is ignored
-    rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem*)GetItem())->GetHeight() ) );
+    rFont.SetSize( Size( rFont.GetSize().Width(), static_cast<const SvxFontHeightItem*>(GetItem())->GetHeight() ) );
 }
 
 
@@ -191,7 +191,7 @@ EditCharAttribStrikeout::EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr
 
 void EditCharAttribStrikeout::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetStrikeout( (FontStrikeout)((const SvxCrossedOutItem*)GetItem())->GetValue() );
+    rFont.SetStrikeout( (FontStrikeout)static_cast<const SvxCrossedOutItem*>(GetItem())->GetValue() );
 }
 
 
@@ -205,7 +205,7 @@ EditCharAttribCaseMap::EditCharAttribCaseMap( const SvxCaseMapItem& rAttr, sal_u
 
 void EditCharAttribCaseMap::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetCaseMap( ((const SvxCaseMapItem*)GetItem())->GetCaseMap() );
+    rFont.SetCaseMap( static_cast<const SvxCaseMapItem*>(GetItem())->GetCaseMap() );
 }
 
 
@@ -219,7 +219,7 @@ EditCharAttribColor::EditCharAttribColor( const SvxColorItem& rAttr, sal_uInt16 
 
 void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    Color aColor = ((const SvxColorItem*)GetItem())->GetValue();
+    Color aColor = static_cast<const SvxColorItem*>(GetItem())->GetValue();
     rFont.SetColor( aColor);
     //fprintf(stderr, "Called SetFont with Color %d\n", aColor.GetColor());
 }
@@ -237,7 +237,7 @@ EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
 
 void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    Color aColor = ((const SvxBackgroundColorItem*)GetItem())->GetValue();
+    Color aColor = static_cast<const SvxBackgroundColorItem*>(GetItem())->GetValue();
     rFont.SetFillColor( aColor);
     rFont.SetTransparent(false);
 
@@ -254,7 +254,7 @@ EditCharAttribLanguage::EditCharAttribLanguage( const SvxLanguageItem& rAttr, sa
 
 void EditCharAttribLanguage::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetLanguage( ((const SvxLanguageItem*)GetItem())->GetLanguage() );
+    rFont.SetLanguage( static_cast<const SvxLanguageItem*>(GetItem())->GetLanguage() );
 }
 
 
@@ -268,7 +268,7 @@ EditCharAttribShadow::EditCharAttribShadow( const SvxShadowedItem& rAttr, sal_uI
 
 void EditCharAttribShadow::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetShadow( ((const SvxShadowedItem*)GetItem())->GetValue() );
+    rFont.SetShadow( static_cast<const SvxShadowedItem*>(GetItem())->GetValue() );
 }
 
 
@@ -282,10 +282,10 @@ EditCharAttribEscapement::EditCharAttribEscapement( const SvxEscapementItem& rAt
 
 void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    sal_uInt16 nProp = ((const SvxEscapementItem*)GetItem())->GetProp();
+    sal_uInt16 nProp = static_cast<const SvxEscapementItem*>(GetItem())->GetProp();
     rFont.SetPropr( (sal_uInt8)nProp );
 
-    short nEsc = ((const SvxEscapementItem*)GetItem())->GetEsc();
+    short nEsc = static_cast<const SvxEscapementItem*>(GetItem())->GetEsc();
     if ( nEsc == DFLT_ESC_AUTO_SUPER )
         nEsc = 100 - nProp;
     else if ( nEsc == DFLT_ESC_AUTO_SUB )
@@ -304,7 +304,7 @@ EditCharAttribOutline::EditCharAttribOutline( const SvxContourItem& rAttr, sal_u
 
 void EditCharAttribOutline::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetOutline( ((const SvxContourItem*)GetItem())->GetValue() );
+    rFont.SetOutline( static_cast<const SvxContourItem*>(GetItem())->GetValue() );
 }
 
 
@@ -411,7 +411,7 @@ EditCharAttribPairKerning::EditCharAttribPairKerning( const SvxAutoKernItem& rAt
 
 void EditCharAttribPairKerning::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetKerning( ((const SvxAutoKernItem*)GetItem())->GetValue() );
+    rFont.SetKerning( static_cast<const SvxAutoKernItem*>(GetItem())->GetValue() );
 }
 
 
@@ -425,7 +425,7 @@ EditCharAttribKerning::EditCharAttribKerning( const SvxKerningItem& rAttr, sal_u
 
 void EditCharAttribKerning::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetFixKerning( ((const SvxKerningItem*)GetItem())->GetValue() );
+    rFont.SetFixKerning( static_cast<const SvxKerningItem*>(GetItem())->GetValue() );
 }
 
 
@@ -439,7 +439,7 @@ EditCharAttribWordLineMode::EditCharAttribWordLineMode( const SvxWordLineModeIte
 
 void EditCharAttribWordLineMode::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetWordLineMode( ((const SvxWordLineModeItem*)GetItem())->GetValue() );
+    rFont.SetWordLineMode( static_cast<const SvxWordLineModeItem*>(GetItem())->GetValue() );
 }
 
 
@@ -453,7 +453,7 @@ EditCharAttribEmphasisMark::EditCharAttribEmphasisMark( const SvxEmphasisMarkIte
 
 void EditCharAttribEmphasisMark::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetEmphasisMark( ((const SvxEmphasisMarkItem*)GetItem())->GetEmphasisMark() );
+    rFont.SetEmphasisMark( static_cast<const SvxEmphasisMarkItem*>(GetItem())->GetEmphasisMark() );
 }
 
 
@@ -467,7 +467,7 @@ EditCharAttribRelief::EditCharAttribRelief( const SvxCharReliefItem& rAttr, sal_
 
 void EditCharAttribRelief::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetRelief( (FontRelief)((const SvxCharReliefItem*)GetItem())->GetValue() );
+    rFont.SetRelief( (FontRelief)static_cast<const SvxCharReliefItem*>(GetItem())->GetValue() );
 }
 
 // class EditCharAttribGrabBag

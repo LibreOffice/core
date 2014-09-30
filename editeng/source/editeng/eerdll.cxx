@@ -166,9 +166,9 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         assert(EDITITEMCOUNT == 55 && "ITEMCOUNT changed, adjust DefItems!");
 
         // Init DefFonts:
-        GetDefaultFonts( *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START],
-                         *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO_CJK - EE_ITEMS_START],
-                         *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO_CTL - EE_ITEMS_START] );
+        GetDefaultFonts( *static_cast<SvxFontItem*>(ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START]),
+                         *static_cast<SvxFontItem*>(ppDefItems[EE_CHAR_FONTINFO_CJK - EE_ITEMS_START]),
+                         *static_cast<SvxFontItem*>(ppDefItems[EE_CHAR_FONTINFO_CTL - EE_ITEMS_START]) );
     }
 
     return ppDefItems;

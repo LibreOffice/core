@@ -259,7 +259,7 @@ void TextConvWrapper::SetLanguageAndFont( const ESelection &rESel,
     if (pFont)
     {
         // set new font attribute
-        SvxFontItem aFontItem = (SvxFontItem&) aNewSet.Get( nFontWhichId );
+        SvxFontItem aFontItem = static_cast<const SvxFontItem&>( aNewSet.Get( nFontWhichId ) );
         aFontItem.SetFamilyName( pFont->GetName());
         aFontItem.SetFamily( pFont->GetFamily());
         aFontItem.SetStyleName( pFont->GetStyleName());

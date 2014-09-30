@@ -619,13 +619,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     bool bRightToLeftPara = IsRightToLeft( nPara );
 
     SvxAdjust eJustification = GetJustification( nPara );
-    bool bHyphenatePara = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HYPHENATE )).GetValue();
+    bool bHyphenatePara = static_cast<const SfxBoolItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_HYPHENATE )).GetValue();
     sal_Int32 nSpaceBefore      = 0;
     sal_Int32 nMinLabelWidth    = 0;
     sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pNode, &nSpaceBefore, &nMinLabelWidth );
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pNode );
-    const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&) pNode->GetContentAttribs().GetItem( EE_PARA_SBL );
-    const bool bScriptSpace = ((const SvxScriptSpaceItem&) pNode->GetContentAttribs().GetItem( EE_PARA_ASIANCJKSPACING )).GetValue();
+    const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>( pNode->GetContentAttribs().GetItem( EE_PARA_SBL ) );
+    const bool bScriptSpace = static_cast<const SvxScriptSpaceItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_ASIANCJKSPACING )).GetValue();
 
     const short nInvalidDiff = pParaPortion->GetInvalidDiff();
     const sal_Int32 nInvalidStart = pParaPortion->GetInvalidPosStart();
@@ -992,7 +992,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         aTmpFont.SetPhysFont( GetRefDevice() );
                         ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
-                        OUString aFieldValue = cChar ? OUString(cChar) : ((EditCharAttribField*)pNextFeature)->GetFieldValue();
+                        OUString aFieldValue = cChar ? OUString(cChar) : static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
                         if ( bCalcCharPositions || !pPortion->HasValidSize() )
                         {
                             pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), 0 );
@@ -1587,7 +1587,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     sal_Int32 nSpaceBefore = 0;
     sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pParaPortion->GetNode(), &nSpaceBefore );
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pParaPortion->GetNode() );
-    const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&)pParaPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
+    const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pParaPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
     short nStartX = GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst() + nSpaceBefore));
 
     Rectangle aBulletArea = Rectangle( Point(), Point() );
@@ -1782,8 +1782,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( LanguageTag::convertToLanguageType( aLocale ), true );
         aUserOptions.forbiddenBeginCharacters = pForbidden->beginLine;
         aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
-        aUserOptions.applyForbiddenRules = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
-        aUserOptions.allowPunctuationOutsideMargin = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
+        aUserOptions.applyForbiddenRules = static_cast<const SfxBoolItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
+        aUserOptions.allowPunctuationOutsideMargin = static_cast<const SfxBoolItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
         aUserOptions.allowHyphenateEnglish = sal_False;
 
         i18n::LineBreakResults aLBR = _xBI->getLineBreak(
@@ -2563,27 +2563,27 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     short nScriptType = GetI18NScriptType( EditPaM( pNode, nPos ) );
     if ( ( nScriptType == i18n::ScriptType::ASIAN ) || ( nScriptType == i18n::ScriptType::COMPLEX ) )
     {
-        const SvxFontItem& rFontItem = (const SvxFontItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) );
+        const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) ));
         rFont.SetName( rFontItem.GetFamilyName() );
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
         Size aSz( rFont.GetSize() );
-        aSz.Height() = ((const SvxFontHeightItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) ) ).GetHeight();
+        aSz.Height() = static_cast<const SvxFontHeightItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) ) ).GetHeight();
         rFont.SetSize( aSz );
-        rFont.SetWeight( ((const SvxWeightItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ))).GetWeight() );
-        rFont.SetItalic( ((const SvxPostureItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ))).GetPosture() );
-        rFont.SetLanguage( ((const SvxLanguageItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ))).GetLanguage() );
+        rFont.SetWeight( static_cast<const SvxWeightItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ))).GetWeight() );
+        rFont.SetItalic( static_cast<const SvxPostureItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ))).GetPosture() );
+        rFont.SetLanguage( static_cast<const SvxLanguageItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ))).GetLanguage() );
     }
 
-    sal_uInt16 nRelWidth = ((const SvxCharScaleWidthItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH)).GetValue();
+    sal_uInt16 nRelWidth = static_cast<const SvxCharScaleWidthItem&>(pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH)).GetValue();
 
     /*
      * Set output device's line and overline colors
     */
     if ( pOut )
     {
-        const SvxUnderlineItem& rTextLineColor = (const SvxUnderlineItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_UNDERLINE );
+        const SvxUnderlineItem& rTextLineColor = static_cast<const SvxUnderlineItem&>(pNode->GetContentAttribs().GetItem( EE_CHAR_UNDERLINE ));
         if ( rTextLineColor.GetColor() != COL_TRANSPARENT )
             pOut->SetTextLineColor( rTextLineColor.GetColor() );
         else
@@ -2592,7 +2592,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
     if ( pOut )
     {
-        const SvxOverlineItem& rOverlineColor = (const SvxOverlineItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_OVERLINE );
+        const SvxOverlineItem& rOverlineColor = static_cast<const SvxOverlineItem&>(pNode->GetContentAttribs().GetItem( EE_CHAR_OVERLINE ));
         if ( rOverlineColor.GetColor() != COL_TRANSPARENT )
             pOut->SetOverlineColor( rOverlineColor.GetColor() );
         else
@@ -2632,16 +2632,16 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                     }
                 }
                 if ( pAttrib->Which() == EE_CHAR_FONTWIDTH )
-                    nRelWidth = ((const SvxCharScaleWidthItem*)pAttrib->GetItem())->GetValue();
+                    nRelWidth = static_cast<const SvxCharScaleWidthItem*>(pAttrib->GetItem())->GetValue();
                 if ( pAttrib->Which() == EE_CHAR_LANGUAGE_CJK )
-                    pCJKLanguageItem = (const SvxLanguageItem*) pAttrib->GetItem();
+                    pCJKLanguageItem = static_cast<const SvxLanguageItem*>( pAttrib->GetItem() );
             }
             pAttrib = GetAttrib( rAttribs, ++nAttr );
         }
     }
 
     if ( !pCJKLanguageItem )
-        pCJKLanguageItem = (const SvxLanguageItem*) &pNode->GetContentAttribs().GetItem( EE_CHAR_LANGUAGE_CJK );
+        pCJKLanguageItem = static_cast<const SvxLanguageItem*>( &pNode->GetContentAttribs().GetItem( EE_CHAR_LANGUAGE_CJK ) );
 
     rFont.SetCJKContextLanguage( pCJKLanguageItem->GetLanguage() );
 
@@ -2918,7 +2918,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
             Point aParaStart( aStartPos );
 
-            const SvxLineSpacingItem& rLSItem = ((const SvxLineSpacingItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
+            const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
             sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
                                 ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
             bool bPaintBullet (false);
@@ -3144,7 +3144,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     DBG_ASSERT( pAttr, "Field not found");
                                     DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Field of the wrong type! ");
-                                    aText = ((EditCharAttribField*)pAttr)->GetFieldValue();
+                                    aText = static_cast<const EditCharAttribField*>(pAttr)->GetFieldValue();
                                     nTextStart = 0;
                                     nTextLen = aText.getLength();
                                     ExtraPortionInfo *pExtraInfo = pTextPortion->GetExtraInfos();
@@ -3453,7 +3453,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                         Rectangle aRect( aTopLeft, pTextPortion->GetSize() );
                                                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
                                                         aBookmark.nLinkId = pPDFExtOutDevData->CreateLink( aRect );
-                                                        aBookmark.aBookmark = ((SvxURLField*)pFieldData)->GetURL();
+                                                        aBookmark.aBookmark = static_cast<const SvxURLField*>(pFieldData)->GetURL();
                                                         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
                                                         rBookmarks.push_back( aBookmark );
                                                     }
@@ -3600,7 +3600,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
             if ( !aStatus.IsOutliner() )
             {
-                const SvxULSpaceItem& rULItem = (const SvxULSpaceItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
+                const SvxULSpaceItem& rULItem = static_cast<const SvxULSpaceItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE ));
                 long nUL = GetYValue( rULItem.GetLower() );
                 if ( !IsVertical() )
                     aStartPos.Y() += nUL;
@@ -3912,7 +3912,7 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
         {
             // Mark as deleted, so that no selection will end or begin at
             // this paragraph...
-            DeletedNodeInfo* pDelInfo = new DeletedNodeInfo( (sal_uIntPtr)pPPortion->GetNode(), nParagraph );
+            DeletedNodeInfo* pDelInfo = new DeletedNodeInfo( reinterpret_cast<sal_uIntPtr>(pPPortion->GetNode()), nParagraph );
             aDeletedNodes.push_back(pDelInfo);
             UpdateSelections();
             // The region below will not be invalidated if UpdateMode = sal_False!
@@ -4090,11 +4090,11 @@ long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
         const ParaPortion* pPortion = rParaPortions[i];
         nTotalOccupiedHeight += pPortion->GetFirstLineOffset();
 
-        const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&)pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL);
+        const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL));
         sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
                             ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
 
-        const SvxULSpaceItem& rULItem = (const SvxULSpaceItem&)pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_ULSPACE);
+        const SvxULSpaceItem& rULItem = static_cast<const SvxULSpaceItem&>(pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_ULSPACE));
         long nUL = GetYValue( rULItem.GetLower() );
 
         const EditLineList& rLines = pPortion->GetLines();
@@ -4262,7 +4262,7 @@ sal_Int32 ImpEditEngine::GetSpaceBeforeAndMinLabelWidth(
 
 const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 {
-    return (const SvxLRSpaceItem&)pNode->GetContentAttribs().GetItem( aStatus.IsOutliner() ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
+    return static_cast<const SvxLRSpaceItem&>(pNode->GetContentAttribs().GetItem( aStatus.IsOutliner() ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE ));
 }
 
 // select a representative text language for the digit type according to the

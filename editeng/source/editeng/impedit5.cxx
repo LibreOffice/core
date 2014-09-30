@@ -150,12 +150,12 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if ( pStyleSheetHint )
         {
             DBG_ASSERT( pStyleSheetHint->GetStyleSheet()->ISA( SfxStyleSheet ), "No SfxStyleSheet!" );
-            pStyle = (SfxStyleSheet*) pStyleSheetHint->GetStyleSheet();
+            pStyle = static_cast<SfxStyleSheet*>( pStyleSheetHint->GetStyleSheet() );
             nId = pStyleSheetHint->GetHint();
         }
         else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) && rBC.ISA( SfxStyleSheet ) )
         {
-            pStyle = (SfxStyleSheet*)&rBC;
+            pStyle = static_cast<SfxStyleSheet*>(&rBC);
             nId = dynamic_cast<const SfxSimpleHint*>(&rHint)->GetId();
         }
 

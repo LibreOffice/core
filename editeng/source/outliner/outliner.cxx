@@ -132,7 +132,7 @@ void Outliner::ParagraphInserted( sal_Int32 nPara )
         {
             pPara->nFlags = PARAFLAG_SETBULLETTEXT;
             pPara->bVisible = true;
-            const SfxInt16Item& rLevel = (const SfxInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
+            const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL ) );
             pPara->SetDepth( rLevel.GetValue() );
         }
     }
@@ -566,7 +566,7 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara,EditView* pView)
             pEditEngine->QuickDelete( aDelSel );
     }
 
-    const SfxInt16Item& rLevel = (const SfxInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
+    const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL ) );
     sal_Int16 nOutlLevel = rLevel.GetValue();
 
     ImplCheckDepth( nOutlLevel );
@@ -731,7 +731,7 @@ void Outliner::ImplSetLevelDependendStyleSheet( sal_Int32 nPara, SfxStyleSheet* 
         OUString aNewStyleSheetName( pStyle->GetName() );
         aNewStyleSheetName = aNewStyleSheetName.copy( 0, aNewStyleSheetName.getLength()-1 );
         aNewStyleSheetName += OUString::number( nDepth+1 );
-        SfxStyleSheet* pNewStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( aNewStyleSheetName, pStyle->GetFamily() );
+        SfxStyleSheet* pNewStyle = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( aNewStyleSheetName, pStyle->GetFamily() ));
         DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
         if ( pNewStyle && ( pNewStyle != GetStyleSheet( nPara ) ) )
         {
@@ -925,7 +925,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
     bool bDrawBullet = false;
     if (pEditEngine)
     {
-        const SfxBoolItem& rBulletState = (const SfxBoolItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE );
+        const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE ) );
         bDrawBullet = rBulletState.GetValue() ? true : false;
     }
 
@@ -1145,7 +1145,7 @@ sal_uLong Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16
         if ( eFormat == EE_FORMAT_BIN )
         {
             const SfxItemSet& rAttrs = pEditEngine->GetParaAttribs( n );
-            const SfxInt16Item& rLevel = (const SfxInt16Item&) rAttrs.Get( EE_PARA_OUTLLEVEL );
+            const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( rAttrs.Get( EE_PARA_OUTLLEVEL ));
             sal_Int16 nDepth = rLevel.GetValue();
             ImplInitDepth( n, nDepth, false );
         }
@@ -1237,7 +1237,7 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
             const SfxItemSet& rAttrs = pEditEngine->GetParaAttribs( nStartPara );
             if ( rAttrs.GetItemState( EE_PARA_OUTLLEVEL ) == SfxItemState::SET )
             {
-                const SfxInt16Item& rLevel = (const SfxInt16Item&) rAttrs.Get( EE_PARA_OUTLLEVEL );
+                const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( rAttrs.Get( EE_PARA_OUTLLEVEL ) );
                 nDepth = rLevel.GetValue();
             }
             if ( nDepth != GetDepth( nStartPara ) )
@@ -1452,7 +1452,7 @@ const SvxNumberFormat* Outliner::GetNumberFormat( sal_Int32 nPara ) const
 
     if( nDepth >= 0 )
     {
-        const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
+        const SvxNumBulletItem& rNumBullet = static_cast<const SvxNumBulletItem&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET ) );
         if ( rNumBullet.GetNumRule()->GetLevelCount() > nDepth )
             pFmt = rNumBullet.GetNumRule()->Get( nDepth );
     }
@@ -1531,7 +1531,7 @@ void Outliner::ParaAttribsChanged( sal_Int32 nPara )
         if ( pParaList->GetParagraphCount() == pEditEngine->GetParagraphCount() )
         {
             Paragraph* pPara = pParaList->GetParagraph( nPara );
-            const SfxInt16Item& rLevel = (const SfxInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
+            const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL ) );
             if ( pPara && pPara->GetDepth() != rLevel.GetValue() )
             {
                 pPara->SetDepth( rLevel.GetValue() );
@@ -1578,7 +1578,7 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
         // the ODF attribute text:space-before which holds the spacing to add to the left of the label
         const short nSpaceBefore = pFmt->GetAbsLSpace() + pFmt->GetFirstLineOffset();
 
-        const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&) pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
+        const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE ) );
         aTopLeft.X() = rLR.GetTxtLeft() + rLR.GetTxtFirstLineOfst() + nSpaceBefore;
 
         long nBulletWidth = std::max( (long) -rLR.GetTxtFirstLineOfst(), (long) ((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
@@ -1588,7 +1588,7 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
         if ( bAdjust && !bOutlineMode )
         {
             // Adjust when centered or align right
-            const SvxAdjustItem& rItem = (const SvxAdjustItem&)pEditEngine->GetParaAttrib( nPara, EE_PARA_JUST );
+            const SvxAdjustItem& rItem = static_cast<const SvxAdjustItem&>(pEditEngine->GetParaAttrib( nPara, EE_PARA_JUST ));
             if ( ( !pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SVX_ADJUST_LEFT ) ) ||
                  ( pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SVX_ADJUST_RIGHT ) ) )
             {
@@ -1890,7 +1890,7 @@ sal_uInt16 Outliner::ImplGetNumbering( sal_Int32 nPara, const SvxNumberFormat* p
            pParaFmt = pFmt;
         }
 
-        const SfxBoolItem& rBulletState = (const SfxBoolItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE );
+        const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE ) );
 
         if( rBulletState.GetValue() )
             nNumber += 1;

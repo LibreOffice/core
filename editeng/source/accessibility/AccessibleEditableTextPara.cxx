@@ -1588,7 +1588,7 @@ namespace accessibility
             // NumberingLevel
             if (rRes.Name == "NumberingLevel")
             {
-                const SvxNumBulletItem& rNumBullet = ( SvxNumBulletItem& )rCacheTF.GetParaAttribs(GetParagraphIndex()).Get(EE_PARA_NUMBULLET);
+                const SvxNumBulletItem& rNumBullet = static_cast<const SvxNumBulletItem&>(rCacheTF.GetParaAttribs(GetParagraphIndex()).Get(EE_PARA_NUMBULLET));
                 if(rNumBullet.GetNumRule()->GetLevelCount()==0)
                 {
                     rRes.Value <<= (sal_Int16)-1;
@@ -1613,7 +1613,7 @@ namespace accessibility
             if (rRes.Name == "NumberingRules")
             {
                 SfxItemSet aAttribs = rCacheTF.GetParaAttribs(GetParagraphIndex());
-                bool bVis = ((const SfxUInt16Item&)aAttribs.Get( EE_PARA_BULLETSTATE )).GetValue() ? sal_True : sal_False;
+                bool bVis = static_cast<const SfxUInt16Item&>(aAttribs.Get( EE_PARA_BULLETSTATE )).GetValue() ? true : false;
                 if(bVis)
                 {
                     rRes.Value <<= (sal_Int16)-1;

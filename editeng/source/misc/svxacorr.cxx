@@ -814,7 +814,7 @@ bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             if( lcl_IsInAsciiArr( sImplWordChars, *pStr ) &&
                 pWordStt - 1 == pStr &&
                 // Installation at beginning of paragraph. Replaced < by <= (#i38971#)
-                (sal_IntPtr)(pStart + 1) <= (sal_IntPtr)pStr &&
+                (pStart + 1) <= pStr &&
                 rCC.isLetter(aText, pStr-1 - pStart))
                 pWordStt = --pStr;
             else

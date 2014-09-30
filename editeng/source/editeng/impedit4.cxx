@@ -332,9 +332,9 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     // Generate and write out Font table  ...
     std::vector<SvxFontItem*> aFontTable;
     // default font must be up front, so DEF font in RTF
-    aFontTable.push_back( new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO ) ) );
-    aFontTable.push_back( new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CJK ) ) );
-    aFontTable.push_back( new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CTL ) ) );
+    aFontTable.push_back( new SvxFontItem( static_cast<const SvxFontItem&>(aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO ) ) ) );
+    aFontTable.push_back( new SvxFontItem( static_cast<const SvxFontItem&>(aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CJK ) ) ) );
+    aFontTable.push_back( new SvxFontItem( static_cast<const SvxFontItem&>(aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CTL ) ) ) );
     for ( sal_uInt16 nScriptType = 0; nScriptType < 3; nScriptType++ )
     {
         sal_uInt16 nWhich = EE_CHAR_FONTINFO;
@@ -344,7 +344,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             nWhich = EE_CHAR_FONTINFO_CTL;
 
         sal_uInt32 i = 0;
-        SvxFontItem* pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem2( nWhich, i );
+        const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(aEditDoc.GetItemPool().GetItem2( nWhich, i ));
         while ( pFontItem )
         {
             bool bAlreadyExist = false;
@@ -357,7 +357,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             if ( !bAlreadyExist )
                 aFontTable.push_back( new SvxFontItem( *pFontItem ) );
 
-            pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem2( nWhich, ++i );
+            pFontItem = static_cast<const SvxFontItem*>(aEditDoc.GetItemPool().GetItem2( nWhich, ++i ));
         }
     }
 
@@ -497,7 +497,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 // Parent ... (only if necessary)
                 if ( !pStyle->GetParent().isEmpty() && ( pStyle->GetParent() != pStyle->GetName() ) )
                 {
-                    SfxStyleSheet* pParent = (SfxStyleSheet*)GetStyleSheetPool()->Find( pStyle->GetParent(), pStyle->GetFamily() );
+                    SfxStyleSheet* pParent = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( pStyle->GetParent(), pStyle->GetFamily() ));
                     DBG_ASSERT( pParent, "Parent not found!" );
                     rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SBASEDON );
                     nNumber = aStyleSheetToIdMap.find(pParent)->second;
@@ -508,7 +508,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 // we assume that we have only SfxStyleSheet in the pool
                 SfxStyleSheet* pNext = static_cast<SfxStyleSheet*>(pStyle);
                 if ( !pStyle->GetFollow().isEmpty() && ( pStyle->GetFollow() != pStyle->GetName() ) )
-                    pNext = (SfxStyleSheet*)GetStyleSheetPool()->Find( pStyle->GetFollow(), pStyle->GetFamily() );
+                    pNext = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( pStyle->GetFollow(), pStyle->GetFamily() ));
 
                 DBG_ASSERT( pNext, "Next ot found!" );
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SNEXT );
@@ -702,7 +702,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
     {
         case EE_PARA_WRITINGDIR:
         {
-            const SvxFrameDirectionItem& rWritingMode = (const SvxFrameDirectionItem&)rItem;
+            const SvxFrameDirectionItem& rWritingMode = static_cast<const SvxFrameDirectionItem&>(rItem);
             if ( rWritingMode.GetValue() == FRMDIR_HORI_RIGHT_TOP )
                 rOutput.WriteCharPtr( "\\rtlpar" );
             else
@@ -711,7 +711,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_PARA_OUTLLEVEL:
         {
-            sal_Int32 nLevel = ((const SfxInt16Item&)rItem).GetValue();
+            sal_Int32 nLevel = static_cast<const SfxInt16Item&>(rItem).GetValue();
             if( nLevel >= 0 )
             {
                 rOutput.WriteCharPtr( "\\level" );
@@ -723,15 +723,15 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_PARA_LRSPACE:
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FI );
-            sal_Int32 nTxtFirst = ((const SvxLRSpaceItem&)rItem).GetTxtFirstLineOfst();
+            sal_Int32 nTxtFirst = static_cast<const SvxLRSpaceItem&>(rItem).GetTxtFirstLineOfst();
             nTxtFirst = LogicToTwips( nTxtFirst );
             rOutput.WriteInt32AsString( nTxtFirst );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LI );
-            sal_uInt32 nTxtLeft = static_cast< sal_uInt32 >(((const SvxLRSpaceItem&)rItem).GetTxtLeft());
+            sal_uInt32 nTxtLeft = static_cast< sal_uInt32 >(static_cast<const SvxLRSpaceItem&>(rItem).GetTxtLeft());
             nTxtLeft = (sal_uInt32)LogicToTwips( nTxtLeft );
             rOutput.WriteInt32AsString( nTxtLeft );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RI );
-            sal_uInt32 nTxtRight = ((const SvxLRSpaceItem&)rItem).GetRight();
+            sal_uInt32 nTxtRight = static_cast<const SvxLRSpaceItem&>(rItem).GetRight();
             nTxtRight = LogicToTwips( nTxtRight);
             rOutput.WriteUInt32AsString( nTxtRight );
         }
@@ -739,11 +739,11 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_PARA_ULSPACE:
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SB );
-            sal_uInt32 nUpper = ((const SvxULSpaceItem&)rItem).GetUpper();
+            sal_uInt32 nUpper = static_cast<const SvxULSpaceItem&>(rItem).GetUpper();
             nUpper = (sal_uInt32)LogicToTwips( nUpper );
             rOutput.WriteUInt32AsString( nUpper );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SA );
-            sal_uInt32 nLower = ((const SvxULSpaceItem&)rItem).GetLower();
+            sal_uInt32 nLower = static_cast<const SvxULSpaceItem&>(rItem).GetLower();
             nLower = LogicToTwips( nLower );
             rOutput.WriteUInt32AsString( nLower );
         }
@@ -751,13 +751,13 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_PARA_SBL:
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SL );
-            sal_Int32 nVal = ((const SvxLineSpacingItem&)rItem).GetLineHeight();
+            sal_Int32 nVal = static_cast<const SvxLineSpacingItem&>(rItem).GetLineHeight();
             char cMult = '0';
-            if ( ((const SvxLineSpacingItem&)rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+            if ( static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
                 // From where do I get the value now?
                 // The SwRTF parser is based on a 240 Font!
-                nVal = ((const SvxLineSpacingItem&)rItem).GetPropLineSpace();
+                nVal = static_cast<const SvxLineSpacingItem&>(rItem).GetPropLineSpace();
                 nVal *= 240;
                 nVal /= 100;
                 cMult = '1';
@@ -768,7 +768,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_PARA_JUST:
         {
-            SvxAdjust eJustification = ((const SvxAdjustItem&)rItem).GetAdjust();
+            SvxAdjust eJustification = static_cast<const SvxAdjustItem&>(rItem).GetAdjust();
             switch ( eJustification )
             {
                 case SVX_ADJUST_CENTER: rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QC );
@@ -782,7 +782,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_PARA_TABS:
         {
-            const SvxTabStopItem& rTabs = (const SvxTabStopItem&) rItem;
+            const SvxTabStopItem& rTabs = static_cast<const SvxTabStopItem&>(rItem);
             for ( sal_uInt16 i = 0; i < rTabs.Count(); i++ )
             {
                 const SvxTabStop& rTab = rTabs[i];
@@ -825,7 +825,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_FONTHEIGHT_CTL:
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FS );
-            sal_Int32 nHeight = ((const SvxFontHeightItem&)rItem).GetHeight();
+            sal_Int32 nHeight = static_cast<const SvxFontHeightItem&>(rItem).GetHeight();
             nHeight = LogicToTwips( nHeight );
             // Twips => HalfPoints
             nHeight /= 10;
@@ -836,7 +836,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_WEIGHT_CJK:
         case EE_CHAR_WEIGHT_CTL:
         {
-            FontWeight e = ((const SvxWeightItem&)rItem).GetWeight();
+            FontWeight e = static_cast<const SvxWeightItem&>(rItem).GetWeight();
             switch ( e )
             {
                 case WEIGHT_BOLD:   rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );                break;
@@ -848,7 +848,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         {
             // Must underlined if in WordLineMode, but the information is
             // missing here
-            FontUnderline e = ((const SvxUnderlineItem&)rItem).GetLineStyle();
+            FontUnderline e = static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle();
             switch ( e )
             {
                 case UNDERLINE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULNONE );       break;
@@ -862,7 +862,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_OVERLINE:
         {
-            FontUnderline e = ((const SvxOverlineItem&)rItem).GetLineStyle();
+            FontUnderline e = static_cast<const SvxOverlineItem&>(rItem).GetLineStyle();
             switch ( e )
             {
                 case UNDERLINE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLNONE );       break;
@@ -876,7 +876,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_STRIKEOUT:
         {
-            FontStrikeout e = ((const SvxCrossedOutItem&)rItem).GetStrikeout();
+            FontStrikeout e = static_cast<const SvxCrossedOutItem&>(rItem).GetStrikeout();
             switch ( e )
             {
                 case STRIKEOUT_SINGLE:
@@ -891,7 +891,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
         {
-            FontItalic e = ((const SvxPostureItem&)rItem).GetPosture();
+            FontItalic e = static_cast<const SvxPostureItem&>(rItem).GetPosture();
             switch ( e )
             {
                 case ITALIC_OBLIQUE:
@@ -905,13 +905,13 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_OUTLINE:
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OUTL );
-            if ( !((const SvxContourItem&)rItem).GetValue() )
+            if ( !static_cast<const SvxContourItem&>(rItem).GetValue() )
                 rOutput.WriteChar( '0' );
         }
         break;
         case EE_CHAR_RELIEF:
         {
-            sal_uInt16 nRelief = ((const SvxCharReliefItem&)rItem).GetValue();
+            sal_uInt16 nRelief = static_cast<const SvxCharReliefItem&>(rItem).GetValue();
             if ( nRelief == RELIEF_EMBOSSED )
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_EMBO );
             if ( nRelief == RELIEF_ENGRAVED )
@@ -920,7 +920,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_EMPHASISMARK:
         {
-            sal_uInt16 nMark = ((const SvxEmphasisMarkItem&)rItem).GetValue();
+            sal_uInt16 nMark = static_cast<const SvxEmphasisMarkItem&>(rItem).GetValue();
             if ( nMark == EMPHASISMARK_NONE )
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ACCNONE );
             else if ( nMark == EMPHASISMARK_SIDE_DOTS )
@@ -932,7 +932,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_SHADOW:
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SHAD );
-            if ( !((const SvxShadowedItem&)rItem).GetValue() )
+            if ( !static_cast<const SvxShadowedItem&>(rItem).GetValue() )
                 rOutput.WriteChar( '0' );
         }
         break;
@@ -950,13 +950,13 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_EXPNDTW );
             rOutput.WriteInt32AsString( LogicToTwips(
-                ((const SvxKerningItem&)rItem).GetValue() ) );
+                static_cast<const SvxKerningItem&>(rItem).GetValue() ) );
         }
         break;
         case EE_CHAR_PAIRKERNING:
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_KERNING );
-            rOutput.WriteUInt32AsString( ((const SvxAutoKernItem&)rItem).GetValue() ? 1 : 0 );
+            rOutput.WriteUInt32AsString( static_cast<const SvxAutoKernItem&>(rItem).GetValue() ? 1 : 0 );
         }
         break;
         case EE_CHAR_ESCAPEMENT:
@@ -968,9 +968,9 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             long nFontHeight = GetRefDevice()->LogicToLogic(
                     aFont.GetSize(), &GetRefMapMode(), &aPntMode ).Height();
             nFontHeight *=2;    // HalfP oints
-            sal_uInt16 nProp = ((const SvxEscapementItem&)rItem).GetProp();
+            sal_uInt16 nProp = static_cast<const SvxEscapementItem&>(rItem).GetProp();
             sal_uInt16 nProp100 = nProp*100;    // For SWG-Token Prop in 100th percent.
-            short nEsc = ((const SvxEscapementItem&)rItem).GetEsc();
+            short nEsc = static_cast<const SvxEscapementItem&>(rItem).GetEsc();
             if ( nEsc == DFLT_ESC_AUTO_SUPER )
             {
                 nEsc = 100 - nProp;
@@ -1213,7 +1213,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             && ( pPortionInfo->GetStretchX() == nStretchX )
             && ( pPortionInfo->GetStretchY() == nStretchY ) )
     {
-        if ( ( pPortionInfo->GetRefDevPtr() == (sal_uIntPtr)GetRefDevice() ) ||
+        if ( ( pPortionInfo->GetRefDevPtr() == reinterpret_cast<sal_uIntPtr>(GetRefDevice()) ) ||
              ( ( pPortionInfo->GetRefDevType() == OUTDEV_VIRDEV ) &&
                ( GetRefDevice()->GetOutDevType() == OUTDEV_VIRDEV ) ) )
         bUsePortionInfo = true;
@@ -1309,7 +1309,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 bParaAttribs = pC->GetParaAttribs().Count() ? sal_True : sal_False;
                 if ( GetStyleSheetPool() && pC->GetStyle().getLength() )
                 {
-                    SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() );
+                    SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() ));
                     DBG_ASSERT( pStyle, "InsertBinTextObject - Style not found!" );
                     SetStyleSheet( nPara, pStyle );
                 }
@@ -1428,10 +1428,10 @@ LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos
 {
     short nScriptType = GetI18NScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen
     sal_uInt16 nLangId = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
-    const SvxLanguageItem* pLangItem = &(const SvxLanguageItem&)rPaM.GetNode()->GetContentAttribs().GetItem( nLangId );
+    const SvxLanguageItem* pLangItem = &static_cast<const SvxLanguageItem&>(rPaM.GetNode()->GetContentAttribs().GetItem( nLangId ));
     const EditCharAttrib* pAttr = rPaM.GetNode()->GetCharAttribs().FindAttrib( nLangId, rPaM.GetIndex() );
     if ( pAttr )
-        pLangItem = (const SvxLanguageItem*)pAttr->GetItem();
+        pLangItem = static_cast<const SvxLanguageItem*>(pAttr->GetItem());
 
     if ( pEndPos && pAttr && ( pAttr->GetEnd() < *pEndPos ) )
         *pEndPos = pAttr->GetEnd();
@@ -1655,7 +1655,7 @@ void ImpEditEngine::SetLanguageAndFont(
     if (pFont)
     {
         // set new font attribute
-        SvxFontItem aFontItem = (SvxFontItem&) aNewSet.Get( nFontWhichId );
+        SvxFontItem aFontItem = static_cast<const SvxFontItem&>( aNewSet.Get( nFontWhichId ) );
         aFontItem.SetFamilyName( pFont->GetName());
         aFontItem.SetFamily( pFont->GetFamily());
         aFontItem.SetStyleName( pFont->GetStyleName());

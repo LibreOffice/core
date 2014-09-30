@@ -91,7 +91,7 @@ EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (vcl::Window*)0 )
 void EditSelectionEngine::SetCurView( EditView* pNewView )
 {
     if ( GetFunctionSet() )
-        ((EditSelFunctionSet*)GetFunctionSet())->SetCurView( pNewView );
+        const_cast<EditSelFunctionSet*>(static_cast<const EditSelFunctionSet*>(GetFunctionSet()))->SetCurView( pNewView );
 
     if ( pNewView )
         SetWindow( pNewView->GetWindow() );

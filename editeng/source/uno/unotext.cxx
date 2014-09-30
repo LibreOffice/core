@@ -646,7 +646,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
     case EE_FEATURE_FIELD:
         if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SfxItemState::SET )
         {
-            SvxFieldItem* pItem = (SvxFieldItem*)rSet.GetItem( EE_FEATURE_FIELD );
+            const SvxFieldItem* pItem = static_cast<const SvxFieldItem*>(rSet.GetItem( EE_FEATURE_FIELD ));
             const SvxFieldData* pData = pItem->GetField();
             uno::Reference< text::XTextRange > xAnchor( this );
 
@@ -703,7 +703,7 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxIt
             if( eState != SfxItemState::SET && eState != SfxItemState::DEFAULT)
                 throw uno::RuntimeException();
 
-            SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET, true );
+            const SvxNumBulletItem* pBulletItem = static_cast<const SvxNumBulletItem*>(rSet.GetItem( EE_PARA_NUMBULLET, true ));
 
             if( pBulletItem == NULL )
                 throw uno::RuntimeException();
@@ -744,8 +744,8 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxIt
             SfxItemState eState = rSet.GetItemState( EE_PARA_BULLETSTATE, true );
             if( eState == SfxItemState::SET || eState == SfxItemState::DEFAULT )
             {
-                SfxBoolItem* pItem = (SfxBoolItem*)rSet.GetItem( EE_PARA_BULLETSTATE, true );
-                bState = pItem->GetValue() ? sal_True : sal_False;
+                const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(rSet.GetItem( EE_PARA_BULLETSTATE, true ));
+                bState = pItem->GetValue();
             }
 
             aAny <<= bState;

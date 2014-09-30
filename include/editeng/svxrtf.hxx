@@ -222,7 +222,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     void SetAttrSet( SvxRTFItemStackType &rSet );
     void SetDefault( int nToken, int nValue );
 
-    // Excecute pard / plain
+    // Execute pard / plain
     void RTFPardPlain( int bPard, SfxItemSet** ppSet );
 
     void BuildWhichTbl();
@@ -325,7 +325,7 @@ public:
 
     virtual bool IsEndPara( SvxNodeIdx* pNd, sal_Int32 nCnt ) const = 0;
 
-    // to det a different attribute pool. May only be done prior to CallParser!
+    // to set a different attribute pool. May only be done prior to CallParser!
     // The maps are not generated anew!
     void SetAttrPool( SfxItemPool* pNewPool )   { pAttrPool = pNewPool; }
     // to set different WhichIds for a different pool.

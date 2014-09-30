@@ -28,6 +28,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/flditem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/wrlmitem.hxx>
@@ -58,6 +59,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
+#include <svl/grabbagitem.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -277,100 +279,100 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
         {
-            pNew = new EditCharAttribLanguage( (const SvxLanguageItem&)rNew, nS, nE );
+            pNew = new EditCharAttribLanguage( static_cast<const SvxLanguageItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_COLOR:
         {
-            pNew = new EditCharAttribColor( (const SvxColorItem&)rNew, nS, nE );
+            pNew = new EditCharAttribColor( static_cast<const SvxColorItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_FONTINFO:
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            pNew = new EditCharAttribFont( (const SvxFontItem&)rNew, nS, nE );
+            pNew = new EditCharAttribFont( static_cast<const SvxFontItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_FONTHEIGHT:
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            pNew = new EditCharAttribFontHeight( (const SvxFontHeightItem&)rNew, nS, nE );
+            pNew = new EditCharAttribFontHeight( static_cast<const SvxFontHeightItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_FONTWIDTH:
         {
-            pNew = new EditCharAttribFontWidth( (const SvxCharScaleWidthItem&)rNew, nS, nE );
+            pNew = new EditCharAttribFontWidth( static_cast<const SvxCharScaleWidthItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_WEIGHT:
         case EE_CHAR_WEIGHT_CJK:
         case EE_CHAR_WEIGHT_CTL:
         {
-            pNew = new EditCharAttribWeight( (const SvxWeightItem&)rNew, nS, nE );
+            pNew = new EditCharAttribWeight( static_cast<const SvxWeightItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_UNDERLINE:
         {
-            pNew = new EditCharAttribUnderline( (const SvxUnderlineItem&)rNew, nS, nE );
+            pNew = new EditCharAttribUnderline( static_cast<const SvxUnderlineItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_OVERLINE:
         {
-            pNew = new EditCharAttribOverline( (const SvxOverlineItem&)rNew, nS, nE );
+            pNew = new EditCharAttribOverline( static_cast<const SvxOverlineItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_EMPHASISMARK:
         {
-            pNew = new EditCharAttribEmphasisMark( (const SvxEmphasisMarkItem&)rNew, nS, nE );
+            pNew = new EditCharAttribEmphasisMark( static_cast<const SvxEmphasisMarkItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_RELIEF:
         {
-            pNew = new EditCharAttribRelief( (const SvxCharReliefItem&)rNew, nS, nE );
+            pNew = new EditCharAttribRelief( static_cast<const SvxCharReliefItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_STRIKEOUT:
         {
-            pNew = new EditCharAttribStrikeout( (const SvxCrossedOutItem&)rNew, nS, nE );
+            pNew = new EditCharAttribStrikeout( static_cast<const SvxCrossedOutItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_ITALIC:
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
         {
-            pNew = new EditCharAttribItalic( (const SvxPostureItem&)rNew, nS, nE );
+            pNew = new EditCharAttribItalic( static_cast<const SvxPostureItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_OUTLINE:
         {
-            pNew = new EditCharAttribOutline( (const SvxContourItem&)rNew, nS, nE );
+            pNew = new EditCharAttribOutline( static_cast<const SvxContourItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_SHADOW:
         {
-            pNew = new EditCharAttribShadow( (const SvxShadowedItem&)rNew, nS, nE );
+            pNew = new EditCharAttribShadow( static_cast<const SvxShadowedItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_ESCAPEMENT:
         {
-            pNew = new EditCharAttribEscapement( (const SvxEscapementItem&)rNew, nS, nE );
+            pNew = new EditCharAttribEscapement( static_cast<const SvxEscapementItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_PAIRKERNING:
         {
-            pNew = new EditCharAttribPairKerning( (const SvxAutoKernItem&)rNew, nS, nE );
+            pNew = new EditCharAttribPairKerning( static_cast<const SvxAutoKernItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_KERNING:
         {
-            pNew = new EditCharAttribKerning( (const SvxKerningItem&)rNew, nS, nE );
+            pNew = new EditCharAttribKerning( static_cast<const SvxKerningItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_WLM:
         {
-            pNew = new EditCharAttribWordLineMode( (const SvxWordLineModeItem&)rNew, nS, nE );
+            pNew = new EditCharAttribWordLineMode( static_cast<const SvxWordLineModeItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_XMLATTRIBS:
@@ -380,32 +382,32 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         break;
         case EE_CHAR_CASEMAP:
         {
-            pNew = new EditCharAttribCaseMap( (const SvxCaseMapItem&)rNew, nS, nE );
+            pNew = new EditCharAttribCaseMap( static_cast<const SvxCaseMapItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_GRABBAG:
         {
-            pNew = new EditCharAttribGrabBag( (const SfxGrabBagItem&)rNew, nS, nE );
+            pNew = new EditCharAttribGrabBag( static_cast<const SfxGrabBagItem&>(rNew), nS, nE );
         }
         break;
         case EE_FEATURE_TAB:
         {
-            pNew = new EditCharAttribTab( (const SfxVoidItem&)rNew, nS );
+            pNew = new EditCharAttribTab( static_cast<const SfxVoidItem&>(rNew), nS );
         }
         break;
         case EE_FEATURE_LINEBR:
         {
-            pNew = new EditCharAttribLineBreak( (const SfxVoidItem&)rNew, nS );
+            pNew = new EditCharAttribLineBreak( static_cast<const SfxVoidItem&>(rNew), nS );
         }
         break;
         case EE_FEATURE_FIELD:
         {
-            pNew = new EditCharAttribField( (const SvxFieldItem&)rNew, nS );
+            pNew = new EditCharAttribField( static_cast<const SvxFieldItem&>(rNew), nS );
         }
         break;
         case EE_CHAR_BKGCOLOR:
         {
-            pNew = new EditCharAttribBackgroundColor( (const SvxBackgroundColorItem&)rNew, nS, nE );
+            pNew = new EditCharAttribBackgroundColor( static_cast<const SvxBackgroundColorItem&>(rNew), nS, nE );
         }
         break;
         default:
@@ -880,7 +882,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         case EE_PARA_LRSPACE:
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLRSpaceItem ) ), "ConvertItem: invalid Item!" );
-            SvxLRSpaceItem& rItem = (SvxLRSpaceItem&)rPoolItem;
+            SvxLRSpaceItem& rItem = static_cast<SvxLRSpaceItem&>(rPoolItem);
             rItem.SetTxtFirstLineOfst( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTxtFirstLineOfst(), eSourceUnit, eDestUnit ) ) );
             rItem.SetTxtLeft( OutputDevice::LogicToLogic( rItem.GetTxtLeft(), eSourceUnit, eDestUnit ) );
             rItem.SetRight( OutputDevice::LogicToLogic( rItem.GetRight(), eSourceUnit, eDestUnit ) );
@@ -889,7 +891,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         case EE_PARA_ULSPACE:
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxULSpaceItem ) ), "ConvertItem: Invalid Item!" );
-            SvxULSpaceItem& rItem = (SvxULSpaceItem&)rPoolItem;
+            SvxULSpaceItem& rItem = static_cast<SvxULSpaceItem&>(rPoolItem);
             rItem.SetUpper( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetUpper(), eSourceUnit, eDestUnit ) ) );
             rItem.SetLower( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetLower(), eSourceUnit, eDestUnit ) ) );
         }
@@ -897,7 +899,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         case EE_PARA_SBL:
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLineSpacingItem ) ), "ConvertItem: Invalid Item!" );
-            SvxLineSpacingItem& rItem = (SvxLineSpacingItem&)rPoolItem;
+            SvxLineSpacingItem& rItem = static_cast<SvxLineSpacingItem&>(rPoolItem);
             // SetLineHeight changes also eLineSpace!
             if ( rItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
                 rItem.SetLineHeight( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetLineHeight(), eSourceUnit, eDestUnit ) ) );
@@ -906,7 +908,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         case EE_PARA_TABS:
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxTabStopItem ) ), "ConvertItem: Invalid Item!" );
-            SvxTabStopItem& rItem = (SvxTabStopItem&)rPoolItem;
+            SvxTabStopItem& rItem = static_cast<SvxTabStopItem&>(rPoolItem);
             SvxTabStopItem aNewItem( EE_PARA_TABS );
             for ( sal_uInt16 i = 0; i < rItem.Count(); i++ )
             {
@@ -922,7 +924,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         case EE_CHAR_FONTHEIGHT_CTL:
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxFontHeightItem ) ), "ConvertItem: Invalid Item!" );
-            SvxFontHeightItem& rItem = (SvxFontHeightItem&)rPoolItem;
+            SvxFontHeightItem& rItem = static_cast<SvxFontHeightItem&>(rPoolItem);
             rItem.SetHeight( OutputDevice::LogicToLogic( rItem.GetHeight(), eSourceUnit, eDestUnit ) );
         }
         break;
@@ -1853,7 +1855,7 @@ ContentAttribs::~ContentAttribs()
 
 SvxTabStop ContentAttribs::FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab )
 {
-    const SvxTabStopItem& rTabs = (const SvxTabStopItem&) GetItem( EE_PARA_TABS );
+    const SvxTabStopItem& rTabs = static_cast<const SvxTabStopItem&>( GetItem( EE_PARA_TABS ) );
     for ( sal_uInt16 i = 0; i < rTabs.Count(); i++ )
     {
         const SvxTabStop& rTab = rTabs[i];
@@ -2008,39 +2010,39 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
 
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontInfo ) == SfxItemState::SET ) )
     {
-        const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get( nWhich_FontInfo );
+        const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(rSet.Get( nWhich_FontInfo ));
         rFont.SetName( rFontItem.GetFamilyName() );
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
     }
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Language ) == SfxItemState::SET ) )
-        rFont.SetLanguage( ((const SvxLanguageItem&)rSet.Get( nWhich_Language )).GetLanguage() );
+        rFont.SetLanguage( static_cast<const SvxLanguageItem&>(rSet.Get( nWhich_Language )).GetLanguage() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_COLOR ) == SfxItemState::SET ) )
-        rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
+        rFont.SetColor( static_cast<const SvxColorItem&>(rSet.Get( EE_CHAR_COLOR )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_BKGCOLOR ) == SfxItemState::SET ) )
-        rFont.SetFillColor( ((const SvxBackgroundColorItem&)rSet.Get( EE_CHAR_BKGCOLOR )).GetValue() );
+        rFont.SetFillColor( static_cast<const SvxBackgroundColorItem&>(rSet.Get( EE_CHAR_BKGCOLOR )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontHeight ) == SfxItemState::SET ) )
-        rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( nWhich_FontHeight ) ).GetHeight() ) );
+        rFont.SetSize( Size( rFont.GetSize().Width(), static_cast<const SvxFontHeightItem&>(rSet.Get( nWhich_FontHeight ) ).GetHeight() ) );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Weight ) == SfxItemState::SET ) )
-        rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( nWhich_Weight )).GetWeight() );
+        rFont.SetWeight( static_cast<const SvxWeightItem&>(rSet.Get( nWhich_Weight )).GetWeight() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET ) )
-        rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetLineStyle() );
+        rFont.SetUnderline( static_cast<const SvxUnderlineItem&>(rSet.Get( EE_CHAR_UNDERLINE )).GetLineStyle() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OVERLINE ) == SfxItemState::SET ) )
-        rFont.SetOverline( ((const SvxOverlineItem&)rSet.Get( EE_CHAR_OVERLINE )).GetLineStyle() );
+        rFont.SetOverline( static_cast<const SvxOverlineItem&>(rSet.Get( EE_CHAR_OVERLINE )).GetLineStyle() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SfxItemState::SET ) )
-        rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
+        rFont.SetStrikeout( static_cast<const SvxCrossedOutItem&>(rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_CASEMAP ) == SfxItemState::SET ) )
-        rFont.SetCaseMap( ((const SvxCaseMapItem&)rSet.Get( EE_CHAR_CASEMAP )).GetCaseMap() );
+        rFont.SetCaseMap( static_cast<const SvxCaseMapItem&>(rSet.Get( EE_CHAR_CASEMAP )).GetCaseMap() );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Italic ) == SfxItemState::SET ) )
-        rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( nWhich_Italic )).GetPosture() );
+        rFont.SetItalic( static_cast<const SvxPostureItem&>(rSet.Get( nWhich_Italic )).GetPosture() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OUTLINE ) == SfxItemState::SET ) )
-        rFont.SetOutline( ((const SvxContourItem&)rSet.Get( EE_CHAR_OUTLINE )).GetValue() );
+        rFont.SetOutline( static_cast<const SvxContourItem&>(rSet.Get( EE_CHAR_OUTLINE )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_SHADOW ) == SfxItemState::SET ) )
-        rFont.SetShadow( ((const SvxShadowedItem&)rSet.Get( EE_CHAR_SHADOW )).GetValue() );
+        rFont.SetShadow( static_cast<const SvxShadowedItem&>(rSet.Get( EE_CHAR_SHADOW )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_ESCAPEMENT ) == SfxItemState::SET ) )
     {
-        const SvxEscapementItem& rEsc = (const SvxEscapementItem&) rSet.Get( EE_CHAR_ESCAPEMENT );
+        const SvxEscapementItem& rEsc = static_cast<const SvxEscapementItem&>( rSet.Get( EE_CHAR_ESCAPEMENT ) );
 
         sal_uInt16 nProp = rEsc.GetProp();
         rFont.SetPropr( (sal_uInt8)nProp );
@@ -2053,15 +2055,15 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
         rFont.SetEscapement( nEsc );
     }
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SfxItemState::SET ) )
-        rFont.SetKerning( ((const SvxAutoKernItem&)rSet.Get( EE_CHAR_PAIRKERNING )).GetValue() );
+        rFont.SetKerning( static_cast<const SvxAutoKernItem&>(rSet.Get( EE_CHAR_PAIRKERNING )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_KERNING ) == SfxItemState::SET ) )
-        rFont.SetFixKerning( ((const SvxKerningItem&)rSet.Get( EE_CHAR_KERNING )).GetValue() );
+        rFont.SetFixKerning( static_cast<const SvxKerningItem&>(rSet.Get( EE_CHAR_KERNING )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_WLM ) == SfxItemState::SET ) )
-        rFont.SetWordLineMode( ((const SvxWordLineModeItem&)rSet.Get( EE_CHAR_WLM )).GetValue() );
+        rFont.SetWordLineMode( static_cast<const SvxWordLineModeItem&>(rSet.Get( EE_CHAR_WLM )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_EMPHASISMARK ) == SfxItemState::SET ) )
-        rFont.SetEmphasisMark( ((const SvxEmphasisMarkItem&)rSet.Get( EE_CHAR_EMPHASISMARK )).GetValue() );
+        rFont.SetEmphasisMark( static_cast<const SvxEmphasisMarkItem&>(rSet.Get( EE_CHAR_EMPHASISMARK )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SfxItemState::SET ) )
-        rFont.SetRelief( (FontRelief)((const SvxCharReliefItem&)rSet.Get( EE_CHAR_RELIEF )).GetValue() );
+        rFont.SetRelief( (FontRelief)static_cast<const SvxCharReliefItem&>(rSet.Get( EE_CHAR_RELIEF )).GetValue() );
 
     // If comparing the entire font, or if checking before each alteration
     // whether the value changes, remains relatively the same thing.
@@ -2313,7 +2315,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
         if ( !aFollow.isEmpty() && ( aFollow != pStyle->GetName() ) )
         {
             SfxStyleSheetBase* pNext = pStyle->GetPool().Find( aFollow, pStyle->GetFamily() );
-            pNode->SetStyleSheet( (SfxStyleSheet*)pNext );
+            pNode->SetStyleSheet( static_cast<SfxStyleSheet*>(pNext) );
         }
     }
 

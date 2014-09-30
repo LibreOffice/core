@@ -309,7 +309,7 @@ bool SvxSizeItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return ( aSize == ( (SvxSizeItem&)rAttr ).GetSize() );
+    return ( aSize == static_cast<const SvxSizeItem&>( rAttr ).GetSize() );
 }
 
 
@@ -553,7 +553,7 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    const SvxLRSpaceItem& rOther = (const SvxLRSpaceItem&)rAttr;
+    const SvxLRSpaceItem& rOther = static_cast<const SvxLRSpaceItem&>(rAttr);
 
     return (
         nFirstLineOfst == rOther.GetTxtFirstLineOfst() &&
@@ -928,11 +928,12 @@ bool SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return ( nUpper == ( (SvxULSpaceItem&)rAttr ).nUpper &&
-             nLower == ( (SvxULSpaceItem&)rAttr ).nLower &&
-             bContext == ( (SvxULSpaceItem&)rAttr ).bContext &&
-             nPropUpper == ( (SvxULSpaceItem&)rAttr ).nPropUpper &&
-             nPropLower == ( (SvxULSpaceItem&)rAttr ).nPropLower );
+    const SvxULSpaceItem& rSpaceItem = static_cast<const SvxULSpaceItem&>( rAttr );
+    return ( nUpper == rSpaceItem.nUpper &&
+             nLower == rSpaceItem.nLower &&
+             bContext == rSpaceItem.bContext &&
+             nPropUpper == rSpaceItem.nPropUpper &&
+             nPropLower == rSpaceItem.nPropLower );
 }
 
 
@@ -949,7 +950,8 @@ bool SvxULSpaceItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText,
+    const IntlWrapper  *pIntl
 )   const
 {
     switch ( ePres )
@@ -1154,9 +1156,10 @@ bool SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return ( bCntnt == ( (SvxProtectItem&)rAttr ).bCntnt &&
-             bSize  == ( (SvxProtectItem&)rAttr ).bSize  &&
-             bPos   == ( (SvxProtectItem&)rAttr ).bPos );
+    const SvxProtectItem& rItem = static_cast<const SvxProtectItem&>(rAttr);
+    return ( bCntnt == rItem.bCntnt &&
+             bSize  == rItem.bSize  &&
+             bPos   == rItem.bPos );
 }
 
 bool SvxProtectItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1371,9 +1374,10 @@ bool SvxShadowItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return ( ( aShadowColor == ( (SvxShadowItem&)rAttr ).aShadowColor ) &&
-             ( nWidth    == ( (SvxShadowItem&)rAttr ).GetWidth() ) &&
-             ( eLocation == ( (SvxShadowItem&)rAttr ).GetLocation() ) );
+    const SvxShadowItem& rItem = static_cast<const SvxShadowItem&>(rAttr);
+    return ( ( aShadowColor == rItem.aShadowColor ) &&
+             ( nWidth    == rItem.GetWidth() ) &&
+             ( eLocation == rItem.GetLocation() ) );
 }
 
 
@@ -1626,15 +1630,16 @@ bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
+    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(rAttr);
     return (
-        ( nTopDist == ( (SvxBoxItem&)rAttr ).nTopDist ) &&
-        ( nBottomDist == ( (SvxBoxItem&)rAttr ).nBottomDist )   &&
-        ( nLeftDist == ( (SvxBoxItem&)rAttr ).nLeftDist )   &&
-        ( nRightDist == ( (SvxBoxItem&)rAttr ).nRightDist ) &&
-        CmpBrdLn( pTop, ( (SvxBoxItem&)rAttr ).GetTop() )           &&
-        CmpBrdLn( pBottom, ( (SvxBoxItem&)rAttr ).GetBottom() )     &&
-        CmpBrdLn( pLeft, ( (SvxBoxItem&)rAttr ).GetLeft() )         &&
-        CmpBrdLn( pRight, ( (SvxBoxItem&)rAttr ).GetRight() ) );
+        ( nTopDist == rBoxItem.nTopDist ) &&
+        ( nBottomDist == rBoxItem.nBottomDist )   &&
+        ( nLeftDist == rBoxItem.nLeftDist )   &&
+        ( nRightDist == rBoxItem.nRightDist ) &&
+        CmpBrdLn( pTop, rBoxItem.GetTop() )           &&
+        CmpBrdLn( pBottom, rBoxItem.GetBottom() )     &&
+        CmpBrdLn( pLeft, rBoxItem.GetLeft() )         &&
+        CmpBrdLn( pRight, rBoxItem.GetRight() ) );
 }
 
 
@@ -2502,7 +2507,7 @@ SvxBoxInfoItem &SvxBoxInfoItem::operator=( const SvxBoxInfoItem& rCpy )
 
 bool SvxBoxInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    SvxBoxInfoItem& rBoxInfo = (SvxBoxInfoItem&)rAttr;
+    const SvxBoxInfoItem& rBoxInfo = static_cast<const SvxBoxInfoItem&>(rAttr);
 
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -2890,7 +2895,7 @@ bool SvxFmtBreakItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "unequal types" );
 
-    return GetValue() == ( (SvxFmtBreakItem&)rAttr ).GetValue();
+    return GetValue() == static_cast<const SvxFmtBreakItem&>( rAttr ).GetValue();
 }
 
 
@@ -3092,7 +3097,7 @@ bool SvxLineItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return CmpBrdLn( pLine, ((SvxLineItem&)rAttr).GetLine() );
+    return CmpBrdLn( pLine, static_cast<const SvxLineItem&>(rAttr).GetLine() );
 }
 
 
@@ -3769,7 +3774,7 @@ bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    SvxBrushItem& rCmp = (SvxBrushItem&)rAttr;
+    const SvxBrushItem& rCmp = static_cast<const SvxBrushItem&>(rAttr);
     bool bEqual = ( aColor == rCmp.aColor && eGraphicPos == rCmp.eGraphicPos &&
         pImpl->nGraphicTransparency == rCmp.pImpl->nGraphicTransparency);
 
@@ -4113,7 +4118,7 @@ bool SvxFrameDirectionItem::operator==( const SfxPoolItem& rCmp ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rCmp), "unequal types" );
 
-    return GetValue() == ((SvxFrameDirectionItem&)rCmp).GetValue();
+    return GetValue() == static_cast<const SvxFrameDirectionItem&>(rCmp).GetValue();
 }
 
 SfxPoolItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const

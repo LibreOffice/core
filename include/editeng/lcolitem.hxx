@@ -44,8 +44,8 @@ public:
         const SAL_OVERRIDE;
 
     inline SvxLineColorItem& operator=(const SvxLineColorItem& rColor)
-        { return (SvxLineColorItem&)SvxColorItem::
-            operator=((const SvxColorItem&)rColor); }
+        { return static_cast<SvxLineColorItem&>(SvxColorItem::
+                     operator=(static_cast<const SvxColorItem&>(rColor))); }
 
 };
 

@@ -86,7 +86,7 @@ bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    const SvxLineSpacingItem& rLineSpace = (const SvxLineSpacingItem&)rAttr;
+    const SvxLineSpacingItem& rLineSpace = static_cast<const SvxLineSpacingItem&>(rAttr);
     return (
         // Same Linespacing Rule?
         (eLineSpace == rLineSpace.eLineSpace)
@@ -347,11 +347,11 @@ bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return( ( GetAdjust() == ((SvxAdjustItem&)rAttr).GetAdjust() &&
-        bOneBlock == ((SvxAdjustItem&)rAttr).bOneBlock &&
-        bLastCenter == ((SvxAdjustItem&)rAttr).bLastCenter &&
-        bLastBlock == ((SvxAdjustItem&)rAttr).bLastBlock )
-        ? 1 : 0 );
+    const SvxAdjustItem& rItem = static_cast<const SvxAdjustItem&>(rAttr);
+    return GetAdjust() == rItem.GetAdjust() &&
+           bOneBlock == rItem.bOneBlock &&
+           bLastCenter == rItem.bLastCenter &&
+           bLastBlock == rItem.bLastBlock;
 }
 
 bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -705,11 +705,12 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return ( (((SvxHyphenZoneItem&)rAttr).bHyphen == bHyphen)
-            && (((SvxHyphenZoneItem&)rAttr).bPageEnd == bPageEnd)
-            && (((SvxHyphenZoneItem&)rAttr).nMinLead == nMinLead)
-            && (((SvxHyphenZoneItem&)rAttr).nMinTrail == nMinTrail)
-            && (((SvxHyphenZoneItem&)rAttr).nMaxHyphens == nMaxHyphens) );
+    const SvxHyphenZoneItem& rItem = static_cast<const SvxHyphenZoneItem&>(rAttr);
+    return ( rItem.bHyphen == bHyphen
+            && rItem.bPageEnd == bPageEnd
+            && rItem.nMinLead == nMinLead
+            && rItem.nMinTrail == nMinTrail
+            && rItem.nMaxHyphens == nMaxHyphens );
 }
 
 
@@ -1053,7 +1054,7 @@ bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    const SvxTabStopItem& rTSI = (SvxTabStopItem&)rAttr;
+    const SvxTabStopItem& rTSI = static_cast<const SvxTabStopItem&>(rAttr);
 
     if ( Count() != rTSI.Count() )
         return false;
@@ -1144,8 +1145,8 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
 
     if( bStoreDefTabs )
     {
-        const SvxTabStopItem& rDefTab = (const SvxTabStopItem &)
-            pPool->GetDefaultItem( pPool->GetWhich( SID_ATTR_TABSTOP, false ) );
+        const SvxTabStopItem& rDefTab = static_cast<const SvxTabStopItem &>(
+            pPool->GetDefaultItem( pPool->GetWhich( SID_ATTR_TABSTOP, false ) ) );
         nDefDist = sal_uInt16( rDefTab.maTabStops.front().GetTabPos() );
         const sal_Int32 nPos = nTabs > 0 ? (*this)[nTabs-1].GetTabPos() : 0;
         nCount  = (sal_uInt16)(nPos / nDefDist);
