@@ -881,7 +881,8 @@ DECLARE_RTFIMPORT_TEST(testDoDhgt, "do-dhgt.rtf")
 DECLARE_RTFIMPORT_TEST(testDplinehollow, "dplinehollow.rtf")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_NONE, getProperty<drawing::LineStyle>(xPropertySet, "LineStyle"));
+    table::BorderLine2 line(getProperty<table::BorderLine2>(xPropertySet, "TopBorder"));
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, line.LineStyle);
 }
 
 DECLARE_RTFIMPORT_TEST(testLeftmarginDefault, "leftmargin-default.rtf")
