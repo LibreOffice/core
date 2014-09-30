@@ -410,6 +410,13 @@ Size ScGridWindow::GetDataAreaSize()
     // Actual data area
     pDoc->ShrinkToDataArea( nTab,
                             nStartCol, nStartRow, nEndCol, nEndRow );
+    // We need to ensure we have at least one cell, since a 0x0 document
+    // cannot be rendered. If we have no content then ShrinkToDataArea simply
+    // leaves nEndCol/Row at MAXCOL/ROW.
+    if ( nEndCol == MAXCOL )
+        nEndCol = 1;
+    if ( nEndRow == MAXROW )
+        nEndRow = 1;
 
     // Drawing layer area -- is completely independent of the data area.
     ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
