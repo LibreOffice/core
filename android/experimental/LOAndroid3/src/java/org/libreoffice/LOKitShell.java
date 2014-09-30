@@ -29,4 +29,7 @@ public class LOKitShell {
         return LibreOfficeMainActivity.mAppContext.mMainHandler;
     }
 
+    public static void queueRedraw() {
+        LOKitShell.sendEvent(LOEventFactory.redraw());
+    }
 }
