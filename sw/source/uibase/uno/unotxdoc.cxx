@@ -4017,3 +4017,4 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
