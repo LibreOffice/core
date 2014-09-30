@@ -133,7 +133,7 @@ public:
     void                Apply();
 
 private:
-    typedef ::std::auto_ptr< ScConditionalFormat > ScCondFmtPtr;
+    typedef ::std::unique_ptr< ScConditionalFormat > ScCondFmtPtr;
 
     ScRangeList         maRanges;           /// Destination cell ranges.
     ScCondFmtPtr        mxScCondFmt;        /// Calc conditional format.

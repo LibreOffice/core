@@ -136,8 +136,8 @@ private:
     void                implImportBiffFormula();
 
 private:
-    typedef ::std::auto_ptr< StreamDataSequence >   StreamDataSeqPtr;
-    typedef ::std::auto_ptr< BiffInputStreamPos >   BiffStreamPosPtr;
+    typedef ::std::unique_ptr< StreamDataSequence >   StreamDataSeqPtr;
+    typedef ::std::unique_ptr< BiffInputStreamPos >   BiffStreamPosPtr;
 
     ScRangeData*        mpScRangeData;       /// ScRangeData of the defined name.
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.

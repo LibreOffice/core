@@ -172,8 +172,8 @@ private:
         SCCOL mnCols;
     };
 
-    ::std::auto_ptr<ScDBQueryParamBase> mpParam;
-    ::std::auto_ptr<DataAccess>         mpData;
+    ::std::unique_ptr<ScDBQueryParamBase> mpParam;
+    ::std::unique_ptr<DataAccess>         mpData;
 
 public:
                     ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);

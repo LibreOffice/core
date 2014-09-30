@@ -142,11 +142,9 @@ ScNotesChildren::~ScNotesChildren()
 {
     ::accessibility::AccessibleTextHelper* pTextHelper = NULL;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
+    ::std::unique_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
         (new ScAccessibleNoteTextData(mpViewShell, rString, aCellPos, bMarkNote));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-    ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
+    ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(std::move(pAccessiblePreviewHeaderCellTextData)));
 
     pTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
 

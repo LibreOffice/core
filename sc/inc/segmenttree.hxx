@@ -76,9 +76,7 @@ public:
     SCROW findLastNotOf(bool bValue) const;
 
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScFlatBoolSegmentsImpl> mpImpl;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
 
 class ScFlatBoolColSegments
@@ -101,9 +99,7 @@ public:
     void insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipStartBoundary);
 
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScFlatBoolSegmentsImpl> mpImpl;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
 
 class ScFlatUInt16SegmentsImpl;
@@ -150,9 +146,7 @@ public:
     void enableTreeSearch(bool bEnable);
 
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScFlatUInt16SegmentsImpl> mpImpl;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScFlatUInt16SegmentsImpl> mpImpl;
 };
 
 #endif

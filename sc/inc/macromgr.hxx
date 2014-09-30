@@ -42,7 +42,7 @@ private:
     NameBoolMap mhFuncToVolatile;
     com::sun::star::uno::Reference< com::sun::star::container::XContainerListener > mxContainerListener;
 
-    ::std::auto_ptr<ScUserMacroDepTracker> mpDepTracker;
+    ::std::unique_ptr<ScUserMacroDepTracker> mpDepTracker;
     ScDocument* mpDoc;
 };
 

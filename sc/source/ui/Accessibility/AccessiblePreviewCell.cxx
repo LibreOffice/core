@@ -283,11 +283,9 @@ void ScAccessiblePreviewCell::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewCellTextData
+        ::std::unique_ptr < ScAccessibleTextData > pAccessiblePreviewCellTextData
             (new ScAccessiblePreviewCellTextData(mpViewShell, maCellAddress));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewCellTextData));
+        ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(std::move(pAccessiblePreviewCellTextData)));
 
         mpTextHelper = new ::accessibility::AccessibleTextHelper( std::move(pEditSource) );
         mpTextHelper->SetEventSource( this );

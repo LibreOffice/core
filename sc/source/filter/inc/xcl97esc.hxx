@@ -41,10 +41,8 @@ private:
     virtual SvStream*   ImplQueryPictureStream() SAL_OVERRIDE;
 
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ::utl::TempFile > mxPicTempFile;
-    ::std::auto_ptr< SvStream > mxPicStrm;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< ::utl::TempFile > mxPicTempFile;
+    ::std::unique_ptr< SvStream > mxPicStrm;
 };
 
 class XclObj;

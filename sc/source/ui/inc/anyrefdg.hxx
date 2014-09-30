@@ -44,12 +44,12 @@ class ScRangeList;
 class ScFormulaReferenceHelper
 {
     IAnyRefDialog*      m_pDlg;
-    ::std::auto_ptr<ScCompiler>         pRefComp;
+    ::std::unique_ptr<ScCompiler>         pRefComp;
     formula::RefEdit*    pRefEdit;               // active input field
     formula::RefButton*  pRefBtn;                // associated button
     vcl::Window*             m_pWindow;
     SfxBindings*        m_pBindings;
-    ::std::auto_ptr<Accelerator>
+    ::std::unique_ptr<Accelerator>
                         pAccel;                 // for Enter/Escape
     ::std::vector<vcl::Window*> m_aHiddenWidgets;    // vector of hidden Controls
     sal_Int32           m_nOldBorderWidth;      // border width for expanded dialog

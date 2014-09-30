@@ -35,7 +35,7 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 using ::std::vector;
 
 ScMyOLEFixer::ScMyOLEFixer(ScXMLImport& rTempImport)
@@ -82,9 +82,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     if (!pCollection)
         return;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr< vector<ScTokenRef> > pRefTokens(new vector<ScTokenRef>);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    unique_ptr< vector<ScTokenRef> > pRefTokens(new vector<ScTokenRef>);
         const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     ScRefTokenHelper::compileRangeRepresentation(
         *pRefTokens, aRangeStr, pDoc, cSep, pDoc->GetGrammar());

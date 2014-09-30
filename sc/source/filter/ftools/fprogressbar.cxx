@@ -22,7 +22,6 @@
 #include "progress.hxx"
 
 ScfProgressBar::ScfProgressSegment::ScfProgressSegment( sal_Size nSize ) :
-    mxProgress( 0 ),
     mnSize( nSize ),
     mnPos( 0 )
 {

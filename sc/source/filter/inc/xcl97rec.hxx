@@ -159,7 +159,7 @@ public:
 class XclObjComment : public XclObj
 {
     ScAddress                   maScPos;
-    std::auto_ptr< SdrCaptionObj >
+    std::unique_ptr< SdrCaptionObj >
                                 mpCaption;
     bool                        mbVisible;
     Rectangle                   maFrom;

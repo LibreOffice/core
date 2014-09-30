@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/ptr_container.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "dbdata.hxx"
@@ -31,8 +34,9 @@
 #include "sortparam.hxx"
 
 #include <memory>
+#include <utility>
 
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 using ::std::unary_function;
 using ::std::for_each;
 using ::std::find_if;
@@ -685,13 +689,11 @@ ScDBData* ScDBCollection::NamedDBs::findByUpperName(const OUString& rName)
 
 bool ScDBCollection::NamedDBs::insert(ScDBData* p)
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<ScDBData> pData(p);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    unique_ptr<ScDBData> pData(p);
     if (!pData->GetIndex())
         pData->SetIndex(mrParent.nEntryIndex++);
 
-    pair<DBsType::iterator, bool> r = maDBs.insert(pData);
+    pair<DBsType::iterator, bool> r = o3tl::ptr_container::insert(maDBs, std::move(pData));
 
     if (r.second && p->HasImportParam() && !p->HasImportSelection())
     {
@@ -767,23 +769,19 @@ ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
     {
         // Insert a new db data.  They all have identical names.
         OUString aName(STR_DB_GLOBAL_NONAME);
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScDBData> pNew(new ScDBData(
+        ::std::unique_ptr<ScDBData> pNew(new ScDBData(
             aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
             rRange.aEnd.Col(), rRange.aEnd.Row(), true, false));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
         pData = pNew.get();
-        maDBs.push_back(pNew);
+        o3tl::ptr_container::push_back(maDBs, std::move(pNew));
     }
     return const_cast<ScDBData*>(pData);
 }
 
 void ScDBCollection::AnonDBs::insert(ScDBData* p)
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDBData> pNew(p);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-    maDBs.push_back(pNew);
+    ::std::unique_ptr<ScDBData> pNew(p);
+    o3tl::ptr_container::push_back(maDBs, std::move(pNew));
 }
 
 bool ScDBCollection::AnonDBs::empty() const

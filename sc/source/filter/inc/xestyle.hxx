@@ -266,7 +266,7 @@ struct XclExpNumFmt
 };
 
 class SvNumberFormatter;
-typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
+typedef ::std::unique_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
 
 /** Stores all number formats used in the document. */
 class XclExpNumFmtBuffer : public XclExpRecordBase, protected XclExpRoot

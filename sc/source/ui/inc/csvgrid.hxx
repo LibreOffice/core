@@ -73,7 +73,7 @@ typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
 class SC_DLLPUBLIC ScCsvGrid : public ScCsvControl, public utl::ConfigurationListener
 {
 private:
-    typedef ::std::auto_ptr< ScEditEngineDefaulter > ScEditEnginePtr;
+    typedef ::std::unique_ptr< ScEditEngineDefaulter > ScEditEnginePtr;
 
     VirtualDevice               maBackgrDev;        /// Grid background, headers, cell texts.
     VirtualDevice               maGridDev;          /// Data grid with selection and cursor.

@@ -141,7 +141,6 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pExternalRefInfo(NULL),
     nStartOffset(-1),
     bStartFormPage(false),
     bPrintEntireSheet(true)

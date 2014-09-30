@@ -13,11 +13,13 @@
 #include "docfunc.hxx"
 #include "sc.hrc"
 
+#include <o3tl/ptr_container.hxx>
 #include <sfx2/app.hxx>
 
 #include <memory>
+#include <utility>
 
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 
 ScUndoAllRangeNames::ScUndoAllRangeNames(
     ScDocShell* pDocSh,
@@ -28,19 +30,15 @@ ScUndoAllRangeNames::ScUndoAllRangeNames(
     std::map<OUString, ScRangeName*>::const_iterator itr, itrEnd;
     for (itr = rOldNames.begin(), itrEnd = rOldNames.end(); itr != itrEnd; ++itr)
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        maOldNames.insert(itr->first, p);
+        unique_ptr<ScRangeName> p(new ScRangeName(*itr->second));
+        o3tl::ptr_container::insert(maOldNames, itr->first, std::move(p));
     }
 
     boost::ptr_map<OUString, ScRangeName>::const_iterator it, itEnd;
     for (it = rNewNames.begin(), itEnd = rNewNames.end(); it != itEnd; ++it)
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<ScRangeName> p(new ScRangeName(*it->second));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        maNewNames.insert(it->first, p);
+        unique_ptr<ScRangeName> p(new ScRangeName(*it->second));
+        o3tl::ptr_container::insert(maNewNames, it->first, std::move(p));
     }
 }
 

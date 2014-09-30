@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include "AccessibleCell.hxx"
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -388,20 +392,18 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
     return pDoc;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr< SvxEditSource > ScAccessibleCell::CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos)
+::std::unique_ptr< SvxEditSource > ScAccessibleCell::CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos)
 {
     if (IsFormulaMode())
     {
-        return ::std::auto_ptr< SvxEditSource >();
+        return ::std::unique_ptr< SvxEditSource >();
     }
-    ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData
+    ::std::unique_ptr < ScAccessibleTextData > pAccessibleCellTextData
         ( new ScAccessibleCellTextData( pViewShell, aCell, eSplitPos, this ) );
-    ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
+    ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(std::move(pAccessibleCellTextData)));
 
     return pEditSource;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelationSet)
 {

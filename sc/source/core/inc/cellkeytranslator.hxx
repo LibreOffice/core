@@ -75,7 +75,7 @@ private:
                   OpCode eOpCode = ocNone);
     void addToMap(const TransItem* pItems, const ::com::sun::star::lang::Locale& rLocale);
 
-    static ::std::auto_ptr<ScCellKeywordTranslator> spInstance;
+    static ::std::unique_ptr<ScCellKeywordTranslator> spInstance;
     ScCellKeywordHashMap maStringNameMap;
     ::utl::TransliterationWrapper maTransWrapper;
 };

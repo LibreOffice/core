@@ -111,8 +111,7 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pColResults( NULL ),
     pRowResults( NULL ),
     bResultOverflow( false ),
-    bPageFiltered( false ),
-    mpGrandTotalName(NULL)
+    bPageFiltered( false )
 {
     pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }

@@ -683,7 +683,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, Normal));
     mpAutoFilterPopup->setPopupEndAction(
         new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
-    std::auto_ptr<AutoFilterData> pData(new AutoFilterData);
+    std::unique_ptr<AutoFilterData> pData(new AutoFilterData);
     pData->maPos = ScAddress(nCol, nRow, nTab);
 
     Point aPos = pViewData->GetScrPos(nCol, nRow, eWhich);

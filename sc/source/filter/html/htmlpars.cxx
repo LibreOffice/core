@@ -17,8 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <boost/shared_ptr.hpp>
 #include <comphelper/string.hxx>
+#include <o3tl/ptr_container.hxx>
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -84,10 +89,8 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
             if (itrElem == maElemProps.end())
             {
                 // new element
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                std::auto_ptr<NamePropsType> p(new NamePropsType);
-                SAL_WNODEPRECATED_DECLARATIONS_POP
-                std::pair<ElemsType::iterator, bool> r = maElemProps.insert(aElem, p);
+                std::unique_ptr<NamePropsType> p(new NamePropsType);
+                std::pair<ElemsType::iterator, bool> r = o3tl::ptr_container::insert(maElemProps, aElem, std::move(p));
                 if (!r.second)
                     // insertion failed.
                     return;
@@ -170,10 +173,8 @@ void ScHTMLStyles::insertProp(
     if (itr == rStore.end())
     {
         // new element
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr<PropsType> p(new PropsType);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        std::pair<NamePropsType::iterator, bool> r = rStore.insert(aName, p);
+        std::unique_ptr<PropsType> p(new PropsType);
+        std::pair<NamePropsType::iterator, bool> r = o3tl::ptr_container::insert(rStore, aName, std::move(p));
         if (!r.second)
             // insertion failed.
             return;
@@ -2140,9 +2141,7 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
     {
         // read needed options from the <td> tag
         ScHTMLSize aSpanSize( 1, 1 );
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<OUString> pValStr, pNumStr;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<OUString> pValStr, pNumStr;
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
         HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
         sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;

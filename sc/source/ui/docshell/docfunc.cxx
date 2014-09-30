@@ -86,6 +86,7 @@
 #include <rowheightcontext.hxx>
 
 #include <memory>
+#include <utility>
 #include <basic/basmgr.hxx>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -967,9 +968,7 @@ bool ScDocFunc::SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr
 
 bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction )
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<ScFormulaCell> xCell(pCell);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<ScFormulaCell> xCell(pCell);
 
     ScDocShellModificator aModificator( rDocShell );
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -3649,14 +3648,12 @@ void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
         OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
         if (pProtect)
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
             p->setProtected(true); // just in case ...
             rDocShell.GetUndoManager()->AddUndoAction(
-                new ScUndoTabProtect(&rDocShell, nTab, p) );
+                new ScUndoTabProtect(&rDocShell, nTab, std::move(p)) );
 
-            // ownership of auto_ptr now transferred to ScUndoTabProtect.
+            // ownership of unique_ptr now transferred to ScUndoTabProtect.
         }
     }
 
@@ -3681,13 +3678,11 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword, bool /*bApi*/ )
             OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScDocProtection pointer is NULL!");
             if (pProtect)
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                ::std::auto_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                ::std::unique_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
                 p->setProtected(true); // just in case ...
                 rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoDocProtect(&rDocShell, p) );
-                // ownership of auto_ptr is transferred to ScUndoDocProtect.
+                    new ScUndoDocProtect(&rDocShell, std::move(p)) );
+                // ownership of unique_ptr is transferred to ScUndoDocProtect.
             }
         }
     }
@@ -3705,13 +3700,11 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword, bool /*bApi*/ )
             OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
             if (pProtect)
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                ::std::unique_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
                 p->setProtected(true); // just in case ...
                 rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoTabProtect(&rDocShell, nTab, p) );
-                // ownership of auto_ptr now transferred to ScUndoTabProtect.
+                    new ScUndoTabProtect(&rDocShell, nTab, std::move(p)) );
+                // ownership of unique_ptr now transferred to ScUndoTabProtect.
             }
         }
     }
@@ -3737,9 +3730,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
             return true;
 
         // save the protection state before unprotect (for undo).
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScDocProtection> pProtectCopy(new ScDocProtection(*pDocProtect));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<ScDocProtection> pProtectCopy(new ScDocProtection(*pDocProtect));
 
         if (!pDocProtect->verifyPassword(rPassword))
         {
@@ -3756,8 +3747,8 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             pProtectCopy->setProtected(false);
             rDocShell.GetUndoManager()->AddUndoAction(
-                new ScUndoDocProtect(&rDocShell, pProtectCopy) );
-            // ownership of auto_ptr now transferred to ScUndoDocProtect.
+                new ScUndoDocProtect(&rDocShell, std::move(pProtectCopy)) );
+            // ownership of unique_ptr now transferred to ScUndoDocProtect.
         }
     }
     else
@@ -3770,9 +3761,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
             return true;
 
         // save the protection state before unprotect (for undo).
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScTableProtection> pProtectCopy(new ScTableProtection(*pTabProtect));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<ScTableProtection> pProtectCopy(new ScTableProtection(*pTabProtect));
         if (!pTabProtect->verifyPassword(rPassword))
         {
             if (!bApi)
@@ -3788,8 +3777,8 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             pProtectCopy->setProtected(false);
             rDocShell.GetUndoManager()->AddUndoAction(
-                new ScUndoTabProtect(&rDocShell, nTab, pProtectCopy) );
-            // ownership of auto_ptr now transferred to ScUndoTabProtect.
+                new ScUndoTabProtect(&rDocShell, nTab, std::move(pProtectCopy)) );
+            // ownership of unique_ptr now transferred to ScUndoTabProtect.
         }
     }
 

@@ -50,7 +50,6 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
  , pRefBtn (NULL)
  , m_pWindow(NULL)
  , m_pBindings(_pBindings)
- , pAccel( NULL )
  , m_nOldBorderWidth (0)
  , nRefTab(0)
  , mnOldEditWidthReq( -1 )

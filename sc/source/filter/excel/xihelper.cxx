@@ -227,7 +227,7 @@ void XclImpStringHelper::SetToDocument(
     if (rString.GetText().isEmpty())
         return;
 
-    ::std::auto_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, nXFIndex ) );
+    ::std::unique_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, nXFIndex ) );
 
     if (pTextObj.get())
     {

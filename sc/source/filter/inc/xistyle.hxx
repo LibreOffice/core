@@ -428,7 +428,7 @@ private:
     void                SetUsedFlags( sal_uInt8 nUsedFlags );
 
 private:
-    typedef ::std::auto_ptr< ScPatternAttr > ScPatternAttrPtr;
+    typedef ::std::unique_ptr< ScPatternAttr > ScPatternAttrPtr;
 
     ScPatternAttrPtr    mpPattern;          /// Calc item set.
     ScStyleSheet*       mpStyleSheet;       /// Calc cell style sheet.

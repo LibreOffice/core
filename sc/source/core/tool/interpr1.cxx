@@ -81,7 +81,7 @@ ScTokenStack* ScInterpreter::pGlobalStack = NULL;
 bool ScInterpreter::bGlobalStackInUse = false;
 
 using namespace formula;
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 
 void ScInterpreter::ScIfJump()
 {
@@ -6626,9 +6626,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
     if ( GetByte() == 3 )
     {
         // First, get the query criteria range.
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScDBRangeBase> pQueryRef( PopDBDoubleRef() );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<ScDBRangeBase> pQueryRef( PopDBDoubleRef() );
         if (!pQueryRef.get())
             return NULL;
 
@@ -6690,9 +6688,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
         if (nGlobalError)
             return NULL;
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<ScDBRangeBase> pDBRef( PopDBDoubleRef() );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        unique_ptr<ScDBRangeBase> pDBRef( PopDBDoubleRef() );
 
         if (nGlobalError || !pDBRef.get())
             return NULL;
@@ -6724,9 +6720,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
         if (!ValidCol(nField))
             return NULL;
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<ScDBQueryParamBase> pParam( pDBRef->createQueryParam(pQueryRef.get()) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        unique_ptr<ScDBQueryParamBase> pParam( pDBRef->createQueryParam(pQueryRef.get()) );
 
         if (pParam.get())
         {
@@ -6767,9 +6761,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     bool bNull = true;
     sal_uLong nCount = 0;
     bool bMissingField = false;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
         if (!pQueryParam->IsValidFieldIndex())
@@ -6834,9 +6826,7 @@ void ScInterpreter::ScDBSum()
 void ScInterpreter::ScDBCount()
 {
     bool bMissingField = true;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
         sal_uLong nCount = 0;
@@ -6894,9 +6884,7 @@ void ScInterpreter::ScDBCount()
 void ScInterpreter::ScDBCount2()
 {
     bool bMissingField = true;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
         if (!pQueryParam->IsValidFieldIndex())
@@ -6952,9 +6940,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     rValCount = 0.0;
     double fSum    = 0.0;
     bool bMissingField = false;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
         if (!pQueryParam->IsValidFieldIndex())

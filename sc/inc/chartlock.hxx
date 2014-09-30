@@ -65,7 +65,7 @@ public:
 private:
     ScDocument*                         mpDoc;
     Timer                               maTimer;
-    std::auto_ptr< ScChartLockGuard >   mapScChartLockGuard;
+    std::unique_ptr< ScChartLockGuard >   mapScChartLockGuard;
 
     DECL_LINK(TimeoutHdl, void *);
 

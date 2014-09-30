@@ -1143,15 +1143,13 @@ bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
     return true;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-void createUndoDoc(std::auto_ptr<ScDocument>& pUndoDoc, ScDocument* pDoc, const ScRange& rRange)
+void createUndoDoc(std::unique_ptr<ScDocument>& pUndoDoc, ScDocument* pDoc, const ScRange& rRange)
 {
     SCTAB nTab = rRange.aStart.Tab();
     pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(pDoc, nTab, nTab);
     pDoc->CopyToDocument(rRange, IDF_ALL, false, pUndoDoc.get());
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut, bool bApi)
 {
@@ -1229,10 +1227,8 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     if (!isEditable(rDocShell, aRanges, bApi))
         return false;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<ScDocument> pOldUndoDoc;
-    std::auto_ptr<ScDocument> pNewUndoDoc;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<ScDocument> pOldUndoDoc;
+    std::unique_ptr<ScDocument> pNewUndoDoc;
 
     ScDPObject aUndoDPObj(*pOldObj); // for undo or revert on failure
 
@@ -1311,10 +1307,8 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
         return false;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<ScDocument> pOldUndoDoc;
-    std::auto_ptr<ScDPObject> pUndoDPObj;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<ScDocument> pOldUndoDoc;
+    std::unique_ptr<ScDPObject> pUndoDPObj;
 
     if (bRecord)
         pUndoDPObj.reset(new ScDPObject(rDPObj));    // copy old settings for undo
@@ -1365,18 +1359,14 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     if (!isEditable(rDocShell, ScRange(rDPObj.GetOutRange().aStart), bApi))
         return false;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<ScDocument> pNewUndoDoc;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<ScDocument> pNewUndoDoc;
 
     ScDocument& rDoc = rDocShell.GetDocument();
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
     //  output range must be set at pNewObj
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<ScDPObject> pDestObj(new ScDPObject(rDPObj));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<ScDPObject> pDestObj(new ScDPObject(rDPObj));
 
     ScDPObject& rDestObj = *pDestObj;
 
@@ -1469,10 +1459,8 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
         return false;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<ScDocument> pOldUndoDoc;
-    std::auto_ptr<ScDocument> pNewUndoDoc;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<ScDocument> pOldUndoDoc;
+    std::unique_ptr<ScDocument> pNewUndoDoc;
 
     ScDPObject aUndoDPObj(rDPObj); // For undo or revert on failure.
 

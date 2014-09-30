@@ -114,7 +114,7 @@ public:
     void                SetCodeName( SCTAB nTab, const OUString& rCodeName );
 
 private:
-    ::std::auto_ptr< ScExtDocOptionsImpl > mxImpl;
+    ::std::unique_ptr< ScExtDocOptionsImpl > mxImpl;
 };
 
 #endif

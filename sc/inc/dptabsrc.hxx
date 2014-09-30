@@ -119,9 +119,7 @@ private:
     bool                    bResultOverflow;
     bool                    bPageFiltered;      // set if page field filters have been applied to cache table
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<OUString> mpGrandTotalName;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<OUString> mpGrandTotalName;
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();

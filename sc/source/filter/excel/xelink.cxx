@@ -32,7 +32,7 @@
 #include <vector>
 #include <memory>
 
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 using ::std::find_if;
 using ::std::vector;
 using ::com::sun::star::uno::Any;
@@ -110,7 +110,7 @@ private:
 
 private:
     const XclExpSupbook&    mrSupbook;
-    auto_ptr<ScTokenArray>  mpArray;
+    unique_ptr<ScTokenArray>  mpArray;
 };
 
 // List of external names =====================================================

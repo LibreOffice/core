@@ -538,7 +538,7 @@ class ScAccessibleCsvCell : public ScAccessibleCsvControl, public accessibility:
 protected:
     typedef ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue >    PropertyValueSeq;
-    typedef ::std::auto_ptr< SvxEditSource >        SvxEditSourcePtr;
+    typedef ::std::unique_ptr< SvxEditSource >      SvxEditSourcePtr;
 
 private:
     OUString                    maCellText; /// The text contents of this cell.
@@ -630,7 +630,7 @@ private:
     Rectangle implGetBoundingBox() const;
 
     /** Creates the edit source the text helper needs. */
-    ::std::auto_ptr< SvxEditSource > implCreateEditSource();
+    ::std::unique_ptr< SvxEditSource > implCreateEditSource();
 };
 
 #endif

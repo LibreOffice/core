@@ -290,7 +290,7 @@ private:
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;
     ScChartCollection*  pChartCollection;
-    std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
+    std::unique_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attributes of a block
     ScFormulaCell*      pFormulaTree;                   // formula tree (start)
     ScFormulaCell*      pEOFormulaTree;                 // formula tree (end), last cell
@@ -311,14 +311,14 @@ private:
 
     ScFieldEditEngine*  pCacheFieldEditEngine;
 
-    ::std::auto_ptr<ScDocProtection> pDocProtection;
-    ::std::auto_ptr<ScClipParam>     mpClipParam;
+    ::std::unique_ptr<ScDocProtection> pDocProtection;
+    ::std::unique_ptr<ScClipParam>     mpClipParam;
 
-    ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
-    ::std::auto_ptr<ScMacroManager> mpMacroMgr;
+    ::std::unique_ptr<ScExternalRefManager> pExternalRefMgr;
+    ::std::unique_ptr<ScMacroManager> mpMacroMgr;
 
     // mutable for lazy construction
-    mutable ::std::auto_ptr< ScFormulaParserPool >
+    mutable ::std::unique_ptr< ScFormulaParserPool >
                         mxFormulaParserPool;            /// Pool for all external formula parsers used by this document.
 
     OUString       aDocName;                       // optional: name of document
@@ -338,7 +338,7 @@ private:
 
     ScLookupCacheMapImpl* pLookupCacheMapImpl;          // cache for lookups like VLOOKUP and MATCH
 
-    SfxItemSet*         pPreviewFont; // convert to std::auto_ptr or whatever
+    SfxItemSet*         pPreviewFont; // convert to std::unique_ptr or whatever
     ScStyleSheet*       pPreviewCellStyle;
     ScMarkData          maPreviewSelection;
     sal_Int64           nUnoObjectId;                   // counted up for UNO objects

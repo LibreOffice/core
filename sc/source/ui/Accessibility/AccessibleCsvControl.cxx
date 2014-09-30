@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include "AccessibleCsvControl.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -1383,7 +1387,7 @@ ScAccessibleCsvCell::ScAccessibleCsvCell(
         const OUString& rCellText,
         sal_Int32 nRow, sal_Int32 nColumn ) :
     ScAccessibleCsvControl( rGrid.GetAccessible(), rGrid, nCellRole ),
-    AccessibleStaticTextBase( SvxEditSourcePtr( NULL ) ),
+    AccessibleStaticTextBase( SvxEditSourcePtr() ),
     maCellText( rCellText ),
     mnLine( nRow ? (nRow + rGrid.GetFirstVisLine() - 1) : CSV_LINE_HEADER ),
     mnColumn( lcl_GetGridColumn( nColumn ) ),
@@ -1399,7 +1403,7 @@ ScAccessibleCsvCell::~ScAccessibleCsvCell()
 void SAL_CALL ScAccessibleCsvCell::disposing()
 {
     SolarMutexGuard aGuard;
-    SetEditSource( SvxEditSourcePtr( NULL ) );
+    SetEditSource( SvxEditSourcePtr() );
     ScAccessibleCsvControl::disposing();
 }
 
@@ -1565,19 +1569,17 @@ Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
     return aRect;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr< SvxEditSource > ScAccessibleCsvCell::implCreateEditSource()
+::std::unique_ptr< SvxEditSource > ScAccessibleCsvCell::implCreateEditSource()
 {
     ScCsvGrid& rGrid = implGetGrid();
     Rectangle aBoundRect( implGetBoundingBox() );
     aBoundRect -= implGetRealPos();
 
-    ::std::auto_ptr< ScAccessibleTextData > pCsvTextData( new ScAccessibleCsvTextData(
+    ::std::unique_ptr< ScAccessibleTextData > pCsvTextData( new ScAccessibleCsvTextData(
         &rGrid, rGrid.GetEditEngine(), maCellText, aBoundRect, implGetRealSize() ) );
 
-    ::std::auto_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( pCsvTextData ) );
+    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( std::move(pCsvTextData) ) );
     return pEditSource;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

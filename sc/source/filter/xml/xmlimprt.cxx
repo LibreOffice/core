@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/ptr_container.hxx>
 #include <svl/zforlist.hxx>
 #include <sal/macros.h>
 
@@ -92,6 +95,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <memory>
+#include <utility>
 
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
@@ -2396,13 +2400,13 @@ bool ScXMLImport::GetValidation(const OUString& sName, ScMyImportValidation& aVa
 
 void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
 {
-    ::std::auto_ptr<ScMyNamedExpression> p(pNamedExp);
+    ::std::unique_ptr<ScMyNamedExpression> p(pNamedExp);
     SheetNamedExpMap::iterator itr = maSheetNamedExpressions.find(nTab);
     if (itr == maSheetNamedExpressions.end())
     {
         // No chain exists for this sheet.  Create one.
-        ::std::auto_ptr<ScMyNamedExpressions> pNew(new ScMyNamedExpressions);
-        ::std::pair<SheetNamedExpMap::iterator, bool> r = maSheetNamedExpressions.insert(nTab, pNew);
+        ::std::unique_ptr<ScMyNamedExpressions> pNew(new ScMyNamedExpressions);
+        ::std::pair<SheetNamedExpMap::iterator, bool> r = o3tl::ptr_container::insert(maSheetNamedExpressions, nTab, std::move(pNew));
         if (!r.second)
             // insertion failed.
             return;
@@ -2410,7 +2414,7 @@ void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
         itr = r.first;
     }
     ScMyNamedExpressions& r = *itr->second;
-    r.push_back(p);
+    o3tl::ptr_container::push_back(r, std::move(p));
 }
 
 ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()

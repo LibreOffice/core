@@ -47,6 +47,7 @@
 #include "drwlayer.hxx"
 #include "scresid.hxx"
 
+#include <utility>
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 
@@ -54,7 +55,7 @@ extern bool bDrawIsInUndo; // somewhere as member!
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 using ::std::vector;
 using ::boost::shared_ptr;
 
@@ -1182,13 +1183,11 @@ OUString ScUndoShowHideTab::GetComment() const
     return ScGlobal::GetRscString( nId );
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-ScUndoDocProtect::ScUndoDocProtect(ScDocShell* pShell, auto_ptr<ScDocProtection> pProtectSettings) :
+ScUndoDocProtect::ScUndoDocProtect(ScDocShell* pShell, unique_ptr<ScDocProtection> && pProtectSettings) :
     ScSimpleUndo(pShell),
-    mpProtectSettings(pProtectSettings)
+    mpProtectSettings(std::move(pProtectSettings))
 {
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 ScUndoDocProtect::~ScUndoDocProtect()
 {
@@ -1201,9 +1200,7 @@ void ScUndoDocProtect::DoProtect(bool bProtect)
     if (bProtect)
     {
         // set protection.
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<ScDocProtection> pCopy(new ScDocProtection(*mpProtectSettings));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        unique_ptr<ScDocProtection> pCopy(new ScDocProtection(*mpProtectSettings));
         pCopy->setProtected(true);
         rDoc.SetDocProtection(pCopy.get());
     }
@@ -1253,14 +1250,12 @@ OUString ScUndoDocProtect::GetComment() const
     return ScGlobal::GetRscString( nId );
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-ScUndoTabProtect::ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab, auto_ptr<ScTableProtection> pProtectSettings) :
+ScUndoTabProtect::ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab, unique_ptr<ScTableProtection> && pProtectSettings) :
     ScSimpleUndo(pShell),
     mnTab(nTab),
-    mpProtectSettings(pProtectSettings)
+    mpProtectSettings(std::move(pProtectSettings))
 {
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 ScUndoTabProtect::~ScUndoTabProtect()
 {
@@ -1273,9 +1268,7 @@ void ScUndoTabProtect::DoProtect(bool bProtect)
     if (bProtect)
     {
         // set protection.
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<ScTableProtection> pCopy(new ScTableProtection(*mpProtectSettings));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        unique_ptr<ScTableProtection> pCopy(new ScTableProtection(*mpProtectSettings));
         pCopy->setProtected(true);
         rDoc.SetTabProtection(mnTab, pCopy.get());
     }

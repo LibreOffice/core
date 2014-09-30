@@ -60,9 +60,10 @@
 #include "documentimport.hxx"
 
 #include <memory>
+#include <utility>
 
 using ::com::sun::star::uno::Sequence;
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 
 // Shared string table ========================================================
 
@@ -240,11 +241,9 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     OSL_ENSURE( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< OUString > xLongName;    // link / file name
-    ::std::auto_ptr< OUString > xShortName;   // 8.3-representation of file name
-    ::std::auto_ptr< OUString > xTextMark;    // text mark
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< OUString > xLongName;    // link / file name
+    ::std::unique_ptr< OUString > xShortName;   // 8.3-representation of file name
+    ::std::unique_ptr< OUString > xTextMark;    // text mark
 
     // description (ignore)
     if( ::get_flag( nFlags, EXC_HLINK_DESCR ) )
@@ -320,7 +319,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     OSL_ENSURE( rStrm.GetRecLeft() == 0, "XclImpHyperlink::ReadEmbeddedData - record size mismatch" );
 
     if( !xLongName.get() && xShortName.get() )
-        xLongName = xShortName;
+        xLongName = std::move(xShortName);
     else if( !xLongName.get() && xTextMark.get() )
         xLongName.reset( new OUString );
 
@@ -625,9 +624,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     const ScAddress& rPos = maRanges.front()->aStart;    // assured above that maRanges is not empty
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ScTokenArray > xTokArr1;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< ScTokenArray > xTokArr1;
     if( nFmlaSize1 > 0 )
     {
         const ScTokenArray* pTokArr = 0;
@@ -638,9 +635,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
             xTokArr1.reset( pTokArr->Clone() );
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ScTokenArray > pTokArr2;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< ScTokenArray > pTokArr2;
     if( nFmlaSize2 > 0 )
     {
         const ScTokenArray* pTokArr = 0;
@@ -762,9 +757,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     // first formula
     // string list is single tStr token with NUL separators -> replace them with LF
     rStrm.SetNulSubstChar( '\n' );
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ScTokenArray > xTokArr1;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< ScTokenArray > xTokArr1;
 
     sal_uInt16 nLen = 0;
     rStrm >> nLen;
@@ -781,9 +774,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rStrm.SetNulSubstChar();    // back to default
 
     // second formula
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ScTokenArray > xTokArr2;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< ScTokenArray > xTokArr2;
 
     nLen = 0;
     rStrm >> nLen;
@@ -1192,9 +1183,7 @@ void XclImpDocProtectBuffer::Apply() const
         // If neither is set then the document is not protected at all.
         return;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<ScDocProtection> pProtect(new ScDocProtection);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    unique_ptr<ScDocProtection> pProtect(new ScDocProtection);
     pProtect->setProtected(true);
 
     if (mnPassHash)
@@ -1290,9 +1279,7 @@ void XclImpSheetProtectBuffer::Apply() const
             // This sheet is (for whatever reason) not protected.
             continue;
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        unique_ptr<ScTableProtection> pProtect(new ScTableProtection);
         pProtect->setProtected(true);
 
         // 16-bit hash password

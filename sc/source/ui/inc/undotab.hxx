@@ -347,9 +347,7 @@ private:
 class ScUndoDocProtect : public ScSimpleUndo
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    ScUndoDocProtect(ScDocShell* pShell, ::std::auto_ptr<ScDocProtection> pProtectSettings);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+                    ScUndoDocProtect(ScDocShell* pShell, ::std::unique_ptr<ScDocProtection> && pProtectSettings);
     virtual         ~ScUndoDocProtect();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -360,9 +358,7 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDocProtection> mpProtectSettings;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScDocProtection> mpProtectSettings;
 
     void    DoProtect(bool bProtect);
 };
@@ -372,10 +368,8 @@ private:
 class ScUndoTabProtect : public ScSimpleUndo
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab,
-                                     ::std::auto_ptr<ScTableProtection> pProtectSettings);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+                                     std::unique_ptr<ScTableProtection> && pProtectSettings);
     virtual         ~ScUndoTabProtect();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -387,9 +381,7 @@ public:
 
 private:
     SCTAB   mnTab;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScTableProtection> mpProtectSettings;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScTableProtection> mpProtectSettings;
 
     void    DoProtect(bool bProtect);
 };

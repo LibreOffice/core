@@ -369,8 +369,8 @@ private:
     void UpdateRowProgress( const CellRangeAddress& rUsedArea, sal_Int32 nRow );
 
 private:
-    typedef ::std::auto_ptr< VmlDrawing >       VmlDrawingPtr;
-    typedef ::std::auto_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
+    typedef ::std::unique_ptr< VmlDrawing >       VmlDrawingPtr;
+    typedef ::std::unique_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
 
     const OUString      maSheetCellRanges;  /// Service name for a SheetCellRanges object.
     const OUString      maUrlTextField;     /// Service name for a URL text field.

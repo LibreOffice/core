@@ -288,10 +288,8 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
 
     ScDocument* pDoc = GetScImport().GetDocument();
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDBData> pData(
+    ::std::unique_ptr<ScDBData> pData(
         new ScDBData(rName, maRange.aStart.Tab(), maRange.aStart.Col(), maRange.aStart.Row(), maRange.aEnd.Col(), maRange.aEnd.Row(), bByRow, bHasHeader));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     pData->SetAutoFilter(bAutoFilter);
     pData->SetKeepFmt(bKeepFormats);
@@ -448,9 +446,7 @@ void ScXMLDatabaseRangeContext::EndElement()
     if (meRangeType == ScDBCollection::SheetAnonymous)
     {
         OUString aName(STR_DB_LOCAL_NONAME);
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScDBData> pData(ConvertToDBData(aName));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(aName));
 
         if (pData.get())
         {
@@ -465,9 +461,7 @@ void ScXMLDatabaseRangeContext::EndElement()
     else if (meRangeType == ScDBCollection::GlobalAnonymous)
     {
         OUString aName(STR_DB_GLOBAL_NONAME);
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScDBData> pData(ConvertToDBData(aName));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(aName));
 
         if (pData.get())
         {
@@ -483,9 +477,7 @@ void ScXMLDatabaseRangeContext::EndElement()
     }
     else if (meRangeType == ScDBCollection::GlobalNamed)
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScDBData> pData(ConvertToDBData(sDatabaseRangeName));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(sDatabaseRangeName));
 
         if (pData.get())
         {

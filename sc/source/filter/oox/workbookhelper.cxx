@@ -236,28 +236,28 @@ private:
     void recalcFormulaCells();
 
 private:
-    typedef ::std::auto_ptr< ScEditEngineDefaulter >    EditEngineDefaulterPtr;
-    typedef ::std::auto_ptr< FormulaBuffer >            FormulaBufferPtr;
-    typedef ::std::auto_ptr< SegmentProgressBar >       ProgressBarPtr;
-    typedef ::std::auto_ptr< WorkbookSettings >         WorkbookSettPtr;
-    typedef ::std::auto_ptr< ViewSettings >             ViewSettingsPtr;
-    typedef ::std::auto_ptr< WorksheetBuffer >          WorksheetBfrPtr;
+    typedef ::std::unique_ptr< ScEditEngineDefaulter >    EditEngineDefaulterPtr;
+    typedef ::std::unique_ptr< FormulaBuffer >          FormulaBufferPtr;
+    typedef ::std::unique_ptr< SegmentProgressBar >     ProgressBarPtr;
+    typedef ::std::unique_ptr< WorkbookSettings >       WorkbookSettPtr;
+    typedef ::std::unique_ptr< ViewSettings >           ViewSettingsPtr;
+    typedef ::std::unique_ptr< WorksheetBuffer >        WorksheetBfrPtr;
     typedef ::boost::shared_ptr< ThemeBuffer >          ThemeBfrRef;
-    typedef ::std::auto_ptr< StylesBuffer >             StylesBfrPtr;
-    typedef ::std::auto_ptr< SharedStringsBuffer >      SharedStrBfrPtr;
-    typedef ::std::auto_ptr< ExternalLinkBuffer >       ExtLinkBfrPtr;
-    typedef ::std::auto_ptr< DefinedNamesBuffer >       DefNamesBfrPtr;
-    typedef ::std::auto_ptr< TableBuffer >              TableBfrPtr;
-    typedef ::std::auto_ptr< ScenarioBuffer >           ScenarioBfrPtr;
-    typedef ::std::auto_ptr< ConnectionsBuffer >        ConnectionsBfrPtr;
-    typedef ::std::auto_ptr< PivotCacheBuffer >         PivotCacheBfrPtr;
-    typedef ::std::auto_ptr< PivotTableBuffer >         PivotTableBfrPtr;
-    typedef ::std::auto_ptr< FormulaParser >            FormulaParserPtr;
-    typedef ::std::auto_ptr< UnitConverter >            UnitConvPtr;
-    typedef ::std::auto_ptr< AddressConverter >         AddressConvPtr;
-    typedef ::std::auto_ptr< oox::drawingml::chart::ChartConverter >      ExcelChartConvPtr;
-    typedef ::std::auto_ptr< PageSettingsConverter >    PageSettConvPtr;
-    typedef ::std::auto_ptr< BiffCodecHelper >          BiffCodecHelperPtr;
+    typedef ::std::unique_ptr< StylesBuffer >           StylesBfrPtr;
+    typedef ::std::unique_ptr< SharedStringsBuffer >    SharedStrBfrPtr;
+    typedef ::std::unique_ptr< ExternalLinkBuffer >     ExtLinkBfrPtr;
+    typedef ::std::unique_ptr< DefinedNamesBuffer >     DefNamesBfrPtr;
+    typedef ::std::unique_ptr< TableBuffer >            TableBfrPtr;
+    typedef ::std::unique_ptr< ScenarioBuffer >         ScenarioBfrPtr;
+    typedef ::std::unique_ptr< ConnectionsBuffer >      ConnectionsBfrPtr;
+    typedef ::std::unique_ptr< PivotCacheBuffer >       PivotCacheBfrPtr;
+    typedef ::std::unique_ptr< PivotTableBuffer >       PivotTableBfrPtr;
+    typedef ::std::unique_ptr< FormulaParser >          FormulaParserPtr;
+    typedef ::std::unique_ptr< UnitConverter >          UnitConvPtr;
+    typedef ::std::unique_ptr< AddressConverter >       AddressConvPtr;
+    typedef ::std::unique_ptr< oox::drawingml::chart::ChartConverter > ExcelChartConvPtr;
+    typedef ::std::unique_ptr< PageSettingsConverter >  PageSettConvPtr;
+    typedef ::std::unique_ptr< BiffCodecHelper >        BiffCodecHelperPtr;
 
     OUString            maCellStyles;           /// Style family name for cell styles.
     OUString            maPageStyles;           /// Style family name for page styles.

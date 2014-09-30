@@ -291,9 +291,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 // TODO: What's this for?
                 break;
 
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<ScDocument> pDocClip(new ScDocument(SCDOCMODE_CLIP));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<ScDocument> pDocClip(new ScDocument(SCDOCMODE_CLIP));
 
             // Check for geometrical feasibility of the ranges.
             bool bValidRanges = true;
@@ -849,9 +847,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     ScDocShellRef aTransShellRef;   // for objects in xTransClip - must remain valid as long as xTransClip
     ScDocument* pOrigClipDoc = NULL;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ScDocument > xTransClip;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< ScDocument > xTransClip;
     if ( bTranspose )
     {
         SCCOL nX;
@@ -1412,9 +1408,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
             return false;
         }
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScDocument> pTransClip(new ScDocument(SCDOCMODE_CLIP));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<ScDocument> pTransClip(new ScDocument(SCDOCMODE_CLIP));
         pClipDoc->TransposeClip(pTransClip.get(), nFlags, bAsLink);
         pClipDoc = pTransClip.release();
         SCCOL nTempColSize = nColSize;
@@ -1470,9 +1464,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
             return false;
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDocument> pUndoDoc;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScDocument> pUndoDoc;
     if (pDoc->IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
@@ -1480,9 +1472,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         pDoc->CopyToDocument(aMarkedRange, nUndoFlags, false, pUndoDoc.get(), &aMark, true);
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDocument> pMixDoc;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScDocument> pMixDoc;
     if ( bSkipEmpty || nFunction )
     {
         if ( nFlags & IDF_CONTENTS )
@@ -1620,9 +1610,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
             return false;
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<ScDocument> pUndoDoc;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<ScDocument> pUndoDoc;
     if (pDoc->IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));

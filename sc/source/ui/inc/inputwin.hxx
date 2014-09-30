@@ -285,7 +285,7 @@ protected:
     bool IsPointerAtResizePos();
 private:
     ScPosWnd        aWndPos;
-    std::auto_ptr<ScTextWndBase> pRuntimeWindow;
+    std::unique_ptr<ScTextWndBase> pRuntimeWindow;
     ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;
     OUString        aTextOk;

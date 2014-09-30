@@ -60,7 +60,7 @@ using com::sun::star::container::XNameContainer;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
 
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 using ::std::vector;
 
 //  former viewfunc/dbfunc methods
@@ -891,10 +891,8 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
 
             if (bRecord)
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                auto_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
-                auto_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                unique_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
+                unique_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
                 GetUndoManager()->AddUndoAction(
                         new ScUndoCopyTab(this, pSrcList.release(), pDestList.release()));
             }
@@ -961,10 +959,8 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
         }
         else if (bRecord)
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            auto_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
-            auto_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            unique_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
+            unique_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
             GetUndoManager()->AddUndoAction(
                     new ScUndoMoveTab(this, pSrcList.release(), pDestList.release()));
         }

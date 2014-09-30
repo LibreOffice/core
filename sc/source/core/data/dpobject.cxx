@@ -68,12 +68,14 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
+#include <o3tl/ptr_container.hxx>
 #include <sal/macros.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 
+#include <utility>
 #include <vector>
 #include <memory>
 
@@ -2385,9 +2387,9 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
 
     for (sal_Int32 nDim = 0; nDim < nDimCount; ++nDim)
     {
-        std::auto_ptr<ScDPLabelData> pNewLabel(new ScDPLabelData);
+        std::unique_ptr<ScDPLabelData> pNewLabel(new ScDPLabelData);
         FillLabelDataForDimension(xDims, nDim, *pNewLabel);
-        rParam.maLabelArray.push_back(pNewLabel);
+        o3tl::ptr_container::push_back(rParam.maLabelArray, std::move(pNewLabel));
     }
 
     return true;
@@ -2866,9 +2868,7 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     }
 
     // Not cached.  Create a new cache.
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     pCache->InitFromDoc(mpDoc, rRange);
     if (pDimData)
         pDimData->WriteToCache(*pCache);
@@ -2890,7 +2890,7 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     }
 
     const ScDPCache* p = pCache.get();
-    maCaches.insert(nIndex, pCache);
+    o3tl::ptr_container::insert(maCaches, nIndex, std::move(pCache));
     return p;
 }
 
@@ -3037,15 +3037,13 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(
         // already cached.
         return itr->second;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     pCache->InitFromDoc(mpDoc, rRange);
     if (pDimData)
         pDimData->WriteToCache(*pCache);
 
     const ScDPCache* p = pCache.get();
-    maCaches.insert(rName, pCache);
+    o3tl::ptr_container::insert(maCaches, rName, std::move(pCache));
     return p;
 }
 
@@ -3126,9 +3124,7 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
     if (!xRowSet.is())
         return NULL;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     SvNumberFormatter aFormat( comphelper::getProcessComponentContext(), ScGlobal::eLnge);
     DBConnector aDB(*pCache, xRowSet, *aFormat.GetNullDate());
     if (!aDB.isValid())
@@ -3146,7 +3142,7 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
 
     ::comphelper::disposeComponent(xRowSet);
     const ScDPCache* p = pCache.get();
-    maCaches.insert(aType, pCache);
+    o3tl::ptr_container::insert(maCaches, aType, std::move(pCache));
     return p;
 }
 
@@ -3500,10 +3496,10 @@ void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
         ScAddress& e = aOutRange.aEnd;
         s.SetTab(nNew);
         e.SetTab(nNew);
-        std::auto_ptr<ScDPObject> pNew(new ScDPObject(rObj));
+        std::unique_ptr<ScDPObject> pNew(new ScDPObject(rObj));
         pNew->SetOutRange(aOutRange);
         mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
-        aAdded.push_back(pNew);
+        o3tl::ptr_container::push_back(aAdded, std::move(pNew));
     }
 
     maTables.transfer(maTables.end(), aAdded.begin(), aAdded.end(), aAdded);

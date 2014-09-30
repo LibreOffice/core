@@ -139,7 +139,7 @@ public:
     OUString     importMacroName( const OUString& rFormulaString );
 
 private:
-    ::std::auto_ptr< FormulaParserImpl > mxImpl;
+    ::std::unique_ptr< FormulaParserImpl > mxImpl;
 };
 
 } // namespace xls

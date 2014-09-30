@@ -13,10 +13,40 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <utility>
 
 // Some glue for using std::unique_ptr with the Boost Pointer Container Library:
 
 namespace o3tl { namespace ptr_container {
+
+template<typename C, typename T> inline std::pair<typename C::iterator, bool>
+insert(C & container, std::unique_ptr<T> && element) {
+    std::pair<typename C::iterator, bool> r(container.insert(element.get()));
+    element.release();
+    return r;
+}
+
+template<typename C, typename T> inline std::pair<typename C::iterator, bool>
+insert(
+    C & container, typename C::key_type const & key,
+    std::unique_ptr<T> && element)
+{
+    // At least Boost <= 1.56.0 boost::ptr_map_adaptor has odd key const-ness
+    // discrepancy between
+    //
+    //   std::pair<iterator,bool> insert( key_type& k, T* x )
+    //
+    // and
+    //
+    //   template< class U >
+    //   std::pair<iterator,bool> insert( const key_type& k,
+    //                                    std::auto_ptr<U> x )
+    std::pair<typename C::iterator, bool> r(
+        container.insert(
+            const_cast<typename C::key_type &>(key), element.get()));
+    element.release();
+    return r;
+}
 
 template<typename C, typename T>
 inline void push_back(C & container, std::unique_ptr<T> && element) {

@@ -44,7 +44,7 @@ private:
     void                importDataValidation( SequenceInputStream& rStrm );
 
 private:
-    ::std::auto_ptr< ValidationModel > mxValModel;
+    ::std::unique_ptr< ValidationModel > mxValModel;
 };
 
 class WorksheetFragment : public WorksheetFragmentBase

@@ -3522,7 +3522,7 @@ void Test::testCopyPasteTranspose()
     ScDocument aNewClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aSrcRange, &aNewClipDoc);
 
-    ::std::auto_ptr<ScDocument> pTransClip;
+    ::std::unique_ptr<ScDocument> pTransClip;
     pTransClip.reset(new ScDocument(SCDOCMODE_CLIP));
     aNewClipDoc.TransposeClip(pTransClip.get(), IDF_ALL, false);
     ScDocument* pTransposedClip = pTransClip.release();

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include "editsrc.hxx"
 
 #include "scitems.hxx"
@@ -238,23 +242,19 @@ void ScSimpleEditSource::UpdateData()
     //  nothing
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-ScAccessibilityEditSource::ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData )
-    : mpAccessibleTextData(pAccessibleCellTextData)
+ScAccessibilityEditSource::ScAccessibilityEditSource( ::std::unique_ptr < ScAccessibleTextData > && pAccessibleCellTextData )
+    : mpAccessibleTextData(std::move(pAccessibleCellTextData))
 {
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 ScAccessibilityEditSource::~ScAccessibilityEditSource()
 {
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvxEditSource* ScAccessibilityEditSource::Clone() const
 {
-    return new ScAccessibilityEditSource(::std::auto_ptr < ScAccessibleTextData > (mpAccessibleTextData->Clone()));
+    return new ScAccessibilityEditSource(::std::unique_ptr < ScAccessibleTextData > (mpAccessibleTextData->Clone()));
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 SvxTextForwarder* ScAccessibilityEditSource::GetTextForwarder()
 {

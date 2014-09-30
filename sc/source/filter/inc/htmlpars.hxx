@@ -464,12 +464,12 @@ protected:
     void                RecalcDocPos( const ScHTMLPos& rBasePos );
 
 private:
-    typedef ::std::auto_ptr< ScHTMLTableMap >           ScHTMLTableMapPtr;
-    typedef ::std::auto_ptr< SfxItemSet >               SfxItemSetPtr;
+    typedef ::std::unique_ptr< ScHTMLTableMap >         ScHTMLTableMapPtr;
+    typedef ::std::unique_ptr< SfxItemSet >             SfxItemSetPtr;
     typedef ::std::vector< SCCOLROW >                   ScSizeVec;
     typedef ::std::list< ScHTMLEntry* >                 ScHTMLEntryList;
     typedef ::std::map< ScHTMLPos, ScHTMLEntryList >    ScHTMLEntryMap;
-    typedef ::std::auto_ptr< ScHTMLEntry >              ScHTMLEntryPtr;
+    typedef ::std::unique_ptr< ScHTMLEntry >            ScHTMLEntryPtr;
 
     /** Returns true, if the current cell does not contain an entry yet. */
     bool                IsEmptyCell() const;
@@ -632,7 +632,7 @@ private:
     DECL_LINK( HTMLImportHdl, const ImportInfo* );
 
 private:
-    typedef ::std::auto_ptr< ScHTMLGlobalTable >    ScHTMLGlobalTablePtr;
+    typedef ::std::unique_ptr< ScHTMLGlobalTable >    ScHTMLGlobalTablePtr;
 
     OUStringBuffer maTitle;            /// The title of the document.
     ScHTMLGlobalTablePtr mxGlobTable;       /// Contains the entire imported document.

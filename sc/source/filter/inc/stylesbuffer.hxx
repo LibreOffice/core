@@ -672,7 +672,7 @@ public:
     const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );
 
 private:
-    typedef ::std::auto_ptr< ::ScPatternAttr > ScPatternAttrPtr;
+    typedef ::std::unique_ptr< ::ScPatternAttr > ScPatternAttrPtr;
 
     ScPatternAttrPtr    mpPattern;          /// Calc item set.
 

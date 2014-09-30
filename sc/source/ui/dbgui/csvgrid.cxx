@@ -1349,7 +1349,7 @@ void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
 
 ScAccessibleCsvControl* ScCsvGrid::ImplCreateAccessible()
 {
-    std::auto_ptr<ScAccessibleCsvControl> pControl(new ScAccessibleCsvGrid( *this ));
+    std::unique_ptr<ScAccessibleCsvControl> pControl(new ScAccessibleCsvGrid( *this ));
     pControl->Init();
     return pControl.release();
 }

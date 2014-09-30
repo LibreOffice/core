@@ -149,8 +149,8 @@ public:
     sal_uInt32   GetStorageId() const { return mnStorageId; }
 
 private:
-    typedef ::std::auto_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
-    typedef ::std::auto_ptr< ScTokenArray >       TokenArrayPtr;
+    typedef ::std::unique_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
+    typedef ::std::unique_ptr< ScTokenArray >       TokenArrayPtr;
 
     XclImpCachedMatrixPtr mxDdeMatrix;      /// Cached results of the DDE link.
     MOper*              mpMOper;            /// Cached values for OLE link
@@ -219,7 +219,7 @@ public:
     const OUString&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
 
 private:
-    typedef ::std::auto_ptr< XclImpLinkManagerImpl > XclImpLinkMgrImplPtr;
+    typedef ::std::unique_ptr< XclImpLinkManagerImpl > XclImpLinkMgrImplPtr;
     XclImpLinkMgrImplPtr mxImpl;
 };
 

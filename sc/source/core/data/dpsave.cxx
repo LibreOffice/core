@@ -53,7 +53,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::sheet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 
 #define SC_DPSAVEMODE_DONTKNOW 2
 
@@ -1360,7 +1360,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
                 // this member instance already exists. nothing to do.
                 continue;
 
-            auto_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(aMemName));
+            unique_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(aMemName));
             pNewMember->SetIsVisible(true);
             iter->AddMember(pNewMember.release());
         }

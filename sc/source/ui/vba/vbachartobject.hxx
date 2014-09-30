@@ -43,9 +43,7 @@ class ScVbaChartObject : public ChartObjectImpl_BASE
     css::uno::Reference< css::drawing::XShape > xShape;
     css::uno::Reference< css::container::XNamed > xNamed;
     OUString sPersistName;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<ov::ShapeHelper> oShapeHelper;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr<ov::ShapeHelper> oShapeHelper;
     css::uno::Reference< css::container::XNamed > xNamedShape;
     OUString getPersistName();
     css::uno::Reference< css::drawing::XShape > setShape() throw ( css::script::BasicErrorException );

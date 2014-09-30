@@ -53,7 +53,7 @@
 using namespace com::sun::star;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::std::vector;
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 using ::boost::unordered_map;
 
 // STATIC DATA -----------------------------------------------------------
@@ -438,7 +438,7 @@ private:
 void ScGridWindow::DPLaunchFieldPopupMenu(
     const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj)
 {
-    auto_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
+    unique_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
     sal_uInt16 nOrient;
     pDPData->mnDim = pDPObj->GetHeaderDim(rPos, nOrient);
 

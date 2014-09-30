@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <utility>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
@@ -74,6 +75,7 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 
+#include <o3tl/ptr_container.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
@@ -122,7 +124,7 @@ using ::formula::FormulaToken;
 using ::formula::StackVar;
 using ::boost::shared_ptr;
 using ::std::pair;
-using ::std::auto_ptr;
+using ::std::unique_ptr;
 
 namespace cssc = ::com::sun::star::chart;
 namespace cssc2 = ::com::sun::star::chart2;
@@ -2102,12 +2104,10 @@ void XclImpChSeries::ReadChSerTrendLine( XclImpStream& rStrm )
 
 void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<XclImpChSerErrorBar> pErrorBar(new XclImpChSerErrorBar(GetChRoot()));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    unique_ptr<XclImpChSerErrorBar> pErrorBar(new XclImpChSerErrorBar(GetChRoot()));
     pErrorBar->ReadChSerErrorBar(rStrm);
     sal_uInt8 nBarType = pErrorBar->GetBarType();
-    maErrorBars.insert(nBarType, pErrorBar);
+    o3tl::ptr_container::insert(maErrorBars, nBarType, std::move(pErrorBar));
 }
 
 XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
@@ -2763,19 +2763,15 @@ void XclImpChTypeGroup::ReadChDropBar( XclImpStream& rStrm )
 {
     if (maDropBars.find(EXC_CHDROPBAR_UP) == maDropBars.end())
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        unique_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
         p->ReadRecordGroup(rStrm);
-        maDropBars.insert(EXC_CHDROPBAR_UP, p);
+        o3tl::ptr_container::insert(maDropBars, EXC_CHDROPBAR_UP, std::move(p));
     }
     else if(maDropBars.find(EXC_CHDROPBAR_DOWN) == maDropBars.end())
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        unique_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
         p->ReadRecordGroup(rStrm);
-        maDropBars.insert(EXC_CHDROPBAR_DOWN, p);
+        o3tl::ptr_container::insert(maDropBars, EXC_CHDROPBAR_DOWN, std::move(p));
     }
 }
 
@@ -3814,11 +3810,9 @@ void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
     sal_uInt16 nTextId = rStrm.ReaduInt16();
     if( (rStrm.GetNextRecId() == EXC_ID_CHTEXT) && rStrm.StartNextRecord() )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr<XclImpChText> pText(new XclImpChText(GetChRoot()));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        unique_ptr<XclImpChText> pText(new XclImpChText(GetChRoot()));
         pText->ReadRecordGroup(rStrm);
-        maDefTexts.insert(nTextId, pText);
+        o3tl::ptr_container::insert(maDefTexts, nTextId, std::move(pText));
     }
 }
 
@@ -3966,16 +3960,12 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
     ScDocument& rDoc = GetRoot().GetDoc();
     if( ScChartListenerCollection* pChartCollection = rDoc.GetChartListenerCollection() )
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< ::std::vector< ScTokenRef > > xRefTokens( new ::std::vector< ScTokenRef > );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< ::std::vector< ScTokenRef > > xRefTokens( new ::std::vector< ScTokenRef > );
         for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end(); aIt != aEnd; ++aIt )
             (*aIt)->FillAllSourceLinks( *xRefTokens );
         if( !xRefTokens->empty() )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, xRefTokens.release() ) );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, xRefTokens.release() ) );
             xListener->SetUsed( true );
             xListener->StartListeningTo();
             pChartCollection->insert( xListener.release() );
