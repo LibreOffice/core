@@ -654,7 +654,9 @@ protected:
         uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
         boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
-        return parseXmlStream(pStream.get());
+        xmlDocPtr pXmlDoc = parseXmlStream(pStream.get());
+        pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(maTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
+        return pXmlDoc;
     }
 
     /**
