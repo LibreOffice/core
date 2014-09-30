@@ -174,6 +174,15 @@ class UnoInProcess:
     def getDoc(self):
         return self.xDoc
     def setUp(self):
+        # set UserInstallation to user profile dir in test/user-template:
+        path = os.getenv("WORKDIR")
+        if os.name == "nt":
+            # do not quote drive letter - it must be "X:"
+            url = "file:///" + path
+        else:
+            url = "file://" + quote(path)
+        os.putenv("UserInstallation", url + "/unittest")
+
         self.xContext = pyuno.getComponentContext()
         pyuno.private_initTestEnvironment()
     def openEmptyWriterDoc(self):
@@ -195,6 +204,22 @@ class UnoInProcess:
         path = os.getenv("TDOC")
         if os.name == "nt":
             # do not quote drive letter - it must be "X:"
+            url = "file:///" + path + "/" + quote(file)
+        else:
+            url = "file://" + quote(path) + "/" + quote(file)
+        self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
+        assert(self.xDoc)
+        return self.xDoc
+
+    def openBaseDoc(self, file):
+        assert(self.xContext)
+        smgr = self.getContext().ServiceManager
+        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
+        props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", False)]
+        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
+        path = os.getenv("TDOC")
+        if os.name == "nt":
+            #do not quote drive letter - it must be "X:"
             url = "file:///" + path + "/" + quote(file)
         else:
             url = "file://" + quote(path) + "/" + quote(file)
