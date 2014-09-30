@@ -49,7 +49,22 @@ public class LOKitTileProvider implements TileProvider {
             for (int i = 0; i < parts; i++) {
                 String partName = mDocument.getPartName(i);
                 if (partName.isEmpty()) {
-                    partName = "Part " + (i + 1);
+                    switch (mDocument.getDocumentType()) {
+                        case Document.DOCTYPE_DRAWING:
+                        case Document.DOCTYPE_TEXT:
+                            partName = "Page " + (i + 1);
+                            break;
+                        case Document.DOCTYPE_SPREADSHEET:
+                            partName = "Sheet " + (i + 1);
+                            break;
+                        case Document.DOCTYPE_PRESENTATION:
+                            partName = "Slide " + (i + 1);
+                            break;
+                        case Document.DOCTYPE_OTHER:
+                        default:
+                            partName = "Part " + (i + 1);
+                            break;
+                    }
                 }
                 Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
                 final DocumentPartView partView = new DocumentPartView(i, partName);
