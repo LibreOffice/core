@@ -45,7 +45,7 @@ extern "C"
 {
 BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt )
 {
-    return tools::PolyPolygon( hDC, ppt, npcnt, ncnt );
+    return PolyPolygon( hDC, ppt, npcnt, ncnt );
 }
 }
 
