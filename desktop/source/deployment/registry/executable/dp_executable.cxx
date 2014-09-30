@@ -86,7 +86,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void revokeEntryFromDb(OUString const & url);
 
     Reference<deployment::XPackageTypeInfo> m_xExecutableTypeInfo;
-    std::auto_ptr<ExecutableBackendDb> m_backendDb;
+    std::unique_ptr<ExecutableBackendDb> m_backendDb;
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );

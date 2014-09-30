@@ -111,7 +111,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     const Reference<deployment::XPackageTypeInfo> m_xHelpTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
-    std::auto_ptr<HelpBackendDb> m_backendDb;
+    std::unique_ptr<HelpBackendDb> m_backendDb;
 
 public:
     BackendImpl( Sequence<Any> const & args,

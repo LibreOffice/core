@@ -1332,8 +1332,8 @@ struct ExecuteGlobals
     Reference < css::document::XDocumentEventListener > xGlobalBroadcaster;
     bool bRestartRequested;
     bool bUseSystemFileDialog;
-    std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
-    std::auto_ptr<SvtPathOptions> pPathOptions;
+    std::unique_ptr<SvtLanguageOptions> pLanguageOptions;
+    std::unique_ptr<SvtPathOptions> pPathOptions;
 
     ExecuteGlobals()
     : bRestartRequested( false )

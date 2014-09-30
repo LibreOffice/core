@@ -240,7 +240,7 @@ class BackendImpl : public ImplBaseT
     const Reference<deployment::XPackageTypeInfo> m_xLegacyBundleTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
 
-    std::auto_ptr<ExtensionBackendDb> m_backendDb;
+    std::unique_ptr<ExtensionBackendDb> m_backendDb;
 
     void addDataToDb(OUString const & url, ExtensionBackendDb::Data const & data);
     ExtensionBackendDb::Data readDataFromDb(OUString const & url);

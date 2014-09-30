@@ -46,6 +46,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <list>
 #include <memory>
+#include <utility>
 
 #include "dp_configurationbackenddb.hxx"
 
@@ -103,7 +104,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     bool m_configmgrini_inited;
     bool m_configmgrini_modified;
-    std::auto_ptr<ConfigurationBackendDb> m_backendDb;
+    std::unique_ptr<ConfigurationBackendDb> m_backendDb;
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
@@ -113,7 +114,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
 #if HAVE_FEATURE_EXTENSIONS
     // for backwards compatibility - nil if no (compatible) back-compat db present
-    ::std::auto_ptr<PersistentMap> m_registeredPackages;
+    ::std::unique_ptr<PersistentMap> m_registeredPackages;
 #endif
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -218,9 +219,7 @@ BackendImpl::BackendImpl(
         configmgrini_verify_init( xCmdEnv );
 
 #if HAVE_FEATURE_EXTENSIONS
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<PersistentMap> pMap;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<PersistentMap> pMap;
         OUString aCompatURL( makeURL( getCachePath(), "registered_packages.pmap" ) );
 
         // Don't create it if it doesn't exist already
@@ -228,9 +227,7 @@ BackendImpl::BackendImpl(
         {
             try
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                pMap = ::std::auto_ptr<PersistentMap>( new PersistentMap( aCompatURL, false ) );
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                pMap.reset( new PersistentMap( aCompatURL, false ) );
             }
             catch (const Exception &e)
             {
@@ -240,7 +237,7 @@ BackendImpl::BackendImpl(
                 dp_misc::writeConsole( aStr.getStr() );
             }
         }
-        m_registeredPackages = pMap;
+        m_registeredPackages = std::move(pMap);
 #endif
      }
 }

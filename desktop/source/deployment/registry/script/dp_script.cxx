@@ -93,7 +93,7 @@ class BackendImpl : public t_helper
     const Reference<deployment::XPackageTypeInfo> m_xBasicLibTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xDialogLibTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
-    std::auto_ptr<ScriptBackendDb> m_backendDb;
+    std::unique_ptr<ScriptBackendDb> m_backendDb;
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );

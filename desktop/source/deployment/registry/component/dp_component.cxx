@@ -292,7 +292,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     OUString m_commonRDB_orig;
     OUString m_nativeRDB_orig;
 
-    std::auto_ptr<ComponentBackendDb> m_backendDb;
+    std::unique_ptr<ComponentBackendDb> m_backendDb;
 
     void addDataToDb(OUString const & url, ComponentBackendDb::Data const & data);
     ComponentBackendDb::Data readDataFromDb(OUString const & url);

@@ -31,7 +31,7 @@ namespace migration
 
 
     typedef ::std::vector< OUString > TStringVector;
-    typedef ::std::auto_ptr< TStringVector > TStringVectorPtr;
+    typedef ::std::unique_ptr< TStringVector > TStringVectorPtr;
 
 
 }   // namespace migration

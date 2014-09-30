@@ -51,7 +51,7 @@ struct install_info
 };
 
 typedef std::vector< OUString > strings_v;
-typedef std::auto_ptr< strings_v > strings_vr;
+typedef std::unique_ptr< strings_v > strings_vr;
 
 struct migration_step
 {
@@ -73,7 +73,7 @@ struct supported_migration
 };
 
 typedef std::vector< migration_step > migrations_v;
-typedef std::auto_ptr< migrations_v > migrations_vr;
+typedef std::unique_ptr< migrations_v > migrations_vr;
 typedef std::vector< supported_migration > migrations_available;
 
 
