@@ -95,9 +95,7 @@ namespace framework
             virtual sal_Bool SAL_CALL isReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         private:
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<ImageManagerImpl>                                               m_pImpl;
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<ImageManagerImpl>                                               m_pImpl;
    };
 }
 
