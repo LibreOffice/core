@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa0d59b9_4a1d930e",
+        "filename": "svtools/source/contnr/treelistbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000464
+      },
+      "writtenOn": "2014-09-30T20:00:10Z",
+      "side": 1,
+      "message": "No, because if we want to set alternating row color, we will call SetAlternatingRow( true ) where the exist rows will be set alternating colors. So if we insert a row then the previous row is set correctly.",
+      "parentUuid": "fa0d59b9_ea2b2732",
+      "revId": "a57f2d071aee0d65478595172481bf1dfe2c947f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0d59b9_ca3063a1",
         "filename": "vcl/source/app/settings.cxx",
         "patchSetId": 3
