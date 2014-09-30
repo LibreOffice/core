@@ -63,6 +63,8 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
             int bReadNewDoc )
     : SvRTFParser( rIn, 5 )
     , rStrm(rIn)
+    , aPlainMap(rPool)
+    , aPardMap(rPool)
     , pInsPos( 0 )
     , pAttrPool( &rPool )
     , m_xDocProps( i_xDocProps )
@@ -79,17 +81,6 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
     , bIsLeftToRightDef( true)
     , bIsInReadStyleTab( false)
 {
-
-    {
-        RTFPlainAttrMapIds aTmp( rPool );
-        aPlainMap.insert( aPlainMap.begin(), (sal_uInt16*)&aTmp,
-                (sal_uInt16*)&aTmp + (sizeof( RTFPlainAttrMapIds ) / sizeof(sal_uInt16)) );
-    }
-    {
-        RTFPardAttrMapIds aTmp( rPool );
-        aPardMap.insert( aPardMap.begin(), (sal_uInt16*)&aTmp,
-                (sal_uInt16*)&aTmp + (sizeof( RTFPardAttrMapIds ) / sizeof(sal_uInt16)) );
-    }
     pDfltFont = new vcl::Font;
     pDfltColor = new Color;
 }
@@ -821,8 +812,7 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
     if( it == aFontTbl.end() )
     {
         const SvxFontItem& rDfltFont = (const SvxFontItem&)
-                        pAttrPool->GetDefaultItem(
-                    ((RTFPlainAttrMapIds*)&aPlainMap[0])->nFont );
+                        pAttrPool->GetDefaultItem( aPlainMap.nFont );
         pDfltFont->SetName( rDfltFont.GetStyleName() );
         pDfltFont->SetFamily( rDfltFont.GetFamily() );
         pFont = pDfltFont;
@@ -965,10 +955,10 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                         pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
 
                         // Delete all paragraph attributes from pNew
-                        for( sal_uInt16 n = 0; n < aPardMap.size() &&
+                        for( sal_uInt16 n = 0; n < (sizeof(aPardMap) / sizeof(sal_uInt16)) &&
                                             pNew->aAttrSet.Count(); ++n )
-                            if( aPardMap[n] )
-                                pNew->aAttrSet.ClearItem( aPardMap[n] );
+                            if( reinterpret_cast<sal_uInt16*>(&aPardMap)[n] )
+                                pNew->aAttrSet.ClearItem( reinterpret_cast<sal_uInt16*>(&aPardMap)[n] );
                         pNew->SetRTFDefaults( GetRTFDefaults() );
 
                         // Were there any?
@@ -1100,7 +1090,7 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
             SetAttrSet( (*rSet.pChildList)[ n ] );
 }
 
-    // Has no Text been inserted yet? (SttPos from the top Stack entry!)
+// Has no text been inserted yet? (SttPos from the top Stack entry!)
 bool SvxRTFParser::IsAttrSttPos()
 {
     SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
@@ -1118,11 +1108,11 @@ void SvxRTFParser::BuildWhichTbl()
     aWhichMap.clear();
     aWhichMap.push_back( 0 );
 
-    // Building a Which-Map 'rWhichMap' from an Array of
-    // 'pWhichIds' frm Which-Ids. It has the long 'nWhichIds'.
+    // Building a Which-Map 'rWhichMap' from an array of
+    // 'pWhichIds' from Which-Ids. It has the long 'nWhichIds'.
     // The Which-Map is not going to be deleted.
-    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)&aPardMap[0], aPardMap.size() );
-    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)&aPlainMap[0], aPlainMap.size() );
+    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)&aPardMap, sizeof(aPardMap) / sizeof(sal_uInt16) );
+    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)&aPlainMap, sizeof(aPlainMap) / sizeof(sal_uInt16) );
 }
 
 const SfxItemSet& SvxRTFParser::GetRTFDefaults()
@@ -1131,7 +1121,7 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
     {
         pRTFDefaults = new SfxItemSet( *pAttrPool, &aWhichMap[0] );
         sal_uInt16 nId;
-        if( 0 != ( nId = ((RTFPardAttrMapIds*)&aPardMap[0])->nScriptSpace ))
+        if( 0 != ( nId = aPardMap.nScriptSpace ))
         {
             SvxScriptSpaceItem aItem( false, nId );
             if( bNewDoc )

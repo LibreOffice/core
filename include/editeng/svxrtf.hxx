@@ -100,7 +100,7 @@ struct SvxRTFStyleType
 
 
 // Here are the IDs for all character attributes, which can be detected by
-// SvxParser and can be set in a SfxItemSet. The IDs are set correctly throught
+// SvxParser and can be set in a SfxItemSet. The IDs are set correctly through
 // the SlotIds from POOL.
 struct RTFPlainAttrMapIds
 {
@@ -143,7 +143,7 @@ struct RTFPlainAttrMapIds
 };
 
 // Here are the IDs for all paragraph attributes, which can be detected by
-// SvxParser and can be set in a SfxItemSet. The IDs are set correctly throught
+// SvxParser and can be set in a SfxItemSet. The IDs are set correctly through
 // the SlotIds from POOL.
 struct RTFPardAttrMapIds
 {
@@ -182,8 +182,8 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     SvxRTFItemStack aAttrStack;
     SvxRTFItemStackList aAttrSetList;
 
-    std::vector<sal_uInt16> aPlainMap;
-    std::vector<sal_uInt16> aPardMap;
+    RTFPlainAttrMapIds aPlainMap;
+    RTFPardAttrMapIds aPardMap;
     std::vector<sal_uInt16> aWhichMap;
     OUString  sBaseURL;
 
@@ -309,11 +309,6 @@ protected:
 
     long GetVersionNo() const           { return nVersionNo; }
 
-    // Query/Set the mapping IDs for the Pard/Plain attributes
-    //(Set: It is noted in the pointers, which thus does not create a copy)
-    void AddPardAttr( sal_uInt16 nWhich ) { aPardMap.push_back( nWhich ); }
-    void AddPlainAttr( sal_uInt16 nWhich ) { aPlainMap.push_back( nWhich ); }
-
     SvxRTFStyleTbl& GetStyleTbl()               { return aStyleTbl; }
     SvxRTFItemStack& GetAttrStack()             { return aAttrStack; }
     SvxRTFColorTbl& GetColorTbl()               { return aColorTbl; }
@@ -334,10 +329,8 @@ public:
     // The maps are not generated anew!
     void SetAttrPool( SfxItemPool* pNewPool )   { pAttrPool = pNewPool; }
     // to set different WhichIds for a different pool.
-    RTFPardAttrMapIds& GetPardMap()
-                        { return (RTFPardAttrMapIds&)*aPardMap.begin(); }
-    RTFPlainAttrMapIds& GetPlainMap()
-                        { return (RTFPlainAttrMapIds&)*aPlainMap.begin(); }
+    RTFPardAttrMapIds& GetPardMap() { return aPardMap; }
+    RTFPlainAttrMapIds& GetPlainMap() { return aPlainMap; }
     // to be able to assign them from the outside as for example table cells
     void ReadBorderAttr( int nToken, SfxItemSet& rSet, int bTableDef=sal_False );
     void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, int bTableDef=sal_False  );
