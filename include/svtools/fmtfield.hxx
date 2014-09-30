@@ -36,9 +36,7 @@ typedef sal_uInt16 FORMAT_CHANGE_TYPE;
 class SVT_DLLPUBLIC FormattedField : public SpinField
 {
 private:
-    // Da ein SvNumberFormatter eine ziemlich teure (sowohl zeit- als auch platz-maessig) Angelegenheit ist,
-    // haelt sich nicht jedes Field, an dem kein Formatter gesetzt wurde, eine eigenen Instanz, sondern es gibt nur eine
-    // einzige statische.
+    // A SvNumberFormatter is very expensive (regarding time and space), it is a Singleton
     class StaticFormatter
     {
         static SvNumberFormatter*   s_cFormatter;
@@ -53,8 +51,8 @@ private:
 
 protected:
     OUString      m_sLastValidText;
-        // hat nichts mit dem current value zu tun, ist der letzte Text, der waehrend einer Eingabe als gueltig erkannt
-        // wurde (also durch CheckText geprueft, nicht durch den Formatter gejagt)
+    // Has nothing to do with the current value. It is the last text, which was valid at input (checked by CheckText,
+    // not yet through formatter)
     Selection   m_aLastSelection;
 
     double              m_dMinValue;
@@ -79,16 +77,14 @@ protected:
     double              m_dSpinFirst;
     double              m_dSpinLast;
 
-    // es macht einen Unterschied, ob man bei eingestellter Textformatierung beim LostFocus den aktuellen String durch
-    // den Formatter jagt und das Ergebnis anzeigt oder erst aus dem String ein double macht, das formatiert und dann
-    // ausgibt
+    // There is a difference, when text formatting is enabled, if LostFocus fotmattes the curent String and display it,
+    // or if a double is created from the String and then
     bool                m_bTreatAsNumber;
-    // und mit den folgenden Members koennen wir das Ganze hier auch zur formatierten Text-Ausgabe benutzen ...
+    // And with the following members we can use it for formatted text output as well ...
     OUString            m_sCurrentTextValue;
     OUString            m_sDefaultText;
 
-    // die bei der letzten Ausgabe-Operation vom Formatter gelieferte Farbe (nicht dass wir sie beachten wuerden, aber
-    // man kann sie von aussen abfragen)
+    // The last color from the Formatter at the last output operation (not we would use it, but you can get it)
     Color*              m_pLastOutputColor;
 
     bool                m_bUseInputStringForFormatting;
@@ -97,7 +93,7 @@ public:
     FormattedField(vcl::Window* pParent, WinBits nStyle = 0, SvNumberFormatter* pInitialFormatter = NULL, sal_Int32 nFormatKey = 0);
     virtual ~FormattedField();
 
-    // Min-/Max-Verwaltung
+    // Min-/Max-management
     bool    HasMinValue() const         { return m_bHasMin; }
     void    ClearMinValue()             { m_bHasMin = false; }
     void    SetMinValue(double dMin);
@@ -108,33 +104,32 @@ public:
     void    SetMaxValue(double dMax);
     double  GetMaxValue() const         { return m_dMaxValue; }
 
-    // aktueller Wert
+    // Current value
     virtual void    SetValue(double dVal);
     virtual double  GetValue();
-        // die Standard-Implementierung jagt die Eingabe jeweils durch den Formatter, so einer vorhanden ist
+    // The default implementation uses a formatter, if available
 
     void    GetColor() const;
 
     void    SetTextValue(const OUString& rText);
-        // der String wird in ein double umgewandelt (durch den Formatter) und anschliessen in SetValue gesteckt
+    // The String is transformed to a double (with a formatter) and SetValue is called afterwards
 
     bool    IsEmptyFieldEnabled() const         { return m_bEnableEmptyField; }
     void    EnableEmptyField(bool bEnable);
-        // wenn nicht enabled, wird beim Verlassen des Feldes der Text auf den letzten gueltigen zurueckgesetzt
+    // If disabled, the value will be resetted to the last valid value on leave
 
     void    SetDefaultValue(double dDefault)    { m_dDefaultValue = dDefault; m_bValueDirty = true; }
-        // wenn der aktuelle String ungueltig ist, liefert GetValue() diesen Default-Wert
+    // If the current String is invalid, GetValue() returns this value
     double  GetDefaultValue() const             { return m_dDefaultValue; }
 
-    // Einstellungen fuer das Format
+    // Settings for the format
     sal_uLong   GetFormatKey() const                { return m_nFormatKey; }
     void    SetFormatKey(sal_uLong nFormatKey);
 
     SvNumberFormatter*  GetFormatter() const    { return m_pFormatter; }
     void    SetFormatter(SvNumberFormatter* pFormatter, bool bResetFormat = true);
-        // wenn bResetFormat sal_False ist, wird versucht, das alte eingestellte Format mit 'hinueberzuretten' (teuer, wenn es sich nicht
-        // um eines der Standard-Formate handelt, die in allen Formattern gleich sind)
-        // wenn sal_True, wird als neuer FormatKey 0 gesetzt
+    // If bResetFormat is sal_False, the old format is tried to be kept. (expensive, if it is no default format, available in all formatters)
+    // If sal_True, the new FormatKey is set to zero
 
     bool    GetThousandsSep() const;
     void    SetThousandsSep(bool _bUseSeparator);
@@ -142,28 +137,27 @@ public:
 
     sal_uInt16  GetDecimalDigits() const;
     void    SetDecimalDigits(sal_uInt16 _nPrecision);
-        // the is no check if the current format is numeric, so be cautious when calling these functions
+        // There is no check if the current format is numeric, so be cautious when calling these functions
 
     SvNumberFormatter*  StandardFormatter() { return m_aStaticFormatter; }
-        // Wenn man keinen eigenen Formatter explizit anlegen will, kann man diesen hier in SetFormatter stecken ...
-        // Das hier gelieferte Objekt wird allerdings zwischen allen Instanzen der Klasse geteilt (aus Zeit- und Platzgruenden),
-        // also ist etwas Vorsicht angebracht ...
+    // If no new Formatter is created explicitly, this can be used in SetFormatter...
 
     OUString    GetFormat(LanguageType& eLang) const;
     bool        SetFormat(const OUString& rFormatString, LanguageType eLang);
-        // sal_False, wenn der FormatString nicht gesetzt werden konnte (also wahrscheinlich ungueltig ist)
+    // sal_False, if the FormatString could not be set (and very probably is invalid)
+    // This Object is shared via all instances, so be careful!
 
     bool    IsStrictFormat() const              { return m_bStrictFormat; }
     void    SetStrictFormat(bool bEnable)       { m_bStrictFormat = bEnable; }
-        // Formatueberpruefung waehrend der Eingabe ?
+    // Check format during input
 
     // Spin-Handling
     virtual void Up() SAL_OVERRIDE;
     virtual void Down() SAL_OVERRIDE;
-        // Standard-Implementierung : hoch- oder runterzaehlen des aktuellen double einfach um die gesetzte SpinSize
+    // Default Implementation: +/- default spin size to the double value
     virtual void First() SAL_OVERRIDE;
     virtual void Last() SAL_OVERRIDE;
-        // Standard-Implementierung : aktuelles double setzen auf eingestellten first respektive last value
+    // Default Implementation: Current double is set to the first or last value
 
     void    SetSpinSize(double dStep)   { m_dSpinSize = dStep; }
     double  GetSpinSize() const         { return m_dSpinSize; }
@@ -181,19 +175,17 @@ public:
     virtual void SetText( const OUString& rStr ) SAL_OVERRIDE;
     virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE;
 
-    // die folgenden Methoden sind interesant, wenn m_bTreatAsNumber auf sal_False sitzt
-    /** nehmen wir mal an, irgendjemand will das ganze schoene double-Handling gar nicht haben, sondern
-        einfach den Text formatiert ausgeben ...
-        (der Text wird einfach nur durch den Formatter gejagt und dann gesetzt)
-    */
+    //The following methods are interesting, if m_bTreatAsNumber is set to sal_False
+    //If someone does not care about all the double handling and just wants to print the text formatted.
+    //(((The text will be formatted, using the Formatter, and then set)
     void SetTextFormatted(const OUString& rText);
     OUString  GetTextValue() const;
 
     void      SetDefaultText(const OUString& rDefault) { m_sDefaultText = rDefault; }
     OUString  GetDefaultText() const { return m_sDefaultText; }
 
-    // die bei der letzten Ausgabe-Operation vom Formatter gelieferte Farbe (Ausgabe-Operationen werden getriggert durch
-    // SetValue, SetTextValue, SetTextFormatted, also indirekt eventuell auch durch SetMin-/-MaxValue)
+    // The last colour from the Formatter's last output operation. Output operations get triggered by:
+    // SetValue, SetTextValue, SetTextFormatted, also indirectly via SetMin - / -MaxValue
     Color*  GetLastOutputColor() const { return m_pLastOutputColor; }
 
     /** reformats the current text. Interesting if the user entered some text in an "input format", and
@@ -238,7 +230,7 @@ protected:
     void impl_Modify(bool makeValueDirty = true);
     virtual void Modify() SAL_OVERRIDE;
 
-    // CheckText ueberschreiben fuer Ueberpruefung zur Eingabezeit
+    // Override CheckTextfor input-time checks
     virtual bool CheckText(const OUString&) const { return true; }
 
     // any aspect of the current format has changed
