@@ -295,9 +295,9 @@ public:
 
     uno::Reference< embed::XStorage > mxSourceStorage;
 
-    std::auto_ptr< xmloff::RDFaImportHelper > mpRDFaHelper;
+    std::unique_ptr< xmloff::RDFaImportHelper > mpRDFaHelper;
 
-    std::auto_ptr< DocumentInfo > mpDocumentInfo;
+    std::unique_ptr< DocumentInfo > mpDocumentInfo;
 
     SvXMLImport_Impl( const uno::Reference< uno::XComponentContext >& rxContext,
                       OUString const & theImplementationName)

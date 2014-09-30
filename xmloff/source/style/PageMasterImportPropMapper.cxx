@@ -117,19 +117,13 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     boost::scoped_ptr<XMLPropertyState> xFooterDynamic;
     XMLPropertyState* pAllMarginProperty = NULL;
     XMLPropertyState* pMargins[4] = { NULL, NULL, NULL, NULL };
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<XMLPropertyState> pNewMargins[4];
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<XMLPropertyState> pNewMargins[4];
     XMLPropertyState* pAllHeaderMarginProperty = NULL;
     XMLPropertyState* pHeaderMargins[4] = { NULL, NULL, NULL, NULL };
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<XMLPropertyState> pNewHeaderMargins[4];
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<XMLPropertyState> pNewHeaderMargins[4];
     XMLPropertyState* pAllFooterMarginProperty = NULL;
     XMLPropertyState* pFooterMargins[4] = { NULL, NULL, NULL, NULL };
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<XMLPropertyState> pNewFooterMargins[4];
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<XMLPropertyState> pNewFooterMargins[4];
 
     ::std::vector< XMLPropertyState >::iterator aEnd = rProperties.end();
     for (::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin(); aIter != aEnd; ++aIter)

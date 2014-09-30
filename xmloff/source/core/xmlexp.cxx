@@ -271,7 +271,7 @@ public:
     /// counts depth (number of open elements/start tags)
     long mDepth;
 
-    ::std::auto_ptr< ::xmloff::RDFaExportHelper> mpRDFaHelper;
+    ::std::unique_ptr< ::xmloff::RDFaExportHelper> mpRDFaHelper;
 
     bool                                                mbExportTextNumberElement;
     bool                                                mbNullDateInitialized;

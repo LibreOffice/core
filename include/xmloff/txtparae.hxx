@@ -76,7 +76,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     rtl::Reference < SvXMLExportPropertyMapper > xSectionPropMapper;
     rtl::Reference < SvXMLExportPropertyMapper > xRubyPropMapper;
 
-    const ::std::auto_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
+    const ::std::unique_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
     XMLTextFieldExport          *pFieldExport;
     std::vector<OUString>  *pListElements;
     XMLTextListAutoStylePool    *pListAutoPool;
@@ -675,7 +675,7 @@ public:
     void PopTextListsHelper();
 
 private:
-        XMLTextParagraphExport(XMLTextParagraphExport &); // private copy-ctor because of explicit copy-ctor of auto_ptr
+        XMLTextParagraphExport(XMLTextParagraphExport &); // private copy-ctor because of explicit copy-ctor of unique_ptr
 };
 
 inline const XMLTextListAutoStylePool&

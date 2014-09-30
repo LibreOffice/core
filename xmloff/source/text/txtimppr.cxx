@@ -394,14 +394,10 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pBackTransparent = NULL;  // transparency as boolean
     XMLPropertyState* pAllParaMargin = 0;
     XMLPropertyState* pParaMargins[4] = { 0, 0, 0, 0 };
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<XMLPropertyState> pNewParaMargins[4];
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<XMLPropertyState> pNewParaMargins[4];
     XMLPropertyState* pAllMargin = 0;
     XMLPropertyState* pMargins[4] = { 0, 0, 0, 0 };
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<XMLPropertyState> pNewMargins[4];
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<XMLPropertyState> pNewMargins[4];
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();

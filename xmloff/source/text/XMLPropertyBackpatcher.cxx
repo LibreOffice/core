@@ -152,18 +152,16 @@ template class XMLPropertyBackpatcher<OUString>;
 
 struct XMLTextImportHelper::BackpatcherImpl
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     /// backpatcher for references to footnotes and endnotes
-    ::std::auto_ptr< XMLPropertyBackpatcher<sal_Int16> >
+    ::std::unique_ptr< XMLPropertyBackpatcher<sal_Int16> >
         m_pFootnoteBackpatcher;
 
     /// backpatchers for references to sequences
-    ::std::auto_ptr< XMLPropertyBackpatcher<sal_Int16> >
+    ::std::unique_ptr< XMLPropertyBackpatcher<sal_Int16> >
         m_pSequenceIdBackpatcher;
 
-    ::std::auto_ptr< XMLPropertyBackpatcher< OUString> >
+    ::std::unique_ptr< XMLPropertyBackpatcher< OUString> >
         m_pSequenceNameBackpatcher;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 
 ::boost::shared_ptr<XMLTextImportHelper::BackpatcherImpl>

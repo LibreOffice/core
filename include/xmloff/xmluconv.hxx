@@ -84,7 +84,7 @@ class XMLOFF_DLLPUBLIC SvXMLUnitConverter
 {
 private:
     struct Impl;
-    ::std::auto_ptr<Impl> m_pImpl;
+    ::std::unique_ptr<Impl> m_pImpl;
 
 public:
     /** constructs a SvXMLUnitConverter. The core measure unit is the
