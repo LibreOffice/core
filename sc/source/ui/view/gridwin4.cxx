@@ -643,8 +643,21 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             bEditMode = false;
     }
 
+    // For tiled rendering we have already prepared the pixel map mode in PaintTile, and need
+    // to make sure that we don't overwrite the origin (however for normal rendering
+    // we specifically need to make sure that we do set this mode).
+    const MapMode aPixelMode = (pOutDev == this ) ? MapMode(MAP_PIXEL) : pOutDev->GetMapMode();
+
+
     // define drawing layer map mode and paint rectangle
-    const MapMode aDrawMode = GetDrawMapMode();
+    MapMode aDrawModeInitial = GetDrawMapMode();
+    if ( pOutDev != this )
+    {
+        aDrawModeInitial.SetOrigin( Point() );
+        aDrawModeInitial.SetOrigin( pOutDev->PixelToLogic( aPixelMode.GetOrigin(),
+                                                           aDrawModeInitial ) );
+    }
+    const MapMode aDrawMode = aDrawModeInitial;
     Rectangle aDrawingRectLogic;
 
     {
@@ -712,7 +725,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     {
         // save MapMode and set to pixel
         MapMode aCurrentMapMode(pContentDev->GetMapMode());
-        pContentDev->SetMapMode(MAP_PIXEL);
+        pContentDev->SetMapMode(aPixelMode);
 
         Rectangle aPixRect = Rectangle( Point(), GetOutputSizePixel() );
         pContentDev->SetFillColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
@@ -749,7 +762,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     if ( rDoc.HasBackgroundDraw( nTab, aDrawingRectLogic ) )
     {
-        pContentDev->SetMapMode(MAP_PIXEL);
+        pContentDev->SetMapMode(aPixelMode);
         aOutputData.DrawClear();
 
             // Drawing Hintergrund
@@ -760,7 +773,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     else
         aOutputData.SetSolidBackground(true);
 
-    pContentDev->SetMapMode(MAP_PIXEL);
+    pContentDev->SetMapMode(aPixelMode);
     aOutputData.DrawDocumentBackground();
 
     if ( bGridFirst && ( bGrid || bPage ) )
@@ -793,7 +806,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( bLogicText )
         aOutputData.DrawStrings(true);      // in logic MapMode if bTextWysiwyg is set
     aOutputData.DrawEdit(true);
-    pContentDev->SetMapMode(MAP_PIXEL);
+    pContentDev->SetMapMode(aPixelMode);
 
         // Autofilter- und Pivot-Buttons
 
@@ -855,7 +868,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         }
     }
 
-    pContentDev->SetMapMode(MAP_PIXEL);
+    pContentDev->SetMapMode(aPixelMode);
 
     if ( pViewData->IsRefMode() && nTab >= pViewData->GetRefStartZ() && nTab <= pViewData->GetRefEndZ() )
     {
@@ -916,7 +929,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()) )
     {
         //! use pContentDev for EditView?
-        SetMapMode(MAP_PIXEL);
+        SetMapMode(aPixelMode);
         SCCOL nCol1 = pViewData->GetEditStartCol();
         SCROW nRow1 = pViewData->GetEditStartRow();
         SCCOL nCol2 = pViewData->GetEditEndCol();
@@ -932,7 +945,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         SetMapMode(pViewData->GetLogicMode());
         pEditView->Paint( pOutDev->PixelToLogic( Rectangle( Point( nScrX, nScrY ),
                             Size( aOutputData.GetScrW(), aOutputData.GetScrH() ) ) ) );
-        SetMapMode(MAP_PIXEL);
+        SetMapMode(aPixelMode);
     }
 
     if (pViewData->HasEditView(eWhich))
