@@ -456,7 +456,13 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     ScModule* pScMod = SC_MOD();
     bool bTextWysiwyg = pScMod->GetInputOptions().GetTextWysiwyg();
 
-    if (pViewData->IsMinimized())
+    // For tiled rendering on Android (but NOT on desktop) IsMinimized returns
+    // false (for reasons I do not yet understand), hence for now we disable
+    // this check when we are doing tiled-rendering. However presumably VCL
+    // shouldn't be calling Paint (and thus Draw) in any case when the window
+    // isn't visible, so it's possible that this check is completely bogus
+    // anyway?
+    if ( (pOutDev == this) && ( pViewData->IsMinimized() ) )
         return;
 
     PutInOrder( nX1, nX2 );
