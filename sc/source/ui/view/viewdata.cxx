@@ -1532,55 +1532,56 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         aScrSize.Height() = pView->GetGridHeight(eWhichY);
     }
 
+    const Size aScrSizeTwips =
+        Application::GetDefaultDevice()->PixelToLogic( aScrSize, maPaintMapMode );
+
     sal_uInt16 nTSize;
 
     SCCOL   nPosX = GetPosX(eWhichX);
     SCCOL   nX;
 
-    long nScrPosX=0;
+    long nScrPosXTwips=0;
     if (nWhereX >= nPosX)
-        for (nX=nPosX; nX<nWhereX && (bAllowNeg || nScrPosX<=aScrSize.Width()); nX++)
+    {
+        for (nX=nPosX; nX<nWhereX && (bAllowNeg || nScrPosXTwips<=aScrSizeTwips.Width()); nX++)
         {
             if ( nX > MAXCOL )
-                nScrPosX = 65535;
+            {
+                nScrPosXTwips = LONG_MAX;
+            }
             else
             {
-                nTSize = pDoc->GetColWidth( nX, nTabNo );
-                if (nTSize)
-                {
-                    long nSizeXPix = ToPixel( nTSize, nPPTX );
-                    nScrPosX += nSizeXPix;
-                }
+                nScrPosXTwips += pDoc->GetColWidth( nX, nTabNo );
             }
         }
+    }
     else if (bAllowNeg)
+    {
         for (nX=nPosX; nX>nWhereX;)
         {
             --nX;
-            nTSize = pDoc->GetColWidth( nX, nTabNo );
-            if (nTSize)
-            {
-                long nSizeXPix = ToPixel( nTSize, nPPTX );
-                nScrPosX -= nSizeXPix;
-            }
+            nScrPosXTwips -= pDoc->GetColWidth( nX, nTabNo );
         }
+    }
 
     SCROW   nPosY = GetPosY(eWhichY);
     SCROW   nY;
 
-    long nScrPosY=0;
+    long nScrPosYTwips=0;
     if (nWhereY >= nPosY)
-        for (nY=nPosY; nY<nWhereY && (bAllowNeg || nScrPosY<=aScrSize.Height()); nY++)
+    {
+        for (nY=nPosY; nY<nWhereY && (bAllowNeg || nScrPosYTwips<=aScrSizeTwips.Height()); nY++)
         {
             if ( nY > MAXROW )
-                nScrPosY = 65535;
+            {
+                nScrPosYTwips = LONG_MAX;
+            }
             else
             {
                 nTSize = pDoc->GetRowHeight( nY, nTabNo );
                 if (nTSize)
                 {
-                    long nSizeYPix = ToPixel( nTSize, nPPTY );
-                    nScrPosY += nSizeYPix;
+                    nScrPosYTwips += nTSize;
                 }
                 else if ( nY < MAXROW )
                 {
@@ -1593,27 +1594,46 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 }
             }
         }
+    }
     else if (bAllowNeg)
+    {
         for (nY=nPosY; nY>nWhereY;)
         {
             --nY;
-            nTSize = pDoc->GetRowHeight( nY, nTabNo );
-            if (nTSize)
-            {
-                long nSizeYPix = ToPixel( nTSize, nPPTY );
-                nScrPosY -= nSizeYPix;
-            }
+            nScrPosYTwips -= pDoc->GetRowHeight( nY, nTabNo );
         }
+    }
 
+    Point aScreenStartTwips = Point( maTabData[ nTabNo ]->nTPosX[ eWhichX ],
+                                     maTabData[ nTabNo ]->nTPosY[ eWhichY ] );
+
+    Point aPosScrRelative = Point( nScrPosXTwips, nScrPosYTwips );
+    Point aPosScrAbsolute = aScreenStartTwips + aPosScrRelative;
+
+
+    Point aScrPosPix =
+        Application::GetDefaultDevice()->LogicToPixel( aPosScrAbsolute, maPaintMapMode ) -
+        Application::GetDefaultDevice()->LogicToPixel( aScreenStartTwips, maPaintMapMode );
+
+    // Point aScrPosPix =
+    //     Application::GetDefaultDevice()->LogicToPixel( aPosScrRelative, maPaintMapMode );
     if ( pDoc->IsLayoutRTL( nTabNo ) )
     {
         //  mirror horizontal position
-        nScrPosX = aScrSize.Width() - 1 - nScrPosX;
+        aScrPosPix.X() = aScrSize.Width() - 1 - aScrPosPix.getX();
     }
 
-    if (nScrPosX > 32767) nScrPosX=32767;
-    if (nScrPosY > 32767) nScrPosY=32767;
-    return Point( nScrPosX, nScrPosY );
+    if ( nScrPosXTwips == LONG_MAX )
+    {
+        aScrPosPix.X() = 32767;
+    }
+    if ( nScrPosYTwips == LONG_MAX )
+    {
+        aScrPosPix.Y() = 32767;
+    }
+
+
+    return aScrPosPix;
 }
 
 //      Number of cells on a screen
