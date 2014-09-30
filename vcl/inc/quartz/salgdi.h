@@ -85,7 +85,7 @@ protected:
 
 private:
     const sal_IntPtr                mnFontId;
-    mutable const FontCharMapPtr    mpCharMap;
+    mutable const ImplFontCharMap*  mpCharMap;
     mutable vcl::FontCapabilities   maFontCapabilities;
     mutable bool                    mbOs2Read;       // true if OS2-table related info is valid
     mutable bool                    mbHasOs2Table;
