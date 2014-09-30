@@ -24,11 +24,6 @@
 #error No X headers should be included for MACOSX even if they are present in the SDK
 #endif
 
-/* Types from <X11/X.h> that clash with LO's identifiers
- * and we don't need.
- */
-#define Icon        HIDE_XLIB_Icon
-
 #if defined __cplusplus
 extern "C" {
 #endif
