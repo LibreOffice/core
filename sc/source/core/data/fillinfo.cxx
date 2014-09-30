@@ -195,7 +195,9 @@ public:
 
 void ScDocument::FillInfo(
     ScTableInfo& rTabInfo, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    SCTAB nTab, double fColScale, double fRowScale, bool bPageMode, bool bFormulaMode,
+    SCTAB nTab, double fColScale, double fRowScale,
+    const OutputDevice* pOutDev, const MapMode& rMapMode,
+    bool bPageMode, bool bFormulaMode,
     const ScMarkData* pMarkData )
 {
     OSL_ENSURE( maTabs[nTab], "Table does not exist" );
@@ -258,6 +260,7 @@ void ScDocument::FillInfo(
     SCROW nYExtra = nRow2+1;
     sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
     SCROW nDocHeightEndRow = -1;
+    long nPosYTwips = 0;
     for (nSignedY=((SCsROW)nRow1)-1; nSignedY<=(SCsROW)nYExtra; nSignedY++)
     {
         if (nSignedY >= 0)
@@ -278,7 +281,14 @@ void ScDocument::FillInfo(
             RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
             pThisRowInfo->pCellInfo = NULL;                 // wird unten belegt
 
-            sal_uInt16 nHeight = (sal_uInt16) ( nDocHeight * fRowScale );
+            const long nPosStartTwips = nPosYTwips;
+            nPosYTwips += nDocHeight;
+
+            sal_uInt16 nHeight =
+                pOutDev->LogicToPixel( Point( 0, nPosYTwips ),
+                                       rMapMode ).getY() -
+                pOutDev->LogicToPixel( Point( 0, nPosStartTwips ),
+                                       rMapMode ).getY();
             if (!nHeight)
                 nHeight = 1;
 
@@ -386,27 +396,14 @@ void ScDocument::FillInfo(
         }
     }
 
-    for (nArrCol=nCol2+3; nArrCol<=nRotMax+2; nArrCol++)            // restliche Breiten eintragen
-    {
-        nX = nArrCol-1;
-        if ( ValidCol(nX) )
-        {
-            if (!ColHidden(nX, nTab))
-            {
-                sal_uInt16 nThisWidth = (sal_uInt16) (GetColWidth( nX, nTab ) * fColScale);
-                if (!nThisWidth)
-                    nThisWidth = 1;
-
-                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;
-            }
-        }
-    }
 
     ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
     if(pCondFormList)
         pCondFormList->startRendering();
 
-    for (nArrCol=0; nArrCol<=nCol2+2; nArrCol++)                    // links & rechts + 1
+    long nPosXTwips = 0;
+
+    for (nArrCol=0; nArrCol<=nRotMax+2; nArrCol++)                    // links & rechts + 1
     {
         nX = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;                    // negativ -> ungueltig
 
@@ -418,11 +415,21 @@ void ScDocument::FillInfo(
             // TODO: Optimize this loop.
             if (!ColHidden(nX, nTab))
             {
-                sal_uInt16 nThisWidth = (sal_uInt16) (GetColWidth( nX, nTab ) * fColScale);
-                if (!nThisWidth)
+                const long nPosStartTwips = nPosXTwips;
+                nPosXTwips += GetColWidth( nX, nTab );
+
+                sal_uInt16 nThisWidth =
+                    pOutDev->LogicToPixel( Point( nPosXTwips, 0 ),
+                                           rMapMode ).getX() -
+                    pOutDev->LogicToPixel( Point( nPosStartTwips, 0 ),
+                                           rMapMode ).getX();
+                if ( nThisWidth == 0)
                     nThisWidth = 1;
 
-                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;           //! dies sollte reichen
+                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;
+
+                if (nArrCol > nCol2+2)
+                    break; // Remaining information isn't needed
 
                 ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Spalten-Daten
 

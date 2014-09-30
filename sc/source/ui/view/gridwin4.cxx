@@ -553,8 +553,10 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     ScTableInfo aTabInfo;
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
-                                        nPPTX, nPPTY, false, bFormulaMode,
-                                        &pViewData->GetMarkData() );
+                   nPPTX, nPPTY,
+                   this, pViewData->GetPaintMapMode(),
+                   false, bFormulaMode,
+                   &pViewData->GetMarkData() );
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();

@@ -4623,7 +4623,10 @@ void ScGridWindow::UpdateFormulas()
     double nPPTY = pViewData->GetPPTY();
 
     ScTableInfo aTabInfo;
-    rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab, nPPTX, nPPTY, false, false );
+    rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
+                   nPPTX, nPPTY,
+                   this, pViewData->GetPaintMapMode(),
+                   false, false );
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_DOCUMENT_HXX
 #define INCLUDED_SC_INC_DOCUMENT_HXX
 
+#include <vcl/mapmod.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -1675,7 +1676,9 @@ public:
 
     void FillInfo(
         ScTableInfo& rTabInfo, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        SCTAB nTab, double fColScale, double fRowScale, bool bPageMode, bool bFormulaMode,
+        SCTAB nTab, double fColScale, double fRowScale,
+        const OutputDevice* pOutDev, const MapMode& rMapMode,
+        bool bPageMode, bool bFormulaMode,
         const ScMarkData* pMarkData = NULL );
 
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
