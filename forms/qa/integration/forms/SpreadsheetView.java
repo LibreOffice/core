@@ -29,8 +29,6 @@ import com.sun.star.frame.*;
 import com.sun.star.sheet.*;
 import com.sun.star.container.*;
 
-import integration.forms.DocumentHelper;
-
 public class SpreadsheetView extends integration.forms.DocumentViewHelper
 {
 

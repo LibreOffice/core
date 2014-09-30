@@ -22,12 +22,6 @@ import com.sun.star.uno.*;
 import com.sun.star.util.*;
 import com.sun.star.lang.*;
 import com.sun.star.beans.*;
-import integration.forms.DocumentHelper;
-import integration.forms.NumericValidator;
-import integration.forms.TextValidator;
-import integration.forms.BooleanValidator;
-import integration.forms.ListSelectionValidator;
-import integration.forms.SingleControlValidation;
 
 public class ControlValidation extends complexlib.ComplexTestCase implements com.sun.star.lang.XEventListener
 {

@@ -22,8 +22,6 @@ import com.sun.star.uno.*;
 import com.sun.star.beans.*;
 import com.sun.star.form.validation.*;
 
-import integration.forms.DocumentHelper;
-
 public class SingleControlValidation implements XFormComponentValidityListener
 {
     private DocumentHelper          m_document;         /// our current test document

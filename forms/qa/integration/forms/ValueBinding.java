@@ -27,8 +27,6 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.form.binding.XValueBinding;
 import com.sun.star.form.binding.XBindableValue;
 
-import integration.forms.TableCellTextBinding;
-
 public class ValueBinding extends integration.forms.TestCase
 {
     /** Creates a new instance of ValueBinding */

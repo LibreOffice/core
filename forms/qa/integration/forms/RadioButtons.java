@@ -24,10 +24,6 @@ import com.sun.star.container.*;
 import com.sun.star.beans.*;
 import com.sun.star.awt.XRadioButton;
 
-import integration.forms.dbfTools;
-import integration.forms.DocumentHelper;
-import integration.forms.SpreadsheetDocument;
-
 public class RadioButtons extends complexlib.ComplexTestCase
 {
     private DocumentHelper          m_document;         /// our current test document
