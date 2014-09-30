@@ -1,6 +1,9 @@
 package org.libreoffice;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -10,8 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -23,7 +28,7 @@ import java.util.List;
 public class LibreOfficeMainActivity extends Activity {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
-    private static final String DEFAULT_DOC_PATH = "/assets/test1.odt";
+    private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
 
     public static LibreOfficeMainActivity mAppContext;
 
@@ -38,6 +43,7 @@ public class LibreOfficeMainActivity extends Activity {
     private ListView mDrawerList;
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdpater mDocumentPartViewListAdpater;
+    private String mInputFile;
 
     public static GeckoLayerClient getLayerClient() {
         return mLayerClient;
@@ -56,11 +62,9 @@ public class LibreOfficeMainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            showAbout();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -69,8 +73,8 @@ public class LibreOfficeMainActivity extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_list).setVisible(!drawerOpen);
+        boolean isDrawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        menu.findItem(R.id.action_parts).setVisible(!isDrawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -82,17 +86,16 @@ public class LibreOfficeMainActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.w(LOGTAG, "onCreate..");
         mAppContext = this;
         super.onCreate(savedInstanceState);
 
         mMainHandler = new Handler();
 
-        String inputFile;
-
         if (getIntent().getData() != null) {
-            inputFile = getIntent().getData().getEncodedPath();
+            mInputFile = getIntent().getData().getEncodedPath();
         } else {
-            inputFile = DEFAULT_DOC_PATH;
+            mInputFile = DEFAULT_DOC_PATH;
         }
 
         setContentView(R.layout.activity_main);
@@ -124,15 +127,13 @@ public class LibreOfficeMainActivity extends Activity {
         mLayerController.setLayerClient(mLayerClient);
         mGeckoLayout.addView(mLayerController.getView(), 0);
 
-        LOKitShell.sendEvent(LOEvent.load(inputFile));
-
-        Log.w(LOGTAG, "UI almost up");
+        LOKitShell.sendEvent(LOEvent.load(mInputFile));
     }
 
     @Override
     protected void onResume() {
-        Log.i(LOGTAG, "Resume..");
         super.onResume();
+        Log.i(LOGTAG, "onResume..");
     }
 
     @Override
@@ -151,6 +152,47 @@ public class LibreOfficeMainActivity extends Activity {
 
     public DocumentPartViewListAdpater getDocumentPartViewListAdpater() {
         return mDocumentPartViewListAdpater;
+    }
+
+    private void showAbout() {
+        // Inflate the about message contents
+        View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
+
+        // When linking text, force to always use default color. This works
+        // around a pressed color state bug.
+        TextView textView = (TextView) messageView.findViewById(R.id.about_credits);
+        int defaultColor = textView.getTextColors().getDefaultColor();
+        textView.setTextColor(defaultColor);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.lo_icon);
+        builder.setTitle(R.string.app_name);
+        builder.setView(messageView);
+        builder.create();
+        builder.show();
+
+        Button licenseButton = (Button) messageView.findViewById(R.id.about_license_button);
+        licenseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), LibreOfficeMainActivity.class);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setData(Uri.parse("file:///assets/license.txt"));
+                startActivity(intent);
+            }
+        });
+
+        Button noticeButton = (Button) messageView.findViewById(R.id.about_notice_button);
+        noticeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), LibreOfficeMainActivity.class);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setData(Uri.parse("file:///assets/notice.txt"));
+                startActivity(intent);
+            }
+        });
+
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
