@@ -966,13 +966,13 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // calculation now, rather than after another dimension conversion,
     // to minimise errors.
     // TODO: width wise we need the print scaling compensation stuff?
-    Fraction scaleX = Fraction( 100*nOutputWidth, 96*96 ) * Fraction(1440L) /
+    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
                                 Fraction( nTileWidth);
     if ( pViewData->GetDocShell() )
     {
         scaleX *= pViewData->GetDocShell()->GetOutputFactor();
     }
-    Fraction scaleY =  Fraction( 100*nOutputHeight, 96*96 ) * Fraction(1440L) /
+    Fraction scaleY =  Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
                                  Fraction( nTileHeight);
 
     rDevice.SetOutputSizePixel( Size( nOutputWidth, nOutputHeight ) );

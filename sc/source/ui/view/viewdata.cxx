@@ -2171,14 +2171,14 @@ void ScViewData::CalcPPT()
 {
     maPaintMapMode.SetMapUnit( MAP_TWIP );
 
-    Fraction aScaleX = GetZoomX() * Fraction(0.96);
+    Fraction aScaleX = GetZoomX();
     if ( pDocShell )
     {
         aScaleX /= pDocShell->GetOutputFactor();
     }
 
     maPaintMapMode.SetScaleX( aScaleX );
-    maPaintMapMode.SetScaleY( GetZoomY() * Fraction(0.96) );
+    maPaintMapMode.SetScaleY( GetZoomY());
 }
 
 #define SC_OLD_TABSEP   '/'
