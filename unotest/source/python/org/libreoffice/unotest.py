@@ -176,6 +176,21 @@ class UnoInProcess:
     def setUp(self):
         self.xContext = pyuno.getComponentContext()
         pyuno.experimentalExtraMagic()
+        smgr = self.getContext().ServiceManager
+        xPs = smgr.createInstanceWithContext("com.sun.star.util.PathSettings", self.getContext())
+        #xPs.UserConfig = os.getenv("UserInstallation")
+        print(os.getenv("UserInstallation"))
+        xPs.Backup = os.getenv("UserInstallation")
+        #xPs.Favorite = xPs.Temp
+        xPs.Graphic = os.getenv("UserInstallation")
+        #xPs.Palette = xPs.Temp
+        #xPs.Storage = xPs.Temp
+        xPs.UserConfig =  os.getenv("UserInstallation") + "/config"
+        #xPs.Backup = os.getenv("UserInstallation")
+        #xPs.Favorite = os.getenv("UserInstallation")
+        for p in [ "Addin", "AutoCorrect", "AutoText", "Backup", "Basic", "Bitmap", "Config", "Dictionary", "Favorite", "Filter", "Gallery", "Graphic", "Help", "Linguistic", "Module", "Palette", "Plugin", "Storage", "Temp", "Template", "UIConfig", "UserConfig", "Work" ]:
+            print(p, xPs.getPropertyValue(p))
+
     def openEmptyWriterDoc(self):
         assert(self.xContext)
         smgr = self.getContext().ServiceManager
@@ -195,6 +210,22 @@ class UnoInProcess:
         path = os.getenv("TDOC")
         if os.name == "nt":
             # do not quote drive letter - it must be "X:"
+            url = "file:///" + path + "/" + quote(file)
+        else:
+            url = "file://" + quote(path) + "/" + quote(file)
+        self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
+        assert(self.xDoc)
+        return self.xDoc
+
+    def openBaseDoc(self, file):
+        assert(self.xContext)
+        smgr = self.getContext().ServiceManager
+        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
+        props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", False)]
+        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
+        path = os.getenv("TDOC")
+        if os.name == "nt":
+            #do not quote drive letter - it must be "X:"
             url = "file:///" + path + "/" + quote(file)
         else:
             url = "file://" + quote(path) + "/" + quote(file)
@@ -259,6 +290,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.verbose:
         verbose = True
+    verbose = True
     con = PersistentConnection({"verbose" : args.verbose})
     print("starting soffice ... ", end="")
     con.setUp()
