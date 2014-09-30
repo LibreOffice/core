@@ -129,17 +129,17 @@ public class LOKitTileProvider implements TileProvider {
     }
 
     @Override
-    public Bitmap thumbnail() {
+    public Bitmap thumbnail(int size) {
         int widthPixel = getPageWidth();
         int heightPixel = getPageHeight();
 
         if (widthPixel > heightPixel) {
             double ratio = heightPixel / (double) widthPixel;
-            widthPixel = 1000;
+            widthPixel = size;
             heightPixel = (int) (widthPixel * ratio);
         } else {
             double ratio = widthPixel / (double) heightPixel;
-            heightPixel = 1000;
+            heightPixel = size;
             widthPixel = (int) (heightPixel * ratio);
         }
 
