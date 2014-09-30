@@ -21,6 +21,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <comphelper/string.hxx>
+#include <o3tl/ptr_container.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
@@ -38,6 +39,7 @@
 #include <svtools/htmlkywd.hxx>
 
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -1582,8 +1584,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
             std::unique_ptr<HTMLOption> pOption(
                 new HTMLOption(sal::static_int_cast<sal_uInt16>(nToken), sName, aValue));
 
-            maOptions.push_back(pOption.get());
-            pOption.release();
+            o3tl::ptr_container::push_back(maOptions, std::move(pOption));
         }
         else
             // Ignore white space and unexpected characters
