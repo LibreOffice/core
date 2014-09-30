@@ -346,6 +346,7 @@ $(foreach ide,\
 	debug \
 	kdevelop \
 	vs2012 \
+	vs2013 \
 	vim \
 	xcode, \
 $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
