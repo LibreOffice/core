@@ -238,6 +238,7 @@ SvxShape::~SvxShape() throw()
 
     delete mpImpl, mpImpl = NULL;
 
+    EndListeningAll(); // call explictily within SolarMutexGuard
 }
 
 
