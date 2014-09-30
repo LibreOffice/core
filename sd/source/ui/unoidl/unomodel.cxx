@@ -143,6 +143,8 @@ void SdUnoForbiddenCharsTable::onChange()
 
 SdUnoForbiddenCharsTable::~SdUnoForbiddenCharsTable()
 {
+    SolarMutexGuard g;
+
     if( mpModel )
         EndListening( *mpModel );
 }
