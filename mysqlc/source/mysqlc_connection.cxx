@@ -215,7 +215,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
             0,
             Any());
     }
-    std::auto_ptr<sql::Statement> stmt(m_settings.cppConnection->createStatement());
+    std::unique_ptr<sql::Statement> stmt(m_settings.cppConnection->createStatement());
     stmt->executeUpdate("SET session sql_mode='ANSI_QUOTES'");
     stmt->executeUpdate("SET NAMES utf8");
 }
