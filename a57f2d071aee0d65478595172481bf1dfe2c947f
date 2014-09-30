@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa0d59b9_ead20734",
+        "filename": "svtools/source/contnr/treelistbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-30T20:03:13Z",
+      "side": 1,
+      "message": "but what if this is not the last row? the next row will then have the same color, or am I wrong?",
+      "parentUuid": "fa0d59b9_4a1d930e",
+      "revId": "a57f2d071aee0d65478595172481bf1dfe2c947f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0d59b9_ca3063a1",
         "filename": "vcl/source/app/settings.cxx",
         "patchSetId": 3
