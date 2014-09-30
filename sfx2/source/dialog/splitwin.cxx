@@ -78,26 +78,6 @@ namespace {
     };
 }
 
-struct SfxDock_Impl
-{
-    sal_uInt16        nType;
-    SfxDockingWindow* pWin;      // SplitWindow has this window
-    bool          bNewLine;
-    bool          bHide;     // SplitWindow had this window
-    long              nSize;
-};
-
-class SfxDockArr_Impl : public std::vector<SfxDock_Impl*>
-{
-public:
-    ~SfxDockArr_Impl()
-    {
-        for(const_iterator it = begin(); it != end(); ++it)
-            delete *it;
-    }
-
-};
-
 class SfxEmptySplitWin_Impl : public SplitWindow
 {
 /*  [Description]
@@ -349,8 +329,8 @@ void SfxSplitWindow::SaveConfig_Impl()
     sal_uInt16 n;
     for ( n=0; n<pDockArr->size(); n++ )
     {
-        SfxDock_Impl *pDock = (*pDockArr)[n];
-        if ( pDock->bHide || pDock->pWin )
+        const SfxDock_Impl& rDock = (*pDockArr)[n];
+        if ( rDock.bHide || rDock.pWin )
             nCount++;
     }
 
@@ -358,13 +338,13 @@ void SfxSplitWindow::SaveConfig_Impl()
 
     for ( n=0; n<pDockArr->size(); n++ )
     {
-        SfxDock_Impl *pDock = (*pDockArr)[n];
-        if ( !pDock->bHide && !pDock->pWin )
+        const SfxDock_Impl& rDock = (*pDockArr)[n];
+        if ( !rDock.bHide && !rDock.pWin )
             continue;
-        if ( pDock->bNewLine )
+        if ( rDock.bNewLine )
             aWinData.append(",0");
         aWinData.append(',');
-        aWinData.append(static_cast<sal_Int32>(pDock->nType));
+        aWinData.append(static_cast<sal_Int32>(rDock.nType));
     }
 
     OUString aWindowId("SplitWindow");
@@ -429,10 +409,10 @@ void SfxSplitWindow::Split()
     sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        SfxDock_Impl *pD = (*pDockArr)[n];
-        if ( pD->pWin )
+        const SfxDock_Impl& rD = (*pDockArr)[n];
+        if ( rD.pWin )
         {
-            const sal_uInt16 nId = pD->nType;
+            const sal_uInt16 nId = rD.nType;
             const long nSize    = GetItemSize( nId, SWIB_FIXED );
             const long nSetSize = GetItemSize( GetSet( nId ) );
             Size aSize;
@@ -448,7 +428,7 @@ void SfxSplitWindow::Split()
                 aSize.Height() = nSize;
             }
 
-            pD->pWin->SetItemSize_Impl( aSize );
+            rD.pWin->SetItemSize_Impl( aSize );
 
             aNewOrgSizes.push_back( std::pair< sal_uInt16, long >( nId, nSize ) );
         }
@@ -486,8 +466,8 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        SfxDock_Impl *pDock = (*pDockArr)[n];
-        if ( pDock->bNewLine )
+        SfxDock_Impl& rDock = (*pDockArr)[n];
+        if ( rDock.bNewLine )
         {
             // The window opens a new line
             if ( pFoundDock )
@@ -499,13 +479,13 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             bNewLine = true;
         }
 
-        if ( pDock->pWin )
+        if ( rDock.pWin )
         {
             // Does there exist a window now at this position
             if ( bNewLine && !pFoundDock )
             {
                 // Not known until now in which real line it is located
-                GetWindowPos( pDock->pWin, nL, nPos );
+                GetWindowPos( rDock.pWin, nL, nPos );
                 nLine = (short) nL;
             }
 
@@ -521,10 +501,10 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
                 break;
         }
 
-        if ( pDock->nType == pDockWin->GetType() )
+        if ( rDock.nType == pDockWin->GetType() )
         {
-            DBG_ASSERT( !pFoundDock && !pDock->pWin, "Window already exists!");
-            pFoundDock = pDock;
+            DBG_ASSERT( !pFoundDock && !rDock.pWin, "Window already exists!");
+            pFoundDock = &rDock;
             if ( !bNewLine )
                 break;
             else
@@ -564,26 +544,20 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow *pDockWin, bool bSave)
 {
 //  The docking window is no longer stored in the internal data.
-    SfxDock_Impl *pDock=0;
     sal_uInt16 nCount = pDockArr->size();
-    bool bFound = false;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        pDock = (*pDockArr)[n];
-        if ( pDock->nType == pDockWin->GetType() )
+        const SfxDock_Impl& rDock = (*pDockArr)[n];
+        if ( rDock.nType == pDockWin->GetType() )
         {
-            if ( pDock->bNewLine && n<nCount-1 )
-                (*pDockArr)[n+1]->bNewLine = true;
+            if ( rDock.bNewLine && n<nCount-1 )
+                (*pDockArr)[n+1].bNewLine = true;
 
             // Window has a position, this we forget
-            bFound = true;
             pDockArr->erase(pDockArr->begin() + n);
             break;
         }
     }
-
-    if ( bFound )
-        delete pDock;
 
     if ( bSave )
         SaveConfig_Impl();
@@ -644,9 +618,9 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     sal_uInt16 nInsertPos = 0;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        SfxDock_Impl *pD = (*pDockArr)[n];
+        SfxDock_Impl& rD = (*pDockArr)[n];
 
-        if (pD->pWin)
+        if (rD.pWin)
         {
             // A docked window has been found. If no suitable window behind the
             // the desired insertion point s found, then insertion is done at
@@ -654,17 +628,17 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             nInsertPos = nCount;
             nLastWindowIdx = n;
             sal_uInt16 nL=0, nP=0;
-            GetWindowPos( pD->pWin, nL, nP );
+            GetWindowPos( rD.pWin, nL, nP );
 
             if ( (nL == nLine && nP == nPos) || nL > nLine )
             {
                 DBG_ASSERT( nL == nLine || bNewLine || nPos > 0, "Wrong Parameter!" );
                 if ( nL == nLine && nPos == 0 && !bNewLine )
                 {
-                    DBG_ASSERT(pD->bNewLine, "No new line?");
+                    DBG_ASSERT(rD.bNewLine, "No new line?");
 
                     // The posption is pushed to nPos==0
-                    pD->bNewLine = false;
+                    rD.bNewLine = false;
                     pDock->bNewLine = true;
                 }
 
@@ -798,10 +772,10 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
         sal_uInt16 nCount = pDockArr->size();
         for ( sal_uInt16 n=0; n<nCount; ++n )
         {
-            SfxDock_Impl *pD = (*pDockArr)[n];
-            if ( pD->pWin )
+            const SfxDock_Impl& rD = (*pDockArr)[n];
+            if ( rD.pWin )
             {
-                const sal_uInt16 nId = pD->nType;
+                const sal_uInt16 nId = rD.nType;
                 const long nSize    = GetItemSize( nId, SWIB_FIXED );
                 aNewOrgSizes.push_back( std::pair< sal_uInt16, long >( nId, nSize ) );
             }
@@ -852,15 +826,14 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, bool bHide )
         pWorkWin->ArrangeAutoHideWindows( this );
     }
 
-    SfxDock_Impl *pDock=0;
     sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        pDock = (*pDockArr)[n];
-        if ( pDock->nType == pDockWin->GetType() )
+        SfxDock_Impl& rDock = (*pDockArr)[n];
+        if ( rDock.nType == pDockWin->GetType() )
         {
-            pDock->pWin = 0;
-            pDock->bHide = bHide;
+            rDock.pWin = 0;
+            rDock.bHide = bHide;
             break;
         }
     }
@@ -1273,9 +1246,9 @@ void SfxSplitWindow::Show_Impl()
     sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        SfxDock_Impl *pDock = (*pDockArr)[n];
-        if ( pDock->pWin )
-            pDock->pWin->FadeIn( pEmptyWin->bFadeIn );
+        const SfxDock_Impl& rDock = (*pDockArr)[n];
+        if ( rDock.pWin )
+            rDock.pWin->FadeIn( pEmptyWin->bFadeIn );
     }
 }
 
@@ -1293,8 +1266,8 @@ bool SfxSplitWindow::ActivateNextChild_Impl( bool bForward )
         // Determine the active window
         for ( n=0; n<nCount; n++ )
         {
-            SfxDock_Impl *pD = (*pDockArr)[n];
-            if ( pD->pWin && pD->pWin->HasChildPathFocus() )
+            const SfxDock_Impl& rD = (*pDockArr)[n];
+            if ( rD.pWin && rD.pWin->HasChildPathFocus() )
                 break;
         }
 
@@ -1309,10 +1282,10 @@ bool SfxSplitWindow::ActivateNextChild_Impl( bool bForward )
         // Search for next window
         for ( sal_uInt16 nNext=n; nNext<nCount; nNext++ )
         {
-            SfxDock_Impl *pD = (*pDockArr)[nNext];
-            if ( pD->pWin )
+            const SfxDock_Impl& rD = (*pDockArr)[nNext];
+            if ( rD.pWin )
             {
-                pD->pWin->GrabFocus();
+                rD.pWin->GrabFocus();
                 return true;
             }
         }
@@ -1322,10 +1295,10 @@ bool SfxSplitWindow::ActivateNextChild_Impl( bool bForward )
         // Search for previous window
         for ( sal_uInt16 nNext=n; nNext--; )
         {
-            SfxDock_Impl *pD = (*pDockArr)[nNext];
-            if ( pD->pWin )
+            const SfxDock_Impl& rD = (*pDockArr)[nNext];
+            if ( rD.pWin )
             {
-                pD->pWin->GrabFocus();
+                rD.pWin->GrabFocus();
                 return true;
             }
         }
