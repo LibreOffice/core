@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0d59b9_ea2b2732",
+        "filename": "svtools/source/contnr/treelistbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-30T19:45:44Z",
+      "side": 1,
+      "message": "Won\u0027t this lead to two rows having the same background color?",
+      "revId": "a57f2d071aee0d65478595172481bf1dfe2c947f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0d59b9_ca3063a1",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-30T19:45:44Z",
+      "side": 1,
+      "message": "That\u0027s a bit dark.\nCan you use 238,238,238 (#eee) instead (That\u0027s what Qt uses)?",
+      "revId": "a57f2d071aee0d65478595172481bf1dfe2c947f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
