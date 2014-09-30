@@ -24,7 +24,7 @@
 
 
 /* ********* Hack, but needed because of conflicting types... */
-#define vcl::Region TQtXRegion
+#define Region TQtXRegion
 
 
 /* ********* TQt headers */
