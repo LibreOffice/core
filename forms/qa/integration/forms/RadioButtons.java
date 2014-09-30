@@ -23,6 +23,7 @@ import com.sun.star.lang.*;
 import com.sun.star.container.*;
 import com.sun.star.beans.*;
 import com.sun.star.awt.XRadioButton;
+import java.util.Arrays;
 
 public class RadioButtons extends complexlib.ComplexTestCase
 {
@@ -306,15 +307,6 @@ public class RadioButtons extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    private String stateString( short[] states )
-    {
-        StringBuilder buf = new StringBuilder();
-        for ( int i=0; i<states.length; ++i )
-            buf.append( states[i] );
-        return buf.toString();
-    }
-
-    /* ------------------------------------------------------------------ */
     /** verifies a number of radio buttons for their states
      */
     private boolean verifyRadios( XPropertySet[] radios, short[] expectedStates, String errorMessage ) throws com.sun.star.uno.Exception
@@ -332,7 +324,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
         {
             if ( actualStates[i] != expectedStates[i] )
             {
-                failed( errorMessage + " (expected: " + stateString( expectedStates ) + ", found: " + stateString( actualStates ) + ")" );
+                failed( errorMessage + " (expected: " + Arrays.toString( expectedStates ) + ", found: " + Arrays.toString( actualStates ) + ")" );
                 return false;
             }
         }
