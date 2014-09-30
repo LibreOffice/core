@@ -1615,7 +1615,7 @@ public:
 
 private:
     SfxItemSet                              m_aItems;
-    ::std::auto_ptr< SvxMacroAssignDlg >    m_pDialog;
+    ::std::unique_ptr< SvxMacroAssignDlg >  m_pDialog;
 };
 
 short SvxMacroAssignDialog::Execute()

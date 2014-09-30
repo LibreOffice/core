@@ -30,7 +30,7 @@ struct PasswordToOpenModifyDialog_Impl;
 
 class PasswordToOpenModifyDialog : public SfxModalDialog
 {
-    std::auto_ptr< PasswordToOpenModifyDialog_Impl >  m_pImpl;
+    std::unique_ptr< PasswordToOpenModifyDialog_Impl >  m_pImpl;
 
     // disallow use of copy c-tor and assignment operator
     PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & );

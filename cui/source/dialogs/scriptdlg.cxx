@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <utility>
 
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
@@ -238,10 +239,8 @@ void SFTreeListBox::Init( const OUString& language  )
         Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( children[ n ], lang );
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         insertEntry( uiName, app ? RID_CUIIMG_HARDDISK : RID_CUIIMG_DOC,
-            0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+            0, true, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
     }
 
     SetUpdateMode( true );
@@ -322,17 +321,13 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
         OUString name( children[ n ]->getName() );
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            insertEntry( name, RID_CUIIMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ],model )));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            insertEntry( name, RID_CUIIMG_LIB, pRootEntry, true, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ],model )));
         }
         else
         {
             if ( children[ n ]->getType() == browse::BrowseNodeTypes::SCRIPT )
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                insertEntry( name, RID_CUIIMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                insertEntry( name, RID_CUIIMG_MACRO, pRootEntry, false, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
 
             }
         }
@@ -348,10 +343,9 @@ void SFTreeListBox::ExpandAllTrees()
 {
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvTreeListEntry * SFTreeListBox::insertEntry(
     OUString const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
-    bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, const OUString& factoryURL )
+    bool bChildrenOnDemand, std::unique_ptr< SFEntry > && aUserData, const OUString& factoryURL )
 {
     SvTreeListEntry * p;
     if( nBitmap == RID_CUIIMG_DOC && !factoryURL.isEmpty() )
@@ -363,16 +357,14 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     }
     else
     {
-        p = insertEntry( rText, nBitmap, pParent, bChildrenOnDemand, aUserData );
+        p = insertEntry( rText, nBitmap, pParent, bChildrenOnDemand, std::move(aUserData) );
     }
     return p;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvTreeListEntry * SFTreeListBox::insertEntry(
     OUString const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
-    bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
+    bool bChildrenOnDemand, std::unique_ptr< SFEntry > && aUserData )
 {
     Image aImage;
     if( nBitmap == RID_CUIIMG_HARDDISK )
@@ -396,7 +388,6 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
         aUserData.release()); // XXX possible leak
    return p;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void SFTreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 {
@@ -962,18 +953,13 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         // not in alphabetical order
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             pNewEntry = m_pScriptsBox->insertEntry( aChildName,
-                    RID_CUIIMG_MACRO, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode,xDocumentModel ) ) );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-
+                    RID_CUIIMG_MACRO, pEntry, false, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode,xDocumentModel ) ) );
         }
         else
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             pNewEntry = m_pScriptsBox->insertEntry( aChildName,
-                RID_CUIIMG_LIB, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) ) );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+                RID_CUIIMG_LIB, pEntry, false, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) ) );
 
             // If the Parent is not loaded then set to
             // loaded, this will prevent RequestingChildren ( called

@@ -85,12 +85,12 @@ public:
     SvTreeListEntry * insertEntry(OUString const & rText, sal_uInt16 nBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
-                              std::auto_ptr< SFEntry > aUserData,
+                              std::unique_ptr< SFEntry > && aUserData,
                               const OUString& factoryURL );
     SvTreeListEntry * insertEntry(OUString const & rText, sal_uInt16 nBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
-                              std::auto_ptr< SFEntry > aUserData );
+                              std::unique_ptr< SFEntry > && aUserData );
     void deleteTree( SvTreeListEntry * pEntry );
     void deleteAllTree( );
 };
