@@ -195,6 +195,14 @@ public class LibreOfficeMainActivity extends Activity {
 
     }
 
+    public void showProgressBar() {
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgressBar() {
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+    }
+
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
