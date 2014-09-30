@@ -462,6 +462,24 @@ SwXStyleFamily::~SwXStyleFamily()
 
 }
 
+static bool lcl_GetHeaderFooterItem(
+        SfxItemSet const& rSet, OUString const& rPropName, bool const bFooter,
+        SvxSetItem const*& o_rpItem)
+{
+    SfxItemState eState = rSet.GetItemState(
+        (bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+        false, reinterpret_cast<const SfxPoolItem**>(&o_rpItem));
+    if (SFX_ITEM_SET != eState &&
+        rPropName == UNO_NAME_FIRST_IS_SHARED)
+    {   // fdo#79269 header may not exist, check footer then
+        eState = rSet.GetItemState(
+            (!bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+            false, reinterpret_cast<const SfxPoolItem**>(&o_rpItem));
+    }
+    return SFX_ITEM_SET == eState;
+}
+
+
 static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
     SfxStyleFamily eFamily, OUString *pString, sal_uInt16 nIndex = USHRT_MAX)
 {
@@ -3093,20 +3111,9 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                         break;
                     }
                     const SvxSetItem* pSetItem;
-                    if(SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
-                            bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                            false, (const SfxPoolItem**)&pSetItem))
+                    if (lcl_GetHeaderFooterItem(aBaseImpl.GetItemSet(), pNames[nProp], bFooter, pSetItem))
                     {
                         lcl_putItemToSet(pSetItem, nRes, nItemType, pValues[nProp], pEntry->nMemberId, aBaseImpl);
-
-                        if (nRes == SID_ATTR_PAGE_SHARED_FIRST)
-                        {
-                            // Need to add this to the other as well
-                            if (SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
-                                        bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
-                                        false, (const SfxPoolItem**)&pSetItem))
-                                lcl_putItemToSet(pSetItem, nRes, nItemType, pValues[nProp], pEntry->nMemberId, aBaseImpl);
-                        }
                     }
                     else if(SID_ATTR_PAGE_ON == nRes )
                     {
@@ -3350,9 +3357,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                             break;
                         }
                         const SvxSetItem* pSetItem;
-                        if(SFX_ITEM_SET == rSet.GetItemState(
-                                bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                                false, (const SfxPoolItem**)&pSetItem))
+                        if (lcl_GetHeaderFooterItem(rSet, pNames[nProp], bFooter, pSetItem))
                         {
                             const SfxItemSet& rTmpSet = pSetItem->GetItemSet();
                             const SfxPoolItem* pItem = 0;
