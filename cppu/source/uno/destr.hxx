@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CPPU_SOURCE_UNO_DESTR_HXX
 #define INCLUDED_CPPU_SOURCE_UNO_DESTR_HXX
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "prim.hxx"
 
 
@@ -255,6 +259,35 @@ inline sal_Int32 idestructElements(
     }
 }
 
+inline void idestroySequence(
+    uno_Sequence * pSeq,
+    typelib_TypeDescriptionReference * pType,
+    typelib_TypeDescription * pTypeDescr,
+    uno_ReleaseFunc release )
+{
+    assert(pSeq != nullptr);
+    assert(pSeq->nRefCount == 0);
+    if (pSeq->nElements > 0)
+    {
+        if (pTypeDescr)
+        {
+            idestructElements(
+                pSeq->elements,
+                ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
+                pSeq->nElements, release );
+        }
+        else
+        {
+            TYPELIB_DANGER_GET( &pTypeDescr, pType );
+            idestructElements(
+                pSeq->elements,
+                ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
+                pSeq->nElements, release );
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+        }
+    }
+    ::rtl_freeMemory( pSeq );
+}
 
 inline void idestructSequence(
     uno_Sequence * pSeq,
@@ -264,29 +297,9 @@ inline void idestructSequence(
 {
     if (osl_atomic_decrement( &pSeq->nRefCount ) == 0)
     {
-        if (pSeq->nElements > 0)
-        {
-            if (pTypeDescr)
-            {
-                idestructElements(
-                    pSeq->elements,
-                    ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
-                    pSeq->nElements, release );
-            }
-            else
-            {
-                TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                idestructElements(
-                    pSeq->elements,
-                    ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
-                    pSeq->nElements, release );
-                TYPELIB_DANGER_RELEASE( pTypeDescr );
-            }
-        }
-        ::rtl_freeMemory( pSeq );
+        idestroySequence(pSeq, pType, pTypeDescr, release);
     }
 }
-
 
 inline void _destructData(
     void * pValue,

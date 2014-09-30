@@ -95,9 +95,12 @@ inline Sequence< E >::Sequence( sal_Int32 len )
 template< class E >
 inline Sequence< E >::~Sequence()
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
-    ::uno_type_destructData(
-        this, rType.getTypeLibType(), (uno_ReleaseFunc)cpp_release );
+    if (osl_atomic_decrement( &_pSequence->nRefCount ) == 0)
+    {
+        const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+        uno_type_sequence_destroy(
+            _pSequence, rType.getTypeLibType(), (uno_ReleaseFunc)cpp_release );
+    }
 }
 
 template< class E >

@@ -145,6 +145,11 @@ UDK_3.3 {   # OOo 2.4
         cppu_unsatisfied_iset_msg;
 } UDK_3.2;
 
+LIBO_UDK_4.4 { # symbols available in >= LibO 4.4
+    global:
+        uno_type_sequence_destroy;
+} UDK_3.3;
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:
