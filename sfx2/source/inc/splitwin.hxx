@@ -24,9 +24,18 @@
 
 class SfxWorkWindow;
 class SfxDockingWindow;
-class SfxDockArr_Impl;
 class SfxEmptySplitWin_Impl;
-struct SfxDock_Impl;
+
+struct SfxDock_Impl
+{
+    sal_uInt16        nType;
+    SfxDockingWindow* pWin;      // SplitWindow has this window
+    bool          bNewLine;
+    bool          bHide;     // SplitWindow had this window
+    long              nSize;
+};
+
+typedef boost::ptr_vector<SfxDock_Impl> SfxDockArr_Impl;
 
 class SfxSplitWindow : public SplitWindow
 {
