@@ -72,6 +72,7 @@
 #include <polypolyaction.hxx>
 #include <textaction.hxx>
 #include <transparencygroupaction.hxx>
+#include <utility>
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -2452,8 +2453,8 @@ namespace cppcanvas
 
                         ActionSharedPtr pFloatTransAction(
                             internal::TransparencyGroupActionFactory::createTransparencyGroupAction(
-                                pMtf,
-                                pGradient,
+                                std::move(pMtf),
+                                std::move(pGradient),
                                 rParms,
                                 rStates.getState().mapModeTransform *
                                 ::vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),

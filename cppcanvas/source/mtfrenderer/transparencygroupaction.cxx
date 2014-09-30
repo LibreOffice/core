@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <tools/gen.hxx>
 
 #include <canvas/debug.hxx>
@@ -87,8 +91,8 @@ namespace cppcanvas
                     Size of the transparency group object, in current
                     state coordinate system.
                 */
-                TransparencyGroupAction( MtfAutoPtr&                    rGroupMtf,
-                                         GradientAutoPtr&               rAlphaGradient,
+                TransparencyGroupAction( MtfAutoPtr&&                   rGroupMtf,
+                                         GradientAutoPtr&&              rAlphaGradient,
                                          const Renderer::Parameters&    rParms,
                                          const ::basegfx::B2DPoint&     rDstPoint,
                                          const ::basegfx::B2DVector&    rDstSize,
@@ -141,15 +145,15 @@ namespace cppcanvas
             }
 
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
-                                                              GradientAutoPtr&              rAlphaGradient,
+            TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&&                  rGroupMtf,
+                                                              GradientAutoPtr&&             rAlphaGradient,
                                                               const Renderer::Parameters&   rParms,
                                                               const ::basegfx::B2DPoint&    rDstPoint,
                                                               const ::basegfx::B2DVector&   rDstSize,
                                                               const CanvasSharedPtr&        rCanvas,
                                                               const OutDevState&            rState ) :
-                mpGroupMtf( rGroupMtf ),
-                mpAlphaGradient( rAlphaGradient ),
+                mpGroupMtf( std::move(rGroupMtf) ),
+                mpAlphaGradient( std::move(rAlphaGradient) ),
                 maParms( rParms ),
                 maDstSize( rDstSize ),
                 mxBufferBitmap(),
@@ -475,16 +479,16 @@ namespace cppcanvas
         }
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&                  rGroupMtf,
-                                                                                       GradientAutoPtr&             rAlphaGradient,
+        ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&&                 rGroupMtf,
+                                                                                       GradientAutoPtr&&            rAlphaGradient,
                                                                                        const Renderer::Parameters&  rParms,
                                                                                        const ::basegfx::B2DPoint&   rDstPoint,
                                                                                        const ::basegfx::B2DVector&  rDstSize,
                                                                                        const CanvasSharedPtr&       rCanvas,
                                                                                        const OutDevState&           rState )
         {
-            return ActionSharedPtr( new TransparencyGroupAction(rGroupMtf,
-                                                                rAlphaGradient,
+            return ActionSharedPtr( new TransparencyGroupAction(std::move(rGroupMtf),
+                                                                std::move(rAlphaGradient),
                                                                 rParms,
                                                                 rDstPoint,
                                                                 rDstSize,
