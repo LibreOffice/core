@@ -452,13 +452,10 @@ void Color::clearTransparence()
 
 sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr ) const
 {
-    /*  Special handling for theme style list placeholder colors (state
-        COLOR_PH), Color::getColor() may be called with different placeholder
-        colors in the nPhClr parameter. Therefore, the resolved color will not
-        be stored in this object, thus the state COLOR_FINAL will not be
-        reached and the transformation container will not be cleared, but the
-        original COLOR_PH state will be restored instead. */
-    bool bIsPh = false;
+    const sal_Int32 nTempC1 = mnC1;
+    const sal_Int32 nTempC2 = mnC2;
+    const sal_Int32 nTempC3 = mnC3;
+    const ColorMode eTempMode = meMode;
 
     switch( meMode )
     {
@@ -471,7 +468,7 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
         case COLOR_SCHEME:  setResolvedRgb( rGraphicHelper.getSchemeColor( mnC1 ) );        break;
         case COLOR_PALETTE: setResolvedRgb( rGraphicHelper.getPaletteColor( mnC1 ) );       break;
         case COLOR_SYSTEM:  setResolvedRgb( rGraphicHelper.getSystemColor( mnC1, mnC2 ) );  break;
-        case COLOR_PH:      setResolvedRgb( nPhClr ); bIsPh = true;                         break;
+        case COLOR_PH:      setResolvedRgb( nPhClr );                                       break;
 
         case COLOR_FINAL:   return mnC1;
     }
@@ -607,10 +604,23 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
         mnC1 = API_RGB_TRANSPARENT;
     }
 
-    meMode = bIsPh ? COLOR_PH : COLOR_FINAL;
+    sal_Int32 nRet = mnC1;
+    // Restore the original values when the color depends on one of the input
+    // parameters (rGraphicHelper or nPhClr)
+    if( eTempMode >= COLOR_SCHEME && eTempMode <= COLOR_PH )
+    {
+        mnC1 = nTempC1;
+        mnC2 = nTempC2;
+        mnC3 = nTempC3;
+        meMode = eTempMode;
+    }
+    else
+    {
+        meMode = COLOR_FINAL;
+    }
     if( meMode == COLOR_FINAL )
         maTransforms.clear();
-    return mnC1;
+    return nRet;
 }
 
 bool Color::hasTransparency() const
