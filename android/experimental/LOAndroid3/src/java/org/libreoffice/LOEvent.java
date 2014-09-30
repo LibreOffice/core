@@ -52,30 +52,6 @@ public class LOEvent {
         mTypeString = "Change part";
     }
 
-    public static LOEvent draw(Rect rect) {
-        return new LOEvent(DRAW, rect);
-    }
-
-    public static LOEvent sizeChanged(int widthPixels, int heightPixels) {
-        return new LOEvent(SIZE_CHANGED, widthPixels, heightPixels);
-    }
-
-    public static LOEvent tileSize(IntSize tileSize) {
-        return new LOEvent(TILE_SIZE, tileSize);
-    }
-
-    public static LOEvent viewport(ImmutableViewportMetrics viewportMetrics) {
-        return new LOEvent(VIEWPORT, viewportMetrics);
-    }
-
-    public static LOEvent changePart(int part) {
-        return new LOEvent(CHANGE_PART, part);
-    }
-
-    public static LOEvent load(String inputFile) {
-        return new LOEvent(LOAD, inputFile);
-    }
-
     public String getTypeString() {
         return mTypeString;
     }
@@ -91,5 +67,4 @@ public class LOEvent {
     public String getFilename() {
         return mFilename;
     }
-
 }

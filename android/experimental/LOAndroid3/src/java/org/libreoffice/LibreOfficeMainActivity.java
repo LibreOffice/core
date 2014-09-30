@@ -127,7 +127,7 @@ public class LibreOfficeMainActivity extends Activity {
         mLayerController.setLayerClient(mLayerClient);
         mGeckoLayout.addView(mLayerController.getView(), 0);
 
-        LOKitShell.sendEvent(LOEvent.load(mInputFile));
+        LOKitShell.sendEvent(LOEventFactory.load(mInputFile));
     }
 
     @Override
@@ -199,7 +199,7 @@ public class LibreOfficeMainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DocumentPartView partView = mDocumentPartViewListAdpater.getItem(position);
-            LOKitShell.sendEvent(LOEvent.changePart(partView.getPartIndex()));
+            LOKitShell.sendEvent(LOEventFactory.changePart(partView.getPartIndex()));
             mDrawerLayout.closeDrawer(mDrawerList);
         }
     }

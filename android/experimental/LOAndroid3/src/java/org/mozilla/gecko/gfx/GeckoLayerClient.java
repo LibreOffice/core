@@ -46,6 +46,7 @@ import android.util.Log;
 import android.view.View;
 
 import org.libreoffice.LOEvent;
+import org.libreoffice.LOEventFactory;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.TileProvider;
@@ -180,7 +181,7 @@ public class GeckoLayerClient implements LayerView.Listener {
             Log.d(LOGTAG, "Window-size changed to " + mWindowSize);
         }
 
-        LOEvent event = LOEvent.sizeChanged(metrics.widthPixels, metrics.heightPixels);
+        LOEvent event = LOEventFactory.sizeChanged(metrics.widthPixels, metrics.heightPixels);
         LOKitShell.sendEvent(event);
     }
 
@@ -206,7 +207,7 @@ public class GeckoLayerClient implements LayerView.Listener {
             mDrawTimingQueue.add(displayPort);
         }
 
-        LOKitShell.sendEvent(LOEvent.viewport(clampedMetrics));
+        LOKitShell.sendEvent(LOEventFactory.viewport(clampedMetrics));
         if (mViewportSizeChanged) {
             mViewportSizeChanged = false;
             LOKitShell.viewSizeChanged();
