@@ -25,7 +25,7 @@ public class LOKitThread extends Thread {
         TileProviderFactory.initialize();
     }
 
-    private boolean draw() throws InterruptedException {
+    private boolean draw() {
         RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         DisplayMetrics displayMetrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
@@ -51,7 +51,7 @@ public class LOKitThread extends Thread {
         mController.setForceRedraw();
     }
 
-    private void changePart(int partIndex) throws InterruptedException {
+    private void changePart(int partIndex) {
         mTileProvider.changePart(partIndex);
         mLayerClient.clearAllTiles();
         refresh();
@@ -88,7 +88,7 @@ public class LOKitThread extends Thread {
         }
     }
 
-    private void processEvent(LOEvent event) throws InterruptedException {
+    private void processEvent(LOEvent event) {
         switch (event.mType) {
             case LOEvent.LOAD:
                 load(event.getFilename());
