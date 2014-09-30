@@ -145,6 +145,7 @@ calc_constructor_list = [
     ]
 
 draw_factory_list = [
+    ("libanimcorelo.a", "animcore_component_getFactory"),
     ("libsddlo.a", "sdd_component_getFactory"),
     ("libsdlo.a", "sd_component_getFactory"),
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
