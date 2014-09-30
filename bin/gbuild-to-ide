@@ -216,8 +216,9 @@ class GbuildParser:
 
 class IdeIntegrationGenerator:
 
-    def __init__(self, gbuildparser):
+    def __init__(self, gbuildparser, ide):
         self.gbuildparser = gbuildparser
+        self.ide = ide
 
     def emit(self):
         pass
@@ -225,8 +226,8 @@ class IdeIntegrationGenerator:
 
 class DebugIntegrationGenerator(IdeIntegrationGenerator):
 
-    def __init__(self, gbuildparser):
-        IdeIntegrationGenerator.__init__(self, gbuildparser)
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
     def emit(self):
         print(self.gbuildparser.srcdir)
@@ -239,8 +240,8 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
 
 class VimIntegrationGenerator(IdeIntegrationGenerator):
 
-    def __init__(self, gbuildparser):
-        IdeIntegrationGenerator.__init__(self, gbuildparser)
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
     def emit(self):
         global_list = []
@@ -423,8 +424,8 @@ VersionControl=kdevgit
         includedirfile.write('\n'.join(include))
         includedirfile.close()
 
-    def __init__(self, gbuildparser):
-        IdeIntegrationGenerator.__init__(self, gbuildparser)
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
         self.target_by_location = {}
         self.target_by_path = {}
         for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
@@ -616,8 +617,8 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         self.write_dict_to_plist(self.generate_project(modulename),
                                  open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w'))
 
-    def __init__(self, gbuildparser):
-        IdeIntegrationGenerator.__init__(self, gbuildparser)
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
         self.target_by_location = {}
         for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
             if target.location not in self.target_by_location:
@@ -632,8 +633,9 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
 
 class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
-    def __init__(self, gbuildparser):
-        IdeIntegrationGenerator.__init__(self, gbuildparser)
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+        self.toolset = self.retrieve_toolset(ide)
         self.solution_directory = './'
         self.configurations = {
             'Build': {
@@ -659,6 +661,10 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             if not target.location in self.target_by_location:
                 self.target_by_location[target.location] = set()
             self.target_by_location[target.location] |= set([target])
+
+    def retrieve_toolset(self, ide):
+        ide_toolset_map = {'vs2012':'v110', 'vs2013':'v120'}
+        return ide_toolset_map[ide]
 
     def module_make_command(self, targets):
         return '%(sh)s -c "PATH=\\"/bin:$PATH\\"; cd %(location)s && %(makecmd)s -rs ' + targets + '"'
@@ -775,7 +781,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             conf_type_node.text = 'Makefile'
             # VS2012: I need to have this otherwise the names of projects will contain text Visual Studio 2010 in the Solution Explorer
             platform_toolset_node = ET.SubElement(conf_node, '{%s}PlatformToolset' % ns)
-            platform_toolset_node.text = 'v110'
+            platform_toolset_node.text = self.toolset
 
         import_node = ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.props')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionSettings')
@@ -894,6 +900,7 @@ if __name__ == '__main__':
         'kdevelop': KdevelopIntegrationGenerator,
         'xcode': XcodeIntegrationGenerator,
         'vs2012': VisualStudioIntegrationGenerator,
+        'vs2013': VisualStudioIntegrationGenerator,
         'vim': VimIntegrationGenerator,
         'debug': DebugIntegrationGenerator}
 
@@ -906,7 +913,7 @@ if __name__ == '__main__':
     else:
         gbuildparser = GbuildParser().parse(sys.stdin)
 
-    generators[args.ide](gbuildparser).emit()
+    generators[args.ide](gbuildparser, args.ide).emit()
 
 # Local Variables:
 # indent-tabs-mode: nil
