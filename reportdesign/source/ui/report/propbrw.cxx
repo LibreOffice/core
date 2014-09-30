@@ -288,7 +288,7 @@ uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const Sdr
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
 
-        ::std::auto_ptr<SdrObjListIter> pGroupIterator;
+        ::std::unique_ptr<SdrObjListIter> pGroupIterator;
         if (pCurrent->IsGroupObject())
         {
             pGroupIterator.reset(new SdrObjListIter(*pCurrent->GetSubList()));

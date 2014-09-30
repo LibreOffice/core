@@ -276,9 +276,7 @@ namespace
                 const SfxPoolItem* pItem = _rItemSet.GetItem(aIt->nWID);
                 if ( pItem )
                 {
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    ::std::auto_ptr<SfxPoolItem> pClone(pItem->Clone());
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
+                    ::std::unique_ptr<SfxPoolItem> pClone(pItem->Clone());
                     pClone->PutValue(_xShape->getPropertyValue(aIt->sName), aIt->nMemberId);
                     _rItemSet.Put(*pClone, aIt->nWID);
                 }
@@ -649,10 +647,8 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE }
     };
     vcl::Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<FontList> pFontList(new FontList( pParent ));
+    ::std::unique_ptr<FontList> pFontList(new FontList( pParent ));
     XColorListRef pColorList( XColorList::CreateStdColorList() );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     SfxPoolItem* pDefaults[] =
     {
         new SvxFontItem(ITEMID_FONT),
@@ -713,9 +709,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     bool bSuccess = false;
     try
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( *pPool, pRanges ) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<SfxItemSet> pDescriptor( new SfxItemSet( *pPool, pRanges ) );
         lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
 
         {   // want the dialog to be destroyed before our set
@@ -758,16 +752,12 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     try
     {
         SfxItemPool& rItemPool = pModel->GetItemPool();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( rItemPool, rItemPool.GetFirstWhich(),rItemPool.GetLastWhich() ) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<SfxItemSet> pDescriptor( new SfxItemSet( rItemPool, rItemPool.GetFirstWhich(),rItemPool.GetLastWhich() ) );
         lcl_fillShapeToItems(_xShape,*pDescriptor);
 
         {   // want the dialog to be destroyed before our set
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get(), true ));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get(), true ));
             if ( RET_OK == pDialog->Execute() )
             {
                 bSuccess = true;

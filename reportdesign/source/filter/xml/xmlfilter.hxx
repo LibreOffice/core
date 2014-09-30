@@ -76,21 +76,19 @@ private:
     com::sun::star::uno::Any                        m_aViewSettings;
     Reference< XComponent >                         m_xSrcDoc;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pReportElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pGroupsElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pGroupElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pSectionElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pControlElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pFunctionElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pSubDocumentElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pFormatElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pColumnTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pCellElemTokenMap;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pDocElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pReportElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pGroupsElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pGroupElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pSectionElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pComponentElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pControlElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pFunctionElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pSubDocumentElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pFormatElemTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pColumnTokenMap;
+    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pCellElemTokenMap;
 
     rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
     rtl::Reference < XMLPropertySetMapper >           m_xCellStylesPropertySetMapper;

@@ -46,7 +46,7 @@ namespace rptui
         OReportPage*                        m_pPage;
         OSectionView*                       m_pView;
         OSectionWindow*                     m_pParent;
-        ::std::auto_ptr<DlgEdFunc>          m_pFunc;
+        ::std::unique_ptr<DlgEdFunc>        m_pFunc;
         ::boost::shared_ptr<OReportModel>   m_pModel;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pMulti;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pReportListener;

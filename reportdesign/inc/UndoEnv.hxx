@@ -40,7 +40,7 @@ namespace rptui
                                         >
         , public SfxListener
     {
-        const ::std::auto_ptr<OXUndoEnvironmentImpl> m_pImpl;
+        const ::std::unique_ptr<OXUndoEnvironmentImpl> m_pImpl;
 
         OXUndoEnvironment(const OXUndoEnvironment&);
         OXUndoEnvironment& operator=(const OXUndoEnvironment&);

@@ -47,7 +47,7 @@ namespace rptui
                                         >
     {
 
-        const ::std::auto_ptr<OXReportControllerObserverImpl> m_pImpl;
+        const ::std::unique_ptr<OXReportControllerObserverImpl> m_pImpl;
 
         FormattedFieldBeautifier m_aFormattedFieldBeautifier;
         FixedTextColor           m_aFixedTextColor;

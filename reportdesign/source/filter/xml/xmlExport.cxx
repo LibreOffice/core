@@ -1469,9 +1469,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
     rtl::Reference< XMLShapeExport > xShapeExport = GetShapeExport();
     xShapeExport->seekShapes(_xSection.get());
     const sal_Int32 nCount = _xSection->getCount();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SvXMLElementExport> pParagraphContent;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SvXMLElementExport> pParagraphContent;
     if ( _bAddParagraph )
         pParagraphContent.reset(new SvXMLElementExport(*this,XML_NAMESPACE_TEXT, XML_P, true, false));
 
@@ -1482,9 +1480,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
         uno::Reference< XShape > xShape(_xSection->getByIndex(i),uno::UNO_QUERY);
         if ( xShape.is() )
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<SvXMLElementExport> pSubDocument;
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<SvXMLElementExport> pSubDocument;
             uno::Reference< frame::XModel> xModel(xShape->getPropertyValue("Model"),uno::UNO_QUERY);
             if ( xModel.is() ) // special handling for chart object
             {

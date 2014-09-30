@@ -82,7 +82,6 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 ,m_pPage(NULL)
 ,m_pView(NULL)
 ,m_pParent(_pParent)
-,m_pFunc(NULL)
 ,m_pMulti(NULL)
 ,m_pReportListener(NULL)
 ,m_xSection(_xSection)
@@ -122,7 +121,7 @@ OReportSection::~OReportSection()
     m_pFunc.reset();
 
     {
-        ::std::auto_ptr<OSectionView> aTemp( m_pView);
+        ::std::unique_ptr<OSectionView> aTemp( m_pView);
         if ( m_pView )
             m_pView->EndListening( *m_pModel );
         m_pView = NULL;

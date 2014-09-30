@@ -210,9 +210,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
     else if ( _sName == "rpt:master-detail-field" )
     {
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());
         try
         {
             OUString sMasterField,sDetailField;
@@ -258,9 +256,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
     {
         bool bHasCategories = true;
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
             OUString sLocalName;

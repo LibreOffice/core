@@ -112,9 +112,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >        m_xMasterDetails;
         /// type converter, needed on various occasions
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >                m_xTypeConverter;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< OPropertyInfoService >                                                     m_pInfoService;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< OPropertyInfoService >                                                   m_pInfoService;
     };
 
 } // namespace rptui

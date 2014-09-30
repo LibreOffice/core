@@ -98,9 +98,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >  m_xFormComponentHandler; /// delegatee
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xReportComponent; /// inspectee
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xFormComponent; /// inspectee
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr< OPropertyInfoService >                                             m_pInfoService;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr< OPropertyInfoService >                                           m_pInfoService;
     };
 
 } // namespace rptui

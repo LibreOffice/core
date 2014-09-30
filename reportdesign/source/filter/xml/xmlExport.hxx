@@ -110,8 +110,8 @@ public:
     typedef ::std::map< Reference<XPropertySet> ,TGrid >            TSectionsGrid;
     typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
 private:
-    ::std::auto_ptr< TStringPair >                  m_aAutoIncrement;
-    ::std::auto_ptr< TDelimiter >                   m_aDelimiter;
+    ::std::unique_ptr< TStringPair >                m_aAutoIncrement;
+    ::std::unique_ptr< TDelimiter >                 m_aDelimiter;
     ::std::vector< Any >                            m_aDataSourceSettings;
     TSectionsGrid                                   m_aSectionsGrid;
 

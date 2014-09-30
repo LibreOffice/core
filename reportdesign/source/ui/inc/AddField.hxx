@@ -56,7 +56,7 @@ class  OAddFieldWindow  :public FloatingWindow
 
     ToolBox                                                                     m_aActions;
 
-    ::std::auto_ptr<OAddFieldWindowListBox>                                     m_pListBox;
+    ::std::unique_ptr<OAddFieldWindowListBox>                                   m_pListBox;
     FixedLine                                                                   m_aFixedLine;
     FixedText                                                                   m_aHelpText;
 

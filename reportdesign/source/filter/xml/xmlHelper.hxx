@@ -44,8 +44,8 @@ namespace rptxml
         OPropertyHandlerFactory(const OPropertyHandlerFactory&);
         void operator =(const OPropertyHandlerFactory&);
     protected:
-        mutable ::std::auto_ptr<XMLConstantsPropertyHandler>    m_pDisplayHandler;
-        mutable ::std::auto_ptr<XMLPropertyHandler>             m_pTextAlignHandler;
+        mutable ::std::unique_ptr<XMLConstantsPropertyHandler>    m_pDisplayHandler;
+        mutable ::std::unique_ptr<XMLPropertyHandler>             m_pTextAlignHandler;
     public:
         OPropertyHandlerFactory();
         virtual ~OPropertyHandlerFactory();

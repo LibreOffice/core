@@ -28,7 +28,7 @@ namespace rptui
     class OReportUndoFactory : public SdrUndoFactory
     {
         OModuleClient       m_aModuleClient;
-        ::std::auto_ptr<SdrUndoFactory> m_pUndoFactory;
+        ::std::unique_ptr<SdrUndoFactory> m_pUndoFactory;
 
         OReportUndoFactory(const OReportUndoFactory&);
         OReportUndoFactory& operator=(const OReportUndoFactory&);
