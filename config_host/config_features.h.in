@@ -136,4 +136,9 @@
  */
 #define HAVE_FEATURE_COLLADA 0
 
+/*
+ * Whether VCL renders using Open GL.
+ */
+#define HAVE_VCL_OPEN_GL_BACKEND 0
+
 #endif

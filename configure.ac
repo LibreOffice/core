@@ -1222,6 +1222,11 @@ AC_ARG_ENABLE(vlc,
         [Enable building with the VLC avmedia backend.]),
 ,enable_vlc=no)
 
+AC_ARG_ENABLE(vgl,
+	AS_HELP_STRING([--enable-vgl],
+		[Enable building with the VCL Open GL backend.]),
+,enable_vgl=no)
+
 AC_ARG_ENABLE(neon,
     AS_HELP_STRING([--disable-neon],
         [Disable neon and the compilation of webdav binding.]),
@@ -2440,6 +2445,10 @@ if test $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
     AC_DEFINE(HAVE_FEATURE_DESKTOP)
     AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
+fi
+
+if test "$enable_vgl" == yes; then
+	AC_DEFINE(HAVE_VCL_OPEN_GL_BACKEND)
 fi
 
 DISABLE_EXPORT=''
