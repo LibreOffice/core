@@ -772,7 +772,7 @@
 #define UNO_NAME_DESCRIPTION "Description"
 #define UNO_NAME_META "InContentMetadata"
 #define UNO_NAME_IS_TEMPLATE "IsTemplate"
-#define UNO_NAME_VBA_DOCOBJ "ThisVBADocObj"
+#define UNO_NAME_VBA_DOCOBJ "VBAGlobalConstantName"
 #define UNO_NAME_NESTED_TEXT_CONTENT "NestedTextContent"
 #define UNO_NAME_SEPARATOR_LINE_STYLE "SeparatorLineStyle"
 #define UNO_NAME_FOOTNOTE_LINE_STYLE "FootnoteLineStyle"
