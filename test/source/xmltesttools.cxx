@@ -114,6 +114,18 @@ void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath,
 #endif
 }
 
+void XmlTestTools::assertXPathNoAttribute(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
+{
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("In <" + OString(pXmlDoc->name) + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+                                 1, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("In <" + OString(pXmlDoc->name) + ">, XPath '" + rXPath + "' unexpected '" + rAttribute + "' attribute").getStr(),
+                                 static_cast<xmlChar*>(0), xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+    xmlXPathFreeObject(pXmlObj);
+}
+
 int XmlTestTools::getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);

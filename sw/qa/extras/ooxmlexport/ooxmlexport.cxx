@@ -134,14 +134,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaShading, "para-shading.docx")
 {
     // Make sure the themeColor attribute is not written when it would be empty.
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        xmlXPathObjectPtr pXPath = getXPathNode(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:shd");
-        xmlNodeSetPtr pXmlNodes = pXPath->nodesetval;
-        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
-        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-        // The attribute existed, so xmlGetProp() returned non-NULL.
-        CPPUNIT_ASSERT_EQUAL(static_cast<xmlChar*>(0), xmlGetProp(pXmlNode, BAD_CAST("themeColor")));
-    }
+        assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:shd", "themeColor");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
@@ -294,14 +287,7 @@ DECLARE_OOXMLEXPORT_TEST(testDrawingmlFlipv, "drawingml-flipv.docx")
 {
     // The problem was that the shape had vertical flip only, but then we added rotation as well on export.
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        xmlXPathObjectPtr pXPath = getXPathNode(pXmlDoc, "//a:xfrm");
-        xmlNodeSetPtr pXmlNodes = pXPath->nodesetval;
-        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
-        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-        // The attribute existed, so xmlGetProp() returned non-NULL.
-        CPPUNIT_ASSERT_EQUAL(static_cast<xmlChar*>(0), xmlGetProp(pXmlNode, BAD_CAST("rot")));
-    }
+        assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "rot");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRot90Fliph, "rot90-fliph.docx")

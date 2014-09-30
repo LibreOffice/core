@@ -76,6 +76,10 @@ protected:
      * Useful for checking that we do have a no child nodes to a specific node (nNumberOfChildNodes == 0).
      */
     void          assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes);
+    /**
+     * Assert that rXPath exists, has exactly 1 child node and does *not* have an attribute named rAttribute.
+     */
+    void          assertXPathNoAttribute(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
 
 };
 
