@@ -1656,50 +1656,50 @@ sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
     return (p != NULL && *p == '\0') ? nRes : 0;
 }
 
-static inline void lcl_a1_append_c ( OUString &rString, int nCol, bool bIsAbs )
+static inline void lcl_a1_append_c ( OUStringBuffer &rString, int nCol, bool bIsAbs )
 {
     if( bIsAbs )
-        rString += "$";
+        rString.append("$");
     ScColToAlpha( rString, sal::static_int_cast<SCCOL>(nCol) );
 }
 
-static inline void lcl_a1_append_r ( OUString &rString, int nRow, bool bIsAbs )
+static inline void lcl_a1_append_r ( OUStringBuffer &rString, int nRow, bool bIsAbs )
 {
     if ( bIsAbs )
-        rString += "$";
-    rString += OUString::number( nRow+1 );
+        rString.append("$");
+    rString.append(OUString::number( nRow+1 ));
 }
 
-static inline void lcl_r1c1_append_c ( OUString &rString, int nCol, bool bIsAbs,
+static inline void lcl_r1c1_append_c ( OUStringBuffer &rString, int nCol, bool bIsAbs,
                                        const ScAddress::Details& rDetails )
 {
-    rString += "C";
+    rString.append("C");
     if (bIsAbs)
     {
-        rString += OUString::number( nCol + 1 );
+        rString.append(OUString::number( nCol + 1 ));
     }
     else
     {
         nCol -= rDetails.nCol;
         if (nCol != 0) {
-            rString += "[" + OUString::number( nCol ) + "]";
+            rString.append("[").append(OUString::number( nCol )).append("]");
         }
     }
 }
 
-static inline void lcl_r1c1_append_r ( OUString &rString, int nRow, bool bIsAbs,
+static inline void lcl_r1c1_append_r ( OUStringBuffer &rString, int nRow, bool bIsAbs,
                                        const ScAddress::Details& rDetails )
 {
-    rString += "R";
+    rString.append("R");
     if (bIsAbs)
     {
-        rString += OUString::number( nRow + 1 );
+        rString.append(OUString::number( nRow + 1 ));
     }
     else
     {
         nRow -= rDetails.nRow;
         if (nRow != 0) {
-            rString += "[" + OUString::number( nRow ) + "]";
+            rString.append("[").append(OUString::number( nRow )).append("]");
         }
     }
 }
@@ -1732,7 +1732,7 @@ static OUString getFileNameFromDoc( const ScDocument* pDoc )
 OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
                            const Details& rDetails) const
 {
-    OUString r;
+    OUStringBuffer r;
     if( nFlags & SCA_VALID )
         nFlags |= ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB );
     if( pDoc && (nFlags & SCA_VALID_TAB ) )
@@ -1770,11 +1770,11 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             {
             default :
             case formula::FormulaGrammar::CONV_OOO:
-                r += aDocName;
+                r.append(aDocName);
                 if( nFlags & SCA_TAB_ABSOLUTE )
-                    r += "$";
-                r += aTabName;
-                r += ".";
+                    r.append("$");
+                r.append(aTabName);
+                r.append(".");
                 break;
 
             case formula::FormulaGrammar::CONV_XL_A1:
@@ -1782,10 +1782,10 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             case formula::FormulaGrammar::CONV_XL_OOX:
                 if (!aDocName.isEmpty())
                 {
-                    r += "[" + aDocName + "]";
+                    r.append("[").append(aDocName).append("]");
                 }
-                r += aTabName;
-                r += "!";
+                r.append(aTabName);
+                r.append("!");
                 break;
             }
         }
@@ -1809,7 +1809,7 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             lcl_r1c1_append_c ( r, nCol, (nFlags & SCA_COL_ABSOLUTE) != 0, rDetails );
         break;
     }
-    return r;
+    return r.makeStringAndClear();
 }
 
 static void lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
@@ -1841,7 +1841,7 @@ static void lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
     ScCompiler::CheckTabQuotes( rTabName, rDetails.eConv);
 }
 
-static void lcl_ScRange_Format_XL_Header( OUString& rString, const ScRange& rRange,
+static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange& rRange,
                                           sal_uInt16 nFlags, const ScDocument* pDoc,
                                           const ScAddress::Details& rDetails )
 {
@@ -1852,18 +1852,18 @@ static void lcl_ScRange_Format_XL_Header( OUString& rString, const ScRange& rRan
                           aTabName, aDocName );
         if( !aDocName.isEmpty() )
         {
-            rString += "[" + aDocName + "]";
+            rString.append("[").append(aDocName).append("]");
         }
-        rString += aTabName;
+        rString.append(aTabName);
 
         if( nFlags & SCA_TAB2_3D )
         {
             lcl_Split_DocTab( pDoc, rRange.aEnd.Tab(), rDetails, nFlags,
                               aTabName, aDocName );
-            rString += ":";
-            rString += aTabName;
+            rString.append(":");
+            rString.append(aTabName);
         }
-        rString += "!";
+        rString.append("!");
     }
 }
 
@@ -1875,7 +1875,7 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
         return ScGlobal::GetRscString( STR_NOREF_STR );
     }
 
-    OUString r;
+    OUStringBuffer r;
 #define absrel_differ(nFlags, mask) (((nFlags) & (mask)) ^ (((nFlags) >> 4) & (mask)))
     switch( rDetails.eConv ) {
     default :
@@ -1894,8 +1894,8 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
             else
                 nFlags |= SCA_TAB_3D;
             OUString aName(aEnd.Format(nFlags, pDoc, rDetails));
-            r += ":";
-            r += aName;
+            r.append(":");
+            r.append(aName);
         }
     }
     break;
@@ -1907,14 +1907,14 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
         {
             // Full col refs always require 2 rows (2:2)
             lcl_a1_append_r( r, aStart.Row(), (nFlags & SCA_ROW_ABSOLUTE) != 0 );
-            r += ":";
+            r.append(":");
             lcl_a1_append_r( r, aEnd.Row(), (nFlags & SCA_ROW2_ABSOLUTE) != 0 );
         }
         else if( aStart.Row() == 0 && aEnd.Row() >= MAXROW )
         {
             // Full row refs always require 2 cols (A:A)
             lcl_a1_append_c( r, aStart.Col(), (nFlags & SCA_COL_ABSOLUTE) != 0 );
-            r += ":";
+            r.append(":");
             lcl_a1_append_c( r, aEnd.Col(), (nFlags & SCA_COL2_ABSOLUTE) != 0 );
         }
         else
@@ -1925,7 +1925,7 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
                 absrel_differ( nFlags, SCA_COL_ABSOLUTE ) ||
                 aStart.Row() != aEnd.Row() ||
                 absrel_differ( nFlags, SCA_ROW_ABSOLUTE )) {
-                r += ":";
+                r.append(":");
                 lcl_a1_append_c ( r, aEnd.Col(), (nFlags & SCA_COL2_ABSOLUTE) != 0 );
                 lcl_a1_append_r ( r, aEnd.Row(), (nFlags & SCA_ROW2_ABSOLUTE) != 0 );
             }
@@ -1939,7 +1939,7 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
             lcl_r1c1_append_r( r, aStart.Row(), (nFlags & SCA_ROW_ABSOLUTE) != 0, rDetails );
             if( aStart.Row() != aEnd.Row() ||
                 absrel_differ( nFlags, SCA_ROW_ABSOLUTE )) {
-                r += ":";
+                r.append(":");
                 lcl_r1c1_append_r( r, aEnd.Row(), (nFlags & SCA_ROW2_ABSOLUTE) != 0, rDetails );
             }
         }
@@ -1948,7 +1948,7 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
             lcl_r1c1_append_c( r, aStart.Col(), (nFlags & SCA_COL_ABSOLUTE) != 0, rDetails );
             if( aStart.Col() != aEnd.Col() ||
                 absrel_differ( nFlags, SCA_COL_ABSOLUTE )) {
-                r += ":";
+                r.append(":");
                 lcl_r1c1_append_c( r, aEnd.Col(), (nFlags & SCA_COL2_ABSOLUTE) != 0, rDetails );
             }
         }
@@ -1960,14 +1960,14 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
                 absrel_differ( nFlags, SCA_COL_ABSOLUTE ) ||
                 aStart.Row() != aEnd.Row() ||
                 absrel_differ( nFlags, SCA_ROW_ABSOLUTE )) {
-                r += ":";
+                r.append(":");
                 lcl_r1c1_append_r( r, aEnd.Row(), (nFlags & SCA_ROW2_ABSOLUTE) != 0, rDetails );
                 lcl_r1c1_append_c( r, aEnd.Col(), (nFlags & SCA_COL2_ABSOLUTE) != 0, rDetails );
             }
         }
     }
 #undef  absrel_differ
-    return r;
+    return r.makeStringAndClear();
 }
 
 bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
@@ -2003,7 +2003,7 @@ bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 OUString ScAddress::GetColRowString( bool bAbsolute,
                                    const Details& rDetails ) const
 {
-    OUString aString;
+    OUStringBuffer aString;
 
     switch( rDetails.eConv )
     {
@@ -2012,14 +2012,14 @@ OUString ScAddress::GetColRowString( bool bAbsolute,
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
     if (bAbsolute)
-        aString += "$";
+        aString.append("$");
 
     ScColToAlpha( aString, nCol);
 
     if ( bAbsolute )
-        aString += "$";
+        aString.append("$");
 
-    aString += OUString::number(nRow+1);
+    aString.append(OUString::number(nRow+1));
         break;
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
@@ -2028,7 +2028,7 @@ OUString ScAddress::GetColRowString( bool bAbsolute,
         break;
     }
 
-    return aString;
+    return aString.makeStringAndClear();
 }
 
 OUString ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
