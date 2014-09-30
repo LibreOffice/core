@@ -102,7 +102,7 @@ public class FormLayer
         // insert the model into the form component hierarchy, if the caller gave us a location
         if ( null != _parentForm )
         {
-            XIndexContainer parentForm = null;
+            XIndexContainer parentForm;
             if ( _parentForm instanceof XIndexContainer )
                 parentForm = (XIndexContainer)_parentForm;
             else

@@ -127,8 +127,6 @@ public class CheckOGroupBoxModel
     private String[] getBoundPropsToTest()
     {
         Property[] properties = m_xPropSet.getPropertySetInfo().getProperties();
-        String[] testPropsNames = null;
-
         ArrayList<String> tNames = new ArrayList<String>();
 
         for (int i = 0; i < properties.length; i++)
@@ -151,8 +149,7 @@ public class CheckOGroupBoxModel
         } // endfor
 
         //get a array of bound properties
-        testPropsNames = new String[tNames.size()];
-        testPropsNames = tNames.toArray(testPropsNames);
+        String[] testPropsNames = tNames.toArray(new String[tNames.size()]);
         return testPropsNames;
     }
 
