@@ -339,7 +339,6 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
     FileBase::RC    rc;
     bool        bCheckResult= false;
 
-    //::std::auto_ptr<Directory> pDir( new Directory( str ) );
     Directory aDir( str );
     rc = aDir.open();
 
@@ -1257,12 +1256,12 @@ namespace osl_FileStatus
             createTestDirectory( aTmpName3 );
             createTestFile( aTmpName4 );
 
-            ::std::auto_ptr<Directory> pDir( new Directory( aTmpName3 ) );
-            nError1 = pDir->open();
+            Directory pDir( aTmpName3 );
+            nError1 = pDir.open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            nError1 = pDir->getNextItem( rItem, 0 );
+            nError1 = pDir.getNextItem( rItem, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-            pDir->close();
+            pDir.close();
             /*
             Directory aDir( aTmpName3 );
             nError1 = aDir.open();
@@ -1332,7 +1331,6 @@ namespace osl_FileStatus
             createTestFile( aTmpName4 );
 
             pDir = new Directory( aTmpName3 );
-            //::std::auto_ptr<Directory> pDir( new Directory( aTmpName3 ) );
                     ::osl::FileBase::RC nError1 = pDir->open();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = pDir->getNextItem( rItem_file, 1 );
