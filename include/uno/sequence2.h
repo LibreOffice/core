@@ -172,6 +172,20 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_realloc(
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
+/** Destroy a sequence whose reference count has dropped to zero.
+
+    @param sequence must be non-null, sequence->nRefCount must be zero
+    @param type the type of the sequence, must be non-null
+    @param release function called each time an interface needs to be release,
+        must be non-null
+
+    @since LibreOffice 4.4
+*/
+CPPU_DLLPUBLIC void SAL_CALL uno_type_sequence_destroy(
+    uno_Sequence * sequence, struct _typelib_TypeDescriptionReference * type,
+    uno_ReleaseFunc release)
+    SAL_THROW_EXTERN_C();
+
 #ifdef __cplusplus
 }
 #endif

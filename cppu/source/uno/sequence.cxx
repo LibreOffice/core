@@ -920,6 +920,14 @@ void SAL_CALL uno_type_sequence_assign(
     }
 }
 
+void uno_type_sequence_destroy(
+    uno_Sequence * sequence, typelib_TypeDescriptionReference * type,
+    uno_ReleaseFunc release)
+    SAL_THROW_EXTERN_C()
+{
+    idestroySequence(sequence, type, nullptr, release);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
