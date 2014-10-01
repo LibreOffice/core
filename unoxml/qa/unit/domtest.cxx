@@ -175,7 +175,7 @@ struct TokenHandler
         return Identifier.getLength() ? Identifier[0] : 0;
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 ) throw (uno::RuntimeException) SAL_OVERRIDE
+    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         CPPUNIT_ASSERT_MESSAGE( "TokenHandler::getUTF8Identifier() unexpected call",
                                 false );
