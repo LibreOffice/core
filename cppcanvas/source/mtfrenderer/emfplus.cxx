@@ -1288,7 +1288,7 @@ namespace cppcanvas
             } else {
                 rState.isFillColorSet = true;
                 // extract UseBrush
-                EMFPBrush* brush = (EMFPBrush*) aObjects [brushIndexOrColor & 0xff];
+                EMFPBrush* brush = static_cast<EMFPBrush*>( aObjects [brushIndexOrColor & 0xff] );
                 SAL_INFO("cppcanvas.emf", "EMF+\tbrush fill slot: " << brushIndexOrColor << " (type: " << brush->GetType () << ")");
 
                 // give up in case something wrong happened
@@ -1583,7 +1583,7 @@ namespace cppcanvas
         void ImplRenderer::EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
                                                 OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex)
         {
-            EMFPPen* pen = (EMFPPen*) aObjects [penIndex & 0xff];
+            EMFPPen* pen = static_cast<EMFPPen*>( aObjects [penIndex & 0xff] );
 
             SAL_WARN_IF( !pen, "cppcanvas.emf", "emf+ missing pen" );
 
@@ -1755,7 +1755,7 @@ namespace cppcanvas
 
         double ImplRenderer::setFont (sal_uInt8 objectId, const ActionFactoryParameters& rParms, OutDevState& rState)
         {
-            EMFPFont *font = (EMFPFont*) aObjects[ objectId ];
+            EMFPFont *font = static_cast<EMFPFont*>( aObjects[ objectId ] );
 
             rendering::FontRequest aFontRequest;
             aFontRequest.FontDescription.FamilyName = font->family;
@@ -1921,7 +1921,7 @@ namespace cppcanvas
 
                             SAL_INFO("cppcanvas.emf", "EMF+ FillPath slot: " << index);
 
-                            EMFPPlusFillPolygon (((EMFPPath*) aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                            EMFPPlusFillPolygon( static_cast<EMFPPath*>( aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                         }
                         break;
                     case EmfPlusRecordTypeDrawEllipse:
@@ -2045,7 +2045,7 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawPath");
                             SAL_INFO("cppcanvas.emf", "EMF+\tpen: " << penIndex);
 
-                            EMFPPath* path = (EMFPPath*) aObjects [flags & 0xff];
+                            EMFPPath* path = static_cast<EMFPPath*>( aObjects [flags & 0xff] );
                             SAL_WARN_IF( !path, "cppcanvas.emf", "EmfPlusRecordTypeDrawPath missing path" );
 
                             EMFPPlusDrawPolygon (path->GetPolygon (*this), rFactoryParms, rState, rCanvas, penIndex);
@@ -2064,7 +2064,7 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+\tTODO: use image attributes");
 
                             if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
-                                EMFPImage& image = *(EMFPImage *) aObjects [flags & 0xff];
+                                EMFPImage& image = *static_cast<EMFPImage *>( aObjects [flags & 0xff]);
                                 float sx, sy, sw, sh;
                                 sal_Int32 aCount;
 
@@ -2350,7 +2350,7 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+ SetClipPath combine mode: " << combineMode);
                             SAL_INFO("cppcanvas.emf", "EMF+\tpath in slot: " << (flags & 0xff));
 
-                            EMFPPath& path = *(EMFPPath*) aObjects [flags & 0xff];
+                            EMFPPath& path = *static_cast<EMFPPath*>( aObjects [flags & 0xff] );
                             ::basegfx::B2DPolyPolygon& clipPoly (path.GetPolygon (*this));
 
                             clipPoly.transform (rState.mapModeTransform);
@@ -2375,7 +2375,7 @@ namespace cppcanvas
 
                         SAL_INFO("cppcanvas.emf", "EMF+ SetClipRegion");
                         SAL_INFO("cppcanvas.emf", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
-                        EMFPRegion *region = (EMFPRegion*)aObjects [flags & 0xff];
+                        EMFPRegion *region = static_cast<EMFPRegion*>(aObjects [flags & 0xff]);
 
                         // reset clip
                         if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
