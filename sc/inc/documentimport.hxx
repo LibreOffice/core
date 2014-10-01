@@ -43,6 +43,17 @@ class SC_DLLPUBLIC ScDocumentImport : boost::noncopyable
     ScDocumentImport(); // disabled
 
 public:
+
+    struct SC_DLLPUBLIC Attrs
+    {
+        ScAttrEntry* mpData;
+        size_t mnSize;
+
+        bool mbGeneralNumFmtOnly;
+
+        Attrs();
+    };
+
     ScDocumentImport(ScDocument& rDoc);
     ~ScDocumentImport();
 
@@ -87,7 +98,7 @@ public:
      * transfers the ownership of the ScAttrEntry array from the caller to the
      * column.
      */
-    void setAttrEntries( SCTAB nTab, SCCOL nCol, ScAttrEntry* pData, size_t nSize );
+    void setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs& rAttrs );
 
     void finalize();
 

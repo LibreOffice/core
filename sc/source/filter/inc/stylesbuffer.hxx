@@ -637,6 +637,14 @@ class Xf : public WorkbookHelper
 {
     friend bool operator==( const Xf& rXf1,  const Xf& rXf2 );
 public:
+    struct AttrList
+    {
+        std::list<ScAttrEntry> maAttrs;
+        bool mbGeneralNumFmtOnly;
+
+        AttrList();
+    };
+
     explicit            Xf( const WorkbookHelper& rHelper );
 
     /** Sets all attributes from the xf element. */
@@ -662,8 +670,9 @@ public:
     /** Returns the cell protection data of this style. */
     inline const Protection& getProtection() const { return maProtection; }
 
-    void  applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
-                                  sal_Int32 nForceScNumFmt );
+    void applyPatternToAttrList(
+        AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nForceScNumFmt );
+
     /** Writes all formatting attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
     /** Writes all formatting attributes to the passed property set. */
@@ -677,6 +686,7 @@ private:
     typedef ::std::unique_ptr< ::ScPatternAttr > ScPatternAttrPtr;
 
     ScPatternAttrPtr    mpPattern;          /// Calc item set.
+    sal_uLong           mnScNumFmt;         /// Calc number format.
 
     XfModel             maModel;            /// Cell XF or style XF model data.
     Alignment           maAlignment;        /// Cell alignment data.
@@ -902,7 +912,7 @@ public:
     void                writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs = false ) const;
     /** Writes the font attributes of the specified font data to the passed property map. */
     void                writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const;
-    void                writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs = false ) const;
+    sal_uLong           writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs = false ) const;
     /** Writes the specified number format to the passed property map. */
     void                writeNumFmtToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;
     void                writeBorderToItemSet( SfxItemSet& rItemSet, sal_Int32 nBorderId, bool bSkipPoolDefs = false ) const;

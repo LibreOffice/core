@@ -71,7 +71,7 @@ public:
     sal_Int32           finalizeImport(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& rxNumFmts,
                             const ::com::sun::star::lang::Locale& rFromLocale );
-    void fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
+    sal_uLong fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
     /** Writes the number format to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
@@ -98,7 +98,7 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    void                fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs = false ) const;
+    sal_uLong           fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs = false ) const;
 
     /** Writes the specified number format to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;

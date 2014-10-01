@@ -38,6 +38,8 @@ struct ScDocumentImportImpl
         mnDefaultScriptNumeric(SC_SCRIPTTYPE_UNKNOWN) {}
 };
 
+ScDocumentImport::Attrs::Attrs() : mpData(NULL), mnSize(0), mbGeneralNumFmtOnly(true) {}
+
 ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mpImpl(new ScDocumentImportImpl(rDoc)) {}
 ScDocumentImport::~ScDocumentImport()
 {
@@ -409,7 +411,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
     }
 }
 
-void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, ScAttrEntry* pData, size_t nSize )
+void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs& rAttrs )
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(nTab);
     if (!pTab)
@@ -419,7 +421,7 @@ void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, ScAttrEntry* pDat
     if (!pCol)
         return;
 
-    pCol->pAttrArray->SetAttrEntries(pData, nSize);
+    pCol->pAttrArray->SetAttrEntries(rAttrs.mpData, rAttrs.mnSize);
 }
 
 namespace {

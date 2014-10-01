@@ -1911,16 +1911,21 @@ sal_Int32 NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNum
     return maApiData.mnIndex;
 }
 
-void NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
+sal_uLong NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 {
     const ScDocument& rDoc = getScDocument();
     static sal_uLong  nDflt = rDoc.GetFormatTable()->GetStandardFormat( ScGlobal::eLnge );
     sal_uLong nScNumFmt = nDflt;
     if ( maApiData.mnIndex )
         nScNumFmt = maApiData.mnIndex;
+
     ScfTools::PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );
     if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, false ) == SfxItemState::SET )
         ScGlobal::AddLanguage( rItemSet, *(rDoc.GetFormatTable()) );
+    else
+        nScNumFmt = 0;
+
+    return nScNumFmt;
 }
 
 void NumberFormat::writeToPropertyMap( PropertyMap& rPropMap ) const
@@ -1976,10 +1981,13 @@ void NumberFormatsBuffer::finalizeImport()
     maNumFmts.forEach( NumberFormatFinalizer( *this ) );
 }
 
-void NumberFormatsBuffer::fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const
+sal_uLong NumberFormatsBuffer::fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const
 {
-    if( const NumberFormat* pNumFmt = maNumFmts.get( nNumFmtId ).get() )
-        pNumFmt->fillToItemSet( rItemSet, bSkipPoolDefs);
+    const NumberFormat* pNumFmt = maNumFmts.get(nNumFmtId).get();
+    if (!pNumFmt)
+        return 0;
+
+    return pNumFmt->fillToItemSet( rItemSet, bSkipPoolDefs);
 }
 
 void NumberFormatsBuffer::writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const

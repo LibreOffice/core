@@ -461,7 +461,7 @@ void SheetDataBuffer::finalizeImport()
     for ( ColStyles::iterator col = maStylesPerColumn.begin(), col_end = maStylesPerColumn.end(); col != col_end; ++col )
     {
         RowStyles& rRowStyles = col->second;
-        std::list<ScAttrEntry> aAttrs;
+        Xf::AttrList aAttrs;
         SCCOL nScCol = static_cast< SCCOL >( col->first );
         for ( RowStyles::iterator rRows = rRowStyles.begin(), rRows_end = rRowStyles.end(); rRows != rRows_end; ++rRows )
         {
@@ -470,22 +470,24 @@ void SheetDataBuffer::finalizeImport()
              if ( pXf )
                  pXf->applyPatternToAttrList( aAttrs,  rRows->mnStartRow,  rRows->mnEndRow,  rRows->mnNumFmt.second );
         }
-        if (aAttrs.empty() || aAttrs.back().nRow != MAXROW)
+        if (aAttrs.maAttrs.empty() || aAttrs.maAttrs.back().nRow != MAXROW)
         {
             ScAttrEntry aEntry;
             aEntry.nRow = MAXROW;
             aEntry.pPattern = rDoc.getDoc().GetPattern(nScCol, 0, getSheetIndex());
             rDoc.getDoc().GetPool()->Put(*aEntry.pPattern);
-            aAttrs.push_back(aEntry);
+            aAttrs.maAttrs.push_back(aEntry);
         }
 
-        size_t nAttrSize = aAttrs.size();
-        ScAttrEntry* pData = new ScAttrEntry[nAttrSize];
-        std::list<ScAttrEntry>::const_iterator itr = aAttrs.begin(), itrEnd = aAttrs.end();
+        ScDocumentImport::Attrs aAttrParam;
+        aAttrParam.mnSize = aAttrs.maAttrs.size();
+        aAttrParam.mpData = new ScAttrEntry[aAttrParam.mnSize];
+        aAttrParam.mbGeneralNumFmtOnly = aAttrs.mbGeneralNumFmtOnly;
+        std::list<ScAttrEntry>::const_iterator itr = aAttrs.maAttrs.begin(), itrEnd = aAttrs.maAttrs.end();
         for (size_t i = 0; itr != itrEnd; ++itr, ++i)
-            pData[i] = *itr;
+            aAttrParam.mpData[i] = *itr;
 
-        rDoc.setAttrEntries(getSheetIndex(), nScCol, pData, static_cast<SCSIZE>(nAttrSize));
+        rDoc.setAttrEntries(getSheetIndex(), nScCol, aAttrParam);
     }
 
     // merge all cached merged ranges and update right/bottom cell borders
