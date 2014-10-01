@@ -1290,7 +1290,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         size_t nLFOInfos = pLFOInfos.size();
         for (size_t nLfo = 0; nLfo < nLFOInfos; ++nLfo)
         {
-            bOk = false;
             WW8LFOInfo& rLFOInfo = pLFOInfos[nLfo];
             // stehen hierfuer ueberhaupt LFOLVL an ?
             if( rLFOInfo.bOverride )
@@ -1435,7 +1434,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
                 for (sal_uInt8 nLevel = 0; nLevel < rLFOInfo.nLfoLvl; ++nLevel)
                     delete aItemSet[ nLevel ];
-                bOk = true;
             }
         }
     }
