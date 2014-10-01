@@ -86,6 +86,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
+	$(if $(filter LINUX,$(OS)), tilebench) \
 	$(call gb_Helper_optional,CRASHREP,crashrep) \
 	gnome-open-url.bin \
 	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \

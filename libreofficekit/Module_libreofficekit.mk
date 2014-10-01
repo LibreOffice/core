@@ -22,6 +22,10 @@ $(eval $(call gb_Module_add_targets,libreofficekit,\
 ))
 endif # ($(ENABLE_GTK),)
 
+$(eval $(call gb_Module_add_targets,libreofficekit,\
+    Executable_tilebench \
+))
+
 endif # ($(OS),LINUX)
 
 # vim: set ts=4 sw=4 et:
