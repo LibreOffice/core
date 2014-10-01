@@ -46,7 +46,7 @@ namespace DOM
 
     private:
         xmlAttrPtr m_aAttrPtr;
-        ::std::auto_ptr< stringpair_t > m_pNamespace;
+        ::std::unique_ptr< stringpair_t > m_pNamespace;
 
     protected:
         CAttr(CDocument const& rDocument, ::osl::Mutex const& rMutex,
