@@ -191,7 +191,7 @@ css::uno::Reference<css::uno::XInterface> create(
 
     uno::Reference< uno::XInterface > xRet( SvxUnoDrawMSFactory::createTextField( rServiceSpecifier ) );
     if( !xRet.is() )
-        throw lang::ServiceNotRegisteredException();
+        throw lang::ServiceNotRegisteredException("unknown service: " + rServiceSpecifier);
 
     return xRet;
 }
