@@ -4,7 +4,7 @@
  CFLAGS = $(CFLAGS) /D "HAVE_LZMA_H"
  !endif
  CFLAGS = $(CFLAGS) /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
-+CFLAGS = $(CFLAGS) $(SOLARINC)
++CFLAGS = $(CFLAGS) -arch:SSE $(SOLARINC)
  
  # The linker and its options.
  LD = link.exe
