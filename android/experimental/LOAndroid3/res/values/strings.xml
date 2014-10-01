@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">LibreOffice</string>
-    <string name="app_description">Description</string>
-    <string name="app_credits">Credits</string>
+    <string name="app_name">LibreOffice Viewer</string>
 
-    <string name="browser_app_name">LibreOfficeUI</string>
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="app_description">LibreOffice Viewer is an document viewer based on LibreOffice</string>
+    <string name="app_credits">http://www.libreoffice.com</string>
+
+    <string name="browser_app_name">LibreOffice Browser</string>
     <string name="menu_search">Search</string>
     <string name="list_view">List</string>
     <string name="grid_view">Grid</string>
