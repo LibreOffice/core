@@ -55,8 +55,8 @@ protected:
     /** deletes all shapes on this drawing page */
     void DeleteAllShapes();
 
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
     /** sets the properties from a page master style with the given name on this contexts page */
     void SetPageMaster( OUString& rsPageMasterName );

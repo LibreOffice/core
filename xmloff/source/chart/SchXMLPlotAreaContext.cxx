@@ -841,7 +841,7 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
                         SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
 
                     if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                        (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+                        const_cast<XMLPropStyleContext*>( static_cast<const XMLPropStyleContext*>( pStyle ) )->FillPropertySet( xProp );
                 }
             }
         }
@@ -911,7 +911,7 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
                         SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
 
                     if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                        (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+                        const_cast<XMLPropStyleContext*>( static_cast<const XMLPropStyleContext*>( pStyle ) )->FillPropertySet( xProp );
                 }
             }
         }

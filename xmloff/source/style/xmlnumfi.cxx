@@ -1568,8 +1568,8 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 
     for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
     {
-        SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, false);
+        SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>( static_cast<const SvXMLNumFormatContext *>(pStyles->FindStyleChildContext(
+            XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, false)));
         if (pStyle)
         {
             if ((pStyle->PrivateGetKey() > -1))     // don't reset pStyle's bRemoveAfterUse flag

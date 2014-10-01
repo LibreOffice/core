@@ -584,13 +584,13 @@ void SAL_CALL SvXMLImport::endDocument()
     }
 
     if( mxFontDecls.Is() )
-        ((SvXMLStylesContext *)&mxFontDecls)->Clear();
+        static_cast<SvXMLStylesContext *>(&mxFontDecls)->Clear();
     if( mxStyles.Is() )
-        ((SvXMLStylesContext *)&mxStyles)->Clear();
+        static_cast<SvXMLStylesContext *>(&mxStyles)->Clear();
     if( mxAutoStyles.Is() )
-        ((SvXMLStylesContext *)&mxAutoStyles)->Clear();
+        static_cast<SvXMLStylesContext *>(&mxAutoStyles)->Clear();
     if( mxMasterStyles.Is() )
-        ((SvXMLStylesContext *)&mxMasterStyles)->Clear();
+        static_cast<SvXMLStylesContext *>(&mxMasterStyles)->Clear();
 
     // possible form-layer related knittings which can only be done when
     // the whole document exists
@@ -1538,32 +1538,32 @@ void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )
 
 XMLFontStylesContext *SvXMLImport::GetFontDecls()
 {
-    return (XMLFontStylesContext *)&mxFontDecls;
+    return static_cast<XMLFontStylesContext *>(&mxFontDecls);
 }
 
 SvXMLStylesContext *SvXMLImport::GetStyles()
 {
-    return (SvXMLStylesContext *)&mxStyles;
+    return static_cast<SvXMLStylesContext *>(&mxStyles);
 }
 
 SvXMLStylesContext *SvXMLImport::GetAutoStyles()
 {
-    return (SvXMLStylesContext *)&mxAutoStyles;
+    return static_cast<SvXMLStylesContext *>(&mxAutoStyles);
 }
 
 const XMLFontStylesContext *SvXMLImport::GetFontDecls() const
 {
-    return (const XMLFontStylesContext *)&mxFontDecls;
+    return static_cast<const XMLFontStylesContext *>(&mxFontDecls);
 }
 
 const SvXMLStylesContext *SvXMLImport::GetStyles() const
 {
-    return (const SvXMLStylesContext *)&mxStyles;
+    return static_cast<const SvXMLStylesContext *>(&mxStyles);
 }
 
 const SvXMLStylesContext *SvXMLImport::GetAutoStyles() const
 {
-    return (const SvXMLStylesContext *)&mxAutoStyles;
+    return static_cast<const SvXMLStylesContext *>(&mxAutoStyles);
 }
 
 OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
@@ -1755,13 +1755,13 @@ void SvXMLImport::SetError(
 void SvXMLImport::DisposingModel()
 {
     if( mxFontDecls.Is() )
-        ((SvXMLStylesContext *)&mxFontDecls)->Clear();
+        static_cast<SvXMLStylesContext *>(&mxFontDecls)->Clear();
     if( mxStyles.Is() )
-        ((SvXMLStylesContext *)&mxStyles)->Clear();
+        static_cast<SvXMLStylesContext *>(&mxStyles)->Clear();
     if( mxAutoStyles.Is() )
-        ((SvXMLStylesContext *)&mxAutoStyles)->Clear();
+        static_cast<SvXMLStylesContext *>(&mxAutoStyles)->Clear();
     if( mxMasterStyles.Is() )
-        ((SvXMLStylesContext *)&mxMasterStyles)->Clear();
+        static_cast<SvXMLStylesContext *>(&mxMasterStyles)->Clear();
 
     mxModel.set(0);
     mxEventListener.set(NULL);

@@ -52,7 +52,7 @@ using namespace ::xmloff::token;
 
 class SdXMLBodyContext_Impl : public SvXMLImportContext
 {
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
 
@@ -90,7 +90,7 @@ SvXMLImportContext *SdXMLBodyContext_Impl::CreateChildContext(
 class SdXMLDocContext_Impl : public virtual SvXMLImportContext
 {
 protected:
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
     SdXMLDocContext_Impl(

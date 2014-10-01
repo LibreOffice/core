@@ -53,8 +53,8 @@ public:
 
 class SdXMLBodyContext : public SvXMLImportContext
 {
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
     SdXMLBodyContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName );

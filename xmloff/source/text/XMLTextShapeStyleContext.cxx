@@ -224,7 +224,7 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
     {
         // set event suppplier and release reference to context
         Reference<XEventsSupplier> xEventsSupplier(xStyle, UNO_QUERY);
-        ((XMLEventsImportContext *)&xEventContext)->SetEvents(xEventsSupplier);
+        static_cast<XMLEventsImportContext *>(&xEventContext)->SetEvents(xEventsSupplier);
         xEventContext = 0;
     }
 }

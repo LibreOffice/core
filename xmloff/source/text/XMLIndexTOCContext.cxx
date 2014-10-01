@@ -268,7 +268,7 @@ void XMLIndexTOCContext::EndElement()
         // get rid of last paragraph (unless it's the only paragraph)
         rHelper->GetCursor()->goRight(1, sal_False);
         if( xBodyContextRef.Is() &&
-            ((XMLIndexBodyContext*)&xBodyContextRef)->HasContent() )
+            static_cast<XMLIndexBodyContext*>(&xBodyContextRef)->HasContent() )
         {
             rHelper->GetCursor()->goLeft(1, sal_True);
             rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
@@ -301,7 +301,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
                 pContext = new XMLIndexBodyContext(GetImport(), nPrefix,
                                                    rLocalName);
                 if ( !xBodyContextRef.Is() ||
-                     !((XMLIndexBodyContext*)&xBodyContextRef)->HasContent() )
+                     !static_cast<XMLIndexBodyContext*>(&xBodyContextRef)->HasContent() )
                 {
                     xBodyContextRef = pContext;
                 }

@@ -42,8 +42,8 @@ class SdXMLPageMasterStyleContext: public SvXMLStyleContext
     sal_Int32                   mnHeight;
     com::sun::star::view::PaperOrientation meOrientation;
 
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
     TYPEINFO_OVERRIDE();
@@ -71,8 +71,8 @@ class SdXMLPageMasterContext: public SvXMLStyleContext
     OUString               msName;
     SdXMLPageMasterStyleContext*mpPageMasterStyle;
 
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
     TYPEINFO_OVERRIDE();
@@ -135,8 +135,8 @@ class SdXMLPresentationPlaceholderContext: public SvXMLImportContext
     sal_Int32                   mnWidth;
     sal_Int32                   mnHeight;
 
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
     SdXMLPresentationPlaceholderContext(
@@ -162,8 +162,8 @@ class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
     ImpPlaceholderList          maList;
     sal_uInt16                  mnTypeId;
 
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
     TYPEINFO_OVERRIDE();
@@ -192,8 +192,8 @@ class SdXMLStylesContext : public SvXMLStylesContext
     SvXMLNumFmtHelper*          mpNumFmtHelper;
     SvNumberFormatter*          mpNumFormatter;
 
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
     void ImpSetGraphicStyles() const;
     void ImpSetCellStyles() const;
@@ -243,8 +243,8 @@ class SdXMLMasterStylesContext : public SvXMLImportContext
 {
     ImpMasterPageList           maMasterPageList;
 
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
     TYPEINFO_OVERRIDE();

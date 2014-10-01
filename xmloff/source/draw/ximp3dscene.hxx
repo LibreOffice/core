@@ -35,8 +35,8 @@ class SdXML3DSceneShapeContext : public SdXMLShapeContext, public SdXML3DSceneAt
     // this is the scene at the same time
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChildren;
 
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
+    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 protected:
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)

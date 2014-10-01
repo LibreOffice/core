@@ -80,12 +80,12 @@ void lcl_NumberFormatStyleToProperty( const OUString& rStyleName, const OUString
 {
     if( !rStyleName.isEmpty())
     {
-        SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)rStylesContext.FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, rStyleName, true );
+        const SvXMLNumFormatContext* pStyle = static_cast<const SvXMLNumFormatContext *>(rStylesContext.FindStyleChildContext(
+            XML_STYLE_FAMILY_DATA_STYLE, rStyleName, true ));
         if( pStyle )
         {
             uno::Any aNumberFormat;
-            sal_Int32 nNumberFormat = pStyle->GetKey();
+            sal_Int32 nNumberFormat = const_cast<SvXMLNumFormatContext*>(pStyle)->GetKey();
             aNumberFormat <<= nNumberFormat;
             rPropSet->setPropertyValue( rPropertyName, aNumberFormat );
         }

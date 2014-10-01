@@ -355,7 +355,7 @@ void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
 
             if( pContext && pContext->ISA( SvXMLStyleContext ) )
             {
-                const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
+                const SdXMLStylesContext* pStyles = static_cast<const SdXMLStylesContext*>(pContext);
                 if(pStyles)
                 {
                     const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
@@ -363,7 +363,7 @@ void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
 
                     if(pStyle && pStyle->ISA(XMLPropStyleContext))
                     {
-                        XMLPropStyleContext* pPropStyle = (XMLPropStyleContext*)pStyle;
+                        const XMLPropStyleContext* pPropStyle = static_cast<const XMLPropStyleContext*>(pStyle);
 
                         Reference <beans::XPropertySet> xPropSet1(mxShapes, uno::UNO_QUERY);
                         if(xPropSet1.is())
@@ -392,7 +392,7 @@ void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
 
                             if(xPropSet.is())
                             {
-                                pPropStyle->FillPropertySet(xPropSet);
+                                const_cast<XMLPropStyleContext*>(pPropStyle)->FillPropertySet(xPropSet);
 
                                 if( xBackgroundSet.is() )
                                     xPropSet1->setPropertyValue( aBackground, uno::makeAny( xBackgroundSet ) );
@@ -420,14 +420,14 @@ void SdXMLGenericPageContext::SetLayout()
 
         if( pContext && pContext->ISA( SvXMLStyleContext ) )
         {
-            const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
+            const SdXMLStylesContext* pStyles = static_cast<const SdXMLStylesContext*>(pContext);
             if(pStyles)
             {
                 const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
 
                 if(pStyle && pStyle->ISA(SdXMLPresentationPageLayoutContext))
                 {
-                    SdXMLPresentationPageLayoutContext* pLayout = (SdXMLPresentationPageLayoutContext*)pStyle;
+                    const SdXMLPresentationPageLayoutContext* pLayout = static_cast<const SdXMLPresentationPageLayoutContext*>(pStyle);
                     nType = pLayout->GetTypeId();
                 }
             }
@@ -489,7 +489,7 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
 
         if(pStyle && pStyle->ISA(SdXMLPageMasterContext))
         {
-            const SdXMLPageMasterContext* pPageMaster = (SdXMLPageMasterContext*)pStyle;
+            const SdXMLPageMasterContext* pPageMaster = static_cast<const SdXMLPageMasterContext*>(pStyle);
             const SdXMLPageMasterStyleContext* pPageMasterContext = pPageMaster->GetPageMasterStyle();
 
             if(pPageMasterContext)

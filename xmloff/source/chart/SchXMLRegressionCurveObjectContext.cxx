@@ -130,7 +130,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
 {
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    SchXMLImport& rImport = ( SchXMLImport& )GetImport();
+    SchXMLImport& rImport = static_cast< SchXMLImport& >(GetImport());
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetRegEquationAttrTokenMap();
     OUString sAutoStyleName;
 

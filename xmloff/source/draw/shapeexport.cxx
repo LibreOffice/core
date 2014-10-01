@@ -1229,7 +1229,7 @@ void XMLShapeExport::ExportGraphicDefaults()
 
     // construct PropertySetMapper
     rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( CreateShapePropMapper( mrExport ) );
-    ((XMLShapeExportPropertyMapper*)xPropertySetMapper.get())->SetAutoStyles( false );
+    static_cast<XMLShapeExportPropertyMapper*>(xPropertySetMapper.get())->SetAutoStyles( false );
 
     // chain text attributes
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(mrExport));

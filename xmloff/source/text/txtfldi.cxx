@@ -2760,7 +2760,7 @@ void XMLMacroFieldImportContext::PrepareField(
     {
         // get event sequence
         XMLEventsImportContext* pEvents =
-            (XMLEventsImportContext*)&xEventContext;
+            static_cast<XMLEventsImportContext*>(&xEventContext);
         Sequence<PropertyValue> aValues;
         pEvents->GetEventSequence( sOnClick, aValues );
 

@@ -35,7 +35,7 @@ class XMLFontStyleContextFontFace : public SvXMLStyleContext
 
     XMLFontStylesContext *GetStyles()
     {
-        return ((XMLFontStylesContext *)&xStyles);
+        return static_cast<XMLFontStylesContext *>(&xStyles);
     }
 
 public:

@@ -228,7 +228,7 @@ void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajo
                     SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
 
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xGridProp );
+                    const_cast<XMLPropStyleContext*>( static_cast< const XMLPropStyleContext* >( pStyle ))->FillPropertySet( xGridProp );
             }
         }
     }
@@ -501,7 +501,7 @@ void SchXMLAxisContext::CreateAxis()
                         if( xAxisSuppl.is() )
                         {
                             Reference< beans::XPropertySet > xXAxisProp( xAxisSuppl->getAxis(0), uno::UNO_QUERY );
-                            (( XMLPropStyleContext* )pStyle )->FillPropertySet( xXAxisProp );
+                            const_cast<XMLPropStyleContext*>( static_cast< const XMLPropStyleContext* >( pStyle ))->FillPropertySet( xXAxisProp );
                         }
 
                         //set scale data of added x axis back to default

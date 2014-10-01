@@ -256,7 +256,7 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
         {
             XMLHint_Impl *pHint = &rHints[nPos];
             if ( pHint->IsReference() &&
-                 sName.equals( ((XMLReferenceHint_Impl *)pHint)->GetRefName()) )
+                 sName.equals( static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName()) )
             {
                 // set end and stop searching
                 pHint->SetEnd(GetImport().GetTextImport()->
@@ -1127,7 +1127,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
                     XMLHint_Impl *pHint = &rHints[nPos];
                     if ( pHint->IsIndexMark() &&
                          sID.equals(
-                             ((XMLIndexMarkHint_Impl *)pHint)->GetID()) )
+                             static_cast<XMLIndexMarkHint_Impl *>(pHint)->GetID()) )
                     {
                         // set end and stop searching
                         pHint->SetEnd(xPos);
@@ -2086,7 +2086,7 @@ XMLParaContext::~XMLParaContext()
             case XML_HINT_STYLE:
                 {
                     const OUString& rStyleName =
-                            ((XMLStyleHint_Impl *)pHint)->GetStyleName();
+                            static_cast<XMLStyleHint_Impl *>(pHint)->GetStyleName();
                     if( !rStyleName.isEmpty() )
                         xTxtImport->SetStyleAndAttrs( GetImport(),
                                                       xAttrCursor, rStyleName,
@@ -2096,7 +2096,7 @@ XMLParaContext::~XMLParaContext()
             case XML_HINT_REFERENCE:
                 {
                     const OUString& rRefName =
-                            ((XMLReferenceHint_Impl *)pHint)->GetRefName();
+                            static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName();
                     if( !rRefName.isEmpty() )
                     {
                         if( !pHint->GetEnd().is() )
@@ -2115,7 +2115,7 @@ XMLParaContext::~XMLParaContext()
             case XML_HINT_HYPERLINK:
                 {
                     const XMLHyperlinkHint_Impl *pHHint =
-                        (const XMLHyperlinkHint_Impl *)pHint;
+                        static_cast<const XMLHyperlinkHint_Impl *>(pHint);
                     xTxtImport->SetHyperlink( GetImport(),
                                               xAttrCursor,
                                               pHHint->GetHRef(),
@@ -2129,7 +2129,7 @@ XMLParaContext::~XMLParaContext()
             case XML_HINT_INDEX_MARK:
                 {
                     Reference<beans::XPropertySet> xMark(
-                        ((const XMLIndexMarkHint_Impl *)pHint)->GetMark());
+                        static_cast<const XMLIndexMarkHint_Impl *>(pHint)->GetMark());
                     Reference<XTextContent> xContent(xMark, UNO_QUERY);
                     xTxtImport->GetText()->insertTextContent(
                         xAttrCursor, xContent, sal_True );
@@ -2138,7 +2138,7 @@ XMLParaContext::~XMLParaContext()
             case XML_HINT_TEXT_FRAME:
                 {
                     const XMLTextFrameHint_Impl *pFHint =
-                        (const XMLTextFrameHint_Impl *)pHint;
+                        static_cast<const XMLTextFrameHint_Impl *>(pHint);
                     // Check for text content (#i33242#)
                     Reference < XTextContent > xTextContent =
                                                     pFHint->GetTextContent();

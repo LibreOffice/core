@@ -57,7 +57,7 @@ void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 {
     if( XML_NAMESPACE_STYLE == nPrefixKey && IsXMLToken( rLocalName, XML_FAMILY ) )
     {
-        DBG_ASSERT( GetFamily() == ((SvXMLStylesContext *)&mxStyles)->GetFamily( rValue ), "unexpected style family" );
+        DBG_ASSERT( GetFamily() == static_cast<SvXMLStylesContext *>(&mxStyles)->GetFamily( rValue ), "unexpected style family" );
     }
     else
     {
@@ -193,7 +193,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
     if( nFamily )
     {
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
-            ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
+            static_cast<SvXMLStylesContext *>(&mxStyles)->GetImportPropertyMapper(
                                                         GetFamily() );
         if( xImpPrMap.is() )
             pContext = new SvXMLPropertySetContext( GetImport(), nPrefix,
@@ -214,7 +214,7 @@ void XMLPropStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
-        ((SvXMLStylesContext *)&mxStyles)->GetImportPropertyMapper(
+        static_cast<SvXMLStylesContext *>(&mxStyles)->GetImportPropertyMapper(
                                                                 GetFamily() );
     DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
     if( xImpPrMap.is() )
@@ -230,7 +230,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
     Reference < XStyle > xNewStyle;
 
     OUString sServiceName(
-        ((SvXMLStylesContext *)&mxStyles)->GetServiceName( GetFamily() ) );
+        static_cast<SvXMLStylesContext *>(&mxStyles)->GetServiceName( GetFamily() ) );
     if( !sServiceName.isEmpty() )
     {
         Reference< XMultiServiceFactory > xFactory( GetImport().GetModel(),
@@ -438,7 +438,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
     {
         // The families cintaner must exist
         Reference < XNameContainer > xFamilies =
-            ((SvXMLStylesContext *)&mxStyles)->GetStylesContainer( GetFamily() );
+            static_cast<SvXMLStylesContext *>(&mxStyles)->GetStylesContainer( GetFamily() );
         DBG_ASSERT( xFamilies.is(), "Families lost" );
         if( !xFamilies.is() )
             return;

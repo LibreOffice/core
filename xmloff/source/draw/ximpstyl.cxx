@@ -439,7 +439,7 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
         {
             pContext->AddRef();
             DBG_ASSERT(!mpPageMasterStyle, "PageMasterStyle is set, there seem to be two of them (!)");
-            mpPageMasterStyle = (SdXMLPageMasterStyleContext*)pContext;
+            mpPageMasterStyle = static_cast<SdXMLPageMasterStyleContext*>(pContext);
         }
     }
 
@@ -498,7 +498,7 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
         if(pContext)
         {
             pContext->AddRef();
-            maList.push_back( (SdXMLPresentationPlaceholderContext*)pContext );
+            maList.push_back( static_cast<SdXMLPresentationPlaceholderContext*>(pContext) );
         }
     }
 
@@ -885,7 +885,7 @@ void SdXMLMasterPageContext::EndElement()
     {
         SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
         if( pContext && pContext->ISA( SvXMLStyleContext ) )
-            ((SdXMLStylesContext*)pContext)->SetMasterPageStyles(*this);
+            static_cast<SdXMLStylesContext*>(pContext)->SetMasterPageStyles(*this);
     }
 
     SdXMLGenericPageContext::EndElement();
@@ -1160,7 +1160,7 @@ void SdXMLStylesContext::EndElement()
             const SvXMLStyleContext* pStyle = GetStyle(a);
             if(pStyle && pStyle->ISA(XMLShapeStyleContext))
             {
-                XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
+                const XMLShapeStyleContext* pDocStyle = static_cast<const XMLShapeStyleContext*>(pStyle);
 
                 SvXMLStylesContext* pStylesContext = GetSdImport().GetShapeImport()->GetStylesContext();
                 if( pStylesContext )
@@ -1169,10 +1169,10 @@ void SdXMLStylesContext::EndElement()
 
                     if(pStyle && pStyle->ISA(XMLShapeStyleContext))
                     {
-                        XMLShapeStyleContext* pParentStyle = (XMLShapeStyleContext*)pStyle;
+                        const XMLShapeStyleContext* pParentStyle = static_cast<const XMLShapeStyleContext*>(pStyle);
                         if(pParentStyle->GetStyle().is())
                         {
-                            pDocStyle->SetStyle(pParentStyle->GetStyle());
+                            const_cast<XMLShapeStyleContext*>(pDocStyle)->SetStyle(pParentStyle->GetStyle());
                         }
                     }
                 }
@@ -1469,7 +1469,7 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
         if(pStyle && pStyle->ISA(SdXMLPresentationPageLayoutContext))
         {
             xLayouts->insertByName( pStyle->GetName(), uno::makeAny(
-            (sal_Int32)((SdXMLPresentationPageLayoutContext*)pStyle)->GetTypeId() ) );
+            (sal_Int32)static_cast<const SdXMLPresentationPageLayoutContext*>(pStyle)->GetTypeId() ) );
         }
     }
 
@@ -1535,7 +1535,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
                     if(pContext)
                     {
                         pContext->AddRef();
-                        maMasterPageList.push_back( (SdXMLMasterPageContext*)pContext );
+                        maMasterPageList.push_back( static_cast<SdXMLMasterPageContext*>(pContext) );
                     }
                 }
             }

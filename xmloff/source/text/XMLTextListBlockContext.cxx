@@ -75,7 +75,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     if( mxParentListBlock.Is() )
     {
         XMLTextListBlockContext *pParent =
-                                (XMLTextListBlockContext *)&mxParentListBlock;
+                                static_cast<XMLTextListBlockContext *>(&mxParentListBlock);
         msListStyleName = pParent->GetListStyleName();
         sParentListStyleName = msListStyleName;
         mxNumRules = pParent->GetNumRules();
@@ -240,7 +240,7 @@ void XMLTextListBlockContext::EndElement()
     // Numbering has not to be restarted if it has been restarted within
     // a child list.
     XMLTextListBlockContext *pParent =
-                                (XMLTextListBlockContext *)&mxParentListBlock;
+                                static_cast<XMLTextListBlockContext *>(&mxParentListBlock);
     if( pParent )
     {
         pParent->mbRestartNumbering = mbRestartNumbering;
