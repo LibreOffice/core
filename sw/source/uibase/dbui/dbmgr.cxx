@@ -1763,7 +1763,7 @@ OUString SwDBManager::GetDBField(uno::Reference<XPropertySet> xColumnProps,
         return sRet;
 
     Any aType = xColumnProps->getPropertyValue("Type");
-    sal_Int32 eDataType = 0;
+    sal_Int32 eDataType = DataType::SQLNULL;
     aType >>= eDataType;
     switch(eDataType)
     {
@@ -1965,8 +1965,8 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
             double aNumber = DBL_MAX;
             if( lcl_GetColumnCnt(pImpl->pMergeData, rColName, nLanguage, aString, &aNumber) )
             {
-                // get the column type
-                sal_Int32 nColumnType;
+                // get the column type, bail out in case of failure
+                sal_Int32 nColumnType = DataType::SQLNULL;
                 Any aCol = xCols->getByName( pColNames[nCol] );
                 uno::Reference<XPropertySet> xCol;
                 aCol >>= xCol;
