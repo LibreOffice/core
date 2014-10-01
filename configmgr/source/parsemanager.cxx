@@ -35,7 +35,7 @@ namespace configmgr {
 
 ParseManager::ParseManager(
     OUString const & url, rtl::Reference< Parser > const & parser)
-   : reader_(url), parser_(parser)
+   : reader_(url), parser_(parser), itemNamespaceId_(-1)
 {
     assert(parser.is());
     int id;
