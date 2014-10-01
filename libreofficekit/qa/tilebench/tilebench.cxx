@@ -13,6 +13,9 @@
 
 #include <vector>
 #include <osl/time.h>
+
+#define LOK_USE_UNSTABLE_API
+
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
@@ -65,6 +68,85 @@ int main( int argc, char* argv[] )
         aTimes.push_back(TimeRecord("load document"));
         Document *pDocument(pOffice->documentLoad(argv[2]));
         aTimes.push_back(TimeRecord());
+
+        aTimes.push_back(TimeRecord("getparts"));
+        int nParts = pDocument->getParts();
+        aTimes.push_back(TimeRecord());
+
+        aTimes.push_back(TimeRecord("get size of parts"));
+        for (int nPart = 0; nPart < nParts; nPart++)
+        {
+            char* pName = pDocument->getPartName(nPart);
+            pDocument->setPart(nPart);
+            long nWidth = 0, nHeight = 0;
+            pDocument->getDocumentSize(&nWidth, &nHeight);
+            fprintf (stderr, "  '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
+            free (pName);
+        }
+        aTimes.push_back(TimeRecord());
+
+        unsigned char pPixels[256*256*4];
+        for (int nPart = 0; nPart < nParts; nPart++)
+        {
+            {
+                char* pName = pDocument->getPartName(nPart);
+                fprintf (stderr, "render '%s'\n", pName);
+                free (pName);
+            }
+            pDocument->setPart(nPart);
+            long nWidth = 0, nHeight = 0;
+            pDocument->getDocumentSize(&nWidth, &nHeight);
+
+            { // whole document
+                aTimes.push_back(TimeRecord("render whole document"));
+                int nRowStride = 256;
+                pDocument->paintTile(pPixels, 256, 256, &nRowStride,
+                                     0, 0, nWidth, nHeight); // not square
+                aTimes.push_back(TimeRecord());
+            }
+
+            { // 1:1
+                aTimes.push_back(TimeRecord("render sub-region at 1:1"));
+                int nTiles = 0;
+                int nSplit = nWidth / 4;
+                for (int nX = 0; nX < 4; nX++)
+                {
+                    for (int nY = 0; nY < nHeight / nSplit; nY++)
+                    {
+                        int nRowStride = 256;
+                        int nTilePosX = nX * nSplit;
+                        int nTilePosY = nY * nSplit;
+                        pDocument->paintTile(pPixels, 256, 256, &nRowStride,
+                                             nTilePosX, nTilePosY, 256, 256);
+                        nTiles++;
+                        fprintf (stderr, "   rendered tile %d at %d, %d\n",
+                                 nTiles, nTilePosX, nTilePosY);
+                    }
+                }
+                aTimes.push_back(TimeRecord());
+            }
+
+            { // scaled
+                aTimes.push_back(TimeRecord("render sub-regions at scale"));
+                int nTiles = 0;
+                int nSplit = nWidth / 4;
+                for (int nX = 0; nX < 4; nX++)
+                {
+                    for (int nY = 0; nY < nHeight / nSplit; nY++)
+                    {
+                        int nRowStride = 256;
+                        int nTilePosX = nX * nSplit;
+                        int nTilePosY = nY * nSplit;
+                        pDocument->paintTile(pPixels, 256, 256, &nRowStride,
+                                             nTilePosX, nTilePosY, nSplit, nSplit);
+                        nTiles++;
+                        fprintf (stderr, "   rendered tile %d at %d, %d\n",
+                                 nTiles, nTilePosX, nTilePosY);
+                    }
+                }
+                aTimes.push_back(TimeRecord());
+            }
+        }
 
         aTimes.push_back(TimeRecord("destroy document"));
         delete pDocument;
