@@ -63,10 +63,8 @@ namespace dbaui
         :OGenericAdministrationPage(pParent, rId, rUIXMLDescription, _rCoreAttrs)
         ,m_pOptionsLabel(NULL)
         ,m_pOptions(NULL)
-        ,m_pDataConvertFixedLine(NULL)
         ,m_pCharsetLabel(NULL)
         ,m_pCharset(NULL)
-        ,m_pAutoFixedLine(NULL)
         ,m_pAutoRetrievingEnabled(NULL)
         ,m_pAutoIncrementLabel(NULL)
         ,m_pAutoIncrement(NULL)
@@ -87,8 +85,8 @@ namespace dbaui
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
-            m_pDataConvertLabel = get<FixedText>("charsetheader");
-            m_pDataConvertLabel->Show();
+            FixedText* pDataConvertLabel = get<FixedText>("charsetheader");
+            pDataConvertLabel->Show();
             m_pCharsetLabel = get<FixedText>("charsetlabel");
             m_pCharsetLabel->Show();
             m_pCharset = get<CharSetListBox>("charset");
@@ -104,11 +102,9 @@ namespace dbaui
             DELETEZ(m_pOptionsLabel);
             DELETEZ(m_pOptions);
 
-            DELETEZ(m_pDataConvertFixedLine);
             DELETEZ(m_pCharsetLabel);
             DELETEZ(m_pCharset);
 
-            DELETEZ(m_pAutoFixedLine);
             DELETEZ(m_pAutoIncrementLabel);
             DELETEZ(m_pAutoIncrement);
 
@@ -128,7 +124,6 @@ namespace dbaui
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
-            //_rControlList.push_back(new ODisableWrapper<FixedLine>(m_pDataConvertFixedLine));
             _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharsetLabel));
         }
     }

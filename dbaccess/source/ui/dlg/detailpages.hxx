@@ -53,12 +53,9 @@ namespace dbaui
         FixedText*          m_pOptionsLabel;
         Edit*               m_pOptions;
 
-        FixedLine*          m_pDataConvertFixedLine;
-        FixedText*          m_pDataConvertLabel;
         FixedText*          m_pCharsetLabel;
         CharSetListBox*     m_pCharset;
 
-        FixedLine*          m_pAutoFixedLine;
         CheckBox*           m_pAutoRetrievingEnabled;
         FixedText*          m_pAutoIncrementLabel;
         Edit*               m_pAutoIncrement;
