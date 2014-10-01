@@ -12,17 +12,18 @@
         android:layout_height="wrap_content"
         android:text="@string/app_description"
         android:textColor="@android:color/secondary_text_light"
-        android:textSize="16sp"/>
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/about_credits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autoLink="web"
+        android:paddingBottom="20dip"
         android:paddingTop="20dip"
         android:text="@string/app_credits"
         android:textColor="@android:color/secondary_text_light"
-        android:textSize="16dip"/>
+        android:textSize="18dip"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
@@ -33,15 +34,15 @@
             android:id="@+id/about_license_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="License"
-            />
+            android:layout_marginRight="12dp"
+            android:text="License"/>
 
         <Button
             android:id="@+id/about_notice_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notice"
-            />
+            android:layout_marginRight="12dp"
+            android:text="Notice"/>
     </LinearLayout>
 
 </LinearLayout>
