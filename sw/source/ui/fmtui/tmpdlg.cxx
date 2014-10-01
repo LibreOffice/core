@@ -291,7 +291,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
             m_nPageId = AddTabPage("page",
                                             pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ),
                                             pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ) );
-            if(!pActShell || 0 == ::GetHtmlMode(pWrtShell->GetView().GetDocShell()))
+            if (0 == ::GetHtmlMode(pWrtShell->GetView().GetDocShell()))
             {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
