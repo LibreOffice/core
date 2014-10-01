@@ -496,7 +496,7 @@ void DocumentHandlerImpl::startElement(
     Reference< xml::input::XAttributes > xAttributes;
     sal_Int32 nUid;
     OUString aLocalName;
-    ::std::auto_ptr< ElementEntry > elementEntry( new ElementEntry );
+    ::std::unique_ptr< ElementEntry > elementEntry( new ElementEntry );
 
     { // guard start:
     MGuard aGuard( m_pMutex );
