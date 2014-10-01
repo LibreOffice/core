@@ -2836,7 +2836,7 @@ void SwFlyFrmFmt::MakeFrms()
 
             if( bAdd )
             {
-                SwFlyFrm *pFly = 0;
+                SwFlyFrm *pFly;
                 switch( aAnchorAttr.GetAnchorId() )
                 {
                 case FLY_AT_FLY:
@@ -2848,11 +2848,11 @@ void SwFlyFrmFmt::MakeFrms()
                     pFly = new SwFlyAtCntFrm( this, pFrm, pFrm );
                     break;
 
+                default:
+                    assert(false && "Neuer Ankertyp" );
+                    //fall-through
                 case FLY_AS_CHAR:
                     pFly = new SwFlyInCntFrm( this, pFrm, pFrm );
-                    break;
-                default:
-                    OSL_ENSURE( false, "Neuer Ankertyp" );
                     break;
                 }
                 pFrm->AppendFly( pFly );
