@@ -14535,7 +14535,6 @@ module com {
      const short FILE = 2;
      const short MAIL = 3;
      const short PRINTER = 1;
-     const short SHELL = 4;
     };
     published service NumberingLevel {
      [property] short Adjust;
