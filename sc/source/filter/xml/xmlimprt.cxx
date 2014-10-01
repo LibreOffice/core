@@ -73,6 +73,7 @@
 #include "documentimport.hxx"
 #include "pivotsource.hxx"
 #include <unonames.hxx>
+#include <numformat.hxx>
 
 #include <comphelper/extract.hxx>
 
@@ -2441,32 +2442,8 @@ void ScXMLImport::ExamineDefaultStyle()
         // number format (then, value cells can be pre-initialized with western script type)
 
         const ScPatternAttr* pDefPattern = pDoc->GetDefPattern();
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        if ( pFormatter && pDefPattern )
-        {
-            sal_uInt32 nKey = pDefPattern->GetNumberFormat(pFormatter);
-            const SvNumberformat* pFormat = pFormatter->GetEntry(nKey);
-            if ( pFormat && pFormat->IsStandard() )
-            {
-                // The standard format is all-latin if the decimal separator doesn't
-                // have a different script type
-
-                OUString aDecSep;
-                LanguageType nFormatLang = pFormat->GetLanguage();
-                if ( nFormatLang == LANGUAGE_SYSTEM )
-                    aDecSep = ScGlobal::pLocaleData->getNumDecimalSep();
-                else
-                {
-                    LocaleDataWrapper aLocaleData( comphelper::getProcessComponentContext(),
-                        LanguageTag( nFormatLang ) );
-                    aDecSep = aLocaleData.getNumDecimalSep();
-                }
-
-                sal_uInt8 nScript = pDoc->GetStringScriptType( aDecSep );
-                if ( nScript == 0 || nScript == SCRIPTTYPE_LATIN )
-                    mpDocImport->setDefaultNumericScript(SCRIPTTYPE_LATIN);
-            }
-        }
+        if (pDefPattern && sc::NumFmtUtil::isLatinScript(*pDefPattern, *pDoc))
+            mpDocImport->setDefaultNumericScript(SCRIPTTYPE_LATIN);
     }
 }
 
