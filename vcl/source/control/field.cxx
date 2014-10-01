@@ -707,9 +707,11 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
 sal_Int64 NumericFormatter::ClipAgainstMinMax(sal_Int64 nValue) const
 {
     if (nValue > mnMax)
-        nValue = mbWrapOnLimits ? mnMin : mnMax;
+        nValue = mbWrapOnLimits ? ((nValue - mnMin) % (mnMax + 1)) + mnMin
+                                : mnMax;
     else if (nValue < mnMin)
-        nValue = mbWrapOnLimits ? mnMax : mnMin;
+        nValue = mbWrapOnLimits ? ((nValue + mnMax + 1 - mnMin) % (mnMax + 1)) + mnMin
+                                : mnMin;
     return nValue;
 }
 
