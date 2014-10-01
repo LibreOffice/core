@@ -424,7 +424,7 @@ extern "C" {
         if( ! pStream || pStream->getStreamType() != InputStream )
             return NPERR_FILE_NOT_FOUND;
 
-        PluginInputStream* pInputStream = (PluginInputStream*)pStream;
+        PluginInputStream* pInputStream = static_cast<PluginInputStream*>(pStream);
         boost::scoped_array<sal_Int8> pBytes;
         int   nBytes = 0;
         pPlugin->enterPluginCallback();
@@ -534,7 +534,7 @@ int32_t SAL_CALL NP_LOADDS  NPN_Write( NPP instance, NPStream* stream, int32_t l
 
     pImpl->enterPluginCallback();
     ::com::sun::star::uno::Sequence<sal_Int8> Bytes( (sal_Int8*)buffer, len );
-    ((PluginOutputStream*)pStream)->getOutputStream()->writeBytes( Bytes );
+    static_cast<PluginOutputStream*>(pStream)->getOutputStream()->writeBytes( Bytes );
     pImpl->leavePluginCallback();
 
     return len;

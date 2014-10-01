@@ -301,7 +301,7 @@ namespace logging
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WeakReference< XLogger >& rLogger( m_aImpl[ _rName ] );
-        Reference< XLogger > xLogger( (Reference< XLogger >)rLogger );
+        Reference< XLogger > xLogger( rLogger );
         if ( !xLogger.is() )
         {
             // never requested before, or already dead

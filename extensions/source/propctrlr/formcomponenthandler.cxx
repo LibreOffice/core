@@ -565,7 +565,7 @@ namespace pcr
             else
             {
                 INetURLObject aDocURL( impl_getDocumentURL_nothrow() );
-                aPropertyValue <<= (OUString)URIHelper::SmartRel2Abs( aDocURL, sControlValue, Link(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
+                aPropertyValue <<= URIHelper::SmartRel2Abs( aDocURL, sControlValue, Link(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
             }
         }
         break;
@@ -2800,7 +2800,7 @@ namespace pcr
         bool bSuccess = ( 0 == aFileDlg.Execute() );
         if ( bSuccess )
         {
-            _out_rNewValue <<= (OUString)aFileDlg.GetPath();
+            _out_rNewValue <<= aFileDlg.GetPath();
         }
         return bSuccess;
     }
@@ -2822,7 +2822,7 @@ namespace pcr
         _rClearBeforeDialog.clear();
         bool bSuccess = ( 0 == aFileDlg.Execute() );
         if ( bSuccess )
-            _out_rNewValue <<= (OUString)aFileDlg.GetPath();
+            _out_rNewValue <<= aFileDlg.GetPath();
         return bSuccess;
     }
 
@@ -2885,7 +2885,7 @@ namespace pcr
         _rClearBeforeDialog.clear();
         bool bSuccess = ( 0 == aFileDlg.Execute() );
         if ( bSuccess )
-            _out_rNewValue <<= (OUString)aFileDlg.GetPath();
+            _out_rNewValue <<= aFileDlg.GetPath();
         return bSuccess;
     }
 

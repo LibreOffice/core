@@ -108,7 +108,7 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const SAL_OVERRIDE
     {   return new SfxLinkItem( *this ); }
     virtual bool             operator==( const SfxPoolItem& rL) const SAL_OVERRIDE
-    {   return ((SfxLinkItem&)rL).aLink == aLink; }
+    {   return static_cast<const SfxLinkItem&>(rL).aLink == aLink; }
     SfxLinkItem( sal_uInt16 nWhichId, const Link& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
     const Link&              GetValue() const { return aLink; }

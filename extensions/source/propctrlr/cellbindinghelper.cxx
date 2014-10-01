@@ -115,8 +115,8 @@ namespace pcr
             while ( ( xParentAsForm.is() || xParentAsGrid.is() ) && xCheck.is() )
             {
                 xCheck.set(xCheck->getParent(), css::uno::UNO_QUERY);
-                xParentAsForm.set(xCheck.is() ? xCheck->getParent() : (Reference< XInterface >) Reference< XForm >(), css::uno::UNO_QUERY);
-                xParentAsGrid.set(xCheck.is() ? xCheck->getParent() : (Reference< XInterface >) Reference< XGridColumnFactory >(), css::uno::UNO_QUERY);
+                xParentAsForm.set(xCheck.is() ? xCheck->getParent() : Reference< XForm >(), css::uno::UNO_QUERY);
+                xParentAsGrid.set(xCheck.is() ? xCheck->getParent() : Reference< XGridColumnFactory >(), css::uno::UNO_QUERY);
             }
             Reference< XInterface > xFormsCollection( xCheck.is() ? xCheck->getParent() : Reference< XInterface >() );
 

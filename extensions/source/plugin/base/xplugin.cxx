@@ -573,7 +573,7 @@ void XPlugin_Impl::loadPlugin()
     if (pEnvData->pDisplay) // headless?
     {
         XSync( (Display*)pEnvData->pDisplay, False );
-        m_aNPWindow.window  = (void*)pEnvData->aWindow;
+        m_aNPWindow.window  = reinterpret_cast<void*>(pEnvData->aWindow);
     }
     else
     {

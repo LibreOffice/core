@@ -674,7 +674,7 @@ namespace pcr
         if ( pItem )
         {
             DBG_ASSERT(pItem->ISA(SvxColorListItem), "OColorControl::OColorControl: invalid color item!");
-            pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
+            pColorList = static_cast<const SvxColorListItem*>( pItem )->GetColorList();
         }
 
         if ( !pColorList.is() )

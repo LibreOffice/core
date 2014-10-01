@@ -293,7 +293,7 @@ namespace pcr
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
-                aPropValue <<= (OUString)getTypedControlWindow()->GetURL();
+                aPropValue <<= getTypedControlWindow()->GetURL();
         return aPropValue;
     }
 

@@ -318,7 +318,7 @@ namespace pcr
     {
         SvTreeListBox::ModelHasMoved( _pSource );
 
-        ((TabOrderDialog*)GetParentDialog())->SetModified();
+        static_cast<TabOrderDialog*>(GetParentDialog())->SetModified();
     }
 
 
@@ -328,7 +328,7 @@ namespace pcr
         Image  aImage;
         for (long i=0; i<labs(nRelPos); i++)
         {
-            ((TabOrderDialog*)GetParentDialog())->SetModified();
+            static_cast<TabOrderDialog*>(GetParentDialog())->SetModified();
 
 
             // move entries

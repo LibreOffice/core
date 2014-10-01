@@ -112,7 +112,7 @@ namespace pcr
             m_aSupportedProperties = doDescribeSupportedProperties();
             m_bSupportedPropertiesAreKnown = true;
         }
-        return (Sequence< Property >)m_aSupportedProperties;
+        return m_aSupportedProperties;
     }
 
     Sequence< OUString > SAL_CALL PropertyHandler::getSupersededProperties( ) throw (RuntimeException, std::exception)

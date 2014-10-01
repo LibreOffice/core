@@ -185,7 +185,7 @@ if( pCont )                                                                 \
     {                                                                       \
         if( aIt.hasMoreElements() )                                         \
         {                                                                   \
-            InterfaceName * pListener = (InterfaceName *)aIt.next();        \
+            InterfaceName * pListener = static_cast<InterfaceName *>(aIt.next()); \
             try                                                             \
             {                                                               \
                 pListener->MethodName( aEvt );                              \
