@@ -19,9 +19,7 @@
 
 #include <sax/fshelper.hxx>
 #include "fastserializer.hxx"
-#include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;
@@ -30,12 +28,8 @@ using namespace ::com::sun::star::uno;
 namespace sax_fastparser {
 
 FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream, bool bWriteHeader ) :
-    mpSerializer(new FastSaxSerializer())
+    mpSerializer(new FastSaxSerializer(xOutputStream))
 {
-    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_SET_THROW );
-    mpSerializer->setFastTokenHandler( css::xml::sax::FastTokenHandler::create(xContext) );
-    assert(xOutputStream.is()); // cannot do anything without that
-    mpSerializer->setOutputStream( xOutputStream );
     if( bWriteHeader )
         mpSerializer->startDocument();
 }
