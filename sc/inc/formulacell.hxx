@@ -289,6 +289,7 @@ public:
     bool            IsEmptyDisplayedAsString();
     bool            IsValue();      // also true if formula::svEmptyCell
     bool IsValueNoError();
+    bool IsValueNoError() const;
     bool            IsHybridValueCell(); // for cells after import to deal with inherited number formats
     double          GetValue();
     svl::SharedString GetString();
@@ -370,6 +371,8 @@ public:
 
     /** Determines whether or not the result string contains more than one paragraph */
     bool            IsMultilineResult();
+
+    bool NeedsInterpret() const;
 
     void            MaybeInterpret();
 
