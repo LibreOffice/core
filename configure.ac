@@ -9128,6 +9128,20 @@ dnl ===================================================================
 dnl Check for disabling cve_tests
 dnl ===================================================================
 AC_MSG_CHECKING([whether to execute CVE tests])
+# If not explicitly enabled or disabled, default
+if test -z "$enable_cve_tests"; then
+    case "$OS" in
+    WNT)
+        # Default cves off for windows with its wild and wonderful
+        # varienty of AV software kicking in and panicing
+        enable_cve_tests=no
+        ;;
+    *)
+        # otherwise yes
+        enable_cve_tests=yes
+        ;;
+    esac
+fi
 if test "$enable_cve_tests" = "no"; then
     AC_MSG_RESULT([no])
     DISABLE_CVE_TESTS=TRUE
