@@ -43,6 +43,7 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #define UNO_COMMAND_RECENT_FILE_LIST    ".uno:RecentFileList"
+#define UNO_COMMAND_CURRENCY_LIST    ".uno:CurrencyList"
 
 using namespace framework;
 
@@ -327,6 +328,46 @@ sal_Bool OpenToolbarController::supportsService(OUString const & rServiceName)
 }
 
 css::uno::Sequence<OUString> OpenToolbarController::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.frame.ToolbarController";
+    return aRet;
+}
+
+class CurrencyController : public PopupMenuToolbarController
+{
+public:
+    CurrencyController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException) SAL_OVERRIDE;
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) SAL_OVERRIDE;
+};
+
+CurrencyController::CurrencyController(
+    const css::uno::Reference< css::uno::XComponentContext >& xContext )
+    : PopupMenuToolbarController( xContext, UNO_COMMAND_RECENT_FILE_LIST )
+{
+}
+
+OUString CurrencyController::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("org.apache.openoffice.comp.framework.CurrencyController");
+}
+
+sal_Bool CurrencyController::supportsService(OUString const & rServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return cppu::supportsService( this, rServiceName );
+}
+
+css::uno::Sequence<OUString> CurrencyController::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< OUString > aRet(1);
