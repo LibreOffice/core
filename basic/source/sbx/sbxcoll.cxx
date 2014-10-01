@@ -92,7 +92,7 @@ SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )
 {
     if( GetParameters() )
     {
-        SbxObject* pObj = (SbxObject*) GetObject();
+        SbxObject* pObj = static_cast<SbxObject*>(GetObject());
         return pObj ? pObj->FindUserData( nData ) : NULL;
     }
     else
@@ -105,7 +105,7 @@ SbxVariable* SbxCollection::Find( const OUString& rName, SbxClassType t )
 {
     if( GetParameters() )
     {
-        SbxObject* pObj = (SbxObject*) GetObject();
+        SbxObject* pObj = static_cast<SbxObject*>(GetObject());
         return pObj ? pObj->Find( rName, t ) : NULL;
     }
     else
@@ -179,7 +179,7 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
         }
         else
         {
-            Insert( (SbxObject*) pObj );
+            Insert( static_cast<SbxObject*>(pObj) );
         }
     }
 }

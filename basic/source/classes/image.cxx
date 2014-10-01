@@ -487,7 +487,7 @@ OUString SbiImage::GetString( short nId ) const
 
 const SbxObject* SbiImage::FindType (const OUString& aTypeName) const
 {
-    return rTypes.Is() ? (SbxObject*)rTypes->Find(aTypeName,SbxCLASS_OBJECT) : NULL;
+    return rTypes.Is() ? static_cast<SbxObject*>(rTypes->Find(aTypeName,SbxCLASS_OBJECT)) : NULL;
 }
 
 sal_uInt16 SbiImage::CalcLegacyOffset( sal_Int32 nOffset )

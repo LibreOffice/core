@@ -320,10 +320,10 @@ SbxProperty* SbxObject::GetDfltProperty()
 {
     if ( !pDfltProp && !aDfltPropName.isEmpty() )
     {
-        pDfltProp = (SbxProperty*) Find( aDfltPropName, SbxCLASS_PROPERTY );
+        pDfltProp = static_cast<SbxProperty*>( Find( aDfltPropName, SbxCLASS_PROPERTY ) );
         if( !pDfltProp )
         {
-            pDfltProp = (SbxProperty*) Make( aDfltPropName, SbxCLASS_PROPERTY, SbxVARIANT );
+            pDfltProp = static_cast<SbxProperty*>( Make( aDfltPropName, SbxCLASS_PROPERTY, SbxVARIANT ) );
         }
     }
     return pDfltProp;
@@ -480,7 +480,7 @@ void SbxObject::Insert( SbxVariable* pVar )
                 {
                     if( pOld == pDfltProp )
                     {
-                        pDfltProp = (SbxProperty*) pVar;
+                        pDfltProp = static_cast<SbxProperty*>(pVar);
                     }
                 }
             }
@@ -598,7 +598,7 @@ void SbxObject::Remove( SbxVariable* pVar )
 
 static bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
 {
-    SbxArrayRef p = (SbxArray*) SbxBase::Load( rStrm );
+    SbxArrayRef p = static_cast<SbxArray*>( SbxBase::Load( rStrm ) );
     if( !p.Is() )
     {
         return false;
@@ -663,7 +663,7 @@ bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     // Set properties
     if( !aDfltProp.isEmpty() )
     {
-        pDfltProp = (SbxProperty*) pProps->Find( aDfltProp, SbxCLASS_PROPERTY );
+        pDfltProp = static_cast<SbxProperty*>( pProps->Find( aDfltProp, SbxCLASS_PROPERTY ) );
     }
     SetModified( false );
     return true;
@@ -717,7 +717,7 @@ OUString SbxObject::GenerateSource( const OUString &rLinePrefix,
     bool bLineFeed = false;
     for ( sal_uInt16 nProp = 0; nProp < xProps->Count(); ++nProp )
     {
-        SbxPropertyRef xProp = (SbxProperty*) xProps->Get(nProp);
+        SbxPropertyRef xProp = static_cast<SbxProperty*>( xProps->Get(nProp) );
         OUString aPropName( xProp->GetName() );
         if ( xProp->CanWrite() &&
              !( xProp->GetHashCode() == nNameHash &&
@@ -889,7 +889,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
                     pVar->GetValues_Impl().pObj != GetParent() )
             {
                 rStrm.WriteCharPtr( " contains " );
-                ((SbxObject*) pVar->GetValues_Impl().pObj)->Dump( rStrm, bFill );
+                static_cast<SbxObject*>(pVar->GetValues_Impl().pObj)->Dump( rStrm, bFill );
             }
             else
             {
@@ -928,7 +928,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
                         pVar->GetValues_Impl().pObj != GetParent() )
                 {
                     rStrm.WriteCharPtr( " contains " );
-                    ((SbxObject*) pVar->GetValues_Impl().pObj)->Dump( rStrm, bFill );
+                    static_cast<SbxObject*>(pVar->GetValues_Impl().pObj)->Dump( rStrm, bFill );
                 }
                 else
                 {
@@ -950,11 +950,11 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
                 rStrm.WriteCharPtr( aIndentNameStr.getStr() ).WriteCharPtr( "  - Sub" );
                 if ( pVar->ISA(SbxObject) )
                 {
-                    ((SbxObject*) pVar)->Dump( rStrm, bFill );
+                    static_cast<SbxObject*>(pVar)->Dump( rStrm, bFill );
                 }
                 else if ( pVar->ISA(SbxVariable) )
                 {
-                    ((SbxVariable*) pVar)->Dump( rStrm, bFill );
+                    static_cast<SbxVariable*>(pVar)->Dump( rStrm, bFill );
                 }
             }
         }

@@ -884,8 +884,8 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
 
         if( xObj->ISA(SbxDimArray) )
         {
-            SbxBase* pObj = (SbxBase*)xObj;
-            SbxDimArray* pArray = (SbxDimArray*)pObj;
+            SbxBase* pObj = static_cast<SbxBase*>(xObj);
+            SbxDimArray* pArray = static_cast<SbxDimArray*>(pObj);
 
             short nDims = pArray->GetDims();
             Type aElementType = getUnoTypeForSbxBaseType( (SbxDataType)(pArray->GetType() & 0xfff) );
@@ -977,12 +977,12 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
         // No array, but ...
         else if( xObj->ISA(SbUnoObject) )
         {
-            aRetType = ((SbUnoObject*)(SbxBase*)xObj)->getUnoAny().getValueType();
+            aRetType = static_cast<SbUnoObject*>((SbxBase*)xObj)->getUnoAny().getValueType();
         }
         // SbUnoAnyObject?
         else if( xObj->ISA(SbUnoAnyObject) )
         {
-            aRetType = ((SbUnoAnyObject*)(SbxBase*)xObj)->getValue().getValueType();
+            aRetType = static_cast<SbUnoAnyObject*>((SbxBase*)xObj)->getValue().getValueType();
         }
         // Otherwise it is a No-Uno-Basic-Object -> default==deliver void
     }
@@ -1004,11 +1004,11 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
         if( xObj.Is() )
         {
             if( xObj->ISA(SbUnoAnyObject) )
-                return ((SbUnoAnyObject*)(SbxBase*)xObj)->getValue();
+                return static_cast<SbUnoAnyObject*>((SbxBase*)xObj)->getValue();
             if( xObj->ISA(SbClassModuleObject) )
             {
                 Any aRetAny;
-                SbClassModuleObject* pClassModuleObj = (SbClassModuleObject*)(SbxBase*)xObj;
+                SbClassModuleObject* pClassModuleObj = static_cast<SbClassModuleObject*>((SbxBase*)xObj);
                 SbModule* pClassModule = pClassModuleObj->getClassModule();
                 if( pClassModule->createCOMWrapperForIface( aRetAny, pClassModuleObj ) )
                     return aRetAny;
@@ -1205,7 +1205,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
         SbxBaseRef xObj = (SbxBase*)pVar->GetObject();
         if( xObj.Is() && xObj->ISA(SbUnoAnyObject) )
         {
-            return ((SbUnoAnyObject*)(SbxBase*)xObj)->getValue();
+            return static_cast<SbUnoAnyObject*>((SbxBase*)xObj)->getValue();
         }
     }
 
@@ -1260,11 +1260,11 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                 SbxBaseRef pObj = (SbxBase*)pVar->GetObject();
                 if( pObj && pObj->ISA(SbUnoObject) )
                 {
-                    aRetVal = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+                    aRetVal = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
                 }
                 else if( pObj && pObj->ISA(SbUnoStructRefObject) )
                 {
-                    aRetVal = ((SbUnoStructRefObject*)(SbxBase*)pObj)->getUnoAny();
+                    aRetVal = static_cast<SbUnoStructRefObject*>((SbxBase*)pObj)->getUnoAny();
                 }
                 else
                 {
@@ -1286,7 +1286,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                 SbxBaseRef pObj = (SbxBase*)pVar->GetObject();
                 if( pObj && pObj->ISA(SbUnoObject) )
                 {
-                    Any aUnoAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+                    Any aUnoAny = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
                     aUnoAny >>= xIdlClass;
                 }
 
@@ -1322,8 +1322,8 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
             SbxBaseRef xObj = (SbxBase*)pVar->GetObject();
             if( xObj && xObj->ISA(SbxDimArray) )
             {
-                SbxBase* pObj = (SbxBase*)xObj;
-                SbxDimArray* pArray = (SbxDimArray*)pObj;
+                SbxBase* pObj = static_cast<SbxBase*>(xObj);
+                SbxDimArray* pArray = static_cast<SbxDimArray*>(pObj);
 
                 short nDims = pArray->GetDims();
 
@@ -3139,7 +3139,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     {
         return;
     }
-    Any aAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+    Any aAny = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
     TypeClass eType = aAny.getValueType().getTypeClass();
     if( eType != TypeClass_INTERFACE )
     {
@@ -3205,7 +3205,7 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     {
         return;
     }
-    Any aAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+    Any aAny = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
     TypeClass eType = aAny.getValueType().getTypeClass();
     if( eType == TypeClass_STRUCT )
     {
@@ -3240,7 +3240,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     {
         return;
     }
-    Any aAny1 = ((SbUnoObject*)(SbxBase*)pObj1)->getUnoAny();
+    Any aAny1 = static_cast<SbUnoObject*>((SbxBase*)pObj1)->getUnoAny();
     TypeClass eType1 = aAny1.getValueType().getTypeClass();
     if( eType1 != TypeClass_INTERFACE )
     {
@@ -3259,7 +3259,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     {
         return;
     }
-    Any aAny2 = ((SbUnoObject*)(SbxBase*)pObj2)->getUnoAny();
+    Any aAny2 = static_cast<SbUnoObject*>((SbxBase*)pObj2)->getUnoAny();
     TypeClass eType2 = aAny2.getValueType().getTypeClass();
     if( eType2 != TypeClass_INTERFACE )
     {
@@ -4269,7 +4269,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
             SbxBaseRef pObj = (SbxBase*)pVal->GetObject();
             if( pObj && pObj->ISA(SbUnoObject) )
             {
-                Any aUnoAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+                Any aUnoAny = static_cast<SbUnoObject*>((SbxBase*)pObj)->getUnoAny();
                 aUnoAny >>= xIdlClass;
             }
 

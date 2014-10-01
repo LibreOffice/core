@@ -733,7 +733,7 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
     }
     // Test downcast!!!
     if( this->ISA(SbxVariable) )
-        ((SbxVariable*)this)->Broadcast( SBX_HINT_DATAWANTED );
+        const_cast<SbxVariable*>(static_cast<const SbxVariable*>(this))->Broadcast( SBX_HINT_DATAWANTED );
     SbxDataType t = GetType();
     if( t == SbxSTRING )
     {

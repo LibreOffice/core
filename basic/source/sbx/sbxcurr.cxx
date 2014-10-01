@@ -233,7 +233,7 @@ start:
             nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nByte);
             break;
         case SbxCHAR:
-            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->pChar);
+            nRes = (sal_Int64)CURRENCY_FACTOR * reinterpret_cast<sal_Int64>(p->pChar);
             break;
         case SbxBOOL:
         case SbxINTEGER:

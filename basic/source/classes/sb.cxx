@@ -239,7 +239,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
             }
         }
         const OUString aVBAHook("VBAGlobals");
-        pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
+        pVBAGlobals = static_cast<SbUnoObject*>(Find( aVBAHook , SbxCLASS_DONTCARE ));
     }
     return pVBAGlobals;
 }
@@ -895,7 +895,7 @@ SbxObject* SbClassFactory::CreateObject( const OUString& rClassName )
     SbxObject* pRet = NULL;
     if( pVar )
     {
-        SbModule* pVarMod = (SbModule*)pVar;
+        SbModule* pVarMod = static_cast<SbModule*>(pVar);
         pRet = new SbClassModuleObject( pVarMod );
     }
     return pRet;
@@ -904,7 +904,7 @@ SbxObject* SbClassFactory::CreateObject( const OUString& rClassName )
 SbModule* SbClassFactory::FindClass( const OUString& rClassName )
 {
     SbxVariable* pVar = xClassModules->Find( rClassName, SbxCLASS_DONTCARE );
-    SbModule* pMod = pVar ? (SbModule*)pVar : NULL;
+    SbModule* pMod = pVar ? static_cast<SbModule*>(pVar) : NULL;
     return pMod;
 }
 
@@ -1026,7 +1026,7 @@ void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
     {
         for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
         {
-            SbModule* p = (SbModule*)pModules->Get( i );
+            SbModule* p = static_cast<SbModule*>(pModules->Get( i ));
             p->ClearVarsDependingOnDeletedBasic( pDeletedBasic );
         }
     }
@@ -1143,7 +1143,7 @@ SbModule* StarBASIC::FindModule( const OUString& rName )
 {
     for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
     {
-        SbModule* p = (SbModule*) pModules->Get( i );
+        SbModule* p = static_cast<SbModule*>( pModules->Get( i ) );
         if( p->GetName().equalsIgnoreAsciiCase( rName ) )
         {
             return p;
@@ -1226,7 +1226,7 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     // Init own modules
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
-        SbModule* pModule = (SbModule*)pModules->Get( nMod );
+        SbModule* pModule = static_cast<SbModule*>( pModules->Get( nMod ) );
         if( !pModule->IsCompiled() )
         {
             pModule->Compile();
@@ -1241,7 +1241,7 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     ModuleInitDependencyMap aMIDMap;
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
-        SbModule* pModule = (SbModule*)pModules->Get( nMod );
+        SbModule* pModule = static_cast<SbModule*>(pModules->Get( nMod ));
         OUString aModuleName = pModule->GetName();
         if( pModule->isProxyModule() )
         {
@@ -1259,7 +1259,7 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     // Call RunInit on standard modules
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
-        SbModule* pModule = (SbModule*)pModules->Get( nMod );
+        SbModule* pModule = static_cast<SbModule*>(pModules->Get( nMod ));
         if( !pModule->isProxyModule() )
         {
             pModule->RunInit();
@@ -1286,7 +1286,7 @@ void StarBASIC::DeInitAllModules( void )
     // Deinit own modules
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
-        SbModule* pModule = (SbModule*)pModules->Get( nMod );
+        SbModule* pModule = static_cast<SbModule*>(pModules->Get( nMod ));
         if( pModule->pImage && !pModule->isProxyModule() && !pModule->ISA(SbObjModule) )
         {
             pModule->pImage->bInit = false;
@@ -1327,7 +1327,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
         }
         if( !pRes )
         {
-            pRes = ((SbiStdObject*) (SbxObject*) pRtl)->Find( rName, t );
+            pRes = static_cast<SbiStdObject*>((SbxObject*) pRtl)->Find( rName, t );
         }
         if( pRes )
         {
@@ -1339,7 +1339,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
     {
         for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
         {
-            SbModule* p = (SbModule*) pModules->Get( i );
+            SbModule* p = static_cast<SbModule*>( pModules->Get( i ) );
             if( p->IsVisible() )
             {
                 // Remember modul fpr Main() call
@@ -1941,7 +1941,7 @@ bool StarBASIC::StoreData( SvStream& r ) const
     r.WriteUInt16( pModules->Count() );
     for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
     {
-        SbModule* p = (SbModule*) pModules->Get( i );
+        SbModule* p = static_cast<SbModule*>( pModules->Get( i ) );
         if( !p->Store( r ) )
         {
             return false;

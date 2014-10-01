@@ -845,7 +845,7 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     // Call of a subprogram
                     SbModule* pOld = GetSbData()->pMod;
                     GetSbData()->pMod = this;
-                    Run( (SbMethod*) pVar );
+                    Run( static_cast<SbMethod*>(pVar) );
                     GetSbData()->pMod = pOld;
                 }
             }
@@ -1053,8 +1053,8 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
     SbxObject* p = pBasic;
     while( p->GetParent() )
         p = p->GetParent();
-    if( ((StarBASIC*)p) != pBasic )
-        ClearUnoObjectsInRTL_Impl_Rek( (StarBASIC*)p );
+    if( static_cast<StarBASIC*>(p) != pBasic )
+        ClearUnoObjectsInRTL_Impl_Rek( static_cast<StarBASIC*>(p) );
 }
 
 
@@ -1091,9 +1091,9 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
     if( bDelInst )
     {
         // #32779: Hold Basic during the execution
-        xBasic = (StarBASIC*) GetParent();
+        xBasic = static_cast<StarBASIC*>( GetParent() );
 
-        GetSbData()->pInst = new SbiInstance( (StarBASIC*) GetParent() );
+        GetSbData()->pInst = new SbiInstance( static_cast<StarBASIC*>(GetParent()) );
 
         /*  If a VBA script in a document is started, get the VBA compatibility
             interface from the document Basic library container, and notify all
@@ -1432,7 +1432,7 @@ void StarBASIC::ClearAllModuleVars( void )
     // Initialise the own module
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
-        SbModule* pModule = (SbModule*)pModules->Get( nMod );
+        SbModule* pModule = static_cast<SbModule*>(pModules->Get( nMod ));
         // Initialise only, if the startcode was already executed
         if( pModule->pImage && pModule->pImage->bInit && !pModule->isProxyModule() && !pModule->ISA(SbObjModule) )
             pModule->ClearPrivateVars();
@@ -1770,7 +1770,7 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
     ErrorHdlResetter aErrHdl;
     SbxBase::ResetError();
 
-    boost::scoped_ptr<SbiParser> pParser(new SbiParser( (StarBASIC*) GetParent(), this ));
+    boost::scoped_ptr<SbiParser> pParser(new SbiParser( static_cast<StarBASIC*>(GetParent()), this ));
     pParser->SetCodeCompleting(true);
 
     while( pParser->Parse() ) {}
@@ -2102,11 +2102,11 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
         mCaller = pCaller;
     }
     // RefCount vom Modul hochzaehlen
-    SbModule* pMod_ = (SbModule*)GetParent();
+    SbModule* pMod_ = static_cast<SbModule*>(GetParent());
     pMod_->AddRef();
 
     // Increment the RefCount of the Basic
-    StarBASIC* pBasic = (StarBASIC*)pMod_->GetParent();
+    StarBASIC* pBasic = static_cast<StarBASIC*>(pMod_->GetParent());
     pBasic->AddRef();
 
     // Establish the values to get the return value
@@ -2665,7 +2665,7 @@ void SbUserFormModule::InitObject()
     try
     {
         OUString aHook("VBAGlobals");
-        SbUnoObject* pGlobs = (SbUnoObject*)GetParent()->Find( aHook, SbxCLASS_DONTCARE );
+        SbUnoObject* pGlobs = static_cast<SbUnoObject*>(GetParent()->Find( aHook, SbxCLASS_DONTCARE ));
         if ( m_xModel.is() && pGlobs )
         {
             // broadcast INITIALIZE_USERFORM script event before the dialog is created

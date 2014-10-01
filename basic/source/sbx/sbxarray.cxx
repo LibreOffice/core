@@ -237,7 +237,7 @@ OUString SbxArray::GetAlias( sal_uInt16 nIdx )
         SetError( SbxERR_PROP_WRITEONLY );
         return OUString();
     }
-    SbxVarEntry& rRef = (SbxVarEntry&) GetRef( nIdx );
+    SbxVarEntry& rRef = reinterpret_cast<SbxVarEntry&>(GetRef( nIdx ));
 
     if (!rRef.maAlias)
         return OUString();
@@ -253,7 +253,7 @@ void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
     }
     else
     {
-        SbxVarEntry& rRef = (SbxVarEntry&) GetRef( nIdx );
+        SbxVarEntry& rRef = reinterpret_cast<SbxVarEntry&>( GetRef( nIdx ) );
         rRef.maAlias.reset(rAlias);
     }
 }
@@ -505,7 +505,7 @@ bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     {
         sal_uInt16 nIdx;
         rStrm.ReadUInt16( nIdx );
-        SbxVariable* pVar = (SbxVariable*) Load( rStrm );
+        SbxVariable* pVar = static_cast<SbxVariable*>(Load( rStrm ));
         if( pVar )
         {
             SbxVariableRef& rRef = GetRef( nIdx );

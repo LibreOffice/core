@@ -365,13 +365,13 @@ void SbiCodeGen::Save()
     sal_uInt16 nCount = pParser->rTypeArray->Count();
     for (i = 0; i < nCount; i++)
     {
-         p->AddType((SbxObject *)pParser->rTypeArray->Get(i));
+         p->AddType(static_cast<SbxObject *>(pParser->rTypeArray->Get(i)));
     }
     // Insert enum objects
     nCount = pParser->rEnumArray->Count();
     for (i = 0; i < nCount; i++)
     {
-         p->AddEnum((SbxObject *)pParser->rEnumArray->Get(i));
+         p->AddEnum(static_cast<SbxObject *>(pParser->rEnumArray->Get(i)));
     }
     if( !p->IsError() )
     {

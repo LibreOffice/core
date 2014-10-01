@@ -846,7 +846,7 @@ void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         rPar = pPar_ = new SbxArray;
                         pPar_->Put( pVar, 0 );
                     }
-                    p( (StarBASIC*) GetParent(), *pPar_, bWrite );
+                    p( static_cast<StarBASIC*>(GetParent()), *pPar_, bWrite );
                     return;
                 }
             }

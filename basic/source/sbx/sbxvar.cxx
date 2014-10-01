@@ -720,7 +720,7 @@ void SbxVariable::Dump( SvStream& rStrm, bool bFill )
             GetValues_Impl().pObj != GetParent() )
     {
         rStrm.WriteCharPtr( " contains " );
-        ((SbxObject*) GetValues_Impl().pObj)->Dump( rStrm, bFill );
+        static_cast<SbxObject*>(GetValues_Impl().pObj)->Dump( rStrm, bFill );
     }
     else
     {

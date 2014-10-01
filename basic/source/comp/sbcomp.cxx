@@ -954,7 +954,7 @@ bool SbModule::Compile()
     SbModule* pOld = GetSbData()->pCompMod;
     GetSbData()->pCompMod = this;
 
-    boost::scoped_ptr<SbiParser> pParser(new SbiParser( (StarBASIC*) GetParent(), this ));
+    boost::scoped_ptr<SbiParser> pParser(new SbiParser( static_cast<StarBASIC*>(GetParent()), this ));
     while( pParser->Parse() ) {}
     if( !pParser->GetErrors() )
         pParser->aGen.Save();

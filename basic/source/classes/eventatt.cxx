@@ -213,8 +213,8 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         if( pParentParent )
         {
             // Own basic must be document library
-            xAppStandardBasic = (StarBASIC*)pParentParent;
-            xDocStandardBasic = (StarBASIC*)pParent;
+            xAppStandardBasic = static_cast<StarBASIC*>(pParentParent);
+            xDocStandardBasic = static_cast<StarBASIC*>(pParent);
         }
         else if( pParent )
         {
@@ -222,13 +222,13 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             if( aName.equalsAscii("Standard") )
             {
                 // Own basic is doc standard lib
-                xDocStandardBasic = (StarBASIC*)p;
+                xDocStandardBasic = static_cast<StarBASIC*>(p);
             }
-            xAppStandardBasic = (StarBASIC*)pParent;
+            xAppStandardBasic = static_cast<StarBASIC*>(pParent);
         }
         else
         {
-            xAppStandardBasic = (StarBASIC*)p;
+            xAppStandardBasic = static_cast<StarBASIC*>(p);
         }
 
         bool bSearchLib = true;
@@ -331,7 +331,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
     SbxVariable* pDlgLibContVar = pBasic->Find(OUString("DialogLibraries"), SbxCLASS_OBJECT);
     if( pDlgLibContVar && pDlgLibContVar->ISA(SbUnoObject) )
     {
-        SbUnoObject* pDlgLibContUnoObj = (SbUnoObject*)(SbxBase*)pDlgLibContVar;
+        SbUnoObject* pDlgLibContUnoObj = static_cast<SbUnoObject*>((SbxBase*)pDlgLibContVar);
         Any aDlgLibContAny = pDlgLibContUnoObj->getUnoAny();
 
         Reference< XLibraryContainer > xDlgLibContNameAccess( aDlgLibContAny, UNO_QUERY );
@@ -379,7 +379,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
 {
     css::uno::Reference< css::container::XNameContainer > aDlgLib;
     // Find dialog library for dialog, direct access is not possible here
-    StarBASIC* pStartedBasic = (StarBASIC*)pBasic;
+    StarBASIC* pStartedBasic = static_cast<StarBASIC*>(pBasic);
     SbxObject* pParentBasic = pStartedBasic ? pStartedBasic->GetParent() : NULL;
     SbxObject* pParentParentBasic = pParentBasic ? pParentBasic->GetParent() : NULL;
 
@@ -400,13 +400,13 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
         aDlgLib = implFindDialogLibForDialog( aAnyISP, pSearchBasic1 );
 
         if ( aDlgLib.is() )
-            pFoundBasic = (StarBASIC*)pSearchBasic1;
+            pFoundBasic = static_cast<StarBASIC*>(pSearchBasic1);
 
         else if( pSearchBasic2 )
         {
             aDlgLib = implFindDialogLibForDialog( aAnyISP, pSearchBasic2 );
             if ( aDlgLib.is() )
-                pFoundBasic = (StarBASIC*)pSearchBasic2;
+                pFoundBasic = static_cast<StarBASIC*>(pSearchBasic2);
         }
     }
     return aDlgLib;
@@ -433,7 +433,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
+    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>((SbxBase*)pObj);
     Any aAnyISP = pUnoObj->getUnoAny();
     TypeClass eType = aAnyISP.getValueType().getTypeClass();
 

@@ -117,13 +117,13 @@ RTLFUNC(CallByName)
     }
 
     // 1. parameter is object
-    SbxBase* pObjVar = (SbxObject*)rPar.Get(1)->GetObject();
+    SbxBase* pObjVar = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     SbxObject* pObj = NULL;
     if( pObjVar )
         pObj = PTR_CAST(SbxObject,pObjVar);
     if( !pObj && pObjVar && pObjVar->ISA(SbxVariable) )
     {
-        SbxBase* pObjVarObj = ((SbxVariable*)pObjVar)->GetObject();
+        SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
         pObj = PTR_CAST(SbxObject,pObjVarObj);
     }
     if( !pObj )
@@ -949,7 +949,7 @@ RTLFUNC(FindPropertyObject)
         return;
     }
 
-    SbxBase* pObjVar = (SbxObject*)rPar.Get(1)->GetObject();
+    SbxBase* pObjVar = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     SbxObject* pObj = NULL;
     if( pObjVar )
     {
@@ -957,7 +957,7 @@ RTLFUNC(FindPropertyObject)
     }
     if( !pObj && pObjVar && pObjVar->ISA(SbxVariable) )
     {
-        SbxBase* pObjVarObj = ((SbxVariable*)pObjVar)->GetObject();
+        SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
         pObj = PTR_CAST(SbxObject,pObjVarObj);
     }
 
