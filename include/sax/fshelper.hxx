@@ -183,7 +183,6 @@ private:
     void singleElementInternal(sal_Int32 elementTokenId, ...);
 
     FastSaxSerializer* mpSerializer;
-    FastAttributeList maAttrList;
 };
 
 typedef boost::shared_ptr< FastSerializerHelper > FSHelperPtr;

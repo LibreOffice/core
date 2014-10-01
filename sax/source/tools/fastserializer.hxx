@@ -33,6 +33,14 @@
 
 namespace sax_fastparser {
 
+struct TokenValue
+{
+    sal_Int32   nToken;
+    const char *pValue;
+    TokenValue(sal_Int32 _nToken, const char *_pValue) : nToken(_nToken), pValue(_pValue) {}
+};
+typedef std::vector<TokenValue> TokenValueList;
+
 /// Receives notification of sax document events to write into an XOutputStream.
 class FastSaxSerializer
 {
@@ -44,6 +52,8 @@ public:
     ~FastSaxSerializer();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream();
+    /// called by FSHelper to put data in for writeTokenValueList
+    TokenValueList& getTokenValueList() { return maTokenValues; }
 
     /** called by the parser when parsing of an XML stream is started.
      */
@@ -65,12 +75,12 @@ public:
             and the integer token of the namespace combined with an arithmetic
             <b>or</b> operation.
 
-        @param Attribs
+        @param pAttrList
             Contains a <type>FastAttributeList</type> to access the attributes
             from the element.
 
     */
-    void startFastElement( ::sal_Int32 Element, FastAttributeList* Attribs );
+    void startFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList = NULL );
 
     /** receives notification of the end of an known element.
         @see startFastElement
@@ -89,12 +99,12 @@ public:
             and the integer token of the namespace combined with an arithmetic
             <b>or</b> operation.
 
-        @param Attribs
+        @param pAttrList
             Contains a <type>FastAttributeList</type> to access the attributes
             from the element.
 
     */
-    void singleFastElement( ::sal_Int32 Element, FastAttributeList* Attribs );
+    void singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList = NULL );
 
     void setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream );
     void setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler );
@@ -197,11 +207,13 @@ private:
     };
 
     ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
+    TokenValueList maTokenValues;
 
 #ifdef DBG_UTIL
     ::std::stack<sal_Int32> m_DebugStartedElements;
 #endif
 
+    void writeTokenValueList();
     void writeFastAttributeList( FastAttributeList* pAttrList );
     void writeOutput( const sal_Int8* pStr, size_t nLen );
     void writeOutput( const css::uno::Sequence< ::sal_Int8 >& aData );
