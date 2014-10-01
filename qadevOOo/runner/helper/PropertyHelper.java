@@ -30,7 +30,7 @@ public class PropertyHelper
     public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList<PropertyValue> _aPropertyList)
         {
             // copy the whole PropertyValue List to an PropertyValue Array
-            PropertyValue[] aSaveProperties = null;
+            PropertyValue[] aSaveProperties;
 
             if (_aPropertyList == null)
             {

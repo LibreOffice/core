@@ -820,16 +820,9 @@ public class APIDescGetter extends DescGetter
             }
         }
 
-        String[] scenario = new String[componentList.size()];
         Collections.sort(componentList);
-
-        for (int i = 0; i < componentList.size(); i++)
-        {
-            scenario[i] = componentList.get(i);
-        }
-
+        String[] scenario = componentList.toArray(new String[componentList.size()]);
         return scenario;
-
     }
 
     private String[] getScenarioFromClassPath(String job)
@@ -892,14 +885,8 @@ public class APIDescGetter extends DescGetter
             e.printStackTrace();
         }
 
-        String[] scenario = new String[scenarioList.size()];
         Collections.sort(scenarioList);
-
-        for (int i = 0; i < scenarioList.size(); i++)
-        {
-            scenario[i] = scenarioList.get(i);
-        }
-
+        String[] scenario = scenarioList.toArray(new String[scenarioList.size()]);
         return scenario;
     }
 

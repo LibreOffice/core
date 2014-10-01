@@ -103,8 +103,7 @@ public class ComplexDescGetter extends DescGetter
                 methods.add(meth);
             }
 
-            methodNames = new String[methods.size()];
-            methodNames = methods.toArray(methodNames);
+            methodNames = methods.toArray(new String[methods.size()]);
         }
 
         // create an instance
