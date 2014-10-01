@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0d59b9_2afc9f3d",
+        "filename": "external/collada2gltf/patches/drop_tr1_support.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2014-10-01T17:24:41Z",
+      "side": 1,
+      "message": "Here is it intentional to remove the whole block? I mean it removes the \u003cmemory\u003e and \u003cunordered_map\u003e header too.",
+      "revId": "768b04cecca43232fbf536675da6eb5591672fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
