@@ -2222,9 +2222,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     }
     break;
     case NS_ooxml::LN_endtrackchange:
-        m_pImpl->RemoveCurrentRedline( );
+        m_pImpl->RemoveTopRedline();
     break;
     case NS_ooxml::LN_CT_RPrChange_rPr:
+    {
         // Push all the current 'Character' properties to the stack, so that we don't store them
         // as 'tracked changes' by mistake
         m_pImpl->PushProperties(CONTEXT_CHARACTER);
@@ -2232,19 +2233,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         // Resolve all the properties that are under the 'rPrChange'->'rPr' XML node
         resolveSprmProps(*this, rSprm );
 
-        if (m_pImpl->GetTopContext())
-        {
-            // Get all the properties that were processed in the 'rPrChange'->'rPr' XML node
-            uno::Sequence< beans::PropertyValue > currentRedlineRevertProperties = m_pImpl->GetTopContext()->GetPropertyValues();
-
-            // Store these properties in the current redline object
-            m_pImpl->SetCurrentRedlineRevertProperties( currentRedlineRevertProperties );
-        }
+        // Get all the properties that were processed in the 'rPrChange'->'rPr' XML node
+        uno::Sequence< beans::PropertyValue > currentRedlineRevertProperties = m_pImpl->GetTopContext()->GetPropertyValues();
 
         // Pop back out the character properties that were on the run
         m_pImpl->PopProperties(CONTEXT_CHARACTER);
+
+        // Store these properties in the current redline object (do it after the PopProperties() above, since
+        // otherwise it'd be stored in the content dropped there).
+        m_pImpl->SetCurrentRedlineRevertProperties( currentRedlineRevertProperties );
+    }
     break;
     case NS_ooxml::LN_CT_PPrChange_pPr:
+    {
         // Push all the current 'Paragraph' properties to the stack, so that we don't store them
         // as 'tracked changes' by mistake
         m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
@@ -2252,17 +2253,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         // Resolve all the properties that are under the 'pPrChange'->'pPr' XML node
         resolveSprmProps(*this, rSprm );
 
-        if (m_pImpl->GetTopContext())
-        {
-            // Get all the properties that were processed in the 'pPrChange'->'pPr' XML node
-            uno::Sequence< beans::PropertyValue > currentRedlineRevertProperties = m_pImpl->GetTopContext()->GetPropertyValues();
-
-            // Store these properties in the current redline object
-            m_pImpl->SetCurrentRedlineRevertProperties( currentRedlineRevertProperties );
-        }
+        // Get all the properties that were processed in the 'pPrChange'->'pPr' XML node
+        uno::Sequence< beans::PropertyValue > currentRedlineRevertProperties = m_pImpl->GetTopContext()->GetPropertyValues();
 
         // Pop back out the character properties that were on the run
         m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
+
+        // Store these properties in the current redline object (do it after the PopProperties() above, since
+        // otherwise it'd be stored in the content dropped there).
+        m_pImpl->SetCurrentRedlineRevertProperties( currentRedlineRevertProperties );
+    }
     break;
     case NS_ooxml::LN_object:
     {
@@ -3444,7 +3444,7 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
 {
     sal_uInt32 nSprmId = rSprm.getId();
 
-    m_pImpl->AddNewRedline( );
+    m_pImpl->AddNewRedline( nSprmId );
 
     if (nSprmId == NS_ooxml::LN_CT_PPr_pPrChange)
     {
@@ -3484,6 +3484,7 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
         default: OSL_FAIL( "redline token other than mod, ins, del or table row" ); break;
     }
     m_pImpl->EndParaMarkerChange( );
+    m_pImpl->SetCurrentRedlineIsRead();
 }
 
 } //namespace dmapper

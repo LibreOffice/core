@@ -17338,9 +17338,6 @@
     </resource>
     <resource name="CT_RPrChange" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_RPrChange_rPr"/>
-      <action name="end" action="tokenproperty"/>
-      <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:endtrackchange"/>
-      <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_ParaRPrChange" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_ParaRPrChange_rPr"/>

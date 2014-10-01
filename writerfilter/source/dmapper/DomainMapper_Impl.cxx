@@ -1592,7 +1592,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 }
 
 void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xRange,
-        RedlineParamsPtr& pRedline)
+        RedlineParamsPtr pRedline)
 {
     if ( pRedline.get( ) )
     {
@@ -1646,21 +1646,25 @@ void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange
 
 void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& xRange )
 {
+    // Writer core "officially" does not like overlapping redlines, and its UNO interface is stupid enough
+    // to not prevent that. However, in practice in fact everything appears to work fine (except for the debug warnings
+    // about redline table corruption, which may possibly be harmless in reality). So leave this as it is, since this
+    // is a better representation of how the changes happened. If this will ever become a problem, overlapping redlines
+    // will need to be merged into one, just like doing the changes in the UI does, which will lose some information
+    // (and so if that happens, it may be better to fix Writer).
+    // Create the redlines here from lowest (formats) to highest (inserts/removals) priority, since the last one is
+    // what Writer presents graphically, so this will show deletes as deleted text and not as just formatted text being there.
+    if( GetTopContextOfType(CONTEXT_PARAGRAPH) != NULL )
+        for( std::vector<RedlineParamsPtr>::const_iterator it = GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines().begin();
+             it != GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines().end(); ++it )
+            CreateRedline( xRange, *it );
+    if( GetTopContextOfType(CONTEXT_CHARACTER) != NULL )
+        for( std::vector<RedlineParamsPtr>::const_iterator it = GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().begin();
+             it != GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().end(); ++it )
+            CreateRedline( xRange, *it );
     std::vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.top().begin( );
-    std::vector< RedlineParamsPtr > aCleaned;
     for (; pIt != m_aRedlines.top().end( ); ++pIt )
-    {
         CreateRedline( xRange, *pIt );
-
-        // Adding the non-mod redlines to the temporary vector
-        if ( pIt->get( ) )
-        {
-            if (((*pIt)->m_nToken & 0xffff) != XML_mod && ((*pIt)->m_nToken & 0xffff) != XML_ParagraphFormat)
-                aCleaned.push_back(*pIt);
-        }
-    }
-
-    m_aRedlines.top().swap( aCleaned );
 }
 
 void DomainMapper_Impl::StartParaMarkerChange( )
@@ -1671,6 +1675,7 @@ void DomainMapper_Impl::StartParaMarkerChange( )
 void DomainMapper_Impl::EndParaMarkerChange( )
 {
     m_bIsParaMarkerChange = false;
+    m_currentRedline.reset();
 }
 
 
@@ -4608,36 +4613,43 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
     return bRet;
 }
 
-void DomainMapper_Impl::AddNewRedline(  )
+void DomainMapper_Impl::AddNewRedline( sal_uInt32 sprmId )
 {
     RedlineParamsPtr pNew( new RedlineParams );
     pNew->m_nToken = XML_mod;
     if ( !m_bIsParaMarkerChange )
     {
-        m_aRedlines.top().push_back( pNew );
+        // <w:rPrChange> applies to the whole <w:r>, <w:pPrChange> applies to the whole <w:p>,
+        // so keep those two in CONTEXT_CHARACTERS and CONTEXT_PARAGRAPH, which will take
+        // care of their scope (i.e. when they should be used and discarded).
+        // Let's keep the rest the same way they used to be handled (explictly dropped
+        // from a global stack by endtrackchange), but quite possibly they should not be handled
+        // that way either (I don't know).
+        if( sprmId == NS_ooxml::LN_EG_RPrContent_rPrChange )
+            GetTopContextOfType( CONTEXT_CHARACTER )->Redlines().push_back( pNew );
+        else if( sprmId == NS_ooxml::LN_CT_PPr_pPrChange )
+            GetTopContextOfType( CONTEXT_PARAGRAPH )->Redlines().push_back( pNew );
+        else
+            m_aRedlines.top().push_back( pNew );
     }
     else
     {
-        m_pParaMarkerRedline.swap( pNew );
+        m_pParaMarkerRedline = pNew;
     }
+    // Newly read data will go into this redline.
+    m_currentRedline = pNew;
 }
 
-RedlineParamsPtr DomainMapper_Impl::GetTopRedline(  )
+void DomainMapper_Impl::SetCurrentRedlineIsRead()
 {
-    RedlineParamsPtr pResult;
-    if ( !m_bIsParaMarkerChange && m_aRedlines.top().size(  ) > 0 )
-        pResult = m_aRedlines.top().back(  );
-    else if ( m_bIsParaMarkerChange )
-        pResult = m_pParaMarkerRedline;
-    return pResult;
+    m_currentRedline.reset();
 }
 
 sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  )
 {
     sal_Int32 nToken = 0;
-    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-    if ( pCurrent.get(  ) )
-        nToken = pCurrent->m_nToken;
+    assert( m_currentRedline.get());
+    nToken = m_currentRedline->m_nToken;
     return nToken;
 }
 
@@ -4645,9 +4657,8 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( const OUString& sAuthor )
 {
     if (!m_xAnnotationField.is())
     {
-        RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-        if ( pCurrent.get(  ) )
-            pCurrent->m_sAuthor = sAuthor;
+        assert( m_currentRedline.get());
+        m_currentRedline->m_sAuthor = sAuthor;
     }
     else
         m_xAnnotationField->setPropertyValue("Author", uno::makeAny(sAuthor));
@@ -4663,9 +4674,8 @@ void DomainMapper_Impl::SetCurrentRedlineDate( const OUString& sDate )
 {
     if (!m_xAnnotationField.is())
     {
-        RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-        if ( pCurrent.get(  ) )
-            pCurrent->m_sDate = sDate;
+        assert( m_currentRedline.get());
+        m_currentRedline->m_sDate = sDate;
     }
     else
         m_xAnnotationField->setPropertyValue("DateTimeValue", uno::makeAny(ConversionHelper::ConvertDateStringToDateTime(sDate)));
@@ -4679,44 +4689,44 @@ void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
     }
     else
     {
-        RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-        if ( pCurrent.get(  ) )
-            pCurrent->m_nId = sId;
+        // This should be an assert, but somebody had the smart idea to reuse this function also for comments and whatnot,
+        // and in some cases the id is actually not handled, which may be in fact a bug.
+        SAL_WARN( "writerfilter", !m_currentRedline.get());
+        if( m_currentRedline.get())
+            m_currentRedline->m_nId = sId;
     }
 }
 
 void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
 {
-    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-    if ( pCurrent.get(  ) )
-        pCurrent->m_nToken = nToken;
+    assert( m_currentRedline.get());
+    m_currentRedline->m_nToken = nToken;
 }
 
 void DomainMapper_Impl::SetCurrentRedlineRevertProperties( const uno::Sequence<beans::PropertyValue>& aProperties )
 {
-    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-    if ( pCurrent.get(  ) )
-        pCurrent->m_aRevertProperties = aProperties;
+    assert( m_currentRedline.get());
+    m_currentRedline->m_aRevertProperties = aProperties;
 }
 
 
-void DomainMapper_Impl::RemoveCurrentRedline( )
+// This removes only the last redline stored here, those stored in contexts are automatically removed when
+// the context is destroyed.
+void DomainMapper_Impl::RemoveTopRedline( )
 {
-    if ( m_aRedlines.top().size( ) > 0 )
-    {
-        m_aRedlines.top().pop_back( );
-    }
+    assert( m_aRedlines.top().size( ) > 0 );
+    m_aRedlines.top().pop_back( );
+    m_currentRedline.reset();
 }
 
 void DomainMapper_Impl::ResetParaMarkerRedline( )
 {
     if ( m_pParaMarkerRedline.get( ) )
     {
-        RedlineParamsPtr pEmpty;
-        m_pParaMarkerRedline.swap( pEmpty );
+        m_pParaMarkerRedline.reset();
+        m_currentRedline.reset();
     }
 }
-
 
 
 void DomainMapper_Impl::ApplySettingsTable()

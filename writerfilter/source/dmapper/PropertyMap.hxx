@@ -74,6 +74,18 @@ enum GrabBagType
     CHAR_GRAB_BAG
 };
 
+struct RedlineParams
+{
+    OUString m_sAuthor;
+    OUString m_sDate;
+    sal_Int32       m_nId;
+    sal_Int32       m_nToken;
+
+    /// This can hold properties of runs that had formatted 'track changes' properties
+    css::uno::Sequence<css::beans::PropertyValue> m_aRevertProperties;
+};
+typedef boost::shared_ptr< RedlineParams > RedlineParamsPtr;
+
 class PropValue
 {
     css::uno::Any m_aValue;
@@ -105,6 +117,9 @@ class PropertyMap
     std::map< PropertyIds, PropValue >                                          m_vMap;
 
     typedef std::map<PropertyIds,PropValue>::const_iterator                     MapIterator;
+
+    std::vector< RedlineParamsPtr > m_aRedlines;
+
 protected:
     void Invalidate()
     {
@@ -151,6 +166,10 @@ public:
     void                        SetFootnoteFontName( const OUString& rSet ) { m_sFootnoteFontName = rSet;}
 
     virtual void insertTableProperties( const PropertyMap* );
+
+    const std::vector< RedlineParamsPtr >& Redlines() const { return m_aRedlines; }
+    std::vector< RedlineParamsPtr >& Redlines() { return m_aRedlines; }
+
 #ifdef DEBUG_DOMAINMAPPER
     void printProperties();
 #endif

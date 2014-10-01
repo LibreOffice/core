@@ -250,20 +250,6 @@ struct AnnotationPosition
 };
 typedef boost::unordered_map< sal_Int32, AnnotationPosition > AnnotationPositions_t;
 
-struct RedlineParams
-{
-    OUString m_sAuthor;
-    OUString m_sDate;
-    sal_Int32       m_nId;
-    sal_Int32       m_nToken;
-
-    /// This can hold properties of runs that had formatted 'track changes' properties
-    css::uno::Sequence<css::beans::PropertyValue> m_aRevertProperties;
-};
-typedef boost::shared_ptr< RedlineParams > RedlineParamsPtr;
-
-
-
 struct LineNumberSettings
 {
     bool        bIsOn;
@@ -392,6 +378,8 @@ private:
 
     // Redline stack
     std::stack< std::vector< RedlineParamsPtr > > m_aRedlines;
+    // The redline currently read, may be also stored by a context instead of m_aRedlines.
+    RedlineParamsPtr                m_currentRedline;
     RedlineParamsPtr                m_pParaMarkerRedline;
     bool                            m_bIsParaMarkerChange;
 
@@ -466,7 +454,7 @@ public:
     }
     void SetDocumentSettingsProperty( const OUString& rPropName, const css::uno::Any& rValue );
 
-    void CreateRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xRange, RedlineParamsPtr& pRedline  );
+    void CreateRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xRange, RedlineParamsPtr pRedline  );
 
     void CheckParaMarkerRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xRange );
 
@@ -725,9 +713,7 @@ public:
         );
     bool ExecuteFrameConversion();
 
-    void AddNewRedline( );
-
-    RedlineParamsPtr GetTopRedline( );
+    void AddNewRedline( sal_uInt32 sprmId );
 
     sal_Int32 GetCurrentRedlineToken( );
     void SetCurrentRedlineAuthor( const OUString& sAuthor );
@@ -735,7 +721,8 @@ public:
     void SetCurrentRedlineId( sal_Int32 nId );
     void SetCurrentRedlineToken( sal_Int32 nToken );
     void SetCurrentRedlineRevertProperties( const css::uno::Sequence<css::beans::PropertyValue>& aProperties );
-    void RemoveCurrentRedline( );
+    void SetCurrentRedlineIsRead();
+    void RemoveTopRedline( );
     void ResetParaMarkerRedline( );
     void SetCurrentRedlineInitials( const OUString& sInitials );
     bool IsFirstRun() { return m_bIsFirstRun;}
