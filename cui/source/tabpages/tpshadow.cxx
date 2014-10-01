@@ -53,6 +53,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
                           rInAttrs ),
     rOutAttrs           ( rInAttrs ),
     eRP                 ( RP_LT ),
+    pnColorListState    ( 0 ),
     nPageType           ( 0 ),
     nDlgType            ( 0 ),
     pbAreaTP            ( 0 ),
@@ -162,10 +163,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_pLbShadowColor->SetSelectHdl( aLink );
     m_pMtrTransparent->SetModifyHdl( aLink );
     m_pMtrDistance->SetModifyHdl( aLink );
-
 }
-
-
 
 void SvxShadowTabPage::Construct()
 {
