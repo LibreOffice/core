@@ -10,7 +10,7 @@ public class LOKitShell {
 
     public static float getDpi() {
         DisplayMetrics metrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
-        return  metrics.density * 160;
+        return metrics.density * 160;
     }
 
     public static void sendEvent(LOEvent event) {
@@ -26,5 +26,23 @@ public class LOKitShell {
 
     public static void queueRedraw() {
         LOKitShell.sendEvent(LOEventFactory.redraw());
+    }
+
+    public static void showProgressSpinner() {
+        getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                LibreOfficeMainActivity.mAppContext.showProgressSpinner();
+            }
+        });
+    }
+
+    public static void hideProgressSpinner() {
+        getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                LibreOfficeMainActivity.mAppContext.hideProgressSpinner();
+            }
+        });
     }
 }

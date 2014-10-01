@@ -55,8 +55,10 @@ public class LOKitThread extends Thread {
     }
 
     private void changePart(int partIndex) {
+        LOKitShell.showProgressSpinner();
         mTileProvider.changePart(partIndex);
         refresh();
+        LOKitShell.hideProgressSpinner();
     }
 
     private boolean load(String filename) {
@@ -76,14 +78,9 @@ public class LOKitThread extends Thread {
 
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
+            LOKitShell.showProgressSpinner();
             refresh();
-            LOKitShell.getMainHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    LibreOfficeMainActivity.mAppContext.hideProgressBar();
-                }
-            });
-
+            LOKitShell.hideProgressSpinner();
         }
         return isReady;
     }

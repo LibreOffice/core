@@ -199,11 +199,11 @@ public class LibreOfficeMainActivity extends Activity {
 
     }
 
-    public void showProgressBar() {
+    public void showProgressSpinner() {
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
     }
 
-    public void hideProgressBar() {
+    public void hideProgressSpinner() {
         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
     }
 
