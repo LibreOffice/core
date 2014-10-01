@@ -16,18 +16,21 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <assert.h>
+
+#include <sal/config.h>
+
+#include <cassert>
 #include "system.h"
 #include <string.h>
 #if defined(OPENBSD)
 #include <sched.h>
 #endif
 #include <config_options.h>
-#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
 #include <rtl/textenc.h>
 #include <rtl/alloc.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #ifdef ANDROID
 #include <jni.h>
@@ -157,7 +160,7 @@ Thread_Impl* osl_thread_construct_Impl (void)
 
 static void osl_thread_destruct_Impl (Thread_Impl ** ppImpl)
 {
-    OSL_ASSERT(ppImpl);
+    assert(ppImpl);
     if (*ppImpl)
     {
         pthread_cond_destroy  (&((*ppImpl)->m_Cond));
@@ -295,8 +298,10 @@ static oslThread osl_thread_create_Impl (
         osl_thread_start_Impl,
         (void*)(pImpl))) != 0)
     {
-        OSL_TRACE("osl_thread_create_Impl(): errno: %d, %s\n",
-                  nRet, strerror(nRet));
+        SAL_WARN(
+            "sal.osl",
+            "pthread_create failed with " << nRet << " \"" << strerror(nRet)
+                << "\"");
 
         pthread_mutex_unlock (&(pImpl->m_Lock));
         osl_thread_destruct_Impl (&pImpl);
@@ -360,9 +365,11 @@ void SAL_CALL osl_resumeThread(oslThread Thread)
 {
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
     if (!pImpl)
+    {
+        SAL_WARN("sal.osl", "invalid osl_resumeThread(nullptr) call");
         return; /* EINVAL */
+    }
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
@@ -380,9 +387,11 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
 {
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
     if (!pImpl)
+    {
+        SAL_WARN("sal.osl", "invalid osl_suspendThread(nullptr) call");
         return; /* EINVAL */
+    }
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
@@ -450,9 +459,11 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
 {
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
     if (!pImpl)
+    {
+        SAL_WARN("sal.osl", "invalid osl_terminateThread(nullptr) call");
         return; /* EINVAL */
+    }
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
@@ -473,13 +484,17 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
     bool terminate;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
     if (!pImpl)
+    {
+        SAL_WARN("sal.osl", "invalid osl_scheduleThread(nullptr) call");
         return sal_False; /* EINVAL */
+    }
 
-    OSL_ASSERT(pthread_equal (pthread_self(), pImpl->m_hThread));
     if (!(pthread_equal (pthread_self(), pImpl->m_hThread)))
+    {
+        SAL_WARN("sal.osl", "invalid osl_scheduleThread(non-self) call");
         return sal_False; /* EINVAL */
+    }
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
@@ -524,9 +539,8 @@ void SAL_CALL osl_yieldThread()
 void SAL_CALL osl_setThreadName(char const * name) {
 #if defined LINUX && ! defined __FreeBSD_kernel__
     if (prctl(PR_SET_NAME, (unsigned long) name, 0, 0, 0) != 0) {
-        OSL_TRACE(
-            "%s prctl(PR_SET_NAME) failed with errno %d", OSL_LOG_PREFIX,
-            errno);
+        int e = errno;
+        SAL_WARN("sal.osl", "prctl(PR_SET_NAME) failed with errno " << e);
     }
 #else
     (void) name;
@@ -689,7 +703,10 @@ static void osl_thread_priority_init_Impl (void)
 
     if ((nRet = pthread_getschedparam(pthread_self(), &policy, &param)) != 0)
     {
-        OSL_TRACE("failed to get priority of thread [%s]",strerror(nRet));
+        SAL_WARN(
+            "sal.osl",
+            "pthread_getschedparam failed with " << nRet << " \""
+                << strerror(nRet) << "\"");
         return;
     }
 
@@ -705,27 +722,33 @@ static void osl_thread_priority_init_Impl (void)
 
     if ((nRet = sched_get_priority_min(policy) ) != -1)
     {
-        OSL_TRACE("Min Prioriy for policy '%i' == '%i'",policy,nRet);
+        SAL_INFO(
+            "sal.osl", "Min Prioriy for policy " << policy << " == " << nRet);
         g_thread.m_priority.m_Lowest=nRet;
     }
-#if OSL_DEBUG_LEVEL > 1
     else
     {
-        fprintf(stderr,"failed to get min sched param [%s]\n",strerror(errno));
+        int e = errno;
+        SAL_WARN(
+            "sal.osl",
+            "sched_get_priority_min failed with " << e << " \"" << strerror(e)
+                << "\"");
     }
-#endif /* OSL_DEBUG_LEVEL */
 
     if ((nRet = sched_get_priority_max(policy) ) != -1)
     {
-        OSL_TRACE("Max Prioriy for policy '%i' == '%i'",policy,nRet);
+        SAL_INFO(
+            "sal.osl", "Max Prioriy for policy " << policy << " == " << nRet);
         g_thread.m_priority.m_Highest=nRet;
     }
-#if OSL_DEBUG_LEVEL > 1
     else
     {
-        fprintf(stderr,"failed to get max sched param [%s]\n",strerror(errno));
+        int e = errno;
+        SAL_WARN(
+            "sal.osl",
+            "sched_get_priority_max failed with " << e << " \"" << strerror(e)
+                << "\"");
     }
-#endif /* OSL_DEBUG_LEVEL */
 
     g_thread.m_priority.m_Normal =
         (g_thread.m_priority.m_Lowest + g_thread.m_priority.m_Highest) / 2;
@@ -740,8 +763,14 @@ static void osl_thread_priority_init_Impl (void)
 
     if ((nRet = pthread_setschedparam(pthread_self(), policy, &param)) != 0)
     {
-        OSL_TRACE("failed to change base priority of thread [%s]",strerror(nRet));
-        OSL_TRACE("Thread ID '%i', Policy '%i', Priority '%i'\n",pthread_self(),policy,param.sched_priority);
+        SAL_WARN(
+            "sal.osl",
+            "pthread_setschedparam failed with " << nRet << " \""
+                << strerror(nRet) << "\"");
+        SAL_INFO(
+            "sal.osl",
+            "Thread ID " << pthread_self() << ", Policy " << policy
+                << ", Priority " << param.sched_priority);
     }
 
 #endif /* NO_PTHREAD_PRIORITY */
@@ -769,9 +798,11 @@ void SAL_CALL osl_setThreadPriority (
 
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
     if (!pImpl)
+    {
+        SAL_WARN("sal.osl", "invalid osl_setThreadPriority(nullptr, ...) call");
         return; /* EINVAL */
+    }
 
 #ifdef NO_PTHREAD_PRIORITY
     (void) Priority; /* unused */
@@ -815,22 +846,25 @@ void SAL_CALL osl_setThreadPriority (
             break;
 
         case osl_Thread_PriorityUnknown:
-            OSL_ASSERT(sal_False);      /* only fools try this...*/
-
-            /* let release-version behave friendly */
+            SAL_WARN(
+                "sal.osl",
+                "invalid osl_setThreadPriority(..., osl_Thread_PriorityUnknown)"
+                    " call");
             return;
 
         default:
-            /* enum expanded, but forgotten here...*/
-            OSL_ENSURE(sal_False,"osl_setThreadPriority : unknown priority\n");
-
-            /* let release-version behave friendly */
+            SAL_WARN(
+                "sal.osl",
+                "invalid osl_setThreadPriority(..., " << Priority << ") call");
             return;
     }
 
     if ((nRet = pthread_setschedparam(pImpl->m_hThread, policy, &Param)) != 0)
     {
-        OSL_TRACE("failed to change thread priority [%s]",strerror(nRet));
+        SAL_WARN(
+            "sal.osl",
+            "pthread_setschedparam failed with " << nRet << " \""
+                << strerror(nRet) << "\"");
     }
 
 #endif /* NO_PTHREAD_PRIORITY */
@@ -848,9 +882,11 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     oslThreadPriority Priority = osl_Thread_PriorityNormal;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
     if (!pImpl)
+    {
+        SAL_WARN("sal.osl", "invalid osl_getThreadPriority(nullptr) call");
         return osl_Thread_PriorityUnknown; /* EINVAL */
+    }
 
 #ifndef NO_PTHREAD_PRIORITY
 
@@ -967,15 +1003,13 @@ static void osl_thread_textencoding_init_Impl (void)
 
     /* determine default text encoding */
     defaultEncoding = osl_getTextEncodingFromLocale(NULL);
-    OSL_ASSERT(defaultEncoding != RTL_TEXTENCODING_DONTKNOW);
-
-    /*
-    Tools string functions call abort() on an unknown encoding so ASCII
-    is a meaningfull fallback regardless whether the assertion makes sense.
-    */
-
+    // Tools string functions call abort() on an unknown encoding so ASCII is a
+    // meaningfull fallback:
     if ( RTL_TEXTENCODING_DONTKNOW == defaultEncoding )
+    {
+        SAL_WARN("sal.osl", "RTL_TEXTENCODING_DONTKNOW -> _ASCII_US");
         defaultEncoding = RTL_TEXTENCODING_ASCII_US;
+    }
 
     g_thread.m_textencoding.m_default = defaultEncoding;
 }
