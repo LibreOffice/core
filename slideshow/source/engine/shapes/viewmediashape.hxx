@@ -147,7 +147,7 @@ namespace slideshow
                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rVCLDeviceParams,
                                                      const OUString& rMimeType );
             ViewLayerSharedPtr                    mpViewLayer;
-            ::std::auto_ptr< SystemChildWindow >  mpMediaWindow;
+            ::std::unique_ptr< SystemChildWindow >  mpMediaWindow;
             boost::scoped_ptr< ::vcl::Window >    mpEventHandlerParent;
             mutable ::com::sun::star::awt::Point  maWindowOffset;
             mutable ::basegfx::B2DRectangle       maBounds;

@@ -75,7 +75,6 @@ namespace slideshow
                                         const uno::Reference< drawing::XShape >&        rxShape,
                                         const uno::Reference< uno::XComponentContext >& rxContext ) :
             mpViewLayer( rViewLayer ),
-            mpMediaWindow(0),
             mpEventHandlerParent(0),
             maWindowOffset( 0, 0 ),
             maBounds(),
