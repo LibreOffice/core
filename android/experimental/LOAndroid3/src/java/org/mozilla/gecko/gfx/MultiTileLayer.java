@@ -56,11 +56,7 @@ public class MultiTileLayer extends Layer {
     private static int TILE_SIZE = 256;
     private final List<SubTile> mTiles = new CopyOnWriteArrayList<SubTile>();
     private TileProvider tileProvider;
-    private RectF tileViewPort = new RectF();
-
-    public MultiTileLayer() {
-        super();
-    }
+    private RectF currentViewPort = new RectF();
 
     public void invalidate() {
         for (SubTile layer : mTiles) {
@@ -211,10 +207,10 @@ public class MultiTileLayer extends Layer {
     }
 
     public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics) {
-        RectF newTileViewPort = inflate(roundToTileSize(viewportMetrics.getViewport(), TILE_SIZE), TILE_SIZE);
+        RectF newCurrentViewPort = inflate(roundToTileSize(viewportMetrics.getViewport(), TILE_SIZE), TILE_SIZE);
 
-        if (tileViewPort != newTileViewPort) {
-            tileViewPort = newTileViewPort;
+        if (currentViewPort != newCurrentViewPort) {
+            currentViewPort = newCurrentViewPort;
             clearMarkedTiles();
             addNewTiles(viewportMetrics);
             markTiles(viewportMetrics);
@@ -233,11 +229,11 @@ public class MultiTileLayer extends Layer {
     }
 
     private void addNewTiles(ImmutableViewportMetrics viewportMetrics) {
-        for (float y = tileViewPort.top; y < tileViewPort.bottom; y += TILE_SIZE) {
+        for (float y = currentViewPort.top; y < currentViewPort.bottom; y += TILE_SIZE) {
             if (y > viewportMetrics.getPageHeight()) {
                 continue;
             }
-            for (float x = tileViewPort.left; x < tileViewPort.right; x += TILE_SIZE) {
+            for (float x = currentViewPort.left; x < currentViewPort.right; x += TILE_SIZE) {
                 if (x > viewportMetrics.getPageWidth()) {
                     continue;
                 }
@@ -248,7 +244,7 @@ public class MultiTileLayer extends Layer {
                     }
                 }
                 if (!contains) {
-                    CairoImage image = tileProvider.createTile(x, y, viewportMetrics.zoomFactor);
+                    CairoImage image = tileProvider.createTile(x, y, new FloatSize(TILE_SIZE, TILE_SIZE), viewportMetrics.zoomFactor);
                     SubTile tile = new SubTile(image, (int)x, (int)y, viewportMetrics.zoomFactor);
                     tile.beginTransaction();
                     mTiles.add(tile);
@@ -261,7 +257,7 @@ public class MultiTileLayer extends Layer {
         for (SubTile tile : mTiles) {
             if (FloatUtils.fuzzyEquals(tile.zoom, viewportMetrics.zoomFactor)) {
                 RectF tileRect = new RectF(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
-                if (!RectF.intersects(tileViewPort, tileRect)) {
+                if (!RectF.intersects(currentViewPort, tileRect)) {
                     tile.markForRemoval();
                 }
             } else {
