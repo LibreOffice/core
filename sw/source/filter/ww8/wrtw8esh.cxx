@@ -1174,6 +1174,8 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
         const SfxItemPool& rDstPool = m_rExport.pDoc->GetAttrPool();
 
         nTmpSwPos = nSwPos;
+        // Did we already produce a <w:sz> element?
+        m_rExport.mbFontSizeWritten = false;
         for(std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
         {
             if (nSwPos >= i->nStart && nSwPos < i->nEnd)
@@ -1201,7 +1203,12 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
                         // use always the SW-Which Id !
                         SfxPoolItem* pI = i->pAttr->Clone();
                         pI->SetWhich( nWhich );
-                        m_rExport.AttrOutput().OutputItem( *pI );
+                        // Will this item produce a <w:sz> element?
+                        bool bFontSizeItem = nWhich == RES_CHRATR_FONTSIZE || nWhich == RES_CHRATR_CJK_FONTSIZE;
+                        if (!m_rExport.mbFontSizeWritten || !bFontSizeItem)
+                            m_rExport.AttrOutput().OutputItem( *pI );
+                        if (bFontSizeItem)
+                            m_rExport.mbFontSizeWritten = true;
                         delete pI;
                     }
                 }
@@ -1210,6 +1217,7 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
             if( nSwPos < i->nStart )
                 break;
         }
+        m_rExport.mbFontSizeWritten = false;
 
         nTmpSwPos = 0;      // HasTextItem nur in dem obigen Bereich erlaubt
         m_rExport.pOutFmtNode = pOldMod;

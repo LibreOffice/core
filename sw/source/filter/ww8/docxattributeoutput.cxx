@@ -6062,7 +6062,7 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         m_pSerializer->singleElementNS( XML_w, XML_position,
                 FSNS( XML_w, XML_val ), sPos.getStr( ), FSEND );
 
-        if( 100 != nProp || sIss.match( OString( "baseline" ) ) )
+        if( ( 100 != nProp || sIss.match( OString( "baseline" ) ) ) && !m_rExport.mbFontSizeWritten )
         {
             OString sSize = OString::number( ( nHeight * nProp + 500 ) / 1000 );
                 m_pSerializer->singleElementNS( XML_w, XML_sz,

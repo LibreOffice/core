@@ -3523,6 +3523,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , bHideTabLeaderAndPageNumbers(false)
     , mbExportModeRTF(false)
     , mbOutOutlineOnly(false)
+    , mbFontSizeWritten(false)
     , pDoc(pDocument)
     , pCurPam(pCurrentPam)
     , pOrigPam(pOriginalPam)

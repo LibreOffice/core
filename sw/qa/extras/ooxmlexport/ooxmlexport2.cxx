@@ -81,7 +81,11 @@ protected:
     bool mustValidate(const char* filename) const SAL_OVERRIDE
     {
         const char* aWhitelist[] = {
-            "zoom.docx"
+            "page-graphic-background.odt",
+            "zoom.docx",
+            "empty.odt",
+            "fdo38244.docx",
+            "comments-nested.odt"
         };
         std::vector<const char*> vWhitelist(aWhitelist, aWhitelist + SAL_N_ELEMENTS(aWhitelist));
 
