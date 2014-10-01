@@ -2538,7 +2538,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
         case ButtonRelease:
             fprintf( stderr, "handleDragEvent: ButtonRelease %d (m_nDragButton = %d)\n", rMessage.xbutton.button, m_nDragButton );
             break;
-        case XLIB_KeyPress:
+        case KeyPress:
             fprintf( stderr, "handleDragEvent: KeyPress\n" );
             break;
         case KeyRelease:
@@ -2639,7 +2639,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             sendDropPosition( bForce, rMessage.type == MotionNotify ? rMessage.xmotion.time : rMessage.xcrossing.time );
         }
     }
-    else if( rMessage.type == XLIB_KeyPress || rMessage.type == KeyRelease )
+    else if( rMessage.type == KeyPress || rMessage.type == KeyRelease )
     {
         bHandled = true;
         KeySym aKey = XkbKeycodeToKeysym( m_pDisplay, rMessage.xkey.keycode, 0, 0 );
@@ -2696,7 +2696,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                 case XK_Control_L: nNewState = ControlMask;break;
                     // just interested in shift and ctrl for dnd
             }
-            if( rMessage.type == XLIB_KeyPress )
+            if( rMessage.type == KeyPress )
                 nState |= nNewState;
             else
                 nState &= ~nNewState;
@@ -3600,7 +3600,7 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
         case MotionNotify:
         case ButtonPress:
         case ButtonRelease:
-        case XLIB_KeyPress:
+        case KeyPress:
         case KeyRelease:
             bHandled = handleDragEvent( rEvent );
             break;
@@ -3783,7 +3783,7 @@ sal_Bool SelectionManager::handleEvent(const Any& event)
         Time nTimestamp = CurrentTime;
         if( pEvent->type == ButtonPress || pEvent->type == ButtonRelease )
             nTimestamp = pEvent->xbutton.time;
-        else if( pEvent->type == XLIB_KeyPress || pEvent->type == KeyRelease )
+        else if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
             nTimestamp = pEvent->xkey.time;
         else if( pEvent->type == MotionNotify )
             nTimestamp = pEvent->xmotion.time;

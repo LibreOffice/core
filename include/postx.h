@@ -37,14 +37,6 @@
 #undef InitializeToken
 #undef NextRequest
 
-#ifdef KeyPress
-#if KeyPress != 2
-Error KeyPress must be Equal 2
-#endif
-#undef KeyPress
-#endif
-#define XLIB_KeyPress 2
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

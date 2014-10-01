@@ -108,8 +108,8 @@ XKeyEventOp::erase ()
 bool
 XKeyEventOp::match (const XKeyEvent &rEvent) const
 {
-    return (   (type == XLIB_KeyPress   && rEvent.type == KeyRelease)
-            || (type == KeyRelease && rEvent.type == XLIB_KeyPress  ))
+    return (   (type == KeyPress   && rEvent.type == KeyRelease)
+            || (type == KeyRelease && rEvent.type == KeyPress  ))
          /* && serial      == rEvent.serial */
             && send_event  == rEvent.send_event
             && display     == rEvent.display
@@ -385,7 +385,7 @@ SalI18N_InputMethod::FilterEvent( XEvent *pEvent, ::Window window    )
 
     bool bFilterEvent = XFilterEvent (pEvent, window);
 
-    if (pEvent->type != XLIB_KeyPress && pEvent->type != KeyRelease)
+    if (pEvent->type != KeyPress && pEvent->type != KeyRelease)
         return bFilterEvent;
 
     /*
@@ -402,7 +402,7 @@ SalI18N_InputMethod::FilterEvent( XEvent *pEvent, ::Window window    )
     }
     else /* (!bFilterEvent) */
     {
-        if (pKeyEvent->type == XLIB_KeyPress)
+        if (pKeyEvent->type == KeyPress)
             maLastKeyPress = *pKeyEvent;
         else
             maLastKeyPress.erase();
