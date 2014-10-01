@@ -1,0 +1,197 @@
+package org.mozilla.gecko.gfx;
+
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Region;
+import android.util.Log;
+
+import org.libreoffice.TileProvider;
+import org.mozilla.gecko.util.FloatUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class DynamicTileLayer extends Layer {
+    private static final String LOGTAG = DynamicTileLayer.class.getSimpleName();
+
+    private final List<SubTile> tiles = new CopyOnWriteArrayList<SubTile>();
+    private TileProvider tileProvider;
+    private final FloatSize tileSize;
+    private RectF currentViewport = new RectF();
+
+    public DynamicTileLayer() {
+        this.tileSize = new FloatSize(256, 256);
+    }
+
+    public DynamicTileLayer(FloatSize tileSize) {
+        this.tileSize = tileSize;
+    }
+
+    public void setTileProvider(TileProvider tileProvider) {
+        this.tileProvider = tileProvider;
+    }
+
+    public void invalidate() {
+        for (SubTile layer : tiles) {
+            layer.invalidate();
+        }
+    }
+
+    @Override
+    public void beginTransaction() {
+        super.beginTransaction();
+        for (SubTile tile : tiles) {
+            tile.beginTransaction();
+        }
+    }
+
+    @Override
+    public void endTransaction() {
+        for (SubTile tile : tiles) {
+            tile.endTransaction();
+        }
+        super.endTransaction();
+    }
+
+    @Override
+    public void draw(RenderContext context) {
+        for (SubTile tile : tiles) {
+            if (RectF.intersects(tile.getBounds(context), context.viewport)) {
+                tile.draw(context);
+            }
+        }
+    }
+
+    @Override
+    protected void performUpdates(RenderContext context) {
+        super.performUpdates(context);
+
+        refreshTileMetrics();
+
+        for (SubTile tile : tiles) {
+            tile.performUpdates(context);
+        }
+    }
+
+    @Override
+    public Region getValidRegion(RenderContext context) {
+        Region validRegion = new Region();
+        for (SubTile tile : tiles) {
+            validRegion.op(tile.getValidRegion(context), Region.Op.UNION);
+        }
+
+        return validRegion;
+    }
+
+    @Override
+    public void setResolution(float newResolution) {
+        super.setResolution(newResolution);
+        for (SubTile tile : tiles) {
+            tile.setResolution(newResolution);
+        }
+    }
+
+    private void refreshTileMetrics() {
+        for (SubTile tile : tiles) {
+            tile.beginTransaction();
+
+            Rect position = tile.getPosition();
+            float positionX = tile.x / tile.zoom;
+            float positionY = tile.y / tile.zoom;
+            float tileSizeWidth = tileSize.width / tile.zoom;
+            float tileSizeHeight = tileSize.height / tile.zoom;
+            position.set((int) positionX, (int) positionY, (int) (positionX + tileSizeWidth + 1), (int) (positionY + tileSizeHeight + 1));
+            tile.setPosition(position);
+
+            tile.endTransaction();
+        }
+    }
+
+    private RectF roundToTileSize(RectF input, FloatSize tileSize) {
+        float minX = ((int)(input.left / tileSize.width)) * tileSize.width;
+        float minY = ((int)(input.top / tileSize.height)) * tileSize.height;
+        float maxX = ((int)(input.right / tileSize.width) + 1) * tileSize.width;
+        float maxY = ((int)(input.bottom / tileSize.height) + 1) * tileSize.height;
+        return new RectF(minX, minY, maxX, maxY);
+    }
+
+    private RectF inflate(RectF rect, FloatSize inflateSize) {
+        RectF newRect = new RectF(rect);
+        newRect.left -= inflateSize.width;
+        newRect.left = newRect.left < 0.0f ? 0.0f : newRect.left;
+
+        newRect.top -= inflateSize.height;
+        newRect.top = newRect.top < 0.0f ? 0.0f : newRect.top;
+
+        newRect.right += inflateSize.width;
+        newRect.bottom += inflateSize.height;
+
+        return newRect;
+    }
+
+    public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics) {
+        RectF newCurrentViewPort = inflate(roundToTileSize(viewportMetrics.getViewport(), tileSize), tileSize);
+
+        if (!currentViewport.equals(newCurrentViewPort)) {
+            Log.i(LOGTAG, "reevaluateTiles " + currentViewport + " " + newCurrentViewPort);
+            currentViewport = newCurrentViewPort;
+            clearMarkedTiles();
+            addNewTiles(viewportMetrics);
+            markTiles(viewportMetrics);
+        }
+    }
+
+    private void addNewTiles(ImmutableViewportMetrics viewportMetrics) {
+        for (float y = currentViewport.top; y < currentViewport.bottom; y += tileSize.height) {
+            if (y > viewportMetrics.getPageHeight()) {
+                continue;
+            }
+            for (float x = currentViewport.left; x < currentViewport.right; x += tileSize.width) {
+                if (x > viewportMetrics.getPageWidth()) {
+                    continue;
+                }
+                boolean contains = false;
+                for (SubTile tile : tiles) {
+                    if (tile.x == x && tile.y == y && tile.zoom == viewportMetrics.zoomFactor) {
+                        contains = true;
+                    }
+                }
+                if (!contains) {
+                    CairoImage image = tileProvider.createTile(x, y, tileSize, viewportMetrics.zoomFactor);
+                    SubTile tile = new SubTile(image, (int) x, (int) y, viewportMetrics.zoomFactor);
+                    tile.beginTransaction();
+                    tiles.add(tile);
+                }
+            }
+        }
+    }
+
+    private void clearMarkedTiles() {
+        List<SubTile> tilesToRemove = new ArrayList<SubTile>();
+        for (SubTile tile : tiles) {
+            if (tile.markedForRemoval) {
+                tile.destroy();
+                tilesToRemove.add(tile);
+            }
+        }
+        tiles.removeAll(tilesToRemove);
+    }
+
+    private void markTiles(ImmutableViewportMetrics viewportMetrics) {
+        for (SubTile tile : tiles) {
+            if (FloatUtils.fuzzyEquals(tile.zoom, viewportMetrics.zoomFactor)) {
+                RectF tileRect = new RectF(tile.x, tile.y, tile.x + tileSize.width, tile.y + tileSize.height);
+                if (!RectF.intersects(currentViewport, tileRect)) {
+                    tile.markForRemoval();
+                }
+            } else {
+                tile.markForRemoval();
+            }
+        }
+    }
+
+    public void clearAllTiles() {
+        tiles.clear();
+    }
+}
