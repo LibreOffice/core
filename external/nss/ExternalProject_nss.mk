@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 		LIB="$(ILIB)" \
-		XCFLAGS="$(SOLARINC)" \
+		XCFLAGS="-arch:SSE $(SOLARINC)" \
 		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 	,nss)
