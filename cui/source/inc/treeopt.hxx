@@ -160,7 +160,6 @@ private:
     SvxColorTabPage *mpColorPage;
 
     bool        bForgetSelection;
-    bool        bExternBrowserActive;
     bool            bIsFromExtensionManager;
 
     // check "for the current document only" and set focus to "Western" languages box
