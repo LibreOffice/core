@@ -217,32 +217,25 @@ public class java_fat_service implements TestBase {
             log = (LogWriter)dcl.getInstance((String)param.get("LogWriter"));
             param.getMSF();
 
-            TestCase tCase = null;
+            TestEnvironment tEnv = null;
 
-            try
-            {
-                tCase = (TestCase) dcl.getInstance("mod._"+entry.entryName);
-            }
-            catch (java.lang.IllegalArgumentException ie)
-            {
+            try {
+                TestCase tCase = (TestCase) dcl.getInstance("mod._"+entry.entryName);
+                log.println("Creating: " + tCase.getObjectName());
+                log.initialize(entry, true);
+                entry.UserDefinedParams = param;
+                tCase.setLogWriter((PrintWriter) log);
+                try {
+                    tCase.initializeTestCase(param);
+                    tEnv = tCase.getTestEnvironment(param);
+                } catch (com.sun.star.lang.DisposedException de) {
+                    log.println("Office disposed");
+                }
+            } catch (java.lang.IllegalArgumentException ie) {
                 entry.ErrorMsg=ie.getMessage();
                 entry.hasErrorMsg=true;
             }
 
-            log.println("Creating: "+tCase.getObjectName());
-            log.initialize(entry,true);
-            entry.UserDefinedParams = param;
-            tCase.setLogWriter((PrintWriter) log);
-            TestEnvironment tEnv = null;
-            try
-            {
-                tCase.initializeTestCase(param);
-                tEnv = tCase.getTestEnvironment(param);
-            }
-            catch (com.sun.star.lang.DisposedException de)
-            {
-                log.println("Office disposed");
-            }
             return tEnv;
     }
 
