@@ -121,7 +121,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
     }
 
     if( eTopic == T_DATA )
-    {   // Ab hier kommen die Daten
+    {   // data starts here
         SCCOL               nBaseCol = rInsPos.Col();
 
         SCCOL               nColCnt = SCCOL_MAX;
@@ -149,7 +149,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                     break;
                 case D_EOD:
                     break;
-                case D_NUMERIC:                 // Numbercell
+                case D_NUMERIC:                 // Number cell
                     if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
@@ -188,7 +188,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
                     nColCnt++;
                     break;
-                case D_STRING:                  // Textcell
+                case D_STRING:                  // Text cell
                     if( nColCnt == SCCOL_MAX )
                         nColCnt = nBaseCol;
 
@@ -221,7 +221,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
     if( bSyntErrWarn )
 
-        // ACHTUNG: Hier fehlt noch die richtige Warnung!
+        // FIXME: Add proper Warnung!
         return eERR_RNGOVRFLW;
 
     else if( bOverflowWarn )
@@ -369,7 +369,7 @@ TOPIC DifParser::GetNextTopic( void )
                 break;
             case S_Data:
                 OSL_ENSURE( aLine.getLength() >= 2,
-                    "+GetNextTopic(): <String> ist zu kurz!" );
+                    "+GetNextTopic(): <String> is too short!" );
                 if( aLine.getLength() > 2 )
                     aData = aLine.copy( 1, aLine.getLength() - 2 );
                 else
@@ -380,11 +380,11 @@ TOPIC DifParser::GetNextTopic( void )
                 OSL_FAIL( "DifParser::GetNextTopic - unexpected state" );
                 break;
             case S_UNKNOWN:
-                // 2 Zeilen ueberlesen
+                // skip 2 lines
                 ReadNextLine( aLine );
                 // fall-through
             case S_ERROR_L2:                // Fehler in Line 2 aufgetreten
-                // eine Zeile ueberlesen
+                // skip 1 line
                 ReadNextLine( aLine );
                 eS = S_END;
                 break;
@@ -418,7 +418,7 @@ DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
             eRet = D_SYNT_ERROR;
     }
     else
-    {   // ...und zur Strafe mit'm Numberformatter...
+    {   // ...and for punishment, with number formatting...
         OSL_ENSURE( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
         OUString aTestVal( pPossibleNumericData );
         sal_uInt32 nFormat = 0;
@@ -514,7 +514,7 @@ DATASET DifParser::GetNextDataset( void )
             }
             break;
         case '0':                   // Numeric Data
-            pAktBuffer++;           // Wert in fVal, 2. Zeile in aData
+            pAktBuffer++;           // value in fVal, 2. line in aData
             if( *pAktBuffer == ',' )
             {
                 pAktBuffer++;
@@ -636,7 +636,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
     sal_Int32                   nExp = 0;
     bool                    bExpNeg = false;
     bool                    bExpOverflow = false;
-    static const sal_uInt16     nExpLimit = 4096;   // ACHTUNG: muss genauer ermittelt werden!
+    static const sal_uInt16     nExpLimit = 4096;   // FIXME: has to be set more accurately!
 
     sal_Unicode             cAkt;
     bool                    bRet = false;
@@ -774,7 +774,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
             case S_FINDEND:
                 if( IsNumberEnding( cAkt ) )
                 {
-                    bRet = true;        // damit sinnvoll weitergeparst werden kann
+                    bRet = true;        // to continue parsing
                     eS = S_END;
                 }
                 break;
@@ -790,7 +790,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
     if( bRet )
     {
         if( bExpOverflow )
-            return false;       // ACHTUNG: hier muss noch differenziert werden
+            return false;       // FIXME: add special cases here
 
         if( bNeg )
             fNewVal *= 1.0;
@@ -883,7 +883,7 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
     for (boost::ptr_vector<ENTRY>::const_iterator it = aEntries.begin(); it != aEntries.end(); ++it)
     {
         OSL_ENSURE( it->nNumFormat > 0,
-            "+DifColumn::Apply(): Numberformat darf hier nicht 0 sein!" );
+            "+DifColumn::Apply(): Number format must not be 0!" );
 
         rItemSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, it->nNumFormat ) );
 
