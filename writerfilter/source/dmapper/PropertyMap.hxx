@@ -439,7 +439,6 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 
     bool                    mbCT_TrPrBase_tblHeaderSet;
     bool                    mbCT_TrPrBase_jcSet;
-    bool                    mbCT_TcPrBase_vAlignSet;
 
     bool                    mbCT_TblWidth_wSet;
     bool                    mbCT_TblWidth_typeSet;

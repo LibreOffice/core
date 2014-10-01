@@ -1423,7 +1423,6 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mbCT_Spacing_lineRuleSet( false ),
     mbCT_TrPrBase_tblHeaderSet( false ),
     mbCT_TrPrBase_jcSet( false ),
-    mbCT_TcPrBase_vAlignSet( false ),
     mbCT_TblWidth_wSet( false ),
     mbCT_TblWidth_typeSet( false ),
     mnListId( -1 ),
