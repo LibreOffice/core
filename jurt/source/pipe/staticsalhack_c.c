@@ -14,6 +14,5 @@
 #include <sal/osl/unx/nlsupport.c>
 #include <sal/osl/unx/pipe.c>
 #include <sal/osl/unx/readwrite_helper.c>
-#include <sal/osl/unx/thread.c>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

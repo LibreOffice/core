@@ -31,6 +31,7 @@
 #include <sal/osl/unx/process_impl.cxx>
 #include <sal/osl/unx/profile.cxx>
 #include <sal/osl/unx/security.cxx>
+#include <sal/osl/unx/thread.cxx>
 #include <sal/osl/unx/uunxapi.cxx>
 #include <sal/rtl/alloc_arena.cxx>
 #include <sal/rtl/alloc_cache.cxx>

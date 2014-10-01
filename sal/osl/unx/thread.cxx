@@ -144,7 +144,7 @@ static void osl_thread_init_Impl (void)
 
 Thread_Impl* osl_thread_construct_Impl (void)
 {
-    Thread_Impl* pImpl = malloc (sizeof(Thread_Impl));
+    Thread_Impl* pImpl = new Thread_Impl;
     if (pImpl)
     {
         memset (pImpl, 0, sizeof(Thread_Impl));
@@ -171,8 +171,8 @@ static void osl_thread_destruct_Impl (Thread_Impl ** ppImpl)
 static void osl_thread_cleanup_Impl (Thread_Impl * pImpl)
 {
     pthread_t thread;
-    int attached;
-    int destroyed;
+    bool attached;
+    bool destroyed;
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
@@ -199,7 +199,7 @@ static void osl_thread_cleanup_Impl (Thread_Impl * pImpl)
 
 static void* osl_thread_start_Impl (void* pData)
 {
-    int terminate;
+    bool terminate;
     Thread_Impl* pImpl= (Thread_Impl*)pData;
 
     assert(pImpl);
@@ -345,7 +345,7 @@ void SAL_CALL osl_destroyThread(oslThread Thread)
 {
     if (Thread != NULL) {
         Thread_Impl * impl = (Thread_Impl *) Thread;
-        int active;
+        bool active;
         pthread_mutex_lock(&impl->m_Lock);
         active = (impl->m_Flags & THREADIMPL_FLAGS_ACTIVE) != 0;
         impl->m_Flags |= THREADIMPL_FLAGS_DESTROYED;
@@ -403,7 +403,7 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
 
 sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
 {
-    sal_Bool active;
+    bool active;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
     if (!pImpl)
@@ -419,7 +419,7 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
 void SAL_CALL osl_joinWithThread(oslThread Thread)
 {
     pthread_t thread;
-    int attached;
+    bool attached;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
     if (!pImpl)
@@ -470,7 +470,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
 
 sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
 {
-    int terminate;
+    bool terminate;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
     OSL_ASSERT(pImpl);
@@ -493,7 +493,7 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
 
     pthread_mutex_unlock(&(pImpl->m_Lock));
 
-    return (terminate == 0);
+    return !terminate;
 }
 
 void SAL_CALL osl_waitThread(const TimeValue* pDelay)
@@ -938,7 +938,7 @@ void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 
 sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
-    sal_Bool bRet;
+    bool bRet;
     void *pOldData = NULL;
     wrapper_pthread_key *pKey = (wrapper_pthread_key*)Key;
     if (!pKey)
@@ -987,8 +987,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
     pthread_once (&(g_thread.m_once), osl_thread_init_Impl);
 
     /* check for thread specific encoding, use default if not set */
-    threadEncoding = SAL_INT_CAST(
-        rtl_TextEncoding,
+    threadEncoding = static_cast<rtl_TextEncoding>(
         (sal_uIntPtr) pthread_getspecific(g_thread.m_textencoding.m_key));
     if (0 == threadEncoding)
         threadEncoding = g_thread.m_textencoding.m_default;
@@ -1003,7 +1002,7 @@ rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
     /* save encoding in thread local storage */
     pthread_setspecific (
         g_thread.m_textencoding.m_key,
-        (void*) SAL_INT_CAST(sal_uIntPtr, Encoding));
+        (void*) static_cast<sal_uIntPtr>(Encoding));
 
     return oldThreadEncoding;
 }
