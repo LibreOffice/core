@@ -58,7 +58,6 @@ public class JdbcLongVarCharTest extends ComplexTestCase
             System.out.println("== Start testing ==");
 
             String url = "jdbc:mysql://localhost:3306/mysql?user=root";
-            com.sun.star.sdbc.XConnection xConnection = null;
             com.sun.star.beans.PropertyValue prop[] = new PropertyValue[1];
             prop[0] = new PropertyValue("JavaDriverClass", 0, "com.mysql.jdbc.Driver", PropertyState.DIRECT_VALUE);
 
@@ -67,7 +66,7 @@ public class JdbcLongVarCharTest extends ComplexTestCase
             Object x = xServiceManager.createInstance("com.sun.star.sdbc.DriverManager");
             com.sun.star.sdbc.XDriverAccess xDriverAccess = UnoRuntime.queryInterface(XDriverAccess.class, x);
             com.sun.star.sdbc.XDriver xDriver = xDriverAccess.getDriverByURL(url);
-            xConnection = xDriver.connect(url, prop);
+            com.sun.star.sdbc.XConnection xConnection = xDriver.connect(url, prop);
 
             Object prepStmnt = xConnection.prepareStatement("SELECT * FROM i90114 WHERE i90114.c1 = ?");
             UnoRuntime.queryInterface(XParameters.class, prepStmnt).clearParameters();
@@ -91,8 +90,7 @@ public class JdbcLongVarCharTest extends ComplexTestCase
             {
                 String str = "not set";
 
-                XClob xClob = null;
-                xClob = xRow.getClob(2);
+                XClob xClob = xRow.getClob(2);
                 if (xClob != null)
                 {
                     System.out.println("xClob != null");
