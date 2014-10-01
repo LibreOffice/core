@@ -47,14 +47,13 @@ private:
     CheckBox* m_pCountFrameLinesCB;
     CheckBox* m_pRestartEachPageCB;
     CheckBox* m_pNumberingOnCB;
-
+    CheckBox* m_pNumberingOnFooterHeader;
     DECL_LINK(OKHdl, void *);
     DECL_LINK(LineOnOffHdl, void * = 0);
     DECL_LINK(ModifyHdl, void * = 0);
 
 public:
     SwWrtShell* GetWrtShell() const { return pSh; }
-
     SwLineNumberingDlg(SwView *pVw);
     virtual ~SwLineNumberingDlg();
 };

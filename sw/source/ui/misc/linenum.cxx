@@ -31,8 +31,33 @@
 #include "lineinfo.hxx"
 #include "linenum.hxx"
 #include "uitool.hxx"
+#include <fmtline.hxx>
 
 #include <IDocumentStylePoolAccess.hxx>
+
+static rtl::Reference<SwDocStyleSheet> lcl_getDocStyleSheet(OUString rName, SwWrtShell *pSh)
+{
+    sal_uInt16 nFamily = SFX_STYLE_FAMILY_PARA;
+    SfxStyleSheetBasePool* mpBase =  pSh->GetView().GetDocShell()->GetStyleSheetPool();
+    SfxStyleSheetBase* pStyle = mpBase->Find(rName, (SfxStyleFamily)nFamily);
+    SAL_WARN_IF( !pStyle, "linenumbering.ui", "Style not found" );
+    if(!pStyle)
+        return NULL;
+    return new SwDocStyleSheet(*(SwDocStyleSheet*)pStyle);
+}
+
+static void lcl_setLineNumbering(OUString rName, SwWrtShell* pSh, bool bLineNumber)
+{
+    rtl::Reference<SwDocStyleSheet> xStyleSheet = lcl_getDocStyleSheet(rName, pSh);
+    if(!xStyleSheet.is())
+        return;
+    SfxItemSet& rSet = xStyleSheet->GetItemSet();
+    SwFmtLineNumber aFmt;
+    aFmt.SetCountLines(bLineNumber);
+    rSet.Put(aFmt);
+    xStyleSheet->MergeIndentAttrsOfListStyle( rSet );
+    xStyleSheet->SetItemSet(rSet, false);
+}
 
 SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     : SfxModalDialog( &pVw->GetViewFrame()->GetWindow(), "LineNumberingDialog",
@@ -53,6 +78,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     get(m_pCountFrameLinesCB, "linesintextframes");
     get(m_pRestartEachPageCB, "restarteverynewpage");
     get(m_pNumberingOnCB, "shownumbering");
+    get(m_pNumberingOnFooterHeader, "showfooterheadernumbering");
 
     OUString sIntervalName = m_pDivIntervalFT->GetAccessibleName();
     sIntervalName += "(";
@@ -119,6 +145,19 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
 
     m_pNumberingOnCB->Check(rInf.IsPaintLineNumbers());
 
+    // Header/Footer Line Numbering
+    rtl::Reference< SwDocStyleSheet > xStyleSheet = lcl_getDocStyleSheet("Footer", pSh);
+    if(xStyleSheet.is())
+    {
+        SfxItemSet& rSet = xStyleSheet->GetItemSet();
+        SwFmtLineNumber &aFmt = (SwFmtLineNumber&)(rSet.Get(RES_LINENUMBER));
+        if(aFmt.IsCount())
+            m_pNumberingOnFooterHeader->SetState(TRISTATE_TRUE);
+        else
+            m_pNumberingOnFooterHeader->SetState(TRISTATE_FALSE);
+    }
+
+    // Line Numbering
     m_pNumberingOnCB->SetClickHdl(LINK(this, SwLineNumberingDlg, LineOnOffHdl));
     m_pDivisorED->SetModifyHdl(LINK(this, SwLineNumberingDlg, ModifyHdl));
     ModifyHdl();
@@ -180,6 +219,14 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
     aInf.SetPaintLineNumbers(m_pNumberingOnCB->IsChecked());
 
     pSh->SetLineNumberInfo(aInf);
+
+    // Set LineNumber explicitly for Header and Footer
+    lcl_setLineNumbering("Footer",pSh,m_pNumberingOnFooterHeader->IsChecked());
+    lcl_setLineNumbering("Header",pSh,m_pNumberingOnFooterHeader->IsChecked());
+    if( m_pNumberingOnFooterHeader->IsChecked())
+       m_pNumberingOnFooterHeader->SetState(TRISTATE_TRUE);
+    else
+       m_pNumberingOnFooterHeader->SetState(TRISTATE_FALSE);
 
     EndDialog( RET_OK );
 
