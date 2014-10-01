@@ -264,8 +264,8 @@ public class GeckoLayerClient implements LayerView.Listener {
         mRootLayer.reevaluateTiles(mLayerController.getViewportMetrics());
     }
 
-    public void clearAllTiles() {
-        mRootLayer.clearAllTiles();
+    public void clearAndResetlayers() {
+        mRootLayer.clearAndReset();
     }
 
     private class AdjustRunnable implements Runnable {

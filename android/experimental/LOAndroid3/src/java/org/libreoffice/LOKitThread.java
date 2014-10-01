@@ -46,10 +46,11 @@ public class LOKitThread extends Thread {
             mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         }
 
-        mLayerClient.clearAllTiles();
-
+        mLayerClient.clearAndResetlayers();
+        draw();
         RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         mController.setPageRect(rect, rect);
+        mController.setViewportMetrics(mController.getViewportMetrics());
         mController.setForceRedraw();
     }
 

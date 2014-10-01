@@ -195,7 +195,7 @@ public class DynamicTileLayer extends Layer {
         }
     }
 
-    public void clearAllTiles() {
+    public void clearAndReset() {
         tiles.clear();
         currentViewport = new RectF();
     }
