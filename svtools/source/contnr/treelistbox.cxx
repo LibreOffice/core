@@ -380,7 +380,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     DragSourceHelper(this),
     mpImpl(new SvTreeListBoxImpl(*this)),
     mbContextBmpExpanded(false),
-    mbAlternatingRowColor(false),
+    mbAlternatingRowColors(false),
     eSelMode(NO_SELECTION),
     nMinWidthInChars(0)
 {
@@ -410,7 +410,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     DragSourceHelper(this),
     mpImpl(new SvTreeListBoxImpl(*this)),
     mbContextBmpExpanded(false),
-    mbAlternatingRowColor(false),
+    mbAlternatingRowColors(false),
     eSelMode(NO_SELECTION),
     nMinWidthInChars(0)
 {
@@ -470,14 +470,14 @@ IMPL_LINK_INLINE_END( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
 sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uLong nPos )
 {
     sal_uLong nInsPos = pModel->Insert( pEntry, pParent, nPos );
-    if(mbAlternatingRowColor)
+    if(mbAlternatingRowColors)
     {
         if(nPos == TREELIST_APPEND)
-            pEntry->SetBackColor( Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetSettings().GetStyleSettings().GetAlternatingRowColor() ?
-                                    GetSettings().GetStyleSettings().GetAlternatingRowColor2() :
-                                    GetSettings().GetStyleSettings().GetAlternatingRowColor() );
+            pEntry->SetBackColor( Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetSettings().GetStyleSettings().GetRowColor() ?
+                                    GetSettings().GetStyleSettings().GetAlternatingRowColor() :
+                                    GetSettings().GetStyleSettings().GetRowColor() );
         else
-            SetAlternatingRow( true );
+            SetAlternatingRowColors( true );
     }
     return nInsPos;
 }
@@ -485,14 +485,14 @@ sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pPare
 sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos )
 {
     sal_uLong nInsPos = pModel->Insert( pEntry, nRootPos );
-    if(mbAlternatingRowColor)
+    if(mbAlternatingRowColors)
     {
         if(nRootPos == TREELIST_APPEND)
-            pEntry->SetBackColor( Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetSettings().GetStyleSettings().GetAlternatingRowColor() ?
-                                    GetSettings().GetStyleSettings().GetAlternatingRowColor2() :
-                                    GetSettings().GetStyleSettings().GetAlternatingRowColor() );
+            pEntry->SetBackColor( Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetSettings().GetStyleSettings().GetRowColor() ?
+                                    GetSettings().GetStyleSettings().GetAlternatingRowColor() :
+                                    GetSettings().GetStyleSettings().GetRowColor() );
         else
-            SetAlternatingRow( true );
+            SetAlternatingRowColors( true );
     }
     return nInsPos;
 }
@@ -3410,21 +3410,22 @@ Size SvTreeListBox::GetOptimalSize() const
     return aRet;
 }
 
-void SvTreeListBox::SetAlternatingRow( bool bEnable )
+void SvTreeListBox::SetAlternatingRowColors( bool bEnable )
 {
-    mbAlternatingRowColor = bEnable;
-    if( mbAlternatingRowColor )
+    mbAlternatingRowColors = bEnable;
+    if( mbAlternatingRowColors )
     {
         SvTreeListEntry* pEntry = pModel->First();
         for(size_t i = 0; pEntry; ++i)
         {
-            pEntry->SetBackColor( i % 2 == 0 ? GetSettings().GetStyleSettings().GetAlternatingRowColor() : GetSettings().GetStyleSettings().GetAlternatingRowColor2());
+            pEntry->SetBackColor( i % 2 == 0 ? GetSettings().GetStyleSettings().GetRowColor() :
+                                               GetSettings().GetStyleSettings().GetAlternatingRowColor());
             pEntry = pModel->Next(pEntry);
         }
     }
     else
         for(SvTreeListEntry* pEntry = pModel->First(); pEntry; pEntry = pModel->Next(pEntry))
-            pEntry->SetBackColor( GetSettings().GetStyleSettings().GetFieldColor() );
+            pEntry->SetBackColor( GetSettings().GetStyleSettings().GetRowColor() );
 
     pImp->UpdateAll();
 }

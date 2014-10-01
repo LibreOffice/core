@@ -236,7 +236,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     sal_uInt16      nLastSelTab;
     long mnCheckboxItemWidth;
     bool mbContextBmpExpanded;
-    bool mbAlternatingRowColor;
+    bool mbAlternatingRowColors;
 
     SvTreeListEntry*    pHdlEntry;
     SvLBoxItem*     pHdlItem;
@@ -780,8 +780,8 @@ public:
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-    void SetAlternatingRow( const bool bEnable );
-    bool IsRowAlternating() const { return mbAlternatingRowColor; }
+    void SetAlternatingRowColors( const bool bEnable );
+    bool IsAlternatingRowColors() const { return mbAlternatingRowColors; }
 };
 
 #define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"

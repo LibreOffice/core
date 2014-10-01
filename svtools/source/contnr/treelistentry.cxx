@@ -20,6 +20,9 @@
 #include <svtools/treelistentry.hxx>
 #include <svtools/treelist.hxx>
 
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <limits>
 
 void SvTreeListEntry::ClearChildren()
@@ -54,7 +57,7 @@ SvTreeListEntry::SvTreeListEntry()
     , bIsMarked(false)
     , pUserData(NULL)
     , nEntryFlags(0)
-    , maBackColor(Color(COL_WHITE))
+    , maBackColor(Application::GetSettings().GetStyleSettings().GetRowColor())
 {
 }
 
@@ -65,7 +68,7 @@ SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r)
     , bIsMarked(r.bIsMarked)
     , pUserData(r.pUserData)
     , nEntryFlags(r.nEntryFlags)
-    , maBackColor(Color(COL_WHITE))
+    , maBackColor(Application::GetSettings().GetStyleSettings().GetRowColor())
 {
     SvTreeListEntries::const_iterator it = r.maChildren.begin(), itEnd = r.maChildren.end();
     for (; it != itEnd; ++it)
