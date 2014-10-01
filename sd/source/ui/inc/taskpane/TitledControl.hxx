@@ -63,7 +63,7 @@ public:
     */
     TitledControl (
         TreeNode* pParent,
-        ::std::auto_ptr<TreeNode> pControl,
+        ::std::unique_ptr<TreeNode> pControl,
         const OUString& rTitle,
         const ClickHandler& rClickHandler,
         TitleBar::TitleBarType eType);
@@ -128,7 +128,7 @@ private:
     OUString msTitle;
     bool mbVisible;
     void* mpUserData;
-    ::std::auto_ptr<ClickHandler> mpClickHandler;
+    ::std::unique_ptr<ClickHandler> mpClickHandler;
 
     /// Do not use! Assignment operator is not supported.
     const TitledControl& operator= (

@@ -168,7 +168,7 @@ public:
         TreeNode* pChild = NULL) const;
 
 protected:
-    ::std::auto_ptr<ControlContainer> mpControlContainer;
+    ::std::unique_ptr<ControlContainer> mpControlContainer;
 
 private:
     TreeNode* mpParent;

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include "BasicPaneFactory.hxx"
 #include "facreg.hxx"
 
@@ -409,9 +413,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
     {
         // Create the corresponding shell and determine the id of the child window.
         sal_uInt16 nChildWindowId = 0;
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SfxShell> pShell;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<SfxShell> pShell;
         switch (rDescriptor.mePaneId)
         {
             case LeftImpressPaneId:
@@ -436,7 +438,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
                 rxPaneId,
                 nChildWindowId,
                 *mpViewShellBase,
-                pShell);
+                std::move(pShell));
         }
     }
 

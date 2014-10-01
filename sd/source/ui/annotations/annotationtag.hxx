@@ -79,7 +79,7 @@ protected:
 private:
     AnnotationManagerImpl& mrManager;
     css::uno::Reference< css::office::XAnnotation > mxAnnotation;
-    std::auto_ptr<AnnotationWindow>                 mpAnnotationWindow;
+    std::unique_ptr<AnnotationWindow>               mpAnnotationWindow;
     Color                                           maColor;
     int                                             mnIndex;
     const ::vcl::Font&                              mrFont;

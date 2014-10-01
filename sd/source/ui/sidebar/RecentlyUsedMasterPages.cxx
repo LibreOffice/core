@@ -76,7 +76,7 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
             RecentlyUsedMasterPages* pInstance = new RecentlyUsedMasterPages();
             pInstance->LateInit();
             SdGlobalResourceContainer::Instance().AddResource (
-                ::std::auto_ptr<SdGlobalResource>(pInstance));
+                ::std::unique_ptr<SdGlobalResource>(pInstance));
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             mpInstance = pInstance;
         }

@@ -90,8 +90,7 @@ Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize) 
         return maLargePreview;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr<std::vector<MasterPageContainerChangeEvent::EventType> >
+::std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> >
     MasterPageDescriptor::Update (
         const MasterPageDescriptor& rDescriptor)
 {
@@ -143,7 +142,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
      }
 
      // Prepare the list of event types that will be returned.
-     ::std::auto_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pResult;
+     ::std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pResult;
      if (bDataChanged || bIndexChanged || bPreviewChanged)
      {
          pResult.reset(new std::vector<MasterPageContainerChangeEvent::EventType>());
@@ -157,7 +156,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
      return pResult;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 int MasterPageDescriptor::UpdatePageObject (
     sal_Int32 nCostThreshold,

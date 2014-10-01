@@ -465,18 +465,14 @@ protected:
     ::boost::shared_ptr<ScrollBar> mpHorizontalScrollBar;
     /// Vertical scroll bar for whole document is always visible.
     ::boost::shared_ptr<ScrollBar> mpVerticalScrollBar;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     /// Horizontal ruler is not shown by default.
-    ::std::auto_ptr<SvxRuler> mpHorizontalRuler;
+    ::std::unique_ptr<SvxRuler> mpHorizontalRuler;
     /// Vertical ruler is not shown by default.
-    ::std::auto_ptr<SvxRuler> mpVerticalRuler;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SvxRuler> mpVerticalRuler;
     /// Filler of the little square enclosed by the two scroll bars.
     ::boost::shared_ptr<ScrollBarBox> mpScrollBarBox;
     /// Layer tab bar.
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<LayerTabBar> mpLayerTabBar;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<LayerTabBar> mpLayerTabBar;
 
     /// This flag controls whether the rulers are visible.
     bool mbHasRulers;
@@ -516,9 +512,7 @@ protected:
     /// The type of the shell.  Returned by GetShellType().
     ShellType meShellType;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<Implementation> mpImpl;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<Implementation> mpImpl;
 
     // Support methods for centralized UNDO/REDO
     virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
@@ -573,9 +567,7 @@ private:
         with reference to the digit langugage used to display digits in text
         shapes.
     */
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ::sd::WindowUpdater> mpWindowUpdater;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< ::sd::WindowUpdater> mpWindowUpdater;
 
     /** Code common to all constructors.  It generally is a bad idea
         to call this function from outside a constructor.

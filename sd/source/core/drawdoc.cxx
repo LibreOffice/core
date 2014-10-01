@@ -171,8 +171,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , meDocType(eType)
 , mpCharClass(NULL)
 , mpLocale(NULL)
-, mpDrawPageListWatcher(0)
-, mpMasterPageListWatcher(0)
 , mbUseEmbedFonts(false)
 {
     mpDrawPageListWatcher.reset(new ImpDrawPageListWatcher(*this));

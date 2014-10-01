@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -91,11 +95,10 @@ using namespace ::com::sun::star::linguistic2;
     current clipboard content and the DrawViewShell.
     The list is stored in a new instance of SvxClipboardFmtItem.
 */
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr<SvxClipboardFmtItem> GetSupportedClipboardFormats (
+::std::unique_ptr<SvxClipboardFmtItem> GetSupportedClipboardFormats (
     TransferableDataHelper& rDataHelper)
 {
-    ::std::auto_ptr<SvxClipboardFmtItem> pResult (
+    ::std::unique_ptr<SvxClipboardFmtItem> pResult (
         new SvxClipboardFmtItem(SID_CLIPBOARD_FORMAT_ITEMS));
 
     sal_uInt32 nFormatCount (rDataHelper.GetFormatCount());
@@ -172,7 +175,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
     return pResult;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 namespace sd {
 
@@ -190,12 +192,10 @@ IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper
         // exit immediately.
         TransferableDataHelper aDataHelper (
             TransferableDataHelper::CreateFromSystemClipboard(GetActiveWindow()));
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SvxClipboardFmtItem> pFormats (GetSupportedClipboardFormats(aDataHelper));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<SvxClipboardFmtItem> pFormats (GetSupportedClipboardFormats(aDataHelper));
         if (mpDrawView == NULL)
             return 0;
-        mpCurrentClipboardFormats = pFormats;
+        mpCurrentClipboardFormats = std::move(pFormats);
 
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );

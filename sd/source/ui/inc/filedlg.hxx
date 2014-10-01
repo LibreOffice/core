@@ -38,7 +38,7 @@ class SdFileDialog_Imp;
  */
 class SD_DLLPUBLIC SdOpenSoundFileDialog
 {
-    const std::auto_ptr< SdFileDialog_Imp > mpImpl;
+    const std::unique_ptr< SdFileDialog_Imp > mpImpl;
 
     // forbidden and not implemented
     SdOpenSoundFileDialog (const SdOpenSoundFileDialog &);

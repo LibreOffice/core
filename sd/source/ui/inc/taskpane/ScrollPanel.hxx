@@ -66,13 +66,13 @@ public:
             title bar as children is returned.
     */
     TitledControl* AddControl (
-        ::std::auto_ptr<TreeNode> pControl,
+        ::std::unique_ptr<TreeNode> && pControl,
         const OUString& rTitle,
         const OString& sHelpId);
 
     /** Add a control to the sub panel without a title bar.
     */
-    void AddControl (::std::auto_ptr<TreeNode> pControl);
+    void AddControl (::std::unique_ptr<TreeNode> && pControl);
 
     virtual void Paint (const Rectangle& rRect);
 

@@ -75,7 +75,7 @@ private:
     static ::osl::Mutex maMutex;
 
     class Implementation;
-    ::std::auto_ptr<Implementation> mpImpl;
+    ::std::unique_ptr<Implementation> mpImpl;
 
     MasterPageObserver (void);
     virtual ~MasterPageObserver (void);

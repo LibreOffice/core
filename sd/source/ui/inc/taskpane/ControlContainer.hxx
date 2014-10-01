@@ -74,7 +74,7 @@ public:
             the container.  It is the same index that is returned by
             GetControlIndex().
     */
-    sal_uInt32 AddControl (::std::auto_ptr<TreeNode> pControl);
+    sal_uInt32 AddControl (::std::unique_ptr<TreeNode> && pControl);
 
     /** Expand (default) or collapse the specified control.  When
         expanding a control in a single expansion environment then all

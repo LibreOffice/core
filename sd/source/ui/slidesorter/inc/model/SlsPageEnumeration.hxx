@@ -80,9 +80,7 @@ public:
 
     /** Create and return an exact copy of the called object.
     */
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    virtual ::std::auto_ptr<Enumeration<SharedPageDescriptor> > Clone (void) SAL_OVERRIDE;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone (void) SAL_OVERRIDE;
 
     PageEnumeration& operator= (const PageEnumeration& rEnumeration);
 
@@ -105,16 +103,12 @@ public:
 
 private:
     /// Implementation object.
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<Enumeration<SharedPageDescriptor> > mpImpl;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<Enumeration<SharedPageDescriptor> > mpImpl;
 
     /** This constructor expects an implementation object that holds
         the predicate that filters the pages.
     */
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    PageEnumeration (::std::auto_ptr<Enumeration<SharedPageDescriptor> > pImpl);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    PageEnumeration (::std::unique_ptr<Enumeration<SharedPageDescriptor> > && pImpl);
 
     // Default constructor not implemented.
     PageEnumeration (void);

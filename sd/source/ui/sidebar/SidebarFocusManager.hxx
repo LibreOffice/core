@@ -98,7 +98,7 @@ private:
     friend struct FocusManagerCreator;
 
     class LinkMap;
-    ::std::auto_ptr<LinkMap> mpLinks;
+    ::std::unqiue_ptr<LinkMap> mpLinks;
 
     FocusManager (void);
     ~FocusManager (void);

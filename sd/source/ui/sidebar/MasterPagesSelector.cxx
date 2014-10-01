@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include "MasterPagesSelector.hxx"
 
 #include "MasterPageContainer.hxx"
@@ -163,12 +167,12 @@ void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
 
 void MasterPagesSelector::Fill (void)
 {
-    ::std::auto_ptr<ItemList> pItemList (new ItemList());
+    ::std::unique_ptr<ItemList> pItemList (new ItemList());
 
     Fill(*pItemList);
 
     UpdateLocks(*pItemList);
-    UpdateItemList(pItemList);
+    UpdateItemList(std::move(pItemList));
 }
 
 ResId MasterPagesSelector::GetContextMenuResId (void) const
@@ -683,7 +687,7 @@ void MasterPagesSelector::InvalidateItem (MasterPageContainer::Token aToken)
 }
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList)
+void MasterPagesSelector::UpdateItemList (::std::unique_ptr<ItemList> && pNewItemList)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 

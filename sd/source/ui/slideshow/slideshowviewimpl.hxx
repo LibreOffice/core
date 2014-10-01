@@ -114,7 +114,7 @@ protected:
     ::osl::Mutex& mrMutex;
 };
 
-typedef ::std::auto_ptr< SlideShowViewListeners >   SlideShowViewListenersPtr;
+typedef ::std::unique_ptr< SlideShowViewListeners >   SlideShowViewListenersPtr;
 
 // SlideShowViewPaintListeners
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XPaintListener,
@@ -128,7 +128,7 @@ public:
 protected:
     virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rListener, const ::com::sun::star::awt::PaintEvent& rEvent ) throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
 };
-typedef ::std::auto_ptr< SlideShowViewPaintListeners >  SlideShowViewPaintListenersPtr;
+typedef ::std::unique_ptr< SlideShowViewPaintListeners >  SlideShowViewPaintListenersPtr;
 
 // SlideShowViewMouseListeners
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XMouseListener, WrappedMouseEvent > SlideShowViewMouseListeners_Base;
@@ -143,7 +143,7 @@ protected:
                              const WrappedMouseEvent&                   rEvent ) throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
 };
 
-typedef ::std::auto_ptr< SlideShowViewMouseListeners >  SlideShowViewMouseListenersPtr;
+typedef ::std::unique_ptr< SlideShowViewMouseListeners >  SlideShowViewMouseListenersPtr;
 
 // SlideShowViewMouseMotionListeners
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XMouseMotionListener,
@@ -158,7 +158,7 @@ protected:
     virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >&    rListener,
                              const WrappedMouseMotionEvent&                 rEvent ) throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
 };
-typedef ::std::auto_ptr< SlideShowViewMouseMotionListeners >    SlideShowViewMouseMotionListenersPtr;
+typedef ::std::unique_ptr< SlideShowViewMouseMotionListeners >    SlideShowViewMouseMotionListenersPtr;
 
 // SlideShowView
 class ShowWindow;

@@ -113,11 +113,11 @@ private:
 
     /// List of active caches.
     class PageCacheContainer;
-    ::std::auto_ptr<PageCacheContainer> mpPageCaches;
+    ::std::unique_ptr<PageCacheContainer> mpPageCaches;
 
     /// List of inactive, recently used caches.
     class RecentlyUsedPageCaches;
-    ::std::auto_ptr<RecentlyUsedPageCaches> mpRecentlyUsedPageCaches;
+    ::std::unique_ptr<RecentlyUsedPageCaches> mpRecentlyUsedPageCaches;
 
     /** The maximal number of recently used caches that are kept alive after
         they have become inactive, i.e. after they are not used anymore by a

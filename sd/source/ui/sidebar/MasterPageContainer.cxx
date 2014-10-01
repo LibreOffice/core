@@ -27,6 +27,7 @@
 #include "strings.hrc"
 #include <algorithm>
 #include <list>
+#include <memory>
 #include <set>
 
 #include "unomodel.hxx"
@@ -684,7 +685,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     {
         // Update an existing MasterPageDescriptor.
         aResult = (*aEntry)->maToken;
-        boost::scoped_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pEventTypes(
+        std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pEventTypes(
             (*aEntry)->Update(*rpDescriptor));
         if (pEventTypes.get()!=NULL && pEventTypes->size()>0)
         {

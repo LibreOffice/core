@@ -137,7 +137,7 @@ private:
             According to this flag one of the lock/unlock entries is
             made disabled.
     */
-    ::std::auto_ptr<PopupMenu> CreatePopupMenu (bool bIsDocking);
+    ::std::unique_ptr<PopupMenu> CreatePopupMenu (bool bIsDocking);
 
     /** Initialize the task pane view shell if that has not yet been done
         before.  If mbIsInitialized is already set to <TRUE/> then this

@@ -75,7 +75,7 @@ IconCache& IconCache::Instance (void)
         {
             IconCache* pCache = new IconCache ();
             SdGlobalResourceContainer::Instance().AddResource (
-                ::std::auto_ptr<SdGlobalResource>(pCache));
+                ::std::unique_ptr<SdGlobalResource>(pCache));
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             Implementation::mpInstance = pCache;
         }

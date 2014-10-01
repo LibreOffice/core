@@ -176,7 +176,7 @@ public:
 
 private:
     class Implementation;
-    ::std::auto_ptr<Implementation> mpImpl;
+    ::std::unique_ptr<Implementation> mpImpl;
 
     /// Specifies whether to search and replace, to spell check or to do a
     /// text conversion.

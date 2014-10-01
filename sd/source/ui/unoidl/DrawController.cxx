@@ -74,7 +74,6 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
       mbMasterPageMode(false),
       mbLayerMode(false),
       mbDisposing(false),
-      mpPropertyArrayHelper(NULL),
       mxSubController(),
       mxConfigurationController(),
       mxModuleController()

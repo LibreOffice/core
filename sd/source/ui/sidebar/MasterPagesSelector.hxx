@@ -170,7 +170,7 @@ protected:
 
     virtual sal_Int32 GetIndexForToken (MasterPageContainer::Token aToken) const;
     typedef ::std::vector<MasterPageContainer::Token> ItemList;
-    void UpdateItemList (::std::auto_ptr<ItemList> pList);
+    void UpdateItemList (::std::unique_ptr<ItemList> && pList);
     void Clear (void);
     /** Invalidate the specified item so that on the next Fill() this item
         is updated.

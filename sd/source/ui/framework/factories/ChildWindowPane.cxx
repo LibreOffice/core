@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include "ChildWindowPane.hxx"
 
 #include "PaneDockingWindow.hxx"
@@ -37,11 +41,11 @@ ChildWindowPane::ChildWindowPane (
     const Reference<XResourceId>& rxPaneId,
     sal_uInt16 nChildWindowId,
     ViewShellBase& rViewShellBase,
-    ::std::auto_ptr<SfxShell> pShell)
+    ::std::unique_ptr<SfxShell> && pShell)
     : ChildWindowPaneInterfaceBase(rxPaneId,(vcl::Window*)NULL),
       mnChildWindowId(nChildWindowId),
       mrViewShellBase(rViewShellBase),
-      mpShell(pShell),
+      mpShell(std::move(pShell)),
       mbHasBeenActivated(false)
 {
     mrViewShellBase.GetViewShellManager()->ActivateShell(mpShell.get());

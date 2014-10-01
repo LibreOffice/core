@@ -161,7 +161,7 @@ public:
             bitmaps are included in the index.  When the flag is <FALSE/> these entries
             are omitted.
     */
-    ::std::auto_ptr<CacheIndex> GetCacheIndex (
+    ::std::unique_ptr<CacheIndex> GetCacheIndex (
         bool bIncludePrecious,
         bool bIncludeNoPreview) const;
 
@@ -203,7 +203,7 @@ private:
     /** The cache compactor is used to reduce the number of bytes used by
         off-screen preview bitmaps.
     */
-    ::std::auto_ptr<CacheCompactor> mpCacheCompactor;
+    ::std::unique_ptr<CacheCompactor> mpCacheCompactor;
 
     /** This flag stores if the cache is or recently was full, i.e. the
         cache compactor has or had to be run in order to reduce the cache

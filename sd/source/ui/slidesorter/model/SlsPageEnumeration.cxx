@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <utility>
+
 #include <boost/noncopyable.hpp>
 
 #include "model/SlideSorterModel.hxx"
@@ -39,9 +41,7 @@ public:
     virtual ~PageEnumerationImpl (void);
     /** Create a copy of the called enumeration object.
     */
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    virtual ::std::auto_ptr<Enumeration<SharedPageDescriptor> > Clone (void) SAL_OVERRIDE;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone (void) SAL_OVERRIDE;
 
     virtual bool HasMoreElements (void) const SAL_OVERRIDE;
     virtual SharedPageDescriptor GetNextElement (void) SAL_OVERRIDE;
@@ -71,23 +71,19 @@ private:
 
 namespace sd { namespace slidesorter { namespace model {
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 PageEnumeration PageEnumeration::Create (
     const SlideSorterModel& rModel,
     const PagePredicate& rPredicate)
 {
-    return PageEnumeration(::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
+    return PageEnumeration(::std::unique_ptr<Enumeration<SharedPageDescriptor> >(
         new PageEnumerationImpl(rModel, rPredicate)));
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 PageEnumeration::PageEnumeration (
-    ::std::auto_ptr<Enumeration<SharedPageDescriptor> > pImpl)
-    : mpImpl(pImpl)
+    ::std::unique_ptr<Enumeration<SharedPageDescriptor> > && pImpl)
+    : mpImpl(std::move(pImpl))
 {
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 PageEnumeration::PageEnumeration (
     PageEnumeration& rEnumeration,
@@ -100,7 +96,7 @@ PageEnumeration::PageEnumeration (
     }
     else
     {
-        mpImpl = rEnumeration.mpImpl;
+        mpImpl = std::move(rEnumeration.mpImpl);
     }
 }
 
@@ -121,13 +117,11 @@ PageEnumeration& PageEnumeration::operator= (
     return *this;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr<Enumeration<SharedPageDescriptor> > PageEnumeration::Clone (void)
+::std::unique_ptr<Enumeration<SharedPageDescriptor> > PageEnumeration::Clone (void)
 {
-    return ::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
+    return ::std::unique_ptr<Enumeration<SharedPageDescriptor> >(
         new PageEnumeration (*this, true));
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool PageEnumeration::HasMoreElements (void) const
 {
@@ -172,14 +166,12 @@ PageEnumerationImpl::~PageEnumerationImpl (void)
 {
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr<Enumeration<SharedPageDescriptor> >
+::std::unique_ptr<Enumeration<SharedPageDescriptor> >
     PageEnumerationImpl::Clone (void)
 {
-    return ::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
+    return ::std::unique_ptr<Enumeration<SharedPageDescriptor> >(
         new PageEnumerationImpl(mrModel,maPredicate,mnIndex));
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool PageEnumerationImpl::HasMoreElements (void) const
 {

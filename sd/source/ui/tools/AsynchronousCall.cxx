@@ -50,10 +50,8 @@ IMPL_LINK(AsynchronousCall,TimerCallback,Timer*,pTimer)
 {
     if (pTimer == &maTimer)
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<AsynchronousFunction> pFunction (mpFunction);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        mpFunction.reset();
+        ::std::unique_ptr<AsynchronousFunction> pFunction;
+        pFunction.swap(mpFunction);
         (*pFunction)();
     }
     return 0;

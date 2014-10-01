@@ -52,11 +52,9 @@ public:
             under this number.  However, it is not guaranteed that this
             works in all cases.
     */
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    static ::std::auto_ptr<CacheCompactor> Create (
+    static ::std::unique_ptr<CacheCompactor> Create (
         BitmapCache& rCache,
         sal_Int32 nMaximalCacheSize);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     /** Request a compaction of the off-screen previews in the bitmap
         cache.  This calls via a timer the Run() method.

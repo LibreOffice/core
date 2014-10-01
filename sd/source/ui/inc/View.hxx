@@ -291,7 +291,7 @@ protected:
     SmartTagSet             maSmartTags;
 
 private:
-    ::std::auto_ptr<ViewClipboard> mpClipboard;
+    ::std::unique_ptr<ViewClipboard> mpClipboard;
     OutlinerMasterViewFilter maMasterViewFilter;
 };
 

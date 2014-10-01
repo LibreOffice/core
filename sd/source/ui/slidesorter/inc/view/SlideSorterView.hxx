@@ -241,7 +241,7 @@ private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
     bool mbIsDisposed;
-    ::std::auto_ptr<Layouter> mpLayouter;
+    ::std::unique_ptr<Layouter> mpLayouter;
     bool mbPageObjectVisibilitiesValid;
     ::boost::shared_ptr<cache::PageCache> mpPreviewCache;
     ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;

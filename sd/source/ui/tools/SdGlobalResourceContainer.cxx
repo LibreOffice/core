@@ -65,7 +65,7 @@ SdGlobalResourceContainer*
 //===== SdGlobalResourceContainer =============================================
 
 void SdGlobalResourceContainer::AddResource (
-    ::std::auto_ptr<SdGlobalResource> pResource)
+    ::std::unique_ptr<SdGlobalResource> && pResource)
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
@@ -78,13 +78,13 @@ void SdGlobalResourceContainer::AddResource (
         mpImpl->maResources.push_back(pResource.get());
     else
     {
-        // Because the given resource is an auto_ptr it is highly unlikely
+        // Because the given resource is a unique_ptr it is highly unlikely
         // that we come here.  But who knows?
         DBG_ASSERT (false,
             "SdGlobalResourceContainer:AddResource(): Resource added twice.");
     }
-    // We can not put the auto_ptr into the vector so we release the
-    // auto_ptr and document that we take ownership explicitly.
+    // We can not put the unique_ptr into the vector so we release the
+    // unique_ptr and document that we take ownership explicitly.
     pResource.release();
 }
 

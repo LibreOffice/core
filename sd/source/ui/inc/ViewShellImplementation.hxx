@@ -76,7 +76,7 @@ public:
         void Release (bool bForce = false);
         DECL_LINK(TimeoutCallback, void *);
     private:
-        ::std::auto_ptr<ToolBarManager::UpdateLock> mpLock;
+        ::std::unique_ptr<ToolBarManager::UpdateLock> mpLock;
         /** The timer is used both as a safe guard to unlock the update lock
             when Release() is not called explicitly.  It is also used to
             defer the release of the lock to a time when the UI is not
@@ -94,7 +94,7 @@ public:
         class Deleter;
         friend class Deleter;
     };
-    // The member is not an auto_ptr because it takes over its own life time
+    // The member is not a unqiue_ptr because it takes over its own life time
     // control.
     ::boost::weak_ptr<ToolBarManagerLock> mpUpdateLockForMouse;
 
