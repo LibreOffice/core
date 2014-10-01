@@ -22,6 +22,7 @@
 #include <memory>
 #include <iostream>
 #include <set>
+#include <utility>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -108,15 +109,13 @@ public:
     bool CheckForOwnMember(const SwPaM & rPaM)
         throw (lang::IllegalArgumentException, uno::RuntimeException);
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void ConvertCell(
             const bool bFirstCell,
             const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
             ::std::vector<SwNodeRange> & rRowNodes,
-            ::std::auto_ptr< SwPaM > & rpFirstPaM,
+            ::std::unique_ptr< SwPaM > & rpFirstPaM,
             SwPaM & rLastPaM,
             bool & rbExcept);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
 };
 
@@ -1535,9 +1534,7 @@ SwXText::convertToTextFrame(
     }
     uno::Reference< text::XTextContent > xRet;
     SwUnoInternalPaM aStartPam(*GetDoc());
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< SwUnoInternalPaM > pEndPam(new SwUnoInternalPaM(*GetDoc()));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr< SwUnoInternalPaM > pEndPam(new SwUnoInternalPaM(*GetDoc()));
     if (!::sw::XTextRangeToSwPaM(aStartPam, xStart) ||
         !::sw::XTextRangeToSwPaM(*pEndPam, xEnd))
     {
@@ -1809,12 +1806,11 @@ static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
     return abs( nPos1 - nPos2 ) < COL_POS_FUZZY;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void SwXText::Impl::ConvertCell(
     const bool bFirstCell,
     const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
     ::std::vector<SwNodeRange> & rRowNodes,
-    ::std::auto_ptr< SwPaM > & rpFirstPaM,
+    ::std::unique_ptr< SwPaM > & rpFirstPaM,
     SwPaM & rLastPaM,
     bool & rbExcept)
 {
@@ -1975,7 +1971,6 @@ void SwXText::Impl::ConvertCell(
         rpFirstPaM.reset(new SwPaM(*aStartCellPam.Start()));
     }
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 typedef uno::Sequence< text::TableColumnSeparator > TableColumnSeparators;
 
@@ -2217,9 +2212,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     //at first collect the text ranges as SwPaMs
     const uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > >*
         pTableRanges = rTableRanges.getConstArray();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr < SwPaM > pFirstPaM;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr < SwPaM > pFirstPaM;
     std::vector< std::vector<SwNodeRange> > aTableNodes;
     bool bExcept = false;
     SwPaM aLastPaM(m_pImpl->m_pDoc->GetNodes());
@@ -2550,13 +2543,11 @@ throw (uno::RuntimeException, std::exception)
 
     SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
     SwPosition aPos(rNode);
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
         GetDoc()->CreateUnoCrsr(aPos, false));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     pUnoCursor->Move(fnMoveBackward, fnGoDoc);
     const uno::Reference< container::XEnumeration > xRet
-        = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_BODY);
+        = new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_BODY);
     return xRet;
 }
 
@@ -2817,12 +2808,10 @@ throw (uno::RuntimeException, std::exception)
     const SwFmtCntnt& rFlyCntnt = rHeadFootFmt.GetCntnt();
     const SwNode& rNode = rFlyCntnt.GetCntntIdx()->GetNode();
     SwPosition aPos(rNode);
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
         GetDoc()->CreateUnoCrsr(aPos, false));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     pUnoCursor->Move(fnMoveForward, fnGoNode);
-    aRef = new SwXParagraphEnumeration(this, pUnoCursor,
+    aRef = new SwXParagraphEnumeration(this, std::move(pUnoCursor),
                 (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
 
     return aRef;

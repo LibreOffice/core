@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
@@ -474,11 +478,11 @@ SwXFootnote::createEnumeration() throw (uno::RuntimeException, std::exception)
 
     SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
     SwPosition aPos( *pTxtFtn->GetStartNode() );
-    ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
         GetDoc()->CreateUnoCrsr(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     const uno::Reference< container::XEnumeration >  xRet =
-        new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FOOTNOTE);
+        new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_FOOTNOTE);
     return xRet;
 }
 

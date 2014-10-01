@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 
+#include <o3tl/ptr_container.hxx>
 #include <svx/svxids.hrc>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/ctrltool.hxx>
@@ -53,6 +54,7 @@
 #include "svxcss1.hxx"
 
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -927,8 +929,8 @@ void SvxCSS1Parser::InsertMapEntry( const OUString& rKey,
     CSS1Map::iterator itr = rMap.find(rKey);
     if (itr == rMap.end())
     {
-        std::auto_ptr<SvxCSS1MapEntry> p(new SvxCSS1MapEntry(rKey, rItemSet, rProp));
-        rMap.insert(rKey, p);
+        std::unique_ptr<SvxCSS1MapEntry> p(new SvxCSS1MapEntry(rKey, rItemSet, rProp));
+        o3tl::ptr_container::insert(rMap, rKey, std::move(p));
     }
     else
     {

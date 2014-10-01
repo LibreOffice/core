@@ -273,7 +273,7 @@ public:
 class SwDocIndexDescriptorProperties_Impl
 {
 private:
-    ::std::auto_ptr<SwTOXBase> m_pTOXBase;
+    ::std::unique_ptr<SwTOXBase> m_pTOXBase;
     OUString m_sUserTOXTypeName;
 
 public:
@@ -327,7 +327,7 @@ public:
     const TOXTypes              m_eTOXType;
     bool                        m_bIsDescriptor;
     SwDoc *                     m_pDoc;
-    ::std::auto_ptr<SwDocIndexDescriptorProperties_Impl> m_pProps;
+    ::std::unique_ptr<SwDocIndexDescriptorProperties_Impl> m_pProps;
     uno::WeakReference<container::XIndexReplace> m_wStyleAccess;
     uno::WeakReference<container::XIndexReplace> m_wTokenAccess;
 

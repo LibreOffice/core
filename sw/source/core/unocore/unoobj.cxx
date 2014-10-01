@@ -298,9 +298,7 @@ SwUnoCursorHelper::SetPageDesc(
     {
         return false;
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwFmtPageDesc> pNewDesc;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwFmtPageDesc> pNewDesc;
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
     {
@@ -421,9 +419,7 @@ lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
     {
         throw lang::IllegalArgumentException();
     }
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwFmtDrop> pDrop;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwFmtDrop> pDrop;
     SfxPoolItem const* pItem(0);
     if (SfxItemState::SET ==
             rItemSet.GetItemState(RES_PARATR_DROP, true, &pItem))
@@ -448,9 +444,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
         throw lang::IllegalArgumentException();
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwFmtRuby> pRuby;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwFmtRuby> pRuby;
     const SfxPoolItem* pItem;
     if (SfxItemState::SET ==
             rItemSet.GetItemState(RES_TXTATR_CJK_RUBY, true, &pItem))
@@ -1936,10 +1930,8 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     const SfxItemPropertyMap &rMap = rPropSet.getPropertyMap();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SfxItemSet> pSet;
-    ::std::auto_ptr<SfxItemSet> pSetParent;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SfxItemSet> pSet;
+    ::std::unique_ptr<SfxItemSet> pSetParent;
 
     for (sal_Int32 i = 0, nEnd = rPropertyNames.getLength(); i < nEnd; i++)
     {
@@ -2058,9 +2050,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     // if we are reseting paragraph attributes, we need to select the full paragraph first
     SwPosition aStart = *rPaM.Start();
     SwPosition aEnd = *rPaM.End();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< SwUnoCrsr > pTemp ( rDoc.CreateUnoCrsr(aStart, false) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr< SwUnoCrsr > pTemp ( rDoc.CreateUnoCrsr(aStart, false) );
     if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
     {
         pTemp->MovePara(fnParaCurr, fnParaStart);
@@ -3017,10 +3007,8 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
+    ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
         rUnoCursor.GetDoc()->CreateUnoCrsr(*rUnoCursor.GetPoint()) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (rUnoCursor.HasMark())
     {
         pNewCrsr->SetMark();
@@ -3035,7 +3023,7 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException, std::exception)
             (pStartNode) ? & pStartNode->GetTable() : 0 );
     const uno::Reference< container::XEnumeration > xRet =
         new SwXParagraphEnumeration(
-                pParentText, pNewCrsr, eSetType, pStartNode, pTable);
+            pParentText, std::move(pNewCrsr), eSetType, pStartNode, pTable);
 
     return xRet;
 }

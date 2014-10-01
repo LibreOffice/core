@@ -18,6 +18,7 @@
  */
 
 #include <list>
+#include <utility>
 #include <vector>
 
 #include <svx/svxids.hrc>
@@ -1209,7 +1210,7 @@ uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) thro
     {
         const SwStartNode* pSttNd = pBox->GetSttNd();
         SwPosition aPos(*pSttNd);
-        ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+        ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
             GetDoc()->CreateUnoCrsr(aPos, false));
         pUnoCursor->Move(fnMoveForward, fnGoNode);
 
@@ -1217,7 +1218,7 @@ uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) thro
         // (used in export of tables in tables)
         SwTable const*const pTable( & pSttNd->FindTableNode()->GetTable() );
         SwXParagraphEnumeration *const pEnum =
-            new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_TBLTEXT,
+            new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_TBLTEXT,
                     pSttNd, pTable);
 
         aRef = pEnum;

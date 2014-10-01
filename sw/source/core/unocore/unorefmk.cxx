@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
@@ -314,12 +318,10 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException, std::exception)
                     &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                const ::std::auto_ptr<SwPaM> pPam( (pTxtMark->End())
+                const ::std::unique_ptr<SwPaM> pPam( (pTxtMark->End())
                     ?   new SwPaM( rTxtNode, *pTxtMark->End(),
                                    rTxtNode, pTxtMark->GetStart())
                     :   new SwPaM( rTxtNode, pTxtMark->GetStart()) );
-                SAL_WNODEPRECATED_DECLARATIONS_POP
 
                 return SwXTextRange::CreateXTextRange(
                             *m_pImpl->m_pDoc, *pPam->Start(), pPam->End());
@@ -642,9 +644,7 @@ private:
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<const TextRangeList_t> m_pTextPortions;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<const TextRangeList_t> m_pTextPortions;
     // 3 possible states: not attached, attached, disposed
     bool m_bIsDisposed;
     bool m_bIsDescriptor;
@@ -735,11 +735,10 @@ SwXMeta::CreateXMeta(SwDoc & rDoc, bool const isField)
     return xMeta;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 uno::Reference<rdf::XMetadatable>
 SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             uno::Reference<text::XText> const& i_xParent,
-            ::std::auto_ptr<TextRangeList_t const> pPortions)
+            ::std::unique_ptr<TextRangeList_t const> && pPortions)
 {
     // re-use existing SwXMeta
     // #i105557#: do not iterate over the registered clients: race condition
@@ -755,7 +754,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             // NB: the meta must always be created with the complete content
             // if SwXTextPortionEnumeration is created for a selection,
             // it must be checked that the Meta is contained in the selection!
-            pXMeta->m_pImpl->m_pTextPortions = pPortions;
+            pXMeta->m_pImpl->m_pTextPortions = std::move(pPortions);
             // ??? is this necessary?
             if (pXMeta->m_pImpl->m_xParentText.get() != i_xParent.get())
             {
@@ -782,7 +781,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     if (!xParentText.is()) { return 0; }
     SwXMeta *const pXMeta( (RES_TXTATR_META == rMeta.GetFmtMeta()->Which())
         ? new SwXMeta     (pTxtNode->GetDoc(), &rMeta, xParentText,
-                            pPortions.release()) // temporarily un-auto_ptr :-(
+                            pPortions.release()) // temporarily un-unique_ptr :-(
         : new SwXMetaField(pTxtNode->GetDoc(), &rMeta, xParentText,
                             pPortions.release()));
     // this is why the constructor is private: need to acquire pXMeta here
@@ -793,7 +792,6 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     pXMeta->m_pImpl->m_wThis = xMeta;
     return xMeta;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool SwXMeta::SetContentRange(
         SwTxtNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd ) const

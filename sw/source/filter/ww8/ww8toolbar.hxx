@@ -397,7 +397,7 @@ public:
 class Tcg: public TBBase
 {
     sal_Int8 nTcgVer;
-    std::auto_ptr< Tcg255 > tcg;
+    std::unique_ptr< Tcg255 > tcg;
     Tcg(const Tcg&);
     Tcg& operator = ( const Tcg&);
 

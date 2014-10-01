@@ -70,16 +70,14 @@ struct SwTextSectionProperties_Impl
     OUString  m_sSectionFilter;
     OUString  m_sSectionRegion;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwFmtCol>               m_pColItem;
-    ::std::auto_ptr<SvxBrushItem>           m_pBrushItem;
-    ::std::auto_ptr<SwFmtFtnAtTxtEnd>       m_pFtnItem;
-    ::std::auto_ptr<SwFmtEndAtTxtEnd>       m_pEndItem;
-    ::std::auto_ptr<SvXMLAttrContainerItem> m_pXMLAttr;
-    ::std::auto_ptr<SwFmtNoBalancedColumns> m_pNoBalanceItem;
-    ::std::auto_ptr<SvxFrameDirectionItem>  m_pFrameDirItem;
-    ::std::auto_ptr<SvxLRSpaceItem>         m_pLRSpaceItem;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwFmtCol>               m_pColItem;
+    ::std::unique_ptr<SvxBrushItem>           m_pBrushItem;
+    ::std::unique_ptr<SwFmtFtnAtTxtEnd>       m_pFtnItem;
+    ::std::unique_ptr<SwFmtEndAtTxtEnd>       m_pEndItem;
+    ::std::unique_ptr<SvXMLAttrContainerItem> m_pXMLAttr;
+    ::std::unique_ptr<SwFmtNoBalancedColumns> m_pNoBalanceItem;
+    ::std::unique_ptr<SvxFrameDirectionItem>  m_pFrameDirItem;
+    ::std::unique_ptr<SvxLRSpaceItem>         m_pLRSpaceItem;
 
     bool m_bDDE;
     bool m_bHidden;
@@ -114,9 +112,7 @@ public:
     const bool                  m_bIndexHeader;
     bool                        m_bIsDescriptor;
     OUString             m_sName;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwTextSectionProperties_Impl> m_pProps;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwTextSectionProperties_Impl> m_pProps;
 
     Impl(   SwXTextSection & rThis,
             SwSectionFmt *const pFmt, const bool bIndexHeader)
@@ -515,11 +511,10 @@ lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways = true)
     }
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 static void
 lcl_UpdateSection(SwSectionFmt *const pFmt,
-    ::std::auto_ptr<SwSectionData> const& pSectionData,
-    ::std::auto_ptr<SfxItemSet> const& pItemSet,
+    ::std::unique_ptr<SwSectionData> const& pSectionData,
+    ::std::unique_ptr<SfxItemSet> const& pItemSet,
     bool const bLinkModeChanged, bool const bLinkUpdateAlways = true)
 {
     if (pFmt)
@@ -550,7 +545,6 @@ lcl_UpdateSection(SwSectionFmt *const pFmt,
         }
     }
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void SwXTextSection::Impl::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
@@ -569,16 +563,12 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         throw uno::RuntimeException();
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwSectionData> const pSectionData(
+    ::std::unique_ptr<SwSectionData> const pSectionData(
         (pFmt) ? new SwSectionData(*pFmt->GetSection()) : 0);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     OUString const*const pPropertyNames = rPropertyNames.getConstArray();
     uno::Any const*const pValues = rValues.getConstArray();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SfxItemSet> pItemSet;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SfxItemSet> pItemSet;
     bool bLinkModeChanged = false;
     bool bLinkMode = false;
 
@@ -1487,12 +1477,10 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
             static_cast<cppu::OWeakObject *>(this));
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwSectionData> const pSectionData(
+    ::std::unique_ptr<SwSectionData> const pSectionData(
         (pFmt) ? new SwSectionData(*pFmt->GetSection()) : 0);
 
-    ::std::auto_ptr<SfxItemSet> pNewAttrSet;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SfxItemSet> pNewAttrSet;
     bool bLinkModeChanged = false;
 
     switch (pEntry->nWID)

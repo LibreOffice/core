@@ -36,11 +36,9 @@ class SwEndNoteInfo;
 class SwUndoAttr : public SwUndo, private SwUndRng
 {
     SfxItemSet m_AttrSet;                           // attributes for Redo
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const ::std::auto_ptr<SwHistory> m_pHistory;    // History for Undo
-    ::std::auto_ptr<SwRedlineData> m_pRedlineData;  // Redlining
-    ::std::auto_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    const ::std::unique_ptr<SwHistory> m_pHistory;    // History for Undo
+    ::std::unique_ptr<SwRedlineData> m_pRedlineData;  // Redlining
+    ::std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
     sal_uLong m_nNodeIndex;                         // Offset: for Redlining
     const SetAttrMode m_nInsertFlags;               // insert flags
 
@@ -63,9 +61,7 @@ public:
 
 class SwUndoResetAttr : public SwUndo, private SwUndRng
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const ::std::auto_ptr<SwHistory> m_pHistory;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    const ::std::unique_ptr<SwHistory> m_pHistory;
     std::set<sal_uInt16> m_Ids;
     const sal_uInt16 m_nFormatId;             // Format-Id for Redo
 
@@ -88,9 +84,7 @@ class SwUndoFmtAttr : public SwUndo
 {
     friend class SwUndoDefaultAttr;
     SwFmt * m_pFmt;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SfxItemSet> m_pOldSet;    // old attributes
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SfxItemSet> m_pOldSet;    // old attributes
     sal_uLong m_nNodeIndex;
     const sal_uInt16 m_nFmtWhich;
     const bool m_bSaveDrawPt;
@@ -148,9 +142,7 @@ class SwUndoFmtResetAttr : public SwUndo
         // which ID of the reset attribute
         const sal_uInt16 m_nWhichId;
         // old attribute which has been reset - needed for undo.
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SfxPoolItem> m_pOldItem;
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        ::std::unique_ptr<SfxPoolItem> m_pOldItem;
 };
 
 class SwUndoDontExpandFmt : public SwUndo
@@ -169,9 +161,7 @@ public:
 // helper class to receive changed attribute sets
 class SwUndoFmtAttrHelper : public SwClient
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwUndoFmtAttr> m_pUndo;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwUndoFmtAttr> m_pUndo;
     const bool m_bSaveDrawPt;
 
 public:
@@ -186,9 +176,7 @@ public:
 
 class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const ::std::auto_ptr<SwHistory> m_pHistory;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    const ::std::unique_ptr<SwHistory> m_pHistory;
     const bool m_bModulus;
 
 public:
@@ -206,10 +194,8 @@ public:
 
 class SwUndoDefaultAttr : public SwUndo
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SfxItemSet> m_pOldSet;        // the old attributes
-    ::std::auto_ptr<SvxTabStopItem> m_pTabStop;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SfxItemSet> m_pOldSet;        // the old attributes
+    ::std::unique_ptr<SvxTabStopItem> m_pTabStop;
 
 public:
     // registers at the format and saves old attributes
@@ -223,9 +209,7 @@ public:
 
 class SwUndoChangeFootNote : public SwUndo, private SwUndRng
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const ::std::auto_ptr<SwHistory> m_pHistory;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    const ::std::unique_ptr<SwHistory> m_pHistory;
     const OUString m_Text;
     const sal_uInt16 m_nNumber;
     const bool m_bEndNote;
@@ -244,9 +228,7 @@ public:
 
 class SwUndoFootNoteInfo : public SwUndo
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwFtnInfo> m_pFootNoteInfo;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwFtnInfo> m_pFootNoteInfo;
 
 public:
     SwUndoFootNoteInfo( const SwFtnInfo &rInfo );
@@ -259,9 +241,7 @@ public:
 
 class SwUndoEndNoteInfo : public SwUndo
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwEndNoteInfo> m_pEndNoteInfo;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwEndNoteInfo> m_pEndNoteInfo;
 
 public:
     SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo );

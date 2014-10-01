@@ -372,7 +372,7 @@ class SW_DLLPUBLIC Writer
     void _AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
     void _AddFontItems( SfxItemPool& rPool, sal_uInt16 nWhichId );
 
-    ::std::auto_ptr<Writer_Impl> m_pImpl;
+    ::std::unique_ptr<Writer_Impl> m_pImpl;
 
 protected:
 

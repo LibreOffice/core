@@ -125,7 +125,7 @@ public:
 
 private:
     class Impl;
-    ::std::auto_ptr<Impl> m_pImpl;
+    ::std::unique_ptr<Impl> m_pImpl;
 };
 
 class SwUndoReRead : public SwUndo

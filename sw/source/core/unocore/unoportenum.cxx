@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <unoport.hxx>
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
@@ -168,9 +172,7 @@ namespace
             const SwPosition& rEndPos = pBkmk->GetMarkEnd();
             if(rEndPos.nNode == nOwnNode)
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                auto_ptr<SwPosition> pCrossRefEndPos;
-                SAL_WNODEPRECATED_DECLARATIONS_POP
+                unique_ptr<SwPosition> pCrossRefEndPos;
                 const SwPosition* pEndPos = NULL;
                 if(hasOther)
                 {
@@ -179,9 +181,7 @@ namespace
                 else if (pCrossRefMark)
                 {
                     // Crossrefbookmarks only remember the start position but have to span the whole paragraph
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    pCrossRefEndPos = auto_ptr<SwPosition>(new SwPosition(rEndPos));
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
+                    pCrossRefEndPos = unique_ptr<SwPosition>(new SwPosition(rEndPos));
                     pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTxtNode()->Len();
                     pEndPos = pCrossRefEndPos.get();
                 }
@@ -555,16 +555,15 @@ lcl_CreateTOXMarkPortion(
     return pPortion;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 static uno::Reference<text::XTextRange>
 lcl_CreateMetaPortion(
     uno::Reference<text::XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    SwTxtAttr & rAttr, ::std::auto_ptr<TextRangeList_t const> & pPortions)
+    SwTxtAttr & rAttr, ::std::unique_ptr<TextRangeList_t const> && pPortions)
 {
     const uno::Reference<rdf::XMetadatable> xMeta( SwXMeta::CreateXMeta(
             *static_cast<SwFmtMeta &>(rAttr.GetAttr()).GetMeta(),
-            xParent, pPortions));
+            xParent, std::move(pPortions)));
     SwXTextPortion * pPortion(0);
     if (RES_TXTATR_META == rAttr.Which())
     {
@@ -581,7 +580,6 @@ lcl_CreateMetaPortion(
     }
     return pPortion;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 static void lcl_ExportBookmark(
     TextRangeList_t & rPortions,
@@ -769,14 +767,12 @@ lcl_ExportHints(
                         }
                         else
                         {
-                            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                            ::std::auto_ptr<const TextRangeList_t>
+                            ::std::unique_ptr<const TextRangeList_t>
                                 pCurrentPortions(Top.first);
-                            SAL_WNODEPRECATED_DECLARATIONS_POP
                             rPortionStack.pop();
                             const uno::Reference<text::XTextRange> xPortion(
                                 lcl_CreateMetaPortion(xParent, pUnoCrsr,
-                                    *pAttr, pCurrentPortions));
+                                                      *pAttr, std::move(pCurrentPortions)));
                             rPortionStack.top().first->push_back(xPortion);
                         }
                     }

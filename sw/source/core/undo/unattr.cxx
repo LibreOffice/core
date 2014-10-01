@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <UndoAttribute.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/tstpitem.hxx>
@@ -57,7 +61,6 @@
 
 SwUndoFmtAttrHelper::SwUndoFmtAttrHelper( SwFmt& rFmt, bool bSvDrwPt )
     : SwClient( &rFmt )
-    , m_pUndo( 0 )
     , m_bSaveDrawPt( bSvDrwPt )
 {
 }
@@ -212,7 +215,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         if ( aTmp.GetUndo() )
         {
             // transfer ownership of helper object's old set
-            m_pOldSet = aTmp.GetUndo()->m_pOldSet;
+            m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);
         }
         else
         {
@@ -536,7 +539,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         {
             m_nNodeIndex = aTmp.GetUndo()->m_nNodeIndex;
             // transfer ownership of helper object's old set
-            m_pOldSet = aTmp.GetUndo()->m_pOldSet;
+            m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);
         }
         else
         {
@@ -589,7 +592,6 @@ SwUndoFmtResetAttr::SwUndoFmtResetAttr( SwFmt& rChangedFormat,
     : SwUndo( UNDO_RESETATTR )
     , m_pChangedFormat( &rChangedFormat )
     , m_nWhichId( nWhichId )
-    , m_pOldItem( 0 )
 {
     const SfxPoolItem* pItem = 0;
     if (rChangedFormat.GetItemState( nWhichId, false, &pItem ) == SfxItemState::SET)
@@ -749,8 +751,6 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
     : SwUndo( UNDO_INSATTR ), SwUndRng( rRange )
     , m_AttrSet( rRange.GetDoc()->GetAttrPool(), rAttr.Which(), rAttr.Which() )
     , m_pHistory( new SwHistory )
-    , m_pRedlineData( 0 )
-    , m_pRedlineSaveData( 0 )
     , m_nNodeIndex( ULONG_MAX )
     , m_nInsertFlags( nFlags )
 {
@@ -762,8 +762,6 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
     : SwUndo( UNDO_INSATTR ), SwUndRng( rRange )
     , m_AttrSet( rSet )
     , m_pHistory( new SwHistory )
-    , m_pRedlineData( 0 )
-    , m_pRedlineSaveData( 0 )
     , m_nNodeIndex( ULONG_MAX )
     , m_nInsertFlags( nFlags )
 {
@@ -963,8 +961,6 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
 
 SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet )
     : SwUndo( UNDO_SETDEFTATTR )
-    , m_pOldSet( 0 )
-    , m_pTabStop( 0 )
 {
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet.GetItemState( RES_PARATR_TABSTOP, false, &pItem ) )
@@ -998,7 +994,7 @@ void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         if ( aTmp.GetUndo() )
         {
             // transfer ownership of helper object's old set
-            m_pOldSet = aTmp.GetUndo()->m_pOldSet;
+            m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);
         }
     }
     if ( m_pTabStop.get() )

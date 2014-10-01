@@ -255,7 +255,6 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
 
 SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTXTFLDHNT )
-    , m_pFldType( 0 )
     , m_pFld( new SwFmtFld( *pTxtFld->GetFmtFld().GetField() ) )
 {
     // only copy if not Sys-FieldType
@@ -439,7 +438,6 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, sal_uLong nNodePo
 
 SwHistorySetFootnote::SwHistorySetFootnote( const SwTxtFtn &rTxtFtn )
     : SwHistoryHint( HSTRY_SETFTNHNT )
-    , m_pUndo( 0 )
     , m_FootnoteNumber( rTxtFtn.GetFtn().GetNumStr() )
     , m_nNodeIndex( _SwTxtFtn_GetIndex( (&rTxtFtn) ) )
     , m_nStart( rTxtFtn.GetStart() )

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
@@ -157,11 +161,9 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration(void)
     SolarMutexGuard aGuard;
     SwPaM aPam(aNodeIndex);
     aPam.Move(fnMoveForward, fnGoNode);
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
         GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
+    return new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_REDLINE);
 }
 
 uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException, std::exception)
@@ -554,11 +556,9 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration(void) t
     {
         SwPaM aPam(*pNodeIndex);
         aPam.Move(fnMoveForward, fnGoNode);
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+        ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
             GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        xRet = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
+        xRet = new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_REDLINE);
     }
     return xRet;
 }

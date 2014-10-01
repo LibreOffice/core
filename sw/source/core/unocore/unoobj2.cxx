@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <rtl/ustrbuf.hxx>
 #include <swtypes.hxx>
 #include <hintids.hxx>
@@ -427,9 +431,8 @@ public:
     bool                    m_bFirstParagraph;
     uno::Reference< text::XTextContent >    m_xNextPara;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     Impl(   uno::Reference< text::XText > const& xParent,
-            ::std::auto_ptr<SwUnoCrsr> pCursor,
+            ::std::unique_ptr<SwUnoCrsr> && pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode, SwTable const*const pTable)
         : SwClient( pCursor.release() )
@@ -463,7 +466,6 @@ public:
             rCursor.DeleteMark();
         }
     }
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     virtual ~Impl() {
         // Impl owns the cursor; delete it here: SolarMutex is locked
@@ -488,17 +490,15 @@ void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPo
     ClientModify(this, pOld, pNew);
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SwXParagraphEnumeration::SwXParagraphEnumeration(
         uno::Reference< text::XText > const& xParent,
-        ::std::auto_ptr<SwUnoCrsr> pCursor,
+        ::std::unique_ptr<SwUnoCrsr> && pCursor,
         const CursorType eType,
         SwStartNode const*const pStartNode, SwTable const*const pTable)
-    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, pCursor, eType,
+    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, std::move(pCursor), eType,
                     pStartNode, pTable) )
 {
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 SwXParagraphEnumeration::~SwXParagraphEnumeration()
 {
@@ -592,10 +592,8 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
          (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
     {
         SwPosition* pStart = pUnoCrsr->Start();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        const ::std::auto_ptr<SwUnoCrsr> aNewCrsr(
+        const ::std::unique_ptr<SwUnoCrsr> aNewCrsr(
             pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, false) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
         // one may also go into tables here
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
@@ -1140,10 +1138,8 @@ SwXTextRange::CreateXTextRange(
 {
     const uno::Reference<text::XText> xParentText(
             ::sw::CreateParentXText(rDoc, rPos));
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
+    const ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
             rDoc.CreateUnoCrsr(rPos, false));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     if(pMark)
     {
         pNewCrsr->SetMark();
@@ -1277,10 +1273,8 @@ throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
+    const ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
             m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1301,10 +1295,8 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
+    ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
             m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1317,7 +1309,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
     const CursorType eSetType = (RANGE_IN_CELL == m_pImpl->m_eRangePosition)
             ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
     const uno::Reference< container::XEnumeration > xRet =
-        new SwXParagraphEnumeration(m_pImpl->m_xParentText, pNewCrsr, eSetType);
+        new SwXParagraphEnumeration(m_pImpl->m_xParentText, std::move(pNewCrsr), eSetType);
     return xRet;
 }
 

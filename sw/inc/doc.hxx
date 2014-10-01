@@ -353,7 +353,7 @@ class SW_DLLPUBLIC SwDoc :
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> m_xTemplateToProjectCache;
 
 private:
-    ::std::auto_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
+    ::std::unique_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
     // other
 

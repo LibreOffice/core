@@ -71,9 +71,6 @@ SwUndoInsSection::SwUndoInsSection(
     , m_pSectionData(new SwSectionData(rNewData))
     , m_pTOXBase( (pTOXBase) ? new SwTOXBase(*pTOXBase) : 0 )
     , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : 0 )
-    , m_pHistory(0)
-    , m_pRedlData(0)
-    , m_pRedlineSaveData(0)
     , m_nSectionNodePos(0)
     , m_bSplitAtStart(false)
     , m_bSplitAtEnd(false)
@@ -277,11 +274,9 @@ class SwUndoDelSection
     : public SwUndo
 {
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwSectionData> const m_pSectionData; /// section not TOX
-    ::std::auto_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
-    ::std::auto_ptr<SfxItemSet> const m_pAttrSet;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwSectionData> const m_pSectionData; /// section not TOX
+    ::std::unique_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
+    ::std::unique_ptr<SfxItemSet> const m_pAttrSet;
     ::boost::shared_ptr< ::sfx2::MetadatableUndo > const m_pMetadataUndo;
     sal_uLong const m_nStartNode;
     sal_uLong const m_nEndNode;
@@ -389,10 +384,8 @@ class SwUndoUpdateSection
     : public SwUndo
 {
 private:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwSectionData> m_pSectionData;
-    ::std::auto_ptr<SfxItemSet> m_pAttrSet;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ::std::unique_ptr<SwSectionData> m_pSectionData;
+    ::std::unique_ptr<SfxItemSet> m_pAttrSet;
     sal_uLong const m_nStartNode;
     bool const m_bOnlyAttrChanged;
 

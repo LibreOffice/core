@@ -90,16 +90,14 @@ protected:
 
 public:
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::rdf::XMetadatable >
         CreateXMeta(
             ::sw::Meta & rMeta,
             ::com::sun::star::uno::Reference< ::com::sun::star::text::XText>
                 const& xParentText = 0,
-            ::std::auto_ptr<TextRangeList_t const> pPortions =
-                ::std::auto_ptr<TextRangeList_t const>(0));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<TextRangeList_t const> && pPortions =
+                ::std::unique_ptr<TextRangeList_t const>());
 
     static css::uno::Reference<css::rdf::XMetadatable>
         CreateXMeta(SwDoc & rDoc, bool isField);
@@ -249,14 +247,12 @@ private:
 
     virtual ~SwXMetaField();
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     friend ::com::sun::star::uno::Reference<
             ::com::sun::star::rdf::XMetadatable >
         SwXMeta::CreateXMeta(::sw::Meta &,
             ::com::sun::star::uno::Reference< ::com::sun::star::text::XText>
                 const&,
-            ::std::auto_ptr<TextRangeList_t const> pPortions);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+            ::std::unique_ptr<TextRangeList_t const> && pPortions);
 
     SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText> const&

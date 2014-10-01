@@ -1394,7 +1394,6 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     : SfxTabDialog(pParent, "InsertSectionDialog",
         "modules/swriter/ui/insertsectiondialog.ui", &rSet)
     , rWrtSh(rSh)
-    , m_pSectionData(0)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");

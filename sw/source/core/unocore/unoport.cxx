@@ -82,10 +82,6 @@ SwXTextPortion::SwXTextPortion(
             ?  PROPERTY_MAP_REDLINE_PORTION
             :  PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
-    , m_pRubyText(0)
-    , m_pRubyStyle(0)
-    , m_pRubyAdjust(0)
-    , m_pRubyIsAbove(0)
     , m_FrameDepend(this, 0)
     , m_pFrameFmt(0)
     , m_ePortionType(eType)
@@ -102,10 +98,6 @@ SwXTextPortion::SwXTextPortion(
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
-    , m_pRubyText(0)
-    , m_pRubyStyle(0)
-    , m_pRubyAdjust(0)
-    , m_pRubyIsAbove(0)
     , m_FrameDepend(this, &rFmt)
     , m_pFrameFmt(&rFmt)
     , m_ePortionType(PORTION_FRAME)

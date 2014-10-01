@@ -481,7 +481,7 @@ class SwCellFrm;
 class SW_DLLPUBLIC SwTableCellInfo : public ::boost::noncopyable
 {
     struct Impl;
-    ::std::auto_ptr<Impl> m_pImpl;
+    ::std::unique_ptr<Impl> m_pImpl;
 
     const SwCellFrm * getCellFrm() const ;
 
