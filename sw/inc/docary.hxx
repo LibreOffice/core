@@ -60,11 +60,18 @@ public:
     virtual ~SwFmtsBase() = 0;
 };
 
-class SwGrfFmtColls : public std::vector<SwGrfFmtColl*>, public SwFmtsBase
+class SwGrfFmtColls : public SwFmtsBase
 {
+private:
+    std::vector<SwGrfFmtColl*> mvColls;
+
 public:
     virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
     virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
+    size_t size() const { return mvColls.size(); }
+    SwGrfFmtColl *operator[](size_t idx) const { return mvColls[idx]; }
+    void push_back(SwGrfFmtColl* pColl) { mvColls.push_back(pColl); }
+    void DeleteAndDestroy(int nStartIdx, int nEndIdx);
     sal_uInt16 GetPos(const SwGrfFmtColl* pFmt) const;
     /// free's any remaining child objects
     virtual ~SwGrfFmtColls() {}

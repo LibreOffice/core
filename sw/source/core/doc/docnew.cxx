@@ -406,16 +406,6 @@ static void DeleteAndDestroy(SwCharFmts& rFmts, int aStartIdx, int aEndIdx)
     rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
 }
 
-static void DeleteAndDestroy(SwGrfFmtColls& rFmts, int aStartIdx, int aEndIdx)
-{
-    if (aEndIdx < aStartIdx)
-        return;
-    for( SwGrfFmtColls::const_iterator it = rFmts.begin() + aStartIdx;
-         it != rFmts.begin() + aEndIdx; ++it )
-             delete *it;
-    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
-}
-
 /**
  * Speciality: a member of the class SwDoc is located at
  * position 0 in the array of the Format and GDI objects.
@@ -557,7 +547,7 @@ SwDoc::~SwDoc()
     OSL_ENSURE( mpDfltGrfFmtColl == (*mpGrfFmtCollTbl)[0],
             "DefaultGrfCollection must always be at the start" );
 
-    DeleteAndDestroy(*mpGrfFmtCollTbl, 1, mpGrfFmtCollTbl->size());
+    mpGrfFmtCollTbl->DeleteAndDestroy(1, mpGrfFmtCollTbl->size());
     delete mpGrfFmtCollTbl;
 
     // Without explicitly freeing the DocumentDeviceManager
@@ -747,7 +737,7 @@ void SwDoc::ClearDoc()
     if( 2 < mpTxtFmtCollTbl->size() )
         DeleteAndDestroy(*mpTxtFmtCollTbl, 2, mpTxtFmtCollTbl->size());
     DeleteAndDestroy(*mpTxtFmtCollTbl, 1, mpTxtFmtCollTbl->size());
-    DeleteAndDestroy(*mpGrfFmtCollTbl, 1, mpGrfFmtCollTbl->size());
+    mpGrfFmtCollTbl->DeleteAndDestroy(1, mpGrfFmtCollTbl->size());
     DeleteAndDestroy(*mpCharFmtTbl, 1, mpCharFmtTbl->size());
 
     if( getIDocumentLayoutAccess().GetCurrentViewShell() )
@@ -1176,10 +1166,20 @@ sal_uInt16 SwTxtFmtColls::GetPos(const SwTxtFmtColl* p) const
     return it == end() ? USHRT_MAX : it - begin();
 }
 
+void SwGrfFmtColls::DeleteAndDestroy(int nStartIdx, int nEndIdx)
+{
+    if (nEndIdx < nStartIdx)
+        return;
+    for( std::vector<SwGrfFmtColl*>::const_iterator it = mvColls.begin() + nStartIdx;
+         it != mvColls.begin() + nEndIdx; ++it )
+             delete *it;
+    mvColls.erase( mvColls.begin() + nStartIdx, mvColls.begin() + nEndIdx);
+}
+
 sal_uInt16 SwGrfFmtColls::GetPos(const SwGrfFmtColl* p) const
 {
-    const_iterator it = std::find(begin(), end(), p);
-    return it == end() ? USHRT_MAX : it - begin();
+    std::vector<SwGrfFmtColl*>::const_iterator it = std::find(mvColls.begin(), mvColls.end(), p);
+    return it == mvColls.end() ? USHRT_MAX : it - mvColls.begin();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
