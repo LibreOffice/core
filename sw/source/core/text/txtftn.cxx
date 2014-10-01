@@ -461,8 +461,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                 //    -> Ftn wandert in den PrevFollow
                 // beide muessen auf einer Seite/in einer Spalte stehen.
 
-                SwFtnFrm *pFtnFrm = bEndn ? SwFtnBossFrm::FindFtn( pSource, pFtn ) :
-                                            SwFtnBossFrm::FindFtn( pSource, pFtn );
+                SwFtnFrm *pFtnFrm = SwFtnBossFrm::FindFtn(pSource, pFtn);
 
                 if( pFtnFrm )
                 {
