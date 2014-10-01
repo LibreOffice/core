@@ -62,7 +62,7 @@ public class GeckoLayerClient implements LayerView.Listener {
     private boolean mRecordDrawTimes;
     private DrawTimingQueue mDrawTimingQueue;
 
-    private MultiTileLayer mRootLayer;
+    private DynamicTileLayer mRootLayer;
 
     /* The viewport that Gecko is currently displaying. */
     private ImmutableViewportMetrics mGeckoViewport;
@@ -88,7 +88,7 @@ public class GeckoLayerClient implements LayerView.Listener {
 
         mLayerController = layerController;
 
-        mRootLayer = new MultiTileLayer();
+        mRootLayer = new DynamicTileLayer();
 
         view.setListener(this);
         layerController.setRoot(mRootLayer);
