@@ -71,7 +71,6 @@ public class GeckoLayerClient implements LayerView.Listener {
     private ImmutableViewportMetrics mNewGeckoViewport;
     private Context mContext;
     private boolean mPendingViewportAdjust;
-    private boolean mViewportSizeChanged;
 
     public GeckoLayerClient(Context context) {
         mContext = context;
@@ -147,8 +146,6 @@ public class GeckoLayerClient implements LayerView.Listener {
 
     /* Informs Gecko that the screen size has changed. */
     private void sendResizeEventIfNecessary(boolean force) {
-        Log.e(LOGTAG, "### sendResizeEventIfNecessary " + force);
-
         DisplayMetrics metrics = new DisplayMetrics();
         LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         View view = mLayerController.getView();
@@ -183,7 +180,6 @@ public class GeckoLayerClient implements LayerView.Listener {
 
     public void viewportSizeChanged() {
         sendResizeEventIfNecessary(true);
-        LOKitShell.viewSizeChanged();
     }
 
     void adjustViewport(DisplayPortMetrics displayPort) {
@@ -204,10 +200,6 @@ public class GeckoLayerClient implements LayerView.Listener {
         }
 
         LOKitShell.sendEvent(LOEventFactory.viewport(clampedMetrics));
-        if (mViewportSizeChanged) {
-            mViewportSizeChanged = false;
-            LOKitShell.viewSizeChanged();
-        }
     }
 
     /** This function is invoked by Gecko via JNI; be careful when modifying signature.
