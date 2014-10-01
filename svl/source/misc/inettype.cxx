@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
+#include <o3tl/ptr_container.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/inetmime.hxx>
 #include <rtl/instance.hxx>
@@ -462,17 +467,21 @@ INetContentType Registration::RegisterContentType(OUString const & rTypeName,
         pTypeIDMapEntry->m_aSystemFileType = *pSystemFileType;
     rRegistration.m_aTypeIDMap.insert( ::std::make_pair( eTypeID, pTypeIDMapEntry ) );
 
-    std::auto_ptr<TypeNameMapEntry> pTypeNameMapEntry(new TypeNameMapEntry());
+    std::unique_ptr<TypeNameMapEntry> pTypeNameMapEntry(new TypeNameMapEntry());
     if (pExtension)
         pTypeNameMapEntry->m_aExtension = *pExtension;
     pTypeNameMapEntry->m_eTypeID = eTypeID;
-    rRegistration.m_aTypeNameMap.insert(aTheTypeName, pTypeNameMapEntry);
+    o3tl::ptr_container::insert(
+        rRegistration.m_aTypeNameMap, aTheTypeName,
+        std::move(pTypeNameMapEntry));
 
     if (pExtension)
     {
-        std::auto_ptr<ExtensionMapEntry> pExtensionMapEntry(new ExtensionMapEntry());
+        std::unique_ptr<ExtensionMapEntry> pExtensionMapEntry(new ExtensionMapEntry());
         pExtensionMapEntry->m_eTypeID = eTypeID;
-        rRegistration.m_aExtensionMap.insert(*pExtension, pExtensionMapEntry);
+        o3tl::ptr_container::insert(
+            rRegistration.m_aExtensionMap, *pExtension,
+            std::move(pExtensionMapEntry));
     }
 
     return eTypeID;
