@@ -116,9 +116,7 @@ public class OfficeUtil implements OfficeConstants {
         }
 
         // Now create and populate an array to return the nodes in.
-        Node nodes[] = new Node[nodeVec.size()];
-        for (int i = 0; i < nodeVec.size(); i++)
-            nodes[i] = nodeVec.get(i);
+        Node nodes[] = nodeVec.toArray(new Node[nodeVec.size()]);
         return nodes;
     }
 }
