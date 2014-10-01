@@ -478,7 +478,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
         case KEY_DELETE:
         {
             if(!rCursor.HasSelection()){
-                rCursor.Move(this, nCode == KEY_DELETE ? MoveRight : MoveLeft, false);
+                rCursor.Move(this, MoveRight, false);
                 if(rCursor.HasComplexSelection()) break;
             }
             rCursor.Delete();
