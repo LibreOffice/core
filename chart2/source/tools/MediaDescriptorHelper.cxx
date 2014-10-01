@@ -192,6 +192,8 @@ void MediaDescriptorHelper::impl_init()
 
     ISSET_WinExtent = false;
 
+    ISSET_SetEmbedded = false;
+
     ISSET_Storage = false;
     ISSET_Stream = false;
 }
