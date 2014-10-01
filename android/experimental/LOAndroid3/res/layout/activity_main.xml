@@ -22,7 +22,8 @@
             android:id="@+id/loadingPanel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center" >
+            android:gravity="center"
+            android:background="#9333">
 
             <ProgressBar
                 android:layout_width="wrap_content"
