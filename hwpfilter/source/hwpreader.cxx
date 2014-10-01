@@ -2918,7 +2918,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         }
         else if (para->hhstr[n]->hh == CH_FIELD)
         {
-            FieldCode *hbox = (FieldCode *) para->hhstr[n];
+            FieldCode *hbox = static_cast<FieldCode *>(para->hhstr[n]);
             if( hbox->location_info == 1)
             {
                 if( !pstart ) {STARTP;}
@@ -2954,7 +2954,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeBookmark((Bookmark *) para->hhstr[n]);
+                    makeBookmark(static_cast<Bookmark *>(para->hhstr[n]));
                     break;
                 case CH_DATE_FORM:                // 7
                     break;
@@ -2962,7 +2962,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeDateCode((DateCode *) para->hhstr[n]);
+                    makeDateCode(static_cast<DateCode *>(para->hhstr[n]));
                     break;
                 case CH_TAB:                      // 9
                     if( !pstart ) {STARTP;}
@@ -2971,12 +2971,12 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                         if( !tstart ) {STARTT;}
                         makeChars(str);
                     }
-                    makeTab((Tab *) para->hhstr[n]);
+                    makeTab(static_cast<Tab *>(para->hhstr[n]));
                     break;
                 case CH_TEXT_BOX:                 /* 10 - 표/텍스트박스/수식/버튼/하이퍼텍스트 순 */
                 {
 /* 일단은 표만 처리하고, 수식은 text:p안에 들어가는 것으로 처리. */
-                    TxtBox *hbox = (TxtBox *) para->hhstr[n];
+                    TxtBox *hbox = static_cast<TxtBox *>(para->hhstr[n]);
 
                     if( hbox->style.anchor_type == 0 )
                     {
@@ -3010,7 +3010,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 }
                 case CH_PICTURE:                  // 11
                 {
-                    Picture *hbox = (Picture *) para->hhstr[n];
+                    Picture *hbox = static_cast<Picture *>(para->hhstr[n]);
                     if( hbox->style.anchor_type == 0 )
                     {
                         if( !pstart ) {STARTP;}
@@ -3032,7 +3032,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 }
                 case CH_LINE:                     // 14
                 {
-                    Line *hbox = (Line *) para->hhstr[n];
+                    Line *hbox = static_cast<Line *>(para->hhstr[n]);
                     if (str.size() > 0)
                     {
                         if( !pstart ) {STARTP;}
@@ -3049,19 +3049,19 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeHidden((Hidden *) para->hhstr[n]);
+                    makeHidden(static_cast<Hidden *>(para->hhstr[n]));
                     break;
                 case CH_FOOTNOTE:                 // 17
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeFootnote((Footnote *) para->hhstr[n]);
+                    makeFootnote(static_cast<Footnote *>(para->hhstr[n]));
                     break;
                 case CH_AUTO_NUM:                 // 18
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeAutoNum((AutoNum *) para->hhstr[n]);
+                    makeAutoNum(static_cast<AutoNum *>(para->hhstr[n]));
                     break;
                 case CH_NEW_NUM:                  // 19 -skip
                     break;
@@ -3071,7 +3071,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeMailMerge((MailMerge *) para->hhstr[n]);
+                    makeMailMerge(static_cast<MailMerge *>(para->hhstr[n]));
                     break;
                 case CH_COMPOSE:                  /* 23 - 글자겹침 */
                     break;
@@ -3081,19 +3081,19 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeTocMark((TocMark *) para->hhstr[n]);
+                    makeTocMark(static_cast<TocMark *>(para->hhstr[n]));
                     break;
                 case CH_INDEX_MARK:               // 26
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeIndexMark((IndexMark *) para->hhstr[n]);
+                    makeIndexMark(static_cast<IndexMark *>(para->hhstr[n]));
                     break;
                 case CH_OUTLINE:                  // 28
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeOutline((Outline *) para->hhstr[n]);
+                    makeOutline(static_cast<Outline *>(para->hhstr[n]));
                     break;
                      case CH_FIXED_SPACE:
                      case CH_KEEP_SPACE:

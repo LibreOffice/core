@@ -136,7 +136,7 @@ void OleEmbeddedObject::MoveListeners()
                     {
                         try
                         {
-                            xWrappedObject->addStateChangeListener( (embed::XStateChangeListener*)pIterator.next() );
+                            xWrappedObject->addStateChangeListener( static_cast<embed::XStateChangeListener*>(pIterator.next()) );
                         }
                         catch( const uno::RuntimeException& )
                         {
@@ -161,7 +161,7 @@ void OleEmbeddedObject::MoveListeners()
                     {
                         try
                         {
-                            xWrappedObject->addEventListener( (document::XEventListener*)pIterator.next() );
+                            xWrappedObject->addEventListener( static_cast<document::XEventListener*>(pIterator.next()) );
                         }
                         catch( const uno::RuntimeException& )
                         {
@@ -186,7 +186,7 @@ void OleEmbeddedObject::MoveListeners()
                     {
                         try
                         {
-                            xWrappedObject->addCloseListener( (util::XCloseListener*)pIterator.next() );
+                            xWrappedObject->addCloseListener( static_cast<util::XCloseListener*>(pIterator.next()) );
                         }
                         catch( const uno::RuntimeException& )
                         {

@@ -175,7 +175,7 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
             {
                 try
                 {
-                    ((document::XEventListener*)pIterator.next())->notifyEvent( aEvent );
+                    static_cast<document::XEventListener*>(pIterator.next())->notifyEvent( aEvent );
                 }
                 catch( const uno::RuntimeException& )
                 {
@@ -479,7 +479,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
             {
                 try
                 {
-                    ((util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
+                    static_cast<util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
                 }
                 catch( const uno::RuntimeException& )
                 {
@@ -497,7 +497,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
             {
                 try
                 {
-                    ((util::XCloseListener*)pCloseIterator.next())->notifyClosing( aSource );
+                    static_cast<util::XCloseListener*>(pCloseIterator.next())->notifyClosing( aSource );
                 }
                 catch( const uno::RuntimeException& )
                 {

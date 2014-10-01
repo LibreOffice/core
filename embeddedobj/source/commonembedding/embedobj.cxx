@@ -132,9 +132,9 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sa
                 try
                 {
                     if ( bBeforeChange )
-                        ((embed::XStateChangeListener*)pIterator.next())->changingState( aSource, nOldState, nNewState );
+                        static_cast<embed::XStateChangeListener*>(pIterator.next())->changingState( aSource, nOldState, nNewState );
                     else
-                        ((embed::XStateChangeListener*)pIterator.next())->stateChanged( aSource, nOldState, nNewState );
+                        static_cast<embed::XStateChangeListener*>(pIterator.next())->stateChanged( aSource, nOldState, nNewState );
                 }
                 catch( const uno::Exception& )
                 {
