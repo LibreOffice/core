@@ -111,6 +111,19 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 drawing::TextVerticalAdjust eAdjust = drawingml::GetTextVerticalAdjust(rAttribs.getToken(XML_anchor, XML_t));
                 xPropertySet->setPropertyValue("TextVerticalAdjust", uno::makeAny(eAdjust));
             }
+
+            // Apply character color of the shape to the shape's textbox.
+            uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
+            uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+            xTextCursor->gotoStart(false);
+            xTextCursor->gotoEnd(true);
+            const uno::Reference<beans::XPropertyState> xPropertyState(xTextCursor, uno::UNO_QUERY);
+            const beans::PropertyState ePropertyState = xPropertyState->getPropertyState("CharColor");
+            if (ePropertyState == beans::PropertyState_DEFAULT_VALUE)
+            {
+                uno::Reference<beans::XPropertySet> xTextBoxPropertySet(xTextCursor, uno::UNO_QUERY);
+                xTextBoxPropertySet->setPropertyValue("CharColor", xPropertySet->getPropertyValue("CharColor"));
+            }
             return this;
         }
         break;

@@ -1013,10 +1013,10 @@ Reference< XShape > Shape::createAndInsert(
         else if( getTextBody() )
             getTextBody()->getTextProperties().pushVertSimulation();
 
+        PropertySet aPropertySet(mxShape);
         if ( !bUseRotationTransform && mnRotation != 0 )
         {
             // use the same logic for rotation from VML exporter (SimpleShape::implConvertAndInsert at vmlshape.cxx)
-            PropertySet aPropertySet( mxShape );
             aPropertySet.setAnyProperty( PROP_RotateAngle, makeAny( sal_Int32( NormAngle360( mnRotation / -600 ) ) ) );
             aPropertySet.setAnyProperty( PROP_HoriOrientPosition, makeAny( maPosition.X ) );
             aPropertySet.setAnyProperty( PROP_VertOrientPosition, makeAny( maPosition.Y ) );
@@ -1040,6 +1040,16 @@ Reference< XShape > Shape::createAndInsert(
 
                 Reference < XTextCursor > xAt = xText->createTextCursor();
                 getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
+            }
+        }
+        else if (mbTextBox)
+        {
+            // No drawingML text, but WPS text is expected: save the theme
+            // character color on the shape, then.
+            if(const ShapeStyleRef* pFontRef = getShapeStyleRef(XML_fontRef))
+            {
+                sal_Int32 nCharColor = pFontRef->maPhClr.getColor(rGraphicHelper);
+                aPropertySet.setAnyProperty(PROP_CharColor, uno::makeAny(nCharColor));
             }
         }
     }

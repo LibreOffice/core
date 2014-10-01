@@ -360,6 +360,13 @@ DECLARE_OOXMLEXPORT_TEST(testMsoPosition, "bnc884615-mso-position.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testWpsCharColor, "wps-char-color.docx")
+{
+    uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
+    // This was -1, i.e. the character color was default (-1), not white.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xShape->getStart(), "CharColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
