@@ -77,7 +77,6 @@ friend class SfxTabDialogController;
     PushButton* m_pBaseFmtBtn;
 
     bool m_bOwnsOKBtn;
-    bool m_bOwnsUserBtn;
     bool m_bOwnsCancelBtn;
     bool m_bOwnsHelpBtn;
     bool m_bOwnsResetBtn;
