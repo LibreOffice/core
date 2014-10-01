@@ -1246,11 +1246,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     getAppleScrollBarVariant(aStyleSettings);
 
     // set scrollbar size
-#if MACOSX_SDK_VERSION >= 1070
     aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidthForControlSize:NSRegularControlSize scrollerStyle:NSScrollerStyleLegacy]) );
-#else
-    aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidth]) );
-#endif
     // images in menus false for MacOSX
     aStyleSettings.SetPreferredUseImagesInMenus( false );
     aStyleSettings.SetHideDisabledMenuItems( true );

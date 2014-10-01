@@ -20,9 +20,6 @@
 #include <typeinfo>
 
 #include <dlfcn.h>
-#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
-#include <cxxabi.h>
-#endif
 
 #include <boost/static_assert.hpp>
 #include <boost/unordered_map.hpp>
@@ -58,31 +55,15 @@ BOOST_STATIC_ASSERT(
 
 struct Fake_class_type_info: Fake_type_info {};
 
-#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
-BOOST_STATIC_ASSERT(
-    sizeof (Fake_class_type_info) == sizeof (__cxxabiv1::__class_type_info));
-#endif
-
 struct Fake_si_class_type_info: Fake_class_type_info {
     void const * base;
 };
-
-#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
-BOOST_STATIC_ASSERT(
-    sizeof (Fake_si_class_type_info)
-    == sizeof (__cxxabiv1::__si_class_type_info));
-#endif
 
 struct Base {};
 struct Derived: Base {};
 
 std::type_info * createFake_class_type_info(char const * name) {
     char * buf = new char[sizeof (Fake_class_type_info)];
-#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
-    assert(
-        dynamic_cast<__cxxabiv1::__class_type_info const *>(&typeid(Base))
-        != 0);
-#endif
     *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
         &typeid(Base));
         // copy __cxxabiv1::__class_type_info vtable into place
@@ -99,11 +80,6 @@ std::type_info * createFake_si_class_type_info(
     char const * name, std::type_info const * base)
 {
     char * buf = new char[sizeof (Fake_si_class_type_info)];
-#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
-    assert(
-        dynamic_cast<__cxxabiv1::__si_class_type_info const *>(&typeid(Derived))
-        != 0);
-#endif
     *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
         &typeid(Derived));
         // copy __cxxabiv1::__si_class_type_info vtable into place

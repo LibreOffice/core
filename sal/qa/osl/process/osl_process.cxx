@@ -466,7 +466,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
     //TODO: Repair these (at least under Windows)
-#if !defined(WNT) && !(defined(MACOSX) && (MACOSX_SDK_VERSION < 1060))
+#if !defined(WNT)
     CPPUNIT_TEST(osl_execProc_parent_equals_child_environment);
     CPPUNIT_TEST(osl_execProc_merged_child_environment);
 #endif
