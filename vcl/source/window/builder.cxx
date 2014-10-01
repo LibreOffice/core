@@ -1746,7 +1746,7 @@ vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClas
         //toplevels default to resizable and apparently you can't change them
         //afterwards, so we need to wait until now before we can truly
         //initialize the dialog.
-        if (pParent->IsSystemWindow())
+        if (pParent && pParent->IsSystemWindow())
         {
             SystemWindow *pSysWin = static_cast<SystemWindow*>(pCurrentChild);
             pSysWin->doDeferredInit(extractDeferredBits(rProps));
