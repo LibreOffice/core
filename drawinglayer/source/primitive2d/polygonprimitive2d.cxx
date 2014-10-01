@@ -50,7 +50,7 @@ namespace drawinglayer
         {
             if(BasePrimitive2D::operator==(rPrimitive))
             {
-                const PolygonHairlinePrimitive2D& rCompare = (PolygonHairlinePrimitive2D&)rPrimitive;
+                const PolygonHairlinePrimitive2D& rCompare = static_cast<const PolygonHairlinePrimitive2D&>(rPrimitive);
 
                 return (getB2DPolygon() == rCompare.getB2DPolygon()
                     && getBColor() == rCompare.getBColor());
@@ -143,7 +143,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const PolygonMarkerPrimitive2D& rCompare = (PolygonMarkerPrimitive2D&)rPrimitive;
+                const PolygonMarkerPrimitive2D& rCompare = static_cast<const PolygonMarkerPrimitive2D&>(rPrimitive);
 
                 return (getB2DPolygon() == rCompare.getB2DPolygon()
                     && getRGBColorA() == rCompare.getRGBColorA()
@@ -321,7 +321,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const PolygonStrokePrimitive2D& rCompare = (PolygonStrokePrimitive2D&)rPrimitive;
+                const PolygonStrokePrimitive2D& rCompare = static_cast<const PolygonStrokePrimitive2D&>(rPrimitive);
 
                 return (getB2DPolygon() == rCompare.getB2DPolygon()
                     && getLineAttribute() == rCompare.getLineAttribute()
@@ -475,7 +475,7 @@ namespace drawinglayer
         {
             if(PolygonStrokePrimitive2D::operator==(rPrimitive))
             {
-                const PolygonWavePrimitive2D& rCompare = (PolygonWavePrimitive2D&)rPrimitive;
+                const PolygonWavePrimitive2D& rCompare = static_cast<const PolygonWavePrimitive2D&>(rPrimitive);
 
                 return (getWaveWidth() == rCompare.getWaveWidth()
                     && getWaveHeight() == rCompare.getWaveHeight());
@@ -619,7 +619,7 @@ namespace drawinglayer
         {
             if(PolygonStrokePrimitive2D::operator==(rPrimitive))
             {
-                const PolygonStrokeArrowPrimitive2D& rCompare = (PolygonStrokeArrowPrimitive2D&)rPrimitive;
+                const PolygonStrokeArrowPrimitive2D& rCompare = static_cast<const PolygonStrokeArrowPrimitive2D&>(rPrimitive);
 
                 return (getStart() == rCompare.getStart()
                     && getEnd() == rCompare.getEnd());

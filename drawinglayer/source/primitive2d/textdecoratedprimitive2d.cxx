@@ -362,7 +362,7 @@ namespace drawinglayer
         {
             if(TextSimplePortionPrimitive2D::operator==(rPrimitive))
             {
-                const TextDecoratedPortionPrimitive2D& rCompare = (TextDecoratedPortionPrimitive2D&)rPrimitive;
+                const TextDecoratedPortionPrimitive2D& rCompare = static_cast<const TextDecoratedPortionPrimitive2D&>(rPrimitive);
 
                 return (getOverlineColor() == rCompare.getOverlineColor()
                     && getTextlineColor() == rCompare.getTextlineColor()

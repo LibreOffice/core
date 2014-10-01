@@ -200,7 +200,7 @@ namespace drawinglayer
         {
             if(BasePrimitive2D::operator==(rPrimitive))
             {
-                const TextEffectPrimitive2D& rCompare = (TextEffectPrimitive2D&)rPrimitive;
+                const TextEffectPrimitive2D& rCompare = static_cast<const TextEffectPrimitive2D&>(rPrimitive);
 
                 return (getTextContent() == rCompare.getTextContent()
                     && getRotationCenter() == rCompare.getRotationCenter()

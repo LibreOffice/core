@@ -328,7 +328,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const FillGradientPrimitive2D& rCompare = (FillGradientPrimitive2D&)rPrimitive;
+                const FillGradientPrimitive2D& rCompare = static_cast<const FillGradientPrimitive2D&>(rPrimitive);
 
                 return (getOutputRange() == rCompare.getOutputRange()
                     && getDefinitionRange() == rCompare.getDefinitionRange()

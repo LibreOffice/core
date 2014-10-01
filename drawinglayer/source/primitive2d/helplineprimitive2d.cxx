@@ -164,7 +164,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const HelplinePrimitive2D& rCompare = (HelplinePrimitive2D&)rPrimitive;
+                const HelplinePrimitive2D& rCompare = static_cast<const HelplinePrimitive2D&>(rPrimitive);
 
                 return (getPosition() == rCompare.getPosition()
                     && getDirection() == rCompare.getDirection()

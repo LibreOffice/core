@@ -46,7 +46,7 @@ namespace drawinglayer
         {
             if(BorderLinePrimitive2D::operator==(rPrimitive))
             {
-                const ClippedBorderLinePrimitive2D& rCompare = (ClippedBorderLinePrimitive2D&)rPrimitive;
+                const ClippedBorderLinePrimitive2D& rCompare = static_cast<const ClippedBorderLinePrimitive2D&>(rPrimitive);
 
                 return maIntersection == rCompare.maIntersection;
             }

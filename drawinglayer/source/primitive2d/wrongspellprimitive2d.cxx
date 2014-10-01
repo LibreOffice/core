@@ -90,7 +90,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const WrongSpellPrimitive2D& rCompare = (WrongSpellPrimitive2D&)rPrimitive;
+                const WrongSpellPrimitive2D& rCompare = static_cast<const WrongSpellPrimitive2D&>(rPrimitive);
 
                 return (getTransformation() == rCompare.getTransformation()
                     && getStart() == rCompare.getStart()

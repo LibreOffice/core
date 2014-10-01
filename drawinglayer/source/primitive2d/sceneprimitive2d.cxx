@@ -418,7 +418,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const ScenePrimitive2D& rCompare = (ScenePrimitive2D&)rPrimitive;
+                const ScenePrimitive2D& rCompare = static_cast<const ScenePrimitive2D&>(rPrimitive);
 
                 return (primitive3d::arePrimitive3DSequencesEqual(getChildren3D(), rCompare.getChildren3D())
                     && getSdrSceneAttribute() == rCompare.getSdrSceneAttribute()

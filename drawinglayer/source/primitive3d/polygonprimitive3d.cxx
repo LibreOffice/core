@@ -47,7 +47,7 @@ namespace drawinglayer
         {
             if(BasePrimitive3D::operator==(rPrimitive))
             {
-                const PolygonHairlinePrimitive3D& rCompare = (PolygonHairlinePrimitive3D&)rPrimitive;
+                const PolygonHairlinePrimitive3D& rCompare = static_cast<const PolygonHairlinePrimitive3D&>(rPrimitive);
 
                 return (getB3DPolygon() == rCompare.getB3DPolygon()
                     && getBColor() == rCompare.getBColor());
@@ -144,7 +144,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive3D::operator==(rPrimitive))
             {
-                const PolygonStrokePrimitive3D& rCompare = (PolygonStrokePrimitive3D&)rPrimitive;
+                const PolygonStrokePrimitive3D& rCompare = static_cast<const PolygonStrokePrimitive3D&>(rPrimitive);
 
                 return (getB3DPolygon() == rCompare.getB3DPolygon()
                     && getLineAttribute() == rCompare.getLineAttribute()

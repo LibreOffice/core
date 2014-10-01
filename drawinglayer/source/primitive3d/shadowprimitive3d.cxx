@@ -48,7 +48,7 @@ namespace drawinglayer
         {
             if(GroupPrimitive3D::operator==(rPrimitive))
             {
-                const ShadowPrimitive3D& rCompare = (ShadowPrimitive3D&)rPrimitive;
+                const ShadowPrimitive3D& rCompare = static_cast<const ShadowPrimitive3D&>(rPrimitive);
 
                 return (getShadowTransform() == rCompare.getShadowTransform()
                     && getShadowColor() == rCompare.getShadowColor()

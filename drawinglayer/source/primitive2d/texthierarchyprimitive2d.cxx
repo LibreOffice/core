@@ -112,7 +112,7 @@ namespace drawinglayer
         {
             if(GroupPrimitive2D::operator==(rPrimitive))
             {
-                const TextHierarchyFieldPrimitive2D& rCompare = (TextHierarchyFieldPrimitive2D&)rPrimitive;
+                const TextHierarchyFieldPrimitive2D& rCompare = static_cast<const TextHierarchyFieldPrimitive2D&>(rPrimitive);
 
                 return (getType() == rCompare.getType()
                     &&  getString() == rCompare.getString());

@@ -75,7 +75,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const PolyPolygonHairlinePrimitive2D& rCompare = (PolyPolygonHairlinePrimitive2D&)rPrimitive;
+                const PolyPolygonHairlinePrimitive2D& rCompare = static_cast<const PolyPolygonHairlinePrimitive2D&>(rPrimitive);
 
                 return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
                     && getBColor() == rCompare.getBColor());
@@ -146,7 +146,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const PolyPolygonMarkerPrimitive2D& rCompare = (PolyPolygonMarkerPrimitive2D&)rPrimitive;
+                const PolyPolygonMarkerPrimitive2D& rCompare = static_cast<const PolyPolygonMarkerPrimitive2D&>(rPrimitive);
 
                 return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
                     && getRGBColorA() == rCompare.getRGBColorA()
@@ -224,7 +224,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const PolyPolygonStrokePrimitive2D& rCompare = (PolyPolygonStrokePrimitive2D&)rPrimitive;
+                const PolyPolygonStrokePrimitive2D& rCompare = static_cast<const PolyPolygonStrokePrimitive2D&>(rPrimitive);
 
                 return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
                     && getLineAttribute() == rCompare.getLineAttribute()
@@ -273,7 +273,7 @@ namespace drawinglayer
         {
             if(BasePrimitive2D::operator==(rPrimitive))
             {
-                const PolyPolygonColorPrimitive2D& rCompare = (PolyPolygonColorPrimitive2D&)rPrimitive;
+                const PolyPolygonColorPrimitive2D& rCompare = static_cast<const PolyPolygonColorPrimitive2D&>(rPrimitive);
 
                 return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
                     && getBColor() == rCompare.getBColor());
@@ -350,7 +350,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const PolyPolygonGradientPrimitive2D& rCompare = (PolyPolygonGradientPrimitive2D&)rPrimitive;
+                const PolyPolygonGradientPrimitive2D& rCompare = static_cast<const PolyPolygonGradientPrimitive2D&>(rPrimitive);
 
                 return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
                     && getDefinitionRange() == rCompare.getDefinitionRange()
@@ -427,7 +427,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const PolyPolygonHatchPrimitive2D& rCompare = (PolyPolygonHatchPrimitive2D&)rPrimitive;
+                const PolyPolygonHatchPrimitive2D& rCompare = static_cast<const PolyPolygonHatchPrimitive2D&>(rPrimitive);
 
                 return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
                     && getDefinitionRange() == rCompare.getDefinitionRange()
@@ -556,7 +556,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const PolyPolygonGraphicPrimitive2D& rCompare = (PolyPolygonGraphicPrimitive2D&)rPrimitive;
+                const PolyPolygonGraphicPrimitive2D& rCompare = static_cast<const PolyPolygonGraphicPrimitive2D&>(rPrimitive);
 
                 return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
                     && getDefinitionRange() == rCompare.getDefinitionRange()
@@ -642,7 +642,7 @@ namespace drawinglayer
         {
             if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
             {
-                const PolyPolygonSelectionPrimitive2D& rCompare = (PolyPolygonSelectionPrimitive2D&)rPrimitive;
+                const PolyPolygonSelectionPrimitive2D& rCompare = static_cast<const PolyPolygonSelectionPrimitive2D&>(rPrimitive);
 
                 return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
                     && getColor() == rCompare.getColor()

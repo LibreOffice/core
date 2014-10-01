@@ -342,7 +342,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const BorderLinePrimitive2D& rCompare = (BorderLinePrimitive2D&)rPrimitive;
+                const BorderLinePrimitive2D& rCompare = static_cast<const BorderLinePrimitive2D&>(rPrimitive);
 
                 return (getStart() == rCompare.getStart()
                     && getEnd() == rCompare.getEnd()

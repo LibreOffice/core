@@ -44,7 +44,7 @@ namespace drawinglayer
         {
             if(BasePrimitive2D::operator==(rPrimitive))
             {
-                const PointArrayPrimitive2D& rCompare = (PointArrayPrimitive2D&)rPrimitive;
+                const PointArrayPrimitive2D& rCompare = static_cast<const PointArrayPrimitive2D&>(rPrimitive);
 
                 return (getPositions() == rCompare.getPositions()
                     && getRGBColor() == rCompare.getRGBColor());

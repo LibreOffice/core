@@ -285,7 +285,7 @@ namespace drawinglayer
         {
             if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
             {
-                const DiscreteShadowPrimitive2D& rCompare = (DiscreteShadowPrimitive2D&)rPrimitive;
+                const DiscreteShadowPrimitive2D& rCompare = static_cast<const DiscreteShadowPrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
                     && getDiscreteShadow() == rCompare.getDiscreteShadow());

@@ -42,7 +42,7 @@ namespace drawinglayer
         {
             if(GroupPrimitive2D::operator==(rPrimitive))
             {
-                const TransparencePrimitive2D& rCompare = (TransparencePrimitive2D&)rPrimitive;
+                const TransparencePrimitive2D& rCompare = static_cast<const TransparencePrimitive2D&>(rPrimitive);
 
                 return (getTransparence() == rCompare.getTransparence());
             }

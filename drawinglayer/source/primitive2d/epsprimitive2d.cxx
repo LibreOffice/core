@@ -61,7 +61,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const EpsPrimitive2D& rCompare = (EpsPrimitive2D&)rPrimitive;
+                const EpsPrimitive2D& rCompare = static_cast<const EpsPrimitive2D&>(rPrimitive);
 
                 return (getEpsTransform() == rCompare.getEpsTransform()
                     && getGfxLink().IsEqual(rCompare.getGfxLink())

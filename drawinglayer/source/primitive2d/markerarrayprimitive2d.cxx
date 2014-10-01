@@ -91,7 +91,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const MarkerArrayPrimitive2D& rCompare = (MarkerArrayPrimitive2D&)rPrimitive;
+                const MarkerArrayPrimitive2D& rCompare = static_cast<const MarkerArrayPrimitive2D&>(rPrimitive);
 
                 return (getPositions() == rCompare.getPositions()
                     && getMarker() == rCompare.getMarker());

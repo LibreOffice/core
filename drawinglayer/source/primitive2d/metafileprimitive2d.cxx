@@ -1655,7 +1655,7 @@ namespace
 
                     while(META_PIXEL_ACTION == pAction->GetType() && nAction < nCount)
                     {
-                        const MetaPixelAction* pA = (const MetaPixelAction*)pAction;
+                        const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pAction);
 
                         if(pA->GetColor() != aLastColor)
                         {
@@ -1691,7 +1691,7 @@ namespace
 
                         while(META_POINT_ACTION == pAction->GetType() && nAction < nCount)
                         {
-                            const MetaPointAction* pA = (const MetaPointAction*)pAction;
+                            const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
                             const Point& rPoint = pA->GetPoint();
                             aPositions.push_back(basegfx::B2DPoint(rPoint.X(), rPoint.Y()));
                             nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
@@ -1717,7 +1717,7 @@ namespace
 
                         while(META_LINE_ACTION == pAction->GetType() && nAction < nCount)
                         {
-                            const MetaLineAction* pA = (const MetaLineAction*)pAction;
+                            const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
                             const Point& rStartPoint = pA->GetStartPoint();
                             const Point& rEndPoint = pA->GetEndPoint();
                             const basegfx::B2DPoint aStart(rStartPoint.X(), rStartPoint.Y());
@@ -1766,7 +1766,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
-                        const MetaRectAction* pA = (const MetaRectAction*)pAction;
+                        const MetaRectAction* pA = static_cast<const MetaRectAction*>(pAction);
                         const Rectangle& rRectangle = pA->GetRect();
 
                         if(!rRectangle.IsEmpty())
@@ -1793,7 +1793,7 @@ namespace
                      */
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
-                        const MetaRoundRectAction* pA = (const MetaRoundRectAction*)pAction;
+                        const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pAction);
                         const Rectangle& rRectangle = pA->GetRect();
 
                         if(!rRectangle.IsEmpty())
@@ -1832,7 +1832,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
-                        const MetaEllipseAction* pA = (const MetaEllipseAction*)pAction;
+                        const MetaEllipseAction* pA = static_cast<const MetaEllipseAction*>(pAction);
                         const Rectangle& rRectangle = pA->GetRect();
 
                         if(!rRectangle.IsEmpty())
@@ -1856,7 +1856,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineColorActive())
                     {
-                        const MetaArcAction* pA = (const MetaArcAction*)pAction;
+                        const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
                         const Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC);
                         const basegfx::B2DPolygon aOutline(aToolsPoly.getB2DPolygon());
 
@@ -1870,7 +1870,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
-                        const MetaPieAction* pA = (const MetaPieAction*)pAction;
+                        const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
                         const Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE);
                         const basegfx::B2DPolygon aOutline(aToolsPoly.getB2DPolygon());
 
@@ -1884,7 +1884,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
-                        const MetaChordAction* pA = (const MetaChordAction*)pAction;
+                        const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
                         const Polygon aToolsPoly(pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD);
                         const basegfx::B2DPolygon aOutline(aToolsPoly.getB2DPolygon());
 
@@ -1898,7 +1898,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineColorActive())
                     {
-                        const MetaPolyLineAction* pA = (const MetaPolyLineAction*)pAction;
+                        const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pAction);
                         createLinePrimitive(pA->GetPolygon().getB2DPolygon(), pA->GetLineInfo(), rTargetHolders.Current(), rPropertyHolders.Current());
                     }
 
@@ -1909,7 +1909,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
-                        const MetaPolygonAction* pA = (const MetaPolygonAction*)pAction;
+                        const MetaPolygonAction* pA = static_cast<const MetaPolygonAction*>(pAction);
                         basegfx::B2DPolygon aOutline(pA->GetPolygon().getB2DPolygon());
 
                         // the metafile play interprets the polygons from MetaPolygonAction
@@ -1930,7 +1930,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
-                        const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*)pAction;
+                        const MetaPolyPolygonAction* pA = static_cast<const MetaPolyPolygonAction*>(pAction);
                         basegfx::B2DPolyPolygon aPolyPolygonOutline(pA->GetPolyPolygon().getB2DPolyPolygon());
 
                         // the metafile play interprets the single polygons from MetaPolyPolygonAction
@@ -1955,7 +1955,7 @@ namespace
                 case META_TEXT_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaTextAction* pA = (const MetaTextAction*)pAction;
+                    const MetaTextAction* pA = static_cast<const MetaTextAction*>(pAction);
                     sal_uInt32 nTextLength(pA->GetLen());
                     const sal_uInt32 nTextIndex(pA->GetIndex());
                     const sal_uInt32 nStringLength(pA->GetText().getLength());
@@ -1983,7 +1983,7 @@ namespace
                 case META_TEXTARRAY_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaTextArrayAction* pA = (const MetaTextArrayAction*)pAction;
+                    const MetaTextArrayAction* pA = static_cast<const MetaTextArrayAction*>(pAction);
                     sal_uInt32 nTextLength(pA->GetLen());
                     const sal_uInt32 nTextIndex(pA->GetIndex());
                     const sal_uInt32 nStringLength(pA->GetText().getLength());
@@ -2031,7 +2031,7 @@ namespace
                     // New status:
 
                     /** CHECKED, WORKS WELL */
-                    const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pAction;
+                    const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction*>(pAction);
                     sal_uInt32 nTextLength(pA->GetLen());
                     const sal_uInt32 nTextIndex(pA->GetIndex());
                     const sal_uInt32 nStringLength(pA->GetText().getLength());
@@ -2088,7 +2088,7 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     // OSL_FAIL("META_TEXTRECT_ACTION requested (!)");
-                    const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
+                    const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
                     const Rectangle& rRectangle = pA->GetRect();
                     const sal_uInt32 nStringLength(pA->GetText().getLength());
 
@@ -2147,7 +2147,7 @@ namespace
                 case META_BMP_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaBmpAction* pA = (const MetaBmpAction*)pAction;
+                    const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
                     const BitmapEx aBitmapEx(pA->GetBitmap());
 
                     createBitmapExPrimitive(aBitmapEx, pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
@@ -2157,7 +2157,7 @@ namespace
                 case META_BMPSCALE_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*)pAction;
+                    const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
                     const Bitmap aBitmapEx(pA->GetBitmap());
 
                     createBitmapExPrimitive(aBitmapEx, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
@@ -2167,7 +2167,7 @@ namespace
                 case META_BMPSCALEPART_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaBmpScalePartAction* pA = (const MetaBmpScalePartAction*)pAction;
+                    const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                     const Bitmap& rBitmap = pA->GetBitmap();
 
                     if(!rBitmap.IsEmpty())
@@ -2189,7 +2189,7 @@ namespace
                 case META_BMPEX_ACTION :
                 {
                     /** CHECKED, WORKS WELL: Simply same as META_BMP_ACTION */
-                    const MetaBmpExAction* pA = (const MetaBmpExAction*)pAction;
+                    const MetaBmpExAction* pA = static_cast<const MetaBmpExAction*>(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
                     createBitmapExPrimitive(rBitmapEx, pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
@@ -2199,7 +2199,7 @@ namespace
                 case META_BMPEXSCALE_ACTION :
                 {
                     /** CHECKED, WORKS WELL: Simply same as META_BMPSCALE_ACTION */
-                    const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*)pAction;
+                    const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
                     createBitmapExPrimitive(rBitmapEx, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
@@ -2209,7 +2209,7 @@ namespace
                 case META_BMPEXSCALEPART_ACTION :
                 {
                     /** CHECKED, WORKS WELL: Simply same as META_BMPSCALEPART_ACTION */
-                    const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*)pAction;
+                    const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
                     if(!rBitmapEx.IsEmpty())
@@ -2231,7 +2231,7 @@ namespace
                 {
                     /** CHECKED, WORKS WELL: Simply same as META_BMP_ACTION */
                     /** Huh, no it isn't!? */
-                    const MetaMaskAction* pA = (const MetaMaskAction*)pAction;
+                    const MetaMaskAction* pA = static_cast<const MetaMaskAction*>(pAction);
                     const BitmapEx aBitmapEx(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
 
                     createBitmapExPrimitive(aBitmapEx, pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
@@ -2241,7 +2241,7 @@ namespace
                 case META_MASKSCALE_ACTION :
                 {
                     /** CHECKED, WORKS WELL: Simply same as META_BMPSCALE_ACTION */
-                    const MetaMaskScaleAction* pA = (const MetaMaskScaleAction*)pAction;
+                    const MetaMaskScaleAction* pA = static_cast<const MetaMaskScaleAction*>(pAction);
                     const BitmapEx aBitmapEx(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
 
                     createBitmapExPrimitive(aBitmapEx, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
@@ -2251,7 +2251,7 @@ namespace
                 case META_MASKSCALEPART_ACTION :
                 {
                     /** CHECKED, WORKS WELL: Simply same as META_BMPSCALEPART_ACTION */
-                    const MetaMaskScalePartAction* pA = (const MetaMaskScalePartAction*)pAction;
+                    const MetaMaskScalePartAction* pA = static_cast<const MetaMaskScalePartAction*>(pAction);
                     const Bitmap& rBitmap = pA->GetBitmap();
 
                     if(!rBitmap.IsEmpty())
@@ -2273,7 +2273,7 @@ namespace
                 case META_GRADIENT_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaGradientAction* pA = (const MetaGradientAction*)pAction;
+                    const MetaGradientAction* pA = static_cast<const MetaGradientAction*>(pAction);
                     const Rectangle& rRectangle = pA->GetRect();
 
                     if(!rRectangle.IsEmpty())
@@ -2335,7 +2335,7 @@ namespace
                 case META_HATCH_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaHatchAction* pA = (const MetaHatchAction*)pAction;
+                    const MetaHatchAction* pA = static_cast<const MetaHatchAction*>(pAction);
                     basegfx::B2DPolyPolygon aOutline(pA->GetPolyPolygon().getB2DPolyPolygon());
 
                     if(aOutline.count())
@@ -2363,7 +2363,7 @@ namespace
                 case META_WALLPAPER_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaWallpaperAction* pA = (const MetaWallpaperAction*)pAction;
+                    const MetaWallpaperAction* pA = static_cast<const MetaWallpaperAction*>(pAction);
                     Rectangle aWallpaperRectangle(pA->GetRect());
 
                     if(!aWallpaperRectangle.IsEmpty())
@@ -2413,7 +2413,7 @@ namespace
                 case META_CLIPREGION_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaClipRegionAction* pA = (const MetaClipRegionAction*)pAction;
+                    const MetaClipRegionAction* pA = static_cast<const MetaClipRegionAction*>(pAction);
 
                     if(pA->IsClipping())
                     {
@@ -2436,7 +2436,7 @@ namespace
                 case META_ISECTRECTCLIPREGION_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*)pAction;
+                    const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pAction);
                     const Rectangle& rRectangle = pA->GetRect();
 
                     if(rRectangle.IsEmpty())
@@ -2504,7 +2504,7 @@ namespace
                 case META_ISECTREGIONCLIPREGION_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*)pAction;
+                    const MetaISectRegionClipRegionAction* pA = static_cast<const MetaISectRegionClipRegionAction*>(pAction);
                     const vcl::Region& rNewRegion = pA->GetRegion();
 
                     if(rNewRegion.IsEmpty())
@@ -2560,7 +2560,7 @@ namespace
                 case META_MOVECLIPREGION_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaMoveClipRegionAction* pA = (const MetaMoveClipRegionAction*)pAction;
+                    const MetaMoveClipRegionAction* pA = static_cast<const MetaMoveClipRegionAction*>(pAction);
 
                     if(rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
@@ -2596,7 +2596,7 @@ namespace
                 case META_LINECOLOR_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaLineColorAction* pA = (const MetaLineColorAction*)pAction;
+                    const MetaLineColorAction* pA = static_cast<const MetaLineColorAction*>(pAction);
                     const bool bActive(pA->IsSetting());
 
                     rPropertyHolders.Current().setLineColorActive(bActive);
@@ -2608,7 +2608,7 @@ namespace
                 case META_FILLCOLOR_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaFillColorAction* pA = (const MetaFillColorAction*)pAction;
+                    const MetaFillColorAction* pA = static_cast<const MetaFillColorAction*>(pAction);
                     const bool bActive(pA->IsSetting());
 
                     rPropertyHolders.Current().setFillColorActive(bActive);
@@ -2620,7 +2620,7 @@ namespace
                 case META_TEXTCOLOR_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    const MetaTextColorAction* pA = (const MetaTextColorAction*)pAction;
+                    const MetaTextColorAction* pA = static_cast<const MetaTextColorAction*>(pAction);
                     const bool bActivate(COL_TRANSPARENT != pA->GetColor().GetColor());
 
                     rPropertyHolders.Current().setTextColorActive(bActivate);
@@ -2631,7 +2631,7 @@ namespace
                 case META_TEXTFILLCOLOR_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    const MetaTextFillColorAction* pA = (const MetaTextFillColorAction*)pAction;
+                    const MetaTextFillColorAction* pA = static_cast<const MetaTextFillColorAction*>(pAction);
                     const bool bWithColorArgument(pA->IsSetting());
 
                     if(bWithColorArgument)
@@ -2652,7 +2652,7 @@ namespace
                 case META_TEXTALIGN_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    const MetaTextAlignAction* pA = (const MetaTextAlignAction*)pAction;
+                    const MetaTextAlignAction* pA = static_cast<const MetaTextAlignAction*>(pAction);
                     const TextAlign aNewTextAlign = pA->GetTextAlign();
 
                     // TextAlign is applied to the current font (as in
@@ -2673,7 +2673,7 @@ namespace
                     // the most necessary MapMode to be interpreted is MAP_RELATIVE,
                     // but also the others may occur. Even not yet supported ones
                     // may need to be added here later
-                    const MetaMapModeAction* pA = (const MetaMapModeAction*)pAction;
+                    const MetaMapModeAction* pA = static_cast<const MetaMapModeAction*>(pAction);
                     const MapMode& rMapMode = pA->GetMapMode();
                     basegfx::B2DHomMatrix aMapping;
 
@@ -2727,7 +2727,7 @@ namespace
                 case META_FONT_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    const MetaFontAction* pA = (const MetaFontAction*)pAction;
+                    const MetaFontAction* pA = static_cast<const MetaFontAction*>(pAction);
                     rPropertyHolders.Current().setFont(pA->GetFont());
                     Size aFontSize(pA->GetFont().GetSize());
 
@@ -2780,7 +2780,7 @@ namespace
                 case META_PUSH_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaPushAction* pA = (const MetaPushAction*)pAction;
+                    const MetaPushAction* pA = static_cast<const MetaPushAction*>(pAction);
                     rPropertyHolders.Push(pA->GetFlags());
 
                     break;
@@ -2825,7 +2825,7 @@ namespace
                 case META_RASTEROP_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaRasterOpAction* pA = (const MetaRasterOpAction*)pAction;
+                    const MetaRasterOpAction* pA = static_cast<const MetaRasterOpAction*>(pAction);
                     const RasterOp aRasterOp = pA->GetRasterOp();
 
                     HandleNewRasterOp(aRasterOp, rTargetHolders, rPropertyHolders);
@@ -2835,7 +2835,7 @@ namespace
                 case META_TRANSPARENT_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaTransparentAction* pA = (const MetaTransparentAction*)pAction;
+                    const MetaTransparentAction* pA = static_cast<const MetaTransparentAction*>(pAction);
                     const basegfx::B2DPolyPolygon aOutline(pA->GetPolyPolygon().getB2DPolyPolygon());
 
                     if(aOutline.count())
@@ -2883,7 +2883,7 @@ namespace
                     // by default decompose to the Metafile replacement data. To support
                     // this EPS on screen, the renderer visualizing this has to support
                     // that primitive and visualize the Eps file (e.g. printing)
-                    const MetaEPSAction* pA = (const MetaEPSAction*)pAction;
+                    const MetaEPSAction* pA = static_cast<const MetaEPSAction*>(pAction);
                     const Rectangle aRectangle(pA->GetPoint(), pA->GetSize());
 
                     if(!aRectangle.IsEmpty())
@@ -2920,7 +2920,7 @@ namespace
                 case META_TEXTLINECOLOR_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    const MetaTextLineColorAction* pA = (const MetaTextLineColorAction*)pAction;
+                    const MetaTextLineColorAction* pA = static_cast<const MetaTextLineColorAction*>(pAction);
                     const bool bActive(pA->IsSetting());
 
                     rPropertyHolders.Current().setTextLineColorActive(bActive);
@@ -2939,7 +2939,7 @@ namespace
                     // This Metaaction seems not to be used (was not used in any
                     // checked files). It's used in combination with the current
                     // Font.
-                    const MetaTextLineAction* pA = (const MetaTextLineAction*)pAction;
+                    const MetaTextLineAction* pA = static_cast<const MetaTextLineAction*>(pAction);
 
                     proccessMetaTextLineAction(
                         *pA,
@@ -2951,7 +2951,7 @@ namespace
                 case META_FLOATTRANSPARENT_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*)pAction;
+                    const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pAction);
                     const basegfx::B2DRange aTargetRange(
                         pA->GetPoint().X(),
                         pA->GetPoint().Y(),
@@ -3060,21 +3060,21 @@ namespace
                 case META_LAYOUTMODE_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    const MetaLayoutModeAction* pA = (const MetaLayoutModeAction*)pAction;
+                    const MetaLayoutModeAction* pA = static_cast<const MetaLayoutModeAction*>(pAction);
                     rPropertyHolders.Current().setLayoutMode(pA->GetLayoutMode());
                     break;
                 }
                 case META_TEXTLANGUAGE_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    const MetaTextLanguageAction* pA = (const MetaTextLanguageAction*)pAction;
+                    const MetaTextLanguageAction* pA = static_cast<const MetaTextLanguageAction*>(pAction);
                     rPropertyHolders.Current().setLanguageType(pA->GetTextLanguage());
                     break;
                 }
                 case META_OVERLINECOLOR_ACTION :
                 {
                     /** SIMPLE, DONE */
-                    const MetaOverlineColorAction* pA = (const MetaOverlineColorAction*)pAction;
+                    const MetaOverlineColorAction* pA = static_cast<const MetaOverlineColorAction*>(pAction);
                     const bool bActive(pA->IsSetting());
 
                     rPropertyHolders.Current().setOverlineColorActive(bActive);
@@ -3091,7 +3091,7 @@ namespace
                     //     XPATHSTROKE_SEQ_BEGIN, XPATHSTROKE_SEQ_END,
                     // but opted to remove these again; it works well without them
                     // and makes the code less dependent from those Metafile Add-Ons
-                    const MetaCommentAction* pA = (const MetaCommentAction*)pAction;
+                    const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
 
                     if (pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN"))
                     {
@@ -3109,11 +3109,11 @@ namespace
 
                             if(META_GRADIENTEX_ACTION == pAction->GetType())
                             {
-                                pMetaGradientExAction = (const MetaGradientExAction*)pAction;
+                                pMetaGradientExAction = static_cast<const MetaGradientExAction*>(pAction);
                             }
                             else if(META_COMMENT_ACTION == pAction->GetType())
                             {
-                                if (((const MetaCommentAction*)pAction)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END"))
+                                if (static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END"))
                                 {
                                     bDone = true;
                                 }
@@ -3240,7 +3240,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const MetafilePrimitive2D& rCompare = (MetafilePrimitive2D&)rPrimitive;
+                const MetafilePrimitive2D& rCompare = static_cast<const MetafilePrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
                     && getMetaFile() == rCompare.getMetaFile());

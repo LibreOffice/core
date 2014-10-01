@@ -233,7 +233,7 @@ namespace drawinglayer
         {
             if(ViewTransformationDependentPrimitive2D::operator==(rPrimitive))
             {
-                const WallpaperBitmapPrimitive2D& rCompare = (WallpaperBitmapPrimitive2D&)rPrimitive;
+                const WallpaperBitmapPrimitive2D& rCompare = static_cast<const WallpaperBitmapPrimitive2D&>(rPrimitive);
 
                 return (getLocalObjectRange() == rCompare.getLocalObjectRange()
                     && getBitmapEx() == rCompare.getBitmapEx()

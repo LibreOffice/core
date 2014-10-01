@@ -61,7 +61,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const BackgroundColorPrimitive2D& rCompare = (BackgroundColorPrimitive2D&)rPrimitive;
+                const BackgroundColorPrimitive2D& rCompare = static_cast<const BackgroundColorPrimitive2D&>(rPrimitive);
 
                 return (getBColor() == rCompare.getBColor());
             }

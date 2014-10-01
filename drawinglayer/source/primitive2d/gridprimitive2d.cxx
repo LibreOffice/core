@@ -291,7 +291,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const GridPrimitive2D& rCompare = (GridPrimitive2D&)rPrimitive;
+                const GridPrimitive2D& rCompare = static_cast<const GridPrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
                     && getWidth() == rCompare.getWidth()

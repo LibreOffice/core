@@ -168,7 +168,7 @@ namespace drawinglayer
         {
             if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
             {
-                const FillHatchPrimitive2D& rCompare = (FillHatchPrimitive2D&)rPrimitive;
+                const FillHatchPrimitive2D& rCompare = static_cast<const FillHatchPrimitive2D&>(rPrimitive);
 
                 return (getOutputRange() == rCompare.getOutputRange()
                     && getDefinitionRange() == rCompare.getDefinitionRange()

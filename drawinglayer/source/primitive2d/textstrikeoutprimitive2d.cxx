@@ -48,7 +48,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const BaseTextStrikeoutPrimitive2D& rCompare = (BaseTextStrikeoutPrimitive2D&)rPrimitive;
+                const BaseTextStrikeoutPrimitive2D& rCompare = static_cast<const BaseTextStrikeoutPrimitive2D&>(rPrimitive);
 
                 return (getObjectTransformation() == rCompare.getObjectTransformation()
                     && getWidth() == rCompare.getWidth()
@@ -129,7 +129,7 @@ namespace drawinglayer
         {
             if(BaseTextStrikeoutPrimitive2D::operator==(rPrimitive))
             {
-                const TextCharacterStrikeoutPrimitive2D& rCompare = (TextCharacterStrikeoutPrimitive2D&)rPrimitive;
+                const TextCharacterStrikeoutPrimitive2D& rCompare = static_cast<const TextCharacterStrikeoutPrimitive2D&>(rPrimitive);
 
                 return (getStrikeoutChar() == rCompare.getStrikeoutChar()
                     && getFontAttribute() == rCompare.getFontAttribute()
@@ -255,7 +255,7 @@ namespace drawinglayer
         {
             if(BaseTextStrikeoutPrimitive2D::operator==(rPrimitive))
             {
-                const TextGeometryStrikeoutPrimitive2D& rCompare = (TextGeometryStrikeoutPrimitive2D&)rPrimitive;
+                const TextGeometryStrikeoutPrimitive2D& rCompare = static_cast<const TextGeometryStrikeoutPrimitive2D&>(rPrimitive);
 
                 return (getHeight() == rCompare.getHeight()
                     && getOffset() == rCompare.getOffset()

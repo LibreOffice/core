@@ -761,7 +761,7 @@ namespace drawinglayer
         {
             if(PolygonHairlinePrimitive3D::operator==(rPrimitive))
             {
-                const PolygonTubePrimitive3D& rCompare = (PolygonTubePrimitive3D&)rPrimitive;
+                const PolygonTubePrimitive3D& rCompare = static_cast<const PolygonTubePrimitive3D&>(rPrimitive);
 
                 return (getRadius() == rCompare.getRadius()
                     && getDegreeStepWidth() == rCompare.getDegreeStepWidth()

@@ -292,7 +292,7 @@ namespace drawinglayer
         {
             if(TexturePrimitive3D::operator==(rPrimitive))
             {
-                const HatchTexturePrimitive3D& rCompare = (HatchTexturePrimitive3D&)rPrimitive;
+                const HatchTexturePrimitive3D& rCompare = static_cast<const HatchTexturePrimitive3D&>(rPrimitive);
 
                 return (getHatch() == rCompare.getHatch());
             }

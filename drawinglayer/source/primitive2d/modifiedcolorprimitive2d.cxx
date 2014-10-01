@@ -42,7 +42,7 @@ namespace drawinglayer
         {
             if(GroupPrimitive2D::operator==(rPrimitive))
             {
-                const ModifiedColorPrimitive2D& rCompare = (ModifiedColorPrimitive2D&)rPrimitive;
+                const ModifiedColorPrimitive2D& rCompare = static_cast<const ModifiedColorPrimitive2D&>(rPrimitive);
 
                 if(getColorModifier().get() == rCompare.getColorModifier().get())
                 {

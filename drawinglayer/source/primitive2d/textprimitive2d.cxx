@@ -262,7 +262,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const TextSimplePortionPrimitive2D& rCompare = (TextSimplePortionPrimitive2D&)rPrimitive;
+                const TextSimplePortionPrimitive2D& rCompare = static_cast<const TextSimplePortionPrimitive2D&>(rPrimitive);
 
                 return (getTextTransform() == rCompare.getTextTransform()
                     && getText() == rCompare.getText()

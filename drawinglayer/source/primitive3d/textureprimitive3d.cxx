@@ -46,7 +46,7 @@ namespace drawinglayer
         {
             if(GroupPrimitive3D::operator==(rPrimitive))
             {
-                const TexturePrimitive3D& rCompare = (TexturePrimitive3D&)rPrimitive;
+                const TexturePrimitive3D& rCompare = static_cast<const TexturePrimitive3D&>(rPrimitive);
 
                 return (getModulate() == rCompare.getModulate()
                     && getFilter() == rCompare.getFilter());
@@ -75,7 +75,7 @@ namespace drawinglayer
         {
             if(TexturePrimitive3D::operator==(rPrimitive))
             {
-                const UnifiedTransparenceTexturePrimitive3D& rCompare = (UnifiedTransparenceTexturePrimitive3D&)rPrimitive;
+                const UnifiedTransparenceTexturePrimitive3D& rCompare = static_cast<const UnifiedTransparenceTexturePrimitive3D&>(rPrimitive);
 
                 return (getTransparence() == rCompare.getTransparence());
             }
@@ -139,7 +139,7 @@ namespace drawinglayer
         {
             if(TexturePrimitive3D::operator==(rPrimitive))
             {
-                const GradientTexturePrimitive3D& rCompare = (GradientTexturePrimitive3D&)rPrimitive;
+                const GradientTexturePrimitive3D& rCompare = static_cast<const GradientTexturePrimitive3D&>(rPrimitive);
 
                 return (getGradient() == rCompare.getGradient());
             }
@@ -173,7 +173,7 @@ namespace drawinglayer
         {
             if(TexturePrimitive3D::operator==(rPrimitive))
             {
-                const BitmapTexturePrimitive3D& rCompare = (BitmapTexturePrimitive3D&)rPrimitive;
+                const BitmapTexturePrimitive3D& rCompare = static_cast<const BitmapTexturePrimitive3D&>(rPrimitive);
 
                 return (getFillGraphicAttribute() == rCompare.getFillGraphicAttribute());
             }

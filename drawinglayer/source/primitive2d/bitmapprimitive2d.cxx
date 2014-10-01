@@ -44,7 +44,7 @@ namespace drawinglayer
         {
             if(BasePrimitive2D::operator==(rPrimitive))
             {
-                const BitmapPrimitive2D& rCompare = (BitmapPrimitive2D&)rPrimitive;
+                const BitmapPrimitive2D& rCompare = static_cast<const BitmapPrimitive2D&>(rPrimitive);
 
                 return (getBitmapEx() == rCompare.getBitmapEx()
                     && getTransform() == rCompare.getTransform());

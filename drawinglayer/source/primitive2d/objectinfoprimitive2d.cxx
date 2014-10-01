@@ -41,7 +41,7 @@ namespace drawinglayer
         {
             if(GroupPrimitive2D::operator==(rPrimitive))
             {
-                const ObjectInfoPrimitive2D& rCompare = (ObjectInfoPrimitive2D&)rPrimitive;
+                const ObjectInfoPrimitive2D& rCompare = static_cast<const ObjectInfoPrimitive2D&>(rPrimitive);
 
                 return (getName() == rCompare.getName()
                     && getTitle() == rCompare.getTitle()

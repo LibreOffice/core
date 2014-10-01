@@ -47,7 +47,7 @@ namespace drawinglayer
         {
             if(BasePrimitive3D::operator==(rPrimitive))
             {
-                const PolyPolygonMaterialPrimitive3D& rCompare = (PolyPolygonMaterialPrimitive3D&)rPrimitive;
+                const PolyPolygonMaterialPrimitive3D& rCompare = static_cast<const PolyPolygonMaterialPrimitive3D&>(rPrimitive);
 
                 return (getB3DPolyPolygon() == rCompare.getB3DPolyPolygon()
                     && getMaterial() == rCompare.getMaterial()
