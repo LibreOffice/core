@@ -1986,14 +1986,16 @@ void XclImpXFRangeBuffer::Finalize()
                 aAttrs.push_back(aEntry);
             }
 
-            size_t nAttrSize = aAttrs.size();
-            assert(nAttrSize > 0);
-            ScAttrEntry* pData = new ScAttrEntry[nAttrSize];
+            ScDocumentImport::Attrs aAttrParam;
+            aAttrParam.mnSize = aAttrs.size();
+            assert(aAttrParam.mnSize > 0);
+            aAttrParam.mpData = new ScAttrEntry[aAttrParam.mnSize];
+            aAttrParam.mbGeneralNumFmtOnly = false; // when unsure, set it to false.
             list<ScAttrEntry>::const_iterator itr = aAttrs.begin(), itrEnd = aAttrs.end();
             for (size_t i = 0; itr != itrEnd; ++itr, ++i)
-                pData[i] = *itr;
+                aAttrParam.mpData[i] = *itr;
 
-            rDoc.setAttrEntries(nScTab, nScCol, pData, static_cast<SCSIZE>(nAttrSize));
+            rDoc.setAttrEntries(nScTab, nScCol, aAttrParam);
         }
     }
 

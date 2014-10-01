@@ -78,6 +78,7 @@
 #include "globstr.hrc"
 #include "xlconst.hxx"
 #include <documentimport.hxx>
+#include <numformat.hxx>
 
 using ::com::sun::star::table::BorderLine2;
 namespace oox {
@@ -2053,8 +2054,11 @@ XfModel::XfModel() :
 {
 }
 
+Xf::AttrList::AttrList() : mbGeneralNumFmtOnly(true) {}
+
 Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
+    mnScNumFmt(0),
     maAlignment( rHelper ),
     maProtection( rHelper ),
     meRotationRef( ::com::sun::star::table::CellVertJustify2::STANDARD ),
@@ -2124,8 +2128,7 @@ FontRef Xf::getFont() const
     return getStyles().getFont( maModel.mnFontId );
 }
 
-void Xf::applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
-                                  sal_Int32 nNumFmtId )
+void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nNumFmtId )
 {
     createPattern();
     ScPatternAttr& rPat = *mpPattern;
@@ -2158,18 +2161,22 @@ void Xf::applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, 
     if ( nNumFmtId >= 0 )
     {
         ScPatternAttr aNumPat(rDoc.GetPool());
-        getStyles().writeNumFmtToItemSet( aNumPat.GetItemSet(), nNumFmtId );
+        mnScNumFmt = getStyles().writeNumFmtToItemSet( aNumPat.GetItemSet(), nNumFmtId );
         rPat.GetItemSet().Put(aNumPat.GetItemSet());
     }
+
+    if (!sc::NumFmtUtil::isGeneral(mnScNumFmt))
+        rAttrs.mbGeneralNumFmtOnly = false;
+
     if (rPat.GetStyleName())
     {
         // Check for a gap between the last entry and this one.
         bool bHasGap = false;
-        if (rAttrs.empty() && nRow1 > 0)
+        if (rAttrs.maAttrs.empty() && nRow1 > 0)
             // First attribute range doesn't start at row 0.
             bHasGap = true;
 
-        if (!rAttrs.empty() && rAttrs.back().nRow + 1 < nRow1)
+        if (!rAttrs.maAttrs.empty() && rAttrs.maAttrs.back().nRow + 1 < nRow1)
             bHasGap = true;
 
         if (bHasGap)
@@ -2178,13 +2185,20 @@ void Xf::applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, 
             ScAttrEntry aEntry;
             aEntry.nRow = nRow1 - 1;
             aEntry.pPattern = rDoc.GetDefPattern();
-            rAttrs.push_back(aEntry);
+            rAttrs.maAttrs.push_back(aEntry);
+
+            // Check if the default pattern is 'General'.
+            if (!sc::NumFmtUtil::isGeneral(*aEntry.pPattern))
+                rAttrs.mbGeneralNumFmtOnly = false;
         }
 
         ScAttrEntry aEntry;
         aEntry.nRow = nRow2;
         aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(rPat));
-        rAttrs.push_back(aEntry);
+        rAttrs.maAttrs.push_back(aEntry);
+
+        if (!sc::NumFmtUtil::isGeneral(*aEntry.pPattern))
+            rAttrs.mbGeneralNumFmtOnly = false;
     }
 }
 
@@ -2307,7 +2321,7 @@ Xf::createPattern( bool bSkipPoolDefs )
     // value format
     if( maModel.mbNumFmtUsed )
     {
-        rStyles.writeNumFmtToItemSet( rItemSet, maModel.mnNumFmtId, bSkipPoolDefs );
+        mnScNumFmt = rStyles.writeNumFmtToItemSet( rItemSet, maModel.mnNumFmtId, bSkipPoolDefs );
     }
     // alignment
     if( maModel.mbAlignUsed )
@@ -3107,9 +3121,9 @@ void StylesBuffer::writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFon
         pFont->writeToPropertyMap( rPropMap, FONT_PROPTYPE_CELL );
 }
 
-void StylesBuffer::writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const
+sal_uLong StylesBuffer::writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const
 {
-    maNumFmts.fillToItemSet( rItemSet, nNumFmtId, bSkipPoolDefs );
+    return maNumFmts.fillToItemSet( rItemSet, nNumFmtId, bSkipPoolDefs );
 }
 
 void StylesBuffer::writeNumFmtToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const
