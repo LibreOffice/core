@@ -487,16 +487,12 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 #else
 
 #ifndef DISABLE_DYNLOADING
-    // get basctl dllname
-    static OUString aLibName( SVLIBRARY( "basctl"  ) );
-
-    // load module
-    oslModule handleMod = osl_loadModuleRelative(
-        &thisModule, aLibName.pData, 0 );
+    // load basctl module
+    osl::Module aMod;
+    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"), 0);
 
     // get symbol
-    OUString aSymbol( "basicide_handle_basic_error"  );
-    basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) osl_getFunctionSymbol( handleMod, aSymbol.pData );
+    basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) aMod.getFunctionSymbol("basicide_handle_basic_error");
 
     // call basicide_handle_basic_error in basctl
     long nRet = pSymbol ? pSymbol( pStarBasic ) : 0;
@@ -587,16 +583,12 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 #else
 
 #ifndef DISABLE_DYNLOADING
-    // get basctl dllname
-    static OUString aLibName( SVLIBRARY( "basctl"  ) );
-
-    // load module
-    oslModule handleMod = osl_loadModuleRelative(
-        &thisModule, aLibName.pData, 0 );
+    // load basctl module
+    osl::Module aMod;
+    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"), 0);
 
     // get symbol
-    OUString aSymbol( "basicide_macro_organizer"  );
-    basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
+    basicide_macro_organizer pSymbol = (basicide_macro_organizer) aMod.getFunctionSymbol("basicide_macro_organizer");
 
     SAL_WARN_IF(!pSymbol, "sfx.doc", "SfxApplication::MacroOrganizer, no symbol!");
     if (!pSymbol)
