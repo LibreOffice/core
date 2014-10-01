@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_mailmerge, \
 $(eval $(call gb_CppunitTest_use_libraries,sw_mailmerge, \
     comphelper \
     cppu \
+    cppuhelper \
     sal \
     sw \
     test \
