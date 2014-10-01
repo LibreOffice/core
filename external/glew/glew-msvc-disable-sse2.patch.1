@@ -1,0 +1,10 @@
+--- glew/build//vc10/common.props.orig	2014-10-02 15:06:57.027060664 +0200
++++ glew/build//vc10/common.props	2014-10-02 15:06:59.026060509 +0200
+@@ -10,6 +10,7 @@
+   <ItemDefinitionGroup>
+     <ClCompile>
+       <AdditionalIncludeDirectories>$(INCLUDE_DIR)</AdditionalIncludeDirectories>
++      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+     </ClCompile>
+   </ItemDefinitionGroup>
+   <ItemGroup>

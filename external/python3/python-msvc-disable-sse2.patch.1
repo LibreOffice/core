@@ -1,0 +1,12 @@
+fdo#82430 disable SSE2 default of MSVC2012
+
+--- python3/PCbuild/release.props.old	2014-10-01 23:47:33.348095403 +0200
++++ python3/PCbuild/release.props	2014-10-01 23:48:05.051092945 +0200
+@@ -9,6 +9,7 @@
+   <ItemDefinitionGroup>
+     <ClCompile>
+       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+     </ClCompile>
+   </ItemDefinitionGroup>
+   <ItemGroup>
