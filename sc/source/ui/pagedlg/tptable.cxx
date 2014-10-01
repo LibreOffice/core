@@ -269,8 +269,8 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     bool bUseValue = m_pBtnPageNo->IsChecked();
 
     if (   WAS_DEFAULT(nWhichPageNo,rOldSet)
-        && (    (!bUseValue && (bUseValue ? 1 : 0) == m_pBtnPageNo->GetSavedValue())
-            || (   bUseValue && (bUseValue ? 1 : 0) == m_pBtnPageNo->GetSavedValue()
+        && (    (!bUseValue && 0 == m_pBtnPageNo->GetSavedValue())
+            || (   bUseValue && 1 == m_pBtnPageNo->GetSavedValue()
                    && ! m_pEdPageNo->IsValueChangedFromSaved() ) ) )
     {
             rCoreSet->ClearItem( nWhichPageNo );
