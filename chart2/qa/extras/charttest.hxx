@@ -49,6 +49,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 
@@ -458,13 +459,14 @@ uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpress(
 
 uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int32 nShape )
 {
-    Reference<drawing::XDrawPageSupplier> xPageSupp(mxComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xPageSupp.is());
+    // DO NOT use XDrawPageSupplier since SwVirtFlyDrawObj are not created
+    // during import, only in layout!
+    Reference<text::XTextEmbeddedObjectsSupplier> xEOS(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEOS.is());
+    Reference<container::XIndexAccess> xEmbeddeds(xEOS->getEmbeddedObjects(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmbeddeds.is());
 
-    Reference<drawing::XDrawPage> xPage = xPageSupp->getDrawPage();
-    CPPUNIT_ASSERT(xPage.is());
-
-    Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(nShape), uno::UNO_QUERY);
+    Reference<beans::XPropertySet> xShapeProps(xEmbeddeds->getByIndex(nShape), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapeProps.is());
 
     Reference<frame::XModel> xDocModel;
