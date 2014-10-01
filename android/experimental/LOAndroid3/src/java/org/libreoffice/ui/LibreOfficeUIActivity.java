@@ -277,9 +277,6 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
             case R.id.menu_sort_modified:
                 sortFiles(item);
                 break;
-            case R.id.menu_preferences:
-                editPreferences(item);
-                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
