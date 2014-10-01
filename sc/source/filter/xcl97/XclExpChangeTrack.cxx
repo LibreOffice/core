@@ -1032,7 +1032,7 @@ static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScA
                     // OOXTODO: other attributes?  see XclExpFormulaCell::SaveXml()
                     FSEND );
             pStream->writeEscaped( XclXmlUtils::ToOUString(
-                        *pData->mpFormulaCell->GetDocument(),
+                        rStrm.GetRoot().GetCompileFormulaContext(),
                         pData->mpFormulaCell->aPos, pData->mpFormulaCell->GetCode()));
             pStream->endElement( XML_f );
             break;

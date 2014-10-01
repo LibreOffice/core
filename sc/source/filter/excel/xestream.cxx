@@ -39,6 +39,7 @@
 #include "compiler.hxx"
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
+#include "tokenstringcontext.hxx"
 #include "refreshtimerprotector.hxx"
 #include "globstr.hrc"
 
@@ -810,9 +811,10 @@ OUString XclXmlUtils::ToOUString( const ScfUInt16Vec& rBuf, sal_Int32 nStart, sa
 }
 
 OUString XclXmlUtils::ToOUString(
-    ScDocument& rDocument, const ScAddress& rAddress, const ScTokenArray* pTokenArray )
+    sc::CompileFormulaContext& rCtx, const ScAddress& rAddress, const ScTokenArray* pTokenArray )
 {
-    ScCompiler aCompiler( &rDocument, rAddress, const_cast<ScTokenArray&>(*pTokenArray));
+    ScCompiler aCompiler( rCtx, rAddress, const_cast<ScTokenArray&>(*pTokenArray));
+
     aCompiler.SetGrammar(FormulaGrammar::GRAM_OOXML);
 
     OUStringBuffer aBuffer( pTokenArray->GetLen() * 5 );
@@ -1077,6 +1079,7 @@ bool XclExpXmlStream::exportDocument()
     aData.maMaxPos.SetCol( ::std::min( aData.maScMaxPos.Col(), aData.maXclMaxPos.Col() ) );
     aData.maMaxPos.SetRow( ::std::min( aData.maScMaxPos.Row(), aData.maXclMaxPos.Row() ) );
     aData.maMaxPos.SetTab( ::std::min( aData.maScMaxPos.Tab(), aData.maXclMaxPos.Tab() ) );
+    aData.mpCompileFormulaCxt.reset( new sc::CompileFormulaContext(&rDoc) );
 
     XclExpRoot aRoot( aData );
 
