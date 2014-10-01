@@ -113,8 +113,7 @@ namespace svxform
 
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
-            const OUString sModuleName( SVLIBRARY( "dbtools" )
-            );
+            const static OUString sModuleName( DBTOOLS_DLL_NAME );
 
             // load the dbtools library
             s_hDbtoolsModule = osl_loadModuleRelative(
