@@ -286,7 +286,7 @@ SwTbxFieldCtrl::SwTbxFieldCtrl(
     pPopup(0),
     pView(0)
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 SwTbxFieldCtrl::~SwTbxFieldCtrl()
