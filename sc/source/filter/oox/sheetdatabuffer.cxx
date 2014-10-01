@@ -54,6 +54,7 @@
 #include "paramisc.hxx"
 #include "documentimport.hxx"
 #include "formulabuffer.hxx"
+#include <numformat.hxx>
 
 namespace oox {
 namespace xls {
@@ -477,12 +478,15 @@ void SheetDataBuffer::finalizeImport()
             aEntry.pPattern = rDoc.getDoc().GetPattern(nScCol, 0, getSheetIndex());
             rDoc.getDoc().GetPool()->Put(*aEntry.pPattern);
             aAttrs.maAttrs.push_back(aEntry);
+
+            if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc.getDoc()))
+                aAttrs.mbLatinNumFmtOnly = false;
         }
 
         ScDocumentImport::Attrs aAttrParam;
         aAttrParam.mnSize = aAttrs.maAttrs.size();
         aAttrParam.mpData = new ScAttrEntry[aAttrParam.mnSize];
-        aAttrParam.mbGeneralNumFmtOnly = aAttrs.mbGeneralNumFmtOnly;
+        aAttrParam.mbLatinNumFmtOnly = aAttrs.mbLatinNumFmtOnly;
         std::list<ScAttrEntry>::const_iterator itr = aAttrs.maAttrs.begin(), itrEnd = aAttrs.maAttrs.end();
         for (size_t i = 0; itr != itrEnd; ++itr, ++i)
             aAttrParam.mpData[i] = *itr;

@@ -1990,7 +1990,7 @@ void XclImpXFRangeBuffer::Finalize()
             aAttrParam.mnSize = aAttrs.size();
             assert(aAttrParam.mnSize > 0);
             aAttrParam.mpData = new ScAttrEntry[aAttrParam.mnSize];
-            aAttrParam.mbGeneralNumFmtOnly = false; // when unsure, set it to false.
+            aAttrParam.mbLatinNumFmtOnly = false; // when unsure, set it to false.
             list<ScAttrEntry>::const_iterator itr = aAttrs.begin(), itrEnd = aAttrs.end();
             for (size_t i = 0; itr != itrEnd; ++itr, ++i)
                 aAttrParam.mpData[i] = *itr;

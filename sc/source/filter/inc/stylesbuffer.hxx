@@ -640,7 +640,7 @@ public:
     struct AttrList
     {
         std::list<ScAttrEntry> maAttrs;
-        bool mbGeneralNumFmtOnly;
+        bool mbLatinNumFmtOnly;
 
         AttrList();
     };

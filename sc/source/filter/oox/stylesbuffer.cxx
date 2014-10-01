@@ -2054,7 +2054,7 @@ XfModel::XfModel() :
 {
 }
 
-Xf::AttrList::AttrList() : mbGeneralNumFmtOnly(true) {}
+Xf::AttrList::AttrList() : mbLatinNumFmtOnly(true) {}
 
 Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -2165,8 +2165,8 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
         rPat.GetItemSet().Put(aNumPat.GetItemSet());
     }
 
-    if (!sc::NumFmtUtil::isGeneral(mnScNumFmt))
-        rAttrs.mbGeneralNumFmtOnly = false;
+    if (!sc::NumFmtUtil::isLatinScript(mnScNumFmt, rDoc))
+        rAttrs.mbLatinNumFmtOnly = false;
 
     if (rPat.GetStyleName())
     {
@@ -2188,8 +2188,8 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
             rAttrs.maAttrs.push_back(aEntry);
 
             // Check if the default pattern is 'General'.
-            if (!sc::NumFmtUtil::isGeneral(*aEntry.pPattern))
-                rAttrs.mbGeneralNumFmtOnly = false;
+            if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
+                rAttrs.mbLatinNumFmtOnly = false;
         }
 
         ScAttrEntry aEntry;
@@ -2197,8 +2197,8 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
         aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(rPat));
         rAttrs.maAttrs.push_back(aEntry);
 
-        if (!sc::NumFmtUtil::isGeneral(*aEntry.pPattern))
-            rAttrs.mbGeneralNumFmtOnly = false;
+        if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))
+            rAttrs.mbLatinNumFmtOnly = false;
     }
 }
 

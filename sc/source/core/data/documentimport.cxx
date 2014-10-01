@@ -38,7 +38,7 @@ struct ScDocumentImportImpl
         mnDefaultScriptNumeric(SC_SCRIPTTYPE_UNKNOWN) {}
 };
 
-ScDocumentImport::Attrs::Attrs() : mpData(NULL), mnSize(0), mbGeneralNumFmtOnly(true) {}
+ScDocumentImport::Attrs::Attrs() : mpData(NULL), mnSize(0), mbLatinNumFmtOnly(false) {}
 
 ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mpImpl(new ScDocumentImportImpl(rDoc)) {}
 ScDocumentImport::~ScDocumentImport()
