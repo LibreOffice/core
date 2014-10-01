@@ -997,9 +997,10 @@ static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocal
     return aBuf.makeStringAndClear();
 }
 
-OfaLanguagesTabPage::OfaLanguagesTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
-      SfxTabPage( pParent,"OptLanguagesPage","cui/ui/optlanguagespage.ui", &rSet ),
-     pLangConfig(new LanguageConfig_Impl)
+OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent,"OptLanguagesPage","cui/ui/optlanguagespage.ui", &rSet)
+    , pLangConfig(new LanguageConfig_Impl)
+    , m_bDatePatternsValid(false)
 {
     get(m_pUserInterfaceLB, "userinterface");
     m_pUserInterfaceLB->SetStyle(m_pUserInterfaceLB->GetStyle() | WB_SORT);
