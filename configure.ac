@@ -3946,10 +3946,6 @@ darwin*)
         ;;
     i*86)
         AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
-        CPUNAME=INTEL
-        RTL_ARCH=x86
-        PLATFORMID=macosx_x86
-        OUTPATH=unxmacxi
         ;;
     x86_64)
         CPUNAME=X86_64

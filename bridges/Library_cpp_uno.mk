@@ -71,10 +71,6 @@ bridges_SELECTED_BRIDGE := gcc3_linux_intel
 bridge_asm_objects := call
 bridge_exception_objects := cpp2uno except uno2cpp
 bridge_noncallexception_objects := callvirtualmethod
-else ifeq ($(OS),MACOSX)
-bridges_SELECTED_BRIDGE := gcc3_macosx_intel
-bridge_asm_objects := call
-bridge_exception_objects := cpp2uno except uno2cpp
 else ifeq ($(OS),SOLARIS)
 bridges_SELECTED_BRIDGE := gcc3_solaris_intel
 bridge_exception_objects := cpp2uno except uno2cpp
