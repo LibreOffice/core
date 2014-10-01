@@ -547,7 +547,7 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
             {
                 report(
                     DiagnosticsEngine::Warning,
-                    "use \"bool\" instead of \"sal_Bool\" as return type%0 [%1 %2]",
+                    "use \"bool\" instead of \"sal_Bool\" as return type%0",
                     loc)
                     << (k == OverrideKind::MAYBE
                         ? (" (unless this member function overrides a dependent"
