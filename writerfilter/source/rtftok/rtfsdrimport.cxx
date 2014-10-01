@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -198,7 +199,9 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, 
         // See DffPropertyReader::Fix16ToAngle(): in RTF, positive rotation angles are clockwise, we have them as counter-clockwise.
         // Additionally, RTF type is 0..360*2^16, our is 0..360*100.
         sal_Int32 nRotation = aValue.toInt32()*100/65536;
-        xPropertySet->setPropertyValue("RotateAngle", uno::makeAny(sal_Int32(NormAngle360(nRotation * -1))));
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
+        if (!xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+            xPropertySet->setPropertyValue("RotateAngle", uno::makeAny(sal_Int32(NormAngle360(nRotation * -1))));
     }
 
     if (nHoriOrient != 0 && xPropertySet.is())
