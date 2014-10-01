@@ -297,9 +297,7 @@ public:
     /**
        Pointer to a value.
      */
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    typedef std::auto_ptr<Value> Pointer_t;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    typedef std::unique_ptr<Value> Pointer_t;
 
     virtual ~Value() {}
 
@@ -348,9 +346,7 @@ public:
 class Sprm
 {
 public:
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    typedef std::auto_ptr<Sprm> Pointer_t;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    typedef std::unique_ptr<Sprm> Pointer_t;
 
     /**
        Returns id of the SPRM.
