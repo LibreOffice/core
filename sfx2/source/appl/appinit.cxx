@@ -93,9 +93,6 @@ void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( 
 
 void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) throw(TerminationVetoException, RuntimeException, std::exception )
 {
-    SolarMutexGuard aGuard;
-    if ( !SfxGetpApp()->QueryExit_Impl() )
-        throw TerminationVetoException();
 }
 
 void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException, std::exception )

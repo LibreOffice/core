@@ -209,7 +209,6 @@ public:
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
-    SAL_DLLPRIVATE bool         QueryExit_Impl();
     SAL_DLLPRIVATE void         SetOptions_Impl(const SfxItemSet &);
     SAL_DLLPRIVATE bool         Initialize_Impl();
 

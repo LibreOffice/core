@@ -203,11 +203,6 @@ String GID_CONTROLS
     Text [ en-US ] = "Controls" ;
 };
 
-String STR_CANT_QUIT
-{
-    Text [ en-US ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
-};
-
 String STR_ISMODIFIED
 {
     Text [ en-US ] = "Do you want to save the changes to %1?" ;

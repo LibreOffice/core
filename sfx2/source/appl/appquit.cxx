@@ -56,26 +56,6 @@
 
 using ::basic::BasicManagerRepository;
 
-
-bool SfxApplication::QueryExit_Impl()
-{
-    bool bQuit = true;
-
-    // Does some instance, that can not be shut down, still require the app?
-    if ( !bQuit )
-    {
-        // Not really exit, only minimize
-        MessageDialog aInfoBox( NULL, SfxResId(STR_CANT_QUIT), VCL_MESSAGE_INFO );
-        aInfoBox.Execute();
-        OSL_TRACE( "QueryExit => sal_False (in use)" );
-        return false;
-    }
-
-    return true;
-}
-
-
-
 void SfxApplication::Deinitialize()
 {
     if ( pAppData_Impl->bDowning )
