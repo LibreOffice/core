@@ -176,7 +176,7 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
         {
             if ( m_pTabControl )
             {
-                sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
+                sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
                 sal_uInt16 nPagePos = m_pTabControl->GetPagePos( nPageId );
                 UpdateFocused();
                 UpdateSelected( nPagePos, rVclWindowEvent.GetId() == VCLEVENT_TABPAGE_ACTIVATE );
@@ -187,7 +187,7 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
         {
             if ( m_pTabControl )
             {
-                sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
+                sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
                 sal_uInt16 nPagePos = m_pTabControl->GetPagePos( nPageId );
                 UpdatePageText( nPagePos );
             }
@@ -197,7 +197,7 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
         {
             if ( m_pTabControl )
             {
-                sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
+                sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
                 sal_uInt16 nPagePos = m_pTabControl->GetPagePos( nPageId );
                 InsertChild( nPagePos );
             }
@@ -207,7 +207,7 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
         {
             if ( m_pTabControl )
             {
-                sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
+                sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
                 for ( sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
                 {
                     Reference< XAccessible > xChild( getAccessibleChild( i ) );
@@ -278,7 +278,7 @@ void VCLXAccessibleTabControl::ProcessWindowChildEvent( const VclWindowEvent& rV
                     {
                         sal_uInt16 nPageId = m_pTabControl->GetPageId( (sal_uInt16)i );
                         TabPage* pTabPage = m_pTabControl->GetTabPage( nPageId );
-                        if ( pTabPage == (TabPage*) pChild )
+                        if ( pTabPage == static_cast<TabPage*>(pChild) )
                             UpdateTabPage( i, rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW );
                     }
                 }

@@ -530,8 +530,8 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
         {
             if ( rVclWindowEvent.GetData() )
             {
-                UpdateChecked_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData() );
-                UpdateIndeterminate_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData() );
+                UpdateChecked_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
+                UpdateIndeterminate_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             }
             else if( pToolBox->GetItemPos(pToolBox->GetCurItemId()) != TOOLBOX_ITEM_NOTFOUND )
             {
@@ -562,11 +562,11 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             break;
 
         case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
-            ReleaseFocus_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData() );
+            ReleaseFocus_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             break;
 
         case VCLEVENT_TOOLBOX_ITEMADDED :
-            UpdateItem_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData(), true );
+            UpdateItem_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()), true );
             break;
 
         case VCLEVENT_TOOLBOX_ITEMREMOVED :
@@ -578,7 +578,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
 
         case VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED:
         {
-            sal_Int32 nPos = (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData();
+            sal_Int32 nPos = (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
             ToolBoxItemsMap::iterator aAccessiblePos( m_aAccessibleChildren.find( nPos ) );
             if ( m_aAccessibleChildren.end() != aAccessiblePos )
             {
@@ -592,13 +592,13 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             break;
         }
         case VCLEVENT_TOOLBOX_ITEMTEXTCHANGED :
-            UpdateItemName_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData() );
+            UpdateItemName_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             break;
 
         case VCLEVENT_TOOLBOX_ITEMENABLED :
         case VCLEVENT_TOOLBOX_ITEMDISABLED :
         {
-            UpdateItemEnabled_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData() );
+            UpdateItemEnabled_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             break;
         }
 

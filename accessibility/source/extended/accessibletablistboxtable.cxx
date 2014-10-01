@@ -256,8 +256,8 @@ namespace accessibility
         OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
         if ( pEvent && pEvent->ISA( VclWindowEvent ) )
         {
-            OSL_ENSURE( ( (VclWindowEvent*)pEvent )->GetWindow() && m_pTabListBox, "no event window" );
-            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+            OSL_ENSURE( static_cast<VclWindowEvent*>( pEvent )->GetWindow() && m_pTabListBox, "no event window" );
+            ProcessWindowEvent( *static_cast<VclWindowEvent*>(pEvent) );
         }
         return 0;
     }

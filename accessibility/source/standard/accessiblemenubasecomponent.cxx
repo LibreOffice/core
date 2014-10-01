@@ -571,8 +571,8 @@ IMPL_LINK( OAccessibleMenuBaseComponent, MenuEventListener, VclSimpleEvent*, pEv
     OSL_ENSURE( pEvent && pEvent->ISA( VclMenuEvent ), "OAccessibleMenuBaseComponent - Unknown MenuEvent!" );
     if ( pEvent && pEvent->ISA( VclMenuEvent ) )
     {
-        OSL_ENSURE( ((VclMenuEvent*)pEvent)->GetMenu(), "OAccessibleMenuBaseComponent - Menu?" );
-        ProcessMenuEvent( *(VclMenuEvent*)pEvent );
+        OSL_ENSURE( static_cast<VclMenuEvent*>(pEvent)->GetMenu(), "OAccessibleMenuBaseComponent - Menu?" );
+        ProcessMenuEvent( *static_cast<VclMenuEvent*>(pEvent) );
     }
     return 0;
 }

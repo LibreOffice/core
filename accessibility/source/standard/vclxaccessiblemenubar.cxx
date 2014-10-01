@@ -78,10 +78,10 @@ IMPL_LINK( VCLXAccessibleMenuBar, WindowEventListener, VclSimpleEvent*, pEvent )
     OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "VCLXAccessibleMenuBar::WindowEventListener: unknown window event!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
-        OSL_ENSURE( ((VclWindowEvent*)pEvent)->GetWindow(), "VCLXAccessibleMenuBar::WindowEventListener: no window!" );
-        if ( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
+        OSL_ENSURE( static_cast<VclWindowEvent*>(pEvent)->GetWindow(), "VCLXAccessibleMenuBar::WindowEventListener: no window!" );
+        if ( !static_cast<VclWindowEvent*>(pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
         {
-            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+            ProcessWindowEvent( *static_cast<VclWindowEvent*>(pEvent) );
         }
     }
     return 0;
