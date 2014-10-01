@@ -23,6 +23,27 @@
 #include <attarray.hxx>
 
 #include <svl/sharedstringpool.hxx>
+#include <svl/languageoptions.hxx>
+
+#include <vector>
+
+namespace {
+
+struct ColAttr
+{
+    bool mbLatinNumFmtOnly;
+
+    ColAttr() : mbLatinNumFmtOnly(false) {}
+};
+
+struct TabAttr
+{
+    std::vector<ColAttr> maCols;
+};
+
+typedef std::vector<TabAttr> TabAttrsType;
+
+}
 
 struct ScDocumentImportImpl
 {
@@ -31,11 +52,28 @@ struct ScDocumentImportImpl
     sc::ColumnBlockPositionSet maBlockPosSet;
     sal_uInt16 mnDefaultScriptNumeric;
 
+    TabAttrsType maTabAttrs;
+
     ScDocumentImportImpl(ScDocument& rDoc) :
         mrDoc(rDoc),
         maListenCxt(rDoc),
         maBlockPosSet(rDoc),
         mnDefaultScriptNumeric(SC_SCRIPTTYPE_UNKNOWN) {}
+
+    ColAttr* getColAttr( size_t nTab, size_t nCol )
+    {
+        if (nTab > static_cast<size_t>(MAXTAB) || nCol > static_cast<size_t>(MAXCOL))
+            return NULL;
+
+        if (nTab >= maTabAttrs.size())
+            maTabAttrs.resize(nTab+1);
+
+        TabAttr& rTab = maTabAttrs[nTab];
+        if (nCol >= rTab.maCols.size())
+            rTab.maCols.resize(nCol+1);
+
+        return &rTab.maCols[nCol];
+    }
 };
 
 ScDocumentImport::Attrs::Attrs() : mpData(NULL), mnSize(0), mbLatinNumFmtOnly(false) {}
@@ -421,6 +459,10 @@ void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs& rAttrs )
     if (!pCol)
         return;
 
+    ColAttr* pColAttr = mpImpl->getColAttr(nTab, nCol);
+    if (pColAttr)
+        pColAttr->mbLatinNumFmtOnly = rAttrs.mbLatinNumFmtOnly;
+
     pCol->pAttrArray->SetAttrEntries(rAttrs.mpData, rAttrs.mnSize);
 }
 
@@ -450,14 +492,16 @@ class CellStoreInitializer
         {}
     };
 
-    ScDocument& mrDoc;
-    sc::StartListeningContext& mrListenCxt;
+    ScDocumentImportImpl& mrDocImpl;
+    SCTAB mnTab;
+    SCCOL mnCol;
 
 public:
-    CellStoreInitializer(ScDocument& rDoc, sc::StartListeningContext& rCxt, sal_uInt16 nScriptNumeric) :
-        mrDoc(rDoc),
-        mrListenCxt(rCxt),
-        mpImpl(new Impl(MAXROWCOUNT, nScriptNumeric))
+    CellStoreInitializer( ScDocumentImportImpl& rDocImpl, SCTAB nTab, SCCOL nCol ) :
+        mrDocImpl(rDocImpl),
+        mnTab(nTab),
+        mnCol(nCol),
+        mpImpl(new Impl(MAXROWCOUNT, mrDocImpl.mnDefaultScriptNumeric))
     {}
 
     boost::shared_ptr<Impl> mpImpl;
@@ -470,7 +514,13 @@ public:
         // Fill with default values for non-empty cell segments.
         sc::CellTextAttr aDefault;
         if (node.type == sc::element_type_numeric)
+        {
             aDefault.mnScriptType = mpImpl->mnScriptNumeric;
+            const ColAttr* p = mrDocImpl.getColAttr(mnTab, mnCol);
+            if (p && p->mbLatinNumFmtOnly)
+                aDefault.mnScriptType = SCRIPTTYPE_LATIN;
+        }
+
         std::vector<sc::CellTextAttr> aDefaults(node.size, aDefault);
         mpImpl->miPos = mpImpl->maAttrs.set(mpImpl->miPos, node.position, aDefaults.begin(), aDefaults.end());
 
@@ -482,7 +532,7 @@ public:
             for (; it != itEnd; ++it)
             {
                 ScFormulaCell& rFC = **it;
-                rFC.StartListeningTo(mrListenCxt);
+                rFC.StartListeningTo(mrDocImpl.maListenCxt);
             }
         }
     }
@@ -515,7 +565,7 @@ void ScDocumentImport::finalize()
 
 void ScDocumentImport::initColumn(ScColumn& rCol)
 {
-    CellStoreInitializer aFunc(mpImpl->mrDoc, mpImpl->maListenCxt, mpImpl->mnDefaultScriptNumeric);
+    CellStoreInitializer aFunc(*mpImpl, rCol.nTab, rCol.nCol);
     std::for_each(rCol.maCells.begin(), rCol.maCells.end(), aFunc);
     aFunc.swap(rCol.maCellTextAttrs);
     rCol.RegroupFormulaCells();
