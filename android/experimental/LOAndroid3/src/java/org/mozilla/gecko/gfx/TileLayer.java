@@ -28,7 +28,7 @@ public abstract class TileLayer extends Layer {
     private PaintMode mPaintMode;
 
     public TileLayer(CairoImage image, PaintMode paintMode) {
-        super(image.getSize());
+        super(image == null ? null : image.getSize());
 
         mPaintMode = paintMode;
         mImage = image;
