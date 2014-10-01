@@ -197,8 +197,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
             delete pParaObj;
     }
 
-    bool bResetPar, bResetAttr;
-    bResetPar = bResetAttr = false;
+    bool bResetAttr = false;
 
     SdrTextHorzAdjust eHAdj = xCell->GetTextHorizontalAdjust();
 
@@ -240,8 +239,6 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
     RTFOutFuncs::Out_String( mrStrm, aContent );
     mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
 
-    if ( bResetPar )
-        mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL );
     if ( bResetAttr )
         mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN );
 }
