@@ -3148,7 +3148,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     {
         SalKeyModEvent aModEvt;
         aModEvt.mnModKeyCode = 0;
-        if( pEvent->type == XLIB_KeyPress && mnExtKeyMod == 0 )
+        if( pEvent->type == KeyPress && mnExtKeyMod == 0 )
             mbSendExtKeyModChange = true;
         else if( pEvent->type == KeyRelease && mbSendExtKeyModChange )
         {
@@ -3246,7 +3246,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
     vcl::DeletionListener aDeleteWatch( this );
 
-    if( nModCode == (KEY_SHIFT | KEY_MOD1) && pEvent->type == XLIB_KeyPress )
+    if( nModCode == (KEY_SHIFT | KEY_MOD1) && pEvent->type == KeyPress )
     {
         sal_uInt16 nSeqKeyCode = pDisplay_->GetKeyCode( nUnmodifiedKeySym, &aDummy );
         if( nSeqKeyCode == KEY_U )
@@ -3969,7 +3969,7 @@ Bool X11SalFrame::checkKeyReleaseForRepeat( Display*, XEvent* pCheck, XPointer p
 {
     X11SalFrame* pThis = (X11SalFrame*)pX11SalFrame;
     return
-        pCheck->type            == XLIB_KeyPress &&
+        pCheck->type            == KeyPress &&
         pCheck->xkey.state      == pThis->nKeyState_ &&
         pCheck->xkey.keycode    == pThis->nKeyCode_ &&
         pCheck->xkey.time       == pThis->nReleaseTime_  ? True : False;
@@ -3992,7 +3992,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
     {
         switch( pEvent->type )
         {
-            case XLIB_KeyPress:
+            case KeyPress:
                 nKeyCode_   = pEvent->xkey.keycode;
                 nKeyState_  = pEvent->xkey.state;
                 nRet        = HandleKeyEvent( &pEvent->xkey );

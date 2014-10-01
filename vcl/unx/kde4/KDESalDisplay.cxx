@@ -76,7 +76,7 @@ void SalKDEDisplay::Yield()
 // would need this handling).
 bool SalKDEDisplay::checkDirectInputEvent( XEvent* ev )
 {
-    if( ev->xany.type == XLIB_KeyPress || ev->xany.type == KeyRelease
+    if( ev->xany.type == KeyPress || ev->xany.type == KeyRelease
         || ( ev->xany.type == ClientMessage && ev->xclient.message_type == xim_protocol ))
     {
         if( QApplication::activeWindow() == NULL )

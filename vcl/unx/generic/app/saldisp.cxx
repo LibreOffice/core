@@ -1887,7 +1887,7 @@ void SalX11Display::Yield()
 
 bool SalX11Display::Dispatch( XEvent *pEvent )
 {
-    if( pEvent->type == XLIB_KeyPress || pEvent->type == KeyRelease )
+    if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
     {
         ::Window aWindow = pEvent->xkey.window;
 
@@ -1950,7 +1950,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
         case ButtonRelease:
             m_nLastUserEventTime = pEvent->xbutton.time;
             break;
-        case XLIB_KeyPress:
+        case KeyPress:
         case KeyRelease:
             m_nLastUserEventTime = pEvent->xkey.time;
             break;
@@ -2044,7 +2044,7 @@ void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) cons
 
         switch( pEvent->type )
         {
-            case XLIB_KeyPress:
+            case KeyPress:
             case KeyRelease:
                 fprintf( stderr, "\t\ts=%d c=%d\n",
                          pEvent->xkey.state,

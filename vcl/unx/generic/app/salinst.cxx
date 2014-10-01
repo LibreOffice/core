@@ -104,7 +104,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
             nType = VCL_INPUT_MOUSE;
             break;
 
-        case XLIB_KeyPress:
+        case KeyPress:
         //case KeyRelease:
             nType = VCL_INPUT_KEYBOARD;
             break;
