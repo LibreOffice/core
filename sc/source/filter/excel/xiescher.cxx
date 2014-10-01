@@ -146,41 +146,11 @@ using ::com::sun::star::table::CellRangeAddress;
 
 namespace {
 
-/** Helper class which mimics the auto_ptr< SdrObject > semantics, but calls
-    SdrObject::Free instead of deleting the SdrObject directly. */
-template< typename SdrObjType >
-class TSdrObjectPtr
-{
-public:
-    inline explicit     TSdrObjectPtr( SdrObjType* pObj = 0 ) : mpObj( pObj ) {}
-    inline              ~TSdrObjectPtr() { free(); }
-
-    inline const SdrObjType* operator->() const { return mpObj; }
-    inline SdrObjType*  operator->() { return mpObj; }
-
-    inline const SdrObjType* get() const { return mpObj; }
-    inline SdrObjType*  get() { return mpObj; }
-
-    inline const SdrObjType& operator*() const { return *mpObj; }
-    inline SdrObjType& operator*() { return *mpObj; }
-
-    inline bool         is() const { return mpObj != 0; }
-    inline bool         operator!() const { return mpObj == 0; }
-
-    inline void         reset( SdrObjType* pObj = 0 ) { free(); mpObj = pObj; }
-    inline SdrObjType*  release() { SdrObjType* pObj = mpObj; mpObj = 0; return pObj; }
-
-private:
-                        TSdrObjectPtr( const TSdrObjectPtr& );    // not implemented
-    TSdrObjectPtr&      operator=( TSdrObjectPtr& rxObj );        // not implemented
-
-    inline void         free() { SdrObject* pObj = mpObj; mpObj = 0; SdrObject::Free( pObj ); }
-
-private:
-    SdrObjType*         mpObj;
+struct SdrObjectFree {
+    void operator ()(SdrObject * obj) { SdrObject::Free(obj); }
 };
 
-typedef TSdrObjectPtr< SdrObject > SdrObjectPtr;
+typedef std::unique_ptr<SdrObject, SdrObjectFree> SdrObjectPtr;
 
 } // namespace
 
@@ -457,7 +427,7 @@ SdrObject* XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, con
     else
     {
         xSdrObj.reset( DoCreateSdrObj( rDffConv, rAnchorRect ) );
-        if( xSdrObj.is() )
+        if( xSdrObj )
             xSdrObj->SetModel( rDffConv.GetModel() );
         //added for exporting OCX control
         /*  mnObjType value set should be as below table:
@@ -477,7 +447,7 @@ SdrObject* XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, con
                 +-----------------------------------------------------+
                     0x0019      Note                0x001E      OfficeArt object
         */
-        if( xSdrObj.is() && xSdrObj->IsUnoObj() &&
+        if( xSdrObj && xSdrObj->IsUnoObj() &&
             ( (mnObjType < 25 && mnObjType > 10) || mnObjType == 7 || mnObjType == 8 ) )
         {
             SdrUnoObj* pSdrUnoObj = dynamic_cast< SdrUnoObj* >( xSdrObj.get() );
@@ -1033,7 +1003,7 @@ sal_Size XclImpGroupObj::DoGetProgressSize() const
 
 SdrObject* XclImpGroupObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& /*rAnchorRect*/ ) const
 {
-    TSdrObjectPtr< SdrObjGroup > xSdrObj( new SdrObjGroup );
+    std::unique_ptr<SdrObjGroup, SdrObjectFree> xSdrObj( new SdrObjGroup );
     // child objects in BIFF2-BIFF5 have absolute size, not needed to pass own anchor rectangle
     SdrObjList& rObjList = *xSdrObj->GetSubList();  // SdrObjGroup always returns existing sublist
     for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end(); aIt != aEnd; ++aIt )
@@ -1430,7 +1400,7 @@ void XclImpTextObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uI
 
 SdrObject* XclImpTextObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const
 {
-    TSdrObjectPtr< SdrObjCustomShape > xSdrObj( new SdrObjCustomShape );
+    std::unique_ptr<SdrObjCustomShape, SdrObjectFree> xSdrObj( new SdrObjCustomShape );
     xSdrObj->NbcSetSnapRect( rAnchorRect );
     OUString aRectType = "rectangle";
     xSdrObj->MergeDefaultAttributes( &aRectType );
@@ -1826,7 +1796,7 @@ SdrObject* XclImpControlHelper::CreateSdrObjectFromShape(
 {
     mxShape = rxShape;
     SdrObjectPtr xSdrObj( SdrObject::getSdrObjectFromXShape( rxShape ) );
-    if( xSdrObj.is() )
+    if( xSdrObj )
     {
         xSdrObj->NbcSetSnapRect( rAnchorRect );
         // #i30543# insert into control layer
@@ -3288,7 +3258,7 @@ void XclImpDffConverter::ProcessObject( SdrObjList& rObjList, const XclImpDrawOb
             {
                 // CreateSdrObject() recursively creates embedded child objects
                 SdrObjectPtr xSdrObj( rDrawObj.CreateSdrObject( *this, aAnchorRect, false ) );
-                if( xSdrObj.is() )
+                if( xSdrObj )
                     rDrawObj.PreProcessSdrObject( *this, *xSdrObj );
                 // call InsertSdrObject() also, if SdrObject is missing
                 InsertSdrObject( rObjList, rDrawObj, xSdrObj.release() );
@@ -3518,11 +3488,11 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
 
     // try to create a custom SdrObject that overwrites the passed object
     SdrObjectPtr xNewSdrObj( xDrawObj->CreateSdrObject( *this, rAnchorRect, true ) );
-    if( xNewSdrObj.is() )
+    if( xNewSdrObj )
         xSdrObj.reset( xNewSdrObj.release() );
 
     // process the SdrObject
-    if( xSdrObj.is() )
+    if( xSdrObj )
     {
         // cell anchoring
         if ( !rDffObjData.bPageAnchor )
@@ -3543,7 +3513,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
             xSdrObj.reset();
     }
 
-    if( xSdrObj.is() )
+    if( xSdrObj )
     {
         /*  Store the relation between shape ID and SdrObject for connectors.
             Must be done here (and not in InsertSdrObject() function),
@@ -3719,7 +3689,7 @@ void XclImpDffConverter::ProcessShContainer( SvStream& rDffStrm, const DffRecord
         virtual functions ProcessClientAnchor2() and ProcessObj() and writes
         the pointer to the related draw object data (OBJ record) into pDrawObj. */
     SdrObjectPtr xSdrObj( ImportObj( rDffStrm, &pDrawObj, aDummy, aDummy, 0, 0 ) );
-    if( pDrawObj && xSdrObj.is() )
+    if( pDrawObj && xSdrObj )
         InsertSdrObject( GetConvData().mrSdrPage, *pDrawObj, xSdrObj.release() );
     rShHeader.SeekToEndOfRecord( rDffStrm );
 }
@@ -3730,7 +3700,7 @@ void XclImpDffConverter::InsertSdrObject( SdrObjList& rObjList, const XclImpDraw
     /*  Take ownership of the passed object. If insertion fails (e.g. rDrawObj
         states to skip insertion), the object is automatically deleted. */
     SdrObjectPtr xSdrObj( pSdrObj );
-    if( xSdrObj.is() && rDrawObj.IsInsertSdrObj() )
+    if( xSdrObj && rDrawObj.IsInsertSdrObj() )
     {
         rObjList.NbcInsertObject( xSdrObj.release() );
         // callback to drawing manager for e.g. tracking of used sheet area
@@ -3740,7 +3710,7 @@ void XclImpDffConverter::InsertSdrObject( SdrObjList& rObjList, const XclImpDraw
     }
     /*  SdrObject still here? Insertion failed, remove data from shape ID map.
         The SdrObject will be destructed then. */
-    if( xSdrObj.is() )
+    if( xSdrObj )
         rConvData.maSolverCont.RemoveSdrObjectInfo( *xSdrObj );
 }
 
