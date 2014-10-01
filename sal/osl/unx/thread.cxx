@@ -233,14 +233,14 @@ static void* osl_thread_start_Impl (void* pData)
     {
 #ifdef ANDROID
         JNIEnv* env = 0;
-        int res = (*lo_get_javavm())->AttachCurrentThread(lo_get_javavm(), &env, NULL);
+        int res = (*lo_get_javavm()).AttachCurrentThread(&env, NULL);
         __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "New sal thread started and attached res=%d", res);
 #endif
         /* call worker function */
         pImpl->m_WorkerFunction(pImpl->m_pData);
 
 #ifdef ANDROID
-        res = (*lo_get_javavm())->DetachCurrentThread(lo_get_javavm());
+        res = (*lo_get_javavm()).DetachCurrentThread();
         __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "Detached finished sal thread res=%d", res);
 #endif
     }
