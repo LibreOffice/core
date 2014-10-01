@@ -106,7 +106,6 @@ public final class OfficeConnection {
         boolean cleanTermination = false;
         int code = 0;
         try {
-            boolean desktopTerminated = true;
             if (process != null) {
                 if (context != null) {
                     XDesktop desktop = null;
@@ -125,7 +124,7 @@ public final class OfficeConnection {
                     context = null;
                     if (desktop != null) {
                         try {
-                            desktopTerminated = desktop.terminate();
+                            boolean desktopTerminated = desktop.terminate();
                             if (!desktopTerminated) {
                                 // in case terminate() fails we would wait
                                 // forever for the process to die, so kill it
