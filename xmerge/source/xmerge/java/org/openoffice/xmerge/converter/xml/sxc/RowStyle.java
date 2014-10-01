@@ -124,19 +124,7 @@ public class RowStyle extends Style implements Cloneable {
      * @return  The twips equivalent.
      */
     private int parseRowHeight(String value) {
-
-        int height = 255;   // Default value
-
-        if(value.indexOf("cm")!=-1) {
-            float heightCM = Float.parseFloat(value.substring(0,value.indexOf('c')));
-            height = TwipsConverter.cm2twips(heightCM);
-        } else if(value.indexOf("inch")!=-1) {
-            float heightInch = Float.parseFloat(value.substring(0,value.indexOf('i')));
-            height = TwipsConverter.inches2twips(heightInch);
-        }
-
-        return (height);
-
+        return TwipsConverter.convert2twips(value, 255);
     }
 
     /**

@@ -125,18 +125,7 @@ public class ColumnStyle extends Style implements Cloneable {
      * @return  The twips equivalent.
      */
     private int parseColWidth(String value) {
-
-        int width = 255;    // Default value
-
-        if(value.indexOf("cm")!=-1) {
-            float widthCM = Float.parseFloat(value.substring(0,value.indexOf('c')));
-            width = TwipsConverter.cm2twips(widthCM);
-        } else if(value.indexOf("inch")!=-1) {
-            float widthInch = Float.parseFloat(value.substring(0,value.indexOf('i')));
-            width = TwipsConverter.inches2twips(widthInch);
-        }
-
-        return (width);
+        return TwipsConverter.convert2twips(value, 255);
     }
 
     /**
