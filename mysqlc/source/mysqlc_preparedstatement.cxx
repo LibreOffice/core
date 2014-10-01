@@ -374,7 +374,7 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData
 
 
 /* {{{ OPreparedStatement::setTime() -I- */
-void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const tools::Time& aVal)
+void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OPreparedStatement::setTime");
