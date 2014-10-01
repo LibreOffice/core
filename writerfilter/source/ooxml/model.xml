@@ -24263,19 +24263,16 @@
     </resource>
     <resource name="CT_RPrChange" resource="Properties" tag="character">
       <element name="rPr" tokenid="ooxml:CT_RPrChange_rPr"/>
-      <action name="end" action="tokenproperty"/>
-      <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:endtrackchange"/>
-      <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_ParaRPrChange" resource="Properties" tag="character">
       <element name="rPr" tokenid="ooxml:CT_ParaRPrChange_rPr"/>
     </resource>
     <resource name="CT_RunTrackChange" resource="Stream" tag="redlines">
       <action name="start" action="tokenproperty"/>
-      <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:trackchange"/>
+      <action name="start" action="sendPropertiesWithId" sendtokenid="ooxml:trackchange"/>
       <action name="start" action="clearProps"/>
       <action name="end" action="tokenproperty"/>
-      <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:endtrackchange"/>
+      <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:endtrackchange"/>
       <action name="end" action="clearProps"/>
     </resource>
     <resource name="EG_RangeMarkupElements" resource="Properties" tag="redlines">
@@ -24479,6 +24476,7 @@
       <element name="checkBox" tokenid="ooxml:CT_FFData_checkBox"/>
       <element name="ddList" tokenid="ooxml:CT_FFData_ddList"/>
       <element name="textInput" tokenid="ooxml:CT_FFData_textInput"/>
+      <!-- TODO: This is possibly wrong and should be sendPropertiesWithId -->
       <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:ffdata"/>
       <action name="end" action="clearProps"/>
     </resource>
@@ -24934,7 +24932,7 @@
     </resource>
     <resource name="CT_ParaTrackChange" resource="Properties" tag="redline">
       <action name="start" action="tokenproperty"/>
-      <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:paratrackchange"/>
+      <action name="start" action="sendPropertiesWithId" sendtokenid="ooxml:paratrackchange"/>
       <action name="start" action="clearProps"/>
     </resource>
     <resource name="ST_RubyAlign" resource="List" generated="yes">
