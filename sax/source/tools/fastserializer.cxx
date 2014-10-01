@@ -19,9 +19,6 @@
 
 #include "fastserializer.hxx"
 
-#include <com/sun/star/xml/Attribute.hpp>
-#include <com/sun/star/xml/FastAttribute.hpp>
-
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceasvector.hxx>
 
@@ -34,15 +31,9 @@
 
 using ::comphelper::SequenceAsVector;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::xml::FastAttribute;
 using ::com::sun::star::xml::Attribute;
-using ::com::sun::star::xml::sax::SAXException;
 using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::NotConnectedException;
-using ::com::sun::star::io::IOException;
-using ::com::sun::star::io::BufferSizeExceededException;
 
 #define HAS_NAMESPACE(x) ((x & 0xffff0000) != 0)
 #define NAMESPACE(x) (x >> 16)
