@@ -39,8 +39,7 @@ public class TwipsConverter {
     /**
      * Convert from cm's to twips.
      *
-     * @param   value  {@code byte} array containing the LE representation of
-     *                 the value.
+     * @param   value  {@code float} containing the representation of the value.
      *
      * @return  {@code int} containing the converted value.
      */
@@ -52,12 +51,34 @@ public class TwipsConverter {
     /**
      * Convert from cm's to twips.
      *
-     * @param   value  {@code byte} array containing the LE representation of
-     *                 the value.
+     * @param   value  {@code float} containing the representation of the value.
      *
      * @return  {@code int} containing the converted value.
      */
     public static int inches2twips(float value) {
         return (int) (value*1440);
+    }
+
+    /**
+     * Convert {@code String} to twips.
+     *
+     * @param  value        {@code String} in the form {@literal "1.234cm"} or
+     *                      {@literal "1.234inch"}.
+     * @param  defaultValue the default value.
+     * @return the converted value if {@code value} is a well-formatted {@code
+     *         String}, {@code defaultValue} otherwise.
+     */
+    public static int convert2twips(String value, int defaultValue) {
+        int posi;
+
+        if ((posi = value.indexOf("cm")) != -1) {
+            float cm = Float.parseFloat(value.substring(0,posi));
+            return cm2twips(cm);
+        } else if ((posi = value.indexOf("inch")) != -1) {
+            float inches = Float.parseFloat(value.substring(0,posi));
+            return inches2twips(inches);
+        }
+
+        return defaultValue;
     }
 }
