@@ -22,4 +22,26 @@ public class SubTile extends SingleTileLayer {
     public void markForRemoval() {
         markedForRemoval = true;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SubTile subTile = (SubTile) o;
+
+        if (x != subTile.x) return false;
+        if (y != subTile.y) return false;
+        if (Float.compare(subTile.zoom, zoom) != 0) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        result = 31 * result + (zoom != +0.0f ? Float.floatToIntBits(zoom) : 0);
+        return result;
+    }
 }
