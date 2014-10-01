@@ -19,7 +19,9 @@
 
 #include "fastserializer.hxx"
 
+#include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceasvector.hxx>
 
 #include <string.h>
@@ -52,11 +54,14 @@ static const char sSpace[] = " ";
 static const char sXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
 
 namespace sax_fastparser {
-    FastSaxSerializer::FastSaxSerializer( )
+    FastSaxSerializer::FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
         : maCachedOutputStream()
-        , mxFastTokenHandler()
         , maMarkStack()
     {
+        mxFastTokenHandler = css::xml::sax::FastTokenHandler::create(
+                ::comphelper::getProcessComponentContext());
+        assert(xOutputStream.is()); // cannot do anything without that
+        maCachedOutputStream.setOutputStream( xOutputStream );
     }
     FastSaxSerializer::~FastSaxSerializer() {}
 
@@ -189,19 +194,9 @@ namespace sax_fastparser {
         writeBytes(sSlashAndClosingBracket, N_CHARS(sSlashAndClosingBracket));
     }
 
-    void FastSaxSerializer::setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
-    {
-        maCachedOutputStream.setOutputStream( xOutputStream );
-    }
-
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > FastSaxSerializer::getOutputStream()
     {
         return maCachedOutputStream.getOutputStream();
-    }
-
-    void FastSaxSerializer::setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
-    {
-        mxFastTokenHandler = xFastTokenHandler;
     }
 
     void FastSaxSerializer::writeTokenValueList()

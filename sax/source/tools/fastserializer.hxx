@@ -48,7 +48,7 @@ class FastSaxSerializer
     typedef ::com::sun::star::uno::Sequence< ::sal_Int32 > Int32Sequence;
 
 public:
-    FastSaxSerializer();
+    FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream );
     ~FastSaxSerializer();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream();
@@ -105,9 +105,6 @@ public:
 
     */
     void singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList = NULL );
-
-    void setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream );
-    void setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler );
 
     // C++ helpers
     void writeId( ::sal_Int32 Element );
