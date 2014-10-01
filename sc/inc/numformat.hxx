@@ -35,6 +35,8 @@ public:
      * latin script output.
      */
     static bool isLatinScript( const ScPatternAttr& rPat, ScDocument& rDoc );
+
+    static bool isLatinScript( sal_uLong nFormat, ScDocument& rDoc );
 };
 
 }

@@ -49,7 +49,13 @@ bool NumFmtUtil::isLatinScript( const ScPatternAttr& rPat, ScDocument& rDoc )
 {
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     sal_uInt32 nKey = rPat.GetNumberFormat(pFormatter);
-    const SvNumberformat* pFormat = pFormatter->GetEntry(nKey);
+    return isLatinScript(nKey, rDoc);
+}
+
+bool NumFmtUtil::isLatinScript( sal_uLong nFormat, ScDocument& rDoc )
+{
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+    const SvNumberformat* pFormat = pFormatter->GetEntry(nFormat);
     if (!pFormat || !pFormat->IsStandard())
         return false;
 

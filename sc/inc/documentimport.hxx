@@ -49,7 +49,7 @@ public:
         ScAttrEntry* mpData;
         size_t mnSize;
 
-        bool mbGeneralNumFmtOnly;
+        bool mbLatinNumFmtOnly;
 
         Attrs();
     };
