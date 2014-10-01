@@ -55,9 +55,7 @@ void CGM::ImplDoClass5()
             else
                 nWidth = (sal_uInt32)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ) * 25; // scaling in 1/4 mm
 
-            ( pElement->nAspectSourceFlags & ASF_LINEWIDTH )
-                ? pElement->aLineBundle.nLineWidth = nWidth
-                    : pElement->aLineBundle.nLineWidth = nWidth;
+            pElement->aLineBundle.nLineWidth = nWidth;
         }
         break;
         case 0x04 : /*Line Color*/
