@@ -3942,7 +3942,6 @@ darwin*)
         PLATFORMID=ios_arm
         OUTPATH=unxiosr
         OS=IOS
-        SDKDIR=sdk
         ;;
     i*86)
         AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
