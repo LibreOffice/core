@@ -338,7 +338,7 @@ dump-deps-sort:
 
 define gb_Top_GbuildToIdeIntegration
 $(1)-ide-integration:
-	cd $(SRCDIR) && (LC_MESSAGES=C $(MAKE) cmd="$(MAKE) -npf Makefile.gbuild all" cmd || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)
+	(LC_MESSAGES=C $(MAKE) cmd="$(MAKE) -qrpf $(SRCDIR)/Makefile.gbuild all" cmd || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)
 
 endef
 
