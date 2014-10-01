@@ -2512,9 +2512,9 @@ void SwTxtFrm::RecalcAllLines()
 
 void SwTxtFrm::VisitPortions( SwPortionHandler& rPH ) const
 {
-    const SwParaPortion* pPara = GetPara();
+    const SwParaPortion* pPara = IsValid() ? GetPara() : NULL;
 
-    if( pPara )
+    if (pPara)
     {
         if ( IsFollow() )
             rPH.Skip( GetOfst() );
