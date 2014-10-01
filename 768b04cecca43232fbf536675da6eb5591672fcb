@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa0d59b9_ea9447e9",
+        "filename": "external/collada2gltf/patches/drop_tr1_support.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2014-10-01T17:38:38Z",
+      "side": 1,
+      "message": "All other places include \"GLTF.h\" before other headers, and I guess this sequence was the reason, why the stdlib headers were also included in the GLTF/GLTFExtraDataHandler.h\n\nTherefore I simply reorganized the following includes. The buildbots succeeded, but I didn\u0027t chek, if all build with collada.\n\nAFAIK no other code includes any stdlib or even \"GLTF.h\"  in a header, so the other headers don\u0027t work on their own without \"GLTF.h\" anyway.",
+      "revId": "768b04cecca43232fbf536675da6eb5591672fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0d59b9_2afc9f3d",
         "filename": "external/collada2gltf/patches/drop_tr1_support.patch.1",
         "patchSetId": 1
