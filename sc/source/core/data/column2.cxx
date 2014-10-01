@@ -1695,6 +1695,10 @@ public:
 void ScColumn::CopyCellNotesToDocument(
     SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption, SCROW nRowOffsetDest ) const
 {
+    if (IsNotesEmptyBlock(nRow1, nRow2))
+        // The column has no cell notes to copy between specified rows.
+        return;
+
     ScDrawLayer *pDrawLayer = rDestCol.GetDoc().GetDrawLayer();
     bool bWasLocked = bool();
     if (pDrawLayer)
