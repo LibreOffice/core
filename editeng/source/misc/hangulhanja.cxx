@@ -491,7 +491,7 @@ namespace editeng
         {
             if ( implNextConvertibleUnit(
                         _bRepeatUnit
-                    ?   ( IsByCharacter() ? m_nCurrentStartIndex : m_nCurrentStartIndex )
+                    ?   m_nCurrentStartIndex
                     :   m_nCurrentEndIndex
                 ) )
                 return true;
