@@ -2753,7 +2753,7 @@ void SfxHelpWindow_Impl::LoadConfig()
                 nExpandWidth = nWidth;
                 nCollapseWidth = nExpandWidth * nTextSize / 100;
             }
-            else
+            else if (nTextSize != 0)
             {
                 nCollapseWidth = nWidth;
                 nExpandWidth = nCollapseWidth * 100 / nTextSize;
