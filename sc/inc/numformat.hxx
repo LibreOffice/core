@@ -15,6 +15,7 @@
 #include <tools/solar.h>
 
 class ScPatternAttr;
+class ScDocument;
 
 namespace sc {
 
@@ -28,6 +29,12 @@ public:
     static bool isGeneral( sal_uLong nFormat );
 
     static bool isGeneral( const ScPatternAttr& rPat );
+
+    /**
+     * Check if the attribute pattern has a number format that only produces
+     * latin script output.
+     */
+    static bool isLatinScript( const ScPatternAttr& rPat, ScDocument& rDoc );
 };
 
 }
