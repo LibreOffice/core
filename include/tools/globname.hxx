@@ -39,10 +39,14 @@ struct ImpSvGlobalName
 
     enum Empty { EMPTY };
 
-                ImpSvGlobalName()
+                ImpSvGlobalName(const SvGUID &rData)
+                    : szData(rData)
+                    , nRefCount(0)
                 {
-                    nRefCount = 0;
                 }
+                ImpSvGlobalName(sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+                          sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
+                          sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15);
                 ImpSvGlobalName( const ImpSvGlobalName & rObj );
                 ImpSvGlobalName( Empty );
 

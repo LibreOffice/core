@@ -27,17 +27,34 @@
 #include <tools/globname.hxx>
 
 // ImpSvGlobalName ------------------------------------------------------------
-
 ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
+    : szData(rObj.szData)
+    , nRefCount(0)
 {
-    nRefCount = 0;
-    szData = rObj.szData;
 }
 
 ImpSvGlobalName::ImpSvGlobalName( Empty )
+    : nRefCount(1)
 {
-    nRefCount = 1;
     memset( &szData, 0, sizeof( szData ) );
+}
+
+ImpSvGlobalName::ImpSvGlobalName(sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+                          sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
+                          sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15)
+    : nRefCount(0)
+{
+    szData.Data1 = n1;
+    szData.Data2 = n2;
+    szData.Data3 = n3;
+    szData.Data4[0] = b8;
+    szData.Data4[1] = b9;
+    szData.Data4[2] = b10;
+    szData.Data4[3] = b11;
+    szData.Data4[4] = b12;
+    szData.Data4[5] = b13;
+    szData.Data4[6] = b14;
+    szData.Data4[7] = b15;
 }
 
 bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
@@ -46,7 +63,6 @@ bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 }
 
 // SvGlobalName ----------------------------------------------------------------
-
 SvGlobalName::SvGlobalName()
 {
     static ImpSvGlobalName aNoName( ImpSvGlobalName::EMPTY );
@@ -57,28 +73,16 @@ SvGlobalName::SvGlobalName()
 
 SvGlobalName::SvGlobalName( const SvGUID & rId )
 {
-    pImp = new ImpSvGlobalName();
+    pImp = new ImpSvGlobalName(rId);
     pImp->nRefCount++;
-    pImp->szData = rId;
 }
 
 SvGlobalName::SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                             sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                             sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
 {
-    pImp = new ImpSvGlobalName();
+    pImp = new ImpSvGlobalName(n1, n2, n3, b8, b9, b10, b11, b12, b13, b14, b15);
     pImp->nRefCount++;
-    pImp->szData.Data1 = n1;
-    pImp->szData.Data2 = n2;
-    pImp->szData.Data3 = n3;
-    pImp->szData.Data4[0] = b8;
-    pImp->szData.Data4[1] = b9;
-    pImp->szData.Data4[2] = b10;
-    pImp->szData.Data4[3] = b11;
-    pImp->szData.Data4[4] = b12;
-    pImp->szData.Data4[5] = b13;
-    pImp->szData.Data4[6] = b14;
-    pImp->szData.Data4[7] = b15;
 }
 
 SvGlobalName::~SvGlobalName()
@@ -315,9 +319,8 @@ SvGlobalName::SvGlobalName( const com::sun::star::uno::Sequence < sal_Int8 >& aS
             aResult.Data4[nInd] = ( sal_uInt8 )aSeq[nInd+8];
     }
 
-    pImp = new ImpSvGlobalName();
+    pImp = new ImpSvGlobalName(aResult);
     pImp->nRefCount++;
-    pImp->szData = aResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
