@@ -60,7 +60,7 @@ AddonMenu::~AddonMenu()
         {
             // delete user attributes created with new!
             sal_uInt16 nId = GetItemId( i );
-            MenuConfiguration::Attributes* pUserAttributes = (MenuConfiguration::Attributes*)GetUserValue( nId );
+            MenuConfiguration::Attributes* pUserAttributes = reinterpret_cast<MenuConfiguration::Attributes*>(GetUserValue( nId ));
             delete pUserAttributes;
             delete GetPopupMenu( nId );
         }
@@ -128,7 +128,7 @@ AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame,
     const Sequence< Sequence< PropertyValue > >& rAddonMenuEntries = aOptions.GetAddonsMenu();
     if ( rAddonMenuEntries.getLength() > 0 )
     {
-        pAddonMenu = (AddonMenu *)AddonMenuManager::CreatePopupMenuType( ADDON_MENU, rFrame );
+        pAddonMenu = static_cast<AddonMenu *>(AddonMenuManager::CreatePopupMenuType( ADDON_MENU, rFrame ));
         ::rtl::OUString aModuleIdentifier = GetModuleIdentifier( rContext, rFrame );
         AddonMenuManager::BuildMenu( pAddonMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, aModuleIdentifier );
 
@@ -249,7 +249,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                  AddonMenuManager::IsCorrectContext( aModuleIdentifier, aContext ))
             {
                 sal_uInt16          nId             = nUniqueMenuId++;
-                AddonPopupMenu* pAddonPopupMenu = (AddonPopupMenu *)AddonMenuManager::CreatePopupMenuType( ADDON_POPUPMENU, rFrame );
+                AddonPopupMenu* pAddonPopupMenu = static_cast<AddonPopupMenu *>(AddonMenuManager::CreatePopupMenuType( ADDON_POPUPMENU, rFrame ));
 
                 AddonMenuManager::BuildMenu( pAddonPopupMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, aModuleIdentifier );
 

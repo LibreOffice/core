@@ -142,7 +142,7 @@ TabControl* TabWindow::impl_GetTabControl( const css::uno::Reference< css::awt::
 {
     vcl::Window* pWindow = VCLUnoHelper::GetWindow( rTabControlWindow );
     if ( pWindow )
-        return (TabControl *)pWindow;
+        return static_cast<TabControl *>(pWindow);
     else
         return NULL;
 }
@@ -173,16 +173,16 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID ) co
                 switch ( eNotify )
                 {
                     case NOTIFY_INSERTED:
-                        ((css::awt::XTabListener*)pIterator.next())->inserted( ID );
+                        static_cast<css::awt::XTabListener*>(pIterator.next())->inserted( ID );
                         break;
                     case NOTIFY_REMOVED:
-                        ((css::awt::XTabListener*)pIterator.next())->removed( ID );
+                        static_cast<css::awt::XTabListener*>(pIterator.next())->removed( ID );
                         break;
                     case NOTIFY_ACTIVATED:
-                        ((css::awt::XTabListener*)pIterator.next())->activated( ID );
+                        static_cast<css::awt::XTabListener*>(pIterator.next())->activated( ID );
                         break;
                     case NOTIFY_DEACTIVATED:
-                        ((css::awt::XTabListener*)pIterator.next())->deactivated( ID );
+                        static_cast<css::awt::XTabListener*>(pIterator.next())->deactivated( ID );
                         break;
                     default:
                         break;
@@ -210,7 +210,7 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID, con
                 switch ( eNotify )
                 {
                     case NOTIFY_CHANGED:
-                        ((css::awt::XTabListener*)pIterator.next())->changed( ID, rSeq );
+                        static_cast<css::awt::XTabListener*>(pIterator.next())->changed( ID, rSeq );
                         break;
                     default:
                         break;
@@ -399,7 +399,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
                     if ( pWindow )
                     {
                         pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
-                        TabControl* pTabControl = (TabControl *)pWindow;
+                        TabControl* pTabControl = static_cast<TabControl *>(pWindow);
                         pTabControl->SetActivatePageHdl( LINK( this, TabWindow, Activate ));
                         pTabControl->SetDeactivatePageHdl( LINK( this, TabWindow, Deactivate ));
                     }

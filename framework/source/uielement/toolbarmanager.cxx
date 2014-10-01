@@ -202,7 +202,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
         pWindow = pWindow->GetParent();
 
     if ( pWindow )
-        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
+        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
 
     m_xToolbarControllerFactory = frame::theToolbarControllerFactory::get( m_xContext );
     m_xURLTransformer = URLTransformer::create( m_xContext );
@@ -258,7 +258,7 @@ void ToolBarManager::Destroy()
             pWindow = pWindow->GetParent();
 
         if ( pWindow )
-            ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( m_pToolBar );
+            static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->RemoveWindow( m_pToolBar );
         m_bAddedToTaskPaneList = false;
     }
 
@@ -537,7 +537,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
         if ( m_xImageOrientationListener.is() )
         {
             ImageOrientationListener* pImageOrientation =
-                (ImageOrientationListener*)m_xImageOrientationListener.get();
+                static_cast<ImageOrientationListener*>(m_xImageOrientationListener.get());
             pImageOrientation->unbindListener();
             m_xImageOrientationListener.clear();
         }
@@ -615,7 +615,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
         if ( m_xImageOrientationListener.is() )
         {
             ImageOrientationListener* pImageOrientation =
-                (ImageOrientationListener*)m_xImageOrientationListener.get();
+                static_cast<ImageOrientationListener*>(m_xImageOrientationListener.get());
             pImageOrientation->unbindListener();
             m_xImageOrientationListener.clear();
         }

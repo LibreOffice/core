@@ -274,7 +274,7 @@ void TitleHelper::impl_sendTitleChangedEvent ()
     {
         try
         {
-            ((css::frame::XTitleChangeListener*)pIt.next())->titleChanged( aEvent );
+            static_cast<css::frame::XTitleChangeListener*>(pIt.next())->titleChanged( aEvent );
         }
         catch(const css::uno::Exception&)
         {

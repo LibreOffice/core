@@ -127,7 +127,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
 
     if ( m_pMenuManager && aEvent.Action == FrameAction_FRAME_UI_ACTIVATED )
     {
-        MenuBar* pMenuBar = (MenuBar *)m_pMenuManager->GetMenu();
+        MenuBar* pMenuBar = static_cast<MenuBar *>(m_pMenuManager->GetMenu());
         uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
         aGuard.clear();
 
@@ -143,7 +143,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
 
                 if ( pWindow )
                 {
-                    SystemWindow* pSysWindow = (SystemWindow *)pWindow;
+                    SystemWindow* pSysWindow = static_cast<SystemWindow *>(pWindow);
                     pSysWindow->SetMenuBar( pMenuBar );
                 }
             }
@@ -226,7 +226,7 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
 
         if ( pWindow )
         {
-            SystemWindow* pSysWindow = (SystemWindow *)pWindow;
+            SystemWindow* pSysWindow = static_cast<SystemWindow *>(pWindow);
 
             if ( m_pMenuManager )
             {

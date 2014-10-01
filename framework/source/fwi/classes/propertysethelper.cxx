@@ -112,7 +112,7 @@ bool PropertySetHelper::impl_existsVeto(const css::beans::PropertyChangeEvent& a
         try
         {
             css::uno::Reference< css::beans::XVetoableChangeListener > xListener(
-                ((css::beans::XVetoableChangeListener*)pListener.next()),
+                static_cast<css::beans::XVetoableChangeListener*>(pListener.next()),
                 css::uno::UNO_QUERY_THROW);
             xListener->vetoableChange(aEvent);
         }
@@ -141,7 +141,7 @@ void PropertySetHelper::impl_notifyChangeListener(const css::beans::PropertyChan
         try
         {
             css::uno::Reference< css::beans::XPropertyChangeListener > xListener(
-                ((css::beans::XVetoableChangeListener*)pListener.next()),
+                static_cast<css::beans::XVetoableChangeListener*>(pListener.next()),
                 css::uno::UNO_QUERY_THROW);
             xListener->propertyChange(aEvent);
         }

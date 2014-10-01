@@ -190,7 +190,7 @@ void LanguageSelectionMenuController::impl_setPopupMenu()
 
 void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu , const Mode eMode )
 {
-    VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
+    VCLXPopupMenu* pVCLPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*     pPopupMenu    = 0;
 
     SolarMutexGuard aSolarMutexGuard;
@@ -200,7 +200,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
         return;
 
     if ( pVCLPopupMenu )
-        pPopupMenu = (PopupMenu *)pVCLPopupMenu->GetMenu();
+        pPopupMenu = static_cast<PopupMenu *>(pVCLPopupMenu->GetMenu());
 
     OUString aCmd;
     OUString aCmd_Dialog;

@@ -177,10 +177,10 @@ void ToolbarsMenuController::addCommand(
     if ( rSettings.GetUseImagesInMenus() )
         aImage = GetImageFromURL( m_xFrame, rCommandURL, false );
 
-    VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( rPopupMenu );
+    VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( rPopupMenu ));
     if ( pPopupMenu )
     {
-        PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+        PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
         if ( !!aImage )
             pVCLPopupMenu->SetItemImage( nItemId, aImage );
     }
@@ -440,8 +440,8 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
             {
                 SolarMutexGuard aGuard;
-                VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
-                PopupMenu* pVCLPopupMenu = pXPopupMenu ? (PopupMenu *)pXPopupMenu->GetMenu() : NULL;
+                VCLXPopupMenu* pXPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( m_xPopupMenu ));
+                PopupMenu* pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : NULL;
                 assert(pVCLPopupMenu);
                 if (pVCLPopupMenu)
                     pVCLPopupMenu->SetUserValue( nIndex, sal_uIntPtr( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
@@ -552,8 +552,8 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
     if ( xPopupMenu.is() )
     {
         SolarMutexGuard aGuard;
-        VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( xPopupMenu );
-        PopupMenu*     pVCLPopupMenu = pXPopupMenu ? (PopupMenu *)pXPopupMenu->GetMenu() : NULL;
+        VCLXPopupMenu* pXPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( xPopupMenu ));
+        PopupMenu*     pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : NULL;
 
         assert(pVCLPopupMenu);
         if (!pVCLPopupMenu)
@@ -608,11 +608,11 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
 
     if ( xPopupMenu.is() )
     {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
+        VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( xPopupMenu ));
         if ( pPopupMenu )
         {
             SolarMutexGuard aSolarMutexGuard;
-            PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+            PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
             OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
             if ( aCmd.startsWith( STATIC_INTERNAL_CMD_PART ) )

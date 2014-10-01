@@ -1228,7 +1228,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
 
     if ( m_xImageManager.is() )
     {
-        ImageManager* pImageManager = (ImageManager*)m_xImageManager.get();
+        ImageManager* pImageManager = static_cast<ImageManager*>(m_xImageManager.get());
         if ( pImageManager )
             pImageManager->setStorage( m_xDocConfigStorage );
     }
@@ -1400,13 +1400,13 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
                 switch ( eOp )
                 {
                     case NotifyOp_Replace:
-                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementReplaced( aEvent );
+                        static_cast<::com::sun::star::ui::XUIConfigurationListener*>(pIterator.next())->elementReplaced( aEvent );
                         break;
                     case NotifyOp_Insert:
-                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementInserted( aEvent );
+                        static_cast<::com::sun::star::ui::XUIConfigurationListener*>(pIterator.next())->elementInserted( aEvent );
                         break;
                     case NotifyOp_Remove:
-                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementRemoved( aEvent );
+                        static_cast<::com::sun::star::ui::XUIConfigurationListener*>(pIterator.next())->elementRemoved( aEvent );
                         break;
                 }
             }

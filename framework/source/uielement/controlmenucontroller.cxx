@@ -278,14 +278,14 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 // private function
 void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
+    VCLXPopupMenu*                                     pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*                                         pVCLPopupMenu     = 0;
 
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
-        pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
     if ( pVCLPopupMenu && m_pResPopupMenu )
         *pVCLPopupMenu = *m_pResPopupMenu;
@@ -324,13 +324,13 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     VCLXPopupMenu*  pPopupMenu = NULL;
 
     if ( nMenuId )
-        pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
+        pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( m_xPopupMenu ));
 
     if (pPopupMenu)
     {
         SolarMutexGuard aSolarMutexGuard;
 
-        PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+        PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
         if ( !Event.IsEnabled && pVCLPopupMenu->GetItemPos( nMenuId ) != MENU_ITEM_NOTFOUND )
             pVCLPopupMenu->RemoveItem( pVCLPopupMenu->GetItemPos( nMenuId ));
@@ -390,10 +390,10 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
         {
             m_bShowMenuImages   = bShowMenuImages;
 
-            VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( m_xPopupMenu );
+            VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( m_xPopupMenu ));
             if ( pPopupMenu )
             {
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+                PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
                 if ( pVCLPopupMenu && bUpdateImages )
                     updateImagesPopupMenu( pVCLPopupMenu );
             }

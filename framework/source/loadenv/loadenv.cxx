@@ -1540,7 +1540,7 @@ void LoadEnv::impl_reactForLoadingState()
             vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
             // check for system window is necessary to guarantee correct pointer cast!
             if (pWindow && pWindow->IsSystemWindow())
-                ((WorkWindow*)pWindow)->Minimize();
+                static_cast<WorkWindow*>(pWindow)->Minimize();
         }
         else if (!bHidden)
         {
@@ -1702,7 +1702,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         return;
 
     // dont overwrite this special state!
-    WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+    WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow);
     if (pWorkWindow->IsMinimized())
         return;
 
@@ -1759,7 +1759,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
             if (! pWindowCheck)
                 return;
 
-            SystemWindow* pSystemWindow = (SystemWindow*)pWindowCheck;
+            SystemWindow* pSystemWindow = static_cast<SystemWindow*>(pWindowCheck);
             pSystemWindow->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
             // <- SOLAR SAFE
         }

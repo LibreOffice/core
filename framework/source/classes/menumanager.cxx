@@ -183,7 +183,7 @@ MenuManager::MenuManager(
             if ( nItemId == SID_NEWDOCDIRECT || aItemCommand == aSlotNewDocDirect )
             {
                 MenuConfiguration aMenuCfg( m_xContext );
-                BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
+                BmkMenu* pSubMenu = static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU ));
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
                 AddMenu(pSubMenu,OUString(),nItemId,true,false);
@@ -197,7 +197,7 @@ MenuManager::MenuManager(
             else if ( nItemId == SID_AUTOPILOTMENU || aItemCommand == aSlotAutoPilot )
             {
                 MenuConfiguration aMenuCfg( m_xContext );
-                BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
+                BmkMenu* pSubMenu = static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU ));
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
                 AddMenu(pSubMenu,OUString(),nItemId,true,false);
@@ -220,7 +220,7 @@ MenuManager::MenuManager(
                         OUString   aImageId;
 
                         MenuConfiguration::Attributes* pMenuAttributes =
-                            (MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
+                            reinterpret_cast<MenuConfiguration::Attributes*>(pMenu->GetUserValue( nItemId ));
 
                         if ( pMenuAttributes && !pMenuAttributes->aImageId.isEmpty() )
                         {
@@ -944,7 +944,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,bool
                 OUString aImageId;
 
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                    (::framework::MenuConfiguration::Attributes*)_pMenu->GetUserValue( nId );
+                    reinterpret_cast<::framework::MenuConfiguration::Attributes*>(_pMenu->GetUserValue( nId ));
 
                 if ( pMenuAttributes )
                     aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes

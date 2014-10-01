@@ -105,15 +105,15 @@ ObjectMenuController::~ObjectMenuController()
 // private function
 void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    const com::sun::star::embed::VerbDescriptor* pVerbCommandArray = rVerbCommandSeq.getConstArray();
-    VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
-    PopupMenu*                                         pVCLPopupMenu     = 0;
+    const css::embed::VerbDescriptor* pVerbCommandArray = rVerbCommandSeq.getConstArray();
+    VCLXPopupMenu*                    pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
+    PopupMenu*                        pVCLPopupMenu     = 0;
 
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
-        pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
     if ( pVCLPopupMenu )
     {

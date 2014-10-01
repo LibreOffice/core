@@ -43,7 +43,7 @@ void SAL_CALL StatusIndicator::start(const OUString& sText ,
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
-        StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
+        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->start(this, sText, nRange);
     }
 #endif
@@ -56,7 +56,7 @@ void SAL_CALL StatusIndicator::end()
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
-        StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
+        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->end(this);
     }
 #endif
@@ -69,7 +69,7 @@ void SAL_CALL StatusIndicator::reset()
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
-        StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
+        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->reset(this);
     }
 #endif
@@ -84,7 +84,7 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
-        StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
+        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->setText(this, sText);
     }
 #endif
@@ -99,7 +99,7 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
-        StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
+        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
         pFactory->setValue(this, nValue);
     }
 #endif

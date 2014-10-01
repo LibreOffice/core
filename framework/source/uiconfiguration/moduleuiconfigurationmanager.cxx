@@ -1693,13 +1693,13 @@ void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::Con
                 switch ( eOp )
                 {
                     case NotifyOp_Replace:
-                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementReplaced( aEvent );
+                        static_cast<::com::sun::star::ui::XUIConfigurationListener*>(pIterator.next())->elementReplaced( aEvent );
                         break;
                     case NotifyOp_Insert:
-                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementInserted( aEvent );
+                        static_cast<::com::sun::star::ui::XUIConfigurationListener*>(pIterator.next())->elementInserted( aEvent );
                         break;
                     case NotifyOp_Remove:
-                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementRemoved( aEvent );
+                        static_cast<::com::sun::star::ui::XUIConfigurationListener*>(pIterator.next())->elementRemoved( aEvent );
                         break;
                 }
             }

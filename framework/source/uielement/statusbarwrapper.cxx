@@ -112,7 +112,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
 
                     pStatusBar = new FrameworkStatusBar( pWindow, nStyles );
                     pStatusBarManager = new StatusBarManager( m_xContext, xFrame, m_aResourceURL, pStatusBar );
-                    ((FrameworkStatusBar*)pStatusBar)->SetStatusBarManager( pStatusBarManager );
+                    static_cast<FrameworkStatusBar*>(pStatusBar)->SetStatusBarManager( pStatusBarManager );
                     m_xStatusBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
                     pStatusBar->SetUniqueId( HID_STATUSBAR );
                 }

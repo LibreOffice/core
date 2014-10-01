@@ -107,7 +107,7 @@ void ProgressBarWrapper::start( const OUString& Text, ::sal_Int32 Range )
         vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
-            StatusBar* pStatusBar = (StatusBar *)pWindow;
+            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
             if ( !pStatusBar->IsProgressMode() )
                 pStatusBar->StartProgressMode( Text );
             else
@@ -145,7 +145,7 @@ void ProgressBarWrapper::end()
         vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
-            StatusBar* pStatusBar = (StatusBar *)pWindow;
+            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
             if ( pStatusBar->IsProgressMode() )
                 pStatusBar->EndProgressMode();
         }
@@ -175,7 +175,7 @@ void ProgressBarWrapper::setText( const OUString& Text )
         vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
-            StatusBar* pStatusBar = (StatusBar *)pWindow;
+            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
             if( pStatusBar->IsProgressMode() )
             {
                 pStatusBar->SetUpdateMode( false );
@@ -228,7 +228,7 @@ void ProgressBarWrapper::setValue( ::sal_Int32 nValue )
         vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
-            StatusBar* pStatusBar = (StatusBar *)pWindow;
+            StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow);
             if ( !pStatusBar->IsProgressMode() )
                 pStatusBar->StartProgressMode( aText );
             pStatusBar->SetProgressValue( sal_uInt16( nValue ));

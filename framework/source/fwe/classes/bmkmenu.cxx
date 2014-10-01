@@ -164,7 +164,7 @@ void BmkMenu::Initialize()
                 InsertItem( nId, aTitle );
 
             MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes( aTargetFrame, aImageId );
-            SetUserValue( nId, (sal_uIntPtr)pUserAttributes );
+            SetUserValue( nId, reinterpret_cast<sal_uIntPtr>(pUserAttributes) );
 
             SetItemCommand( nId, aURL );
         }

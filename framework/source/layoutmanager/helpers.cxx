@@ -123,7 +123,7 @@ SystemWindow* getTopSystemWindow( const uno::Reference< awt::XWindow >& xWindow 
         pWindow = pWindow->GetParent();
 
     if ( pWindow )
-        return (SystemWindow *)pWindow;
+        return static_cast<SystemWindow *>(pWindow);
     else
         return 0;
 }
@@ -153,7 +153,7 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
         vcl::Window* pWindow = VCLUnoHelper::GetWindow( _xWindow );
         if ( pWindow->GetType() == WINDOW_TOOLBOX )
         {
-            ::Size aSize = ((ToolBox*)pWindow)->CalcWindowSizePixel( 1 );
+            ::Size aSize = static_cast<ToolBox*>(pWindow)->CalcWindowSizePixel( 1 );
             _rPosSize.Width = aSize.Width();
             _rPosSize.Height = aSize.Height();
         }

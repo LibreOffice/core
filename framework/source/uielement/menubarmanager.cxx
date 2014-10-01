@@ -546,7 +546,7 @@ void MenuBarManager::RequestImages()
         MenuItemHandler* pItemHandler = m_aMenuItemHandlerVector[i];
         if ( pItemHandler->xSubMenuManager.is() )
         {
-            MenuBarManager* pMenuBarManager = (MenuBarManager*)(pItemHandler->xSubMenuManager.get());
+            MenuBarManager* pMenuBarManager = static_cast<MenuBarManager*>(pItemHandler->xSubMenuManager.get());
             pMenuBarManager->RequestImages();
         }
     }
@@ -1187,13 +1187,13 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             if ( nItemId == SID_MDIWINDOWLIST || aCommand == aSpecialWindowCommand)
             {
                 // Retrieve addon popup menus and add them to our menu bar
-                framework::AddonMenuManager::MergeAddonPopupMenus( rFrame, nPos, (MenuBar *)pMenu, m_xContext );
+                framework::AddonMenuManager::MergeAddonPopupMenus( rFrame, nPos, static_cast<MenuBar *>(pMenu), m_xContext );
                 break;
             }
         }
 
         // Merge the Add-Ons help menu items into the Office help menu
-        framework::AddonMenuManager::MergeAddonHelpMenu( rFrame, (MenuBar *)pMenu, m_xContext );
+        framework::AddonMenuManager::MergeAddonHelpMenu( rFrame, static_cast<MenuBar *>(pMenu), m_xContext );
     }
 
     OUString    aEmpty;
@@ -1249,7 +1249,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 // works with inplace OLE. Remove old dummy popup menu!
                 MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
-                PopupMenu* pNewPopupMenu = (PopupMenu *)pVCLXPopupMenu->GetMenu();
+                PopupMenu* pNewPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( nItemId, pNewPopupMenu );
                 pItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( (OWeakObject *)pVCLXPopupMenu, UNO_QUERY );
                 pItemHandler->aMenuItemURL = aItemCommand;
@@ -1267,7 +1267,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                      ( aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX ) ))
             {
                 // A special addon popup menu, must be created with a different ctor
-                MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,(AddonPopupMenu *)pPopup, bDeleteChildren, bDeleteChildren );
+                MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,
+                                                          static_cast<AddonPopupMenu *>(pPopup), bDeleteChildren, bDeleteChildren );
                 AddMenu(pSubMenuManager,aItemCommand,nItemId);
             }
             else
@@ -1275,7 +1276,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 Reference< XDispatchProvider > xPopupMenuDispatchProvider( rDispatchProvider );
 
                 // Retrieve possible attributes struct
-                MenuConfiguration::Attributes* pAttributes = (MenuConfiguration::Attributes *)(pMenu->GetUserValue( nItemId ));
+                MenuConfiguration::Attributes* pAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(pMenu->GetUserValue( nItemId ));
                 if ( pAttributes )
                     xPopupMenuDispatchProvider = pAttributes->xDispatchProvider;
 
@@ -1346,7 +1347,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     OUString   aImageId;
 
                     MenuConfiguration::Attributes* pMenuAttributes =
-                        (MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
+                        reinterpret_cast<MenuConfiguration::Attributes*>(pMenu->GetUserValue( nItemId ));
 
                     if ( pMenuAttributes && !pMenuAttributes->aImageId.isEmpty() )
                     {
@@ -1379,7 +1380,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 // We have to set an empty popup menu into our menu structure so the controller also
                 // works with inplace OLE.
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
-                PopupMenu* pPopupMenu = (PopupMenu *)pVCLXPopupMenu->GetMenu();
+                PopupMenu* pPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( pItemHandler->nItemId, pPopupMenu );
                 pItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( (OWeakObject *)pVCLXPopupMenu, UNO_QUERY );
 
@@ -1708,7 +1709,7 @@ void MenuBarManager::FillMenu(
                             // Use attributes struct to transport special dispatch provider
                             MenuConfiguration::Attributes* pAttributes = new MenuConfiguration::Attributes;
                             pAttributes->xDispatchProvider = xDispatchProvider;
-                            pMenu->SetUserValue( nId, (sal_uIntPtr)( pAttributes ));
+                            pMenu->SetUserValue( nId, reinterpret_cast<sal_uIntPtr>( pAttributes ));
                         }
 
                         // Use help command to transport module identifier
@@ -1884,7 +1885,7 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
         }
         if ( pItemHandler->xSubMenuManager.is() )
         {
-            MenuBarManager* pMenuBarManager = (MenuBarManager*)(pItemHandler->xSubMenuManager.get());
+            MenuBarManager* pMenuBarManager = static_cast<MenuBarManager*>(pItemHandler->xSubMenuManager.get());
             if ( pMenuBarManager )
                 pMenuBarManager->GetPopupController( rPopupController );
         }
@@ -1964,7 +1965,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
         {
             if ( pAddonMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
             {
-                MenuConfiguration::Attributes* pAddonAttributes = (MenuConfiguration::Attributes *)(pAddonMenu->GetUserValue( nItemId ));
+                MenuConfiguration::Attributes* pAddonAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(pAddonMenu->GetUserValue( nItemId ));
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
 
                 if ( pAddonAttributes )
@@ -1983,7 +1984,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
                         m_xPopupMenuControllerFactory->hasController( aItemCommand, OUString() ))
                     {
                         VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
-                        PopupMenu* pCtlPopupMenu = (PopupMenu *)pVCLXPopupMenu->GetMenu();
+                        PopupMenu* pCtlPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                         pAddonMenu->SetPopupMenu( pMenuItemHandler->nItemId, pCtlPopupMenu );
                         pMenuItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( (OWeakObject *)pVCLXPopupMenu, UNO_QUERY );
 

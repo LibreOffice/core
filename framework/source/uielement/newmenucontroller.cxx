@@ -313,14 +313,14 @@ NewMenuController::~NewMenuController()
 // private function
 void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    VCLXPopupMenu* pPopupMenu    = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
+    VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*     pVCLPopupMenu = 0;
 
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
-        pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
     if ( pVCLPopupMenu )
     {
@@ -328,9 +328,9 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         boost::scoped_ptr<BmkMenu> pSubMenu;
 
         if ( m_bNewMenu )
-            pSubMenu.reset((BmkMenu*)aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU ));
+            pSubMenu.reset(static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU )));
         else
-            pSubMenu.reset((BmkMenu*)aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_WIZARDMENU ));
+            pSubMenu.reset(static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_WIZARDMENU )));
 
         // copy entries as we have to use the provided popup menu
         *pVCLPopupMenu = *pSubMenu;
@@ -346,7 +346,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
             if (( nItemId != 0 ) &&
                 ( pSubMenu->GetItemType( nItemId ) != MENUITEM_SEPARATOR ))
             {
-                MenuConfiguration::Attributes* pBmkAttributes = (MenuConfiguration::Attributes *)(pSubMenu->GetUserValue( nItemId ));
+                MenuConfiguration::Attributes* pBmkAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(pSubMenu->GetUserValue( nItemId ));
                 if ( pBmkAttributes != 0 )
                 {
                     aAddInfo.aTargetFrame = pBmkAttributes->aTargetFrame;
@@ -403,12 +403,12 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
 
     if ( xPopupMenu.is() && xDispatchProvider.is() )
     {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
+        VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( xPopupMenu ));
         if ( pPopupMenu )
         {
             {
                 SolarMutexGuard aSolarMutexGuard;
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+                PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
                 aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
             }
 
@@ -444,13 +444,13 @@ void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& ) thr
     SolarMutexGuard aSolarMutexGuard;
     if ( m_xFrame.is() && m_xPopupMenu.is() )
     {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( m_xPopupMenu );
+        VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( m_xPopupMenu ));
         if ( pPopupMenu )
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
             bool bShowImages( rSettings.GetUseImagesInMenus() );
 
-            PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+            PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
             if ( m_bShowImages != bShowImages )
             {

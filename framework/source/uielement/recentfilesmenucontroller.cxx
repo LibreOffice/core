@@ -129,14 +129,14 @@ RecentFilesMenuController::~RecentFilesMenuController()
 // private function
 void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    VCLXPopupMenu* pPopupMenu    = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
+    VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*     pVCLPopupMenu = 0;
 
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
-        pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
     if ( pVCLPopupMenu )
     {

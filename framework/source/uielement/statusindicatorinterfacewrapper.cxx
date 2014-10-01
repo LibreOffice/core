@@ -49,7 +49,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )
     {
-        ProgressBarWrapper* pProgressBar = (ProgressBarWrapper*)xComp.get();
+        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
         if ( pProgressBar )
             pProgressBar->start( sText, nRange );
     }
@@ -61,7 +61,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )
     {
-        ProgressBarWrapper* pProgressBar = (ProgressBarWrapper*)xComp.get();
+        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
         if ( pProgressBar )
             pProgressBar->end();
     }
@@ -73,7 +73,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )
     {
-        ProgressBarWrapper* pProgressBar = (ProgressBarWrapper*)xComp.get();
+        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
         if ( pProgressBar )
             pProgressBar->reset();
     }
@@ -86,7 +86,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )
     {
-        ProgressBarWrapper* pProgressBar = (ProgressBarWrapper*)xComp.get();
+        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
         if ( pProgressBar )
             pProgressBar->setText( sText );
     }
@@ -99,7 +99,7 @@ throw( ::com::sun::star::uno::RuntimeException, std::exception )
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );
     if ( xComp.is() )
     {
-        ProgressBarWrapper* pProgressBar = (ProgressBarWrapper*)xComp.get();
+        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
         if ( pProgressBar )
             pProgressBar->setValue( nValue );
     }

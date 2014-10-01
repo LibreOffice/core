@@ -74,14 +74,14 @@ HeaderMenuController::~HeaderMenuController()
 // private function
 void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::frame::XModel >& rModel, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
-    PopupMenu*                                         pVCLPopupMenu     = 0;
+    VCLXPopupMenu*       pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
+    PopupMenu*           pVCLPopupMenu     = 0;
 
     SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
-        pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
     Reference< XStyleFamiliesSupplier > xStyleFamiliesSupplier( rModel, UNO_QUERY );
     if ( pVCLPopupMenu && xStyleFamiliesSupplier.is())
