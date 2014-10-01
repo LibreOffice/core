@@ -58,9 +58,9 @@ class SerfUri
         bool operator!= ( const SerfUri & rOther ) const
         { return !operator==( rOther ); }
 
-        apr_uri_t* getAprUri()
+        apr_uri_t& getAprUri()
         {
-            return &mAprUri;
+            return mAprUri;
         }
         const OUString & GetURI( void ) const
                                             { return mURI; };

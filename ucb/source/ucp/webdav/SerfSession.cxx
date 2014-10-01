@@ -138,7 +138,7 @@ void SerfSession::Init()
         // TODO - close_connection callback
         apr_status_t status = serf_connection_create2( &m_pSerfConnection,
                                                        m_pSerfContext,
-                                                       *(m_aUri.getAprUri()),
+                                                       m_aUri.getAprUri(),
                                                        Serf_ConnectSetup, this,
                                                        0 /* close connection callback */, 0 /* close connection baton */,
                                                        getAprPool() );
@@ -209,13 +209,13 @@ bool SerfSession::isSSLNeeded()
 
 char* SerfSession::getHostinfo()
 {
-    return m_aUri.getAprUri()->hostinfo;
+    return m_aUri.getAprUri().hostinfo;
 }
 
 
 
 // virtual
-sal_Bool SerfSession::CanUse( const OUString & inUri )
+bool SerfSession::CanUse( const OUString & inUri )
 {
     try
     {
@@ -224,19 +224,19 @@ sal_Bool SerfSession::CanUse( const OUString & inUri )
              ( theUri.GetHost() == m_aUri.GetHost() ) &&
              ( theUri.GetScheme() == m_aUri.GetScheme() ) )
         {
-            return sal_True;
+            return true;
         }
     }
     catch ( DAVException const & )
     {
-        return sal_False;
+        return false;
     }
-    return sal_False;
+    return false;
 }
 
 
 // virtual
-sal_Bool SerfSession::UsesProxy()
+bool SerfSession::UsesProxy()
 {
     Init();
     return ( m_aProxyName.getLength() > 0 );
@@ -913,7 +913,7 @@ void SerfSession::MKCOL( const OUString & inPath,
 void SerfSession::COPY( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
-                        sal_Bool inOverWrite )
+                        bool inOverWrite )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -936,7 +936,7 @@ void SerfSession::COPY( const OUString & inSourceURL,
 void SerfSession::MOVE( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
-                        sal_Bool inOverWrite )
+                        bool inOverWrite )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -1461,13 +1461,13 @@ SerfSession::getDataFromInputStream(
 }
 
 
-sal_Bool
+bool
 SerfSession::isDomainMatch( const OUString & certHostName )
 {
     OUString hostName = getHostName();
 
     if (hostName.equalsIgnoreAsciiCase( certHostName ) )
-        return sal_True;
+        return true;
 
     if ( certHostName.startsWith( "*" ) &&
          hostName.getLength() >= certHostName.getLength()  )
@@ -1476,9 +1476,9 @@ SerfSession::isDomainMatch( const OUString & certHostName )
 
         if ( hostName.matchIgnoreAsciiCase(
                 cmpStr, hostName.getLength() -  cmpStr.getLength() ) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 /*

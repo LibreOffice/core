@@ -157,7 +157,7 @@ class DAVException : public std::exception
             , mData( rData )
             , mStatusCode( nStatusCode )
          {};
-        ~DAVException( ) {};
+        virtual ~DAVException( ) {};
 
     const ExceptionCode & getError() const { return mExceptionCode; }
     const OUString & getData() const  { return mData; }

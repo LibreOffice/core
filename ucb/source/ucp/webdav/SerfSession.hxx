@@ -108,9 +108,9 @@ public:
     serf_connection_t* getSerfConnection();
 
     // DAVSession methods
-    virtual sal_Bool CanUse( const OUString & inUri ) SAL_OVERRIDE;
+    virtual bool CanUse( const OUString & inUri ) SAL_OVERRIDE;
 
-    virtual sal_Bool UsesProxy() SAL_OVERRIDE;
+    virtual bool UsesProxy() SAL_OVERRIDE;
 
     const DAVRequestEnvironment & getRequestEnvironment() const
     { return m_aEnv; }
@@ -211,14 +211,14 @@ public:
     COPY( const OUString & inSourceURL,
           const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
-          sal_Bool inOverWrite )
+          bool inOverWrite )
         throw ( DAVException ) SAL_OVERRIDE;
 
     virtual void
     MOVE( const OUString & inSourceURL,
           const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
-          sal_Bool inOverWrite )
+          bool inOverWrite )
         throw ( DAVException ) SAL_OVERRIDE;
 
     virtual void DESTROY( const OUString & inPath,
@@ -248,7 +248,7 @@ public:
     const OUString & getHostName() const { return m_aUri.GetHost(); }
     int getPort() const { return m_aUri.GetPort(); }
 
-    sal_Bool isDomainMatch( const OUString & certHostName );
+    bool isDomainMatch( const OUString & certHostName );
 
 private:
     friend class SerfLockStore;

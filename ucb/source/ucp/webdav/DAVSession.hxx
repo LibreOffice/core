@@ -59,9 +59,9 @@ public:
         }
     }
 
-    virtual sal_Bool CanUse( const OUString & inPath ) = 0;
+    virtual bool CanUse( const OUString & inPath ) = 0;
 
-    virtual sal_Bool UsesProxy() = 0;
+    virtual bool UsesProxy() = 0;
 
     // DAV methods
 
@@ -158,13 +158,13 @@ public:
     virtual void COPY( const OUString & inSource,
                        const OUString & inDestination,
                        const DAVRequestEnvironment & rEnv,
-                       sal_Bool inOverwrite = false )
+                       bool inOverwrite = false )
         throw( DAVException ) = 0;
 
     virtual void MOVE( const OUString & inSource,
                        const OUString & inDestination,
                        const DAVRequestEnvironment & rEnv,
-                       sal_Bool inOverwrite = false )
+                       bool inOverwrite = false )
         throw( DAVException ) = 0;
 
     virtual void DESTROY( const OUString & inPath,
