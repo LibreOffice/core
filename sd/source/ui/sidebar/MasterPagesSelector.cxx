@@ -686,7 +686,6 @@ void MasterPagesSelector::InvalidateItem (MasterPageContainer::Token aToken)
     }
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void MasterPagesSelector::UpdateItemList (::std::unique_ptr<ItemList> && pNewItemList)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -724,7 +723,6 @@ void MasterPagesSelector::UpdateItemList (::std::unique_ptr<ItemList> && pNewIte
     if (mxSidebar.is())
         mxSidebar->requestLayout();
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth (const sal_Int32 nWidth)
 {

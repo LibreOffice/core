@@ -3121,7 +3121,6 @@ void Content::cancelCommandExecution(
 }
 
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 const OUString
 Content::getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess )
 {
@@ -3235,7 +3234,6 @@ Content::ResourceType Content::getResourceType(
     }
     return m_eResourceType;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 Content::ResourceType Content::getResourceType(

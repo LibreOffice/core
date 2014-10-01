@@ -584,9 +584,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 ScAddress aAddress;
                 ScCompiler* pComp = new ScCompiler(&rDoc,aAddress);
                 pComp->SetGrammar( rDoc.GetGrammar() );
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> (pComp))));
-                SAL_WNODEPRECATED_DECLARATIONS_POP
                 break;
             }
 #ifndef DISABLE_SCRIPTING

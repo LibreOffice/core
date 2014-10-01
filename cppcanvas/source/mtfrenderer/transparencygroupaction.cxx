@@ -144,7 +144,6 @@ namespace cppcanvas
                                                       aLocalTransformation );
             }
 
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&&                  rGroupMtf,
                                                               GradientAutoPtr&&             rAlphaGradient,
                                                               const Renderer::Parameters&   rParms,
@@ -176,7 +175,6 @@ namespace cppcanvas
                 maLastSubset.mnSubsetBegin = 0;
                 maLastSubset.mnSubsetEnd = -1;
             }
-            SAL_WNODEPRECATED_DECLARATIONS_POP
 
             // TODO(P3): The whole float transparency handling is a mess,
             // this should be refactored. What's more, the old idea of
@@ -478,7 +476,6 @@ namespace cppcanvas
 
         }
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&&                 rGroupMtf,
                                                                                        GradientAutoPtr&&            rAlphaGradient,
                                                                                        const Renderer::Parameters&  rParms,
@@ -495,7 +492,6 @@ namespace cppcanvas
                                                                 rCanvas,
                                                                 rState ) );
         }
-        SAL_WNODEPRECATED_DECLARATIONS_POP
 
     }
 }

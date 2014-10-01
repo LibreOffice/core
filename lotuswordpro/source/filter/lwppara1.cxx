@@ -354,13 +354,11 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     LwpOverride* pBorder = pParaStyle->GetParaBorder();
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     boost::scoped_ptr<LwpParaBorderOverride> pFinalBorder(
         pBorder
             ? polymorphic_downcast<LwpParaBorderOverride*>(pBorder->clone())
             : new LwpParaBorderOverride)
         ;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // get local border
     pBorder = static_cast<LwpParaBorderProperty*>(pProps)->GetLocalParaBorder();

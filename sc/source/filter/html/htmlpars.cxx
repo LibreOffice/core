@@ -2373,7 +2373,6 @@ void ScHTMLTable::CreateNewEntry( const ImportInfo& rInfo )
     mxCurrEntry->aSel = rInfo.aSelection;
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryPtr& rxEntry )
 {
     // HTML entry list does not own the entries
@@ -2381,9 +2380,7 @@ void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryP
     // mrEEParseList (reference to member of ScEEParser) owns the entries
     mrEEParseList.push_back( rxEntry.release() );
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
 bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
 {
     bool bPushed = false;
@@ -2411,7 +2408,6 @@ bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
     }
     return bPushed;
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool ScHTMLTable::PushEntry( const ImportInfo& rInfo, bool bLastInCell )
 {
