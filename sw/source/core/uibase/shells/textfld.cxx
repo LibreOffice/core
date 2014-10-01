@@ -82,6 +82,7 @@ static OUString& lcl_AppendRedlineStr( OUString& rStr, sal_uInt16 nRedlId )
     case nsRedlineType_t::REDLINE_INSERT:   nResId = STR_REDLINE_INSERTED;      break;
     case nsRedlineType_t::REDLINE_DELETE:   nResId = STR_REDLINE_DELETED;       break;
     case nsRedlineType_t::REDLINE_FORMAT:   nResId = STR_REDLINE_FORMATED;      break;
+    case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:   nResId = STR_REDLINE_FORMATED;      break;
     case nsRedlineType_t::REDLINE_TABLE:        nResId = STR_REDLINE_TABLECHG;      break;
     case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLLSET;    break;
     }
