@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,freetype,3))
 
 $(eval $(call gb_UnpackedTarball_add_patches,freetype,\
 	external/freetype/freetype-2.4.8.patch \
+	external/freetype/freetype-msvc-disable-sse2.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
