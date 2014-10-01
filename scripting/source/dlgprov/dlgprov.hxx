@@ -78,7 +78,7 @@ namespace dlgprov
              ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxDlgLib;
              ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener > mxBasicRTLListener;
         };
-        std::auto_ptr< BasicRTLParams > m_BasicInfo;
+        std::unique_ptr< BasicRTLParams > m_BasicInfo;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
 
