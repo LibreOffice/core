@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,glew,\
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_set_patchflags,glew,--binary))
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
+	external/glew/glew-msvc-disable-sse2.patch.1 \
 	external/glew/glew-fix-rc-error.patch.1 \
 	external/glew/glew-vc2013-project.patch.1 \
 ))
