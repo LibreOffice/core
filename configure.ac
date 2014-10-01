@@ -3760,15 +3760,19 @@ if test -n "$ENABLE_DBGUTIL"; then
         AC_MSG_ERROR([--disable-debug cannot be used with --enable-dbgutil])
     fi
     ENABLE_DEBUG="TRUE"
+    ANDROID_DEBUGGABLE='android:debuggable="true"'
     AC_MSG_RESULT([yes (dbgutil)])
 elif test -n "$enable_debug" && test "$enable_debug" != "no"; then
     ENABLE_DEBUG="TRUE"
+    ANDROID_DEBUGGABLE='android:debuggable="true"'
     AC_MSG_RESULT([yes])
 else
     ENABLE_DEBUG=""
+    ANDROID_DEBUGGABLE=""
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
+AC_SUBST(ANDROID_DEBUGGABLE)
 
 dnl Selective debuginfo
 ENABLE_DEBUGINFO_FOR=
@@ -4419,6 +4423,7 @@ if test "$cross_compiling" = "yes"; then
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
+        android/experimental/LOAndroid3/AndroidManifest.xml.in \
         config_host.mk.in \
         Makefile.in \
         lo.xcent.in \
@@ -12779,7 +12784,8 @@ if test -f config_host.mk; then
     config_md5=`$MD5SUM config_host.mk | sed "s/ .*//"`
 fi
 
-AC_CONFIG_FILES([config_host.mk
+AC_CONFIG_FILES([android/experimental/LOAndroid3/AndroidManifest.xml
+                 config_host.mk
                  Makefile
                  lo.xcent
                  instsetoo_native/util/openoffice.lst
