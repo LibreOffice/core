@@ -131,6 +131,10 @@ public class DynamicTileLayer extends Layer {
     }
 
     public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics) {
+        if (tileProvider == null) {
+            return;
+        }
+
         RectF newCurrentViewPort = inflate(roundToTileSize(viewportMetrics.getViewport(), tileSize), tileSize);
 
         if (!currentViewport.equals(newCurrentViewPort)) {
@@ -193,5 +197,6 @@ public class DynamicTileLayer extends Layer {
 
     public void clearAllTiles() {
         tiles.clear();
+        currentViewport = new RectF();
     }
 }

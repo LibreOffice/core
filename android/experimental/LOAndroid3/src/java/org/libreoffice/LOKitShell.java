@@ -3,7 +3,6 @@ package org.libreoffice;
 
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 
 public class LOKitShell {
@@ -18,10 +17,6 @@ public class LOKitShell {
         if (LibreOfficeMainActivity.mAppContext != null && LibreOfficeMainActivity.mAppContext.getLOKitThread() != null) {
             LibreOfficeMainActivity.mAppContext.getLOKitThread().queueEvent(event);
         }
-    }
-
-    public static void viewSizeChanged() {
-        Log.i(LOGTAG, "viewSizeChanged");
     }
 
     // Get a Handler for the main java thread
