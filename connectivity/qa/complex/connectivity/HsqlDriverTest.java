@@ -88,17 +88,15 @@ public class HsqlDriverTest extends ComplexTestCase {
                 xComp.dispose();
         } catch(Exception e){}
 
-        com.sun.star.beans.PropertyValue[] info = null;
-        XDriver drv = null;
         try{
             XDocumentSubStorageSupplier doc = UnoRuntime.queryInterface(XDocumentSubStorageSupplier.class,ds);
             XModel mod = UnoRuntime.queryInterface(XModel.class,ds);
             XStorage stor = doc.getDocumentSubStorage("database",4);
-            info = new com.sun.star.beans.PropertyValue[]{
+            com.sun.star.beans.PropertyValue[] info = new com.sun.star.beans.PropertyValue[]{
                 new com.sun.star.beans.PropertyValue("Storage",0,stor,PropertyState.DIRECT_VALUE)
                 ,new com.sun.star.beans.PropertyValue("URL",0,mod.getURL(),PropertyState.DIRECT_VALUE)
             };
-            drv = UnoRuntime.queryInterface(XDriver.class,param.getMSF().createInstance("com.sun.star.sdbcx.comp.hsqldb.Driver"));
+            XDriver drv = UnoRuntime.queryInterface(XDriver.class,param.getMSF().createInstance("com.sun.star.sdbcx.comp.hsqldb.Driver"));
 
 
             TestCacheSize test = new TestCacheSize((param.getMSF()),info,drv);
@@ -119,17 +117,16 @@ public class HsqlDriverTest extends ComplexTestCase {
             } catch(Exception e){}
         }catch(Exception e){}
     }
+
     public void test2(){
         System.gc();
 
-        com.sun.star.beans.PropertyValue[] info = null;
-        XDriver drv = null;
         try{
-            info = new com.sun.star.beans.PropertyValue[]{
+            com.sun.star.beans.PropertyValue[] info = new com.sun.star.beans.PropertyValue[]{
                 new com.sun.star.beans.PropertyValue("JavaDriverClass",0,"org.hsqldb.jdbcDriver",PropertyState.DIRECT_VALUE)
                 ,new com.sun.star.beans.PropertyValue("ParameterNameSubstitution",0, false,PropertyState.DIRECT_VALUE)
             };
-            drv = UnoRuntime.queryInterface(XDriver.class,param.getMSF().createInstance("com.sun.star.comp.sdbc.JDBCDriver"));
+            XDriver drv = UnoRuntime.queryInterface(XDriver.class,param.getMSF().createInstance("com.sun.star.comp.sdbc.JDBCDriver"));
             TestCacheSize test = new TestCacheSize((param.getMSF()),info,drv);
             test.setURL("jdbc:hsqldb:g:\\hsql\\db");
 
