@@ -158,7 +158,10 @@ namespace sax_fastparser {
         writeBytes(sOpeningBracket, N_CHARS(sOpeningBracket));
 
         writeId(Element);
-        writeFastAttributeList(pAttrList);
+        if (pAttrList)
+            writeFastAttributeList(pAttrList);
+        else
+            writeTokenValueList();
 
         writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
     }
@@ -187,7 +190,10 @@ namespace sax_fastparser {
         writeBytes(sOpeningBracket, N_CHARS(sOpeningBracket));
 
         writeId(Element);
-        writeFastAttributeList(pAttrList);
+        if (pAttrList)
+            writeFastAttributeList(pAttrList);
+        else
+            writeTokenValueList();
 
         writeBytes(sSlashAndClosingBracket, N_CHARS(sSlashAndClosingBracket));
     }
@@ -205,6 +211,34 @@ namespace sax_fastparser {
     void FastSaxSerializer::setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
     {
         mxFastTokenHandler = xFastTokenHandler;
+    }
+
+    void FastSaxSerializer::writeTokenValueList()
+    {
+#ifdef DBG_UTIL
+        ::std::set<OString> DebugAttributes;
+#endif
+        for (size_t j = 0; j < maTokenValues.size(); j++)
+        {
+            writeBytes(sSpace, N_CHARS(sSpace));
+
+            sal_Int32 nToken = maTokenValues[j].nToken;
+            writeId(nToken);
+
+#ifdef DBG_UTIL
+            // Well-formedness constraint: Unique Att Spec
+            OString const nameId(getId(nToken));
+            assert(DebugAttributes.find(nameId) == DebugAttributes.end());
+            DebugAttributes.insert(nameId);
+#endif
+
+            writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
+
+            write(maTokenValues[j].pValue, 0, true);
+
+            writeBytes(sQuote, N_CHARS(sQuote));
+        }
+        maTokenValues.clear();
     }
 
     void FastSaxSerializer::writeFastAttributeList( FastAttributeList* pAttrList )

@@ -31,7 +31,6 @@ namespace sax_fastparser {
 
 FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream, bool bWriteHeader ) :
     mpSerializer(new FastSaxSerializer())
-  , maAttrList(Reference< xml::sax::XFastTokenHandler >())
 {
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_SET_THROW );
     mpSerializer->setFastTokenHandler( css::xml::sax::FastTokenHandler::create(xContext) );
@@ -51,7 +50,7 @@ void FastSerializerHelper::startElementInternal(sal_Int32 elementTokenId, ...)
 {
     va_list args;
     va_start( args, elementTokenId );
-    maAttrList.clear();
+    TokenValueList& rAttrList = mpSerializer->getTokenValueList();
 
     while (true)
     {
@@ -60,10 +59,10 @@ void FastSerializerHelper::startElementInternal(sal_Int32 elementTokenId, ...)
             break;
         const char* pValue = va_arg(args, const char*);
         if (pValue)
-            maAttrList.add(nName, pValue);
+            rAttrList.push_back(TokenValue(nName, pValue));
     }
 
-    mpSerializer->startFastElement(elementTokenId, &maAttrList);
+    mpSerializer->startFastElement(elementTokenId);
     va_end( args );
 }
 
@@ -71,7 +70,7 @@ void FastSerializerHelper::singleElementInternal(sal_Int32 elementTokenId, ...)
 {
     va_list args;
     va_start( args, elementTokenId );
-    maAttrList.clear();
+    TokenValueList& rAttrList = mpSerializer->getTokenValueList();
 
     while (true)
     {
@@ -80,10 +79,10 @@ void FastSerializerHelper::singleElementInternal(sal_Int32 elementTokenId, ...)
             break;
         const char* pValue = va_arg(args, const char*);
         if  (pValue)
-            maAttrList.add(nName, pValue);
+            rAttrList.push_back(TokenValue(nName, pValue));
     }
 
-    mpSerializer->singleFastElement(elementTokenId, &maAttrList);
+    mpSerializer->singleFastElement(elementTokenId);
     va_end( args );
 }
 
