@@ -84,17 +84,6 @@ gb_CXXFLAGS += -fno-strict-aliasing
 endif
 endif
 
-#We have so many std::auto_ptr uses that we need to be able to disable
-#warnings for those so that -Werror continues to be useful, seeing as moving
-#to unique_ptr isn't an option when we must support different compilers
-#
-#When we are using 4.6.0 we can use gcc pragmas to selectively silence auto_ptr
-#warnings in isolation, but for <= 4.5.X we need to globally disable
-#deprecation
-ifeq ($(HAVE_GCC_PRAGMA_OPERATOR),)
-gb_CXXFLAGS += -Wno-deprecated-declarations
-endif
-
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
