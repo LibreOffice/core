@@ -52,6 +52,7 @@ class XclExpFilterManager;
 class XclExpPivotTableManager;
 class XclExpDxfs;
 class XclExpXmlPivotTableManager;
+namespace sc { class CompileFormulaContext; }
 
 /** Stores global buffers and data needed for Excel export filter. */
 struct XclExpRootData : public XclRootData
@@ -92,6 +93,7 @@ struct XclExpRootData : public XclRootData
     XclExpDxfsRef       mxDxfs;             /// All delta formatting entries
 
     boost::shared_ptr<XclExpXmlPivotTableManager> mxXmlPTableMgr;
+    boost::shared_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
 
     ScCompiler::OpCodeMapPtr  mxOpCodeMap;  /// mapping between op-codes and names
 
@@ -112,6 +114,7 @@ public:
     inline const XclExpRoot& GetRoot() const { return *this; }
     /** Returns true, if URLs should be stored relative to the document location. */
     inline bool         IsRelUrl() const { return mrExpData.mbRelUrl; }
+    sc::CompileFormulaContext& GetCompileFormulaContext() const { return *mrExpData.mpCompileFormulaCxt; }
 
     /** Returns the buffer for Calc->Excel sheet index conversion. */
     XclExpTabInfo&      GetTabInfo() const;

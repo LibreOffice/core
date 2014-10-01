@@ -251,6 +251,7 @@ struct XclAddress;
 struct XclFontData;
 struct XclRange;
 class XclRangeList;
+namespace sc { class CompileFormulaContext; }
 
 class XclXmlUtils
 {
@@ -275,7 +276,7 @@ public:
 
     static OUString ToOUString( const char* s );
     static OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );
-    static OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress, const ScTokenArray* pTokenArray );
+    static OUString ToOUString( sc::CompileFormulaContext& rCtx, const ScAddress& rAddress, const ScTokenArray* pTokenArray );
     static OUString ToOUString( const XclExpString& s );
 
     /**
