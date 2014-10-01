@@ -1965,13 +1965,15 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
             double aNumber = DBL_MAX;
             if( lcl_GetColumnCnt(pImpl->pMergeData, rColName, nLanguage, aString, &aNumber) )
             {
-                // get the column type
+                // get the column type, bail out in case of failure
                 sal_Int32 nColumnType;
                 Any aCol = xCols->getByName( pColNames[nCol] );
                 uno::Reference<XPropertySet> xCol;
-                aCol >>= xCol;
+                if ( !(aCol >>= xCol) )
+                    return false;
                 Any aType = xCol->getPropertyValue( "Type" );
-                aType >>= nColumnType;
+                if ( !(aType >>= nColumnType) )
+                    return false;
 
                 sal_uInt32 nFmt;
                 if( !GetMergeColumnCnt(pColNames[nCol], nLanguage, aString, &aNumber, &nFmt) )
