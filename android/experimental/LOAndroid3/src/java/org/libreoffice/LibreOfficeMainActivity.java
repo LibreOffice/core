@@ -63,9 +63,13 @@ public class LibreOfficeMainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_about) {
-            showAbout();
-            return true;
+        switch (id) {
+            case R.id.action_about:
+                showAbout();
+                return true;
+            case R.id.action_parts:
+                mDrawerLayout.openDrawer(mDrawerList);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
