@@ -917,12 +917,12 @@ void SmEditWindow::MouseMove(const MouseEvent &rEvt)
 
 sal_Int8 SmEditWindow::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
-    return pEditView ? /*pEditView->QueryDrop( rEvt )*/DND_ACTION_NONE: DND_ACTION_NONE;
+    return DND_ACTION_NONE;
 }
 
 sal_Int8 SmEditWindow::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 {
-    return pEditView ? /*pEditView->Drop( rEvt )*/DND_ACTION_NONE : DND_ACTION_NONE;
+    return DND_ACTION_NONE;
 }
 
 ESelection SmEditWindow::GetSelection() const
