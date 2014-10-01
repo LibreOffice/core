@@ -158,12 +158,12 @@ public:
 
     // Not good to expose implementation details, but this is actually an
     // internal class.
-    const std::auto_ptr< PropertyValueMap > & getProperties() const
+    const std::unique_ptr< PropertyValueMap > & getProperties() const
     { return m_xProps; }
 
 private:
     OUString m_aEscapedTitle;
-    std::auto_ptr< PropertyValueMap > m_xProps;
+    std::unique_ptr< PropertyValueMap > m_xProps;
     bool m_bTrailingSlash;
 
     static com::sun::star::uno::Any m_aEmptyAny;

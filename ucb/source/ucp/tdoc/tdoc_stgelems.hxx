@@ -301,7 +301,7 @@ private:
     StorageElementFactory::StorageMap::iterator m_aContainerIt;
 
     friend class StorageElementFactory;
-    friend class std::auto_ptr< Storage >;
+    friend class std::unique_ptr< Storage >;
 };
 
 

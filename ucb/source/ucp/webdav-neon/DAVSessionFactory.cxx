@@ -66,7 +66,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
     {
         NeonUri aURI( inUri );
 
-        std::auto_ptr< DAVSession > xElement(
+        std::unique_ptr< DAVSession > xElement(
             new NeonSession( this, inUri, rFlags, *m_xProxyDecider.get() ) );
 
         aIt = m_aMap.insert( Map::value_type( inUri, xElement.get() ) ).first;

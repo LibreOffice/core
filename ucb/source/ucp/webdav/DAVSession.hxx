@@ -203,7 +203,7 @@ private:
     oslInterlockedCount m_nRefCount;
 
     friend class DAVSessionFactory;
-    friend class std::auto_ptr< DAVSession >;
+    friend struct std::default_delete< DAVSession >;
 };
 
 } // namespace http_dav_ucp

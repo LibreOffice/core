@@ -84,8 +84,8 @@ class Content : public ::ucbhelper::ContentImplHelper,
         DAV
     };
 
-    std::auto_ptr< DAVResourceAccess > m_xResAccess;
-    std::auto_ptr< CachableContentProperties >
+    std::unique_ptr< DAVResourceAccess > m_xResAccess;
+    std::unique_ptr< CachableContentProperties >
                       m_xCachedProps; // locally cached props
     OUString     m_aEscapedTitle;
     ResourceType      m_eResourceType;
@@ -131,24 +131,20 @@ private:
     exchangeIdentity( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const OUString
-    getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess );
 
     ResourceType
     getResourceType( const ::com::sun::star::uno::Reference<
                          ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw ( ::com::sun::star::uno::Exception, std::exception );
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ResourceType
     getResourceType( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
-                     const std::auto_ptr< DAVResourceAccess > & rResAccess,
+                     const std::unique_ptr< DAVResourceAccess > & rResAccess,
                      bool * networkAccessAllowed = 0)
         throw ( ::com::sun::star::uno::Exception, std::exception );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // Command "open"
     com::sun::star::uno::Any open(

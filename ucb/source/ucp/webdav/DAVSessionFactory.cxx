@@ -54,7 +54,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
     {
         SerfUri aURI( inUri );
 
-        std::auto_ptr< DAVSession > xElement(
+        std::unique_ptr< DAVSession > xElement(
             new SerfSession( this, inUri, *m_xProxyDecider.get() ) );
 
         aIt = m_aMap.insert( Map::value_type( inUri, xElement.get() ) ).first;

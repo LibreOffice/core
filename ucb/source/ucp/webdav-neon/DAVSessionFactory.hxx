@@ -73,7 +73,7 @@ private:
 
     Map m_aMap;
     osl::Mutex m_aMutex;
-    std::auto_ptr< ucbhelper::InternetProxyDecider > m_xProxyDecider;
+    std::unique_ptr< ucbhelper::InternetProxyDecider > m_xProxyDecider;
 
     ::uno::Reference< ::uno::XComponentContext > m_xContext;
 

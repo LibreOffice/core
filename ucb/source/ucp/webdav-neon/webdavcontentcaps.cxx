@@ -299,10 +299,8 @@ uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     bool bTransient;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< DAVResourceAccess > xResAccess;
-    std::auto_ptr< ContentProperties > xCachedProps;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    std::unique_ptr< DAVResourceAccess > xResAccess;
+    std::unique_ptr< ContentProperties > xCachedProps;
     rtl::Reference< ContentProvider >  xProvider;
 
     {
@@ -481,10 +479,8 @@ uno::Sequence< beans::Property > Content::getProperties(
         const std::set< OUString >::const_iterator set_end
             = aPropSet.end();
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        const std::auto_ptr< PropertyValueMap > & xProps
+        const std::unique_ptr< PropertyValueMap > & xProps
             = xCachedProps->getProperties();
-        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         PropertyValueMap::const_iterator       map_it  = xProps->begin();
         const PropertyValueMap::const_iterator map_end = xProps->end();

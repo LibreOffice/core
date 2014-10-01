@@ -581,9 +581,7 @@ CachableContentProperties::CachableContentProperties(
 void CachableContentProperties::addProperties(
     const ContentProperties & rProps )
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const std::auto_ptr< PropertyValueMap > & props = rProps.getProperties();
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    const std::unique_ptr< PropertyValueMap > & props = rProps.getProperties();
 
     PropertyValueMap::const_iterator it = props->begin();
     const PropertyValueMap::const_iterator end = props->end();

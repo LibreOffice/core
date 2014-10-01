@@ -210,12 +210,7 @@ private:
     oslInterlockedCount m_nRefCount;
 
     friend class DAVSessionFactory;
-#if defined ( _MSC_VER ) && _MSC_VER < 1310
-    friend struct std::auto_ptr< DAVSession >;
-    // work around compiler bug...
-#else // WNT
-    friend class std::auto_ptr< DAVSession >;
-#endif // WNT
+    friend struct std::default_delete< DAVSession >;
 };
 
 } // namespace webdav_ucp
