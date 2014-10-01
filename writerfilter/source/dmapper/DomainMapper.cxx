@@ -864,8 +864,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         pSectionContext->SetdxaLnn( nIntValue );
                 break;
                 case NS_ooxml::LN_CT_LineNumber_restart:
-                    //page:empty, probably 0,section:1,continuous:2;
-                    aSettings.bRestartAtEachPage = nIntValue < 1;
+                    aSettings.bRestartAtEachPage = nIntValue == NS_ooxml::LN_Value_ST_LineNumberRestart_newPage;
                     OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
                     if( pSectionContext )
                         pSectionContext->SetLnc( nIntValue );

@@ -3153,7 +3153,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_LINEPPAGE:
     case RTF_LINECONT:
     {
-        RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_LINEPPAGE ? 0 : 2));
+        RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_LINEPPAGE ? NS_ooxml::LN_Value_ST_LineNumberRestart_newPage : NS_ooxml::LN_Value_ST_LineNumberRestart_continuous));
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                                NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_restart, pValue);
     }

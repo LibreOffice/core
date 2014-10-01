@@ -1047,7 +1047,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     {
         bool bFirst = rDM_Impl.IsLineNumberingSet();
         rDM_Impl.SetLineNumbering( m_nLnnMod, m_nLnc, m_ndxaLnn );
-        if( m_nLnnMin > 0 || (bFirst && m_nLnc == 1))
+        if( m_nLnnMin > 0 || (bFirst && m_nLnc == NS_ooxml::LN_Value_ST_LineNumberRestart_newSection))
         {
             //set the starting value at the beginning of the section
             try

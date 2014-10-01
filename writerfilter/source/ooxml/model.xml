@@ -17686,9 +17686,9 @@
       <value tokenid="ooxml:Value_ST_ChapterSep_enDash">enDash</value>
     </resource>
     <resource name="ST_LineNumberRestart" resource="List">
-      <value tokenid="0">newPage</value>
-      <value tokenid="1">newSection</value>
-      <value tokenid="2">continuous</value>
+      <value tokenid="ooxml:Value_ST_LineNumberRestart_newPage">newPage</value>
+      <value tokenid="ooxml:Value_ST_LineNumberRestart_newSection">newSection</value>
+      <value tokenid="ooxml:Value_ST_LineNumberRestart_continuous">continuous</value>
     </resource>
     <resource name="CT_LineNumber" resource="Properties">
       <attribute name="countBy" tokenid="ooxml:CT_LineNumber_countBy"/>
