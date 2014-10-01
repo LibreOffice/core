@@ -2218,15 +2218,20 @@ bool ScFormulaCell::IsMultilineResult()
     return false;
 }
 
-void ScFormulaCell::MaybeInterpret()
+bool ScFormulaCell::NeedsInterpret() const
 {
     if (mxGroup && mxGroup->meKernelState == sc::OpenCLKernelCompilationScheduled)
-        return;
+        return false;
 
     if (!IsDirtyOrInTableOpDirty())
-        return;
+        return false;
 
-    if (pDocument->GetAutoCalc() || (cMatrixFlag != MM_NONE))
+    return (pDocument->GetAutoCalc() || (cMatrixFlag != MM_NONE));
+}
+
+void ScFormulaCell::MaybeInterpret()
+{
+    if (NeedsInterpret())
         Interpret();
 }
 
@@ -2265,6 +2270,18 @@ bool ScFormulaCell::IsValue()
 bool ScFormulaCell::IsValueNoError()
 {
     MaybeInterpret();
+    if (pCode->GetCodeError())
+        return false;
+
+    return aResult.IsValueNoError();
+}
+
+bool ScFormulaCell::IsValueNoError() const
+{
+    if (NeedsInterpret())
+        // false if the cell is dirty & needs to be interpreted.
+        return false;
+
     if (pCode->GetCodeError())
         return false;
 

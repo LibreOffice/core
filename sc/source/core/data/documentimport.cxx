@@ -513,12 +513,43 @@ public:
 
         // Fill with default values for non-empty cell segments.
         sc::CellTextAttr aDefault;
-        if (node.type == sc::element_type_numeric)
+        switch (node.type)
         {
-            aDefault.mnScriptType = mpImpl->mnScriptNumeric;
-            const ColAttr* p = mrDocImpl.getColAttr(mnTab, mnCol);
-            if (p && p->mbLatinNumFmtOnly)
-                aDefault.mnScriptType = SCRIPTTYPE_LATIN;
+            case sc::element_type_numeric:
+            {
+                aDefault.mnScriptType = mpImpl->mnScriptNumeric;
+                const ColAttr* p = mrDocImpl.getColAttr(mnTab, mnCol);
+                if (p && p->mbLatinNumFmtOnly)
+                    aDefault.mnScriptType = SCRIPTTYPE_LATIN;
+            }
+            break;
+            case sc::element_type_formula:
+            {
+                const ColAttr* p = mrDocImpl.getColAttr(mnTab, mnCol);
+                if (p && p->mbLatinNumFmtOnly)
+                {
+                    // We can assume latin script type if the block only
+                    // contains formula cells with numeric results.
+                    ScFormulaCell** pp = &sc::formula_block::at(*node.data, 0);
+                    ScFormulaCell** ppEnd = pp + node.size;
+                    bool bNumResOnly = true;
+                    for (; pp != ppEnd; ++pp)
+                    {
+                        const ScFormulaCell& rCell = **pp;
+                        if (!rCell.IsValueNoError())
+                        {
+                            bNumResOnly = false;
+                            break;
+                        }
+                    }
+
+                    if (bNumResOnly)
+                        aDefault.mnScriptType = SCRIPTTYPE_LATIN;
+                }
+            }
+            break;
+            default:
+                ;
         }
 
         std::vector<sc::CellTextAttr> aDefaults(node.size, aDefault);
