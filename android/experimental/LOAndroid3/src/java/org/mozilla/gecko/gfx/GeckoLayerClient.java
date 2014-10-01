@@ -40,7 +40,6 @@ package org.mozilla.gecko.gfx;
 
 import android.content.Context;
 import android.graphics.RectF;
-import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -120,7 +119,6 @@ public class GeckoLayerClient implements LayerView.Listener {
                 mRootLayer.endTransaction();
             }
         }
-        Log.i(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - endDrawing");
     }
 
     protected void updateViewport(boolean onlyUpdatePageSize) {
@@ -134,8 +132,6 @@ public class GeckoLayerClient implements LayerView.Listener {
         RectF position = mGeckoViewport.getViewport();
         mRootLayer.setPosition(RectUtils.round(position));
         mRootLayer.setResolution(mGeckoViewport.zoomFactor);
-
-        Log.e(LOGTAG, "### updateViewport onlyUpdatePageSize=" + onlyUpdatePageSize + " getTileViewport " + mGeckoViewport);
 
         if (onlyUpdatePageSize) {
             // Don't adjust page size when zooming unless zoom levels are
