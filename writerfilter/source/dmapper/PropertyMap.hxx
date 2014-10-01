@@ -430,7 +430,6 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
     OUString         msCT_Fonts_ascii;
     bool                    mbCT_TrPrBase_tblHeader;
     sal_Int32               mnCT_TrPrBase_jc;
-    sal_Int32               mnCT_TcPrBase_vAlign;
 
     sal_Int32               mnCT_TblWidth_w;
     sal_Int32               mnCT_TblWidth_type;
@@ -466,8 +465,6 @@ public:
         {mbCT_TrPrBase_tblHeader = bSet; mbCT_TrPrBase_tblHeaderSet = true; }
     void SetCT_TrPrBase_jc(        sal_Int32 nSet )
         {mnCT_TrPrBase_jc = nSet;        mbCT_TrPrBase_jcSet = true;     }
-    void SetCT_TcPrBase_vAlign(    sal_Int32 nSet )
-        {mnCT_TcPrBase_vAlign = nSet;    mbCT_TcPrBase_vAlignSet = true; }
 
     void SetCT_TblWidth_w( sal_Int32 nSet )
         { mnCT_TblWidth_w = nSet;    mbCT_TblWidth_wSet = true; }
@@ -504,12 +501,6 @@ public:
         if( mbCT_TrPrBase_jcSet )
             rToFill = mnCT_TrPrBase_jc;
         return mbCT_TrPrBase_jcSet;
-    }
-    bool GetCT_TcPrBase_vAlign( sal_Int32& rToFill)const
-    {
-        if( mbCT_TcPrBase_vAlignSet )
-            rToFill = mnCT_TcPrBase_vAlign;
-        return mbCT_TcPrBase_vAlignSet;
     }
     sal_Int32   GetListId() const               { return mnListId; }
     void        SetListId(sal_Int32 nId)        { mnListId = nId; }

@@ -1417,7 +1417,6 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mnCT_Spacing_lineRule( 0 ),
     mbCT_TrPrBase_tblHeader( false ),
     mnCT_TrPrBase_jc( 0 ),
-    mnCT_TcPrBase_vAlign( 0 ),
     mnCT_TblWidth_w( 0 ),
     mnCT_TblWidth_type( 0 ),
     mbCT_Spacing_lineSet( false ),
