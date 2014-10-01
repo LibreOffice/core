@@ -123,7 +123,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if( IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL) )
         EnableChildTransparentMode( true );
 
-    if ( pParent->IsDialog() )
+    if (pParent && pParent->IsDialog())
         pParent->AddChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
 }
 
@@ -192,7 +192,8 @@ TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
 
 TabControl::~TabControl()
 {
-    if ( GetParent()->IsDialog() )
+    Window *pParent = GetParent();
+    if (pParent && pParent->IsDialog())
         GetParent()->RemoveChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
 
     ImplFreeLayoutData();
