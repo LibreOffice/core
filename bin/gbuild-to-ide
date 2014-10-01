@@ -111,10 +111,65 @@ class GbuildParser:
             mapping_dict[target] = library
         return mapping_dict
 
+    def _parse_hash(self, line, state):
+        libmatch = GbuildParser.libpattern.match(line)
+        if libmatch:
+            libname = self.libnames.get(state.ilib, None)
+            self.libs.append(
+                GbuildLib(libmatch.group(2), libname, libmatch.group(1),
+                          state.include, state.include_sys, state.defs, state.cxxobjects,
+                          state.cxxflags, state.linked_libs))
+            state = GbuildParserState()
+            return state
+        exematch = GbuildParser.exepattern.match(line)
+        if exematch:
+            exename = self.exenames.get(state.target, None)
+            self.exes.append(
+                GbuildExe(exematch.group(2), exename, exematch.group(1),
+                          state.include, state.include_sys, state.defs, state.cxxobjects,
+                          state.cxxflags, state.linked_libs))
+            state = GbuildParserState()
+            return state
+        if line.find('# INCLUDE :=') == 0:
+            isystemmatch = GbuildParser.isystempattern.findall(line)
+            if isystemmatch:
+                state.include_sys = isystemmatch
+            state.include = [includeswitch.strip() for includeswitch in GbuildParser.includepattern.findall(line) if
+                             len(includeswitch) > 2]
+            return state
+        defsmatch = GbuildParser.defspattern.match(line)
+        if defsmatch:
+            alldefs = [defswitch.strip()[2:] for defswitch in defsmatch.group(1).split(' ') if len(defswitch) > 2]
+            for d in alldefs:
+                defparts = d.split('=')
+                if len(defparts) == 1:
+                    defparts.append(None)
+                state.defs[defparts[0]] = defparts[1]
+            return state
+        cxxmatch = GbuildParser.cxxpattern.match(line)
+        if cxxmatch:
+            state.cxxobjects = [obj for obj in cxxmatch.group(1).split(' ') if len(obj) > 0]
+            return state
+        linkedlibsmatch = GbuildParser.linkedlibspattern.match(line)
+        if linkedlibsmatch:
+            state.linked_libs = linkedlibsmatch.group(1).strip().split(' ')
+            return state
+        ilibmatch = GbuildParser.ilibpattern.match(line)
+        if ilibmatch:
+            state.ilib = os.path.basename(ilibmatch.group(1))
+            return state
+        if line.find('# T_CXXFLAGS :=') == 0:
+            state.cxxflags = [cxxflag.strip() for cxxflag in GbuildParser.warningpattern.sub('', line.replace('# T_CXXFLAGS :=', '')).split(' ') if len(cxxflag) > 1]
+            return state
+        # we could match a lot of other stuff here if needed for integration rpaths etc.
+        return state
+
     def parse(self, gbuildstate):
         state = GbuildParserState()
         for line in gbuildstate:
-            if not line.startswith('#'):
+            if line.startswith('#'):
+                state = self._parse_hash(line, state)
+            else:
                 makecmdmatch = GbuildParser.makecmdpattern.match(line)
                 if makecmdmatch:
                     self.makecmd = makecmdmatch.group(1)
@@ -140,7 +195,13 @@ class GbuildParser:
                     continue
                 rulematch = self.rulepattern.match(line)
                 if rulematch:
-                    state.target = os.path.basename(rulematch.group(1))
+                    if len(rulematch.groups()) == 2 \
+                       and rulematch.group(2) is not None \
+                       and ':=' in rulematch.group(2):
+                        # Hack to make GNU make >= 4.x happy
+                        state = self._parse_hash('#' + rulematch.group(2), state)
+                    else:
+                        state.target = os.path.basename(rulematch.group(1))
                     continue
                 libnamesmatch = GbuildParser.libnamespattern.match(line)
                 if libnamesmatch:
@@ -151,59 +212,7 @@ class GbuildParser:
                     self.exenames = self.__mapping_to_dict(exenamesmatch.group(1))
                     continue
                 state = GbuildParserState()
-                continue
-            libmatch = GbuildParser.libpattern.match(line)
-            if libmatch:
-                libname = self.libnames.get(state.ilib, None)
-                self.libs.append(
-                    GbuildLib(libmatch.group(2), libname, libmatch.group(1),
-                              state.include, state.include_sys, state.defs, state.cxxobjects,
-                              state.cxxflags, state.linked_libs))
-                state = GbuildParserState()
-                continue
-            exematch = GbuildParser.exepattern.match(line)
-            if exematch:
-                exename = self.exenames.get(state.target, None)
-                self.exes.append(
-                    GbuildExe(exematch.group(2), exename, exematch.group(1),
-                              state.include, state.include_sys, state.defs, state.cxxobjects,
-                              state.cxxflags, state.linked_libs))
-                state = GbuildParserState()
-                continue
-            if line.find('# INCLUDE :=') == 0:
-                isystemmatch = GbuildParser.isystempattern.findall(line)
-                if isystemmatch:
-                    state.include_sys = isystemmatch
-                state.include = [includeswitch.strip() for includeswitch in GbuildParser.includepattern.findall(line) if
-                                 len(includeswitch) > 2]
-                continue
-            defsmatch = GbuildParser.defspattern.match(line)
-            if defsmatch:
-                alldefs = [defswitch.strip()[2:] for defswitch in defsmatch.group(1).split(' ') if len(defswitch) > 2]
-                for d in alldefs:
-                    defparts = d.split('=')
-                    if len(defparts) == 1:
-                        defparts.append(None)
-                    state.defs[defparts[0]] = defparts[1]
-                continue
-            cxxmatch = GbuildParser.cxxpattern.match(line)
-            if cxxmatch:
-                state.cxxobjects = [obj for obj in cxxmatch.group(1).split(' ') if len(obj) > 0]
-                continue
-            linkedlibsmatch = GbuildParser.linkedlibspattern.match(line)
-            if linkedlibsmatch:
-                state.linked_libs = linkedlibsmatch.group(1).strip().split(' ')
-                continue
-            ilibmatch = GbuildParser.ilibpattern.match(line)
-            if ilibmatch:
-                state.ilib = os.path.basename(ilibmatch.group(1))
-                continue
-            if line.find('# T_CXXFLAGS :=') == 0:
-                state.cxxflags = [cxxflag.strip() for cxxflag in GbuildParser.warningpattern.sub('', line.replace('# T_CXXFLAGS :=', '')).split(' ') if len(cxxflag) > 1]
-                continue
-            # we could match a lot of other stuff here if needed for integration rpaths etc.
         return self
-
 
 class IdeIntegrationGenerator:
 
