@@ -6,6 +6,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <set>
+
 #include <swmodeltestbase.hxx>
 
 #if !defined(MACOSX) && !defined(WNT)
@@ -49,8 +53,7 @@ DECLARE_DFLT_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored-
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
 
-    // bitset of all page numbers
-    char nPageSum = 0xFF;
+    std::set<sal_uInt16> pages;
     uno::Reference<beans::XPropertySet> xPropertySet;
 
     for (sal_Int32 i = 0; i < xDraws->getCount(); i++)
@@ -63,11 +66,9 @@ DECLARE_DFLT_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored-
         CPPUNIT_ASSERT_EQUAL( text::TextContentAnchorType_AT_PAGE, nAnchorType );
 
         xPropertySet->getPropertyValue( UNO_NAME_ANCHOR_PAGE_NO ) >>= nAnchorPageNo;
-        nPageSum &= !nAnchorPageNo;
+        // are all shapes are on different page numbers?
+        CPPUNIT_ASSERT(pages.insert(nAnchorPageNo).second);
     }
-
-    // are all shapes are on different page numbers?
-    CPPUNIT_ASSERT_EQUAL(char(0), nPageSum);
 }
 
 #endif
