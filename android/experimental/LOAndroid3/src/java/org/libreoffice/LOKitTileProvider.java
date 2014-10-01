@@ -8,6 +8,7 @@ import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
+import org.mozilla.gecko.gfx.FloatSize;
 import org.mozilla.gecko.gfx.LayerController;
 
 import java.nio.ByteBuffer;
@@ -131,7 +132,7 @@ public class LOKitTileProvider implements TileProvider {
     }
 
     @Override
-    public CairoImage createTile(float x, float y, float zoom) {
+    public CairoImage createTile(float x, float y, FloatSize tileSize, float zoom) {
         ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
         Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
 
