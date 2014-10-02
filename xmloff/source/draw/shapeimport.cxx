@@ -467,14 +467,14 @@ void XMLShapeImportHelper::SetStylesContext(SvXMLStylesContext* pNew)
 {
     mpStylesContext = pNew;
     if (mpStylesContext)
-        mpStylesContext->AddRef();
+        mpStylesContext->AddFirstRef();
 }
 
 void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 {
     mpAutoStylesContext = pNew;
     if (mpAutoStylesContext)
-        mpAutoStylesContext->AddRef();
+        mpAutoStylesContext->AddFirstRef();
 }
 
 SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(

@@ -717,7 +717,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     if( !pContext )
         pContext = new SvXMLImportContext( *this, nPrefix, aLocalName );
 
-    pContext->AddRef();
+    pContext->AddFirstRef();
 
     // Remember old namespace map.
     if( pRewindMap )

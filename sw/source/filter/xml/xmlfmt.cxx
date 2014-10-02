@@ -351,7 +351,7 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
             if( !pConditions )
                pConditions = new SwXMLConditions_Impl;
             pConditions->push_back( pCond );
-            pCond->AddRef();
+            pCond->AddFirstRef();
         }
         pContext = pCond;
     }

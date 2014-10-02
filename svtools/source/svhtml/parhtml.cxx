@@ -317,7 +317,7 @@ SvParserState HTMLParser::CallParser()
     nPre_LinePos = 0;
     bPre_IgnoreNewPara = false;
 
-    AddRef();
+    AddFirstRef();
     Continue( 0 );
     if( SVPAR_PENDING != eState )
         ReleaseRef();       // Parser not needed anymore

@@ -2103,11 +2103,11 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
     }
     // RefCount vom Modul hochzaehlen
     SbModule* pMod_ = static_cast<SbModule*>(GetParent());
-    pMod_->AddRef();
+    pMod_->AddFirstRef();
 
     // Increment the RefCount of the Basic
     StarBASIC* pBasic = static_cast<StarBASIC*>(pMod_->GetParent());
-    pBasic->AddRef();
+    pBasic->AddFirstRef();
 
     // Establish the values to get the return value
     SbxValues aVals;

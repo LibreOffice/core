@@ -193,7 +193,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
         // (for delayed processing of events)
         pEventContext = new XMLEventsImportContext( GetImport(), nPrefix,
                                                    rLocalName);
-        pEventContext->AddRef();
+        pEventContext->AddFirstRef();
         pContext = pEventContext;
     }
 

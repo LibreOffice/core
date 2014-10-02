@@ -40,7 +40,7 @@ public:
 
     SvRef(T * pObjP): pObj(pObjP)
     {
-        if (pObj != 0) pObj->AddRef();
+        if (pObj != 0) pObj->AddFirstRef();
     }
 
     ~SvRef()
@@ -121,7 +121,7 @@ public:
     inline void push_back( T p )
     {
         base_t::push_back( p );
-        p->AddRef();
+        p->AddFirstRef();
     }
 
     inline void insert(const SvRefMemberList& rOther)
@@ -171,7 +171,7 @@ public:
                         ++nRefCount;
                     }
 
-    void            AddRef()
+    void            AddFirstRef()
                     {
                         assert( nRefCount < (1 << 30) && "Do not add refs to dead objects" );
                         if( bNoDelete )

@@ -587,7 +587,7 @@ sal_uInt32 SvPersistStream::ReadObj
             }
             pFunc( &rpObj );
             // Save reference
-            rpObj->AddRef();
+            rpObj->AddFirstRef();
 
             if( bRegister )
             {

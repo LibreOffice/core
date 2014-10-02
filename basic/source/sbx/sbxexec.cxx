@@ -108,7 +108,7 @@ static SbxVariable* QualifiedName
         SbxBase::SetError( SbxERR_SYNTAX );
     *ppBuf = p;
     if( refVar.Is() )
-        refVar->AddRef();
+        refVar->AddFirstRef();
     return refVar;
 }
 
@@ -166,7 +166,7 @@ static SbxVariable* Operand
     }
     *ppBuf = p;
     if( refVar.Is() )
-        refVar->AddRef();
+        refVar->AddFirstRef();
     return refVar;
 }
 
@@ -201,7 +201,7 @@ static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
     }
     *ppBuf = p;
     if( refVar.Is() )
-        refVar->AddRef();
+        refVar->AddFirstRef();
     return refVar;
 }
 
@@ -233,7 +233,7 @@ static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Unico
     }
     *ppBuf = p;
     if( refVar.Is() )
-        refVar->AddRef();
+        refVar->AddFirstRef();
     return refVar;
 }
 
@@ -271,7 +271,7 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
     }
     *ppBuf = p;
     if( refVar.Is() )
-        refVar->AddRef();
+        refVar->AddFirstRef();
     return refVar;
 }
 
@@ -339,7 +339,7 @@ static SbxVariable* Element
     }
     *ppBuf = p;
     if( refVar.Is() )
-        refVar->AddRef();
+        refVar->AddFirstRef();
     return refVar;
 }
 

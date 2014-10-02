@@ -149,7 +149,7 @@ public:
     {
         pEvents = pCtxt;
         if (pEvents != NULL)
-            pEvents->AddRef();
+            pEvents->AddFirstRef();
     }
 };
 

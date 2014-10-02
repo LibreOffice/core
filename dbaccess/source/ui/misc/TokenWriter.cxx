@@ -607,7 +607,7 @@ bool ORTFImportExport::Read()
     if ( m_pStream )
     {
         m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext);
-        ((ORTFReader*)m_pReader)->AddRef();
+        ((ORTFReader*)m_pReader)->AddFirstRef();
         if ( isCheckEnabled() )
             m_pReader->enableCheckOnly();
         eState = ((ORTFReader*)m_pReader)->CallParser();
@@ -678,7 +678,7 @@ bool OHTMLImportExport::Read()
     if ( m_pStream )
     {
         m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext);
-        ((OHTMLReader*)m_pReader)->AddRef();
+        ((OHTMLReader*)m_pReader)->AddFirstRef();
         if ( isCheckEnabled() )
             m_pReader->enableCheckOnly();
         m_pReader->SetTableName(m_sDefaultTableName);

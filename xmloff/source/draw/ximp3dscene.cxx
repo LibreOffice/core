@@ -233,7 +233,7 @@ SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uIn
     // remember SdXML3DLightContext for later evaluation
     if(pContext)
     {
-        pContext->AddRef();
+        pContext->AddFirstRef();
         maList.push_back( static_cast<SdXML3DLightContext*>(pContext) );
     }
 

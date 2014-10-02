@@ -215,7 +215,7 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
             mpTabStops = new SvxXMLTabStopArray_Impl;
 
         mpTabStops->push_back( pTabStopContext );
-        pTabStopContext->AddRef();
+        pTabStopContext->AddFirstRef();
 
         pContext = pTabStopContext;
     }

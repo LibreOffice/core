@@ -92,7 +92,7 @@ SvStringHashTable::SvStringHashTable( sal_uInt32 nMaxEntries )
     pEnd    = pEntries + nMaxEntries;
     while( pPos != pEnd )
     {
-        pPos->AddRef();
+        pPos->AddFirstRef();
         pPos++;
     }
 }

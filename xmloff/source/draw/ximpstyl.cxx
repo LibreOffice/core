@@ -437,7 +437,7 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
         // remember SdXMLPresentationPlaceholderContext for later evaluation
         if(pContext)
         {
-            pContext->AddRef();
+            pContext->AddFirstRef();
             DBG_ASSERT(!mpPageMasterStyle, "PageMasterStyle is set, there seem to be two of them (!)");
             mpPageMasterStyle = static_cast<SdXMLPageMasterStyleContext*>(pContext);
         }
@@ -497,7 +497,7 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
         // remember SdXMLPresentationPlaceholderContext for later evaluation
         if(pContext)
         {
-            pContext->AddRef();
+            pContext->AddFirstRef();
             maList.push_back( static_cast<SdXMLPresentationPlaceholderContext*>(pContext) );
         }
     }
@@ -1534,7 +1534,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
 
                     if(pContext)
                     {
-                        pContext->AddRef();
+                        pContext->AddFirstRef();
                         maMasterPageList.push_back( static_cast<SdXMLMasterPageContext*>(pContext) );
                     }
                 }

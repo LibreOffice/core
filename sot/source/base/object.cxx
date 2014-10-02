@@ -88,7 +88,7 @@ void SotObject::OwnerLock
     if( bLock )
     {
         nOwnerLockCount++;
-        AddRef();
+        AddFirstRef();
     }
     else if ( nOwnerLockCount )
     {

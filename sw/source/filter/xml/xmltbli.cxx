@@ -1499,7 +1499,7 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
             }
             pDDESource = new SwXMLDDETableContext_Impl( GetSwImport(), nPrefix,
                                                         rLocalName );
-            pDDESource->AddRef();
+            pDDESource->AddFirstRef();
             pContext = pDDESource;
         }
         break;

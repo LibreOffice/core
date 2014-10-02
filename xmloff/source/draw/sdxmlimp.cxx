@@ -739,7 +739,7 @@ SvXMLImportContext* SdXMLImport::CreateMasterStylesContext(const OUString& rLoca
 
     mpMasterStylesContext = new SdXMLMasterStylesContext(
         *this, XML_NAMESPACE_OFFICE, rLocalName);
-    mpMasterStylesContext->AddRef();
+    mpMasterStylesContext->AddFirstRef();
 
     return mpMasterStylesContext;
 }

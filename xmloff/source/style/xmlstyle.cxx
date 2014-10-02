@@ -304,7 +304,7 @@ SvXMLStylesContext_Impl::~SvXMLStylesContext_Impl()
 inline void SvXMLStylesContext_Impl::AddStyle( SvXMLStyleContext *pStyle )
 {
     aStyles.push_back( pStyle );
-    pStyle->AddRef();
+    pStyle->AddFirstRef();
 
     FlushIndex();
 }
