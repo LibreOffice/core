@@ -95,8 +95,8 @@ void _DelBookmarks(const SwNodeIndex& rStt,
  *  location. */
 struct _SaveFly
 {
-    sal_uLong nNdDiff;              /// relative node difference
-    SwFrmFmt* pFrmFmt;          /// the fly's frame format
+    sal_uLong nNdDiff;      /// relative node difference
+    SwFrmFmt* pFrmFmt;      /// the fly's frame format
     bool bInsertPosition;   /// if true, anchor _at_ insert position
 
     _SaveFly( sal_uLong nNodeDiff, SwFrmFmt* pFmt, bool bInsert )
@@ -132,22 +132,23 @@ public:
     sal_Int32 GetCntnt() const { return nCntnt; }
 };
 
-// Funktions-Deklaration damit auch alles unter der CrsrShell mal die
-// Crsr verschieben kann
-// die Funktionen rufen nicht die SwDoc::Corr - Methoden!
-
-    // Setzt alle PaMs im Bereich vom Range nach NewPos
+/**
+ * Function declarations so that everything below the CrsrShell can
+ * move the Crsr once in a while.
+ * These functions do not call the SwDoc::Corr methods!
+ */
 void PaMCorrAbs( const SwPaM& rRange,
                  const SwPosition& rNewPos );
 
-    // Setzt alle PaMs in OldNode auf relative Pos
+/// Sets all PaMs in OldNode to relative Pos
 void PaMCorrRel( const SwNodeIndex &rOldNode,
                  const SwPosition &rNewPos,
                  const sal_Int32 nOffset = 0 );
 
-// Hilfsklasse zum kopieren von absatzgebundenen Flys. Durch die Sortierung
-// nach der Ordnungsnummer wird versucht die layout seitige Anordnung
-// bei zu behalten
+/**
+ * Helper to copy paragraph-bound Flys.
+ * By sorting by order number, we try to retain the layout.
+ */
 class _ZSortFly
 {
     const SwFrmFmt* pFmt;
