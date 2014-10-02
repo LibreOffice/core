@@ -16,19 +16,25 @@
             android:id="@+id/gecko_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+
+            <org.mozilla.gecko.gfx.LayerView
+                android:id="@+id/layer_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/loadingPanel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="#9333">
+            android:background="#9333"
+            android:gravity="center">
 
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:indeterminate="true" />
+                android:indeterminate="true"/>
         </RelativeLayout>
 
         <View
