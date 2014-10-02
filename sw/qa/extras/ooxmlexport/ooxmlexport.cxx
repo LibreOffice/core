@@ -3669,8 +3669,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78907,"fdo78907.docx")
     assertXPath ( pXmlDoc1, "/w:ftr[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl", 0 );
 }
 
-#endif
-
 DECLARE_OOXMLEXPORT_TEST(testMsoPosition, "bnc884615-mso-position.docx")
 {
     if(xmlDocPtr doc = parseExport("word/footer1.xml"))
@@ -3707,6 +3705,8 @@ DECLARE_OOXMLEXPORT_TEST(testMsoPosition, "bnc884615-mso-position.docx")
         CPPUNIT_ASSERT( style3.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
     }
 }
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
