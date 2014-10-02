@@ -60,6 +60,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
               , &rInAttrs ),
     rOutAttrs           ( rInAttrs ),
     pPolyObj            ( NULL ),
+    bObjSelected        ( false ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXLStyle            ( XLINE_SOLID ),
@@ -67,7 +68,11 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( pXPool ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
-    pLineEndList        ( NULL )
+    pLineEndList        ( NULL ),
+    pnLineEndListState  ( NULL ),
+    pPageType           ( NULL ),
+    nDlgType            ( 0 ),
+    pPosLineEndLb       ( NULL )
 {
     get(m_pEdtName,"EDT_NAME");
     get(m_pLbLineEnds,"LB_LINEENDS");
