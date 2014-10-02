@@ -143,11 +143,13 @@ void SwAnnotationWin::UpdateData()
 
 void SwAnnotationWin::Delete()
 {
-    SwSidebarWin::Delete();
-    // we delete the field directly, the Mgr cleans up the PostIt by listening
-    DocView().GetWrtShellPtr()->GotoField(*mpFmtFld);
-    GrabFocusToDocument();
-    DocView().GetWrtShellPtr()->DelRight();
+    if (DocView().GetWrtShellPtr()->GotoField(*mpFmtFld))
+    {
+        SwSidebarWin::Delete();
+        // we delete the field directly, the Mgr cleans up the PostIt by listening
+        GrabFocusToDocument();
+        DocView().GetWrtShellPtr()->DelRight();
+    }
 }
 
 void SwAnnotationWin::GotoPos()

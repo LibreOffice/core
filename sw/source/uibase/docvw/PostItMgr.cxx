@@ -1209,8 +1209,8 @@ void SwPostItMgr::Delete(const OUString& aAuthor)
     }
     for(std::vector<const SwFmtFld*>::iterator i = aTmp.begin(); i != aTmp.end() ; ++i)
     {
-        mpWrtShell->GotoField( *(*i) );
-        mpWrtShell->DelRight();
+        if (mpWrtShell->GotoField(*(*i)))
+            mpWrtShell->DelRight();
     }
     mpWrtShell->EndUndo();
     PrepareView();
@@ -1236,8 +1236,8 @@ void SwPostItMgr::Delete()
     }
     for(std::vector<const SwFmtFld*>::iterator i = aTmp.begin(); i != aTmp.end() ; ++i)
     {
-        mpWrtShell->GotoField( *(*i) );
-        mpWrtShell->DelRight();
+        if (mpWrtShell->GotoField(*(*i)))
+            mpWrtShell->DelRight();
     }
 
     mpWrtShell->EndUndo();
