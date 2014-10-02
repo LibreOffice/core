@@ -17638,8 +17638,8 @@
       <value tokenid="ooxml:Value_ST_NumberFormat_thaiCounting">thaiCounting</value>
     </resource>
     <resource name="ST_PageOrientation" resource="List">
-      <value tokenid="0">portrait</value>
-      <value tokenid="1">landscape</value>
+      <value tokenid="ooxml:Value_ST_PageOrientation_portrait">portrait</value>
+      <value tokenid="ooxml:Value_ST_PageOrientation_landscape">landscape</value>
     </resource>
     <resource name="CT_PageSz" resource="Properties">
       <attribute name="w" tokenid="ooxml:CT_PageSz_w"/>

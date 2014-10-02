@@ -537,7 +537,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             break;
         case NS_ooxml::LN_CT_PageSz_orient:
-            CT_PageSz.orient = (nIntValue != 0);
+            CT_PageSz.orient = (nIntValue != NS_ooxml::LN_Value_ST_PageOrientation_portrait);
             break;
         case NS_ooxml::LN_CT_PageSz_w:
             {

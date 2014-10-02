@@ -3364,8 +3364,11 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     break;
     case RTF_LANDSCAPE:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, RTFValue::Pointer_t(new RTFValue(1)));
-        break;
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_PageOrientation_landscape));
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, pValue);
+    }
+    break;
     case RTF_FACINGP:
         m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_evenAndOddHeaders, RTFValue::Pointer_t(new RTFValue(1)));
         break;
