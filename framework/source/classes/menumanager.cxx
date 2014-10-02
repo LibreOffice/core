@@ -944,7 +944,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,bool
                 OUString aImageId;
 
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                    reinterpret_cast<::framework::MenuConfiguration::Attributes*>(_pMenu->GetUserValue( nId ));
+                    reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(_pMenu->GetUserValue( nId ));
 
                 if ( pMenuAttributes )
                     aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
