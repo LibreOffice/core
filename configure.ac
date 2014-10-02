@@ -5789,20 +5789,6 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CC supports pragma GCC diagnostic push/pop])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -Wunknown-pragmas -Wunused-parameter"
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-            #pragma GCC diagnostic push
-            #pragma GCC diagnostic ignored "-Wunused-parameter"
-            void dummy(int n) {}
-            #pragma GCC diagnostic pop
-        ])], [
-            AC_DEFINE([HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE],[1])
-            AC_MSG_RESULT([yes])
-        ], [AC_MSG_RESULT([no])])
-    CFLAGS=$save_CFLAGS
-
     AC_MSG_CHECKING([whether $CC supports __attribute__((deprecated(message)))])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror"

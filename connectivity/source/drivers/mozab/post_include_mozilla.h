@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
-    && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
 #elif defined _MSC_VER
 #pragma warning(pop)

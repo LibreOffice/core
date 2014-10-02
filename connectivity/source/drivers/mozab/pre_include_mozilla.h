@@ -48,8 +48,7 @@
     #endif
 #endif
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
-    && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #elif defined _MSC_VER

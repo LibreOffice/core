@@ -23,10 +23,8 @@
 #include <sal/types.h>
 
 #if defined __GNUC__
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
 #elif defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -41,9 +39,7 @@
 #include "PDFDoc.h"
 
 #if defined __GNUC__
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 # pragma GCC diagnostic pop
-#endif
 #elif defined _MSC_VER
 #pragma warning(pop)
 #endif

@@ -22,12 +22,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
 G_DEFINE_TYPE (OOoMountOperation, ooo_mount_operation, G_TYPE_MOUNT_OPERATION);
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
 

@@ -35,12 +35,12 @@
 #include <ne_basic.h>
 #include <ne_props.h>
 
-#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
+#if defined(__GNUC__)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wshadow"
 #endif
 #include <ne_locks.h>
-#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
+#if defined(__GNUC__)
 # pragma GCC diagnostic pop
 #endif
 

@@ -1,11 +1,10 @@
 --- boost/ptr_container/ptr_map.hpp
 +++ boost/ptr_container/ptr_map.hpp
-@@ -16,6 +16,12 @@
+@@ -16,6 +16,11 @@
  # pragma once
  #endif
  
-+#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -17,19 +16,18 @@
  
  }
  
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic pop
 +#endif
 +
  #endif
 --- boost/ptr_container/ptr_map_adapter.hpp
 +++ boost/ptr_container/ptr_map_adapter.hpp
-@@ -16,6 +16,12 @@
+@@ -16,6 +16,11 @@
  # pragma once
  #endif
  
-+#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -41,19 +39,18 @@
      
  } // namespace 'boost'  
  
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic pop
 +#endif
 +
  #endif
 --- boost/ptr_container/ptr_set_adapter.hpp
 +++ boost/ptr_container/ptr_set_adapter.hpp
-@@ -16,6 +16,12 @@
+@@ -16,6 +16,11 @@
  # pragma once
  #endif
  
-+#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -65,19 +62,18 @@
  
  } // namespace 'boost'  
  
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic pop
 +#endif
 +
  #endif
 --- boost/ptr_container/ptr_sequence_adapter.hpp
 +++ boost/ptr_container/ptr_sequence_adapter.hpp
-@@ -16,6 +16,11 @@
+@@ -16,6 +16,10 @@
  # pragma once
  #endif
  
-+#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -88,19 +84,18 @@
  
  } // namespace 'boost'  
  
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic pop
 +#endif
 +
  #endif
 --- boost/ptr_container/ptr_vector.hpp
 +++ boost/ptr_container/ptr_vector.hpp
-@@ -16,6 +16,12 @@
+@@ -16,6 +16,11 @@
  # pragma once
  #endif
  
-+#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -112,19 +107,18 @@
      
  }
  
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic pop
 +#endif
 +
  #endif
 --- boost/smart_ptr/detail/shared_count.hpp
 +++ boost/smart_ptr/detail/shared_count.hpp
-@@ -18,6 +18,12 @@
+@@ -18,6 +18,11 @@
  // http://www.boost.org/LICENSE_1_0.txt)
  //
  
-+#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -136,19 +130,18 @@
  # pragma warn .8027     // Functions containing try are not expanded inline
  #endif
  
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic pop
 +#endif
 +
  #endif  // #ifndef BOOST_SMART_PTR_DETAIL_SHARED_COUNT_HPP_INCLUDED
 --- boost/smart_ptr/scoped_ptr.hpp
 +++ boost/smart_ptr/scoped_ptr.hpp
-@@ -11,6 +11,12 @@
+@@ -11,6 +11,11 @@
  //  http://www.boost.org/libs/smart_ptr/scoped_ptr.htm
  //
  
-+#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -160,19 +153,18 @@
  
  } // namespace boost
  
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic pop
 +#endif
 +
  #endif // #ifndef BOOST_SMART_PTR_SCOPED_PTR_HPP_INCLUDED
 --- boost/smart_ptr/shared_ptr.hpp
 +++ boost/smart_ptr/shared_ptr.hpp
-@@ -14,6 +14,12 @@
+@@ -14,6 +14,11 @@
  //  See http://www.boost.org/libs/smart_ptr/shared_ptr.htm for documentation.
  //
  
-+#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -180,12 +172,11 @@
  #include <boost/config.hpp>   // for broken compiler workarounds
  
  #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
-@@ -1036,4 +1036,9 @@
+@@ -1036,4 +1036,8 @@
  
  #endif  // #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
  
-+#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +# pragma GCC diagnostic pop
 +#endif
 +

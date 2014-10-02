@@ -94,14 +94,14 @@ std::type_info * createFake_si_class_type_info(
 
 }
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
 void dummy_can_throw_anything( char const * )
 {
 }
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
 

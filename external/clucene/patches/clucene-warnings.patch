@@ -5,7 +5,7 @@
  #define _lucene_analysis_AnalysisHeader_
  
 +#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
 +#endif
@@ -18,7 +18,7 @@
  
  CL_NS_END
 +
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic pop
 +#endif
  #endif
@@ -29,7 +29,7 @@
  #define _lucene_search_Searcher_
  
 +#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
 +#endif
@@ -42,7 +42,7 @@
  
  CL_NS_END
 +
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic pop
 +#endif
  #endif
@@ -53,7 +53,7 @@
  #define _lucene_store_IndexInput_
  
 +#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
 +#endif
@@ -66,7 +66,7 @@
  	};
  CL_NS_END
 +
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic pop
 +#endif
  #endif
@@ -77,7 +77,7 @@
  #define _lucene_util_Array_
  
 +#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wshadow"
 +# pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -91,7 +91,7 @@
  
  CL_NS_END
 +
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic pop
 +#endif
  #endif
@@ -102,7 +102,7 @@
  #define _lucene_util_PriorityQueue_
  
 +#include <config_global.h>
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wshadow"
 +#endif
@@ -115,7 +115,7 @@
  
  CL_NS_END
 +
-+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++#if defined(__GNUC__)
 +# pragma GCC diagnostic pop
 +#endif
  #endif
