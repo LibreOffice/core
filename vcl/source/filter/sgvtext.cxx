@@ -763,9 +763,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
 
         (*R)=(*WErec); nChars=WEnChar;
 
-        if (UmbWdt>=R->ChrXP) {
-            BoxRest=UmbWdt-R->ChrXP;
-        } else {                                       // crush together
+        if (UmbWdt<R->ChrXP) {
             BoxRest=R->ChrXP-UmbWdt;                   // so much should be crushed
             for (i=2;i<=nChars;i++) {                  // first character position remains!
                 Line[i]-=(i-1)*(BoxRest) /(nChars-1);
