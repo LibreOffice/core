@@ -1643,13 +1643,12 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 mxStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_ALL);
             }
 
-            if( !aCreatedStyles.empty() )
+            if (bUndo && !aCreatedStyles.empty())
             {
                 // Add UndoAction for creating and inserting the stylesheets to
                 // the top of the UndoManager
                 SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, aCreatedStyles, true);
-                if (bUndo)
-                    pUndoMgr->AddUndoAction(pMovStyles);
+                pUndoMgr->AddUndoAction(pMovStyles);
             }
         }
 
