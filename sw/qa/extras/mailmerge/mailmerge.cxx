@@ -12,7 +12,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(WNT)
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
