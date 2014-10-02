@@ -1006,8 +1006,8 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     double  fCos = cos( (double)mnAngle * F_PI18000 );
     double  fSin = sin( (double)mnAngle * F_PI18000 );
 
-    double  fWidthHalf = maRect.GetWidth() / 2;
-    double  fHeightHalf = maRect.GetHeight() / 2;
+    double  fWidthHalf = maRect.GetWidth() / 2.0;
+    double  fHeightHalf = maRect.GetHeight() / 2.0;
 
     double  fXDiff = fCos * fWidthHalf + fSin * (-fHeightHalf);
     double  fYDiff = - ( fSin * fWidthHalf - fCos * ( -fHeightHalf ) );
