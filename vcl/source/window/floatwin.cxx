@@ -154,6 +154,21 @@ FloatingWindow::FloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
 
 FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : SystemWindow(WINDOW_FLOATINGWINDOW)
+    , mpNextFloat(0)
+    , mpFirstPopupModeWin(0)
+    , mpImplData(0)
+    , mnPostId(0)
+    , mnPopupModeFlags(0)
+    , mnTitle(0)
+    , mnOldTitle(0)
+    , mbInPopupMode(false)
+    , mbPopupMode(false)
+    , mbPopupModeCanceled(false)
+    , mbPopupModeTearOff(false)
+    , mbMouseDown(false)
+    , mbOldSaveBackMode(false)
+    , mbGrabFocus(false)
+    , mbInCleanUp(false)
 {
     loadUI(pParent, rID, rUIXMLDescription, rFrame);
 }
