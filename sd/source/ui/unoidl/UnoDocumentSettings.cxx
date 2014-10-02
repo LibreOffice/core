@@ -911,7 +911,8 @@ throw (UnknownPropertyException, PropertyVetoException,
 
                 if ( !pDocSh->SetModifyPasswordInfo( aInfo ) )
                     throw beans::PropertyVetoException(
-                        "The hash is not allowed to be changed now!" );
+                        "The hash is not allowed to be changed now!",
+                        static_cast<OWeakObject *>(this));
 
             }
             break;
