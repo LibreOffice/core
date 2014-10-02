@@ -22,7 +22,6 @@
             <menu:menuitem menu:id=".uno:AddDirect"/>
             <menu:menuitem menu:id=".uno:OpenFromCalc"/>
             <menu:menuitem menu:id=".uno:RecentFileList"/>
-            <menu:menuitem menu:id=".uno:CurrencyList"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
             <menu:menuseparator/>
@@ -300,6 +299,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:DesignerDialog"/>
+            <menu:menuitem menu:id=".uno:CurrencyList"/>
             <menu:menuitem menu:id=".uno:AutoFormat"/>
             <menu:menu menu:id=".uno:ConditionalFormatMenu">
               <menu:menupopup>
