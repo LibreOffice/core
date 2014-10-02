@@ -30,6 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
+import util.WaitUnreachable;
 
 public class ComponentBase_Test
 {
@@ -97,16 +98,12 @@ public class ComponentBase_Test
 
     @Test public void test_finalize() throws Exception
     {
-        logger.log(Level.INFO, "Testing ComponentBase: test_finalize()");
         ComponentBase comp= new ComponentBase();
         obj1.nDisposingCalled = 0;
         comp.addEventListener(obj1);
-
+        WaitUnreachable u = new WaitUnreachable(comp);
         comp= null;
-        System.gc();
-        System.runFinalization();
-        logger.log(Level.FINE, "Waiting 51ms (-XX:MaxGCPauseMillis=50)");
-        Thread.sleep(51);
+        u.waitUnreachable();
         assertEquals(obj1.nDisposingCalled, 1);
     }
 }
