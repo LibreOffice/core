@@ -5863,7 +5863,7 @@ if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CFLAGS -Werror -Wunknown-pragmas"
+    CXXFLAGS="$CXXFLAGS -Werror -Wunknown-pragmas"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             struct __attribute__((warn_unused)) dummy {};
         ])], [
@@ -5876,7 +5876,7 @@ if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether STL uses __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CFLAGS -Werror -Wunused"
+    CXXFLAGS="$CXXFLAGS -Werror -Wunused"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <string>
             void f() { std::string s; }
