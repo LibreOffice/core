@@ -989,7 +989,9 @@ struct PDFNewJobParameters
 
     bool operator==(const PDFNewJobParameters& rComp ) const
     {
-        Size aCompLSSize( rComp.maPageSize.Height(), rComp.maPageSize.Width() );
+        const long nRotatedWidth = rComp.maPageSize.Height();
+        const long nRotatedHeight = rComp.maPageSize.Width();
+        Size aCompLSSize(nRotatedWidth, nRotatedHeight);
         return
             (maPageSize == rComp.maPageSize || maPageSize == aCompLSSize)
         &&  mnPaperBin == rComp.mnPaperBin
