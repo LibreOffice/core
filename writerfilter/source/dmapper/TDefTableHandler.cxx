@@ -332,7 +332,7 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
         table::BorderLine2 aBorderLine;
         ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
                                                                         aBorderLine, m_bOOXML );
-        bool rtl = false; // TODO
+        const bool rtl = false; // TODO
         switch( rName )
         {
             case NS_ooxml::LN_CT_TcBorders_top:
