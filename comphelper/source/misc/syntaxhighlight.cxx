@@ -499,7 +499,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*out*
 
                 // Read all numbers
                 while( testCharFlags( *pos, CHAR_IN_HEX_NUMBER ) )
-                    c = *pos++;
+                    ++pos;
             }
             else
             {
