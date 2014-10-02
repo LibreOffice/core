@@ -43,7 +43,7 @@ sal_uInt16 CertificateChooser::GetSelectedEntryPos( void ) const
 
     SvTreeListEntry* pSel = m_pCertLB->FirstSelected();
     if( pSel )
-        nSel = (sal_uInt16) ( sal_uIntPtr ) pSel->GetUserData();
+        nSel = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( pSel->GetUserData() );
 
     return (sal_uInt16) nSel;
 }
@@ -173,7 +173,7 @@ void CertificateChooser::ImplInitialize()
             SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() )
                 + "\t" + XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() )
                 + "\t" + XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
-            pEntry->SetUserData( ( void* )(sal_IntPtr)nC ); // missuse user data as index
+            pEntry->SetUserData( reinterpret_cast<void*>(nC) ); // missuse user data as index
         }
 
         // enable/disable buttons

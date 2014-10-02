@@ -725,7 +725,7 @@ cssu::Reference< cssxw::XXMLElementWrapper > SAL_CALL XMLDocumentWrapper_XmlSecI
     throw (cssu::RuntimeException, std::exception)
 {
     XMLElementWrapper_XmlSecImpl* pElement = new XMLElementWrapper_XmlSecImpl(m_pCurrentElement);
-    return (cssu::Reference< cssxw::XXMLElementWrapper >)pElement;
+    return cssu::Reference< cssxw::XXMLElementWrapper >(pElement);
 }
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::setCurrentElement( const cssu::Reference< cssxw::XXMLElementWrapper >& element )

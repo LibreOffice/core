@@ -513,7 +513,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl)
     {
         try
         {
-            sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) m_pSignaturesLB->FirstSelected()->GetUserData();
+            sal_uInt16 nSelected = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() );
             maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
 
             // Export all other signatures...
@@ -671,7 +671,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             m_pSignaturesLB->SetEntryText( aSubject, pEntry, 1 );
             m_pSignaturesLB->SetEntryText( aIssuer, pEntry, 2 );
             m_pSignaturesLB->SetEntryText( aDateTimeStr, pEntry, 3 );
-            pEntry->SetUserData( ( void* ) n );     // missuse user data as index
+            pEntry->SetUserData( reinterpret_cast<void*>(n) );     // missuse user data as index
         }
     }
 
@@ -726,7 +726,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 {
     if( m_pSignaturesLB->FirstSelected() )
     {
-        sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) m_pSignaturesLB->FirstSelected()->GetUserData();
+        sal_uInt16 nSelected = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() );
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
         css::uno::Reference<css::xml::crypto::XSecurityEnvironment > xSecEnv =
             maSignatureHelper.GetSecurityEnvironment();
