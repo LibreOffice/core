@@ -2188,7 +2188,7 @@ SfxModule* SfxDispatcher::GetModule() const
         if ( pSh == NULL )
             return 0;
         if ( pSh->ISA(SfxModule) )
-            return (SfxModule*) pSh;
+            return static_cast<SfxModule*>(pSh);
     }
 }
 

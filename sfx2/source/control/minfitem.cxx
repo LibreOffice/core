@@ -61,12 +61,13 @@ SfxMacroInfoItem::SfxMacroInfoItem(const SfxMacroInfoItem& rCopy):
 
 bool SfxMacroInfoItem::operator==( const SfxPoolItem& rCmp) const
 {
+    const SfxMacroInfoItem rItem = static_cast<const SfxMacroInfoItem&>(rCmp);
     return SfxPoolItem::operator==(rCmp) &&
-            pBasicManager == ((const SfxMacroInfoItem&)rCmp).pBasicManager &&
-            aLibName == ((const SfxMacroInfoItem&)rCmp).aLibName &&
-            aModuleName == ((const SfxMacroInfoItem&)rCmp).aModuleName &&
-            aMethodName == ((const SfxMacroInfoItem&)rCmp).aMethodName &&
-            aCommentText == ((const SfxMacroInfoItem&)rCmp).aCommentText;
+            pBasicManager == rItem.pBasicManager &&
+            aLibName == rItem.aLibName &&
+            aModuleName == rItem.aModuleName &&
+            aMethodName == rItem.aMethodName &&
+            aCommentText == rItem.aCommentText;
 }
 
 

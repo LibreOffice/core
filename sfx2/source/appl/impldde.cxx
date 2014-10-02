@@ -349,7 +349,7 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
 
 IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
 {
-    bool bValid = (bool)(sal_uIntPtr)pData;
+    bool bValid = (bool)reinterpret_cast<sal_uIntPtr>(pData);
     if( !bValid && ( pRequest || pLink ))
     {
         DdeTransaction* pReq = 0;

@@ -852,7 +852,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SFX_ALIGN_LOWESTTOP:
                 aSize.Width() = aTmp.GetWidth();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = ((SplitWindow *)(pCli->pWin))->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
                 bAllowHiding = false;
                 aBorder.Top() += aSize.Height();
                 aPos = aTmp.TopLeft();
@@ -867,7 +867,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SFX_ALIGN_HIGHESTBOTTOM:
                 aSize.Width() = aTmp.GetWidth();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = ((SplitWindow *)(pCli->pWin))->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
                 aBorder.Bottom() += aSize.Height();
                 aPos = aTmp.BottomLeft();
                 aPos.Y() -= (aSize.Height()-1);
@@ -882,7 +882,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SFX_ALIGN_TOOLBOXLEFT:
                 aSize.Height() = aTmp.GetHeight();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = ((SplitWindow *)(pCli->pWin))->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
                 bAllowHiding = false;
                 aBorder.Left() += aSize.Width();
                 aPos = aTmp.TopLeft();
@@ -897,7 +897,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SFX_ALIGN_TOOLBOXRIGHT:
                 aSize.Height() = aTmp.GetHeight();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = ((SplitWindow *)(pCli->pWin))->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
                 aBorder.Right() += aSize.Width();
                 aPos = aTmp.TopRight();
                 aPos.X() -= (aSize.Width()-1);
@@ -1071,10 +1071,10 @@ void SfxWorkWindow::ShowChildren_Impl()
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                        ((DockingWindow*)pCli->pWin)->Show( true, nFlags );
+                        static_cast<DockingWindow*>(pCli->pWin)->Show( true, nFlags );
                         break;
                     case RSC_SPLITWINDOW :
-                        ((SplitWindow*)pCli->pWin)->Show( true, nFlags );
+                        static_cast<SplitWindow*>(pCli->pWin)->Show( true, nFlags );
                         break;
                     default:
                         pCli->pWin->Show( true, nFlags );
@@ -1088,7 +1088,7 @@ void SfxWorkWindow::ShowChildren_Impl()
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                        ((DockingWindow*)pCli->pWin)->Hide();
+                        static_cast<DockingWindow*>(pCli->pWin)->Hide();
                         break;
                     default:
                         pCli->pWin->Hide();
@@ -1111,7 +1111,7 @@ void SfxWorkWindow::HideChildren_Impl()
             switch ( pChild->pWin->GetType() )
             {
                 case RSC_DOCKINGWINDOW :
-                    ((DockingWindow*)pChild->pWin)->Hide();
+                    static_cast<DockingWindow*>(pChild->pWin)->Hide();
                     break;
                 default:
                     pChild->pWin->Hide();
@@ -1485,7 +1485,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                         {
                             if ( pCW->bCreate && IsDockingAllowed() && bInternalDockingAllowed )
                                 // The window ia within a SplitWindow
-                                ((SfxDockingWindow*)pChildWin->GetWindow())->Reappear_Impl();
+                                static_cast<SfxDockingWindow*>(pChildWin->GetWindow())->Reappear_Impl();
                         }
 
                         if ( pCW->nInterfaceId != pChildWin->GetContextId() )
@@ -1505,7 +1505,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                         pCW->pCli->nVisible ^= CHILD_NOT_HIDDEN;
                 }
                 else
-                    ((SfxDockingWindow*)pChildWin->GetWindow())->Disappear_Impl();
+                    static_cast<SfxDockingWindow*>(pChildWin->GetWindow())->Disappear_Impl();
             }
             else
                 RemoveChildWin_Impl( pCW );
@@ -1715,7 +1715,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             {
                 if ( pChild->GetWindow()->GetType() == RSC_DOCKINGWINDOW )
                     // it's a DockingWindow
-                    pDockWin = (SfxDockingWindow*) pChild->GetWindow();
+                    pDockWin = static_cast<SfxDockingWindow*>( pChild->GetWindow() );
                 else
                     // FloatingWindow or ModelessDialog
                     pWin = pChild->GetWindow();
@@ -1751,7 +1751,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
             pWin = pSplitWin->GetSplitWindow();
             if ( pSplitWin->GetWindowCount() == 1 )
-                ((SplitWindow*)pWin)->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                static_cast<SplitWindow*>(pWin)->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
         }
     }
 
@@ -2063,7 +2063,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, bool bSetFocus)
             if ( !pCW->pCli )
             {
                 SfxDockingWindow *pDock =
-                    (SfxDockingWindow*) pCW->pWin->GetWindow();
+                    static_cast<SfxDockingWindow*>( pCW->pWin->GetWindow() );
                 if ( pDock->IsAutoHide_Impl() )
                     pDock->AutoShow_Impl();
             }
@@ -2279,7 +2279,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSe
                     pChildWin->Show( bSetFocus && pChildWin->WantsFocus() ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                 }
                 else
-                    ((SfxDockingWindow*)pChildWin->GetWindow())->Reappear_Impl();
+                    static_cast<SfxDockingWindow*>(pChildWin->GetWindow())->Reappear_Impl();
 
             }
             else
@@ -2290,7 +2290,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSe
                     pCW->pWin->Hide();
                 }
                 else
-                    ((SfxDockingWindow*)pChildWin->GetWindow())->Disappear_Impl();
+                    static_cast<SfxDockingWindow*>(pChildWin->GetWindow())->Disappear_Impl();
 
             }
 

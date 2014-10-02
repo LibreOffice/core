@@ -54,7 +54,7 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const SAL_OVERRIDE
     {   return new SfxRefItem( *this ); }
     virtual bool             operator==( const SfxPoolItem& rL) const SAL_OVERRIDE
-    {   return ((SfxRefItem&)rL).maRef == maRef; }
+    {   return static_cast<const SfxRefItem&>(rL).maRef == maRef; }
     const tools::SvRef<SvRefBase>&      GetValue() const { return maRef; }
 };
 

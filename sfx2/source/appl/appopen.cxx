@@ -649,7 +649,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             return;
         }
 
-        rReq.SetArgs( *(SfxAllItemSet*)pSet );
+        rReq.SetArgs( *static_cast<SfxAllItemSet*>(pSet) );
         if ( !aFilter.isEmpty() )
             rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
         rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
@@ -959,7 +959,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
     // remove from Itemset, because it confuses the parameter transformation
     if ( pLinkItem )
-        pLinkItem = (SfxLinkItem*) pLinkItem->Clone();
+        pLinkItem = static_cast<SfxLinkItem*>( pLinkItem->Clone() );
 
     rReq.RemoveItem( SID_DONELINK );
 

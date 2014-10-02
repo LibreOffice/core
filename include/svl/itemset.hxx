@@ -95,6 +95,10 @@ public:
                                                 bool bSrchInParent = true,
                                                 const SfxPoolItem **ppItem = 0 ) const;
 
+    SfxItemState                GetItemState(   sal_uInt16 nWhich,
+                                                bool bSrchInParent = true,
+                                                SfxPoolItem **ppItem = 0 );
+
     bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = NULL) const;
 
     virtual void                DisableItem(sal_uInt16 nWhich);

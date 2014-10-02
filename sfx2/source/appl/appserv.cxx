@@ -1108,7 +1108,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             Reference< XModel > xLimitToModel;
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_RECORDMACRO, false, &pItem) )
             {
-                bool bRecord = ((SfxBoolItem*)pItem)->GetValue();
+                bool bRecord = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 if ( bRecord )
                 {
                     // !Hack
@@ -1133,7 +1133,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             sal_Int16 nTabId = 0;
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_MACROORGANIZER, false, &pItem) )
             {
-                nTabId = ((SfxUInt16Item*)pItem)->GetValue();
+                nTabId = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             }
 
             SfxApplication::MacroOrganizer( nTabId );
@@ -1203,7 +1203,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             OUString aLanguage;
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_SCRIPTORGANIZER, false, &pItem) )
             {
-                aLanguage = ((SfxScriptOrganizerItem*)pItem)->getLanguage();
+                aLanguage = static_cast<const SfxScriptOrganizerItem*>(pItem)->getLanguage();
             }
 
             OUString aLang( aLanguage );

@@ -1151,19 +1151,19 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                 if ( pOldItem->ISA(SfxBoolItem) )
                 {
                     // we can toggle Bools
-                    bool bOldValue = ((const SfxBoolItem *)pOldItem)->GetValue();
-                    SfxBoolItem *pNewItem = (SfxBoolItem*) (pOldItem->Clone());
+                    bool bOldValue = static_cast<const SfxBoolItem *>(pOldItem)->GetValue();
+                    SfxBoolItem *pNewItem = static_cast<SfxBoolItem*>(pOldItem->Clone());
                     pNewItem->SetValue( !bOldValue );
                     aReq.AppendItem( *pNewItem );
                     delete pNewItem;
                 }
                 else if ( pOldItem->ISA(SfxEnumItemInterface) &&
-                        ((SfxEnumItemInterface *)pOldItem)->HasBoolValue())
+                        static_cast<const SfxEnumItemInterface *>(pOldItem)->HasBoolValue())
                 {
                     // and Enums with Bool-Interface
                     SfxEnumItemInterface *pNewItem =
-                        (SfxEnumItemInterface*) (pOldItem->Clone());
-                    pNewItem->SetBoolValue(!((SfxEnumItemInterface *)pOldItem)->GetBoolValue());
+                        static_cast<SfxEnumItemInterface*>(pOldItem->Clone());
+                    pNewItem->SetBoolValue(!static_cast<const SfxEnumItemInterface *>(pOldItem)->GetBoolValue());
                     aReq.AppendItem( *pNewItem );
                     delete pNewItem;
                 }
@@ -1181,14 +1181,14 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                 if ( pNewItem->ISA(SfxBoolItem) )
                 {
                   // we can toggle Bools
-                    ((SfxBoolItem*)pNewItem)->SetValue( true );
+                    static_cast<SfxBoolItem*>(pNewItem)->SetValue( true );
                     aReq.AppendItem( *pNewItem );
                 }
                 else if ( pNewItem->ISA(SfxEnumItemInterface) &&
-                        ((SfxEnumItemInterface *)pNewItem)->HasBoolValue())
+                        static_cast<SfxEnumItemInterface *>(pNewItem)->HasBoolValue())
                 {
                     // and Enums with Bool-Interface
-                    ((SfxEnumItemInterface*)pNewItem)->SetBoolValue(true);
+                    static_cast<SfxEnumItemInterface*>(pNewItem)->SetBoolValue(true);
                     aReq.AppendItem( *pNewItem );
                 }
                 else {
@@ -1395,7 +1395,7 @@ void SfxBindings::UpdateControllers_Impl
         if ( SfxItemState::DONTCARE == eState )
         {
             // ambiguous
-            pCache->SetState( SfxItemState::DONTCARE, (SfxPoolItem *)-1 );
+            pCache->SetState( SfxItemState::DONTCARE, reinterpret_cast<SfxPoolItem *>(-1) );
         }
         else if ( SfxItemState::DEFAULT == eState &&
                     rFound.nWhichId > SFX_WHICH_MAX )
@@ -1466,7 +1466,7 @@ void SfxBindings::UpdateControllers_Impl
                 else
                 {
                     // ambiguous
-                    pEnumCache->SetState( SfxItemState::DONTCARE, (SfxPoolItem *)-1 );
+                    pEnumCache->SetState( SfxItemState::DONTCARE, reinterpret_cast<SfxPoolItem *>(-1) );
                 }
             }
 

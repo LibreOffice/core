@@ -77,7 +77,7 @@ bool SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
     const SfxEventNamesList& rOwn = aEventsList;
-    const SfxEventNamesList& rOther = ( (SfxEventNamesItem&) rAttr ).aEventsList;
+    const SfxEventNamesList& rOther = static_cast<const SfxEventNamesItem&>( rAttr ).aEventsList;
 
     if ( rOwn.size() != rOther.size() )
         return false;

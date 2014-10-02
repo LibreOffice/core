@@ -1380,62 +1380,62 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_COMPONENTDATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sComponentData);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_COMPONENTCONTEXT, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sComponentContext);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sStatusInd);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_INTERACTIONHANDLER, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sInteractionHdl);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_VIEW_DATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sViewData);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_FILTER_DATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sFilterData);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_DOCUMENT, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sModel);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_CONTENT, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sUCBContent);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_INPUTSTREAM, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sInputStream);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_STREAM, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sStream);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_OUTPUTSTREAM, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sOutputStream);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_POSTDATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sPostData);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_FILLFRAME, false, &pItem ) == SfxItemState::SET )
         {
@@ -1453,206 +1453,206 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_TEMPLATE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sAsTemplate);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_OPEN_NEW_VIEW, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sOpenNewView);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_FAIL_ON_WARNING, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sFailOnWarning);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_VIEW_ID, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sViewId);
-            pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= (sal_Int16) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_PLUGIN_MODE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sPluginMode);
-            pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= (sal_Int16) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_DOC_READONLY, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sReadOnly);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_DDE_RECONNECT_ONLOAD, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDdeReconnect);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sStartPresentation);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_SELECTION, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSelectionOnly);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_HIDDEN, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sHidden);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_MINIMIZED, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sMinimized);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_SILENT, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSilent);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_PREVIEW, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sPreview);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_VIEWONLY, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sViewOnly);
-            pValue[nActProp++].Value <<= ((SfxBoolItem*)pItem)->GetValue() ;
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_EDITDOC, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDontEdit);
-            pValue[nActProp++].Value <<= !( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= !static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_FILE_DIALOG, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sUseSystemDialog);
-            pValue[nActProp++].Value <<= ((SfxBoolItem*)pItem)->GetValue();
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_STANDARD_DIR, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sStandardDir);
-            pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue()) );
+            pValue[nActProp++].Value <<= OUString( static_cast<const SfxStringItem*>(pItem)->GetValue());
         }
         if ( rSet.GetItemState( SID_BLACK_LIST, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sBlackList);
 
             com::sun::star::uno::Sequence< OUString > aList;
-            ((SfxStringListItem*)pItem)->GetStringList( aList );
+            static_cast<const SfxStringListItem*>(pItem)->GetStringList( aList );
             pValue[nActProp++].Value <<= aList ;
         }
         if ( rSet.GetItemState( SID_TARGETNAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sFrameName);
-            pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue()) );
+            pValue[nActProp++].Value <<= OUString( static_cast<const SfxStringItem*>(pItem)->GetValue() );
         }
         if ( rSet.GetItemState( SID_DOC_SALVAGE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSalvagedFile);
-            pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue()) );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_PATH, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sFolderName);
-            pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue()) );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_CONTENTTYPE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sMediaType);
-            pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_TEMPLATE_NAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sTemplateName);
-            pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sTemplateRegionName);
-            pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_JUMPMARK, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sJumpMark);
-            pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
 
         if ( rSet.GetItemState( SID_CHARSET, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sCharacterSet);
-            pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_MACROEXECMODE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sMacroExecMode);
-            pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= (sal_Int16) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_UPDATEDOCMODE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sUpdateDocMode);
-            pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= (sal_Int16) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_REPAIRPACKAGE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sRepairPackage);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue() ;
         }
         if ( rSet.GetItemState( SID_DOCINFO_TITLE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDocumentTitle);
-            pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_DOC_BASEURL, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDocumentBaseURL);
-            pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_DOC_HIERARCHICALNAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sHierarchicalDocumentName);
-            pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_COPY_STREAM_IF_POSSIBLE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sCopyStreamIfPossible);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_NOAUTOSAVE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sNoAutoSave);
-            pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue() ;
         }
         if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sModifyPasswordInfo);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_ENCRYPTIONDATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sEncryptionData);
-            pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSuggestedSaveAsDir);
-            pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSuggestedSaveAsName);
-            pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_DOC_SERVICE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDocumentService);
-            pValue[nActProp++].Value <<= OUString(static_cast<const SfxStringItem*>(pItem)->GetValue());
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if (rSet.HasItem(SID_FILTER_PROVIDER, &pItem))
         {
             pValue[nActProp].Name = sFilterProvider;
-            pValue[nActProp++].Value <<= OUString(static_cast<const SfxStringItem*>(pItem)->GetValue());
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
     }
 

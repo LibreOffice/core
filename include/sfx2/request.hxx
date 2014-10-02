@@ -113,11 +113,11 @@ private:
 
 
 #define SFX_REQUEST_ARG(rReq, pItem, ItemType, nSlotId, bDeep) \
-        const ItemType *pItem = (const ItemType*) \
-                rReq.GetArg( nSlotId, bDeep, TYPE(ItemType) )
+        const ItemType *pItem = static_cast<const ItemType*>( \
+                rReq.GetArg( nSlotId, bDeep, TYPE(ItemType) ) )
 #define SFX_ITEMSET_ARG(pArgs, pItem, ItemType, nSlotId, bDeep) \
-    const ItemType *pItem = (const ItemType*) \
-        SfxRequest::GetItem( pArgs, nSlotId, bDeep, TYPE(ItemType) )
+    const ItemType *pItem = static_cast<const ItemType*>( \
+        SfxRequest::GetItem( pArgs, nSlotId, bDeep, TYPE(ItemType) ) )
 
 #endif
 

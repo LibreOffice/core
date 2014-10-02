@@ -381,7 +381,7 @@ FieldUnit SfxModule::GetCurrentFieldUnit()
     {
         const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
         if ( pItem )
-            eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+            eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
     else
         SAL_WARN( "sfx.appl", "GetModuleFieldUnit(): no module found" );
@@ -393,7 +393,7 @@ FieldUnit SfxModule::GetFieldUnit() const
     FieldUnit eUnit = FUNIT_INCH;
     const SfxPoolItem* pItem = GetItem( SID_ATTR_METRIC );
     if ( pItem )
-        eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+        eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     return eUnit;
 }
 

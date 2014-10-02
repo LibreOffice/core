@@ -34,11 +34,11 @@ public:
     SfxScriptOrganizerItem( const SfxScriptOrganizerItem& );
     virtual ~SfxScriptOrganizerItem();
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
-    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*  Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
+    virtual bool          operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual bool          QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool          PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
-    OUString  getLanguage() { return aLanguage; };
+    OUString              getLanguage() const { return aLanguage; };
 };
 
 #endif

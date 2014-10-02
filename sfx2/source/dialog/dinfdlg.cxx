@@ -658,7 +658,7 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
     if ( pExSet && SfxItemState::SET != pExSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         pInfo = m_pInfoItem;
     else if ( pItem )
-        pInfo = new SfxDocumentInfoItem( *(const SfxDocumentInfoItem *)pItem );
+        pInfo = new SfxDocumentInfoItem( *static_cast<const SfxDocumentInfoItem *>(pItem) );
 
     if ( !pInfo )
     {
@@ -694,7 +694,7 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
 
 void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
 {
-    m_pInfoItem = &(SfxDocumentInfoItem &)rSet->Get(SID_DOCINFO);
+    m_pInfoItem = const_cast<SfxDocumentInfoItem*>(&static_cast<const SfxDocumentInfoItem &>(rSet->Get(SID_DOCINFO)));
 
     m_pTitleEd->SetText( m_pInfoItem->getTitle() );
     m_pThemaEd->SetText( m_pInfoItem->getSubject() );
@@ -933,12 +933,12 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
          m_pUseUserDataCB->IsValueChangedFromSaved() &&
          GetTabDialog() && GetTabDialog()->GetExampleSet() )
     {
-        const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
-        const SfxPoolItem* pItem;
+        SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
+        SfxPoolItem* pItem;
 
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
-            SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
+            SfxDocumentInfoItem* m_pInfoItem = static_cast<SfxDocumentInfoItem*>(pItem);
             bool bUseData = ( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
             m_pInfoItem->SetUseUserData( bUseData );
             rSet->Put( SfxDocumentInfoItem( *m_pInfoItem ) );
@@ -948,17 +948,17 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 
     if ( bHandleDelete )
     {
-        const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
-        const SfxPoolItem* pItem;
+        SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
+        SfxPoolItem* pItem;
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
-            SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
+            SfxDocumentInfoItem* pInfoItem = static_cast<SfxDocumentInfoItem*>(pItem);
             bool bUseAuthor = bEnableUseUserData && m_pUseUserDataCB->IsChecked();
-            SfxDocumentInfoItem newItem( *m_pInfoItem );
+            SfxDocumentInfoItem newItem( *pInfoItem );
             newItem.resetUserData( bUseAuthor
                 ? SvtUserOptions().GetFullName()
                 : OUString() );
-            m_pInfoItem->SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
+            pInfoItem->SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
             newItem.SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
 
             newItem.SetDeleteUserData( true );
@@ -1033,7 +1033,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
          || !pItem )
         m_pReadOnlyCB->Hide();
     else
-        m_pReadOnlyCB->Check( ( (SfxBoolItem*)pItem )->GetValue() );
+        m_pReadOnlyCB->Check( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
 
     // determine context symbol
     INetURLObject aURL;
@@ -1197,7 +1197,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
     {
         DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ),
                     "SfxDocumentInfoDialog:<SfxStringItem> expected" );
-        aTitle += ( ( SfxStringItem* ) pItem )->GetValue();
+        aTitle += static_cast<const SfxStringItem*>(pItem)->GetValue();
     }
     SetText( aTitle );
 
@@ -1461,7 +1461,7 @@ CustomPropertiesWindow::~CustomPropertiesWindow()
 
 IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
 {
-    sal_Int64 nType = sal_Int64( (sal_IntPtr)pBox->GetEntryData( pBox->GetSelectEntryPos() ) );
+    long nType = reinterpret_cast<long>( pBox->GetEntryData( pBox->GetSelectEntryPos() ) );
     CustomPropertyLine* pLine = pBox->GetLine();
     pLine->m_aValueEdit.Show( (CUSTOM_TYPE_TEXT == nType) || (CUSTOM_TYPE_NUMBER  == nType) );
     pLine->m_aDateField.Show( (CUSTOM_TYPE_DATE == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
@@ -1566,8 +1566,8 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
 {
     bool bIsValid = true;
     pLine->m_bTypeLostFocus = false;
-    sal_Int64 nType = sal_Int64(
-        (sal_IntPtr)pLine->m_aTypeBox.GetEntryData( pLine->m_aTypeBox.GetSelectEntryPos() ) );
+    long nType = reinterpret_cast<long>(
+                     pLine->m_aTypeBox.GetEntryData( pLine->m_aTypeBox.GetSelectEntryPos() ) );
     OUString sValue = pLine->m_aValueEdit.GetText();
     if ( sValue.isEmpty() )
         return true;
@@ -1602,7 +1602,7 @@ void CustomPropertiesWindow::ValidateLine( CustomPropertyLine* pLine, bool bIsFr
             pLine->m_bTypeLostFocus = true;
         vcl::Window* pParent = GetParent()->GetParent();
         if (MessageDialog(pParent, SfxResId(STR_SFX_QUERY_WRONG_TYPE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_OK_CANCEL).Execute() == RET_OK)
-            pLine->m_aTypeBox.SelectEntryPos( m_aTypeBox.GetEntryPos( (void*)CUSTOM_TYPE_TEXT ) );
+            pLine->m_aTypeBox.SelectEntryPos( m_aTypeBox.GetEntryPos( reinterpret_cast<void*>(CUSTOM_TYPE_TEXT) ) );
         else
             pLine->m_aValueEdit.GrabFocus();
     }
@@ -1840,7 +1840,7 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
             else
                 pNewLine->m_aYesNoButton.CheckNo();
         }
-        pNewLine->m_aTypeBox.SelectEntryPos( m_aTypeBox.GetEntryPos( (void*)nType ) );
+        pNewLine->m_aTypeBox.SelectEntryPos( m_aTypeBox.GetEntryPos( reinterpret_cast<void*>(nType) ) );
     }
 
     TypeHdl( &pNewLine->m_aTypeBox );
@@ -1919,8 +1919,8 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
         if ( !sPropertyName.isEmpty() )
         {
             aPropertiesSeq[i].Name = sPropertyName;
-            sal_Int64 nType = sal_Int64(
-                (sal_IntPtr)pLine->m_aTypeBox.GetEntryData( pLine->m_aTypeBox.GetSelectEntryPos() ) );
+            long nType = reinterpret_cast<long>(
+                            pLine->m_aTypeBox.GetEntryData( pLine->m_aTypeBox.GetSelectEntryPos() ) );
             if ( CUSTOM_TYPE_NUMBER == nType )
             {
                 double nValue = 0;
@@ -2131,11 +2131,11 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
     {
         if ( SfxItemState::SET !=
                 GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
-            pInfo = &( SfxDocumentInfoItem& )rSet->Get( SID_DOCINFO );
+            pInfo = const_cast<SfxDocumentInfoItem*>(&static_cast<const SfxDocumentInfoItem& >(rSet->Get( SID_DOCINFO )));
         else
         {
             bMustDelete = true;
-            pInfo = new SfxDocumentInfoItem( *( const SfxDocumentInfoItem* ) pItem );
+            pInfo = new SfxDocumentInfoItem( *static_cast<const SfxDocumentInfoItem*>(pItem) );
         }
     }
 
@@ -2174,8 +2174,8 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
 void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
 {
     m_pPropertiesCtrl->ClearAllLines();
-    const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet->Get(SID_DOCINFO);
-    std::vector< CustomProperty* > aCustomProps = m_pInfoItem->GetCustomProperties();
+    const SfxDocumentInfoItem& rInfoItem = static_cast<const SfxDocumentInfoItem &>(rItemSet->Get(SID_DOCINFO));
+    std::vector< CustomProperty* > aCustomProps = rInfoItem.GetCustomProperties();
     for ( sal_uInt32 i = 0; i < aCustomProps.size(); i++ )
     {
         m_pPropertiesCtrl->AddLine( aCustomProps[i]->m_sName, aCustomProps[i]->m_aValue, false );
@@ -2603,11 +2603,11 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
     {
         if ( SfxItemState::SET !=
                 GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
-            pInfo = &( SfxDocumentInfoItem& )rSet->Get( SID_DOCINFO );
+            pInfo = const_cast<SfxDocumentInfoItem*>(&static_cast<const SfxDocumentInfoItem& >(rSet->Get( SID_DOCINFO )));
         else
         {
             bMustDelete = true;
-            pInfo = new SfxDocumentInfoItem( *( const SfxDocumentInfoItem* ) pItem );
+            pInfo = new SfxDocumentInfoItem( *static_cast<const SfxDocumentInfoItem*>(pItem) );
         }
     }
 
@@ -2665,8 +2665,8 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
 void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
 {
     m_pPropertiesCtrl.ClearAllLines();
-    const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet->Get(SID_DOCINFO);
-    uno::Sequence< document::CmisProperty > aCmisProps = m_pInfoItem->GetCmisProperties();
+    const SfxDocumentInfoItem& rInfoItem = static_cast<const SfxDocumentInfoItem& >(rItemSet->Get(SID_DOCINFO));
+    uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
     for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
     {
         m_pPropertiesCtrl.AddLine( aCmisProps[i].Id,

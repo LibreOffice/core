@@ -211,6 +211,7 @@ public:
     void                Start( bool bShow = true );
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
+    SfxItemSet*         GetExampleSet() { return pExampleSet; }
     SfxViewFrame*       GetViewFrame() const { return pFrame; }
 
     void                SetApplyHandler(const Link& _rHdl);

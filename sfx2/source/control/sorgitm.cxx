@@ -63,7 +63,7 @@ bool SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 {
      return rItem.Type() == Type() &&
          SfxStringItem::operator==(rItem) &&
-         aLanguage == ((const SfxScriptOrganizerItem &)rItem).aLanguage;
+         aLanguage == static_cast<const SfxScriptOrganizerItem &>(rItem).aLanguage;
 }
 
 

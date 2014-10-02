@@ -493,7 +493,7 @@ void LinkManager::CancelTransfers()
     for( size_t n = rLnks.size(); n; )
         if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
-            0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )
+            0 != ( pFileObj = static_cast<SvFileObject*>(pLnk->GetObj()) ) )
             pFileObj->CancelTransfers();
 }
     // For the purpose of sending Status information from the file object to

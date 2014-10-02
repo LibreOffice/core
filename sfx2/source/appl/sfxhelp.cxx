@@ -587,7 +587,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                             //see if it has a TabControl and ask the active tab of
                             //that for help
                             bTriedTabPage = true;
-                            Dialog *pDialog = ((Dialog*)pParent);
+                            Dialog *pDialog = static_cast<Dialog*>(pParent);
                             TabControl *pCtrl = pDialog->hasBuilder() ? pDialog->get<TabControl>("tabcontrol") : NULL;
                             TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : NULL;
                             vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(WINDOW_FIRSTCHILD) : NULL;
@@ -627,7 +627,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
     if (!xHelp.is())
         pHelpWindow = impl_createHelp(xHelp, xHelpContent);
     else
-        pHelpWindow = (SfxHelpWindow_Impl*)VCLUnoHelper::GetWindow(xHelp->getComponentWindow());
+        pHelpWindow = static_cast<SfxHelpWindow_Impl*>(VCLUnoHelper::GetWindow(xHelp->getComponentWindow()));
     if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
         return false;
 
