@@ -950,6 +950,31 @@ public:
     }
 };
 
+class CopyTextAttrsFromClipHandler
+{
+    sc::CellTextAttrStoreType& mrAttrs;
+    sc::CellTextAttrStoreType::iterator miPos;
+    size_t mnDelta;
+
+public:
+    CopyTextAttrsFromClipHandler( sc::CellTextAttrStoreType& rAttrs, size_t nDelta ) :
+        mrAttrs(rAttrs), miPos(mrAttrs.begin()), mnDelta(nDelta) {}
+
+    void operator() ( const sc::CellTextAttrStoreType::value_type& aNode, size_t nOffset, size_t nDataSize )
+    {
+        if (aNode.type != sc::element_type_celltextattr)
+            return;
+
+        sc::celltextattr_block::const_iterator it = sc::celltextattr_block::begin(*aNode.data);
+        std::advance(it, nOffset);
+        sc::celltextattr_block::const_iterator itEnd = it;
+        std::advance(itEnd, nDataSize);
+
+        size_t nPos = aNode.position + nOffset + mnDelta;
+        miPos = mrAttrs.set(miPos, nPos, it, itEnd);
+    }
+};
+
 }
 
 //  rColumn = source
@@ -1001,6 +1026,10 @@ void ScColumn::CopyFromClip(
             SetFormulaCell(nDestRow, new ScFormulaCell(pDocument, aDestPos, aArr));
         }
 
+        // Don't forget to copy the cell text attributes.
+        CopyTextAttrsFromClipHandler aFunc(maCellTextAttrs, nDy);
+        sc::ParseBlock(rColumn.maCellTextAttrs.begin(), rColumn.maCellTextAttrs, aFunc, nRow1-nDy, nRow2-nDy);
+
         return;
     }
 
@@ -1011,8 +1040,16 @@ void ScColumn::CopyFromClip(
 
     // nRow1 to nRow2 is for destination (this) column. Subtract nDy to get the source range.
     // Copy all cells in the source column (rColumn) from nRow1-nDy to nRow2-nDy to this column.
-    CopyCellsFromClipHandler aFunc(rCxt, rColumn, *this, nTab, nCol, nDy, pSharedStringPool);
-    sc::ParseBlock(rColumn.maCells.begin(), rColumn.maCells, aFunc, nRow1-nDy, nRow2-nDy);
+    {
+        CopyCellsFromClipHandler aFunc(rCxt, rColumn, *this, nTab, nCol, nDy, pSharedStringPool);
+        sc::ParseBlock(rColumn.maCells.begin(), rColumn.maCells, aFunc, nRow1-nDy, nRow2-nDy);
+    }
+
+    {
+        // Don't forget to copy the cell text attributes.
+        CopyTextAttrsFromClipHandler aFunc(maCellTextAttrs, nDy);
+        sc::ParseBlock(rColumn.maCellTextAttrs.begin(), rColumn.maCellTextAttrs, aFunc, nRow1-nDy, nRow2-nDy);
+    }
 }
 
 void ScColumn::MixMarked(

@@ -983,6 +983,31 @@ public:
     }
 };
 
+class CopyTextAttrToClipHandler
+{
+    sc::CellTextAttrStoreType& mrDestAttrs;
+    sc::CellTextAttrStoreType::iterator miPos;
+
+public:
+    CopyTextAttrToClipHandler( sc::CellTextAttrStoreType& rAttrs ) :
+        mrDestAttrs(rAttrs), miPos(mrDestAttrs.begin()) {}
+
+    void operator() ( const sc::CellTextAttrStoreType::value_type& aNode, size_t nOffset, size_t nDataSize )
+    {
+        if (aNode.type != sc::element_type_celltextattr)
+            return;
+
+        sc::celltextattr_block::const_iterator it = sc::celltextattr_block::begin(*aNode.data);
+        std::advance(it, nOffset);
+        sc::celltextattr_block::const_iterator itEnd = it;
+        std::advance(itEnd, nDataSize);
+
+        size_t nPos = aNode.position + nOffset;
+        miPos = mrDestAttrs.set(miPos, nPos, it, itEnd);
+    }
+};
+
+
 }
 
 void ScColumn::CopyToClip(
@@ -991,8 +1016,15 @@ void ScColumn::CopyToClip(
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
                           rCxt.isKeepScenarioFlags() ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
 
-    CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), rCxt.isCloneNotes());
-    sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
+    {
+        CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), rCxt.isCloneNotes());
+        sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
+    }
+
+    {
+        CopyTextAttrToClipHandler aFunc(rColumn.maCellTextAttrs);
+        sc::ParseBlock(maCellTextAttrs.begin(), maCellTextAttrs, aFunc, nRow1, nRow2);
+    }
 
     rColumn.CellStorageModified();
 }
