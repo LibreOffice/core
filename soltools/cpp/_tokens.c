@@ -492,7 +492,7 @@ void
         {
             if ( write(1, wbuf, OBS) != -1 ) {
             if (wbp > &wbuf[OBS])
-                memcpy(wbuf, wbuf + OBS, wbp - &wbuf[OBS]);
+                memmove(wbuf, wbuf + OBS, wbp - &wbuf[OBS]);
             wbp -= OBS;
         }
         else exit(1);
