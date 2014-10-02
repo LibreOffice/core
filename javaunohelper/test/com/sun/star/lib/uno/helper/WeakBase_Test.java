@@ -34,6 +34,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+import util.WaitUnreachable;
 
 public class WeakBase_Test
 {
@@ -81,12 +82,9 @@ public class WeakBase_Test
         adapter.addReference(aRef2);
 
         assertSame(adapter.queryAdapted(), comp);
+        WaitUnreachable u = new WaitUnreachable(comp);
         comp= null;
-        logger.log(Level.FINE, "Wait 51ms (-XX:MaxGCPauseMillis=50)");
-        System.gc();
-        System.runFinalization();
-        Thread.sleep(51);
-
+        u.waitUnreachable();
         assertEquals(aRef1.nDisposeCalled, 1);
         assertEquals(aRef2.nDisposeCalled, 1);
         assertNull(adapter.queryAdapted());
@@ -102,11 +100,9 @@ public class WeakBase_Test
         adapter.addReference(aRef2);
 
         adapter.removeReference(aRef1);
-        logger.log(Level.FINE, "Wait 51ms (-XX:MaxGCPauseMillis=50)");
+        u = new WaitUnreachable(comp);
         comp= null;
-        System.gc();
-        System.runFinalization();
-        Thread.sleep(51);
+        u.waitUnreachable();
         assertEquals(aRef1.nDisposeCalled, 0);
         assertEquals(aRef2.nDisposeCalled, 1);
     }
