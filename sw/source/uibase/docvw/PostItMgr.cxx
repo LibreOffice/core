@@ -1186,30 +1186,154 @@ void SwPostItMgr::RemoveSidebarWin()
     PreparePageContainer();
 }
 
+class FilterFunctor : public std::unary_function<const SwFmtFld*, bool>
+{
+public:
+    virtual bool operator()(const SwFmtFld* pFld) const = 0;
+    virtual ~FilterFunctor() {}
+};
+
+class IsPostitField : public FilterFunctor
+{
+public:
+    bool operator()(const SwFmtFld* pFld) const SAL_OVERRIDE
+    {
+        return pFld->GetField()->GetTyp()->Which() == RES_POSTITFLD;
+    }
+};
+
+class IsPostitFieldWithAuthorOf : public FilterFunctor
+{
+    OUString m_sAuthor;
+public:
+    IsPostitFieldWithAuthorOf(const OUString &rAuthor)
+        : m_sAuthor(rAuthor)
+    {
+    }
+    bool operator()(const SwFmtFld* pFld) const SAL_OVERRIDE
+    {
+        if (pFld->GetField()->GetTyp()->Which() != RES_POSTITFLD)
+            return false;
+        return static_cast<const SwPostItField*>(pFld->GetField())->GetPar1() == m_sAuthor;
+    }
+};
+
+
+//Manages the passed in vector by automatically removing entries if they are deleted
+//and automatically adding entries if they appear in the document and match the
+//functor.
+//
+//This will completely refill in the case of a "anonymous" NULL pFld stating
+//rather unhelpfully that "something changed" so you may process the same
+//Fields more than once.
+class FieldDocWatchingStack : public SfxListener
+{
+    std::list<SwSidebarItem*>& l;
+    std::vector<const SwFmtFld*> v;
+    SwDocShell& m_rDocShell;
+    FilterFunctor& m_rFilter;
+
+    virtual void Notify(SfxBroadcaster&, const SfxHint& rHint) SAL_OVERRIDE
+    {
+        const SwFmtFldHint* pHint = dynamic_cast<const SwFmtFldHint*>(&rHint);
+        if (pHint)
+        {
+            bool bAllInvalidated = false;
+            if (pHint->Which() == SWFMTFLD_REMOVED)
+            {
+                const SwFmtFld* pFld = pHint->GetField();
+                bAllInvalidated = pFld == NULL;
+                if (!bAllInvalidated && m_rFilter(pFld))
+                {
+                    EndListening(const_cast<SwFmtFld&>(*pFld));
+                    v.erase(std::remove(v.begin(), v.end(), pFld), v.end());
+                }
+            }
+            else if (pHint->Which() == SWFMTFLD_INSERTED)
+            {
+                const SwFmtFld* pFld = pHint->GetField();
+                bAllInvalidated = pFld == NULL;
+                if (!bAllInvalidated && m_rFilter(pFld))
+                {
+                    StartListening(const_cast<SwFmtFld&>(*pFld));
+                    v.push_back(pFld);
+                }
+            }
+
+            if (bAllInvalidated)
+                FillVector();
+
+            return;
+        }
+    }
+
+public:
+    FieldDocWatchingStack(std::list<SwSidebarItem*>& in, SwDocShell &rDocShell, FilterFunctor& rFilter)
+        : l(in)
+        , m_rDocShell(rDocShell)
+        , m_rFilter(rFilter)
+    {
+        FillVector();
+        StartListening(m_rDocShell);
+    }
+    void FillVector()
+    {
+        EndListeningToAllFields();
+        v.clear();
+        v.reserve(l.size());
+        for(std::list<SwSidebarItem*>::iterator aI = l.begin(); aI != l.end(); ++aI)
+        {
+            SwSidebarItem* p = *aI;
+            const SwFmtFld& rFld = p->GetFmtFld();
+            if (!m_rFilter(&rFld))
+                continue;
+            StartListening(const_cast<SwFmtFld&>(rFld));
+            v.push_back(&rFld);
+        }
+    }
+    void EndListeningToAllFields()
+    {
+        for(std::vector<const SwFmtFld*>::iterator aI = v.begin(); aI != v.end(); ++aI)
+        {
+            const SwFmtFld* pFld = *aI;
+            EndListening(const_cast<SwFmtFld&>(*pFld));
+        }
+    }
+    ~FieldDocWatchingStack()
+    {
+        EndListeningToAllFields();
+        EndListening(m_rDocShell);
+    }
+    const SwFmtFld* pop()
+    {
+        if (v.empty())
+            return NULL;
+        const SwFmtFld* p = v.back();
+        EndListening(const_cast<SwFmtFld&>(*p));
+        v.pop_back();
+        return p;
+    }
+};
+
 // copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFlds as well
 // RemoveItem will clean up the core field and visible postit if necessary
 // we cannot just delete everything as before, as postits could move into change tracking
-void SwPostItMgr::Delete(const OUString& aAuthor)
+void SwPostItMgr::Delete(const OUString& rAuthor)
 {
     mpWrtShell->StartAllAction();
-    if ( HasActiveSidebarWin() && (GetActiveSidebarWin()->GetAuthor()==aAuthor) )
+    if (HasActiveSidebarWin() && (GetActiveSidebarWin()->GetAuthor() == rAuthor))
     {
         SetActiveSidebarWin(0);
     }
     SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_DELETE_AUTHOR_NOTES) + aAuthor);
+    aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_DELETE_AUTHOR_NOTES) + rAuthor);
     mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
 
-    std::vector<const SwFmtFld*> aTmp;
-    aTmp.reserve( mvPostItFlds.size() );
-    for(std::list<SwSidebarItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; ++pPostIt)
+    IsPostitFieldWithAuthorOf aFilter(rAuthor);
+    FieldDocWatchingStack aStack(mvPostItFlds, *mpView->GetDocShell(), aFilter);
+    while (const SwFmtFld* pFld = aStack.pop())
     {
-        if (((*pPostIt)->pPostIt->GetAuthor() == aAuthor) )
-            aTmp.push_back( &(*pPostIt)->GetFmtFld() );
-    }
-    for(std::vector<const SwFmtFld*>::iterator i = aTmp.begin(); i != aTmp.end() ; ++i)
-    {
-        if (mpWrtShell->GotoField(*(*i)))
+        if (mpWrtShell->GotoField(*pFld))
             mpWrtShell->DelRight();
     }
     mpWrtShell->EndUndo();
@@ -1228,15 +1352,12 @@ void SwPostItMgr::Delete()
     aRewriter.AddRule(UndoArg1, SW_RES(STR_DELETE_ALL_NOTES) );
     mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
 
-    std::vector<const SwFmtFld*> aTmp;
-    aTmp.reserve( mvPostItFlds.size() );
-    for(std::list<SwSidebarItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; ++pPostIt)
+    IsPostitField aFilter;
+    FieldDocWatchingStack aStack(mvPostItFlds, *mpView->GetDocShell(),
+        aFilter);
+    while (const SwFmtFld* pFld = aStack.pop())
     {
-        aTmp.push_back( &(*pPostIt)->GetFmtFld() );
-    }
-    for(std::vector<const SwFmtFld*>::iterator i = aTmp.begin(); i != aTmp.end() ; ++i)
-    {
-        if (mpWrtShell->GotoField(*(*i)))
+        if (mpWrtShell->GotoField(*pFld))
             mpWrtShell->DelRight();
     }
 
