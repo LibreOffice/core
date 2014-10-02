@@ -6,42 +6,49 @@
 package org.mozilla.gecko.gfx;
 
 public class SubTile extends SingleTileLayer {
-    public int x;
-    public int y;
-    public float zoom;
-
     public boolean markedForRemoval = false;
+    public final TileIdentifier id;
 
     public SubTile(CairoImage mImage, int x, int y, float zoom) {
         super(mImage);
-        this.x = x;
-        this.y = y;
-        this.zoom = zoom;
+        id = new TileIdentifier(x, y, zoom);
     }
 
     public void markForRemoval() {
         markedForRemoval = true;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public static class TileIdentifier {
+        public int x;
+        public int y;
+        public float zoom;
 
-        SubTile subTile = (SubTile) o;
+        public TileIdentifier(int x, int y, float zoom) {
+            this.x = x;
+            this.y = y;
+            this.zoom = zoom;
+        }
 
-        if (x != subTile.x) return false;
-        if (y != subTile.y) return false;
-        if (Float.compare(subTile.zoom, zoom) != 0) return false;
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
 
-        return true;
-    }
+            TileIdentifier that = (TileIdentifier) o;
 
-    @Override
-    public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
-        result = 31 * result + (zoom != +0.0f ? Float.floatToIntBits(zoom) : 0);
-        return result;
+            if (x != that.x) return false;
+            if (y != that.y) return false;
+            if (Float.compare(that.zoom, zoom) != 0) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = x;
+            result = 31 * result + y;
+            result = 31 * result + (zoom != +0.0f ? Float.floatToIntBits(zoom) : 0);
+            return result;
+        }
     }
 }
