@@ -221,7 +221,7 @@ void Bridge::call_cli(
         System::Exception^ exc= e->InnerException;
         css::uno::TypeDescription td(mapCliType(exc->GetType()));
         // memory for exception
-        std::auto_ptr< rtl_mem > memExc(rtl_mem::allocate(td.get()->nSize));
+        std::unique_ptr< rtl_mem > memExc(rtl_mem::allocate(td.get()->nSize));
         map_to_uno(memExc.get(), exc, td.get()->pWeakRef, false);
         (*uno_exc)->pType= td.get()->pWeakRef;
         (*uno_exc)->pData= memExc.release();

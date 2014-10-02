@@ -49,9 +49,9 @@ OUString mapCliTypeName(System::String^ typeName);
 System::String^ mapCliPolymorphicName(System::String^ unoName);
 System::String^ mapPolymorphicName(System::String^ unoName, bool bCliToUno);
 
-inline auto_ptr< rtl_mem > seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
+inline unique_ptr< rtl_mem > seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
 {
-    auto_ptr< rtl_mem > seq(
+    unique_ptr< rtl_mem > seq(
         rtl_mem::allocate( SAL_SEQUENCE_HEADER_SIZE + (nElements * nSize) ) );
     uno_Sequence * p = (uno_Sequence *)seq.get();
     p->nRefCount = 1;
@@ -897,7 +897,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     }
                     else
                     {
-                        auto_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (sal_Int64) ) );
+                        unique_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (sal_Int64) ) );
                         *(sal_Int64 *) mem.get()=  *safe_cast<System::Int64^>(aAny.Value);
                         pAny->pData = mem.release();
                     }
@@ -910,7 +910,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     }
                     else
                     {
-                        auto_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (sal_uInt64) ) );
+                        unique_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (sal_uInt64) ) );
                         *(sal_uInt64 *) mem.get()=  *safe_cast<System::UInt64^>(aAny.Value);
                         pAny->pData = mem.release();
                     }
@@ -923,7 +923,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     }
                     else
                     {
-                        auto_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (float) ) );
+                        unique_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (float) ) );
                         *(float*) mem.get() = *safe_cast<System::Single^>(aAny.Value);
                         pAny->pData = mem.release();
                     }
@@ -936,7 +936,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     }
                     else
                     {
-                        auto_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (double) ) );
+                        unique_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (double) ) );
                         *(double*) mem.get()= *safe_cast<System::Double^>(aAny.Value);
                         pAny->pData= mem.release();
                     }
@@ -965,7 +965,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     css::uno::Type anyType(value_td);
                     typelib_TypeDescription* td= NULL;
                     anyType.getDescription(&td);
-                    auto_ptr< rtl_mem > mem(rtl_mem::allocate(td->nSize));
+                    unique_ptr< rtl_mem > mem(rtl_mem::allocate(td->nSize));
                     typelib_typedescription_release(td);
                     map_to_uno(
                         mem.get(), aAny.Value, value_td.getTypeLibType(),
@@ -1238,7 +1238,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
             typelib_TypeDescriptionReference * element_type =
                 ((typelib_IndirectTypeDescription *)td.get())->pType;
 
-            auto_ptr< rtl_mem > seq;
+            unique_ptr< rtl_mem > seq;
 
             System::Array^ ar = nullptr;
             if (cli_data != nullptr)
