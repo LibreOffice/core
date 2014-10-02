@@ -1618,8 +1618,10 @@ private:
             Size aPaperSize( rInfo.mpPrinter->PixelToLogic( rInfo.mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
             maPrintSize.Width  = aPaperSize.Height();
             maPrintSize.Height = aPaperSize.Width();
+            const long nRotatedWidth = aOutRect.GetHeight();
+            const long nRotatedHeight = aOutRect.GetWidth();
             aOutRect = Rectangle( Point( aPageOfs.Y(), aPageOfs.X() ),
-                                  Size( aOutRect.GetHeight(), aOutRect.GetWidth() ) );
+                                  Size( nRotatedWidth, nRotatedHeight ) );
         }
 
         Link aOldLink;
