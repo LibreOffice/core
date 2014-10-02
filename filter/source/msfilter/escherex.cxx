@@ -670,7 +670,7 @@ void EscherPropertyContainer::CreateTextProperties(
 
     // used with normal shapes:
     bool bAutoGrowWidth     ( false );
-    bool bAutoGrowHeight    ( false );
+    const bool bAutoGrowHeight    ( false ); //#ii63936 not setting autogrowheight, because minframeheight would be ignored
     // used with ashapes:
     bool bWordWrap          ( false );
     bool bAutoGrowSize      ( false );
