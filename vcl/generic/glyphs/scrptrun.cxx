@@ -39,11 +39,11 @@
 
 #include "scrptrun.h"
 
-#define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
-
 const char ScriptRun::fgClassID=0;
 
-UChar32 ScriptRun::pairedChars[] = {
+// WARNING: In the unlikely event that this array needs to be changed,
+// the following arrays and getPairIndex() must also be changed
+const UChar32 ScriptRun::pairedChars[] = {
     0x0028, 0x0029, // ascii paired punctuation
     0x003c, 0x003e,
     0x005b, 0x005d,
@@ -63,68 +63,53 @@ UChar32 ScriptRun::pairedChars[] = {
     0x301a, 0x301b
 };
 
-const int32_t ScriptRun::pairedCharCount = ARRAY_SIZE(pairedChars);
-const int32_t ScriptRun::pairedCharPower = 1 << highBit(pairedCharCount);
-const int32_t ScriptRun::pairedCharExtra = pairedCharCount - pairedCharPower;
+// The return values for getPairIndex() from 0x28 to 0xbb
+const int8_t ScriptRun::pairedCharsIndex0x0028[] = {
+     0,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1,  2, -1,  3, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1,  4, -1,  5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1,  6, -1,  7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1,  8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1,  9
+};
 
-int8_t ScriptRun::highBit(int32_t value)
+// The return values for getPairIndex() from 0x2018 to 0x203a
+const int8_t ScriptRun::pairedCharsIndex0x2018[] = {
+    10, 11, -1, -1, 12, 13, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, 14, 15
+};
+
+// The return values for getPairIndex() from 0x3008 to 0x301b
+const int8_t ScriptRun::pairedCharsIndex0x3008[] = {
+    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, 26, 27, 28, 29,
+    30, 31, 32, 33
+};
+
+// If ch is present in pairedChars, return its index, else -1
+inline int32_t ScriptRun::getPairIndex(UChar32 ch)
 {
-    if (value <= 0) {
-        return -32;
+    if (ch <= 0xbb) {
+        if (ch >= 0x28)
+            return pairedCharsIndex0x0028[ch - 0x28];
+        return -1;
     }
 
-    int8_t bit = 0;
-
-    if (value >= 1 << 16) {
-        value >>= 16;
-        bit += 16;
+    if (ch <= 0x203a) {
+        if (ch >= 0x2018)
+            return pairedCharsIndex0x2018[ch - 0x2018];
+        return -1;
     }
 
-    if (value >= 1 << 8) {
-        value >>= 8;
-        bit += 8;
+    if (ch >= 0x3008 && ch <= 0x301b) {
+        return pairedCharsIndex0x3008[ch - 0x3008];
     }
 
-    if (value >= 1 << 4) {
-        value >>= 4;
-        bit += 4;
-    }
-
-    if (value >= 1 << 2) {
-        value >>= 2;
-        bit += 2;
-    }
-
-    if (value >= 1 << 1) {
-        value >>= 1;
-        bit += 1;
-    }
-
-    return bit;
-}
-
-int32_t ScriptRun::getPairIndex(UChar32 ch)
-{
-    int32_t probe = pairedCharPower;
-    int32_t index = 0;
-
-    if (ch >= pairedChars[pairedCharExtra]) {
-        index = pairedCharExtra;
-    }
-
-    while (probe > (1 << 0)) {
-        probe >>= 1;
-
-        if (ch >= pairedChars[index + probe]) {
-            index += probe;
-        }
-    }
-
-    if (pairedChars[index] != ch) {
-        index = -1;
-    }
-
-    return index;
+    return -1;
 }
 
 UBool ScriptRun::sameScript(int32_t scriptOne, int32_t scriptTwo)
