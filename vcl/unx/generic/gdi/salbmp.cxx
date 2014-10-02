@@ -343,9 +343,8 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
             else if( aSrcBuf.mnBitCount <= 8 )
             {
                 const SalColormap& rColMap = pSalDisp->GetColormap( nScreen );
-                const sal_uInt16 nCols = std::min( (sal_uLong)rColMap.GetUsed()
-                                            , (sal_uLong)(1 << nDrawableDepth)
-                                            );
+                const sal_uInt16 nCols = std::min((sal_uLong)rColMap.GetUsed(),
+                                                  sal_uLong(1) << nDrawableDepth);
 
                 rPal.SetEntryCount( nCols );
                 pDstPal = &rPal;
