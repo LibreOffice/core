@@ -94,7 +94,7 @@ public:
 
     virtual void fire( XEventListener * listener ) const SAL_OVERRIDE
     {
-        ((XContainerListener*)listener)->elementReplaced( m_event );
+        static_cast<XContainerListener*>(listener)->elementReplaced( m_event );
     }
     virtual Type getType() const SAL_OVERRIDE
     {
@@ -115,7 +115,7 @@ public:
 
     virtual void fire( XEventListener * listener ) const SAL_OVERRIDE
     {
-        ((XContainerListener*)listener)->elementInserted( m_event );
+        static_cast<XContainerListener*>(listener)->elementInserted( m_event );
     }
 
     virtual Type getType() const SAL_OVERRIDE
@@ -136,7 +136,7 @@ public:
 
     virtual void fire( XEventListener * listener ) const SAL_OVERRIDE
     {
-        ((XContainerListener*)listener)->elementRemoved( m_event );
+        static_cast<XContainerListener*>(listener)->elementRemoved( m_event );
     }
 
     virtual Type getType() const SAL_OVERRIDE
@@ -461,7 +461,7 @@ void Container::fire( const EventBroadcastHelper &helper )
         {
             try
             {
-                helper.fire( (XEventListener * ) iterator.next() );
+                helper.fire( static_cast<XEventListener *>(iterator.next()) );
             }
             catch ( com::sun::star::uno::RuntimeException & )
             {

@@ -246,7 +246,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     }   break;
                 case SQL_LONGVARBINARY:
                 {
-                    _pData = (void*)(sal_IntPtr)(columnIndex);
+                    _pData = reinterpret_cast<void*>(columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
@@ -254,7 +254,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     break;
                 case SQL_LONGVARCHAR:
                 {
-                    _pData = (void*)(sal_IntPtr)(columnIndex);
+                    _pData = reinterpret_cast<void*>(columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = ((OUString*)_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);

@@ -281,7 +281,7 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
 
 Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return (Reference< XConnection >)m_pConnection;
+    return Reference< XConnection >(m_pConnection);
 }
 
 sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)

@@ -40,7 +40,7 @@ void OCalcCatalog::refreshTables()
 {
     TStringVector aVector;
     Sequence< OUString > aTypes;
-    OCalcConnection::ODocHolder aDocHodler(((OCalcConnection*)m_pConnection));
+    OCalcConnection::ODocHolder aDocHolder(static_cast<OCalcConnection*>(m_pConnection));
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
         OUString("%"),OUString("%"),aTypes);
 

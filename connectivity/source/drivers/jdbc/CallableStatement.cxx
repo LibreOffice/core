@@ -99,7 +99,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    jbyteArray out = (jbyteArray)callObjectMethodWithIntArg(t.pEnv,"getBytes","(I)[B", mID, columnIndex);
+    jbyteArray out = static_cast<jbyteArray>(callObjectMethodWithIntArg(t.pEnv,"getBytes","(I)[B", mID, columnIndex));
     if (out)
     {
         jboolean p = sal_False;

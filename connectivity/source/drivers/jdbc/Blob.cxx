@@ -77,7 +77,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         // submit Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        jbyteArray out = (jbyteArray)t.pEnv->CallObjectMethod( object, mID,pos,count);
+        jbyteArray out = static_cast<jbyteArray>(t.pEnv->CallObjectMethod( object, mID,pos,count));
         ThrowSQLException(t.pEnv,*this);
         if(out)
         {

@@ -334,7 +334,7 @@ OUString java_lang_Object::callStringMethod( const char* _pMethodName, jmethodID
     OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java environment anymore!" );
 
     // call method
-    jstring out = (jstring)callObjectMethod(t.pEnv,_pMethodName,"()Ljava/lang/String;", _inout_MethodID);
+    jstring out = static_cast<jstring>(callObjectMethod(t.pEnv,_pMethodName,"()Ljava/lang/String;", _inout_MethodID));
     return JavaString2String( t.pEnv, out );
 }
 
@@ -362,7 +362,7 @@ OUString java_lang_Object::callStringMethodWithIntArg( const char* _pMethodName,
 {
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java environment anymore!" );
-    jstring out = (jstring)callObjectMethodWithIntArg(t.pEnv,_pMethodName,"(I)Ljava/lang/String;",_inout_MethodID,_nArgument);
+    jstring out = static_cast<jstring>(callObjectMethodWithIntArg(t.pEnv,_pMethodName,"(I)Ljava/lang/String;",_inout_MethodID,_nArgument));
     return JavaString2String( t.pEnv, out );
 }
 
@@ -410,7 +410,7 @@ jclass java_lang_Object::findMyClass(const char* _pClassName)
         t.pEnv->ExceptionDescribe();
         t.pEnv->ExceptionClear();
     }
-    jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
+    jclass globClass = static_cast<jclass>(t.pEnv->NewGlobalRef( tempClass ));
     t.pEnv->DeleteLocalRef( tempClass );
     return globClass;
 }

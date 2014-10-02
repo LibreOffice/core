@@ -47,7 +47,7 @@ java_lang_String::operator OUString()
     SDBThreadAttach t;
     if(!t.pEnv)
         return OUString();
-    return JavaString2String(t.pEnv,(jstring)object);
+    return JavaString2String(t.pEnv, static_cast<jstring>(object));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,7 @@ OUString java_sql_DriverPropertyInfo::name()
     {
         jfieldID id = t.pEnv->GetFieldID(getMyClass(),"name","Ljava/lang/String;");
         if(id)
-            aStr = JavaString2String(t.pEnv,(jstring)t.pEnv->GetObjectField( object, id));
+            aStr = JavaString2String(t.pEnv, static_cast<jstring>(t.pEnv->GetObjectField( object, id)));
     } //t.pEnv
     return aStr;
 }
@@ -81,7 +81,7 @@ OUString java_sql_DriverPropertyInfo::description()
     {
         jfieldID id = t.pEnv->GetFieldID(getMyClass(),"description","Ljava/lang/String;");
         if(id)
-            aStr = JavaString2String(t.pEnv,(jstring)t.pEnv->GetObjectField( object, id));
+            aStr = JavaString2String(t.pEnv, static_cast<jstring>(t.pEnv->GetObjectField( object, id)));
     } //t.pEnv
     return aStr;
 }
@@ -94,7 +94,7 @@ OUString java_sql_DriverPropertyInfo::value()
     {
         jfieldID id = t.pEnv->GetFieldID(getMyClass(),"value","Ljava/lang/String;");
         if(id)
-            aStr = JavaString2String(t.pEnv,(jstring)t.pEnv->GetObjectField( object, id));
+            aStr = JavaString2String(t.pEnv, static_cast<jstring>(t.pEnv->GetObjectField( object, id)));
     } //t.pEnv
     return aStr;
 }
@@ -122,7 +122,7 @@ Sequence< OUString> java_sql_DriverPropertyInfo::choices()
         {
             const java_lang_String * pEmpty = NULL;
             const OUString * pEmpty2 = NULL;
-            return copyArrayAndDelete(t.pEnv,(jobjectArray)t.pEnv->GetObjectField( object, id), pEmpty2, pEmpty);
+            return copyArrayAndDelete(t.pEnv, static_cast<jobjectArray>(t.pEnv->GetObjectField( object, id)), pEmpty2, pEmpty);
         }
     } //t.pEnv
     return Sequence< OUString>();

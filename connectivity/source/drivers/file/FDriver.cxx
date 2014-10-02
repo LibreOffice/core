@@ -197,7 +197,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
         OConnection* pConnection = NULL;
         for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
         {
-            if ((OConnection*) Reference< XConnection >::query(i->get().get()).get() == pSearchConnection)
+            if (static_cast<OConnection*>( Reference< XConnection >::query(i->get().get()).get() ) == pSearchConnection)
             {
                 pConnection = pSearchConnection;
                 break;

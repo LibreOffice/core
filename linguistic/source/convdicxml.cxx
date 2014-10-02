@@ -94,7 +94,7 @@ public:
 
     ConvDicXMLImport & GetConvDicImport()
     {
-        return (ConvDicXMLImport &) GetImport();
+        return static_cast<ConvDicXMLImport &>(GetImport());
     }
 
     // SvXMLImportContext

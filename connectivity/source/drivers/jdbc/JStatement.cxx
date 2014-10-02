@@ -292,7 +292,7 @@ Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) thr
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    return (Reference< XConnection >)m_pConnection;
+    return Reference< XConnection >(m_pConnection);
 }
 
 
@@ -324,7 +324,7 @@ Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com:
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    jintArray out = (jintArray)callObjectMethod(t.pEnv,"executeBatch","()[I", mID);
+    jintArray out = static_cast<jintArray>(callObjectMethod(t.pEnv,"executeBatch","()[I", mID));
     if (out)
     {
         jboolean p = sal_False;

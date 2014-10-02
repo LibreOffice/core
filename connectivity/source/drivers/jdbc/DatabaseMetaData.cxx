@@ -173,23 +173,23 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             t.pEnv->ExceptionClear();// we have to clear the exception here because we want to handle it below
         if ( aCatalogFilter.hasValue() )
         {
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
             OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
         }
         if(args[1].l)
         {
-            t.pEnv->DeleteLocalRef((jstring)args[1].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
             OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
         }
         if(!tableNamePattern.isEmpty())
         {
-            t.pEnv->DeleteLocalRef((jstring)args[2].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[2].l));
             OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
         }
         //for(INT16 i=0;i<len;i++)
         if ( args[3].l )
         {
-            t.pEnv->DeleteLocalRef( (jobjectArray)args[3].l );
+            t.pEnv->DeleteLocalRef( static_cast<jobjectArray>(args[3].l) );
             OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
         }
 
@@ -358,11 +358,11 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
 
         // and clean up
         if(catalog.hasValue())
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
         if(args[1].l)
-            t.pEnv->DeleteLocalRef((jstring)args[1].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
         if(!table.isEmpty())
-            t.pEnv->DeleteLocalRef((jstring)args[2].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[2].l));
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
     if ( !out )
@@ -397,11 +397,11 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
 
         // and cleanup
         if(catalog.hasValue())
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
         if(args[1].l)
-            t.pEnv->DeleteLocalRef((jstring)args[1].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
         if(!table.isEmpty())
-            t.pEnv->DeleteLocalRef((jstring)args[2].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[2].l));
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
 
@@ -516,17 +516,17 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
 
         // and clean up
         if(primaryCatalog.hasValue())
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
         if(args[1].l)
-            t.pEnv->DeleteLocalRef((jstring)args[1].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
         if(!primaryTable.isEmpty())
-            t.pEnv->DeleteLocalRef((jstring)args[2].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[2].l));
         if(foreignCatalog.hasValue())
-            t.pEnv->DeleteLocalRef((jstring)args[3].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[3].l));
         if(args[4].l)
-            t.pEnv->DeleteLocalRef((jstring)args[4].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[4].l));
         if(!foreignTable.isEmpty())
-            t.pEnv->DeleteLocalRef((jstring)args[5].l);
+            t.pEnv->DeleteLocalRef(static_cast<jstring>(args[5].l));
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
 
@@ -645,13 +645,13 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethodWithS
 
             // clean up
             if ( args[0].l )
-                t.pEnv->DeleteLocalRef( (jstring)args[0].l );
+                t.pEnv->DeleteLocalRef( static_cast<jstring>(args[0].l) );
             if ( args[1].l )
-                t.pEnv->DeleteLocalRef( (jstring)args[1].l );
+                t.pEnv->DeleteLocalRef( static_cast<jstring>(args[1].l) );
             if ( args[2].l )
-                t.pEnv->DeleteLocalRef( (jstring)args[2].l );
+                t.pEnv->DeleteLocalRef( static_cast<jstring>(args[2].l) );
             if ( args[3].l )
-                t.pEnv->DeleteLocalRef( (jstring)args[3].l );
+                t.pEnv->DeleteLocalRef( static_cast<jstring>(args[3].l) );
 
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
@@ -1432,13 +1432,13 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
             out = t.pEnv->CallObjectMethod( object, mID, args[0].l, args[1].l,args[2].l,args[3].l);
 
             if(catalog.hasValue())
-                t.pEnv->DeleteLocalRef((jstring)args[0].l);
+                t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
             if(!schemaPattern.isEmpty())
-                t.pEnv->DeleteLocalRef((jstring)args[1].l);
+                t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
             if(!typeNamePattern.isEmpty())
-                t.pEnv->DeleteLocalRef((jstring)args[2].l);
+                t.pEnv->DeleteLocalRef(static_cast<jstring>(args[2].l));
             if(args[3].l)
-                t.pEnv->DeleteLocalRef((jintArray)args[3].l);
+                t.pEnv->DeleteLocalRef(static_cast<jintArray>(args[3].l));
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
     }

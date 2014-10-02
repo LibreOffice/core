@@ -341,7 +341,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLE
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     // just return our connection here
-    return (Reference< XConnection >)m_pConnection;
+    return Reference< XConnection >(m_pConnection);
 }
 
 Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)

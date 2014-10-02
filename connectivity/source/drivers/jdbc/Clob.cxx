@@ -76,7 +76,7 @@ OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStrin
         // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID,pos,subStringLength);
+        jstring out = static_cast<jstring>(t.pEnv->CallObjectMethod( object, mID,pos,subStringLength));
         ThrowSQLException(t.pEnv,*this);
         aStr = JavaString2String(t.pEnv,out);
     } //t.pEnv
@@ -111,7 +111,7 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallLongMethod( object, mID, args[0].l,start );
         ThrowSQLException(t.pEnv,*this);
-        t.pEnv->DeleteLocalRef((jstring)args[0].l);
+        t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
     } //t.pEnv
     return (sal_Int64)out;
 }

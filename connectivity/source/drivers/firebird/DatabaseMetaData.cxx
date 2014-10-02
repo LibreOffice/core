@@ -832,7 +832,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates()
 uno::Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
     throw(SQLException, RuntimeException, std::exception)
 {
-    return (uno::Reference< XConnection >) m_pConnection;
+    return uno::Reference< XConnection >(m_pConnection);
 }
 
 // here follow all methods which return a resultset

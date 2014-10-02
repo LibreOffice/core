@@ -192,7 +192,7 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return (Reference< XConnection >)m_pConnection;
+    return Reference< XConnection >(m_pConnection);
 }
 
 

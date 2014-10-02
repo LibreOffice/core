@@ -141,7 +141,7 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL java_sql_PreparedStatement::getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return (Reference< XConnection >)m_pConnection;
+    return Reference< XConnection >(m_pConnection);
 }
 
 
@@ -587,7 +587,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    jintArray out = (jintArray)callObjectMethod(t.pEnv,"executeBatch","()[I", mID);
+    jintArray out = static_cast<jintArray>(callObjectMethod(t.pEnv,"executeBatch","()[I", mID));
     if(out)
     {
         jboolean p = sal_False;
@@ -651,7 +651,7 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
             if ( mID2 )
                 out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, args[0].l );
         }
-        _pEnv->DeleteLocalRef((jstring)args[0].l);
+        _pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
         ThrowLoggedSQLException( m_aLogger, _pEnv, *this );
         if ( out )
             object = _pEnv->NewGlobalRef( out );

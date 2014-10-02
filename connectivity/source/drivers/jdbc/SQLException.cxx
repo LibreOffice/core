@@ -70,7 +70,7 @@ css::sdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     if( out )
     {
         java_sql_SQLException_BASE  warn_base(t.pEnv,out);
-        return (css::sdbc::SQLException)java_sql_SQLException(warn_base,0);
+        return css::sdbc::SQLException(java_sql_SQLException(warn_base,0));
     }
 
     return css::sdbc::SQLException();

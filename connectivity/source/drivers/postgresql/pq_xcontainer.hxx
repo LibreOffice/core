@@ -76,7 +76,7 @@ public:
 
     virtual void fire( com::sun::star::lang::XEventListener * listener ) const SAL_OVERRIDE
     {
-        ((com::sun::star::util::XRefreshListener*)listener)->refreshed( m_event );
+        static_cast<com::sun::star::util::XRefreshListener*>(listener)->refreshed( m_event );
     }
 
     virtual com::sun::star::uno::Type getType() const SAL_OVERRIDE

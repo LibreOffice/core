@@ -53,8 +53,8 @@ void java_util_Properties::setProperty(const OUString& key, const OUString& valu
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
         ThrowSQLException(t.pEnv,NULL);
-        t.pEnv->DeleteLocalRef((jstring)args[1].l);
-        t.pEnv->DeleteLocalRef((jstring)args[0].l);
+        t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
+        t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
         ThrowSQLException(t.pEnv,0);
         if(out)
             t.pEnv->DeleteLocalRef(out);

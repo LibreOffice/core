@@ -177,7 +177,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
     Sequence< sal_Int8 > aSeq;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
-    jbyteArray out = (jbyteArray)callObjectMethodWithIntArg(t.pEnv,"getBytes","(I)[B", mID, columnIndex);
+    jbyteArray out = static_cast<jbyteArray>(callObjectMethodWithIntArg(t.pEnv,"getBytes","(I)[B", mID, columnIndex));
     if (out)
     {
         jboolean p = sal_False;
@@ -309,7 +309,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
         }
 
         out = t.pEnv->CallObjectMethodA( object, mID, args);
-        t.pEnv->DeleteLocalRef((jstring)args[1].l);
+        t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         // and clean up
         if ( out )
@@ -317,7 +317,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
             if ( t.pEnv->IsInstanceOf(out,java_lang_String::st_getMyClass()) )
             {
                 java_lang_String aVal(t.pEnv,out);
-                aRet <<= (OUString)aVal;
+                aRet <<= OUString(aVal);
             }
             else if ( t.pEnv->IsInstanceOf(out,java_lang_Boolean::st_getMyClass()) )
             {
@@ -328,17 +328,17 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
             else if ( t.pEnv->IsInstanceOf(out,java_sql_Date::st_getMyClass()) )
             {
                 java_sql_Date aVal(t.pEnv,out);
-                aRet <<= (::com::sun::star::util::Date)aVal;
+                aRet <<= ::com::sun::star::util::Date(aVal);
             }
             else if ( t.pEnv->IsInstanceOf(out,java_sql_Time::st_getMyClass()) )
             {
                 java_sql_Time aVal(t.pEnv,out);
-                aRet <<= (::com::sun::star::util::Time)aVal;
+                aRet <<= ::com::sun::star::util::Time(aVal);
             }
             else if ( t.pEnv->IsInstanceOf(out,java_sql_Timestamp::st_getMyClass()) )
             {
                 java_sql_Timestamp aVal(t.pEnv,out);
-                aRet <<= (::com::sun::star::util::DateTime)aVal;
+                aRet <<= ::com::sun::star::util::DateTime(aVal);
             }
             else
                 t.pEnv->DeleteLocalRef(out);

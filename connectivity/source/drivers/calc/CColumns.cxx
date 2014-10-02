@@ -32,7 +32,7 @@ using namespace ::com::sun::star::container;
 
 sdbcx::ObjectType OCalcColumns::createObject(const OUString& _rName)
 {
-    OCalcTable* pTable = (OCalcTable*)m_pTable;
+    OCalcTable* pTable = static_cast<OCalcTable*>(m_pTable);
     ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();
 
     OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));

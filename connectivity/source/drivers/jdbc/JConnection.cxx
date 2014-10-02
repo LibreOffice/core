@@ -545,7 +545,7 @@ OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQ
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,sql));
 
         jobject out = t.pEnv->CallObjectMethod( object, mID, str.get() );
-        aStr = JavaString2String(t.pEnv, (jstring)out );
+        aStr = JavaString2String(t.pEnv, static_cast<jstring>(out) );
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
 
@@ -725,7 +725,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
                         jclass tempClass = t.pEnv->GetObjectClass(m_pDriverobject);
                         if ( m_pDriverobject )
                         {
-                            m_Driver_theClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
+                            m_Driver_theClass = static_cast<jclass>(t.pEnv->NewGlobalRef( tempClass ));
                             t.pEnv->DeleteLocalRef( tempClass );
                         }
                     }

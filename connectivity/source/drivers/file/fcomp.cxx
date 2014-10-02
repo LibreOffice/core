@@ -372,16 +372,16 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
                 pOb2->setValue((double)pOb2->getValue());
                 break;
             case DataType::DATE:
-                pOb1->setValue((util::Date)pOb1->getValue());
-                pOb2->setValue((util::Date)pOb2->getValue());
+                pOb1->setValue(static_cast<util::Date>(pOb1->getValue()));
+                pOb2->setValue(static_cast<util::Date>(pOb2->getValue()));
                 break;
             case DataType::TIME:
-                pOb1->setValue((util::Time)pOb1->getValue());
-                pOb2->setValue((util::Time)pOb2->getValue());
+                pOb1->setValue(static_cast<util::Time>(pOb1->getValue()));
+                pOb2->setValue(static_cast<util::Time>(pOb2->getValue()));
                 break;
             case DataType::TIMESTAMP:
-                pOb1->setValue((util::DateTime)pOb1->getValue());
-                pOb2->setValue((util::DateTime)pOb2->getValue());
+                pOb1->setValue(static_cast<util::DateTime>(pOb1->getValue()));
+                pOb2->setValue(static_cast<util::DateTime>(pOb2->getValue()));
                 break;
         }
     }
@@ -557,7 +557,7 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
         if (pOperand)
             m_aStack.push(pOperand);
         else
-            ((OOperator *)(*aIter))->Exec(m_aStack);
+            static_cast<OOperator *>(*aIter)->Exec(m_aStack);
     }
 
     OOperand* pOperand = m_aStack.top();
@@ -584,7 +584,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
         if (pOperand)
             m_aStack.push(pOperand);
         else
-            ((OOperator *)(*aIter))->Exec(m_aStack);
+            static_cast<OOperator *>(*aIter)->Exec(m_aStack);
     }
 
     OOperand* pOperand = m_aStack.top();

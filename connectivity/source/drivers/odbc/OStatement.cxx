@@ -468,7 +468,7 @@ Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLEx
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return (Reference< XConnection >)m_pConnection;
+    return Reference< XConnection >(m_pConnection);
 }
 
 

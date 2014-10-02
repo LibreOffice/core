@@ -892,7 +892,7 @@ Any ORowSetValue::makeAny() const
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 OSL_ENSURE(m_aValue.m_pString,"Value is null!");
-                rValue <<= (OUString)m_aValue.m_pString;
+                rValue <<= OUString(m_aValue.m_pString);
                 break;
             case DataType::FLOAT:
                 rValue <<= m_aValue.m_nFloat;
