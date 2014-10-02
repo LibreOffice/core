@@ -1188,15 +1188,15 @@ hchar_string hstr2ucsstr(hchar const* hstr)
 {
     ::std::string ret;
     int res, j;
-    int c;
      hchar dest[3];
     for( ; *hstr ; )
     {
         res = hcharconv(*hstr++, dest, KS);
           for( j = 0 ; j < res ; j++ ){
-              c = dest[j];
-              if( c < 32 ) c = ' ';
-              else if( c < 256 )
+              int c = dest[j];
+              if( c < 32 )
+                  c = ' ';
+              if( c < 256 )
               {
                   ret.push_back(sal::static_int_cast<char>(c));
               }
