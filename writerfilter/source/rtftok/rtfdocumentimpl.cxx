@@ -810,9 +810,12 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         uno::Reference<lang::XServiceInfo> xSI(xShape, uno::UNO_QUERY_THROW);
         if (!xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"))
         {
-            //fdo37691-1.rtf
-            SAL_WARN("writerfilter.rtf", "cannot set graphic on existing shape, creating a new GraphicObjectShape");
-            xShape.set(NULL);
+            // it's sometimes an error to get here - but it's possible to have
+            // a \pict inside the \shptxt of a \shp of shapeType 202 "TextBox"
+            // and in that case xShape is the text frame; we actually need a
+            // new GraphicObject then (example: fdo37691-1.rtf)
+            SAL_INFO("writerfilter.rtf", "cannot set graphic on existing shape, creating a new GraphicObjectShape");
+            xShape.clear();
         }
     }
     if (!xShape.is())
