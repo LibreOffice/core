@@ -1375,24 +1375,22 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThi
 
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen + allocExtra );
     assert( *ppThis != NULL );
-    if ( (*ppThis) )
-    {
-        (*ppThis)->length = nLen; // fix after possible allocExtra != 0
-        (*ppThis)->buffer[nLen] = 0;
-        IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
-        sal_Int32 nCount;
-        for( nCount = nLen; nCount > 0; --nCount )
-        {
-            /* Check ASCII range */
-            SAL_WARN_IF( ((unsigned char)*pCharStr) > 127, "rtl.string",
-                        "rtl_uString_newFromLiteral - Found char > 127" );
-            SAL_WARN_IF( ((unsigned char)*pCharStr) == '\0', "rtl.string",
-                        "rtl_uString_newFromLiteral - Found embedded \\0 character" );
 
-            *pBuffer = *pCharStr;
-            pBuffer++;
-            pCharStr++;
-        }
+    (*ppThis)->length = nLen; // fix after possible allocExtra != 0
+    (*ppThis)->buffer[nLen] = 0;
+    IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
+    sal_Int32 nCount;
+    for( nCount = nLen; nCount > 0; --nCount )
+    {
+        /* Check ASCII range */
+        SAL_WARN_IF( ((unsigned char)*pCharStr) > 127, "rtl.string",
+                    "rtl_uString_newFromLiteral - Found char > 127" );
+        SAL_WARN_IF( ((unsigned char)*pCharStr) == '\0', "rtl.string",
+                    "rtl_uString_newFromLiteral - Found embedded \\0 character" );
+
+        *pBuffer = *pCharStr;
+        pBuffer++;
+        pCharStr++;
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
