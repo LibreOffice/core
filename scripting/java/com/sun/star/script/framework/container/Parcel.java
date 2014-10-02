@@ -17,16 +17,21 @@
  */
 package com.sun.star.script.framework.container;
 
-import  com.sun.star.script.framework.log.*;
-import  com.sun.star.script.framework.io.*;
-import  com.sun.star.script.framework.provider.PathUtils;
-import com.sun.star.container.*;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.UnoRuntime;
+import com.sun.star.container.ElementExistException;
+import com.sun.star.container.XNameContainer;
+
+import com.sun.star.script.framework.io.XInputStreamImpl;
+import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.framework.provider.PathUtils;
+
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.ucb.XSimpleFileAccess2;
 
-import java.io.*;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 public class Parcel implements XNameContainer {
     private ParcelDescriptor m_descriptor;

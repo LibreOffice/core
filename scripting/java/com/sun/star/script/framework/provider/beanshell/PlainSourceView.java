@@ -17,19 +17,19 @@
  */
 package com.sun.star.script.framework.provider.beanshell;
 
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-import javax.swing.JComponent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.DocumentEvent;
-
-import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.awt.Dimension;
+
+import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class PlainSourceView extends JScrollPane
     implements ScriptSourceView, DocumentListener {

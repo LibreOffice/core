@@ -18,11 +18,11 @@
 
 package com.sun.star.script.framework.browse;
 
-import com.sun.star.uno.XComponentContext;
-
+import com.sun.star.script.framework.container.ParcelContainer;
+import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.ScriptProvider;
-import com.sun.star.script.framework.log.*;
-import com.sun.star.script.framework.container.*;
+
+import com.sun.star.uno.XComponentContext;
 
 
 public class PkgProviderBrowseNode extends ProviderBrowseNode {

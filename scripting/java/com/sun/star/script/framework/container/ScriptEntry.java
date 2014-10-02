@@ -17,8 +17,10 @@
  */
 
 package com.sun.star.script.framework.container;
-import java.util.Map;
+
 import java.util.HashMap;
+import java.util.Map;
+
 public class ScriptEntry implements Cloneable {
 
     private String language;

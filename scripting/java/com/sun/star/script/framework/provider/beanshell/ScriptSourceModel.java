@@ -17,12 +17,12 @@
  */
 package com.sun.star.script.framework.provider.beanshell;
 
-import java.io.InputStream;
+import com.sun.star.script.provider.XScriptContext;
+
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.net.URL;
-
-import com.sun.star.script.provider.XScriptContext;
 
 public class ScriptSourceModel {
 

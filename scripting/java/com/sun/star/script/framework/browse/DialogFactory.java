@@ -18,18 +18,25 @@
 
 package com.sun.star.script.framework.browse;
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.EventObject;
+import com.sun.star.awt.XButton;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlContainer;
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XDialog;
+import com.sun.star.awt.XTextComponent;
+import com.sun.star.awt.XToolkit;
+import com.sun.star.awt.XWindow;
 
 import com.sun.star.beans.XPropertySet;
+
 import com.sun.star.container.XNameContainer;
 
-import com.sun.star.awt.*;
+import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 public class DialogFactory {
     private static DialogFactory factory;

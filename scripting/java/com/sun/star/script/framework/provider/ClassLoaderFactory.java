@@ -18,10 +18,11 @@
 
 package com.sun.star.script.framework.provider;
 
-import java.net.*;
-
-import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.script.framework.log.LogUtils;
+
+import java.net.URL;
+import java.net.URLClassLoader;
 
 /**
  *  Class Loader Factory

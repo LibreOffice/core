@@ -18,10 +18,10 @@
 
 package com.sun.star.script.framework.io;
 
+import com.sun.star.io.XInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.sun.star.io.XInputStream;
 
 public class XInputStreamImpl implements XInputStream {
     private InputStream is;

@@ -16,9 +16,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 package com.sun.star.script.framework.io;
-import java.io.*;
+
 import com.sun.star.io.XOutputStream;
 
+import java.io.OutputStream;
 
 public class XOutputStreamWrapper extends OutputStream {
     private XOutputStream m_xOutputStream;

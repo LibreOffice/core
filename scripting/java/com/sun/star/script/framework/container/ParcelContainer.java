@@ -18,25 +18,39 @@
 
 package com.sun.star.script.framework.container;
 
-import  com.sun.star.script.framework.log.*;
-import  com.sun.star.script.framework.io.*;
-import  com.sun.star.script.framework.provider.PathUtils;
-import com.sun.star.container.*;
-import com.sun.star.uno.Type;
-import com.sun.star.lang.*;
-import com.sun.star.io.*;
+import com.sun.star.container.ElementExistException;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameContainer;
 
-import java.io.*;
-import java.util.*;
+import com.sun.star.io.XInputStream;
+
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XMultiComponentFactory;
+
+import com.sun.star.script.framework.io.XInputStreamImpl;
+import com.sun.star.script.framework.io.XInputStreamWrapper;
+import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.framework.provider.PathUtils;
 
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.ucb.XSimpleFileAccess2;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
+
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+
 import com.sun.star.uri.XUriReference;
 import com.sun.star.uri.XUriReferenceFactory;
 import com.sun.star.uri.XVndSunStarScriptUrl;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.StringTokenizer;
 
 /**
  * The <code>ParcelContainer</code> object is used to store the

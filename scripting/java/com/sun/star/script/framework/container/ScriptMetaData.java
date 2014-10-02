@@ -18,22 +18,22 @@
 
 package com.sun.star.script.framework.container;
 
-import java.net.URL;
-
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
+import com.sun.star.script.framework.io.UCBStreamHandler;
+import com.sun.star.script.framework.io.XInputStreamImpl;
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.PathUtils;
-import com.sun.star.script.framework.io.XInputStreamImpl;
-import com.sun.star.script.framework.io.UCBStreamHandler;
 
 import com.sun.star.ucb.XSimpleFileAccess2;
 
 import com.sun.star.uno.UnoRuntime;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import java.net.URL;
+
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class ScriptMetaData extends ScriptEntry {
     private boolean hasSource = false;

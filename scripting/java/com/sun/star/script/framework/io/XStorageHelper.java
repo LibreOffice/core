@@ -18,36 +18,37 @@
 
 package com.sun.star.script.framework.io;
 
-import com.sun.star.frame.XModel;
+import com.sun.star.beans.XPropertySet;
 
 import com.sun.star.container.XNameAccess;
 
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.UnoRuntime;
-
-import com.sun.star.lang.XComponent;
-
-import com.sun.star.uno.AnyConverter;
-
-import com.sun.star.io.XStream;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
+import com.sun.star.document.XDocumentSubStorageSupplier;
 
 import com.sun.star.embed.XStorage;
 import com.sun.star.embed.XTransactedObject;
 
-import com.sun.star.document.XDocumentSubStorageSupplier;
+import com.sun.star.frame.XModel;
 
-import com.sun.star.beans.XPropertySet;
+import com.sun.star.io.XInputStream;
+import com.sun.star.io.XOutputStream;
+import com.sun.star.io.XStream;
 
-import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XEventListener;
 
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.PathUtils;
 
-import java.util.*;
-import java.io.*;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 
 public class XStorageHelper implements XEventListener {

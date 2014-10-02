@@ -18,14 +18,16 @@
 
 package com.sun.star.script.framework.container;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
-import java.io.ByteArrayInputStream;
 
 import java.util.ArrayList;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class DeployedUnoPackagesDB {
 

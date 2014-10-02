@@ -18,9 +18,10 @@
 
 package com.sun.star.script.framework.container;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
+
 import org.w3c.dom.Document;
 
 public interface XMLParser {
