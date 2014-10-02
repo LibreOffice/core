@@ -80,7 +80,7 @@ template< typename T > class PropertySetMixin;
 
    @since UDK 3.2.1
 */
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
     && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
@@ -478,7 +478,7 @@ private:
     PropertySetMixin( const PropertySetMixin&); // not defined
     void operator=( const PropertySetMixin&); // not defined
 };
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
     && !defined __clang__
 #pragma GCC diagnostic pop
 #endif

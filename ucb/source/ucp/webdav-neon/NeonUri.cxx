@@ -43,7 +43,7 @@ using namespace webdav_ucp;
 // FIXME: not sure whether initializing a ne_uri statically is supposed to work
 // the string fields of ne_uri are char*, not const char*
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #endif
 

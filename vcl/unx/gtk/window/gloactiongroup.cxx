@@ -39,12 +39,12 @@ struct _GLOAction
 typedef GObjectClass GLOActionClass;
 typedef struct _GLOAction GLOAction;
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
 G_DEFINE_TYPE (GLOAction, g_lo_action, G_TYPE_OBJECT);
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 #pragma GCC diagnostic pop
 #endif
 
@@ -106,7 +106,7 @@ struct _GLOActionGroupPrivate
 
 static void g_lo_action_group_iface_init (GActionGroupInterface *);
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
@@ -114,7 +114,7 @@ G_DEFINE_TYPE_WITH_CODE (GLOActionGroup,
     g_lo_action_group, G_TYPE_OBJECT,
     G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
                            g_lo_action_group_iface_init));
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 #pragma GCC diagnostic pop
 #endif
 

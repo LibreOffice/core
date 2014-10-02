@@ -43,7 +43,7 @@
 
 #include "sal/main.h"
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))

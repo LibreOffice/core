@@ -257,7 +257,7 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 #pragma warning(push, 1)
 #pragma warning(disable:4129 4273 4701 4702)
 #endif
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #endif
 %}

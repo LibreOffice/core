@@ -48,7 +48,7 @@
     #endif
 #endif
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
     && !defined __clang__
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"

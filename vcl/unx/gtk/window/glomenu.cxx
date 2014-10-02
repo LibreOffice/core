@@ -25,12 +25,12 @@ struct _GLOMenu
 
 typedef GMenuModelClass GLOMenuClass;
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #endif
 G_DEFINE_TYPE (GLOMenu, g_lo_menu, G_TYPE_MENU_MODEL);
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 #pragma GCC diagnostic pop
 #endif
 

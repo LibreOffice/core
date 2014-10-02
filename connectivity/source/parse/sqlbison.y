@@ -51,7 +51,7 @@
 #pragma warning(disable:4273 4701)
 #endif
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wwrite-strings"
 # pragma GCC diagnostic ignored "-Wunused-function"
 #endif

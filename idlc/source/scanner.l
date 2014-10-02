@@ -238,7 +238,7 @@ static void parseLineAndFile(sal_Char* pBuf)
 }	
 
 // Suppress any warnings from generated code:
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
 #elif defined _MSC_VER

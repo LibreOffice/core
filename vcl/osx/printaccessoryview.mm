@@ -1084,7 +1084,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
 
 // Make deprecation warnings just warnings in a -Werror compilation.
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#ifdef __GNUC__
 // #pragma GCC diagnostic push
 #pragma GCC diagnostic warning "-Wdeprecated-declarations"
 #endif

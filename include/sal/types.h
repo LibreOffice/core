@@ -497,7 +497,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
         SAL_WNODEPRECATED_DECLARATIONS_POP
 */
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_OPERATOR
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_OPERATOR
 #define SAL_WNODEPRECATED_DECLARATIONS_PUSH \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic push)) \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic ignored "-Wdeprecated-declarations"))
