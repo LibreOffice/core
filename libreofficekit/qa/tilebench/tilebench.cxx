@@ -45,8 +45,6 @@ int main( int argc, char* argv[] )
         TimeRecord() : mpName(NULL), mfTime(getTimeNow()) { }
         explicit TimeRecord(const char *pName) :
                        mpName(pName ), mfTime(getTimeNow()) { }
-        explicit TimeRecord(const TimeRecord *pSrc) :
-                       mpName(pSrc->mpName), mfTime(pSrc->mfTime) { }
     };
     std::vector< TimeRecord > aTimes;
     if( argc < 2 ||
