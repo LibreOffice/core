@@ -510,28 +510,28 @@ bool SvpSalGraphics::drawPolyLine(
     basegfx::B2DLineJoin /*eJoin*/,
     com::sun::star::drawing::LineCap /*eLineCap*/)
 {
-        // TODO: implement and advertise OutDevSupport_B2DDraw support
-        return false;
+    // TODO: implement and advertise OutDevSupport_B2DDraw support
+    return false;
 }
 
 bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
-                                             const SalPoint*,
-                                             const sal_uInt8* )
+                                         const SalPoint*,
+                                         const sal_uInt8* )
 {
     return false;
 }
 
 bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
-                                            const SalPoint*,
-                                            const sal_uInt8* )
+                                        const SalPoint*,
+                                        const sal_uInt8* )
 {
     return false;
 }
 
 bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
-                                                const sal_uInt32*,
-                                                const SalPoint* const*,
-                                                const sal_uInt8* const* )
+                                            const sal_uInt32*,
+                                            const SalPoint* const*,
+                                            const sal_uInt8* const* )
 {
     return false;
 }
