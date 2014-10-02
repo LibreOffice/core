@@ -1768,9 +1768,8 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newTrim )( IMPL_RTL_STRINGDATA** ppThis,
     {
         nLen -= nPostSpaces+nPreSpaces;
         *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
-        OSL_ASSERT(*ppThis != NULL);
-        if ( *ppThis )
-            rtl_str_ImplCopy( (*ppThis)->buffer, pStr->buffer+nPreSpaces, nLen );
+        assert(*ppThis);
+        rtl_str_ImplCopy( (*ppThis)->buffer, pStr->buffer+nPreSpaces, nLen );
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
