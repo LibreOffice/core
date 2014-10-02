@@ -18,15 +18,14 @@
 
 package org.openoffice.netbeans.modules.office.utils;
 
+import com.sun.star.script.framework.container.XMLParserFactory;
+import org.openide.NotifyDescriptor;
 import org.openide.TopManager;
 import org.openide.WizardDescriptor;
-import org.openide.NotifyDescriptor;
 import org.openide.modules.ModuleInstall;
-
-import com.sun.star.script.framework.container.XMLParserFactory;
 import org.openoffice.idesupport.OfficeInstallation;
-import org.openoffice.netbeans.modules.office.wizard.InstallationPathDescriptor;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
+import org.openoffice.netbeans.modules.office.wizard.InstallationPathDescriptor;
 
 public class OfficeModule extends ModuleInstall {
 

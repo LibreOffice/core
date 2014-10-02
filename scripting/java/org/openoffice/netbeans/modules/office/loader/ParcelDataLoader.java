@@ -19,15 +19,7 @@
 package org.openoffice.netbeans.modules.office.loader;
 
 import java.io.IOException;
-import java.io.File;
-
-import org.openide.actions.*;
-import org.openide.filesystems.*;
-import org.openide.loaders.*;
-import org.openide.util.NbBundle;
 import org.openide.util.actions.SystemAction;
-
-import org.openoffice.netbeans.modules.office.actions.*;
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 /** Recognizes single files in the Repository as being of a certain type.

@@ -18,13 +18,11 @@
 
 package org.openoffice.netbeans.modules.office.utils;
 
-import java.io.*;
-import java.util.zip.*;
 import java.beans.PropertyVetoException;
-
+import java.io.File;
+import java.io.IOException;
 import org.openide.filesystems.FileSystem;
 import org.openide.filesystems.Repository;
-
 import org.openoffice.netbeans.modules.office.filesystem.OpenOfficeDocFileSystem;
 
 public class ZipMounter {

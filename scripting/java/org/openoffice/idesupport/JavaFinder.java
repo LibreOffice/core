@@ -18,6 +18,7 @@
 
 package org.openoffice.idesupport;
 
+import com.sun.star.script.framework.container.ScriptEntry;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -28,10 +29,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.openoffice.idesupport.zip.ParcelZipper;
-
-import com.sun.star.script.framework.container.ScriptEntry;
 
 public class JavaFinder implements MethodFinder {
 

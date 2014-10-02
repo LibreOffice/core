@@ -18,31 +18,27 @@
 
 package org.openoffice.netbeans.modules.office.actions;
 
-import java.io.IOException;
-import java.io.File;
 import java.beans.PropertyVetoException;
+import java.io.File;
+import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
-import javax.swing.event.ChangeListener;
+import java.util.Set;
 import javax.swing.event.ChangeEvent;
-
+import javax.swing.event.ChangeListener;
 import org.openide.ErrorManager;
-import org.openide.filesystems.FileObject;
-import org.openide.filesystems.FileUtil;
+import org.openide.cookies.OpenCookie;
+import org.openide.filesystems.FileAttributeEvent;
 import org.openide.filesystems.FileChangeListener;
 import org.openide.filesystems.FileEvent;
-import org.openide.filesystems.FileAttributeEvent;
+import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileRenameEvent;
-import org.openide.cookies.OpenCookie;
-
+import org.openide.filesystems.FileUtil;
 import org.openoffice.idesupport.OfficeDocument;
-
-import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.netbeans.modules.office.loader.OfficeDocumentDataObject;
+import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.netbeans.modules.office.utils.ZipMounter;
-import org.openoffice.netbeans.modules.office.utils.ManifestParser;
 
 public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie,
     FileChangeListener {

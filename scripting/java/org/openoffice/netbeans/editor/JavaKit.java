@@ -17,28 +17,10 @@
  */
 package org.openoffice.netbeans.editor;
 
-import java.io.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.text.MessageFormat;
-
-import java.util.Map;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
-import javax.swing.KeyStroke;
-import javax.swing.JEditorPane;
-import javax.swing.JMenuItem;
-import javax.swing.Action;
 import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.TextAction;
-import javax.swing.text.BadLocationException;
-import org.netbeans.editor.*;
-import org.netbeans.editor.ext.*;
-import org.netbeans.editor.ext.java.*;
 
 /**
 * Java editor kit with appropriate document

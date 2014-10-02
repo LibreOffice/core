@@ -18,45 +18,22 @@
 
 package org.openoffice.netbeans.modules.office.actions;
 
-import java.util.Vector;
-import java.util.StringTokenizer;
-
-import java.io.*;
-import java.beans.PropertyVetoException;
+import com.sun.star.script.framework.container.ParcelDescriptor;
 import java.awt.Dialog;
-
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import org.openide.TopManager;
+import java.io.File;
+import java.io.IOException;
+import java.util.StringTokenizer;
 import org.openide.DialogDescriptor;
 import org.openide.ErrorManager;
-import org.openide.xml.XMLUtil;
+import org.openide.TopManager;
 import org.openide.execution.NbClassPath;
-
-import org.openide.cookies.OpenCookie;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataNode;
-
 import org.openide.filesystems.FileObject;
-import org.openide.filesystems.FileSystem;
-import org.openide.filesystems.JarFileSystem;
 import org.openide.filesystems.FileUtil;
-import org.openide.filesystems.Repository;
-
-import org.openide.nodes.*;
 import org.openide.windows.OutputWriter;
-
+import org.openoffice.idesupport.ui.ConfigurePanel;
+import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.netbeans.modules.office.loader.ParcelFolder;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
-import org.openoffice.netbeans.modules.office.utils.ManifestParser;
-
-import com.sun.star.script.framework.container.ParcelDescriptor;
-
-import org.openoffice.idesupport.zip.ParcelZipper;
-import org.openoffice.idesupport.filter.FileFilter;
-import org.openoffice.idesupport.ui.ConfigurePanel;
 
 public class ParcelFolderSupport implements ParcelFolderCookie {
     protected ParcelFolder parcelFolder;

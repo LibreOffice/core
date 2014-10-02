@@ -19,24 +19,19 @@
 package org.openoffice.netbeans.modules.office.loader;
 
 import java.io.IOException;
-
-import org.openide.TopManager;
-import org.openide.NotifyDescriptor;
 import org.openide.ErrorManager;
-
-import org.openide.filesystems.FileObject;
+import org.openide.NotifyDescriptor;
+import org.openide.TopManager;
 import org.openide.filesystems.FileLock;
-import org.openide.filesystems.FileUtil;
+import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileSystem;
+import org.openide.filesystems.FileUtil;
 import org.openide.filesystems.Repository;
-
-import org.openide.loaders.DataObject;
 import org.openide.loaders.DataFolder;
+import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectExistsException;
-
 import org.openide.nodes.Node;
 import org.openide.util.datatransfer.NewType;
-
 import org.openoffice.netbeans.modules.office.actions.ParcelFolderCookie;
 import org.openoffice.netbeans.modules.office.utils.PackageRemover;
 

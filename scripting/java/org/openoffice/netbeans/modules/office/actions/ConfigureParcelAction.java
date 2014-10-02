@@ -22,7 +22,6 @@ import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
 import org.openide.util.RequestProcessor;
 import org.openide.util.actions.CookieAction;
-
 import org.openoffice.netbeans.modules.office.utils.FrameworkJarChecker;
 
 public class ConfigureParcelAction extends CookieAction {

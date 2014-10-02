@@ -18,13 +18,12 @@
 
 package org.openoffice.netbeans.modules.office.utils;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class PackageRemover {

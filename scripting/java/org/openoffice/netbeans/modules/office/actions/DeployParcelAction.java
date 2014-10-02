@@ -18,38 +18,22 @@
 
 package org.openoffice.netbeans.modules.office.actions;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Enumeration;
-
-import javax.swing.JMenuItem;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
-import org.openide.TopManager;
+import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
+import javax.swing.filechooser.FileFilter;
 import org.openide.NotifyDescriptor;
-import org.openide.awt.Actions;
+import org.openide.TopManager;
+import org.openide.awt.JMenuPlus;
 import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
-import org.openide.util.actions.*;
-import org.openide.awt.JMenuPlus;
-
-import org.openoffice.idesupport.SVersionRCFile;
-import org.openoffice.idesupport.OfficeInstallation;
-import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.idesupport.LocalOffice;
-
-import org.openoffice.netbeans.modules.office.utils.NagDialog;
+import org.openoffice.idesupport.OfficeInstallation;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
+import org.openoffice.netbeans.modules.office.utils.NagDialog;
 
 public class DeployParcelAction extends CookieAction implements
     Presenter.Popup {

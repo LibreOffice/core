@@ -18,6 +18,8 @@
 
 package org.openoffice.idesupport.ui;
 
+import com.sun.star.script.framework.container.ParcelDescriptor;
+import com.sun.star.script.framework.container.ScriptEntry;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -28,17 +30,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
 import org.openoffice.idesupport.zip.ParcelZipper;
-
-import com.sun.star.script.framework.container.ParcelDescriptor;
-import com.sun.star.script.framework.container.ScriptEntry;
 
 public class ConfigurePanel extends JPanel {
 

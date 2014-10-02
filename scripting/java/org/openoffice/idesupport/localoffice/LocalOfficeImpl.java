@@ -18,17 +18,15 @@
 
 package org.openoffice.idesupport.localoffice;
 
-import java.net.ConnectException;
-
-import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.comp.helper.Bootstrap;
-import com.sun.star.uno.XComponentContext;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
-
+import java.net.ConnectException;
 import org.openoffice.idesupport.LocalOffice;
 
 /**

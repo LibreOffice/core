@@ -18,20 +18,17 @@
 
 package org.openoffice.idesupport.xml;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.sun.star.script.framework.container.XMLParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
-
-import com.sun.star.script.framework.container.XMLParserFactory;
+import org.w3c.dom.NodeList;
 
 public class Manifest {
 

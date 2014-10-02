@@ -16,20 +16,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+import com.sun.star.script.framework.container.ParcelDescriptor;
+import com.sun.star.script.framework.container.ScriptEntry;
+import com.sun.star.script.framework.container.XMLParserFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
-
-import com.sun.star.script.framework.container.ScriptEntry;
-import com.sun.star.script.framework.container.ParcelDescriptor;
-
-import org.openoffice.idesupport.zip.ParcelZipper;
+import org.openoffice.idesupport.ExtensionFinder;
+import org.openoffice.idesupport.MethodFinder;
 import org.openoffice.idesupport.filter.AllFilesFilter;
-import com.sun.star.script.framework.container.XMLParserFactory;
-import org.openoffice.idesupport.*;
+import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class CommandLineTools {
     private static final String PARCEL_XML_FILE =

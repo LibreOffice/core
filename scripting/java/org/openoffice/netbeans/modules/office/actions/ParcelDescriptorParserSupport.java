@@ -18,18 +18,20 @@
 
 package org.openoffice.netbeans.modules.office.actions;
 
-import java.io.*;
-import java.util.*;
-import javax.swing.event.ChangeListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import javax.swing.event.ChangeEvent;
-
+import javax.swing.event.ChangeListener;
+import org.openide.xml.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import org.openide.filesystems.*;
-import org.openide.xml.XMLUtil;
 
 public class ParcelDescriptorParserSupport
     implements ParcelDescriptorParserCookie, FileChangeListener {

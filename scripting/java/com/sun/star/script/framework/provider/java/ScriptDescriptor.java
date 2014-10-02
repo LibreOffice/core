@@ -18,8 +18,8 @@
 
 package com.sun.star.script.framework.provider.java;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**

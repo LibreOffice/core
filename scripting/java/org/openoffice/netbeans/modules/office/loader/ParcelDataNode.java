@@ -18,18 +18,10 @@
 
 package org.openoffice.netbeans.modules.office.loader;
 
-import java.io.*;
 import java.awt.datatransfer.Transferable;
-import java.util.zip.*;
-
-import org.openide.loaders.*;
-import org.openide.nodes.*;
+import java.io.File;
+import java.io.IOException;
 import org.openide.filesystems.FileObject;
-import org.openide.util.NbBundle;
-import org.openide.util.datatransfer.*;
-import org.openide.ErrorManager;
-import org.openide.windows.OutputWriter;
-
 import org.openoffice.netbeans.modules.office.actions.ParcelCookie;
 
 /** A node to represent this object.

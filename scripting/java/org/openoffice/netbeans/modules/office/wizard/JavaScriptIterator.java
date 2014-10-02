@@ -20,28 +20,14 @@ package org.openoffice.netbeans.modules.office.wizard;
 
 import java.awt.Component;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import javax.swing.JComponent;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import org.openide.ErrorManager;
-import org.openide.TopManager;
 import org.openide.NotifyDescriptor;
+import org.openide.TopManager;
 import org.openide.WizardDescriptor;
-import org.openide.cookies.OpenCookie;
-import org.openide.cookies.SourceCookie;
-import org.openide.loaders.*;
-import org.openide.util.NbBundle;
-import org.openide.filesystems.*;
-
-import org.openoffice.idesupport.zip.ParcelZipper;
-import org.openoffice.netbeans.modules.office.loader.ParcelFolder;
 import org.openoffice.netbeans.modules.office.filesystem.OpenOfficeDocFileSystem;
 import org.openoffice.netbeans.modules.office.utils.PackageRemover;
 

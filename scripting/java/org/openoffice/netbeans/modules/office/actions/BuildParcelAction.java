@@ -18,18 +18,11 @@
 
 package org.openoffice.netbeans.modules.office.actions;
 
-import java.util.Vector;
-import java.util.Enumeration;
-
-import org.openide.nodes.Node;
-import org.openide.util.HelpCtx;
-import org.openide.util.RequestProcessor;
 import org.openide.actions.BuildAllAction;
-
 import org.openide.compiler.Compiler;
 import org.openide.compiler.CompilerJob;
 import org.openide.compiler.CompilerTask;
-
+import org.openide.nodes.Node;
 import org.openoffice.netbeans.modules.office.utils.FrameworkJarChecker;
 
 public class BuildParcelAction extends BuildAllAction {

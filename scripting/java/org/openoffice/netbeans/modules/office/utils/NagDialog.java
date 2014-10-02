@@ -20,14 +20,12 @@ package org.openoffice.netbeans.modules.office.utils;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-
-import javax.swing.JPanel;
-import javax.swing.JOptionPane;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import org.openide.TopManager;
 import org.openide.NotifyDescriptor;
+import org.openide.TopManager;
 
 public class NagDialog {
 
