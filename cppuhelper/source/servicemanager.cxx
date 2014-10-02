@@ -711,7 +711,6 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
         if (init.is()) {
             init->initialize(arguments);
         }
-        return inst;
     } else if (factory1.is()) {
         inst = factory1->createInstanceWithArgumentsAndContext(
             arguments, context);
