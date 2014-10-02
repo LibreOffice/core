@@ -893,14 +893,14 @@ static void DUMPCURRENTALLOCS(void)
 {
     VALGRIND_PRINTF( "=== start memcheck dump of active allocations ===\n" );
 
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
+#ifdef __GNUC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 
     VALGRIND_DO_LEAK_CHECK;
 
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
+#ifdef __GNUC__
 #   pragma GCC diagnostic pop
 #endif
 

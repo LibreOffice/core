@@ -47,9 +47,7 @@
 #if __GNUC__
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#endif
 #elif defined _MSC_VER
 #pragma warning(push, 1)
 #endif
