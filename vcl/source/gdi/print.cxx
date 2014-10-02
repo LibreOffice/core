@@ -1377,8 +1377,9 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
          nLandscapeAngle != 0 &&
          HasSupport( SUPPORT_SET_ORIENTATION ))
     {
-
-        PaperInfo aRotatedInfo(pSetupData->mnPaperHeight, pSetupData->mnPaperWidth);
+        const long nRotatedWidth = pSetupData->mnPaperHeight;
+        const long nRotatedHeight = pSetupData->mnPaperWidth;
+        PaperInfo aRotatedInfo(nRotatedWidth, nRotatedHeight);
 
         for ( int i = 0; i < nPaperCount; i++ )
         {
