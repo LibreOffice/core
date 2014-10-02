@@ -102,11 +102,9 @@ void SwDbtoolsClient::registerClient()
 
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
-        const OUString sModuleName(SVLIBRARY("dbtools"));
-
         // load the dbtools library
         getDbToolsClientModule() = osl_loadModuleRelative(
-            &thisModule, sModuleName.pData, 0);
+            &thisModule, DBTOOLS_DLL_NAME, 0);
         OSL_ENSURE(NULL != getDbToolsClientModule(), "SwDbtoolsClient::registerClient: could not load the dbtools library!");
         if (NULL != getDbToolsClientModule())
         {
