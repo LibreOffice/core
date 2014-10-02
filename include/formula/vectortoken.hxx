@@ -47,7 +47,7 @@ struct FORMULA_DLLPUBLIC VectorRefArray
     VectorRefArray( rtl_uString** pArray );
     VectorRefArray( const double* pNumArray, rtl_uString** pStrArray );
 
-    bool isValid() const { return mbValid;}
+    bool isValid() const;
 };
 
 /**
@@ -65,8 +65,8 @@ public:
 
     virtual FormulaToken* Clone() const SAL_OVERRIDE;
 
-    inline const VectorRefArray& GetArray() const { return maArray; }
-    inline size_t GetArrayLength() const { return mnArrayLength; }
+    const VectorRefArray& GetArray() const;
+    size_t GetArrayLength() const;
 };
 
 /**
@@ -93,11 +93,11 @@ public:
 
     virtual FormulaToken* Clone() const SAL_OVERRIDE;
 
-    inline const std::vector<VectorRefArray>& GetArrays() const { return maArrays; }
-    inline size_t GetArrayLength() const { return mnArrayLength; }
-    inline size_t GetRefRowSize() const { return mnRefRowSize; }
-    inline bool IsStartFixed() const { return mbStartFixed; }
-    inline bool IsEndFixed() const { return mbEndFixed; }
+    const std::vector<VectorRefArray>& GetArrays() const;
+    size_t GetArrayLength() const;
+    size_t GetRefRowSize() const;
+    bool IsStartFixed() const;
+    bool IsEndFixed() const;
 };
 
 }

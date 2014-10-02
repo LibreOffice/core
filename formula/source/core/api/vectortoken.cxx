@@ -36,6 +36,10 @@ VectorRefArray::VectorRefArray( const double* pNumArray, rtl_uString** pStrArray
     mpStringArray(pStrArray),
     mbValid(true) {}
 
+bool VectorRefArray::isValid() const
+{
+    return mbValid;
+}
 
 SingleVectorRefToken::SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength ) :
     FormulaToken(svSingleVectorRef, ocPush), maArray(rArray), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength) {}
@@ -43,6 +47,16 @@ SingleVectorRefToken::SingleVectorRefToken( const VectorRefArray& rArray, size_t
 FormulaToken* SingleVectorRefToken::Clone() const
 {
     return new SingleVectorRefToken(maArray, mnRequestedLength, mnArrayLength);
+}
+
+const VectorRefArray& SingleVectorRefToken::GetArray() const
+{
+    return maArray;
+}
+
+size_t SingleVectorRefToken::GetArrayLength() const
+{
+    return mnArrayLength;
 }
 
 DoubleVectorRefToken::DoubleVectorRefToken(
@@ -56,6 +70,31 @@ FormulaToken* DoubleVectorRefToken::Clone() const
 {
     return new DoubleVectorRefToken(
         maArrays, mnRequestedLength, mnArrayLength, mnRefRowSize, mbStartFixed, mbEndFixed);
+}
+
+const std::vector<VectorRefArray>& DoubleVectorRefToken::GetArrays() const
+{
+    return maArrays;
+}
+
+size_t DoubleVectorRefToken::GetArrayLength() const
+{
+    return mnArrayLength;
+}
+
+size_t DoubleVectorRefToken::GetRefRowSize() const
+{
+    return mnRefRowSize;
+}
+
+bool DoubleVectorRefToken::IsStartFixed() const
+{
+    return mbStartFixed;
+}
+
+bool DoubleVectorRefToken::IsEndFixed() const
+{
+    return mbEndFixed;
 }
 
 }
