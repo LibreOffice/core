@@ -197,7 +197,7 @@ inline sal_uInt32 SaxWriterHelper::writeSequence() throw( SAXException )
         Any a;
         a <<= e;
         throw SAXException(
-            "io exception during writing",
+            "IO exception during writing",
             Reference< XInterface > (),
             a );
     }
