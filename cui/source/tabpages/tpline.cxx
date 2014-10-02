@@ -95,6 +95,7 @@ SvxLineTabPage::SvxLineTabPage
     bSymbols(false),
 
     rOutAttrs           ( rInAttrs ),
+    eRP( RP_LT ),
     bObjSelected( false ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
@@ -107,7 +108,11 @@ SvxLineTabPage::SvxLineTabPage
      pnLineEndListState( 0 ),
     pnDashListState( 0 ),
     pnColorListState( 0 ),
-   nPageType           ( 0 )
+    nPageType           ( 0 ),
+
+    nDlgType(0),
+    pPosDashLb(NULL),
+    pPosLineEndLb(NULL)
 {
     get(m_pLbLineStyle,"LB_LINE_STYLE");
     get(m_pBoxColor,"boxCOLOR");
