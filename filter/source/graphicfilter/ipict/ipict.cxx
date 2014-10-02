@@ -90,7 +90,7 @@ namespace PictReaderInternal {
     // count the no of bits in pattern which are set to 1:
     nBitCount=0;
     for (ny=0; ny<8; ny++) {
-      stream.ReadChar( (char&)nbyte[ny] );
+      stream.ReadChar( reinterpret_cast<char&>(nbyte[ny]) );
       for (nx=0; nx<8; nx++) {
     if ( (nbyte[ny] & (1<<nx)) != 0 ) nBitCount++;
       }
@@ -382,7 +382,7 @@ Point PictReader::ReadDeltaH(Point aBase)
 {
     signed char ndh;
 
-    pPict->ReadChar( (char&)ndh );
+    pPict->ReadChar( reinterpret_cast<char&>(ndh) );
 
     return Point( aBase.X() + (long)ndh, aBase.Y() );
 }
@@ -391,7 +391,7 @@ Point PictReader::ReadDeltaV(Point aBase)
 {
     signed char ndv;
 
-    pPict->ReadChar( (char&)ndv );
+    pPict->ReadChar( reinterpret_cast<char&>(ndv) );
 
     return Point( aBase.X(), aBase.Y() + (long)ndv );
 }

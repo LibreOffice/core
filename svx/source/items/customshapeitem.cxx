@@ -68,6 +68,15 @@ com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( co
     return pRet;
 }
 
+const com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rPropName ) const
+{
+    const com::sun::star::uno::Any* pRet = NULL;
+    PropertyHashMap::const_iterator aHashIter( aPropHashMap.find( rPropName ) );
+    if ( aHashIter != aPropHashMap.end() )
+        pRet = &aPropSeq[ (*aHashIter).second ].Value;
+    return pRet;
+}
+
 com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rSequenceName, const OUString& rPropName )
 {
     com::sun::star::uno::Any* pRet = NULL;

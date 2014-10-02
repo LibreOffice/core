@@ -755,11 +755,11 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                     case PPT_PST_RecolorInfoAtom :
                     {
-                        if ( pRet && ( pRet->ISA( SdrGrafObj ) && ((SdrGrafObj*)pRet)->HasGDIMetaFile() ) )
+                        if ( pRet && ( pRet->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pRet)->HasGDIMetaFile() ) )
                         {
-                            Graphic aGraphic( ((SdrGrafObj*)pRet)->GetGraphic() );
+                            Graphic aGraphic( static_cast<SdrGrafObj*>(pRet)->GetGraphic() );
                             RecolorGraphic( rSt, aClientDataHd.nRecLen, aGraphic );
-                            ((SdrGrafObj*)pRet)->SetGraphic( aGraphic );
+                            static_cast<SdrGrafObj*>(pRet)->SetGraphic( aGraphic );
                         }
                     }
                     break;
@@ -780,7 +780,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         else
         {
             // try to load some ppt text
-            PPTTextObj aTextObj( rSt, (SdrPowerPointImport&)*this, rPersistEntry, &rObjData );
+            PPTTextObj aTextObj( rSt, static_cast<SdrPowerPointImport&>(*this), rPersistEntry, &rObjData );
             if ( ( aTextObj.Count() || aTextObj.GetOEPlaceHolderAtom() ) )
             {
                 bool bVerticalText = false;
@@ -5576,7 +5576,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                         pItemSet->GetItemState( XATTR_FILLSTYLE, false, &pFillStyleItem );
                         if ( pFillStyleItem )
                         {
-                            drawing::FillStyle eFillStyle = ((XFillStyleItem*)pFillStyleItem)->GetValue();
+                            drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem*>(pFillStyleItem)->GetValue();
                             switch( eFillStyle )
                             {
                                 case drawing::FillStyle_SOLID :
@@ -5584,7 +5584,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                                     const SfxPoolItem* pFillColorItem = NULL;
                                     pItemSet->GetItemState( XATTR_FILLCOLOR, false, &pFillColorItem );
                                     if ( pFillColorItem )
-                                        aDefColor = ((XColorItem*)pFillColorItem)->GetColorValue();
+                                        aDefColor = static_cast<const XColorItem*>(pFillColorItem)->GetColorValue();
                                 }
                                 break;
                                 case drawing::FillStyle_GRADIENT :
@@ -5592,7 +5592,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                                     const SfxPoolItem* pGradientItem = NULL;
                                     pItemSet->GetItemState( XATTR_FILLGRADIENT, false, &pGradientItem );
                                     if ( pGradientItem )
-                                        aDefColor = ((XFillGradientItem*)pGradientItem)->GetGradientValue().GetStartColor();
+                                        aDefColor = static_cast<const XFillGradientItem*>(pGradientItem)->GetGradientValue().GetStartColor();
                                 }
                                 break;
                                 case drawing::FillStyle_HATCH :
@@ -6848,7 +6848,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             if (!(*FE)->pField1)
                                                                 break;
 
-                                                            const SvxURLField* pField = (const SvxURLField*)(*FE)->pField1->GetField();
+                                                            const SvxURLField* pField = static_cast<const SvxURLField*>((*FE)->pField1->GetField());
 
                                                             pCurrent->mbIsHyperlink = true;
                                                             pCurrent->mnHylinkOrigColor = pCurrent->pCharSet->mnColor;
@@ -7006,7 +7006,9 @@ PPTTextObj& PPTTextObj::operator=( PPTTextObj& rTextObj )
 
 bool IsLine( const SdrObject* pObj )
 {
-    return pObj->ISA( SdrPathObj ) && ((SdrPathObj*)pObj)->IsLine() && (((SdrPathObj*)pObj)->GetPointCount() == 2 );
+    return pObj->ISA( SdrPathObj ) &&
+           static_cast<const SdrPathObj*>(pObj)->IsLine() &&
+           static_cast<const SdrPathObj*>(pObj)->GetPointCount() == 2;
 }
 
 bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
@@ -7142,8 +7144,8 @@ void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows
     else
     {
         sal_uInt32 nPosition = 0;
-        Point aPt1( ((SdrPathObj*)pObj)->GetPoint( 0 ) );
-        Point aPt2( ((SdrPathObj*)pObj)->GetPoint( 1 ) );
+        Point aPt1( static_cast<const SdrPathObj*>(pObj)->GetPoint( 0 ) );
+        Point aPt2( static_cast<const SdrPathObj*>(pObj)->GetPoint( 1 ) );
         if ( aPt1.X() < aPt2.X() )
             nPosition |= aPt1.Y() < aPt2.Y() ? LinePositionTLBR : LinePositionBLTR;
         else
@@ -7232,10 +7234,10 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
     {
         Reference< XPropertySet > xPropSet( xCell, UNO_QUERY_THROW );
 
-        const sal_Int32 nLeftDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
-        const sal_Int32 nRightDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
-        const sal_Int32 nUpperDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
-        const sal_Int32 nLowerDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+        const sal_Int32 nLeftDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
+        const sal_Int32 nRightDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
+        const sal_Int32 nUpperDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
+        const sal_Int32 nLowerDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
         static const OUString  sTopBorder( "TextUpperDistance" );
         static const OUString  sBottomBorder( "TextLowerDistance" );
         static const OUString  sLeftBorder( "TextLeftDistance" );
@@ -7246,7 +7248,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         xPropSet->setPropertyValue( sBottomBorder, Any( nLowerDist ) );
 
         static const OUString  sTextVerticalAdjust( "TextVerticalAdjust" );
-        const SdrTextVertAdjust eTextVertAdjust(((const SdrTextVertAdjustItem&)pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue());
+        const SdrTextVertAdjust eTextVertAdjust(static_cast<const SdrTextVertAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue());
         drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
         if ( eTextVertAdjust == SDRTEXTVERTADJUST_CENTER )
             eVA = drawing::TextVerticalAdjust_CENTER;
@@ -7255,8 +7257,8 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         xPropSet->setPropertyValue( sTextVerticalAdjust, Any( eVA ) );
 
         //set textHorizontalAdjust and TextWritingMode attr
-        const sal_Int32 eHA(((const SdrTextHorzAdjustItem&)pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
-        const SvxFrameDirection eDirection = (const SvxFrameDirection)((( const SvxFrameDirectionItem&)pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
+        const sal_Int32 eHA(static_cast<const SdrTextHorzAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
+        const SvxFrameDirection eDirection = (const SvxFrameDirection)(static_cast<const SvxFrameDirectionItem&>(pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
         static const OUString  sHorizontalAdjust( "TextHorizontalAdjust" );
         static const OUString  sWritingMode( "TextWritingMode" );
         xPropSet->setPropertyValue(  sHorizontalAdjust , Any( eHA ) );
@@ -7265,7 +7267,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
             xPropSet->setPropertyValue(  sWritingMode , Any( ::com::sun::star::text::WritingMode_TB_RL ) );
         }
         SfxItemSet aSet( pObj->GetMergedItemSet() );
-        drawing::FillStyle eFillStyle(((XFillStyleItem&)pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
+        drawing::FillStyle eFillStyle(static_cast<const XFillStyleItem&>(pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
         ::com::sun::star::drawing::FillStyle eFS( com::sun::star::drawing::FillStyle_NONE );
         switch( eFillStyle )
         {
@@ -7273,7 +7275,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                 {
                     static const OUString sFillColor( "FillColor" );
                     eFS = com::sun::star::drawing::FillStyle_SOLID;
-                    Color aFillColor( ((XFillColorItem&)pObj->GetMergedItem( XATTR_FILLCOLOR )).GetColorValue() );
+                    Color aFillColor( static_cast<const XFillColorItem&>(pObj->GetMergedItem( XATTR_FILLCOLOR )).GetColorValue() );
                     sal_Int32 nFillColor( aFillColor.GetColor() );
                     xPropSet->setPropertyValue( sFillColor, Any( nFillColor ) );
                 }
@@ -7281,7 +7283,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
             case drawing::FillStyle_GRADIENT :
                 {
                     eFS = com::sun::star::drawing::FillStyle_GRADIENT;
-                    XGradient aXGradient(((const XFillGradientItem&)pObj->GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
+                    XGradient aXGradient(static_cast<const XFillGradientItem&>(pObj->GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
 
                     com::sun::star::awt::Gradient aGradient;
                     aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
@@ -7306,7 +7308,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                 {
                     eFS = com::sun::star::drawing::FillStyle_BITMAP;
 
-                    const XFillBitmapItem aXFillBitmapItem((const XFillBitmapItem&)pObj->GetMergedItem( XATTR_FILLBITMAP ));
+                    const XFillBitmapItem aXFillBitmapItem(static_cast<const XFillBitmapItem&>(pObj->GetMergedItem( XATTR_FILLBITMAP )));
                     OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
                     aURL += OStringToOUString(
                         aXFillBitmapItem.GetGraphicObject().GetUniqueID(),
@@ -7314,8 +7316,8 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
 
                     xPropSet->setPropertyValue("FillBitmapURL", Any( aURL ) );
 
-                    const XFillBmpStretchItem aStretchItem(( const XFillBmpStretchItem&)pObj->GetMergedItem( XATTR_FILLBMP_STRETCH ));
-                    const XFillBmpTileItem aTileItem(( const XFillBmpTileItem&)pObj->GetMergedItem( XATTR_FILLBMP_TILE ));
+                    const XFillBmpStretchItem aStretchItem(static_cast<const XFillBmpStretchItem&>(pObj->GetMergedItem( XATTR_FILLBMP_STRETCH )));
+                    const XFillBmpTileItem aTileItem(static_cast<const XFillBmpTileItem&>(pObj->GetMergedItem( XATTR_FILLBMP_TILE )));
                     if( aTileItem.GetValue() )
                         xPropSet->setPropertyValue( "FillBitmapMode", Any( com::sun::star::drawing::BitmapMode_REPEAT ) );
                     else if( aStretchItem.GetValue() )
@@ -7334,7 +7336,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         xPropSet->setPropertyValue( sFillStyle, Any( eFS ) );
         if ( eFillStyle != drawing::FillStyle_NONE )
         {
-            sal_Int16 nFillTransparence( ( (const XFillTransparenceItem&)pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
+            sal_Int16 nFillTransparence( static_cast<const XFillTransparenceItem&>(pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
             static const OUString sFillTransparence( "FillTransparence" );
             xPropSet->setPropertyValue( sFillTransparence, Any( nFillTransparence ) );
         }
@@ -7349,17 +7351,17 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
     try
     {
         SfxItemSet aSet( pLine->GetMergedItemSet() );
-        XLineStyle eLineStyle(((XLineStyleItem&)pLine->GetMergedItem( XATTR_LINESTYLE )).GetValue());
+        XLineStyle eLineStyle(static_cast<const XLineStyleItem&>(pLine->GetMergedItem( XATTR_LINESTYLE )).GetValue());
         com::sun::star::table::BorderLine2 aBorderLine;
         switch( eLineStyle )
         {
             case XLINE_DASH :
             case XLINE_SOLID :
                 {
-                    Color aLineColor( ((XLineColorItem&)pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
+                    Color aLineColor( static_cast<const XLineColorItem&>(pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
                     aBorderLine.Color = aLineColor.GetColor();
                     // Avoid width = 0, the min value should be 1.
-                    sal_Int32 nLineWidth = std::max(sal_Int32(1), ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4);
+                    sal_Int32 nLineWidth = std::max(sal_Int32(1), static_cast<const XLineWidthItem&>(pLine->GetMergedItem(XATTR_LINEWIDTH)) .GetValue() / 4);
                     aBorderLine.LineWidth = static_cast< sal_Int16 >( nLineWidth );
                     aBorderLine.LineStyle = eLineStyle == XLINE_SOLID ? table::BorderLineStyle::SOLID : table::BorderLineStyle::DASHED;
                 }
@@ -7414,7 +7416,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
     sal_uInt32 nRows = pTableArry[ 1 ];
     if ( nRows && pGroup->ISA( SdrObjGroup ) )
     {
-        SdrObjList* pSubList(((SdrObjGroup*)pGroup)->GetSubList());
+        SdrObjList* pSubList(static_cast<SdrObjGroup*>(pGroup)->GetSubList());
         if ( pSubList )
         {
             std::set< sal_Int32 > aRows;

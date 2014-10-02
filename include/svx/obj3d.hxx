@@ -251,52 +251,52 @@ public :
 
     // DoubleSided: sal_True/FALSE
     bool GetDoubleSided() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue(); }
 
     // NormalsKind: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetNormalsKind() const
-        { return ((const Svx3DNormalsKindItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue(); }
+        { return static_cast<const Svx3DNormalsKindItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue(); }
 
     // NormalsInvert: sal_True/FALSE
     bool GetNormalsInvert() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue(); }
 
     // TextureProjX: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetTextureProjectionX() const
-        { return ((const Svx3DTextureProjectionXItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue(); }
+        { return static_cast<const Svx3DTextureProjectionXItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue(); }
 
     // TextureProjY: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetTextureProjectionY() const
-        { return ((const Svx3DTextureProjectionYItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue(); }
+        { return static_cast<const Svx3DTextureProjectionYItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue(); }
 
     // Shadow3D: sal_True/FALSE
     bool GetShadow3D() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue(); }
 
     // MaterialColor: Color
     Color GetMaterialColor() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_COLOR)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_COLOR)).GetValue(); }
 
     // MaterialEmission: Color
     Color GetMaterialEmission() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue(); }
 
     // MaterialSpecular: Color
     Color GetMaterialSpecular() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue(); }
 
     // MaterialSpecularIntensity:
     sal_uInt16 GetMaterialSpecularIntensity() const
-        { return ((const SfxUInt16Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue(); }
+        { return static_cast<const SfxUInt16Item&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue(); }
 
     // TextureFilter: sal_True/FALSE
     bool GetTextureFilter() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue(); }
 
     // #i28528#
     // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
     bool GetReducedLineGeometry() const
-        { return ((const Svx3DReducedLineGeometryItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)).GetValue(); }
+        { return static_cast<const Svx3DReducedLineGeometryItem&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)).GetValue(); }
 
     virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
     virtual void RecalcSnapRect() SAL_OVERRIDE;

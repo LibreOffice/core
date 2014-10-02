@@ -104,85 +104,85 @@ public:
 
     // Perspective: enum ProjectionType { PR_PARALLEL, PR_PERSPECTIVE }
     ProjectionType GetPerspective() const
-        { return (ProjectionType)((const Svx3DPerspectiveItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue(); }
+        { return (ProjectionType) static_cast<const Svx3DPerspectiveItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue(); }
 
     // Distance:
     double GetDistance() const
-        { return (double)((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE)).GetValue(); }
+        { return (double)static_cast<const SfxUInt32Item&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE)).GetValue(); }
 
     // Focal length: before cm, now 1/10th mm (*100)
     double GetFocalLength() const
-        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
+        { return static_cast<const SfxUInt32Item&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
 
     // Two sided lighting:
     bool GetTwoSidedLighting() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue(); }
 
     // Lightcolor:
     Color GetLightColor1() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue(); }
     Color GetLightColor2() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue(); }
     Color GetLightColor3() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue(); }
     Color GetLightColor4() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue(); }
     Color GetLightColor5() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue(); }
     Color GetLightColor6() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue(); }
     Color GetLightColor7() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue(); }
     Color GetLightColor8() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue(); }
 
     // Ambient color:
     Color GetGlobalAmbientColor() const
-        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue(); }
+        { return static_cast<const SvxColorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue(); }
 
     // Light on/off:
     bool GetLightOnOff1() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue(); }
     bool GetLightOnOff2() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue(); }
     bool GetLightOnOff3() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue(); }
     bool GetLightOnOff4() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue(); }
     bool GetLightOnOff5() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue(); }
     bool GetLightOnOff6() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue(); }
     bool GetLightOnOff7() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue(); }
     bool GetLightOnOff8() const
-        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue(); }
+        { return static_cast<const SfxBoolItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue(); }
 
     // Light direction:
     basegfx::B3DVector GetLightDirection1() const
-        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue(); }
+        { return static_cast<const SvxB3DVectorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue(); }
     basegfx::B3DVector GetLightDirection2() const
-        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue(); }
+        { return static_cast<const SvxB3DVectorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue(); }
     basegfx::B3DVector GetLightDirection3() const
-        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue(); }
+        { return static_cast<const SvxB3DVectorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue(); }
     basegfx::B3DVector GetLightDirection4() const
-        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue(); }
+        { return static_cast<const SvxB3DVectorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue(); }
     basegfx::B3DVector GetLightDirection5() const
-        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue(); }
+        { return static_cast<const SvxB3DVectorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue(); }
     basegfx::B3DVector GetLightDirection6() const
-        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue(); }
+        { return static_cast<const SvxB3DVectorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue(); }
     basegfx::B3DVector GetLightDirection7() const
-        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue(); }
+        { return static_cast<const SvxB3DVectorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue(); }
     basegfx::B3DVector GetLightDirection8() const
-        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue(); }
+        { return static_cast<const SvxB3DVectorItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue(); }
 
     // ShadowSlant:
     sal_uInt16 GetShadowSlant() const
-        { return ((const SfxUInt16Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue(); }
+        { return static_cast<const SfxUInt16Item&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue(); }
 
     // ShadeMode: 0 == FLAT, 1 == PHONG, 2 == SMOOTH, 3 == ForceDraft
     sal_uInt16 GetShadeMode() const
-        { return ((const Svx3DShadeModeItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue(); }
+        { return static_cast<const Svx3DShadeModeItem&>(GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue(); }
 
     // set flag to draw only selected
     void SetDrawOnlySelected(bool bNew) { bDrawOnlySelected = bNew; }

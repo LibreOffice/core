@@ -91,25 +91,25 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
 
     CopyAllBundles( rSource.aLineList, aLineList );
     aLineBundle = rSource.aLineBundle;
-    pLineBundle = (LineBundle*)GetBundle( aLineList, rSource.pLineBundle->GetIndex() );
+    pLineBundle = static_cast<LineBundle*>(GetBundle( aLineList, rSource.pLineBundle->GetIndex() ));
     eLineWidthSpecMode = rSource.eLineWidthSpecMode;
     eLineCapType = rSource.eLineCapType;
     eLineJoinType = rSource.eLineJoinType;
 
     CopyAllBundles( rSource.aMarkerList, aMarkerList );
     aMarkerBundle = rSource.aMarkerBundle;
-    pMarkerBundle = (MarkerBundle*)GetBundle( aMarkerList, rSource.pMarkerBundle->GetIndex() );
+    pMarkerBundle = static_cast<MarkerBundle*>(GetBundle( aMarkerList, rSource.pMarkerBundle->GetIndex() ));
     eMarkerSizeSpecMode = rSource.eMarkerSizeSpecMode;
 
     CopyAllBundles( rSource.aEdgeList, aEdgeList );
     aEdgeBundle = rSource.aEdgeBundle;
-    pEdgeBundle = (EdgeBundle*)GetBundle( aEdgeList, rSource.pEdgeBundle->GetIndex() );
+    pEdgeBundle = static_cast<EdgeBundle*>(GetBundle( aEdgeList, rSource.pEdgeBundle->GetIndex() ));
     eEdgeVisibility = rSource.eEdgeVisibility;
     eEdgeWidthSpecMode = rSource.eEdgeWidthSpecMode;
 
     CopyAllBundles( rSource.aTextList, aTextList );
     aTextBundle = rSource.aTextBundle;
-    pTextBundle = (TextBundle*)GetBundle( aTextList, rSource.pTextBundle->GetIndex() );
+    pTextBundle = static_cast<TextBundle*>(GetBundle( aTextList, rSource.pTextBundle->GetIndex() ));
     nCharacterHeight = rSource.nCharacterHeight;
     nCharacterOrientation[ 0 ] = rSource.nCharacterOrientation[ 0 ];
     nCharacterOrientation[ 1 ] = rSource.nCharacterOrientation[ 1 ];
@@ -129,7 +129,7 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
 
     CopyAllBundles( rSource.aFillList, aFillList );
     aFillBundle = rSource.aFillBundle;
-    pFillBundle = (FillBundle*)GetBundle( aFillList, rSource.pFillBundle->GetIndex() );
+    pFillBundle = static_cast<FillBundle*>(GetBundle( aFillList, rSource.pFillBundle->GetIndex() ));
     aFillRefPoint = rSource.aFillRefPoint;
     eTransparency = rSource.eTransparency;
     nAuxiliaryColor = rSource.nAuxiliaryColor;

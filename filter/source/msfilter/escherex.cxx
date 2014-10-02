@@ -570,7 +570,7 @@ void    EscherPropertyContainer::CreateFillProperties(
             SfxItemSet aAttr( pObj->GetMergedItemSet() );
             // tranparency with gradient. Means the third setting in transparency page is set
             bool bTransparentGradient =  ( aAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SfxItemState::SET ) &&
-                ( (const XFillFloatTransparenceItem&) aAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled();
+                static_cast<const XFillFloatTransparenceItem&>( aAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled();
             CreateFillProperties(  rXPropSet, bEdge, bTransparentGradient );
         }
     }
@@ -1328,7 +1328,7 @@ bool EscherPropertyContainer::CreateMediaGraphicProperties(
         SdrObject* pSdrMedia( GetSdrObjectFromXShape( rXShape ) );  // SJ: leaving unoapi, because currently there is
         if ( pSdrMedia && pSdrMedia->ISA( SdrMediaObj ) )               // no access to the native graphic object
         {
-            GraphicObject aGraphicObject( ((SdrMediaObj*)pSdrMedia)->getSnapshot() );
+            GraphicObject aGraphicObject( static_cast<SdrMediaObj*>(pSdrMedia)->getSnapshot() );
             bRetValue = CreateGraphicProperties( rXShape, aGraphicObject );
         }
     }
@@ -1844,7 +1844,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
                         for( b = 0; b < nInnerSequenceCount; b++)
                         {
                             PolyFlags   ePolyFlags( *( (PolyFlags*)pFlags++ ) );
-                            ::com::sun::star::awt::Point aPoint( (::com::sun::star::awt::Point)*(pArray++) );
+                            ::com::sun::star::awt::Point aPoint( *(pArray++) );
                             aPolygon[ b ] = Point( aPoint.X, aPoint.Y );
                             aPolygon.SetFlags( b, ePolyFlags );
 
@@ -2577,9 +2577,9 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
     {
         uno::Sequence< OUString > sEquationSource;
         const OUString sEquations( "Equations"  );
-        SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)
-            pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-        const uno::Any* pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sEquations );
+        const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
+            pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sEquations );
         if ( pAny )
             *pAny >>= sEquationSource;
         sal_Int32 nEquationSourceCount = sEquationSource.getLength();
@@ -2726,7 +2726,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
     if ( aXPropSet.is() )
     {
-        SdrObjCustomShape* pCustoShape = (SdrObjCustomShape*)GetSdrObjectFromXShape( rXShape );
+        SdrObjCustomShape* pCustoShape = static_cast<SdrObjCustomShape*>(GetSdrObjectFromXShape( rXShape ));
         if ( !pCustoShape ) return;
         const OUString sCustomShapeGeometry( "CustomShapeGeometry"  );
         uno::Any aGeoPropSet = aXPropSet->getPropertyValue( sCustomShapeGeometry );
@@ -3590,7 +3590,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     break;
                                 case drawing::TextHorizontalAdjust_BLOCK:
                                     {
-                                        SdrFitToSizeType  eFTS( ((SdrTextFitToSizeTypeItem&)pCustoShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
+                                        SdrFitToSizeType  eFTS( static_cast<const SdrTextFitToSizeTypeItem&>(pCustoShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
                                         if ( eFTS == SDRTEXTFIT_ALLLINES)
                                         {
                                             gTextAlign = mso_alignTextStretch;
@@ -4742,15 +4742,15 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             SdrObject* pCustoShape( GetSdrObjectFromXShape( aXShape ) );
             if ( pCustoShape && pCustoShape->ISA( SdrObjCustomShape ) )
             {
-                SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)
-                    pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+                const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
+                    pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
 
                 const OUString sPath( "Path"  );
                 const OUString sType( "Type"  );
                 const OUString sGluePointType( "GluePointType"  );
 
                 OUString sShapeType;
-                uno::Any* pType = rGeometryItem.GetPropertyValueByName( sType );
+                const uno::Any* pType = rGeometryItem.GetPropertyValueByName( sType );
                 if ( pType )
                     *pType >>= sShapeType;
                 MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
@@ -4792,7 +4792,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
                         // #i74631# use explicit constructor here. Also XPolyPolygon is not necessary,
                         // reducing to PolyPolygon
-                        const tools::PolyPolygon aPolyPoly(((SdrPathObj*)pPoly)->GetPathPoly());
+                        const tools::PolyPolygon aPolyPoly(static_cast<SdrPathObj*>(pPoly)->GetPathPoly());
 
                         for ( a = 0; a < aPolyPoly.Count(); a++ )
                         {

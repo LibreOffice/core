@@ -513,11 +513,11 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
     fW=0.0;
     pBE=rE.pSucc;
     for (i=0; i<nPolySize; i++) {
-        rTransform.Transform(((DXFVertexEntity*)pBE)->aP0,aPoly[i]);
+        rTransform.Transform(static_cast<const DXFVertexEntity*>(pBE)->aP0,aPoly[i]);
         if (i+1<nPolySize || (rE.nFlags&1)!=0) {
-            if (((DXFVertexEntity*)pBE)->fSWidth>=0.0) fW+=((DXFVertexEntity*)pBE)->fSWidth;
+            if (static_cast<const DXFVertexEntity*>(pBE)->fSWidth>=0.0) fW+=static_cast<const DXFVertexEntity*>(pBE)->fSWidth;
             else fW+=rE.fSWidth;
-            if (((DXFVertexEntity*)pBE)->fEWidth>=0.0) fW+=((DXFVertexEntity*)pBE)->fEWidth;
+            if (static_cast<const DXFVertexEntity*>(pBE)->fEWidth>=0.0) fW+=static_cast<const DXFVertexEntity*>(pBE)->fEWidth;
             else fW+=rE.fEWidth;
         }
         pBE=pBE->pSucc;
@@ -533,7 +533,7 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
             pBE=rE.pSucc;
             for (i=0; i<nPolySize; i++) {
                 rTransform.Transform(
-                   (((DXFVertexEntity*)pBE)->aP0)+DXFVector(0,0,rE.fThickness),
+                   (static_cast<const DXFVertexEntity*>(pBE)->aP0)+DXFVector(0,0,rE.fThickness),
                    aPoly2[i]
                 );
                 pBE=pBE->pSucc;
@@ -598,9 +598,9 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
                         case 1 :
                         {
                             Point aPt;
-                            rTransform.Transform( ((DXFEdgeTypeLine*)pEdge)->aStartPoint, aPt );
+                            rTransform.Transform( static_cast<const DXFEdgeTypeLine*>(pEdge)->aStartPoint, aPt );
                             aPtAry.push_back( aPt );
-                            rTransform.Transform( ((DXFEdgeTypeLine*)pEdge)->aEndPoint, aPt );
+                            rTransform.Transform( static_cast<const DXFEdgeTypeLine*>(pEdge)->aEndPoint, aPt );
                             aPtAry.push_back( aPt );
                         }
                         break;
@@ -700,46 +700,46 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
             }
             switch (pE->eType) {
             case DXF_LINE:
-                DrawLineEntity((DXFLineEntity&)*pE,*pT);
+                DrawLineEntity(static_cast<const DXFLineEntity&>(*pE),*pT);
                 break;
             case DXF_POINT:
-                DrawPointEntity((DXFPointEntity&)*pE,*pT);
+                DrawPointEntity(static_cast<const DXFPointEntity&>(*pE),*pT);
                 break;
             case DXF_CIRCLE:
-                DrawCircleEntity((DXFCircleEntity&)*pE,*pT);
+                DrawCircleEntity(static_cast<const DXFCircleEntity&>(*pE),*pT);
                 break;
             case DXF_ARC:
-                DrawArcEntity((DXFArcEntity&)*pE,*pT);
+                DrawArcEntity(static_cast<const DXFArcEntity&>(*pE),*pT);
                 break;
             case DXF_TRACE:
-                DrawTraceEntity((DXFTraceEntity&)*pE,*pT);
+                DrawTraceEntity(static_cast<const DXFTraceEntity&>(*pE),*pT);
                 break;
             case DXF_SOLID:
-                DrawSolidEntity((DXFSolidEntity&)*pE,*pT);
+                DrawSolidEntity(static_cast<const DXFSolidEntity&>(*pE),*pT);
                 break;
             case DXF_TEXT:
-                DrawTextEntity((DXFTextEntity&)*pE,*pT);
+                DrawTextEntity(static_cast<const DXFTextEntity&>(*pE),*pT);
                 break;
             case DXF_INSERT:
-                DrawInsertEntity((DXFInsertEntity&)*pE,*pT);
+                DrawInsertEntity(static_cast<const DXFInsertEntity&>(*pE),*pT);
                 break;
             case DXF_ATTRIB:
-                DrawAttribEntity((DXFAttribEntity&)*pE,*pT);
+                DrawAttribEntity(static_cast<const DXFAttribEntity&>(*pE),*pT);
                 break;
             case DXF_POLYLINE:
-                DrawPolyLineEntity((DXFPolyLineEntity&)*pE,*pT);
+                DrawPolyLineEntity(static_cast<const DXFPolyLineEntity&>(*pE),*pT);
                 break;
             case DXF_LWPOLYLINE :
-                DrawLWPolyLineEntity((DXFLWPolyLineEntity&)*pE, *pT);
+                DrawLWPolyLineEntity(static_cast<const DXFLWPolyLineEntity&>(*pE), *pT);
                 break;
             case DXF_HATCH :
-                DrawHatchEntity((DXFHatchEntity&)*pE, *pT);
+                DrawHatchEntity(static_cast<const DXFHatchEntity&>(*pE), *pT);
                 break;
             case DXF_3DFACE:
-                Draw3DFaceEntity((DXF3DFaceEntity&)*pE,*pT);
+                Draw3DFaceEntity(static_cast<const DXF3DFaceEntity&>(*pE),*pT);
                 break;
             case DXF_DIMENSION:
-                DrawDimensionEntity((DXFDimensionEntity&)*pE,*pT);
+                DrawDimensionEntity(static_cast<const DXFDimensionEntity&>(*pE),*pT);
                 break;
             default:
                 break;  // four other values not handled -Wall

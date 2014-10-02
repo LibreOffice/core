@@ -573,7 +573,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 
                             case OBJ_CUSTOMSHAPE :
                             {
-                                SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)((SdrObjCustomShape*)pO)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                                const SfxPoolItem& aCustomShape =  static_cast<SdrObjCustomShape*>(pO)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+                                SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(aCustomShape) );
                                 const OUString sPath( "Path" );
                                 const OUString sGluePointType( "GluePointType" );
                                 sal_Int16 nGluePointType = EnhancedCustomShapeGluePointType::SEGMENTS;
@@ -717,7 +718,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                 aProp.Value <<= aGluePoints;
                                                 aGeometryItem.SetPropertyValue( sPath, aProp );
                                                 bValidGluePoint = true;
-                                                ((SdrObjCustomShape*)pO)->SetMergedItem( aGeometryItem );
+                                                static_cast<SdrObjCustomShape*>(pO)->SetMergedItem( aGeometryItem );
                                                 SdrGluePointList* pLst = pO->ForceGluePointList();
                                                 if ( pLst->GetCount() > nGluePoints )
                                                     nId = (sal_Int32)((*pLst)[ (sal_uInt16)nGluePoints ].GetId() + 3 );
@@ -2715,7 +2716,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
     if ( !bRotateTextWithShape )
     {
         const com::sun::star::uno::Any* pAny;
-        SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+        SdrCustomShapeGeometryItem aGeometryItem(static_cast<const SdrCustomShapeGeometryItem&>(rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
         const OUString sTextRotateAngle( "TextRotateAngle" );
         pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );
         double fExtraTextRotateAngle = 0.0;
@@ -3889,7 +3890,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         {
             pRet = new SdrGrafObj;
             if( bGrfRead )
-                ((SdrGrafObj*)pRet)->SetGraphic( aGraf );
+                static_cast<SdrGrafObj*>(pRet)->SetGraphic( aGraf );
 
             if( bLinkGrf && !bGrfRead )     // sj: #i55484# if the graphic was embedded ( bGrfRead == true ) then
             {                               // we do not need to set a link. TODO: not to lose the information where the graphic is linked from
@@ -3935,15 +3936,15 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     if ( pRet->ISA( SdrGrafObj ) )
     {
         if( aLinkFileName.getLength() )
-            ((SdrGrafObj*)pRet)->SetGraphicLink( aLinkFileName, ""/*TODO?*/, aLinkFilterName );
+            static_cast<SdrGrafObj*>(pRet)->SetGraphicLink( aLinkFileName, ""/*TODO?*/, aLinkFilterName );
 
         if ( bLinkGrf && !bGrfRead )
         {
-            ((SdrGrafObj*)pRet)->ForceSwapIn();
-            Graphic aGraf(((SdrGrafObj*)pRet)->GetGraphic());
+            static_cast<SdrGrafObj*>(pRet)->ForceSwapIn();
+            Graphic aGraf(static_cast<SdrGrafObj*>(pRet)->GetGraphic());
             lcl_ApplyCropping( *this, &rSet, aGraf );
         }
-        ((SdrGrafObj*)pRet)->ForceSwapOut();
+        static_cast<SdrGrafObj*>(pRet)->ForceSwapOut();
     }
 
     return pRet;
@@ -4032,9 +4033,9 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                         return pRet;
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportGroup( aRecHd2, rSt, pClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp && pRet && ((SdrObjGroup*)pRet)->GetSubList() )
+                    if ( pTmp && pRet && static_cast<SdrObjGroup*>(pRet)->GetSubList() )
                     {
-                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
+                        static_cast<SdrObjGroup*>(pRet)->GetSubList()->NbcInsertObject( pTmp );
                         if( nShapeId )
                             insertShapeId( nShapeId, pTmp );
                     }
@@ -4045,9 +4046,9 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                         return pRet;
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp && pRet && ((SdrObjGroup*)pRet)->GetSubList())
+                    if ( pTmp && pRet && static_cast<SdrObjGroup*>(pRet)->GetSubList())
                     {
-                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
+                        static_cast<SdrObjGroup*>(pRet)->GetSubList()->NbcInsertObject( pTmp );
                         if( nShapeId )
                             insertShapeId( nShapeId, pTmp );
                     }
@@ -4294,7 +4295,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // this should be replaced through "CharacterRotation"
                         // by 90 degrees, therefore a new Item has to be
                         // supported by svx core, api and xml file format
-                        ((SdrObjCustomShape*)pRet)->SetVerticalWriting( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 ) != 0 );
+                        static_cast<SdrObjCustomShape*>(pRet)->SetVerticalWriting( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 ) != 0 );
 
                         if ( SeekToContent( DFF_Prop_gtextUNICODE, rSt ) )
                         {
@@ -4343,14 +4344,14 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     // so we have to calculate the a text direction from string:
                     if ( bIsFontwork )
                     {
-                        OutlinerParaObject* pParaObj = ((SdrObjCustomShape*)pRet)->GetOutlinerParaObject();
+                        OutlinerParaObject* pParaObj = static_cast<SdrObjCustomShape*>(pRet)->GetOutlinerParaObject();
                         if ( pParaObj )
                         {
-                            SdrOutliner& rOutliner = ((SdrObjCustomShape*)pRet)->ImpGetDrawOutliner();
+                            SdrOutliner& rOutliner = static_cast<SdrObjCustomShape*>(pRet)->ImpGetDrawOutliner();
                             bool bOldUpdateMode = rOutliner.GetUpdateMode();
                             SdrModel* pModel = pRet->GetModel();
                             if ( pModel )
-                                rOutliner.SetStyleSheetPool( (SfxStyleSheetPool*)pModel->GetStyleSheetPool() );
+                                rOutliner.SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(pModel->GetStyleSheetPool()) );
                             rOutliner.SetUpdateMode( false );
                             rOutliner.SetText( *pParaObj );
                             VirtualDevice aVirDev( 1 );
@@ -4375,7 +4376,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 {
                                     OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
                                     rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
-                                    ((SdrObjCustomShape*)pRet)->NbcSetOutlinerParaObject( pNewText );
+                                    static_cast<SdrObjCustomShape*>(pRet)->NbcSetOutlinerParaObject( pNewText );
                                 }
                             }
                             rOutliner.Clear();
@@ -4396,7 +4397,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         const OUString sViewBox( "ViewBox" );
                         const OUString sPath( "Path" );
                         const OUString sTextFrames( "TextFrames" );
-                        SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)((SdrObjCustomShape*)pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                        SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(static_cast<SdrObjCustomShape*>(pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
                         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
                         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
 
@@ -4561,21 +4562,21 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 aObjData.aBoundRect.Move( aP2.X() - aP1.X(), aP2.Y() - aP1.Y() );
                             }
                         }
-                        ((SdrObjCustomShape*)pRet)->SetMergedItem( aGeometryItem );
-                        ((SdrObjCustomShape*)pRet)->MergeDefaultAttributes();
+                        static_cast<SdrObjCustomShape*>(pRet)->SetMergedItem( aGeometryItem );
+                        static_cast<SdrObjCustomShape*>(pRet)->MergeDefaultAttributes();
 
                         // now setting a new name, so the above correction is only done once when importing from ms
-                        SdrCustomShapeGeometryItem aGeoName( (SdrCustomShapeGeometryItem&)((SdrObjCustomShape*)pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                        SdrCustomShapeGeometryItem aGeoName( static_cast<const SdrCustomShapeGeometryItem&>(static_cast<SdrObjCustomShape*>(pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
                         const OUString sType( "Type" );
                         const OUString sName( "mso-spt100" );
                         PropertyValue aPropVal;
                         aPropVal.Name = sType;
                         aPropVal.Value <<= sName;
                         aGeoName.SetPropertyValue( aPropVal );
-                        ((SdrObjCustomShape*)pRet)->SetMergedItem( aGeoName );
+                        static_cast<SdrObjCustomShape*>(pRet)->SetMergedItem( aGeoName );
                     }
                     else
-                        ((SdrObjCustomShape*)pRet)->MergeDefaultAttributes();
+                        static_cast<SdrObjCustomShape*>(pRet)->MergeDefaultAttributes();
 
                     pRet->SetSnapRect( aObjData.aBoundRect );
                     EnhancedCustomShape2d aCustomShape2d( pRet );
@@ -4615,8 +4616,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // connectors
                         MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
 
-                        ((SdrEdgeObj*)pRet)->ConnectToNode(true, NULL);
-                        ((SdrEdgeObj*)pRet)->ConnectToNode(false, NULL);
+                        static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(true, NULL);
+                        static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(false, NULL);
 
                         Point aPoint1( aObjData.aBoundRect.TopLeft() );
                         Point aPoint2( aObjData.aBoundRect.BottomRight() );
@@ -4681,13 +4682,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aSet.Put( SdrEdgeNode2HorzDistItem( n2HorzDist ) );
                         aSet.Put( SdrEdgeNode2VertDistItem( n2VertDist ) );
 
-                        ((SdrEdgeObj*)pRet)->SetEdgeTrackPath( aPoly );
+                        static_cast<SdrEdgeObj*>(pRet)->SetEdgeTrackPath( aPoly );
                         pRet->SetMergedItemSet( aSet );
                     }
                     if ( aObjData.eShapeType == mso_sptLine )
                     {
                         pRet->SetMergedItemSet(aSet);
-                        ((SdrObjCustomShape*)pRet)->MergeDefaultAttributes();
+                        static_cast<SdrObjCustomShape*>(pRet)->MergeDefaultAttributes();
                     }
                 }
             }

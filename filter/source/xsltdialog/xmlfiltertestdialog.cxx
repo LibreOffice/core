@@ -678,7 +678,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
         }
         else
         {
-            xTest = (Reference< XComponent >)xDesktop->getCurrentComponent();
+            xTest = xDesktop->getCurrentComponent();
 
             if( checkComponent( xTest, rServiceName ) )
             {

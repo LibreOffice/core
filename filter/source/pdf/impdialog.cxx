@@ -335,27 +335,27 @@ void ImpPDFTabDialog::PageCreated( sal_uInt16 _nId,
 {
     if (_nId == mnGeneralPageId)
     {
-        ( ( ImpPDFTabGeneralPage* )&_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabGeneralPage*>( &_rPage )->SetFilterConfigItem( this );
     }
     else if (_nId == mnInterfacePageId)
     {
-        ( ( ImpPDFTabViewerPage* )&_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabViewerPage*>( &_rPage )->SetFilterConfigItem( this );
     }
     else if (_nId == mnViewPageId)
     {
-        ( ( ImpPDFTabOpnFtrPage* )&_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabOpnFtrPage*>( &_rPage )->SetFilterConfigItem( this );
     }
     else if (_nId == mnLinksPage)
     {
-        ( ( ImpPDFTabLinksPage* )&_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabLinksPage*>( &_rPage )->SetFilterConfigItem( this );
     }
     else if (_nId == mnSecurityPageId)
     {
-        ( ( ImpPDFTabSecurityPage* )&_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabSecurityPage*>( &_rPage )->SetFilterConfigItem( this );
     }
     else if (_nId == mnSigningPageId)
     {
-        ( ( ImpPDFTabSigningPage* )&_rPage )->SetFilterConfigItem( this );
+        static_cast<ImpPDFTabSigningPage*>( &_rPage )->SetFilterConfigItem( this );
     }
 }
 
@@ -372,17 +372,17 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 {
 // updating the FilterData sequence and storing FilterData to configuration
     if( GetTabPage(mnGeneralPageId) )
-        ( ( ImpPDFTabGeneralPage* )GetTabPage(mnGeneralPageId) )->GetFilterConfigItem( this );
+        static_cast<ImpPDFTabGeneralPage*>( GetTabPage(mnGeneralPageId) )->GetFilterConfigItem( this );
     if( GetTabPage(mnInterfacePageId) )
-        ( ( ImpPDFTabViewerPage* )GetTabPage(mnInterfacePageId) )->GetFilterConfigItem( this );
+        static_cast<ImpPDFTabViewerPage*>( GetTabPage(mnInterfacePageId) )->GetFilterConfigItem( this );
     if( GetTabPage(mnViewPageId) )
-        ( ( ImpPDFTabOpnFtrPage* )GetTabPage(mnViewPageId) )->GetFilterConfigItem( this );
+        static_cast<ImpPDFTabOpnFtrPage*>( GetTabPage(mnViewPageId) )->GetFilterConfigItem( this );
     if( GetTabPage(mnLinksPage) )
-        ( ( ImpPDFTabLinksPage* )GetTabPage(mnLinksPage) )->GetFilterConfigItem( this );
+        static_cast<ImpPDFTabLinksPage*>( GetTabPage(mnLinksPage) )->GetFilterConfigItem( this );
     if( GetTabPage(mnSecurityPageId) )
-        ( ( ImpPDFTabSecurityPage* )GetTabPage(mnSecurityPageId) )->GetFilterConfigItem( this );
+        static_cast<ImpPDFTabSecurityPage*>( GetTabPage(mnSecurityPageId) )->GetFilterConfigItem( this );
     if( GetTabPage(mnSigningPageId) )
-        ( ( ImpPDFTabSigningPage* )GetTabPage(mnSigningPageId) )->GetFilterConfigItem( this );
+        static_cast<ImpPDFTabSigningPage*>( GetTabPage(mnSigningPageId) )->GetFilterConfigItem( this );
 
 //prepare the items to be returned
     maConfigItem.WriteBool( "UseLosslessCompression", mbUseLosslessCompression );

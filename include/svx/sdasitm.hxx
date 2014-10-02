@@ -95,6 +95,7 @@ private:
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const { return aPropSeq;}
 
             com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName );
+            const com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName ) const;
             com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );
 
             void SetPropertyValue( const com::sun::star::beans::PropertyValue& rPropVal );

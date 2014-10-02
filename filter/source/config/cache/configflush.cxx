@@ -75,7 +75,7 @@ void SAL_CALL ConfigFlush::refresh()
             {
                 // ... this pointer can be interesting to find out, where will be called as listener
                 // Dont optimize it to a direct iterator cast :-)
-                css::util::XRefreshListener* pListener = (css::util::XRefreshListener*)pIterator.next();
+                css::util::XRefreshListener* pListener = static_cast<css::util::XRefreshListener*>(pIterator.next());
                 pListener->refreshed(aSource);
             }
             catch(const css::uno::Exception&)

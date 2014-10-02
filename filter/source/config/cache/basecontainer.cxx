@@ -538,7 +538,7 @@ void SAL_CALL BaseContainer::flush()
             {
                 // ... this pointer can be interesting to find out, where will be called as listener
                 // Dont optimize it to a direct iterator cast :-)
-                css::util::XFlushListener* pListener = (css::util::XFlushListener*)pIterator.next();
+                css::util::XFlushListener* pListener = static_cast<css::util::XFlushListener*>(pIterator.next());
                 pListener->flushed(aSource);
             }
             catch(const css::uno::Exception&)

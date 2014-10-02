@@ -30,7 +30,7 @@ void CGM::ImplDoClass5()
     switch ( mnElementID )
     {
         case 0x01 : /*Line Bundle Index*/
-            pElement->pLineBundle = (LineBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aLineList, pElement->aLineBundle );
+            pElement->pLineBundle = static_cast<LineBundle*>(pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aLineList, pElement->aLineBundle ));
         break;
         case 0x02 : /*Line Type*/
         {
@@ -67,7 +67,7 @@ void CGM::ImplDoClass5()
         }
         break;
         case 0x05 : /*Marker Bundle Index*/
-            pElement->pMarkerBundle = (MarkerBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aMarkerList, pElement->aMarkerBundle );
+            pElement->pMarkerBundle = static_cast<MarkerBundle*>(pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aMarkerList, pElement->aMarkerBundle ));
         break;
         case 0x06 : /*Marker Type*/
         {
@@ -104,7 +104,7 @@ void CGM::ImplDoClass5()
         }
         break;
         case 0x09 : /*Text Bundle Index*/
-            pElement->pTextBundle = (TextBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aTextList, pElement->aTextBundle );
+            pElement->pTextBundle = static_cast<TextBundle*>(pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aTextList, pElement->aTextBundle ));
         break;
         case 0x0a : /*Text Font Index*/
         {
@@ -209,7 +209,7 @@ void CGM::ImplDoClass5()
             pElement->nAlternateCharacterSetIndex = ImplGetI( pElement->nIndexPrecision );
         break;
         case 0x15 : /*Fill Bundle Index*/
-            pElement->pFillBundle = (FillBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aFillList, pElement->aFillBundle );
+            pElement->pFillBundle = static_cast<FillBundle*>(pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aFillList, pElement->aFillBundle ));
         break;
         case 0x16 : /*Fill Interior Style*/
         {
@@ -244,7 +244,7 @@ void CGM::ImplDoClass5()
         }
         break;
         case 0x1a : /*Edge Bundle Index*/
-            pElement->pEdgeBundle = (EdgeBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aEdgeList, pElement->aEdgeBundle );
+            pElement->pEdgeBundle = static_cast<EdgeBundle*>(pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aEdgeList, pElement->aEdgeBundle ));
         break;
         case 0x1b : /*Edge Type*/
         {

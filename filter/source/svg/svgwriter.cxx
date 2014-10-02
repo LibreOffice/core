@@ -493,7 +493,7 @@ void SVGTextWriter::implSetCurrentFont()
 template< typename SubType >
 bool SVGTextWriter::implGetTextPosition( const MetaAction* pAction, Point& raPos, bool& rbEmpty )
 {
-    const SubType* pA = (const SubType*) pAction;
+    const SubType* pA = static_cast<const SubType*>(pAction);
     sal_uInt16 nLength = pA->GetLen();
     rbEmpty = ( nLength == 0 );
     if( !rbEmpty )
@@ -507,7 +507,7 @@ bool SVGTextWriter::implGetTextPosition( const MetaAction* pAction, Point& raPos
 template<>
 bool SVGTextWriter::implGetTextPosition<MetaTextRectAction>( const MetaAction* pAction, Point& raPos, bool& rbEmpty )
 {
-    const MetaTextRectAction* pA = (const MetaTextRectAction*) pAction;
+    const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
     sal_uInt16 nLength = pA->GetText().getLength();
     rbEmpty = ( nLength == 0 );
     if( !rbEmpty )
@@ -521,7 +521,7 @@ bool SVGTextWriter::implGetTextPosition<MetaTextRectAction>( const MetaAction* p
 template< typename SubType >
 bool SVGTextWriter::implGetTextPositionFromBitmap( const MetaAction* pAction, Point& raPos, bool& rbEmpty )
 {
-    const SubType* pA = (const SubType*) pAction;
+    const SubType* pA = static_cast<const SubType*>(pAction);
     raPos = pA->GetPoint();
     rbEmpty = false;
     return true;
@@ -596,7 +596,7 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
             // without finding any text we stop searching
             case( META_COMMENT_ACTION ):
             {
-                const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
                 const OString& rsComment = pA->GetComment();
                 if( rsComment.equalsIgnoreAsciiCase( "XTEXT_EOL" ) )
                 {
@@ -683,28 +683,28 @@ void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAc
 
             case( META_TEXT_ACTION ):
             {
-                const MetaTextAction* pA = (const MetaTextAction*) pAction;
+                const MetaTextAction* pA = static_cast<const MetaTextAction*>(pAction);
                 if( pA->GetLen() > 2 )
                     bConfigured = true;
             }
             break;
             case( META_TEXTRECT_ACTION ):
             {
-                const MetaTextRectAction* pA = (const MetaTextRectAction*) pAction;
+                const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
                 if( pA->GetText().getLength() > 2 )
                     bConfigured = true;
             }
             break;
             case( META_TEXTARRAY_ACTION ):
             {
-                const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pAction;
+                const MetaTextArrayAction* pA = static_cast<const MetaTextArrayAction*>(pAction);
                 if( pA->GetLen() > 2 )
                     bConfigured = true;
             }
             break;
             case( META_STRETCHTEXT_ACTION ):
             {
-                const MetaStretchTextAction* pA = (const MetaStretchTextAction*) pAction;
+                const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction*>(pAction);
                 if( pA->GetLen() > 2 )
                     bConfigured = true;
             }
@@ -713,7 +713,7 @@ void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAc
             // we stop searching
             case( META_COMMENT_ACTION ):
             {
-                const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
                 const OString& rsComment = pA->GetComment();
                 if( rsComment.equalsIgnoreAsciiCase( "XTEXT_EOP" ) )
                 {
@@ -1394,7 +1394,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
             {
                 case( META_BMPSCALE_ACTION ):
                 {
-                    const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+                    const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
                     nChecksum = pA->GetBitmap().GetChecksum();
                     aPt = pA->GetPoint();
                     aSz = pA->GetSize();
@@ -1402,7 +1402,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                 break;
                 case( META_BMPEXSCALE_ACTION ):
                 {
-                    const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+                    const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                     nChecksum = pA->GetBitmapEx().GetChecksum();
                     aPt = pA->GetPoint();
                     aSz = pA->GetSize();
@@ -2680,7 +2680,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if (pAction && (nType == META_COMMENT_ACTION))
                 {
                     sType.append(": ");
-                    const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                    const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
                     OString sComment = pA->GetComment();
                     if (!sComment.isEmpty())
                     {
@@ -2711,7 +2711,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             catch( ... )
             {
-                const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
                 OSL_FAIL( pA->GetComment().getStr() );
             }
 
@@ -2723,7 +2723,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaPixelAction* pA = (const MetaPixelAction*) pAction;
+                    const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pAction);
 
                     mpContext->AddPaintAttr( pA->GetColor(), pA->GetColor() );
                     ImplWriteLine( pA->GetPoint(), pA->GetPoint(), &pA->GetColor() );
@@ -2735,7 +2735,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaPointAction* pA = (const MetaPointAction*) pAction;
+                    const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
 
                     mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
                     ImplWriteLine( pA->GetPoint(), pA->GetPoint(), NULL );
@@ -2747,7 +2747,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaLineAction* pA = (const MetaLineAction*) pAction;
+                    const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
 
                     mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
                     ImplWriteLine( pA->GetStartPoint(), pA->GetEndPoint(), NULL );
@@ -2760,7 +2760,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
-                    ImplWriteRect( ( (const MetaRectAction*) pAction )->GetRect(), 0, 0 );
+                    ImplWriteRect( static_cast<const MetaRectAction*>(pAction)->GetRect(), 0, 0 );
                 }
             }
             break;
@@ -2769,7 +2769,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaRoundRectAction* pA = (const MetaRoundRectAction*) pAction;
+                    const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pAction);
 
                     mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
                     ImplWriteRect( pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
@@ -2781,7 +2781,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaEllipseAction*    pA = (const MetaEllipseAction*) pAction;
+                    const MetaEllipseAction*    pA = static_cast<const MetaEllipseAction*>(pAction);
                     const Rectangle&            rRect = pA->GetRect();
 
                     mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
@@ -2803,27 +2803,27 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         case( META_ARC_ACTION ):
                         {
-                            const MetaArcAction* pA = (const MetaArcAction*) pAction;
+                            const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
                         }
                         break;
 
                         case( META_PIE_ACTION ):
                         {
-                            const MetaPieAction* pA = (const MetaPieAction*) pAction;
+                            const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
                         }
                         break;
 
                         case( META_CHORD_ACTION ):
                         {
-                            const MetaChordAction* pA = (const MetaChordAction*) pAction;
+                            const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
                         }
                         break;
 
                         case( META_POLYGON_ACTION ):
-                            aPoly = ( (const MetaPolygonAction*) pAction )->GetPolygon();
+                            aPoly = static_cast<const MetaPolygonAction*>(pAction)->GetPolygon();
                         break;
                     }
 
@@ -2840,7 +2840,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaPolyLineAction*   pA = (const MetaPolyLineAction*) pAction;
+                    const MetaPolyLineAction*   pA = static_cast<const MetaPolyLineAction*>(pAction);
                     const Polygon&              rPoly = pA->GetPolygon();
 
                     if( rPoly.GetSize() )
@@ -2857,7 +2857,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaPolyPolygonAction*    pA = (const MetaPolyPolygonAction*) pAction;
+                    const MetaPolyPolygonAction*    pA = static_cast<const MetaPolyPolygonAction*>(pAction);
                     const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
 
                     if( rPolyPoly.Count() )
@@ -2873,7 +2873,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaGradientAction*   pA = (const MetaGradientAction*) pAction;
+                    const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pAction);
                     const Polygon               aRectPoly( pA->GetRect() );
                     const tools::PolyPolygon           aRectPolyPoly( aRectPoly );
 
@@ -2886,7 +2886,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaGradientExAction* pA = (const MetaGradientExAction*) pAction;
+                    const MetaGradientExAction* pA = static_cast<const MetaGradientExAction*>(pAction);
                     ImplWriteGradientEx( pA->GetPolyPolygon(), pA->GetGradient(), nWriteFlags );
                 }
             }
@@ -2896,7 +2896,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaHatchAction*  pA = (const MetaHatchAction*) pAction;
+                    const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pAction);
                     ImplWritePattern( pA->GetPolyPolygon(), &pA->GetHatch(), NULL, nWriteFlags );
                 }
             }
@@ -2906,7 +2906,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaTransparentAction*    pA = (const MetaTransparentAction*) pAction;
+                    const MetaTransparentAction*    pA = static_cast<const MetaTransparentAction*>(pAction);
                     const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
 
                     if( rPolyPoly.Count() )
@@ -2927,7 +2927,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaFloatTransparentAction*   pA = (const MetaFloatTransparentAction*) pAction;
+                    const MetaFloatTransparentAction*   pA = static_cast<const MetaFloatTransparentAction*>(pAction);
                     GDIMetaFile                         aTmpMtf( pA->GetGDIMetaFile() );
                     ImplWriteMask( aTmpMtf, pA->GetPoint(), pA->GetSize(),
                                    pA->GetGradient(), nWriteFlags  );
@@ -2939,7 +2939,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaEPSAction*    pA = (const MetaEPSAction*) pAction;
+                    const MetaEPSAction*    pA = static_cast<const MetaEPSAction*>(pAction);
                     const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
                     bool                bFound = false;
 
@@ -2950,7 +2950,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
                         {
                             bFound = true;
-                            const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*) pSubstAct;
+                            const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pSubstAct);
                             ImplWriteBmp( pBmpScaleAction->GetBitmap(),
                                           pA->GetPoint(), pA->GetSize(),
                                           Point(), pBmpScaleAction->GetBitmap().GetSizePixel() );
@@ -2962,7 +2962,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
             case( META_COMMENT_ACTION ):
             {
-                const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
+                const MetaCommentAction*    pA = static_cast<const MetaCommentAction*>(pAction);
 
                 if( ( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") ) &&
                     ( nWriteFlags & SVGWRITER_WRITE_FILL ) )
@@ -2975,9 +2975,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         pAction = rMtf.GetAction( nCurAction );
 
                         if( pAction->GetType() == META_GRADIENTEX_ACTION )
-                            pGradAction = (const MetaGradientExAction*) pAction;
+                            pGradAction = static_cast<const MetaGradientExAction*>(pAction);
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                 ( ( (const MetaCommentAction*) pAction )->GetComment().
+                                 ( static_cast<const MetaCommentAction*>( pAction )->GetComment().
                                         equalsIgnoreAsciiCase("XGRAD_SEQ_END") ) )
                         {
                             bDone = true;
@@ -3035,7 +3035,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                     pAction = rMtf.GetAction( nCurAction );
 
                                     if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                        ( ( (const MetaCommentAction*) pAction )->GetComment().
+                                        ( static_cast<const MetaCommentAction*>(pAction)->GetComment().
                                                equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") ) )
                                     {
                                         bSkip = false;
@@ -3063,7 +3063,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         pAction = rMtf.GetAction( nCurAction );
 
                         if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                    ( ( (const MetaCommentAction*) pAction )->GetComment().
+                                    ( static_cast<const MetaCommentAction*>( pAction )->GetComment().
                                             equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") ) )
                         {
                             bSkip = false;
@@ -3211,7 +3211,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         pAction = rMtf.GetAction( nCurAction );
 
                         if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                    ( ( (const MetaCommentAction*) pAction )->GetComment().
+                                    ( static_cast<const MetaCommentAction*>(pAction)->GetComment().
                                     equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_END") ) )
                         {
                             bSkip = false;
@@ -3263,7 +3263,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         const MetaAction* pNextAction = rMtf.GetAction( nCurAction + 1 );
                         if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
-                               ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_END") )  ))
+                               ( static_cast<const MetaCommentAction*>(pNextAction)->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_END") )  ))
                         {
                             // nTextFound == -1 => no text found and end of paragraph reached
                             // nTextFound ==  0 => no text found and end of text shape reached
@@ -3296,7 +3296,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         const MetaAction* pNextAction = rMtf.GetAction( nCurAction + 1 );
                         if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
-                               ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCase("XTEXT_EOP") ) ) )
+                               ( static_cast<const MetaCommentAction*>(pNextAction)->GetComment().equalsIgnoreAsciiCase("XTEXT_EOP") ) ) )
                         {
                             // nTextFound == -2 => no text found and end of line reached
                             // nTextFound == -1 => no text found and end of paragraph reached
@@ -3331,7 +3331,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaBmpAction* pA = (const MetaBmpAction*) pAction;
+                    const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
 
                     ImplWriteBmp( pA->GetBitmap(),
                                   pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmap().GetSizePixel() ),
@@ -3344,7 +3344,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+                    const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
 
                     // Bitmaps embedded into text shapes are collected and exported elsewhere.
                     if( maTextWriter.isTextShapeStarted() )
@@ -3365,7 +3365,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaBmpScalePartAction* pA = (const MetaBmpScalePartAction*) pAction;
+                    const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
 
                     ImplWriteBmp( pA->GetBitmap(),
                                   pA->GetDestPoint(), pA->GetDestSize(),
@@ -3378,7 +3378,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaBmpExAction*  pA = (const MetaBmpExAction*) pAction;
+                    const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
 
                     ImplWriteBmp( pA->GetBitmapEx(),
                                   pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmapEx().GetSizePixel() ),
@@ -3391,7 +3391,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+                    const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
 
                     // Bitmaps embedded into text shapes are collected and exported elsewhere.
                     if( maTextWriter.isTextShapeStarted() )
@@ -3412,7 +3412,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pAction;
+                    const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
 
                     ImplWriteBmp( pA->GetBitmapEx(),
                                   pA->GetDestPoint(), pA->GetDestSize(),
@@ -3425,7 +3425,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
-                    const MetaTextAction*   pA = (const MetaTextAction*) pAction;
+                    const MetaTextAction*   pA = static_cast<const MetaTextAction*>(pAction);
                     const OUString          aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
                     if( !aText.isEmpty() )
@@ -3450,7 +3450,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
-                    const MetaTextRectAction* pA = (const MetaTextRectAction*) pAction;
+                    const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
 
                     if (!pA->GetText().isEmpty())
                     {
@@ -3472,7 +3472,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
-                    const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pAction;
+                    const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pAction);
                     const OUString              aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
                     if( !aText.isEmpty() )
@@ -3496,7 +3496,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
-                    const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pAction;
+                    const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pAction);
                     const OUString                  aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
                     if( !aText.isEmpty() )

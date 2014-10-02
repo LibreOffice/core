@@ -718,7 +718,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
             {
                 case( META_ISECTRECTCLIPREGION_ACTION ):
                 {
-                    const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pAction;
+                    const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pAction);
                     clipRect = pA->GetRect();
                     i = nCount;
                     break;

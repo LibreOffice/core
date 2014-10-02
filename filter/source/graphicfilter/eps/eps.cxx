@@ -668,10 +668,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_PIXEL_ACTION :
             {
                 Color aOldLineColor( aLineColor );
-                aLineColor = ( (const MetaPixelAction*) pMA )->GetColor();
+                aLineColor = static_cast<const MetaPixelAction*>(pMA)->GetColor();
                 ImplWriteLineColor( PS_SPACE );
-                ImplMoveTo( ( (const MetaPixelAction*)pMA )->GetPoint() );
-                ImplLineTo( ( (const MetaPixelAction*)pMA )->GetPoint() );
+                ImplMoveTo( static_cast<const MetaPixelAction*>(pMA)->GetPoint() );
+                ImplLineTo( static_cast<const MetaPixelAction*>(pMA)->GetPoint() );
                 ImplPathDraw();
                 aLineColor = aOldLineColor;
             }
@@ -680,21 +680,21 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_POINT_ACTION :
             {
                 ImplWriteLineColor( PS_SPACE );
-                ImplMoveTo( ( (const MetaPointAction*)pMA )->GetPoint() );
-                ImplLineTo( ( (const MetaPointAction*)pMA )->GetPoint() );
+                ImplMoveTo( static_cast<const MetaPointAction*>(pMA)->GetPoint() );
+                ImplLineTo( static_cast<const MetaPointAction*>(pMA)->GetPoint() );
                 ImplPathDraw();
             }
             break;
 
             case META_LINE_ACTION :
             {
-                const LineInfo& rLineInfo = ( ( const MetaLineAction*)pMA )->GetLineInfo();
+                const LineInfo& rLineInfo = static_cast<const MetaLineAction*>(pMA)->GetLineInfo();
                 ImplWriteLineInfo( rLineInfo );
                 if ( bLineColor )
                 {
                     ImplWriteLineColor( PS_SPACE );
-                    ImplMoveTo( ( (const MetaLineAction*) pMA )->GetStartPoint() );
-                    ImplLineTo( ( (const MetaLineAction*) pMA )->GetEndPoint() );
+                    ImplMoveTo( static_cast<const MetaLineAction*>(pMA)->GetStartPoint() );
+                    ImplLineTo( static_cast<const MetaLineAction*>(pMA )->GetEndPoint() );
                     ImplPathDraw();
                 }
             }
@@ -702,17 +702,17 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_RECT_ACTION :
             {
-                ImplRect( ( (const MetaRectAction*) pMA )->GetRect() );
+                ImplRect( static_cast<const MetaRectAction*>(pMA)->GetRect() );
             }
             break;
 
             case META_ROUNDRECT_ACTION :
-                ImplRect( ( (const MetaRoundRectAction*) pMA )->GetRect() );
+                ImplRect( static_cast<const MetaRoundRectAction*>(pMA)->GetRect() );
             break;
 
             case META_ELLIPSE_ACTION :
             {
-                Rectangle   aRect = ( ( (const MetaEllipseAction*) pMA )->GetRect() );
+                Rectangle   aRect = static_cast<const MetaEllipseAction*>(pMA)->GetRect();
                 Point       aCenter = aRect.Center();
                 Polygon     aPoly( aCenter, aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
                 tools::PolyPolygon aPolyPoly( aPoly );
@@ -722,8 +722,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_ARC_ACTION :
             {
-                Polygon aPoly( ( (const MetaArcAction*)pMA )->GetRect(), ( (const MetaArcAction*)pMA )->GetStartPoint(),
-                    ( (const MetaArcAction*)pMA )->GetEndPoint(), POLY_ARC );
+                Polygon aPoly( static_cast<const MetaArcAction*>(pMA)->GetRect(), static_cast<const MetaArcAction*>(pMA)->GetStartPoint(),
+                    static_cast<const MetaArcAction*>(pMA)->GetEndPoint(), POLY_ARC );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
@@ -731,8 +731,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_PIE_ACTION :
             {
-                Polygon aPoly( ( (const MetaPieAction*)pMA )->GetRect(), ( (const MetaPieAction*)pMA )->GetStartPoint(),
-                    ( (const MetaPieAction*)pMA )->GetEndPoint(), POLY_PIE );
+                Polygon aPoly( static_cast<const MetaPieAction*>(pMA)->GetRect(), static_cast<const MetaPieAction*>(pMA)->GetStartPoint(),
+                    static_cast<const MetaPieAction*>(pMA)->GetEndPoint(), POLY_PIE );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
@@ -740,8 +740,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_CHORD_ACTION :
             {
-                Polygon aPoly( ( (const MetaChordAction*)pMA )->GetRect(), ( (const MetaChordAction*)pMA )->GetStartPoint(),
-                    ( (const MetaChordAction*)pMA )->GetEndPoint(), POLY_CHORD );
+                Polygon aPoly( static_cast<const MetaChordAction*>(pMA)->GetRect(), static_cast<const MetaChordAction*>(pMA)->GetStartPoint(),
+                    static_cast<const MetaChordAction*>(pMA)->GetEndPoint(), POLY_CHORD );
                 tools::PolyPolygon aPolyPoly( aPoly );
                 ImplPolyPoly( aPolyPoly );
             }
@@ -749,8 +749,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_POLYLINE_ACTION :
             {
-                Polygon aPoly( ( (const MetaPolyLineAction*) pMA )->GetPolygon() );
-                const LineInfo& rLineInfo = ( ( const MetaPolyLineAction*)pMA )->GetLineInfo();
+                Polygon aPoly( static_cast<const MetaPolyLineAction*>(pMA)->GetPolygon() );
+                const LineInfo& rLineInfo = static_cast<const MetaPolyLineAction*>(pMA)->GetLineInfo();
                 ImplWriteLineInfo( rLineInfo );
 
                 if(basegfx::B2DLINEJOIN_NONE == rLineInfo.GetLineJoin()
@@ -791,20 +791,20 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_POLYGON_ACTION :
             {
-                tools::PolyPolygon aPolyPoly( ( (const MetaPolygonAction*) pMA )->GetPolygon() );
+                tools::PolyPolygon aPolyPoly( static_cast<const MetaPolygonAction*>(pMA)->GetPolygon() );
                 ImplPolyPoly( aPolyPoly );
             }
             break;
 
             case META_POLYPOLYGON_ACTION :
             {
-                ImplPolyPoly( ( (const MetaPolyPolygonAction*) pMA )->GetPolyPolygon() );
+                ImplPolyPoly( static_cast<const MetaPolyPolygonAction*>(pMA)->GetPolyPolygon() );
             }
             break;
 
             case META_TEXT_ACTION:
             {
-                const MetaTextAction * pA = (const MetaTextAction*) pMA;
+                const MetaTextAction * pA = static_cast<const MetaTextAction*>(pMA);
 
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
@@ -821,7 +821,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_STRETCHTEXT_ACTION :
             {
-                const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pMA;
+                const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction*>(pMA);
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
@@ -831,7 +831,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_TEXTARRAY_ACTION:
             {
-                const MetaTextArrayAction* pA = (const MetaTextArrayAction*)pMA;
+                const MetaTextArrayAction* pA = static_cast<const MetaTextArrayAction*>(pMA);
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
@@ -841,10 +841,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_BMP_ACTION :
             {
-                Bitmap aBitmap = ( (const MetaBmpAction*)pMA )->GetBitmap();
+                Bitmap aBitmap = static_cast<const MetaBmpAction*>(pMA)->GetBitmap();
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
-                Point aPoint = ( (const MetaBmpAction*) pMA )->GetPoint();
+                Point aPoint = static_cast<const MetaBmpAction*>(pMA)->GetPoint();
                 Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
                 ImplBmp( &aBitmap, NULL, aPoint, aSize.Width(), aSize.Height() );
             }
@@ -852,36 +852,36 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_BMPSCALE_ACTION :
             {
-                Bitmap aBitmap = ( (const MetaBmpScaleAction*)pMA )->GetBitmap();
+                Bitmap aBitmap = static_cast<const MetaBmpScaleAction*>(pMA)->GetBitmap();
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
-                Point aPoint = ( (const MetaBmpScaleAction*) pMA )->GetPoint();
-                Size aSize = ( (const MetaBmpScaleAction*)pMA )->GetSize();
+                Point aPoint = static_cast<const MetaBmpScaleAction*>(pMA)->GetPoint();
+                Size aSize = static_cast<const MetaBmpScaleAction*>(pMA)->GetSize();
                 ImplBmp( &aBitmap, NULL, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
 
             case META_BMPSCALEPART_ACTION :
             {
-                Bitmap  aBitmap( ( (const MetaBmpScalePartAction*)pMA )->GetBitmap() );
-                aBitmap.Crop( Rectangle( ( (const MetaBmpScalePartAction*)pMA )->GetSrcPoint(),
-                    ( (const MetaBmpScalePartAction*)pMA )->GetSrcSize() ) );
+                Bitmap  aBitmap( static_cast<const MetaBmpScalePartAction*>(pMA)->GetBitmap() );
+                aBitmap.Crop( Rectangle( static_cast<const MetaBmpScalePartAction*>(pMA)->GetSrcPoint(),
+                    static_cast<const MetaBmpScalePartAction*>(pMA)->GetSrcSize() ) );
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
-                Point aPoint = ( (const MetaBmpScalePartAction*) pMA)->GetDestPoint();
-                Size aSize = ( (const MetaBmpScalePartAction*)pMA )->GetDestSize();
+                Point aPoint = static_cast<const MetaBmpScalePartAction*>(pMA)->GetDestPoint();
+                Size aSize = static_cast<const MetaBmpScalePartAction*>(pMA)->GetDestSize();
                 ImplBmp( &aBitmap, NULL, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
 
             case META_BMPEX_ACTION :
             {
-                BitmapEx aBitmapEx( ( (MetaBmpExAction*)pMA)->GetBitmapEx() );
+                BitmapEx aBitmapEx( static_cast<MetaBmpExAction*>(pMA)->GetBitmapEx() );
                 Bitmap aBitmap( aBitmapEx.GetBitmap() );
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Bitmap aMask( aBitmapEx.GetMask() );
-                Point aPoint( ( (const MetaBmpExAction*) pMA )->GetPoint() );
+                Point aPoint( static_cast<const MetaBmpExAction*>(pMA)->GetPoint() );
                 Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
                 ImplBmp( &aBitmap, &aMask, aPoint, aSize.Width(), aSize.Height() );
             }
@@ -889,28 +889,28 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_BMPEXSCALE_ACTION :
             {
-                BitmapEx aBitmapEx( ( (MetaBmpExScaleAction*)pMA)->GetBitmapEx() );
+                BitmapEx aBitmapEx( static_cast<MetaBmpExScaleAction*>(pMA)->GetBitmapEx() );
                 Bitmap aBitmap( aBitmapEx.GetBitmap() );
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Bitmap aMask( aBitmapEx.GetMask() );
-                Point aPoint = ( (const MetaBmpExScaleAction*) pMA)->GetPoint();
-                Size aSize( ( (const MetaBmpExScaleAction*)pMA )->GetSize() );
+                Point aPoint = static_cast<const MetaBmpExScaleAction*>(pMA)->GetPoint();
+                Size aSize( static_cast<const MetaBmpExScaleAction*>(pMA)->GetSize() );
                 ImplBmp( &aBitmap, &aMask, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
 
             case META_BMPEXSCALEPART_ACTION :
             {
-                BitmapEx    aBitmapEx( ( (const MetaBmpExScalePartAction*)pMA )->GetBitmapEx() );
-                aBitmapEx.Crop( Rectangle( ( (const MetaBmpExScalePartAction*)pMA )->GetSrcPoint(),
-                    ( (const MetaBmpExScalePartAction*)pMA )->GetSrcSize() ) );
+                BitmapEx    aBitmapEx( static_cast<const MetaBmpExScalePartAction*>(pMA)->GetBitmapEx() );
+                aBitmapEx.Crop( Rectangle( static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcPoint(),
+                    static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcSize() ) );
                 Bitmap      aBitmap( aBitmapEx.GetBitmap() );
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Bitmap      aMask( aBitmapEx.GetMask() );
-                Point aPoint = ( (const MetaBmpExScalePartAction*) pMA)->GetDestPoint();
-                Size aSize = ( (const MetaBmpExScalePartAction*)pMA )->GetDestSize();
+                Point aPoint = static_cast<const MetaBmpExScalePartAction*>(pMA)->GetDestPoint();
+                Size aSize = static_cast<const MetaBmpExScalePartAction*>(pMA)->GetDestSize();
                 ImplBmp( &aBitmap, &aMask, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
@@ -926,15 +926,15 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_GRADIENT_ACTION :
             {
-                tools::PolyPolygon aPolyPoly( ( (const MetaGradientAction*)pMA)->GetRect() );
-                ImplWriteGradient( aPolyPoly, ( (const MetaGradientAction*) pMA )->GetGradient(), rVDev );
+                tools::PolyPolygon aPolyPoly( static_cast<const MetaGradientAction*>(pMA)->GetRect() );
+                ImplWriteGradient( aPolyPoly, static_cast<const MetaGradientAction*>(pMA)->GetGradient(), rVDev );
             }
             break;
 
             case META_GRADIENTEX_ACTION :
             {
-                tools::PolyPolygon aPolyPoly( ( (const MetaGradientExAction*)pMA)->GetPolyPolygon() );
-                ImplWriteGradient( aPolyPoly, ( (const MetaGradientExAction*) pMA )->GetGradient(), rVDev );
+                tools::PolyPolygon aPolyPoly( static_cast<const MetaGradientExAction*>(pMA)->GetPolyPolygon() );
+                ImplWriteGradient( aPolyPoly, static_cast<const MetaGradientExAction*>(pMA)->GetGradient(), rVDev );
             }
             break;
 
@@ -944,15 +944,15 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 GDIMetaFile     aTmpMtf;
 
                 l_aVDev.SetMapMode( rVDev.GetMapMode() );
-                l_aVDev.AddHatchActions( ( (const MetaHatchAction*)pMA)->GetPolyPolygon(),
-                                         ( (const MetaHatchAction*)pMA )->GetHatch(), aTmpMtf );
+                l_aVDev.AddHatchActions( static_cast<const MetaHatchAction*>(pMA)->GetPolyPolygon(),
+                                         static_cast<const MetaHatchAction*>(pMA)->GetHatch(), aTmpMtf );
                 ImplWriteActions( aTmpMtf, rVDev );
             }
             break;
 
             case META_WALLPAPER_ACTION :
             {
-                const MetaWallpaperAction* pA = (const MetaWallpaperAction*)pMA;
+                const MetaWallpaperAction* pA = static_cast<const MetaWallpaperAction*>(pMA);
                 Rectangle   aRect = pA->GetRect();
                 Wallpaper   aWallpaper = pA->GetWallpaper();
 
@@ -993,7 +993,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_ISECTRECTCLIPREGION_ACTION:
             {
-                const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pMA;
+                const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pMA);
                 vcl::Region aRegion( pA->GetRect() );
                 ImplSetClipRegion( aRegion );
             }
@@ -1001,7 +1001,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_CLIPREGION_ACTION:
             {
-                const MetaClipRegionAction* pA = (const MetaClipRegionAction*) pMA;
+                const MetaClipRegionAction* pA = static_cast<const MetaClipRegionAction*>(pMA);
                 vcl::Region aRegion( pA->GetRegion() );
                 ImplSetClipRegion( aRegion );
             }
@@ -1009,7 +1009,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_ISECTREGIONCLIPREGION_ACTION:
             {
-                const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*) pMA;
+                const MetaISectRegionClipRegionAction* pA = static_cast<const MetaISectRegionClipRegionAction*>(pMA);
                 vcl::Region aRegion( pA->GetRegion() );
                 ImplSetClipRegion( aRegion );
             }
@@ -1020,7 +1020,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 /*
                 if ( !aClipRegion.IsEmpty() )
                 {
-                    const MetaMoveClipRegionAction* pA = (const MetaMoveClipRegionAction*) pMA;
+                    const MetaMoveClipRegionAction* pA = static_cast<const MetaMoveClipRegionAction*>(pMA);
                     aClipRegion.Move( pA->GetHorzMove(), pA->GetVertMove() );
                     ImplSetClipRegion();
                 }
@@ -1030,10 +1030,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_LINECOLOR_ACTION :
             {
-                if ( ( (const MetaLineColorAction*) pMA)->IsSetting() )
+                if ( static_cast<const MetaLineColorAction*>(pMA)->IsSetting() )
                 {
                     bLineColor = true;
-                    aLineColor = ( (const MetaLineColorAction*) pMA )->GetColor();
+                    aLineColor = static_cast<const MetaLineColorAction*>(pMA)->GetColor();
                 }
                 else
                     bLineColor = false;
@@ -1042,10 +1042,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_FILLCOLOR_ACTION :
             {
-                if ( ( (const MetaFillColorAction*) pMA )->IsSetting() )
+                if ( static_cast<const MetaFillColorAction*>(pMA)->IsSetting() )
                 {
                     bFillColor = true;
-                    aFillColor =  ( (const MetaFillColorAction*) pMA )->GetColor();
+                    aFillColor =  static_cast<const MetaFillColorAction*>(pMA)->GetColor();
                 }
                 else
                     bFillColor = false;
@@ -1054,16 +1054,16 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_TEXTCOLOR_ACTION :
             {
-                aTextColor = ( (const MetaTextColorAction*) pMA )->GetColor();
+                aTextColor = static_cast<const MetaTextColorAction*>(pMA)->GetColor();
             }
             break;
 
             case META_TEXTFILLCOLOR_ACTION :
             {
-                if ( ( (const MetaTextFillColorAction*) pMA )->IsSetting() )
+                if ( static_cast<const MetaTextFillColorAction*>(pMA)->IsSetting() )
                 {
                     bTextFillColor = true;
-                    aTextFillColor = ( (const MetaTextFillColorAction*) pMA )->GetColor();
+                    aTextFillColor = static_cast<const MetaTextFillColorAction*>(pMA)->GetColor();
                 }
                 else
                     bTextFillColor = false;
@@ -1072,7 +1072,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_TEXTALIGN_ACTION :
             {
-                eTextAlign = ( (const MetaTextAlignAction*) pMA )->GetTextAlign();
+                eTextAlign = static_cast<const MetaTextAlignAction*>(pMA)->GetTextAlign();
             }
             break;
 
@@ -1085,14 +1085,14 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_FONT_ACTION :
             {
-                maFont = ((const MetaFontAction*)pMA)->GetFont();
+                maFont = static_cast<const MetaFontAction*>(pMA)->GetFont();
                 rVDev.SetFont( maFont );
             }
             break;
 
             case META_PUSH_ACTION :
             {
-                rVDev.Push(((const MetaPushAction*)pMA)->GetFlags() );
+                rVDev.Push(static_cast<const MetaPushAction*>(pMA)->GetFlags() );
                 StackMember* pGS = new StackMember;
                 pGS->pSucc = pGDIStack;
                 pGDIStack = pGS;
@@ -1159,8 +1159,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_EPS_ACTION :
             {
-                GfxLink aGfxLink = ( (const MetaEPSAction*) pMA )->GetLink();
-                const GDIMetaFile aSubstitute( ( ( const MetaEPSAction*) pMA )->GetSubstitute() );
+                GfxLink aGfxLink = static_cast<const MetaEPSAction*>(pMA)->GetLink();
+                const GDIMetaFile aSubstitute( static_cast<const MetaEPSAction*>(pMA)->GetSubstitute() );
 
                 bool    bLevelConflict = false;
                 sal_uInt8*  pSource = (sal_uInt8*) aGfxLink.GetData();
@@ -1198,8 +1198,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     double  nBoundingBox[4];
                     if ( pSource && ImplGetBoundingBox( nBoundingBox, pSource, nParseThis ) )
                     {
-                        Point   aPoint = ( (const MetaEPSAction*) pMA )->GetPoint();
-                        Size    aSize = ( (const MetaEPSAction*) pMA )->GetSize();
+                        Point   aPoint = static_cast<const MetaEPSAction*>(pMA)->GetPoint();
+                        Size    aSize = static_cast<const MetaEPSAction*>(pMA)->GetSize();
 
                         MapMode aMapMode( aSubstitute.GetPrefMapMode() );
                         Size aOutSize( OutputDevice::LogicToLogic( aSize, rVDev.GetMapMode(), aMapMode ) );
@@ -1232,7 +1232,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_FLOATTRANSPARENT_ACTION:
             {
-                const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pMA;
+                const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pMA);
 
                 GDIMetaFile     aTmpMtf( pA->GetGDIMetaFile() );
                 Point           aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
@@ -1260,7 +1260,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_COMMENT_ACTION:
             {
-                const MetaCommentAction* pA = (const MetaCommentAction*) pMA;
+                const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pMA);
                 if ( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") )
                 {
                     const MetaGradientExAction* pGradAction = NULL;
@@ -1268,9 +1268,9 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     {
                         MetaAction* pAction = rMtf.GetAction( nCurAction );
                         if( pAction->GetType() == META_GRADIENTEX_ACTION )
-                            pGradAction = (const MetaGradientExAction*) pAction;
+                            pGradAction = static_cast<const MetaGradientExAction*>(pAction);
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-                                 ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END") ) )
+                                 ( static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END") ) )
                         {
                             break;
                         }
@@ -1402,7 +1402,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                             break;
                                             case META_COMMENT_ACTION :
                                             {
-                                                if (((const MetaCommentAction*)pAction)->GetComment().equals("XPATHFILL_SEQ_END"))
+                                                if (static_cast<const MetaCommentAction*>(pAction)->GetComment().equals("XPATHFILL_SEQ_END"))
                                                     bOk = false;
                                             }
                                             break;
@@ -1443,7 +1443,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 pMA = rMtf.GetAction( nCurAction );
                                 if ( pMA->GetType() == META_COMMENT_ACTION )
                                 {
-                                    OString sComment( ((MetaCommentAction*)pMA)->GetComment() );
+                                    OString sComment( static_cast<MetaCommentAction*>(pMA)->GetComment() );
                                     if ( sComment.equals( sSeqEnd ) )
                                         break;
                                 }

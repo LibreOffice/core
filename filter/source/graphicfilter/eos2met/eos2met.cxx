@@ -318,7 +318,7 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
         {
             case META_EPS_ACTION :
             {
-                const GDIMetaFile aGDIMetaFile( ((const MetaEPSAction*)pMA)->GetSubstitute() );
+                const GDIMetaFile aGDIMetaFile( static_cast<const MetaEPSAction*>(pMA)->GetSubstitute() );
                 size_t nCount = aGDIMetaFile.GetActionSize();
                 size_t i;
                 for ( i = 0; i < nCount; i++ )
@@ -413,7 +413,7 @@ void METWriter::CreateChrSets(const GDIMetaFile * pMTF)
         {
             case META_FONT_ACTION:
             {
-                const MetaFontAction* pA = (const MetaFontAction*) pMA;
+                const MetaFontAction* pA = static_cast<const MetaFontAction*>(pMA);
                 CreateChrSet( pA->GetFont() );
             }
             break;
@@ -748,48 +748,48 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
             case META_BMP_ACTION:
             {
                 METSetMix( eGDIRasterOp );
-                WriteImageObject( ( (MetaBmpAction*) pMA )->GetBitmap() );
+                WriteImageObject( static_cast<const MetaBmpAction*>(pMA)->GetBitmap() );
             }
             break;
 
             case META_BMPSCALE_ACTION:
             {
                 METSetMix( eGDIRasterOp );
-                WriteImageObject( ( (MetaBmpScaleAction*) pMA )->GetBitmap() );
+                WriteImageObject( static_cast<const MetaBmpScaleAction*>(pMA)->GetBitmap() );
             }
             break;
 
             case META_BMPSCALEPART_ACTION:
             {
                 METSetMix( eGDIRasterOp );
-                WriteImageObject( ( (MetaBmpScalePartAction*) pMA )->GetBitmap() );
+                WriteImageObject( static_cast<const MetaBmpScalePartAction*>(pMA)->GetBitmap() );
             }
             break;
 
             case META_BMPEX_ACTION:
             {
                 METSetMix( eGDIRasterOp );
-                WriteImageObject( Graphic( ( (MetaBmpExAction*) pMA )->GetBitmapEx() ).GetBitmap() );
+                WriteImageObject( Graphic( static_cast<const MetaBmpExAction*>(pMA)->GetBitmapEx() ).GetBitmap() );
             }
             break;
 
             case META_BMPEXSCALE_ACTION:
             {
                 METSetMix( eGDIRasterOp );
-                WriteImageObject( Graphic( ( (MetaBmpExScaleAction*) pMA )->GetBitmapEx() ).GetBitmap() );
+                WriteImageObject( Graphic( static_cast<const MetaBmpExScaleAction*>(pMA)->GetBitmapEx() ).GetBitmap() );
             }
             break;
 
             case META_BMPEXSCALEPART_ACTION:
             {
                 METSetMix( eGDIRasterOp );
-                WriteImageObject( Graphic( ( (MetaBmpExScalePartAction*) pMA )->GetBitmapEx() ).GetBitmap() );
+                WriteImageObject( Graphic( static_cast<const MetaBmpExScalePartAction*>(pMA)->GetBitmapEx() ).GetBitmap() );
             }
             break;
 
             case META_EPS_ACTION :
             {
-                const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
+                const MetaEPSAction* pA = static_cast<const MetaEPSAction*>(pMA);
                 const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
                 size_t nCount = aGDIMetaFile.GetActionSize();
@@ -798,7 +798,7 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
                     const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                     if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
                     {
-                        const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*)pMetaAct;
+                        const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pMetaAct);
                         METSetMix( eGDIRasterOp );
                         WriteImageObject( pBmpScaleAction->GetBitmap() );
                         break;
@@ -1502,7 +1502,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
         {
             case META_PIXEL_ACTION:
             {
-                const MetaPixelAction* pA = (const MetaPixelAction*) pMA;
+                const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pMA);
                 METSetMix( eGDIRasterOp );
                 METSetColor( pA->GetColor() );
                 METLine( pA->GetPoint(),pA->GetPoint() );
@@ -1511,7 +1511,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_POINT_ACTION:
             {
-                const MetaPointAction* pA = (const MetaPointAction*) pMA;
+                const MetaPointAction* pA = static_cast<const MetaPointAction*>(pMA);
 
                 METSetArcParams(1,1,0,0);
                 METSetMix(eGDIRasterOp);
@@ -1524,7 +1524,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_LINE_ACTION:
             {
-                const MetaLineAction* pA = (const MetaLineAction*) pMA;
+                const MetaLineAction* pA = static_cast<const MetaLineAction*>(pMA);
 
                 if( aGDILineColor != Color( COL_TRANSPARENT ) )
                 {
@@ -1547,7 +1547,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_RECT_ACTION:
             {
-                const MetaRectAction* pA = (const MetaRectAction*) pMA;
+                const MetaRectAction* pA = static_cast<const MetaRectAction*>(pMA);
 
                 if( aGDIFillColor != Color( COL_TRANSPARENT ) )
                 {
@@ -1568,7 +1568,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_ROUNDRECT_ACTION:
             {
-                const MetaRoundRectAction* pA = (const MetaRoundRectAction*) pMA;
+                const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pMA);
 
                 if( aGDIFillColor != Color( COL_TRANSPARENT ) )
                 {
@@ -1589,7 +1589,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_ELLIPSE_ACTION:
             {
-                const MetaEllipseAction*    pA = (const MetaEllipseAction*) pMA;
+                const MetaEllipseAction*    pA = static_cast<const MetaEllipseAction*>(pMA);
                 Point                       aCenter;
 
                 aCenter.X()=(pA->GetRect().Left()+pA->GetRect().Right())/2;
@@ -1618,7 +1618,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_ARC_ACTION:
             {
-                const MetaArcAction*    pA = (const MetaArcAction*) pMA;
+                const MetaArcAction*    pA = static_cast<const MetaArcAction*>(pMA);
                 Point                   aStartPos,aCenter;
                 double                  fdx,fdy,fa1,fa2;
 
@@ -1655,7 +1655,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_PIE_ACTION:
             {
-                const MetaPieAction*    pA = (const MetaPieAction*) pMA;
+                const MetaPieAction*    pA = static_cast<const MetaPieAction*>(pMA);
                 Point                   aCenter;
                 double                  fdx,fdy,fa1,fa2;
 
@@ -1705,7 +1705,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_CHORD_ACTION:
             {
-                const MetaChordAction*  pA = (const MetaChordAction*) pMA;
+                const MetaChordAction*  pA = static_cast<const MetaChordAction*>(pMA);
                 Point                   aStartPos,aCenter;
                 double                  fdx,fdy,fa1,fa2;
 
@@ -1755,7 +1755,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_POLYLINE_ACTION:
             {
-                const MetaPolyLineAction* pA = (const MetaPolyLineAction*) pMA;
+                const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pMA);
 
                 if( aGDILineColor != Color( COL_TRANSPARENT ) )
                 {
@@ -1784,7 +1784,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_POLYGON_ACTION:
             {
-                const MetaPolygonAction* pA = (const MetaPolygonAction*) pMA;
+                const MetaPolygonAction* pA = static_cast<const MetaPolygonAction*>(pMA);
                 Polygon aSimplePoly;
                 const Polygon& rPoly = pA->GetPolygon();
                 if ( rPoly.HasFlags() )
@@ -1816,7 +1816,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_POLYPOLYGON_ACTION:
             {
-                const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*) pMA;
+                const MetaPolyPolygonAction* pA = static_cast<const MetaPolyPolygonAction*>(pMA);
 
                 tools::PolyPolygon aSimplePolyPoly( pA->GetPolyPolygon() );
                 sal_uInt16 i, nCount = aSimplePolyPoly.Count();
@@ -1854,7 +1854,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXT_ACTION:
             {
-                const MetaTextAction*   pA = (const MetaTextAction*) pMA;
+                const MetaTextAction*   pA = static_cast<const MetaTextAction*>(pMA);
                 Point                   aPt( pA->GetPoint() );
 
                 if( aGDIFont.GetAlign() != ALIGN_BASELINE)
@@ -1879,8 +1879,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXTARRAY_ACTION:
             {
-                const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pMA;
-                sal_uInt16                      i;
+                const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pMA);
+                sal_uInt16                  i;
                 OUString                    aStr;
                 Polygon                     aPolyDummy(1);
                 short                       nOrientation;
@@ -1930,7 +1930,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_STRETCHTEXT_ACTION:
             {
-                const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pMA;
+                const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pMA);
                 VirtualDevice                   aVDev;
                 sal_uInt16                          i;
                 sal_Int32                       nNormSize;
@@ -1986,7 +1986,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMP_ACTION:
             {
-                const MetaBmpAction*    pA = (const MetaBmpAction*) pMA;
+                const MetaBmpAction*    pA = static_cast<const MetaBmpAction*>(pMA);
                 const Size              aSizePixel( pA->GetBitmap().GetSizePixel() );
 
                 METSetMix(eGDIRasterOp);
@@ -1996,7 +1996,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPSCALE_ACTION:
             {
-                const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pMA;
+                const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pMA);
 
                 METSetMix(eGDIRasterOp);
                 METBitBlt( pA->GetPoint(), pA->GetSize(), pA->GetBitmap().GetSizePixel() );
@@ -2005,7 +2005,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPSCALEPART_ACTION:
             {
-                const MetaBmpScalePartAction*   pA = (const MetaBmpScalePartAction*) pMA;
+                const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pMA);
                 Bitmap                          aTmp( pA->GetBitmap() );
 
                 aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
@@ -2016,7 +2016,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPEX_ACTION:
             {
-                const MetaBmpExAction*  pA = (const MetaBmpExAction*) pMA;
+                const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pMA);
                 const Size              aSizePixel( pA->GetBitmapEx().GetSizePixel() );
 
                 METSetMix( eGDIRasterOp );
@@ -2026,7 +2026,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPEXSCALE_ACTION:
             {
-                const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pMA;
+                const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pMA);
                 const Size                  aSizePixel( pA->GetBitmapEx().GetSizePixel() );
 
                 METSetMix( eGDIRasterOp );
@@ -2036,7 +2036,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_BMPEXSCALEPART_ACTION:
             {
-                const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pMA;
+                const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pMA);
                 Bitmap                          aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
 
                 aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
@@ -2047,7 +2047,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_EPS_ACTION :
             {
-                const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
+                const MetaEPSAction* pA = static_cast<const MetaEPSAction*>(pMA);
                 const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
                 size_t nCount = aGDIMetaFile.GetActionSize();
@@ -2056,7 +2056,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                     if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
                     {
-                        const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*)pMetaAct;
+                        const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pMetaAct);
                         METSetMix(eGDIRasterOp);
                         METBitBlt( pA->GetPoint(), pA->GetSize(), pBmpScaleAction->GetBitmap().GetSizePixel() );
                         break;
@@ -2078,7 +2078,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             {
                 VirtualDevice               aVDev;
                 GDIMetaFile                 aTmpMtf;
-                const MetaGradientAction*   pA = (const MetaGradientAction*) pMA;
+                const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pMA);
 
                 aVDev.SetMapMode( aTargetMapMode );
                 aVDev.AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
@@ -2090,7 +2090,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             {
                 VirtualDevice           aVDev;
                 GDIMetaFile             aTmpMtf;
-                const MetaHatchAction*  pA = (const MetaHatchAction*) pMA;
+                const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pMA);
 
                 aVDev.SetMapMode( aTargetMapMode );
                 aVDev.AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
@@ -2106,7 +2106,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_ISECTRECTCLIPREGION_ACTION:
             {
-                const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pMA;
+                const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pMA);
                 WriteClipRect( pA->GetRect() );
             }
             break;
@@ -2119,7 +2119,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_LINECOLOR_ACTION:
             {
-                const MetaLineColorAction* pA = (const MetaLineColorAction*) pMA;
+                const MetaLineColorAction* pA = static_cast<const MetaLineColorAction*>(pMA);
 
                 if( pA->IsSetting() )
                     aGDILineColor = pA->GetColor();
@@ -2130,7 +2130,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_FILLCOLOR_ACTION:
             {
-                const MetaFillColorAction* pA = (const MetaFillColorAction*) pMA;
+                const MetaFillColorAction* pA = static_cast<const MetaFillColorAction*>(pMA);
 
                 if( pA->IsSetting() )
                     aGDIFillColor = pA->GetColor();
@@ -2141,14 +2141,14 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXTCOLOR_ACTION:
             {
-                const MetaTextColorAction* pA = (const MetaTextColorAction*) pMA;
+                const MetaTextColorAction* pA = static_cast<const MetaTextColorAction*>(pMA);
                 aGDIFont.SetColor( pA->GetColor() );
             }
             break;
 
             case META_TEXTFILLCOLOR_ACTION:
             {
-                const MetaTextFillColorAction* pA = (const MetaTextFillColorAction*) pMA;
+                const MetaTextFillColorAction* pA = static_cast<const MetaTextFillColorAction*>(pMA);
 
                 if( pA->IsSetting() )
                     aGDIFont.SetFillColor( pA->GetColor() );
@@ -2162,7 +2162,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_MAPMODE_ACTION:
             {
-                const MetaMapModeAction* pA = (const MetaMapModeAction*) pMA;
+                const MetaMapModeAction* pA = static_cast<const MetaMapModeAction*>(pMA);
 
                 if( aPictureMapMode != pA->GetMapMode() )
                 {
@@ -2229,7 +2229,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_FONT_ACTION:
             {
-                aGDIFont = ( (const MetaFontAction*) pMA )->GetFont();
+                aGDIFont = static_cast<const MetaFontAction*>(pMA)->GetFont();
             }
             break;
 
@@ -2268,7 +2268,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_RASTEROP_ACTION:
             {
-                eGDIRasterOp = ( (const MetaRasterOpAction*) pMA )->GetRasterOp();
+                eGDIRasterOp = static_cast<const MetaRasterOpAction*>(pMA)->GetRasterOp();
             }
             break;
 
@@ -2280,7 +2280,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetColor(aGDIFillColor);
                     METSetBackgroundColor(aGDIFillColor);
                     METBeginPath(1);
-                    METLine(( (const MetaTransparentAction*) pMA )->GetPolyPolygon());
+                    METLine( static_cast<const MetaTransparentAction*>(pMA)->GetPolyPolygon());
                     METEndPath();
                     METFillPath(1);
                 }
@@ -2290,7 +2290,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     METSetMix(eGDIRasterOp);
                     METSetColor(aGDILineColor);
                     METBeginPath(1);
-                    METLine(( (const MetaTransparentAction*) pMA )->GetPolyPolygon());
+                    METLine( static_cast<const MetaTransparentAction*>(pMA)->GetPolyPolygon());
                     METEndPath();
                     METOutlinePath(1);
                 }
@@ -2299,7 +2299,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_FLOATTRANSPARENT_ACTION:
             {
-                const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pMA;
+                const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pMA);
 
                 GDIMetaFile     aTmpMtf( pA->GetGDIMetaFile() );
                 Point           aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );

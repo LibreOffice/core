@@ -231,18 +231,18 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
     while (pBE!=NULL) {
         switch (pBE->eType) {
             case DXF_LINE: {
-                const DXFLineEntity * pE = (DXFLineEntity*)pBE;
+                const DXFLineEntity * pE = static_cast<const DXFLineEntity*>(pBE);
                 rBox.Union(pE->aP0);
                 rBox.Union(pE->aP1);
                 break;
             }
             case DXF_POINT: {
-                const DXFPointEntity * pE = (DXFPointEntity*)pBE;
+                const DXFPointEntity * pE = static_cast<const DXFPointEntity*>(pBE);
                 rBox.Union(pE->aP0);
                 break;
             }
             case DXF_CIRCLE: {
-                const DXFCircleEntity * pE = (DXFCircleEntity*)pBE;
+                const DXFCircleEntity * pE = static_cast<const DXFCircleEntity*>(pBE);
                 DXFVector aP;
                 aP=pE->aP0;
                 aP.fx-=pE->fRadius;
@@ -255,7 +255,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_ARC: {
-                const DXFArcEntity * pE = (DXFArcEntity*)pBE;
+                const DXFArcEntity * pE = static_cast<const DXFArcEntity*>(pBE);
                 DXFVector aP;
                 aP=pE->aP0;
                 aP.fx-=pE->fRadius;
@@ -268,7 +268,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_TRACE: {
-                const DXFTraceEntity * pE = (DXFTraceEntity*)pBE;
+                const DXFTraceEntity * pE = static_cast<const DXFTraceEntity*>(pBE);
                 rBox.Union(pE->aP0);
                 rBox.Union(pE->aP1);
                 rBox.Union(pE->aP2);
@@ -276,7 +276,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_SOLID: {
-                const DXFSolidEntity * pE = (DXFSolidEntity*)pBE;
+                const DXFSolidEntity * pE = static_cast<const DXFSolidEntity*>(pBE);
                 rBox.Union(pE->aP0);
                 rBox.Union(pE->aP1);
                 rBox.Union(pE->aP2);
@@ -294,7 +294,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_INSERT: {
-                const DXFInsertEntity * pE = (DXFInsertEntity*)pBE;
+                const DXFInsertEntity * pE = static_cast<const DXFInsertEntity*>(pBE);
                 DXFBlock * pB;
                 DXFBoundingBox aBox;
                 DXFVector aP;
@@ -323,12 +323,12 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_VERTEX: {
-                const DXFVertexEntity * pE = (DXFVertexEntity*)pBE;
+                const DXFVertexEntity * pE = static_cast<const DXFVertexEntity*>(pBE);
                 rBox.Union(pE->aP0);
                 break;
             }
             case DXF_3DFACE: {
-                const DXF3DFaceEntity * pE = (DXF3DFaceEntity*)pBE;
+                const DXF3DFaceEntity * pE = static_cast<const DXF3DFaceEntity*>(pBE);
                 rBox.Union(pE->aP0);
                 rBox.Union(pE->aP1);
                 rBox.Union(pE->aP2);
@@ -336,7 +336,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_DIMENSION: {
-                const DXFDimensionEntity * pE = (DXFDimensionEntity*)pBE;
+                const DXFDimensionEntity * pE = static_cast<const DXFDimensionEntity*>(pBE);
                 DXFBlock * pB;
                 DXFBoundingBox aBox;
                 DXFVector aP;

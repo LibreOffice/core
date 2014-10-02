@@ -434,7 +434,7 @@ sal_uLong GetBitmapChecksum( const MetaAction* pAction )
     {
         case( META_BMPSCALE_ACTION ):
         {
-            const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+            const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
             if( pA  )
                 nChecksum = pA->GetBitmap().GetChecksum();
             else
@@ -443,7 +443,7 @@ sal_uLong GetBitmapChecksum( const MetaAction* pAction )
         break;
         case( META_BMPEXSCALE_ACTION ):
         {
-            const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+            const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
             if( pA )
                 nChecksum = pA->GetBitmapEx().GetChecksum();
             else
@@ -462,7 +462,7 @@ void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
     {
         case( META_BMPSCALE_ACTION ):
         {
-            const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+            const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
             if( pA  )
                 rPt = pA->GetPoint();
             else
@@ -471,7 +471,7 @@ void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
         break;
         case( META_BMPEXSCALE_ACTION ):
         {
-            const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+            const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
             if( pA )
                 rPt = pA->GetPoint();
             else
@@ -1997,7 +1997,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPag
 
                                         if( nType == META_COMMENT_ACTION )
                                         {
-                                            const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                                            const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
                                             if( ( pA->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_BEGIN") ) )
                                             {
                                                 bIsTextShapeStarted = true;
