@@ -2153,9 +2153,9 @@ at_least_one_scoped_name :
             $$ = $2;
         } else
         {
-            StringList* pNames = new StringList();
-            pNames->push_back(*$1);
-            $$ = pNames;
+            StringList* pScopedNames = new StringList();
+            pScopedNames->push_back(*$1);
+            $$ = pScopedNames;
         }
         delete($1);
     }
