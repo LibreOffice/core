@@ -86,7 +86,7 @@ protected:
 // member
 protected:
     HINSTANCE                   m_Instance;
-    std::auto_ptr<PreviewBase>  m_Preview;
+    std::unique_ptr<PreviewBase> m_Preview;
     HWND                        m_FileDialog;
     int                         m_RightMargin;
 

@@ -87,7 +87,7 @@ public:
 private:
     // hide implementation details using the
     // bridge pattern
-    std::auto_ptr<CPreviewAdapterImpl> m_pImpl;
+    std::unique_ptr<CPreviewAdapterImpl> m_pImpl;
 
 // prevent copy and assignment
 private:

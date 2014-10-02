@@ -197,10 +197,10 @@ private:
     static BOOL CALLBACK EnumChildWndProc( HWND hWnd, LPARAM lParam );
 
 private:
-    std::auto_ptr<CFilterContainer>         m_filterContainer;
-    std::auto_ptr<CPreviewAdapter>          m_Preview;
-    std::auto_ptr<CCustomControlFactory>    m_CustomControlFactory;
-    std::auto_ptr<CCustomControl>           m_CustomControls;
+    std::unique_ptr<CFilterContainer>       m_filterContainer;
+    std::unique_ptr<CPreviewAdapter>        m_Preview;
+    std::unique_ptr<CCustomControlFactory>  m_CustomControlFactory;
+    std::unique_ptr<CCustomControl>         m_CustomControls;
     CFilePicker*                            m_FilePicker;
     WNDPROC                                 m_pfnOldDlgProc;
     OUString                           m_defaultName;

@@ -260,7 +260,7 @@ void SAL_CALL CAsyncEventNotifier::run()
         {
             while (getEventListSize() > 0)
             {
-                std::auto_ptr<CEventNotification> EventNotification(getNextEventRecord());
+                std::unique_ptr<CEventNotification> EventNotification(getNextEventRecord());
                 removeNextEventRecord();
 
                 ::cppu::OInterfaceContainerHelper* pICHelper =

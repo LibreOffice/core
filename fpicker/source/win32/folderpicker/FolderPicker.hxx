@@ -99,7 +99,7 @@ public:
 
 private:
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
-    std::auto_ptr< CWinFolderPickerImpl >   m_pFolderPickerImpl;
+    std::unique_ptr< CWinFolderPickerImpl >   m_pFolderPickerImpl;
     osl::Mutex  m_aMutex;
 
 // prevent copy and assignment

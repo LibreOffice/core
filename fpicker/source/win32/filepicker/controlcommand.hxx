@@ -46,7 +46,7 @@ public:
 
     // the client inherits the ownership of the returned
     // CControlCommandResult and has to delete it or he may
-    // use the auto_ptr template for automatic deletion
+    // use the unique_ptr template for automatic deletion
     virtual CControlCommandResult* SAL_CALL handleRequest( CControlCommandRequest* aRequest );
 
     // clients of this method should use the returned

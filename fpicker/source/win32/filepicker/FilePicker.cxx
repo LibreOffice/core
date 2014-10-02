@@ -76,7 +76,7 @@ CFilePicker::CFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xSer
     SAL_WARN_IF( !hInstance, "fpicker", "The name of the service dll must have changed" );
 
     // create a default FileOpen dialog without any additional ui elements
-    m_pImpl = std::auto_ptr< CWinFileOpenImpl >(
+    m_pImpl = std::unique_ptr< CWinFileOpenImpl >(
         new CWinFileOpenImpl(
             this,
             true,
@@ -682,7 +682,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
     // create a new impl-class here based on the
     // given string, if the given string is empty
     // we do nothing
-    m_pImpl = std::auto_ptr< CWinFileOpenImpl >(
+    m_pImpl = std::unique_ptr< CWinFileOpenImpl >(
         new CWinFileOpenImpl(
             this,
             bFileOpenDialog,

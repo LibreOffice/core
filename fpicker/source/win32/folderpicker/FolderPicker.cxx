@@ -64,7 +64,7 @@ namespace
 CFolderPicker::CFolderPicker( const Reference< XMultiServiceFactory >& xServiceMgr ) :
     m_xServiceMgr( xServiceMgr )
 {
-    m_pFolderPickerImpl = std::auto_ptr< CWinFolderPickerImpl > ( new CWinFolderPickerImpl( this ) );
+    m_pFolderPickerImpl = std::unique_ptr< CWinFolderPickerImpl > ( new CWinFolderPickerImpl( this ) );
 }
 
 
