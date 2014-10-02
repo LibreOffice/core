@@ -834,7 +834,9 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     rShell.ReRead(OUString(), OUString(), (const Graphic*) &aGraphic);
 
     SwFlyFrmAttrMgr aManager(false, &rShell, rShell.IsFrmSelected() ? FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
-    Size aSize(aManager.GetSize().Height(), aManager.GetSize().Width());
+    const long nRotatedWidth = aManager.GetSize().Height();
+    const long nRotatedHeight = aManager.GetSize().Width();
+    Size aSize(nRotatedWidth, nRotatedHeight);
     aManager.SetSize(aSize);
     aManager.UpdateFlyFrm();
 
