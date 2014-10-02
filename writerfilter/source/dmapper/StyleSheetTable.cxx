@@ -574,6 +574,9 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 StyleSheetEntry* pEntry = m_pImpl->m_pCurrentEntry.get();
                 TableStyleSheetEntry& rTableEntry = dynamic_cast<TableStyleSheetEntry&>(*pEntry);
                 rTableEntry.AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tcPr"));
+
+                // This is a <w:tcPr> directly under <w:style>, so it affects the whole table.
+                rTableEntry.pProperties->InsertProps(pTblStylePrHandler->getProperties());
             }
         }
         break;
