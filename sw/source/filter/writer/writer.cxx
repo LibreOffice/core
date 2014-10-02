@@ -207,11 +207,10 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     SwPaM* pNew = new SwPaM( aStt );
     pNew->SetMark();
     aStt = nEndIdx;
-    if( 0 == (pCNode = aStt.GetNode().GetCntntNode()) &&
-        0 == (pCNode = pNds->GoPrevious( &aStt )) )
-    {
-        OSL_FAIL( "No more ContentNode at StartPos" );
-    }
+    pCNode = aStt.GetNode().GetCntntNode();
+    if (!pCNode)
+        pCNode = pNds->GoPrevious(&aStt);
+    assert(pCNode && "No more ContentNode at StartPos");
     pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
     pNew->GetPoint()->nNode = aStt;
     return pNew;
