@@ -291,8 +291,8 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
     PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
 
     mxCanvas->drawLine(
-        geometry::RealPoint2D(aWindowBox.Width/2, gnVerticalBorder),
-        geometry::RealPoint2D(aWindowBox.Width/2, mnSeparatorY - gnVerticalBorder),
+            geometry::RealPoint2D((double)(aWindowBox.Width/2), gnVerticalBorder),
+            geometry::RealPoint2D((double)(aWindowBox.Width/2), mnSeparatorY - gnVerticalBorder),
         aViewState,
         aRenderState);
 
