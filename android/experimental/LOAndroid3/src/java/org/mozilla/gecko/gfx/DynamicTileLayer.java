@@ -97,10 +97,10 @@ public class DynamicTileLayer extends Layer {
             tile.beginTransaction();
 
             Rect position = tile.getPosition();
-            float positionX = tile.x / tile.zoom;
-            float positionY = tile.y / tile.zoom;
-            float tileSizeWidth = tileSize.width / tile.zoom;
-            float tileSizeHeight = tileSize.height / tile.zoom;
+            float positionX = tile.id.x / tile.id.zoom;
+            float positionY = tile.id.y / tile.id.zoom;
+            float tileSizeWidth = tileSize.width / tile.id.zoom;
+            float tileSizeHeight = tileSize.height / tile.id.zoom;
             position.set((int) positionX, (int) positionY, (int) (positionX + tileSizeWidth + 1), (int) (positionY + tileSizeHeight + 1));
             tile.setPosition(position);
 
@@ -157,7 +157,7 @@ public class DynamicTileLayer extends Layer {
                 }
                 boolean contains = false;
                 for (SubTile tile : tiles) {
-                    if (tile.x == x && tile.y == y && tile.zoom == viewportMetrics.zoomFactor) {
+                    if (tile.id.x == x && tile.id.y == y && tile.id.zoom == viewportMetrics.zoomFactor) {
                         contains = true;
                     }
                 }
@@ -184,8 +184,8 @@ public class DynamicTileLayer extends Layer {
 
     private void markTiles(ImmutableViewportMetrics viewportMetrics) {
         for (SubTile tile : tiles) {
-            if (FloatUtils.fuzzyEquals(tile.zoom, viewportMetrics.zoomFactor)) {
-                RectF tileRect = new RectF(tile.x, tile.y, tile.x + tileSize.width, tile.y + tileSize.height);
+            if (FloatUtils.fuzzyEquals(tile.id.zoom, viewportMetrics.zoomFactor)) {
+                RectF tileRect = new RectF(tile.id.x, tile.id.y, tile.id.x + tileSize.width, tile.id.y + tileSize.height);
                 if (!RectF.intersects(currentViewport, tileRect)) {
                     tile.markForRemoval();
                 }
