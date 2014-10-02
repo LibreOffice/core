@@ -21,26 +21,26 @@
 
 #include <tools/solar.h>
 
-/*
- * Die Klasse SwNode2Layout stellt die Verbindung von Nodes zum Layout her.
- * Sie liefert einen intelligenten Iterator ueber die zum Node oder Nodebereich
- * gehoerenden Frames. Je nach Zweck der Iteration, z.B. um vor oder hinter
- * den Frames andere Frames einzufuegen, werden Master/Follows erkannt und nur
- * die relevanten zurueckgegeben. Auch wiederholte Tabellenueberschriften werden
- * beachtet.
- * Es ist auch moeglich, ueber SectionNodes zu iterieren, die durch Schachtelung
- * manchmal gar keinem SectionFrm direkt zugeordnet sind, manchmal aber sogar
- * mehreren.
- * SwNode2Layout ist ein Schnittstelle zwischen der aufrufenden Methode und
- * einem SwClientIter, sie waehlt je nach Aufgabenstellung das richtige
- * SwModify aus, erzeugt einen SwClientIter und filtert dessen Iterationen
- * je nach Aufgabenstellung.
- * Die Aufgabenstellung wird durch die Wahl des Ctors bestimmt.
- * 1. Das Einsammeln der UpperFrms, damit spaeter RestoreUpperFrms wird,
- *    wird von MakeFrms gerufen, wenn es keinen PrevNext gibt, vor/hinter den
- *    die Frames gehaengt werden koennen.
- * 2. Die Lieferung der Frames hinter/vor die die neuen Frames eines Nodes
- *    gehaengt werden muessen, ebenfalls von MakeFrms gerufen.
+/**
+ * This class connects the Nodes with the Layouts.
+ * It provides an intelligent iterator over Frames belonging to the Node or
+ * Node Area. Depending on the purpose of iterating (e.g. to insert other
+ * Frames before or after the Frames) Master/Follows are recognized and only
+ * the relevant ones are returned. Repeated table headers are also taken
+ * into account.
+ * It's possible to iterate over SectionNodes that are either not directly
+ * assigned to a SectionFrm or to multiple ones due to nesting.
+ *
+ * This class is an interface between the method and a SwClientIter: it
+ * chooses the right SwModify depending on the task, creates a SwClientIter
+ * and filters its iterations depeding on the task.
+ * The task is determined by the choice of ctor.
+ *
+ * 1. Collecting the UpperFrms (so that later on it becomes RestoreUpperFrms)
+ *    is called by MakeFrms, if there's no PrevNext (before/after we can insert
+ *    the Frames).
+ * 2. Inserting the Frames before/after which the new Frames of a Node need to
+ *    be inserted, is also called by MakeFrms.
  */
 
 class SwNode2LayImpl;
@@ -55,10 +55,11 @@ class SwNode2Layout
 {
     SwNode2LayImpl *pImpl;
 public:
-    // Dieser Ctor ist zum Einsammeln der UpperFrms gedacht.
+    /// Use this ctor for collecting the UpperFrms
     SwNode2Layout( const SwNode& rNd );
-    // Dieser Ctor ist fuer das Einfuegen vor oder hinter rNd gedacht,
-    // nIdx ist der Index des einzufuegenden Nodes
+
+    /// Use this ctor for inserting before/after rNd
+    /// @param nIdx is the index of the to-be-inserted Node
     SwNode2Layout( const SwNode& rNd, sal_uLong nIdx );
     ~SwNode2Layout();
     SwFrm* NextFrm();

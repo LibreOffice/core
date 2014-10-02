@@ -31,63 +31,59 @@ class SwViewImp;
 class SwCntntNode;
 class SwWait;
 
-// The usage of LayAction is always the same:
-
-// 1. Generation of the LayAction object.
-// 2. Specifying the wanted bahaviour via the Set-methods
-// 3. Calling Action()
-// 4. Soon after that the destruction of the object
-
-// Das Objekt meldet sich im CTor beim SwViewImp an und erst im DTor
-// wieder ab! Es handelt sich mithin um ein typisches Stackobjekt.
-
+/**
+ * The usage of LayAction is always the same:
+ *
+ * 1. Generation of the LayAction object.
+ * 2. Specifying the wanted behaviour via the Set-methods
+ * 3. Calling Action()
+ * 4. Soon after that the destruction of the object
+ *
+ * The object registers at the SwViewImp in the ctor and deregisters not until
+ * the dtor!
+ * It's a typical stack object.
+ */
 class SwLayAction
 {
     SwRootFrm  *pRoot;
-    SwViewImp  *pImp;   // here the action logs in and off
+    SwViewImp  *pImp; // here the action logs in and off
 
-    // for the sake of optimization, so that the tables stick a bit better to the Crsr
-    // when hitting return/backspace in front of one
-    // Wenn der erste TabFrm, der sich Paintet (pro Seite) traegt sich im
-    // Pointer ein. Die CntntFrms unterhalb der Seite brauchen sich
-    // dann nicht mehr bei der Shell zum Painten anmelden.
+    // For the sake of optimization, so that the tables stick a bit better to
+    // the Crsr when hitting return/backspace in front of one.
+    // The first TabFrm that paints itself (per page) adds itself to the pointer.
+    // The CntntFrms beneath the page do not need to deregister at the Shell for
+    // painting.
     const SwTabFrm *pOptTab;
 
     SwWait *pWait;
 
-    //Wenn ein Absatz - oder was auch immer - bei der Formatierung mehr
-    //als eine Seite rueckwaerts floss traegt er seine neue Seitennummer
-    //hier ein. Die Steuerung der InternalAction kann dann geeignet reagieren.
+    // If a paragraph (or anything else) moved more than one page when
+    // formatting, it adds its new page number here.
+    // The InternalAction can then take the appropriate steps.
     sal_uInt16 nPreInvaPage;
 
-    sal_uLong nStartTicks;  //Startzeitpunkt der Aktion, vergeht zu viel Zeit kann
-                        //der WaitCrsr per CheckWaitCrsr() eingeschaltet werden.
+    sal_uLong nStartTicks;      // The Action's starting time; if too much time passes the
+                                // WaitCrsr can be enabled via CheckWaitCrsr()
 
-    sal_uInt16 nInputType;  //Bei welchem Input soll die Verarbeitung abgebrochen
-                        //werden?
-    sal_uInt16 nEndPage;    //StatBar control
-    sal_uInt16 nCheckPageNum; //CheckPageDesc() was delayed if != USHRT_MAX
-                          // check from this page on
+    sal_uInt16 nInputType;      // Which input should terminate processing
+    sal_uInt16 nEndPage;        // StatBar control
+    sal_uInt16 nCheckPageNum;   // CheckPageDesc() was delayed if != USHRT_MAX
+                                // check from this page onwards
 
-    bool bPaint;        // painting or only formatting?
-    bool bComplete;     //Alles bis zum sichtbaren Bereich Formatieren oder
-                        // or only the visible area?
-    bool bCalcLayout;   //Vollstaendige Reformatierung?
-    bool bAgain;        //Zur automatisch wiederholten Action wenn Seiten
-                        //geloscht werden.
-    bool bNextCycle;    //Wiederaufsetzen bei der ersten Ungueltigen Seite.
-    bool bInput;        //Zum Abbrechen der Verarbeitung wenn ein Input anliegt.
-    bool bIdle;         //True wenn die Layaction vom Idler ausgeloest wurde.
-    bool bReschedule;   //Soll das Reschedule - abhaengig vom Progress -
-                        //gerufen werden?
-    bool bCheckPages;   //CheckPageDescs() ausfuehren oder verzoegern.
-    bool bUpdateExpFlds;//Wird gesetzt wenn nach dem Formatierien noch eine
-                        //Runde fuer den ExpFld laufen muss.
-    bool bBrowseActionStop; //Action fruehzeitig beenden (per bInput) und den
-                            //Rest dem Idler ueberlassen.
-    bool bWaitAllowed;      //Wartecursor erlaubt?
-    bool bPaintExtraData;   //Anzeige von Zeilennumerierung o. ae. eingeschaltet?
-    bool bActionInProgress; // wird in Action() anfangs gesetzt und zum Schluss geloescht
+    bool bPaint;         // painting or only formatting?
+    bool bComplete;      // Format everything or just the visible Area?
+    bool bCalcLayout;    // Complete reformatting?
+    bool bAgain;         // For the automatically repeated Action if Pages are deleted
+    bool bNextCycle;     // Reset on the first invalid Page
+    bool bInput;         // For terminating processing on input
+    bool bIdle;          // True if the LayAction was triggered by the Idler
+    bool bReschedule;    // Call Reschedule depending on Progress?
+    bool bCheckPages;    // Run CheckPageDescs() or delay it
+    bool bUpdateExpFlds; // Is set if, after Formatting, we need to do another round for ExpFld
+    bool bBrowseActionStop; // Terminate Action early (as per bInput) and leave the rest to the Idler
+    bool bWaitAllowed;      // Waitcursor allowed?
+    bool bPaintExtraData;   // Painting line numbers (or similar) enabled?
+    bool bActionInProgress; // Is set in Action() at the beginning and deleted at the end
 
     // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
     bool    mbFormatCntntOnInterrupt;
@@ -181,11 +177,11 @@ class SwLayIdle
 {
 
     SwRootFrm *pRoot;
-    SwViewImp  *pImp;           // Hier Meldet sich der Idler an und ab.
-    SwCntntNode *pCntntNode;    // Hier wird die aktuelle Cursorposition
-    sal_Int32  nTxtPos;        // zwischengespeichert.
-    bool        bPageValid;     // Konnte die Seite alles validiert werden?
-    bool        bAllValid;      // Konnte alles validiert werden?
+    SwViewImp  *pImp;           // The Idler registers and deregisters here
+    SwCntntNode *pCntntNode;    // The current cursor position is saved here
+    sal_Int32  nTxtPos;
+    bool        bPageValid;     // Were we able to evaluate everything on the whole page?
+    bool        bAllValid;      // Were we able to evaluate everything?
 
 #ifdef DBG_UTIL
     bool m_bIndicator;

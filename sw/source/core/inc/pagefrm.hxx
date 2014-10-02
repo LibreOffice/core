@@ -50,30 +50,30 @@ class SwPageFrm: public SwFtnBossFrm
 
     SwSortedObjs *pSortedObjs;
 
-    SwPageDesc *pDesc;      //PageDesc der die Seite beschreibt.
+    SwPageDesc *pDesc; //PageDesc that describes the Page
 
-    sal_uInt16  nPhyPageNum;        //Physikalische Seitennummer.
+    sal_uInt16  nPhyPageNum; // Physical page number
 
-    bool bInvalidCntnt      :1;
-    bool bInvalidLayout     :1;
-    bool bInvalidFlyCntnt   :1;
-    bool bInvalidFlyLayout  :1;
-    bool bInvalidFlyInCnt   :1;
-    bool bFtnPage           :1; //Diese Seite ist fuer Dokumentende-Fussnoten.
-    bool bEmptyPage         :1; //Dies ist eine explizite Leerseite
-    bool bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
-    bool bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
-    bool bInvalidSmartTags :1;  //checking for smarttags is needed
-    bool bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
-    bool bInvalidWordCount  :1;
-    bool bHasGrid           :1; // Grid for Asian layout
+    bool bInvalidCntnt        :1;
+    bool bInvalidLayout       :1;
+    bool bInvalidFlyCntnt     :1;
+    bool bInvalidFlyLayout    :1;
+    bool bInvalidFlyInCnt     :1;
+    bool bFtnPage             :1; // This Page is for document end footnotes
+    bool bEmptyPage           :1; // This Page is an explicitly empty page
+    bool bEndNotePage         :1; // 'Footnote page' for end notes
+    bool bInvalidSpelling     :1; // We need online spelling
+    bool bInvalidSmartTags    :1; // We need checking for smarttags
+    bool bInvalidAutoCmplWrds :1; // Update auto complete word list
+    bool bInvalidWordCount    :1;
+    bool bHasGrid             :1; // Grid for Asian layout
 
     static const sal_Int8 mnShadowPxWidth;
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
-    // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten
+    /// Adapt the max. footnote height in each single column
     void SetColMaxFtnHeight();
 
     /** determine rectangle for horizontal page shadow
@@ -111,9 +111,9 @@ public:
     SwPageFrm( SwFrmFmt*, SwFrm*, SwPageDesc* );
     virtual ~SwPageFrm();
 
-    //public, damit die SwViewShell beim Umschalten vom BrowseMode darauf
-    //zugreifen kann.
-    void PrepareHeader();   //Kopf-/Fusszeilen anlegen/entfernen.
+    /// Make this public, so that the SwViewShell can access it when switching from browse mode
+    /// Add/remove header/footer
+    void PrepareHeader();
     void PrepareFooter();
 
     const SwSortedObjs  *GetSortedObjs() const  { return pSortedObjs; }
@@ -124,7 +124,7 @@ public:
 
     void AppendFlyToPage( SwFlyFrm *pNew );
     void RemoveFlyFromPage( SwFlyFrm *pToRemove );
-    void MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest );//optimiertes Remove/Append
+    void MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest ); // Optimized Remove/Append
 
     void  SetPageDesc( SwPageDesc *, SwFrmFmt * );
           SwPageDesc *GetPageDesc() { return pDesc; }
@@ -138,18 +138,18 @@ public:
 
     SwRect GetBoundRect() const;
 
-    //Spezialisiertes GetCntntPos() fuer Felder in Rahmen.
+    // Specialized GetCntntPos() for Field in Frames
     void GetCntntPosition( const Point &rPt, SwPosition &rPos ) const;
 
-    bool IsEmptyPage() const { return bEmptyPage; } //explizite Leerseite.
+    bool IsEmptyPage() const { return bEmptyPage; } // Explicitly empty page
 
     void    UpdateFtnNum();
 
-    //Immer nach dem Paste rufen. Erzeugt die Seitengeb. Rahmen und Formatiert
-    //generischen Inhalt.
+    /// Always call after Paste
+    /// Creates the page-bound frames and formats the generic content
     void PreparePage( bool bFtn );
 
-    //Schickt an alle ContentFrames ein Prepare wg. geaenderter Registervorlage
+    // Sends a Prepare() to all ContentFrames caused by a changed register template
     void PrepareRegisterChg();
 
     // Appends a fly frame - the given one or a new one - at the page frame.
@@ -162,7 +162,7 @@ public:
 
     virtual bool GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
-        // erfrage vom Client Informationen
+    /// Get info from Client
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
     virtual void Cut() SAL_OVERRIDE;
@@ -176,25 +176,25 @@ public:
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
     virtual void PaintBreak() const SAL_OVERRIDE;
 
-    //Zeilennummern usw malen
+    /// Paint line number etc.
     void RefreshExtraData( const SwRect & ) const;
 
-    //Hilfslinien malen.
+    /// Paint helper lines
     void RefreshSubsidiary( const SwRect& ) const;
 
-    //Fussnotenschnittstelle
-    bool IsFtnPage() const                                  { return bFtnPage; }
-    bool IsEndNotePage() const                              { return bEndNotePage; }
-    void SetFtnPage( bool b )                               { bFtnPage = b; }
-    void SetEndNotePage( bool b )                           { bEndNotePage = b; }
+    /// Foot note interface
+    bool IsFtnPage() const                          { return bFtnPage; }
+    bool IsEndNotePage() const                      { return bEndNotePage; }
+    void SetFtnPage( bool b )                       { bFtnPage = b; }
+    void SetEndNotePage( bool b )                   { bEndNotePage = b; }
 
     inline  sal_uInt16 GetPhyPageNum() const        { return nPhyPageNum;}
     inline  void SetPhyPageNum( sal_uInt16 nNum )   { nPhyPageNum = nNum;}
     inline  void DecrPhyPageNum()               { --nPhyPageNum;     }
     inline  void IncrPhyPageNum()               { ++nPhyPageNum;     }
 
-    //Validieren, invalidieren und abfragen des Status der Seite.
-    //Layout/Cntnt und jeweils Fly/nicht Fly werden getrennt betrachtet.
+    /// Validate, invalidate and query the Page status
+    /// Layout/Cntnt and Fly/non-Fly respectively are inspected separately
     inline void InvalidateFlyLayout() const;
     inline void InvalidateFlyCntnt() const;
     inline void InvalidateFlyInCnt() const;
