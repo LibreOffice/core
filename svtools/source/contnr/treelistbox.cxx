@@ -3022,8 +3022,6 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                     SetTextColor( aBackupTextColor );
                     Control::SetFont( aBackupFont );
                 }
-                else
-                  aWallpaper.SetColor( pEntry->GetBackColor() );
             }
 
             // draw background
