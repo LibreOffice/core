@@ -512,7 +512,6 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
             case SFX_CREATE_MODE_INTERNAL:
             case SFX_CREATE_MODE_EMBEDDED:
                 {
-                    // for MWERKS (Mac-Compiler): can't cast autonomously
                     SwTransferable::InitOle( this, *mpDoc );
                 }
                 // suppress SfxProgress, when we are Embedded

@@ -208,11 +208,6 @@ private:
 
 FrameControlApplication g_App;
 
-#ifdef __MWERKS__
-Application* pApp = &g_App;
-#endif
-
-
 
 void FrameControlApplication::init()
 {

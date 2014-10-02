@@ -121,14 +121,10 @@
  * Distributed under the Boost Software License, Version 1.0. (See
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt) */
-#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600))
-#define OSL_THIS_FUNC __PRETTY_FUNCTION__
-#elif defined(__DMC__) && (__DMC__ >= 0x810)
+#if defined(__GNUC__)
 #define OSL_THIS_FUNC __PRETTY_FUNCTION__
 #elif defined(__FUNCSIG__)
 #define OSL_THIS_FUNC __FUNCSIG__
-#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
-#define OSL_THIS_FUNC __FUNCTION__
 #elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
 #define OSL_THIS_FUNC __func__
 #else
