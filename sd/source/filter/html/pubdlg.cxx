@@ -681,7 +681,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     HtmlPublishMode ePublishMode;
     if (pPage2_Frames->IsChecked())
         ePublishMode = PUBLISH_FRAMES;
-    if (pPage2_SingleDocument->IsChecked())
+    else if (pPage2_SingleDocument->IsChecked())
         ePublishMode = PUBLISH_SINGLE_DOCUMENT;
     else if (pPage2_Kiosk->IsChecked())
         ePublishMode  = PUBLISH_KIOSK;
