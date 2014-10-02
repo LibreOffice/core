@@ -20,33 +20,32 @@ package com.sun.star.script.framework.browse;
 
 import com.sun.star.beans.XIntrospectionAccess;
 
-import com.sun.star.lib.uno.helper.PropertySet;
-
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Any;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.XComponentContext;
-
-
 import com.sun.star.lang.XMultiComponentFactory;
 
+import com.sun.star.lib.uno.helper.PropertySet;
 
 import com.sun.star.script.XInvocation;
+import com.sun.star.script.browse.BrowseNodeTypes;
+import com.sun.star.script.browse.XBrowseNode;
+import com.sun.star.script.framework.container.Parcel;
+import com.sun.star.script.framework.container.ParcelContainer;
+import com.sun.star.script.framework.container.ScriptEntry;
+import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.framework.provider.ScriptProvider;
 
 import com.sun.star.ucb.XSimpleFileAccess;
 
-import com.sun.star.script.browse.XBrowseNode;
-import com.sun.star.script.browse.BrowseNodeTypes;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
-import com.sun.star.script.framework.provider.ScriptProvider;
-import com.sun.star.script.framework.log.LogUtils;
-import com.sun.star.script.framework.container.ScriptMetaData;
-import com.sun.star.script.framework.container.ScriptEntry;
-import com.sun.star.script.framework.container.Parcel;
-import com.sun.star.script.framework.container.ParcelContainer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
-import java.util.*;
 import javax.swing.JOptionPane;
 
 public class ParcelBrowseNode extends PropertySet

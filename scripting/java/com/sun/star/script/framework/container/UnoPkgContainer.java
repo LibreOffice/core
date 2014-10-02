@@ -17,21 +17,24 @@
  */
 package com.sun.star.script.framework.container;
 
-import com.sun.star.script.framework.log.LogUtils;
-import com.sun.star.script.framework.provider.PathUtils;
-import com.sun.star.script.framework.io.XOutputStreamWrapper;
-import com.sun.star.script.framework.io.XInputStreamWrapper;
+import com.sun.star.deployment.XPackage;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.io.OutputStream;
-import java.io.InputStream;
-
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
-import com.sun.star.deployment.XPackage;
+
+import com.sun.star.script.framework.io.XInputStreamWrapper;
+import com.sun.star.script.framework.io.XOutputStreamWrapper;
+import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.framework.provider.PathUtils;
+
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class UnoPkgContainer extends ParcelContainer {
 

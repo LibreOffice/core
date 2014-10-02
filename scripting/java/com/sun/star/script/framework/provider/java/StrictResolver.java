@@ -18,8 +18,10 @@
 
 package com.sun.star.script.framework.provider.java;
 
-import java.lang.reflect.*;
 import com.sun.star.script.framework.log.LogUtils;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * A StrictResolver can be used to get a ScriptProxy object for a given

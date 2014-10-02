@@ -17,13 +17,15 @@
  */
 package com.sun.star.script.framework.provider;
 
-import com.sun.star.frame.XModel;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.document.XScriptInvocationContext;
 
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XModel;
+
 import com.sun.star.script.provider.XScriptContext;
+
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 public class EditorScriptContext implements XScriptContext {
     private XDesktop m_xDeskTop;

@@ -17,19 +17,23 @@
  */
 package com.sun.star.script.framework.provider;
 
-import com.sun.star.document.XScriptInvocationContext;
-import com.sun.star.frame.XModel;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.PropertyAttribute;
-import com.sun.star.lib.uno.helper.PropertySet;
-import com.sun.star.uno.Type;
 
-import com.sun.star.script.provider.XScriptContext;
+import com.sun.star.document.XScriptInvocationContext;
+
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XModel;
+
+import com.sun.star.lang.XMultiComponentFactory;
+
+import com.sun.star.lib.uno.helper.PropertySet;
 
 import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.provider.XScriptContext;
+
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 public class ScriptContext extends PropertySet implements XScriptContext {
     private final static String HM_DOC_REF = "DocumentReference";

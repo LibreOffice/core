@@ -18,8 +18,8 @@
 
 package com.sun.star.script.framework.provider.java;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * A ScriptProxy object acts as a proxy for a Java <code>Method</code>

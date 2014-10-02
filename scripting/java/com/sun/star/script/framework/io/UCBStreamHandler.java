@@ -18,18 +18,29 @@
 
 package com.sun.star.script.framework.io;
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-
-import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
+
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.PathUtils;
+
+import com.sun.star.ucb.XSimpleFileAccess;
+
+import com.sun.star.uno.UnoRuntime;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
+
+import java.util.HashMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class UCBStreamHandler extends URLStreamHandler {
 

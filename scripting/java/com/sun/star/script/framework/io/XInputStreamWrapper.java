@@ -17,8 +17,9 @@
  */
 package com.sun.star.script.framework.io;
 
-import java.io.InputStream;
 import com.sun.star.io.XInputStream;
+
+import java.io.InputStream;
 
 public class XInputStreamWrapper extends InputStream {
     private XInputStream m_xInputStream;

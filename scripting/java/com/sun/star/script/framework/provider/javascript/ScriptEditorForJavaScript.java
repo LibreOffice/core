@@ -18,27 +18,27 @@
 
 package com.sun.star.script.framework.provider.javascript;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ImporterTopLevel;
-import org.mozilla.javascript.tools.debugger.Main;
-import org.mozilla.javascript.tools.debugger.ScopeProvider;
-
-import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.ScriptEditor;
 import com.sun.star.script.framework.provider.SwingInvocation;
-import com.sun.star.script.framework.log.LogUtils;
-
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.URL;
-
-import java.util.Map;
-import java.util.HashMap;
+import com.sun.star.script.provider.XScriptContext;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ImporterTopLevel;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.tools.debugger.Main;
+import org.mozilla.javascript.tools.debugger.ScopeProvider;
 
 public class ScriptEditorForJavaScript implements ScriptEditor {
     // global ScriptEditorForJavaScript instance

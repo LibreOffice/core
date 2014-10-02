@@ -17,30 +17,32 @@
  */
 package com.sun.star.script.framework.provider.beanshell;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
+import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.script.framework.provider.ClassLoaderFactory;
+import com.sun.star.script.framework.provider.ScriptEditor;
+import com.sun.star.script.framework.provider.SwingInvocation;
+import com.sun.star.script.provider.XScriptContext;
 
 import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Map;
-import java.util.HashMap;
 
-import com.sun.star.script.provider.XScriptContext;
-import com.sun.star.script.framework.provider.ScriptEditor;
-import com.sun.star.script.framework.provider.SwingInvocation;
-import com.sun.star.script.framework.container.ScriptMetaData;
-import com.sun.star.script.framework.provider.ClassLoaderFactory;
+import java.net.URL;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class ScriptEditorForBeanShell
     implements ScriptEditor, ActionListener {

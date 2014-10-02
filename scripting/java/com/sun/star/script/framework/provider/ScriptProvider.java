@@ -17,66 +17,61 @@
  */
 package com.sun.star.script.framework.provider;
 
-import com.sun.star.container.XNameContainer;
-
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.frame.XModel;
-
-import com.sun.star.util.XMacroExpander;
-
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
-
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XVetoableChangeListener;
-import com.sun.star.beans.XPropertyChangeListener;
-import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.Property;
-
 import com.sun.star.beans.XIntrospectionAccess;
-import com.sun.star.script.XInvocation;
+import com.sun.star.beans.XPropertyChangeListener;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertySetInfo;
+import com.sun.star.beans.XVetoableChangeListener;
 
-import com.sun.star.script.provider.XScriptContext;
-import com.sun.star.script.provider.XScriptProvider;
-import com.sun.star.script.provider.XScript;
-import com.sun.star.script.provider.ScriptFrameworkErrorException;
-import com.sun.star.script.provider.ScriptFrameworkErrorType;
-
-import com.sun.star.script.browse.XBrowseNode;
-import com.sun.star.script.browse.BrowseNodeTypes;
-
-import com.sun.star.script.framework.log.LogUtils;
-
-import com.sun.star.script.framework.container.ScriptMetaData;
-import com.sun.star.script.framework.container.XMLParserFactory;
-import com.sun.star.script.framework.container.ParcelContainer;
-import com.sun.star.script.framework.container.ParsedScriptUri;
-import com.sun.star.script.framework.container.UnoPkgContainer;
-
-import com.sun.star.ucb.Command;
-import com.sun.star.ucb.UniversalContentBroker;
-import com.sun.star.ucb.XContent;
-import com.sun.star.ucb.XCommandProcessor;
-import com.sun.star.ucb.XContentIdentifier;
-import com.sun.star.ucb.XUniversalContentBroker;
-
-import com.sun.star.sdbc.XRow;
-
-import com.sun.star.script.framework.browse.ProviderBrowseNode;
-import com.sun.star.script.framework.browse.DialogFactory;
+import com.sun.star.container.XNameContainer;
 
 import com.sun.star.deployment.XPackage;
 
-
 import com.sun.star.document.XScriptInvocationContext;
+
+import com.sun.star.frame.XModel;
 import com.sun.star.frame.XTransientDocumentsDocumentContentFactory;
+
+import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.XTypeProvider;
+
+import com.sun.star.script.XInvocation;
+import com.sun.star.script.browse.BrowseNodeTypes;
+import com.sun.star.script.browse.XBrowseNode;
+import com.sun.star.script.framework.browse.DialogFactory;
+import com.sun.star.script.framework.browse.ProviderBrowseNode;
+import com.sun.star.script.framework.container.ParcelContainer;
+import com.sun.star.script.framework.container.ParsedScriptUri;
+import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.script.framework.container.UnoPkgContainer;
+import com.sun.star.script.framework.container.XMLParserFactory;
+import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.provider.ScriptFrameworkErrorException;
+import com.sun.star.script.provider.ScriptFrameworkErrorType;
+import com.sun.star.script.provider.XScript;
+import com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptProvider;
+
+import com.sun.star.sdbc.XRow;
+
+import com.sun.star.ucb.Command;
+import com.sun.star.ucb.UniversalContentBroker;
+import com.sun.star.ucb.XCommandProcessor;
+import com.sun.star.ucb.XContent;
+import com.sun.star.ucb.XContentIdentifier;
+import com.sun.star.ucb.XUniversalContentBroker;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Exception;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+
+import com.sun.star.util.XMacroExpander;
 
 public abstract class ScriptProvider
     implements XScriptProvider, XBrowseNode, XPropertySet, XInvocation,

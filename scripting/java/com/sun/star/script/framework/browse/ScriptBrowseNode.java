@@ -17,33 +17,38 @@
  */
 package com.sun.star.script.framework.browse;
 
-import com.sun.star.script.browse.XBrowseNode;
-import com.sun.star.script.browse.BrowseNodeTypes;
-import com.sun.star.script.provider.XScriptContext;
-
-import com.sun.star.lib.uno.helper.PropertySet;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Any;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.UnoRuntime;
-
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.beans.XIntrospectionAccess;
-import com.sun.star.script.XInvocation;
+
+import com.sun.star.container.ElementExistException;
+import com.sun.star.container.NoSuchElementException;
 
 import com.sun.star.lang.NoSupportException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XMultiComponentFactory;
+
+import com.sun.star.lib.uno.helper.PropertySet;
+
 import com.sun.star.reflection.InvocationTargetException;
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.container.ElementExistException;
 
-import java.util.*;
-
+import com.sun.star.script.XInvocation;
+import com.sun.star.script.browse.BrowseNodeTypes;
+import com.sun.star.script.browse.XBrowseNode;
+import com.sun.star.script.framework.container.Parcel;
+import com.sun.star.script.framework.container.ScriptEntry;
+import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.ScriptProvider;
-import com.sun.star.script.framework.container.*;
+import com.sun.star.script.provider.XScriptContext;
+
+import com.sun.star.ucb.XSimpleFileAccess;
+
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+
+import java.util.HashMap;
 
 public class ScriptBrowseNode extends PropertySet
     implements XBrowseNode, XInvocation {

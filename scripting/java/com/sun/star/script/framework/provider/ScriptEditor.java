@@ -18,8 +18,8 @@
 
 package com.sun.star.script.framework.provider;
 
-import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.script.provider.XScriptContext;
 
 public interface ScriptEditor {
     Object execute() throws Exception;
