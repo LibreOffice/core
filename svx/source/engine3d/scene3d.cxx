@@ -637,7 +637,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     // through the enter of aOutRect's (Steiner's theorem), so RotateZ
 
     RotateScene (rRef, nWink, sn, cs);  // Rotates the scene
-    double fWinkelInRad = nWink/100 * F_PI180;
+    double fWinkelInRad = nWink/100.0 * F_PI180;
 
     basegfx::B3DHomMatrix aRotation;
     aRotation.rotate(0.0, 0.0, fWinkelInRad);
