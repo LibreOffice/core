@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0d59b9_cd519d10",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/TwipsConverter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-10-02T04:29:41Z",
+      "side": 1,
+      "message": "not a string",
+      "revId": "a429cb481f0d9c36e7de49ae355961ed5676a613",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0d59b9_ad566904",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/TwipsConverter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-10-02T04:29:41Z",
+      "side": 1,
+      "message": "not a string",
+      "revId": "a429cb481f0d9c36e7de49ae355961ed5676a613",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
