@@ -1403,13 +1403,12 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
     if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
     {
 #ifndef DISABLE_DYNLOADING
+        osl::Module aTkLib;
         OUString aLibName(TK_DLL_NAME);
-        oslModule hTkLib = osl_loadModuleRelative(
-            &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
-        if ( hTkLib )
+        aTkLib.loadRelative(&thisModule, aLibName, SAL_LOADMODULE_DEFAULT);
+        if (aTkLib.is())
         {
-            OUString aFunctionName( "CreateUnoWrapper" );
-            FN_TkCreateUnoWrapper fnCreateWrapper = (FN_TkCreateUnoWrapper)osl_getFunctionSymbol( hTkLib, aFunctionName.pData );
+            FN_TkCreateUnoWrapper fnCreateWrapper = (FN_TkCreateUnoWrapper)aTkLib.getFunctionSymbol("CreateUnoWrapper");
             if ( fnCreateWrapper )
             {
                 pSVData->mpUnoWrapper = fnCreateWrapper();
