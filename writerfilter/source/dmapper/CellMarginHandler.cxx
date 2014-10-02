@@ -98,7 +98,7 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
     if( pProperties.get())
     {
         pProperties.get()->resolve( *this );
-        bool rtl = false; // TODO
+        const bool rtl = false; // TODO
         switch( rSprm.getId() )
         {
             case NS_ooxml::LN_CT_TblCellMar_top:
