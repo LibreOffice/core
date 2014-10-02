@@ -23,6 +23,8 @@
 #include <sfx2/progress.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/svxids.hrc>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/aeitem.hxx>
@@ -374,6 +376,26 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         uno::Reference<text::XTextRange> const& xInsertPosition)
 {
+    const OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
+    if( aFilterName == "Impress MS PowerPoint 2007 XML" ||
+        aFilterName == "Impress MS PowerPoint 2007 XML AutoPlay" )
+    {
+        // As this is a MSFT format, we should use the "MS Compat"
+        // mode for spacing before and after paragraphs.
+
+        // This is copied from what is done for .ppt import in
+        // ImplSdPPTImport::Import() in sd/source/filter/ppt/pptin.cxx
+        // in. We need to tell both the edit engine of the draw outliner,
+        // and the document, to do "summation of paragraphs".
+        SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
+        sal_uInt32 nControlWord = rOutl.GetEditEngine().GetControlWord();
+        nControlWord |=  EE_CNTRL_ULSPACESUMMATION;
+        nControlWord &=~ EE_CNTRL_ULSPACEFIRSTPARA;
+        ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
+
+        mpDoc->SetSummationOfParagraphs( true );
+    }
+
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
 
     SfxItemSet* pSet = rMedium.GetItemSet();
