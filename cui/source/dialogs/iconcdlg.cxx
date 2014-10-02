@@ -717,45 +717,11 @@ bool IconChoiceDialog::QueryClose()
     return bRet;
 }
 
-
-
 void IconChoiceDialog::Start_Impl()
 {
-    sal_uInt16 nActPage;
-
-    if ( mnCurrentPageId == 0 || mnCurrentPageId == USHRT_MAX )
-        nActPage = maPageList.front()->nId;
-    else
-        nActPage = mnCurrentPageId;
-
-    // configuration existing?
-    //SvtViewOptions aTabDlgOpt( E_TABDIALOG, rId );
-
-    /*if ( aTabDlgOpt.Exists() )
-    {
-        // possibly position from config
-        SetWindowState(OUStringToOString(aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
-
-        // initial TabPage from program/help/config
-        nActPage = (sal_uInt16)aTabDlgOpt.GetPageID();
-
-        if ( USHRT_MAX != mnCurrentPageId )
-            nActPage = mnCurrentPageId;
-
-        if ( GetPageData ( nActPage ) == NULL )
-            nActPage = maPageList.front()->nId;
-    }*/
-    //else if ( USHRT_MAX != mnCurrentPageId && GetPageData ( mnCurrentPageId ) != NULL )
-    nActPage = mnCurrentPageId;
-
-    mnCurrentPageId = nActPage;
-
     FocusOnIcon( mnCurrentPageId );
-
     ActivatePageImpl();
 }
-
-
 
 const SfxItemSet* IconChoiceDialog::GetRefreshedSet()
 {
