@@ -62,7 +62,6 @@
 #include <svx/xtable.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/contouritem.hxx>
@@ -89,6 +88,9 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 #include <svx/xlnclit.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
+
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 #define LOGICAL_EDIT_HEIGHT         12
@@ -647,43 +649,55 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                 Color aOldColor( pDevice->GetTextColor() );
                 Color aOldFillColor( pDevice->GetFillColor() );
 
+                Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
+
                 pDevice->SetFont( aFont );
 
-                Color aFontCol, aBackCol;
-                bool  IsNotSelect = rUDEvt.GetItemId() != GetSelectEntryPos();
+                bool IsNotSelected = rUDEvt.GetItemId() != GetSelectEntryPos();
 
-                // text color
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_COLOR );
-                if ( NULL != pItem )
+                // text color, when nothing is selected
+                if ( (NULL != pItem) && IsNotSelected)
                     aFontCol = Color( static_cast< const SvxColorItem* >( pItem )->GetValue() );
-                else
-                    aFontCol = COL_AUTO;
 
-                // background color
-                pItem = aItemSet.GetItem( SID_ATTR_BRUSH );
-                if ( NULL != pItem )
-                    aBackCol = Color( static_cast< const SvxBrushItem* >( pItem )->GetColor() );
-                else
-                    aBackCol = COL_AUTO;
+                sal_uInt16 style = drawing::FillStyle_NONE;
+                // which kind of Fill style is selected
+                pItem = aItemSet.GetItem( XATTR_FILLSTYLE );
+                // only when ok and not selected
+                if ( (NULL != pItem) && IsNotSelected)
+                    style = static_cast< const XFillStyleItem* >( pItem )->GetValue();
 
-                // test is the font-, background-color not different, then change the Font-Color
+                switch(style)
+                {
+                    case drawing::FillStyle_SOLID:
+                    {
+                        // set background color
+                        pItem = aItemSet.GetItem( XATTR_FILLCOLOR );
+                        if ( NULL != pItem )
+                            aBackCol = Color( static_cast< const XFillColorItem* >( pItem )->GetColorValue() );
+
+                        if ( aBackCol != COL_AUTO )
+                        {
+                            pDevice->SetFillColor( aBackCol );
+                            pDevice->DrawRect( rUDEvt.GetRect() );
+                        }
+                    }
+                    break;
+
+                    //TODO Draw the other background styles: gradient, hatching and bitmap
+               }
+
+                // when the font- and background-color are too similiar, adjust the Font-Color
                 if( (aFontCol != COL_AUTO) || (aBackCol != COL_AUTO) )
                     aFontCol = TestColorsVisible(aFontCol, (aBackCol != COL_AUTO) ? aBackCol : pDevice->GetBackground().GetColor());
 
-                // text color, when we are not selected
-                if ( (aFontCol != COL_AUTO) && IsNotSelect )
+                // set text color
+                if ( aFontCol != COL_AUTO )
                     pDevice->SetTextColor( aFontCol );
 
-                // background color
-                if (pItem && IsNotSelect)
+                // handle the push-button
+                if (IsNotSelected)
                 {
-                    // background color,  when we are not selected
-                    if ( aBackCol != COL_AUTO )
-                    {
-                        pDevice->SetFillColor( aBackCol );
-                        pDevice->DrawRect( rUDEvt.GetRect() );
-                    }
-
                     Rectangle aRect(rUDEvt.GetRect());
                     unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
                     if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
