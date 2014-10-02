@@ -833,7 +833,7 @@ Bool2Shadow( const uno::Any& rAny )
 static gchar *
 Short2Degree( const uno::Any& rAny )
 {
-    float f = rAny.get<sal_Int16>() / 10;
+    float f = rAny.get<sal_Int16>() / 10.0;
     return g_strdup_printf( "%g", f );
 }
 
