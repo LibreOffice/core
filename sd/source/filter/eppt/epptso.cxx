@@ -1025,7 +1025,9 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
         // vertical. Therefore, we need to put down it BEFORE THE ROTATION.
         ::com::sun::star::awt::Point
             aTopLeft( (sal_Int32)( maRect.Left() + fWidthHalf - fHeightHalf ), (sal_Int32)( maRect.Top() + fHeightHalf - fWidthHalf ) );
-        Size    aNewSize( maRect.GetHeight(), maRect.GetWidth() );
+        const long nRotatedWidth(maRect.GetHeight());
+        const long nRotatedHeight(maRect.GetWidth());
+        const Size aNewSize(nRotatedWidth, nRotatedHeight);
         maRect = Rectangle( Point( aTopLeft.X, aTopLeft.Y ), aNewSize );
     }
 }
