@@ -492,8 +492,8 @@ void PresenterHelpView::Resize (void)
             - mpCloseButton->GetSize().Height - gnVerticalButtonPadding;
 
         mpCloseButton->SetCenter(geometry::RealPoint2D(
-            aWindowBox.Width/2,
-            aWindowBox.Height - mpCloseButton->GetSize().Height/2));
+            aWindowBox.Width/2.0,
+            aWindowBox.Height - mpCloseButton->GetSize().Height/2.0));
 
         CheckFontSize();
     }
