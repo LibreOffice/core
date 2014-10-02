@@ -277,8 +277,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
             break;
         case SC_IMPORTFILE:
             aName += " - [" + aDatName + "]";
-        default:
             SetText( aName );
+            break;
+        default:
+            break;
     }
 
     // To be able to prefill the correct values based on the file extension
