@@ -113,6 +113,7 @@ static const struct {
     { "sv_SE",  lcl_DATA_EURO },
     { "sv_FI",  lcl_DATA_EURO },
     { "ca_ES",  lcl_DATA_EURO },
+    { "ca_ES_valencia",  lcl_DATA_EURO },
     { "cs_CZ",  lcl_DATA_EURO },
     { "sk_SK",  lcl_DATA_EURO },
     { "da_DK",  lcl_DATA_EURO },
