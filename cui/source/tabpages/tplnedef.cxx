@@ -57,6 +57,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
               , "cui/ui/linestyletabpage.ui"
               , &rInAttrs ),
     rOutAttrs       ( rInAttrs ),
+    bObjSelected    ( false ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXLStyle            ( XLINE_DASH ),
@@ -64,7 +65,11 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aXDash              ( OUString(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
     aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( pXPool ),
-    rXLSet              ( aXLineAttr.GetItemSet() )
+    rXLSet              ( aXLineAttr.GetItemSet() ),
+    pnDashListState(0),
+    pPageType(0),
+    nDlgType(0),
+    pPosDashLb(0)
 {
 
    get(m_pLbLineStyles   ,"LB_LINESTYLES");
@@ -145,9 +150,6 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
     pDashList = NULL;
 }
-
-
-
 
 void SvxLineDefTabPage::Construct()
 {
