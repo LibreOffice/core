@@ -953,14 +953,12 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
             !mpDoc->RowHidden(rOverY, nTab) &&
             pRowInfo[nArrY].nRowNo == rOverY)
         {
-            bHOver = pRowInfo[nArrY].pCellInfo[rOverX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rOverX+1].bVOverlapped;
         }
         else
         {
             sal_uInt16 nOverlap = ((ScMergeFlagAttr*)mpDoc->GetAttr(
                                 rOverX, rOverY, nTab, ATTR_MERGE_FLAG ))->GetValue();
-            bHOver = ((nOverlap & SC_MF_HOR) != 0);
             bVOver = ((nOverlap & SC_MF_VER) != 0);
         }
     }
