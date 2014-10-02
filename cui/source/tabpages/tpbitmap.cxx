@@ -449,7 +449,6 @@ long SvxBitmapTabPage::CheckChanges_Impl()
                 case RET_BTN_2:
                 {
                     ClickAddHdl_Impl( this );
-                    nPos = m_pLbBitmaps->GetSelectEntryPos();
                 }
                 break;
 
