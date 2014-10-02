@@ -177,9 +177,9 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,com::sun::star::u
 
     if ( _nJulianTime )
     {
-        double d_s = _nJulianTime / 1000;
-        double d_m = d_s / 60;
-        double d_h  = d_m / 60;
+        double d_s = _nJulianTime / 1000.0;
+        double d_m = d_s / 60.0;
+        double d_h  = d_m / 60.0;
         _rDateTime.Hours = (sal_uInt16) (d_h);
         _rDateTime.Minutes = (sal_uInt16) d_m;
         _rDateTime.Seconds = static_cast<sal_uInt16>(( d_m - (double) _rDateTime.Minutes ) * 60.0);
