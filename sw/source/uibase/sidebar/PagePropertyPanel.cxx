@@ -287,7 +287,9 @@ void PagePropertyPanel::ExecuteOrientationChange( const bool bLandscape )
         mpPageItem->SetLandscape( bLandscape );
 
         // swap the width and height of the page size
-        mpPageSizeItem->SetSize( Size( mpPageSizeItem->GetSize().Height(), mpPageSizeItem->GetSize().Width() ) );
+        const long nRotatedWidth = mpPageSizeItem->GetSize().Height();
+        const long nRotatedHeight = mpPageSizeItem->GetSize().Width();
+        mpPageSizeItem->SetSize(Size(nRotatedWidth, nRotatedHeight));
 
         // apply changed attributes
         GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_SIZE, SFX_CALLMODE_RECORD, mpPageSizeItem.get(), mpPageItem.get(), 0L );
