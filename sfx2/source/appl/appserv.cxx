@@ -845,16 +845,13 @@ extern "C" void basicide_macro_organizer( sal_Int16 );
 OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChooseOnly, const OUString& rMacroDesc = OUString() )
 {
 #ifndef DISABLE_DYNLOADING
-    // get basctl dllname
-    static OUString aLibName( SVLIBRARY( "basctl"  ) );
+    osl::Module aMod;
 
-    // load module
-    oslModule handleMod = osl_loadModuleRelative(
-        &thisModule, aLibName.pData, 0 );
+    // load basctl module
+    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"), 0);
 
     // get symbol
-    OUString aSymbol( "basicide_choose_macro"  );
-    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
+    basicide_choose_macro pSymbol = (basicide_choose_macro) aMod.getFunctionSymbol("basicide_choose_macro");
     SAL_WARN_IF(!pSymbol, "sfx.doc", "SfxApplication::MacroOrganizer, no symbol!");
     if (!pSymbol)
         return OUString();
