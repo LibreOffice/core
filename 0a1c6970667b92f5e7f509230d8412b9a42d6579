@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0d59b9_4d924d59",
+        "filename": "scripting/java/org/openoffice/netbeans/modules/office/actions/DeployParcelAction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-10-02T19:09:31Z",
+      "side": 1,
+      "message": "Wrong indentation: keep 4 chars, not 8.\n\n              return file.isDirectory() ||\n                  file.getName().endsWith(\".sxw\") ||\n                  file.getName().endsWith(\".sxc\") ||\n                  file.getName().endsWith(\".sxd\") ||\n                  file.getName().endsWith(\".sxi\");",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 56
+      },
+      "revId": "0a1c6970667b92f5e7f509230d8412b9a42d6579",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
