@@ -2822,9 +2822,9 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                     sal_Int32 nOffsetX( 0 );
                     sal_Int32 nOffsetY( 0 );
                     if ( bHorizontalDockArea )
-                        nOffsetY = sal_Int32( floor( aRowColumnRect.getHeight() / 2 + 0.5 ));
+                        nOffsetY = sal_Int32( floor( aRowColumnRect.getHeight() / 2.0 + 0.5 ));
                     else
-                        nOffsetX = sal_Int32( floor( aRowColumnRect.getWidth() / 2 + 0.5 ));
+                        nOffsetX = sal_Int32( floor( aRowColumnRect.getWidth() / 2.0 + 0.5 ));
 
                     if ( rDockingOperation == DOCKOP_BEFORE_COLROW )
                     {
