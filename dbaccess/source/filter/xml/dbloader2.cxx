@@ -434,7 +434,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         else
         {
             ::comphelper::NamedValueCollection aCreationArgs;
-            aCreationArgs.put( (OUString)INFO_POOLURL, sSalvagedURL );
+            aCreationArgs.put( OUString(INFO_POOLURL), sSalvagedURL );
             xDocumentDataSource.set( xDatabaseContext->createInstanceWithArguments( aCreationArgs.getWrappedNamedValues() ), UNO_QUERY_THROW );
         }
 

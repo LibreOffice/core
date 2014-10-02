@@ -91,7 +91,7 @@ void SbaXPropertiesChangeMultiplexer::propertiesChange(const ::com::sun::star::u
 
     ::cppu::OInterfaceIteratorHelper aIt(*this);
     while (aIt.hasMoreElements())
-        ((::com::sun::star::beans::XPropertiesChangeListener*)aIt.next())->propertiesChange(aMulti);
+        static_cast< ::com::sun::star::beans::XPropertiesChangeListener*>(aIt.next())->propertiesChange(aMulti);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

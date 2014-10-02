@@ -798,7 +798,7 @@ void ODatabaseExport::ensureFormatter()
     {
         Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
         Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-        SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
+        SvNumberFormatsSupplierObj* pSupplierImpl = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
         m_pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
         Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
         xNumberFormatSettings->getPropertyValue("NullDate") >>= m_aNullDate;

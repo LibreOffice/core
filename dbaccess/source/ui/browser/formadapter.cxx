@@ -171,7 +171,7 @@ void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSe
             ::com::sun::star::lang::EventObject aEvt(*this);
             ::cppu::OInterfaceIteratorHelper aIt(m_aLoadListeners);
             while (aIt.hasMoreElements())
-                ((::com::sun::star::form::XLoadListener*)aIt.next())->unloaded(aEvt);
+                static_cast< ::com::sun::star::form::XLoadListener*>(aIt.next())->unloaded(aEvt);
         }
     }
 
@@ -188,7 +188,7 @@ void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSe
             ::com::sun::star::lang::EventObject aEvt(*this);
             ::cppu::OInterfaceIteratorHelper aIt(m_aLoadListeners);
             while (aIt.hasMoreElements())
-                ((::com::sun::star::form::XLoadListener*)aIt.next())->loaded(aEvt);
+                static_cast< ::com::sun::star::form::XLoadListener*>(aIt.next())->loaded(aEvt);
         }
     }
 
@@ -1142,7 +1142,7 @@ void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any
 
         ::cppu::OInterfaceIteratorHelper aIt(*m_aPropertyChangeListeners.getContainer(PROPERTY_NAME));
         while (aIt.hasMoreElements())
-            ((::com::sun::star::beans::XPropertyChangeListener*)aIt.next())->propertyChange(aEvt);
+            static_cast< ::com::sun::star::beans::XPropertyChangeListener*>(aIt.next())->propertyChange(aEvt);
 
         return;
     }
@@ -1425,7 +1425,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     aEvt.Element <<= xElement;
     ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
-        ((::com::sun::star::container::XContainerListener*)aIt.next())->elementInserted(aEvt);
+        static_cast< ::com::sun::star::container::XContainerListener*>(aIt.next())->elementInserted(aEvt);
 }
 
 sal_Int32 SbaXFormAdapter::implGetPos(const OUString& rName)
@@ -1531,7 +1531,7 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( ::com::su
     aEvt.Element <<= xAffected;
     ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
-        ((::com::sun::star::container::XContainerListener*)aIt.next())->elementRemoved(aEvt);
+        static_cast< ::com::sun::star::container::XContainerListener*>(aIt.next())->elementRemoved(aEvt);
 
 }
 
@@ -1594,7 +1594,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
 
     ::cppu::OInterfaceIteratorHelper aIt(m_aContainerListeners);
     while (aIt.hasMoreElements())
-        ((::com::sun::star::container::XContainerListener*)aIt.next())->elementReplaced(aEvt);
+        static_cast< ::com::sun::star::container::XContainerListener*>(aIt.next())->elementReplaced(aEvt);
 }
 
 // ::com::sun::star::container::XIndexAccess

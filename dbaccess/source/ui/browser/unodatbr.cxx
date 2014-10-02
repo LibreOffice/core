@@ -2295,7 +2295,7 @@ bool SbaTableQueryBrowser::ensureEntryObject( SvTreeListEntry* _pEntry )
                 SvTreeListEntry* pParent = m_pTreeView->getListBox().GetParent(_pEntry);
                 if ( pParent != pDataSourceEntry )
                 {
-                    SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+                    SvLBoxString* pString = static_cast<SvLBoxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
                     OSL_ENSURE(pString,"There must be a string item!");
                     OUString aName(pString->GetText());
                     DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pParent->GetUserData());
@@ -2546,7 +2546,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
     Reference<XConnection> xOldConnection(xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
 
     // the name of the table or query
-    SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+    SvLBoxString* pString = static_cast<SvLBoxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
     OSL_ENSURE(pString,"There must be a string item!");
     const OUString sSimpleName = pString->GetText();
     OUStringBuffer sNameBuffer(sSimpleName);
@@ -2556,7 +2556,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
         while( m_pTreeModel->GetParent(pTemp) != pConnection )
         {
             sNameBuffer.insert(0,'/');
-            pString = (SvLBoxString*)pTemp->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+            pString = static_cast<SvLBoxString*>(pTemp->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
             OSL_ENSURE(pString,"There must be a string item!");
             sNameBuffer.insert(0,pString->GetText());
             pTemp = m_pTreeModel->GetParent(pTemp);
@@ -3096,21 +3096,21 @@ void SbaTableQueryBrowser::impl_initialize()
 
     const NamedValueCollection& rArguments( getInitParams() );
 
-    rArguments.get_ensureType( (OUString)PROPERTY_DATASOURCENAME, sInitialDataSourceName );
-    rArguments.get_ensureType( (OUString)PROPERTY_COMMAND_TYPE, nInitialDisplayCommandType );
-    rArguments.get_ensureType( (OUString)PROPERTY_COMMAND, sInitialCommand );
-    rArguments.get_ensureType( (OUString)PROPERTY_ACTIVE_CONNECTION, xForeignConnection );
-    rArguments.get_ensureType( (OUString)PROPERTY_UPDATE_CATALOGNAME, aCatalogName );
-    rArguments.get_ensureType( (OUString)PROPERTY_UPDATE_SCHEMANAME, aSchemaName );
-    rArguments.get_ensureType( (OUString)PROPERTY_UPDATE_TABLENAME, aTableName );
-    rArguments.get_ensureType( (OUString)PROPERTY_ESCAPE_PROCESSING, bEsacpeProcessing );
+    rArguments.get_ensureType( OUString(PROPERTY_DATASOURCENAME), sInitialDataSourceName );
+    rArguments.get_ensureType( OUString(PROPERTY_COMMAND_TYPE), nInitialDisplayCommandType );
+    rArguments.get_ensureType( OUString(PROPERTY_COMMAND), sInitialCommand );
+    rArguments.get_ensureType( OUString(PROPERTY_ACTIVE_CONNECTION), xForeignConnection );
+    rArguments.get_ensureType( OUString(PROPERTY_UPDATE_CATALOGNAME), aCatalogName );
+    rArguments.get_ensureType( OUString(PROPERTY_UPDATE_SCHEMANAME), aSchemaName );
+    rArguments.get_ensureType( OUString(PROPERTY_UPDATE_TABLENAME), aTableName );
+    rArguments.get_ensureType( OUString(PROPERTY_ESCAPE_PROCESSING), bEsacpeProcessing );
     rArguments.get_ensureType( "Frame", xFrame );
-    rArguments.get_ensureType( (OUString)PROPERTY_SHOWMENU, m_bShowMenu );
+    rArguments.get_ensureType( OUString(PROPERTY_SHOWMENU), m_bShowMenu );
 
     // disable the browser if either of ShowTreeViewButton (compatibility name) or EnableBrowser
     // is present and set to FALSE
     bool bDisableBrowser =  ( sal_False == rArguments.getOrDefault( "ShowTreeViewButton", sal_True ) )   // compatibility name
-                            ||  ( sal_False == rArguments.getOrDefault( (OUString)PROPERTY_ENABLE_BROWSER, sal_True ) );
+                            ||  ( sal_False == rArguments.getOrDefault( OUString(PROPERTY_ENABLE_BROWSER), sal_True ) );
     OSL_ENSURE( !rArguments.has( "ShowTreeViewButton" ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeViewButton is superseded by EnableBrowser!" );
     m_bEnableBrowser = !bDisableBrowser;
@@ -3118,7 +3118,7 @@ void SbaTableQueryBrowser::impl_initialize()
     // hide the tree view it is disabled in general, or if the settings tell to hide it initially
     bool bHideTreeView =    ( !m_bEnableBrowser )
                             ||  ( sal_False == rArguments.getOrDefault( "ShowTreeView", sal_True ) )  // compatibility name
-                            ||  ( sal_False == rArguments.getOrDefault( (OUString)PROPERTY_SHOW_BROWSER, sal_True ) );
+                            ||  ( sal_False == rArguments.getOrDefault( OUString(PROPERTY_SHOW_BROWSER), sal_True ) );
     OSL_ENSURE( !rArguments.has( "ShowTreeView" ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeView is superseded by ShowBrowser!" );
 

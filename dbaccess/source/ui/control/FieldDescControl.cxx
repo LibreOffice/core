@@ -936,7 +936,7 @@ void OFieldDescControl::InitializeControl(Control* _pControl,const OString& _sHe
 {
     _pControl->SetHelpId(_sHelpId);
     if ( _bAddChangeHandler )
-        ((OPropListBoxCtrl*)_pControl)->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
+        static_cast<OPropListBoxCtrl*>(_pControl)->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
     _pControl->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
     _pControl->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1465,25 +1465,25 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, Control*, pControl )
 {
     if ((pControl == pLength) || (pControl == pTextLen) || (pControl == pScale))
     {
-        OPropNumericEditCtrl* pConverted = (OPropNumericEditCtrl*)pControl;
+        OPropNumericEditCtrl* pConverted = static_cast<OPropNumericEditCtrl*>(pControl);
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }
     if(pControl == m_pColumnName)
     {
-        OPropColumnEditCtrl* pConverted = (OPropColumnEditCtrl*)pControl;
+        OPropColumnEditCtrl* pConverted = static_cast<OPropColumnEditCtrl*>(pControl);
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }
     else if ((pControl == pDefault) || (pControl == pFormatSample) || (pControl == m_pAutoIncrementValue) )
     {
-        OPropEditCtrl* pConverted = (OPropEditCtrl*)pControl;
+        OPropEditCtrl* pConverted = static_cast<OPropEditCtrl*>(pControl);
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }
     else if ((pControl == pRequired) || (pControl == pNumType) || (pControl == pAutoIncrement) || (pControl == pBoolDefault) || (pControl == m_pType))
     {
-        OPropListBoxCtrl* pConverted = (OPropListBoxCtrl*)pControl;
+        OPropListBoxCtrl* pConverted = static_cast<OPropListBoxCtrl*>(pControl);
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }

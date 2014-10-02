@@ -151,7 +151,7 @@ namespace dbaui
         }
         aArguments.put( "OpenMode", sOpenMode );
 
-        aArguments.put( (OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
+        aArguments.put( OUString(PROPERTY_ACTIVE_CONNECTION), m_xConnection );
         try
         {
             Reference<XHierarchicalNameContainer> xHier(m_xDocumentContainer,UNO_QUERY);
@@ -273,7 +273,7 @@ namespace dbaui
                 ::comphelper::NamedValueCollection aCreationArgs( i_rCreationArgs );
                 if ( aClassId.getLength() )
                     aCreationArgs.put( "ClassID", aClassId );
-                aCreationArgs.put( (OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
+                aCreationArgs.put( OUString(PROPERTY_ACTIVE_CONNECTION), m_xConnection );
 
                 // separate values which are real creation args from args relevant for opening the doc
                 ::comphelper::NamedValueCollection aCommandArgs;

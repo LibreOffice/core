@@ -1129,7 +1129,7 @@ void ORowSet::notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard
 void ORowSet::notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard, const RowsChangeEvent& aEvt)
 {
     _rGuard.clear();
-    m_aRowsetListeners.notifyEach( &XRowSetListener::rowChanged, (EventObject)aEvt );
+    m_aRowsetListeners.notifyEach( &XRowSetListener::rowChanged, static_cast<EventObject>(aEvt) );
     m_aRowsChangeListener.notifyEach( &XRowsChangeListener::rowsChanged, aEvt );
     _rGuard.reset();
 }

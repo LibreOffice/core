@@ -78,7 +78,7 @@ OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj( const OConn
 void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     // same as in base class, use of (non-virtual) operator=
-    *this = (const OQueryTableConnectionData&)rSource;
+    *this = static_cast<const OQueryTableConnectionData&>(rSource);
 }
 
 OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTableConnectionData& rConnData)
@@ -121,7 +121,7 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
     SetFieldType(JTCS_FROM, rDragLeft->GetFieldType());
     SetFieldType(JTCS_TO, rDragRight->GetFieldType());
 
-    AppendConnLine((OUString)rDragLeft->GetField(),(OUString)rDragRight->GetField());
+    AppendConnLine(rDragLeft->GetField(), rDragRight->GetField());
 }
 
 OTableConnectionData* OQueryTableConnectionData::NewInstance() const

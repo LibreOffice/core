@@ -1619,7 +1619,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;
 
     Reference< XPropertySet > xProp( _rxTargetStorage, UNO_QUERY_THROW );
-    xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( (OUString)MIMETYPE_OASIS_OPENDOCUMENT_DATABASE ) );
+    xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( OUString(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE) ) );
 
     OUString aVersion;
     SvtSaveOptions::ODFDefaultVersion const nDefVersion =

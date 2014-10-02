@@ -87,7 +87,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     OSL_ENSURE(nRow == -1,"nRow muss -1 sein!");
     (void)nRow;
 
-    MultiListBox *pListBox = ((OWizTypeSelect*)m_pParentTabPage)->m_pColumnNames;
+    MultiListBox *pListBox = static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pColumnNames;
 
     OFieldDescription* pCurFieldDescr = getCurrentFieldDescData();
 
@@ -192,22 +192,22 @@ const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
 {
-    return ((OWizTypeSelect*)m_pParentTabPage)->m_pParent->m_xDestConnection->getMetaData();
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pParent->m_xDestConnection->getMetaData();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OWizTypeSelectControl::getConnection()
 {
-    return ((OWizTypeSelect*)m_pParentTabPage)->m_pParent->m_xDestConnection;
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_pParent->m_xDestConnection;
 }
 
 bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
 {
-    return ((OWizTypeSelect*)m_pParentTabPage)->m_bAutoIncrementEnabled;
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_bAutoIncrementEnabled;
 }
 
 OUString OWizTypeSelectControl::getAutoIncrementValue() const
 {
-    return ((OWizTypeSelect*)m_pParentTabPage)->m_sAutoIncrementValue;
+    return static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_sAutoIncrementValue;
 }
 
 #define IMG_PRIMARY_KEY 1
@@ -364,7 +364,7 @@ void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr, sal_uInt
     RemoveEntry(_nPos);
     _pFieldDescr->SetPrimaryKey(_bSet);
     if( _bSet )
-        InsertEntry(sColumnName,((OWizTypeSelect*)m_pParentTabPage)->m_imgPKey,_nPos);
+        InsertEntry(sColumnName, static_cast<OWizTypeSelect*>(m_pParentTabPage)->m_imgPKey,_nPos);
     else if( _pFieldDescr->getTypeInfo()->bNullable )
     {
         _pFieldDescr->SetControlDefault(Any());

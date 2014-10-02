@@ -1146,7 +1146,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
         aArgs.put( "Preview", sal_True );
         aArgs.put( "ReadOnly", sal_True );
         aArgs.put( "AsTemplate", sal_False );
-        aArgs.put( (OUString)PROPERTY_SHOWMENU, sal_False );
+        aArgs.put( OUString(PROPERTY_SHOWMENU), sal_False );
 
         Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
         bool bClearPreview = !xPreview.is();

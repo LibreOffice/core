@@ -840,9 +840,9 @@ SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const OUS
     {
         pContext = new OTableStylesContext(*this, _nPrefix, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
-            SetAutoStyles((SvXMLStylesContext*)pContext);
+            SetAutoStyles(static_cast<SvXMLStylesContext*>(pContext));
         else
-            SetStyles((SvXMLStylesContext*)pContext);
+            SetStyles(static_cast<SvXMLStylesContext*>(pContext));
     }
     return pContext;
 }

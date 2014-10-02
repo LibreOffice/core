@@ -429,7 +429,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
         // obtain the data source we belong to, and the TableTypeFilterMode setting
         Any aFilterModeSetting;
-        if ( getDataSourceSetting( getDataSource( (Reference< XInterface >)m_rParent ), "TableTypeFilterMode", aFilterModeSetting ) )
+        if ( getDataSourceSetting( getDataSource( Reference< XInterface >(m_rParent) ), "TableTypeFilterMode", aFilterModeSetting ) )
         {
             OSL_VERIFY( aFilterModeSetting >>= nFilterMode );
         }

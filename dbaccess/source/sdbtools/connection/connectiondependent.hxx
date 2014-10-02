@@ -90,7 +90,7 @@ namespace sdbtools
 
         inline bool acquireConnection( GuardAccess )
         {
-            m_xConnection = (::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >)m_aConnection;
+            m_xConnection = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >(m_aConnection);
             return m_xConnection.is();
         }
         inline void releaseConnection( GuardAccess )

@@ -126,7 +126,7 @@ void SbaExternalSourceBrowser::modified(const ::com::sun::star::lang::EventObjec
     ::com::sun::star::lang::EventObject aEvt(*this);
     ::cppu::OInterfaceIteratorHelper aIt(m_aModifyListeners);
     while (aIt.hasMoreElements())
-        ((::com::sun::star::util::XModifyListener*)aIt.next())->modified(aEvt);
+        static_cast< ::com::sun::star::util::XModifyListener*>(aIt.next())->modified(aEvt);
 }
 
 void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw(::com::sun::star::uno::RuntimeException, std::exception)

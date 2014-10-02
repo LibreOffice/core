@@ -602,7 +602,7 @@ void ODefinitionContainer::approveNewObject(const OUString& _sName,const Referen
 void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException, std::exception)
 {
     ClearableMutexGuard aGuard(m_aMutex);
-    if( evt.PropertyName == (OUString) PROPERTY_NAME || evt.PropertyName ==  "Title" )
+    if( evt.PropertyName == PROPERTY_NAME || evt.PropertyName ==  "Title" )
     {
         m_bInPropertyChange = true;
         try
@@ -629,7 +629,7 @@ void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& a
 {
     MutexGuard aGuard(m_aMutex);
 
-    if( aEvent.PropertyName == (OUString) PROPERTY_NAME || aEvent.PropertyName == "Title" )
+    if( aEvent.PropertyName == PROPERTY_NAME || aEvent.PropertyName == "Title" )
     {
         OUString sNewName;
         aEvent.NewValue >>= sNewName;

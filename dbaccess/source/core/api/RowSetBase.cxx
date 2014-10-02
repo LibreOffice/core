@@ -242,7 +242,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         for (; k != m_pCache->getEnd(); ++k)
         {
             ORowSetValueVector* pTemp = k->get();
-            OSL_ENSURE( pTemp != (void*)0xfeeefeee,"HALT!" );
+            OSL_ENSURE( pTemp != reinterpret_cast<void*>(0xfeeefeee),"HALT!" );
         }
 #endif
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow < m_pCache->getEnd() && aCacheIter != m_pCache->m_aCacheIterators.end(),"Invalid iterator set for currentrow!");

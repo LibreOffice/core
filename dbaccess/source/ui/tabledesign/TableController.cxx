@@ -504,7 +504,7 @@ void OTableController::impl_initialize()
 
         const NamedValueCollection& rArguments( getInitParams() );
 
-        rArguments.get_ensureType( (OUString)PROPERTY_CURRENTTABLE, m_sName );
+        rArguments.get_ensureType( OUString(PROPERTY_CURRENTTABLE), m_sName );
 
         // read autoincrement value set in the datasource
         ::dbaui::fillAutoIncrementValue(getDataSource(),m_bAllowAutoIncrementValue,m_sAutoIncrementValue);

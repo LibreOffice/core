@@ -1480,7 +1480,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
                 if (xCurrentController.Is() && xCurrentController->ISA(EditCellController))
                 {
-                    Edit& rEdit = (Edit&)xCurrentController->GetWindow();
+                    Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
                     bool bHasLen = (rEdit.GetSelection().Len() != 0);
                     bool bIsReadOnly = rEdit.IsReadOnly();
                     switch (nId)
@@ -1964,7 +1964,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 // enabled. This would be really deadly herein if the current cell has no controller ...
                 return;
 
-            Edit& rEdit = (Edit&)xCurrentController->GetWindow();
+            Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
             switch (nId)
             {
                 case ID_BROWSER_CUT :       rEdit.Cut();    break;

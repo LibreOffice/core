@@ -257,7 +257,7 @@ void ORelationTableView::AddNewRelation()
 
 bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,bool /*_bDelete*/)
 {
-    ORelationTableConnectionData* pTabConnData = (ORelationTableConnectionData*)pConn->GetData().get();
+    ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(pConn->GetData().get());
     try
     {
         if ( m_bInRemove || pTabConnData->DropRelation())

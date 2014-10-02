@@ -123,7 +123,7 @@ void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< Prop
 {
     try
     {
-        Reference< XController > xController( (Reference< XController >)m_aController, UNO_SET_THROW );
+        Reference< XController > xController( Reference< XController >(m_aController), UNO_SET_THROW );
         Reference< XDispatchProvider > xDispatchProvider( xController->getFrame(), UNO_QUERY_THROW );
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch(
             _rFeatureURL,

@@ -192,7 +192,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     if  ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )
     {
         bool bDisableBrowser =  ( sal_False == aLoadArgs.getOrDefault( "ShowTreeViewButton", sal_True ) )   // compatibility name
-                                ||  ( sal_False == aLoadArgs.getOrDefault( (OUString)PROPERTY_ENABLE_BROWSER, sal_True ) );
+                                ||  ( sal_False == aLoadArgs.getOrDefault( OUString(PROPERTY_ENABLE_BROWSER), sal_True ) );
 
         if ( bDisableBrowser )
         {

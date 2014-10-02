@@ -29,6 +29,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
 namespace
@@ -187,7 +188,7 @@ namespace cairo
         mpPixmap(),
         mpSurface(
             cairo_xlib_surface_create( (Display*)rSysData.pDisplay,
-                                       (Drawable)rData.aPixmap,
+                                       reinterpret_cast<Drawable>(rData.aPixmap),
                                        (Visual*) rSysData.pVisual,
                                        rData.mnWidth, rData.mnHeight ),
             &cairo_surface_destroy)
@@ -337,10 +338,10 @@ namespace cairo
                                     int x, int y, int width, int height )
     {
         if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-            return SurfaceSharedPtr(new X11Surface(getSysData((const vcl::Window&)rRefDevice),
+            return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
                                                    x,y,width,height));
         else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
-            return SurfaceSharedPtr(new X11Surface(getSysData((const VirtualDevice&)rRefDevice),
+            return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
                                                    x,y,width,height));
         else
             return SurfaceSharedPtr();
@@ -355,9 +356,9 @@ namespace cairo
         if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
         {
             if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-                return SurfaceSharedPtr(new X11Surface(getSysData((const vcl::Window&)rRefDevice), rData ));
+                return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)), rData ));
             else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
-                return SurfaceSharedPtr(new X11Surface(getSysData((const VirtualDevice&)rRefDevice), rData ));
+                return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)), rData ));
         }
 
         return SurfaceSharedPtr();

@@ -309,7 +309,7 @@ void SAL_CALL SbaXGridPeer::dispose(void) throw( RuntimeException, std::exceptio
 
 void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl, const Reference< ::com::sun::star::frame::XStatusListener > & xControl)
 {
-    SbaGridControl* pGrid = (SbaGridControl*) GetWindow();
+    SbaGridControl* pGrid = static_cast<SbaGridControl*>(GetWindow());
     if (!pGrid)
         return;
 
@@ -334,7 +334,7 @@ void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl,
         {
             ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
             while (aListIter.hasMoreElements())
-                ((::com::sun::star::frame::XStatusListener*)aListIter.next())->statusChanged(aEvt);
+                static_cast< ::com::sun::star::frame::XStatusListener*>(aListIter.next())->statusChanged(aEvt);
         }
     }
 }
@@ -398,7 +398,7 @@ SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
 
 void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException, std::exception )
 {
-    SbaGridControl* pGrid = (SbaGridControl*)GetWindow();
+    SbaGridControl* pGrid = static_cast<SbaGridControl*>(GetWindow());
     if (!pGrid)
         return;
 
@@ -621,7 +621,7 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
     FmGridHeader::PreExecuteColumnContextMenu(nColId, rMenu);
 
     // some items are valid only if the db isn't readonly
-    bool bDBIsReadOnly = ((SbaGridControl*)GetParent())->IsReadOnlyDB();
+    bool bDBIsReadOnly = static_cast<SbaGridControl*>(GetParent())->IsReadOnlyDB();
 
     if (bDBIsReadOnly)
     {
@@ -644,8 +644,8 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
     {
         PopupMenu aNewItems(ModuleRes(RID_SBA_GRID_COLCTXMENU));
         sal_uInt16 nPos = 0;
-        sal_uInt16 nModelPos = ((SbaGridControl*)GetParent())->GetModelColumnPos(nColId);
-        Reference< XPropertySet >  xField = ((SbaGridControl*)GetParent())->getField(nModelPos);
+        sal_uInt16 nModelPos = static_cast<SbaGridControl*>(GetParent())->GetModelColumnPos(nColId);
+        Reference< XPropertySet >  xField = static_cast<SbaGridControl*>(GetParent())->getField(nModelPos);
 
         if ( xField.is() )
         {
@@ -678,16 +678,16 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
     switch (nExecutionResult)
     {
         case ID_BROWSER_COLWIDTH:
-            ((SbaGridControl*)GetParent())->SetColWidth(nColId);
+            static_cast<SbaGridControl*>(GetParent())->SetColWidth(nColId);
             break;
 
         case ID_BROWSER_COLATTRSET:
-            ((SbaGridControl*)GetParent())->SetColAttrs(nColId);
+            static_cast<SbaGridControl*>(GetParent())->SetColAttrs(nColId);
             break;
         case ID_BROWSER_COLUMNINFO:
             {
-                sal_uInt16 nModelPos = ((SbaGridControl*)GetParent())->GetModelColumnPos(nColId);
-                Reference< XPropertySet >  xField = ((SbaGridControl*)GetParent())->getField(nModelPos);
+                sal_uInt16 nModelPos = static_cast<SbaGridControl*>(GetParent())->GetModelColumnPos(nColId);
+                Reference< XPropertySet >  xField = static_cast<SbaGridControl*>(GetParent())->getField(nModelPos);
 
                 if(!xField.is())
                     break;
@@ -1381,7 +1381,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         CellControllerRef xCurrentController = Controller();
         if (!xCurrentController.Is() || !xCurrentController->ISA(EditCellController))
             return DND_ACTION_NONE;
-        Edit& rEdit = (Edit&)xCurrentController->GetWindow();
+        Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
 
         // get the dropped string
         TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );

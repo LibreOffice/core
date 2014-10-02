@@ -164,14 +164,14 @@ namespace dbaui
         Reference<XDataSource> xDataSource;
         if ( _aDataSource >>= sDataSource )
         {
-            i_rDispatchArgs.put( (OUString)PROPERTY_DATASOURCENAME, sDataSource );
+            i_rDispatchArgs.put( OUString(PROPERTY_DATASOURCENAME), sDataSource );
         }
         else if ( _aDataSource >>= xDataSource )
         {
-            i_rDispatchArgs.put( (OUString)PROPERTY_DATASOURCE, xDataSource );
+            i_rDispatchArgs.put( OUString(PROPERTY_DATASOURCE), xDataSource );
         }
 
-        i_rDispatchArgs.put( (OUString)PROPERTY_ACTIVE_CONNECTION, getConnection() );
+        i_rDispatchArgs.put( OUString(PROPERTY_ACTIVE_CONNECTION), getConnection() );
     }
 
     // QueryDesigner
@@ -188,19 +188,19 @@ namespace dbaui
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rObjectName );
 
         const bool bIncludeQueryName = !_rObjectName.isEmpty();
-        const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( (OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
+        const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( OUString(PROPERTY_GRAPHICAL_DESIGN), sal_True );
         const bool bEditViewAsSQLCommand = ( m_nCommandType == CommandType::TABLE ) && !bGraphicalDesign;
 
-        i_rDispatchArgs.put( (OUString)PROPERTY_COMMAND_TYPE, m_nCommandType );
+        i_rDispatchArgs.put( OUString(PROPERTY_COMMAND_TYPE), m_nCommandType );
 
         if ( bIncludeQueryName )
         {
-            i_rDispatchArgs.put( (OUString)PROPERTY_COMMAND, _rObjectName );
+            i_rDispatchArgs.put( OUString(PROPERTY_COMMAND), _rObjectName );
         }
 
         if ( bEditViewAsSQLCommand )
         {
-            i_rDispatchArgs.put( (OUString)PROPERTY_ESCAPE_PROCESSING, sal_False );
+            i_rDispatchArgs.put( OUString(PROPERTY_ESCAPE_PROCESSING), sal_False );
         }
     }
 
@@ -217,7 +217,7 @@ namespace dbaui
 
         if ( !_rObjectName.isEmpty() )
         {
-            i_rDispatchArgs.put( (OUString)PROPERTY_CURRENTTABLE, _rObjectName );
+            i_rDispatchArgs.put( OUString(PROPERTY_CURRENTTABLE), _rObjectName );
         }
     }
 
@@ -283,15 +283,15 @@ namespace dbaui
         if ( m_bTable )
             ::dbtools::qualifiedNameComponents( getConnection()->getMetaData(), _rQualifiedName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
 
-        i_rDispatchArgs.put( (OUString)PROPERTY_COMMAND_TYPE, (m_bTable ? CommandType::TABLE : CommandType::QUERY) );
-        i_rDispatchArgs.put( (OUString)PROPERTY_COMMAND, _rQualifiedName );
-        i_rDispatchArgs.put( (OUString)PROPERTY_ENABLE_BROWSER, sal_False );
+        i_rDispatchArgs.put( OUString(PROPERTY_COMMAND_TYPE), (m_bTable ? CommandType::TABLE : CommandType::QUERY) );
+        i_rDispatchArgs.put( OUString(PROPERTY_COMMAND), _rQualifiedName );
+        i_rDispatchArgs.put( OUString(PROPERTY_ENABLE_BROWSER), sal_False );
 
         if ( m_bTable )
         {
-            i_rDispatchArgs.put( (OUString)PROPERTY_UPDATE_CATALOGNAME, sCatalog );
-            i_rDispatchArgs.put( (OUString)PROPERTY_UPDATE_SCHEMANAME, sSchema );
-            i_rDispatchArgs.put( (OUString)PROPERTY_UPDATE_TABLENAME, sTable );
+            i_rDispatchArgs.put( OUString(PROPERTY_UPDATE_CATALOGNAME), sCatalog );
+            i_rDispatchArgs.put( OUString(PROPERTY_UPDATE_SCHEMANAME), sSchema );
+            i_rDispatchArgs.put( OUString(PROPERTY_UPDATE_TABLENAME), sTable );
         }
     }
 

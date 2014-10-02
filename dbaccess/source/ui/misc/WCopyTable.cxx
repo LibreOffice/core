@@ -937,7 +937,7 @@ void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rS
 
 IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl)
 {
-    OWizardPage* pCurrent = (OWizardPage*)GetPage(GetCurLevel());
+    OWizardPage* pCurrent = static_cast<OWizardPage*>(GetPage(GetCurLevel()));
     if(pCurrent)
     {
         bool bFirstTime = pCurrent->IsFirstTime();
@@ -991,7 +991,7 @@ void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle, bool bEnable)
 
 long OCopyTableWizard::DeactivatePage()
 {
-    OWizardPage* pPage = (OWizardPage*)GetPage(GetCurLevel());
+    OWizardPage* pPage = static_cast<OWizardPage*>(GetPage(GetCurLevel()));
     return pPage ? pPage->LeavePage() : sal_False;
 }
 
