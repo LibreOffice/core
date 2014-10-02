@@ -35,6 +35,7 @@
   <implementation name="com.sun.star.comp.desktop.QuickstartWrapper"
       constructor="com_sun_star_comp_desktop_QuickstartWrapper_get_implementation">
     <service name="com.sun.star.office.Quickstart"/>
+    <singleton name="com.sun.star.office.theQuickstart"/>
   </implementation>
   <implementation name="com.sun.star.comp.document.OwnSubFilter"
       constructor="com_sun_star_comp_document_OwnSubFilter_get_implementation">
