@@ -1571,10 +1571,12 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         DBG_ASSERT(bTest, "Renaming StyleSheet failed.");
                         pMySheet->GetItemSet().ClearItem(0);  // Delete all
 
-                        StyleSheetUndoAction* pUndoChStyle = new StyleSheetUndoAction(this,
-                                                                 pMySheet, &pHisSheet->GetItemSet());
                         if (bUndo)
+                        {
+                            StyleSheetUndoAction* pUndoChStyle = new StyleSheetUndoAction(this,
+                                                                 pMySheet, &pHisSheet->GetItemSet());
                             pUndoMgr->AddUndoAction(pUndoChStyle);
+                        }
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
                         pMySheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                     }
