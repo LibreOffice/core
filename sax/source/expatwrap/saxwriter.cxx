@@ -23,6 +23,7 @@
 #include <set>
 #include <stack>
 
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -891,17 +892,27 @@ public: // XActiveDataSource
     virtual void SAL_CALL setOutputStream(const Reference< XOutputStream > & aStream)
         throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
-        // temporary: set same stream again to clear buffer
-        if ( m_out == aStream && m_pSaxWriterHelper && m_bDocStarted )
-            m_pSaxWriterHelper->clearBuffer();
-        else
+        try
         {
-            m_out = aStream;
-            delete m_pSaxWriterHelper;
-            m_pSaxWriterHelper = new SaxWriterHelper(m_out);
-            m_bDocStarted = false;
-            m_nLevel = 0;
-            m_bIsCDATA = false;
+            // temporary: set same stream again to clear buffer
+            if ( m_out == aStream && m_pSaxWriterHelper && m_bDocStarted )
+                m_pSaxWriterHelper->clearBuffer();
+            else
+            {
+                m_out = aStream;
+                delete m_pSaxWriterHelper;
+                m_pSaxWriterHelper = new SaxWriterHelper(m_out);
+                m_bDocStarted = false;
+                m_nLevel = 0;
+                m_bIsCDATA = false;
+            }
+        }
+        catch (const SAXException& e)
+        {
+            throw css::lang::WrappedTargetRuntimeException(
+                   e.Message,
+                   static_cast < OWeakObject * > ( this ),
+                   e.WrappedException);
         }
     }
     virtual Reference< XOutputStream >  SAL_CALL getOutputStream(void)
