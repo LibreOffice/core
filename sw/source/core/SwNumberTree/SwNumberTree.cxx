@@ -230,21 +230,18 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
 {
     tSwNumberTreeChildren::const_iterator aIt = mItLastValid;
 
-    SwNumberTree::tSwNumTreeNumber nTmpNumber = 0;
-
     do
     {
         if (aIt == mChildren.end())
         {
             aIt = mChildren.begin();
-
-            nTmpNumber = GetStartValue();
         }
         else
             ++aIt;
 
         if (aIt != mChildren.end())
         {
+            SwNumberTree::tSwNumTreeNumber nTmpNumber = 0;
             SwNumberTreeNode * pPred = (*aIt)->GetPred();
 
             // #i64311#
