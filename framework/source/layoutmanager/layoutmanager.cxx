@@ -752,7 +752,6 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
     MenuBarManager*           pInplaceMenuBar( m_pInplaceMenuBar );
     aWriteLock.clear();
 
-    bool bMustDoLayout(false);
     if (( xMenuBar.is() || xInplaceMenuBar.is() ) && xContainerWindow.is() )
     {
         SolarMutexGuard aGuard;
@@ -773,10 +772,10 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
                 pSysWindow->SetMenuBar(pMenuBar, m_xFrame);
             else
                 pSysWindow->SetMenuBar( 0 );
-            bMustDoLayout = true;
         }
     }
 
+    bool bMustDoLayout;
     // Hide/show the statusbar according to bSetVisible
     if ( bSetVisible )
         bMustDoLayout = !implts_showStatusBar();
