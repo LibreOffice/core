@@ -54,6 +54,7 @@ void ServicesTest::test()
     // ImplBorderWindow::ImplInit -> Window::ImplInit ->
     // WinSalInstance::CreateFrame -> ImplSendMessage -> SendMessageW):
     blacklist.push_back("com.sun.star.report.ReportDefinition");
+    blacklist.push_back("com.sun.star.office.Quickstart");
 
     Reference< XHierarchicalNameAccess > xTypeManager(
             m_xContext->getValueByName(
