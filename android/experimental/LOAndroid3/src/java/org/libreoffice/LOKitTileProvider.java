@@ -9,6 +9,7 @@ import org.libreoffice.kit.Office;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.FloatSize;
+import org.mozilla.gecko.gfx.IntSize;
 import org.mozilla.gecko.gfx.LayerController;
 
 import java.nio.ByteBuffer;
@@ -132,9 +133,9 @@ public class LOKitTileProvider implements TileProvider {
     }
 
     @Override
-    public CairoImage createTile(float x, float y, FloatSize tileSize, float zoom) {
-        ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
-        Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
+    public CairoImage createTile(float x, float y, IntSize tileSize, float zoom) {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(tileSize.width * tileSize.height * 4);
+        Bitmap bitmap = Bitmap.createBitmap(tileSize.width, tileSize.height, Bitmap.Config.ARGB_8888);
 
         if (mDocument != null) {
             float twipX = pixelToTwip(x, mDPI) / zoom;
@@ -142,8 +143,8 @@ public class LOKitTileProvider implements TileProvider {
             float twipWidth = mTileWidth / zoom;
             float twipHeight = mTileHeight / zoom;
             long start = System.currentTimeMillis();
-            Log.i(LOGTAG, "paintTile TOP @ " + start + "(" + TILE_SIZE + " " + TILE_SIZE + " " + (int)twipX + " " + (int)twipY + " " + (int) twipWidth + " " + (int) twipHeight + ")");
-            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) twipX, (int) twipY, (int) twipWidth, (int) twipHeight);
+            Log.i(LOGTAG, "paintTile TOP @ " + start + "(" + tileSize.width + " " + tileSize.height + " " + (int)twipX + " " + (int)twipY + " " + (int) twipWidth + " " + (int) twipHeight + ")");
+            mDocument.paintTile(buffer, tileSize.width, tileSize.height, (int) twipX, (int) twipY, (int) twipWidth, (int) twipHeight);
             long stop = System.currentTimeMillis();
             Log.i(LOGTAG, "paintTile TAIL @ " + stop + " - elapsed: " + (stop - start) + " ");
         } else {

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.FloatSize;
+import org.mozilla.gecko.gfx.IntSize;
 import org.mozilla.gecko.gfx.LayerController;
 
 public class MockTileProvider implements TileProvider {
@@ -45,7 +46,7 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
-    public CairoImage createTile(float x, float y, FloatSize tileSize, float zoom) {
+    public CairoImage createTile(float x, float y, IntSize tileSize, float zoom) {
         int tiles = (int) (getPageWidth() / TILE_SIZE) + 1;
         int tileNumber = (int) ((y / TILE_SIZE) * tiles + (x / TILE_SIZE));
         tileNumber %= 9;
