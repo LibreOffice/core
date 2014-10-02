@@ -890,25 +890,25 @@ public:
 public: // XActiveDataSource
     virtual void SAL_CALL setOutputStream(const Reference< XOutputStream > & aStream)
         throw (RuntimeException, std::exception) SAL_OVERRIDE
-            {
-                // temporary: set same stream again to clear buffer
-                if ( m_out == aStream && m_pSaxWriterHelper && m_bDocStarted )
-                    m_pSaxWriterHelper->clearBuffer();
-                else
-                {
-
-                m_out = aStream;
-                delete m_pSaxWriterHelper;
-                m_pSaxWriterHelper = new SaxWriterHelper(m_out);
-                m_bDocStarted = false;
-                m_nLevel = 0;
-                m_bIsCDATA = false;
-
-                }
-            }
+    {
+        // temporary: set same stream again to clear buffer
+        if ( m_out == aStream && m_pSaxWriterHelper && m_bDocStarted )
+            m_pSaxWriterHelper->clearBuffer();
+        else
+        {
+            m_out = aStream;
+            delete m_pSaxWriterHelper;
+            m_pSaxWriterHelper = new SaxWriterHelper(m_out);
+            m_bDocStarted = false;
+            m_nLevel = 0;
+            m_bIsCDATA = false;
+        }
+    }
     virtual Reference< XOutputStream >  SAL_CALL getOutputStream(void)
         throw(RuntimeException, std::exception) SAL_OVERRIDE
-            { return m_out; }
+    {
+        return m_out;
+    }
 
 public: // XDocumentHandler
     virtual void SAL_CALL startDocument(void)
