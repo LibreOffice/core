@@ -1385,9 +1385,6 @@ Any TreeControlPeer::getProperty( const OUString& PropertyName ) throw(RuntimeEx
         UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
         switch(nPropId)
         {
-        case BASEPROPERTY_HIDEINACTIVESELECTION:
-            return Any( ( rTree.GetStyle() & WB_HIDESELECTION ) != 0 ? sal_True : sal_False );
-
         case BASEPROPERTY_TREE_SELECTIONTYPE:
         {
             SelectionType eSelectionType;
