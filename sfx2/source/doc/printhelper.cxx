@@ -819,7 +819,7 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
 
     ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
     while (pIterator.hasMoreElements())
-        ((view::XPrintJobListener*)pIterator.next())->printJobEvent( aEvent );
+        static_cast<view::XPrintJobListener*>(pIterator.next())->printJobEvent( aEvent );
 }
 
 void SAL_CALL SfxPrintHelper::addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)

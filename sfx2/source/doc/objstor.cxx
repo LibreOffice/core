@@ -1420,8 +1420,9 @@ bool SfxObjectShell::SaveTo_Impl
 
         pFilter = rMedium.GetFilter();
 
-        const SfxStringItem *pVersionItem = ( !rMedium.IsInCheckIn( ) && pSet ) ? (const SfxStringItem*)
-                SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, false, TYPE(SfxStringItem) ) : NULL;
+        const SfxStringItem *pVersionItem = ( !rMedium.IsInCheckIn( ) && pSet )
+                ? static_cast<const SfxStringItem*>( SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, false, TYPE(SfxStringItem) ) )
+                : NULL;
         OUString aTmpVersionURL;
 
         if ( bOk )
@@ -1509,8 +1510,9 @@ bool SfxObjectShell::SaveTo_Impl
             if ( bOk && pVersionItem && !rMedium.IsInCheckIn() )
             {
                 // store a version also
-                const SfxStringItem *pAuthorItem = pSet ? (const SfxStringItem*)
-                    SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, false, TYPE(SfxStringItem) ) : NULL;
+                const SfxStringItem *pAuthorItem = pSet
+                    ? static_cast<const SfxStringItem*>( SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, false, TYPE(SfxStringItem) ) )
+                    : NULL;
 
                 // version comment
                 util::RevisionTag aInfo;

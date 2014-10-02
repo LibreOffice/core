@@ -1202,7 +1202,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         && !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ))
     {
         pImp->nFlagsInProgress |= SFX_LOADED_MAINDOCUMENT;
-        ((SfxHeaderAttributes_Impl*)GetHeaderAttributes())->SetAttributes();
+        static_cast<SfxHeaderAttributes_Impl*>(GetHeaderAttributes())->SetAttributes();
         pImp->bImportDone = true;
         if( !IsAbortingImport() )
             PositionView_Impl();
@@ -1669,19 +1669,19 @@ SvKeyValueIterator* SfxObjectShell::GetHeaderAttributes()
         DBG_ASSERT( pMedium, "No Medium" );
         pImp->xHeaderAttributes = new SfxHeaderAttributes_Impl( this );
     }
-    return ( SvKeyValueIterator*) &pImp->xHeaderAttributes;
+    return static_cast<SvKeyValueIterator*>( &pImp->xHeaderAttributes );
 }
 
 void SfxObjectShell::ClearHeaderAttributesForSourceViewHack()
 {
-    ((SfxHeaderAttributes_Impl*)GetHeaderAttributes())
+    static_cast<SfxHeaderAttributes_Impl*>(GetHeaderAttributes())
         ->ClearForSourceView();
 }
 
 
 void SfxObjectShell::SetHeaderAttributesForSourceViewHack()
 {
-    ((SfxHeaderAttributes_Impl*)GetHeaderAttributes())
+    static_cast<SfxHeaderAttributes_Impl*>(GetHeaderAttributes())
         ->SetAttributes();
 }
 

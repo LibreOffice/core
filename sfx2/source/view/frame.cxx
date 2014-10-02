@@ -544,8 +544,8 @@ SfxFrameItem::SfxFrameItem( SfxFrame *p ):
 
 bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
 {
-     return ((SfxFrameItem&)rItem).pFrame == pFrame &&
-         ((SfxFrameItem&)rItem).wFrame == wFrame;
+     return static_cast<const SfxFrameItem&>(rItem).pFrame == pFrame &&
+         static_cast<const SfxFrameItem&>(rItem).wFrame == wFrame;
 }
 
 

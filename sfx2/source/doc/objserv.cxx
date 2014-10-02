@@ -1125,33 +1125,33 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
     {
         case SID_MODIFIED:
         {
-            SetModified( ( (SfxBoolItem&) rReq.GetArgs()->Get(SID_MODIFIED)).GetValue() );
+            SetModified( static_cast<const SfxBoolItem&>(rReq.GetArgs()->Get(SID_MODIFIED)).GetValue() );
             rReq.Done();
             break;
         }
 
         case SID_DOCTITLE:
-            SetTitle( ( (SfxStringItem&) rReq.GetArgs()->Get(SID_DOCTITLE)).GetValue() );
+            SetTitle( static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_DOCTITLE)).GetValue() );
             rReq.Done();
             break;
 
         case SID_DOCINFO_AUTHOR :
         {
-            OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            OUString aStr = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
             getDocProperties()->setAuthor( aStr );
             break;
         }
 
         case SID_DOCINFO_COMMENTS :
         {
-            OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            OUString aStr = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
             getDocProperties()->setDescription( aStr );
             break;
         }
 
         case SID_DOCINFO_KEYWORDS :
         {
-            OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            OUString aStr = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
             getDocProperties()->setKeywords(
                 ::comphelper::string::convertCommaSeparated(aStr) );
             break;

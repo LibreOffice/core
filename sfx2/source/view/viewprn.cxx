@@ -445,7 +445,7 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
     {
         DBG_ASSERT( _pSetupParent, "no dialog parent" );
         if( _pSetupParent )
-            _pOptions = ( (SfxPrinter*)_pSetupParent->GetPrinter() )->GetOptions().Clone();
+            _pOptions = static_cast<SfxPrinter*>( _pSetupParent->GetPrinter() )->GetOptions().Clone();
     }
 
     assert(_pOptions);

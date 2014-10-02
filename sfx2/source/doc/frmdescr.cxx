@@ -186,7 +186,7 @@ bool SfxFrameDescriptorItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return aProperties == ((SfxFrameDescriptorItem&)rAttr).aProperties;
+    return aProperties == static_cast<const SfxFrameDescriptorItem&>(rAttr).aProperties;
 }
 
 

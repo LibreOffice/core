@@ -295,12 +295,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
         if ( nPos != MENU_ITEM_NOTFOUND && xFrame.is() )
         {
             // Retrieve addon popup menus and add them to our menu bar
-            framework::AddonMenuManager::MergeAddonPopupMenus( xFrame, nPos, (MenuBar *)pSVMenu, xContext );
+            framework::AddonMenuManager::MergeAddonPopupMenus( xFrame, nPos, static_cast<MenuBar *>(pSVMenu), xContext );
         }
 
         // Merge the Add-Ons help menu items into the Office help menu
         if ( xFrame.is() )
-            framework::AddonMenuManager::MergeAddonHelpMenu( xFrame, (MenuBar *)pSVMenu, xContext );
+            framework::AddonMenuManager::MergeAddonHelpMenu( xFrame, static_cast<MenuBar *>(pSVMenu), xContext );
 
         // Set addon menu pointer here to avoid problems. When accessibility is enabled, the whole menu
         // is created immediately!
@@ -440,7 +440,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                             OUString aImageId;
 
                             ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                                (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nSlotId );
+                                reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pSVMenu->GetUserValue( nSlotId ));
 
                             if ( pMenuAttributes )
                                 aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
@@ -512,7 +512,7 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
                     OUString aImageId;
 
                     ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                        (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nSlotId );
+                        reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pSVMenu->GetUserValue( nSlotId ));
 
                     if ( pMenuAttributes )
                         aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
@@ -580,7 +580,7 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
                 OUString aImageId;
 
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                    (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nSlotId );
+                    reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pMenu->GetUserValue( nSlotId ));
 
                 if ( pMenuAttributes )
                     aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes

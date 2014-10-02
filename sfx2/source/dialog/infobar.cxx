@@ -224,7 +224,7 @@ void SfxInfoBarWindow::Resize( )
 
 IMPL_LINK_NOARG( SfxInfoBarWindow, CloseHandler )
 {
-    ((SfxInfoBarContainerWindow*)GetParent())->removeInfoBar( this );
+    static_cast<SfxInfoBarContainerWindow*>(GetParent())->removeInfoBar( this );
     return 0;
 }
 

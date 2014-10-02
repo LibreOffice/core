@@ -1980,7 +1980,7 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuI
         try
         {
             ui::ContextMenuInterceptorAction eAction =
-                ((ui::XContextMenuInterceptor*)aIt.next())->notifyContextMenuExecute( aEvent );
+                static_cast<ui::XContextMenuInterceptor*>(aIt.next())->notifyContextMenuExecute( aEvent );
             switch ( eAction )
             {
                 case ui::ContextMenuInterceptorAction_CANCELLED :

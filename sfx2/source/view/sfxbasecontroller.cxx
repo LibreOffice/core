@@ -951,7 +951,7 @@ void SfxBaseController::BorderWidthsChanged_Impl()
         {
             try
             {
-                ((frame::XBorderResizeListener*)pIterator.next())->borderWidthsChanged( xThis, aBWidths );
+                static_cast<frame::XBorderResizeListener*>(pIterator.next())->borderWidthsChanged( xThis, aBWidths );
             }
             catch (const RuntimeException&)
             {

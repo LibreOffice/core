@@ -664,7 +664,7 @@ bool SfxObjectShell::PrepareClose
                 pPoolItem = pFrame->GetBindings().ExecuteSynchron( IsReadOnlyMedium() ? SID_SAVEASDOC : SID_SAVEDOC, ppArgs );
             }
 
-            if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
+            if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !static_cast<const SfxBoolItem*>( pPoolItem )->GetValue() ) )
                 return false;
         }
         else if ( RET_CANCEL == nRet )

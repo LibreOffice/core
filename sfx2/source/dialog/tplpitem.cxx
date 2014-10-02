@@ -60,7 +60,7 @@ SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return ( SfxFlagItem::operator==( rCmp ) &&
-             aStyle == ( (const SfxTemplateItem&)rCmp ).aStyle );
+             aStyle == static_cast<const SfxTemplateItem&>(rCmp).aStyle );
 }
 
 

@@ -199,24 +199,24 @@ void SfxMenuControl::StateChanged
         // BoolItem for check
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxBoolItem not allowed for SID_OBJECTMENUx" );
-        bCheck = ((const SfxBoolItem*)pState)->GetValue();
+        bCheck = static_cast<const SfxBoolItem*>(pState)->GetValue();
         Menu* pMenu = pOwnMenu->GetSVMenu();
         pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MIB_CHECKABLE);
     }
     else if ( pState->ISA(SfxEnumItemInterface) &&
-              ((SfxEnumItemInterface *)pState)->HasBoolValue() )
+              static_cast<const SfxEnumItemInterface *>(pState)->HasBoolValue() )
     {
         // Treat EnumItem as Bool
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxEnumItem not allowed for SID_OBJECTMENUx" );
-        bCheck = ((SfxEnumItemInterface *)pState)->GetBoolValue();
+        bCheck = static_cast<const SfxEnumItemInterface *>(pState)->GetBoolValue();
         Menu* pMenu = pOwnMenu->GetSVMenu();
         pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MIB_CHECKABLE);
     }
     else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
     {
         // Get MenuText from SfxStringItem
-        OUString aStr( ((const SfxStringItem*)pState)->GetValue() );
+        OUString aStr( static_cast<const SfxStringItem*>(pState)->GetValue() );
         if ( aStr.startsWith("($1)") )
         {
             OUString aEntry(SfxResId(STR_UPDATEDOC).toString());
@@ -294,7 +294,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
 PopupMenu* SfxMenuControl::GetPopup () const
 {
     if (GetPopupMenu())
-        return (PopupMenu*)GetPopupMenu()->GetSVMenu();
+        return static_cast<PopupMenu*>(GetPopupMenu()->GetSVMenu());
     else
         return 0;
 }
@@ -353,7 +353,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         bool        bImageSet = false;
                         OUString aImageId;
                         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                            (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
+                            reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pMenu->GetUserValue( nItemId ));
 
                         if ( pMenuAttributes )
                             aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
@@ -439,7 +439,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
     {
         OUString aTargetFrame( "_blank" );
         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-            (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
+            reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pMenu->GetUserValue( pMenu->GetCurItemId() ));
 
         if ( pMenuAttributes )
             aTargetFrame = pMenuAttributes->aTargetFrame;

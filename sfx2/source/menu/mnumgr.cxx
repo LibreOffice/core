@@ -254,7 +254,7 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
 
 sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, vcl::Window* pWindow )
 {
-    sal_uInt16 nVal = ( (PopupMenu*) GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
+    sal_uInt16 nVal = static_cast<PopupMenu*>( GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
     delete pStaticThesSubMenu;  pStaticThesSubMenu = NULL;
     return nVal;
 }
@@ -319,7 +319,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
         if ( pMenu )
         {
             delete pSVMenu;
-            pSVMenu = (PopupMenu*) pMenu;
+            pSVMenu = static_cast<PopupMenu*>( pMenu );
         }
 
         SfxPopupMenuManager* aMgr = new SfxPopupMenuManager( pSVMenu, pFrame->GetBindings());
@@ -369,7 +369,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         if ( pMenu )
         {
             delete pSVMenu;
-            pSVMenu = (PopupMenu*) pMenu;
+            pSVMenu = static_cast<PopupMenu*>( pMenu );
         }
 
         SfxPopupMenuManager aPop( pSVMenu, pFrame->GetBindings() );

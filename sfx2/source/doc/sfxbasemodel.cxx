@@ -338,7 +338,7 @@ void SAL_CALL SfxPrintHelperListener_Impl::printJobEvent( const view::PrintJobEv
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
         while (pIterator.hasMoreElements())
-            ((view::XPrintJobListener*)pIterator.next())->printJobEvent( rEvent );
+            static_cast<view::XPrintJobListener*>(pIterator.next())->printJobEvent( rEvent );
     }
 }
 
@@ -1374,7 +1374,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
         {
             try
             {
-                ((util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
+                static_cast<util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
             }
             catch( RuntimeException& )
             {
@@ -1402,7 +1402,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
         {
             try
             {
-                ((util::XCloseListener*)pCloseIterator.next())->notifyClosing( aSource );
+                static_cast<util::XCloseListener*>(pCloseIterator.next())->notifyClosing( aSource );
             }
             catch( RuntimeException& )
             {
@@ -3270,7 +3270,7 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
         {
             try
             {
-                ((document::XEventListener *)aIt.next())->notifyEvent( aEvent );
+                static_cast<document::XEventListener *>(aIt.next())->notifyEvent( aEvent );
             }
             catch( RuntimeException& )
             {
@@ -3326,9 +3326,9 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const Sequence< sal_Int8 >& aIden
         {
             // SO3_GLOBAL_CLASSID is apparently used by binfilter :(
             if ( aName == SvGlobalName( SO3_GLOBAL_CLASSID ) )
-                 return (sal_Int64)(sal_IntPtr)(SvObject*) pObjectShell;
+                 return reinterpret_cast<sal_Int64>((SvObject*) pObjectShell);
             else if ( aName == SvGlobalName( SFX_GLOBAL_CLASSID ) )
-                 return (sal_Int64)(sal_IntPtr)(SfxObjectShell*) pObjectShell;
+                 return reinterpret_cast<sal_Int64>((SfxObjectShell*) pObjectShell);
         }
     }
 

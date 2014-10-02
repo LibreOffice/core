@@ -251,7 +251,7 @@ void SfxViewNotificatedFrameList_Impl::Notify( SfxBroadcaster& rBC, const SfxHin
         switch( pSimpleHint->GetId() )
         {
             case SFX_HINT_DYING:
-                SfxViewFrame* pFrame = (SfxViewFrame*) &rBC;
+                SfxViewFrame* pFrame = dynamic_cast<SfxViewFrame*>(&rBC);
                 if( pFrame )
                 {
                     iterator it = std::find( begin(), end(), pFrame );
@@ -964,7 +964,7 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
         // The SW has its own undo in the View
         const SfxPoolItem *pRet = GetViewShell()->ExecuteSlot( rReq );
         if ( pRet )
-            bOK = ((SfxBoolItem*)pRet)->GetValue();
+            bOK = static_cast<const SfxBoolItem*>(pRet)->GetValue();
     }
 
     rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bOK ) );
@@ -2608,7 +2608,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
     const SfxPoolItem* pRet = SfxGetpApp()->ExecuteSlot( aReq );
     OUString aScriptURL;
     if ( pRet )
-        aScriptURL = ((SfxStringItem*)pRet)->GetValue();
+        aScriptURL = static_cast<const SfxStringItem*>(pRet)->GetValue();
     if ( !aScriptURL.isEmpty() )
     {
         // parse scriptURL
@@ -2658,7 +2658,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                 SbModule* pModule = pBasic->FindModule( aModuleName );
                 if ( pModule )
                 {
-                    SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD );
+                    SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ));
                     aOUSource = pModule->GetSource32();
                     sal_uInt16 nStart, nEnd;
                     pMethod->GetLineRange( nStart, nEnd );
@@ -2898,7 +2898,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             SfxViewFrame *pTop = GetTopViewFrame();
             if ( pTop )
             {
-                WorkWindow* pWork = (WorkWindow*) pTop->GetFrame().GetTopWindow_Impl();
+                WorkWindow* pWork = static_cast<WorkWindow*>( pTop->GetFrame().GetTopWindow_Impl() );
                 if ( pWork )
                 {
                     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
@@ -3049,7 +3049,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     SfxViewFrame* pTop = GetTopViewFrame();
                     if ( pTop )
                     {
-                        WorkWindow* pWork = (WorkWindow*) pTop->GetFrame().GetTopWindow_Impl();
+                        WorkWindow* pWork = static_cast<WorkWindow*>( pTop->GetFrame().GetTopWindow_Impl() );
                         if ( pWork )
                         {
                             rSet.Put( SfxBoolItem( nWhich, pWork->IsFullScreenMode() ) );
@@ -3358,7 +3358,7 @@ void SfxViewFrame::AppendInfoBar( const OUString& sId, const OUString& sMessage,
     SfxChildWindow* pChild = GetChildWindow( nId );
     if ( pChild )
     {
-        SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
+        SfxInfoBarContainerWindow* pInfoBars = static_cast<SfxInfoBarContainerWindow*>( pChild->GetWindow() );
         pInfoBars->appendInfoBar( sId, sMessage, aButtons );
         ShowChildWindow( nId );
     }
@@ -3382,7 +3382,7 @@ void SfxViewFrame::RemoveInfoBar( const OUString& sId )
     SfxChildWindow* pChild = GetChildWindow( nId );
     if ( pChild )
     {
-        SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
+        SfxInfoBarContainerWindow* pInfoBars = static_cast<SfxInfoBarContainerWindow*>( pChild->GetWindow() );
         SfxInfoBarWindow* pInfoBar = pInfoBars->getInfoBar( sId );
         pInfoBars->removeInfoBar( pInfoBar );
         ShowChildWindow( nId );

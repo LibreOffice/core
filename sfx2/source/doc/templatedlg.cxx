@@ -916,7 +916,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                 for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
                 {
                     OUString aTemplateList;
-                    TemplateContainerItem *pFolder = (TemplateContainerItem*)(*pIter);
+                    TemplateContainerItem *pFolder = const_cast<TemplateContainerItem*>(static_cast<const TemplateContainerItem*>(*pIter));
 
                     for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
                     {
@@ -1329,7 +1329,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
                 std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
                 for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
                 {
-                    TemplateContainerItem *pItem = (TemplateContainerItem*)(*pIter);
+                    TemplateContainerItem *pItem = const_cast<TemplateContainerItem*>(static_cast<const TemplateContainerItem*>(*pIter));
 
                     if (!mpLocalView->isTemplateNameUnique(pItem->mnId,aName))
                     {

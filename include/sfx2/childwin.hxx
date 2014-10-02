@@ -320,7 +320,7 @@ public:
         SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
-            ((SfxFloatingWindow*)GetWindow())->FillInfo( aInfo );  \
+            static_cast<SfxFloatingWindow*>(GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
 #define SFX_IMPL_FLOATINGWINDOW_WITHID(Class, MyID)    \
@@ -328,7 +328,7 @@ public:
         SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
-            ((SfxFloatingWindow*)GetWindow())->FillInfo( aInfo );  \
+            static_cast<SfxFloatingWindow*>(GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
 #define SFX_IMPL_MODELESSDIALOG_WITHID(Class, MyID)    \
@@ -336,7 +336,7 @@ public:
         SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
-            ((SfxModelessDialog*)GetWindow())->FillInfo( aInfo );  \
+            static_cast<SfxModelessDialog*>(GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
 
@@ -345,7 +345,7 @@ public:
         SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
-            ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo );  \
+            static_cast<SfxDockingWindow*>(GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
 #define SFX_IMPL_DOCKINGWINDOW_WITHID(Class, MyID) \
@@ -353,7 +353,7 @@ public:
         SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
-            ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo );  \
+            static_cast<SfxDockingWindow*>(GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
 #define SFX_IMPL_TOOLBOX(Class, MyID)   \
@@ -361,7 +361,7 @@ public:
         SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
-            ((SfxToolbox*)GetWindow())->FillInfo( aInfo );  \
+            static_cast<SfxToolbox*>(GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
 bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize );

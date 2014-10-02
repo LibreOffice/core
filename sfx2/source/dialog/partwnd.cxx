@@ -65,10 +65,10 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     assert(pInfo);
     pInfo->nFlags |= SFX_CHILDWIN_FORCEDOCK;
 
-    ((SfxDockingWindow*)pWindow)->SetFloatingSize( Size( 175, 175 ) );
+    static_cast<SfxDockingWindow*>(pWindow)->SetFloatingSize( Size( 175, 175 ) );
     pWindow->SetSizePixel( Size( 175, 175 ) );
 
-    ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
+    static_cast<SfxDockingWindow*>(pWindow)->Initialize( pInfo );
     SetHideNotDelete( true );
 }
 
@@ -82,7 +82,7 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
     // But don't do it, if xFrame already exist. Then dispose() must come from inside ...
     // and we need a valid pMgr for further operations ...
 
-    SfxPartDockWnd_Impl* pWin = (SfxPartDockWnd_Impl*) pWindow;
+    SfxPartDockWnd_Impl* pWin = static_cast<SfxPartDockWnd_Impl*>(pWindow);
 
     if ( pWin && xFrame == pWin->GetBindings().GetActiveFrame() )
         pWin->GetBindings().SetActiveFrame( NULL );
@@ -90,7 +90,7 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
 
 bool SfxPartChildWnd_Impl::QueryClose()
 {
-    return ( (SfxPartDockWnd_Impl*)pWindow )->QueryClose();
+    return static_cast<SfxPartDockWnd_Impl*>(pWindow)->QueryClose();
 }
 
 

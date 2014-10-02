@@ -119,7 +119,7 @@ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
         while ( pWindow )
         {
             if ( pWindow->IsSystemWindow() )
-                pTopMostSysWin = (SystemWindow*)pWindow;
+                pTopMostSysWin = static_cast<SystemWindow*>(pWindow);
             pWindow = pWindow->GetParent();
         }
         pWindow = pTopMostSysWin;
@@ -204,7 +204,7 @@ IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent 
          (( pEvent->GetId() == VCLEVENT_WINDOW_MOVE ) ||
           ( pEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE )))
     {
-        vcl::Window* pWindow( ((VclWindowEvent*)pEvent)->GetWindow() );
+        vcl::Window* pWindow( static_cast<VclWindowEvent*>(pEvent)->GetWindow() );
         if (( pWindow == mpFloatingWindow ) &&
             ( mpPopupWindow != 0 ))
         {
@@ -826,7 +826,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBar
                 vcl::Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
                 ToolBox* pToolBar( 0 );
                 if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
-                    pToolBar = (ToolBox *)pTbxWindow;
+                    pToolBar = static_cast<ToolBox *>(pTbxWindow);
 
                 if ( pToolBar )
                 {
@@ -921,20 +921,20 @@ void SfxToolBoxControl::StateChanged
             if ( pState->ISA(SfxBoolItem) )
             {
                 // BoolItem for checking
-                if ( ((const SfxBoolItem*)pState)->GetValue() )
+                if ( static_cast<const SfxBoolItem*>(pState)->GetValue() )
                     eTri = TRISTATE_TRUE;
                 nItemBits |= TIB_CHECKABLE;
             }
             else if ( pState->ISA(SfxEnumItemInterface) &&
-                ((SfxEnumItemInterface *)pState)->HasBoolValue())
+                static_cast<const SfxEnumItemInterface *>(pState)->HasBoolValue())
             {
                 // EnumItem is handled as Bool
-                if ( ((const SfxEnumItemInterface *)pState)->GetBoolValue() )
+                if ( static_cast<const SfxEnumItemInterface *>(pState)->GetBoolValue() )
                     eTri = TRISTATE_TRUE;
                 nItemBits |= TIB_CHECKABLE;
             }
             else if ( pImpl->bShowString && pState->ISA(SfxStringItem) )
-                pImpl->pBox->SetItemText(nId, ((const SfxStringItem*)pState)->GetValue() );
+                pImpl->pBox->SetItemText(nId, static_cast<const SfxStringItem*>(pState)->GetValue() );
         }
         break;
 
@@ -1150,7 +1150,7 @@ SfxPopupWindow::SfxPopupWindow(
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
-        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
+        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
 SfxPopupWindow::SfxPopupWindow(sal_uInt16 nId, const OString& rID, const OUString& rUIXMLDescription,
@@ -1164,7 +1164,7 @@ SfxPopupWindow::SfxPopupWindow(sal_uInt16 nId, const OString& rID, const OUStrin
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
-        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
+        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
 SfxPopupWindow::SfxPopupWindow(
@@ -1181,7 +1181,7 @@ SfxPopupWindow::SfxPopupWindow(
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
-        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
+        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
 SfxPopupWindow::SfxPopupWindow(
@@ -1198,7 +1198,7 @@ SfxPopupWindow::SfxPopupWindow(
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
-        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
+        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
 SfxPopupWindow::~SfxPopupWindow()
@@ -1211,7 +1211,7 @@ SfxPopupWindow::~SfxPopupWindow()
 
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
-        ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( this );
+        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
 }
 
 

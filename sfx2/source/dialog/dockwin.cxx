@@ -206,7 +206,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
 
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
-    ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
+    static_cast<SfxDockingWindow*>( pWindow )->Initialize( pInfo );
     SetHideNotDelete( true );
 }
 
@@ -233,7 +233,7 @@ void SfxDockingWrapper::RegisterChildWindow (bool bVis, SfxModule *pMod, sal_uIn
 SfxChildWinInfo  SfxDockingWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-    ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo );
+    static_cast<SfxDockingWindow*>(GetWindow())->FillInfo( aInfo );
     return aInfo;
 };
 

@@ -1258,13 +1258,13 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             aFilterLb.Clear();
             //insert hierarchical at the beginning
             sal_uInt16 nPos = aFilterLb.InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString(), 0);
-            aFilterLb.SetEntryData( nPos, (void*)(sal_uIntPtr)SFXSTYLEBIT_ALL );
+            aFilterLb.SetEntryData( nPos, reinterpret_cast<void*>(SFXSTYLEBIT_ALL) );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
             for( size_t i = 0; i < rFilter.size(); ++i)
             {
                 sal_uIntPtr nFilterFlags = rFilter[ i ]->nFlags;
                 nPos = aFilterLb.InsertEntry( rFilter[ i ]->aName );
-                aFilterLb.SetEntryData( nPos, (void*)nFilterFlags );
+                aFilterLb.SetEntryData( nPos, reinterpret_cast<void*>(nFilterFlags) );
             }
             if(nActFilter < aFilterLb.GetEntryCount() - 1)
                 aFilterLb.SelectEntryPos(nActFilter + 1);

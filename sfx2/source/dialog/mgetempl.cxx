@@ -45,7 +45,7 @@
  */
 SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "ManageStylePage", "sfx/ui/managestylepage.ui", &rAttrSet)
-    , pStyle(&((SfxStyleDialog*)GetParentDialog())->GetStyleSheet())
+    , pStyle(&static_cast<SfxStyleDialog*>(GetParentDialog())->GetStyleSheet())
     , pItem(0)
     , bModified(false)
     , aName(pStyle->GetName())
@@ -191,7 +191,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
                  pTupel->nFlags != SFXSTYLEBIT_ALL )
             {
                 m_pFilterLb->InsertEntry( pTupel->aName, nIdx );
-                m_pFilterLb->SetEntryData(nIdx, (void*)(sal_IntPtr)i);
+                m_pFilterLb->SetEntryData(nIdx, reinterpret_cast<void*>(i));
 
                 if ( ( pTupel->nFlags & nMask ) == nMask )
                     nStyleFilterIdx = nIdx;
@@ -288,7 +288,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     {
         const SfxPoolItem* pPoolItem = pModule->GetItem( SID_ATTR_METRIC );
         if ( pPoolItem )
-            eFieldUnit = (FieldUnit)( (SfxUInt16Item*)pPoolItem )->GetValue();
+            eFieldUnit = (FieldUnit) static_cast<const SfxUInt16Item*>( pPoolItem )->GetValue();
     }
 
     switch ( eFieldUnit )
@@ -380,7 +380,7 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
         OSL_ENSURE( pItem, "No Item" );
         // is only possibly for user templates
-        sal_uInt16 nMask = pItem->GetFilterList()[ (size_t)m_pFilterLb->GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
+        sal_uInt16 nMask = pItem->GetFilterList()[ reinterpret_cast<size_t>(m_pFilterLb->GetEntryData( nFilterIdx )) ]->nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );
     }
     if(m_pAutoCB->IsVisible() &&
@@ -506,7 +506,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
     if ( SfxItemState::SET ==
          rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, false, &pPoolItem ) )
-        m_pAutoCB->Check( ( (const SfxBoolItem*)pPoolItem )->GetValue() );
+        m_pAutoCB->Check( static_cast<const SfxBoolItem*>(pPoolItem)->GetValue() );
     m_pAutoCB->SaveValue();
 }
 

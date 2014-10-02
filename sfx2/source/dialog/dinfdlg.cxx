@@ -987,12 +987,12 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 {
     // Determine the document information
-    const SfxDocumentInfoItem *m_pInfoItem =
-        &(const SfxDocumentInfoItem &)rSet->Get(SID_DOCINFO);
+    const SfxDocumentInfoItem& rInfoItem =
+        static_cast<const SfxDocumentInfoItem &>(rSet->Get(SID_DOCINFO));
 
     // template data
-    if ( m_pInfoItem->HasTemplate() )
-        m_pTemplValFt->SetText( m_pInfoItem->getTemplateName() );
+    if ( rInfoItem.HasTemplate() )
+        m_pTemplValFt->SetText( rInfoItem.getTemplateName() );
     else
     {
         m_pTemplFt->Hide();
@@ -1000,7 +1000,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     }
 
     // determine file name
-    OUString aFile( m_pInfoItem->GetValue() );
+    OUString aFile( rInfoItem.GetValue() );
     OUString aFactory( aFile );
     if ( aFile.getLength() > 2 && aFile[0] == '[' )
     {
@@ -1023,7 +1023,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     else
     {
         DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ), "SfxDocumentPage:<SfxStringItem> expected" );
-        aName = ( ( SfxStringItem* ) pItem )->GetValue();
+        aName = static_cast<const SfxStringItem*>( pItem )->GetValue();
     }
     m_pNameED->SetText( aName );
     m_pNameED->ClearModifyFlag();
@@ -1078,31 +1078,31 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         m_pFileValFt->SetText( aURL.GetPartBeforeLastName() );
 
     // handle access data
-    bool m_bUseUserData = m_pInfoItem->IsUseUserData();
+    bool m_bUseUserData = rInfoItem.IsUseUserData();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    m_pCreateValFt->SetText( ConvertDateTime_Impl( m_pInfoItem->getAuthor(),
-        m_pInfoItem->getCreationDate(), rLocaleWrapper ) );
-    util::DateTime aTime( m_pInfoItem->getModificationDate() );
+    m_pCreateValFt->SetText( ConvertDateTime_Impl( rInfoItem.getAuthor(),
+        rInfoItem.getCreationDate(), rLocaleWrapper ) );
+    util::DateTime aTime( rInfoItem.getModificationDate() );
     if ( aTime.Month > 0 )
         m_pChangeValFt->SetText( ConvertDateTime_Impl(
-            m_pInfoItem->getModifiedBy(), aTime, rLocaleWrapper ) );
-    aTime = m_pInfoItem->getPrintDate();
+            rInfoItem.getModifiedBy(), aTime, rLocaleWrapper ) );
+    aTime = rInfoItem.getPrintDate();
     if ( aTime.Month > 0 )
-        m_pPrintValFt->SetText( ConvertDateTime_Impl( m_pInfoItem->getPrintedBy(),
+        m_pPrintValFt->SetText( ConvertDateTime_Impl( rInfoItem.getPrintedBy(),
             aTime, rLocaleWrapper ) );
-    const long nTime = m_pInfoItem->getEditingDuration();
+    const long nTime = rInfoItem.getEditingDuration();
     if ( m_bUseUserData )
     {
         const tools::Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
         m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aT ) );
         m_pDocNoValFt->SetText( OUString::number(
-            m_pInfoItem->getEditingCycles() ) );
+            rInfoItem.getEditingCycles() ) );
     }
 
     // Check for cmis properties where otherwise unavailable
-    if ( m_pInfoItem->isCmisDocument( ) )
+    if ( rInfoItem.isCmisDocument( ) )
     {
-        uno::Sequence< document::CmisProperty > aCmisProps = m_pInfoItem->GetCmisProperties();
+        uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
         for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
         {
             if ( aCmisProps[i].Id == "cmis:contentStreamLength" &&
@@ -1162,8 +1162,8 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
         "sfx/ui/documentpropertiesdialog.ui", &rItemSet)
     , m_nDocInfoId(0)
 {
-    const SfxDocumentInfoItem* m_pInfoItem =
-        &(const SfxDocumentInfoItem &)rItemSet.Get( SID_DOCINFO );
+    const SfxDocumentInfoItem& rInfoItem =
+        static_cast<const SfxDocumentInfoItem &>(rItemSet.Get( SID_DOCINFO ));
 
 #ifdef DBG_UTIL
     SFX_ITEMSET_ARG( &rItemSet, pURLItem, SfxStringItem, SID_BASEURL, false );
@@ -1177,7 +1177,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
          rItemSet.GetItemState( SID_EXPLORER_PROPS_START, false, &pItem ) )
     {
         // File name
-        OUString aFile( m_pInfoItem->GetValue() );
+        OUString aFile( rInfoItem.GetValue() );
 
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
@@ -1214,7 +1214,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
 void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if ( m_nDocInfoId == nId )
-        ( (SfxDocumentPage&)rPage ).EnableUseUserData();
+        static_cast<SfxDocumentPage&>(rPage).EnableUseUserData();
 }
 
 void SfxDocumentInfoDialog::AddFontTabPage()

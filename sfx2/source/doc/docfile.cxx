@@ -2348,7 +2348,7 @@ void SfxMedium::GetMedium_Impl()
         pImp->bDownloadDone = true;
         pImp->aDoneLink.ClearPendingCall();
         sal_uIntPtr nError = GetError();
-        pImp->aDoneLink.Call( (void*)nError );
+        pImp->aDoneLink.Call( reinterpret_cast<void*>(nError) );
     }
 }
 

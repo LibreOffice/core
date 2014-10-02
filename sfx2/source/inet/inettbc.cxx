@@ -73,7 +73,7 @@ SfxURLToolBoxControl_Impl::~SfxURLToolBoxControl_Impl()
 
 SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 {
-    return (SvtURLBox*)GetToolBox().GetItemWindow( GetId() );
+    return static_cast<SvtURLBox*>(GetToolBox().GetItemWindow( GetId() ));
 }
 
 
