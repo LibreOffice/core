@@ -1451,8 +1451,7 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
 
             SubstituteVariables( aImageURL );
 
-            pEntry->addImage(i == OFFSET_IMAGES_SMALL ? IMGSIZE_SMALL : IMGSIZE_BIG,
-                             Image(), aImageURL);
+            pEntry->addImage(IMGSIZE_BIG, Image(), aImageURL);
         }
     }
 
