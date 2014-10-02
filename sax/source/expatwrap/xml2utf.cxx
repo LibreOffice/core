@@ -87,7 +87,6 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
                     // initialize decoding
                     initializeDecoding();
                 }
-                nRead = seq.getLength();
                 seqStart = Sequence < sal_Int8 > ();
             }
 
