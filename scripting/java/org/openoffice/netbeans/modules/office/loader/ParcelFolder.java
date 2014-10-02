@@ -18,26 +18,20 @@
 
 package org.openoffice.netbeans.modules.office.loader;
 
-import java.io.File;
-import java.io.IOException;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
-
-import org.openide.loaders.DataFolder;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataFilter;
-import org.openide.loaders.DataObjectExistsException;
-
+import java.io.File;
+import java.io.IOException;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
-
+import org.openide.loaders.DataFilter;
+import org.openide.loaders.DataFolder;
+import org.openide.loaders.DataObject;
+import org.openide.loaders.DataObjectExistsException;
 import org.openide.nodes.CookieSet;
 import org.openide.nodes.Node;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
-import org.openide.util.HelpCtx;
-
-import org.openoffice.idesupport.filter.*;
 import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.netbeans.modules.office.actions.ParcelFolderCookie;
 import org.openoffice.netbeans.modules.office.actions.ParcelFolderSupport;

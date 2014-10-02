@@ -18,12 +18,6 @@
 
 package org.openoffice.netbeans.modules.office.wizard;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.net.URL;
-import java.net.MalformedURLException;
-
-import org.openide.TopManager;
 import org.openide.WizardDescriptor;
 import org.openide.util.NbBundle;
 

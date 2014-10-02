@@ -19,9 +19,12 @@
 package org.openoffice.netbeans.modules.office.filesystem;
 
 import java.awt.Image;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
 import java.io.File;
-import java.beans.*;
-
 import org.openide.ErrorManager;
 import org.openide.filesystems.FileSystem;
 import org.openide.util.NbBundle;

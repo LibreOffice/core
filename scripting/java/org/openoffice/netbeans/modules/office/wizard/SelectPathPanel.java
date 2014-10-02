@@ -24,14 +24,11 @@ import java.util.Iterator;
 import java.util.Set;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import org.openide.WizardDescriptor;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
-
-import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.idesupport.OfficeInstallation;
 import org.openoffice.idesupport.SVersionRCFile;
+import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 
 /** A single panel descriptor for a wizard.
  * You probably want to make a wizard iterator to hold it.

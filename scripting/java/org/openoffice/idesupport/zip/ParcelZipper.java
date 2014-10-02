@@ -18,10 +18,17 @@
 
 package org.openoffice.idesupport.zip;
 
-import java.io.*;
-import java.util.zip.*;
-import org.openoffice.idesupport.filter.FileFilter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 import org.openoffice.idesupport.filter.BinaryOnlyFilter;
+import org.openoffice.idesupport.filter.FileFilter;
 import org.openoffice.idesupport.xml.Manifest;
 
 public class ParcelZipper {

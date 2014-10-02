@@ -18,31 +18,21 @@
 
 package org.openoffice.netbeans.modules.office.actions;
 
+import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.IOException;
-import java.beans.PropertyVetoException;
-import java.util.Enumeration;
 import java.util.Calendar;
-
-import org.openide.TopManager;
-import org.openide.NotifyDescriptor;
-import org.openide.windows.OutputWriter;
-import org.openide.windows.InputOutput;
-
 import org.openide.ErrorManager;
-import org.openide.nodes.Node;
-import org.openide.filesystems.Repository;
-import org.openide.filesystems.FileSystem;
+import org.openide.NotifyDescriptor;
+import org.openide.TopManager;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
-import org.openide.filesystems.FileEvent;
-
+import org.openide.windows.InputOutput;
+import org.openide.windows.OutputWriter;
 import org.openoffice.idesupport.zip.ParcelZipper;
-
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.netbeans.modules.office.utils.NagDialog;
 import org.openoffice.netbeans.modules.office.utils.ZipMounter;
-import org.openoffice.netbeans.modules.office.utils.ManifestParser;
 
 public class ParcelSupport implements ParcelCookie {
     private FileObject fo;

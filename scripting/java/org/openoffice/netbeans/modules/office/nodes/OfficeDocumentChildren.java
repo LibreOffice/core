@@ -19,18 +19,16 @@
 package org.openoffice.netbeans.modules.office.nodes;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import org.openide.nodes.*;
-import org.openide.actions.*;
-import org.openide.util.actions.SystemAction;
 import org.openide.util.HelpCtx;
-
+import org.openide.util.actions.SystemAction;
+import org.openoffice.netbeans.modules.office.actions.OfficeDocumentCookie;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.netbeans.modules.office.utils.NagDialog;
-import org.openoffice.netbeans.modules.office.actions.OfficeDocumentCookie;
 
 public class OfficeDocumentChildren extends Children.Keys
     implements ChangeListener {

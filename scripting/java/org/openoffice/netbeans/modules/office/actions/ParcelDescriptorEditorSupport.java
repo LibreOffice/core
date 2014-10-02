@@ -19,14 +19,10 @@
 package org.openoffice.netbeans.modules.office.actions;
 
 import java.io.IOException;
-
-import org.openide.cookies.*;
 import org.openide.filesystems.FileLock;
 import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
 import org.openide.text.DataEditorSupport;
 import org.openide.windows.CloneableOpenSupport;
-
 import org.openoffice.netbeans.modules.office.loader.ParcelDescriptorDataObject;
 
 /** Support for editing a data object as text.

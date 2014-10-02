@@ -18,17 +18,12 @@
 
 package org.openoffice.netbeans.modules.office.options;
 
-import java.util.Hashtable;
-import java.util.Enumeration;
-import java.io.File;
 import java.io.IOException;
-
+import java.util.Enumeration;
 import org.openide.options.SystemOption;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
-
-import org.openoffice.idesupport.SVersionRCFile;
 import org.openoffice.idesupport.OfficeInstallation;
+import org.openoffice.idesupport.SVersionRCFile;
 
 /** Options for something or other.
  */

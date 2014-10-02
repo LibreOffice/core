@@ -18,16 +18,13 @@
 
 package org.openoffice.netbeans.modules.office.wizard;
 
-import java.util.Hashtable;
-import java.util.Enumeration;
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
 import javax.swing.JFileChooser;
-
 import org.openide.util.NbBundle;
-import org.openoffice.idesupport.SVersionRCFile;
 import org.openoffice.idesupport.OfficeInstallation;
-import org.openoffice.netbeans.modules.office.options.OfficeSettings;
+import org.openoffice.idesupport.SVersionRCFile;
 
 /** A single panel for a wizard - the GUI portion.
  */

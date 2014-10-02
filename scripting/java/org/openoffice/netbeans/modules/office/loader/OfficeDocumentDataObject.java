@@ -18,14 +18,7 @@
 
 package org.openoffice.netbeans.modules.office.loader;
 
-import org.openide.actions.*;
-import org.openide.cookies.*;
-import org.openide.filesystems.*;
-import org.openide.loaders.*;
-import org.openide.nodes.*;
 import org.openide.util.HelpCtx;
-
-import org.openoffice.netbeans.modules.office.actions.*;
 
 public class OfficeDocumentDataObject extends MultiDataObject {
 

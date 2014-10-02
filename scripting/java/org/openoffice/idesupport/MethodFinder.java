@@ -18,8 +18,8 @@
 
 package org.openoffice.idesupport;
 
-import java.io.File;
 import com.sun.star.script.framework.container.ScriptEntry;
+import java.io.File;
 
 public interface MethodFinder {
     ScriptEntry[] findMethods(File basedir);

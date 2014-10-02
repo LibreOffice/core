@@ -18,14 +18,12 @@
 
 package org.openoffice.netbeans.modules.office.utils;
 
+import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.IOException;
-import java.beans.PropertyVetoException;
-
-import org.openide.filesystems.Repository;
 import org.openide.filesystems.FileSystem;
 import org.openide.filesystems.JarFileSystem;
-
+import org.openide.filesystems.Repository;
 import org.openoffice.idesupport.SVersionRCFile;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 

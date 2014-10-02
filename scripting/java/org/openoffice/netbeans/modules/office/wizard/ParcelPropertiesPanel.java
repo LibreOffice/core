@@ -19,18 +19,10 @@
 package org.openoffice.netbeans.modules.office.wizard;
 
 import java.awt.Component;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import org.openide.WizardDescriptor;
 import org.openide.loaders.TemplateWizard;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
 
 /** A single panel descriptor for a wizard.
  * You probably want to make a wizard iterator to hold it.

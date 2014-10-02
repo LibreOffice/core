@@ -18,16 +18,18 @@
 
 package org.openoffice.netbeans.modules.office.options;
 
-import java.awt.Image;
 import java.awt.Component;
-import javax.swing.event.ChangeListener;
+import java.awt.Image;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.beans.PropertyEditorSupport;
+import java.beans.SimpleBeanInfo;
 import javax.swing.event.ChangeEvent;
-import java.beans.*;
-
+import javax.swing.event.ChangeListener;
 import org.openide.ErrorManager;
 import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
-
 import org.openoffice.idesupport.OfficeInstallation;
 import org.openoffice.netbeans.modules.office.wizard.SelectPathPanel;
 

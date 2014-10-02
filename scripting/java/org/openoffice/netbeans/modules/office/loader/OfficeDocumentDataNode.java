@@ -19,14 +19,8 @@
 package org.openoffice.netbeans.modules.office.loader;
 
 import java.awt.datatransfer.Transferable;
+import java.io.File;
 import java.util.List;
-import java.io.*;
-
-import org.openide.loaders.*;
-import org.openide.nodes.*;
-import org.openide.util.NbBundle;
-import org.openide.filesystems.*;
-
 import org.openoffice.netbeans.modules.office.actions.OfficeDocumentCookie;
 import org.openoffice.netbeans.modules.office.nodes.OfficeDocumentChildren;
 

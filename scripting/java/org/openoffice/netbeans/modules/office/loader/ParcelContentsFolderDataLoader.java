@@ -18,12 +18,8 @@
 
 package org.openoffice.netbeans.modules.office.loader;
 
-import org.openide.loaders.*;
 import org.openide.filesystems.FileObject;
-import org.openide.actions.*;
-import org.openide.util.NbBundle;
 import org.openide.util.actions.SystemAction;
-
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class ParcelContentsFolderDataLoader extends UniFileLoader {

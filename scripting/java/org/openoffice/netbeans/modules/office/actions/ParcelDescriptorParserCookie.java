@@ -18,9 +18,9 @@
 
 package org.openoffice.netbeans.modules.office.actions;
 
-import org.w3c.dom.NodeList;
 import javax.swing.event.ChangeListener;
 import org.openide.nodes.Node;
+import org.w3c.dom.NodeList;
 
 public interface ParcelDescriptorParserCookie extends Node.Cookie {
     // should return a NodeList of org.w3c.dom.Element

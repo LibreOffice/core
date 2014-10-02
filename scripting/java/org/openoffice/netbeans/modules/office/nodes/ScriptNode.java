@@ -18,13 +18,10 @@
 
 package org.openoffice.netbeans.modules.office.nodes;
 
-import org.w3c.dom.*;
-
-import org.openide.actions.*;
-import org.openide.nodes.*;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
 import org.openide.util.actions.SystemAction;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /** A simple node with no children.
  */

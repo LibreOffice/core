@@ -17,20 +17,17 @@
  */
 package org.openoffice.netbeans.editor;
 
-import javax.swing.*;
-import javax.swing.text.Document;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.DocumentEvent;
-
-import java.io.*;
-import java.util.ResourceBundle;
-
-import javax.swing.text.Caret;
-import org.netbeans.editor.*;
-import org.netbeans.editor.ext.*;
-
-import com.sun.star.script.framework.provider.beanshell.ScriptSourceView;
 import com.sun.star.script.framework.provider.beanshell.ScriptSourceModel;
+import com.sun.star.script.framework.provider.beanshell.ScriptSourceView;
+import java.io.File;
+import java.util.ResourceBundle;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Caret;
 
 public class NetBeansSourceView extends JPanel
     implements ScriptSourceView, DocumentListener {

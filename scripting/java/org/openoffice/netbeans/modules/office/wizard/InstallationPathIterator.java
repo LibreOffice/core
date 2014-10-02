@@ -18,15 +18,8 @@
 
 package org.openoffice.netbeans.modules.office.wizard;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Set;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import org.openide.WizardDescriptor;
 import org.openide.util.NbBundle;
 

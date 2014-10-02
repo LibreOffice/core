@@ -18,12 +18,12 @@
 
 package org.openoffice.idesupport.ui;
 
+import com.sun.star.script.framework.container.ScriptEntry;
 import java.awt.BorderLayout;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import javax.swing.DefaultCellEditor;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,8 +33,6 @@ import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
-
-import com.sun.star.script.framework.container.ScriptEntry;
 
 public class ScriptPanel extends JPanel {
     private ScriptTableModel model;

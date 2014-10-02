@@ -18,14 +18,8 @@
 
 package org.openoffice.netbeans.modules.office.loader;
 
-import org.openide.actions.*;
-import org.openide.cookies.*;
 import org.openide.filesystems.FileObject;
-import org.openide.loaders.*;
-import org.openide.nodes.*;
 import org.openide.util.HelpCtx;
-
-import org.openoffice.netbeans.modules.office.actions.*;
 
 /** Represents a Parcel object in the Repository.
  */

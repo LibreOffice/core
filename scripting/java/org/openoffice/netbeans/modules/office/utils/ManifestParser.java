@@ -18,21 +18,17 @@
 
 package org.openoffice.netbeans.modules.office.utils;
 
+import com.sun.star.script.framework.container.XMLParser;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
-import java.io.File;
-
+import org.openide.xml.XMLUtil;
+import org.openoffice.idesupport.OfficeInstallation;
+import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-import org.openide.xml.XMLUtil;
-
-import com.sun.star.script.framework.container.XMLParser;
-import org.openoffice.netbeans.modules.office.options.OfficeSettings;
-import org.openoffice.idesupport.OfficeInstallation;
 
 public class ManifestParser implements XMLParser {
 

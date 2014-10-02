@@ -18,13 +18,6 @@
 
 package org.openoffice.netbeans.modules.office.loader;
 
-import org.openide.loaders.*;
-import org.openide.nodes.*;
-import org.openide.util.NbBundle;
-
-import org.openoffice.netbeans.modules.office.nodes.*;
-import org.openoffice.netbeans.modules.office.actions.*;
-
 /** A node to represent this object.
  */
 public class ParcelDescriptorDataNode extends DataNode {

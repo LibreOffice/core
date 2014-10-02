@@ -18,20 +18,17 @@
 
 package org.openoffice.idesupport.ui;
 
+import com.sun.star.script.framework.container.ScriptEntry;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.util.ArrayList;
-
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import org.openoffice.idesupport.ExtensionFinder;
 import org.openoffice.idesupport.JavaFinder;
 import org.openoffice.idesupport.MethodFinder;
-
-import com.sun.star.script.framework.container.ScriptEntry;
 
 public class MethodPanel extends JPanel {
 

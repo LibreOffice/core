@@ -19,10 +19,11 @@
 package org.openoffice.netbeans.modules.office.loader;
 
 import java.awt.Image;
-import java.beans.*;
-
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.SimpleBeanInfo;
 import org.openide.ErrorManager;
-import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
 
 /** Description of {@link ParcelDescriptorDataLoader}.

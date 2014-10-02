@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class OfficeDocument {

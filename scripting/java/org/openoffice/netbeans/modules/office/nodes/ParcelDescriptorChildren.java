@@ -18,15 +18,13 @@
 
 package org.openoffice.netbeans.modules.office.nodes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
-
-import org.openide.nodes.*;
 import org.openoffice.netbeans.modules.office.actions.ParcelDescriptorParserCookie;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /** List of children of a containing node.
  * Remember to document what your permitted keys are!
