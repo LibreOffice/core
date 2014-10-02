@@ -934,13 +934,13 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
          GetTabDialog() && GetTabDialog()->GetExampleSet() )
     {
         SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
-        SfxPoolItem* pItem;
+        const SfxPoolItem* pItem;
 
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
-            SfxDocumentInfoItem* m_pInfoItem = static_cast<SfxDocumentInfoItem*>(pItem);
+            const SfxDocumentInfoItem* m_pInfoItem = static_cast<const SfxDocumentInfoItem*>(pItem);
             bool bUseData = ( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
-            m_pInfoItem->SetUseUserData( bUseData );
+            const_cast<SfxDocumentInfoItem*>(m_pInfoItem)->SetUseUserData( bUseData );
             rSet->Put( SfxDocumentInfoItem( *m_pInfoItem ) );
             bRet = true;
         }
@@ -949,16 +949,16 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
     if ( bHandleDelete )
     {
         SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
-        SfxPoolItem* pItem;
+        const SfxPoolItem* pItem;
         if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
-            SfxDocumentInfoItem* pInfoItem = static_cast<SfxDocumentInfoItem*>(pItem);
+            const SfxDocumentInfoItem* pInfoItem = static_cast<const SfxDocumentInfoItem*>(pItem);
             bool bUseAuthor = bEnableUseUserData && m_pUseUserDataCB->IsChecked();
             SfxDocumentInfoItem newItem( *pInfoItem );
             newItem.resetUserData( bUseAuthor
                 ? SvtUserOptions().GetFullName()
                 : OUString() );
-            pInfoItem->SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
+            const_cast<SfxDocumentInfoItem*>(pInfoItem)->SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
             newItem.SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
 
             newItem.SetDeleteUserData( true );
