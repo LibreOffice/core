@@ -62,6 +62,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  vcl::Window* pParent, const SfxItemSet& rIn
     pnColorListState    ( 0 ),
     pPageType           ( 0 ),
     nDlgType            ( 0 ),
+    pPos                ( 0 ),
     pbAreaTP            ( 0 ),
 
     bBmpChanged         ( false ),
