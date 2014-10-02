@@ -53,6 +53,15 @@ static const char sEqualSignAndQuote[] = "=\"";
 static const char sSpace[] = " ";
 static const char sXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
 
+static bool lcl_isAscii(const OUString& sStr)
+{
+    for (sal_Int32 i = 0; i < sStr.getLength(); ++i)
+        if (sStr[i] & 0xff80)
+            return false;
+
+    return true;
+}
+
 namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
         : maCachedOutputStream()
@@ -72,7 +81,29 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::write( const OUString& sOutput, bool bEscape )
     {
-        write( OUStringToOString(sOutput, RTL_TEXTENCODING_UTF8), bEscape );
+        if (!lcl_isAscii(sOutput))
+        {
+            write( OUStringToOString(sOutput, RTL_TEXTENCODING_UTF8), bEscape );
+            return ;
+        }
+
+        for (sal_Int32 i = 0; i < sOutput.getLength(); ++i)
+        {
+            char c = sOutput[ i ];
+            if (bEscape) switch( c )
+            {
+                case '<':   writeBytes( "&lt;", 4 );     break;
+                case '>':   writeBytes( "&gt;", 4 );     break;
+                case '&':   writeBytes( "&amp;", 5 );    break;
+                case '\'':  writeBytes( "&apos;", 6 );   break;
+                case '"':   writeBytes( "&quot;", 6 );   break;
+                case '\n':  writeBytes( "&#10;", 5 );    break;
+                case '\r':  writeBytes( "&#13;", 5 );    break;
+                default:    writeBytes( &c, 1 );          break;
+            }
+            else
+                writeBytes( &c, 1 );
+        }
     }
 
     void FastSaxSerializer::write( const OString& sOutput, bool bEscape )
