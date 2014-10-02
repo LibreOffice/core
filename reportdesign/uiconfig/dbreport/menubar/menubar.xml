@@ -22,6 +22,7 @@
             <menu:menuitem menu:id=".uno:AddDirect"/>
             <menu:menuitem menu:id=".uno:Open"/>
             <menu:menuitem menu:id=".uno:RecentFileList"/>
+            <menu:menuitem menu:id=".uno:CurrencyList"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
             <menu:menuseparator/>

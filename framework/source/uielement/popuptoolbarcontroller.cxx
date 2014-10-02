@@ -351,7 +351,7 @@ public:
 
 CurrencyController::CurrencyController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : PopupMenuToolbarController( xContext, UNO_COMMAND_RECENT_FILE_LIST )
+    : PopupMenuToolbarController( xContext, UNO_COMMAND_CURRENCY_LIST )
 {
 }
 

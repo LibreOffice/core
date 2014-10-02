@@ -5296,6 +5296,11 @@
           <value xml:lang="en-US">Recent Doc~uments</value>
         </prop>
       </node>
+      <node oor:name=".uno:CurrencyList" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Currencies</value>
+        </prop>
+      </node>
       <node oor:name=".uno:DeleteAllNotes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete All Comments</value>
