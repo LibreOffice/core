@@ -91,7 +91,7 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
 void BorderHandler::lcl_sprm(Sprm & rSprm)
 {
     BorderPosition pos = BORDER_COUNT; // invalid pos
-    bool rtl = false; // TODO detect
+    const bool rtl = false; // TODO detect
     OUString aBorderPos;
     switch( rSprm.getId())
     {
