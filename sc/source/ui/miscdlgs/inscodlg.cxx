@@ -40,7 +40,12 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     bMoveDownDisabled( false ),
     bMoveRightDisabled( false ),
     bUsedShortCut   ( false ),
-    nShortCutInsContentsCmdBits( IDF_NONE )
+    nShortCutInsContentsCmdBits( IDF_NONE ),
+    nShortCutFormulaCmdBits(0),
+    bShortCutSkipEmptyCells(false),
+    bShortCutTranspose(false),
+    bShortCutIsLink(false),
+    nShortCutMoveMode(INS_NONE)
 {
     get( mpBtnInsAll, "paste_all" );
     get( mpBtnInsStrings, "text" );
