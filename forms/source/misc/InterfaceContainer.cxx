@@ -334,7 +334,7 @@ void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStre
         if (xScripts.is())
             xScripts->write(_rxOutStream);
 
-        // feststellen der Laenge
+        // Determine length
         nObjLen = xMark->offsetToMark(nMark) - 4;
         xMark->jumpToMark(nMark);
         _rxOutStream->writeLong(nObjLen);
@@ -441,7 +441,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
-    // Scripting Info lesen
+    // Read scripting info
     Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
     sal_Int32 nObjLen = _rxInStream->readLong();
     if (nObjLen)
@@ -455,7 +455,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
         xMark->deleteMark(nMark);
     }
 
-    // Attachement lesen
+    // Read Attachement
     if ( m_xEventAttacher.is() )
     {
         OInterfaceArray::const_iterator aAttach = m_aItems.begin();
@@ -475,7 +475,7 @@ void SAL_CALL OInterfaceContainer::write( const Reference< XObjectOutputStream >
     ::osl::MutexGuard aGuard( m_rMutex );
     sal_Int32 nLen = m_aItems.size();
 
-    // schreiben der laenge
+    // Write length
     _rxOutStream->writeLong(nLen);
 
     if (nLen)
@@ -483,7 +483,7 @@ void SAL_CALL OInterfaceContainer::write( const Reference< XObjectOutputStream >
         // 1. Version
         _rxOutStream->writeShort(0x0001);
 
-        // 2. Objekte
+        // 2. Objects
         for (sal_Int32 i = 0; i < nLen; i++)
         {
             Reference<XPersistObject>  xObj(m_aItems[i], UNO_QUERY);
@@ -537,7 +537,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
     while (getCount())
         removeByIndex(0);
 
-    // Schreibt nur in Abhaengigkeit der Laenge
+    // Only writes depending on the length
     sal_Int32 nLen = _rxInStream->readLong();
 
     if (nLen)
@@ -545,7 +545,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
         // 1. Version
         sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
 
-        // 2. Objekte
+        // 2. Objects
         for (sal_Int32 i = 0; i < nLen; i++)
         {
             Reference<XPersistObject>  xObj;
@@ -564,11 +564,11 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
             }
             catch(const Exception&)
             {
-                // unsere Map leeren
+                // Clear the map
                 while (!m_aItems.empty())
                     removeElementsNoEvents(0);
 
-                // und die Exception nach aussen
+                // Rethrow the exception
                 throw;
             }
 
@@ -580,9 +580,9 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                     implInsert(
                         m_aItems.size(),    // position
                         xElement,           // element to insert
-                        false,          // no event attacher manager handling
+                        false,              // no event attacher manager handling
                         NULL,               // not yet approved - let implInsert do it
-                        true            // fire the event
+                        true                // fire the event
                     );
                 }
                 catch( const Exception& )
@@ -829,7 +829,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     _rxElement->addPropertyChangeListener(PROPERTY_NAME, this);
 
     // insert the object into our internal structures
-    if (_nIndex > (sal_Int32)m_aItems.size()) // ermitteln des tatsaechlichen Indexs
+    if (_nIndex > (sal_Int32)m_aItems.size()) // Calculate the actual index
     {
         _nIndex = m_aItems.size();
         m_aItems.push_back( pElementMetaData->xInterface );

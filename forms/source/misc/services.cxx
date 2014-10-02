@@ -29,17 +29,17 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-static Sequence< OUString >                      s_aClassImplementationNames;
+static Sequence< OUString >              s_aClassImplementationNames;
 static Sequence<Sequence< OUString > >   s_aClassServiceNames;
-static Sequence<sal_Int64>                              s_aFactories;
-    // need to use sal_Int64 instead of ComponentInstantiation, as ComponentInstantiation has no cppuType, so
-    // it can't be used with sequences
 
+// need to use sal_Int64 instead of ComponentInstantiation, as ComponentInstantiation has no cppuType, so
+// it can't be used with sequences
+static Sequence<sal_Int64>               s_aFactories;
 
 void registerClassInfo(
-        const OUString& _rClassImplName,                                // the ImplName of the class
+        const OUString& _rClassImplName,                 // the ImplName of the class
         const Sequence< OUString >& _rServiceNames,      // the services supported by this class
-        ::cppu::ComponentInstantiation _pCreateFunction                 // the method for instantiating such a class
+        ::cppu::ComponentInstantiation _pCreateFunction  // the method for instantiating such a class
         )
 {
     sal_Int32 nCurrentLength = s_aClassImplementationNames.getLength();
