@@ -4009,7 +4009,9 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 sal_Int32 nHalfHeight = ( aClientRect.GetHeight() + 1 ) >> 1;
                 Point aTopLeft( aClientRect.Left() + nHalfWidth - nHalfHeight,
                                 aClientRect.Top() + nHalfHeight - nHalfWidth );
-                Size aNewSize( aClientRect.GetHeight(), aClientRect.GetWidth() );
+                const long nRotatedWidth = aClientRect.GetHeight();
+                const long nRotatedHeight = aClientRect.GetWidth();
+                Size aNewSize(nRotatedWidth, nRotatedHeight);
                 Rectangle aNewRect( aTopLeft, aNewSize );
                 aClientRect = aNewRect;
             }
