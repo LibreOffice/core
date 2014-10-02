@@ -42,7 +42,6 @@ import android.content.Context;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 
 import org.libreoffice.LOEvent;
 import org.libreoffice.LOEventFactory;
@@ -148,30 +147,22 @@ public class GeckoLayerClient implements LayerView.Listener {
     private void sendResizeEventIfNecessary(boolean force) {
         DisplayMetrics metrics = new DisplayMetrics();
         LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        View view = mLayerController.getView();
 
         IntSize newScreenSize = new IntSize(metrics.widthPixels, metrics.heightPixels);
-        IntSize newWindowSize = new IntSize(view.getWidth(), view.getHeight());
 
         // Return immediately if the screen size hasn't changed or the viewport
         // size is zero (which indicates that the rendering surface hasn't been
         // allocated yet).
         boolean screenSizeChanged = !mScreenSize.equals(newScreenSize);
-        boolean windowSizeChanged = !mWindowSize.equals(newWindowSize);
 
-        if (!force && !screenSizeChanged && !windowSizeChanged) {
+        if (!force && !screenSizeChanged) {
             return;
         }
 
         mScreenSize = newScreenSize;
-        mWindowSize = newWindowSize;
 
         if (screenSizeChanged) {
             Log.d(LOGTAG, "Screen-size changed to " + mScreenSize);
-        }
-
-        if (windowSizeChanged) {
-            Log.d(LOGTAG, "Window-size changed to " + mWindowSize);
         }
 
         LOEvent event = LOEventFactory.sizeChanged(metrics.widthPixels, metrics.heightPixels);
