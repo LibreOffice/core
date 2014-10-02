@@ -2445,8 +2445,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                             if (std::abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE ||
                                                 std::abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
                                                 std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
-                                                    aLogicSize.Width()  / aOutlineSize.Width()   < 0.48          ||
-                                                    aLogicSize.Width()  / aOutlineSize.Width()   > 0.5)
+                                                (double)aLogicSize.Width()  / aOutlineSize.Width()   < 0.48          ||
+                                                (double)aLogicSize.Width()  / aOutlineSize.Width()   > 0.5)
                                             {
                                                 pPresObj->SetUserCall( NULL );
                                             }
