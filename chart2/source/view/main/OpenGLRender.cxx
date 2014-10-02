@@ -937,7 +937,7 @@ void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadiu
     double nAngleStep = 1;
     PointList aPointList;
     // TODO: moggi: GL_TRIANGLE_FAN seems not to work
-    bool bInnerRadiusNotZero = true; //!rtl::math::approxEqual(0.0, fInnerRadius);
+    const bool bInnerRadiusNotZero = true; //!rtl::math::approxEqual(0.0, fInnerRadius);
     size_t nVectorSize = 3*(nAngleWidth/nAngleStep);
     if(bInnerRadiusNotZero)
         nVectorSize *= 2;
