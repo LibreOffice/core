@@ -284,11 +284,7 @@ public class ParcelFolder extends DataFolder {
     private class ParcelFolderFilter implements DataFilter {
         public boolean acceptDataObject(DataObject dobj) {
             String name = dobj.getPrimaryFile().getNameExt();
-
-            if (name.equals(ParcelZipper.PARCEL_DESCRIPTOR_XML))
-                return false;
-
-            return true;
+            return !name.equals(ParcelZipper.PARCEL_DESCRIPTOR_XML);
         }
     }
 }
