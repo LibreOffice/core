@@ -687,8 +687,8 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                         else
                             nHeightPix = aSizePix.Height();
 
-                        double fWidthDif = aSizePix.Width() / nWidthPix;
-                        double fHeightDif = aSizePix.Height() / nHeightPix;
+                        double fWidthDif = (double)aSizePix.Width() / nWidthPix;
+                        double fHeightDif = (double)aSizePix.Height() / nHeightPix;
 
                         if (fWidthDif > fHeightDif)
                             nHeightPix = static_cast<long>(aSizePix.Height() / fWidthDif);
