@@ -134,8 +134,8 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                 aImageSize = pImage->GetSizePixel();
             }
 
-            float nOffX = (aThumbSize.getWidth() - aImageSize.getWidth()) / 2;
-            float nOffY = (aThumbSize.getHeight() - aImageSize.getHeight()) / 2;
+            float nOffX = (aThumbSize.getWidth() - aImageSize.getWidth()) / 2.0;
+            float nOffY = (aThumbSize.getHeight() - aImageSize.getHeight()) / 2.0;
 
             float fWidth = aImageSize.Width();
             float fHeight = aImageSize.Height();
