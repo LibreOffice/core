@@ -62,7 +62,7 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
         pIterator.reset(new DataRangeByRowIterator(mInputRange));
 
     sal_Int32 aIntervalSize = mpIntervalSpin->GetValue();
-    bool aCentral = true;
+    const bool aCentral = true; //to-do add support to change this to the dialog
 
     for( ; pIterator->hasNext(); pIterator->next() )
     {
