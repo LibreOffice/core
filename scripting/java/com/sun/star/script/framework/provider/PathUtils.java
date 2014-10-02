@@ -18,12 +18,10 @@
 
 package com.sun.star.script.framework.provider;
 
-import java.util.StringTokenizer;
-
-import java.lang.reflect.Method;
-
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.IQueryInterface;
+import java.lang.reflect.Method;
+import java.util.StringTokenizer;
 
 public class PathUtils {
 
