@@ -140,7 +140,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
             if( rExplicitSymbol >>= aSymbol )
             {
                 drawing::Direction3D aSymbolSize( nSize, nSize, 0 );
-                drawing::Position3D aPos( rEntryKeyAspectRatio.Width/2, rEntryKeyAspectRatio.Height/2, 0 );
+                drawing::Position3D aPos( rEntryKeyAspectRatio.Width/2.0, rEntryKeyAspectRatio.Height/2.0, 0 );
                 AbstractShapeFactory* pFactory = AbstractShapeFactory::getOrCreateShapeFactory( xShapeFactory );
                 if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
                 {
