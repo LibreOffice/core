@@ -1196,7 +1196,6 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
             aOldSelection = pOLV->GetSelection();
             if (!pOLV->GetEditView().HasSelection())
             {
-                bRestoreSelection   = true;
                 pOLV->GetEditView().SelectCurrentWord();
             }
 
