@@ -155,7 +155,7 @@ public:
     OUString            GetStandardName() const;
 
     OUString            GetComment4Entry(short nEntry);
-    short               GetCategory4Entry(short nEntry);
+    short               GetCategory4Entry(short nEntry) const;
     bool                GetUserDefined4Entry(short nEntry);
     OUString            GetFormat4Entry(short nEntry);
     void                SetComment4Entry(short nEntry, const OUString& aCommentString);
@@ -217,8 +217,8 @@ private:
 
     SVX_DLLPRIVATE void  GetPreviewString_Impl( OUString& rString,
                                                 Color*& rpColor );
-    SVX_DLLPRIVATE void  PosToCategory_Impl( sal_uInt16 nPos, short& rCategory );
-    SVX_DLLPRIVATE void  CategoryToPos_Impl( short nCategory, sal_uInt16& rPos );
+    SVX_DLLPRIVATE void  PosToCategory_Impl(sal_uInt16 nPos, short& rCategory) const;
+    SVX_DLLPRIVATE void  CategoryToPos_Impl(short nCategory, sal_uInt16& rPos) const;
 };
 
 #endif

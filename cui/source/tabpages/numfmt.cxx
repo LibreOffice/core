@@ -833,7 +833,6 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
     vcl::Font   aFont=m_pLbCategory->GetFont();
     size_t      i = 0;
     short       nTmpCatPos;
-    short       aPrivCat;
 
     m_pLbFormat->Clear();
     m_pLbFormat->SetUpdateMode( false );
@@ -860,7 +859,6 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
                                     aTmpString=aEntry;
                                 else
                                     aTmpString = pNumFmtShell->GetStandardName();
-                                aPrivCat=pNumFmtShell->GetCategory4Entry(0);
                                 m_pLbFormat->InsertFontEntry( aTmpString, aFont );
                                 break;
 
@@ -872,7 +870,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
         for ( ; i < rEntries.size(); ++i )
         {
             aEntry = rEntries[i];
-            aPrivCat=pNumFmtShell->GetCategory4Entry( static_cast<short>(i) );
+            short aPrivCat = pNumFmtShell->GetCategory4Entry( static_cast<short>(i) );
             if(aPrivCat!=CAT_TEXT)
             {
                 Color* pPreviewColor = NULL;

@@ -1149,11 +1149,8 @@ bool SvxNumberFormatShell::IsAdded_Impl( size_t nKey )
     return GetAdded_Impl( nKey ) != aAddList.end();
 }
 
-
 // Konvertierungs-Routinen:
-
-
-void SvxNumberFormatShell::PosToCategory_Impl( sal_uInt16 nPos, short& rCategory )
+void SvxNumberFormatShell::PosToCategory_Impl(sal_uInt16 nPos, short& rCategory) const
 {
     // Kategorie ::com::sun::star::form-Positionen abbilden (->Resource)
     switch ( nPos )
@@ -1173,9 +1170,7 @@ void SvxNumberFormatShell::PosToCategory_Impl( sal_uInt16 nPos, short& rCategory
     }
 }
 
-
-
-void SvxNumberFormatShell::CategoryToPos_Impl( short nCategory, sal_uInt16& rPos )
+void SvxNumberFormatShell::CategoryToPos_Impl(short nCategory, sal_uInt16& rPos) const
 {
     // Kategorie auf ::com::sun::star::form-Positionen abbilden (->Resource)
     switch ( nCategory )
@@ -1255,7 +1250,7 @@ OUString SvxNumberFormatShell::GetComment4Entry(short nEntry)
  * Input:      Nummer des Eintrags
  * Output:     Kategorie- Nummer
  */
-short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
+short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
 {
     if(nEntry<0) return 0;
     if( static_cast<size_t>(nEntry) < aCurEntryList.size() )
