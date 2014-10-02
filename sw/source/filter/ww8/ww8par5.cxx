@@ -2214,11 +2214,11 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
 
 WW8PostProcessAttrsInfo::WW8PostProcessAttrsInfo(WW8_CP nCpStart, WW8_CP nCpEnd,
                                                  SwPaM & rPaM)
-: mbCopy(false),
-  mnCpStart(nCpStart),
-  mnCpEnd(nCpEnd),
-  mPaM(*rPaM.GetPoint(), *rPaM.GetMark()),
-  mItemSet(rPaM.GetDoc()->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END - 1)
+    : mbCopy(false)
+    , mnCpStart(nCpStart)
+    , mnCpEnd(nCpEnd)
+    , mPaM(*rPaM.GetMark(), *rPaM.GetPoint())
+    , mItemSet(rPaM.GetDoc()->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END - 1)
 {
 }
 
