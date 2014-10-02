@@ -215,14 +215,11 @@ public class DeployParcelAction extends CookieAction implements
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setFileFilter(new FileFilter() {
             public boolean accept(File file) {
-                if (file.isDirectory() ||
+                return file.isDirectory() ||
                     file.getName().endsWith(".sxw") ||
                     file.getName().endsWith(".sxc") ||
                     file.getName().endsWith(".sxd") ||
-                    file.getName().endsWith(".sxi"))
-                    return true;
-
-                return false;
+                    file.getName().endsWith(".sxi");
             }
 
             public String getDescription() {

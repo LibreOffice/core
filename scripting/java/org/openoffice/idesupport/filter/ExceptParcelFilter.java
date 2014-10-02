@@ -33,11 +33,9 @@ public class ExceptParcelFilter implements FileFilter {
     public static ExceptParcelFilter getInstance() {
         return filter;
     }
-    public boolean validate(String name) {
-        if (name.startsWith(ExceptParcelFilter.parcelName))
-            return true;
 
-        return false;
+    public boolean validate(String name) {
+        return name.startsWith(ExceptParcelFilter.parcelName);
     }
 
     @Override
