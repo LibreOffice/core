@@ -42,7 +42,6 @@
 #define EE_CNTRL_URLSFXEXECUTE      0x00008000  // !!!OLD!!!: SFX-URL-Execute.
 #define EE_CNTRL_RESTOREFONT        0x00010000  // Restore Font in OutDev
 #define EE_CNTRL_RTFSTYLESHEETS     0x00020000  // Use Stylesheets when imported
-//#define EE_CNTRL_NOREDLINES            0x00040000  // No RedLines when OnlineSpellError     /* removed #i91949 */
 #define EE_CNTRL_AUTOCORRECT        0x00080000  // AutoCorrect
 #define EE_CNTRL_AUTOCOMPLETE       0x00100000  // AutoComplete
 #define EE_CNTRL_AUTOPAGESIZEX      0x00200000  // Adjust paper width to Text
@@ -71,7 +70,6 @@
 #define EE_STAT_TEXTWIDTHCHANGED    0x00000020
 #define EE_STAT_TEXTHEIGHTCHANGED   0x00000040
 #define EE_STAT_WRONGWORDCHANGED    0x00000080
-// #define EE_STAT_MODIFIED         0x00000100
 
 /*
     EE_STAT_CRSRLEFTPARA at the time cursor movement and the enter.
