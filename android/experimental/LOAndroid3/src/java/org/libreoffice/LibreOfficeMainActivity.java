@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerController;
+import org.mozilla.gecko.gfx.LayerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +98,8 @@ public class LibreOfficeMainActivity extends Activity {
 
         mMainHandler = new Handler();
 
+        LayoutInflater.from(this).setFactory(ViewFactory.getInstance());
+
         if (getIntent().getData() != null) {
             mInputFile = getIntent().getData().getEncodedPath();
         } else {
@@ -128,8 +132,9 @@ public class LibreOfficeMainActivity extends Activity {
         mLayerController = new LayerController(this);
         mLayerController.setZoomConstraints(new ZoomConstraints(true));
         mLayerClient = new GeckoLayerClient(this);
+        LayerView layerView = (LayerView)findViewById(R.id.layer_view);
+        mLayerController.setView(layerView);
         mLayerController.setLayerClient(mLayerClient);
-        mGeckoLayout.addView(mLayerController.getView(), 0);
 
         LOKitShell.sendEvent(LOEventFactory.load(mInputFile));
     }

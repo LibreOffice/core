@@ -9,6 +9,7 @@ package org.mozilla.gecko.gfx;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -32,7 +33,6 @@ import java.nio.IntBuffer;
 public class LayerView extends SurfaceView implements SurfaceHolder.Callback {
     private static String LOGTAG = "GeckoLayerView";
 
-    private Context mContext;
     private LayerController mController;
     private TouchEventHandler mTouchEventHandler;
     private GLController mGLController;
@@ -51,18 +51,19 @@ public class LayerView extends SurfaceView implements SurfaceHolder.Callback {
     public static final int PAINT_BEFORE_FIRST = 1;
     public static final int PAINT_AFTER_FIRST = 2;
 
-
-    public LayerView(Context context, LayerController controller) {
-        super(context);
+    public LayerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
 
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         holder.setFormat(PixelFormat.RGB_565);
 
         mGLController = new GLController(this);
-        mContext = context;
+    }
+
+    void connect(LayerController controller) {
         mController = controller;
-        mTouchEventHandler = new TouchEventHandler(context, this, mController);
+        mTouchEventHandler = new TouchEventHandler(getContext(), this, mController);
         mRenderer = new LayerRenderer(this);
         mInputConnectionHandler = null;
 
@@ -208,6 +209,10 @@ public class LayerView extends SurfaceView implements SurfaceHolder.Callback {
         mListener = listener;
     }
 
+    Listener getListener() {
+        return mListener;
+    }
+
     public GLController getGLController() {
         return mGLController;
     }
@@ -267,10 +272,6 @@ public class LayerView extends SurfaceView implements SurfaceHolder.Callback {
 
     private GLThread mGLThread; // Protected by this class's monitor.
 
-    /**
-     * Creates a Java GL thread. After this is called, the FlexibleGLSurfaceView may be used just
-     * like a GLSurfaceView. It is illegal to access the controller after this has been called.
-     */
     public synchronized void createGLThread() {
         if (mGLThread != null) {
             throw new LayerViewException ("createGLThread() called with a GL thread already in place!");
@@ -282,10 +283,6 @@ public class LayerView extends SurfaceView implements SurfaceHolder.Callback {
         notifyAll();
     }
 
-    /**
-     * Destroys the Java GL thread. Returns a Thread that completes when the Java GL thread is
-     * fully shut down.
-     */
     public synchronized Thread destroyGLThread() {
         // Wait for the GL thread to be started.
         Log.e(LOGTAG, "### Waiting for GL thread to be created...");

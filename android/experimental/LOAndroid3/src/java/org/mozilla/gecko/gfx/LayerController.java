@@ -69,9 +69,13 @@ public class LayerController implements PanZoomTarget {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
         mPanZoomController = new PanZoomController(this);
-        mView = new LayerView(context, this);
         mCheckerboardShouldShowChecks = true;
         mZoomConstraints = new ZoomConstraints(false);
+    }
+
+    public void setView(LayerView v) {
+        mView = v;
+        mView.connect(this);
     }
 
     public void setRoot(Layer layer) { mRootLayer = layer; }
