@@ -528,7 +528,6 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
         {   // The current interval belongs between two old intervals
             if( !bSubtract )
                 pOld->insert( pOld->begin() + nRightPos, pLongArr->begin() + i - 2, pLongArr->begin() + i );
-            nIdx = nRightPos + 2;
         }
         else if( bSubtract ) // Subtract, if necessary separate
         {
