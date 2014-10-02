@@ -883,7 +883,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             SfxItemSet& rNewSet = pStyleSheet->GetItemSet();
                             bool bNumFormatChanged;
                             if ( ScGlobal::CheckWidthInvalidate(
-                                                bNumFormatChanged, aOldSet, rNewSet ) )
+                                                bNumFormatChanged, rNewSet, aOldSet ) )
                                 rDoc.InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
 
                             SCTAB nTabCount = rDoc.GetTableCount();
