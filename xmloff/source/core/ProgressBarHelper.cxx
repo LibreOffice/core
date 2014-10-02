@@ -48,7 +48,7 @@ sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
     {
         if (nReference)
         {
-            double fPercent(nNewReference / nReference);
+            double fPercent((double)nNewReference / nReference);
             double fValue(nValue * fPercent);
             nValue = static_cast<sal_Int32>(fValue);
             nReference = nNewReference;
