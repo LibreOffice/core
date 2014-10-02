@@ -82,7 +82,7 @@ sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
 
 Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
 {
-    if( (0 <= nToken) && (static_cast< size_t >( nToken ) < maTokenNames.size()) )
+    if( (0 <= nToken) && (static_cast< size_t >( nToken ) < XML_TOKEN_COUNT) )
         return maTokenNames[ static_cast< size_t >( nToken ) ];
     return Sequence< sal_Int8 >();
 }
