@@ -681,7 +681,6 @@ bool View::SdrBeginTextEdit(
         pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
         sal_uLong nCntrl = pOutl->GetControlWord();
         nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
-        nCntrl |= EE_CNTRL_URLSFXEXECUTE;
         nCntrl |= EE_CNTRL_MARKFIELDS;
         nCntrl |= EE_CNTRL_AUTOCORRECT;
 

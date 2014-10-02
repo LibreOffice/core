@@ -523,7 +523,6 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 
         sal_uInt32 nCntrl = pOutliner->GetControlWord();
         nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
-        nCntrl |= EE_CNTRL_URLSFXEXECUTE;
 
         const SwViewOption *pOpt = pSh->GetViewOptions();
 

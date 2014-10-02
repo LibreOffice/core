@@ -39,7 +39,6 @@
 #define EE_CNTRL_ONLINESPELLING     0x00001000  // During the edit Spelling
 #define EE_CNTRL_STRETCHING         0x00002000  // Stretch mode
 #define EE_CNTRL_MARKFIELDS         0x00004000  // Mark Fields with color
-#define EE_CNTRL_URLSFXEXECUTE      0x00008000  // !!!OLD!!!: SFX-URL-Execute.
 #define EE_CNTRL_RESTOREFONT        0x00010000  // Restore Font in OutDev
 #define EE_CNTRL_RTFSTYLESHEETS     0x00020000  // Use Stylesheets when imported
 #define EE_CNTRL_AUTOCORRECT        0x00080000  // AutoCorrect

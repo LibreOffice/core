@@ -420,7 +420,7 @@ void SwSidebarWin::InitControls()
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     sal_uLong nCntrl = mpOutliner->GetControlWord();
     // TODO: crash when AUTOCOMPLETE enabled
-    nCntrl |= EE_CNTRL_MARKFIELDS | EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_URLSFXEXECUTE; // | EE_CNTRL_AUTOCOMPLETE;
+    nCntrl |= EE_CNTRL_MARKFIELDS | EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL; // | EE_CNTRL_AUTOCOMPLETE;
     if (SwViewOption::IsFieldShadings())
         nCntrl |= EE_CNTRL_MARKFIELDS;
     else

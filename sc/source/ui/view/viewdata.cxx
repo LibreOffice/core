@@ -2997,7 +2997,6 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
     bool bOnlineSpell = pLocalDoc->GetDocOptions().IsAutoSpell();
 
     sal_uLong nCntrl = rOutl.GetControlWord();
-    nCntrl |= EE_CNTRL_URLSFXEXECUTE;
     nCntrl |= EE_CNTRL_MARKFIELDS;
     nCntrl |= EE_CNTRL_AUTOCORRECT;
     if( bOnlineSpell )

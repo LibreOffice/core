@@ -279,7 +279,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     sal_uLong nCntrl = rOutliner.GetControlWord();
     nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
-    nCntrl |= EE_CNTRL_URLSFXEXECUTE;
 
     if (mbOnlineSpell)
         nCntrl |= EE_CNTRL_ONLINESPELLING;
@@ -327,7 +326,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     sal_uLong nCntrl2 = pHitTestOutliner->GetControlWord();
     nCntrl2 |= EE_CNTRL_ALLOWBIGOBJS;
-    nCntrl2 |= EE_CNTRL_URLSFXEXECUTE;
     nCntrl2 &= ~EE_CNTRL_ONLINESPELLING;
 
     nCntrl2 &= ~ EE_CNTRL_ULSPACESUMMATION;

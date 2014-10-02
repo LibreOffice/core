@@ -852,8 +852,6 @@ ScFieldEditEngine::ScFieldEditEngine(
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
-    //  EE_CNTRL_URLSFXEXECUTE nicht, weil die Edit-Engine den ViewFrame nicht kennt
-    // wir haben keine StyleSheets fuer Text
     SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
 }
 
