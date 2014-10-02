@@ -17,14 +17,14 @@ public class DynamicTileLayer extends Layer {
 
     private final List<SubTile> tiles = new CopyOnWriteArrayList<SubTile>();
     private TileProvider tileProvider;
-    private final FloatSize tileSize;
+    private final IntSize tileSize;
     private RectF currentViewport = new RectF();
 
     public DynamicTileLayer() {
-        this.tileSize = new FloatSize(256, 256);
+        this.tileSize = new IntSize(256, 256);
     }
 
-    public DynamicTileLayer(FloatSize tileSize) {
+    public DynamicTileLayer(IntSize tileSize) {
         this.tileSize = tileSize;
     }
 
@@ -108,7 +108,7 @@ public class DynamicTileLayer extends Layer {
         }
     }
 
-    private RectF roundToTileSize(RectF input, FloatSize tileSize) {
+    private RectF roundToTileSize(RectF input, IntSize tileSize) {
         float minX = ((int)(input.left / tileSize.width)) * tileSize.width;
         float minY = ((int)(input.top / tileSize.height)) * tileSize.height;
         float maxX = ((int)(input.right / tileSize.width) + 1) * tileSize.width;
@@ -116,7 +116,7 @@ public class DynamicTileLayer extends Layer {
         return new RectF(minX, minY, maxX, maxY);
     }
 
-    private RectF inflate(RectF rect, FloatSize inflateSize) {
+    private RectF inflate(RectF rect, IntSize inflateSize) {
         RectF newRect = new RectF(rect);
         newRect.left -= inflateSize.width;
         newRect.left = newRect.left < 0.0f ? 0.0f : newRect.left;
