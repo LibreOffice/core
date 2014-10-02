@@ -2787,22 +2787,18 @@ if test $_os = Darwin; then
     INSTALL_NAME_TOOL=install_name_tool
     if test -z "$save_CC"; then
         AC_MSG_CHECKING([what compiler to use])
-        case $with_macosx_sdk in
-        10.8|10.9|10.10)
-            stdlib=-stdlib=libc++
-            if test "$ENABLE_LTO" = TRUE; then
-                lto=-flto
-            fi
-            CC="`xcrun -find clang` -m64 $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            CXX="`xcrun -find clang++` -m64 $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
-            AR=`xcrun -find ar`
-            NM=`xcrun -find nm`
-            STRIP=`xcrun -find strip`
-            LIBTOOL=`xcrun -find libtool`
-            RANLIB=`xcrun -find ranlib`
-            ;;
-        esac
+        stdlib=-stdlib=libc++
+        if test "$ENABLE_LTO" = TRUE; then
+            lto=-flto
+        fi
+        CC="`xcrun -find clang` -m64 $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        CXX="`xcrun -find clang++` -m64 $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
+        AR=`xcrun -find ar`
+        NM=`xcrun -find nm`
+        STRIP=`xcrun -find strip`
+        LIBTOOL=`xcrun -find libtool`
+        RANLIB=`xcrun -find ranlib`
         AC_MSG_RESULT([$CC and $CXX])
     fi
 
