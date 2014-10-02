@@ -35,7 +35,7 @@
 
 
 class list_view_builder;
-typedef std::auto_ptr<list_view_builder> list_view_builder_ptr;
+typedef std::unique_ptr<list_view_builder> list_view_builder_ptr;
 
 // factory method for list_view_builder
 list_view_builder_ptr create_list_view_builder(

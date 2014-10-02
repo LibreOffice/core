@@ -55,7 +55,7 @@ typedef std::vector<statistic_group_t>                  statistic_group_list_t;
 
 
 class document_statistic_reader;
-typedef std::auto_ptr<document_statistic_reader> document_statistic_reader_ptr;
+typedef std::unique_ptr<document_statistic_reader> document_statistic_reader_ptr;
 
 document_statistic_reader_ptr create_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 

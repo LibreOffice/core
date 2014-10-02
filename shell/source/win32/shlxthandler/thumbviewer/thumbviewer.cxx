@@ -357,7 +357,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
     try
     {
         std::wstring fname = getShortPathName( filename_ );
-        std::auto_ptr<ZipFile> zipfile( new ZipFile( WStringToString( fname ) ) );
+        std::unique_ptr<ZipFile> zipfile( new ZipFile( WStringToString( fname ) ) );
 
         if (zipfile->HasContent(THUMBNAIL_CONTENT))
         {
