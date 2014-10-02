@@ -2434,22 +2434,28 @@ void SwHTMLParser::AddParSpace()
             const size_t nCntAttr = (pTxtNode  && pTxtNode->GetpSwpHints())
                             ? pTxtNode->GetSwpHints().Count() : 0;
 
-            for(size_t i = 0; (i < nCntAttr) && !bIsCJK; ++i)
+            for(size_t i = 0; i < nCntAttr; ++i)
             {
-               pHt = rHints.GetTextHint(i);
-               nWhich = pHt->Which();
-               if( RES_CHRATR_CJK_FONT == nWhich ||
-                   RES_CHRATR_CJK_FONTSIZE == nWhich ||
-                   RES_CHRATR_CJK_LANGUAGE == nWhich ||
-                   RES_CHRATR_CJK_POSTURE == nWhich ||
-                   RES_CHRATR_CJK_WEIGHT == nWhich )
-                       bIsCJK = true;
-               if( RES_CHRATR_CTL_FONT == nWhich ||
-                   RES_CHRATR_CTL_FONTSIZE == nWhich ||
-                   RES_CHRATR_CTL_LANGUAGE == nWhich ||
-                   RES_CHRATR_CTL_POSTURE == nWhich ||
-                   RES_CHRATR_CTL_WEIGHT == nWhich )
-                       bIsCJK = false;
+                pHt = rHints.GetTextHint(i);
+                nWhich = pHt->Which();
+                if (RES_CHRATR_CJK_FONT == nWhich ||
+                    RES_CHRATR_CJK_FONTSIZE == nWhich ||
+                    RES_CHRATR_CJK_LANGUAGE == nWhich ||
+                    RES_CHRATR_CJK_POSTURE == nWhich ||
+                    RES_CHRATR_CJK_WEIGHT == nWhich)
+                {
+                    bIsCJK = true;
+                    break;
+                }
+                if (RES_CHRATR_CTL_FONT == nWhich ||
+                    RES_CHRATR_CTL_FONTSIZE == nWhich ||
+                    RES_CHRATR_CTL_LANGUAGE == nWhich ||
+                    RES_CHRATR_CTL_POSTURE == nWhich ||
+                    RES_CHRATR_CTL_WEIGHT == nWhich)
+                {
+                    bIsCTL = true;
+                    break;
+                }
             }
 
             if( bIsCTL )
