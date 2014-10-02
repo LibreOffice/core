@@ -2997,7 +2997,7 @@ void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUn
     // I think this may never happen... But I am not sure enough .-)
     if ( bTransferOwnership )
     {
-        if ( _rxUnoShape.is() )
+        if (mpSvxShape)
             mpSvxShape->TakeSdrObjectOwnership();
         SAL_WARN( "svx.uno", "a UNO shape took over an SdrObject previously owned by another UNO shape!");
     }
