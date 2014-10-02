@@ -155,7 +155,6 @@ bool SfxFrame::DoClose()
 
 bool SfxFrame::DoClose_Impl()
 {
-    bool bRet = true;
     SfxBindings* pBindings = NULL;
     if ( pImp->pCurrentViewFrame )
         pBindings = &pImp->pCurrentViewFrame->GetBindings();
@@ -165,12 +164,12 @@ bool SfxFrame::DoClose_Impl()
         pImp->pWorkWin->DeleteControllers_Impl();
 
     if ( pImp->pCurrentViewFrame )
-        bRet = pImp->pCurrentViewFrame->Close();
+        pImp->pCurrentViewFrame->Close();
 
     if ( pImp->bOwnsBindings )
         DELETEZ( pBindings );
 
-    bRet = Close();
+    bool bRet = Close();
     DBG_ASSERT( bRet, "Impossible state: frame closes, but controller refuses!");
     return bRet;
 }
