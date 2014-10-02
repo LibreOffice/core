@@ -745,7 +745,7 @@ void E3dObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     // take no part in the rotation of the scene. To ensure this, there is the
     // SetGlueReallyAbsolute(sal_True);
 
-    double fWinkelInRad = nWink/100 * F_PI180;
+    double fWinkelInRad = nWink/100.0 * F_PI180;
 
     basegfx::B3DHomMatrix aRotateZ;
     aRotateZ.rotate(0.0, 0.0, fWinkelInRad);
