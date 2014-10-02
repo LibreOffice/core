@@ -90,6 +90,7 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
 BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),
     mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
+    mbIsSaveMode( false ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
     mpAccExec( NULL ),
@@ -144,6 +145,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
 
     get(mpAllRecentThumbnails, "all_recent");
     get(mpLocalView, "local_view");
+    mpCurrentView = mpLocalView;
 
     maDndWindows.push_back(mpAllRecentThumbnails);
 
