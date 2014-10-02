@@ -74,7 +74,7 @@ public:
     void push_back(SvBaseLink* p)
     {
         mLinks.push_back(p);
-        p->AddRef();
+        p->AddFirstRef();
     }
 };
 

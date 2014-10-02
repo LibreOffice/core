@@ -443,7 +443,7 @@ void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
         SvParser *pReader = createReader(nRows);
         if(pReader)
         {
-            pReader->AddRef();
+            pReader->AddFirstRef();
             pReader->CallParser();
             pReader->ReleaseRef();
         }

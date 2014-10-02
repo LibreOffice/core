@@ -240,7 +240,7 @@ void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewCont
     OSL_ENSURE(!m_pAutoStyles, "OFormLayerXMLImport_Impl::setAutoStyleContext: not to be called twice!");
     m_pAutoStyles = _pNewContext;
     if (m_pAutoStyles)
-        m_pAutoStyles->AddRef();
+        m_pAutoStyles->AddFirstRef();
 }
 
 void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumerStyleName)
@@ -253,7 +253,7 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
     {
         m_pAutoStyles = m_rImporter.GetShapeImport()->GetAutoStylesContext();
         if (m_pAutoStyles)
-            m_pAutoStyles->AddRef();
+            m_pAutoStyles->AddFirstRef();
     }
 
     if (m_pAutoStyles)

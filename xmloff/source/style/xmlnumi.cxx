@@ -1075,7 +1075,7 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
         if( !pLevelStyles )
             pLevelStyles = new SvxXMLListStyle_Impl;
         pLevelStyles->push_back( pLevelStyle );
-        pLevelStyle->AddRef();
+        pLevelStyle->AddFirstRef();
 
         pContext = pLevelStyle;
     }

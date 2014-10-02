@@ -1264,14 +1264,14 @@ UCBStorageStream::UCBStorageStream( const OUString& rName, StreamMode nMode, boo
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
     pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect, pKey, bRepair, xProgress );
-    pImp->AddRef();             // use direct refcounting because in header file only a pointer should be used
+    pImp->AddFirstRef();             // use direct refcounting because in header file only a pointer should be used
     StorageBase::m_nMode = pImp->m_nMode;
 }
 
 UCBStorageStream::UCBStorageStream( UCBStorageStream_Impl *pImpl )
     : pImp( pImpl )
 {
-    pImp->AddRef();             // use direct refcounting because in header file only a pointer should be used
+    pImp->AddFirstRef();             // use direct refcounting because in header file only a pointer should be used
     pImp->m_pAntiImpl = this;
     SetError( pImp->m_nError );
     StorageBase::m_nMode = pImp->m_nMode;
@@ -1474,7 +1474,7 @@ UCBStorage::UCBStorage( SvStream& rStrm, bool bDirect )
         pImp = new UCBStorage_Impl( rStrm, this, bDirect );
     }
 
-    pImp->AddRef();
+    pImp->AddFirstRef();
     pImp->Init();
     StorageBase::m_nMode = pImp->m_nMode;
 }
@@ -1484,7 +1484,7 @@ UCBStorage::UCBStorage( const ::ucbhelper::Content& rContent, const OUString& rN
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
     pImp = new UCBStorage_Impl( rContent, rName, nMode, this, bDirect, bIsRoot );
-    pImp->AddRef();
+    pImp->AddFirstRef();
     pImp->Init();
     StorageBase::m_nMode = pImp->m_nMode;
 }
@@ -1494,7 +1494,7 @@ UCBStorage::UCBStorage( const OUString& rName, StreamMode nMode, bool bDirect, b
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
     pImp = new UCBStorage_Impl( rName, nMode, this, bDirect, bIsRoot, bIsRepair, xProgressHandler );
-    pImp->AddRef();
+    pImp->AddFirstRef();
     pImp->Init();
     StorageBase::m_nMode = pImp->m_nMode;
 }
@@ -1504,7 +1504,7 @@ UCBStorage::UCBStorage( const OUString& rName, StreamMode nMode, bool bDirect, b
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
     pImp = new UCBStorage_Impl( rName, nMode, this, bDirect, bIsRoot, false, Reference< XProgressHandler >() );
-    pImp->AddRef();
+    pImp->AddFirstRef();
     pImp->Init();
     StorageBase::m_nMode = pImp->m_nMode;
 }
@@ -1514,7 +1514,7 @@ UCBStorage::UCBStorage( UCBStorage_Impl *pImpl )
 {
     pImp->m_pAntiImpl = this;
     SetError( pImp->m_nError );
-    pImp->AddRef();             // use direct refcounting because in header file only a pointer should be used
+    pImp->AddFirstRef();             // use direct refcounting because in header file only a pointer should be used
     StorageBase::m_nMode = pImp->m_nMode;
 }
 

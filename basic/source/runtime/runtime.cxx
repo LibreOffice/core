@@ -1406,7 +1406,7 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         {
             pNULL = new SbxVariable;
             pNULL->PutNull();
-            pNULL->AddRef();
+            pNULL->AddFirstRef();
         }
         PushVar( pNULL );
     }
@@ -1416,7 +1416,7 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         {
             pTRUE = new SbxVariable;
             pTRUE->PutBool( true );
-            pTRUE->AddRef();
+            pTRUE->AddFirstRef();
         }
         PushVar( pTRUE );
     }
@@ -1426,7 +1426,7 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         {
             pFALSE = new SbxVariable;
             pFALSE->PutBool( false );
-            pFALSE->AddRef();
+            pFALSE->AddFirstRef();
         }
         PushVar( pFALSE );
     }

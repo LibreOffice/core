@@ -68,7 +68,7 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
             case SbxOBJECT:
                 aData.pObj = (SbxBase*) p;
                 if( p )
-                    aData.pObj->AddRef();
+                    aData.pObj->AddFirstRef();
                 break;
             case SbxDECIMAL:
                 aData.pDecimal = (SbxDecimal*) p;
@@ -107,7 +107,7 @@ SbxValue::SbxValue( const SbxValue& r )
                 break;
             case SbxOBJECT:
                 if( aData.pObj )
-                    aData.pObj->AddRef();
+                    aData.pObj->AddFirstRef();
                 break;
             case SbxDECIMAL:
                 if( aData.pDecimal )
@@ -542,7 +542,7 @@ bool SbxValue::Put( const SbxValues& rVal )
                             bool bParentProp = pThisVar && 5345 ==
                                     ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
                             if ( !bParentProp )
-                                p->aData.pObj->AddRef();
+                                p->aData.pObj->AddFirstRef();
                         }
                     }
                     else

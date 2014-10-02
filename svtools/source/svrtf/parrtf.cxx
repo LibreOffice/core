@@ -553,7 +553,7 @@ SvParserState SvRTFParser::CallParser()
     // the first two tokens should be '{' and \\rtf !!
     if( '{' == GetNextToken() && RTF_RTF == GetNextToken() )
     {
-        AddRef();
+        AddFirstRef();
         Continue( 0 );
         if( SVPAR_PENDING != eState )
             ReleaseRef();       // now parser is not needed anymore

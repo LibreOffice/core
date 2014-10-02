@@ -42,7 +42,7 @@ SfxHintPoster::~SfxHintPoster()
 void SfxHintPoster::Post( SfxHint* pHintToPost )
 {
     Application::PostUserEvent( ( LINK(this, SfxHintPoster, DoEvent_Impl) ), pHintToPost );
-    AddRef();
+    AddFirstRef();
 }
 
 

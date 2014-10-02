@@ -155,7 +155,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             if ( pItem )
             {
                 SbxObject* pObject = SbxBase::CreateObject( pItem->GetValue() );
-                pObject->AddRef();
+                pObject->AddFirstRef();
                 rReq.Done();
             }
             break;

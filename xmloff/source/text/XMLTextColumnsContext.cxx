@@ -352,7 +352,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
             pColumns = new XMLTextColumnsArray_Impl;
 
         pColumns->push_back( pColumn );
-        pColumn->AddRef();
+        pColumn->AddFirstRef();
 
         pContext = pColumn;
     }
@@ -362,7 +362,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
         pColumnSep =
             new XMLTextColumnSepContext_Impl( GetImport(), nPrefix, rLocalName,
                                            xAttrList, *pColumnSepAttrTokenMap );
-        pColumnSep->AddRef();
+        pColumnSep->AddFirstRef();
 
         pContext = pColumnSep;
     }

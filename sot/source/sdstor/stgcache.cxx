@@ -262,7 +262,7 @@ void StgCache::SetStrm( UCBStorageStream* pStgStream )
 
     if ( pStorageStream )
     {
-        pStorageStream->AddRef();
+        pStorageStream->AddFirstRef();
         pStrm = pStorageStream->GetModifySvStream();
     }
 
