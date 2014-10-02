@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0d59b9_6ddd1170",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-10-02T12:59:18Z",
+      "side": 1,
+      "message": "Is there a reason why you set this to NULL?",
+      "revId": "a752b111210e0bcaf315d62f2aadea4335a99e3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
