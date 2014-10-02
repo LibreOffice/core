@@ -23,6 +23,13 @@
 ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShellOri)
     : ModalDialog(pParent, "DataFormDialog", "modules/scalc/ui/dataform.ui")
     , pTabViewShell(pTabViewShellOri)
+    , aColLength(0)
+    , nCurrentRow(0)
+    , nStartCol(0)
+    , nEndCol(0)
+    , nStartRow(0)
+    , nEndRow(0)
+    , nTab(0)
     , bNoSelection(false)
 {
     get(m_pBtnNew, "new");
