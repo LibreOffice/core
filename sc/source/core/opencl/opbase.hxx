@@ -120,7 +120,6 @@ public:
     virtual ~DynamicKernelArgument() { }
 
     virtual void GenSlidingWindowFunction( std::stringstream& ) { }
-    const std::string& GetSymName() const { return mSymName; }
     formula::FormulaToken* GetFormulaToken() const;
     virtual size_t GetWindowSize() const = 0;
     virtual std::string DumpOpName() const { return std::string(""); }
@@ -158,7 +157,6 @@ public:
     virtual ~VectorRef();
 
     virtual void GenSlidingWindowFunction( std::stringstream& ) SAL_OVERRIDE { }
-    const std::string& GetSymName() const { return mSymName; }
     virtual size_t GetWindowSize() const SAL_OVERRIDE;
     virtual std::string DumpOpName() const SAL_OVERRIDE { return std::string(""); }
     virtual void DumpInlineFun( std::set<std::string>&,
