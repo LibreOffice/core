@@ -124,7 +124,6 @@ public:
 
     FastSerializerHelper* write(const char* value);
     FastSerializerHelper* write(const OUString& value);
-    FastSerializerHelper* write(const OString& value);
     FastSerializerHelper* write(sal_Int32 value);
     FastSerializerHelper* write(sal_Int64 value);
     FastSerializerHelper* write(double value);
