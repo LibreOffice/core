@@ -718,7 +718,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
                     ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
                     m_pDriverobject = driverObject.release();
 
-                    if( t.pEnv && m_pDriverobject )
+                    if( m_pDriverobject )
                         m_pDriverobject = t.pEnv->NewGlobalRef( m_pDriverobject );
 
                     {
