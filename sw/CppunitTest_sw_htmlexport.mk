@@ -55,6 +55,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
 	canvas/source/factory/canvasfactory \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    dbaccess/util/dba \
     embeddedobj/util/embobj \
     filter/source/config/cache/filterconfig1 \
     filter/source/storagefilterdetect/storagefd \
