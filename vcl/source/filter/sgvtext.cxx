@@ -758,7 +758,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
         } while (!(AbsEnd || (Border && ((WordEndCnt>0) || WordEnd || Trenn))));
 
         while (WErec0->Index<WErec->Index) { // to assure Line[] matches }
-            c=ProcessChar(vOut,TBuf,*WErec0,Atr0,WEnChar0,WEnChar-WEnChar0-1,Line,cLine);
+            ProcessChar(vOut,TBuf,*WErec0,Atr0,WEnChar0,WEnChar-WEnChar0-1,Line,cLine);
         }
 
         (*R)=(*WErec); nChars=WEnChar;
