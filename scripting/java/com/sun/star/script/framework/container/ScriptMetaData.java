@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class ScriptMetaData extends ScriptEntry {
+
     private boolean hasSource = false;
     private String locationPlaceHolder = "";
     private String source;
@@ -51,7 +52,6 @@ public class ScriptMetaData extends ScriptEntry {
             this.hasSource = true;
             this.source = source;
         }
-
     }
 
     public boolean hasSource() {
@@ -71,18 +71,18 @@ public class ScriptMetaData extends ScriptEntry {
     }
 
     public String getScriptFullURL() {
-        String url = "vnd.sun.star.script:" + parent.getName() + "." + getLanguageName()
-                     +
-                     "?" + "language=" + getLanguage() +
-                     "&location=" + getParcelLocation();
+        String url = "vnd.sun.star.script:" + parent.getName() + "."
+                     + getLanguageName() + "?" + "language=" + getLanguage()
+                     + "&location=" + getParcelLocation();
+
         return url;
     }
 
     public String getShortFormScriptURL() {
-        String url = "vnd.sun.star.script:" + parent.getName() + "." + getLanguageName()
-                     +
-                     "?" + "language=" + getLanguage() +
-                     "&location=" + getLocationPlaceHolder();
+        String url = "vnd.sun.star.script:" + parent.getName() + "."
+                     + getLanguageName() + "?" + "language=" + getLanguage()
+                     + "&location=" + getLocationPlaceHolder();
+
         return url;
     }
 
@@ -93,21 +93,18 @@ public class ScriptMetaData extends ScriptEntry {
         "vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR";
 
     private static final String USER =
-        "vnd.sun.star.expand:${$BRAND_INI_DIR/" +
-        PathUtils.BOOTSTRAP_NAME +
-        "::UserInstallation}/user";
+        "vnd.sun.star.expand:${$BRAND_INI_DIR/" + PathUtils.BOOTSTRAP_NAME
+        + "::UserInstallation}/user";
 
     private static final String UNO_USER_PACKAGES1 =
         "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE";
 
-    private static final String UNO_USER_PACKAGES2 =
-        USER + "/uno_packages";
+    private static final String UNO_USER_PACKAGES2 = USER + "/uno_packages";
 
     private static final String UNO_SHARED_PACKAGES1 =
         "$UNO_SHARED_PACKAGES_CACHE";
 
-    private static final String UNO_SHARED_PACKAGES2 =
-        SHARE + "/uno_packages";
+    private static final String UNO_SHARED_PACKAGES2 = SHARE + "/uno_packages";
 
     public static String getLocationPlaceHolder(String url, String pkgname) {
         String result = "Unknown";
@@ -177,7 +174,6 @@ public class ScriptMetaData extends ScriptEntry {
         return parent.getPathToParcel();
     }
 
-
     @Override
     public String toString() {
         return "\nParcelLocation = " + getParcelLocation() + "\nLocationPlaceHolder = "
@@ -230,8 +226,8 @@ public class ScriptMetaData extends ScriptEntry {
             LogUtils.DEBUG(LogUtils.getTrace(e));
             return new URL[0];
         }
-
     }
+
     private URL createURL(String path) throws java.net.MalformedURLException {
         int indexOfColon = path.indexOf(':');
         String scheme = path.substring(0, indexOfColon);
@@ -246,7 +242,9 @@ public class ScriptMetaData extends ScriptEntry {
     public void loadSource() {
         try {
             URL sourceUrl = getSourceURL();
-            LogUtils.DEBUG("** In load source BUT not loading yet for " + sourceUrl);
+
+            LogUtils.DEBUG("** In load source BUT not loading yet for "
+                           + sourceUrl);
 
             if (sourceUrl != null) {
                 StringBuilder buf = new StringBuilder();
@@ -262,7 +260,8 @@ public class ScriptMetaData extends ScriptEntry {
                 try {
                     in.close();
                 } catch (java.io.IOException ignore) {
-                    LogUtils.DEBUG("** Failed to read scriot from url " + ignore.toString());
+                    LogUtils.DEBUG("** Failed to read scriot from url "
+                                   + ignore.toString());
                 }
 
                 source = buf.toString();
@@ -273,13 +272,15 @@ public class ScriptMetaData extends ScriptEntry {
         }
 
     }
+
     protected boolean writeSourceFile() {
         String sourceFilePath = parent.getPathToParcel() + "/" + getLanguageName();
         boolean result = false;
 
         try {
-            XSimpleFileAccess2 xSFA2 = UnoRuntime.queryInterface(XSimpleFileAccess2.class,
-                                       parent.m_xSFA);
+
+            XSimpleFileAccess2 xSFA2 =
+                UnoRuntime.queryInterface(XSimpleFileAccess2.class, parent.m_xSFA);
 
             if (xSFA2 != null) {
                 ByteArrayInputStream bis = new ByteArrayInputStream(getSourceBytes());
@@ -291,13 +292,12 @@ public class ScriptMetaData extends ScriptEntry {
         }
         // TODO re-examine exception processing should probably throw
         // exceptions back to caller
-        catch (Exception ignore)
-
-        {
+        catch (Exception ignore) {
         }
 
         return result;
     }
+
     protected boolean removeSourceFile() {
         String parcelLocation = parent.getPathToParcel();
         String sourceFilePath = parcelLocation + "/" + getLanguageName();

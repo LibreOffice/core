@@ -41,6 +41,7 @@ import org.mozilla.javascript.tools.debugger.Main;
 import org.mozilla.javascript.tools.debugger.ScopeProvider;
 
 public class ScriptEditorForJavaScript implements ScriptEditor {
+
     // global ScriptEditorForJavaScript instance
     private static ScriptEditorForJavaScript theScriptEditorForJavaScript;
 
@@ -55,9 +56,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
 
     static {
         try {
-            URL url =
-                ScriptEditorForJavaScript.class.getResource("template.js");
-
+            URL url = ScriptEditorForJavaScript.class.getResource("template.js");
             InputStream in = url.openStream();
             StringBuilder buf = new StringBuilder();
             byte[] b = new byte[1024];
@@ -83,8 +82,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
 
     public static synchronized ScriptEditorForJavaScript getEditor() {
         if (theScriptEditorForJavaScript == null) {
-            theScriptEditorForJavaScript =
-                new ScriptEditorForJavaScript();
+            theScriptEditorForJavaScript = new ScriptEditorForJavaScript();
         }
 
         return theScriptEditorForJavaScript;
@@ -170,12 +168,10 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
             new Runnable() {
                 public void run() {
                     synchronized (BEING_EDITED) {
-                        ScriptEditorForJavaScript editor =
-                            BEING_EDITED.get(url);
+                        ScriptEditorForJavaScript editor = BEING_EDITED.get(url);
 
                         if (editor == null) {
-                            editor = new ScriptEditorForJavaScript(
-                                context, url);
+                            editor = new ScriptEditorForJavaScript(context, url);
                             BEING_EDITED.put(url, editor);
                         }
                     }
@@ -200,8 +196,6 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
         initUI();
         Scriptable scope = getScope(context);
         this.rhinoWindow.openFile(url, scope, new closeHandler(url));
-
-
         this.scriptURL = url;
     }
 
@@ -293,8 +287,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
         Scriptable jsCtxt = Context.toObject(xsctxt, scope);
         scope.put("XSCRIPTCONTEXT", scope, jsCtxt);
 
-        Scriptable jsArgs = Context.toObject(
-                                new Object[0], scope);
+        Scriptable jsArgs = Context.toObject(new Object[0], scope);
         scope.put("ARGUMENTS", scope, jsArgs);
 
         Context.exit();
@@ -302,10 +295,13 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
     }
 
     private class closeHandler implements Runnable {
+
         private URL url;
+
         private closeHandler(URL url) {
             this.url = url;
         }
+
         public void run() {
             synchronized (BEING_EDITED) {
                 BEING_EDITED.remove(this.url);

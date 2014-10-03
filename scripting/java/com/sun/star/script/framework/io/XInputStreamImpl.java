@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class XInputStreamImpl implements XInputStream {
+
     private InputStream is;
+
     public XInputStreamImpl(InputStream is) {
         this.is = is;
     }
@@ -32,8 +34,8 @@ public class XInputStreamImpl implements XInputStream {
     public int readBytes(/*OUT*/byte[][] aData, /*IN*/int nBytesToRead) throws
         com.sun.star.io.NotConnectedException,
         com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException {
-        aData[ 0 ] = new byte[ nBytesToRead ];
 
+        aData[ 0 ] = new byte[ nBytesToRead ];
         int totalBytesRead = 0;
 
         try {
@@ -56,6 +58,7 @@ public class XInputStreamImpl implements XInputStream {
     public int readSomeBytes(/*OUT*/byte[][] aData, /*IN*/int nMaxBytesToRead)
     throws com.sun.star.io.NotConnectedException,
         com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException {
+
         int bytesToRead = nMaxBytesToRead;
         int availableBytes = available();
 
@@ -70,6 +73,7 @@ public class XInputStreamImpl implements XInputStream {
     public void skipBytes(/*IN*/int nBytesToSkip) throws
         com.sun.star.io.NotConnectedException,
         com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException {
+
         try {
             is.skip(nBytesToSkip);
         } catch (IOException e) {
@@ -77,8 +81,9 @@ public class XInputStreamImpl implements XInputStream {
         }
     }
 
-    public int available() throws com.sun.star.io.NotConnectedException,
-        com.sun.star.io.IOException {
+    public int available() throws
+        com.sun.star.io.NotConnectedException, com.sun.star.io.IOException {
+
         int bytesAvail = 0;
 
         try {
@@ -90,13 +95,13 @@ public class XInputStreamImpl implements XInputStream {
         return bytesAvail;
     }
 
-    public void closeInput() throws com.sun.star.io.NotConnectedException,
-        com.sun.star.io.IOException {
+    public void closeInput() throws
+        com.sun.star.io.NotConnectedException, com.sun.star.io.IOException {
+
         try {
             is.close();
         } catch (IOException e) {
             throw new com.sun.star.io.IOException(e);
         }
     }
-
 }

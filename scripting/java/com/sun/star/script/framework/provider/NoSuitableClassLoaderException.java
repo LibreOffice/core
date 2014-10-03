@@ -19,6 +19,7 @@
 package com.sun.star.script.framework.provider;
 
 public class NoSuitableClassLoaderException extends Exception {
+
     /**
      * Constructs an <code>NoSuitableClassLoaderException</code> with <code>null</code>
      * as its error detail message.
@@ -26,6 +27,7 @@ public class NoSuitableClassLoaderException extends Exception {
     public NoSuitableClassLoaderException() {
         super();
     }
+
     /**
      * Constructs an <code>NoSuitBaleClassLoaderException</code> with the specified detail
      * message. The error message string <code>s</code> can later be
@@ -37,5 +39,4 @@ public class NoSuitableClassLoaderException extends Exception {
     public NoSuitableClassLoaderException(String s) {
         super(s);
     }
-
 }

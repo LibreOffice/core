@@ -116,6 +116,7 @@ public class ScriptSourceModel {
 
         return result;
     }
+
     public void indicateErrorLine(int lineNum) {
         System.out.println("Beanshell indicateErrorLine " + lineNum);
         currentPosition = lineNum - 1;

@@ -31,6 +31,7 @@ import java.lang.reflect.Modifier;
  * can be found in the Class.
  */
 public class StrictResolver implements Resolver {
+
     /**
      *Constructor for the StrictResolver object
      */
@@ -47,8 +48,9 @@ public class StrictResolver implements Resolver {
      * @param  c   the Class file in which to search for the method
      * @return     the ScriptProxy matching the criteria, or null if no match is found
      */
-    public ScriptProxy getProxy(ScriptDescriptor sd, Class<?> c)
-    throws NoSuchMethodException {
+    public ScriptProxy getProxy(ScriptDescriptor sd, Class<?> c) throws
+        NoSuchMethodException {
+
         Method m = null;
 
         LogUtils.DEBUG("StrictResolver.getProxy() for: " + sd.toString());
@@ -56,11 +58,13 @@ public class StrictResolver implements Resolver {
         try {
             m = resolveArguments(sd, c);
         } catch (ClassNotFoundException e) {
-            throw new NoSuchMethodException("StrictResolver.getProxy: Can't find method: "
-                                            + sd.getMethodName() + ":" + e.getMessage());
+            throw new NoSuchMethodException(
+                "StrictResolver.getProxy: Can't find method: " + sd.getMethodName()
+                + ":" + e.getMessage());
         } catch (NoSuchMethodException e) {
-            throw new NoSuchMethodException("StrictResolver.getProxy: Can't find method: "
-                                            + sd.getMethodName() + ":" + e.getMessage());
+            throw new NoSuchMethodException(
+                "StrictResolver.getProxy: Can't find method: " + sd.getMethodName()
+                + ":" + e.getMessage());
         }
 
         ScriptProxy sp = new ScriptProxy(m);
@@ -73,11 +77,11 @@ public class StrictResolver implements Resolver {
             try {
                 o = c.newInstance();
             } catch (InstantiationException ie) {
-                throw new NoSuchMethodException("getScriptProxy: Can't instantiate: " +
-                                                c.getName());
+                throw new NoSuchMethodException(
+                    "getScriptProxy: Can't instantiate: " + c.getName());
             } catch (IllegalAccessException iae) {
-                throw new NoSuchMethodException("getScriptProxy: Can't access: "
-                                                + c.getName());
+                throw new NoSuchMethodException(
+                    "getScriptProxy: Can't access: " + c.getName());
             }
 
             sp.setTargetObject(o);
@@ -85,7 +89,6 @@ public class StrictResolver implements Resolver {
 
         return sp;
     }
-
 
     /**
      *  Description of the Method
@@ -96,9 +99,9 @@ public class StrictResolver implements Resolver {
      * @exception  ClassNotFoundException
      * @exception  NoSuchMethodException
      */
-    private Method resolveArguments(ScriptDescriptor sd, Class<?> c)
-    throws ClassNotFoundException, NoSuchMethodException {
+    private Method resolveArguments(ScriptDescriptor sd, Class<?> c) throws
+        ClassNotFoundException, NoSuchMethodException {
+
         return c.getMethod(sd.getMethodName(), sd.getArgumentTypes());
     }
 }
-

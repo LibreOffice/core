@@ -45,8 +45,10 @@ public class UnoPkgContainer extends ParcelContainer {
 
     public UnoPkgContainer(XComponentContext xCtx, String locationURL,
                            String _extensionDb, String _extensionRepository,
-                           String language) throws com.sun.star.lang.IllegalArgumentException,
+                           String language) throws
+        com.sun.star.lang.IllegalArgumentException,
         com.sun.star.lang.WrappedTargetException {
+
         super(xCtx, locationURL, language, false);
         extensionDb = _extensionDb;
         extensionRepository = _extensionRepository;
@@ -55,6 +57,7 @@ public class UnoPkgContainer extends ParcelContainer {
 
     // gets the ParcelContainer for persisted uno packages
     public ParcelContainer getRegisteredUnoPkgContainer(String url) {
+
         if (!url.endsWith("/")) {
             url += "/";
         }
@@ -62,6 +65,7 @@ public class UnoPkgContainer extends ParcelContainer {
         LogUtils.DEBUG("** getRegisterPackage ctx = " + containerUrl);
         LogUtils.DEBUG("** getRegisterPackage  for uri " + url);
         LogUtils.DEBUG("** getRegisterPackage  for langugage " + language);
+
         ParcelContainer result = registeredPackages.get(url);
         LogUtils.DEBUG("getRegisterPackage result is  " + result);
         return result;
@@ -72,6 +76,7 @@ public class UnoPkgContainer extends ParcelContainer {
     }
 
     private void registerPackageContainer(String url, ParcelContainer c) {
+
         if (!url.endsWith("/")) {
             url += "/";
         }
@@ -83,6 +88,7 @@ public class UnoPkgContainer extends ParcelContainer {
     }
 
     public void deRegisterPackageContainer(String url) {
+
         if (!url.endsWith("/")) {
             url += "/";
         }
@@ -136,13 +142,15 @@ public class UnoPkgContainer extends ParcelContainer {
                     try {
                         processUnoPackage(thepackage, language);
                     } catch (com.sun.star.lang.IllegalArgumentException ila) {
-                        LogUtils.DEBUG("Failed to process " + thepackage + " for " + language);
+                        LogUtils.DEBUG("Failed to process " + thepackage
+                                       + " for " + language);
                         LogUtils.DEBUG("   Reason: " + ila);
                     } catch (Exception e) {
                         // TODO proper exception or do we wish
                         // to ignore errors here
                         LogUtils.DEBUG("Something very wrong!!!!!");
-                        LogUtils.DEBUG("Failed to process " + thepackage + " for " + language);
+                        LogUtils.DEBUG("Failed to process " + thepackage
+                                       + " for " + language);
                         LogUtils.DEBUG("   Reason: " + e);
                     }
                 }
@@ -153,15 +161,12 @@ public class UnoPkgContainer extends ParcelContainer {
         }
     }
 
-
     @Override
     public ScriptMetaData findScript(ParsedScriptUri psu) throws
         com.sun.star.container.NoSuchElementException,
-        com.sun.star.lang.WrappedTargetException
+        com.sun.star.lang.WrappedTargetException {
 
-    {
         ScriptMetaData scriptData = null;
-
         String functionName = psu.function;
         String parcelName = psu.parcel;
         String location = psu.location;
@@ -175,9 +180,10 @@ public class UnoPkgContainer extends ParcelContainer {
         ParcelContainer pc = getChildContainer(location);
 
         if (pc  == null) {
-            throw new com.sun.star.lang.WrappedTargetException("Failed to resolve script " ,
-                    null, new com.sun.star.lang.IllegalArgumentException("Cannot resolve script location for script = "
-                            + functionName));
+            throw new com.sun.star.lang.WrappedTargetException(
+                "Failed to resolve script " , null,
+                new com.sun.star.lang.IllegalArgumentException(
+                    "Cannot resolve script location for script = " + functionName));
         }
 
         return pc.findScript(psu);
@@ -185,18 +191,24 @@ public class UnoPkgContainer extends ParcelContainer {
 
     private DeployedUnoPackagesDB getUnoPackagesDB() throws
         com.sun.star.lang.WrappedTargetException {
+
         InputStream is = null;
         DeployedUnoPackagesDB dp = null;
 
         try {
-            String packagesUrl = PathUtils.make_url(extensionDb,
-                                                    "/Scripts/" + extensionRepository + "-extension-desc.xml");
-            LogUtils.DEBUG("getUnoPackagesDB() looking for existing db in " + packagesUrl);
+
+            String packagesUrl =
+                PathUtils.make_url(extensionDb,
+                                   "/Scripts/" + extensionRepository + "-extension-desc.xml");
+
+            LogUtils.DEBUG("getUnoPackagesDB() looking for existing db in "
+                           + packagesUrl);
 
             if (m_xSFA.exists(packagesUrl)) {
                 if (packagesUrl.startsWith("vnd.sun.star.tdoc")) {
                     // handles using XStorage directly
-                    throw new com.sun.star.lang.WrappedTargetException("Can't handle documents yet");
+                    throw new com.sun.star.lang.WrappedTargetException(
+                        "Can't handle documents yet");
                 }
 
                 is = new XInputStreamWrapper(m_xSFA.openFileRead(packagesUrl));
@@ -208,7 +220,8 @@ public class UnoPkgContainer extends ParcelContainer {
                 } catch (Exception ignore) {
                 }
             } else {
-                LogUtils.DEBUG("getUnoPackagesDB() " + packagesUrl + " does not exist");
+                LogUtils.DEBUG("getUnoPackagesDB() " + packagesUrl
+                               + " does not exist");
             }
         } catch (Exception e) {
             LogUtils.DEBUG("getUnoPackagesDB() caught Exception: " + e);
@@ -230,14 +243,18 @@ public class UnoPkgContainer extends ParcelContainer {
     private  void writeUnoPackageDB(DeployedUnoPackagesDB dp) throws
         com.sun.star.lang.IllegalArgumentException,
         com.sun.star.lang.WrappedTargetException {
+
         LogUtils.DEBUG("In writeUnoPackageDB() ");
 
         XOutputStream xos = null;
         OutputStream os = null;
 
         try {
-            String packagesUrl = PathUtils.make_url(extensionDb,
-                                                    "/Scripts/" + extensionRepository + "-extension-desc.xml");
+
+            String packagesUrl =
+                PathUtils.make_url(extensionDb, "/Scripts/" + extensionRepository
+                                   + "-extension-desc.xml");
+
             xos =  m_xSFA.openFileWrite(packagesUrl);
             XTruncate xTrc = UnoRuntime.queryInterface(XTruncate.class, xos);
 
@@ -271,10 +288,13 @@ public class UnoPkgContainer extends ParcelContainer {
     }
 
     public  void processUnoPackage(XPackage dPackage,
-                                   String language) throws com.sun.star.lang.IllegalArgumentException,
+                                   String language) throws
+        com.sun.star.lang.IllegalArgumentException,
         com.sun.star.lang.WrappedTargetException,
         com.sun.star.container.ElementExistException {
+
         LogUtils.DEBUG("** in processUnoPackage ");
+
         String uri =  dPackage.getURL();
 
         if (!uri.endsWith("/")) {
@@ -283,12 +303,12 @@ public class UnoPkgContainer extends ParcelContainer {
 
         LogUtils.DEBUG("** processUnoPackage getURL() -> " + uri);
         LogUtils.DEBUG("** processUnoPackage getName() -> " + dPackage.getName());
-        LogUtils.DEBUG("** processUnoPackage getMediaType() -> " +
-                       dPackage.getPackageType().getMediaType());
+        LogUtils.DEBUG("** processUnoPackage getMediaType() -> "
+                       + dPackage.getPackageType().getMediaType());
 
         try {
-            LogUtils.DEBUG("** processUnoPackage getDisplayName() -> " +
-                           dPackage.getDisplayName());
+            LogUtils.DEBUG("** processUnoPackage getDisplayName() -> "
+                           + dPackage.getDisplayName());
         } catch (com.sun.star.deployment.ExtensionRemovedException e) {
             throw new com.sun.star.lang.WrappedTargetException(e.getMessage(), this, e);
         }
@@ -310,12 +330,15 @@ public class UnoPkgContainer extends ParcelContainer {
     }
 
     private  void processUnoPackage(String uri,
-                                    String language) throws com.sun.star.lang.IllegalArgumentException,
+                                    String language) throws
+        com.sun.star.lang.IllegalArgumentException,
         com.sun.star.lang.WrappedTargetException,
         com.sun.star.container.ElementExistException {
+
         if (hasRegisteredUnoPkgContainer(uri)) {
-            throw new com.sun.star.container.ElementExistException("Already a registered uno package "
-                    + uri + " for language " + language);
+            throw new com.sun.star.container.ElementExistException(
+                "Already a registered uno package " + uri + " for language "
+                + language);
         }
 
         LogUtils.DEBUG("processUnoPackage - URL = " + uri);
@@ -327,6 +350,7 @@ public class UnoPkgContainer extends ParcelContainer {
             uri.contains("$UNO_USER_PACKAGES_CACHE/") ||
             uri.contains("$UNO_SHARED_PACKAGES_CACHE/") ||
             uri.contains("$BUNDLED_EXTENSIONS/")) {
+
             //its in a bundle need to determine the uno-package file its in
             LogUtils.DEBUG("processUnoPackage - is part of a uno bundle");
 
@@ -339,25 +363,28 @@ public class UnoPkgContainer extends ParcelContainer {
 
             if (index > -1) {
                 parentUrl = uri.substring(0, index);
-                LogUtils.DEBUG("processUnoPackage - composition is contained in " + parentUrl);
+                LogUtils.DEBUG("processUnoPackage - composition is contained in "
+                               + parentUrl);
             }
 
             ParcelContainer pkgContainer = getChildContainerForURL(parentUrl);
 
             if (pkgContainer == null) {
-                pkgContainer = new ParcelContainer(this, m_xCtx, parentUrl, language, false);
+                pkgContainer =
+                    new ParcelContainer(this, m_xCtx, parentUrl, language, false);
 
                 if (pkgContainer.loadParcel(uri) == null) {
-                    throw new com.sun.star.lang.IllegalArgumentException("Couldn't load script library from composition package "
-                            + uri + " for language " + language);
-
+                    throw new com.sun.star.lang.IllegalArgumentException(
+                        "Couldn't load script library from composition package "
+                        + uri + " for language " + language);
                 }
 
                 addChildContainer(pkgContainer);
             } else {
                 if (pkgContainer.loadParcel(uri) == null) {
-                    throw new com.sun.star.lang.IllegalArgumentException("Couldn't load script library from composition package "
-                            + uri + " for language " + language);
+                    throw new com.sun.star.lang.IllegalArgumentException(
+                        "Couldn't load script library from composition package "
+                        + uri + " for language " + language);
                 }
 
             }
@@ -367,13 +394,12 @@ public class UnoPkgContainer extends ParcelContainer {
             // stand-alone library package, e.g. not contained in
             // an uno package
             if (loadParcel(uri) == null) {
-                throw new com.sun.star.lang.IllegalArgumentException("Couldn't load script library package "
-                        + uri + " for language " + language);
+                throw new com.sun.star.lang.IllegalArgumentException(
+                    "Couldn't load script library package " + uri
+                    + " for language " + language);
             }
 
             registerPackageContainer(uri, this);
         }
-
     }
-
 }

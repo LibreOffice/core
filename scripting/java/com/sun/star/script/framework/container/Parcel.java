@@ -34,18 +34,22 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 public class Parcel implements XNameContainer {
+
     private ParcelDescriptor m_descriptor;
     private String name;
     protected ParcelContainer parent;
     protected XSimpleFileAccess m_xSFA;
+
     public Parcel(XSimpleFileAccess xSFA, ParcelContainer parent,
                   ParcelDescriptor desc, String parcelName) {
+
         this(parent, desc, parcelName);
         this.m_xSFA = xSFA;
     }
 
     private Parcel(ParcelContainer parent, ParcelDescriptor desc,
                    String parcelName) {
+
         this.parent = parent;
         this.m_descriptor = desc;
         this.name = parcelName;
@@ -64,9 +68,11 @@ public class Parcel implements XNameContainer {
     public String getName() {
         return name;
     }
+
     public java.lang.Object getByName(String aName) throws
         com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {
+
         LogUtils.DEBUG("** Parcel.getByName for " + aName);
         ScriptEntry thescript = null;
 
@@ -100,7 +106,9 @@ public class Parcel implements XNameContainer {
         LogUtils.DEBUG("returning date  for " + aName);
         return data;
     }
+
     public String[] getElementNames() {
+
         String[] results = new String[0];
 
         if (m_descriptor != null) {
@@ -114,6 +122,7 @@ public class Parcel implements XNameContainer {
 
         return results;
     }
+
     public boolean hasByName(String aName) {
 
         boolean result = true;
@@ -144,10 +153,11 @@ public class Parcel implements XNameContainer {
         return m_descriptor != null && m_descriptor.getScriptEntries().length > 0;
     }
 
-    public void replaceByName(String aName,
-                              java.lang.Object aElement) throws com.sun.star.lang.IllegalArgumentException,
+    public void replaceByName(String aName, java.lang.Object aElement) throws
+        com.sun.star.lang.IllegalArgumentException,
         com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {
+
         // TODO check type of aElement
         // if not ok, throw IllegalArgument
         if (m_descriptor != null) {
@@ -159,10 +169,9 @@ public class Parcel implements XNameContainer {
                     // TODO needs to create source file ( if there is one )
                     //m_descriptor.write();
                 } else {
-                    throw new com.sun.star.container.NoSuchElementException("No script named " +
-                            aName);
+                    throw new com.sun.star.container.NoSuchElementException(
+                        "No script named " + aName);
                 }
-
 
             }
             // TO DO should catch specified exceptions
@@ -174,9 +183,10 @@ public class Parcel implements XNameContainer {
     }
 
     // create
-    public void insertByName(String aName,
-                             java.lang.Object aElement) throws com.sun.star.lang.IllegalArgumentException,
-        ElementExistException, com.sun.star.lang.WrappedTargetException {
+    public void insertByName(String aName, java.lang.Object aElement) throws
+        com.sun.star.lang.IllegalArgumentException, ElementExistException,
+        com.sun.star.lang.WrappedTargetException {
+
         // TODO check the type of aElement and throw#
         // if not appropriate
         try {
@@ -190,8 +200,8 @@ public class Parcel implements XNameContainer {
                 LogUtils.DEBUG("Inserting source: " + script.getSource());
 
                 if (!script.writeSourceFile()) {
-                    throw new com.sun.star.lang.WrappedTargetException("Failed to create source file "
-                            + script.getLanguageName());
+                    throw new com.sun.star.lang.WrappedTargetException(
+                        "Failed to create source file " + script.getLanguageName());
                 }
             }
 
@@ -203,18 +213,19 @@ public class Parcel implements XNameContainer {
         }
     }
 
-
     private void writeParcelDescriptor()
     throws com.sun.star.ucb.CommandAbortedException,
         com.sun.star.io.IOException,
         com.sun.star.uno.Exception, java.io.IOException {
-        String pathToDescriptor = PathUtils.make_url(
-                                      getPathToParcel(),  ParcelDescriptor.PARCEL_DESCRIPTOR_NAME);
 
-        XSimpleFileAccess2 xSFA2 = UnoRuntime.queryInterface(XSimpleFileAccess2.class,
-                                   m_xSFA);
+        String pathToDescriptor =
+            PathUtils.make_url(getPathToParcel(), ParcelDescriptor.PARCEL_DESCRIPTOR_NAME);
+
+        XSimpleFileAccess2 xSFA2 =
+            UnoRuntime.queryInterface(XSimpleFileAccess2.class, m_xSFA);
 
         if (xSFA2 != null) {
+
             ByteArrayOutputStream bos = null;
             ByteArrayInputStream bis = null;
             XInputStreamImpl xis = null;
@@ -240,23 +251,26 @@ public class Parcel implements XNameContainer {
     public void removeByName(String Name) throws
         com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {
+
         try {
             ScriptMetaData script = (ScriptMetaData)getByName(Name);
 
             if (script != null) {
                 if (!script.removeSourceFile()) {
-                    LogUtils.DEBUG("** Parcel.removeByName Failed to remove script " + Name);
-                    throw new com.sun.star.lang.WrappedTargetException("Failed to remove script " +
-                            Name);
+                    LogUtils.DEBUG("** Parcel.removeByName Failed to remove script "
+                                   + Name);
+                    throw new com.sun.star.lang.WrappedTargetException(
+                        "Failed to remove script " + Name);
                 }
 
-                LogUtils.DEBUG("** Parcel.removeByName have removed script source file " +
-                               Name);
+                LogUtils.DEBUG("** Parcel.removeByName have removed script source file "
+                               + Name);
+
                 m_descriptor.removeScriptEntry(script);
                 writeParcelDescriptor();
             } else {
-                throw new com.sun.star.container.NoSuchElementException("No script named " +
-                        Name);
+                throw new com.sun.star.container.NoSuchElementException(
+                    "No script named " + Name);
             }
 
         } catch (Exception e) {
@@ -265,6 +279,7 @@ public class Parcel implements XNameContainer {
         }
 
     }
+
     // rename parcel
     public void rename(String name) {
         this.name = name;
@@ -273,6 +288,7 @@ public class Parcel implements XNameContainer {
     public ParcelContainer getParent() {
         return parent;
     }
+
     /**
      * Returns the path of this  <tt>Parcel</tt>
      *
@@ -284,4 +300,3 @@ public class Parcel implements XNameContainer {
     }
 
 }
-

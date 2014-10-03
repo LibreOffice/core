@@ -44,8 +44,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class ScriptEditorForBeanShell
-    implements ScriptEditor, ActionListener {
+public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
+
     private JFrame frame;
     private String filename;
 
@@ -60,8 +60,8 @@ public class ScriptEditorForBeanShell
     private static ScriptEditorForBeanShell theScriptEditorForBeanShell;
 
     // global list of ScriptEditors, key is URL of file being edited
-    private static Map<URL, ScriptEditorForBeanShell> BEING_EDITED = new
-    HashMap<URL, ScriptEditorForBeanShell>();
+    private static Map<URL, ScriptEditorForBeanShell> BEING_EDITED =
+        new HashMap<URL, ScriptEditorForBeanShell>();
 
     // template for new BeanShell scripts
     private static String BSHTEMPLATE;
@@ -69,9 +69,7 @@ public class ScriptEditorForBeanShell
     // try to load the template for BeanShell scripts
     static {
         try {
-            URL url =
-                ScriptEditorForBeanShell.class.getResource("template.bsh");
-
+            URL url = ScriptEditorForBeanShell.class.getResource("template.bsh");
             InputStream in = url.openStream();
             StringBuilder buf = new StringBuilder();
             byte[] b = new byte[1024];
@@ -153,7 +151,6 @@ public class ScriptEditorForBeanShell
         return "bsh";
     }
 
-
     /**
      *  Indicates the line where error occurred
      *
@@ -161,6 +158,7 @@ public class ScriptEditorForBeanShell
     public void indicateErrorLine(int lineNum) {
         model.indicateErrorLine(lineNum);
     }
+
     /**
      *  Executes the script edited by the editor
      *
@@ -169,6 +167,7 @@ public class ScriptEditorForBeanShell
         frame.toFront();
         return model.execute(context, cl);
     }
+
     /**
      *  Opens an editor window for the specified ScriptMetaData.
      *  If an editor window is already open for that data it will be
@@ -232,8 +231,9 @@ public class ScriptEditorForBeanShell
         this.cl = cl;
 
         try {
-            Class<?> c = Class.forName(
-                             "org.openoffice.netbeans.editor.NetBeansSourceView");
+
+            Class<?> c =
+                Class.forName("org.openoffice.netbeans.editor.NetBeansSourceView");
 
             Class<?>[] types = new Class[] { ScriptSourceModel.class };
 
@@ -297,9 +297,9 @@ public class ScriptEditorForBeanShell
 
     private void doClose() {
         if (view.isModified()) {
+
             int result = JOptionPane.showConfirmDialog(frame,
-                         "The script has been modified. " +
-                         "Do you want to save the changes?");
+                         "The script has been modified. Do you want to save the changes?");
 
             if (result == JOptionPane.CANCEL_OPTION) {
                 // don't close the window, just return

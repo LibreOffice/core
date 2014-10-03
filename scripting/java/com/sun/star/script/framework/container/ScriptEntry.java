@@ -33,6 +33,7 @@ public class ScriptEntry implements Cloneable {
 
     public ScriptEntry(String language, String languagename,
                        String location) {
+
         this.language = language;
         this.languagename = languagename;
         // logical name/ function name concept
@@ -114,7 +115,9 @@ public class ScriptEntry implements Cloneable {
 
     @Override
     public String toString() {
-        return "\nLogicalName = " + logicalname +  "\nLanguageName = " + languagename +
-               "\nLocation = " + location + "\nLanguaguageProperties = " + languagedepprops;
+        return "\nLogicalName = " + logicalname +
+               "\nLanguageName = " + languagename +
+               "\nLocation = " + location +
+               "\nLanguaguageProperties = " + languagedepprops;
     }
 }

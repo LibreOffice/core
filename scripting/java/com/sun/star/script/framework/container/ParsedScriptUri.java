@@ -23,4 +23,3 @@ public class ParsedScriptUri {
     public String function;
     public String parcel;
 }
-

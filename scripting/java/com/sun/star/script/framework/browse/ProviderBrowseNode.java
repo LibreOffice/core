@@ -44,37 +44,32 @@ import java.util.Collection;
 
 import javax.swing.JOptionPane;
 
-public class ProviderBrowseNode extends PropertySet
-    implements XBrowseNode, XInvocation {
+public class ProviderBrowseNode extends PropertySet implements
+    XBrowseNode, XInvocation {
+
     private ScriptProvider provider;
     private Collection<XBrowseNode> browsenodes;
     private String name;
     protected ParcelContainer container;
-
     private XComponentContext m_xCtx;
-
-
-
-
 
     public ProviderBrowseNode(ScriptProvider provider, ParcelContainer container,
                               XComponentContext xCtx) {
+
         LogUtils.DEBUG("*** ProviderBrowseNode ctor");
         this.container = container;
         this.name = this.container.getLanguage();
         this.provider = provider;
         this.m_xCtx = xCtx;
 
-        registerProperty("Deletable", new Type(boolean.class),
-                         (short)0, "deletable");
-        registerProperty("Creatable", new Type(boolean.class),
-                         (short)0, "creatable");
-        registerProperty("Editable", new Type(boolean.class),
-                         (short)0, "editable");
+        registerProperty("Deletable", new Type(boolean.class), (short)0, "deletable");
+        registerProperty("Creatable", new Type(boolean.class), (short)0, "creatable");
+        registerProperty("Editable", new Type(boolean.class), (short)0, "editable");
         XSimpleFileAccess xSFA = null;
         XMultiComponentFactory xFac = m_xCtx.getServiceManager();
 
         try {
+
             xSFA = UnoRuntime.queryInterface(XSimpleFileAccess.class,
                                              xFac.createInstanceWithContext(
                                                  "com.sun.star.ucb.SimpleFileAccess",
@@ -84,7 +79,6 @@ public class ProviderBrowseNode extends PropertySet
         catch (com.sun.star.uno.Exception e) {
             LogUtils.DEBUG("Caught exception in creation of ProviderBrowseNode ");
             LogUtils.DEBUG(LogUtils.getTrace(e));
-
         }
     }
 
@@ -96,9 +90,11 @@ public class ProviderBrowseNode extends PropertySet
         LogUtils.DEBUG("***** ProviderBrowseNode.getChildNodes()");
 
         if (hasChildNodes()) {
+
             // needs initialisation?
             LogUtils.DEBUG("** ProviderBrowseNode.getChildNodes(), container is " +
                            container);
+
             String[] parcels = container.getElementNames();
             browsenodes = new ArrayList<XBrowseNode>(parcels.length);
 
@@ -113,13 +109,16 @@ public class ProviderBrowseNode extends PropertySet
             }
 
             ParcelContainer[] packageContainers = container.getChildContainers();
+
             LogUtils.DEBUG("**** For container named " + container.getName() +
-                           " with root path " + container.getParcelContainerDir() + " has " +
-                           packageContainers.length + " child containers ");
+                           " with root path " + container.getParcelContainerDir() +
+                           " has " + packageContainers.length + " child containers ");
 
             for (ParcelContainer packageContainer : packageContainers) {
-                XBrowseNode node = new PkgProviderBrowseNode(provider, packageContainer,
-                        m_xCtx);
+
+                XBrowseNode node =
+                    new PkgProviderBrowseNode(provider, packageContainer, m_xCtx);
+
                 browsenodes.add(node);
             }
         } else {
@@ -134,15 +133,13 @@ public class ProviderBrowseNode extends PropertySet
         boolean result = true;
 
         if (container == null ||
-            (!container.hasElements() &&
-             container.getChildContainers().length == 0)) {
+            (!container.hasElements() && container.getChildContainers().length == 0)) {
+
             result = false;
         }
 
-        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes(): " +
-                       "name=" + name +
-                       ", path=" + container.getParcelContainerDir() +
-                       ", result=" + result);
+        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes(): " + "name=" + name +
+                       ", path=" + container.getParcelContainerDir() + ", result=" + result);
 
         return result;
     }
@@ -162,10 +159,11 @@ public class ProviderBrowseNode extends PropertySet
     }
 
     public Object invoke(String aFunctionName, Object[] aParams,
-                         short[][] aOutParamIndex, Object[][] aOutParam)
-    throws com.sun.star.lang.IllegalArgumentException,
+                         short[][] aOutParamIndex, Object[][] aOutParam) throws
+        com.sun.star.lang.IllegalArgumentException,
         com.sun.star.script.CannotConvertException,
         com.sun.star.reflection.InvocationTargetException {
+
         // Initialise the out parameters - not used but prevents error in
         // UNO bridge
         aOutParamIndex[0] = new short[0];
@@ -179,19 +177,20 @@ public class ProviderBrowseNode extends PropertySet
 
                 if (aParams == null || aParams.length < 1 ||
                     !AnyConverter.isString(aParams[0])) {
+
                     String prompt = "Enter name for new Parcel";
                     String title = "Create Parcel";
 
                     // try to get a DialogFactory instance, if it fails
                     // just use a Swing JOptionPane to prompt for the name
                     try {
-                        DialogFactory dialogFactory =
-                            DialogFactory.getDialogFactory();
-
+                        DialogFactory dialogFactory = DialogFactory.getDialogFactory();
                         name = dialogFactory.showInputDialog(title, prompt);
                     } catch (Exception e) {
+
                         name = JOptionPane.showInputDialog(null, prompt, title,
                                                            JOptionPane.QUESTION_MESSAGE);
+
                     }
                 } else {
                     name = AnyConverter.toString(aParams[0]);
@@ -215,8 +214,6 @@ public class ProviderBrowseNode extends PropertySet
                         }
 
                         browsenodes.add(parcel);
-
-
                         result = new Any(new Type(XBrowseNode.class), parcel);
                     }
                 }
@@ -233,14 +230,15 @@ public class ProviderBrowseNode extends PropertySet
         return result;
     }
 
-    public void setValue(String aPropertyName, Object aValue)
-    throws com.sun.star.beans.UnknownPropertyException,
+    public void setValue(String aPropertyName, Object aValue) throws
+        com.sun.star.beans.UnknownPropertyException,
         com.sun.star.script.CannotConvertException,
         com.sun.star.reflection.InvocationTargetException {
     }
 
-    public Object getValue(String aPropertyName)
-    throws com.sun.star.beans.UnknownPropertyException {
+    public Object getValue(String aPropertyName) throws
+        com.sun.star.beans.UnknownPropertyException {
+
         return null;
     }
 

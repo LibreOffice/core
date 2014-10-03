@@ -31,8 +31,8 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class PlainSourceView extends JScrollPane
-    implements ScriptSourceView, DocumentListener {
+public class PlainSourceView extends JScrollPane implements
+    ScriptSourceView, DocumentListener {
 
     private ScriptSourceModel model;
     private JTextArea ta;

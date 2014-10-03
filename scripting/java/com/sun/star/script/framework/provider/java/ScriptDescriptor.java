@@ -15,7 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 package com.sun.star.script.framework.provider.java;
 
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ import java.util.StringTokenizer;
  * criteria that should be used for finding a particular script
  */
 public class ScriptDescriptor {
+
     private String m_name;
     private String m_methodName;
     private String m_className;
@@ -39,8 +39,7 @@ public class ScriptDescriptor {
      * @param  name                          Script Name
      * @exception  IllegalArgumentException  if the given name does not contain a "."
      */
-    public ScriptDescriptor(String name)
-    throws IllegalArgumentException {
+    public ScriptDescriptor(String name) throws IllegalArgumentException {
         int idx = name.lastIndexOf('.');
 
         if (idx == -1) {
@@ -70,7 +69,6 @@ public class ScriptDescriptor {
         return m_className;
     }
 
-
     /**
      * Gets the method name of this <code>ScriptDescriptor</code>
      *
@@ -79,7 +77,6 @@ public class ScriptDescriptor {
     public String getMethodName() {
         return m_methodName;
     }
-
 
     /**
      * Sets the classpath value stored by this <code>ScriptDescriptor</code>
@@ -103,7 +100,6 @@ public class ScriptDescriptor {
         this.m_classpath = classpath;
     }
 
-
     /**
      * Gets the classpath value stored by this <code>ScriptDescriptor</code>
      *
@@ -112,7 +108,6 @@ public class ScriptDescriptor {
     public List<String> getClasspath() {
         return m_classpath;
     }
-
 
     /**
      * Adds the given <code>Class</code> to the list of argument types stored in
@@ -125,10 +120,6 @@ public class ScriptDescriptor {
         m_argumentTypes.add(clazz);
     }
 
-
-
-
-
     /**
      * Gets a list of the types of the arguments stored in this
      * <code>ScriptDescriptor</code>
@@ -138,14 +129,12 @@ public class ScriptDescriptor {
      * @return    The argumentTypes value
      */
 
-    public synchronized Class<?>[]
-    getArgumentTypes() {
+    public synchronized Class<?>[] getArgumentTypes() {
         if (m_argumentTypes.size() > 0)
             return m_argumentTypes.toArray(new Class[ m_argumentTypes.size() ]);
         else
             return null;
     }
-
 
     /**
      * Returns a <code>String</code> representation of this
@@ -174,4 +163,3 @@ public class ScriptDescriptor {
         return description.toString();
     }
 }
-

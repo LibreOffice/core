@@ -42,8 +42,8 @@ public class ParcelDescriptor {
     PARCEL_DESCRIPTOR_NAME = "parcel-descriptor.xml";
 
     // Collection of all ParcelDescriptor created for files
-    private static final Map<File, ParcelDescriptor> PARCEL_DESCRIPTOR_MAP = new
-    HashMap<File, ParcelDescriptor>(5);
+    private static final Map<File, ParcelDescriptor> PARCEL_DESCRIPTOR_MAP =
+        new HashMap<File, ParcelDescriptor>(5);
 
     // This is the default contents of a parcel descriptor to be used when
     // creating empty descriptors
@@ -56,10 +56,6 @@ public class ParcelDescriptor {
     private Document document = null;
     private String language = null;
     private Map<String, String> languagedepprops = new HashMap<String, String>(3);
-
-
-
-
 
     public ParcelDescriptor() throws IOException {
         ByteArrayInputStream bis = null;
@@ -148,6 +144,7 @@ public class ParcelDescriptor {
     }
 
     public ScriptEntry[] getScriptEntries() {
+
         ArrayList<ScriptEntry> scripts = new ArrayList<ScriptEntry>();
         NodeList scriptNodes;
         int len;
@@ -217,8 +214,8 @@ public class ParcelDescriptor {
                 }
             }
 
-            ScriptEntry entry = new ScriptEntry(language, languagename, "", langProps,
-                                                description);
+            ScriptEntry entry =
+                new ScriptEntry(language, languagename, "", langProps, description);
             scripts.add(entry);
         }
 

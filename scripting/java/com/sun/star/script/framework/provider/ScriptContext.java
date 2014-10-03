@@ -15,6 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 package com.sun.star.script.framework.provider;
 
 import com.sun.star.beans.PropertyAttribute;
@@ -36,12 +37,12 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
 public class ScriptContext extends PropertySet implements XScriptContext {
+
     private final static String HM_DOC_REF = "DocumentReference";
     private final static String HM_DESKTOP = "Desktop";
     private final static String HM_COMPONENT_CONTEXT = "ComponentContext";
 
     private final static String DOC_URI = "SCRIPTING_DOC_URI";
-
 
     private XModel m_xModel = null;
     private XScriptInvocationContext m_xInvocationContext = null;
@@ -50,24 +51,30 @@ public class ScriptContext extends PropertySet implements XScriptContext {
 
     private XComponentContext m_xComponentContext = null;
 
-    private ScriptContext(XComponentContext xmComponentContext,
-                          XDesktop xDesktop, XModel xModel, XScriptInvocationContext xInvocContext) {
+    private ScriptContext(XComponentContext xmComponentContext, XDesktop xDesktop,
+                          XModel xModel, XScriptInvocationContext xInvocContext) {
+
         this.m_xDeskTop = xDesktop;
         this.m_xComponentContext = xmComponentContext;
         this.m_xModel = xModel;
         this.m_xInvocationContext = xInvocContext;
 
         if (m_xModel != null) {
+
             registerProperty(DOC_URI, new Type(String.class),
                              (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT),
                              "m_sDocURI");
+
         }
 
         registerProperty(HM_DOC_REF, new Type(XModel.class),
-                         (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_xModel");
+                         (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT),
+                         "m_xModel");
+
         registerProperty(HM_DESKTOP, new Type(XDesktop.class),
                          (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT),
                          "m_xDeskTop");
+
         registerProperty(HM_COMPONENT_CONTEXT, new Type(XDesktop.class),
                          (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT),
                          "m_xComponentContext");
@@ -76,12 +83,14 @@ public class ScriptContext extends PropertySet implements XScriptContext {
     public static XScriptContext createContext(XModel xModel,
             XScriptInvocationContext xInvocContext,
             XComponentContext xCtxt, XMultiComponentFactory xMCF) {
+
         XScriptContext sc = null;
 
         try {
 
-            Object xInterface = xMCF.createInstanceWithContext(
-                                    "com.sun.star.frame.Desktop", xCtxt);
+            Object xInterface =
+                xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xCtxt);
+
             XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, xInterface);
 
             if (xModel != null) {
@@ -128,5 +137,4 @@ public class ScriptContext extends PropertySet implements XScriptContext {
     public XComponentContext getComponentContext() {
         return m_xComponentContext;
     }
-
 }

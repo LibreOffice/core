@@ -22,13 +22,15 @@ import com.sun.star.io.XOutputStream;
 import java.io.OutputStream;
 
 public class XOutputStreamWrapper extends OutputStream {
+
     private XOutputStream m_xOutputStream;
+
     public XOutputStreamWrapper(XOutputStream xOs) {
         this.m_xOutputStream = xOs;
     }
+
     @Override
-    public void write(int b)
-    throws java.io.IOException {
+    public void write(int b) throws java.io.IOException {
         if (m_xOutputStream == null) {
             throw new java.io.IOException("Stream is null");
         }
@@ -42,9 +44,9 @@ public class XOutputStreamWrapper extends OutputStream {
             throw new java.io.IOException(ioe.getMessage());
         }
     }
+
     @Override
-    public void write(byte[] b)
-    throws java.io.IOException {
+    public void write(byte[] b) throws java.io.IOException {
 
         if (m_xOutputStream == null) {
             throw new java.io.IOException("Stream is null");
@@ -57,8 +59,7 @@ public class XOutputStreamWrapper extends OutputStream {
         }
     }
     @Override
-    public void write(byte[] b, int off, int len)
-    throws java.io.IOException {
+    public void write(byte[] b, int off, int len) throws java.io.IOException {
         if (m_xOutputStream == null) {
             throw new java.io.IOException("Stream is null");
         }
@@ -74,8 +75,7 @@ public class XOutputStreamWrapper extends OutputStream {
     }
 
     @Override
-    public void flush()
-    throws java.io.IOException {
+    public void flush() throws java.io.IOException {
         if (m_xOutputStream == null) {
             throw new java.io.IOException("Stream is null");
         }
@@ -86,9 +86,9 @@ public class XOutputStreamWrapper extends OutputStream {
             throw new java.io.IOException(ioe.getMessage());
         }
     }
+
     @Override
-    public void close()
-    throws java.io.IOException {
+    public void close() throws java.io.IOException {
         if (m_xOutputStream == null) {
             throw new java.io.IOException("Stream is null");
         }
@@ -99,6 +99,4 @@ public class XOutputStreamWrapper extends OutputStream {
             throw new java.io.IOException(ioe.getMessage());
         }
     }
-
 }
-

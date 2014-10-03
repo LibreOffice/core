@@ -41,6 +41,7 @@ public class DeployedUnoPackagesDB {
     private Document document = null;
 
     public DeployedUnoPackagesDB() throws IOException {
+
         ByteArrayInputStream bis = null;
 
         try {
@@ -61,6 +62,7 @@ public class DeployedUnoPackagesDB {
     }
 
     public String[] getDeployedPackages(String language) {
+
         ArrayList<String> packageUrls = new ArrayList<String>(4);
         Element main = document.getDocumentElement();
         Element root = null;
@@ -87,10 +89,10 @@ public class DeployedUnoPackagesDB {
                 (len = packages.getLength()) != 0) {
 
                 for (int i = 0; i < len; i++) {
-
                     Element e = (Element)packages.item(i);
                     packageUrls.add(e.getAttribute("value"));
                 }
+
             }
         }
 
@@ -111,6 +113,7 @@ public class DeployedUnoPackagesDB {
 
 
     public boolean removePackage(String language, String url) {
+
         Element main = document.getDocumentElement();
         Element langNode = null;
         int len = 0;
@@ -153,6 +156,7 @@ public class DeployedUnoPackagesDB {
     }
 
     public void addPackage(String language, String url) {
+
         Element main = document.getDocumentElement();
         Element langNode = null;
         Element pkgNode = null;

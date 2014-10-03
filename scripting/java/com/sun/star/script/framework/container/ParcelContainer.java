@@ -56,8 +56,8 @@ import java.util.StringTokenizer;
  * The <code>ParcelContainer</code> object is used to store the
  * ScripingFramework specific Libraries.
  */
-
 public class ParcelContainer implements XNameAccess {
+
     protected String language;
     protected String containerUrl;
     private Collection<Parcel> parcels = new ArrayList<Parcel>(10);
@@ -77,7 +77,6 @@ public class ParcelContainer implements XNameAccess {
     public boolean isUnoPkg() {
         return isPkgContainer;
     }
-
 
     /**
      * Returns this <tt>ParcelContainer</tt>'s  parent
@@ -101,8 +100,8 @@ public class ParcelContainer implements XNameAccess {
         }
 
         return childContainers.toArray(new ParcelContainer[childContainers.size()]);
-
     }
+
     /**
      * Removes a child <tt>ParcelContainer</tt>
      * from this instance.
@@ -137,8 +136,9 @@ public class ParcelContainer implements XNameAccess {
         ParcelContainer result = null;
 
         for (ParcelContainer c : childContainers) {
-            String location = ScriptMetaData.getLocationPlaceHolder(
-                                  c.containerUrl, c.getName());
+
+            String location =
+                ScriptMetaData.getLocationPlaceHolder(c.containerUrl, c.getName());
 
             if (key.equals(location)) {
                 result = c;
@@ -193,7 +193,8 @@ public class ParcelContainer implements XNameAccess {
                     name =  decodedUrl.substring(indexOfSlash + 1);
                 }
             } catch (UnsupportedEncodingException e) {
-                com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
+                com.sun.star.uno.RuntimeException e2 =
+                    new com.sun.star.uno.RuntimeException();
                 e2.initCause(e);
                 throw e2;
             }
@@ -211,10 +212,10 @@ public class ParcelContainer implements XNameAccess {
      * @param   language language for which entries are stored
      */
     public ParcelContainer(XComponentContext xCtx, String containerUrl,
-                           String language) throws com.sun.star.lang.IllegalArgumentException,
-        com.sun.star.lang.WrappedTargetException
+                           String language) throws
+        com.sun.star.lang.IllegalArgumentException,
+        com.sun.star.lang.WrappedTargetException {
 
-    {
         this(null, xCtx, containerUrl, language, true);
     }
 
@@ -230,6 +231,7 @@ public class ParcelContainer implements XNameAccess {
                            String language, boolean loadParcels) throws
         com.sun.star.lang.IllegalArgumentException,
         com.sun.star.lang.WrappedTargetException {
+
         this(null, xCtx, containerUrl, language, loadParcels);
     }
 
@@ -244,12 +246,13 @@ public class ParcelContainer implements XNameAccess {
      */
     public ParcelContainer(ParcelContainer parent, XComponentContext xCtx,
                            String containerUrl, String language,
-                           boolean loadParcels) throws com.sun.star.lang.IllegalArgumentException,
-        com.sun.star.lang.WrappedTargetException
+                           boolean loadParcels) throws
+        com.sun.star.lang.IllegalArgumentException,
+        com.sun.star.lang.WrappedTargetException {
 
-    {
         LogUtils.DEBUG("Creating ParcelContainer for " + containerUrl +
                        " loadParcels = " + loadParcels + " language = " + language);
+
         this.m_xCtx = xCtx;
         this.language = language;
         this.parent = parent;
@@ -282,10 +285,12 @@ public class ParcelContainer implements XNameAccess {
         }
 
         try {
+
             m_xSFA = UnoRuntime.queryInterface(
                          XSimpleFileAccess.class,
                          m_xCtx.getServiceManager().createInstanceWithContext(
                              "com.sun.star.ucb.SimpleFileAccess", m_xCtx));
+
         } catch (Exception e) {
             // TODO should throw
             LogUtils.DEBUG("Error instantiating simplefile access ");
@@ -307,6 +312,7 @@ public class ParcelContainer implements XNameAccess {
 
     public Object getByName(String aName) throws
         com.sun.star.container.NoSuchElementException, WrappedTargetException {
+
         Parcel parcel = null;
 
         try {
@@ -331,7 +337,9 @@ public class ParcelContainer implements XNameAccess {
     }
 
     public String[] getElementNames() {
+
         if (hasElements()) {
+
             Parcel[] theParcels = parcels.toArray(new Parcel[parcels.size()]);
             String[] names = new String[ theParcels.length ];
 
@@ -344,7 +352,9 @@ public class ParcelContainer implements XNameAccess {
 
         return new String[0];
     }
+
     public boolean hasByName(String aName) {
+
         boolean isFound = false;
 
         try {
@@ -358,15 +368,18 @@ public class ParcelContainer implements XNameAccess {
 
         return isFound;
     }
+
     public Type getElementType() {
         return new Type();
     }
+
     public boolean hasElements() {
         return !(parcels == null || parcels.isEmpty());
     }
 
     private void loadParcels() throws com.sun.star.lang.IllegalArgumentException,
         com.sun.star.lang.WrappedTargetException {
+
         try {
             LogUtils.DEBUG("About to load parcels from " + containerUrl);
 
@@ -405,18 +418,21 @@ public class ParcelContainer implements XNameAccess {
         }
     }
 
-    public  XNameContainer createParcel(String name) throws ElementExistException,
-        com.sun.star.lang.WrappedTargetException {
+    public  XNameContainer createParcel(String name) throws
+        ElementExistException, com.sun.star.lang.WrappedTargetException {
+
         Parcel p = null;
 
         if (hasByName(name)) {
             throw new ElementExistException("Parcel " + name + " already exists");
         }
 
-        String pathToParcel =  PathUtils.make_url(getParcelContainerDir() ,  name);
+        String pathToParcel = PathUtils.make_url(getParcelContainerDir(), name);
 
         try {
-            LogUtils.DEBUG("ParcelContainer.createParcel, creating folder " + pathToParcel);
+            LogUtils.DEBUG("ParcelContainer.createParcel, creating folder "
+                           + pathToParcel);
+
             m_xSFA.createFolder(pathToParcel);
 
             LogUtils.DEBUG("ParcelContainer.createParcel, folder " + pathToParcel  +
@@ -424,10 +440,12 @@ public class ParcelContainer implements XNameAccess {
 
             ParcelDescriptor pd = new ParcelDescriptor();
             pd.setLanguage(language);
-            String parcelDesc = PathUtils.make_url(pathToParcel,
-                                                   ParcelDescriptor.PARCEL_DESCRIPTOR_NAME);
-            XSimpleFileAccess2 xSFA2 = UnoRuntime.queryInterface(XSimpleFileAccess2.class,
-                                       m_xSFA);
+
+            String parcelDesc =
+                PathUtils.make_url(pathToParcel, ParcelDescriptor.PARCEL_DESCRIPTOR_NAME);
+
+            XSimpleFileAccess2 xSFA2 =
+                UnoRuntime.queryInterface(XSimpleFileAccess2.class, m_xSFA);
 
             if (xSFA2 != null) {
                 LogUtils.DEBUG("createParcel() Using XSIMPLEFILEACCESS2 " + parcelDesc);
@@ -441,8 +459,8 @@ public class ParcelContainer implements XNameAccess {
                 p = loadParcel(pathToParcel);
             }
         } catch (Exception e) {
-
-            LogUtils.DEBUG("createParcel() Exception while attempting to create = " + name);
+            LogUtils.DEBUG("createParcel() Exception while attempting to create = "
+                           + name);
             throw new com.sun.star.lang.WrappedTargetException(e);
         }
 
@@ -453,27 +471,29 @@ public class ParcelContainer implements XNameAccess {
         com.sun.star.lang.WrappedTargetException,
         com.sun.star.lang.IllegalArgumentException {
 
-        String parcelDescUrl =  PathUtils.make_url(parcelUrl,
-                                ParcelDescriptor.PARCEL_DESCRIPTOR_NAME);
-        Parcel parcel = null;
+        String parcelDescUrl =
+            PathUtils.make_url(parcelUrl, ParcelDescriptor.PARCEL_DESCRIPTOR_NAME);
 
+        Parcel parcel = null;
         XInputStream xis = null;
         InputStream is = null;
 
         try {
             if (m_xSFA.exists(parcelDescUrl)) {
+
                 LogUtils.DEBUG("ParcelContainer.loadParcel opening " + parcelDescUrl);
+
                 xis = m_xSFA.openFileRead(parcelDescUrl);
                 is = new XInputStreamWrapper(xis);
-
                 ParcelDescriptor pd = new ParcelDescriptor(is) ;
 
                 try {
                     is.close();
                     is = null;
                 } catch (Exception e) {
-                    LogUtils.DEBUG("ParcelContainer.loadParcel Exception when closing stream for  "
-                                   + parcelDescUrl + " :" + e);
+                    LogUtils.DEBUG(
+                        "ParcelContainer.loadParcel Exception when closing stream for  "
+                        + parcelDescUrl + " :" + e);
                 }
 
                 LogUtils.DEBUG("ParcelContainer.loadParcel closed " + parcelDescUrl);
@@ -490,25 +510,24 @@ public class ParcelContainer implements XNameAccess {
 
                 parcel = new Parcel(m_xSFA, this, pd, name);
 
-                LogUtils.DEBUG(" ParcelContainer.loadParcel created parcel for " + parcelDescUrl
-                               + " for language " + language);
+                LogUtils.DEBUG(" ParcelContainer.loadParcel created parcel for "
+                               + parcelDescUrl + " for language " + language);
+
                 parcels.add(parcel);
             } else {
                 throw new java.io.IOException(parcelDescUrl + " does NOT exist!");
             }
         } catch (com.sun.star.ucb.CommandAbortedException e) {
-
-            LogUtils.DEBUG("loadParcel() Exception while accessing filesystem url = " +
-                           parcelDescUrl + e);
+            LogUtils.DEBUG("loadParcel() Exception while accessing filesystem url = "
+                           + parcelDescUrl + e);
             throw new com.sun.star.lang.WrappedTargetException(e);
         } catch (java.io.IOException e) {
             LogUtils.DEBUG("ParcelContainer.loadParcel() caught IOException while accessing "
                            + parcelDescUrl + ": " + e);
             throw new com.sun.star.lang.WrappedTargetException(e);
         } catch (com.sun.star.uno.Exception e) {
-
-            LogUtils.DEBUG("loadParcel() Exception while accessing filesystem url = " +
-                           parcelDescUrl + e);
+            LogUtils.DEBUG("loadParcel() Exception while accessing filesystem url = "
+                           + parcelDescUrl + e);
             throw new com.sun.star.lang.WrappedTargetException(e);
         }
 
@@ -528,34 +547,39 @@ public class ParcelContainer implements XNameAccess {
 
         return parcel;
     }
-    public void renameParcel(String oldName,
-                             String newName) throws com.sun.star.container.NoSuchElementException,
+    public void renameParcel(String oldName, String newName) throws
+        com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {
+
         LogUtils.DEBUG(" ** ParcelContainer Renaming parcel " + oldName + " to " +
                        newName);
         LogUtils.DEBUG(" ** ParcelContainer is " + this);
+
         Parcel p = (Parcel)getByName(oldName);
 
         if (p == null) {
-            throw new com.sun.star.container.NoSuchElementException("No parcel named " +
-                    oldName);
+            throw new com.sun.star.container.NoSuchElementException(
+                "No parcel named " + oldName);
         }
 
-        String oldParcelDirUrl = PathUtils.make_url(getParcelContainerDir(),
-                                 oldName);
-        String newParcelDirUrl = PathUtils.make_url(getParcelContainerDir(),
-                                 newName);
+        String oldParcelDirUrl =
+            PathUtils.make_url(getParcelContainerDir(), oldName);
+
+        String newParcelDirUrl =
+            PathUtils.make_url(getParcelContainerDir(), newName);
 
         try {
             if (!m_xSFA.isFolder(oldParcelDirUrl)) {
-                Exception e = new com.sun.star.io.IOException("Invalid Parcel directory: " +
-                        oldName);
+                Exception e = new com.sun.star.io.IOException(
+                    "Invalid Parcel directory: " + oldName);
                 throw new com.sun.star.lang.WrappedTargetException(e);
             }
 
-            LogUtils.DEBUG(" ** ParcelContainer Renaming folder " + oldParcelDirUrl + " to "
-                           + newParcelDirUrl);
+            LogUtils.DEBUG(" ** ParcelContainer Renaming folder " + oldParcelDirUrl
+                           + " to " + newParcelDirUrl);
+
             m_xSFA.move(oldParcelDirUrl, newParcelDirUrl);
+
         } catch (com.sun.star.ucb.CommandAbortedException ce) {
             LogUtils.DEBUG(" ** ParcelContainer Renaming failed with " + ce);
             throw new com.sun.star.lang.WrappedTargetException(ce);
@@ -570,30 +594,33 @@ public class ParcelContainer implements XNameAccess {
     public boolean removeParcel(String name) throws
         com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {
+
         Parcel p = (Parcel)getByName(name);
 
         if (p == null) {
-            throw new com.sun.star.container.NoSuchElementException("No parcel named " +
-                    name);
+            throw new com.sun.star.container.NoSuchElementException(
+                "No parcel named " + name);
         }
 
         return  parcels.remove(p);
     }
+
     public boolean deleteParcel(String name) throws
         com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {
-        LogUtils.DEBUG("deleteParcel for containerURL " + containerUrl + " name = " +
-                       name  + " Langueg = " + language);
+
+        LogUtils.DEBUG("deleteParcel for containerURL " + containerUrl
+                       + " name = " + name  + " Langueg = " + language);
 
         Parcel p = (Parcel)getByName(name);
 
         if (p == null) {
-            throw new com.sun.star.container.NoSuchElementException("No parcel named " +
-                    name);
+            throw new com.sun.star.container.NoSuchElementException(
+                "No parcel named " + name);
         }
 
         try {
-            String pathToParcel =  PathUtils.make_url(getParcelContainerDir(),   name);
+            String pathToParcel = PathUtils.make_url(getParcelContainerDir(), name);
             m_xSFA.kill(pathToParcel);
         } catch (Exception e) {
             LogUtils.DEBUG("Error deleteing parcel " + name);
@@ -610,13 +637,16 @@ public class ParcelContainer implements XNameAccess {
     public ScriptMetaData findScript(ParsedScriptUri  parsedUri) throws
         com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {
+
         Parcel p = (Parcel)getByName(parsedUri.parcel);
         ScriptMetaData scriptData = (ScriptMetaData)p.getByName(parsedUri.function);
+
         LogUtils.DEBUG("** found script data for " +  parsedUri.function + " script is "
                        + scriptData);
-        return scriptData;
 
+        return scriptData;
     }
+
     public  ParsedScriptUri parseScriptUri(String scriptURI) throws
         com.sun.star.lang.IllegalArgumentException {
 
@@ -625,28 +655,32 @@ public class ParcelContainer implements XNameAccess {
 
         try {
             xMcFac = m_xCtx.getServiceManager();
-            xFac = UnoRuntime.queryInterface(XUriReferenceFactory.class,
-                                             xMcFac.createInstanceWithContext(
-                                                 "com.sun.star.uri.UriReferenceFactory", m_xCtx));
+
+            xFac = UnoRuntime.queryInterface(
+                       XUriReferenceFactory.class, xMcFac.createInstanceWithContext(
+                           "com.sun.star.uri.UriReferenceFactory", m_xCtx));
+
         } catch (com.sun.star.uno.Exception e) {
             LogUtils.DEBUG("Problems parsing  URL:" + e.toString());
-            throw new com.sun.star.lang.IllegalArgumentException(e, "Problems parsing URL");
+            throw new com.sun.star.lang.IllegalArgumentException(
+                e, "Problems parsing URL");
         }
 
         if (xFac == null) {
             LogUtils.DEBUG("Failed to create UrlReference factory");
-            throw new com.sun.star.lang.IllegalArgumentException("Failed to create UrlReference factory for url "
-                    + scriptURI);
+            throw new com.sun.star.lang.IllegalArgumentException(
+                "Failed to create UrlReference factory for url " + scriptURI);
         }
 
         XUriReference uriRef = xFac.parse(scriptURI);
-        XVndSunStarScriptUrl  sfUri = UnoRuntime.queryInterface(
-                                          XVndSunStarScriptUrl.class, uriRef);
+
+        XVndSunStarScriptUrl sfUri =
+            UnoRuntime.queryInterface(XVndSunStarScriptUrl.class, uriRef);
 
         if (sfUri == null) {
             LogUtils.DEBUG("Failed to parse url");
-            throw new com.sun.star.lang.IllegalArgumentException("Failed to parse url " +
-                    scriptURI);
+            throw new com.sun.star.lang.IllegalArgumentException(
+                "Failed to parse url " + scriptURI);
         }
 
         ParsedScriptUri parsedUri = new ParsedScriptUri();
@@ -662,9 +696,11 @@ public class ParcelContainer implements XNameAccess {
         }
 
         if (parsedUri.function != null && (parsedUri.function.length() > 0)) {
+
             // strip out parcel name
-            parsedUri.function = parsedUri.function.substring(parsedUri.parcel.length() +
-                                 1);
+            parsedUri.function =
+                parsedUri.function.substring(parsedUri.parcel.length() + 1);
+
         }
 
         // parse location
@@ -678,8 +714,7 @@ public class ParcelContainer implements XNameAccess {
                        "\nfunction = " + parsedUri.function +
                        "\nparcel = " + parsedUri.parcel +
                        "\nlocation = " + parsedUri.location);
+
         return parsedUri;
     }
-
-
 }
