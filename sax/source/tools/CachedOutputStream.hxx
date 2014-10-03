@@ -17,8 +17,16 @@
 
 #include <cstring>
 #include <cstdlib>
+#include <boost/shared_ptr.hpp>
 
 namespace sax_fastparser {
+
+class ForMergeBase
+{
+public:
+    virtual ~ForMergeBase() {}
+    virtual void append( const css::uno::Sequence<sal_Int8>& rWhat ) = 0;
+};
 
 class CachedOutputStream
 {
@@ -30,11 +38,16 @@ class CachedOutputStream
     sal_Int32 mnCacheWrittenSize;
     const css::uno::Sequence<sal_Int8> mpCache;
     uno_Sequence *pSeq;
+    bool mbWriteToOutStream;
+    /// ForMerge structure is used for sorting elements in Writer
+    boost::shared_ptr< ForMergeBase > mpForMerge;
 
 public:
     CachedOutputStream() : mnCacheWrittenSize(0)
                          , mpCache(mnMaximumSize)
                          , pSeq(mpCache.get())
+                         , mbWriteToOutStream(true)
+                         , mpForMerge(NULL)
     {}
     ~CachedOutputStream() {}
 
@@ -46,6 +59,20 @@ public:
     void setOutputStream( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
     {
         mxOutputStream = xOutputStream;
+    }
+
+    void setOutput( boost::shared_ptr< ForMergeBase > pForMerge )
+    {
+        flush();
+        mbWriteToOutStream = false;
+        mpForMerge = pForMerge;
+    }
+
+    void resetOutputToStream()
+    {
+        flush();
+        mbWriteToOutStream = true;
+        mpForMerge.reset();
     }
 
     /// cache string and if limit is hit, flush
@@ -61,7 +88,10 @@ public:
             // In that case, just flush data and write immediately.
             if (nLen > mnMaximumSize)
             {
-                mxOutputStream->writeBytes( css::uno::Sequence<sal_Int8>(pStr, nLen) );
+                if (mbWriteToOutStream)
+                    mxOutputStream->writeBytes( css::uno::Sequence<sal_Int8>(pStr, nLen) );
+                else
+                    mpForMerge->append( css::uno::Sequence<sal_Int8>(pStr, nLen) );
                 return;
             }
         }
@@ -75,7 +105,10 @@ public:
     {
         // resize the Sequence to written size
         pSeq->nElements = mnCacheWrittenSize;
-        mxOutputStream->writeBytes( mpCache );
+        if (mbWriteToOutStream)
+            mxOutputStream->writeBytes( mpCache );
+        else
+            mpForMerge->append( mpCache );
         // and next time write to the beginning
         mnCacheWrittenSize = 0;
     }

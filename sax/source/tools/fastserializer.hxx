@@ -148,11 +148,14 @@ public:
     void mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND );
 
 private:
-    /// Helper class to cache data and write in chunks to XOutputStream
+    /** Helper class to cache data and write in chunks to XOutputStream or ForMerge::append.
+     *  Its flush method needs to be called before touching maMarkStack
+     *  to ensure correct order of ForSort methods.
+     */
     CachedOutputStream maCachedOutputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxFastTokenHandler;
 
-    class ForMerge
+    class ForMerge : public ForMergeBase
     {
         Int8Sequence maData;
         Int8Sequence maPostponed;
@@ -168,7 +171,7 @@ private:
 #endif
 
         virtual void prepend( const Int8Sequence &rWhat );
-        virtual void append( const Int8Sequence &rWhat );
+        virtual void append( const Int8Sequence &rWhat ) SAL_OVERRIDE;
         void postpone( const Int8Sequence &rWhat );
 
     protected:
@@ -205,6 +208,7 @@ private:
     };
 
     ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
+    bool mbMarkStackEmpty;
     // Would be better to use OStringBuffer instead of these two
     // but then we couldn't get the rtl_String* member :-(
     rtl_String *mpDoubleStr;
@@ -217,8 +221,6 @@ private:
 
     void writeTokenValueList();
     void writeFastAttributeList( FastAttributeList* pAttrList );
-    void writeOutput( const sal_Int8* pStr, size_t nLen );
-    void writeOutput( const css::uno::Sequence< ::sal_Int8 >& aData );
 
     /** Forward the call to the output stream, or write to the stack.
 
