@@ -53,6 +53,7 @@ using namespace ::com::sun::star;
 
 namespace svgi
 {
+    enum SvgiVisitorCaller {STYLE_ANNOTATOR, SHAPE_WRITER, STYLE_WRITER};
 namespace
 {
 
@@ -78,7 +79,8 @@ template<typename Func> void visitChildren(const Func& rFunc,
     element's attributes, if any
  */
 template<typename Func> void visitElements(Func& rFunc,
-                                           const uno::Reference<xml::dom::XElement> xElem)
+                                           const uno::Reference<xml::dom::XElement> xElem,
+                                           SvgiVisitorCaller eCaller)
 {
     if( xElem->hasAttributes() )
         rFunc(xElem,xElem->getAttributes());
@@ -89,6 +91,9 @@ template<typename Func> void visitElements(Func& rFunc,
     rFunc.push();
 
     // recurse over children
+    if (eCaller == SHAPE_WRITER && xElem->getTagName() == "defs") {
+        return;
+    }
     uno::Reference<xml::dom::XNodeList> xChildren( xElem->getChildNodes() );
     const sal_Int32 nNumNodes( xChildren->getLength() );
     for( sal_Int32 i=0; i<nNumNodes; ++i )
@@ -97,7 +102,8 @@ template<typename Func> void visitElements(Func& rFunc,
             visitElements( rFunc,
                            uno::Reference<xml::dom::XElement>(
                                xChildren->item(i),
-                               uno::UNO_QUERY_THROW) );
+                               uno::UNO_QUERY_THROW),
+                           eCaller );
     }
 
     // children processing done
@@ -1170,7 +1176,7 @@ static void annotateStyles( StatePool&                                        rS
                             const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl )
 {
     AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl);
-    visitElements(aVisitor, xElem);
+    visitElements(aVisitor, xElem, STYLE_ANNOTATOR);
 }
 
 struct ShapeWritingVisitor
@@ -1706,7 +1712,7 @@ static void writeShapes( StatePool&                                        rStat
                          const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl )
 {
     ShapeWritingVisitor aVisitor(rStatePool,rStateMap,xDocHdl);
-    visitElements(aVisitor, xElem);
+    visitElements(aVisitor, xElem, SHAPE_WRITER);
 }
 
 } // namespace
@@ -1822,7 +1828,7 @@ static void writeOfficeStyles(  StateMap&                                       
                                 const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl )
 {
     OfficeStylesWritingVisitor aVisitor( rStateMap, xDocHdl );
-    visitElements( aVisitor, xElem );
+    visitElements( aVisitor, xElem, STYLE_WRITER );
 }
 
 #if OSL_DEBUG_LEVEL > 2
