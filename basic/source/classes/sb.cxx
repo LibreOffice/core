@@ -543,8 +543,8 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                 SbxDimArray* pSource = PTR_CAST(SbxDimArray,pParObj);
                 SbxDimArray* pDest = new SbxDimArray( pVar->GetType() );
 
-                pDest->setHasFixedSize( pSource->hasFixedSize() );
-                if ( pSource->GetDims() && pSource->hasFixedSize() )
+                pDest->setHasFixedSize( pSource ? pSource->hasFixedSize() : false );
+                if ( pSource && pSource->GetDims() && pSource->hasFixedSize() )
                 {
                     sal_Int32 lb = 0;
                     sal_Int32 ub = 0;
