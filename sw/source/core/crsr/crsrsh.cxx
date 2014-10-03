@@ -2015,8 +2015,8 @@ bool SwCrsrShell::Pop( bool bOldCrsr )
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
         // If the visible SSelection was not changed
-        if( pOldStk->GetPtPos() == m_pCurCrsr->GetPtPos() ||
-            pOldStk->GetPtPos() == m_pCurCrsr->GetMkPos() )
+        const Point& rPoint = pOldStk->GetPtPos();
+        if (rPoint == m_pCurCrsr->GetPtPos() || rPoint == m_pCurCrsr->GetMkPos())
         {
             // move "Selections Rectangles"
             m_pCurCrsr->insert( m_pCurCrsr->begin(), pOldStk->begin(), pOldStk->end() );
