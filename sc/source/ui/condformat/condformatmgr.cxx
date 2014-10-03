@@ -47,15 +47,18 @@ void ScCondFormatManagerWindow::Init()
 {
     SetUpdateMode(false);
 
-    for(ScConditionalFormatList::iterator itr = mpFormatList->begin(); itr != mpFormatList->end(); ++itr)
+    if (mpFormatList)
     {
-        SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(*itr), TREELIST_APPEND, 0xffff );
-        maMapLBoxEntryToCondIndex.insert(std::pair<SvTreeListEntry*,sal_Int32>(pEntry,itr->GetKey()));
+        for(ScConditionalFormatList::iterator itr = mpFormatList->begin(); itr != mpFormatList->end(); ++itr)
+        {
+            SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(*itr), TREELIST_APPEND, 0xffff );
+            maMapLBoxEntryToCondIndex.insert(std::pair<SvTreeListEntry*,sal_Int32>(pEntry,itr->GetKey()));
+        }
     }
 
     SetUpdateMode(true);
 
-    if (mpFormatList->size())
+    if (mpFormatList && mpFormatList->size())
         SelectRow(0);
 }
 
