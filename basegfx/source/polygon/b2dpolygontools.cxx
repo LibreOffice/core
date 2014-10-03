@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <rtl/instance.hxx>
+#include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -3446,8 +3447,8 @@ namespace basegfx
 
                 // two or no control points are consumed, another one would be an error.
                 // It's also an error if only one control point was read
-                OSL_ENSURE(com::sun::star::drawing::PolygonFlags_CONTROL != ePolygonFlag && bControlA == bControlB,
-                    "UnoPolygonBezierCoordsToB2DPolygon: Illegal source polygon (!)");
+                SAL_WARN_IF(com::sun::star::drawing::PolygonFlags_CONTROL == ePolygonFlag || bControlA != bControlB,
+                    "basegfx", "UnoPolygonBezierCoordsToB2DPolygon: Illegal source polygon (!)");
 
                 // the previous writes used the B2DPolyPoygon -> tools::PolyPolygon converter
                 // which did not create minimal PolyPolygons, but created all control points
