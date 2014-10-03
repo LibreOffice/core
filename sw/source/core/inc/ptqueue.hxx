@@ -19,23 +19,24 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_PTQUEUE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_PTQUEUE_HXX
 
-//Leider vertragen wir es nicht so gut, wenn wir mehr als ein Paint
-//gleichzeitig verarbeiten sollen. Insbesondere beim Drucken kommt dies
-//leider haeufig vor.
-//SwRootFrm::Paint() stellt fest, dass es zum zweitenmal gerufen wird, und
-//traegt das Rechteck sowie die dazugehoerige Shell in den PaintCollector ein.
-//Diejenigen stellen, die moeglicherweise das doppelte Paint "Verursachen"
-//brauchen nur noch zum richtigen Zeitpunkt die gesammelten Paints verarbeiten.
-//Derzeit bietet sich der Druckvorgang an, und zwar nach dem Druck von jeweils
-//einer Seite.
-
-//Das Invalidieren der Windows direkt aus dem RootFrm::Paint hat sich als nicht
-//erfolgreich erwiesen, weil die Paints dann in den allermeisten Faellen
-//wiederum zu einem sehr unguenstigen Zeitpunkt ankommen.
-//Nach dem Druck jeder Seite ein Update auf alle Fenster auszuloesen scheint
-//auch nicht angeraten, weil einerseits die edit-Windows nicht im direkten
-//Zugriff sind und anderseits das notwendige Update je nach Plattform extrem
-//teuer werden kann.
+/**
+ * Unfortunately we have some problems with processing more than one Paint()
+ * at a time. This happens especially often during printing.
+ *
+ * SwRootFrm::Paint() determines that it's called a second time and adds the
+ * rectangle and the corresponding Shell to the PaintCollector.
+ * The call sites that are causing the double Paint() only need to process the
+ * collected Paint()s at the right point in time.
+ * Doing this during printing (after having printed one page) is very suitable
+ * for doing that.
+ *
+ * Invalidating windows directly from the RootFrm::Paint was not a succesful
+ * approach, because the Paint()s arrive at a very unfavourable point in time.
+ * Triggering an update for all windows after printing each page does not seem
+ * appropriate either: on the one hand we don't have direct acces to the edit
+ * windows and on the other hand the updates can become very costly on some
+ * platforms.
+ */
 
 class SwQueuedPaint;
 class SwViewShell;

@@ -53,74 +53,77 @@ struct SwCrsrMoveState;
 /// The root element of a Writer document layout.
 class SwRootFrm: public SwLayoutFrm
 {
-    //Muss das Superfluous temporaer abschalten.
+    // Needs to disable the Superfluous temporarily
     friend void AdjustSizeChgNotify( SwRootFrm *pRoot );
 
-    //Pflegt pLastPage (Cut() und Paste() vom SwPageFrm
+    // Maintains the pLastPage (Cut() and Paste() of SwPageFrm
     friend inline void SetLastPage( SwPageFrm* );
 
-    // Fuer das Anlegen und Zerstoeren des virtuellen Outputdevice-Managers
-    friend void _FrmInit();     //erzeugt pVout
-    friend void _FrmFinit();    //loescht pVout
+    // For creating and destroying of the virtual output device manager
+    friend void _FrmInit(); // Creates pVout
+    friend void _FrmFinit(); // Destroys pVout
 
     std::vector<SwRect> maPageRects;// returns the current rectangle for each page frame
                                     // the rectangle is extended to the top/bottom/left/right
-                                    // for pages located at the outer borders
+                                    // for pages located at the outer margins
     SwRect  maPagesArea;            // the area covered by the pages
     long    mnViewWidth;            // the current page layout bases on this view width
-    sal_uInt16  mnColumns;              // the current page layout bases on this number of columns
+    sal_uInt16  mnColumns;          // the current page layout bases on this number of columns
     bool    mbBookMode;             // the current page layout is in book view
     bool    mbSidebarChanged;       // the notes sidebar state has changed
 
     bool    mbNeedGrammarCheck;     // true when sth needs to be checked (not necessarily started yet!)
 
     static SwLayVout     *pVout;
-    static bool           bInPaint;     //Schutz gegen doppelte Paints.
-    static bool           bNoVirDev;    //Bei SystemPaints kein virt. Device
+    static bool           bInPaint; // Protection against double Paints
+    static bool           bNoVirDev;// No virt. Device for SystemPaints
 
-    bool    bCheckSuperfluous   :1; //Leere Seiten suchen?
-    bool    bIdleFormat         :1; //Idle-Formatierer anwerfen?
-    bool    bBrowseWidthValid   :1; //Ist nBrowseWidth gueltig?
+    bool    bCheckSuperfluous   :1; // Search for empty Pages?
+    bool    bIdleFormat         :1; // Trigger Idle Formatter?
+    bool    bBrowseWidthValid   :1; // Is nBrowseWidth valid?
     bool    bTurboAllowed       :1;
-    bool    bAssertFlyPages     :1; //Ggf. weitere Seiten fuer Flys einfuegen?
-    bool    bIsVirtPageNum      :1; //gibt es eine virtuelle Seitennummer ?
-    bool    bIsNewLayout        :1; //Layout geladen oder neu erzeugt.
-    bool    bCallbackActionEnabled:1; //Keine Action in Benachrichtung erwuenscht
-                                    //siehe dcontact.cxx, ::Changed()
-    bool        bLayoutFreezed;
+    bool    bAssertFlyPages     :1; // Insert more Pages for Flys if needed?
+    bool    bIsVirtPageNum      :1; // Do we have a virtual pagenumber?
+    bool    bIsNewLayout        :1; // Layout loaded or newly created
+    bool    bCallbackActionEnabled:1; // No Action in Notification desired
+                                      // @see dcontact.cxx, ::Changed()
+    bool    bLayoutFreezed;
 
-    //Fuer den BrowseMode. nBrowseWidth ist die Aeussere Kante des am weitesten
-    //rechts stehenden Objectes. Die rechte Kante der Seiten soll im BrowseMode
-    //nicht kleiner werden als dieser Wert.
+    /**
+     * For BrowseMode
+     * nBrowseWidth is the outer margin of the object most to the right.
+     * The page's right edge should not be smaller than this value.
+     */
     long    nBrowseWidth;
 
-    //Wenn nur _ein: CntntFrm zu formatieren ist, so steht dieser in pTurbo.
+    /// If we only have to format one CntntFrm, its in pTurbo
     const SwCntntFrm *pTurbo;
 
-    //Die letzte Seite wollen wir uns nicht immer muehsam zusammensuchen.
+    /// We should not need to always struggle to find the last page, so store it here
     SwPageFrm *pLastPage;
 
-    // [ Comment from the original StarOffice checkin ]:
-    // The root takes care of the shell access. Via the document
-    // it should be possible to get at the root frame, and thus always
-    // have access to the shell.
-    // the pointer pCurrShell is the pointer to any of the shells for
-    // the document.
-    // Because sometimes it matters which shell is used, it is necessary to
-    // know the active shell.
-    // this is approximated by setting the pointer pCurrShell when a
-    // shell gets the focus (FEShell). Acditionally the pointer will be
-    // set temporarily by SwCurrShell typically via  SET_CURR_SHELL
-    // The macro and class can be found in the SwViewShell. These object can
-    // be created nested (also for different kinds of Shells). They are
-    // collected into the Array pCurrShells.
-    // Futhermore it can happen that a shell is activated while a curshell
-    // object is still 'active'. This one will be entered into pWaitingCurrShell
-    // and will be activated by the last d'tor of CurrShell.
-    // One other problem is the destruction of a shell while it is active.
-    // The pointer pCurrShell is then reset to an arbitrary other shell.
-    // If at the time of the destruction of a shell, which is still referneced
-    // by a curshell object, that will be cleaned up as well.
+    /** [ Comment from the original StarOffice checkin ]:
+     * The root takes care of the shell access. Via the document
+     * it should be possible to get at the root frame, and thus always
+     * have access to the shell.
+     * the pointer pCurrShell is the pointer to any of the shells for
+     * the document.
+     * Because sometimes it matters which shell is used, it is necessary to
+     * know the active shell.
+     * this is approximated by setting the pointer pCurrShell when a
+     * shell gets the focus (FEShell). Acditionally the pointer will be
+     * set temporarily by SwCurrShell typically via  SET_CURR_SHELL
+     * The macro and class can be found in the SwViewShell. These object can
+     * be created nested (also for different kinds of Shells). They are
+     * collected into the Array pCurrShells.
+     * Futhermore it can happen that a shell is activated while a curshell
+     * object is still 'active'. This one will be entered into pWaitingCurrShell
+     * and will be activated by the last d'tor of CurrShell.
+     * One other problem is the destruction of a shell while it is active.
+     * The pointer pCurrShell is then reset to an arbitrary other shell.
+     * If at the time of the destruction of a shell, which is still referneced
+     * by a curshell object, that will be cleaned up as well.
+     */
     friend class CurrShell;
     friend void SetShell( SwViewShell *pSh );
     friend void InitCurrShells( SwRootFrm *pRoot );
@@ -128,19 +131,19 @@ class SwRootFrm: public SwLayoutFrm
     SwViewShell *pWaitingCurrShell;
     SwCurrShells *pCurrShells;
 
-    //Eine Page im DrawModel pro Dokument, hat immer die Groesse der Root.
+    /// One Page per DrawModel per Document; is always the size of the Root
     SdrPage *pDrawPage;
 
     SwDestroyList* pDestroy;
 
-    sal_uInt16  nPhyPageNums;           //Anzahl der Seiten.
-    sal_uInt16 nAccessibleShells;   // Number of accessible shells
+    sal_uInt16  nPhyPageNums; /// Page count
+    sal_uInt16 nAccessibleShells; // Number of accessible shells
 
     void ImplCalcBrowseWidth();
     void ImplInvalidateBrowseWidth();
 
-    void _DeleteEmptySct(); // zerstoert ggf. die angemeldeten SectionFrms
-    void _RemoveFromList( SwSectionFrm* pSct ); // entfernt SectionFrms aus der Delete-Liste
+    void _DeleteEmptySct(); // Destroys the registered SectionFrms
+    void _RemoveFromList( SwSectionFrm* pSct ); // Removes SectionFrms from the Delete List
 
 protected:
 
@@ -148,7 +151,7 @@ protected:
 
 public:
 
-    //MasterObjekte aus der Page entfernen (von den Ctoren gerufen).
+    /// Remove MasterObjects from the Page (called by the ctors)
     static void RemoveMasterObjs( SdrPage *pPg );
 
     void AllCheckPageDescs() const;
@@ -156,9 +159,11 @@ public:
     void AllAddPaintRect() const;
     void AllRemoveFtns() ;
     void AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const;
-    //Virtuelles Device ausgeben (z.B. wenn Animationen ins Spiel kommen)
+
+    /// Output virtual Device (e.g. for animations)
     static bool FlushVout();
-    //Clipping sparen, wenn im Vout eh genau das Cliprechteck ausgegeben wird
+
+    /// Save Clipping if exactly the ClipRect is outputted
     static bool HasSameRect( const SwRect& rRect );
 
     SwRootFrm( SwFrmFmt*, SwViewShell* );
@@ -168,17 +173,20 @@ public:
     SwViewShell *GetCurrShell() const { return pCurrShell; }
     void DeRegisterShell( SwViewShell *pSh );
 
-    //Start-/EndAction fuer alle Shells auf moeglichst hoeher
-    //(Shell-Ableitungs-)Ebene aufsetzen. Fuer die StarONE Anbindung, die
-    //die Shells nicht dirkt kennt.
-    //Der ChangeLinkd der CrsrShell (UI-Benachrichtigung) wird im EndAllAction
-    //automatisch gecallt.
+    /**
+     * Set up Start-/EndAction for all Shells on a as high as possible
+     * (Shell section) level.
+     * For the StarONE binding, which does not know the Shells directly.
+     * The ChangeLinkd of the CrsrShell (UI notifications) is called
+     * automatically in the EndAllAction.
+     */
     void StartAllAction();
     void EndAllAction( bool bVirDev = false );
 
-    // fuer bestimmte UNO-Aktionen (Tabellencursor) ist es notwendig, dass alle Actions
-    // kurzfristig zurueckgesetzt werden. Dazu muss sich jede SwViewShell ihren alten Action-zaehler
-    // merken
+    /**
+     * Certain UNO Actions (e.g. table cursor) require that all Actions are reset temporarily
+     * In order for that to work, every SwViewShell needs to remember its old Action counter
+     */
     void UnoRemoveAllActions();
     void UnoRestoreAllActions();
 
@@ -232,33 +240,36 @@ public:
         }
     }
 
-    //Sorgt dafuer, dass alle gewuenschten Seitengebunden Flys eine Seite finden
+    /// Makes sure that all requested page-bound Flys find a Page
     void SetAssertFlyPages() { bAssertFlyPages = true; }
     void AssertFlyPages();
     bool IsAssertFlyPages()  { return bAssertFlyPages; }
 
-    //Stellt sicher, dass ab der uebergebenen Seite auf allen Seiten die
-    //Seitengebundenen Rahmen auf der richtigen Seite (Seitennummer) stehen.
+    /**
+     * Makes sure that, starting from the passed Page, all page-bound Frames
+     * are on the right Page (pagenumber).
+     */
     void AssertPageFlys( SwPageFrm * );
 
-    //Saemtlichen Inhalt invalidieren, Size oder PrtArea
+    /// Invalidate all Cntnt, Size or PrtArea
     void InvalidateAllCntnt( sal_uInt8 nInvalidate = INV_SIZE );
 
-    /** method to invalidate/re-calculate the position of all floating
-        screen objects (Writer fly frames and drawing objects), which are
-        anchored to paragraph or to character.
-
-        OD 2004-03-16 #i11860#
+    /**
+     * Invalidate/re-calculate the position of all floating
+     * screen objects (Writer fly frames and drawing objects), which are
+     * anchored to paragraph or to character.
     */
     void InvalidateAllObjPos();
 
-    //Ueberfluessige Seiten entfernen.
+    /// Remove superfluous Pages
     void SetSuperfluous()      { bCheckSuperfluous = true; }
     bool IsSuperfluous() const { return bCheckSuperfluous; }
     void RemoveSuperfluous();
 
-    //abfragen/setzen der aktuellen Seite und der Gesamtzahl der Seiten.
-    //Es wird soweit wie notwendig Formatiert.
+    /**
+     * Query/set the current Page and the collective Page count
+     * We'll format as much as necessary
+     */
     sal_uInt16  GetCurrPage( const SwPaM* ) const;
     sal_uInt16  SetCurrPage( SwCursor*, sal_uInt16 nPageNum );
     Point   GetPagePos( sal_uInt16 nPageNum ) const;
@@ -269,18 +280,23 @@ public:
     inline  void SetVirtPageNum( const bool bOf ) const;
     bool    IsDummyPage( sal_uInt16 nPageNum ) const;
 
-    // Point rPt: The point that should be used to find the page
-    // Size pSize: If given, we return the (first) page that overlaps with the
-    // rectangle defined by rPt and pSize
-    // bool bExtend: Extend each page to the left/right/top/botton up to the
-    // next page border
+    /**
+     * Point rPt: The point that should be used to find the page
+     * Size pSize: If given, we return the (first) page that overlaps with the
+     * rectangle defined by rPt and pSize
+     * bool bExtend: Extend each page to the left/right/top/botton up to the
+     * next page margin
+     */
     const SwPageFrm* GetPageAtPos( const Point& rPt, const Size* pSize = 0, bool bExtend = false ) const;
 
     void CalcFrmRects( SwShellCrsr& );
 
-    // Calculates the cells included from the current selection
-    // false: There was no result because of an invalid layout
-    // true: Everything worked fine.
+    /**
+     * Calculates the cells included from the current selection
+     *
+     * @returns false: There was no result because of an invalid layout
+     * @returns true: Everything worked fine.
+     */
     bool MakeTblCrsrs( SwTableCursor& );
 
     void DisallowTurbo()  const { ((SwRootFrm*)this)->bTurboAllowed = false; }
@@ -290,10 +306,10 @@ public:
     void ResetTurbo() { pTurbo = 0; }
     const SwCntntFrm *GetTurbo() { return pTurbo; }
 
-    //Fussnotennummern aller Seiten auf den neuesten Stand bringen.
-    void UpdateFtnNums();           //nur bei Seitenweiser Nummerierung!
+    /// Update the footernumbers of all Pages
+    void UpdateFtnNums(); // Only for page by page numnbering!
 
-    //Alle Fussnoten (nicht etwa die Referenzen) entfernen.
+    /// Remove all footnotes (but no references)
     void RemoveFtns( SwPageFrm *pPage = 0, bool bPageOnly = false,
                      bool bEndNotes = false );
     void CheckFtnPageDescs( bool bEndNote );
@@ -312,8 +328,10 @@ public:
     bool IsNewLayout() const { return bIsNewLayout; }
     void ResetNewLayout()    { bIsNewLayout = false;}
 
-    // Hier werden leere SwSectionFrms zur Zerstoerung angemeldet
-    // und spaeter zerstoert oder wieder abgemeldet
+    /**
+     * Empty SwSectionFrms are registered here for deletion and
+     * destroyed later on or deregistered.
+     */
     void InsertEmptySct( SwSectionFrm* pDel );
     void DeleteEmptySct() { if( pDestroy ) _DeleteEmptySct(); }
     void RemoveFromList( SwSectionFrm* pSct ) { if( pDestroy ) _RemoveFromList( pSct ); }
@@ -328,19 +346,17 @@ public:
     void AddAccessibleShell() { ++nAccessibleShells; }
     void RemoveAccessibleShell() { --nAccessibleShells; }
 
-    /** get page frame by phyiscal page number
-
-        OD 14.01.2003 #103492#
-        looping through the lowers, which are page frame, in order to find the
-        page frame with the given physical page number.
-        if no page frame is found, 0 is returned.
-        Note: Empty page frames are also returned.
-
-        @param _nPageNum
-        input parameter - physical page number of page frame to be searched and
-        returned.
-
-        @return pointer to the page frame with the given physical page number
+    /**
+     * Get page frame by phyiscal page number
+     * looping through the lowers, which are page frame, in order to find the
+     * page frame with the given physical page number.
+     * if no page frame is found, 0 is returned.
+     * Note: Empty page frames are also returned.
+     *
+     * @param _nPageNum: physical page number of page frame to be searched and
+     *                   returned.
+     *
+     * @return pointer to the page frame with the given physical page number
     */
     SwPageFrm* GetPageByPageNum( sal_uInt16 _nPageNum ) const;
 

@@ -61,8 +61,8 @@ protected:
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) SAL_OVERRIDE;
 
 public:
-    SwSectionFrm( SwSection &, SwFrm* );                 //Inhalt wird nicht erzeugt!
-    SwSectionFrm( SwSectionFrm &, bool bMaster );//_Nur_ zum Erzeugen von Master/Follows
+    SwSectionFrm( SwSection &, SwFrm* ); // Content is not created!
+    SwSectionFrm( SwSectionFrm &, bool bMaster ); // _ONLY_ for creating Master/Follows!
     virtual ~SwSectionFrm();
 
     void Init();
@@ -89,33 +89,43 @@ public:
     bool IsDescendantFrom( const SwSectionFmt* pSect ) const;
     bool HasToBreak( const SwFrm* pFrm ) const;
     void MergeNext( SwSectionFrm* pNxt );
-    //Zerlegt den pFrm umgebenden SectionFrm in zwei Teile,
-    //pFrm an den Anfang des 2. Teils
+
+    /**
+     * Splits the SectionFrm surrounding the pFrm up in two parts:
+     * pFrm and the start of the 2nd part
+     */
     bool SplitSect( SwFrm* pFrm, bool bApres );
-    void DelEmpty( bool bRemove );  // wie Cut(), Follow-Verkettung wird aber mitgepflegt
-    bool IsToIgnore() const         // Keine Groesse, kein Inhalt, muss ignoriert werden
+    void DelEmpty( bool bRemove ); // Like Cut(), except for that Follow chaining is maintained
+    bool IsToIgnore() const        // No size, no content; need to be ignored
     { return !Frm().Height() && !ContainsCntnt(); }
     SwFtnContFrm* ContainsFtnCont( const SwFtnContFrm* pCont = NULL ) const;
     bool Growable() const;
     SwTwips _Shrink( SwTwips, bool bTst );
     SwTwips _Grow  ( SwTwips, bool bTst );
 
-    // A sectionfrm has to maximize, if he has a follow or a ftncontainer at
-    // the end of the page. A superfluous follow will be ignored,
-    // if bCheckFollow is set.
+    /**
+     * A sectionfrm has to maximize, if he has a follow or a ftncontainer at
+     * the end of the page. A superfluous follow will be ignored,
+     * if bCheckFollow is set.
+     */
     bool ToMaximize( bool bCheckFollow ) const;
     inline bool _ToMaximize() const
         { if( !pSection ) return false; return ToMaximize( false ); }
     bool MoveAllowed( const SwFrm* ) const;
     bool CalcMinDiff( SwTwips& rMinDiff ) const;
-    // Uebergibt man kein bOverSize bzw. sal_False, so ist der Returnwert
-    // >0 fuer Undersized-Frames, ==0 sonst.
-    // Uebergibt man sal_True, so kann es auch einen negativen Returnwert geben,
-    // wenn der SectionFrm nicht vollstaendig ausgefuellt ist, was z.B. bei
-    // SectionFrm mit Follow meist vorkommt. Benoetigt wird dies im
-    // FormatWidthCols, um "Luft" aus den Spalten zu lassen.
+
+    /**
+     * If we don't pass a @param bOverSize or false, the return value is > 0 for
+     * undersized Frames, or 0
+     *
+     * If @param bOverSize == true, we can also get a negative return value,
+     * if the SectionFrm is not completely filled, which happens often for
+     * e.g. SectionFrms with Follows.
+     * We need this in the FormatWidthCols to "deflate" columns there.
+     */
     long Undersize( bool bOverSize = false );
-    // Groesse an die Umgebung anpassen
+
+    /// Adapt size to surroundings
     void _CheckClipping( bool bGrow, bool bMaximize );
 
     void InvalidateFtnPos();
