@@ -129,6 +129,19 @@
  
 --- foo/foo/foo/boost/random/subtract_with_carry.hpp
 +++ foo/foo/foo/boost/random/subtract_with_carry.hpp
+@@ -249,10 +249,10 @@
+      * Returns true if the two generators will produce identical
+      * sequences of values.
+      */
+-    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(subtract_with_carry_engine, x, y)
++    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(subtract_with_carry_engine, x_arg, y_arg)
+     {
+         for(unsigned int j = 0; j < r; ++j)
+-            if(x.compute(j) != y.compute(j))
++            if(x_arg.compute(j) != y_arg.compute(j))
+                 return false;
+         return true;
+     }
 @@ -268,21 +268,21 @@
  
      friend struct detail::subtract_with_carry_discard;
@@ -156,6 +169,19 @@
      }
      /// \endcond
  
+@@ -483,10 +483,10 @@
+     }
+ 
+     /** Returns true if the two generators will produce identical sequences. */
+-    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(subtract_with_carry_01_engine, x, y)
++    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(subtract_with_carry_01_engine, x_arg, y_arg)
+     {
+         for(unsigned int j = 0; j < r; ++j)
+-            if(x.compute(j) != y.compute(j))
++            if(x_arg.compute(j) != y_arg.compute(j))
+                 return false;
+         return true;
+     }
 @@ -498,17 +498,17 @@
  
      friend struct detail::subtract_with_carry_discard;
@@ -179,3 +205,73 @@
      }
      /// \endcond
      std::size_t k;
+--- misc/boost_1_44_0/boost/random/lagged_fibonacci.hpp
++++ misc/build/boost_1_44_0/boost/random/lagged_fibonacci.hpp
+@@ -148,8 +148,8 @@
+     BOOST_RANDOM_DETAIL_OSTREAM_OPERATOR(os, lagged_fibonacci_engine, f)
+     {
+         os << f.i;
+-        for(unsigned int i = 0; i < f.long_lag; ++i)
+-            os << ' ' << f.x[i];
++        for(unsigned int i_index = 0; i_index < f.long_lag; ++i_index)
++            os << ' ' << f.x[i_index];
+         return os;
+     }
+     
+@@ -159,17 +159,17 @@
+     BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, lagged_fibonacci_engine, f)
+     {
+         is >> f.i >> std::ws;
+-        for(unsigned int i = 0; i < f.long_lag; ++i)
+-            is >> f.x[i] >> std::ws;
++        for(unsigned int i_index = 0; i_index < f.long_lag; ++i_index)
++            is >> f.x[i_index] >> std::ws;
+         return is;
+     }
+     
+     /**
+      * Returns true if the two generators will produce identical
+      * sequences of outputs.
+      */
+-    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(lagged_fibonacci_engine, x, y)
+-    { return x.i == y.i && std::equal(x.x, x.x+long_lag, y.x); }
++    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(lagged_fibonacci_engine, x_arg, y_arg)
++    { return x_arg.i == y_arg.i && std::equal(x_arg.x, x_arg.x+long_lag, y_arg.x); }
+     
+     /**
+      * Returns true if the two generators will produce different
+@@ -359,8 +359,8 @@
+         using std::pow;
+         os << f.i;
+         std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left); 
+-        for(unsigned int i = 0; i < f.long_lag; ++i)
+-            os << ' ' << f.x[i] * f.modulus();
++        for(unsigned int i_index = 0; i_index < f.long_lag; ++i_index)
++            os << ' ' << f.x[i_index] * f.modulus();
+         os.flags(oldflags);
+         return os;
+     }
+@@ -371,10 +371,10 @@
+     BOOST_RANDOM_DETAIL_ISTREAM_OPERATOR(is, lagged_fibonacci_01_engine, f)
+     {
+         is >> f.i;
+-        for(unsigned int i = 0; i < f.long_lag; ++i) {
++        for(unsigned int i_index = 0; i_index < f.long_lag; ++i_index) {
+             typename lagged_fibonacci_01_engine::result_type value;
+             is >> std::ws >> value;
+-            f.x[i] = value / f.modulus();
++            f.x[i_index] = value / f.modulus();
+         }
+         return is;
+     }
+@@ -383,8 +383,8 @@
+      * Returns true if the two generators will produce identical
+      * sequences of outputs.
+      */
+-    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(lagged_fibonacci_01_engine, x, y)
+-    { return x.i == y.i && std::equal(x.x, x.x+long_lag, y.x); }
++    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(lagged_fibonacci_01_engine, x_arg, y_arg)
++    { return x_arg.i == y_arg.i && std::equal(x_arg.x, x_arg.x+long_lag, y_arg.x); }
+     
+     /**
+      * Returns true if the two generators will produce different
