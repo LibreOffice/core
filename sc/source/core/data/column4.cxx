@@ -326,15 +326,11 @@ namespace {
 
 class ConvertFormulaToValueHandler
 {
-    SCTAB mnTab;
-    SCCOL mnCol;
     sc::CellValues maResValues;
     bool mbModified;
 
 public:
-    ConvertFormulaToValueHandler( SCTAB nTab, SCCOL nCol ) :
-        mnTab(nTab),
-        mnCol(nCol),
+    ConvertFormulaToValueHandler( SCTAB, SCCOL ) :
         mbModified(false)
     {
         maResValues.reset(MAXROWCOUNT);
