@@ -824,7 +824,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate 
             if(mpView->SdrBeginTextEdit(mpObject, 0L, 0L, false, (SdrOutliner*)0L, 0L, false, false))
             {
                 SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-                if( pTextObj->IsTextEditActive() )
+                if (pTextObj && pTextObj->IsTextEditActive())
                 {
                     // create new view forwarder
                     mpViewForwarder = CreateViewForwarder();
