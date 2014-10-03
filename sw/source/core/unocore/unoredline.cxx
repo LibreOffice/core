@@ -211,6 +211,7 @@ static OUString lcl_RedlineTypeToOUString(RedlineType_t eType)
         case nsRedlineType_t::REDLINE_INSERT: sRet = "Insert"; break;
         case nsRedlineType_t::REDLINE_DELETE: sRet = "Delete"; break;
         case nsRedlineType_t::REDLINE_FORMAT: sRet = "Format"; break;
+        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: sRet = "ParagraphFormat"; break;
         case nsRedlineType_t::REDLINE_TABLE:  sRet = "TextTable"; break;
         case nsRedlineType_t::REDLINE_FMTCOLL:sRet = "Style"; break;
     }
