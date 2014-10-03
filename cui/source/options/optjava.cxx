@@ -275,9 +275,9 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
         else if ( xFolderPicker.is() && xFolderPicker->execute() == ExecutableDialogResults::OK )
             AddFolder( xFolderPicker->getDirectory() );
     }
-    catch (const Exception&)
+    catch (const Exception& e)
     {
-        SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): caught exception" );
+        SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): caught exception: " << e.Message);
     }
 
     return 0;
@@ -672,8 +672,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         for ( i = 0; i < nSize; ++i )
             pParamArr[i] = pList[i].pData;
         eErr = jfw_setVMParameters( pParamArrIter, nSize );
-        DBG_ASSERT( JFW_E_NONE == eErr,
-                    "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters" );
+        SAL_WARN_IF("cui.options", JFW_E_NONE != eErr, "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters");
         pParamArrIter = pParamArr;
         rtl_freeMemory( pParamArr );
         bModified = true;
