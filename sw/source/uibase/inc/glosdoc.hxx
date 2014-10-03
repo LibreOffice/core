@@ -112,7 +112,6 @@ public:
     SwTextBlocks*   GetGroupDoc(const OUString &rName,
                                 bool bCreate = false);
     SwTextBlocks*   GetDefGroupDoc() { return GetGroupDoc(GetDefName()); }
-    void            PutGroupDoc(SwTextBlocks *pBlock);
     static OUString GetDefName();
     static OUString GetExtension();
 

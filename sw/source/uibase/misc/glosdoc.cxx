@@ -152,7 +152,7 @@ OUString SwGlossaries::GetGroupTitle( const OUString& rGroupName )
     if(pGroup)
     {
         sRet = pGroup->GetName();
-        PutGroupDoc( pGroup );
+        delete pGroup;
     }
     return sRet;
 }
@@ -178,11 +178,6 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const OUString &rName,
     return GetGlosDoc( rName, bCreate );
 }
 
-// delete a text block
-void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
-    delete pBlock;
-}
-
 // Creates a new document with the group name. temporarly also created as file
 // so that groups remain there later (without access).
 bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
@@ -199,7 +194,7 @@ bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
     {
         GetNameList().push_back(sNewGroup);
         pBlock->SetName(rTitle);
-        PutGroupDoc(pBlock);
+        delete pBlock;
         rGroupName = sNewGroup;
         return true;
     }

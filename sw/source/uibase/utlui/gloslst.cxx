@@ -371,7 +371,7 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
         pGroup->sShortNames += pBlock->GetShortName(j);
         pGroup->sShortNames += OUString(STRING_DELIM);
     }
-    pGlossaries->PutGroupDoc(pBlock);
+    delete pBlock;
 }
 
 // Give back all (not exceeding FIND_MAX_GLOS) found modules

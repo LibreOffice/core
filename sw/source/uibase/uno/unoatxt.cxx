@@ -425,8 +425,6 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         {
             throw uno::RuntimeException();
         }
-        pGlossaries->PutGroupDoc( pGlosGroup );
-        pGlosGroup = 0;
     }
     delete pGlosGroup;
 
