@@ -125,7 +125,7 @@ void E3dObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReaso
     // call parent
     SdrObjList::InsertObject(pObj, nPos, pReason);
 
-    E3dScene* pScene = ((E3dObject*)GetOwnerObj())->GetScene();
+    E3dScene* pScene = static_cast<E3dObject*>(GetOwnerObj())->GetScene();
     if(pScene)
     {
         pScene->Cleanup3DDepthMapper();
@@ -139,7 +139,7 @@ SdrObject* E3dObjList::NbcRemoveObject(size_t nObjNum)
     // call parent
     SdrObject* pRetval = SdrObjList::NbcRemoveObject(nObjNum);
 
-    E3dScene* pScene = ((E3dObject*)GetOwnerObj())->GetScene();
+    E3dScene* pScene = static_cast<E3dObject*>(GetOwnerObj())->GetScene();
     if(pScene)
     {
         pScene->Cleanup3DDepthMapper();
@@ -155,7 +155,7 @@ SdrObject* E3dObjList::RemoveObject(size_t nObjNum)
     // call parent
     SdrObject* pRetval = SdrObjList::RemoveObject(nObjNum);
 
-    E3dScene* pScene = ((E3dObject*)GetOwnerObj())->GetScene();
+    E3dScene* pScene = static_cast<E3dObject*>(GetOwnerObj())->GetScene();
     if(pScene)
     {
         pScene->Cleanup3DDepthMapper();
@@ -271,7 +271,7 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
     // gradient depends on fillstyle
     // BM *** check if SetItem is NULL ***
-    drawing::FillStyle eFillStyle = ((XFillStyleItem&)(GetMergedItem(XATTR_FILLSTYLE))).GetValue();
+    drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(GetMergedItem(XATTR_FILLSTYLE)).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == drawing::FillStyle_GRADIENT);
 
     // Convert 3D objects in a group of polygons:
@@ -497,7 +497,7 @@ E3dObject* E3dObject::GetParentObj() const
     if(GetObjList()
         && GetObjList()->GetOwnerObj()
         && GetObjList()->GetOwnerObj()->ISA(E3dObject))
-        pRetval = ((E3dObject*)GetObjList()->GetOwnerObj());
+        pRetval = static_cast<E3dObject*>(GetObjList()->GetOwnerObj());
     return pRetval;
 }
 
@@ -721,15 +721,15 @@ void E3dObject::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrAttrObj::SaveGeoData (rGeo);
 
-    ((E3DObjGeoData &) rGeo).maLocalBoundVol  = maLocalBoundVol;
-    ((E3DObjGeoData &) rGeo).maTransformation = maTransformation;
+    static_cast<E3DObjGeoData &>(rGeo).maLocalBoundVol  = maLocalBoundVol;
+    static_cast<E3DObjGeoData &>(rGeo).maTransformation = maTransformation;
 }
 
 void E3dObject::RestGeoData(const SdrObjGeoData& rGeo)
 {
-    maLocalBoundVol = ((E3DObjGeoData &) rGeo).maLocalBoundVol;
+    maLocalBoundVol = static_cast<const E3DObjGeoData &>(rGeo).maLocalBoundVol;
     E3DModifySceneSnapRectUpdater aUpdater(this);
-    NbcSetTransform(((E3DObjGeoData &) rGeo).maTransformation);
+    NbcSetTransform(static_cast<const E3DObjGeoData &>(rGeo).maTransformation);
     SdrAttrObj::RestGeoData (rGeo);
 }
 
@@ -959,7 +959,7 @@ bool E3dCompoundObject::IsAOrdNumRemapCandidate(E3dScene*& prScene) const
         && GetObjList()->GetOwnerObj()
         && GetObjList()->GetOwnerObj()->ISA(E3dScene))
     {
-        prScene = (E3dScene*)GetObjList()->GetOwnerObj();
+        prScene = static_cast<E3dScene*>(GetObjList()->GetOwnerObj());
         return true;
     }
 

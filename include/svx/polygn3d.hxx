@@ -63,7 +63,7 @@ public:
     virtual E3dPolygonObj* Clone() const SAL_OVERRIDE;
 
     // LineOnly?
-    bool GetLineOnly() { return bLineOnly; }
+    bool GetLineOnly() const { return bLineOnly; }
     void SetLineOnly(bool bNew);
 };
 

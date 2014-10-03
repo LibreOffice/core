@@ -150,7 +150,7 @@ void GalleryPreview::Paint( const Rectangle& rRect )
 void GalleryPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( mpTheme && ( rMEvt.GetClicks() == 2 ) )
-        ( (GalleryBrowser2*) GetParent() )->TogglePreview( this );
+        static_cast<GalleryBrowser2*>( GetParent() )->TogglePreview( this );
 }
 
 void GalleryPreview::Command(const CommandEvent& rCEvt )
@@ -158,7 +158,7 @@ void GalleryPreview::Command(const CommandEvent& rCEvt )
     Window::Command( rCEvt );
 
     if( mpTheme && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) )
-        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this,
+        static_cast<GalleryBrowser2*>( GetParent() )->ShowContextMenu( this,
             ( rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL ) );
 }
 
@@ -209,7 +209,7 @@ sal_Int8 GalleryPreview::AcceptDrop( const AcceptDropEvent& rEvt )
     sal_Int8 nRet;
 
     if( mpTheme )
-        nRet = ( (GalleryBrowser2*) GetParent() )->AcceptDrop( *this, rEvt );
+        nRet = static_cast<GalleryBrowser2*>( GetParent() )->AcceptDrop( *this, rEvt );
     else
         nRet = DND_ACTION_NONE;
 
@@ -221,7 +221,7 @@ sal_Int8 GalleryPreview::ExecuteDrop( const ExecuteDropEvent& rEvt )
     sal_Int8 nRet;
 
     if( mpTheme )
-        nRet = ( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, rEvt );
+        nRet = static_cast<GalleryBrowser2*>( GetParent() )->ExecuteDrop( *this, rEvt );
     else
         nRet = DND_ACTION_NONE;
 
@@ -231,7 +231,7 @@ sal_Int8 GalleryPreview::ExecuteDrop( const ExecuteDropEvent& rEvt )
 void GalleryPreview::StartDrag( sal_Int8, const Point& )
 {
     if( mpTheme )
-        ( (GalleryBrowser2*) GetParent() )->StartDrag( this );
+        static_cast<GalleryBrowser2*>( GetParent() )->StartDrag( this );
 }
 
 void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
@@ -376,7 +376,7 @@ void GalleryIconView::MouseButtonDown( const MouseEvent& rMEvt )
     ValueSet::MouseButtonDown( rMEvt );
 
     if( rMEvt.GetClicks() == 2 )
-        ( (GalleryBrowser2*) GetParent() )->TogglePreview( this, &rMEvt.GetPosPixel() );
+        static_cast<GalleryBrowser2*>( GetParent() )->TogglePreview( this, &rMEvt.GetPosPixel() );
 }
 
 void GalleryIconView::Command( const CommandEvent& rCEvt )
@@ -385,7 +385,7 @@ void GalleryIconView::Command( const CommandEvent& rCEvt )
 
     if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this,
+        static_cast<GalleryBrowser2*>( GetParent() )->ShowContextMenu( this,
             ( rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL ) );
     }
 }
@@ -574,7 +574,7 @@ void GalleryListView::Command( const CommandEvent& rCEvt )
         if( rCEvt.IsMouseEvent() && ( GetRowAtYPosPixel( rCEvt.GetMousePosPixel().Y() ) != BROWSER_ENDOFSELECTION ) )
             pPos = &rCEvt.GetMousePosPixel();
 
-        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this, pPos );
+        static_cast<GalleryBrowser2*>( GetParent() )->ShowContextMenu( this, pPos );
     }
 }
 
@@ -589,7 +589,7 @@ void GalleryListView::DoubleClick( const BrowserMouseEvent& rEvt )
     BrowseBox::DoubleClick( rEvt );
 
     if( rEvt.GetRow() != BROWSER_ENDOFSELECTION )
-        ( (GalleryBrowser2*) GetParent() )->TogglePreview( this, &rEvt.GetPosPixel() );
+        static_cast<GalleryBrowser2*>( GetParent() )->TogglePreview( this, &rEvt.GetPosPixel() );
 }
 
 void GalleryListView::Select()
@@ -614,12 +614,12 @@ sal_Int8 GalleryListView::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
     aEvt.maPosPixel.Y() += GetTitleHeight();
 
-    return( ( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, aEvt ) );
+    return( static_cast<GalleryBrowser2*>( GetParent() )->ExecuteDrop( *this, aEvt ) );
 }
 
 void GalleryListView::StartDrag( sal_Int8, const Point& rPosPixel )
 {
-    ( (GalleryBrowser2*) GetParent() )->StartDrag( this, &rPosPixel );
+    static_cast<GalleryBrowser2*>( GetParent() )->StartDrag( this, &rPosPixel );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

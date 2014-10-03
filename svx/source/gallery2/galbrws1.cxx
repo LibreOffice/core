@@ -457,7 +457,7 @@ void GalleryBrowser1::GetFocus()
 
 void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const GalleryHint& rGalleryHint = (const GalleryHint&) rHint;
+    const GalleryHint& rGalleryHint = static_cast<const GalleryHint&>(rHint);
 
     switch( rGalleryHint.GetType() )
     {

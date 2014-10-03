@@ -49,11 +49,11 @@ public:
 
     // horizontal segments:
     sal_uInt32 GetHorizontalSegments() const
-        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue(); }
+        { return static_cast<const SfxUInt32Item&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue(); }
 
     // VerticalSegments:
     sal_uInt32 GetVerticalSegments() const
-        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
+        { return static_cast<const SfxUInt32Item&>(GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
 
     virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;

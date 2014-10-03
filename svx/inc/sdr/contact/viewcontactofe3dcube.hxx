@@ -21,13 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DCUBE_HXX
 
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
-
-
-// predeclarations
-
-class E3dCubeObj;
-
-
+#include <svx/cube3d.hxx>
 
 namespace sdr
 {
@@ -41,9 +35,9 @@ namespace sdr
             virtual ~ViewContactOfE3dCube();
 
             // access to SdrObject
-            E3dCubeObj& GetE3dCubeObj() const
+            const E3dCubeObj& GetE3dCubeObj() const
             {
-                return (E3dCubeObj&)GetE3dObject();
+                return static_cast<const E3dCubeObj&>(GetE3dObject());
             }
 
         protected:

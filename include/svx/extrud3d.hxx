@@ -91,7 +91,7 @@ public:
 
     // set/get local parameters with geometry regeneration
     void SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew);
-    const basegfx::B2DPolyPolygon &GetExtrudePolygon() { return maExtrudePolygon; }
+    const basegfx::B2DPolyPolygon &GetExtrudePolygon() const { return maExtrudePolygon; }
 
     virtual bool IsBreakObjPossible() SAL_OVERRIDE;
     virtual SdrAttrObj* GetBreakObj() SAL_OVERRIDE;

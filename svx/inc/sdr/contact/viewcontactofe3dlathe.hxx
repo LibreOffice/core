@@ -21,12 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DLATHE_HXX
 
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
-
-
-// predeclarations
-
-class E3dLatheObj;
-
+#include <svx/lathe3d.hxx>
 
 
 namespace sdr
@@ -41,9 +36,9 @@ namespace sdr
             virtual ~ViewContactOfE3dLathe();
 
             // access to SdrObject
-            E3dLatheObj& GetE3dLatheObj() const
+            const E3dLatheObj& GetE3dLatheObj() const
             {
-                return (E3dLatheObj&)GetE3dObject();
+                return static_cast<const E3dLatheObj&>(GetE3dObject());
             }
 
         protected:

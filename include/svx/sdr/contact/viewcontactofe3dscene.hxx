@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 #define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 
+#include <svx/scene3d.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
@@ -29,8 +30,6 @@
 
 
 // predeclarations
-
-class E3dScene;
 
 namespace basegfx {
     class B3DRange;
@@ -55,9 +54,9 @@ namespace sdr
             explicit ViewContactOfE3dScene(E3dScene& rScene);
 
             // access to SdrObject
-            E3dScene& GetE3dScene() const
+            const E3dScene& GetE3dScene() const
             {
-                return (E3dScene&)GetSdrObject();
+                return static_cast<const E3dScene&>(GetSdrObject());
             }
 
             // React on changes of the object of this ViewContact

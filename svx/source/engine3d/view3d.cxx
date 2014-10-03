@@ -68,7 +68,7 @@
 
 using namespace com::sun::star;
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define ITEMVALUE(ItemSet,Id,Cast)  (static_cast<const Cast&>((ItemSet).Get(Id))).GetValue()
 
 TYPEINIT1(E3dView, SdrView);
 
@@ -246,14 +246,14 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
         if(pObj && pObj->ISA(E3dCompoundObject))
         {
             // related scene
-            pScene = ((E3dCompoundObject*)pObj)->GetScene();
+            pScene = static_cast<E3dCompoundObject*>(pObj)->GetScene();
             if(pScene && !IsObjMarked(pScene))
                 bSpecialHandling = true;
         }
         // Reset all selection flags
         if(pObj && pObj->ISA(E3dObject))
         {
-            pScene = ((E3dObject*)pObj)->GetScene();
+            pScene = static_cast<E3dObject*>(pObj)->GetScene();
             if(pScene)
                 pScene->SetSelected(false);
         }
@@ -269,7 +269,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             if(pObj && pObj->ISA(E3dCompoundObject))
             {
                 // relatated scene
-                pScene = ((E3dCompoundObject*)pObj)->GetScene();
+                pScene = static_cast<E3dCompoundObject*>(pObj)->GetScene();
                 if(pScene)
                     pScene->SetSelected(false);
             }
@@ -281,7 +281,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             if(pObj && pObj->ISA(E3dObject))
             {
                 // Select object
-                E3dObject* p3DObj = (E3dObject*)pObj;
+                E3dObject* p3DObj = static_cast<E3dObject*>(pObj);
                 p3DObj->SetSelected(true);
                 pScene = p3DObj->GetScene();
             }
@@ -304,7 +304,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             if(pObj && pObj->ISA(E3dCompoundObject))
             {
                 // releated scene
-                pScene = ((E3dCompoundObject*)pObj)->GetScene();
+                pScene = static_cast<E3dCompoundObject*>(pObj)->GetScene();
                 if(pScene)
                     pScene->SetSelected(false);
             }
@@ -335,7 +335,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         {
             // if the object is selected, but it's scene not,
             // we need special handling
-            pScene = ((E3dCompoundObject*)pObj)->GetScene();
+            pScene = static_cast<const E3dCompoundObject*>(pObj)->GetScene();
 
             if(pScene && !IsObjMarked(pScene))
             {
@@ -346,7 +346,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         if(pObj && pObj->ISA(E3dObject))
         {
             // reset all selection flags at 3D objects
-            pScene = ((E3dObject*)pObj)->GetScene();
+            pScene = static_cast<const E3dObject*>(pObj)->GetScene();
 
             if(pScene)
             {
@@ -373,7 +373,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         if(pObj && pObj->ISA(E3dCompoundObject))
         {
             // mark object, but not scenes
-            E3dCompoundObject* p3DObj = (E3dCompoundObject*)pObj;
+            E3dCompoundObject* p3DObj = static_cast<E3dCompoundObject*>(pObj);
             p3DObj->SetSelected(true);
             aSelectedSnapRect.Union(p3DObj->GetSnapRect());
         }
@@ -392,7 +392,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
 
         if(pObj && pObj->ISA(E3dObject))
         {
-            pScene = ((E3dObject*)pObj)->GetScene();
+            pScene = static_cast<E3dObject*>(pObj)->GetScene();
 
             if(pScene && !IsObjMarked(pScene) && GetSdrPageView())
             {
@@ -418,7 +418,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
 
                 if(pSrcOb->ISA(E3dScene))
                 {
-                    pScene = (E3dScene*)pSrcOb;
+                    pScene = const_cast<E3dScene*>(static_cast<const E3dScene*>(pSrcOb));
 
                     // delete all not intentionally cloned 3d objects
                     pScene->removeAllNonSelectedObjects();
@@ -458,7 +458,7 @@ bool E3dView::Paste(
     SdrObject* pOwner = pDstList->GetOwnerObj();
     if(pOwner && pOwner->ISA(E3dScene))
     {
-        E3dScene* pDstScene = (E3dScene*)pOwner;
+        E3dScene* pDstScene = static_cast<E3dScene*>(pOwner);
         BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXCHANGE_PASTE));
 
         // Copy all objects from E3dScenes and insert them directly
@@ -477,7 +477,7 @@ bool E3dView::Paste(
                 const SdrObject* pSrcOb = pSrcPg->GetObj(nOb);
                 if(pSrcOb->ISA(E3dScene))
                 {
-                    E3dScene* pSrcScene = (E3dScene*)pSrcOb;
+                    E3dScene* pSrcScene = const_cast<E3dScene*>(static_cast<const E3dScene*>(pSrcOb));
                     ImpCloneAll3DObjectsToDestScene(pSrcScene, pDstScene, aDist);
                 }
             }
@@ -658,7 +658,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
     if(pObj->ISA(SdrTextObj))
     {
         const SfxItemSet& rSet = pObj->GetMergedItemSet();
-        const SvxColorItem& rTextColorItem = (const SvxColorItem&)rSet.Get(EE_CHAR_COLOR);
+        const SvxColorItem& rTextColorItem = static_cast<const SvxColorItem&>(rSet.Get(EE_CHAR_COLOR));
         if(rTextColorItem.GetValue() == RGB_Color(COL_BLACK))
         {
             //For black text objects, the color set to gray
@@ -683,11 +683,11 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
     if(pObj->ISA(SdrPathObj))
     {
         const SfxItemSet& rSet = pObj->GetMergedItemSet();
-        sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
-        XLineStyle eLineStyle = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
+        sal_Int32 nLineWidth = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue();
+        XLineStyle eLineStyle = (XLineStyle)static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
         drawing::FillStyle eFillStyle = ITEMVALUE(rSet, XATTR_FILLSTYLE, XFillStyleItem);
 
-        if(((SdrPathObj*)pObj)->IsClosed()
+        if(static_cast<SdrPathObj*>(pObj)->IsClosed()
             && eLineStyle == XLINE_SOLID
             && !nLineWidth
             && eFillStyle != drawing::FillStyle_NONE)
@@ -736,7 +736,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
 
             // Fill color must be the color line, because the object was
             // previously just a line
-            Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
+            Color aColorLine = static_cast<const XLineColorItem&>(aSet.Get(XATTR_LINECOLOR)).GetColorValue();
             aSet.Put(XFillColorItem(OUString(), aColorLine));
         }
 
@@ -1064,7 +1064,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                     basegfx::tools::prepareForPolygonOperation(pExtrudeObj->GetExtrudePolygon()));
                 const SfxItemSet& rLocalSet = pExtrudeObj->GetMergedItemSet();
                 const drawing::FillStyle eLocalFillStyle = ITEMVALUE(rLocalSet, XATTR_FILLSTYLE, XFillStyleItem);
-                const Color aLocalColor = ((const XFillColorItem&)(rLocalSet.Get(XATTR_FILLCOLOR))).GetColorValue();
+                const Color aLocalColor = static_cast<const XFillColorItem&>(rLocalSet.Get(XATTR_FILLCOLOR)).GetColorValue();
 
                 // sort in ExtrudeObj
                 if(pLayer)
@@ -1095,7 +1095,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                             {
                                 if(eLocalFillStyle == drawing::FillStyle_SOLID)
                                 {
-                                    Color aCompareColor = ((const XFillColorItem&)(rCompareSet.Get(XATTR_FILLCOLOR))).GetColorValue();
+                                    Color aCompareColor = static_cast<const XFillColorItem&>(rCompareSet.Get(XATTR_FILLCOLOR)).GetColorValue();
 
                                     if(aCompareColor == aLocalColor)
                                     {
@@ -1221,7 +1221,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                 SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
                 if(pObj)
                 {
-                    if(pObj->ISA(E3dScene) && ((E3dScene*)pObj)->GetScene() == pObj)
+                    if(pObj->ISA(E3dScene) && static_cast<E3dScene*>(pObj)->GetScene() == pObj)
                         bThereAreRootScenes = true;
                     if(pObj->ISA(E3dObject))
                         bThereAre3DObjects = true;
@@ -1551,7 +1551,7 @@ bool E3dView::IsBreak3DObjPossible() const
 
             if (pObj && pObj->ISA(E3dObject))
             {
-                if(!(((E3dObject*)pObj)->IsBreakObjPossible()))
+                if(!(static_cast<E3dObject*>(pObj)->IsBreakObjPossible()))
                     return false;
             }
             else
@@ -1578,7 +1578,7 @@ void E3dView::Break3DObj()
         BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_BREAK_LATHE));
         for(size_t a=0; a<nCount; ++a)
         {
-            E3dObject* pObj = (E3dObject*)GetMarkedObjectByIndex(a);
+            E3dObject* pObj = static_cast<E3dObject*>(GetMarkedObjectByIndex(a));
             BreakSingle3DObj(pObj);
         }
         DeleteMarked();
@@ -1595,7 +1595,7 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
 
         while(aIter.IsMore())
         {
-            E3dObject* pSubObj = (E3dObject*)aIter.Next();
+            E3dObject* pSubObj = static_cast<E3dObject*>(aIter.Next());
             BreakSingle3DObj(pSubObj);
         }
     }

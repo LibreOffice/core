@@ -21,12 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DEXTRUDE_HXX
 
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
-
-
-// predeclarations
-
-class E3dExtrudeObj;
-
+#include <svx/extrud3d.hxx>
 
 
 namespace sdr
@@ -41,9 +36,9 @@ namespace sdr
             virtual ~ViewContactOfE3dExtrude();
 
             // access to SdrObject
-            E3dExtrudeObj& GetE3dExtrudeObj() const
+            const E3dExtrudeObj& GetE3dExtrudeObj() const
             {
-                return (E3dExtrudeObj&)GetE3dObject();
+                return static_cast<const E3dExtrudeObj&>(GetE3dObject());
             }
 
         protected:

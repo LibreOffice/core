@@ -68,13 +68,13 @@ public:
 
     // Set local parameters with geometry recreation
     void SetCubePos(const basegfx::B3DPoint& rNew);
-    const basegfx::B3DPoint& GetCubePos() { return aCubePos; }
+    const basegfx::B3DPoint& GetCubePos() const { return aCubePos; }
 
     void SetCubeSize(const basegfx::B3DVector& rNew);
-    const basegfx::B3DVector& GetCubeSize() { return aCubeSize; }
+    const basegfx::B3DVector& GetCubeSize() const { return aCubeSize; }
 
     void SetPosIsCenter(bool bNew);
-    bool GetPosIsCenter() { return bPosIsCenter; }
+    bool GetPosIsCenter() const { return bPosIsCenter; }
 
     sal_uInt16 GetSideFlags() { return nSideFlags; }
 

@@ -548,7 +548,7 @@ void GalleryBrowser2::Resize()
 
 void GalleryBrowser2::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const GalleryHint& rGalleryHint = (const GalleryHint&) rHint;
+    const GalleryHint& rGalleryHint = static_cast<const GalleryHint&>(rHint);
 
     switch( rGalleryHint.GetType() )
     {

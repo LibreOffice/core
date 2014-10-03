@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3D_HXX
 #define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3D_HXX
 
+#include <svx/obj3d.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
@@ -38,8 +39,6 @@ namespace basegfx {
     class BColor;
     class B3DHomMatrix;
 }
-
-class E3dObject;
 
 
 
@@ -60,9 +59,9 @@ namespace sdr
             virtual ~ViewContactOfE3d();
 
             // access to E3dObject
-            E3dObject& GetE3dObject() const
+            const E3dObject& GetE3dObject() const
             {
-                return (E3dObject&)GetSdrObject();
+                return static_cast<const E3dObject&>(GetSdrObject());
             }
 
             // public helpers

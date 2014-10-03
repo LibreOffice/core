@@ -694,8 +694,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nFlags              ( 0 ),
     nColorData          ( 0 ),
     bTextFlow           ( false ),
-    bFilled             ( ((const XFillStyleItem&)pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != drawing::FillStyle_NONE ),
-    bStroked            ( ((const XLineStyleItem&)pAObj->GetMergedItem( XATTR_LINESTYLE )).GetValue() != XLINE_NONE ),
+    bFilled             ( static_cast<const XFillStyleItem&>(pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != drawing::FillStyle_NONE ),
+    bStroked            ( static_cast<const XLineStyleItem&>(pAObj->GetMergedItem( XATTR_LINESTYLE )).GetValue() != XLINE_NONE ),
     bFlipH              ( false ),
     bFlipV              ( false )
 {
@@ -722,8 +722,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     aLogicRect = Rectangle( aP, aS );
 
     OUString sShapeType;
-    SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
+    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
     if ( pAny ) {
         *pAny >>= sShapeType;
         bOOXMLShape = ( sShapeType.startsWith("ooxml-") );
@@ -739,7 +739,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         *pAny >>= bFlipV;
 
     if ( pCustomShapeObj->ISA( SdrObjCustomShape ) )    // should always be a SdrObjCustomShape, but you don't know
-        nRotateAngle = (sal_Int32)(((SdrObjCustomShape*)pCustomShapeObj)->GetObjectRotation() * 100.0);
+        nRotateAngle = (sal_Int32)(static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetObjectRotation() * 100.0);
     else
          nRotateAngle = pCustomShapeObj->GetRotateAngle();
 
@@ -1176,7 +1176,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                 }
                 rReturnPosition = GetPoint( aHandle.aPosition, true, false );
             }
-            const GeoStat aGeoStat( ((SdrObjCustomShape*)pCustomShapeObj)->GetGeoStat() );
+            const GeoStat aGeoStat( static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetGeoStat() );
             if ( aGeoStat.nShearWink )
             {
                 double nTan = aGeoStat.nTan;
@@ -1221,7 +1221,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 double a = -nRotateAngle * F_PI18000;
                 RotatePoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
             }
-            const GeoStat aGeoStat( ((SdrObjCustomShape*)pCustomShapeObj)->GetGeoStat() );
+            const GeoStat aGeoStat( static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetGeoStat() );
             if ( aGeoStat.nShearWink )
             {
                 double nTan = -aGeoStat.nTan;
@@ -1334,8 +1334,8 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 }
             }
             // and writing them back into the GeometryItem
-            SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)
-                (const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+            SdrCustomShapeGeometryItem aGeometryItem(
+                static_cast<const SdrCustomShapeGeometryItem&>(pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
             com::sun::star::beans::PropertyValue aPropVal;
             aPropVal.Name = "AdjustmentValues";
             aPropVal.Value <<= seqAdjustmentValues;
@@ -1350,14 +1350,14 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
 void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
 {
     XLineStartItem       aLineStart;
-    aLineStart.SetLineStartValue(((XLineStartItem&)pObj->GetMergedItem( XATTR_LINEEND )).GetLineStartValue());
-    XLineStartWidthItem  aLineStartWidth(((XLineStartWidthItem&)pObj->GetMergedItem( XATTR_LINEENDWIDTH )).GetValue());
-    XLineStartCenterItem aLineStartCenter(((XLineStartCenterItem&)pObj->GetMergedItem( XATTR_LINEENDCENTER )).GetValue());
+    aLineStart.SetLineStartValue(static_cast<const XLineStartItem&>(pObj->GetMergedItem( XATTR_LINEEND )).GetLineStartValue());
+    XLineStartWidthItem  aLineStartWidth(static_cast<const XLineStartWidthItem&>(pObj->GetMergedItem( XATTR_LINEENDWIDTH )).GetValue());
+    XLineStartCenterItem aLineStartCenter(static_cast<const XLineStartCenterItem&>(pObj->GetMergedItem( XATTR_LINEENDCENTER )).GetValue());
 
     XLineEndItem         aLineEnd;
-    aLineEnd.SetLineEndValue(((XLineEndItem&)pObj->GetMergedItem( XATTR_LINESTART )).GetLineEndValue());
-    XLineEndWidthItem    aLineEndWidth(((XLineEndWidthItem&)pObj->GetMergedItem( XATTR_LINESTARTWIDTH )).GetValue());
-    XLineEndCenterItem   aLineEndCenter(((XLineEndCenterItem&)pObj->GetMergedItem( XATTR_LINESTARTCENTER )).GetValue());
+    aLineEnd.SetLineEndValue(static_cast<const XLineEndItem&>(pObj->GetMergedItem( XATTR_LINESTART )).GetLineEndValue());
+    XLineEndWidthItem    aLineEndWidth(static_cast<const XLineEndWidthItem&>(pObj->GetMergedItem( XATTR_LINESTARTWIDTH )).GetValue());
+    XLineEndCenterItem   aLineEndCenter(static_cast<const XLineEndCenterItem&>(pObj->GetMergedItem( XATTR_LINESTARTCENTER )).GetValue());
 
     pObj->SetMergedItem( aLineStart );
     pObj->SetMergedItem( aLineStartWidth );
@@ -1565,7 +1565,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             bIsDefaultPath = true;
 
                         OUString sShpType;
-                        SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+                        SdrCustomShapeGeometryItem& rGeometryItem = const_cast<SdrCustomShapeGeometryItem&>(static_cast<const SdrCustomShapeGeometryItem&>(pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
                         Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
                         if ( pAny )
                             *pAny >>= sShpType;
@@ -2094,7 +2094,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
 {
     if ( !rObj.IsLine() )
     {
-        const drawing::FillStyle eFillStyle = ((const XFillStyleItem&)rObj.GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+        const drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(rObj.GetMergedItem(XATTR_FILLSTYLE)).GetValue();
         switch( eFillStyle )
         {
             default:
@@ -2104,7 +2104,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
                 if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
                     aFillColor = GetColorData(
-                        ((XFillColorItem&)rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetColorValue(),
+                        static_cast<const XFillColorItem&>(rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetColorValue(),
                         std::min(nColorIndex, nColorCount-1), rObj.GetBrightness() );
                     rObj.SetMergedItem( XFillColorItem( "", aFillColor ) );
                 }
@@ -2112,7 +2112,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             }
             case drawing::FillStyle_GRADIENT:
             {
-                XGradient aXGradient(((const XFillGradientItem&)rObj.GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
+                XGradient aXGradient(static_cast<const XFillGradientItem&>(rObj.GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
                 if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
                     aXGradient.SetStartColor(
@@ -2130,7 +2130,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             }
             case drawing::FillStyle_HATCH:
             {
-                XHatch aXHatch(((const XFillHatchItem&)rObj.GetMergedItem(XATTR_FILLHATCH)).GetHatchValue());
+                XHatch aXHatch(static_cast<const XFillHatchItem&>(rObj.GetMergedItem(XATTR_FILLHATCH)).GetHatchValue());
                 if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
                     aXHatch.SetColor(
@@ -2146,7 +2146,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             {
                 if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
-                    Bitmap aBitmap(((const XFillBitmapItem&)rObj.GetMergedItem(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
+                    Bitmap aBitmap(static_cast<const XFillBitmapItem&>(rObj.GetMergedItem(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
 
                     aBitmap.Adjust(
                         static_cast< short > ( GetLuminanceChange(
@@ -2200,8 +2200,8 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             for(size_t i = 0; i < vObjectList.size(); ++i)
             {
                 SdrPathObj* pObj(vObjectList[i]);
-                const XLineStyle eLineStyle = ((const XLineStyleItem&)pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
-                const drawing::FillStyle eFillStyle = ((const XFillStyleItem&)pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+                const XLineStyle eLineStyle =static_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
+                const drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
                 //SJ: #i40600# if bLineGeometryNeededOnly is set linystyle does not matter
                 if( !bLineGeometryNeededOnly && ( XLINE_NONE == eLineStyle ) && ( drawing::FillStyle_NONE == eFillStyle ) )
@@ -2343,7 +2343,7 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 
 bool EnhancedCustomShape2d::IsPostRotate() const
 {
-    return pCustomShapeObj->ISA( SdrObjCustomShape ) && ((SdrObjCustomShape*)pCustomShapeObj)->IsPostRotate();
+    return pCustomShapeObj->ISA( SdrObjCustomShape ) && static_cast<SdrObjCustomShape*>(pCustomShapeObj)->IsPostRotate();
 }
 
 SdrObject* EnhancedCustomShape2d::CreateLineGeometry()

@@ -358,7 +358,7 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
     else
         nAt = ImplInsertEntry( aStrEntry, nPos );
 
-    ImplSetEntryData( nAt, (void*)(sal_uIntPtr)nLangType );
+    ImplSetEntryData( nAt, reinterpret_cast<void*>(nLangType) );
     return nAt;
 }
 
@@ -394,7 +394,7 @@ sal_Int32 SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
         aStrEntry = m_aAllString;
 
     sal_Int32 nAt = ImplInsertImgEntry( aStrEntry, nPos, bCheckEntry );
-    ImplSetEntryData( nAt, (void*)(sal_uIntPtr)nLang );
+    ImplSetEntryData( nAt, reinterpret_cast<void*>(nLang) );
 
     return nAt;
 }
@@ -414,7 +414,7 @@ LanguageType SvxLanguageBoxBase::GetSelectLanguage() const
     sal_Int32     nPos   = ImplGetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return LanguageType( (sal_uIntPtr)ImplGetEntryData(nPos) );
+        return LanguageType( reinterpret_cast<sal_uIntPtr>(ImplGetEntryData(nPos)) );
     else
         return LanguageType( LANGUAGE_DONTKNOW );
 }
@@ -452,7 +452,7 @@ bool SvxLanguageBoxBase::IsLanguageSelected( const LanguageType eLangType ) cons
 
 sal_Int32 SvxLanguageBoxBase::ImplTypeToPos( LanguageType eType ) const
 {
-    return ImplGetEntryPos( (void*)(sal_uIntPtr)eType);
+    return ImplGetEntryPos( reinterpret_cast<void*>(eType) );
 }
 
 

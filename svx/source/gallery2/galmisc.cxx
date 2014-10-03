@@ -173,8 +173,8 @@ bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
 
                 if ( ( pUserData->GetInventor() == IV_IMAPINFO ) && ( pUserData->GetId() == ID_IMAPINFO ) )
                 {
-                    rGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
-                    rImageMap = ( (SgaIMapInfo*) pUserData )->GetImageMap();
+                    rGraphic = static_cast<const SdrGrafObj*>( pObj )->GetGraphic();
+                    rImageMap = static_cast<const SgaIMapInfo*>( pUserData )->GetImageMap();
                     bRet = true;
                     break;
                 }

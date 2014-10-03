@@ -219,6 +219,7 @@ public:
 
     // get transformations
     B3dCamera& GetCameraSet() { return aCameraSet; }
+    const B3dCamera& GetCameraSet() const { return aCameraSet; }
 
     // break up
     virtual bool IsBreakObjPossible() SAL_OVERRIDE;

@@ -52,7 +52,7 @@ void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
         if (pObj && pObj->ISA(E3dPolyScene))
         {
             bool bBezier = false;
-            pNewObj = ((E3dPolyScene*) pObj)->ConvertToPolyObj(bBezier, bLineToArea);
+            pNewObj = static_cast<E3dPolyScene*>(pObj)->ConvertToPolyObj(bBezier, bLineToArea);
 
             if (pNewObj)
             {
@@ -190,12 +190,12 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, bool
 
 double E3dView::GetDefaultCamPosZ()
 {
-    return (double)((const SfxUInt32Item&)pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+    return (double) static_cast<const SfxUInt32Item&>(pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE)).GetValue();
 }
 
 double E3dView::GetDefaultCamFocal()
 {
-    return (double)((const SfxUInt32Item&)pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+    return (double) static_cast<const SfxUInt32Item&>(pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

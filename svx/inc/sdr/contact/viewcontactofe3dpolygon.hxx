@@ -21,13 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DPOLYGON_HXX
 
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
-
-
-// predeclarations
-
-class E3dPolygonObj;
-
-
+#include <svx/polygn3d.hxx>
 
 namespace sdr
 {
@@ -41,9 +35,9 @@ namespace sdr
             virtual ~ViewContactOfE3dPolygon();
 
             // access to SdrObject
-            E3dPolygonObj& GetE3dPolygonObj() const
+            const E3dPolygonObj& GetE3dPolygonObj() const
             {
-                return (E3dPolygonObj&)GetE3dObject();
+                return static_cast<const E3dPolygonObj&>(GetE3dObject());
             }
 
         protected:

@@ -21,12 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DSPHERE_HXX
 
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
-
-
-// predeclarations
-
-class E3dSphereObj;
-
+#include <svx/sphere3d.hxx>
 
 
 namespace sdr
@@ -41,9 +36,9 @@ namespace sdr
             virtual ~ViewContactOfE3dSphere();
 
             // access to SdrObject
-            E3dSphereObj& GetE3dSphereObj() const
+            const E3dSphereObj& GetE3dSphereObj() const
             {
-                return (E3dSphereObj&)GetE3dObject();
+                return static_cast<const E3dSphereObj&>(GetE3dObject());
             }
 
         protected:

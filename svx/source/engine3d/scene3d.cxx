@@ -338,7 +338,7 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
 {
     // Set old camera
     aCamera = rNewCamera;
-    ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
+    static_cast<sdr::properties::E3dSceneProperties&>(GetProperties()).SetSceneItemsFromCamera();
 
     SetRectsDirty();
 
@@ -416,7 +416,7 @@ void E3dScene::removeAllNonSelectedObjects()
 
             if(pObj->ISA(E3dScene))
             {
-                E3dScene* pScene = (E3dScene*)pObj;
+                E3dScene* pScene = static_cast<E3dScene*>(pObj);
 
                 // iterate over this sub-scene
                 pScene->removeAllNonSelectedObjects();
@@ -432,7 +432,7 @@ void E3dScene::removeAllNonSelectedObjects()
             }
             else if(pObj->ISA(E3dCompoundObject))
             {
-                E3dCompoundObject* pCompound = (E3dCompoundObject*)pObj;
+                E3dCompoundObject* pCompound = static_cast<E3dCompoundObject*>(pObj);
 
                 if(!pCompound->GetSelected())
                 {
@@ -465,7 +465,7 @@ E3dScene& E3dScene::operator=(const E3dScene& rObj)
     aCamera          = r3DObj.aCamera;
 
     aCameraSet = r3DObj.aCameraSet;
-    ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
+    static_cast<sdr::properties::E3dSceneProperties&>(GetProperties()).SetSceneItemsFromCamera();
 
     InvalidateBoundVolume();
     RebuildLists();
@@ -500,7 +500,7 @@ void E3dScene::RebuildLists()
     // then examine all the objects in the scene
     while ( a3DIterator.IsMore() )
     {
-        E3dObject* p3DObj = (E3dObject*) a3DIterator.Next();
+        E3dObject* p3DObj = static_cast<E3dObject*>(a3DIterator.Next());
         p3DObj->NbcSetLayer(nCurrLayerID);
         NewObjectInserted(p3DObj);
     }
@@ -515,7 +515,7 @@ void E3dScene::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     E3dObject::SaveGeoData (rGeo);
 
-    ((E3DSceneGeoData &) rGeo).aCamera = aCamera;
+    static_cast<E3DSceneGeoData &>(rGeo).aCamera = aCamera;
 }
 
 void E3dScene::RestGeoData(const SdrObjGeoData& rGeo)
@@ -523,7 +523,7 @@ void E3dScene::RestGeoData(const SdrObjGeoData& rGeo)
     // #i94832# removed E3DModifySceneSnapRectUpdater here.
     // It should not be needed, is already part of E3dObject::RestGeoData
     E3dObject::RestGeoData (rGeo);
-    SetCamera (((E3DSceneGeoData &) rGeo).aCamera);
+    SetCamera (static_cast<const E3DSceneGeoData &>(rGeo).aCamera);
 }
 
 // Something was changed in the style sheet, so change scene
@@ -677,7 +677,7 @@ bool E3dScene::IsBreakObjPossible()
 
     while ( a3DIterator.IsMore() )
     {
-        E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+        E3dObject* pObj = static_cast<E3dObject*>(a3DIterator.Next());
         DBG_ASSERT(pObj->ISA(E3dObject), "only 3D objects are allowed in scenes!");
         if(!pObj->IsBreakObjPossible())
             return false;
