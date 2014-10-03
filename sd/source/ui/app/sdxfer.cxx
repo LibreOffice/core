@@ -110,6 +110,8 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, 
 
 SdTransferable::~SdTransferable()
 {
+    SolarMutexGuard g;
+
     if( mpSourceDoc )
         EndListening( *mpSourceDoc );
 
