@@ -17,6 +17,7 @@ import sys
 import uuid
 import json
 import xml.etree.ElementTree as ET
+import xml.dom.minidom as minidom
 
 
 class GbuildParserState:
@@ -86,7 +87,7 @@ class GbuildParser:
     srcdirpattern = re.compile('^SRCDIR = (.*)')
     builddirpattern = re.compile('^BUILDDIR = (.*)')
     instdirpattern = re.compile('^INSTDIR = (.*)')
-    binpathpattern = re.compile('^LS = (.*)ls(.exe)?')
+    binpathpattern = re.compile('^GPERF = (.*)gperf(.exe)?')
     libnamespattern = re.compile('^gb_Library_ILIBFILENAMES := (.*)')
     exenamepattern = re.compile('^gb_Executable_FILENAMES_FOR_BUILD := (.*)')
     rulepattern = re.compile('^(.+?):( .*)?$')
@@ -213,6 +214,7 @@ class GbuildParser:
                     continue
                 state = GbuildParserState()
         return self
+
 
 class IdeIntegrationGenerator:
 
@@ -417,7 +419,6 @@ VersionControl=kdevgit
 
     def write_includepaths(self, path):
         includedirfile = open(os.path.join(path, '.kdev_include_paths'), 'w')
-        fullpath = '%s/%s' % (self.gbuildparser.srcdir, path)
         include = set()
         for target in self.target_by_path[path]:
             include |= set(target.include)
@@ -658,12 +659,12 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
             if target.is_empty():
                 continue
-            if not target.location in self.target_by_location:
+            if target.location not in self.target_by_location:
                 self.target_by_location[target.location] = set()
             self.target_by_location[target.location] |= set([target])
 
     def retrieve_toolset(self, ide):
-        ide_toolset_map = {'vs2012':'v110', 'vs2013':'v120'}
+        ide_toolset_map = {'vs2012': 'v110', 'vs2013': 'v120'}
         return ide_toolset_map[ide]
 
     def module_make_command(self, targets):
@@ -694,9 +695,6 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     nmake_project_guid = '8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942'
 
-    def get_project_directory(self, target):
-        return os.path.join(self.solution_directory, target.location.split('/')[-1])
-
     def get_dependency_libs(self, linked_libs, library_projects):
         dependency_libs = {}
         for linked_lib in linked_libs:
@@ -713,7 +711,6 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             for project in projects:
                 target = project.target
                 print(' %s' % target.name, end='')
-                module = target.location.split('/')[-1]
                 proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
@@ -783,15 +780,15 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             platform_toolset_node = ET.SubElement(conf_node, '{%s}PlatformToolset' % ns)
             platform_toolset_node.text = self.toolset
 
-        import_node = ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.props')
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.props')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionSettings')
         for configuration in self.configurations:
             prop_sheets_node = ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='Configuration',
                                              Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
-            import_node = ET.SubElement(prop_sheets_node, '{%s}Import' % ns,
-                                        Project='$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props',
-                                        Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",
-                                        Label='LocalAppDataPlatform')
+            ET.SubElement(prop_sheets_node, '{%s}Import' % ns,
+                          Project='$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props',
+                          Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",
+                          Label='LocalAppDataPlatform')
 
         ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
         for cfg_name, cfg_targets in self.configurations.items():
@@ -838,8 +835,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hfile)
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
-        msbuild_tree = ET.ElementTree(proj_node)
-        msbuild_tree.write(project_path, encoding='unicode', xml_declaration=True)
+        self.write_pretty_xml(proj_node, project_path)
         self.write_filters(project_path + '.filters',
                            os.path.join(self.gbuildparser.srcdir, os.path.basename(target.location)),
                            [cxx_node.get('Include') for cxx_node in cxxobjects_node.findall('{%s}ClCompile' % ns)],
@@ -855,6 +851,12 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         for i in range(1, len(parts)):
             subfilters.add('\\'.join(parts[:i]))
         return subfilters
+
+    def write_pretty_xml(self, node, file_path):
+        xml_str = ET.tostring(node, encoding='unicode')
+        pretty_str = minidom.parseString(xml_str).toprettyxml(encoding='utf-8')
+        with open(file_path, 'w') as f:
+            f.write(pretty_str.decode())
 
     def add_nodes(self, files_node, module_dir, tag, project_files):
         ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
@@ -883,8 +885,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             filter_node = ET.SubElement(filters_node, '{%s}Filter' % ns, Include=proj_filter)
             filter_id_node = ET.SubElement(filter_node, '{%s}UniqueIdentifier' % ns)
             filter_id_node.text = '{%s}' % str(uuid.uuid4())
-        filters_tree = ET.ElementTree(proj_node)
-        filters_tree.write(filters_path, encoding='unicode', xml_declaration=True)
+        self.write_pretty_xml(proj_node, filters_path)
 
 
 if __name__ == '__main__':
