@@ -675,7 +675,6 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
 IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
 {
-    SvTreeListEntry* pFirstSel = pWordsLB->FirstSelected();
     OUString rEntry = pEdt->GetText();
 
     sal_Int32 nWordLen = rEntry.getLength();
@@ -705,7 +704,6 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
                     bDoNothing=true;
                     pWordsLB->SetCurEntry(pEntry);
                     bDoNothing=false;
-                    pFirstSel = pEntry;
                     pReplaceED->SetText(pWordsLB->GetEntryText(pEntry, 1));
 
                     if (CDE_SIMILAR == eCmpRes)
@@ -733,7 +731,6 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
             if(!bFound)
             {
                 pWordsLB->SelectAll(false);
-                pFirstSel = 0;
 
                 aNewReplaceText = sNew;
                 bEnableNewReplace = true;
@@ -752,6 +749,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
     {
         OUString aReplaceText;
         OUString aWordText;
+        SvTreeListEntry* pFirstSel = pWordsLB->FirstSelected();
         if (pFirstSel)  // a pWordsLB entry is selected
         {
             aWordText    = pWordsLB->GetEntryText( pFirstSel, 0 );
