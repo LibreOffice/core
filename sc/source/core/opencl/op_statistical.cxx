@@ -5661,14 +5661,14 @@ void OpMedian::GenSlidingWindowFunction(
     ss << "    int nSize =endFlag- startFlag ;\n";
     ss << "    if (nSize & 1)\n";
     ss << "    {\n";
-    ss << "        tmp = "<<vSubArguments[0]->GetNameAsString();
+    ss << "        tmp = "<<vSubArguments[0]->GetName();
     ss << "        [startFlag+nSize/2];\n";
     ss << "    }\n";
     ss << "    else\n";
     ss << "    {\n";
-    ss << "        tmp =("<<vSubArguments[0]->GetNameAsString();
+    ss << "        tmp =("<<vSubArguments[0]->GetName();
     ss << "        [startFlag+nSize/2]+";
-    ss <<          vSubArguments[0]->GetNameAsString();
+    ss <<          vSubArguments[0]->GetName();
     ss << "        [startFlag+nSize/2-1])/2;\n";
     ss << "    }\n";
     ss <<"     return tmp;\n";
