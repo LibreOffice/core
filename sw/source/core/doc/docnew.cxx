@@ -90,6 +90,7 @@
 #include <unochart.hxx>
 #include <fldbas.hxx>
 #include <wrtsh.hxx>
+#include <svx/xdef.hxx>
 
 #include <cmdid.h>              // for the default printer in SetJob
 
@@ -1054,6 +1055,7 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
         RES_PARATR_BEGIN, RES_PARATR_END-1,
         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+        XATTR_START, XATTR_END-1,
         0
     };
 
@@ -1062,6 +1064,11 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
     sal_uInt16 nRange = 0;
     while (aRangeOfDefaults[nRange] != 0)
     {
+        if( aRangeOfDefaults[nRange] == XATTR_START && ( !mpDrawModel || !mbSetDrawDefaults))
+        {
+            nRange += 2;
+            continue;
+        }
         for (sal_uInt16 nWhich = aRangeOfDefaults[nRange];
              nWhich <= aRangeOfDefaults[nRange + 1]; ++nWhich)
         {
