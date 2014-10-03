@@ -668,7 +668,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         return ide_toolset_map[ide]
 
     def module_make_command(self, targets):
-        return '%(sh)s -c "PATH=\\"/bin:$PATH\\"; cd %(location)s && %(makecmd)s -rs ' + targets + '"'
+        return '%(sh)s -c "PATH=\\"/bin:$PATH\\";BUILDDIR=\\"%(builddir)s\\" %(makecmd)s -rsC %(location)s ' + targets + '"'
 
     class Project:
 
@@ -796,6 +796,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                                       Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (cfg_name, platform))
             nmake_params = {
                 'sh': os.path.join(self.gbuildparser.binpath, 'dash.exe'),
+                'builddir': self.gbuildparser.builddir,
                 'location': target.location,
                 'makecmd': self.gbuildparser.makecmd,
                 'target': target.target_name()}
