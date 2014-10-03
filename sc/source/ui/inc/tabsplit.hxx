@@ -31,7 +31,6 @@ private:
     bool            bFixed;
 
 protected:
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Splitting( Point& rSplitPos ) SAL_OVERRIDE;
 
