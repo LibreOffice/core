@@ -347,8 +347,8 @@ void SvxStyleBox_Impl::ReleaseFocus()
 
 IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu)
 {
-    ReleaseFocus();
     OUString sEntry = OUString( (GetEntry(GetSelectEntryPos())) );
+    ReleaseFocus(); // It must be after getting entry pos!
     Sequence< PropertyValue > aArgs( 2 );
     aArgs[0].Name   = "Param";
     aArgs[0].Value  = makeAny( sEntry );
