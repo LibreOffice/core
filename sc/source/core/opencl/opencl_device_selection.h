@@ -319,7 +319,6 @@ inline ds_status writeProfileToFile(ds_profile* profile, ds_score_serializer ser
                 }
                     break;
                 default:
-                    status = DS_UNKNOWN_DEVICE_TYPE;
                     break;
             };
 
