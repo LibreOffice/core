@@ -403,7 +403,7 @@ inline bool isFRMATR(const sal_uInt16 nWhich)
 }
 inline bool isDrawingLayerAttribute(const sal_uInt16 nWhich) //UUUU
 {
-    return (XATTR_FILL_FIRST <= nWhich) && (XATTR_FILL_LAST >= nWhich);
+    return (XATTR_START <= nWhich) && (XATTR_END > nWhich);
 }
 inline bool isGRFATR(const sal_uInt16 nWhich)
 {
