@@ -775,7 +775,7 @@ void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
         return;
 
     // same menu, nothing to do
-    if ( dynamic_cast<PopupMenu*>(pData->pSubMenu) == pMenu )
+    if ( static_cast<PopupMenu*>(pData->pSubMenu) == pMenu )
         return;
 
     // data exchange
