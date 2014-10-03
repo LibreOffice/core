@@ -80,13 +80,6 @@ sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
-Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
-{
-    if( (0 <= nToken) && (static_cast< size_t >( nToken ) < XML_TOKEN_COUNT) )
-        return maTokenNames[ static_cast< size_t >( nToken ) ];
-    return Sequence< sal_Int8 >();
-}
-
 sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength ) const
 {
     const struct xmltoken* pToken = Perfect_Hash::in_word_set( pStr, nLength );

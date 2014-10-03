@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_TOKEN_TOKENMAP_HXX
 
 #include <vector>
+#include <oox/token/tokens.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -40,7 +41,13 @@ public:
 
     /** Returns the UTF8 name of the passed token identifier as byte sequence. */
     ::com::sun::star::uno::Sequence< sal_Int8 >
-                        getUtf8TokenName( sal_Int32 nToken ) const;
+                        getUtf8TokenName( sal_Int32 nToken ) const
+    {
+        SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "oox", "Wrong nToken parameter");
+        if (0 <= nToken && nToken < XML_TOKEN_COUNT)
+            return maTokenNames[ nToken ];
+        return css::uno::Sequence< sal_Int8 >();
+    }
 
     /** Returns the token identifier for the passed UTF8 token name. */
     sal_Int32           getTokenFromUtf8(
