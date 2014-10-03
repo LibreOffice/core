@@ -1299,7 +1299,7 @@ public:
             EndListening(const_cast<SwFmtFld&>(*pFld));
         }
     }
-    ~FieldDocWatchingStack()
+    virtual ~FieldDocWatchingStack()
     {
         EndListeningToAllFields();
         EndListening(m_rDocShell);
