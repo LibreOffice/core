@@ -43,14 +43,6 @@ void ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
         Splitter::MouseMove( rMEvt );
 }
 
-void ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    if (bFixed)
-        Window::MouseButtonUp( rMEvt );
-    else
-        Splitter::MouseButtonUp( rMEvt );
-}
-
 void ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (bFixed)
