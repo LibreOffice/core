@@ -28,10 +28,14 @@ class CachedOutputStream
     /// Output stream, usually writing data into files.
     css::uno::Reference< css::io::XOutputStream > mxOutputStream;
     sal_Int32 mnCacheWrittenSize;
-    sal_Int8 mpCache[ mnMaximumSize ];
+    const css::uno::Sequence<sal_Int8> mpCache;
+    uno_Sequence *pSeq;
 
 public:
-    CachedOutputStream() : mnCacheWrittenSize(0) {}
+    CachedOutputStream() : mnCacheWrittenSize(0)
+                         , mpCache(mnMaximumSize)
+                         , pSeq(mpCache.get())
+    {}
     ~CachedOutputStream() {}
 
     css::uno::Reference< css::io::XOutputStream > getOutputStream() const
@@ -62,14 +66,16 @@ public:
             }
         }
 
-        memcpy(mpCache + mnCacheWrittenSize, pStr, nLen);
+        memcpy(pSeq->elements + mnCacheWrittenSize, pStr, nLen);
         mnCacheWrittenSize += nLen;
     }
 
     /// immediately write buffer into mxOutputStream and clear
     void flush()
     {
-        mxOutputStream->writeBytes( css::uno::Sequence<sal_Int8>(mpCache, mnCacheWrittenSize) );
+        // resize the Sequence to written size
+        pSeq->nElements = mnCacheWrittenSize;
+        mxOutputStream->writeBytes( mpCache );
         // and next time write to the beginning
         mnCacheWrittenSize = 0;
     }
