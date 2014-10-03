@@ -26,12 +26,7 @@ submit() {
 }
 
 logerrit() {
-        echo "Host logerrit"
-        echo "    IdentityFile ~/.ssh/id_rsa"
-        echo "    User $1"
-        echo "    Port 29418"
-        echo "    HostName gerrit.libreoffice.org"
-        echo "Host gerrit.libreoffice.org"
+        echo "Host logerrit gerrit.libreoffice.org"
         echo "    IdentityFile ~/.ssh/id_rsa"
         echo "    User $1"
         echo "    Port 29418"
