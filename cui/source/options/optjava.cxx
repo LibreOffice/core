@@ -720,8 +720,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
                     }
 
                     eErr = jfw_setSelectedJRE( pInfo );
-                    DBG_ASSERT( JFW_E_NONE == eErr,
-                                "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE" );
+                    SAL_WARN_IF("cui.options", JFW_E_NONE != eErr, "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE");
                     bModified = true;
                 }
             }
