@@ -307,7 +307,7 @@ public:
     {
         return mSymName + "_Random()";
     }
-    void GenSlidingWindowFunction( std::stringstream& ss ) SAL_OVERRIDE
+    virtual void GenSlidingWindowFunction( std::stringstream& ss ) SAL_OVERRIDE
     {
         ss << "\ndouble " << mSymName;
         ss << "_Random ()\n{\n";
