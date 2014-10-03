@@ -20,6 +20,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <comphelper/random.hxx>
 #include <boost/scoped_ptr.hpp>
 
 #include "opencl_device.hxx"
@@ -170,13 +171,12 @@ double timerCurrent(timer* mytimer)
 /* Random number generator */
 double random(double min, double max)
 {
-    return floor(((double)rand() / ((unsigned int)RAND_MAX + 1)) * (max - min + 1) + min);
+    return comphelper::rng::uniform_real_distribution(min, max);
 }
 
 /* Populate input */
 void populateInput(LibreOfficeDeviceEvaluationIO* testData)
 {
-    srand((unsigned int)time(NULL));
     double* input0 = &testData->input0[0];
     double* input1 = &testData->input1[0];
     double* input2 = &testData->input2[0];

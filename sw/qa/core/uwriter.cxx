@@ -16,6 +16,7 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -849,7 +850,7 @@ getRand(int modulus)
 {
     if (modulus <= 0)
         return 0;
-    return rand() % modulus;
+    return comphelper::rng::uniform_int_distribution(0, modulus-1);
 }
 
 static OUString
@@ -869,12 +870,13 @@ static SwPosition
 getRandomPosition(SwDoc *pDoc, int /* nOffset */)
 {
     const SwPosition aPos(pDoc->GetNodes().GetEndOfContent());
-	sal_uLong nNodes = aPos.nNode.GetNode().GetIndex() - aPos.nNode.GetNode().StartOfSectionIndex();
-	sal_uLong n = (rand() * nNodes) / RAND_MAX;
-	SwPaM pam(aPos);
-	for (sal_uLong i = 0; i < n; ++i) {
-		pam.Move(fnMoveBackward, fnGoNode);
-	}
+    sal_uLong nNodes = aPos.nNode.GetNode().GetIndex() - aPos.nNode.GetNode().StartOfSectionIndex();
+    sal_uLong n = comphelper::rng::uniform_int_distribution(static_cast<sal_uLong>(0), nNodes);
+    SwPaM pam(aPos);
+    for (sal_uLong i = 0; i < n; ++i)
+    {
+        pam.Move(fnMoveBackward, fnGoNode);
+    }
     return *pam.GetPoint();
 }
 

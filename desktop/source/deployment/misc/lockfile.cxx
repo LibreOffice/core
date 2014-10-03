@@ -24,6 +24,7 @@
 #else
 #include <windows.h>
 #endif
+#include <comphelper/random.hxx>
 #include <sal/types.h>
 #include <osl/file.hxx>
 #include <osl/socket.hxx>
@@ -32,7 +33,6 @@
 #include <tools/config.hxx>
 
 #include "lockfile.hxx"
-
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -85,11 +85,9 @@ namespace desktop {
         // generate ID
         const int nIdBytes = 16;
         char tmpId[nIdBytes*2+1];
-        time_t t;
-        srand( (unsigned)(t = time( NULL )) );
-        int tmpByte = 0;
+        time_t t = time(NULL);
         for (int i = 0; i<nIdBytes; i++) {
-            tmpByte = rand( ) % 0xFF;
+            int tmpByte = comphelper::rng::uniform_int_distribution(0, 0xFF);
             sprintf( tmpId+i*2, "%02X", tmpByte );
         }
         tmpId[nIdBytes*2]=0x00;

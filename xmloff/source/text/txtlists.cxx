@@ -19,7 +19,7 @@
 
 
 #include <txtlists.hxx>
-
+#include <comphelper/random.hxx>
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -233,7 +233,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
         // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
         sal_Int64 n = ::tools::Time( ::tools::Time::SYSTEM ).GetTime();
         n += Date( Date::SYSTEM ).GetDate();
-        n += rand();
+        n += comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max());
         // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
         sTmpStr += OUString::number( n );
     }

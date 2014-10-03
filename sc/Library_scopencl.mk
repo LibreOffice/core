@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_externals,scopencl,\
 ))
 
 $(eval $(call gb_Library_use_libraries,scopencl,\
+        comphelper \
         cppu \
         cppuhelper \
         for \

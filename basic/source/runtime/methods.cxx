@@ -3528,7 +3528,7 @@ RTLFUNC(Randomize)
     {
         nSeed = (int)time(NULL);
     }
-    comphelper::rng::seed( nSeed );
+    comphelper::rng::reseed(nSeed);
 }
 
 RTLFUNC(Rnd)
@@ -3542,7 +3542,7 @@ RTLFUNC(Rnd)
     }
     else
     {
-        rPar.Get(0)->PutDouble( comphelper::rng::uniform() );
+        rPar.Get(0)->PutDouble(comphelper::rng::uniform_real_distribution());
     }
 }
 

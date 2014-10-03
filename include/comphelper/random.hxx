@@ -18,11 +18,24 @@ namespace comphelper
 namespace rng
 {
 
-/// set initial seed (equivalent of libc srand())
-COMPHELPER_DLLPUBLIC void seed(int i);
+/// reset initial seed, typically you don't call this as the initial seed is taken from the
+//  time on the first use of the distribution functions
+COMPHELPER_DLLPUBLIC void reseed(int i);
 
-/// uniform distribution in [0,1)
-COMPHELPER_DLLPUBLIC double uniform();
+// note that uniform_int_distribution is inclusive of b, i.e. [a,b] while
+// uniform_real_distribution is exclusive of b, i.e. [a,b), [std/boost]::nextafter may be your friend there
+
+/// uniform distribution in [a,b)
+COMPHELPER_DLLPUBLIC double uniform_real_distribution(double a = 0.0, double b = 1.0);
+
+/// uniform distribution in [a,b]
+COMPHELPER_DLLPUBLIC int uniform_int_distribution(int a, int b);
+
+/// uniform distribution in [a,b]
+COMPHELPER_DLLPUBLIC unsigned int uniform_int_distribution(unsigned int a, unsigned int b);
+
+/// uniform distribution in [a,b]
+COMPHELPER_DLLPUBLIC size_t uniform_int_distribution(size_t a, size_t b);
 
 } // namespace
 

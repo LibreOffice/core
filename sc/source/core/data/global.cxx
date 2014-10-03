@@ -521,8 +521,6 @@ void ScGlobal::Init()
     // arguments are to be merged in, which in turn need strings of function
     // names from the compiler.
     ScParameterClassification::Init();
-    srand( (unsigned) time( NULL ) );       // Random Seed Init for Interpreter
-    ::comphelper::rng::seed( time( NULL ) ); // seed for libc rand() replacement
 
     InitAddIns();
 

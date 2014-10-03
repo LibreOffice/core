@@ -20,7 +20,7 @@
 #include <avahi-common/error.h>
 #include <avahi-common/timeval.h>
 #include <avahi-common/thread-watch.h>
-
+#include <comphelper/random.hxx>
 #include <dbus/dbus.h>
 
 #include <sal/log.hxx>
@@ -99,7 +99,8 @@ static bool create_services(AvahiClient *c) {
     if (avahi_entry_group_is_empty(group)) {
         SAL_INFO("sdremote.wifi", "Adding service '" << avahiService->getName() << "'");
         char r[128];
-        snprintf(r, sizeof(r), "random=%i", rand());
+        int nRandom = comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max());
+        snprintf(r, sizeof(r), "random=%i", nRandom);
         int ret = avahi_entry_group_add_service(
             group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, static_cast<AvahiPublishFlags>(0),
             avahiService->getName().c_str(), kREG_TYPE, NULL, NULL, 1599, "local", r, NULL

@@ -11,8 +11,8 @@
  */
 
 #include <boost/random.hpp>
-
 #include <comphelper/random.hxx>
+#include <rtl/instance.hxx>
 
 // this is nothing but a simple wrapper around
 // the boost random generators
@@ -29,23 +29,55 @@ namespace rng
 // memory requirement: 625*sizeof(uint32_t)
 // http://en.wikipedia.org/wiki/Mersenne_twister
 #define BOOST_RNG_ALGO  boost::mt19937
-BOOST_RNG_ALGO global_rng;
 
-// initialises the state of the global random number generator
-// should only be called once at the start of the main programme
-// (note, a few boost::variate_generator<> (like normal) have their
-// own state which would need a reset as well to guarantee identical
-// sequence of numbers, e.g. via myrand.distribution().reset())
-void seed(int i)
+struct RandomNumberGenerator
 {
-    global_rng.seed(i);
+    BOOST_RNG_ALGO global_rng;
+    RandomNumberGenerator()
+    {
+        // initialises the state of the global random number generator
+        // should only be called once.
+        // (note, a few boost::variate_generator<> (like normal) have their
+        // own state which would need a reset as well to guarantee identical
+        // sequence of numbers, e.g. via myrand.distribution().reset())
+        global_rng.seed(time(NULL));
+    }
+};
+
+class theRandomNumberGenerator : public rtl::Static<RandomNumberGenerator, theRandomNumberGenerator> {};
+
+// re-initialises the state of the global random number generator
+void reseed(int i)
+{
+    return theRandomNumberGenerator::get().global_rng.seed(i);
 }
 
-// uniform [0,1) or [a,b) distribution
-double uniform()
+// uniform ints [a,b] distribution
+int uniform_int_distribution(int a, int b)
 {
-    static boost::uniform_01<BOOST_RNG_ALGO&> myrand(global_rng);
-    return myrand();
+    boost::random::uniform_int_distribution<int> dist(a, b);
+    return dist(theRandomNumberGenerator::get().global_rng);
+}
+
+// uniform ints [a,b] distribution
+unsigned int uniform_int_distribution(unsigned int a, unsigned int b)
+{
+    boost::random::uniform_int_distribution<unsigned int> dist(a, b);
+    return dist(theRandomNumberGenerator::get().global_rng);
+}
+
+// uniform size_t [a,b] distribution
+size_t uniform_int_distribution(size_t a, size_t b)
+{
+    boost::random::uniform_int_distribution<size_t> dist(a, b);
+    return dist(theRandomNumberGenerator::get().global_rng);
+}
+
+// uniform size_t [a,b) distribution
+double uniform_real_distribution(double a, double b)
+{
+    boost::random::uniform_real_distribution<double> dist(a, b);
+    return dist(theRandomNumberGenerator::get().global_rng);
 }
 
 } // namespace

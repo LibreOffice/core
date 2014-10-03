@@ -11,7 +11,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/undo.hxx>
-
+#include <comphelper/random.hxx>
 #include "rangelst.hxx"
 #include "scitems.hxx"
 #include "docsh.hxx"
@@ -21,8 +21,6 @@
 #include "strload.hxx"
 #include "docfunc.hxx"
 #include "StatisticsDialogs.hrc"
-
-#include <boost/random.hpp>
 
 #include "SamplingDialog.hxx"
 
@@ -203,11 +201,6 @@ ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
     SCCOL outCol = mOutputAddress.Col();
     SCROW outRow = mOutputAddress.Row();
 
-    TimeValue now;
-    osl_getSystemTime(&now);
-    boost::mt19937 seed(now.Nanosec);
-    boost::uniform_01<boost::mt19937> rng(seed);
-
     SCROW inRow;
 
     sal_Int64 aSampleSize = mpSampleSize->GetValue();
@@ -222,11 +215,9 @@ ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
             outRow = mOutputAddress.Row();
             inRow  = aStart.Row();
 
-            double aRandomValue;
-
             while ((outRow - mOutputAddress.Row()) < aSampleSize)
             {
-                aRandomValue = rng();
+                double aRandomValue = comphelper::rng::uniform_real_distribution();
 
                 if ( (aPopulationSize - (inRow - aStart.Row())) * aRandomValue >= aSampleSize - (outRow - mOutputAddress.Row()) )
                 {

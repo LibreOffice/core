@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
@@ -576,12 +577,12 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
 
     if( pCategoryList && pCategoryList->size() )
     {
-        sal_Int32 nCategory = (rand() * pCategoryList->size() / RAND_MAX);
+        sal_Int32 nCategory = comphelper::rng::uniform_int_distribution(static_cast<size_t>(0), pCategoryList->size()-1);
 
         PresetCategoryPtr pCategory = (*pCategoryList)[nCategory];
         if( pCategory.get() && !pCategory->maEffects.empty() )
         {
-            sal_Int32 nDescriptor = (rand() * pCategory->maEffects.size() / RAND_MAX);
+            sal_Int32 nDescriptor = comphelper::rng::uniform_int_distribution(static_cast<size_t>(0), pCategory->maEffects.size()-1);
             CustomAnimationPresetPtr pPreset = pCategory->maEffects[nDescriptor];
             if( pPreset.get() )
             {
@@ -590,7 +591,7 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
                 OUString aSubType;
                 if( !aSubTypes.empty() )
                 {
-                    sal_Int32 nSubType = (rand() * aSubTypes.size() / RAND_MAX);
+                    size_t nSubType = comphelper::rng::uniform_int_distribution(static_cast<size_t>(0), aSubTypes.size()-1);
                     aSubType = aSubTypes[nSubType];
                 }
                 xNode = pPreset->create( aSubType );

@@ -26,6 +26,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <time.h>
@@ -262,8 +263,7 @@ OUString VbaCommandBarHelper::generateCustomURL()
     url += CUSTOM_TOOLBAR_STR;
 
     // use a random number to minimize possible clash with existing custom toolbars
-    srand( unsigned( time( NULL ) ));
-    url += OUString::number( rand(), 16 );
+    url += OUString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max()), 16);
     return url;
 }
 

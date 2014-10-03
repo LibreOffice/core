@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/random.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <sdr/overlay/overlaymanagerbuffered.hxx>
 #include <svx/svdpntv.hxx>
@@ -174,7 +175,10 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
 
         if(bDoPaintForVisualControlRegion)
         {
-            const Color aColor((((((rand()&0x7f)|0x80)<<8L)|((rand()&0x7f)|0x80))<<8L)|((rand()&0x7f)|0x80));
+            int nR = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
+            int nG = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
+            int nB = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
+            const Color aColor(((((nR|0x80)<<8L)|(nG|0x80))<<8L)|(nB|0x80));
 
             mrOutputDevice.SetLineColor(aColor);
             mrOutputDevice.SetFillColor();
@@ -182,32 +186,6 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
         }
 #endif
     }
-
-//  while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
-//  {
-//      // for each rectangle, copy the area
-//      const Point aTopLeft(aRegionRectanglePixel.TopLeft());
-//      const Size aSize(aRegionRectanglePixel.GetSize());
-
-//      mrOutputDevice.DrawOutDev(
-//          aTopLeft, aSize,
-//          aTopLeft, aSize,
-//          maPreRenderDevice);
-
-//#ifdef DBG_UTIL
-//      // #i74769#
-//      static bool bDoPaintForVisualControlRegion(false);
-//      if(bDoPaintForVisualControlRegion)
-//      {
-//          Color aColor((((((rand()&0x7f)|0x80)<<8L)|((rand()&0x7f)|0x80))<<8L)|((rand()&0x7f)|0x80));
-//          mrOutputDevice.SetLineColor(aColor);
-//          mrOutputDevice.SetFillColor();
-//          mrOutputDevice.DrawRect(aRegionRectanglePixel);
-//      }
-//#endif
-//  }
-
-//  aRegionPixel.EndEnumRects(aRegionHandle);
 
     mrOutputDevice.EnableMapMode(bMapModeWasEnabledDest);
     maPreRenderDevice.EnableMapMode(bMapModeWasEnabledSource);

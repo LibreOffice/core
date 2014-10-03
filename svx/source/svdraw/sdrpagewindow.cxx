@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svdouno.hxx>
@@ -254,7 +255,10 @@ namespace
 
                     for(sal_uInt32 a(0L); a < aResult.count(); a++)
                     {
-                        Color aColor(rand()%255, rand()%255, rand()%255);
+                        int nR = comphelper::rng::uniform_int_distribution(0, 254);
+                        int nG = comphelper::rng::uniform_int_distribution(0, 254);
+                        int nB = comphelper::rng::uniform_int_distribution(0, 254);
+                        Color aColor(nR, nG, nB);
                         impPaintStrokePolygon(aResult.getB2DPolygon(a), rOutDev, aColor);
                     }
                 }

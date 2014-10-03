@@ -83,6 +83,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
 #include <set>
@@ -431,8 +432,7 @@ sal_Int32 lcl_getChartType( const OUString& sChartType )
 
 sal_Int32 lcl_generateRandomValue()
 {
-    static sal_Int32 MAX_NUMBER = 100000000;
-    return sal_Int32( rand() % MAX_NUMBER );
+    return comphelper::rng::uniform_int_distribution(0, 100000000-1);
 }
 
 ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< frame::XModel >& xModel, XmlFilterBase* pFB, DocumentType eDocumentType )

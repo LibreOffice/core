@@ -18,6 +18,7 @@
  */
 
 #include <rtl/math.hxx>
+#include <comphelper/random.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -1287,10 +1288,10 @@ bool ScTable::IsSorted( SCCOLROW nStart, SCCOLROW nEnd ) const   // ueber aSortP
 void ScTable::DecoladeRow( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2 )
 {
     SCROW nRow;
-    SCROW nMax = nRow2 - nRow1;
+    int nMax = nRow2 - nRow1;
     for (SCROW i = nRow1; (i + 4) <= nRow2; i += 4)
     {
-        nRow = rand() % nMax;
+        nRow = comphelper::rng::uniform_int_distribution(0, nMax-1);
         pArray->Swap(i, nRow1 + nRow);
     }
 }

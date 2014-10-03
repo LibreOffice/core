@@ -63,6 +63,7 @@
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
@@ -297,8 +298,7 @@ generateCustomName(
 
 sal_uInt32 generateRandomValue()
 {
-    srand( unsigned( time( NULL ) ));
-    return sal_uInt32( rand() );
+    return comphelper::rng::uniform_int_distribution(static_cast<unsigned int>(0), std::numeric_limits<unsigned int>::max());
 }
 
 OUString

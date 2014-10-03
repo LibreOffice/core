@@ -1662,7 +1662,7 @@ void ScInterpreter::ScPi()
 
 void ScInterpreter::ScRandom()
 {
-    PushDouble(::comphelper::rng::uniform());
+    PushDouble(::comphelper::rng::uniform_real_distribution());
 }
 
 void ScInterpreter::ScTrue()

@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/random.hxx>
 #include <rtl/math.hxx>
 #include <rtl/string.hxx>
 #include <tools/time.hxx>
@@ -29,7 +30,7 @@ DebugEventInjector::DebugEventInjector( sal_uInt32 nMaxEvents) :
 
 static double getRandom()
 {
-    return (double)rand() / RAND_MAX;
+    return comphelper::rng::uniform_real_distribution();
 }
 
 vcl::Window *DebugEventInjector::ChooseWindow()

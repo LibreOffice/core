@@ -37,6 +37,8 @@ namespace drawinglayer
             sal_uInt32 nDiscreteHeight,
             sal_uInt32 nMaxQuadratPixels);
 
+        double DRAWINGLAYER_DLLPUBLIC getRandomColorRange();
+
     } // end of namespace tools
 } // end of namespace drawinglayer
 

@@ -33,6 +33,7 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <comphelper/random.hxx>
 
 #include <boost/bind.hpp>
 
@@ -47,8 +48,7 @@ double getRandomOrdinal( const ::std::size_t n )
 {
     // use this one when displaying polygons in OOo, which still sucks
     // great rocks when trying to import non-integer svg:d attributes
-    // return sal_Int64(double(n) * rand() / (RAND_MAX + 1.0));
-    return double(n) * rand() / (RAND_MAX + 1.0);
+    return comphelper::rng::uniform_int_distribution(static_cast<size_t>(0), n-1);
 }
 
 inline bool compare(const B2DPoint& left, const B2DPoint& right)

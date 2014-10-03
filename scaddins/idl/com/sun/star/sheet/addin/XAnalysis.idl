@@ -109,6 +109,8 @@ module addin
             raises( com::sun::star::lang::IllegalArgumentException );
 
         // randbetween.
+        // Min is the smallest value randbetween will return
+        // Max is the largest value randbetween will return
         double getRandbetween( [in] double Min, [in] double Max )
             raises( com::sun::star::lang::IllegalArgumentException );
 

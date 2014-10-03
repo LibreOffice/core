@@ -40,6 +40,7 @@
 
 #include "wrtww8.hxx"
 
+#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/flagguard.hxx>
 #include <oox/token/tokens.hxx>
@@ -657,9 +658,9 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
         if( nSdtPrToken == FSNS( XML_w, XML_id ) || ( bPara && m_bParagraphSdtHasId ) )
             //Word won't open a document with an empty id tag, we fill it with a random number
-            m_pSerializer->singleElementNS(XML_w, XML_id,
-                                          FSNS(XML_w, XML_val), OString::number( rand() ),
-                                          FSEND );
+            m_pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val),
+                                          OString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max())),
+                                          FSEND);
 
         if(( pSdtPrDataBindingAttrs ) && !m_rExport.SdrExporter().IsParagraphHasDrawing())
         {
@@ -4794,7 +4795,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
                                     XML_ProgID, OUStringToOString( sProgID, RTL_TEXTENCODING_UTF8 ).getStr(),
                                     XML_ShapeID, sShapeId.getStr(),
                                     XML_DrawAspect, OUStringToOString( sDrawAspect, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                    XML_ObjectID, "_" + OString::number( rand() ),
+                                    XML_ObjectID, "_" + OString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max())),
                                     FSNS( XML_r, XML_id ), sId.getStr(),
                                     FSEND );
 

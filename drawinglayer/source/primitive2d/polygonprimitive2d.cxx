@@ -25,9 +25,9 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <boost/math/special_functions/next.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
-
-
+#include <comphelper/random.hxx>
 
 using namespace com::sun::star;
 
@@ -212,10 +212,16 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-
-
 namespace drawinglayer
 {
+    namespace tools
+    {
+        double getRandomColorRange()
+        {
+            return comphelper::rng::uniform_real_distribution(0.0, boost::math::nextafter(1.0, DBL_MAX));
+        }
+    }
+
     namespace primitive2d
     {
         Primitive2DSequence PolygonStrokePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -271,7 +277,7 @@ namespace drawinglayer
                         const basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
                         static bool bTestByUsingRandomColor(false);
                         const basegfx::BColor aColor(bTestByUsingRandomColor
-                            ? basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)
+                            ? basegfx::BColor(tools::getRandomColorRange(), tools::getRandomColorRange(), tools::getRandomColorRange())
                             : getLineAttribute().getColor());
                         const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(aNewPolyPolygon, aColor));
                         aRetval[b] = xRef;

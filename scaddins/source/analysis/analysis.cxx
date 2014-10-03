@@ -22,6 +22,7 @@
 #include "bessel.hxx"
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -30,6 +31,7 @@
 #include <string.h>
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
+#include <boost/math/special_functions/next.hpp>
 
 #define ADDIN_SERVICE               "com.sun.star.sheet.AddIn"
 #define MY_SERVICE                  "com.sun.star.sheet.addin.Analysis"
@@ -700,12 +702,7 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) throw(
     if( fMin > fMax )
         throw lang::IllegalArgumentException();
 
-    // fMax -> range
-    double fRet = fMax - fMin + 1.0;
-    fRet *= rand();
-    fRet /= (RAND_MAX + 1.0);
-    fRet += fMin;
-    fRet = floor( fRet );   // simple floor is sufficient here
+    double fRet = comphelper::rng::uniform_real_distribution(fMin, boost::math::nextafter(fMax, DBL_MAX));
     RETURN_FINITE( fRet );
 }
 

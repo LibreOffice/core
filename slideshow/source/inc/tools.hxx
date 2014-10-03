@@ -26,7 +26,7 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-
+#include <comphelper/random.hxx>
 #include <vector>
 
 #include <cppcanvas/color.hxx>
@@ -293,8 +293,7 @@ namespace slideshow
         /// Gets a random ordinal [0,n)
         inline ::std::size_t getRandomOrdinal( const ::std::size_t n )
         {
-            return static_cast< ::std::size_t >(
-                double(n) * rand() / (RAND_MAX + 1.0) );
+            return comphelper::rng::uniform_int_distribution(static_cast<size_t>(0), n-1);
         }
 
         /// To work around ternary operator in initializer lists
