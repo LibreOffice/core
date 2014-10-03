@@ -223,13 +223,13 @@ namespace dbaui
             aValue.reset();
 
             SFX_ITEMSET_GET( _rSet, pItem, SfxPoolItem, setting->nItemId, true );
-            if ( pItem->ISA( SfxBoolItem ) )
+            if (const SfxBoolItem *pBoolItem = PTR_CAST(SfxBoolItem, pItem))
             {
-                aValue.reset( PTR_CAST( SfxBoolItem, pItem )->GetValue() );
+                aValue.reset( pBoolItem->GetValue() );
             }
-            else if ( pItem->ISA( OptionalBoolItem ) )
+            else if (const OptionalBoolItem *pOptionalItem = PTR_CAST(OptionalBoolItem, pItem))
             {
-                aValue = PTR_CAST( OptionalBoolItem, pItem )->GetFullValue();
+                aValue = pOptionalItem->GetFullValue();
             }
             else
                 OSL_FAIL( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );
