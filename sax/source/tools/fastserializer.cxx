@@ -20,7 +20,7 @@
 #include "fastserializer.hxx"
 
 #include <com/sun/star/xml/sax/FastTokenHandler.hpp>
-#include <rtl/ustrbuf.hxx>
+#include <rtl/math.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceasvector.hxx>
 
@@ -66,17 +66,37 @@ namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
         : maCachedOutputStream()
         , maMarkStack()
+        , mpDoubleStr(NULL)
+        , mnDoubleStrCapacity(RTL_STR_MAX_VALUEOFDOUBLE)
     {
+        rtl_string_new_WithLength(&mpDoubleStr, mnDoubleStrCapacity);
         mxFastTokenHandler = css::xml::sax::FastTokenHandler::create(
                 ::comphelper::getProcessComponentContext());
         assert(xOutputStream.is()); // cannot do anything without that
         maCachedOutputStream.setOutputStream( xOutputStream );
     }
-    FastSaxSerializer::~FastSaxSerializer() {}
+
+    FastSaxSerializer::~FastSaxSerializer()
+    {
+        rtl_string_release(mpDoubleStr);
+    }
 
     void FastSaxSerializer::startDocument()
     {
         writeBytes(sXmlHeader, N_CHARS(sXmlHeader));
+    }
+
+    void FastSaxSerializer::write( double value )
+    {
+        rtl_math_doubleToString(
+            &mpDoubleStr, &mnDoubleStrCapacity, 0, value, rtl_math_StringFormat_G,
+            RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0,
+            0, sal_True);
+
+        write(mpDoubleStr->buffer, mpDoubleStr->length);
+        // and "clear" the string
+        mpDoubleStr->length = 0;
+        mnDoubleStrCapacity = RTL_STR_MAX_VALUEOFDOUBLE;
     }
 
     void FastSaxSerializer::write( const OUString& sOutput, bool bEscape )
