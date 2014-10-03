@@ -4303,7 +4303,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         {
             SdrObject* pObj;
             SdrPageView* pPV;
-            if (pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER ))
+            if (pSdrView && pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER ))
             {
                 std::map<SwFrmFmt*, SwFrmFmt*> aTextBoxShapes = SwTextBoxHelper::findShapes(rSh.GetDoc());
                 SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
