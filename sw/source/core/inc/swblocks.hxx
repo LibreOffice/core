@@ -31,19 +31,19 @@ class SvxMacroTableDtor;
 class SwBlockName
 {
     friend class SwImpBlocks;
-    sal_uInt16 nHashS, nHashL;          // Hash-Codes zum Checken
+    sal_uInt16 nHashS, nHashL;     // Hash codes for testing
 public:
-    OUString aShort;                    // Short name
-    OUString aLong;                     // Long name
-    OUString aPackageName;         // Package name
-    bool bIsOnlyTxtFlagInit : 1;        // ist das Flag gueltig?
-    bool bIsOnlyTxt : 1;                // unformatted text
-    bool bInPutMuchBlocks : 1;          // put serveral block entries
+    OUString aShort;               /// Shortname
+    OUString aLong;                /// Longname
+    OUString aPackageName;         /// Package name
+    bool bIsOnlyTxtFlagInit : 1;   /// Is the Flag valid?
+    bool bIsOnlyTxt : 1;           /// Unformatted text
+    bool bInPutMuchBlocks : 1;     /// Put serveral block entries
 
     SwBlockName( const OUString& rShort, const OUString& rLong );
     SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName );
 
-    // fuer das Einsortieren in das Array
+    /// For sorting in the array
     bool operator==( const SwBlockName& r ) const { return aShort == r.aShort; }
     bool operator< ( const SwBlockName& r ) const { return aShort <  r.aShort; }
 };
@@ -54,48 +54,48 @@ class SwImpBlocks
 {
     friend class SwTextBlocks;
 protected:
-    OUString aFile;                     // physikalischer Dateiname
-    OUString aName;                     // logischer Name der Datei
-    OUString aCur;                      // aktueller Text
-    OUString aShort, aLong;             // Kurz- und Langname (PutDoc)
-    OUString sBaseURL;                  // base URL - has to be set at the Readers and Writers
-    SwBlockNames aNames;                // Liste aller Bausteine
-    Date aDateModified;                 // fuers abgleichen bei den Aktionen
+    OUString aFile;                     // Physical file name
+    OUString aName;                     // Logical file name
+    OUString aCur;                      // Current text
+    OUString aShort, aLong;             // Short- and longname (PutDoc)
+    OUString sBaseURL;                  // Base URL - has to be set at the Readers and Writers
+    SwBlockNames aNames;                // List of all Blocks
+    Date aDateModified;                 // For aligning the Actions
     tools::Time aTimeModified;
-    SwDoc* pDoc;                        // Austauschdokument
-    sal_uInt16 nCur;                        // aktueller Index
+    SwDoc* pDoc;                        // Document to be switched
+    sal_uInt16 nCur;                    // Current Index
     bool bReadOnly : 1;
-    bool bInPutMuchBlocks : 1;          // put serveral block entries
-    bool bInfoChanged : 1;              // any Info of TextBlock is changed
+    bool bInPutMuchBlocks : 1;          // Put serveral block entries
+    bool bInfoChanged : 1;              // Whether any info of TextBlock changed
 
     SwImpBlocks( const OUString&, bool = false );
     virtual ~SwImpBlocks();
 
     static short GetFileType( const OUString& );
     virtual short GetFileType() const = 0;
-#define SWBLK_NO_FILE   0               // nicht da
-#define SWBLK_NONE      1               // keine TB-Datei
-#define SWBLK_SW2       2               // SW2-Datei
-#define SWBLK_SW3       3               // SW3-Datei
+#define SWBLK_NO_FILE   0               // Not present
+#define SWBLK_NONE      1               // No TB file
+#define SWBLK_SW2       2               // SW2 file
+#define SWBLK_SW3       3               // SW3 file
 #define SWBLK_XML       4               // XML Block List
 
-    virtual void   ClearDoc();                  // Doc-Inhalt loeschen
-    SwPaM* MakePaM();                   // PaM ueber Doc aufspannen
+    virtual void   ClearDoc();          // Delete Doc content
+    SwPaM* MakePaM();                   // Span PaM over Doc
     virtual void   AddName( const OUString&, const OUString&, bool bOnlyTxt = false );
     bool   IsFileChanged() const;
     void   Touch();
 
 public:
-    static sal_uInt16 Hash( const OUString& );      // Hashcode fuer Blocknamen
-    sal_uInt16 GetCount() const;                    // Anzahl Textbausteine ermitteln
-    sal_uInt16 GetIndex( const OUString& ) const;     // Index fuer Kurznamen ermitteln
-    sal_uInt16 GetLongIndex( const OUString& ) const; //Index fuer Langnamen ermitteln
-    OUString GetShortName( sal_uInt16 ) const;     // Kurzname fuer Index zurueck
-    OUString GetLongName( sal_uInt16 ) const;      // Langname fuer Index zurueck
-    OUString GetPackageName( sal_uInt16 ) const;   // Langname fuer Index zurueck
+    static sal_uInt16 Hash( const OUString& );        /// Hashcode for Block names
+    sal_uInt16 GetCount() const;                      /// Get count of Text Blocks
+    sal_uInt16 GetIndex( const OUString& ) const;     /// Index for shortnames
+    sal_uInt16 GetLongIndex( const OUString& ) const; /// Index for longnames
+    OUString GetShortName( sal_uInt16 ) const;        /// Return shortname for index
+    OUString GetLongName( sal_uInt16 ) const;         /// Return longname for index
+    OUString GetPackageName( sal_uInt16 ) const;      /// Return packagename for index
 
-    OUString GetFileName() const {return aFile;}   // phys. Dateinamen liefern
-    void SetName( const OUString& rName )          // logic name
+    OUString GetFileName() const {return aFile;}      /// Return physical file name
+    void SetName( const OUString& rName )             /// Logic name
         { aName = rName; bInfoChanged = true; }
     OUString GetName( void )
         { return aName; }

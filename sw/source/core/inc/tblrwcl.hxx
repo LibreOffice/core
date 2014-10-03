@@ -53,11 +53,13 @@ SW_DLLPUBLIC void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo = 0
                 bool bCalcNewSize = true, const bool bCorrBorder = true,
                 SwShareBoxFmts* pShareFmts = 0 );
 
-// Klasse fuers SplitTable
-// sammelt von einer Line die Boxen aller obersten oder untersten Lines
-// in einem Array. Zusaetzlich werden die Positionen vermerkt.
-// ( die Implementierung steht im ndtbl.cxx)
-
+/**
+ * Class for SplitTable
+ * Collects the uppermost or lowermost Lines of a Box from a Line in an array.
+ * We also store their positions.
+ *
+ * @see implementation in im ndtbl.cxx
+ */
 class SwCollectTblLineBoxes
 {
     std::vector<sal_uInt16> aPosArr;
@@ -82,7 +84,7 @@ public:
     size_t Count() const                { return m_Boxes.size(); }
     const SwTableBox& GetBox( std::size_t nPos, sal_uInt16* pWidth = 0 ) const
         {
-            // hier wird die EndPos der Spalte benoetigt!
+            // We need the EndPos of the column here!
             if( pWidth )
                 *pWidth = (nPos+1 == aPosArr.size()) ? nWidth
                                                     : aPosArr[ nPos+1 ];
@@ -103,8 +105,10 @@ bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara );
 
 void sw_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara );
 
-// This structure is needed by Undo to restore row span attributes
-// when a table has been splitted into two tables
+/**
+ * This structure is needed by Undo to restore row span attributes
+ * when a table has been split into two tables
+ */
 struct SwSaveRowSpan
 {
     sal_uInt16 mnSplitLine; // the line number where the table has been splitted
@@ -136,8 +140,10 @@ public:
     void SetBorder( const editeng::SvxBorderLine& rBorderLine )
         { pBrdLn = &rBorderLine; bAnyBorderFnd = false; }
 
-    // checke, ob die linke Border dieselbe wie die gesetzte ist
-    // returnt false falls gar keine Border gesetzt ist
+    /**
+     * Check whether the left Border is the same as the set one
+     * @returns false if no Border was set
+     */
     bool CheckLeftBorderOfFormat( const SwFrmFmt& rFmt );
 
     bool IsAnyBorderFound() const { return bAnyBorderFnd; }
@@ -160,7 +166,7 @@ public:
     SwFrmFmt* GetFormat( long nWidth ) const;
     SwFrmFmt* GetFormat( const SfxPoolItem& rItem ) const;
     void AddFormat( SwFrmFmt& rFmt );
-    // returnt sal_True, wenn geloescht werden kann
+    /// @returns true, if we can delete
     bool RemoveFormat( const SwFrmFmt& rFmt );
 };
 

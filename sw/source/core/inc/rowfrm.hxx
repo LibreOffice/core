@@ -30,7 +30,7 @@ class SwBorderAttrs;
 class SwRowFrm: public SwLayoutFrm
 {
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
-        //Aendern nur die Framesize, nicht die PrtArea-SSize
+    /// Only change the Frame size, not the PrtArea SSize
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 
@@ -55,16 +55,20 @@ public:
 
     virtual void Cut() SAL_OVERRIDE;
 
-    //Zum Anmelden der Flys nachdem eine Zeile erzeugt _und_ eingefuegt wurde.
-    //Muss vom Erzeuger gerufen werden, denn erst nach dem Konstruieren wird
-    //Das Teil gepastet; mithin ist auch erst dann die Seite zum Anmelden der
-    //Flys erreichbar.
+    /**
+     * Register Flys after a line was created _AND_ inserted
+     * Must be called by the creator; the Fly is inserted _after_ it has
+     * been created; the same holds true for the Page at which the Flys
+     * are to be registered at.
+     */
     void RegistFlys( SwPageFrm *pPage = 0 );
 
     const SwTableLine *GetTabLine() const { return pTabLine; }
 
-    //Passt die Zellen auf die aktuelle Hoehe an, invalidiert die Zellen
-    //wenn die Direction nicht der Hoehe entspricht.
+    /**
+     * Adapts the Cells to the current height; invalidates the Cells if
+     * the Direction does not match the height
+     */
     void AdjustCells( const SwTwips nHeight, const bool bHeight );
 
     SwRowFrm* GetFollowRow() const { return pFollowRow; }

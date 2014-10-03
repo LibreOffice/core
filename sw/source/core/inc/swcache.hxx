@@ -19,32 +19,28 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWCACHE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWCACHE_HXX
 
-/*
- * Es werden Pointer auf Objekte verwaltet. Diese werden in einem einfachen
- * PtrArray verwaltet.
- * Angelegt (new) werden die Objekte von Cache-Zugriffsklassen, zuerstoert
- * werden die Objekte vom Cache.
+/**
+ * Here, we manage pointers in a simple PtrArray to objects.
+ * These objects are created (using new) in cache access classes; they are
+ * destroyed by the cache.
  *
- * Auf die Objekte kann wahlweise per Index in das Array oder per Suche
- * zugegriffen werden. Soll per Index zugegriffen werden, so obliegt die
- * Verwaltung des Index dem Anwender des Cache.
+ * One can access these objects by array index or by searching in the array
+ * If you access it by index, managing the index is the responsibility of
+ * the cache user.
  *
- * Fuer die verwalteten Cache-Objekte gibt es eine Basisklasse, von dieser
- * sind spezifische Klassen abzuleiten.
- * In der Basisklasse werden die Cache-Objekte eines Cache doppelt verkettet,
- * das ermoeglich die Implementierung eines LRU-Algorithmus.
+ * The cached objects are derrived from the base class SwCacheObj.
+ * In it, the cache objects are doubly-linked which allows for the use of
+ * an LRU algorithm.
  *
- * Der LRU kann in der Cache-Basisklasse manipuliert werden, indem ein
- * virtueller First-Pointer gesetzt wird. Dieser kann auf den echten ersten
- * plus einem Ofst gesetzt werden. Dadurch kann man den Anfangsbereich des
- * Cache sichern und so dafuer sorgen, dass man waehrend bestimmter
- * Operationen nicht den Cache versaut. Beispiel: Der Idle-Handler sollte nicht
- * den Cache fuer den sichtbaren Bereich vernichten.
+ * The LRU algorithm can be changed in the base class, by setting a virtual
+ * First Pointer. It can be set to the first real one plus an offset.
+ * By doing so we can protect the start area of the cache and make sure we
+ * don't mess up the cache during some special operations.
+ * E.g.: the Idle Handler should not destroy the cache for the visible area.
  *
- * Der Cache kann in der Groesse erweitert und wieder verkleinert werden.
- * Beispiel: Fuer jede neue Shell wird der Cache fuer FormatInfo vergrossert
- * und beim Destruieren der Shell wieder verkleinert.
- *
+ * The cache can be grown and shrunk in size.
+ * E.g.: The cache for FormatInfo is grown for every new Shell and shrunk
+ * when destroying them.
  */
 
 #include <vector>
@@ -57,16 +53,13 @@ typedef std::vector<SwCacheObj*> SwCacheObjArr;
 class SwCache
 {
     SwCacheObjArr m_aCacheObjects;
-    std::vector<sal_uInt16> aFreePositions; //Freie Positionen fuer das Insert wenn
-                                    //die Maximalgrenze nicht erreicht ist.
-                                    //Immer wenn ein Objekt ausgetragen wird,
-                                    //so wird seine Position hier eingetragen.
-
-    SwCacheObj *pRealFirst;         //_immer_ der echte LRU-erste
-    SwCacheObj *pFirst;             //der virtuelle erste.
+    std::vector<sal_uInt16> aFreePositions; /// Free positions for the Insert if the maximum has not been reached
+                                            /// Every time an object is deregistered, its position is added here
+    SwCacheObj *pRealFirst;                 /// _ALWAYS_ the real first LRU
+    SwCacheObj *pFirst;                     /// The virtual first
     SwCacheObj *pLast;
 
-          sal_uInt16 nCurMax;           //Mehr werden nicht aufgenommen.
+    sal_uInt16 nCurMax;                     // Maximum of accepted objects
 
     void DeleteObj( SwCacheObj *pObj );
 
@@ -91,18 +84,18 @@ class SwCache
 
 public:
 
-    //nur sal_uInt8 hineinstecken!!!
+// Only add sal_uInt8!!!
 #ifdef DBG_UTIL
     SwCache( const sal_uInt16 nInitSize, const OString &rNm );
 #else
     SwCache( const sal_uInt16 nInitSize );
 #endif
-    // the destructor will free all objects still in the vector
+    /// The dtor will free all objects still in the vector
     ~SwCache();
 
     void Flush( const sal_uInt8 nPercent = 100 );
 
-    //bToTop == sal_False -> Keine LRU-Umsortierung!
+    //bToTop == false -> No LRU resorting!
     SwCacheObj *Get( const void *pOwner, const bool bToTop = true );
     SwCacheObj *Get( const void *pOwner, const sal_uInt16 nIndex,
                      const bool bToTop = true );
@@ -112,8 +105,7 @@ public:
     void Delete( const void *pOwner );
 //  void Delete( const void *pOwner, const sal_uInt16 nIndex );
 
-    void SetLRUOfst( const sal_uInt16 nOfst );      //nOfst sagt wieviele unangetastet
-                                                //bleiben sollen.
+    void SetLRUOfst( const sal_uInt16 nOfst );  /// nOfst determines how many are not to be touched
     void ResetLRUOfst() { pFirst = pRealFirst; }
 
     inline void IncreaseMax( const sal_uInt16 nAdd );
@@ -126,7 +118,7 @@ public:
     inline sal_uInt16 size() { return m_aCacheObjects.size(); }
 };
 
-//Cache-Manipulation auf die sichere Art.
+/// Safely manipulate the cache
 class SwSaveSetLRUOfst
 {
     SwCache &rCache;
@@ -137,17 +129,19 @@ public:
     ~SwSaveSetLRUOfst()         { rCache.ResetLRUOfst(); }
 };
 
-//Das allgemeine CacheObjekt. Anwender des Cache muessen eine Klasse vom
-//CacheObjekt ableiten und dort die Nutzdaten unterbringen.
-
+/**
+ * The Cache object base class
+ * Users of the Cache must derrive a class from the SwCacheObj and store
+ * their payload there
+ */
 class SwCacheObj
 {
-    friend class SwCache;   //Der darf alles
+    friend class SwCache;   /// Can do everything
 
-    SwCacheObj *pNext;      //Fuer die LRU-Verkettung.
+    SwCacheObj *pNext;      /// For the LRU chaining
     SwCacheObj *pPrev;
 
-    sal_uInt16 nCachePos;       //Position im Cache-Array.
+    sal_uInt16 nCachePos;   /// Position in the Cache array
 
     sal_uInt8       nLock;
 
@@ -188,15 +182,17 @@ public:
 
 };
 
-//Zugriffsklasse fuer den Cache. Im CTor wird das CacheObjekt erzeugt.
-//Wenn der Cache keines herausrueckt wird der Member zunaechst auf 0 gesetzt.
-//Beim Get wird dann eines erzeugt und, falls moeglich, in den Cache
-//eingetragen.
-//Anwender der des Cache muessen eine Klasse vom Access ableiten um
-//fuer Typsicherheit zu sorgen, die Basisklasse sollte fuer das Get aber immer
-//gerufen werden, ein Abgeleitetes Get sollte nur der Typsicherheit dienen.
-//Cache-Objekte werden stets gelockt solange die Instanz lebt.
-
+/**
+ * Access class for the Cache
+ *
+ * The Cache object is created in the ctor.
+ * If the Cache does not return one, the member is set to 0 and one is
+ * created on the Get() and added to the Cache (if possible).
+ * Cache users must derrive a class from SwCacheAccess in order to
+ * guarantee type safety. The base class should always be called for the
+ * Get(). A derrived Get() should only ever guarantee type safety.
+ * Cache objects are always locked for the instance's life time.
+ */
 class SwCacheAccess
 {
     SwCache &rCache;
@@ -205,7 +201,7 @@ class SwCacheAccess
 
 protected:
     SwCacheObj *pObj;
-    const void *pOwner;     //Kann ggf. in NewObj benutzt werden.
+    const void *pOwner; /// Can be use in NewObj
 
     virtual SwCacheObj *NewObj() = 0;
 
@@ -219,8 +215,7 @@ public:
 
     virtual bool IsAvailable() const;
 
-    //Abkuerzung fuer diejenigen, die wissen, das die Ableitung das IsAvailable
-    //nicht ueberladen haben.
+    /// Shorthand for those who know, that they did not overload isAvailable()
     bool IsAvail() const { return pObj != 0; }
 };
 

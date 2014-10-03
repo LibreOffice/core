@@ -38,45 +38,45 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 
     SwTable* pTable;
 
-    bool bComplete          :1; //Eintrage als Repaint ohne das CompletePaint
-                                    //der Basisklasse gesetzt werden muss. Damit
-                                    //sollen unertraegliche Tabellen-Repaints
-                                    //vermieden werden.
-    bool bCalcLowers        :1; //Im MakeAll auf jedenfall auch fuer Stabilitaet
-    //des Inhaltes sorgen.
-    bool bLowersFormatted   :1;//Kommunikation zwischen MakeAll und Layact
-    bool bLockBackMove      :1; //BackMove-Test hat der Master erledigt.
-    bool bResizeHTMLTable   :1; //Resize des HTMLTableLayout rufen im MakeAll
-    //Zur Optimierung, damit dies nicht im
-    //CntntFrm::Grow gerufen werden muss, denn dann
-    //wird es ggf. fuer jede Zelle gerufen #47483#
-    bool bONECalcLowers     :1; //Primaer fuer die StarONE-SS. Beim MakeAll werden
-    //die Cntnts auf jedenfall per Calc() formatiert.
-    //es finden keine zusaetzlichen Invalidierungen
-    //statt und dieser Weg kann auch kaum garantien
-    //geben.
+    bool bComplete          :1; /// Set entries for Repaint without needing to
+                                /// set the base class' CompletePaint
+                                /// With that we would want to avoid unnecessary
+                                /// table repaints
+    bool bCalcLowers        :1; /// For stability of the content in MakeAll
+    bool bLowersFormatted   :1; /// Communication between MakeAll and Layact
+    bool bLockBackMove      :1; /// The Master took care of the BackMove test
+    bool bResizeHTMLTable   :1; /// Call the Resize of the HTMLTableLayout in the MakeAll
+                                /// This is an optimization, so that we don't have to call
+                                /// it in CntntFrm::Grow; there it might be called for
+                                /// _every_ Cell
 
-    bool bHasFollowFlowLine :1; // Means that the first line in the follow
-                                // is indented to contain content from a broken
-                                // cell
-    bool bIsRebuildLastLine :1; // Means that currently the last line of the
-                                // TabFrame is rebuilded. In this case we
-                                // do not want any notification to the master
-                                // table
-    bool bRestrictTableGrowth :1;       // Usually, the table may grow infinite,
-                                        // because the table can be split in
-                                        // SwTabFrm::MakeAll. In MakeAll, this
-                                        // flag is set to indicate that the table
-                                        // may only grow inside its upper. This
-                                        // is necessary, in order to let the text
-                                        // flow into the FollowFlowLine
+    bool bONECalcLowers     :1; /// Primarily for the StarONE SS
+                                /// The Cntnts are formatted via Calc() on MakeAll in any
+                                /// case. There are no further invalidations and that path can
+                                /// hardly give any guarantees
+
+    bool bHasFollowFlowLine :1; /// Means that the first line in the follow
+                                /// is indented to contain content from a broken
+                                /// cell
+    bool bIsRebuildLastLine :1; /// Means that currently the last line of the
+                                /// TabFrame is rebuilt. In this case we do not
+                                //  want any notification to the master table
+
+    bool bRestrictTableGrowth :1;       // Usually, the table may grow infinitely,
+                                        // as the table can be split in SwTabFrm::MakeAll
+                                        // In MakeAll, this flag is set to indicate that
+                                        // the table may only grow inside its upper. This
+                                        // is necessary, in order to let the text flow into
+                                        // the FollowFlowLine
+
     bool bRemoveFollowFlowLinePending :1;
+
     // #i26945#
     bool bConsiderObjsForMinCellHeight :1; // Usually, the floating screen objects
-                                           // are considered on the calculation
+                                           // are considered during the calculation
                                            // for the minimal cell height.
-                                           // For splitting table rows algorithm
-                                           // it's needed not to consider floating
+                                           // For the splitting table rows algorithm
+                                           // we need not to consider floating
                                            // screen object for the preparation
                                            // of the re-calculation of the
                                            // last table row.
@@ -86,9 +86,11 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 
     bool mbInRecalcLowerRow : 1;
 
-    //Split() spaltet den Frm an der angegebenen Stelle, es wird ein
-    //Follow erzeugt und aufgebaut und direkt hinter this gepastet.
-    //Join() Holt sich den Inhalt aus dem Follow und vernichtet diesen.
+    /**
+     * Split() splits the Frm at the specified position: a Follow is
+     * created and constructed and insterted directly after this.
+     * Join() gets the Follow's content and destroys it.
+     */
     bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );
     bool Join();
 
@@ -104,7 +106,7 @@ protected:
     virtual void MakeAll() SAL_OVERRIDE;
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
-        // only changes the Framesize, not the PrtArea size
+    // only changes the Framesize, not the PrtArea size
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 
 public:
