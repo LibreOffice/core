@@ -164,6 +164,26 @@ DECLARE_HTMLEXPORT_TEST(testSkipImageEmbeddedDocument, "skipimage-embedded-docum
 
 #endif
 
+DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutton.doc")
+{
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/html/body", 1);
+    assertXPath(pDoc, "/html/body/p[1]/input", "type", "checkbox");
+    assertXPath(pDoc, "/html/body/p[1]/input", "checked", "checked");
+    assertXPath(pDoc, "/html/body/p[2]/input", "type", "checkbox");
+    assertXPathNoAttribute(pDoc, "/html/body/p[2]/input", "checked");
+    assertXPath(pDoc, "/html/body/form/p[1]/input", "type", "checkbox");
+    assertXPath(pDoc, "/html/body/form/p[1]/input", "checked", "checked");
+    assertXPath(pDoc, "/html/body/form/p[2]/input", "type", "checkbox");
+    assertXPathNoAttribute(pDoc, "/html/body/form/p[2]/input", "checked");
+    assertXPath(pDoc, "/html/body/form/p[3]/input", "type", "radio");
+    assertXPath(pDoc, "/html/body/form/p[3]/input", "checked", "checked");
+    assertXPath(pDoc, "/html/body/form/p[4]/input", "type", "radio");
+    assertXPathNoAttribute(pDoc, "/html/body/form/p[4]/input", "checked");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
