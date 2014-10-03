@@ -161,7 +161,7 @@ OUString SwGlossaryHdl::GetGroupName( size_t nId, OUString* pTitle )
     if(pTitle)
     {
         SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sRet, false);
-        if(pGroup && !pGroup->GetError())
+        if (pGroup && !pGroup->GetError())
         {
             *pTitle = pGroup->GetName();
             if (pTitle->isEmpty())
@@ -172,7 +172,10 @@ OUString SwGlossaryHdl::GetGroupName( size_t nId, OUString* pTitle )
             rStatGlossaries.PutGroupDoc( pGroup );
         }
         else
+        {
+            delete pGroup;
             sRet = OUString();
+        }
     }
     return sRet;
 }
