@@ -108,11 +108,8 @@ void ConfigurationUpdater::RequestUpdate (
         do
         {
             UpdateConfiguration();
-
-            if (mbUpdatePending && IsUpdatePossible())
-                continue;
         }
-        while (false);
+        while (mbUpdatePending && IsUpdatePossible());
     }
     else
     {
