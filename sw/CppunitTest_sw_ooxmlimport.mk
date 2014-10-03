@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport, \
     unotest \
     utl \
     sw \
+    tl \
     vcl \
 	$(gb_UWINAPI) \
 ))

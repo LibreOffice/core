@@ -56,11 +56,13 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <vcl/svapp.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <swtypes.hxx>
+#include <tools/datetimeutils.hxx>
 
 #include <bordertest.hxx>
 
@@ -2373,6 +2375,115 @@ DECLARE_OOXMLIMPORT_TEST(testBnc891663, "bnc891663.docx")
     int imageHeight = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds", "height").toInt32();
     int textNextRowTop = parseDump("/root/page/body/tab/row[2]/cell[1]/txt[1]/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT( textNextRowTop >= imageTop + imageHeight );
+}
+
+static OString dateTimeToString( const util::DateTime& dt )
+{
+    return DateTimeToOString( DateTime( Date( dt.Day, dt.Month, dt.Year ), tools::Time( dt.Hours, dt.Minutes, dt.Seconds )));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testBnc821804, "bnc821804.docx")
+{
+    CPPUNIT_ASSERT_EQUAL( OUString( "TITLE" ), getRun( getParagraph( 1 ), 1 )->getString());
+    CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
+    // Redline information (SwXRedlinePortion) are separate "runs" apparently.
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(1), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(1), 2), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("unknown1"),getProperty<OUString>(getRun(getParagraph(1), 2), "RedlineAuthor"));
+    CPPUNIT_ASSERT_EQUAL(OString("2006-08-29T09:46:00Z"),dateTimeToString(getProperty<util::DateTime>(getRun(getParagraph(1), 2), "RedlineDateTime")));
+    // So only the 3rd run is actual text (and the two runs have been merged into one, not sure why, but that shouldn't be a problem).
+    CPPUNIT_ASSERT_EQUAL(OUString(" (1st run of an insert) (2nd run of an insert)"), getRun(getParagraph(1),3)->getString());
+    CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(1), 3), "RedlineType"));
+    // And the end SwXRedlinePortion of the redline.
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(1), 4), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("unknown1"),getProperty<OUString>(getRun(getParagraph(1), 4), "RedlineAuthor"));
+    CPPUNIT_ASSERT_EQUAL(OString("2006-08-29T09:46:00Z"),dateTimeToString(getProperty<util::DateTime>(getRun(getParagraph(1), 4), "RedlineDateTime")));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(1), 4), "IsStart"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal text"), getRun(getParagraph(2),1)->getString());
+    CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(3), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("unknown2"),getProperty<OUString>(getRun(getParagraph(3), 1), "RedlineAuthor"));
+    CPPUNIT_ASSERT_EQUAL(OString("2006-08-29T09:47:00Z"),dateTimeToString(getProperty<util::DateTime>(getRun(getParagraph(3), 1), "RedlineDateTime")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Deleted"), getRun(getParagraph(3),2)->getString());
+
+    // This is both inserted and formatted, so there are two SwXRedlinePortion "runs". Given that the redlines overlap and Writer core
+    // doesn't officially expect that (even though it copes, the redline info will be split depending on how Writer deal with it).
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(4), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(4), 1), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ParagraphFormat"),getProperty<OUString>(getRun(getParagraph(4), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(4), 2), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Inserted and formatted"), getRun(getParagraph(4),3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(4), 4), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(4), 4), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" and this is only formatted"), getRun(getParagraph(4),5)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("ParagraphFormat"),getProperty<OUString>(getRun(getParagraph(4), 6), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(4), 6), "IsStart"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal text"), getRun(getParagraph(5),1)->getString());
+    CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(5), 1), "RedlineType"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Format"),getProperty<OUString>(getRun(getParagraph(6), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(6), 1), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("unknown5"),getProperty<OUString>(getRun(getParagraph(6), 1), "RedlineAuthor"));
+    CPPUNIT_ASSERT_EQUAL(OString("2006-08-29T10:02:00Z"),dateTimeToString(getProperty<util::DateTime>(getRun(getParagraph(6), 1), "RedlineDateTime")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Formatted run"), getRun(getParagraph(6),2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Format"),getProperty<OUString>(getRun(getParagraph(6), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(6), 3), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" and normal text here "), getRun(getParagraph(6),4)->getString());
+    CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(6), 4), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(6), 5), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(6), 5), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("unknown6"),getProperty<OUString>(getRun(getParagraph(6), 5), "RedlineAuthor"));
+    CPPUNIT_ASSERT_EQUAL(OString("2006-08-29T09:48:00Z"),dateTimeToString(getProperty<util::DateTime>(getRun(getParagraph(6), 5), "RedlineDateTime")));
+    CPPUNIT_ASSERT_EQUAL(OUString("and inserted again"), getRun(getParagraph(6),6)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(6), 7), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(6), 7), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" and normal text again "), getRun(getParagraph(6),8)->getString());
+    CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(6), 8), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Format"),getProperty<OUString>(getRun(getParagraph(6), 9), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(6), 9), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("unknown7"),getProperty<OUString>(getRun(getParagraph(6), 9), "RedlineAuthor"));
+    CPPUNIT_ASSERT_EQUAL(OUString("and formatted"), getRun(getParagraph(6),10)->getString());
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(6), 11), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" and normal."), getRun(getParagraph(6),12)->getString());
+    CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(6), 12), "RedlineType"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(7), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(7), 1), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("unknown8"),getProperty<OUString>(getRun(getParagraph(7), 1), "RedlineAuthor"));
+    CPPUNIT_ASSERT_EQUAL(OUString("One insert."), getRun(getParagraph(7),2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(7), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(7), 3), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(7), 4), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(7), 4), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("unknown9"),getProperty<OUString>(getRun(getParagraph(7), 4), "RedlineAuthor"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Second insert."), getRun(getParagraph(7),5)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),getProperty<OUString>(getRun(getParagraph(7), 6), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(7), 6), "IsStart"));
+
+    // Overlapping again.
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(8), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(8), 1), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ParagraphFormat"),getProperty<OUString>(getRun(getParagraph(8), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(8), 2), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Deleted and formatted"), getRun(getParagraph(8),3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(8), 4), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(8), 4), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" and this is only formatted"), getRun(getParagraph(8),5)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("ParagraphFormat"),getProperty<OUString>(getRun(getParagraph(8), 6), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(8), 6), "IsStart"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal text"), getRun(getParagraph(9),1)->getString());
+    CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(9), 1), "RedlineType"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("ParagraphFormat"),getProperty<OUString>(getRun(getParagraph(10), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true,getProperty<bool>(getRun(getParagraph(10), 1), "IsStart"));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is only formatted."), getRun(getParagraph(10),2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("ParagraphFormat"),getProperty<OUString>(getRun(getParagraph(10), 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(10), 3), "IsStart"));
 }
 
 #endif
