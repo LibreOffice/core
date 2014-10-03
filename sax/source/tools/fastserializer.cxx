@@ -113,7 +113,7 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::write( const char* pStr, sal_Int32 nLen, bool bEscape )
     {
-        if (nLen == 0)
+        if (nLen == -1)
             nLen = strlen(pStr);
 
         if (!bEscape)
@@ -251,7 +251,7 @@ namespace sax_fastparser {
 
             writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
 
-            write(maTokenValues[j].pValue, 0, true);
+            write(maTokenValues[j].pValue, -1, true);
 
             writeBytes(sQuote, N_CHARS(sQuote));
         }
