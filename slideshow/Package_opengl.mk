@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,slideshow_opengl_shader,$(SRCDIR)/slideshow/opengl))
 
-$(eval $(call gb_Package_add_files,slideshow_opengl_shader,$(LIBO_BIN_FOLDER)/opengl,\
+$(eval $(call gb_Package_add_files,slideshow_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
 		basicVertexShader.glsl \
 		dissolveFragmentShader.glsl \
 		staticFragmentShader.glsl \

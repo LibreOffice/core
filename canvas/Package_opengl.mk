@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,canvas_opengl_shader,$(SRCDIR)/canvas/opengl))
 
-$(eval $(call gb_Package_add_files,canvas_opengl_shader,$(LIBO_BIN_FOLDER)/opengl,\
+$(eval $(call gb_Package_add_files,canvas_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
 	dummyVertexShader.glsl \
 	linearMultiColorGradientFragmentShader.glsl \
 	linearTwoColorGradientFragmentShader.glsl \
