@@ -52,7 +52,7 @@ if test -z "$start_dir" ; then
     echo "Error: Please, define where to unpack sources, try --help"
 fi
 
-if ! test -f $start_dir/Repository.mk -a -f $start_dir/solenv/inc/target.mk ; then
+if ! test -f $start_dir/Repository.mk ; then
     echo "Error: $start_dir is not a valid LibreOffice core source directory"
     exit 1;
 fi
@@ -74,8 +74,12 @@ for tarball in $tarballs ; do
     fi
 
     echo "Unpacking $tarname..."
-    echo tar -xf "$tarball" -C "$lo_src_dir"
-    if ! tar -xf "$tarball" -C "$lo_src_dir"; then
+    echo mkdir -p "$lo_src_dir/$tarname"
+    if ! mkdir -p "$lo_src_dir/$tarname" ; then
+        echo "Error: could not create directory $lo_src_dir/$tarname"
+    fi
+    echo tar -xf "$tarball" -C "$lo_src_dir/$tarname" --strip-components=1
+    if ! tar -xf "$tarball" -C "$lo_src_dir/$tarname" --strip-components=1; then
         echo "Error: could not unpack $tarname"
         exit 1
     fi
