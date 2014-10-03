@@ -219,8 +219,11 @@ bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSou
     SwTextBlocks* pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName, false);
 
     SwTextBlocks* pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName, false);
-    if(pDestGroup->IsReadOnly() || (bMove && pSourceGroup->IsReadOnly()) )
+    if (pDestGroup->IsReadOnly() || (bMove && pSourceGroup->IsReadOnly()) )
+    {
+        delete pDestGroup;
         return false;
+    }
 
     //The index must be determined here because rSourceShortName maybe changed in CopyBlock
     sal_uInt16 nDeleteIdx = pSourceGroup->GetIndex( rSourceShortName );
