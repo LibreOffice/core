@@ -85,7 +85,7 @@ namespace svgio
         {
             // aSelectors: CssStyle selectors, any combination, no comma separations, no spaces at start/end
             // rNewStyle: the already preapared style to register on that name
-            if(aSelectors.getLength())
+            if(!aSelectors.isEmpty())
             {
                 std::vector< OUString > aSelectorParts;
                 const sal_Int32 nLen(aSelectors.getLength());
@@ -100,7 +100,7 @@ namespace svgio
                     skip_char(aSelectors, sal_Unicode(' '), nPos, nLen);
                     const OUString aSelectorPart(aToken.makeStringAndClear().trim());
 
-                    if(aSelectorPart.getLength())
+                    if(!aSelectorPart.isEmpty())
                     {
                         aSelectorParts.push_back(aSelectorPart);
                     }
@@ -147,7 +147,7 @@ namespace svgio
         {
             // aSelectors: possible comma-separated list of CssStyle definitions, no spaces at start/end
             // aContent: the svg style definitions as string
-            if(aSelectors.getLength() && aContent.getLength())
+            if(!aSelectors.isEmpty() && !aContent.isEmpty())
             {
                 // create new style and add to local list (for ownership control)
                 SvgStyleAttributes* pNewStyle = new SvgStyleAttributes(*this);
@@ -203,7 +203,7 @@ namespace svgio
                     const OUString aSelectors(aToken.makeStringAndClear().trim());
                     OUString aContent;
 
-                    if(aSelectors.getLength() && nPos < nLen)
+                    if(!aSelectors.isEmpty() && nPos < nLen)
                     {
                         // isolate content as text, embraced by '{' and '}'
                         copyToLimiter(aSelectorsAndContent, sal_Unicode('}'), nPos, aToken, nLen);
@@ -212,7 +212,7 @@ namespace svgio
                         aContent = aToken.makeStringAndClear().trim();
                     }
 
-                    if(aSelectors.getLength() && aContent.getLength())
+                    if(!aSelectors.isEmpty() && !aContent.isEmpty())
                     {
                         addCssStyleSheet(aSelectors, aContent);
                     }

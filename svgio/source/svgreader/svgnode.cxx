@@ -135,7 +135,7 @@ namespace svgio
                 }
 
                 // check for class-dependent references to CssStyles
-                if(rClassStr.getLength())
+                if(!rClassStr.isEmpty())
                 {
                     OUString aNewConcatenated(aConcatenated);
 
@@ -213,7 +213,7 @@ namespace svgio
             {
                 // #i125293# rOriginal will be the last element in the linked list; use no CssStyleParent
                 // there (reset it) to ensure that the parent hierarchy will be used when it's base
-                // is referenced. This new chaning inserts the CssStyles before the original style,
+                // is referenced. This new chaining inserts the CssStyles before the original style,
                 // this makes the whole process much safer since the original style when used will
                 // be not different to the situation without CssStyles; thus loops which may be caused
                 // by trying to use the parent hierarchy of the owner of the style will be avoided
