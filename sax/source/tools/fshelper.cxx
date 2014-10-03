@@ -126,7 +126,7 @@ FastSerializerHelper* FastSerializerHelper::write(sal_Int64 value)
 
 FastSerializerHelper* FastSerializerHelper::write(double value)
 {
-    mpSerializer->write(OString::number(value));
+    mpSerializer->write(value);
     return this;
 }
 

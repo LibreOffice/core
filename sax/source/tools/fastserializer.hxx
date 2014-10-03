@@ -110,6 +110,7 @@ public:
     void writeId( ::sal_Int32 Element );
     OString getId( ::sal_Int32 Element );
 
+    void write( double value );
     void write( const OUString& s, bool bEscape = false );
     void write( const OString& s, bool bEscape = false );
     void write( const char* pStr, sal_Int32 nLen, bool bEscape = false );
@@ -204,6 +205,10 @@ private:
     };
 
     ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
+    // Would be better to use OStringBuffer instead of these two
+    // but then we couldn't get the rtl_String* member :-(
+    rtl_String *mpDoubleStr;
+    sal_Int32 mnDoubleStrCapacity;
     TokenValueList maTokenValues;
 
 #ifdef DBG_UTIL
