@@ -88,7 +88,6 @@ class DynamicKernelArgument : boost::noncopyable
 public:
     DynamicKernelArgument( const std::string& s, FormulaTreeNodeRef ft );
 
-    const std::string& GetNameAsString() const { return mSymName; }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const = 0;
 
@@ -145,7 +144,6 @@ class VectorRef : public DynamicKernelArgument
 public:
     VectorRef( const std::string& s, FormulaTreeNodeRef ft, int index = 0 );
 
-    const std::string& GetNameAsString() const { return mSymName; }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE;
     /// When declared as input to a sliding window function
