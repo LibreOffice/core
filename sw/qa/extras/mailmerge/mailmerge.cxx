@@ -71,6 +71,29 @@ DECLARE_DFLT_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored-
     }
 }
 
+DECLARE_DFLT_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-color.ott", "one-empty-address.ods", "one-empty-address")
+{
+    executeMailMerge();
+    // The document was created by LO version which didn't write out the default value for line color
+    // (see XMLGraphicsDefaultStyle::SetDefaults()).
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxMMComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    // Lines do not have a line color.
+    CPPUNIT_ASSERT( !xPropertySet->getPropertySetInfo()->hasPropertyByName( "LineColor" ));
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
+    uno::Reference< lang::XMultiServiceFactory > xFact( mxMMComponent, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( "com.sun.star.drawing.Defaults" ), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xDefaults.is());
+    uno::Reference< beans::XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo());
+    CPPUNIT_ASSERT( xInfo->hasPropertyByName( "LineColor" ));
+    sal_uInt32 lineColor;
+    xDefaults->getPropertyValue( "LineColor" ) >>= lineColor;
+    // And the default value is black (wasn't copied properly by mailmerge).
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, lineColor );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
