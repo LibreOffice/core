@@ -87,6 +87,7 @@ class DynamicKernelArgument : boost::noncopyable
 {
 public:
     DynamicKernelArgument( const std::string& s, FormulaTreeNodeRef ft );
+    virtual ~DynamicKernelArgument() {}
 
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const = 0;
@@ -97,36 +98,31 @@ public:
     /// When referenced in a sliding window function
     virtual std::string GenSlidingWindowDeclRef( bool = false ) const = 0;
 
-    /// When Mix, it will be called
-    virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const
-    { return std::string(""); }
-
-    /// When Mix, it will be called
-    virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const
-    { return std::string(""); }
-
-    virtual bool IsMixedArgument() const
-    { return false; }
-
-    /// Generate use/references to the argument
-    virtual void GenDeclRef( std::stringstream& ss ) const;
-    virtual void GenNumDeclRef( std::stringstream& ss ) const { ss << ",";}
-
-    virtual void GenStringDeclRef( std::stringstream& ss ) const { ss << ",";}
-
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel, int, int, cl_program ) = 0;
 
-    virtual ~DynamicKernelArgument() { }
-
-    virtual void GenSlidingWindowFunction( std::stringstream& ) { }
-    formula::FormulaToken* GetFormulaToken() const;
     virtual size_t GetWindowSize() const = 0;
-    virtual std::string DumpOpName() const { return std::string(""); }
-    virtual void DumpInlineFun( std::set<std::string>&,
-        std::set<std::string>& ) const { }
-    const std::string& GetName() const { return mSymName; }
-    virtual bool NeedParallelReduction() const { return false; }
+
+    /// When Mix, it will be called
+    virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const;
+
+    /// When Mix, it will be called
+    virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const;
+
+    virtual bool IsMixedArgument() const;
+
+    /// Generate use/references to the argument
+    virtual void GenDeclRef( std::stringstream& ss ) const;
+    virtual void GenNumDeclRef( std::stringstream& ss ) const;
+
+    virtual void GenStringDeclRef( std::stringstream& ss ) const;
+
+    virtual void GenSlidingWindowFunction( std::stringstream& );
+    formula::FormulaToken* GetFormulaToken() const;
+    virtual std::string DumpOpName() const;
+    virtual void DumpInlineFun( std::set<std::string>&, std::set<std::string>& ) const;
+    const std::string& GetName() const;
+    virtual bool NeedParallelReduction() const;
 
 protected:
     std::string mSymName;
@@ -142,6 +138,7 @@ class VectorRef : public DynamicKernelArgument
 {
 public:
     VectorRef( const std::string& s, FormulaTreeNodeRef ft, int index = 0 );
+    virtual ~VectorRef();
 
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE;
@@ -154,16 +151,13 @@ public:
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel, int, int, cl_program ) SAL_OVERRIDE;
 
-    virtual ~VectorRef();
-
-    virtual void GenSlidingWindowFunction( std::stringstream& ) SAL_OVERRIDE { }
+    virtual void GenSlidingWindowFunction( std::stringstream& ) SAL_OVERRIDE;
     virtual size_t GetWindowSize() const SAL_OVERRIDE;
-    virtual std::string DumpOpName() const SAL_OVERRIDE { return std::string(""); }
-    virtual void DumpInlineFun( std::set<std::string>&,
-        std::set<std::string>& ) const SAL_OVERRIDE { }
-    const std::string& GetName() const { return mSymName; }
-    virtual cl_mem GetCLBuffer() const { return mpClmem; }
-    virtual bool NeedParallelReduction() const SAL_OVERRIDE { return false; }
+    virtual std::string DumpOpName() const SAL_OVERRIDE;
+    virtual void DumpInlineFun( std::set<std::string>&, std::set<std::string>& ) const SAL_OVERRIDE;
+    const std::string& GetName() const;
+    virtual cl_mem GetCLBuffer() const;
+    virtual bool NeedParallelReduction() const SAL_OVERRIDE;
 
 protected:
     // Used by marshaling
@@ -200,7 +194,7 @@ public:
     typedef std::vector<SubArgument> SubArguments;
     virtual void GenSlidingWindowFunction( std::stringstream&,
         const std::string&, SubArguments& ) = 0;
-    virtual ~SlidingFunctionBase() { };
+    virtual ~SlidingFunctionBase() { }
 };
 
 class Normal : public SlidingFunctionBase

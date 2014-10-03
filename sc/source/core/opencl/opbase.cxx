@@ -88,15 +88,60 @@ DynamicKernelArgument::DynamicKernelArgument( const std::string& s,
     FormulaTreeNodeRef ft ) :
     mSymName(s), mFormulaTree(ft) { }
 
+std::string DynamicKernelArgument::GenDoubleSlidingWindowDeclRef( bool ) const
+{
+    return std::string("");
+}
+
+/// When Mix, it will be called
+std::string DynamicKernelArgument::GenStringSlidingWindowDeclRef( bool ) const
+{
+    return std::string("");
+}
+
+bool DynamicKernelArgument::IsMixedArgument() const
+{
+    return false;
+}
+
 /// Generate use/references to the argument
 void DynamicKernelArgument::GenDeclRef( std::stringstream& ss ) const
 {
     ss << mSymName;
 }
 
+void DynamicKernelArgument::GenNumDeclRef( std::stringstream& ss ) const
+{
+    ss << ",";
+}
+
+void DynamicKernelArgument::GenStringDeclRef( std::stringstream& ss ) const
+{
+    ss << ",";
+}
+
+void DynamicKernelArgument::GenSlidingWindowFunction( std::stringstream& ) {}
+
 FormulaToken* DynamicKernelArgument::GetFormulaToken() const
 {
     return mFormulaTree->GetFormulaToken();
+}
+
+std::string DynamicKernelArgument::DumpOpName() const
+{
+    return std::string("");
+}
+
+void DynamicKernelArgument::DumpInlineFun( std::set<std::string>&, std::set<std::string>& ) const {}
+
+const std::string& DynamicKernelArgument::GetName() const
+{
+    return mSymName;
+}
+
+bool DynamicKernelArgument::NeedParallelReduction() const
+{
+    return false;
 }
 
 VectorRef::VectorRef( const std::string& s, FormulaTreeNodeRef ft, int idx ) :
@@ -144,6 +189,8 @@ std::string VectorRef::GenSlidingWindowDeclRef( bool nested ) const
     return ss.str();
 }
 
+void VectorRef::GenSlidingWindowFunction( std::stringstream& ) {}
+
 size_t VectorRef::GetWindowSize() const
 {
     FormulaToken* pCur = mFormulaTree->GetFormulaToken();
@@ -162,6 +209,28 @@ size_t VectorRef::GetWindowSize() const
     {
         throw Unhandled();
     }
+}
+
+std::string VectorRef::DumpOpName() const
+{
+    return std::string("");
+}
+
+void VectorRef::DumpInlineFun( std::set<std::string>&, std::set<std::string>& ) const {}
+
+const std::string& VectorRef::GetName() const
+{
+    return mSymName;
+}
+
+cl_mem VectorRef::GetCLBuffer() const
+{
+    return mpClmem;
+}
+
+bool VectorRef::NeedParallelReduction() const
+{
+    return false;
 }
 
 void Normal::GenSlidingWindowFunction(
