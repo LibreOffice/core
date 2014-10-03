@@ -220,7 +220,7 @@ void ScCalcOptionsDialog::setValueAt(size_t nPos, const OUString &rValue)
 
 #if HAVE_FEATURE_OPENCL
 
-void ScCalcOptionsDialog::fillOpenclList()
+void ScCalcOptionsDialog::fillOpenCLList()
 {
     mpOpenclInfoList->SetUpdateMode(false);
     mpOpenclInfoList->Clear();
@@ -231,10 +231,10 @@ void ScCalcOptionsDialog::fillOpenclList()
     SvTreeListEntry* pSelectedEntry = NULL;
 
     sc::FormulaGroupInterpreter::fillOpenCLInfo(maPlatformInfo);
-    for(std::vector<sc::OpenclPlatformInfo>::iterator it = maPlatformInfo.begin(),
+    for(std::vector<sc::OpenCLPlatformInfo>::iterator it = maPlatformInfo.begin(),
             itEnd = maPlatformInfo.end(); it != itEnd; ++it)
     {
-        for(std::vector<sc::OpenclDeviceInfo>::iterator
+        for(std::vector<sc::OpenCLDeviceInfo>::iterator
                 itr = it->maDevices.begin(), itrEnd = it->maDevices.end(); itr != itrEnd; ++itr)
         {
             OUString aDeviceId = it->maVendor + " " + itr->maName;
@@ -296,7 +296,7 @@ void ScCalcOptionsDialog::FillOptionsList()
 
 #if HAVE_FEATURE_OPENCL
     pModel->Insert(createBoolItem(maCaptionOpenCLEnabled,maConfig.mbOpenCLEnabled));
-    fillOpenclList();
+    fillOpenCLList();
 
     mpBtnAutomaticSelectionFalse->Check(!maConfig.mbOpenCLAutoSelect);
     mpBtnAutomaticSelectionTrue->Check(maConfig.mbOpenCLAutoSelect);
@@ -412,7 +412,7 @@ void ScCalcOptionsDialog::SelectionChanged()
                 else
                     mpOpenclInfoList->GetParent()->Disable();
 
-                OpenclAutomaticSelectionChanged();
+                OpenCLAutomaticSelectionChanged();
             }
 
             if ( bValue )
@@ -493,7 +493,7 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
     }
 }
 
-void ScCalcOptionsDialog::OpenclAutomaticSelectionChanged()
+void ScCalcOptionsDialog::OpenCLAutomaticSelectionChanged()
 {
     bool bValue = mpBtnAutomaticSelectionTrue->IsChecked();
     if(bValue)
@@ -511,7 +511,7 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
     if(!pEntry)
         return;
 
-    sc::OpenclDeviceInfo* pInfo = reinterpret_cast<sc::OpenclDeviceInfo*>(pEntry->GetUserData());
+    sc::OpenCLDeviceInfo* pInfo = reinterpret_cast<sc::OpenCLDeviceInfo*>(pEntry->GetUserData());
     if(pInfo)
     {
         mpFtFrequency->SetText(OUString::number(pInfo->mnFrequency));
@@ -556,7 +556,7 @@ void ScCalcOptionsDialog::RadioValueChanged()
                 mpOpenclInfoList->GetParent()->Enable();
             else
                 mpOpenclInfoList->GetParent()->Disable();
-            OpenclAutomaticSelectionChanged();
+            OpenCLAutomaticSelectionChanged();
             break;
     }
 
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnToggleHdl)
 
 IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnAutomaticSelectHdl)
 {
-    OpenclAutomaticSelectionChanged();
+    OpenCLAutomaticSelectionChanged();
     return 0;
 }
 

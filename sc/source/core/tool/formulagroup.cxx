@@ -33,8 +33,8 @@
 #ifdef DISABLE_DYNLOADING
 
 extern "C" size_t getOpenCLPlatformCount(void);
-extern "C" void fillOpenCLInfo(sc::OpenclPlatformInfo*, size_t);
-extern "C" bool switchOpenClDevice(const OUString*, bool, bool);
+extern "C" void fillOpenCLInfo(sc::OpenCLPlatformInfo*, size_t);
+extern "C" bool switchOpenCLDevice(const OUString*, bool, bool);
 extern "C" sc::FormulaGroupInterpreter* createFormulaGroupOpenCLInterpreter();
 extern "C" void getOpenCLDeviceInfo(size_t*, size_t*);
 
@@ -528,8 +528,8 @@ static void SAL_CALL thisModule() {}
 
 typedef FormulaGroupInterpreter* (*__createFormulaGroupOpenCLInterpreter)(void);
 typedef size_t (*__getOpenCLPlatformCount)(void);
-typedef void (*__fillOpenCLInfo)(OpenclPlatformInfo*, size_t);
-typedef bool (*__switchOpenClDevice)(const OUString*, bool, bool);
+typedef void (*__fillOpenCLInfo)(OpenCLPlatformInfo*, size_t);
+typedef bool (*__switchOpenCLDevice)(const OUString*, bool, bool);
 typedef void (*__getOpenCLDeviceInfo)(size_t*, size_t*);
 
 #endif
@@ -585,7 +585,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     return msInstance;
 }
 
-void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms)
+void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rPlatforms)
 {
 #if !HAVE_FEATURE_OPENCL
     (void) rPlatforms;
@@ -607,7 +607,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rP
     if (!fn)
         return;
 
-    std::vector<OpenclPlatformInfo> aPlatforms(nPlatforms);
+    std::vector<OpenCLPlatformInfo> aPlatforms(nPlatforms);
     reinterpret_cast<__fillOpenCLInfo>(fn)(&aPlatforms[0], aPlatforms.size());
     rPlatforms.swap(aPlatforms);
 #else
@@ -615,7 +615,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rP
     if (!nPlatforms)
         return;
 
-    std::vector<OpenclPlatformInfo> aPlatforms(nPlatforms);
+    std::vector<OpenCLPlatformInfo> aPlatforms(nPlatforms);
     ::fillOpenCLInfo(&aPlatforms[0], aPlatforms.size());
     rPlatforms.swap(aPlatforms);
 #endif
@@ -645,15 +645,15 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     if (!pModule)
         return false;
 
-    oslGenericFunction fn = pModule->getFunctionSymbol("switchOpenClDevice");
+    oslGenericFunction fn = pModule->getFunctionSymbol("switchOpenCLDevice");
     if (!fn)
         return false;
 
-    bool bSuccess = reinterpret_cast<__switchOpenClDevice>(fn)(&rDeviceId, bAutoSelect, bForceEvaluation);
+    bool bSuccess = reinterpret_cast<__switchOpenCLDevice>(fn)(&rDeviceId, bAutoSelect, bForceEvaluation);
     if(!bSuccess)
         return false;
 #else
-    bool bSuccess = switchOpenClDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
+    bool bSuccess = switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
     if(!bSuccess)
         return false;
 #endif

@@ -147,28 +147,28 @@ struct DoubleVectorFormula
     int mnInputEndOffset;
 };
 
-class OpenclDevice
+class OpenCLDevice
 {
 public:
     static GPUEnv gpuEnv;
     static bool bIsInited;
     static OString maCacheFolder;
 
-    static void registOpenclKernel();
-    static bool initOpenclRunEnv( GPUEnv *gpu );
-    static void releaseOpenclEnv( GPUEnv *gpuInfo );
-    static bool initOpenclRunEnv( int argc );
+    static void registerOpenCLKernel();
+    static bool initOpenCLRunEnv( GPUEnv *gpu );
+    static void releaseOpenCLEnv( GPUEnv *gpuInfo );
+    static bool initOpenCLRunEnv( int argc );
     static bool generatBinFromKernelSource( cl_program program, const char * clFileName );
     static bool writeBinaryToFile( const OString& rName, const char* birary, size_t numBytes );
     static std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context);
     static bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
 
-    static bool initOpenclAttr( OpenCLEnv * env );
+    static bool initOpenCLAttr( OpenCLEnv * env );
     static void setKernelEnv( KernelEnv *envInfo );
 };
 
 size_t getOpenCLPlatformCount();
-const std::vector<OpenclPlatformInfo>& fillOpenCLInfo();
+const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo();
 
 /**
  * Used to set or switch between OpenCL devices.
@@ -178,7 +178,7 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo();
  *
  * @return returns true if there is a valid opencl device that has been set up
  */
-bool switchOpenclDevice(const OUString* pDeviceId, bool bAutoSelect,
+bool switchOpenCLDevice(const OUString* pDeviceId, bool bAutoSelect,
         bool bForceEvaluation);
 
 void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);

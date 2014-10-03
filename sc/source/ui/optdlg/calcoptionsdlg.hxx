@@ -43,10 +43,10 @@ private:
     void SelectionChanged();
     void ListOptionValueChanged();
     void RadioValueChanged();
-    void OpenclAutomaticSelectionChanged();
+    void OpenCLAutomaticSelectionChanged();
     void SelectedDeviceChanged();
 #if HAVE_FEATURE_OPENCL
-    void fillOpenclList();
+    void fillOpenCLList();
 #endif
 
     OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
@@ -100,7 +100,7 @@ private:
 
     ScCalcConfig maConfig;
 #if HAVE_FEATURE_OPENCL
-    std::vector<sc::OpenclPlatformInfo> maPlatformInfo;
+    std::vector<sc::OpenCLPlatformInfo> maPlatformInfo;
 #endif
 
     bool mbSelectedEmptyStringAsZero;

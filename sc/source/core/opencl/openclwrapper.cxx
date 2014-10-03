@@ -43,8 +43,8 @@ using namespace std;
 
 namespace sc { namespace opencl {
 
-GPUEnv OpenclDevice::gpuEnv;
-bool OpenclDevice::bIsInited = false;
+GPUEnv OpenCLDevice::gpuEnv;
+bool OpenCLDevice::bIsInited = false;
 
 namespace {
 
@@ -87,7 +87,7 @@ void clearCache()
     // more.  So there is little this function can do until we come up
     // with some other way to figure out which cached .bin files are
     // "current".
-    OUString aCacheDirURL(rtl::OStringToOUString(OpenclDevice::maCacheFolder, RTL_TEXTENCODING_UTF8));
+    OUString aCacheDirURL(rtl::OStringToOUString(OpenCLDevice::maCacheFolder, RTL_TEXTENCODING_UTF8));
     osl::Directory aCacheDir(aCacheDirURL);
     osl::FileBase::RC status = aCacheDir.open();
     if(status != osl::FileBase::E_None)
@@ -117,15 +117,15 @@ void clearCache()
 
 }
 
-OString OpenclDevice::maCacheFolder = getCacheFolder();
+OString OpenCLDevice::maCacheFolder = getCacheFolder();
 
-void OpenclDevice::registOpenclKernel()
+void OpenCLDevice::registerOpenCLKernel()
 {
     if ( !gpuEnv.mnIsUserCreated )
         memset( &gpuEnv, 0, sizeof(gpuEnv) );
 }
 
-void OpenclDevice::setKernelEnv( KernelEnv *envInfo )
+void OpenCLDevice::setKernelEnv( KernelEnv *envInfo )
 {
     envInfo->mpkContext = gpuEnv.mpContext;
     envInfo->mpkCmdQueue = gpuEnv.mpCmdQueue;
@@ -161,13 +161,13 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
     OString aString = OString(deviceName) + driverVersion + platformVersion;
     OString aHash = generateMD5(aString.getStr(), aString.getLength());
 
-    return OpenclDevice::maCacheFolder + fileName + "-" +
+    return OpenCLDevice::maCacheFolder + fileName + "-" +
         aHash + ".bin";
 }
 
 }
 
-std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const char * clFileName, cl_context context )
+std::vector<boost::shared_ptr<osl::File> > OpenCLDevice::binaryGenerated( const char * clFileName, cl_context context )
 {
     size_t numDevices=0;
 
@@ -210,7 +210,7 @@ std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const 
     return aGeneratedFiles;
 }
 
-bool OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
+bool OpenCLDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
 {
     clearCache();
     osl::File file(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
@@ -228,7 +228,7 @@ bool OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* bina
     return true;
 }
 
-bool OpenclDevice::generatBinFromKernelSource( cl_program program, const char * clFileName )
+bool OpenCLDevice::generatBinFromKernelSource( cl_program program, const char * clFileName )
 {
     cl_uint numDevices;
 
@@ -292,7 +292,7 @@ bool OpenclDevice::generatBinFromKernelSource( cl_program program, const char * 
     return true;
 }
 
-bool OpenclDevice::initOpenclAttr( OpenCLEnv * env )
+bool OpenCLDevice::initOpenCLAttr( OpenCLEnv * env )
 {
     if ( gpuEnv.mnIsUserCreated )
         return true;
@@ -307,7 +307,7 @@ bool OpenclDevice::initOpenclAttr( OpenCLEnv * env )
     return false;
 }
 
-void OpenclDevice::releaseOpenclEnv( GPUEnv *gpuInfo )
+void OpenCLDevice::releaseOpenCLEnv( GPUEnv *gpuInfo )
 {
     if ( !bIsInited )
     {
@@ -383,7 +383,7 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
             return false;
         }
 
-        OString aBuildLogFileURL = OpenclDevice::maCacheFolder + "kernel-build.log";
+        OString aBuildLogFileURL = OpenCLDevice::maCacheFolder + "kernel-build.log";
         osl::File aBuildLogFile(rtl::OStringToOUString(aBuildLogFileURL, RTL_TEXTENCODING_UTF8));
         osl::FileBase::RC status = aBuildLogFile.open(
                 osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
@@ -402,7 +402,7 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
 
 }
 
-bool OpenclDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char* filename, int idx)
+bool OpenCLDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char* filename, int idx)
 {
     size_t numDevices;
     cl_int clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
@@ -469,7 +469,7 @@ bool OpenclDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
     return buildProgram(buildOption, gpuInfo, idx);
 }
 
-bool OpenclDevice::initOpenclRunEnv( int argc )
+bool OpenCLDevice::initOpenCLRunEnv( int argc )
 {
     if ( MAX_CLKERNEL_NUM <= 0 )
     {
@@ -480,9 +480,9 @@ bool OpenclDevice::initOpenclRunEnv( int argc )
 
     if ( !bIsInited )
     {
-        registOpenclKernel();
+        registerOpenCLKernel();
         //initialize devices, context, command_queue
-        bool status = initOpenclRunEnv( &gpuEnv );
+        bool status = initOpenCLRunEnv( &gpuEnv );
         if ( status )
         {
             return true;
@@ -546,7 +546,7 @@ void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bA
 
 }
 
-bool OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
+bool OpenCLDevice::initOpenCLRunEnv( GPUEnv *gpuInfo )
 {
     size_t length;
     cl_int clStatus;
@@ -678,7 +678,7 @@ bool OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
 namespace {
 
 // based on crashes and hanging during kernel compilation
-bool checkForKnownBadCompilers(const OpenclDeviceInfo& rInfo)
+bool checkForKnownBadCompilers(const OpenCLDeviceInfo& rInfo)
 {
 
     struct {
@@ -697,9 +697,9 @@ bool checkForKnownBadCompilers(const OpenclDeviceInfo& rInfo)
     return false;
 }
 
-void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
+void createDeviceInfo(cl_device_id aDeviceId, OpenCLPlatformInfo& rPlatformInfo)
 {
-    OpenclDeviceInfo aDeviceInfo;
+    OpenCLDeviceInfo aDeviceInfo;
     aDeviceInfo.device = aDeviceId;
 
     char pName[DEVICE_NAME_LENGTH];
@@ -757,7 +757,7 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
         rPlatformInfo.maDevices.push_back(aDeviceInfo);
 }
 
-bool createPlatformInfo(cl_platform_id nPlatformId, OpenclPlatformInfo& rPlatformInfo)
+bool createPlatformInfo(cl_platform_id nPlatformId, OpenCLPlatformInfo& rPlatformInfo)
 {
     rPlatformInfo.platform = nPlatformId;
     char pName[64];
@@ -812,9 +812,9 @@ size_t getOpenCLPlatformCount()
     return nPlatforms;
 }
 
-const std::vector<OpenclPlatformInfo>& fillOpenCLInfo()
+const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo()
 {
-    static std::vector<OpenclPlatformInfo> aPlatforms;
+    static std::vector<OpenCLPlatformInfo> aPlatforms;
     if(!aPlatforms.empty())
         return aPlatforms;
 
@@ -838,7 +838,7 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo()
 
     for(size_t i = 0; i < nPlatforms; ++i)
     {
-        OpenclPlatformInfo aPlatformInfo;
+        OpenCLPlatformInfo aPlatformInfo;
         if(createPlatformInfo(pPlatforms[i], aPlatformInfo))
             aPlatforms.push_back(aPlatformInfo);
     }
@@ -848,12 +848,12 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo()
 
 namespace {
 
-cl_device_id findDeviceIdByDeviceString(const OUString& rString, const std::vector<OpenclPlatformInfo>& rPlatforms)
+cl_device_id findDeviceIdByDeviceString(const OUString& rString, const std::vector<OpenCLPlatformInfo>& rPlatforms)
 {
-    std::vector<OpenclPlatformInfo>::const_iterator it = rPlatforms.begin(), itEnd = rPlatforms.end();
+    std::vector<OpenCLPlatformInfo>::const_iterator it = rPlatforms.begin(), itEnd = rPlatforms.end();
     for(; it != itEnd; ++it)
     {
-        std::vector<OpenclDeviceInfo>::const_iterator itr = it->maDevices.begin(), itrEnd = it->maDevices.end();
+        std::vector<OpenCLDeviceInfo>::const_iterator itr = it->maDevices.begin(), itrEnd = it->maDevices.end();
         for(; itr != itrEnd; ++itr)
         {
             OUString aDeviceId = it->maVendor + " " + itr->maName;
@@ -876,7 +876,7 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
     if(nState != CL_SUCCESS)
         return;
 
-    const std::vector<OpenclPlatformInfo>& rPlatforms = fillOpenCLInfo();
+    const std::vector<OpenCLPlatformInfo>& rPlatforms = fillOpenCLInfo();
     for(size_t i = 0; i < rPlatforms.size(); ++i)
     {
         cl_platform_id platId = static_cast<cl_platform_id>(rPlatforms[i].platform);
@@ -898,7 +898,7 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
 
 }
 
-bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation)
+bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation)
 {
     if(fillOpenCLInfo().empty())
         return false;
@@ -923,7 +923,7 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
 
     }
 
-    if(OpenclDevice::gpuEnv.mpDevID == pDeviceId)
+    if(OpenCLDevice::gpuEnv.mpDevID == pDeviceId)
     {
         // we don't need to change anything
         // still the same device
@@ -962,18 +962,18 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         return false;
     }
 
-    OpenclDevice::releaseOpenclEnv(&OpenclDevice::gpuEnv);
+    OpenCLDevice::releaseOpenCLEnv(&OpenCLDevice::gpuEnv);
     OpenCLEnv env;
     env.mpOclPlatformID = platformId;
     env.mpOclContext = context;
     env.mpOclDevsID = pDeviceId;
     env.mpOclCmdQueue = command_queue;
-    OpenclDevice::initOpenclAttr(&env);
+    OpenCLDevice::initOpenCLAttr(&env);
 
     // why do we need this at all?
-    OpenclDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
-    OpenclDevice::gpuEnv.mpArryDevsID[0] = pDeviceId;
-    return !OpenclDevice::initOpenclRunEnv(0);
+    OpenCLDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
+    OpenCLDevice::gpuEnv.mpArryDevsID[0] = pDeviceId;
+    return !OpenCLDevice::initOpenCLRunEnv(0);
 }
 
 void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
@@ -982,7 +982,7 @@ void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
     if (status < 0)
         return;
 
-    cl_device_id id = OpenclDevice::gpuEnv.mpDevID;
+    cl_device_id id = OpenCLDevice::gpuEnv.mpDevID;
     findDeviceInfoFromDeviceId(id, rDeviceId, rPlatformId);
 }
 

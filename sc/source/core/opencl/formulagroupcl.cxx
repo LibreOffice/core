@@ -95,7 +95,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
     }
     // Obtain cl context
     KernelEnv kEnv;
-    OpenclDevice::setKernelEnv(&kEnv);
+    OpenCLDevice::setKernelEnv(&kEnv);
     cl_int err;
     if (pHostBuffer)
     {
@@ -186,7 +186,7 @@ public:
         // marshaling
         // Obtain cl context
         KernelEnv kEnv;
-        OpenclDevice::setKernelEnv(&kEnv);
+        OpenCLDevice::setKernelEnv(&kEnv);
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
         if (CL_SUCCESS != err)
@@ -370,7 +370,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
     FormulaToken* ref = mFormulaTree->GetFormulaToken();
     // Obtain cl context
     KernelEnv kEnv;
-    OpenclDevice::setKernelEnv(&kEnv);
+    OpenCLDevice::setKernelEnv(&kEnv);
     cl_int err;
     formula::VectorRefArray vRef;
     size_t nStrings = 0;
@@ -1113,7 +1113,7 @@ public:
         assert(Base::mpClmem == NULL);
         // Obtain cl context
         KernelEnv kEnv;
-        OpenclDevice::setKernelEnv(&kEnv);
+        OpenCLDevice::setKernelEnv(&kEnv);
         cl_int err;
         size_t nInput = mpDVR->GetArrayLength();
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
@@ -1894,7 +1894,7 @@ public:
         {
             // Obtain cl context
             KernelEnv kEnv;
-            OpenclDevice::setKernelEnv(&kEnv);
+            OpenCLDevice::setKernelEnv(&kEnv);
             cl_int err;
             cl_mem pClmem2;
 
@@ -1952,7 +1952,7 @@ public:
         {
             // Obtain cl context
             KernelEnv kEnv;
-            OpenclDevice::setKernelEnv(&kEnv);
+            OpenCLDevice::setKernelEnv(&kEnv);
             cl_int err;
             DynamicKernelArgument* Arg = mvSubArguments[0].get();
             DynamicKernelSlidingArgument<VectorRef>* slidingArgPtr =
@@ -3260,11 +3260,11 @@ public:
                                                                DynamicKernelSoPArguments>(mpRoot, new OpNop);
 
         std::stringstream decl;
-        if (OpenclDevice::gpuEnv.mnKhrFp64Flag)
+        if (OpenCLDevice::gpuEnv.mnKhrFp64Flag)
         {
             decl << "#pragma OPENCL EXTENSION cl_khr_fp64: enable\n";
         }
-        else if (OpenclDevice::gpuEnv.mnAmdFp64Flag)
+        else if (OpenCLDevice::gpuEnv.mnAmdFp64Flag)
         {
             decl << "#pragma OPENCL EXTENSION cl_amd_fp64: enable\n";
         }
@@ -3326,7 +3326,7 @@ public:
     {
         // Obtain cl context
         KernelEnv kEnv;
-        OpenclDevice::setKernelEnv(&kEnv);
+        OpenCLDevice::setKernelEnv(&kEnv);
         cl_int err;
         // The results
         mpResClmem = clCreateBuffer(kEnv.mpkContext,
@@ -3388,7 +3388,7 @@ void DynamicKernel::CreateKernel()
     // Compile kernel here!!!
     // Obtain cl context
     KernelEnv kEnv;
-    OpenclDevice::setKernelEnv(&kEnv);
+    OpenCLDevice::setKernelEnv(&kEnv);
     const char* src = mFullProgramSrc.c_str();
     static std::string lastOneKernelHash = "";
     static std::string lastSecondKernelHash = "";
@@ -3410,11 +3410,11 @@ void DynamicKernel::CreateKernel()
         {
             clReleaseProgram(lastSecondProgram);
         }
-        if (OpenclDevice::buildProgramFromBinary("",
-                &OpenclDevice::gpuEnv, KernelHash.c_str(), 0))
+        if (OpenCLDevice::buildProgramFromBinary("",
+                &OpenCLDevice::gpuEnv, KernelHash.c_str(), 0))
         {
-            mpProgram = OpenclDevice::gpuEnv.mpArryPrograms[0];
-            OpenclDevice::gpuEnv.mpArryPrograms[0] = NULL;
+            mpProgram = OpenCLDevice::gpuEnv.mpArryPrograms[0];
+            OpenCLDevice::gpuEnv.mpArryPrograms[0] = NULL;
         }
         else
         {
@@ -3423,7 +3423,7 @@ void DynamicKernel::CreateKernel()
             if (err != CL_SUCCESS)
                 throw OpenCLError(err, __FILE__, __LINE__);
             err = clBuildProgram(mpProgram, 1,
-                OpenclDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
+                OpenCLDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
             if (err != CL_SUCCESS)
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -3431,7 +3431,7 @@ void DynamicKernel::CreateKernel()
                 {
                     cl_build_status stat;
                     cl_int e = clGetProgramBuildInfo(
-                        mpProgram, OpenclDevice::gpuEnv.mpArryDevsID[0],
+                        mpProgram, OpenCLDevice::gpuEnv.mpArryDevsID[0],
                         CL_PROGRAM_BUILD_STATUS, sizeof(cl_build_status),
                         &stat, 0);
                     SAL_WARN_IF(
@@ -3443,7 +3443,7 @@ void DynamicKernel::CreateKernel()
                     {
                         size_t n;
                         e = clGetProgramBuildInfo(
-                            mpProgram, OpenclDevice::gpuEnv.mpArryDevsID[0],
+                            mpProgram, OpenCLDevice::gpuEnv.mpArryDevsID[0],
                             CL_PROGRAM_BUILD_LOG, 0, 0, &n);
                         SAL_WARN_IF(
                             e != CL_SUCCESS || n == 0, "sc.opencl",
@@ -3454,7 +3454,7 @@ void DynamicKernel::CreateKernel()
                         {
                             std::vector<char> log(n);
                             e = clGetProgramBuildInfo(
-                                mpProgram, OpenclDevice::gpuEnv.mpArryDevsID[0],
+                                mpProgram, OpenCLDevice::gpuEnv.mpArryDevsID[0],
                                 CL_PROGRAM_BUILD_LOG, n, &log[0], 0);
                             SAL_WARN_IF(
                                 e != CL_SUCCESS || n == 0, "sc.opencl",
@@ -3473,7 +3473,7 @@ void DynamicKernel::CreateKernel()
                 throw OpenCLError(err, __FILE__, __LINE__);
             }
             // Generate binary out of compiled kernel.
-            OpenclDevice::generatBinFromKernelSource(mpProgram,
+            OpenCLDevice::generatBinFromKernelSource(mpProgram,
                 (mKernelSignature + GetMD5()).c_str());
         }
         lastSecondKernelHash = lastOneKernelHash;
@@ -3661,7 +3661,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     {
         // Obtain cl context
         KernelEnv kEnv;
-        OpenclDevice::setKernelEnv(&kEnv);
+        OpenCLDevice::setKernelEnv(&kEnv);
         // Run the kernel.
         pKernel->Launch(xGroup->mnLength);
         // Map results back
@@ -3744,20 +3744,20 @@ SAL_DLLPUBLIC_EXPORT size_t getOpenCLPlatformCount()
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL fillOpenCLInfo(
-    sc::OpenclPlatformInfo* pInfos, size_t nInfoSize )
+    sc::OpenCLPlatformInfo* pInfos, size_t nInfoSize )
 {
-    const std::vector<sc::OpenclPlatformInfo>& rPlatforms =
+    const std::vector<sc::OpenCLPlatformInfo>& rPlatforms =
         sc::opencl::fillOpenCLInfo();
     size_t n = std::min(rPlatforms.size(), nInfoSize);
     for (size_t i = 0; i < n; ++i)
         pInfos[i] = rPlatforms[i];
 }
 
-SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenClDevice(
+SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenCLDevice(
     const OUString* pDeviceId, bool bAutoSelect,
     bool bForceEvaluation )
 {
-    return sc::opencl::switchOpenclDevice(pDeviceId, bAutoSelect, bForceEvaluation);
+    return sc::opencl::switchOpenCLDevice(pDeviceId, bAutoSelect, bForceEvaluation);
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL getOpenCLDeviceInfo( size_t* pDeviceId, size_t* pPlatformId )
