@@ -166,7 +166,7 @@ static void osl_thread_destruct_Impl (Thread_Impl ** ppImpl)
         pthread_cond_destroy  (&((*ppImpl)->m_Cond));
         pthread_mutex_destroy (&((*ppImpl)->m_Lock));
 
-        free (*ppImpl);
+        delete *ppImpl;
         (*ppImpl) = 0;
     }
 }
