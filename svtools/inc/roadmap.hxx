@@ -110,7 +110,7 @@ namespace svt
         ItemId                      GetNextAvailableItemId( ItemIndex _NewIndex );
         ItemId                      GetPreviousAvailableItemId( ItemIndex _NewIndex );
         RoadmapItem*                GetByPointer(vcl::Window* pWindow);
-        RoadmapItem*                InsertHyperLabel( ItemIndex _Index, const OUString& _aStr, ItemId _RMID, bool _bEnabled = true  );
+        RoadmapItem*                InsertHyperLabel( ItemIndex _Index, const OUString& _aStr, ItemId _RMID, bool _bEnabled, bool _bIncomplete  );
         void                        UpdatefollowingHyperLabels( ItemIndex _Index );
     };
 

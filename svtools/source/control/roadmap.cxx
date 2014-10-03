@@ -30,7 +30,6 @@
 #define ROADMAP_INDENT_X        4
 #define ROADMAP_INDENT_Y        27
 #define ROADMAP_ITEM_DISTANCE_Y 6
-#define RMINCOMPLETE        -1
 
 
 namespace svt
@@ -235,7 +234,7 @@ namespace svt
 
 
 
-    RoadmapItem* ORoadmap::InsertHyperLabel( ItemIndex _Index, const OUString& _sLabel, ItemId _RMID, bool _bEnabled)
+    RoadmapItem* ORoadmap::InsertHyperLabel( ItemIndex _Index, const OUString& _sLabel, ItemId _RMID, bool _bEnabled, bool _bIncomplete)
     {
         if ( m_pImpl->getItemCount() == 0 )
             m_pImpl->initItemSize();
@@ -244,14 +243,14 @@ namespace svt
         RoadmapItem* pOldItem = GetPreviousHyperLabel( _Index );
 
         pItem = new RoadmapItem( *this, m_pImpl->getItemSize() );
-        if ( _RMID != RMINCOMPLETE )
+        if ( _bIncomplete )
         {
-            pItem->SetInteractive( m_pImpl->isInteractive() );
-            m_pImpl->insertHyperLabel( _Index, pItem );
+            pItem->SetInteractive( false );
         }
         else
         {
-            pItem->SetInteractive( false );
+            pItem->SetInteractive( m_pImpl->isInteractive() );
+            m_pImpl->insertHyperLabel( _Index, pItem );
         }
         pItem->SetPosition( pOldItem );
         pItem->Update( _Index, _sLabel );
@@ -306,7 +305,7 @@ namespace svt
             }
         }
         else if ( bWasComplete )
-            m_pImpl->InCompleteHyperLabel = InsertHyperLabel( m_pImpl->getItemCount(), OUString("..."), RMINCOMPLETE );
+            m_pImpl->InCompleteHyperLabel = InsertHyperLabel( m_pImpl->getItemCount(), OUString("..."), -1, true/*bEnabled*/, true/*bIncomplete*/ );
     }
 
 
@@ -365,10 +364,7 @@ namespace svt
 
     void ORoadmap::InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled )
     {
-        // make coverity happy, because then it knows the return value from InsertHyperLabel won't leak
-        assert( _nUniqueId != RMINCOMPLETE );
-
-        InsertHyperLabel( _Index, _RoadmapItem, _nUniqueId, _bEnabled );
+        InsertHyperLabel( _Index, _RoadmapItem, _nUniqueId, _bEnabled, false/*bIncomplete*/ );
         // TODO YPos is superfluous, if items are always appended
         UpdatefollowingHyperLabels( _Index + 1 );
     }
