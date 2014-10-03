@@ -17566,11 +17566,11 @@
       <element name="format" tokenid="ooxml:CT_FFTextInput_format"/>
     </resource>
     <resource name="ST_SectionMark" resource="List">
-      <value tokenid="0">continuous</value>
-      <value tokenid="1">nextColumn</value>
-      <value tokenid="2">nextPage</value>
-      <value tokenid="3">evenPage</value>
-      <value tokenid="4">oddPage</value>
+      <value tokenid="ooxml:Value_ST_SectionMark_continuous">continuous</value>
+      <value tokenid="ooxml:Value_ST_SectionMark_nextColumn">nextColumn</value>
+      <value tokenid="ooxml:Value_ST_SectionMark_nextPage">nextPage</value>
+      <value tokenid="ooxml:Value_ST_SectionMark_evenPage">evenPage</value>
+      <value tokenid="ooxml:Value_ST_SectionMark_oddPage">oddPage</value>
     </resource>
     <resource name="CT_SectType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_SectType_val" action="setValue"/>

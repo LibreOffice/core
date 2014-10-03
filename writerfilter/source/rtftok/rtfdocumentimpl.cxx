@@ -585,7 +585,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     SAL_INFO("writerfilter", OSL_THIS_FUNC << ": final? " << bFinal << ", needed? " << m_bNeedSect);
     bool bNeedSect = m_bNeedSect;
     RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
-    bool bContinuous = pBreak.get() && pBreak->getInt() == 0;
+    bool bContinuous = pBreak.get() && pBreak->getInt() == NS_ooxml::LN_Value_ST_SectionMark_continuous;
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer,
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
     if (m_bNeedPar && !(bFinal && !m_bNeedSect && !bContinuous) && !isSubstream())
@@ -2329,7 +2329,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
         // Unless we're on a title page.
         RTFValue::Pointer_t pTitlePg = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_titlePg);
-        if (((pBreak.get() && !pBreak->getInt())
+        if (((pBreak.get() && pBreak->getInt() == NS_ooxml::LN_Value_ST_SectionMark_continuous)
                 || m_nResetBreakOnSectBreak == RTF_SBKNONE)
                 && !(pTitlePg.get() && pTitlePg->getInt()))
         {
@@ -2634,19 +2634,19 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
     case RTF_SBKNONE:
-        nParam = 0;
+        nParam = NS_ooxml::LN_Value_ST_SectionMark_continuous;
         break;
     case RTF_SBKCOL:
-        nParam = 1;
+        nParam = NS_ooxml::LN_Value_ST_SectionMark_nextColumn;
         break;
     case RTF_SBKPAGE:
-        nParam = 2;
+        nParam = NS_ooxml::LN_Value_ST_SectionMark_nextPage;
         break;
     case RTF_SBKEVEN:
-        nParam = 3;
+        nParam = NS_ooxml::LN_Value_ST_SectionMark_evenPage;
         break;
     case RTF_SBKODD:
-        nParam = 4;
+        nParam = NS_ooxml::LN_Value_ST_SectionMark_oddPage;
         break;
     default:
         break;
