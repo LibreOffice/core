@@ -1654,11 +1654,11 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& 
     // (and so if that happens, it may be better to fix Writer).
     // Create the redlines here from lowest (formats) to highest (inserts/removals) priority, since the last one is
     // what Writer presents graphically, so this will show deletes as deleted text and not as just formatted text being there.
-    if( GetTopContextOfType(CONTEXT_PARAGRAPH) != NULL )
+    if( GetTopContextOfType(CONTEXT_PARAGRAPH) )
         for( std::vector<RedlineParamsPtr>::const_iterator it = GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines().begin();
              it != GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines().end(); ++it )
             CreateRedline( xRange, *it );
-    if( GetTopContextOfType(CONTEXT_CHARACTER) != NULL )
+    if( GetTopContextOfType(CONTEXT_CHARACTER) )
         for( std::vector<RedlineParamsPtr>::const_iterator it = GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().begin();
              it != GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().end(); ++it )
             CreateRedline( xRange, *it );
