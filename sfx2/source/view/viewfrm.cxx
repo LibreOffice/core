@@ -1624,13 +1624,10 @@ void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
     }
 }
 
-
-
 bool SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
 {
-     return PTR_CAST(SfxViewFrameItem, &rItem)->pFrame== pFrame;
+    return dynamic_cast<const SfxViewFrameItem&>(rItem).pFrame == pFrame;
 }
-
 
 OUString SfxViewFrameItem::GetValueText() const
 {
