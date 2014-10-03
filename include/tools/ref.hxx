@@ -26,6 +26,10 @@
 #include <tools/toolsdllapi.h>
 #include <vector>
 
+/**
+   This implements similar functionality to boost::intrusive_ptr
+*/
+
 namespace tools {
 
 /** T must be a class that extends SvRefBase */
@@ -152,7 +156,6 @@ class TOOLS_DLLPUBLIC SvRefBase
 
 protected:
     virtual         ~SvRefBase();
-    virtual void    QueryDelete();
 
 public:
                     SvRefBase() : bNoDelete(1), nRefCount(0) {}
@@ -183,7 +186,13 @@ public:
                     {
                         assert( nRefCount >= 1);
                         if( --nRefCount == 0 && !bNoDelete)
-                            QueryDelete();
+                        {
+                            // I'm not sure about the original purpose of this line, but right now
+                            // it serves the purpose that anything that attempts to do an AddRef()
+                            // after an object is deleted will trip an assert.
+                            nRefCount = 1 << 30;
+                            delete this;
+                        }
                     }
 
     unsigned int    GetRefCount() const
