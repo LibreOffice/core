@@ -86,6 +86,15 @@ ONDXPage::~ONDXPage()
     delete[] ppNodes;
 }
 
+void ONDXPage::ReleaseRef()
+{
+    assert( nRefCount >= 1);
+    if(--nRefCount == 0 && !bNoDelete)
+    {
+        QueryDelete();
+    }
+}
+
 void ONDXPage::QueryDelete()
 {
     // Store in GarbageCollector
@@ -105,14 +114,20 @@ void ONDXPage::QueryDelete()
 
             ppNodes[i] = ONDXNode();
         }
-        RestoreNoDelete();
+        bNoDelete = 1;
 
         nCount = 0;
         aParent.Clear();
         rIndex.Collect(this);
     }
     else
-        SvRefBase::QueryDelete();
+    {
+        // I'm not sure about the original purpose of this line, but right now
+        // it serves the purpose that anything that attempts to do an AddFirstRef()
+        // after an object is deleted will trip an assert.
+        nRefCount = 1 << 30;
+        delete this;
+    }
 }
 
 ONDXPagePtr& ONDXPage::GetChild(ODbaseIndex* pIndex)
@@ -189,7 +204,7 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
             {
 
                 // this practically reduces the number of nodes by 1
-                if (IsLeaf() && this == &rIndex.m_aCurLeaf)
+                if (IsLeaf() && this == rIndex.m_aCurLeaf)
                 {
                     // assumes, that the node, for which the condition (<=) holds, is stored in m_nCurNode
                     --nCount;   // (otherwise we might get Assertions and GPFs - 60593)
@@ -344,7 +359,7 @@ void ONDXPage::Release(bool bSave)
 
         ppNodes[i].GetChild().Clear();
     }
-    aParent = NULL;
+    aParent.Clear();
 }
 
 void ONDXPage::ReleaseFull(bool bSave)
@@ -487,7 +502,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
             sal_uInt16 nLastNode = bRight ? Count() - 1 : xPage->Count() - 1;
             if (bRight)
             {
-                DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
                 // shift all nodes from xPage to the left node (append)
                 while (xPage->Count())
                 {
@@ -497,7 +512,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
             }
             else
             {
-                DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
                 // xPage is the left page and THIS the right one
                 while (xPage->Count())
                 {
@@ -520,7 +535,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
             {
                 (*aParent)[0].SetChild();
                 aParent->ReleaseFull();
-                aParent = NULL;
+                aParent.Clear();
                 rIndex.SetRootPos(nPagePos);
                 rIndex.m_aRoot = this;
                 SetModified(true);
@@ -567,7 +582,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
         {
             if (bRight)
             {
-                DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
                 // Parent node will be integrated; is initialized with Child from xPage
                 (*aParent)[nParentNodePos].SetChild(xPage->GetChild(),aParent);
                 Append((*aParent)[nParentNodePos]);
@@ -576,7 +591,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
             }
             else
             {
-                DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
                 // Parent-node will be integrated; is initialized with child
                 (*aParent)[nParentNodePos].SetChild(GetChild(),aParent); // Parent memorizes my child
                 Insert(0,(*aParent)[nParentNodePos]); // insert parent node into myself
@@ -601,7 +616,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage)
             {
                 (*aParent).SetChild();
                 aParent->ReleaseFull();
-                aParent = NULL;
+                aParent.Clear();
                 rIndex.SetRootPos(nPagePos);
                 rIndex.m_aRoot = this;
                 SetModified(true);
@@ -802,33 +817,22 @@ SvStream& connectivity::dbase::WriteONDXPagePtr(SvStream &rStream, const ONDXPag
 
 
 ONDXPagePtr::ONDXPagePtr(const ONDXPagePtr& rRef)
-              :ONDXPageRef(rRef)
+              :mpPage(rRef.mpPage)
               ,nPagePos(rRef.nPagePos)
 {
+    if (mpPage != 0)
+        mpPage->AddNextRef();
 }
 
 
 ONDXPagePtr::ONDXPagePtr(ONDXPage* pRefPage)
-              :ONDXPageRef(pRefPage)
+              :mpPage(pRefPage)
               ,nPagePos(0)
 {
+    if (mpPage != 0)
+        mpPage->AddFirstRef();
     if (pRefPage)
         nPagePos = pRefPage->GetPagePos();
-}
-
-ONDXPagePtr& ONDXPagePtr::operator=(const ONDXPagePtr& rRef)
-{
-    ONDXPageRef::operator=(rRef);
-    nPagePos = rRef.nPagePos;
-    return *this;
-}
-
-
-ONDXPagePtr& ONDXPagePtr::operator= (ONDXPage* pRef)
-{
-    ONDXPageRef::operator=(pRef);
-    nPagePos = (pRef) ? pRef->GetPagePos() : 0;
-    return *this;
 }
 
 static sal_uInt32 nValue;

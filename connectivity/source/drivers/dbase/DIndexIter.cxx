@@ -52,7 +52,7 @@ sal_uIntPtr OIndexIterator::Find(bool bFirst)
     if (bFirst)
     {
         m_aRoot = m_pIndex->getRoot();
-        m_aCurLeaf = NULL;
+        m_aCurLeaf.Clear();
     }
 
     if (!m_pOperator)
@@ -186,7 +186,7 @@ sal_uIntPtr OIndexIterator::GetCompare(bool bFirst)
                 if ( ( ( pKey = GetNextKey() ) == NULL )  || !m_pOperator->operate(pKey,m_pOperand))
                 {
                     pKey = NULL;
-                    m_aCurLeaf = NULL;
+                    m_aCurLeaf.Clear();
                 }
                 break;
             case SQLFilterOperator::GREATER_EQUAL:
@@ -235,7 +235,7 @@ sal_uIntPtr OIndexIterator::GetNull(bool bFirst)
     if ( ( ( pKey = GetNextKey() ) == NULL ) || !pKey->getValue().isNull())
     {
         pKey = NULL;
-        m_aCurLeaf = NULL;
+        m_aCurLeaf.Clear();
     }
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }

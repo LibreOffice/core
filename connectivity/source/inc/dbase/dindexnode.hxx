@@ -23,7 +23,6 @@
 #include "file/FTable.hxx"
 #include <connectivity/FValue.hxx>
 #include <rtl/ref.hxx>
-#include <tools/ref.hxx>
 #include <tools/stream.hxx>
 #include <vector>
 
@@ -84,49 +83,53 @@ namespace connectivity
 
 
 
-        // Index Page Pointer
-
         class ONDXPage;
-        typedef tools::SvRef<ONDXPage> ONDXPageRef; // Base class - because we need to store additional information
 
-
-        class ONDXPagePtr : public ONDXPageRef
+        // Index Page Pointer
+        // This is  ref-count pointer class
+        class ONDXPagePtr
         {
             friend  SvStream& WriteONDXPagePtr(SvStream &rStream, const ONDXPagePtr&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
+            ONDXPage*   mpPage;
             sal_uInt32  nPagePos;       // Position in the index file
-
         public:
-            ONDXPagePtr(sal_uInt32 nPos = 0):nPagePos(nPos){}
+            ONDXPagePtr(sal_uInt32 nPos = 0) : mpPage(0), nPagePos(nPos) {}
             ONDXPagePtr(const ONDXPagePtr& rRef);
             ONDXPagePtr(ONDXPage* pRefPage);
-
-            ONDXPagePtr& operator=(const ONDXPagePtr& rRef);
-            ONDXPagePtr& operator=(ONDXPage* pPageRef);
+            inline ~ONDXPagePtr();
 
             sal_uInt32 GetPagePos() const {return nPagePos;}
             bool HasPage() const {return nPagePos != 0;}
-            //  sal_Bool Is() const { return isValid(); }
+
+            operator ONDXPage *() const { return mpPage; }
+            ONDXPage * operator ->() const { assert(mpPage != 0); return mpPage; }
+            bool Is() const { return mpPage != 0; }
+            inline void Clear();
         };
 
         // Index Page
-
-        class ONDXPage : public SvRefBase
+        // This is a ref-counted class, with re-cycling
+        class ONDXPage
         {
             friend class ODbaseIndex;
+            friend class ONDXPagePtr;
 
             friend  SvStream& WriteONDXPage(SvStream &rStream, const ONDXPage&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPage&);
 
+            // the only reason this is not bool is because MSVC cannot handle mixed type bitfields
+            unsigned int    bNoDelete : 1;
+            unsigned int    nRefCount : 31;
             sal_uInt32      nPagePos;       // Position in the index file
-            bool        bModified : 1;
+            bool            bModified : 1;
             sal_uInt16      nCount;
 
-            ONDXPagePtr aParent,            // Parent page
-                        aChild;             // Pointer to the right child page
-            ODbaseIndex& rIndex;
-            ONDXNode*  ppNodes;             // Array of nodes
+            ONDXPagePtr     aParent,            // Parent page
+                            aChild;             // Pointer to the right child page
+            ODbaseIndex&    rIndex;
+            ONDXNode*       ppNodes;             // Array of nodes
 
         public:
             // Node operations
@@ -174,9 +177,22 @@ namespace connectivity
 
         protected:
             ONDXPage(ODbaseIndex& rIndex, sal_uInt32 nPos, ONDXPage* = NULL);
-            virtual ~ONDXPage();
+            ~ONDXPage();
 
-            virtual void QueryDelete() SAL_OVERRIDE;
+            void ReleaseRef();
+            void QueryDelete();
+            void AddNextRef()
+                    {
+                        assert( nRefCount < (1 << 30) && "Do not add refs to dead objects" );
+                        ++nRefCount;
+                    }
+            void AddFirstRef()
+                    {
+                        assert( nRefCount < (1 << 30) && "Do not add refs to dead objects" );
+                        if( bNoDelete )
+                            bNoDelete = 0;
+                        ++nRefCount;
+                    }
 
             void SetModified(bool bMod) {bModified = bMod;}
             void SetPagePos(sal_uInt32 nPage) {nPagePos = nPage;}
@@ -188,6 +204,16 @@ namespace connectivity
             void PrintPage();
 #endif
         };
+
+        inline ONDXPagePtr::~ONDXPagePtr() { if (mpPage != 0) mpPage->ReleaseRef(); }
+        inline void ONDXPagePtr::Clear()
+            {
+                if (mpPage != 0) {
+                    ONDXPage * pRefObj = mpPage;
+                    mpPage = 0;
+                    pRefObj->ReleaseRef();
+                }
+            }
 
         SvStream& WriteONDXPagePtr(SvStream &rStream, const ONDXPagePtr&);
         SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
