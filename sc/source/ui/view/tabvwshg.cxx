@@ -61,6 +61,9 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     SdrObject* pObj = SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
                                pDrView->GetSdrPageView()->GetPage(), pModel);
     SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
+    OSL_ENSURE( pUnoCtrl, "no SdrUnoObj");
+    if( !pUnoCtrl )
+        return;
 
     uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
     OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
