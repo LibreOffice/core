@@ -24,6 +24,7 @@
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -714,6 +715,47 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 if ( rInfo.pTableStyle )
                 {
                     PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties( nCnfStyleMask );
+
+                    // Check if we need to clean up some empty border definitions to match what Word does.
+                    static const PropertyIds pBorders[] =
+                    {
+                        PROP_TOP_BORDER, PROP_LEFT_BORDER, PROP_BOTTOM_BORDER, PROP_RIGHT_BORDER
+                    };
+                    for (size_t i = 0; i < SAL_N_ELEMENTS(pBorders); ++i)
+                    {
+                        boost::optional<PropertyMap::Property> oStyleCellBorder = pStyleProps->getProperty(pBorders[i]);
+                        boost::optional<PropertyMap::Property> oDirectCellBorder = (*aCellIterator)->getProperty(pBorders[i]);
+                        if (oStyleCellBorder && oDirectCellBorder)
+                        {
+                            // We have a cell border from the table style and as direct formatting as well.
+                            table::BorderLine2 aStyleCellBorder = oStyleCellBorder->second.get<table::BorderLine2>();
+                            table::BorderLine2 aDirectCellBorder = oDirectCellBorder->second.get<table::BorderLine2>();
+                            if (aStyleCellBorder.LineStyle != table::BorderLineStyle::NONE && aDirectCellBorder.LineStyle == table::BorderLineStyle::NONE)
+                            {
+                                // The style one would be visible, but then cleared away as direct formatting.
+                                // Delete both, so that table formatting can become visible.
+                                pStyleProps->Erase(pBorders[i]);
+                                (*aCellIterator)->Erase(pBorders[i]);
+                            }
+                            else
+                            {
+                                boost::optional<PropertyMap::Property> oTableBorder = rInfo.pTableBorders->getProperty(pBorders[i]);
+                                if (oTableBorder)
+                                {
+                                    table::BorderLine2 aTableBorder = oTableBorder->second.get<table::BorderLine2>();
+                                    // Both style and direct formatting says that the cell has no border.
+                                    bool bNoCellBorder = aStyleCellBorder.LineStyle == table::BorderLineStyle::NONE && aDirectCellBorder.LineStyle == table::BorderLineStyle::NONE;
+                                    if (aTableBorder.LineStyle != table::BorderLineStyle::NONE && bNoCellBorder)
+                                    {
+                                        // But at a table-level, there is a border, then again delete both cell properties.
+                                        pStyleProps->Erase(pBorders[i]);
+                                        (*aCellIterator)->Erase(pBorders[i]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     pAllCellProps->InsertProps( pStyleProps );
                 }
 

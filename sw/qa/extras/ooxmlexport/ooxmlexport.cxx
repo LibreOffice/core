@@ -378,6 +378,21 @@ DECLARE_OOXMLEXPORT_TEST(testTableStyleCellBackColor, "table-style-cell-back-col
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableStyleBorder, "table-style-border.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // This was 0, the second cell was missing its right border.
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A2");
+    CPPUNIT_ASSERT(getProperty<table::BorderLine2>(xCell, "RightBorder").LineWidth > 0);
+
+    // This was also 0 (even after fixing the previous problem), the first cell was missing its right border, too.
+    xCell = xTable->getCellByName("A1");
+    CPPUNIT_ASSERT(getProperty<table::BorderLine2>(xCell, "RightBorder").LineWidth > 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
