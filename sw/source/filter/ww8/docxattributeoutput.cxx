@@ -3386,8 +3386,12 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
 
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
-    // the defaults of the table are taken from the top-left cell
-    impl_borders( m_pSerializer, pFrmFmt->GetBox( ), lcl_getTableDefaultBorderOptions(bEcma), NULL, m_aTableStyleConf );
+    // Don't write table defaults based on the top-left cell if we have a table style available.
+    if (m_aTableStyleConf.empty())
+    {
+        // the defaults of the table are taken from the top-left cell
+        impl_borders(m_pSerializer, pFrmFmt->GetBox(), lcl_getTableDefaultBorderOptions(bEcma), NULL, m_aTableStyleConf);
+    }
 }
 
 void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
