@@ -172,7 +172,7 @@ void FTPURL::parse(const OUString& url)
 
     OUString aExpr(buffer.get(), strlen(buffer.get()), RTL_TEXTENCODING_UTF8);
 
-    sal_Int32 l = aExpr.indexOf('@');
+    sal_Int32 l = aExpr.lastIndexOf('@');
     m_aHost = aExpr.copy(1+l);
 
     if(l != -1) {
