@@ -524,7 +524,7 @@ static void
 writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const sal_Int32 nValue )
 {
     pDoc->startElement( nXmlElement, FSEND );
-    pDoc->write( OUString::number( nValue ) );
+    pDoc->write( nValue );
     pDoc->endElement( nXmlElement );
 }
 
@@ -677,7 +677,7 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     {
             sal_Int32 nValue = 0;
             if (it->second >>= nValue)
-                writeElement(pAppProps, XML_Paragraphs, OUString::number(nValue));
+                writeElement(pAppProps, XML_Paragraphs, nValue);
     }
 
     uno::Reference<beans::XPropertyAccess> xUserDefinedProperties(xProperties->getUserDefinedProperties(), uno::UNO_QUERY);
@@ -719,10 +719,9 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
 
             OString aName = OUStringToOString( aprop[n].Name, RTL_TEXTENCODING_ASCII_US );
             // pid starts from 2 not from 1 as MS supports pid from 2
-            OString pid =  OUStringToOString( OUString::number(n + 2), RTL_TEXTENCODING_ASCII_US );
             pAppProps->startElement( XML_property ,
                 XML_fmtid,  "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
-                XML_pid,    pid,
+                XML_pid,    OString::number(n + 2),
                 XML_name,   aName,
                 FSEND);
 
