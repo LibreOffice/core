@@ -306,11 +306,19 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
         // TODO maybe use hints like FieldHints for this instead of looking at the text...
         const sal_Int32 l = nNext<m_pTxtNode->Len() ? nNext : m_pTxtNode->Len();
         sal_Int32 p=nPos;
-        while (p<l && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDSTART
-                   && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDEND
-                   && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FORMELEMENT)
+        const sal_Unicode* aStr = m_pTxtNode->GetTxt().getStr();
+        while (p<l)
         {
-            ++p;
+            sal_Unicode aChar = aStr[p];
+            if (aChar < CH_TXT_ATR_FORMELEMENT
+                || aChar > CH_TXT_ATR_FIELDEND)
+            {
+                ++p;
+            }
+            else
+            {
+                break;
+            }
         }
         if ((p<l && p>nPos) || nNext<=p)
         nNext=p;
