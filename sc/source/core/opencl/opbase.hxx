@@ -73,7 +73,7 @@ public:
         Children.reserve(8);
     }
     std::vector<FormulaTreeNodeRef> Children;
-    formula::FormulaToken* GetFormulaToken( void ) const
+    formula::FormulaToken* GetFormulaToken() const
     {
         return const_cast<formula::FormulaToken*>(mpCurrentFormula.get());
     }
@@ -88,7 +88,7 @@ class DynamicKernelArgument : boost::noncopyable
 public:
     DynamicKernelArgument( const std::string& s, FormulaTreeNodeRef ft );
 
-    const std::string& GetNameAsString( void ) const { return mSymName; }
+    const std::string& GetNameAsString() const { return mSymName; }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const = 0;
 
@@ -121,14 +121,14 @@ public:
     virtual ~DynamicKernelArgument() { }
 
     virtual void GenSlidingWindowFunction( std::stringstream& ) { }
-    const std::string& GetSymName( void ) const { return mSymName; }
-    formula::FormulaToken* GetFormulaToken( void ) const;
-    virtual size_t GetWindowSize( void ) const = 0;
-    virtual std::string DumpOpName( void ) const { return std::string(""); }
+    const std::string& GetSymName() const { return mSymName; }
+    formula::FormulaToken* GetFormulaToken() const;
+    virtual size_t GetWindowSize() const = 0;
+    virtual std::string DumpOpName() const { return std::string(""); }
     virtual void DumpInlineFun( std::set<std::string>&,
         std::set<std::string>& ) const { }
-    const std::string& GetName( void ) const { return mSymName; }
-    virtual bool NeedParallelReduction( void ) const { return false; }
+    const std::string& GetName() const { return mSymName; }
+    virtual bool NeedParallelReduction() const { return false; }
 
 protected:
     std::string mSymName;
@@ -145,7 +145,7 @@ class VectorRef : public DynamicKernelArgument
 public:
     VectorRef( const std::string& s, FormulaTreeNodeRef ft, int index = 0 );
 
-    const std::string& GetNameAsString( void ) const { return mSymName; }
+    const std::string& GetNameAsString() const { return mSymName; }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE;
     /// When declared as input to a sliding window function
@@ -160,14 +160,14 @@ public:
     virtual ~VectorRef();
 
     virtual void GenSlidingWindowFunction( std::stringstream& ) SAL_OVERRIDE { }
-    const std::string& GetSymName( void ) const { return mSymName; }
-    virtual size_t GetWindowSize( void ) const SAL_OVERRIDE;
-    virtual std::string DumpOpName( void ) const SAL_OVERRIDE { return std::string(""); }
+    const std::string& GetSymName() const { return mSymName; }
+    virtual size_t GetWindowSize() const SAL_OVERRIDE;
+    virtual std::string DumpOpName() const SAL_OVERRIDE { return std::string(""); }
     virtual void DumpInlineFun( std::set<std::string>&,
         std::set<std::string>& ) const SAL_OVERRIDE { }
-    const std::string& GetName( void ) const { return mSymName; }
-    virtual cl_mem GetCLBuffer( void ) const { return mpClmem; }
-    virtual bool NeedParallelReduction( void ) const SAL_OVERRIDE { return false; }
+    const std::string& GetName() const { return mSymName; }
+    virtual cl_mem GetCLBuffer() const { return mpClmem; }
+    virtual bool NeedParallelReduction() const SAL_OVERRIDE { return false; }
 
 protected:
     // Used by marshaling
@@ -182,11 +182,11 @@ class OpBase
 public:
     typedef std::vector<std::string> ArgVector;
     typedef std::vector<std::string>::iterator ArgVectorIter;
-    virtual std::string GetBottom( void ) { return "";};
+    virtual std::string GetBottom() { return "";};
     virtual std::string Gen2( const std::string&/*lhs*/,
         const std::string&/*rhs*/ ) const { return "";}
     virtual std::string Gen( ArgVector& /*argVector*/ ) { return "";};
-    virtual std::string BinFuncName( void ) const { return "";};
+    virtual std::string BinFuncName() const { return "";};
     virtual void BinInlineFun( std::set<std::string>&,
         std::set<std::string>& ) { }
     virtual bool takeString() const = 0;

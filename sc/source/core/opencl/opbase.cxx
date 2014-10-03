@@ -94,7 +94,7 @@ void DynamicKernelArgument::GenDeclRef( std::stringstream& ss ) const
     ss << mSymName;
 }
 
-FormulaToken* DynamicKernelArgument::GetFormulaToken( void ) const
+FormulaToken* DynamicKernelArgument::GetFormulaToken() const
 {
     return mFormulaTree->GetFormulaToken();
 }
@@ -144,7 +144,7 @@ std::string VectorRef::GenSlidingWindowDeclRef( bool nested ) const
     return ss.str();
 }
 
-size_t VectorRef::GetWindowSize( void ) const
+size_t VectorRef::GetWindowSize() const
 {
     FormulaToken* pCur = mFormulaTree->GetFormulaToken();
     assert(pCur);
