@@ -205,7 +205,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
     SwDocShellRef xDocSh;
 
     SwTextBlocks* pGroup = GetGroupDoc( rGroup );
-    if( pGroup && pGroup->GetCount() )
+    if (pGroup && pGroup->GetCount())
     {
         // query which view is registered. In WebWriter there is no normal view
         sal_uInt16 nViewId = 0 != SwView::Factory() ? 2 : 6;
@@ -269,9 +269,8 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         xDocSh->GetDoc()->getIDocumentState().ResetModified();
         if ( bShow )
             pFrame->GetFrame().Appear();
-
-        delete pGroup;
     }
+    delete pGroup;
     return xDocSh;
 }
 
