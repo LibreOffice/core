@@ -66,7 +66,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svdemo \
         svptest \
         svpclient \
-        vcldemo \
         pixelctl ) \
 ))
 
@@ -100,6 +99,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	) \
 	uri-encode \
 	ui-previewer \
+	vcldemo \
 	tiledrendering \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
