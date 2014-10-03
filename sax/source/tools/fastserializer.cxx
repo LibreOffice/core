@@ -57,6 +57,7 @@ namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
         : maCachedOutputStream()
         , maMarkStack()
+        , mbMarkStackEmpty(true)
         , mpDoubleStr(NULL)
         , mnDoubleStrCapacity(RTL_STR_MAX_VALUEOFDOUBLE)
     {
@@ -152,6 +153,7 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::endDocument()
     {
+        assert(mbMarkStackEmpty && maMarkStack.empty());
         maCachedOutputStream.flush();
     }
 
@@ -186,8 +188,11 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::startFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList )
     {
-        if ( !maMarkStack.empty() )
+        if ( !mbMarkStackEmpty )
+        {
+            maCachedOutputStream.flush();
             maMarkStack.top()->setCurrentElement( Element );
+        }
 
 #ifdef DBG_UTIL
         m_DebugStartedElements.push(Element);
@@ -222,8 +227,11 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList )
     {
-        if ( !maMarkStack.empty() )
+        if ( !mbMarkStackEmpty )
+        {
+            maCachedOutputStream.flush();
             maMarkStack.top()->setCurrentElement( Element );
+        }
 
         writeBytes(sOpeningBracket, N_CHARS(sOpeningBracket));
 
@@ -303,28 +311,47 @@ namespace sax_fastparser {
         {
             boost::shared_ptr< ForMerge > pSort( new ForSort( aOrder ) );
             maMarkStack.push( pSort );
+            maCachedOutputStream.setOutput( pSort );
         }
         else
         {
             boost::shared_ptr< ForMerge > pMerge( new ForMerge( ) );
             maMarkStack.push( pMerge );
+            maCachedOutputStream.setOutput( pMerge );
         }
+        mbMarkStackEmpty = false;
     }
 
     void FastSaxSerializer::mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType )
     {
-        if ( maMarkStack.empty() )
+        SAL_WARN_IF(mbMarkStackEmpty, "sax", "Empty mark stack - nothing to merge");
+        if ( mbMarkStackEmpty )
             return;
+
+        // flush, so that we get everything in getData()
+        maCachedOutputStream.flush();
 
         if ( maMarkStack.size() == 1  && eMergeType != MERGE_MARKS_IGNORE)
         {
-            writeOutput( maMarkStack.top()->getData() );
+            Sequence<sal_Int8> aSeq( maMarkStack.top()->getData() );
             maMarkStack.pop();
+            mbMarkStackEmpty = true;
+            maCachedOutputStream.resetOutputToStream();
+            maCachedOutputStream.writeBytes( aSeq.getConstArray(), aSeq.getLength() );
             return;
         }
 
         const Int8Sequence aMerge( maMarkStack.top()->getData() );
         maMarkStack.pop();
+        if (maMarkStack.empty())
+        {
+            mbMarkStackEmpty = true;
+            maCachedOutputStream.resetOutputToStream();
+        }
+        else
+        {
+            maCachedOutputStream.setOutput( maMarkStack.top() );
+        }
 
         switch ( eMergeType )
         {
@@ -338,26 +365,12 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::writeBytes( const Sequence< sal_Int8 >& rData )
     {
-        writeBytes( reinterpret_cast<const char*>(rData.getConstArray()), rData.getLength() );
+        maCachedOutputStream.writeBytes( rData.getConstArray(), rData.getLength() );
     }
 
     void FastSaxSerializer::writeBytes( const char* pStr, size_t nLen )
     {
-        if ( maMarkStack.empty() )
-            writeOutput( reinterpret_cast<const sal_Int8*>(pStr), nLen );
-        else
-            maMarkStack.top()->append( Sequence< sal_Int8 >(
-                reinterpret_cast<const sal_Int8*>(pStr), nLen) );
-    }
-
-    void FastSaxSerializer::writeOutput( const Sequence< ::sal_Int8 >& aData )
-    {
-        writeOutput( aData.getConstArray(), aData.getLength() );
-    }
-
-    void FastSaxSerializer::writeOutput( const sal_Int8* pStr, size_t nLen )
-    {
-        maCachedOutputStream.writeBytes( pStr, nLen );
+        maCachedOutputStream.writeBytes( reinterpret_cast<const sal_Int8*>(pStr), nLen );
     }
 
     FastSaxSerializer::Int8Sequence& FastSaxSerializer::ForMerge::getData()
