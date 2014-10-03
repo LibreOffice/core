@@ -2667,7 +2667,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
             if(TOKEN_TEXT == aToken.eTokenType)
             {
-                OSL_ENSURE(!bLastWasText, "text following text is invalid");
+                SAL_WARN_IF(bLastWasText, "sw", "text following text is invalid");
                 Control* pCtrl = InsertItem(aToken.sText, aToken);
                 bLastWasText = true;
                 if(!GetActiveControl())
