@@ -217,11 +217,11 @@ bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSou
                                 const OUString& rDestGroupName, const OUString& rLongName, bool bMove )
 {
     SwTextBlocks* pSourceGroup = rStatGlossaries.GetGroupDoc(rSourceGroupName, false);
-
     SwTextBlocks* pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName, false);
     if (pDestGroup->IsReadOnly() || (bMove && pSourceGroup->IsReadOnly()) )
     {
         delete pDestGroup;
+        delete pSourceGroup;
         return false;
     }
 
