@@ -50,8 +50,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-
 public class XStorageHelper implements XEventListener {
+
     XStorage[] xStorages;
     XStream xStream;
     XInputStream xIs = null;
@@ -61,8 +61,10 @@ public class XStorageHelper implements XEventListener {
     private static XStorageHelper listener = new XStorageHelper();
 
     private XStorageHelper() {}
+
     public XStorageHelper(String path, int mode,
                           boolean create) throws IOException {
+
         String modelUrl = null;
         int indexOfScriptsDir = path.lastIndexOf("Scripts");
 
@@ -82,10 +84,13 @@ public class XStorageHelper implements XEventListener {
             }
 
             XDocumentSubStorageSupplier xDocumentSubStorageSupplier =
-                UnoRuntime.queryInterface(
-                    XDocumentSubStorageSupplier.class, xModel);
-            xStorages =  new XStorage[tokens.countTokens()  ];
-            LogUtils.DEBUG("XStorageHelper ctor, path chunks length: " + xStorages.length);
+                UnoRuntime.queryInterface(XDocumentSubStorageSupplier.class,
+                                          xModel);
+
+            xStorages =  new XStorage[tokens.countTokens()];
+
+            LogUtils.DEBUG("XStorageHelper ctor, path chunks length: "
+                           + xStorages.length);
 
             for (int i = 0; i < xStorages.length; i++) {
                 LogUtils.DEBUG("XStorageHelper, processing index " + i);
@@ -94,16 +99,20 @@ public class XStorageHelper implements XEventListener {
                 XStorage storage = null;
 
                 if (i == 0) {
-                    storage  = xDocumentSubStorageSupplier.getDocumentSubStorage(name, mode);
+                    storage = xDocumentSubStorageSupplier.getDocumentSubStorage(name, mode);
 
                     if (storage == null) {
                         LogUtils.DEBUG("** boo hoo Storage is null ");
                     }
 
-                    XPropertySet xProps = UnoRuntime.queryInterface(XPropertySet.class, storage);
+                    XPropertySet xProps =
+                        UnoRuntime.queryInterface(XPropertySet.class, storage);
 
                     if (xProps != null) {
-                        String mediaType = AnyConverter.toString(xProps.getPropertyValue("MediaType"));
+
+                        String mediaType =
+                            AnyConverter.toString(xProps.getPropertyValue("MediaType"));
+
                         LogUtils.DEBUG("***** media type is " + mediaType);
 
                         if (!mediaType.equals("scripts")) {
@@ -111,8 +120,9 @@ public class XStorageHelper implements XEventListener {
                         }
                     }
                 } else {
-                    XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class,
-                                              xStorages[i - 1]);
+
+                    XNameAccess xNameAccess =
+                        UnoRuntime.queryInterface(XNameAccess.class, xStorages[i - 1]);
 
                     if (xNameAccess == null) {
                         disposeObject();
@@ -124,7 +134,8 @@ public class XStorageHelper implements XEventListener {
                             throw new IOException("No subdir: " + name);
                         } else {
                             // attempt to create new storage
-                            LogUtils.DEBUG("Attempt to create new storage for " + name);
+                            LogUtils.DEBUG("Attempt to create new storage for "
+                                           + name);
                         }
                     }
 
@@ -137,7 +148,7 @@ public class XStorageHelper implements XEventListener {
                     throw new IOException("storage not found: " + name);
                 }
 
-                xStorages[ i ] = storage;
+                xStorages[i] = storage;
 
             }
         } catch (com.sun.star.io.IOException ioe) {
@@ -171,15 +182,19 @@ public class XStorageHelper implements XEventListener {
             modelMap.remove(model);
         }
     }
+
     public XStorage getStorage() {
         return xStorages[ xStorages.length - 1 ];
     }
+
     public XModel getModel() {
         return xModel;
     }
+
     public void disposeObject() {
         disposeObject(false);
     }
+
     public void disposeObject(boolean shouldCommit) {
         LogUtils.DEBUG("In disposeObject");
 
@@ -202,12 +217,14 @@ public class XStorageHelper implements XEventListener {
         }
 
     }
+
     static public void disposeObject(XInterface xInterface) {
         if (xInterface == null) {
             return;
         }
 
-        XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, xInterface);
+        XComponent xComponent =
+            UnoRuntime.queryInterface(XComponent.class, xInterface);
 
         if (xComponent == null) {
             return;
@@ -215,9 +232,11 @@ public class XStorageHelper implements XEventListener {
 
         xComponent.dispose();
     }
+
     static public void commit(XInterface xInterface) {
-        XTransactedObject xTrans = UnoRuntime.queryInterface(XTransactedObject.class,
-                                   xInterface);
+
+        XTransactedObject xTrans =
+            UnoRuntime.queryInterface(XTransactedObject.class, xInterface);
 
         if (xTrans != null) {
             try {
@@ -232,6 +251,4 @@ public class XStorageHelper implements XEventListener {
         //TODO does not cater for untitled documents
         return modelMap.get(url);
     }
-
 }
-

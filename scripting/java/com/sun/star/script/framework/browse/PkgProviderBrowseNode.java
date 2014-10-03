@@ -24,12 +24,13 @@ import com.sun.star.script.framework.provider.ScriptProvider;
 
 import com.sun.star.uno.XComponentContext;
 
-
 public class PkgProviderBrowseNode extends ProviderBrowseNode {
 
     public PkgProviderBrowseNode(ScriptProvider provider, ParcelContainer container,
                                  XComponentContext xCtx) {
+
         super(provider, container, xCtx);
+
         LogUtils.DEBUG("*** PkgProviderBrowseNode ctor container name = " +
                        container.getName());
         LogUtils.DEBUG("*** PkgProviderBrowseNode ctor container path = " +
@@ -38,8 +39,7 @@ public class PkgProviderBrowseNode extends ProviderBrowseNode {
                        container.getElementNames().length);
     }
 
-    @Override
-    public String getName() {
+    @Override public String getName() {
         return (container != null) ? container.getName() : "Unknown";
     }
 

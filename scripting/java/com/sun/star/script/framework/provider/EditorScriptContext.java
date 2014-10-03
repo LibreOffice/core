@@ -28,8 +28,10 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
 public class EditorScriptContext implements XScriptContext {
+
     private XDesktop m_xDeskTop;
     private XComponentContext  m_xComponentContext;
+
     public EditorScriptContext(XComponentContext xmComponentContext,
                                XDesktop xDesktop) {
         this.m_xComponentContext = xmComponentContext;
@@ -42,15 +44,18 @@ public class EditorScriptContext implements XScriptContext {
         @return  XModel interface
     */
     public XModel getDocument() {
-        XModel xModel = UnoRuntime.queryInterface(XModel.class,
-                        m_xDeskTop.getCurrentComponent());
+
+        XModel xModel =
+            UnoRuntime.queryInterface(XModel.class, m_xDeskTop.getCurrentComponent());
 
         return xModel;
     }
 
     public XScriptInvocationContext getInvocationContext() {
-        XScriptInvocationContext xContext = UnoRuntime.queryInterface(
-                                                XScriptInvocationContext.class, getDocument());
+
+        XScriptInvocationContext xContext =
+            UnoRuntime.queryInterface(XScriptInvocationContext.class, getDocument());
+
         return xContext;
     }
 
@@ -71,5 +76,4 @@ public class EditorScriptContext implements XScriptContext {
     public XComponentContext getComponentContext() {
         return m_xComponentContext;
     }
-
 }

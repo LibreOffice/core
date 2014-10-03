@@ -22,6 +22,7 @@ import com.sun.star.io.XInputStream;
 import java.io.InputStream;
 
 public class XInputStreamWrapper extends InputStream {
+
     private XInputStream m_xInputStream;
 
     public XInputStreamWrapper(XInputStream xInputStream) {
@@ -85,5 +86,4 @@ public class XInputStreamWrapper extends InputStream {
             throw new java.io.IOException(ioe.getMessage());
         }
     }
-
 }

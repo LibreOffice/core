@@ -216,10 +216,10 @@ public class DeployParcelAction extends CookieAction implements
         chooser.setFileFilter(new FileFilter() {
             public boolean accept(File file) {
                 return file.isDirectory() ||
-                    file.getName().endsWith(".sxw") ||
-                    file.getName().endsWith(".sxc") ||
-                    file.getName().endsWith(".sxd") ||
-                    file.getName().endsWith(".sxi");
+                       file.getName().endsWith(".sxw") ||
+                       file.getName().endsWith(".sxc") ||
+                       file.getName().endsWith(".sxd") ||
+                       file.getName().endsWith(".sxi");
             }
 
             public String getDescription() {

@@ -15,7 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 package com.sun.star.script.framework.provider.java;
 
 /**
@@ -23,8 +22,8 @@ package com.sun.star.script.framework.provider.java;
  * want to implement an algorithm for obtaining a ScriptProxy object
  * for a particular ScriptDescriptor and Class
  */
-
 public interface Resolver {
+
     /**
      * Returns a ScriptProxy object for the given ScriptDescriptor and Class
      *
@@ -32,7 +31,6 @@ public interface Resolver {
      * @param  c   A Class
      * @return     The ScriptProxy value
      */
-    ScriptProxy getProxy(ScriptDescriptor sd, Class<?> c)
-    throws NoSuchMethodException;
+    ScriptProxy getProxy(ScriptDescriptor sd, Class<?> c) throws
+        NoSuchMethodException;
 }
-

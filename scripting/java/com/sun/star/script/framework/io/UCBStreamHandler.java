@@ -59,8 +59,9 @@ public class UCBStreamHandler extends URLStreamHandler {
 
     @Override
     public void parseURL(URL url, String spec, int start, int limit) {
-        LogUtils.DEBUG("**XUCBStreamHandler, parseURL: " + url + " spec: " + spec +
-                       " start: " + start + " limit: " + limit);
+
+        LogUtils.DEBUG("**XUCBStreamHandler, parseURL: " + url + " spec: "
+                       + spec + " start: " + start + " limit: " + limit);
 
         String file = url.getFile();
 
@@ -99,10 +100,13 @@ public class UCBStreamHandler extends URLStreamHandler {
                 return getFileStreamFromUCB(sUrl);
             } else {
                 String path = sUrl.substring(0, sUrl.lastIndexOf(separator));
-                String file = sUrl.substring(
-                                  sUrl.lastIndexOf(separator) + separator.length());
-                LogUtils.DEBUG("getInputStream, load of file from another file eg. " + file +
-                               " from " + path);
+
+                String file =
+                    sUrl.substring(sUrl.lastIndexOf(separator) + separator.length());
+
+                LogUtils.DEBUG("getInputStream, load of file from another file eg. "
+                               + file + " from " + path);
+
                 return getUCBStream(file, path);
             }
         }
@@ -121,11 +125,14 @@ public class UCBStreamHandler extends URLStreamHandler {
                         throw new java.io.IOException("File is read only");
                     }
 
-                    LogUtils.DEBUG("getOutputStream, create o/p  stream  for file eg. " + path);
+                    LogUtils.DEBUG("getOutputStream, create o/p  stream  for file eg. "
+                                   + path);
 
                     // we will only deal with simple file write
                     XOutputStream xos = m_xSimpleFileAccess.openFileWrite(path);
-                    XTruncate xtrunc = UnoRuntime.queryInterface(XTruncate.class, xos);
+
+                    XTruncate xtrunc =
+                        UnoRuntime.queryInterface(XTruncate.class, xos);
 
                     if (xtrunc != null) {
                         xtrunc.truncate();
@@ -135,7 +142,8 @@ public class UCBStreamHandler extends URLStreamHandler {
                 }
 
                 if (os == null) {
-                    throw new IOException("Failed to get OutputStream for " + sUrl);
+                    throw new IOException("Failed to get OutputStream for "
+                                          + sUrl);
                 }
             } catch (com.sun.star.ucb.CommandAbortedException cae) {
                 LogUtils.DEBUG("caught exception: " + cae.toString() +
@@ -155,9 +163,8 @@ public class UCBStreamHandler extends URLStreamHandler {
         }
     }
 
+    private InputStream getUCBStream(String file, String path) throws IOException {
 
-    private InputStream getUCBStream(String file, String path)
-    throws IOException {
         InputStream is = null;
         InputStream result = null;
 
@@ -197,10 +204,11 @@ public class UCBStreamHandler extends URLStreamHandler {
         return result;
     }
 
-    private InputStream getFileStreamFromJarStream(String file, InputStream is)
-    throws IOException {
-        ZipEntry entry;
+    private InputStream getFileStreamFromJarStream(String file,
+            InputStream is) throws
+        IOException {
 
+        ZipEntry entry;
         ZipInputStream zis = new ZipInputStream(is);
 
         while (zis.available() != 0) {
@@ -214,8 +222,8 @@ public class UCBStreamHandler extends URLStreamHandler {
         return null;
     }
 
-    private InputStream getFileStreamFromUCB(String path)
-    throws IOException {
+    private InputStream getFileStreamFromUCB(String path) throws IOException {
+
         InputStream result = null;
         XInputStream xInputStream = null;
 
@@ -258,13 +266,12 @@ public class UCBStreamHandler extends URLStreamHandler {
                 try {
                     xInputStream.closeInput();
                 } catch (Exception e2) {
-                    LogUtils.DEBUG(
-                        "Error closing XInputStream:" + e2.getMessage());
+                    LogUtils.DEBUG("Error closing XInputStream: "
+                                   + e2.getMessage());
                 }
             }
         }
 
         return result;
     }
-
 }

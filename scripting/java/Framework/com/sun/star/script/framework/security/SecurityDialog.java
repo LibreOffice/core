@@ -55,29 +55,35 @@ import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
-public class SecurityDialog extends WeakBase implements XComponent,
-    XServiceInfo, XDialog,
-    XInitialization {
+public class SecurityDialog extends WeakBase implements
+    XComponent, XServiceInfo, XDialog, XInitialization {
 
     static final String __serviceName =
         "com.sun.star.script.framework.security.SecurityDialog";
 
     private static final String _label1Name = "Label1";
+
     private static final String _label1String =
         "This document contains macros. Do you want to allow these macros to be run?";
 
     private static final String _label2Name = "Label2";
+
     private static final String _label2String =
         "This document contains macros. According to the security settings, the";
+
     private static final String _label3Name = "Label3";
+
     private static final String _label3String =
         "macros in this document should not be run. Do you want to run them";
+
     private static final String _label4Name = "Label4";
     private static final String _label4String = "anyway?";
 
     private static final String _checkBoxName = "CheckBox";
+
     private static final String _checkBoxString =
         "Add this directory to the list of secure paths: ";
+
     private static final String _label5Name = "Label5";
 
     private static final String _title = "Run Macro";
@@ -173,8 +179,7 @@ public class SecurityDialog extends WeakBase implements XComponent,
             }
 
         } else {
-            LogUtils.DEBUG("no checkbox: # of args=" +
-                           args.length);
+            LogUtils.DEBUG("no checkbox: # of args=" + args.length);
             cbIncrW = 0;
             cbIncrH = 0;
             checkBoxDialog = false;
@@ -197,13 +202,17 @@ public class SecurityDialog extends WeakBase implements XComponent,
 
     // static component operations
     public static XSingleServiceFactory __getServiceFactory(String implName,
-            XMultiServiceFactory multiFactory,
-            XRegistryKey regKey) {
+            XMultiServiceFactory multiFactory, XRegistryKey regKey) {
+
         XSingleServiceFactory xSingleServiceFactory = null;
 
         if (implName.equals(SecurityDialog.class.getName())) {
-            xSingleServiceFactory = FactoryHelper.getServiceFactory(
-                                        SecurityDialog.class, SecurityDialog.__serviceName, multiFactory, regKey);
+
+            xSingleServiceFactory =
+                FactoryHelper.getServiceFactory(SecurityDialog.class,
+                                                SecurityDialog.__serviceName,
+                                                multiFactory, regKey);
+
         }
 
         return xSingleServiceFactory;
@@ -226,7 +235,6 @@ public class SecurityDialog extends WeakBase implements XComponent,
         return retValue;
     }
 
-
     /** method for creating a dialog at runtime
      */
     private XDialog createDialog() throws com.sun.star.uno.Exception {
@@ -236,10 +244,13 @@ public class SecurityDialog extends WeakBase implements XComponent,
             _xComponentContext.getServiceManager();
 
         // create the dialog model and set the properties
-        Object dialogModel = xMultiComponentFactory.createInstanceWithContext(
-                                 "com.sun.star.awt.UnoControlDialogModel", _xComponentContext);
-        XPropertySet xPSetDialog = UnoRuntime.queryInterface(
-                                       XPropertySet.class, dialogModel);
+        Object dialogModel =
+            xMultiComponentFactory.createInstanceWithContext(
+                "com.sun.star.awt.UnoControlDialogModel", _xComponentContext);
+
+        XPropertySet xPSetDialog =
+            UnoRuntime.queryInterface(XPropertySet.class, dialogModel);
+
         xPSetDialog.setPropertyValue("PositionX", Integer.valueOf(dialogX));
         xPSetDialog.setPropertyValue("PositionY", Integer.valueOf(dialogY));
         xPSetDialog.setPropertyValue("Width", Integer.valueOf(dialogW + cbIncrW));
@@ -247,20 +258,26 @@ public class SecurityDialog extends WeakBase implements XComponent,
         xPSetDialog.setPropertyValue("Title", _title);
 
         // get the service manager from the dialog model
-        XMultiServiceFactory xMultiServiceFactory = UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, dialogModel);
+        XMultiServiceFactory xMultiServiceFactory =
+            UnoRuntime.queryInterface(XMultiServiceFactory.class, dialogModel);
 
         // create the Run Macro button model and set the properties
-        Object runButtonModel = xMultiServiceFactory.createInstance(
-                                    "com.sun.star.awt.UnoControlButtonModel");
-        XPropertySet xPSetButton = UnoRuntime.queryInterface(
-                                       XPropertySet.class, runButtonModel);
+        Object runButtonModel =
+            xMultiServiceFactory.createInstance(
+                "com.sun.star.awt.UnoControlButtonModel");
+
+        XPropertySet xPSetButton =
+            UnoRuntime.queryInterface(XPropertySet.class, runButtonModel);
+
         LogUtils.DEBUG("run: x=" + (((dialogW + cbIncrW) / 2) - runButtonW - 1));
         LogUtils.DEBUG("run: y=" + (dialogH + cbIncrH - runButtonH - 1));
-        xPSetButton.setPropertyValue("PositionX",
-                                     Integer.valueOf((((dialogW + cbIncrW) / 2) - runButtonW - 1)));
-        xPSetButton.setPropertyValue("PositionY",
-                                     Integer.valueOf(dialogH + cbIncrH - runButtonH - 1));
+
+        xPSetButton.setPropertyValue(
+            "PositionX", Integer.valueOf((((dialogW + cbIncrW) / 2) - runButtonW - 1)));
+
+        xPSetButton.setPropertyValue(
+            "PositionY", Integer.valueOf(dialogH + cbIncrH - runButtonH - 1));
+
         xPSetButton.setPropertyValue("Width", Integer.valueOf(runButtonW));
         xPSetButton.setPropertyValue("Height", Integer.valueOf(runButtonH));
         xPSetButton.setPropertyValue("Name", _runButtonName);
@@ -268,16 +285,22 @@ public class SecurityDialog extends WeakBase implements XComponent,
         xPSetButton.setPropertyValue("Label", _runMacro);
 
         // create the Dont Run Macro button model and set the properties
-        Object doNotRunButtonModel = xMultiServiceFactory.createInstance(
-                                         "com.sun.star.awt.UnoControlButtonModel");
-        xPSetButton = UnoRuntime.queryInterface(
-                          XPropertySet.class, doNotRunButtonModel);
+        Object doNotRunButtonModel =
+            xMultiServiceFactory.createInstance(
+                "com.sun.star.awt.UnoControlButtonModel");
+
+        xPSetButton =
+            UnoRuntime.queryInterface(XPropertySet.class, doNotRunButtonModel);
+
         LogUtils.DEBUG("dontrun: x=" + (((dialogW + cbIncrW) / 2) - 1));
         LogUtils.DEBUG("dontrun: y=" + (dialogH + cbIncrH - doNotRunButtonH - 1));
-        xPSetButton.setPropertyValue("PositionX",
-                                     Integer.valueOf((((dialogW + cbIncrW) / 2) + 1)));
-        xPSetButton.setPropertyValue("PositionY",
-                                     Integer.valueOf((dialogH + cbIncrH - doNotRunButtonH - 1)));
+
+        xPSetButton.setPropertyValue(
+            "PositionX", Integer.valueOf((((dialogW + cbIncrW) / 2) + 1)));
+
+        xPSetButton.setPropertyValue(
+            "PositionY", Integer.valueOf((dialogH + cbIncrH - doNotRunButtonH - 1)));
+
         xPSetButton.setPropertyValue("Width", Integer.valueOf(doNotRunButtonW));
         xPSetButton.setPropertyValue("Height", Integer.valueOf(doNotRunButtonH));
         xPSetButton.setPropertyValue("Name", _doNotRunButtonName);
@@ -285,18 +308,23 @@ public class SecurityDialog extends WeakBase implements XComponent,
         xPSetButton.setPropertyValue("Label", _doNotRunMacro);
 
         // insert the control models into the dialog model
-        XNameContainer xNameCont = UnoRuntime.queryInterface(
-                                       XNameContainer.class, dialogModel);
+        XNameContainer xNameCont =
+            UnoRuntime.queryInterface(XNameContainer.class, dialogModel);
+
         xNameCont.insertByName(_runButtonName, runButtonModel);
         xNameCont.insertByName(_doNotRunButtonName, doNotRunButtonModel);
 
         if (checkBoxDialog) {
             LogUtils.DEBUG("creating label & checkbox");
+
             // create the label model and set the properties
-            Object label2Model = xMultiServiceFactory.createInstance(
-                                     "com.sun.star.awt.UnoControlFixedTextModel");
-            XPropertySet xPSetLabel = UnoRuntime.queryInterface(
-                                          XPropertySet.class, label2Model);
+            Object label2Model =
+                xMultiServiceFactory.createInstance(
+                    "com.sun.star.awt.UnoControlFixedTextModel");
+
+            XPropertySet xPSetLabel =
+                UnoRuntime.queryInterface(XPropertySet.class, label2Model);
+
             xPSetLabel.setPropertyValue("PositionX", Integer.valueOf(label2X));
             xPSetLabel.setPropertyValue("PositionY", Integer.valueOf(label2Y));
             xPSetLabel.setPropertyValue("Width", Integer.valueOf(label2W));
@@ -306,10 +334,13 @@ public class SecurityDialog extends WeakBase implements XComponent,
             xPSetLabel.setPropertyValue("Label", _label2String);
 
             // create the label model and set the properties
-            Object label3Model = xMultiServiceFactory.createInstance(
-                                     "com.sun.star.awt.UnoControlFixedTextModel");
-            XPropertySet xPSetLabel3 = UnoRuntime.queryInterface(
-                                           XPropertySet.class, label3Model);
+            Object label3Model =
+                xMultiServiceFactory.createInstance(
+                    "com.sun.star.awt.UnoControlFixedTextModel");
+
+            XPropertySet xPSetLabel3 =
+                UnoRuntime.queryInterface(XPropertySet.class, label3Model);
+
             xPSetLabel3.setPropertyValue("PositionX", Integer.valueOf(label3X));
             xPSetLabel3.setPropertyValue("PositionY", Integer.valueOf(label3Y));
             xPSetLabel3.setPropertyValue("Width", Integer.valueOf(label3W));
@@ -319,10 +350,13 @@ public class SecurityDialog extends WeakBase implements XComponent,
             xPSetLabel3.setPropertyValue("Label", _label3String);
 
             // create the label model and set the properties
-            Object label4Model = xMultiServiceFactory.createInstance(
-                                     "com.sun.star.awt.UnoControlFixedTextModel");
-            XPropertySet xPSetLabel4 = UnoRuntime.queryInterface(
-                                           XPropertySet.class, label4Model);
+            Object label4Model =
+                xMultiServiceFactory.createInstance(
+                    "com.sun.star.awt.UnoControlFixedTextModel");
+
+            XPropertySet xPSetLabel4 =
+                UnoRuntime.queryInterface(XPropertySet.class, label4Model);
+
             xPSetLabel4.setPropertyValue("PositionX", Integer.valueOf(label4X));
             xPSetLabel4.setPropertyValue("PositionY", Integer.valueOf(label4Y));
             xPSetLabel4.setPropertyValue("Width", Integer.valueOf(label4W));
@@ -332,10 +366,13 @@ public class SecurityDialog extends WeakBase implements XComponent,
             xPSetLabel4.setPropertyValue("Label", _label4String);
 
             // create the checkbox model and set the properties
-            Object checkBoxModel = xMultiServiceFactory.createInstance(
-                                       "com.sun.star.awt.UnoControlCheckBoxModel");
-            XPropertySet xPSetCheckBox = UnoRuntime.queryInterface(
-                                             XPropertySet.class, checkBoxModel);
+            Object checkBoxModel =
+                xMultiServiceFactory.createInstance(
+                    "com.sun.star.awt.UnoControlCheckBoxModel");
+
+            XPropertySet xPSetCheckBox =
+                UnoRuntime.queryInterface(XPropertySet.class, checkBoxModel);
+
             xPSetCheckBox.setPropertyValue("PositionX", Integer.valueOf(checkBoxX));
             xPSetCheckBox.setPropertyValue("PositionY", Integer.valueOf(checkBoxY));
             xPSetCheckBox.setPropertyValue("Width", Integer.valueOf(checkBoxW));
@@ -352,11 +389,15 @@ public class SecurityDialog extends WeakBase implements XComponent,
             xNameCont.insertByName(_checkBoxName, checkBoxModel);
 
             if (extraPathLine) {
+
                 // create the label model and set the properties
-                Object label5Model = xMultiServiceFactory.createInstance(
-                                         "com.sun.star.awt.UnoControlFixedTextModel");
-                XPropertySet xPSetLabel5 = UnoRuntime.queryInterface(
-                                               XPropertySet.class, label5Model);
+                Object label5Model =
+                    xMultiServiceFactory.createInstance(
+                        "com.sun.star.awt.UnoControlFixedTextModel");
+
+                XPropertySet xPSetLabel5 =
+                    UnoRuntime.queryInterface(XPropertySet.class, label5Model);
+
                 xPSetLabel5.setPropertyValue("PositionX", Integer.valueOf(label5X));
                 xPSetLabel5.setPropertyValue("PositionY", Integer.valueOf(label5Y));
                 xPSetLabel5.setPropertyValue("Width", Integer.valueOf(label5W));
@@ -368,10 +409,13 @@ public class SecurityDialog extends WeakBase implements XComponent,
             }
         } else {
             // create the label model and set the properties
-            Object labelModel = xMultiServiceFactory.createInstance(
-                                    "com.sun.star.awt.UnoControlFixedTextModel");
-            XPropertySet xPSetLabel = UnoRuntime.queryInterface(
-                                          XPropertySet.class, labelModel);
+            Object labelModel =
+                xMultiServiceFactory.createInstance(
+                    "com.sun.star.awt.UnoControlFixedTextModel");
+
+            XPropertySet xPSetLabel =
+                UnoRuntime.queryInterface(XPropertySet.class, labelModel);
+
             xPSetLabel.setPropertyValue("PositionX", Integer.valueOf(label1X));
             xPSetLabel.setPropertyValue("PositionY", Integer.valueOf(label1Y));
             xPSetLabel.setPropertyValue("Width", Integer.valueOf(label1W));
@@ -385,53 +429,63 @@ public class SecurityDialog extends WeakBase implements XComponent,
         }
 
         // create the dialog control and set the model
-        Object dialog = xMultiComponentFactory.createInstanceWithContext(
-                            "com.sun.star.awt.UnoControlDialog", _xComponentContext);
-        XControl xControl = UnoRuntime.queryInterface(
-                                XControl.class, dialog);
-        XControlModel xControlModel = UnoRuntime.queryInterface(
-                                          XControlModel.class, dialogModel);
+        Object dialog =
+            xMultiComponentFactory.createInstanceWithContext(
+                "com.sun.star.awt.UnoControlDialog", _xComponentContext);
+
+        XControl xControl =
+            UnoRuntime.queryInterface(XControl.class, dialog);
+
+        XControlModel xControlModel =
+            UnoRuntime.queryInterface(XControlModel.class, dialogModel);
+
         xControl.setModel(xControlModel);
 
         // add an action listener to the button control
-        XControlContainer xControlCont = UnoRuntime.queryInterface(
-                                             XControlContainer.class, dialog);
+        XControlContainer xControlCont =
+            UnoRuntime.queryInterface(XControlContainer.class, dialog);
 
         // Add to yes button
         Object objectButton = xControlCont.getControl(_runButtonName);
-        XButton xButton = UnoRuntime.queryInterface(
-                              XButton.class, objectButton);
+
+        XButton xButton =
+            UnoRuntime.queryInterface(XButton.class, objectButton);
+
         xButton.addActionListener(new ActionListenerImpl(_runButtonName));
 
         // add to no button
         objectButton = xControlCont.getControl(_doNotRunButtonName);
-        xButton = UnoRuntime.queryInterface(
-                      XButton.class, objectButton);
+
+        xButton =
+            UnoRuntime.queryInterface(XButton.class, objectButton);
+
         xButton.addActionListener(new ActionListenerImpl(_doNotRunButtonName));
 
         if (checkBoxDialog) {
             // add to checkbox
             Object objectCheckBox = xControlCont.getControl(_checkBoxName);
-            XCheckBox xCheckBox = UnoRuntime.queryInterface(
-                                      XCheckBox.class, objectCheckBox);
+
+            XCheckBox xCheckBox =
+                UnoRuntime.queryInterface(XCheckBox.class, objectCheckBox);
+
             xCheckBox.addItemListener(new ItemListenerImpl(xControlCont));
         }
 
         // create a peer
-        Object toolkit = xMultiComponentFactory.createInstanceWithContext(
-                             "com.sun.star.awt.ExtToolkit", _xComponentContext);
-        XToolkit xToolkit = UnoRuntime.queryInterface(
-                                XToolkit.class, toolkit);
-        XWindow xWindow = UnoRuntime.queryInterface(
-                              XWindow.class, xControl);
+        Object toolkit =
+            xMultiComponentFactory.createInstanceWithContext(
+                "com.sun.star.awt.ExtToolkit", _xComponentContext);
+
+        XToolkit xToolkit = UnoRuntime.queryInterface(XToolkit.class, toolkit);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, xControl);
         xWindow.setVisible(false);
         xControl.createPeer(xToolkit, null);
 
         // return the dialog
-        XDialog xDialog = UnoRuntime.queryInterface(
-                              XDialog.class, dialog);
+        XDialog xDialog = UnoRuntime.queryInterface(XDialog.class, dialog);
         return xDialog;
     }
+
     public short execute() {
 
         short result = 0;
@@ -464,26 +518,33 @@ public class SecurityDialog extends WeakBase implements XComponent,
     }
 
     public void dispose() {
-        XComponent xComponent = UnoRuntime.queryInterface(
-                                    XComponent.class, _xDialog);
+
+        XComponent xComponent =
+            UnoRuntime.queryInterface(XComponent.class, _xDialog);
+
         xComponent.dispose();
     }
 
     public void addEventListener(com.sun.star.lang.XEventListener xListener) {
-        XComponent xComponent = UnoRuntime.queryInterface(
-                                    XComponent.class, _xDialog);
+
+        XComponent xComponent =
+            UnoRuntime.queryInterface(XComponent.class, _xDialog);
+
         xComponent.addEventListener(xListener);
     }
 
-
     public void removeEventListener(com.sun.star.lang.XEventListener aListener) {
-        XComponent xComponent = UnoRuntime.queryInterface(
-                                    XComponent.class, _xDialog);
+
+        XComponent xComponent =
+            UnoRuntime.queryInterface(XComponent.class, _xDialog);
+
         xComponent.removeEventListener(aListener);
     }
 
     private class ActionListenerImpl implements com.sun.star.awt.XActionListener {
+
         private String _buttonName;
+
         private ActionListenerImpl(String buttonName) {
             _buttonName = buttonName;
         }
@@ -496,17 +557,20 @@ public class SecurityDialog extends WeakBase implements XComponent,
         public void actionPerformed(ActionEvent actionEvent) {
             _pushed = _buttonName;
             LogUtils.DEBUG("** Button pushed ->" + _pushed);
-
             _xDialog.endExecute();
         }
     }
 
     private class ItemListenerImpl implements com.sun.star.awt.XItemListener {
+
         private XCheckBox _xCheckBox;
+
         private ItemListenerImpl(XControlContainer xControlCont) {
             Object objectCheckBox = xControlCont.getControl(_checkBoxName);
-            _xCheckBox = UnoRuntime.queryInterface(
-                             XCheckBox.class, objectCheckBox);
+
+            _xCheckBox =
+                UnoRuntime.queryInterface(XCheckBox.class, objectCheckBox);
+
         }
 
         // XEventListener

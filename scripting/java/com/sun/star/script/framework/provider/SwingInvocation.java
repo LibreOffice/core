@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 // (also, the current thread must not wait for that fresh thread to terminate,
 // as that would cause a deadlock if this thread is the AppKit thread):
 public final class SwingInvocation {
+
     public static void invoke(final Runnable doRun) {
         new Thread("SwingInvocation") {
             @Override

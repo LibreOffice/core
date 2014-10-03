@@ -27,7 +27,6 @@ import java.util.StringTokenizer;
 
 public class PathUtils {
 
-
     public static String BOOTSTRAP_NAME;
     private static boolean m_windows = false;
 
@@ -38,13 +37,15 @@ public class PathUtils {
 
         BOOTSTRAP_NAME = m_windows ? "bootstrap.ini" : "bootstraprc";
     }
+
     public static String getOidForModel(XModel xModel) {
         String oid = "";
 
         if (xModel != null) {
             try {
-                Method getOid = IQueryInterface.class.getMethod("getOid",
-                                (java.lang.Class[])null);
+
+                Method getOid =
+                    IQueryInterface.class.getMethod("getOid", (java.lang.Class[])null);
 
                 if (getOid != null) {
                     oid = (String)getOid.invoke(xModel, new Object[0]);
@@ -56,6 +57,7 @@ public class PathUtils {
 
         return oid;
     }
+
     static  public String make_url(String baseUrl, String url) {
         StringBuilder buff = new StringBuilder(baseUrl.length() + url.length());
         buff.append(baseUrl);

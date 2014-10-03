@@ -28,6 +28,7 @@ import java.net.URLClassLoader;
  *  Class Loader Factory
  */
 public class ClassLoaderFactory {
+
     private ClassLoaderFactory() {}
 
     public static ClassLoader getURLClassLoader(ScriptMetaData scriptData) {
@@ -41,9 +42,9 @@ public class ClassLoaderFactory {
 
         return getURLClassLoader(parent, classPath);
     }
+
     private static ClassLoader getURLClassLoader(ClassLoader parent,
             URL[] classpath) {
         return new URLClassLoader(classpath, parent);
     }
-
 }

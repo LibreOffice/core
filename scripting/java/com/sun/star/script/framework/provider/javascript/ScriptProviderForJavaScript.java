@@ -52,15 +52,16 @@ import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.Scriptable;
 
 public class ScriptProviderForJavaScript {
+
     public static class ScriptProviderForJavaScript_2 extends ScriptProvider {
+
         public ScriptProviderForJavaScript_2(XComponentContext ctx) {
             super(ctx, "JavaScript");
         }
 
         @Override
         public XScript getScript(/*IN*/String scriptURI)
-        throws com.sun.star.uno.RuntimeException,
-            ScriptFrameworkErrorException {
+        throws com.sun.star.uno.RuntimeException, ScriptFrameworkErrorException {
             ScriptMetaData scriptData = null;
 
             try {
@@ -69,9 +70,9 @@ public class ScriptProviderForJavaScript {
                                                    m_xInvocContext);
                 return script;
             } catch (com.sun.star.uno.RuntimeException re) {
-                throw new ScriptFrameworkErrorException("Failed to create script object: " +
-                                                        re.getMessage(),
-                                                        null, scriptData.getLanguageName(), language, ScriptFrameworkErrorType.UNKNOWN);
+                throw new ScriptFrameworkErrorException(
+                    "Failed to create script object: " + re.getMessage(),
+                    null, scriptData.getLanguageName(), language, ScriptFrameworkErrorType.UNKNOWN);
             }
         }
 
@@ -99,23 +100,27 @@ public class ScriptProviderForJavaScript {
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
     public static XSingleServiceFactory __getServiceFactory(String implName,
-            XMultiServiceFactory multiFactory,
-            XRegistryKey regKey) {
+            XMultiServiceFactory multiFactory, XRegistryKey regKey) {
+
         XSingleServiceFactory xSingleServiceFactory = null;
 
         if (implName.equals(
                 ScriptProviderForJavaScript.ScriptProviderForJavaScript_2.class.getName())) {
-            xSingleServiceFactory = FactoryHelper.getServiceFactory(
-                                        ScriptProviderForJavaScript.ScriptProviderForJavaScript_2.class,
-                                        "com.sun.star.script.provider.ScriptProviderForJavaScript",
-                                        multiFactory,
-                                        regKey);
+
+            xSingleServiceFactory =
+                FactoryHelper.getServiceFactory(
+                    ScriptProviderForJavaScript.ScriptProviderForJavaScript_2.class,
+                    "com.sun.star.script.provider.ScriptProviderForJavaScript",
+                    multiFactory, regKey);
+
         }
 
         return xSingleServiceFactory;
     }
 }
+
 class ScriptImpl implements XScript {
+
     private ScriptMetaData metaData;
     private XComponentContext m_xContext;
     private XMultiComponentFactory m_xMultiComponentFactory;
@@ -125,6 +130,7 @@ class ScriptImpl implements XScript {
     ScriptImpl(XComponentContext ctx, ScriptMetaData metaData, XModel xModel,
                XScriptInvocationContext xInvocContext) throws
         com.sun.star.uno.RuntimeException {
+
         this.metaData = metaData;
         this.m_xContext = ctx;
         this.m_xModel = xModel;
@@ -167,18 +173,15 @@ class ScriptImpl implements XScript {
      *                                   ScriptErrorRaisedException or
      *                                   ScriptExceptionRaisedException
      */
-
     public Object invoke(
         /*IN*/Object[]  params,
         /*OUT*/short[][]  aOutParamIndex,
         /*OUT*/Object[][]  aOutParam)
-
     throws ScriptFrameworkErrorException, InvocationTargetException {
+
         // Initialise the out parameters - not used at the moment
         aOutParamIndex[0] = new short[0];
         aOutParam[0] = new Object[0];
-
-
 
         ClassLoader cl = null;
         URL sourceUrl = null;
@@ -198,9 +201,9 @@ class ScriptImpl implements XScript {
         try {
             String editorURL = sourceUrl.toString();
             Object result = null;
+
             ScriptEditorForJavaScript editor =
-                ScriptEditorForJavaScript.getEditor(
-                    metaData.getSourceURL());
+                ScriptEditorForJavaScript.getEditor(metaData.getSourceURL());
 
             if (editor != null) {
                 editorURL = editor.getURL();
@@ -252,22 +255,24 @@ class ScriptImpl implements XScript {
              */
             ImporterTopLevel scope = new ImporterTopLevel(ctxt);
 
-            Scriptable jsCtxt = Context.toObject(
-                                    ScriptContext.createContext(
-                                        m_xModel, m_xInvocContext, m_xContext,
-                                        m_xMultiComponentFactory), scope);
+            Scriptable jsCtxt =
+                Context.toObject(
+                    ScriptContext.createContext(
+                        m_xModel, m_xInvocContext, m_xContext,
+                        m_xMultiComponentFactory),
+                    scope);
+
             scope.put("XSCRIPTCONTEXT", scope, jsCtxt);
 
             Scriptable jsArgs = Context.toObject(params, scope);
             scope.put("ARGUMENTS", scope, jsArgs);
 
-            result = ctxt.evaluateString(scope,
-                                         source, "<stdin>", 1, null);
+            result = ctxt.evaluateString(scope, source, "<stdin>", 1, null);
             result = Context.toString(result);
             return result;
         } catch (JavaScriptException jse) {
-            LogUtils.DEBUG("Caught JavaScriptException exception for JavaScript type = " +
-                           jse.getClass());
+            LogUtils.DEBUG("Caught JavaScriptException exception for JavaScript type = "
+                           +       jse.getClass());
             String message = jse.getMessage();
             Object wrap = jse.getValue();
             LogUtils.DEBUG("\t message  " + message);
@@ -286,15 +291,14 @@ class ScriptImpl implements XScript {
             LogUtils.DEBUG("\t language  " + se.language);
             LogUtils.DEBUG("\t scriptName  " + se.scriptName);
             raiseEditor(se.lineNum);
-            throw new InvocationTargetException("JavaScript uncaught exception" +
-                                                metaData.getLanguageName(), null, se);
+            throw new InvocationTargetException(
+                "JavaScript uncaught exception" + metaData.getLanguageName(), null, se);
         } catch (Exception ex) {
             LogUtils.DEBUG("Caught Exception " + ex);
             LogUtils.DEBUG("rethrowing as ScriptFramework error");
             throw new ScriptFrameworkErrorException(
-                ex.getMessage(), null,
-                metaData.getLanguageName(), metaData.getLanguage(),
-                ScriptFrameworkErrorType.UNKNOWN);
+                ex.getMessage(), null, metaData.getLanguageName(),
+                metaData.getLanguage(), ScriptFrameworkErrorType.UNKNOWN);
         } finally {
             if (ctxt != null) {
                 Context.exit();
@@ -305,14 +309,18 @@ class ScriptImpl implements XScript {
     private void raiseEditor(int lineNum) {
         try {
             URL sourceUrl = metaData.getSourceURL();
-            ScriptEditorForJavaScript editor = ScriptEditorForJavaScript.getEditor(
-                                                   sourceUrl);
+
+            ScriptEditorForJavaScript editor =
+                ScriptEditorForJavaScript.getEditor(sourceUrl);
 
             if (editor == null) {
                 editor = ScriptEditorForJavaScript.getEditor();
+
                 editor.edit(
                     ScriptContext.createContext(m_xModel, m_xInvocContext,
-                                                m_xContext, m_xMultiComponentFactory), metaData);
+                                                m_xContext, m_xMultiComponentFactory),
+                    metaData);
+
                 editor = ScriptEditorForJavaScript.getEditor(sourceUrl);
             }
 
@@ -325,4 +333,3 @@ class ScriptImpl implements XScript {
         }
     }
 }
-

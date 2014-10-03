@@ -15,7 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 package com.sun.star.script.framework.provider.java;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,9 +26,9 @@ import java.lang.reflect.Method;
  * @see        java.lang.reflect.Method
  */
 public class ScriptProxy {
+
     private Object m_targetObject;
     private Method m_method;
-
 
     /**
      * Constructs a <code>ScriptProxy</code> object for the given
@@ -41,7 +40,6 @@ public class ScriptProxy {
         this.m_method = method;
     }
 
-
     /**
      * Sets the <code>Object</code> on which the ScriptProxy should invoke
      * the method
@@ -51,7 +49,6 @@ public class ScriptProxy {
     public void setTargetObject(Object obj) {
         m_targetObject = obj;
     }
-
 
     /**
      * Invokes the method contained in this <code>ScriptProxy</code>,
@@ -64,10 +61,9 @@ public class ScriptProxy {
      * @see                                   java.lang.reflect.Method for the exceptions
      *                                          that may be thrown
      */
-    public  Object invoke(Object[] args)
-    throws IllegalAccessException, InvocationTargetException,
-        IllegalArgumentException {
+    public  Object invoke(Object[] args) throws
+        IllegalAccessException, InvocationTargetException, IllegalArgumentException {
+
         return m_method.invoke(m_targetObject, args);
     }
 }
-

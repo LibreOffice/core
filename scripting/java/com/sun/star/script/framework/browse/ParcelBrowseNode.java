@@ -48,19 +48,17 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-public class ParcelBrowseNode extends PropertySet
-    implements XBrowseNode, XInvocation {
+public class ParcelBrowseNode extends PropertySet implements
+    XBrowseNode, XInvocation {
+
     private ScriptProvider provider;
     private Collection<XBrowseNode> browsenodes;
     private ParcelContainer container;
     private Parcel parcel;
 
-
-
-
-
     public ParcelBrowseNode(ScriptProvider provider, ParcelContainer container,
                             String parcelName) {
+
         this.provider = provider;
         this.container = container;
 
@@ -68,30 +66,28 @@ public class ParcelBrowseNode extends PropertySet
         try {
             this.parcel = (Parcel)this.container.getByName(parcelName);
         } catch (Exception e) {
-
             LogUtils.DEBUG("** Exception: " + e);
-            LogUtils.DEBUG(" ** Failed to get parcel named " +
-                           parcelName + " from container");
+            LogUtils.DEBUG(" ** Failed to get parcel named " + parcelName +
+                           " from container");
         }
 
-        registerProperty("Deletable", new Type(boolean.class),
-                         (short)0, "deletable");
-        registerProperty("Editable", new Type(boolean.class),
-                         (short)0, "editable");
-        registerProperty("Creatable", new Type(boolean.class),
-                         (short)0, "creatable");
-        registerProperty("Renamable", new Type(boolean.class),
-                         (short)0, "renamable");
+        registerProperty("Deletable", new Type(boolean.class), (short)0, "deletable");
+        registerProperty("Editable", new Type(boolean.class), (short)0, "editable");
+        registerProperty("Creatable", new Type(boolean.class), (short)0, "creatable");
+        registerProperty("Renamable", new Type(boolean.class), (short)0, "renamable");
 
         String parcelDirUrl = parcel.getPathToParcel();
         XComponentContext xCtx = provider.getScriptingContext().getComponentContext();
         XMultiComponentFactory xFac = xCtx.getServiceManager();
 
         try {
-            XSimpleFileAccess xSFA = UnoRuntime.queryInterface(XSimpleFileAccess.class,
-                                     xFac.createInstanceWithContext(
-                                         "com.sun.star.ucb.SimpleFileAccess",
-                                         xCtx));
+
+            XSimpleFileAccess xSFA =
+                UnoRuntime.queryInterface(XSimpleFileAccess.class,
+                                          xFac.createInstanceWithContext(
+                                              "com.sun.star.ucb.SimpleFileAccess",
+                                              xCtx));
+
         } catch (com.sun.star.uno.Exception e) {
             // TODO propagate potential errors
             LogUtils.DEBUG("Caught exception creating ParcelBrowseNode " + e);
@@ -150,11 +146,13 @@ public class ParcelBrowseNode extends PropertySet
     }
 
     public Object invoke(String aFunctionName, Object[] aParams,
-                         short[][] aOutParamIndex, Object[][] aOutParam)
-    throws com.sun.star.lang.IllegalArgumentException,
+                         short[][] aOutParamIndex, Object[][] aOutParam) throws
+        com.sun.star.lang.IllegalArgumentException,
         com.sun.star.script.CannotConvertException,
         com.sun.star.reflection.InvocationTargetException {
+
         LogUtils.DEBUG("ParcelBrowseNode invoke for " + aFunctionName);
+
         // Initialise the out parameters - not used but prevents error in
         // UNO bridge
         aOutParamIndex[0] = new short[0];
@@ -166,21 +164,22 @@ public class ParcelBrowseNode extends PropertySet
             try {
                 String newName;
 
-                if (aParams == null || aParams.length < 1 ||
-                    !AnyConverter.isString(aParams[0])) {
+                if (aParams == null || aParams.length < 1
+                    || !AnyConverter.isString(aParams[0])) {
+
                     String prompt = "Enter name for new Script";
                     String title = "Create Script";
 
                     // try to get a DialogFactory instance, if it fails
                     // just use a Swing JOptionPane to prompt for the name
                     try {
-                        DialogFactory dialogFactory =
-                            DialogFactory.getDialogFactory();
-
+                        DialogFactory dialogFactory = DialogFactory.getDialogFactory();
                         newName = dialogFactory.showInputDialog(title, prompt);
                     } catch (Exception e) {
+
                         newName = JOptionPane.showInputDialog(null, prompt, title,
                                                               JOptionPane.QUESTION_MESSAGE);
+
                     }
                 } else {
                     newName = AnyConverter.toString(aParams[0]);
@@ -190,7 +189,10 @@ public class ParcelBrowseNode extends PropertySet
                     result =  new Any(new Type(Boolean.class), Boolean.FALSE);
                 } else {
                     String source = provider.getScriptEditor().getTemplate();
-                    String languageName = newName + "." + provider.getScriptEditor().getExtension();
+
+                    String languageName =
+                        newName + "." + provider.getScriptEditor().getExtension();
+
                     String language = container.getLanguage();
 
                     ScriptEntry entry = new ScriptEntry(language, languageName, "",
@@ -200,7 +202,8 @@ public class ParcelBrowseNode extends PropertySet
                     ScriptMetaData data = new ScriptMetaData(parcel, entry, source);
                     parcel.insertByName(languageName, data);
 
-                    ScriptBrowseNode sbn = new ScriptBrowseNode(provider, parcel, languageName);
+                    ScriptBrowseNode sbn =
+                        new ScriptBrowseNode(provider, parcel, languageName);
 
                     if (browsenodes == null) {
                         LogUtils.DEBUG("browsenodes null!!");
@@ -208,14 +211,12 @@ public class ParcelBrowseNode extends PropertySet
                     }
 
                     browsenodes.add(sbn);
-
                     result = new Any(new Type(XBrowseNode.class), sbn);
                 }
             } catch (Exception e) {
                 LogUtils.DEBUG("ParcelBrowseNode[create] failed with: " + e);
                 LogUtils.DEBUG(LogUtils.getTrace(e));
                 result = new Any(new Type(Boolean.class), Boolean.FALSE);
-
             }
         } else if (aFunctionName.equals("Deletable")) {
             try {
@@ -228,6 +229,7 @@ public class ParcelBrowseNode extends PropertySet
                 result =  new Any(new Type(Boolean.class), Boolean.FALSE);
             }
         } else if (aFunctionName.equals("Renamable")) {
+
             String newName = null;
 
             try {
@@ -240,13 +242,13 @@ public class ParcelBrowseNode extends PropertySet
                     // try to get a DialogFactory instance, if it fails
                     // just use a Swing JOptionPane to prompt for the name
                     try {
-                        DialogFactory dialogFactory =
-                            DialogFactory.getDialogFactory();
-
+                        DialogFactory dialogFactory = DialogFactory.getDialogFactory();
                         newName = dialogFactory.showInputDialog(title, prompt);
                     } catch (Exception e) {
+
                         newName = JOptionPane.showInputDialog(null, prompt, title,
                                                               JOptionPane.QUESTION_MESSAGE);
+
                     }
                 } else {
                     newName = AnyConverter.toString(aParams[0]);
@@ -259,8 +261,8 @@ public class ParcelBrowseNode extends PropertySet
                     getChildNodes();
                 }
 
-                ScriptBrowseNode[] childNodes = browsenodes.toArray(new
-                                                ScriptBrowseNode[browsenodes.size()]);
+                ScriptBrowseNode[] childNodes =
+                    browsenodes.toArray(new ScriptBrowseNode[browsenodes.size()]);
 
                 for (int index = 0; index < childNodes.length; index++) {
                     childNodes[ index ].updateURI(p);
@@ -280,14 +282,14 @@ public class ParcelBrowseNode extends PropertySet
         return result;
     }
 
-    public void setValue(String aPropertyName, Object aValue)
-    throws com.sun.star.beans.UnknownPropertyException,
+    public void setValue(String aPropertyName, Object aValue)    throws
+        com.sun.star.beans.UnknownPropertyException,
         com.sun.star.script.CannotConvertException,
         com.sun.star.reflection.InvocationTargetException {
     }
 
-    public Object getValue(String aPropertyName)
-    throws com.sun.star.beans.UnknownPropertyException {
+    public Object getValue(String aPropertyName) throws
+        com.sun.star.beans.UnknownPropertyException {
         return null;
     }
 
