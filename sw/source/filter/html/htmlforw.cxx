@@ -752,6 +752,9 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             TRISTATE_FALSE != *(sal_Int16*) aTmp.getValue() )
         {
             sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_checked);
+            sOptions += "=\"";
+            sOptions += OString(OOO_STRING_SVTOOLS_HTML_O_checked);
+            sOptions += "\"";
         }
 
         aTmp = xPropSet->getPropertyValue( "RefValue" );
@@ -970,7 +973,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         sOut = "\"";
     }
 
-    sOut = sOptions;
+    sOut += " " + sOptions;
 
     if( TYPE_IMAGE == eType )
     {
