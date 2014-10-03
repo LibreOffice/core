@@ -557,7 +557,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     {
         Rectangle aRect(rUDEvt.GetRect());
         unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
-        if(m_pButtons[nId])
+        if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
             m_pButtons[nId]->Hide();
         // draw the non-style entries, ie. "Clear Formatting" or "More..."
         DrawEntry( rUDEvt, true, true );
