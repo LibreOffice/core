@@ -6124,6 +6124,81 @@ void Test::testFormulaToValue()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaToValue2()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    m_pDoc->InsertTab(0, "Test");
+
+    const char* aData[][2] = {
+        { "=1", "=ISFORMULA(RC[-1])" },
+        { "=2", "=ISFORMULA(RC[-1])" },
+        {  "3", "=ISFORMULA(RC[-1])" },
+        { "=4", "=ISFORMULA(RC[-1])" },
+        { "=5", "=ISFORMULA(RC[-1])" },
+    };
+
+    // Insert data into B2:C6.
+    ScAddress aPos(1,1,0); // B2
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "1", "TRUE" },
+            { "2", "TRUE" },
+            { "3", "FALSE" },
+            { "4", "TRUE" },
+            { "5", "TRUE" },
+        };
+
+        bool bSuccess = checkOutput<2>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Convert B3:B5 to a value.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScRange aConvRange(1,2,0,1,4,0); // B3:B5
+    rFunc.ConvertFormulaToValue(aConvRange, true, false);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "1", "TRUE" },
+            { "2", "FALSE" },
+            { "3", "FALSE" },
+            { "4", "FALSE" },
+            { "5", "TRUE" },
+        };
+
+        bool bSuccess = checkOutput<2>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Undo and check.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "1", "TRUE" },
+            { "2", "TRUE" },
+            { "3", "FALSE" },
+            { "4", "TRUE" },
+            { "5", "TRUE" },
+        };
+
+        bool bSuccess = checkOutput<2>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testMixData()
 {
     m_pDoc->InsertTab(0, "Test");

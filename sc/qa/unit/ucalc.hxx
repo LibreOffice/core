@@ -388,6 +388,7 @@ public:
     void testTransliterateText();
 
     void testFormulaToValue();
+    void testFormulaToValue2();
 
     void testColumnFindEditCells();
 
@@ -572,6 +573,7 @@ public:
     CPPUNIT_TEST(testDeleteContents);
     CPPUNIT_TEST(testTransliterateText);
     CPPUNIT_TEST(testFormulaToValue);
+    CPPUNIT_TEST(testFormulaToValue2);
     CPPUNIT_TEST(testColumnFindEditCells);
     CPPUNIT_TEST_SUITE_END();
 
