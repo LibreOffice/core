@@ -56,7 +56,7 @@ private:
 
     XclExpNoteListRef   mxNoteList;
 
-    // pRec mit new anlegen und vergessen, delete macht ExcTable selber!
+    // re-create and forget pRec; delete is done by ExcTable itself!
     void                        Add( XclExpRecordBase* pRec );
 
 public:

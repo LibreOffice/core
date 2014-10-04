@@ -26,34 +26,34 @@
 enum FUNC_TYPE
 {
     FT_Return = 0,  // End Formula
-    FT_FuncFix0,    // Funktion, 0 Parameter
-    FT_FuncFix1,    // Funktion, 0 Parameter
-    FT_FuncFix2,    // Funktion, 0 Parameter
-    FT_FuncFix3,    // Funktion, 0 Parameter
-    FT_FuncFix4,    // Funktion, 0 Parameter
+    FT_FuncFix0,    // Function, 0 Parameter
+    FT_FuncFix1,    // Function, 0 Parameter
+    FT_FuncFix2,    // Function, 0 Parameter
+    FT_FuncFix3,    // Function, 0 Parameter
+    FT_FuncFix4,    // Function, 0 Parameter
     FT_FuncVar,     // ~, var. P.
-    FT_Neg,         // Negierung
+    FT_Neg,         // Negation
     FT_Op,          // Operator
-    FT_NotImpl,     // nicht implementiert
+    FT_NotImpl,     // not implemented
     FT_ConstFloat,  // Double (8-Byte)
     FT_Variable,    // Single Ref
     FT_Range,       // Double Ref
-    FT_Braces,      // Klammmern
+    FT_Braces,      // Braces
     FT_ConstInt,    // Integer
     FT_ConstString, // String
-    FT_NOP,         // nichts
-    // zusaetzlich ab WK3
+    FT_NOP,         // nothing
+    // additionally since WK3
     FT_Cref,        // Cell Reference
     FT_Rref,        // Range Reference
     FT_Nrref,       // Named range reference
-    FT_Absnref,     // Absolut named range
+    FT_Absnref,     // Absolute named range
     FT_Erref,       // Err range reference
     FT_Ecref,       // Err cell reference
     FT_Econstant,   // Err constant
     FT_Splfunc,     // SPLfunction
     FT_Const10Float,// Float (10-Byte)
     FT_Snum         // Const Short Num
-    // fuer 'Problemfaelle' beim Import
+    // for 'Problem Cases' during Import
 };
 
 struct LotusContext;
@@ -73,19 +73,19 @@ private:
     static DefTokenId   IndexToTokenWK123( sal_uInt8 );
     void                DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtName );
     void                LotusRelToScRel(sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefData& rSRD);
-    bool                bWK3;       // alternative Codeumsetzung statt fuer < WK1
+    bool                bWK3;       // alternative Code translation for < WK1
     bool                bWK123;     // alternative for 123
 
     void                ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nFlags );
     inline void         ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nFlags );
     void                IncToken( TokenId &rParam );
-                        // ACHTUNG: hier wird die aktuelle Token-Kette im Pool
-                        // mit '(<rParam>)+1' fortgeschrieben und mit
-                        // Store() abgeschlossen!
+                        // Attention: here the Token-chain is extended in Pool
+                        // with '(<rParam>)+1' and finished with Store() !
+
     void                DecToken( TokenId& rParam );
                         // ACHTUNG: ~
     void                NegToken( TokenId& rParam );
-                        // ACHTUNG: wie ~, nur wird '-(<rParam>)' gebildet
+                        // ACHTUNG: like ~, but with '-(<rParam>)'
 public:
     LotusToSc(LotusContext &rContext, SvStream& aStr, svl::SharedStringPool& rSPool, rtl_TextEncoding eSrc, bool b);
 
@@ -102,10 +102,10 @@ private:
 
 inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nRelBit )
 {
-    // erster Teil
+    // 1st part
     ReadSRD( rCRD.Ref1, nRelBit );
 
-    // zweiter Teil
+    // 2nd part
     ReadSRD( rCRD.Ref2, nRelBit >> 3 );
 }
 

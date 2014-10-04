@@ -67,27 +67,27 @@ enum E_TYPE
     T_RefC,     // Cell Reference
     T_RefA,     // Area Reference
     T_RN,       // Range Name
-    T_Ext,      // irgendwas Unbekanntes mit Funktionsnamen
+    T_Ext,      // something unknown with function name
     T_Nlf,      // token for natural language formula
     T_Matrix,   // token for inline arrays
     T_ExtName,  // token for external names
     T_ExtRefC,
     T_ExtRefA,
-    T_Error     // fuer Abfrage im Fehlerfall
+    T_Error     // for check in case of error
 };
 
 class TokenPool
 {
-    // !ACHTUNG!: externe Id-Basis ist 1, interne 0!
-    // Ausgabe Id = 0 -> Fehlerfall
+    // !ATTENTION!: external Id-Basis is 1, internal 0!
+    // return Id = 0 -> Error
 private:
     svl::SharedStringPool& mrStringPool;
 
-        OUString**                      ppP_Str;    // Pool fuer Strings
-        sal_uInt16                      nP_Str;     // ...mit Groesse
-        sal_uInt16                      nP_StrAkt;  // ...und Schreibmarke
+        OUString**                      ppP_Str;    // Pool for Strings
+        sal_uInt16                      nP_Str;     // ...with size
+        sal_uInt16                      nP_StrAkt;  // ...and Write-Mark
 
-        double*                     pP_Dbl;     // Pool fuer Doubles
+        double*                     pP_Dbl;     // Pool for Doubles
         sal_uInt16                      nP_Dbl;
         sal_uInt16                      nP_DblAkt;
 
@@ -95,14 +95,14 @@ private:
         sal_uInt16                      nP_Err;
         sal_uInt16                      nP_ErrAkt;
 
-        ScSingleRefData**               ppP_RefTr;  // Pool fuer Referenzen
+        ScSingleRefData**               ppP_RefTr;  // Pool for References
         sal_uInt16                      nP_RefTr;
         sal_uInt16                      nP_RefTrAkt;
 
-        sal_uInt16*                     pP_Id;      // Pool fuer Id-Folgen
+        sal_uInt16*                     pP_Id;      // Pool for Id-sets
         sal_uInt16                      nP_Id;
         sal_uInt16                      nP_IdAkt;
-        sal_uInt16                      nP_IdLast;  // letzter Folgen-Beginn
+        sal_uInt16                      nP_IdLast;  // last set-start
 
         struct  EXTCONT
         {
@@ -124,7 +124,7 @@ private:
         sal_uInt16                      nP_Nlf;
         sal_uInt16                      nP_NlfAkt;
 
-        ScMatrix**                  ppP_Matrix;     // Pool fuer Matricies
+        ScMatrix**                  ppP_Matrix;     // Pool for Matrices
         sal_uInt16                      nP_Matrix;
         sal_uInt16                      nP_MatrixAkt;
 
@@ -162,13 +162,13 @@ private:
         };
         ::std::vector<ExtAreaRef>   maExtAreaRefs;
 
-        sal_uInt16*                     pElement;   // Array mit Indizes fuer Elemente
-        E_TYPE*                     pType;      // ...mit Typ-Info
-        sal_uInt16*                     pSize;      // ...mit Laengenangabe (Anz. sal_uInt16)
+        sal_uInt16*                     pElement;   // Array with Indices for elements
+        E_TYPE*                     pType;      // ...with Typ-Info
+        sal_uInt16*                     pSize;      // ...with size (Anz. sal_uInt16)
         sal_uInt16                      nElement;
         sal_uInt16                      nElementAkt;
 
-        static const sal_uInt16         nScTokenOff;// Offset fuer SC-Token
+        static const sal_uInt16         nScTokenOff;// Offset for SC-Token
 #ifdef DBG_UTIL
         sal_uInt16                      m_nRek; // recursion counter
 #endif
@@ -199,7 +199,7 @@ public:
         inline const TokenId        Store( void );
         const TokenId               Store( const double& rDouble );
 
-                                    // nur fuer Range-Names
+                                    // only for Range-Names
         const TokenId               Store( const sal_uInt16 nIndex );
         inline const TokenId        Store( const sal_Int16 nWert );
         const TokenId               Store( const OUString& rString );
@@ -207,7 +207,7 @@ public:
         const TokenId               Store( const ScComplexRefData& rTr );
 
         const TokenId               Store( const DefTokenId eId, const OUString& rName );
-                                        // 4 externals (e.g. AddIns, Makros...)
+                                        // 4 externals (e.g. AddIns, Macros...)
         const TokenId               StoreNlf( const ScSingleRefData& rTr );
         const TokenId               StoreMatrix();
         const TokenId               StoreName( sal_uInt16 nIndex, bool bGlobal );
@@ -225,13 +225,13 @@ public:
 };
 
 class TokenStack
-    // Stack fuer Token-Ids: Id 0 sollte reserviert bleiben als
-    //  fehlerhafte Id, da z.B. Get() im Fehlerfall 0 liefert
+    // Stack for Token-Ids: reserve Id=0 for error; e.g. Get() returns 0 on error
+
 {
     private:
-        TokenId*                    pStack;     // Stack als Array
-        sal_uInt16                      nPos;       // Schreibmarke
-        sal_uInt16                      nSize;      // Erster Index ausserhalb des Stacks
+        TokenId*                    pStack;     // Stack as Array
+        sal_uInt16                      nPos;       // Write-mark
+        sal_uInt16                      nSize;      // first Index outside of stack
     public:
                                     TokenStack( sal_uInt16 nNewSize = 1024 );
                                     ~TokenStack();
@@ -247,7 +247,7 @@ class TokenStack
 inline const TokenId TokenStack::Get( void )
 {
     OSL_ENSURE( nPos > 0,
-        "*TokenStack::Get(): Leer ist leer, ist leer, ist leer, ist..." );
+        "*TokenStack::Get(): is empty, is empty, ..." );
 
     TokenId nRet;
 
@@ -263,7 +263,7 @@ inline const TokenId TokenStack::Get( void )
 }
 
 inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
-{// Element auf Stack
+{// Element on Stack
     OSL_ENSURE( nPos < nSize, "*TokenStack::<<(): Stack overflow" );
     if( nPos < nSize )
     {
@@ -275,9 +275,9 @@ inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
 }
 
 inline void TokenStack::operator >>( TokenId& rId )
-{// Element von Stack
+{// Element of Stack
     OSL_ENSURE( nPos > 0,
-        "*TokenStack::>>(): Leer ist leer, ist leer, ist leer, ..." );
+        "*TokenStack::>>(): is empty, is empty, ..." );
     if( nPos > 0 )
     {
         nPos--;
@@ -292,11 +292,11 @@ inline void TokenStack::Reset( void )
 
 inline TokenPool& TokenPool::operator <<( const TokenId nId )
 {
-    // POST: nId's werden hintereinander im Pool unter einer neuen Id
-    //       abgelegt. Vorgang wird mit >> oder Store() abgeschlossen
+    // POST: nId's are stored consecutively in Pool under a new Id;
+    //       finalize with >> or Store()
     // nId -> ( sal_uInt16 ) nId - 1;
     OSL_ENSURE( ( sal_uInt16 ) nId < nScTokenOff,
-        "-TokenPool::operator <<: TokenId im DefToken-Bereich!" );
+        "-TokenPool::operator <<: TokenId in DefToken-Range!" );
 
     if( nP_IdAkt >= nP_Id )
 		if (!GrowId())
@@ -311,7 +311,7 @@ inline TokenPool& TokenPool::operator <<( const TokenId nId )
 inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 {
     OSL_ENSURE( ( sal_uInt32 ) eId + nScTokenOff < 0xFFFF,
-        "-TokenPool::operator<<: enmum zu gross!" );
+        "-TokenPool::operator<<: enmum too large!" );
 
     if( nP_IdAkt >= nP_Id )
 		if (!GrowId())
@@ -356,7 +356,7 @@ inline const TokenId TokenPool::Store( const sal_Int16 nWert )
 
 inline const TokenId TokenPool::LastId( void ) const
 {
-    return ( TokenId ) nElementAkt; // stimmt, da Ausgabe mit Offset 1!
+    return ( TokenId ) nElementAkt; // correct, as Ausgabe with Offset 1!
 }
 
 const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
@@ -364,7 +364,7 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
     pScToken->Clear();
 
     if( nId )
-    {//...nur wenn nId > 0!
+    {//...only if nId > 0!
 #ifdef DBG_UTIL
         m_nRek = 0;
 #endif

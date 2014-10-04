@@ -151,29 +151,29 @@
 #define pfProtection        0x20
 
 // Displayflags fuer die Tabelle
-#define dfFormula           0x0001      // Formeln
-#define dfZerro             0x0002      // Nullwerte
-#define dfGrid              0x0004      // Gitternetz
-#define dfPageBreak         0x0008      // Seitenumbruch
-#define dfColRowBar         0x0010      // Zeilen/Spalten Koepfe (Dummy)
+#define dfFormula           0x0001      // formula
+#define dfZerro             0x0002      // zero values
+#define dfGrid              0x0004      // grid
+#define dfPageBreak         0x0008      // PageBreak
+#define dfColRowBar         0x0010      // Row/Col heads (Dummy)
 #define dfSyntax            0x0020      // Syntax Highlighting
-#define dfPrintPage         0x0040      // Druckbildansicht (Dummy)
-#define dfObjectAll         0x0080      // Objekte anzeigen
-#define dfObjectFrame       0x0100      // Objekte als Platzhalter
-#define dfObjectNone        0x0200      // Objekte nicht anzeigen
-#define dfNoteMark          0x0400      // Notizanzeiger
-#define dfProtectMark       0x0800      // Schutzanzeiger
+#define dfPrintPage         0x0040      // PrintView (Dummy)
+#define dfObjectAll         0x0080      // show objects
+#define dfObjectFrame       0x0100      // objects as place holder
+#define dfObjectNone        0x0200      // do not show objects
+#define dfNoteMark          0x0400      // NoteMark
+#define dfProtectMark       0x0800      // ProtectMark
 
 // Objekt Typen
-#define otNone              0           // s.u.
+#define otNone              0           // see below
 #define otOle               1
 #define otImage             2
 #define otChart             3
 
 // Grafik Typen
-#define gtNone              0           // Kann nicht vorkommen
-#define gtOle               1           // Ole 1.0 Objekt
-#define gtImage             2           // Image (Bitmap oder Metafile)
+#define gtNone              0           // not possible
+#define gtOle               1           // Ole 1.0 Object
+#define gtImage             2           // Image (Bitmap or Metafile)
 #define gtChart             3           // Chart
 
 // Datum/Uhrzeit
@@ -190,8 +190,8 @@ struct Sc10DateTime
 // ZahlenFormate
 struct Sc10ValueFormat
 {
-    sal_uInt8       Format;         // Zahl, Waehrung, Prozent etc.
-    sal_uInt8       Info;           // Anzahl Nachkommastellen, Anzahl Stellen, bzw. Datums/Zeitformat
+    sal_uInt8       Format;         // number, currency, percentage,...
+    sal_uInt8       Info;           // number of decimals, or positions, or Date/Time format
     Sc10ValueFormat()
         : Format(0)
         , Info(0)
@@ -255,7 +255,7 @@ struct Sc10Color
     }
 };
 
-// Blockbeschreibung
+// Block definition
 struct Sc10BlockRect
 {
     sal_Int16       x1;
@@ -271,7 +271,7 @@ struct Sc10BlockRect
     }
 };
 
-// Datenbank-Bereich
+// Data range
 struct Sc10DataBaseRec
 {
     sal_Char        Name[32];
@@ -334,7 +334,7 @@ struct Sc10DataBaseRec
     }
 };
 
-// Kopf/Fusszeilen-Beschreibung
+// Header/Footer
 struct Sc10HeadFootLine
 {
     sal_Char        Title[128];
@@ -346,13 +346,13 @@ struct Sc10HeadFootLine
     Sc10Color       TextColor;
     Sc10Color       BackColor;
     Sc10Color       RasterColor;
-    sal_uInt16          FrameColor; // Nibble Codierte Farben link oben rechts unten
+    sal_uInt16          FrameColor; // Nibble coded colors left-top right-bottom
     sal_uInt16          Reserved;
 
     bool operator==( const Sc10HeadFootLine& rData ) const;
 };
 
-// Seitenformat
+// page format
 struct Sc10PageFormat
 {
     Sc10HeadFootLine    HeadLine;
@@ -376,7 +376,7 @@ struct Sc10PageFormat
     sal_uInt8               TopBottomDir;
     sal_Char            PrintAreaName[32];
     Sc10BlockRect       PrintArea;
-    sal_Char            PrnZoom[6]; // Pascal 6 Byte Realzahl
+    sal_Char            PrnZoom[6]; // Pascal 6 Byte RealNumber
     SCTAB               FirstPageNo;
     sal_Int16               RowRepeatStart;
     sal_Int16               RowRepeatEnd;
@@ -387,7 +387,7 @@ struct Sc10PageFormat
     bool operator==( const Sc10PageFormat& rData ) const;
 };
 
-// Tabellenschutz
+// Table protection
 struct Sc10TableProtect
 {
     sal_Char    PassWord[16];
@@ -395,7 +395,7 @@ struct Sc10TableProtect
     sal_uInt8       Protect;
 };
 
-// Documentschutz
+// Document protection
 struct Sc10SheetProtect
 {
     sal_Char    PassWord[16];
@@ -409,7 +409,7 @@ struct Sc10SheetProtect
     }
 };
 
-// Dateikopf StarCalc 1.0 Datei
+// FileHeader StarCalc 1.0 Datei
 struct Sc10FileHeader
 {
     sal_Char    CopyRight[30];
@@ -417,7 +417,7 @@ struct Sc10FileHeader
     sal_Char    Reserved[32];
 };
 
-// Benutzer-Definierte Datei-Beschreibung
+// User-Defined File Definition
 struct Sc10FileInfo
 {
     sal_Char        Title[64];
@@ -451,30 +451,30 @@ struct Sc10FileInfo
     sal_Char        Reserved[52];
 };
 
-// Letze Cursorposition
+// Last Cursor position
 struct Sc10EditStateInfo
 {
     // Cursor Position
     sal_uInt16      CarretX;
     sal_uInt16      CarretY;
     sal_uInt16      CarretZ;
-    // Linke obere Ecke der Tabelle im Fenster
+    // left-top corner of the table
     sal_uInt16      DeltaX;
     sal_uInt16      DeltaY;
     sal_uInt16      DeltaZ;
-    // Ueberfluessig in StarCalc 3.0
+    // redundant in StarCalc 3.0
     sal_uInt8       DataBaseMode;
     sal_Char    Reserved[51];
 };
 
-// Attribut-Eintrag
+// Attribut entry
 struct Sc10ColData
 {
     sal_uInt16      Row;
     sal_uInt16      Value;
 };
 
-// ZellAttribut-Beschreibung
+// Cell-Attribute definition
 struct Sc10ColAttr
 {
     sal_uInt16          Count;
@@ -491,68 +491,68 @@ struct Sc10ColAttr
 // GraphHeader
 struct Sc10GraphHeader
 {
-    sal_uInt8       Typ;            // Typ der Grafik (Ole-Objekt, Image (Bitmap oder MetaFile), Chart-Object)
-    sal_Int16       CarretX;        // ZellPosition der Grafik
+    sal_uInt8       Typ;            // Type of Grafik (Ole-Objekt, Image (Bitmap of MetaFile), Chart-Object)
+    sal_Int16       CarretX;        // Cell Position of Grafik
     sal_Int16       CarretY;
     sal_Int16       CarretZ;
-    sal_Int32       x;              // x,y Abstand zum Zellrand in Pixel (Pixel weil ich Grafiken in Fenstern ablege)
+    sal_Int32       x;              // x,y distance to cell border in pixels (pixels, as Grafics are stored in window)
     sal_Int32       y;
-    sal_Int32       w;              // w,h Breite und Hoehe in Pixel
+    sal_Int32       w;              // w,h width and height in pixels
     sal_Int32       h;
-    sal_uInt8       IsRelPos;       // Ist die Position relativ zur Zelle oder absolute in der Tabelle
-    sal_uInt8       DoPrint;        // Soll die Grafik ausgedruckt werden
-    sal_uInt16      FrameType;      // Art der Umrandung um die Grafik (Keine, Einfach, Doppelt, Einfach Dick, Doppelt Dick)
-    sal_uInt8       IsTransparent;  // Soll der Hintergrund gezeichnet werden
-    Sc10Color   FrameColor;     // Umrandungsfarbe als RGB-Wert
-    Sc10Color   BackColor;      // Hintergrundfarbe als RGB-Wert
-    sal_Char    Reserved[32];   // Na was wohl
+    sal_uInt8       IsRelPos;       // position relativ to cell, or absolute in the table
+    sal_uInt8       DoPrint;        // print Grafic?
+    sal_uInt16      FrameType;      // Frame type around Grafic (none, simple, double, simple thick, double thick)
+    sal_uInt8       IsTransparent;  // show background?
+    Sc10Color   FrameColor;         // FrameColor as RGB value
+    Sc10Color   BackColor;          // BackGroundColor as RGB value
+    sal_Char    Reserved[32];       // Reserved
 };
 
 // ImageHeader
 struct Sc10ImageHeader
 {
-    sal_Char    FileName[128];  // Dateiname des urspruenglich eingefuegten Bildes
-    sal_Int16   Typ;                // Typ der Grafik (Bitmap oder Metafile)
-    sal_uInt8   Linked;             // Kann nicht vorkommen
-    sal_Int16   x1;                 // Urspruengliche Groesse der Grafik (nur fuer Metafiles)
+    sal_Char    FileName[128];      // file name of the original inserted image
+    sal_Int16   Typ;                // image type (Bitmap or Metafile)
+    sal_uInt8   Linked;             // not possible
+    sal_Int16   x1;                 // original image size (only for Metafiles)
     sal_Int16   y1;
     sal_Int16   x2;
     sal_Int16   y2;
-    sal_uInt32 Size;                // Groesse der Grafik in BYTES
+    sal_uInt32 Size;                // image size in BYTES
 };
 
 // ChartHeader
 struct Sc10ChartHeader
 {
-    sal_Int16   MM;                 // Meatfile Struktur MapMode, Breite, Hoehe
+    sal_Int16   MM;                 // Meatfile structure MapMode, Width, Hight
     sal_Int16   xExt;
     sal_Int16   yExt;
-    sal_uInt32 Size;                // Groesse der Grafik in BYTES
+    sal_uInt32 Size;                // image size in BYTES
 };
 
 // ChartSheetData
 struct Sc10ChartSheetData
 {
-    sal_uInt8       HasTitle;       // Hat das Chart Daten aus der Tabell fuer einen Titel
-    sal_Int16       TitleX;         // Zellposition des Titels
+    sal_uInt8       HasTitle;       // has the Chart a title in the table
+    sal_Int16       TitleX;         // cell position of title
     sal_Int16       TitleY;
-    sal_uInt8       HasSubTitle;    // Hat das Chart Daten aus der Tabell fuer einen Untertitel
-    sal_Int16       SubTitleX;      // Zellposition des Untertitels
+    sal_uInt8       HasSubTitle;    // has the Chart a sub-title in the table
+    sal_Int16       SubTitleX;      // cell position of sub-title
     sal_Int16       SubTitleY;
-    sal_uInt8       HasLeftTitle;   // Hat das Chart Daten aus der Tabelle fuer einen Linken-Titel
-    sal_Int16       LeftTitleX;     // Zellposition des Linken-Titels
+    sal_uInt8       HasLeftTitle;   // has the Chart a left-title in the table
+    sal_Int16       LeftTitleX;     // cell position of left-title
     sal_Int16       LeftTitleY;
-    sal_uInt8       HasLegend;      // Hat das Chart Daten aus der Tabelle fuer eine Legende
-    sal_Int16       LegendX1;       // Zellen der Legende
+    sal_uInt8       HasLegend;      // has the Chart a legend in the table
+    sal_Int16       LegendX1;       // cells for legend
     sal_Int16       LegendY1;
     sal_Int16       LegendX2;
     sal_Int16       LegendY2;
-    sal_uInt8       HasLabel;       // Hat das Chart Daten aus der Tabelle fuer die Achsbeschriftung
-    sal_Int16       LabelX1;        // Zellen der Achsbeschriftung
+    sal_uInt8       HasLabel;       // has the Chart axis labels in the table
+    sal_Int16       LabelX1;        // cells for axis labels
     sal_Int16       LabelY1;
     sal_Int16       LabelX2;
     sal_Int16       LabelY2;
-    sal_Int16       DataX1;         // Zellen der Daten
+    sal_Int16       DataX1;         // cells for Data
     sal_Int16       DataY1;
     sal_Int16       DataX2;
     sal_Int16       DataY2;
@@ -626,7 +626,7 @@ private:
     using               ScCollection::At;
 };
 
-//BereichsDaten
+//Range-Data
 class Sc10NameData : public ScDataObject
 {
 public :
@@ -647,7 +647,7 @@ public :
     virtual ScDataObject*   Clone() const SAL_OVERRIDE { return new Sc10NameData(*this); }
 };
 
-// Bereichs-Collection
+// Range-Collection
 class Sc10NameCollection : public ScCollection
 {
 protected:
@@ -660,7 +660,7 @@ private:
     using               ScCollection::At;
 };
 
-// Vorlage-Daten
+// Template-Data
 class Sc10PatternData : public ScDataObject
 {
 public:
@@ -698,7 +698,7 @@ public:
 virtual ScDataObject*       Clone() const SAL_OVERRIDE { return new Sc10PatternData(*this); }
 };
 
-// Vorlage-Collection
+// Template-Collection
 class Sc10PatternCollection : public ScCollection
 {
 protected:
@@ -711,7 +711,7 @@ private:
     using               ScCollection::At;
 };
 
-// DatenBank-Daten
+// DataBank-Data
 class Sc10DataBaseData : public ScDataObject
 {
 public:
@@ -726,7 +726,7 @@ public:
 virtual ScDataObject*       Clone() const SAL_OVERRIDE { return new Sc10DataBaseData(*this); }
 };
 
-// DatenBank-Collection
+// DataBank-Collection
 class Sc10DataBaseCollection : public ScCollection
 {
 protected:
@@ -750,7 +750,7 @@ public:
     virtual ScDataObject*   Clone() const SAL_OVERRIDE;
 };
 
-// Seitenformat-Collection
+// PageFormat-Collection
 class Sc10PageCollection : public ScCollection
 {
 public:
@@ -764,7 +764,7 @@ private:
 
 class ScfStreamProgressBar;
 
-// Import-Klasse
+// Import-Class
 class Sc10Import
 {
     SvStream&               rStream;

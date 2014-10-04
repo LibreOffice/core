@@ -46,8 +46,8 @@ class ExcelToSc;
 class ImportTyp
 {
 protected:
-    rtl_TextEncoding    eQuellChar;     // Quell-Zeichensatz
-    ScDocument*         pD;             // Dokument
+    rtl_TextEncoding    eQuellChar;     // source (Quelle) character set
+    ScDocument*         pD;             // document
 
 public:
                         ImportTyp( ScDocument*, rtl_TextEncoding eSrc );
@@ -90,7 +90,7 @@ protected:
     };
     typedef boost::unordered_map<SCCOL, LastFormula> LastFormulaMapType;
 
-    static const double     fExcToTwips;        // Umrechnung 1/256 Zeichen -> Twips
+    static const double     fExcToTwips;        // translate 1/256 chars -> Twips
 
     RootData*               pExcRoot;
 
@@ -105,7 +105,7 @@ protected:
 
     XclImpOutlineBuffer*    pColOutlineBuff;
     XclImpOutlineBuffer*    pRowOutlineBuff;
-    XclImpColRowSettings*   pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
+    XclImpColRowSettings*   pColRowBuff;        // Col/Row settings 1 table
 
     typedef boost::ptr_vector< XclImpOutlineDataBuffer > XclImpOutlineListBuffer;
     XclImpOutlineListBuffer* pOutlineListBuffer;
@@ -117,17 +117,17 @@ protected:
     sal_uInt16              mnIxfeIndex;        /// Current XF identifier from IXFE record.
     sal_uInt16 mnLastRecId;
 
-    SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
+    SCTAB                   nBdshtTab;          // Counter for Boundsheet
 
-    bool                    bTabTruncated;      // wenn Bereichsueberschreitung zum
-                                                //  Abschneiden von Zellen fuehrt
+    bool                    bTabTruncated;      // if extended range leads to
+                                                // truncation of cells
 
     bool mbBiff2HasXfs:1;      /// Select XF formatting or direct formatting in BIFF2.
     bool mbBiff2HasXfsValid:1; /// False = mbBiff2HasXfs is undetermined yet.
 
     void SetLastFormula( SCCOL nCol, SCROW nRow, double fVal, sal_uInt16 nXF, ScFormulaCell* pCell );
 
-    // Record-Funktionen
+    // Record functions
     void                    ReadFileSharing();
 
     sal_uInt16              ReadXFIndex( const ScAddress& rScPos, bool bBiff2 );

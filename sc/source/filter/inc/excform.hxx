@@ -35,9 +35,9 @@ protected:
     enum ExtensionType { EXTENSION_ARRAY, EXTENSION_NLR, EXTENSION_MEMAREA };
     typedef ::std::vector< ExtensionType >          ExtensionTypeVec;
 
-    bool                    bExternName;    // wenn External Name gefunden wurde
+    bool                    bExternName;    // external name was found
     static const sal_uInt16 nRowMask;
-    static const sal_uInt16 nLastInd;       // letzter Index fuer Excel->SC-
+    static const sal_uInt16 nLastInd;       // last Index for Excel->SC-
                                         // Token Umsetzung
     XclFunctionProvider maFuncProv;
     const XclBiff       meBiff;

@@ -86,7 +86,7 @@ inline bool StringHashEntry::operator ==( const StringHashEntry& r ) const
 class NameBuffer : public ExcRoot
 {
 private:
-    sal_uInt16                  nBase;      // Index-Basis
+    sal_uInt16                  nBase;      // Index-Base
     std::vector<StringHashEntry*> maHashes;
 
 public:
@@ -157,7 +157,7 @@ private:
         StringHashEntry     aStrHashEntry;
         ScComplexRefData    aScComplexRefDataRel;
         OUString            aScAbsName;
-        sal_uInt16          nAbsInd;        // == 0 -> noch keine Abs-Name!
+        sal_uInt16          nAbsInd;        // == 0 -> no Abs-Name yet!
         sal_uInt16          nRelInd;
         bool                bSingleRef;
                             Entry( const OUString& rName, const OUString& rScName, const ScComplexRefData& rCRD )
@@ -209,16 +209,16 @@ private:
         {
         OUString      aFile;
         OUString      aTab;
-        sal_uInt16    nTabNum;    // 0xFFFF -> noch nicht angelegt
-                                // 0xFFFE -> versucht anzulegen, ging aber schief
-                                // 0xFFFD -> soll im selben Workbook sein, findet's aber nicht
+        sal_uInt16    nTabNum;    // 0xFFFF -> not set yet
+                                // 0xFFFE -> tried to set, but failed
+                                // 0xFFFD -> should be in the same workbook, but not found
         bool          bSWB;
         bool          bLink;
                     Cont( const OUString& rFilePathAndName, const OUString& rTabName ) :
                         aFile( rFilePathAndName ),
                         aTab( rTabName )
                     {
-                        nTabNum = 0xFFFF;   // -> Tabelle noch nicht erzeugt
+                        nTabNum = 0xFFFF;   // -> table not created yet
                         bSWB = bLink = false;
                     }
                     Cont( const OUString& rFilePathAndName, const OUString& rTabName,
@@ -226,7 +226,7 @@ private:
                         aFile( rFilePathAndName ),
                         aTab( rTabName )
                     {
-                        nTabNum = 0xFFFF;   // -> Tabelle noch nicht erzeugt
+                        nTabNum = 0xFFFF;   // -> table not created yet
                         bSWB = bSameWB;
                         bLink = false;
                     }
