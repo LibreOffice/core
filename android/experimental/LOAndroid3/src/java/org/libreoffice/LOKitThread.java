@@ -74,10 +74,10 @@ public class LOKitThread extends Thread {
         }
 
         mTileProvider = TileProviderFactory.create(mController, filename);
-        mLayerClient.setTileProvider(mTileProvider);
-
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
+            mLayerClient.setTileProvider(mTileProvider);
+
             LOKitShell.showProgressSpinner();
             refresh();
             LOKitShell.hideProgressSpinner();
