@@ -8,7 +8,6 @@ import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
-import org.mozilla.gecko.gfx.FloatSize;
 import org.mozilla.gecko.gfx.IntSize;
 import org.mozilla.gecko.gfx.LayerController;
 
@@ -16,13 +15,14 @@ import java.nio.ByteBuffer;
 
 public class LOKitTileProvider implements TileProvider {
     private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
-    public static int TILE_SIZE = 256;
-    public final Office mOffice;
-    public final Document mDocument;
+    private static int TILE_SIZE = 256;
+    private final Office mOffice;
+    private Document mDocument;
     private final LayerController mLayerController;
     private final float mTileWidth;
     private final float mTileHeight;
     private final String mInputFile;
+    private boolean mIsReady = false;
 
     private float mDPI;
     private float mWidthTwip;
@@ -70,6 +70,8 @@ public class LOKitTileProvider implements TileProvider {
                     LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdpater().notifyDataSetChanged();
                 }
             });
+
+            mIsReady = true;
         }
     }
 
@@ -108,8 +110,15 @@ public class LOKitTileProvider implements TileProvider {
         mWidthTwip = mDocument.getDocumentWidth();
         mHeightTwip = mDocument.getDocumentHeight();
 
-        if (mWidthTwip == 0 && mHeightTwip == 0) {
+        if (mWidthTwip == 0 || mHeightTwip == 0) {
             Log.e(LOGTAG, "Document size zero - last error: " + mOffice.getError());
+            LOKitShell.getMainHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    LibreOfficeMainActivity.mAppContext.showAlertDialog("Document has no size!");
+                }
+            });
+            return false;
         } else {
             Log.i(LOGTAG, "Document size: " + mDocument.getDocumentWidth() + " x " + mDocument.getDocumentHeight());
         }
@@ -129,7 +138,7 @@ public class LOKitTileProvider implements TileProvider {
 
     @Override
     public boolean isReady() {
-        return mDocument != null;
+        return mIsReady;
     }
 
     @Override
@@ -143,7 +152,7 @@ public class LOKitTileProvider implements TileProvider {
             float twipWidth = mTileWidth / zoom;
             float twipHeight = mTileHeight / zoom;
             long start = System.currentTimeMillis();
-            Log.i(LOGTAG, "paintTile TOP @ " + start + "(" + tileSize.width + " " + tileSize.height + " " + (int)twipX + " " + (int)twipY + " " + (int) twipWidth + " " + (int) twipHeight + ")");
+            Log.i(LOGTAG, "paintTile TOP @ " + start + "(" + tileSize.width + " " + tileSize.height + " " + (int) twipX + " " + (int) twipY + " " + (int) twipWidth + " " + (int) twipHeight + ")");
             mDocument.paintTile(buffer, tileSize.width, tileSize.height, (int) twipX, (int) twipY, (int) twipWidth, (int) twipHeight);
             long stop = System.currentTimeMillis();
             Log.i(LOGTAG, "paintTile TAIL @ " + stop + " - elapsed: " + (stop - start) + " ");
@@ -173,6 +182,8 @@ public class LOKitTileProvider implements TileProvider {
             widthPixel = (int) (heightPixel * ratio);
         }
 
+        Log.w(LOGTAG, "Thumbnail size: " + getPageWidth() + " " + getPageHeight() + " " + widthPixel + " " + heightPixel);
+
         ByteBuffer buffer = ByteBuffer.allocateDirect(widthPixel * heightPixel * 4);
         mDocument.paintTile(buffer, widthPixel, heightPixel, 0, 0, (int) mWidthTwip, (int) mHeightTwip);
 
@@ -189,7 +200,14 @@ public class LOKitTileProvider implements TileProvider {
         Log.i(LOGTAG, "Document destroyed: " + mInputFile);
         if (mDocument != null) {
             mDocument.destroy();
+            mDocument = null;
         }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        close();
+        super.finalize();
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.libreoffice;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -132,7 +133,7 @@ public class LibreOfficeMainActivity extends Activity {
         mLayerController = new LayerController(this);
         mLayerController.setZoomConstraints(new ZoomConstraints(true));
         mLayerClient = new GeckoLayerClient(this);
-        LayerView layerView = (LayerView)findViewById(R.id.layer_view);
+        LayerView layerView = (LayerView) findViewById(R.id.layer_view);
         mLayerController.setView(layerView);
         mLayerController.setLayerClient(mLayerClient);
 
@@ -147,8 +148,26 @@ public class LibreOfficeMainActivity extends Activity {
 
     @Override
     protected void onPause() {
-        Log.i(LOGTAG, "Pause..");
+        Log.i(LOGTAG, "onPause..");
         super.onPause();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.i(LOGTAG, "onStart..");
+        super.onStop();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i(LOGTAG, "onStop..");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(LOGTAG, "onDestroy..");
+        super.onDestroy();
     }
 
     public LOKitThread getLOKitThread() {
@@ -210,6 +229,22 @@ public class LibreOfficeMainActivity extends Activity {
 
     public void hideProgressSpinner() {
         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+    }
+
+    public void showAlertDialog(String s) {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LibreOfficeMainActivity.this);
+
+        alertDialogBuilder.setTitle("Error");
+        alertDialogBuilder.setMessage(s);
+        alertDialogBuilder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {

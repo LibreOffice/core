@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
-import org.mozilla.gecko.gfx.FloatSize;
 import org.mozilla.gecko.gfx.IntSize;
 import org.mozilla.gecko.gfx.LayerController;
 
