@@ -223,15 +223,6 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
                 if( mxCursor.is() )
                 {
                     xTxtImport->SetCursor( mxCursor );
-
-                    // Check if this shape has a TextBox, so we can pass the right context type.
-                    uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-                    if (xPropertySet.is())
-                    {
-                        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-                        if (xPropertySetInfo->hasPropertyByName("TextBox"))
-                            xPropertySet->getPropertyValue("TextBox") >>= mbTextBox;
-                    }
                 }
 
                 // remember old list item and block (#91964#) and reset them
@@ -721,6 +712,11 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 // set PropertySet on object
                 pDocStyle->FillPropertySet(xPropSet);
             }
+
+            // Writer shapes: if this one has a TextBox, set it here.
+            uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropSet->getPropertySetInfo();
+            if (xPropertySetInfo->hasPropertyByName("TextBox"))
+                xPropSet->setPropertyValue("TextBox", uno::makeAny(mbTextBox));
 
         } while(false);
 
@@ -3721,6 +3717,29 @@ SdXMLCustomShapeContext::SdXMLCustomShapeContext(
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
+    // See the XMLTextFrameContext ctor, a frame has Writer content (and not
+    // editeng) if its autostyle has a parent style. Do the same for shapes as well.
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for (sal_Int16 i=0; i < nAttrCount; ++i)
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+        if (nPrefix == XML_NAMESPACE_DRAW && IsXMLToken(aLocalName, XML_STYLE_NAME))
+        {
+            OUString aStyleName = xAttrList->getValueByIndex(i);
+            if(!aStyleName.isEmpty())
+            {
+                rtl::Reference<XMLTextImportHelper> xTxtImport = GetImport().GetTextImport();
+                XMLPropStyleContext* pStyle = xTxtImport->FindAutoFrameStyle(aStyleName);
+                if (pStyle && !pStyle->GetParentName().isEmpty())
+                {
+                    mbTextBox = true;
+                    break;
+                }
+            }
+        }
+    }
 }
 
 SdXMLCustomShapeContext::~SdXMLCustomShapeContext()

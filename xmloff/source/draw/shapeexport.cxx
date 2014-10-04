@@ -76,6 +76,7 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -352,6 +353,18 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
                 aParentName += xStyle->getName();
             }
+        }
+
+        if (aParentName.isEmpty() && xPropertySetInfo->hasPropertyByName("TextBox") && xPropSet->getPropertyValue("TextBox").get<bool>())
+        {
+            // Shapes with a Writer TextBox always have a parent style.
+            // If there would be none, then just assign the first available.
+            uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(GetExport().GetModel(), uno::UNO_QUERY);
+            uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+            uno::Reference<container::XNameAccess> xFrameStyles = xStyleFamilies->getByName("FrameStyles").get< uno::Reference<container::XNameAccess> >();
+            uno::Sequence<OUString> aFrameStyles = xFrameStyles->getElementNames();
+            if (aFrameStyles.hasElements())
+                aParentName = aFrameStyles[0];
         }
 
         // filter propset
