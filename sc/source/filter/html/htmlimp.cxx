@@ -100,9 +100,9 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
 
 ScHTMLImport::~ScHTMLImport()
 {
-    // Reihenfolge wichtig, sonst knallt's irgendwann irgendwo in irgendeinem Dtor!
-    // Ist gewaehrleistet, da ScEEImport Basisklasse ist
-    delete (ScHTMLParser*) mpParser;        // vor EditEngine!
+    // Ordering is important, otherwise we get an error in some other Dtor!
+    // OK, as ScEEImport is the Base Class
+    delete (ScHTMLParser*) mpParser;        // before EditEngine!
 }
 
 void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const OUString& rName, const ScRange& rRange )

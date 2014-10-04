@@ -383,7 +383,7 @@ TOPIC DifParser::GetNextTopic( void )
                 // skip 2 lines
                 ReadNextLine( aLine );
                 // fall-through
-            case S_ERROR_L2:                // Fehler in Line 2 aufgetreten
+            case S_ERROR_L2:                // error happened in line 2
                 // skip 1 line
                 ReadNextLine( aLine );
                 eS = S_END;
