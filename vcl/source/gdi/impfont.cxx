@@ -50,7 +50,7 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
     }
 }
 
-static ImplFontCharMap* pDefaultImplFontCharMap = NULL;
+static ImplFontCharMapPtr pDefaultImplFontCharMap;
 static const sal_UCS4 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
 static const sal_UCS4 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
 
@@ -69,39 +69,21 @@ ImplFontCharMap::~ImplFontCharMap()
     delete[] mpGlyphIds;
 }
 
-ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
+ImplFontCharMapPtr ImplFontCharMap::GetDefaultMap( bool bSymbols)
 {
-    if( pDefaultImplFontCharMap )
-        pDefaultImplFontCharMap->AddReference();
-    else
+    const sal_UCS4* pRangeCodes = aDefaultUnicodeRanges;
+    int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
+    if( bSymbols )
     {
-        const sal_UCS4* pRangeCodes = aDefaultUnicodeRanges;
-        int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
-        if( bSymbols )
-        {
-            pRangeCodes = aDefaultSymbolRanges;
-            nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
-        }
-
-        CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
-        pDefaultImplFontCharMap = new ImplFontCharMap( aDefaultCR );
+        pRangeCodes = aDefaultSymbolRanges;
+        nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
     }
+
+    CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
+    pDefaultImplFontCharMap.reset( new ImplFontCharMap( aDefaultCR ) );
 
     return pDefaultImplFontCharMap;
 }
-
-void ImplFontCharMap::AddReference( void) const
-{
-    ++mnRefCount;
-}
-
-void ImplFontCharMap::DeReference( void) const
-{
-    if( --mnRefCount <= 0 )
-        if( this != pDefaultImplFontCharMap )
-            delete this;
-}
-
 
 int ImplFontCharMap::ImplFindRangeIndex( sal_UCS4 cChar ) const
 {
@@ -561,73 +543,74 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 }
 
 FontCharMap::FontCharMap()
-:   mpImpl( ImplFontCharMap::GetDefaultMap() )
+:   mpImplFontCharMap( ImplFontCharMap::GetDefaultMap() )
 {}
 
 FontCharMap::~FontCharMap()
 {
-    mpImpl->DeReference();
-    mpImpl = NULL;
+    mpImplFontCharMap = 0;
 }
 
 int FontCharMap::GetCharCount() const
 {
-    return mpImpl->GetCharCount();
+    return mpImplFontCharMap->GetCharCount();
 }
 
 int FontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
 {
-    return mpImpl->CountCharsInRange( cMin, cMax );
+    return mpImplFontCharMap->CountCharsInRange( cMin, cMax );
 }
 
-void FontCharMap::Reset( const ImplFontCharMap* pNewMap )
+void FontCharMap::Reset( const ImplFontCharMapPtr pNewMap )
 {
     if( pNewMap == NULL )
     {
-        mpImpl->DeReference();
-        mpImpl = ImplFontCharMap::GetDefaultMap();
+        mpImplFontCharMap = ImplFontCharMap::GetDefaultMap();
     }
-    else if( pNewMap != mpImpl )
+    else if( pNewMap != mpImplFontCharMap )
     {
-        mpImpl->DeReference();
-        mpImpl = pNewMap;
-        mpImpl->AddReference();
+        mpImplFontCharMap = pNewMap;
     }
 }
 
 bool FontCharMap::IsDefaultMap() const
 {
-    return mpImpl->IsDefaultMap();
+    return mpImplFontCharMap->IsDefaultMap();
 }
 
 bool FontCharMap::HasChar( sal_UCS4 cChar ) const
 {
-    return mpImpl->HasChar( cChar );
+    return mpImplFontCharMap->HasChar( cChar );
 }
 
 sal_UCS4 FontCharMap::GetFirstChar() const
 {
-    return mpImpl->GetFirstChar();
+    return mpImplFontCharMap->GetFirstChar();
+}
+
+sal_UCS4 FontCharMap::GetLastChar() const
+{
+    return mpImplFontCharMap->GetLastChar();
 }
 
 sal_UCS4 FontCharMap::GetNextChar( sal_UCS4 cChar ) const
 {
-    return mpImpl->GetNextChar( cChar );
+    return mpImplFontCharMap->GetNextChar( cChar );
 }
 
 sal_UCS4 FontCharMap::GetPrevChar( sal_UCS4 cChar ) const
 {
-    return mpImpl->GetPrevChar( cChar );
+    return mpImplFontCharMap->GetPrevChar( cChar );
 }
 
 int FontCharMap::GetIndexFromChar( sal_UCS4 cChar ) const
 {
-    return mpImpl->GetIndexFromChar( cChar );
+    return mpImplFontCharMap->GetIndexFromChar( cChar );
 }
 
 sal_UCS4 FontCharMap::GetCharFromIndex( int nIndex ) const
 {
-    return mpImpl->GetCharFromIndex( nIndex );
+    return mpImplFontCharMap->GetCharFromIndex( nIndex );
 }
 
 // on some systems we have to get the font attributes from the name table
