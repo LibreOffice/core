@@ -36,10 +36,10 @@ typedef sal_uInt32 FontRefCount;
 class Impl_Font
 {
 public:
-             Impl_Font();
-             Impl_Font( const Impl_Font& );
+                        Impl_Font();
+                        Impl_Font( const Impl_Font& );
 
-    bool     operator==( const Impl_Font& ) const;
+    bool                operator==( const Impl_Font& ) const;
 
     FontPitch           GetPitch()      { if(mePitch==PITCH_DONTKNOW)    AskConfig(); return mePitch; }
     FontFamily          GetFamily()     { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
@@ -91,36 +91,36 @@ class ImplFontMetric
     friend class ::OutputDevice;
 
 private:
-    long    mnAscent;      // Ascent
-    long    mnDescent;     // Descent
-    long    mnIntLeading;  // Internal Leading
-    long    mnExtLeading;  // External Leading
-    long    mnLineHeight;  // Ascent+Descent+EmphasisMark
-    long    mnSlant;       // Slant
-    sal_uInt16  mnMiscFlags;   // Misc Flags
-    FontRefCount mnRefCount;    // Reference Counter
+    long                mnAscent;      // Ascent
+    long                mnDescent;     // Descent
+    long                mnIntLeading;  // Internal Leading
+    long                mnExtLeading;  // External Leading
+    long                mnLineHeight;  // Ascent+Descent+EmphasisMark
+    long                mnSlant;       // Slant
+    sal_uInt16          mnMiscFlags;   // Misc Flags
+    FontRefCount        mnRefCount;    // Reference Counter
 
     enum { DEVICE_FLAG=1, SCALABLE_FLAG=2, LATIN_FLAG=4, CJK_FLAG=8, CTL_FLAG=16 };
 
 public:
-            ImplFontMetric();
-    void    AddReference();
-    void    DeReference();
+                        ImplFontMetric();
+    void                AddReference();
+    void                DeReference();
 
-    long    GetAscent() const       { return mnAscent; }
-    long    GetDescent() const      { return mnDescent; }
-    long    GetIntLeading() const   { return mnIntLeading; }
-    long    GetExtLeading() const   { return mnExtLeading; }
-    long    GetLineHeight() const   { return mnLineHeight; }
-    long    GetSlant() const        { return mnSlant; }
+    long                GetAscent() const       { return mnAscent; }
+    long                GetDescent() const      { return mnDescent; }
+    long                GetIntLeading() const   { return mnIntLeading; }
+    long                GetExtLeading() const   { return mnExtLeading; }
+    long                GetLineHeight() const   { return mnLineHeight; }
+    long                GetSlant() const        { return mnSlant; }
 
-    bool    IsDeviceFont() const    { return ((mnMiscFlags & DEVICE_FLAG) != 0); }
-    bool    IsScalable() const      { return ((mnMiscFlags & SCALABLE_FLAG) != 0); }
-    bool    SupportsLatin() const   { return ((mnMiscFlags & LATIN_FLAG) != 0); }
-    bool    SupportsCJK() const     { return ((mnMiscFlags & CJK_FLAG) != 0); }
-    bool    SupportsCTL() const     { return ((mnMiscFlags & CTL_FLAG) != 0); }
+    bool                IsDeviceFont() const    { return ((mnMiscFlags & DEVICE_FLAG) != 0); }
+    bool                IsScalable() const      { return ((mnMiscFlags & SCALABLE_FLAG) != 0); }
+    bool                SupportsLatin() const   { return ((mnMiscFlags & LATIN_FLAG) != 0); }
+    bool                SupportsCJK() const     { return ((mnMiscFlags & CJK_FLAG) != 0); }
+    bool                SupportsCTL() const     { return ((mnMiscFlags & CTL_FLAG) != 0); }
 
-    bool    operator==( const ImplFontMetric& ) const;
+    bool                operator==( const ImplFontMetric& ) const;
 };
 
 // - ImplFontOptions -
@@ -134,27 +134,20 @@ public:
     FontHinting        meHinting;        // whether the font should be hinted
     FontHintStyle      meHintStyle;      // type of font hinting to be used
 public:
-    ImplFontOptions() :
-        meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
-        meAntiAlias(ANTIALIAS_DONTKNOW),
-        meAutoHint(AUTOHINT_DONTKNOW),
-        meHinting(HINTING_DONTKNOW),
-        meHintStyle(HINT_SLIGHT)
-    {}
-    virtual ~ImplFontOptions()
-    {}
-    FontAutoHint GetUseAutoHint() const
-        { return meAutoHint; }
-    FontHintStyle GetHintStyle() const
-        { return meHintStyle; }
-    bool DontUseEmbeddedBitmaps() const
-        { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
-    bool DontUseAntiAlias() const
-        { return meAntiAlias == ANTIALIAS_FALSE; }
-    bool DontUseHinting() const
-        { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
-    virtual void *GetPattern(void * /*pFace*/, bool /*bEmbolden*/, bool /*bVerticalMetrics*/) const
-        { return NULL; }
+                        ImplFontOptions() :
+                            meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
+                            meAntiAlias(ANTIALIAS_DONTKNOW),
+                            meAutoHint(AUTOHINT_DONTKNOW),
+                            meHinting(HINTING_DONTKNOW),
+                            meHintStyle(HINT_SLIGHT) {}
+    virtual             ~ImplFontOptions() {}
+
+    FontAutoHint        GetUseAutoHint() const { return meAutoHint; }
+    FontHintStyle       GetHintStyle() const { return meHintStyle; }
+    bool                DontUseEmbeddedBitmaps() const { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
+    bool                DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
+    bool                DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
+    virtual void*       GetPattern(void * /*pFace*/, bool /*bEmbolden*/, bool /*bVerticalMetrics*/) const { return NULL; }
 };
 
 // - ImplFontCharMap -
@@ -164,8 +157,8 @@ class CmapResult;
 class VCL_PLUGIN_PUBLIC ImplFontCharMap
 {
 public:
-    explicit             ImplFontCharMap( const CmapResult& );
-    virtual              ~ImplFontCharMap();
+    explicit            ImplFontCharMap( const CmapResult& );
+    virtual             ~ImplFontCharMap();
 
     static ImplFontCharMap* GetDefaultMap( bool bSymbols=false);
 
@@ -198,26 +191,26 @@ private:
 private:
     const sal_uInt32*   mpRangeCodes;     // pairs of StartCode/(EndCode+1)
     const int*          mpStartGlyphs;    // range-specific mapper to glyphs
-    const sal_uInt16*       mpGlyphIds;       // individual glyphid mappings
+    const sal_uInt16*   mpGlyphIds;       // individual glyphid mappings
     int                 mnRangeCount;
     int                 mnCharCount;      // covered codepoints
-    mutable FontRefCount    mnRefCount;
+    mutable FontRefCount mnRefCount;
 };
 
 // CmapResult is a normalized version of the many CMAP formats
 class VCL_PLUGIN_PUBLIC CmapResult
 {
 public:
-    explicit    CmapResult( bool bSymbolic = false,
-                    const sal_uInt32* pRangeCodes = NULL, int nRangeCount = 0,
-                    const int* pStartGlyphs = 0, const sal_uInt16* pGlyphIds = NULL );
+    explicit            CmapResult( bool bSymbolic = false,
+                            const sal_uInt32* pRangeCodes = NULL, int nRangeCount = 0,
+                            const int* pStartGlyphs = 0, const sal_uInt16* pGlyphIds = NULL );
 
-    const sal_uInt32* mpRangeCodes;
-    const int*        mpStartGlyphs;
-    const sal_uInt16*     mpGlyphIds;
-    int               mnRangeCount;
-    bool              mbSymbolic;
-    bool              mbRecoded;
+    const sal_uInt32*   mpRangeCodes;
+    const int*          mpStartGlyphs;
+    const sal_uInt16*   mpGlyphIds;
+    int                 mnRangeCount;
+    bool                mbSymbolic;
+    bool                mbRecoded;
 };
 
 bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
