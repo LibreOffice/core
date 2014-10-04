@@ -70,11 +70,11 @@ struct ScHTMLStyle
 
 struct ScHTMLGraphEntry
 {
-    ScRange             aRange;         // ueberlagerter Zellbereich
-    Size                aSize;          // Groesse in Pixeln
-    Size                aSpace;         // Spacing in Pixeln
+    ScRange             aRange;         // mapped range
+    Size                aSize;          // size in pixels
+    Size                aSpace;         // spacing in pixels
     SdrObject*          pObject;
-    bool                bInCell;        // ob in Zelle ausgegeben wird
+    bool                bInCell;        // if output is in cell
     bool                bWritten;
 
     ScHTMLGraphEntry( SdrObject* pObj, const ScRange& rRange,
@@ -109,15 +109,15 @@ class ScHTMLExport : public ScExportBase
     OUString         aBaseURL;
     OUString         aStreamPath;
     OUString         aFilterOptions;
-    OUString         aCId;           // Content-Id fuer Mail-Export
-    OutputDevice*    pAppWin;        // fuer Pixelei
-    FileNameMapPtr   pFileNameMap;        // fuer CopyLocalFileToINet
+    OUString         aCId;           // Content-Id for Mail-Export
+    OutputDevice*    pAppWin;        // for Pixel-work
+    FileNameMapPtr   pFileNameMap;        // for CopyLocalFileToINet
     OUString         aNonConvertibleChars;   // collect nonconvertible characters
     rtl_TextEncoding eDestEnc;
     SCTAB            nUsedTables;
     short            nIndent;
     sal_Char         sIndent[nIndentMax+1];
-    bool             bAll;           // ganzes Dokument
+    bool             bAll;           // whole document
     bool             bTabHasGraphics;
     bool             bTabAlignedLeft;
     bool             bCalcAsShown;
@@ -139,12 +139,12 @@ class ScHTMLExport : public ScExportBase
     void WriteImage( OUString& rLinkName,
                      const Graphic&, const OString& rImgOptions,
                      sal_uLong nXOutFlags = 0 );
-            // nXOutFlags fuer XOutBitmap::WriteGraphic
+            // nXOutFlags for XOutBitmap::WriteGraphic
 
     // write to stream if and only if URL fields in edit cell
     bool WriteFieldText( const EditTextObject* pData );
 
-    // kopiere ggfs. eine lokale Datei ins Internet
+    // copy a local file to internet if needed
     bool CopyLocalFileToINet( OUString& rFileNm, const OUString& rTargetNm, bool bFileToFile = false );
     bool HasCId()
     {

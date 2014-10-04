@@ -24,7 +24,7 @@
 
 class ScRTFExport : public ScExportBase
 {
-    sal_uLong*              pCellX;     // kumulierte Zellbreiten einer Tabelle
+    sal_uLong*              pCellX;     // cumulative range in a table
 
     void                WriteTab( SCTAB nTab );
     void                WriteRow( SCTAB nTab, SCROW nRow );

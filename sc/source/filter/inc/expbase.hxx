@@ -41,19 +41,19 @@ public:
                         ScExportBase( SvStream&, ScDocument*, const ScRange& );
     virtual             ~ScExportBase();
 
-                        // Hidden Cols/Rows an den Raendern trimmen,
-                        // return: sal_True wenn Bereich vorhanden
-                        // Start/End/Col/Row muessen gueltige Ausgangswerte sein
+                        // Trim borders of hidden Cols/Rows,
+                        // return: sal_True if range exists
+                        // Start/End/Col/Row must have valid starting values
     bool                TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
-                        // Ausgabebereich einer Tabelle ermitteln,
-                        // Hidden Cols/Rows an den Raendern beruecksichtigt,
-                        // return: sal_True wenn Bereich vorhanden
+                        // Get Data Area of a table,
+                        // adjust borders of hidden Cols/Rows,
+                        // return: sal_True if range exists
     bool                GetDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
-                        // Tabelle nicht vorhanden oder leer
+                        // table does not exist or is empty
     bool                IsEmptyTable( SCTAB nTab ) const;
 
     ScFieldEditEngine&  GetEditEngine() const;
