@@ -444,7 +444,7 @@ void ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
 bool WinGlyphFallbackSubstititution::HasMissingChars( const PhysicalFontFace* pFace, const OUString& rMissingChars ) const
 {
     const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFace);
-    const ImplFontCharMap* pCharMap = pWinFont->GetImplFontCharMap();
+    ImplFontCharMapPtr pCharMap = pWinFont->GetImplFontCharMap();
     if( !pCharMap )
     {
         // construct a Size structure as the parameter of constructor of class FontSelectPattern
@@ -474,7 +474,6 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const PhysicalFontFace* pF
     // avoid fonts with unknown CMAP subtables for glyph fallback
     if( !pCharMap || pCharMap->IsDefaultMap() )
         return false;
-        pCharMap->AddReference();
 
     int nMatchCount = 0;
     // static const int nMaxMatchCount = 1; // TODO: tolerate more missing characters?
@@ -485,7 +484,8 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const PhysicalFontFace* pF
         nMatchCount += pCharMap->HasChar( uChar );
         break; // for now
     }
-        pCharMap->DeReference();
+
+    pCharMap = 0;
 
     const bool bHasMatches = (nMatchCount > 0);
     return bHasMatches;
@@ -1137,7 +1137,7 @@ ImplWinFontData::~ImplWinFontData()
     delete[] mpFontCharSets;
 
     if( mpUnicodeMap )
-        mpUnicodeMap->DeReference();
+        mpUnicodeMap = 0;
 #if ENABLE_GRAPHITE
     if (mpGraphiteData)
         mpGraphiteData->DeReference();
@@ -1224,7 +1224,7 @@ bool ImplWinFontData::IsGSUBstituted( sal_UCS4 cChar ) const
     return( maGsubTable.find( cChar ) != maGsubTable.end() );
 }
 
-const ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
+const ImplFontCharMapPtr ImplWinFontData::GetImplFontCharMap() const
 {
     if( !mpUnicodeMap )
         return NULL;
@@ -1298,12 +1298,14 @@ void ImplWinFontData::ReadCmapTable( HDC hDC ) const
         mbDisableGlyphApi |= aResult.mbRecoded;
         aResult.mbSymbolic = bIsSymbolFont;
         if( aResult.mnRangeCount > 0 )
-            mpUnicodeMap = new ImplFontCharMap( aResult );
+        {
+            ImplFontCharMapPtr pUnicodeMap( new ImplFontCharMap( aResult ) );
+            mpUnicodeMap = pUnicodeMap;
+        }
     }
 
     if( !mpUnicodeMap )
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap( bIsSymbolFont );
-    mpUnicodeMap->AddReference();
 }
 
 void ImplWinFontData::GetFontCapabilities( HDC hDC ) const
@@ -1697,7 +1699,7 @@ sal_uLong WinSalGraphics::GetKernPairs()
     return mnFontKernPairCount;
 }
 
-const ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMapPtr WinSalGraphics::GetImplFontCharMap() const
 {
     if( !mpWinFontData[0] )
         return ImplFontCharMap::GetDefaultMap();
@@ -2480,8 +2482,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     if( aRawCffData.get() )
     {
         pWinFontData->UpdateFromHDC( getHDC() );
-        const ImplFontCharMap* pCharMap = pWinFontData->GetImplFontCharMap();
-        pCharMap->AddReference();
+        ImplFontCharMapPtr pCharMap = pWinFontData->GetImplFontCharMap();
 
         sal_GlyphId aRealGlyphIds[ 256 ];
         for( int i = 0; i < nGlyphCount; ++i )
@@ -2497,7 +2498,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
             aRealGlyphIds[i] = aGlyphId;
         }
 
-        pCharMap->DeReference(); // TODO: and and use a RAII object
+        pCharMap = 0;
 
         // provide a font subset from the CFF-table
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
@@ -2731,9 +2732,8 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                 rUnicodeEnc.clear();
             }
             const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFont);
-            const ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
+            ImplFontCharMapPtr pMap = pWinFont->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no map" );
-            pMap->AddReference();
 
             int nCharCount = pMap->GetCharCount();
             sal_uInt32 nChar = pMap->GetFirstChar();
@@ -2750,7 +2750,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                 nChar = pMap->GetNextChar( nChar );
             }
 
-            pMap->DeReference(); // TODO: and and use a RAII object
+            pMap = 0;
         }
     }
     else if( pFont->IsEmbeddable() )

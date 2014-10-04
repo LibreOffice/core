@@ -229,7 +229,7 @@ public:
     virtual void            SetTextColor( SalColor nSalColor ) SAL_OVERRIDE;
     virtual sal_uInt16          SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
-    virtual const ImplFontCharMap* GetImplFontCharMap() const SAL_OVERRIDE;
+    virtual const ImplFontCharMapPtr GetImplFontCharMap() const SAL_OVERRIDE;
     virtual bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
     virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
     virtual void ClearDevFontCache() SAL_OVERRIDE;
