@@ -175,8 +175,8 @@ public class LayerView extends FrameLayout {
     }
 
     public void requestRender() {
-        if (mGLThread != null) {
-            mGLThread.renderFrame();
+        if (mRenderControllerThread != null) {
+            mRenderControllerThread.renderFrame();
         }
         if (mListener != null) {
             mListener.renderRequested();
@@ -276,8 +276,8 @@ public class LayerView extends FrameLayout {
     private void onSizeChanged(int width, int height) {
         mGLController.surfaceChanged(width, height);
 
-        if (mGLThread != null) {
-            mGLThread.surfaceChanged(width, height);
+        if (mRenderControllerThread != null) {
+            mRenderControllerThread.surfaceChanged(width, height);
         }
 
         if (mListener != null) {
@@ -288,8 +288,8 @@ public class LayerView extends FrameLayout {
     private void onDestroyed() {
         mGLController.surfaceDestroyed();
 
-        if (mGLThread != null) {
-            mGLThread.surfaceDestroyed();
+        if (mRenderControllerThread != null) {
+            mRenderControllerThread.surfaceDestroyed();
         }
 
         if (mListener != null) {
@@ -331,8 +331,8 @@ public class LayerView extends FrameLayout {
         }
 
         public void surfaceCreated(SurfaceHolder holder) {
-            if (mGLThread != null) {
-                mGLThread.surfaceCreated();
+            if (mRenderControllerThread != null) {
+                mRenderControllerThread.surfaceCreated();
             }
         }
 
@@ -345,8 +345,8 @@ public class LayerView extends FrameLayout {
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             // We don't do this for surfaceCreated above because it is always followed by a surfaceChanged,
             // but that is not the case here.
-            if (mGLThread != null) {
-                mGLThread.surfaceCreated();
+            if (mRenderControllerThread != null) {
+                mRenderControllerThread.surfaceCreated();
             }
             onSizeChanged(width, height);
         }
@@ -364,23 +364,23 @@ public class LayerView extends FrameLayout {
         }
     }
 
-    private GLThread mGLThread; // Protected by this class's monitor.
+    private RenderControllerThread mRenderControllerThread;
 
     public synchronized void createGLThread() {
-        if (mGLThread != null) {
+        if (mRenderControllerThread != null) {
             throw new LayerViewException ("createGLThread() called with a GL thread already in place!");
         }
 
         Log.e(LOGTAG, "### Creating GL thread!");
-        mGLThread = new GLThread(mGLController);
-        mGLThread.start();
+        mRenderControllerThread = new RenderControllerThread(mGLController);
+        mRenderControllerThread.start();
         notifyAll();
     }
 
     public synchronized Thread destroyGLThread() {
         // Wait for the GL thread to be started.
         Log.e(LOGTAG, "### Waiting for GL thread to be created...");
-        while (mGLThread == null) {
+        while (mRenderControllerThread == null) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -389,19 +389,18 @@ public class LayerView extends FrameLayout {
         }
 
         Log.e(LOGTAG, "### Destroying GL thread!");
-        Thread glThread = mGLThread;
-        mGLThread.shutdown();
-        mGLThread = null;
-        return glThread;
+        Thread thread = mRenderControllerThread;
+        mRenderControllerThread.shutdown();
+        mRenderControllerThread = null;
+        return thread;
     }
 
     public synchronized void recreateSurface() {
-        if (mGLThread == null) {
-            throw new LayerViewException("recreateSurface() called with no GL " +
-                    "thread active!");
+        if (mRenderControllerThread == null) {
+            throw new LayerViewException("recreateSurface() called with no GL thread active!");
         }
 
-        mGLThread.recreateSurface();
+        mRenderControllerThread.recreateSurface();
     }
 
     public static class LayerViewException extends RuntimeException {
