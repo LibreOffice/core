@@ -24,10 +24,13 @@
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 
+#include <boost/intrusive_ptr.hpp>
+
 class ImplFontMetric;
 class ImplFontCharMap;
 
 typedef sal_uInt32 sal_UCS4;
+typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
 
 namespace vcl {
 
@@ -94,7 +97,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 class VCL_DLLPUBLIC FontCharMap
 {
 private:
-    const ImplFontCharMap* mpImpl;
+    ImplFontCharMapPtr  mpImplFontCharMap;
 
 public:
                         FontCharMap();
@@ -106,6 +109,7 @@ public:
     int                 GetCharCount( void ) const;
 
     sal_UCS4            GetFirstChar() const;
+    sal_UCS4            GetLastChar() const;
 
     sal_UCS4            GetNextChar( sal_UCS4 ) const;
     sal_UCS4            GetPrevChar( sal_UCS4 ) const;
@@ -116,7 +120,7 @@ public:
 
 private:
     friend class ::OutputDevice;
-    void                Reset( const ImplFontCharMap* pNewMap = NULL );
+    void                Reset( const ImplFontCharMapPtr pNewMap = NULL );
 
     // prevent assignment and copy construction
                         FontCharMap( const FontCharMap& );
