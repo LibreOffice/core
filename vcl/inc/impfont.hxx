@@ -29,6 +29,11 @@
 #include <vcl/fntstyle.hxx>
 #include <outfont.hxx>
 
+#include <boost/intrusive_ptr.hpp>
+
+class ImplFontCharMap;
+typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
+
 // - Impl_Font -
 
 class Impl_Font
@@ -158,7 +163,7 @@ public:
     explicit            ImplFontCharMap( const CmapResult& );
     virtual             ~ImplFontCharMap();
 
-    static ImplFontCharMap* GetDefaultMap( bool bSymbols=false);
+    static ImplFontCharMapPtr GetDefaultMap( bool bSymbols=false);
 
     bool                IsDefaultMap() const;
     bool                HasChar( sal_uInt32 ) const;
@@ -174,12 +179,12 @@ public:
     int                 GetIndexFromChar( sal_uInt32 ) const;
     sal_uInt32          GetCharFromIndex( int ) const;
 
-    void                AddReference() const;
-    void                DeReference() const;
-
     int                 GetGlyphIndex( sal_uInt32 ) const;
 
 private:
+    friend void intrusive_ptr_add_ref(ImplFontCharMap* pImplFontCharMap);
+    friend void intrusive_ptr_release(ImplFontCharMap* pImplFontCharMap);
+
     int                 ImplFindRangeIndex( sal_uInt32 ) const;
 
     // prevent assignment and copy construction
@@ -194,6 +199,17 @@ private:
     int                 mnCharCount;      // covered codepoints
     mutable sal_uInt32  mnRefCount;
 };
+
+inline void intrusive_ptr_add_ref(ImplFontCharMap* pImplFontCharMap)
+{
+    ++pImplFontCharMap->mnRefCount;
+}
+
+inline void intrusive_ptr_release(ImplFontCharMap* pImplFontCharMap)
+{
+    if (--pImplFontCharMap->mnRefCount == 0)
+        delete pImplFontCharMap;
+}
 
 // CmapResult is a normalized version of the many CMAP formats
 class VCL_PLUGIN_PUBLIC CmapResult
