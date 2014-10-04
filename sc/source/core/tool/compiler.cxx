@@ -3348,7 +3348,6 @@ void ScCompiler::AutoCorrectParsedSymbol()
                                 if ( !bLastAlp && !CharClass::isAsciiNumeric( aTmp1 ) )
                                     nStrip++;
                             }
-                            bNextNum = !bLastAlp;
                         }
                         aTmp1 = aTmp2;
                         nLen1 = nLen2;
