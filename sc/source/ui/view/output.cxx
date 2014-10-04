@@ -1745,8 +1745,6 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                 if ( rInfo.nRotateDir > SC_ROTDIR_STANDARD &&
                         !rInfo.bHOverlapped && !rInfo.bVOverlapped )
                 {
-                    pCondSet = rInfo.pConditionSet;
-
                     size_t nCol = lclGetArrayColFromCellInfoX( nArrX, nX1, nX2, bLayoutRTL );
 
                     //  horizontal: angrenzende Linie verlaengern
