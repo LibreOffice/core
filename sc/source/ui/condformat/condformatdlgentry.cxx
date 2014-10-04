@@ -674,10 +674,6 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
 
 void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos, bool bDataBar )
 {
-    sal_uInt32 nIndex = 0;
-    double nVal = 0;
-    SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-    pNumberFormatter->IsNumberFormat(rValue.GetText(), nIndex, nVal);
 
     // color scale does not have the automatic entry
     sal_Int32 nPos = rType.GetSelectEntryPos();
@@ -694,7 +690,13 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
         case COLORSCALE_PERCENTILE:
         case COLORSCALE_VALUE:
         case COLORSCALE_PERCENT:
-            pEntry->SetValue(nVal);
+            {
+                sal_uInt32 nIndex = 0;
+                double nVal = 0;
+                SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+                (void)pNumberFormatter->IsNumberFormat(rValue.GetText(), nIndex, nVal);
+                pEntry->SetValue(nVal);
+            }
             break;
         case COLORSCALE_FORMULA:
             pEntry->SetFormula(rValue.GetText(), pDoc, rPos);
