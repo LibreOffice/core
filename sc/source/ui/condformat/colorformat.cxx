@@ -39,7 +39,7 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
         case COLORSCALE_PERCENTILE:
         case COLORSCALE_VALUE:
         case COLORSCALE_PERCENT:
-            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
+            (void)pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
         case COLORSCALE_FORMULA:
