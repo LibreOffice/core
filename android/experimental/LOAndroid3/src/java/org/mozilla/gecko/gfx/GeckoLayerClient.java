@@ -227,23 +227,23 @@ public class GeckoLayerClient implements LayerView.Listener {
     }
 
     @Override
-    public void renderRequested() {
+    public void compositorCreated() {
+    }
 
+    @Override
+    public void renderRequested() {
     }
 
     @Override
     public void compositionPauseRequested() {
-
     }
 
     @Override
     public void compositionResumeRequested(int width, int height) {
-
     }
 
     @Override
     public void surfaceChanged(int width, int height) {
-        compositionResumeRequested(width, height);
         renderRequested();
     }
 
