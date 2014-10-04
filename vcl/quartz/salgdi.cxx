@@ -62,19 +62,17 @@ using namespace vcl;
 CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
 :   PhysicalFontFace( rSrc )
 ,   mnFontId( rSrc.mnFontId )
-,   mpCharMap( rSrc.mpCharMap )
 ,   mbOs2Read( rSrc.mbOs2Read )
 ,   mbHasOs2Table( rSrc.mbHasOs2Table )
 ,   mbCmapEncodingRead( rSrc.mbCmapEncodingRead )
 {
-    if( mpCharMap )
-        mpCharMap->AddReference();
+    if( rSrc.mpCharMap )
+        mpCharMap = rSrc.mpCharMap;
 }
 
 CoreTextFontData::CoreTextFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr nFontId )
 :   PhysicalFontFace( rDFA, 0 )
 ,   mnFontId( nFontId )
-,   mpCharMap( NULL )
 ,   mbOs2Read( false )
 ,   mbHasOs2Table( false )
 ,   mbCmapEncodingRead( false )
@@ -85,7 +83,7 @@ CoreTextFontData::CoreTextFontData( const ImplDevFontAttributes& rDFA, sal_IntPt
 CoreTextFontData::~CoreTextFontData()
 {
     if( mpCharMap )
-        mpCharMap->DeReference();
+        mpCharMap->reset();
 }
 
 sal_IntPtr CoreTextFontData::GetFontId() const
@@ -95,7 +93,7 @@ sal_IntPtr CoreTextFontData::GetFontId() const
 
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 
-const ImplFontCharMap* CoreTextFontData::GetImplFontCharMap() const
+const ImplFontCharMapPtr CoreTextFontData::GetImplFontCharMap() const
 {
     // return the cached charmap
     if( mpCharMap )
@@ -103,7 +101,6 @@ const ImplFontCharMap* CoreTextFontData::GetImplFontCharMap() const
 
     // set the default charmap
     mpCharMap = ImplFontCharMap::GetDefaultMap();
-    mpCharMap->AddReference();
 
     // get the CMAP byte size
     // allocate a buffer for the CMAP raw data
@@ -125,9 +122,7 @@ const ImplFontCharMap* CoreTextFontData::GetImplFontCharMap() const
     if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
     {
         // create the matching charmap
-        mpCharMap->DeReference();
-        mpCharMap = new ImplFontCharMap( aCmapResult );
-        mpCharMap->AddReference();
+        mpCharMap.reset( new ImplFontCharMap( aCmapResult ) );
     }
 
     return mpCharMap;
@@ -489,7 +484,7 @@ SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFal
     return pSalLayout;
 }
 
-const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMapPtr AquaSalGraphics::GetImplFontCharMap() const
 {
     if( !mpFontData )
         return ImplFontCharMap::GetDefaultMap();
@@ -726,9 +721,8 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
                 free( (void*)pGlyphMetrics );
             }
 
-            const ImplFontCharMap* pMap = mpFontData->GetImplFontCharMap();
+            const ImplFontCharMapPtr pMap = mpFontData->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no charmap" );
-            pMap->AddReference(); // TODO: add and use RAII object instead
 
             // get unicode<->glyph encoding
             // TODO? avoid sft mapping by using the pMap itself
@@ -744,7 +738,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
                     rUnicodeEnc[ nUcsChar ] = nGlyph;
             }
 
-            pMap->DeReference(); // TODO: add and use RAII object instead
+            pMap->reset();
         }
 
         ::CloseTTFont( pSftFont );
