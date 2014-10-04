@@ -52,7 +52,7 @@ public class MockTileProvider implements TileProvider {
         tileNumber += 1; // 0 to 1 based numbering
 
         String imageName = "d" + tileNumber;
-        Bitmap bitmap = layerController.getDrawable(imageName);
+        Bitmap bitmap = layerController.getView().getDrawable(imageName);
 
         CairoImage image = new BufferedCairoImage(bitmap);
 
@@ -61,7 +61,7 @@ public class MockTileProvider implements TileProvider {
 
     @Override
     public Bitmap thumbnail(int size) {
-        return layerController.getDrawable("dummy_page");
+        return layerController.getView().getDrawable("dummy_page");
     }
 
     @Override

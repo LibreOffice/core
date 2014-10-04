@@ -6,9 +6,6 @@
 package org.mozilla.gecko.gfx;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -104,23 +101,12 @@ public class LayerController implements PanZoomTarget {
         return mViewportMetrics.getSize();
     }
 
-    public Bitmap getBackgroundPattern()    { return getDrawable("background"); }
-    public Bitmap getShadowPattern()        { return getDrawable("shadow"); }
-
     public PanZoomController getPanZoomController()                                 { return mPanZoomController; }
     public GestureDetector.OnGestureListener getGestureListener()                   { return mPanZoomController; }
     public SimpleScaleGestureDetector.SimpleScaleGestureListener getScaleGestureListener() {
         return mPanZoomController;
     }
     public GestureDetector.OnDoubleTapListener getDoubleTapListener()               { return mPanZoomController; }
-
-    public Bitmap getDrawable(String name) {
-        Resources resources = mContext.getResources();
-        int resourceID = resources.getIdentifier(name, "drawable", mContext.getPackageName());
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-        return BitmapFactory.decodeResource(mContext.getResources(), resourceID, options);
-    }
 
     /**
      * The view calls this function to indicate that the viewport changed size. It must hold the
