@@ -100,7 +100,7 @@ Menu RID_SVX_STYLE_MENU
         MenuItem
         {
             Identifier = RID_SVX_MODIFY_STYLE ;
-            Text [ en-US ] = "Edit Style" ;
+            Text [ en-US ] = "Edit Style..." ;
         };
     };
 };
