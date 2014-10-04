@@ -26,10 +26,10 @@
 #endif
 
 /* in cpp1.c: file-pointer auf stdout oder file */
-extern FILE *pCppOut;                                   /* BP */
+extern FILE* pCppOut;                                   /* BP */
 #define PUTCHAR( d )   fprintf( pCppOut, "%c", (d) )    /* BP */
 #if OSL_DEBUG_LEVEL > 1
-extern FILE *pDefOut;                                   /* ER */
+extern FILE* pDefOut;                                   /* ER */
 #ifdef EVALDEFS
 #define NEVALBUF        2048
 #endif
@@ -164,12 +164,13 @@ extern FILE *pDefOut;                                   /* ER */
  * in malloc storage.
  */
 
-typedef struct defbuf {
-        struct defbuf   *link;          /* Next define in chain */
-        char            *repl;          /* -> replacement       */
-        int             hash;           /* Symbol table hash    */
-        int             nargs;          /* For define(args)     */
-        char            name[1];        /* #define name         */
+typedef struct defbuf
+{
+    struct defbuf*  link;           /* Next define in chain */
+    char*           repl;           /* -> replacement       */
+    int             hash;           /* Symbol table hash    */
+    int             nargs;          /* For define(args)     */
+    char            name[1];        /* #define name         */
 } DEFBUF;
 
 /*
@@ -177,22 +178,24 @@ typedef struct defbuf {
  * and macros being expanded.
  */
 
-typedef struct fileinfo {
-        char            *bptr;          /* Buffer pointer       */
-        int             line;           /* for include or macro */
-        FILE            *fp;            /* File if non-null     */
-        struct fileinfo *parent;        /* Link to includer     */
-        char            *filename;      /* File/macro name      */
-        char            *progname;      /* From #line statement */
-        unsigned int    unrecur;        /* For macro recursion  */
-        char            buffer[1];      /* current input line   */
+typedef struct fileinfo
+{
+    char*           bptr;           /* Buffer pointer       */
+    int             line;           /* for include or macro */
+    FILE*           fp;             /* File if non-null     */
+    struct fileinfo* parent;        /* Link to includer     */
+    char*           filename;       /* File/macro name      */
+    char*           progname;       /* From #line statement */
+    unsigned int    unrecur;        /* For macro recursion  */
+    char            buffer[1];      /* current input line   */
 } FILEINFO;
 
 /*
  * The SIZES structure is used to store the values for #if sizeof
  */
 
-typedef struct sizes {
+typedef struct sizes
+{
     short       bits;                   /* If this bit is set,          */
     int         size;                   /* this is the datum size value */
     int         psize;                  /* this is the pointer size     */
@@ -204,8 +207,8 @@ typedef struct sizes {
 /*
  * Error codes.
  */
-#define IO_NORMAL       0
-#define IO_ERROR        1
+#define IO_NORMAL 0
+#define IO_ERROR  1
 
 /*
  * Externs
@@ -221,18 +224,18 @@ extern int      errors;                 /* Error counter                */
 extern int      recursion;              /* Macro depth counter          */
 extern char     ifstack[BLK_NEST];      /* #if information              */
 #define compiling ifstack[0]
-extern char     *ifptr;                 /* -> current ifstack item      */
-extern char     *incdir[NINCLUDE];      /* -i directories               */
-extern char     **incend;               /* -> active end of incdir      */
+extern char*    ifptr;                  /* -> current ifstack item      */
+extern char*    incdir[NINCLUDE];       /* -i directories               */
+extern char**   incend;                 /* -> active end of incdir      */
 extern int      cflag;                  /* -C option (keep comments)    */
 extern int      eflag;                  /* -E option (ignore errors)    */
 extern int      nflag;                  /* -N option (no pre-defines)   */
 extern int      rec_recover;            /* unwind recursive macros      */
-extern char     *preset[];              /* Standard predefined symbols  */
-extern char     *magic[];               /* Magic predefined symbols     */
-extern FILEINFO *infile;                /* Current input file           */
+extern char*    preset[];               /* Standard predefined symbols  */
+extern char*    magic[];                /* Magic predefined symbols     */
+extern FILEINFO* infile;                /* Current input file           */
 extern char     work[NWORK + 1];        /* #define scratch              */
-extern char     *workp;                 /* Free space in work           */
+extern char*    workp;                  /* Free space in work           */
 #if OSL_DEBUG_LEVEL > 1
 extern int      debug;                  /* Debug level                  */
 /* ER dump & evaluate #define's */
@@ -260,12 +263,12 @@ int rscpp_main( int argc, char **argv );
 #endif
 
 
-void InitCpp1(void);
-void InitCpp2(void);
-void InitCpp3(void);
-void InitCpp4(void);
-void InitCpp5(void);
-void InitCpp6(void);
+void InitCpp1( void );
+void InitCpp2( void );
+void InitCpp3( void );
+void InitCpp4( void );
+void InitCpp5( void );
+void InitCpp6( void );
 
 #define HELLO()   fprintf( stderr, "[Hello at %s, %d] ", __FILE__, __LINE__ )
 
@@ -275,8 +278,8 @@ void InitCpp6(void);
 
 /* cpp1.c */
 void output( int c );
-void sharp(void);
-void cppmain(void);
+void sharp( void );
+void cppmain( void );
 #if OSL_DEBUG_LEVEL > 1
 #ifdef EVALDEFS
 int outputEval( int c );
@@ -286,79 +289,79 @@ int outputEval( int c );
 
 /* cpp2.c */
 int control( int counter );
-void doinclude(void);
-void dodefine(void);
+void doinclude( void );
+void dodefine( void );
 void doif( int hash );
-int openinclude( char *, int );
-int hasdirectory(char *, char * );
-int openfile( char * );
+int openinclude( char*, int );
+int hasdirectory( char*, char* );
+int openfile( char* );
 
 /* cpp3.c */
-int openfiles( char *filename );
-void addfile( FILE *fp, char *filename );
-void setincdirs(void);
-int AddInclude( char *pIncStr );
-int getredirection( int argc, char **argv );
-void zap_uc( char *ap );
+int openfiles( char* filename );
+void addfile( FILE* fp, char* filename );
+void setincdirs( void );
+int AddInclude( char* pIncStr );
+int getredirection( int argc, char** argv );
+void zap_uc( char* ap );
 
-void initdefines(void);
-int dooptions( int argc, char *argv[] );
-int readoptions(char* filename, char*** pfargv);
+void initdefines( void );
+int dooptions( int argc, char* argv[] );
+int readoptions( char* filename, char*** pfargv );
 
 /* cpp4.c */
-void dodefines(void);
-void checkparm( int c, DEFBUF *dp );
-int expcollect(void);
-void expstuff( DEFBUF *dp );
+void dodefines( void );
+void checkparm( int c, DEFBUF* dp );
+int expcollect( void );
+void expstuff( DEFBUF* dp );
 
-void stparmscan( int delim);
+void stparmscan( int delim );
 #if OSL_DEBUG_LEVEL > 1
-void dumpparm( char *why );
+void dumpparm( char* why );
 #endif
 
-void doundef(void);
-void textput( char *text );
+void doundef( void );
+void textput( char* text );
 void charput( int c );
-void expand( DEFBUF *tokenp );
+void expand( DEFBUF* tokenp );
 
 /* cpp5.c */
-int eval(void);
-int evallex(int);
-int *evaleval(int *, int, int );
-int evalchar(int);
-int dosizeof(void);
+int eval( void );
+int evallex( int );
+int *evaleval( int*, int, int );
+int evalchar( int );
+int dosizeof( void );
 int evalnum( int c );
 int bittest( int );
 
 /* cpp6.c */
 
-void skipnl(void);
-int skipws(void);
+void skipnl( void );
+int skipws( void );
 void scanid( int c );
 int macroid( int c );
 int catenate(void);
 int scanstring( int c, void (*outfun)( int c ) );
 void scannumber( int c, void (*outfun)( int c ) );
 void save( int c );
-char *savestring( char *text );
-FILEINFO *getfile( int bufsize, char *name);
+char* savestring( char* text );
+FILEINFO* getfile( int bufsize, char* name );
 char *getmem( int size );
-DEFBUF *lookid( int c );
-DEFBUF *defendel( char *name, int delete );
-void dunpdef( char *why );
-void dumpadef( char *why, DEFBUF *dp);
-int get(void);
-int cget(void);
-void unget(void);
-void ungetstring( char *text );
-void cerror( char *format, char *sarg);
-void cwarn( char *format, char *sarg);
-void cfatal( char *format, char *sarg);
-void cierror( char *format, int n);
-void ciwarn( char *format, int n);
+DEFBUF* lookid( int c );
+DEFBUF* defendel( char* name, int delete );
+void dunpdef( char* why );
+void dumpadef( char* why, DEFBUF* dp );
+int get( void );
+int cget( void );
+void unget( void );
+void ungetstring( char* text );
+void cerror( char* format, char* sarg );
+void cwarn( char* format, char* sarg );
+void cfatal( char* format, char* sarg );
+void cierror( char* format, int n );
+void ciwarn( char* format, int n );
 #if OSL_DEBUG_LEVEL > 1
-void dumpdef( char *why );
-void dumpadef( char *why, DEFBUF *dp );
+void dumpdef( char* why );
+void dumpadef( char* why, DEFBUF *dp );
 #endif
 
 #endif // INCLUDED_RSC_SOURCE_RSCPP_CPP_H

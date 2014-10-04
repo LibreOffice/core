@@ -26,7 +26,7 @@
  * Evaluate an #if expression.
  */
 
-static char *opname[] = {       /* For debug and error messages */
+static char* opname[] = {       /* For debug and error messages */
 "end of expression", "val", "id",
   "+",   "-",  "*",  "/",  "%",
   "<<", ">>",  "&",  "|",  "^",
@@ -80,7 +80,8 @@ static char opdope[OP_MAX] = {
 #define S_ANDOR     2
 #define S_QUEST     1
 
-typedef struct optab {
+typedef struct optab
+{
     char    op;         /* Operator         */
     char    prec;           /* Its precedence       */
     char    skip;           /* Short-circuit: TRUE to skip  */
@@ -133,7 +134,8 @@ static int  evalue;         /* Current value from evallex() */
 #define S_PFPTR     (sizeof (int (*)(void)))
 #endif
 
-typedef struct types {
+typedef struct types
+{
     short   type;           /* This is the bit if       */
     char    *name;          /* this is the token word   */
 } TYPES;
@@ -184,9 +186,6 @@ void InitCpp5()
 }
 
 
-
-int
-eval()
 /*
  * Evaluate an expression.  Straight-forward operator precedence.
  * This is called from control() on encountering an #if statement.
@@ -199,23 +198,26 @@ eval()
  * For compatibility with older cpp's, this return returns 1 (TRUE)
  * if a syntax error is detected.
  */
+int eval()
 {
-    int    op;     /* Current operator     */
-    int    *valp;      /* -> value vector      */
-    OPTAB  *opp;       /* Operator stack       */
-    int     prec;       /* Op precedence        */
-    int     binop;      /* Set if binary op. needed */
-    int     op1;        /* Operand from stack       */
-    int     skip;       /* For short-circuit testing    */
-    int     value[NEXP];    /* Value stack          */
-    OPTAB       opstack[NEXP];  /* Operand stack        */
+    int op;         /* Current operator     */
+    int* valp;      /* -> value vector      */
+    OPTAB* opp;     /* Operator stack       */
+    int prec;       /* Op precedence        */
+    int binop;      /* Set if binary op. needed */
+    int op1;        /* Operand from stack       */
+    int skip;       /* For short-circuit testing    */
+    int value[NEXP]; /* Value stack          */
+    OPTAB opstack[NEXP]; /* Operand stack        */
+
     valp = value;
     opp = opstack;
     opp->op = OP_END;       /* Mark bottom of stack     */
     opp->prec = opdope[OP_END]; /* And its precedence       */
     opp->skip = 0;          /* Not skipping now     */
     binop = 0;
-again:  ;
+
+again:
 #ifdef  DEBUG_EVAL
     fprintf( pCppOut, "In #if at again: skip = %d, binop = %d, line is: %s",
         opp->skip, binop, infile->bptr);
@@ -230,129 +232,143 @@ again:  ;
     fprintf( pCppOut, "op = %s, opdope = %03o, binop = %d, skip = %d\n",
         opname[op], opdope[op], binop, opp->skip);
 #endif
-    if (op == DIG) {            /* Value?       */
-        if (binop != 0) {
-        cerror("misplaced constant in #if", NULLST);
-        return (1);
+    if (op == DIG)              /* Value?       */
+    {
+        if (binop != 0)
+        {
+            cerror("misplaced constant in #if", NULLST);
+            return (1);
         }
-        else if (valp >= &value[NEXP-1]) {
-        cerror("#if value stack overflow", NULLST);
-        return (1);
+        else if (valp >= &value[NEXP-1])
+        {
+            cerror("#if value stack overflow", NULLST);
+            return (1);
         }
-        else {
+        else
+        {
 #ifdef  DEBUG_EVAL
-        fprintf( pCppOut, "pushing %d onto value stack[%d]\n",
-            evalue, valp - value);
+            fprintf( pCppOut, "pushing %d onto value stack[%d]\n",
+                     evalue, valp - value);
 #endif
-        *valp++ = evalue;
-        binop = 1;
+            *valp++ = evalue;
+            binop = 1;
         }
         goto again;
     }
-    else if (op > OP_END) {
+    else if (op > OP_END)
+    {
         cerror("Illegal #if line", NULLST);
         return (1);
     }
     prec = opdope[op];
-    if (binop != (prec & 1)) {
+    if (binop != (prec & 1))
+    {
         cerror("Operator %s in incorrect context", opname[op]);
         return (1);
     }
     binop = (prec & 2) >> 1;
-    for (;;) {
+    for (;;)
+    {
 #ifdef  DEBUG_EVAL
         fprintf( pCppOut, "op %s, prec %d., stacked op %s, prec %d, skip %d\n",
         opname[op], prec, opname[opp->op], opp->prec, opp->skip);
 #endif
-        if (prec > opp->prec) {
-        if (op == OP_LPA)
-            prec = OP_RPA_PREC;
-        else if (op == OP_QUE)
-            prec = OP_QUE_PREC;
-        op1 = opp->skip;        /* Save skip for test   */
-        /*
-         * Push operator onto op. stack.
-         */
-        opp++;
-        if (opp >= &opstack[NEXP]) {
-            cerror("expression stack overflow at op \"%s\"",
-            opname[op]);
-            return (1);
-        }
-        opp->op = (char)op;
-        opp->prec = (char)prec;
-        /*
-         * Do the short-circuit stuff here.  Short-circuiting
-         * stops automagically when operators are evaluated.
-         */
-        if ((op == OP_ANA && valp[-1] == 0)
-         || (op == OP_ORO && valp[-1] != 0))
-            opp->skip = S_ANDOR;    /* And/or skip starts   */
-        else if (op == OP_QUE)      /* Start of ?: operator */
-            opp->skip = (char)((op1 & S_ANDOR) | ((valp[-1] == 0) ? S_QUEST : 0));
-        else if (op == OP_COL) {    /* : inverts S_QUEST    */
-            opp->skip = (char)((op1 & S_ANDOR)
-                  | (((op1 & S_QUEST) != 0) ? 0 : S_QUEST));
-        }
-        else {              /* Other ops leave  */
-            opp->skip = (char)op1;      /*  skipping unchanged. */
-        }
+        if (prec > opp->prec)
+        {
+            if (op == OP_LPA)
+                prec = OP_RPA_PREC;
+            else if (op == OP_QUE)
+                prec = OP_QUE_PREC;
+            op1 = opp->skip;        /* Save skip for test   */
+            /*
+             * Push operator onto op. stack.
+             */
+            opp++;
+            if (opp >= &opstack[NEXP])
+            {
+                cerror("expression stack overflow at op \"%s\"",
+                       opname[op]);
+                return (1);
+            }
+            opp->op = (char)op;
+            opp->prec = (char)prec;
+            /*
+             * Do the short-circuit stuff here.  Short-circuiting
+             * stops automagically when operators are evaluated.
+             */
+            if ((op == OP_ANA && valp[-1] == 0) ||
+                (op == OP_ORO && valp[-1] != 0))
+            {
+                opp->skip = S_ANDOR;    /* And/or skip starts   */
+            }
+            else if (op == OP_QUE)      /* Start of ?: operator */
+                opp->skip = (char)((op1 & S_ANDOR) | ((valp[-1] == 0) ? S_QUEST : 0));
+            else if (op == OP_COL)      /* : inverts S_QUEST    */
+            {
+                opp->skip = (char)((op1 & S_ANDOR)
+                                   | (((op1 & S_QUEST) != 0) ? 0 : S_QUEST));
+            }
+            else                 /* Other ops leave  */
+            {
+                opp->skip = (char)op1;      /*  skipping unchanged. */
+            }
 #ifdef  DEBUG_EVAL
-        fprintf( pCppOut, "stacking %s, valp[-1] == %d at %s",
-            opname[op], valp[-1], infile->bptr);
-        dumpstack(opstack, opp, value, valp);
+            fprintf( pCppOut, "stacking %s, valp[-1] == %d at %s",
+                     opname[op], valp[-1], infile->bptr);
+            dumpstack(opstack, opp, value, valp);
 #endif
-        goto again;
+            goto again;
         }
         /*
          * Pop operator from op. stack and evaluate it.
          * End of stack and '(' are specials.
          */
         skip = opp->skip;           /* Remember skip value  */
-        switch ((op1 = opp->op)) {      /* Look at stacked op   */
-        case OP_END:            /* Stack end marker */
-        if (op == OP_EOE)
-            return (valp[-1]);      /* Finished ok.     */
-        goto again;         /* Read another op. */
+        switch ((op1 = opp->op))    /* Look at stacked op   */
+        {
+        case OP_END:                /* Stack end marker */
+            if (op == OP_EOE)
+                return (valp[-1]);  /* Finished ok.     */
+            goto again;             /* Read another op. */
 
-        case OP_LPA:            /* ( on stack       */
-        if (op != OP_RPA) {     /* Matches ) on input   */
-            cerror("unbalanced paren's, op is \"%s\"", opname[op]);
-            return (1);
-        }
-        opp--;              /* Unstack it       */
-        /* goto again;          -- Fall through     */
+        case OP_LPA:                /* ( on stack       */
+            if (op != OP_RPA)       /* Matches ) on input   */
+            {
+                cerror("unbalanced paren's, op is \"%s\"", opname[op]);
+                return (1);
+            }
+            opp--;                  /* Unstack it       */
+            /* goto again;          -- Fall through     */
 
         case OP_QUE:
-        goto again;         /* Evaluate true expr.  */
+            goto again;             /* Evaluate true expr.  */
 
-        case OP_COL:            /* : on stack.      */
-        opp--;              /* Unstack :        */
-        if (opp->op != OP_QUE) {    /* Matches ? on stack?  */
-            cerror("Misplaced '?' or ':', previous operator is %s",
-                   opname[(int)opp->op]);
-            return (1);
-        }
+        case OP_COL:                /* : on stack.      */
+            opp--;                  /* Unstack :        */
+            if (opp->op != OP_QUE)  /* Matches ? on stack?  */
+            {
+                cerror("Misplaced '?' or ':', previous operator is %s",
+                       opname[(int)opp->op]);
+                return (1);
+            }
         /*
          * Evaluate op1.
          */
         default:                /* Others:      */
-        opp--;              /* Unstack the operator */
+            opp--;              /* Unstack the operator */
 #ifdef  DEBUG_EVAL
-        fprintf( pCppOut, "Stack before evaluation of %s\n", opname[op1]);
-        dumpstack(opstack, opp, value, valp);
+            fprintf( pCppOut, "Stack before evaluation of %s\n", opname[op1]);
+            dumpstack(opstack, opp, value, valp);
 #endif
-        valp = evaleval(valp, op1, skip);
+            valp = evaleval(valp, op1, skip);
 #ifdef  DEBUG_EVAL
-        fprintf( pCppOut, "Stack after evaluation\n");
-        dumpstack(opstack, opp, value, valp);
+            fprintf( pCppOut, "Stack after evaluation\n");
+            dumpstack(opstack, opp, value, valp);
 #endif
         }                   /* op1 switch end   */
     }                   /* Stack unwind loop    */
 }
 
-FILE_LOCAL int
-evallex(int skip)
 /*
  * Return next eval operator or value.  Called from eval().  It
  * calls a special-purpose routines for 'char' strings and
@@ -360,46 +376,62 @@ evallex(int skip)
  * evalchar called to evaluate 'x'
  * evalnum  called to evaluate numbers.
  */
+FILE_LOCAL int evallex(int skip)
 {
-    int    c, c1, t;
+    int c;
+    int c1;
+    int t;
 
-again:  do {                    /* Collect the token    */
+again:
+    do                              /* Collect the token    */
+    {
         c = skipws();
-        if ((c = macroid(c)) == EOF_CHAR || c == '\n') {
-        unget();
-        return (OP_EOE);        /* End of expression    */
+        if ((c = macroid(c)) == EOF_CHAR || c == '\n')
+        {
+            unget();
+            return (OP_EOE);        /* End of expression    */
         }
-    } while ((t = type[c]) == LET && catenate());
-    if (t == INV) {             /* Total nonsense   */
-        if (!skip) {
-        if (isascii(c) && isprint(c))
-            cierror("illegal character '%c' in #if", c);
-        else
-            cierror("illegal character (%d decimal) in #if", c);
+    }
+    while ((t = type[c]) == LET && catenate());
+    if (t == INV)                   /* Total nonsense   */
+    {
+        if (!skip)
+        {
+            if (isascii(c) && isprint(c))
+                cierror("illegal character '%c' in #if", c);
+            else
+                cierror("illegal character (%d decimal) in #if", c);
         }
         return (OP_FAIL);
     }
-    else if (t == QUO) {            /* ' or "       */
-        if (c == '\'') {            /* Character constant   */
-        evalue = evalchar(skip);    /* Somewhat messy   */
+    else if (t == QUO)              /* ' or "       */
+    {
+        if (c == '\'')              /* Character constant   */
+        {
+            evalue = evalchar(skip);    /* Somewhat messy   */
 #ifdef  DEBUG_EVAL
-        fprintf( pCppOut, "evalchar returns %d.\n", evalue);
+            fprintf( pCppOut, "evalchar returns %d.\n", evalue);
 #endif
-        return (DIG);           /* Return a value   */
+            return (DIG);           /* Return a value   */
         }
         cerror("Can't use a string in an #if", NULLST);
         return (OP_FAIL);
     }
-    else if (t == LET) {            /* ID must be a macro   */
-        if (streq(token, "defined")) {  /* Or defined name  */
+    else if (t == LET)              /* ID must be a macro   */
+    {
+        if (streq(token, "defined"))  /* Or defined name  */
+        {
             c1 = c = skipws();
             if (c == '(')           /* Allow defined(name)  */
                 c = skipws();
-            if (type[c] == LET) {
+            if (type[c] == LET)
+            {
                 evalue = (lookid(c) != NULL);
-                if (c1 != '('       /* Need to balance  */
-                    || skipws() == ')')    /* Did we balance?  */
-                return (DIG);       /* Parsed ok        */
+                if (c1 != '(' ||      /* Need to balance  */
+                    skipws() == ')')    /* Did we balance?  */
+                {
+                    return (DIG);       /* Parsed ok        */
+                }
             }
             cerror("Bad #if ... defined() syntax", NULLST);
             return (OP_FAIL);
@@ -419,70 +451,73 @@ again:  do {                    /* Collect the token    */
         evalue = 0;
         return (DIG);
     }
-    else if (t == DIG) {            /* Numbers are harder   */
+    else if (t == DIG)              /* Numbers are harder   */
+    {
         evalue = evalnum(c);
 #ifdef  DEBUG_EVAL
         fprintf( pCppOut, "evalnum returns %d.\n", evalue);
 #endif
     }
-    else if (strchr("!=<>&|\\", c) != NULL) {
+    else if (strchr("!=<>&|\\", c) != NULL)
+    {
         /*
          * Process a possible multi-byte lexeme.
          */
-        c1 = cget();            /* Peek at next char    */
-        switch (c) {
+        c1 = cget();                /* Peek at next char    */
+        switch (c)
+        {
         case '!':
-        if (c1 == '=')
-            return (OP_NE);
-        break;
+            if (c1 == '=')
+                return (OP_NE);
+            break;
 
         case '=':
-        if (c1 != '=') {        /* Can't say a=b in #if */
-            unget();
-            cerror("= not allowed in #if", NULLST);
-            return (OP_FAIL);
-        }
-        return (OP_EQ);
+            if (c1 != '=')          /* Can't say a=b in #if */
+            {
+                unget();
+                cerror("= not allowed in #if", NULLST);
+                return (OP_FAIL);
+            }
+            return (OP_EQ);
 
         case '>':
         case '<':
-        if (c1 == c)
-            return ((c == '<') ? OP_ASL : OP_ASR);
-        else if (c1 == '=')
-            return ((c == '<') ? OP_LE  : OP_GE);
-        break;
+            if (c1 == c)
+                return ((c == '<') ? OP_ASL : OP_ASR);
+            else if (c1 == '=')
+                return ((c == '<') ? OP_LE  : OP_GE);
+            break;
 
         case '|':
         case '&':
-        if (c1 == c)
-            return ((c == '|') ? OP_ORO : OP_ANA);
-        break;
+            if (c1 == c)
+                return ((c == '|') ? OP_ORO : OP_ANA);
+            break;
 
         case '\\':
-        if (c1 == '\n')         /* Multi-line if    */
-            goto again;
-        cerror("Unexpected \\ in #if", NULLST);
-        return (OP_FAIL);
+            if (c1 == '\n')         /* Multi-line if    */
+                goto again;
+            cerror("Unexpected \\ in #if", NULLST);
+            return (OP_FAIL);
         }
         unget();
     }
     return (t);
 }
-
-FILE_LOCAL int
-dosizeof()
+
 /*
  * Process the sizeof (basic type) operation in an #if string.
  * Sets evalue to the size and returns
  *  DIG     success
  *  OP_FAIL     bad parse or something.
  */
+FILE_LOCAL int dosizeof()
 {
-    int    c;
-    TYPES  *tp;
-    SIZES  *sizp;
-    short  *testp;
-    short  typecode;
+    int c;
+    TYPES* tp;
+    SIZES* sizp;
+    short* testp;
+    short typecode;
 
     if ((c = skipws()) != '(')
         goto nogood;
@@ -490,52 +525,60 @@ dosizeof()
      * Scan off the tokens.
      */
     typecode = 0;
-    while (0 != (c = skipws())) {
+    while (0 != (c = skipws()))
+    {
         if ((c = macroid(c)) == EOF_CHAR || c == '\n')
             goto nogood;            /* End of line is a bug */
-        else if (c == '(') {        /* thing (*)() func ptr */
-            if (skipws() == '*'
-             && skipws() == ')') {      /* We found (*)     */
+        else if (c == '(')          /* thing (*)() func ptr */
+        {
+            if (skipws() == '*' && skipws() == ')')
+            {                       /* We found (*)     */
                 if (skipws() != '(')    /* Let () be optional   */
                     unget();
                 else if (skipws() != ')')
                     goto nogood;
-                typecode |= T_FPTR;     /* Function pointer */
+                typecode |= T_FPTR; /* Function pointer */
             }
-            else {              /* Junk is a bug    */
+            else                    /* Junk is a bug    */
                 goto nogood;
-            }
         }
-        else if (type[c] != LET)        /* Exit if not a type   */
+        else if (type[c] != LET)    /* Exit if not a type   */
             break;
-        else if (!catenate()) {     /* Maybe combine tokens */
+        else if (!catenate())       /* Maybe combine tokens */
+        {
             /*
              * Look for this unexpandable token in basic_types.
              * The code accepts "int long" as well as "long int"
              * which is a minor bug as bugs go (and one shared with
              * a lot of C compilers).
              */
-            for (tp = basic_types; tp->name != NULLST; tp++) {
+            for (tp = basic_types; tp->name != NULLST; tp++)
+            {
                 if (streq(token, tp->name))
-                break;
+                    break;
             }
-            if (tp->name == NULLST) {
+            if (tp->name == NULLST)
+            {
                 cerror("#if sizeof, unknown type \"%s\"", token);
                 return (OP_FAIL);
             }
-        typecode |= tp->type;       /* Or in the type bit   */
+            typecode |= tp->type;   /* Or in the type bit   */
         }
     }
     /*
      * We are at the end of the type scan.  Chew off '*' if necessary.
      */
-    if (c == '*') {
+    if (c == '*')
+    {
         typecode |= T_PTR;
         c = skipws();
     }
-    if (c == ')') {             /* Last syntax check    */
-        for (testp = test_table; *testp != 0; testp++) {
-            if (!bittest(typecode & *testp)) {
+    if (c == ')')                   /* Last syntax check    */
+    {
+        for (testp = test_table; *testp != 0; testp++)
+        {
+            if (!bittest(typecode & *testp))
+            {
                 cerror("#if ... sizeof: illegal type combination", NULLST);
                 return (OP_FAIL);
             }
@@ -546,24 +589,28 @@ dosizeof()
          * We assume that signed and unsigned don't change the size:
          *      sizeof (signed int) == (sizeof unsigned int)
          */
-        if ((typecode & T_FPTR) != 0)   /* Function pointer */
+        if ((typecode & T_FPTR) != 0) /* Function pointer */
             typecode = T_FPTR | T_PTR;
-        else {              /* Var or var * datum   */
+        else                        /* Var or var * datum   */
+        {
             typecode &= ~(T_SIGNED | T_UNSIGNED);
             if ((typecode & (T_SHORT | T_LONG)) != 0)
                 typecode &= ~T_INT;
         }
-        if ((typecode & ~T_PTR) == 0) {
+        if ((typecode & ~T_PTR) == 0)
+        {
             cerror("#if sizeof() error, no type specified", NULLST);
             return (OP_FAIL);
         }
         /*
          * Exactly one bit (and possibly T_PTR) may be set.
          */
-        for (sizp = size_table; sizp->bits != 0; sizp++) {
-            if ((typecode & ~T_PTR) == sizp->bits) {
+        for (sizp = size_table; sizp->bits != 0; sizp++)
+        {
+            if ((typecode & ~T_PTR) == sizp->bits)
+            {
                 evalue = ((typecode & T_PTR) != 0)
-                ? sizp->psize : sizp->size;
+                    ? sizp->psize : sizp->size;
                 return (DIG);
             }
         }                   /* We shouldn't fail    */
@@ -571,17 +618,20 @@ dosizeof()
         return (OP_FAIL);
     }
 
-nogood: unget();
+  nogood:
+    unget();
     cerror("#if ... sizeof() syntax error", NULLST);
     return (OP_FAIL);
 }
 
-FILE_LOCAL int
-bittest(int value)
 /*
  * TRUE if value is zero or exactly one bit is set in value.
  */
+FILE_LOCAL int bittest(int value)
 {
+/* whoaa!! really worried about non 2's complement machines...
+ * but not at all about cross-compiling ?
+ */
 #if (4096 & ~(-4096)) == 0
     return ((value & ~(-value)) == 0);
 #else
@@ -592,36 +642,37 @@ bittest(int value)
 #endif
 }
 
-FILE_LOCAL int
-evalnum(int c)
 /*
  * Expand number for #if lexical analysis.  Note: evalnum recognizes
  * the unsigned suffix, but only returns a signed int value.
  */
+FILE_LOCAL int evalnum(int c)
 {
-    int    value;
-    int    base;
-    int    c1;
+    int value;
+    int base;
+    int c1;
 
     if (c != '0')
         base = 10;
-    else if ((c = cget()) == 'x' || c == 'X') {
+    else if ((c = cget()) == 'x' || c == 'X')
+    {
         base = 16;
         c = cget();
     }
     else base = 8;
     value = 0;
-    for (;;) {
+    for (;;)
+    {
         c1 = c;
         if (isascii(c) && isupper(c1))
             c1 = tolower(c1);
 #ifdef EBCDIC
         if (c1 <= 'f')
 #else
-        if (c1 >= 'a')
+            if (c1 >= 'a')
 #endif
-            c1 -= ('a' - 10);
-        else c1 -= '0';
+                c1 -= ('a' - 10);
+            else c1 -= '0';
         if (c1 < 0 || c1 >= base)
             break;
         value *= base;
@@ -634,95 +685,101 @@ evalnum(int c)
     return (value);
 }
 
-FILE_LOCAL int
-evalchar(int skip)
 /*
  * Get a character constant
  */
+FILE_LOCAL int evalchar(int skip)
 {
-    int    c;
-    int    value;
-    int    count;
+    int c;
+    int value;
+    int count;
 
     instring = TRUE;
-    if ((c = cget()) == '\\') {
-        switch ((c = cget())) {
+    if ((c = cget()) == '\\')
+    {
+        switch ((c = cget()))
+        {
         case 'a':               /* New in Standard  */
 #if ('a' == '\a' || '\a' == ALERT)
-        value = ALERT;          /* Use predefined value */
+            value = ALERT;          /* Use predefined value */
 #else
-        value = '\a';           /* Use compiler's value */
+            value = '\a';           /* Use compiler's value */
 #endif
-        break;
+            break;
 
         case 'b':
-        value = '\b';
-        break;
+            value = '\b';
+            break;
 
         case 'f':
-        value = '\f';
-        break;
+            value = '\f';
+            break;
 
         case 'n':
-        value = '\n';
-        break;
+            value = '\n';
+            break;
 
         case 'r':
-        value = '\r';
-        break;
+            value = '\r';
+            break;
 
         case 't':
-        value = '\t';
-        break;
+            value = '\t';
+            break;
 
         case 'v':               /* New in Standard  */
 #if ('v' == '\v' || '\v' == VT)
-        value = VT;         /* Use predefined value */
+            value = VT;         /* Use predefined value */
 #else
-        value = '\v';           /* Use compiler's value */
+            value = '\v';           /* Use compiler's value */
 #endif
-        break;
+            break;
 
         case 'x':               /* '\xFF'       */
-        count = 3;
-        value = 0;
-        while ((((c = get()) >= '0' && c <= '9')
-             || (c >= 'a' && c <= 'f')
-             || (c >= 'A' && c <= 'F'))
-            && (--count >= 0)) {
-            value *= 16;
-#ifdef EBCDIC
-            value += (c <= '9') ? (c - '0') : ((c & 0xF) + 9);
-#else
-            value += (c >= '0') ? (c - '0') : ((c & 0xF) + 9);
-#endif
-        }
-        unget();
-        break;
-
-        default:
-        if (c >= '0' && c <= '7') {
             count = 3;
             value = 0;
-            while (c >= '0' && c <= '7' && --count >= 0) {
-            value *= 8;
-            value += (c - '0');
-            c = get();
+            while ((((c = get()) >= '0' && c <= '9') ||
+                    (c >= 'a' && c <= 'f') ||
+                    (c >= 'A' && c <= 'F')) &&
+                   (--count >= 0))
+            {
+                value *= 16;
+#ifdef EBCDIC
+                value += (c <= '9') ? (c - '0') : ((c & 0xF) + 9);
+#else
+                value += (c >= '0') ? (c - '0') : ((c & 0xF) + 9);
+#endif
             }
             unget();
-        }
-        else value = c;
-        break;
+            break;
+
+        default:
+            if (c >= '0' && c <= '7')
+            {
+                count = 3;
+                value = 0;
+                while (c >= '0' && c <= '7' && --count >= 0)
+                {
+                    value *= 8;
+                    value += (c - '0');
+                    c = get();
+                }
+                unget();
+            }
+            else value = c;
+            break;
         }
     }
     else if (c == '\'')
         value = 0;
-    else value = c;
+    else
+        value = c;
     /*
      * We warn on multi-byte constants and try to hack
      * (big|little)endian machines.
      */
-    while ((c = get()) != '\'' && c != EOF_CHAR && c != '\n') {
+    while ((c = get()) != '\'' && c != EOF_CHAR && c != '\n')
+    {
         if (!skip)
             ciwarn("multi-byte constant '%c' isn't portable", c);
         value <<= BITS_CHAR;
@@ -732,8 +789,6 @@ evalchar(int skip)
     return (value);
 }
 
-FILE_LOCAL int *
-evaleval(int* valp, int op, int skip)
 /*
  * Apply the argument operator to the data on the value stack.
  * One or two values are popped from the value stack and the result
@@ -743,22 +798,25 @@ evaleval(int* valp, int op, int skip)
  *
  * evaleval() returns the new pointer to the top of the value stack.
  */
+FILE_LOCAL int * evaleval(int* valp, int op, int skip)
 {
-    int    v1, v2 = 0;
+    int v1;
+    int v2 = 0;
 
     if (isbinary(op))
         v2 = *--valp;
     v1 = *--valp;
 #ifdef  DEBUG_EVAL
     fprintf( pCppOut, "%s op %s", (isbinary(op)) ? "binary" : "unary",
-        opname[op]);
+             opname[op]);
     if (isbinary(op))
         fprintf( pCppOut, ", v2 = %d.", v2);
     fprintf( pCppOut, ", v1 = %d.\n", v1);
 #endif
-    switch (op) {
+    switch (op)
+    {
     case OP_EOE:
-         break;
+        break;
 
     case OP_ADD:
         v1 += v2;
@@ -774,10 +832,12 @@ evaleval(int* valp, int op, int skip)
 
     case OP_DIV:
     case OP_MOD:
-        if (v2 == 0) {
-            if (!skip) {
+        if (v2 == 0)
+        {
+            if (!skip)
+            {
                 cwarn("%s by zero in #if, zero result assumed",
-                (op == OP_DIV) ? "divide" : "mod");
+                      (op == OP_DIV) ? "divide" : "mod");
             }
             v1 = 0;
         }
@@ -878,12 +938,14 @@ int     value[NEXP];    /* Value stack          */
 int    *valp;           /* -> value vector      */
 {
     fprintf( pCppOut, "index op prec skip name -- op stack at %s", infile->bptr);
-    while (opp > opstack) {
+    while (opp > opstack)
+    {
         fprintf( pCppOut, " [%2d] %2d  %03o    %d %s\n", opp - opstack,
-        opp->op, opp->prec, opp->skip, opname[opp->op]);
+                 opp->op, opp->prec, opp->skip, opname[opp->op]);
         opp--;
     }
-    while (--valp >= value) {
+    while (--valp >= value)
+    {
         fprintf( pCppOut, "value[%d] = %d\n", (valp - value), *valp);
     }
 }
