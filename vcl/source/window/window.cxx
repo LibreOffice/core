@@ -1292,8 +1292,11 @@ SalGraphics* Window::ImplGetFrameGraphics() const
     }
     else
     {
-        OutputDevice *pFrameWinOutDev = mpWindowImpl->mpFrameWindow;
-        pFrameWinOutDev->AcquireGraphics();
+        OutputDevice* pFrameWinOutDev = mpWindowImpl->mpFrameWindow;
+        if ( ! pFrameWinOutDev->AcquireGraphics() )
+        {
+            return NULL;
+        }
     }
     mpWindowImpl->mpFrameWindow->mpGraphics->ResetClipRegion();
     return mpWindowImpl->mpFrameWindow->mpGraphics;
