@@ -128,23 +128,23 @@ class VCL_DLLPUBLIC TextRectInfo
     friend class ::OutputDevice;
 
 private:
-    long            mnMaxWidth;
+    long                mnMaxWidth;
     sal_uInt16          mnLineCount;
-    bool            mbEllipsis;
+    bool                mbEllipsis;
 
 public:
-                    TextRectInfo();
+                        TextRectInfo();
 
     sal_uInt16          GetLineCount() const { return mnLineCount; }
-    long            GetMaxLineWidth() const { return mnMaxWidth; }
-    bool            IsEllipses() const { return mbEllipsis; }
+    long                GetMaxLineWidth() const { return mnMaxWidth; }
+    bool                IsEllipses() const { return mbEllipsis; }
 
-    bool            operator ==( const TextRectInfo& rInfo ) const
-                        { return ((mnMaxWidth   == rInfo.mnMaxWidth)    &&
-                                  (mnLineCount  == rInfo.mnLineCount)   &&
-                                  (mbEllipsis   == rInfo.mbEllipsis)); }
-    bool            operator !=( const TextRectInfo& rInfo ) const
-                        { return !(TextRectInfo::operator==( rInfo )); }
+    bool                operator ==( const TextRectInfo& rInfo ) const
+                            { return ((mnMaxWidth   == rInfo.mnMaxWidth)    &&
+                                      (mnLineCount  == rInfo.mnLineCount)   &&
+                                      (mbEllipsis   == rInfo.mbEllipsis)); }
+    bool                operator !=( const TextRectInfo& rInfo ) const
+                            { return !(TextRectInfo::operator==( rInfo )); }
 };
 
 inline TextRectInfo::TextRectInfo()
