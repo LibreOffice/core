@@ -1124,7 +1124,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         SetBackground( Wallpaper( rStyleSettings.GetWindowColor() ) );
     }
 
-    ImplUpdatePos();
+    (void)ImplUpdatePos();
 
     // calculate app font res (except for the Intro Window or the default window)
     if ( mpWindowImpl->mbFrame && !pSVData->maGDIData.mnAppFontX && ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN)) )
