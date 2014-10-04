@@ -50,17 +50,11 @@ extern FILE* pDefOut;                                   /* ER */
 #define TOK_SEP         0x1E            /* Token concatenation delim.   */
 #define COM_SEP         0x1F            /* Magic comment separator      */
 
-#ifdef  EBCDIC
-#define HT              0x05            /* horizontal tab               */
-#define NL              0x15            /* new line                     */
-#define CR              0x0D            /* carriage return              */
-#define DEL             0x07
-#else
 #define HT              0x09            /* horizontal tab               */
 #define NL              0x0A            /* new line                     */
 #define CR              0x0D            /* carriage return              */
 #define DEL             0x7F
-#endif
+
 
 
 #ifdef  SOLAR

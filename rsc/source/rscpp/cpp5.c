@@ -666,13 +666,10 @@ FILE_LOCAL int evalnum(int c)
         c1 = c;
         if (isascii(c) && isupper(c1))
             c1 = tolower(c1);
-#ifdef EBCDIC
-        if (c1 <= 'f')
-#else
-            if (c1 >= 'a')
-#endif
-                c1 -= ('a' - 10);
-            else c1 -= '0';
+        if (c1 >= 'a')
+            c1 -= ('a' - 10);
+        else
+            c1 -= '0';
         if (c1 < 0 || c1 >= base)
             break;
         value *= base;
@@ -744,11 +741,7 @@ FILE_LOCAL int evalchar(int skip)
                    (--count >= 0))
             {
                 value *= 16;
-#ifdef EBCDIC
-                value += (c <= '9') ? (c - '0') : ((c & 0xF) + 9);
-#else
                 value += (c >= '0') ? (c - '0') : ((c & 0xF) + 9);
-#endif
             }
             unget();
             break;

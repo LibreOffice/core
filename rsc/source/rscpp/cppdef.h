@@ -168,11 +168,7 @@
 
 
 #ifndef ALERT
-#ifdef EBCDIC
-#define ALERT                   '\057'
-#else
 #define ALERT                   '\007'          /* '\a' is "Bell"       */
-#endif
 #endif
 
 #ifndef VT
