@@ -234,7 +234,7 @@ Font::Font()
 
 Font::Font( const vcl::Font& rFont )
 {
-    bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<FontRefCount>::max();
+    bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<sal_uInt32>::max();
     DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
 
     mpImplFont = rFont.mpImplFont;
@@ -565,7 +565,7 @@ void Font::SetWordLineMode( bool bWordLine )
 
 Font& Font::operator=( const vcl::Font& rFont )
 {
-    bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<FontRefCount>::max();
+    bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<sal_uInt32>::max();
     DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
 
     // Increment RefCount first, so that we can reference ourselves
