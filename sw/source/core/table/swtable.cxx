@@ -316,11 +316,11 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
 static void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
                          const long nNew, std::vector<SwFmt*>& rFmtArr, const bool bCheckSum )
 {
-    for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
+    for ( size_t i = 0; i < rLines.size(); ++i )
         ::lcl_ModifyBoxes( rLines[i]->GetTabBoxes(), nOld, nNew, rFmtArr );
     if( bCheckSum )
     {
-        for( sal_uInt16 i = 0; i < rFmtArr.size(); ++i )
+        for( size_t i = 0; i < rFmtArr.size(); ++i )
         {
             SwFmt* pFmt = rFmtArr[i];
             sal_uInt64 nBox = pFmt->GetFrmSize().GetWidth();
@@ -339,7 +339,7 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
 {
     sal_uInt64 nSum = 0; // To avoid rounding errors we summarize all box widths
     sal_uInt64 nOriginalSum = 0; // Sum of original widths
-    for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
+    for ( size_t i = 0; i < rBoxes.size(); ++i )
     {
         SwTableBox &rBox = *rBoxes[i];
         if ( !rBox.GetTabLines().empty() )
@@ -381,7 +381,7 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
 void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     // catch SSize changes, to adjust the lines/boxes
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
     const SwFmtFrmSize* pNewSize = 0, *pOldSize = 0;
 
     if( RES_ATTRSET_CHG == nWhich )
@@ -432,12 +432,12 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
 
     // The value for the left edge of the box is calculated from the
     // widths of the previous boxes.
-    sal_uInt16 nPos = 0;
-    sal_uInt16 nLeftMin = 0;
-    sal_uInt16 nRightMax = 0;
+    long nPos = 0;
+    long nLeftMin = 0;
+    long nRightMax = 0;
     if (nWish != 0) //fdo#33012 0 width frmfmt
     {
-        sal_uInt16 nSum = 0;
+        SwTwips nSum = 0;
         const SwTableBox  *pCur  = pBox;
         const SwTableLine *pLine = pBox->GetUpper();
         const long nAct  = rToFill.GetRight() - rToFill.GetLeft();  // +1 why?
@@ -445,10 +445,10 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
         while ( pLine )
         {
             const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-            for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
+            for ( size_t i = 0; i < rBoxes.size(); ++i )
             {
                 SwTwips nWidth = rBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth();
-                nSum = (sal_uInt16)(nSum + nWidth);
+                nSum += nWidth;
                 sal_uInt64 nTmp = nSum;
                 nTmp *= nAct;
                 nTmp /= nWish;
@@ -456,14 +456,14 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
                 if (rBoxes[i] != pCur)
                 {
                     if ( pLine == pBox->GetUpper() || 0 == nLeftMin )
-                        nLeftMin = (sal_uInt16)(nTmp - nPos);
-                    nPos = (sal_uInt16)nTmp;
+                        nLeftMin = static_cast<long>(nTmp - nPos);
+                    nPos = static_cast<long>(nTmp);
                 }
                 else
                 {
-                    nSum = (sal_uInt16)(nSum - nWidth);
+                    nSum -= nWidth;
                     if ( 0 == nRightMax )
-                        nRightMax = (sal_uInt16)(nTmp - nPos);
+                        nRightMax = static_cast<long>(nTmp - nPos);
                     break;
                 }
             }
@@ -540,10 +540,10 @@ static void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
     if ( !pBox->GetTabLines().empty() )
     {
         const SwTableLines &rLines = pBox->GetTabLines();
-        for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
+        for ( size_t i = 0; i < rLines.size(); ++i )
         {
             const SwTableBoxes &rBoxes = rLines[i]->GetTabBoxes();
-            for ( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
+            for ( size_t j = 0; j < rBoxes.size(); ++j )
                 ::lcl_ProcessBoxGet( rBoxes[j], rToFill, pTabFmt, bRefreshHidden);
         }
     }
@@ -554,13 +554,13 @@ static void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
 static void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
                          const SwFrmFmt *pTabFmt )
 {
-    for ( sal_uInt16 i = 0; i < pLine->GetTabBoxes().size(); ++i )
+    for ( size_t i = 0; i < pLine->GetTabBoxes().size(); ++i )
     {
         const SwTableBox *pBox = pLine->GetTabBoxes()[i];
         if ( pBox->GetSttNd() )
             ::lcl_SortedTabColInsert( rToFill, pBox, pTabFmt, true, false );
         else
-            for ( sal_uInt16 j = 0; j < pBox->GetTabLines().size(); ++j )
+            for ( size_t j = 0; j < pBox->GetTabLines().size(); ++j )
                 ::lcl_ProcessLineGet( pBox->GetTabLines()[j], rToFill, pTabFmt );
     }
 }
@@ -617,7 +617,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
     while ( pLine )
     {
         const SwTableBoxes &rBoxes2 = pLine->GetTabBoxes();
-        for ( sal_uInt16 k = 0; k < rBoxes2.size(); ++k )
+        for ( size_t k = 0; k < rBoxes2.size(); ++k )
             ::lcl_SortedTabColInsert( rToFill, rBoxes2[k],
                                       pTabFmt, false, bRefreshHidden );
         pLine = pLine->GetUpper() ? pLine->GetUpper()->GetUpper() : 0;
@@ -668,8 +668,11 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm );
 static void lcl_ProcessLine( SwTableLine *pLine, Parm &rParm )
 {
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-    for ( int i = rBoxes.size()-1; i >= 0; --i )
-        ::lcl_ProcessBoxSet( rBoxes[ static_cast< sal_uInt16 >(i) ], rParm );
+    for ( size_t i = rBoxes.size(); i > 0; )
+    {
+        --i;
+        ::lcl_ProcessBoxSet( rBoxes[i], rParm );
+    }
 }
 
 static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
@@ -677,8 +680,11 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
     if ( !pBox->GetTabLines().empty() )
     {
         SwTableLines &rLines = pBox->GetTabLines();
-        for ( int i = rLines.size()-1; i >= 0; --i )
-            lcl_ProcessLine( rLines[ static_cast< sal_uInt16 >(i) ], rParm );
+        for ( size_t i = rLines.size(); i > 0; )
+        {
+            --i;
+            lcl_ProcessLine( rLines[i], rParm );
+        }
     }
     else
     {
@@ -699,13 +705,13 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
         while ( pLine )
         {
             const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-            for ( sal_uInt16 i = 0; (i < rBoxes.size()) && (rBoxes[i] != pCur); ++i)
+            for ( size_t i = 0; (i < rBoxes.size()) && (rBoxes[i] != pCur); ++i)
             {
                 sal_uInt64 nWidth = rBoxes[i]->GetFrmFmt()->
                                         GetFrmSize().GetWidth();
                 nWidth *= nOldAct;
                 nWidth /= rParm.nOldWish;
-                nLeft += (sal_uInt16)nWidth;
+                nLeft += static_cast<long>(nWidth);
             }
             pCur  = pLine->GetUpper();
             pLine = pCur ? pCur->GetUpper() : 0;
@@ -768,7 +774,7 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
         if( pBox->getRowSpan() == 1 )
         {
             SwTableBoxes& rTblBoxes = pBox->GetUpper()->GetTabBoxes();
-            sal_uInt16 nPos = rTblBoxes.GetPos( pBox );
+            const sal_uInt16 nPos = rTblBoxes.GetPos( pBox );
             if( nPos && rTblBoxes[ nPos - 1 ]->getRowSpan() != 1 )
                 nLeftDiff = 0;
             if( nPos + 1 < (sal_uInt16)rTblBoxes.size() &&
@@ -829,10 +835,10 @@ static void lcl_ProcessBoxPtr( SwTableBox *pBox, std::deque<SwTableBox*> &rBoxAr
     if ( !pBox->GetTabLines().empty() )
     {
         const SwTableLines &rLines = pBox->GetTabLines();
-        for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
+        for ( size_t i = 0; i < rLines.size(); ++i )
         {
             const SwTableBoxes &rBoxes = rLines[i]->GetTabBoxes();
-            for ( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
+            for ( size_t j = 0; j < rBoxes.size(); ++j )
                 ::lcl_ProcessBoxPtr( rBoxes[j], rBoxArr, bBefore );
         }
     }
@@ -846,7 +852,7 @@ static void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm );
 
 static void lcl_AdjustLines( SwTableLines &rLines, const long nDiff, Parm &rParm )
 {
-    for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
+    for ( size_t i = 0; i < rLines.size(); ++i )
     {
         SwTableBox *pBox = rLines[i]->GetTabBoxes()
                                 [rLines[i]->GetTabBoxes().size()-1];
@@ -969,7 +975,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             // The best way to achieve this is probably to track the boxes
             // in a PtrArray.
             const SwTableBoxes &rBoxes = pStart->GetUpper()->GetTabBoxes();
-            for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
+            for ( size_t i = 0; i < rBoxes.size(); ++i )
                 ::lcl_ProcessBoxPtr( rBoxes[i], aParm.aBoxArr, false );
 
             const SwTableLine *pLine = pStart->GetUpper()->GetUpper() ?
@@ -979,7 +985,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             {
                 const SwTableBoxes &rBoxes2 = pLine->GetTabBoxes();
                 bool bBefore = true;
-                for ( sal_uInt16 i = 0; i < rBoxes2.size(); ++i )
+                for ( size_t i = 0; i < rBoxes2.size(); ++i )
                 {
                     if ( rBoxes2[i] != pExcl )
                         ::lcl_ProcessBoxPtr( rBoxes2[i], aParm.aBoxArr, bBefore );
@@ -1003,8 +1009,11 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             // adjusted, as are their superiors. Of course we need to process
             // in reverse order to prevent fooling ourselves!
             SwTableLines &rLines = GetTabLines();
-            for ( int i = rLines.size()-1; i >= 0; --i )
-                ::lcl_ProcessLine( rLines[ static_cast< sal_uInt16 >(i) ], aParm );
+            for ( size_t i = rLines.size(); i > 0; )
+            {
+                --i;
+                ::lcl_ProcessLine( rLines[i], aParm );
+            }
         }
     }
 
@@ -1029,13 +1038,12 @@ static void lcl_AdjustWidthsInLine( SwTableLine* pLine, ChangeList& rOldNew,
     ChangeList::iterator pCurr = rOldNew.begin();
     if( pCurr == rOldNew.end() )
         return;
-    sal_uInt16 nCount = pLine->GetTabBoxes().size();
-    sal_uInt16 i = 0;
+    const size_t nCount = pLine->GetTabBoxes().size();
     SwTwips nBorder = 0;
     SwTwips nRest = 0;
-    while( i < nCount )
+    for( size_t i = 0; i < nCount; ++i )
     {
-        SwTableBox* pBox = pLine->GetTabBoxes()[i++];
+        SwTableBox* pBox = pLine->GetTabBoxes()[i];
         SwTwips nWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
         SwTwips nNewWidth = nWidth - nRest;
         nRest = 0;
@@ -1092,11 +1100,11 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
     aNewChanges.push_back( *pCurr ); // Nullposition
     std::list<sal_uInt16>::iterator pSpan = rSpanPos.begin();
     sal_uInt16 nCurr = 0;
-    sal_uInt16 nOrgSum = 0;
+    SwTwips nOrgSum = 0;
     bool bRowSpan = false;
     sal_uInt16 nRowSpanCount = 0;
-    sal_uInt16 nCount = pLine->GetTabBoxes().size();
-    for( sal_uInt16 nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
+    const size_t nCount = pLine->GetTabBoxes().size();
+    for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
         SwTwips nCurrWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
@@ -1106,13 +1114,13 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
         if( bRowSpan || bCurrRowSpan )
             aNewSpanPos.push_back( nRowSpanCount );
         bRowSpan = bCurrRowSpan;
-        nOrgSum = (sal_uInt16)(nOrgSum + nCurrWidth);
+        nOrgSum += nCurrWidth;
         sal_uInt64 nSum = nOrgSum;
         nSum *= nWidth;
         nSum /= nWish;
         nSum *= nWish;
         nSum /= nWidth;
-        sal_uInt16 nPos = (sal_uInt16)nSum;
+        const sal_uInt16 nPos = static_cast<sal_uInt16>(nSum);
         while( pCurr != rChanges.end() && pCurr->first < nPos )
         {
             ++nCurr;
@@ -1309,8 +1317,11 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
         }
         ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, COLFUZZY );
     }
-    else for( sal_uInt16 i = 0; i < rLines.size(); ++i )
-        ::lcl_AdjustWidthsInLine( rLines[i], aOldNew, rParm, COLFUZZY );
+    else
+    {
+        for( size_t i = 0; i < rLines.size(); ++i )
+            ::lcl_AdjustWidthsInLine( rLines[i], aOldNew, rParm, COLFUZZY );
+    }
     CHECK_TABLE( *this )
 }
 
@@ -1506,7 +1517,7 @@ SwTableLine::SwTableLine( SwTableLineFmt *pFmt, sal_uInt16 nBoxes,
     aBoxes(),
     pUpper( pUp )
 {
-    aBoxes.reserve( (sal_uInt8)nBoxes );
+    aBoxes.reserve( nBoxes );
 }
 
 SwTableLine::~SwTableLine()
@@ -1645,7 +1656,7 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, sal_uInt16 nLines, SwTableLine *pUp
     pUpper( pUp ),
     pImpl( 0 )
 {
-    aLines.reserve( (sal_uInt8)nLines );
+    aLines.reserve( nLines );
     CheckBoxFmt( pFmt )->Add( this );
 }
 
@@ -1821,10 +1832,9 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
 void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm )
 {
     const sal_uInt16 coDiff = 52;   // 'A'-'Z' 'a' - 'z'
-    sal_uInt16 nCalc;
 
     do {
-        nCalc = nCol % coDiff;
+        const sal_uInt16 nCalc = nCol % coDiff;
         if( nCalc >= 26 )
             rNm = OUString( sal_Unicode('a' - 26 + nCalc ) ) + rNm;
         else
@@ -2375,8 +2385,7 @@ bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
     sal_uLong nNdPos = IsValidNumTxtNd( true );
     if( ULONG_MAX != nNdPos )
     {
-        OUString aTxt( pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->
-                            GetRedlineTxt() );
+        OUString aTxt( pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->GetRedlineTxt() );
         // Keep Tabs
         lcl_TabToBlankAtSttEnd( aTxt );
         rIsEmptyTxtNd = aTxt.isEmpty();
