@@ -476,13 +476,12 @@ SvxThesaurusDialog::SvxThesaurusDialog(
         aLookUpHistory.push( rWord );
 
     OUString aTmp( rWord );
-    linguistic::RemoveHyphens( aTmp );
-    linguistic::ReplaceControlChars( aTmp );
-    OUString aTmp2( aTmp );
-    m_pReplaceEdit->SetText( aTmp2 );
-    m_pWordCB->InsertEntry( aTmp2 );
+    (void)linguistic::RemoveHyphens( aTmp );
+    (void)linguistic::ReplaceControlChars( aTmp );
+    m_pReplaceEdit->SetText( aTmp );
+    m_pWordCB->InsertEntry( aTmp );
 
-    LookUp( aTmp2 );
+    LookUp( aTmp );
     m_pAlternativesCT->GrabFocus();
     m_pLeftBtn->Enable( false );
 
