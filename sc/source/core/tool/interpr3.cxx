@@ -138,7 +138,6 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
         {
             fSx = 0.5 * (fAx + fBx);
             // reset points
-            fPx = fAx; fPy = fAy;
             fQx = fBx; fQy = fBy;
             bHasToInterpolate = true;
         }
