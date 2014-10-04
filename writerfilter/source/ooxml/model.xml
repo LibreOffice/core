@@ -17078,11 +17078,11 @@
       <value tokenid="ooxml:Value_ST_TabJc_num">num</value>
     </resource>
     <resource name="ST_TabTlc" resource="List">
-      <value tokenid="0">none</value>
-      <value tokenid="1">dot</value>
-      <value tokenid="2">hyphen</value>
-      <value tokenid="3">underscore</value>
-      <value tokenid="4">heavy</value>
+      <value tokenid="ooxml:Value_ST_TabTlc_none">none</value>
+      <value tokenid="ooxml:Value_ST_TabTlc_dot">dot</value>
+      <value tokenid="ooxml:Value_ST_TabTlc_hyphen">hyphen</value>
+      <value tokenid="ooxml:Value_ST_TabTlc_underscore">underscore</value>
+      <value tokenid="ooxml:Value_ST_TabTlc_heavy">heavy</value>
       <value tokenid="ooxml:Value_ST_TabTlc_middleDot">middleDot</value>
     </resource>
     <resource name="CT_TabStop" resource="Properties">

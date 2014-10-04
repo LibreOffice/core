@@ -2538,22 +2538,22 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
     case RTF_TLDOT:
-        nParam = 1;
+        nParam = NS_ooxml::LN_Value_ST_TabTlc_dot;
         break;
     case RTF_TLMDOT:
         nParam = NS_ooxml::LN_Value_ST_TabTlc_middleDot;
         break;
     case RTF_TLHYPH:
-        nParam = 2;
+        nParam = NS_ooxml::LN_Value_ST_TabTlc_hyphen;
         break;
     case RTF_TLUL:
-        nParam = 3;
+        nParam = NS_ooxml::LN_Value_ST_TabTlc_underscore;
         break;
     case RTF_TLTH:
-        nParam = 2;
+        nParam = NS_ooxml::LN_Value_ST_TabTlc_hyphen;
         break; // thick line is not supported by dmapper, this is just a hack
     case RTF_TLEQ:
-        nParam = 0;
+        nParam = NS_ooxml::LN_Value_ST_TabTlc_none;
         break; // equal sign isn't, either
     default:
         break;

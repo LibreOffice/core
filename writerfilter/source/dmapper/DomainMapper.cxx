@@ -3341,16 +3341,16 @@ sal_Unicode DomainMapper::getFillCharFromValue(const sal_Int32 nIntValue)
 {
     switch (nIntValue)
     {
-    case 1: // dot
+    case NS_ooxml::LN_Value_ST_TabTlc_dot:
         return sal_Unicode(0x002e);
-    case 2: // hyphen
+    case NS_ooxml::LN_Value_ST_TabTlc_hyphen:
         return sal_Unicode(0x002d);
-    case 3: // underscore
-    case 4: // heavy FIXME ???
+    case NS_ooxml::LN_Value_ST_TabTlc_underscore:
+    case NS_ooxml::LN_Value_ST_TabTlc_heavy: // FIXME ???
         return sal_Unicode(0x005f);
     case NS_ooxml::LN_Value_ST_TabTlc_middleDot: // middleDot
         return sal_Unicode(0x00b7);
-    case 0: // none
+    case NS_ooxml::LN_Value_ST_TabTlc_none:
     default:
         return sal_Unicode(0x0020); // blank space
     }
