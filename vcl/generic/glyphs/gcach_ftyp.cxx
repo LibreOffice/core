@@ -242,7 +242,7 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
 FtFontInfo::~FtFontInfo()
 {
     if( mpFontCharMap )
-        mpFontCharMap->DeReference();
+        mpFontCharMap = 0;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
 #if ENABLE_GRAPHITE
@@ -1265,13 +1265,13 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
 
 // determine unicode ranges in font
 
-const ImplFontCharMap* ServerFont::GetImplFontCharMap( void ) const
+const ImplFontCharMapPtr ServerFont::GetImplFontCharMap( void ) const
 {
-    const ImplFontCharMap* pIFCMap = mpFontInfo->GetImplFontCharMap();
+    const ImplFontCharMapPtr pIFCMap = mpFontInfo->GetImplFontCharMap();
     return pIFCMap;
 }
 
-const ImplFontCharMap* FtFontInfo::GetImplFontCharMap( void )
+const ImplFontCharMapPtr FtFontInfo::GetImplFontCharMap( void )
 {
     // check if the charmap is already cached
     if( mpFontCharMap )
@@ -1281,9 +1281,14 @@ const ImplFontCharMap* FtFontInfo::GetImplFontCharMap( void )
     CmapResult aCmapResult;
     bool bOK = GetFontCodeRanges( aCmapResult );
     if( bOK )
-        mpFontCharMap = new ImplFontCharMap( aCmapResult );
+    {
+        ImplFontCharMapPtr pFontCharMap( new ImplFontCharMap( aCmapResult ) );
+        mpFontCharMap = pFontCharMap;
+    }
     else
+    {
         mpFontCharMap = ImplFontCharMap::GetDefaultMap();
+    }
     // mpFontCharMap on either branch now has a refcount of 1
     return mpFontCharMap;
 }
