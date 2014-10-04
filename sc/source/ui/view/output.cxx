@@ -1745,7 +1745,6 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                 if ( rInfo.nRotateDir > SC_ROTDIR_STANDARD &&
                         !rInfo.bHOverlapped && !rInfo.bVOverlapped )
                 {
-                    pPattern = rInfo.pPatternAttr;
                     pCondSet = rInfo.pConditionSet;
 
                     size_t nCol = lclGetArrayColFromCellInfoX( nArrX, nX1, nX2, bLayoutRTL );
