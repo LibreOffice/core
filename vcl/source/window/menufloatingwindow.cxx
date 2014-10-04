@@ -80,7 +80,7 @@ void MenuFloatingWindow::doShutdown()
             }
             if( i < nCount )
             {
-                MenuFloatingWindow* pPWin = dynamic_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
+                MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
                 if( pPWin )
                     pPWin->HighlightItem( i, false );
             }
@@ -682,7 +682,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
             }
             if( i < nCount )
             {
-                MenuFloatingWindow* pPWin = dynamic_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
+                MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
                 if( pPWin && pPWin->nHighlightedItem != i )
                 {
                     pPWin->HighlightItem( i, true );

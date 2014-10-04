@@ -147,15 +147,16 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
 {
     SolarMutexGuard aGuard;
 
-    SystemWindow* pWindow = dynamic_cast<SystemWindow*>( GetWindowImpl() );
+    vcl::Window* pWindow = GetWindowImpl();
     if ( pWindow )
     {
-        pWindow->SetMenuBar( NULL );
+        SystemWindow* pSystemWindow = static_cast<SystemWindow*>( pWindow );
+        pSystemWindow->SetMenuBar( NULL );
         if ( rxMenu.is() )
         {
             VCLXMenu* pMenu = VCLXMenu::GetImplementation( rxMenu );
             if ( pMenu && !pMenu->IsPopupMenu() )
-                pWindow->SetMenuBar( static_cast<MenuBar*>( pMenu->GetMenu() ));
+                pSystemWindow->SetMenuBar( static_cast<MenuBar*>( pMenu->GetMenu() ));
         }
     }
     mxMenuBar = rxMenu;
