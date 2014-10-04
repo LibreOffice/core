@@ -415,6 +415,8 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
 {
     char** incptr;
     char tmpname[NFWORK]; /* Filename work area   */
+    int len;
+    int len2;
 
     if (searchlocal)
     {
@@ -427,17 +429,36 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
          * source file (as opposed to the current directory). (ARF, SCK).
          */
         if (filename[0] != '/' &&
-            hasdirectory(infile->filename, tmpname))
+            hasdirectory(infile->filename, tmpname, NFWORK))
         {
-            strcat(tmpname, filename);
+            len = strlen(tmpname);
+            len2 = strlen(filename);
+            if(len + len2 < NFWORK)
+            {
+                memcpy(tmpname + len, filename, len2);
+                tmpname[len + len2] = 0;
+            }
+            else
+            {
+                cfatal("Filename work buffer overflow", NULLST);
+            }
         }
         else
         {
-            strcpy(tmpname, filename);
+            len = strlen(filename);
+            if(len < NFWORK)
+            {
+                memcpy(tmpname, filename, len);
+                tmpname[len] = 0;
+            }
+            else
+            {
+                cfatal("Filename work buffer overflow", NULLST);
+            }
         }
 #else
-        if (!hasdirectory(filename, tmpname) &&
-            hasdirectory(infile->filename, tmpname))
+        if (!hasdirectory(filename, tmpname, NFWORK) &&
+            hasdirectory(infile->filename, tmpname, NFWORK))
         {
             strcat(tmpname, filename);
         }
@@ -471,7 +492,7 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
             else
                 sprintf(tmpname, "%s\\%s", *incptr, filename);
 #else
-            if (!hasdirectory(filename, tmpname))
+            if (!hasdirectory(filename, tmpname, NFWORK))
                 sprintf(tmpname, "%s%s", *incptr, filename);
 #endif
             if (openfile(tmpname))
@@ -486,7 +507,7 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
  * node/device/directory part of the string is copied to result and
  * hasdirectory returns TRUE.  Else, nothing is copied and it returns FALSE.
  */
-FILE_LOCAL int hasdirectory(char* source, char* result)
+FILE_LOCAL int hasdirectory(char* source, char* result, int max)
 {
 #if HOST == SYS_UNIX
     char* tp;
@@ -495,8 +516,16 @@ FILE_LOCAL int hasdirectory(char* source, char* result)
         return (FALSE);
     else
     {
-        strncpy(result, source, tp - source + 1);
-        result[tp - source + 1] = EOS;
+        int len = (int)(tp - source);
+        if(len < max)
+        {
+            memcpy(result, source, len);
+            result[len] = 0;
+        }
+        else
+        {
+            cfatal("Filename work buffer overflow", NULLST);
+        }
         return (TRUE);
     }
 #else

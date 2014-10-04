@@ -293,7 +293,7 @@ void doinclude( void );
 void dodefine( void );
 void doif( int hash );
 int openinclude( char*, int );
-int hasdirectory( char*, char* );
+int hasdirectory( char*, char*, int );
 int openfile( char* );
 
 /* cpp3.c */
