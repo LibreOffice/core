@@ -7,7 +7,9 @@ package org.mozilla.gecko.gfx;
 
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
@@ -233,6 +235,23 @@ public class LayerView extends FrameLayout {
 
     public GLController getGLController() {
         return mGLController;
+    }
+
+    public Bitmap getDrawable(String name) {
+        Context context = getContext();
+        Resources resources = context.getResources();
+        int resourceID = resources.getIdentifier(name, "drawable", context.getPackageName());
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        return BitmapFactory.decodeResource(context.getResources(), resourceID, options);
+    }
+
+    Bitmap getBackgroundPattern() {
+        return getDrawable("background");
+    }
+
+    Bitmap getShadowPattern() {
+        return getDrawable("shadow");
     }
 
     private void onSizeChanged(int width, int height) {

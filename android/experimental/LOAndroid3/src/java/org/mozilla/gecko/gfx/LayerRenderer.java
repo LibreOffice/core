@@ -160,12 +160,12 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
         LayerController controller = view.getController();
 
-        CairoImage backgroundImage = new BufferedCairoImage(controller.getBackgroundPattern());
+        CairoImage backgroundImage = new BufferedCairoImage(view.getBackgroundPattern());
         mBackgroundLayer = new SingleTileLayer(true, backgroundImage);
 
         mScreenshotLayer = ScreenshotLayer.create();
 
-        CairoImage shadowImage = new BufferedCairoImage(controller.getShadowPattern());
+        CairoImage shadowImage = new BufferedCairoImage(view.getShadowPattern());
         mShadowLayer = new NinePatchTileLayer(shadowImage);
 
         mHorizScrollLayer = ScrollbarLayer.create(this, false);
