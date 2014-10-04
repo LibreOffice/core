@@ -28,6 +28,7 @@
 #include "vcl/salnativewidgets.hxx"
 #include "salglyphid.hxx"
 #include "sallayout.hxx"
+#include <impfont.hxx>
 
 #include <map>
 
@@ -36,7 +37,6 @@ class SalBitmap;
 class FontSelectPattern;
 class ImplFontMetricData;
 class PhysicalFontFace;
-class ImplFontCharMap;
 class SalLayout;
 class ImplLayoutArgs;
 class Rectangle;
@@ -231,7 +231,7 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
 
     // get the repertoire of the current font
-    virtual const ImplFontCharMap*
+    virtual const ImplFontCharMapPtr
                             GetImplFontCharMap() const = 0;
 
     // get the layout capabilities of the current font
