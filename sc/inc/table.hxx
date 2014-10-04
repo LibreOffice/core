@@ -351,6 +351,8 @@ public:
 
     bool SetFormulaCells( SCCOL nCol, SCROW nRow, std::vector<ScFormulaCell*>& rCells );
 
+    bool HasFormulaCell( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+
     svl::SharedString GetSharedString( SCCOL nCol, SCROW nRow ) const;
 
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );

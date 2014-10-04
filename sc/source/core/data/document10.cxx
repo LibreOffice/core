@@ -435,4 +435,22 @@ void ScDocument::CollectAllAreaListeners(
         rListener.push_back(it->mpListener);
 }
 
+bool ScDocument::HasFormulaCell( const ScRange& rRange ) const
+{
+    if (!rRange.IsValid())
+        return false;
+
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        const ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        if (pTab->HasFormulaCell(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row()))
+            return true;
+    }
+
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

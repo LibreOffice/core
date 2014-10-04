@@ -105,6 +105,7 @@
 #define CMD_FID_TAB_MENU_SET_TAB_BG_COLOR           ".uno:SetTabBgColor"
 #define CMD_FID_TAB_SET_TAB_BG_COLOR                ".uno:TabBgColor"
 #define CMD_SID_MANAGE_XML_SOURCE                   ".uno:ManageXMLSource"
+#define CMD_SID_CONVERT_FORMULA_TO_VALUE            ".uno:ConvertFormulaToValue"
 
 #endif
 

@@ -180,4 +180,16 @@ void ScTable::CollectListeners(
         aCol[nCol].CollectListeners(rListeners, nRow1, nRow2);
 }
 
+bool ScTable::HasFormulaCell( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+{
+    if (nCol2 < nCol1 || !ValidCol(nCol1) || !ValidCol(nCol2))
+        return false;
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        if (aCol[nCol].HasFormulaCell(nRow1, nRow2))
+            return true;
+
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

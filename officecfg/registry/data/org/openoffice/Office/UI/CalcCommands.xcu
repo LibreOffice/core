@@ -1711,7 +1711,7 @@
       </node>
       <node oor:name=".uno:ConvertFormulaToValue" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Convert Formula to Value</value>
+          <value xml:lang="en-US">Formula to Value</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

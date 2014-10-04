@@ -1107,4 +1107,28 @@ void ScColumn::CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nR
     sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aFunc);
 }
 
+namespace {
+
+struct FindAnyFormula
+{
+    bool operator() ( size_t /*nRow*/, const ScFormulaCell* /*pCell*/ ) const
+    {
+        return true;
+    }
+};
+
+}
+
+bool ScColumn::HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const
+{
+    if (nRow2 < nRow1 || !ValidRow(nRow1) || !ValidRow(nRow2))
+        return false;
+
+    FindAnyFormula aFunc;
+    std::pair<sc::CellStoreType::const_iterator, size_t> aRet =
+        sc::FindFormula(maCells, nRow1, nRow2, aFunc);
+
+    return aRet.first != maCells.end();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

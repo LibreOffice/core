@@ -311,6 +311,8 @@ public:
 
     bool SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells );
 
+    bool HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const;
+
     void CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc::RowSpan>& rRanges );
 
     svl::SharedString GetSharedString( SCROW nRow ) const;

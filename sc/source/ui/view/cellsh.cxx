@@ -254,6 +254,12 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_TRANSLITERATE_KATAGANA:
                 ScViewUtil::HideDisabledSlot( rSet, GetViewData()->GetBindings(), nWhich );
             break;
+            case SID_CONVERT_FORMULA_TO_VALUE:
+            {
+                // Check and see if the marked range has at least one formula cell.
+                bDisable = !pDoc->HasFormulaCell(aMarkRange);
+            }
+            break;
         }
         if (!bDisable && bNeedEdit && !bEditable)
             bDisable = true;
