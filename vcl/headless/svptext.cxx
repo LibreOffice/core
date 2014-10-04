@@ -231,12 +231,12 @@ void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     }
 }
 
-const ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMapPtr SvpSalGraphics::GetImplFontCharMap() const
 {
     if( !m_pServerFont[0] )
         return NULL;
 
-    const ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
+    const ImplFontCharMapPtr pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
     return pIFCMap;
 }
 
