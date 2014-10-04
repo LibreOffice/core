@@ -404,35 +404,43 @@ static const hwpeq *lookup_eqn(char *str)
 /* 첫자만 대문자이거나 전부 대문자면 소문자로 바꾼다. */
 void make_keyword( char *keyword, const char *token)
 {
-  assert(keyword);
-  char  *ptr;
-  bool result = true;
-  int len = strlen(token);
+    char* ptr;
+    bool result = true;
+    int len = strlen(token);
+    assert(keyword);
 
-  if( 255 < len )
-    strncpy(keyword, token, 255);
-  else
-    strcpy(keyword, token);
-
-  if( (token[0] & 0x80) || islower(token[0]) || strlen(token) < 2 )
-    return;
-
-  int capital = isupper(keyword[1]);
-  for( ptr = keyword + 2; *ptr && result; ptr++ )
-    if( (*ptr & 0x80) ||
-        (!capital && isupper(*ptr)) ||
-        (capital && islower(*ptr)) )
-      result = false;
-
-  if( result ) {
-    ptr = keyword;
-    while( *ptr ) {
-      if( isupper(*ptr) )
-        *ptr = sal::static_int_cast<char>(tolower(*ptr));
-      ptr++;
+    if( 255 < len )
+    {
+        len = 255;
     }
-  }
-  return;
+    memcpy(keyword, token, len);
+    keyword[len] = 0;
+
+    if( (token[0] & 0x80) || islower(token[0]) || strlen(token) < 2 )
+        return;
+
+    int capital = isupper(keyword[1]);
+    for( ptr = keyword + 2; *ptr && result; ptr++ )
+    {
+        if( (*ptr & 0x80) ||
+            (!capital && isupper(*ptr)) ||
+            (capital && islower(*ptr)) )
+        {
+            result = false;
+        }
+    }
+
+    if( result )
+    {
+        ptr = keyword;
+        while( *ptr )
+        {
+            if( isupper(*ptr) )
+                *ptr = sal::static_int_cast<char>(tolower(*ptr));
+            ptr++;
+        }
+    }
+    return;
 }
 
 // token reading function
