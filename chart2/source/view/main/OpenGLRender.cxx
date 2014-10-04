@@ -352,7 +352,7 @@ void OpenGLRender::SetSize(int width, int height)
 void OpenGLRender::SetSizePixel(int width, int height)
 {
     m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
-    m_Projection = m_Projection * glm::scale((float)width / m_iWidth, -(float)height / m_iHeight, 1.0f);
+    m_Projection = m_Projection * glm::scale(glm::vec3((float)width / m_iWidth, -(float)height / m_iHeight, 1.0f));
 
     m_View       = glm::lookAt(glm::vec3(0,m_iHeight,1),
                                glm::vec3(0,m_iHeight,0),
