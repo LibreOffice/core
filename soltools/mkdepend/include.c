@@ -91,11 +91,30 @@ struct inclist *inc_path(char *file, char *include, boolean dot, struct Includes
             if (*p == '/')
                 break;
         if (p == file)
-            strcpy(path, include);
-        else {
-            strncpy(path, file, (p-file) + 1);
-            path[ (p-file) + 1 ] = '\0';
-            strcpy(path + (p-file) + 1, include);
+        {
+            if(strlen(include) >= BUFSIZ )
+            {
+                fatalerr("include filename too long \"%s\"\n", include);
+            }
+            else
+            {
+                strcpy(path, include);
+            }
+        }
+        else
+        {
+            int partial = (p - file);
+            int inc_len = strlen(include);
+            if(inc_len + partial >= BUFSIZ )
+            {
+                fatalerr("include filename too long \"%s\"\n", include);
+            }
+            else
+            {
+                memcpy(path, file, partial);
+                memcpy(path + partial, include, inc_len);
+                path[partial + inc_len] = 0;
+            }
         }
         remove_dotdot(path);
         if ((exists_path(incCollection, path)) && stat(path, &st) == 0 && !( st.st_mode & S_IFDIR)) {
