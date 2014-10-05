@@ -2726,25 +2726,47 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([what Mac OS X SDK to use])
 
-    for _macosx_sdk in $with_macosx_sdk 10.8 10.9 10.10 10.11 10.12; do
-        MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
-        if test -d "$MACOSX_SDK_PATH"; then
-            with_macosx_sdk="${_macosx_sdk}"
-            break
-        else
-            MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${_macosx_sdk}.sdk"
+    if test -z "$with_macosx_sdk"; then
+        for _macosx_sdk in $with_macosx_sdk 10.8 10.9 10.10 10.11 10.12; do
+            MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
             if test -d "$MACOSX_SDK_PATH"; then
                 with_macosx_sdk="${_macosx_sdk}"
                 break
+            else
+                MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${_macosx_sdk}.sdk"
+                if test -d "$MACOSX_SDK_PATH"; then
+                    with_macosx_sdk="${_macosx_sdk}"
+                   break
+                fi
             fi
-        fi
-    done
+        done
+    else
+        # --with-macosx-sdk=...
+        case $with_macosx_sdk in
+            10.5|10.6|10.7)
+                if test -d /Developer/SDKs/MacOSX${with_macosx_sdk}.sdk; then
+                    MACOSX_SDK_PATH=/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk
+                elif test -d /Developer-old/SDKs/MacOSX${with_macosx_sdk}.sdk; then
+                    MACOSX_SDK_PATH=/Developer-old/SDKs/MacOSX${with_macosx_sdk}.sdk
+                fi
+                ;;
+        esac
+    fi
     if test ! -d "$MACOSX_SDK_PATH"; then
         AC_MSG_ERROR([Could not figure out the location of a Mac OS X SDK and its version])
     fi
     AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
 
     case $with_macosx_sdk in
+    10.5)
+        MACOSX_SDK_VERSION=1050
+        ;;
+    10.6)
+        MACOSX_SDK_VERSION=1060
+        ;;
+    10.7)
+        MACOSX_SDK_VERSION=1070
+        ;;
     10.8)
         MACOSX_SDK_VERSION=1080
         ;;
@@ -2761,12 +2783,12 @@ if test $_os = Darwin; then
         MACOSX_SDK_VERSION=101200
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.8--12])
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.5--12])
         ;;
     esac
 
     if test "$with_macosx_version_min_required" = "" ; then
-        with_macosx_version_min_required="10.8";
+        with_macosx_version_min_required="$with_macosx_sdk"
     fi
 
     if test "$with_macosx_version_max_allowed" = "" ; then
@@ -2780,37 +2802,24 @@ if test $_os = Darwin; then
     FRAMEWORKSHOME="$MACOSX_SDK_PATH/System/Library/Frameworks"
     MACOSX_DEPLOYMENT_TARGET="$with_macosx_version_min_required"
 
-    case "$with_macosx_version_min_required" in
-    10.8)
-        MAC_OS_X_VERSION_MIN_REQUIRED="1080"
-        ;;
-    10.9)
-        MAC_OS_X_VERSION_MIN_REQUIRED="1090"
-        ;;
-    10.10)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101000"
-        ;;
-    10.11)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101100"
-        ;;
-    10.12)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101200"
-        ;;
-    *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.8--12])
-        ;;
-    esac
-
-    LIBTOOL=/usr/bin/libtool
+    LIBTOOL=libtool
     INSTALL_NAME_TOOL=install_name_tool
     if test -z "$save_CC"; then
         AC_MSG_CHECKING([what compiler to use])
-        stdlib=-stdlib=libc++
-        if test "$ENABLE_LTO" = TRUE; then
-            lto=-flto
-        fi
-        CC="`xcrun -find clang` -m64 $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-        CXX="`xcrun -find clang++` -m64 $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        case $with_macosx_sdk in
+        10.5|10.6)
+            CC="gcc -mmacosx-version-min=$with_macosx_version_min_required"
+            CXX="g++ -mmacosx-version-min=$with_macosx_version_min_required"
+            ;;
+        10.7|10.8|10.9|10.10|10.11)
+            stdlib=-stdlib=libc++
+            if test "$ENABLE_LTO" = TRUE; then
+                lto=-flto
+            fi
+            CC="`xcrun -find clang` -m64 $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="`xcrun -find clang++` -m64 $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            ;;
+        esac
         INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
         AR=`xcrun -find ar`
         NM=`xcrun -find nm`
@@ -2819,43 +2828,6 @@ if test $_os = Darwin; then
         RANLIB=`xcrun -find ranlib`
         AC_MSG_RESULT([$CC and $CXX])
     fi
-
-    case "$with_macosx_version_max_allowed" in
-    10.8)
-        MAC_OS_X_VERSION_MAX_ALLOWED="1080"
-        ;;
-    10.9)
-        MAC_OS_X_VERSION_MAX_ALLOWED="1090"
-        ;;
-    10.10)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101000"
-        ;;
-    10.11)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101100"
-        ;;
-    10.12)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101200"
-        ;;
-    *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.8--12])
-        ;;
-    esac
-
-    AC_MSG_CHECKING([that macosx-version-min-required is coherent with macosx-version-max-allowed])
-    if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED; then
-        AC_MSG_ERROR([the version minimumn required must be inferior or equal to the version maximum allowed])
-    else
-        AC_MSG_RESULT([ok])
-    fi
-
-    AC_MSG_CHECKING([that macosx-version-max-allowed is coherent with macos-with-sdk])
-    if test $MAC_OS_X_VERSION_MAX_ALLOWED -gt $MACOSX_SDK_VERSION; then
-        AC_MSG_ERROR([the version maximum allowed cannot be greater than the sdk level])
-    else
-        AC_MSG_RESULT([ok])
-    fi
-    AC_MSG_NOTICE([MAC_OS_X_VERSION_MIN_REQUIRED=$MAC_OS_X_VERSION_MIN_REQUIRED])
-    AC_MSG_NOTICE([MAC_OS_X_VERSION_MAX_ALLOWED=$MAC_OS_X_VERSION_MAX_ALLOWED])
 
     AC_MSG_CHECKING([whether to do code signing])
 
@@ -2933,8 +2905,6 @@ fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_SDK_VERSION)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
-AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
-AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(INSTALL_NAME_TOOL)
 AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libtool
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
@@ -4092,6 +4062,11 @@ darwin*)
         RTL_ARCH=ARM_EABI
         PLATFORMID=ios_arm
         OS=IOS
+        ;;
+    powerpc*)
+        CPUNAME=POWERPC
+        RTL_ARCH=PowerPC
+        PLATFORMID=macosx_powerpc
         ;;
     i*86)
         AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
@@ -5890,7 +5865,7 @@ if test "$GCC" = "yes"; then
         dnl is apparently provided by LLVM's libcxxabi project, which has good
         dnl semantics (cf. <http://llvm.org/svn/llvm-project/libcxxabi/trunk/
         dnl src/cxa_guard.cpp>):
-        if test "$MAC_OS_X_VERSION_MIN_REQUIRED" -ge 1090; then
+        if test "$MACOSX_SDK_VERSION" -ge 1090; then
             HAVE_THREADSAFE_STATICS=TRUE
         fi
     elif test "$_os" != Android; then
