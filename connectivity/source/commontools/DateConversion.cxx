@@ -136,7 +136,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                     if ( bOk )
                     {
                         if (bQuote)
-                            aRet.appendAscii("{TS '");
+                            aRet.appendAscii("{ts '");
                         aRet.append(DBTypeConversion::toDateTimeString(aDateTime));
                         if (bQuote)
                             aRet.appendAscii("'}");
@@ -166,7 +166,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                         bOk = _rVal >>= aDate;
                     OSL_VERIFY_RES( bOk, "DBTypeConversion::toSQLString: _rVal is not date!");
                     if (bQuote)
-                        aRet.appendAscii("{D '");
+                        aRet.appendAscii("{d '");
                     aRet.append(DBTypeConversion::toDateString(aDate));
                     if (bQuote)
                         aRet.appendAscii("'}");
@@ -193,7 +193,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                         bOk = _rVal >>= aTime;
                     OSL_VERIFY_RES( bOk,"DBTypeConversion::toSQLString: _rVal is not time!");
                     if (bQuote)
-                        aRet.appendAscii("{T '");
+                        aRet.appendAscii("{t '");
                     aRet.append(DBTypeConversion::toTimeString(aTime));
                     if (bQuote)
                         aRet.appendAscii("'}");

@@ -4660,6 +4660,14 @@ OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pCont
 		aStr = yytname[YYTRANSLATE(nTokenID)];
 		if(aStr.startsWith("SQL_TOKEN_"))
 			aStr = aStr.copy(10);
+		switch( nTokenID )
+		{
+			case SQL_TOKEN_OJ:
+			case SQL_TOKEN_TS:
+			case SQL_TOKEN_T:
+			case SQL_TOKEN_D:
+				aStr = aStr.toAsciiLowerCase();
+		}
 	}
 	return aStr;
 }
