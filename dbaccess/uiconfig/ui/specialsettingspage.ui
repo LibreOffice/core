@@ -76,7 +76,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="useoj">
-                <property name="label" translatable="yes">Use Outer Join syntax '{OJ }'</property>
+                <property name="label" translatable="yes">Use Outer Join syntax '{oj }'</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

@@ -1073,7 +1073,7 @@ namespace
                                     {
                                         // create outer join
                                         if ( bUseEscape )
-                                            aStr += "{ OJ ";
+                                            aStr += "{ oj ";
                                         aStr += aJoin;
                                         if ( bUseEscape )
                                             aStr += " }";
