@@ -291,7 +291,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	acc \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(if $(filter MACOSX,$(OS)),\
-		avmediaMacAVF \
+		$(if $(shell test $(MACOSX_SDK_VERSION) -ge 1070 && echo yep),avmediaMacAVF) \
 		$(if $(ENABLE_MACOSX_SANDBOX),,\
 			$(if $(shell test $(MACOSX_SDK_VERSION) -ge 101200 || echo not),avmediaQuickTime) \
 		) \

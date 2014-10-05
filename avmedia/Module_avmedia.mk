@@ -46,9 +46,11 @@ endif
 endif
 
 ifeq ($(OS),MACOSX)
+ifeq ($(shell test $(MACOSX_SDK_VERSION) -ge 1070; echo $$?),0)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediaMacAVF \
 ))
+endif
 endif
 
 ifeq ($(OS),WNT)

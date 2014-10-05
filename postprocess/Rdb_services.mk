@@ -125,7 +125,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerperfect/source/writer/wpftwriter \
 	writerperfect/source/calc/wpftcalc \
 	$(if $(filter MACOSX,$(OS)), \
-		$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
+		$(if $(filter 1050 1060,$(MACOSX_SDK_VERSION)),, \
+			$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
+		) \
 		$(if $(filter TRUE,$(ENABLE_MACOSX_SANDBOX)),, \
 			$(if $(shell test $(MACOSX_SDK_VERSION) -ge 101200 || echo nope), \
 				$(call gb_Helper_optional,AVMEDIA,avmedia/source/quicktime/avmediaQuickTime) \
