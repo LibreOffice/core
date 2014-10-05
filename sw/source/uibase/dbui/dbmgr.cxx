@@ -985,7 +985,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                                 rMaster.GetFooter().IsActive();
 
                 // copy compatibility options
-                pTargetShell->GetDoc()->ReplaceCompatabilityOptions( *pTargetShell->GetDoc());
+                pTargetShell->GetDoc()->ReplaceCompatabilityOptions( *pSourceShell->GetDoc());
                 // #72821# copy dynamic defaults
                 pTargetShell->GetDoc()->ReplaceDefaults( *pSourceShell->GetDoc());
 
