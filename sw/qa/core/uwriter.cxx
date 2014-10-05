@@ -80,6 +80,22 @@ public:
     void testFileNameFields();
     void testDocStat();
     void testModelToViewHelper();
+    void testModelToViewHelperPassthrough();
+    void testModelToViewHelperExpandFieldsExpandFootnote();
+    void testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode();
+    void testModelToViewHelperExpandFields();
+    void testModelToViewHelperExpandFieldsReplaceMode();
+    void testModelToViewHelperExpandFieldsHideInvisible();
+    void testModelToViewHelperExpandFieldsHideRedlined();
+    void testModelToViewHelperExpandFieldsHideInvisibleExpandFootnote();
+    void testModelToViewHelperExpandFieldsHideInvisibleExpandFootnoteReplaceMode();
+    void testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnote();
+    void testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnoteReplaceMode();
+    void testModelToViewHelperHideInvisibleHideRedlined();
+    void testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnote();
+    void testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnoteReplaceMode();
+    void testModelToViewHelperExpandFieldsExpandFootnote2();
+    void testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode2();
     void testSwScanner();
     void testUserPerceivedCharCount();
     void testGraphicAnchorDeletion();
@@ -92,7 +108,21 @@ public:
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
     CPPUNIT_TEST(testDocStat);
-    CPPUNIT_TEST(testModelToViewHelper);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsExpandFootnote);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode);
+    CPPUNIT_TEST(testModelToViewHelperExpandFields);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsReplaceMode);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsHideInvisible);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsHideRedlined);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsHideInvisibleExpandFootnote);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsHideInvisibleExpandFootnoteReplaceMode);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnote);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnoteReplaceMode);
+    CPPUNIT_TEST(testModelToViewHelperHideInvisibleHideRedlined);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnote);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnoteReplaceMode);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsExpandFootnote2);
+    CPPUNIT_TEST(testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode2);
     CPPUNIT_TEST(testSwScanner);
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
@@ -226,220 +256,284 @@ void SwDocTest::testUserPerceivedCharCount()
     CPPUNIT_ASSERT_MESSAGE("Surrogate Pair should be counted as single character", nCount == 1);
 }
 
-void SwDocTest::testModelToViewHelper()
+SwTxtNode* getModelToViewTestDocument(SwDoc *pDoc)
 {
-    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    {
-        SwFmtFtn aFtn;
-        aFtn.SetNumStr(OUString("foo"));
+    SwFmtFtn aFtn;
+    aFtn.SetNumStr(OUString("foo"));
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA BBBBB "));
-        SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
-        sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
-        pTxtNode->InsertItem(aFtn, nPos, nPos);
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" CCCCC "));
-        nPos = aPaM.GetPoint()->nContent.GetIndex();
-        pTxtNode->InsertItem(aFtn, nPos, nPos);
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" DDDDD"));
-        CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == (4*5) + 5 + 2);
+    pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA BBBBB "));
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
+    pTxtNode->InsertItem(aFtn, nPos, nPos);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" CCCCC "));
+    nPos = aPaM.GetPoint()->nContent.GetIndex();
+    pTxtNode->InsertItem(aFtn, nPos, nPos);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" DDDDD"));
+    CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == (4*5) + 5 + 2);
 
-        //set start of selection to first B
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 6);
-        aPaM.SetMark();
-        //set end of selection to last C
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 14);
-        //set character attribute hidden on range
-        SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
-        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aHidden, 0 );
-        aPaM.DeleteMark();
+    //set start of selection to first B
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 6);
+    aPaM.SetMark();
+    //set end of selection to last C
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 14);
+    //set character attribute hidden on range
+    SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
+    pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aHidden, 0 );
+    aPaM.DeleteMark();
 
-        //turn on red-lining and show changes
-        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
-        CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
-        CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
+    //turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on", pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
 
-        //set start of selection to last A
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 4);
-        aPaM.SetMark();
-        //set end of selection to second last B
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 9);
-        m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
-        aPaM.DeleteMark();
+    //set start of selection to last A
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 4);
+    aPaM.SetMark();
+    //set end of selection to second last B
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 9);
+    pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
+    aPaM.DeleteMark();
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, PASSTHROUGH);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            OUString sModelText = pTxtNode->GetTxt();
-            CPPUNIT_ASSERT_EQUAL(sModelText, sViewText);
-        }
+    return pTxtNode;
+}
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(
-                OUString("AAAAA BBBBB foo CCCCC foo DDDDD"), sViewText);
-        }
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode,
-                    EXPANDFIELDS | EXPANDFOOTNOTE | REPLACEMODE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(
-                OUString("AAAAA BBBBB " + OUString(CHAR_ZWSP) + " CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
-                sViewText);
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
-                aModelToViewHelper.getFootnotePositions().size());
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12),
-                aModelToViewHelper.getFootnotePositions()[0]);
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(20),
-                aModelToViewHelper.getFootnotePositions()[1]);
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
-                aModelToViewHelper.getFieldPositions().size());
-        }
+SwTxtNode* getModelToViewTestDocument2(SwDoc *pDoc)
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(pDoc);
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(
-                OUString("AAAAA BBBBB  CCCCC  DDDDD"), sViewText);
-        }
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode,
-                EXPANDFIELDS | REPLACEMODE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(OUString("AAAAA BBBBB  CCCCC  DDDDD"),
-                sViewText);
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
-                aModelToViewHelper.getFootnotePositions().size());
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
-                aModelToViewHelper.getFieldPositions().size());
-        }
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(
-                OUString("AAAAA CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD"),
-                sViewText);
-        }
+    pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA"));
+    IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+    sw::mark::IFieldmark *pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(
+            pMarksAccess->makeNoTextFieldBookmark(aPaM, "test", ODF_FORMDROPDOWN));
+    CPPUNIT_ASSERT(pFieldmark);
+    uno::Sequence< OUString > vListEntries(1);
+    vListEntries[0] = "BBBBB";
+    (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
+    (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(sal_Int32(0));
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("CCCCC"));
+    pTxtNode = aPaM.GetNode().GetTxtNode();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11),
+            pTxtNode->GetTxt().getLength());
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEREDLINED);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(
-                OUString("AAAABB " + OUString(CH_TXTATR_BREAKWORD) + " CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD"),
-                sViewText);
-        }
+    return pTxtNode;
+}
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | EXPANDFOOTNOTE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(OUString("AAAAA CCCCC foo DDDDD"), sViewText);
-        }
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode,
-                EXPANDFIELDS | HIDEINVISIBLE | EXPANDFOOTNOTE | REPLACEMODE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(
-                OUString("AAAAA CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
-                sViewText);
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
-                aModelToViewHelper.getFootnotePositions().size());
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12),
-                aModelToViewHelper.getFootnotePositions()[0]);
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
-                aModelToViewHelper.getFieldPositions().size());
-        }
+void SwDocTest::testModelToViewHelperPassthrough()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(
-                OUString("AAAABB foo CCCCC foo DDDDD"), sViewText);
-        }
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode,
-                EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE | REPLACEMODE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(
-               OUString("AAAABB " + OUString(CHAR_ZWSP) + " CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
-               sViewText);
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
-                aModelToViewHelper.getFootnotePositions().size());
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7),
-                aModelToViewHelper.getFootnotePositions()[0]);
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15),
-                aModelToViewHelper.getFootnotePositions()[1]);
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
-                aModelToViewHelper.getFieldPositions().size());
-        }
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, PASSTHROUGH);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    OUString sModelText = pTxtNode->GetTxt();
+    CPPUNIT_ASSERT_EQUAL(sModelText, sViewText);
+}
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE | HIDEREDLINED);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            OUStringBuffer aBuffer;
-            aBuffer.append("AAAACCCCC ");
-            aBuffer.append(CH_TXTATR_BREAKWORD);
-            aBuffer.append(" DDDDD");
-            CPPUNIT_ASSERT_EQUAL(aBuffer.makeStringAndClear(), sViewText);
-        }
+void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnote()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(OUString("AAAACCCCC foo DDDDD"), sViewText);
-        }
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode,
-                EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE | REPLACEMODE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(sViewText,
-                OUString("AAAACCCCC " + OUString(CHAR_ZWSP) + " DDDDD"));
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
-                aModelToViewHelper.getFootnotePositions().size());
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10),
-                aModelToViewHelper.getFootnotePositions()[0]);
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
-                aModelToViewHelper.getFieldPositions().size());
-        }
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AAAAA BBBBB foo CCCCC foo DDDDD"), sViewText);
+}
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA"));
-        IDocumentMarkAccess* pMarksAccess = m_pDoc->getIDocumentMarkAccess();
-        sw::mark::IFieldmark *pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(
-                pMarksAccess->makeNoTextFieldBookmark(aPaM, "test", ODF_FORMDROPDOWN));
-        CPPUNIT_ASSERT(pFieldmark);
-        uno::Sequence< OUString > vListEntries(1);
-        vListEntries[0] = "BBBBB";
-        (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
-        (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(sal_Int32(0));
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("CCCCC"));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11),
-                pTxtNode->GetTxt().getLength());
+void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
 
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(OUString("AAAAABBBBBCCCCC"), sViewText);
-        }
-        {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode,
-                EXPANDFIELDS | EXPANDFOOTNOTE | REPLACEMODE);
-            OUString sViewText = aModelToViewHelper.getViewText();
-            CPPUNIT_ASSERT_EQUAL(
-                OUString("AAAAA" + OUString(CHAR_ZWSP) + "CCCCC"),
-                sViewText);
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
-                aModelToViewHelper.getFootnotePositions().size());
-            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
-                aModelToViewHelper.getFieldPositions().size());
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5),
-                aModelToViewHelper.getFieldPositions()[0]);
-        }
-    }
+    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+            EXPANDFIELDS | EXPANDFOOTNOTE | REPLACEMODE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AAAAA BBBBB " + OUString(CHAR_ZWSP) + " CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
+        sViewText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+        aModelToViewHelper.getFootnotePositions().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12),
+        aModelToViewHelper.getFootnotePositions()[0]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(20),
+        aModelToViewHelper.getFootnotePositions()[1]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+        aModelToViewHelper.getFieldPositions().size());
+}
+
+void SwDocTest::testModelToViewHelperExpandFields()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AAAAA BBBBB  CCCCC  DDDDD"), sViewText);
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsReplaceMode()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+        EXPANDFIELDS | REPLACEMODE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(OUString("AAAAA BBBBB  CCCCC  DDDDD"),
+        sViewText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+        aModelToViewHelper.getFootnotePositions().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+        aModelToViewHelper.getFieldPositions().size());
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsHideInvisible()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AAAAA CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD"),
+        sViewText);
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsHideRedlined()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEREDLINED);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AAAABB " + OUString(CH_TXTATR_BREAKWORD) + " CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD"),
+        sViewText);
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnote()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | EXPANDFOOTNOTE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(OUString("AAAAA CCCCC foo DDDDD"), sViewText);
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnoteReplaceMode()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+        EXPANDFIELDS | HIDEINVISIBLE | EXPANDFOOTNOTE | REPLACEMODE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AAAAA CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
+        sViewText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+        aModelToViewHelper.getFootnotePositions().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12),
+        aModelToViewHelper.getFootnotePositions()[0]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+        aModelToViewHelper.getFieldPositions().size());
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnote()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AAAABB foo CCCCC foo DDDDD"), sViewText);
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnoteReplaceMode()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+        EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE | REPLACEMODE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(
+       OUString("AAAABB " + OUString(CHAR_ZWSP) + " CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
+       sViewText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
+        aModelToViewHelper.getFootnotePositions().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7),
+        aModelToViewHelper.getFootnotePositions()[0]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15),
+        aModelToViewHelper.getFootnotePositions()[1]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+        aModelToViewHelper.getFieldPositions().size());
+}
+
+void SwDocTest::testModelToViewHelperHideInvisibleHideRedlined()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE | HIDEREDLINED);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    OUStringBuffer aBuffer;
+    aBuffer.append("AAAACCCCC ");
+    aBuffer.append(CH_TXTATR_BREAKWORD);
+    aBuffer.append(" DDDDD");
+    CPPUNIT_ASSERT_EQUAL(aBuffer.makeStringAndClear(), sViewText);
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnote()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(OUString("AAAACCCCC foo DDDDD"), sViewText);
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnoteReplaceMode()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+        EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE | REPLACEMODE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(sViewText,
+        OUString("AAAACCCCC " + OUString(CHAR_ZWSP) + " DDDDD"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+        aModelToViewHelper.getFootnotePositions().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10),
+        aModelToViewHelper.getFootnotePositions()[0]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+        aModelToViewHelper.getFieldPositions().size());
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnote2()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument2(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(OUString("AAAAABBBBBCCCCC"), sViewText);
+}
+
+void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode2()
+{
+    SwTxtNode* pTxtNode = getModelToViewTestDocument2(m_pDoc);
+
+    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+        EXPANDFIELDS | EXPANDFOOTNOTE | REPLACEMODE);
+    OUString sViewText = aModelToViewHelper.getViewText();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AAAAA" + OUString(CHAR_ZWSP) + "CCCCC"),
+        sViewText);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+        aModelToViewHelper.getFootnotePositions().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+        aModelToViewHelper.getFieldPositions().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5),
+        aModelToViewHelper.getFieldPositions()[0]);
 }
 
 void SwDocTest::testSwScanner()
