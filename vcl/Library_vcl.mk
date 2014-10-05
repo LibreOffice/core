@@ -393,15 +393,11 @@ vcl_coretext_code= \
 
 ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $(gb_OBJCXXFLAGS) \
-))
-
 $(eval $(call gb_Library_add_defs,vcl,\
 	-DMACOSX_BUNDLE_IDENTIFIER=\"$(MACOSX_BUNDLE_IDENTIFIER)\" \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,vcl,\
+$(eval $(call gb_Library_add_objcxxcppobjects,vcl,\
     $(vcl_coretext_code) \
 ))
 
@@ -443,7 +439,7 @@ $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/osx/salframeview \
     vcl/osx/salnsmenu \
 ))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
+$(eval $(call gb_Library_add_objcxxcppobjects,vcl,\
     vcl/osx/a11yfocuslistener \
     vcl/osx/a11yfocustracker \
     vcl/osx/a11ylistener \
