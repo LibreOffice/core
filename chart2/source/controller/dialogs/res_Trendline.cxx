@@ -276,7 +276,7 @@ bool TrendlineResources::FillItemSet(SfxItemSet* rOutAttrs) const
         rOutAttrs->Put( SfxBoolItem( SCHATTR_REGRESSION_SET_INTERCEPT, m_pCB_SetIntercept->IsChecked() ));
 
     aValue = 0.0;
-    m_pNumFormatter->IsNumberFormat(m_pFmtFld_InterceptValue->GetText(),nIndex,aValue);
+    (void)m_pNumFormatter->IsNumberFormat(m_pFmtFld_InterceptValue->GetText(),nIndex,aValue);
     rOutAttrs->Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_INTERCEPT_VALUE ) );
 
     return true;
