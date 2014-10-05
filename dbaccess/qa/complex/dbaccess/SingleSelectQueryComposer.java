@@ -51,7 +51,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             + " OR ( \"ID\" = 3 AND \"Postal\" = '6' AND \"Address\" = '7' )"
             + " OR ( \"Address\" = '8' )"
             + " OR ( \"Postal\" = '9' )"
-            + " OR ( NOW( ) = {D '2010-01-01' } )";
+            + " OR ( NOW( ) = {d '2010-01-01' } )";
     private final static String INNERPRODUCTSQUERY = "products (inner)";
 
 
