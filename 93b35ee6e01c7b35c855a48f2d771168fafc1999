@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0d59b9_5092e458",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-10-05T16:07:59Z",
+      "side": 1,
+      "message": "From where di you get this bug number? I couldn\u0027t find it in the OpenOffice bug tracker.",
+      "revId": "93b35ee6e01c7b35c855a48f2d771168fafc1999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
