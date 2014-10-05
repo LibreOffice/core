@@ -3223,7 +3223,7 @@ void FmXFormShell::CreateExternalView()
             {
                 Reference< runtime::XFormController > xAsFormController( m_xExternalViewController, UNO_QUERY );
                 ControllerFeatures aHelper( xAsFormController, NULL );
-                aHelper->commitCurrentControl();
+                (void)aHelper->commitCurrentControl();
             }
 
             Reference< runtime::XFormController > xNewController(m_xExtViewTriggerController);
