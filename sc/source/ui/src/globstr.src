@@ -1211,7 +1211,7 @@ Resource RID_GLOBSTR
     };
     String STR_VOBJ_OBJECT
     {
-        Text [ en-US ] = "Objects/Image" ;
+        Text [ en-US ] = "Objects/Images" ;
     };
     String STR_VOBJ_CHART
     {
