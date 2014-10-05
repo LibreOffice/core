@@ -90,6 +90,7 @@
 #include <comphelper/string.hxx>
 #include <oox/ole/olehelper.hxx>
 
+#include <cassert>
 #include <boost/make_shared.hpp>
 
 using namespace ::com::sun::star;
@@ -551,11 +552,11 @@ bool ImplSdPPTImport::Import()
             SdPage* pPage = (SdPage*)MakeBlancPage( true );
             if ( pPage )
             {
-                bool bNotesMaster = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bNotesMaster;
-                bool bStarDrawFiller = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bStarDrawFiller;
+                bool bNotesMaster = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bNotesMaster;
+                bool bStarDrawFiller = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bStarDrawFiller;
 
                 PageKind ePgKind = ( bNotesMaster ) ? PK_NOTES : PK_STANDARD;
-                bool bHandout = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bHandoutMaster;
+                bool bHandout = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bHandoutMaster;
                 if ( bHandout )
                     ePgKind = PK_HANDOUT;
 
@@ -704,7 +705,7 @@ bool ImplSdPPTImport::Import()
         // importing master page objects
         PptSlidePersistList* pList = GetPageList( eAktPageKind );
         PptSlidePersistEntry* pPersist = ( pList && ( nAktPageNum < pList->size() ) )
-                                                    ? (*pList)[ nAktPageNum ] : NULL;
+                                                    ? &(*pList)[ nAktPageNum ] : NULL;
         if ( pPersist )
         {
             if ( pPersist->bStarDrawFiller && pPersist->bNotesMaster && ( nAktPageNum > 2 ) && ( ( nAktPageNum & 1 ) == 0 ) )
@@ -728,14 +729,14 @@ bool ImplSdPPTImport::Import()
                     if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                         break;
                     else
-                        pE = (*pList)[ nNextMaster ];
+                        pE = &(*pList)[ nNextMaster ];
                 }
                 SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pE->nBackgroundOffset, true );   // import background
                 if ( pObj )
                     pMPage->NbcInsertObject( pObj );
 
                 bool bNewAnimationsUsed = false;
-                ProcessData aProcessData( *(*pList)[ nAktPageNum ], (SdPage*)pMPage );
+                ProcessData aProcessData( (*pList)[ nAktPageNum ], (SdPage*)pMPage );
                 sal_uInt32 nFPosMerk = rStCtrl.Tell();
                 DffRecordHeader aPageHd;
                 if ( SeekToAktPage( &aPageHd ) )
@@ -882,7 +883,7 @@ bool ImplSdPPTImport::Import()
                     pPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nMasterNum));
                     PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                     if ( pPageList && nMasterNum < pPageList->size() )
-                        pMasterPersist = (*pPageList)[ nMasterNum ];
+                        pMasterPersist = &(*pPageList)[ nMasterNum ];
                     pPage->SetLayoutName(((SdPage&)pPage->TRG_GetMasterPage()).GetLayoutName());
                 }
                 pPage->SetPageKind( PK_STANDARD );
@@ -961,7 +962,7 @@ bool ImplSdPPTImport::Import()
                         pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                         if ( pPageList && nNotesMasterNum < pPageList->size() )
-                            pMasterPersist2 = (*pPageList)[ nNotesMasterNum ];
+                            pMasterPersist2 = &(*pPageList)[ nNotesMasterNum ];
                         pNotesPage->SetLayoutName( ((SdPage&)pNotesPage->TRG_GetMasterPage()).GetLayoutName() );
                     }
                     pNotesPage->SetPageKind( PK_NOTES );
@@ -1371,7 +1372,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
     if ( ( !pList ) || ( pList->size() <= nAktPageNum ) )
         return;
-    PptSlidePersistEntry& rSlidePersist = *(*pList)[ nAktPageNum ];
+    PptSlidePersistEntry& rSlidePersist = (*pList)[ nAktPageNum ];
     HeaderFooterEntry* pHFE = rSlidePersist.pHeaderFooterEntry;
     if ( pHFE )
     {
@@ -1465,7 +1466,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
     {
         PptSlidePersistList* pPersistList = GetPageList( eAktPageKind );
         PptSlidePersistEntry* pActualSlidePersist = ( pPersistList && ( nAktPageNum < pPersistList->size() ) )
-                                                        ? (*pPersistList)[ nAktPageNum ] : NULL;
+                                                        ? &(*pPersistList)[ nAktPageNum ] : NULL;
 
         if ( pActualSlidePersist && ( eAktPageKind == PPT_SLIDEPAGE ) )
         {
@@ -1772,17 +1773,15 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                         if ( pPageList && ( nMasterNum < pPageList->size() ) )
                         {
-                            PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
-                            if ( pE )
-                            {
-                                sal_uInt32 nOfs = pE->aPersistAtom.nReserved;
+                            assert( !pPageList->is_null( nMasterNum ) );
+                            const PptSlidePersistEntry& rE = (*pPageList)[ nMasterNum ];
+                            sal_uInt32 nOfs = rE.aPersistAtom.nReserved;
                                 if ( nOfs )
                                 {
                                     rStCtrl.Seek( nOfs );
                                     nPageRecEnd = nOfs + 16;
                                     continue;
                                 }
-                            }
                         }
 
                     }

@@ -118,6 +118,7 @@
 #include <svtools/embedhlp.hxx>
 
 #include <algorithm>
+#include <cassert>
 #include <set>
 #include <rtl/strbuf.hxx>
 #include <tools/time.hxx>
@@ -199,9 +200,9 @@ SvStream& ReadPptSlidePersistAtom( SvStream& rIn, PptSlidePersistAtom& rAtom )
 
 sal_uInt16 PptSlidePersistList::FindPage(sal_uInt32 nId) const
 {
-    for ( sal_uInt16 i=0; i < size(); i++ )
+    for ( sal_uInt16 i=0; i < mvEntries.size(); i++ )
     {
-        if (operator[](i)->GetSlideId()==nId) return i;
+        if (mvEntries[ i ].GetSlideId()==nId) return i;
     }
     return PPTSLIDEPERSIST_ENTRY_NOTFOUND;
 }
@@ -1529,8 +1530,8 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                 PptSlidePersistList* pPageList = GetPageList( PptPageKind( nPageListNum ) );
                 for ( sal_uInt16 nPageNum = 0; nPageNum < pPageList->size(); nPageNum++ )
                 {
-                    PptSlidePersistEntry* pE2 = (*pPageList)[ nPageNum ];
-                    sal_uLong nPersist = pE2->aPersistAtom.nPsrReference;
+                    PptSlidePersistEntry& rE2 = (*pPageList)[ nPageNum ];
+                    sal_uLong nPersist = rE2.aPersistAtom.nPsrReference;
                     if ( ( nPersist > 0 ) && ( nPersist < nPersistPtrAnz ) )
                     {
                         sal_uLong nFPos = pPersistPtr[ nPersist ];
@@ -1540,9 +1541,9 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                             DffRecordHeader aSlideHd;
                             ReadDffRecordHeader( rStCtrl, aSlideHd );
                             if ( SeekToRec( rStCtrl, PPT_PST_SlideAtom, aSlideHd.GetRecEndFilePos() ) )
-                                ReadPptSlideAtom( rStCtrl, pE2->aSlideAtom );
+                                ReadPptSlideAtom( rStCtrl, rE2.aSlideAtom );
                             else if ( SeekToRec( rStCtrl, PPT_PST_NotesAtom, aSlideHd.GetRecEndFilePos() ) )
-                                ReadPptNotesAtom( rStCtrl, pE2->aNotesAtom );
+                                ReadPptNotesAtom( rStCtrl, rE2.aNotesAtom );
                             aSlideHd.SeekToContent( rStCtrl );
 
                             DffRecordHeader aPPTDrawingHd;
@@ -1555,30 +1556,30 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                     {
                                         DffRecordHeader aDgRecordHeader;
                                         ReadDffRecordHeader( rStCtrl, aDgRecordHeader );
-                                        pE2->nDrawingDgId = aDgRecordHeader.nRecInstance;
+                                        rE2.nDrawingDgId = aDgRecordHeader.nRecInstance;
                                         aDgRecordHeader.SeekToEndOfRecord( rStCtrl );
                                     }
                                     if ( SeekToRec( rStCtrl, DFF_msofbtSolverContainer, aPPTDgContainer.GetRecEndFilePos() ) )
                                     {
-                                        pE2->pSolverContainer = new SvxMSDffSolverContainer;
-                                        ReadSvxMSDffSolverContainer( rStCtrl, *( pE2->pSolverContainer ) );
+                                        rE2.pSolverContainer = new SvxMSDffSolverContainer;
+                                        ReadSvxMSDffSolverContainer( rStCtrl, *( rE2.pSolverContainer ) );
                                     }
                                     aPPTDgContainer.SeekToBegOfRecord( rStCtrl );
                                     SetDgContainer( rStCtrl );  // set this, so that the escherimport is knowing of our drawings
                                 }
                             }
                             // office xp is supporting more than one stylesheet
-                            if ( ( pE2->ePageKind == PPT_MASTERPAGE ) && ( pE2->aSlideAtom.nMasterId == 0 ) && ( pE2->bNotesMaster == false ) )
+                            if ( ( rE2.ePageKind == PPT_MASTERPAGE ) && ( rE2.aSlideAtom.nMasterId == 0 ) && ( rE2.bNotesMaster == false ) )
                             {
                                 PPTTextSpecInfo aTxSI( 0 );
                                 if ( aTxSIStyle.bValid && !aTxSIStyle.aList.empty() )
                                     aTxSI = *( aTxSIStyle.aList[ 0 ] );
 
-                                pE2->pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxCFStyle, aTxPFStyle, aTxSI );
-                                pDefaultSheet = pE2->pStyleSheet;
+                                rE2.pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxCFStyle, aTxPFStyle, aTxSI );
+                                pDefaultSheet = rE2.pStyleSheet;
                             }
                             if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
-                                ReadPptColorSchemeAtom( rStCtrl, pE2->aColorScheme );
+                                ReadPptColorSchemeAtom( rStCtrl, rE2.aColorScheme );
                             else
                             {
                                 OSL_FAIL( "SdrPowerPointImport::Ctor(): could not get SlideColorScheme! (SJ)" );
@@ -1604,10 +1605,10 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                 }
                 for ( sal_uInt16 i = 0; i < pMasterPages->size(); i++ )
                 {
-                    if ( (*pMasterPages)[ i ]->bNotesMaster )
-                        (*pMasterPages)[ i ]->pHeaderFooterEntry = new HeaderFooterEntry( aNotesMaster );
+                    if ( (*pMasterPages)[ i ].bNotesMaster )
+                        (*pMasterPages)[ i ].pHeaderFooterEntry = new HeaderFooterEntry( aNotesMaster );
                     else
-                        (*pMasterPages)[ i ]->pHeaderFooterEntry = new HeaderFooterEntry( aNormalMaster );
+                        (*pMasterPages)[ i ].pHeaderFooterEntry = new HeaderFooterEntry( aNormalMaster );
                 }
             }
         }
@@ -2383,7 +2384,7 @@ sal_uInt32 SdrPowerPointImport::GetAktPageId()
 {
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
     if ( pList && nAktPageNum < pList->size() )
-        return (*pList)[ (sal_uInt16)nAktPageNum ]->aPersistAtom.nSlideId;
+        return (*pList)[ (sal_uInt16)nAktPageNum ].aPersistAtom.nSlideId;
     return 0;
 }
 
@@ -2393,7 +2394,7 @@ bool SdrPowerPointImport::SeekToAktPage( DffRecordHeader* pRecHd ) const
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
     if ( pList && ( nAktPageNum < pList->size() ) )
     {
-        sal_uLong nPersist = (*pList)[ (sal_uInt16)nAktPageNum ]->aPersistAtom.nPsrReference;
+        sal_uLong nPersist = (*pList)[ (sal_uInt16)nAktPageNum ].aPersistAtom.nPsrReference;
         if ( nPersist > 0 && nPersist < nPersistPtrAnz )
         {
             sal_uLong nFPos = 0;
@@ -2442,14 +2443,14 @@ void SdrPowerPointImport::SetPageNum( sal_uInt16 nPageNum, PptPageKind eKind )
         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
         if ( pPageList && nMasterIndex < pPageList->size() )
         {
-            PptSlidePersistEntry* pMasterPersist = (*pPageList)[ nMasterIndex ];
-            if ( ( pMasterPersist->pStyleSheet == NULL ) && pMasterPersist->aSlideAtom.nMasterId )
+            PptSlidePersistEntry& rMasterPersist = (*pPageList)[ nMasterIndex ];
+            if ( ( rMasterPersist.pStyleSheet == NULL ) && rMasterPersist.aSlideAtom.nMasterId )
             {
-                nMasterIndex = pMasterPages->FindPage( pMasterPersist->aSlideAtom.nMasterId );
+                nMasterIndex = pMasterPages->FindPage( rMasterPersist.aSlideAtom.nMasterId );
                 if ( nMasterIndex != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
-                    pMasterPersist = (*pPageList)[ nMasterIndex ];
+                    rMasterPersist = (*pPageList)[ nMasterIndex ];
             }
-            pPPTStyleSheet = pMasterPersist->pStyleSheet;
+            pPPTStyleSheet = rMasterPersist.pStyleSheet;
          }
     }
     if ( !pPPTStyleSheet )
@@ -2494,13 +2495,11 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
         PptSlidePersistList* pPageList = GetPageList( eAktPageKind );
         if ( pPageList && ( nAktPageNum < pPageList->size() ) )
         {
-            PptSlidePersistEntry* pE = (*pPageList)[ nAktPageNum ];
-            if ( pE )
-            {
-                nSlideFlags = pE->aSlideAtom.nFlags;
-                if ( ! ( nSlideFlags & 2 ) )
-                    ((SdrPowerPointImport*)this)->aPageColors = pE->aColorScheme;
-            }
+            assert( !pPageList->is_null( nAktPageNum ) );
+            const PptSlidePersistEntry& rE = (*pPageList)[ nAktPageNum ];
+            nSlideFlags = rE.aSlideAtom.nFlags;
+            if ( ! ( nSlideFlags & 2 ) )
+                ((SdrPowerPointImport*)this)->aPageColors = rE.aColorScheme;
         }
         if ( nSlideFlags & 2 )      // follow master colorscheme?
         {
@@ -2509,14 +2508,14 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
             {
                 PptSlidePersistEntry* pMasterPersist = NULL;
                 if ( eAktPageKind == PPT_MASTERPAGE )
-                    pMasterPersist = (*pPageList2)[ nAktPageNum ];
+                    pMasterPersist = &(*pPageList2)[ nAktPageNum ];
                 else
                 {
                     if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
                     {
                         sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
                         if ( nMasterNum < pPageList2->size() )
-                            pMasterPersist = (*pPageList2)[ nMasterNum ];
+                            pMasterPersist = &(*pPageList2)[ nMasterNum ];
                     }
                 }
                 if ( pMasterPersist )
@@ -2528,7 +2527,7 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
                         if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                             break;
                         else
-                            pMasterPersist = (*pPageList2)[ nNextMaster ];
+                            pMasterPersist = &(*pPageList2)[ nNextMaster ];
                     }
                 }
                 if ( pMasterPersist )
@@ -2560,8 +2559,9 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uIn
                 PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                 if ( pPageList && ( nMasterNum < pPageList->size() ) )
                 {
-                    PptSlidePersistEntry* pPersist = (*pPageList)[ nMasterNum ];    // get the masterpage's persistentry
-                    if ( pPersist && pPersist->pPresentationObjects )
+                    assert( !pPageList->is_null( nMasterNum ) );
+                    const PptSlidePersistEntry& rPersist = (*pPageList)[ nMasterNum ];    // get the masterpage's persistentry
+                    if ( rPersist.pPresentationObjects )
                     {
                         sal_uInt32 nCurrent(0L);
                         DffRecordList* pCList = maShapeRecords.pCList;              // we got a backup of the current position
@@ -2577,16 +2577,16 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uIn
                                 switch ( aTextObj.GetInstance() )
                                 {
                                     case TSS_TYPE_TITLE :
-                                        nShapePos = pPersist->pPresentationObjects[ TSS_TYPE_PAGETITLE ];
+                                        nShapePos = rPersist.pPresentationObjects[ TSS_TYPE_PAGETITLE ];
                                     break;
                                     case TSS_TYPE_PAGETITLE :
-                                        nShapePos = pPersist->pPresentationObjects[ TSS_TYPE_PAGETITLE ];
+                                        nShapePos = rPersist.pPresentationObjects[ TSS_TYPE_PAGETITLE ];
                                     break;
                                     case TSS_TYPE_SUBTITLE :
                                     case TSS_TYPE_HALFBODY :
                                     case TSS_TYPE_QUARTERBODY :
                                     case TSS_TYPE_BODY :
-                                        nShapePos = pPersist->pPresentationObjects[ TSS_TYPE_BODY ];
+                                        nShapePos = rPersist.pPresentationObjects[ TSS_TYPE_BODY ];
                                     break;
                                 }
                                 if ( nShapePos )
@@ -2694,7 +2694,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
     if ( ( !pList ) || ( pList->size() <= nAktPageNum ) )
         return;
-    PptSlidePersistEntry& rSlidePersist = *(*pList)[ nAktPageNum ];
+    PptSlidePersistEntry& rSlidePersist = (*pList)[ nAktPageNum ];
     if ( rSlidePersist.bStarDrawFiller )
         return;
 
@@ -2753,21 +2753,21 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                         {
                                             sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
                                             PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-                                            PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
-                                            while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
+                                            PptSlidePersistEntry& rE = (*pPageList)[ nMasterNum ];
+                                            while( ( rE.aSlideAtom.nFlags & 4 ) && rE.aSlideAtom.nMasterId )
                                             {
-                                                sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
+                                                sal_uInt16 nNextMaster = pMasterPages->FindPage( rE.aSlideAtom.nMasterId );
                                                 if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                                                     break;
                                                 else
-                                                    pE = (*pPageList)[ nNextMaster ];
+                                                    rE = (*pPageList)[ nNextMaster ];
                                             }
-                                            if ( pE->nBackgroundOffset )
+                                            if ( rE.nBackgroundOffset )
                                             {
                                                 // do not follow master colorscheme?
                                                 bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) != 0;
                                                 sal_uInt32 nPos = rStCtrl.Tell();
-                                                rStCtrl.Seek( pE->nBackgroundOffset );
+                                                rStCtrl.Seek( rE.nBackgroundOffset );
                                                 rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aPageSize, aPageSize );
                                                 rSlidePersist.bBObjIsTemporary = bTemporary;
                                                 rStCtrl.Seek( nPos );
@@ -2870,9 +2870,8 @@ const PptSlideLayoutAtom* SdrPowerPointImport::GetSlideLayoutAtom() const
     PptSlidePersistList* pPageList = GetPageList( eAktPageKind );
     if ( pPageList && nAktPageNum < pPageList->size() )
     {
-        PptSlidePersistEntry* pE = (*pPageList)[ nAktPageNum ];
-        if ( pE )
-            return &pE->aSlideAtom.aLayout;
+        assert( !pPageList->is_null( nAktPageNum ) );
+        return &(*pPageList)[ nAktPageNum ].aSlideAtom.aLayout;
     }
     return NULL;
 }
@@ -2889,7 +2888,7 @@ sal_uInt32 SdrPowerPointImport::GetMasterPageId( sal_uInt16 nPageNum, PptPageKin
 {
     PptSlidePersistList* pPageList = GetPageList( ePageKind );
     if ( pPageList && nPageNum < pPageList->size() )
-        return (*pPageList)[ nPageNum ]->aSlideAtom.nMasterId;
+        return (*pPageList)[ nPageNum ].aSlideAtom.nMasterId;
    return 0;
 }
 
@@ -2897,7 +2896,7 @@ sal_uInt32 SdrPowerPointImport::GetNotesPageId( sal_uInt16 nPageNum ) const
 {
     PptSlidePersistList* pPageList=GetPageList( PPT_SLIDEPAGE );
     if ( pPageList && nPageNum < pPageList->size() )
-        return (*pPageList)[ nPageNum ]->aSlideAtom.nNotesId;
+        return (*pPageList)[ nPageNum ].aSlideAtom.nNotesId;
    return 0;
 }
 
@@ -6439,7 +6438,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                         PptSlidePersistList* pPageList = rSdrPowerPointImport.GetPageList( rSdrPowerPointImport.eAktPageKind );
                         PptSlidePersistEntry* pE = NULL;
                         if ( pPageList && ( rSdrPowerPointImport.nAktPageNum < pPageList->size() ) )
-                            pE = (*pPageList)[ rSdrPowerPointImport.nAktPageNum ];
+                            pE = &(*pPageList)[ rSdrPowerPointImport.nAktPageNum ];
                         if ( (!pE) || (!pE->nSlidePersistStartOffset) || ( pE->aPersistAtom.nSlideId != nSlideId ) )
                             bStatus = false;
                         else

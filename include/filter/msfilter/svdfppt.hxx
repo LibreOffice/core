@@ -346,21 +346,26 @@ public:
     sal_uInt32          GetSlideId() const { return aPersistAtom.nSlideId; }
 };
 
-class _PptSlidePersistList : public std::vector<PptSlidePersistEntry*>
-{
-public:
-    ~_PptSlidePersistList()
-    {
-        for( const_iterator it = begin(); it != end(); ++it )
-            delete *it;
-    }
-};
-
 #define PPTSLIDEPERSIST_ENTRY_NOTFOUND 0xFFFF
 
-class MSFILTER_DLLPUBLIC PptSlidePersistList: public _PptSlidePersistList
+class MSFILTER_DLLPUBLIC PptSlidePersistList
 {
+private:
+    boost::ptr_vector<PptSlidePersistEntry> mvEntries;
+
 public:
+    size_t size() const { return mvEntries.size(); }
+    bool is_null( size_t nIdx ) const { return mvEntries.is_null( nIdx ); }
+    const PptSlidePersistEntry& operator[]( size_t nIdx ) const { return mvEntries[ nIdx ]; }
+    PptSlidePersistEntry& operator[]( size_t nIdx ) { return mvEntries[ nIdx ]; }
+    boost::ptr_vector<PptSlidePersistEntry>::iterator begin() { return mvEntries.begin(); }
+    void insert( boost::ptr_vector<PptSlidePersistEntry>::iterator it,
+                 PptSlidePersistEntry* pEntry )
+    {
+        mvEntries.insert(it, pEntry);
+    }
+    void push_back( PptSlidePersistEntry* pEntry ) { mvEntries.push_back(pEntry); }
+
     sal_uInt16          FindPage( sal_uInt32 nId ) const;
 };
 
