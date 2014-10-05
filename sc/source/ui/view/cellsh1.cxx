@@ -2098,7 +2098,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if (pHdl)
                             {
                                 //  "=" in KeyEvent, switches to input-mode
-                                pScMod->InputKeyEvent( KeyEvent('=', vcl::KeyCode()) );
+                                (void)pScMod->InputKeyEvent( KeyEvent('=', vcl::KeyCode()) );
 
                                 std::vector<OUString> aNames = pDlg->GetSelectedNames();
                                 if (!aNames.empty())
