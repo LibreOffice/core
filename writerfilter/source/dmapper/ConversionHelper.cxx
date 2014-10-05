@@ -36,7 +36,208 @@ namespace writerfilter {
 namespace dmapper{
 namespace ConversionHelper{
 
-void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
+/// Convert OOXML border style to WW8 that editeng can handle.
+sal_Int32 lcl_convertBorderStyleFromToken(sal_Int32 nOOXMLType)
+{
+    switch (nOOXMLType)
+    {
+        case NS_ooxml::LN_Value_ST_Border_nil: return 255;
+        case NS_ooxml::LN_Value_ST_Border_none: return 0;
+        case NS_ooxml::LN_Value_ST_Border_single: return 1;
+        case NS_ooxml::LN_Value_ST_Border_thick: return 2;
+        case NS_ooxml::LN_Value_ST_Border_double: return 3;
+        case NS_ooxml::LN_Value_ST_Border_dotted: return 6;
+        case NS_ooxml::LN_Value_ST_Border_dashed: return 7;
+        case NS_ooxml::LN_Value_ST_Border_dotDash: return 8;
+        case NS_ooxml::LN_Value_ST_Border_dotDotDash: return 9;
+        case NS_ooxml::LN_Value_ST_Border_triple: return 10;
+        case NS_ooxml::LN_Value_ST_Border_thinThickSmallGap: return 11;
+        case NS_ooxml::LN_Value_ST_Border_thickThinSmallGap: return 12;
+        case NS_ooxml::LN_Value_ST_Border_thinThickThinSmallGap: return 13;
+        case NS_ooxml::LN_Value_ST_Border_thinThickMediumGap: return 14;
+        case NS_ooxml::LN_Value_ST_Border_thickThinMediumGap: return 15;
+        case NS_ooxml::LN_Value_ST_Border_thinThickThinMediumGap: return 16;
+        case NS_ooxml::LN_Value_ST_Border_thinThickLargeGap: return 17;
+        case NS_ooxml::LN_Value_ST_Border_thickThinLargeGap: return 18;
+        case NS_ooxml::LN_Value_ST_Border_thinThickThinLargeGap: return 19;
+        case NS_ooxml::LN_Value_ST_Border_wave: return 20;
+        case NS_ooxml::LN_Value_ST_Border_doubleWave: return 21;
+        case NS_ooxml::LN_Value_ST_Border_dashSmallGap: return 22;
+        case NS_ooxml::LN_Value_ST_Border_dashDotStroked: return 23;
+        case NS_ooxml::LN_Value_ST_Border_threeDEmboss: return 24;
+        case NS_ooxml::LN_Value_ST_Border_threeDEngrave: return 25;
+        case NS_ooxml::LN_Value_ST_Border_outset: return 26;
+        case NS_ooxml::LN_Value_ST_Border_inset: return 27;
+        case NS_ooxml::LN_Value_ST_Border_apples: return 64;
+        case NS_ooxml::LN_Value_ST_Border_archedScallops: return 65;
+        case NS_ooxml::LN_Value_ST_Border_babyPacifier: return 66;
+        case NS_ooxml::LN_Value_ST_Border_babyRattle: return 67;
+        case NS_ooxml::LN_Value_ST_Border_balloons3Colors: return 68;
+        case NS_ooxml::LN_Value_ST_Border_balloonsHotAir: return 69;
+        case NS_ooxml::LN_Value_ST_Border_basicBlackDashes: return 70;
+        case NS_ooxml::LN_Value_ST_Border_basicBlackDots: return 71;
+        case NS_ooxml::LN_Value_ST_Border_basicBlackSquares: return 72;
+        case NS_ooxml::LN_Value_ST_Border_basicThinLines: return 73;
+        case NS_ooxml::LN_Value_ST_Border_basicWhiteDashes: return 74;
+        case NS_ooxml::LN_Value_ST_Border_basicWhiteDots: return 75;
+        case NS_ooxml::LN_Value_ST_Border_basicWhiteSquares: return 76;
+        case NS_ooxml::LN_Value_ST_Border_basicWideInline: return 77;
+        case NS_ooxml::LN_Value_ST_Border_basicWideMidline: return 78;
+        case NS_ooxml::LN_Value_ST_Border_basicWideOutline: return 79;
+        case NS_ooxml::LN_Value_ST_Border_bats: return 80;
+        case NS_ooxml::LN_Value_ST_Border_birds: return 81;
+        case NS_ooxml::LN_Value_ST_Border_birdsFlight: return 82;
+        case NS_ooxml::LN_Value_ST_Border_cabins: return 83;
+        case NS_ooxml::LN_Value_ST_Border_cakeSlice: return 84;
+        case NS_ooxml::LN_Value_ST_Border_candyCorn: return 85;
+        case NS_ooxml::LN_Value_ST_Border_celticKnotwork: return 86;
+        case NS_ooxml::LN_Value_ST_Border_certificateBanner: return 87;
+        case NS_ooxml::LN_Value_ST_Border_chainLink: return 88;
+        case NS_ooxml::LN_Value_ST_Border_champagneBottle: return 89;
+        case NS_ooxml::LN_Value_ST_Border_checkedBarBlack: return 90;
+        case NS_ooxml::LN_Value_ST_Border_checkedBarColor: return 91;
+        case NS_ooxml::LN_Value_ST_Border_checkered: return 92;
+        case NS_ooxml::LN_Value_ST_Border_christmasTree: return 93;
+        case NS_ooxml::LN_Value_ST_Border_circlesLines: return 94;
+        case NS_ooxml::LN_Value_ST_Border_circlesRectangles: return 95;
+        case NS_ooxml::LN_Value_ST_Border_classicalWave: return 96;
+        case NS_ooxml::LN_Value_ST_Border_clocks: return 97;
+        case NS_ooxml::LN_Value_ST_Border_compass: return 98;
+        case NS_ooxml::LN_Value_ST_Border_confetti: return 99;
+        case NS_ooxml::LN_Value_ST_Border_confettiGrays: return 100;
+        case NS_ooxml::LN_Value_ST_Border_confettiOutline: return 101;
+        case NS_ooxml::LN_Value_ST_Border_confettiStreamers: return 102;
+        case NS_ooxml::LN_Value_ST_Border_confettiWhite: return 103;
+        case NS_ooxml::LN_Value_ST_Border_cornerTriangles: return 104;
+        case NS_ooxml::LN_Value_ST_Border_couponCutoutDashes: return 105;
+        case NS_ooxml::LN_Value_ST_Border_couponCutoutDots: return 106;
+        case NS_ooxml::LN_Value_ST_Border_crazyMaze: return 107;
+        case NS_ooxml::LN_Value_ST_Border_creaturesButterfly: return 108;
+        case NS_ooxml::LN_Value_ST_Border_creaturesFish: return 109;
+        case NS_ooxml::LN_Value_ST_Border_creaturesInsects: return 110;
+        case NS_ooxml::LN_Value_ST_Border_creaturesLadyBug: return 111;
+        case NS_ooxml::LN_Value_ST_Border_crossStitch: return 112;
+        case NS_ooxml::LN_Value_ST_Border_cup: return 113;
+        case NS_ooxml::LN_Value_ST_Border_decoArch: return 114;
+        case NS_ooxml::LN_Value_ST_Border_decoArchColor: return 115;
+        case NS_ooxml::LN_Value_ST_Border_decoBlocks: return 116;
+        case NS_ooxml::LN_Value_ST_Border_diamondsGray: return 117;
+        case NS_ooxml::LN_Value_ST_Border_doubleD: return 118;
+        case NS_ooxml::LN_Value_ST_Border_doubleDiamonds: return 119;
+        case NS_ooxml::LN_Value_ST_Border_earth1: return 120;
+        case NS_ooxml::LN_Value_ST_Border_earth2: return 121;
+        case NS_ooxml::LN_Value_ST_Border_eclipsingSquares1: return 122;
+        case NS_ooxml::LN_Value_ST_Border_eclipsingSquares2: return 123;
+        case NS_ooxml::LN_Value_ST_Border_eggsBlack: return 124;
+        case NS_ooxml::LN_Value_ST_Border_fans: return 125;
+        case NS_ooxml::LN_Value_ST_Border_film: return 126;
+        case NS_ooxml::LN_Value_ST_Border_firecrackers: return 127;
+        case NS_ooxml::LN_Value_ST_Border_flowersBlockPrint: return 128;
+        case NS_ooxml::LN_Value_ST_Border_flowersDaisies: return 129;
+        case NS_ooxml::LN_Value_ST_Border_flowersModern1: return 130;
+        case NS_ooxml::LN_Value_ST_Border_flowersModern2: return 131;
+        case NS_ooxml::LN_Value_ST_Border_flowersPansy: return 132;
+        case NS_ooxml::LN_Value_ST_Border_flowersRedRose: return 133;
+        case NS_ooxml::LN_Value_ST_Border_flowersRoses: return 134;
+        case NS_ooxml::LN_Value_ST_Border_flowersTeacup: return 135;
+        case NS_ooxml::LN_Value_ST_Border_flowersTiny: return 136;
+        case NS_ooxml::LN_Value_ST_Border_gems: return 137;
+        case NS_ooxml::LN_Value_ST_Border_gingerbreadMan: return 138;
+        case NS_ooxml::LN_Value_ST_Border_gradient: return 139;
+        case NS_ooxml::LN_Value_ST_Border_handmade1: return 140;
+        case NS_ooxml::LN_Value_ST_Border_handmade2: return 141;
+        case NS_ooxml::LN_Value_ST_Border_heartBalloon: return 142;
+        case NS_ooxml::LN_Value_ST_Border_heartGray: return 143;
+        case NS_ooxml::LN_Value_ST_Border_hearts: return 144;
+        case NS_ooxml::LN_Value_ST_Border_heebieJeebies: return 145;
+        case NS_ooxml::LN_Value_ST_Border_holly: return 146;
+        case NS_ooxml::LN_Value_ST_Border_houseFunky: return 147;
+        case NS_ooxml::LN_Value_ST_Border_hypnotic: return 148;
+        case NS_ooxml::LN_Value_ST_Border_iceCreamCones: return 149;
+        case NS_ooxml::LN_Value_ST_Border_lightBulb: return 150;
+        case NS_ooxml::LN_Value_ST_Border_lightning1: return 151;
+        case NS_ooxml::LN_Value_ST_Border_lightning2: return 152;
+        case NS_ooxml::LN_Value_ST_Border_mapPins: return 153;
+        case NS_ooxml::LN_Value_ST_Border_mapleLeaf: return 154;
+        case NS_ooxml::LN_Value_ST_Border_mapleMuffins: return 155;
+        case NS_ooxml::LN_Value_ST_Border_marquee: return 156;
+        case NS_ooxml::LN_Value_ST_Border_marqueeToothed: return 157;
+        case NS_ooxml::LN_Value_ST_Border_moons: return 158;
+        case NS_ooxml::LN_Value_ST_Border_mosaic: return 159;
+        case NS_ooxml::LN_Value_ST_Border_musicNotes: return 160;
+        case NS_ooxml::LN_Value_ST_Border_northwest: return 161;
+        case NS_ooxml::LN_Value_ST_Border_ovals: return 162;
+        case NS_ooxml::LN_Value_ST_Border_packages: return 163;
+        case NS_ooxml::LN_Value_ST_Border_palmsBlack: return 164;
+        case NS_ooxml::LN_Value_ST_Border_palmsColor: return 165;
+        case NS_ooxml::LN_Value_ST_Border_paperClips: return 166;
+        case NS_ooxml::LN_Value_ST_Border_papyrus: return 167;
+        case NS_ooxml::LN_Value_ST_Border_partyFavor: return 168;
+        case NS_ooxml::LN_Value_ST_Border_partyGlass: return 169;
+        case NS_ooxml::LN_Value_ST_Border_pencils: return 170;
+        case NS_ooxml::LN_Value_ST_Border_people: return 171;
+        case NS_ooxml::LN_Value_ST_Border_peopleWaving: return 172;
+        case NS_ooxml::LN_Value_ST_Border_peopleHats: return 173;
+        case NS_ooxml::LN_Value_ST_Border_poinsettias: return 174;
+        case NS_ooxml::LN_Value_ST_Border_postageStamp: return 175;
+        case NS_ooxml::LN_Value_ST_Border_pumpkin1: return 176;
+        case NS_ooxml::LN_Value_ST_Border_pushPinNote2: return 177;
+        case NS_ooxml::LN_Value_ST_Border_pushPinNote1: return 178;
+        case NS_ooxml::LN_Value_ST_Border_pyramids: return 179;
+        case NS_ooxml::LN_Value_ST_Border_pyramidsAbove: return 180;
+        case NS_ooxml::LN_Value_ST_Border_quadrants: return 181;
+        case NS_ooxml::LN_Value_ST_Border_rings: return 182;
+        case NS_ooxml::LN_Value_ST_Border_safari: return 183;
+        case NS_ooxml::LN_Value_ST_Border_sawtooth: return 184;
+        case NS_ooxml::LN_Value_ST_Border_sawtoothGray: return 185;
+        case NS_ooxml::LN_Value_ST_Border_scaredCat: return 186;
+        case NS_ooxml::LN_Value_ST_Border_seattle: return 187;
+        case NS_ooxml::LN_Value_ST_Border_shadowedSquares: return 188;
+        case NS_ooxml::LN_Value_ST_Border_sharksTeeth: return 189;
+        case NS_ooxml::LN_Value_ST_Border_shorebirdTracks: return 190;
+        case NS_ooxml::LN_Value_ST_Border_skyrocket: return 191;
+        case NS_ooxml::LN_Value_ST_Border_snowflakeFancy: return 192;
+        case NS_ooxml::LN_Value_ST_Border_snowflakes: return 193;
+        case NS_ooxml::LN_Value_ST_Border_sombrero: return 194;
+        case NS_ooxml::LN_Value_ST_Border_southwest: return 195;
+        case NS_ooxml::LN_Value_ST_Border_stars: return 196;
+        case NS_ooxml::LN_Value_ST_Border_starsTop: return 197;
+        case NS_ooxml::LN_Value_ST_Border_stars3d: return 198;
+        case NS_ooxml::LN_Value_ST_Border_starsBlack: return 199;
+        case NS_ooxml::LN_Value_ST_Border_starsShadowed: return 200;
+        case NS_ooxml::LN_Value_ST_Border_sun: return 201;
+        case NS_ooxml::LN_Value_ST_Border_swirligig: return 202;
+        case NS_ooxml::LN_Value_ST_Border_tornPaper: return 203;
+        case NS_ooxml::LN_Value_ST_Border_tornPaperBlack: return 204;
+        case NS_ooxml::LN_Value_ST_Border_trees: return 205;
+        case NS_ooxml::LN_Value_ST_Border_triangleParty: return 206;
+        case NS_ooxml::LN_Value_ST_Border_triangles: return 207;
+        case NS_ooxml::LN_Value_ST_Border_tribal1: return 208;
+        case NS_ooxml::LN_Value_ST_Border_tribal2: return 209;
+        case NS_ooxml::LN_Value_ST_Border_tribal3: return 210;
+        case NS_ooxml::LN_Value_ST_Border_tribal4: return 211;
+        case NS_ooxml::LN_Value_ST_Border_tribal5: return 212;
+        case NS_ooxml::LN_Value_ST_Border_tribal6: return 213;
+        case NS_ooxml::LN_Value_ST_Border_twistedLines1: return 214;
+        case NS_ooxml::LN_Value_ST_Border_twistedLines2: return 215;
+        case NS_ooxml::LN_Value_ST_Border_vine: return 216;
+        case NS_ooxml::LN_Value_ST_Border_waveline: return 217;
+        case NS_ooxml::LN_Value_ST_Border_weavingAngles: return 218;
+        case NS_ooxml::LN_Value_ST_Border_weavingBraid: return 219;
+        case NS_ooxml::LN_Value_ST_Border_weavingRibbon: return 220;
+        case NS_ooxml::LN_Value_ST_Border_weavingStrips: return 221;
+        case NS_ooxml::LN_Value_ST_Border_whiteFlowers: return 222;
+        case NS_ooxml::LN_Value_ST_Border_woodwork: return 223;
+        case NS_ooxml::LN_Value_ST_Border_xIllusions: return 224;
+        case NS_ooxml::LN_Value_ST_Border_zanyTriangles: return 225;
+        case NS_ooxml::LN_Value_ST_Border_zigZag: return 226;
+        case NS_ooxml::LN_Value_ST_Border_zigZagStitch: return 227;
+        default: break;
+    }
+    return 0;
+}
+
+void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
                                             sal_Int32 nLineColor,
                                             table::BorderLine2& rToFill, bool bIsOOXML )
 {
@@ -54,6 +255,8 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
         ++nLineColor;
     if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) < SAL_N_ELEMENTS(aBorderDefColor))
         nLineColor = aBorderDefColor[nLineColor];
+
+    sal_Int32 nLineType = lcl_convertBorderStyleFromToken(nLineToken);
 
     // Map to our border types, we should use of one equal line
     // thickness, or one of smaller thickness. If too small we

@@ -2572,52 +2572,50 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             // brdrhair and brdrs are the same, brdrw will make a difference
             // map to values in ooxml/model.xml resource ST_Border
         case RTF_BRDRHAIR:
-            nParam = 5;
-            break;
         case RTF_BRDRS:
-            nParam = 1;
+            nParam = NS_ooxml::LN_Value_ST_Border_single;
             break;
         case RTF_BRDRDOT:
-            nParam = 6;
+            nParam = NS_ooxml::LN_Value_ST_Border_dotted;
             break;
         case RTF_BRDRDASH:
-            nParam = 7;
+            nParam = NS_ooxml::LN_Value_ST_Border_dashed;
             break;
         case RTF_BRDRDB:
-            nParam = 3;
+            nParam = NS_ooxml::LN_Value_ST_Border_double;
             break;
         case RTF_BRDRTNTHSG:
-            nParam = 11;
+            nParam = NS_ooxml::LN_Value_ST_Border_thinThickSmallGap;
             break;
         case RTF_BRDRTNTHMG:
-            nParam = 14;
+            nParam = NS_ooxml::LN_Value_ST_Border_thinThickMediumGap;
             break;
         case RTF_BRDRTNTHLG:
-            nParam = 17;
+            nParam = NS_ooxml::LN_Value_ST_Border_thinThickLargeGap;
             break;
         case RTF_BRDRTHTNSG:
-            nParam = 12;
+            nParam = NS_ooxml::LN_Value_ST_Border_thickThinSmallGap;
             break;
         case RTF_BRDRTHTNMG:
-            nParam = 15;
+            nParam = NS_ooxml::LN_Value_ST_Border_thickThinMediumGap;
             break;
         case RTF_BRDRTHTNLG:
-            nParam = 18;
+            nParam = NS_ooxml::LN_Value_ST_Border_thickThinLargeGap;
             break;
         case RTF_BRDREMBOSS:
-            nParam = 24;
+            nParam = NS_ooxml::LN_Value_ST_Border_threeDEmboss;
             break;
         case RTF_BRDRENGRAVE:
-            nParam = 25;
+            nParam = NS_ooxml::LN_Value_ST_Border_threeDEngrave;
             break;
         case RTF_BRDROUTSET:
-            nParam = 26;
+            nParam = NS_ooxml::LN_Value_ST_Border_outset;
             break;
         case RTF_BRDRINSET:
-            nParam = 27;
+            nParam = NS_ooxml::LN_Value_ST_Border_inset;
             break;
         case RTF_BRDRNONE:
-            nParam = 0;
+            nParam = NS_ooxml::LN_Value_ST_Border_none;
             break;
         default:
             break;
