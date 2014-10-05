@@ -797,7 +797,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
             if(pOutItemSet)
             {
                 ControllerLockGuardUNO aCLGuard( getModel());
-                pItemConverter->ApplyItemSet(*pOutItemSet); //model should be changed now
+                (void)pItemConverter->ApplyItemSet(*pOutItemSet); //model should be changed now
                 bRet = true;
             }
         }
