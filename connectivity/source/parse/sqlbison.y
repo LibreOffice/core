@@ -4650,11 +4650,22 @@ OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pCont
 			case SQL_TOKEN_MAX: eKeyCode = IParseContext::KEY_MAX; break;
 			case SQL_TOKEN_MIN: eKeyCode = IParseContext::KEY_MIN; break;
 			case SQL_TOKEN_SUM: eKeyCode = IParseContext::KEY_SUM; break;
+
 		}
 		if ( eKeyCode != IParseContext::KEY_NONE )
 		    aStr = pContext->getIntlKeywordAscii(eKeyCode);
 	}
 
+	if (aStr.isEmpty())
+	{
+		switch( nTokenID )
+		{
+			case SQL_TOKEN_OJ: aStr="oj"; break;
+			case SQL_TOKEN_TS: aStr="ts"; break;
+			case SQL_TOKEN_T: aStr="t"; break;
+			case SQL_TOKEN_D: aStr="d"; break;
+                }
+	}
 	if (aStr.isEmpty())
 	{
 		aStr = yytname[YYTRANSLATE(nTokenID)];
