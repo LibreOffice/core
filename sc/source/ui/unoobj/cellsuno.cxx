@@ -5570,7 +5570,7 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
         pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );       // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh); // Bereich muss angelegt sein
-        aFunc.Sort( nTab, aParam, true, true, true );
+        (void)aFunc.Sort( nTab, aParam, true, true, true );
     }
 }
 
