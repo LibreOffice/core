@@ -356,7 +356,7 @@ void StringResourceImpl::implSetCurrentLocale( const Locale& locale,
 
     if( pLocaleItem != NULL )
     {
-        loadLocale( pLocaleItem );
+        (void)loadLocale( pLocaleItem );
         m_pCurrentLocaleItem = pLocaleItem;
 
         // Only notify without modifying
