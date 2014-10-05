@@ -21,7 +21,6 @@
 
 #include <officecfg/Office/Common.hxx>
 
-#include <svsys.h>
 #include "comphelper/processfactory.hxx"
 #include <rtl/bootstrap.hxx>
 #include "tools/debug.hxx"
