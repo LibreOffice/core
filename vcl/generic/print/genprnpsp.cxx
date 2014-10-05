@@ -299,9 +299,11 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
             close( fd[ 1 ] );
         }
         int status = 0;
-        waitpid( pid, &status, 0 );
-        if( ! status )
-            bSuccess = true;
+        if(waitpid( pid, &status, 0 ) != -1)
+        {
+            if( ! status )
+                bSuccess = true;
+        }
     }
     else if( ! pid )
     {
