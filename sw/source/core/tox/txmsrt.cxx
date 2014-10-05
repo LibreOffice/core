@@ -245,9 +245,10 @@ bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
                         // Both pointers exist -> compare text
                         // else -> compare AlternativeText
                         if( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) )
-                            pTOXIntl->IsEqual( GetTxt(), GetLocale(),
-                                               rCmp.GetTxt(), rCmp.GetLocale() );
-
+                        {
+                            return pTOXIntl->IsEqual( GetTxt(), GetLocale(),
+                                                      rCmp.GetTxt(), rCmp.GetLocale() );
+                        }
                         if( pEnd && !pEndCmp )
                             return true;
                     }
