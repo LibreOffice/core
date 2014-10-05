@@ -144,7 +144,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
     SalGraphics* pGraphics;
     if ( !pOutDev->mpGraphics )
-        pOutDev->AcquireGraphics();
+        (void)pOutDev->AcquireGraphics();
     pGraphics = pOutDev->mpGraphics;
     if ( pGraphics )
         mpVirDev = pSVData->mpDefInst->CreateVirtualDevice( pGraphics, nDX, nDY, nBitCount, pData );
