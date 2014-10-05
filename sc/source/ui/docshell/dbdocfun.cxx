@@ -397,7 +397,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
             if (bSort)
             {
                 pDBData->GetSortParam( aSortParam );            // Bereich kann sich geaendert haben
-                Sort( nTab, aSortParam, false, false, bApi );
+                (void)Sort( nTab, aSortParam, false, false, bApi );
             }
             if (bQuery)
             {
