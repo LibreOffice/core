@@ -404,12 +404,13 @@ Dim sXPos As String, sYPos As String
 	sXPos = Iif(IsNull(_XPos), &quot;&quot;, &quot;XPos&quot;)
 	sYPos = Iif(IsNull(_YPos), &quot;&quot;, &quot;YPos&quot;)
 
-	_PropertiesList = Utils._TrimArray(&quot;ButtonLeft&quot;, &quot;ButtonRight&quot;, &quot;ButtonMiddle&quot;, &quot;ClickCount&quot; _
+	_PropertiesList = Utils._TrimArray(Array( _
+										&quot;ButtonLeft&quot;, &quot;ButtonRight&quot;, &quot;ButtonMiddle&quot;, &quot;ClickCount&quot; _
 										, &quot;ContextShortcut&quot;, &quot;EventName&quot;, &quot;EventType&quot;, &quot;FocusChangeTemporary&quot;,  _
 										, &quot;KeyAlt&quot;, &quot;KeyChar&quot;, &quot;KeyCode&quot;, &quot;KeyCtrl&quot;, &quot;KeyFunction&quot;, &quot;KeyShift&quot; _
 										, &quot;ObjectType&quot;, &quot;Recommendation&quot;, &quot;RowChangeAction&quot;, &quot;Source&quot; _
 										, sSubComponentName, sSubComponentType, sXPos, sYPos _
-									)
+									))
 
 End Function	&apos;	_PropertiesList
 

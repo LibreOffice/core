@@ -45,6 +45,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLD
 	Recordset.xba \
 	script.xlb \
 	SubForm.xba \
+	TempVar.xba \
 	Test.xba \
 	Trace.xba \
 	Utils.xba \

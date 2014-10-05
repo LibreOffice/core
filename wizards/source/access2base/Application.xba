@@ -86,6 +86,7 @@ Global Const COLLPROPERTIES	= &quot;PROPERTIES&quot;
 Global Const COLLQUERYDEFS	= &quot;QUERYDEFS&quot;
 Global Const COLLRECORDSETS	= &quot;RECORDSETS&quot;
 Global Const COLLTABLEDEFS	= &quot;TABLEDEFS&quot;
+Global Const COLLTEMPVARS	= &quot;TEMPVARS&quot;
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const OBJAPPLICATION	= &quot;APPLICATION&quot;
@@ -102,6 +103,7 @@ Global Const OBJQUERYDEF	= &quot;QUERYDEF&quot;
 Global Const OBJRECORDSET	= &quot;RECORDSET&quot;
 Global Const OBJSUBFORM		= &quot;SUBFORM&quot;
 Global Const OBJTABLEDEF	= &quot;TABLEDEF&quot;
+Global Const OBJTEMPVAR		= &quot;TEMPVAR&quot;
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const CTLCONTROL			= &quot;CONTROL&quot;		&apos;	ClassId
@@ -152,6 +154,7 @@ Type Root
 	FindRecord			As Object
 	StatusBar			As Object
 	Dialogs				As Object				&apos;	Collection
+	TempVars			As Object				&apos;	Collection
 	CurrentDoc()		As Variant				&apos;	Array of document containers - [0] = Base document, [1 ... N] = other documents
 End Type
 
@@ -1131,6 +1134,60 @@ Error_Arg:
 End Function	&apos;	SysCmd				V0.9.1
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function TempVars(ByVal Optional pvIndex As Variant) As Variant
+&apos;	Return either a Collection or a TempVar object
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;TempVars&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+Dim iMode As Integer, vTempVars As Variant, bFound As Boolean
+Const cstCount = 0
+Const cstByIndex = 1
+Const cstByName = 2
+
+	If IsMissing(pvIndex) Then
+		iMode = cstCount
+	Else
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+		If VarType(pvIndex) = vbString Then iMode = cstByName Else iMode = cstByIndex
+	End If
+
+	Set vTempVars = Nothing
+	Select Case iMode
+		Case cstCount							&apos;	Build Collection object
+			Set vTempVars = New Collect
+			With vTempVars
+				._CollType = COLLTEMPVARS
+				._Count = _A2B_.TempVars.Count
+			End With
+		Case cstByIndex							&apos;	Build TempVar object
+			If pvIndex &lt; 0 Or pvIndex &gt;= _A2B_.TempVars.Count Then Goto Trace_Error_Index
+			Set vTempVars = _A2B_.TempVars.Item(pvIndex + 1)		&apos;	Builtin collections start at 1
+		Case cstByName
+			bFound = _hasItem(COLLTEMPVARS, pvIndex)
+			If Not bFound Then Goto Trace_NotFound
+			vTempVars = _A2B_.TempVars.Item(UCase(pvIndex))
+	End Select
+
+	Set TempVars = vTempVars
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Trace_Error_Index:
+	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0, 1)
+	Set vTempVars = Nothing
+	Goto Exit_Function
+Trace_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;TEMPVAR&quot;), pvIndex))
+	Goto Exit_Function
+End Function	&apos;	TempVars V1.2.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Version() As String
 	Version = Utils._GetProductName()
 End Function	&apos;	Version	V0.9.1
@@ -1226,10 +1283,12 @@ Const cstBase = &quot;com.sun.star.comp.dba.ODatabaseDocument&quot;
 			With .CurrentDoc(0)
 				If Not .Active Then GoTo Trace_Error
 				If IsNull(.Document) Then GoTo Trace_Error
+				If Not  Utils._hasUNOProperty(ThisComponent, &quot;URL&quot;) Then Goto Trace_Error
 				If Utils._ImplementationName(ThisComponent) &lt;&gt; cstBase Or .Document.URL &lt;&gt; ThisComponent.URL Then	&apos;	Give the parent a try
 					If Not  Utils._hasUNOProperty(ThisComponent, &quot;Parent&quot;) Then Goto Trace_Error
 					If IsNull(ThisComponent.Parent) Then Goto Trace_Error
 					If Utils._ImplementationName(ThisComponent.Parent) &lt;&gt; cstBase Then Goto Trace_Error
+					If Not  Utils._hasUNOProperty(ThisComponent.Parent, &quot;URL&quot;) Then Goto Trace_Error
 					If .Document.URL &lt;&gt; ThisComponent.Parent.URL Then Goto Trace_Error
 				End If
 			End With
@@ -1246,20 +1305,28 @@ Trace_Error:
 End Function	&apos;	_CurrentDoc		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _hasDialog(ByVal psName As String) As Boolean
-&apos;	Return True if psName if in the collection of started dialogs
+Public Function _hasItem(psCollType As String, ByVal psName As String) As Boolean
+&apos;	Return True if psName if in the collection
 
-Dim oDialog As Object
+Dim oItem As Object
 	On Local Error Goto Error_Function		&apos;	Whatever ErrorHandler !
-	Set oDialog = _A2B_.Dialogs.Item(UCase(psName))
-	_hasDialog = True
+
+	_hasItem = True
+	Select Case psCollType
+		Case COLLALLDIALOGS
+			Set oItem = _A2B_.Dialogs.Item(UCase(psName))
+		Case COLLTEMPVARS
+			Set oItem = _A2B_.TempVars.Item(UCase(psName))
+		Case Else
+			_hasItem = False
+	End Select
 
 Exit_Function:
 	Exit Function
 Error_Function:		&apos;	Item by key aborted
-	_hasDialog = False
+	_hasItem = False
 	GoTo Exit_Function
-End Function	&apos;	_hasDialog	V1.1.0
+End Function	&apos;	_hasItem	V1.2.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _NewBar() As Object
@@ -1297,11 +1364,12 @@ Dim vBar As Variant, vWindow As Variant, vController As Object
 End Function			&apos;	_NewBar				V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Sub _RootInit()
-&apos;	Initialize _A2B_ global variable
+Public Sub _RootInit(Optional ByVal pbForce As Boolean)
+&apos;	Initialize _A2B_ global variable. Reinit forced if pbForce = True
 
 Dim vRoot As Root, vCurrentDoc() As Variant
-	If IsEmpty(_A2B_) Then
+	If IsMissing(pbForce) Then pbForce = False
+	If IsEmpty(_A2B_) Or pbForce Then
 		_A2B_ = vRoot
 		With _A2B_
 			.VersionNumber = Access2Base_Version
@@ -1316,6 +1384,7 @@ Dim vRoot As Root, vCurrentDoc() As Variant
 			Set .FindRecord = Nothing
 			Set .StatusBar = Nothing
 			Set .Dialogs = New Collection
+			Set .TempVars = New Collection
 			vCurrentDoc() = Array()
 			ReDim vCurrentDoc(0 To 0)
 			Set vCurrentDoc(0) = Nothing

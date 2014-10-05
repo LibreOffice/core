@@ -103,6 +103,7 @@ Dim iVarType As Integer
 	If VarType(pvItem) = vbCurrency Or VarType(pvItem) = vbDecimal Or VarType(pvItem) = vbBigint Then pvItem = CDbl(pvItem)
 
 Exit_Function:
+Const cstObject = &quot;[com.sun.star.script.NativeObjectWrapper]&quot;
 	If Not _CheckArgument Then
 		If IsMissing(pvError) Then pvError = True
 		If pvError Then
@@ -502,8 +503,8 @@ Dim oDoc As Object, oForms As Variant
 				If ._DbConnect = DBCONNECTFORM Then bPseudoExists = True Else bPseudoExists = .Document.CurrentController.IsConnected
 			Case OBJDIALOG
 				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of dialog name
-					bPseudoExists = ( Application._hasDialog(._Name) )
-				End If			
+					bPseudoExists = ( Application._hasItem(COLLALLDIALOGS, ._Name) )
+				End If
 			Case OBJCOLLECTION
 				bPseudoExists = True
 			Case OBJCONTROL
@@ -532,6 +533,10 @@ Dim oDoc As Object, oForms As Variant
 				bPseudoExists = ( Not IsNull(.RowSet) )
 			Case OBJFIELD
 				bPseudoExists = ( ._Name &lt;&gt; &quot;&quot; And Not IsNull(.Column) )
+			Case OBJTEMPVAR
+				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of tempvar name
+					bPseudoExists = ( Application._hasItem(COLLTEMPVARS, ._Name) )
+				End If
 			Case Else
 		End Select
 	End With
@@ -592,6 +597,7 @@ REM ----------------------------------------------------------------------------
 Public Sub _ResetCalledSub(ByVal psSub As String) As String
 &apos;	Called in bottom of each public function. _A2B_.CalledSub variable is used for error handling
 &apos;	Used to trace routine in/outs and to clarify error messages
+		If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	Only is Utils module recompiled
 		If _A2B_.CalledSub = psSub Then _A2B_.CalledSub = &quot;&quot;
 		If _A2B_.MinimalTraceLevel = 1 Then TraceLog(TRACEDEBUG, _GetLabel(&quot;Exiting&quot;) &amp; &quot; &quot; &amp; psSub &amp; &quot; ...&quot;, False)
 End Sub			&apos;	ResetCalledSub
@@ -665,7 +671,7 @@ Dim sTrim As String, vTrim() As Variant, i As Integer, j As Integer, iCount As I
 			Next i
 		End If
 	End If
-	
+
 	_TrimArray() = vTrim()
 
 End Function	&apos;	TrimArray	V0.9.0

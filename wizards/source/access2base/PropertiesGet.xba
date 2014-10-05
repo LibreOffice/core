@@ -394,7 +394,8 @@ Const cstEXCLAMATION = &quot;!&quot;
 Const cstDOT = &quot;.&quot;
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
-	Utils._SetCalledSub(&quot;getObject&quot;)
+Const cstThisSub = &quot;getObject&quot;
+	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pvShortcut) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvShortcut, 1, vbString) Then Goto Exit_Function
 
@@ -404,7 +405,7 @@ Dim oDoc As Object
 	Set vCurrentObject = Nothing
 	sComponents = Split(Trim(pvShortcut), cstEXCLAMATION)
 	If UBound(sComponents) = 0 Then Goto Trace_Error
-	If Not Utils._InList(UCase(sComponents(0)), Array(&quot;FORMS&quot;, &quot;DIALOGS&quot;)) Then Goto Trace_Error
+	If Not Utils._InList(UCase(sComponents(0)), Array(&quot;FORMS&quot;, &quot;DIALOGS&quot;, &quot;TEMPVARS&quot;)) Then Goto Trace_Error
 	If sComponents(1) = &quot;0&quot; Or Left(sComponents(1), 2) = &quot;0.&quot; Then
 		Set oDoc = _A2B_.CurrentDoc(Application._CurrentDoc())
 		If oDoc.DbConnect = DBCONNECTFORM Then sComponents(1) = oDoc.DbContainers(0).FormName Else Goto Trace_Error
@@ -417,6 +418,7 @@ Dim oDoc As Object
 	Select Case UCase(sComponents(0))
 		Case &quot;FORMS&quot;	:	vCurrentObject._CollType = COLLFORMS
 		Case &quot;DIALOGS&quot;	:	vCurrentObject._CollType = COLLALLDIALOGS
+		Case &quot;TEMPVARS&quot;	:	vCurrentObject._CollType = COLLTEMPVARS
 	End Select
 	For iCurrentIndex = 1 To UBound(sComponents)	&apos;	Start parsing ...
 		sSubComponents = Split(sComponents(iCurrentIndex), cstDOT)
@@ -439,6 +441,9 @@ Dim oDoc As Object
 						vCurrentObject = Application.AllDialogs(sDialog)
 						If Not vCurrentObject.IsLoaded Then Goto Trace_Error
 						Set vCurrentObject.UnoDialog = _A2B_.Dialogs.Item(sDialog)
+					Case COLLTEMPVARS
+						If UBound(sComponents) &gt; 1 Then Goto Trace_Error
+						vCurrentObject = Application.TempVars(sComponents(1))
 					&apos;Case Else
 				End Select
 			Case OBJFORM, OBJSUBFORM, OBJCONTROL, OBJDIALOG
@@ -450,13 +455,13 @@ Dim oDoc As Object
 	Set getObject = vCurrentObject
 				
 Exit_Function:
-	Utils._ResetCalledSub(&quot;getObject&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Trace_Error:
 	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvShortcut))
 	Goto Exit_Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;getObject&quot;, Erl)
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
 End Function		&apos;	getObject	V0.9.5
 
@@ -733,6 +738,9 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 	Utils._SetCalledSub(&quot;get&quot; &amp; psProperty)
 	_getProperty = Nothing
 	
+&apos;pvItem must be an object and have the requested property
+	If Not Utils._CheckArgument(pvItem, 1, vbObject) Then Goto Exit_Function
+	If Not PropertiesGet._hasProperty(pvItem._Type, pvItem._PropertiesList(), psProperty) Then Goto Trace_Error
 &apos;Check Index argument
 	If Not IsMissing(pvIndex) Then
 		If Not Utils._CheckArgument(pvIndex, 3, Utils._AddNumeric()) Then Goto Exit_Function
@@ -916,18 +924,18 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 		Case UCase(&quot;Locked&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			If IsNull(pvItem.Locked) Then Goto Trace_Error
-			_getProperty = pvItem.Locked
+			_ge						ExitProperty = pvItem.Locked
 		Case UCase(&quot;MultiSelect&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			_getProperty = pvItem.MultiSelect
 		Case UCase(&quot;Name&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, _
-				Array(OBJFORM, OBJSUBFORM, OBJCONTROL, OBJOPTIONGROUP, OBJPROPERTY, OBJDIALOG, OBJTABLEDEF, OBJRECORDSET, OBJFIELD) _
+				Array(OBJFORM, OBJSUBFORM, OBJCONTROL, OBJOPTIONGROUP, OBJPROPERTY, OBJDIALOG, OBJTABLEDEF, OBJRECORDSET, OBJFIELD, OBJTEMPVAR) _
 				) Then Goto Exit_Function
 			_getProperty = pvItem.Name
 		Case UCase(&quot;ObjectType&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJDATABASE, OBJCOLLECTION, OBJFORM, OBJDIALOG, OBJSUBFORM, OBJCONTROL _
-				, OBJEVENT, OBJOPTIONGROUP, OBJPROPERTY, OBJRECORDSET, OBJTABLEDEF, OBJFIELD) _
+				, OBJEVENT, OBJOPTIONGROUP, OBJPROPERTY, OBJRECORDSET, OBJTABLEDEF, OBJFIELD, OBJTEMPVAR) _
 				) Then Goto Exit_Function
 			_getProperty = pvItem.ObjectType
 		Case UCase(&quot;OpenArgs&quot;)
@@ -1021,7 +1029,7 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 			If Not Utils._CheckArgument(pvItem, 1, OBJFIELD) Then Goto Exit_Function
 			_getProperty = pvItem.TypeName
 		Case UCase(&quot;Value&quot;)
-			If Not Utils._CheckArgument(pvItem, 1, Array(OBJCONTROL, OBJOPTIONGROUP, OBJPROPERTY, OBJFIELD)) Then Goto Exit_Function
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJCONTROL, OBJOPTIONGROUP, OBJPROPERTY, OBJFIELD, OBJTEMPVAR)) Then Goto Exit_Function
 			_getProperty = pvItem.Value
 		Case UCase(&quot;Visible&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG, OBJCONTROL)) Then Goto Exit_Function
@@ -1159,7 +1167,7 @@ Dim i As Integer, j As Integer, iCount As Integer
 	Set vProperties = Nothing
 	Select Case pvObject._Type
 		Case OBJCOLLECTION, OBJPROPERTY, OBJFORM, OBJEVENT, OBJSUBFORM, OBJCONTROL, OBJOPTIONGROUP _
-				, OBJDATABASE, OBJTABLEDEF, OBJQUERYDEF, OBJDIALOG, OBJFIELD, OBJRECORDSET
+				, OBJDATABASE, OBJTABLEDEF, OBJQUERYDEF, OBJDIALOG, OBJFIELD, OBJRECORDSET, OBJTEMPVAR
 			vPropertiesList = pvObject._PropertiesList()
 		Case Else
 	End Select

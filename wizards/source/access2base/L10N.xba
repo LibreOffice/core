@@ -84,6 +84,7 @@ Dim sLocal As String
 				Case &quot;REPORT&quot;						:	sLocal = &quot;Report&quot;
 				Case &quot;RECORDSET&quot;					:	sLocal = &quot;Recordset&quot;
 				Case &quot;FIELD&quot;						:	sLocal = &quot;Field&quot;
+				Case &quot;TEMPVAR&quot;						:	sLocal = &quot;Temporary variable&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;ERR#&quot;							:	sLocal = &quot;Error #&quot;
 				Case &quot;ERROCCUR&quot;						:	sLocal = &quot;occurred&quot;
@@ -188,6 +189,7 @@ Dim sLocal As String
 				Case &quot;REPORT&quot;						:	sLocal = &quot;Rapport&quot;
 				Case &quot;RECORDSET&quot;					:	sLocal = &quot;Recordset&quot;
 				Case &quot;FIELD&quot;						:	sLocal = &quot;Champ&quot;
+				Case &quot;TEMPVAR&quot;						:	sLocal = &quot;Variable temporaire&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;ERR#&quot;							:	sLocal = &quot;L&apos;erreur #&quot;
 				Case &quot;ERROCCUR&quot;						:	sLocal = &quot;s&apos;est produite&quot;
