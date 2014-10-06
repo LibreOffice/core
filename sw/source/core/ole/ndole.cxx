@@ -247,25 +247,26 @@ const Graphic* SwOLENode::GetGraphic()
 
 SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 {
-    // OLE-Objecte vervielfaeltigen ??
+    // Multiply OLE objects?
     OSL_FAIL( "OleNode: can't split." );
     return this;
 }
 
-// Laden eines in den Undo-Bereich verschobenen OLE-Objekts
-
+/**
+ * Loading a OLE object that has been moved to the Undo Area
+ */
 bool SwOLENode::RestorePersistentData()
 {
     OSL_ENSURE( aOLEObj.GetOleRef().is(), "No object to restore!" );
     if ( aOLEObj.xOLERef.is() )
     {
-        // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
+        // If a SvPersist instance already exists, we use it
         SfxObjectShell* p = GetDoc()->GetPersist();
         if( !p )
         {
-            // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
-            // diesem Dokument?
-            OSL_ENSURE( false, "warum wird hier eine DocShell angelegt?" );
+            // TODO/LATER: Isn't a EmbeddedObjectContainer sufficient here?
+            // What happens to this document?
+            OSL_ENSURE( false, "Why are we creating a DocShell here?" );
             p = new SwDocShell( GetDoc(), SFX_CREATE_MODE_INTERNAL );
             p->DoInitNew( NULL );
         }
@@ -293,7 +294,9 @@ bool SwOLENode::RestorePersistentData()
     return true;
 }
 
-// OLE object is transported into UNDO area
+/**
+ * OLE object is transported into UNDO area
+ */
 bool SwOLENode::SavePersistentData()
 {
     if( aOLEObj.xOLERef.is() )
@@ -370,7 +373,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
                                     SwGrfFmtColl* pGrfColl,
                                     SwAttrSet* pAutoAttr )
 {
-    OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer is 0." );
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, xObj, pGrfColl, pAutoAttr );
@@ -391,7 +394,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
     const OUString &rName, sal_Int64 nAspect, SwGrfFmtColl* pGrfColl, SwAttrSet* pAutoAttr )
 {
-    OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer is 0." );
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, rName, nAspect, pGrfColl, pAutoAttr );
@@ -417,7 +420,7 @@ Size SwOLENode::GetTwipSize() const
 
 SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
-    // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
+    // If there's already a SvPersist instance, we use it
     SfxObjectShell* pPersistShell = pDoc->GetPersist();
     if( !pPersistShell )
     {
@@ -428,7 +431,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         pPersistShell->DoInitNew( NULL );
     }
 
-    // Wir hauen das Ding auf SvPersist-Ebene rein
+    // We insert it at SvPersist level
     // TODO/LATER: check if using the same naming scheme for all apps works here
     OUString aNewName/*( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) )*/;
     SfxObjectShell* pSrc = GetDoc()->GetPersist();
@@ -458,7 +461,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
 bool SwOLENode::IsInGlobalDocSection() const
 {
-    // suche den "Body Anchor"
+    // Find the "Body Anchor"
     sal_uLong nEndExtraIdx = GetNodes().GetEndOfExtras().GetIndex();
     const SwNode* pAnchorNd = this;
     do {
@@ -483,8 +486,8 @@ bool SwOLENode::IsInGlobalDocSection() const
         pSectNd = pAnchorNd->StartOfSectionNode()->FindSectionNode();
     }
 
-    // in pAnchorNd steht der zuletzt gefundene Section Node. Der muss
-    // jetzt die Bedingung fuers GlobalDoc erfuellen.
+    // pAnchorNd contains the most recently found Section Node, which
+    // now must fullfill the prerequesites for the GlobalDoc
     pSectNd = (SwSectionNode*)pAnchorNd;
     return FILE_LINK_SECTION == pSectNd->GetSection().GetType() &&
             pSectNd->GetIndex() > nEndExtraIdx;
@@ -496,7 +499,7 @@ bool SwOLENode::IsOLEObjectDeleted() const
     if( aOLEObj.xOLERef.is() )
     {
         SfxObjectShell* p = GetDoc()->GetPersist();
-        if( p )     // muss da sein
+        if( p ) // Must be there
         {
             return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( aOLEObj.aName );
         }
@@ -720,13 +723,13 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
     {
         SwDoc* pDoc = pNode->GetDoc();
 
-        // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
+        // If there's already a SvPersist instance, we use it
         SfxObjectShell* p = pDoc->GetPersist();
         if( !p )
         {
-            // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
-            // diesem Dokument?
-            OSL_ENSURE( false, "warum wird hier eine DocShell angelegt?" );
+            // TODO/LATER: Isn't a EmbeddedObjectContainer sufficient here?
+            // What happens to the document?
+            OSL_ENSURE( false, "Why are we creating a DocShell here??" );
             p = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
             p->DoInitNew( NULL );
         }
@@ -769,14 +772,14 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
     if( !xOLERef.is() )
     {
         SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
-        OSL_ENSURE( p, "kein SvPersist vorhanden" );
+        OSL_ENSURE( p, "No SvPersist present" );
 
         uno::Reference < embed::XEmbeddedObject > xObj = p->GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
-        OSL_ENSURE( !xOLERef.is(), "rekursiver Aufruf von GetOleRef() ist nicht erlaubt" );
+        OSL_ENSURE( !xOLERef.is(), "Calling GetOleRef() recursively is not permitted" );
 
         if ( !xObj.is() )
         {
-            //Das Teil konnte nicht geladen werden (wahrsch. Kaputt).
+            // We could not load this part (probably broken)
             Rectangle aArea;
             SwFrm *pFrm = pOLENd->getLayoutFrm(0);
             if ( pFrm )
