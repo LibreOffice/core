@@ -84,7 +84,7 @@ public:
     void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
 
     bool                  GetFontCodeRanges( CmapResult& ) const;
-    const ImplFontCharMapPtr GetImplFontCharMap( void );
+    const FontCharMapPtr  GetFontCharMap();
 
 private:
     FT_FaceRec_*    maFaceFT;
@@ -99,7 +99,7 @@ private:
     sal_IntPtr      mnFontId;
     ImplDevFontAttributes maDevFontAttributes;
 
-    ImplFontCharMapPtr mpFontCharMap;
+    FontCharMapPtr  mpFontCharMap;
 
     // cache unicode->glyphid mapping because looking it up is expensive
     // TODO: change to boost::unordered_multimap when a use case requires a m:n mapping

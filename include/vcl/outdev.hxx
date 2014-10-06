@@ -50,6 +50,7 @@
 #  undef check
 #endif
 #include <boost/ptr_container/ptr_deque.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -234,6 +235,8 @@ class Printer;
 class FontSelectPattern;
 class ImplFontMetricData;
 class VCLXGraphics;
+
+typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
 
 namespace vcl {
     class FontInfo;
@@ -1145,7 +1148,7 @@ public:
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const vcl::Font& rFont ) const;
 
-    bool                        GetFontCharMap( FontCharMap& rFontCharMap ) const;
+    bool                        GetFontCharMap( FontCharMapPtr& rFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     /** Retrieve detailed font information in platform independent structure
