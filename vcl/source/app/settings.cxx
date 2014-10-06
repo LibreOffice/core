@@ -21,7 +21,10 @@
 
 #include <officecfg/Office/Common.hxx>
 
-#include <svsys.h>
+#ifdef WNT
+#include "win/svsys.h"
+#endif
+
 #include "comphelper/processfactory.hxx"
 #include <rtl/bootstrap.hxx>
 #include "tools/debug.hxx"
