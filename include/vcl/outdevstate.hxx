@@ -30,75 +30,43 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
+#include <o3tl/typed_flags.hxx>
 
 // Flags for OutputDevice::Push() and OutDevState
-enum PushFlags {
-        PUSH_NONE            = ((sal_uInt16)0x0000),
-        PUSH_LINECOLOR       = ((sal_uInt16)0x0001),
-        PUSH_FILLCOLOR       = ((sal_uInt16)0x0002),
-        PUSH_FONT            = ((sal_uInt16)0x0004),
-        PUSH_TEXTCOLOR       = ((sal_uInt16)0x0008),
-        PUSH_MAPMODE         = ((sal_uInt16)0x0010),
-        PUSH_CLIPREGION      = ((sal_uInt16)0x0020),
-        PUSH_RASTEROP        = ((sal_uInt16)0x0040),
-        PUSH_TEXTFILLCOLOR   = ((sal_uInt16)0x0080),
-        PUSH_TEXTALIGN       = ((sal_uInt16)0x0100),
-        PUSH_REFPOINT        = ((sal_uInt16)0x0200),
-        PUSH_TEXTLINECOLOR   = ((sal_uInt16)0x0400),
-        PUSH_TEXTLAYOUTMODE  = ((sal_uInt16)0x0800),
-        PUSH_TEXTLANGUAGE    = ((sal_uInt16)0x1000),
-        PUSH_OVERLINECOLOR   = ((sal_uInt16)0x2000),
-        PUSH_ALL             = ((sal_uInt16)0xFFFF)
-};
-// make combining these type-safe
-inline PushFlags operator| (PushFlags lhs, PushFlags rhs)
-{
-    return static_cast<PushFlags>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
-}
-inline PushFlags operator& (PushFlags lhs, PushFlags rhs)
-{
-    return static_cast<PushFlags>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
-}
+typedef o3tl::typed_flags<sal_uInt16, 0xffff> PushFlags;
+const PushFlags PUSH_NONE            (0x0000);
+const PushFlags PUSH_LINECOLOR       (0x0001);
+const PushFlags PUSH_FILLCOLOR       (0x0002);
+const PushFlags PUSH_FONT            (0x0004);
+const PushFlags PUSH_TEXTCOLOR       (0x0008);
+const PushFlags PUSH_MAPMODE         (0x0010);
+const PushFlags PUSH_CLIPREGION      (0x0020);
+const PushFlags PUSH_RASTEROP        (0x0040);
+const PushFlags PUSH_TEXTFILLCOLOR   (0x0080);
+const PushFlags PUSH_TEXTALIGN       (0x0100);
+const PushFlags PUSH_REFPOINT        (0x0200);
+const PushFlags PUSH_TEXTLINECOLOR   (0x0400);
+const PushFlags PUSH_TEXTLAYOUTMODE  (0x0800);
+const PushFlags PUSH_TEXTLANGUAGE    (0x1000);
+const PushFlags PUSH_OVERLINECOLOR   (0x2000);
+const PushFlags PUSH_ALL             (0xFFFF);
+const PushFlags PUSH_ALLTEXT         (PUSH_TEXTCOLOR | PUSH_TEXTFILLCOLOR | PUSH_TEXTLINECOLOR | PUSH_OVERLINECOLOR | PUSH_TEXTALIGN | PUSH_TEXTLAYOUTMODE | PUSH_TEXTLANGUAGE);
+const PushFlags PUSH_ALLFONT         (PUSH_ALLTEXT | PUSH_FONT);
 
-#define PUSH_ALLTEXT                    (PUSH_TEXTCOLOR | PUSH_TEXTFILLCOLOR | PUSH_TEXTLINECOLOR | PUSH_OVERLINECOLOR | PUSH_TEXTALIGN | PUSH_TEXTLAYOUTMODE | PUSH_TEXTLANGUAGE)
-#define PUSH_ALLFONT                    (PUSH_ALLTEXT | PUSH_FONT)
+
 
 // LayoutModes for Complex Text Layout
 // These are flag values, i.e they can be combined
-enum ComplexTextLayoutMode
-{
-  TEXT_LAYOUT_DEFAULT =             ((sal_uLong)0x00000000),
-  TEXT_LAYOUT_BIDI_RTL =            ((sal_uLong)0x00000001),
-  TEXT_LAYOUT_BIDI_STRONG =         ((sal_uLong)0x00000002),
-  TEXT_LAYOUT_TEXTORIGIN_LEFT =     ((sal_uLong)0x00000004),
-  TEXT_LAYOUT_TEXTORIGIN_RIGHT =    ((sal_uLong)0x00000008),
-  TEXT_LAYOUT_COMPLEX_DISABLED =    ((sal_uLong)0x00000100),
-  TEXT_LAYOUT_ENABLE_LIGATURES =    ((sal_uLong)0x00000200),
-  TEXT_LAYOUT_SUBSTITUTE_DIGITS =   ((sal_uLong)0x00000400)
-};
-// make combining these type-safe
-inline ComplexTextLayoutMode operator| (ComplexTextLayoutMode lhs, ComplexTextLayoutMode rhs)
-{
-    return static_cast<ComplexTextLayoutMode>(static_cast<sal_uLong>(lhs) | static_cast<sal_uLong>(rhs));
-}
-inline ComplexTextLayoutMode operator& (ComplexTextLayoutMode lhs, ComplexTextLayoutMode rhs)
-{
-    return static_cast<ComplexTextLayoutMode>(static_cast<sal_uLong>(lhs) & static_cast<sal_uLong>(rhs));
-}
-inline ComplexTextLayoutMode operator~ (ComplexTextLayoutMode rhs)
-{
-    return static_cast<ComplexTextLayoutMode>(0x7ff & ~(static_cast<sal_uLong>(rhs)));
-}
-inline ComplexTextLayoutMode& operator|= (ComplexTextLayoutMode& lhs, ComplexTextLayoutMode rhs)
-{
-    lhs = static_cast<ComplexTextLayoutMode>(static_cast<sal_uLong>(lhs) | static_cast<sal_uLong>(rhs));
-    return lhs;
-}
-inline ComplexTextLayoutMode& operator&= (ComplexTextLayoutMode& lhs, ComplexTextLayoutMode rhs)
-{
-    lhs = static_cast<ComplexTextLayoutMode>(static_cast<sal_uLong>(lhs) & static_cast<sal_uLong>(rhs));
-    return lhs;
-}
+typedef o3tl::typed_flags<sal_uLong, 0x7ff> ComplexTextLayoutMode;
+const ComplexTextLayoutMode TEXT_LAYOUT_DEFAULT           (0x00000000);
+const ComplexTextLayoutMode TEXT_LAYOUT_BIDI_RTL          (0x00000001);
+const ComplexTextLayoutMode TEXT_LAYOUT_BIDI_STRONG       (0x00000002);
+const ComplexTextLayoutMode TEXT_LAYOUT_TEXTORIGIN_LEFT   (0x00000004);
+const ComplexTextLayoutMode TEXT_LAYOUT_TEXTORIGIN_RIGHT  (0x00000008);
+const ComplexTextLayoutMode TEXT_LAYOUT_COMPLEX_DISABLED  (0x00000100);
+const ComplexTextLayoutMode TEXT_LAYOUT_ENABLE_LIGATURES  (0x00000200);
+const ComplexTextLayoutMode TEXT_LAYOUT_SUBSTITUTE_DIGITS (0x00000400);
+
 
 
 class OutDevState
@@ -108,7 +76,7 @@ public:
 
     MapMode*        mpMapMode;
     bool            mbMapActive;
-    vcl::Region*         mpClipRegion;
+    vcl::Region*    mpClipRegion;
     Color*          mpLineColor;
     Color*          mpFillColor;
     vcl::Font*      mpFont;

@@ -3140,7 +3140,7 @@ void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
-    rOStm.WriteUInt16( mnFlags );
+    rOStm.WriteUInt16( mnFlags.mValue );
 }
 
 void MetaPushAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -3734,7 +3734,7 @@ void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
-    rOStm.WriteUInt32( mnLayoutMode );
+    rOStm.WriteUInt32( mnLayoutMode.mValue );
 }
 
 void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )

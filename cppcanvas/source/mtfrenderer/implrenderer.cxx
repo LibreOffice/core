@@ -1520,7 +1520,7 @@ namespace cppcanvas
                         ::cppcanvas::internal::OutDevState& rState = rStates.getState();
 
                         ComplexTextLayoutMode nBidiLayoutMode = nLayoutMode & (TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_BIDI_STRONG);
-                        if( nBidiLayoutMode == 0)
+                        if( nBidiLayoutMode == TEXT_LAYOUT_DEFAULT)
                                 rState.textDirection = rendering::TextDirection::WEAK_LEFT_TO_RIGHT;
                         else if( nBidiLayoutMode == TEXT_LAYOUT_BIDI_STRONG)
                                 rState.textDirection = rendering::TextDirection::STRONG_LEFT_TO_RIGHT;
