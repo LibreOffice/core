@@ -714,9 +714,9 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             } // end of else <nRelPosY <= 0>
         } // end of <aVert.GetVertOrient() == text::VertOrientation::NONE>
 
-        //Damit das Teil ggf. auf die richtige Seite gestellt und in die
-        //PrtArea des LayLeaf gezogen werden kann, muss hier seine
-        //absolute Position berechnet werden.
+        // We need to calculate the part's absolute position, in order for
+        // it to be put onto the right page and to be pulled into the
+        // LayLeaf's PrtArea
         const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrmForVertPos, fnRect, bVert );
         if( bVert )
         {
@@ -884,7 +884,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     if ( !bInSct &&
                          (GetAnchoredObj().GetObjRect().*fnRect->fnGetTop)() ==
                                  (pUpperOfOrientFrm->*fnRect->fnGetPrtTop)() )
-                        //Das teil passt nimmer, da hilft auch kein moven.
+                        // It doesn't fit, moving it would not help either anymore
                         break;
 
                     const SwLayoutFrm* pNextLay = pUpperOfOrientFrm->GetLeaf(
@@ -951,8 +951,8 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else if ( bInSct )
                     {
-                        // Wenn wir innerhalb des Bereich nicht genug Platz haben, gucken
-                        // wir uns mal die Seite an.
+                        // If we don't have enough room within the Area, we take a look at
+                        // the Page
                         const SwLayoutFrm* pTmp = pUpperOfOrientFrm->FindSctFrm()->GetUpper();
                         nDist = (GetAnchoredObj().GetObjRect().*fnRect->fnBottomDist)(
                                   (pTmp->*fnRect->fnGetPrtBottom)() );
@@ -1066,7 +1066,9 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     GetAnchoredObj().SetCurrRelPos( aRelPos );
 }
 
-/** determine frame for horizontal position */
+/**
+ * Determine frame for horizontal position
+ */
 const SwFrm& SwToCntntAnchoredObjectPosition::_GetHoriVirtualAnchor(
                                         const SwLayoutFrm& _rProposedFrm ) const
 {
