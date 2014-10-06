@@ -2119,9 +2119,14 @@ bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 
 bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 {
+    std::vector<SCCOL> selCol;
     bool bFound = false;
-    for (SCCOL i=0; i<=MAXCOL && !bFound; i++)
-        bFound |= aCol[i].HasSelectionMatrixFragment(rMark);
+    for (SCCOL i=0; i<=MAXCOL; i++)
+        if ( rMark.IsColumnMarked(i) )
+            selCol.push_back(i);
+
+    for (std::vector<SCCOL>::iterator it = selCol.begin(); it != selCol.begin(); ++it )
+        bFound |= aCol[*it].HasSelectionMatrixFragment(rMark);
     return bFound;
 }
 
