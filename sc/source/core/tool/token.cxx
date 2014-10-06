@@ -2386,9 +2386,9 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
                     sal_uInt16 nFileId;
                     GetExternalTableData(pOldDoc, pNewDoc, rRef.Tab(), aTabName, nFileId);
                     //replace with ScExternalSingleRefToken and adjust references
-                    pCode[j]->DecRef();
                     ScExternalSingleRefToken* pToken = new ScExternalSingleRefToken(nFileId, aTabName, rRef);
                     pToken->IncRef();
+                    pCode[j]->DecRef(); // ATTENTION: rRef can't be used after this point
                     pCode[j] = pToken;
                 }
             }
