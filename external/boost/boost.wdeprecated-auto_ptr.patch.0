@@ -4,7 +4,7 @@
  # pragma once
  #endif
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -16,7 +16,7 @@
  
  }
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic pop
 +#endif
 +
@@ -27,7 +27,7 @@
  # pragma once
  #endif
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -39,7 +39,7 @@
      
  } // namespace 'boost'  
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic pop
 +#endif
 +
@@ -50,7 +50,7 @@
  # pragma once
  #endif
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -62,7 +62,7 @@
  
  } // namespace 'boost'  
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic pop
 +#endif
 +
@@ -73,7 +73,7 @@
  # pragma once
  #endif
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -84,7 +84,7 @@
  
  } // namespace 'boost'  
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic pop
 +#endif
 +
@@ -95,7 +95,7 @@
  # pragma once
  #endif
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -107,7 +107,7 @@
      
  }
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic pop
 +#endif
 +
@@ -118,7 +118,7 @@
  // http://www.boost.org/LICENSE_1_0.txt)
  //
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -130,7 +130,7 @@
  # pragma warn .8027     // Functions containing try are not expanded inline
  #endif
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic pop
 +#endif
 +
@@ -141,7 +141,7 @@
  //  http://www.boost.org/libs/smart_ptr/scoped_ptr.htm
  //
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -153,7 +153,7 @@
  
  } // namespace boost
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic pop
 +#endif
 +
@@ -164,7 +164,7 @@
  //  See http://www.boost.org/libs/smart_ptr/shared_ptr.htm for documentation.
  //
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +#endif
@@ -176,7 +176,7 @@
  
  #endif  // #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
  
-+#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
 +# pragma GCC diagnostic pop
 +#endif
 +
