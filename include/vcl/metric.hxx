@@ -100,22 +100,95 @@ private:
     ImplFontCharMapPtr  mpImplFontCharMap;
 
 public:
+    /** A new FontCharMap is created based on a "default" map, which includes
+        all codepoints in the Unicode BMP range, including surrogates.
+     **/
                         FontCharMap();
                         ~FontCharMap();
 
-    bool                IsDefaultMap( void ) const;
-    bool                HasChar( sal_UCS4 ) const;
-    int                 CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const;
-    int                 GetCharCount( void ) const;
+    /** Determines if the font character map is the "default". The default map
+        includes all codepoints in the Unicode BMP range, including surrogates.
 
+        @returns true if default map, false if not default map.
+     */
+    bool                IsDefaultMap() const;
+
+    /** Does the font character map include the UCS4 character?
+
+        @returns true if character exists in font character map, false is not.
+     */
+    bool                HasChar( sal_UCS4 ) const;
+
+
+        UCS4 codepoints.
+
+        @param  cMin        Lowest codepoint in range to be counted
+        @param  cMax        Highest codepoitn in range to be counted
+
+        @returns number of characters in the font charmap between the two
+                 codepoints.
+     */
+    int                 CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const;
+
+    /** Get the number of characters in the font character map.
+
+        @returns number of characters in the font character map.
+     */
+    int                 GetCharCount() const;
+
+    /** Get the first character in the font character map.
+
+        @returns first character in the font character map.
+     */
     sal_UCS4            GetFirstChar() const;
+
+    /** Get the last character in the font character map.
+
+        @returns last character in the font character map.
+     */
     sal_UCS4            GetLastChar() const;
 
-    sal_UCS4            GetNextChar( sal_UCS4 ) const;
-    sal_UCS4            GetPrevChar( sal_UCS4 ) const;
+    /** Get the next character in the font character map. This is important
+        because character maps (e.g. the default map which holds the characters
+        in the BMP plane) can have discontiguous ranges.
 
-    int                 GetIndexFromChar( sal_UCS4 ) const;
-    sal_UCS4            GetCharFromIndex( int ) const;
+        @param  cChar       Character from which to find next character
+
+        @returns next character in the font character map.
+     */
+    sal_UCS4            GetNextChar( sal_UCS4 cChar ) const;
+
+    /** Get the previous character in the font character map. This is important
+        because character maps (e.g. the default map which holds the characters
+        in the BMP plane) can have discontiguous ranges.
+
+        @param  cChar       Character from which to find previous character
+
+        @returns previous character in the font character map.
+     */
+    sal_UCS4            GetPrevChar( sal_UCS4 cChar ) const;
+
+    /** Get the index of a particular character in the font character map. The
+        index is different from the codepoint, because font character maps can
+
+        determine the index.
+
+        @param  cChar       Character used to find index number
+
+        @returns Index of character in font character map.
+     */
+    int                 GetIndexFromChar( sal_UCS4 cChar ) const;
+
+    /** Get the character at a particular index in the font character map. The
+        index is different from the codepoint, because font character maps can
+
+        determine the character.
+
+        @param  nCharIndex  Index used to find the character
+
+        @returns Character in font character map.
+     */
+    sal_UCS4            GetCharFromIndex( int nCharIndex ) const;
 
 
 private:
