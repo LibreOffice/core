@@ -817,6 +817,21 @@ OStatement::~OStatement()
 }
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.AStatement","com.sun.star.sdbc.Statement");
 
+void SAL_CALL OStatement_Base::acquire() throw()
+{
+    OStatement_BASE::acquire();
+}
+
+void SAL_CALL OStatement::acquire() throw()
+{
+    OStatement_Base::acquire();
+}
+
+void SAL_CALL OStatement::release() throw()
+{
+    OStatement_Base::release();
+}
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());

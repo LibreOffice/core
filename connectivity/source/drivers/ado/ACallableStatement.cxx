@@ -210,4 +210,16 @@ Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 /*columnIndex*/
 }
 
 
+void SAL_CALL OCallableStatement::acquire() throw()
+{
+    OPreparedStatement::acquire();
+}
+
+void SAL_CALL OCallableStatement::release() throw()
+{
+    OPreparedStatement::release();
+}
+
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
