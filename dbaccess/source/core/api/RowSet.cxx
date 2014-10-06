@@ -561,6 +561,8 @@ void ORowSet::freeResources( bool _bComplete )
     }
     m_aClones.clear();
 
+    doCancelModification();
+
     m_aBookmark     = Any();
     m_bBeforeFirst  = true;
     m_bAfterLast    = false;
