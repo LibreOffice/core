@@ -55,7 +55,6 @@
 #include "vcl/settings.hxx"
 
 // declare system types in sysdata.hxx
-#include "svsys.h"
 #include "vcl/sysdata.hxx"
 
 #include "salframe.hxx"
