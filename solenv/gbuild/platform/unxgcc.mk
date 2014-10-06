@@ -43,7 +43,6 @@ gb_CXXFLAGS := \
 	-fPIC \
 	-Wshadow \
 	-Woverloaded-virtual \
-	-Wnon-virtual-dtor \
 	$(CXXFLAGS_CXX11) \
 
 

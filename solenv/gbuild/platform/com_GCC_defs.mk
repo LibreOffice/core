@@ -62,6 +62,7 @@ gb_CFLAGS_COMMON := \
 
 gb_CXXFLAGS_COMMON := \
 	-Wall \
+	-Wnon-virtual-dtor \
 	-Wendif-labels \
 	-Wextra \
 	-Wundef \

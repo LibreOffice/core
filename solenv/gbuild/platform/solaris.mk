@@ -61,7 +61,6 @@ gb_CXXFLAGS := \
 	-fPIC \
 	-Wshadow \
 	-Woverloaded-virtual \
-	-Wnon-virtual-dtor \
 	-std=c++0x \
 
 # enable debug STL
