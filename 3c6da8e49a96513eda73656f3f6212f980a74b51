@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_29e70d42",
+        "filename": "sfx2/source/appl/linksrc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-10-06T12:52:34Z",
+      "side": 0,
+      "message": "You cannot drop the dtor. That would cause memory leaks.",
+      "revId": "3c6da8e49a96513eda73656f3f6212f980a74b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
