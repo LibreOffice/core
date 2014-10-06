@@ -599,21 +599,23 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(
     EnableContextMenuHandling();
 }
 
-
-
-class StyleTreeArr_Impl;
-
 /*  [Description]
 
     Internal structure for the establishment of the hierarchical view
 */
+class StyleTree_Impl;
+typedef std::vector<StyleTree_Impl*> StyleTreeArr_Impl;
 
-struct StyleTree_Impl
+class StyleTree_Impl
 {
+private:
     OUString aName;
     OUString aParent;
-    StyleTreeArr_Impl *pChildren;
+    StyleTreeArr_Impl pChildren;
     bool bIsExpanded;
+
+public:
+
     bool HasParent() const { return !aParent.isEmpty(); }
 
     StyleTree_Impl(const OUString &rName, const OUString &rParent):
@@ -621,42 +623,29 @@ struct StyleTree_Impl
     ~StyleTree_Impl();
     void Put(StyleTree_Impl* pIns, sal_uIntPtr lPos=ULONG_MAX);
     sal_uIntPtr Count();
-};
 
-class StyleTreeArr_Impl : public std::vector<StyleTree_Impl*>
-{
-public:
-    ~StyleTreeArr_Impl()
-    {
-        for(const_iterator it = begin(); it != end(); ++it)
-            delete *it;
-    }
-
+    OUString getName() { return aName; }
+    OUString getParent() { return aParent; }
+    StyleTree_Impl *operator[](size_t idx) const { return pChildren[idx]; }
 };
 
 sal_uIntPtr StyleTree_Impl::Count()
 {
-    return pChildren ? pChildren->size() : 0L;
+    return pChildren.size();
 }
-
-
 
 StyleTree_Impl::~StyleTree_Impl()
 {
-    delete pChildren;
+    for(StyleTreeArr_Impl::const_iterator it = pChildren.begin(); it != pChildren.end(); ++it)
+        delete *it;
 }
-
-
 
 void StyleTree_Impl::Put(StyleTree_Impl* pIns, sal_uIntPtr lPos)
 {
-    if ( !pChildren )
-        pChildren = new StyleTreeArr_Impl;
-
     if ( ULONG_MAX == lPos )
-        pChildren->push_back( pIns );
+        pChildren.push_back( pIns );
     else
-        pChildren->insert( pChildren->begin() + (sal_uInt16)lPos, pIns );
+        pChildren.insert( pChildren.begin() + (sal_uInt16)lPos, pIns );
 }
 
 
@@ -679,12 +668,12 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
             for(sal_uInt16 j = 0; j < nCount; ++j)
             {
                 StyleTree_Impl* pCmp = rArr[j];
-                if(pCmp->aName == pEntry->aParent)
+                if(pCmp->getName() == pEntry->getParent())
                 {
                     // Paste initial filter
                     sal_uInt16 nPos;
                     for( nPos = 0 ; nPos < pCmp->Count() &&
-                             aSorter.compare((*pCmp->pChildren)[nPos]->aName, pEntry->aName) < 0 ; nPos++)
+                             aSorter.compare((*pCmp)[nPos]->getName(), pEntry->getName()) < 0 ; nPos++)
                     {};
                     pCmp->Put(pEntry,nPos);
                     break;
@@ -724,10 +713,9 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox *pBox,
                                  const ExpandedEntries_t& rEntries,
                                  SvTreeListEntry* pParent = 0)
 {
-    SvTreeListEntry* pNewEntry = pBox->InsertEntry(pEntry->aName, pParent);
-    const sal_uInt16 nCount = pEntry->pChildren ? pEntry->pChildren->size() : 0;
-    for(sal_uInt16 i = 0; i < nCount; ++i)
-        FillBox_Impl(pBox, (*pEntry->pChildren)[i], rEntries, pNewEntry);
+    SvTreeListEntry* pNewEntry = pBox->InsertEntry(pEntry->getName(), pParent);
+    for(sal_uInt16 i = 0; i < pEntry->Count(); ++i)
+        FillBox_Impl(pBox, (*pEntry)[i], rEntries, pNewEntry);
     return pNewEntry;
 }
 
