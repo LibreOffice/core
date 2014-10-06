@@ -73,7 +73,7 @@ static const NSTimeInterval FADE_IN_DURATION = 0.3;
 
 -(void)start{
     
-    NSLog(@"L O : START LIBRE OFFICE");
+    NSLog(@"L O : START LIBREOFFICE");
     
     if (![self isInit]) {
         

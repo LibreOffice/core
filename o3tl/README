@@ -26,4 +26,4 @@ Simple vector-based memory pool allocator.
 
 [git:o3tl/inc/o3tl/compat_functional.hxx]
 Some more templates. Contains also templates from STLport's functional header that are not part of the
-C++ standard (STLport has been replaced by direct use of the C++ STL in Libre Office).
+C++ standard (STLport has been replaced by direct use of the C++ STL in LibreOffice).
