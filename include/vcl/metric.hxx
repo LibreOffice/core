@@ -120,7 +120,7 @@ public:
     bool                HasChar( sal_UCS4 ) const;
 
 
-        UCS4 codepoints.
+    /** UCS4 codepoints.
 
         @param  cMin        Lowest codepoint in range to be counted
         @param  cMax        Highest codepoitn in range to be counted
