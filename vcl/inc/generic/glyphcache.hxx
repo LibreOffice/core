@@ -33,9 +33,9 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/metric.hxx>
 
 #include <outfont.hxx>
-#include <impfont.hxx>
 #include <sallayout.hxx>
 
 class FtFontInfo;
@@ -182,7 +182,7 @@ public:
     const unsigned char* GetTable( const char* pName, sal_uLong* pLength );
     int                 GetEmUnits() const { return maFaceFT->units_per_EM;}
     const FT_Size_Metrics& GetMetricsFT() const { return maSizeFT->metrics; }
-    const ImplFontCharMapPtr GetImplFontCharMap() const;
+    const FontCharMapPtr GetFontCharMap() const;
     bool                GetFontCapabilities(vcl::FontCapabilities &) const;
 
     GlyphData&                  GetGlyphData( sal_GlyphId );
