@@ -1229,8 +1229,8 @@ namespace
             drawinglayer::primitive2d::getFontAttributeFromVclFont(
                 aFontScaling,
                 rFont,
-                0 != (rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_RTL),
-                0 != (rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_STRONG)));
+                bool(rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_RTL),
+                bool(rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_STRONG)));
 
         // add FontScaling
         rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());
