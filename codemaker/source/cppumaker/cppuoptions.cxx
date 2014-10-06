@@ -276,7 +276,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                     char* rargv[512];
                     char  buffer[512];
 
-                    while ( fscanf(cmdFile, "%s", buffer) != EOF )
+                    while (fscanf(cmdFile, "%511s", buffer) != EOF && rargc < 512)
                     {
                         rargv[rargc]= strdup(buffer);
                         rargc++;
