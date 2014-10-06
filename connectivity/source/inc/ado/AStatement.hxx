@@ -140,7 +140,6 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
-            virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
@@ -177,8 +176,6 @@ namespace connectivity
 
             DECLARE_SERVICE_INFO();
 
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             // XBatchExecution
             virtual void SAL_CALL addBatch( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
