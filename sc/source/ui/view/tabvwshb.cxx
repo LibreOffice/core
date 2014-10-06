@@ -306,6 +306,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             break;
 
         case SID_INSERT_DIAGRAM_FROM_FILE:
+            try
             {
                 sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                         0, OUString("com.sun.star.chart2.ChartDocument"));
@@ -315,6 +316,10 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     OUString aURL = aURLObj.GetURLNoPass();
                     FuInsertChartFromFile(this, pWin, pView, pDrModel, rReq, aURL);
                 }
+            }
+            catch (const uno::Exception& e)
+            {
+                SAL_WARN( "sc", "Cannot Insert Chart: " << e.Message);
             }
             break;
 
