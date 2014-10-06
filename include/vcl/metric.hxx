@@ -28,6 +28,7 @@
 
 class ImplFontMetric;
 class ImplFontCharMap;
+class CmapResult;
 
 typedef sal_uInt32 sal_UCS4;
 typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
@@ -96,15 +97,19 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 class VCL_DLLPUBLIC FontCharMap
 {
-private:
-    ImplFontCharMapPtr  mpImplFontCharMap;
-
 public:
     /** A new FontCharMap is created based on a "default" map, which includes
         all codepoints in the Unicode BMP range, including surrogates.
      **/
                         FontCharMap();
+                        FontCharMap( const CmapResult& rCR );
                         ~FontCharMap();
+
+    /** Get the default font character map
+
+        @returns the default font character map.
+     */
+    static FontCharMap* GetDefaultMap( bool bSymbols=false );
 
     /** Determines if the font character map is the "default". The default map
         includes all codepoints in the Unicode BMP range, including surrogates.
@@ -119,8 +124,8 @@ public:
      */
     bool                HasChar( sal_UCS4 ) const;
 
-
-    /** UCS4 codepoints.
+    /** Returns the number of chars supported by the font, which
+        are inside the unicode range from cMin to cMax (inclusive).
 
         @param  cMin        Lowest codepoint in range to be counted
         @param  cMax        Highest codepoitn in range to be counted
@@ -190,10 +195,18 @@ public:
      */
     sal_UCS4            GetCharFromIndex( int nCharIndex ) const;
 
+    int                 GetGlyphIndex( sal_UCS4 ) const;
+
+    void                Reset( const FontCharMap* pNewMap = NULL );
 
 private:
+    ImplFontCharMapPtr  mpImplFontCharMap;
+
     friend class ::OutputDevice;
-    void                Reset( const ImplFontCharMapPtr pNewMap = NULL );
+
+    int                 findRangeIndex( sal_uInt32 ) const;
+
+                        FontCharMap( ImplFontCharMapPtr pIFCMap );
 
     // prevent assignment and copy construction
                         FontCharMap( const FontCharMap& );
