@@ -25,6 +25,7 @@ $(eval $(call gb_Executable_use_libraries,ui-previewer,\
 	cppu \
 	cppuhelper \
 	sal \
+	tk \
     tl \
     ucbhelper \
     vcl \
