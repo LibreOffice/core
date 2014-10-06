@@ -231,8 +231,7 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
 
     // get the repertoire of the current font
-    virtual const ImplFontCharMapPtr
-                            GetImplFontCharMap() const = 0;
+    virtual const FontCharMap* GetFontCharMap() const = 0;
 
     // get the layout capabilities of the current font
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
