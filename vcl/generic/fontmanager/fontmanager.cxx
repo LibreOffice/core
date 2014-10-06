@@ -2088,7 +2088,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                 CmapResult aCmapResult;
                 if( ParseCMAP( pCmapData, nCmapSize, aCmapResult ) )
                 {
-                    const ImplFontCharMapPtr pCharMap( new ImplFontCharMap(aCmapResult) );
+                    FontCharMapPtr pCharMap( new FontCharMap(aCmapResult) );
                     for( sal_uInt32 cOld = 0;;)
                     {
                         // get next unicode covered by font
@@ -2105,6 +2105,8 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                         // update the requested map
                         rUnicodeEnc[ (sal_Unicode)c ] = aGlyphId;
                     }
+
+                    pCharMap = 0;
                 }
             }
         }
