@@ -2899,6 +2899,8 @@ void ScTokenArray::MoveReference(
                 {
                     aAbs.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
                     rRef.SetAddress(aAbs, rPos);
+                    if (rDelta.Tab())
+                        rRef.SetFlag3D(aAbs.Tab()!=rPos.Tab());
                 }
             }
             break;
@@ -2911,6 +2913,8 @@ void ScTokenArray::MoveReference(
                 {
                     aAbs.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
                     rRef.SetRange(aAbs, rPos);
+                    if (rDelta.Tab())
+                        rRef.Ref1.SetFlag3D(aAbs.aStart.Tab()!=rPos.Tab());
                 }
             }
             break;
