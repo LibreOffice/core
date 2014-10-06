@@ -729,7 +729,7 @@ The following structure describes the permissions used in PDF security
 
     /* functions for graphics state */
     /* flag values: see vcl/outdev.hxx */
-    void                Push( PushFlags nFlags = PUSH_ALL );
+    void                Push( PushFlags nFlags = PushFlags::ALL );
     void                Pop();
 
     void               SetClipRegion();

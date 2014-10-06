@@ -1069,7 +1069,7 @@ void SwTxtPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool b
                 !GetOpt().IsPagePreview())
         {
             OutputDevice* pOut = (OutputDevice*)GetOut();
-            pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
             pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
             pOut->SetLineColor();
             pOut->DrawRect( aIntersect.SVRect() );
@@ -1077,7 +1077,7 @@ void SwTxtPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool b
         }
         const int delta=10;
         Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
-        m_pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        m_pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
         m_pOut->SetLineColor( Color(0, 0, 0));
         m_pOut->SetFillColor();
         m_pOut->DrawRect( r );
@@ -1100,7 +1100,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     if ( aIntersect.HasArea() )
     {
         OutputDevice* pOut = (OutputDevice*)GetOut();
-        pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
 
         // For dark background we do not want to have a filled rectangle
         if ( GetVsh() && GetVsh()->GetWin() && lcl_IsDarkBackground( *this ) )
@@ -1151,7 +1151,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     !GetOpt().IsPagePreview())
             {
                 OutputDevice* pOutDev = (OutputDevice*)GetOut();
-                pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+                pOutDev->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
                 pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
                 pOutDev->SetLineColor( );
                 pOutDev->DrawRect( aIntersect.SVRect() );
@@ -1183,7 +1183,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             aFillColor = *m_pFnt->GetBackColor();
         }
 
-        pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        pTmpOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
 
         pTmpOut->SetFillColor(aFillColor);
         pTmpOut->SetLineColor();

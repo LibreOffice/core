@@ -161,7 +161,7 @@ namespace sdr
             if(!rRedrawArea.IsEmpty())
             {
                 bClipRegionPushed = true;
-                pOutDev->Push(PUSH_CLIPREGION);
+                pOutDev->Push(PushFlags::CLIPREGION);
                 pOutDev->IntersectClipRegion(rRedrawArea);
             }
 

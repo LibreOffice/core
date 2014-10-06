@@ -33,20 +33,20 @@ namespace rptui
         ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor)
             :m_pDev( _pDev )
         {
-            m_pDev->Push( PUSH_LINECOLOR );
+            m_pDev->Push( PushFlags::LINECOLOR );
             m_pDev->SetLineColor( _rNewLineColor );
         }
         ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor, const Color& _rNewFillColor )
             :m_pDev( _pDev )
         {
-            m_pDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            m_pDev->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
             m_pDev->SetLineColor( _rNewLineColor );
             m_pDev->SetFillColor( _rNewFillColor );
         }
         ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor, const Color& _rNewFillColor, const Color& _rNewTextColor )
             :m_pDev( _pDev )
         {
-            m_pDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR);
+            m_pDev->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR);
             m_pDev->SetLineColor( _rNewLineColor );
             m_pDev->SetFillColor( _rNewFillColor );
             m_pDev->SetTextColor( _rNewTextColor );

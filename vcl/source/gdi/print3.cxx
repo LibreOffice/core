@@ -1010,7 +1010,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     io_rSubPage.Clip( i_rClipRect );
 
     // save gstate
-    o_rMtf.AddAction( new MetaPushAction( PUSH_ALL ) );
+    o_rMtf.AddAction( new MetaPushAction( PushFlags::ALL ) );
 
     // clip to page rect
     o_rMtf.AddAction( new MetaClipRegionAction( vcl::Region( i_rClipRect ), true ) );
@@ -1026,7 +1026,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     if( i_bDrawBorder )
     {
         // save gstate
-        o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION | PUSH_MAPMODE ) );
+        o_rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::CLIPREGION | PushFlags::MAPMODE ) );
         o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
 
         Rectangle aBorderRect( i_rClipRect );

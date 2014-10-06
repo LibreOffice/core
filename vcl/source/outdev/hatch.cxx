@@ -102,7 +102,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
 
         mpMetaFile = NULL;
         EnableMapMode( false );
-        Push( PUSH_LINECOLOR );
+        Push( PushFlags::LINECOLOR );
         SetLineColor( aHatch.GetColor() );
         InitLineColor();
         DrawHatch( aPolyPoly, aHatch, false );
@@ -127,7 +127,7 @@ void OutputDevice::AddHatchActions( const tools::PolyPolygon& rPolyPoly, const H
         GDIMetaFile* pOldMtf = mpMetaFile;
 
         mpMetaFile = &rMtf;
-        mpMetaFile->AddAction( new MetaPushAction( PUSH_ALL ) );
+        mpMetaFile->AddAction( new MetaPushAction( PushFlags::ALL ) );
         mpMetaFile->AddAction( new MetaLineColorAction( rHatch.GetColor(), true ) );
         DrawHatch( aPolyPoly, rHatch, true );
         mpMetaFile->AddAction( new MetaPopAction() );

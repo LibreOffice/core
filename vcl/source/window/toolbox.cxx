@@ -505,7 +505,7 @@ void ToolBox::ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
     if( pThis->IsInPaint() )
         aPaintRegion.Intersect( pThis->GetActiveClipRegion() );
 
-    pThis->Push( PUSH_CLIPREGION );
+    pThis->Push( PushFlags::CLIPREGION );
     pThis->IntersectClipRegion( aPaintRegion );
 
     if( !pWrapper /*|| bIsInPopupMode*/ )
@@ -553,7 +553,7 @@ void ToolBox::ImplErase( ToolBox* pThis, const Rectangle &rRect, bool bHighlight
     {
         if( (((vcl::Window*) pThis)->GetStyle() & WB_3DLOOK ) )
         {
-            pThis->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            pThis->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
             pThis->SetLineColor();
             if( bHasOpenPopup )
                 // choose the same color as the popup will use

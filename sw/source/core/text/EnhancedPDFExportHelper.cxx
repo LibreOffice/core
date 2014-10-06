@@ -1546,7 +1546,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
     // Prepare the output device:
 
-    mrOut.Push( PUSH_MAPMODE );
+    mrOut.Push( PushFlags::MAPMODE );
     MapMode aMapMode( mrOut.GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
     mrOut.SetMapMode( aMapMode );

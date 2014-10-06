@@ -1053,7 +1053,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
             return;
     }
 
-    mpOutDev->Push( PUSH_LINECOLOR );
+    mpOutDev->Push( PushFlags::LINECOLOR );
     if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
         mpOutDev->SetLineColor( Color( COL_BLACK ) );
     else

@@ -237,7 +237,7 @@ namespace vclcanvas
                 // already redrawn the sprite.
                 bool bSpriteRedrawn( false );
 
-                rTargetSurface.Push( PUSH_CLIPREGION );
+                rTargetSurface.Push( PushFlags::CLIPREGION );
 
                 // apply clip (if any)
                 if( getClip().is() )

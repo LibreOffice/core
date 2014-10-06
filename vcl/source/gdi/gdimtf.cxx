@@ -350,7 +350,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         // This is necessary, since old metafiles don't even know of these
         // recent add-ons. Newer metafiles must of course explicitly set
         // those states.
-        pOut->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
+        pOut->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
         pOut->SetLayoutMode( TEXT_LAYOUT_DEFAULT );
         pOut->SetDigitLanguage( 0 );
 
@@ -1792,7 +1792,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
                 {
                     MetaPushAction* pAct = static_cast<MetaPushAction*>(pAction);
                     aPushFlagStack.push_back( pAct->GetFlags() );
-                    if( aPushFlagStack.back() & PUSH_CLIPREGION )
+                    if( aPushFlagStack.back() & PushFlags::CLIPREGION )
                     {
                         Rectangle aRect( aClipStack.back() );
                         aClipStack.push_back( aRect );
@@ -1803,7 +1803,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
                     // sanity check
                     if( ! aPushFlagStack.empty() )
                     {
-                        if( aPushFlagStack.back() & PUSH_CLIPREGION )
+                        if( aPushFlagStack.back() & PushFlags::CLIPREGION )
                         {
                             if( aClipStack.size() > 1 )
                                 aClipStack.pop_back();

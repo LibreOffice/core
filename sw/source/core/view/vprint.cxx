@@ -611,7 +611,7 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         // document because the thumbnail creation will not trigger a complete
         // formatting of the document.
 
-        pOleOut->Push( PUSH_CLIPREGION );
+        pOleOut->Push( PushFlags::CLIPREGION );
         pOleOut->IntersectClipRegion( aSwRect.SVRect() );
         pSh->GetLayout()->Paint( aSwRect );
 

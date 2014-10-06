@@ -377,7 +377,7 @@ void ScMenuFloatingWindow::drawSeparator(size_t nPos)
 
     if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
-        Push(PUSH_CLIPREGION);
+        Push(PushFlags::CLIPREGION);
         IntersectClipRegion(aRegion);
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
         DrawNativeControl(
@@ -667,7 +667,7 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
 
     if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
-        Push(PUSH_CLIPREGION);
+        Push(PushFlags::CLIPREGION);
         IntersectClipRegion(Rectangle(aPos, aSize));
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
         DrawNativeControl(

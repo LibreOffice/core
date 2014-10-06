@@ -1126,7 +1126,7 @@ void Array::DrawRange( OutputDevice& rDev,
     // *** diagonal frame borders ***
 
     // set clipping region to clip partly visible merged cells
-    rDev.Push( PUSH_CLIPREGION );
+    rDev.Push( PushFlags::CLIPREGION );
     rDev.IntersectClipRegion( GetClipRangeRectangle() );
     for( nRow = nFirstRow; nRow <= nLastRow; ++nRow )
     {

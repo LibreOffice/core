@@ -40,7 +40,7 @@ awt::Size lcl_getOptimalWidth(StyleSheetTablePtr pStyleSheet, OUString& rDefault
 
     MapMode aMap(MAP_100TH_MM);
     OutputDevice* pOut = Application::GetDefaultDevice();
-    pOut->Push(PUSH_FONT | PUSH_MAPMODE);
+    pOut->Push(PushFlags::FONT | PushFlags::MAPMODE);
 
     PropertyMapPtr pDefaultCharProps = pStyleSheet->GetDefaultCharProps();
     vcl::Font aFont(pOut->GetFont());

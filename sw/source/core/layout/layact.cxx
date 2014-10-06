@@ -2116,7 +2116,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
             Rectangle aRect( 0, 0, 5, 5 );
             aRect = pWin->PixelToLogic( aRect );
             // OD 2004-04-23 #116347#
-            pWin->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+            pWin->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
             pWin->SetFillColor( eColorData );
             pWin->SetLineColor();
             pWin->DrawRect( aRect );

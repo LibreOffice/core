@@ -584,7 +584,7 @@ namespace vclcanvas
                 // poly-polygons, and don't have to output the gradient
                 // twice for XOR
 
-                rOutDev.Push( PUSH_CLIPREGION );
+                rOutDev.Push( PushFlags::CLIPREGION );
                 rOutDev.IntersectClipRegion( aPolygonDeviceRectOrig );
                 doGradientFill( rOutDev,
                                 rValues,
@@ -609,7 +609,7 @@ namespace vclcanvas
             {
                 const vcl::Region aPolyClipRegion( rPoly );
 
-                rOutDev.Push( PUSH_CLIPREGION );
+                rOutDev.Push( PushFlags::CLIPREGION );
                 rOutDev.SetClipRegion( aPolyClipRegion );
 
                 doGradientFill( rOutDev,
@@ -1071,7 +1071,7 @@ namespace vclcanvas
                         {
                             const vcl::Region aPolyClipRegion( aPolyPoly );
 
-                            rOutDev.Push( PUSH_CLIPREGION );
+                            rOutDev.Push( PushFlags::CLIPREGION );
                             rOutDev.SetClipRegion( aPolyClipRegion );
 
                             textureFill( rOutDev,
@@ -1088,7 +1088,7 @@ namespace vclcanvas
                             if( mp2ndOutDev )
                             {
                                 OutputDevice& r2ndOutDev( mp2ndOutDev->getOutDev() );
-                                r2ndOutDev.Push( PUSH_CLIPREGION );
+                                r2ndOutDev.Push( PushFlags::CLIPREGION );
 
                                 r2ndOutDev.SetClipRegion( aPolyClipRegion );
                                 textureFill( r2ndOutDev,

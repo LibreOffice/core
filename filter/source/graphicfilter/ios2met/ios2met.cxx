@@ -483,7 +483,7 @@ void OS2METReader::DrawPolygon( const Polygon& rPolygon )
 {
     if ( IsLineInfo() )
     {
-        pVirDev->Push( PUSH_LINECOLOR );
+        pVirDev->Push( PushFlags::LINECOLOR );
         pVirDev->SetLineColor( COL_TRANSPARENT );
         pVirDev->DrawPolygon( rPolygon );
         pVirDev->Pop();
@@ -497,7 +497,7 @@ void OS2METReader::DrawPolyPolygon( const tools::PolyPolygon& rPolyPolygon )
 {
     if ( IsLineInfo() )
     {
-        pVirDev->Push( PUSH_LINECOLOR );
+        pVirDev->Push( PushFlags::LINECOLOR );
         pVirDev->SetLineColor( COL_TRANSPARENT );
         pVirDev->DrawPolyPolygon( rPolyPolygon );
         pVirDev->Pop();
@@ -939,7 +939,7 @@ void OS2METReader::ReadBox(bool bGivenPos)
             Polygon aPolygon( aBoxRect, nHRound, nVRound );
             if ( nFlags & 0x40 )
             {
-                pVirDev->Push( PUSH_LINECOLOR );
+                pVirDev->Push( PushFlags::LINECOLOR );
                 pVirDev->SetLineColor( COL_TRANSPARENT );
                 pVirDev->DrawRect( aBoxRect, nHRound, nVRound );
                 pVirDev->Pop();

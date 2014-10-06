@@ -747,7 +747,7 @@ void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                 if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
                 {
                     Size aPxSize( GetOutputSizePixel() );
-                    Push( PUSH_CLIPREGION );
+                    Push( PushFlags::CLIPREGION );
                     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) ) );
                     Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
                     MenupopupValue aVal( pMenu->nTextPos-GUTTERBORDER, aItemRect );

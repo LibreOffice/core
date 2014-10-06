@@ -507,7 +507,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
 {
     if ( 0 != (pPrinter = rDocShell.GetPrt()) )
     {
-        pPrinter->Push( PUSH_MAPMODE );
+        pPrinter->Push( PushFlags::MAPMODE );
         if ( SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
         {
             // if it is an embedded object (without it's own printer)
@@ -532,7 +532,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     }
     if ( 0 != (pRefDev = rDocShell.GetRefDev()) && pPrinter != pRefDev )
     {
-        pRefDev->Push( PUSH_MAPMODE );
+        pRefDev->Push( PushFlags::MAPMODE );
         if ( SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
         {
             // if it is an embedded object (without it's own printer)

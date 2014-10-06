@@ -371,12 +371,12 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 aPushFlags.push_back(nFlags);
 
-                if(nFlags & PUSH_CLIPREGION)
+                if(nFlags & PushFlags::CLIPREGION)
                 {
                     aClips.push_back(aClips.back());
                 }
 
-                if(nFlags & PUSH_MAPMODE)
+                if(nFlags & PushFlags::MAPMODE)
                 {
                     aMapModes.push_back(aMapModes.back());
                 }
@@ -391,7 +391,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     const PushFlags nFlags(aPushFlags.back());
                     aPushFlags.pop_back();
 
-                    if(nFlags & PUSH_CLIPREGION)
+                    if(nFlags & PushFlags::CLIPREGION)
                     {
                         if(aClips.size() > 1)
                         {
@@ -403,7 +403,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         }
                     }
 
-                    if(nFlags & PUSH_MAPMODE)
+                    if(nFlags & PushFlags::MAPMODE)
                     {
                         if(aMapModes.size() > 1)
                         {

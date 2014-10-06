@@ -375,7 +375,7 @@ void ScAutoFmtPreview::DrawBackground()
                 const SvxBrushItem* pItem = static_cast< const SvxBrushItem* >(
                     pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BACKGROUND ) );
 
-                aVD.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+                aVD.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
                 aVD.SetLineColor();
                 aVD.SetFillColor( pItem->GetColor() );
                 aVD.DrawRect( maArray.GetCellRect( nCol, nRow ) );

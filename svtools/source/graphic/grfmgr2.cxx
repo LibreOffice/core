@@ -1647,7 +1647,7 @@ void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size&
         aOutSz = aRotBoundRect.GetSize();
     }
 
-    pOut->Push( PUSH_CLIPREGION );
+    pOut->Push( PushFlags::CLIPREGION );
     pOut->IntersectClipRegion( Rectangle( aOutPt, aOutSz ) );
 
     ( (GDIMetaFile&) rMtf ).WindStart();
@@ -1994,7 +1994,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
         const Point aOutStart( aOutOrigin.X() + nInvisibleTilesX*rSizePixel.Width(),
                                aOutOrigin.Y() + nInvisibleTilesY*rSizePixel.Height() );
 
-        pOut->Push( PUSH_CLIPREGION );
+        pOut->Push( PushFlags::CLIPREGION );
         pOut->IntersectClipRegion( rArea );
 
         // Paint all tiles

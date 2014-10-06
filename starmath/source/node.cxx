@@ -2675,7 +2675,7 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
     if (aFntSize.Width() == 0)
     {
         OutputDevice &rDevNC = (OutputDevice &) rDev;
-        rDevNC.Push(PUSH_FONT | PUSH_MAPMODE);
+        rDevNC.Push(PushFlags::FONT | PushFlags::MAPMODE);
         rDevNC.SetFont(GetFont());
         aFntSize.Width() = rDev.GetFontMetric().GetSize().Width();
         rDevNC.Pop();

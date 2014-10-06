@@ -98,8 +98,8 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
     sal_uInt16 nPos;
     SwTxtPaintInfo aInf( rInf );
 
-    const bool bBidiPor = ( rInf.GetTxtFrm()->IsRightToLeft() ) !=
-                          ( 0 != ( TEXT_LAYOUT_BIDI_RTL & rInf.GetOut()->GetLayoutMode() ) );
+    const bool bBidiPor = rInf.GetTxtFrm()->IsRightToLeft() !=
+                          bool( TEXT_LAYOUT_BIDI_RTL & rInf.GetOut()->GetLayoutMode() );
 
     sal_uInt16 nDir = bBidiPor ?
                   1800 :

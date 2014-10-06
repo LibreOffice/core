@@ -30,38 +30,35 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 // Flags for OutputDevice::Push() and OutDevState
-enum PushFlags {
-        PUSH_NONE            = ((sal_uInt16)0x0000),
-        PUSH_LINECOLOR       = ((sal_uInt16)0x0001),
-        PUSH_FILLCOLOR       = ((sal_uInt16)0x0002),
-        PUSH_FONT            = ((sal_uInt16)0x0004),
-        PUSH_TEXTCOLOR       = ((sal_uInt16)0x0008),
-        PUSH_MAPMODE         = ((sal_uInt16)0x0010),
-        PUSH_CLIPREGION      = ((sal_uInt16)0x0020),
-        PUSH_RASTEROP        = ((sal_uInt16)0x0040),
-        PUSH_TEXTFILLCOLOR   = ((sal_uInt16)0x0080),
-        PUSH_TEXTALIGN       = ((sal_uInt16)0x0100),
-        PUSH_REFPOINT        = ((sal_uInt16)0x0200),
-        PUSH_TEXTLINECOLOR   = ((sal_uInt16)0x0400),
-        PUSH_TEXTLAYOUTMODE  = ((sal_uInt16)0x0800),
-        PUSH_TEXTLANGUAGE    = ((sal_uInt16)0x1000),
-        PUSH_OVERLINECOLOR   = ((sal_uInt16)0x2000),
-        PUSH_ALL             = ((sal_uInt16)0xFFFF)
-};
-// make combining these type-safe
-inline PushFlags operator| (PushFlags lhs, PushFlags rhs)
-{
-    return static_cast<PushFlags>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
-}
-inline PushFlags operator& (PushFlags lhs, PushFlags rhs)
-{
-    return static_cast<PushFlags>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
-}
+enum class PushFlags : sal_uInt16 {
+    NONE            = 0x0000,
+    LINECOLOR       = 0x0001,
+    FILLCOLOR       = 0x0002,
+    FONT            = 0x0004,
+    TEXTCOLOR       = 0x0008,
+    MAPMODE         = 0x0010,
+    CLIPREGION      = 0x0020,
+    RASTEROP        = 0x0040,
+    TEXTFILLCOLOR   = 0x0080,
+    TEXTALIGN       = 0x0100,
+    REFPOINT        = 0x0200,
+    TEXTLINECOLOR   = 0x0400,
+    TEXTLAYOUTMODE  = 0x0800,
+    TEXTLANGUAGE    = 0x1000,
+    OVERLINECOLOR   = 0x2000,
+    ALL             = 0xFFFF
 
-#define PUSH_ALLTEXT                    (PUSH_TEXTCOLOR | PUSH_TEXTFILLCOLOR | PUSH_TEXTLINECOLOR | PUSH_OVERLINECOLOR | PUSH_TEXTALIGN | PUSH_TEXTLAYOUTMODE | PUSH_TEXTLANGUAGE)
-#define PUSH_ALLFONT                    (PUSH_ALLTEXT | PUSH_FONT)
+    //bool operator bool() { return static_cast<sal_uInt16>(*this) != 0; }
+};
+template<>
+struct o3tl::typed_flags<PushFlags>: o3tl::is_typed_flags<PushFlags, 0xFFFF> {};
+#define PUSH_ALLTEXT  (PushFlags::TEXTCOLOR | PushFlags::TEXTFILLCOLOR | PushFlags::TEXTLINECOLOR | PushFlags::OVERLINECOLOR | PushFlags::TEXTALIGN | PushFlags::TEXTLAYOUTMODE | PushFlags::TEXTLANGUAGE)
+#define PUSH_ALLFONT  (PUSH_ALLTEXT | PushFlags::FONT)
+
+
 
 // LayoutModes for Complex Text Layout
 // These are flag values, i.e they can be combined
@@ -101,6 +98,8 @@ inline ComplexTextLayoutMode& operator&= (ComplexTextLayoutMode& lhs, ComplexTex
 }
 
 
+
+
 class OutDevState
 {
 public:
@@ -108,7 +107,7 @@ public:
 
     MapMode*        mpMapMode;
     bool            mbMapActive;
-    vcl::Region*         mpClipRegion;
+    vcl::Region*    mpClipRegion;
     Color*          mpLineColor;
     Color*          mpFillColor;
     vcl::Font*      mpFont;

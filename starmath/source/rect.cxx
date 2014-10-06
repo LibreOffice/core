@@ -154,7 +154,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     {
         OutputDevice    *pWindow = Application::GetDefaultDevice();
 
-        pWindow->Push(PUSH_MAPMODE | PUSH_FONT);
+        pWindow->Push(PushFlags::MAPMODE | PushFlags::FONT);
 
         pWindow->SetMapMode(rDev.GetMapMode());
         pWindow->SetFont(rDev.GetFontMetric());
@@ -618,7 +618,7 @@ bool SmGetGlyphBoundRect(const OutputDevice &rDev,
 
     const FontMetric  aDevFM (rDev.GetFontMetric());
 
-    pGlyphDev->Push(PUSH_FONT | PUSH_MAPMODE);
+    pGlyphDev->Push(PushFlags::FONT | PushFlags::MAPMODE);
     vcl::Font aFnt(rDev.GetFont());
     aFnt.SetAlign(ALIGN_TOP);
 

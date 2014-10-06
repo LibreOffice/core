@@ -838,7 +838,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
     if( aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top() )
         aInRect.SetEmpty();
 
-    pDev->Push( PUSH_CLIPREGION );
+    pDev->Push( PushFlags::CLIPREGION );
     pDev->IntersectClipRegion( aInRect );
 
     if ( nDrawFlags & WINDOW_DRAW_MONO )
@@ -2033,7 +2033,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
     OUString*               pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
-    pDev->Push( PUSH_CLIPREGION );
+    pDev->Push( PushFlags::CLIPREGION );
     pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
 
     // no image radio button
@@ -2860,7 +2860,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, sal_uInt16 nFlag
 
 void RadioButton::ImplSetMinimumNWFSize()
 {
-    Push( PUSH_MAPMODE );
+    Push( PushFlags::MAPMODE );
     SetMapMode( MAP_PIXEL );
 
     ImplControlValue aControlValue;
@@ -3083,7 +3083,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
 
-    pDev->Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
+    pDev->Push( PushFlags::CLIPREGION | PushFlags::LINECOLOR );
     pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
 
     long nLineY = rPos.Y() + (rSize.Height()-1)/2;
@@ -3714,7 +3714,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, sal_uInt16 nFlags )
 
 void CheckBox::ImplSetMinimumNWFSize()
 {
-    Push( PUSH_MAPMODE );
+    Push( PushFlags::MAPMODE );
     SetMapMode( MAP_PIXEL );
 
     ImplControlValue aControlValue;

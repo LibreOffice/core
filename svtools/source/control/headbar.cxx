@@ -502,7 +502,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     {
         if( aSelectionTextColor != Color( COL_TRANSPARENT ) )
         {
-            pDev->Push( PUSH_TEXTCOLOR );
+            pDev->Push( PushFlags::TEXTCOLOR );
             pDev->SetTextColor( aSelectionTextColor );
         }
         if ( IsEnabled() )
