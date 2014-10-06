@@ -143,8 +143,8 @@ public:
     long CallAsyncCallLink() { return NewDataRead( this, 0 ); }
 
     // fuers asynchrone lesen aus dem SvStream
-    /*virtual*/ void SaveState( int nToken );
-    /*virtual*/ void RestoreState();
+    void SaveState( int nToken );
+    void RestoreState();
     virtual void Continue( int nToken );
 
     inline void SetDownloadingFile( bool bSet ) { bDownloadingFile = bSet; }

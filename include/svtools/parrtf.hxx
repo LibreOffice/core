@@ -75,8 +75,6 @@ public:
     int GetOpenBrakets() const { return nOpenBrakets; }
 
     // fuers asynchrone lesen aus dem SvStream
-//  virtual void SaveState( int nToken );
-//  virtual void RestoreState();
     virtual void Continue( int nToken ) SAL_OVERRIDE;
 };
 

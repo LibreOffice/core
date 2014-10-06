@@ -55,7 +55,7 @@ class VCL_DLLPUBLIC GlyphCache
 {
 public:
     explicit                    GlyphCache( GlyphCachePeer& );
-    /*virtual*/                 ~GlyphCache();
+                                ~GlyphCache();
 
     static GlyphCache&      GetInstance();
 

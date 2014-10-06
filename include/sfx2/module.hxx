@@ -90,7 +90,7 @@ public:
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) SAL_OVERRIDE;
 
-    /*virtual*/ bool            IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const;
+    bool                        IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const;
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=NULL );
     static FieldUnit            GetCurrentFieldUnit();

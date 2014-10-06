@@ -709,10 +709,10 @@ public:
     virtual bool                        Notify( NotifyEvent& rNEvt );
     virtual vcl::Window*                     GetPreferredKeyInputWindow();
 
-    /*virtual*/ void                    AddEventListener( const Link& rEventListener );
-    /*virtual*/ void                    RemoveEventListener( const Link& rEventListener );
-    /*virtual*/ void                    AddChildEventListener( const Link& rEventListener );
-    /*virtual*/ void                    RemoveChildEventListener( const Link& rEventListener );
+    void                                AddEventListener( const Link& rEventListener );
+    void                                RemoveEventListener( const Link& rEventListener );
+    void                                AddChildEventListener( const Link& rEventListener );
+    void                                RemoveChildEventListener( const Link& rEventListener );
 
     ImplSVEvent *                       PostUserEvent( const Link& rLink, void* pCaller = NULL );
     void                                RemoveUserEvent( ImplSVEvent * nUserEvent );

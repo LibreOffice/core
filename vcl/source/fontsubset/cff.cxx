@@ -1713,7 +1713,7 @@ class Type1Emitter
 {
 public:
     explicit    Type1Emitter( FILE* pOutFile, bool bPfbSubset = true);
-    /*virtual*/ ~Type1Emitter( void);
+    ~Type1Emitter( void);
     void        setSubsetName( const char* );
 
     size_t      emitRawData( const char* pData, size_t nLength) const;
