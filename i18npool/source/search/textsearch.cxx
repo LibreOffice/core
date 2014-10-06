@@ -614,7 +614,7 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
                     bool bAtStart = !nCmpIdx;
                     bool bAtEnd = nFndEnd == endPos;
                     bool bDelimBefore = bAtStart || IsDelimiter( aStr, nCmpIdx-1 );
-                    bool bDelimBehind = IsDelimiter(  aStr, nFndEnd );
+                    bool bDelimBehind = bAtEnd || IsDelimiter(  aStr, nFndEnd );
                     //  *       1 -> only one word in the paragraph
                     //  *       2 -> at begin of paragraph
                     //  *       3 -> at end of paragraph
@@ -685,7 +685,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
                     sal_Int32 nFndStt = nCmpIdx - sSearchKey.getLength();
                     bool bAtStart = !nFndStt;
                     bool bAtEnd = nCmpIdx == startPos;
-                    bool bDelimBehind = IsDelimiter( aStr, nCmpIdx );
+                    bool bDelimBehind = bAtEnd || IsDelimiter( aStr, nCmpIdx );
                     bool bDelimBefore = bAtStart || // begin of paragraph
                         IsDelimiter( aStr, nFndStt-1 );
                     //  *       1 -> only one word in the paragraph
