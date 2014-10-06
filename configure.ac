@@ -5748,17 +5748,6 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CC supports -Wno-long-double])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -Wno-long-double"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_NO_LONG_DOUBLE=TRUE ],[])
-    CFLAGS=$save_CFLAGS
-    if test "$HAVE_GCC_NO_LONG_DOUBLE" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
-
     AC_MSG_CHECKING([whether $CC supports -mno-avx])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -mno-avx"
@@ -5862,7 +5851,6 @@ if test "$GCC" = "yes"; then
     AC_LANG_POP([C++])
 fi
 
-AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
 AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 
