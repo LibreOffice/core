@@ -37,6 +37,9 @@
 
 #include "vcl/sysdata.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/metric.hxx"
+
+#include "impfont.hxx"
 
 #include "quartz/salgdi.h"
 #include "quartz/utils.h"
@@ -53,7 +56,6 @@
 #include "ctfonts.hxx"
 
 #include "fontsubset.hxx"
-#include "impfont.hxx"
 #include "sallayout.hxx"
 #include "sft.hxx"
 
@@ -93,37 +95,38 @@ sal_IntPtr CoreTextFontData::GetFontId() const
 
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 
-const ImplFontCharMapPtr CoreTextFontData::GetImplFontCharMap() const
+const FontCharMapPtr CoreTextFontData::GetFontCharMap() const
 {
     // return the cached charmap
     if( mpCharMap )
         return mpCharMap;
 
     // set the default charmap
-    mpCharMap = ImplFontCharMap::GetDefaultMap();
+    FontCharMapPtr pCharMap( new FontCharMap() );
+    mpCharMap = pCharMap;
 
     // get the CMAP byte size
     // allocate a buffer for the CMAP raw data
     const int nBufSize = GetFontTable( "cmap", NULL );
-    DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::GetImplFontCharMap : GetFontTable1 failed!\n");
+    DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::GetFontCharMap : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return mpCharMap;
 
     // get the CMAP raw data
     ByteVector aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    DBG_ASSERT( (nRawLength > 0), "CoreTextFontData::GetImplFontCharMap : GetFontTable2 failed!\n");
+    DBG_ASSERT( (nRawLength > 0), "CoreTextFontData::GetFontCharMap : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
         return mpCharMap;
-    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::GetImplFontCharMap : ByteCount mismatch!\n");
+    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::GetFontCharMap : ByteCount mismatch!\n");
 
     // parse the CMAP
     CmapResult aCmapResult;
     if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
     {
-        ImplFontCharMapPtr pCharMap(new ImplFontCharMap( aCmapResult ) );
+        FontCharMapPtr pDefFontCharMap( new FontCharMap(aCmapResult) );
         // create the matching charmap
-        mpCharMap = pCharMap;
+        mpCharMap = pDefFontCharMap;
     }
 
     return mpCharMap;
@@ -485,12 +488,15 @@ SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFal
     return pSalLayout;
 }
 
-const ImplFontCharMapPtr AquaSalGraphics::GetImplFontCharMap() const
+const FontCharMapPtr AquaSalGraphics::GetFontCharMap() const
 {
     if( !mpFontData )
-        return ImplFontCharMap::GetDefaultMap();
+    {
+        FontCharMapPtr pFontCharMap( new FontCharMap() );
+        return pFontCharMap;
+    }
 
-    return mpFontData->GetImplFontCharMap();
+    return mpFontData->GetFontCharMap();
 }
 
 bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
@@ -722,7 +728,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
                 free( (void*)pGlyphMetrics );
             }
 
-            ImplFontCharMapPtr pMap = mpFontData->GetImplFontCharMap();
+            FontCharMapPtr pMap = mpFontData->GetFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no charmap" );
 
             // get unicode<->glyph encoding
