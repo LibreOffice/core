@@ -444,6 +444,16 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
     }
 }
 
+void SAL_CALL OPreparedStatement::acquire() throw()
+{
+    OStatement_Base::acquire();
+}
+
+void SAL_CALL OPreparedStatement::release() throw()
+{
+    OStatement_Base::release();
+}
+
 void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
                                                   const OUString& _sDefaultName,
                                                   sal_Int32& _rParameterCount)
