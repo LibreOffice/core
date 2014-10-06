@@ -50,6 +50,7 @@
 #include "refupdatecontext.hxx"
 #include "scopetools.hxx"
 #include "tabprotection.hxx"
+#include "columnspanset.hxx"
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
 
@@ -2119,9 +2120,18 @@ bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 
 bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 {
+    using namespace sc;
+
     bool bFound = false;
-    for (SCCOL i=0; i<=MAXCOL && !bFound; i++)
-        bFound |= aCol[i].HasSelectionMatrixFragment(rMark);
+    std::vector<sc::ColRowSpan> colrowspan = rMark.GetMarkedColSpans();
+
+    for ( size_t i=0; i<colrowspan.size(); i++ )
+    {
+        for ( SCCOLROW j=colrowspan[i].mnStart; j<colrowspan[i].mnEnd; j++ )
+        {
+            aCol[j].HasSelectionMatrixFragment(rMark);
+        }
+    }
     return bFound;
 }
 
