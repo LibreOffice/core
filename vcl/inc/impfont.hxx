@@ -163,33 +163,17 @@ public:
     explicit            ImplFontCharMap( const CmapResult& );
     virtual             ~ImplFontCharMap();
 
-    static ImplFontCharMapPtr GetDefaultMap( bool bSymbols=false);
-
-    bool                IsDefaultMap() const;
-    bool                HasChar( sal_uInt32 ) const;
-    int                 CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const;
-    int                 GetCharCount() const { return mnCharCount;}
-
-    sal_uInt32          GetFirstChar() const { return mpRangeCodes[0];}
-    sal_uInt32          GetLastChar() const;
-
-    sal_uInt32          GetNextChar( sal_uInt32 ) const;
-    sal_uInt32          GetPrevChar( sal_uInt32 ) const;
-
-    int                 GetIndexFromChar( sal_uInt32 ) const;
-    sal_uInt32          GetCharFromIndex( int ) const;
-
-    int                 GetGlyphIndex( sal_uInt32 ) const;
-
 private:
+    friend class FontCharMap;
     friend void intrusive_ptr_add_ref(ImplFontCharMap* pImplFontCharMap);
     friend void intrusive_ptr_release(ImplFontCharMap* pImplFontCharMap);
-
-    int                 ImplFindRangeIndex( sal_uInt32 ) const;
 
     // prevent assignment and copy construction
     explicit            ImplFontCharMap( const ImplFontCharMap& );
     void                operator=( const ImplFontCharMap& );
+
+    static ImplFontCharMapPtr getDefaultMap( bool bSymbols=false);
+    bool                isDefaultMap() const;
 
 private:
     const sal_uInt32*   mpRangeCodes;     // pairs of StartCode/(EndCode+1)
