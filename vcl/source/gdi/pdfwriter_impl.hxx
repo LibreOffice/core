@@ -738,7 +738,7 @@ private:
                 m_nLayoutMode( TEXT_LAYOUT_DEFAULT ),
                 m_aDigitLanguage( 0 ),
                 m_nTransparentPercent( 0 ),
-                m_nFlags( PUSH_ALL ),
+                m_nFlags( PushFlags::ALL ),
                 m_nUpdateFlags( 0xffff )
         {}
         GraphicsState( const GraphicsState& rState ) :

@@ -157,7 +157,7 @@ css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible 
 
 void TitleBar::PaintTitle (const Rectangle& rTitleBox)
 {
-    Push(PUSH_FONT | PUSH_TEXTCOLOR);
+    Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     Rectangle aTitleBox (rTitleBox);
 
@@ -192,7 +192,7 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
 
 void TitleBar::PaintFocus (const Rectangle& rFocusBox)
 {
-    Push(PUSH_FONT | PUSH_TEXTCOLOR);
+    Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     vcl::Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_BOLD);

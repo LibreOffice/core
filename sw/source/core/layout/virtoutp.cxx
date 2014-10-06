@@ -42,7 +42,7 @@ inline DbgRect::DbgRect( OutputDevice *pOutDev, const Rectangle &rRect,
 {
     if( pOut )
     {
-        pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+        pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
         pOut->SetLineColor( eColor );
         pOut->SetFillColor();
         pOut->DrawRect( rRect );

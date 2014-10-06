@@ -147,7 +147,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
         {
             case PDFExtOutDevDataSync::CreateNamedDest : //i56629
             {
-                 rWriter.Push( PUSH_MAPMODE );
+                 rWriter.Push( PushFlags::MAPMODE );
                 rWriter.SetMapMode( mParaMapModes.front() );
                 mParaMapModes.pop_front();
                 mParaIds.push_back( rWriter.CreateNamedDest( mParaOUStrings.front(), mParaRects.front(), mParaInts.front(), mParaDestAreaTypes.front() ) );
@@ -160,7 +160,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
             break;
             case PDFExtOutDevDataSync::CreateDest :
             {
-                rWriter.Push( PUSH_MAPMODE );
+                rWriter.Push( PushFlags::MAPMODE );
                 rWriter.SetMapMode( mParaMapModes.front() );
                 mParaMapModes.pop_front();
                 mParaIds.push_back( rWriter.CreateDest( mParaRects.front(), mParaInts.front(), mParaDestAreaTypes.front() ) );
@@ -172,7 +172,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
             break;
             case PDFExtOutDevDataSync::CreateLink :
             {
-                rWriter.Push( PUSH_MAPMODE );
+                rWriter.Push( PushFlags::MAPMODE );
                 rWriter.SetMapMode( mParaMapModes.front() );
                 mParaMapModes.pop_front();
                 mParaIds.push_back( rWriter.CreateLink( mParaRects.front(), mParaInts.front() ) );
@@ -206,7 +206,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
 
                 PDFLinkDestination& rDest = mFutureDestinations[ nDestId ];
 
-                rWriter.Push( PUSH_MAPMODE );
+                rWriter.Push( PushFlags::MAPMODE );
                 rWriter.SetMapMode( rDest.mMapMode );
                 mParaIds.push_back( rWriter.RegisterDestReference( nDestId, rDest.mRect, rDest.mPageNr, rDest.mAreaType ) );
                 rWriter.Pop();
@@ -243,7 +243,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
             break;
             case PDFExtOutDevDataSync::CreateNote :
             {
-                rWriter.Push( PUSH_MAPMODE );
+                rWriter.Push( PushFlags::MAPMODE );
                 rWriter.SetMapMode( mParaMapModes.front() );
                 rWriter.CreateNote( mParaRects.front(), mParaPDFNotes.front(), mParaInts.front() );
                 mParaMapModes.pop_front();

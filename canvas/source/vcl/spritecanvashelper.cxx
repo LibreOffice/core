@@ -453,7 +453,7 @@ namespace vclcanvas
             // repaint uncovered areas from sprite. Need to actually
             // clip here, since we're only repainting _parts_ of the
             // sprite
-            rOutDev.Push( PUSH_CLIPREGION );
+            rOutDev.Push( PushFlags::CLIPREGION );
             ::std::for_each( aUnscrollableAreas.begin(),
                              aUnscrollableAreas.end(),
                              ::boost::bind( &opaqueUpdateSpriteArea,

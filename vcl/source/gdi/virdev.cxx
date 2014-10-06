@@ -387,7 +387,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
     // Set line and fill color to black (->opaque),
     // fill rect with that (linecolor, too, because of
     // those pesky missing pixel problems)
-    Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+    Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
     SetLineColor( COL_BLACK );
     SetFillColor( COL_BLACK );
     DrawRect( rRect );

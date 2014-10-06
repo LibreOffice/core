@@ -758,7 +758,7 @@ void AutoFmtPreview::DrawBackground()
         {
             SvxBrushItem aBrushItem( aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBackground() );
 
-            aVD.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            aVD.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
             aVD.SetLineColor();
             aVD.SetFillColor( aBrushItem.GetColor() );
             aVD.DrawRect( maArray.GetCellRect( nCol, nRow ) );

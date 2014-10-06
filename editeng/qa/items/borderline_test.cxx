@@ -134,7 +134,7 @@ void BorderLineTest::testGuessWidthThinthickLargegap()
 void BorderLineTest::testGuessWidthNostyleDouble()
 {
     SvxBorderLine line;
-    line.GuessLinesWidths( NONE,
+    line.GuessLinesWidths( css::table::BorderLineStyle::NONE,
             THINTHICKLG_OUT_WIDTH,
             THINTHICKLG_IN_WIDTH,
             THINTHICKLG_DIST_WIDTH );
@@ -152,7 +152,7 @@ void BorderLineTest::testGuessWidthNostyleDouble()
 void BorderLineTest::testGuessWidthNostyleSingle()
 {
     SvxBorderLine line;
-    line.GuessLinesWidths( NONE, TEST_WIDTH );
+    line.GuessLinesWidths( css::table::BorderLineStyle::NONE, TEST_WIDTH );
     CPPUNIT_ASSERT_EQUAL( SOLID, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
 }

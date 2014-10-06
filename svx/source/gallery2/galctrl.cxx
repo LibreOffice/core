@@ -506,7 +506,7 @@ sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColu
 
 void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 /*nColumnId*/ ) const
 {
-    rDev.Push( PUSH_CLIPREGION );
+    rDev.Push( PushFlags::CLIPREGION );
     rDev.IntersectClipRegion( rRect );
 
     if( mpTheme && ( mnCurRow < mpTheme->GetObjectCount() ) )

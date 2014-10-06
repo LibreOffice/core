@@ -1031,7 +1031,7 @@ void FmFilterItemsString::Paint(
     const bool bIsCurrentFilter = pForm->GetChildren()[ pForm->GetFilterController()->getActiveTerm() ] == pRow;
     if ( bIsCurrentFilter )
     {
-        rDev.Push( PUSH_LINECOLOR );
+        rDev.Push( PushFlags::LINECOLOR );
 
         rDev.SetLineColor( rDev.GetTextColor() );
 

@@ -530,7 +530,7 @@ void Edit::ImplRepaint(bool bLayout)
     if( (GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground() )
     {
         // check if we need to set ControlBackground even in NWF case
-        Push( PUSH_FILLCOLOR | PUSH_LINECOLOR );
+        Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
         SetLineColor();
         SetFillColor( GetControlBackground() );
         DrawRect( Rectangle( aPos, Size( GetOutputSizePixel().Width() - 2*mnXOffset, GetOutputSizePixel().Height() ) ) );

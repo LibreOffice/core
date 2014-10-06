@@ -354,7 +354,7 @@ void BackingWindow::Paint( const Rectangle& )
 
     aClip.Exclude( maStartCentButtons );
 
-    Push( PUSH_CLIPREGION );
+    Push( PushFlags::CLIPREGION );
     IntersectClipRegion( aClip );
     DrawWallpaper( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ), aBack );
     Pop();

@@ -58,7 +58,7 @@ namespace cppcanvas
                 fontRotation(0.0),
 
                 textEmphasisMarkStyle(EMPHASISMARK_NONE),
-                pushFlags(PUSH_ALL),
+                pushFlags(PushFlags::ALL),
                 textDirection(::com::sun::star::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
                 textAlignment(0), // TODO(Q2): Synchronize with implrenderer
                                   // and possibly new rendering::TextAlignment

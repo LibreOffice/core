@@ -3108,7 +3108,7 @@ void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
 MetaPushAction::MetaPushAction() :
     MetaAction  ( META_PUSH_ACTION ),
-    mnFlags     ( PUSH_NONE )
+    mnFlags     ( PushFlags::NONE )
 {}
 
 MetaPushAction::~MetaPushAction()

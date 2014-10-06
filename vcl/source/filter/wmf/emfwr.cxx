@@ -1246,7 +1246,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                     const MetaAction* pSubstAct = aSubstitute.GetAction( i );
                     if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
                     {
-                        maVDev.Push( PUSH_ALL );
+                        maVDev.Push( PushFlags::ALL );
                         ImplBeginRecord( WIN_EMR_SAVEDC );
                         ImplEndRecord();
 

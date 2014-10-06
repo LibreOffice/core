@@ -461,7 +461,7 @@ namespace frm
             long nFontWidth = m_pEngine->GetStandardFont(0).GetSize().Width();
             if ( !nFontWidth )
             {
-                m_pViewport->Push( PUSH_FONT );
+                m_pViewport->Push( PushFlags::FONT );
                 m_pViewport->SetFont( m_pEngine->GetStandardFont(0) );
                 nFontWidth = m_pViewport->GetTextWidth( "x" );
                 m_pViewport->Pop();
@@ -576,7 +576,7 @@ namespace frm
     {
         // need to normalize the map mode of the device - every paint operation on any device needs
         // to use the same map mode
-        _pDev->Push( PUSH_MAPMODE | PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        _pDev->Push( PushFlags::MAPMODE | PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
 
         // enforce our "normalize map mode" on the device
         MapMode aRefMapMode( m_pEngine->GetRefDevice()->GetMapMode() );

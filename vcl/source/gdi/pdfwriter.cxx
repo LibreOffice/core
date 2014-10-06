@@ -198,7 +198,7 @@ void PDFWriter::DrawGradient( const Rectangle& rRect, const Gradient& rGradient 
 
 void PDFWriter::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient )
 {
-    pImplementation->push(PUSH_CLIPREGION);
+    pImplementation->push(PushFlags::CLIPREGION);
     pImplementation->setClipRegion( rPolyPoly.getB2DPolyPolygon() );
     pImplementation->drawGradient( rPolyPoly.GetBoundRect(), rGradient );
     pImplementation->pop();

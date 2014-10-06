@@ -472,7 +472,7 @@ namespace svt
             ClipItemRegion( const PanelTabBar_Impl& i_rImpl )
                 :m_rDevice( i_rImpl.m_rTabBar )
             {
-                m_rDevice.Push( PUSH_CLIPREGION );
+                m_rDevice.Push( PushFlags::CLIPREGION );
                 m_rDevice.SetClipRegion(vcl::Region(
                     i_rImpl.m_aNormalizer.getTransformed(
                         i_rImpl.m_aGeometry.getItemsRect(),
@@ -683,7 +683,7 @@ namespace svt
             Point aTextPos( aRenderArea.TopLeft() );
             if ( IsVertical() )
             {
-                m_rTabBar.Push( PUSH_FONT );
+                m_rTabBar.Push( PushFlags::FONT );
 
                 vcl::Font aFont( m_rTabBar.GetFont() );
                 aFont.SetOrientation( 2700 );
@@ -1046,7 +1046,7 @@ namespace svt
 
         // background
         const Rectangle aNormalizedPaintArea( m_pImpl->m_aNormalizer.getNormalized( i_rRect, m_pImpl->m_eTabAlignment ) );
-        m_pImpl->m_aRenderDevice.Push( PUSH_CLIPREGION );
+        m_pImpl->m_aRenderDevice.Push( PushFlags::CLIPREGION );
         m_pImpl->m_aRenderDevice.SetClipRegion(vcl::Region(aNormalizedPaintArea));
         m_pImpl->m_pRenderer->renderBackground();
         m_pImpl->m_aRenderDevice.Pop();

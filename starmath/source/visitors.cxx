@@ -359,7 +359,7 @@ SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
         return;
 
     //Save device state
-    rDev.Push( PUSH_FONT | PUSH_MAPMODE | PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
+    rDev.Push( PushFlags::FONT | PushFlags::MAPMODE | PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR );
 
     pos.pSelectedNode->Accept( this );
     //Restore device state
@@ -433,7 +433,7 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
 void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
 {
     //Save device state
-    pDev->Push( PUSH_FONT | PUSH_TEXTCOLOR );
+    pDev->Push( PushFlags::FONT | PushFlags::TEXTCOLOR );
 
     long i = pos.Index;
 
@@ -2070,7 +2070,7 @@ SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmN
         aSelectionArea.Move( Offset.X( ), Offset.Y( ) );
 
         //Save device state
-        rDev.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        rDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
         //Change colors
         rDev.SetLineColor( );
         rDev.SetFillColor( Color( COL_LIGHTGRAY ) );
@@ -2109,7 +2109,7 @@ void SmSelectionDrawingVisitor::VisitChildren( SmNode* pNode )
 void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
 {
     if( pNode->IsSelected( ) ){
-        rDev.Push( PUSH_TEXTCOLOR | PUSH_FONT );
+        rDev.Push( PushFlags::TEXTCOLOR | PushFlags::FONT );
 
         rDev.SetFont( pNode->GetFont( ) );
         Point Position = pNode->GetTopLeft( );

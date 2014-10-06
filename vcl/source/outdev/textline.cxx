@@ -653,7 +653,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
         aPixelRect = aPoly.GetBoundRect();
     }
 
-    Push( PUSH_CLIPREGION );
+    Push( PushFlags::CLIPREGION );
     IntersectClipRegion( PixelToLogic(aPixelRect) );
     if( mbInitClipRegion )
         InitClipRegion();

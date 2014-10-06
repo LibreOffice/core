@@ -453,7 +453,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     aFont.SetColor( COL_LIGHTRED );
 //  aFont.SetSize( Size( 0, 32 ) );
 
-    aVDev.Push( PUSH_FONT );
+    aVDev.Push( PushFlags::FONT );
     aVDev.SetFont( aFont );
 
     Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );

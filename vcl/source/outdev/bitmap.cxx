@@ -77,7 +77,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                 cCmpVal = 255;
 
             Color aCol( cCmpVal, cCmpVal, cCmpVal );
-            Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
             SetLineColor( aCol );
             SetFillColor( aCol );
             DrawRect( Rectangle( rDestPt, rDestSize ) );

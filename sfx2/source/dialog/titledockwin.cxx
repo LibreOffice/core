@@ -162,7 +162,7 @@ namespace sfx2
 
         SfxDockingWindow::Paint( i_rArea );
 
-        Push( PUSH_FONT | PUSH_FILLCOLOR | PUSH_LINECOLOR );
+        Push( PushFlags::FONT | PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
 
         SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
         SetLineColor();

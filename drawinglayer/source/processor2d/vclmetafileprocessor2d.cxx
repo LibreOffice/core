@@ -1784,7 +1784,7 @@ namespace drawinglayer
                                 // set VCL clip region; subdivide before conversion to tools polygon. Subdivision necessary (!)
                                 // Removed subdivision and fixed in vcl::Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
                                 // the ClipRegion is built from the Polygon. A AdaptiveSubdivide on the source polygon was missing there
-                                mpOutputDevice->Push(PUSH_CLIPREGION);
+                                mpOutputDevice->Push(PushFlags::CLIPREGION);
                                 mpOutputDevice->SetClipRegion(vcl::Region(maClipPolyPolygon));
 
                                 // recursively paint content
