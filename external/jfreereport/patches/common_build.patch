@@ -1,5 +1,14 @@
 --- misc/libloader-1.1.3/common_build.xml	2009-11-16 10:25:34.000000000 +0100
 +++ misc/build/libloader-1.1.3/common_build.xml	2009-12-04 10:22:24.277647200 +0100
+@@ -136,8 +136,6 @@
+   <property name="javac.deprecation"
+             value="true"
+             description="Indicates whether source should be compiled with deprecation information" />
+-  <property name="javac.source" value="1.5" description="Provide source compatibility with specified release" />
+-  <property name="javac.target" value="1.5" description="Generate class files for specific VM version" />
+ 
+   <!-- Build Cache properties -->
+   <property name="build.cache.dir"
 @@ -261,7 +261,7 @@ TYPICAL TARGET SEQUENCE
    <property name="project.revision" value="${Implementation-Version}" description="Sets the version number of the project based on the Implementation-Version found in the manifest file (if one is supplied and nothing is specified in the build.properties)" />
    <fail message="A project revision number has not been determined!">
@@ -27,7 +36,7 @@
      <if>
        <istrue value="${release}" />
        <then>
-@@ -1061,6 +1061,11 @@
+@@ -1061,12 +1061,17 @@
  	    Performs the actual compile
  	    ====================================================================-->
    <target name="compile.compile" depends="init">
@@ -39,6 +48,14 @@
      <javac destdir="${classes.dir}"
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
+            fork="true"
+-           source="${javac.source}"
+-           target="${javac.target}">
++           source="${ant.build.javac.source}"
++           target="${ant.build.javac.target}">
+       <classpath>
+         <path refid="classpath" />
+       </classpath>
 @@ -1082,27 +1087,32 @@
  	    duplicate copying of resources from src tree (handled by compile.src_copy
  	    if jar.include.source is set.
