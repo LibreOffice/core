@@ -79,7 +79,6 @@ public:
     void testPageDescName();
     void testFileNameFields();
     void testDocStat();
-    void testModelToViewHelper();
     void testModelToViewHelperPassthrough();
     void testModelToViewHelperExpandFieldsExpandFootnote();
     void testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode();
@@ -108,6 +107,7 @@ public:
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
     CPPUNIT_TEST(testDocStat);
+    CPPUNIT_TEST(testModelToViewHelperPassthrough);
     CPPUNIT_TEST(testModelToViewHelperExpandFieldsExpandFootnote);
     CPPUNIT_TEST(testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode);
     CPPUNIT_TEST(testModelToViewHelperExpandFields);
