@@ -103,6 +103,9 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rTxt, sal_Int32 nPos 
     {
         if( nPos && nPos == rTxt.getLength() )
             --nPos;
+        else if( nPos < 0)
+            nPos = 0;
+
         nScript = xBreak->getScriptType( rTxt, nPos );
         sal_Int32 nChgPos = 0;
         if ( i18n::ScriptType::WEAK == nScript && nPos + 1 < rTxt.getLength() )
