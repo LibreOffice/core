@@ -52,44 +52,44 @@ uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
     // This should be in sync with the ST_Shd list in ooxml's model.xml.
     switch (nIntValue)
     {
-        case 0: aRet = "clear"; break;
-        case 1: aRet = "solid"; break;
-        case 2: aRet = "pct5"; break;
-        case 3: aRet = "pct10"; break;
-        case 4: aRet = "pct20"; break;
-        case 5: aRet = "pct25"; break;
-        case 6: aRet = "pct30"; break;
-        case 7: aRet = "pct40"; break;
-        case 8: aRet = "pct50"; break;
-        case 9: aRet = "pct60"; break;
-        case 10: aRet = "pct70"; break;
-        case 11: aRet = "pct75"; break;
-        case 12: aRet = "pct80"; break;
-        case 13: aRet = "pct90"; break;
-        case 14: aRet = "horzStripe"; break;
-        case 15: aRet = "vertStripe"; break;
-        case 17: aRet = "reverseDiagStripe"; break;
-        case 16: aRet = "diagStripe"; break;
-        case 18: aRet = "horzCross"; break;
-        case 19: aRet = "diagCross"; break;
-        case 20: aRet = "thinHorzStripe"; break;
-        case 21: aRet = "thinVertStripe"; break;
-        case 23: aRet = "thinReverseDiagStripe"; break;
-        case 22: aRet = "thinDiagStripe"; break;
-        case 24: aRet = "thinHorzCross"; break;
-        case 25: aRet = "thinDiagCross"; break;
-        case 37: aRet = "pct12"; break;
-        case 38: aRet = "pct15"; break;
-        case 43: aRet = "pct35"; break;
-        case 44: aRet = "pct37"; break;
-        case 46: aRet = "pct45"; break;
-        case 49: aRet = "pct55"; break;
-        case 51: aRet = "pct62"; break;
-        case 52: aRet = "pct65"; break;
-        case 57: aRet = "pct85"; break;
-        case 58: aRet = "pct87"; break;
-        case 60: aRet = "pct95"; break;
-        case 65535: aRet = "nil"; break;
+        case NS_ooxml::LN_Value_ST_Shd_clear: aRet = "clear"; break;
+        case NS_ooxml::LN_Value_ST_Shd_solid: aRet = "solid"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct5: aRet = "pct5"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct10: aRet = "pct10"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct20: aRet = "pct20"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct25: aRet = "pct25"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct30: aRet = "pct30"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct40: aRet = "pct40"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct50: aRet = "pct50"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct60: aRet = "pct60"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct70: aRet = "pct70"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct75: aRet = "pct75"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct80: aRet = "pct80"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct90: aRet = "pct90"; break;
+        case NS_ooxml::LN_Value_ST_Shd_horzStripe: aRet = "horzStripe"; break;
+        case NS_ooxml::LN_Value_ST_Shd_vertStripe: aRet = "vertStripe"; break;
+        case NS_ooxml::LN_Value_ST_Shd_reverseDiagStripe: aRet = "reverseDiagStripe"; break;
+        case NS_ooxml::LN_Value_ST_Shd_diagStripe: aRet = "diagStripe"; break;
+        case NS_ooxml::LN_Value_ST_Shd_horzCross: aRet = "horzCross"; break;
+        case NS_ooxml::LN_Value_ST_Shd_diagCross: aRet = "diagCross"; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinHorzStripe: aRet = "thinHorzStripe"; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinVertStripe: aRet = "thinVertStripe"; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinReverseDiagStripe: aRet = "thinReverseDiagStripe"; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinDiagStripe: aRet = "thinDiagStripe"; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinHorzCross: aRet = "thinHorzCross"; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinDiagCross: aRet = "thinDiagCross"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct12: aRet = "pct12"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct15: aRet = "pct15"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct35: aRet = "pct35"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct37: aRet = "pct37"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct45: aRet = "pct45"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct55: aRet = "pct55"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct62: aRet = "pct62"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct65: aRet = "pct65"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct85: aRet = "pct85"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct87: aRet = "pct87"; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct95: aRet = "pct95"; break;
+        case NS_ooxml::LN_Value_ST_Shd_nil: aRet = "nil"; break;
     }
     return uno::makeAny(aRet);
 }
@@ -102,9 +102,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_CT_Shd_val:
         {
             createGrabBag("val", lcl_ConvertShd(nIntValue));
-            //might be clear, pct5...90, some hatch types
-            //TODO: The values need symbolic names!
-            m_nShadingPattern = nIntValue; //clear == 0, solid: 1, pct5: 2, pct50:8, pct95: x3c, horzStripe:0x0e, thinVertStripe: 0x15
+            m_nShadingPattern = nIntValue;
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
@@ -153,82 +151,53 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
     TablePropertyMapPtr pPropertyMap(new TablePropertyMap);
 
     // Code from binary word filter (the values are out of 1000)
-    static const sal_Int32 eMSGrayScale[] =
+    sal_Int32 nWW8BrushStyle = 0;
+    switch (m_nShadingPattern)
     {
         // Clear-Brush
-           0,   // 0    clear
+        case NS_ooxml::LN_Value_ST_Shd_clear: nWW8BrushStyle = 0; break;
         // Solid-Brush
-        1000,   // 1    solid
+        case NS_ooxml::LN_Value_ST_Shd_solid: nWW8BrushStyle = 1000; break;
         // Percent values
-          50,   // 2    pct5
-         100,   // 3    pct10
-         200,   // 4    pct20
-         250,   // 5    pct25
-         300,   // 6    pct30
-         400,   // 7    pct40
-         500,   // 8    pct50
-         600,   // 9    pct60
-         700,   // 10   pct70
-         750,   // 11   pct75
-         800,   // 12   pct80
-         900,   // 13   pct90
+        case NS_ooxml::LN_Value_ST_Shd_pct5: nWW8BrushStyle = 50; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct10: nWW8BrushStyle = 100; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct20: nWW8BrushStyle = 200; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct25: nWW8BrushStyle = 250; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct30: nWW8BrushStyle = 300; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct40: nWW8BrushStyle = 400; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct50: nWW8BrushStyle = 500; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct60: nWW8BrushStyle = 600; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct70: nWW8BrushStyle = 700; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct75: nWW8BrushStyle = 750; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct80: nWW8BrushStyle = 800; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct90: nWW8BrushStyle = 900; break;
         // Special cases
-         333,   // 14   Dark Horizontal
-         333,   // 15   Dark Vertical
-         333,   // 16   Dark Forward Diagonal
-         333,   // 17   Dark Backward Diagonal
-         333,   // 18   Dark Cross
-         333,   // 19   Dark Diagonal Cross
-         333,   // 20   Horizontal
-         333,   // 21   Vertical
-         333,   // 22   Forward Diagonal
-         333,   // 23   Backward Diagonal
-         333,   // 24   Cross
-         333,   // 25   Diagonal Cross
-        // Undefined values in DOC spec-sheet
-         500,   // 26
-         500,   // 27
-         500,   // 28
-         500,   // 29
-         500,   // 30
-         500,   // 31
-         500,   // 32
-         500,   // 33
-         500,   // 34
+        case NS_ooxml::LN_Value_ST_Shd_horzStripe: nWW8BrushStyle = 333; break; // Dark Horizontal
+        case NS_ooxml::LN_Value_ST_Shd_vertStripe: nWW8BrushStyle = 333; break; // Dark Vertical
+        case NS_ooxml::LN_Value_ST_Shd_reverseDiagStripe: nWW8BrushStyle = 333; break; // Dark Forward Diagonal
+        case NS_ooxml::LN_Value_ST_Shd_diagStripe: nWW8BrushStyle = 333; break; // Dark Backward Diagonal
+        case NS_ooxml::LN_Value_ST_Shd_horzCross: nWW8BrushStyle = 333; break; // Dark Cross
+        case NS_ooxml::LN_Value_ST_Shd_diagCross: nWW8BrushStyle = 333; break; // Dark Diagonal Cross
+        case NS_ooxml::LN_Value_ST_Shd_thinHorzStripe: nWW8BrushStyle = 333; break; // Horizontal
+        case NS_ooxml::LN_Value_ST_Shd_thinVertStripe: nWW8BrushStyle = 333; break; // Vertical
+        case NS_ooxml::LN_Value_ST_Shd_thinReverseDiagStripe: nWW8BrushStyle = 333; break; // Forward Diagonal
+        case NS_ooxml::LN_Value_ST_Shd_thinDiagStripe: nWW8BrushStyle = 333; break; // Backward Diagonal
+        case NS_ooxml::LN_Value_ST_Shd_thinHorzCross: nWW8BrushStyle = 333; break; // Cross
+        case NS_ooxml::LN_Value_ST_Shd_thinDiagCross: nWW8BrushStyle = 333; break;   // 25   Diagonal Cross
         // Different shading types
-          25,   // 35   [available in DOC, not available in DOCX]
-          75,   // 36   [available in DOC, not available in DOCX]
-         125,   // 37   pct12
-         150,   // 38   pct15
-         175,   // 39   [available in DOC, not available in DOCX]
-         225,   // 40   [available in DOC, not available in DOCX]
-         275,   // 41   [available in DOC, not available in DOCX]
-         325,   // 42   [available in DOC, not available in DOCX]
-         350,   // 43   pct35
-         375,   // 44   pct37
-         425,   // 45   [available in DOC, not available in DOCX]
-         450,   // 46   pct45
-         475,   // 47   [available in DOC, not available in DOCX]
-         525,   // 48   [available in DOC, not available in DOCX]
-         550,   // 49   pct55
-         575,   // 50   [available in DOC, not available in DOCX]
-         625,   // 51   pct62
-         650,   // 52   pct65
-         675,   // 53   [available in DOC, not available in DOCX]
-         725,   // 54   [available in DOC, not available in DOCX]
-         775,   // 55   [available in DOC, not available in DOCX]
-         825,   // 56   [available in DOC, not available in DOCX]
-         850,   // 57   pct85
-         875,   // 58   pct87
-         925,   // 59   [available in DOC, not available in DOCX]
-         950,   // 60   pct95
-         975    // 61   [available in DOC, not available in DOCX]
-    };// 62
+        case NS_ooxml::LN_Value_ST_Shd_pct12: nWW8BrushStyle = 125; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct15: nWW8BrushStyle = 150; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct35: nWW8BrushStyle = 350; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct37: nWW8BrushStyle = 375; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct45: nWW8BrushStyle = 450; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct55: nWW8BrushStyle = 550; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct62: nWW8BrushStyle = 625; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct65: nWW8BrushStyle = 650; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct85: nWW8BrushStyle = 850; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct87: nWW8BrushStyle = 875; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct95: nWW8BrushStyle = 950; break;
+    };
 
-    if( m_nShadingPattern >= (sal_Int32)SAL_N_ELEMENTS( eMSGrayScale ) )
-        m_nShadingPattern = 0;
-
-    sal_Int32 nWW8BrushStyle = eMSGrayScale[m_nShadingPattern];
     sal_Int32 nApplyColor = 0;
     if( !nWW8BrushStyle )
     {
@@ -253,74 +222,50 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
     // Check if it is a 'Character'
     if (m_OutputFormat == Character)
     {
-        static sal_Int32 aWWShadingPatterns[ ] =
+        sal_Int32 nShadingPattern = drawing::ShadingPattern::CLEAR;
+        switch (m_nShadingPattern)
         {
-            drawing::ShadingPattern::CLEAR,
-            drawing::ShadingPattern::SOLID,
-            drawing::ShadingPattern::PCT5,
-            drawing::ShadingPattern::PCT10,
-            drawing::ShadingPattern::PCT20,
-            drawing::ShadingPattern::PCT25,
-            drawing::ShadingPattern::PCT30,
-            drawing::ShadingPattern::PCT40,
-            drawing::ShadingPattern::PCT50,
-            drawing::ShadingPattern::PCT60,
-            drawing::ShadingPattern::PCT70,
-            drawing::ShadingPattern::PCT75,
-            drawing::ShadingPattern::PCT80,
-            drawing::ShadingPattern::PCT90,
-            drawing::ShadingPattern::HORZ_STRIPE,
-            drawing::ShadingPattern::VERT_STRIPE,
-            drawing::ShadingPattern::REVERSE_DIAG_STRIPE,
-            drawing::ShadingPattern::DIAG_STRIPE,
-            drawing::ShadingPattern::HORZ_CROSS,
-            drawing::ShadingPattern::DIAG_CROSS,
-            drawing::ShadingPattern::THIN_HORZ_STRIPE,
-            drawing::ShadingPattern::THIN_VERT_STRIPE,
-            drawing::ShadingPattern::THIN_REVERSE_DIAG_STRIPE,
-            drawing::ShadingPattern::THIN_DIAG_STRIPE,
-            drawing::ShadingPattern::THIN_HORZ_CROSS,
-            drawing::ShadingPattern::THIN_DIAG_CROSS,
-            drawing::ShadingPattern::UNUSED_1,
-            drawing::ShadingPattern::UNUSED_2,
-            drawing::ShadingPattern::UNUSED_3,
-            drawing::ShadingPattern::UNUSED_4,
-            drawing::ShadingPattern::UNUSED_5,
-            drawing::ShadingPattern::UNUSED_6,
-            drawing::ShadingPattern::UNUSED_7,
-            drawing::ShadingPattern::UNUSED_8,
-            drawing::ShadingPattern::UNUSED_9,
-            drawing::ShadingPattern::PCT2,
-            drawing::ShadingPattern::PCT7,
-            drawing::ShadingPattern::PCT12,
-            drawing::ShadingPattern::PCT15,
-            drawing::ShadingPattern::PCT17,
-            drawing::ShadingPattern::PCT22,
-            drawing::ShadingPattern::PCT27,
-            drawing::ShadingPattern::PCT32,
-            drawing::ShadingPattern::PCT35,
-            drawing::ShadingPattern::PCT37,
-            drawing::ShadingPattern::PCT42,
-            drawing::ShadingPattern::PCT45,
-            drawing::ShadingPattern::PCT47,
-            drawing::ShadingPattern::PCT52,
-            drawing::ShadingPattern::PCT55,
-            drawing::ShadingPattern::PCT57,
-            drawing::ShadingPattern::PCT62,
-            drawing::ShadingPattern::PCT65,
-            drawing::ShadingPattern::PCT67,
-            drawing::ShadingPattern::PCT72,
-            drawing::ShadingPattern::PCT77,
-            drawing::ShadingPattern::PCT82,
-            drawing::ShadingPattern::PCT85,
-            drawing::ShadingPattern::PCT87,
-            drawing::ShadingPattern::PCT92,
-            drawing::ShadingPattern::PCT95,
-            drawing::ShadingPattern::PCT97
+        case NS_ooxml::LN_Value_ST_Shd_clear: nShadingPattern = drawing::ShadingPattern::CLEAR; break;
+        case NS_ooxml::LN_Value_ST_Shd_solid: nShadingPattern = drawing::ShadingPattern::SOLID; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct5: nShadingPattern = drawing::ShadingPattern::PCT5; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct10: nShadingPattern = drawing::ShadingPattern::PCT10; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct20: nShadingPattern = drawing::ShadingPattern::PCT20; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct25: nShadingPattern = drawing::ShadingPattern::PCT25; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct30: nShadingPattern = drawing::ShadingPattern::PCT30; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct40: nShadingPattern = drawing::ShadingPattern::PCT40; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct50: nShadingPattern = drawing::ShadingPattern::PCT50; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct60: nShadingPattern = drawing::ShadingPattern::PCT60; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct70: nShadingPattern = drawing::ShadingPattern::PCT70; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct75: nShadingPattern = drawing::ShadingPattern::PCT75; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct80: nShadingPattern = drawing::ShadingPattern::PCT80; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct90: nShadingPattern = drawing::ShadingPattern::PCT90; break;
+        case NS_ooxml::LN_Value_ST_Shd_horzStripe: nShadingPattern = drawing::ShadingPattern::HORZ_STRIPE; break;
+        case NS_ooxml::LN_Value_ST_Shd_vertStripe: nShadingPattern = drawing::ShadingPattern::VERT_STRIPE; break;
+        case NS_ooxml::LN_Value_ST_Shd_reverseDiagStripe: nShadingPattern = drawing::ShadingPattern::REVERSE_DIAG_STRIPE; break;
+        case NS_ooxml::LN_Value_ST_Shd_diagStripe: nShadingPattern = drawing::ShadingPattern::DIAG_STRIPE; break;
+        case NS_ooxml::LN_Value_ST_Shd_horzCross: nShadingPattern = drawing::ShadingPattern::HORZ_CROSS; break;
+        case NS_ooxml::LN_Value_ST_Shd_diagCross: nShadingPattern = drawing::ShadingPattern::DIAG_CROSS; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinHorzStripe: nShadingPattern = drawing::ShadingPattern::THIN_HORZ_STRIPE; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinVertStripe: nShadingPattern = drawing::ShadingPattern::THIN_VERT_STRIPE; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinReverseDiagStripe: nShadingPattern = drawing::ShadingPattern::THIN_REVERSE_DIAG_STRIPE; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinDiagStripe: nShadingPattern = drawing::ShadingPattern::THIN_DIAG_STRIPE; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinHorzCross: nShadingPattern = drawing::ShadingPattern::THIN_HORZ_CROSS; break;
+        case NS_ooxml::LN_Value_ST_Shd_thinDiagCross: nShadingPattern = drawing::ShadingPattern::THIN_DIAG_CROSS; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct12: nShadingPattern = drawing::ShadingPattern::PCT12; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct15: nShadingPattern = drawing::ShadingPattern::PCT15; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct35: nShadingPattern = drawing::ShadingPattern::PCT35; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct37: nShadingPattern = drawing::ShadingPattern::PCT37; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct45: nShadingPattern = drawing::ShadingPattern::PCT45; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct55: nShadingPattern = drawing::ShadingPattern::PCT55; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct62: nShadingPattern = drawing::ShadingPattern::PCT62; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct65: nShadingPattern = drawing::ShadingPattern::PCT65; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct85: nShadingPattern = drawing::ShadingPattern::PCT85; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct87: nShadingPattern = drawing::ShadingPattern::PCT87; break;
+        case NS_ooxml::LN_Value_ST_Shd_pct95: nShadingPattern = drawing::ShadingPattern::PCT95; break;
         };
 
         // Write the shading pattern property
-        pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::makeAny( aWWShadingPatterns[m_nShadingPattern] ));
+        pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::makeAny( nShadingPattern ));
     }
 
     pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR

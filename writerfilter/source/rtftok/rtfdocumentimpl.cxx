@@ -4435,73 +4435,73 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         switch (nParam)
         {
         case 500:
-            nValue = 2;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct5;
             break;
         case 1000:
-            nValue = 3;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct10;
             break;
         case 1200:
-            nValue = 37;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct12;
             break;
         case 1500:
-            nValue = 38;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct15;
             break;
         case 2000:
-            nValue = 4;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct20;
             break;
         case 2500:
-            nValue = 5;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct25;
             break;
         case 3000:
-            nValue = 6;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct30;
             break;
         case 3500:
-            nValue = 43;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct35;
             break;
         case 3700:
-            nValue = 44;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct37;
             break;
         case 4000:
-            nValue = 7;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct40;
             break;
         case 4500:
-            nValue = 46;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct45;
             break;
         case 5000:
-            nValue = 8;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct50;
             break;
         case 5500:
-            nValue = 49;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct55;
             break;
         case 6000:
-            nValue = 9;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct60;
             break;
         case 6200:
-            nValue = 51;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct62;
             break;
         case 6500:
-            nValue = 52;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct65;
             break;
         case 7000:
-            nValue = 10;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct70;
             break;
         case 7500:
-            nValue = 11;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct75;
             break;
         case 8000:
-            nValue = 12;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct80;
             break;
         case 8500:
-            nValue = 57;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct85;
             break;
         case 8700:
-            nValue = 58;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct87;
             break;
         case 9000:
-            nValue = 13;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct90;
             break;
         case 9500:
-            nValue = 60;
+            nValue = NS_ooxml::LN_Value_ST_Shd_pct95;
             break;
         default:
             break;
