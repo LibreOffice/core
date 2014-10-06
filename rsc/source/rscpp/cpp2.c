@@ -415,8 +415,6 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
 {
     char** incptr;
     char tmpname[NFWORK]; /* Filename work area   */
-    int len;
-    int len2;
 
     if (searchlocal)
     {
@@ -431,8 +429,8 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
         if (filename[0] != '/' &&
             hasdirectory(infile->filename, tmpname, NFWORK))
         {
-            len = strlen(tmpname);
-            len2 = strlen(filename);
+            int len = strlen(tmpname);
+            int len2 = strlen(filename);
             if(len + len2 < NFWORK)
             {
                 memcpy(tmpname + len, filename, len2);
@@ -445,7 +443,7 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
         }
         else
         {
-            len = strlen(filename);
+            int len = strlen(filename);
             if(len < NFWORK)
             {
                 memcpy(tmpname, filename, len);
@@ -533,6 +531,8 @@ FILE_LOCAL int hasdirectory(char* source, char* result, int max)
      * Random DEC operating system (RSTS/E)
      */
     char* tp;
+
+    (void)max;
 
     if ((tp = strrchr(source, ']')) == NULL &&
         (tp = strrchr(source, ':')) == NULL)
