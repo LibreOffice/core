@@ -104,9 +104,9 @@ FILE * init(int argc, char ** argv)
     return pFile;
 }
 
-int Parse( int nTyp, const char *pTokenText ){
-    global::exporter->Execute( nTyp , pTokenText );
-    return 1;
+bool Parse( int nTyp, const char *pTokenText )
+{
+    return global::exporter->Execute( nTyp, pTokenText );
 }
 
 void Close()
@@ -116,25 +116,21 @@ void Close()
         // avoid nontrivial Export dtor being executed during exit
 }
 
-int WorkOnTokenSet( int nTyp, char *pTokenText )
+void WorkOnTokenSet( int nTyp, char *pTokenText )
 {
     global::exporter->GetParseQueue()->Push( QueueEntry( nTyp , OString(pTokenText) ) );
-    return 1;
 }
 
-int SetError()
+void SetError(bool errorFlag)
 {
     // set error at global instance of class Export
-    global::exporter->SetError();
-    return 1;
+    global::exporter->SetError(errorFlag);
 }
 
-int GetError()
+bool IsError()
 {
     // get error at global instance of class Export
-    if (global::exporter->GetError())
-        return 1;
-    return sal_False;
+    return global::exporter->IsError();
 }
 
 } // extern "C"
@@ -154,7 +150,7 @@ bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
         {
             OString sError("ResId after child definition");
             yyerror(sError.getStr());
-            SetError();
+            SetError(true);
         }
 
         if ( sId.getLength() > 255 )
@@ -282,7 +278,7 @@ Export::~Export()
     }
 }
 
-int Export::Execute( int nToken, const char * pToken )
+bool Export::Execute( int nToken, const char * pToken )
 {
 
     OString sToken( pToken );
@@ -303,7 +299,7 @@ int Export::Execute( int nToken, const char * pToken )
         // this tokens are not mandatory for parsing, so ignore them ...
         if ( bMergeMode )
             WriteToMerged( sOrig , false ); // ... or write them directly to dest.
-        return 0;
+        return false;
     }
 
     ResData *pResData = NULL;
@@ -323,7 +319,7 @@ int Export::Execute( int nToken, const char * pToken )
         // no res. exists at cur. level so return
         if ( bMergeMode )
             WriteToMerged( sOrig , false );
-        return 0;
+        return false;
     }
 
     if ( bDefine ) {
@@ -341,7 +337,7 @@ int Export::Execute( int nToken, const char * pToken )
                     bNextMustBeDefineEOL = false;
                     if ( bMergeMode )
                         WriteToMerged( sOrig , false );
-                    return 1;
+                    return true;
                 }
             }
         }
@@ -378,7 +374,7 @@ int Export::Execute( int nToken, const char * pToken )
         case NORMDEFINE:
             if ( bMergeMode )
                 WriteToMerged( sOrig , false );
-            return 0;
+            return false;
         case RSCDEFINE:
             bDefine = true; // res. defined in macro
 
@@ -675,7 +671,7 @@ int Export::Execute( int nToken, const char * pToken )
         Parse( LEVELDOWN, "" );
     }
 
-    return 1;
+    return true;
 }
 
 void Export::CutComment( OString &rText )

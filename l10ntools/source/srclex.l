@@ -237,14 +237,12 @@ void yyerror( const char *s )
 {
 	/* write error to stderr */
 	fprintf( stderr, "Error: \"%s\" in line %d: \"%s\"\n", s, yylineno, yytext  );
-	SetError();
+	SetError(true);
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
-    int e;
-    yyin = init(argc, argv);
-    yylex();
-    e = GetError();
-    Close();
-    return EXIT_SUCCESS;
+        yyin = init(argc, argv);
+        yylex();
+        Close();
+        return (IsError() ? EXIT_FAILURE : EXIT_SUCCESS);
 }
