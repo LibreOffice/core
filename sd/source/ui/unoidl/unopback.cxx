@@ -71,6 +71,8 @@ SdUnoPageBackground::SdUnoPageBackground(
 
 SdUnoPageBackground::~SdUnoPageBackground() throw()
 {
+    SolarMutexGuard g;
+
     if( mpDoc )
         EndListening( *mpDoc );
 
