@@ -20,15 +20,17 @@
 #ifndef INCLUDED_VCL_INC_SALGDI_HXX
 #define INCLUDED_VCL_INC_SALGDI_HXX
 
-#include "tools/solar.h"
-#include "vcl/dllapi.h"
-#include "vcl/salgtype.hxx"
-#include "osl/thread.hxx"
-#include "vcl/outdev.hxx"
-#include "vcl/salnativewidgets.hxx"
+#include <tools/solar.h>
+#include <osl/thread.hxx>
+
+#include <vcl/dllapi.h>
+#include <vcl/salgtype.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/salnativewidgets.hxx>
+#include <vcl/metric.hxx>
+
 #include "salglyphid.hxx"
 #include "sallayout.hxx"
-#include <impfont.hxx>
 
 #include <map>
 
@@ -231,8 +233,7 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
 
     // get the repertoire of the current font
-    virtual const ImplFontCharMapPtr
-                            GetImplFontCharMap() const = 0;
+    virtual const FontCharMapPtr GetFontCharMap() const = 0;
 
     // get the layout capabilities of the current font
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;

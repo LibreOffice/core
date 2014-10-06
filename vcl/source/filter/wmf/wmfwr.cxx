@@ -945,15 +945,18 @@ void WMFWriter::SetAllAttr()
         pVirDev->SetFont(aSrcFont);
         if ( aDstFont.GetName() != aSrcFont.GetName() )
         {
-            FontCharMap aFontCharMap;
-            if ( pVirDev->GetFontCharMap( aFontCharMap ) )
+            FontCharMapPtr pFontCharMap;
+            if ( pVirDev->GetFontCharMap( pFontCharMap ) )
             {
-                if ( ( aFontCharMap.GetFirstChar() & 0xff00 ) == 0xf000 )
+                if ( ( pFontCharMap->GetFirstChar() & 0xff00 ) == 0xf000 )
                     aSrcFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
                 else if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
                     aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
             }
+
+            pFontCharMap = 0;
         }
+
         aDstFont = aSrcFont;
         CreateSelectDeleteFont(aDstFont);
     }
