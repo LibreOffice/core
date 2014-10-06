@@ -446,9 +446,9 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
     bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
     if( bNeedSubset )
     {
-        FontCharMap aFontCharMap;
-        m_pShowSet->GetFontCharMap( aFontCharMap );
-        pSubsetMap = new SubsetMap( &aFontCharMap );
+        FontCharMapPtr pFontCharMap( new FontCharMap() );
+        m_pShowSet->GetFontCharMap( pFontCharMap );
+        pSubsetMap = new SubsetMap( pFontCharMap );
 
         // update subset listbox for new font's unicode subsets
         // TODO: is it worth to improve the stupid linear search?
