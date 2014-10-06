@@ -5717,7 +5717,7 @@ if test "$GCC" = "yes"; then
 #endif
                 ]])],[HAVE_THREADSAFE_STATICS=TRUE],[])
             AC_LANG_POP([C++])
-        elif test "${GCC_VERSION?}" -ge 0403; then
+        else # known to work in GCC since version 4.3
             HAVE_THREADSAFE_STATICS=TRUE
         fi
     fi
