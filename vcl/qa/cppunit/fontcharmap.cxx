@@ -28,17 +28,19 @@ public:
 
 void VclFontCharMapTest::testDefaultFontCharMap()
 {
-    FontCharMap fcmap; // gets default map
+    FontCharMapPtr pfcmap( new FontCharMap() ); // gets default map
 
-    CPPUNIT_ASSERT( fcmap.IsDefaultMap() );
+    CPPUNIT_ASSERT( pfcmap->IsDefaultMap() );
 
-    sal_uInt32 nStartBMPPlane = fcmap.GetFirstChar();
-    sal_uInt32 nStartSupBMPPlane = fcmap.GetNextChar(0xD800);
-    sal_uInt32 nEndBMPPlane = fcmap.GetLastChar();
+    sal_uInt32 nStartBMPPlane = pfcmap->GetFirstChar();
+    sal_uInt32 nStartSupBMPPlane = pfcmap->GetNextChar(0xD800);
+    sal_uInt32 nEndBMPPlane = pfcmap->GetLastChar();
 
     CPPUNIT_ASSERT( nStartBMPPlane == 0x0020 );
     CPPUNIT_ASSERT( nStartSupBMPPlane == 0xE000 );
     CPPUNIT_ASSERT( nEndBMPPlane == 0xFFF0-1 );
+
+    pfcmap = 0;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontCharMapTest);
