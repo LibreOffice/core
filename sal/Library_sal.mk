@@ -185,16 +185,9 @@ $(eval $(call gb_Library_add_cobject,sal,sal/osl/unx/signal, \
 		-DSAL_ENABLE_CRASH_REPORT) \
 ))
 
-# Note that the uunxapi.mm file just includes the uunxapi.cxx one
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_objcxxobjects,sal,\
+$(eval $(call gb_Library_add_objcxxcppobjects,sal,\
 	sal/osl/unx/uunxapi \
 ))
-else
-$(eval $(call gb_Library_add_exception_objects,sal,\
-	sal/osl/unx/uunxapi \
-))
-endif
 
 ifneq ($(filter $(OS),MACOSX IOS),)
 $(eval $(call gb_Library_add_exception_objects,sal,\
