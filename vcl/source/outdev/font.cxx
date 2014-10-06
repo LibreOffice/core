@@ -231,7 +231,7 @@ bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     if( !mpFontEntry )
         return false;
 
-    const ImplFontCharMapPtr pNewMap = mpGraphics->GetImplFontCharMap();
+    const FontCharMap* pNewMap = mpGraphics->GetFontCharMap();
     rFontCharMap.Reset( pNewMap );
 
     if( rFontCharMap.IsDefaultMap() )
