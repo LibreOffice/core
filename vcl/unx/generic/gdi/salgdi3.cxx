@@ -43,12 +43,13 @@
 #include <vcl/jobdata.hxx>
 #include <vcl/printerinfomanager.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/metric.hxx>
 
 #include "fontmanager.hxx"
+#include "impfont.hxx"
 #include "gcach_xpeer.hxx"
 #include "generic/genpspgraphics.h"
 #include "generic/printergfx.hxx"
-#include "impfont.hxx"
 #include "outdev.h"
 #include "PhysicalFontCollection.hxx"
 #include "PhysicalFontFace.hxx"
@@ -431,13 +432,13 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     cairo_destroy(cr);
 }
 
-const ImplFontCharMapPtr X11SalGraphics::GetImplFontCharMap() const
+const FontCharMapPtr X11SalGraphics::GetFontCharMap() const
 {
     if( !mpServerFont[0] )
         return NULL;
 
-    const ImplFontCharMapPtr pIFCMap = mpServerFont[0]->GetImplFontCharMap();
-    return pIFCMap;
+    const FontCharMapPtr pFCMap = mpServerFont[0]->GetFontCharMap();
+    return pFCMap;
 }
 
 bool X11SalGraphics::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
