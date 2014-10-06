@@ -185,7 +185,7 @@ public:
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData*, int /* nFallbackLevel */ ) SAL_OVERRIDE {}
     // get the repertoire of the current font
-    virtual const ImplFontCharMap*
+    virtual const ImplFontCharMapPtr
                             GetImplFontCharMap() const SAL_OVERRIDE
     {
         return nullptr;
