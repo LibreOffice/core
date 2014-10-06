@@ -777,12 +777,12 @@ void GenPspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     DrawPrinterLayout( rLayout, *m_pPrinterGfx, true );
 }
 
-const ImplFontCharMapPtr GenPspGraphics::GetImplFontCharMap() const
+const FontCharMap* GenPspGraphics::GetFontCharMap() const
 {
     if( !m_pServerFont[0] )
         return NULL;
 
-    const ImplFontCharMapPtr pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
+    const FontCharMap* pIFCMap = m_pServerFont[0]->GetFontCharMap();
     return pIFCMap;
 }
 
