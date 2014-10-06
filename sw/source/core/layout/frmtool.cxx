@@ -208,7 +208,7 @@ SwFrmNotify::~SwFrmNotify()
     {
         //UUUU
         bool bUseNewFillProperties(false);
-        if (pFrm->IsAdaptedToNewFillProperties())
+        if (pFrm->supportsFullDrawingLayerFillAttributeSet())
         {
             drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pFrm->getSdrAllFillAttributesHelper());
             if(aFillAttributes.get() && aFillAttributes->isUsed())

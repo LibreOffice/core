@@ -570,7 +570,7 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrm::getSdrAllFillAttri
     }
 }
 
-bool SwFrm::IsAdaptedToNewFillProperties() const
+bool SwFrm::supportsFullDrawingLayerFillAttributeSet() const
 {
     if (IsCntntFrm())
     {
@@ -578,7 +578,7 @@ bool SwFrm::IsAdaptedToNewFillProperties() const
     }
     else
     {
-        return static_cast< const SwLayoutFrm* >(this)->GetFmt()->IsAdaptedToNewFillProperties();
+        return static_cast< const SwLayoutFrm* >(this)->GetFmt()->supportsFullDrawingLayerFillAttributeSet();
     }
 }
 

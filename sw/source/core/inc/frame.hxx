@@ -895,7 +895,7 @@ public:
 
     //UUUU
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
-    bool IsAdaptedToNewFillProperties() const;
+    bool supportsFullDrawingLayerFillAttributeSet() const;
 
 public:
     // if writer is NULL, dumps the layout structure as XML in layout.xml

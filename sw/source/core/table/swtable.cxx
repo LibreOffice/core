@@ -2363,17 +2363,17 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     SwFrmFmt::Modify( pOld, pNew );
 }
 
-bool SwTableBoxFmt::IsAdaptedToNewFillProperties() const
+bool SwTableBoxFmt::supportsFullDrawingLayerFillAttributeSet() const
 {
     return false;
 }
 
-bool SwTableFmt::IsAdaptedToNewFillProperties() const
+bool SwTableFmt::supportsFullDrawingLayerFillAttributeSet() const
 {
     return false;
 }
 
-bool SwTableLineFmt::IsAdaptedToNewFillProperties() const
+bool SwTableLineFmt::supportsFullDrawingLayerFillAttributeSet() const
 {
     return false;
 }

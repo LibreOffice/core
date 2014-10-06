@@ -391,14 +391,14 @@ bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     return true;
 }
 
-bool SwFmt::IsAdaptedToNewFillProperties() const
+bool SwFmt::supportsFullDrawingLayerFillAttributeSet() const
 {
     return false;
 }
 
 const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
 {
-    if (RES_BACKGROUND == nWhich && IsAdaptedToNewFillProperties())
+    if (RES_BACKGROUND == nWhich && supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or makeBackgroundBrushItem (simple fallback is in place and used)");
@@ -417,7 +417,7 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
 
 SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem ) const
 {
-    if (RES_BACKGROUND == nWhich && IsAdaptedToNewFillProperties())
+    if (RES_BACKGROUND == nWhich && supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or SwFmt::GetBackgroundStat (simple fallback is in place and used)");
@@ -452,7 +452,7 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
 
 SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) const
 {
-    if (IsAdaptedToNewFillProperties())
+    if (supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
@@ -489,7 +489,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     bool bRet = false;
 
     //UUUU
-    if (RES_BACKGROUND == rAttr.Which() && IsAdaptedToNewFillProperties())
+    if (RES_BACKGROUND == rAttr.Which() && supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -590,7 +590,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
         GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aTempSet);
     }
 
-    if (IsAdaptedToNewFillProperties())
+    if (supportsFullDrawingLayerFillAttributeSet())
     {
         const SfxPoolItem* pSource = 0;
 
@@ -823,7 +823,7 @@ void SwFmt::SetGrabBagItem(const uno::Any& rVal)
 //UUUU
 SvxBrushItem SwFmt::makeBackgroundBrushItem(bool bInP) const
 {
-    if (IsAdaptedToNewFillProperties())
+    if (supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");

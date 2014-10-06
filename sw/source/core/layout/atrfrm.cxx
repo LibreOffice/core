@@ -2423,7 +2423,7 @@ SwFrmFmt::SwFrmFmt(
 {
 }
 
-bool SwFrmFmt::IsAdaptedToNewFillProperties() const
+bool SwFrmFmt::supportsFullDrawingLayerFillAttributeSet() const
 {
     return true;
 }
@@ -2443,7 +2443,7 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             RES_FOOTER, false, (const SfxPoolItem**)&pF );
 
         //UUUU reset fill information
-        if (maFillAttributes.get() && IsAdaptedToNewFillProperties())
+        if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
         {
             SfxItemIter aIter(*((SwAttrSetChg*)pNew)->GetChgSet());
             bool bReset(false);
@@ -2462,7 +2462,7 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     else if(RES_FMT_CHG == nWhich)
     {
         //UUUU reset fill information on format change (e.g. style changed)
-        if (maFillAttributes.get() && IsAdaptedToNewFillProperties())
+        if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
         {
             maFillAttributes.reset();
         }
@@ -2983,7 +2983,7 @@ OUString SwFlyFrmFmt::GetObjDescription() const
 bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
     //UUUU
-    if (IsAdaptedToNewFillProperties() && getSdrAllFillAttributesHelper())
+    if (supportsFullDrawingLayerFillAttributeSet() && getSdrAllFillAttributesHelper())
     {
         return getSdrAllFillAttributesHelper()->isTransparent();
     }
@@ -3026,7 +3026,7 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
 bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
 {
     //UUUU
-    if (IsAdaptedToNewFillProperties() && getSdrAllFillAttributesHelper())
+    if (supportsFullDrawingLayerFillAttributeSet() && getSdrAllFillAttributesHelper())
     {
         return !getSdrAllFillAttributesHelper()->isUsed();
     }
@@ -3257,7 +3257,7 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
 //UUUU
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrmFmt::getSdrAllFillAttributesHelper() const
 {
-    if (IsAdaptedToNewFillProperties())
+    if (supportsFullDrawingLayerFillAttributeSet())
     {
         // create FillAttributes on demand
         if(!maFillAttributes.get())
