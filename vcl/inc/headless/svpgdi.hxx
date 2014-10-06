@@ -23,6 +23,7 @@
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/color.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/metric.hxx>
 
 #include "salgdi.hxx"
 #include "sallayout.hxx"
@@ -156,7 +157,7 @@ public:
     virtual void            SetTextColor( SalColor nSalColor ) SAL_OVERRIDE;
     virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
-    virtual const ImplFontCharMapPtr GetImplFontCharMap() const SAL_OVERRIDE;
+    virtual const FontCharMapPtr GetFontCharMap() const SAL_OVERRIDE;
     virtual bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
     virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
     virtual void ClearDevFontCache() SAL_OVERRIDE;
