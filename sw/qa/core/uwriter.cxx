@@ -964,8 +964,8 @@ static SwPosition
 getRandomPosition(SwDoc *pDoc, int /* nOffset */)
 {
     const SwPosition aPos(pDoc->GetNodes().GetEndOfContent());
-    sal_uLong nNodes = aPos.nNode.GetNode().GetIndex() - aPos.nNode.GetNode().StartOfSectionIndex();
-    sal_uLong n = comphelper::rng::uniform_int_distribution(static_cast<sal_uLong>(0), nNodes);
+    size_t nNodes = aPos.nNode.GetNode().GetIndex() - aPos.nNode.GetNode().StartOfSectionIndex();
+    size_t n = comphelper::rng::uniform_int_distribution(static_cast<size_t>(0), nNodes);
     SwPaM pam(aPos);
     for (sal_uLong i = 0; i < n; ++i)
     {
