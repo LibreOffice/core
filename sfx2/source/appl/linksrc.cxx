@@ -91,22 +91,36 @@ SvLinkSource_Entry_Impl::~SvLinkSource_Entry_Impl()
 {
 }
 
-class SvLinkSource_Array_Impl : public std::vector<SvLinkSource_Entry_Impl*>
+class SvLinkSource_Array_Impl
 {
+private :
+    std::vector<SvLinkSource_Entry_Impl*> mvData;
+
 public:
+    SvLinkSource_Array_Impl() : mvData() {}
+
+    size_t size() const { return mvData.size(); }
+    SvLinkSource_Entry_Impl *operator[](size_t idx) const { return mvData[idx]; }
+    std::vector<SvLinkSource_Entry_Impl*>::iterator begin() { return mvData.begin(); }
+    std::vector<SvLinkSource_Entry_Impl*>::iterator end() { return mvData.end(); }
+    std::vector<SvLinkSource_Entry_Impl*>::const_iterator cbegin() const { return mvData.cbegin(); }
+    std::vector<SvLinkSource_Entry_Impl*>::const_iterator cend() const { return mvData.cend(); }
+    void clear() { mvData.clear(); }
+    void push_back(SvLinkSource_Entry_Impl* rData) { mvData.push_back(rData); }
+
     void DeleteAndDestroy(SvLinkSource_Entry_Impl* p)
     {
-        iterator it = std::find(begin(), end(), p);
-        if (it != end())
+        std::vector<SvLinkSource_Entry_Impl*>::iterator it = std::find(mvData.begin(), mvData.end(), p);
+        if (it != mvData.end())
         {
-            erase(it);
+            mvData.erase(it);
             delete p;
         }
     }
 
     ~SvLinkSource_Array_Impl()
     {
-        for(const_iterator it = begin(); it != end(); ++it)
+        for(std::vector<SvLinkSource_Entry_Impl*>::const_iterator it = mvData.begin(); it != mvData.end(); ++it)
             delete *it;
     }
 };
@@ -138,7 +152,7 @@ SvLinkSource_EntryIter_Impl::~SvLinkSource_EntryIter_Impl()
 bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry )
 {
     return ( nPos < aArr.size() && aArr[nPos] == pEntry
-       && std::find( rOrigArr.begin(), rOrigArr.end(), pEntry ) != rOrigArr.end() );
+       && std::find( rOrigArr.cbegin(), rOrigArr.cend(), pEntry ) != rOrigArr.cend() );
 }
 
 SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
@@ -155,7 +169,7 @@ SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
             // then we must search the current (or the next) in the orig
             do {
                 pRet = aArr[ nPos ];
-                if( std::find(rOrigArr.begin(), rOrigArr.end(), pRet ) != rOrigArr.end() )
+                if( std::find(rOrigArr.cbegin(), rOrigArr.cend(), pRet ) != rOrigArr.cend() )
                     break;
                 pRet = 0;
                 ++nPos;
