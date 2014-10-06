@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_09b6893d",
+        "filename": "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-10-06T12:04:29Z",
+      "side": 0,
+      "message": "Don\u0027t you think shadow should be added hidden?",
+      "revId": "5ed973e0fa38b2752850c04659452aa1cf2479e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
