@@ -34,8 +34,12 @@ COMPHELPER_DLLPUBLIC int uniform_int_distribution(int a, int b);
 /// uniform distribution in [a,b]
 COMPHELPER_DLLPUBLIC unsigned int uniform_int_distribution(unsigned int a, unsigned int b);
 
+#if SAL_TYPES_SIZEOFLONG == 8
+
 /// uniform distribution in [a,b]
 COMPHELPER_DLLPUBLIC size_t uniform_int_distribution(size_t a, size_t b);
+
+#endif
 
 } // namespace
 

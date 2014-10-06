@@ -66,12 +66,16 @@ unsigned int uniform_int_distribution(unsigned int a, unsigned int b)
     return dist(theRandomNumberGenerator::get().global_rng);
 }
 
+#if SAL_TYPES_SIZEOFLONG == 8
+
 // uniform size_t [a,b] distribution
 size_t uniform_int_distribution(size_t a, size_t b)
 {
     boost::random::uniform_int_distribution<size_t> dist(a, b);
     return dist(theRandomNumberGenerator::get().global_rng);
 }
+
+#endif
 
 // uniform size_t [a,b) distribution
 double uniform_real_distribution(double a, double b)
