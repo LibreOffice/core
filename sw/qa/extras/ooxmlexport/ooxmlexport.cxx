@@ -403,6 +403,15 @@ DECLARE_OOXMLEXPORT_TEST(testTableStyleBorderExport, "table-style-border-export.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x8064A2), getProperty<table::BorderLine2>(xCell, "BottomBorder").Color);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testAnchorPosition, "anchor-position.docx")
+{
+    // The problem was that the at-char anchored picture was at the end of the
+    // paragraph, so there were only two postions: a Text, then a Frame one.
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(getRun(getParagraph(1), 1), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getProperty<OUString>(getRun(getParagraph(1), 2), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(getRun(getParagraph(1), 3), "TextPortionType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

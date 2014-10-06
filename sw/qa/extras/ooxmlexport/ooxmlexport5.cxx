@@ -466,7 +466,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO79915, "fdo79915.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[8]/w:t", "How much buoyancy does the water provide?");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[10]/w:t", "How much buoyancy does the water provide?");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo79817, "fdo79817.docx")

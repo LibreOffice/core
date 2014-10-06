@@ -1097,6 +1097,22 @@ void SwTxtNode::Update(
 
             bSortMarks = bAtLeastOneBookmarkMoved && bAtLeastOneExpandedBookmarkAtInsertionPosition;
         }
+
+        // at-char anchored flys shouldn't be moved, either.
+        const SwFrmFmts& rFmts = *GetDoc()->GetSpzFrmFmts();
+        for (SwFrmFmts::const_iterator pFmt = rFmts.begin(); pFmt != rFmts.end(); ++pFmt)
+        {
+            const SwFmtAnchor& rAnchor = (*pFmt)->GetAnchor();
+            const SwPosition* pCntntAnchor = rAnchor.GetCntntAnchor();
+            if (rAnchor.GetAnchorId() == FLY_AT_CHAR && pCntntAnchor)
+            {
+                // The fly is at-char anchored and has an anchor position.
+                SwIndex& rEndIdx = const_cast<SwIndex&>(pCntntAnchor->nContent);
+                if (&pCntntAnchor->nNode.GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
+                    // The anchor position is exactly our insert position.
+                    rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
+            }
+        }
     }
 
     // base class
