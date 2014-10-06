@@ -144,7 +144,7 @@ class SwLineRect : public SwRect
     SvxBorderStyle  nStyle;
     const SwTabFrm *pTab;
           sal_uInt8     nSubColor;  //colorize subsidiary lines
-          bool      bPainted;   //already painted?
+          bool          bPainted;   //already painted?
           sal_uInt8     nLock;      //To distinguish the line and the hell layer.
 public:
     SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
@@ -300,10 +300,12 @@ bool isTableBoundariesEnabled()
 
 }
 
-// Set borders alignment statics.
-// adjustment for 'small' twip-to-pixel relations:
-// For 'small' twip-to-pixel relations (less then 2:1)
-// values of <nHalfPixelSzW> and <nHalfPixelSzH> are set to ZERO.
+/**
+ * Set borders alignment statics
+ * Adjustment for 'small' twip-to-pixel relations:
+ * For 'small' twip-to-pixel relations (less then 2:1)
+ * values of <nHalfPixelSzW> and <nHalfPixelSzH> are set to ZERO
+ */
 void SwCalcPixStatics( OutputDevice *pOut )
 {
     // determine 'small' twip-to-pixel relation
@@ -357,7 +359,9 @@ void SwCalcPixStatics( OutputDevice *pOut )
     aScaleY = rMap.GetScaleY();
 }
 
-//To be able to save the statics so the paint is more or lees reentrant.
+/**
+ * To be able to save the statics so the paint is more or lees reentrant
+ */
 class SwSavePaintStatics
 {
     bool                bSFlyMetafile;
@@ -652,9 +656,8 @@ bool SwLineRect::MakeUnion( const SwRect &rRect )
 void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
                                const SwTabFrm *pTab, const sal_uInt8 nSCol )
 {
-    //Loop backwards because lines which can be combined, can usually be painted
-    //in the same context.
-
+    // Loop backwards because lines which can be combined, can usually be painted
+    // in the same context
     for (reverse_iterator it = aLineRects.rbegin(); it != aLineRects.rend();
          ++it)
     {
@@ -786,9 +789,9 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                         }
 
                         if ( rL1.Bottom() > pLB->Bottom() )
-                            rL1.Top( pLB->Top() );  // extend i1 on the top
+                            rL1.Top( pLB->Top() ); // extend i1 on the top
                         else
-                            bRemove = true;     //stopping, remove i1
+                            bRemove = true; //stopping, remove i1
                     }
                 }
                 else
@@ -844,7 +847,6 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
 {
     // All help lines that are covered by any border will be removed or split
-
     for (size_t i = 0; i < aLineRects.size(); ++i)
     {
         // get a copy instead of a reference, because an <insert> may destroy
@@ -909,7 +911,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         break;
                     }
                 }
-                else                                    //horizontal
+                else // Horizontal
                 {
                     if ( aSubsRect.Top() <= rLine.Bottom() &&
                          aSubsRect.Bottom() >= rLine.Top() )
@@ -1211,18 +1213,21 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 
 // Various functions that are use in this file.
 
-// Note: function <SwAlignRect(..)> also used outside this file.
-// Correction: adjust rectangle on pixel level in order
-//          to assure, that the border 'leaves its original pixel', if it has to.
-//          No prior adjustments for odd relation between pixel and twip.
+/**
+ * Function <SwAlignRect(..)> is also used outside this file
+ *
+ * Correction: adjust rectangle on pixel level in order to make sure,
+ * that the border "leaves its original pixel", if it has to
+ * No prior adjustments for odd relation between pixel and twip
+ */
 void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
 {
     if( !rRect.HasArea() )
         return;
 
-    // Assure that view shell (parameter <pSh>) exists, if the output device
-    // is taken from this view shell --> no output device, no alignment.
-    // Output device taken from view shell <pSh>, if <bFlyMetafile> not set.
+    // Make sure that view shell (parameter <pSh>) exists, if the output device
+    // is taken from this view shell --> no output device, no alignment
+    // Output device taken from view shell <pSh>, if <bFlyMetafile> not set
     if ( !bFlyMetafile && !pSh )
     {
         return;
@@ -1306,16 +1311,17 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
     }
 }
 
-/** Helper method for twip adjustments on pixel base
-
-    method compares the x- or y-pixel position of two twip-point. If the x-/y-pixel
-    positions are the same, the x-/y-pixel position of the second twip point is
-    adjusted by a given amount of pixels.
+/**
+ * Helper for twip adjustments on pixel base
+ *
+ * This method compares the x- or y-pixel position of two twip-points.
+ * If the x-/y-pixel positions are the same, the x-/y-pixel position of
+ * the second twip point is adjusted by a given amount of pixels
 */
 static void lcl_CompPxPosAndAdjustPos( const OutputDevice&  _rOut,
                                 const Point&         _rRefPt,
                                 Point&               _rCompPt,
-                                const bool       _bChkXPos,
+                                const bool          _bChkXPos,
                                 const sal_Int8       _nPxAdjustment )
 {
     const Point aRefPxPt = _rOut.LogicToPixel( _rRefPt );
@@ -1341,17 +1347,20 @@ static void lcl_CompPxPosAndAdjustPos( const OutputDevice&  _rOut,
     }
 }
 
-/** Method to pixel-align rectangle for drawing graphic object
-
-    Because for drawing a graphic left-top-corner and size coordinations are
-    used, these coordinations have to be determined on pixel level.
-    Thus, convert rectangle to pixel and then convert left-top-corner and
-    size of pixel rectangle back to logic.
-    This calculation is necessary, because there exists a different between
-    the convert from logic to pixel of a normal rectangle with its left-top-
-    and right-bottom-corner and the same convert of the same rectangle
-    with left-top-corner and size.
-    Call this method before each <GraphicObject.Draw(...)>
+/**
+ * Method to pixel-align rectangle for drawing graphic object
+ *
+ * Because we are drawing graphics from the left-top-corner in conjunction
+ * with size coordinates, these coordinates have to be calculated at a pixel
+ * level.
+ * Thus, we convert the rectangle to pixel and then convert to left-top-corner
+ * and then get size of pixel rectangle back to logic.
+ * This calculation is necessary, because there's a different between
+ * the conversion from logic to pixel of a normal rectangle with its left-top-
+ * and right-bottom-corner and the same conversion of the same rectangle
+ * with left-top-corner and size.
+ *
+ * NOTE: Call this method before each <GraphicObject.Draw(...)>
 */
 void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut )
 {
@@ -1391,7 +1400,9 @@ static long lcl_MinHeightDist( const long nDist )
     return ::lcl_AlignHeight( std::max( nDist, nMinDistPixelH ));
 }
 
-//Calculate PrtArea plus surrounding plus shadow.
+/**
+ * Calculate PrtArea plus surrounding plus shadow
+ */
 static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                                         const SwBorderAttrs &rAttrs,
                                         const bool bShadow )
@@ -1486,13 +1497,15 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
     ::SwAlignRect( rRect, pGlobalShell );
 }
 
+/**
+ * Extend left/right border/shadow rectangle to bottom of previous frame/to
+ * top of next frame, if border/shadow is joined with previous/next frame
+ */
 static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
                                          const SwFrm&           _rFrm,
                                          const SwBorderAttrs&   _rAttrs,
                                          const SwRectFn&        _rRectFn )
 {
-    // Extend left/right border/shadow rectangle to bottom of previous frame/to
-    // top of next frame, if border/shadow is joined with previous/next frame.
     if ( _rAttrs.JoinedWithPrev( _rFrm ) )
     {
         const SwFrm* pPrevFrm = _rFrm.GetPrev();
@@ -1721,36 +1734,37 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     }
 }
 
-/** lcl_DrawGraphicBackgrd - local help method to draw a background for a graphic
-
-    Under certain circumstances we have to draw a background for a graphic.
-    This method takes care of the conditions and draws the background with the
-    corresponding color.
-    Method introduced for bug fix #103876# in order to optimize drawing tiled
-    background graphics. Previously, this code was integrated in method
-    <lcl_DrawGraphic>.
-    Method implemented as a inline, checking the conditions and calling method
-    method <lcl_implDrawGraphicBackgrd(..)> for the intrinsic drawing.
-
-    @param _rBackgrdBrush
-    background brush contain the color the background has to be drawn.
-
-    @param _pOut
-    output device the background has to be drawn in.
-
-    @param _rAlignedPaintRect
-    paint rectangle in the output device, which has to be drawn with the background.
-    rectangle have to be aligned by method ::SwAlignRect
-
-    @param _rGraphicObj
-    graphic object, for which the background has to be drawn. Used for checking
-    the transparency of its bitmap, its type and if the graphic is drawn transparent
-
-    @param _bNumberingGraphic
-    boolean indicating that graphic is used as a numbering.
-
-    @param _bBackgrdAlreadyDrawn
-    boolean (optional; default: false) indicating, if the background is already drawn.
+/**
+ * This is a local help method to draw a background for a graphic
+ *
+ * Under certain circumstances we have to draw a background for a graphic.
+ * This method takes care of the conditions and draws the background with the
+ * corresponding color.
+ * Method introduced for bug fix #103876# in order to optimize drawing tiled
+ * background graphics. Previously, this code was integrated in method
+ * <lcl_DrawGraphic>.
+ * Method implemented as a inline, checking the conditions and calling method
+ * method <lcl_implDrawGraphicBackgrd(..)> for the intrinsic drawing.
+ *
+ * @param _rBackgrdBrush
+ * background brush contain the color the background has to be drawn.
+ *
+ * @param _pOut
+ * output device the background has to be drawn in.
+ *
+ * @param _rAlignedPaintRect
+ * paint rectangle in the output device, which has to be drawn with the background.
+ * rectangle have to be aligned by method ::SwAlignRect
+ *
+ * @param _rGraphicObj
+ * graphic object, for which the background has to be drawn. Used for checking
+ * the transparency of its bitmap, its type and if the graphic is drawn transparent
+ *
+ * @param _bNumberingGraphic
+ * boolean indicating that graphic is used as a numbering.
+ *
+ * @param _bBackgrdAlreadyDrawn
+ * boolean (optional; default: false) indicating, if the background is already drawn.
 */
 static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                     OutputDevice* _pOut,
@@ -1772,16 +1786,21 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     }
 }
 
-// Note: the transparency of the background graphic
-//     is saved in SvxBrushItem.GetGraphicObject(<shell>).GetAttr().Set/GetTransparency()
-//     and is considered in the drawing of the graphic.
-//     Thus, to provide transparent background graphic for text frames nothing
-//     has to be coded.
-// Use align rectangle for drawing graphic
-// Pixel-align coordinations for drawing graphic.
-// Outsource code for drawing background of the graphic
-//     with a background color in method <lcl_DrawGraphicBackgrd>
-//     Also, change type of <bGrfNum> and <bClip> from <bool> to <bool>.
+/**
+ * NNOTE: the transparency of the background graphic is saved in
+ * SvxBrushItem.GetGraphicObject(<shell>).GetAttr().Set/GetTransparency()
+ * and is considered in the drawing of the graphic
+ *
+ * Thus, to provide transparent background graphic for text frames nothing
+ * has to be coded
+ *
+ * Use align rectangle for drawing graphic Pixel-align coordinates for
+ * drawing graphic
+ * Outsource code for drawing background of the graphic
+ * with a background color in method <lcl_DrawGraphicBackgrd>
+ *
+ * Also, change type of <bGrfNum> and <bClip> from <bool> to <bool>
+ */
 static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                       SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bClip, bool bGrfNum,
@@ -1809,8 +1828,8 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     // Outsource drawing of background with a background color
     ::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, bBackgrdAlreadyDrawn );
 
-    // Because for drawing a graphic left-top-corner and size coordinations are
-    // used, these coordinations have to be determined on pixel level.
+    // Because for drawing a graphic left-top-corner and size coordinates are
+    // used, these coordinates have to be determined on pixel level.
     ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
 
     if (pGrf->GetGraphic().getSvgData().get())
@@ -1997,12 +2016,13 @@ void DrawGraphic(
 
     case GPOS_AREA:
         aGrf = rOrg;
-        // In spite the fact that the background graphic have to fill the complete
-        // area, it has been checked, if the graphic will completely fill out
-        // the region to be painted <rOut> and thus, nothing has to be retouched.
-        // For example, this is the case for a fly frame without a background
-        // brush positioned on the border of the page and inherited the
-        // background brush from the page.
+        // Despite the fact that the background graphic has to fill the complete
+        // area, we already checked, whether the graphic will completely fill out
+        // the region the <rOut> that is to be painted. Thus, nothing has to be
+        // touched again.
+        // E.g. this is the case for a Fly Frame without a background
+        // brush positioned on the border of the page which inherited the background
+        // brush from the page.
         bRetouche = !rOut.IsInside( aGrf );
         break;
 
@@ -2082,12 +2102,12 @@ void DrawGraphic(
         pOutDev->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
         pOutDev->SetLineColor();
 
-        //     check, if a existing background graphic (not filling the complete
-        //     background) is transparent drawn and the background color is
-        //     "no fill" respectively "auto fill", if background transparency
-        //     has to be considered.
-        //     If YES, memorise transparency of background graphic.
-        //     check also, if background graphic bitmap is transparent.
+        // check, if a existing background graphic (not filling the complete
+        // background) is transparent drawn and the background color is
+        // "no fill" respectively "auto fill", if background transparency
+        // has to be considered.
+        // If YES, memorise transparency of background graphic.
+        // check also, if background graphic bitmap is transparent.
         bool bTransparentGrfWithNoFillBackgrd = false;
         sal_Int32 nGrfTransparency = 0;
         bool bGrfIsTransparent = false;
@@ -2150,9 +2170,9 @@ void DrawGraphic(
             pOutDev->SetDrawMode( 0 );
         }
 
-        // OD 06.08.2002 #99657# - if background region have to be drawn
-        //     transparent, set only the RGB values of the background color as
-        //     the fill color for the output device.
+        // OD 06.08.2002 #99657# - if background region has to be drawn
+        // transparent, set only the RGB values of the background color as
+        // the fill color for the output device.
         switch (eDrawStyle)
         {
             case Transparent:
@@ -2188,7 +2208,7 @@ void DrawGraphic(
                     {
                         // substract area of background graphic from draw area
                         // OD 08.10.2002 #103898# - consider only that part of the
-                        //     graphic area that is overlapping with draw area.
+                        // graphic area that is overlapping with draw area.
                         SwRect aTmpGrf = aGrf;
                         aTmpGrf.Intersection( rOut );
                         if ( aTmpGrf.HasArea() )
@@ -2245,13 +2265,13 @@ void DrawGraphic(
     }
 }
 
-/** local help method for SwRootFrm::Paint(..) - Adjust given rectangle to pixel size
-
-    By OD at 27.09.2002 for #103636#
-    In order to avoid paint errors caused by multiple alignments - e.g. method
-    ::SwAlignRect(..) - and other changes to the rectangle to be painted,
-    this method is called for the rectangle to be painted in order to
-    adjust it to the pixel it is overlapping.
+/**
+ * Local helper for SwRootFrm::Paint(..) - Adjust given rectangle to pixel size
+ *
+ * By OD at 27.09.2002 for #103636#
+ * In order to avoid paint errors caused by multiple alignments (e.g. ::SwAlignRect(..))
+ * and other changes to the to be painted rectangle, this method is called for the
+ * rectangle to be painted in order to adjust it to the pixel it is overlapping
 */
 static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 {
@@ -2726,9 +2746,11 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     rDev.SetDrawMode( nOldDrawMode );
 }
 
-// Finds the lines that join the line defined by (StartPoint, EndPoint) in either
-// StartPoint or Endpoint. The styles of these lines are required for DR's magic
-// line painting functions.
+/**
+ * Finds the lines that join the line defined by (StartPoint, EndPoint) in either
+ * StartPoint or Endpoint. The styles of these lines are required for DR's magic
+ * line painting functions
+ */
 void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
                                          const Point& rEndPoint,
                                          svx::frame::Style* pStyles,
@@ -2879,8 +2901,10 @@ void SwTabFrmPainter::AdjustTopLeftFrames()
     calcOffsetForDoubleLine(maVertLines);
 }
 
-// special case: #i9860#
-// first line in follow table without repeated headlines
+/**
+ * Special case: #i9860#
+ * first line in follow table without repeated headlines
+ */
 static bool lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
         SwTabFrm const& rTabFrm, SwFrm const& rFrm, SvxBoxItem const& rBoxItem)
 {
@@ -3052,9 +3076,10 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
         pLineSet->insert( rNew );
 }
 
-// FUNCTIONS USED FOR COLLAPSING TABLE BORDER LINES END
-
-// --> OD #i76669#
+/**
+ * FUNCTIONS USED FOR COLLAPSING TABLE BORDER LINES END
+ * --> OD #i76669#
+ */
 namespace
 {
     class SwViewObjectContactRedirector : public ::sdr::contact::ViewObjectContactRedirector
@@ -3094,13 +3119,15 @@ namespace
 
 } // end of anonymous namespace
 // <--
-/** Paint once for every visible page which is touched by Rect.
-|*
-|*      1. Paint borders and backgrounds.
-|*      2. Paint the draw layer (frames and drawing objects) that is
-|*         below the document (hell).
-|*      3. Paint the document content (text)
-|*      4. Paint the draw layer that is above the document.
+
+/**
+ * Paint once for every visible page which is touched by Rect
+ *
+ * 1. Paint borders and backgrounds
+ * 2. Paint the draw layer (frames and drawing objects) that is
+ *    below the document (hell)
+ * 3. Paint the document content (text)
+ * 4. Paint the draw layer that is above the document
 |*/
 void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 {
@@ -3873,16 +3900,18 @@ void SwPageFrm::PaintDecorators( ) const
     }
 }
 
-/** FlyFrm::IsBackgroundTransparent - for feature #99657#
-
-    OD 12.08.2002
-    determines, if background of fly frame has to be drawn transparent
-    declaration found in /core/inc/flyfrm.cxx
-    OD 08.10.2002 #103898# - If the background of the fly frame itself is not
-    transparent and the background is inherited from its parent/grandparent,
-    the background brush, used for drawing, has to be investigated for transparency.
-
-    @return true, if background is transparent drawn.
+/**
+ * For feature #99657#
+ *
+ * OD 12.08.2002
+ * determines, if background of fly frame has to be drawn transparent
+ * declaration found in /core/inc/flyfrm.cxx
+ *
+ * OD 08.10.2002 #103898# - If the background of the fly frame itself is not
+ * transparent and the background is inherited from its parent/grandparent,
+ * the background brush, used for drawing, has to be investigated for transparency.
+ *
+ * @return true, if background is transparent drawn
 */
 bool SwFlyFrm::IsBackgroundTransparent() const
 {
@@ -3933,13 +3962,13 @@ bool SwFlyFrm::IsBackgroundTransparent() const
     return bBackgroundTransparent;
 };
 
-/** FlyFrm::IsShadowTransparent - for feature #99657#
-
-    OD 13.08.2002
-    determine, if shadow color of fly frame has to be drawn transparent
-    declaration found in /core/inc/flyfrm.cxx
-
-    @return true, if shadow color is transparent.
+/**
+ * For feature #99657#
+ *
+ * OD 13.08.2002
+ * determine, if shadow color of fly frame has to be drawn transparent
+ * declaration found in /core/inc/flyfrm.cxx
+ * @return true, if shadow color is transparent.
 */
 bool SwFlyFrm::IsShadowTransparent() const
 {
@@ -4355,7 +4384,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 }
 
 /**
- * Paint border shadow.
+ * Paint border shadow
  *
  * @param[in]       rRect       aligned rect to clip the result
  * @param[in,out]   rOutRect    full painting area as input
@@ -4567,14 +4596,15 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     }
 }
 
-/** Paints a shadow if the format requests so.
-|*
-|*      The shadow is always painted on the outer edge of the OutRect.
-|*      If needed, the OutRect is shrunk so the painting of the border can be
-|*      done on it.
-|*
-|* @note: draw full shadow rectangle for frames with transparent drawn backgrounds (OD 23.08.2002 #99657#)
-*/
+/**
+ * Paints a shadow if the format requests so.
+ *
+ * The shadow is always painted on the outer edge of the OutRect.
+ * If needed, the OutRect is shrunk so the painting of the border can be
+ * done on it.
+ *
+ * @note: draw full shadow rectangle for frames with transparent drawn backgrounds (OD 23.08.2002 #99657#)
+ */
 void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                          const SwBorderAttrs &rAttrs ) const
 {
@@ -4646,13 +4676,16 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
         pLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol );
 }
 
-/// @note Only all lines once or all lines twice!
-// OD 29.04.2003 #107169# - method called for left and right border rectangles.
-// For a printer output device perform adjustment for non-overlapping top and
-// bottom border rectangles. Thus, add parameter <_bPrtOutputDev> to indicate
-// printer output device.
-// NOTE: For printer output device left/right border rectangle <_iorRect>
-//       has to be already non-overlapping the outer top/bottom border rectangle.
+/**
+ * @note Only all lines once or all lines twice!
+ *
+ * OD 29.04.2003 #107169# - method called for left and right border rectangles.
+ * For a printer output device perform adjustment for non-overlapping top and
+ * bottom border rectangles. Thus, add parameter <_bPrtOutputDev> to indicate
+ * printer output device.
+ * NOTE: For printer output device left/right border rectangle <_iorRect>
+ *        has to be already non-overlapping the outer top/bottom border rectangle.
+ */
 static void lcl_SubTopBottom( SwRect&              _iorRect,
                                    const SvxBoxItem&    _rBox,
                                    const SwBorderAttrs& _rAttrs,
@@ -4867,8 +4900,10 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
     g_pBorderLines->AddBorderLine(xLine);
 }
 
-// OD 19.05.2003 #109667# - merge <lcl_PaintLeftLine> and <lcl_PaintRightLine>
-// into new method <lcl_PaintLeftRightLine(..)>
+/**
+ * OD 19.05.2003 #109667# - merge <lcl_PaintLeftLine> and <lcl_PaintRightLine>
+ * into new method <lcl_PaintLeftRightLine(..)>
+ */
 static void lcl_PaintLeftRightLine( const bool         _bLeft,
                              const SwFrm&           _rFrm,
                              const SwPageFrm&       /*_rPage*/,
@@ -4946,8 +4981,10 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
     }
 }
 
-// OD 19.05.2003 #109667# - merge <lcl_PaintTopLine> and <lcl_PaintBottomLine>
-// into <lcl_PaintTopLine>
+/**
+ * OD 19.05.2003 #109667# - merge <lcl_PaintTopLine> and <lcl_PaintBottomLine>
+ * into <lcl_PaintTopLine>
+ */
 static void lcl_PaintTopBottomLine( const bool         _bTop,
                              const SwFrm&           ,
                              const SwPageFrm&       /*_rPage*/,
@@ -5141,7 +5178,7 @@ void PaintCharacterBorder(
     }
 }
 
-// #i15844#
+/// #i15844#
 static const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
 {
     OSL_ENSURE( rFrm.IsCellFrm(),
@@ -5160,26 +5197,27 @@ static const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
     return 0;
 }
 
-/** local method to determine cell frame, from which the border attributes
-    for paint of top/bottom border has to be used.
-
-    OD 21.02.2003 #b4779636#, #107692#
-
-    @param _pCellFrm
-    input parameter - constant pointer to cell frame for which the cell frame
-    for the border attributes has to be determined.
-
-    @param _rCellBorderAttrs
-    input parameter - constant reference to the border attributes of cell frame
-    <_pCellFrm>.
-
-    @param _bTop
-    input parameter - boolean, that controls, if cell frame for top border or
-    for bottom border has to be determined.
-
-    @return constant pointer to cell frame, for which the border attributes has
-    to be used
-*/
+/**
+ * Determine cell frame, from which the border attributes
+ * for paint of top/bottom border has to be used.
+ *
+ * OD 21.02.2003 #b4779636#, #107692#
+ *
+ * @param _pCellFrm
+ * input parameter - constant pointer to cell frame for which the cell frame
+ * for the border attributes has to be determined.
+ *
+ * @param _rCellBorderAttrs
+ * input parameter - constant reference to the border attributes of cell frame
+ * <_pCellFrm>.
+ *
+ * @param _bTop
+ * input parameter - boolean, that controls, if cell frame for top border or
+ * for bottom border has to be determined.
+ *
+ * @return constant pointer to cell frame, for which the border attributes has
+ * to be used
+ */
 static const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                                            const SwBorderAttrs& _rCellBorderAttrs,
                                            const bool           _bTop )
@@ -5486,10 +5524,12 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
     }
 }
 
-/*      Special implementation because of the footnote line.
-|*      Currently only the top frame needs to be taken into account.
-|*      Other lines and shadows are set aside.
-|*/
+/**
+ * Special implementation because of the footnote line
+ *
+ * Currently only the top frame needs to be taken into account
+ * Other lines and shadows are set aside
+ */
 void SwFtnContFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                                 const SwBorderAttrs & ) const
 {
@@ -5890,20 +5930,21 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
     }
 }
 
-/** paint margin area of a page
-
-    OD 20.11.2002 for #104598#:
-    implement paint of margin area; margin area will be painted for a
-    view shell with a window and if the document is not in online layout.
-
-    @param _rOutputRect
-    input parameter - constant instance reference of the rectangle, for
-    which an output has to be generated.
-
-    @param _pViewShell
-    input parameter - instance of the view shell, on which the output
-    has to be generated.
-*/
+/**
+ * Paint margin area of a page
+ *
+ * OD 20.11.2002 for #104598#:
+ * implement paint of margin area; margin area will be painted for a
+ * view shell with a window and if the document is not in online layout.
+ *
+ * @param _rOutputRect
+ * input parameter - constant instance reference of the rectangle, for
+ * which an output has to be generated.
+ *
+ * @param _pViewShell
+ * input parameter - instance of the view shell, on which the output
+ * has to be generated.
+ */
 void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
                                  SwViewShell* _pViewShell ) const
 {
@@ -5954,10 +5995,10 @@ bool SwPageFrm::IsLeftShadowNeeded() const
         || (!bIsLTR && OnRightPage());
 }
 
-/** determine rectangle for bottom page shadow
-
-    OD 12.02.2003 for #i9719# and #105645#
-*/
+/**
+ * Determine rectangle for bottom page shadow
+ * OD 12.02.2003 for #i9719# and #105645#
+ */
 /*static*/ void SwPageFrm::GetHorizontalShadowRect( const SwRect& _rPageRect,
                                                 const SwViewShell*    _pViewShell,
                                                 SwRect&       _orHorizontalShadowRect,
@@ -5971,7 +6012,7 @@ bool SwPageFrm::IsLeftShadowNeeded() const
     SwRect aPagePxRect =
             _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
 
-    long lShadowAdjustment = mnShadowPxWidth - 1; // TODO extract this
+    long lShadowAdjustment = mnShadowPxWidth - 1; // TODO: extract this
 
     _orHorizontalShadowRect.Chg(
                     Point( aPagePxRect.Left() + (bPaintLeftShadow ? lShadowAdjustment : 0), 0 ),
@@ -6016,10 +6057,11 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
             rBitmapEx);
 }
 
-/** paint page border and shadow
-
-    OD 12.02.2003 for #i9719# and #105645#
-    implement paint of page border and shadow
+/**
+ * Paint page border and shadow
+ *
+ * OD 12.02.2003 for #i9719# and #105645#
+ * implement paint of page border and shadow
 */
 /*static*/ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
                                                  const SwViewShell*    _pViewShell,
@@ -6173,8 +6215,10 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
             aPageTopShadow, TOP);
 }
 
-//mod #i6193# paint sidebar for notes
-//IMPORTANT: if you change the rects here, also change SwPostItMgr::ScrollbarHit
+/**
+ * mod #i6193# paint sidebar for notes
+ * IMPORTANT: if you change the rects here, also change SwPostItMgr::ScrollbarHit
+ */
 /*static*/void SwPageFrm::PaintNotesSidebar(const SwRect& _rPageRect, SwViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight)
 {
     //TODO: cut out scrollbar area and arrows out of sidepane rect, otherwise it could flicker when pressing arrow buttons
@@ -6290,12 +6334,11 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
     _pViewShell->GetOut()->DrawPolygon(aTriangleDown);
 }
 
-/** get bound rectangle of border and shadow for repaints
-
-    OD 12.02.2003 for #i9719# and #105645#
-
-    author OD
-*/
+/**
+ * Get bound rectangle of border and shadow for repaints
+ *
+ * OD 12.02.2003 for #i9719# and #105645#
+ */
 /*static*/ void SwPageFrm::GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
                                                         const SwViewShell*    _pViewShell,
                                                         SwRect& _orBorderAndShadowBoundRect,
@@ -6702,10 +6745,11 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
     }
 }
 
-/// Subsidiary lines to paint the PrtAreas.
-/// Only the LayoutFrms which directly contain Cntnt.
-/// Paints the desired line and pays attention to not overpaint any flys.
-// OD 18.11.2002 #99672# - new parameter <_pSubsLines>
+/**
+ * Subsidiary lines to paint the PrtAreas
+ * Only the LayoutFrms which directly contain Cntnt
+ * Paints the desired line and pays attention to not overpaint any flys
+ */
 static void lcl_RefreshLine( const SwLayoutFrm *pLay,
                                   const SwPageFrm *pPage,
                                   const Point &rP1,
@@ -6980,9 +7024,10 @@ void SwSectionFrm::PaintSubsidiaryLines( const SwPageFrm * pPage,
     }
 }
 
-/** The SwBodyFrm doesn't print any subsidiary line: it's bounds are painted
-    either by the parent page or the parent column frame.
-  */
+/**
+ * The SwBodyFrm doesn't print any subsidiary line: it's bounds are painted
+ * either by the parent page or the parent column frame.
+ */
 void SwBodyFrm::PaintSubsidiaryLines( const SwPageFrm *,
                                         const SwRect & ) const
 {
@@ -7001,17 +7046,19 @@ void SwHeadFootFrm::PaintSubsidiaryLines( const SwPageFrm *, const SwRect & ) co
     }
 }
 
-/** This method is overridden in order to have no subsidiary lines
-    around the footnotes.
-  */
+/**
+ * This method is overridden in order to have no subsidiary lines
+ * around the footnotes.
+ */
 void SwFtnFrm::PaintSubsidiaryLines( const SwPageFrm *,
                                         const SwRect & ) const
 {
 }
 
-/** This method is overridden in order to have no subsidiary lines
-    around the footnotes containers.
-  */
+/**
+ * This method is overridden in order to have no subsidiary lines
+ * around the footnotes containers.
+ */
 void SwFtnContFrm::PaintSubsidiaryLines( const SwPageFrm *,
                                         const SwRect & ) const
 {
@@ -7140,8 +7187,10 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
     }
 }
 
-/// Refreshes all extra data (line breaks a.s.o) of the page. Basically only those objects
-/// are considered which horizontally overlap the Rect.
+/**
+ * Refreshes all extra data (line breaks a.s.o) of the page. Basically only those objects
+ * are considered which horizontally overlap the Rect.
+ */
 void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
 {
     const SwLineNumberInfo &rInfo = GetFmt()->GetDoc()->GetLineNumberInfo();
@@ -7206,16 +7255,16 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
     }
 }
 
-/** SwPageFrm::GetDrawBackgrdColor - for #102450#
-
-    determine the color, that is respectively will be drawn as background
-    for the page frame.
-    Using existing method SwFrm::GetBackgroundBrush to determine the color
-    that is set at the page frame respectively is parent. If none is found
-    return the global retouche color
-
-    @return Color
-*/
+/**
+ * For #102450#
+ * Determine the color, that is respectively will be drawn as background
+ * for the page frame.
+ * Using existing method SwFrm::GetBackgroundBrush to determine the color
+ * that is set at the page frame respectively is parent. If none is found
+ * return the global retouche color
+ *
+ * @return Color
+ */
 const Color SwPageFrm::GetDrawBackgrdColor() const
 {
     const SvxBrushItem* pBrushItem;
@@ -7282,12 +7331,13 @@ const vcl::Font& SwPageFrm::GetEmptyPageFont()
     return *pEmptyPgFont;
 }
 
-/** Retouch for a section.
-|*
-|*      Retouch will only be done, if the Frm is the last one in his chain.
-|*      The whole area of the upper which is located below the Frm will be
-|*      cleared using PaintBackground.
-|*/
+/**
+ * Retouch for a section
+ *
+ * Retouch will only be done, if the Frm is the last one in his chain.
+ * The whole area of the upper which is located below the Frm will be
+ * cleared using PaintBackground.
+ */
 void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 {
     if ( bFlyMetafile )
@@ -7350,48 +7400,47 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         ResetRetouche();
 }
 
-/** SwFrm::GetBackgroundBrush
-
-    @descr
-    determine the background brush for the frame:
-    the background brush is taken from it-self or from its parent (anchor/upper).
-    Normally, the background brush is taken, which has no transparent color or
-    which has a background graphic. But there are some special cases:
-    (1) No background brush is taken from a page frame, if view option "IsPageBack"
-        isn't set.
-    (2) Background brush from a index section is taken under special conditions.
-        In this case parameter <rpCol> is set to the index shading color.
-    (3) New (OD 20.08.2002) - Background brush is taken, if on background drawing
-        of the frame transparency is considered and its color is not "no fill"/"auto fill"
-    ---- old description in german:
-    Description         Returns the Backgroundbrush for the area of the Frm.
-        The Brush is defined by the Frm or by an upper, the first Brush is
-        used. If no Brush is defined for a Frm, sal_False is returned.
-
-    @param rpBrush
-    output parameter - constant reference pointer the found background brush
-
-    @param rpFillStyle
-    output parameter - constant reference pointer the found background fill style
-
-    @param rpFillGradient
-    output parameter - constant reference pointer the found background fill gradient
-
-    @param rpCol
-    output parameter - constant reference pointer to the color of the index shading
-    set under special conditions, if background brush is taken from an index section.
-
-    @param rOrigRect
-    in-/output parameter - reference to the rectangle the background brush is
-    considered for - adjusted to the frame, from which the background brush is
-    taken.
-
-    @parem bLowerMode
-    input parameter - boolean indicating, if background brush should *not* be
-    taken from parent.
-
-    @return true, if a background brush for the frame is found
-*/
+/**
+ * Determine the background brush for the frame:
+ * the background brush is taken from it-self or from its parent (anchor/upper).
+ * Normally, the background brush is taken, which has no transparent color or
+ * which has a background graphic. But there are some special cases:
+ * (1) No background brush is taken from a page frame, if view option "IsPageBack"
+ *     isn't set.
+ * (2) Background brush from a index section is taken under special conditions.
+ *     In this case parameter <rpCol> is set to the index shading color.
+ * (3) New (OD 20.08.2002) - Background brush is taken, if on background drawing
+ *     of the frame transparency is considered and its color is not "no fill"/"auto fill"
+ *
+ * Old description in German:
+ * Returns the Backgroundbrush for the area of the Frm.
+ * The Brush is defined by the Frm or by an upper, the first Brush is
+ * used. If no Brush is defined for a Frm, sal_False is returned.
+ *
+ * @param rpBrush
+ * output parameter - constant reference pointer the found background brush
+ *
+ * @param rpFillStyle
+ * output parameter - constant reference pointer the found background fill style
+ *
+ * @param rpFillGradient
+ * output parameter - constant reference pointer the found background fill gradient
+ *
+ * @param rpCol
+ * output parameter - constant reference pointer to the color of the index shading
+ * set under special conditions, if background brush is taken from an index section.
+ *
+ * @param rOrigRect
+ * in-/output parameter - reference to the rectangle the background brush is
+ * considered for - adjusted to the frame, from which the background brush is
+ * taken.
+ *
+ * @parem bLowerMode
+ * input parameter - boolean indicating, if background brush should *not* be
+ * taken from parent.
+ *
+ * @return true, if a background brush for the frame is found
+ */
 bool SwFrm::GetBackgroundBrush(
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SvxBrushItem* & rpBrush,
