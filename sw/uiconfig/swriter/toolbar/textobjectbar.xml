@@ -25,13 +25,24 @@
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
+ <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
  <toolbar:toolbaritem xlink:href=".uno:Underline"/>
- <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
+ <toolbar:toolbaritem xlink:href=".uno:Strikeout" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
+ <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio"/>
@@ -41,20 +52,9 @@
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
- <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
- <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
- <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontColor" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:BackColor" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SelectAll" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false"/>
