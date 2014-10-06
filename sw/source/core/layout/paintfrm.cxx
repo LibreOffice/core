@@ -3665,7 +3665,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         {
             const SwFrmFmt* pSwFrmFmt = dynamic_cast< const SwFrmFmt* >(GetFmt());
 
-            if(pSwFrmFmt && (RES_FLYFRMFMT == pSwFrmFmt->Which() || RES_FRMFMT == pSwFrmFmt->Which()))
+            if(pSwFrmFmt && pSwFrmFmt->supportsFullDrawingLayerFillAttributeSet())
             {
                 //UUUU check for transparency
                 const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pSwFrmFmt->getSdrAllFillAttributesHelper());

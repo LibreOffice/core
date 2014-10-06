@@ -2508,6 +2508,11 @@ SwFrmFmt::SwFrmFmt(
 {
 }
 
+//UUUU
+SwFrmFmt::~SwFrmFmt()
+{
+}
+
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     SwFmtHeader *pH = 0;
@@ -2523,7 +2528,7 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             RES_FOOTER, sal_False, (const SfxPoolItem**)&pF );
 
         //UUUU reset fill information
-        if(maFillAttributes.get() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+        if(maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
         {
             SfxItemIter aIter(*((SwAttrSetChg*)pNew)->GetChgSet());
             bool bReset(false);
@@ -2542,7 +2547,7 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     else if(RES_FMT_CHG == nWhich)
     {
         //UUUU reset fill information on format change (e.g. style changed)
-        if(maFillAttributes.get() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+        if(maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
         {
             maFillAttributes.reset();
         }
@@ -3086,7 +3091,7 @@ const String SwFlyFrmFmt::GetObjDescription() const
 sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
     //UUUU
-    if((RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()) && getSdrAllFillAttributesHelper())
+    if(supportsFullDrawingLayerFillAttributeSet() && getSdrAllFillAttributesHelper())
     {
         return getSdrAllFillAttributesHelper()->isTransparent();
     }
@@ -3130,7 +3135,7 @@ sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
 sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
 {
     //UUUU
-    if((RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()) && getSdrAllFillAttributesHelper())
+    if(supportsFullDrawingLayerFillAttributeSet() && getSdrAllFillAttributesHelper())
     {
         return !getSdrAllFillAttributesHelper()->isUsed();
     }
@@ -3377,7 +3382,7 @@ SwFrmFmt* SwFrmFmt::GetCaptionFmt() const
 //UUUU
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrmFmt::getSdrAllFillAttributesHelper() const
 {
-    if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
+    if(supportsFullDrawingLayerFillAttributeSet())
     {
         // create FillAttributes on demand
         if(!maFillAttributes.get())

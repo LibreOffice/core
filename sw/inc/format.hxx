@@ -333,6 +333,10 @@ public:
     */
     virtual sal_Bool IsShadowTransparent() const;
 
+    //UUUU decide if DrawingLayer FillAttributes are supported. If answering this with yes
+    // the full FillStyle ItemSet will be used to handle/visualize the element
+    virtual bool supportsFullDrawingLayerFillAttributeSet() const;
+
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 };

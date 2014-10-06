@@ -436,7 +436,7 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
 
 const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, sal_Bool bInParents ) const
 {
-    if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+    if(RES_BACKGROUND == nWhich && supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -456,7 +456,7 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, sal_Bool bInParents ) c
 
 SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent, const SfxPoolItem **ppItem ) const
 {
-    if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+    if(RES_BACKGROUND == nWhich && supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -500,7 +500,7 @@ sal_Bool SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
     sal_Bool bRet = sal_False;
 
     //UUUU
-    if(RES_BACKGROUND == rAttr.Which() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
+    if(RES_BACKGROUND == rAttr.Which() && supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -601,7 +601,7 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     }
 
     //UUUU   FlyFrame              PageStyle
-    if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
+    if(supportsFullDrawingLayerFillAttributeSet())
     {
         const SfxPoolItem* pSource = 0;
 
@@ -842,7 +842,7 @@ IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() {
 const SvxBrushItem& SwFmt::GetBackground(sal_Bool bInP) const
 {
     //UUUU   FlyFrame              PageStyle
-    if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
+    if(supportsFullDrawingLayerFillAttributeSet())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -857,6 +857,14 @@ const SvxBrushItem& SwFmt::GetBackground(sal_Bool bInP) const
     }
 
     return aSet.GetBackground(bInP);
+}
+
+//UUUU
+bool SwFmt::supportsFullDrawingLayerFillAttributeSet() const
+{
+    // base definition - probably not completely correct, e.g. for Table FillStyles
+    //UUUU  FlyFrame                    PageStyle
+    return (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which());
 }
 
 //UUUU

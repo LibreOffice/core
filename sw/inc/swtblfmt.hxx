@@ -32,18 +32,17 @@ class SW_DLLPUBLIC SwTableFmt : public SwFrmFmt
     friend class SwDoc;
 
 protected:
-    SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    {}
-    SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    {}
-
+    //UUUU
+    SwTableFmt(SwAttrPool& rPool,const sal_Char* pFmtNm, SwFrmFmt *pDrvdFrm);
+    SwTableFmt(SwAttrPool& rPool,const String &rFmtNm, SwFrmFmt *pDrvdFrm);
 
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
+    //UUUU
+    virtual ~SwTableFmt();
+
+    //UUUU
+    virtual bool supportsFullDrawingLayerFillAttributeSet() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFmt)
 };
@@ -53,17 +52,17 @@ class SwTableLineFmt : public SwFrmFmt
     friend class SwDoc;
 
 protected:
-    SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
-    {}
-    SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
-    {}
+    //UUUU
+    SwTableLineFmt(SwAttrPool& rPool,const sal_Char* pFmtNm, SwFrmFmt *pDrvdFrm);
+    SwTableLineFmt(SwAttrPool& rPool,const String &rFmtNm, SwFrmFmt *pDrvdFrm);
 
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
+    //UUUU
+    virtual ~SwTableLineFmt();
+
+    //UUUU
+    virtual bool supportsFullDrawingLayerFillAttributeSet() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFmt)
 };
@@ -73,20 +72,20 @@ class SW_DLLPUBLIC SwTableBoxFmt : public SwFrmFmt
     friend class SwDoc;
 
 protected:
-    SwTableBoxFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
-    {}
-    SwTableBoxFmt( SwAttrPool& rPool, const String &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
-    {}
+    //UUUU
+    SwTableBoxFmt(SwAttrPool& rPool,const sal_Char* pFmtNm, SwFrmFmt *pDrvdFrm);
+    SwTableBoxFmt(SwAttrPool& rPool,const String &rFmtNm, SwFrmFmt *pDrvdFrm);
 
     // zum Erkennen von Veraenderungen (haupts. TableBoxAttribute)
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
+    virtual void Modify(const SfxPoolItem* pOld,const SfxPoolItem* pNewValue);
 
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
+    //UUUU
+    virtual ~SwTableBoxFmt();
+
+    //UUUU
+    virtual bool supportsFullDrawingLayerFillAttributeSet() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFmt)
 };

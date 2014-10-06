@@ -71,6 +71,8 @@ protected:
 
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
+    //UUUU
+    ~SwFrmFmt();
 
     //Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
     virtual void DelFrms();

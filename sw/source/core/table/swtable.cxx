@@ -79,9 +79,75 @@ using namespace com::sun::star;
 TYPEINIT1( SwTable, SwClient );
 TYPEINIT1( SwTableBox, SwClient );
 TYPEINIT1( SwTableLine, SwClient );
+
+//UUUU
 TYPEINIT1( SwTableFmt, SwFrmFmt );
+
+SwTableFmt::SwTableFmt(SwAttrPool& rPool,const sal_Char* pFmtNm, SwFrmFmt *pDrvdFrm)
+:   SwFrmFmt(rPool,pFmtNm,pDrvdFrm,RES_FRMFMT,aTableSetRange)
+{
+}
+
+SwTableFmt::SwTableFmt(SwAttrPool& rPool,const String &rFmtNm, SwFrmFmt *pDrvdFrm)
+:   SwFrmFmt(rPool,rFmtNm,pDrvdFrm,RES_FRMFMT,aTableSetRange)
+{
+}
+
+SwTableFmt::~SwTableFmt()
+{
+}
+
+//UUUU Do not support for table frames - may change later if support will be added
+bool SwTableFmt::supportsFullDrawingLayerFillAttributeSet() const
+{
+    return false;
+}
+
+//UUUU
 TYPEINIT1( SwTableBoxFmt, SwFrmFmt );
+
+SwTableBoxFmt::SwTableBoxFmt(SwAttrPool& rPool,const sal_Char* pFmtNm, SwFrmFmt *pDrvdFrm)
+: SwFrmFmt(rPool,pFmtNm,pDrvdFrm,RES_FRMFMT,aTableBoxSetRange)
+{
+}
+
+SwTableBoxFmt::SwTableBoxFmt(SwAttrPool& rPool,const String &rFmtNm, SwFrmFmt *pDrvdFrm)
+:   SwFrmFmt(rPool,rFmtNm,pDrvdFrm,RES_FRMFMT,aTableBoxSetRange)
+{
+}
+
+SwTableBoxFmt::~SwTableBoxFmt()
+{
+}
+
+//UUUU Do not support for table frames - may change later if support will be added
+bool SwTableBoxFmt::supportsFullDrawingLayerFillAttributeSet() const
+{
+    return false;
+}
+
+//UUUU
 TYPEINIT1( SwTableLineFmt, SwFrmFmt );
+
+SwTableLineFmt::SwTableLineFmt(SwAttrPool& rPool,const sal_Char* pFmtNm, SwFrmFmt *pDrvdFrm)
+:   SwFrmFmt(rPool,pFmtNm,pDrvdFrm,RES_FRMFMT,aTableLineSetRange)
+{
+}
+
+SwTableLineFmt::SwTableLineFmt(SwAttrPool& rPool,const String &rFmtNm, SwFrmFmt *pDrvdFrm)
+:   SwFrmFmt(rPool,rFmtNm,pDrvdFrm,RES_FRMFMT,aTableLineSetRange)
+{
+}
+
+SwTableLineFmt::~SwTableLineFmt()
+{
+}
+
+//UUUU Do not support for table frames - may change later if support will be added
+bool SwTableLineFmt::supportsFullDrawingLayerFillAttributeSet() const
+{
+    return false;
+}
 
 SV_IMPL_PTRARR(SwTableLines,SwTableLine*);
 SV_IMPL_PTRARR(SwTableBoxes,SwTableBox*);
