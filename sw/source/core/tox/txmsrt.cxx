@@ -246,7 +246,7 @@ bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
                         // else -> compare AlternativeText
                         if( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) )
                         {
-                            return pTOXIntl->IsEqual( GetTxt(), GetLocale(),
+                            return pTOXIntl->IsLess( GetTxt(), GetLocale(),
                                                       rCmp.GetTxt(), rCmp.GetLocale() );
                         }
                         if( pEnd && !pEndCmp )
