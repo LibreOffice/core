@@ -586,7 +586,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
             {
                 // #107747# give menuitems the height of the menubar
                 Rectangle aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
-                Push( PUSH_CLIPREGION );
+                Push( PushFlags::CLIPREGION );
                 IntersectClipRegion( aRect );
                 bool bRollover = bHighlight && nPos != nHighlightedItem;
                 if ( bHighlight )
@@ -899,7 +899,7 @@ void MenuBarWindow::Paint( const Rectangle& )
     if( ! IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) &&
         GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
-        Push( PUSH_LINECOLOR | PUSH_MAPMODE );
+        Push( PushFlags::LINECOLOR | PushFlags::MAPMODE );
         SetLineColor( Color( COL_WHITE ) );
         SetMapMode( MapMode( MAP_PIXEL ) );
         Size aSize = GetSizePixel();

@@ -3089,7 +3089,7 @@ namespace {
 sal_Int32 lclGetApiTickmarks( sal_uInt8 nXclTickPos )
 {
     using namespace ::com::sun::star::chart2::TickmarkStyle;
-    sal_Int32 nApiTickmarks = NONE;
+    sal_Int32 nApiTickmarks = css::chart2::TickmarkStyle::NONE;
     ::set_flag( nApiTickmarks, INNER, ::get_flag( nXclTickPos, EXC_CHTICK_INSIDE ) );
     ::set_flag( nApiTickmarks, OUTER, ::get_flag( nXclTickPos, EXC_CHTICK_OUTSIDE ) );
     return nApiTickmarks;

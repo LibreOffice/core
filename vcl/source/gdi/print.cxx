@@ -287,7 +287,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
         default:    nMove = 0; break;
     }
 
-    Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
+    Push( PushFlags::CLIPREGION | PushFlags::LINECOLOR );
     IntersectClipRegion(vcl::Region(rPolyPoly));
     SetLineColor( GetFillColor() );
     const bool bOldMap = mbMap;
@@ -854,7 +854,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 
         mpMetaFile = NULL;
         mbMap = false;
-        Push( PUSH_FILLCOLOR | PUSH_LINECOLOR );
+        Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
         SetLineColor( rMaskColor );
         SetFillColor( rMaskColor );
         InitLineColor();

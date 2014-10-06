@@ -3842,7 +3842,7 @@ void Window::DrawGradientWallpaper( long nX, long nY,
 
     mpMetaFile = NULL;
     EnableMapMode( false );
-    Push( PUSH_CLIPREGION );
+    Push( PushFlags::CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
     if( rWallpaper.GetStyle() == WALLPAPER_APPLICATIONGRADIENT )

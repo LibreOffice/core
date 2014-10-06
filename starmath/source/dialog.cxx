@@ -1062,7 +1062,7 @@ Point SmShowSymbolSetWindow::OffsetPoint(const Point &rPoint) const
 
 void SmShowSymbolSetWindow::Paint(const Rectangle&)
 {
-    Push(PUSH_MAPMODE);
+    Push(PushFlags::MAPMODE);
 
     // set MapUnit for which 'nLen' has been calculated
     SetMapMode(MapMode(MAP_PIXEL));

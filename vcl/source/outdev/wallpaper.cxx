@@ -171,7 +171,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
 
     mpMetaFile = NULL;
     EnableMapMode( false );
-    Push( PUSH_CLIPREGION );
+    Push( PushFlags::CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
     switch( eStyle )
@@ -344,7 +344,7 @@ void OutputDevice::DrawGradientWallpaper( long nX, long nY,
 
     mpMetaFile = NULL;
     EnableMapMode( false );
-    Push( PUSH_CLIPREGION );
+    Push( PushFlags::CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
     DrawGradient( aBound, rWallpaper.GetGradient() );

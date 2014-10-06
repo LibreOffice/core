@@ -3108,7 +3108,7 @@ void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
 MetaPushAction::MetaPushAction() :
     MetaAction  ( META_PUSH_ACTION ),
-    mnFlags     ( PUSH_NONE )
+    mnFlags     ( PushFlags::NONE )
 {}
 
 MetaPushAction::~MetaPushAction()
@@ -3140,7 +3140,7 @@ void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
-    rOStm.WriteUInt16( mnFlags );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(mnFlags) );
 }
 
 void MetaPushAction::Read( SvStream& rIStm, ImplMetaReadData* )

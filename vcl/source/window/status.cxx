@@ -495,7 +495,7 @@ void DrawProgress( vcl::Window* pWindow, const Point& rPos,
                                                  INVALIDATE_TRANSPARENT );
                 pEraseWindow->Update();
             }
-            pWindow->Push( PUSH_CLIPREGION );
+            pWindow->Push( PushFlags::CLIPREGION );
             pWindow->IntersectClipRegion( rFramePosSize );
         }
         bool bNativeOK = pWindow->DrawNativeControl( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,

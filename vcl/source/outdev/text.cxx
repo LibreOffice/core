@@ -1201,11 +1201,11 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( nEndIndex < nMinIndex )
         nEndIndex = nMinIndex;
 
-    if( (mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) != 0 )
+    if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL )
         nLayoutFlags |= SAL_LAYOUT_BIDI_RTL;
-    if( (mnTextLayoutMode & TEXT_LAYOUT_BIDI_STRONG) != 0 )
+    if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_STRONG )
         nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
-    else if( 0 == (mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
+    else if( !(mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
     {
         // disable Bidi if no RTL hint and no RTL codes used
         const sal_Unicode* pStr = rStr.getStr() + nMinIndex;
@@ -1226,9 +1226,9 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( maFont.IsVertical() )
         nLayoutFlags |= SAL_LAYOUT_VERTICAL;
 
-    if( (mnTextLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES) != 0 )
+    if( mnTextLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
         nLayoutFlags |= SAL_LAYOUT_ENABLE_LIGATURES;
-    else if( (mnTextLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED) != 0 )
+    else if( mnTextLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED )
         nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
     else
     {
@@ -1273,10 +1273,10 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     }
 
     // right align for RTL text, DRAWPOS_REVERSED, RTL window style
-    bool bRightAlign = ((mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) != 0);
-    if( (mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT) != 0 )
+    bool bRightAlign = bool(mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL);
+    if( mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT )
         bRightAlign = false;
-    else if ( (mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_RIGHT) != 0 )
+    else if ( mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_RIGHT )
         bRightAlign = true;
     // SSA: hack for western office, ie text get right aligned
     //      for debugging purposes of mirrored UI
@@ -1620,7 +1620,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             // Set clipping
             if ( nStyle & TEXT_DRAW_CLIP )
             {
-                rTargetDevice.Push( PUSH_CLIPREGION );
+                rTargetDevice.Push( PushFlags::CLIPREGION );
                 rTargetDevice.IntersectClipRegion( rRect );
             }
 
@@ -1737,7 +1737,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
         if ( nStyle & TEXT_DRAW_CLIP )
         {
-            rTargetDevice.Push( PUSH_CLIPREGION );
+            rTargetDevice.Push( PushFlags::CLIPREGION );
             rTargetDevice.IntersectClipRegion( rRect );
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if ( bDrawMnemonics )

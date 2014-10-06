@@ -664,7 +664,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     // SW disables TEXT_LAYOUT_COMPLEX_DISABLED, so maybe I have to enable it...
 
     // Saving both layout mode and language (since I'm potentially changing both)
-    GetRefDevice()->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
+    GetRefDevice()->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
 
     ImplInitLayoutMode( GetRefDevice(), nPara, -1 );
 
@@ -2271,7 +2271,7 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
                SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
             SeekCursor( pPortion->GetNode(), nTxtPortionStart+1, aTmpFont );
             aTmpFont.SetPhysFont( GetRefDevice() );
-            GetRefDevice()->Push( PUSH_TEXTLANGUAGE );
+            GetRefDevice()->Push( PushFlags::TEXTLANGUAGE );
             ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
             Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nTxtPortionStart, pTextPortion->GetLen(), NULL );
             GetRefDevice()->Pop();
@@ -3032,7 +3032,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                 // #114278# Saving both layout mode and language (since I'm
                                 // potentially changing both)
-                                pOutDev->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
+                                pOutDev->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
                                 ImplInitLayoutMode( pOutDev, n, nIndex );
                                 ImplInitDigitMode(pOutDev, aTmpFont.GetLanguage());
 
@@ -3096,8 +3096,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                     aBottomRightRectPos.Y() += 2 * nHalfBlankWidth;
                                                 }
 
-                                                pOutDev->Push( PUSH_FILLCOLOR );
-                                                pOutDev->Push( PUSH_LINECOLOR );
+                                                pOutDev->Push( PushFlags::FILLCOLOR );
+                                                pOutDev->Push( PushFlags::LINECOLOR );
                                                 pOutDev->SetFillColor( COL_LIGHTGRAY );
                                                 pOutDev->SetLineColor( COL_LIGHTGRAY );
 
@@ -3776,7 +3776,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
         if ( GetTextRanger() )
         {
             // Some problems here with push/pop, why?!
-//          pTarget->Push( PUSH_CLIPREGION|PUSH_MAPMODE );
+//          pTarget->Push( PushFlags::CLIPREGION|PushFlags::MAPMODE );
             bClipRegion = pTarget->IsClipRegion();
             aOldRegion = pTarget->GetClipRegion();
             // How do I get the polygon to the right place??

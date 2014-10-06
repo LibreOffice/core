@@ -830,7 +830,7 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
 {
     mbIsMapWinSet = false;
     mbIsMapDevSet = false;
-    mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );      // The original clipregion has to be on top
+    mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) );      // The original clipregion has to be on top
                                                                             // of the stack so it can always be restored
                                                                             // this is necessary to be able to support
                                                                             // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
@@ -867,7 +867,7 @@ void WinMtfOutput::UpdateClipRegion()
         mbComplexClip = false;
 
         mpGDIMetaFile->AddAction( new MetaPopAction() );                    // taking the original clipregion
-        mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );
+        mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) );
 
         // skip for 'no clipping at all' case
         if( !aClipPath.isEmpty() )
@@ -976,7 +976,7 @@ void WinMtfOutput::StrokeAndFillPath( bool bStroke, bool bFill )
         {
             if ( !bStroke )
             {
-                mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
+                mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                 mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
             }
             if ( aPathObj.Count() == 1 )

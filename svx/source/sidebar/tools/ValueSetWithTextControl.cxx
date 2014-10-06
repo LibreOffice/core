@@ -191,7 +191,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     const Rectangle aRect = rUDEvt.GetRect();
     OutputDevice* pDev = rUDEvt.GetDevice();
-    pDev->Push( PUSH_ALL );
+    pDev->Push( PushFlags::ALL );
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
 
     const long nRectHeight = aRect.GetHeight();

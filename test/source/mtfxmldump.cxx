@@ -24,33 +24,33 @@ const size_t constMaxActionType = 513;
 
 OUString flagToString(PushFlags nFlag)
 {
-    if (nFlag & PUSH_LINECOLOR)
+    if (nFlag & PushFlags::LINECOLOR)
         return OUString("PushLineColor");
-    else if (nFlag & PUSH_FILLCOLOR)
+    else if (nFlag & PushFlags::FILLCOLOR)
         return OUString("PushFillColor");
-    else if (nFlag & PUSH_FONT)
+    else if (nFlag & PushFlags::FONT)
         return OUString("PushFont");
-    else if (nFlag & PUSH_TEXTCOLOR)
+    else if (nFlag & PushFlags::TEXTCOLOR)
         return OUString("PushTextColor");
-    else if (nFlag & PUSH_MAPMODE)
+    else if (nFlag & PushFlags::MAPMODE)
         return OUString("PushMapMode");
-    else if (nFlag & PUSH_CLIPREGION)
+    else if (nFlag & PushFlags::CLIPREGION)
         return OUString("PushClipRegion");
-    else if (nFlag & PUSH_RASTEROP)
+    else if (nFlag & PushFlags::RASTEROP)
         return OUString("PushRasterOp");
-    else if (nFlag & PUSH_TEXTFILLCOLOR)
+    else if (nFlag & PushFlags::TEXTFILLCOLOR)
         return OUString("PushTextFillColor");
-    else if (nFlag & PUSH_TEXTALIGN)
+    else if (nFlag & PushFlags::TEXTALIGN)
         return OUString("PushTextAlign");
-    else if (nFlag & PUSH_REFPOINT)
+    else if (nFlag & PushFlags::REFPOINT)
         return OUString("PushRefPoint");
-    else if (nFlag & PUSH_TEXTLINECOLOR)
+    else if (nFlag & PushFlags::TEXTLINECOLOR)
         return OUString("PushTextLineColor");
-    else if (nFlag & PUSH_TEXTLAYOUTMODE)
+    else if (nFlag & PushFlags::TEXTLAYOUTMODE)
         return OUString("PushTextLayoutMode");
-    else if (nFlag & PUSH_TEXTLANGUAGE)
+    else if (nFlag & PushFlags::TEXTLANGUAGE)
         return OUString("PushTextLanguage");
-    else if (nFlag & PUSH_OVERLINECOLOR)
+    else if (nFlag & PushFlags::OVERLINECOLOR)
         return OUString("PushOverlineColor");
 
     return OUString();
@@ -58,7 +58,7 @@ OUString flagToString(PushFlags nFlag)
 
 OUString collectPushFlags(PushFlags nFlags)
 {
-    if ((nFlags & PUSH_ALL) == nFlags)
+    if ((nFlags & PushFlags::ALL) == nFlags)
         return OUString("PushAll");
     else if ((nFlags & PUSH_ALLFONT) == nFlags)
         return OUString("PushAllFont");

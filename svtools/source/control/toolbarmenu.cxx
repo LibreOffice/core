@@ -903,7 +903,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
             if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
             {
                 Size aPxSize( GetOutputSizePixel() );
-                Push( PUSH_CLIPREGION );
+                Push( PushFlags::CLIPREGION );
                 IntersectClipRegion( Rectangle( Point( nX, nY ), Size( aSz.Width(), pEntry->maSize.Height() ) ) );
                 Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
                 DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,

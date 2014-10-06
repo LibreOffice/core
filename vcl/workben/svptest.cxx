@@ -215,7 +215,7 @@ void MyWin::Paint( const Rectangle& rRect )
 {
     WorkWindow::Paint( rRect );
 
-    Push( PUSH_ALL );
+    Push( PushFlags::ALL );
     MapMode aMapMode( MAP_100TH_MM );
 
     SetMapMode( aMapMode );

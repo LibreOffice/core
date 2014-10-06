@@ -995,7 +995,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
 
-        pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+        pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
         pOut->SetFillColor();
         pOut->SetLineColor();
         ConnectEdges( pOut );
@@ -1166,7 +1166,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 
         if ( !aLineRects.empty() )
         {
-            pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+            pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
             pOut->SetLineColor();
 
             // Reset draw mode in high contrast mode in order to get fill color
@@ -1817,7 +1817,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     const bool bNotInside = bClip && !rOut.IsInside( aAlignedGrfRect );
     if ( bNotInside )
     {
-        pOut->Push( PUSH_CLIPREGION );
+        pOut->Push( PushFlags::CLIPREGION );
         pOut->IntersectClipRegion( rOut.SVRect() );
     }
 
@@ -2062,7 +2062,7 @@ void DrawGraphic(
             // area, from which the background brush is determined.
             aGrf.Pos() = rOrg.Pos();
             // setup clipping at output device
-            pOutDev->Push( PUSH_CLIPREGION );
+            pOutDev->Push( PushFlags::CLIPREGION );
             pOutDev->IntersectClipRegion( rOut.SVRect() );
             // use new method <GraphicObject::DrawTiled(::)>
             {
@@ -2120,7 +2120,7 @@ void DrawGraphic(
     bool bGrfBackgrdAlreadyDrawn = false;
     if ( bRetouche )
     {
-        pOutDev->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+        pOutDev->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
         pOutDev->SetLineColor();
 
         // check, if a existing background graphic (not filling the complete
@@ -4136,7 +4136,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     aRect._Intersection( Frm() );
 
     OutputDevice* pOut = pGlobalShell->GetOut();
-    pOut->Push( PUSH_CLIPREGION );
+    pOut->Push( PushFlags::CLIPREGION );
     pOut->SetClipRegion();
     const SwPageFrm* pPage = FindPageFrm();
 
@@ -4239,7 +4239,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             //one.
 
             // OD 2004-04-23 #116347#
-            pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+            pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
             pOut->SetLineColor();
 
             pPage = FindPageFrm();
@@ -6420,7 +6420,7 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
 
     // OD 2004-04-23 #116347#
-    pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+    pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
     pOut->SetLineColor();
 
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)this );

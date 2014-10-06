@@ -225,7 +225,7 @@ namespace svt { namespace table
         OSL_PRECOND( _bIsColHeaderArea || _bIsRowHeaderArea,
             "GridTableRenderer::PaintHeaderArea: invalid area flags!" );
 
-        _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR );
+        _rDevice.Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
 
         Color const background = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderBackgroundColor(), _rStyle, &StyleSettings::GetDialogColor );
         _rDevice.SetFillColor( background );
@@ -249,7 +249,7 @@ namespace svt { namespace table
     void GridTableRenderer::PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
-        _rDevice.Push( PUSH_LINECOLOR);
+        _rDevice.Push( PushFlags::LINECOLOR);
 
         OUString sHeaderText;
         PColumnModel const pColumn = m_pImpl->rModel.getColumnModel( _nCol );
@@ -320,7 +320,7 @@ namespace svt { namespace table
         // remember the row for subsequent calls to the other ->ITableRenderer methods
         m_pImpl->nCurrentRow = _nRow;
 
-        _rDevice.Push( PUSH_FILLCOLOR | PUSH_LINECOLOR);
+        _rDevice.Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
 
         ::Color backgroundColor = _rStyle.GetFieldColor();
 
@@ -384,7 +384,7 @@ namespace svt { namespace table
     void GridTableRenderer::PaintRowHeader( bool i_hasControlFocus, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
         const StyleSettings& _rStyle )
     {
-        _rDevice.Push( PUSH_LINECOLOR | PUSH_TEXTCOLOR );
+        _rDevice.Push( PushFlags::LINECOLOR | PushFlags::TEXTCOLOR );
 
         ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
         ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
@@ -437,7 +437,7 @@ namespace svt { namespace table
     void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
-        _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        _rDevice.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
 
         Rectangle const aContentArea( lcl_getContentArea( *m_pImpl, _rArea ) );
         CellRenderContext const aRenderContext( _rDevice, aContentArea, _rStyle, i_column, _bSelected, i_hasControlFocus );

@@ -118,7 +118,7 @@ namespace
     SvxBorderLine CreateBorderLine(SvStream &stream, sal_uInt16 version)
     {
         sal_uInt16 nOutline, nInline, nDistance;
-        sal_uInt16 nStyle = NONE;
+        sal_uInt16 nStyle = css::table::BorderLineStyle::NONE;
         Color aColor;
         ReadColor( stream, aColor ).ReadUInt16( nOutline ).ReadUInt16( nInline ).ReadUInt16( nDistance );
 
@@ -1905,7 +1905,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 drawing::LineStyle eDrawingStyle;
                 rVal >>= eDrawingStyle;
-                editeng::SvxBorderStyle eBorderStyle = NONE;
+                editeng::SvxBorderStyle eBorderStyle = css::table::BorderLineStyle::NONE;
                 switch ( eDrawingStyle )
                 {
                     default:
@@ -2643,7 +2643,7 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
         Color aColor;
         ReadColor( rStrm, aColor ).ReadInt16( nOutline ).ReadInt16( nInline ).ReadInt16( nDistance );
         SvxBorderLine aBorder( &aColor );
-        aBorder.GuessLinesWidths(NONE, nOutline, nInline, nDistance);
+        aBorder.GuessLinesWidths(css::table::BorderLineStyle::NONE, nOutline, nInline, nDistance);
 
         switch( cLine )
         {
@@ -3239,7 +3239,7 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     if( nOutline )
     {
         SvxBorderLine aLine( &aColor );
-        aLine.GuessLinesWidths(NONE, nOutline, nInline, nDistance);
+        aLine.GuessLinesWidths(css::table::BorderLineStyle::NONE, nOutline, nInline, nDistance);
         _pLine->SetLine( &aLine );
     }
     return _pLine;

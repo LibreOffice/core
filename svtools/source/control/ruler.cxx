@@ -2744,7 +2744,7 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Color &rFillColor, const Point
     Point                   aPos( rPos );
     sal_uInt16              nTabStyle = nStyle & (RULER_TAB_STYLE | RULER_TAB_RTL);
 
-    pDevice->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+    pDevice->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
     pDevice->SetLineColor();
     pDevice->SetFillColor(rFillColor);
     ImplCenterTabPos( aPos, nTabStyle );

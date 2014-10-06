@@ -564,7 +564,7 @@ void FixedLine::ImplDraw( bool bLayout )
     else if( (nWinStyle & WB_VERT) )
     {
         long nWidth = GetTextWidth( aText );
-        Push( PUSH_FONT );
+        Push( PushFlags::FONT );
         vcl::Font aFont( GetFont() );
         aFont.SetOrientation( 900 );
         SetFont( aFont );

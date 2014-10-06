@@ -805,7 +805,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
                 pFirstCol->Title(), false, false, !IsEnabled());
             aButtonFrame.Draw( *pDev );
 
-            pDev->Push( PUSH_LINECOLOR );
+            pDev->Push( PushFlags::LINECOLOR );
             pDev->SetLineColor( Color( COL_BLACK ) );
 
             pDev->DrawLine( Point( aRealPos.X(), aRealPos.Y() + nTitleHeight-1 ),
@@ -1018,7 +1018,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
         {
             // draw horizontal delimitation lines
             _rOut.SetClipRegion();
-            _rOut.Push( PUSH_LINECOLOR );
+            _rOut.Push( PushFlags::LINECOLOR );
             _rOut.SetLineColor( aDelimiterLineColor );
             long nY = aPos.Y() + nDataRowHeigt - 1;
             if (nY <= aOverallAreaBRPos.Y())

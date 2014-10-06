@@ -746,7 +746,7 @@ vcl::Region lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& r
  */
 void lclSetColorToOutDev( OutputDevice& rDev, const Color& rColor, const Color* pForceColor )
 {
-    rDev.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+    rDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
     rDev.SetLineColor( pForceColor ? *pForceColor : rColor );
     rDev.SetFillColor( pForceColor ? *pForceColor : rColor );
 }
@@ -958,7 +958,7 @@ void lclPushDiagClipRect( OutputDevice& rDev, const Rectangle& rRect, const Diag
     if( (aClipRect.GetWidth() < 1) ||(aClipRect.GetHeight() < 1) )
         aClipRect.SetEmpty();
 
-    rDev.Push( PUSH_CLIPREGION );
+    rDev.Push( PushFlags::CLIPREGION );
     rDev.IntersectClipRegion( aClipRect );
 }
 
@@ -1005,7 +1005,7 @@ void lclPushCrossingClipRegion( OutputDevice& rDev, const Rectangle& rRect, bool
             aRPoints.maBeg, aRPoints.maEnd, rRect.BottomLeft(), rRect.BottomRight(), rRect.TopRight() ) );
     }
 
-    rDev.Push( PUSH_CLIPREGION );
+    rDev.Push( PushFlags::CLIPREGION );
     rDev.IntersectClipRegion( aClipReg );
 }
 

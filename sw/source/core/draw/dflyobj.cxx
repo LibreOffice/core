@@ -412,7 +412,7 @@ namespace
             {
                 if ( pViewShell->getPrePostMapMode() != mpOutDev->GetMapMode() )
                 {
-                    mpOutDev->Push(PUSH_MAPMODE);
+                    mpOutDev->Push(PushFlags::MAPMODE);
 
                     GDIMetaFile* pMetaFile = mpOutDev->GetConnectMetaFile();
                     if ( pMetaFile &&

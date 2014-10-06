@@ -284,7 +284,7 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
 
     const ComplexTextLayoutMode nMode = rInf.GetpOut()->GetLayoutMode();
     const bool bBidiPor = ( bSwitchL2R !=
-                            ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
+                            ( TEXT_LAYOUT_DEFAULT != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
 
     if ( bBidiPor )
         nDiff = -nDiff;

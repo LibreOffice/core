@@ -42,25 +42,25 @@
 
 OutDevState::~OutDevState()
 {
-    if ( mnFlags & PUSH_LINECOLOR )
+    if ( mnFlags & PushFlags::LINECOLOR )
         delete mpLineColor;
-    if ( mnFlags & PUSH_FILLCOLOR )
+    if ( mnFlags & PushFlags::FILLCOLOR )
         delete mpFillColor;
-    if ( mnFlags & PUSH_FONT )
+    if ( mnFlags & PushFlags::FONT )
         delete mpFont;
-    if ( mnFlags & PUSH_TEXTCOLOR )
+    if ( mnFlags & PushFlags::TEXTCOLOR )
         delete mpTextColor;
-    if ( mnFlags & PUSH_TEXTFILLCOLOR )
+    if ( mnFlags & PushFlags::TEXTFILLCOLOR )
         delete mpTextFillColor;
-    if ( mnFlags & PUSH_TEXTLINECOLOR )
+    if ( mnFlags & PushFlags::TEXTLINECOLOR )
         delete mpTextLineColor;
-    if ( mnFlags & PUSH_OVERLINECOLOR )
+    if ( mnFlags & PushFlags::OVERLINECOLOR )
         delete mpOverlineColor;
-    if ( mnFlags & PUSH_MAPMODE )
+    if ( mnFlags & PushFlags::MAPMODE )
         delete mpMapMode;
-    if ( mnFlags & PUSH_CLIPREGION )
+    if ( mnFlags & PushFlags::CLIPREGION )
         delete mpClipRegion;
-    if ( mnFlags & PUSH_REFPOINT )
+    if ( mnFlags & PushFlags::REFPOINT )
         delete mpRefPoint;
 }
 
@@ -75,66 +75,66 @@ void OutputDevice::Push( PushFlags nFlags )
 
     pState->mnFlags = nFlags;
 
-    if ( nFlags & PUSH_LINECOLOR )
+    if ( nFlags & PushFlags::LINECOLOR )
     {
         if ( mbLineColor )
             pState->mpLineColor = new Color( maLineColor );
         else
             pState->mpLineColor = NULL;
     }
-    if ( nFlags & PUSH_FILLCOLOR )
+    if ( nFlags & PushFlags::FILLCOLOR )
     {
         if ( mbFillColor )
             pState->mpFillColor = new Color( maFillColor );
         else
             pState->mpFillColor = NULL;
     }
-    if ( nFlags & PUSH_FONT )
+    if ( nFlags & PushFlags::FONT )
         pState->mpFont = new vcl::Font( maFont );
-    if ( nFlags & PUSH_TEXTCOLOR )
+    if ( nFlags & PushFlags::TEXTCOLOR )
         pState->mpTextColor = new Color( GetTextColor() );
-    if ( nFlags & PUSH_TEXTFILLCOLOR )
+    if ( nFlags & PushFlags::TEXTFILLCOLOR )
     {
         if ( IsTextFillColor() )
             pState->mpTextFillColor = new Color( GetTextFillColor() );
         else
             pState->mpTextFillColor = NULL;
     }
-    if ( nFlags & PUSH_TEXTLINECOLOR )
+    if ( nFlags & PushFlags::TEXTLINECOLOR )
     {
         if ( IsTextLineColor() )
             pState->mpTextLineColor = new Color( GetTextLineColor() );
         else
             pState->mpTextLineColor = NULL;
     }
-    if ( nFlags & PUSH_OVERLINECOLOR )
+    if ( nFlags & PushFlags::OVERLINECOLOR )
     {
         if ( IsOverlineColor() )
             pState->mpOverlineColor = new Color( GetOverlineColor() );
         else
             pState->mpOverlineColor = NULL;
     }
-    if ( nFlags & PUSH_TEXTALIGN )
+    if ( nFlags & PushFlags::TEXTALIGN )
         pState->meTextAlign = GetTextAlign();
-    if( nFlags & PUSH_TEXTLAYOUTMODE )
+    if( nFlags & PushFlags::TEXTLAYOUTMODE )
         pState->mnTextLayoutMode = GetLayoutMode();
-    if( nFlags & PUSH_TEXTLANGUAGE )
+    if( nFlags & PushFlags::TEXTLANGUAGE )
         pState->meTextLanguage = GetDigitLanguage();
-    if ( nFlags & PUSH_RASTEROP )
+    if ( nFlags & PushFlags::RASTEROP )
         pState->meRasterOp = GetRasterOp();
-    if ( nFlags & PUSH_MAPMODE )
+    if ( nFlags & PushFlags::MAPMODE )
     {
         pState->mpMapMode = new MapMode( maMapMode );
         pState->mbMapActive = mbMap;
     }
-    if ( nFlags & PUSH_CLIPREGION )
+    if ( nFlags & PushFlags::CLIPREGION )
     {
         if ( mbClipRegion )
             pState->mpClipRegion = new vcl::Region( maRegion );
         else
             pState->mpClipRegion = NULL;
     }
-    if ( nFlags & PUSH_REFPOINT )
+    if ( nFlags & PushFlags::REFPOINT )
     {
         if ( mbRefPoint )
             pState->mpRefPoint = new Point( maRefPoint );
@@ -167,7 +167,7 @@ void OutputDevice::Pop()
     if( mpAlphaVDev )
         mpAlphaVDev->Pop();
 
-    if ( rState.mnFlags & PUSH_LINECOLOR )
+    if ( rState.mnFlags & PushFlags::LINECOLOR )
     {
         if ( rState.mpLineColor )
             SetLineColor( *rState.mpLineColor );
@@ -175,7 +175,7 @@ void OutputDevice::Pop()
             SetLineColor();
     }
 
-    if ( rState.mnFlags & PUSH_FILLCOLOR )
+    if ( rState.mnFlags & PushFlags::FILLCOLOR )
     {
         if ( rState.mpFillColor )
             SetFillColor( *rState.mpFillColor );
@@ -183,13 +183,13 @@ void OutputDevice::Pop()
             SetFillColor();
     }
 
-    if ( rState.mnFlags & PUSH_FONT )
+    if ( rState.mnFlags & PushFlags::FONT )
         SetFont( *rState.mpFont );
 
-    if ( rState.mnFlags & PUSH_TEXTCOLOR )
+    if ( rState.mnFlags & PushFlags::TEXTCOLOR )
         SetTextColor( *rState.mpTextColor );
 
-    if ( rState.mnFlags & PUSH_TEXTFILLCOLOR )
+    if ( rState.mnFlags & PushFlags::TEXTFILLCOLOR )
     {
         if ( rState.mpTextFillColor )
             SetTextFillColor( *rState.mpTextFillColor );
@@ -197,7 +197,7 @@ void OutputDevice::Pop()
             SetTextFillColor();
     }
 
-    if ( rState.mnFlags & PUSH_TEXTLINECOLOR )
+    if ( rState.mnFlags & PushFlags::TEXTLINECOLOR )
     {
         if ( rState.mpTextLineColor )
             SetTextLineColor( *rState.mpTextLineColor );
@@ -205,7 +205,7 @@ void OutputDevice::Pop()
             SetTextLineColor();
     }
 
-    if ( rState.mnFlags & PUSH_OVERLINECOLOR )
+    if ( rState.mnFlags & PushFlags::OVERLINECOLOR )
     {
         if ( rState.mpOverlineColor )
             SetOverlineColor( *rState.mpOverlineColor );
@@ -213,19 +213,19 @@ void OutputDevice::Pop()
             SetOverlineColor();
     }
 
-    if ( rState.mnFlags & PUSH_TEXTALIGN )
+    if ( rState.mnFlags & PushFlags::TEXTALIGN )
         SetTextAlign( rState.meTextAlign );
 
-    if( rState.mnFlags & PUSH_TEXTLAYOUTMODE )
+    if( rState.mnFlags & PushFlags::TEXTLAYOUTMODE )
         SetLayoutMode( rState.mnTextLayoutMode );
 
-    if( rState.mnFlags & PUSH_TEXTLANGUAGE )
+    if( rState.mnFlags & PushFlags::TEXTLANGUAGE )
         SetDigitLanguage( rState.meTextLanguage );
 
-    if ( rState.mnFlags & PUSH_RASTEROP )
+    if ( rState.mnFlags & PushFlags::RASTEROP )
         SetRasterOp( rState.meRasterOp );
 
-    if ( rState.mnFlags & PUSH_MAPMODE )
+    if ( rState.mnFlags & PushFlags::MAPMODE )
     {
         if ( rState.mpMapMode )
             SetMapMode( *rState.mpMapMode );
@@ -234,10 +234,10 @@ void OutputDevice::Pop()
         mbMap = rState.mbMapActive;
     }
 
-    if ( rState.mnFlags & PUSH_CLIPREGION )
+    if ( rState.mnFlags & PushFlags::CLIPREGION )
         SetDeviceClipRegion( rState.mpClipRegion );
 
-    if ( rState.mnFlags & PUSH_REFPOINT )
+    if ( rState.mnFlags & PushFlags::REFPOINT )
     {
         if ( rState.mpRefPoint )
             SetRefPoint( *rState.mpRefPoint );

@@ -202,7 +202,7 @@ static void lcl_ClearArea( const SwFrm &rFrm,
         }
         else
         {
-            rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+            rOut.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
             rOut.SetFillColor( rFrm.getRootFrm()->GetCurrShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
             for( sal_uInt16 i = 0; i < aRegion.size(); ++i )

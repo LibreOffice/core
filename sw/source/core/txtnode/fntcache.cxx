@@ -868,7 +868,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             ! rInf.IsIgnoreFrmRTL();
     const ComplexTextLayoutMode nMode = rInf.GetOut().GetLayoutMode();
     const bool bBidiPor = ( bSwitchL2R !=
-                            ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
+                            ( TEXT_LAYOUT_DEFAULT != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
 
     // be sure to have the correct layout mode at the printer
     if ( pPrinter )

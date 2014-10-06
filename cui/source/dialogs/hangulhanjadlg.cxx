@@ -64,7 +64,7 @@ namespace svx
             inline FontSwitch( OutputDevice& _rDev, const vcl::Font& _rTemporaryFont )
                 :m_rDev( _rDev )
             {
-                m_rDev.Push( PUSH_FONT );
+                m_rDev.Push( PushFlags::FONT );
                 m_rDev.SetFont( _rTemporaryFont );
             }
             inline ~FontSwitch( )

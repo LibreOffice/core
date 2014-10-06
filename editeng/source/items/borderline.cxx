@@ -163,7 +163,7 @@ ConvertBorderStyleFromWord(int const nWordLineStyle)
         case 27:
             return INSET;
         default:
-            return NONE;
+            return css::table::BorderLineStyle::NONE;
     }
 }
 
@@ -302,7 +302,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
     switch ( nStyle )
     {
         // No line: no width
-        case NONE:
+        case css::table::BorderLineStyle::NONE:
             aImpl = BorderWidthImpl( 0, 0.0 );
             break;
 
@@ -431,7 +431,7 @@ void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
 
 void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist )
 {
-    if (NONE == nStyle)
+    if (css::table::BorderLineStyle::NONE == nStyle)
     {
         nStyle = SOLID;
         if ( nOut > 0 && nIn > 0 )
@@ -454,7 +454,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
 
         static size_t const len = SAL_N_ELEMENTS(aDoubleStyles);
         long nWidth = 0;
-        SvxBorderStyle nTestStyle(NONE);
+        SvxBorderStyle nTestStyle(css::table::BorderLineStyle::NONE);
         for (size_t i = 0; i < len && nWidth == 0; ++i)
         {
             nTestStyle = aDoubleStyles[i];

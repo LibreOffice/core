@@ -117,7 +117,7 @@ namespace vcl
         ,m_aZoom( _rControl.GetZoom() )
         ,m_bRTLEnabled( _rControl.IsRTLEnabled() )
     {
-        m_rTargetDevice.Push( PUSH_MAPMODE | PUSH_FONT | PUSH_TEXTLAYOUTMODE );
+        m_rTargetDevice.Push( PushFlags::MAPMODE | PushFlags::FONT | PushFlags::TEXTLAYOUTMODE );
 
         MapMode aTargetMapMode( m_rTargetDevice.GetMapMode() );
         OSL_ENSURE( aTargetMapMode.GetOrigin() == Point(), "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: uhm, the code below won't work here ..." );
@@ -147,7 +147,7 @@ namespace vcl
         _rTargetDevice.SetFont( aDrawFont );
 
         // transfer font to the reference device
-        m_rReferenceDevice.Push( PUSH_FONT | PUSH_TEXTLAYOUTMODE );
+        m_rReferenceDevice.Push( PushFlags::FONT | PushFlags::TEXTLAYOUTMODE );
         Font aRefFont( m_aUnzoomedPointFont );
         aRefFont.SetSize( OutputDevice::LogicToLogic(
             aRefFont.GetSize(), MAP_POINT, m_rReferenceDevice.GetMapMode().GetMapUnit() ) );

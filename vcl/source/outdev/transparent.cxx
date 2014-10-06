@@ -284,7 +284,7 @@ void OutputDevice::DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly )
         return;
 
     // we assume that the border is NOT to be drawn transparently???
-    Push( PUSH_FILLCOLOR );
+    Push( PushFlags::FILLCOLOR );
     SetFillColor();
     DrawPolyPolygon( rPolyPoly );
     Pop();
@@ -577,7 +577,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
                     if( mbLineColor )
                     {
-                        Push( PUSH_FILLCOLOR );
+                        Push( PushFlags::FILLCOLOR );
                         SetFillColor();
                         DrawPolyPolygon( rPolyPoly );
                         Pop();

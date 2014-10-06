@@ -1473,7 +1473,7 @@ void SwViewShell::PaintDesktop( const SwRect &rRect )
 void SwViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 {
     // OD 2004-04-23 #116347#
-    GetOut()->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+    GetOut()->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
     GetOut()->SetLineColor();
 
     for ( sal_uInt16 i = 0; i < rRegion.size(); ++i )
@@ -1744,7 +1744,7 @@ void SwViewShell::Paint(const Rectangle &rRect)
             const vcl::Region aDLRegion(rRect);
             DLPrePaint2(aDLRegion);
 
-            mpOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+            mpOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
             mpOut->SetFillColor( Imp()->GetRetoucheColor() );
             mpOut->SetLineColor();
             mpOut->DrawRect( rRect );

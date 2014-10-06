@@ -1495,27 +1495,27 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     {
                         aDstLineInfo = pAt->aLineInfo;
                         aDstLineColor = pAt->aLineColor;
-                        if ( pAt->nFlags & PUSH_LINECOLOR )
+                        if ( pAt->nFlags & PushFlags::LINECOLOR )
                             aSrcLineColor = pAt->aLineColor;
                         aDstFillColor = pAt->aFillColor;
-                        if ( pAt->nFlags & PUSH_FILLCOLOR )
+                        if ( pAt->nFlags & PushFlags::FILLCOLOR )
                             aSrcFillColor = pAt->aFillColor;
                         eDstROP2 = pAt->eRasterOp;
-                        if ( pAt->nFlags & PUSH_RASTEROP )
+                        if ( pAt->nFlags & PushFlags::RASTEROP )
                             eSrcRasterOp = pAt->eRasterOp;
                         aDstFont = pAt->aFont;
-                        if ( pAt->nFlags & PUSH_FONT )
+                        if ( pAt->nFlags & PushFlags::FONT )
                             aSrcFont = pAt->aFont;
                         eDstTextAlign = pAt->eTextAlign;
-                        if ( pAt->nFlags & ( PUSH_FONT | PUSH_TEXTALIGN ) )
+                        if ( pAt->nFlags & ( PushFlags::FONT | PushFlags::TEXTALIGN ) )
                             eSrcTextAlign = pAt->eTextAlign;
                         aDstTextColor = pAt->aTextColor;
-                        if ( pAt->nFlags & ( PUSH_FONT | PUSH_TEXTCOLOR ) )
+                        if ( pAt->nFlags & ( PushFlags::FONT | PushFlags::TEXTCOLOR ) )
                             aSrcTextColor = pAt->aTextColor;
-                        if ( pAt->nFlags & PUSH_MAPMODE )
+                        if ( pAt->nFlags & PushFlags::MAPMODE )
                             aSrcMapMode = pAt->aMapMode;
                         aDstClipRegion = pAt->aClipRegion;
-                        if ( pAt->nFlags & PUSH_CLIPREGION )
+                        if ( pAt->nFlags & PushFlags::CLIPREGION )
                             aSrcClipRegion = pAt->aClipRegion;
 
                         WMFRecord_RestoreDC();

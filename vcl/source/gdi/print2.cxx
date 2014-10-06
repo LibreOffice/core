@@ -165,7 +165,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         // #i10613# Respect transparency for draw color
         if( nTransparency )
         {
-            o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR|PUSH_FILLCOLOR ) );
+            o_rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR|PushFlags::FILLCOLOR ) );
 
             // assume white background for alpha blending
             Color aLineColor( rStateOutDev.GetLineColor() );
@@ -1161,7 +1161,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         VirtualDevice   aPaintVDev; // into this one, we render.
                         aPaintVDev.SetBackground( aBackgroundComponent.aBgColor );
 
-                        rOutMtf.AddAction( new MetaPushAction( PUSH_MAPMODE ) );
+                        rOutMtf.AddAction( new MetaPushAction( PushFlags::MAPMODE ) );
                         rOutMtf.AddAction( new MetaMapModeAction() );
 
                         aPaintVDev.SetDrawMode( GetDrawMode() );
@@ -1372,7 +1372,7 @@ void Printer::DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const 
                                    ( (long) rEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
             const Color     aColor( (sal_uInt8) nR, (sal_uInt8) nG, (sal_uInt8) nB );
 
-            pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
             pOut->SetLineColor( aColor );
             pOut->SetFillColor( aColor );
             pOut->DrawRect( rRect );

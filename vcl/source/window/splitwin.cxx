@@ -911,7 +911,7 @@ void SplitWindow::ImplDrawBack( SplitWindow* pWindow, const Rectangle& rRect,
     {
         Point   aPos = rRect.TopLeft();
         Size    aBmpSize = pBitmap->GetSizePixel();
-        pWindow->Push( PUSH_CLIPREGION );
+        pWindow->Push( PushFlags::CLIPREGION );
         pWindow->IntersectClipRegion( rRect );
         do
         {

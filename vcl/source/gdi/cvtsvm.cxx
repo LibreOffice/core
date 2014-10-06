@@ -665,7 +665,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     {
                         const Polygon aPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
 
-                        rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
+                        rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                         rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
@@ -686,7 +686,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     {
                         const Polygon aPoly( aRect, aPt, aPt1, POLY_ARC );
 
-                        rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
+                        rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                         rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
@@ -707,7 +707,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     {
                         const Polygon aPoly( aRect, aPt, aPt1, POLY_PIE );
 
-                        rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
+                        rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                         rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
@@ -722,7 +722,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_HIGHLIGHTRECT_ACTION ):
                 {
                     ImplReadRect( rIStm, aRect );
-                    rMtf.AddAction( new MetaPushAction( PUSH_RASTEROP ) );
+                    rMtf.AddAction( new MetaPushAction( PushFlags::RASTEROP ) );
                     rMtf.AddAction( new MetaRasterOpAction( ROP_INVERT ) );
                     rMtf.AddAction( new MetaRectAction( aRect ) );
                     rMtf.AddAction( new MetaPopAction() );
@@ -747,7 +747,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     if( bFatLine )
                     {
-                        rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
+                        rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                         rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
@@ -769,7 +769,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     if( bFatLine )
                     {
-                        rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
+                        rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                         rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                         rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
@@ -1109,7 +1109,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_PUSH_ACTION ):
                 {
                     aLIStack.push( new LineInfo( aLineInfo ) );
-                    rMtf.AddAction( new MetaPushAction( PUSH_ALL ) );
+                    rMtf.AddAction( new MetaPushAction( PushFlags::ALL ) );
 
                     // #106172# Track font relevant data in shadow VDev
                     aFontVDev.Push();

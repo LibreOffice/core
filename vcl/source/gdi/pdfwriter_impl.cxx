@@ -237,7 +237,7 @@ void doTestCode()
     aClipPoly.setClosed( true );
     aClip.append( aClipPoly );
 
-    aWriter.Push( PUSH_CLIPREGION | PUSH_FILLCOLOR );
+    aWriter.Push( PushFlags::CLIPREGION | PushFlags::FILLCOLOR );
     aWriter.SetClipRegion( aClip );
     aWriter.DrawEllipse( Rectangle( Point( 4500, 9600 ), Size( 12000, 3000 ) ) );
     aWriter.MoveClipRegion( 1000, 500 );
@@ -3524,7 +3524,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                     throw FontException();
 
                 OutputDevice* pRef = getReferenceDevice();
-                pRef->Push( PUSH_FONT | PUSH_MAPMODE );
+                pRef->Push( PushFlags::FONT | PushFlags::MAPMODE );
                 pRef->SetMapMode( MapMode( MAP_PIXEL ) );
                 Font aFont( pFont->GetFamilyName(), pFont->GetStyleName(), Size( 0, 1000 ) );
                 aFont.SetWeight( pFont->GetWeight() );
@@ -4679,7 +4679,7 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     // save graphics state
-    push( PUSH_ALL );
+    push( PushFlags::ALL );
 
     // transform relative to control's coordinates since an
     // appearance stream is a form XObject
@@ -4786,7 +4786,7 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     SvMemoryStream* pEditStream = new SvMemoryStream( 1024, 1024 );
 
-    push( PUSH_ALL );
+    push( PushFlags::ALL );
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rEdit, rWidget, rSettings );
@@ -4838,7 +4838,7 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     SvMemoryStream* pListBoxStream = new SvMemoryStream( 1024, 1024 );
 
-    push( PUSH_ALL );
+    push( PushFlags::ALL );
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rBox, rWidget, rSettings );
@@ -4889,7 +4889,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     // save graphics state
-    push( PUSH_ALL );
+    push( PushFlags::ALL );
 
     if( rWidget.Background || rWidget.Border )
     {
@@ -5014,7 +5014,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     // save graphics state
-    push( PUSH_ALL );
+    push( PushFlags::ALL );
 
     if( rWidget.Background || rWidget.Border )
     {
@@ -5102,7 +5102,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     rBox.m_aRect = aCheckRect;
 
     // create appearance streams
-    push( PUSH_ALL);
+    push( PushFlags::ALL);
     SvMemoryStream* pCheckStream = new SvMemoryStream( 256, 256 );
 
     beginRedirect( pCheckStream, aCheckRect );
@@ -7142,7 +7142,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
 
 void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines )
 {
-    push( PUSH_ALL );
+    push( PushFlags::ALL );
 
     FontRelief eRelief = m_aCurrentPDFState.m_aFont.GetRelief();
 
@@ -7714,7 +7714,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         bool                    bEmphPolyLine;
         FontEmphasisMark        nEmphMark;
 
-        push( PUSH_ALL );
+        push( PushFlags::ALL );
 
         aLine.setLength( 0 );
         aLine.append( "q\n" );
@@ -8396,7 +8396,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     ComplexTextLayoutMode nOrigTLM = m_pReferenceDevice->GetLayoutMode();
     m_pReferenceDevice->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_COMPLEX_DISABLED );
 
-    push( PUSH_CLIPREGION );
+    push( PushFlags::CLIPREGION );
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
     Rectangle aRect;
     aRect.Left() = rPos.X();
@@ -8659,7 +8659,7 @@ void PDFWriterImpl::pushResource( ResourceKind eKind, const OString& rResource, 
 
 void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRect )
 {
-    push( PUSH_ALL );
+    push( PushFlags::ALL );
 
     // force reemitting clip region inside the new stream, and
     // prevent emitting an unbalanced "Q" at the start
@@ -10321,7 +10321,7 @@ void PDFWriterImpl::drawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch&
         tools::PolyPolygon     aPolyPoly( rPolyPoly );
 
         aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
-        push( PUSH_LINECOLOR );
+        push( PushFlags::LINECOLOR );
         setLineColor( rHatch.GetColor() );
         getReferenceDevice()->DrawHatch( aPolyPoly, rHatch, false );
         pop();
@@ -10630,32 +10630,32 @@ void PDFWriterImpl::pop()
 
     // move those parameters back that were not pushed
     // in the first place
-    if( ! (aState.m_nFlags & PUSH_LINECOLOR) )
+    if( ! (aState.m_nFlags & PushFlags::LINECOLOR) )
         setLineColor( aState.m_aLineColor );
-    if( ! (aState.m_nFlags & PUSH_FILLCOLOR) )
+    if( ! (aState.m_nFlags & PushFlags::FILLCOLOR) )
         setFillColor( aState.m_aFillColor );
-    if( ! (aState.m_nFlags & PUSH_FONT) )
+    if( ! (aState.m_nFlags & PushFlags::FONT) )
         setFont( aState.m_aFont );
-    if( ! (aState.m_nFlags & PUSH_TEXTCOLOR) )
+    if( ! (aState.m_nFlags & PushFlags::TEXTCOLOR) )
         setTextColor( aState.m_aFont.GetColor() );
-    if( ! (aState.m_nFlags & PUSH_MAPMODE) )
+    if( ! (aState.m_nFlags & PushFlags::MAPMODE) )
         setMapMode( aState.m_aMapMode );
-    if( ! (aState.m_nFlags & PUSH_CLIPREGION) )
+    if( ! (aState.m_nFlags & PushFlags::CLIPREGION) )
     {
         // do not use setClipRegion here
         // it would convert again assuming the current mapmode
         rOld.m_aClipRegion = aState.m_aClipRegion;
         rOld.m_bClipRegion = aState.m_bClipRegion;
     }
-    if( ! (aState.m_nFlags & PUSH_TEXTLINECOLOR ) )
+    if( ! (aState.m_nFlags & PushFlags::TEXTLINECOLOR ) )
         setTextLineColor( aState.m_aTextLineColor );
-    if( ! (aState.m_nFlags & PUSH_OVERLINECOLOR ) )
+    if( ! (aState.m_nFlags & PushFlags::OVERLINECOLOR ) )
         setOverlineColor( aState.m_aOverlineColor );
-    if( ! (aState.m_nFlags & PUSH_TEXTALIGN ) )
+    if( ! (aState.m_nFlags & PushFlags::TEXTALIGN ) )
         setTextAlign( aState.m_aFont.GetAlign() );
-    if( ! (aState.m_nFlags & PUSH_TEXTFILLCOLOR) )
+    if( ! (aState.m_nFlags & PushFlags::TEXTFILLCOLOR) )
         setTextFillColor( aState.m_aFont.GetFillColor() );
-    if( ! (aState.m_nFlags & PUSH_REFPOINT) )
+    if( ! (aState.m_nFlags & PushFlags::REFPOINT) )
     {
         // what ?
     }

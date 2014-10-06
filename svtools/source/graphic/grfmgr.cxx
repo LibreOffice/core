@@ -582,7 +582,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         bool        bRectClip;
         const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 
-        pOut->Push( PUSH_CLIPREGION );
+        pOut->Push( PushFlags::CLIPREGION );
 
         if( bCrop )
         {
@@ -727,7 +727,7 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
                 bool        bRectClip;
                 const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 
-                pOut->Push( PUSH_CLIPREGION );
+                pOut->Push( PushFlags::CLIPREGION );
 
                 if( bCrop )
                 {

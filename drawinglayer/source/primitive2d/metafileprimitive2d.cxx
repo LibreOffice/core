@@ -118,7 +118,7 @@ namespace
             maRasterOp(ROP_OVERPAINT),
             mnLayoutMode(TEXT_LAYOUT_DEFAULT),
             maLanguageType(0),
-            mnPushFlags(PUSH_NONE),
+            mnPushFlags(PushFlags::NONE),
             mbLineColor(false),
             mbFillColor(false),
             mbTextColor(true),
@@ -229,7 +229,7 @@ namespace
 
         void Push(PushFlags nPushFlags)
         {
-            if(nPushFlags)
+            if(bool(nPushFlags))
             {
                 OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: PUSH with no property holders (!)");
                 if ( !maPropertyHolders.empty() )
@@ -251,54 +251,54 @@ namespace
                 const PropertyHolder* pTip = maPropertyHolders.back();
                 const PushFlags nPushFlags(pTip->getPushFlags());
 
-                if(nPushFlags != PUSH_NONE)
+                if(nPushFlags != PushFlags::NONE)
                 {
                     if(nSize > 1)
                     {
                         // copy back content for all non-set flags
                         PropertyHolder* pLast = maPropertyHolders[nSize - 2];
 
-                        if(PUSH_ALL != nPushFlags)
+                        if(PushFlags::ALL != nPushFlags)
                         {
-                            if(!(nPushFlags & PUSH_LINECOLOR      ))
+                            if(!(nPushFlags & PushFlags::LINECOLOR      ))
                             {
                                 pLast->setLineColor(pTip->getLineColor());
                                 pLast->setLineColorActive(pTip->getLineColorActive());
                             }
-                            if(!(nPushFlags & PUSH_FILLCOLOR      ))
+                            if(!(nPushFlags & PushFlags::FILLCOLOR      ))
                             {
                                 pLast->setFillColor(pTip->getFillColor());
                                 pLast->setFillColorActive(pTip->getFillColorActive());
                             }
-                            if(!(nPushFlags & PUSH_FONT           ))
+                            if(!(nPushFlags & PushFlags::FONT           ))
                             {
                                 pLast->setFont(pTip->getFont());
                             }
-                            if(!(nPushFlags & PUSH_TEXTCOLOR      ))
+                            if(!(nPushFlags & PushFlags::TEXTCOLOR      ))
                             {
                                 pLast->setTextColor(pTip->getTextColor());
                                 pLast->setTextColorActive(pTip->getTextColorActive());
                             }
-                            if(!(nPushFlags & PUSH_MAPMODE        ))
+                            if(!(nPushFlags & PushFlags::MAPMODE        ))
                             {
                                 pLast->setTransformation(pTip->getTransformation());
                                 pLast->setMapUnit(pTip->getMapUnit());
                             }
-                            if(!(nPushFlags & PUSH_CLIPREGION     ))
+                            if(!(nPushFlags & PushFlags::CLIPREGION     ))
                             {
                                 pLast->setClipPolyPolygon(pTip->getClipPolyPolygon());
                                 pLast->setClipPolyPolygonActive(pTip->getClipPolyPolygonActive());
                             }
-                            if(!(nPushFlags & PUSH_RASTEROP       ))
+                            if(!(nPushFlags & PushFlags::RASTEROP       ))
                             {
                                 pLast->setRasterOp(pTip->getRasterOp());
                             }
-                            if(!(nPushFlags & PUSH_TEXTFILLCOLOR  ))
+                            if(!(nPushFlags & PushFlags::TEXTFILLCOLOR  ))
                             {
                                 pLast->setTextFillColor(pTip->getTextFillColor());
                                 pLast->setTextFillColorActive(pTip->getTextFillColorActive());
                             }
-                            if(!(nPushFlags & PUSH_TEXTALIGN      ))
+                            if(!(nPushFlags & PushFlags::TEXTALIGN      ))
                             {
                                 if(pLast->getFont().GetAlign() != pTip->getFont().GetAlign())
                                 {
@@ -307,24 +307,24 @@ namespace
                                     pLast->setFont(aFont);
                                 }
                             }
-                            if(!(nPushFlags & PUSH_REFPOINT       ))
+                            if(!(nPushFlags & PushFlags::REFPOINT       ))
                             {
                                 // not supported
                             }
-                            if(!(nPushFlags & PUSH_TEXTLINECOLOR  ))
+                            if(!(nPushFlags & PushFlags::TEXTLINECOLOR  ))
                             {
                                 pLast->setTextLineColor(pTip->getTextLineColor());
                                 pLast->setTextLineColorActive(pTip->getTextLineColorActive());
                             }
-                            if(!(nPushFlags & PUSH_TEXTLAYOUTMODE ))
+                            if(!(nPushFlags & PushFlags::TEXTLAYOUTMODE ))
                             {
                                 pLast->setLayoutMode(pTip->getLayoutMode());
                             }
-                            if(!(nPushFlags & PUSH_TEXTLANGUAGE   ))
+                            if(!(nPushFlags & PushFlags::TEXTLANGUAGE   ))
                             {
                                 pLast->setLanguageType(pTip->getLanguageType());
                             }
-                            if(!(nPushFlags & PUSH_OVERLINECOLOR  ))
+                            if(!(nPushFlags & PushFlags::OVERLINECOLOR  ))
                             {
                                 pLast->setOverlineColor(pTip->getOverlineColor());
                                 pLast->setOverlineColorActive(pTip->getOverlineColorActive());
@@ -1229,8 +1229,8 @@ namespace
             drawinglayer::primitive2d::getFontAttributeFromVclFont(
                 aFontScaling,
                 rFont,
-                0 != (rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_RTL),
-                0 != (rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_STRONG)));
+                bool(rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_RTL),
+                bool(rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_STRONG)));
 
         // add FontScaling
         rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());
@@ -2788,8 +2788,8 @@ namespace
                 case META_POP_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    const bool bRegionMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_CLIPREGION);
-                    const bool bRasterOpMayChange(rPropertyHolders.Current().getPushFlags() & PUSH_RASTEROP);
+                    const bool bRegionMayChange(rPropertyHolders.Current().getPushFlags() & PushFlags::CLIPREGION);
+                    const bool bRasterOpMayChange(rPropertyHolders.Current().getPushFlags() & PushFlags::RASTEROP);
 
                     if(bRegionMayChange && rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
