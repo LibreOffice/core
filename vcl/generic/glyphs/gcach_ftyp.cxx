@@ -1266,13 +1266,13 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
 
 // determine unicode ranges in font
 
-const ImplFontCharMapPtr ServerFont::GetImplFontCharMap( void ) const
+const FontCharMapPtr ServerFont::GetFontCharMap() const
 {
-    const ImplFontCharMapPtr pIFCMap = mpFontInfo->GetImplFontCharMap();
-    return pIFCMap;
+    const FontCharMapPtr pFCMap = mpFontInfo->GetFontCharMap();
+    return pFCMap;
 }
 
-const ImplFontCharMapPtr FtFontInfo::GetImplFontCharMap( void )
+const FontCharMapPtr FtFontInfo::GetFontCharMap()
 {
     // check if the charmap is already cached
     if( mpFontCharMap )
@@ -1283,12 +1283,13 @@ const ImplFontCharMapPtr FtFontInfo::GetImplFontCharMap( void )
     bool bOK = GetFontCodeRanges( aCmapResult );
     if( bOK )
     {
-        ImplFontCharMapPtr pFontCharMap( new ImplFontCharMap( aCmapResult ) );
+        FontCharMapPtr pFontCharMap( new FontCharMap ( aCmapResult ) );
         mpFontCharMap = pFontCharMap;
     }
     else
     {
-        mpFontCharMap = ImplFontCharMap::GetDefaultMap();
+        FontCharMapPtr pFontCharMap( new FontCharMap() );
+        mpFontCharMap = pFontCharMap;
     }
     // mpFontCharMap on either branch now has a refcount of 1
     return mpFontCharMap;
