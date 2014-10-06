@@ -43,34 +43,8 @@ gb_CXXFLAGS := \
 	-fPIC \
 	-Wshadow \
 	-Woverloaded-virtual \
+	-Wnon-virtual-dtor \
 	$(CXXFLAGS_CXX11) \
-
-ifeq ($(COM_GCC_IS_CLANG),)
-gb_GccLess460 := $(shell expr $(GCC_VERSION) \< 406)
-
-# Only GCC 4.6 has a fix for <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=7302>
-# "-Wnon-virtual-dtor should't complain of protected dtor" and supports #pragma
-# GCC diagnostic push/pop required e.g. in cppuhelper/propertysetmixin.hxx to
-# silence warnings about a protected, non-virtual dtor in a class with virtual
-# members and friends:
-ifeq ($(gb_GccLess460),1)
-gb_CXXFLAGS += -Wno-non-virtual-dtor
-else
-gb_CXXFLAGS += -Wnon-virtual-dtor
-endif
-
-#At least SLED 10.2 gcc 4.3 overly aggressively optimizes uno::Sequence into
-#junk, so only strict-alias on >= 4.6.0
-gb_StrictAliasingUnsafe := $(gb_GccLess460)
-
-ifeq ($(gb_StrictAliasingUnsafe),1)
-gb_CFLAGS += -fno-strict-aliasing
-gb_CXXFLAGS += -fno-strict-aliasing
-endif
-
-else # Clang
-gb_CXXFLAGS += -Wnon-virtual-dtor
-endif
 
 
 # enable debug STL

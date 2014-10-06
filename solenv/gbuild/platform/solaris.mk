@@ -61,7 +61,7 @@ gb_CXXFLAGS := \
 	-fPIC \
 	-Wshadow \
 	-Woverloaded-virtual \
-	-Wno-non-virtual-dtor \
+	-Wnon-virtual-dtor \
 	-std=c++0x \
 
 # enable debug STL
@@ -69,19 +69,6 @@ ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_COMPILERDEFS += \
 	-D_GLIBCXX_DEBUG \
 
-endif
-
-ifeq ($(COM_GCC_IS_CLANG),)
-gb_GccLess460 := $(shell expr $(GCC_VERSION) \< 406)
-
-#At least SLED 10.2 gcc 4.3 overly aggressively optimizes uno::Sequence into
-#junk, so only strict-alias on >= 4.6.0
-gb_StrictAliasingUnsafe := $(gb_GccLess460)
-
-ifeq ($(gb_StrictAliasingUnsafe),1)
-gb_CFLAGS += -fno-strict-aliasing
-gb_CXXFLAGS += -fno-strict-aliasing
-endif
 endif
 
 ifneq ($(strip $(SYSBASE)),)
