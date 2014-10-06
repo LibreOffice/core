@@ -1413,6 +1413,7 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
             {
                 pSVData->mpUnoWrapper = fnCreateWrapper();
             }
+            aTkLib.release();
         }
         DBG_ASSERT( pSVData->mpUnoWrapper, "UnoWrapper could not be created!" );
 #else
