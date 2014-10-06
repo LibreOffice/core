@@ -431,13 +431,13 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     cairo_destroy(cr);
 }
 
-const ImplFontCharMapPtr X11SalGraphics::GetImplFontCharMap() const
+const FontCharMap* X11SalGraphics::GetFontCharMap() const
 {
     if( !mpServerFont[0] )
         return NULL;
 
-    const ImplFontCharMapPtr pIFCMap = mpServerFont[0]->GetImplFontCharMap();
-    return pIFCMap;
+    const FontCharMap* pFCMap = mpServerFont[0]->GetFontCharMap();
+    return pFCMap;
 }
 
 bool X11SalGraphics::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const

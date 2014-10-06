@@ -73,7 +73,7 @@ public:
     CoreTextStyle*                  CreateTextStyle( const FontSelectPattern& ) const;
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
-    const ImplFontCharMapPtr        GetImplFontCharMap() const;
+    const FontCharMap*              GetFontCharMap() const;
     bool                            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
@@ -330,8 +330,7 @@ public:
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
     // get the repertoire of the current font
-    virtual const ImplFontCharMapPtr
-                            GetImplFontCharMap() const SAL_OVERRIDE;
+    virtual const FontCharMap* GetFontCharMap() const SAL_OVERRIDE;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
