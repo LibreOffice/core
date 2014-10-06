@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_SYSDATA_HXX
 #define INCLUDED_VCL_SYSDATA_HXX
 
+#include <config_features.h>
+
 #include <vector>
 #include <cstddef>
 
@@ -36,8 +38,11 @@ class NSView;
 #endif
 
 #ifdef IOS
+#if HAVE_VCL_OPEN_GL_BACKEND
+#else
 typedef const struct __CTFont * CTFontRef;
 typedef struct CGContext *CGContextRef;
+#endif
 #endif
 
 #if defined( WNT )
@@ -140,7 +145,10 @@ struct SystemGraphicsData
 #elif defined( ANDROID )
     // Nothing
 #elif defined( IOS )
+#if HAVE_VCL_OPEN_GL_BACKEND
+#else
     CGContextRef    rCGContext;     // CoreGraphics graphic context
+#endif
 #elif defined( UNX )
     void*           pDisplay;       // the relevant display connection
     long            hDrawable;      // a drawable
@@ -159,7 +167,10 @@ struct SystemGraphicsData
 #elif defined( ANDROID )
     // Nothing
 #elif defined( IOS )
+#if HAVE_VCL_OPEN_GL_BACKEND
+#else
         , rCGContext( NULL )
+#endif
 #elif defined( UNX )
         , pDisplay( NULL )
         , hDrawable( 0 )

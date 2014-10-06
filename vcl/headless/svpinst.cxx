@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/time.h>
@@ -32,9 +34,15 @@
 #include "headless/svpvd.hxx"
 #ifdef IOS
 #include "headless/svpgdi.hxx"
+#if HAVE_VCL_OPEN_GL_BACKEND
+#include "opengl/salbmp.h"
+#include "opengl/salgdi.h"
+#include "opengl/salvd.h"
+#else
 #include "quartz/salbmp.h"
 #include "quartz/salgdi.h"
 #include "quartz/salvd.h"
+#endif
 #endif
 #include "headless/svpbmp.hxx"
 
@@ -230,6 +238,16 @@ SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics
     return pNew;
 }
 
+#else
+#if HAVE_VCL_OPEN_GL_BACKEND
+SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics */,
+                                                      long /* nDX */, long /*nDY*/,
+                                                      sal_uInt16 /* nBitCount */,
+                                                      const SystemGraphicsData* /* pData */ )
+{
+    return nullptr;
+}
+#endif
 #endif
 
 SalTimer* SvpSalInstance::CreateSalTimer()
@@ -250,7 +268,11 @@ SalSystem* SvpSalInstance::CreateSalSystem()
 SalBitmap* SvpSalInstance::CreateSalBitmap()
 {
 #ifdef IOS
+#if HAVE_VCL_OPEN_GL_BACKEND
+    return new OpenGLSalBitmap();
+#else
     return new QuartzSalBitmap();
+#endif
 #else
     return new SvpSalBitmap();
 #endif

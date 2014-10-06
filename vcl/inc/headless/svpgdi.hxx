@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 
+#include <config_features.h>
+
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/color.hxx>
 #include <vcl/sysdata.hxx>
@@ -28,11 +30,15 @@
 #include "sallayout.hxx"
 
 #ifdef IOS
+#if HAVE_VCL_OPEN_GL_BACKEND
+#include "opengl/salgdi.h"
+#else
 #include "quartz/salgdi.h"
 #include <premac.h>
 #include <Foundation/Foundation.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <postmac.h>
+#endif
 #endif
 
 class ServerFont;
@@ -42,9 +48,15 @@ class ServerFont;
 // let's continue calling the SalGraphics subclass "AquaSalGraphics" even if it
 // is used by us also on iOS, where of course the term "Aqua" has no meaning at all.
 // (Note that even on OS X, using the term "Aqua" is a misunderstanding or obsolete.)
+#if HAVE_VCL_OPEN_GL_BACKEND
+#define SvpSalGraphics OpenGLSalGraphics
+#define SVP_SAL_GRAPHICS_ALREADY_DEFINED
+#else
 #define SvpSalGraphics AquaSalGraphics
 #endif
+#endif
 
+#ifndef SVP_SAL_GRAPHICS_ALREADY_DEFINED
 class SvpSalGraphics : public SalGraphics
 {
 #ifndef IOS
@@ -83,7 +95,6 @@ private:
 public:
     void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
 
-#else
     friend class CTLayout;
 
     CGLayerRef                              mxLayer;
@@ -242,6 +253,8 @@ public:
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
 #ifdef IOS
+#if HAVE_VCL_OPEN_GL_BACKEND
+#else
     void                SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int = 0 );
 
     bool CheckContext();
@@ -262,7 +275,10 @@ public:
     void ApplyXorContext();
     void Pattern50Fill();
 #endif
+#endif
 };
+#endif
+#undef SVP_SAL_GRAPHICS_ALREADY_DEFINED
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 

@@ -1851,7 +1851,10 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
     if (pViewShell)
     {
         SystemGraphicsData aData;
+#if HAVE_VCL_OPEN_GL_BACKEND
+#else
         aData.rCGContext = (CGContextRef) context;
+#endif
         VirtualDevice aDevice(&aData, (sal_uInt16)0);
         // paint to it
         pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);

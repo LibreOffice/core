@@ -401,9 +401,11 @@ $(eval $(call gb_Library_add_defs,vcl,\
 	-DMACOSX_BUNDLE_IDENTIFIER=\"$(MACOSX_BUNDLE_IDENTIFIER)\" \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,vcl,\
+$(if $(filter-out TRUE, $(HAVE_VCL_OPEN_GL_BACKEND)), \
+$(eval $(call gb_Library_add_exception_objects,vcl, \
     $(vcl_coretext_code) \
-))
+)) \
+)
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 	ApplicationServices \
@@ -462,8 +464,13 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/osx/PictToBmpFlt \
     vcl/osx/clipboard \
     vcl/osx/service_entry \
-    $(vcl_quartz_code) \
-    vcl/quartz/salgdiutils \
+    $(if $(filter-out TRUE, $(HAVE_VCL_OPEN_GL_BACKEND)),\
+        $(vcl_quartz_code) \
+        vcl/quartz/salgdiutils \
+    )\
+    $(if $(filter TRUE, $(HAVE_VCL_OPEN_GL_BACKEND)),\
+        vcl/quartz/utils \
+    )\
     vcl/osx/salnativewidgets \
     vcl/osx/salprn \
     vcl/osx/salframe \
@@ -604,8 +611,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/iosinst \
     vcl/ios/dummies \
     $(vcl_really_generic_code) \
-    $(vcl_coretext_code) \
-	$(vcl_quartz_code) \
+    $(if $(filter-out TRUE, $(HAVE_VCL_OPEN_GL_BACKEND)), $(vcl_quartz_code) $(vcl_coretext_code)) \
+    $(if $(filter TRUE, $(HAVE_VCL_OPEN_GL_BACKEND)), vcl/quartz/utils )\
 	$(vcl_headless_code) \
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\

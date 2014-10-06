@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_SALDATABASIC_HXX
 #define INCLUDED_VCL_INC_SALDATABASIC_HXX
 
+#include <config_features.h>
+
 #include <svdata.hxx>
 #include <salinst.hxx>
 #include <osl/module.h>
@@ -27,7 +29,11 @@
 #include "vcl/dllapi.h"
 
 #ifdef IOS
+#if HAVE_VCL_OPEN_GL_BACKEND
+#include "opengl/salgdi.h"
+#else
 #include "quartz/salgdi.h"
+#endif
 #endif
 
 namespace psp
@@ -47,9 +53,12 @@ public:
     SalData();
     virtual ~SalData();
 #ifdef IOS
+#if HAVE_VCL_OPEN_GL_BACKEND
+#else
     SystemFontList*               mpFontList;
     CGColorSpaceRef               mxRGBSpace;
     CGColorSpaceRef               mxGraySpace;
+#endif
     static void ensureThreadAutoreleasePool() {};
 #endif
 };

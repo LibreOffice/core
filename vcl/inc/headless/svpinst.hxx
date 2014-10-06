@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 
+#include <config_features.h>
+
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <salinst.hxx>
@@ -37,7 +39,11 @@
 #define VIRTUAL_DESKTOP_HEIGHT 768
 
 #ifdef IOS
+#if HAVE_VCL_OPEN_GL_BACKEND
+#define SvpSalInstance OpenGLSalInstance
+#else
 #define SvpSalInstance AquaSalInstance
+#endif
 #endif
 
 class SvpSalInstance;

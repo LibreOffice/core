@@ -25,7 +25,11 @@
 #include <list>
 
 #ifdef IOS
+#if HAVE_VCL_OPEN_GL_BACKEND
+#define SvpSalGraphics OpenGLSalGraphics
+#else
 #define SvpSalGraphics AquaSalGraphics
+#endif
 #endif
 
 class SvpSalGraphics;

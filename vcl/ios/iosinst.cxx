@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <premac.h>
 #include <UIKit/UIKit.h>
 #include <postmac.h>
@@ -197,10 +199,14 @@ const OUString& SalGetDesktopEnvironment()
 }
 
 SalData::SalData() :
-    m_pInstance( 0 ),
+    m_pInstance( 0 )
+#if HAVE_VCL_OPEN_GL_BACKEND
+#else
+    ,
     mpFontList( 0 ),
     mxRGBSpace( CGColorSpaceCreateDeviceRGB() ),
     mxGraySpace( CGColorSpaceCreateDeviceGray() )
+#endif
 {
 }
 
@@ -232,8 +238,13 @@ int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
     (void)rButtons;
     (void)nDefButton;
 
+#if HAVE_VCL_OPEN_GL_BACKEND
+    // CreateNSString doesn't link, dunno why
+    (void)rTitle;
+    (void)rMessage;
+#else
     NSLog(@"%@: %@", CreateNSString(rTitle), CreateNSString(rMessage));
-
+#endif
     return 0;
 }
 

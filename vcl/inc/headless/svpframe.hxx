@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
 
+#include <config_features.h>
+
 #include <vcl/sysdata.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <basebmp/bitmapdevice.hxx>
@@ -29,8 +31,13 @@
 #include <list>
 
 #ifdef IOS
+#if HAVE_VCL_OPEN_GL_BACKEND
+#define SvpSalGraphics OpenGLSalGraphics
+#define SvpSalInstance OpenGLSalInstance
+#else
 #define SvpSalGraphics AquaSalGraphics
 #define SvpSalInstance AquaSalInstance
+#endif
 #endif
 
 class SvpSalInstance;

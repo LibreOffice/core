@@ -2448,6 +2448,7 @@ if test $_os != iOS -a $_os != Android; then
 fi
 
 if test "$enable_vgl" == yes; then
+	HAVE_VCL_OPEN_GL_BACKEND="TRUE"
 	AC_DEFINE(HAVE_VCL_OPEN_GL_BACKEND)
 fi
 

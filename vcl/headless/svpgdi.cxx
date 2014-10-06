@@ -730,11 +730,12 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 #endif
 
 #ifdef IOS
-
+#if HAVE_VCL_OPEN_GL_BACKEND
+#else
 void  SvpSalGraphics::RefreshRect(float /* lX */, float /* lY */, float /* lWidth */, float /* lHeight */)
 {
 }
-
+#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
