@@ -216,10 +216,8 @@ FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
     return aMetric;
 }
 
-bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
+bool OutputDevice::GetFontCharMap( FontCharMapPtr& rFontCharMap ) const
 {
-    rFontCharMap.Reset();
-
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return false;
@@ -231,10 +229,16 @@ bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     if( !mpFontEntry )
         return false;
 
-    const ImplFontCharMapPtr pNewMap = mpGraphics->GetImplFontCharMap();
-    rFontCharMap.Reset( pNewMap );
+    FontCharMapPtr pFontCharMap ( mpGraphics->GetFontCharMap() );
+    if (!pFontCharMap)
+    {
+        FontCharMapPtr pDefaultMap( new FontCharMap() );
+        rFontCharMap = pDefaultMap;
+    }
+    else
+        rFontCharMap = pFontCharMap;
 
-    if( rFontCharMap.IsDefaultMap() )
+    if( rFontCharMap->IsDefaultMap() )
         return false;
     return true;
 }
@@ -2160,8 +2164,8 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
     // to get the map temporarily set font
     const vcl::Font aOrigFont = GetFont();
     const_cast<OutputDevice&>(*this).SetFont( rTempFont );
-    FontCharMap aFontCharMap;
-    bool bRet = GetFontCharMap( aFontCharMap );
+    FontCharMapPtr pFontCharMap ( new FontCharMap() );
+    bool bRet = GetFontCharMap( pFontCharMap );
     const_cast<OutputDevice&>(*this).SetFont( aOrigFont );
 
     // if fontmap is unknown assume it doesn't have the glyphs
@@ -2169,8 +2173,10 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
         return nIndex;
 
     for( sal_Int32 i = nIndex; nIndex < nEnd; ++i, ++nIndex )
-        if( ! aFontCharMap.HasChar( rStr[i] ) )
+        if( ! pFontCharMap->HasChar( rStr[i] ) )
             return nIndex;
+
+    pFontCharMap = 0;
 
     return -1;
 }
