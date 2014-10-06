@@ -563,7 +563,7 @@ int FontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
 
 void FontCharMap::Reset( const ImplFontCharMapPtr pNewMap )
 {
-    if( pNewMap == NULL )
+    if( !pNewMap )
     {
         mpImplFontCharMap = ImplFontCharMap::GetDefaultMap();
     }
