@@ -8,6 +8,7 @@
  */
 #include <time.h>
 #include <iostream>
+#include <limits>
 #include <new>
 #include <stdlib.h>
 #include <assert.h>
