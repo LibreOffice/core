@@ -3167,8 +3167,27 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             case MOUSE_LEFT + KEY_MOD2:
             {
 
+                // fdo#79604: first, check if a link has been clicked - do not
+                // select fly in this case!
+                if (1 == nNumberOfClicks)
+                {
+                    UpdatePointer( aDocPos, rMEvt.GetModifier() );
+                    SwEditWin::m_nDDStartPosY = aDocPos.Y();
+                    SwEditWin::m_nDDStartPosX = aDocPos.X();
+
+                    // hit an URL in DrawText object?
+                    if (bExecHyperlinks && pSdrView)
+                    {
+                        SdrViewEvent aVEvt;
+                        pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+
+                        if (aVEvt.eEvent == SDREVENT_EXECUTEURL)
+                            bExecDrawTextLink = true;
+                    }
+                }
+
                 bool bHandledFlyClick = false;
-                if ( nNumberOfClicks == nNbFlyClicks )
+                if (!bExecDrawTextLink && nNumberOfClicks == nNbFlyClicks)
                 {
                     bHandledFlyClick = true;
                     // only try to select frame, if pointer already was
@@ -3291,22 +3310,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 switch ( nNumberOfClicks )
                 {
                     case 1:
-                    {
-                        UpdatePointer( aDocPos, rMEvt.GetModifier() );
-                        SwEditWin::m_nDDStartPosY = aDocPos.Y();
-                        SwEditWin::m_nDDStartPosX = aDocPos.X();
-
-                        // hit an URL in DrawText object?
-                        if (bExecHyperlinks && pSdrView)
-                        {
-                            SdrViewEvent aVEvt;
-                            pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-
-                            if (aVEvt.eEvent == SDREVENT_EXECUTEURL)
-                                bExecDrawTextLink = true;
-                        }
                         break;
-                    }
                     case 2:
                     {
                         bFrmDrag = false;
@@ -3684,7 +3688,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     MoveCursor( rSh, aDocPos, bOnlyText, bLockView );
                     bCallBase = false;
                 }
-                if ( !bOverURLGrf && !bOnlyText )
+                if (!bOverURLGrf && !bExecDrawTextLink && !bOnlyText)
                 {
                     const int nSelType = rSh.GetSelectionType();
                     // Check in general, if an object is selectable at given position.
