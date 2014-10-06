@@ -2643,8 +2643,14 @@ void MSWordExportBase::WriteText()
         if ( pNd == &pNd->GetNodes().GetEndOfContent() )
             break;
 
-        SwNode * pCurrentNode = &pCurPam->GetPoint()->nNode.GetNode();
+        const SwNode * pCurrentNode = &pCurPam->GetPoint()->nNode.GetNode();
         const SwNode * pNextNode = mpTableInfo->getNextNode(pCurrentNode);
+
+        if (pCurrentNode == pNextNode)
+        {
+            SAL_WARN("sw.ww8", "loop in TableInfo");
+            pNextNode = NULL;
+        }
 
         if (pNextNode != NULL)
             pCurPam->GetPoint()->nNode = SwNodeIndex(*pNextNode);
