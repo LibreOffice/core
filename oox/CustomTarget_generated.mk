@@ -63,6 +63,7 @@ $(call gb_CustomTarget_get_target,oox/generated) : \
 	$(oox_INC)/tokenhash.inc \
 	$(oox_INC)/tokennames.inc \
 	$(oox_INC)/namespacenames.inc \
+	$(oox_INC)/namespaces-strictnames.inc \
 	$(oox_INC)/propertynames.inc \
 	$(oox_GENHEADERPATH)/tokens.hxx \
 	$(oox_GENHEADERPATH)/namespaces.hxx \
