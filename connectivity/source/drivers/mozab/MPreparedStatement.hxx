@@ -27,14 +27,14 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase4.hxx>
 
 namespace connectivity
 {
     namespace mozab
     {
 
-        typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
+        typedef ::cppu::ImplHelper4<    ::com::sun::star::sdbc::XPreparedStatement,
                                         ::com::sun::star::sdbc::XParameters,
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
