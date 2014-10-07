@@ -6054,7 +6054,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
             nLenFBSE = nLength;
             // ist FBSE gross genug fuer unsere Daten
             sal_Bool bOk = ( nSkipBLIPLen + 4 + nSkipBLIPPos + 4 <= nLenFBSE );
-            bool bBLIPIsDirectlyEmbedded(false);
+            // #125476# bool bBLIPIsDirectlyEmbedded(false);
 
             if(bOk)
             {
@@ -6066,10 +6066,11 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                 // stream, else 1. Use this as hint to be more reliable (see below)
                 rSt >> nBLIPPos;
 
-                if(0 == nBLIPPos)
-                {
-                    bBLIPIsDirectlyEmbedded = true;
-                }
+                // #125476# Taking back this change - see issue. It probably was a wrong assumtion
+                // if(0 == nBLIPPos)
+                // {
+                //     bBLIPIsDirectlyEmbedded = true;
+                // }
 
                 rSt >> nBLIPPos;
                 bOk = rSt.GetError() == 0;
@@ -6089,7 +6090,12 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                 // This modification works with all ppt files I found which use directly embedded
                 // BLIPs and with the file which showed the error. More work may be needed when
                 // exceptions to this more strict schema may show up, though.
-                if(0 == nBLIPPos && nBLIPLen < nLenFBSE && bBLIPIsDirectlyEmbedded)
+                //
+                // #125476# back to original - see task. Keeping the change in the code as hint
+                // if this comes up again for someone who tries to fix it. This would show that
+                // indeed the information that the blip is embedded needs to be extracted somwhere
+                // and would need to be re-evaluated.
+                if(0 == nBLIPPos && nBLIPLen < nLenFBSE ) // #125476# && bBLIPIsDirectlyEmbedded)
                 {
                     // get BLIP file position as directly following embedded
                     nBLIPPos = rSt.Tell() + 4;
