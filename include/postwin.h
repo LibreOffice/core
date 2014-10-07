@@ -23,6 +23,7 @@
 #undef Rectangle
 #undef DELETE
 #undef OPTIONAL
+#undef TRANSPARENT
 
 #undef Folder
 #undef GradientStyle_RECT

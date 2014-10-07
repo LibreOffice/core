@@ -663,7 +663,7 @@ IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
 
 void DBTreeListBox::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == STATE_CHANGE_VISIBLE )
+    if ( nStateChange == StateChangedType::VISIBLE )
         implStopSelectionTimer();
 }
 

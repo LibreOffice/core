@@ -535,13 +535,13 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
 {
     ComboBox::StateChanged( nStateChange );
 
-    if ( nStateChange == STATE_CHANGE_VISIBLE )
+    if ( nStateChange == StateChangedType::VISIBLE )
     {
         bVisible = IsReallyVisible();
         if ( aVisibilityListener.IsSet() )
             aVisibilityListener.Call( this );
     }
-    else if ( nStateChange == STATE_CHANGE_INITSHOW )
+    else if ( nStateChange == StateChangedType::INITSHOW )
     {
         bVisible = true;
         if ( aVisibilityListener.IsSet() )

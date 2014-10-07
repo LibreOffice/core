@@ -436,7 +436,7 @@ SfxChildAlignment SfxTemplatePanelControl::CheckAlignment(SfxChildAlignment eAct
 
 void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    if ( nStateChange == StateChangedType::INITSHOW )
     {
         SfxViewFrame *pFrame = mpBindings->GetDispatcher_Impl()->GetFrame();
         vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
@@ -2792,7 +2792,7 @@ void SfxCommonTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
 
 void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    if ( nStateChange == StateChangedType::INITSHOW )
     {
         SfxViewFrame *pFrame = GetBindings().GetDispatcher_Impl()->GetFrame();
         vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();

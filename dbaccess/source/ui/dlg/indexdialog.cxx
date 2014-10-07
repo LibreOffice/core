@@ -803,12 +803,12 @@ namespace dbaui
     {
         ModalDialog::StateChanged( nType );
 
-        if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+        if ( nType == StateChangedType::CONTROLBACKGROUND )
         {
             // Check if we need to get new images for normal/high contrast mode
             checkImageList();
         }
-        else if ( nType == STATE_CHANGE_TEXT )
+        else if ( nType == StateChangedType::TEXT )
         {
             // The physical toolbar changed its outlook and shows another logical toolbar!
             // We have to set the correct high contrast mode on the new tbx manager.

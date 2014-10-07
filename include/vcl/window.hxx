@@ -228,28 +228,30 @@ namespace svt { class PopupWindowControllerImpl; }
 #define AUTOSCROLL_HORZ                 ((sal_uInt16)0x0002)
 
 // Flags for StateChanged()
-typedef sal_uInt16 StateChangedType;
-#define STATE_CHANGE_INITSHOW           ((StateChangedType)1)
-#define STATE_CHANGE_VISIBLE            ((StateChangedType)2)
-#define STATE_CHANGE_UPDATEMODE         ((StateChangedType)3)
-#define STATE_CHANGE_ENABLE             ((StateChangedType)4)
-#define STATE_CHANGE_TEXT               ((StateChangedType)5)
-#define STATE_CHANGE_IMAGE              ((StateChangedType)6)
-#define STATE_CHANGE_DATA               ((StateChangedType)7)
-#define STATE_CHANGE_STATE              ((StateChangedType)8)
-#define STATE_CHANGE_STYLE              ((StateChangedType)9)
-#define STATE_CHANGE_ZOOM               ((StateChangedType)10)
-#define STATE_CHANGE_BORDER             ((StateChangedType)11)
-#define STATE_CHANGE_TRANSPARENT        ((StateChangedType)12)
-#define STATE_CHANGE_CONTROLFONT        ((StateChangedType)13)
-#define STATE_CHANGE_CONTROLFOREGROUND  ((StateChangedType)14)
-#define STATE_CHANGE_CONTROLBACKGROUND  ((StateChangedType)15)
-#define STATE_CHANGE_READONLY           ((StateChangedType)16)
-#define STATE_CHANGE_EXTENDEDSTYLE      ((StateChangedType)17)
-#define STATE_CHANGE_MIRRORING          ((StateChangedType)18)
-#define STATE_CHANGE_LAYOUT             ((StateChangedType)19)
-#define STATE_CHANGE_CONTROL_FOCUS      ((StateChangedType)20)
-#define STATE_CHANGE_USER               ((StateChangedType)10000)
+enum class StateChangedType : sal_uInt16
+{
+    INITSHOW           = 1,
+    VISIBLE            = 2,
+    UPDATEMODE         = 3,
+    ENABLE             = 4,
+    TEXT               = 5,
+    IMAGE              = 6,
+    DATA               = 7,
+    STATE              = 8,
+    STYLE              = 9,
+    ZOOM               = 10,
+    BORDER             = 11,
+    TRANSPARENT        = 12,
+    CONTROLFONT        = 13,
+    CONTROLFOREGROUND  = 14,
+    CONTROLBACKGROUND  = 15,
+    READONLY           = 16,
+    EXTENDEDSTYLE      = 17,
+    MIRRORING          = 18,
+    LAYOUT             = 19,
+    CONTROL_FOCUS      = 20,
+    USER               = 10000
+};
 
 // GetFocusFlags
 #define GETFOCUS_TAB                    ((sal_uInt16)0x0001)
@@ -1226,7 +1228,7 @@ public:
      *
      * akin to gtk_widget_queue_resize
      */
-    virtual void queue_resize(StateChangedType eReason = STATE_CHANGE_LAYOUT);
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT);
 
     /*
      * Sets the "width-request" property

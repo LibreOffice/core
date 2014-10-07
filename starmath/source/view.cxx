@@ -128,7 +128,7 @@ SmGraphicWindow::~SmGraphicWindow()
 
 void SmGraphicWindow::StateChanged( StateChangedType eType )
 {
-    if ( eType == STATE_CHANGE_INITSHOW )
+    if ( eType == StateChangedType::INITSHOW )
         Show();
     ScrollableWindow::StateChanged( eType );
 }
@@ -796,7 +796,7 @@ SfxChildAlignment SmCmdBoxWindow::CheckAlignment(SfxChildAlignment eActual,
 
 void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 {
-    if (STATE_CHANGE_INITSHOW == nStateChange)
+    if (StateChangedType::INITSHOW == nStateChange)
     {
         Resize();   // avoid SmEditWindow not being painted correctly
 

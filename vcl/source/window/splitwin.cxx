@@ -2602,18 +2602,19 @@ void SplitWindow::StateChanged( StateChangedType nType )
 {
     switch ( nType )
     {
-    case STATE_CHANGE_INITSHOW:
+    case StateChangedType::INITSHOW:
         if ( IsUpdateMode() )
             ImplCalcLayout();
         break;
-    case STATE_CHANGE_UPDATEMODE:
+    case StateChangedType::UPDATEMODE:
         if ( IsUpdateMode() && IsReallyShown() )
             ImplCalcLayout();
         break;
-    case STATE_CHANGE_CONTROLBACKGROUND:
+    case StateChangedType::CONTROLBACKGROUND:
         ImplInitSettings();
         Invalidate();
         break;
+    default:;
     }
 
     DockingWindow::StateChanged( nType );

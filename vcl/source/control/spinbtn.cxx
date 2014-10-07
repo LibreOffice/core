@@ -82,7 +82,7 @@ void SpinButton::Up()
     if ( ImplIsUpperEnabled() )
     {
         mnValue += mnValueStep;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
 
         ImplMoveFocus( true );
     }
@@ -95,7 +95,7 @@ void SpinButton::Down()
     if ( ImplIsLowerEnabled() )
     {
         mnValue -= mnValueStep;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
 
         ImplMoveFocus( false );
     }
@@ -315,12 +315,12 @@ void SpinButton::StateChanged( StateChangedType nType )
 {
     switch ( nType )
     {
-    case STATE_CHANGE_DATA:
-    case STATE_CHANGE_ENABLE:
+    case StateChangedType::DATA:
+    case StateChangedType::ENABLE:
         Invalidate();
         break;
 
-    case STATE_CHANGE_STYLE:
+    case StateChangedType::STYLE:
     {
         bool bNewRepeat = 0 != ( GetStyle() & WB_REPEAT );
         if ( bNewRepeat != mbRepeat )
@@ -341,6 +341,7 @@ void SpinButton::StateChanged( StateChangedType nType )
         }
     }
     break;
+    default:;
     }
 
     Control::StateChanged( nType );
@@ -377,7 +378,7 @@ void SpinButton::SetRange( const Range& rRange )
         if ( mnValue < mnMinRange )
             mnValue = mnMinRange;
 
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
     }
 }
 
@@ -392,7 +393,7 @@ void SpinButton::SetValue( long nValue )
     if ( mnValue != nValue )
     {
         mnValue = nValue;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
     }
 }
 

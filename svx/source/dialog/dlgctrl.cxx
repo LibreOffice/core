@@ -361,9 +361,9 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
 
 void SvxRectCtl::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    if ( nType == StateChangedType::CONTROLFOREGROUND )
         InitSettings( true, false );
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
         InitSettings( false, true );
 
     Window::StateChanged( nType );
@@ -1899,11 +1899,11 @@ void SvxPreviewBase::StateChanged(StateChangedType nType)
 {
     Control::StateChanged(nType);
 
-    if(STATE_CHANGE_CONTROLFOREGROUND == nType)
+    if(StateChangedType::CONTROLFOREGROUND == nType)
     {
         InitSettings(true, false);
     }
-    else if(STATE_CHANGE_CONTROLBACKGROUND == nType)
+    else if(StateChangedType::CONTROLBACKGROUND == nType)
     {
         InitSettings(false, true);
     }

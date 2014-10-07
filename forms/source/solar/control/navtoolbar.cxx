@@ -476,23 +476,23 @@ namespace frm
 
         switch ( nType )
         {
-            case STATE_CHANGE_ZOOM:
+            case StateChangedType::ZOOM:
 //                m_pToolbar->SetZoom( GetZoom() );
 //                forEachItemWindow( setItemWindowZoom, NULL );
                 // the ToolBox class is not zoomable at the moment, so
                 // we better have no zoom at all instead of only half a zoom ...
                 break;
 
-            case STATE_CHANGE_CONTROLFONT:
+            case StateChangedType::CONTROLFONT:
                 forEachItemWindow( &NavigationToolBar::setItemControlFont, NULL );
                 forEachItemWindow( &NavigationToolBar::adjustItemWindowWidth, NULL );
                 break;
 
-            case STATE_CHANGE_CONTROLFOREGROUND:
+            case StateChangedType::CONTROLFOREGROUND:
                 forEachItemWindow( &NavigationToolBar::setItemControlForeground, NULL );
                 break;
 
-            case STATE_CHANGE_MIRRORING:
+            case StateChangedType::MIRRORING:
             {
                 sal_Bool bIsRTLEnabled( IsRTLEnabled() );
                 m_pToolbar->EnableRTL( bIsRTLEnabled );
@@ -500,6 +500,7 @@ namespace frm
                 Resize();
             }
             break;
+            default:;
         }
     }
 

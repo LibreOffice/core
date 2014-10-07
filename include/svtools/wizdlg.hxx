@@ -249,7 +249,7 @@ public:
     virtual void        ActivatePage();
     virtual long        DeactivatePage();
 
-    virtual void        queue_resize(StateChangedType eReason = STATE_CHANGE_LAYOUT) SAL_OVERRIDE;
+    virtual void        queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
 
     bool                ShowPrevPage();
     bool                ShowNextPage();
