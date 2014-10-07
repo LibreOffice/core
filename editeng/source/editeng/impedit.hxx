@@ -288,6 +288,7 @@ public:
 
     bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );
+    void            ReleaseMouse();
     bool            MouseMove( const MouseEvent& rMouseEvent );
     void            Command( const CommandEvent& rCEvt );
 
@@ -728,6 +729,7 @@ public:
 
     bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
     bool                MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );
+    void                ReleaseMouse();
     bool                MouseMove( const MouseEvent& rMouseEvent, EditView* pView );
     void                    Command( const CommandEvent& rCEvt, EditView* pView );
 

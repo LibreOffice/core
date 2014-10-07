@@ -541,6 +541,9 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     eLanguage = pOLV->GetOutliner()->GetLanguage( aSelection.nStartPara, aSelection.nStartPos );
                 }
 
+                //fdo#44998 if the outliner has captured the mouse events release the lock
+                //so the SdFieldPopup can get them
+                pOLV->ReleaseMouse();
                 SdFieldPopup aFieldPopup( pFldItem->GetField(), eLanguage );
 
                 if ( rCEvt.IsMouseEvent() )

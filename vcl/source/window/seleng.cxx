@@ -244,7 +244,7 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 
     if( !rMEvt.IsRight() )
     {
-       pWin->ReleaseMouse();
+       ReleaseMouse();
     }
 
     if( (nFlags & SELENG_WAIT_UPEVT) && !(nFlags & SELENG_CMDEVT) &&
@@ -274,6 +274,13 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 
     nFlags &= ~(SELENG_CMDEVT | SELENG_WAIT_UPEVT | SELENG_IN_SEL);
     return true;
+}
+
+void SelectionEngine::ReleaseMouse()
+{
+    if (!pWin)
+        return;
+    pWin->ReleaseMouse();
 }
 
 bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )

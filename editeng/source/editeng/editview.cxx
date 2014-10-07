@@ -365,6 +365,11 @@ bool EditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     return pImpEditView->MouseButtonUp( rMouseEvent );
 }
 
+void EditView::ReleaseMouse()
+{
+    return pImpEditView->ReleaseMouse();
+}
+
 bool EditView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
     return pImpEditView->MouseButtonDown( rMouseEvent );

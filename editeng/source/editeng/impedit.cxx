@@ -1064,6 +1064,11 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     return pEditEngine->pImpEditEngine->MouseButtonUp( rMouseEvent, GetEditViewPtr() );
 }
 
+void ImpEditView::ReleaseMouse()
+{
+    pEditEngine->pImpEditEngine->ReleaseMouse();
+}
+
 bool ImpEditView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
     pEditEngine->CheckIdleFormatter();  // If fast typing and mouse button downs

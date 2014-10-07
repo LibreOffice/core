@@ -100,6 +100,13 @@ public:
     bool                SelMouseButtonDown( const MouseEvent& rMEvt );
     bool                SelMouseButtonUp( const MouseEvent& rMEvt );
     bool                SelMouseMove( const MouseEvent& rMEvt );
+    //SelMouseButtonDown captures mouse events, SelMouseButtonUp
+    //releases the capture. If you need to release the mouse
+    //capture after SelMouseButtonDown but before
+    //SelMouseButtonUp, e.g. to allow events to go to a
+    //context menu via "Command" which is delivered after
+    //mouse down but before mouse up, then use this
+    void                ReleaseMouse();
 
     // Keyboard
     void                CursorPosChanging( bool bShift, bool bMod1 );

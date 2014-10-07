@@ -586,6 +586,11 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
     return true;
 }
 
+void ImpEditEngine::ReleaseMouse()
+{
+    GetSelEngine().ReleaseMouse();
+}
+
 bool ImpEditEngine::MouseMove( const MouseEvent& rMEvt, EditView* pView )
 {
     // MouseMove is called directly after ShowQuickHelp()!

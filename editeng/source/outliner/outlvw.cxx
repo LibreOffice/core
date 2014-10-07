@@ -51,7 +51,6 @@ using namespace ::com::sun::star;
 
 OutlinerView::OutlinerView( Outliner* pOut, vcl::Window* pWin )
 {
-
     pOwner                      = pOut;
 
     pEditView = new EditView( pOut->pEditEngine, pWin );
@@ -361,6 +360,11 @@ bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
     pEditView->GetWindow()->SetPointer( aPointer );
 
     return pEditView->MouseButtonUp( rMEvt );
+}
+
+void OutlinerView::ReleaseMouse()
+{
+    pEditView->ReleaseMouse();
 }
 
 void OutlinerView::ImpToggleExpand( Paragraph* pPara )

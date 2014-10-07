@@ -214,6 +214,7 @@ public:
     bool        PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin = NULL );
     bool        MouseButtonDown( const MouseEvent& );
     bool        MouseButtonUp( const MouseEvent& );
+    void        ReleaseMouse();
     bool        MouseMove( const MouseEvent& );
 
     void        ShowCursor( bool bGotoCursor = true );
