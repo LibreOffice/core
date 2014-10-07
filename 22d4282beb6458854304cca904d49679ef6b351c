@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_693f4526",
+        "filename": "include/o3tl/typed_flags.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-07T10:48:13Z",
+      "side": 1,
+      "message": "(somewhat awkward to have to specify M for every instantiation, and that D has to be specified in terms of the \"naked\" U type, when what it should represent is a value of the typed_flags\u003c...\u003e type)",
+      "revId": "22d4282beb6458854304cca904d49679ef6b351c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_493c812f",
+        "filename": "include/o3tl/typed_flags.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-07T10:48:13Z",
+      "side": 1,
+      "message": "this could potentially be private",
+      "revId": "22d4282beb6458854304cca904d49679ef6b351c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_29494dd1",
+        "filename": "include/o3tl/typed_flags.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-07T10:48:13Z",
+      "side": 1,
+      "message": "better to make it private and only provide a getter?",
+      "revId": "22d4282beb6458854304cca904d49679ef6b351c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_094689bf",
+        "filename": "include/o3tl/typed_flags.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-07T10:48:13Z",
+      "side": 1,
+      "message": "some static_assert that U is unsigned (or else assert(v\u003e\u003d0) unless U is unsigned)?",
+      "revId": "22d4282beb6458854304cca904d49679ef6b351c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_e911f5b0",
+        "filename": "include/o3tl/typed_flags.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-07T10:48:13Z",
+      "side": 1,
+      "message": "spurious trailing whitespace (and, arguably, the \"explicit\" should be enough to not require a comment at all?)",
+      "revId": "22d4282beb6458854304cca904d49679ef6b351c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_c91631a7",
+        "filename": "include/o3tl/typed_flags.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-07T10:48:13Z",
+      "side": 1,
+      "message": "all these functions should consistently:\n* either all be members or all friends\n* take rvalue args by value instead of const\u0026\n* (not be redundantly marked \"inline\")\n\nalso, ^, ^\u003d might potentially be useful too (but probably best left for when a client actually needs them)",
+      "revId": "22d4282beb6458854304cca904d49679ef6b351c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_a90bfd7c",
+        "filename": "include/o3tl/typed_flags.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-07T10:48:13Z",
+      "side": 1,
+      "message": "lhs would need to be of type SELF\u0026 (or a one-parameter member fn)",
+      "revId": "22d4282beb6458854304cca904d49679ef6b351c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_891039aa",
+        "filename": "include/vcl/outdevstate.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-07T10:48:13Z",
+      "side": 1,
+      "message": "at least with a Linux --enable-dbgutil build, e.g.\n\n  nm instdir/program/libvcllo.so | grep PUSH_LINECOLOR\n\nshows 204 (non-exported) instances of that variable in BSS (i.e., there\u0027s apparently also .init code to initialize all those variables)",
+      "revId": "22d4282beb6458854304cca904d49679ef6b351c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_29202df7",
+        "filename": "sw/source/core/text/porlin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-07T10:48:13Z",
+      "side": 1,
+      "message": "wouldn\u0027t it look more natural to cast to bool?",
+      "revId": "22d4282beb6458854304cca904d49679ef6b351c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
