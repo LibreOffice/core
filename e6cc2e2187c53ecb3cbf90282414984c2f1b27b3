@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_0990c9eb",
+        "filename": "sw/Library_sw.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-10-07T15:52:44Z",
+      "side": 1,
+      "message": "Wasn\u0027t it like that gb_Foo__bar methods are private ones, i.e. not supposed to be used outside gbuild? Not a big thing, but maybe fix that up on master.",
+      "revId": "e6cc2e2187c53ecb3cbf90282414984c2f1b27b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
