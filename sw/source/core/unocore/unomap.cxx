@@ -1795,7 +1795,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_CHAR_LOCALE), RES_CHRATR_LANGUAGE ,   cppu::UnoType<css::lang::Locale>::get(), PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
                     { OUString(UNO_NAME_CHARACTER_COUNT), WID_DOC_CHAR_COUNT,           cppu::UnoType<sal_Int32>::get(),   PropertyAttribute::READONLY,   0},
                     { OUString(UNO_NAME_DIALOG_LIBRARIES), WID_DOC_DIALOG_LIBRARIES,  cppu::UnoType<css::script::XLibraryContainer>::get(), PropertyAttribute::READONLY, 0},
-                    { OUString(UNO_NAME_VBA_DOCOBJ), WID_DOC_VBA_DOCOBJ,  cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PropertyAttribute::READONLY, 0},
+                    { OUString(UNO_NAME_VBA_DOCOBJ), WID_DOC_VBA_DOCOBJ,  cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     { OUString(UNO_NAME_INDEX_AUTO_MARK_FILE_U_R_L), WID_DOC_AUTO_MARK_URL, cppu::UnoType<OUString>::get(),    PROPERTY_NONE,   0},
                     { OUString(UNO_NAME_PARAGRAPH_COUNT), WID_DOC_PARA_COUNT,           cppu::UnoType<sal_Int32>::get(),   PropertyAttribute::READONLY,   0},
                     { OUString(UNO_NAME_RECORD_CHANGES), WID_DOC_CHANGES_RECORD,        cppu::UnoType<bool>::get(), PROPERTY_NONE,   0},
