@@ -79,10 +79,13 @@ public:
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
     void setRemoveOnInsertMode_Impl( bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
 
-    bool saveChild(const OUString &rShortName, const com::sun::star::packages::ContentInfo &rInfo, OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool & rRandomPool) const;
-
     // Recursive functions
-    void  saveContents(OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence< sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool) const
+    void saveContents(
+            const OUString &rPath,
+            std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList,
+            ZipOutputStream & rZipOut,
+            const com::sun::star::uno::Sequence< sal_Int8 > &rEncryptionKey,
+            const rtlRandomPool & rRandomPool) const
         throw(::com::sun::star::uno::RuntimeException);
     void  releaseUpwardRef();
 

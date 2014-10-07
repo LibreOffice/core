@@ -294,7 +294,57 @@ static void ImplSetStoredData( ZipEntry & rEntry, uno::Reference< XInputStream> 
     rEntry.nCrc = aCRC32.getValue();
 }
 
-bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo &rInfo, OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool) const
+static bool ZipPackageFolder_saveChild(
+        const ContentInfo &rInfo,
+        const OUString &rPath,
+        std::vector < uno::Sequence < PropertyValue > > &rManList,
+        ZipOutputStream & rZipOut,
+        const uno::Sequence < sal_Int8 >& rEncryptionKey,
+        const rtlRandomPool &rRandomPool,
+        sal_Int32 nFormat)
+{
+    bool bSuccess = true;
+
+    const OUString sMediaTypeProperty ("MediaType");
+    const OUString sVersionProperty ("Version");
+    const OUString sFullPathProperty ("FullPath");
+
+    uno::Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
+
+    assert( rInfo.bFolder && rInfo.pFolder && "A valid child object is expected!" );
+
+    OUString sTempName = rPath + "/";
+
+    if ( !rInfo.pFolder->GetMediaType().isEmpty() )
+    {
+        aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
+        aPropSet[PKG_MNFST_MEDIATYPE].Value <<= rInfo.pFolder->GetMediaType();
+        aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
+        aPropSet[PKG_MNFST_VERSION].Value <<= rInfo.pFolder->GetVersion();
+        aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
+        aPropSet[PKG_MNFST_FULLPATH].Value <<= sTempName;
+    }
+    else
+        aPropSet.realloc( 0 );
+
+    rInfo.pFolder->saveContents( sTempName, rManList, rZipOut, rEncryptionKey, rRandomPool);
+
+    // folder can have a mediatype only in package format
+    if ( aPropSet.getLength()
+      && ( nFormat == embed::StorageFormats::PACKAGE || ( nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) ) )
+        rManList.push_back( aPropSet );
+
+    return bSuccess;
+}
+
+static bool ZipPackageStream_saveChild(
+        const ContentInfo &rInfo,
+        const OUString &rPath,
+        std::vector < uno::Sequence < PropertyValue > > &rManList,
+        ZipOutputStream & rZipOut,
+        const uno::Sequence < sal_Int8 >& rEncryptionKey,
+        const rtlRandomPool &rRandomPool,
+        sal_Int32 nFormat)
 {
     bool bSuccess = true;
 
@@ -309,311 +359,165 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
     const OUString sEncryptionAlgProperty    ("EncryptionAlgorithm");
     const OUString sStartKeyAlgProperty  ("StartKeyAlgorithm");
     const OUString sDigestAlgProperty    ("DigestAlgorithm");
-    const OUString  sDerivedKeySizeProperty  ("DerivedKeySize");
+    const OUString sDerivedKeySizeProperty  ("DerivedKeySize");
 
     uno::Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
 
-    OSL_ENSURE( ( rInfo.bFolder && rInfo.pFolder ) || ( !rInfo.bFolder && rInfo.pStream ), "A valid child object is expected!" );
-    if ( rInfo.bFolder )
+    assert( !rInfo.bFolder && rInfo.pStream && "A valid child object is expected!" );
+
+    // if pTempEntry is necessary, it will be released and passed to the ZipOutputStream
+    // and be deleted in the ZipOutputStream destructor
+    unique_ptr < ZipEntry > pAutoTempEntry ( new ZipEntry );
+    ZipEntry* pTempEntry = pAutoTempEntry.get();
+
+    // In case the entry we are reading is also the entry we are writing, we will
+    // store the ZipEntry data in pTempEntry
+
+    ZipPackageFolder::copyZipEntry ( *pTempEntry, rInfo.pStream->aEntry );
+    pTempEntry->sPath = rPath;
+    pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
+
+    bool bToBeEncrypted = rInfo.pStream->IsToBeEncrypted() && (rEncryptionKey.getLength() || rInfo.pStream->HasOwnKey());
+    bool bToBeCompressed = bToBeEncrypted ? sal_True : rInfo.pStream->IsToBeCompressed();
+
+    aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
+    aPropSet[PKG_MNFST_MEDIATYPE].Value <<= rInfo.pStream->GetMediaType( );
+    aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
+    aPropSet[PKG_MNFST_VERSION].Value <<= OUString(); // no version is stored for streams currently
+    aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
+    aPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
+
+    OSL_ENSURE( rInfo.pStream->GetStreamMode() != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
+
+    bool bRawStream = false;
+    if ( rInfo.pStream->GetStreamMode() == PACKAGE_STREAM_DETECT )
+        bRawStream = rInfo.pStream->ParsePackageRawStream();
+    else if ( rInfo.pStream->GetStreamMode() == PACKAGE_STREAM_RAW )
+        bRawStream = true;
+
+    bool bTransportOwnEncrStreamAsRaw = false;
+    // During the storing the original size of the stream can be changed
+    // TODO/LATER: get rid of this hack
+    sal_Int64 nOwnStreamOrigSize = bRawStream ? rInfo.pStream->GetMagicalHackSize() : rInfo.pStream->getSize();
+
+    bool bUseNonSeekableAccess = false;
+    uno::Reference < XInputStream > xStream;
+    if ( !rInfo.pStream->IsPackageMember() && !bRawStream && !bToBeEncrypted && bToBeCompressed )
     {
-        OUString sTempName = rPath + rShortName + "/";
+        // the stream is not a package member, not a raw stream,
+        // it should not be encrypted and it should be compressed,
+        // in this case nonseekable access can be used
 
-        if ( !rInfo.pFolder->GetMediaType().isEmpty() )
-        {
-            aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
-            aPropSet[PKG_MNFST_MEDIATYPE].Value <<= rInfo.pFolder->GetMediaType();
-            aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
-            aPropSet[PKG_MNFST_VERSION].Value <<= rInfo.pFolder->GetVersion();
-            aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
-            aPropSet[PKG_MNFST_FULLPATH].Value <<= sTempName;
-        }
-        else
-            aPropSet.realloc( 0 );
+        xStream = rInfo.pStream->GetOwnStreamNoWrap();
+        uno::Reference < XSeekable > xSeek ( xStream, uno::UNO_QUERY );
 
-        rInfo.pFolder->saveContents( sTempName, rManList, rZipOut, rEncryptionKey, rRandomPool);
+        bUseNonSeekableAccess = ( xStream.is() && !xSeek.is() );
     }
-    else
+
+    if ( !bUseNonSeekableAccess )
     {
-        // if pTempEntry is necessary, it will be released and passed to the ZipOutputStream
-        // and be deleted in the ZipOutputStream destructor
-        unique_ptr < ZipEntry > pAutoTempEntry ( new ZipEntry );
-        ZipEntry* pTempEntry = pAutoTempEntry.get();
+        xStream = rInfo.pStream->getRawData();
 
-        // In case the entry we are reading is also the entry we are writing, we will
-        // store the ZipEntry data in pTempEntry
-
-        ZipPackageFolder::copyZipEntry ( *pTempEntry, rInfo.pStream->aEntry );
-        pTempEntry->sPath = rPath + rShortName;
-        pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
-
-        bool bToBeEncrypted = rInfo.pStream->IsToBeEncrypted() && (rEncryptionKey.getLength() || rInfo.pStream->HasOwnKey());
-        bool bToBeCompressed = bToBeEncrypted ? sal_True : rInfo.pStream->IsToBeCompressed();
-
-        aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
-        aPropSet[PKG_MNFST_MEDIATYPE].Value <<= rInfo.pStream->GetMediaType( );
-        aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
-        aPropSet[PKG_MNFST_VERSION].Value <<= OUString(); // no version is stored for streams currently
-        aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
-        aPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
-
-        OSL_ENSURE( rInfo.pStream->GetStreamMode() != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
-
-        bool bRawStream = false;
-        if ( rInfo.pStream->GetStreamMode() == PACKAGE_STREAM_DETECT )
-            bRawStream = rInfo.pStream->ParsePackageRawStream();
-        else if ( rInfo.pStream->GetStreamMode() == PACKAGE_STREAM_RAW )
-            bRawStream = true;
-
-        bool bTransportOwnEncrStreamAsRaw = false;
-        // During the storing the original size of the stream can be changed
-        // TODO/LATER: get rid of this hack
-        sal_Int64 nOwnStreamOrigSize = bRawStream ? rInfo.pStream->GetMagicalHackSize() : rInfo.pStream->getSize();
-
-        bool bUseNonSeekableAccess = false;
-        uno::Reference < XInputStream > xStream;
-        if ( !rInfo.pStream->IsPackageMember() && !bRawStream && !bToBeEncrypted && bToBeCompressed )
+        if ( !xStream.is() )
         {
-            // the stream is not a package member, not a raw stream,
-            // it should not be encrypted and it should be compressed,
-            // in this case nonseekable access can be used
-
-            xStream = rInfo.pStream->GetOwnStreamNoWrap();
-            uno::Reference < XSeekable > xSeek ( xStream, uno::UNO_QUERY );
-
-            bUseNonSeekableAccess = ( xStream.is() && !xSeek.is() );
+            OSL_FAIL( "ZipPackageStream didn't have a stream associated with it, skipping!" );
+            bSuccess = false;
+            return bSuccess;
         }
 
-        if ( !bUseNonSeekableAccess )
+        uno::Reference < XSeekable > xSeek ( xStream, uno::UNO_QUERY );
+        try
         {
-            xStream = rInfo.pStream->getRawData();
-
-            if ( !xStream.is() )
+            if ( xSeek.is() )
             {
-                OSL_FAIL( "ZipPackageStream didn't have a stream associated with it, skipping!" );
-                bSuccess = false;
-                return bSuccess;
-            }
-
-            uno::Reference < XSeekable > xSeek ( xStream, uno::UNO_QUERY );
-            try
-            {
-                if ( xSeek.is() )
+                // If the stream is a raw one, then we should be positioned
+                // at the beginning of the actual data
+                if ( !bToBeCompressed || bRawStream )
                 {
-                    // If the stream is a raw one, then we should be positioned
-                    // at the beginning of the actual data
-                    if ( !bToBeCompressed || bRawStream )
-                    {
-                        // The raw stream can neither be encrypted nor connected
-                        OSL_ENSURE( !bRawStream || !(bToBeCompressed || bToBeEncrypted), "The stream is already encrypted!\n" );
-                        xSeek->seek ( bRawStream ? rInfo.pStream->GetMagicalHackPos() : 0 );
-                        ImplSetStoredData ( *pTempEntry, xStream );
+                    // The raw stream can neither be encrypted nor connected
+                    OSL_ENSURE( !bRawStream || !(bToBeCompressed || bToBeEncrypted), "The stream is already encrypted!\n" );
+                    xSeek->seek ( bRawStream ? rInfo.pStream->GetMagicalHackPos() : 0 );
+                    ImplSetStoredData ( *pTempEntry, xStream );
 
-                        // TODO/LATER: Get rid of hacks related to switching of Flag Method and Size properties!
-                    }
-                    else if ( bToBeEncrypted )
-                    {
-                        // this is the correct original size
-                        pTempEntry->nSize = xSeek->getLength();
-                        nOwnStreamOrigSize = pTempEntry->nSize;
-                    }
+                    // TODO/LATER: Get rid of hacks related to switching of Flag Method and Size properties!
+                }
+                else if ( bToBeEncrypted )
+                {
+                    // this is the correct original size
+                    pTempEntry->nSize = xSeek->getLength();
+                    nOwnStreamOrigSize = pTempEntry->nSize;
+                }
 
-                    xSeek->seek ( 0 );
+                xSeek->seek ( 0 );
+            }
+            else
+            {
+                // Okay, we don't have an xSeekable stream. This is possibly bad.
+                // check if it's one of our own streams, if it is then we know that
+                // each time we ask for it we'll get a new stream that will be
+                // at position zero...otherwise, assert and skip this stream...
+                if ( rInfo.pStream->IsPackageMember() )
+                {
+                    // if the password has been changed than the stream should not be package member any more
+                    if ( rInfo.pStream->IsEncrypted() && rInfo.pStream->IsToBeEncrypted() )
+                    {
+                        // Should be handled close to the raw stream handling
+                        bTransportOwnEncrStreamAsRaw = true;
+                        pTempEntry->nMethod = STORED;
+
+                        // TODO/LATER: get rid of this situation
+                        // this size should be different from the one that will be stored in manifest.xml
+                        // it is used in storing algorithms and after storing the correct size will be set
+                        pTempEntry->nSize = pTempEntry->nCompressedSize;
+                    }
                 }
                 else
                 {
-                    // Okay, we don't have an xSeekable stream. This is possibly bad.
-                    // check if it's one of our own streams, if it is then we know that
-                    // each time we ask for it we'll get a new stream that will be
-                    // at position zero...otherwise, assert and skip this stream...
-                    if ( rInfo.pStream->IsPackageMember() )
-                    {
-                        // if the password has been changed than the stream should not be package member any more
-                        if ( rInfo.pStream->IsEncrypted() && rInfo.pStream->IsToBeEncrypted() )
-                        {
-                            // Should be handled close to the raw stream handling
-                            bTransportOwnEncrStreamAsRaw = true;
-                            pTempEntry->nMethod = STORED;
-
-                            // TODO/LATER: get rid of this situation
-                            // this size should be different from the one that will be stored in manifest.xml
-                            // it is used in storing algorithms and after storing the correct size will be set
-                            pTempEntry->nSize = pTempEntry->nCompressedSize;
-                        }
-                    }
-                    else
-                    {
-                        bSuccess = false;
-                        return bSuccess;
-                    }
-                }
-            }
-            catch ( uno::Exception& )
-            {
-                bSuccess = false;
-                return bSuccess;
-            }
-
-            if ( bToBeEncrypted || bRawStream || bTransportOwnEncrStreamAsRaw )
-            {
-                if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
-                {
-                    uno::Sequence < sal_Int8 > aSalt( 16 ), aVector( rInfo.pStream->GetBlockSize() );
-                    rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
-                    rtl_random_getBytes ( rRandomPool, aVector.getArray(), aVector.getLength() );
-                    sal_Int32 nIterationCount = 1024;
-
-                    if ( !rInfo.pStream->HasOwnKey() )
-                        rInfo.pStream->setKey ( rEncryptionKey );
-
-                    rInfo.pStream->setInitialisationVector ( aVector );
-                    rInfo.pStream->setSalt ( aSalt );
-                    rInfo.pStream->setIterationCount ( nIterationCount );
-                }
-
-                // last property is digest, which is inserted later if we didn't have
-                // a magic header
-                aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
-
-                aPropSet[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
-                aPropSet[PKG_MNFST_INIVECTOR].Value <<= rInfo.pStream->getInitialisationVector();
-                aPropSet[PKG_MNFST_SALT].Name = sSaltProperty;
-                aPropSet[PKG_MNFST_SALT].Value <<= rInfo.pStream->getSalt();
-                aPropSet[PKG_MNFST_ITERATION].Name = sIterationCountProperty;
-                aPropSet[PKG_MNFST_ITERATION].Value <<= rInfo.pStream->getIterationCount ();
-
-                // Need to store the uncompressed size in the manifest
-                OSL_ENSURE( nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
-                aPropSet[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
-                aPropSet[PKG_MNFST_UCOMPSIZE].Value <<= nOwnStreamOrigSize;
-
-                if ( bRawStream || bTransportOwnEncrStreamAsRaw )
-                {
-                    ::rtl::Reference< EncryptionData > xEncData = rInfo.pStream->GetEncryptionData();
-                    if ( !xEncData.is() )
-                        throw uno::RuntimeException();
-
-                    aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
-                    aPropSet[PKG_MNFST_DIGEST].Value <<= rInfo.pStream->getDigest();
-                    aPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
-                    aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
-                    aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
-                    aPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
-                    aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
-                    aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
-                    aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
-                    aPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
-                }
-            }
-        }
-
-        // If the entry is already stored in the zip file in the format we
-        // want for this write...copy it raw
-        if ( !bUseNonSeekableAccess
-          && ( bRawStream || bTransportOwnEncrStreamAsRaw
-            || ( rInfo.pStream->IsPackageMember() && !bToBeEncrypted
-              && ( ( rInfo.pStream->aEntry.nMethod == DEFLATED && bToBeCompressed )
-                || ( rInfo.pStream->aEntry.nMethod == STORED && !bToBeCompressed ) ) ) ) )
-        {
-            // If it's a PackageMember, then it's an unbuffered stream and we need
-            // to get a new version of it as we can't seek backwards.
-            if ( rInfo.pStream->IsPackageMember() )
-            {
-                xStream = rInfo.pStream->getRawData();
-                if ( !xStream.is() )
-                {
-                    // Make sure that we actually _got_ a new one !
                     bSuccess = false;
                     return bSuccess;
                 }
             }
-
-            try
-            {
-                if ( bRawStream )
-                    xStream->skipBytes( rInfo.pStream->GetMagicalHackPos() );
-
-                rZipOut.putNextEntry ( *pTempEntry, rInfo.pStream, false );
-                // the entry is provided to the ZipOutputStream that will delete it
-                pAutoTempEntry.release();
-
-                uno::Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
-                sal_Int32 nLength;
-
-                do
-                {
-                    nLength = xStream->readBytes( aSeq, n_ConstBufferSize );
-                    rZipOut.rawWrite(aSeq, 0, nLength);
-                }
-                while ( nLength == n_ConstBufferSize );
-
-                rZipOut.rawCloseEntry();
-            }
-            catch ( ZipException& )
-            {
-                bSuccess = false;
-            }
-            catch ( IOException& )
-            {
-                bSuccess = false;
-            }
         }
-        else
+        catch ( uno::Exception& )
         {
-            // This stream is defenitly not a raw stream
+            bSuccess = false;
+            return bSuccess;
+        }
 
-            // If nonseekable access is used the stream should be at the beginning and
-            // is useless after the storing. Thus if the storing fails the package should
-            // be thrown away ( as actually it is done currently )!
-            // To allow to reuse the package after the error, the optimization must be removed!
-
-            // If it's a PackageMember, then our previous reference held a 'raw' stream
-            // so we need to re-get it, unencrypted, uncompressed and positioned at the
-            // beginning of the stream
-            if ( rInfo.pStream->IsPackageMember() )
+        if ( bToBeEncrypted || bRawStream || bTransportOwnEncrStreamAsRaw )
+        {
+            if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
             {
-                xStream = rInfo.pStream->getInputStream();
-                if ( !xStream.is() )
-                {
-                    // Make sure that we actually _got_ a new one !
-                    bSuccess = false;
-                    return bSuccess;
-                }
+                uno::Sequence < sal_Int8 > aSalt( 16 ), aVector( rInfo.pStream->GetBlockSize() );
+                rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
+                rtl_random_getBytes ( rRandomPool, aVector.getArray(), aVector.getLength() );
+                sal_Int32 nIterationCount = 1024;
+
+                if ( !rInfo.pStream->HasOwnKey() )
+                    rInfo.pStream->setKey ( rEncryptionKey );
+
+                rInfo.pStream->setInitialisationVector ( aVector );
+                rInfo.pStream->setSalt ( aSalt );
+                rInfo.pStream->setIterationCount ( nIterationCount );
             }
 
-            if ( bToBeCompressed )
-            {
-                pTempEntry->nMethod = DEFLATED;
-                pTempEntry->nCrc = -1;
-                pTempEntry->nCompressedSize = pTempEntry->nSize = -1;
-            }
+            // last property is digest, which is inserted later if we didn't have
+            // a magic header
+            aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
 
-            try
-            {
-                rZipOut.putNextEntry ( *pTempEntry, rInfo.pStream, bToBeEncrypted);
-                // the entry is provided to the ZipOutputStream that will delete it
-                pAutoTempEntry.release();
+            aPropSet[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
+            aPropSet[PKG_MNFST_INIVECTOR].Value <<= rInfo.pStream->getInitialisationVector();
+            aPropSet[PKG_MNFST_SALT].Name = sSaltProperty;
+            aPropSet[PKG_MNFST_SALT].Value <<= rInfo.pStream->getSalt();
+            aPropSet[PKG_MNFST_ITERATION].Name = sIterationCountProperty;
+            aPropSet[PKG_MNFST_ITERATION].Value <<= rInfo.pStream->getIterationCount ();
 
-                sal_Int32 nLength;
-                uno::Sequence < sal_Int8 > aSeq (n_ConstBufferSize);
-                do
-                {
-                    nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
-                    rZipOut.write(aSeq, 0, nLength);
-                }
-                while ( nLength == n_ConstBufferSize );
+            // Need to store the uncompressed size in the manifest
+            OSL_ENSURE( nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
+            aPropSet[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
+            aPropSet[PKG_MNFST_UCOMPSIZE].Value <<= nOwnStreamOrigSize;
 
-                rZipOut.closeEntry();
-            }
-            catch ( ZipException& )
-            {
-                bSuccess = false;
-            }
-            catch ( IOException& )
-            {
-                bSuccess = false;
-            }
-
-            if ( bToBeEncrypted )
+            if ( bRawStream || bTransportOwnEncrStreamAsRaw )
             {
                 ::rtl::Reference< EncryptionData > xEncData = rInfo.pStream->GetEncryptionData();
                 if ( !xEncData.is() )
@@ -629,53 +533,184 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
                 aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
                 aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
                 aPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
-
-                rInfo.pStream->SetIsEncrypted ( true );
             }
         }
+    }
 
-        if( bSuccess )
+    // If the entry is already stored in the zip file in the format we
+    // want for this write...copy it raw
+    if ( !bUseNonSeekableAccess
+      && ( bRawStream || bTransportOwnEncrStreamAsRaw
+        || ( rInfo.pStream->IsPackageMember() && !bToBeEncrypted
+          && ( ( rInfo.pStream->aEntry.nMethod == DEFLATED && bToBeCompressed )
+            || ( rInfo.pStream->aEntry.nMethod == STORED && !bToBeCompressed ) ) ) ) )
+    {
+        // If it's a PackageMember, then it's an unbuffered stream and we need
+        // to get a new version of it as we can't seek backwards.
+        if ( rInfo.pStream->IsPackageMember() )
         {
-            if ( !rInfo.pStream->IsPackageMember() )
+            xStream = rInfo.pStream->getRawData();
+            if ( !xStream.is() )
             {
-                rInfo.pStream->CloseOwnStreamIfAny();
-                rInfo.pStream->SetPackageMember ( true );
+                // Make sure that we actually _got_ a new one !
+                bSuccess = false;
+                return bSuccess;
             }
-
-            if ( bRawStream )
-            {
-                // the raw stream was integrated and now behaves
-                // as usual encrypted stream
-                rInfo.pStream->SetToBeEncrypted( true );
-            }
-
-            // Then copy it back afterwards...
-            ZipPackageFolder::copyZipEntry ( rInfo.pStream->aEntry, *pTempEntry );
-
-            // Remove hacky bit from entry flags
-            if ( rInfo.pStream->aEntry.nFlag & ( 1 << 4 ) )
-            {
-                rInfo.pStream->aEntry.nFlag &= ~( 1 << 4 );
-                rInfo.pStream->aEntry.nMethod = STORED;
-            }
-
-            // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
-            if ( rInfo.pStream->IsEncrypted() )
-                rInfo.pStream->setSize( nOwnStreamOrigSize );
-
-            rInfo.pStream->aEntry.nOffset *= -1;
         }
+
+        try
+        {
+            if ( bRawStream )
+                xStream->skipBytes( rInfo.pStream->GetMagicalHackPos() );
+
+            rZipOut.putNextEntry ( *pTempEntry, rInfo.pStream, false );
+            // the entry is provided to the ZipOutputStream that will delete it
+            pAutoTempEntry.release();
+
+            uno::Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
+            sal_Int32 nLength;
+
+            do
+            {
+                nLength = xStream->readBytes( aSeq, n_ConstBufferSize );
+                rZipOut.rawWrite(aSeq, 0, nLength);
+            }
+            while ( nLength == n_ConstBufferSize );
+
+            rZipOut.rawCloseEntry();
+        }
+        catch ( ZipException& )
+        {
+            bSuccess = false;
+        }
+        catch ( IOException& )
+        {
+            bSuccess = false;
+        }
+    }
+    else
+    {
+        // This stream is defenitly not a raw stream
+
+        // If nonseekable access is used the stream should be at the beginning and
+        // is useless after the storing. Thus if the storing fails the package should
+        // be thrown away ( as actually it is done currently )!
+        // To allow to reuse the package after the error, the optimization must be removed!
+
+        // If it's a PackageMember, then our previous reference held a 'raw' stream
+        // so we need to re-get it, unencrypted, uncompressed and positioned at the
+        // beginning of the stream
+        if ( rInfo.pStream->IsPackageMember() )
+        {
+            xStream = rInfo.pStream->getInputStream();
+            if ( !xStream.is() )
+            {
+                // Make sure that we actually _got_ a new one !
+                bSuccess = false;
+                return bSuccess;
+            }
+        }
+
+        if ( bToBeCompressed )
+        {
+            pTempEntry->nMethod = DEFLATED;
+            pTempEntry->nCrc = -1;
+            pTempEntry->nCompressedSize = pTempEntry->nSize = -1;
+        }
+
+        try
+        {
+            rZipOut.putNextEntry ( *pTempEntry, rInfo.pStream, bToBeEncrypted);
+            // the entry is provided to the ZipOutputStream that will delete it
+            pAutoTempEntry.release();
+
+            sal_Int32 nLength;
+            uno::Sequence < sal_Int8 > aSeq (n_ConstBufferSize);
+            do
+            {
+                nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
+                rZipOut.write(aSeq, 0, nLength);
+            }
+            while ( nLength == n_ConstBufferSize );
+
+            rZipOut.closeEntry();
+        }
+        catch ( ZipException& )
+        {
+            bSuccess = false;
+        }
+        catch ( IOException& )
+        {
+            bSuccess = false;
+        }
+
+        if ( bToBeEncrypted )
+        {
+            ::rtl::Reference< EncryptionData > xEncData = rInfo.pStream->GetEncryptionData();
+            if ( !xEncData.is() )
+                throw uno::RuntimeException();
+
+            aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
+            aPropSet[PKG_MNFST_DIGEST].Value <<= rInfo.pStream->getDigest();
+            aPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
+            aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
+            aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
+            aPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
+            aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
+            aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
+            aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
+            aPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
+
+            rInfo.pStream->SetIsEncrypted ( true );
+        }
+    }
+
+    if( bSuccess )
+    {
+        if ( !rInfo.pStream->IsPackageMember() )
+        {
+            rInfo.pStream->CloseOwnStreamIfAny();
+            rInfo.pStream->SetPackageMember ( true );
+        }
+
+        if ( bRawStream )
+        {
+            // the raw stream was integrated and now behaves
+            // as usual encrypted stream
+            rInfo.pStream->SetToBeEncrypted( true );
+        }
+
+        // Then copy it back afterwards...
+        ZipPackageFolder::copyZipEntry ( rInfo.pStream->aEntry, *pTempEntry );
+
+        // Remove hacky bit from entry flags
+        if ( rInfo.pStream->aEntry.nFlag & ( 1 << 4 ) )
+        {
+            rInfo.pStream->aEntry.nFlag &= ~( 1 << 4 );
+            rInfo.pStream->aEntry.nMethod = STORED;
+        }
+
+        // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
+        if ( rInfo.pStream->IsEncrypted() )
+            rInfo.pStream->setSize( nOwnStreamOrigSize );
+
+        rInfo.pStream->aEntry.nOffset *= -1;
     }
 
     // folder can have a mediatype only in package format
     if ( aPropSet.getLength()
-      && ( m_nFormat == embed::StorageFormats::PACKAGE || ( m_nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) ) )
+      && ( nFormat == embed::StorageFormats::PACKAGE || ( nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) ) )
         rManList.push_back( aPropSet );
 
     return bSuccess;
 }
 
-void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool ) const
+void ZipPackageFolder::saveContents(
+        const OUString &rPath,
+        std::vector < uno::Sequence < PropertyValue > > &rManList,
+        ZipOutputStream & rZipOut,
+        const uno::Sequence < sal_Int8 >& rEncryptionKey,
+        const rtlRandomPool &rRandomPool ) const
     throw( uno::RuntimeException )
 {
     bool bWritingFailed = false;
@@ -708,12 +743,13 @@ void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequenc
     OUString aMimeTypeStreamName("mimetype");
     if ( m_nFormat == embed::StorageFormats::ZIP && rPath.isEmpty() )
     {
-        // let the "mimtype" stream in root folder be stored as the first stream if it is zip format
+        // let the "mimetype" stream in root folder be stored as the first stream if it is zip format
         ContentHash::const_iterator aIter = maContents.find ( aMimeTypeStreamName );
         if ( aIter != maContents.end() && !(*aIter).second->bFolder )
         {
             bMimeTypeStreamStored = true;
-            bWritingFailed = !saveChild( (*aIter).first, *(*aIter).second, rPath, rManList, rZipOut, rEncryptionKey, rRandomPool );
+            bWritingFailed = !ZipPackageStream_saveChild(
+                *aIter->second, rPath + aIter->first, rManList, rZipOut, rEncryptionKey, rRandomPool, m_nFormat );
         }
     }
 
@@ -725,7 +761,18 @@ void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequenc
         const ContentInfo &rInfo = *(*aCI).second;
 
         if ( !bMimeTypeStreamStored || !rShortName.equals( aMimeTypeStreamName ) )
-            bWritingFailed = !saveChild( rShortName, rInfo, rPath, rManList, rZipOut, rEncryptionKey, rRandomPool );
+        {
+            if (rInfo.bFolder)
+            {
+                bWritingFailed = !ZipPackageFolder_saveChild(
+                    rInfo, rPath + rShortName, rManList, rZipOut, rEncryptionKey, rRandomPool, m_nFormat );
+            }
+            else
+            {
+                bWritingFailed = !ZipPackageStream_saveChild(
+                    rInfo, rPath + rShortName, rManList, rZipOut, rEncryptionKey, rRandomPool, m_nFormat );
+            }
+        }
     }
 
     if( bWritingFailed )
