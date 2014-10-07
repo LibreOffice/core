@@ -38,10 +38,6 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
  */
 public final class ParaNodeIterator extends NodeIterator {
 
-    // can be expanded to an array in the future, not necessary right now
-    private static final String SUPPORTED_TAG1 = OfficeConstants.TAG_PARAGRAPH;
-    private static final String SUPPORTED_TAG2 = OfficeConstants.TAG_HEADING;
-
     /**
      * Standard constructor.
      *
@@ -65,8 +61,9 @@ public final class ParaNodeIterator extends NodeIterator {
     protected boolean nodeSupported(Node node) {
         // can use an array later to check all possible tags for
         // future expansion
+        String nodeName = node.getNodeName();
         return node.getNodeType() == Node.ELEMENT_NODE &&
-                (node.getNodeName().equals(SUPPORTED_TAG1) ||
-                node.getNodeName().equals(SUPPORTED_TAG2));
+            (nodeName.equals(OfficeConstants.TAG_PARAGRAPH) ||
+            nodeName.equals(OfficeConstants.TAG_HEADING));
     }
 }
