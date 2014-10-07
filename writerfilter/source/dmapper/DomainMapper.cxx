@@ -4520,8 +4520,12 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     {
         m_pImpl->getTableManager().utext(data_, len);
 
-        if(len == 1 && ((*data_) == 0x0d || (*data_) == 0x07))
+        if ( len == 1
+             && ( (*(const sal_Unicode*)data_) == 0x0d
+                    || (*(const sal_Unicode*)data_) == 0x07 ) )
+        {
             m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
+        }
         else
         {
 
