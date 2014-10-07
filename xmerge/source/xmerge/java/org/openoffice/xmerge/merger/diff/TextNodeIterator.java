@@ -60,9 +60,10 @@ public final class TextNodeIterator extends NodeIterator {
     protected boolean nodeSupported(Node node) {
         // can use an array later to check all possible tags for
         // future expansion
+        String nodeName = node.getNodeName();
         return node.getNodeType() == Node.TEXT_NODE ||
-                node.getNodeName().equals(OfficeConstants.TAG_SPACE) ||
-                node.getNodeName().equals(OfficeConstants.TAG_TAB_STOP) ||
-                node.getNodeName().equals(OfficeConstants.TAG_LINE_BREAK);
+            nodeName.equals(OfficeConstants.TAG_SPACE) ||
+            nodeName.equals(OfficeConstants.TAG_TAB_STOP) ||
+            nodeName.equals(OfficeConstants.TAG_LINE_BREAK);
     }
 }

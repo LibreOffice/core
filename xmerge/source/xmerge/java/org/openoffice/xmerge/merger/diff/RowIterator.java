@@ -61,6 +61,6 @@ public final class RowIterator extends NodeIterator {
         // can use an array later to check all possible tags for
         // future expansion
         return node.getNodeType() == Node.ELEMENT_NODE &&
-                node.getNodeName().equals(OfficeConstants.TAG_TABLE_ROW);
+            node.getNodeName().equals(OfficeConstants.TAG_TABLE_ROW);
     }
 }
