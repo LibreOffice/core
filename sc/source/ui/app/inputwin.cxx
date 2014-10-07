@@ -774,7 +774,7 @@ void ScInputWindow::StateChanged( StateChangedType nType )
 {
     ToolBox::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_INITSHOW ) Resize();
+    if ( nType == StateChangedType::INITSHOW ) Resize();
 }
 
 void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )

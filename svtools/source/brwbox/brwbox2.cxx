@@ -131,7 +131,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
 {
     Control::StateChanged( nStateChange );
 
-    if ( STATE_CHANGE_MIRRORING == nStateChange )
+    if ( StateChangedType::MIRRORING == nStateChange )
     {
         getDataWindow()->EnableRTL( IsRTLEnabled() );
 
@@ -143,7 +143,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
             pVScroll->EnableRTL( IsRTLEnabled() );
         Resize();
     }
-    else if ( STATE_CHANGE_INITSHOW == nStateChange )
+    else if ( StateChangedType::INITSHOW == nStateChange )
     {
         bBootstrapped = true; // must be set first!
 
@@ -165,7 +165,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
         AutoSizeLastColumn();
         CursorMoved();
     }
-    else if (STATE_CHANGE_ZOOM == nStateChange)
+    else if (StateChangedType::ZOOM == nStateChange)
     {
         pDataWin->SetZoom(GetZoom());
         HeaderBar* pHeaderBar = getDataWindow()->pHeaderBar;
@@ -183,7 +183,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
         // all our controls have to be repositioned
         Resize();
     }
-    else if (STATE_CHANGE_ENABLE == nStateChange)
+    else if (StateChangedType::ENABLE == nStateChange)
     {
         // do we have a handle column?
         bool bHandleCol = !pCols->empty() && (0 == (*pCols)[ 0 ]->GetId());
@@ -536,7 +536,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
 void BrowseBox::Resize()
 {
     if ( !bBootstrapped && IsReallyVisible() )
-        BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
+        BrowseBox::StateChanged( StateChangedType::INITSHOW );
     if ( pCols->empty() )
     {
         getDataWindow()->bResizeOnPaint = true;
@@ -616,7 +616,7 @@ void BrowseBox::Paint( const Rectangle& rRect )
 
     // initializations
     if ( !bBootstrapped && IsReallyVisible() )
-        BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
+        BrowseBox::StateChanged( StateChangedType::INITSHOW );
     if ( pCols->empty() )
         return;
 
@@ -1104,7 +1104,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
 void BrowseBox::PaintData( vcl::Window& rWin, const Rectangle& rRect )
 {
     if ( !bBootstrapped && IsReallyVisible() )
-        BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
+        BrowseBox::StateChanged( StateChangedType::INITSHOW );
 
     // initializations
     if ( !pCols || pCols->empty() || !rWin.IsUpdateMode() )

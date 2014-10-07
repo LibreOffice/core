@@ -272,7 +272,7 @@ bool SfxTitleDockingWindow::Notify( NotifyEvent& rNEvt )
 
 void SfxTitleDockingWindow::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_INITSHOW )
+    if ( nType == StateChangedType::INITSHOW )
     {
         vcl::Window* pWindow = GetWrappedWindow();
         if ( pWindow )
@@ -1860,7 +1860,7 @@ void SfxDockingWindow::FadeIn( bool /*bFadeIn*/ )
 
 void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    if ( nStateChange == StateChangedType::INITSHOW )
         Initialize_Impl();
 
     DockingWindow::StateChanged( nStateChange );

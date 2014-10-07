@@ -201,7 +201,7 @@ void SmToolBoxWindow::DataChanged( const DataChangedEvent &rEvt )
 void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 {
     static bool bSetPosition = true;
-    if (STATE_CHANGE_INITSHOW == nStateChange)
+    if (StateChangedType::INITSHOW == nStateChange)
     {
         SetCategory( nActiveCategoryRID == USHRT_MAX ? RID_UNBINOPS_CAT : nActiveCategoryRID );
 

@@ -458,7 +458,7 @@ IMPL_LINK_NOARG(AddonsToolBarManager, Deactivate)
 
 IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
 {
-    if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
+    if ( *pStateChangedType == StateChangedType::CONTROLBACKGROUND )
     {
         CheckAndUpdateImages();
     }

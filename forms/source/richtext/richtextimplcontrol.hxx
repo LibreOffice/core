@@ -127,7 +127,7 @@ namespace frm
         */
         void    notifyZoomChanged();
 
-        /** to be called when the STATE_CHANGE_INITSHOW event arrives
+        /** to be called when the StateChangedType::INITSHOW event arrives
         */
         void    notifyInitShow();
 

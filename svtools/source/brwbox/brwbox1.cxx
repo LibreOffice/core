@@ -2329,7 +2329,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
     if ( bBootstrapped )
     {
-        StateChanged( STATE_CHANGE_INITSHOW );
+        StateChanged( StateChangedType::INITSHOW );
         if ( bMultiSelection && !pOldRowSel &&
              nOldRowSel != BROWSER_ENDOFSELECTION )
             uRow.pSel->Select( nOldRowSel );
