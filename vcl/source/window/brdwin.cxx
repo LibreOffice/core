@@ -1967,9 +1967,9 @@ void ImplBorderWindow::Resize()
 
 void ImplBorderWindow::StateChanged( StateChangedType nType )
 {
-    if ( (nType == STATE_CHANGE_TEXT) ||
-         (nType == STATE_CHANGE_IMAGE) ||
-         (nType == STATE_CHANGE_DATA) )
+    if ( (nType == StateChangedType::TEXT) ||
+         (nType == StateChangedType::IMAGE) ||
+         (nType == StateChangedType::DATA) )
     {
         if ( IsReallyVisible() && mbFrameBorder )
         {

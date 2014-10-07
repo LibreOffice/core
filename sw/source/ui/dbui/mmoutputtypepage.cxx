@@ -513,7 +513,7 @@ void SwSendMailDialog::ShowDialog()
 void  SwSendMailDialog::StateChanged( StateChangedType nStateChange )
 {
     ModelessDialog::StateChanged( nStateChange );
-    if(STATE_CHANGE_VISIBLE == nStateChange && !IsVisible())
+    if(StateChangedType::VISIBLE == nStateChange && !IsVisible())
     {
         m_pImpl->aRemoveTimer.SetTimeoutHdl( STATIC_LINK( this, SwSendMailDialog,
                                                     RemoveThis ) );

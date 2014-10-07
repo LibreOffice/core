@@ -980,8 +980,8 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( ( nType == STATE_CHANGE_CONTROLFOREGROUND ) ||
-         ( nType == STATE_CHANGE_CONTROLBACKGROUND ) )
+    if ( ( nType == StateChangedType::CONTROLFOREGROUND ) ||
+         ( nType == StateChangedType::CONTROLBACKGROUND ) )
     {
         ImplInitMenuWindow( this, false, true );
         Invalidate();
