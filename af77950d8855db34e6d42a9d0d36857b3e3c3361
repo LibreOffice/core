@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_e98e9526",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2123,
+      "author": {
+        "id": 1000771
+      },
+      "writtenOn": "2014-10-07T07:05:47Z",
+      "side": 1,
+      "message": "sc::ColRowSpan is used explicitly below, so this \u0027using\u0027 seems unnecessary",
+      "revId": "af77950d8855db34e6d42a9d0d36857b3e3c3361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
