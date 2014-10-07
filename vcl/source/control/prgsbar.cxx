@@ -185,20 +185,20 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
 void ProgressBar::StateChanged( StateChangedType nType )
 {
 /* FIXME: !!! We do not support text output at the moment
-    if ( (nType == STATE_CHANGE_ZOOM) ||
-         (nType == STATE_CHANGE_CONTROLFONT) )
+    if ( (nType == StateChangedType::ZOOM) ||
+         (nType == StateChangedType::CONTROLFONT) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
     else
 */
-    if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         ImplInitSettings( false, false, true );
         Invalidate();

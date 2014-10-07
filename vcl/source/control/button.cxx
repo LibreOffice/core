@@ -163,7 +163,7 @@ bool Button::SetModeImage( const Image& rImage )
     if ( rImage != mpButtonData->maImage )
     {
         mpButtonData->maImage = rImage;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
         queue_resize();
     }
     return true;
@@ -184,7 +184,7 @@ void Button::SetImageAlign( ImageAlign eAlign )
     if ( mpButtonData->meImageAlign != eAlign )
     {
         mpButtonData->meImageAlign = eAlign;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
     }
 }
 
@@ -549,7 +549,7 @@ void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
     if ( mpButtonData->meSymbolAlign != eAlign )
     {
         mpButtonData->meSymbolAlign = eAlign;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
     }
 }
 
@@ -1434,17 +1434,17 @@ void PushButton::StateChanged( StateChangedType nType )
 {
     Button::StateChanged( nType );
 
-    if ( (nType == STATE_CHANGE_ENABLE) ||
-         (nType == STATE_CHANGE_TEXT) ||
-         (nType == STATE_CHANGE_IMAGE) ||
-         (nType == STATE_CHANGE_DATA) ||
-         (nType == STATE_CHANGE_STATE) ||
-         (nType == STATE_CHANGE_UPDATEMODE) )
+    if ( (nType == StateChangedType::ENABLE) ||
+         (nType == StateChangedType::TEXT) ||
+         (nType == StateChangedType::IMAGE) ||
+         (nType == StateChangedType::DATA) ||
+         (nType == StateChangedType::STATE) ||
+         (nType == StateChangedType::UPDATEMODE) )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == STATE_CHANGE_STYLE )
+    else if ( nType == StateChangedType::STYLE )
     {
         SetStyle( ImplInitStyle( GetWindow( WINDOW_PREV ), GetStyle() ) );
 
@@ -1460,18 +1460,18 @@ void PushButton::StateChanged( StateChangedType nType )
                 Invalidate();
         }
     }
-    else if ( (nType == STATE_CHANGE_ZOOM) ||
-              (nType == STATE_CHANGE_CONTROLFONT) )
+    else if ( (nType == StateChangedType::ZOOM) ||
+              (nType == StateChangedType::CONTROLFONT) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         ImplInitSettings( false, false, true );
         Invalidate();
@@ -1567,7 +1567,7 @@ void PushButton::SetSymbol( SymbolType eSymbol )
     if ( meSymbol != eSymbol )
     {
         meSymbol = eSymbol;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
     }
 }
 
@@ -1581,7 +1581,7 @@ void PushButton::SetDropDown( sal_uInt16 nStyle )
     if ( mnDDStyle != nStyle )
     {
         mnDDStyle = nStyle;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
     }
 }
 
@@ -1603,7 +1603,7 @@ void PushButton::SetState( TriState eState )
             ImplGetButtonState() |= BUTTON_DRAW_DONTKNOW;
         }
 
-        StateChanged( STATE_CHANGE_STATE );
+        StateChanged( StateChangedType::STATE );
         Toggle();
     }
 }
@@ -1613,7 +1613,7 @@ void PushButton::SetPressed( bool bPressed )
     if ( mbPressed != bPressed )
     {
         mbPressed = bPressed;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
     }
 }
 
@@ -2562,21 +2562,21 @@ void RadioButton::StateChanged( StateChangedType nType )
 {
     Button::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_STATE )
+    if ( nType == StateChangedType::STATE )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate( maStateRect );
     }
-    else if ( (nType == STATE_CHANGE_ENABLE) ||
-              (nType == STATE_CHANGE_TEXT) ||
-              (nType == STATE_CHANGE_IMAGE) ||
-              (nType == STATE_CHANGE_DATA) ||
-              (nType == STATE_CHANGE_UPDATEMODE) )
+    else if ( (nType == StateChangedType::ENABLE) ||
+              (nType == StateChangedType::TEXT) ||
+              (nType == StateChangedType::IMAGE) ||
+              (nType == StateChangedType::DATA) ||
+              (nType == StateChangedType::UPDATEMODE) )
     {
         if ( IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == STATE_CHANGE_STYLE )
+    else if ( nType == StateChangedType::STYLE )
     {
         SetStyle( ImplInitStyle( GetWindow( WINDOW_PREV ), GetStyle() ) );
 
@@ -2587,18 +2587,18 @@ void RadioButton::StateChanged( StateChangedType nType )
                 Invalidate();
         }
     }
-    else if ( (nType == STATE_CHANGE_ZOOM) ||
-              (nType == STATE_CHANGE_CONTROLFONT) )
+    else if ( (nType == StateChangedType::ZOOM) ||
+              (nType == StateChangedType::CONTROLFONT) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         ImplInitSettings( false, false, true );
         Invalidate();
@@ -2655,7 +2655,7 @@ bool RadioButton::SetModeRadioImage( const Image& rImage )
     if ( rImage != maImage )
     {
         maImage = rImage;
-        StateChanged( STATE_CHANGE_DATA );
+        StateChanged( StateChangedType::DATA );
         queue_resize();
     }
     return true;
@@ -2673,7 +2673,7 @@ void RadioButton::SetState( bool bCheck )
     if ( mbChecked != bCheck )
     {
         mbChecked = bCheck;
-        StateChanged( STATE_CHANGE_STATE );
+        StateChanged( StateChangedType::STATE );
         Toggle();
     }
 }
@@ -2730,7 +2730,7 @@ void RadioButton::Check( bool bCheck )
         mbChecked = bCheck;
         ImplDelData aDelData;
         ImplAddDel( &aDelData );
-        StateChanged( STATE_CHANGE_STATE );
+        StateChanged( StateChangedType::STATE );
         if ( aDelData.IsDead() )
             return;
         if ( bCheck && mbRadioCheck )
@@ -3496,21 +3496,21 @@ void CheckBox::StateChanged( StateChangedType nType )
 {
     Button::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_STATE )
+    if ( nType == StateChangedType::STATE )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate( maStateRect );
     }
-    else if ( (nType == STATE_CHANGE_ENABLE) ||
-              (nType == STATE_CHANGE_TEXT) ||
-              (nType == STATE_CHANGE_IMAGE) ||
-              (nType == STATE_CHANGE_DATA) ||
-              (nType == STATE_CHANGE_UPDATEMODE) )
+    else if ( (nType == StateChangedType::ENABLE) ||
+              (nType == StateChangedType::TEXT) ||
+              (nType == StateChangedType::IMAGE) ||
+              (nType == StateChangedType::DATA) ||
+              (nType == StateChangedType::UPDATEMODE) )
     {
         if ( IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == STATE_CHANGE_STYLE )
+    else if ( nType == StateChangedType::STYLE )
     {
         SetStyle( ImplInitStyle( GetWindow( WINDOW_PREV ), GetStyle() ) );
 
@@ -3521,18 +3521,18 @@ void CheckBox::StateChanged( StateChangedType nType )
                 Invalidate();
         }
     }
-    else if ( (nType == STATE_CHANGE_ZOOM) ||
-              (nType == STATE_CHANGE_CONTROLFONT) )
+    else if ( (nType == StateChangedType::ZOOM) ||
+              (nType == StateChangedType::CONTROLFONT) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         ImplInitSettings( false, false, true );
         Invalidate();
@@ -3592,7 +3592,7 @@ void CheckBox::SetState( TriState eState )
     if ( meState != eState )
     {
         meState = eState;
-        StateChanged( STATE_CHANGE_STATE );
+        StateChanged( StateChangedType::STATE );
         Toggle();
     }
 }

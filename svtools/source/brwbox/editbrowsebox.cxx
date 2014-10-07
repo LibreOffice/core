@@ -755,31 +755,31 @@ namespace svt
         BrowseBox::StateChanged( nType );
 
         bool bNeedCellReActivation = false;
-        if ( nType == STATE_CHANGE_MIRRORING )
+        if ( nType == StateChangedType::MIRRORING )
         {
             bNeedCellReActivation = true;
         }
-        else if ( nType == STATE_CHANGE_ZOOM )
+        else if ( nType == StateChangedType::ZOOM )
         {
             ImplInitSettings( true, false, false );
             bNeedCellReActivation = true;
         }
-        else if ( nType == STATE_CHANGE_CONTROLFONT )
+        else if ( nType == StateChangedType::CONTROLFONT )
         {
             ImplInitSettings( true, false, false );
             Invalidate();
         }
-        else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+        else if ( nType == StateChangedType::CONTROLFOREGROUND )
         {
             ImplInitSettings( false, true, false );
             Invalidate();
         }
-        else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+        else if ( nType == StateChangedType::CONTROLBACKGROUND )
         {
             ImplInitSettings( false, false, true );
             Invalidate();
         }
-        else if (nType == STATE_CHANGE_STYLE)
+        else if (nType == StateChangedType::STYLE)
         {
             WinBits nStyle = GetStyle();
             if (!(nStyle & WB_NOTABSTOP) )

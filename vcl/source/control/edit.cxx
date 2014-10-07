@@ -2193,7 +2193,7 @@ void Edit::Command( const CommandEvent& rCEvt )
 
 void Edit::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_INITSHOW )
+    if ( nType == StateChangedType::INITSHOW )
     {
         if ( !mpSubEdit )
         {
@@ -2205,7 +2205,7 @@ void Edit::StateChanged( StateChangedType nType )
         // update background (eventual SetPaintTransparent)
         ImplInitSettings( false, false, true );
     }
-    else if ( nType == STATE_CHANGE_ENABLE )
+    else if ( nType == StateChangedType::ENABLE )
     {
         if ( !mpSubEdit )
         {
@@ -2213,10 +2213,10 @@ void Edit::StateChanged( StateChangedType nType )
             ImplInvalidateOrRepaint();
         }
     }
-    else if ( nType == STATE_CHANGE_STYLE || nType == STATE_CHANGE_MIRRORING )
+    else if ( nType == StateChangedType::STYLE || nType == StateChangedType::MIRRORING )
     {
         WinBits nStyle = GetStyle();
-        if( nType == STATE_CHANGE_STYLE )
+        if( nType == StateChangedType::STYLE )
         {
             nStyle = ImplInitStyle( GetStyle() );
             SetStyle( nStyle );
@@ -2232,12 +2232,12 @@ void Edit::StateChanged( StateChangedType nType )
         {
             if( GetParent()->GetStyle() & WB_LEFT )
                 mnAlign = EDIT_ALIGN_RIGHT;
-            if ( nType == STATE_CHANGE_MIRRORING )
+            if ( nType == StateChangedType::MIRRORING )
                 SetLayoutMode( TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT );
         }
         else if( mbIsSubEdit && !GetParent()->IsRTLEnabled() )
         {
-            if ( nType == STATE_CHANGE_MIRRORING )
+            if ( nType == StateChangedType::MIRRORING )
                 SetLayoutMode( TEXT_LAYOUT_TEXTORIGIN_LEFT );
         }
 
@@ -2252,7 +2252,7 @@ void Edit::StateChanged( StateChangedType nType )
         }
 
     }
-    else if ( nType == STATE_CHANGE_ZOOM )
+    else if ( nType == StateChangedType::ZOOM )
     {
         if ( !mpSubEdit )
         {
@@ -2261,7 +2261,7 @@ void Edit::StateChanged( StateChangedType nType )
             Invalidate();
         }
     }
-    else if ( nType == STATE_CHANGE_CONTROLFONT )
+    else if ( nType == StateChangedType::CONTROLFONT )
     {
         if ( !mpSubEdit )
         {
@@ -2270,7 +2270,7 @@ void Edit::StateChanged( StateChangedType nType )
             Invalidate();
         }
     }
-    else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
         if ( !mpSubEdit )
         {
@@ -2278,7 +2278,7 @@ void Edit::StateChanged( StateChangedType nType )
             Invalidate();
         }
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         if ( !mpSubEdit )
         {
@@ -2442,7 +2442,7 @@ void Edit::SetReadOnly( bool bReadOnly )
         if ( mpSubEdit )
             mpSubEdit->SetReadOnly( bReadOnly );
 
-        StateChanged( STATE_CHANGE_READONLY );
+        StateChanged( StateChangedType::READONLY );
     }
 }
 

@@ -2031,16 +2031,16 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
     if ( m_bDisposed )
         return 1;
 
-    if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
+    if ( *pStateChangedType == StateChangedType::CONTROLBACKGROUND )
     {
         CheckAndUpdateImages();
     }
-    else if ( *pStateChangedType == STATE_CHANGE_VISIBLE )
+    else if ( *pStateChangedType == StateChangedType::VISIBLE )
     {
         if ( m_pToolBar->IsReallyVisible() )
             m_aAsyncUpdateControllersTimer.Start();
     }
-    else if ( *pStateChangedType == STATE_CHANGE_INITSHOW )
+    else if ( *pStateChangedType == StateChangedType::INITSHOW )
     {
         m_aAsyncUpdateControllersTimer.Start();
     }

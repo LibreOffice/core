@@ -129,7 +129,7 @@ void DockingAreaWindow::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_VISIBLE )
+    if ( nType == StateChangedType::VISIBLE )
         ImplInvalidateMenubar( this );
 }
 

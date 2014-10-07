@@ -122,30 +122,31 @@ namespace svt { namespace table
         // forward certain settings to the data window
         switch ( i_nStateChange )
         {
-        case STATE_CHANGE_CONTROL_FOCUS:
+        case StateChangedType::CONTROL_FOCUS:
             m_pImpl->invalidateSelectedRows();
             break;
 
-        case STATE_CHANGE_CONTROLBACKGROUND:
+        case StateChangedType::CONTROLBACKGROUND:
             if ( IsControlBackground() )
                 getDataWindow().SetControlBackground( GetControlBackground() );
             else
                 getDataWindow().SetControlBackground();
             break;
 
-        case STATE_CHANGE_CONTROLFOREGROUND:
+        case StateChangedType::CONTROLFOREGROUND:
             if ( IsControlForeground() )
                 getDataWindow().SetControlForeground( GetControlForeground() );
             else
                 getDataWindow().SetControlForeground();
             break;
 
-        case STATE_CHANGE_CONTROLFONT:
+        case StateChangedType::CONTROLFONT:
             if ( IsControlFont() )
                 getDataWindow().SetControlFont( GetControlFont() );
             else
                 getDataWindow().SetControlFont();
             break;
+        default:;
         }
     }
 

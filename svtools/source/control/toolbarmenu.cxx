@@ -1512,7 +1512,7 @@ void ToolbarMenu::StateChanged( StateChangedType nType )
 {
     DockingWindow::StateChanged( nType );
 
-    if ( ( nType == STATE_CHANGE_CONTROLFOREGROUND ) || ( nType == STATE_CHANGE_CONTROLBACKGROUND ) )
+    if ( ( nType == StateChangedType::CONTROLFOREGROUND ) || ( nType == StateChangedType::CONTROLBACKGROUND ) )
     {
         initWindow();
         Invalidate();
