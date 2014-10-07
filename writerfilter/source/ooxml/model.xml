@@ -16978,11 +16978,11 @@
       <attribute name="id" tokenid="ooxml:CT_FitText_id"/>
     </resource>
     <resource name="ST_Em" resource="List">
-      <value tokenid="0">none</value>
-      <value tokenid="1">dot</value>
-      <value tokenid="2">comma</value>
-      <value tokenid="3">circle</value>
-      <value tokenid="4">underDot</value>
+      <value tokenid="ooxml:Value_ST_Em_none">none</value>
+      <value tokenid="ooxml:Value_ST_Em_dot">dot</value>
+      <value tokenid="ooxml:Value_ST_Em_comma">comma</value>
+      <value tokenid="ooxml:Value_ST_Em_circle">circle</value>
+      <value tokenid="ooxml:Value_ST_Em_underDot">underDot</value>
     </resource>
     <resource name="CT_Em" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Em_val" action="setValue"/>
