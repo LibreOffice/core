@@ -3361,7 +3361,9 @@ void DomainMapper_Impl::CloseFieldCommand()
     dmapper_logger->element("closeFieldCommand");
 #endif
 
-    FieldContextPtr pContext = m_aFieldStack.empty() ? nullptr : m_aFieldStack.top();
+    FieldContextPtr pContext;
+    if(!m_aFieldStack.empty())
+        pContext = m_aFieldStack.top();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
     {
