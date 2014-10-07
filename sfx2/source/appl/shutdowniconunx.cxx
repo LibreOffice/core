@@ -25,6 +25,7 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
