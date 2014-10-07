@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da1255d7_c98cf137",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1000771
+      },
+      "writtenOn": "2014-10-07T06:53:45Z",
+      "side": 1,
+      "message": "Naming convention: How about \"aSpans\"",
+      "revId": "e0596ddaf0ca798323abb4be5724d7920f87ed50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da1255d7_a981bdfd",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2132,
+      "author": {
+        "id": 1000771
+      },
+      "writtenOn": "2014-10-07T06:53:45Z",
+      "side": 1,
+      "message": "Nothing is setting bFound here.\nLook at the original logic more closely - you can stop looking the first time aCol[j].HasSelectionMatrixFragment() returns true\n\nTry replacing the use of bFound with a \"return true\" when a match is found, and \"return false\" at the end",
+      "revId": "e0596ddaf0ca798323abb4be5724d7920f87ed50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
