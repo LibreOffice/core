@@ -1235,11 +1235,11 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
     SwPaM aInsertPam( aTargetIdx );
 
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "Pam-Nd: " << aCpyPam.GetNode( true ).GetIndex() - aCpyPam.GetNode( false ).GetIndex() + 1
-                              << " (0x" << std::hex << (int) aCpyPam.GetNode( false ).GetNodeType() << std::dec
-                              << " " << aCpyPam.GetNode( false ).GetIndex()
-                              << " - 0x" << std::hex << (int) aCpyPam.GetNode( true ).GetNodeType() << std::dec
-                              << " " << aCpyPam.GetNode( true ).GetIndex() << ")" );
+    SAL_INFO( "sw.docappend", "Pam-Nd: " << aCpyPam.GetNode( true )->GetIndex() - aCpyPam.GetNode( false )->GetIndex() + 1
+                              << " (0x" << std::hex << (int) aCpyPam.GetNode( false )->GetNodeType() << std::dec
+                              << " " << aCpyPam.GetNode( false )->GetIndex()
+                              << " - 0x" << std::hex << (int) aCpyPam.GetNode( true )->GetNodeType() << std::dec
+                              << " " << aCpyPam.GetNode( true )->GetIndex() << ")" );
 #endif
 
     this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
