@@ -43,14 +43,14 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 ZipPackageEntry::ZipPackageEntry ( bool bNewFolder )
 : mbIsFolder ( bNewFolder )
 , mbAllowRemoveOnInsert( true )
-, pParent ( NULL )
+, mpParent ( NULL )
 {
 }
 
 ZipPackageEntry::~ZipPackageEntry()
 {
     // When the entry is destroyed it must be already disconnected from the parent
-    OSL_ENSURE( !pParent, "The parent must be disconnected already! Memory corruption is possible!\n" );
+    OSL_ENSURE( !mpParent, "The parent must be disconnected already! Memory corruption is possible!\n" );
 }
 
 // XChild
@@ -62,8 +62,8 @@ OUString SAL_CALL ZipPackageEntry::getName(  )
 void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     throw(RuntimeException, std::exception)
 {
-    if ( pParent && !msName.isEmpty() && pParent->hasByName ( msName ) )
-        pParent->removeByName ( msName );
+    if ( mpParent && !msName.isEmpty() && mpParent->hasByName ( msName ) )
+        mpParent->removeByName ( msName );
 
     // unfortunately no other exception than RuntimeException can be thrown here
     // usually the package is used through storage implementation, the problem should be detected there
@@ -72,20 +72,20 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
 
     msName = aName;
 
-    if ( pParent )
-        pParent->doInsertByName ( this, false );
+    if ( mpParent )
+        mpParent->doInsertByName ( this, false );
 }
 uno::Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
         throw(RuntimeException, std::exception)
 {
     // return uno::Reference< XInterface >( xParent, UNO_QUERY );
-    return uno::Reference< XInterface >( static_cast< ::cppu::OWeakObject* >( pParent ), UNO_QUERY );
+    return uno::Reference< XInterface >( static_cast< ::cppu::OWeakObject* >( mpParent ), UNO_QUERY );
 }
 
 void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, bool bInsert )
 {
-    // xParent = pParent = pNewParent;
-    pParent = pNewParent;
+    // xParent = mpParent = pNewParent;
+    mpParent = pNewParent;
     if ( bInsert && !msName.isEmpty() && !pNewParent->hasByName ( msName ) )
         pNewParent->doInsertByName ( this, false );
 }
@@ -100,10 +100,10 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xN
 
     ZipPackageFolder *pNewParent = reinterpret_cast < ZipPackageFolder * > ( nTest );
 
-    if ( pNewParent != pParent )
+    if ( pNewParent != mpParent )
     {
-        if ( pParent && !msName.isEmpty() && pParent->hasByName ( msName ) && mbAllowRemoveOnInsert )
-            pParent->removeByName( msName );
+        if ( mpParent && !msName.isEmpty() && mpParent->hasByName ( msName ) && mbAllowRemoveOnInsert )
+            mpParent->removeByName( msName );
         doSetParent ( pNewParent, true );
     }
 }

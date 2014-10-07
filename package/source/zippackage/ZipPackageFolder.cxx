@@ -294,7 +294,7 @@ static void ImplSetStoredData( ZipEntry & rEntry, uno::Reference< XInputStream> 
     rEntry.nCrc = aCRC32.getValue();
 }
 
-bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo &rInfo, OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool)
+bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo &rInfo, OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool) const
 {
     bool bSuccess = true;
 
@@ -675,7 +675,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
     return bSuccess;
 }
 
-void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool )
+void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, const uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool &rRandomPool ) const
     throw( uno::RuntimeException )
 {
     bool bWritingFailed = false;
@@ -709,7 +709,7 @@ void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequenc
     if ( m_nFormat == embed::StorageFormats::ZIP && rPath.isEmpty() )
     {
         // let the "mimtype" stream in root folder be stored as the first stream if it is zip format
-        ContentHash::iterator aIter = maContents.find ( aMimeTypeStreamName );
+        ContentHash::const_iterator aIter = maContents.find ( aMimeTypeStreamName );
         if ( aIter != maContents.end() && !(*aIter).second->bFolder )
         {
             bMimeTypeStreamStored = true;
@@ -779,7 +779,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException(THROW_WHERE );
 
-        aValue >>= sMediaType;
+        aValue >>= msMediaType;
     }
     else if ( aPropertyName == "Version" )
         aValue >>= m_sVersion;
@@ -797,7 +797,7 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException(THROW_WHERE );
 
-        return uno::makeAny ( sMediaType );
+        return uno::makeAny ( msMediaType );
     }
     else if ( PropertyName == "Version" )
         return uno::makeAny( m_sVersion );

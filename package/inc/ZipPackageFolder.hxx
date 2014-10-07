@@ -60,7 +60,7 @@ public:
                       bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder();
 
-    OUString& GetVersion() { return m_sVersion; }
+    const OUString& GetVersion() const { return m_sVersion; }
     void SetVersion( const OUString& aVersion ) { m_sVersion = aVersion; }
 
     bool LookForUnexpectedODF12Streams( const OUString& aPath );
@@ -79,10 +79,10 @@ public:
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
     void setRemoveOnInsertMode_Impl( bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
 
-    bool saveChild(const OUString &rShortName, const com::sun::star::packages::ContentInfo &rInfo, OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool & rRandomPool);
+    bool saveChild(const OUString &rShortName, const com::sun::star::packages::ContentInfo &rInfo, OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence < sal_Int8 >& rEncryptionKey, rtlRandomPool & rRandomPool) const;
 
     // Recursive functions
-    void  saveContents(OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence< sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
+    void  saveContents(OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence< sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool) const
         throw(::com::sun::star::uno::RuntimeException);
     void  releaseUpwardRef();
 

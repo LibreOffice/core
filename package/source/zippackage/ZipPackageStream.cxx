@@ -298,7 +298,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
             throw RuntimeException(THROW_WHERE );
 
         // copy all the properties of this stream to the new stream
-        xNewPSProps->setPropertyValue("MediaType", makeAny( sMediaType ) );
+        xNewPSProps->setPropertyValue("MediaType", makeAny( msMediaType ) );
         xNewPSProps->setPropertyValue("Compressed", makeAny( bToBeCompressed ) );
         if ( bToBeEncrypted )
         {
@@ -406,7 +406,7 @@ bool ZipPackageStream::ParsePackageRawStream()
                     m_nImportedDerivedKeySize = nDerivedKeySize;
                     m_nImportedStartKeyAlgorithm = nStartKeyGenID;
                     m_nMagicalHackSize = nMagHackSize;
-                    sMediaType = aMediaType;
+                    msMediaType = aMediaType;
 
                     bOk = true;
                 }
@@ -600,7 +600,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
         if ( !bIsEncrypted || !GetEncryptionData().is() )
             throw packages::NoEncryptionException(THROW_WHERE );
 
-        return rZipPackage.getZipFile().getWrappedRawStream( aEntry, GetEncryptionData(), sMediaType, rZipPackage.GetSharedMutexRef() );
+        return rZipPackage.getZipFile().getWrappedRawStream( aEntry, GetEncryptionData(), msMediaType, rZipPackage.GetSharedMutexRef() );
     }
     else if ( GetOwnSeekStream().is() )
     {
@@ -703,12 +703,12 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE && rZipPackage.getFormat() != embed::StorageFormats::OFOPXML )
             throw beans::PropertyVetoException(THROW_WHERE );
 
-        if ( aValue >>= sMediaType )
+        if ( aValue >>= msMediaType )
         {
-            if ( !sMediaType.isEmpty() )
+            if ( !msMediaType.isEmpty() )
             {
-                if ( sMediaType.indexOf ( "text" ) != -1
-                 || sMediaType == "application/vnd.sun.star.oleobject" )
+                if ( msMediaType.indexOf ( "text" ) != -1
+                 || msMediaType == "application/vnd.sun.star.oleobject" )
                     bToBeCompressed = true;
                 else if ( !m_bCompressedIsSetFromOutside )
                     bToBeCompressed = false;
@@ -859,7 +859,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     Any aAny;
     if ( PropertyName == "MediaType" )
     {
-        aAny <<= sMediaType;
+        aAny <<= msMediaType;
         return aAny;
     }
     else if ( PropertyName == "Size" )

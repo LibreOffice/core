@@ -44,24 +44,24 @@ protected:
     bool mbIsFolder:1;
     bool mbAllowRemoveOnInsert:1;
     // com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xParent;
-    OUString     sMediaType;
-    ZipPackageFolder * pParent;
+    OUString msMediaType;
+    ZipPackageFolder* mpParent;
 public:
     ZipEntry aEntry;
     ZipPackageEntry ( bool bNewFolder = false );
     virtual ~ZipPackageEntry( void );
 
-    OUString & GetMediaType () { return sMediaType; }
-    void SetMediaType ( const OUString & sNewType) { sMediaType = sNewType; }
+    const OUString& GetMediaType () const { return msMediaType; }
+    void SetMediaType ( const OUString & sNewType) { msMediaType = sNewType; }
     void doSetParent ( ZipPackageFolder * pNewParent, bool bInsert );
     bool IsFolder ( ) { return mbIsFolder; }
-    ZipPackageFolder* GetParent ( ) { return pParent; }
+    const ZipPackageFolder* GetParent () const { return mpParent; }
     void SetFolder ( bool bSetFolder ) { mbIsFolder = bSetFolder; }
 
     void clearParent ( void )
     {
         // xParent.clear();
-        pParent = NULL;
+        mpParent = NULL;
     }
     // XNamed
     virtual OUString SAL_CALL getName(  )
