@@ -2185,10 +2185,18 @@ sal_Bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
  *************************************************************************/
 
 SwTextGridItem::SwTextGridItem()
-    : SfxPoolItem( RES_TEXTGRID ), aColor( COL_LIGHTGRAY ), nLines( 20 ),
-      nBaseHeight( 400 ), nRubyHeight( 200 ), eGridType( GRID_NONE ),
-      bRubyTextBelow( 0 ), bPrintGrid( 1 ), bDisplayGrid( 1 ),
-      nBaseWidth(400), bSnapToChars( 1 ), bSquaredMode(1)
+    : SfxPoolItem( RES_TEXTGRID )
+    , aColor( COL_LIGHTGRAY )
+    , nLines( 20 )
+    , nBaseHeight( 400 )
+    , nRubyHeight( 200 )
+    , eGridType( GRID_NONE )
+    , bRubyTextBelow( 0 )
+    , bPrintGrid( 1 )
+    , bDisplayGrid( 1 )
+    , nBaseWidth( 400 )
+    , bSnapToChars( 1 )
+    , bSquaredMode( 1 )
 {
 }
 

@@ -93,7 +93,14 @@ public:
 
     //for textgrid enhancement
     sal_uInt16 GetBaseWidth() const { return nBaseWidth;}
-    void SetBaseWidth( sal_uInt16 nNew ) { nBaseWidth = nNew; }
+    void SetBaseWidth( sal_uInt16 nNew )
+    {
+        // only accept positive values
+        if ( nBaseWidth > 0 )
+        {
+            nBaseWidth = nNew;
+        }
+    }
 
     sal_Bool IsSnapToChars() const { return bSnapToChars; }
     sal_Bool GetSnapToChars() const { return bSnapToChars; }
