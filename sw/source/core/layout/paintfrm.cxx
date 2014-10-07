@@ -1867,13 +1867,34 @@ bool DrawFillAttributes(
             !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
             !basegfx::fTools::equalZero(aPaintRange.getHeight()))
         {
-            //UUUU need to expand for correct AAed and non-AAed visualization as primitive; move
-            // bounds to half-(logical)pixel bounds and add a width/height of one pixel that is missing
-            // from SwRect/Rectangle integer handling
-            const basegfx::B2DVector aSingleUnit(rOut.GetInverseViewTransformation() * basegfx::B2DVector(0.5, 0.5));
+            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
 
-            aPaintRange.expand(aPaintRange.getMinimum() - (aSingleUnit * 0.5));
-            aPaintRange.expand(aPaintRange.getMaximum() + (aSingleUnit * 1.5));
+            //UUUU need to expand for correct AAed and non-AAed visualization as primitive.
+            // This must probably be removed again when we will be able to get all Writer visualization
+            // as primitives and Writer prepares all it's stuff in high precision coordinates (also
+            // needs to avoid moving boundaries around to better show overlapping stuff...)
+            if(aSvtOptionsDrawinglayer.IsAntiAliasing())
+            {
+                // if AAed in principle expand by 0.5 in all directions. Since painting edges of
+                // AAed regions does not add to no transparence (0.5 opacity covered by 0.5 opacity
+                // is not full opacity but 0.75 opacity) we need some overlap here to avoid paint
+                // artifacts. Checked experimentally - a little bit more in Y is needed, probably
+                // due to still existing integer alignment and cruncing in writer.
+                static double fExpandX = 0.55;
+                static double fExpandY = 0.70;
+                const basegfx::B2DVector aSingleUnit(rOut.GetInverseViewTransformation() * basegfx::B2DVector(fExpandX, fExpandY));
+
+                aPaintRange.expand(aPaintRange.getMinimum() - aSingleUnit);
+                aPaintRange.expand(aPaintRange.getMaximum() + aSingleUnit);
+            }
+            else
+            {
+                // if not AAed expand by one unit to bottom right due to the missing unit
+                // from SwRect/Rectangle integer handling
+                const basegfx::B2DVector aSingleUnit(rOut.GetInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+
+                aPaintRange.expand(aPaintRange.getMaximum() + aSingleUnit);
+            }
 
             const basegfx::B2DRange aDefineRange(
                 rOriginalLayoutRect.Left(),
