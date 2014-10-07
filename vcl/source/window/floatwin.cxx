@@ -537,14 +537,14 @@ bool FloatingWindow::Notify( NotifyEvent& rNEvt )
 
 void FloatingWindow::StateChanged( StateChangedType nType )
 {
-    if (nType == STATE_CHANGE_INITSHOW)
+    if (nType == StateChangedType::INITSHOW)
     {
         DoInitialLayout();
     }
 
     SystemWindow::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         ImplInitSettings();
         Invalidate();

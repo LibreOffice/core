@@ -253,7 +253,7 @@ void CustomAnimationPane::StateChanged( StateChangedType nStateChange )
 {
     Control::StateChanged( nStateChange );
 
-    if( nStateChange == STATE_CHANGE_VISIBLE )
+    if( nStateChange == StateChangedType::VISIBLE )
         updateMotionPathTags();
 }
 

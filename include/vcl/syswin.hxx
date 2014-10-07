@@ -189,7 +189,7 @@ public:
     virtual void    Resizing( Size& rSize );
     virtual void    Resize() SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
-    virtual void    queue_resize(StateChangedType eReason = STATE_CHANGE_LAYOUT) SAL_OVERRIDE;
+    virtual void    queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
     bool            isLayoutEnabled() const;
     void            setOptimalLayoutSize();
     bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }

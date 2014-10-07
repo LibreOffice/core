@@ -75,7 +75,7 @@ void Control::EnableRTL( bool bEnable )
     // convenience: for controls also switch layout mode
     SetLayoutMode( bEnable ? TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT :
                                 TEXT_LAYOUT_TEXTORIGIN_LEFT );
-    StateChanged( STATE_CHANGE_MIRRORING );
+    StateChanged( StateChangedType::MIRRORING );
     OutputDevice::EnableRTL(bEnable);
 }
 
@@ -248,7 +248,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
         if ( !mbHasControlFocus )
         {
             mbHasControlFocus = true;
-            StateChanged( STATE_CHANGE_CONTROL_FOCUS );
+            StateChanged( StateChangedType::CONTROL_FOCUS );
             if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
                 // been destroyed within the handler
                 return true;
@@ -262,7 +262,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
             if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
             {
                 mbHasControlFocus = false;
-                StateChanged( STATE_CHANGE_CONTROL_FOCUS );
+                StateChanged( StateChangedType::CONTROL_FOCUS );
                 if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
                     // been destroyed within the handler
                     return true;
@@ -275,11 +275,11 @@ bool Control::Notify( NotifyEvent& rNEvt )
 
 void Control::StateChanged( StateChangedType nStateChange )
 {
-    if( nStateChange == STATE_CHANGE_INITSHOW   ||
-        nStateChange == STATE_CHANGE_VISIBLE    ||
-        nStateChange == STATE_CHANGE_ZOOM       ||
-        nStateChange == STATE_CHANGE_BORDER     ||
-        nStateChange == STATE_CHANGE_CONTROLFONT
+    if( nStateChange == StateChangedType::INITSHOW   ||
+        nStateChange == StateChangedType::VISIBLE    ||
+        nStateChange == StateChangedType::ZOOM       ||
+        nStateChange == StateChangedType::BORDER     ||
+        nStateChange == StateChangedType::CONTROLFONT
         )
     {
         ImplClearLayoutData();

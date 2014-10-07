@@ -2199,25 +2199,25 @@ void Ruler::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_INITSHOW )
+    if ( nType == StateChangedType::INITSHOW )
         ImplFormat();
-    else if ( nType == STATE_CHANGE_UPDATEMODE )
+    else if ( nType == StateChangedType::UPDATEMODE )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Paint(Rectangle());
     }
-    else if ( (nType == STATE_CHANGE_ZOOM) ||
-              (nType == STATE_CHANGE_CONTROLFONT) )
+    else if ( (nType == StateChangedType::ZOOM) ||
+              (nType == StateChangedType::CONTROLFONT) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         ImplInitSettings( false, false, true );
         Invalidate();

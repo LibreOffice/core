@@ -24,7 +24,7 @@ namespace vcl {
 
 void Window::EnableRTL ( bool bEnable )
 {
-    StateChanged( STATE_CHANGE_MIRRORING );
+    StateChanged( StateChangedType::MIRRORING );
     OutputDevice::EnableRTL(bEnable);
 }
 
