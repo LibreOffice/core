@@ -711,7 +711,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     {
                         if(m_pButtons[nId] == NULL)
                         {
-                            m_pButtons[nId] = new MenuButton((Window*)pDevice, WB_FLATBUTTON);
+                            m_pButtons[nId] = new MenuButton((Window*)pDevice, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
                             m_pButtons[nId]->SetSizePixel(Size(20, aRect.GetSize().Height()));
                             m_pButtons[nId]->SetPopupMenu(&m_aMenu);
                         }
