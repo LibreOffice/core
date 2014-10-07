@@ -5419,7 +5419,7 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
     sal_uInt16 nShpCnt = pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
     {
-        SvxMSDffShapeOrder& rOrder = *(*pShapeOrders)[ nShapeNum ];
+        SvxMSDffShapeOrder& rOrder = (*pShapeOrders)[ nShapeNum ];
 
         if( rOrder.nShapeId == nId )
         {
@@ -5440,7 +5440,7 @@ void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
     sal_uInt16 nShpCnt = pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
     {
-        SvxMSDffShapeOrder& rOrder = *(*pShapeOrders)[ nShapeNum ];
+        SvxMSDffShapeOrder& rOrder = (*pShapeOrders)[ nShapeNum ];
 
         if( rOrder.pObj == pOldObject )
         {
@@ -5457,7 +5457,7 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
     sal_uInt16 nShpCnt = pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
     {
-        SvxMSDffShapeOrder& rOrder = *(*pShapeOrders)[ nShapeNum ];
+        SvxMSDffShapeOrder& rOrder = (*pShapeOrders)[ nShapeNum ];
 
         if( rOrder.pObj == pObject )
         {
@@ -7343,12 +7343,6 @@ SdrObject* SvxMSDffManager::getShapeForId( sal_Int32 nShapeId )
 {
     SvxMSDffShapeIdContainer::iterator aIter( maShapeIdContainer.find(nShapeId) );
     return aIter != maShapeIdContainer.end() ? (*aIter).second : 0;
-}
-
-SvxMSDffShapeOrders::~SvxMSDffShapeOrders()
-{
-    for( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

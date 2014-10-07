@@ -111,11 +111,7 @@ typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 
 // the following two will be sorted by the order of their appearance:
 typedef boost::ptr_vector<SvxMSDffBLIPInfo> SvxMSDffBLIPInfos;
-class SvxMSDffShapeOrders : public std::vector<SvxMSDffShapeOrder*>
-{
-public:
-    ~SvxMSDffShapeOrders();
-};
+typedef boost::ptr_vector<SvxMSDffShapeOrder> SvxMSDffShapeOrders;
 
 struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoById
 {
@@ -695,7 +691,7 @@ public:
     inline const SvxMSDffShapeInfos_ById* GetShapeInfos( void ) const
         { return m_pShapeInfosById.get(); }
 
-    inline const SvxMSDffShapeOrders* GetShapeOrders( void ) const
+    inline SvxMSDffShapeOrders* GetShapeOrders( void ) const
         { return pShapeOrders; }
 
     void StoreShapeOrder(sal_uLong      nId,
