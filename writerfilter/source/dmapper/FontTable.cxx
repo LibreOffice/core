@@ -131,7 +131,7 @@ void FontTable::lcl_sprm(Sprm& rSprm)
                     nSprmId == NS_ooxml::LN_CT_Font_embedRegular ? ""
                     : nSprmId == NS_ooxml::LN_CT_Font_embedBold ? "b"
                     : nSprmId == NS_ooxml::LN_CT_Font_embedItalic ? "i"
-                    : nSprmId == NS_ooxml::LN_CT_Font_embedBoldItalic ? "bi" : "?" );
+                    : /*NS_ooxml::LN_CT_Font_embedBoldItalic*/ "bi" );
                 pProperties->resolve( handler );
             }
             break;
