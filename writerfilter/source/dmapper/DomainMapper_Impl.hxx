@@ -113,6 +113,22 @@ enum BreakType
     PAGE_BREAK,
     COLUMN_BREAK
 };
+
+/**
+ * Storage for state that is relevant outside a header/footer, but not inside it.
+ *
+ * In case some state of DomainMapper_Impl should be reset before handling the
+ * header/footer and should be restored once handling of header/footer is done,
+ * then you can use this class to do so.
+ */
+class HeaderFooterContext
+{
+    bool m_bTextInserted;
+public:
+    HeaderFooterContext(bool bTextInserted);
+    bool getTextInserted();
+};
+
 /*--------------------------------------------------
    field stack element
  * --------------------------------------------------*/
@@ -200,6 +216,7 @@ typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
 typedef std::stack<ContextType>                 ContextStack;
 typedef std::stack<PropertyMapPtr>              PropertyStack;
 typedef std::stack< TextAppendContext >         TextAppendStack;
+typedef std::stack<HeaderFooterContext> HeaderFooterStack;
 typedef std::stack<FieldContextPtr>                FieldStack;
 typedef std::stack< AnchoredContext >           TextContentStack;
 
@@ -301,6 +318,7 @@ private:
 
     TextContentStack                                                                m_aAnchoredStack;
 
+    HeaderFooterStack m_aHeaderFooterStack;
     FieldStack                                                                      m_aFieldStack;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bSetCitation;

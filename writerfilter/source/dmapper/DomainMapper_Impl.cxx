@@ -1496,6 +1496,9 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
 
 void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType)
 {
+    m_aHeaderFooterStack.push(HeaderFooterContext(m_bTextInserted));
+    m_bTextInserted = false;
+
     const PropertyIds ePropIsOn = bHeader? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
     const PropertyIds ePropShared = bHeader? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
     const PropertyIds ePropTextLeft = bHeader? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
@@ -1576,6 +1579,12 @@ void DomainMapper_Impl::PopPageHeaderFooter()
         m_bDiscardHeaderFooter = false;
     }
     m_bInHeaderFooterImport = false;
+
+    if (!m_aHeaderFooterStack.empty())
+    {
+        m_bTextInserted = m_aHeaderFooterStack.top().getTextInserted();
+        m_aHeaderFooterStack.pop();
+    }
 }
 
 
@@ -2523,6 +2532,15 @@ bool DomainMapper_Impl::IsOpenField() const
     return !m_aFieldStack.empty();
 }
 
+HeaderFooterContext::HeaderFooterContext(bool bTextInserted)
+    : m_bTextInserted(bTextInserted)
+{
+}
+
+bool HeaderFooterContext::getTextInserted()
+{
+    return m_bTextInserted;
+}
 
 FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart) :
     m_bFieldCommandCompleted( false )

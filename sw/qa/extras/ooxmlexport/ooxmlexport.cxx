@@ -3706,6 +3706,18 @@ DECLARE_OOXMLEXPORT_TEST(testMsoPosition, "bnc884615-mso-position.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testMultiPageToc, "multi-page-toc.docx")
+{
+    // Import of this document triggered an STL assertion.
+
+    // Document has a ToC from its second paragraph.
+    uno::Reference<container::XNamed> xTextSection = getProperty< uno::Reference<container::XNamed> >(getParagraph(2), "TextSection");
+    CPPUNIT_ASSERT_EQUAL(OUString("Table of Contents1"), xTextSection->getName());
+    // There should be a field in the header as well.
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(getRun(getParagraphOfText(1, xHeaderText), 1), "TextPortionType"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
