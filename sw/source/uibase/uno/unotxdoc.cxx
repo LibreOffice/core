@@ -2124,10 +2124,12 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_VBA_DOCOBJ:
         {
-            beans::PropertyValue aProp;
-            aProp.Name = "ThisWordDoc";
-            aProp.Value <<= pDocShell->GetModel();
-            aAny <<= aProp;
+            /* #i111553# This property provides the name of the constant that
+               will be used to store this model in the global Basic manager.
+               That constant will be equivalent to 'ThisComponent' but for
+               each application, so e.g. a 'ThisExcelDoc' and a 'ThisWordDoc'
+               constant can co-exist, as required by VBA. */
+            aAny <<= OUString( "ThisWordDoc" );
         }
         break;
         case WID_DOC_RUNTIME_UID:
