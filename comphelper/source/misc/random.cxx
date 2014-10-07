@@ -80,6 +80,9 @@ size_t uniform_int_distribution(size_t a, size_t b)
 // uniform size_t [a,b) distribution
 double uniform_real_distribution(double a, double b)
 {
+    // Probably too rude to just assert(a < b), so instead...
+    if (a >= b)
+        return a;
     boost::random::uniform_real_distribution<double> dist(a, b);
     return dist(theRandomNumberGenerator::get().global_rng);
 }
