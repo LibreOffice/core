@@ -108,7 +108,7 @@ SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
 
 void SwFldInputDlg::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_INITSHOW )
+    if ( nType == StateChangedType::INITSHOW )
         m_pEditED->GrabFocus();
     SvxStandardDialog::StateChanged( nType );
 }

@@ -53,12 +53,13 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
 {
     switch (nType)
     {
-        case STATE_CHANGE_INITSHOW:
+        case StateChangedType::INITSHOW:
             Resize();
             GetContentWindow().SetStyle(GetContentWindow().GetStyle() | WB_DIALOGCONTROL);
             break;
 
-        case STATE_CHANGE_VISIBLE:
+        case StateChangedType::VISIBLE:
+        {
             // The visibility of the docking window has changed.  Tell the
             // ConfigurationController so that it can activate or deactivate
             // a/the view for the pane.
@@ -70,7 +71,10 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
             {
                 framework::FrameworkHelper::Instance(*pBase)->UpdateConfiguration();
             }
-            break;
+        }
+        break;
+
+        default:;
     }
     SfxDockingWindow::StateChanged (nType);
 }

@@ -1159,7 +1159,7 @@ void MenuFloatingWindow::StateChanged( StateChangedType nType )
 {
     FloatingWindow::StateChanged( nType );
 
-    if ( ( nType == STATE_CHANGE_CONTROLFOREGROUND ) || ( nType == STATE_CHANGE_CONTROLBACKGROUND ) )
+    if ( ( nType == StateChangedType::CONTROLFOREGROUND ) || ( nType == StateChangedType::CONTROLBACKGROUND ) )
     {
         ImplInitMenuWindow( this, false, false );
         Invalidate();

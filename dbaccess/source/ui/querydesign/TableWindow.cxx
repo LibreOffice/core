@@ -550,7 +550,7 @@ void OTableWindow::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_ZOOM )
+    if ( nType == StateChangedType::ZOOM )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 

@@ -691,12 +691,12 @@ void DockingWindow::StateChanged( StateChangedType nType )
 {
     switch(nType)
     {
-        case STATE_CHANGE_CONTROLBACKGROUND:
+        case StateChangedType::CONTROLBACKGROUND:
             ImplInitSettings();
             Invalidate();
             break;
 
-        case STATE_CHANGE_STYLE:
+        case StateChangedType::STYLE:
             mbDockable = (GetStyle() & WB_DOCKABLE) != 0;
             break;
 

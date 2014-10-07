@@ -226,7 +226,7 @@ TabDialog::~TabDialog()
 
 void TabDialog::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_INITSHOW )
+    if ( nType == StateChangedType::INITSHOW )
     {
         // Calculate the Layout only for the initialized state
         if ( mbPosControls )

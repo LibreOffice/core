@@ -772,7 +772,7 @@ void SpinField::StateChanged( StateChangedType nType )
 {
     Edit::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_ENABLE )
+    if ( nType == StateChangedType::ENABLE )
     {
         if ( mbSpin || ( GetStyle() & WB_DROPDOWN ) )
         {
@@ -787,45 +787,45 @@ void SpinField::StateChanged( StateChangedType nType )
                 Invalidate( maDropDownRect );
         }
     }
-    else if ( nType == STATE_CHANGE_STYLE )
+    else if ( nType == StateChangedType::STYLE )
     {
         if ( GetStyle() & WB_REPEAT )
             mbRepeat = true;
         else
             mbRepeat = false;
     }
-    else if ( nType == STATE_CHANGE_ZOOM )
+    else if ( nType == StateChangedType::ZOOM )
     {
         Resize();
         if ( mpEdit )
             mpEdit->SetZoom( GetZoom() );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLFONT )
+    else if ( nType == StateChangedType::CONTROLFONT )
     {
         if ( mpEdit )
             mpEdit->SetControlFont( GetControlFont() );
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
         if ( mpEdit )
             mpEdit->SetControlForeground( GetControlForeground() );
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         if ( mpEdit )
             mpEdit->SetControlBackground( GetControlBackground() );
         ImplInitSettings( false, false, true );
         Invalidate();
     }
-    else if( nType == STATE_CHANGE_MIRRORING )
+    else if( nType == StateChangedType::MIRRORING )
     {
         if( mpEdit )
-            mpEdit->StateChanged( STATE_CHANGE_MIRRORING );
+            mpEdit->StateChanged( StateChangedType::MIRRORING );
         Resize();
     }
 }

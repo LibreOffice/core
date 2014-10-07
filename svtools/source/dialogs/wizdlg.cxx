@@ -391,7 +391,7 @@ void WizardDialog::Resize()
 
 void WizardDialog::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_INITSHOW )
+    if ( nType == StateChangedType::INITSHOW )
     {
         if ( IsDefaultSize() )
         {

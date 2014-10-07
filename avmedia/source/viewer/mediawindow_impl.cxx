@@ -639,14 +639,14 @@ void MediaWindowImpl::StateChanged( StateChangedType eType )
         // stop playing when going disabled or hidden
         switch( eType )
         {
-            case STATE_CHANGE_VISIBLE:
+            case StateChangedType::VISIBLE:
             {
                 stopPlayingInternal( !IsVisible() );
                 mxPlayerWindow->setVisible( IsVisible() );
             }
             break;
 
-            case STATE_CHANGE_ENABLE:
+            case StateChangedType::ENABLE:
             {
                 stopPlayingInternal( !IsEnabled() );
                 mxPlayerWindow->setEnable( IsEnabled() );

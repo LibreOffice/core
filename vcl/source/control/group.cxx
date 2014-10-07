@@ -223,32 +223,32 @@ void GroupBox::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    if ( (nType == STATE_CHANGE_ENABLE) ||
-         (nType == STATE_CHANGE_TEXT) ||
-         (nType == STATE_CHANGE_UPDATEMODE) )
+    if ( (nType == StateChangedType::ENABLE) ||
+         (nType == StateChangedType::TEXT) ||
+         (nType == StateChangedType::UPDATEMODE) )
     {
         if ( IsUpdateMode() )
             Invalidate();
     }
-    else if ( nType == STATE_CHANGE_STYLE )
+    else if ( nType == StateChangedType::STYLE )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         if ( (GetPrevStyle() & GROUP_VIEW_STYLE) !=
              (GetStyle() & GROUP_VIEW_STYLE) )
             Invalidate();
     }
-    else if ( (nType == STATE_CHANGE_ZOOM)  ||
-              (nType == STATE_CHANGE_CONTROLFONT) )
+    else if ( (nType == StateChangedType::ZOOM)  ||
+              (nType == StateChangedType::CONTROLFONT) )
     {
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         ImplInitSettings( false, false, true );
         Invalidate();
