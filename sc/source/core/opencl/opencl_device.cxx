@@ -171,6 +171,8 @@ double timerCurrent(timer* mytimer)
 /* Random number generator */
 double random(double min, double max)
 {
+    if (min == max)
+        return min;
     return comphelper::rng::uniform_real_distribution(min, max);
 }
 
