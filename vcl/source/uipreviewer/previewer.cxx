@@ -81,7 +81,7 @@ int UIPreviewApp::Main()
             pRealDialog->SetText(OUString("LibreOffice ui-previewer"));
             pRealDialog->SetStyle(pDialog->GetStyle()|WB_CLOSEABLE);
             /*
-               Force a new STATE_CHANGE_INITSHOW for the edge case where pRoot
+               Force a new StateChangedType::INITSHOW for the edge case where pRoot
                is not a dialog or contents of a dialog, but instead a visible floating window
                which may have had initshow already done before it was given children
             */

@@ -3784,12 +3784,12 @@ void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvTreeListBox::StateChanged( StateChangedType eType )
 {
-    if( eType == STATE_CHANGE_ENABLE )
+    if( eType == StateChangedType::ENABLE )
         Invalidate( INVALIDATE_CHILDREN );
 
     Control::StateChanged( eType );
 
-    if ( eType == STATE_CHANGE_STYLE )
+    if ( eType == StateChangedType::STYLE )
         ImplInitStyle();
 }
 

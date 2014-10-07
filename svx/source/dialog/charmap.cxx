@@ -107,9 +107,9 @@ void SvxShowCharSet::LoseFocus()
 
 void SvxShowCharSet::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    if ( nType == StateChangedType::CONTROLFOREGROUND )
         InitSettings( true, false );
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
         InitSettings( false, true );
 
     Control::StateChanged( nType );
