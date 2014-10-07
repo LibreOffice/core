@@ -4892,6 +4892,22 @@ int RTFDocumentImpl::popState()
     RTFParserState aState(m_aStates.top());
     m_bWasInFrame = aState.aFrame.inFrame();
 
+    // dmapper expects some content in header/footer, so if there would be nothing, add an empty paragraph.
+    if (m_pTokenizer->getGroup() == 1 && m_bFirstRun)
+    {
+        switch (m_nStreamType)
+        {
+        case NS_ooxml::LN_headerl:
+        case NS_ooxml::LN_headerr:
+        case NS_ooxml::LN_headerf:
+        case NS_ooxml::LN_footerl:
+        case NS_ooxml::LN_footerr:
+        case NS_ooxml::LN_footerf:
+            dispatchSymbol(RTF_PAR);
+            break;
+        }
+    }
+
     switch (aState.nDestinationState)
     {
     case DESTINATION_FONTTABLE:
