@@ -33,8 +33,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::packages;
-using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to write Zip files
@@ -42,35 +40,35 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 ZipOutputStream::ZipOutputStream( const uno::Reference< uno::XComponentContext >& rxContext,
                                   const uno::Reference < XOutputStream > &xOStream )
 : m_xContext( rxContext )
-, xStream(xOStream)
+, m_xStream(xOStream)
 , m_aDeflateBuffer(n_ConstBufferSize)
-, aDeflater(DEFAULT_COMPRESSION, true)
-, aChucker(xOStream)
-, pCurrentEntry(NULL)
-, nMethod(DEFLATED)
-, nLevel(0)
-, mnDigested(0)
-, bFinished(false)
-, bEncryptCurrentEntry(false)
+, m_aDeflater(DEFAULT_COMPRESSION, true)
+, m_aChucker(xOStream)
+, m_pCurrentEntry(NULL)
+, m_nMethod(DEFLATED)
+, m_nLevel(0)
+, m_nDigested(0)
+, m_bFinished(false)
+, m_bEncryptCurrentEntry(false)
 , m_pCurrentStream(NULL)
 {
 }
 
 ZipOutputStream::~ZipOutputStream( void )
 {
-    for (sal_Int32 i = 0, nEnd = aZipList.size(); i < nEnd; i++)
-        delete aZipList[i];
+    for (sal_Int32 i = 0, nEnd = m_aZipList.size(); i < nEnd; i++)
+        delete m_aZipList[i];
 }
 
 void SAL_CALL ZipOutputStream::setMethod( sal_Int32 nNewMethod )
     throw(RuntimeException)
 {
-    nMethod = static_cast < sal_Int16 > (nNewMethod);
+    m_nMethod = static_cast < sal_Int16 > (nNewMethod);
 }
 void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
     throw(RuntimeException)
 {
-    aDeflater.setLevel( nNewLevel);
+    m_aDeflater.setLevel( nNewLevel);
 }
 
 void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
@@ -78,12 +76,12 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
                         bool bEncrypt)
     throw(IOException, RuntimeException)
 {
-    if (pCurrentEntry != NULL)
+    if (m_pCurrentEntry != NULL)
         closeEntry();
     if (rEntry.nTime == -1)
         rEntry.nTime = getCurrentDosTime();
     if (rEntry.nMethod == -1)
-        rEntry.nMethod = nMethod;
+        rEntry.nMethod = m_nMethod;
     rEntry.nVersion = 20;
     rEntry.nFlag = 1 << 11;
     if (rEntry.nSize == -1 || rEntry.nCompressedSize == -1 ||
@@ -95,61 +93,61 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
 
     if (bEncrypt)
     {
-        bEncryptCurrentEntry = true;
+        m_bEncryptCurrentEntry = true;
 
         m_xCipherContext = ZipFile::StaticGetCipher( m_xContext, pStream->GetEncryptionData(), true );
         m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xContext, pStream->GetEncryptionData() );
-        mnDigested = 0;
+        m_nDigested = 0;
         rEntry.nFlag |= 1 << 4;
         m_pCurrentStream = pStream;
     }
     sal_Int32 nLOCLength = writeLOC(rEntry);
-    rEntry.nOffset = aChucker.GetPosition() - nLOCLength;
-    aZipList.push_back( &rEntry );
-    pCurrentEntry = &rEntry;
+    rEntry.nOffset = m_aChucker.GetPosition() - nLOCLength;
+    m_aZipList.push_back( &rEntry );
+    m_pCurrentEntry = &rEntry;
 }
 
 void SAL_CALL ZipOutputStream::closeEntry(  )
     throw(IOException, RuntimeException)
 {
-    ZipEntry *pEntry = pCurrentEntry;
+    ZipEntry *pEntry = m_pCurrentEntry;
     if (pEntry)
     {
         switch (pEntry->nMethod)
         {
             case DEFLATED:
-                aDeflater.finish();
-                while (!aDeflater.finished())
+                m_aDeflater.finish();
+                while (!m_aDeflater.finished())
                     doDeflate();
                 if ((pEntry->nFlag & 8) == 0)
                 {
-                    if (pEntry->nSize != aDeflater.getTotalIn())
+                    if (pEntry->nSize != m_aDeflater.getTotalIn())
                     {
                         OSL_FAIL("Invalid entry size");
                     }
-                    if (pEntry->nCompressedSize != aDeflater.getTotalOut())
+                    if (pEntry->nCompressedSize != m_aDeflater.getTotalOut())
                     {
                         // Different compression strategies make the merit of this
                         // test somewhat dubious
-                        pEntry->nCompressedSize = aDeflater.getTotalOut();
+                        pEntry->nCompressedSize = m_aDeflater.getTotalOut();
                     }
-                    if (pEntry->nCrc != aCRC.getValue())
+                    if (pEntry->nCrc != m_aCRC.getValue())
                     {
                         OSL_FAIL("Invalid entry CRC-32");
                     }
                 }
                 else
                 {
-                    if ( !bEncryptCurrentEntry )
+                    if ( !m_bEncryptCurrentEntry )
                     {
-                        pEntry->nSize = aDeflater.getTotalIn();
-                        pEntry->nCompressedSize = aDeflater.getTotalOut();
+                        pEntry->nSize = m_aDeflater.getTotalIn();
+                        pEntry->nCompressedSize = m_aDeflater.getTotalOut();
                     }
-                    pEntry->nCrc = aCRC.getValue();
+                    pEntry->nCrc = m_aCRC.getValue();
                     writeEXT(*pEntry);
                 }
-                aDeflater.reset();
-                aCRC.reset();
+                m_aDeflater.reset();
+                m_aCRC.reset();
                 break;
             case STORED:
                 if (!((pEntry->nFlag & 8) == 0))
@@ -160,9 +158,9 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 break;
         }
 
-        if (bEncryptCurrentEntry)
+        if (m_bEncryptCurrentEntry)
         {
-            bEncryptCurrentEntry = false;
+            m_bEncryptCurrentEntry = false;
 
             m_xCipherContext.clear();
 
@@ -176,7 +174,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
             if ( m_pCurrentStream )
                 m_pCurrentStream->setDigest( aDigestSeq );
         }
-        pCurrentEntry = NULL;
+        m_pCurrentEntry = NULL;
         m_pCurrentStream = NULL;
     }
 }
@@ -184,22 +182,22 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
 void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
     throw(IOException, RuntimeException)
 {
-    switch (pCurrentEntry->nMethod)
+    switch (m_pCurrentEntry->nMethod)
     {
         case DEFLATED:
-            if (!aDeflater.finished())
+            if (!m_aDeflater.finished())
             {
-                aDeflater.setInputSegment(rBuffer, nNewOffset, nNewLength);
-                 while (!aDeflater.needsInput())
+                m_aDeflater.setInputSegment(rBuffer, nNewOffset, nNewLength);
+                 while (!m_aDeflater.needsInput())
                     doDeflate();
-                if (!bEncryptCurrentEntry)
-                    aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
+                if (!m_bEncryptCurrentEntry)
+                    m_aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
             }
             break;
         case STORED:
             {
                 Sequence < sal_Int8 > aTmpBuffer ( rBuffer.getConstArray(), nNewLength );
-                aChucker.WriteBytes( aTmpBuffer );
+                m_aChucker.WriteBytes( aTmpBuffer );
             }
             break;
     }
@@ -209,84 +207,84 @@ void SAL_CALL ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int3
     throw(IOException, RuntimeException)
 {
     Sequence < sal_Int8 > aTmpBuffer ( rBuffer.getConstArray(), nNewLength );
-    aChucker.WriteBytes( aTmpBuffer );
+    m_aChucker.WriteBytes( aTmpBuffer );
 }
 
 void SAL_CALL ZipOutputStream::rawCloseEntry(  )
     throw(IOException, RuntimeException)
 {
-    if ( pCurrentEntry->nMethod == DEFLATED && ( pCurrentEntry->nFlag & 8 ) )
-        writeEXT(*pCurrentEntry);
-    pCurrentEntry = NULL;
+    if ( m_pCurrentEntry->nMethod == DEFLATED && ( m_pCurrentEntry->nFlag & 8 ) )
+        writeEXT(*m_pCurrentEntry);
+    m_pCurrentEntry = NULL;
 }
 
 void SAL_CALL ZipOutputStream::finish(  )
     throw(IOException, RuntimeException)
 {
-    if (bFinished)
+    if (m_bFinished)
         return;
 
-    if (pCurrentEntry != NULL)
+    if (m_pCurrentEntry != NULL)
         closeEntry();
 
-    if (aZipList.size() < 1)
+    if (m_aZipList.size() < 1)
         OSL_FAIL("Zip file must have at least one entry!\n");
 
-    sal_Int32 nOffset= static_cast < sal_Int32 > (aChucker.GetPosition());
-    for (sal_Int32 i =0, nEnd = aZipList.size(); i < nEnd; i++)
-        writeCEN( *aZipList[i] );
-    writeEND( nOffset, static_cast < sal_Int32 > (aChucker.GetPosition()) - nOffset);
-    bFinished = true;
-    xStream->flush();
+    sal_Int32 nOffset= static_cast < sal_Int32 > (m_aChucker.GetPosition());
+    for (sal_Int32 i =0, nEnd = m_aZipList.size(); i < nEnd; i++)
+        writeCEN( *m_aZipList[i] );
+    writeEND( nOffset, static_cast < sal_Int32 > (m_aChucker.GetPosition()) - nOffset);
+    m_bFinished = true;
+    m_xStream->flush();
 }
 
 void ZipOutputStream::doDeflate()
 {
-    sal_Int32 nLength = aDeflater.doDeflateSegment(m_aDeflateBuffer, 0, m_aDeflateBuffer.getLength());
+    sal_Int32 nLength = m_aDeflater.doDeflateSegment(m_aDeflateBuffer, 0, m_aDeflateBuffer.getLength());
 
     if ( nLength > 0 )
     {
         uno::Sequence< sal_Int8 > aTmpBuffer( m_aDeflateBuffer.getConstArray(), nLength );
-        if ( bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
+        if ( m_bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
         {
             // Need to update our digest before encryption...
-            sal_Int32 nDiff = n_ConstDigestLength - mnDigested;
+            sal_Int32 nDiff = n_ConstDigestLength - m_nDigested;
             if ( nDiff )
             {
                 sal_Int32 nEat = ::std::min( nLength, nDiff );
                 uno::Sequence< sal_Int8 > aTmpSeq( aTmpBuffer.getConstArray(), nEat );
                 m_xDigestContext->updateDigest( aTmpSeq );
-                mnDigested = mnDigested + static_cast< sal_Int16 >( nEat );
+                m_nDigested = m_nDigested + static_cast< sal_Int16 >( nEat );
             }
 
             // FIXME64: uno::Sequence not 64bit safe.
             uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
 
-            aChucker.WriteBytes( aEncryptionBuffer );
+            m_aChucker.WriteBytes( aEncryptionBuffer );
 
             // the sizes as well as checksum for encrypted streams is calculated here
-            pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
-            pCurrentEntry->nSize = pCurrentEntry->nCompressedSize;
-            aCRC.update( aEncryptionBuffer );
+            m_pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
+            m_pCurrentEntry->nSize = m_pCurrentEntry->nCompressedSize;
+            m_aCRC.update( aEncryptionBuffer );
         }
         else
         {
-            aChucker.WriteBytes ( aTmpBuffer );
+            m_aChucker.WriteBytes ( aTmpBuffer );
         }
     }
 
-    if ( aDeflater.finished() && bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
+    if ( m_aDeflater.finished() && m_bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
     {
         // FIXME64: sequence not 64bit safe.
         uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
         if ( aEncryptionBuffer.getLength() )
         {
-            aChucker.WriteBytes( aEncryptionBuffer );
+            m_aChucker.WriteBytes( aEncryptionBuffer );
 
             // the sizes as well as checksum for encrypted streams is calculated hier
-            pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
-            pCurrentEntry->nSize = pCurrentEntry->nCompressedSize;
-            aCRC.update( aEncryptionBuffer );
+            m_pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
+            m_pCurrentEntry->nSize = m_pCurrentEntry->nCompressedSize;
+            m_aCRC.update( aEncryptionBuffer );
         }
     }
 }
@@ -294,14 +292,14 @@ void ZipOutputStream::doDeflate()
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(IOException, RuntimeException)
 {
-    aChucker << ENDSIG;
-    aChucker << static_cast < sal_Int16 > ( 0 );
-    aChucker << static_cast < sal_Int16 > ( 0 );
-    aChucker << static_cast < sal_Int16 > ( aZipList.size() );
-    aChucker << static_cast < sal_Int16 > ( aZipList.size() );
-    aChucker << nLength;
-    aChucker << nOffset;
-    aChucker << static_cast < sal_Int16 > ( 0 );
+    m_aChucker << ENDSIG;
+    m_aChucker << static_cast < sal_Int16 > ( 0 );
+    m_aChucker << static_cast < sal_Int16 > ( 0 );
+    m_aChucker << static_cast < sal_Int16 > ( m_aZipList.size() );
+    m_aChucker << static_cast < sal_Int16 > ( m_aZipList.size() );
+    m_aChucker << nLength;
+    m_aChucker << nOffset;
+    m_aChucker << static_cast < sal_Int16 > ( 0 );
 }
 
 static sal_uInt32 getTruncated( sal_Int64 nNum, bool *pIsTruncated )
@@ -324,35 +322,35 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     OString sUTF8Name = OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
-    aChucker << CENSIG;
-    aChucker << rEntry.nVersion;
-    aChucker << rEntry.nVersion;
+    m_aChucker << CENSIG;
+    m_aChucker << rEntry.nVersion;
+    m_aChucker << rEntry.nVersion;
     if (rEntry.nFlag & (1 << 4) )
     {
         // If it's an encrypted entry, we pretend its stored plain text
         ZipEntry *pEntry = const_cast < ZipEntry * > ( &rEntry );
         pEntry->nFlag &= ~(1 <<4 );
-        aChucker << rEntry.nFlag;
-        aChucker << static_cast < sal_Int16 > ( STORED );
+        m_aChucker << rEntry.nFlag;
+        m_aChucker << static_cast < sal_Int16 > ( STORED );
     }
     else
     {
-        aChucker << rEntry.nFlag;
-        aChucker << rEntry.nMethod;
+        m_aChucker << rEntry.nFlag;
+        m_aChucker << rEntry.nMethod;
     }
     bool bWrite64Header = false;
 
-    aChucker << static_cast < sal_uInt32> ( rEntry.nTime );
-    aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
-    aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
-    aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
-    aChucker << nNameLength;
-    aChucker << static_cast < sal_Int16> (0);
-    aChucker << static_cast < sal_Int16> (0);
-    aChucker << static_cast < sal_Int16> (0);
-    aChucker << static_cast < sal_Int16> (0);
-    aChucker << static_cast < sal_Int32> (0);
-    aChucker << getTruncated( rEntry.nOffset, &bWrite64Header );
+    m_aChucker << static_cast < sal_uInt32> ( rEntry.nTime );
+    m_aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
+    m_aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
+    m_aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
+    m_aChucker << nNameLength;
+    m_aChucker << static_cast < sal_Int16> (0);
+    m_aChucker << static_cast < sal_Int16> (0);
+    m_aChucker << static_cast < sal_Int16> (0);
+    m_aChucker << static_cast < sal_Int16> (0);
+    m_aChucker << static_cast < sal_Int32> (0);
+    m_aChucker << getTruncated( rEntry.nOffset, &bWrite64Header );
 
     if( bWrite64Header )
     {
@@ -363,17 +361,17 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     }
 
     Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
-    aChucker.WriteBytes( aSequence );
+    m_aChucker.WriteBytes( aSequence );
 }
 void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
     bool bWrite64Header = false;
 
-    aChucker << EXTSIG;
-    aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
-    aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
-    aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
+    m_aChucker << EXTSIG;
+    m_aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
+    m_aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
+    m_aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
 
     if( bWrite64Header )
     {
@@ -393,40 +391,40 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     OString sUTF8Name = OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
-    aChucker << LOCSIG;
-    aChucker << rEntry.nVersion;
+    m_aChucker << LOCSIG;
+    m_aChucker << rEntry.nVersion;
 
     if (rEntry.nFlag & (1 << 4) )
     {
         // If it's an encrypted entry, we pretend its stored plain text
         sal_Int16 nTmpFlag = rEntry.nFlag;
         nTmpFlag &= ~(1 <<4 );
-        aChucker << nTmpFlag;
-        aChucker << static_cast < sal_Int16 > ( STORED );
+        m_aChucker << nTmpFlag;
+        m_aChucker << static_cast < sal_Int16 > ( STORED );
     }
     else
     {
-        aChucker << rEntry.nFlag;
-        aChucker << rEntry.nMethod;
+        m_aChucker << rEntry.nFlag;
+        m_aChucker << rEntry.nMethod;
     }
 
     bool bWrite64Header = false;
 
-    aChucker << static_cast < sal_uInt32 > (rEntry.nTime);
+    m_aChucker << static_cast < sal_uInt32 > (rEntry.nTime);
     if ((rEntry.nFlag & 8) == 8 )
     {
-        aChucker << static_cast < sal_Int32 > (0);
-        aChucker << static_cast < sal_Int32 > (0);
-        aChucker << static_cast < sal_Int32 > (0);
+        m_aChucker << static_cast < sal_Int32 > (0);
+        m_aChucker << static_cast < sal_Int32 > (0);
+        m_aChucker << static_cast < sal_Int32 > (0);
     }
     else
     {
-        aChucker << static_cast < sal_uInt32 > (rEntry.nCrc);
-        aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
-        aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
+        m_aChucker << static_cast < sal_uInt32 > (rEntry.nCrc);
+        m_aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
+        m_aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
     }
-    aChucker << nNameLength;
-    aChucker << static_cast < sal_Int16 > (0);
+    m_aChucker << nNameLength;
+    m_aChucker << static_cast < sal_Int16 > (0);
 
     if( bWrite64Header )
     {
@@ -437,7 +435,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     }
 
     Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
-    aChucker.WriteBytes( aSequence );
+    m_aChucker.WriteBytes( aSequence );
 
     return LOCHDR + nNameLength;
 }

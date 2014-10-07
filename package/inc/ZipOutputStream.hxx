@@ -20,7 +20,6 @@
 #define INCLUDED_PACKAGE_INC_ZIPOUTPUTSTREAM_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
@@ -33,32 +32,28 @@
 
 struct ZipEntry;
 class ZipPackageStream;
-namespace rtl
-{
-    template < class T > class Reference;
-}
 
 class ZipOutputStream
 {
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > m_xStream;
 
-    ::std::vector < ZipEntry * >            aZipList;
+    ::std::vector < ZipEntry * > m_aZipList;
 
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
 
-    OUString     sComment;
-    ZipUtils::Deflater  aDeflater;
+    OUString            m_sComment;
+    ZipUtils::Deflater  m_aDeflater;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > m_xDigestContext;
 
-    CRC32               aCRC;
-    ByteChucker         aChucker;
-    ZipEntry            *pCurrentEntry;
-    sal_Int16           nMethod, nLevel, mnDigested;
-    bool            bFinished, bEncryptCurrentEntry;
+    CRC32               m_aCRC;
+    ByteChucker         m_aChucker;
+    ZipEntry            *m_pCurrentEntry;
+    sal_Int16           m_nMethod, m_nLevel, m_nDigested;
+    bool                m_bFinished, m_bEncryptCurrentEntry;
     ZipPackageStream*   m_pCurrentStream;
 
 public:
