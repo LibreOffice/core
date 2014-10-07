@@ -897,16 +897,17 @@ void SwColumnPage::UpdateCols()
 
 void SwColumnPage::SetLabels( sal_uInt16 nVis )
 {
+    //insert ~ before the last character, e.g. 1 -> ~1, 10 -> 1~0
     const OUString sLbl( '~' );
 
     const OUString sLbl1(OUString::number( nVis + 1 ));
-    m_pLbl1->SetText(sLbl1 + sLbl);
+    m_pLbl1->SetText(sLbl1.replaceAt(sLbl1.getLength()-1, 0, sLbl));
 
     const OUString sLbl2(OUString::number( nVis + 2 ));
-    m_pLbl2->SetText(sLbl2 + sLbl);
+    m_pLbl2->SetText(sLbl2.replaceAt(sLbl2.getLength()-1, 0, sLbl));
 
     const OUString sLbl3(OUString::number( nVis + 3 ));
-    m_pLbl3->SetText(sLbl3 + sLbl);
+    m_pLbl3->SetText(sLbl3.replaceAt(sLbl3.getLength()-1, 0, sLbl));
 
     const OUString sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
     aEd1.SetAccessibleName(sColumnWidth.replaceFirst("%1", sLbl1));
