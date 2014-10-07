@@ -48,7 +48,7 @@ double getRandomOrdinal( const ::std::size_t n )
 {
     // use this one when displaying polygons in OOo, which still sucks
     // great rocks when trying to import non-integer svg:d attributes
-    return comphelper::rng::uniform_int_distribution(static_cast<size_t>(0), n-1);
+    return comphelper::rng::uniform_size_distribution(0, n-1);
 }
 
 inline bool compare(const B2DPoint& left, const B2DPoint& right)

@@ -293,7 +293,7 @@ namespace slideshow
         /// Gets a random ordinal [0,n)
         inline ::std::size_t getRandomOrdinal( const ::std::size_t n )
         {
-            return comphelper::rng::uniform_int_distribution(static_cast<size_t>(0), n-1);
+            return comphelper::rng::uniform_size_distribution(0, n-1);
         }
 
         /// To work around ternary operator in initializer lists

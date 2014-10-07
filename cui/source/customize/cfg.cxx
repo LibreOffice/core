@@ -298,7 +298,7 @@ generateCustomName(
 
 sal_uInt32 generateRandomValue()
 {
-    return comphelper::rng::uniform_int_distribution(static_cast<unsigned int>(0), std::numeric_limits<unsigned int>::max());
+    return comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<unsigned int>::max());
 }
 
 OUString

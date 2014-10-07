@@ -3820,7 +3820,7 @@ void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<long>* pIndexO
     size_t nValCount = rSortArray.size();
     for (size_t i = 0; (i + 4) <= nValCount-1; i += 4)
     {
-        size_t nInd = comphelper::rng::uniform_int_distribution(static_cast<size_t>(0), nValCount-2);
+        size_t nInd = comphelper::rng::uniform_size_distribution(0, nValCount-2);
         ::std::swap( rSortArray[i], rSortArray[nInd]);
         if (pIndexOrder)
             ::std::swap( pIndexOrder->at(i), pIndexOrder->at(nInd));
