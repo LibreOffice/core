@@ -17,8 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_folders.h>
+#include <sal/config.h>
 
+#include <cassert>
+
+#include <boost/logic/tribool.hpp>
+#include <config_folders.h>
 #include <shutdownicon.hxx>
 #include <app.hrc>
 #include <sfx2/app.hxx>
@@ -80,10 +84,6 @@ extern "C" { static void SAL_CALL thisModule() {} }
 # endif
 #endif
 
-#if defined(UNX) && defined(ENABLE_SYSTRAY_GTK) && !defined(PLUGIN_NAME)
-#define PLUGIN_NAME "libqstart_gtklo.so"
-#endif
-
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper1< XDispatchResultListener >
 {
 public:
@@ -123,7 +123,7 @@ css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
 bool ShutdownIcon::bModalMode = false;
 ShutdownIcon* ShutdownIcon::pShutdownIcon = NULL;
 
-#if !defined( ENABLE_QUICKSTART_APPLET ) || defined( UNX )
+#if !defined( ENABLE_QUICKSTART_APPLET )
 // To remove conditionals
 extern "C" {
     static void disabled_initSystray() { }
@@ -131,100 +131,57 @@ extern "C" {
 }
 #endif
 
-bool ShutdownIcon::LoadModule( osl::Module **pModule,
-                               oslGenericFunction *pInit,
-                               oslGenericFunction *pDeInit )
-{
-    if ( pModule )
-    {
-        OSL_ASSERT ( pInit && pDeInit );
-        *pInit = *pDeInit = NULL;
-        *pModule = NULL;
-    }
+namespace {
 
+boost::logic::tribool loaded(boost::logic::indeterminate);
+oslGenericFunction pInitSystray(nullptr);
+oslGenericFunction pDeInitSystray(nullptr);
+
+bool LoadModule()
+{
+    if (boost::logic::indeterminate(loaded))
+    {
 #ifdef ENABLE_QUICKSTART_APPLET
 #  ifdef WIN32
-    if ( pModule )
-    {
-        *pInit = win32_init_sys_tray;
-        *pDeInit = win32_shutdown_sys_tray;
-    }
-    return true;
+        pInitSystray = win32_init_sys_tray;
+        pDeInitSystray = win32_shutdown_sys_tray;
+        loaded = true;
 #  elif defined MACOSX
-    *pInit = aqua_init_systray;
-    *pDeInit = aqua_shutdown_systray;
-    return true;
+        pInitSystray = aqua_init_systray;
+        pDeInitSystray = aqua_shutdown_systray;
+        loaded = true;
 #  else // UNX
-    osl::Module *pPlugin;
-    pPlugin = new osl::Module();
-
-    oslGenericFunction pTmpInit = NULL;
-    oslGenericFunction pTmpDeInit = NULL;
-
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
-
-    if ( pPlugin->loadRelative( &thisModule, OUString (STRING( PLUGIN_NAME  ) ) ) )
-    {
-        pTmpInit = pPlugin->getFunctionSymbol(
-            OUString( "plugin_init_sys_tray"  ) );
-        pTmpDeInit = pPlugin->getFunctionSymbol(
-            OUString( "plugin_shutdown_sys_tray"  ) );
-    }
-    if ( !pTmpInit || !pTmpDeInit )
-    {
-        delete pPlugin;
-        pPlugin = NULL;
-    }
-    if ( pModule )
-    {
-        *pModule = pPlugin;
-        *pInit = pTmpInit;
-        *pDeInit = pTmpDeInit;
-    }
-    else
-    {
-        bool bRet = pPlugin != NULL;
-        delete pPlugin;
-        return bRet;
-    }
+        osl::Module plugin;
+        oslGenericFunction pTmpInit = NULL;
+        oslGenericFunction pTmpDeInit = NULL;
+        if ( plugin.loadRelative( &thisModule, "libqstart_gtklo.so" ) )
+        {
+            pTmpInit = plugin.getFunctionSymbol( "plugin_init_sys_tray" );
+            pTmpDeInit = plugin.getFunctionSymbol( "plugin_shutdown_sys_tray" );
+        }
+        if ( !pTmpInit || !pTmpDeInit )
+        {
+            loaded = false;
+        }
+        else
+        {
+            plugin.release();
+            pInitSystray = pTmpInit;
+            pDeInitSystray = pTmpDeInit;
+            loaded = true;
+        }
 #  endif // UNX
+#else
+        pInitSystray = disabled_initSystray;
+        pDeInitSystray = disabled_deInitSystray
+        loaded = false;
 #endif // ENABLE_QUICKSTART_APPLET
-
-#if !defined( ENABLE_QUICKSTART_APPLET ) || defined( UNX )
-    // Avoid unreachable code. In the ENABLE_QUICKSTART_APPLET && !UNX
-    // case, we have already returned.
-    if ( pModule )
-    {
-        if ( !*pInit )
-            *pInit = disabled_initSystray;
-        if ( !*pDeInit )
-            *pDeInit = disabled_deInitSystray;
     }
-
-    return true;
-#endif // !ENABLE_QUICKSTART_APPLET || UNX
+    assert(!boost::logic::indeterminate(loaded));
+    return loaded;
 }
 
-// These two timeouts are necessary to avoid there being
-// plugin frames still on the stack, after unloading that
-// code, causing a crash during disabling / termination.
-class IdleUnloader : Timer
-{
-    ::osl::Module *m_pModule;
-public:
-    IdleUnloader (::osl::Module **pModule) :
-        m_pModule (*pModule)
-    {
-        *pModule = NULL;
-        Start();
-    }
-    virtual void Timeout() SAL_OVERRIDE
-    {
-        delete m_pModule;
-        delete this;
-    }
-};
+}
 
 class IdleTerminate : Timer
 {
@@ -248,9 +205,9 @@ void ShutdownIcon::initSystray()
         return;
     m_bInitialized = true;
 
-    (void) LoadModule( &m_pPlugin, &m_pInitSystray, &m_pDeInitSystray );
+    (void) LoadModule();
     m_bVeto = true;
-    m_pInitSystray();
+    pInitSystray();
 }
 
 void ShutdownIcon::deInitSystray()
@@ -258,13 +215,12 @@ void ShutdownIcon::deInitSystray()
     if (!m_bInitialized)
         return;
 
-    if (m_pDeInitSystray)
-        m_pDeInitSystray();
+    if (pDeInitSystray)
+        pDeInitSystray();
 
     m_bVeto = false;
-    m_pInitSystray = 0;
-    m_pDeInitSystray = 0;
-    new IdleUnloader (&m_pPlugin);
+    pInitSystray = 0;
+    pDeInitSystray = 0;
 
     delete m_pFileDlg;
     m_pFileDlg = NULL;
@@ -280,9 +236,6 @@ ShutdownIcon::ShutdownIcon( const ::com::sun::star::uno::Reference< XComponentCo
     m_pResMgr( NULL ),
     m_pFileDlg( NULL ),
     m_xContext( rxContext ),
-    m_pInitSystray( 0 ),
-    m_pDeInitSystray( 0 ),
-    m_pPlugin( 0 ),
     m_bInitialized( false )
 {
     m_bSystemDialogs = SvtMiscOptions().UseSystemFileDialog();
@@ -291,7 +244,6 @@ ShutdownIcon::ShutdownIcon( const ::com::sun::star::uno::Reference< XComponentCo
 ShutdownIcon::~ShutdownIcon()
 {
     deInitSystray();
-    new IdleUnloader (&m_pPlugin);
 }
 
 
@@ -772,7 +724,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     return false;
 #else // !ENABLE_QUICKSTART_APPLET
 #ifdef UNX
-    return LoadModule( NULL, NULL, NULL);
+    return LoadModule();
 #endif // UNX
 #endif // !ENABLE_QUICKSTART_APPLET
 }

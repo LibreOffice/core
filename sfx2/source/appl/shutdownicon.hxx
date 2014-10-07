@@ -29,7 +29,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
-#include <osl/module.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <sfx2/dllapi.h>
@@ -70,17 +69,10 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 
         static ShutdownIcon *pShutdownIcon; // one instance
 
-        oslGenericFunction m_pInitSystray;
-        oslGenericFunction m_pDeInitSystray;
-        ::osl::Module  *m_pPlugin;
-
         bool m_bInitialized;
         void initSystray();
         void deInitSystray();
 
-        static bool LoadModule( osl::Module **pModule,
-                                oslGenericFunction *pInit,
-                                oslGenericFunction *pDeInit );
         static void EnterModalMode();
         static void LeaveModalMode();
         static OUString getShortcutName();
