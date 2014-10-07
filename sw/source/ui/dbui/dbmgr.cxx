@@ -190,22 +190,6 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
     }
     return false;
 }
-// copy compatibility options
-void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTargetShell)
-{
-    IDocumentSettingAccess* pIDsa = rSourceShell.getIDocumentSettingAccess();
-
-    rTargetShell.SetParaSpaceMax( pIDsa->get(IDocumentSettingAccess::PARA_SPACE_MAX));
-    rTargetShell.SetParaSpaceMaxAtPages(pIDsa->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES));
-    rTargetShell.SetTabCompat( pIDsa->get(IDocumentSettingAccess::TAB_COMPAT));
-    rTargetShell.SetAddExtLeading( pIDsa->get(IDocumentSettingAccess::ADD_EXT_LEADING));
-    rTargetShell.SetUseVirDev( pIDsa->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE));
-    rTargetShell.SetAddParaSpacingToTableCells( pIDsa->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS));
-    rTargetShell.SetUseFormerLineSpacing( pIDsa->get(IDocumentSettingAccess::OLD_LINE_SPACING));
-    rTargetShell.SetUseFormerObjectPositioning( pIDsa->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS));
-    rTargetShell.SetConsiderWrapOnObjPos( pIDsa->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION));
-    rTargetShell.SetUseFormerTextWrapping( pIDsa->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING));
-}
 }
 
 class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper1
@@ -765,35 +749,6 @@ static String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStarti
     }while(true);
 }
 
-static void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
-{
-    sal_uInt16 aRangeOfDefaults[] = {
-        RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-        RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-        RES_PARATR_BEGIN, RES_PARATR_END-1,
-        RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-        0
-    };
-
-    SfxItemSet aNewDefaults( rTarget.GetAttrPool(), aRangeOfDefaults );
-
-    sal_uInt16 nWhich;
-    sal_uInt16 nRange = 0;
-    while( aRangeOfDefaults[nRange] != 0)
-    {
-        for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
-        {
-            const SfxPoolItem& rSourceAttr = rSource.GetDefault( nWhich );
-            if( rSourceAttr != rTarget.GetDefault( nWhich ) )
-                aNewDefaults.Put( rSourceAttr );
-        }
-        nRange += 2;
-    }
-    if( aNewDefaults.Count() )
-        rTarget.SetDefault( aNewDefaults );
-}
-
 static void lcl_CopyFollowPageDesc(
                             SwWrtShell& rTargetShell,
                             const SwPageDesc& rSourcePageDesc,
@@ -1038,9 +993,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                                 rMaster.GetFooter().IsActive();
 
                 // copy compatibility options
-                lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
+                pTargetShell->GetDoc()->ReplaceCompatabilityOptions( *pSourceShell->GetDoc());
                 // #72821# copy dynamic defaults
-                lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
+                pTargetShell->GetDoc()->ReplaceDefaults( *pSourceShell->GetDoc());
 
                 lcl_CopyDocumentPorperties( xSourceDocProps, xTargetDocShell, pTargetDoc );
             }
