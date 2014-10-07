@@ -1409,7 +1409,8 @@ bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_
     ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, NULL );
     bool bRTL = false;
     int nCharPos = -1;
-    aArgs.GetNextPos( &nCharPos, &bRTL );
+    if (!aArgs.GetNextPos(&nCharPos, &bRTL))
+        return false;
     return (nCharPos != nIndex);
 }
 
