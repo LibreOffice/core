@@ -115,7 +115,11 @@ void RemoteServer::execute()
         {
             OString aName( aLine );
 
-            if ( ! pSocket->readLine( aLine ) ) delete pSocket;
+            if ( ! pSocket->readLine( aLine ) )
+            {
+                delete pSocket;
+                continue;
+            }
             OString aPin( aLine );
 
             SocketAddr aClientAddr;
