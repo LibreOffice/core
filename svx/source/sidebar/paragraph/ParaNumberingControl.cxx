@@ -127,8 +127,8 @@ IMPL_LINK(ParaNumberingControl, MoreButtonClickHdl_Impl, void*, EMPTYARG)
 
 void ParaNumberingControl::UpdateValueSet()
 {
-    maNumberVS.StateChanged(STATE_CHANGE_STYLE);
-    maNumberVS.StateChanged(STATE_CHANGE_INITSHOW);
+    maNumberVS.StateChanged(StateChangedType::STYLE);
+    maNumberVS.StateChanged(StateChangedType::INITSHOW);
 
     const sal_uInt16 nTypeIndex = mrParaPropertyPanel.GetNumTypeIndex();
     if ( nTypeIndex != (sal_uInt16)0xFFFF )

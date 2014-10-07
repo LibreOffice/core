@@ -4416,29 +4416,29 @@ void ToolBox::StateChanged( StateChangedType nType )
 {
     DockingWindow::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_INITSHOW )
+    if ( nType == StateChangedType::INITSHOW )
         ImplFormat();
-    else if ( nType == STATE_CHANGE_ENABLE )
+    else if ( nType == StateChangedType::ENABLE )
         ImplUpdateItem();
-    else if ( nType == STATE_CHANGE_UPDATEMODE )
+    else if ( nType == StateChangedType::UPDATEMODE )
     {
         if ( IsUpdateMode() )
             Invalidate();
     }
-    else if ( (nType == STATE_CHANGE_ZOOM) ||
-              (nType == STATE_CHANGE_CONTROLFONT) )
+    else if ( (nType == StateChangedType::ZOOM) ||
+              (nType == StateChangedType::CONTROLFONT) )
     {
         mbCalc = true;
         mbFormat = true;
         ImplInitSettings( true, false, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
+    else if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
         ImplInitSettings( false, true, false );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
         ImplInitSettings( false, false, true ); // font, foreground, background
         Invalidate();

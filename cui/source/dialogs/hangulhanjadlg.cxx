@@ -402,7 +402,7 @@ namespace svx
 
     void SuggestionDisplay::StateChanged( StateChangedType nStateChange )
     {
-        if( STATE_CHANGE_VISIBLE == nStateChange )
+        if( StateChangedType::VISIBLE == nStateChange )
             implUpdateDisplay();
     }
 

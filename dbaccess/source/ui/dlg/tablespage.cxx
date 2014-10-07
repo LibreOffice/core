@@ -111,7 +111,7 @@ namespace dbaui
     {
         OGenericAdministrationPage::StateChanged( nType );
 
-        if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+        if ( nType == StateChangedType::CONTROLBACKGROUND )
         {
             // Check if we need to get new images for normal/high contrast mode
             m_pTablesList->notifyHiContrastChanged();

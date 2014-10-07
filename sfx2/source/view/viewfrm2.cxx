@@ -58,7 +58,7 @@ using ::com::sun::star::lang::XComponent;
 
 void SfxFrameViewWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    if ( nStateChange == StateChangedType::INITSHOW )
     {
         SfxObjectShell* pDoc = pFrame->GetObjectShell();
         if ( pDoc && !pFrame->IsVisible() )

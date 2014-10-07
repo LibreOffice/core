@@ -1759,7 +1759,7 @@ void Calendar::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    if ( nType == STATE_CHANGE_INITSHOW )
+    if ( nType == StateChangedType::INITSHOW )
         ImplFormat();
 }
 
@@ -2540,7 +2540,7 @@ void CalendarField::StateChanged( StateChangedType nStateChange )
 {
     DateField::StateChanged( nStateChange );
 
-    if ( ( nStateChange == STATE_CHANGE_STYLE ) && GetSubEdit() )
+    if ( ( nStateChange == StateChangedType::STYLE ) && GetSubEdit() )
     {
         WinBits nAllAlignmentBits = ( WB_LEFT | WB_CENTER | WB_RIGHT | WB_TOP | WB_VCENTER | WB_BOTTOM );
         WinBits nMyAlignment = GetStyle() & nAllAlignmentBits;

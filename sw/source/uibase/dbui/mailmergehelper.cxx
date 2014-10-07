@@ -417,7 +417,7 @@ void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
 
 void SwAddressPreview::StateChanged( StateChangedType nStateChange )
 {
-    if(nStateChange == STATE_CHANGE_ENABLE)
+    if(nStateChange == StateChangedType::ENABLE)
         Invalidate();
     Window::StateChanged(nStateChange);
 }

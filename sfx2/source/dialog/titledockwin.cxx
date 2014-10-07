@@ -284,9 +284,10 @@ namespace sfx2
     {
         switch ( i_nType )
         {
-            case STATE_CHANGE_INITSHOW:
+            case StateChangedType::INITSHOW:
                 impl_scheduleLayout();
                 break;
+            default:;
         }
         SfxDockingWindow::StateChanged( i_nType );
     }

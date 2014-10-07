@@ -299,7 +299,7 @@ namespace svt
     void CheckBoxControl::StateChanged( StateChangedType nStateChange )
     {
         Control::StateChanged(nStateChange);
-        if ( nStateChange == STATE_CHANGE_ZOOM )
+        if ( nStateChange == StateChangedType::ZOOM )
             pBox->SetZoom(GetZoom());
     }
 

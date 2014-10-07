@@ -88,8 +88,8 @@ ParaBulletsControl::~ParaBulletsControl()
 
 void ParaBulletsControl::UpdateValueSet()
 {
-    maBulletsVS.StateChanged(STATE_CHANGE_STYLE);
-    maBulletsVS.StateChanged(STATE_CHANGE_INITSHOW);
+    maBulletsVS.StateChanged(StateChangedType::STYLE);
+    maBulletsVS.StateChanged(StateChangedType::INITSHOW);
 
     const sal_uInt16 nTypeIndex = mrParaPropertyPanel.GetBulletTypeIndex();
     if ( nTypeIndex != (sal_uInt16)0xFFFF )
