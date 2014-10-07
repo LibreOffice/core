@@ -585,7 +585,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     SAL_INFO("writerfilter", OSL_THIS_FUNC << ": final? " << bFinal << ", needed? " << m_bNeedSect);
     bool bNeedSect = m_bNeedSect;
     RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
-    bool bContinuous = pBreak.get() && pBreak->getInt() == NS_ooxml::LN_Value_ST_SectionMark_continuous;
+    bool bContinuous = pBreak.get() && pBreak->getInt() == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous);
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer,
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
     if (m_bNeedPar && !(bFinal && !m_bNeedSect && !bContinuous) && !isSubstream())
@@ -2329,7 +2329,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_type);
         // Unless we're on a title page.
         RTFValue::Pointer_t pTitlePg = m_aStates.top().aSectionSprms.find(NS_ooxml::LN_EG_SectPrContents_titlePg);
-        if (((pBreak.get() && pBreak->getInt() == NS_ooxml::LN_Value_ST_SectionMark_continuous)
+        if (((pBreak.get() && pBreak->getInt() == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous))
                 || m_nResetBreakOnSectBreak == RTF_SBKNONE)
                 && !(pTitlePg.get() && pTitlePg->getInt()))
         {

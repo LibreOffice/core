@@ -1074,7 +1074,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // depending on the break type no page styles should be created
     // If the section type is missing, but we have columns, then this should be
     // handled as a continuous section break.
-    if(m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_continuous || (m_nBreakType == -1 && m_nColumnCount > 0))
+    if(m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) || (m_nBreakType == -1 && m_nColumnCount > 0))
     {
         //todo: insert a section or access the already inserted section
         uno::Reference< beans::XPropertySet > xSection =
@@ -1105,7 +1105,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // If the section is of type "New column" (0x01), then simply insert a column break.
     // But only if there actually are columns on the page, otherwise a column break
     // seems to be handled like a page break by MSO.
-    else if(m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextColumn && m_nColumnCount > 0 )
+    else if(m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_nextColumn) && m_nColumnCount > 0 )
     {
         uno::Reference< beans::XPropertySet > xRangeProperties;
         if( m_xStartingRange.is() )
@@ -1252,7 +1252,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 // Handle page breaks with odd/even page numbering. We need to use an extra page style for setting the page style
                 // to left/right, because if we set it to the normal style, we'd set it to "First Page"/"Default Style", which would
                 // break them (all default pages would be only left or right).
-                if (m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_evenPage || m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_oddPage)
+                if (m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage) || m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_oddPage))
                 {
                     OUString* pageStyle = m_bTitlePage ? &m_sFirstPageStyleName : &m_sFollowPageStyleName;
                     OUString evenOddStyleName = lcl_FindUnusedPageStyleName(rDM_Impl.GetPageStyles()->getElementNames());
@@ -1274,9 +1274,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     evenOddStyle->setPropertyValue("FooterIsOn", uno::makeAny(sal_False));
                     CopyHeaderFooter( pageProperties, evenOddStyle );
                     *pageStyle = evenOddStyleName; // And use it instead of the original one (which is set as follow of this one).
-                    if (m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_evenPage)
+                    if (m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage))
                         evenOddStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_STYLE_LAYOUT), uno::makeAny(style::PageStyleLayout_LEFT));
-                    else if (m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_oddPage)
+                    else if (m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_oddPage))
                         evenOddStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_STYLE_LAYOUT), uno::makeAny(style::PageStyleLayout_RIGHT));
                 }
 

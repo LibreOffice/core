@@ -4516,7 +4516,7 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
 
 
 
-void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn )
+void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sal_Int32 ndxaLnn )
 {
     if( !m_bLineNumberingSet )
     {

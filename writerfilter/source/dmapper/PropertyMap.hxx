@@ -236,7 +236,7 @@ class SectionPropertyMap : public PropertyMap
 
     //line numbering
     sal_Int32                               m_nLnnMod;
-    sal_Int32                               m_nLnc;
+    sal_uInt32                              m_nLnc;
     sal_Int32                               m_ndxaLnn;
     sal_Int32                               m_nLnnMin;
 

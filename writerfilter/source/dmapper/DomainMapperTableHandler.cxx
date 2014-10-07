@@ -809,7 +809,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 const boost::optional<PropertyMap::Property> aCellDirectionVal = (*aCellIterator)->getProperty(PROP_CELL_DIRECTION);
                 if (aCellDirectionVal)
                 {
-                    if (aCellDirectionVal->second.get<sal_Int32>() == NS_ooxml::LN_Value_ST_TextDirection_btLr)
+                    if (aCellDirectionVal->second.get<sal_Int32>() == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_TextDirection_btLr))
                     {
                         // btLr, so map ParagraphAdjust_CENTER to VertOrientation::CENTER.
                         uno::Reference<beans::XPropertySet> xPropertySet((*m_pTableSeq)[nRow][nCell][0], uno::UNO_QUERY);

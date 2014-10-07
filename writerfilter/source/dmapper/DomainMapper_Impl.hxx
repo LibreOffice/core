@@ -680,7 +680,7 @@ public:
             m_aTableManagers.pop( );
     }
 
-    void SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn );
+    void SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sal_Int32 ndxaLnn );
     bool IsLineNumberingSet() const {return m_bLineNumberingSet;}
 
     DeletableTabStop                m_aCurrentTabStop;
