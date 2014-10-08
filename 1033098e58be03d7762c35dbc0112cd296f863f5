@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_68418339",
+        "filename": "Makefile.in",
+        "patchSetId": 7
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-10-08T20:28:45Z",
+      "side": 1,
+      "message": "Jürgen reported that cygwin fails to find python3 on his machine, even though it exists. Workaround for him is to call this manually:\n\n  $ make -npf Makefile.gbuild | ./bin/gbuild-to-ide --ide vs2012\n\nI wonder why we don\u0027t move this Makefile mess entirely in gbuild-to-ide? And call it with:\n\n  $ ./bin/gbuild-to-ide --ide vs2012\n\nand do the whole Makefile invocation from python?",
+      "revId": "1033098e58be03d7762c35dbc0112cd296f863f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
