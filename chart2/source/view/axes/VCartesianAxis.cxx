@@ -601,7 +601,7 @@ bool VCartesianAxis::createTextShapes(
                        const Reference< drawing::XShapes >& xTarget
                      , TickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
-                     , TickFactory_2D* pTickFactory
+                     , TickFactory2D* pTickFactory
                      , sal_Int32 nScreenDistanceBetweenTicks )
 {
     //returns true if the text shapes have been created successfully
@@ -1249,7 +1249,7 @@ TickFactory* VCartesianAxis::createTickFactory()
     return createTickFactory2D();
 }
 
-TickFactory_2D* VCartesianAxis::createTickFactory2D()
+TickFactory2D* VCartesianAxis::createTickFactory2D()
 {
     B2DVector aStart, aEnd;
     get2DAxisMainLine( aStart, aEnd, getAxisIntersectionValue() );
@@ -1257,7 +1257,7 @@ TickFactory_2D* VCartesianAxis::createTickFactory2D()
     B2DVector aLabelLineStart, aLabelLineEnd;
     get2DAxisMainLine( aLabelLineStart, aLabelLineEnd, getLabelLineIntersectionValue() );
 
-    return new TickFactory_2D( m_aScale, m_aIncrement, aStart, aEnd, aLabelLineStart-aStart );
+    return new TickFactory2D( m_aScale, m_aIncrement, aStart, aEnd, aLabelLineStart-aStart );
 }
 
 void lcl_hideIdenticalScreenValues( TickIter& rTickIter )
@@ -1327,7 +1327,7 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
     return nRet;
 }
 
-void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties, TickFactory_2D* pTickFactory2D )
+void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties, TickFactory2D* pTickFactory2D )
 {
     if( !pTickFactory2D )
         return;
@@ -1376,8 +1376,8 @@ void VCartesianAxis::createLabels()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-    TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+    boost::scoped_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
 
@@ -1398,7 +1398,7 @@ void VCartesianAxis::createLabels()
         {
             if(nTextLevel==0)
             {
-                nScreenDistanceBetweenTicks = TickFactory_2D::getTickScreenDistance( *apTickIter.get() );
+                nScreenDistanceBetweenTicks = TickFactory2D::getTickScreenDistance( *apTickIter.get() );
                 if( nTextLevelCount>1 )
                     nScreenDistanceBetweenTicks*=2; //the above used tick iter does contain also the sub ticks -> thus the given distance is only the half
             }
@@ -1430,8 +1430,8 @@ void VCartesianAxis::createMaximumLabels()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-    TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+    boost::scoped_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
 
@@ -1467,8 +1467,8 @@ void VCartesianAxis::updatePositions()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-    TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+    boost::scoped_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
 
@@ -1532,7 +1532,7 @@ void VCartesianAxis::updatePositions()
     doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
 }
 
-void VCartesianAxis::createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory_2D& rTickFactory2D, bool bOnlyAtLabels )
+void VCartesianAxis::createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D& rTickFactory2D, bool bOnlyAtLabels )
 {
     sal_Int32 nPointCount = rTickInfos.size();
     drawing::PointSequenceSequence aPoints(2*nPointCount);
@@ -1568,8 +1568,8 @@ void VCartesianAxis::createShapes()
     if( !prepareShapeCreation() )
         return;
 
-    boost::scoped_ptr< TickFactory_2D > apTickFactory2D( this->createTickFactory2D() );
-    TickFactory_2D* pTickFactory2D = apTickFactory2D.get();
+    boost::scoped_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
 

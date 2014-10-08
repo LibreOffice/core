@@ -103,16 +103,16 @@ protected: //methods
                        ::com::sun::star::drawing::XShapes >& xTarget
                      , TickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
-                     , TickFactory_2D* pTickFactory
+                     , TickFactory2D* pTickFactory
                      , sal_Int32 nScreenDistanceBetweenTicks );
 
-    void    createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory_2D& rTickFactory2D, bool bOnlyAtLabels );
+    void    createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D& rTickFactory2D, bool bOnlyAtLabels );
 
-    TickFactory_2D* createTickFactory2D();
+    TickFactory2D* createTickFactory2D();
     void    hideIdenticalScreenValues(  ::std::vector< ::std::vector< TickInfo > >& rTickInfos ) const;
 
     void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
-                            , TickFactory_2D* pTickFactory2D );
+                            , TickFactory2D* pTickFactory2D );
     bool    isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
                             , bool bIsHorizontalAxis, bool bIsVerticalAxis );
     bool    isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis );

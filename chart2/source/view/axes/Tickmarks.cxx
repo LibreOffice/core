@@ -135,7 +135,7 @@ void TickFactory::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >
 }
 
 // ___TickFactory_2D___
-TickFactory_2D::TickFactory_2D(
+TickFactory2D::TickFactory2D(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement
           //, double fStrech_SceneToScreen, double fOffset_SceneToScreen )
           , const B2DVector& rStartScreenPos, const B2DVector& rEndScreenPos
@@ -164,21 +164,21 @@ TickFactory_2D::TickFactory_2D(
     }
 }
 
-TickFactory_2D::~TickFactory_2D()
+TickFactory2D::~TickFactory2D()
 {
 }
 
-bool TickFactory_2D::isHorizontalAxis() const
+bool TickFactory2D::isHorizontalAxis() const
 {
     return ( m_aAxisStartScreenPosition2D.getY() == m_aAxisEndScreenPosition2D.getY() );
 }
-bool TickFactory_2D::isVerticalAxis() const
+bool TickFactory2D::isVerticalAxis() const
 {
     return ( m_aAxisStartScreenPosition2D.getX() == m_aAxisEndScreenPosition2D.getX() );
 }
 
 //static
-sal_Int32 TickFactory_2D::getTickScreenDistance( TickIter& rIter )
+sal_Int32 TickFactory2D::getTickScreenDistance( TickIter& rIter )
 {
     //return the positive distance between the two first tickmarks in screen values
     //if there are less than two tickmarks -1 is returned
@@ -191,7 +191,7 @@ sal_Int32 TickFactory_2D::getTickScreenDistance( TickIter& rIter )
     return pFirstTickInfo->getScreenDistanceBetweenTicks( *pSecondTickInfo );
 }
 
-B2DVector TickFactory_2D::getTickScreenPosition2D( double fScaledLogicTickValue ) const
+B2DVector TickFactory2D::getTickScreenPosition2D( double fScaledLogicTickValue ) const
 {
     B2DVector aRet(m_aAxisStartScreenPosition2D);
     aRet += (m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D)
@@ -199,7 +199,7 @@ B2DVector TickFactory_2D::getTickScreenPosition2D( double fScaledLogicTickValue 
     return aRet;
 }
 
-void TickFactory_2D::addPointSequenceForTickLine( drawing::PointSequenceSequence& rPoints
+void TickFactory2D::addPointSequenceForTickLine( drawing::PointSequenceSequence& rPoints
                                 , sal_Int32 nSequenceIndex
                                 , double fScaledLogicTickValue, double fInnerDirectionSign
                                 , const TickmarkProperties& rTickmarkProperties
@@ -228,7 +228,7 @@ void TickFactory_2D::addPointSequenceForTickLine( drawing::PointSequenceSequence
     rPoints[nSequenceIndex][1].Y = static_cast<sal_Int32>(aEnd.getY());
 }
 
-B2DVector TickFactory_2D::getDistanceAxisTickToText( const AxisProperties& rAxisProperties, bool bIncludeFarAwayDistanceIfSo, bool bIncludeSpaceBetweenTickAndText ) const
+B2DVector TickFactory2D::getDistanceAxisTickToText( const AxisProperties& rAxisProperties, bool bIncludeFarAwayDistanceIfSo, bool bIncludeSpaceBetweenTickAndText ) const
 {
     bool bFarAwayLabels = false;
     if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START == rAxisProperties.m_eLabelPos
@@ -281,7 +281,7 @@ B2DVector TickFactory_2D::getDistanceAxisTickToText( const AxisProperties& rAxis
     return aLabelDirection;
 }
 
-void TickFactory_2D::createPointSequenceForAxisMainLine( drawing::PointSequenceSequence& rPoints ) const
+void TickFactory2D::createPointSequenceForAxisMainLine( drawing::PointSequenceSequence& rPoints ) const
 {
     rPoints[0].realloc(2);
     rPoints[0][0].X = static_cast<sal_Int32>(m_aAxisStartScreenPosition2D.getX());
@@ -290,7 +290,7 @@ void TickFactory_2D::createPointSequenceForAxisMainLine( drawing::PointSequenceS
     rPoints[0][1].Y = static_cast<sal_Int32>(m_aAxisEndScreenPosition2D.getY());
 }
 
-void TickFactory_2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+void TickFactory2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
 {
     //get the transformed screen values for all tickmarks in rAllTickInfos
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter       = rAllTickInfos.begin();

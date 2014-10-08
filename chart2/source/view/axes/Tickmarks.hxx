@@ -103,16 +103,16 @@ protected: //member
     double    m_fScaledVisibleMax;
 };
 
-class TickFactory_2D : public TickFactory
+class TickFactory2D : public TickFactory
 {
 public:
-    TickFactory_2D(
+    TickFactory2D(
         const ExplicitScaleData& rScale
         , const ExplicitIncrementData& rIncrement
         , const ::basegfx::B2DVector& rStartScreenPos, const ::basegfx::B2DVector& rEndScreenPos
         , const ::basegfx::B2DVector& rAxisLineToLabelLineShift );
         //, double fStrech_SceneToScreen, double fOffset_SceneToScreen );
-    virtual ~TickFactory_2D();
+    virtual ~TickFactory2D();
 
     static sal_Int32    getTickScreenDistance( TickIter& rIter );
 
