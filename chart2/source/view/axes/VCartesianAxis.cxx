@@ -847,17 +847,22 @@ double VCartesianAxis::getLabelLineIntersectionValue() const
     return getAxisIntersectionValue();
 }
 
-bool VCartesianAxis::getLogicValueWhereExtraLineCrossesOtherAxis( double& fCrossesOtherAxis ) const
+double VCartesianAxis::getExtraLineIntersectionValue() const
 {
+    double fNan;
+    rtl::math::setNan(&fNan);
+
     if( !m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis )
-        return false;
+        return fNan;
+
     double fMin = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
     double fMax = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
+
     if( *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis <= fMin
         || *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis >= fMax )
-        return false;
-    fCrossesOtherAxis = *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis;
-    return true;
+        return fNan;
+
+    return *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis;
 }
 
 B2DVector VCartesianAxis::getScreenPosition( double fLogicX, double fLogicY, double fLogicZ ) const
@@ -1640,8 +1645,8 @@ void VCartesianAxis::createShapes()
         //create an additional line at NULL
         if( !AxisHelper::isAxisPositioningEnabled() )
         {
-            double fExtraLineCrossesOtherAxis;
-            if( getLogicValueWhereExtraLineCrossesOtherAxis(fExtraLineCrossesOtherAxis) )
+            double fExtraLineCrossesOtherAxis = getExtraLineIntersectionValue();
+            if (!rtl::math::isNan(fExtraLineCrossesOtherAxis))
             {
                 B2DVector aStart, aEnd;
                 this->get2DAxisMainLine( aStart, aEnd, fExtraLineCrossesOtherAxis );

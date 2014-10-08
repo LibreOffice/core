@@ -63,7 +63,14 @@ public:
      */
     double getLabelLineIntersectionValue() const;
 
-    bool        getLogicValueWhereExtraLineCrossesOtherAxis( double& fCrossesOtherAxis) const;
+    /**
+     * Get the value at which extra line crosses the other axis.
+     *
+     * @return a NaN if the line doesn't cross the other axis, a non-NaN value
+     *         otherwise.
+     */
+    double getExtraLineIntersectionValue() const;
+
     void        get2DAxisMainLine( ::basegfx::B2DVector& rStart, ::basegfx::B2DVector& rEnd, double fCrossesOtherAxis );
 
     //Layout interface for cartesian axes:
