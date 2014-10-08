@@ -92,7 +92,7 @@ namespace accessibility
         Any aOldValue, aNewValue;
         aOldValue <<= rOldName;
         aNewValue <<= rNewName;
-        commitEvent( AccessibleEventId::NAME_CHANGED, aOldValue, aNewValue );
+        commitEvent( AccessibleEventId::NAME_CHANGED, aNewValue, aOldValue );
     }
 
     // XInterface -------------------------------------------------------------

@@ -235,7 +235,7 @@ namespace accessibility
                             {
                                 AccessibleCheckBoxCell* pCell =
                                     static_cast< AccessibleCheckBoxCell* >( xChild.get() );
-                                pCell->commitEvent( AccessibleEventId::NAME_CHANGED, aOldValue, aNewValue );
+                                pCell->commitEvent( AccessibleEventId::NAME_CHANGED, aNewValue, aOldValue );
                             }
                             else
                             {
