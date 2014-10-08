@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#if defined(MACOSX) && defined(HAVE_FEATURE_READONLY_INSTALLSET)
+#if defined(MACOSX) && HAVE_FEATURE_READONLY_INSTALLSET
 #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
 #include <premac.h>
 #include <Foundation/Foundation.h>
@@ -245,7 +245,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
 
         uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
 
-#if defined(MACOSX) && defined(HAVE_FEATURE_READONLY_INSTALLSET)
+#if defined(MACOSX) && HAVE_FEATURE_READONLY_INSTALLSET
         if( rBaseURL.GetProtocol() == INET_PROT_FILE )
         {
             const char *appBundle = [[[NSBundle mainBundle] bundlePath] UTF8String];
