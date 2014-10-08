@@ -608,10 +608,6 @@ bool VCartesianAxis::createTextShapes(
                      , TickFactory2D* pTickFactory
                      , sal_Int32 nScreenDistanceBetweenTicks )
 {
-    uno::Reference<chart2::XScaling> xInverseScaling(NULL);
-    if( m_aScale.Scaling.is() )
-        xInverseScaling = m_aScale.Scaling->getInverseScaling();
-
     FixedNumberFormatter aFixedNumberFormatter(
                 m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
 
