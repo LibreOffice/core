@@ -35,7 +35,7 @@
 
 #include <IDocumentStylePoolAccess.hxx>
 
-static rtl::Reference<SwDocStyleSheet> lcl_getDocStyleSheet(OUString rName, SwWrtShell *pSh)
+static rtl::Reference<SwDocStyleSheet> lcl_getDocStyleSheet(const OUString& rName, SwWrtShell *pSh)
 {
     sal_uInt16 nFamily = SFX_STYLE_FAMILY_PARA;
     SfxStyleSheetBasePool* mpBase =  pSh->GetView().GetDocShell()->GetStyleSheetPool();
