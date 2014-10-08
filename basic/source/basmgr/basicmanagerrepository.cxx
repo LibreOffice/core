@@ -81,7 +81,6 @@ namespace basic
         ImplRepository();
 
     private:
-        ::osl::Mutex        m_aMutex;
         BasicManagerStore   m_aStore;
         CreationListeners   m_aCreationListeners;
 
@@ -222,7 +221,7 @@ namespace basic
 
     BasicManager* ImplRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        SolarMutexGuard g;
 
         /*  #163556# (DR) - This function may be called recursively while
             constructing the Basic manager and loading the Basic storage. By
@@ -242,7 +241,7 @@ namespace basic
 
     BasicManager* ImplRepository::getApplicationBasicManager( bool _bCreate )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        SolarMutexGuard g;
 
         BasicManager* pAppManager = GetSbData()->pAppBasMgr;
         if ( ( pAppManager == NULL ) && _bCreate )
@@ -254,7 +253,7 @@ namespace basic
 
     void ImplRepository::setApplicationBasicManager( BasicManager* _pBasicManager )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        SolarMutexGuard g;
 
         BasicManager* pPreviousManager = getApplicationBasicManager( false );
         delete pPreviousManager;
@@ -265,7 +264,8 @@ namespace basic
 
     BasicManager* ImplRepository::impl_createApplicationBasicManager()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        SolarMutexGuard g;
+
         OSL_PRECOND( getApplicationBasicManager( false ) == NULL, "ImplRepository::impl_createApplicationBasicManager: there already is one!" );
 
         // Determine Directory
@@ -324,14 +324,16 @@ namespace basic
 
     void ImplRepository::registerCreationListener( BasicManagerCreationListener& _rListener )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        SolarMutexGuard g;
+
         m_aCreationListeners.push_back( &_rListener );
     }
 
 
     void ImplRepository::revokeCreationListener( BasicManagerCreationListener& _rListener )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        SolarMutexGuard g;
+
         CreationListeners::iterator pos = ::std::find( m_aCreationListeners.begin(), m_aCreationListeners.end(), &_rListener );
         if ( pos != m_aCreationListeners.end() )
             m_aCreationListeners.erase( pos );
@@ -542,7 +544,7 @@ namespace basic
 
     void ImplRepository::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        SolarMutexGuard g;
 
         Reference< XInterface > xNormalizedSource( _rSource.Source, UNO_QUERY );
     #if OSL_DEBUG_LEVEL > 0
