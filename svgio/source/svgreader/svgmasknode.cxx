@@ -69,7 +69,7 @@ namespace svgio
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
             // read style attributes
-            maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent);
+            maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent, false);
 
             // parse own
             switch(aSVGToken)

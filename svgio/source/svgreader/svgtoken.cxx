@@ -167,7 +167,7 @@ namespace svgio
         static rtl::OUString aSVGStrText(rtl::OUString::createFromAscii("text"));
         static rtl::OUString aSVGStrBaselineShift(rtl::OUString::createFromAscii("baseline-shift"));
 
-        SVGToken StrToSVGToken(const rtl::OUString& rStr)
+        SVGToken StrToSVGToken(const rtl::OUString& rStr, bool bCaseIndependent)
         {
             typedef std::hash_map< rtl::OUString, SVGToken, rtl::OUStringHash > SVGTokenMapper;
             typedef std::pair< rtl::OUString, SVGToken > SVGTokenValueType;
@@ -315,6 +315,33 @@ namespace svgio
 
             if(aResult == aSVGTokenMapperList.end())
             {
+                if(bCaseIndependent)
+                {
+                    static SVGTokenMapper aCaseLindependentSVGTokenMapperList;
+
+                    if(aCaseLindependentSVGTokenMapperList.empty())
+                    {
+                        for(SVGTokenMapper::const_iterator aCurrent(aSVGTokenMapperList.begin()); aCurrent != aSVGTokenMapperList.end(); aCurrent++)
+                        {
+                            aCaseLindependentSVGTokenMapperList.insert(
+                                SVGTokenValueType(
+                                    aCurrent->first.toAsciiLowerCase(),
+                                    aCurrent->second));
+                        }
+                    }
+
+                    const SVGTokenMapper::const_iterator aResult2(aCaseLindependentSVGTokenMapperList.find(rStr.toAsciiLowerCase()));
+
+                    if(aResult2 == aCaseLindependentSVGTokenMapperList.end())
+                    {
+                        return SVGTokenUnknown;
+                    }
+                    else
+                    {
+                        return aResult2->second;
+                    }
+                }
+
                 return SVGTokenUnknown;
             }
             else

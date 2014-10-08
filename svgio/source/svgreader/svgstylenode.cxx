@@ -163,7 +163,7 @@ namespace svgio
                 maSvgStyleAttributes.push_back(pNewStyle);
 
                 // fill with content
-                pNewStyle->readStyle(aContent);
+                pNewStyle->readCssStyle(aContent);
 
                 // comma-separated split (Css abbreviation for same style for multiple selectors)
                 const sal_Int32 nLen(aSelectors.getLength());

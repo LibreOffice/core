@@ -646,7 +646,10 @@ namespace svgio
             }
         }
 
-        bool match_colorKeyword(basegfx::BColor& rColor, const rtl::OUString& rName)
+        bool match_colorKeyword(
+            basegfx::BColor& rColor,
+            const rtl::OUString& rName,
+            bool bCaseIndependent)
         {
             typedef std::hash_map< rtl::OUString, Color, rtl::OUStringHash > ColorTokenMapper;
             typedef std::pair< rtl::OUString, Color > ColorTokenValueType;
@@ -803,7 +806,13 @@ namespace svgio
                 aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("yellowgreen"), Color(154, 205, 50)));
             }
 
-            const ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName));
+            ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName));
+
+            if(bCaseIndependent && aResult == aColorTokenMapperList.end())
+            {
+                // also try case independent match (e.g. for Css styles)
+                aResult = aColorTokenMapperList.find(rName.toAsciiLowerCase());
+            }
 
             if(aResult == aColorTokenMapperList.end())
             {
@@ -816,7 +825,10 @@ namespace svgio
             }
         }
 
-        bool read_color(const rtl::OUString& rCandidate, basegfx::BColor& rColor)
+        bool read_color(
+            const rtl::OUString& rCandidate,
+            basegfx::BColor& rColor,
+            bool bCaseIndependent)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -924,7 +936,7 @@ namespace svgio
                     else
                     {
                         // color keyword
-                        if(match_colorKeyword(rColor, rCandidate))
+                        if(match_colorKeyword(rColor, rCandidate, bCaseIndependent))
                         {
                             return true;
                         }
@@ -1209,7 +1221,11 @@ namespace svgio
             return false;
         }
 
-        bool readSvgPaint(const rtl::OUString& rCandidate, SvgPaint& rSvgPaint, rtl::OUString& rURL)
+        bool readSvgPaint(
+            const rtl::OUString& rCandidate,
+            SvgPaint& rSvgPaint,
+            rtl::OUString& rURL,
+            bool bCaseIndependent)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -1217,7 +1233,7 @@ namespace svgio
             {
                 basegfx::BColor aColor;
 
-                if(read_color(rCandidate, aColor))
+                if(read_color(rCandidate, aColor, bCaseIndependent))
                 {
                     rSvgPaint = SvgPaint(aColor, true, true);
                     return true;
@@ -1292,7 +1308,7 @@ namespace svgio
 
                     if(aTokenName.getLength())
                     {
-                        switch(StrToSVGToken(aTokenName.makeStringAndClear()))
+                        switch(StrToSVGToken(aTokenName.makeStringAndClear(), false))
                         {
                             case SVGTokenDefer:
                             {

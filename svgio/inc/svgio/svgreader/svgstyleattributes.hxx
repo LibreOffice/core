@@ -259,7 +259,11 @@ namespace svgio
 
         public:
             /// local attribute scanner
-            void parseStyleAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            void parseStyleAttribute(
+                const rtl::OUString& rTokenName,
+                SVGToken aSVGToken,
+                const rtl::OUString& aContent,
+                bool bCaseIndependent);
 
             /// helper which does the necessary with a given path
             void add_text(
@@ -279,7 +283,7 @@ namespace svgio
             const SvgStyleAttributes* getCssStyleParent() const { return mpCssStyleParent; }
 
             /// scan helpers
-            void readStyle(const rtl::OUString& rCandidate);
+            void readCssStyle(const rtl::OUString& rCandidate);
             const SvgStyleAttributes* getParentStyle() const;
 
             SvgStyleAttributes(SvgNode& rOwner);

@@ -180,61 +180,70 @@ namespace svgio
             return nRetval;
         }
 
-        void SvgStyleAttributes::readStyle(const rtl::OUString& rCandidate)
+        void SvgStyleAttributes::readCssStyle(const rtl::OUString& rCandidate)
         {
             const sal_Int32 nLen(rCandidate.getLength());
             sal_Int32 nPos(0);
 
             while(nPos < nLen)
             {
-                const sal_Int32 nInitPos(nPos);
-                skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
+                // get TokenName
                 rtl::OUStringBuffer aTokenName;
+                skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
                 copyString(rCandidate, nPos, aTokenName, nLen);
 
-                if(aTokenName.getLength())
+                if(!aTokenName.getLength())
                 {
-                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(':'), nPos, nLen);
-                    rtl::OUStringBuffer aTokenValue;
-                    copyToLimiter(rCandidate, sal_Unicode(';'), nPos, aTokenValue, nLen);
-                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(';'), nPos, nLen);
-                    const rtl::OUString aOUTokenName(aTokenName.makeStringAndClear());
-                    rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
+                    // if no TokenName advance one by force to avoid death loop, continue
+                    OSL_ENSURE(false, "Could not interpret on current position, advancing one byte (!)");
+                    nPos++;
+                    continue;
+                }
 
-                    // check for '!important' CssStyle mark, currently not supported
-                    // but neds to be extracted for correct parsing
-                    static rtl::OUString aTokenImportant(RTL_CONSTASCII_USTRINGPARAM("!important"));
-                    const sal_Int32 nIndexTokenImportant(aOUTokenValue.indexOf(aTokenImportant));
+                // get TokenValue
+                rtl::OUStringBuffer aTokenValue;
+                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(':'), nPos, nLen);
+                copyToLimiter(rCandidate, sal_Unicode(';'), nPos, aTokenValue, nLen);
+                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(';'), nPos, nLen);
 
-                    if(-1 != nIndexTokenImportant)
+                if(!aTokenValue.getLength())
+                {
+                    // no value - continue
+                    continue;
+                }
+
+                // generate OUStrings
+                const rtl::OUString aOUTokenName(aTokenName.makeStringAndClear());
+                rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
+
+                // check for '!important' CssStyle mark, currently not supported
+                // but needs to be extracted for correct parsing
+                static rtl::OUString aTokenImportant(RTL_CONSTASCII_USTRINGPARAM("!important"));
+                const sal_Int32 nIndexTokenImportant(aOUTokenValue.indexOf(aTokenImportant));
+
+                if(-1 != nIndexTokenImportant)
+                {
+                    // if there currently just remove it and remove spaces to have the value only
+                    rtl::OUString aNewOUTokenValue;
+
+                    if(nIndexTokenImportant > 0)
                     {
-                        // if there currently just remove it and remove spaces to have the value only
-                        rtl::OUString aNewOUTokenValue;
-
-                        if(nIndexTokenImportant > 0)
-                        {
-                            // copy content before token
-                            aNewOUTokenValue += aOUTokenValue.copy(0, nIndexTokenImportant);
-                        }
-
-                        if(aOUTokenValue.getLength() > nIndexTokenImportant + aTokenImportant.getLength())
-                        {
-                            // copy content after token
-                            aNewOUTokenValue += aOUTokenValue.copy(nIndexTokenImportant + aTokenImportant.getLength());
-                        }
-
-                        // remove spaces
-                        aOUTokenValue = aNewOUTokenValue.trim();
+                        // copy content before token
+                        aNewOUTokenValue += aOUTokenValue.copy(0, nIndexTokenImportant);
                     }
 
-                    parseStyleAttribute(aOUTokenName, StrToSVGToken(aOUTokenName), aOUTokenValue);
+                    if(aOUTokenValue.getLength() > nIndexTokenImportant + aTokenImportant.getLength())
+                    {
+                        // copy content after token
+                        aNewOUTokenValue += aOUTokenValue.copy(nIndexTokenImportant + aTokenImportant.getLength());
+                    }
+
+                    // remove spaces
+                    aOUTokenValue = aNewOUTokenValue.trim();
                 }
 
-                if(nInitPos == nPos)
-                {
-                    OSL_ENSURE(false, "Could not interpret on current position (!)");
-                    nPos++;
-                }
+                // valid token-value pair, parse it
+                parseStyleAttribute(aOUTokenName, StrToSVGToken(aOUTokenName, true), aOUTokenValue, true);
             }
         }
 
@@ -1246,7 +1255,11 @@ namespace svgio
         {
         }
 
-        void SvgStyleAttributes::parseStyleAttribute(const rtl::OUString& /* rTokenName */, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgStyleAttributes::parseStyleAttribute(
+            const rtl::OUString& /* rTokenName */,
+            SVGToken aSVGToken,
+            const rtl::OUString& aContent,
+            bool bCaseIndependent)
         {
             switch(aSVGToken)
             {
@@ -1255,7 +1268,7 @@ namespace svgio
                     SvgPaint aSvgPaint;
                     rtl::OUString aURL;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent))
                     {
                         setFill(aSvgPaint);
                     }
@@ -1310,7 +1323,7 @@ namespace svgio
                     SvgPaint aSvgPaint;
                     rtl::OUString aURL;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent))
                     {
                         setStroke(aSvgPaint);
                     }
@@ -1457,7 +1470,7 @@ namespace svgio
                     SvgPaint aSvgPaint;
                     rtl::OUString aURL;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent))
                     {
                         setStopColor(aSvgPaint);
                     }
@@ -1778,7 +1791,7 @@ namespace svgio
                     SvgPaint aSvgPaint;
                     rtl::OUString aURL;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent))
                     {
                         setColor(aSvgPaint);
                     }

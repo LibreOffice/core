@@ -179,7 +179,7 @@ namespace svgio
         {
             if(aName.getLength())
             {
-                const SVGToken aSVGToken(StrToSVGToken(aName));
+                const SVGToken aSVGToken(StrToSVGToken(aName, false));
 
                 switch(aSVGToken)
                 {
@@ -393,7 +393,7 @@ namespace svgio
         {
             if(aName.getLength())
             {
-                const SVGToken aSVGToken(StrToSVGToken(aName));
+                const SVGToken aSVGToken(StrToSVGToken(aName, false));
                 SvgNode* pWhitespaceCheck(SVGTokenText == aSVGToken ? mpTarget : 0);
                 SvgStyleNode* pCssStyle(SVGTokenStyle == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : 0);
                 SvgTitleDescNode* pSvgTitleDescNode(SVGTokenTitle == aSVGToken || SVGTokenDesc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : 0);

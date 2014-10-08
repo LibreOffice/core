@@ -186,7 +186,7 @@ namespace svgio
             SVGTokenLast
         };
 
-        SVGToken StrToSVGToken(const rtl::OUString& rStr);
+        SVGToken StrToSVGToken(const rtl::OUString& rStr, bool bCaseIndependent);
 
         const rtl::OUString& getStrTitle();
         const rtl::OUString& getStrDesc();

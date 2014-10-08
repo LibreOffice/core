@@ -203,13 +203,23 @@ namespace svgio
         bool readNumberAndUnit(const rtl::OUString& rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen);
         bool readAngle(const rtl::OUString& rCandidate, sal_Int32& nPos, double& fAngle, const sal_Int32 nLen);
         sal_Int32 read_hex(const sal_Unicode& rChar);
-        bool match_colorKeyword(basegfx::BColor& rColor, const rtl::OUString& rName);
-        bool read_color(const rtl::OUString& rCandidate, basegfx::BColor& rColor);
+        bool match_colorKeyword(
+            basegfx::BColor& rColor,
+            const rtl::OUString& rName,
+            bool bCaseIndependent);
+        bool read_color(
+            const rtl::OUString& rCandidate,
+            basegfx::BColor& rColor,
+            bool bCaseIndependent);
         basegfx::B2DRange readViewBox(const rtl::OUString& rCandidate, InfoProvider& rInfoProvider);
         basegfx::B2DHomMatrix readTransform(const rtl::OUString& rCandidate, InfoProvider& rInfoProvider);
         bool readSingleNumber(const rtl::OUString& rCandidate, SvgNumber& aNum);
         bool readLocalUrl(const rtl::OUString& rCandidate, rtl::OUString& rURL);
-        bool readSvgPaint(const rtl::OUString& rCandidate, SvgPaint& rSvgPaint, rtl::OUString& rURL);
+        bool readSvgPaint(
+            const rtl::OUString& rCandidate,
+            SvgPaint& rSvgPaint,
+            rtl::OUString& rURL,
+            bool bCaseIndependent);
 
         bool readSvgNumberVector(const rtl::OUString& rCandidate, SvgNumberVector& rSvgNumberVector);
         ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider, NumberType aNumberType = length);
