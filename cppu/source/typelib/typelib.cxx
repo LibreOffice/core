@@ -2238,7 +2238,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDesc
         }
         else
         {
-            osl_atomic_decrement( &pRef->pType->nRefCount );
+            (void)osl_atomic_decrement( &pRef->pType->nRefCount );
             // detruction of this type in progress (another thread!)
             // no acces through this weak reference
             pRef->pType = 0;
