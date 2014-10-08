@@ -115,6 +115,8 @@ public:
     virtual void Init() SAL_OVERRIDE;
     virtual int Main() SAL_OVERRIDE;
 
+    IconTestApp() : nRet(EXIT_SUCCESS) {};
+
 private:
     int nRet;
 
