@@ -156,8 +156,8 @@ public class DocumentMerge implements MergeAlgorithm {
                     replaceElement((Element)orgSeq.currentElement(),
                                    (Element)modSeq.currentElement());
                 } else {
-                    subDocumentMerge.merge((Element)orgSeq.currentElement(),
-                                         (Element)modSeq.currentElement());
+                    subDocumentMerge.merge((Node)orgSeq.currentElement(),
+                                         (Node)modSeq.currentElement());
 
                 }
                 break;
