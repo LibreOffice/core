@@ -32,12 +32,12 @@
   <LC_CTYPE ref="ca_ES"/>
   <LC_FORMAT ref="ca_ES" replaceFrom="[CURRENCY]" replaceTo="[$₧-803]"/>
   <LC_COLLATION ref="ca_ES"/>
-  <LC_SEARCH ref="en_US"/>
-  <LC_INDEX ref="en_US"/>
+  <LC_SEARCH ref="ca_ES"/>
+  <LC_INDEX ref="ca_ES"/>
   <LC_CALENDAR ref="ca_ES"/>
   <LC_CURRENCY ref="ca_ES"/>
-  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_TRANSLITERATION ref="ca_ES"/>
   <LC_MISC ref="ca_ES"/>
-  <LC_NumberingLevel ref="en_US"/>
-  <LC_OutLineNumberingLevel ref="en_US"/>
+  <LC_NumberingLevel ref="ca_ES"/>
+  <LC_OutLineNumberingLevel ref="ca_ES"/>
 </Locale>
