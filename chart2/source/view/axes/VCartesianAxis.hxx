@@ -53,8 +53,16 @@ public:
 
     virtual TickFactory* createTickFactory() SAL_OVERRIDE;
 
-    double      getLogicValueWhereMainLineCrossesOtherAxis() const;
-    double      getLogicValueWhereLabelLineCrossesOtherAxis() const;
+    /**
+     * Get the value at which the other axis crosses.
+     */
+    double getAxisIntersectionValue() const;
+
+    /**
+     * Get the value at which label line crosses the other axis.
+     */
+    double getLabelLineIntersectionValue() const;
+
     bool        getLogicValueWhereExtraLineCrossesOtherAxis( double& fCrossesOtherAxis) const;
     void        get2DAxisMainLine( ::basegfx::B2DVector& rStart, ::basegfx::B2DVector& rEnd, double fCrossesOtherAxis );
 

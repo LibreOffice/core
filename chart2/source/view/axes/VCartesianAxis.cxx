@@ -49,15 +49,13 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-namespace chart
-{
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
-using namespace ::rtl::math;
-using ::basegfx::B2DVector;
 using ::com::sun::star::uno::Reference;
+using ::basegfx::B2DVector;
 using ::basegfx::B2DPolygon;
 using ::basegfx::B2DPolyPolygon;
+
+namespace chart {
 
 VCartesianAxis::VCartesianAxis( const AxisProperties& rAxisProperties
             , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
@@ -610,7 +608,7 @@ bool VCartesianAxis::createTextShapes(
     //otherwise false - in this case the AxisLabelProperties have changed
     //and contain new instructions for the next try for text shape creation
 
-    Reference< XScaling > xInverseScaling( NULL );
+    uno::Reference<chart2::XScaling> xInverseScaling(NULL);
     if( m_aScale.Scaling.is() )
         xInverseScaling = m_aScale.Scaling->getInverseScaling();
 
@@ -827,37 +825,26 @@ drawing::PointSequenceSequence lcl_makePointSequence( B2DVector& rStart, B2DVect
     return aPoints;
 }
 
-double VCartesianAxis::getLogicValueWhereMainLineCrossesOtherAxis() const
+double VCartesianAxis::getAxisIntersectionValue() const
 {
+    if (m_aAxisProperties.m_pfMainLinePositionAtOtherAxis)
+        return *m_aAxisProperties.m_pfMainLinePositionAtOtherAxis;
+
     double fMin = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
     double fMax = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
 
-    double fCrossesOtherAxis;
-    if(m_aAxisProperties.m_pfMainLinePositionAtOtherAxis)
-        fCrossesOtherAxis = *m_aAxisProperties.m_pfMainLinePositionAtOtherAxis;
-    else
-    {
-        if( ::com::sun::star::chart::ChartAxisPosition_END == m_aAxisProperties.m_eCrossoverType )
-            fCrossesOtherAxis = fMax;
-        else
-            fCrossesOtherAxis = fMin;
-    }
-    return fCrossesOtherAxis;
+    return (css::chart::ChartAxisPosition_END == m_aAxisProperties.m_eCrossoverType) ? fMax : fMin;
 }
 
-double VCartesianAxis::getLogicValueWhereLabelLineCrossesOtherAxis() const
+double VCartesianAxis::getLabelLineIntersectionValue() const
 {
-    double fMin = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
-    double fMax = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
+    if (css::chart::ChartAxisLabelPosition_OUTSIDE_START == m_aAxisProperties.m_eLabelPos)
+        return (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
 
-    double fCrossesOtherAxis;
-    if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START == m_aAxisProperties.m_eLabelPos )
-        fCrossesOtherAxis = fMin;
-    else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == m_aAxisProperties.m_eLabelPos )
-        fCrossesOtherAxis = fMax;
-    else
-        fCrossesOtherAxis = getLogicValueWhereMainLineCrossesOtherAxis();
-    return fCrossesOtherAxis;
+    if (css::chart::ChartAxisLabelPosition_OUTSIDE_END == m_aAxisProperties.m_eLabelPos)
+        return (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
+
+    return getAxisIntersectionValue();
 }
 
 bool VCartesianAxis::getLogicValueWhereExtraLineCrossesOtherAxis( double& fCrossesOtherAxis ) const
@@ -1207,8 +1194,8 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
                 ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
                     LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
 
-            if( ( fDeltaY<0 && m_aScale.Orientation == AxisOrientation_REVERSE ) ||
-                ( fDeltaY>0 && m_aScale.Orientation == AxisOrientation_MATHEMATICAL ) )
+            if( ( fDeltaY<0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
+                ( fDeltaY>0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
                 m_aAxisProperties.m_aLabelAlignment =
                     ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_RIGHT ) ?
                         LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
@@ -1225,8 +1212,8 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
                 ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
                     LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
 
-            if( ( fDeltaY<0 && m_aScale.Orientation == AxisOrientation_REVERSE ) ||
-                ( fDeltaY>0 && m_aScale.Orientation == AxisOrientation_MATHEMATICAL ) )
+            if( ( fDeltaY<0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
+                ( fDeltaY>0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
                 m_aAxisProperties.m_aLabelAlignment =
                     ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_RIGHT ) ?
                         LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
@@ -1243,8 +1230,8 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
                 ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
                     LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
 
-            if( ( fDeltaX>0 && m_aScale.Orientation == AxisOrientation_REVERSE ) ||
-                ( fDeltaX<0 && m_aScale.Orientation == AxisOrientation_MATHEMATICAL ) )
+            if( ( fDeltaX>0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
+                ( fDeltaX<0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
                 m_aAxisProperties.m_aLabelAlignment =
                     ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_TOP ) ?
                         LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
@@ -1260,10 +1247,10 @@ TickFactory* VCartesianAxis::createTickFactory()
 TickFactory_2D* VCartesianAxis::createTickFactory2D()
 {
     B2DVector aStart, aEnd;
-    this->get2DAxisMainLine( aStart, aEnd, this->getLogicValueWhereMainLineCrossesOtherAxis() );
+    get2DAxisMainLine( aStart, aEnd, getAxisIntersectionValue() );
 
     B2DVector aLabelLineStart, aLabelLineEnd;
-    this->get2DAxisMainLine( aLabelLineStart, aLabelLineEnd, this->getLogicValueWhereLabelLineCrossesOtherAxis() );
+    get2DAxisMainLine( aLabelLineStart, aLabelLineEnd, getLabelLineIntersectionValue() );
 
     return new TickFactory_2D( m_aScale, m_aIncrement, aStart, aEnd, aLabelLineStart-aStart );
 }
@@ -1313,7 +1300,7 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
         return nRet;
 
     B2DVector aStart, aEnd;
-    this->get2DAxisMainLine( aStart, aEnd, this->getLogicValueWhereMainLineCrossesOtherAxis() );
+    this->get2DAxisMainLine( aStart, aEnd, getAxisIntersectionValue() );
 
     sal_Int32 nMaxHeight = static_cast<sal_Int32>(fabs(aEnd.getY()-aStart.getY()));
     sal_Int32 nMaxWidth = static_cast<sal_Int32>(fabs(aEnd.getX()-aStart.getX()));

@@ -86,15 +86,15 @@ struct AxisLabelProperties
 
 struct AxisProperties
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > m_xAxisModel;
+    css::uno::Reference<css::chart2::XAxis> m_xAxisModel;
 
     sal_Int32   m_nDimensionIndex;
     bool        m_bIsMainAxis;//not secondary axis
     bool        m_bSwapXAndY;
 
-    ::com::sun::star::chart::ChartAxisPosition      m_eCrossoverType;
-    ::com::sun::star::chart::ChartAxisLabelPosition m_eLabelPos;
-    ::com::sun::star::chart::ChartAxisMarkPosition  m_eTickmarkPos;
+    css::chart::ChartAxisPosition      m_eCrossoverType;
+    css::chart::ChartAxisLabelPosition m_eLabelPos;
+    css::chart::ChartAxisMarkPosition  m_eTickmarkPos;
 
     boost::optional<double> m_pfMainLinePositionAtOtherAxis;
     boost::optional<double> m_pfExrtaLinePositionAtOtherAxis;
@@ -125,9 +125,7 @@ struct AxisProperties
     sal_Int32                           m_nAxisType;//REALNUMBER, CATEGORY etc. type ::com::sun::star::chart2::AxisType
     bool                                m_bComplexCategories;
     ExplicitCategoriesProvider* m_pExplicitCategoriesProvider;/*no ownership here*/
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XTextualDataSequence >
-                                                    m_xAxisTextProvider; //for categories or series names
+    css::uno::Reference<css::chart2::data::XTextualDataSequence> m_xAxisTextProvider; //for categories or series names
     //<- category axes
 
     //methods:
