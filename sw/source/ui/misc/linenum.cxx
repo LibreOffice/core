@@ -46,7 +46,7 @@ static rtl::Reference<SwDocStyleSheet> lcl_getDocStyleSheet(const OUString& rNam
     return new SwDocStyleSheet(*(SwDocStyleSheet*)pStyle);
 }
 
-static void lcl_setLineNumbering(OUString rName, SwWrtShell* pSh, bool bLineNumber)
+static void lcl_setLineNumbering(const OUString& rName, SwWrtShell* pSh, bool bLineNumber)
 {
     rtl::Reference<SwDocStyleSheet> xStyleSheet = lcl_getDocStyleSheet(rName, pSh);
     if(!xStyleSheet.is())
