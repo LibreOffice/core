@@ -16993,11 +16993,11 @@
       <attribute name="bidi" tokenid="ooxml:CT_Language_bidi"/>
     </resource>
     <resource name="ST_CombineBrackets" resource="List">
-      <value tokenid="0">none</value>
-      <value tokenid="1">round</value>
-      <value tokenid="2">square</value>
-      <value tokenid="3">angle</value>
-      <value tokenid="4">curly</value>
+      <value tokenid="ooxml:Value_ST_CombineBrackets_none">none</value>
+      <value tokenid="ooxml:Value_ST_CombineBrackets_round">round</value>
+      <value tokenid="ooxml:Value_ST_CombineBrackets_square">square</value>
+      <value tokenid="ooxml:Value_ST_CombineBrackets_angle">angle</value>
+      <value tokenid="ooxml:Value_ST_CombineBrackets_curly">curly</value>
     </resource>
     <resource name="CT_EastAsianLayout" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_EastAsianLayout_id"/>

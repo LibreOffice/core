@@ -3831,8 +3831,27 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         RTFValue::Pointer_t pValue(new RTFValue(int(true)));
         m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_combine, pValue);
-        if (nParam > 0)
-            m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_combineBrackets, pIntValue);
+        nId = 0;
+        switch (nParam)
+        {
+        case 0:
+            nId = NS_ooxml::LN_Value_ST_CombineBrackets_none;
+            break;
+        case 1:
+            nId = NS_ooxml::LN_Value_ST_CombineBrackets_round;
+            break;
+        case 2:
+            nId = NS_ooxml::LN_Value_ST_CombineBrackets_square;
+            break;
+        case 3:
+            nId = NS_ooxml::LN_Value_ST_CombineBrackets_angle;
+            break;
+        case 4:
+            nId = NS_ooxml::LN_Value_ST_CombineBrackets_curly;
+            break;
+        }
+        if (nId > 0)
+            m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_combineBrackets, RTFValue::Pointer_t(new RTFValue(nId)));
     }
     break;
     case RTF_SL:
