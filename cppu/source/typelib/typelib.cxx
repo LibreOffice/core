@@ -2281,7 +2281,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
             {
                 // detruction of this type in progress (another thread!)
                 // no acces through this weak reference
-                osl_atomic_decrement( &(*aIt).second->nRefCount );
+                (void)osl_atomic_decrement( &(*aIt).second->nRefCount );
             }
         }
     }
