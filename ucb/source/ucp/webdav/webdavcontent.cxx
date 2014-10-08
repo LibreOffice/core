@@ -2340,7 +2340,7 @@ void Content::post(
 
 void Content::queryChildren( ContentRefList& rChildren )
 {
-    // Obtain a list with a snapshot of all currently instanciated contents
+    // Obtain a list with a snapshot of all currently instantiated contents
     // from provider and extract the contents which are direct children
     // of this content.
 
@@ -2881,7 +2881,7 @@ void Content::destroy( bool bDeletePhysical )
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    // Process instanciated children...
+    // Process instantiated children...
 
     ::http_dav_ucp::Content::ContentRefList aChildren;
     queryChildren( aChildren );
@@ -3018,7 +3018,7 @@ bool Content::exchangeIdentity(
         aGuard.clear();
         if ( exchange( xNewId ) )
         {
-            // Process instanciated children...
+            // Process instantiated children...
 
             ContentRefList aChildren;
             queryChildren( aChildren );

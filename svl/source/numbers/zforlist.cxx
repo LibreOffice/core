@@ -3661,7 +3661,7 @@ bool SvNumberFormatter::IsLocaleInstalled( LanguageType eLang )
 {
     // The set is initialized as a side effect of the currency table
     // created, make sure that exists, which usually is the case unless a
-    // SvNumberFormatter was never instanciated.
+    // SvNumberFormatter was never instantiated.
     GetTheCurrencyTable();
     const NfInstalledLocales &rInstalledLocales = theInstalledLocales::get();
     return rInstalledLocales.find( eLang) != rInstalledLocales.end();

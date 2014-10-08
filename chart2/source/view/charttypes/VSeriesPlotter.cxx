@@ -44,7 +44,7 @@
 #include "DiagramHelper.hxx"
 #include "defines.hxx"
 
-//only for creation: @todo remove if all plotter are uno components and instanciated via servicefactory
+//only for creation: @todo remove if all plotter are uno components and instantiated via servicefactory
 #include "BarChart.hxx"
 #include "PieChart.hxx"
 #include "AreaChart.hxx"

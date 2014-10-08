@@ -138,7 +138,7 @@ public:
         is something like org.libreoffice.calc, this modifies the names to
         "LibreOffice"+pName and "org.libreoffice.calc"+pName to make tests not
         interfere with the real world. This is not to be used otherwise. If
-        used it must be called before the first TeleManager is instanciated and
+        used it must be called before the first TeleManager is instantiated and
         connects.
      */
     // exported for unit test

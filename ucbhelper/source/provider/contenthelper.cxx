@@ -806,7 +806,7 @@ void ContentImplHelper::inserted()
     // Content is not yet registered at provider.
     m_xProvider->registerNewContent( this );
 
-    // If the parent content is currently not instanciated, there can be
+    // If the parent content is currently not instantiated, there can be
     // no listeners interested in changes ;-)
 
     rtl::Reference< ContentImplHelper > xParent

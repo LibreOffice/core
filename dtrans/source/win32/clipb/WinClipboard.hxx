@@ -44,7 +44,7 @@ class CWinClipbImpl;
 // and a static member to reasocciate from this static function to the
 // class instance
 // watch out: we are using only one static member variable and not a list
-// because we assume to be instanciated only once
+// because we assume to be instantiated only once
 // this will be asured by an OneInstanceFactory of the service and not
 // by this class!
 

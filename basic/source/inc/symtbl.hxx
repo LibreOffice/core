@@ -177,7 +177,7 @@ class SbiProcDef : public SbiSymDef {   // procedure definition (from basic):
     OUString maPropName;              // Property name if property procedure (!= proc name)
     bool   bCdecl  : 1;             // true: CDECL given
     bool   bPublic : 1;             // true: proc is PUBLIC
-    bool   mbProcDecl : 1;          // true: instanciated by SbiParser::ProcDecl
+    bool   mbProcDecl : 1;          // true: instantiated by SbiParser::ProcDecl
 public:
     SbiProcDef( SbiParser*, const OUString&, bool bProcDecl=false );
     virtual ~SbiProcDef();

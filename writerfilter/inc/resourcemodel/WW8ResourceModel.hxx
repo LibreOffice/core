@@ -35,7 +35,7 @@
    @image html doctok.png
 
    A resource is a set of events that describe an object. A resource
-   is only an abstract concept. It is not instanciated to a class.
+   is only an abstract concept. It is not instantiated to a class.
 
    A reference to a resource represents the object that the resource
    describes. The reference can be resolved thereby generating the

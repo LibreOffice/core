@@ -451,7 +451,7 @@ private:
     /** @short  tries to use FrameLoader objects for loading.
 
         @descr  First the target frame will be located. If it could be found
-                or new created a filter/frame loader will be instanciated and
+                or new created a filter/frame loader will be instantiated and
                 used to load the content into this frame.
                 In case loading failed all new created resources will be
                 removed before a suitable exception is thrown.

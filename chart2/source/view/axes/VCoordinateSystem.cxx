@@ -56,7 +56,7 @@ VCoordinateSystem* VCoordinateSystem::createCoordinateSystem(
 
     OUString aViewServiceName = xCooSysModel->getViewServiceName();
 
-    //@todo: in future the coordinatesystems should be instanciated via service factory
+    //@todo: in future the coordinatesystems should be instantiated via service factory
     VCoordinateSystem* pRet=NULL;
     if( aViewServiceName.equals( CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME ) )
         pRet = new VCartesianCoordinateSystem(xCooSysModel);

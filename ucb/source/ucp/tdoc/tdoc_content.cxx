@@ -770,7 +770,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     if ( !m_aProps.getIsFolder() )
         return;
 
-    // Obtain a list with a snapshot of all currently instanciated contents
+    // Obtain a list with a snapshot of all currently instantiated contents
     // from provider and extract the contents which are direct children
     // of this content.
 
@@ -856,7 +856,7 @@ bool Content::exchangeIdentity(
         {
             if ( eType == FOLDER )
             {
-                // Process instanciated children...
+                // Process instantiated children...
 
                 ContentRefList aChildren;
                 queryChildren( aChildren );
@@ -1789,7 +1789,7 @@ void Content::destroy( bool bDeletePhysical,
 
     if ( eType == FOLDER )
     {
-        // Process instanciated children...
+        // Process instantiated children...
 
         ContentRefList aChildren;
         queryChildren( aChildren );

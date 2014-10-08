@@ -215,7 +215,7 @@ void XclExpRoot::InitializeGlobals()
             ScDocument& rDoc = GetDoc();
             // Pass the model factory to OpCodeProvider, not the process
             // service factory, otherwise a FormulaOpCodeMapperObj would be
-            // instanciated intead of a ScFormulaOpCodeMapperObj and the
+            // instantiated intead of a ScFormulaOpCodeMapperObj and the
             // ScCompiler virtuals not be called! Which would be the case with
             // the current (2013-01-24) rDoc.GetServiceManager()
             const SfxObjectShell* pShell = rDoc.GetDocumentShell();

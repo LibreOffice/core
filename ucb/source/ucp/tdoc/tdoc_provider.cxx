@@ -287,7 +287,7 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
     if ( xRoot.is() )
     {
         // No document content found for rDocId but root content
-        // instanciated. Root content must announce document removal
+        // instantiated. Root content must announce document removal
         // to content event listeners.
         xRoot->notifyChildRemoved( rDocId );
     }
@@ -305,7 +305,7 @@ void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
     ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
     ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
 
-    // Find root content. If instanciated let it propagate document insertion.
+    // Find root content. If instantiated let it propagate document insertion.
 
     while ( it != end )
     {

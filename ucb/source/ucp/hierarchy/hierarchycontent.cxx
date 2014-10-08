@@ -785,7 +785,7 @@ void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
     if ( ( m_eKind != FOLDER ) && ( m_eKind != ROOT ) )
         return;
 
-    // Obtain a list with a snapshot of all currently instanciated contents
+    // Obtain a list with a snapshot of all currently instantiated contents
     // from provider and extract the contents which are direct children
     // of this content.
 
@@ -870,7 +870,7 @@ bool HierarchyContent::exchangeIdentity(
         {
             if ( m_eKind == FOLDER )
             {
-                // Process instanciated children...
+                // Process instantiated children...
 
                 HierarchyContentRefList aChildren;
                 queryChildren( aChildren );
@@ -1564,7 +1564,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
 
     if ( m_eKind == FOLDER )
     {
-        // Process instanciated children...
+        // Process instantiated children...
 
         HierarchyContentRefList aChildren;
         queryChildren( aChildren );

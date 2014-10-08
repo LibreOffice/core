@@ -1785,7 +1785,7 @@ void Content::destroy(
 
     if ( isFolder() )
     {
-        // Process instanciated children...
+        // Process instantiated children...
 
         ContentRefList aChildren;
         queryChildren( aChildren );
@@ -2123,7 +2123,7 @@ bool Content::exchangeIdentity(
             m_aUri = aNewUri;
             if ( isFolder() )
             {
-                // Process instanciated children...
+                // Process instantiated children...
 
                 ContentRefList aChildren;
                 queryChildren( aChildren );
@@ -2165,7 +2165,7 @@ bool Content::exchangeIdentity(
 
 void Content::queryChildren( ContentRefList& rChildren )
 {
-    // Obtain a list with a snapshot of all currently instanciated contents
+    // Obtain a list with a snapshot of all currently instantiated contents
     // from provider and extract the contents which are direct children
     // of this content.
 

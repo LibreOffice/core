@@ -317,7 +317,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
         PropertySetMap_Impl::const_iterator it = rSets.find( key );
         if ( it != rSets.end() )
         {
-            // Already instanciated.
+            // Already instantiated.
             return Reference< XPersistentPropertySet >( (*it).second );
         }
         else
