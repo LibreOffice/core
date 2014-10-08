@@ -2608,18 +2608,16 @@ void ScChart2DataSequence::BuildDataCache()
                                 continue;
                         }
 
-                        m_aDataArray.push_back(Item());
-                        Item& rItem = m_aDataArray.back();
-                        ++nDataCount;
+                        Item aItem;
 
                         ScAddress aAdr(nCol, nRow, nTab);
-                        rItem.maString = m_pDocument->GetString(aAdr);
+                        aItem.maString = m_pDocument->GetString(aAdr);
 
                         switch (m_pDocument->GetCellType(aAdr))
                         {
                             case CELLTYPE_VALUE:
-                                rItem.mfValue = m_pDocument->GetValue(aAdr);
-                                rItem.mbIsValue = true;
+                                aItem.mfValue = m_pDocument->GetValue(aAdr);
+                                aItem.mbIsValue = true;
                             break;
                             case CELLTYPE_FORMULA:
                             {
@@ -2632,8 +2630,8 @@ void ScChart2DataSequence::BuildDataCache()
 
                                 if (pFCell->IsValue())
                                 {
-                                    rItem.mfValue = pFCell->GetValue();
-                                    rItem.mbIsValue = true;
+                                    aItem.mfValue = pFCell->GetValue();
+                                    aItem.mbIsValue = true;
                                 }
                             }
                             break;
@@ -2643,6 +2641,9 @@ void ScChart2DataSequence::BuildDataCache()
                             default:
                                 ; // do nothing
                         }
+
+                        m_aDataArray.push_back(aItem);
+                        ++nDataCount;
                     }
                 }
             }
@@ -2714,17 +2715,15 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
             {
                 if (pMat->IsValue(nC, nR) || pMat->IsBoolean(nC, nR))
                 {
-                    m_aDataArray.push_back(Item());
-                    Item& rItem = m_aDataArray.back();
-                    ++nDataCount;
+                    Item aItem;
 
-                    rItem.mbIsValue = true;
-                    rItem.mfValue = pMat->GetDouble(nC, nR);
+                    aItem.mbIsValue = true;
+                    aItem.mfValue = pMat->GetDouble(nC, nR);
 
                     SvNumberFormatter* pFormatter = m_pDocument->GetFormatTable();
                     if (pFormatter)
                     {
-                        const double fVal = rItem.mfValue;
+                        const double fVal = aItem.mfValue;
                         Color* pColor = NULL;
                         sal_uInt32 nFmt = 0;
                         if (pTable)
@@ -2734,17 +2733,21 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                             SCROW nRow = aRange.aStart.Row() + static_cast<SCROW>(nR);
                             pTable->getCell(nCol, nRow, &nFmt);
                         }
-                        pFormatter->GetOutputString(fVal, nFmt, rItem.maString, &pColor);
+                        pFormatter->GetOutputString(fVal, nFmt, aItem.maString, &pColor);
                     }
+
+                    m_aDataArray.push_back(aItem);
+                    ++nDataCount;
                 }
                 else if (pMat->IsString(nC, nR))
                 {
-                    m_aDataArray.push_back(Item());
-                    Item& rItem = m_aDataArray.back();
-                    ++nDataCount;
+                    Item aItem;
 
-                    rItem.mbIsValue = false;
-                    rItem.maString = pMat->GetString(nC, nR).getString();
+                    aItem.mbIsValue = false;
+                    aItem.maString = pMat->GetString(nC, nR).getString();
+
+                    m_aDataArray.push_back(Item());
+                    ++nDataCount;
                 }
             }
         }
