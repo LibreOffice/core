@@ -35,19 +35,19 @@ namespace basegfx
                                         const OUString& rStr,
                                         const sal_Int32         nLen);
 
-        inline bool lcl_isOnNumberChar(const sal_Unicode aChar, bool bSignAllowed = true)
+        inline bool lcl_isOnNumberChar(const sal_Unicode aChar, bool bSignAllowed = true, bool bDotAllowed = true)
         {
             const bool bPredicate( (sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
                                     || (bSignAllowed && sal_Unicode('+') == aChar)
-                                    || (bSignAllowed && sal_Unicode('-') == aChar) );
+                                    || (bSignAllowed && sal_Unicode('-') == aChar)
+                                    || (bDotAllowed && sal_Unicode('.') == aChar));
 
             return bPredicate;
         }
 
-        inline bool lcl_isOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
+        inline bool lcl_isOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true, bool bDotAllowed = true)
         {
-            return lcl_isOnNumberChar(rStr[nPos],
-                                        bSignAllowed);
+            return lcl_isOnNumberChar(rStr[nPos], bSignAllowed, bDotAllowed);
         }
 
         bool lcl_getDoubleChar(double&                  o_fRetval,

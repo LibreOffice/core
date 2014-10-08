@@ -46,35 +46,50 @@ namespace basegfx
             }
         }
 
-        bool lcl_getDoubleChar(double&                  o_fRetval,
-                                sal_Int32&              io_rPos,
-                                const OUString&  rStr)
+        bool lcl_getDoubleChar(double& o_fRetval, sal_Int32& io_rPos, const OUString& rStr)
         {
             sal_Unicode aChar( rStr[io_rPos] );
             OUStringBuffer sNumberString;
-            bool separator_seen=false;
 
+            // sign
             if('+' == aChar || '-' == aChar)
             {
                 sNumberString.append(rStr[io_rPos]);
                 aChar = rStr[++io_rPos];
             }
 
-            while(('0' <= aChar && '9' >= aChar)
-                     || (!separator_seen && '.' == aChar))
+            // numbers before point
+            while('0' <= aChar && '9' >= aChar)
             {
-                if ('.' == aChar) separator_seen = true;
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
             }
 
+            // point
+            if('.' == aChar)
+            {
+                sNumberString.append(rStr[io_rPos]);
+                io_rPos++;
+                aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+            }
+
+            // numbers after point
+            while ('0' <= aChar && '9' >= aChar)
+            {
+                sNumberString.append(rStr[io_rPos]);
+                io_rPos++;
+                aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+            }
+
+            // 'e'
             if('e' == aChar || 'E' == aChar)
             {
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
 
+                // sign for 'e'
                 if('+' == aChar || '-' == aChar)
                 {
                     sNumberString.append(rStr[io_rPos]);
@@ -82,6 +97,7 @@ namespace basegfx
                     aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
                 }
 
+                // number for 'e'
                 while('0' <= aChar && '9' >= aChar)
                 {
                     sNumberString.append(rStr[io_rPos]);
@@ -153,7 +169,7 @@ namespace basegfx
             const sal_Int32 aLen( rStr.getLength() );
             if(aLen)
             {
-                if( lcl_isOnNumberChar(rStr[aLen - 1], false) &&
+                if( lcl_isOnNumberChar(rStr[aLen - 1], false, true) &&
                     fValue >= 0.0 )
                 {
                     rStr.append( ' ' );
