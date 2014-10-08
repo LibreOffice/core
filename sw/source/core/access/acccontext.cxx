@@ -124,7 +124,7 @@ const SwCrsrShell* SwAccessibleContext::GetCrsrShell() const
     return pCrsrShell;
 }
 
-enum Action { NONE, SCROLLED, SCROLLED_WITHIN,
+enum class Action { NONE, SCROLLED, SCROLLED_WITHIN,
                           SCROLLED_IN, SCROLLED_OUT };
 
 void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
@@ -141,23 +141,23 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
         const SwRect aBox( rLower.GetBox( *(GetMap()) ) );
         if( rLower.IsAccessible( GetShell()->IsPreview() ) )
         {
-            Action eAction = NONE;
+            Action eAction = Action::NONE;
             if( aBox.IsOver( rNewVisArea ) )
             {
                 if( aBox.IsOver( rOldVisArea ) )
                 {
-                    eAction = SCROLLED_WITHIN;
+                    eAction = Action::SCROLLED_WITHIN;
                 }
                 else
                 {
                     if ( bVisibleChildrenOnly &&
                          !rLower.AlwaysIncludeAsChild() )
                     {
-                        eAction = SCROLLED_IN;
+                        eAction = Action::SCROLLED_IN;
                     }
                     else
                     {
-                        eAction = SCROLLED;
+                        eAction = Action::SCROLLED;
                     }
                 }
             }
@@ -166,11 +166,11 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                 if ( bVisibleChildrenOnly &&
                      !rLower.AlwaysIncludeAsChild() )
                 {
-                    eAction = SCROLLED_OUT;
+                    eAction = Action::SCROLLED_OUT;
                 }
                 else
                 {
-                    eAction = SCROLLED;
+                    eAction = Action::SCROLLED;
                 }
             }
             else if( !bVisibleChildrenOnly ||
@@ -178,9 +178,9 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
             {
                 // This wouldn't be required if the SwAccessibleFrame,
                 // wouldn't know about the visible area.
-                eAction = SCROLLED;
+                eAction = Action::SCROLLED;
             }
-            if( NONE != eAction )
+            if( Action::NONE != eAction )
             {
                 if ( rLower.GetSwFrm() )
                 {
@@ -193,19 +193,19 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                     {
                         switch( eAction )
                         {
-                        case SCROLLED:
+                        case Action::SCROLLED:
                             xAccImpl->Scrolled( rOldVisArea );
                             break;
-                        case SCROLLED_WITHIN:
+                        case Action::SCROLLED_WITHIN:
                             xAccImpl->ScrolledWithin( rOldVisArea );
                             break;
-                        case SCROLLED_IN:
+                        case Action::SCROLLED_IN:
                             xAccImpl->ScrolledIn();
                             break;
-                        case SCROLLED_OUT:
+                        case Action::SCROLLED_OUT:
                             xAccImpl->ScrolledOut( rOldVisArea );
                             break;
-                        case NONE:
+                        case Action::NONE:
                             break;
                         }
                     }
@@ -226,24 +226,24 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                     {
                         switch( eAction )
                         {
-                        case SCROLLED:
-                        case SCROLLED_WITHIN:
+                        case Action::SCROLLED:
+                        case Action::SCROLLED_WITHIN:
                             xAccImpl->ViewForwarderChanged(
                                 ::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
                                 GetMap() );
                             break;
-                        case SCROLLED_IN:
+                        case Action::SCROLLED_IN:
                             ScrolledInShape( rLower.GetDrawObject(),
                                              xAccImpl.get() );
                             break;
-                        case SCROLLED_OUT:
+                        case Action::SCROLLED_OUT:
                             {
                                 xAccImpl->ViewForwarderChanged(
                                     ::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
                                     GetMap() );
                             }
                             break;
-                        case NONE:
+                        case Action::NONE:
                             break;
                         }
                     }
