@@ -37,7 +37,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
