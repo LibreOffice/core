@@ -52,11 +52,11 @@ public class OfficeSettings extends SystemOption {
             SVersionRCFile sversion = SVersionRCFile.createInstance();
 
             try {
-                Enumeration enum = sversion.getVersions();
+                Enumeration enumeration = sversion.getVersions();
                 OfficeInstallation oi;
 
-                while (enum.hasMoreElements()) {
-                    oi = (OfficeInstallation)enum.nextElement();
+                while (enumeration.hasMoreElements()) {
+                    oi = (OfficeInstallation)enumeration.nextElement();
                     setOfficeDirectory(oi);
                     return;
                 }
