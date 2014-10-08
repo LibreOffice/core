@@ -236,7 +236,7 @@ public class _XAccessibleText {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             System.out.println("Expected exception");
             res &= true;
-        } catch(com.sun.star.beans.UnknownPropertyException e) {
+        } catch(UnknownPropertyException e) {
             System.out.println("unexpected exception => FAILED");
             res &= false;
         }
@@ -249,7 +249,7 @@ public class _XAccessibleText {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             System.out.println("Expected exception");
             res &= true;
-        } catch(com.sun.star.beans.UnknownPropertyException e) {
+        } catch(UnknownPropertyException e) {
             System.out.println("unexpected exception => FAILED");
             res &= false;
         }
@@ -264,7 +264,7 @@ public class _XAccessibleText {
             System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
-        } catch(com.sun.star.beans.UnknownPropertyException e) {
+        } catch(UnknownPropertyException e) {
             System.out.println("unexpected exception => FAILED");
             res &= false;
         }
