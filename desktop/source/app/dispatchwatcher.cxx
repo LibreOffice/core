@@ -562,9 +562,12 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             {
                                 xStorable->storeToURL( aOutFile, conversionProperties );
                             }
-                            catch (const Exception&)
+                            catch (const Exception& rException)
                             {
-                                fprintf( stderr, "Error: Please reverify input parameters...\n" );
+                                std::cerr << "Error: Please reverify input parameters...";
+                                if (!rException.Message.isEmpty())
+                                    std::cerr << " (" << rException.Message << ")";
+                                std::cerr << std::endl;
                             }
 
                             if( aDispatchRequest.aRequestType == REQUEST_CAT )
