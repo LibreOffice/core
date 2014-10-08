@@ -576,6 +576,7 @@ protected:
         sal_Int32 nHandle,
         const ::com::sun::star::uno::Any& rValue )
         throw (css::lang::IllegalArgumentException,
+               css::beans::UnknownPropertyException,
                css::uno::RuntimeException, std::exception) = 0;
 
     /** The same as setFastProperyValue; nHandle is always valid.

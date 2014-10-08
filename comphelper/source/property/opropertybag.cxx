@@ -298,12 +298,10 @@ namespace comphelper
         m_aDynamicProperties.getFastPropertyValue( _nHandle, _rValue );
     }
 
-
-    sal_Bool SAL_CALL OPropertyBag::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
+    sal_Bool SAL_CALL OPropertyBag::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException, UnknownPropertyException)
     {
         return m_aDynamicProperties.convertFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
     }
-
 
     void SAL_CALL OPropertyBag::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
     {
