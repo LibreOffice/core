@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
+import java.util.HashMap;
 
 import com.sun.star.script.framework.container.ScriptEntry;
 import com.sun.star.script.framework.container.ParcelDescriptor;
