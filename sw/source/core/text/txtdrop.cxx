@@ -796,15 +796,12 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                                             nIdx, pCurrPart->GetLen() ) &&
                                         ! aRect.IsEmpty();
                     }
-                    if ( bHaveGlyphRect )
+                    if (!bHaveGlyphRect)
                     {
-                        FontMetric aWinMet( pWin->GetFontMetric() );
-                        nAscent = (sal_uInt16) aWinMet.GetAscent();
-                    }
-                    else
-                    // We do not have a window or our window could not
-                    // give us glyph boundaries.
+                        // We do not have a window or our window could not
+                        // give us glyph boundaries.
                         aRect = Rectangle( Point( 0, 0 ), Size( 0, nAscent ) );
+                    }
                 }
 
                 // Now we (hopefully) have a bounding rectangle for the
