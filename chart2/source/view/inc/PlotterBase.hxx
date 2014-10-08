@@ -82,7 +82,7 @@ protected: //member
     AbstractShapeFactory* m_pShapeFactory;
     OUString   m_aCID;
 
-    sal_Int32                                           m_nDimension;
+    const sal_Int32 m_nDimension;
     // needs to be created and deleted by the derived class
     PlottingPositionHelper*                             m_pPosHelper;
 };
