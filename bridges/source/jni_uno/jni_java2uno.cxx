@@ -369,7 +369,6 @@ SAL_JNI_EXPORT jobject
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle, jstring jo_method,
     jobjectArray jo_args /* may be 0 */ )
-    SAL_THROW_EXTERN_C()
 {
     Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );
     JNI_info const * jni_info = bridge->m_jni_info;
@@ -617,7 +616,6 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
 SAL_JNI_EXPORT void
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle )
-    SAL_THROW_EXTERN_C()
 {
     Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );
     JNI_info const * jni_info = bridge->m_jni_info;
