@@ -424,6 +424,17 @@ DECLARE_OOXMLEXPORT_TEST(testMultiPageToc, "multi-page-toc.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(getRun(getParagraphOfText(1, xHeaderText), 1), "TextPortionType"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTextboxTable, "textbox-table.docx")
+{
+    // We wrote not-well-formed XML during export for this one:
+    // Shape with textbox, having a table and also anchored inside a table.
+
+    // Just make sure that we have both tables.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

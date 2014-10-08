@@ -106,6 +106,22 @@ struct PageMargins
 };
 
 /**
+ * All the information that should be stashed away when we're in the middle of
+ * of a table export and still have to do something else, e.g. export a shape.
+ */
+class DocxTableExportContext
+{
+    ww8::WW8TableInfo::Pointer_t m_pTableInfo;
+    bool m_bTableCellOpen;
+    sal_uInt32 m_nTableDepth;
+public:
+    /// Stores the passed parameters and resets them to their default value.
+    DocxTableExportContext(ww8::WW8TableInfo::Pointer_t& pTableInfo, bool& bTableCellOpen, sal_uInt32& nTableDepth);
+    /// Restores the remembered state.
+    void restore(ww8::WW8TableInfo::Pointer_t& pTableInfo, bool& bTableCellOpen, sal_uInt32& nTableDepth);
+};
+
+/**
  * A structure that holds flags for the table export.
  */
 struct TableReference

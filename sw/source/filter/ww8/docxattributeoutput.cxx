@@ -5090,20 +5090,47 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
 }
 
+DocxTableExportContext::DocxTableExportContext(ww8::WW8TableInfo::Pointer_t& pTableInfo, bool& bTableCellOpen, sal_uInt32& nTableDepth)
+{
+    m_pTableInfo = pTableInfo;
+    pTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+
+    m_bTableCellOpen = bTableCellOpen;
+    bTableCellOpen = false;
+
+    m_nTableDepth = nTableDepth;
+    nTableDepth = 0;
+}
+
+void DocxTableExportContext::restore(ww8::WW8TableInfo::Pointer_t& pTableInfo, bool& bTableCellOpen, sal_uInt32& nTableDepth)
+{
+    pTableInfo = m_pTableInfo;
+    bTableCellOpen = m_bTableCellOpen;
+    nTableDepth = m_nTableDepth;
+}
+
 void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
 {
+    DocxTableExportContext aTableExportContext(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+
     SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetCntntAnchor();
     sw::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
+
+    aTableExportContext.restore(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
 }
 
 void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape)
 {
+    DocxTableExportContext aTableExportContext(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+
     SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetCntntAnchor();
     sw::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
+
+    aTableExportContext.restore(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
 }
 
 oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
