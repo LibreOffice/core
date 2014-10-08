@@ -45,6 +45,8 @@ public:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
+
+    std::vector<Bitmap*>maBitmaps;
 };
 
 MyWorkWindow::MyWorkWindow( const char *kind, vcl::Window* pParent, WinBits nWinStyle ) :
@@ -251,8 +253,6 @@ void IconTestApp::DoItWithOpenGL(std::vector<OUString>& aImageFiles)
 
         pWindow->SetText(OUString("OpenGL Image Test"));
 
-        Point aPos(10, 10);
-
         for (std::vector<OUString>::const_iterator i = aImageFiles.cbegin(); i != aImageFiles.end(); ++i)
         {
             SvFileStream aFileStream( *i, STREAM_READ );
@@ -261,16 +261,7 @@ void IconTestApp::DoItWithOpenGL(std::vector<OUString>& aImageFiles)
             if (aGraphicFilter.ImportGraphic(aGraphic, *i, aFileStream) != 0)
                 continue;
             SAL_INFO("vcl.icontest", *i << ": size: " << aGraphic.GetSizeBytes() << "B, " << aGraphic.GetSizePixel());
-            Size aSize( 100, 100 );
-            // Bitmap *pBitmap = new Bitmap( aGraphic.GetBitmap( ) );
-
-
-            aPos.Move( aSize.Width() + 10, 0);
-            if ( aPos.X() > 800 )
-            {
-                aPos.setX( 10 );
-                aPos.setY( aPos.Y() + aSize.Height() + 10 );
-            }
+            pWindow->maBitmaps.push_back(new Bitmap( aGraphic.GetBitmap( ) ) );
         }
 
         pWindow->Hide();
