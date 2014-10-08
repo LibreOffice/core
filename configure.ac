@@ -9194,7 +9194,7 @@ dnl ===================================================================
 dnl Check for building gnutls
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use gnutls])
-if test "$WITH_WEBDAV" = "neon" && test "$enable_openssl" = "no"; then
+if test "$WITH_WEBDAV" = "neon" -a "$with_system_neon" = no -a "$enable_openssl" = "no"; then
     AC_MSG_RESULT([yes])
     AM_PATH_LIBGCRYPT()
     PKG_CHECK_MODULES(GNUTLS, [gnutls],,
