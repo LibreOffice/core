@@ -115,7 +115,7 @@ Calendar_hijri::NewMoon(sal_Int32 n)
 {
     double jd, t, t2, t3, k, ma, sa, tf, xtra;
     k = n;
-    t = k/1236.85;  // tools::Time in Julian centuries from 1900 January 0.5
+    t = k/1236.85;  // Time in Julian centuries from 1900 January 0.5
     t2 = t * t;
     t3 = t2 * t;
 
@@ -160,7 +160,7 @@ Calendar_hijri::NewMoon(sal_Int32 n)
         + 0.0010 * sin(tf - ma)
         + 0.0005 * sin(sa + 2 * ma);
 
-    // convert from Ephemeris tools::Time (ET) to (approximate) Universal tools::Time (UT)
+    // convert from Ephemeris Time (ET) to (approximate) Universal Time (UT)
     jd += xtra - (0.41 + 1.2053 * t + 0.4992 * t2)/1440;
 
     return (jd);
