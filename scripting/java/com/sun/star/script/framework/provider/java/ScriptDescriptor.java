@@ -87,7 +87,7 @@ public class ScriptDescriptor {
         StringTokenizer stk = new StringTokenizer(classpath, ":");
 
         while (stk.hasMoreElements()) {
-            this.m_classpath.add((String) stk.nextElement());
+            this.m_classpath.add(stk.nextToken());
         }
     }
 
