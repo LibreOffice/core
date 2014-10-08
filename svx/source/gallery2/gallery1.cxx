@@ -17,6 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
+#if defined(MACOSX) && defined(HAVE_FEATURE_READONLY_INSTALLSET)
+#define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
+#include <premac.h>
+#include <Foundation/Foundation.h>
+#include <postmac.h>
+#endif
+
 #include "sal/config.h"
 
 #include <comphelper/processfactory.hxx>
@@ -236,6 +245,15 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
 
         uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
 
+#if defined(MACOSX) && defined(HAVE_FEATURE_READONLY_INSTALLSET)
+        if( rBaseURL.GetProtocol() == INET_PROT_FILE )
+        {
+            const char *appBundle = [[[NSBundle mainBundle] bundlePath] UTF8String];
+            OUString path = rBaseURL.GetURLPath();
+            if( path.startsWith( OUString( appBundle, strlen( appBundle ), RTL_TEXTENCODING_UTF8 ) + "/" ) )
+                rbDirIsReadOnly = true;
+        }
+#else
         try
         {
             // check readonlyness the very hard way
@@ -267,7 +285,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
         catch( const uno::Exception& )
         {
         }
-
+#endif
         if( xResultSet.is() )
         {
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );

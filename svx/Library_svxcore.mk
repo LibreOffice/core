@@ -90,6 +90,18 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	glew \
 ))
 
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Library_add_cxxflags,svxcore,\
+    $(gb_OBJCXXFLAGS) \
+))
+
+$(eval $(call gb_Library_use_system_darwin_frameworks,svxcore,\
+	Foundation \
+))
+
+endif
+
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/core/coreservices \
     svx/source/core/extedit \
