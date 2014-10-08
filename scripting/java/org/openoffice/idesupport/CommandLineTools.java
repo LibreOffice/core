@@ -193,16 +193,11 @@ public class CommandLineTools {
             }
 
             if (tokenizer.hasMoreTokens()) {
-                String ext = (String)tokenizer.nextToken();
+                String ext = tokenizer.nextToken();
                 String[] extensions;
 
                 if (ext.indexOf(File.pathSeparator) != -1) {
-                    tokenizer = new StringTokenizer(ext, File.pathSeparator);
-                    extensions = new String[tokenizer.countTokens()];
-                    int i = 0;
-
-                    while (tokenizer.hasMoreTokens())
-                        extensions[i++] = (String)tokenizer.nextToken();
+                    extensions = ext.split(File.pathSeparator);
                 } else {
                     extensions = new String[1];
                     extensions[0] = ext;
