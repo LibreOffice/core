@@ -63,7 +63,6 @@
 #include <unistd.h>
 #include <errno.h>
 #endif
-#include <vcl/timer.hxx>
 
 #include <sfx2/sfxresid.hxx>
 
@@ -182,22 +181,6 @@ bool LoadModule()
 }
 
 }
-
-class IdleTerminate : Timer
-{
-    ::com::sun::star::uno::Reference< XDesktop2 > m_xDesktop;
-public:
-    IdleTerminate (::com::sun::star::uno::Reference< XDesktop2 > xDesktop)
-    {
-        m_xDesktop = xDesktop;
-        Start();
-    }
-    virtual void Timeout() SAL_OVERRIDE
-    {
-        m_xDesktop->terminate();
-        delete this;
-    }
-};
 
 void ShutdownIcon::initSystray()
 {
@@ -564,7 +547,7 @@ void ShutdownIcon::terminateDesktop()
     // terminate desktop only if no tasks exist
     ::com::sun::star::uno::Reference< XIndexAccess > xTasks ( xDesktop->getFrames(), UNO_QUERY );
     if( xTasks.is() && xTasks->getCount() < 1 )
-        new IdleTerminate( xDesktop );
+        Application::Quit();
 
     // remove the instance pointer
     ShutdownIcon::pShutdownIcon = 0;
