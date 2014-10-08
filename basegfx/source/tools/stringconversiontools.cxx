@@ -51,37 +51,53 @@ namespace basegfx
             }
         }
 
-        bool lcl_getDoubleChar(double&                  o_fRetval,
-                                sal_Int32&              io_rPos,
-                                const ::rtl::OUString&  rStr)
+        bool lcl_getDoubleChar(double& o_fRetval, sal_Int32& io_rPos, const ::rtl::OUString& rStr)
         {
             sal_Unicode aChar( rStr[io_rPos] );
             ::rtl::OUStringBuffer sNumberString;
 
+            // sign
             if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
             {
                 sNumberString.append(rStr[io_rPos]);
                 aChar = rStr[++io_rPos];
             }
 
-            while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                    || sal_Unicode('.') == aChar)
+            // numbers before point
+            while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
             {
                 sNumberString.append(rStr[io_rPos]);
                 aChar = rStr[++io_rPos];
             }
 
+            // point
+            if(sal_Unicode('.') == aChar)
+            {
+                sNumberString.append(rStr[io_rPos]);
+                aChar = rStr[++io_rPos];
+            }
+
+            // numbers after point
+            while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
+            {
+                sNumberString.append(rStr[io_rPos]);
+                aChar = rStr[++io_rPos];
+            }
+
+            // 'e'
             if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
             {
                 sNumberString.append(rStr[io_rPos]);
                 aChar = rStr[++io_rPos];
 
+                // sign for 'e'
                 if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
                 {
                     sNumberString.append(rStr[io_rPos]);
                     aChar = rStr[++io_rPos];
                 }
 
+                // number for 'e'
                 while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
                 {
                     sNumberString.append(rStr[io_rPos]);
@@ -153,34 +169,53 @@ namespace basegfx
         {
             bool bSignAllowed(true);
 
-            while(io_rPos < nLen && lcl_isOnNumberChar(rStr, io_rPos, bSignAllowed))
+            while(io_rPos < nLen && lcl_isOnNumberChar(rStr, io_rPos, bSignAllowed, true))
             {
                 bSignAllowed = false;
                 ++io_rPos;
             }
         }
 
-        void lcl_skipDouble(sal_Int32&              io_rPos,
-                            const ::rtl::OUString&  rStr)
+        void lcl_skipDouble(sal_Int32& io_rPos, const ::rtl::OUString& rStr)
         {
             sal_Unicode aChar( rStr[io_rPos] );
 
+            // sign
             if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
-                aChar = rStr[++io_rPos];
-
-            while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                    || sal_Unicode('.') == aChar)
             {
                 aChar = rStr[++io_rPos];
             }
 
+            // numbers before point
+            while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
+            {
+                aChar = rStr[++io_rPos];
+            }
+
+            // point
+            if(sal_Unicode('.') == aChar)
+            {
+                aChar = rStr[++io_rPos];
+            }
+
+            // numbers after point
+            while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
+            {
+                aChar = rStr[++io_rPos];
+            }
+
+            // 'e'
             if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
             {
                 aChar = rStr[++io_rPos];
 
+                // sign of 'e'
                 if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
+                {
                     aChar = rStr[++io_rPos];
+                }
 
+                // numbers for 'e'
                 while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
                 {
                     aChar = rStr[++io_rPos];
@@ -199,7 +234,7 @@ namespace basegfx
             const sal_Int32 aLen( rStr.getLength() );
             if(aLen)
             {
-                if( lcl_isOnNumberChar(rStr.charAt(aLen - 1), false) &&
+                if( lcl_isOnNumberChar(rStr.charAt(aLen - 1), false, true) &&
                     fValue >= 0.0 )
                 {
                     rStr.append( sal_Unicode(' ') );
