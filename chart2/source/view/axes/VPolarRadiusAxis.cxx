@@ -152,7 +152,7 @@ void VPolarRadiusAxis::createShapes()
         }
 
         //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
-        aAxisProperties.m_pfMainLinePositionAtOtherAxis = new double( pTickInfo->getUnscaledTickValue() );
+        aAxisProperties.m_pfMainLinePositionAtOtherAxis.reset(pTickInfo->getUnscaledTickValue());
         aAxisProperties.m_bDisplayLabels=false;
 
         VCartesianAxis aAxis(aAxisProperties,m_xNumberFormatsSupplier

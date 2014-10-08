@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <vector>
+#include <boost/optional.hpp>
 
 namespace chart
 {
@@ -95,8 +96,8 @@ struct AxisProperties
     ::com::sun::star::chart::ChartAxisLabelPosition m_eLabelPos;
     ::com::sun::star::chart::ChartAxisMarkPosition  m_eTickmarkPos;
 
-    double*     m_pfMainLinePositionAtOtherAxis;
-    double*     m_pfExrtaLinePositionAtOtherAxis;
+    boost::optional<double> m_pfMainLinePositionAtOtherAxis;
+    boost::optional<double> m_pfExrtaLinePositionAtOtherAxis;
 
     bool        m_bCrossingAxisHasReverseDirection;
     bool        m_bCrossingAxisIsCategoryAxes;

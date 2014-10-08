@@ -62,7 +62,7 @@ public:
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
     virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
 
-    void setExrtaLinePositionAtOtherAxis( const double& fCrossingAt );
+    void setExrtaLinePositionAtOtherAxis( double fCrossingAt );
 
 protected: //methods
     sal_Int32 getIndexOfLongestLabel( const ::com::sun::star::uno::Sequence< OUString >& rLabels );
