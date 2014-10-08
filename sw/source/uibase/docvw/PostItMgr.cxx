@@ -243,7 +243,7 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
             SwSidebarItem* p = (*i);
             if (GetActiveSidebarWin() == p->pPostIt)
                 SetActiveSidebarWin(0);
-            mvPostItFlds.remove(*i);
+            mvPostItFlds.erase(i);
             delete p->pPostIt;
             delete p;
             break;
