@@ -157,11 +157,11 @@ private:
         animations.
     */
     canvas::tools::ElapsedTime maTimer;
-    /** tools::Time between the display of frames.  Enforced only when mbIsActive
+    /** Time between the display of frames.  Enforced only when mbIsActive
         is <TRUE/>.
     */
     const double mnFrameDuration;
-    /** tools::Time (of maTimer) when the next frame shall be displayed.
+    /** Time (of maTimer) when the next frame shall be displayed.
         Synchronize() will wait until this time.
     */
     double mnNextFrameTargetTime;

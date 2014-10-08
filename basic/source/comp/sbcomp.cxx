@@ -382,7 +382,7 @@ void lcl_printTimeOutput( void )
 {
     // Overall time output
     lcl_lineOut( "" );
-    lcl_lineOut( "***** tools::Time Output *****" );
+    lcl_lineOut( "***** Time Output *****" );
     char TimeBuffer[500];
     double dTotalTime = GpTimer->getElapsedTime() - GdStartTime;
     sprintf( TimeBuffer, "Total execution time = %f ms", dTotalTime*1000.0 );

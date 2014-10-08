@@ -338,7 +338,7 @@ bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
     return bSuccess;
 }
 
-/** convert ISO8601 tools::Time String to util::Time */
+/** convert ISO8601 Time String to util::Time */
 bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
 {
     bool bSuccess = true;
