@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_c8786f92",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-10-08T20:34:20Z",
+      "side": 1,
+      "message": "May be just:\n\n_XAccessibleText: Use short exception class name",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 66
+      },
+      "revId": "0d5bc397ba1ebd1c75ee28988878f7223c09aed7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_e87333b3",
+        "filename": "toolkit/qa/complex/toolkit/accessibility/_XAccessibleText.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-10-08T20:34:20Z",
+      "side": 1,
+      "message": "So you replaced one full qualified class name Exception, but preserved anothe one in place? Let be consistent:\n\n  import com.sun.star.lang.IndexOutOfBoundsException;\n\nAnd replace all occurences of com.sun.star.lang.IndexOutOfBoundsException with IndexOutOfBoundsException.",
+      "range": {
+        "startLine": 249,
+        "startChar": 16,
+        "endLine": 249,
+        "endChar": 59
+      },
+      "revId": "0d5bc397ba1ebd1c75ee28988878f7223c09aed7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
