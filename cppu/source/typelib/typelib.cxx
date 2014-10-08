@@ -1503,7 +1503,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
                     else
                     {
                         // destruction of this type in progress (another thread!)
-                        osl_atomic_decrement( &pTDR->pType->nRefCount );
+                        (void)osl_atomic_decrement( &pTDR->pType->nRefCount );
                     }
                 }
                 // take new descr
