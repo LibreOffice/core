@@ -116,7 +116,7 @@ public:
     virtual int Main() SAL_OVERRIDE;
 
 private:
-    int nRet = EXIT_SUCCESS;
+    int nRet;
 
     void DoItWithVcl(std::vector<OUString>& aImageFiles);
     void DoItWithOpenGL(std::vector<OUString>& aImageFiles);
@@ -124,6 +124,8 @@ private:
 
 void IconTestApp::Init()
 {
+    nRet = EXIT_SUCCESS;
+
     uno::Reference<uno::XComponentContext> xContext =
         cppu::defaultBootstrap_InitialComponentContext();
     uno::Reference<lang::XMultiComponentFactory> xFactory =
