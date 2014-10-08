@@ -596,7 +596,7 @@ OUString SfxDispatchController_Impl::getSlaveCommand( const ::com::sun::star::ut
 
 namespace {
 
-/// Class that collects the usage information.
+/// Class that collects the usage information - how many times what .uno: command was used.
 class UsageInfo {
 
     typedef std::map<OUString, int> UsageMap;
