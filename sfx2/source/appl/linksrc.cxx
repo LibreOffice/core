@@ -101,8 +101,6 @@ public:
 
     size_t size() const { return mvData.size(); }
     SvLinkSource_Entry_Impl *operator[](size_t idx) const { return mvData[idx]; }
-    std::vector<SvLinkSource_Entry_Impl*>::iterator begin() { return mvData.begin(); }
-    std::vector<SvLinkSource_Entry_Impl*>::iterator end() { return mvData.end(); }
     std::vector<SvLinkSource_Entry_Impl*>::const_iterator cbegin() const { return mvData.cbegin(); }
     std::vector<SvLinkSource_Entry_Impl*>::const_iterator cend() const { return mvData.cend(); }
     void clear() { mvData.clear(); }
