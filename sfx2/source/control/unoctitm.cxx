@@ -30,6 +30,7 @@
 #include <tools/urlobj.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -39,6 +40,7 @@
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -62,6 +64,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
@@ -591,11 +594,121 @@ OUString SfxDispatchController_Impl::getSlaveCommand( const ::com::sun::star::ut
     return aSlaveCommand;
 }
 
+namespace {
+
+/// Class that collects the usage information.
+class UsageInfo {
+
+    typedef std::map<OUString, int> UsageMap;
+
+    /// Command vs. how many times it was used
+    UsageMap maUsage;
+
+public:
+    UsageInfo()
+    {
+        load();
+    }
+
+    ~UsageInfo()
+    {
+        save();
+    }
+
+    /// Increment command's use.
+    void increment(const OUString &rCommand);
+
+    /// Load the usage data from the previous session.
+    void load();
+
+    /// Save the usage data for the next session.
+    void save();
+};
+
+void UsageInfo::increment(const OUString &rCommand)
+{
+    UsageMap::iterator it = maUsage.find(rCommand);
+
+    if (it != maUsage.end())
+        ++(it->second);
+    else
+        maUsage[rCommand] = 1;
+}
+
+void UsageInfo::load()
+{
+    // TODO - do the real loading here
+}
+
+void UsageInfo::save()
+{
+    // TODO - do a real saving here, not only dump to the screen
+    std::cerr << "Usage information:" << std::endl;
+    for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
+    {
+        std::cerr << it->first << ';' << it->second << std::endl;
+    }
+    std::cerr << "Usage information end" << std::endl;
+}
+
+class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
+
+/// Extracts information about the command + args, and stores that.
+void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::PropertyValue>& rArgs)
+{
+    if (/*TODO disabled now, bind this to a config option instead*/true)
+        return;
+
+    OUStringBuffer aBuffer;
+
+    // app identification [uh, several UNO calls :-(]
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
+    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
+    uno::Reference<frame::XFrame> xFrame = xDesktop->getCurrentFrame();
+
+    OUString aModule(xModuleManager->identify(xFrame));
+    sal_Int32 nLastDot = aModule.lastIndexOf('.');
+    if (nLastDot >= 0)
+        aModule = aModule.copy(nLastDot + 1);
+
+    aBuffer.append(aModule);
+    aBuffer.append(';');
+
+    // command
+    aBuffer.append(rURL.Protocol);
+    aBuffer.append(rURL.Path);
+    sal_Int32 nCount = rArgs.getLength();
+
+    // parameters - only their names, not the values (could be sensitive!)
+    if (nCount > 0)
+    {
+        aBuffer.append('(');
+        for (sal_Int32 n = 0; n < nCount; n++)
+        {
+            const ::com::sun::star::beans::PropertyValue& rProp = rArgs[n];
+            if (n > 0)
+                aBuffer.append(',');
+            aBuffer.append(rProp.Name);
+        }
+        aBuffer.append(')');
+    }
+
+    OUString aCommand(aBuffer.makeStringAndClear());
+
+    // store
+    theUsageInfo::get().increment(aCommand);
+}
+
+}
+
 void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util::URL& aURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener )
     throw (css::uno::RuntimeException, std::exception)
 {
+    collectUsageInformation(aURL, aArgs);
+
     SolarMutexGuard aGuard;
     if (
         pDispatch &&
