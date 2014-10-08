@@ -37,7 +37,7 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <osl/file.h>
+#include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
@@ -3887,13 +3887,13 @@ bool PDFWriterImpl::emitFonts()
             if( m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, it->first, aGlyphIds, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
             {
                 // create font stream
-                oslFileHandle aFontFile;
-                if ( osl_File_E_None != osl_openFile( aTmpName.pData, &aFontFile, osl_File_OpenFlag_Read ) ) return false;
+                osl::File aFontFile(aTmpName);
+                if (osl::File::E_None != aFontFile.open(osl_File_OpenFlag_Read)) return false;
                 // get file size
                 sal_uInt64 nLength1;
-                if ( osl_File_E_None != osl_setFilePos( aFontFile, osl_Pos_End, 0 ) ) return false;
-                if ( osl_File_E_None != osl_getFilePos( aFontFile, &nLength1 ) ) return false;
-                if ( osl_File_E_None != osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) return false;
+                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_End, 0) ) return false;
+                if ( osl::File::E_None != aFontFile.getPos(nLength1) ) return false;
+                if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
 
                 #if OSL_DEBUG_LEVEL > 1
                 emitComment( "PDFWriterImpl::emitFonts" );
@@ -3930,9 +3930,9 @@ bool PDFWriterImpl::emitFonts()
                     {
                         char buf[8192];
                         sal_uInt64 nRead;
-                        if ( osl_File_E_None != osl_readFile( aFontFile, buf, sizeof( buf ), &nRead ) ) return false;
+                        if ( osl::File::E_None != aFontFile.read(buf, sizeof(buf), nRead) ) return false;
                         if ( !writeBuffer( buf, nRead ) ) return false;
-                        if ( osl_File_E_None != osl_isEndOfFile( aFontFile, &bEOF ) ) return false;
+                        if ( osl::File::E_None != aFontFile.isEndOfFile(&bEOF) ) return false;
                     } while( ! bEOF );
                 }
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::CFF_FONT) != 0 )
@@ -3945,9 +3945,9 @@ bool PDFWriterImpl::emitFonts()
                     boost::shared_array<unsigned char> pBuffer( new unsigned char[ nLength1 ] );
 
                     sal_uInt64 nBytesRead = 0;
-                    if ( osl_File_E_None != osl_readFile( aFontFile, pBuffer.get(), nLength1, &nBytesRead ) ) return false;
+                    if ( osl::File::E_None != aFontFile.read(pBuffer.get(), nLength1, nBytesRead) ) return false;
                     DBG_ASSERT( nBytesRead==nLength1, "PDF-FontSubset read incomplete!" );
-                    if ( osl_File_E_None != osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) return false;
+                    if ( osl::File::E_None != aFontFile.setPos(osl_Pos_Absolut, 0) ) return false;
                     // get the PFB-segment lengths
                     ThreeInts aSegmentLengths = {0,0,0};
                     getPfbSegmentLengths( pBuffer.get(), (int)nBytesRead, aSegmentLengths );
@@ -3980,7 +3980,7 @@ bool PDFWriterImpl::emitFonts()
                 endCompression();
                 disableStreamEncryption();
                 // close the file
-                osl_closeFile( aFontFile );
+                aFontFile.close();
 
                 sal_uInt64 nEndPos = 0;
                 if ( osl_File_E_None != osl_getFilePos( m_aFile, &nEndPos ) ) return false;
