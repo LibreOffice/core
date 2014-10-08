@@ -324,7 +324,7 @@ namespace svgio
             if(mpLocalCssStyle)
             {
                 // parse and set values to it
-                mpLocalCssStyle->readStyle(aContent);
+                mpLocalCssStyle->readCssStyle(aContent);
             }
             else
             {
@@ -342,7 +342,7 @@ namespace svgio
             for(sal_uInt32 a(0); a < nAttributes; a++)
             {
                 const OUString aTokenName(xAttribs->getNameByIndex(a));
-                const SVGToken aSVGToken(StrToSVGToken(aTokenName));
+                const SVGToken aSVGToken(StrToSVGToken(aTokenName, false));
 
                 parseAttribute(aTokenName, aSVGToken, xAttribs->getValueByIndex(a));
             }

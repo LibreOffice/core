@@ -162,7 +162,7 @@ namespace svgio
 
         static OUString aSVGStrFlowRoot("flowRoot");
 
-        SVGToken StrToSVGToken(const OUString& rStr)
+        SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent)
         {
             typedef boost::unordered_map< OUString, SVGToken, OUStringHash,::std::equal_to< OUString >  > SVGTokenMapper;
             typedef std::pair< OUString, SVGToken > SVGTokenValueType;
@@ -311,6 +311,33 @@ namespace svgio
 
             if(aResult == aSVGTokenMapperList.end())
             {
+                if(bCaseIndependent)
+                {
+                    static SVGTokenMapper aCaseLindependentSVGTokenMapperList;
+
+                    if(aCaseLindependentSVGTokenMapperList.empty())
+                    {
+                        for(SVGTokenMapper::const_iterator aCurrent(aSVGTokenMapperList.begin()); aCurrent != aSVGTokenMapperList.end(); aCurrent++)
+                        {
+                            aCaseLindependentSVGTokenMapperList.insert(
+                                SVGTokenValueType(
+                                    aCurrent->first.toAsciiLowerCase(),
+                                    aCurrent->second));
+                        }
+                    }
+
+                    const SVGTokenMapper::const_iterator aResult2(aCaseLindependentSVGTokenMapperList.find(rStr.toAsciiLowerCase()));
+
+                    if(aResult2 == aCaseLindependentSVGTokenMapperList.end())
+                    {
+                        return SVGTokenUnknown;
+                    }
+                    else
+                    {
+                        return aResult2->second;
+                    }
+                }
+
                 return SVGTokenUnknown;
             }
             else

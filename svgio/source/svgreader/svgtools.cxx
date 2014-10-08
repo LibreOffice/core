@@ -633,7 +633,7 @@ namespace svgio
             }
         }
 
-        bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName)
+        bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName, bool bCaseIndependent)
         {
             typedef boost::unordered_map< OUString, Color,
                       OUStringHash,
@@ -793,7 +793,13 @@ namespace svgio
                 aColorTokenMapperList.insert(ColorTokenValueType(OUString("yellowgreen"), Color(154, 205, 50)));
             }
 
-            const ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName));
+            ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName));
+
+            if(bCaseIndependent && aResult == aColorTokenMapperList.end())
+            {
+                // also try case independent match (e.g. for Css styles)
+                aResult = aColorTokenMapperList.find(rName.toAsciiLowerCase());
+            }
 
             if(aResult == aColorTokenMapperList.end())
             {
@@ -806,7 +812,7 @@ namespace svgio
             }
         }
 
-        bool read_color(const OUString& rCandidate, basegfx::BColor& rColor)
+        bool read_color(const OUString& rCandidate, basegfx::BColor& rColor, bool bCaseIndependent)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -914,7 +920,7 @@ namespace svgio
                     else
                     {
                         // color keyword
-                        if(match_colorKeyword(rColor, rCandidate))
+                        if(match_colorKeyword(rColor, rCandidate, bCaseIndependent))
                         {
                             return true;
                         }
@@ -1199,13 +1205,13 @@ namespace svgio
             return false;
         }
 
-        bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL)
+        bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL, bool bCaseIndependent)
         {
             if( !rCandidate.isEmpty() )
             {
                 basegfx::BColor aColor;
 
-                if(read_color(rCandidate, aColor))
+                if(read_color(rCandidate, aColor, bCaseIndependent))
                 {
                     rSvgPaint = SvgPaint(aColor, true, true);
                     return true;
@@ -1277,7 +1283,7 @@ namespace svgio
 
                     if(!aTokenName.isEmpty())
                     {
-                        switch(StrToSVGToken(aTokenName.makeStringAndClear()))
+                        switch(StrToSVGToken(aTokenName.makeStringAndClear(), false))
                         {
                             case SVGTokenDefer:
                             {
