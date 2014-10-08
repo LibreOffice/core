@@ -114,7 +114,7 @@ void SwLayAction::CheckWaitCrsr()
     }
 }
 
-// tools::Time over already?
+// Time over already?
 inline void SwLayAction::CheckIdleEnd()
 {
     if ( !IsInput() )

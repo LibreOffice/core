@@ -280,7 +280,7 @@ start:
             // if the whole-number part is 0, we want no year!
             if( n <= -1.0 || n >= 1.0 )
             {
-                // tools::Time only if != 00:00:00
+                // Time only if != 00:00:00
                 if( floor( n ) == n )
                 {
                     switch( eDate )

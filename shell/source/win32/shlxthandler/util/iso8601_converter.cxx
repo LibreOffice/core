@@ -65,7 +65,7 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
         else
             ws8601DateTime = StringToWString( asDateTime );
 
-        //get tools::Time info from structure
+        //get Time info from structure
         WCHAR TimeBuffer[ MAX_PATH ];
 
         int TimeSize =  GetTimeFormatW(

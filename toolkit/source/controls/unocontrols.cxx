@@ -3717,7 +3717,7 @@ void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
     OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
     ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), false );
 
-    // re-calc the tools::Time property
+    // re-calc the Time property
     uno::Reference < awt::XTimeField >  xField( getPeer(), uno::UNO_QUERY );
     uno::Any aValue;
     if ( !xField->isEmpty() )

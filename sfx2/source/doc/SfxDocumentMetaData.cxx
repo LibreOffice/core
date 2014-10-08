@@ -967,7 +967,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
                 OUString("date")));
         } else if (type == ::cppu::UnoType<css::util::Time>::get()) {
             // #i97029#: replaced by Duration
-            // tools::Time is supported for backward compatibility with OOo 3.x, x<=2
+            // Time is supported for backward compatibility with OOo 3.x, x<=2
             css::util::Time ut;
             any >>= ut;
             css::util::Duration ud;
@@ -2274,7 +2274,7 @@ void SfxDocumentMetaData::createUserDefined()
         types[ 9] = ::cppu::UnoType<sal_Int16>::get();
         types[10] = ::cppu::UnoType<sal_Int32>::get();
         types[11] = ::cppu::UnoType<sal_Int64>::get();
-        // tools::Time is supported for backward compatibility with OOo 3.x, x<=2
+        // Time is supported for backward compatibility with OOo 3.x, x<=2
         types[12] = ::cppu::UnoType<css::util::Time>::get();
         // #i94175#:  ODF allows empty user-defined property names!
         m_xUserDefined.set(

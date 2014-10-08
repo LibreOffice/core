@@ -303,7 +303,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             if (!rSigInfo.Signer.is())
                 rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
-            // tools::Time support again (#i38744#)
+            // Time support again (#i38744#)
             Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
             tools::Time aTime( rInfo.stDateTime.Hours, rInfo.stDateTime.Minutes,
                         rInfo.stDateTime.Seconds, rInfo.stDateTime.NanoSeconds );

@@ -113,7 +113,7 @@ using namespace InternalFilePickerElementIds;
 #define GET_DECODED_NAME(aObj) \
     aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET )
 
-// tools::Time to wait while traveling in the filterbox until
+// Time to wait while traveling in the filterbox until
 // the browsebox gets filtered ( in ms).
 #define TRAVELFILTER_TIMEOUT    750
 

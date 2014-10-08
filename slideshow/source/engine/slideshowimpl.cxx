@@ -2086,7 +2086,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             // commit frame to screen
             maScreenUpdater.commitUpdates();
         }
-        // tools::Time held until here
+        // Time held until here
 
         const bool bActivitiesLeft = (! maActivitiesQueue.isEmpty());
         const bool bTimerEventsLeft = (! maEventQueue.isEmpty());

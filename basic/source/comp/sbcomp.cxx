@@ -606,7 +606,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     {
         double dDiffTime = dCurTime - GdLastTime;
         GdLastTime = dCurTime;
-        sprintf( TimeBuffer, "\t\t// tools::Time = %f ms / += %f ms", dCurTime*1000.0, dDiffTime*1000.0 );
+        sprintf( TimeBuffer, "\t\t// Time = %f ms / += %f ms", dCurTime*1000.0, dDiffTime*1000.0 );
     }
 #endif
 
@@ -802,7 +802,7 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     char TimeBuffer[200];
     if( GbTimerOn && bLeave )
     {
-        sprintf( TimeBuffer, "    // Execution tools::Time = %f ms", dExecutionTime*1000.0 );
+        sprintf( TimeBuffer, "    // Execution Time = %f ms", dExecutionTime*1000.0 );
         pPostStr = TimeBuffer;
     }
 #endif

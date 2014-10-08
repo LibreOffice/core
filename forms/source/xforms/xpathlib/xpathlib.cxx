@@ -233,7 +233,7 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
         xmlXPathReturnEmptyString(ctxt);
 }
 
-// Date and tools::Time Functions
+// Date and Time Functions
 
 static OString makeDateTimeString (const DateTime& aDateTime, bool bUTC = true)
 {
