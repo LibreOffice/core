@@ -3101,6 +3101,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 }
                 m_rSink << "?=";
             }
+            //fall-through
             case CODING_ENCODED_TERMINATED:
                 if (m_rSink.getColumn() + nSize
                         > m_rSink.getLineLengthLimit() - 1)
