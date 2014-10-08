@@ -34,76 +34,110 @@ using namespace com::sun::star;
 
 class MyWorkWindow : public WorkWindow
 {
+public:
+    MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
+
+    virtual void Resize() SAL_OVERRIDE;
+};
+
+class MyOpenGLWorkWindow : public MyWorkWindow
+{
 private:
-    bool mbPainted;
-    OUString msKind;
     OpenGLWindow *mpOpenGLWindow;
 
 public:
-    MyWorkWindow( const char *kind, vcl::Window* pParent, WinBits nWinStyle );
+    MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
 
-    std::vector<Bitmap*>maBitmaps;
+    std::vector<GLuint>maTextureName;
+    std::vector<float>maTextureAspect;
 };
 
-MyWorkWindow::MyWorkWindow( const char *kind, vcl::Window* pParent, WinBits nWinStyle ) :
+MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
 {
     EnableInput();
-    mbPainted = false;
-    msKind = OUString( kind, strlen(kind), RTL_TEXTENCODING_UTF8 );
-    if( msKind == "opengl" )
-    {
-        mpOpenGLWindow = new OpenGLWindow( this );
-        mpOpenGLWindow->SetSizePixel( Size( 1000, 800 ) );
-        mpOpenGLWindow->Show();
-        mpOpenGLWindow->EnableInput();
-   }
 }
 
-void MyWorkWindow::MouseButtonDown( const MouseEvent& rMEvt )
+MyOpenGLWorkWindow::MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
+    MyWorkWindow( pParent, nWinStyle )
 {
-    SAL_INFO("vcl.icontest", "MouseButtonDown: " << rMEvt.GetPosPixel() );
-    Size aSize( GetSizePixel() );
-    Paint( Rectangle( Point( 0, 0 ), aSize ) );
-    WorkWindow::MouseButtonDown( rMEvt );
+    mpOpenGLWindow = new OpenGLWindow( this );
+    mpOpenGLWindow->SetSizePixel( Size( 1000, 800 ) );
+    mpOpenGLWindow->Show();
+    mpOpenGLWindow->EnableInput();
 }
 
-void MyWorkWindow::Paint( const Rectangle& rRect )
+void MyOpenGLWorkWindow::Paint( const Rectangle& )
 {
-    if( msKind == "opengl" )
+    const int WIDTH = 1000, HEIGHT = 800;
+
+    SAL_INFO("vcl.icontest", "==> Paint! (OpenGL) " << GetSizePixel());
+    OpenGLContext& aCtx = mpOpenGLWindow->getContext();
+    aCtx.requestLegacyContext();
+    aCtx.setWinSize( Size( WIDTH, HEIGHT ) );
+
+    CHECK_GL_ERROR();
+
+    aCtx.makeCurrent();
+    CHECK_GL_ERROR();
+
+    Size aSize(WIDTH, HEIGHT);
+    glViewport( 0, 0, aSize.Width(), aSize.Height() );
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    CHECK_GL_ERROR();
+
+    float nThumbWidth = 2.0 / (WIDTH / 100.0);
+    float nThumbHeight = 2.0 / (HEIGHT / 100.0);
+
+    float nStepX = 2.0 / (WIDTH / (100.0 + 10));
+    float nStepY = 2.0 / (HEIGHT / (100.0 + 10));
+
+    float nX = -1, nY = -1;
+
+    for (size_t i = 0; i < maTextureName.size(); ++i)
     {
-        SAL_INFO("vcl.icontest", "==> Paint! (OpenGL) " << GetSizePixel());
-        OpenGLContext& aCtx = mpOpenGLWindow->getContext();
-        aCtx.requestLegacyContext();
-        aCtx.setWinSize( Size( 1000, 800 ) );
-
+        glBindTexture(GL_TEXTURE_2D, maTextureName[i]);
         CHECK_GL_ERROR();
 
-        aCtx.makeCurrent();
+        glPushMatrix();
         CHECK_GL_ERROR();
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glTranslatef(nX, nY, 0);
+
+        if (maTextureAspect[i] >= 1)
+            glScalef(1, 1/maTextureAspect[i], 1);
+        else
+            glScalef(1*maTextureAspect[i], 1, 1);
         CHECK_GL_ERROR();
-        Size aSize = GetSizePixel();
-        glViewport( 0, 0, aSize.Width(), aSize.Height() );
+
+        glBegin(GL_QUADS);
+        glTexCoord2f(0, 0);
+        glVertex3f(0, 0, 0);
+        glTexCoord2f(0, 1);
+        glVertex3f(0, nThumbHeight, 0);
+        glTexCoord2f(1, 1);
+        glVertex3f(nThumbWidth, nThumbHeight, 0);
+        glTexCoord2f(1, 0);
+        glVertex3f(nThumbWidth, 0, 0);
+        glEnd();
         CHECK_GL_ERROR();
-        glColor3f( 1, 0.7, 0.2 );
+
+        glPopMatrix();
         CHECK_GL_ERROR();
-        glRectf(-0.75, 0.75, 0.75, -0.75);
-        CHECK_GL_ERROR();
-        aCtx.swapBuffers();
-        CHECK_GL_ERROR();
+
+        nX += nStepX;
+        if (nX + nThumbWidth >= 1)
+        {
+            nX = -1;
+            nY += nStepY;
+        }
     }
-    else
-    {
-        SAL_INFO("vcl.icontest", "==> Paint! (vcl)");
-        WorkWindow::Paint( rRect );
-    }
-    mbPainted = true;
+
+    aCtx.swapBuffers();
+    CHECK_GL_ERROR();
 }
 
 void MyWorkWindow::Resize()
@@ -196,7 +230,7 @@ void IconTestApp::DoItWithVcl(std::vector<OUString>& aImageFiles)
 {
     try
     {
-        MyWorkWindow *pWindow = new MyWorkWindow( "vcl", NULL, WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN );
+        MyWorkWindow *pWindow = new MyWorkWindow( NULL, WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN );
 
         pWindow->SetText(OUString("VCL Image Test"));
 
@@ -209,22 +243,30 @@ void IconTestApp::DoItWithVcl(std::vector<OUString>& aImageFiles)
             Graphic aGraphic;
             if (aGraphicFilter.ImportGraphic(aGraphic, *i, aFileStream) != 0)
                 continue;
-            SAL_INFO("vcl.icontest", *i << ": size: " << aGraphic.GetSizeBytes() << "B, " << aGraphic.GetSizePixel());
-            Size aSize( 100, 100 );
+            Size aGraphicSize( aGraphic.GetSizePixel() );
+            float aspect = ((float) aGraphicSize.Width()) / aGraphicSize.Height();
+            SAL_INFO("vcl.icontest", *i << ": size: " << aGraphic.GetSizeBytes() << "B, " << aGraphicSize << " (" << aspect << ")");
+            Size aSize;
+            if( aspect >= 1 )
+                aSize = Size( 100, 100/aspect );
+            else
+                aSize = Size( 100 * aspect, 100 );
             GraphicConversionParameters aConv( aSize );
             Bitmap *pBitmap = new Bitmap( aGraphic.GetBitmap( aConv ) );
 
             FixedBitmap *pFixedBitmap = new FixedBitmap( pWindow );
             pFixedBitmap->SetBitmap( *pBitmap );
             pFixedBitmap->SetSizePixel( aSize );
-            pFixedBitmap->SetPosPixel( aPos );
+            Point aShiftedPos( aPos );
+            aShiftedPos.Move( (100 - aSize.Width()) / 2, (100 - aSize.Height()) / 2 );
+            pFixedBitmap->SetPosPixel( aShiftedPos );
             pFixedBitmap->Show();
 
-            aPos.Move( aSize.Width() + 10, 0);
+            aPos.Move( 100 + 10, 0);
             if ( aPos.X() > 1000 )
             {
                 aPos.setX( 10 );
-                aPos.setY( aPos.Y() + aSize.Height() + 10 );
+                aPos.setY( aPos.Y() + 100 + 10 );
             }
         }
 
@@ -249,10 +291,23 @@ void IconTestApp::DoItWithOpenGL(std::vector<OUString>& aImageFiles)
 {
     try
     {
-        MyWorkWindow *pWindow = new MyWorkWindow( "opengl", NULL, WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN );
+        MyOpenGLWorkWindow *pWindow = new MyOpenGLWorkWindow( NULL, WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN );
 
         pWindow->SetText(OUString("OpenGL Image Test"));
 
+        glEnable(GL_TEXTURE_2D);
+        CHECK_GL_ERROR();
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        CHECK_GL_ERROR();
+
+        pWindow->maTextureName.resize( aImageFiles.size() );
+        pWindow->maTextureAspect.resize( aImageFiles.size() );
+
+        glGenTextures( aImageFiles.size(), pWindow->maTextureName.data() );
+        CHECK_GL_ERROR();
+
+        int n = 0;
         for (std::vector<OUString>::const_iterator i = aImageFiles.cbegin(); i != aImageFiles.end(); ++i)
         {
             SvFileStream aFileStream( *i, STREAM_READ );
@@ -261,8 +316,37 @@ void IconTestApp::DoItWithOpenGL(std::vector<OUString>& aImageFiles)
             if (aGraphicFilter.ImportGraphic(aGraphic, *i, aFileStream) != 0)
                 continue;
             SAL_INFO("vcl.icontest", *i << ": size: " << aGraphic.GetSizeBytes() << "B, " << aGraphic.GetSizePixel());
-            pWindow->maBitmaps.push_back(new Bitmap( aGraphic.GetBitmap( ) ) );
+
+            glBindTexture(GL_TEXTURE_2D, pWindow->maTextureName[n]);
+            CHECK_GL_ERROR();
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            CHECK_GL_ERROR();
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            CHECK_GL_ERROR();
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            CHECK_GL_ERROR();
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            CHECK_GL_ERROR();
+
+            BitmapEx aBitmap( aGraphic.GetBitmapEx( ) );
+            Size aBitmapSize( aBitmap.GetSizePixel() );
+
+            pWindow->maTextureAspect[n] = ((float) aBitmapSize.Width()) / aBitmapSize.Height();
+
+            GLubyte *buffer = new GLubyte[aBitmapSize.Width() * aBitmapSize.Height() * 4];
+            OpenGLHelper::ConvertBitmapExToRGBATextureBuffer( aBitmap, buffer, true );
+
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                         aBitmapSize.Width(), aBitmapSize.Height(),
+                         0, GL_RGBA, GL_UNSIGNED_BYTE,
+                         buffer);
+            CHECK_GL_ERROR();
+
+            delete[] buffer;
+            n++;
         }
+        pWindow->maTextureName.resize( n );
 
         pWindow->Hide();
         pWindow->Show();
