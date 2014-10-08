@@ -173,7 +173,7 @@ bool LoadModule()
 #  endif // UNX
 #else
         pInitSystray = disabled_initSystray;
-        pDeInitSystray = disabled_deInitSystray
+        pDeInitSystray = disabled_deInitSystray;
         loaded = false;
 #endif // ENABLE_QUICKSTART_APPLET
     }
