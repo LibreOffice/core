@@ -206,21 +206,21 @@ bool InitExternalFunc(const OUString& rModuleName)
                 sal_Char cInternalName[256];
                 sal_uInt16 nParamCount;
                 ParamType eParamType[MAXFUNCPARAM];
-                ParamType eAsyncType = NONE;
+                ParamType eAsyncType = ParamType::NONE;
                 // initialize all,  in case the AddIn behaves bad
                 cFuncName[0] = 0;
                 cInternalName[0] = 0;
                 nParamCount = 0;
                 for ( sal_uInt16 j=0; j<MAXFUNCPARAM; j++ )
                 {
-                    eParamType[j] = NONE;
+                    eParamType[j] = ParamType::NONE;
                 }
                 (*((GetFuncDataPtr)fpGetData))(i, cFuncName, nParamCount,
                                                eParamType, cInternalName);
                 if( fpIsAsync )
                 {
                     (*((IsAsync)fpIsAsync))(i, &eAsyncType);
-                    if ( fpAdvice && eAsyncType != NONE )
+                    if ( fpAdvice && eAsyncType != ParamType::NONE )
                         (*((Advice)fpAdvice))( i, pfCallBack );
                 }
                 OUString aInternalName( cInternalName, strlen(cInternalName), osl_getThreadTextEncoding() );

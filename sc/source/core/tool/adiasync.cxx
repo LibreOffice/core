@@ -41,7 +41,7 @@ ScAddInAsync::ScAddInAsync() :
     pDocs( NULL ),
     mpFuncData( NULL ),
     nHandle( 0 ),
-    meType( NONE ),
+    meType( ParamType::NONE ),
     bValid( false )
 {   // nur fuer aSeekObj !
 }
@@ -66,7 +66,7 @@ ScAddInAsync::~ScAddInAsync()
     {
         // in dTor because of theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
         mpFuncData->Unadvice( (double)nHandle );
-        if ( meType == PTR_STRING && pStr )      // include type comparison because of union
+        if ( meType == ParamType::PTR_STRING && pStr )      // include type comparison because of union
             delete pStr;
         delete pDocs;
     }
@@ -98,10 +98,10 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
     }
     switch ( p->meType )
     {
-        case PTR_DOUBLE :
+        case ParamType::PTR_DOUBLE :
             p->nVal = *(double*)pData;
             break;
-        case PTR_STRING :
+        case ParamType::PTR_STRING :
         {
             sal_Char* pChar = (sal_Char*)pData;
             if ( p->pStr )

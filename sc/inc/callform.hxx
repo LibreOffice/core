@@ -37,7 +37,7 @@ extern "C" {
 typedef void (CALLTYPE* AdvData)( double& nHandle, void* pData );
 }
 
-enum ParamType
+enum class ParamType
 {
     PTR_DOUBLE,
     PTR_STRING,

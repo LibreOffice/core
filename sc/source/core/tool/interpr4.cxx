@@ -2492,13 +2492,13 @@ void ScInterpreter::ScExternal()
             {
                 switch (eParamType[i])
                 {
-                    case PTR_DOUBLE :
+                    case ParamType::PTR_DOUBLE :
                         {
                             nVal[i-1] = GetDouble();
                             ppParam[i] = &nVal[i-1];
                         }
                         break;
-                    case PTR_STRING :
+                    case ParamType::PTR_STRING :
                         {
                             OString aStr(OUStringToOString(GetString().getString(),
                                 osl_getThreadTextEncoding()));
@@ -2513,7 +2513,7 @@ void ScInterpreter::ScExternal()
                             }
                         }
                         break;
-                    case PTR_DOUBLE_ARR :
+                    case ParamType::PTR_DOUBLE_ARR :
                         {
                             SCCOL nCol1;
                             SCROW nRow1;
@@ -2529,7 +2529,7 @@ void ScInterpreter::ScExternal()
                                 ppParam[i] = pCellArr[i-1];
                         }
                         break;
-                    case PTR_STRING_ARR :
+                    case ParamType::PTR_STRING_ARR :
                         {
                             SCCOL nCol1;
                             SCROW nRow1;
@@ -2545,7 +2545,7 @@ void ScInterpreter::ScExternal()
                                 ppParam[i] = pCellArr[i-1];
                         }
                         break;
-                    case PTR_CELL_ARR :
+                    case ParamType::PTR_CELL_ARR :
                         {
                             SCCOL nCol1;
                             SCROW nRow1;
@@ -2571,11 +2571,11 @@ void ScInterpreter::ScExternal()
 
             if (nGlobalError == 0)
             {
-                if ( pFuncData->GetAsyncType() == NONE )
+                if ( pFuncData->GetAsyncType() == ParamType::NONE )
                 {
                     switch ( eParamType[0] )
                     {
-                        case PTR_DOUBLE :
+                        case ParamType::PTR_DOUBLE :
                         {
                             double nErg = 0.0;
                             ppParam[0] = &nErg;
@@ -2583,7 +2583,7 @@ void ScInterpreter::ScExternal()
                             PushDouble(nErg);
                         }
                         break;
-                        case PTR_STRING :
+                        case ParamType::PTR_STRING :
                         {
                             boost::scoped_array<sal_Char> pcErg(new sal_Char[ADDIN_MAXSTRLEN]);
                             ppParam[0] = pcErg.get();
@@ -2627,10 +2627,10 @@ void ScInterpreter::ScExternal()
                         {
                             switch ( pAs->GetType() )
                             {
-                                case PTR_DOUBLE :
+                                case ParamType::PTR_DOUBLE :
                                     PushDouble( pAs->GetValue() );
                                     break;
-                                case PTR_STRING :
+                                case ParamType::PTR_STRING :
                                     PushString( pAs->GetString() );
                                     break;
                                 default:

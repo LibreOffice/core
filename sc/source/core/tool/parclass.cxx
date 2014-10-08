@@ -361,8 +361,8 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
             {
                 switch ( pFuncData->GetParamType( nParameter) )
                 {
-                    case PTR_DOUBLE:
-                    case PTR_STRING:
+                    case ParamType::PTR_DOUBLE:
+                    case ParamType::PTR_STRING:
                         eRet = Value;
                     break;
                     default:

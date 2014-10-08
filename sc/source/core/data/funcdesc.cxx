@@ -483,19 +483,19 @@ ScFunctionList::ScFunctionList() :
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
-                        case PTR_DOUBLE:
+                        case ParamType::PTR_DOUBLE:
                             pDesc->maDefArgNames[j] = aDefArgNameValue;
                             break;
-                        case PTR_STRING:
+                        case ParamType::PTR_STRING:
                             pDesc->maDefArgNames[j] = aDefArgNameString;
                             break;
-                        case PTR_DOUBLE_ARR:
+                        case ParamType::PTR_DOUBLE_ARR:
                             pDesc->maDefArgNames[j] = aDefArgNameValues;
                             break;
-                        case PTR_STRING_ARR:
+                        case ParamType::PTR_STRING_ARR:
                             pDesc->maDefArgNames[j] = aDefArgNameStrings;
                             break;
-                        case PTR_CELL_ARR:
+                        case ParamType::PTR_CELL_ARR:
                             pDesc->maDefArgNames[j] = aDefArgNameCells;
                             break;
                         default:
@@ -509,19 +509,19 @@ ScFunctionList::ScFunctionList() :
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
-                        case PTR_DOUBLE:
+                        case ParamType::PTR_DOUBLE:
                             pDesc->maDefArgDescs[j] = aDefArgDescValue;
                             break;
-                        case PTR_STRING:
+                        case ParamType::PTR_STRING:
                             pDesc->maDefArgDescs[j] = aDefArgDescString;
                             break;
-                        case PTR_DOUBLE_ARR:
+                        case ParamType::PTR_DOUBLE_ARR:
                             pDesc->maDefArgDescs[j] = aDefArgDescValues;
                             break;
-                        case PTR_STRING_ARR:
+                        case ParamType::PTR_STRING_ARR:
                             pDesc->maDefArgDescs[j] = aDefArgDescStrings;
                             break;
-                        case PTR_CELL_ARR:
+                        case ParamType::PTR_CELL_ARR:
                             pDesc->maDefArgDescs[j] = aDefArgDescCells;
                             break;
                         default:
