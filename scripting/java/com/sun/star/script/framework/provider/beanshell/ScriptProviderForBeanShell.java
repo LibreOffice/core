@@ -331,8 +331,8 @@ class ScriptImpl implements XScript {
                     new StringTokenizer(full.substring(index), ":");
 
                 if (tokenizer.countTokens() > 2) {
-                    LogUtils.DEBUG("First token = " + (String)tokenizer.nextElement());
-                    wrappedException = (String)tokenizer.nextElement();
+                    LogUtils.DEBUG("First token = " + tokenizer.nextToken());
+                    wrappedException = tokenizer.nextToken();
                     LogUtils.DEBUG("wrapped exception = = " + wrappedException);
                 }
             }
