@@ -1793,7 +1793,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         else
         {
             PathKind eKind = pDlg->getCreatePathKind();
-            if( eKind != NONE )
+            if( eKind != PathKind::NONE )
                 createPath( eKind, aTargets, fDuration );
         }
         mrBase.GetDocShell()->SetModified();
@@ -1813,9 +1813,9 @@ void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTarge
 
     switch( eKind )
     {
-    case CURVE:     nSID = SID_DRAW_BEZIER_NOFILL; break;
-    case POLYGON:   nSID = SID_DRAW_POLYGON_NOFILL; break;
-    case FREEFORM:  nSID = SID_DRAW_FREELINE_NOFILL; break;
+    case PathKind::CURVE:     nSID = SID_DRAW_BEZIER_NOFILL; break;
+    case PathKind::POLYGON:   nSID = SID_DRAW_POLYGON_NOFILL; break;
+    case PathKind::FREEFORM:  nSID = SID_DRAW_FREELINE_NOFILL; break;
     default: break;
     }
 

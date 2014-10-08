@@ -376,22 +376,22 @@ CustomAnimationPresetPtr CustomAnimationCreateTabPage::getSelectedPreset() const
 
 PathKind CustomAnimationCreateTabPage::getCreatePathKind() const
 {
-    PathKind eKind = NONE;
+    PathKind eKind = PathKind::NONE;
 
     if( mpLBEffects->GetSelectEntryCount() == 1 )
     {
         const sal_Int32 nPos = mpLBEffects->GetSelectEntryPos();
         if( nPos == mnCurvePathPos )
         {
-            eKind = CURVE;
+            eKind = PathKind::CURVE;
         }
         else if( nPos == mnPolygonPathPos )
         {
-            eKind = POLYGON;
+            eKind = PathKind::POLYGON;
         }
         else if( nPos == mnFreeformPathPos )
         {
-            eKind = FREEFORM;
+            eKind = PathKind::FREEFORM;
         }
     }
 
