@@ -39,7 +39,11 @@ public:
                     ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~VAxisBase();
 
-    sal_Int32 getDimensionCount() { return m_nDimension;}
+    /**
+     * Return the number of dimensions the diagram has.  2 for x and y, and 3
+     * for x, y, and z.
+     */
+    sal_Int32 getDimensionCount() const;
 
     virtual void createMaximumLabels()=0;
     virtual void createLabels()=0;

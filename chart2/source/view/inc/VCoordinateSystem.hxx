@@ -98,6 +98,9 @@ public:
         ::com::sun::star::chart2::XCoordinateSystem >
         getModel() const { return m_xCooSysModel;}
 
+    /**
+     * Create "view" axis obejcts 'VAxis' from the coordinate system model.
+     */
     virtual void createVAxisList(
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier
             , const ::com::sun::star::awt::Size& rFontReferenceSize

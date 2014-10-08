@@ -118,6 +118,11 @@ void VAxisBase::setExrtaLinePositionAtOtherAxis( const double& fCrossingAt )
     m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis = new double(fCrossingAt);
 }
 
+sal_Int32 VAxisBase::getDimensionCount() const
+{
+    return m_nDimension;
+}
+
 bool VAxisBase::isAnythingToDraw()
 {
     if( !m_aAxisProperties.m_xAxisModel.is() )

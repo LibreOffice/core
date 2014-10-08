@@ -109,8 +109,10 @@ void VCartesianCoordinateSystem::createVAxisList(
 
     sal_Int32 nDimensionIndex = 0;
 
+    // dimension index -> x, y or z axis.
     for( nDimensionIndex = 0; nDimensionIndex < nDimensionCount; nDimensionIndex++ )
     {
+        // axis index -> primary or secondary axis.
         sal_Int32 nMaxAxisIndex = m_xCooSysModel->getMaximumAxisIndexByDimension(nDimensionIndex);
         for( sal_Int32 nAxisIndex = 0; nAxisIndex <= nMaxAxisIndex; nAxisIndex++ )
         {
