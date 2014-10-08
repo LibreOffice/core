@@ -331,7 +331,8 @@ void Test::test_Uri() {
             { "http://a/b/../", "../c", "http://a/c" },
             { "http://a/b/..", "../c", "http://a/c" },
             { "http://a/./b/", ".././.././../c", "http://a/c" },
-            { "http://a", "b", "http://a/b" } };
+            { "http://a", "b", "http://a/b" },
+            { "", "http://a/b/../c", "http://a/c" } };
     for (std::size_t i = 0; i < sizeof aRelToAbsTest / sizeof (RelToAbsTest); ++i)
     {
         rtl::OUString aAbs;
