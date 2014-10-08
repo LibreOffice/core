@@ -99,6 +99,8 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	) \
 	uri-encode \
 	ui-previewer \
+	$(if $(filter LINUX,$(OS)), \
+		icontest) \
 	vcldemo \
 	tiledrendering \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
