@@ -417,13 +417,13 @@ void SfxLibraryContainer::checkDisposed() const
 
 void SfxLibraryContainer::enterMethod()
 {
-    maMutex.acquire();
+    Application::GetSolarMutex().acquire();
     checkDisposed();
 }
 
 void SfxLibraryContainer::leaveMethod()
 {
-    maMutex.release();
+    Application::GetSolarMutex().release();
 }
 
 BasicManager* SfxLibraryContainer::getBasicManager()
