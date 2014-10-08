@@ -570,11 +570,7 @@ GL3DBarChart::GL3DBarChart(
         osl_getSystemTime(&maDataUpdateStartTime);
         osl_getSystemTime(&maDataUpdateEndTime);
     }
-    Size aSize;
-    if (mpWindow)
-    {
-        aSize = mpWindow->GetSizePixel();
-    }
+    Size aSize = mpWindow->GetSizePixel();
     mpRenderer->SetSize(aSize);
     mpWindow->setRenderer(this);
     mpWindow->getContext().makeCurrent();
@@ -602,7 +598,7 @@ GL3DBarChart::~GL3DBarChart()
 
     joinRenderThread();
 
-    if(mbValidContext && mpWindow)
+    if(mbValidContext)
         mpWindow->setRenderer(NULL);
 }
 
