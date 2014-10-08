@@ -11,6 +11,7 @@ APP_PACKAGE=org.libreoffice
 
 DISABLE_UI=TRUE
 BOOTSTRAPDIR=../../Bootstrap
+ANDROID_DIR=android/experimental/LOAndroid3
 include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
@@ -33,6 +34,10 @@ build-ant: android_version_setup copy-stuff link-so properties
 	    $(call COPYJAR,$(INSTDIR)/$(LIBO_SHARE_JAVA_FOLDER)/$${F}.jar); \
 	done
 #
+	# ant wants AndroidManifest.xml in the same dir as build.xml, so if we're building in a separate directory, we need a symlink.
+	if ! test -f $(SRCDIR)/$(ANDROID_DIR)/AndroidManifest.xml; then \
+		ln -s $(BUILDDIR)/$(ANDROID_DIR)/AndroidManifest.xml $(SRCDIR)/$(ANDROID_DIR)/; \
+	fi
 	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) debug
 
 run:
