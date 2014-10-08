@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	) \
 	$(if $(filter WNT,$(OS)),\
 		$(if $(DISABLE_ACTIVEX),,InstallModule_activex) \
+		InstallModule_quickstart \
 		InstallModule_windows \
 		$(if $(filter MSC,$(COM)),\
 			InstallModule_winexplorerext \
