@@ -24,7 +24,9 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
-        Executable_ui-previewer) \
+        Executable_ui-previewer \
+		$(if $(filter LINUX,$(OS)), \
+	        Executable_icontest)) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_svptest \
