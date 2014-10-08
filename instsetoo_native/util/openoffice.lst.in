@@ -60,7 +60,7 @@ LibreOffice
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
-            ROOTMODULEGID gid_Module_Root_Files_4
+            ROOTMODULEGID gid_Module_Root
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
             OOODOWNLOADNAME 1
@@ -111,7 +111,7 @@ LibreOffice_Dev
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
-            ROOTMODULEGID gid_Module_Root_Files_4
+            ROOTMODULEGID gid_Module_Root
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
             OOODOWNLOADNAME 1

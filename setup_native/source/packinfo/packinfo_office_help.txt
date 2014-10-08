@@ -47,7 +47,7 @@ vendor = "The Document Foundation"
 description = "Help module for LibreOffice %PRODUCTVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
-pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core"
 End
 
 

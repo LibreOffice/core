@@ -19,10 +19,10 @@
 Start
 module = "gid_Module_Root_SDK"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-sdk"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01, SUNWbtool (Name="CCS tools bundled with SunOS"), SUNWxcu4 (Name="XCU4 Utilities")"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core, SUNWbtool (Name="CCS tools bundled with SunOS"), SUNWxcu4 (Name="XCU4 Utilities")"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-sdk"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01 %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2014 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
