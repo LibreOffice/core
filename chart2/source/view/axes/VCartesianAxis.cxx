@@ -367,9 +367,13 @@ bool lcl_hasWordBreak( const Reference< drawing::XShape >& rxShape )
     return false;
 }
 
+/**
+ * Iterate through only the first 2 and last 2 tick info items, and the tick
+ * that has the longest text (in terms of character length) in case it's not
+ * in the first or last 2 items.
+ */
 class MaxLabelTickIter : public TickIter
 {
-    //iterate over first two and last two labels and the longest label
 public:
     MaxLabelTickIter( ::std::vector< TickInfo >& rTickInfoVector
             , sal_Int32 nLongestLabelIndex );
@@ -604,10 +608,6 @@ bool VCartesianAxis::createTextShapes(
                      , TickFactory2D* pTickFactory
                      , sal_Int32 nScreenDistanceBetweenTicks )
 {
-    //returns true if the text shapes have been created successfully
-    //otherwise false - in this case the AxisLabelProperties have changed
-    //and contain new instructions for the next try for text shape creation
-
     uno::Reference<chart2::XScaling> xInverseScaling(NULL);
     if( m_aScale.Scaling.is() )
         xInverseScaling = m_aScale.Scaling->getInverseScaling();

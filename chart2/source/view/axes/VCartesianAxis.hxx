@@ -99,6 +99,12 @@ public:
     };
 
 protected: //methods
+    /**
+     * @return true if the text shapes have been successfully created,
+     *         otherwise false.  Returning false means the AxisLabelProperties
+     *         have changed during the call, and the caller needs to call this
+     *         method once again to get the text shapes created.
+     */
     bool    createTextShapes( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::drawing::XShapes >& xTarget
                      , TickIter& rTickIter
