@@ -1143,9 +1143,9 @@ void PDFWriterImpl::PDFPage::beginStream()
     aLine.append( ">>\nstream\n" );
     if( ! m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() ) )
         return;
-    if( osl_File_E_None != osl_getFilePos( m_pWriter->m_aFile, &m_nBeginStreamPos ) )
+    if (osl::File::E_None != m_pWriter->m_aFile.getPos(m_nBeginStreamPos))
     {
-        osl_closeFile( m_pWriter->m_aFile );
+        m_pWriter->m_aFile.close();
         m_pWriter->m_bOpen = false;
     }
 #if defined ( COMPRESS_PAGES ) && !defined ( DEBUG_DISABLE_PDFCOMPRESSION )
@@ -1160,9 +1160,9 @@ void PDFWriterImpl::PDFPage::endStream()
     m_pWriter->endCompression();
 #endif
     sal_uInt64 nEndStreamPos;
-    if( osl_File_E_None != osl_getFilePos( m_pWriter->m_aFile, &nEndStreamPos ) )
+    if (osl::File::E_None != m_pWriter->m_aFile.getPos(nEndStreamPos))
     {
-        osl_closeFile( m_pWriter->m_aFile );
+        m_pWriter->m_aFile.close();
         m_pWriter->m_bOpen = false;
         return;
     }
@@ -1720,7 +1720,8 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_nSignatureLastByteRangeNoOffset( 0 ),
         m_nResourceDict( -1 ),
         m_nFontDictObject( -1 ),
-        m_aFile(0),
+        m_aContext(rContext),
+        m_aFile(m_aContext.URL),
         m_bOpen(false),
         m_pCodec( NULL ),
         m_pMemStream(NULL),
@@ -1744,7 +1745,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         doTestCode();
     }
 #endif
-    m_aContext = rContext;
     m_aStructure.push_back( PDFStructureElement() );
     m_aStructure[0].m_nOwnElement       = 0;
     m_aStructure[0].m_nParentElement    = 0;
@@ -1758,17 +1758,17 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     aState.m_aFont          = aFont;
     m_aGraphicsStack.push_front( aState );
 
-    oslFileError  aError = osl_openFile( m_aContext.URL.pData, &m_aFile, osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
-    if( aError != osl_File_E_None )
+    osl::File::RC aError = m_aFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
+    if (aError != osl::File::E_None)
     {
-        if( aError == osl_File_E_EXIST )
+        if (aError == osl::File::E_EXIST)
         {
-            aError = osl_openFile( m_aContext.URL.pData, &m_aFile, osl_File_OpenFlag_Write );
-            if( aError == osl_File_E_None )
-                aError = osl_setFileSize( m_aFile, 0 );
+            aError = m_aFile.open(osl_File_OpenFlag_Write);
+            if (aError == osl::File::E_None)
+                aError = m_aFile.setSize(0);
         }
     }
-    if( aError != osl_File_E_None )
+    if (aError != osl::File::E_None)
         return;
 
     m_bOpen = true;
@@ -1820,7 +1820,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     aBuffer.append( "\n%\303\244\303\274\303\266\303\237\n" );
     if( !writeBuffer( aBuffer.getStr(), aBuffer.getLength() ) )
     {
-        osl_closeFile( m_aFile );
+        m_aFile.close();
         m_bOpen = false;
         return;
     }
@@ -2166,14 +2166,12 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
         if( m_aDocDigest )
             rtl_digest_updateMD5( m_aDocDigest, pWriteBuffer, static_cast<sal_uInt32>(nBytes) );
 
-        if( osl_writeFile( m_aFile,
-                           pWriteBuffer,
-                           nBytes, &nWritten ) != osl_File_E_None )
+        if (m_aFile.write(pWriteBuffer, nBytes, nWritten) != osl::File::E_None)
             nWritten = 0;
 
         if( nWritten != nBytes )
         {
-            osl_closeFile( m_aFile );
+            m_aFile.close();
             m_bOpen = false;
         }
     }
@@ -2352,15 +2350,15 @@ bool PDFWriterImpl::updateObject( sal_Int32 n )
         return false;
 
     sal_uInt64 nOffset = ~0U;
-    oslFileError aError = osl_getFilePos( m_aFile, &nOffset );
-    DBG_ASSERT( aError == osl_File_E_None, "could not register object" );
-    if( aError != osl_File_E_None )
+    osl::File::RC aError = m_aFile.getPos(nOffset);
+    DBG_ASSERT( aError == osl::File::E_None, "could not register object" );
+    if (aError != osl::File::E_None)
     {
-        osl_closeFile( m_aFile );
+        m_aFile.close();
         m_bOpen = false;
     }
     m_aObjects[ n-1 ] = nOffset;
-    return aError == osl_File_E_None;
+    return aError == osl::File::E_None;
 }
 
 #define CHECK_RETURN( x ) if( !(x) ) return 0
@@ -3310,7 +3308,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                         throw FontException();
 
                     sal_uInt64 nBeginStreamPos = 0;
-                    osl_getFilePos( m_aFile, &nBeginStreamPos );
+                    m_aFile.getPos(nBeginStreamPos);
 
                     beginCompression();
                     checkAndEnableStreamEncryption( nStreamObject );
@@ -3435,7 +3433,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                     disableStreamEncryption();
 
                     sal_uInt64 nEndStreamPos = 0;
-                    osl_getFilePos( m_aFile, &nEndStreamPos );
+                    m_aFile.getPos(nEndStreamPos);
 
                     // and finally close the stream
                     aLine.setLength( 0 );
@@ -3920,7 +3918,7 @@ bool PDFWriterImpl::emitFonts()
                     aLine.append( ">>\n"
                                  "stream\n" );
                     if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
-                    if ( osl_File_E_None != osl_getFilePos( m_aFile, &nStartPos ) ) return false;
+                    if ( osl::File::E_None != m_aFile.getPos(nStartPos) ) return false;
 
                     // copy font file
                     beginCompression();
@@ -3962,7 +3960,7 @@ bool PDFWriterImpl::emitFonts()
                     aLine.append( ">>\n"
                                  "stream\n" );
                     if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
-                    if ( osl_File_E_None != osl_getFilePos( m_aFile, &nStartPos ) ) return false;
+                    if ( osl::File::E_None != m_aFile.getPos(nStartPos) ) return false;
 
                     // emit PFB-sections without section headers
                     beginCompression();
@@ -3983,7 +3981,7 @@ bool PDFWriterImpl::emitFonts()
                 aFontFile.close();
 
                 sal_uInt64 nEndPos = 0;
-                if ( osl_File_E_None != osl_getFilePos( m_aFile, &nEndPos ) ) return false;
+                if ( osl::File::E_None != m_aFile.getPos(nEndPos) ) return false;
                 // end the stream
                 aLine.setLength( 0 );
                 aLine.append( "\nendstream\nendobj\n\n" );
@@ -5878,7 +5876,7 @@ bool PDFWriterImpl::emitSignature()
     aLine.append("<</Contents <" );
 
     sal_uInt64 nOffset = ~0U;
-    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nOffset ) ) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nOffset) ) );
 
     m_nSignatureContentOffset = nOffset + aLine.getLength();
 
@@ -5964,20 +5962,20 @@ bool PDFWriterImpl::finalizeSignature()
 
     // 1- calculate last ByteRange value
     sal_uInt64 nOffset = ~0U;
-    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nOffset ) ) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nOffset) ) );
 
     sal_Int64 nLastByteRangeNo = nOffset - (m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
 
     // 2- overwrite the value to the m_nSignatureLastByteRangeNoOffset position
     sal_uInt64 nWritten = 0;
-    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset ) ) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset) ) );
     OStringBuffer aByteRangeNo( 256 );
     aByteRangeNo.append( nLastByteRangeNo, 10);
     aByteRangeNo.append( " ]" );
 
-    if( osl_writeFile( m_aFile, aByteRangeNo.getStr(), aByteRangeNo.getLength(), &nWritten ) != osl_File_E_None )
+    if (m_aFile.write(aByteRangeNo.getStr(), aByteRangeNo.getLength(), nWritten) != osl::File::E_None)
     {
-        CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset ) ) );
+        CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
         return false;
     }
 
@@ -6003,7 +6001,7 @@ bool PDFWriterImpl::finalizeSignature()
     SAL_WARN("vcl.gdi", "PDF Signing: Certificate Subject: " <<  cert->subjectName << "\n\tCertificate Issuer: " << cert->issuerName);
 
     // Prepare buffer and calculate PDF file digest
-    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, 0) ) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
 
     HashContextScope hc(HASH_Create(HASH_AlgSHA1));
     if (!hc.get())
@@ -6018,16 +6016,15 @@ bool PDFWriterImpl::finalizeSignature()
     sal_uInt64 bytesRead;
 
     //FIXME: Check if SHA1 is calculated from the correct byterange
-
-    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer.get(), m_nSignatureContentOffset - 1 , &bytesRead ) ) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), m_nSignatureContentOffset - 1 , bytesRead)) );
     if (bytesRead != (sal_uInt64)m_nSignatureContentOffset - 1)
         SAL_WARN("vcl.gdi", "PDF Signing: First buffer read failed!");
 
     HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer.get()), bytesRead);
 
-    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1)) );
     buffer.reset(new char[nLastByteRangeNo + 1]);
-    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer.get(), nLastByteRangeNo, &bytesRead ) ) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), nLastByteRangeNo, bytesRead)) );
     if (bytesRead != (sal_uInt64) nLastByteRangeNo)
         SAL_WARN("vcl.gdi", "PDF Signing: Second buffer read failed!");
 
@@ -6141,12 +6138,12 @@ bool PDFWriterImpl::finalizeSignature()
 
     // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
     nWritten = 0;
-    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset) ) );
-    osl_writeFile(m_aFile, cms_hexbuffer.getStr(), cms_hexbuffer.getLength(), &nWritten);
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset)) );
+    m_aFile.write(cms_hexbuffer.getStr(), cms_hexbuffer.getLength(), nWritten);
 
     NSS_CMSMessage_Destroy(cms_msg);
 
-    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset ) ) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
     return true;
 }
 
@@ -6337,7 +6334,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
     //get file position
     sal_uInt64 nBeginStreamPos = 0;
-    osl_getFilePos( m_aFile, &nBeginStreamPos );
+    m_aFile.getPos(nBeginStreamPos);
     beginCompression();
     checkAndEnableStreamEncryption( nICCObject );
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
@@ -6354,7 +6351,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     disableStreamEncryption();
     endCompression();
     sal_uInt64 nEndStreamPos = 0;
-    osl_getFilePos( m_aFile, &nEndStreamPos );
+    m_aFile.getPos(nEndStreamPos);
 
     if( !written )
         return 0;
@@ -6619,7 +6616,7 @@ bool PDFWriterImpl::emitTrailer()
     // emit xref table
     // remember start
     sal_uInt64 nXRefOffset = 0;
-    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nXRefOffset )) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nXRefOffset )) );
     CHECK_RETURN( writeBuffer( "xref\n", 5 ) );
 
     sal_Int32 nObjects = m_aObjects.size();
@@ -6884,9 +6881,9 @@ bool PDFWriterImpl::emitAdditionalStreams()
         if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
             return false;
         sal_uInt64 nBeginStreamPos = 0, nEndStreamPos = 0;
-        if( osl_File_E_None != osl_getFilePos( m_aFile, &nBeginStreamPos ) )
+        if( osl::File::E_None != m_aFile.getPos(nBeginStreamPos) )
         {
-            osl_closeFile( m_aFile );
+            m_aFile.close();
             m_bOpen = false;
         }
         if( rStream.m_bCompress )
@@ -6903,9 +6900,9 @@ bool PDFWriterImpl::emitAdditionalStreams()
         if( rStream.m_bCompress )
             endCompression();
 
-        if( osl_File_E_None != osl_getFilePos( m_aFile, &nEndStreamPos ) )
+        if (osl::File::E_None != m_aFile.getPos(nEndStreamPos))
         {
-            osl_closeFile( m_aFile );
+            m_aFile.close();
             m_bOpen = false;
             return false;
         }
@@ -6962,7 +6959,7 @@ bool PDFWriterImpl::emit()
         CHECK_RETURN( finalizeSignature() );
 #endif
 
-    osl_closeFile( m_aFile );
+    m_aFile.close();
     m_bOpen = false;
 
     return true;
@@ -9533,7 +9530,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     sal_uInt64 nStartStreamPos = 0;
-    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartStreamPos )) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nStartStreamPos)) );
 
     checkAndEnableStreamEncryption( nFunctionObject );
     beginCompression();
@@ -9575,7 +9572,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     disableStreamEncryption();
 
     sal_uInt64 nEndStreamPos = 0;
-    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nEndStreamPos )) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nEndStreamPos)) );
 
     aLine.setLength( 0 );
     aLine.append( "\nendstream\nendobj\n\n" );
@@ -9971,7 +9968,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
                   "stream\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     sal_uInt64 nStartPos = 0;
-    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos )) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nStartPos)) );
 
     checkAndEnableStreamEncryption( rObject.m_nObject );
 #ifndef DEBUG_DISABLE_PDFCOMPRESSION
@@ -10013,7 +10010,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     disableStreamEncryption();
 
     sal_uInt64 nEndPos = 0;
-    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nEndPos )) );
+    CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nEndPos)) );
     aLine.setLength( 0 );
     aLine.append( "\nendstream\nendobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );

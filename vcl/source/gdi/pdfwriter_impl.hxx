@@ -27,7 +27,7 @@
 #include <boost/shared_array.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <osl/file.h>
+#include <osl/file.hxx>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
@@ -683,7 +683,7 @@ private:
     std::map< sal_Int32, sal_Int32 >    m_aBuiltinFontToObjectMap;
 
     PDFWriter::PDFWriterContext         m_aContext;
-    oslFileHandle                       m_aFile;
+    osl::File                           m_aFile;
     bool                                m_bOpen;
 
     /* output redirection; e.g. to accumulate content streams for
