@@ -23,7 +23,7 @@
 #include "CustomAnimationPreset.hxx"
 #include <vcl/tabdlg.hxx>
 
-enum PathKind { NONE, CURVE, POLYGON, FREEFORM };
+enum class PathKind { NONE, CURVE, POLYGON, FREEFORM };
 
 class TabControl;
 class OKButton;
