@@ -19,9 +19,10 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Enumeration;
 import java.util.StringTokenizer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.sun.star.script.framework.container.ScriptEntry;
 import com.sun.star.script.framework.container.ParcelDescriptor;
@@ -175,7 +176,7 @@ public class CommandLineTools {
         private String language = null;
         private MethodFinder finder = null;
         private ArrayList<ScriptEntry> scripts = null;
-        private HashMap properties = new HashMap(3);
+        private Map<String,String> properties = new HashMap<String,String>(3);
 
         public GenerateCommand(String basedir) {
             this.basedir = new File(basedir);
@@ -289,12 +290,10 @@ public class CommandLineTools {
 
                 ParcelDescriptor desc = new ParcelDescriptor(parcelxml, language);
                 desc.setScriptEntries(scripts.toArray(new ScriptEntry[scripts.size()]));
-                if (properties.size() != 0) {
-                    Enumeration enumer = properties.keys();
-
-                    while (enumer.hasMoreElements()) {
-                        String name = (String)enumer.nextElement();
-                        String value = (String)properties.get(name);
+                if (!properties.isEmpty()) {
+                    for (Entry<String,String> property : properties.entrySet()) {
+                        String name = property.getKey();
+                        String value = property.getValue();
                         log("Setting property: " +  name + " to " + value);
 
                         desc.setLanguageProperty(name, value);
