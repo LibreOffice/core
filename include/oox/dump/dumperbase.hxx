@@ -808,11 +808,20 @@ static const NameListWrapper NO_LIST;
 
 
 
-class ItemFormatMap : public ::std::map< sal_Int64, ItemFormat >
+class ItemFormatMap
 {
+private:
+    ::std::map< sal_Int64, ItemFormat > maMap;
+
 public:
-                 ItemFormatMap() {}
+    ItemFormatMap() : maMap() {}
     explicit     ItemFormatMap( const NameListRef& rxNameList ) { insertFormats( rxNameList ); }
+
+    ::std::map< sal_Int64, ItemFormat >::const_iterator end() const { return maMap.end(); }
+    ::std::map< sal_Int64, ItemFormat >::const_iterator find(sal_Int64 nId) const
+    {
+        return maMap.find(nId);
+    }
 
     void         insertFormats( const NameListRef& rxNameList );
 };

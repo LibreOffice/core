@@ -936,7 +936,7 @@ void ItemFormatMap::insertFormats( const NameListRef& rxNameList )
 {
     if( Base::isValid( rxNameList ) )
         for( NameListBase::const_iterator aIt = rxNameList->begin(), aEnd = rxNameList->end(); aIt != aEnd; ++aIt )
-            (*this)[ aIt->first ].parse( aIt->second );
+            maMap[ aIt->first ].parse( aIt->second );
 }
 
 ConstList::ConstList( const SharedConfigData& rCfgData ) :
@@ -2488,7 +2488,7 @@ void RecordObjectBase::implDump()
         // record body
         if( !mbBinaryOnly && cfg().hasName( xRecNames, mnRecId ) )
         {
-            ItemFormatMap::const_iterator aIt = aSimpleRecs.find( mnRecId );
+            ::std::map< sal_Int64, ItemFormat >::const_iterator aIt = aSimpleRecs.find( mnRecId );
             if( aIt != aSimpleRecs.end() )
                 dumpItem( aIt->second );
             else
