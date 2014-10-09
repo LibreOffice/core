@@ -428,7 +428,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // einstellungen fuer liniendash
+        // configuration for line-dash
         case SID_DASH :
             if (pArgs)
                 if (pArgs->Count () == 7)

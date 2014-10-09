@@ -847,8 +847,8 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
     return (bFound);
 }
 
-//If  object  is marked , return true , else return false .
-bool DrawDocShell::IsMarked(  SdrObject* pObject  )
+// If object is marked return true else return false.
+bool DrawDocShell::IsMarked( SdrObject* pObject )
 {
     bool bisMarked =false;
 
@@ -863,7 +863,7 @@ bool DrawDocShell::IsMarked(  SdrObject* pObject  )
     return  bisMarked;
 }
 
-//If  object  is marked , return true , else return false .
+// If object is marked return true else return false.
 bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
 {
     OSL_TRACE("GotoBookmark %s",
@@ -879,14 +879,14 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
         if( rBookmark.startsWith("#") )
             aBookmark = rBookmark.copy( 1 );
 
-        // Ist das Bookmark eine Seite?
+        // Is the bookmark a page ?
         bool        bIsMasterPage;
         sal_uInt16  nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
         SdrObject*  pObj = NULL;
 
         if (nPgNum == SDRPAGE_NOTFOUND)
         {
-            // Ist das Bookmark ein Objekt?
+            // Is the bookmark an object ?
             pObj = mpDoc->GetObj(aBookmark);
 
             if (pObj)
@@ -897,17 +897,16 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
 
         if (nPgNum != SDRPAGE_NOTFOUND)
         {
-            /**********************************************************
-            * Zur Seite springen
-            **********************************************************/
-
+            /********************
+             * Skip to the page *
+             ********************/
             SdPage* pPage = (SdPage*) mpDoc->GetPage(nPgNum);
 
             PageKind eNewPageKind = pPage->GetPageKind();
 
             if (eNewPageKind != pDrViewSh->GetPageKind())
             {
-                // Arbeitsbereich wechseln
+                // change workspace
                 GetFrameView()->SetPageKind(eNewPageKind);
                 ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
                   mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->
@@ -926,7 +925,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
 
             if (eNewEditMode != pDrViewSh->GetEditMode())
             {
-                // EditMode setzen
+                // set EditMode
                 pDrViewSh->ChangeEditMode(eNewEditMode, false);
             }
 
@@ -967,7 +966,8 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
 
     return ( bUnMark);
 }
-//realize multi-selection of objects
+
+// realize multi-selection of objects
 bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 {
     OSL_TRACE("GotoBookmark %s",
@@ -983,14 +983,14 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
         if( rBookmark.startsWith("#") )
             aBookmark = rBookmark.copy( 1 );
 
-        // Ist das Bookmark eine Seite?
+        // is the bookmark a page ?
         bool        bIsMasterPage;
         sal_uInt16  nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
         SdrObject*  pObj = NULL;
 
         if (nPgNum == SDRPAGE_NOTFOUND)
         {
-            // Ist das Bookmark ein Objekt?
+            // is the bookmark an object ?
             pObj = mpDoc->GetObj(aBookmark);
 
             if (pObj)
@@ -1001,9 +1001,9 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 
         if (nPgNum != SDRPAGE_NOTFOUND)
         {
-            /**********************************************************
-            * Zur Seite springen
-            **********************************************************/
+            /********************
+             * Skip to the page *
+             ********************/
             bFound = true;
             SdPage* pPage = (SdPage*) mpDoc->GetPage(nPgNum);
 
@@ -1011,7 +1011,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 
             if (eNewPageKind != pDrViewSh->GetPageKind())
             {
-                // Arbeitsbereich wechseln
+                // change workspace
                 GetFrameView()->SetPageKind(eNewPageKind);
                 ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
                   mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->
@@ -1030,7 +1030,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 
             if (eNewEditMode != pDrViewSh->GetEditMode())
             {
-                // EditMode setzen
+                // set EditMode
                 pDrViewSh->ChangeEditMode(eNewEditMode, false);
             }
 
