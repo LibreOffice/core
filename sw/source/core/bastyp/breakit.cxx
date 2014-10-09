@@ -108,7 +108,7 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rTxt, sal_Int32 nPos 
 
         nScript = xBreak->getScriptType( rTxt, nPos );
         sal_Int32 nChgPos = 0;
-        if ( i18n::ScriptType::WEAK == nScript && nPos + 1 < rTxt.getLength() )
+        if (i18n::ScriptType::WEAK == nScript && nPos >= 0 && nPos + 1 < rTxt.getLength())
         {
             // A weak character followed by a mark may be meant to combine with
             // the mark, so prefer the following character's script
