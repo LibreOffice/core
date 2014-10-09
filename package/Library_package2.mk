@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_exception_objects,package2,\
 	package/source/zipapi/XUnbufferedStream \
 	package/source/zipapi/ZipEnumeration \
 	package/source/zipapi/ZipFile \
+	package/source/zipapi/ZipOutputEntry \
 	package/source/zipapi/ZipOutputStream \
 	package/source/zippackage/wrapstreamforshare \
 	package/source/zippackage/zipfileaccess \

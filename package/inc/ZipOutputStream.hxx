@@ -21,74 +21,35 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/xml/crypto/XCipherContext.hpp>
-#include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
-#include <package/Deflater.hxx>
 #include <ByteChucker.hxx>
-#include <CRC32.hxx>
 
 #include <vector>
 
 struct ZipEntry;
-class ZipPackageStream;
 
 class ZipOutputStream
 {
-protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > m_xStream;
-
     ::std::vector < ZipEntry * > m_aZipList;
 
-    ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
-
-    OUString            m_sComment;
-    ZipUtils::Deflater  m_aDeflater;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > m_xDigestContext;
-
-    CRC32               m_aCRC;
     ByteChucker         m_aChucker;
-    ZipEntry            *m_pCurrentEntry;
-    sal_Int16           m_nDigested;
-    bool                m_bFinished, m_bEncryptCurrentEntry;
-    ZipPackageStream*   m_pCurrentStream;
+    bool                m_bFinished;
 
 public:
     ZipOutputStream(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
-    // rawWrite to support a direct write to the output stream
-    void SAL_CALL rawWrite( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+    void addEntry( ZipEntry *pZipEntry );
+    void finish()
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL rawCloseEntry(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    ByteChucker& getChucker();
 
-    // XZipOutputStream interfaces
-    void SAL_CALL putNextEntry( ZipEntry& rEntry,
-            ZipPackageStream* pStream,
-            bool bEncrypt = false )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL closeEntry(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL finish(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    static sal_uInt32 getCurrentDosTime ( );
-protected:
-    void doDeflate();
+private:
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void writeCEN( const ZipEntry &rEntry )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void writeEXT( const ZipEntry &rEntry )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    sal_Int32 writeLOC( const ZipEntry &rEntry )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 };
 
