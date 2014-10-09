@@ -84,6 +84,8 @@ bool ScDocument::CopyOneCellFromClip(
         return false;
 
     ScCellValue& rSrcCell = rCxt.getSingleCell();
+    const ScPatternAttr* pAttr = pClipDoc->GetPattern(aSrcPos);
+    rCxt.setSingleCellPattern(pAttr);
     if (rCxt.isAsLink())
     {
         ScSingleRefData aRef;
@@ -97,8 +99,6 @@ bool ScDocument::CopyOneCellFromClip(
     else
     {
         rSrcCell.set(pClipDoc->GetRefCellValue(aSrcPos));
-        const ScPatternAttr* pAttr = pClipDoc->GetPattern(aSrcPos);
-        rCxt.setSingleCellPattern(pAttr);
 
         // Check the paste flag to see whether we want to paste this cell.  If the
         // flag says we don't want to paste this cell, we'll return with true.
