@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<parcel>
-    <script language="Java" deploymentdir="java/HelloWorld">
-        <logicalname value="HelloWorld.printHello"/>
-        <languagename value="HelloWorld.printHello" location="HelloWorld.class"/>
-    </script>
-</parcel>
