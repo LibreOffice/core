@@ -134,15 +134,11 @@ public class LocalOfficeConnection
         }
         catch ( java.net.MalformedURLException e )
         {
-            com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
-            e2.initCause(e);
-            throw e2;
+            throw new com.sun.star.uno.RuntimeException(e);
         }
         catch ( UnsupportedEncodingException e)
         {
-            com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
-            e2.initCause(e);
-            throw e2;
+            throw new com.sun.star.uno.RuntimeException(e);
         }
     }
 
@@ -672,9 +668,7 @@ public class LocalOfficeConnection
             }
             catch (UnsupportedEncodingException e)
             {
-                com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
-                e2.initCause(e);
-                throw e2;
+                throw new com.sun.star.uno.RuntimeException(e);
             }
             return identifier;
         }
