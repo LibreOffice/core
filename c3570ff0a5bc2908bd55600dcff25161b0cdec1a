@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_2855cbc5",
+        "filename": "cui/source/dialogs/colorpicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-09T09:34:48Z",
+      "side": 1,
+      "message": "for Sequence\u003cOUString\u003e, you\u0027ll unfortunately need to more explicitly create an initializer_list\u003cOUString\u003e,\n\n  return Sequence\u003cOUString\u003e{OUString(\"com.sun.star.ui.dialogs.ColorPicker\"};",
+      "revId": "c3570ff0a5bc2908bd55600dcff25161b0cdec1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_085207de",
+        "filename": "include/com/sun/star/uno/Sequence.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-09T09:34:48Z",
+      "side": 1,
+      "message": "...filled with objects of type E.",
+      "revId": "c3570ff0a5bc2908bd55600dcff25161b0cdec1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
