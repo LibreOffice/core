@@ -52,7 +52,7 @@ protected:
     CRC32               m_aCRC;
     ByteChucker         m_aChucker;
     ZipEntry            *m_pCurrentEntry;
-    sal_Int16           m_nMethod, m_nLevel, m_nDigested;
+    sal_Int16           m_nDigested;
     bool                m_bFinished, m_bEncryptCurrentEntry;
     ZipPackageStream*   m_pCurrentStream;
 
@@ -69,10 +69,6 @@ public:
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XZipOutputStream interfaces
-    void SAL_CALL setMethod( sal_Int32 nNewMethod )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLevel( sal_Int32 nNewLevel )
-        throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL putNextEntry( ZipEntry& rEntry,
             ZipPackageStream* pStream,
             bool bEncrypt = false )

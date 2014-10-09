@@ -45,8 +45,6 @@ ZipOutputStream::ZipOutputStream( const uno::Reference< uno::XComponentContext >
 , m_aDeflater(DEFAULT_COMPRESSION, true)
 , m_aChucker(xOStream)
 , m_pCurrentEntry(NULL)
-, m_nMethod(DEFLATED)
-, m_nLevel(0)
 , m_nDigested(0)
 , m_bFinished(false)
 , m_bEncryptCurrentEntry(false)
@@ -60,17 +58,6 @@ ZipOutputStream::~ZipOutputStream( void )
         delete m_aZipList[i];
 }
 
-void SAL_CALL ZipOutputStream::setMethod( sal_Int32 nNewMethod )
-    throw(RuntimeException)
-{
-    m_nMethod = static_cast < sal_Int16 > (nNewMethod);
-}
-void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
-    throw(RuntimeException)
-{
-    m_aDeflater.setLevel( nNewLevel);
-}
-
 void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
                         ZipPackageStream* pStream,
                         bool bEncrypt)
@@ -81,7 +68,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     if (rEntry.nTime == -1)
         rEntry.nTime = getCurrentDosTime();
     if (rEntry.nMethod == -1)
-        rEntry.nMethod = m_nMethod;
+        rEntry.nMethod = DEFLATED;
     rEntry.nVersion = 20;
     rEntry.nFlag = 1 << 11;
     if (rEntry.nSize == -1 || rEntry.nCompressedSize == -1 ||

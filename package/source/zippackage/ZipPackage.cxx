@@ -1139,9 +1139,6 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
     // Hand it to the ZipOutputStream:
     ZipOutputStream aZipOut( m_xContext, xTempOut );
-    aZipOut.setMethod( DEFLATED );
-    aZipOut.setLevel( DEFAULT_COMPRESSION );
-
     try
     {
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
