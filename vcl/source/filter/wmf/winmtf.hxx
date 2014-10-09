@@ -40,9 +40,13 @@
 #define RGN_DIFF                4
 #define RGN_COPY                5
 
-#define TRANSPARENT             1
-#define OPAQUE                  2
-#define BKMODE_LAST             2
+enum class BkMode
+{
+    NONE         = 0,
+    TRANSPARENT  = 1,
+    OPAQUE       = 2,
+    LAST         = 2
+};
 
 /* xform stuff */
 #define MWT_IDENTITY            1
@@ -471,7 +475,8 @@ struct XForm
 
 struct SaveStruct
 {
-    sal_uInt32          nBkMode, nMapMode, nGfxMode;
+    BkMode              nBkMode;
+    sal_uInt32          nMapMode, nGfxMode;
     ComplexTextLayoutMode nTextLayoutMode;
     sal_Int32           nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
     sal_Int32           nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
@@ -596,8 +601,8 @@ class WinMtfOutput
     Color               maBkColor;
     ComplexTextLayoutMode  mnLatestTextLayoutMode;
     ComplexTextLayoutMode  mnTextLayoutMode;
-    sal_uInt32          mnLatestBkMode;
-    sal_uInt32          mnBkMode;
+    BkMode              mnLatestBkMode;
+    BkMode              mnBkMode;
     RasterOp            meLatestRasterOp;
     RasterOp            meRasterOp;
 
@@ -680,7 +685,7 @@ public:
 
     void                SetGfxMode( sal_Int32 nGfxMode ){ mnGfxMode = nGfxMode; };
     sal_Int32           GetGfxMode() const { return mnGfxMode; };
-    void                SetBkMode( sal_uInt32 nMode );
+    void                SetBkMode( BkMode nMode );
     void                SetBkColor( const Color& rColor );
     void                SetTextColor( const Color& rColor );
     void                SetTextAlign( sal_uInt32 nAlign );

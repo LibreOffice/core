@@ -611,7 +611,7 @@ void WinMtfOutput::SetTextLayoutMode( ComplexTextLayoutMode nTextLayoutMode )
     mnTextLayoutMode = nTextLayoutMode;
 }
 
-void WinMtfOutput::SetBkMode( sal_uInt32 nMode )
+void WinMtfOutput::SetBkMode( BkMode nMode )
 {
     mnBkMode = nMode;
 }
@@ -803,8 +803,8 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     maBkColor           ( COL_WHITE ),
     mnLatestTextLayoutMode( TEXT_LAYOUT_DEFAULT ),
     mnTextLayoutMode    ( TEXT_LAYOUT_DEFAULT ),
-    mnLatestBkMode      ( 0 ),
-    mnBkMode            ( OPAQUE ),
+    mnLatestBkMode      ( BkMode::NONE ),
+    mnBkMode            ( BkMode::OPAQUE ),
     meLatestRasterOp    ( ROP_INVERT ),
     meRasterOp          ( ROP_OVERPAINT ),
     maActPos            ( Point() ),
@@ -907,7 +907,7 @@ void WinMtfOutput::UpdateLineStyle()
 void WinMtfOutput::UpdateFillStyle()
 {
     if ( !mbFillStyleSelected )     // SJ: #i57205# taking care of bkcolor if no brush is selected
-        maFillStyle = WinMtfFillStyle( maBkColor, mnBkMode == TRANSPARENT );
+        maFillStyle = WinMtfFillStyle( maBkColor, mnBkMode == BkMode::TRANSPARENT );
     if (!( maLatestFillStyle == maFillStyle ) )
     {
         maLatestFillStyle = maFillStyle;
@@ -1398,7 +1398,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
     aTmp.SetColor( maTextColor );
     aTmp.SetFillColor( maBkColor );
 
-    if( mnBkMode == TRANSPARENT )
+    if( mnBkMode == BkMode::TRANSPARENT )
         aTmp.SetTransparent( true );
     else
         aTmp.SetTransparent( false );

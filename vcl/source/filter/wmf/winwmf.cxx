@@ -176,7 +176,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         {
             sal_uInt16 nDat = 0;
             pWMF->ReadUInt16( nDat );
-            pOut->SetBkMode( nDat );
+            pOut->SetBkMode( static_cast<BkMode>(nDat) );
         }
         break;
 

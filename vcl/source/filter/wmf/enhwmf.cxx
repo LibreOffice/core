@@ -775,7 +775,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 case EMR_SETBKMODE :
                 {
                     pWMF->ReadUInt32( nDat32 );
-                    pOut->SetBkMode( nDat32 );
+                    pOut->SetBkMode( static_cast<BkMode>(nDat32) );
                 }
                 break;
 
