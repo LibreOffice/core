@@ -416,10 +416,6 @@ public class ColourConverter {
         matchedRGB += getClosest(c.getGreen(), points) << 8;
         matchedRGB += getClosest(c.getBlue(), points);
 
-        if (matchedRGB == 0xC0C0C0) {
-            return true;
-        }
-
-        return false;
+        return matchedRGB == 0xC0C0C0;
     }
 }

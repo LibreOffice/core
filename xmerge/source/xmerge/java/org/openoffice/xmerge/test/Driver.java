@@ -292,10 +292,6 @@ public final class Driver {
     private boolean isZip(String zipName) {
 
         String str = zipName.toLowerCase();
-        if (str.endsWith("sxw") || zipName.endsWith("sxc")) {
-            return true;
-        }
-
-        return false;
+        return str.endsWith("sxw") || zipName.endsWith("sxc");
     }
 }

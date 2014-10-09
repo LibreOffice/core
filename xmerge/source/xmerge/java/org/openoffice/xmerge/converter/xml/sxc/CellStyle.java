@@ -352,10 +352,7 @@ public class CellStyle extends Style implements Cloneable {
 
         Format rhs = tStyle.getFormat();
 
-        if(!fmt.isSubset(rhs))
-            return false;
-
-        return true;
+        return fmt.isSubset(rhs);
     }
 
     /**
