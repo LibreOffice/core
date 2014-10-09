@@ -1678,7 +1678,10 @@ public:
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
     SC_DLLPUBLIC SvNumberFormatter* CreateFormatTable() const;
 
-    void Sort( SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress, sc::ReorderParam* pUndo );
+    void Sort(
+        SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+        ScProgress* pProgress, sc::ReorderParam* pUndo );
+
     void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );
 
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );

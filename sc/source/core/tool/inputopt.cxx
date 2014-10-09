@@ -55,6 +55,7 @@ void ScInputOptions::SetDefaults()
     bExtendFormat   = false;
     bRangeFinder    = true;
     bExpandRefs     = false;
+    mbSortRefUpdate = true;
     bMarkHeader     = true;
     bUseTabCol      = false;
     bTextWysiwyg    = false;
@@ -70,6 +71,7 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
     bExtendFormat   = rCpy.bExtendFormat;
     bRangeFinder    = rCpy.bRangeFinder;
     bExpandRefs     = rCpy.bExpandRefs;
+    mbSortRefUpdate = rCpy.mbSortRefUpdate;
     bMarkHeader     = rCpy.bMarkHeader;
     bUseTabCol      = rCpy.bUseTabCol;
     bTextWysiwyg    = rCpy.bTextWysiwyg;
@@ -83,18 +85,19 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
 
 #define CFGPATH_INPUT           "Office.Calc/Input"
 
-#define SCINPUTOPT_MOVEDIR                0
-#define SCINPUTOPT_MOVESEL                1
-#define SCINPUTOPT_EDTEREDIT              2
-#define SCINPUTOPT_EXTENDFMT              3
-#define SCINPUTOPT_RANGEFIND              4
-#define SCINPUTOPT_EXPANDREFS             5
-#define SCINPUTOPT_MARKHEADER             6
-#define SCINPUTOPT_USETABCOL              7
-#define SCINPUTOPT_TEXTWYSIWYG            8
-#define SCINPUTOPT_REPLCELLSWARN          9
-#define SCINPUTOPT_LEGACY_CELL_SELECTION 10
-#define SCINPUTOPT_COUNT                 11
+#define SCINPUTOPT_MOVEDIR                 0
+#define SCINPUTOPT_MOVESEL                 1
+#define SCINPUTOPT_EDTEREDIT               2
+#define SCINPUTOPT_EXTENDFMT               3
+#define SCINPUTOPT_RANGEFIND               4
+#define SCINPUTOPT_EXPANDREFS              5
+#define SCINPUTOPT_SORT_REF_UPDATE         6
+#define SCINPUTOPT_MARKHEADER              7
+#define SCINPUTOPT_USETABCOL               8
+#define SCINPUTOPT_TEXTWYSIWYG             9
+#define SCINPUTOPT_REPLCELLSWARN          10
+#define SCINPUTOPT_LEGACY_CELL_SELECTION  11
+#define SCINPUTOPT_COUNT                  12
 
 Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
@@ -106,6 +109,7 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
         "ExpandFormatting",         // SCINPUTOPT_EXTENDFMT
         "ShowReference",            // SCINPUTOPT_RANGEFIND
         "ExpandReference",          // SCINPUTOPT_EXPANDREFS
+        "UpdateReferenceOnSort",    // SCINPUTOPT_SORT_REF_UPDATE
         "HighlightSelection",       // SCINPUTOPT_MARKHEADER
         "UseTabCol",                // SCINPUTOPT_USETABCOL
         "UsePrinterMetrics",        // SCINPUTOPT_TEXTWYSIWYG
@@ -157,6 +161,9 @@ ScInputCfg::ScInputCfg() :
                     case SCINPUTOPT_EXPANDREFS:
                         SetExpandRefs( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
+                    case SCINPUTOPT_SORT_REF_UPDATE:
+                        SetSortRefUpdate(ScUnoHelpFunctions::GetBoolFromAny(pValues[nProp]));
+                        break;
                     case SCINPUTOPT_MARKHEADER:
                         SetMarkHeader( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
@@ -205,6 +212,9 @@ void ScInputCfg::Commit()
                 break;
             case SCINPUTOPT_EXPANDREFS:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetExpandRefs() );
+                break;
+            case SCINPUTOPT_SORT_REF_UPDATE:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetSortRefUpdate() );
                 break;
             case SCINPUTOPT_MARKHEADER:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetMarkHeader() );
