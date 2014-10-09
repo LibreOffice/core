@@ -54,7 +54,10 @@ public: //methods
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
             getCoordinateRegion() { return css::uno::Reference<css::drawing::XShapes>( m_xCoordinateRegionShape, css::uno::UNO_QUERY );}
 
-    ::basegfx::B2IRectangle    getCurrentRectangle();
+    /**
+     * Get current bounding rectangle for the diagram without axes.
+     */
+    basegfx::B2IRectangle getCurrentRectangle() const;
 
     void    reduceToMimimumSize();
 
