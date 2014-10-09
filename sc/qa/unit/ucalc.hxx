@@ -338,13 +338,23 @@ public:
 
     void testFindAreaPosVertical();
     void testFindAreaPosColRight();
+    void testShiftCells();
+
     void testSort();
     void testSortHorizontal();
+    void testSortHorizontalWholeColumn();
+    void testSortSingleRow();
     void testSortWithFormulaRefs();
     void testSortWithStrings();
     void testSortInFormulaGroup();
     void testSortWithCellFormats();
-    void testShiftCells();
+    void testSortRefUpdate();
+    void testSortRefUpdate2();
+    void testSortRefUpdate3();
+    void testSortRefUpdate4();
+    void testSortRefUpdate5();
+    void testSortOutOfPlaceResult();
+    void testSortPartialFormulaGroup();
 
     void testNoteBasic();
     void testNoteDeleteRow();
@@ -507,10 +517,19 @@ public:
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST(testSort);
     CPPUNIT_TEST(testSortHorizontal);
+    CPPUNIT_TEST(testSortHorizontalWholeColumn);
+    CPPUNIT_TEST(testSortSingleRow);
     CPPUNIT_TEST(testSortWithFormulaRefs);
     CPPUNIT_TEST(testSortWithStrings);
     CPPUNIT_TEST(testSortInFormulaGroup);
     CPPUNIT_TEST(testSortWithCellFormats);
+    CPPUNIT_TEST(testSortRefUpdate);
+    CPPUNIT_TEST(testSortRefUpdate2);
+    CPPUNIT_TEST(testSortRefUpdate3);
+    CPPUNIT_TEST(testSortRefUpdate4);
+    CPPUNIT_TEST(testSortRefUpdate5);
+    CPPUNIT_TEST(testSortOutOfPlaceResult);
+    CPPUNIT_TEST(testSortPartialFormulaGroup);
     CPPUNIT_TEST(testShiftCells);
     CPPUNIT_TEST(testNoteBasic);
     CPPUNIT_TEST(testNoteDeleteRow);
