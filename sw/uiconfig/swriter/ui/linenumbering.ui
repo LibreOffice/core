@@ -1,10 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="intervaladjustment">
+    <property name="lower">1</property>
+    <property name="upper">1000</property>
+    <property name="value">5</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="lineadjustment">
+    <property name="upper">1000</property>
+    <property name="value">3</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkListStore" id="positionstore">
+    <columns>
+      <!-- column-name positions -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Left</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Right</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Inner</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Outer</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkAdjustment" id="spacingadjustment">
+    <property name="upper">9999</property>
+    <property name="value">0.5</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkDialog" id="LineNumberingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Line Numbering</property>
+    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -73,21 +115,14 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkAlignment" id="alignment4">
+              <object class="GtkCheckButton" id="shownumbering">
+                <property name="label" translatable="yes">Show numbering</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkCheckButton" id="shownumbering">
-                    <property name="label" translatable="yes">Show numbering</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="halign">start</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -124,15 +159,13 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Character Style</property>
+                                <property name="label" translatable="yes">Character style:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">styledropdown</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -140,13 +173,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Format</property>
+                                <property name="label" translatable="yes">Format:</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -154,15 +185,13 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Position</property>
+                                <property name="label" translatable="yes">Position:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">positiondropdown</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">2</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -170,15 +199,13 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Spacing</property>
+                                <property name="label" translatable="yes">Spacing:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">spacingspin:0.00cm</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">3</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -186,15 +213,13 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Interval</property>
+                                <property name="label" translatable="yes">Interval:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">intervalspin</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">4</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -207,7 +232,6 @@
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
                                 <property name="width">2</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -215,13 +239,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
-                                <property name="type">16</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">1</property>
                                 <property name="width">2</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -235,7 +257,6 @@
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">2</property>
                                 <property name="width">2</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -244,7 +265,6 @@
                                 <property name="can_focus">True</property>
                                 <property name="halign">start</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="adjustment">spacingadjustment</property>
                                 <property name="digits">2</property>
                               </object>
@@ -252,7 +272,6 @@
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">3</property>
                                 <property name="width">2</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -265,7 +284,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                     <property name="adjustment">intervaladjustment</property>
                                   </object>
                                   <packing>
@@ -292,7 +310,6 @@
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">4</property>
                                 <property name="width">2</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                           </object>
@@ -344,15 +361,13 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Text</property>
+                                    <property name="label" translatable="yes">Text:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">textentry</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -360,15 +375,13 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Every</property>
+                                    <property name="label" translatable="yes">Every:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">linesspin</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -377,13 +390,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
                                     <property name="width_chars">3</property>
-                                    <property name="invisible_char_set">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">0</property>
                                     <property name="width">2</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -391,13 +402,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Lines</property>
+                                    <property name="label" translatable="yes">lines</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -405,14 +414,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                     <property name="adjustment">lineadjustment</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -486,13 +492,12 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="restarteverynewpage">
-                                    <property name="label" translatable="yes">Restart every new page</property>
+                                  <object class="GtkCheckButton" id="showfooterheadernumbering">
+                                    <property name="label" translatable="yes">Include header and footer</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="yalign">0.5</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
@@ -502,13 +507,12 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="showfooterheadernumbering">
-                                    <property name="label" translatable="yes">Include footer/header in Line Numbering</property>
+                                  <object class="GtkCheckButton" id="restarteverynewpage">
+                                    <property name="label" translatable="yes">Restart every new page</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="yalign">0.5</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
@@ -567,44 +571,5 @@
       <action-widget response="0">cancel</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkAdjustment" id="intervaladjustment">
-    <property name="lower">1</property>
-    <property name="upper">1000</property>
-    <property name="value">5</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkListStore" id="positionstore">
-    <columns>
-      <!-- column-name positions -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Left</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Right</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Inner</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Outer</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkAdjustment" id="lineadjustment">
-    <property name="upper">1000</property>
-    <property name="value">3</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="spacingadjustment">
-    <property name="upper">9999</property>
-    <property name="value">0.5</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>
