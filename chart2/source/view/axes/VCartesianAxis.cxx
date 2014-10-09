@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basegfx/numeric/ftools.hxx>
-
 #include "VCartesianAxis.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "AbstractShapeFactory.hxx"
@@ -41,13 +39,15 @@
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
 
-#include <algorithm>
-#include <boost/scoped_ptr.hpp>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
+
+#include <algorithm>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
