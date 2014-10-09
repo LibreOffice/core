@@ -47,13 +47,9 @@ public class MSOfficePrint
 
     private static boolean isWordDocument(String _sSuffix)
         {
-            if (_sSuffix.toLowerCase().endsWith(".doc") ||
+            return _sSuffix.toLowerCase().endsWith(".doc") ||
                 _sSuffix.toLowerCase().endsWith(".rtf") ||
-                _sSuffix.toLowerCase().endsWith(".dot"))
-            {
-                return true;
-            }
-            return false;
+                _sSuffix.toLowerCase().endsWith(".dot");
         }
 
     private static boolean isExcelDocument(String _sSuffix)
@@ -75,12 +71,8 @@ public class MSOfficePrint
 
     private static boolean isPowerPointDocument(String _sSuffix)
         {
-            if (_sSuffix.toLowerCase().endsWith(".pps") ||
-                _sSuffix.toLowerCase().endsWith(".ppt"))
-            {
-                return true;
-            }
-            return false;
+            return _sSuffix.toLowerCase().endsWith(".pps") ||
+                _sSuffix.toLowerCase().endsWith(".ppt");
         }
 
     /**

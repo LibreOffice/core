@@ -196,15 +196,9 @@ public class GraphicalTestArguments
             {
                 sREUSE_OFFICE = "false";
             }
-            if (sREUSE_OFFICE.equalsIgnoreCase("yes") ||
-                sREUSE_OFFICE.equalsIgnoreCase("true"))
-            {
-                m_bResuseOffice = true;
-            }
-            else
-            {
-                m_bResuseOffice = false;
-            }
+            m_bResuseOffice =
+                sREUSE_OFFICE.equalsIgnoreCase("yes") ||
+                sREUSE_OFFICE.equalsIgnoreCase("true");
 
 
             String sHTMLOutputPrefix = (String)param.get( PropertyName.DOC_COMPARATOR_HTML_OUTPUT_PREFIX);
@@ -276,15 +270,9 @@ public class GraphicalTestArguments
             String sCreateDefault = (String)param.get(PropertyName.CREATE_DEFAULT);
             if (sCreateDefault != null)
             {
-                if (sCreateDefault.equalsIgnoreCase("yes") ||
-                    sCreateDefault.equalsIgnoreCase("true"))
-                {
-                    m_bCreateDefaultReference = true;
-                }
-                else
-                {
-                    m_bCreateDefaultReference = false;
-                }
+                m_bCreateDefaultReference =
+                    sCreateDefault.equalsIgnoreCase("yes") ||
+                    sCreateDefault.equalsIgnoreCase("true");
             }
 
         }
@@ -293,17 +281,12 @@ public class GraphicalTestArguments
         {
             // @todo
             // check if the name is in the leave out list and then return 'false'
-            if (_sName.toLowerCase().endsWith(".jpg") ||
+            return !(_sName.toLowerCase().endsWith(".jpg") ||
                 _sName.toLowerCase().endsWith(".png") ||
                 _sName.toLowerCase().endsWith(".gif") ||
                 _sName.toLowerCase().endsWith(".bmp") ||
                 _sName.toLowerCase().endsWith(".prn") ||
-                _sName.toLowerCase().endsWith(".ps"))
-            {
-                return false;
-            }
-
-            return true;
+                _sName.toLowerCase().endsWith(".ps"));
         }
 
     private static void showInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
@@ -417,12 +400,7 @@ public class GraphicalTestArguments
      */
     public boolean printAllPages()
         {
-            if ( (getMaxPages() > 0) ||
-                 (getOnlyPages().length() != 0))
-            {
-                return false;
-            }
-            return true;
+            return !((getMaxPages() > 0) || (getOnlyPages().length() != 0));
         }
 
     /**
@@ -590,11 +568,7 @@ public class GraphicalTestArguments
 
     public boolean restartOffice()
         {
-            if (!m_bResuseOffice)
-            {
-                return true;
-            }
-            return false;
+            return !m_bResuseOffice;
         }
 
     private String m_sHTMLOutputPrefix = "";

@@ -79,12 +79,8 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             {
                 sNEEDCHECK = "false";
             }
-            if (sNEEDCHECK.equalsIgnoreCase("yes") ||
-                sNEEDCHECK.equalsIgnoreCase("true"))
-            {
-                return true;
-            }
-            return false;
+            return sNEEDCHECK.equalsIgnoreCase("yes") ||
+                sNEEDCHECK.equalsIgnoreCase("true");
         }
 
 
