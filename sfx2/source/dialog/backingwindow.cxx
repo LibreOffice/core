@@ -551,6 +551,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     {
         mpLocalView->Hide();
         mpAllRecentThumbnails->Show();
+        mpAllRecentThumbnails->GrabFocus();
     }
     else if( pButton == mpTemplateButton )
     {
@@ -558,6 +559,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
         mpLocalView->Show();
         mpLocalView->reload();
+        mpLocalView->GrabFocus();
     }
     return 0;
 }
@@ -598,6 +600,7 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
     mpAllRecentThumbnails->Hide();
     mpLocalView->Show();
     mpLocalView->reload();
+    mpLocalView->GrabFocus();
 
     return 0;
 }
