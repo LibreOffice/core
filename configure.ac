@@ -78,7 +78,7 @@ AbsolutePath()
     if test -d "$rel" ; then
         cd "$rel" || AC_MSG_ERROR([absolute path resolution failed for "$rel".])
         absolute_path="$(pwd)"
-        cd - &> /dev/null
+        cd - > /dev/null
     else
         AC_MSG_ERROR([Failed to resolve absolute path.  "$rel" does not exist or is not a directory.])
     fi
