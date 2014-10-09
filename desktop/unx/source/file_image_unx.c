@@ -24,12 +24,6 @@
 #include <errno.h>
 #include <fcntl.h>
 
-#if defined(LINUX)
-#  ifndef __USE_BSD
-#    define __USE_BSD /* madvise, MADV_WILLNEED */
-#  endif
-#endif /* Linux */
-
 #include <sys/mman.h>
 #include <sys/stat.h>
 
