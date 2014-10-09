@@ -7,6 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/*
+ * =======================================================================
+ *
+ * This is a quick hack to test some stuff. Work in progress. Don't touch.
+ *
+ * =======================================================================
+ */
+
+
 #include <GL/glew.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -236,7 +245,7 @@ void IconTestApp::DoItWithVcl(std::vector<OUString>& aImageFiles)
 
         Point aPos(10, 10);
 
-        for (std::vector<OUString>::const_iterator i = aImageFiles.cbegin(); i != aImageFiles.end(); ++i)
+        for (auto i = aImageFiles.cbegin(); i != aImageFiles.end(); ++i)
         {
             SvFileStream aFileStream( *i, STREAM_READ );
             GraphicFilter aGraphicFilter(false);
@@ -308,7 +317,7 @@ void IconTestApp::DoItWithOpenGL(std::vector<OUString>& aImageFiles)
         CHECK_GL_ERROR();
 
         int n = 0;
-        for (std::vector<OUString>::const_iterator i = aImageFiles.cbegin(); i != aImageFiles.end(); ++i)
+        for (auto i = aImageFiles.cbegin(); i != aImageFiles.end(); ++i)
         {
             SvFileStream aFileStream( *i, STREAM_READ );
             GraphicFilter aGraphicFilter(false);
