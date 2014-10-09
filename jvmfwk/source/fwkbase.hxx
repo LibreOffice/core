@@ -34,19 +34,6 @@ class VendorSettings
 public:
     VendorSettings();
 
-    /** Gets all plugin library URLs with the corresponding vendor name.
-
-    It uses the /javaSelection/plugins/library element from the javavendors.xml
-    to locate the library.
-    Is is verified that the plug-in exist. If a plug-in does not exist then an
-    exception is thrown containing the error JFW_E_CONFIGURATION
-    */
-    ::std::vector<PluginLibrary> getPluginData();
-
-    /* returns the file URL to the plugin.
-     */
-    OUString getPluginLibrary(const OUString& sVendor);
-
     VersionInfo getVersionInformation(const OUString & sVendor);
 
     ::std::vector< OUString> getSupportedVendors();

@@ -519,7 +519,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 	sal_textenc \
 	stocservices \
 	store \
-	$(if $(ENABLE_JAVA),sunjavaplugin) \
 	unoidl \
 	uuresolver \
 	xmlreader \

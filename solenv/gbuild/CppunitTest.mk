@@ -296,7 +296,6 @@ $(call gb_CppunitTest_get_target,$(1)) : \
     $(call gb_Library_get_target,juhx) \
     $(call gb_Library_get_target,jvmaccess) \
     $(call gb_Library_get_target,jvmfwk) \
-    $(call gb_Library_get_target,sunjavaplugin) \
     $(call gb_Package_get_target,jvmfwk_javavendors) \
     $(call gb_Package_get_target,jvmfwk_jreproperties)
 

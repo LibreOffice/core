@@ -22,7 +22,6 @@
 #include "rtl/bootstrap.hxx"
 #include "osl/thread.hxx"
 #include "osl/file.hxx"
-#include "osl/module.hxx"
 #include "jvmfwk/framework.h"
 #include "jvmfwk/vendorplugin.h"
 #include <cassert>
@@ -48,41 +47,6 @@ bool areEqualJavaInfo(
 
 }
 
-#ifdef DISABLE_DYNLOADING
-
-extern "C"
-javaPluginError jfw_plugin_getAllJavaInfos(
-    rtl_uString *sVendor,
-    rtl_uString *sMinVersion,
-    rtl_uString *sMaxVersion,
-    rtl_uString  * *arExcludeList,
-    sal_Int32  nLenList,
-    JavaInfo*** parJavaInfo,
-    sal_Int32 *nLenInfoList);
-
-extern "C"
-javaPluginError jfw_plugin_getJavaInfoByPath(
-    rtl_uString *path,
-    rtl_uString *sVendor,
-    rtl_uString *sMinVersion,
-    rtl_uString *sMaxVersion,
-    rtl_uString  *  *arExcludeList,
-    sal_Int32  nLenList,
-    JavaInfo ** ppInfo);
-
-extern "C"
-javaPluginError jfw_plugin_startJavaVirtualMachine(
-    const JavaInfo *pInfo,
-    const JavaVMOption* arOptions,
-    sal_Int32 cOptions,
-    JavaVM ** ppVm,
-    JNIEnv ** ppEnv);
-
-extern "C"
-javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
-
-#endif
-
 javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
 {
     javaFrameworkError retVal = JFW_E_NONE;
@@ -94,16 +58,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             return JFW_E_INVALID_ARG;
 
         jfw::VendorSettings aVendorSettings;
-        //Get a list of plugins which provide Java information
-        std::vector<jfw::PluginLibrary> vecPlugins =
-            aVendorSettings.getPluginData();
-#ifndef DISABLE_DYNLOADING
-        //Create a vector that holds the libraries, which will be later
-        //dynamically loaded;
-        boost::scoped_array<osl::Module> sarModules;
-        sarModules.reset(new osl::Module[vecPlugins.size()]);
-        osl::Module * arModules = sarModules.get();
-#endif
+        std::vector<OUString> vecVendors =
+            aVendorSettings.getSupportedVendors();
         //Add the JavaInfos found by jfw_plugin_getAllJavaInfos to the vector
         //Make sure that the contents are destroyed if this
         //function returns with an error
@@ -119,42 +75,20 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         const std::vector<OUString>& vecJRELocations =
             settings.getJRELocations();
         //Use every plug-in library to get Java installations.
-        typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
+        typedef std::vector<OUString>::const_iterator ci_pl;
         int cModule = 0;
-         for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i, ++cModule)
+         for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i, ++cModule)
          {
-            const jfw::PluginLibrary & library = *i;
+            const OUString & vendor = *i;
             jfw::VersionInfo versionInfo =
-                aVendorSettings.getVersionInformation(library.sVendor);
-#ifndef DISABLE_DYNLOADING
-            arModules[cModule].load(library.sPath);
-            osl::Module & pluginLib = arModules[cModule];
-
-            if (!pluginLib.is())
-            {
-                OString msg = OUStringToOString(
-                    library.sPath, osl_getThreadTextEncoding());
-                fprintf(stderr,"[jvmfwk] Could not load plugin %s\n" \
-                        "Modify the javavendors.xml accordingly!\n", msg.getStr());
-                return JFW_E_NO_PLUGIN;
-            }
-            jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
-                (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getFunctionSymbol(
-                    OUString("jfw_plugin_getAllJavaInfos"));
-#else
-            jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
-                jfw_plugin_getAllJavaInfos;
-#endif
-            OSL_ASSERT(getAllJavaFunc);
-            if (getAllJavaFunc == NULL)
-                return JFW_E_ERROR;
+                aVendorSettings.getVersionInformation(vendor);
 
             //get all installations of one vendor according to minVersion,
             //maxVersion and excludeVersions
             sal_Int32 cInfos = 0;
             JavaInfo** arInfos = NULL;
-            javaPluginError plerr  = (*getAllJavaFunc)(
-                library.sVendor.pData,
+            javaPluginError plerr = jfw_plugin_getAllJavaInfos(
+                vendor.pData,
                 versionInfo.sMinVersion.pData,
                 versionInfo.sMaxVersion.pData,
                 versionInfo.getExcludeVersions(),
@@ -173,27 +107,15 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             //Check if the current plugin can detect JREs at the location
             // of the paths added by jfw_addJRELocation
             //get the function from the plugin
-#ifndef DISABLE_DYNLOADING
-            jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
-                    OUString("jfw_plugin_getJavaInfoByPath"));
-            OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
-            if (jfw_plugin_getJavaInfoByPathFunc == NULL)
-                return JFW_E_ERROR;
-#else
-            jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                jfw_plugin_getJavaInfoByPath;
-#endif
-
             typedef std::vector<OUString>::const_iterator citLoc;
             //Check every manually added location
             for (citLoc ii = vecJRELocations.begin();
                 ii != vecJRELocations.end(); ++ii)
             {
                 jfw::CJavaInfo aInfo;
-                plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
+                plerr = jfw_plugin_getJavaInfoByPath(
                     ii->pData,
-                    library.sVendor.pData,
+                    vendor.pData,
                     versionInfo.sMinVersion.pData,
                     versionInfo.sMaxVersion.pData,
                     versionInfo.getExcludeVersions(),
@@ -225,9 +147,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         std::vector<jfw::CJavaInfo> vecInfoManual2;
         for (it_info ivm = vecInfoManual.begin(); ivm != vecInfoManual.end(); ++ivm)
         {
-            for (ci_pl ii = vecPlugins.begin(); ii != vecPlugins.end(); ++ii)
+            for (ci_pl ii = vecVendors.begin(); ii != vecVendors.end(); ++ii)
             {
-                if ( ii->sVendor.equals((*ivm)->sVendor))
+                if ( ii->equals((*ivm)->sVendor))
                 {
                     vecInfoManual2.push_back(*ivm);
                     break;
@@ -378,23 +300,6 @@ javaFrameworkError SAL_CALL jfw_startVM(
 
         //get the function jfw_plugin_startJavaVirtualMachine
         jfw::VendorSettings aVendorSettings;
-        OUString sLibPath = aVendorSettings.getPluginLibrary(pInfo->sVendor);
-
-#ifndef DISABLE_DYNLOADING
-        osl::Module modulePlugin(sLibPath);
-        if ( ! modulePlugin)
-            return JFW_E_NO_PLUGIN;
-
-        OUString sFunctionName("jfw_plugin_startJavaVirtualMachine");
-        jfw_plugin_startJavaVirtualMachine_ptr pFunc =
-            (jfw_plugin_startJavaVirtualMachine_ptr)
-            osl_getFunctionSymbol(modulePlugin, sFunctionName.pData);
-        if (pFunc == NULL)
-            return JFW_E_ERROR;
-#else
-        jfw_plugin_startJavaVirtualMachine_ptr pFunc =
-            jfw_plugin_startJavaVirtualMachine;
-#endif
 
         // create JavaVMOptions array that is passed to the plugin
         // it contains the classpath and all options set in the
@@ -434,7 +339,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
         //start Java
         JavaVM *pVm = NULL;
         SAL_INFO("jfw", "Starting Java");
-        javaPluginError plerr = (*pFunc)(pInfo, arOpt, index, & pVm, ppEnv);
+        javaPluginError plerr = jfw_plugin_startJavaVirtualMachine(pInfo, arOpt, index, & pVm, ppEnv);
         if (plerr == JFW_PLUGIN_E_VM_CREATION_FAILED)
         {
             errcode = JFW_E_VM_CREATION_FAILED;
@@ -483,47 +388,24 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 
         //Get a list of services which provide Java information
         jfw::VendorSettings aVendorSettings;
-        std::vector<jfw::PluginLibrary> vecPlugins =
-             aVendorSettings.getPluginData();
-#ifndef DISABLE_DYNLOADING
-        //Create a vector that holds the libraries, which will be later
-        //dynamically loaded;
-        boost::scoped_array<osl::Module> sarModules;
-        sarModules.reset(new osl::Module[vecPlugins.size()]);
-        osl::Module * arModules = sarModules.get();
-#endif
-        //Use every plug-in library to get Java installations. At the first usable
+        std::vector<OUString> vecVendors =
+             aVendorSettings.getSupportedVendors();
+        //Use every vendor to get Java installations. At the first usable
         //Java the loop will break
-        typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
+        typedef std::vector<OUString>::const_iterator ci_pl;
         int cModule = 0;
-        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i, ++cModule)
+        for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i, ++cModule)
         {
-            const jfw::PluginLibrary & library = *i;
+            const OUString & vendor = *i;
             jfw::VersionInfo versionInfo =
-                aVendorSettings.getVersionInformation(library.sVendor);
-#ifndef DISABLE_DYNLOADING
-            arModules[cModule].load(library.sPath);
-            osl::Module & pluginLib = arModules[cModule];
-            if (!pluginLib.is())
-                return JFW_E_NO_PLUGIN;
-
-            jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
-                (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getFunctionSymbol(
-                    OUString("jfw_plugin_getAllJavaInfos"));
-#else
-            jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
-                jfw_plugin_getAllJavaInfos;
-#endif
-            OSL_ASSERT(getAllJavaFunc);
-            if (getAllJavaFunc == NULL)
-                continue;
+                aVendorSettings.getVersionInformation(vendor);
 
             //get all installations of one vendor according to minVersion,
             //maxVersion and excludeVersions
             sal_Int32 cInfos = 0;
             JavaInfo** arInfos = NULL;
-            javaPluginError plerr  = (*getAllJavaFunc)(
-                library.sVendor.pData,
+            javaPluginError plerr = jfw_plugin_getAllJavaInfos(
+                vendor.pData,
                 versionInfo.sMinVersion.pData,
                 versionInfo.sMaxVersion.pData,
                 versionInfo.getExcludeVersions(),
@@ -581,37 +463,20 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 settings.getJRELocations();
             //use every plug-in to determine the JavaInfo objects
             bool bInfoFound = false;
-            for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i)
+            for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
             {
-                const jfw::PluginLibrary & library = *i;
+                const OUString & vendor = *i;
                 jfw::VersionInfo versionInfo =
-                    aVendorSettings.getVersionInformation(library.sVendor);
-#ifndef DISABLE_DYNLOADING
-                osl::Module pluginLib(library.sPath);
-                if (!pluginLib.is())
-                    return JFW_E_NO_PLUGIN;
-                //Check if the current plugin can detect JREs at the location
-                // of the paths added by jfw_addJRELocation
-                //get the function from the plugin
-                jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                    (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
-                        OUString("jfw_plugin_getJavaInfoByPath"));
-#else
-                jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                    jfw_plugin_getJavaInfoByPath;
-#endif
-                OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
-                if (jfw_plugin_getJavaInfoByPathFunc == NULL)
-                    return JFW_E_ERROR;
+                    aVendorSettings.getVersionInformation(vendor);
 
                 typedef std::vector<OUString>::const_iterator citLoc;
                 for (citLoc it = vecJRELocations.begin();
                     it != vecJRELocations.end(); ++it)
                 {
                     jfw::CJavaInfo aInfo;
-                    javaPluginError err = (*jfw_plugin_getJavaInfoByPathFunc)(
+                    javaPluginError err = jfw_plugin_getJavaInfoByPath(
                         it->pData,
-                        library.sVendor.pData,
+                        vendor.pData,
                         versionInfo.sMinVersion.pData,
                         versionInfo.sMaxVersion.pData,
                         versionInfo.getExcludeVersions(),
@@ -787,61 +652,27 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             return JFW_E_INVALID_ARG;
 
         jfw::VendorSettings aVendorSettings;
-        //Get a list of plugins which provide Java information
-        std::vector<jfw::PluginLibrary> vecPlugins =
-            aVendorSettings.getPluginData();
-#ifndef DISABLE_DYNLOADING
-        //Create a vector that holds the libraries, which will be later
-        //dynamically loaded;
-        boost::scoped_array<osl::Module> sarModules;
-        sarModules.reset(new osl::Module[vecPlugins.size()]);
-        osl::Module * arModules = sarModules.get();
-#endif
-        typedef std::vector<OUString>::const_iterator CIT_VENDOR;
         std::vector<OUString> vecVendors =
             aVendorSettings.getSupportedVendors();
 
         //Use every plug-in library to determine if the path represents a
         //JRE. If a plugin recognized it then the loop will break
-        typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
+        typedef std::vector<OUString>::const_iterator ci_pl;
         int cModule = 0;
-        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end();
+        for (ci_pl i = vecVendors.begin(); i != vecVendors.end();
              ++i, ++cModule)
         {
-            const jfw::PluginLibrary & library = *i;
+            const OUString & vendor = *i;
             jfw::VersionInfo versionInfo =
-                aVendorSettings.getVersionInformation(library.sVendor);
-
-#ifndef DISABLE_DYNLOADING
-            arModules[cModule].load(library.sPath);
-            osl::Module & pluginLib = arModules[cModule];
-            if (!pluginLib.is())
-            {
-                OString msg = OUStringToOString(
-                    library.sPath, osl_getThreadTextEncoding());
-                fprintf(stderr,"[jvmfwk] Could not load plugin %s\n" \
-                        "Modify the javavendors.xml accordingly!\n", msg.getStr());
-                return JFW_E_NO_PLUGIN;
-            }
-
-            jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
-                    OUString("jfw_plugin_getJavaInfoByPath"));
-#else
-            jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                jfw_plugin_getJavaInfoByPath;
-#endif
-            OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
-            if (jfw_plugin_getJavaInfoByPathFunc == NULL)
-                continue;
+                aVendorSettings.getVersionInformation(vendor);
 
             //ask the plugin if this is a JRE.
             //If so check if it meets the version requirements.
             //Only if it does return a JavaInfo
             JavaInfo* pInfo = NULL;
-            javaPluginError plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
+            javaPluginError plerr = jfw_plugin_getJavaInfoByPath(
                 pPath,
-                library.sVendor.pData,
+                vendor.pData,
                 versionInfo.sMinVersion.pData,
                 versionInfo.sMaxVersion.pData,
                 versionInfo.getExcludeVersions(),
@@ -850,29 +681,8 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
 
             if (plerr == JFW_PLUGIN_E_NONE)
             {
-                //check if the vendor of the found JRE is supported
-                if (vecVendors.empty())
-                {
-                    //vendor does not matter
-                    *ppInfo = pInfo;
-                    break;
-                }
-                else
-                {
-                    OUString sVendor(pInfo->sVendor);
-                    CIT_VENDOR ivendor = std::find(vecVendors.begin(), vecVendors.end(),
-                                                   sVendor);
-                    if (ivendor != vecVendors.end())
-                    {
-                        *ppInfo = pInfo;
-                    }
-                    else
-                    {
-                        *ppInfo = NULL;
-                        errcode = JFW_E_NOT_RECOGNIZED;
-                    }
-                    break;
-                }
+                *ppInfo = pInfo;
+                break;
             }
             else if(plerr == JFW_PLUGIN_E_FAILED_VERSION)
             {//found JRE but it has the wrong version
@@ -1141,22 +951,7 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     jfw::VendorSettings aVendorSettings;
     jfw::CJavaInfo aInfo;
     aInfo = (const ::JavaInfo*) pInfo; //makes a copy of pInfo
-#ifndef DISABLE_DYNLOADING
-    OUString sLibPath = aVendorSettings.getPluginLibrary(aInfo.getVendor());
-    osl::Module modulePlugin(sLibPath);
-    if ( ! modulePlugin)
-        return JFW_E_NO_PLUGIN;
-    OUString sFunctionName("jfw_plugin_existJRE");
-    jfw_plugin_existJRE_ptr pFunc =
-        (jfw_plugin_existJRE_ptr)
-        osl_getFunctionSymbol(modulePlugin, sFunctionName.pData);
-    if (pFunc == NULL)
-        return JFW_E_ERROR;
-#else
-    jfw_plugin_existJRE_ptr pFunc =
-        jfw_plugin_existJRE;
-#endif
-    javaPluginError plerr = (*pFunc)(pInfo, exist);
+    javaPluginError plerr = jfw_plugin_existJRE(pInfo, exist);
 
     javaFrameworkError ret = JFW_E_NONE;
     switch (plerr)

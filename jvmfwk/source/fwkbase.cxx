@@ -118,53 +118,6 @@ VendorSettings::VendorSettings():
     }
 }
 
-std::vector<PluginLibrary> VendorSettings::getPluginData()
-{
-    OString sExcMsg("[Java framework] Error in function VendorSettings::getVendorPluginURLs "
-                         "(fwkbase.cxx).");
-    std::vector<PluginLibrary> vecPlugins;
-    CXPathObjectPtr result(xmlXPathEvalExpression(
-        (xmlChar*)"/jf:javaSelection/jf:plugins/jf:library",
-        m_xmlPathContextVendorSettings));
-    if (xmlXPathNodeSetIsEmpty(result->nodesetval))
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    //get the values of the library elements + vendor attribute
-    xmlNode* cur = result->nodesetval->nodeTab[0];
-
-    while (cur != NULL)
-    {
-        //between library elements are also text elements
-        if (cur->type == XML_ELEMENT_NODE)
-        {
-            CXmlCharPtr sAttrVendor(xmlGetProp(cur, (xmlChar*) "vendor"));
-            CXmlCharPtr sTextLibrary(
-                xmlNodeListGetString(m_xmlDocVendorSettings,
-                                     cur->xmlChildrenNode, 1));
-            PluginLibrary plugin;
-            OString osVendor((sal_Char*)(xmlChar*) sAttrVendor);
-            plugin.sVendor = OStringToOUString(osVendor, RTL_TEXTENCODING_UTF8);
-
-            //create the file URL to the library
-            OUString sUrl = findPlugin(
-                m_xmlDocVendorSettingsFileUrl, sTextLibrary);
-            if (sUrl.isEmpty())
-            {
-                OString sPlugin = OUStringToOString(
-                    sTextLibrary, osl_getThreadTextEncoding());
-                throw FrameworkException(
-                    JFW_E_CONFIGURATION,
-                    "[Java framework] The file: " + sPlugin + " does not exist.");
-            }
-            plugin.sPath  = sUrl;
-
-            vecPlugins.push_back(plugin);
-        }
-        cur = cur->next;
-    }
-    return vecPlugins;
-}
-
 VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
 {
     OSL_ASSERT(!sVendor.isEmpty());
@@ -250,65 +203,27 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
 std::vector<OUString> VendorSettings::getSupportedVendors()
 {
     std::vector<OUString> vecVendors;
-    //get the nodeset for the library elements
+    //get the nodeset for the vendor elements
     jfw::CXPathObjectPtr result;
     result = xmlXPathEvalExpression(
-        (xmlChar*)"/jf:javaSelection/jf:plugins/jf:library",
+        (xmlChar*)"/jf:javaSelection/jf:vendorInfos/jf:vendor",
         m_xmlPathContextVendorSettings);
-    if (xmlXPathNodeSetIsEmpty(result->nodesetval))
-        throw FrameworkException(
-            JFW_E_ERROR,
-            OString("[Java framework] Error in function getSupportedVendors (fwkbase.cxx)."));
-
-    //get the values of the library elements + vendor attribute
-    xmlNode* cur = result->nodesetval->nodeTab[0];
-    while (cur != NULL)
+    if (!xmlXPathNodeSetIsEmpty(result->nodesetval))
     {
-        //between library elements are also text elements
-        if (cur->type == XML_ELEMENT_NODE)
+        //get the values of the vendor elements + name attribute
+        xmlNode* cur = result->nodesetval->nodeTab[0];
+        while (cur != NULL)
         {
-            jfw::CXmlCharPtr sAttrVendor(xmlGetProp(cur, (xmlChar*) "vendor"));
-            vecVendors.push_back(sAttrVendor);
+            //between vendor elements are also text elements
+            if (cur->type == XML_ELEMENT_NODE)
+            {
+                jfw::CXmlCharPtr sAttrVendor(xmlGetProp(cur, (xmlChar*) "name"));
+                vecVendors.push_back(sAttrVendor);
+            }
+            cur = cur->next;
         }
-        cur = cur->next;
     }
     return vecVendors;
-}
-
-OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
-{
-    OSL_ASSERT(!sVendor.isEmpty());
-
-    OString sExcMsg("[Java framework] Error in function getPluginLibrary (fwkbase.cxx).");
-    OUStringBuffer usBuffer(256);
-    usBuffer.appendAscii("/jf:javaSelection/jf:plugins/jf:library[@vendor=\"");
-    usBuffer.append(sVendor);
-    usBuffer.appendAscii("\"]/text()");
-    OUString ouExpr = usBuffer.makeStringAndClear();
-    OString sExpression =
-        OUStringToOString(ouExpr, osl_getThreadTextEncoding());
-    CXPathObjectPtr pathObjVendor;
-    pathObjVendor = xmlXPathEvalExpression(
-        (xmlChar*) sExpression.getStr(), m_xmlPathContextVendorSettings);
-    if (xmlXPathNodeSetIsEmpty(pathObjVendor->nodesetval))
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    CXmlCharPtr xmlCharPlugin;
-    xmlCharPlugin =
-        xmlNodeListGetString(
-            m_xmlDocVendorSettings,pathObjVendor->nodesetval->nodeTab[0], 1);
-
-    //make an absolute file url from the relative plugin URL
-    OUString sUrl = findPlugin(m_xmlDocVendorSettingsFileUrl, xmlCharPlugin);
-    if (sUrl.isEmpty())
-    {
-        OString sPlugin = OUStringToOString(
-            xmlCharPlugin, osl_getThreadTextEncoding());
-        throw FrameworkException(
-                    JFW_E_CONFIGURATION,
-                    "[Java framework] The file: " + sPlugin + " does not exist.");
-    }
-    return sUrl;
 }
 
 ::std::vector<OString> BootParams::getVMParameters()

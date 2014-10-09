@@ -95,22 +95,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
     }
 
-    OUString aVendor( pInfo->sVendor );
-    // Only do something if the sunjavaplugin created this JavaInfo
-    if ( aVendor != "Sun Microsystems Inc." &&
-         aVendor != "Oracle Corporation" &&
-         aVendor != "IBM Corporation" &&
-         aVendor != "Blackdown Java-Linux Team" &&
-         aVendor != "Apple Inc." &&
-         aVendor != "Apple Computer, Inc." &&
-         aVendor != "BEA Systems, Inc." &&
-         aVendor != "Free Software Foundation, Inc." &&
-         aVendor != "The FreeBSD Foundation" )
-    {
-        jfw_freeJavaInfo(pInfo);
-        return 0;
-    }
-
     OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
     fprintf(stdout, "%s\n", sPaths.getStr());
     jfw_freeJavaInfo(pInfo);

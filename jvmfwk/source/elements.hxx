@@ -353,23 +353,6 @@ public:
     sal_Int32 getExcludeVersionSize();
 };
 
-struct PluginLibrary
-{
-    PluginLibrary()
-    {
-    }
-    PluginLibrary(const OUString & vendor, const OUString & path) :
-        sVendor(vendor), sPath(path)
-    {
-    }
-    /** contains the vendor string which is later userd in the xml API
-     */
-    OUString sVendor;
-    /** File URL the plug-in library
-     */
-    OUString sPath;
-};
-
 } //end namespace
 #endif
 

@@ -197,7 +197,6 @@ typedef enum _javaFrameworkError
     JFW_E_NEED_RESTART,
     JFW_E_RUNNING_JVM,
     JFW_E_JAVA_DISABLED,
-    JFW_E_NO_PLUGIN,
     JFW_E_NOT_RECOGNIZED,
     JFW_E_FAILED_VERSION,
     JFW_E_NO_JAVA_FOUND,
@@ -376,7 +375,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
     @return
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_ERROR an error occurred. <br/>
-    JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
     JFW_E_NO_JAVA_FOUND no JRE was found that meets the requirements.</br>
     JFW_E_DIRECT_MODE the function cannot be used in this mode. </br>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
@@ -407,7 +405,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pIn
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALID_ARG at least on of the parameters was NULL<br/>
     JFW_E_ERROR an error occurred. <br/>
-    JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.
 */
@@ -439,7 +436,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_findAllJREs(
    JFW_E_ERROR an error occurred. <br/>
    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
    were not met.</br>
-   JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
    JFW_E_NOT_RECOGNIZED neither plug-in library could detect a JRE. <br/>
    JFW_E_FAILED_VERSION a JRE was detected but if failed the version
    requirements as determined by the javavendors.xml
@@ -496,8 +492,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     JFW_E_ERROR an error occurred. <br/>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.</br>
-    JFW_E_NO_PLUGIN the plug-in library responsible for creating the VM
-    could not be found.<br/>
     JFW_E_JAVA_DISABLED the use of Java is currently disabled. <br/>
     JFW_E_NO_SELECT there is no JRE selected yet. <br/>
     JFW_E_RUNNIN_JVM there is already a VM running.<br/>
@@ -768,7 +762,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getJRELocations(
     JFW_E_NONE the function ran successfully.</br>
     JFW_E_ERROR an error occurred during execution.</br>
     JFW_E_INVALID_ARG pInfo contains invalid data</br>
-    JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
  */
 JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
 

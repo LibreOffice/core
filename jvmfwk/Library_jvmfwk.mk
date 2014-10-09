@@ -13,15 +13,29 @@ $(eval $(call gb_Library_add_defs,jvmfwk,\
     -DJVMFWK_DLLIMPLEMENTATION \
 ))
 
+ifneq ($(JVM_ONE_PATH_CHECK),)
+$(eval $(call gb_Library_add_defs,jvmfwk,\
+    -DJVM_ONE_PATH_CHECK=\"$(JVM_ONE_PATH_CHECK)\" \
+))
+endif
+
 $(eval $(call gb_Library_use_api,jvmfwk,\
     udkapi \
 ))
 
 $(eval $(call gb_Library_use_libraries,jvmfwk,\
+    cppu \
     cppuhelper \
     sal \
+    salhelper \
 	$(gb_UWINAPI) \
 ))
+
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Library_use_libraries,jvmfwk,\
+    lo-bootstrap \
+))
+endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,jvmfwk,\
@@ -32,9 +46,18 @@ endif
 $(eval $(call gb_Library_use_externals,jvmfwk,\
     boost_headers \
     libxml2 \
+    valgrind \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,jvmfwk,\
+    jvmfwk/plugins/sunmajor/pluginlib/gnujre \
+    jvmfwk/plugins/sunmajor/pluginlib/otherjre \
+    jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin \
+    jvmfwk/plugins/sunmajor/pluginlib/sunjre \
+    jvmfwk/plugins/sunmajor/pluginlib/sunversion \
+    jvmfwk/plugins/sunmajor/pluginlib/util \
+    jvmfwk/plugins/sunmajor/pluginlib/vendorbase \
+    jvmfwk/plugins/sunmajor/pluginlib/vendorlist \
     jvmfwk/source/elements \
     jvmfwk/source/framework \
     jvmfwk/source/fwkbase \

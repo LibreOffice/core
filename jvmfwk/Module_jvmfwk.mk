@@ -14,7 +14,6 @@ ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Module_add_targets,jvmfwk,\
 	CustomTarget_jreproperties \
 	Library_jvmfwk \
-	Library_sunjavaplugin \
 	Package_jreproperties \
 	Package_rcfiles \
 ))
