@@ -61,17 +61,13 @@ public class LOKitThread extends Thread {
         LOKitShell.hideProgressSpinner();
     }
 
-    private boolean load(String filename) {
+    private boolean loadDocument(String filename) {
         if (mApplication == null) {
             mApplication = LibreOfficeMainActivity.mAppContext;
         }
 
         mController = mApplication.getLayerController();
         mLayerClient = mApplication.getLayerClient();
-
-        if (mTileProvider != null) {
-            mTileProvider.close();
-        }
 
         mTileProvider = TileProviderFactory.create(mController, filename);
         boolean isReady = mTileProvider.isReady();
@@ -82,7 +78,14 @@ public class LOKitThread extends Thread {
             refresh();
             LOKitShell.hideProgressSpinner();
         }
+
         return isReady;
+    }
+
+    public void closeDocument() {
+        if (mTileProvider != null) {
+            mTileProvider.close();
+        }
     }
 
     public void run() {
@@ -95,9 +98,13 @@ public class LOKitThread extends Thread {
     }
 
     private void processEvent(LOEvent event) {
+        Log.i(LOGTAG, "processEvent: " + event.getTypeString());
         switch (event.mType) {
             case LOEvent.LOAD:
-                load(event.getFilename());
+                loadDocument(event.getFilename());
+                break;
+            case LOEvent.CLOSE:
+                closeDocument();
                 break;
             case LOEvent.VIEWPORT:
                 mViewportMetrics = event.getViewport();
