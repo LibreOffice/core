@@ -435,6 +435,16 @@ DECLARE_OOXMLEXPORT_TEST(testTextboxTable, "textbox-table.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCropPixel, "crop-pixel.docx")
+{
+    // If map mode of the graphic is in pixels, then we used to handle original
+    // size of the graphic as mm100, but it was in pixels.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        // This is 17667 in the original document (i.e. should be < 20000), but
+        // was 504666, so the image become invisible.
+        assertXPath(pXmlDoc, "//a:srcRect", "l", "19072");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

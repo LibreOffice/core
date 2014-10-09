@@ -1063,7 +1063,13 @@ void DrawingML::WritePattFill( Reference< XPropertySet > rXPropSet )
 
 void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, const OUString& rURL )
 {
-    Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( rURL ).GetPrefSize() );
+    GraphicObject aGraphicObject = GraphicObject::CreateGraphicObjectFromURL(rURL);
+    Size aOriginalSize = aGraphicObject.GetPrefSize();
+    const MapMode& rMapMode = aGraphicObject.GetPrefMapMode();
+
+    // GraphicCrop is in mm100, so in case the original size is in pixels, convert it over.
+    if (rMapMode.GetMapUnit() == MAP_PIXEL)
+        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, MapMode(MAP_100TH_MM));
 
     if ( GetProperty( rXPropSet, "GraphicCrop" ) )
     {
