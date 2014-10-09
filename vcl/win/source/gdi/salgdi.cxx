@@ -489,7 +489,7 @@ void ImplSalInitGraphics( WinSalGraphics* pData )
     }
 
     ::SetTextAlign( pData->getHDC(), TA_BASELINE | TA_LEFT | TA_NOUPDATECP );
-    ::SetBkMode( pData->getHDC(), TRANSPARENT );
+    ::SetBkMode( pData->getHDC(), WIN32_TRANSPARENT );
     ::SetROP2( pData->getHDC(), R2_COPYPEN );
 }
 
