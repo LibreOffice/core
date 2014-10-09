@@ -101,7 +101,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                         pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
                         nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-                        return true;
+                        return false;   // don't stop the handling  fdo#84795
                     }
                     else if ( nHitTest == HITTEST_RECT )
                     {
@@ -381,7 +381,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
         // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
         if ( pSVData->maWinData.mpCaptureWin != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalNonRefMode() ) )
         {
-            ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave );
+            bool bStopHdl = ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave );
             if ( nSVEvent == EVENT_MOUSEMOVE )
             {
                 ImplHandleMouseHelpRequest( pChild, aMousePos );
@@ -401,15 +401,18 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
                 pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
             }
 
-            if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
-                return true;
-            else
+            if(bStopHdl) // mouse-button left: don't stop the handling for the click fdo#84795
             {
-                // Set normal MousePointer for disabled windows
-                if ( nSVEvent == EVENT_MOUSEMOVE )
-                    ImplSetMousePointer( pChild );
+                if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
+                    return true;
+                else
+                {
+                    // Set normal MousePointer for disabled windows
+                    if ( nSVEvent == EVENT_MOUSEMOVE )
+                        ImplSetMousePointer( pChild );
 
-                return false;
+                    return false;
+                }
             }
         }
 
