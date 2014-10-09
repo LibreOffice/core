@@ -41,6 +41,7 @@
 #include <sfx2/dispatch.hxx>
 
 #include <cassert>
+#include <initializer_list>
 #include <memory>
 
 #include <com/sun/star/script/ModuleType.hpp>
@@ -424,18 +425,15 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
 
 void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
-
-    std::vector<std::pair<EntryType, OUString> > aEntries;
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) ) );
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_USERFORMS, IDE_RESSTR(RID_STR_USERFORMS) ) );
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDE_RESSTR(RID_STR_NORMAL_MODULES) ) );
-    aEntries.push_back( ::std::make_pair( OBJ_TYPE_CLASS_MODULES, IDE_RESSTR(RID_STR_CLASS_MODULES) ) );
-
-    std::vector<std::pair<EntryType, OUString> >::iterator iter;
-    for( iter = aEntries.begin(); iter != aEntries.end(); ++iter )
+    auto const aEntries = {
+        std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) ),
+        std::make_pair( OBJ_TYPE_USERFORMS, IDE_RESSTR(RID_STR_USERFORMS) ),
+        std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDE_RESSTR(RID_STR_NORMAL_MODULES) ),
+        std::make_pair( OBJ_TYPE_CLASS_MODULES, IDE_RESSTR(RID_STR_CLASS_MODULES) ) };
+    for( auto const & iter: aEntries )
     {
-        EntryType eType = iter->first;
-        OUString aEntryName = iter->second;
+        EntryType eType = iter.first;
+        OUString const & aEntryName = iter.second;
         SvTreeListEntry* pLibSubRootEntry = FindEntry( pLibRootEntry, aEntryName, eType );
         if( pLibSubRootEntry )
         {
