@@ -166,9 +166,14 @@ String RID_SVXSTR_CLEARFORM
     Text [ en-US ] = "Clear formatting";
 };
 
+String RID_SVXSTR_MORE_STYLES
+{
+    Text [ en-US ] = "More Styles...";
+};
+
 String RID_SVXSTR_MORE
 {
-    Text [ en-US ] = "More...";
+    Text [ en-US ] = "More Options...";
 };
 
 String RID_SVXSTR_TEXTCOLOR

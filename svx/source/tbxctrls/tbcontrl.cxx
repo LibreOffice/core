@@ -1790,7 +1790,7 @@ struct SvxStyleToolBoxControl::Impl
 
     inline Impl( void )
         :aClearForm         ( SVX_RESSTR( RID_SVXSTR_CLEARFORM ) )
-        ,aMore              ( SVX_RESSTR( RID_SVXSTR_MORE ) )
+        ,aMore              ( SVX_RESSTR( RID_SVXSTR_MORE_STYLES ) )
         ,bSpecModeWriter    ( false )
         ,bSpecModeCalc      ( false )
     {

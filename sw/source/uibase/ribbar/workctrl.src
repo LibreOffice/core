@@ -78,7 +78,7 @@ Menu RID_INSERT_FIELD_CTRL
         {
             Identifier = FN_INSERT_FIELD ;
             HelpId = CMD_FN_INSERT_FIELD ;
-            Text [ en-US ] = "More..." ;
+            Text [ en-US ] = "More Fields..." ;
         };
     };
 };
