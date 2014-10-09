@@ -120,24 +120,15 @@ public class IniFile implements Enumeration<String>
      */
     public boolean hasValue(String _sSectionName, String _sKey)
         {
-            int n = findKey(_sSectionName, _sKey);
-            if (n > 0)
-            {
-                return true;
-            }
-            return false;
+            return findKey(_sSectionName, _sKey) > 0;
         }
 
 
     private boolean isRemark(String _sLine)
         {
-            if (((_sLine.length() < 2)) ||
-                (_sLine.startsWith("#")) ||
-                (_sLine.startsWith(";")))
-            {
-                return true;
-            }
-            return false;
+            return _sLine.length() < 2 ||
+                _sLine.startsWith("#") ||
+                _sLine.startsWith(";");
         }
 
     private String getItem(int i)
@@ -199,12 +190,7 @@ public class IniFile implements Enumeration<String>
      */
     public boolean hasSection(String _sSection)
         {
-            int i = findSection(_sSection);
-            if (i == -1)
-            {
-                return false;
-            }
-            return true;
+            return findSection(_sSection) != -1;
         }
 
     // return the line number, where the key is found.
@@ -494,12 +480,7 @@ public class IniFile implements Enumeration<String>
      */
     public boolean hasMoreElements()
         {
-            if (m_aEnumerationPos >= 0 &&
-                m_aEnumerationPos < m_aList.size())
-            {
-                return true;
-            }
-            return false;
+            return m_aEnumerationPos >= 0 && m_aEnumerationPos < m_aList.size();
         }
 
     /**

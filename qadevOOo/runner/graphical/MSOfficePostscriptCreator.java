@@ -113,13 +113,9 @@ public class MSOfficePostscriptCreator implements IOffice
 
     private boolean isWordDocument(String _sSuffix)
         {
-            if (_sSuffix.toLowerCase().endsWith(".doc") ||
+            return _sSuffix.toLowerCase().endsWith(".doc") ||
                 _sSuffix.toLowerCase().endsWith(".rtf") ||
-                _sSuffix.toLowerCase().endsWith(".dot"))
-            {
-                return true;
-            }
-            return false;
+                _sSuffix.toLowerCase().endsWith(".dot");
         }
 
     private boolean isExcelDocument(String _sSuffix)
@@ -127,21 +123,13 @@ public class MSOfficePostscriptCreator implements IOffice
             // xlt templates
             // xlw
             // xla addin
-            if (_sSuffix.toLowerCase().endsWith(".xls"))
-            {
-                return true;
-            }
-            return false;
+            return _sSuffix.toLowerCase().endsWith(".xls");
         }
 
     private boolean isPowerPointDocument(String _sSuffix)
         {
-            if (_sSuffix.toLowerCase().endsWith(".pps") ||
-                _sSuffix.toLowerCase().endsWith(".ppt"))
-            {
-                return true;
-            }
-            return false;
+            return _sSuffix.toLowerCase().endsWith(".pps") ||
+                _sSuffix.toLowerCase().endsWith(".ppt");
         }
 
     /**

@@ -314,12 +314,7 @@ public class ParameterHelper
      */
     public boolean printAllPages()
         {
-            if ( (getMaxPages() > 0) ||
-                 (getOnlyPages().length() != 0))
-            {
-                return false;
-            }
-            return true;
+            return !((getMaxPages() > 0) || (getOnlyPages().length() != 0));
         }
 
     public boolean getOverwrite()
@@ -348,13 +343,7 @@ public class ParameterHelper
 
     public boolean createSmallPictures()
         {
-            // boolean bCreateSmallPictures = true;
-            boolean bNoSmallPictures = m_aCurrentParams.getBool( PropertyName.NO_SMALL_PICTURES);
-            if (bNoSmallPictures)
-            {
-                return false;
-            }
-            return true;
+            return !m_aCurrentParams.getBool(PropertyName.NO_SMALL_PICTURES);
         }
 
 }
