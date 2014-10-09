@@ -37,11 +37,11 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>'FL'</code> as <code>com.sun.star.form.XLoadable</code>
 *    implementation : used to connect control to data source. </li>
 *  <li> <code>'LC'</code> as <code>com.sun.star.uno.XInterface</code>
-*    implementation : as value for LableControl property (see property
+*    implementation : as value for LabelControl property (see property
 *    documentation). </li>
 *  <li> <code>'DataAwareControlModel.NewFieldName'</code> :
 *   <b>optional</b> <code>String</code> relation which is used
-*   for new value of DataFiled proeprty.</li>
+*   for new value of DataField property.</li>
 * <ul> <p>
 * Test is <b> NOT </b> multithread compliant. <p>
 * After test completion object environment has to be recreated.

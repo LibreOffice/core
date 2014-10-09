@@ -61,7 +61,7 @@ public:
     };
 
     /** This is the preferred constructor that allows the created
-        controller item to return non-empty values for GetLable() and
+        controller item to return non-empty values for GetLabel() and
         GetIcon() calls.
     */
     ControllerItem (

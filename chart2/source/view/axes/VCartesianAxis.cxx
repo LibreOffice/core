@@ -307,7 +307,7 @@ B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTick
     return aRet;
 }
 
-void lcl_shiftLables( TickIter& rIter, const B2DVector& rStaggerDistance )
+void lcl_shiftLabels( TickIter& rIter, const B2DVector& rStaggerDistance )
 {
     if(rStaggerDistance.getLength()==0.0)
         return;
@@ -1352,7 +1352,7 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
                 double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
                 if( nTextLevel>0 )
                 {
-                    lcl_shiftLables( *apTickIter.get(), aCummulatedLabelsDistance );
+                    lcl_shiftLabels( *apTickIter.get(), aCummulatedLabelsDistance );
                     fRotationAngleDegree = 0.0;
                 }
                 aCummulatedLabelsDistance += lcl_getLabelsDistance( *apTickIter.get()
@@ -1368,7 +1368,7 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
             LabelIterator aInnerIter( m_aAllTickInfos[0], rAxisLabelProperties.eStaggering, true );
             LabelIterator aOuterIter( m_aAllTickInfos[0], rAxisLabelProperties.eStaggering, false );
 
-            lcl_shiftLables( aOuterIter
+            lcl_shiftLabels( aOuterIter
                 , lcl_getLabelsDistance( aInnerIter
                     , pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties ), 0.0 ) );
         }

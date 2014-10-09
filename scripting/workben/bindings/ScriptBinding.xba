@@ -22,9 +22,9 @@
 REM ----- Global Variables -----
 
 &apos;bindingDialog can refer to either KeyBinding or MenuBinding dialog
-private languages() as String 
-private extensions() as Object 
-private locations() as String  
+private languages() as String
+private extensions() as Object
+private locations() as String
 private filesysScripts() as String
 private filesysCount as integer
 private bindingDialog as object
@@ -70,7 +70,7 @@ private allKeyBindings() as string
 &apos;KeyBindArrayOfArrays(2) contains SHIFT + CONTROL + letters
 &apos;KeyBindArrayOfArrays(3) contains CONTROL + F keys
 &apos;KeyBindArrayOfArrays(4) contains CONTROL + digits
-&apos;KeyBindArrayOfArrays(5) contains CONTROL + letters 
+&apos;KeyBindArrayOfArrays(5) contains CONTROL + letters
 &apos;KeyBindArrayOfArrays(6) contains SHIFT + F keys
 private KeyBindArrayOfArrays(6)
 
@@ -105,7 +105,7 @@ sub RefreshAllScripts()
    RefreshAppScripts( &quot;USER&quot; )
    RefreshAppScripts( &quot;SHARE&quot; )
    RefreshDocumentScripts
-end sub 
+end sub
 
 sub RefreshAppScripts( appName as String )
    On Error Goto ErrorHandler
@@ -120,8 +120,8 @@ sub RefreshAppScripts( appName as String )
    ErrorHandler:
    reset
    MsgBox (&quot;Error: Unable to refresh Java (scripts)&quot; + chr$(10) + chr$(10)+ &quot;Detail: &quot; &amp; error$ + chr$(10) + chr$(10)+ &quot;Action: Please restart Office&quot;,0,&quot;Error&quot; )
-   
-end sub 
+
+end sub
 
 sub RefreshDocumentScripts()
    On Error Goto ErrorHandler
@@ -144,8 +144,8 @@ sub RefreshDocumentScripts()
    ErrorHandler:
    reset
    MsgBox (&quot;Error: Unable to refresh Java (scripts)&quot; + chr$(10) + chr$(10)+ &quot;Detail: &quot; &amp; error$ + chr$(10) + chr$(10)+ &quot;Action: Please restart Office&quot;,0,&quot;Error&quot; )
-   
-end sub 
+
+end sub
 
 
 REM ----- Launch Functions -----
@@ -158,16 +158,16 @@ Sub createAndPopulateKeyArrays()
 	for FKey = 1 to 12
 		SCFKey( FKey - 1 ) = &quot;SHIFT + CONTROL + F&quot; + FKey
 	next FKey
-	
+
 	KeyBindArrayOfArrays(0) = SCFKey()
-	
+
 	&apos;Create SHIFT + CONTROL + digits
 	Dim SCDKey( 9 )
 	for Digit = 0 to 9
 		SCDKey( Digit ) = &quot;SHIFT + CONTROL + &quot; + Digit
 	next Digit
 	KeyBindArrayOfArrays(1) = SCDKey()
-	
+
 	&apos;Create SHIFT + CONTROL + letters
 
 	Dim SCLKey( 25 )
@@ -176,35 +176,35 @@ Sub createAndPopulateKeyArrays()
 	next Alpha
 	KeyBindArrayOfArrays(2) = SCLKey()
 
-	&apos;Create CONTROL + F keys	
+	&apos;Create CONTROL + F keys
 	Dim CFKey( 11 )
 	for FKey = 1 to 12
 		CFKey( Fkey - 1 ) = &quot;CONTROL + F&quot; + FKey
 	next FKey
 	KeyBindArrayOfArrays(3) = CFKey()
-	
+
 	&apos;Create CONTROL + digits
 	Dim CDKey( 9 )
 	for Digit = 0 to 9
 		CDKey( Digit ) = &quot;CONTROL + &quot; + Digit
 	next Digit
 	KeyBindArrayOfArrays(4) = CDKey()
-		
+
 	&apos;Create CONTROL + letters
 	Dim CLKey( 25 )
-	for Alpha = 65 to 90 
+	for Alpha = 65 to 90
 		CLKey( Alpha - 65 ) = &quot;CONTROL + &quot; + chr$( Alpha )
-	next Alpha	
+	next Alpha
 	KeyBindArrayOfArrays(5) = CLKey()
-		
+
 	&apos;Create SHIFT + F Keys
 	Dim SFKey( 11 )
 	for FKey = 1 to 12
 		SFKey( Fkey - 1 ) = &quot;SHIFT + F&quot; + FKey
 	next FKey
 	KeyBindArrayOfArrays(6) = SFKey()
-	
-End Sub 
+
+End Sub
 
 Sub updateMapWithDisabledKeys()
 	&apos;disable CONTROL + F1 &amp;
@@ -212,8 +212,8 @@ Sub updateMapWithDisabledKeys()
 	keyAllocationMap( 3, 0 ).Name = &quot;&quot;
 	&apos;disable CONTROL + F4 &amp;
 	keyAllocationMap( 3, 3 ).Value = 1
-	keyAllocationMap( 3, 3 ).Name = &quot;&quot;	
-	&apos;disable CONTROL + F6 
+	keyAllocationMap( 3, 3 ).Name = &quot;&quot;
+	&apos;disable CONTROL + F6
 	keyAllocationMap( 3, 5 ).Value = 1
 	keyAllocationMap( 3, 5 ).Name = &quot;&quot;
 
@@ -243,24 +243,24 @@ Sub initialiseFileExtensions()
     		if(languages(index) &lt;&gt; &quot;Java&quot;) then
             	xPropSet = oConfigAccess.getByName(languages(index))
             	extns() = xPropSet.getPropertyValue(&quot;SupportedFileExtensions&quot;)
-            	extensions(index) = extns()  
+            	extensions(index) = extns()
             endif
     next index
 end sub
 
 Sub ExecuteEditDebug()
-        
+
 	locations = Array ( &quot;User&quot;, &quot;Share&quot;, &quot;Document&quot;, &quot;Filesystem&quot; )
 	languages = Array ( &quot;BeanShell&quot;, &quot;JavaScript&quot; )
 	dialogName = &quot;EditDebug&quot;
-	initialiseFileExtensions()  
+	initialiseFileExtensions()
 	bindingDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;EditDebug&quot; )
 
 	PopulateLanguageCombo()
 	PopulateLocationCombo()
 	PopulateScriptList( languages(0), locations(0) )
 
-	bindingDialog.execute()	
+	bindingDialog.execute()
 End Sub
 
 Sub ExecuteKeyBinding()
@@ -283,18 +283,18 @@ Sub ExecuteKeyBinding()
 	bindingDialog.execute()
 end Sub
 
-    
+
 Sub initialiseNavigationComboArrays()
     locations = Array ( &quot;User&quot;, &quot;Share&quot;, &quot;Document&quot;, &quot;Filesystem&quot; )
     ReDim languages(0) as String
     ReDim extensions(0) as Object
 	languages(0) = &quot;Java&quot;
 	REM extensions(0) = &quot;&quot;
-	
+
     &apos; Setup languages array for all supported languages
     oServiceManager = GetProcessServiceManager()
     svrArray = oServiceManager.getAvailableServiceNames
-    
+
     langCount = 1
     for index = 0 to ubound(svrArray)
         iPos = inStr(svrArray(index), &quot;ScriptProviderFor&quot;)
@@ -308,7 +308,7 @@ Sub initialiseNavigationComboArrays()
                 languages(langCount) = lang
                 langCount = langCount + 1
             endif
-        endif  
+        endif
     next index
     initialiseFileExtensions()
 End Sub
@@ -318,14 +318,14 @@ Sub ExecuteEventBinding
 	dialogName = &quot;Event&quot;
 	createAllEventTypes()
 	createAllEventBindings()
-	
+
 	&apos;Populate application event bindings array (from config xml file)
 	if not (ReadXMLToArray( &quot;Event&quot; )) then
 		Exit Sub
 	endif
 	&apos;Populate document event bindings array (using Office API calls)
 	ReadEventsFromDoc()
-		
+
 	bindingDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;EventsBinding&quot; )
 	initialiseNavigationComboArrays()
     PopulateLanguageCombo()
@@ -352,10 +352,10 @@ Sub ExecuteMenuBinding()
 	PopulateSubMenuList( 1 )
 
 	subMenuList = bindingDialog.getControl(&quot;SubMenuList&quot;)
-	
+
 	subMenuList.selectItemPos( 0, true )
 
-	bindingDialog.execute()	
+	bindingDialog.execute()
 end Sub
 
 
@@ -395,7 +395,7 @@ function GetDocumentType( bindingType as string ) as string
 		else
 			if bindingType = &quot;Menu&quot; then
 				GetDocumentType() = &quot;writermenubar.xml&quot;
-			end if	
+			end if
 		end if
 	elseif document.SupportsService(&quot;com.sun.star.presentation.PresentationDocument&quot;) then
 		if bindingType = &quot;Key&quot; then
@@ -403,7 +403,7 @@ function GetDocumentType( bindingType as string ) as string
 		else
 			if bindingType = &quot;Menu&quot; then
 				GetDocumentType() = &quot;impressmenubar.xml&quot;
-			end if	
+			end if
 		end if
 	elseif document.SupportsService(&quot;com.sun.star.presentation.PresentationDocument&quot;) then
 		if bindingType = &quot;Key&quot; then
@@ -411,7 +411,7 @@ function GetDocumentType( bindingType as string ) as string
 		else
 			if bindingType = &quot;Menu&quot; then
 				GetDocumentType() = &quot;impressmenubar.xml&quot;
-			end if	
+			end if
 		end if
 	elseif document.SupportsService(&quot;com.sun.star.drawing.DrawingDocument&quot;) then
 		if bindingType = &quot;Key&quot; then
@@ -419,7 +419,7 @@ function GetDocumentType( bindingType as string ) as string
 		else
 			if bindingType = &quot;Menu&quot; then
 				GetDocumentType() = &quot;drawmenubar.xml&quot;
-			end if	
+			end if
 		end if
 	else
 		MsgBox (&quot;Error: Couldn&apos;t determine configuration file type&quot; + chr$(10) + chr$(10) + &quot;Action: Please reinstall Scripting Framework&quot;,0,&quot;Error&quot; )
@@ -438,8 +438,8 @@ end function
 
 function getScriptURI( selectedScript as String ) as String
 	combo = bindingDialog.getControl( &quot;LocationCombo&quot; )
-	location = combo.text 
-	if ( location = &quot;User&quot; ) then 
+	location = combo.text
+	if ( location = &quot;User&quot; ) then
 		location = &quot;user&quot;
 	elseif ( location = &quot;Share&quot; ) then
 		location = &quot;share&quot;
@@ -477,9 +477,9 @@ function getScriptURI( selectedScript as String ) as String
 		next n
 		getScriptURI() = &quot;script://&quot; + scriptInfo.getLogicalName + &quot;?language=&quot; _
 			+ scriptInfo.getLanguage() + &quot;&amp;amp;function=&quot; + _
-			scriptInfo.getFunctionName() + &quot;&amp;amp;location=&quot; + location 	
+			scriptInfo.getFunctionName() + &quot;&amp;amp;location=&quot; + location
 	end if
-	
+
 end function
 
 function GetOfficePath() as string
@@ -488,7 +488,7 @@ function GetOfficePath() as string
 	path = settings.getByName( &quot;PathSettings&quot; )
 	unformattedOfficePath = path.getPropertyValue( &quot;UserPath&quot; )
 
-	dim officePath as string 
+	dim officePath as string
 	const removeFromEnd = &quot;/user&quot;
 	const removeFromEndWindows = &quot;\user&quot;
 
@@ -511,7 +511,7 @@ function GetOfficePath() as string
 			REM Prompt user
 		end if
 	end if
-	
+
 	GetOfficePath() = officePath
 end function
 
@@ -525,7 +525,7 @@ function ReadXMLToArray( bindingType as string ) as boolean
 	if ( bindingType = &quot;Event&quot; ) then
 		xmlfilename = &quot;eventbindings.xml&quot;
 	endif
-	
+
 	simplefileaccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
 	filestream = simplefileaccess.openFileRead( &quot;file://&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName )
 
@@ -537,11 +537,11 @@ function ReadXMLToArray( bindingType as string ) as boolean
     redim menuItemLinePosition( 30 ) as Integer
     redim scriptNames( 120 ) as string
     redim scriptLinePosition( 120) as integer
-    
+
     lineCount = 1
     menuCount = 1
     scriptCount = 1
-    
+
     do while not textin.isEOF()
     	xmlline = textin.readLine()
     	xmlFile( lineCount ) = xmlline
@@ -560,12 +560,12 @@ function ReadXMLToArray( bindingType as string ) as boolean
 		end if
         lineCount = lineCount + 1
     loop
-	
+
 	&apos;Set global variable numberOfLines (lineCount is one too many at end of the loop)
 	numberOfLines = lineCount - 1
 	&apos;Set global variable menuCount (it is one too many at end of the loop)
 	menuCount = menuCount - 1
-	
+
     filestream.closeInput()
     ReadXMLToArray( ) = true
 	Exit function
@@ -595,8 +595,8 @@ sub evaluateForEvent( xmlline as string, lineCount as integer )
 	&apos;if the xml line identifies a script or SB macro
 	dim scriptName as string
 	dim lineNumber as integer
-	if instr( xmlline, &quot;event:language=&quot; + chr$(34) + &quot;Script&quot; ) &gt; 0 then 
-		eventName = ExtractEventNameFromXMLLine( xmlline ) 
+	if instr( xmlline, &quot;event:language=&quot; + chr$(34) + &quot;Script&quot; ) &gt; 0 then
+		eventName = ExtractEventNameFromXMLLine( xmlline )
 		scriptName = ExtractEventScriptFromXMLLine( xmlline )
 		lineNumber = lineCount
 	elseif instr( xmlline, &quot;event:language=&quot; + chr$(34) + &quot;StarBasic&quot; ) &gt; 0 then
@@ -604,14 +604,14 @@ sub evaluateForEvent( xmlline as string, lineCount as integer )
 		scriptName = &quot;Allocated to Office function&quot;
 		lineNumber = 1
 	end if
-	
+
 	&apos;Need to sequence to find the corresponding index for the event type
 	for n = 0 to ubound( allEventTypesApp() )
 		if ( eventName = allEventTypes( n ).Name ) then
 			allEventTypesApp( n ).Name = scriptName
 			allEventTypesApp( n ).Value = lineNumber
 		end if
-	next n	
+	next n
 end sub
 
 
@@ -621,14 +621,14 @@ function isOKscriptProps( props() as Object, eventName as string ) as Boolean
 	test = ubound( props() )
 	isOKscriptProps() = true
 	exit function
-	
+
 	ErrorHandler:
 	isOKscriptProps() = false
 end function
 
 sub ReadEventsFromDoc()
 	On Error Goto ErrorHandler
-	
+
 	eventSupplier = ThisComponent
 	for n = 0 to ubound( allEventTypes() )
 		Dim scriptProps() as Object
@@ -636,7 +636,7 @@ sub ReadEventsFromDoc()
 			if ( ubound( scriptProps ) &gt; 0 ) then
 				if ( scriptProps(0).Value = &quot;Script&quot; ) then
 					&apos;Script binding
-					allEventTypesDoc(n).Name = scriptProps(1).Value					
+					allEventTypesDoc(n).Name = scriptProps(1).Value
 					allEventTypesDoc(n).value = 2
 				elseif( scriptProps(0).Value = &quot;StarBasic&quot; ) then
 					&apos;StarBasic macro
@@ -646,9 +646,9 @@ sub ReadEventsFromDoc()
 			end if
 		end if
 	next n
-	
+
 	exit sub
-	
+
 	&apos; eventProps is undefined if there are no event bindings in the doc
 	ErrorHandler:
 	reset
@@ -657,7 +657,7 @@ end sub
 
 sub WriteEventsToDoc()
 	On Error Goto ErrorHandler
-	
+
 	eventSupplier = ThisComponent
 	for n = 0 to ubound( allEventTypes() )
 		scriptName = allEventTypesDoc( n ).Name
@@ -674,7 +674,7 @@ sub WriteEventsToDoc()
 	&apos;Mark document as modified ( should happen automatically as a result of calling the API )
 	ThisComponent.CurrentController.getModel().setModified( True )
 	exit sub
-	
+
 	ErrorHandler:
 	reset
 	msgbox( &quot;Error calling UNO API for writing event bindings to the document&quot; )
@@ -686,7 +686,7 @@ sub RemoveEventFromDocViaAPI( event as string )
 	dim dispatcher as object
 	dim parser     as object
 	dim url        as new com.sun.star.util.URL
-	
+
 	document = ThisComponent.CurrentController.Frame
 	parser   = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
 	dim args(0) as new com.sun.star.beans.PropertyValue
@@ -696,7 +696,7 @@ sub RemoveEventFromDocViaAPI( event as string )
 	url.Complete = &quot;script://_$ScriptFrmwrkHelper.removeEvent?&quot; _
 					+ &quot;language=Java&amp;function=ScriptFrmwrkHelper.removeEvent&quot; _
 					+ &quot;&amp;location=share&quot;
-					
+
 	parser.parseStrict(url)
 	disp = document.queryDispatch(url,&quot;&quot;,0)
 	disp.dispatch(url,args())
@@ -709,7 +709,7 @@ sub AddEventToDocViaAPI( scriptName as string, eventName as string )
 	properties( 0 ).Value = &quot;Script&quot;
 	properties( 1 ).Name = &quot;Script&quot;
 	properties( 1 ).Value = scriptName
-		
+
 	eventSupplier = ThisComponent
 	nameReplace = eventSupplier.getEvents()
 	nameReplace.replaceByName( eventName, properties() )
@@ -724,7 +724,7 @@ function getKeyTypeOffset( key as String ) as integer
 	length = Len( key )
 	if ( length &gt; 1 ) then
  		getKeyTypeOffset() = 0
-		
+
 	elseif  ( key &gt;= &quot;0&quot; AND key &lt;= &quot;9&quot; )  then
  		getKeyTypeOffset() = 1
 	else
@@ -737,24 +737,24 @@ function getKeyGroupIndex( key as String, offset as Integer ) as Integer
     &apos; ensure -1 is returned
 	cutKey = mid( key,2 )
 
-	if ( cutKey &lt;&gt; &quot;&quot; ) then 
+	if ( cutKey &lt;&gt; &quot;&quot; ) then
 		acode = asc ( mid( cutKey,1,1) )
-        if ( acode &gt; 57 ) then		
+        if ( acode &gt; 57 ) then
 			getKeyGroupIndex() = -1
 			exit function
 		end if
 	end if
-	
+
 	select case offset
 	case 0:
 			num = cint( cutKey )
 			getKeyGroupIndex() = num - 1
 			exit function
-	case 1:	
+	case 1:
 			num = asc( key ) - 48
 			getKeyGroupIndex() = num
 			exit function
-	case 2: 
+	case 2:
 			num = asc( key ) - 65
 			getKeyGroupIndex() = num
 			exit function
@@ -785,16 +785,16 @@ Sub processKeyXMLLine( lineCount as Integer, xmlline as String )
 		key = ExtractKeyCodeFromXMLLine( xmlline )
 		keyTypeOffset = getKeyTypeOffset( key  )
 		offsetIntoArrayOfArrays = offsetIntoArrayOfArrays + keyTypeOffset
-		
+
 		&apos; Calculate from the key the offset into key group array we need to point to
 		KeyGroupIndex = getKeyGroupIndex( key, keyTypeOffset )
 		if ( offsetIntoArrayOfArrays = -1 ) then
 			&apos;Unknown key group, no processing necessary
 			Exit Sub
-		end if 
+		end if
 		if ( KeyGroupIndex &gt; -1 ) then
-		
-			&apos; Determine if a script framework binding is present or not	
+
+			&apos; Determine if a script framework binding is present or not
 			if  instr( xmlline, &quot;script://&quot; ) &gt; 0 then
 				&apos; its one of ours so update its details
 				scriptName = ExtractScriptIdFromXMLLine( xmlline )
@@ -807,12 +807,12 @@ Sub processKeyXMLLine( lineCount as Integer, xmlline as String )
 
 			end if
 		end if
-	end if		
+	end if
 End Sub
 
 Sub WriteXMLFromArray()
 	On Error Goto ErrorHandler
-	cfgFile =  GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName 
+	cfgFile =  GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName
 	updateCfgFile( cfgFile )
 	&apos;if ( false ) then&apos; config stuff not in build yet
 	if ( true ) then
@@ -821,7 +821,7 @@ Sub WriteXMLFromArray()
 		msgbox (&quot;Office must be restarted before your changes will take effect.&quot;+ chr$(10)+&quot;Also close the Office QuickStarter (Windows and Linux)&quot;, 48, &quot;Assign Script (Java) To Menu&quot; )
 	endif
 	Exit Sub
-	
+
 	ErrorHandler:
 	reset
 	MsgBox (&quot;Error: Unable to write to Star Office configuration file&quot; + chr$(10) + &quot;/&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; +xmlFileName + chr$(10) + chr$(10) + &quot;Action: Please make sure you have write access to this file&quot;,0,&quot;Error&quot; )
@@ -836,7 +836,7 @@ Sub UpdateCfgFile ( fileName as String )
 	displayDialogFlag = false
 	args(0) = ThisComponent
 	args(1) = displayDialogFlag
-	
+
 	ScriptProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.MasterScriptProvider&quot;)
 	ScriptProvider.initialize( args() )
 	Script = ScriptProvider.getScript(&quot;script://_$ScriptFrmwrkHelper.updateCfgFile?&quot; _
@@ -879,19 +879,19 @@ sub AddNewEventBinding( scriptName as string, eventPosition as integer, isApp as
 		&apos;scriptProp.Value = numberOfLines
 		allEventTypesApp( eventPosition ).Name = scriptName
 		allEventTypesApp( eventPosition ).Value = numberOfLines
-	
+
 		newline = &quot; &lt;event:event event:name=&quot; + chr$(34) + event + chr$(34)
 		newline = newline + &quot; event:language=&quot; + chr$(34) + &quot;Script&quot; + chr$(34) + &quot; xlink:href=&quot; + chr$(34)
-		newline = newline + scriptName + chr$(34) + &quot; xlink:type=&quot; + chr$(34) + &quot;simple&quot; + chr$(34) + &quot;/&gt;&quot;	
+		newline = newline + scriptName + chr$(34) + &quot; xlink:type=&quot; + chr$(34) + &quot;simple&quot; + chr$(34) + &quot;/&gt;&quot;
 		xmlFile( numberOfLines ) = newline
-		xmlFile( numberOfLines + 1 ) = &quot;&lt;/event:events&gt;&quot;	
+		xmlFile( numberOfLines + 1 ) = &quot;&lt;/event:events&gt;&quot;
 		numberOfLines = numberOfLines + 1
 	else
 		&apos;scriptProp.Name = scriptName
 		&apos;scriptProp.Value = 2
 		allEventTypesDoc( eventPosition ).Name = scriptName
 		allEventTypesDoc( eventPosition ).Value = 2
-	end if	
+	end if
 end sub
 
 REM ----- Array update functions -----
@@ -902,7 +902,7 @@ sub AddNewMenuBinding( newScript as string, newMenuLabel as string, newLinePosit
 	dim newLineInserted as boolean
 	dim lineCounter as integer
 	lineCounter = 1
-		
+
 	do while lineCounter &lt;= numberOfLines
 		if not newLineInserted then
 			REM If the line number is the position at which to insert the new line
@@ -914,7 +914,7 @@ sub AddNewMenuBinding( newScript as string, newMenuLabel as string, newLinePosit
 				else
 					indent = GetMenuWhiteSpace( xmlFile( newLinePosition - 1 ) )
 					newXmlFile( lineCounter ) = ( indent + &quot;&lt;menu:menuitem menu:id=&quot;+chr$(34) + newScript + chr$(34)+&quot; menu:helpid=&quot;+chr$(34)+&quot;1929&quot;+chr$(34)+&quot; menu:label=&quot;+chr$(34)+ newMenuLabel + chr$(34)+&quot;/&gt;&quot; )
-					newXmlFile( lineCounter + 1 ) = xmlFile( lineCounter )									
+					newXmlFile( lineCounter + 1 ) = xmlFile( lineCounter )
 				end if
 			REM added -1 for debug --&gt;
 			&apos;	indent = GetMenuWhiteSpace( xmlFile( newLinePosition ) )
@@ -930,14 +930,14 @@ sub AddNewMenuBinding( newScript as string, newMenuLabel as string, newLinePosit
 		end if
 		lineCounter = lineCounter + 1
 	loop
-		
+
 	numberOfLines = numberOfLines + 1
-	
+
 	REM read the new file into the global array
 	for n = 1 to numberOfLines
 		xmlFile( n ) = newXmlFile( n )
 	next n
-	
+
 end sub
 
 
@@ -955,11 +955,11 @@ sub AddNewKeyBinding( scriptName as string, shift as boolean, control as boolean
 	end if
 	keyCombo = keyCombo + key
 	newLine = newLine + &quot; xlink:href=&quot;+chr$(34)+ scriptName +chr$(34) +&quot;/&gt;&quot;
-	
+
 	if ( control AND shift ) then
 		offsetIntoArrayOfArrays = 0
 	elseif ( control ) then
-		offsetIntoArrayOfArrays = 3	
+		offsetIntoArrayOfArrays = 3
 	elseif ( shift ) then
 		offsetIntoArrayOfArrays = 6
 	endif
@@ -977,7 +977,7 @@ sub AddNewKeyBinding( scriptName as string, shift as boolean, control as boolean
 		xmlFile( keyAllocationMap( offsetIntoArrayOfArrays, KeyGroupIndex ).Value ) = newLine
 	else
 		&apos; this is a new binding, create a new line in xml file
-		for n = 1 to numberOfLines 
+		for n = 1 to numberOfLines
 			if n = numberOfLines then
 				xmlFile( n ) = newLine
 				xmlFile( n + 1 ) = &quot;&lt;/accel:acceleratorlist&gt;&quot;
@@ -987,8 +987,8 @@ sub AddNewKeyBinding( scriptName as string, shift as boolean, control as boolean
 			end if
 		next n
 
-		keyAllocationMap( offsetIntoArrayOfArrays, KeyGroupIndex ).Value = n	
-		keyAllocationMap( offsetIntoArrayOfArrays, KeyGroupIndex ).Name = scriptName	
+		keyAllocationMap( offsetIntoArrayOfArrays, KeyGroupIndex ).Value = n
+		keyAllocationMap( offsetIntoArrayOfArrays, KeyGroupIndex ).Name = scriptName
 		numberOfLines = numberOfLines + 1
 	endif
 
@@ -1016,7 +1016,7 @@ sub RemoveScriptNameAndPosition( keyComboPosition )
 	dim updatedScriptLinePosition( 120 ) as integer
 	dim removedScript as boolean
 	removedScript = false
-	
+
 	for n = 1 to scriptCount
 		if not removedScript then
 			if not( n = keyComboPosition ) then
@@ -1029,7 +1029,7 @@ sub RemoveScriptNameAndPosition( keyComboPosition )
 		end if
 	next n
 	scriptCount = scriptCount - 1
-	
+
 	for n = 1 to scriptCount
 		scriptNames( n ) = updatedScriptNames( n )
 	next n
@@ -1045,8 +1045,8 @@ Sub PopulateLanguageCombo()
 	for n = LBOUND( languages() ) to UBOUND ( languages() )
 		langCombo.addItem( languages( n ), n )
 	next n
-	langCombo.setDropDownLineCount( n ) 
-	langCombo.text = langCombo.getItem( 0 )	
+	langCombo.setDropDownLineCount( n )
+	langCombo.text = langCombo.getItem( 0 )
 End Sub
 
 Sub PopulateLocationCombo()
@@ -1056,7 +1056,7 @@ Sub PopulateLocationCombo()
 	displayDialogFlag = false
 	args(0) = ThisComponent
 	args(1) = displayDialogFlag
-	
+
 	ScriptProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.MasterScriptProvider&quot;)
 	ScriptProvider.initialize( args() )
 
@@ -1065,7 +1065,7 @@ Sub PopulateLocationCombo()
 	for n = LBOUND( locations() ) to UBOUND ( locations() )
 		locCombo.addItem( locations( n ), n )
 	next n
-	locCombo.setDropDownLineCount( n ) 
+	locCombo.setDropDownLineCount( n )
 	locCombo.text = locCombo.getItem( 0 )
 End Sub
 
@@ -1077,7 +1077,7 @@ sub PopulateScriptList( lang as String, loc as String )
 
 	smgr = getProcessServiceManager()
    	context = smgr.getPropertyValue( &quot;DefaultContext&quot; )
-   	scriptstoragemgr = context.getValueByName( &quot;/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager&quot; ) 
+   	scriptstoragemgr = context.getValueByName( &quot;/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager&quot; )
 	scriptLocationURI = &quot;USER&quot;
 	if ( loc = &quot;Share&quot; ) then
 		scriptLocationURI = &quot;SHARE&quot;
@@ -1104,10 +1104,10 @@ sub PopulateScriptList( lang as String, loc as String )
 			scriptextn = filesysScripts( index )
 			pos = lastIndexOf( scriptextn, &quot;.&quot; )
             scriptextn = mid( scriptextn, pos + 1, len( scriptextn ) - pos )
-            
+
             for extnsIndex = lbound(extns()) to ubound(extns())
                 extn = extns(extnsIndex)
-                if ( scriptextn = extn ) then 
+                if ( scriptextn = extn ) then
                 	if ( detailedView ) then
                     	locnDisplayList( index ).Name = filesysScripts( index )
                     	locnDisplayList( index ).Value = filesysScripts( index )
@@ -1117,7 +1117,7 @@ sub PopulateScriptList( lang as String, loc as String )
 						locnDisplayList( index ).Value = filesysScripts( index )
 					end if
 				scriptList.addItem( locnDisplayList( index ).Name, index )
-				exit for 
+				exit for
                 end if
             next extnsIndex
 		next index
@@ -1125,7 +1125,7 @@ sub PopulateScriptList( lang as String, loc as String )
 		scriptList.selectItemPos( 0, true )
 
         REM !!!!At this point we exit the sub!!!!
-		exit sub			
+		exit sub
 
 	endif
 
@@ -1146,7 +1146,7 @@ sub PopulateScriptList( lang as String, loc as String )
 					if ( lang = implementations( n ).getLanguage() ) then
 						if ( detailedView ) then
 							tempDisplayList( n ).Name = logicalName _
-								+ &quot; [&quot; + implementations( n ).getFunctionName() + &quot;]&quot;  
+								+ &quot; [&quot; + implementations( n ).getFunctionName() + &quot;]&quot;
 							tempDisplayList( n ).Value = implementations( n )
 						else
 							tempDisplayList( n ).Name = logicalName
@@ -1170,7 +1170,7 @@ sub PopulateMenuCombo()
 	for n = 1 to menuCount
 		menuComboBox.addItem( menuItems( n ), n - 1 )
 	next n
-	menuComboBox.setDropDownLineCount( 8 ) 
+	menuComboBox.setDropDownLineCount( 8 )
 	menuComboBox.text = menuComboBox.getItem( 0 )
 end sub
 
@@ -1194,7 +1194,7 @@ sub PopulateSubMenuList( menuItemPosition as integer )
 		REM Other wise get the line before the next top-level menu begins
 		xmlEndLine = menuItemLinePosition( menuItemPosition + 1 ) - 1
 	end if
-	
+
 	for lineNumber = xmlStartLine to xmlEndLine
 		REM Insert all sub-menus and sub-popupmenus
 		if not( instr( xmlFile( lineNumber ), menuXMLTag ) = 0 ) and instr( xmlFile( lineNumber ), &quot;menupopup&quot;) = 0 then
@@ -1202,10 +1202,10 @@ sub PopulateSubMenuList( menuItemPosition as integer )
 			if subMenuIndent = &quot; &quot; then
 				subMenuIndent = &quot;&quot;
 			else
-				subMenuIndent = subMenuIndent + subMenuIndent 
+				subMenuIndent = subMenuIndent + subMenuIndent
 			end if
 			if not( instr( xmlFile( lineNumber ), &quot;menuseparator&quot; ) = 0 ) then
-				subMenuItems( subMenuCount ) = subMenuIndent + &quot;----------------&quot;	
+				subMenuItems( subMenuCount ) = subMenuIndent + &quot;----------------&quot;
 			else
 				subMenuName = ExtractLabelFromXMLLine( xmlFile( lineNumber ) )
 				REM Add script Name if there is one bound to menu item
@@ -1230,7 +1230,7 @@ sub PopulateSubMenuList( menuItemPosition as integer )
 	&apos;if subMenuCount = 1 then
 	if menuItems( menuItemPosition ) = &quot;Format&quot; then
 			subMenuList.addItem( &quot;Unable to Assign Scripts to this menu&quot;, 0 )
-	else	
+	else
 		for n = 1 to subMenuCount - 1
 			subMenuList.addItem( subMenuItems( n ), n - 1 )
 		next n
@@ -1253,7 +1253,7 @@ sub PopulateTopLevelKeyBindingList()
 	allKeyGroupsArray(4) = &quot;CONTROL + digits&quot;
 	allKeyGroupsArray(5) = &quot;CONTROL + letters&quot;
 	allKeyGroupsArray(6) = &quot;SHIFT + F keys&quot;
-	
+
 	keyCombo = bindingDialog.getControl( &quot;KeyCombo&quot; )
 	keyCombo.removeItems( 0, keyCombo.getItemCount() )
 	pos = 0
@@ -1264,7 +1264,7 @@ sub PopulateTopLevelKeyBindingList()
 			keyCombo.addItem( allKeyGroupsArray( n ), pos )
 			pos = pos +1
 		endif
-	next n 
+	next n
 	keyCombo.text = keyCombo.getItem( 0 )
 end sub
 
@@ -1301,17 +1301,17 @@ sub populateEventList( focusPosition as integer )
 	eventList.removeItems( 0, eventList.getItemCount() )
 
 	dim isApp as boolean
-	if allApps.state = true then  &apos; Application event	
-		isApp = true	
+	if allApps.state = true then  &apos; Application event
+		isApp = true
 	else
 		isApp = false
 	end if
 
-	&apos; use allEventTypes() to fill list box 
+	&apos; use allEventTypes() to fill list box
 	&apos; for each element compare with allEventTypesApp
 	dim scriptName as string
-	dim lineNumber as integer	
-	for n = 0 to ubound( allEventTypes() ) 	
+	dim lineNumber as integer
+	for n = 0 to ubound( allEventTypes() )
 		&apos; If the line number is 1 then SB macro
 		&apos; more than 1 it is the line number of the script
 		if isApp and n &gt; 12 then
@@ -1322,7 +1322,7 @@ sub populateEventList( focusPosition as integer )
 			scriptName = allEventTypesApp( n ).Name
 		else
 			lineNumber = allEventTypesDoc( n ).Value
-			scriptName = allEventTypesDoc( n ).Name			
+			scriptName = allEventTypesDoc( n ).Name
 		end if
 		stringToAdd = &quot;&quot;
 		if ( lineNumber &gt;= 1 ) then
@@ -1330,7 +1330,7 @@ sub populateEventList( focusPosition as integer )
 		end if
 		eventList.addItem( allEventTypes( n ).Value + &quot; &quot; + stringToAdd, n )
 	next n
-	
+
 	eventList.selectItemPos( focusPosition, true )
 end sub
 
@@ -1412,7 +1412,7 @@ sub createAllEventBindings()
 	&apos;dim props as new com.sun.star.beans.PropertyValue
 	&apos;props.Name = &quot;&quot; &apos;Name = script name
 	&apos;props.Value = 0 &apos;Value = 0 for empty, 1 for macro, linenumber for script
-	
+
 	&apos; Creates all types of event bindings for both Application and Document
 	&apos; Initially both arrays have no bindings allocated to the events
 	&apos; The value for Doc is only Script/macro name (no need for line number)
@@ -1482,7 +1482,7 @@ function ExtractEventNameFromXMLLine(  xmlline as string )
 	idEnd = instr( xmlline, chr$(34)+&quot; event:language&quot; )
 	idLength = idEnd - idStart
 	event =  mid( xmlline, idStart, idLength )
-	
+
 	ExtractEventNameFromXMLLine() = event
 end function
 
@@ -1491,7 +1491,7 @@ function ExtractKeyCodeFromXMLLine( XMLLine as string ) as string
 	keyCode = mid( XMLLine, keyStart, ( len( XMLLine ) - keyStart ) )
 	keyEnd = instr( keyCode, chr$(34) )
 	keyCode = mid( keyCode, 1, keyEnd - 1 )
-	
+
 	ExtractKeyCodeFromXMLLine() = keyCode
 end function
 
@@ -1502,7 +1502,7 @@ function GetMenuWhiteSpace( MenuXMLLine as string ) as string
 	for i = 1 to numberOfSpaces
 		whiteSpace = whiteSpace + &quot; &quot;
 	next i
-	
+
 	GetMenuWhiteSpace() = whiteSpace
 end function
 
@@ -1510,11 +1510,11 @@ function IsAllocatedMenuItem( script as string ) as boolean
 	foundMenuItem = false
 	Allocated = false
 	count = 0
-	do 
+	do
 		count = count + 1
 		if strcomp( script, subMenuItems( count ) ) = 0 then
 			foundMenuItem = true
-		end if	
+		end if
 	loop while not( foundMenuItem ) and count &lt; subMenuCount
 
 	linePosition = subMenuItemLinePosition( count )
@@ -1533,7 +1533,7 @@ function HasShiftKey( keyCombo ) as boolean
 	else
 		hasShift = true
 	end if
-		
+
 	HasShiftKey = hasShift
 end function
 
@@ -1544,7 +1544,7 @@ function HasControlKey( keyCombo ) as boolean
 	else
 		hasControl = true
 	end if
-		
+
 	HasControlKey = hasControl
 end function
 
@@ -1565,7 +1565,7 @@ REM ------ Event Handling Functions (Listeners) ------
 sub KeyListListener()
 	keyShortCutList = bindingDialog.getControl( &quot;KeyList&quot; )
 	selectedShortCut = keyShortCutList.getSelectedItem()
-	combo = bindingDialog.getControl( &quot;KeyCombo&quot; ) 
+	combo = bindingDialog.getControl( &quot;KeyCombo&quot; )
 
 	menuScriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
 	selectedScript = menuScriptList.getSelectedItem()
@@ -1578,10 +1578,10 @@ sub KeyListListener()
 			keyGroupIndex = n
 			exit for
 		end if
-    next n	
+    next n
     selectedKeyIndex = keyShortCutList.getSelectedItemPos()
 
-	if  keyAllocationMap( keyGroupIndex, selectedKeyIndex ).Value &gt; 1 then 
+	if  keyAllocationMap( keyGroupIndex, selectedKeyIndex ).Value &gt; 1 then
 		bindingDialog.Model.Delete.enabled = true
 		bindingDialog.Model.AddOn.enabled = true
 		if selectedScript &lt;&gt; &quot;&quot; then
@@ -1627,13 +1627,13 @@ end sub
 
 &apos;Populates the SubMenuList with the appropriate menu items from the Top-level menu selected from the combo box
 sub MenuComboListener()
-	combo = bindingDialog.getControl( &quot;MenuCombo&quot; ) 
+	combo = bindingDialog.getControl( &quot;MenuCombo&quot; )
 	newToplevelMenu = combo.text
 	counter = 0
 	do
 		counter = counter + 1
 	loop while not( newToplevelMenu = menuItems( counter ) )
-	
+
 	PopulateSubMenuList( counter )
 end sub
 
@@ -1645,14 +1645,14 @@ sub fireLangLocComboListernerOnRet( eventobj as object )
 end sub
 
 sub LangLocComboListener()
-   
-	combo = bindingDialog.getControl( &quot;LanguageCombo&quot; ) 
+
+	combo = bindingDialog.getControl( &quot;LanguageCombo&quot; )
 	language = combo.text
 	combo = bindingDialog.getControl( &quot;LocationCombo&quot; )
-	location = combo.text 
+	location = combo.text
 
 	PopulateScriptList( language,location )
-	
+
     &apos;Enable/disable Assign button
     scriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
     if not (dialogName = &quot;EditDebug&quot;) then
@@ -1660,7 +1660,7 @@ sub LangLocComboListener()
             bindingDialog.Model.NewButton.enabled = false
         end if
     end if
-    
+
     if ( location = &quot;Filesystem&quot; ) and ( language &lt;&gt; &quot;Java&quot; ) then
     	bindingDialog.Model.Browse.enabled = true
     	if not (dialogName = &quot;EditDebug&quot;) then
@@ -1672,10 +1672,10 @@ sub LangLocComboListener()
     		bindingDialog.Model.fsonly.enabled = false
     	end if
     endif
-    
+
     &apos; extra dialog dependent processing
     if dialogName = &quot;Menu&quot; then
-    	&apos; will set New button to false if no text in LableBox
+    	&apos; will set New button to false if no text in LabelBox
     	MenuLabelBoxListener()
     elseif dialogName = &quot;Key&quot; then
     	&apos; will set Assigne button to false if appropriate
@@ -1683,7 +1683,7 @@ sub LangLocComboListener()
     elseif dialogName = &quot;Event&quot; then
     	EventListListener()
     end if
-    
+
 end sub
 
 REM a keypress listener that in turn fires the KeyCL on a return key even only
@@ -1695,7 +1695,7 @@ end sub
 
 &apos;Populates the KeyList with the appropriate key combos from the Top-level key group selected from the combo box
 sub KeyComboListener()
-	combo = bindingDialog.getControl( &quot;KeyCombo&quot; ) 
+	combo = bindingDialog.getControl( &quot;KeyCombo&quot; )
 	keyGroup = combo.text
 	for n = lbound ( allKeyGroupsArray() ) to ubound ( allKeyGroupsArray() )
 		if ( allKeyGroupsArray( n ) = keyGroup )then
@@ -1737,7 +1737,7 @@ sub EventListListener()
 
 	menuScriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
 	selectedScript = menuScriptList.getSelectedItem()
-	
+
     dim binding as integer
     if allApps.state = true then
     	binding = allEventTypesApp( eventPos ).Value
@@ -1750,7 +1750,7 @@ sub EventListListener()
     else
        	bindingDialog.Model.Delete.enabled = false
     end if
-    
+
 	if ( binding = 1 ) then
 		&apos; staroffice binding, can&apos;t assign
 		bindingDialog.Model.NewButton.enabled = false
@@ -1772,7 +1772,7 @@ function getFilePicker() as Object
     REM file dialog
     oFilePicker = CreateUnoService( &quot;com.sun.star.ui.dialogs.FilePicker&quot; )
 
-    combo = bindingDialog.getControl( &quot;LanguageCombo&quot; ) 
+    combo = bindingDialog.getControl( &quot;LanguageCombo&quot; )
     language = combo.text
     currentFilter = &quot;&quot;
 
@@ -1901,20 +1901,20 @@ end sub
 sub MenuDeleteButton()
 	subMenuList = bindingDialog.getControl( &quot;SubMenuList&quot; )
 	linePos = subMenuItemLinePosition( subMenuList.getSelectedItemPos() + 1 )
-	
+
 	RemoveBinding( linePos )
 
-	REM Update the top-level menu&apos;s line positions	
-	combo = bindingDialog.getControl( &quot;MenuCombo&quot; ) 
+	REM Update the top-level menu&apos;s line positions
+	combo = bindingDialog.getControl( &quot;MenuCombo&quot; )
 	newToplevelMenu = combo.text
 	counter = 0
 	do
 		counter = counter + 1
 	loop while not( newToplevelMenu = menuItems( counter ) )
-	UpdateTopLevelMenus( counter + 1, false )	
-	
+	UpdateTopLevelMenus( counter + 1, false )
+
 	MenuComboListener()
-	
+
 	subMenuList.selectItemPos( subMenuList.getSelectedItemPos(), true )
 end sub
 
@@ -1928,7 +1928,7 @@ sub MenuNewButton()
 	subMenuList = bindingDialog.getControl( &quot;SubMenuList&quot; )
 
 	REM Update the top-level menu&apos;s line positions
-	combo = bindingDialog.getControl( &quot;MenuCombo&quot; ) 
+	combo = bindingDialog.getControl( &quot;MenuCombo&quot; )
 	newToplevelMenu = combo.text
 	counter = 0
 	do
@@ -1936,9 +1936,9 @@ sub MenuNewButton()
 	loop while not( newToplevelMenu = menuItems( counter ) )
 	UpdateTopLevelMenus( counter + 1, true )
 
-	REM New line position is one ahead of the selected sub menu item		
+	REM New line position is one ahead of the selected sub menu item
 	linePos = subMenuItemLinePosition( subMenuList.getSelectedItemPos() + 1 ) + 1
-	
+
 	AddNewMenuBinding( scriptURI, newMenuLabel, linePos )
 
 	MenuComboListener()
@@ -1953,7 +1953,7 @@ sub BrowseButton()
 	Dim sFiles As Variant
 
 	oFilePicker = getFilePicker()
-	
+
 	REM execute file dialog
 	If oFilePicker.execute() Then
 		sFiles = oFilePicker.getFiles()
@@ -1982,11 +1982,11 @@ sub BrowseButton()
 				end if
 			next index
 		End If
-	End If		
+	End If
 	LangLocComboListener()
 End Sub
 
-sub KeyOKButton()	
+sub KeyOKButton()
 	WriteXMLFromArray()
 	bindingDialog.endExecute()
 end sub
@@ -2015,13 +2015,13 @@ sub KeyNewButton()
 	menuScriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
 	script = menuScriptList.getSelectedItem()
 	scriptURI = getScriptURI( script )
-	
+
 	keyList = bindingDialog.getControl( &quot;KeyList&quot; )
 	keyIndex = keyList.getSelectedItemPos()
 	ShortCutKeyArray() = KeyBindArrayOfArrays( keyGroupIndex )
 	keyText = ShortCutKeyArray( keyIndex )
-	
-	AddNewKeyBinding( scriptURI, HasShiftKey( keyText ), HasControlKey( keyText ), ExtractKeyFromCombo( keyText ) ) 
+
+	AddNewKeyBinding( scriptURI, HasShiftKey( keyText ), HasControlKey( keyText ), ExtractKeyFromCombo( keyText ) )
 
 	KeyComboListener()
 end sub
@@ -2036,7 +2036,7 @@ sub KeyDeleteButton()
 	keyGroup = combo.text
 	dim keyGroupIndex as Integer
 	dim selectedKeyIndex as Integer
-	for n = lbound ( allKeyGroupsArray() ) to ubound ( allKeyGroupsArray() ) 
+	for n = lbound ( allKeyGroupsArray() ) to ubound ( allKeyGroupsArray() )
 		if ( allKeyGroupsArray( n ) = keyGroup )then
 			keyGroupIndex = n
 			exit for
@@ -2060,7 +2060,7 @@ sub EventNewButton()
 
 	allApps = bindingDialog.getControl( &quot;AllAppsOption&quot; )
 	dim isApp as boolean
-	if allApps.state = true then &apos;Application	
+	if allApps.state = true then &apos;Application
 		isApp = true
 	else &apos;Document
 		isApp = false
@@ -2084,14 +2084,14 @@ sub EventDeleteButton()
 		&apos;eventProp.Name = &quot;&quot;
 		&apos;eventProp.Value = 0
 		allEventTypesApp( eventPosition ).Name = &quot;&quot;
-		allEventTypesApp( eventPosition ).Value = 0		
+		allEventTypesApp( eventPosition ).Value = 0
 		RemoveBinding( linePosition )
 	else &apos;Document
 		&apos;DeleteEvent( allEventTypes( eventPosition ) )
-		allEventTypesDoc( eventPosition ).Name = &quot;&quot;		
+		allEventTypesDoc( eventPosition ).Name = &quot;&quot;
 		allEventTypesDoc( eventPosition ).Value = 0
 	end if
-	
+
 	PopulateEventList( eventPosition )
 	EventListListener()
 end sub
