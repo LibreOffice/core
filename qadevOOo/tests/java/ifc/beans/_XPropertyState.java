@@ -204,7 +204,7 @@ public class _XPropertyState extends MultiMethodTest {
         /**
         * Sets the property to default, then compares the current property
         * value to value received by method <code>getPropertyDefault</code>.
-        * Has <b> OK </b> status if the current proeprty value equals to
+        * Has <b> OK </b> status if the current property value equals to
         * default property. <p>
         * The following method tests are to be completed successfully before :
         * <ul>

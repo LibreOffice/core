@@ -102,7 +102,7 @@ public class XMLSettingsImporter extends TestCase {
     * The calc document is set as a target document for importer.
     * Imported XML-data contains only settings tags including tag
     * with new number of iteration steps.
-    * After import 'IterationCount' proeprty getting from
+    * After import 'IterationCount' property getting from
     * target document is checked.
     *     Object relations created :
     * <ul>

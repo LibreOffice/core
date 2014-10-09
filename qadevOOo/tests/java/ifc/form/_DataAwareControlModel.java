@@ -95,7 +95,7 @@ public class _DataAwareControlModel extends MultiPropertyTest {
     * if it was properly set. If <code>'DataAwareControlModel.NewFieldName'
     * </code> relation is not found, then new property value is
     * 'Address'. <p>
-    * Has <b> OK </b> status if the proeprty was properly set
+    * Has <b> OK </b> status if the property was properly set
     * and no exceptions were thrown. If old and new values are equal
     * the test is OK if no exceptions occurred and the value remains
     * the same.<p>
