@@ -1,8 +1,0 @@
-"ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getLogicalName()"
-"ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getParcelURI()"
-"ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getLanguage()"
-"ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getFunctionName()"
-"ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getLanguageProperties()"
-"ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getFileSetNames()"
-"ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getFilesInFileSet()"
-"ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getDescription()"

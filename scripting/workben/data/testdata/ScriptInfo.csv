@@ -1,8 +1,0 @@
-_getLogicalName;description=Try to get a logical name;expected=MemoryUtils.MemUsage
-_getParcelURI;description=Try to get a parcel URI;expected=ExampleSpreadSheetLatest.sxc/Scripts/java/MemoryUsage
-_getLanguage;description=Try to get language;expected=Java
-_getFunctionName;description=Try to get a function name;expected=MemoryUsage.updateMemoryUsage
-_getLanguageProperties;description=Try to get language properties;expected=MemUsage.jar
-_getFileSetNames;description=Try to get fileset names;expected=delivered
-_getFilesInFileSet;description=Try to get files in fileset;expected=google.jar
-_getDescription;description=Try to get description;expected=Show JVM memory usage stats
