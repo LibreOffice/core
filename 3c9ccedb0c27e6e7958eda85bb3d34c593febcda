@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_483c7f2f",
+        "filename": "toolkit/qa/complex/toolkit/accessibility/_XAccessibleEventBroadcaster.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-10-09T20:08:44Z",
+      "side": 1,
+      "message": "You don\u0027t need this if as well, the whole method is one return statement:\n\n  return accCon.getAccessibleStateSet().contains(\n      AccessibleStateType.TRANSIENT)\n   \u0026\u0026 accCon.getAccessibleParent().getAccessibleContext()\n      .getAccessibleStateSet().contains(\n          AccessibleStateType.MANAGES_DESCENDANTS);",
+      "revId": "3c9ccedb0c27e6e7958eda85bb3d34c593febcda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
