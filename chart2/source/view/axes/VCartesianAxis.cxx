@@ -1258,19 +1258,15 @@ TickFactory2D* VCartesianAxis::createTickFactory2D()
 
 void lcl_hideIdenticalScreenValues( TickIter& rTickIter )
 {
-    TickInfo* pPreviousTickInfo = rTickIter.firstInfo();
-    if(!pPreviousTickInfo)
+    TickInfo* pPrevTickInfo = rTickIter.firstInfo();
+    if (!pPrevTickInfo)
         return;
-    pPreviousTickInfo->bPaintIt = true;
+
+    pPrevTickInfo->bPaintIt = true;
     for( TickInfo* pTickInfo = rTickIter.nextInfo(); pTickInfo; pTickInfo = rTickIter.nextInfo())
     {
-        pTickInfo->bPaintIt =
-            ( static_cast<sal_Int32>(pTickInfo->aTickScreenPosition.getX())
-            != static_cast<sal_Int32>(pPreviousTickInfo->aTickScreenPosition.getX()) )
-            ||
-            ( static_cast<sal_Int32>(pTickInfo->aTickScreenPosition.getY())
-            != static_cast<sal_Int32>(pPreviousTickInfo->aTickScreenPosition.getY()) );
-        pPreviousTickInfo = pTickInfo;
+        pTickInfo->bPaintIt = (pTickInfo->aTickScreenPosition != pPrevTickInfo->aTickScreenPosition);
+        pPrevTickInfo = pTickInfo;
     }
 }
 
