@@ -58,7 +58,7 @@ sal_Int32 TickInfo::getScreenDistanceBetweenTicks( const TickInfo& rOherTickInfo
     return nRet;
 }
 
-PureTickIter::PureTickIter( ::std::vector< TickInfo >& rTickInfoVector )
+PureTickIter::PureTickIter( TickInfoArrayType& rTickInfoVector )
             : m_rTickVector(rTickInfoVector)
             , m_aTickIter(m_rTickVector.begin())
 {
@@ -116,7 +116,7 @@ bool TickFactory::isDateAxis() const
     return m_rScale.AxisType == chart2::AxisType::DATE;
 }
 
-void TickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+void TickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) const
 {
     if( isDateAxis() )
         DateTickFactory( m_rScale, m_rIncrement ).getAllTicks( rAllTickInfos );
@@ -124,7 +124,7 @@ void TickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllT
         EquidistantTickFactory( m_rScale, m_rIncrement ).getAllTicks( rAllTickInfos );
 }
 
-void TickFactory::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+void TickFactory::getAllTicksShifted( TickInfoArraysType& rAllTickInfos ) const
 {
     if( isDateAxis() )
         DateTickFactory( m_rScale, m_rIncrement ).getAllTicksShifted( rAllTickInfos );
@@ -288,15 +288,15 @@ void TickFactory2D::createPointSequenceForAxisMainLine( drawing::PointSequenceSe
     rPoints[0][1].Y = static_cast<sal_Int32>(m_aAxisEndScreenPosition2D.getY());
 }
 
-void TickFactory2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+void TickFactory2D::updateScreenValues( TickInfoArraysType& rAllTickInfos ) const
 {
     //get the transformed screen values for all tickmarks in rAllTickInfos
-    ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter       = rAllTickInfos.begin();
-    const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rAllTickInfos.end();
+    TickInfoArraysType::iterator aDepthIter = rAllTickInfos.begin();
+    const TickInfoArraysType::const_iterator aDepthEnd = rAllTickInfos.end();
     for( ; aDepthIter != aDepthEnd; ++aDepthIter )
     {
-        ::std::vector< TickInfo >::iterator       aTickIter = (*aDepthIter).begin();
-        const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
+        TickInfoArrayType::iterator aTickIter = (*aDepthIter).begin();
+        const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
         for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = (*aTickIter);

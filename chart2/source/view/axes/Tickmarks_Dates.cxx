@@ -59,11 +59,11 @@ DateTickFactory::~DateTickFactory()
 {
 }
 
-void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos, bool bShifted ) const
+void DateTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos, bool bShifted ) const
 {
     rAllTickInfos.resize(2);
-    ::std::vector< TickInfo >& rMajorTicks = rAllTickInfos[0];
-    ::std::vector< TickInfo >& rMinorTicks = rAllTickInfos[1];
+    TickInfoArrayType& rMajorTicks = rAllTickInfos[0];
+    TickInfoArrayType& rMinorTicks = rAllTickInfos[1];
     rMajorTicks.clear();
     rMinorTicks.clear();
 
@@ -143,12 +143,12 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
     }
 }
 
-void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+void DateTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) const
 {
     getAllTicks( rAllTickInfos, false );
 }
 
-void DateTickFactory::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+void DateTickFactory::getAllTicksShifted( TickInfoArraysType& rAllTickInfos ) const
 {
     getAllTicks( rAllTickInfos, true );
 }

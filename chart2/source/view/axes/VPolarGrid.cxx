@@ -57,7 +57,7 @@ void VPolarGrid::setIncrements( const std::vector< ExplicitIncrementData >& rInc
     m_aIncrements = rIncrements;
 }
 
-void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, TickInfoArraysType& rAllTickInfos ) const
 {
     TickFactory aTickFactory(
             m_pPosHelper->getScales()[nDimensionIndex], m_aIncrements[nDimensionIndex] );
@@ -66,7 +66,7 @@ void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::st
 
 void VPolarGrid::createLinePointSequence_ForAngleAxis(
         drawing::PointSequenceSequence& rPoints
-        , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
+        , TickInfoArraysType& rAllTickInfos
         , const ExplicitIncrementData& rIncrement
         , const ExplicitScaleData& rScale
         , PolarPlottingPositionHelper* pPosHelper
@@ -103,8 +103,8 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
 }
 #ifdef NOTYET
 void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicTarget
-        , ::std::vector< ::std::vector< TickInfo > >& /* rRadiusTickInfos */
-        , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
+        , TickInfoArraysType& /* rRadiusTickInfos */
+        , TickInfoArraysType& rAngleTickInfos
         , const ::std::vector<VLineProperties>& rLinePropertiesList )
 {
     Reference< drawing::XShapes > xMainTarget(
@@ -119,15 +119,15 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
     double fLogicOuterRadius = m_pPosHelper->getOuterLogicRadius();
 
     sal_Int32 nLinePropertiesCount = rLinePropertiesList.size();
-    ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rAngleTickInfos.begin();
+    TickInfoArraysType::iterator aDepthIter = rAngleTickInfos.begin();
     if(nLinePropertiesCount)
     {
         double fLogicZ      = 1.0;//as defined
         sal_Int32 nDepth=0;
         //create axis main lines
         drawing::PointSequenceSequence aAllPoints;
-        ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
-        const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
+        TickInfoArrayType::iterator             aTickIter = (*aDepthIter).begin();
+        const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
         for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = *aTickIter;
@@ -157,8 +157,8 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
 #endif
 
 void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogicTarget
-        , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
-        , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
+        , TickInfoArraysType& rRadiusTickInfos
+        , TickInfoArraysType& rAngleTickInfos
         , const ::std::vector<VLineProperties>& rLinePropertiesList )
 {
     Reference< drawing::XShapes > xMainTarget(
@@ -172,8 +172,8 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
         xInverseRadiusScaling = rRadiusScale.Scaling->getInverseScaling();
 
     sal_Int32 nLinePropertiesCount = rLinePropertiesList.size();
-    ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rRadiusTickInfos.begin();
-    const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rRadiusTickInfos.end();
+    TickInfoArraysType::iterator aDepthIter             = rRadiusTickInfos.begin();
+    const TickInfoArraysType::const_iterator aDepthEnd  = rRadiusTickInfos.end();
     for( sal_Int32 nDepth=0
         ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
         ; ++aDepthIter, nDepth++ )
@@ -193,8 +193,8 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
 
         //create axis main lines
         drawing::PointSequenceSequence aAllPoints;
-        ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
-        const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
+        TickInfoArrayType::iterator             aTickIter = (*aDepthIter).begin();
+        const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
         for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = *aTickIter;
@@ -228,8 +228,8 @@ void VPolarGrid::createShapes()
         return;
 
     //create all scaled tickmark values
-    ::std::vector< ::std::vector< TickInfo > > aAngleTickInfos;
-    ::std::vector< ::std::vector< TickInfo > > aRadiusTickInfos;
+    TickInfoArraysType aAngleTickInfos;
+    TickInfoArraysType aRadiusTickInfos;
     getAllTickInfos( 0, aAngleTickInfos );
     getAllTickInfos( 1, aRadiusTickInfos );
 

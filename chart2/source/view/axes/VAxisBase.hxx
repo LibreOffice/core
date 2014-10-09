@@ -60,7 +60,7 @@ public:
                 throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
-    virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
+    virtual void createAllTickInfos( TickInfoArraysType& rAllTickInfos );
 
     void setExrtaLinePositionAtOtherAxis( double fCrossingAt );
 
@@ -96,7 +96,7 @@ protected: //member
      * It may have more than 2 TickInfo vectors for complex category axis
      * which has multi-level axis labels.
      */
-    std::vector< std::vector<TickInfo> > m_aAllTickInfos;
+    TickInfoArraysType m_aAllTickInfos;
     bool m_bReCreateAllTickInfos;
 
     bool m_bRecordMaximumTextSize;

@@ -48,7 +48,7 @@ public:
 
     static void createLinePointSequence_ForAngleAxis(
                     ::com::sun::star::drawing::PointSequenceSequence& rPoints
-                    , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
+                    , TickInfoArraysType& rAllTickInfos
                     , const ExplicitIncrementData& rIncrement
                     , const ExplicitScaleData& rScale
                     , PolarPlottingPositionHelper* pPosHelper
@@ -61,11 +61,11 @@ private: //member
     PolarPlottingPositionHelper* m_pPosHelper;
     ::std::vector< ExplicitIncrementData >   m_aIncrements;
 
-    void    getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
+    void getAllTickInfos( sal_Int32 nDimensionIndex, TickInfoArraysType& rAllTickInfos ) const;
 
-    void    create2DRadiusGrid( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
-                    , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
-                    , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
+    void create2DRadiusGrid( const css::uno::Reference<css::drawing::XShapes>& xLogicTarget
+                    , TickInfoArraysType& rRadiusTickInfos
+                    , TickInfoArraysType& rAngleTickInfos
                     , const ::std::vector<VLineProperties>& rLinePropertiesList );
 };
 

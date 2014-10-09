@@ -130,7 +130,7 @@ void VPolarRadiusAxis::createShapes()
     const ExplicitScaleData& rAngleScale         = m_pPosHelper->getScales()[0];
     const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
 
-    ::std::vector< ::std::vector< TickInfo > > aAngleTickInfos;
+    TickInfoArraysType aAngleTickInfos;
     TickFactory aAngleTickFactory( rAngleScale, rAngleIncrement );
     aAngleTickFactory.getAllTicks( aAngleTickInfos );
 

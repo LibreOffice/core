@@ -32,11 +32,11 @@ public:
         , const ExplicitIncrementData& rIncrement );
     ~DateTickFactory();
 
-    void getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
-    void getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
+    void getAllTicks( TickInfoArraysType& rAllTickInfos ) const;
+    void getAllTicksShifted( TickInfoArraysType& rAllTickInfos ) const;
 
 private: //methods
-    void getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos, bool bShifted ) const;
+    void getAllTicks( TickInfoArraysType& rAllTickInfos, bool bShifted ) const;
 
 private: //member
     ExplicitScaleData     m_aScale;

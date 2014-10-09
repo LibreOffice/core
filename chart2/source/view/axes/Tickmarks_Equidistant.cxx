@@ -310,7 +310,7 @@ bool EquidistantTickFactory::isVisible( double fScaledValue ) const
     return true;
 }
 
-void EquidistantTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) const
 {
     uno::Sequence< uno::Sequence< double > > aAllTicks;
 
@@ -395,7 +395,7 @@ void EquidistantTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo
     {
         sal_Int32 nCount = aAllTicks[nDepth].getLength();
 
-        ::std::vector< TickInfo >& rTickInfoVector = rAllTickInfos[nDepth];
+        TickInfoArrayType& rTickInfoVector = rAllTickInfos[nDepth];
         rTickInfoVector.clear();
         rTickInfoVector.reserve( nCount );
         for(sal_Int32 nN = 0; nN<nCount; nN++)
@@ -407,7 +407,7 @@ void EquidistantTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo
     }
 }
 
-void EquidistantTickFactory::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+void EquidistantTickFactory::getAllTicksShifted( TickInfoArraysType& rAllTickInfos ) const
 {
     ExplicitIncrementData aShiftedIncrement( m_rIncrement );
     aShiftedIncrement.BaseValue = m_rIncrement.BaseValue-m_rIncrement.Distance/2.0;
@@ -428,7 +428,7 @@ EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< do
     initIter( nMinDepth, nMaxDepth );
 }
 
-EquidistantTickIter::EquidistantTickIter( ::std::vector< ::std::vector< TickInfo > >& rTicks
+EquidistantTickIter::EquidistantTickIter( TickInfoArraysType& rTicks
                    , const ExplicitIncrementData& rIncrement
                    , sal_Int32 nMinDepth, sal_Int32 nMaxDepth )
                 : m_pSimpleTicks(NULL)

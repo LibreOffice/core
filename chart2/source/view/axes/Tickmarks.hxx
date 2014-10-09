@@ -53,6 +53,9 @@ private:
     TickInfo();
 };
 
+typedef std::vector<TickInfo>           TickInfoArrayType;
+typedef std::vector<TickInfoArrayType>  TickInfoArraysType;
+
 class TickIter
 {
 public:
@@ -64,14 +67,14 @@ public:
 class PureTickIter : public TickIter
 {
 public:
-    PureTickIter( ::std::vector< TickInfo >& rTickInfoVector );
+    PureTickIter( TickInfoArrayType& rTickInfoVector );
     virtual ~PureTickIter();
     virtual TickInfo* firstInfo() SAL_OVERRIDE;
     virtual TickInfo* nextInfo() SAL_OVERRIDE;
 
 private:
-    ::std::vector< TickInfo >& m_rTickVector;
-    ::std::vector< TickInfo >::iterator m_aTickIter;
+    TickInfoArrayType& m_rTickVector;
+    TickInfoArrayType::iterator m_aTickIter;
 };
 
 class TickFactory
@@ -82,9 +85,9 @@ public:
         , const ExplicitIncrementData& rIncrement );
     virtual ~TickFactory();
 
-    void getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
-    void getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
-    virtual void updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& /*rAllTickInfos*/ ) const {}
+    void getAllTicks( TickInfoArraysType& rAllTickInfos ) const;
+    void getAllTicksShifted( TickInfoArraysType& rAllTickInfos ) const;
+    virtual void updateScreenValues( TickInfoArraysType& /*rAllTickInfos*/ ) const {}
 
 private: //methods
     bool        isDateAxis() const;
@@ -122,7 +125,7 @@ public:
         , bool bIncludeFarAwayDistanceIfSo = false
         , bool bIncludeSpaceBetweenTickAndText = true ) const;
 
-    virtual void        updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const SAL_OVERRIDE;
+    virtual void updateScreenValues( TickInfoArraysType& rAllTickInfos ) const SAL_OVERRIDE;
 
     bool  isHorizontalAxis() const;
     bool  isVerticalAxis() const;

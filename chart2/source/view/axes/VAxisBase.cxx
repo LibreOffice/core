@@ -151,7 +151,7 @@ void VAxisBase::setExplicitScaleAndIncrement(
     m_aIncrement = rIncrement;
 }
 
-void VAxisBase::createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos )
+void VAxisBase::createAllTickInfos( TickInfoArraysType& rAllTickInfos )
 {
     boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
     if( m_aScale.ShiftedCategoryPosition )
@@ -208,12 +208,12 @@ void VAxisBase::removeTextShapesFromTicks()
 {
     if( m_xTextTarget.is() )
     {
-       ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter = m_aAllTickInfos.begin();
-        const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
+        TickInfoArraysType::iterator aDepthIter = m_aAllTickInfos.begin();
+        const TickInfoArraysType::const_iterator aDepthEnd  = m_aAllTickInfos.end();
         for( ; aDepthIter != aDepthEnd; ++aDepthIter )
         {
-            ::std::vector< TickInfo >::iterator       aTickIter = (*aDepthIter).begin();
-            const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
+            TickInfoArrayType::iterator aTickIter = (*aDepthIter).begin();
+            const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
             for( ; aTickIter != aTickEnd; ++aTickIter )
             {
                 TickInfo& rTickInfo = (*aTickIter);

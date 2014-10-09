@@ -202,7 +202,7 @@ class LabelIterator : public TickIter
     //we iterate through all labels
 
 public:
-    LabelIterator( ::std::vector< TickInfo >& rTickInfoVector
+    LabelIterator( TickInfoArrayType& rTickInfoVector
             , const AxisLabelStaggering eAxisLabelStaggering
             , bool bInnerLine );
 
@@ -215,7 +215,7 @@ private: //member
     bool m_bInnerLine;
 };
 
-LabelIterator::LabelIterator( ::std::vector< TickInfo >& rTickInfoVector
+LabelIterator::LabelIterator( TickInfoArrayType& rTickInfoVector
             , const AxisLabelStaggering eAxisLabelStaggering
             , bool bInnerLine )
             : m_aPureTickIter( rTickInfoVector )
@@ -375,7 +375,7 @@ bool lcl_hasWordBreak( const Reference< drawing::XShape >& rxShape )
 class MaxLabelTickIter : public TickIter
 {
 public:
-    MaxLabelTickIter( ::std::vector< TickInfo >& rTickInfoVector
+    MaxLabelTickIter( TickInfoArrayType& rTickInfoVector
             , sal_Int32 nLongestLabelIndex );
     virtual ~MaxLabelTickIter();
 
@@ -383,12 +383,12 @@ public:
     virtual TickInfo* nextInfo() SAL_OVERRIDE;
 
 private:
-    ::std::vector< TickInfo >& m_rTickInfoVector;
+    TickInfoArrayType& m_rTickInfoVector;
     ::std::vector< sal_Int32 > m_aValidIndices;
     sal_Int32 m_nCurrentIndex;
 };
 
-MaxLabelTickIter::MaxLabelTickIter( ::std::vector< TickInfo >& rTickInfoVector
+MaxLabelTickIter::MaxLabelTickIter( TickInfoArrayType& rTickInfoVector
             , sal_Int32 nLongestLabelIndex )
             : m_rTickInfoVector(rTickInfoVector)
             , m_nCurrentIndex(0)
@@ -466,7 +466,7 @@ bool VCartesianAxis::isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties&
     return false;
 }
 
-void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos, bool bShiftedPosition )
+void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType& rAllTickInfos, bool bShiftedPosition )
 {
     //no minor tickmarks will be generated!
     //order is: inner labels first , outer labels last (that is different to all other TickIter cases)
@@ -477,7 +477,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
         sal_Int32 nLevelCount = m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoryLevelCount();
         for( ; nLevel<nLevelCount; nLevel++ )
         {
-            ::std::vector< TickInfo > aTickInfoVector;
+            TickInfoArrayType aTickInfoVector;
             const std::vector<ComplexCategory>* pComplexCategories =
                 m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoriesByLevel(nLevel);
 
@@ -517,7 +517,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
         sal_Int32 nLevelCount = m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoryLevelCount();
         for( ; nLevel<nLevelCount; nLevel++ )
         {
-            ::std::vector< TickInfo > aTickInfoVector;
+            TickInfoArrayType aTickInfoVector;
             const std::vector<ComplexCategory>* pComplexCategories =
                 m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoriesByLevel(nLevel);
             sal_Int32 nCatIndex = 0;
@@ -558,7 +558,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
     }
 }
 
-void VCartesianAxis::createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos )
+void VCartesianAxis::createAllTickInfos( TickInfoArraysType& rAllTickInfos )
 {
     if( isComplexCategoryAxis() )
         createAllTickInfosFromComplexCategories( rAllTickInfos, false );
@@ -1271,7 +1271,7 @@ void lcl_hideIdenticalScreenValues( TickIter& rTickIter )
 }
 
 //'hide' tickmarks with identical screen values in aAllTickInfos
-void VCartesianAxis::hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& rTickInfos ) const
+void VCartesianAxis::hideIdenticalScreenValues( TickInfoArraysType& rTickInfos ) const
 {
     if( isComplexCategoryAxis() || isDateAxis() )
     {
@@ -1467,12 +1467,12 @@ void VCartesianAxis::updatePositions()
     //update positions of all existing text shapes
     pTickFactory2D->updateScreenValues( m_aAllTickInfos );
 
-    ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter = m_aAllTickInfos.begin();
-    const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
+    TickInfoArraysType::iterator aDepthIter = m_aAllTickInfos.begin();
+    const TickInfoArraysType::const_iterator aDepthEnd  = m_aAllTickInfos.end();
     for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; ++aDepthIter, nDepth++ )
     {
-        ::std::vector< TickInfo >::iterator aTickIter = aDepthIter->begin();
-        const ::std::vector< TickInfo >::const_iterator aTickEnd  = aDepthIter->end();
+        TickInfoArrayType::iterator aTickIter = aDepthIter->begin();
+        const TickInfoArrayType::const_iterator aTickEnd  = aDepthIter->end();
         for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = (*aTickIter);
@@ -1524,13 +1524,13 @@ void VCartesianAxis::updatePositions()
     doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
 }
 
-void VCartesianAxis::createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D& rTickFactory2D, bool bOnlyAtLabels )
+void VCartesianAxis::createTickMarkLineShapes( TickInfoArrayType& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D& rTickFactory2D, bool bOnlyAtLabels )
 {
     sal_Int32 nPointCount = rTickInfos.size();
     drawing::PointSequenceSequence aPoints(2*nPointCount);
 
-    ::std::vector< TickInfo >::const_iterator       aTickIter = rTickInfos.begin();
-    const ::std::vector< TickInfo >::const_iterator aTickEnd  = rTickInfos.end();
+    TickInfoArrayType::const_iterator       aTickIter = rTickInfos.begin();
+    const TickInfoArrayType::const_iterator aTickEnd  = rTickInfos.end();
     sal_Int32 nN = 0;
     for( ; aTickIter != aTickEnd; ++aTickIter )
     {
@@ -1571,7 +1571,7 @@ void VCartesianAxis::createShapes()
         //create extra long ticks to separate complex categories (create them only there where the labels are)
         if( isComplexCategoryAxis() )
         {
-            ::std::vector< ::std::vector< TickInfo > > aComplexTickInfos;
+            TickInfoArraysType aComplexTickInfos;
             createAllTickInfosFromComplexCategories( aComplexTickInfos, true );
             pTickFactory2D->updateScreenValues( aComplexTickInfos );
             hideIdenticalScreenValues( aComplexTickInfos );
@@ -1594,8 +1594,8 @@ void VCartesianAxis::createShapes()
             }
 
             sal_Int32 nTickmarkPropertiesCount = aTickmarkPropertiesList.size();
-            ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = aComplexTickInfos.begin();
-            const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = aComplexTickInfos.end();
+            TickInfoArraysType::iterator aDepthIter             = aComplexTickInfos.begin();
+            const TickInfoArraysType::const_iterator aDepthEnd  = aComplexTickInfos.end();
             for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; ++aDepthIter, nDepth++ )
             {
                 if(nDepth==0 && !m_aAxisProperties.m_nMajorTickmarks)
@@ -1605,17 +1605,17 @@ void VCartesianAxis::createShapes()
         }
         //create normal ticks for major and minor intervals
         {
-            ::std::vector< ::std::vector< TickInfo > > aUnshiftedTickInfos;
+            TickInfoArraysType aUnshiftedTickInfos;
             if( m_aScale.ShiftedCategoryPosition )// if ShiftedCategoryPosition==true the tickmarks in m_aAllTickInfos are shifted
             {
                 pTickFactory2D->getAllTicks( aUnshiftedTickInfos );
                 pTickFactory2D->updateScreenValues( aUnshiftedTickInfos );
                 hideIdenticalScreenValues( aUnshiftedTickInfos );
             }
-            ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos = m_aScale.ShiftedCategoryPosition ? aUnshiftedTickInfos : m_aAllTickInfos;
+            TickInfoArraysType& rAllTickInfos = m_aScale.ShiftedCategoryPosition ? aUnshiftedTickInfos : m_aAllTickInfos;
 
-            ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rAllTickInfos.begin();
-            const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rAllTickInfos.end();
+            TickInfoArraysType::iterator aDepthIter             = rAllTickInfos.begin();
+            const TickInfoArraysType::const_iterator aDepthEnd  = rAllTickInfos.end();
             if(aDepthIter == aDepthEnd)//no tickmarks at all
                 return;
 

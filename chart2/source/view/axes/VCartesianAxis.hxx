@@ -44,8 +44,8 @@ public:
     virtual void createShapes() SAL_OVERRIDE;
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount() SAL_OVERRIDE;
-    virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) SAL_OVERRIDE;
-    void createAllTickInfosFromComplexCategories( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos, bool bShiftedPosition );
+    virtual void createAllTickInfos( TickInfoArraysType& rAllTickInfos ) SAL_OVERRIDE;
+    void createAllTickInfosFromComplexCategories( TickInfoArraysType& rAllTickInfos, bool bShiftedPosition );
 
     TickIter* createLabelTickIterator( sal_Int32 nTextLevel );
     TickIter* createMaximumLabelTickIterator( sal_Int32 nTextLevel );
@@ -112,10 +112,10 @@ protected: //methods
                      , TickFactory2D* pTickFactory
                      , sal_Int32 nScreenDistanceBetweenTicks );
 
-    void    createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D& rTickFactory2D, bool bOnlyAtLabels );
+    void createTickMarkLineShapes( TickInfoArrayType& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D& rTickFactory2D, bool bOnlyAtLabels );
 
     TickFactory2D* createTickFactory2D();
-    void    hideIdenticalScreenValues(  ::std::vector< ::std::vector< TickInfo > >& rTickInfos ) const;
+    void hideIdenticalScreenValues( TickInfoArraysType& rTickInfos ) const;
 
     void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
                             , TickFactory2D* pTickFactory2D );

@@ -212,12 +212,12 @@ void VCartesianGrid::createShapes()
     //create all scaled tickmark values
     boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
     TickFactory& aTickFactory = *apTickFactory.get();
-    ::std::vector< ::std::vector< TickInfo > > aAllTickInfos;
+    TickInfoArraysType aAllTickInfos;
     aTickFactory.getAllTicks( aAllTickInfos );
 
     //create tick mark line shapes
-    ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = aAllTickInfos.begin();
-    const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = aAllTickInfos.end();
+    TickInfoArraysType::iterator aDepthIter             = aAllTickInfos.begin();
+    const TickInfoArraysType::const_iterator aDepthEnd  = aAllTickInfos.end();
 
     if(aDepthIter == aDepthEnd)//no tickmarks at all
         return;
@@ -248,8 +248,8 @@ void VCartesianGrid::createShapes()
             sal_Int32 nPointCount = (*aDepthIter).size();
             drawing::PointSequenceSequence aPoints(nPointCount);
 
-            ::std::vector< TickInfo >::const_iterator       aTickIter = (*aDepthIter).begin();
-            const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
+            TickInfoArrayType::const_iterator       aTickIter = (*aDepthIter).begin();
+            const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
             sal_Int32 nRealPointCount = 0;
             for( ; aTickIter != aTickEnd; ++aTickIter )
             {
@@ -286,8 +286,8 @@ void VCartesianGrid::createShapes()
             aPoints.SequenceY.realloc(nPointCount);
             aPoints.SequenceZ.realloc(nPointCount);
 
-            ::std::vector< TickInfo >::const_iterator       aTickIter = (*aDepthIter).begin();
-            const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
+            TickInfoArrayType::const_iterator       aTickIter = (*aDepthIter).begin();
+            const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
             sal_Int32 nRealPointCount = 0;
             sal_Int32 nPolyIndex = 0;
             for( ; aTickIter != aTickEnd; ++aTickIter, ++nPolyIndex )

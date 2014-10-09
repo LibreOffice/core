@@ -31,7 +31,7 @@ public:
                 ::com::sun::star::uno::Sequence< double > >& rTicks
                 , const ExplicitIncrementData& rIncrement
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
-    EquidistantTickIter( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
+    EquidistantTickIter( TickInfoArraysType& rTickInfos
             , const ExplicitIncrementData& rIncrement
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
     virtual ~EquidistantTickIter();
@@ -79,7 +79,7 @@ private: //methods
 private: //member
     const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< double > >*  m_pSimpleTicks;
-    ::std::vector< ::std::vector< TickInfo > >*       m_pInfoTicks;
+    TickInfoArraysType*       m_pInfoTicks;
     const ExplicitIncrementData& m_rIncrement;
     sal_Int32   m_nMaxDepth;
     sal_Int32   m_nTickCount;
@@ -100,8 +100,8 @@ public:
         , const ExplicitIncrementData& rIncrement );
     ~EquidistantTickFactory();
 
-    void getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
-    void getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
+    void getAllTicks( TickInfoArraysType& rAllTickInfos ) const;
+    void getAllTicksShifted( TickInfoArraysType& rAllTickInfos ) const;
 
     static double getMinimumAtIncrement( double fMin, const ExplicitIncrementData& rIncrement );
     static double getMaximumAtIncrement( double fMax, const ExplicitIncrementData& rIncrement );
