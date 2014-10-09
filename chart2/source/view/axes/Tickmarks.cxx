@@ -23,15 +23,13 @@
 #include "ViewDefines.hxx"
 #include <rtl/math.hxx>
 
-namespace chart
-{
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
 using ::basegfx::B2DVector;
 
-TickInfo::TickInfo( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XScaling >& xInverse )
+namespace chart {
+
+TickInfo::TickInfo( const uno::Reference<chart2::XScaling>& xInverse )
 : fScaledTickValue( 0.0 )
 , xInverseScaling( xInverse )
 , aTickScreenPosition(0.0,0.0)
@@ -115,7 +113,7 @@ TickFactory::~TickFactory()
 
 bool TickFactory::isDateAxis() const
 {
-    return m_rScale.AxisType == AxisType::DATE;
+    return m_rScale.AxisType == chart2::AxisType::DATE;
 }
 
 void TickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
@@ -148,7 +146,7 @@ TickFactory2D::TickFactory2D(
           , m_fOffset_LogicToScreen(0.0)
 {
     double fWidthY = m_fScaledVisibleMax - m_fScaledVisibleMin;
-    if( AxisOrientation_MATHEMATICAL==m_rScale.Orientation )
+    if (chart2::AxisOrientation_MATHEMATICAL == m_rScale.Orientation)
     {
         m_fStrech_LogicToScreen = 1.0/fWidthY;
         m_fOffset_LogicToScreen = -m_fScaledVisibleMin;

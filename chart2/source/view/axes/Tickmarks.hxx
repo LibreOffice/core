@@ -29,39 +29,36 @@
 
 #include <vector>
 
-namespace chart
-{
+namespace chart {
 
 struct TickInfo
 {
     double      fScaledTickValue;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XScaling > xInverseScaling;
+    css::uno::Reference<css::chart2::XScaling> xInverseScaling;
 
     ::basegfx::B2DVector  aTickScreenPosition;
     bool        bPaintIt;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape > xTextShape;
+    css::uno::Reference<css::drawing::XShape> xTextShape;
 
     OUString aText;//used only for complex categories so far
     sal_Int32 nFactorForLimitedTextWidth;//categories in higher levels of complex categories can have more place than a single simple category
 
 //methods:
-    TickInfo( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XScaling >& xInverseScaling );
+    TickInfo( const css::uno::Reference<css::chart2::XScaling>& xInverse );
 
     double getUnscaledTickValue() const;
     sal_Int32 getScreenDistanceBetweenTicks( const TickInfo& rOherTickInfo ) const;
 private:
     TickInfo();
 };
+
 class TickIter
 {
 public:
-    virtual ~TickIter(){};
-    virtual TickInfo* firstInfo()=0;
-    virtual TickInfo* nextInfo()=0;
+    virtual ~TickIter() {}
+    virtual TickInfo* firstInfo() = 0;
+    virtual TickInfo* nextInfo() = 0;
 };
 
 class PureTickIter : public TickIter
@@ -111,7 +108,7 @@ public:
         , const ExplicitIncrementData& rIncrement
         , const ::basegfx::B2DVector& rStartScreenPos, const ::basegfx::B2DVector& rEndScreenPos
         , const ::basegfx::B2DVector& rAxisLineToLabelLineShift );
-        //, double fStrech_SceneToScreen, double fOffset_SceneToScreen );
+
     virtual ~TickFactory2D();
 
     static sal_Int32    getTickScreenDistance( TickIter& rIter );
@@ -146,6 +143,7 @@ private: //member
 };
 
 } //namespace chart
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
