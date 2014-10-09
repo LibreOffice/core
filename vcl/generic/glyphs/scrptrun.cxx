@@ -41,6 +41,8 @@
 
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
+namespace vcl {
+
 const char ScriptRun::fgClassID=0;
 
 UChar32 ScriptRun::pairedChars[] = {
@@ -230,3 +232,4 @@ UBool ScriptRun::next()
     return true;
 }
 
+}

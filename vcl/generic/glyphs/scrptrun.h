@@ -44,6 +44,8 @@
 #include "unicode/uobject.h"
 #include "unicode/uscript.h"
 
+namespace vcl {
+
 struct ScriptRecord
 {
     UChar32 startChar;
@@ -179,6 +181,8 @@ inline void ScriptRun::reset(const UChar chars[], int32_t start, int32_t length)
     charArray = chars;
 
     reset(start, length);
+}
+
 }
 
 #endif

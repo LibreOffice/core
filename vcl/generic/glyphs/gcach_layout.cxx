@@ -372,7 +372,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     rLayout.Reserve(nGlyphCapacity);
 
-    ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnLength);
+    vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnLength);
 
     Point aCurrPos(0, 0);
     while (true)
