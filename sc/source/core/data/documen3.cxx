@@ -1366,13 +1366,14 @@ bool ScDocument::UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, b
 }
 
 void ScDocument::Sort(
-    SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress, sc::ReorderParam* pUndo )
+    SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+    ScProgress* pProgress, sc::ReorderParam* pUndo )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         bool bOldEnableIdle = IsIdleEnabled();
         EnableIdle(false);
-        maTabs[nTab]->Sort(rSortParam, bKeepQuery, pProgress, pUndo);
+        maTabs[nTab]->Sort(rSortParam, bKeepQuery, bUpdateRefs, pProgress, pUndo);
         EnableIdle(bOldEnableIdle);
     }
 }

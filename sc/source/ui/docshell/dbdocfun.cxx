@@ -48,6 +48,7 @@
 #include "markdata.hxx"
 #include "progress.hxx"
 #include <undosort.hxx>
+#include <inputopt.hxx>
 
 #include <set>
 #include <memory>
@@ -514,8 +515,10 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
     if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
     {
+        ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+        bool bUpdateRefs = aInputOption.GetSortRefUpdate();
         ScProgress aProgress(&rDocShell, ScGlobal::GetRscString(STR_PROGRESS_SORTING), 0);
-        pDoc->Sort(nTab, aLocalParam, bRepeatQuery, &aProgress, &aUndoParam);
+        pDoc->Sort(nTab, aLocalParam, bRepeatQuery, bUpdateRefs, &aProgress, &aUndoParam);
     }
 
     if (bRecord)

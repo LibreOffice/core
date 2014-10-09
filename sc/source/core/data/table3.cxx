@@ -262,6 +262,7 @@ private:
 
     std::vector<SCCOLROW> maOrderIndices;
     bool mbKeepQuery;
+    bool mbUpdateRefs;
 
 public:
     ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
@@ -308,6 +309,10 @@ public:
     void SetKeepQuery( bool b ) { mbKeepQuery = b; }
 
     bool IsKeepQuery() const { return mbKeepQuery; }
+
+    void SetUpdateRefs( bool b ) { mbUpdateRefs = b; }
+
+    bool IsUpdateRefs() const { return mbUpdateRefs; }
 
     /**
      * Call this only during normal sorting, not from reordering.
@@ -472,6 +477,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( const sc::ReorderParam& rParam )
 
         pArray = new ScSortInfoArray(0, nRow1, nRow2);
         pArray->SetKeepQuery(rParam.mbHiddenFiltered);
+        pArray->SetUpdateRefs(rParam.mbUpdateRefs);
 
         initDataRows(
             *pArray, *this, aCol, nCol1, nRow1, nCol2, nRow2,
@@ -484,19 +490,22 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( const sc::ReorderParam& rParam )
 
         pArray = new ScSortInfoArray(0, nCol1, nCol2);
         pArray->SetKeepQuery(rParam.mbHiddenFiltered);
+        pArray->SetUpdateRefs(rParam.mbUpdateRefs);
     }
 
     return pArray;
 }
 
 ScSortInfoArray* ScTable::CreateSortInfoArray(
-    const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2, bool bKeepQuery )
+    const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2,
+    bool bKeepQuery, bool bUpdateRefs )
 {
     sal_uInt16 nUsedSorts = 1;
     while ( nUsedSorts < rSortParam.GetSortKeyCount() && rSortParam.maKeyState[nUsedSorts].bDoSort )
         nUsedSorts++;
     ScSortInfoArray* pArray = new ScSortInfoArray( nUsedSorts, nInd1, nInd2 );
     pArray->SetKeepQuery(bKeepQuery);
+    pArray->SetUpdateRefs(bUpdateRefs);
 
     if ( rSortParam.bByRow )
     {
@@ -738,16 +747,19 @@ void ScTable::SortReorderByColumn(
         }
     }
 
-    for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
-        aCol[nCol].CollectListeners(aListeners, nRow1, nRow2);
+    if (pArray->IsUpdateRefs())
+    {
+        for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+            aCol[nCol].CollectListeners(aListeners, nRow1, nRow2);
 
-    // Remove any duplicate listener entries and notify all listeners
-    // afterward.  We must ensure that we notify each unique listener only
-    // once.
-    std::sort(aListeners.begin(), aListeners.end());
-    aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
-    ColReorderNotifier aFunc(aColMap, nTab, nRow1, nRow2);
-    std::for_each(aListeners.begin(), aListeners.end(), aFunc);
+        // Remove any duplicate listener entries and notify all listeners
+        // afterward.  We must ensure that we notify each unique listener only
+        // once.
+        std::sort(aListeners.begin(), aListeners.end());
+        aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
+        ColReorderNotifier aFunc(aColMap, nTab, nRow1, nRow2);
+        std::for_each(aListeners.begin(), aListeners.end(), aFunc);
+    }
 
     // Re-start area listeners on the reordered columns.
     {
@@ -1002,38 +1014,50 @@ void ScTable::SortReorderByRow(
         }
     }
 
-    // Collect listeners of cell broadcasters.
-    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        aCol[nCol].CollectListeners(aListeners, nRow1, nRow2);
-
-    // Remove any duplicate listener entries.  We must ensure that we notify
-    // each unique listener only once.
-    std::sort(aListeners.begin(), aListeners.end());
-    aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
-
-    // Collect positions of all shared formula cells outside the sorted range,
-    // and make them unshared before notifying them.
-    sc::RefQueryFormulaGroup aFormulaGroupPos;
-    aFormulaGroupPos.setSkipRange(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab));
-
-    std::for_each(aListeners.begin(), aListeners.end(), FormulaGroupPosCollector(aFormulaGroupPos));
-    const sc::RefQueryFormulaGroup::TabsType& rGroupTabs = aFormulaGroupPos.getAllPositions();
-    sc::RefQueryFormulaGroup::TabsType::const_iterator itGroupTab = rGroupTabs.begin(), itGroupTabEnd = rGroupTabs.end();
-    for (; itGroupTab != itGroupTabEnd; ++itGroupTab)
+    if (pArray->IsUpdateRefs())
     {
-        const sc::RefQueryFormulaGroup::ColsType& rCols = itGroupTab->second;
-        sc::RefQueryFormulaGroup::ColsType::const_iterator itCol = rCols.begin(), itColEnd = rCols.end();
-        for (; itCol != itColEnd; ++itCol)
+        // Collect listeners of cell broadcasters.
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+            aCol[nCol].CollectListeners(aListeners, nRow1, nRow2);
+
+        // Remove any duplicate listener entries.  We must ensure that we notify
+        // each unique listener only once.
+        std::sort(aListeners.begin(), aListeners.end());
+        aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
+
+        // Collect positions of all shared formula cells outside the sorted range,
+        // and make them unshared before notifying them.
+        sc::RefQueryFormulaGroup aFormulaGroupPos;
+        aFormulaGroupPos.setSkipRange(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab));
+
+        std::for_each(aListeners.begin(), aListeners.end(), FormulaGroupPosCollector(aFormulaGroupPos));
+        const sc::RefQueryFormulaGroup::TabsType& rGroupTabs = aFormulaGroupPos.getAllPositions();
+        sc::RefQueryFormulaGroup::TabsType::const_iterator itGroupTab = rGroupTabs.begin(), itGroupTabEnd = rGroupTabs.end();
+        for (; itGroupTab != itGroupTabEnd; ++itGroupTab)
         {
-            const sc::RefQueryFormulaGroup::ColType& rCol = itCol->second;
-            std::vector<SCROW> aBounds(rCol);
-            pDocument->UnshareFormulaCells(itGroupTab->first, itCol->first, aBounds);
+            const sc::RefQueryFormulaGroup::ColsType& rCols = itGroupTab->second;
+            sc::RefQueryFormulaGroup::ColsType::const_iterator itCol = rCols.begin(), itColEnd = rCols.end();
+            for (; itCol != itColEnd; ++itCol)
+            {
+                const sc::RefQueryFormulaGroup::ColType& rCol = itCol->second;
+                std::vector<SCROW> aBounds(rCol);
+                pDocument->UnshareFormulaCells(itGroupTab->first, itCol->first, aBounds);
+            }
+        }
+
+        // Notify the listeners.
+        RowReorderNotifier aFunc(aRowMap, nTab, nCol1, nCol2);
+        std::for_each(aListeners.begin(), aListeners.end(), aFunc);
+
+        // Re-group formulas in affected columns.
+        for (itGroupTab = rGroupTabs.begin(); itGroupTab != itGroupTabEnd; ++itGroupTab)
+        {
+            const sc::RefQueryFormulaGroup::ColsType& rCols = itGroupTab->second;
+            sc::RefQueryFormulaGroup::ColsType::const_iterator itCol = rCols.begin(), itColEnd = rCols.end();
+            for (; itCol != itColEnd; ++itCol)
+                pDocument->RegroupFormulaCells(itGroupTab->first, itCol->first);
         }
     }
-
-    // Notify the listeners.
-    RowReorderNotifier aFunc(aRowMap, nTab, nCol1, nCol2);
-    std::for_each(aListeners.begin(), aListeners.end(), aFunc);
 
     // Re-start area listeners on the reordered rows.
     {
@@ -1049,15 +1073,6 @@ void ScTable::SortReorderByRow(
             }
             pDocument->StartListeningArea(aNewRange, it->mpListener);
         }
-    }
-
-    // Re-group formulas in affected columns.
-    for (itGroupTab = rGroupTabs.begin(); itGroupTab != itGroupTabEnd; ++itGroupTab)
-    {
-        const sc::RefQueryFormulaGroup::ColsType& rCols = itGroupTab->second;
-        sc::RefQueryFormulaGroup::ColsType::const_iterator itCol = rCols.begin(), itColEnd = rCols.end();
-        for (; itCol != itColEnd; ++itCol)
-            pDocument->RegroupFormulaCells(itGroupTab->first, itCol->first);
     }
 
     // Re-group columns in the sorted range too.
@@ -1282,7 +1297,8 @@ void ScTable::DecoladeRow( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2 )
 }
 
 void ScTable::Sort(
-    const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress, sc::ReorderParam* pUndo )
+    const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+    ScProgress* pProgress, sc::ReorderParam* pUndo )
 {
     aSortParam = rSortParam;
     InitSortCollator( rSortParam );
@@ -1294,6 +1310,7 @@ void ScTable::Sort(
         pUndo->mbByRow = rSortParam.bByRow;
         pUndo->mbPattern = rSortParam.bIncludePattern;
         pUndo->mbHiddenFiltered = bKeepQuery;
+        pUndo->mbUpdateRefs = bUpdateRefs;
     }
 
     if (rSortParam.bByRow)
@@ -1309,7 +1326,7 @@ void ScTable::Sort(
             if(pProgress)
                 pProgress->SetState( 0, nLastRow-nRow1 );
 
-            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, nLastRow, bKeepQuery));
+            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, nLastRow, bKeepQuery, bUpdateRefs));
 
             if ( nLastRow - nRow1 > 255 )
                 DecoladeRow(pArray.get(), nRow1, nLastRow);
@@ -1338,7 +1355,7 @@ void ScTable::Sort(
             if(pProgress)
                 pProgress->SetState( 0, nLastCol-nCol1 );
 
-            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nCol1, nLastCol, bKeepQuery));
+            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nCol1, nLastCol, bKeepQuery, bUpdateRefs));
 
             QuickSort(pArray.get(), nCol1, nLastCol);
             SortReorderByColumn(pArray.get(), aSortParam.nRow1, aSortParam.nRow2, aSortParam.bIncludePattern, pProgress);
@@ -2370,7 +2387,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     bSortCollatorInitialized = true;
                     InitSortCollator( aLocalSortParam );
                 }
-                boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, rParam.nRow2, bGlobalKeepQuery));
+                boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, rParam.nRow2, bGlobalKeepQuery, false));
                 DecoladeRow( pArray.get(), nRow1, rParam.nRow2 );
                 QuickSort( pArray.get(), nRow1, rParam.nRow2 );
                 ScSortInfo** ppInfo = pArray->GetFirstArray();

@@ -86,6 +86,7 @@
 
 // TabPage entry - Legacy selection
 #define SID_SC_INPUT_LEGACY_CELL_SELECTION (SC_VIEW_START + 15)
+#define SID_SC_OPT_SORT_REF_UPDATE         (SC_VIEW_START + 16)
 
 // Format options
 #define SID_SCFORMULAOPTIONS    (SC_VIEW_START + 20)
