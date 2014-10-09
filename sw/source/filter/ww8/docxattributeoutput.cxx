@@ -4164,7 +4164,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     // picture description (used for pic:cNvPr later too)
     ::sax_fastparser::FastAttributeList* docPrattrList = m_pSerializer->createAttrList();
     docPrattrList->add( XML_id, OString::number( m_anchorId++).getStr());
-    docPrattrList->add( XML_name, "Picture" );
+    docPrattrList->add( XML_name, OUStringToOString( pFrmFmt->GetName(), RTL_TEXTENCODING_UTF8 ) );
     docPrattrList->add( XML_descr, OUStringToOString( pGrfNode ? pGrfNode->GetDescription() : pOLEFrmFmt->GetObjDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
     if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
         docPrattrList->add( XML_title, OUStringToOString( pGrfNode ? pGrfNode->GetTitle() : pOLEFrmFmt->GetObjTitle(), RTL_TEXTENCODING_UTF8 ).getStr());
