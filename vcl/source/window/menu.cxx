@@ -2816,10 +2816,10 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
     WinBits nStyle = WB_BORDER;
     if (bRealExecute)
         nPopupModeFlags |= FLOATWIN_POPUPMODE_NEWLEVEL;
-    if (!pStartedFrom || !pStartedFrom->IsMenuBar())
-        nPopupModeFlags |= FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK | FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE;
 
-    nPopupModeFlags |= FLOATWIN_POPUPMODE_NOKEYCLOSE;
+    nPopupModeFlags |= FLOATWIN_POPUPMODE_NOKEYCLOSE |
+        FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK | FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE;  // mouse-button right: close the sub-menu (float-win)
+                                                                                           // and don't stop the handling fdo#84795
 
     // could be useful during debugging.
     // nPopupModeFlags |= FLOATWIN_POPUPMODE_NOFOCUSCLOSE;
