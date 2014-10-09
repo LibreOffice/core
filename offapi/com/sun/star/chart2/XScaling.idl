@@ -28,16 +28,27 @@ module com {  module sun {  module star {  module chart2 {
 
 interface XScaling : ::com::sun::star::uno::XInterface
 {
-    /** needs to keep relative ordering
-    */
-    double doScaling([in] double value);
+    /**
+     * Given a numeric value, return the scaled value that conforms
+     * to a predefined scaling rule.  For instance, for linear
+     * scaling, given a x value, the method may return a y value as
+     * defined by y = Ax + B for predefined values of A and B.
+     *
+     * @param value input value from which to calculate the scaled
+     *              value.
+     *
+     * @return scaled value based on a predefined scaling rule.
+     */
+    double doScaling( [in] double value );
+
+    /**
+     * Get an interface object that conforms to a scaling rule that
+     * is the reverse of the original scaling rule.
+     *
+     * @return internface object that represents the reversed
+     *         scaling rule.
+     */
     com::sun::star::chart2::XScaling getInverseScaling();
-
-    //maybe provide correction for Min/Max
-    //double getMinimum(); ?adjust <-> min/max may not exist
-    //double getMaximum();
-
-    //... or better/additionally?: provide default values for Min&Max
 };
 
 
