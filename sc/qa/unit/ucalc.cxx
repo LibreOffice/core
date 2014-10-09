@@ -4277,7 +4277,7 @@ void Test::testSortWithFormulaRefs()
     aSortData.maKeyState[0].bDoSort = true;
     aSortData.maKeyState[0].nField = 0;
 
-    pDoc->Sort(0, aSortData, false, NULL, NULL);
+    pDoc->Sort(0, aSortData, false, true, NULL, NULL);
 
     nEnd = SAL_N_ELEMENTS( aResults );
     for ( SCROW i = nStart; i < nEnd; ++i )
@@ -4313,7 +4313,7 @@ void Test::testSortWithStrings()
     aParam.maKeyState[0].bAscending = true;
     aParam.maKeyState[0].nField = 1;
 
-    m_pDoc->Sort(0, aParam, false, NULL, NULL);
+    m_pDoc->Sort(0, aParam, false, true, NULL, NULL);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1,2,0)));
@@ -4321,7 +4321,7 @@ void Test::testSortWithStrings()
 
     aParam.maKeyState[0].bAscending = false;
 
-    m_pDoc->Sort(0, aParam, false, NULL, NULL);
+    m_pDoc->Sort(0, aParam, false, true, NULL, NULL);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1,2,0)));
@@ -4367,7 +4367,7 @@ void Test::testSort()
     aSortData.maKeyState[0].nField = 1;
     aSortData.maKeyState[0].bAscending = true;
 
-    m_pDoc->Sort(0, aSortData, false, NULL, NULL);
+    m_pDoc->Sort(0, aSortData, false, true, NULL, NULL);
 
     double nVal = m_pDoc->GetValue(1,0,0);
     ASSERT_DOUBLES_EQUAL(nVal, 1.0);
@@ -4400,7 +4400,7 @@ void Test::testSort()
     aSortData.nRow2 = aDataRange.aEnd.Row();
     aSortData.bHasHeader = true;
     aSortData.maKeyState[0].nField = 0;
-    m_pDoc->Sort(0, aSortData, false, NULL, NULL);
+    m_pDoc->Sort(0, aSortData, false, true, NULL, NULL);
 
     // Title should stay at the top, numbers should be sorted numerically,
     // numbers always come before strings, and empty cells always occur at the

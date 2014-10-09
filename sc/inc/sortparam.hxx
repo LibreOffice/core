@@ -98,6 +98,7 @@ struct SC_DLLPUBLIC ReorderParam
     bool mbByRow;
     bool mbPattern;
     bool mbHiddenFiltered;
+    bool mbUpdateRefs;
 
     /**
      * Reorder the position indices such that it can be used to undo the

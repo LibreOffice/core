@@ -32,6 +32,7 @@ private:
     sal_Bool        bExtendFormat;
     sal_Bool        bRangeFinder;
     sal_Bool        bExpandRefs;
+    sal_Bool        mbSortRefUpdate;
     sal_Bool        bMarkHeader;
     sal_Bool        bUseTabCol;
     sal_Bool        bTextWysiwyg;
@@ -57,6 +58,8 @@ public:
     sal_Bool        GetRangeFinder() const          { return bRangeFinder;   }
     void        SetExpandRefs(sal_Bool bSet)        { bExpandRefs = bSet;    }
     sal_Bool        GetExpandRefs() const           { return bExpandRefs;    }
+    void        SetSortRefUpdate(sal_Bool bSet)     { mbSortRefUpdate = bSet; }
+    sal_Bool        GetSortRefUpdate() const        { return mbSortRefUpdate; }
     void        SetMarkHeader(sal_Bool bSet)        { bMarkHeader = bSet;    }
     sal_Bool        GetMarkHeader() const           { return bMarkHeader;    }
     void        SetUseTabCol(sal_Bool bSet)         { bUseTabCol = bSet;     }
