@@ -28,7 +28,7 @@
 @implementation AquaA11yWrapperRadioButton : AquaA11yWrapper
 
 -(id)valueAttribute {
-    if ( [ self accessibleValue ] != nil ) {
+    if ( [ self accessibleValue ] ) {
         return [ AquaA11yValueWrapper valueAttributeForElement: self ];
     }
     return [ NSNumber numberWithInt: 0 ];
