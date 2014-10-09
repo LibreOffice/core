@@ -17,6 +17,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
     sc/qa/unit/ucalc_formula \
     sc/qa/unit/ucalc_pivottable \
     sc/qa/unit/ucalc_sharedformula \
+    sc/qa/unit/ucalc_sort \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,sc_ucalc, \
