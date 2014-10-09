@@ -96,8 +96,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
         aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
 
-        // Falls Grafik zu gross, wird die Grafik
-        // in die Seite eingepasst
+        // If the image is too large we make it fit into the page
         if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
             aSize.Height() && aPageSize.Height() )
         {

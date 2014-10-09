@@ -352,7 +352,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
             if( pItem == NULL )
                 pItem = (SvxNumBulletItem*) aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
 
-            //DBG_ASSERT( pItem, "Kein EE_PARA_NUMBULLET im Pool! [CL]" );
+            //DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in the Pool!" );
 
             aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
 
@@ -375,7 +375,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
                 return pTmpItem;
 
         }
-        //DBG_ASSERT(eState == SfxItemState::SET, "kein Item gefunden!")
+        //DBG_ASSERT(eState == SfxItemState::SET, "No item found");
     }
     return pTmpItem;
 }

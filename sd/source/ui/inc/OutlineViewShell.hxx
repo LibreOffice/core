@@ -157,7 +157,7 @@ public:
 private:
     void ShowSlideShow(SfxRequest& rReq);
     OutlineView* pOlView;
-    SdPage*         pLastPage; // Zur performanten Aufbereitung der Preview
+    SdPage*         pLastPage; // For efficient processing of the preview
     TransferableClipboardListener* pClipEvtLstnr;
     bool            bPastePossible;
     bool mbInitialized;

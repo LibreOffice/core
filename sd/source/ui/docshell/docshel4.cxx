@@ -912,7 +912,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
                   mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->
                   GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
 
-                // Die aktuelle ViewShell hat sich geaendert!
+                // The current ViewShell changed
                 pDrViewSh = (DrawViewShell*) mpViewShell;
             }
 
@@ -954,12 +954,11 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
 
             if (pObj)
             {
-                // Objekt einblenden und selektieren
+                // Show and select object
                 pDrViewSh->MakeVisible(pObj->GetLogicRect(),
                                        *pDrViewSh->GetActiveWindow());
 
-                 bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
-
+                bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
             }
         }
     }
@@ -1017,7 +1016,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
                   mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->
                   GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
 
-                // Die aktuelle ViewShell hat sich geaendert!
+                // The current ViewShell changed
                 pDrViewSh = (DrawViewShell*) mpViewShell;
             }
 
@@ -1059,7 +1058,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 
             if (pObj)
             {
-                // Objekt einblenden und selektieren
+                // Show and select object
                 pDrViewSh->MakeVisible(pObj->GetLogicRect(),
                                        *pDrViewSh->GetActiveWindow());
                 bool bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
