@@ -60,10 +60,6 @@ class SwFrm;
 namespace vcl { class Window; }
 struct ImplSVEvent;
 
-#define SORT_POS    1
-#define SORT_AUTHOR 2
-#define SORT_DATE   3
-
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
 
@@ -187,7 +183,7 @@ class SwPostItMgr: public SfxListener
         void InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
         void RemoveItem( SfxBroadcaster* pBroadcast );
 
-        void Sort(const short aType);
+        void Sort();
 
     public:
             SwPostItMgr(SwView* aDoc);
