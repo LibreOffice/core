@@ -1088,6 +1088,9 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         aOpt.SetMerge( false );
         pTempView->GetDocShell()->LoadStylesFromFile(
                 sTargetTempURL, aOpt, true );
+        pTempView->GetDocShell()->GetDoc()->ReplaceCompatabilityOptions( *pTargetView->GetDocShell()->GetDoc());
+        pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
+        pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
         pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
                 (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
         pTargetView->GetWrtShell().EndAction();
