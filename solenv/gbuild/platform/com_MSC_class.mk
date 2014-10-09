@@ -136,8 +136,7 @@ gb_LinkTarget_get_linksearchpath_for_layer = \
 
 # avoid fatal error LNK1170 for Library_merged
 define gb_LinkTarget_MergedResponseFile
-cut -f -1000 -d ' ' $${RESPONSEFILE} > $${RESPONSEFILE}.1 && \
-cut -f 1001- -d ' ' $${RESPONSEFILE} >> $${RESPONSEFILE}.1 && \
+cat $${RESPONSEFILE} | sed 's/ /\n/g' | grep -v '^$$' > $${RESPONSEFILE}.1 && \
 mv $${RESPONSEFILE}.1 $${RESPONSEFILE} &&
 endef
 
