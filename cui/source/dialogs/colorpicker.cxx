@@ -1427,9 +1427,7 @@ Reference< XInterface > SAL_CALL ColorPicker_createInstance( Reference< XCompone
 
 Sequence< OUString > SAL_CALL ColorPicker_getSupportedServiceNames() throw( RuntimeException )
 {
-    Sequence< OUString > seq(1);
-    seq[0] = "com.sun.star.ui.dialogs.ColorPicker";
-    return seq;
+    return Sequence< OUString >({"com.sun.star.ui.dialogs.ColorPicker"});
 }
 
 ColorPicker::ColorPicker( Reference< XComponentContext > const & xContext )

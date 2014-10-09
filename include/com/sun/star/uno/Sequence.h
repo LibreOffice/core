@@ -25,6 +25,7 @@
 #include <rtl/alloc.h>
 
 #include <new>
+#include <initializer_list>
 
 namespace rtl
 {
@@ -108,6 +109,12 @@ public:
         @param len initial sequence length
     */
     inline explicit Sequence( sal_Int32 len );
+
+    /** Constructor: Creates a Sequence filled of object of type E.
+
+        @param list objects of type E to populate Sequence
+    */
+    inline Sequence( std::initializer_list<E> list );
 
     /** Destructor: Releases sequence handle. Last handle will destruct
         elements and free memory.

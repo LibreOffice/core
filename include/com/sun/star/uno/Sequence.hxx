@@ -92,6 +92,31 @@ inline Sequence< E >::Sequence( sal_Int32 len )
         throw ::std::bad_alloc();
 }
 
+template<class E>
+inline Sequence< E >::Sequence( std::initializer_list<E> list )
+{
+    const Type & rType = ::cppu::getTypeFavourUnsigned( this );
+    bool success =
+    ::uno_type_sequence_construct(&_pSequence, rType.getTypeLibType(), 0, list.size(), (uno_AcquireFunc)cpp_acquire );
+
+    if (! success)
+        throw ::std::bad_alloc();
+
+    success =
+    ::uno_type_sequence_reference2One(
+        &_pSequence, rType.getTypeLibType(),
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
+
+    if (! success)
+        throw ::std::bad_alloc();
+
+    E* elements = reinterpret_cast< E * >( _pSequence->elements );
+
+    int i = 0;
+    for (auto n : list)
+        elements[i++] = n;
+}
+
 template< class E >
 inline Sequence< E >::~Sequence()
 {
