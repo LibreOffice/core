@@ -196,11 +196,8 @@ public class LibreOfficeMainActivity extends Activity {
         builder.setIcon(R.drawable.lo_icon);
         builder.setTitle(R.string.app_name);
         builder.setView(messageView);
-        builder.create();
-        builder.show();
 
-        Button licenseButton = (Button) messageView.findViewById(R.id.about_license_button);
-        licenseButton.setOnClickListener(new View.OnClickListener() {
+        builder.setNegativeButton(R.string.about_license, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), LibreOfficeMainActivity.class);
@@ -210,8 +207,7 @@ public class LibreOfficeMainActivity extends Activity {
             }
         });
 
-        Button noticeButton = (Button) messageView.findViewById(R.id.about_notice_button);
-        noticeButton.setOnClickListener(new View.OnClickListener() {
+        builder.setPositiveButton(R.string.about_notice, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), LibreOfficeMainActivity.class);
@@ -221,6 +217,8 @@ public class LibreOfficeMainActivity extends Activity {
             }
         });
 
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void showProgressSpinner() {
