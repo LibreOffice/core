@@ -637,11 +637,9 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, InsertDeleteFlags nFlag
     // add undo action after drawing undo is complete (objects and note captions)
     if( bRecord )
     {
-        ScUndoDeleteContents* pUndo =
-            new ScUndoDeleteContents(
-                &rDocShell, aMultiMark, aExtendedRange, pUndoDoc, bMulti, nFlags, bDrawUndo);
-        rDocShell.GetUndoManager()->AddUndoAction(pUndo);
-        pUndo->SetDataSpans(pDataSpans);
+        sc::DocFuncUtil::addDeleteContentsUndo(
+            rDocShell.GetUndoManager(), &rDocShell, aMultiMark, aExtendedRange,
+            pUndoDoc, nFlags, pDataSpans, bMulti, bDrawUndo);
     }
 
     if (!AdjustRowHeight( aExtendedRange ))

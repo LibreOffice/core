@@ -1850,12 +1850,9 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
 
     if ( bRecord )
     {
-        ScUndoDeleteContents* pUndo =
-            new ScUndoDeleteContents(
-                pDocSh, aFuncMark, aExtendedRange, pUndoDoc, bMulti, nFlags, bDrawUndo);
-        pUndo->SetDataSpans(pDataSpans);
-
-        pDocSh->GetUndoManager()->AddUndoAction(pUndo);
+        sc::DocFuncUtil::addDeleteContentsUndo(
+            pDocSh->GetUndoManager(), pDocSh, aFuncMark, aExtendedRange, pUndoDoc,
+            nFlags, pDataSpans, bMulti, bDrawUndo);
     }
 
     if (!AdjustRowHeight( aExtendedRange.aStart.Row(), aExtendedRange.aEnd.Row() ))

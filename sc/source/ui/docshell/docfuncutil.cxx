@@ -22,6 +22,7 @@
 #include <markdata.hxx>
 #include <undobase.hxx>
 #include <global.hxx>
+#include <undoblk.hxx>
 
 #include <memory>
 
@@ -68,6 +69,20 @@ ScDocument* DocFuncUtil::createDeleteContentsUndoDoc(
     rDoc.CopyToDocument(aCopyRange, nUndoDocFlags, bOnlyMarked, pUndoDoc.get(), &rMark);
 
     return pUndoDoc.release();
+}
+
+void DocFuncUtil::addDeleteContentsUndo(
+    svl::IUndoManager* pUndoMgr, ScDocShell* pDocSh, const ScMarkData& rMark,
+    const ScRange& rRange, ScDocument* pUndoDoc, InsertDeleteFlags nFlags,
+    const boost::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
+    bool bMulti, bool bDrawUndo )
+{
+    std::unique_ptr<ScUndoDeleteContents> pUndo(
+        new ScUndoDeleteContents(
+            pDocSh, rMark, rRange, pUndoDoc, bMulti, nFlags, bDrawUndo));
+    pUndo->SetDataSpans(pSpans);
+
+    pUndoMgr->AddUndoAction(pUndo.release());
 }
 
 ScSimpleUndo::DataSpansType* DocFuncUtil::getNonEmptyCellSpans(
