@@ -155,7 +155,7 @@ public class LibreOfficeMainActivity extends Activity {
     @Override
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
-        super.onStop();
+        super.onStart();
     }
 
     @Override
