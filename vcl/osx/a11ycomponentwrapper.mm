@@ -47,7 +47,7 @@ using namespace ::com::sun::star::uno;
 }
 
 +(id)descriptionAttributeForElement:(AquaA11yWrapper *)wrapper {
-    if ( [ wrapper accessibleExtendedComponent ] != nil ) {
+    if ( [ wrapper accessibleExtendedComponent ] ) {
         return CreateNSString ( [ wrapper accessibleExtendedComponent ] -> getToolTipText() );
     } else {
         return nil;
