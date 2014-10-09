@@ -404,6 +404,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/docshell/dbdocfun \
     sc/source/ui/docshell/dbdocimp \
     sc/source/ui/docshell/docfunc \
+    sc/source/ui/docshell/docfuncutil \
     sc/source/ui/docshell/docsh \
     sc/source/ui/docshell/docsh2 \
     sc/source/ui/docshell/docsh3 \

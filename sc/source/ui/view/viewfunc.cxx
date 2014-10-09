@@ -76,6 +76,8 @@
 #include "cellsuno.hxx"
 #include "tokenarray.hxx"
 #include <rowheightcontext.hxx>
+#include <docfuncutil.hxx>
+
 #include <boost/scoped_ptr.hpp>
 
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
@@ -1800,15 +1802,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
     }
 
     // no objects on protected tabs
-    bool bObjects = false;
-    if ( nFlags & IDF_OBJECTS )
-    {
-        bObjects = true;
-        ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
-        for (; itr != itrEnd; ++itr)
-            if (pDoc->IsTabProtected(*itr))
-                bObjects = false;
-    }
+    bool bObjects = (nFlags & IDF_OBJECTS) && !sc::DocFuncUtil::hasProtectedTab(*pDoc, aFuncMark);
 
     sal_uInt16 nExtFlags = 0;       // extra flags are needed only if attributes are deleted
     if ( nFlags & IDF_ATTRIB )

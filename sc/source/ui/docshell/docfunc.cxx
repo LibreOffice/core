@@ -86,6 +86,7 @@
 #include <rowheightcontext.hxx>
 #include <cellvalues.hxx>
 #include <undoconvert.hxx>
+#include <docfuncutil.hxx>
 
 #include <memory>
 #include <utility>
@@ -595,17 +596,8 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, InsertDeleteFlags nFlag
     if ( rDoc.ExtendMerge( aExtendedRange, true ) )
         bMulti = false;
 
-    // keine Objekte auf geschuetzten Tabellen
-    bool bObjects = false;
-    if ( nFlags & IDF_OBJECTS )
-    {
-        bObjects = true;
-        SCTAB nTabCount = rDoc.GetTableCount();
-        ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-        for (; itr != itrEnd && *itr < nTabCount; ++itr)
-            if (rDoc.IsTabProtected(*itr))
-                bObjects = false;
-    }
+    // no objects on protected tabs
+    bool bObjects = (nFlags & IDF_OBJECTS) && !sc::DocFuncUtil::hasProtectedTab(rDoc, rMark);
 
     sal_uInt16 nExtFlags = 0;       // extra flags are needed only if attributes are deleted
     if ( nFlags & IDF_ATTRIB )
@@ -674,7 +666,6 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, InsertDeleteFlags nFlag
         }
     }
 
-//! HideAllCursors();   // falls Zusammenfassung aufgehoben wird
     rDoc.DeleteSelection( nFlags, aMultiMark );
 
     // add undo action after drawing undo is complete (objects and note captions)
