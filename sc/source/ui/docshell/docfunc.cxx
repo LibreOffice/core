@@ -628,42 +628,8 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, InsertDeleteFlags nFlag
 
     if ( bRecord )
     {
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( &rDoc, aMarkRange.aStart.Tab(), aMarkRange.aEnd.Tab() );
-
-        //  bei "Format/Standard" alle Attribute kopieren, weil CopyToDocument
-        //  nur mit IDF_HARDATTR zu langsam ist:
-        InsertDeleteFlags nUndoDocFlags = nFlags;
-        if (nFlags & IDF_ATTRIB)
-            nUndoDocFlags |= IDF_ATTRIB;
-        if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute
-            nUndoDocFlags |= IDF_STRING;    // -> Zellen werden geaendert
-        if (nFlags & IDF_NOTE)
-            nUndoDocFlags |= IDF_CONTENTS;  // copy all cells with their notes
-        // note captions are handled in drawing undo
-        nUndoDocFlags |= IDF_NOCAPTIONS;
-        rDoc.CopyToDocument( aExtendedRange, nUndoDocFlags, bMulti, pUndoDoc, &aMultiMark );
-
-        pDataSpans.reset(new ScSimpleUndo::DataSpansType);
-
-        ScMarkData::iterator it = aMultiMark.begin(), itEnd = aMultiMark.end();
-        for (; it != itEnd; ++it)
-        {
-            SCTAB nTab = *it;
-
-            SCCOL nCol1 = aMarkRange.aStart.Col(), nCol2 = aMarkRange.aEnd.Col();
-            SCROW nRow1 = aMarkRange.aStart.Row(), nRow2 = aMarkRange.aEnd.Row();
-
-            std::pair<ScSimpleUndo::DataSpansType::iterator,bool> r =
-                pDataSpans->insert(nTab, new sc::ColumnSpanSet(false));
-
-            if (r.second)
-            {
-                ScSimpleUndo::DataSpansType::iterator it2 = r.first;
-                sc::ColumnSpanSet* pSet = it2->second;
-                pSet->scan(rDoc, nTab, nCol1, nRow1, nCol2, nRow2, true);
-            }
-        }
+        pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, aMultiMark, aMarkRange, nFlags, bMulti);
+        pDataSpans.reset(sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, aMultiMark, aMarkRange));
     }
 
     rDoc.DeleteSelection( nFlags, aMultiMark );

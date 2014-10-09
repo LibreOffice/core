@@ -5,17 +5,34 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_SC_DOCFUNCUTIL_HXX
+#define INCLUDED_SC_DOCFUNCUTIL_HXX
+
+#include <undobase.hxx>
+
 class ScDocument;
 class ScMarkData;
+class ScRange;
+struct InsertDeleteFlags;
 
 namespace sc {
 
 class DocFuncUtil
 {
 public:
+
     static bool hasProtectedTab( const ScDocument& rDoc, const ScMarkData& rMark );
+
+    static ScDocument* createDeleteContentsUndoDoc(
+        ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange,
+        InsertDeleteFlags nFlags, bool bOnlyMarked );
+
+    static ScSimpleUndo::DataSpansType* getNonEmptyCellSpans(
+        const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange );
 };
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

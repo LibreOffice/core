@@ -20,6 +20,10 @@
 #include <docfuncutil.hxx>
 #include <document.hxx>
 #include <markdata.hxx>
+#include <undobase.hxx>
+#include <global.hxx>
+
+#include <memory>
 
 namespace sc {
 
@@ -32,6 +36,63 @@ bool DocFuncUtil::hasProtectedTab( const ScDocument& rDoc, const ScMarkData& rMa
             return true;
 
     return false;
+}
+
+ScDocument* DocFuncUtil::createDeleteContentsUndoDoc(
+    ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange,
+    InsertDeleteFlags nFlags, bool bOnlyMarked )
+{
+    std::unique_ptr<ScDocument> pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    SCTAB nTab = rRange.aStart.Tab();
+    pUndoDoc->InitUndo(&rDoc, nTab, nTab);
+    SCTAB nTabCount = rDoc.GetTableCount();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd; ++itr)
+        if (*itr != nTab)
+            pUndoDoc->AddUndoTab( *itr, *itr );
+    ScRange aCopyRange = rRange;
+    aCopyRange.aStart.SetTab(0);
+    aCopyRange.aEnd.SetTab(nTabCount-1);
+
+    //  in case of "Format/Standard" copy all attributes, because CopyToDocument
+    //  with IDF_HARDATTR only is too time-consuming:
+    InsertDeleteFlags nUndoDocFlags = nFlags;
+    if (nFlags & IDF_ATTRIB)
+        nUndoDocFlags |= IDF_ATTRIB;
+    if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute
+        nUndoDocFlags |= IDF_STRING;    // -> cells will be changed
+    if (nFlags & IDF_NOTE)
+        nUndoDocFlags |= IDF_CONTENTS;  // copy all cells with their notes
+    // do not copy note captions to undo document
+    nUndoDocFlags |= IDF_NOCAPTIONS;
+    rDoc.CopyToDocument(aCopyRange, nUndoDocFlags, bOnlyMarked, pUndoDoc.get(), &rMark);
+
+    return pUndoDoc.release();
+}
+
+ScSimpleUndo::DataSpansType* DocFuncUtil::getNonEmptyCellSpans(
+    const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange )
+{
+    std::unique_ptr<ScSimpleUndo::DataSpansType> pDataSpans(new ScSimpleUndo::DataSpansType);
+    ScMarkData::const_iterator it = rMark.begin(), itEnd = rMark.end();
+    for (; it != itEnd; ++it)
+    {
+        SCTAB nTab = *it;
+
+        SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
+        SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+
+        std::pair<ScSimpleUndo::DataSpansType::iterator,bool> r =
+            pDataSpans->insert(nTab, new sc::ColumnSpanSet(false));
+
+        if (r.second)
+        {
+            sc::ColumnSpanSet* pSet = r.first->second;
+            pSet->scan(rDoc, nTab, nCol1, nRow1, nCol2, nRow2, true);
+        }
+    }
+
+    return pDataSpans.release();
 }
 
 }

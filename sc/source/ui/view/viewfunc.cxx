@@ -1834,50 +1834,8 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
 
     if ( bRecord )
     {
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        SCTAB nTab = aMarkRange.aStart.Tab();
-        pUndoDoc->InitUndo( pDoc, nTab, nTab );
-        SCTAB nTabCount = pDoc->GetTableCount();
-        ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
-        for (; itr != itrEnd; ++itr)
-            if (*itr != nTab)
-                pUndoDoc->AddUndoTab( *itr, *itr );
-        ScRange aCopyRange = aExtendedRange;
-        aCopyRange.aStart.SetTab(0);
-        aCopyRange.aEnd.SetTab(nTabCount-1);
-
-        //  in case of "Format/Standard" copy all attributes, because CopyToDocument
-        //  with IDF_HARDATTR only is too time-consuming:
-        InsertDeleteFlags nUndoDocFlags = nFlags;
-        if (nFlags & IDF_ATTRIB)
-            nUndoDocFlags |= IDF_ATTRIB;
-        if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute
-            nUndoDocFlags |= IDF_STRING;    // -> cells will be changed
-        if (nFlags & IDF_NOTE)
-            nUndoDocFlags |= IDF_CONTENTS;  // copy all cells with their notes
-        // do not copy note captions to undo document
-        nUndoDocFlags |= IDF_NOCAPTIONS;
-        pDoc->CopyToDocument( aCopyRange, nUndoDocFlags, bMulti, pUndoDoc, &aFuncMark );
-
-        pDataSpans.reset(new ScSimpleUndo::DataSpansType);
-
-        for (itr = aFuncMark.begin(); itr != itrEnd; ++itr)
-        {
-            nTab = *itr;
-
-            SCCOL nCol1 = aCopyRange.aStart.Col(), nCol2 = aCopyRange.aEnd.Col();
-            SCROW nRow1 = aCopyRange.aStart.Row(), nRow2 = aCopyRange.aEnd.Row();
-
-            std::pair<ScSimpleUndo::DataSpansType::iterator,bool> r =
-                pDataSpans->insert(nTab, new sc::ColumnSpanSet(false));
-
-            if (r.second)
-            {
-                ScSimpleUndo::DataSpansType::iterator it = r.first;
-                sc::ColumnSpanSet* pSet = it->second;
-                pSet->scan(*pDoc, nTab, nCol1, nRow1, nCol2, nRow2, true);
-            }
-        }
+        pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(*pDoc, aFuncMark, aExtendedRange, nFlags, bMulti);
+        pDataSpans.reset(sc::DocFuncUtil::getNonEmptyCellSpans(*pDoc, aFuncMark, aExtendedRange));
     }
 
     HideAllCursors();   // for if summary is cancelled
