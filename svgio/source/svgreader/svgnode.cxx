@@ -194,6 +194,15 @@ namespace svgio
 
             // check the hierarchy for concatenated patterns of Selectors
             fillCssStyleVectorUsingHierarchyAndSelectors(rClassStr, *this, OUString());
+
+            // #i125329# find Css selector '*', add as last element if found
+            const SvgStyleAttributes* pNew = getDocument().findGlobalCssStyleAttributes("*");
+
+            if(pNew)
+            {
+                // add CssStyle for selector '*' if found
+                maCssStyleVector.push_back(pNew);
+            }
         }
 
         const SvgStyleAttributes* SvgNode::checkForCssStyle(const OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
