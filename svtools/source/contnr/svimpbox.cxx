@@ -2049,6 +2049,8 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
         nCurTabPos = FIRST_ENTRY_TAB;
     nFlags &= (~F_FILLING);
     pView->GrabFocus();
+    //fdo#82270 Grabbing focus can invalidate the entries, re-fetch
+    pEntry = GetEntry(aPos);
     // the entry can still be invalid!
     if( !pEntry || !pView->GetViewData( pEntry ))
         return;
