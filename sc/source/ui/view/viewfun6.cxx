@@ -267,22 +267,29 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
     const sal_uInt32 nCurNumFormat = rDoc.GetNumberFormat(aCurPos);
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     const SvNumberformat* pCurNumFormatEntry = pFormatter->GetEntry(nCurNumFormat);
+    const short nCurNumFormatType = (pCurNumFormatEntry ?
+            (pCurNumFormatEntry->GetType() & ~NUMBERFORMAT_DEFINED) : NUMBERFORMAT_UNDEFINED);
 
     if (bInputMode)
     {
         double fVal = 0.0;
+        sal_uInt32 nFormat = 0;
         switch (nReqFmt)
         {
             case NUMBERFORMAT_DATE:
                 {
                     Date aActDate( Date::SYSTEM );
                     fVal = aActDate - *pFormatter->GetNullDate();
+                    if (nCurNumFormatType == NUMBERFORMAT_DATE)
+                        nFormat = nCurNumFormat;
                 }
                 break;
             case NUMBERFORMAT_TIME:
                 {
                     tools::Time aActTime( tools::Time::SYSTEM );
                     fVal = aActTime.GetTimeInDays();
+                    if (nCurNumFormatType == NUMBERFORMAT_TIME)
+                        nFormat = nCurNumFormat;
                 }
                 break;
             default:
@@ -293,15 +300,20 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                 {
                     DateTime aActDateTime( DateTime::SYSTEM );
                     fVal = aActDateTime - DateTime( *pFormatter->GetNullDate());
+                    if (nCurNumFormatType == NUMBERFORMAT_DATETIME)
+                        nFormat = nCurNumFormat;
                 }
                 break;
         }
 
-        LanguageType nLang = (pCurNumFormatEntry ? pCurNumFormatEntry->GetLanguage() : ScGlobal::eLnge);
-        sal_uInt32 nFormat = pFormatter->GetStandardFormat( nReqFmt, nLang);
-        // This would return a more precise format with seconds and 100th
-        // seconds for a time request.
-        //nFormat = pFormatter->GetStandardFormat( fVal, nFormat, nReqFmt, nLang);
+        if (!nFormat)
+        {
+            const LanguageType nLang = (pCurNumFormatEntry ? pCurNumFormatEntry->GetLanguage() : ScGlobal::eLnge);
+            nFormat = pFormatter->GetStandardFormat( nReqFmt, nLang);
+            // This would return a more precise format with seconds and 100th
+            // seconds for a time request.
+            //nFormat = pFormatter->GetStandardFormat( fVal, nFormat, nReqFmt, nLang);
+        }
         OUString aString;
         Color* pColor;
         pFormatter->GetOutputString( fVal, nFormat, aString, &pColor);
@@ -317,8 +329,6 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
     }
     else
     {
-        const short nCurNumFormatType = (pCurNumFormatEntry ?
-                (pCurNumFormatEntry->GetType() & ~NUMBERFORMAT_DEFINED) : NUMBERFORMAT_UNDEFINED);
         bool bForceReqFmt = false;
         const double fCell = rDoc.GetValue( aCurPos);
         // Combine requested date/time stamp with existing cell time/date, if any.
