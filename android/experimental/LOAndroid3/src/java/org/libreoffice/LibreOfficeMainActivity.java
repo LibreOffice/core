@@ -136,8 +136,6 @@ public class LibreOfficeMainActivity extends Activity {
         LayerView layerView = (LayerView) findViewById(R.id.layer_view);
         mLayerController.setView(layerView);
         mLayerController.setLayerClient(mLayerClient);
-
-        LOKitShell.sendEvent(LOEventFactory.load(mInputFile));
     }
 
     @Override
@@ -156,11 +154,13 @@ public class LibreOfficeMainActivity extends Activity {
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
         super.onStart();
+        LOKitShell.sendEvent(LOEventFactory.load(mInputFile));
     }
 
     @Override
     protected void onStop() {
         Log.i(LOGTAG, "onStop..");
+        LOKitShell.sendEvent(LOEventFactory.close());
         super.onStop();
     }
 
@@ -199,21 +199,19 @@ public class LibreOfficeMainActivity extends Activity {
 
         builder.setNegativeButton(R.string.about_license, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), LibreOfficeMainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.setData(Uri.parse("file:///assets/license.txt"));
-                startActivity(intent);
+            public void onClick(DialogInterface dialog, int id) {
+                LOKitShell.sendEvent(LOEventFactory.close());
+                LOKitShell.sendEvent(LOEventFactory.load("/assets/license.txt"));
+                dialog.dismiss();
             }
         });
 
         builder.setPositiveButton(R.string.about_notice, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), LibreOfficeMainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.setData(Uri.parse("file:///assets/notice.txt"));
-                startActivity(intent);
+            public void onClick(DialogInterface dialog, int id) {
+                LOKitShell.sendEvent(LOEventFactory.close());
+                LOKitShell.sendEvent(LOEventFactory.load("/assets/notice.txt"));
+                dialog.dismiss();
             }
         });
 

@@ -31,6 +31,10 @@ public class LOEventFactory {
         return new LOEvent(LOEvent.LOAD, inputFile);
     }
 
+    public static LOEvent close() {
+        return new LOEvent(LOEvent.CLOSE);
+    }
+
     public static LOEvent redraw() {
         return new LOEvent(LOEvent.REDRAW);
     }

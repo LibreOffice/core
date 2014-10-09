@@ -13,7 +13,8 @@ public class LOEvent {
     public static final int DRAW = 4;
     public static final int CHANGE_PART = 5;
     public static final int LOAD = 6;
-    public static final int REDRAW = 7;
+    public static final int CLOSE = 7;
+    public static final int REDRAW = 8;
 
     public int mType;
     private ImmutableViewportMetrics mViewportMetrics;
@@ -58,6 +59,9 @@ public class LOEvent {
     }
 
     public String getTypeString() {
+        if (mTypeString == null) {
+            return "Event type: " + mType;
+        }
         return mTypeString;
     }
 
