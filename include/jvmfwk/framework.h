@@ -104,7 +104,7 @@ extern "C" {
     <p>
     regcomp -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
     -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
-    -env:UNO_JAVA_JFW_PLUGIN=file:\\solver\\bin\\libsunjavaplugin.dll -register ....
+    -register ....
     </p>
     <p>Additionall parameters for the Java VM can be provided. For every parameter
     a separate bootstrap parameter must be specified. The names are
@@ -137,10 +137,6 @@ extern "C" {
     environment variable CLASSPATH. If this variable and UNO_JAVA_JFW_CLASSPATH are
     set then the class path is composed from UNO_JAVA_JFW_CLASSPATH and the environment
     variable CLASSPATH.</dd>
-    <dt>UNO_JAVA_JFW_PLUGIN</dt>
-    <dd>Specified a file URL to a plugin library. If this variable is provided
-    then a javavendors.xml is ignored. It must be provided if no
-    javavendors.xml is available.</dd>
     <dt>UNO_JAVA_JFW_PARAMETER_X</dt>
     <dd>Specifies a parameter for the Java VM. The X is replaced by
     non-negative natural numbers starting with 1.</dd>
