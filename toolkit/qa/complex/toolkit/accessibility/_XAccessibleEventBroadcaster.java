@@ -23,6 +23,7 @@ import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.XWindow;
 import com.sun.star.accessibility.AccessibleEventObject;
+import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleEventBroadcaster;
 import com.sun.star.accessibility.XAccessibleEventListener;
@@ -172,15 +173,11 @@ public class _XAccessibleEventBroadcaster {
 
     private static boolean chkTransient(Object Testcase) {
         XAccessibleContext accCon = UnoRuntime.queryInterface(XAccessibleContext.class, Testcase);
-        if (accCon.getAccessibleStateSet().contains(
-            com.sun.star.accessibility.AccessibleStateType.TRANSIENT)){
-            if (!accCon.getAccessibleParent().getAccessibleContext().getAccessibleStateSet().contains(
-                        com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS)) {
-                return false;
-            }
-            return true;
-        }
-        return false;
+        return accCon.getAccessibleStateSet().contains(
+            AccessibleStateType.TRANSIENT)
+            && accCon.getAccessibleParent().getAccessibleContext()
+                .getAccessibleStateSet().contains(
+                    AccessibleStateType.MANAGES_DESCENDANTS);
     }
 
 }
