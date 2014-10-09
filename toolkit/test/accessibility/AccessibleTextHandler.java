@@ -480,7 +480,7 @@ class AccessibleTextHandler extends NodeHandler
         }
 
         if( aDialog != null )
-            aDialog.show();
+            aDialog.setVisible(true);
     }
 
 }
@@ -550,7 +550,7 @@ abstract class TextActionDialog extends JDialog
 
     void cancel()
     {
-        hide();
+        setVisible(false);
         dispose();
     }
 
