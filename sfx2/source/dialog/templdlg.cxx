@@ -612,14 +612,13 @@ private:
     OUString aName;
     OUString aParent;
     StyleTreeArr_Impl pChildren;
-    bool bIsExpanded;
 
 public:
 
     bool HasParent() const { return !aParent.isEmpty(); }
 
     StyleTree_Impl(const OUString &rName, const OUString &rParent):
-        aName(rName), aParent(rParent), pChildren(0), bIsExpanded(false) {}
+        aName(rName), aParent(rParent), pChildren(0) {}
     ~StyleTree_Impl();
     void Put(StyleTree_Impl* pIns, sal_uIntPtr lPos=ULONG_MAX);
     sal_uIntPtr Count();
