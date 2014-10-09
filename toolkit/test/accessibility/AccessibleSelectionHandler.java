@@ -140,6 +140,7 @@ class AccessibleSelectionHandler
     @Override
     public void performAction (AccessibleTreeNode aNode, int nIndex)
     {
-        new SelectionDialog( (AccTreeNode)aNode ).show();
+        SelectionDialog selectionDialog = new SelectionDialog( (AccTreeNode)aNode );
+        selectionDialog.setVisible(true);
     }
 }

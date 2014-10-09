@@ -134,7 +134,7 @@ class SelectionDialog extends JDialog
 
     void close ()
     {
-        hide();
+        setVisible(false);
         dispose();
     }
 
