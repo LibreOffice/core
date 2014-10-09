@@ -60,11 +60,7 @@ public class Runner
         {
             return false;
         }
-        if (_sVariable.startsWith("/cygdrive"))
-        {
-            return true;
-        }
-        return false;
+        return _sVariable.startsWith("/cygdrive");
     }
 
     private static boolean checkPathVariable(String _sPath, String delim)

@@ -44,11 +44,7 @@ public class FileHelper
             if (_sFile == null) return false;
 
             File aFile = new File(_sFile);
-            if (aFile.exists())
-            {
-                return true;
-            }
-            return false;
+            return aFile.exists();
         }
 
     public static boolean isDir(String _sDir)

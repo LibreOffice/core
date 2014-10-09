@@ -246,11 +246,7 @@ abstract class FilenameHelper_impl implements Filenamer
         {
             String sPath = createAbsoluteFilename();
             String sPathOther = _aOtherFN.createAbsoluteFilename();
-            if (sPath.equals(sPathOther))
-            {
-                return true;
-            }
-            return false;
+            return sPath.equals(sPathOther);
         }
 
 }

@@ -25,52 +25,31 @@ public class OSHelper
 {
     public static boolean isWindows()
         {
-            String sOSName = System.getProperty("os.name");
-            if (sOSName.toLowerCase().startsWith("windows"))
-            {
-                return true;
-            }
-            return false;
+            return System.getProperty("os.name").toLowerCase().startsWith("windows");
         }
     public static boolean isSolarisIntel()
         {
-            if ( ( System.getProperty("os.name").toLowerCase().startsWith("solaris") ||
-                   System.getProperty("os.name").toLowerCase().startsWith("sunos") ) &&
-                 System.getProperty("os.arch").equals("x86"))
-            {
-                return true;
-            }
-            return false;
+            String sOSName = System.getProperty("os.name");
+            return ( sOSName.toLowerCase().startsWith("solaris") ||
+                sOSName.toLowerCase().startsWith("sunos") ) &&
+                System.getProperty("os.arch").equals("x86");
         }
     public static boolean isSolarisSparc()
         {
-            if ( ( System.getProperty("os.name").toLowerCase().startsWith("solaris") ||
-                   System.getProperty("os.name").toLowerCase().startsWith("sunos") ) &&
-                 System.getProperty("os.arch").equals("sparc"))
-            {
-                return true;
-            }
-            return false;
+            String sOSName = System.getProperty("os.name");
+            return ( sOSName.toLowerCase().startsWith("solaris") ||
+                sOSName.toLowerCase().startsWith("sunos") ) &&
+                System.getProperty("os.arch").equals("sparc");
         }
     public static boolean isLinuxIntel()
         {
-            if (System.getProperty("os.name").toLowerCase().startsWith("linux") &&
-                System.getProperty("os.arch").equals("i386"))
-            {
-                return true;
-            }
-            return false;
+            return System.getProperty("os.name").toLowerCase().startsWith("linux") &&
+                System.getProperty("os.arch").equals("i386");
         }
 
     public static boolean isUnix()
         {
-            if (isLinuxIntel() ||
-                isSolarisIntel() ||
-                isSolarisSparc())
-            {
-                return true;
-            }
-            return false;
+            return isLinuxIntel() || isSolarisIntel() || isSolarisSparc();
         }
 
 }

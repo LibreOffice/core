@@ -104,13 +104,9 @@ class IniFile
 
     private boolean isRemark(String _sLine)
         {
-            if ( ((_sLine.length() < 2) ) ||
-                 ( _sLine.startsWith("#")) ||
-                 ( _sLine.startsWith(";")) )
-            {
-                return true;
-            }
-            return false;
+            return _sLine.length() < 2 ||
+                _sLine.startsWith("#") ||
+                _sLine.startsWith(";");
         }
 
     private String getItem(int i)
