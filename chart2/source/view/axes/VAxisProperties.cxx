@@ -205,10 +205,6 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
         m_pfExrtaLinePositionAtOtherAxis.reset(*rAxisProperties.m_pfExrtaLinePositionAtOtherAxis);
 }
 
-AxisProperties::~AxisProperties()
-{
-}
-
 LabelAlignment lcl_getLabelAlignmentForZAxis( const AxisProperties& rAxisProperties )
 {
     LabelAlignment aRet( LABEL_ALIGN_RIGHT );

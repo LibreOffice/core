@@ -57,7 +57,7 @@ enum AxisLabelStaggering
     , STAGGER_AUTO
 };
 
-struct AxisLabelProperties
+struct AxisLabelProperties SAL_FINAL
 {
     AxisLabelProperties();
 
@@ -84,7 +84,7 @@ struct AxisLabelProperties
     bool getIsStaggered() const;
 };
 
-struct AxisProperties
+struct AxisProperties SAL_FINAL
 {
     css::uno::Reference<css::chart2::XAxis> m_xAxisModel;
 
@@ -133,8 +133,8 @@ struct AxisProperties
     AxisProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxisModel
                   , ExplicitCategoriesProvider* pExplicitCategoriesProvider );
     AxisProperties( const AxisProperties& rAxisProperties );
-    virtual ~AxisProperties();
-    virtual void init(bool bCartesian=false);//init from model data (m_xAxisModel)
+
+    void init(bool bCartesian=false);//init from model data (m_xAxisModel)
 
     void initAxisPositioning( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProp );
 
@@ -144,8 +144,7 @@ struct AxisProperties
 private:
     AxisProperties();
 
-protected:
-    virtual TickmarkProperties  makeTickmarkProperties( sal_Int32 nDepth ) const;
+    TickmarkProperties  makeTickmarkProperties( sal_Int32 nDepth ) const;
     //@todo get this from somewhere; maybe for each subincrement
     //so far the model does not offer different settings for each tick depth
     VLineProperties      makeLinePropertiesForDepth( sal_Int32 /*nDepth*/ ) const { return m_aLineProperties; }
