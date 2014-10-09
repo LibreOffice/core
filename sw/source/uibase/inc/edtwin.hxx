@@ -286,6 +286,11 @@ public:
     void    SetUseInputLanguage( bool bNew );
     bool    IsUseInputLanguage() const { return m_bUseInputLanguage; }
 
+    /** fdo#55546 cut very long tooltips to 2/3 of the width of the screen
+        via center ellipsis
+     */
+    OUString ClipLongToolTip(const OUString& rTxt);
+
     SwFrameControlsManager& GetFrameControlsManager() { return m_aFrameControlsManager; }
 
     SwEditWin(vcl::Window *pParent, SwView &);

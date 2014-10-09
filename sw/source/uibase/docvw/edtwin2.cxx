@@ -94,6 +94,17 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
     return sBuf.makeStringAndClear();
 }
 
+OUString SwEditWin::ClipLongToolTip(const OUString& rTxt)
+{
+    OUString sDisplayTxt(rTxt);
+    long nTextWidth = GetTextWidth(sDisplayTxt);
+    long nMaxWidth = GetDesktopRectPixel().GetWidth() * 2 / 3;
+    nMaxWidth = PixelToLogic(Size(nMaxWidth, 0)).Width();
+    if (nTextWidth > nMaxWidth)
+        sDisplayTxt = GetEllipsisString(sDisplayTxt, nMaxWidth, TEXT_DRAW_CENTERELLIPSIS);
+    return sDisplayTxt;
+}
+
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -369,7 +380,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     aPt = OutputToScreenPixel( LogicToPixel( aRect.BottomRight() ));
                     aRect.Right()  = aPt.X();
                     aRect.Bottom() = aPt.Y();
-                    Help::ShowQuickHelp( this, aRect, sTxt, nStyle );
+                    OUString sDisplayTxt(ClipLongToolTip(sTxt));
+                    Help::ShowQuickHelp(this, aRect, sDisplayTxt, nStyle);
                 }
             }
 
@@ -410,7 +422,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt = SW_RESSTR(nTabRes);
                 Size aTxtSize( GetTextWidth(sTxt), GetTextHeight());
                 Rectangle aRect(rEvt.GetMousePosPixel(), aTxtSize);
-                Help::ShowQuickHelp(this, aRect, sTxt);
+                OUString sDisplayTxt(ClipLongToolTip(sTxt));
+                Help::ShowQuickHelp(this, aRect, sDisplayTxt);
             }
             bContinue = false;
         }
