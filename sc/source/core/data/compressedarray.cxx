@@ -248,7 +248,7 @@ template< typename A, typename D >
 void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A nStart,
         A nEnd, long nSourceDy )
 {
-    size_t nIndex;
+    size_t nIndex = 0;
     A nRegionEnd;
     for (A j=nStart; j<=nEnd; ++j)
     {
@@ -385,7 +385,7 @@ void ScBitMaskCompressedArray<A,D>::CopyFromAnded(
         const ScBitMaskCompressedArray<A,D>& rArray, A nStart, A nEnd,
         const D& rValueToAnd, long nSourceDy )
 {
-    size_t nIndex;
+    size_t nIndex = 0;
     A nRegionEnd;
     for (A j=nStart; j<=nEnd; ++j)
     {
