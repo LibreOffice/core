@@ -305,7 +305,7 @@ class Parser:
             "scaddins" : 0, #
             "sccomp" : 1,
             "scripting" : 1,
-            "sd" : 0, #
+            "sd" : 1,
             "sdext" : 1,
             "sfx2" : 0, #
             "shell" : 1,
