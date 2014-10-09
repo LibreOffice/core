@@ -22,6 +22,7 @@
 #include <ZipEnumeration.hxx>
 #include <ZipPackageStream.hxx>
 #include <ZipPackageFolder.hxx>
+#include <ZipOutputEntry.hxx>
 #include <ZipOutputStream.hxx>
 #include <ZipPackageBuffer.hxx>
 #include <ZipFile.hxx>
@@ -156,7 +157,7 @@ ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
 , m_pRootFolder( NULL )
 , m_pZipFile( NULL )
 {
-    m_xRootFolder = m_pRootFolder = new ZipPackageFolder( m_nFormat, m_bAllowRemoveOnInsert );
+    m_xRootFolder = m_pRootFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
 }
 
 ZipPackage::~ZipPackage( void )
@@ -539,7 +540,7 @@ void ZipPackage::getZipFileContents()
                     break;
                 if ( !pCurrent->hasByName( sTemp ) )
                 {
-                    pPkgFolder = new ZipPackageFolder( m_nFormat, m_bAllowRemoveOnInsert );
+                    pPkgFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
                     pPkgFolder->setName( sTemp );
                     pPkgFolder->doSetParent( pCurrent, true );
                     pCurrent = pPkgFolder;
@@ -953,7 +954,7 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( c
     if ( aArguments.getLength() )
         aArguments[0] >>= bArg;
     if ( bArg )
-        xRef = *new ZipPackageFolder ( m_nFormat, m_bAllowRemoveOnInsert );
+        xRef = *new ZipPackageFolder ( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
     else
         xRef = *new ZipPackageStream ( *this, m_xContext, m_bAllowRemoveOnInsert );
 
@@ -975,7 +976,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     pEntry->sPath = sMime;
     pEntry->nMethod = STORED;
     pEntry->nSize = pEntry->nCompressedSize = nBufferLength;
-    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+    pEntry->nTime = ZipOutputEntry::getCurrentDosTime();
 
     CRC32 aCRC32;
     aCRC32.update( aType );
@@ -983,9 +984,10 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 
     try
     {
-        aZipOut.putNextEntry( *pEntry, NULL );
-        aZipOut.write( aType, 0, nBufferLength );
-        aZipOut.closeEntry();
+        ZipOutputEntry aZipEntry(m_xContext, aZipOut.getChucker(), *pEntry, NULL);
+        aZipEntry.write(aType, 0, nBufferLength);
+        aZipEntry.closeEntry();
+        aZipOut.addEntry(pEntry);
     }
     catch ( const ::com::sun::star::io::IOException & r )
     {
@@ -1008,7 +1010,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     pEntry->nMethod = DEFLATED;
     pEntry->nCrc = -1;
     pEntry->nSize = pEntry->nCompressedSize = -1;
-    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+    pEntry->nTime = ZipOutputEntry::getCurrentDosTime();
 
     // Convert vector into a uno::Sequence
     uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
@@ -1025,9 +1027,10 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     pBuffer->realloc( nBufferLength );
 
     // the manifest.xml is never encrypted - so pass an empty reference
-    aZipOut.putNextEntry( *pEntry, NULL );
-    aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
-    aZipOut.closeEntry();
+    ZipOutputEntry aZipEntry(m_xContext, aZipOut.getChucker(), *pEntry, NULL);
+    aZipEntry.write(pBuffer->getSequence(), 0, nBufferLength);
+    aZipEntry.closeEntry();
+    aZipOut.addEntry(pEntry);
 }
 
 void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
@@ -1040,7 +1043,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     pEntry->nMethod = DEFLATED;
     pEntry->nCrc = -1;
     pEntry->nSize = pEntry->nCompressedSize = -1;
-    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+    pEntry->nTime = ZipOutputEntry::getCurrentDosTime();
 
     // Convert vector into a uno::Sequence
     // TODO/LATER: use Defaulst entries in future
@@ -1075,9 +1078,10 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     pBuffer->realloc( nBufferLength );
 
     // there is no encryption in this format currently
-    aZipOut.putNextEntry( *pEntry, NULL );
-    aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
-    aZipOut.closeEntry();
+    ZipOutputEntry aZipEntry(m_xContext, aZipOut.getChucker(), *pEntry, NULL);
+    aZipEntry.write(pBuffer->getSequence(), 0, nBufferLength);
+    aZipEntry.closeEntry();
+    aZipOut.addEntry(pEntry);
 }
 
 void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream )
@@ -1138,7 +1142,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     }
 
     // Hand it to the ZipOutputStream:
-    ZipOutputStream aZipOut( m_xContext, xTempOut );
+    ZipOutputStream aZipOut( xTempOut );
     try
     {
         if ( m_nFormat == embed::StorageFormats::PACKAGE )

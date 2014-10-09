@@ -21,6 +21,7 @@
 
 #include <ZipPackageFolder.hxx>
 #include <ZipFile.hxx>
+#include <ZipOutputEntry.hxx>
 #include <ZipOutputStream.hxx>
 #include <ZipPackageStream.hxx>
 #include <PackageConstants.hxx>
@@ -60,9 +61,11 @@ using namespace ::com::sun::star;
 
 namespace { struct lcl_CachedImplId : public rtl::Static< cppu::OImplementationId, lcl_CachedImplId > {}; }
 
-ZipPackageFolder::ZipPackageFolder ( sal_Int32 nFormat,
+ZipPackageFolder::ZipPackageFolder ( css::uno::Reference< css::uno::XComponentContext> xContext,
+                                     sal_Int32 nFormat,
                                      bool bAllowRemoveOnInsert )
-: m_nFormat( nFormat )
+    : m_xContext( xContext )
+    , m_nFormat( nFormat )
 {
     this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
@@ -338,6 +341,7 @@ static bool ZipPackageFolder_saveChild(
 }
 
 static bool ZipPackageStream_saveChild(
+        css::uno::Reference< css::uno::XComponentContext> xContext,
         const ContentInfo &rInfo,
         const OUString &rPath,
         std::vector < uno::Sequence < PropertyValue > > &rManList,
@@ -563,7 +567,7 @@ static bool ZipPackageStream_saveChild(
             if ( bRawStream )
                 xStream->skipBytes( rInfo.pStream->GetMagicalHackPos() );
 
-            rZipOut.putNextEntry ( *pTempEntry, rInfo.pStream, false );
+            ZipOutputEntry aZipEntry(xContext, rZipOut.getChucker(), *pTempEntry, rInfo.pStream, false);
             // the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
 
@@ -573,11 +577,12 @@ static bool ZipPackageStream_saveChild(
             do
             {
                 nLength = xStream->readBytes( aSeq, n_ConstBufferSize );
-                rZipOut.rawWrite(aSeq, 0, nLength);
+                aZipEntry.rawWrite(aSeq, 0, nLength);
             }
             while ( nLength == n_ConstBufferSize );
 
-            rZipOut.rawCloseEntry();
+            aZipEntry.rawCloseEntry();
+            rZipOut.addEntry(pTempEntry);
         }
         catch ( ZipException& )
         {
@@ -620,7 +625,7 @@ static bool ZipPackageStream_saveChild(
 
         try
         {
-            rZipOut.putNextEntry ( *pTempEntry, rInfo.pStream, bToBeEncrypted);
+            ZipOutputEntry aZipEntry(xContext, rZipOut.getChucker(), *pTempEntry, rInfo.pStream, bToBeEncrypted);
             // the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
 
@@ -629,11 +634,12 @@ static bool ZipPackageStream_saveChild(
             do
             {
                 nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
-                rZipOut.write(aSeq, 0, nLength);
+                aZipEntry.write(aSeq, 0, nLength);
             }
             while ( nLength == n_ConstBufferSize );
 
-            rZipOut.closeEntry();
+            aZipEntry.closeEntry();
+            rZipOut.addEntry(pTempEntry);
         }
         catch ( ZipException& )
         {
@@ -726,8 +732,9 @@ void ZipPackageFolder::saveContents(
 
         try
         {
-            rZipOut.putNextEntry( *pTempEntry, NULL, false );
-            rZipOut.rawCloseEntry();
+            ZipOutputEntry aZipEntry(m_xContext, rZipOut.getChucker(), *pTempEntry, NULL, false);
+            aZipEntry.rawCloseEntry();
+            rZipOut.addEntry(pTempEntry);
         }
         catch ( ZipException& )
         {
@@ -748,7 +755,7 @@ void ZipPackageFolder::saveContents(
         if ( aIter != maContents.end() && !(*aIter).second->bFolder )
         {
             bMimeTypeStreamStored = true;
-            bWritingFailed = !ZipPackageStream_saveChild(
+            bWritingFailed = !ZipPackageStream_saveChild( m_xContext,
                 *aIter->second, rPath + aIter->first, rManList, rZipOut, rEncryptionKey, rRandomPool, m_nFormat );
         }
     }
@@ -769,7 +776,7 @@ void ZipPackageFolder::saveContents(
             }
             else
             {
-                bWritingFailed = !ZipPackageStream_saveChild(
+                bWritingFailed = !ZipPackageStream_saveChild( m_xContext,
                     rInfo, rPath + rShortName, rManList, rZipOut, rEncryptionKey, rRandomPool, m_nFormat );
             }
         }

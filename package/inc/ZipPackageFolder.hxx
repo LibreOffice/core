@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <HashMaps.hxx>
 #include <ZipPackageEntry.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -50,13 +51,15 @@ class ZipPackageFolder : public cppu::ImplInheritanceHelper2
 >
 {
 private:
+    css::uno::Reference< css::uno::XComponentContext> m_xContext;
     ContentHash maContents;
     sal_Int32 m_nFormat;
     OUString m_sVersion;
 
 public:
 
-    ZipPackageFolder( sal_Int32 nFormat,
+    ZipPackageFolder( css::uno::Reference< css::uno::XComponentContext> xContext,
+                      sal_Int32 nFormat,
                       bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder();
 
