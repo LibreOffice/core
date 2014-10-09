@@ -388,10 +388,7 @@ public class Format implements Cloneable {
         if (rhs.align!= align)
                 return false;
 
-        if (rhs.vertAlign!= vertAlign)
-                return false;
-
-        return true;
+        return rhs.vertAlign == vertAlign;
     }
 
     /**
@@ -426,9 +423,6 @@ public class Format implements Cloneable {
         if (rhs.align!= align)
                 return false;
 
-        if (rhs.vertAlign!= vertAlign)
-                return false;
-
-        return true;
+        return rhs.vertAlign == vertAlign;
     }
 }

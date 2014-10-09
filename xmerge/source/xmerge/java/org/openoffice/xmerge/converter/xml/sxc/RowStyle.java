@@ -224,10 +224,7 @@ public class RowStyle extends Style implements Cloneable {
                 return false;
         RowStyle tStyle = (RowStyle)style;
 
-        if(rowHeight!=tStyle.getRowHeight())
-            return false;
-
-        return true;
+        return rowHeight == tStyle.getRowHeight();
     }
 
     /**
