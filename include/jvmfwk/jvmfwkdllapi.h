@@ -17,7 +17,6 @@
 #else
 #   define JVMFWK_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
-#define JVMFWK_DLLPRIVATE SAL_DLLPRIVATE
 
 #endif
 
