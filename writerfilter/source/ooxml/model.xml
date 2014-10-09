@@ -18734,19 +18734,19 @@
       <element name="numIdMacAtCleanup" tokenid="ooxml:CT_Numbering_numIdMacAtCleanup"/>
     </resource>
     <resource name="ST_TblStyleOverrideType" resource="List">
-      <value tokenid="1">wholeTable</value>
-      <value tokenid="2">firstRow</value>
-      <value tokenid="3">lastRow</value>
-      <value tokenid="4">firstCol</value>
-      <value tokenid="5">lastCol</value>
-      <value tokenid="6">band1Vert</value>
-      <value tokenid="7">band2Vert</value>
-      <value tokenid="8">band1Horz</value>
-      <value tokenid="9">band2Horz</value>
-      <value tokenid="10">neCell</value>
-      <value tokenid="11">nwCell</value>
-      <value tokenid="12">seCell</value>
-      <value tokenid="13">swCell</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_wholeTable">wholeTable</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_firstRow">firstRow</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_lastRow">lastRow</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_firstCol">firstCol</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_lastCol">lastCol</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_band1Vert">band1Vert</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_band2Vert">band2Vert</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_band1Horz">band1Horz</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_band2Horz">band2Horz</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_neCell">neCell</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_nwCell">nwCell</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_seCell">seCell</value>
+      <value tokenid="ooxml:Value_ST_TblStyleOverrideType_swCell">swCell</value>
     </resource>
     <resource name="CT_Style_tblStylePr" resource="Properties">
       <element name="pPr" tokenid="ooxml:CT_PPrBase"/>

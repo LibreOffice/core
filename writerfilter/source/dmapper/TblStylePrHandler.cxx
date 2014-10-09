@@ -79,9 +79,48 @@ void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
     {
         case NS_ooxml::LN_CT_TblStyleOverrideType:
             {
-                // The tokenid should be the same in the model.xml than
-                // in the TblStyleType enum
-                m_nType = TblStyleType( rVal.getInt( ) );
+                switch (rVal.getInt())
+                {
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_wholeTable:
+                    m_nType = TBL_STYLE_WHOLETABLE;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_firstRow:
+                    m_nType = TBL_STYLE_FIRSTROW;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_lastRow:
+                    m_nType = TBL_STYLE_LASTROW;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_firstCol:
+                    m_nType = TBL_STYLE_FIRSTCOL;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_lastCol:
+                    m_nType = TBL_STYLE_LASTCOL;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_band1Vert:
+                    m_nType = TBL_STYLE_BAND1VERT;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_band2Vert:
+                    m_nType = TBL_STYLE_BAND2VERT;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_band1Horz:
+                    m_nType = TBL_STYLE_BAND1HORZ;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_band2Horz:
+                    m_nType = TBL_STYLE_BAND2HORZ;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_neCell:
+                    m_nType = TBL_STYLE_NECELL;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_nwCell:
+                    m_nType = TBL_STYLE_NWCELL;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_seCell:
+                    m_nType = TBL_STYLE_SECELL;
+                    break;
+                case NS_ooxml::LN_Value_ST_TblStyleOverrideType_swCell:
+                    m_nType = TBL_STYLE_SWCELL;
+                    break;
+                }
             }
             break;
     }
