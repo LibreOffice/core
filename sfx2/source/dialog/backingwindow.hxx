@@ -62,6 +62,7 @@ class BackingWindow
     com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
 
     PushButton*                     mpOpenButton;
+    PushButton*                     mpRecentButton;
     MenuButton*                     mpTemplateButton;
 
     FixedText*                      mpCreateLabel;
