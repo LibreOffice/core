@@ -87,7 +87,16 @@ protected: //member
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xGroupShape_Shapes;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xTextTarget;
 
-    ::std::vector< ::std::vector< TickInfo > >                                          m_aAllTickInfos;
+    /**
+     * This typically consists of 2 TickInfo vectors (i.e. the outer vector
+     * has 2 child vector elements) for normal axis.  The first vector
+     * corresponds with the major ticks while the second corresponds with the
+     * minor ticks.
+     *
+     * It may have more than 2 TickInfo vectors for complex category axis
+     * which has multi-level axis labels.
+     */
+    std::vector< std::vector<TickInfo> > m_aAllTickInfos;
     bool m_bReCreateAllTickInfos;
 
     bool m_bRecordMaximumTextSize;
