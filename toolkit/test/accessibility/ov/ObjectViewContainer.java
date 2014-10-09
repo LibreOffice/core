@@ -69,7 +69,7 @@ public class ObjectViewContainer
         {
             try
             {
-                Class aViewClass = maViewTemplates.get (i);
+                Class<?> aViewClass = maViewTemplates.get(i);
                 Method aCreateMethod = aViewClass.getDeclaredMethod (
                     "Create", new Class[] {
                         ObjectViewContainer.class,
