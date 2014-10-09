@@ -1106,8 +1106,14 @@ void LibPage::implExportLib( const OUString& aLibName, const OUString& aTargetUR
     if ( xModLibContainerExport.is() )
         xModLibContainerExport->exportLibrary( aOULibName, aTargetURL, Handler );
 
-    if ( xDlgLibContainerExport.is() )
-        xDlgLibContainerExport->exportLibrary( aOULibName, aTargetURL, Handler );
+    if (!xDlgLibContainerExport.is())
+        return;
+    Reference<container::XNameAccess> xNameAcc(xDlgLibContainerExport, UNO_QUERY);
+    if (!xNameAcc.is())
+        return;
+    if (!xNameAcc->hasByName(aOULibName))
+        return;
+    xDlgLibContainerExport->exportLibrary(aOULibName, aTargetURL, Handler);
 }
 
 // Implementation XCommandEnvironment
