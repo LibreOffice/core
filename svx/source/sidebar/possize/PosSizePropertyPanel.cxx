@@ -181,9 +181,6 @@ void PosSizePropertyPanel::Initialize()
     mpMtrWidth->SetAccessibleRelationLabeledBy(mpFtWidth);
     mpMtrHeight->SetAccessibleRelationLabeledBy(mpFtHeight);
     mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtAngle);
-#ifdef HAS_IA2
-    mpMtrAngle->SetMpSubEditAccLableBy(mpFtAngle);
-#endif
     mpFlipTbx->SetAccessibleRelationLabeledBy(mpFtFlip);
 
     mpMtrAngle->InsertValue(0, FUNIT_CUSTOM);

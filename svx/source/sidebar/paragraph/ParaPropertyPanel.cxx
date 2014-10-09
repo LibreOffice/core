@@ -351,23 +351,6 @@ void ParaPropertyPanel::initial()
     InitToolBoxBulletsNumbering();
     InitToolBoxSpacing();
     InitToolBoxLineSpacing();
-
-#ifdef HAS_IA2
-    mpAlignToolBox->SetAccRelationLabeledBy(&mpAlignToolBox);
-    mpTBxVertAlign->SetMpSubEditAccLableBy(&mpTBxVertAlign);
-    mpTBxNumBullet->SetAccRelationLabeledBy(&mpTBxNumBullet);
-    mpTBxBackColor->SetMpSubEditAccLableBy(&mpTBxBackColor);
-    mpTbxUL_IncDec->SetAccRelationLabeledBy(&mpTbxUL_IncDec);
-    mpTopDist->SetAccRelationLabeledBy(&mpTopDist);
-    mpBottomDist->SetAccRelationLabeledBy(&mpBottomDist);
-    mpLineSPTbx->SetAccRelationLabeledBy(&mpLineSPTbx);
-    mpTbxIndent_IncDec->SetAccRelationLabeledBy(&mpTbxIndent_IncDec);
-    mpTbxProDemote->SetAccRelationLabeledBy(&mpTbxProDemote);
-    mpLeftIndent->SetAccRelationLabeledBy(&mpLeftIndent);
-    mpRightIndent->SetAccRelationLabeledBy(&mpRightIndent);
-    mpFLineIndent->SetAccRelationLabeledBy(&mpFLineIndent);
-    mpColorUpdater->SetAccRelationLabeledBy(&mpColorUpdater);
-#endif
 }
 
 // for Numbering & Bullet
