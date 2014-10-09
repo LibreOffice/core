@@ -651,7 +651,7 @@ void DocumentFieldsManager::UpdateTblFlds( SfxPoolItem* pHt )
         pFldType = 0;
     }
 
-    // process all table box formuals
+    // process all table box formulas
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = m_rSwdoc.GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
     for (sal_uInt32 i = 0; i < nMaxItems; ++i)

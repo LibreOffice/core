@@ -3591,7 +3591,7 @@ DynamicKernel* DynamicKernel::create( ScDocument& /* rDoc */,
     }
     catch (const UnhandledToken& ut)
     {
-        std::cerr << "\nDynamic formual compiler: unhandled token: ";
+        std::cerr << "\nDynamic formula compiler: unhandled token: ";
         std::cerr << ut.mMessage << " at ";
         std::cerr << ut.mFile << ":" << ut.mLineNumber << "\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
@@ -3681,7 +3681,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     }
     catch (const UnhandledToken& ut)
     {
-        std::cerr << "\nDynamic formual compiler: unhandled token: ";
+        std::cerr << "\nDynamic formula compiler: unhandled token: ";
         std::cerr << ut.mMessage << "\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
