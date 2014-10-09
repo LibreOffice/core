@@ -1208,14 +1208,14 @@ AC_ARG_ENABLE(randr-link,
 ,enable_randr_link=yes)
 
 AC_ARG_ENABLE(gstreamer,
-    AS_HELP_STRING([--enable-gstreamer],
-        [Enable building with the new gstreamer 1.0 avmedia backend.]),
-,enable_gstreamer=no)
+    AS_HELP_STRING([--disable-gstreamer],
+        [Disable building with the new gstreamer 1.0 avmedia backend.]),
+,enable_gstreamer=yes)
 
 AC_ARG_ENABLE(gstreamer-0-10,
-    AS_HELP_STRING([--disable-gstreamer-0-10],
-        [Disable building the gstreamer avmedia backend.]),
-,enable_gstreamer_0_10=yes)
+    AS_HELP_STRING([--enable-gstreamer-0-10],
+        [Enable building the gstreamer 0.10 avmedia backend.]),
+,enable_gstreamer_0_10=no)
 
 AC_ARG_ENABLE(vlc,
     AS_HELP_STRING([--enable-vlc],
