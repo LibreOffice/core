@@ -128,7 +128,7 @@ void SvxPageWindow::Paint(const Rectangle&)
             // Draw Landscape page of the same size
             boost::rational<long> aX = aMapMode.GetScaleX();
             boost::rational<long> aY = aMapMode.GetScaleY();
-            boost::rational<long> a2(1.5);
+            boost::rational<long> a2(3, 2);
             aX *= a2;
             aY *= a2;
             aMapMode.SetScaleX(aX);
