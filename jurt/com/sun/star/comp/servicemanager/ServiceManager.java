@@ -652,11 +652,7 @@ public class ServiceManager implements XMultiServiceFactory,
             try {
                 return enumeration.next();
             } catch (java.util.NoSuchElementException e) {
-                com.sun.star.container.NoSuchElementException ex =
-                    new com.sun.star.container.NoSuchElementException(
-                        e.toString());
-                ex.initCause(e);
-                throw ex;
+                throw new com.sun.star.container.NoSuchElementException(e, e.toString());
             }
         }
     }

@@ -279,20 +279,11 @@ public class JavaLoader implements XImplementationLoader,
                 }
             }
         } catch (java.net.MalformedURLException e) {
-            CannotActivateFactoryException cae = new CannotActivateFactoryException(
-                    "Can not activate factory because " + e );
-            cae.initCause(e);
-            throw cae;
+            throw new CannotActivateFactoryException(e, "Can not activate factory because " + e);
         } catch (java.io.IOException e) {
-            CannotActivateFactoryException cae = new CannotActivateFactoryException(
-                    "Can not activate factory because " + e );
-            cae.initCause(e);
-            throw cae;
+            throw new CannotActivateFactoryException(e, "Can not activate factory because " + e);
         } catch (java.lang.ClassNotFoundException e) {
-            CannotActivateFactoryException cae = new CannotActivateFactoryException(
-                    "Can not activate factory because " + e );
-            cae.initCause(e);
-            throw cae;
+            throw new CannotActivateFactoryException(e, "Can not activate factory because " + e);
         }
 
         Class<?>[] paramTypes = {String.class, XMultiServiceFactory.class, XRegistryKey.class};
