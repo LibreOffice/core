@@ -826,7 +826,9 @@ public:
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 
     void Sort(
-        const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress, sc::ReorderParam* pUndo );
+        const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+        ScProgress* pProgress, sc::ReorderParam* pUndo );
+
     void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );
 
     bool ValidQuery(
@@ -1023,7 +1025,9 @@ private:
     short       Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     ScSortInfoArray* CreateSortInfoArray( const sc::ReorderParam& rParam );
-    ScSortInfoArray* CreateSortInfoArray( const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2, bool bKeepQuery );
+    ScSortInfoArray* CreateSortInfoArray(
+        const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2,
+        bool bKeepQuery, bool bUpdateRefs );
     void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
     void SortReorderByColumn( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2, bool bPattern, ScProgress* pProgress );
     void SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress );

@@ -1242,6 +1242,12 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         pInputCfg->SetExpandRefs( ((const SfxBoolItem*)pItem)->GetValue() );
         bSaveInputOptions = true;
     }
+    if (rOptSet.HasItem(SID_SC_OPT_SORT_REF_UPDATE, &pItem))
+    {
+        pInputCfg->SetSortRefUpdate(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+        bSaveInputOptions = true;
+    }
+
     if ( rOptSet.HasItem(SID_SC_INPUT_MARK_HEADER,&pItem) )
     {
         pInputCfg->SetMarkHeader( ((const SfxBoolItem*)pItem)->GetValue() );
@@ -1999,7 +2005,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                             SID_SC_INPUT_SELECTION,SID_SC_INPUT_MARK_HEADER,
                             SID_SC_INPUT_TEXTWYSIWYG,SID_SC_INPUT_TEXTWYSIWYG,
                             SID_SC_INPUT_REPLCELLSWARN,SID_SC_INPUT_REPLCELLSWARN,
-                            SID_SC_INPUT_LEGACY_CELL_SELECTION,SID_SC_INPUT_LEGACY_CELL_SELECTION,
+                            SID_SC_INPUT_LEGACY_CELL_SELECTION,SID_SC_OPT_SORT_REF_UPDATE,
                             // TP_USERLISTS:
                             SCITEM_USERLIST,        SCITEM_USERLIST,
                             // TP_PRINT:
@@ -2062,6 +2068,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                     rInpOpt.GetRangeFinder() ) );
         pRet->Put( SfxBoolItem( SID_SC_INPUT_REF_EXPAND,
                     rInpOpt.GetExpandRefs() ) );
+        pRet->Put( SfxBoolItem(SID_SC_OPT_SORT_REF_UPDATE, rInpOpt.GetSortRefUpdate()));
         pRet->Put( SfxBoolItem( SID_SC_INPUT_MARK_HEADER,
                     rInpOpt.GetMarkHeader() ) );
         pRet->Put( SfxBoolItem( SID_SC_INPUT_TEXTWYSIWYG,
