@@ -440,9 +440,11 @@ DECLARE_OOXMLEXPORT_TEST(testCropPixel, "crop-pixel.docx")
     // If map mode of the graphic is in pixels, then we used to handle original
     // size of the graphic as mm100, but it was in pixels.
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
-        // This is 17667 in the original document (i.e. should be < 20000), but
-        // was 504666, so the image become invisible.
-        assertXPath(pXmlDoc, "//a:srcRect", "l", "19072");
+    {
+        // This is 17667 in the original document, was 504666 (so the image
+        // become invisible), now is around 19072.
+        CPPUNIT_ASSERT(getXPath(pXmlDoc, "//a:srcRect", "l").toInt32() < 20000);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
