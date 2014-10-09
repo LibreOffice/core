@@ -19,6 +19,10 @@ $(eval $(call gb_CppunitTest_use_libraries,sal_osl_process,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,sal_osl_process,\
+    valgrind \
+))
+
 $(eval $(call gb_CppunitTest_use_executable,sal_osl_process,osl_process_child))
 
 # vim: set noet sw=4 ts=4:

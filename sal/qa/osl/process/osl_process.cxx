@@ -37,6 +37,10 @@
 #include <osl/module.hxx>
 #include <sal/macros.h>
 
+#if defined HAVE_VALGRIND_HEADERS
+#include <valgrind/memcheck.h>
+#endif
+
 #if ( defined WNT )                     // Windows
 #   include <windows.h>
 #   include <tchar.h>
@@ -363,6 +367,12 @@ public:
 
         osl_freeProcessHandle(process);
 
+#if defined HAVE_VALGRIND_HEADERS
+        //valgrind makes these not match
+        if (RUNNING_ON_VALGRIND)
+            return;
+#endif
+
         CPPUNIT_ASSERT_MESSAGE
         (
             "Parent and child environment not equal",
@@ -420,6 +430,12 @@ public:
         different_child_env_vars.push_back(ENV1);
         different_child_env_vars.push_back(ENV2);
         different_child_env_vars.push_back(ENV4);
+
+#if defined HAVE_VALGRIND_HEADERS
+        //valgrind makes these not match
+        if (RUNNING_ON_VALGRIND)
+            return;
+#endif
 
         CPPUNIT_ASSERT_MESSAGE
         (
