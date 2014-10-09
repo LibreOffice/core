@@ -914,7 +914,7 @@ public:
 
         This includes the user defined document properties!
      */
-    void ReplaceDocumentProperties(const SwDoc& rSource);
+    void ReplaceDocumentProperties(const SwDoc& rSource, bool mailMerge = false);
 
     // Query if style (paragraph- / character- / frame- / page-) is used.
     bool IsUsed( const SwModify& ) const;

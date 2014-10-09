@@ -56,6 +56,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <dbmgr.hxx>
 #include <swunohelper.hxx>
 #include <osl/mutex.hxx>
@@ -66,6 +67,7 @@
 #include <dbui.hxx>
 #include <dbui.hrc>
 #include <helpid.h>
+#include <doc.hxx>
 #include <sfx2/app.hxx>
 #include <statstr.hrc>
 #include <unomid.h>
@@ -679,6 +681,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             aOpt.SetMerge( false );
             pTempView->GetDocShell()->LoadStylesFromFile(
                     sTargetTempURL, aOpt, true );
+            pTempView->GetDocShell()->GetDoc()->ReplaceCompatabilityOptions( *pTargetView->GetDocShell()->GetDoc());
+            pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
+            pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
 
             pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
                     (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );

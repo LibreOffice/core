@@ -88,7 +88,7 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(const SwDoc& rSource)
     ReplaceUserDefinedDocumentProperties( xSourceDocProps );
 }
 
-void SwDoc::ReplaceDocumentProperties(const SwDoc& rSource)
+void SwDoc::ReplaceDocumentProperties(const SwDoc& rSource, bool mailMerge)
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xSourceDPS(
         rSource.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
@@ -110,6 +110,7 @@ void SwDoc::ReplaceDocumentProperties(const SwDoc& rSource)
     xDocProps->setDescription(xSourceDocProps->getDescription());
     xDocProps->setKeywords(xSourceDocProps->getKeywords());
     xDocProps->setLanguage(xSourceDocProps->getLanguage());
+    // Note: These below originally weren't copied for mailmerge, but I don't see why not.
     xDocProps->setModifiedBy(xSourceDocProps->getModifiedBy());
     xDocProps->setModificationDate(xSourceDocProps->getModificationDate());
     xDocProps->setPrintedBy(xSourceDocProps->getPrintedBy());
@@ -123,6 +124,13 @@ void SwDoc::ReplaceDocumentProperties(const SwDoc& rSource)
     xDocProps->setDocumentStatistics(xSourceDocProps->getDocumentStatistics());
     xDocProps->setEditingCycles(xSourceDocProps->getEditingCycles());
     xDocProps->setEditingDuration(xSourceDocProps->getEditingDuration());
+
+    if( mailMerge ) // Note: Not sure this is needed.
+    {
+        // Manually set the creation date, otherwise author field isn't filled
+        // during MM, as it's set when saving the document the first time.
+        xDocProps->setCreationDate( xSourceDocProps->getModificationDate() );
+    }
 
     ReplaceUserDefinedDocumentProperties( xSourceDocProps );
 }

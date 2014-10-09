@@ -776,32 +776,6 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
     rWorkShell.SetLabelDoc( false );
 }
 
-// based on SwDoc::ReplaceDocumentProperties
-static void lcl_CopyDocumentPorperties(
-    const uno::Reference<document::XDocumentProperties> &xSourceDocProps,
-    const SfxObjectShell *xTargetDocShell, SwDoc *pTargetDoc)
-{
-    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-        xTargetDocShell->GetModel(), uno::UNO_QUERY_THROW);
-    uno::Reference<document::XDocumentProperties> xTargetDocProps(
-        xDPS->getDocumentProperties());
-    OSL_ENSURE(xTargetDocProps.is(), "DocumentProperties is null");
-
-    xTargetDocProps->setTitle( xSourceDocProps->getTitle() );
-    xTargetDocProps->setSubject( xSourceDocProps->getSubject() );
-    xTargetDocProps->setDescription( xSourceDocProps->getDescription() );
-    xTargetDocProps->setKeywords( xSourceDocProps->getKeywords() );
-    xTargetDocProps->setAuthor( xSourceDocProps->getAuthor() );
-    xTargetDocProps->setGenerator( xSourceDocProps->getGenerator() );
-    xTargetDocProps->setLanguage( xSourceDocProps->getLanguage() );
-
-    // Manually set the creation date, otherwise author field isn't filled
-    // during MM, as it's set when saving the document the first time.
-    xTargetDocProps->setCreationDate( xSourceDocProps->getModificationDate() );
-
-    pTargetDoc->ReplaceUserDefinedDocumentProperties( xSourceDocProps );
-}
-
 static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
                          const char *name, int no = 0 )
 {
@@ -989,7 +963,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 // #72821# copy dynamic defaults
                 pTargetShell->GetDoc()->ReplaceDefaults( *pSourceShell->GetDoc());
 
-                lcl_CopyDocumentPorperties( xSourceDocProps, xTargetDocShell, pTargetDoc );
+                pTargetShell->GetDoc()->ReplaceDocumentProperties( *pSourceShell->GetDoc());
             }
 
             // Progress, to prohibit KeyInputs
@@ -1088,7 +1062,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
 
                         SwDoc* pWorkDoc = rWorkShell.GetDoc();
-                        lcl_CopyDocumentPorperties( xSourceDocProps, xWorkDocSh, pWorkDoc );
+                        pWorkDoc->ReplaceDocumentProperties( *pSourceDocSh->GetDoc());
                         if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                             lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
                         SwDBManager* pOldDBManager = pWorkDoc->GetDBManager();
