@@ -38,7 +38,9 @@
 #include <sal/macros.h>
 
 #if defined HAVE_VALGRIND_HEADERS
-#include <valgrind/memcheck.h>
+#include <valgrind/valgrind.h>
+#else
+#define RUNNING_ON_VALGRIND false
 #endif
 
 #if ( defined WNT )                     // Windows
@@ -90,11 +92,11 @@ inline ::rtl::OUString getExecutablePath( void )
 
 //rtl::OUString CWD = getExecutablePath();
 
-typedef std::vector<std::string>  string_container_t;
+typedef std::vector<OString> string_container_t;
 typedef string_container_t::const_iterator string_container_const_iter_t;
 typedef string_container_t::iterator       string_container_iter_t;
 
-class exclude : public std::unary_function<std::string, bool>
+class exclude : public std::unary_function<OString, bool>
 {
 public:
 
@@ -106,7 +108,7 @@ public:
             exclude_list_.push_back(env_var_name(*iter));
     }
 
-    bool operator() (const std::string& env_var) const
+    bool operator() (const OString& env_var) const
     {
         return (exclude_list_.end() !=
                 std::find(
@@ -119,15 +121,15 @@ private:
 
     // extract the name from an environment variable
     // that is given in the form "NAME=VALUE"
-    std::string env_var_name(const std::string& env_var) const
+    OString env_var_name(const OString& env_var) const
     {
-        std::string::size_type pos_equal_sign =
-            env_var.find_first_of("=");
+        sal_Int32 pos_equal_sign =
+            env_var.indexOf('=');
 
-        if (std::string::npos != pos_equal_sign)
-            return std::string(env_var, 0, pos_equal_sign);
+        if (-1 != pos_equal_sign)
+            return env_var.copy(0, pos_equal_sign);
 
-        return std::string();
+        return OString();
     }
 
 private:
@@ -136,27 +138,20 @@ private:
 
 namespace
 {
-    class starts_with
-        : public std::unary_function<const std::string&, bool>
-    {
-    private:
-        const std::string m_rString;
-    public:
-        starts_with(const char *pString) : m_rString(pString) {}
-        bool operator()(const std::string &rEntry) const
-        {
-            return rEntry.find(m_rString) == 0;
-        }
-    };
-
     void tidy_container(string_container_t &env_container)
     {
         //sort them because there are no guarantees to ordering
         std::sort(env_container.begin(), env_container.end());
-        //remove LD_PRELOAD because valgrind injects that into the
-        //parent process
-        env_container.erase(std::remove_if(env_container.begin(), env_container.end(),
-            starts_with("LD_PRELOAD=")), env_container.end());
+        if (RUNNING_ON_VALGRIND)
+        {
+            env_container.erase(
+                std::remove_if(
+                    env_container.begin(), env_container.end(),
+                    [](OString const & s) {
+                        return s.startsWith("LD_PRELOAD=")
+                            || s.startsWith("VALGRIND_LIB="); }),
+                env_container.end());
+        }
     }
 }
 
@@ -168,7 +163,7 @@ namespace
 
         while (size_t l = _tcslen(p))
         {
-            env_container->push_back(std::string(p));
+            env_container->push_back(OString(p));
             p += l + 1;
         }
         FreeEnvironmentStrings(env);
@@ -178,7 +173,7 @@ namespace
     void read_parent_environment(string_container_t* env_container)
     {
         for (int i = 0; NULL != environ[i]; i++)
-            env_container->push_back(std::string(environ[i]));
+            env_container->push_back(OString(environ[i]));
         tidy_container(*env_container);
     }
 #endif
@@ -246,14 +241,14 @@ public:
         std::string line;
         line.reserve(1024);
         while (std::getline(file, line, '\0'))
-            env_container->push_back(line);
+            env_container->push_back(OString(line.c_str()));
         tidy_container(*env_container);
     }
 
     // environment of the child process that was
     // started. The child process writes his
     // environment into a file
-    bool compare_environments()
+    void compare_environments()
     {
         string_container_t parent_env;
         read_parent_environment(&parent_env);
@@ -261,8 +256,20 @@ public:
         string_container_t child_env;
         read_child_environment(&child_env);
 
-        return ((parent_env.size() == child_env.size()) &&
-                (std::equal(child_env.begin(), child_env.end(), parent_env.begin())));
+        OString msg(
+            OString::number(parent_env.size()) + "/"
+            + OString::number(child_env.size()));
+        auto min = std::min(parent_env.size(), child_env.size());
+        for (decltype(min) i = 0; i != min; ++i) {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                msg.getStr(), parent_env[i], child_env[i]);
+        }
+        if (parent_env.size() != child_env.size()) {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                (parent_env.size() >= child_env.size()
+                 ? parent_env.back() : child_env.back()).getStr(),
+                parent_env.size(), child_env.size());
+        }
     }
 
     // compare the equal environment parts and the
@@ -367,17 +374,7 @@ public:
 
         osl_freeProcessHandle(process);
 
-#if defined HAVE_VALGRIND_HEADERS
-        //valgrind makes these not match
-        if (RUNNING_ON_VALGRIND)
-            return;
-#endif
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "Parent and child environment not equal",
-            compare_environments()
-        );
+        compare_environments();
     }
 
     #define ENV1 "PAT=a:\\"
@@ -430,12 +427,6 @@ public:
         different_child_env_vars.push_back(ENV1);
         different_child_env_vars.push_back(ENV2);
         different_child_env_vars.push_back(ENV4);
-
-#if defined HAVE_VALGRIND_HEADERS
-        //valgrind makes these not match
-        if (RUNNING_ON_VALGRIND)
-            return;
-#endif
 
         CPPUNIT_ASSERT_MESSAGE
         (
