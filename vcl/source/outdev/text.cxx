@@ -1582,7 +1582,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             long nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
             nLines = (sal_Int32)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
-            if ( !nLines )
+            if (nLines <= 0)
                 nLines = 1;
             if ( nFormatLines > nLines )
             {
