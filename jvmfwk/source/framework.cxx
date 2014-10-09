@@ -23,7 +23,7 @@
 #include "osl/thread.hxx"
 #include "osl/file.hxx"
 #include "jvmfwk/framework.h"
-#include "jvmfwk/vendorplugin.h"
+#include "vendorplugin.hxx"
 #include <cassert>
 #include <vector>
 #include <functional>

@@ -51,7 +51,7 @@
 
 #include "jni.h"
 #include "rtl/byteseq.hxx"
-#include "jvmfwk/vendorplugin.h"
+#include "vendorplugin.hxx"
 #include "util.hxx"
 #include "sunversion.hxx"
 #include "vendorlist.hxx"
@@ -200,7 +200,6 @@ extern "C" void JNICALL abort_handler()
 
 }
 
-extern "C"
 javaPluginError jfw_plugin_getAllJavaInfos(
     rtl_uString *sVendor,
     rtl_uString *sMinVersion,
@@ -330,7 +329,6 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     return JFW_PLUGIN_E_NONE;
 }
 
-extern "C"
 javaPluginError jfw_plugin_getJavaInfoByPath(
     rtl_uString *path,
     rtl_uString *sVendor,
@@ -585,7 +583,6 @@ static void do_msvcr_magic(rtl_uString *jvm_dll)
     during instantiation.
     </p>
  */
-extern "C"
 javaPluginError jfw_plugin_startJavaVirtualMachine(
     const JavaInfo *pInfo,
     const JavaVMOption* arOptions,
@@ -782,7 +779,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
    return errorcode;
 }
 
-extern "C"
 javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
 {
     javaPluginError ret = JFW_PLUGIN_E_NONE;

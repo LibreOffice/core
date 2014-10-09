@@ -22,9 +22,9 @@
 #include "rtl/ustring.hxx"
 #include "rtl/byteseq.hxx"
 #include "jvmfwk/framework.h"
-#include "jvmfwk/vendorplugin.h"
+#include "vendorplugin.hxx"
 
-/** typedefs for functions from vendorplugin.h
+/** typedefs for functions from vendorplugin.hxx
  */
 typedef javaPluginError (*jfw_plugin_getAllJavaInfos_ptr)(
     rtl_uString * sVendor,

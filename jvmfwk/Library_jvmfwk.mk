@@ -19,6 +19,11 @@ $(eval $(call gb_Library_add_defs,jvmfwk,\
 ))
 endif
 
+$(eval $(call gb_Library_set_include,jvmfwk,\
+    -I$(SRCDIR)/jvmfwk/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_api,jvmfwk,\
     udkapi \
 ))

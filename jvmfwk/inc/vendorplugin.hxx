@@ -18,17 +18,12 @@
  */
 
 /** @HTML */
-#ifndef INCLUDED_JVMFWK_VENDORPLUGIN_H
-#define INCLUDED_JVMFWK_VENDORPLUGIN_H
+#ifndef INCLUDED_JVMFWK_INC_VENDORPLUGIN_HXX
+#define INCLUDED_JVMFWK_INC_VENDORPLUGIN_HXX
 
 #include <jvmfwk/framework.h>
 #include <rtl/ustring.h>
 #include "jni.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 
 /**
    @file
@@ -246,11 +241,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     JFW_PLUGIN_E_INVALID_ARG pInfo contains invalid data</br>
  */
 javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif
 
