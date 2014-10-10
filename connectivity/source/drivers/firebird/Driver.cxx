@@ -31,6 +31,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 #include <svtools/miscopt.hxx>
+#include <unotools/localfilehelper.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -67,8 +68,11 @@ FirebirdDriver::FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::su
     , m_firebirdTMPDirectory(NULL, true)
     , m_firebirdLockDirectory(NULL, true)
 {
-    m_firebirdTMPDirectory.EnableKillingFile();
-    m_firebirdLockDirectory.EnableKillingFile();
+    // Note: TempFile caches the URL on first access; call this here so that
+    // ~FirebirdDriver is not the first access, because that is called
+    // when the ServiceManager is disposing, so GetURL() would fail!
+    m_firebirdTMPDirectory.GetURL();
+    m_firebirdLockDirectory.GetURL();
 
     // ::utl::TempFile uses a unique temporary directory (subdirectory of
     // /tmp or other user specific tmp directory) per instance in which
@@ -89,6 +93,12 @@ FirebirdDriver::FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::su
     ::osl::FileBase::getSystemPathFromFileURL(sMsgURL, sMsgPath);
     osl_setEnvironment(our_sFirebirdMsgVar.pData, sMsgPath.pData);
 #endif
+}
+
+FirebirdDriver::~FirebirdDriver()
+{
+    utl::removeTree(m_firebirdTMPDirectory.GetURL());
+    utl::removeTree(m_firebirdLockDirectory.GetURL());
 }
 
 void FirebirdDriver::disposing()
