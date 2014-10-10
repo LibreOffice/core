@@ -845,8 +845,8 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
             //http://processingjs.nihongoresources.com/the_smallest_font/
             //https://github.com/grzegorzrolek/null-ttf
             const int nMaxFontsPossible = fileSize / 528;
-
-            nLength = std::min(nMaxFontsPossible, nLength);
+            if (nLength > nMaxFontsPossible)
+                nLength = nMaxFontsPossible;
 
             for( int i = 0; i < nLength; i++ )
             {
