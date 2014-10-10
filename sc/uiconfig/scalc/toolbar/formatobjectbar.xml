@@ -46,7 +46,7 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:style="radio auto" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatScientific" toolbar:visible="false"/>
