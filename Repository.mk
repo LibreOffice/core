@@ -99,7 +99,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	) \
 	uri-encode \
 	ui-previewer \
-	$(if $(filter LINUX WNT,$(OS)), \
+	$(if $(filter LINUX MACOSX WNT,$(OS)), \
 		icontest) \
 	vcldemo \
 	tiledrendering \

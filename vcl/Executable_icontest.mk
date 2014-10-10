@@ -33,6 +33,12 @@ $(eval $(call gb_Executable_add_libs,icontest,\
     opengl32.lib \
 ))
 
+else ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Executable_add_libs,icontest,\
+    -framework OpenGL \
+))
+
 endif
 
 $(eval $(call gb_Executable_use_static_libraries,icontest,\
