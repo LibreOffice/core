@@ -1887,6 +1887,17 @@ DECLARE_RTFIMPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-67)), getProperty<sal_Int32>(getShape(1), "VertOrientPosition"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo84679, "fdo84679.rtf")
+{
+    // The problem was that the paragraph in A1 had some bottom margin, but it should not.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // This was 282.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
