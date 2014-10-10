@@ -1,0 +1,20 @@
+--- glm/gtx/bit.inl
++++ glm/gtx/bit.inl
+@@ -576,7 +576,7 @@
+ 		assert(ToBit <= sizeof(genIUType) * std::size_t(8));
+ 
+ 		genIUType Result = Value;
+-		for(std::size_t i = 0; i <= ToBit; ++i)
++		for(int i = 0; i <= ToBit; ++i)
+ 			Result |= (1 << i);
+ 		return Result;
+ 	}
+@@ -593,7 +593,7 @@
+ 		assert(ToBit <= sizeof(genIUType) * std::size_t(8));
+ 
+ 		genIUType Result = Value;
+-		for(std::size_t i = 0; i <= ToBit; ++i)
++		for(int i = 0; i <= ToBit; ++i)
+ 			Result &= ~(1 << i);
+ 		return Result;
+ 	}
