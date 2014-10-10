@@ -81,6 +81,7 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <officecfg/Setup.hxx>
@@ -163,57 +164,6 @@ namespace {
 
 #if HAVE_FEATURE_EXTENSIONS
 
-void removeTree(OUString const & url) {
-    osl::Directory dir(url);
-    osl::FileBase::RC rc = dir.open();
-    switch (rc) {
-    case osl::FileBase::E_None:
-        break;
-    case osl::FileBase::E_NOENT:
-        return; //TODO: SAL_WARN if recursive
-    default:
-        SAL_WARN("desktop.app", "cannot open directory " << dir.getURL() << ": " << +rc);
-        return;
-    }
-    for (;;) {
-        osl::DirectoryItem i;
-        rc = dir.getNextItem(i, SAL_MAX_UINT32);
-        if (rc == osl::FileBase::E_NOENT) {
-            break;
-        }
-        if (rc != osl::FileBase::E_None) {
-            SAL_WARN( "desktop.app", "cannot iterate directory " << dir.getURL() << ": " << +rc);
-            break;
-        }
-        osl::FileStatus stat(
-            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
-            osl_FileStatus_Mask_FileURL);
-        rc = i.getFileStatus(stat);
-        if (rc != osl::FileBase::E_None) {
-            SAL_WARN( "desktop.app", "cannot stat in directory " << dir.getURL() << ": " << +rc);
-            continue;
-        }
-        if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
-            removeTree(stat.getFileURL());
-        } else {
-            rc = osl::File::remove(stat.getFileURL());
-            SAL_WARN_IF(
-                rc != osl::FileBase::E_None, "desktop.app",
-                "cannot remove file " << stat.getFileURL() << ": " << +rc);
-        }
-    }
-    if (dir.isOpen()) {
-        rc = dir.close();
-        SAL_WARN_IF(
-            rc != osl::FileBase::E_None, "desktop.app",
-            "cannot close directory " << dir.getURL() << ": " << +rc);
-    }
-    rc = osl::Directory::remove(url);
-    SAL_WARN_IF(
-        rc != osl::FileBase::E_None, "desktop.app",
-        "cannot remove directory " << url << ": " << +rc);
-}
-
 // Remove any existing UserInstallation's extensions cache data remaining from
 // old installations.  This addresses at least two problems:
 //
@@ -285,7 +235,7 @@ bool cleanExtensionCache() {
         SAL_WARN( "desktop.app", "cannot open " << fr.getURL() << " for reading: " << +rc);
         break;
     }
-    removeTree(extDir);
+    utl::removeTree(extDir);
     OUString userRcFile(
         "$UNO_USER_PACKAGES_CACHE/registry/"
         "com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
