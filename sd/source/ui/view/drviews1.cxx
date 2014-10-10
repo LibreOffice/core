@@ -850,8 +850,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
         }
 
-        if( mpDrawView )
-            mpDrawView->SdrEndTextEdit();
+        mpDrawView->SdrEndTextEdit();
 
         mpActualPage = NULL;
 
@@ -984,7 +983,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             /**********************************************************************
             * MASTERPAGE
             **********************************************************************/
-            SdrPageView* pPageView = mpDrawView ? mpDrawView->GetSdrPageView() : NULL;
+            SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
             if (pPageView)
             {
