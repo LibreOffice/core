@@ -398,9 +398,15 @@ String STR_SQL_NAME_ERROR
 {
     Text [ en-US ] = "The name '$name$' doesn't match SQL naming constraints.";
 };
+
 String STR_COULD_NOT_DELETE_FILE
 {
     Text [ en-US ] = "The file $filename$ could not be deleted.";
+};
+
+String STR_COULD_NOT_RENAME_FILE
+{
+    Text [ en-US ] = "The file could not be renamed to $filename$.";
 };
 
 String STR_INVALID_COLUMN_TYPE

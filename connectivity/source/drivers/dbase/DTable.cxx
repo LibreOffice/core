@@ -2256,8 +2256,19 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         // now drop the old one
         if( DropImpl() ) // we don't want to delete the memo columns too
         {
-            // rename the new one to the old one
-            pNewTable->renameImpl(m_Name);
+            try
+            {
+                // rename the new one to the old one
+                pNewTable->renameImpl(m_Name);
+            }
+            catch(const css::container::ElementExistException&)
+            {
+                const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                        STR_COULD_NOT_DELETE_FILE,
+                        "$filename$", m_Name
+                     ) );
+                ::dbtools::throwGenericSQLException( sError, *this );
+            }
             // release the temp file
             pNewTable = NULL;
             ::comphelper::disposeComponent(xHoldTable);
