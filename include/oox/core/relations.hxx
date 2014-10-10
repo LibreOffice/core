@@ -68,10 +68,25 @@ struct Relation
 class Relations;
 typedef ::boost::shared_ptr< Relations > RelationsRef;
 
-class OOX_DLLPUBLIC Relations : public ::std::map< OUString, Relation >
+class OOX_DLLPUBLIC Relations
 {
 public:
     explicit            Relations( const OUString& rFragmentPath );
+
+    size_t size() const { return maMap.size(); }
+    size_t count( const OUString& rId ) const { return maMap.count( rId ); }
+    ::std::map< OUString, Relation >::const_iterator begin() const
+    {
+        return maMap.begin();
+    }
+    ::std::map< OUString, Relation >::const_iterator end() const
+    {
+        return maMap.end();
+    }
+    void insert( const ::std::map< OUString, Relation >::value_type& rVal )
+    {
+        maMap.insert( rVal );
+    }
 
     /** Returns the path of the fragment this relations collection is related to. */
     const OUString& getFragmentPath() const { return maFragmentPath; }
@@ -99,6 +114,7 @@ public:
     OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
 
 private:
+    ::std::map< OUString, Relation > maMap;
     OUString     maFragmentPath;
 };
 
