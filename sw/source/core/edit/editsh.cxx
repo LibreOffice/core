@@ -599,7 +599,7 @@ void *SwEditShell::GetIMapInventor() const
 }
 
 // #i73788#
-Graphic SwEditShell::GetIMapGraphic() const
+Graphic SwEditShell::GetIMapGraphic(bool bSwapIn) const
 {
     // returns always a graphic if the cursor is in a Fly
     SET_CURR_SHELL( (SwViewShell*)this );
@@ -612,8 +612,8 @@ Graphic SwEditShell::GetIMapGraphic() const
         {
             SwGrfNode & rGrfNode(static_cast<SwGrfNode&>(rNd));
             const Graphic& rGrf = rGrfNode.GetGrf();
-            if( rGrf.IsSwapOut() || ( rGrfNode.IsLinkedFile() &&
-                                    GRAPHIC_DEFAULT == rGrf.GetType() ) )
+            if( bSwapIn && (rGrf.IsSwapOut() || ( rGrfNode.IsLinkedFile() &&
+                                    GRAPHIC_DEFAULT == rGrf.GetType() ) ) )
             {
                 bool const bResult = rGrfNode.SwapIn(true);
                 OSL_ENSURE(bResult, "Graphic could not be loaded" );

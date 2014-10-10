@@ -619,7 +619,7 @@ public:
 
     // #i73788#
     /// Remove default parameter, because method always called this default value.
-    Graphic GetIMapGraphic() const; ///< @return a graphic for all Flys!
+    Graphic GetIMapGraphic(bool bSwapIn = true) const; ///< @return a graphic for all Flys!
     const SwFlyFrmFmt* FindFlyByName( const OUString& rName, sal_uInt8 nNdTyp = 0 ) const;
 
     /** @return a ClientObject, if CurCrsr->Point() points to a SwOLENode

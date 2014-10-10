@@ -1509,7 +1509,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         if ( nSel & nsSelectionType::SEL_GRF )
                             bDisable = GRAPHIC_NONE == rSh.GetGraphicType();
                         else
-                            bDisable = GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                            bDisable = GRAPHIC_NONE == rSh.GetIMapGraphic(false).GetType();
                     }
 
                     if( bDisable )
@@ -1695,7 +1695,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                     // #i102253# applied patch from OD (see task)
                                     bDisable =
                                         nSel & nsSelectionType::SEL_FRM ||
-                                        GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                                        GRAPHIC_NONE == rSh.GetIMapGraphic(false).GetType();
                                 }
                             }
                             bSet = bDisable ? sal_False : rWrap.IsContour();
