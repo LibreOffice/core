@@ -1513,6 +1513,57 @@ namespace svgio
             return rCandidate;
         }
 
+        // #i125325#
+        OUString removeBlockComments(const OUString& rCandidate)
+        {
+            const sal_Int32 nLen(rCandidate.getLength());
+
+            if(nLen)
+            {
+                sal_Int32 nPos(0);
+                OUStringBuffer aBuffer;
+                bool bChanged(false);
+                sal_Int32 nInsideComment(0);
+                const sal_Unicode aCommentSlash('/');
+                const sal_Unicode aCommentStar('*');
+
+                while(nPos < nLen)
+                {
+                    const sal_Unicode aChar(rCandidate[nPos]);
+                    const bool bStart(aCommentSlash == aChar && nPos + 1 < nLen && aCommentStar == rCandidate[nPos + 1]);
+                    const bool bEnd(aCommentStar == aChar && nPos + 1 < nLen && aCommentSlash == rCandidate[nPos + 1]);
+
+                    if(bStart)
+                    {
+                        nPos += 2;
+                        nInsideComment++;
+                        bChanged = true;
+                    }
+                    else if(bEnd)
+                    {
+                        nPos += 2;
+                        nInsideComment--;
+                    }
+                    else
+                    {
+                        if(!nInsideComment)
+                        {
+                            aBuffer.append(aChar);
+                        }
+
+                        nPos++;
+                    }
+                }
+
+                if(bChanged)
+                {
+                    return aBuffer.makeStringAndClear();
+                }
+            }
+
+            return rCandidate;
+        }
+
         OUString consolidateContiguosSpace(const OUString& rCandidate)
         {
             const sal_Int32 nLen(rCandidate.getLength());
