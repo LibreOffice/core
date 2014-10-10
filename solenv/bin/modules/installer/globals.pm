@@ -39,10 +39,10 @@ BEGIN
     $build = "";
     $minor = "";
     $lastminor = "";
-    $compiler = "";
     $os = "";
     $cpuname = "";
     $com = "";
+    $platformid = "";
     $pro = 0;
     $dounzip = 1;
     $languages_defined_in_productlist = 0;

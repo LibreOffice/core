@@ -78,7 +78,7 @@ sub create_directories
     }
     else
     {
-        $path = $path . $par2script::globals::compiler . $par2script::globals::separator;
+        $path = $path . $par2script::globals::platformid . $par2script::globals::separator;
         create_directory($path);
 
         $path = $path . $par2script::globals::product . $par2script::globals::separator;
