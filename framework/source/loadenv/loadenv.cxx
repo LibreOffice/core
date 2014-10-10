@@ -853,7 +853,7 @@ void LoadEnv::impl_detectTypeAndFilter()
 }
 
 bool LoadEnv::impl_handleContent()
-    throw(LoadEnvException, css::uno::RuntimeException, beans::IllegalTypeException)
+    throw(LoadEnvException, css::uno::RuntimeException, beans::IllegalTypeException, std::exception)
 {
     // SAFE -> -----------------------------------
     osl::ClearableMutexGuard aReadLock(m_mutex);
