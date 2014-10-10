@@ -55,6 +55,8 @@ public:
     void testAutoBackgroundXLSX();
     void testNumberFormatsXLSX();
 
+    void testTransparentBackground(OUString filename);
+
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
     CPPUNIT_TEST(testSteppedLines);
@@ -593,9 +595,9 @@ void Chart2ImportTest::testFdo78080()
     CPPUNIT_ASSERT(!xTitle.is());
 }
 
-void Chart2ImportTest::testFdo54361()
+void Chart2ImportTest::testTransparentBackground(OUString filename)
 {
-    load("/chart2/qa/extras/data/xlsx/", "fdo54361.xlsx");
+    load("/chart2/qa/extras/data/xlsx/", filename);
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
@@ -609,6 +611,11 @@ void Chart2ImportTest::testFdo54361()
     xPropSet -> getPropertyValue("FillStyle") >>= aStyle;
 
     CPPUNIT_ASSERT_MESSAGE("Background needs to be with solid fill style", aStyle == 1);
+}
+void Chart2ImportTest::testFdo54361()
+{
+    testTransparentBackground("fdo54361.xlsx");
+    testTransparentBackground("fdo54361-1.xlsx");
 }
 
 void Chart2ImportTest::testAutoBackgroundXLSX()
