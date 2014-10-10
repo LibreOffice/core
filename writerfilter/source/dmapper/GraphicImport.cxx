@@ -258,6 +258,10 @@ public:
     std::queue<OUString>& m_rPositivePercentages;
     OUString sAnchorId;
     comphelper::SequenceAsHashMap m_aInteropGrabBag;
+    boost::optional<sal_Int32> m_oEffectExtentLeft;
+    boost::optional<sal_Int32> m_oEffectExtentTop;
+    boost::optional<sal_Int32> m_oEffectExtentRight;
+    boost::optional<sal_Int32> m_oEffectExtentBottom;
 
     GraphicImport_Impl(GraphicImportType eImportType, DomainMapper&   rDMapper, std::queue<OUString>& rPositivePercentages) :
         nXSize(0)
@@ -411,6 +415,23 @@ public:
             SAL_WARN("writerfilter", "failed. Message :" << e.Message);
         }
     }
+
+    /// Getter for m_aInteropGrabBag, but also merges in the values from other members if they are set.
+    comphelper::SequenceAsHashMap getInteropGrabBag()
+    {
+        comphelper::SequenceAsHashMap aEffectExtent;
+        if (m_oEffectExtentLeft)
+            aEffectExtent["l"] <<= *m_oEffectExtentLeft;
+        if (m_oEffectExtentTop)
+            aEffectExtent["t"] <<= *m_oEffectExtentTop;
+        if (m_oEffectExtentRight)
+            aEffectExtent["r"] <<= *m_oEffectExtentRight;
+        if (m_oEffectExtentBottom)
+            aEffectExtent["b"] <<= *m_oEffectExtentBottom;
+        if (!aEffectExtent.empty())
+            m_aInteropGrabBag["CT_EffectExtent"] <<= aEffectExtent.getAsConstPropertyValueList();
+        return m_aInteropGrabBag;
+    }
 };
 
 GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> const& xComponentContext,
@@ -530,12 +551,18 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                 m_pImpl->setYSize(nDim);
         }
         break;
-        case NS_ooxml::LN_CT_EffectExtent_l:// 90907;
-        case NS_ooxml::LN_CT_EffectExtent_t:// 90908;
-        case NS_ooxml::LN_CT_EffectExtent_r:// 90909;
-        case NS_ooxml::LN_CT_EffectExtent_b:// 90910;
-            //todo: extends the wrapping size of the object, e.g. if shadow is added
-        break;
+        case NS_ooxml::LN_CT_EffectExtent_l:
+            m_pImpl->m_oEffectExtentLeft = nIntValue;
+            break;
+        case NS_ooxml::LN_CT_EffectExtent_t:
+            m_pImpl->m_oEffectExtentTop = nIntValue;
+            break;
+        case NS_ooxml::LN_CT_EffectExtent_r:
+            m_pImpl->m_oEffectExtentRight = nIntValue;
+            break;
+        case NS_ooxml::LN_CT_EffectExtent_b:
+            m_pImpl->m_oEffectExtentBottom = nIntValue;
+            break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_id:// 90650;
             //id of the object - ignored
         break;
@@ -819,7 +846,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         // Get the grab-bag set by oox, merge with our one and then put it back.
                         comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
-                        aInteropGrabBag.update(m_pImpl->m_aInteropGrabBag);
+                        aInteropGrabBag.update(m_pImpl->getInteropGrabBag());
                         xShapeProps->setPropertyValue("InteropGrabBag", uno::makeAny(aInteropGrabBag.getAsConstPropertyValueList()));
                     }
                 }
