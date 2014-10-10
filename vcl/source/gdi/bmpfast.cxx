@@ -314,26 +314,6 @@ inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
     }
 }
 
-template <unsigned ALPHABITS, sal_uLong SRCFMT, sal_uLong DSTFMT>
-inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
-    const TrueColorPixelPtr<SRCFMT>& rSrc, unsigned nAlphaVal,
-    int nPixelCount )
-{
-    if( nAlphaVal == ~(~0 << ALPHABITS) )
-        ImplConvertLine( rDst, rSrc, nPixelCount );
-    else if( nAlphaVal )
-    {
-        TrueColorPixelPtr<SRCFMT> aSrc( rSrc );
-        TrueColorPixelPtr<DSTFMT> aDst( rDst );
-        while( --nPixelCount >= 0 )
-        {
-            ImplBlendPixels<ALPHABITS>( aDst, aSrc, nAlphaVal );
-            ++aDst;
-            ++aSrc;
-        }
-    }
-}
-
 static bool ImplCopyImage( BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer )
 {
     const int nSrcLinestep = rSrcBuffer.mnScanlineSize;
