@@ -525,11 +525,11 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
     sal_uInt16 nCmdId;
     switch (eNavMode)
     {
-        case NAV_LMODE_DOCS:        nCmdId = IID_DOCS;      break;
+        case NAV_LMODE_SCENARIOS:   nCmdId = IID_SCENARIOS; break;
         case NAV_LMODE_AREAS:       nCmdId = IID_AREAS;     break;
 // The follwing case can never be reach due to how eNavMode is set-up
+//        case NAV_LMODE_DOCS:        nCmdId = IID_DOCS;      break;
 //        case NAV_LMODE_DBAREAS:     nCmdId = IID_DBAREAS;   break;
-//        case NAV_LMODE_SCENARIOS:   nCmdId = IID_SCENARIOS; break;
         default:                    nCmdId = 0;
     }
     if (nCmdId)
