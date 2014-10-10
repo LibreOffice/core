@@ -96,7 +96,7 @@ MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void MyWorkWindow::Paint( const Rectangle& rRect )
 {
-    SAL_INFO("vcl.icontest", "==> Paint! " << nPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - nStartTime);
+    std::cerr << "==> Paint! " << nPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - nStartTime << std::endl;
     WorkWindow::Paint( rRect );
     Invalidate( INVALIDATE_CHILDREN );
 }
@@ -199,7 +199,7 @@ void MyOpenGLWorkWindow::LoadTexture()
 
 void MyOpenGLWorkWindow::Paint( const Rectangle& )
 {
-    SAL_INFO("vcl.icontest", "==> Paint! "<< nPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - nStartTime);
+    std::cerr << "==> Paint! "<< nPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - nStartTime << std::endl;
     OpenGLContext& aCtx = mpOpenGLWindow->getContext();
     aCtx.requestLegacyContext();
     CHECK_GL_ERROR();
