@@ -82,14 +82,14 @@ class SfxItemSet;
  void SfxStub##aShellClass##aExecMethod( \
    SfxShell *pShell, SfxRequest& rReq) \
   { \
-    (( aShellClass* ) pShell )->aExecMethod( rReq ); \
+      static_cast<aShellClass*>(pShell)->aExecMethod( rReq ); \
   }
 
 #define SFX_STATE_STUB( aShellClass, aStateMethod) \
  void  SfxStub##aShellClass##aStateMethod( \
    SfxShell *pShell, SfxItemSet& rSet) \
   { \
-    (( aShellClass* ) pShell )->aStateMethod( rSet ); \
+      static_cast<aShellClass*>(pShell)->aStateMethod( rSet ); \
   }
 
 #define SFX_STUB_PTR( aShellClass, aMethod ) \
