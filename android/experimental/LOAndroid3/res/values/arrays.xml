@@ -29,7 +29,7 @@
         <item >0</item>
         <item >1</item>
     </string-array>
-    
+
     <!-- Preference Name Arrays -->
     <string-array name="file_view_modes">
         <item >EVERYTHING</item>
@@ -51,6 +51,6 @@
         <item >Largest First</item>
         <item >Smallest First</item>
     </string-array>
-    
-    
+
+
 </resources>

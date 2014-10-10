@@ -12,16 +12,16 @@
 
     <GridView
         android:id="@+id/file_explorer_grid_view"
-    	android:layout_width="fill_parent" 
-	    android:layout_height="fill_parent"
-	    android:columnWidth="120dp"
-	    android:numColumns="auto_fit"
-	    android:verticalSpacing="10dp"
-	    android:horizontalSpacing="10dp"
-	    android:stretchMode="columnWidth"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:columnWidth="120dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth"
         android:background="#ffeeeeee"
-	    android:gravity="center">
+        android:gravity="center">
     </GridView>
-	
-	
+
+
 </LinearLayout>
