@@ -488,7 +488,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*out*
 
                 // Read all numbers
                 while( testCharFlags( *pos, CHAR_IN_OCT_NUMBER ) )
-                    c = *pos++;
+                    ++pos;
             }
             // Hexadecimal?
             else if( *pos == 'h' || *pos == 'H' )
