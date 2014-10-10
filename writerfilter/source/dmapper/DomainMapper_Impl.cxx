@@ -1664,13 +1664,19 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& 
     // Create the redlines here from lowest (formats) to highest (inserts/removals) priority, since the last one is
     // what Writer presents graphically, so this will show deletes as deleted text and not as just formatted text being there.
     if( GetTopContextOfType(CONTEXT_PARAGRAPH) )
-        for( std::vector<RedlineParamsPtr>::const_iterator it = GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines().begin();
-             it != GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines().end(); ++it )
+    {
+        std::vector<RedlineParamsPtr>& avRedLines = GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines();
+        for( std::vector<RedlineParamsPtr>::const_iterator it = avRedLines.begin();
+             it != avRedLines.end(); ++it )
             CreateRedline( xRange, *it );
+    }
     if( GetTopContextOfType(CONTEXT_CHARACTER) )
-        for( std::vector<RedlineParamsPtr>::const_iterator it = GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().begin();
-             it != GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().end(); ++it )
+    {
+        std::vector<RedlineParamsPtr>& avRedLines = GetTopContextOfType(CONTEXT_CHARACTER)->Redlines();
+        for( std::vector<RedlineParamsPtr>::const_iterator it = avRedLines.begin();
+             it != avRedLines.end(); ++it )
             CreateRedline( xRange, *it );
+    }
     std::vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.top().begin( );
     for (; pIt != m_aRedlines.top().end( ); ++pIt )
         CreateRedline( xRange, *pIt );
