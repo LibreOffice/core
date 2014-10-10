@@ -42,6 +42,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
 		$(SRCDIR)/configure.ac \
 		$(SRCDIR)/config_host/*.h.in \
+		$(SRCDIR)/android/experimental/LOAndroid3/AndroidManifest.xml.in \
 		$(BUILDDIR)/autogen.input \
 		$(BUILDDIR)/autogen.lastrun \
 		)
