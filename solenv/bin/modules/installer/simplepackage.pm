@@ -665,7 +665,7 @@ sub create_simple_package
     my $extensionfolder = get_extensions_dir($subfolderdir);
     installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
 
-    if ( $installer::globals::compiler =~ /^unxmacx/ )
+    if ( $installer::globals::platformid eq 'macosx_x86_64' )
     {
         installer::worker::put_scpactions_into_installset("$installdir/$packagename");
     }

@@ -47,9 +47,6 @@ sub create_pathvariables
     my $localcommonpath  = $environment->{'LOCAL_COMMON_OUT'};
     $variables{'localcommonpath'} = $localcommonpath;
 
-    my $platformname  = $environment->{'OUTPATH'};
-    $variables{'platformname'} = $platformname;
-
     my $installscriptdir = $environment->{'WORKDIR'} . $installer::globals::separator . "InstallScriptTarget";
     $variables{'installscriptdir'} = $installscriptdir;
 
@@ -106,10 +103,10 @@ sub set_global_environment_variables
     my ( $environment ) = @_;
 
     $installer::globals::build = $environment->{'LIBO_VERSION_MAJOR'}.$environment->{'LIBO_VERSION_MINOR'}."0";
-    $installer::globals::compiler = $environment->{'OUTPATH'};
     $installer::globals::os = $environment->{'OS'};
     $installer::globals::com = $environment->{'COM'};
     $installer::globals::cpuname = $environment->{'CPUNAME'};
+    $installer::globals::platformid = $environment->{'PLATFORMID'};
 
     if ( $ENV{'LAST_MINOR'} ) { $installer::globals::lastminor = $ENV{'LAST_MINOR'}; }
 

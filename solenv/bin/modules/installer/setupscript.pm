@@ -57,7 +57,7 @@ sub set_setupscript_name
         installer::exiter::exit_program("ERROR: Setup script not defined on command line (-l) and not in product list!", "set_setupscript_name");
     }
 
-    if ( $installer::globals::compiler =~ /wnt/ )
+    if ( $installer::globals::os eq 'WNT')
     {
         $scriptname .= ".inf";
     }

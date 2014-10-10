@@ -101,7 +101,7 @@ sub create_directories
     }
     else
     {
-        $path = $path . $pre2par::globals::compiler . $pre2par::globals::separator;
+        $path = $path . $pre2par::globals::platformid . $pre2par::globals::separator;
         create_directory($path);
 
         $path = $path . $pre2par::globals::product . $pre2par::globals::separator;

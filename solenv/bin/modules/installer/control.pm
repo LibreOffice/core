@@ -270,7 +270,7 @@ sub check_system_environment
         CPUNAME
         OS
         COM
-        OUTPATH
+        PLATFORMID
         LOCAL_OUT
         LOCAL_COMMON_OUT
         WORKDIR
