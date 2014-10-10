@@ -44,7 +44,6 @@ The following parameter are needed:
 -b: Build, e.g. srx645 (optional)
 -m: Minor, e.g. m10 (optional)
 -simple: Path to do a simple install to
--c: Compiler, e.g. wntmsci8, unxlngi5, unxsols4, ... (optional)
 -u: Path, in which zipfiles are unpacked (optional)
 -msitemplate: Source of the msi file templates (Windows compiler only)
 -msilanguage: Source of the msi file templates (Windows compiler only)
@@ -117,7 +116,6 @@ sub getparameter
         elsif ($param eq "-b") { $installer::globals::build = shift(@ARGV); }
         elsif ($param eq "-m") { $installer::globals::minor = shift(@ARGV); }
         elsif ($param eq "-dontunzip") { $installer::globals::dounzip = 0; }
-        elsif ($param eq "-c") { $installer::globals::compiler = shift(@ARGV); }
         elsif ($param eq "-pro") { $installer::globals::pro = 1; }
         elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
         elsif ($param eq "-quiet") { $installer::globals::quiet = 1; }
@@ -245,19 +243,21 @@ sub setglobalvariables
     # makefile calling the perl program.
     $installer::globals::installertypedir = $installer::globals::packageformat;
 
-    if ( $installer::globals::compiler =~ /wnt(msc|gcc)i/ )
+    if ( $installer::globals::os eq 'WNT' )
     {
-        $installer::globals::iswindowsbuild = 1;
-        $installer::globals::iswin64build = 0;
+        if ( $installer::globals::cpuname eq 'INTEL')
+        {
+            $installer::globals::iswindowsbuild = 1;
+            $installer::globals::iswin64build = 0;
+        }
+        else
+        {
+            $installer::globals::iswindowsbuild = 1;
+            $installer::globals::iswin64build = 1;
+        }
     }
 
-    if ( $installer::globals::compiler =~ /wnt(msc|gcc)x/ )
-    {
-        $installer::globals::iswindowsbuild = 1;
-        $installer::globals::iswin64build = 1;
-    }
-
-    if ( $installer::globals::compiler =~ /unxso[lg][siux]/ )
+    if ( $installer::globals::os eq 'SOLARIS')
     {
         $installer::globals::issolarisbuild = 1;
         if ( $installer::globals::packageformat eq "pkg" )
@@ -265,9 +265,17 @@ sub setglobalvariables
             $installer::globals::issolarispkgbuild = 1;
             $installer::globals::epmoutpath = "packages";
         }
+        if ( $installer::globals::cpuname eq 'INTEL')
+        {
+            $installer::globals::issolarisx86build = 1;
+        }
+        else
+        {
+            $installer::globals::issolarissparcbuild = 1;
+        }
     }
 
-    if ( $installer::globals::compiler =~ /unxmacx/ )
+    if ( $installer::globals::platformid eq 'macosx_x86_64')
     {
         $installer::globals::ismacbuild = 1;
 
@@ -277,12 +285,12 @@ sub setglobalvariables
         }
     }
 
-    if ( $installer::globals::compiler =~ /unxobsd/ )
+    if ( $installer::globals::os eq 'OPENBSD')
     {
             $installer::globals::epmoutpath = "openbsd";
     }
 
-    if ( $installer::globals::compiler =~ /unxfbsd/ )
+    if ( $installer::globals::os eq 'FREEBSD')
     {
         $installer::globals::isfreebsdbuild = 1;
 
@@ -293,11 +301,7 @@ sub setglobalvariables
         }
     }
 
-    if ( $installer::globals::compiler =~ /unxso[lg]s/ ) { $installer::globals::issolarissparcbuild = 1; }
-
-    if ( $installer::globals::compiler =~ /unxso[lg]i/ ) { $installer::globals::issolarisx86build = 1; }
-
-    if ($ENV{OS} eq 'AIX')
+    if ($installer::globals::os eq 'AIX')
     {
         if ( $installer::globals::packageformat eq "rpm" )
         {
@@ -307,7 +311,7 @@ sub setglobalvariables
         if ( $installer::globals::rpm eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"\$RPM\" has to be defined!", "setglobalvariables"); }
     }
 
-    if ($ENV{OS} eq 'LINUX')
+    if ($installer::globals::os eq 'LINUX')
     {
         $installer::globals::islinuxbuild = 1;
         if ( $installer::globals::packageformat eq "rpm" )
@@ -374,7 +378,7 @@ sub setglobalvariables
 
         my $dirsave = $installer::globals::temppath;
 
-        if ( $installer::globals::compiler =~ /^unxmac/ )
+        if ( $installer::globals::platformid eq 'maosx_x86_64')
         {
             chmod 0777, $installer::globals::temppath;
         }
@@ -385,7 +389,7 @@ sub setglobalvariables
 
         if ( ! -d $installer::globals::temppath ) { installer::exiter::exit_program("ERROR: Failed to create directory $installer::globals::temppath ! Possible reason: Wrong privileges in directory $dirsave .", "setglobalvariables"); }
 
-        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::compiler;
+        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::platformid;
         installer::systemactions::create_directory($installer::globals::temppath);
         if ( $^O =~ /cygwin/i )
         {
@@ -415,7 +419,7 @@ sub control_required_parameter
     if (!($installer::globals::is_copy_only_project))
     {
         ##############################################################################################
-        # idt template path. Only required for Windows build ($installer::globals::compiler =~ /wntmsci/)
+        # idt template path. Only required for Windows build
         # for the creation of the msi database.
         ##############################################################################################
 
@@ -427,7 +431,7 @@ sub control_required_parameter
         }
 
         ##############################################################################################
-        # idt language path. Only required for Windows build ($installer::globals::compiler =~ /wntmsci/)
+        # idt language path. Only required for Windows build
         # for the creation of the msi database.
         ##############################################################################################
 
@@ -512,7 +516,10 @@ sub outputparameter
         push(@output, "Taking setup script from workdir\n");
     }
     push(@output, "Unpackpath: $installer::globals::unpackpath\n");
-    push(@output, "Compiler: $installer::globals::compiler\n");
+    push(@output, "PLATFORMID: $installer::globals::platformid\n");
+    push(@output, "OS: $installer::globals::os\n");
+    push(@output, "CPUNAME: $installer::globals::cpuname\n");
+    push(@output, "COM: $installer::globals::com\n");
     push(@output, "Product: $installer::globals::product\n");
     push(@output, "BuildID: $installer::globals::buildid\n");
     push(@output, "Build: $installer::globals::build\n");
