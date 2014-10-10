@@ -29,8 +29,8 @@ $(eval $(call gb_Executable_add_libs,icontest,\
 
 else ifeq ($(OS),WNT)
 
-$(eval $(call gb_Executable_add_libs,icontest,\
-    opengl32.lib \
+$(eval $(call gb_Executable_use_system_win32_libs,icontest,\
+    opengl32 \
 ))
 
 else ifeq ($(OS),MACOSX)
