@@ -360,11 +360,10 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         xDiaProp->getPropertyValue( "IncludeHiddenCells" ) >>= bIncludeHiddenCells;
         xDiaProp->getPropertyValue( "StartingAngle" ) >>= nStartingAngle;
 
-    if( m_pDrawModelWrapper.get() )
-    {
-        SolarMutexGuard aSolarGuard;
-        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
-        m_pDrawModelWrapper.reset();
+        if (nDimensionCount == 3)
+        {
+            xDiaProp->getPropertyValue( "3DRelativeHeight" ) >>= n3DRelativeHeight;
+        }
     }
     catch( const uno::Exception & ex )
     {
@@ -1106,10 +1105,11 @@ ChartView::~ChartView()
     if ( xComp.is() )
         xComp->dispose();
 
-        if (nDimensionCount == 3)
-        {
-             xDiaProp->getPropertyValue( "3DRelativeHeight" ) >>= n3DRelativeHeight;
-        }
+    if( m_pDrawModelWrapper.get() )
+    {
+        SolarMutexGuard aSolarGuard;
+        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
+        m_pDrawModelWrapper.reset();
     }
     m_xDrawPage = NULL;
     impl_deleteCoordinateSystems();
