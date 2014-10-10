@@ -626,6 +626,29 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
             break;
         }
     }
+    else if(const SdrObject* pObject = pFrmFmt->FindRealSdrObject())
+    {
+        // No shadow, but we have an idea what was the original effectExtent.
+        uno::Any aAny;
+        pObject->GetGrabBagItem(aAny);
+        comphelper::SequenceAsHashMap aGrabBag(aAny);
+        comphelper::SequenceAsHashMap::iterator it = aGrabBag.find("CT_EffectExtent");
+        if (it != aGrabBag.end())
+        {
+            comphelper::SequenceAsHashMap aEffectExtent(it->second);
+            for (std::pair<const OUString, uno::Any>& rDirection : aEffectExtent)
+            {
+                if (rDirection.first == "l" && rDirection.second.has<sal_Int32>())
+                    aLeftExt = OString::number(rDirection.second.get<sal_Int32>());
+                else if (rDirection.first == "t" && rDirection.second.has<sal_Int32>())
+                    aTopExt = OString::number(rDirection.second.get<sal_Int32>());
+                else if (rDirection.first == "r" && rDirection.second.has<sal_Int32>())
+                    aRightExt = OString::number(rDirection.second.get<sal_Int32>());
+                else if (rDirection.first == "b" && rDirection.second.has<sal_Int32>())
+                    aBottomExt = OString::number(rDirection.second.get<sal_Int32>());
+            }
+        }
+    }
 
     m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_effectExtent,
                                             XML_l, aLeftExt,

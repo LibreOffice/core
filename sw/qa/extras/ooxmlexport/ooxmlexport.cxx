@@ -447,6 +447,15 @@ DECLARE_OOXMLEXPORT_TEST(testCropPixel, "crop-pixel.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testEffectExtent, "effect-extent.docx")
+{
+    // The problem was that in case there were no shadows on the picture, we
+    // wrote a <wp:effectExtent> full or zeros.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        // E.g. this was 0.
+        assertXPath(pXmlDoc, "//wp:effectExtent", "l", "114300");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
