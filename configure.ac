@@ -7783,15 +7783,7 @@ fi
 
 if test $enable_python = system; then
     if test -z "$PYTHON_CFLAGS" -a $_os = Darwin; then
-        # Make sure we use the 2.6 Python when building against the
-        # 10.6 SDK.
-        case $with_macosx_sdk in
-        10.8)
-            python_version=2.7;;
-        *)
-            # 10.9 etc.
-            python_version=2.7;;
-        esac
+        python_version=2.7
         PYTHON=python$python_version
         if test -d "$FRAMEWORKSHOME/Python.framework/Versions/${python_version}/include/python${python_version}"; then
             PYTHON_CFLAGS="-I$FRAMEWORKSHOME/Python.framework/Versions/${python_version}/include/python${python_version}"
