@@ -248,7 +248,7 @@ namespace comphelper
         if  (   !m_aAllowedTypes.empty()
             &&  m_aAllowedTypes.find( aProperty.Type ) == m_aAllowedTypes.end()
             )
-            throw IllegalTypeException( OUString(), *this );
+            throw IllegalArgumentException( OUString(), *this, 1 );
 
         m_aDynamicProperties.addVoidProperty( aProperty.Name, aProperty.Type, findFreeHandle(), aProperty.Attributes );
 
