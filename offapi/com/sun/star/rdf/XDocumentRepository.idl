@@ -169,6 +169,7 @@ interface XDocumentRepository : XRepository
     com::sun::star::beans::Pair< sequence<Statement>, boolean >
             getStatementRDFa([in] XMetadatable Element)
         raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::NoSuchElementException,
                 RepositoryException );
 
     /** gets matching RDFa statements from the repository.
