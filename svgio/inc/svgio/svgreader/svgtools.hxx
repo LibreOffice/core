@@ -236,6 +236,10 @@ namespace svgio
         rtl::OUString whiteSpaceHandlingDefault(const rtl::OUString& rCandidate);
         rtl::OUString whiteSpaceHandlingPreserve(const rtl::OUString& rCandidate);
 
+        // #125325# removes block comment of the general form '/* ... */', returns
+        // an adapted string or the original if no comments included
+        rtl::OUString removeBlockComments(const rtl::OUString& rCandidate);
+
     } // end of namespace svgreader
 } // end of namespace svgio
 

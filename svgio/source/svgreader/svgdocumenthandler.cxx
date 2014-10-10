@@ -512,7 +512,16 @@ namespace svgio
                     if(maCssContents.size())
                     {
                         // need to interpret css styles and remember them as StyleSheets
-                        pCssStyle->addCssStyleSheet(*(maCssContents.end() - 1));
+                        // #125325# Caution! the Css content may contain block comments
+                        // (see http://www.w3.org/wiki/CSS_basics#CSS_comments). These need
+                        // to be removed first
+                        const rtl::OUString aCommentFreeSource(removeBlockComments(*(maCssContents.end() - 1)));
+
+                        if(aCommentFreeSource.getLength())
+                        {
+                            pCssStyle->addCssStyleSheet(aCommentFreeSource);
+                        }
+
                         maCssContents.pop_back();
                     }
                     else
