@@ -1,3 +1,4 @@
+/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -86,30 +87,30 @@ import java.nio.ByteOrder;
 
 public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavigationListener {
     private String tag = "file_manager";
-	private SharedPreferences prefs;
+    private SharedPreferences prefs;
     private File homeDirectory;
-	private File currentDirectory;
-	private int filterMode = FileUtilities.ALL;
-	private int viewMode;
-	private int sortMode;
-	
-	FileFilter fileFilter;
-	FilenameFilter filenameFilter;
-	private File[] filePaths;
-	
-	
-	private static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
-	private static final String FILTER_MODE_KEY = "FILTER_MODE";
-	public static final String EXPLORER_VIEW_TYPE_KEY = "EXPLORER_VIEW_TYPE";
-	public static final String EXPLORER_PREFS_KEY = "EXPLORER_PREFS";
-	public static final String SORT_MODE_KEY = "SORT_MODE";
-	
-	public static final int GRID_VIEW = 0;
-	public static final int LIST_VIEW = 1;
-	
-	GridView gv;
-	ListView lv;
-	
+    private File currentDirectory;
+    private int filterMode = FileUtilities.ALL;
+    private int viewMode;
+    private int sortMode;
+
+    FileFilter fileFilter;
+    FilenameFilter filenameFilter;
+    private File[] filePaths;
+
+
+    private static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
+    private static final String FILTER_MODE_KEY = "FILTER_MODE";
+    public static final String EXPLORER_VIEW_TYPE_KEY = "EXPLORER_VIEW_TYPE";
+    public static final String EXPLORER_PREFS_KEY = "EXPLORER_PREFS";
+    public static final String SORT_MODE_KEY = "SORT_MODE";
+
+    public static final int GRID_VIEW = 0;
+    public static final int LIST_VIEW = 1;
+
+    GridView gv;
+    ListView lv;
+
     private static final String TAG = "ThumbnailGenerator";
     private static final int SMALLSIZE = 128;
 
@@ -134,21 +135,21 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         homeDirectory.mkdirs();
         currentDirectory = homeDirectory;
         //Load default settings
-        
+
         Bootstrap.setup(this);
 
         Bootstrap.putenv("SAL_LOG=yes");
 
     }
-    
+
     public void createUI(){
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);//This should show current directory if anything
         /*actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.file_view_modes,
-                android.R.layout.simple_spinner_dropdown_item);
-        actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-        */
+          SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.file_view_modes,
+          android.R.layout.simple_spinner_dropdown_item);
+          actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
+          */
         //make the navigation spinner
         Context context = actionBar.getThemedContext();
         ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.file_view_modes, android.R.layout.simple_spinner_item);
@@ -170,38 +171,38 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-    	if( viewMode == GRID_VIEW){
-	        // code to make a grid view
-        	setContentView(R.layout.file_grid);
-	    	gv = (GridView)findViewById(R.id.file_explorer_grid_view);
-        	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
-	        gv.setOnItemClickListener(new OnItemClickListener() {
-	            public void onItemClick(AdapterView<?> parent, View view,
-	                int position, long id) {
-	            	File file = filePaths[position];
-	            	if(!file.isDirectory()){
+        if( viewMode == GRID_VIEW){
+            // code to make a grid view
+            setContentView(R.layout.file_grid);
+            gv = (GridView)findViewById(R.id.file_explorer_grid_view);
+            filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
+            gv.setOnItemClickListener(new OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+                    File file = filePaths[position];
+                    if(!file.isDirectory()){
                         open(file);
-	            	}else{
+                    }else{
                         openDirectory( file );
-	            	}
-	            		
-	            }
-	          });
-	        gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
-	        actionBar.setSelectedNavigationItem( filterMode + 1 );//This triggers the listener which modifies the view.
+                    }
+
+                }
+            });
+            gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
+            actionBar.setSelectedNavigationItem( filterMode + 1 );//This triggers the listener which modifies the view.
         }else{
-        	setContentView(R.layout.file_list);
-        	lv = (ListView)findViewById( R.id.file_explorer_list_view);
-        	lv.setClickable(true);
-        	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
-        	lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
-        	actionBar.setSelectedNavigationItem( filterMode + 1 );
+            setContentView(R.layout.file_list);
+            lv = (ListView)findViewById( R.id.file_explorer_list_view);
+            lv.setClickable(true);
+            filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
+            lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
+            actionBar.setSelectedNavigationItem( filterMode + 1 );
         }
-    	
+
     }
-    
+
     public void openDirectory(File dir ){
-    	currentDirectory = dir; 
+        currentDirectory = dir;
         if( !currentDirectory.equals( homeDirectory )){
             ActionBar actionBar = getActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -209,68 +210,68 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
             ActionBar actionBar = getActionBar();
             actionBar.setDisplayHomeAsUpEnabled( false );
         }
-    	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
-    	FileUtilities.sortFiles( filePaths, sortMode );
-/*
-    	for( int i = 0; i < fileNames.length; i++){
-            fileNames[ i ] = filePaths[ i ].getName();
-            if( !FileUtilities.hasThumbnail( filePaths[ i ] ) )
-            {
-                new ThumbnailGenerator( filePaths[ i ] );
-            }
-    	}
-*/
-    	if( viewMode == GRID_VIEW){
-    		gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
-    	}else{
-    		lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
-    	}
+        filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
+        FileUtilities.sortFiles( filePaths, sortMode );
+        /*
+           for( int i = 0; i < fileNames.length; i++){
+           fileNames[ i ] = filePaths[ i ].getName();
+           if( !FileUtilities.hasThumbnail( filePaths[ i ] ) )
+           {
+           new ThumbnailGenerator( filePaths[ i ] );
+           }
+           }
+           */
+        if( viewMode == GRID_VIEW){
+            gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
+        }else{
+            lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
+        }
     }
-    
+
     public void open(File file) {
         Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
         i.setComponent(new ComponentName(
-                "org.libreoffice",
-                "org.libreoffice.LibreOfficeMainActivity"));
+                    "org.libreoffice",
+                    "org.libreoffice.LibreOfficeMainActivity"));
         startActivity(i);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
-        
+
         MenuItem item = (MenuItem)menu.findItem(R.id.menu_view_toggle);
         if( viewMode == GRID_VIEW){
-        	item.setTitle(R.string.list_view);
-        	item.setIcon( R.drawable.light_view_as_list );
+            item.setTitle(R.string.list_view);
+            item.setIcon( R.drawable.light_view_as_list );
         }else{
-        	item.setTitle(R.string.grid_view);
-        	item.setIcon( R.drawable.light_view_as_grid );
+            item.setTitle(R.string.grid_view);
+            item.setIcon( R.drawable.light_view_as_grid );
         }
         return true;
     }
-    
+
     public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	        case android.R.id.home:
-	            if( !currentDirectory.equals( homeDirectory ) ){
-	            	openDirectory( currentDirectory.getParentFile() );
-	            }
-	            break;
-	        case R.id.menu_view_toggle:
-	        	if( viewMode == GRID_VIEW){
-	        		viewMode = LIST_VIEW;
-	        		item.setTitle(R.string.grid_view);//Button points to next view.
-	            	item.setIcon( R.drawable.light_view_as_grid );
-	        		
-	        	}else{
-	        		viewMode = GRID_VIEW;
-	        		item.setTitle(R.string.list_view);//Button points to next view.
-	            	item.setIcon( R.drawable.light_view_as_list );
-	        	}
-	        	createUI();
-	        	break;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if( !currentDirectory.equals( homeDirectory ) ){
+                    openDirectory( currentDirectory.getParentFile() );
+                }
+                break;
+            case R.id.menu_view_toggle:
+                if( viewMode == GRID_VIEW){
+                    viewMode = LIST_VIEW;
+                    item.setTitle(R.string.grid_view);//Button points to next view.
+                    item.setIcon( R.drawable.light_view_as_grid );
+
+                }else{
+                    viewMode = GRID_VIEW;
+                    item.setTitle(R.string.list_view);//Button points to next view.
+                    item.setIcon( R.drawable.light_view_as_list );
+                }
+                createUI();
+                break;
             case R.id.menu_sort_size:
             case R.id.menu_sort_az:
             case R.id.menu_sort_modified:
@@ -282,11 +283,11 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
             default:
                 return super.onOptionsItemSelected(item);
         }
-	    return true;
-	}
-    
+        return true;
+    }
+
     public void createDummyFileSystem(){
-    	boolean mExternalStorageAvailable = false;
+        boolean mExternalStorageAvailable = false;
         boolean mExternalStorageWriteable = false;
         String state = Environment.getExternalStorageState();
 
@@ -298,145 +299,145 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         } else {
             mExternalStorageAvailable = mExternalStorageWriteable = false;
         }
-        if( mExternalStorageAvailable && mExternalStorageWriteable ){//can also check if its writeable 
-        	Log.d(tag, Boolean.toString( currentDirectory.mkdir() ) );
-        	try {
-        		File[] removeList = currentDirectory.listFiles();
-        		for(File item : removeList){
-        			if(item.isDirectory())
-        				continue;//Log.d(tag, item.getPath());
-        			item.delete();
-        		}
-        		new File( currentDirectory , "d0.odp" ).createNewFile();
-				new File( currentDirectory , "d1.odt" ).createNewFile();
-				new File( currentDirectory , "d2.odt" ).createNewFile();
-				new File( currentDirectory , "d3.odp" ).createNewFile();
-				new File( currentDirectory , "d4.ods" ).createNewFile();
-				new File( currentDirectory , "d5.odt" ).createNewFile();
-				new File( currentDirectory , "d6.odp" ).createNewFile();
-				new File( currentDirectory , "d7.odt" ).createNewFile();
-				new File( currentDirectory , "d8.odt" ).createNewFile();
-				new File( currentDirectory , "d9.odp" ).createNewFile();
-				new File( currentDirectory , "d10.odp" ).createNewFile();
-				new File( currentDirectory , "d11.odt" ).createNewFile();
-				new File( currentDirectory , "d12.odt" ).createNewFile();
-				new File( currentDirectory , "d13.odp" ).createNewFile();
-				new File( currentDirectory , "d14.ods" ).createNewFile();
-				new File( currentDirectory , "d15.odt" ).createNewFile();
-				File templatesDirectory = new File( currentDirectory , "Templates" );
-				templatesDirectory.mkdir();
-				new File( templatesDirectory , "template1.odt" ).createNewFile();
-				new File( templatesDirectory , "template2.odt" ).createNewFile();
-				new File( templatesDirectory , "template3.ods" ).createNewFile();
-				new File( templatesDirectory , "template4.odp" ).createNewFile();
-				File regularDirectory = new File( currentDirectory , "Folder" );
-				regularDirectory.mkdir();
-				new File( regularDirectory , "yetAnotherDoc.odt" ).createNewFile();
-				new File( regularDirectory , "some really long file name.ods" ).createNewFile();
-				File anotherRegularDirectory = new File( regularDirectory , "AnotherFolder" );
-				anotherRegularDirectory.mkdir();
-				new File( anotherRegularDirectory , "yetAnotherDoc2.odt" ).createNewFile();
-				//Should put a folder in at some stage.
-				
-			} catch (IOException e) {
-				Log.d(tag, "file io failure");
-				e.printStackTrace();
-			}
-        	//Log.d(tag, fileStore.toString());
+        if( mExternalStorageAvailable && mExternalStorageWriteable ){//can also check if its writeable
+            Log.d(tag, Boolean.toString( currentDirectory.mkdir() ) );
+            try {
+                File[] removeList = currentDirectory.listFiles();
+                for(File item : removeList){
+                    if(item.isDirectory())
+                        continue;//Log.d(tag, item.getPath());
+                    item.delete();
+                }
+                new File( currentDirectory , "d0.odp" ).createNewFile();
+                new File( currentDirectory , "d1.odt" ).createNewFile();
+                new File( currentDirectory , "d2.odt" ).createNewFile();
+                new File( currentDirectory , "d3.odp" ).createNewFile();
+                new File( currentDirectory , "d4.ods" ).createNewFile();
+                new File( currentDirectory , "d5.odt" ).createNewFile();
+                new File( currentDirectory , "d6.odp" ).createNewFile();
+                new File( currentDirectory , "d7.odt" ).createNewFile();
+                new File( currentDirectory , "d8.odt" ).createNewFile();
+                new File( currentDirectory , "d9.odp" ).createNewFile();
+                new File( currentDirectory , "d10.odp" ).createNewFile();
+                new File( currentDirectory , "d11.odt" ).createNewFile();
+                new File( currentDirectory , "d12.odt" ).createNewFile();
+                new File( currentDirectory , "d13.odp" ).createNewFile();
+                new File( currentDirectory , "d14.ods" ).createNewFile();
+                new File( currentDirectory , "d15.odt" ).createNewFile();
+                File templatesDirectory = new File( currentDirectory , "Templates" );
+                templatesDirectory.mkdir();
+                new File( templatesDirectory , "template1.odt" ).createNewFile();
+                new File( templatesDirectory , "template2.odt" ).createNewFile();
+                new File( templatesDirectory , "template3.ods" ).createNewFile();
+                new File( templatesDirectory , "template4.odp" ).createNewFile();
+                File regularDirectory = new File( currentDirectory , "Folder" );
+                regularDirectory.mkdir();
+                new File( regularDirectory , "yetAnotherDoc.odt" ).createNewFile();
+                new File( regularDirectory , "some really long file name.ods" ).createNewFile();
+                File anotherRegularDirectory = new File( regularDirectory , "AnotherFolder" );
+                anotherRegularDirectory.mkdir();
+                new File( anotherRegularDirectory , "yetAnotherDoc2.odt" ).createNewFile();
+                //Should put a folder in at some stage.
+
+            } catch (IOException e) {
+                Log.d(tag, "file io failure");
+                e.printStackTrace();
+            }
+            //Log.d(tag, fileStore.toString());
         }
         else{
-        	Log.d(tag, "No External Storage");
+            Log.d(tag, "No External Storage");
         }
     }
-    
+
     @SuppressWarnings("unused")//see android:onClick properties in view_menu.xml
-	public void sortFiles(MenuItem item){
-		switch ( item.getItemId() ) {
-			case R.id.menu_sort_az:
-				if( sortMode == FileUtilities.SORT_AZ ){
-					sortMode = FileUtilities.SORT_ZA;
-				}else{
-					sortMode = FileUtilities.SORT_AZ;
-				}
-				break;
-			case R.id.menu_sort_modified:
-				if( sortMode == FileUtilities.SORT_NEWEST ){
-					sortMode = FileUtilities.SORT_OLDEST;
-				}else{
-					sortMode = FileUtilities.SORT_NEWEST;
-				}
-				break;
-			case R.id.menu_sort_size:
-				if( sortMode == FileUtilities.SORT_LARGEST ){
-					sortMode = FileUtilities.SORT_SMALLEST;
-				}else{
-					sortMode = FileUtilities.SORT_LARGEST;
-				}
-				break;
-			default:
-				break;
-		}
-		this.onResume();
+    public void sortFiles(MenuItem item){
+        switch ( item.getItemId() ) {
+            case R.id.menu_sort_az:
+                if( sortMode == FileUtilities.SORT_AZ ){
+                    sortMode = FileUtilities.SORT_ZA;
+                }else{
+                    sortMode = FileUtilities.SORT_AZ;
+                }
+                break;
+            case R.id.menu_sort_modified:
+                if( sortMode == FileUtilities.SORT_NEWEST ){
+                    sortMode = FileUtilities.SORT_OLDEST;
+                }else{
+                    sortMode = FileUtilities.SORT_NEWEST;
+                }
+                break;
+            case R.id.menu_sort_size:
+                if( sortMode == FileUtilities.SORT_LARGEST ){
+                    sortMode = FileUtilities.SORT_SMALLEST;
+                }else{
+                    sortMode = FileUtilities.SORT_LARGEST;
+                }
+                break;
+            default:
+                break;
+        }
+        this.onResume();
     }
-    
+
     public void readPreferences(){
-    	prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
+        prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
         viewMode = prefs.getInt( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
         sortMode = prefs.getInt( SORT_MODE_KEY, FileUtilities.SORT_AZ );
         SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences( getBaseContext() );
         filterMode = Integer.valueOf( defaultPrefs.getString( FILTER_MODE_KEY , "-1") );
         sortMode = Integer.valueOf( defaultPrefs.getString( SORT_MODE_KEY , "-1") );
     }
-    
+
     public void editPreferences(MenuItem item){
-    	startActivity( new Intent( this , PreferenceEditor.class) );
+        startActivity( new Intent( this , PreferenceEditor.class) );
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-    	// TODO Auto-generated method stub
-    	super.onSaveInstanceState(outState);
-    	outState.putString( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
-    	outState.putInt( FILTER_MODE_KEY , filterMode );
-    	outState.putInt( EXPLORER_VIEW_TYPE_KEY , viewMode );
+        // TODO Auto-generated method stub
+        super.onSaveInstanceState(outState);
+        outState.putString( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
+        outState.putInt( FILTER_MODE_KEY , filterMode );
+        outState.putInt( EXPLORER_VIEW_TYPE_KEY , viewMode );
 
-    	Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
-    	//prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
-    	Log.d(tag, "savedInstanceSate");
+        Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
+        //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
+        Log.d(tag, "savedInstanceSate");
     }
-    
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-    	// TODO Auto-generated method stub
-    	super.onRestoreInstanceState(savedInstanceState);
-    	if( savedInstanceState.isEmpty() ){
-    		return;
-    	}
-    	currentDirectory = new File( savedInstanceState.getString( CURRENT_DIRECTORY_KEY ) );
-    	filterMode = savedInstanceState.getInt( FILTER_MODE_KEY , FileUtilities.ALL ) ;
-    	viewMode = savedInstanceState.getInt( EXPLORER_VIEW_TYPE_KEY , GRID_VIEW );
-    	//openDirectory( currentDirectory );
-    	Log.d(tag, "onRestoreInstanceState");
-    	Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
+        // TODO Auto-generated method stub
+        super.onRestoreInstanceState(savedInstanceState);
+        if( savedInstanceState.isEmpty() ){
+            return;
+        }
+        currentDirectory = new File( savedInstanceState.getString( CURRENT_DIRECTORY_KEY ) );
+        filterMode = savedInstanceState.getInt( FILTER_MODE_KEY , FileUtilities.ALL ) ;
+        viewMode = savedInstanceState.getInt( EXPLORER_VIEW_TYPE_KEY , GRID_VIEW );
+        //openDirectory( currentDirectory );
+        Log.d(tag, "onRestoreInstanceState");
+        Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
     }
-    
+
     @Override
     protected void onPause() {
-    	//prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
-    	super.onPause();
-    	Log.d(tag, "onPause");
+        //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
+        super.onPause();
+        Log.d(tag, "onPause");
     }
-    
+
     @Override
     protected void onResume() {
-    	// TODO Auto-generated method stub
-    	super.onResume();
-    	Log.d(tag, "onResume");
-    	readPreferences();// intent values take precedence over prefs?
-    	Intent i = this.getIntent();
+        // TODO Auto-generated method stub
+        super.onResume();
+        Log.d(tag, "onResume");
+        readPreferences();// intent values take precedence over prefs?
+        Intent i = this.getIntent();
         if( i.hasExtra( CURRENT_DIRECTORY_KEY ) ){
-        	currentDirectory = new File( i.getStringExtra( CURRENT_DIRECTORY_KEY ) );
-        	Log.d(tag, CURRENT_DIRECTORY_KEY);
+            currentDirectory = new File( i.getStringExtra( CURRENT_DIRECTORY_KEY ) );
+            Log.d(tag, CURRENT_DIRECTORY_KEY);
         }
         if( i.hasExtra( FILTER_MODE_KEY ) ){
             filterMode = i.getIntExtra( FILTER_MODE_KEY, FileUtilities.ALL);
@@ -446,183 +447,183 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
             viewMode = i.getIntExtra( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
             Log.d(tag, EXPLORER_VIEW_TYPE_KEY);
         }
-    	createUI();
-    	openDirectory( currentDirectory );
+        createUI();
+        openDirectory( currentDirectory );
     }
-    
+
     @Override
     protected void onStart() {
-    	// TODO Auto-generated method stub
-    	super.onStart();
-    	Log.d(tag, "onStart");
+        // TODO Auto-generated method stub
+        super.onStart();
+        Log.d(tag, "onStart");
     }
-    
+
     @Override
     protected void onStop() {
-    	// TODO Auto-generated method stub
-    	super.onStop();
-    	Log.d(tag, "onStop");
+        // TODO Auto-generated method stub
+        super.onStop();
+        Log.d(tag, "onStop");
     }
-    
+
     @Override
     protected void onDestroy() {
-    	// TODO Auto-generated method stub
-    	super.onDestroy();
-    	
-    	Log.d(tag, "onDestroy");
+        // TODO Auto-generated method stub
+        super.onDestroy();
+
+        Log.d(tag, "onDestroy");
     }
-     
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		filterMode = itemPosition -1; //bit of a hack, I know. -1 is ALL 0 Docs etc
-		openDirectory( currentDirectory );// Uses filter mode 
-		return true;
-	}
-	
+
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        filterMode = itemPosition -1; //bit of a hack, I know. -1 is ALL 0 Docs etc
+        openDirectory( currentDirectory );// Uses filter mode
+        return true;
+    }
+
     private int dpToPx( int dp ){
         final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
 
-class ListItemAdapter implements ListAdapter{
-		private Context mContext;
-		private File[] filePaths;
-		private final long KB = 1024;
-		private final long MB = 1048576;
-		
-		public ListItemAdapter(Context mContext, File[] filePaths) {
-			this.mContext = mContext;
-			this.filePaths = filePaths;
-		}
-		
-		public int getCount() {
-			// TODO Auto-generated method stub
-			return filePaths.length;
-		}
+    class ListItemAdapter implements ListAdapter{
+        private Context mContext;
+        private File[] filePaths;
+        private final long KB = 1024;
+        private final long MB = 1048576;
 
-		public Object getItem(int arg0) {
-			// TODO Auto-generated method stub
-			return null;
-		}
+        public ListItemAdapter(Context mContext, File[] filePaths) {
+            this.mContext = mContext;
+            this.filePaths = filePaths;
+        }
 
-		public long getItemId(int arg0) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return filePaths.length;
+        }
 
-		public int getItemViewType(int arg0) {
-			// TODO Auto-generated method stub
-			return 0;
-		}
+        public Object getItem(int arg0) {
+            // TODO Auto-generated method stub
+            return null;
+        }
 
-		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(
-					Context.LAYOUT_INFLATER_SERVICE);
-			
-			View listItem;
-	 
-			if (convertView == null) {
-				listItem = new View(mContext);
-				listItem = inflater.inflate(R.layout.file_list_item, null);
-			} else {
-				listItem = (View) convertView;
-			}
-			final int pos = position;
-			listItem.setClickable(true);
-			listItem.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View v) {
-					Log.d("LIST", "click!");
-					if(filePaths[ pos ].isDirectory() ){
-						openDirectory( filePaths[ pos ] );
-					}else{
+        public long getItemId(int arg0) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        public int getItemViewType(int arg0) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
+
+            View listItem;
+
+            if (convertView == null) {
+                listItem = new View(mContext);
+                listItem = inflater.inflate(R.layout.file_list_item, null);
+            } else {
+                listItem = (View) convertView;
+            }
+            final int pos = position;
+            listItem.setClickable(true);
+            listItem.setOnClickListener(new OnClickListener() {
+
+                public void onClick(View v) {
+                    Log.d("LIST", "click!");
+                    if(filePaths[ pos ].isDirectory() ){
+                        openDirectory( filePaths[ pos ] );
+                    }else{
                         open( filePaths[ pos ] );
-					}
-				}
-			});
-			
-			
-			
-			// set value into textview
-			TextView filename = (TextView) listItem.findViewById(R.id.file_list_item_name);
-			filename.setText( filePaths[ position ].getName() );
-			//filename.setClickable(true);
-			
-			TextView fileSize = (TextView) listItem.findViewById(R.id.file_list_item_size);
-			//TODO Give size in KB , MB as appropriate.
-			String size = "0B";
-			long length = filePaths[ position ].length();
-			if( length < KB ){
-				size = Long.toString( length ) + "B";
-			}
-			if( length >= KB && length < MB){
-				size = Long.toString( length/KB ) + "KB";
-			}
-			if( length >= MB){
-				size = Long.toString( length/MB ) + "MB";
-			}
-			fileSize.setText( size );
-			//fileSize.setClickable(true);
-			
-			TextView fileDate = (TextView) listItem.findViewById(R.id.file_list_item_date);
-			SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy hh:ss");
-			Date date = new Date( filePaths[ position ].lastModified() );
-			//TODO format date
-			fileDate.setText( df.format( date ) );
-			
-			// set image based on selected text
-			ImageView imageView = (ImageView) listItem.findViewById(R.id.file_list_item_icon);
-			if( filePaths[position].getName().endsWith(".odt") ){
-				imageView.setImageResource(R.drawable.writer);
-			}
-			if( filePaths[position].getName().endsWith(".ods") ){
-				imageView.setImageResource(R.drawable.calc);
-			}
-			if( filePaths[position].getName().endsWith(".odp") ){
-				imageView.setImageResource(R.drawable.impress);
-			}
-			if( filePaths[position].isDirectory() ){
-				//Eventually have thumbnails of each sub file on a black circle
-				//For now just a folder icon
-				imageView.setImageResource(R.drawable.folder);
-			}
-			//imageView.setClickable(true);
-			return listItem;
-		}
+                    }
+                }
+            });
 
-		public int getViewTypeCount() {
-			// TODO Auto-generated method stub
-			return 1;
-		}
 
-		public boolean hasStableIds() {
-			// TODO Auto-generated method stub
-			return false;
-		}
 
-		public boolean isEmpty() {
-			// TODO Auto-generated method stub
-			return false;
-		}
+            // set value into textview
+            TextView filename = (TextView) listItem.findViewById(R.id.file_list_item_name);
+            filename.setText( filePaths[ position ].getName() );
+            //filename.setClickable(true);
 
-		public void registerDataSetObserver(DataSetObserver arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+            TextView fileSize = (TextView) listItem.findViewById(R.id.file_list_item_size);
+            //TODO Give size in KB , MB as appropriate.
+            String size = "0B";
+            long length = filePaths[ position ].length();
+            if( length < KB ){
+                size = Long.toString( length ) + "B";
+            }
+            if( length >= KB && length < MB){
+                size = Long.toString( length/KB ) + "KB";
+            }
+            if( length >= MB){
+                size = Long.toString( length/MB ) + "MB";
+            }
+            fileSize.setText( size );
+            //fileSize.setClickable(true);
 
-		public void unregisterDataSetObserver(DataSetObserver arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+            TextView fileDate = (TextView) listItem.findViewById(R.id.file_list_item_date);
+            SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy hh:ss");
+            Date date = new Date( filePaths[ position ].lastModified() );
+            //TODO format date
+            fileDate.setText( df.format( date ) );
 
-		public boolean areAllItemsEnabled() {
-			// TODO Auto-generated method stub
-			return false;
-		}
+            // set image based on selected text
+            ImageView imageView = (ImageView) listItem.findViewById(R.id.file_list_item_icon);
+            if( filePaths[position].getName().endsWith(".odt") ){
+                imageView.setImageResource(R.drawable.writer);
+            }
+            if( filePaths[position].getName().endsWith(".ods") ){
+                imageView.setImageResource(R.drawable.calc);
+            }
+            if( filePaths[position].getName().endsWith(".odp") ){
+                imageView.setImageResource(R.drawable.impress);
+            }
+            if( filePaths[position].isDirectory() ){
+                //Eventually have thumbnails of each sub file on a black circle
+                //For now just a folder icon
+                imageView.setImageResource(R.drawable.folder);
+            }
+            //imageView.setClickable(true);
+            return listItem;
+        }
 
-		public boolean isEnabled(int position) {
-			// TODO Auto-generated method stub
-			return false;
-		}
+        public int getViewTypeCount() {
+            // TODO Auto-generated method stub
+            return 1;
+        }
+
+        public boolean hasStableIds() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        public boolean isEmpty() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        public void registerDataSetObserver(DataSetObserver arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public void unregisterDataSetObserver(DataSetObserver arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public boolean areAllItemsEnabled() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        public boolean isEnabled(int position) {
+            // TODO Auto-generated method stub
+            return false;
+        }
 
     }
 
@@ -631,15 +632,14 @@ class ListItemAdapter implements ListAdapter{
 
         ThumbnailGenerator( File file ){
             this.file = file;
-                String input = file.getAbsolutePath();
-                if (input == null)
-                    input = "/assets/test1.odt";
-                // Load the wanted document
-                new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
+            String input = file.getAbsolutePath();
+            if (input == null)
+                input = "/assets/test1.odt";
+            // Load the wanted document
+            new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
         }
 
-        class DocumentLoadTask
-            extends AsyncTask<String, Void, Integer>
+        class DocumentLoadTask extends AsyncTask<String, Void, Integer>
         {
 
             ByteBuffer renderPage(int number, int width , int height)
@@ -701,9 +701,9 @@ class ListItemAdapter implements ListAdapter{
                         Log.i(TAG, "w,h Scaling with " + scaleNumerator + "/" + scaleDenominator);
 
                         device = toolkit.createScreenCompatibleDeviceUsingBuffer(width, height,
-                                                                                 scaleNumerator, scaleDenominator,
-                                                                                 0, 0,
-                                                                                 wrapped_bb);
+                                scaleNumerator, scaleDenominator,
+                                0, 0,
+                                wrapped_bb);
                     }
 
                     // Update the property that points to the device
@@ -788,9 +788,9 @@ class ListItemAdapter implements ListAdapter{
                     toolkit = (XToolkitExperimental) UnoRuntime.queryInterface(XToolkitExperimental.class, toolkitService);
 
                     renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
-		    if (renderable == null)
-			// some serious error with the rendering backend
-			return new Integer(0);
+                    if (renderable == null)
+                        // some serious error with the rendering backend
+                        return new Integer(0);
 
                     // Set up dummySmallDevice and use it to find out the number
                     // of pages ("renderers").
@@ -820,14 +820,14 @@ class ListItemAdapter implements ListAdapter{
                     finish();
                 }
                 return new Integer( 0 );
-        }
+            }
 
             protected void onPostExecute(Integer result){
 
-		if (renderable == null) {
+                if (renderable == null) {
                     Log.i(TAG, "Document is un-renderable");
-		    return; // TODO: check if this falls-back to a sensible image
-		}
+                    return; // TODO: check if this falls-back to a sensible image
+                }
 
                 int widthInPx = dpToPx( 100 );
                 int heightInPx = dpToPx( (int)( 100*Math.sqrt(2) ) );
@@ -871,75 +871,74 @@ class ListItemAdapter implements ListAdapter{
                     // TODO: handle exception
                 }
                 ( (GridItemAdapter)gv.getAdapter() ).update();
-        }
+            }
         }
 
-        class MyXController
-            implements XController
+        class MyXController implements XController
         {
 
-        XFrame frame;
-        XModel model;
+            XFrame frame;
+            XModel model;
 
-        public void attachFrame(XFrame frame)
-        {
-            Log.i(TAG, "attachFrame");
-            this.frame = frame;
-        }
+            public void attachFrame(XFrame frame)
+            {
+                Log.i(TAG, "attachFrame");
+                this.frame = frame;
+            }
 
-        public boolean attachModel(XModel model)
-        {
-            Log.i(TAG, "attachModel");
-            this.model = model;
-            return true;
-        }
+            public boolean attachModel(XModel model)
+            {
+                Log.i(TAG, "attachModel");
+                this.model = model;
+                return true;
+            }
 
-        public boolean suspend(boolean doSuspend)
-        {
-            Log.i(TAG, "suspend");
-            return false;
-        }
+            public boolean suspend(boolean doSuspend)
+            {
+                Log.i(TAG, "suspend");
+                return false;
+            }
 
-        public Object getViewData()
-        {
-            Log.i(TAG, "getViewData");
-            return null;
-        }
+            public Object getViewData()
+            {
+                Log.i(TAG, "getViewData");
+                return null;
+            }
 
-        public void restoreViewData(Object data)
-        {
-            Log.i(TAG, "restoreViewData");
-        }
+            public void restoreViewData(Object data)
+            {
+                Log.i(TAG, "restoreViewData");
+            }
 
-        public XModel getModel()
-        {
-            Log.i(TAG, "getModel");
-            return model;
-        }
+            public XModel getModel()
+            {
+                Log.i(TAG, "getModel");
+                return model;
+            }
 
-        public XFrame getFrame()
-        {
-            Log.i(TAG, "getFrame");
-            return frame;
-        }
+            public XFrame getFrame()
+            {
+                Log.i(TAG, "getFrame");
+                return frame;
+            }
 
-        public void dispose()
-        {
-            Log.i(TAG, "dispose");
-        }
+            public void dispose()
+            {
+                Log.i(TAG, "dispose");
+            }
 
-        public void addEventListener(XEventListener listener)
-        {
-            Log.i(TAG, "addEventListener");
-        }
+            public void addEventListener(XEventListener listener)
+            {
+                Log.i(TAG, "addEventListener");
+            }
 
-        public void removeEventListener(XEventListener listener)
-        {
-            Log.i(TAG, "removeEventListener");
+            public void removeEventListener(XEventListener listener)
+            {
+                Log.i(TAG, "removeEventListener");
+            }
         }
-    }
 
     }
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
