@@ -12,8 +12,8 @@ $(eval $(call gb_Library_Library,mwaw))
 $(eval $(call gb_Library_use_unpacked,mwaw,libmwaw))
 
 $(eval $(call gb_Library_use_externals,mwaw,\
+    revenge \
     boost_headers \
-	revenge \
 ))
 
 $(eval $(call gb_Library_set_warnings_not_errors,mwaw))

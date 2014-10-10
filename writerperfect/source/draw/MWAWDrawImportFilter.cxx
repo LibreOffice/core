@@ -67,6 +67,12 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
             case MWAWDocument::MWAW_T_GREATWORKS:
                 rTypeName = "draw_Great_Works";
                 break;
+            case MWAWDocument::MWAW_T_MACDRAW:
+                rTypeName = "draw_MacDraw";
+                break;
+            case MWAWDocument::MWAW_T_MACDRAWPRO:
+                rTypeName = "draw_MacDrawPro";
+                break;
             case MWAWDocument::MWAW_T_MACPAINT:
                 rTypeName = "draw_MacPaint";
                 break;
@@ -97,8 +103,6 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
             case MWAWDocument::MWAW_T_LIGHTWAYTEXT:
             case MWAWDocument::MWAW_T_MACDOC:
             case MWAWDocument::MWAW_T_MACDRAFT:
-            case MWAWDocument::MWAW_T_MACDRAW:
-            case MWAWDocument::MWAW_T_MACDRAWPRO:
             case MWAWDocument::MWAW_T_MACWRITE:
             case MWAWDocument::MWAW_T_MACWRITEPRO:
             case MWAWDocument::MWAW_T_MARINERWRITE:

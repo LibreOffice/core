@@ -335,6 +335,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_LightWayText \
 	writer_Mac_Acta \
 	writer_Mac_More \
+	writer_Mac_RagTime \
 	writer_Mac_Word \
 	writer_Mac_Works \
 	writer_MacDoc \
@@ -395,6 +396,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	LightWayText \
 	Mac_Acta \
 	Mac_More \
+	Mac_RagTime \
 	Mac_Word \
 	Mac_Works \
 	MacDoc \
@@ -625,6 +627,8 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 	draw_Beagle_Works \
 	draw_ClarisWorks \
 	draw_Great_Works \
+	draw_MacDraw \
+	draw_MacDrawPro \
 	draw_Mac_Works \
 	draw_MacPaint \
 	draw_SuperPaint \
@@ -647,6 +651,8 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filt
 	Beagle_Works_Draw \
 	ClarisWorks_Draw \
 	Great_Works_Draw \
+	MacDraw_Draw \
+	MacDrawPro_Draw \
 	Mac_Works_Draw \
 	MacPaint_Draw \
 	SuperPaint_Draw \

@@ -114,6 +114,9 @@ bool MWAWImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUStr
             case MWAWDocument::MWAW_T_NISUSWRITER:
                 rTypeName = "writer_Nisus_Writer";
                 break;
+            case MWAWDocument::MWAW_T_RAGTIME:
+                rTypeName = "writer_Mac_RagTime";
+                break;
             case MWAWDocument::MWAW_T_TEACHTEXT:
                 rTypeName = "writer_TeachText";
                 break;
@@ -151,7 +154,6 @@ bool MWAWImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUStr
             case MWAWDocument::MWAW_T_PAGEMAKER:
             case MWAWDocument::MWAW_T_PIXELPAINT:
             case MWAWDocument::MWAW_T_READYSETGO:
-            case MWAWDocument::MWAW_T_RAGTIME:
             case MWAWDocument::MWAW_T_SUPERPAINT:
             case MWAWDocument::MWAW_T_SYMPOSIUM:
             case MWAWDocument::MWAW_T_TRAPEZE:
