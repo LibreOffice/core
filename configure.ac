@@ -1209,12 +1209,12 @@ AC_ARG_ENABLE(randr-link,
 
 AC_ARG_ENABLE(gstreamer,
     AS_HELP_STRING([--disable-gstreamer],
-        [Disable building with the new gstreamer 1.0 avmedia backend.]),
+        [Disable building the gstreamer avmedia backend (API 1.0).]),
 ,enable_gstreamer=yes)
 
 AC_ARG_ENABLE(gstreamer-0-10,
     AS_HELP_STRING([--enable-gstreamer-0-10],
-        [Enable building the gstreamer 0.10 avmedia backend.]),
+        [Enable use of the old gstreamer 0.10 API to build the avmedia backend.]),
 ,enable_gstreamer_0_10=no)
 
 AC_ARG_ENABLE(vlc,
@@ -10147,12 +10147,16 @@ ENABLE_GSTREAMER=""
 
 if test "$build_gstreamer" = "yes"; then
 
-    AC_MSG_CHECKING([whether to enable the new GStreamer 1.0 avmedia backend])
+    AC_MSG_CHECKING([whether to enable the GStreamer avmedia backend (defaults to v1.0)])
     if test "$enable_avmedia" = yes -a "$enable_gstreamer" != no; then
-        ENABLE_GSTREAMER="TRUE"
-        AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-video-1.0 )
-        GSTREAMER_CFLAGS=$(printf '%s' "$GSTREAMER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        if test "$enable_gstreamer_0_10" != yes; then
+            ENABLE_GSTREAMER="TRUE"
+            AC_MSG_RESULT([yes])
+            PKG_CHECK_MODULES( GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-video-1.0 )
+            GSTREAMER_CFLAGS=$(printf '%s' "$GSTREAMER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        else
+            AC_MSG_RESULT([yes])
+        fi
     else
         AC_MSG_RESULT([no])
     fi
@@ -10165,8 +10169,8 @@ AC_SUBST(ENABLE_GSTREAMER)
 ENABLE_GSTREAMER_0_10=""
 if test "$build_gstreamer_0_10" = "yes"; then
 
-    AC_MSG_CHECKING([whether to enable the GStreamer avmedia backend])
-    if test "$enable_avmedia" = yes -a "$enable_gstreamer_0_10" != no; then
+    AC_MSG_CHECKING([whether to use the old the GStreamer v0.10 API for the avmedia backend])
+    if test "$enable_avmedia" = yes -a "$enable_gstreamer_0_10" = yes -a "$enable_gstreamer" != no; then
         ENABLE_GSTREAMER_0_10="TRUE"
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-interfaces-0.10],, [
