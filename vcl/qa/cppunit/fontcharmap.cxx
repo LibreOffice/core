@@ -28,13 +28,13 @@ public:
 
 void VclFontCharMapTest::testDefaultFontCharMap()
 {
-    FontCharMap *fcmap = new FontCharMap(); // gets default map
+    FontCharMap fcmap; // gets default map
 
-    CPPUNIT_ASSERT( fcmap->IsDefaultMap() );
+    CPPUNIT_ASSERT( fcmap.IsDefaultMap() );
 
-    sal_uInt32 nStartBMPPlane = fcmap->GetFirstChar();
-    sal_uInt32 nStartSupBMPPlane = fcmap->GetNextChar(0xD800);
-    sal_uInt32 nEndBMPPlane = fcmap->GetLastChar();
+    sal_uInt32 nStartBMPPlane = fcmap.GetFirstChar();
+    sal_uInt32 nStartSupBMPPlane = fcmap.GetNextChar(0xD800);
+    sal_uInt32 nEndBMPPlane = fcmap.GetLastChar();
 
     CPPUNIT_ASSERT( nStartBMPPlane == 0x0020 );
     CPPUNIT_ASSERT( nStartSupBMPPlane == 0xE000 );
