@@ -2026,9 +2026,18 @@ sub create_packages_without_epm
         my $rpmversion = determine_rpm_version();
 
         my $target = "";
-        if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
-        elsif ( $installer::globals::compiler =~ /unxaigppc/) { $target = "ppc"; }
-        elsif ( $installer::globals::compiler =~ /unxlng/) {$target = (POSIX::uname())[4]; }
+        if ( $installer::globals::platformid eq 'linux_x86')
+        {
+            $target = "i586";
+        }
+        elsif ( $installer::globals::platformid eq 'aix_powerpc')
+        {
+            $target = "ppc";
+        }
+        elsif ( $installer::globals::os eq 'LINUX')
+        {
+            $target = (POSIX::uname())[4];
+        }
 
         # rpm 4.6 ignores buildroot tag in spec file
 
@@ -2233,18 +2242,24 @@ sub create_new_directory_structure
     {
         my $rpmdir;
                 my $machine = "";
-        if ( $installer::globals::compiler =~ /unxlngi/) {
-                    $rpmdir = "$installer::globals::epmoutpath/RPMS/i586";
-                }
-        elsif ( $installer::globals::compiler =~ /unxaigppc/) {
-                    $machine = "ppc";
-                    $rpmdir = "$installer::globals::epmoutpath/RPMS/$machine";
-                }
-        elsif ( $installer::globals::compiler =~ /unxlng/) {
-                    $machine = (POSIX::uname())[4];
-                    $rpmdir = "$installer::globals::epmoutpath/RPMS/$machine";
-                }
-                else { installer::exiter::exit_program("ERROR: rpmdir undefined !", "create_new_directory_structure"); }
+        if ( $installer::globals::platformid eq 'linux_x86')
+        {
+            $rpmdir = "$installer::globals::epmoutpath/RPMS/i586";
+        }
+        elsif ( $installer::globals::platformid eq 'aix_powerpc')
+        {
+            $machine = "ppc";
+            $rpmdir = "$installer::globals::epmoutpath/RPMS/$machine";
+        }
+        elsif ( $installer::globals::os eq 'LINUX')
+        {
+            $machine = (POSIX::uname())[4];
+            $rpmdir = "$installer::globals::epmoutpath/RPMS/$machine";
+        }
+        else
+        {
+            installer::exiter::exit_program("ERROR: rpmdir undefined !", "create_new_directory_structure");
+        }
 
         my $systemcall = "mv $rpmdir/* $newdir";    # moving the rpms into the directory "RPMS"
 
