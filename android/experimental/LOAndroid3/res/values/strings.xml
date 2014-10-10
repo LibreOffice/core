@@ -7,8 +7,8 @@
     <string name="app_description">LibreOffice Viewer is a document viewer based on LibreOffice.</string>
     <string name="app_credits">http://www.libreoffice.org</string>
 
-    <string name="about_license">License</string>
-    <string name="about_notice">Notice</string>
+    <string name="about_license">Show License</string>
+    <string name="about_notice">Show Notice</string>
 
     <string name="browser_app_name">LibreOffice Browser</string>
     <string name="menu_search">Search</string>
