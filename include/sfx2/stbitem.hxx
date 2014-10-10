@@ -23,11 +23,10 @@
 #include <sfx2/dllapi.h>
 #include <svl/poolitem.hxx>
 #include <svtools/statusbarcontroller.hxx>
-
+#include <vcl/status.hxx>
 
 
 class SfxModule;
-class StatusBar;
 class SfxStatusBarControl;
 class SfxBindings;
 
