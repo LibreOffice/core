@@ -85,9 +85,11 @@ public:
     void            DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
     void            DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
 
-    SC_DLLPUBLIC bool
-                    DeleteContents( const ScMarkData& rMark, InsertDeleteFlags nFlags,
-                                            bool bRecord, bool bApi );
+    SC_DLLPUBLIC bool DeleteContents(
+        const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi );
+
+    bool DeleteCell(
+        const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi );
 
     bool            TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
                                                bool bRecord, bool bApi );

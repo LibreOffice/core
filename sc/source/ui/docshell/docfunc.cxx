@@ -559,8 +559,8 @@ void ScDocFunc::DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, vector<S
     lcl_collectAllPredOrSuccRanges(rSrcRanges, rRefTokens, rDocShell, false);
 }
 
-bool ScDocFunc::DeleteContents( const ScMarkData& rMark, InsertDeleteFlags nFlags,
-                                    bool bRecord, bool bApi )
+bool ScDocFunc::DeleteContents(
+    const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -646,6 +646,74 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, InsertDeleteFlags nFlag
         rDocShell.PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
     else if (nExtFlags & SC_PF_LINES)
         lcl_PaintAbove( rDocShell, aExtendedRange );    // fuer Linien ueber dem Bereich
+
+    aModificator.SetDocumentModified();
+
+    return true;
+}
+
+bool ScDocFunc::DeleteCell(
+    const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi )
+{
+    ScDocShellModificator aModificator(rDocShell);
+
+    ScDocument& rDoc = rDocShell.GetDocument();
+
+    if (bRecord && !rDoc.IsUndoEnabled())
+        bRecord = false;
+
+    ScEditableTester aTester(&rDoc, rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
+    if (!aTester.IsEditable())
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(aTester.GetMessageId());
+        return false;
+    }
+
+    // no objects on protected tabs
+    bool bObjects = (nFlags & IDF_OBJECTS) && !sc::DocFuncUtil::hasProtectedTab(rDoc, rMark);
+
+    sal_uInt16 nExtFlags = 0;       // extra flags are needed only if attributes are deleted
+    if (nFlags & IDF_ATTRIB)
+        rDocShell.UpdatePaintExt(nExtFlags, rPos);
+
+    //  order op opeeration:
+    //  1) BeginDrawUndo
+    //  2) delete objects (DrawUndo is filled)
+    //  3) copy contents for undo
+    //  4) delete contents
+    //  5) add undo-action
+
+    bool bDrawUndo = bObjects || (nFlags & IDF_NOTE);     // needed for shown notes
+    if (bDrawUndo && bRecord)
+        rDoc.BeginDrawUndo();
+
+    if (bObjects)
+        rDoc.DeleteObjectsInArea(rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
+
+    // To keep track of all non-empty cells within the deleted area.
+    boost::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
+
+    ScDocument* pUndoDoc = NULL;
+    if (bRecord)
+    {
+        pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, rMark, rPos, nFlags, false);
+        pDataSpans.reset(sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, rMark, rPos));
+    }
+
+    rDoc.DeleteArea(rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark, nFlags);
+
+    if (bRecord)
+    {
+        sc::DocFuncUtil::addDeleteContentsUndo(
+            rDocShell.GetUndoManager(), &rDocShell, rMark, rPos, pUndoDoc,
+            nFlags, pDataSpans, false, bDrawUndo);
+    }
+
+    if (!AdjustRowHeight(rPos))
+        rDocShell.PostPaint(
+            rPos.Col(), rPos.Row(), rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Tab(),
+            PAINT_GRID, nExtFlags);
 
     aModificator.SetDocumentModified();
 
