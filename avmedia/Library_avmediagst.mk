@@ -14,9 +14,9 @@ $(eval $(call gb_Library_set_componentfile,avmediagst,avmedia/source/gstreamer/a
 $(eval $(call gb_Library_set_include,avmediagst,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/avmedia/source/inc \
-	$(GSTREAMER_CFLAGS) \
+	$(GSTREAMER_1_0_CFLAGS) \
 ))
-$(eval $(call gb_Library_add_libs,avmediagst,$(GSTREAMER_LIBS)))
+$(eval $(call gb_Library_add_libs,avmediagst,$(GSTREAMER_1_0_LIBS)))
 
 $(eval $(call gb_Library_use_external,avmediagst,boost_headers))
 

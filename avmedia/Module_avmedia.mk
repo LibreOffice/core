@@ -17,7 +17,7 @@ $(eval $(call gb_Module_add_l10n_targets,avmedia,\
 	AllLangResTarget_avmedia \
 ))
 
-ifeq ($(ENABLE_GSTREAMER),TRUE)
+ifeq ($(ENABLE_GSTREAMER_1_0),TRUE)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediagst \
 ))
