@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
 
 
 /**
- * The MultiPropertySetHelper performs the follwing functions:
+ * The MultiPropertySetHelper performs the following functions:
  *
  * Given a list of property names (as sal_Char** or OUString*), it can
  * query an XMultiPropertySet (or XPropertySet) which of these properties

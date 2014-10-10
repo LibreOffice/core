@@ -320,7 +320,7 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:choose>
-			<!-- if we got to the last node, return it directly, or return the max window of current one and follwing ones -->
+			<!-- if we got to the last node, return it directly, or return the max window of current one and following ones -->
 			<xsl:when test="$CurrPos = count($nodeSet)">
 				<xsl:value-of select="$CurrNodeWindow"/>
 			</xsl:when>

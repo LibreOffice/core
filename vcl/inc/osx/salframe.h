@@ -180,7 +180,7 @@ public:
 
     void getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY );
 
-    // actually the follwing methods do the same thing: flipping y coordinates
+    // actually the following methods do the same thing: flipping y coordinates
     // but having two of them makes clearer what the coordinate system
     // is supposed to be before and after
     void VCLToCocoa( NSRect& io_rRect, bool bRelativeToScreen = true );

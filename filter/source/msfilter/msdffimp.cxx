@@ -3545,7 +3545,7 @@ void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
 }
 
 // sj: I just want to set a string for a text object that may contain multiple
-// paragraphs. If I now take a look at the follwing code I get the impression that
+// paragraphs. If I now take a look at the following code I get the impression that
 // our outliner is too complicate to be used properly,
 void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
 {

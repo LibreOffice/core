@@ -621,7 +621,7 @@ sub get_sequence_for_file
         # my $sequence = $number + 1;
 
         # Idea: Each component is packed into a cab file.
-        # This requires that all files in one cab file have sequences directly follwing each other,
+        # This requires that all files in one cab file have sequences directly following each other,
         # for instance from 1456 to 1466. Then in the media table the LastSequence for this cab file
         # is 1466.
         # Because all files belonging to one component are directly behind each other in the file
