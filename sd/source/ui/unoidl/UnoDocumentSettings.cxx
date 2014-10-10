@@ -110,7 +110,7 @@ namespace sd
                                        const uno::Sequence<beans::PropertyValue>& aConfigProps ) SAL_OVERRIDE;
 
     protected:
-        virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException ) SAL_OVERRIDE;
+        virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
@@ -397,7 +397,7 @@ void
 DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
         const Any* pValues)
 throw (UnknownPropertyException, PropertyVetoException,
-    IllegalArgumentException, WrappedTargetException, RuntimeException)
+    IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
