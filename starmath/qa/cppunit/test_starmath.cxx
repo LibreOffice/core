@@ -97,6 +97,7 @@ void Test::tearDown()
     delete m_pEditWindow;
     delete m_pSmCmdBoxWindow;
     delete m_pDispatcher;
+    m_xDocShRef->DoClose();
     m_xDocShRef.Clear();
 
     BootstrapFixture::tearDown();
