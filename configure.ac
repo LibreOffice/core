@@ -3893,7 +3893,6 @@ aix*)
     RTL_OS=AIX
     RTL_ARCH=PowerPC
     PLATFORMID=aix_powerpc
-    OUTPATH=unxaigppc
     P_SEP=:
     ;;
 
@@ -3913,12 +3912,10 @@ cygwin*)
             CPUNAME=X86_64
             RTL_ARCH=X86_64
             PLATFORMID=windows_x86_64
-            OUTPATH=wntmscx$COMEX
         else
             CPUNAME=INTEL
             RTL_ARCH=x86
             PLATFORMID=windows_x86
-            OUTPATH=wntmsci$COMEX
         fi
         ;;
     *)
@@ -3940,7 +3937,6 @@ darwin*)
         CPUNAME=ARM
         RTL_ARCH=ARM_EABI
         PLATFORMID=ios_arm
-        OUTPATH=unxiosr
         OS=IOS
         ;;
     i*86)
@@ -3950,7 +3946,6 @@ darwin*)
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=macosx_x86_64
-        OUTPATH=unxmacxx
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -3963,7 +3958,6 @@ dragonfly*)
     GUIBASE=unx
     OS=DRAGONFLY
     RTL_OS=DragonFly
-    OUTPATH=unxdfly
     P_SEP=:
 
     case "$host_cpu" in
@@ -3988,7 +3982,6 @@ freebsd*)
     GUIBASE=unx
     RTL_OS=FreeBSD
     OS=FREEBSD
-    OUTPATH=unxfbsd
     P_SEP=:
 
     case "$host_cpu" in
@@ -3996,7 +3989,6 @@ freebsd*)
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=freebsd_x86
-        OUTPATH=unxfbsdi
         ;;
     x86_64|amd64)
         CPUNAME=X86_64
@@ -4022,13 +4014,11 @@ kfreebsd*)
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=kfreebsd_x86
-        OUTPATH=unxkfgi6
         ;;
     x86_64)
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=kfreebsd_x86_64
-        OUTPATH=unxkfgx6
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -4049,18 +4039,15 @@ linux-gnu*)
         CPUNAME=AARCH64
         PLATFORMID=linux_aarch64
         RTL_ARCH=AARCH64
-        OUTPATH=unxlngaarch64
         ;;
     alpha)
         CPUNAME=AXP
         RTL_ARCH=ALPHA
         PLATFORMID=linux_alpha
-        OUTPATH=unxlngaxp
         ;;
     arm*)
         CPUNAME=ARM
         EPM_FLAGS="-a arm"
-        OUTPATH=unxlngr
         RTL_ARCH=ARM_EABI
         PLATFORMID=linux_arm_eabi
         case "$host_cpu" in
@@ -4075,95 +4062,80 @@ linux-gnu*)
         RTL_ARCH=HPPA
         EPM_FLAGS="-a hppa"
         PLATFORMID=linux_hppa
-        OUTPATH=unxlnghppa
         ;;
     i*86)
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=linux_x86
-        OUTPATH=unxlngi6
         ;;
     ia64)
         CPUNAME=IA64
         RTL_ARCH=IA64
         PLATFORMID=linux_ia64
-        OUTPATH=unxlnga
         ;;
     mips)
         CPUNAME=GODSON
         RTL_ARCH=MIPS_EB
         EPM_FLAGS="-a mips"
         PLATFORMID=linux_mips_eb
-        OUTPATH=unxlngmips
         ;;
     mips64)
         CPUNAME=GODSON
         RTL_ARCH=MIPS_EB
         EPM_FLAGS="-a mips64"
         PLATFORMID=linux_mips_eb
-        OUTPATH=unxlngmips
         ;;
     mips64el)
         CPUNAME=GODSON
         RTL_ARCH=MIPS_EL
         EPM_FLAGS="-a mips64el"
         PLATFORMID=linux_mips_el
-        OUTPATH=unxlngmips
         ;;
     mipsel)
         CPUNAME=GODSON
         RTL_ARCH=MIPS_EL
         EPM_FLAGS="-a mipsel"
         PLATFORMID=linux_mips_el
-        OUTPATH=unxlngmips
         ;;
     m68k)
         CPUNAME=M68K
         RTL_ARCH=M68K
         PLATFORMID=linux_m68k
-        OUTPATH=unxlngm68k
         ;;
     powerpc)
         CPUNAME=POWERPC
         RTL_ARCH=PowerPC
         PLATFORMID=linux_powerpc
-        OUTPATH=unxlngppc
         ;;
     powerpc64)
         CPUNAME=POWERPC64
         RTL_ARCH=PowerPC_64
         PLATFORMID=linux_powerpc64
-        OUTPATH=unxlngppc64
         ;;
     powerpc64le)
         CPUNAME=POWERPC64
         RTL_ARCH=PowerPC_64_LE
         PLATFORMID=linux_powerpc64_le
-        OUTPATH=unxlngppc64
         ;;
     sparc)
         CPUNAME=SPARC
         RTL_ARCH=SPARC
         PLATFORMID=linux_sparc
-        OUTPATH=unxlngs
         ;;
     s390)
         CPUNAME=S390
         RTL_ARCH=S390
         PLATFORMID=linux_s390
-        OUTPATH=unxlngs390
         ;;
     s390x)
         CPUNAME=S390X
         RTL_ARCH=S390x
         PLATFORMID=linux_s390x
-        OUTPATH=unxlngs390x
         ;;
     x86_64)
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=linux_x86_64
-        OUTPATH=unxlngx6
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -4184,25 +4156,21 @@ linux-android*)
         CPUNAME=ARM
         RTL_ARCH=ARM_EABI
         PLATFORMID=android_arm_eabi
-        OUTPATH=unxandr
         ;;
     aarch64)
         CPUNAME=AARCH64
         RTL_ARCH=AARCH64
         PLATFORMID=android_aarch64
-        OUTPATH=unxandaarch64
         ;;
     mips|mipsel)
         CPUNAME=GODSON # Weird, but maybe that's the LO convention?
         RTL_ARCH=MIPS_EL
         PLATFORMID=android_mips_el
-        OUTPATH=unxandm
         ;;
     i*86)
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=android_x86
-        OUTPATH=unxandi
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -4223,13 +4191,11 @@ mingw*)
             CPUNAME=X86_64
             RTL_ARCH=X86_84
             PLATFORMID=windows_x86_64
-            OUTPATH=wntgccx$COMEX
             SOLARINC="$SOLARINC -I$SRC_ROOT/include/wntgccx"
         else
             CPUNAME=INTEL
             RTL_ARCH=x86
             PLATFORMID=windows_x86
-            OUTPATH=wntgcci$COMEX
             SOLARINC="$SOLARINC -I$SRC_ROOT/include/wntgcci"
         fi
         ;;
@@ -4245,7 +4211,6 @@ mingw*)
     GUIBASE=unx
     OS=NETBSD
     RTL_OS=NetBSD
-    OUTPATH=unxnbsd
     P_SEP=:
 
     case "$host_cpu" in
@@ -4280,7 +4245,6 @@ openbsd*)
     GUIBASE=unx
     OS=OPENBSD
     RTL_OS=OpenBSD
-    OUTPATH=unxobsd
     P_SEP=:
 
     case "$host_cpu" in
@@ -4314,19 +4278,16 @@ solaris*)
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=solaris_x86
-        OUTPATH=unxsogi
         ;;
     sparc)
         CPUNAME=SPARC
         RTL_ARCH=SPARC
         PLATFORMID=solaris_sparc
-        OUTPATH=unxsogs
         ;;
     sparc64)
         CPUNAME=SPARC64
         RTL_ARCH=SPARC64
         PLATFORMID=solaris_sparc64
-        OUTPATH=unxsogu
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -4360,7 +4321,6 @@ AC_SUBST(GUIBASE)
 AC_SUBST([INSTDIR])
 AC_SUBST([INSTROOT])
 AC_SUBST(OS)
-AC_SUBST(OUTPATH)
 AC_SUBST(P_SEP)
 AC_SUBST(WORKDIR)
 AC_SUBST(PLATFORMID)

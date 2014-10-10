@@ -1272,7 +1272,7 @@ sub run {
 
         #####################################################################
         # ... creating idt files ...
-        # Only for Windows builds ($installer::globals::compiler is wntmsci)
+        # Only for Windows builds
         #####################################################################
 
         if ( $installer::globals::iswindowsbuild )
@@ -1285,7 +1285,7 @@ sub run {
             # 1. copy all files that need to be stripped locally
             # 2. strip all these files
 
-            if ( $installer::globals::compiler =~ /wntgcci/  || $installer::globals::compiler =~ /wntgccx/ )
+            if ( $installer::globals::com eq 'GCC')
             {
                 installer::windows::strip::strip_binaries($filesinproductlanguageresolvedarrayref, $languagestringref);
             }
