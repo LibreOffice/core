@@ -267,6 +267,9 @@ sub check_system_environment
     my @environmentvariables = qw(
         LIBO_VERSION_MAJOR
         LIBO_VERSION_MINOR
+        CPUNAME
+        OS
+        COM
         OUTPATH
         LOCAL_OUT
         LOCAL_COMMON_OUT

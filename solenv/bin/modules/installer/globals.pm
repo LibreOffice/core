@@ -40,6 +40,9 @@ BEGIN
     $minor = "";
     $lastminor = "";
     $compiler = "";
+    $os = "";
+    $cpuname = "";
+    $com = "";
     $pro = 0;
     $dounzip = 1;
     $languages_defined_in_productlist = 0;

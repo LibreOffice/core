@@ -107,6 +107,9 @@ sub set_global_environment_variables
 
     $installer::globals::build = $environment->{'LIBO_VERSION_MAJOR'}.$environment->{'LIBO_VERSION_MINOR'}."0";
     $installer::globals::compiler = $environment->{'OUTPATH'};
+    $installer::globals::os = $environment->{'OS'};
+    $installer::globals::com = $environment->{'COM'};
+    $installer::globals::cpuname = $environment->{'CPUNAME};
 
     if ( $ENV{'LAST_MINOR'} ) { $installer::globals::lastminor = $ENV{'LAST_MINOR'}; }
 
