@@ -227,7 +227,7 @@ void AxisUsage::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAutomatism, 
 {
     std::vector<VCoordinateSystem*> aVCooSysList = getCoordinateSystems(nDimIndex, nAxisIndex);
     for (size_t i = 0, n = aVCooSysList.size(); i < n; ++i)
-        aVCooSysList[i]->prepareScaleAutomatismForDimensionAndIndex(rScaleAutomatism, nDimIndex, nAxisIndex);
+        aVCooSysList[i]->prepareAutomaticAxisScaling(rScaleAutomatism, nDimIndex, nAxisIndex);
 }
 
 void AxisUsage::setExplicitScaleAndIncrement(
@@ -793,7 +793,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
                 {
                     for( size_t nC = 0; nC < aVCooSysList_Y.size(); ++nC )
                     {
-                        aVCooSysList_Y[nC]->prepareScaleAutomatismForDimensionAndIndex( rAxisUsage.aAutoScaling, 1, nAttachedAxisIndex );
+                        aVCooSysList_Y[nC]->prepareAutomaticAxisScaling( rAxisUsage.aAutoScaling, 1, nAttachedAxisIndex );
 
                         ExplicitScaleData aExplicitScaleSource = aVCooSysList_Y[nC]->getExplicitScale( 1,nAttachedAxisIndex );
                         ExplicitIncrementData aExplicitIncrementSource = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAttachedAxisIndex );

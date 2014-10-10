@@ -356,7 +356,7 @@ void VCoordinateSystem::updateScalesAndIncrementsOnAxes()
 {
 }
 
-void VCoordinateSystem::prepareScaleAutomatismForDimensionAndIndex( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex )
+void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex )
 {
     if( rScaleAutomatism.getScale().AxisType==AxisType::DATE && nDimIndex==0 )
     {
