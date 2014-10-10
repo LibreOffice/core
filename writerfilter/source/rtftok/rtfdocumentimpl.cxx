@@ -3720,7 +3720,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
         {
             m_nCurrentStyleIndex = nParam;
-            RTFValue::Pointer_t pValue(new RTFValue(1));
+            RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_StyleType_paragraph));
             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // paragraph style
         }
         else
@@ -3736,7 +3736,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
         {
             m_nCurrentStyleIndex = nParam;
-            RTFValue::Pointer_t pValue(new RTFValue(2));
+            RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_StyleType_character));
             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // character style
         }
         else
@@ -3758,7 +3758,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
         {
             m_nCurrentStyleIndex = nParam;
-            RTFValue::Pointer_t pValue(new RTFValue(0)); // FIXME the correct value would be 3 but maybe table styles mess things up in dmapper, be cautious and disable them for now
+            // FIXME the correct value would be NS_ooxml::LN_Value_ST_StyleType_table but maybe table styles mess things up in dmapper, be cautious and disable them for now
+            RTFValue::Pointer_t pValue(new RTFValue(0));
             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // table style
         }
         break;
@@ -4837,7 +4838,7 @@ int RTFDocumentImpl::pushState()
             // the *default* is \s0 i.e. paragraph style default
             // this will be overwritten by \sN \csN \dsN \tsN
             m_nCurrentStyleIndex = 0;
-            RTFValue::Pointer_t pValue(new RTFValue(1));
+            RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_StyleType_paragraph));
             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue);
         }
         break;

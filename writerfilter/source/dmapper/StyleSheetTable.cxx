@@ -422,16 +422,16 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             StyleType nType(STYLE_TYPE_UNKNOWN);
             switch (nIntValue)
             {
-                case 1:
+                case NS_ooxml::LN_Value_ST_StyleType_paragraph:
                     nType = STYLE_TYPE_PARA;
                     break;
-                case 2:
+                case NS_ooxml::LN_Value_ST_StyleType_character:
                     nType = STYLE_TYPE_CHAR;
                     break;
-                case 3:
+                case NS_ooxml::LN_Value_ST_StyleType_table:
                     nType = STYLE_TYPE_TABLE;
                     break;
-                case 4:
+                case NS_ooxml::LN_Value_ST_StyleType_numbering:
                     nType = STYLE_TYPE_LIST;
                     break;
                 default:

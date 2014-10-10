@@ -18757,10 +18757,10 @@
       <attribute name="type" tokenid="ooxml:CT_TblStyleOverrideType"/>
     </resource>
     <resource name="ST_StyleType" resource="List">
-      <value tokenid="1">paragraph</value>
-      <value tokenid="2">character</value>
-      <value tokenid="3">table</value>
-      <value tokenid="4">numbering</value>
+      <value tokenid="ooxml:Value_ST_StyleType_paragraph">paragraph</value>
+      <value tokenid="ooxml:Value_ST_StyleType_character">character</value>
+      <value tokenid="ooxml:Value_ST_StyleType_table">table</value>
+      <value tokenid="ooxml:Value_ST_StyleType_numbering">numbering</value>
     </resource>
     <resource name="CT_Style" resource="Properties">
       <element name="name" tokenid="ooxml:CT_Style_name"/>
