@@ -341,6 +341,14 @@ public class LayerView extends FrameLayout {
         }
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (changed) {
+            setViewportSize(new IntSize(right - left, bottom - top));
+        }
+    }
+
     private class SurfaceTextureListener implements TextureView.SurfaceTextureListener {
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             // We don't do this for surfaceCreated above because it is always followed by a surfaceChanged,

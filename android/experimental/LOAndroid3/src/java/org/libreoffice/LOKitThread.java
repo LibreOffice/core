@@ -26,6 +26,11 @@ public class LOKitThread extends Thread {
     }
 
     private boolean draw() {
+        if (mTileProvider == null || mApplication == null) {
+            // called too early...
+            return false;
+        }
+
         RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         DisplayMetrics displayMetrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
@@ -114,6 +119,8 @@ public class LOKitThread extends Thread {
                 draw();
                 break;
             case LOEvent.SIZE_CHANGED:
+                // re-draw when the size has changed
+                draw();
                 break;
             case LOEvent.CHANGE_PART:
                 changePart(event.getPartIndex());
@@ -130,3 +137,5 @@ public class LOKitThread extends Thread {
         mEventQueue.clear();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
