@@ -141,7 +141,10 @@ struct AxisUsage
     ::std::vector< VCoordinateSystem* > getCoordinateSystems( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
     sal_Int32 getMaxAxisIndexForDimension( sal_Int32 nDimensionIndex );
 
-    ScaleAutomatism         aScaleAutomatism;
+    void prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex );
+    void setExplicitScaleAndIncrement( sal_Int32 nDimIndex, sal_Int32 nAxisIndex, const ExplicitScaleData& rScale, const ExplicitIncrementData& rInc );
+
+    ScaleAutomatism aAutoScaling;
 
 private:
     tCoordinateSystemMap    aCoordinateSystems;
@@ -149,7 +152,7 @@ private:
 };
 
 AxisUsage::AxisUsage()
-    : aScaleAutomatism(AxisHelper::createDefaultScale(),Date( Date::SYSTEM ))
+    : aAutoScaling(AxisHelper::createDefaultScale(), Date(Date::SYSTEM))
 {
 }
 
@@ -218,6 +221,21 @@ sal_Int32 AxisUsage::getMaxAxisIndexForDimension( sal_Int32 nDimensionIndex )
     if( aIter != aMaxIndexPerDimension.end() )
         nRet = aIter->second;
     return nRet;
+}
+
+void AxisUsage::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex )
+{
+    std::vector<VCoordinateSystem*> aVCooSysList = getCoordinateSystems(nDimIndex, nAxisIndex);
+    for (size_t i = 0, n = aVCooSysList.size(); i < n; ++i)
+        aVCooSysList[i]->prepareScaleAutomatismForDimensionAndIndex(rScaleAutomatism, nDimIndex, nAxisIndex);
+}
+
+void AxisUsage::setExplicitScaleAndIncrement(
+    sal_Int32 nDimIndex, sal_Int32 nAxisIndex, const ExplicitScaleData& rScale, const ExplicitIncrementData& rInc )
+{
+    std::vector<VCoordinateSystem*> aVCooSysList = getCoordinateSystems(nDimIndex, nAxisIndex);
+    for (size_t i = 0, n = aVCooSysList.size(); i < n; ++i)
+        aVCooSysList[i]->setExplicitScaleAndIncrement(nDimIndex, nAxisIndex, rScale, rInc);
 }
 
 typedef boost::ptr_vector<VSeriesPlotter> SeriesPlottersType;
@@ -584,7 +602,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
                     bool bHasComplexCat = pCatProvider && pCatProvider->hasComplexCategories();
                     aSourceScale.ShiftedCategoryPosition = isCategoryPositionShifted(aSourceScale, bHasComplexCat);
 
-                    m_aAxisUsageList[xAxis].aScaleAutomatism = ScaleAutomatism(aSourceScale, rNullDate);
+                    m_aAxisUsageList[xAxis].aAutoScaling = ScaleAutomatism(aSourceScale, rNullDate);
                 }
 
                 AxisUsage& rAxisUsage = m_aAxisUsageList[xAxis];
@@ -697,57 +715,38 @@ void SeriesPlotterContainer::doAutoScaling( ChartModel& rChartModel )
     const ::std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
 
     //iterate over the main scales first than secondary axis
-    size_t nC;
-    sal_Int32 nAxisIndex=0;
-    for( nAxisIndex=0; nAxisIndex<=m_nMaxAxisIndex; nAxisIndex++ )
+    for (sal_Int32 nAxisIndex = 0; nAxisIndex <= m_nMaxAxisIndex; ++nAxisIndex)
     {
-
         // - first do autoscale for all x and z scales (because they are treated independent)
         for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
-            ::std::vector< VCoordinateSystem* > aVCooSysList_X = rAxisUsage.getCoordinateSystems(0,nAxisIndex);
-            ::std::vector< VCoordinateSystem* > aVCooSysList_Z = rAxisUsage.getCoordinateSystems(2,nAxisIndex);
 
-            for( nC=0; nC < aVCooSysList_X.size(); nC++)
-                aVCooSysList_X[nC]->prepareScaleAutomatismForDimensionAndIndex(rAxisUsage.aScaleAutomatism,0,nAxisIndex);
-            for( nC=0; nC < aVCooSysList_Z.size(); nC++)
-                aVCooSysList_Z[nC]->prepareScaleAutomatismForDimensionAndIndex(rAxisUsage.aScaleAutomatism,2,nAxisIndex);
+            rAxisUsage.prepareAutomaticAxisScaling(rAxisUsage.aAutoScaling, 0, nAxisIndex);
+            rAxisUsage.prepareAutomaticAxisScaling(rAxisUsage.aAutoScaling, 2, nAxisIndex);
 
             ExplicitScaleData       aExplicitScale;
             ExplicitIncrementData   aExplicitIncrement;
-            rAxisUsage.aScaleAutomatism.calculateExplicitScaleAndIncrement( aExplicitScale, aExplicitIncrement );
+            rAxisUsage.aAutoScaling.calculateExplicitScaleAndIncrement( aExplicitScale, aExplicitIncrement );
 
-            for( nC=0; nC < aVCooSysList_X.size(); nC++)
-                aVCooSysList_X[nC]->setExplicitScaleAndIncrement( 0, nAxisIndex, aExplicitScale, aExplicitIncrement );
-            for( nC=0; nC < aVCooSysList_Z.size(); nC++)
-                aVCooSysList_Z[nC]->setExplicitScaleAndIncrement( 2, nAxisIndex, aExplicitScale, aExplicitIncrement );
+            rAxisUsage.setExplicitScaleAndIncrement(0, nAxisIndex, aExplicitScale, aExplicitIncrement);
+            rAxisUsage.setExplicitScaleAndIncrement(2, nAxisIndex, aExplicitScale, aExplicitIncrement);
         }
 
         // - second do autoscale for the dependent y scales (the coordinate systems are prepared with x and z scales already )
         for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
-            ::std::vector< VCoordinateSystem* > aVCooSysList_X = rAxisUsage.getCoordinateSystems(0,nAxisIndex);
-            ::std::vector< VCoordinateSystem* > aVCooSysList_Y = rAxisUsage.getCoordinateSystems(1,nAxisIndex);
-            ::std::vector< VCoordinateSystem* > aVCooSysList_Z = rAxisUsage.getCoordinateSystems(2,nAxisIndex);
 
-            if(!aVCooSysList_Y.size())
-                continue;
-
-            for( nC=0; nC < aVCooSysList_Y.size(); nC++)
-                aVCooSysList_Y[nC]->prepareScaleAutomatismForDimensionAndIndex(rAxisUsage.aScaleAutomatism,1,nAxisIndex);
+            rAxisUsage.prepareAutomaticAxisScaling(rAxisUsage.aAutoScaling, 1, nAxisIndex);
 
             ExplicitScaleData       aExplicitScale;
             ExplicitIncrementData   aExplicitIncrement;
-            rAxisUsage.aScaleAutomatism.calculateExplicitScaleAndIncrement( aExplicitScale, aExplicitIncrement );
+            rAxisUsage.aAutoScaling.calculateExplicitScaleAndIncrement( aExplicitScale, aExplicitIncrement );
 
-            for( nC=0; nC < aVCooSysList_X.size(); nC++)
-                aVCooSysList_X[nC]->setExplicitScaleAndIncrement( 0, nAxisIndex, aExplicitScale, aExplicitIncrement );
-            for( nC=0; nC < aVCooSysList_Y.size(); nC++)
-                aVCooSysList_Y[nC]->setExplicitScaleAndIncrement( 1, nAxisIndex, aExplicitScale, aExplicitIncrement );
-            for( nC=0; nC < aVCooSysList_Z.size(); nC++)
-                aVCooSysList_Z[nC]->setExplicitScaleAndIncrement( 2, nAxisIndex, aExplicitScale, aExplicitIncrement );
+            rAxisUsage.setExplicitScaleAndIncrement(0, nAxisIndex, aExplicitScale, aExplicitIncrement);
+            rAxisUsage.setExplicitScaleAndIncrement(1, nAxisIndex, aExplicitScale, aExplicitIncrement);
+            rAxisUsage.setExplicitScaleAndIncrement(2, nAxisIndex, aExplicitScale, aExplicitIncrement);
         }
     }
     AdaptScaleOfYAxisWithoutAttachedSeries( rChartModel );
@@ -794,7 +793,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
                 {
                     for( size_t nC = 0; nC < aVCooSysList_Y.size(); ++nC )
                     {
-                        aVCooSysList_Y[nC]->prepareScaleAutomatismForDimensionAndIndex( rAxisUsage.aScaleAutomatism, 1, nAttachedAxisIndex );
+                        aVCooSysList_Y[nC]->prepareScaleAutomatismForDimensionAndIndex( rAxisUsage.aAutoScaling, 1, nAttachedAxisIndex );
 
                         ExplicitScaleData aExplicitScaleSource = aVCooSysList_Y[nC]->getExplicitScale( 1,nAttachedAxisIndex );
                         ExplicitIncrementData aExplicitIncrementSource = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAttachedAxisIndex );
@@ -808,7 +807,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
 
                         aExplicitIncrementDest.BaseValue = aExplicitIncrementSource.BaseValue;
 
-                        ScaleData aScale( rAxisUsage.aScaleAutomatism.getScale() );
+                        ScaleData aScale( rAxisUsage.aAutoScaling.getScale() );
                         if( !aScale.Minimum.hasValue() )
                         {
                             bool bNewMinOK = true;
