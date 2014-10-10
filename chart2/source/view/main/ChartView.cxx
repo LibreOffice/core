@@ -658,8 +658,9 @@ void SeriesPlotterContainer::updateScalesAndIncrementsOnAxes()
 
 void SeriesPlotterContainer::doAutoScaling( ChartModel& rChartModel )
 {
-    //precondition: need a initialized m_aSeriesPlotterList
-    //precondition: need a initialized m_aAxisUsageList
+    if (m_aSeriesPlotterList.empty() || m_aAxisUsageList.empty())
+        // We need these two containers populated to do auto-scaling.  Bail out.
+        return;
 
     ::std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
     const ::std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
