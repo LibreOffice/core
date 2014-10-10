@@ -542,12 +542,11 @@ case "$host_os" in
 
 solaris*)
     test_gtk=yes
-    build_gstreamer=yes
+    build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=yes
     test_kde=yes
     test_freetype=yes
-    test_gstreamer=yes
     _os=SunOS
 
     dnl ===========================================================
@@ -572,7 +571,7 @@ solaris*)
 
 linux-gnu*|k*bsd*-gnu*)
     test_gtk=yes
-    build_gstreamer=yes
+    build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=yes
     test_kde=yes
@@ -665,7 +664,7 @@ darwin*) # Mac OS X or iOS
 
 freebsd*)
     test_gtk=yes
-    build_gstreamer=yes
+    build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=yes
     test_kde=yes
@@ -695,7 +694,7 @@ freebsd*)
 
 *netbsd*)
     test_gtk=yes
-    build_gstreamer=yes
+    build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=no
     test_kde=no
@@ -724,7 +723,7 @@ openbsd*)
 
 dragonfly*)
     test_gtk=yes
-    build_gstreamer=yes
+    build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=yes
     test_kde=yes
@@ -735,7 +734,7 @@ dragonfly*)
     ;;
 
 linux-android*)
-    build_gstreamer=no
+    build_gstreamer_1_0=no
     build_gstreamer_0_10=no
     enable_lotuswordpro=no
     enable_mpl_subset=yes
@@ -1207,14 +1206,14 @@ AC_ARG_ENABLE(randr-link,
         [Disable linking with libXrandr, instead dynamically open it at runtime.]),
 ,enable_randr_link=yes)
 
-AC_ARG_ENABLE(gstreamer,
-    AS_HELP_STRING([--disable-gstreamer],
+AC_ARG_ENABLE(gstreamer-1-0,
+    AS_HELP_STRING([--disable-gstreamer-1-0],
         [Disable building with the new gstreamer 1.0 avmedia backend.]),
-,enable_gstreamer=yes)
+,enable_gstreamer_1_0=yes)
 
 AC_ARG_ENABLE(gstreamer-0-10,
     AS_HELP_STRING([--enable-gstreamer-0-10],
-        [Enable building the gstreamer 0.10 avmedia backend.]),
+        [Enable building with the gstreamer 0.10 avmedia backend.]),
 ,enable_gstreamer_0_10=no)
 
 AC_ARG_ENABLE(vlc,
@@ -4594,7 +4593,7 @@ if test "$enable_headless" = "yes"; then
     test_dbus=no
     test_fontconfig=yes
     test_gtk=no
-    build_gstreamer=no
+    build_gstreamer_1_0=no
     build_gstreamer_0_10=no
     test_tde=no
     test_kde=no
@@ -10125,36 +10124,37 @@ AC_SUBST(ENABLE_CAIRO_CANVAS)
 
 dnl ===================================================================
 dnl Check whether the GStreamer libraries are available.
+dnl It's possible to build avmedia with both GStreamer backends!
 dnl ===================================================================
 
-ENABLE_GSTREAMER=""
+ENABLE_GSTREAMER_1_0=""
 
-if test "$build_gstreamer" = "yes"; then
+if test "$build_gstreamer_1_0" = "yes"; then
 
     AC_MSG_CHECKING([whether to enable the new GStreamer 1.0 avmedia backend])
-    if test "$enable_avmedia" = yes -a "$enable_gstreamer" != no; then
-        ENABLE_GSTREAMER="TRUE"
+    if test "$enable_avmedia" = yes -a "$enable_gstreamer_1_0" != no; then
+        ENABLE_GSTREAMER_1_0="TRUE"
         AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-video-1.0 )
-        GSTREAMER_CFLAGS=$(printf '%s' "$GSTREAMER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        PKG_CHECK_MODULES( [GSTREAMER_1_0], [gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-video-1.0] )
+        GSTREAMER_1_0_CFLAGS=$(printf '%s' "$GSTREAMER_1_0_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     else
         AC_MSG_RESULT([no])
     fi
 fi
-AC_SUBST(GSTREAMER_CFLAGS)
-AC_SUBST(GSTREAMER_LIBS)
-AC_SUBST(ENABLE_GSTREAMER)
+AC_SUBST(GSTREAMER_1_0_CFLAGS)
+AC_SUBST(GSTREAMER_1_0_LIBS)
+AC_SUBST(ENABLE_GSTREAMER_1_0)
 
 
 ENABLE_GSTREAMER_0_10=""
 if test "$build_gstreamer_0_10" = "yes"; then
 
-    AC_MSG_CHECKING([whether to enable the GStreamer avmedia backend])
+    AC_MSG_CHECKING([whether to enable the GStreamer 0.10 avmedia backend])
     if test "$enable_avmedia" = yes -a "$enable_gstreamer_0_10" != no; then
         ENABLE_GSTREAMER_0_10="TRUE"
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-interfaces-0.10],, [
-            PKG_CHECK_MODULES(  [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10] )
+            PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10] )
         ])
         GSTREAMER_0_10_CFLAGS=$(printf '%s' "$GSTREAMER_0_10_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     else
