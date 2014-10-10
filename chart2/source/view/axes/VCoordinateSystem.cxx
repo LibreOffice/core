@@ -77,7 +77,7 @@ VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCoo
     , m_eLeftWallPos(CuboidPlanePosition_Left)
     , m_eBackWallPos(CuboidPlanePosition_Back)
     , m_eBottomPos(CuboidPlanePosition_Bottom)
-    , m_aMergedMinimumAndMaximumSupplier()
+    , m_aMergedMinMaxSupplier()
     , m_aExplicitScales(3)
     , m_aExplicitIncrements(3)
     , m_apExplicitCategoriesProvider(NULL)
@@ -360,13 +360,14 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
 {
     if( rScaleAutomatism.getScale().AxisType==AxisType::DATE && nDimIndex==0 )
     {
+        // This is a date X dimension.  Determine proper time resolution.
         sal_Int32 nTimeResolution = ::com::sun::star::chart::TimeUnit::MONTH;
         if( !(rScaleAutomatism.getScale().TimeIncrement.TimeResolution >>= nTimeResolution) )
         {
-            nTimeResolution = m_aMergedMinimumAndMaximumSupplier.calculateTimeResolutionOnXAxis();
+            nTimeResolution = m_aMergedMinMaxSupplier.calculateTimeResolutionOnXAxis();
             rScaleAutomatism.setAutomaticTimeResolution( nTimeResolution );
         }
-        m_aMergedMinimumAndMaximumSupplier.setTimeResolutionOnXAxis( nTimeResolution, rScaleAutomatism.getNullDate() );
+        m_aMergedMinMaxSupplier.setTimeResolutionOnXAxis( nTimeResolution, rScaleAutomatism.getNullDate() );
     }
 
     double fMin = 0.0;
@@ -375,31 +376,34 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
     ::rtl::math::setInf(&fMax, true);
     if( 0 == nDimIndex )
     {
-        fMin = m_aMergedMinimumAndMaximumSupplier.getMinimumX();
-        fMax = m_aMergedMinimumAndMaximumSupplier.getMaximumX();
+        // x dimension
+        fMin = m_aMergedMinMaxSupplier.getMinimumX();
+        fMax = m_aMergedMinMaxSupplier.getMaximumX();
     }
     else if( 1 == nDimIndex )
     {
+        // y dimension
         ExplicitScaleData aScale = getExplicitScale( 0, 0 );
-        fMin = m_aMergedMinimumAndMaximumSupplier.getMinimumYInRange(aScale.Minimum,aScale.Maximum, nAxisIndex);
-        fMax = m_aMergedMinimumAndMaximumSupplier.getMaximumYInRange(aScale.Minimum,aScale.Maximum, nAxisIndex);
+        fMin = m_aMergedMinMaxSupplier.getMinimumYInRange(aScale.Minimum,aScale.Maximum, nAxisIndex);
+        fMax = m_aMergedMinMaxSupplier.getMaximumYInRange(aScale.Minimum,aScale.Maximum, nAxisIndex);
     }
     else if( 2 == nDimIndex )
     {
-        fMin = m_aMergedMinimumAndMaximumSupplier.getMinimumZ();
-        fMax = m_aMergedMinimumAndMaximumSupplier.getMaximumZ();
+        // z dimension
+        fMin = m_aMergedMinMaxSupplier.getMinimumZ();
+        fMax = m_aMergedMinMaxSupplier.getMaximumZ();
     }
 
     //merge our values with those already contained in rScaleAutomatism
     rScaleAutomatism.expandValueRange( fMin, fMax );
 
     rScaleAutomatism.setAutoScalingOptions(
-        m_aMergedMinimumAndMaximumSupplier.isExpandBorderToIncrementRhythm( nDimIndex ),
-        m_aMergedMinimumAndMaximumSupplier.isExpandIfValuesCloseToBorder( nDimIndex ),
-        m_aMergedMinimumAndMaximumSupplier.isExpandWideValuesToZero( nDimIndex ),
-        m_aMergedMinimumAndMaximumSupplier.isExpandNarrowValuesTowardZero( nDimIndex ) );
+        m_aMergedMinMaxSupplier.isExpandBorderToIncrementRhythm( nDimIndex ),
+        m_aMergedMinMaxSupplier.isExpandIfValuesCloseToBorder( nDimIndex ),
+        m_aMergedMinMaxSupplier.isExpandWideValuesToZero( nDimIndex ),
+        m_aMergedMinMaxSupplier.isExpandNarrowValuesTowardZero( nDimIndex ) );
 
-    VAxisBase* pVAxis( this->getVAxis( nDimIndex, nAxisIndex ) );
+    VAxisBase* pVAxis = getVAxis(nDimIndex, nAxisIndex);
     if( pVAxis )
         rScaleAutomatism.setMaximumAutoMainIncrementCount( pVAxis->estimateMaximumAutoMainIncrementCount() );
 }
@@ -530,17 +534,17 @@ void VCoordinateSystem::createGridShapes()
 }
 void VCoordinateSystem::addMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier )
 {
-    m_aMergedMinimumAndMaximumSupplier.addMinimumAndMaximumSupplier(pMinimumAndMaximumSupplier);
+    m_aMergedMinMaxSupplier.addMinimumAndMaximumSupplier(pMinimumAndMaximumSupplier);
 }
 
 bool VCoordinateSystem::hasMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier )
 {
-    return m_aMergedMinimumAndMaximumSupplier.hasMinimumAndMaximumSupplier(pMinimumAndMaximumSupplier);
+    return m_aMergedMinMaxSupplier.hasMinimumAndMaximumSupplier(pMinimumAndMaximumSupplier);
 }
 
 void VCoordinateSystem::clearMinimumAndMaximumSupplierList()
 {
-    m_aMergedMinimumAndMaximumSupplier.clearMinimumAndMaximumSupplierList();
+    m_aMergedMinMaxSupplier.clearMinimumAndMaximumSupplierList();
 }
 
 bool VCoordinateSystem::getPropertySwapXAndYAxis() const

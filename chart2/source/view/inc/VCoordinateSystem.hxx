@@ -172,7 +172,12 @@ protected: //member
     CuboidPlanePosition m_eBackWallPos;
     CuboidPlanePosition m_eBottomPos;
 
-    MergedMinimumAndMaximumSupplier m_aMergedMinimumAndMaximumSupplier; //this is used only for autoscaling purpose
+    /**
+     * Collection of min-max suppliers which are basically different chart
+     * types present in the same coordinate system.  This is used only for
+     * auto-scaling purposes.
+     */
+    MergedMinimumAndMaximumSupplier m_aMergedMinMaxSupplier;
 
     ::com::sun::star::uno::Sequence< OUString > m_aSeriesNamesForZAxis;
 
