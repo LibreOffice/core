@@ -561,14 +561,14 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
         if( !rSpzArr.empty() )
         {
             const bool bDelFwrd = rMark.nNode.GetIndex() <= rPoint.nNode.GetIndex();
-            SwFlyFrmFmt* pFmt;
+            SwFrmFmt* pFmt;
             const SwFmtAnchor* pAnchor;
             size_t n = rSpzArr.size();
             const SwPosition* pAPos;
 
             while( n && !rSpzArr.empty() )
             {
-                pFmt = (SwFlyFrmFmt*)rSpzArr[--n];
+                pFmt = rSpzArr[--n];
                 pAnchor = &pFmt->GetAnchor();
                 switch( pAnchor->GetAnchorId() )
                 {
@@ -630,7 +630,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                                 }
                                 else
                                 {
-                                    pHistory->Add( *pFmt, nChainInsPos );
+                                    pHistory->Add( *static_cast<SwFlyFrmFmt *>(pFmt), nChainInsPos );
                                     // reset n so that no Format is skipped
                                     n = n >= rSpzArr.size() ?
                                         rSpzArr.size() : n+1;
@@ -648,7 +648,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         if (IsDestroyFrameAnchoredAtChar(
                                 *pAPos, *pStt, *pEnd, pDoc, nDelCntntType))
                         {
-                            pHistory->Add( *pFmt, nChainInsPos );
+                            pHistory->Add( *static_cast<SwFlyFrmFmt *>(pFmt), nChainInsPos );
                             n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                         }
                         else if( !( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType ) )
@@ -677,7 +677,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         if( !pHistory )
                             pHistory = new SwHistory;
 
-                        pHistory->Add( *pFmt, nChainInsPos );
+                        pHistory->Add( *static_cast<SwFlyFrmFmt *>(pFmt), nChainInsPos );
 
                         // reset n so that no Format is skipped
                         n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
