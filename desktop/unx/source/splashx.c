@@ -354,36 +354,6 @@ static void create_pixmap(struct splash* splash)
         XPutImage( splash->display, pixmap, pixmap_gc, image, 0, 0, 0, 0, splash->width, splash->height );
         XDestroyImage( image );
     }
-    else //if ( depth == 1 || visual->class == DirectColor )
-    {
-        // FIXME Something like the following, but faster ;-) - XDrawPoint is not
-        // a good idea...
-        int x, y;
-        for ( y = 0; y < splash->height; ++y )
-        {
-            color_t* color = (color_t *)&(splash->bitmap_rows[y]);
-
-            int delta = 0;
-            for ( x = 0; x < splash->width; ++x, ++color )
-            {
-                int rnd = (int)( ( (long)( random() - RAND_MAX/2 ) * 32000 )/RAND_MAX );
-                int luminance = delta + rnd + 299 * (int)color->r + 587 * (int)color->g + 114 * (int)color->b;
-
-                if ( luminance < 128000 )
-                {
-                    XSetForeground( splash->display, pixmap_gc, BlackPixel( splash->display, splash->screen ) );
-                    delta = luminance;
-                }
-                else
-                {
-                    XSetForeground( splash->display, pixmap_gc, WhitePixel( splash->display, splash->screen ) );
-                    delta = luminance - 255000;
-                }
-
-                XDrawPoint( splash->display, pixmap, pixmap_gc, x, y );
-            }
-        }
-    }
 
     XSetWindowBackgroundPixmap( splash->display, splash->win, pixmap );
 
