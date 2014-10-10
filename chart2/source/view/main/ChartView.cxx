@@ -242,6 +242,9 @@ public:
 
     void AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel& rModel );
 
+    bool isCategoryPositionShifted(
+        const chart2::ScaleData& rSourceScale, bool bHasComplexCategories ) const;
+
 private:
     SeriesPlottersType m_aSeriesPlotterList;
     std::vector< VCoordinateSystem* >& m_rVCooSysList;
@@ -525,61 +528,89 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     }
 }
 
+bool SeriesPlotterContainer::isCategoryPositionShifted(
+    const chart2::ScaleData& rSourceScale, bool bHasComplexCategories ) const
+{
+    if (rSourceScale.AxisType == AxisType::CATEGORY && m_bChartTypeUsesShiftedCategoryPositionPerDefault)
+        return true;
+
+    if (rSourceScale.AxisType==AxisType::CATEGORY && bHasComplexCategories)
+        return true;
+
+    if (rSourceScale.AxisType == AxisType::DATE)
+        return true;
+
+    if (rSourceScale.AxisType == AxisType::SERIES)
+        return true;
+
+    return false;
+}
+
 void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
 {
     m_aAxisUsageList.clear();
-    size_t nC;
-    for( nC=0; nC < m_rVCooSysList.size(); nC++)
+
+    // Loop through coordinate systems in the diagram (though for now
+    // there should only be one coordinate system per diagram).
+    for (size_t i = 0, n = m_rVCooSysList.size(); i < n; ++i)
     {
-        VCoordinateSystem* pVCooSys = m_rVCooSysList[nC];
-        for(sal_Int32 nDimensionIndex=0; nDimensionIndex<3; nDimensionIndex++)
+        VCoordinateSystem* pVCooSys = m_rVCooSysList[i];
+        uno::Reference<XCoordinateSystem> xCooSys = pVCooSys->getModel();
+        sal_Int32 nDimCount = xCooSys->getDimension();
+
+        for (sal_Int32 nDimIndex = 0; nDimIndex < nDimCount; ++nDimIndex)
         {
-            uno::Reference< XCoordinateSystem > xCooSys = pVCooSys->getModel();
-            sal_Int32 nDimensionCount = xCooSys->getDimension();
-            if( nDimensionIndex >= nDimensionCount )
-                continue;
-            bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis(  AxisHelper::getChartTypeByIndex( xCooSys, 0 ), nDimensionCount, nDimensionIndex );
-            const sal_Int32 nMaximumAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
-            for(sal_Int32 nAxisIndex=0; nAxisIndex<=nMaximumAxisIndex; ++nAxisIndex)
+            bool bDateAxisAllowed = ChartTypeHelper::isSupportingDateAxis(
+                AxisHelper::getChartTypeByIndex(xCooSys, 0), nDimCount, nDimIndex);
+
+            // Each dimension may have primary and secondary axes.
+            const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);
+            for (sal_Int32 nAxisIndex = 0; nAxisIndex <= nMaxAxisIndex; ++nAxisIndex)
             {
-                uno::Reference< XAxis > xAxis( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
-                OSL_ASSERT( xAxis.is());
-                if( xAxis.is())
+                uno::Reference<XAxis> xAxis = xCooSys->getAxisByDimension(nDimIndex, nAxisIndex);
+
+                if (!xAxis.is())
+                    continue;
+
+                if (m_aAxisUsageList.find(xAxis) == m_aAxisUsageList.end())
                 {
-                    if(m_aAxisUsageList.find(xAxis)==m_aAxisUsageList.end())
-                    {
-                        chart2::ScaleData aSourceScale = xAxis->getScaleData();
-                        ExplicitCategoriesProvider* pExplicitCategoriesProvider = pVCooSys->getExplicitCategoriesProvider();
-                        if( nDimensionIndex==0 )
-                            AxisHelper::checkDateAxis( aSourceScale, pExplicitCategoriesProvider, bChartTypeAllowsDateAxis );
-                        if( (aSourceScale.AxisType == AxisType::CATEGORY && m_bChartTypeUsesShiftedCategoryPositionPerDefault)
-                            || (aSourceScale.AxisType==AxisType::CATEGORY && pExplicitCategoriesProvider && pExplicitCategoriesProvider->hasComplexCategories() )
-                            || aSourceScale.AxisType == AxisType::DATE
-                            || aSourceScale.AxisType == AxisType::SERIES )
-                            aSourceScale.ShiftedCategoryPosition = true;
-                        else
-                            aSourceScale.ShiftedCategoryPosition = false;
-                        m_aAxisUsageList[xAxis].aScaleAutomatism = ScaleAutomatism(aSourceScale,rNullDate);
-                    }
-                    AxisUsage& rAxisUsage = m_aAxisUsageList[xAxis];
-                    rAxisUsage.addCoordinateSystem(pVCooSys,nDimensionIndex,nAxisIndex);
+                    // Create axis usage object for this axis.
+
+                    chart2::ScaleData aSourceScale = xAxis->getScaleData();
+                    ExplicitCategoriesProvider* pCatProvider = pVCooSys->getExplicitCategoriesProvider();
+                    if (nDimIndex == 0)
+                        AxisHelper::checkDateAxis( aSourceScale, pCatProvider, bDateAxisAllowed );
+
+                    bool bHasComplexCat = pCatProvider && pCatProvider->hasComplexCategories();
+                    aSourceScale.ShiftedCategoryPosition = isCategoryPositionShifted(aSourceScale, bHasComplexCat);
+
+                    m_aAxisUsageList[xAxis].aScaleAutomatism = ScaleAutomatism(aSourceScale, rNullDate);
                 }
+
+                AxisUsage& rAxisUsage = m_aAxisUsageList[xAxis];
+                rAxisUsage.addCoordinateSystem(pVCooSys, nDimIndex, nAxisIndex);
             }
         }
     }
 
+    // Determine the highest axis index of all dimensions.
     ::std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
     const ::std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
-
-    //init m_nMaxAxisIndex
     m_nMaxAxisIndex = 0;
-    for(sal_Int32 nDimensionIndex=0; nDimensionIndex<3; nDimensionIndex++)
+    for (size_t i = 0, n = m_rVCooSysList.size(); i < n; ++i)
     {
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
+        VCoordinateSystem* pVCooSys = m_rVCooSysList[i];
+        uno::Reference<XCoordinateSystem> xCooSys = pVCooSys->getModel();
+        sal_Int32 nDimCount = xCooSys->getDimension();
+
+        for (sal_Int32 nDimIndex = 0; nDimIndex < nDimCount; ++nDimIndex)
         {
-            sal_Int32 nLocalMax = aAxisIter->second.getMaxAxisIndexForDimension( nDimensionIndex );
-            if( m_nMaxAxisIndex < nLocalMax )
-                m_nMaxAxisIndex = nLocalMax;
+            for (aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter)
+            {
+                sal_Int32 nLocalMax = aAxisIter->second.getMaxAxisIndexForDimension(nDimIndex);
+                if (m_nMaxAxisIndex < nLocalMax)
+                    m_nMaxAxisIndex = nLocalMax;
+            }
         }
     }
 }
