@@ -94,6 +94,7 @@ namespace connectivity
 
             ONDXPage*   mpPage;
             sal_uInt32  nPagePos;       // Position in the index file
+
         public:
             ONDXPagePtr(sal_uInt32 nPos = 0) : mpPage(0), nPagePos(nPos) {}
             ONDXPagePtr(const ONDXPagePtr& rRef);
@@ -107,6 +108,7 @@ namespace connectivity
             ONDXPage * operator ->() const { assert(mpPage != 0); return mpPage; }
             bool Is() const { return mpPage != 0; }
             inline void Clear();
+            ONDXPagePtr& operator=(const ONDXPagePtr& rRef);
         };
 
         // Index Page

@@ -835,6 +835,19 @@ ONDXPagePtr::ONDXPagePtr(ONDXPage* pRefPage)
         nPagePos = pRefPage->GetPagePos();
 }
 
+ONDXPagePtr& ONDXPagePtr::operator=(ONDXPagePtr const & rOther)
+{
+    if (rOther.mpPage != 0) {
+        rOther.mpPage->AddNextRef();
+    }
+    ONDXPage * pOldObj = mpPage;
+    mpPage = rOther.mpPage;
+    if (pOldObj != 0) {
+        pOldObj->ReleaseRef();
+    }
+    return *this;
+}
+
 static sal_uInt32 nValue;
 
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
