@@ -265,11 +265,11 @@ bool TrendlineResources::FillItemSet(SfxItemSet* rOutAttrs) const
 
     sal_uInt32 nIndex = 0;
     double aValue = 0.0;
-    m_pNumFormatter->IsNumberFormat(m_pFmtFld_ExtrapolateForward->GetText(),nIndex,aValue);
+    (void)m_pNumFormatter->IsNumberFormat(m_pFmtFld_ExtrapolateForward->GetText(),nIndex,aValue);
     rOutAttrs->Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD ) );
 
     aValue = 0.0;
-    m_pNumFormatter->IsNumberFormat(m_pFmtFld_ExtrapolateBackward->GetText(),nIndex,aValue);
+    (void)m_pNumFormatter->IsNumberFormat(m_pFmtFld_ExtrapolateBackward->GetText(),nIndex,aValue);
     rOutAttrs->Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD ) );
 
     if( m_pCB_SetIntercept->GetState() != TRISTATE_INDET )
