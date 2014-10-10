@@ -111,7 +111,7 @@ namespace sd
 
     protected:
         virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException ) SAL_OVERRIDE;
-        virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, RuntimeException ) SAL_OVERRIDE;
+        virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
         bool LoadList( XPropertyListType t, const OUString &rPath,
@@ -980,7 +980,7 @@ void DocumentSettings::ExtractURL( XPropertyListType t, Any* pValue )
 void
 DocumentSettings::_getPropertyValues(
         const PropertyMapEntry** ppEntries, Any* pValue)
-throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
