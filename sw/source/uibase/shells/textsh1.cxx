@@ -1574,8 +1574,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 SfxItemSet aSet( GetPool() );
                 rSh.GetCurAttr( aSet );
-                const SvxColorItem& aColorItem = static_cast< const SvxColorItem& >( aSet.Get(RES_CHRATR_BACKGROUND) );
-                rSet.Put( aColorItem, SID_ATTR_CHAR_COLOR_BACKGROUND );
+                const SvxBrushItem& aBrushItem = static_cast< const SvxBrushItem& >( aSet.Get(RES_CHRATR_BACKGROUND) );
+                rSet.Put( SvxColorItem(aBrushItem.GetColor(), nWhich) );
             }
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
