@@ -237,7 +237,8 @@ public:
         {
             if (nCurOutputType == text::MailMergeType::SHELL)
             {
-                SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+                SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
+                CPPUNIT_ASSERT(pTxtDoc);
                 pTxtDoc->GetDocShell()->DoClose();
             }
             else
