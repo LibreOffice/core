@@ -1110,8 +1110,7 @@ SAL_CALL osl_mapFile (
         return osl_File_E_INVAL;
     *ppAddr = 0;
 
-    static sal_uInt64 const g_limit_size_t = std::numeric_limits< size_t >::max();
-    if (g_limit_size_t < uLength)
+    if (uLength > SAL_MAX_SIZE)
         return osl_File_E_OVERFLOW;
     size_t const nLength = sal::static_int_cast< size_t >(uLength);
 
@@ -1190,8 +1189,7 @@ unmapFile (void* pAddr, sal_uInt64 uLength)
     if (0 == pAddr)
         return osl_File_E_INVAL;
 
-    static sal_uInt64 const g_limit_size_t = std::numeric_limits< size_t >::max();
-    if (g_limit_size_t < uLength)
+    if (uLength > SAL_MAX_SIZE)
         return osl_File_E_OVERFLOW;
     size_t const nLength = sal::static_int_cast< size_t >(uLength);
 

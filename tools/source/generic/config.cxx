@@ -104,7 +104,7 @@ static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
         sal_uInt64 nPos = 0;
         if( aFile.getSize( nPos ) == ::osl::FileBase::E_None )
         {
-            if (nPos > std::numeric_limits< std::size_t >::max()) {
+            if (nPos > SAL_MAX_SIZE) {
                 aFile.close();
                 return 0;
             }
