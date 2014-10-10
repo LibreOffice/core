@@ -1434,7 +1434,9 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                                 OUStringBuffer aAspectRatioString;
                                 ::sax::Converter::convertDouble(
                                     aAspectRatioString,
-                                    double(aSize.Width)/double(aSize.Height));
+                                    (aSize.Height == 0
+                                     ? 1.0
+                                     : double(aSize.Width)/double(aSize.Height)));
                                 mrExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEGEND_EXPANSION_ASPECT_RATIO, aAspectRatioString.makeStringAndClear() );
                             }
                         }
