@@ -56,6 +56,9 @@ namespace gio
 
 com::sun::star::uno::Any convertToException(GError *pError,
     const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rContext, bool bThrow=true);
+void convertToIOException(GError *pError,
+    const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rContext)
+        throw (css::io::IOException, css::uno::RuntimeException, std::exception);
 
 class ContentProvider;
 class Content : public ::ucbhelper::ContentImplHelper, public com::sun::star::ucb::XContentCreator

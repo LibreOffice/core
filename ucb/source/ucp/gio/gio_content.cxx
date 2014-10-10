@@ -33,6 +33,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
@@ -58,6 +59,7 @@
 #include <com/sun/star/ucb/XContentCreator.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/interactionrequest.hxx>
@@ -281,6 +283,30 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
             break;
     }
     return aRet;
+}
+
+void convertToIOException(GError *pError, const uno::Reference< uno::XInterface >& rContext)
+    throw( io::IOException, uno::RuntimeException, std::exception )
+{
+    try
+    {
+        convertToException(pError, rContext);
+    }
+    catch (const io::IOException&)
+    {
+        throw;
+    }
+    catch (const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (const uno::Exception& e)
+    {
+        css::uno::Any a(cppu::getCaughtException());
+        throw css::lang::WrappedTargetException(
+            "wrapped Exception " + e.Message,
+            css::uno::Reference<css::uno::XInterface>(), a);
+    }
 }
 
 uno::Any Content::mapGIOError( GError *pError )

@@ -51,7 +51,7 @@ void SAL_CALL Seekable::truncate( void )
 
     GError *pError=NULL;
     if (!g_seekable_truncate(mpStream, 0, NULL, &pError))
-        convertToException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
 void SAL_CALL Seekable::seek( sal_Int64 location )
@@ -66,7 +66,7 @@ void SAL_CALL Seekable::seek( sal_Int64 location )
 
     GError *pError=NULL;
     if (!g_seekable_seek(mpStream, location, G_SEEK_SET, NULL, &pError))
-        convertToException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
 sal_Int64 SAL_CALL Seekable::getPosition() throw( io::IOException, uno::RuntimeException, std::exception )
@@ -104,7 +104,7 @@ sal_Int64 SAL_CALL Seekable::getLength() throw( io::IOException, uno::RuntimeExc
         GError *pError=NULL;
         sal_Int64 nCurr = getPosition();
         if (!g_seekable_seek(mpStream, 0, G_SEEK_END, NULL, &pError))
-            convertToException(pError, static_cast< cppu::OWeakObject * >(this));
+            convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
         nSize = getPosition();
         seek(nCurr);
         bOk = true;

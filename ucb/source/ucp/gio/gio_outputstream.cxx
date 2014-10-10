@@ -49,7 +49,7 @@ void SAL_CALL OutputStream::writeBytes( const com::sun::star::uno::Sequence< sal
 
     GError *pError=NULL;
     if (!g_output_stream_write_all(G_OUTPUT_STREAM(mpStream), rData.getConstArray(), rData.getLength(), NULL, NULL, &pError))
-        convertToException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
 void SAL_CALL OutputStream::flush( void )
@@ -61,7 +61,7 @@ void SAL_CALL OutputStream::flush( void )
 
     GError *pError=NULL;
     if (!g_output_stream_flush(G_OUTPUT_STREAM(mpStream), NULL, &pError))
-        convertToException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
 void SAL_CALL OutputStream::closeOutput( void )

@@ -66,7 +66,7 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
 
     GError *pError=NULL;
     if (!g_seekable_seek(G_SEEKABLE(mpStream), nBytesToSkip, G_SEEK_CUR, NULL, &pError))
-        convertToException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
 }
 
 sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -88,7 +88,7 @@ sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal
     gsize nBytesRead = 0;
     GError *pError=NULL;
     if (!g_input_stream_read_all(G_INPUT_STREAM(mpStream), aData.getArray(), nBytesToRead, &nBytesRead, NULL, &pError))
-        convertToException(pError, static_cast< cppu::OWeakObject * >(this));
+        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
     aData.realloc(nBytesRead);
     return nBytesRead;
 }
