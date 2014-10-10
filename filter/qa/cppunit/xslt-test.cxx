@@ -122,6 +122,8 @@ void XsltFilterTest::testXsltCopyNew()
     sal_uInt64 size(0);
     foo.getSize(size);
     CPPUNIT_ASSERT(size > 1000); // check that something happened
+    foo.close();
+    osl_removeFile(tempURL.pData);
 }
 
 void XsltFilterTest::testXsltCopyOld()
@@ -182,6 +184,8 @@ void XsltFilterTest::testXsltCopyOld()
     sal_uInt64 size(0);
     foo.getSize(size);
     CPPUNIT_ASSERT(size > 1000); // check that something happened
+    foo.close();
+    osl_removeFile(tempURL.pData);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(XsltFilterTest);
