@@ -56,7 +56,7 @@
 using namespace ::com::sun::star;
 
 /// Impress import filters tests.
-class SdFiltersTest : public SdModelTestBase
+class SdImportTest : public SdModelTestBase
 {
 public:
     void testDocumentLayout();
@@ -85,7 +85,7 @@ public:
     void testBnc584721_3();
     void testBnc584721_4();
 
-    CPPUNIT_TEST_SUITE(SdFiltersTest);
+    CPPUNIT_TEST_SUITE(SdImportTest);
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testSmoketest);
     CPPUNIT_TEST(testN759180);
@@ -145,7 +145,7 @@ NOTE: This approach is suitable only for tests of fixes that actually change
 the layout - best to check by reverting your fix locally after having added
 the test, and re-running; it should break.
 */
-void SdFiltersTest::testDocumentLayout()
+void SdImportTest::testDocumentLayout()
 {
     struct { const char *pInput, *pDump; sal_Int32 nFormat; sal_Int32 nExportType; } aFilesToCompare[] =
     {
@@ -174,7 +174,7 @@ void SdFiltersTest::testDocumentLayout()
     }
 }
 
-void SdFiltersTest::testSmoketest()
+void SdImportTest::testSmoketest()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/smoketest.pptx"), PPTX);
 
@@ -202,7 +202,7 @@ void SdFiltersTest::testSmoketest()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN759180()
+void SdImportTest::testN759180()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/n759180.pptx"), PPTX);
 
@@ -240,7 +240,7 @@ void SdFiltersTest::testN759180()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN862510_1()
+void SdImportTest::testN862510_1()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_1.pptx"), PPTX );
 
@@ -265,7 +265,7 @@ void SdFiltersTest::testN862510_1()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN862510_2()
+void SdImportTest::testN862510_2()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_2.pptx"), PPTX );
 
@@ -284,7 +284,7 @@ void SdFiltersTest::testN862510_2()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN862510_4()
+void SdImportTest::testN862510_4()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_4.pptx"), PPTX );
 
@@ -309,7 +309,7 @@ void SdFiltersTest::testN862510_4()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN828390_2()
+void SdImportTest::testN828390_2()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_2.pptx"), PPTX );
 
@@ -328,7 +328,7 @@ void SdFiltersTest::testN828390_2()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN828390_3()
+void SdImportTest::testN828390_3()
 {
     bool bPassed = true;
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_3.pptx"), PPTX );
@@ -361,7 +361,7 @@ void SdFiltersTest::testN828390_3()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testMasterPageStyleParent()
+void SdImportTest::testMasterPageStyleParent()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/masterpage_style_parent.odp"), ODP );
 
@@ -400,7 +400,7 @@ void SdFiltersTest::testMasterPageStyleParent()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN778859()
+void SdImportTest::testN778859()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/n778859.pptx"), PPTX);
 
@@ -419,7 +419,7 @@ void SdFiltersTest::testN778859()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testFdo68594()
+void SdImportTest::testFdo68594()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/fdo68594.ppt"), PPT);
 
@@ -438,7 +438,7 @@ void SdFiltersTest::testFdo68594()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testFdo72998()
+void SdImportTest::testFdo72998()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/cshapes.pptx"), PPTX);
 
@@ -468,7 +468,7 @@ std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
     return rStrm;
 }
 
-void SdFiltersTest::testFdo77027()
+void SdImportTest::testFdo77027()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/fdo77027.odp"), ODP);
 
@@ -492,7 +492,7 @@ void SdFiltersTest::testFdo77027()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testFdo64512()
+void SdImportTest::testFdo64512()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo64512.odp"), ODP);
 
@@ -535,7 +535,7 @@ void SdFiltersTest::testFdo64512()
 }
 
 // Unit test for importing charts
-void SdFiltersTest::testFdo71075()
+void SdImportTest::testFdo71075()
 {
     double values[] = { 12.0, 13.0, 14.0 };
     ::com::sun::star::uno::Any aAny;
@@ -579,7 +579,7 @@ void SdFiltersTest::testFdo71075()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testStrictOOXML()
+void SdImportTest::testStrictOOXML()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/strict_ooxml.pptx"), PPTX);
 
@@ -593,7 +593,7 @@ void SdFiltersTest::testStrictOOXML()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc870237()
+void SdImportTest::testBnc870237()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870237.pptx"), PPTX);
 
@@ -613,7 +613,7 @@ void SdFiltersTest::testBnc870237()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testCreationDate()
+void SdImportTest::testCreationDate()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71434.pptx"), PPTX);
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
@@ -626,7 +626,7 @@ void SdFiltersTest::testCreationDate()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc887225()
+void SdImportTest::testBnc887225()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc887225.pptx"), PPTX );
     // In the document, lastRow and lastCol table properties are used.
@@ -674,7 +674,7 @@ void SdFiltersTest::testBnc887225()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc480256()
+void SdImportTest::testBnc480256()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc480256.pptx"), PPTX);
     // In the document, there are two tables with table background properties.
@@ -731,7 +731,7 @@ void SdFiltersTest::testBnc480256()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc584721_1()
+void SdImportTest::testBnc584721_1()
 {
     // Title text shape on the master page contained wrong text.
 
@@ -749,7 +749,7 @@ void SdFiltersTest::testBnc584721_1()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc584721_2()
+void SdImportTest::testBnc584721_2()
 {
     // Import created an extra/unneeded outliner shape on the master slide next to the imported title shape.
 
@@ -764,7 +764,7 @@ void SdFiltersTest::testBnc584721_2()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc584721_3()
+void SdImportTest::testBnc584721_3()
 {
     // Subtitle was simply skipped on master slides.
     // Check whether the second shape is a subtitle shape with the right text.
@@ -789,7 +789,7 @@ void SdFiltersTest::testBnc584721_3()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc591147()
+void SdImportTest::testBnc591147()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc591147.pptx"), PPTX);
 
@@ -824,7 +824,7 @@ void SdFiltersTest::testBnc591147()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc584721_4()
+void SdImportTest::testBnc584721_4()
 {
     // Black text was imported as white because of wrong caching mechanism
 
@@ -863,7 +863,7 @@ void SdFiltersTest::testBnc584721_4()
     xDocShRef->DoClose();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

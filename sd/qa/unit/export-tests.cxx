@@ -56,7 +56,7 @@
 
 using namespace ::com::sun::star;
 
-class SdFiltersTest : public SdModelTestBase
+class SdExportTest : public SdModelTestBase
 {
 public:
     void testN821567();
@@ -72,7 +72,7 @@ public:
     void testBnc822347_EmptyBullet();
     void testFdo83751();
 
-    CPPUNIT_TEST_SUITE(SdFiltersTest);
+    CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testN821567);
     CPPUNIT_TEST(testBnc870233_1);
     CPPUNIT_TEST(testBnc870233_2);
@@ -88,7 +88,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void SdFiltersTest::testN821567()
+void SdExportTest::testN821567()
 {
     OUString bgImage;
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n821567.pptx"), PPTX );
@@ -154,7 +154,7 @@ void checkFontAttributes(const SdrTextObj* pObj, sal_uInt32 nColor,
 
 }
 
-void SdFiltersTest::testBnc870233_1()
+void SdExportTest::testBnc870233_1()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_1.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
@@ -183,7 +183,7 @@ void SdFiltersTest::testBnc870233_1()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc870233_2()
+void SdExportTest::testBnc870233_2()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_2.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
@@ -219,7 +219,7 @@ void SdFiltersTest::testBnc870233_2()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN828390_4()
+void SdExportTest::testN828390_4()
 {
     bool bPassed = false;
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/n828390_4.odp"), ODP );
@@ -258,7 +258,7 @@ void SdFiltersTest::testN828390_4()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN828390_5()
+void SdExportTest::testN828390_5()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/n828390_5.odp"), ODP );
 
@@ -281,7 +281,7 @@ void SdFiltersTest::testN828390_5()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testMediaEmbedding()
+void SdExportTest::testMediaEmbedding()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"), ODP);
 
@@ -316,7 +316,7 @@ void SdFiltersTest::testMediaEmbedding()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testFdo71961()
+void SdExportTest::testFdo71961()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71961.odp"), ODP);
 
@@ -347,7 +347,7 @@ void SdFiltersTest::testFdo71961()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testN828390()
+void SdExportTest::testN828390()
 {
     bool bPassed = false;
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390.pptx"), PPTX );
@@ -384,7 +384,7 @@ void SdFiltersTest::testN828390()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc880763()
+void SdExportTest::testBnc880763()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc880763.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
@@ -408,7 +408,7 @@ void SdFiltersTest::testBnc880763()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testBnc862510_5()
+void SdExportTest::testBnc862510_5()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_5.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
@@ -432,7 +432,7 @@ void SdFiltersTest::testBnc862510_5()
 // In numbering a bullet could be defined as empty (no character).
 // When exporting to OOXML make sure that the bullet is ignored and
 // not written into the file.
-void SdFiltersTest::testBnc822347_EmptyBullet()
+void SdExportTest::testBnc822347_EmptyBullet()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/bnc822347_EmptyBullet.odp"), ODP);
     xDocShRef = saveAndReload(xDocShRef, PPTX);
@@ -460,7 +460,7 @@ void SdFiltersTest::testBnc822347_EmptyBullet()
     xDocShRef->DoClose();
 }
 
-void SdFiltersTest::testFdo83751()
+void SdExportTest::testFdo83751()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/fdo83751.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
@@ -476,7 +476,7 @@ void SdFiltersTest::testFdo83751()
     CPPUNIT_ASSERT_EQUAL(OUString("Document"), propValue);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
