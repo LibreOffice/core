@@ -6072,6 +6072,7 @@ void Test::testFormulaToValue()
 
     // C3:C8 should be shared formula cells.
     pFC = m_pDoc->GetFormulaCell(ScAddress(2,2,0));
+    CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT(pFC->GetSharedTopRow() == 2);
     CPPUNIT_ASSERT(pFC->GetSharedLength() == 6);
 
