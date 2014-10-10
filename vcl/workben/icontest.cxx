@@ -10,7 +10,8 @@
 /*
  * =======================================================================
  *
- * This is a quick hack to test some stuff. Work in progress. Don't touch.
+ * This is a quick hack to test some stuff. Work in progress. Don't touch
+ * and don't bother inspecting too closely.
  *
  * =======================================================================
  */
@@ -45,13 +46,27 @@ using namespace com::sun::star;
 
 namespace {
     const int WIDTH = 1000, HEIGHT = 800;
+
+    double getTimeNow()
+    {
+        TimeValue aValue;
+        osl_getSystemTime(&aValue);
+        return (double)aValue.Seconds +
+            (double)aValue.Nanosec / (1000*1000*1000);
+    }
+
 }
 
 class MyWorkWindow : public WorkWindow
 {
+protected:
+    double nStartTime;
+    int nPaintCount;
+
 public:
     MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
 
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 };
 
@@ -69,13 +84,21 @@ public:
     MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-
 };
 
 MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
 {
+    nPaintCount = 0;
+    nStartTime = getTimeNow();
     EnableInput();
+}
+
+void MyWorkWindow::Paint( const Rectangle& rRect )
+{
+    SAL_INFO("vcl.icontest", "==> Paint! " << nPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - nStartTime);
+    WorkWindow::Paint( rRect );
+    Invalidate( INVALIDATE_CHILDREN );
 }
 
 MyOpenGLWorkWindow::MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
@@ -176,7 +199,7 @@ void MyOpenGLWorkWindow::LoadTexture()
 
 void MyOpenGLWorkWindow::Paint( const Rectangle& )
 {
-    SAL_INFO("vcl.icontest", "==> Paint! (OpenGL) " << GetSizePixel());
+    SAL_INFO("vcl.icontest", "==> Paint! "<< nPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - nStartTime);
     OpenGLContext& aCtx = mpOpenGLWindow->getContext();
     aCtx.requestLegacyContext();
     CHECK_GL_ERROR();
@@ -228,6 +251,8 @@ void MyOpenGLWorkWindow::Paint( const Rectangle& )
 
     aCtx.swapBuffers();
     CHECK_GL_ERROR();
+
+    Invalidate( INVALIDATE_CHILDREN );
 }
 
 void MyWorkWindow::Resize()
