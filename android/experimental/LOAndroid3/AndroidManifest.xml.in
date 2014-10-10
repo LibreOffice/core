@@ -71,6 +71,8 @@
             </intent-filter>
         </activity>
         <!-- Document Browser Activity -->
+        <!-- Disable it here so that we don't present two icons.
+             TODO Probably merge the two activities, so that the browser opens when LibreOffice is started with no document.
         <activity android:name=".ui.LibreOfficeUIActivity"
                   android:label="@string/browser_app_name"
                   android:theme="@android:style/Theme.Holo">
@@ -79,6 +81,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        -->
     </application>
 
 </manifest>
