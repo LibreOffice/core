@@ -9,7 +9,7 @@
 
 #please make generic modifications to unxgcc.mk or linux.mk
 gb_CPUDEFS += -DARM32
-gb_COMPILERDEFAULTOPTFLAGS := -Os
+gb_COMPILEROPTFLAGS := -Os
 gb_CXXFLAGS += -fno-omit-frame-pointer
 gb_CFLAGS += -fno-omit-frame-pointer
 

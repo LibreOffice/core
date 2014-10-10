@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_COMPILERDEFAULTOPTFLAGS := -Os
+gb_COMPILEROPTFLAGS := -Os
 gb_CPUDEFS := -D_M_AMD64 -D_M_X64
 gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 

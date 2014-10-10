@@ -9,8 +9,6 @@
 
 #please make generic modifications to unxgcc.mk
 
-gb_COMPILERDEFAULTOPTFLAGS := -O2
-
 include $(GBUILDDIR)/platform/unxgcc.mk
 
 gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs:/usr/pkg/lib

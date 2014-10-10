@@ -9,7 +9,7 @@
 
 #please make generic modifications to unxgcc.mk
 
-gb_COMPILERDEFAULTOPTFLAGS := -O -g
+gb_COMPILEROPTFLAGS := -O -g
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 

@@ -10,7 +10,6 @@
 #please make generic modifications to unxgcc.mk
 
 gb_CPUDEFS := -DX86
-gb_COMPILERDEFAULTOPTFLAGS := -O2
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 

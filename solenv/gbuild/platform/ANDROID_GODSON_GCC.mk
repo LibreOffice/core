@@ -9,7 +9,7 @@
 
 # please make generic modifications to unxgcc.mk or android.mk
 gb_CPUDEFS += -DMIPS
-gb_COMPILERDEFAULTOPTFLAGS := -Os
+gb_COMPILEROPTFLAGS := -Os
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 include $(GBUILDDIR)/platform/android.mk

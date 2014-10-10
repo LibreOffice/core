@@ -35,8 +35,8 @@ else
 gb_AR := $(shell $(CC) -print-prog-name=ar)
 endif
 
-ifeq ($(strip $(gb_COMPILERDEFAULTOPTFLAGS)),)
-gb_COMPILERDEFAULTOPTFLAGS := -O2
+ifeq ($(strip $(gb_COMPILEROPTFLAGS)),)
+gb_COMPILEROPTFLAGS := -O2
 endif
 
 gb_SHORTSTDC3 := 1
@@ -81,7 +81,7 @@ ifeq ($(strip $(gb_GCOV)),YES)
 gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_LinkTarget_LDFLAGS += -fprofile-arcs -lgcov
-gb_COMPILERDEFAULTOPTFLAGS := -O0
+gb_COMPILEROPTFLAGS := -O0
 endif
 
 
@@ -130,7 +130,6 @@ endif
 gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 
 # optimization level
-gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 gb_COMPILERNOOPTFLAGS := -O0 -fstrict-aliasing -fstrict-overflow
 
 # Clang does not know -ggdb2 or some other options

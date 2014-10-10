@@ -8,7 +8,6 @@
 #
 
 #please make generic modifications to unxgcc.mk or linux.mk
-gb_COMPILERDEFAULTOPTFLAGS := -O2
 
 include $(GBUILDDIR)/platform/linux.mk
 

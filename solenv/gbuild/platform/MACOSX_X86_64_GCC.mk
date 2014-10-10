@@ -8,8 +8,6 @@
 #
 #*************************************************************************
 
-gb_COMPILERDEFAULTOPTFLAGS := -O2
-
 include $(GBUILDDIR)/platform/macosx.mk
 
 # vim: set noet sw=4 ts=4:

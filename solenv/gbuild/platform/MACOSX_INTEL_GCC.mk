@@ -9,7 +9,6 @@
 #*************************************************************************
 
 gb_CPUDEFS := -DX86
-gb_COMPILERDEFAULTOPTFLAGS := -O2
 
 include $(GBUILDDIR)/platform/macosx.mk
 

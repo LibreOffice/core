@@ -9,7 +9,6 @@
 
 #please make generic modifications to unxgcc.mk
 
-gb_COMPILERDEFAULTOPTFLAGS := -O2
 gb_STDLIBS := $(PTHREAD_LIBS)
 
 include $(GBUILDDIR)/platform/unxgcc.mk
