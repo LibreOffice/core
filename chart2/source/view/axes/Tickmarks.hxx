@@ -87,7 +87,11 @@ public:
 
     void getAllTicks( TickInfoArraysType& rAllTickInfos ) const;
     void getAllTicksShifted( TickInfoArraysType& rAllTickInfos ) const;
-    virtual void updateScreenValues( TickInfoArraysType& /*rAllTickInfos*/ ) const {}
+
+    /**
+     * Determine the screen positions of all ticks based on their numeric values.
+     */
+    virtual void updateScreenValues( TickInfoArraysType& rAllTickInfos ) const;
 
 private: //methods
     bool        isDateAxis() const;
