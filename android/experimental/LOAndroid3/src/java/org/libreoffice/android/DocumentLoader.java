@@ -66,7 +66,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.view.View.OnClickListener;
-// Obsolete? 
+// Obsolete?
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.AdapterView;
@@ -110,7 +110,7 @@ public class DocumentLoader
     extends Activity
 {
     private static final String TAG = "DocumentLoader";
-    
+
     // Size of a small virtual (bitmap) device used to find out page count and
     // page sizes
     private static final int SMALLSIZE = 128;
@@ -140,7 +140,7 @@ public class DocumentLoader
     DocumentViewer documentViewer;
 
     Bundle extras;
-    
+
     LinearLayout ll ;
     LayoutInflater inflater ;
 
@@ -172,29 +172,28 @@ public class DocumentLoader
             }
             return false;
         }
-        
+
         @Override
-        public boolean onSingleTapUp(MotionEvent event){
-        	if( getActionBar().isShowing() ){
-        		getActionBar().hide();
-        	}else{
-        		getActionBar().show();
-        	}	
-        	return true;
+        public boolean onSingleTapUp(MotionEvent event) {
+            if (getActionBar().isShowing()) {
+                getActionBar().hide();
+            } else {
+                getActionBar().show();
+            }
+            return true;
         }
-        
+
         @Override
-        public boolean onDoubleTap(MotionEvent event){
-        LinearLayout ll = (LinearLayout)findViewById( R.id.navigator);
-        	if( ll.isShown() ){
-        		ll.setVisibility( View.GONE );
-        	}else{
-        		ll.setVisibility( View.VISIBLE );
-        	}
-        	return true;	
+        public boolean onDoubleTap(MotionEvent event) {
+            LinearLayout ll = (LinearLayout)findViewById( R.id.navigator);
+            if (ll.isShown()) {
+                ll.setVisibility( View.GONE );
+            } else {
+                ll.setVisibility( View.VISIBLE );
+            }
+            return true;
         }
-        
-        
+
     }
 
     class ScaleListener implements OnTouchListener
@@ -648,14 +647,14 @@ public class DocumentLoader
         }
 
         int getPage(){
-        	return this.currentPageNumber;
+            return this.currentPageNumber;
         }
-        
+
         PageViewer(int number , int width , int height)
         {
             super(DocumentLoader.this);
             if( number < 0)
-            	return;
+                return;
             this.width = width ;
             this.height = height;
             // Render in a bit better quality, so it makes sense to zoom.
@@ -684,7 +683,7 @@ public class DocumentLoader
         final int defaultWidthPx = 120;
         final int defaultHeightPx = 120;
         final int thumbnailPaddingDp = 10;
-        		
+
         class ThumbLoadTask
             extends AsyncTask<Integer, Void, Integer>
         {
@@ -710,14 +709,14 @@ public class DocumentLoader
                     return;
 
                 //ImageView imageView = new ImageView(DocumentLoader.this);
-                
-				ImageView thumbImage = new ImageView(DocumentLoader.this);//(ImageView)findViewById( R.id.thumbnail );
+
+                ImageView thumbImage = new ImageView(DocumentLoader.this);//(ImageView)findViewById( R.id.thumbnail );
                 thumbImage.setImageBitmap(bm);
                 int paddingPx = (int) (thumbnailPaddingDp* scale + 0.5f);
                 thumbImage.setPadding( paddingPx , 0 , paddingPx , 0 );
                 thumbImage.setScaleY(-1);
 
-				Log.i( TAG, Integer.toString( thumbImage.getWidth() ) );
+                Log.i( TAG, Integer.toString( thumbImage.getWidth() ) );
                 if (getChildCount() == 1)
                     removeViewAt(0);
                 addView(thumbImage, matchParent);
@@ -747,43 +746,43 @@ public class DocumentLoader
             scale = getContext().getResources().getDisplayMetrics().density;
             widthInPx = (int) (widthInDp * scale + 0.5f);
             heightInPx = (int) (heightInDp* scale + 0.5f);
-			waitView = new TextView( DocumentLoader.this );
+            waitView = new TextView( DocumentLoader.this );
             thumbnailView = inflater.inflate( R.layout.navigation_grid_item , null);
 
             display(number);
-            
-            
+
+
         }
-        
+
         ThumbnailView(int number)
         {
             super(DocumentLoader.this);
             scale = getContext().getResources().getDisplayMetrics().density;
             widthInPx = defaultWidthPx;
             heightInPx = defaultHeightPx;
-			waitView = new TextView( DocumentLoader.this );
+            waitView = new TextView( DocumentLoader.this );
             thumbnailView = inflater.inflate( R.layout.navigation_grid_item , null);
 
             display(number);
-            
-            
+
+
         }
     }
 
     class DocumentLoadTask
         extends AsyncTask<String, Integer, Integer>
     {
-    	ProgressBar progressView; 
+        ProgressBar progressView;
 
         protected void onPreExecute (){//TODO have another go at putting in a progress bar (shouldn't waste time on it now)
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-    		TextView waitView = new TextView(DocumentLoader.this);
+            TextView waitView = new TextView(DocumentLoader.this);
             waitView.setTextSize(24);
             waitView.setGravity(Gravity.CENTER);
             waitView.setBackgroundColor(Color.WHITE);
             waitView.setTextColor(Color.BLACK);
-    		waitView.setText("Page " + (1) + ", wait...");
+            waitView.setText("Page " + (1) + ", wait...");
 
             progressView = new ProgressBar( DocumentLoader.this, null, android.R.attr.progressBarStyleHorizontal);
             progressView.setProgress( 10 );
@@ -792,9 +791,9 @@ public class DocumentLoader
             flipper.addView( waitView , 0 , matchParent);
             flipper.showNext();
             currentPage = 0;
-    	}
-        
-    	protected Integer doInBackground(String... params)
+        }
+
+        protected Integer doInBackground(String... params)
         {
             try {
                 String url = params[0];
@@ -862,7 +861,7 @@ public class DocumentLoader
         }
 
         protected void onProgressUpdate(Integer progress){
-        	progressView.setProgress( progress.intValue() );
+            progressView.setProgress( progress.intValue() );
         }
 
         protected void onPostExecute(Integer result){
@@ -872,19 +871,19 @@ public class DocumentLoader
             documentViewer = new DocumentViewer( (ViewFlipper)findViewById( R.id.page_flipper ) );
             ll = (LinearLayout)findViewById( R.id.navigator);
             inflater = (LayoutInflater) getApplicationContext().getSystemService(
-				Context.LAYOUT_INFLATER_SERVICE);
-			for( int i = 0; i < result.intValue() ; i++ ){
-				ThumbnailView thumb = new ThumbnailView( i , (int)(120.0f / Math.sqrt(2) ) , 120 );
-				final int pos = i;
-				thumb.setOnClickListener(new OnClickListener() {
-			
-					@Override
-					public void onClick(View v) {
+                    Context.LAYOUT_INFLATER_SERVICE);
+            for( int i = 0; i < result.intValue() ; i++ ){
+                ThumbnailView thumb = new ThumbnailView( i , (int)(120.0f / Math.sqrt(2) ) , 120 );
+                final int pos = i;
+                thumb.setOnClickListener(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
                         documentViewer.open( pos );
-					}
-				});
-				ll.addView ( thumb );
-			}
+                    }
+                });
+                ll.addView ( thumb );
+            }
         }
     }
 
@@ -1084,7 +1083,7 @@ public class DocumentLoader
     {
         super.onCreate(savedInstanceState);
 
-		extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
 
         gestureDetector = new GestureDetector(this, new GestureListener());
         scaleDetector = new ScaleListener();
@@ -1138,9 +1137,9 @@ public class DocumentLoader
             // Load the wanted document
             new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
 
-			/*
+            /*
             //flipper = new ViewFlipper(this);
-			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
+            flipper = (ViewFlipper)findViewById( R.id.page_flipper );
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
             // should have document load task publish pageCount before this happens: Shouldn't try to pre-fetch
@@ -1154,26 +1153,26 @@ public class DocumentLoader
 
             ll = (LinearLayout)findViewById( R.id.navigator);
             inflater = (LayoutInflater) getApplicationContext().getSystemService(
-				Context.LAYOUT_INFLATER_SERVICE);
+                Context.LAYOUT_INFLATER_SERVICE);
 
-			
-			
-			for( int i = 0; i < 2 ; i++ ){
-				ThumbnailView thumb = new ThumbnailView( i , (int)(120.0f / Math.sqrt(2) ) , 120 );
-				final int pos = i;
-				thumb.setOnClickListener(new OnClickListener() {
-			
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						Log.d("nav" , Integer.toString( pos ) );
-						
-					}
-				});
-				ll.addView ( thumb );
-			}*/
-            
-	    	
+
+
+            for( int i = 0; i < 2 ; i++ ){
+                ThumbnailView thumb = new ThumbnailView( i , (int)(120.0f / Math.sqrt(2) ) , 120 );
+                final int pos = i;
+                thumb.setOnClickListener(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        Log.d("nav" , Integer.toString( pos ) );
+
+                    }
+                });
+                ll.addView ( thumb );
+            }*/
+
+
         }
         catch (Exception e) {
             e.printStackTrace(System.err);
@@ -1236,22 +1235,23 @@ public class DocumentLoader
             return true;
         return false;
     }
-    
+
     @Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	        case android.R.id.home:
-	            // app icon in action bar clicked; go home
-	            Intent intent = new Intent(this, LibreOfficeUIActivity.class);
-	            intent.putExtras( extras );
-	            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	            startActivity(intent);
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
-	}
-    
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, LibreOfficeUIActivity.class);
+                intent.putExtras( extras );
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

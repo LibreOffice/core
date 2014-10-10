@@ -66,7 +66,7 @@ public class FileUtilities {
         mExtnMap.put(".svg",  DRAWING);
         mExtnMap.put(".vsd",  DRAWING);
         mExtnMap.put(".wpg",  DRAWING);
-	// FIXME: we need to expand this ...
+        // FIXME: we need to expand this ...
     }
 
     private static final String getExtension(String filename)
@@ -133,67 +133,68 @@ public class FileUtilities {
 
     static FilenameFilter getFilenameFilter(final int mode)
     {
-	return new FilenameFilter() {
-	    public boolean accept(File dir, String filename) {
-		if( new File( dir , filename ).isDirectory() )
-		    return true;
-		return doAccept(filename, mode, "");
-	    }
-	};
+        return new FilenameFilter() {
+            public boolean accept(File dir, String filename) {
+                if( new File( dir , filename ).isDirectory() )
+                    return true;
+                return doAccept(filename, mode, "");
+            }
+        };
     }
 
-	static void sortFiles(File[] files , int sortMode){
-		// Should really change all this to a switch statement...
-		if( sortMode == SORT_AZ ){
-			Arrays.sort( files , new Comparator<File>() {
-				public int compare(File lhs, File rhs) {
-					return lhs.getName().compareTo( rhs.getName() );
-				}
-			});
-			return;
-		}
-		if( sortMode == SORT_ZA ){
-			Arrays.sort( files , new Comparator<File>() {
-				public int compare(File lhs, File rhs) {
-					return rhs.getName().compareTo( lhs.getName() );
-				}
-			});
-			return;
-		}
-		if( sortMode == SORT_OLDEST ){
-			Arrays.sort( files , new Comparator<File>() {
-				public int compare(File lhs, File rhs) {
-					return Long.valueOf( lhs.lastModified() ).compareTo( rhs.lastModified() );
-				}
-			});
-			return;
-		}
-		if( sortMode == SORT_NEWEST ){
-			Arrays.sort( files , new Comparator<File>() {
-				public int compare(File lhs, File rhs) {
-					return Long.valueOf( rhs.lastModified() ).compareTo( lhs.lastModified() );
-				}
-			});
-			return;
-		}
-		if( sortMode == SORT_LARGEST ){
-			Arrays.sort( files , new Comparator<File>() {
-				public int compare(File lhs, File rhs) {
-					return Long.valueOf( rhs.length() ).compareTo( lhs.length() );
-				}
-			});
-			return;
-		}
-		if( sortMode == SORT_SMALLEST ){
-			Arrays.sort( files , new Comparator<File>() {
-				public int compare(File lhs, File rhs) {
-					return Long.valueOf( lhs.length() ).compareTo( rhs.length() );
-				}
-			});
-			return;
-		}
-		return;
-	}
+    static void sortFiles(File[] files , int sortMode)
+    {
+        // Should really change all this to a switch statement...
+        if( sortMode == SORT_AZ ){
+            Arrays.sort( files , new Comparator<File>() {
+                public int compare(File lhs, File rhs) {
+                    return lhs.getName().compareTo( rhs.getName() );
+                }
+            });
+            return;
+        }
+        if( sortMode == SORT_ZA ){
+            Arrays.sort( files , new Comparator<File>() {
+                public int compare(File lhs, File rhs) {
+                    return rhs.getName().compareTo( lhs.getName() );
+                }
+            });
+            return;
+        }
+        if( sortMode == SORT_OLDEST ){
+            Arrays.sort( files , new Comparator<File>() {
+                public int compare(File lhs, File rhs) {
+                    return Long.valueOf( lhs.lastModified() ).compareTo( rhs.lastModified() );
+                }
+            });
+            return;
+        }
+        if( sortMode == SORT_NEWEST ){
+            Arrays.sort( files , new Comparator<File>() {
+                public int compare(File lhs, File rhs) {
+                    return Long.valueOf( rhs.lastModified() ).compareTo( lhs.lastModified() );
+                }
+            });
+            return;
+        }
+        if( sortMode == SORT_LARGEST ){
+            Arrays.sort( files , new Comparator<File>() {
+                public int compare(File lhs, File rhs) {
+                    return Long.valueOf( rhs.length() ).compareTo( lhs.length() );
+                }
+            });
+            return;
+        }
+        if( sortMode == SORT_SMALLEST ){
+            Arrays.sort( files , new Comparator<File>() {
+                public int compare(File lhs, File rhs) {
+                    return Long.valueOf( lhs.length() ).compareTo( rhs.length() );
+                }
+            });
+            return;
+        }
+        return;
+    }
 
     static boolean isHidden( File file ){
         if( file.getName().startsWith(".") )
