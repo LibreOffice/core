@@ -6676,6 +6676,9 @@
       <include href="dml-graphicalObject"/>
       <include href="dml-documentProperties"/>
       <!-- start = inline | anchor -->
+      <define name="ST_Coordinate">
+        <data type="long"/>
+      </define>
       <define name="CT_EffectExtent">
         <attribute name="l">
           <ref name="ST_Coordinate"/>
@@ -7014,6 +7017,7 @@
         </element>
       </define>
     </grammar>
+    <resource name="ST_Coordinate" resource="Integer"/>
     <resource name="CT_EffectExtent" resource="Properties">
       <attribute name="l" tokenid="ooxml:CT_EffectExtent_l"/>
       <attribute name="t" tokenid="ooxml:CT_EffectExtent_t"/>
