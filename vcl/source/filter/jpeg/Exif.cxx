@@ -124,7 +124,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
 
         rStream.ReadUInt16( aLength );
 
-        if (aLength < 8)
+        if (aLength < 8 || aLength > rStream.remainingSize())
         {
             return false;
         }
