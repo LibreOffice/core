@@ -8,6 +8,7 @@
  */
 
 #include "ucalc.hxx"
+#include "helper/sorthelper.hxx"
 
 #include <postit.hxx>
 #include <sortparam.hxx>
@@ -18,7 +19,6 @@
 #include <globalnames.hxx>
 #include <dbdocfun.hxx>
 #include <scitems.hxx>
-#include <inputopt.hxx>
 #include <editutil.hxx>
 
 #include <sal/config.h>
@@ -117,6 +117,8 @@ void Test::testSort()
 
 void Test::testSortHorizontal()
 {
+    SortRefUpdateSetter aUpdateSet;
+
     ScFormulaOptions aOptions;
     aOptions.SetFormulaSepArg(";");
     aOptions.SetFormulaSepArrayCol(";");
@@ -361,6 +363,8 @@ void Test::testSortSingleRow()
 // if cells in the sort are referenced by formulas
 void Test::testSortWithFormulaRefs()
 {
+    SortRefUpdateSetter aUpdateSet;
+
     m_pDoc->InsertTab(0, "List1");
     m_pDoc->InsertTab(1, "List2");
 
@@ -460,6 +464,8 @@ void Test::testSortWithStrings()
 
 void Test::testSortInFormulaGroup()
 {
+    SortRefUpdateSetter aUpdateSet;
+
     static struct {
         SCCOL nCol;
         SCROW nRow;
@@ -691,6 +697,8 @@ void Test::testSortWithCellFormats()
 
 void Test::testSortRefUpdate()
 {
+    SortTypeSetter aSortTypeSet(true);
+
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
@@ -811,8 +819,7 @@ void Test::testSortRefUpdate()
         m_pDoc->SetString(ScAddress(2,1+i,0), "=RC[-2]");
 
     // Turn off reference update on sort.
-    ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
-    aInputOption.SetSortRefUpdate(false);
+    aSortTypeSet.changeTo(false);
 
     bSorted = aFunc.Sort(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
@@ -837,14 +844,13 @@ void Test::testSortRefUpdate()
         CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0))); // column C
     }
 
-    // Turn it back on.
-    aInputOption.SetSortRefUpdate(true);
-
     m_pDoc->DeleteTab(0);
 }
 
 void Test::testSortRefUpdate2()
 {
+    SortRefUpdateSetter aUpdateSet;
+
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
@@ -932,6 +938,8 @@ void Test::testSortRefUpdate2()
 
 void Test::testSortRefUpdate3()
 {
+    SortRefUpdateSetter aUpdateSet;
+
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Sort");
 
@@ -1020,6 +1028,8 @@ void Test::testSortRefUpdate3()
 // testRefInterne.ods
 void Test::testSortRefUpdate4()
 {
+    SortRefUpdateSetter aUpdateSet;
+
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Sort");
     m_pDoc->InsertTab(1, "Lesson1");
@@ -1217,6 +1227,8 @@ void Test::testSortRefUpdate4()
  * before midnight, ermm.. */
 void Test::testSortRefUpdate5()
 {
+    SortRefUpdateSetter aUpdateSet;
+
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Sort");
 
@@ -1388,6 +1400,8 @@ void Test::testSortOutOfPlaceResult()
 
 void Test::testSortPartialFormulaGroup()
 {
+    SortRefUpdateSetter aUpdateSet;
+
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
