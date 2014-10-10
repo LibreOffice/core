@@ -474,6 +474,7 @@ void SdExportTest::testFdo83751()
     OUString propValue;
     xUDProps->getPropertyValue(OUString("Testing")) >>= propValue;
     CPPUNIT_ASSERT_EQUAL(OUString("Document"), propValue);
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
