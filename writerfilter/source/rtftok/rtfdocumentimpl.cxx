@@ -1152,8 +1152,8 @@ void RTFDocumentImpl::text(OUString& rString)
     bool bRet = true;
     switch (m_aStates.top().nDestinationState)
     {
-        // Note: in fonttbl there may or may not be groups; in stylesheet
-        // and revtbl groups are mandatory
+    // Note: in fonttbl there may or may not be groups; in stylesheet
+    // and revtbl groups are mandatory
     case DESTINATION_FONTTABLE:
     case DESTINATION_FONTENTRY:
     case DESTINATION_STYLEENTRY:
@@ -1876,7 +1876,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_FLYMAINCONTENT;
             break;
         case RTF_LISTTEXT:
-            // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
+        // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
         case RTF_NONESTTABLES:
             // This destination should be ignored by readers that support nested tables.
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
@@ -2570,8 +2570,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         switch (nKeyword)
         {
-            // brdrhair and brdrs are the same, brdrw will make a difference
-            // map to values in ooxml/model.xml resource ST_Border
+        // brdrhair and brdrs are the same, brdrw will make a difference
+        // map to values in ooxml/model.xml resource ST_Border
         case RTF_BRDRHAIR:
         case RTF_BRDRS:
             nParam = NS_ooxml::LN_Value_ST_Border_single;

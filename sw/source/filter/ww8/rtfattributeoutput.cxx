@@ -3187,10 +3187,10 @@ void RtfAttributeOutput::WriteExpand(const SwField* pFld)
     OUString sCmd;        // for optional Parameters
     switch (pFld->GetTyp()->Which())
     {
-        //#i119803# Export user field and DB field for RTF filter
+    //#i119803# Export user field and DB field for RTF filter
     case RES_DBFLD:
         sCmd = FieldString(ww::eMERGEFIELD);
-        // no break !!
+    // no break !!
     case RES_USERFLD:
         sCmd += pFld->GetTyp()->GetName();
         m_rExport.OutputField(pFld, ww::eNONE, sCmd);
@@ -3640,14 +3640,14 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         pGraphicAry = aGraphicLink.GetData();
         switch (aGraphicLink.GetType())
         {
-            // #i15508# trying to add BMP type for better exports, need to check if this works
-            // checked, does not work. Also need to reset pGraphicAry to NULL to force conversion
-            // to PNG, else the BMP array will be used.
-            // It may work using direct DIB data, but that needs to be checked eventually
-            //
-            // #i15508# before GFX_LINK_TYPE_NATIVE_BMP was added the graphic data
-            // (to be hold in pGraphicAry) was not available; thus for now to stay
-            // compatible, keep it that way by assigning NULL value to pGraphicAry
+        // #i15508# trying to add BMP type for better exports, need to check if this works
+        // checked, does not work. Also need to reset pGraphicAry to NULL to force conversion
+        // to PNG, else the BMP array will be used.
+        // It may work using direct DIB data, but that needs to be checked eventually
+        //
+        // #i15508# before GFX_LINK_TYPE_NATIVE_BMP was added the graphic data
+        // (to be hold in pGraphicAry) was not available; thus for now to stay
+        // compatible, keep it that way by assigning NULL value to pGraphicAry
         case GFX_LINK_TYPE_NATIVE_BMP:
             //    pBLIPType = OOO_STRING_SVTOOLS_RTF_WBITMAP;
             pGraphicAry = 0;

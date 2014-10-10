@@ -626,7 +626,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
             break;
         }
     }
-    else if(const SdrObject* pObject = pFrmFmt->FindRealSdrObject())
+    else if (const SdrObject* pObject = pFrmFmt->FindRealSdrObject())
     {
         // No shadow, but we have an idea what was the original effectExtent.
         uno::Any aAny;
