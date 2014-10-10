@@ -24,7 +24,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
-
+#include <svl/itemset.hxx>
 
 
 #define SFX_SLOT_CACHABLE      0x0001L // exclusiv to VOLATILE, default
@@ -76,7 +76,6 @@
 
 
 class SfxRequest;
-class SfxItemSet;
 
 #define SFX_EXEC_STUB( aShellClass, aExecMethod) \
  void SfxStub##aShellClass##aExecMethod( \
