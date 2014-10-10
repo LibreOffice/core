@@ -90,4 +90,9 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_modelobj \
 ))
 
+$(eval $(call gb_Module_add_perfcheck_targets,sc,\
+	CppunitTest_sc_perf_searchobj \
+))
+
+
 # vim: set noet sw=4 ts=4:
