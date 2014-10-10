@@ -397,6 +397,9 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPol
     sal_uInt16 nPolygonCount(0);
     rIStm.ReadUInt16( nPolygonCount );
 
+    if (!nPolygonCount)
+        return;
+
     for(sal_uInt16 a(0); a < nPolygonCount; a++)
     {
         sal_uInt16 nPointCount(0);
