@@ -27,6 +27,12 @@ $(eval $(call gb_Executable_add_libs,icontest,\
     -lGL \
 ))
 
+else ifeq ($(OS),WNT)
+
+$(eval $(call gb_Executable_add_libs,icontest,\
+    opengl32.lib \
+))
+
 endif
 
 $(eval $(call gb_Executable_use_static_libraries,icontest,\

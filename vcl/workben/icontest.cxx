@@ -98,11 +98,11 @@ void MyOpenGLWorkWindow::Paint( const Rectangle& )
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR();
 
-    float nThumbWidth = 2.0 / (WIDTH / 100.0);
-    float nThumbHeight = 2.0 / (HEIGHT / 100.0);
+    float nThumbWidth = 2.0f / (WIDTH / 100.0f);
+    float nThumbHeight = 2.0f / (HEIGHT / 100.0f);
 
-    float nStepX = 2.0 / (WIDTH / (100.0 + 10));
-    float nStepY = 2.0 / (HEIGHT / (100.0 + 10));
+    float nStepX = 2.0f / (WIDTH / (100.0f + 10));
+    float nStepY = 2.0f / (HEIGHT / (100.0f + 10));
 
     float nX = -1, nY = -1;
 
