@@ -26,6 +26,7 @@
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
@@ -244,7 +245,6 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
     }
 }
 
-
 // Methods of XAllListener
 Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Event )
     throw( InvocationTargetException, RuntimeException, std::exception )
@@ -314,7 +314,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
                     break;
             }
         }
-        catch( CannotConvertException& )
+        catch (const CannotConvertException&)
         {
             // silent ignore conversions errors from a script call
             Reference< XIdlClass > xListenerType = mpManager->getReflection()->
@@ -325,13 +325,21 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
                 Reference< XIdlClass > xRetType = xMeth->getReturnType();
                 Type aRetType(xRetType->getTypeClass(), xRetType->getName());
                 aRet.clear();
-                convertToEventReturn( aRet, aRetType );
+                try
+                {
+                    convertToEventReturn( aRet, aRetType );
+                }
+                catch (const CannotConvertException& e)
+                {
+                    throw css::lang::WrappedTargetRuntimeException(
+                        "wrapped CannotConvertException " + e.Message,
+                        css::uno::Reference<css::uno::XInterface>(), makeAny(e));
+                }
             }
         }
     }
     return aRet;
 }
-
 
 // Methods of XEventListener
 void SAL_CALL AttacherAllListener_Impl::disposing(const EventObject& )
@@ -339,7 +347,6 @@ void SAL_CALL AttacherAllListener_Impl::disposing(const EventObject& )
 {
     // It is up to the container to release the object
 }
-
 
 // Constructor method for EventAttacherManager
 Reference< XEventAttacherManager > createEventAttacherManager( const Reference< XComponentContext > & rxContext )
