@@ -522,7 +522,7 @@ private:
                 the whole runtime can't be used any longer.
      */
     css::uno::Reference< css::frame::XFrame > impl_searchRecycleTarget()
-        throw(LoadEnvException, css::uno::RuntimeException);
+        throw(LoadEnvException, css::uno::RuntimeException, std::exception);
 
     /** @short  because showing of a frame is needed more than once ...
                 it's implemented as an separate method .-)

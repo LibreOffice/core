@@ -1387,7 +1387,7 @@ bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::
 }
 
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
-    throw(LoadEnvException, css::uno::RuntimeException)
+    throw(LoadEnvException, css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ..................................
     osl::ClearableMutexGuard aReadLock(m_mutex);
