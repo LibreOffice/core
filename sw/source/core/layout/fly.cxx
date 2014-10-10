@@ -858,11 +858,19 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             }
 
             SwFmtURL aURL( GetFmt()->GetURL() );
-            if ( aURL.GetMap() )
+
+            SwFmtFrmSize *pNewFmtFrmSize = NULL;
+            SwFmtChg *pOldFmtChg = NULL;
+            if (nWhich == RES_FRM_SIZE)
+                pNewFmtFrmSize = (SwFmtFrmSize*)pNew;
+            else
+                pOldFmtChg = (SwFmtChg*)pOld;
+
+            if (aURL.GetMap() && (pNewFmtFrmSize || pOldFmtChg))
             {
-                const SwFmtFrmSize &rOld = nWhich == RES_FRM_SIZE ?
-                                *(SwFmtFrmSize*)pNew :
-                                ((SwFmtChg*)pOld)->pChangedFmt->GetFrmSize();
+                const SwFmtFrmSize &rOld = pNewFmtFrmSize ?
+                                *pNewFmtFrmSize :
+                                pOldFmtChg->pChangedFmt->GetFrmSize();
                 //#35091# Can be "times zero", when loading the template
                 if ( rOld.GetWidth() && rOld.GetHeight() )
                 {
