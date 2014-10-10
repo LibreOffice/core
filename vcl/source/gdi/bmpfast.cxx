@@ -267,18 +267,15 @@ inline void ImplConvertLine( const TrueColorPixelPtr<DSTFMT>& rDst,
 }
 
 // alpha blending truecolor pixels
-template <unsigned ALPHABITS, sal_uLong SRCFMT, sal_uLong DSTFMT>
+template <sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, unsigned nAlphaVal )
 {
+    static const unsigned nAlphaShift = 8;
     if( !nAlphaVal )
         ImplConvertPixel( rDst, rSrc );
-    else if( nAlphaVal != ~(~0U << ALPHABITS) )
+    else if( nAlphaVal != ~(~0U << nAlphaShift) )
     {
-        static const unsigned nAlphaShift = (ALPHABITS > 8) ? 8 : ALPHABITS;
-        if( ALPHABITS > nAlphaShift )
-            nAlphaVal >>= ALPHABITS - nAlphaShift;
-
         int nR = rDst.GetRed();
         int nS = rSrc.GetRed();
         nR = nS + (((nR - nS) * nAlphaVal) >> nAlphaShift);
@@ -297,7 +294,7 @@ inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
     }
 }
 
-template <unsigned ALPHABITS, sal_uLong MASKFMT, sal_uLong SRCFMT, sal_uLong DSTFMT>
+template <sal_uLong MASKFMT, sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, const TrueColorPixelPtr<MASKFMT>& rMsk,
     int nPixelCount )
@@ -307,7 +304,7 @@ inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
     TrueColorPixelPtr<SRCFMT> aSrc( rSrc );
     while( --nPixelCount >= 0 )
     {
-        ImplBlendPixels<ALPHABITS>( aDst, aSrc, aMsk.GetAlpha() );
+        ImplBlendPixels(aDst, aSrc, aMsk.GetAlpha());
         ++aDst;
         ++aSrc;
         ++aMsk;
@@ -576,7 +573,7 @@ bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     assert(rDstBuffer.mnHeight <= rSrcBuffer.mnHeight && "not sure about that?");
     for (int y = rDstBuffer.mnHeight; --y >= 0;)
     {
-        ImplBlendLines<8>( aDstLine, rSrcLine, aMskLine, rDstBuffer.mnWidth );
+        ImplBlendLines(aDstLine, rSrcLine, aMskLine, rDstBuffer.mnWidth);
         aDstLine.AddByteOffset( nDstLinestep );
         rSrcLine.AddByteOffset( nSrcLinestep );
         aMskLine.AddByteOffset( nMskLinestep );
