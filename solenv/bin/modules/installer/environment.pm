@@ -33,8 +33,6 @@ sub create_pathvariables
     # The following variables are needed in the path file list
     # solarenvpath, os, pmiscpath
 
-    $variables{'os'} = $installer::globals::compiler;
-
     my $solarenvpath = "";
 
     if ( $ENV{'SO_PACK'} ) { $solarenvpath  = $ENV{'SO_PACK'}; }
