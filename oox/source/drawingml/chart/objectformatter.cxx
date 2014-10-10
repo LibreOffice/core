@@ -643,7 +643,8 @@ class FillFormatter : public DetailFormatterBase
 public:
     explicit            FillFormatter(
                             ObjectFormatterData& rData,
-                            const AutoFormatEntry* pAutoFormatEntry );
+                            const AutoFormatEntry* pAutoFormatEntry,
+                            const ObjectType eObjType );
 
     /** Converts area formatting to the passed property set. */
     void                convertFormatting(
@@ -704,7 +705,8 @@ public:
     explicit            ObjectTypeFormatter(
                             ObjectFormatterData& rData,
                             const ObjectTypeFormatEntry& rEntry,
-                            const ChartSpaceModel& rChartSpace );
+                            const ChartSpaceModel& rChartSpace,
+                            const ObjectType eObjType );
 
     /** Sets frame formatting properties to the passed property set. */
     void                convertFrameFormatting(
@@ -886,15 +888,14 @@ void LineFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRe
     aLineProps.pushToPropMap( rPropMap, mrData.mrFilter.getGraphicHelper(), getPhColor( nSeriesIdx ) );
 }
 
-
-
-FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
+FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry, const ObjectType eObjType ) :
     DetailFormatterBase( rData, pAutoFormatEntry )
 {
     if( pAutoFormatEntry )
     {
         mxAutoFill.reset( new FillProperties );
-        mxAutoFill->moFillType = XML_noFill;
+        if( eObjType != OBJECTTYPE_CHARTSPACE )
+            mxAutoFill->moFillType = XML_noFill;
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
             if( const FillProperties* pFillProps = pTheme->getFillStyle( pAutoFormatEntry->mnThemedIdx ) )
                 *mxAutoFill = *pFillProps;
@@ -975,11 +976,9 @@ void TextFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Te
     convertFormatting( rPropSet, lclGetTextProperties( rxTextProp ) );
 }
 
-
-
-ObjectTypeFormatter::ObjectTypeFormatter( ObjectFormatterData& rData, const ObjectTypeFormatEntry& rEntry, const ChartSpaceModel& rChartSpace ) :
+ObjectTypeFormatter::ObjectTypeFormatter( ObjectFormatterData& rData, const ObjectTypeFormatEntry& rEntry, const ChartSpaceModel& rChartSpace, const ObjectType eObjType ) :
     maLineFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoLines,   rChartSpace.mnStyle ) ),
-    maFillFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoFills,   rChartSpace.mnStyle ) ),
+    maFillFormatter(   rData, lclGetAutoFormatEntry( rEntry.mpAutoFills,   rChartSpace.mnStyle ), eObjType ),
     maEffectFormatter( rData, lclGetAutoFormatEntry( rEntry.mpAutoEffects, rChartSpace.mnStyle ) ),
     maTextFormatter(   rData, lclGetAutoTextEntry(   rEntry.mpAutoTexts,   rChartSpace.mnStyle ), rChartSpace.mxTextProp ),
     mrModelObjHelper( rData.maModelObjHelper ),
@@ -1032,7 +1031,7 @@ ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Re
 {
     const ObjectTypeFormatEntry* pEntryEnd = STATIC_ARRAY_END( spObjTypeFormatEntries );
     for( const ObjectTypeFormatEntry* pEntry = spObjTypeFormatEntries; pEntry != pEntryEnd; ++pEntry )
-        maTypeFormatters[ pEntry->meObjType ].reset( new ObjectTypeFormatter( *this, *pEntry, rChartSpace ) );
+        maTypeFormatters[ pEntry->meObjType ].reset( new ObjectTypeFormatter( *this, *pEntry, rChartSpace, pEntry->meObjType ) );
 
     try
     {
