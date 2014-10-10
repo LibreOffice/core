@@ -55,7 +55,7 @@ public:
     void testAutoBackgroundXLSX();
     void testNumberFormatsXLSX();
 
-    void testTransparentBackground(OUString filename);
+    void testTransparentBackground(OUString const & filename);
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -595,7 +595,7 @@ void Chart2ImportTest::testFdo78080()
     CPPUNIT_ASSERT(!xTitle.is());
 }
 
-void Chart2ImportTest::testTransparentBackground(OUString filename)
+void Chart2ImportTest::testTransparentBackground(OUString const & filename)
 {
     load("/chart2/qa/extras/data/xlsx/", filename);
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
