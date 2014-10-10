@@ -163,7 +163,7 @@ public:
     void testFdo70221();
     void testFdo65090();
     void testNestedTable();
-
+    void testFdo84679();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -311,6 +311,7 @@ void Test::run()
         {"fdo70221.rtf", &Test::testFdo70221},
         {"fdo65090.rtf", &Test::testFdo65090},
         {"rhbz1065629.rtf", &Test::testNestedTable},
+        {"fdo84679.rtf", &Test::testFdo84679},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1520,6 +1521,17 @@ void Test::testNestedTable()
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Nom: John Doe"), xPara->getString());
+}
+
+void Test::testFdo84679()
+{
+    // The problem was that the paragraph in A1 had some bottom margin, but it should not.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // This was 282.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

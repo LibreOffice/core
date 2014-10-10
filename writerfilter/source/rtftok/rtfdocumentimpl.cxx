@@ -408,7 +408,9 @@ void RTFDocumentImpl::setNeedSect(bool bNeedSect)
 
 writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms)
 {
-    int nStyle = m_aStates.top().nCurrentStyleIndex;
+    int nStyle = 0;
+    if (!m_aStates.empty())
+        nStyle = m_aStates.top().nCurrentStyleIndex;
     RTFReferenceTable::Entries_t::iterator it = m_aStyleTableEntries.find(nStyle);
     if (it != m_aStyleTableEntries.end())
     {
@@ -1187,9 +1189,10 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
         rBuffer.pop_front();
         if (aPair.first == BUFFER_PROPS)
         {
+            // Construct properties via getProperties() and not directly, to take care of deduplication.
             writerfilter::Reference<Properties>::Pointer_t const pProp(
-                    new RTFReferenceProperties(aPair.second->getAttributes(), aPair.second->getSprms())
-                    );
+                getProperties(aPair.second->getAttributes(), aPair.second->getSprms())
+            );
             Mapper().props(pProp);
         }
         else if (aPair.first == BUFFER_CELLEND)
