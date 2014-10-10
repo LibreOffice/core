@@ -999,7 +999,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
 }
 
 bool LoadEnv::impl_loadContent()
-    throw(LoadEnvException, css::uno::RuntimeException, beans::IllegalTypeException)
+    throw(LoadEnvException, css::uno::RuntimeException, beans::IllegalTypeException, std::exception)
 {
     // SAFE -> -----------------------------------
     osl::ClearableMutexGuard aWriteLock(m_mutex);
