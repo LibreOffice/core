@@ -79,6 +79,7 @@ FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     , bDragHelpLine(false)
     , nHelpLine(0)
     , bPermanent(false)
+    , bIsImageSelected(false)
 {
 }
 
