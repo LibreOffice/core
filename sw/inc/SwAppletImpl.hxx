@@ -22,10 +22,12 @@
 
 #include <config_features.h>
 
-#define SWHTML_OPTTYPE_IGNORE 0
-#define SWHTML_OPTTYPE_TAG 1
-#define SWHTML_OPTTYPE_PARAM 2
-#define SWHTML_OPTTYPE_SIZE 3
+enum class SwHtmlOptType {
+    IGNORE = 0,
+    TAG = 1,
+    PARAM = 2,
+    SIZE = 3
+};
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
@@ -49,7 +51,7 @@ class SwApplet_Impl
     OUString   sAlt;
 
 public:
-    static sal_uInt16 GetOptionType( const OUString& rName, bool bApplet );
+    static SwHtmlOptType GetOptionType( const OUString& rName, bool bApplet );
     SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
     SwApplet_Impl( SfxItemSet& rSet ): aItemSet ( rSet) {}
     ~SwApplet_Impl();

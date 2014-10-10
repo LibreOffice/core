@@ -1164,8 +1164,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         {
             const SvCommand& rCommand = aCommands[ --i ];
             const OUString& rName = rCommand.GetCommand();
-            sal_uInt16 nType = SwApplet_Impl::GetOptionType( rName, true );
-            if( SWHTML_OPTTYPE_TAG == nType )
+            SwHtmlOptType nType = SwApplet_Impl::GetOptionType( rName, true );
+            if( SwHtmlOptType::TAG == nType )
             {
                 const OUString& rValue = rCommand.GetArgument();
                 rWrt.Strm().WriteChar( ' ' );
@@ -1173,7 +1173,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                 rWrt.Strm().WriteCharPtr( "=\"" );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
             }
-            else if( SWHTML_OPTTYPE_PARAM == nType )
+            else if( SwHtmlOptType::PARAM == nType )
             {
                 aParams.push_back( i );
             }
@@ -1222,7 +1222,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             const SvCommand& rCommand = aCommands[ i ];
             const OUString& rName = rCommand.GetCommand();
 
-            if( SwApplet_Impl::GetOptionType( rName, false ) == SWHTML_OPTTYPE_TAG )
+            if( SwApplet_Impl::GetOptionType( rName, false ) == SwHtmlOptType::TAG )
             {
                 const OUString& rValue = rCommand.GetArgument();
                 rWrt.Strm().WriteChar( ' ' );

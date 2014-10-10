@@ -38,9 +38,9 @@ static char const sHTML_O_Object[] = "OBJECT";
 
 }
 
-sal_uInt16 SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet )
+SwHtmlOptType SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet )
 {
-    sal_uInt16 nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
+    SwHtmlOptType nType = bApplet ? SwHtmlOptType::PARAM : SwHtmlOptType::TAG;
 
     switch( rName.toChar() )
     {
@@ -48,67 +48,67 @@ sal_uInt16 SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet )
     case 'a':
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_align ) ||
             rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_alt ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SwHtmlOptType::IGNORE;
         else if( bApplet &&
                  (rName.equalsIgnoreAsciiCaseAscii( sHTML_O_archive ) ||
                  rName.equalsIgnoreAsciiCaseAscii( sHTML_O_Archives )) )
-            nType = SWHTML_OPTTYPE_TAG;
+            nType = SwHtmlOptType::TAG;
         break;
     case 'C':
     case 'c':
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_class ) ||
             (bApplet && (rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_code ) ||
                          rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SwHtmlOptType::IGNORE;
         break;
     case 'H':
     case 'h':
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_height ) )
-            nType = SWHTML_OPTTYPE_SIZE;
+            nType = SwHtmlOptType::SIZE;
         else if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
             (!bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SW_HTML_O_Hidden )) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SwHtmlOptType::IGNORE;
         break;
     case 'I':
     case 'i':
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_id ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SwHtmlOptType::IGNORE;
         break;
     case 'M':
     case 'm':
         if( bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SwHtmlOptType::IGNORE;
         break;
     case 'N':
     case 'n':
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_name ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SwHtmlOptType::IGNORE;
         break;
     case 'O':
     case 'o':
         if( bApplet && rName.equalsIgnoreAsciiCaseAscii( sHTML_O_Object ) )
-            nType = SWHTML_OPTTYPE_TAG;
+            nType = SwHtmlOptType::TAG;
         break;
     case 'S':
     case 's':
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_style ) ||
             (!bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_src )) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SwHtmlOptType::IGNORE;
         break;
     case 'T':
     case 't':
         if( !bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_type ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SwHtmlOptType::IGNORE;
         break;
     case 'V':
     case 'v':
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
+            nType = SwHtmlOptType::IGNORE;
         break;
     case 'W':
     case 'w':
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_width ) )
-            nType = SWHTML_OPTTYPE_SIZE;
+            nType = SwHtmlOptType::SIZE;
         break;
     }
 
