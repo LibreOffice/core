@@ -1106,11 +1106,10 @@ ChartView::~ChartView()
     if ( xComp.is() )
         xComp->dispose();
 
-    if( m_pDrawModelWrapper.get() )
-    {
-        SolarMutexGuard aSolarGuard;
-        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
-        m_pDrawModelWrapper.reset();
+        if (nDimensionCount == 3)
+        {
+             xDiaProp->getPropertyValue( "3DRelativeHeight" ) >>= n3DRelativeHeight;
+        }
     }
     m_xDrawPage = NULL;
     impl_deleteCoordinateSystems();
