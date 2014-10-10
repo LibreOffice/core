@@ -503,7 +503,7 @@ class FilterCache : public BaseLock
         virtual void setItem(      EItemType        eType ,
                              const OUString& sItem ,
                              const CacheItem&       aValue)
-            throw(css::uno::Exception);
+            throw(css::uno::Exception, std::exception);
 
 
 
