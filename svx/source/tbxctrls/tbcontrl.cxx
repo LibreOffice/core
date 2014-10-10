@@ -2228,7 +2228,7 @@ void SvxStyleToolBoxControl::StateChanged(
     switch ( eState )
     {
         case SfxItemState::DEFAULT:
-            eTri = ((const SfxBoolItem*)pState)->GetValue()
+            eTri = ((const SfxTemplateItem*)pState)->GetValue()
                         ? TRISTATE_TRUE
                         : TRISTATE_FALSE;
             break;
