@@ -46,7 +46,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	svl \
 	svt \
 	svx \
-        svxcore \
+	svxcore \
 	test \
 	tl \
 	unotest \
