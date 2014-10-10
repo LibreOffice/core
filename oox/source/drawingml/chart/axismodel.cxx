@@ -46,7 +46,7 @@ AxisModel::AxisModel( sal_Int32 nTypeId ) :
     mnMinorTimeUnit( XML_days ),
     mnOrientation( XML_minMax ),
     mnTickLabelPos( XML_nextTo ),
-    mnTickLabelSkip( 0 ),
+    mnTickLabelSkip( 1 ),
     mnTickMarkSkip( 0 ),
     mnTypeId( nTypeId ),
     mbAuto( false ),

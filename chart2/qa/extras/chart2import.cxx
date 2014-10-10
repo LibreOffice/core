@@ -18,8 +18,10 @@
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 
 #include <com/sun/star/util/Color.hpp>
+
 
 class Chart2ImportTest : public ChartTest
 {
@@ -53,6 +55,7 @@ public:
     void testFdo78080();
     void testFdo54361();
     void testAutoBackgroundXLSX();
+    void testTextCanOverlapXLSX();
     void testNumberFormatsXLSX();
 
     void testTransparentBackground(OUString const & filename);
@@ -88,6 +91,7 @@ public:
     CPPUNIT_TEST(testFdo78080);
     CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
+    CPPUNIT_TEST(testTextCanOverlapXLSX);
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST_SUITE_END();
 
@@ -633,6 +637,25 @@ void Chart2ImportTest::testAutoBackgroundXLSX()
         eStyle == drawing::FillStyle_SOLID);
     CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
         (nColor & 0x00FFFFFF) == 0x00FFFFFF); // highest 2 bytes are transparency which we ignore here.
+}
+
+void Chart2ImportTest::testTextCanOverlapXLSX()
+{
+    // fdo#84647 : To check textoverlap value is imported correclty.
+    load("/chart2/qa/extras/data/xlsx/", "chart-text-can-overlap.xlsx");
+    uno::Reference< chart::XDiagram > mxDiagram;
+    uno::Reference< beans::XPropertySet > xAxisProp;
+    bool textCanOverlap = false;
+    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    mxDiagram.set(xChartDoc->getDiagram());
+    CPPUNIT_ASSERT(mxDiagram.is());
+    uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
+    CPPUNIT_ASSERT(xAxisXSupp.is());
+    xAxisProp = xAxisXSupp->getXAxis();
+    xAxisProp->getPropertyValue("TextCanOverlap") >>= textCanOverlap;
+    // Expected value of 'TextCanOverlap' is true
+    CPPUNIT_ASSERT(textCanOverlap);
 }
 
 void Chart2ImportTest::testNumberFormatsXLSX()
