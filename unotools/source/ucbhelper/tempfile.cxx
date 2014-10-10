@@ -364,9 +364,9 @@ OUString TempFile::GetURL()
 {
     if ( aURL.isEmpty() )
     {
-        OUString aTmp;
-        LocalFileHelper::ConvertPhysicalNameToURL( GetFileName(), aTmp );
-        aURL = aTmp;
+        OUString const name(GetFileName());
+        LocalFileHelper::ConvertPhysicalNameToURL(name, aURL);
+        assert((name.isEmpty() || !aURL.isEmpty()) && "TempFile::GetURL failed: unit test is leaking temp files, add the ucpfile1 component!");
     }
 
     return aURL;
