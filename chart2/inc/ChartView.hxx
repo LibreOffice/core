@@ -52,7 +52,6 @@ namespace chart {
 
 class VCoordinateSystem;
 class DrawModelWrapper;
-class SeriesPlotterContainer;
 class VDataSeries;
 class GL3DPlotterBase;
 class GL2DRenderer;
@@ -222,9 +221,7 @@ private: //methods
 
     void render();
 
-    css::awt::Rectangle impl_createDiagramAndContent(
-        SeriesPlotterContainer& rSeriesPlotterContainer,
-        const CreateShapeParam2D& rParam, const css::awt::Size& rPageSize );
+    css::awt::Rectangle impl_createDiagramAndContent( const CreateShapeParam2D& rParam, const css::awt::Size& rPageSize );
 
     DECL_LINK( UpdateTimeBased, void* );
 

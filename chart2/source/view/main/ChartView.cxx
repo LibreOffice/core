@@ -128,423 +128,6 @@ namespace {
 
 class theExplicitValueProviderUnoTunnelId  : public rtl::Static<UnoTunnelIdInit, theExplicitValueProviderUnoTunnelId> {};
 
-}
-
-struct CreateShapeParam2D
-{
-    css::awt::Rectangle maRemainingSpace;
-
-    boost::shared_ptr<VTitle> mpVTitleX;
-    boost::shared_ptr<VTitle> mpVTitleY;
-    boost::shared_ptr<VTitle> mpVTitleZ;
-
-    boost::shared_ptr<VTitle> mpVTitleSecondX;
-    boost::shared_ptr<VTitle> mpVTitleSecondY;
-
-    css::uno::Reference<css::drawing::XShape> mxMarkHandles;
-    css::uno::Reference<css::drawing::XShape> mxPlotAreaWithAxes;
-
-    css::uno::Reference<css::drawing::XShapes> mxDiagramWithAxesShapes;
-
-    bool mbAutoPosTitleX;
-    bool mbAutoPosTitleY;
-    bool mbAutoPosTitleZ;
-
-    bool mbAutoPosSecondTitleX;
-    bool mbAutoPosSecondTitleY;
-
-    bool mbUseFixedInnerSize;
-
-    CreateShapeParam2D() :
-        mbAutoPosTitleX(true),
-        mbAutoPosTitleY(true),
-        mbAutoPosTitleZ(true),
-        mbAutoPosSecondTitleX(true),
-        mbAutoPosSecondTitleY(true),
-        mbUseFixedInnerSize(false) {}
-};
-
-class GL2DRenderer : public IRenderer
-{
-public:
-    GL2DRenderer(ChartView* pView);
-    virtual ~GL2DRenderer();
-
-    virtual void update() SAL_OVERRIDE;
-    virtual void clickedAt(const Point& rPos, sal_uInt16 nButton) SAL_OVERRIDE;
-    virtual void mouseDragMove(const Point& rBegin, const Point& rEnd, sal_uInt16 nButton) SAL_OVERRIDE;
-    virtual void scroll(long nDelta) SAL_OVERRIDE;
-    virtual void contextDestroyed() SAL_OVERRIDE;
-
-    const OpenGLWindow* getOpenGLWindow() const;
-    void updateOpenGLWindow();
-private:
-    ChartView* mpView;
-    bool mbContextDestroyed;
-    OpenGLWindow* mpWindow;
-};
-
-GL2DRenderer::GL2DRenderer(ChartView* pView):
-    mpView(pView),
-    mbContextDestroyed(false),
-    mpWindow(mpView->mrChartModel.getOpenGLWindow())
-{
-}
-
-GL2DRenderer::~GL2DRenderer()
-{
-    if(!mbContextDestroyed && mpWindow)
-        mpWindow->setRenderer(NULL);
-}
-
-void GL2DRenderer::update()
-{
-    mpView->update();
-    mpView->render();
-}
-
-void GL2DRenderer::clickedAt(const Point&, sal_uInt16 )
-{
-}
-
-void GL2DRenderer::mouseDragMove(const Point& , const Point& , sal_uInt16 )
-{
-}
-
-void GL2DRenderer::scroll(long )
-{
-}
-
-void GL2DRenderer::contextDestroyed()
-{
-    mbContextDestroyed = true;
-}
-
-const OpenGLWindow* GL2DRenderer::getOpenGLWindow() const
-{
-    return mpWindow;
-}
-
-void GL2DRenderer::updateOpenGLWindow()
-{
-    if(mbContextDestroyed)
-        return;
-
-    OpenGLWindow* pWindow = mpView->mrChartModel.getOpenGLWindow();
-    if(pWindow != mpWindow)
-    {
-        if(mpWindow)
-        {
-            mpWindow->setRenderer(NULL);
-        }
-
-        if(pWindow)
-        {
-            pWindow->setRenderer(this);
-        }
-    }
-    mpWindow = pWindow;
-}
-
-const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
-{
-    return theExplicitValueProviderUnoTunnelId::get().getSeq();
-}
-
-ExplicitValueProvider* ExplicitValueProvider::getExplicitValueProvider(
-        const Reference< uno::XInterface >& xChartView )
-{
-    ExplicitValueProvider* pExplicitValueProvider=0;
-
-    Reference< lang::XUnoTunnel > xTunnel( xChartView, uno::UNO_QUERY );
-    if( xTunnel.is() )
-    {
-        pExplicitValueProvider = reinterpret_cast<ExplicitValueProvider*>(xTunnel->getSomething(
-            ExplicitValueProvider::getUnoTunnelId() ));
-    }
-    return pExplicitValueProvider;
-}
-
-ChartView::ChartView(
-        uno::Reference<uno::XComponentContext> const & xContext,
-        ChartModel& rModel)
-    : m_aMutex()
-    , m_xCC(xContext)
-    , mrChartModel(rModel)
-    , m_xShapeFactory()
-    , m_xDrawPage()
-    , m_pDrawModelWrapper()
-    , m_aListenerContainer( m_aMutex )
-    , m_bViewDirty(true)
-    , m_bInViewUpdate(false)
-    , m_bViewUpdatePending(false)
-    , m_bRefreshAddIn(true)
-    , m_aPageResolution(1000,1000)
-    , m_bPointsWereSkipped(false)
-    , m_nScaleXNumerator(1)
-    , m_nScaleXDenominator(1)
-    , m_nScaleYNumerator(1)
-    , m_nScaleYDenominator(1)
-    , m_bSdrViewIsInEditMode(false)
-    , m_aResultingDiagramRectangleExcludingAxes(0,0,0,0)
-    , mp2DRenderer(new GL2DRenderer(this))
-{
-    init();
-}
-
-void ChartView::init()
-{
-    if( !m_pDrawModelWrapper.get() )
-    {
-        SolarMutexGuard aSolarGuard;
-        m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
-        m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
-        m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
-        StartListening( m_pDrawModelWrapper->getSdrModel(), false /*bPreventDups*/ );
-    }
-}
-
-void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& )
-                throw ( uno::Exception, uno::RuntimeException, std::exception)
-{
-    init();
-}
-
-ChartView::~ChartView()
-{
-    maTimeBased.maTimer.Stop();
-    // #i120831#. In ChartView::initialize(), m_xShapeFactory is created from SdrModel::getUnoModel() and indirectly
-    //   from SfxBaseModel, it needs call dispose() to make sure SfxBaseModel object is freed correctly.
-    uno::Reference< lang::XComponent > xComp( m_xShapeFactory, uno::UNO_QUERY);
-    if ( xComp.is() )
-        xComp->dispose();
-
-    if( m_pDrawModelWrapper.get() )
-    {
-        SolarMutexGuard aSolarGuard;
-        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
-        m_pDrawModelWrapper.reset();
-    }
-    m_xDrawPage = NULL;
-    impl_deleteCoordinateSystems();
-}
-
-void ChartView::impl_deleteCoordinateSystems()
-{
-    //delete all coordinate systems
-    ::std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
-    ::std::swap( aVectorToDeleteObjects, m_aVCooSysList );//#i109770#
-    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
-    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
-    for( ; aIter != aEnd; ++aIter )
-    {
-        delete *aIter;
-    }
-    aVectorToDeleteObjects.clear();
-}
-
-// datatransfer::XTransferable
-namespace
-{
-const OUString lcl_aGDIMetaFileMIMEType(
-    "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
-const OUString lcl_aGDIMetaFileMIMETypeHighContrast(
-    "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
-} // anonymous namespace
-
-void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStream
-                           , bool bUseHighContrast )
-{
-    if( !m_xDrawPage.is() )
-        return;
-
-    // creating the graphic exporter
-    uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( m_xCC );
-
-    uno::Sequence< beans::PropertyValue > aProps(3);
-    aProps[0].Name = "FilterName";
-    aProps[0].Value <<= OUString("SVM");
-
-    aProps[1].Name = "OutputStream";
-    aProps[1].Value <<= xOutStream;
-
-    uno::Sequence< beans::PropertyValue > aFilterData(4);
-    aFilterData[0].Name = "ExportOnlyBackground";
-    aFilterData[0].Value <<= sal_False;
-    aFilterData[1].Name = "HighContrast";
-    aFilterData[1].Value <<= bUseHighContrast;
-
-    aFilterData[2].Name = "Version";
-    const sal_Int32 nVersion = SOFFICE_FILEFORMAT_50;
-    aFilterData[2].Value <<= nVersion;
-
-    aFilterData[3].Name = "CurrentPage";
-    aFilterData[3].Value <<= uno::Reference< uno::XInterface >( m_xDrawPage, uno::UNO_QUERY );
-
-    //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
-    {
-        aFilterData.realloc( aFilterData.getLength()+4 );
-        aFilterData[4].Name = "ScaleXNumerator";
-        aFilterData[4].Value = uno::makeAny( m_nScaleXNumerator );
-        aFilterData[5].Name = "ScaleXDenominator";
-        aFilterData[5].Value = uno::makeAny( m_nScaleXDenominator );
-        aFilterData[6].Name = "ScaleYNumerator";
-        aFilterData[6].Value = uno::makeAny( m_nScaleYNumerator );
-        aFilterData[7].Name = "ScaleYDenominator";
-        aFilterData[7].Value = uno::makeAny( m_nScaleYDenominator );
-    }
-
-    aProps[2].Name = "FilterData";
-    aProps[2].Value <<= aFilterData;
-
-    xExporter->setSourceDocument( uno::Reference< lang::XComponent >( m_xDrawPage, uno::UNO_QUERY) );
-    if( xExporter->filter( aProps ) )
-    {
-        xOutStream->flush();
-        xOutStream->closeOutput();
-        uno::Reference< io::XSeekable > xSeekable( xOutStream, uno::UNO_QUERY );
-        if( xSeekable.is() )
-            xSeekable->seek(0);
-    }
-}
-
-uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aFlavor )
-                throw (datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
-{
-    bool bHighContrastMetaFile( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast));
-    uno::Any aRet;
-    if( ! (bHighContrastMetaFile || aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType)) )
-        return aRet;
-
-    update();
-
-    SvMemoryStream aStream( 1024, 1024 );
-    utl::OStreamWrapper* pStreamWrapper = new utl::OStreamWrapper( aStream );
-
-    uno::Reference< io::XOutputStream > xOutStream( pStreamWrapper );
-    uno::Reference< io::XInputStream > xInStream( pStreamWrapper );
-    uno::Reference< io::XSeekable > xSeekable( pStreamWrapper );
-
-    if( xOutStream.is() )
-    {
-        this->getMetaFile( xOutStream, bHighContrastMetaFile );
-
-        if( xInStream.is() && xSeekable.is() )
-        {
-            xSeekable->seek(0);
-            sal_Int32 nBytesToRead = xInStream->available();
-            uno::Sequence< sal_Int8 > aSeq( nBytesToRead );
-            xInStream->readBytes( aSeq, nBytesToRead);
-            aRet <<= aSeq;
-            xInStream->closeInput();
-        }
-    }
-
-    return aRet;
-}
-uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFlavors()
-                throw (uno::RuntimeException, std::exception)
-{
-    uno::Sequence< datatransfer::DataFlavor > aRet(2);
-
-    aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
-        "GDIMetaFile",
-        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
-    aRet[1] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
-        "GDIMetaFile",
-        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
-
-    return aRet;
-}
-sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
-                throw (uno::RuntimeException, std::exception)
-{
-    return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||
-             aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
-}
-
-// ____ XUnoTunnel ___
-::sal_Int64 SAL_CALL ChartView::getSomething( const uno::Sequence< ::sal_Int8 >& aIdentifier )
-        throw( uno::RuntimeException, std::exception)
-{
-    if( aIdentifier.getLength() == 16 && 0 == memcmp( ExplicitValueProvider::getUnoTunnelId().getConstArray(),
-                                                         aIdentifier.getConstArray(), 16 ) )
-    {
-        ExplicitValueProvider* pProvider = this;
-        return reinterpret_cast<sal_Int64>(pProvider);
-    }
-    return 0;
-}
-
-// lang::XServiceInfo
-
-APPHELPER_XSERVICEINFO_IMPL(ChartView,CHART_VIEW_SERVICE_IMPLEMENTATION_NAME)
-
-    uno::Sequence< OUString > ChartView
-::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART_VIEW_SERVICE_NAME;
-    return aSNS;
-}
-
-::basegfx::B3DHomMatrix createTransformationSceneToScreen(
-    const ::basegfx::B2IRectangle& rDiagramRectangleWithoutAxes )
-{
-    ::basegfx::B3DHomMatrix aM;
-    aM.scale(double(rDiagramRectangleWithoutAxes.getWidth())/FIXED_SIZE_FOR_3D_CHART_VOLUME
-            , -double(rDiagramRectangleWithoutAxes.getHeight())/FIXED_SIZE_FOR_3D_CHART_VOLUME, 1.0 );
-    aM.translate(double(rDiagramRectangleWithoutAxes.getMinX())
-        , double(rDiagramRectangleWithoutAxes.getMinY()+rDiagramRectangleWithoutAxes.getHeight()-1), 0);
-    return aM;
-}
-
-VCoordinateSystem* findInCooSysList( const std::vector< VCoordinateSystem* >& rVCooSysList
-                                    , const uno::Reference< XCoordinateSystem >& xCooSys )
-{
-    for( size_t nC=0; nC < rVCooSysList.size(); nC++)
-    {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC];
-        if(pVCooSys->getModel()==xCooSys)
-            return pVCooSys;
-    }
-    return NULL;
-}
-
-VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysList
-            , const uno::Reference< XCoordinateSystem >& xCooSys
-            , ChartModel& rChartModel )
-{
-    VCoordinateSystem* pVCooSys = findInCooSysList( rVCooSysList, xCooSys );
-    if( !pVCooSys )
-    {
-        pVCooSys = VCoordinateSystem::createCoordinateSystem(xCooSys );
-        if(pVCooSys)
-        {
-            OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, rChartModel ) );
-            pVCooSys->setParticle(aCooSysParticle);
-
-            pVCooSys->setExplicitCategoriesProvider( new ExplicitCategoriesProvider(xCooSys, rChartModel) );
-
-            rVCooSysList.push_back( pVCooSys );
-        }
-    }
-    return pVCooSys;
-}
-
-VCoordinateSystem* lcl_getCooSysForPlotter( const std::vector< VCoordinateSystem* >& rVCooSysList, MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier )
-{
-    if(!pMinimumAndMaximumSupplier)
-        return 0;
-    for( size_t nC=0; nC < rVCooSysList.size(); nC++)
-    {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC];
-        if(pVCooSys->hasMinimumAndMaximumSupplier( pMinimumAndMaximumSupplier ))
-            return pVCooSys;
-    }
-    return 0;
-}
-
 typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 typedef std::map< VCoordinateSystem*, tFullAxisIndex > tCoordinateSystemMap;
 
@@ -609,6 +192,7 @@ void AxisUsage::addCoordinateSystem( VCoordinateSystem* pCooSys, sal_Int32 nDime
     else
         aMaxIndexPerDimension[nDimensionIndex]=nAxisIndex;
 }
+
 ::std::vector< VCoordinateSystem* > AxisUsage::getCoordinateSystems( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
     ::std::vector< VCoordinateSystem* > aRet;
@@ -625,6 +209,7 @@ void AxisUsage::addCoordinateSystem( VCoordinateSystem* pCooSys, sal_Int32 nDime
 
     return aRet;
 }
+
 sal_Int32 AxisUsage::getMaxAxisIndexForDimension( sal_Int32 nDimensionIndex )
 {
     sal_Int32 nRet = -1;
@@ -695,6 +280,52 @@ std::vector< LegendEntryProvider* > SeriesPlotterContainer::getLegendEntryProvid
     return aRet;
 }
 
+VCoordinateSystem* findInCooSysList( const std::vector< VCoordinateSystem* >& rVCooSysList
+                                    , const uno::Reference< XCoordinateSystem >& xCooSys )
+{
+    for( size_t nC=0; nC < rVCooSysList.size(); nC++)
+    {
+        VCoordinateSystem* pVCooSys = rVCooSysList[nC];
+        if(pVCooSys->getModel()==xCooSys)
+            return pVCooSys;
+    }
+    return NULL;
+}
+
+VCoordinateSystem* lcl_getCooSysForPlotter( const std::vector< VCoordinateSystem* >& rVCooSysList, MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier )
+{
+    if(!pMinimumAndMaximumSupplier)
+        return 0;
+    for( size_t nC=0; nC < rVCooSysList.size(); nC++)
+    {
+        VCoordinateSystem* pVCooSys = rVCooSysList[nC];
+        if(pVCooSys->hasMinimumAndMaximumSupplier( pMinimumAndMaximumSupplier ))
+            return pVCooSys;
+    }
+    return 0;
+}
+
+VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysList
+            , const uno::Reference< XCoordinateSystem >& xCooSys
+            , ChartModel& rChartModel )
+{
+    VCoordinateSystem* pVCooSys = findInCooSysList( rVCooSysList, xCooSys );
+    if( !pVCooSys )
+    {
+        pVCooSys = VCoordinateSystem::createCoordinateSystem(xCooSys );
+        if(pVCooSys)
+        {
+            OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, rChartModel ) );
+            pVCooSys->setParticle(aCooSysParticle);
+
+            pVCooSys->setExplicitCategoriesProvider( new ExplicitCategoriesProvider(xCooSys, rChartModel) );
+
+            rVCooSysList.push_back( pVCooSys );
+        }
+    }
+    return pVCooSys;
+}
+
 void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
               ChartModel& rChartModel )
 {
@@ -729,10 +360,11 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         xDiaProp->getPropertyValue( "IncludeHiddenCells" ) >>= bIncludeHiddenCells;
         xDiaProp->getPropertyValue( "StartingAngle" ) >>= nStartingAngle;
 
-        if (nDimensionCount == 3)
-        {
-             xDiaProp->getPropertyValue( "3DRelativeHeight" ) >>= n3DRelativeHeight;
-        }
+    if( m_pDrawModelWrapper.get() )
+    {
+        SolarMutexGuard aSolarGuard;
+        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
+        m_pDrawModelWrapper.reset();
     }
     catch( const uno::Exception & ex )
     {
@@ -1281,6 +913,379 @@ drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
     return aPreferredAspectRatio;
 }
 
+}
+
+struct CreateShapeParam2D
+{
+    css::awt::Rectangle maRemainingSpace;
+
+    boost::shared_ptr<SeriesPlotterContainer> mpSeriesPlotterContainer;
+
+    boost::shared_ptr<VTitle> mpVTitleX;
+    boost::shared_ptr<VTitle> mpVTitleY;
+    boost::shared_ptr<VTitle> mpVTitleZ;
+
+    boost::shared_ptr<VTitle> mpVTitleSecondX;
+    boost::shared_ptr<VTitle> mpVTitleSecondY;
+
+    css::uno::Reference<css::drawing::XShape> mxMarkHandles;
+    css::uno::Reference<css::drawing::XShape> mxPlotAreaWithAxes;
+
+    css::uno::Reference<css::drawing::XShapes> mxDiagramWithAxesShapes;
+
+    bool mbAutoPosTitleX;
+    bool mbAutoPosTitleY;
+    bool mbAutoPosTitleZ;
+
+    bool mbAutoPosSecondTitleX;
+    bool mbAutoPosSecondTitleY;
+
+    bool mbUseFixedInnerSize;
+
+    CreateShapeParam2D() :
+        mbAutoPosTitleX(true),
+        mbAutoPosTitleY(true),
+        mbAutoPosTitleZ(true),
+        mbAutoPosSecondTitleX(true),
+        mbAutoPosSecondTitleY(true),
+        mbUseFixedInnerSize(false) {}
+};
+
+class GL2DRenderer : public IRenderer
+{
+public:
+    GL2DRenderer(ChartView* pView);
+    virtual ~GL2DRenderer();
+
+    virtual void update() SAL_OVERRIDE;
+    virtual void clickedAt(const Point& rPos, sal_uInt16 nButton) SAL_OVERRIDE;
+    virtual void mouseDragMove(const Point& rBegin, const Point& rEnd, sal_uInt16 nButton) SAL_OVERRIDE;
+    virtual void scroll(long nDelta) SAL_OVERRIDE;
+    virtual void contextDestroyed() SAL_OVERRIDE;
+
+    const OpenGLWindow* getOpenGLWindow() const;
+    void updateOpenGLWindow();
+private:
+    ChartView* mpView;
+    bool mbContextDestroyed;
+    OpenGLWindow* mpWindow;
+};
+
+GL2DRenderer::GL2DRenderer(ChartView* pView):
+    mpView(pView),
+    mbContextDestroyed(false),
+    mpWindow(mpView->mrChartModel.getOpenGLWindow())
+{
+}
+
+GL2DRenderer::~GL2DRenderer()
+{
+    if(!mbContextDestroyed && mpWindow)
+        mpWindow->setRenderer(NULL);
+}
+
+void GL2DRenderer::update()
+{
+    mpView->update();
+    mpView->render();
+}
+
+void GL2DRenderer::clickedAt(const Point&, sal_uInt16 )
+{
+}
+
+void GL2DRenderer::mouseDragMove(const Point& , const Point& , sal_uInt16 )
+{
+}
+
+void GL2DRenderer::scroll(long )
+{
+}
+
+void GL2DRenderer::contextDestroyed()
+{
+    mbContextDestroyed = true;
+}
+
+const OpenGLWindow* GL2DRenderer::getOpenGLWindow() const
+{
+    return mpWindow;
+}
+
+void GL2DRenderer::updateOpenGLWindow()
+{
+    if(mbContextDestroyed)
+        return;
+
+    OpenGLWindow* pWindow = mpView->mrChartModel.getOpenGLWindow();
+    if(pWindow != mpWindow)
+    {
+        if(mpWindow)
+        {
+            mpWindow->setRenderer(NULL);
+        }
+
+        if(pWindow)
+        {
+            pWindow->setRenderer(this);
+        }
+    }
+    mpWindow = pWindow;
+}
+
+const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
+{
+    return theExplicitValueProviderUnoTunnelId::get().getSeq();
+}
+
+ExplicitValueProvider* ExplicitValueProvider::getExplicitValueProvider(
+        const Reference< uno::XInterface >& xChartView )
+{
+    ExplicitValueProvider* pExplicitValueProvider=0;
+
+    Reference< lang::XUnoTunnel > xTunnel( xChartView, uno::UNO_QUERY );
+    if( xTunnel.is() )
+    {
+        pExplicitValueProvider = reinterpret_cast<ExplicitValueProvider*>(xTunnel->getSomething(
+            ExplicitValueProvider::getUnoTunnelId() ));
+    }
+    return pExplicitValueProvider;
+}
+
+ChartView::ChartView(
+        uno::Reference<uno::XComponentContext> const & xContext,
+        ChartModel& rModel)
+    : m_aMutex()
+    , m_xCC(xContext)
+    , mrChartModel(rModel)
+    , m_xShapeFactory()
+    , m_xDrawPage()
+    , m_pDrawModelWrapper()
+    , m_aListenerContainer( m_aMutex )
+    , m_bViewDirty(true)
+    , m_bInViewUpdate(false)
+    , m_bViewUpdatePending(false)
+    , m_bRefreshAddIn(true)
+    , m_aPageResolution(1000,1000)
+    , m_bPointsWereSkipped(false)
+    , m_nScaleXNumerator(1)
+    , m_nScaleXDenominator(1)
+    , m_nScaleYNumerator(1)
+    , m_nScaleYDenominator(1)
+    , m_bSdrViewIsInEditMode(false)
+    , m_aResultingDiagramRectangleExcludingAxes(0,0,0,0)
+    , mp2DRenderer(new GL2DRenderer(this))
+{
+    init();
+}
+
+void ChartView::init()
+{
+    if( !m_pDrawModelWrapper.get() )
+    {
+        SolarMutexGuard aSolarGuard;
+        m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
+        m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
+        m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
+        StartListening( m_pDrawModelWrapper->getSdrModel(), false /*bPreventDups*/ );
+    }
+}
+
+void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& )
+                throw ( uno::Exception, uno::RuntimeException, std::exception)
+{
+    init();
+}
+
+ChartView::~ChartView()
+{
+    maTimeBased.maTimer.Stop();
+    // #i120831#. In ChartView::initialize(), m_xShapeFactory is created from SdrModel::getUnoModel() and indirectly
+    //   from SfxBaseModel, it needs call dispose() to make sure SfxBaseModel object is freed correctly.
+    uno::Reference< lang::XComponent > xComp( m_xShapeFactory, uno::UNO_QUERY);
+    if ( xComp.is() )
+        xComp->dispose();
+
+    if( m_pDrawModelWrapper.get() )
+    {
+        SolarMutexGuard aSolarGuard;
+        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
+        m_pDrawModelWrapper.reset();
+    }
+    m_xDrawPage = NULL;
+    impl_deleteCoordinateSystems();
+}
+
+void ChartView::impl_deleteCoordinateSystems()
+{
+    //delete all coordinate systems
+    ::std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
+    ::std::swap( aVectorToDeleteObjects, m_aVCooSysList );//#i109770#
+    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
+    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
+    for( ; aIter != aEnd; ++aIter )
+    {
+        delete *aIter;
+    }
+    aVectorToDeleteObjects.clear();
+}
+
+// datatransfer::XTransferable
+namespace
+{
+const OUString lcl_aGDIMetaFileMIMEType(
+    "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
+const OUString lcl_aGDIMetaFileMIMETypeHighContrast(
+    "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
+} // anonymous namespace
+
+void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStream
+                           , bool bUseHighContrast )
+{
+    if( !m_xDrawPage.is() )
+        return;
+
+    // creating the graphic exporter
+    uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( m_xCC );
+
+    uno::Sequence< beans::PropertyValue > aProps(3);
+    aProps[0].Name = "FilterName";
+    aProps[0].Value <<= OUString("SVM");
+
+    aProps[1].Name = "OutputStream";
+    aProps[1].Value <<= xOutStream;
+
+    uno::Sequence< beans::PropertyValue > aFilterData(4);
+    aFilterData[0].Name = "ExportOnlyBackground";
+    aFilterData[0].Value <<= sal_False;
+    aFilterData[1].Name = "HighContrast";
+    aFilterData[1].Value <<= bUseHighContrast;
+
+    aFilterData[2].Name = "Version";
+    const sal_Int32 nVersion = SOFFICE_FILEFORMAT_50;
+    aFilterData[2].Value <<= nVersion;
+
+    aFilterData[3].Name = "CurrentPage";
+    aFilterData[3].Value <<= uno::Reference< uno::XInterface >( m_xDrawPage, uno::UNO_QUERY );
+
+    //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
+    {
+        aFilterData.realloc( aFilterData.getLength()+4 );
+        aFilterData[4].Name = "ScaleXNumerator";
+        aFilterData[4].Value = uno::makeAny( m_nScaleXNumerator );
+        aFilterData[5].Name = "ScaleXDenominator";
+        aFilterData[5].Value = uno::makeAny( m_nScaleXDenominator );
+        aFilterData[6].Name = "ScaleYNumerator";
+        aFilterData[6].Value = uno::makeAny( m_nScaleYNumerator );
+        aFilterData[7].Name = "ScaleYDenominator";
+        aFilterData[7].Value = uno::makeAny( m_nScaleYDenominator );
+    }
+
+    aProps[2].Name = "FilterData";
+    aProps[2].Value <<= aFilterData;
+
+    xExporter->setSourceDocument( uno::Reference< lang::XComponent >( m_xDrawPage, uno::UNO_QUERY) );
+    if( xExporter->filter( aProps ) )
+    {
+        xOutStream->flush();
+        xOutStream->closeOutput();
+        uno::Reference< io::XSeekable > xSeekable( xOutStream, uno::UNO_QUERY );
+        if( xSeekable.is() )
+            xSeekable->seek(0);
+    }
+}
+
+uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aFlavor )
+                throw (datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
+{
+    bool bHighContrastMetaFile( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast));
+    uno::Any aRet;
+    if( ! (bHighContrastMetaFile || aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType)) )
+        return aRet;
+
+    update();
+
+    SvMemoryStream aStream( 1024, 1024 );
+    utl::OStreamWrapper* pStreamWrapper = new utl::OStreamWrapper( aStream );
+
+    uno::Reference< io::XOutputStream > xOutStream( pStreamWrapper );
+    uno::Reference< io::XInputStream > xInStream( pStreamWrapper );
+    uno::Reference< io::XSeekable > xSeekable( pStreamWrapper );
+
+    if( xOutStream.is() )
+    {
+        this->getMetaFile( xOutStream, bHighContrastMetaFile );
+
+        if( xInStream.is() && xSeekable.is() )
+        {
+            xSeekable->seek(0);
+            sal_Int32 nBytesToRead = xInStream->available();
+            uno::Sequence< sal_Int8 > aSeq( nBytesToRead );
+            xInStream->readBytes( aSeq, nBytesToRead);
+            aRet <<= aSeq;
+            xInStream->closeInput();
+        }
+    }
+
+    return aRet;
+}
+uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFlavors()
+                throw (uno::RuntimeException, std::exception)
+{
+    uno::Sequence< datatransfer::DataFlavor > aRet(2);
+
+    aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
+        "GDIMetaFile",
+        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+    aRet[1] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
+        "GDIMetaFile",
+        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+
+    return aRet;
+}
+sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+                throw (uno::RuntimeException, std::exception)
+{
+    return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||
+             aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
+}
+
+// ____ XUnoTunnel ___
+::sal_Int64 SAL_CALL ChartView::getSomething( const uno::Sequence< ::sal_Int8 >& aIdentifier )
+        throw( uno::RuntimeException, std::exception)
+{
+    if( aIdentifier.getLength() == 16 && 0 == memcmp( ExplicitValueProvider::getUnoTunnelId().getConstArray(),
+                                                         aIdentifier.getConstArray(), 16 ) )
+    {
+        ExplicitValueProvider* pProvider = this;
+        return reinterpret_cast<sal_Int64>(pProvider);
+    }
+    return 0;
+}
+
+// lang::XServiceInfo
+
+APPHELPER_XSERVICEINFO_IMPL(ChartView,CHART_VIEW_SERVICE_IMPLEMENTATION_NAME)
+
+    uno::Sequence< OUString > ChartView
+::getSupportedServiceNames_Static()
+{
+    uno::Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[ 0 ] = CHART_VIEW_SERVICE_NAME;
+    return aSNS;
+}
+
+::basegfx::B3DHomMatrix createTransformationSceneToScreen(
+    const ::basegfx::B2IRectangle& rDiagramRectangleWithoutAxes )
+{
+    ::basegfx::B3DHomMatrix aM;
+    aM.scale(double(rDiagramRectangleWithoutAxes.getWidth())/FIXED_SIZE_FOR_3D_CHART_VOLUME
+            , -double(rDiagramRectangleWithoutAxes.getHeight())/FIXED_SIZE_FOR_3D_CHART_VOLUME, 1.0 );
+    aM.translate(double(rDiagramRectangleWithoutAxes.getMinX())
+        , double(rDiagramRectangleWithoutAxes.getMinY()+rDiagramRectangleWithoutAxes.getHeight()-1), 0);
+    return aM;
+}
+
 namespace
 {
 
@@ -1432,9 +1437,7 @@ sal_Int16 lcl_getDefaultWritingModeFromPool( const boost::shared_ptr<DrawModelWr
 
 } //end anonymous namespace
 
-awt::Rectangle ChartView::impl_createDiagramAndContent(
-    SeriesPlotterContainer& rSeriesPlotterContainer,
-    const CreateShapeParam2D& rParam, const awt::Size& rPageSize )
+awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D& rParam, const awt::Size& rPageSize )
 {
     //return the used rectangle
     awt::Rectangle aUsedOuterRect(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y, 0, 0);
@@ -1452,8 +1455,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent(
 
     basegfx::B2IRectangle aAvailableOuterRect = BaseGFXHelper::makeRectangle(rParam.maRemainingSpace);
 
-    const std::vector< VCoordinateSystem* >& rVCooSysList( rSeriesPlotterContainer.getCooSysList() );
-    const std::vector< VSeriesPlotter* >& rSeriesPlotterList( rSeriesPlotterContainer.getSeriesPlotterList() );
+    const std::vector< VCoordinateSystem* >& rVCooSysList( rParam.mpSeriesPlotterContainer->getCooSysList() );
+    const std::vector< VSeriesPlotter* >& rSeriesPlotterList( rParam.mpSeriesPlotterContainer->getSeriesPlotterList() );
 
     //create VAxis, so they can give necessary information for automatic scaling
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( static_cast< ::cppu::OWeakObject* >( &mrChartModel ), uno::UNO_QUERY );
@@ -1475,16 +1478,16 @@ awt::Rectangle ChartView::impl_createDiagramAndContent(
 
     // - prepare list of all axis and how they are used
     Date aNullDate = NumberFormatterWrapper( xNumberFormatsSupplier ).getNullDate();
-    rSeriesPlotterContainer.initAxisUsageList(aNullDate);
-    rSeriesPlotterContainer.doAutoScaling( mrChartModel );
-    rSeriesPlotterContainer.setScalesFromCooSysToPlotter();
-    rSeriesPlotterContainer.setNumberFormatsFromAxes();
+    rParam.mpSeriesPlotterContainer->initAxisUsageList(aNullDate);
+    rParam.mpSeriesPlotterContainer->doAutoScaling( mrChartModel );
+    rParam.mpSeriesPlotterContainer->setScalesFromCooSysToPlotter();
+    rParam.mpSeriesPlotterContainer->setNumberFormatsFromAxes();
 
     //create shapes
 
     //aspect ratio
-    drawing::Direction3D aPreferredAspectRatio(
-        rSeriesPlotterContainer.getPreferredAspectRatio() );
+    drawing::Direction3D aPreferredAspectRatio =
+        rParam.mpSeriesPlotterContainer->getPreferredAspectRatio();
 
     uno::Reference< drawing::XShapes > xSeriesTargetInFrontOfAxis(0);
     uno::Reference< drawing::XShapes > xSeriesTargetBehindAxis(0);
@@ -1540,9 +1543,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent(
             createTransformationSceneToScreen( aNewInnerRect ) ));
 
         //redo autoscaling to get size and text dependent automatic main increment count
-        rSeriesPlotterContainer.doAutoScaling( mrChartModel );
-        rSeriesPlotterContainer.updateScalesAndIncrementsOnAxes();
-        rSeriesPlotterContainer.setScalesFromCooSysToPlotter();
+        rParam.mpSeriesPlotterContainer->doAutoScaling( mrChartModel );
+        rParam.mpSeriesPlotterContainer->updateScalesAndIncrementsOnAxes();
+        rParam.mpSeriesPlotterContainer->setScalesFromCooSysToPlotter();
 
         pVCooSys->createAxesLabels();
 
@@ -3058,12 +3061,12 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     if (aParam.maRemainingSpace.Width <= 0|| aParam.maRemainingSpace.Height <= 0)
         return;
 
-    SeriesPlotterContainer aSeriesPlotterContainer( m_aVCooSysList );
-    aSeriesPlotterContainer.initializeCooSysAndSeriesPlotter( mrChartModel );
+    aParam.mpSeriesPlotterContainer.reset(new SeriesPlotterContainer(m_aVCooSysList));
+    aParam.mpSeriesPlotterContainer->initializeCooSysAndSeriesPlotter( mrChartModel );
     if(maTimeBased.bTimeBased && maTimeBased.nFrame != 0)
     {
         std::vector<VSeriesPlotter*>& rSeriesPlotter =
-            aSeriesPlotterContainer.getSeriesPlotterList();
+            aParam.mpSeriesPlotterContainer->getSeriesPlotterList();
         size_t n = rSeriesPlotter.size();
         for(size_t i = 0; i < n; ++i)
         {
@@ -3082,7 +3085,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
     lcl_createLegend(
         LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC,
-        aParam.maRemainingSpace, rPageSize, mrChartModel, aSeriesPlotterContainer.getLegendEntryProviderList(),
+        aParam.maRemainingSpace, rPageSize, mrChartModel, aParam.mpSeriesPlotterContainer->getLegendEntryProviderList(),
         lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
     if (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0)
         return;
@@ -3095,7 +3098,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
     if (getAvailablePosAndSizeForDiagram(aParam, rPageSize, mrChartModel.getFirstDiagram()))
     {
-        awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(aSeriesPlotterContainer, aParam, rPageSize);
+        awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(aParam, rPageSize);
 
         if (aParam.mxPlotAreaWithAxes.is())
         {
@@ -3126,7 +3129,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     {
         // create copy of the data for next frame
         std::vector<VSeriesPlotter*>& rSeriesPlotter =
-            aSeriesPlotterContainer.getSeriesPlotterList();
+            aParam.mpSeriesPlotterContainer->getSeriesPlotterList();
         size_t n = rSeriesPlotter.size();
         maTimeBased.m_aDataSeriesList.clear();
         maTimeBased.m_aDataSeriesList.resize(n);
