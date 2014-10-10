@@ -50,7 +50,7 @@ public:
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) SAL_OVERRIDE = 0;
 
 protected:
-    css::uno::Any createDocument() throw (css::uno::RuntimeException);
+    css::uno::Any createDocument() throw (css::uno::RuntimeException, std::exception);
     void closeDocuments() throw (css::uno::RuntimeException);
     css::uno::Any openDocument( const OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
 };

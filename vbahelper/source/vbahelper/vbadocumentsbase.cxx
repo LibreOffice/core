@@ -234,7 +234,7 @@ void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, b
 
 } // namespace
 
-uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
+uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException, std::exception)
 {
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
