@@ -55,7 +55,9 @@ void CGM::ImplDoClass5()
             else
                 nWidth = (sal_uInt32)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ) * 25; // scaling in 1/4 mm
 
-            pElement->aLineBundle.nLineWidth = nWidth;
+            ( pElement->nAspectSourceFlags & ASF_LINEWIDTH )
+                ? pElement->pLineBundle->nLineWidth = nWidth
+                    : pElement->aLineBundle.nLineWidth = nWidth;
         }
         break;
         case 0x04 : /*Line Color*/
@@ -91,7 +93,7 @@ void CGM::ImplDoClass5()
             else
                 nWidth = (sal_uInt32)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ) * 25;
             ( pElement->nAspectSourceFlags & ASF_MARKERSIZE )
-                ? pElement->aMarkerBundle.nMarkerSize = nWidth
+                ? pElement->pMarkerBundle->nMarkerSize = nWidth
                     : pElement->aMarkerBundle.nMarkerSize = nWidth;
         }
         break;
@@ -269,7 +271,7 @@ void CGM::ImplDoClass5()
             else
                 nWidth = (sal_uInt32)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ) * 25;
             ( pElement->nAspectSourceFlags & ASF_EDGEWIDTH )
-                ? pElement->aEdgeBundle.nEdgeWidth = nWidth
+                ? pElement->pEdgeBundle->nEdgeWidth = nWidth
                     : pElement->aEdgeBundle.nEdgeWidth = nWidth;
         }
         break;
