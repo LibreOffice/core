@@ -3201,10 +3201,11 @@ bool SwpHints::TryInsertHint(
     const bool bNoHintAdjustMode = (nsSetAttrMode::SETATTR_NOHINTADJUST & nMode);
 
     // handle nesting attributes: inserting may fail due to overlap!
-    if (pHint->IsNesting())
+    SwTxtAttrNesting* attrNesting = pHint->IsNesting()
+        ? dynamic_cast<SwTxtAttrNesting*>(pHint) : nullptr;
+    if (attrNesting)
     {
-        const bool bRet(
-            TryInsertNesting(rNode, *static_cast<SwTxtAttrNesting*>(pHint)));
+        const bool bRet(TryInsertNesting(rNode, *attrNesting));
         if (!bRet) return false;
     }
     // Currently REFMARK and TOXMARK have OverlapAllowed set to true.
