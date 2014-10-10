@@ -21,6 +21,7 @@
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NotRemoveableException.hpp>
@@ -37,6 +38,7 @@ namespace comphelper
     using ::com::sun::star::uno::TypeClass_VOID;
     using ::com::sun::star::beans::IllegalTypeException;
     using ::com::sun::star::beans::PropertyExistException;
+    using ::com::sun::star::container::ElementExistException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::beans::NotRemoveableException;
@@ -88,15 +90,24 @@ namespace comphelper
                       );
         }
 
-        void    lcl_checkNameAndHandle( const OUString& _name, const sal_Int32 _handle, const PropertyBag& _container )
+        void    lcl_checkNameAndHandle_PropertyExistException( const OUString& _name, const sal_Int32 _handle, const PropertyBag& _container )
         {
             if ( _container.hasPropertyByName( _name ) || _container.hasPropertyByHandle( _handle ) )
                 throw PropertyExistException(
                     "Property name or handle already used.",
-                    // TODO: resource
                     NULL );
 
         }
+
+        void    lcl_checkNameAndHandle_ElementExistException( const OUString& _name, const sal_Int32 _handle, const PropertyBag& _container )
+        {
+            if ( _container.hasPropertyByName( _name ) || _container.hasPropertyByHandle( _handle ) )
+                throw ElementExistException(
+                    "Property name or handle already used.",
+                    NULL );
+
+        }
+
     }
 
 
@@ -112,7 +123,7 @@ namespace comphelper
 
         // check name/handle sanity
         lcl_checkForEmptyName( m_pImpl->m_bAllowEmptyPropertyName, _rName );
-        lcl_checkNameAndHandle( _rName, _nHandle, *this );
+        lcl_checkNameAndHandle_ElementExistException( _rName, _nHandle, *this );
 
         // register the property
         OSL_ENSURE( _nAttributes & PropertyAttribute::MAYBEVOID, "PropertyBag::addVoidProperty: this is for default-void properties only!" );
@@ -135,7 +146,7 @@ namespace comphelper
 
         // check name/handle sanity
         lcl_checkForEmptyName( m_pImpl->m_bAllowEmptyPropertyName, _rName );
-        lcl_checkNameAndHandle( _rName, _nHandle, *this );
+        lcl_checkNameAndHandle_PropertyExistException( _rName, _nHandle, *this );
 
         // register the property
         registerPropertyNoMember( _rName, _nHandle, _nAttributes, aPropertyType,
