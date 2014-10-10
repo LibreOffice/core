@@ -153,10 +153,6 @@ sub getproductblock
         {
             installer::exiter::exit_program("ERROR: Product $installer::globals::product not defined in $installer::globals::ziplistname", "getproductblock");
         }
-        elsif ($search eq $installer::globals::compiler )
-        {
-            installer::exiter::exit_program("ERROR: Compiler $installer::globals::compiler not defined in $installer::globals::pathfilename", "getproductblock");
-        }
         else    # this is not possible
         {
             installer::exiter::exit_program("ERROR: Unknown value for $search in getproductblock()", "getproductblock");
@@ -175,17 +171,13 @@ sub analyze_settings_block
     my ($blockref) = @_;
 
     my @newsettingsblock = ();
-    my $compilerstring = "";
     my $record = 1;
     my $counter = 0;
 
     # Allowed values in settings block:
     # "Settings", "Variables", "unix" (for destination path and logfile)
-    # Furthermore allowed values are $installer::globals::build (srx645) and $installer::globals::compiler (pro and nonpro (unxsols4.pro))
 
     # Comment line in settings block begin with "#" or ";"
-
-    $compilerstring = $installer::globals::compiler;
 
     for ( my $i = 0; $i <= $#{$blockref}; $i++ )
     {
@@ -203,8 +195,7 @@ sub analyze_settings_block
 
         # complete blocks of unknows strings are not recorded
 
-        if ((!($line =~ /^\s*\Q$compilerstring\E\s*$/i)) &&
-            (!($line =~ /^\s*\Q$installer::globals::build\E\s*$/i)) &&
+        if ((!($line =~ /^\s*\Q$installer::globals::build\E\s*$/i)) &&
             (!($line =~ /^\s*\bSettings\b\s*$/i)) &&
             (!($line =~ /^\s*\bVariables\b\s*$/i)) &&
             (!($line =~ /^\s*\bunix\b\s*$/i)) &&

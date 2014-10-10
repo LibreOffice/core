@@ -18,8 +18,8 @@
 #
 
 cat > /dev/null
-[[ "${OUTPATH}" == unxlngx* ]] && mark64="()(64bit)"
-if [[ "${OUTPATH}" == unxaig* ]]; then
+[[ "${PLATFORMID}" == "linux_x86_64" ]] && mark64="()(64bit)"
+if [[ "${OS}" == "AIX" ]]; then
   echo "libfreetype.a(libfreetype.so.6${mark64})"
 else
   echo "libfreetype.so.6${mark64}"
