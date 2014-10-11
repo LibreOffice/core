@@ -16,6 +16,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/ucb/CheckinArgument.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -205,7 +206,7 @@ public:
 
     virtual std::list< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) SAL_OVERRIDE;
 
-    libcmis::ObjectPtr getObject( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, libcmis::Exception);
+    libcmis::ObjectPtr getObject( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception);
 };
 
 }

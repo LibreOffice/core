@@ -422,7 +422,7 @@ namespace cmis
     }
 
 
-    libcmis::ObjectPtr Content::getObject( const uno::Reference< ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, libcmis::Exception)
+    libcmis::ObjectPtr Content::getObject( const uno::Reference< ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception)
     {
         // can't get the session for some reason
         // the recent file openning at start up is an example.
