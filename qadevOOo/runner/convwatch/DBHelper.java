@@ -187,8 +187,8 @@ public class DBHelper
 
     public String Quote(String _sToQuote)
         {
-            String ts = "'";
-            String ds = "\"";
+            char ts = '\'';
+            char ds = '"';
             int nQuote = _sToQuote.indexOf(ts);
             if (nQuote >= 0)
             {
