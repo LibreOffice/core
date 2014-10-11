@@ -200,11 +200,8 @@ def factoryAttributeToResourceMap(nsNode):
 
 
 def idToLabel(idName):
-    if ":" in idName:
-        ns, ln = idName.split(':')
-        return "NS_%s::LN_%s" % (ns, ln)
-    else:
-        return idName
+    ns, ln = idName.split(':')
+    return "NS_%s::LN_%s" % (ns, ln)
 
 
 def appendValueData(values, name, value):
