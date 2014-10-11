@@ -102,11 +102,11 @@ OUString SwWrtShell::GetDoString( DoType eDoType ) const
     {
     case UNDO:
         nResStr = STR_UNDO;
-        GetLastUndoInfo(& aUndoStr, 0);
+        (void)GetLastUndoInfo(&aUndoStr, 0);
         break;
     case REDO:
         nResStr = STR_REDO;
-        GetFirstRedoInfo(& aUndoStr);
+        (void)GetFirstRedoInfo(&aUndoStr);
         break;
     default:;//prevent warning
     }
