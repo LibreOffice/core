@@ -1766,8 +1766,6 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
 
-    ScDocShellModificator aModificator( *pDocSh );
-
     if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
     {
         aMarkRange.aStart.SetCol(GetViewData().GetCurX());
@@ -1782,81 +1780,13 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
             bSimple = true;
     }
 
-    aFuncMark.SetMarking(false);        // for MarkToMulti
-    aFuncMark.MarkToSimple();           // before bMulti test below
-
-    OSL_ENSURE( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() || bSimple, "delete what?" );
-
-    ScDocument* pUndoDoc = NULL;
-    bool bMulti = !bSimple && aFuncMark.IsMultiMarked();
-    if (!bSimple)
-    {
-        aFuncMark.MarkToMulti();
-        aFuncMark.GetMultiMarkArea( aMarkRange );
-    }
-    ScRange aExtendedRange(aMarkRange);
-    if (!bSimple)
-    {
-        if ( pDoc->ExtendMerge( aExtendedRange, true ) )
-            bMulti = false;
-    }
-
-    // no objects on protected tabs
-    bool bObjects = (nFlags & IDF_OBJECTS) && !sc::DocFuncUtil::hasProtectedTab(*pDoc, aFuncMark);
-
-    sal_uInt16 nExtFlags = 0;       // extra flags are needed only if attributes are deleted
-    if ( nFlags & IDF_ATTRIB )
-        pDocSh->UpdatePaintExt( nExtFlags, aMarkRange );
-
-    //  order op opeeration:
-    //  1) BeginDrawUndo
-    //  2) delete objects (DrawUndo is filled)
-    //  3) copy contents for undo
-    //  4) delete contents
-    //  5) add undo-action
-
-    bool bDrawUndo = bObjects || ( nFlags & IDF_NOTE );     // needed for shown notes
-    if ( bDrawUndo && bRecord )
-        pDoc->BeginDrawUndo();
-
-    if (bObjects)
-    {
-        if (bMulti)
-            pDoc->DeleteObjectsInSelection( aFuncMark );
-        else
-            pDoc->DeleteObjectsInArea( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
-/*!*/                                  aMarkRange.aEnd.Col(),   aMarkRange.aEnd.Row(),
-                                       aFuncMark );
-    }
-
-    // To keep track of all non-empty cells within the deleted area.
-    boost::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
-
-    if ( bRecord )
-    {
-        pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(*pDoc, aFuncMark, aExtendedRange, nFlags, bMulti);
-        pDataSpans.reset(sc::DocFuncUtil::getNonEmptyCellSpans(*pDoc, aFuncMark, aExtendedRange));
-    }
-
     HideAllCursors();   // for if summary is cancelled
+
+    ScDocFunc& rDocFunc = pDocSh->GetDocFunc();
     if (bSimple)
-        pDoc->DeleteArea( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
-                          aMarkRange.aEnd.Col(),   aMarkRange.aEnd.Row(),
-                          aFuncMark, nFlags );
+        rDocFunc.DeleteCell(aMarkRange.aStart, aFuncMark, nFlags, bRecord, false);
     else
-    {
-        pDoc->DeleteSelection( nFlags, aFuncMark );
-    }
-
-    if ( bRecord )
-    {
-        sc::DocFuncUtil::addDeleteContentsUndo(
-            pDocSh->GetUndoManager(), pDocSh, aFuncMark, aExtendedRange, pUndoDoc,
-            nFlags, pDataSpans, bMulti, bDrawUndo);
-    }
-
-    if (!AdjustRowHeight( aExtendedRange.aStart.Row(), aExtendedRange.aEnd.Row() ))
-        pDocSh->PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
+        rDocFunc.DeleteContents(aFuncMark, nFlags, bRecord, false);
 
     pDocSh->UpdateOle(&GetViewData());
 
@@ -1874,7 +1804,6 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
         HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
     }
 
-    aModificator.SetDocumentModified();
     CellContentChanged();
     ShowAllCursors();
 
