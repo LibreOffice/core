@@ -8,8 +8,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
-
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -161,10 +159,10 @@ DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
 DECLARE_RTFEXPORT_TEST(testCommentsNested, "comments-nested.odt")
 {
     uno::Reference<beans::XPropertySet> xOuter(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content").trim());
 
     uno::Reference<beans::XPropertySet> xInner(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), "TextField"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content").trim());
 }
 
 DECLARE_RTFEXPORT_TEST(testMathAccents, "math-accents.rtf")
@@ -697,8 +695,6 @@ DECLARE_RTFEXPORT_TEST(testNumberingFont, "numbering-font.rtf")
     // This was Liberation Serif, i.e. custom font of the numbering itself ("1.\t") was lost on import.
     CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(xStyle, "CharFontName"));
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
