@@ -67,9 +67,6 @@ namespace sdbtools
         :ConnectionDependentComponent( _rContext )
         ,m_pImpl( new TableName_Impl )
     {
-        if ( !_rxConnection.is() )
-            throw NullPointerException();
-
         setWeakConnection( _rxConnection );
     }
 
