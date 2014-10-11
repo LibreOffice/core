@@ -570,7 +570,7 @@ public class OfficePrint {
                         {
                             nPropIndex++;
                         }
-                        isBusy = (aPrinterProps[nPropIndex].Value == Boolean.TRUE);
+                        isBusy = ((Boolean) aPrinterProps[nPropIndex].Value).booleanValue();
                         TimeHelper.waitInSeconds(1, "is print ready?");
                         nPrintCount++;
                         if (nPrintCount > 3600)
