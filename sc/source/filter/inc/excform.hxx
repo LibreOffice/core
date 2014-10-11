@@ -37,8 +37,8 @@ protected:
 
     bool                    bExternName;    // external name was found
     static const sal_uInt16 nRowMask;
-    static const sal_uInt16 nLastInd;       // last Index for Excel->SC-
-                                        // Token Umsetzung
+    static const sal_uInt16 nLastInd;       // last Index for Excel->SC- token
+
     XclFunctionProvider maFuncProv;
     const XclBiff       meBiff;
 

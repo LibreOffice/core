@@ -100,8 +100,8 @@ protected:
     ScfUInt32Vec            maSheetOffsets;
     ScRange                 maScOleSize;        /// Visible range if embedded.
 
-    NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
-    ExcelToSc*              pFormConv;          // Formel-Konverter
+    NameBuffer*             pExtNameBuff;       // ... external names (Ind.-Basis=1)
+    ExcelToSc*              pFormConv;          // formula-converter
 
     XclImpOutlineBuffer*    pColOutlineBuff;
     XclImpOutlineBuffer*    pRowOutlineBuff;

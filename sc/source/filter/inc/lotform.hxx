@@ -83,9 +83,9 @@ private:
                         // with '(<rParam>)+1' and finished with Store() !
 
     void                DecToken( TokenId& rParam );
-                        // ACHTUNG: ~
+                        // Attention: ~
     void                NegToken( TokenId& rParam );
-                        // ACHTUNG: like ~, but with '-(<rParam>)'
+                        // Attention: like ~, but with '-(<rParam>)'
 public:
     LotusToSc(LotusContext &rContext, SvStream& aStr, svl::SharedStringPool& rSPool, rtl_TextEncoding eSrc, bool b);
 
