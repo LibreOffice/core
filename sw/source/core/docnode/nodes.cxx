@@ -280,8 +280,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                                             SwFmtFldHint(
                                                 &pTxtFld->GetFmtFld(),
                                                 ( pTxtFld->GetFmtFld().IsFldInDoc()
-                                                  ? SWFMTFLD_INSERTED
-                                                  : SWFMTFLD_REMOVED ) ) );
+                                                  ? SwFmtFldHintWhich::INSERTED
+                                                  : SwFmtFldHintWhich::REMOVED ) ) );
                                     }
                                     else if( RES_DDEFLD == pTyp->Which() )
                                     {
@@ -1553,7 +1553,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             pEnd->nContent = pStt->nContent;
             rPam.DeleteMark();
             GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0,
-                rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
+                rNodes.IsDocNodes() ? SwFmtFldHintWhich::INSERTED : SwFmtFldHintWhich::REMOVED ) );
             return;
         }
 
@@ -1675,7 +1675,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     *pEnd = *pStt;
     rPam.DeleteMark();
     GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0,
-                rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
+                rNodes.IsDocNodes() ? SwFmtFldHintWhich::INSERTED : SwFmtFldHintWhich::REMOVED ) );
 }
 
 ///@see SwNodes::_MoveNodes (TODO: seems to be C&P programming here)

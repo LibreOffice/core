@@ -318,7 +318,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SwFmtFld* pFld = const_cast <SwFmtFld*>( rFmtHint.GetField() );
         switch ( rFmtHint.Which() )
         {
-            case SWFMTFLD_INSERTED :
+            case SwFmtFldHintWhich::INSERTED :
             {
                 if (!pFld)
                 {
@@ -339,7 +339,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
             }
-            case SWFMTFLD_REMOVED:
+            case SwFmtFldHintWhich::REMOVED:
             {
                 if (mbDeleteNote)
                 {
@@ -352,13 +352,13 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
             }
-            case SWFMTFLD_FOCUS:
+            case SwFmtFldHintWhich::FOCUS:
             {
                 if (rFmtHint.GetView()== mpView)
                     Focus(rBC);
                 break;
             }
-            case SWFMTFLD_CHANGED:
+            case SwFmtFldHintWhich::CHANGED:
             {
                         SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
                 for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
@@ -376,7 +376,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             }
 
-            case SWFMTFLD_LANGUAGE:
+            case SwFmtFldHintWhich::LANGUAGE:
             {
                 SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
                 for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
@@ -1239,7 +1239,7 @@ class FieldDocWatchingStack : public SfxListener
         if (pHint)
         {
             bool bAllInvalidated = false;
-            if (pHint->Which() == SWFMTFLD_REMOVED)
+            if (pHint->Which() == SwFmtFldHintWhich::REMOVED)
             {
                 const SwFmtFld* pFld = pHint->GetField();
                 bAllInvalidated = pFld == NULL;
@@ -1249,7 +1249,7 @@ class FieldDocWatchingStack : public SfxListener
                     v.erase(std::remove(v.begin(), v.end(), pFld), v.end());
                 }
             }
-            else if (pHint->Which() == SWFMTFLD_INSERTED)
+            else if (pHint->Which() == SwFmtFldHintWhich::INSERTED)
             {
                 const SwFmtFld* pFld = pHint->GetField();
                 bAllInvalidated = pFld == NULL;

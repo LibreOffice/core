@@ -117,27 +117,30 @@ public:
             { m_wXTextField = xTextField; }
 };
 
+enum class SwFmtFldHintWhich
+{
+    INSERTED   = 1,
+    REMOVED    = 2,
+    FOCUS      = 3,
+    CHANGED    = 4,
+    LANGUAGE   = 5
+};
+
 class SW_DLLPUBLIC SwFmtFldHint : public SfxHint
 {
-#define SWFMTFLD_INSERTED   1
-#define SWFMTFLD_REMOVED    2
-#define SWFMTFLD_FOCUS      3
-#define SWFMTFLD_CHANGED    4
-#define SWFMTFLD_LANGUAGE   5
-
-    const SwFmtFld* pFld;
-    sal_Int16 nWhich;
-    const SwView* pView;
+    const SwFmtFld*   pFld;
+    SwFmtFldHintWhich nWhich;
+    const SwView*     pView;
 
 public:
-    SwFmtFldHint( const SwFmtFld* p, sal_Int16 n, const SwView* pV = 0)
+    SwFmtFldHint( const SwFmtFld* p, SwFmtFldHintWhich n, const SwView* pV = 0)
         : pFld(p)
         , nWhich(n)
         , pView(pV)
     {}
 
     const SwFmtFld* GetField() const { return pFld; }
-    sal_Int16 Which() const { return nWhich; }
+    SwFmtFldHintWhich Which() const { return nWhich; }
     const SwView* GetView() const { return pView; }
 };
 

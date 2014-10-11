@@ -409,7 +409,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     {
                         if ( pSwFmtFld->GetField() == pPostIt )
                         {
-                            pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS, &GetView() ) );
+                            pSwFmtFld->Broadcast( SwFmtFldHint( 0, SwFmtFldHintWhich::FOCUS, &GetView() ) );
                             break;
                         }
                         pSwFmtFld = aIter.Next();
