@@ -904,7 +904,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
         pRetShell->DoInitNew();
     }
 
-    pRet->acquire();
+    (void)pRet->acquire();
 
     pRet->ReplaceDefaults(*this);
 
@@ -924,7 +924,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     // remove the temporary shell if it is there as it was done before
     pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
 
-    pRet->release();
+    (void)pRet->release();
 
     return pRetShell;
 }
