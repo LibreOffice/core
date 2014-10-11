@@ -1465,7 +1465,7 @@ namespace //local functions originally from docfmt.cxx
                     if( pNode->IsTxtNode() && pCharSet && pCharSet->Count() )
                     {
                         SwRegHistory history( pNode, *pNode, pHistory );
-                        history.InsertItems(*pCharSet,
+                        (void)history.InsertItems(*pCharSet,
                                 0, aCntEnd.GetIndex(), nFlags);
                     }
 
