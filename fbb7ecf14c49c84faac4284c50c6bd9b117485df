@@ -16,6 +16,24 @@
       "revId": "fbb7ecf14c49c84faac4284c50c6bd9b117485df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_abdc1547",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-10-11T14:13:54Z",
+      "side": 1,
+      "message": "Its the rect that\u0027s negative. Small original height, take away top and bottom borders, and you are left with a negative height in which the draw the text.",
+      "parentUuid": "ba076199_0b8d617b",
+      "revId": "fbb7ecf14c49c84faac4284c50c6bd9b117485df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
