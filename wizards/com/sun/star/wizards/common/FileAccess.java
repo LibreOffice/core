@@ -1063,7 +1063,7 @@ public class FileAccess
         {
             if (path.startsWith("/"))
             { // unix
-                int nextSlash = path.indexOf("/", 1) + 1;
+                int nextSlash = path.indexOf('/', 1) + 1;
                 firstPart = Math.min(nextSlash, (maxLength - 3) / 2);
             }
             else
