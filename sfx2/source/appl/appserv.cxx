@@ -855,6 +855,7 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChoose
     SAL_WARN_IF(!pSymbol, "sfx.doc", "SfxApplication::MacroOrganizer, no symbol!");
     if (!pSymbol)
         return OUString();
+    aMod.release();
 #else
 #define pSymbol basicide_choose_macro
 #endif

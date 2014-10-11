@@ -494,6 +494,8 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
     // get symbol
     basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) aMod.getFunctionSymbol("basicide_handle_basic_error");
 
+    aMod.release();
+
     // call basicide_handle_basic_error in basctl
     long nRet = pSymbol ? pSymbol( pStarBasic ) : 0;
 
