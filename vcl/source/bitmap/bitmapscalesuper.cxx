@@ -24,6 +24,16 @@
 
 #define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<7L)+nFrac*((long)(cVal1)-(cVal0)))>>7L))
 
+/**
+ * generate a map of pixel source locations and errors for each
+ * destination pixel; we should end up with pMapIX containing a
+ * series of effectively integer pixel offsets across the row eg.
+ * for something slightly larger than a doubling in size with
+ * no flips:
+ *     pMapIX: 0 0 1 1 1 2 2 3 3 3 ...
+ * then pMapFX - contains fixed-point offsets from these
+ * co-ordinates to reflect sub-pixel positions.
+ */
 void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
 {
     const double fRevScaleX = (nDstW > 1L) ? (double) (nW - 1) / (nDstW - 1) : 0.0;
