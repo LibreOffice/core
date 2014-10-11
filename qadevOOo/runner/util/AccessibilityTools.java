@@ -65,12 +65,12 @@ public class AccessibilityTools {
 
             if (xFrame == null) {
                 System.out.println("can't get frame from controller");
+            } else {
+                if (containerWindow)
+                    xWindow = xFrame.getContainerWindow();
+                else
+                    xWindow = xFrame.getComponentWindow();
             }
-
-            if (containerWindow)
-                xWindow = xFrame.getContainerWindow();
-            else
-                xWindow = xFrame.getComponentWindow();
 
             if (xWindow == null) {
                 System.out.println("can't get window from frame");
