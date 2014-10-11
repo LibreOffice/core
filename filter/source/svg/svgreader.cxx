@@ -1266,7 +1266,7 @@ struct ShapeWritingVisitor
             {
                 OUString sPoints = xElem->hasAttribute("points") ? xElem->getAttribute("points") : "";
                 basegfx::B2DPolygon aPoly;
-                basegfx::tools::importFromSvgPoints(aPoly, sPoints);
+                (void)basegfx::tools::importFromSvgPoints(aPoly, sPoints);
                 if( nTokenId == XML_POLYGON || maCurrState.meFillType != NONE )
                     aPoly.setClosed(true);
 
