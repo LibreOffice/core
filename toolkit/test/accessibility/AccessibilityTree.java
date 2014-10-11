@@ -265,7 +265,7 @@ public class AccessibilityTree
                         for( int i = 0; i < aActions.size(); i++ )
                         {
                             aMenu.add( new NodeAction(
-                                           aActions.get(i).toString(),
+                                           aActions.get(i),
                                            aNode, i ) );
                         }
                     }
