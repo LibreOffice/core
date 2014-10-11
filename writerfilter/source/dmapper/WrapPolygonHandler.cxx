@@ -92,7 +92,7 @@ WrapPolygon::Pointer_t WrapPolygon::scale(const boost::rational<long>& rFraction
 
     while (aIt != aItEnd)
     {
-        awt::Point aPoint( boost::rational_cast<long>(long(aIt->X) * rFractionX), boost::rational_cast<long>(long(aIt->Y) * rFractionY) );
+        awt::Point aPoint( boost::rational_cast<long>(rFractionX * long(aIt->X)), boost::rational_cast<long>(rFractionY * long(aIt->Y)));
         pResult->addPoint(aPoint);
         ++aIt;
     }
